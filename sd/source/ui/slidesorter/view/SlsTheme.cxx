@@ -99,6 +99,7 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
 
     maRawShadow = Image(SdResId(IMAGE_SHADOW)).GetBitmapEx();
     maRawInsertShadow = Image(SdResId(IMAGE_INSERT_SHADOW)).GetBitmapEx();
+    maHideSlideOverlay  = Image(SdResId(IMAGE_HIDE_SLIDE_OVERLAY)).GetBitmapEx();
 
     Update(rpProperties);
 }
@@ -175,7 +176,7 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
             pFont->SetTransparent(TRUE);
             pFont->SetWeight(WEIGHT_NORMAL);
             const Size aSize (pFont->GetSize());
-            pFont->SetSize(Size(aSize.Width()*4/3, aSize.Height()*4/3));
+            pFont->SetSize(Size(aSize.Width()*5/3, aSize.Height()*5/3));
             break;
     }
 
@@ -319,6 +320,9 @@ BitmapEx Theme::GetIcon (const IconType eType)
 
         case RawInsertShadow:
             return maRawInsertShadow;
+
+        case HideSlideOverlay:
+            return maHideSlideOverlay;
 
         default:
             return BitmapEx();

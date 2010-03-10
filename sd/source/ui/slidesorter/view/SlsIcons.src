@@ -71,4 +71,9 @@ Resource IMG_ICONS
     {
         ImageBitmap = Bitmap { File = "slide_sorter_insert_shadow.png" ; };
     };
+
+    Image IMAGE_HIDE_SLIDE_OVERLAY
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_hide_slide_overlay.png" ; };
+    };
 };

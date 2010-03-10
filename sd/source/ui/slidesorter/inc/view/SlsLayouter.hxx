@@ -39,6 +39,7 @@
 #include <vector>
 #include <utility>
 
+
 class MapMode;
 class OutputDevice;
 class Size;
@@ -228,7 +229,7 @@ public:
         where to do an insert operation when the user would release the the
         mouse button at the given position after a drag operation and of
         where and how to display an insertion indicator.
-        @param rPosition
+        @param rModelPosition
             The position in the model coordinate system for which to
             determine the insertion page index.  The position does not have
             to be over a page object to return a valid value.
@@ -236,10 +237,15 @@ public:
             The size of the insertion indicator.  This size is used to adapt
             the location when at the left or right of a row or at the top or
             bottom of a column.
+        @param rModel
+            The model is used to get access to the selection states of the
+            pages.  This in turn is used to determine the visual bounding
+            boxes.
     */
     InsertPosition GetInsertPosition (
         const Point& rModelPosition,
-        const Size& rIndicatorSize) const;
+        const Size& rIndicatorSize,
+        model::SlideSorterModel& rModel) const;
 
     /** Return whether the main orientation of the slides in the slide
         sorter is vertical, i.e. all slides are arranged in one column.
@@ -349,7 +355,30 @@ private:
         sal_Int32 nIndex,
         sal_Int32 nGap) const;
 
-    Rectangle GetPreviewBox (const sal_Int32 nIndex) const;
+    /** Calculate the logical part of the insert position, i.e. the page
+        after whicht to insert.
+    */
+    void CalculateLogicalInsertPosition (
+        const Point& rModelPosition,
+        InsertPosition& rPosition) const;
+
+    /** Calculate the geometrical part of the insert position, i.e. the
+        location of where to display the insertion indicator and the
+        distances about which the leading and trailing pages have to be
+        moved to make room for the indicator.
+    */
+    void CalculateGeometricPosition (
+        InsertPosition& rPosition,
+        const Size& rIndicatorSize,
+        const bool bIsVertical,
+        model::SlideSorterModel& rModel) const;
+
+    /** Return the bounding box of the preview or, when selected, of the page
+        object.  Thus, it returns something like a visual bounding box.
+    */
+    Rectangle GetInnerBoundingBox (
+        model::SlideSorterModel& rModel,
+        const sal_Int32 nIndex) const;
 };
 
 
@@ -370,6 +399,8 @@ public:
     sal_Int32 GetColumn (void) const { return mnColumn; }
     sal_Int32 GetIndex (void) const { return mnIndex; }
     Point GetLocation (void) const { return maLocation; }
+    Point GetLeadingOffset (void) const { return maLeadingOffset; }
+    Point GetTrailingOffset (void) const { return maTrailingOffset; }
     bool IsAtRunStart (void) const { return mbIsAtRunStart; }
     bool IsAtRunEnd (void) const { return mbIsAtRunEnd; }
     bool IsExtraSpaceNeeded (void) const { return mbIsExtraSpaceNeeded; }
@@ -379,6 +410,8 @@ private:
     sal_Int32 mnColumn;
     sal_Int32 mnIndex;
     Point maLocation;
+    Point maLeadingOffset;
+    Point maTrailingOffset;
     bool mbIsAtRunStart : 1;
     bool mbIsAtRunEnd : 1;
     bool mbIsExtraSpaceNeeded : 1;

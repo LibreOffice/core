@@ -183,6 +183,7 @@ Rectangle PageObjectLayouter::GetBoundingBox (
     const CoordinateSystem eCoordinateSystem,
     const sal_Int32 nIndex)
 {
+    OSL_ASSERT(rpPageDescriptor);
     Point aLocation (rpPageDescriptor ? rpPageDescriptor->GetLocation() : Point(0,0));
     return GetBoundingBox(aLocation, ePart, eCoordinateSystem, nIndex);
 }
@@ -238,8 +239,9 @@ Rectangle PageObjectLayouter::GetBoundingBox (
             break;
     }
 
+    // Adapt coordinates to the requested coordinate system.
     Point aLocation (rPageObjectLocation);
-    if (eCoordinateSystem == ScreenCoordinateSystem)
+    if (eCoordinateSystem == WindowCoordinateSystem)
         aLocation += mpWindow->GetMapMode().GetOrigin();
 
     return Rectangle(
@@ -313,14 +315,14 @@ sal_Int32 PageObjectLayouter::GetButtonIndexAt (
     const model::SharedPageDescriptor& rpPageDescriptor,
     const Point& rWindowLocation)
 {
-    if ( ! GetBoundingBox(rpPageDescriptor, ButtonArea, WindowCoordinateSystem)
+    if ( ! GetBoundingBox(rpPageDescriptor, ButtonArea, ModelCoordinateSystem)
         .IsInside(rWindowLocation))
     {
         return -1;
     }
     for (sal_Int32 nIndex=0; nIndex<3; ++nIndex)
     {
-        if (GetBoundingBox(rpPageDescriptor, Button, WindowCoordinateSystem, nIndex)
+        if (GetBoundingBox(rpPageDescriptor, Button, ModelCoordinateSystem, nIndex)
             .IsInside(rWindowLocation))
         {
             return nIndex;
@@ -328,7 +330,5 @@ sal_Int32 PageObjectLayouter::GetButtonIndexAt (
     }
     return -1;
 }
-
-
 
 } } } // end of namespace ::sd::slidesorter::view

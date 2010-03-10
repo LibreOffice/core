@@ -110,6 +110,9 @@ private:
     AnimatorAccess& mrAnimatorAccess;
     ::boost::function<double(double)> maAccelerationFunction;
 
+    Rectangle GetInnerBoundingBox (
+        const view::Layouter& rLayouter,
+        const sal_Int32 nIndex) const;
     void RestartAnimation (void);
 };
 typedef ::boost::shared_ptr<PageObjectRun> SharedPageObjectRun;
@@ -375,12 +378,37 @@ PageObjectRun::~PageObjectRun (void)
 
 
 
+Rectangle PageObjectRun::GetInnerBoundingBox (
+    const view::Layouter& rLayouter,
+    const sal_Int32 nIndex) const
+{
+    model::SharedPageDescriptor pDescriptor (
+        mrAnimatorAccess.GetModel().GetPageDescriptor(nIndex));
+    if (pDescriptor)
+        if (pDescriptor->HasState(model::PageDescriptor::ST_Selected))
+            return rLayouter.GetPageObjectLayouter()->GetBoundingBox(
+                pDescriptor,
+                PageObjectLayouter::PageObject,
+                PageObjectLayouter::ModelCoordinateSystem);
+        else
+            return rLayouter.GetPageObjectLayouter()->GetBoundingBox(
+                pDescriptor,
+                PageObjectLayouter::Preview,
+                PageObjectLayouter::ModelCoordinateSystem);
+    else
+        return Rectangle();
+}
+
+
+
+
 void PageObjectRun::UpdateOffsets(
     const InsertPosition& rInsertPosition,
     const Size& rRequiredSpace,
     const view::Layouter& rLayouter)
 {
-    const sal_Int32 nLocalInsertIndex(rLayouter.GetColumnCount()==1
+    const bool bIsVertical (rLayouter.GetColumnCount()==1);
+    const sal_Int32 nLocalInsertIndex(bIsVertical
         ? rInsertPosition.GetRow()
         : rInsertPosition.GetColumn());
     if (nLocalInsertIndex != mnLocalInsertIndex)
@@ -388,70 +416,19 @@ void PageObjectRun::UpdateOffsets(
         mnLocalInsertIndex = nLocalInsertIndex;
 
         model::SlideSorterModel& rModel (mrAnimatorAccess.GetModel());
-        Point aLeadingOffset;
-        Point aTrailingOffset;
-        const bool bUseX (rLayouter.GetColumnCount() > 1);
         const sal_Int32 nRunLength (mnEndIndex - mnStartIndex + 1);
-        if (rInsertPosition.IsAtRunStart())
-        {
-            // Insertion position is at the left or top of the run.
-            const Rectangle aInnerBox (rLayouter.GetPageObjectLayouter()->GetBoundingBox(
-                Point(0,0),
-                PageObjectLayouter::Preview,
-                PageObjectLayouter::WindowCoordinateSystem));
-            const Point aAvailableSpace (aInnerBox.TopLeft());
-            if (bUseX)
-                aTrailingOffset.X() = ::std::max(0L, rRequiredSpace.Width()-aAvailableSpace.X());
-            else
-                aTrailingOffset.Y() = ::std::max(0L, rRequiredSpace.Height()-aAvailableSpace.Y());
-        }
-        else if (rInsertPosition.IsAtRunEnd() && rInsertPosition.IsExtraSpaceNeeded())
-        {
-            // Insertion position is at the right or bottom of the run.
-            const Rectangle aOuterBox (rLayouter.GetPageObjectBox(mnEndIndex));
-            const Rectangle aInnerBox (rLayouter.GetPageObjectLayouter()->GetBoundingBox(
-                aOuterBox.TopLeft(),
-                PageObjectLayouter::Preview,
-                PageObjectLayouter::WindowCoordinateSystem));
-            const Point aAvailableSpace (aOuterBox.BottomRight() - aInnerBox.BottomRight());
-            if (bUseX)
-                aLeadingOffset.X() = ::std::min(0L, aAvailableSpace.X()-rRequiredSpace.Width());
-            else
-                aLeadingOffset.Y() = ::std::min(0L, aAvailableSpace.Y()-rRequiredSpace.Height());
-        }
-        else if ( ! rInsertPosition.IsAtRunEnd())
-        {
-            // Insertion position is somewhere in the middle of the run.
-            const Rectangle aBox1 (rLayouter.GetPageObjectLayouter()->GetBoundingBox(
-                rModel.GetPageDescriptor(mnStartIndex + mnLocalInsertIndex - 1),
-                PageObjectLayouter::Preview,
-                PageObjectLayouter::WindowCoordinateSystem));
-            const Rectangle aBox2 (rLayouter.GetPageObjectLayouter()->GetBoundingBox(
-                rModel.GetPageDescriptor(mnStartIndex + mnLocalInsertIndex),
-                PageObjectLayouter::Preview,
-                PageObjectLayouter::WindowCoordinateSystem));
-            const Size aDelta (
-                bUseX ? aBox2.Left() - aBox1.Right() - 1 : 0,
-                bUseX ? 0 : aBox2.Top() - aBox1.Bottom() - 1);
-            if (aDelta.Width() < rRequiredSpace.Width())
-            {
-                aLeadingOffset.X() = (aDelta.Width()-rRequiredSpace.Width()-1)/2;
-                aTrailingOffset.X() = rRequiredSpace.Width()-aDelta.Width()+aLeadingOffset.X();
-            }
-            if (aDelta.Height() < rRequiredSpace.Height())
-            {
-                aLeadingOffset.Y() = (aDelta.Height()-rRequiredSpace.Height()-1)/2;
-                aTrailingOffset.Y() = rRequiredSpace.Height()-aDelta.Height()+aLeadingOffset.Y();
-            }
-        }
         for (sal_Int32 nIndex=0; nIndex<nRunLength; ++nIndex)
         {
             model::SharedPageDescriptor pDescriptor(rModel.GetPageDescriptor(nIndex+mnStartIndex));
             if (pDescriptor)
                 maStartOffset[nIndex] = pDescriptor->GetVisualState().GetLocationOffset();
             maEndOffset[nIndex] = nIndex < mnLocalInsertIndex
-                ? aLeadingOffset
-                : aTrailingOffset;
+                ? rInsertPosition.GetLeadingOffset()
+                : rInsertPosition.GetTrailingOffset();
+            if (bIsVertical)
+                maEndOffset[nIndex].X() = 0;
+            else
+                maEndOffset[nIndex].Y() = 0;
         }
         RestartAnimation();
     }

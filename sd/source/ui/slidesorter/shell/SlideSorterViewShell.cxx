@@ -304,7 +304,12 @@ SlideSorter& SlideSorterViewShell::GetSlideSorter (void) const
 bool SlideSorterViewShell::RelocateToParentWindow (::Window* pParentWindow)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
-    return mpSlideSorter->RelocateToWindow(pParentWindow);
+    if (pParentWindow == NULL)
+        WriteFrameViewData();
+    const bool bSuccess (mpSlideSorter->RelocateToWindow(pParentWindow));
+    if (pParentWindow != NULL)
+        ReadFrameViewData(mpFrameView);
+    return bSuccess;
 }
 
 
@@ -546,8 +551,11 @@ void SlideSorterViewShell::Paint (
 
 void SlideSorterViewShell::ArrangeGUIElements (void)
 {
-    OSL_ASSERT(mpSlideSorter.get()!=NULL);
-    mpSlideSorter->ArrangeGUIElements(maViewPos, maViewSize);
+    if (IsActive())
+    {
+        OSL_ASSERT(mpSlideSorter.get()!=NULL);
+        mpSlideSorter->ArrangeGUIElements(maViewPos, maViewSize);
+    }
 }
 
 
@@ -642,9 +650,11 @@ void SlideSorterViewShell::WriteFrameViewData()
         SdPage* pActualPage = GetActualPage();
         if (pActualPage != NULL)
         {
+            if (IsMainViewShell())
+                mpFrameView->SetSelectedPage((pActualPage->GetPageNum()- 1) / 2);
+            // else
             // The slide sorter is not expected to switch the current page
             // other then by double clicks.  That is handled seperatly.
-            //            mpFrameView->SetSelectedPage((pActualPage->GetPageNum()- 1) / 2);
         }
         else
         {

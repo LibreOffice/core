@@ -398,7 +398,7 @@ awt::Rectangle SAL_CALL AccessibleSlideSorterObject::getBounds (void)
         mrSlideSorter.GetView().GetLayouter().GetPageObjectLayouter()->GetBoundingBox(
             mrSlideSorter.GetModel().GetPageDescriptor(mnPageNumber),
             ::sd::slidesorter::view::PageObjectLayouter::PageObject,
-            ::sd::slidesorter::view::PageObjectLayouter::ScreenCoordinateSystem));
+            ::sd::slidesorter::view::PageObjectLayouter::WindowCoordinateSystem));
 
     if (mxParent.is())
     {

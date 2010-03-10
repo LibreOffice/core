@@ -116,7 +116,11 @@ void Animator::Dispose (void)
         (*iAnimation)->Expire();
 
     maTimer.Stop();
-    mpDrawLock.reset();
+    if (mpDrawLock)
+    {
+        mpDrawLock->Dispose();
+        mpDrawLock.reset();
+    }
 }
 
 

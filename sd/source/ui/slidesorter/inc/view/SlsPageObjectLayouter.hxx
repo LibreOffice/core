@@ -85,20 +85,13 @@ public:
     };
     /** Two coordinate systems are supported.  They differ only in
         translation not in scale.  Both relate to pixel values in the window.
-        A position in the window coordinate system does not change when the window content is
-        scrolled up or down.  In the screen coordinate system (relative
+        A position in the model coordinate system does not change when the window content is
+        scrolled up or down.  In the window coordinate system (relative
         to the top left point of the window)scrolling leads to different values.
-        Example: Scroll up the point (0,0) in the the window coordinate
-        system by 20 pixels.  It lies not inside the visible area of the
-        window anymore.  Its screen coordinates are now (-20,0).
-
-        WindowCoordinateSystem corresponds to the logic coordinate system of
-        class Window, while ScreenCoordinateSystem corresponds to its pixel
-        coordinate system.
     */
     enum CoordinateSystem {
         WindowCoordinateSystem,
-        ScreenCoordinateSystem};
+        ModelCoordinateSystem};
 
     /** Return the bounding box of the page object or one of its graphical
         parts.

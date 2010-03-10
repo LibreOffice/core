@@ -106,7 +106,6 @@ public:
             given position.
     */
     sal_Int32 GetPageIndexAtPoint (const Point& rPosition) const;
-    sal_Int32 GetFadePageIndexAtPoint (const Point& rPosition) const;
 
     view::Layouter& GetLayouter (void);
 
@@ -193,14 +192,18 @@ public:
 
     void UpdatePageUnderMouse (
         const Point& rMousePosition,
-        const bool bIsMouseButtonDown);
-    void SetPageUnderMouse (const model::SharedPageDescriptor& rpDescriptor);
+        const bool bIsMouseButtonDown,
+        const bool bAnimate = true);
+    void SetPageUnderMouse (
+        const model::SharedPageDescriptor& rpDescriptor,
+        const bool bAnimate = true);
     void SetButtonUnderMouse (const sal_Int32 nButtonIndex);
 
     bool SetState (
         const model::SharedPageDescriptor& rpDescriptor,
         const model::PageDescriptor::State eState,
-        const bool bStateValue);
+        const bool bStateValue,
+        const bool bAnimate = true);
 
     ::boost::shared_ptr<PageObjectPainter> GetPageObjectPainter (void);
     ::boost::shared_ptr<LayeredDevice> GetLayeredDevice (void) const;
@@ -211,6 +214,10 @@ public:
         DrawLock (view::SlideSorterView& rView, const SharedSdWindow& rpWindow);
         DrawLock (SlideSorter& rSlideSorter);
         ~DrawLock (void);
+        /** When the DrawLock is disposed then it will not request a repaint
+            on destruction.
+        */
+        void Dispose (void);
     private:
         view::SlideSorterView& mrView;
         SharedSdWindow mpWindow;

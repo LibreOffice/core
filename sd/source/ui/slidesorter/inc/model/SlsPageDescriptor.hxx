@@ -128,7 +128,7 @@ public:
     VisualState& GetVisualState (void);
 
     Rectangle GetBoundingBox (void) const;
-    Point GetLocation (void) const;
+    Point GetLocation (const bool bIgnoreLocation = false) const;
     void SetBoundingBox (const Rectangle& rBoundingBox);
 
 private:

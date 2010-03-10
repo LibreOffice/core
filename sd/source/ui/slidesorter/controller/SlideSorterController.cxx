@@ -225,14 +225,16 @@ SlideSorter& SlideSorterController::GetSlideSorter (void) const
 
 
 model::SharedPageDescriptor SlideSorterController::GetPageAt (
-    const Point& aPixelPosition)
+    const Point& aWindowPosition)
 {
-    sal_Int32 nHitPageIndex (mrView.GetPageIndexAtPoint(aPixelPosition));
+    sal_Int32 nHitPageIndex (mrView.GetPageIndexAtPoint(aWindowPosition));
     model::SharedPageDescriptor pDescriptorAtPoint;
     if (nHitPageIndex >= 0)
     {
         pDescriptorAtPoint = mrModel.GetPageDescriptor(nHitPageIndex);
 
+        // Depending on a property we may have to check that the mouse is no
+        // just over the page object but over the preview area.
         if (pDescriptorAtPoint
             && mrSlideSorter.GetProperties()->IsOnlyPreviewTriggersMouseOver()
             && ! pDescriptorAtPoint->HasState(PageDescriptor::ST_Selected))
@@ -241,26 +243,12 @@ model::SharedPageDescriptor SlideSorterController::GetPageAt (
             if ( ! mrView.GetLayouter().GetPageObjectLayouter()->GetBoundingBox(
                 pDescriptorAtPoint,
                 view::PageObjectLayouter::Preview,
-                view::PageObjectLayouter::WindowCoordinateSystem).IsInside(aPixelPosition))
+                view::PageObjectLayouter::WindowCoordinateSystem).IsInside(aWindowPosition))
             {
                 pDescriptorAtPoint.reset();
             }
         }
     }
-
-    return pDescriptorAtPoint;
-}
-
-
-
-
-model::SharedPageDescriptor SlideSorterController::GetFadePageAt (
-    const Point& aPixelPosition)
-{
-    sal_Int32 nHitPageIndex (mrView.GetFadePageIndexAtPoint(aPixelPosition));
-    model::SharedPageDescriptor pDescriptorAtPoint;
-    if (nHitPageIndex >= 0)
-        pDescriptorAtPoint = mrModel.GetPageDescriptor(nHitPageIndex);
 
     return pDescriptorAtPoint;
 }
@@ -489,7 +477,7 @@ bool SlideSorterController::Command (
                             mrView.GetLayouter().GetPageObjectLayouter()->GetBoundingBox (
                                 pDescriptor,
                                 PageObjectLayouter::PageObject,
-                                PageObjectLayouter::WindowCoordinateSystem));
+                                PageObjectLayouter::ModelCoordinateSystem));
                         Point aCenter (aBBox.Center());
                         mbIsContextMenuOpen = true;
                         if (pViewShell != NULL)

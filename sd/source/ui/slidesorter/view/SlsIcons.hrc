@@ -44,5 +44,6 @@
 
 #define IMAGE_SHADOW 10
 #define IMAGE_INSERT_SHADOW 11
+#define IMAGE_HIDE_SLIDE_OVERLAY 12
 
 #endif

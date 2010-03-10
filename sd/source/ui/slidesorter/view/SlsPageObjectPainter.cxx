@@ -234,7 +234,7 @@ void PageObjectPainter::PaintBackground (
     const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
         rpDescriptor,
         PageObjectLayouter::PageObject,
-        PageObjectLayouter::WindowCoordinateSystem));
+        PageObjectLayouter::ModelCoordinateSystem));
 
     if (rpDescriptor->HasState(model::PageDescriptor::ST_MouseOver))
     {
@@ -273,12 +273,14 @@ void PageObjectPainter::PaintPreview (
     Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
         rpDescriptor,
         PageObjectLayouter::Preview,
-        PageObjectLayouter::WindowCoordinateSystem));
+        PageObjectLayouter::ModelCoordinateSystem));
 
     if (mpCache != NULL)
     {
         const SdrPage* pPage = rpDescriptor->GetPage();
         BitmapEx aBitmap (mpCache->GetPreviewBitmap(pPage));
+        if (aBitmap.GetSizePixel() != aBox.GetSize())
+            aBitmap.Scale(aBox.GetSize());
         mpCache->SetPreciousFlag(pPage, true);
 
         rDevice.DrawBitmapEx(aBox.TopLeft(), aBitmap);
@@ -287,14 +289,18 @@ void PageObjectPainter::PaintPreview (
     if (rpDescriptor->GetVisualState().GetCurrentVisualState()
         == model::VisualState::VS_Excluded)
     {
-        rDevice.SetFillColor(COL_GRAY);
-        rDevice.SetLineColor();
-        rDevice.DrawTransparent(
-            ::basegfx::B2DPolyPolygon(::basegfx::tools::createPolygonFromRect(
-                ::basegfx::B2DRectangle(aBox.Left(), aBox.Top(), aBox.Right()+1, aBox.Bottom()+1),
-                0,
-                0)),
-            0.3);
+        const Region aSavedClip (rDevice.GetClipRegion());
+
+        rDevice.IntersectClipRegion(aBox);
+
+        const BitmapEx aOverlay (mpTheme->GetIcon(Theme::HideSlideOverlay));
+        const sal_Int32 nIconWidth (aOverlay.GetSizePixel().Width());
+        const sal_Int32 nIconHeight (aOverlay.GetSizePixel().Height());
+        for (sal_Int32 nX=aBox.Left(); nX<aBox.Right(); nX+=nIconWidth)
+            for (sal_Int32 nY=aBox.Top(); nY<aBox.Bottom(); nY+=nIconHeight)
+                rDevice.DrawBitmapEx(Point(nX,nY), aOverlay);
+
+        rDevice.SetClipRegion(aSavedClip);
     }
 }
 
@@ -308,7 +314,7 @@ void PageObjectPainter::PaintPageNumber (
     const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
         rpDescriptor,
         PageObjectLayouter::PageNumber,
-        PageObjectLayouter::WindowCoordinateSystem));
+        PageObjectLayouter::ModelCoordinateSystem));
 
     // Paint the page number.
     OSL_ASSERT(rpDescriptor->GetPage()!=NULL);
@@ -325,7 +331,7 @@ void PageObjectPainter::PaintPageNumber (
         const Rectangle aFrameBox (mpPageObjectLayouter->GetBoundingBox(
             rpDescriptor,
             PageObjectLayouter::PageNumberFrame,
-            PageObjectLayouter::WindowCoordinateSystem));
+            PageObjectLayouter::ModelCoordinateSystem));
         rDevice.SetLineColor(Color(mpTheme->GetColor(Theme::PageNumberBorder)));
         rDevice.SetFillColor();
         rDevice.DrawRect(aFrameBox);
@@ -347,7 +353,7 @@ void PageObjectPainter::PaintTransitionEffect (
         const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
             rpDescriptor,
             PageObjectLayouter::TransitionEffectIndicator,
-            PageObjectLayouter::WindowCoordinateSystem));
+            PageObjectLayouter::ModelCoordinateSystem));
 
         rDevice.DrawBitmapEx(
             aBox.TopLeft(),
@@ -368,7 +374,7 @@ void PageObjectPainter::PaintButtons (
     const Rectangle aPreviewBox (mpPageObjectLayouter->GetBoundingBox(
         rpDescriptor,
         PageObjectLayouter::Preview,
-        PageObjectLayouter::WindowCoordinateSystem));
+        PageObjectLayouter::ModelCoordinateSystem));
 
     const USHORT nSavedAntialiasingMode (rDevice.GetAntialiasing());
     rDevice.SetAntialiasing(nSavedAntialiasingMode | ANTIALIASING_ENABLE_B2DDRAW);
@@ -383,7 +389,7 @@ void PageObjectPainter::PaintButtons (
             mpPageObjectLayouter->GetBoundingBox(
                 rpDescriptor,
                 PageObjectLayouter::Button,
-                PageObjectLayouter::WindowCoordinateSystem,
+                PageObjectLayouter::ModelCoordinateSystem,
                 nButtonIndex));
 
         switch (rpDescriptor->GetVisualState().GetButtonState(nButtonIndex))
@@ -500,9 +506,9 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
     // Get bounding box of the preview around which a shadow is painted.
     // Compensate for the border around the preview.
     const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
-        model::SharedPageDescriptor(),
+        Point(0,0),
         PageObjectLayouter::Preview,
-        PageObjectLayouter::WindowCoordinateSystem));
+        PageObjectLayouter::ModelCoordinateSystem));
     Rectangle aFrameBox (aBox.Left()-1,aBox.Top()-1,aBox.Right()+1,aBox.Bottom()+1);
     mpShadowPainter->PaintFrame(aBitmapDevice, aFrameBox);
 

@@ -404,57 +404,18 @@ void SlideSorterView::Dispose (void)
 
 
 
-sal_Int32 SlideSorterView::GetPageIndexAtPoint (const Point& rPosition) const
+sal_Int32 SlideSorterView::GetPageIndexAtPoint (const Point& rWindowPosition) const
 {
     sal_Int32 nIndex (-1);
 
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow)
     {
-        nIndex = mpLayouter->GetIndexAtPoint (pWindow->PixelToLogic (rPosition));
+        nIndex = mpLayouter->GetIndexAtPoint(pWindow->PixelToLogic(rWindowPosition));
 
         // Clip the page index against the page count.
         if (nIndex >= mrModel.GetPageCount())
             nIndex = -1;
-    }
-
-    return nIndex;
-}
-
-
-
-
-sal_Int32 SlideSorterView::GetFadePageIndexAtPoint (
-    const Point& rPosition) const
-{
-    sal_Int32 nIndex (-1);
-
-    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
-    if (pWindow)
-    {
-        Point aModelPosition (pWindow->PixelToLogic (rPosition));
-        nIndex = mpLayouter->GetIndexAtPoint(
-            aModelPosition,
-            true // Include page borders into hit test
-            );
-
-        // Clip the page index against the page count.
-        if (nIndex >= mrModel.GetPageCount())
-            nIndex = -1;
-
-        if (nIndex >= 0)
-        {
-            // Now test whether the given position is inside the area of the
-            // fade effect indicator.
-            const Rectangle aBox (
-                mpLayouter->GetPageObjectLayouter()->GetBoundingBox(
-                    mrModel.GetPageDescriptor(nIndex),
-                    PageObjectLayouter::TransitionEffectIndicator,
-                    PageObjectLayouter::WindowCoordinateSystem));
-            const Point aPoint (aModelPosition.getX(), aModelPosition.getY());
-            if ( ! aBox.IsInside(aPoint))
-                nIndex = -1;
-        }
     }
 
     return nIndex;
@@ -525,7 +486,8 @@ void SlideSorterView::PostModelChange (void)
         const Window::PointerState aPointerState (pWindow->GetPointerState());
         UpdatePageUnderMouse (
             aPointerState.maPos,
-            (aPointerState.mnState & MOUSE_LEFT)!=0);
+            (aPointerState.mnState & MOUSE_LEFT)!=0,
+            false);
     }
 }
 
@@ -937,12 +899,13 @@ void SlideSorterView::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint
 
 void SlideSorterView::UpdatePageUnderMouse (
     const Point& rMousePosition,
-    const bool bIsMouseButtonDown)
+    const bool bIsMouseButtonDown,
+    const bool bAnimate)
 {
     // Determine page under mouse and show the mouse over effect.
     model::SharedPageDescriptor pHitDescriptor (
         mrSlideSorter.GetController().GetPageAt(rMousePosition));
-    SetPageUnderMouse(pHitDescriptor);
+    SetPageUnderMouse(pHitDescriptor, bAnimate);
 
     // Handle the mouse being over any buttons.
     if (pHitDescriptor)
@@ -966,7 +929,9 @@ void SlideSorterView::UpdatePageUnderMouse (
 
 
 
-void SlideSorterView::SetPageUnderMouse (const model::SharedPageDescriptor& rpDescriptor)
+void SlideSorterView::SetPageUnderMouse (
+    const model::SharedPageDescriptor& rpDescriptor,
+    const bool bAnimate)
 {
     if (mpPageUnderMouse != rpDescriptor)
     {
@@ -975,14 +940,14 @@ void SlideSorterView::SetPageUnderMouse (const model::SharedPageDescriptor& rpDe
             mpPageUnderMouse->GetVisualState().SetActiveButtonState(
                 -1,
                 model::VisualState::BS_Normal);
-            SetState(mpPageUnderMouse, PageDescriptor::ST_MouseOver, false);
+            SetState(mpPageUnderMouse, PageDescriptor::ST_MouseOver, false, bAnimate);
         }
 
         mpPageUnderMouse = rpDescriptor;
         SetButtonUnderMouse(-1);
 
         if (mpPageUnderMouse)
-            SetState(mpPageUnderMouse, PageDescriptor::ST_MouseOver, true);
+            SetState(mpPageUnderMouse, PageDescriptor::ST_MouseOver, true, bAnimate);
 
         // Change the quick help text to display the name of the page under
         // the mouse.
@@ -1034,7 +999,8 @@ void SlideSorterView::SetButtonUnderMouse (const sal_Int32 nButtonIndex)
 bool SlideSorterView::SetState (
     const model::SharedPageDescriptor& rpDescriptor,
     const PageDescriptor::State eState,
-    const bool bStateValue)
+    const bool bStateValue,
+    const bool bAnimate)
 {
     const bool bModified (rpDescriptor->SetState(eState, bStateValue));
     if ( ! bModified)
@@ -1059,36 +1025,42 @@ bool SlideSorterView::SetState (
     // Fade in or out the buttons.
     if (eState == PageDescriptor::ST_MouseOver)
     {
-        // Stop a running animation.
-        const Animator::AnimationId nId (
-            rpDescriptor->GetVisualState().GetButtonAlphaAnimationId());
-        if (nId != Animator::NotAnAnimationId)
-        {
-            mrSlideSorter.GetController().GetAnimator()->RemoveAnimation(nId);
-        }
-
-        const double nStartAlpha (rpDescriptor->GetVisualState().GetButtonAlpha());
         const double nEndAlpha (bStateValue ? 0.2 : 1.0);
-        const ::boost::function<double(double)> aBlendFunctor (
-            ::boost::bind(
-                AnimationFunction::Blend,
+        if (bAnimate)
+        {
+            const double nStartAlpha (rpDescriptor->GetVisualState().GetButtonAlpha());
+
+            // Stop a running animation.
+            const Animator::AnimationId nId (
+                rpDescriptor->GetVisualState().GetButtonAlphaAnimationId());
+            if (nId != Animator::NotAnAnimationId)
+                mrSlideSorter.GetController().GetAnimator()->RemoveAnimation(nId);
+
+            const ::boost::function<double(double)> aBlendFunctor (
+                ::boost::bind(
+                    AnimationFunction::Blend,
                 nStartAlpha,
-                nEndAlpha,
-                ::boost::bind(AnimationFunction::Linear, _1)));
-        rpDescriptor->GetVisualState().SetButtonAlphaAnimationId(
-            mrSlideSorter.GetController().GetAnimator()->AddAnimation(
-                ::boost::bind(
-                    AnimationFunction::ApplyButtonAlphaChange,
-                    rpDescriptor,
-                    ::boost::ref(*this),
-                    ::boost::bind(aBlendFunctor, _1)),
-                bStateValue ? 500 : 0,
-                400,
-                ::boost::bind(
-                    &VisualState::SetButtonAlphaAnimationId,
-                    ::boost::ref(rpDescriptor->GetVisualState()),
-                    controller::Animator::NotAnAnimationId)
-                ));
+                    nEndAlpha,
+                    ::boost::bind(AnimationFunction::Linear, _1)));
+            rpDescriptor->GetVisualState().SetButtonAlphaAnimationId(
+                mrSlideSorter.GetController().GetAnimator()->AddAnimation(
+                    ::boost::bind(
+                        AnimationFunction::ApplyButtonAlphaChange,
+                        rpDescriptor,
+                        ::boost::ref(*this),
+                        ::boost::bind(aBlendFunctor, _1)),
+                    bStateValue ? 500 : 0,
+                    400,
+                    ::boost::bind(
+                        &VisualState::SetButtonAlphaAnimationId,
+                        ::boost::ref(rpDescriptor->GetVisualState()),
+                        controller::Animator::NotAnAnimationId)
+                    ));
+        }
+        else
+        {
+            rpDescriptor->GetVisualState().SetButtonAlpha(nEndAlpha);
+        }
     }
 
     return bModified;
@@ -1160,6 +1132,13 @@ SlideSorterView::DrawLock::~DrawLock (void)
     */
 }
 
+
+
+
+void SlideSorterView::DrawLock::Dispose (void)
+{
+    mpWindow.reset();
+}
 
 
 } } } // end of namespace ::sd::slidesorter::view

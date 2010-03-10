@@ -123,14 +123,6 @@ public:
     */
     model::SharedPageDescriptor GetPageAt (const Point& rPixelPosition);
 
-    /** Return the descriptor of the page that is associated to the page
-        visible fade symbol at the given position.
-        @return
-            When the given position is not over a visible page fade symbol
-            then NULL is returned.
-    */
-    model::SharedPageDescriptor GetFadePageAt (const Point& rPixelPosition);
-
     PageSelector& GetPageSelector (void);
     FocusManager& GetFocusManager (void);
     controller::Clipboard& GetClipboard (void);

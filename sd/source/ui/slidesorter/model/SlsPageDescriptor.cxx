@@ -262,9 +262,12 @@ Rectangle PageDescriptor::GetBoundingBox (void) const
 
 
 
-Point PageDescriptor::GetLocation (void) const
+Point PageDescriptor::GetLocation (const bool bIgnoreOffset) const
 {
-    return maBoundingBox.TopLeft() + maVisualState.GetLocationOffset();
+    if (bIgnoreOffset)
+        return maBoundingBox.TopLeft();
+    else
+        return maBoundingBox.TopLeft() + maVisualState.GetLocationOffset();
 }
 
 

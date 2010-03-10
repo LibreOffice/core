@@ -106,7 +106,8 @@ public:
     enum IconType
     {
         RawShadow,
-        RawInsertShadow
+        RawInsertShadow,
+        HideSlideOverlay
     };
     BitmapEx GetIcon (const IconType eType);
 
@@ -127,6 +128,7 @@ private:
     GradientDescriptor maMouseOverGradient;
     BitmapEx maRawShadow;
     BitmapEx maRawInsertShadow;
+    BitmapEx maHideSlideOverlay;
 };
 
 

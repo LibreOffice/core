@@ -389,7 +389,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
             break;
         }
 
-        case SID_UNDO :
+        case SID_UNDO:
         {
             SlideSorterViewShell* pViewShell
                 = dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell());
@@ -398,7 +398,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
             break;
         }
 
-        case SID_REDO :
+        case SID_REDO:
         {
             SlideSorterViewShell* pViewShell
                 = dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell());

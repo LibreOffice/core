@@ -183,7 +183,8 @@ void InsertionIndicatorHandler::SetPosition (
 
     const view::InsertPosition aInsertPosition (rLayouter.GetInsertPosition(
         rPoint,
-        maIconSize));
+        maIconSize,
+        mrSlideSorter.GetModel()));
 
     if (maInsertPosition != aInsertPosition
         || meMode != eMode
