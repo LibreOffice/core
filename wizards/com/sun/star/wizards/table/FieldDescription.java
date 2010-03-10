@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FieldDescription.java,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,8 +39,6 @@ import com.sun.star.wizards.common.Properties;
 
 public class FieldDescription
 {
-
-    int category;
     private String tablename = "";
 //  String fieldname;
     private String keyname;
@@ -63,7 +58,6 @@ public class FieldDescription
     {
         xMSF = _xMSF;
         aLocale = _aLocale;
-        category = _curscenarioselector.getCategory();
         tablename = _curscenarioselector.getTableName();
         Name = _fieldname;
         keyname = _keyname;

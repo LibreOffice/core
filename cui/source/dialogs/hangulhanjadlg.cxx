@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hangulhanjadlg.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +50,7 @@
 
 #include <comphelper/processfactory.hxx>
 
-#define HHC HangulHanjaConversion
+#define HHC editeng::HangulHanjaConversion
 #define LINE_CNT        static_cast< USHORT >(2)
 
 //.............................................................................
@@ -604,7 +601,7 @@ namespace svx
         m_pPlayground->GetButton( SvxCommonLinguisticControl::eOptions )->Show();
 //      m_pPlayground->EnableButton( SvxCommonLinguisticControl::eOptions, true );
 
-        if ( HangulHanjaConversion::eHangulToHanja == _ePrimaryDirection )
+        if ( editeng::HangulHanjaConversion::eHangulToHanja == _ePrimaryDirection )
         {
 //          m_aHanjaOnly.Enable( sal_False );
             m_pIgnoreNonPrimary = &m_aHangulOnly;
