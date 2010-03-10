@@ -281,7 +281,6 @@ MY_FILES_main = \
     $(MY_MOD)/fcfg_internalgraphics_filters.xcu \
     $(MY_MOD)/fcfg_internalgraphics_types.xcu \
     $(MY_MOD)/org/openoffice/Office/Embedding-chart.xcu \
-    $(MY_MOD)/org/openoffice/Office/Writer-javamail.xcu \
     $(MY_MOD)/org/openoffice/Setup-start.xcu \
     $(MY_MOD)/org/openoffice/TypeDetection/UISort-calc.xcu \
     $(MY_MOD)/org/openoffice/TypeDetection/UISort-draw.xcu \
