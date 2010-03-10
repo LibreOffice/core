@@ -36,7 +36,7 @@ testcase tScripting
     
     const ORGANIZER_ITEMS = 2
     
-    hInitBackingMode()
+    hFileCloseAll()
 
     ToolsMacrosOrganizeMacrosBeanShell
     

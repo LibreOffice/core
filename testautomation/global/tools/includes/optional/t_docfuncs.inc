@@ -435,48 +435,7 @@ function hInitSingleDoc() as boolean
 
 end function
 
-'*******************************************************************************
-
-function hInitBackingMode() as boolean
-
-    '///<h3>Make that we are on the backing window (no open documents)</h3>
-    '///<i>Close all open documents</i><br><br>
-
-    '///<u>Parameter(s):</u><br>
-    '///<ol>
-    '///+<li>No input parameters</li>
-    '///</ol>
-
-
-    '///<u>Returns:</u><br>
-    '///<ol>
-    '///+<li>Errorcondition (Boolean)</li>
-    '///<ul>
-    '///+<li>TRUE: No open documents are present</li>
-    '///+<li>FALSE: Any error</li>
-    '///</ul>
-    '///</ol>
-
-    const CFN = "global::tools::includes::optional::t_docfuncs.inc::hInitBackingMode::"
-
-    '///<u>Description:</u>
-    '///<ul>
-    '///+<li>Close all documents until we are on the backing window</li>
-    hFileCloseAll()
-    
-    '///+<li>verify that we do not have any open documents left (redundant check)</li>
-    if ( getDocumentCount = 0 ) then
-        printlog( "Program is in backing mode" )
-        hInitBackingMode() = true
-    else
-        printlog( CFN & "Office is in undefined state" )
-        hInitBackingMode() = false
-    endif
-    '///</ul>
-    
-end function
-
-'*******************************************************************************
+'*******************************************************************************'*******************************************************************************
 
 function hInitWriteDocIdentifier( cString as string ) as boolean
 
