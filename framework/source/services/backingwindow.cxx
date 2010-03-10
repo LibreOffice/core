@@ -354,7 +354,12 @@ void BackingWindow::initBackground()
     maOpenText.SetControlBackground( aTextBGColor );
 
     if( mnLayoutStyle == 1 )
-        mnBtnPos = maBackgroundLeft.GetSizePixel().Width() + 40;
+    {
+        if( Application::GetSettings().GetLayoutRTL() )
+            mnBtnPos = maBackgroundRight.GetSizePixel().Width() + 40;
+        else
+            mnBtnPos = maBackgroundLeft.GetSizePixel().Width() + 40;
+    }
 }
 
 void BackingWindow::initControls()
