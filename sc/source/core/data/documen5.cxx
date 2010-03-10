@@ -453,124 +453,25 @@ void ScDocument::UpdateChart( const String& rChartName )
 {
     if (!pDrawLayer || bInDtorClear)
         return;
-
-    for (SCTAB nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
+    uno::Reference< chart2::XChartDocument > xChartDoc( GetChartByName( rChartName ) );
+    if( xChartDoc.is() )
     {
-        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-        DBG_ASSERT(pPage,"Page ?");
-
-        SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
-        SdrObject* pObject = aIter.Next();
-        while (pObject)
+        try
         {
-            if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
-                    ((SdrOle2Obj*)pObject)->GetPersistName() == rChartName )
-            {
-                //@todo?: maybe we need a notification
-                //from the calc to the chart in future
-                //that calc content has changed
-                // ((SdrOle2Obj*)pObject)->GetNewReplacement();
-
-                // Load the object and set modified
-
-                uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                if ( xIPObj.is() )
-                {
-                    svt::EmbeddedObjectRef::TryRunningState( xIPObj );
-
-                    try
-                    {
-                        uno::Reference< util::XModifiable > xModif( xIPObj->getComponent(), uno::UNO_QUERY_THROW );
-                        if( apTemporaryChartLock.get() )
-                            apTemporaryChartLock->AlsoLockThisChart( uno::Reference< frame::XModel >( xModif, uno::UNO_QUERY ) );
-                        xModif->setModified( sal_True );
-                    }
-                    catch ( uno::Exception& )
-                    {
-                    }
-                }
-
-                // repaint
-
-                pObject->ActionChanged();
-
-                // After the update, chart keeps track of its own data source ranges,
-                // the listener doesn't need to listen anymore.
-
-                pChartListenerCollection->ChangeListening( rChartName, new ScRangeList );
-
-                return;
-
-                /* old chart:
-                uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                if ( xIPObj.is() )
-                {
-                    const SchMemChart* pChartData = SchDLL::GetChartData(xIPObj);
-                    if ( pChartData )
-                    {
-                        ScChartArray aArray( this, *pChartData );
-
-                        SchMemChart* pMemChart = aArray.CreateMemChart();
-                        ScChartArray::CopySettings( *pMemChart, *pChartData );
-
-                        //  #57655# Chart-Update ohne geaenderte Einstellungen (MemChart)
-                        //  soll das Dokument nicht auf modified setzen (z.B. in frisch
-                        //  geladenem Dokument durch initiales Recalc)
-
-                        //  #72576# disable SetModified for readonly documents only
-
-                        sal_Bool bEnabled = ( (pShell && pShell->IsReadOnly()) || IsImportingXML() );
-                        sal_Bool bModified = sal_False;
-                        uno::Reference< util::XModifiable > xModif;
-
-                        if ( bEnabled )
-                        {
-                            try
-                            {
-                                xModif =
-                                    uno::Reference< util::XModifiable >( xIPObj->getComponent(), uno::UNO_QUERY_THROW );
-                                bModified = xModif->isModified();
-                            }
-                            catch( uno::Exception& )
-                            {
-                                bEnabled = sal_False;
-                            }
-                        }
-
-                        SchDLL::Update( xIPObj, pMemChart, pWindow );
-                        ((SdrOle2Obj*)pObject)->GetNewReplacement();
-                        delete pMemChart;
-
-                        // Dies veranlaesst Chart zum sofortigen Update
-                        //SvData aEmpty;
-                        //aIPObj->SendDataChanged( aEmpty );
-
-                        // the method below did nothing in SO7
-//REMOVE                            aIPObj->SendViewChanged();
-
-                        // redraw only
-                        pObject->ActionChanged();
-                        // pObject->SendRepaintBroadcast();
-
-                        if ( bEnabled && xModif.is() )
-                        {
-                            try
-                            {
-                                if ( xModif->isModified() != bModified )
-                                    xModif->setModified( bModified );
-                            }
-                            catch ( uno::Exception& )
-                            {}
-                        }
-
-                        return;         // nicht weitersuchen
-                    }
-                }
-                */
-            }
-            pObject = aIter.Next();
+            uno::Reference< util::XModifiable > xModif( xChartDoc, uno::UNO_QUERY_THROW );
+            if( apTemporaryChartLock.get() )
+                apTemporaryChartLock->AlsoLockThisChart( uno::Reference< frame::XModel >( xModif, uno::UNO_QUERY ) );
+            xModif->setModified( sal_True );
+        }
+        catch ( uno::Exception& )
+        {
         }
     }
+
+    // After the update, chart keeps track of its own data source ranges,
+    // the listener doesn't need to listen anymore.
+    if(pChartListenerCollection)
+        pChartListenerCollection->ChangeListening( rChartName, new ScRangeList );
 }
 
 void ScDocument::RestoreChartListener( const String& rName )
