@@ -67,7 +67,7 @@ namespace svt
         ControlState lcl_ItemToControlState( const ItemFlags i_nItemFlags )
         {
             ControlState nState = CTRL_STATE_ENABLED;
-            if ( i_nItemFlags & ITEM_STATE_FOCUSED )    nState |= CTRL_STATE_FOCUSED;
+            if ( i_nItemFlags & ITEM_STATE_FOCUSED )    nState |= CTRL_STATE_FOCUSED | CTRL_STATE_PRESSED;
             if ( i_nItemFlags & ITEM_STATE_HOVERED )    nState |= CTRL_STATE_ROLLOVER;
             if ( i_nItemFlags & ITEM_STATE_ACTIVE )     nState |= CTRL_STATE_SELECTED;
             return nState;
@@ -527,7 +527,6 @@ namespace svt
             m_pRenderer.reset( new VCLItemRenderer( m_aRenderDevice ) );
 
         m_aRenderDevice.SetLineColor();
-        //m_aRenderDevice.SetFillColor( m_rTabBar.GetSettings().GetStyleSettings().GetDialogColor() );
 
         m_rPanelDeck.AddListener( *this );
 
@@ -1220,7 +1219,6 @@ namespace svt
             &&  ( ( i_rDataChanedEvent.GetFlags() & SETTINGS_STYLE ) != 0 )
             )
         {
-            //SetFillColor( GetSettings().GetStyleSettings().GetDialogColor() );
             Invalidate();
         }
     }
