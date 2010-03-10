@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: lngex.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -203,8 +200,8 @@ int _cdecl main( int argc, char *argv[] )
         return 1;
     }
     if( !bQuiet ){
-        fprintf( stdout, "\nUlfEx 1 Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.\n" );
-        fprintf( stdout, "====================================================================\n" );
+        fprintf( stdout, "\nUlfEx 1 Copyright 2000, 2010 Oracle and/or its affiliates. All Rights Reserved.\n" );
+        fprintf( stdout, "=================================================================================\n" );
         fprintf( stdout, "\nProcessing File %s ...\n", sInputFile.GetBuffer());
     }else
     {

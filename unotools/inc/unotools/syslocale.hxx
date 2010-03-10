@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: syslocale.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +33,7 @@
 #include <unotools/charclass.hxx>
 #include <sal/types.h>
 #include <i18npool/lang.h>
+#include <rtl/textenc.h>
 
 class SvtSysLocale_Impl;
 class SvtSysLocaleOptions;
@@ -79,6 +77,12 @@ public:
             LanguageType                GetLanguage() const;
             com::sun::star::lang::Locale GetUILocale() const;
             LanguageType                GetUILanguage() const;
+
+    /** Get the best MIME encoding matching the system locale, or if that isn't
+        determinable one that matches the UI locale, or UTF8 if everything else
+        fails.
+     */
+    static  rtl_TextEncoding    GetBestMimeEncoding();
 };
 
 #endif  // INCLUDED_SVTOOLS_SYSLOCALE_HXX
