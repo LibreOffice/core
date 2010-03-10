@@ -75,7 +75,7 @@
 #include <frmatr.hxx>
 // --> OD 2009-12-29 #i89920#
 #include <fmtsrnd.hxx>
-#include <svx/opaqitem.hxx>
+#include <editeng/opaqitem.hxx>
 // <--
 
 using ::rtl::OUString;
