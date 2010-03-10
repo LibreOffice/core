@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrtsh1.cxx,v $
- * $Revision: 1.72 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,11 +54,10 @@
 #include <svtools/soerr.hxx>
 #include <tools/cachestr.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/svxacorr.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/svxacorr.hxx>
 #include <vcl/graph.hxx>
-#include <svx/impgrf.hxx>
 #include <sfx2/printer.hxx>
 #include <unotools/charclass.hxx>
 
@@ -111,7 +107,9 @@
 #include <sfx2/request.hxx>
 #include <paratr.hxx>
 #include <ndtxt.hxx>
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
+//#include <svx/acorrcfg.hxx>
+#include <IMark.hxx>
 
 // -> #111827#
 #include <SwRewriter.hxx>
@@ -122,10 +120,11 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 
 #include "PostItMgr.hxx"
 
+using namespace sw::mark;
 using namespace com::sun::star;
 
 #define COMMON_INI_LIST \
@@ -160,7 +159,7 @@ SvxAutoCorrect* lcl_IsAutoCorr()
 {
        SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     if( pACorr && !pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
-                            ChgFractionSymbol | ChgOrdinalNumber |
+                            AddNonBrkSpace | ChgOrdinalNumber |
                             ChgToEnEmDash | SetINetAttr | Autocorrect ))
         pACorr = 0;
     return pACorr;
@@ -1757,6 +1756,12 @@ SwWrtShell::SwWrtShell( SwWrtShell& rSh, Window *_pWin, SwView &rShell )
 
     SetSfxViewShell( (SfxViewShell *)&rShell );
     SetFlyMacroLnk( LINK(this, SwWrtShell, ExecFlyMac) );
+
+    // place the cursor on the first field...
+    IFieldmark *pBM = NULL;
+    if ( IsFormProtected() && ( pBM = GetFieldmarkAfter( ) ) !=NULL ) {
+        GotoFieldmark(pBM);
+    }
 }
 
 

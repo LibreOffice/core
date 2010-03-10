@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: expfld.cxx,v $
- * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,10 +31,10 @@
 #include <hintids.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/charclass.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <com/sun/star/text/SetVariableType.hpp>
 #include <unofield.hxx>
 #include <frmfmt.hxx>
@@ -1298,7 +1295,7 @@ BOOL SwSetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
     case FIELD_PROP_DOUBLE:
         {
-             double fVal;
+             double fVal = 0.0;
              rAny >>= fVal;
              SetValue(fVal);
         }
