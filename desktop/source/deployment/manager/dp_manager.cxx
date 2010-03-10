@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dp_manager.cxx,v $
- * $Revision: 1.33.8.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -312,18 +309,6 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
             catch (Exception &) {
                 that->m_readOnly = true;
             }
-        }
-
-        //Workaround. See issue http://www.openoffice.org/issues/show_bug.cgi?id=99257
-        //This prevents the copying of the common.rdbf and native rdbs. It disables the
-        //feature to add shared extensions in a running office.
-        if (!that->m_readOnly && context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("shared") ))
-        {
-            OUString sNoRdb;
-            ::rtl::Bootstrap::get(OUSTR("NORDBCOPY"), sNoRdb);
-            if (sNoRdb.equalsIgnoreAsciiCase(OUSTR("true"))
-                && dp_misc::office_is_running())
-                that->m_readOnly = true;
         }
 
         if (!that->m_readOnly && logFile.getLength() > 0)

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: obj3d.cxx,v $
- * $Revision: 1.48.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,9 +55,9 @@
 #include <svx/xlnwtit.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/poly.hxx>
-#include <goodies/b3dtrans.hxx>
+#include <tools/b3dtrans.hxx>
 #include <svx/svxids.hrc>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/e3ditem.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
@@ -70,7 +67,7 @@
 #include <svx/svx3ditems.hxx>
 #include <svl/whiter.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/xgrscit.hxx>
 #include "svdoimp.hxx"
 #include <svx/sdr/properties/e3dproperties.hxx>
