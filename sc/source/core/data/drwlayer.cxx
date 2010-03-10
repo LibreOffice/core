@@ -79,6 +79,7 @@
 #include "chartarr.hxx"
 #include "postit.hxx"
 #include "attrib.hxx"
+#include "charthelper.hxx"
 
 #define DET_ARROW_OFFSET    1000
 
@@ -1399,38 +1400,48 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle&
     }
 }
 
-BOOL lcl_IsAllInRange( const ScRangeList& rRanges, const ScRange& rClipRange )
+BOOL lcl_IsAllInRange( const ::std::vector< ScRangeList >& rRangesVector, const ScRange& rClipRange )
 {
-    //  check if every range of rRanges is completely in rClipRange
+    //  check if every range of rRangesVector is completely in rClipRange
 
-    ULONG nCount = rRanges.Count();
-    for (ULONG i=0; i<nCount; i++)
+    ::std::vector< ScRangeList >::const_iterator aIt = rRangesVector.begin();
+    for( ;aIt!=rRangesVector.end(); ++aIt )
     {
-        ScRange aRange = *rRanges.GetObject(i);
-        if ( !rClipRange.In( aRange ) )
+        const ScRangeList& rRanges = *aIt;
+        ULONG nCount = rRanges.Count();
+        for (ULONG i=0; i<nCount; i++)
         {
-            return FALSE;   // at least one range is not valid
+            ScRange aRange = *rRanges.GetObject(i);
+            if ( !rClipRange.In( aRange ) )
+            {
+                return FALSE;   // at least one range is not valid
+            }
         }
     }
 
     return TRUE;            // everything is fine
 }
 
-BOOL lcl_MoveRanges( ScRangeList& rRanges, const ScRange& rSourceRange, const ScAddress& rDestPos )
+BOOL lcl_MoveRanges( ::std::vector< ScRangeList >& rRangesVector, const ScRange& rSourceRange, const ScAddress& rDestPos )
 {
     BOOL bChanged = FALSE;
 
-    ULONG nCount = rRanges.Count();
-    for (ULONG i=0; i<nCount; i++)
+    ::std::vector< ScRangeList >::iterator aIt = rRangesVector.begin();
+    for( ;aIt!=rRangesVector.end(); ++aIt )
     {
-        ScRange* pRange = rRanges.GetObject(i);
-        if ( rSourceRange.In( *pRange ) )
+        ScRangeList& rRanges = *aIt;
+        ULONG nCount = rRanges.Count();
+        for (ULONG i=0; i<nCount; i++)
         {
-            SCsCOL nDiffX = rDestPos.Col() - (SCsCOL)rSourceRange.aStart.Col();
-            SCsROW nDiffY = rDestPos.Row() - (SCsROW)rSourceRange.aStart.Row();
-            SCsTAB nDiffZ = rDestPos.Tab() - (SCsTAB)rSourceRange.aStart.Tab();
-            pRange->Move( nDiffX, nDiffY, nDiffZ );
-            bChanged = TRUE;
+            ScRange* pRange = rRanges.GetObject(i);
+            if ( rSourceRange.In( *pRange ) )
+            {
+                SCsCOL nDiffX = rDestPos.Col() - (SCsCOL)rSourceRange.aStart.Col();
+                SCsROW nDiffY = rDestPos.Row() - (SCsROW)rSourceRange.aStart.Row();
+                SCsTAB nDiffZ = rDestPos.Tab() - (SCsTAB)rSourceRange.aStart.Tab();
+                pRange->Move( nDiffX, nDiffY, nDiffZ );
+                bChanged = TRUE;
+            }
         }
     }
 
@@ -1541,16 +1552,11 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
 
                 if ( xIPObj.is() && SotExchange::IsChart( aObjectClassName ) )
                 {
-                    String aNewName = ((SdrOle2Obj*)pNewObject)->GetPersistName();
+                    String aChartName = ((SdrOle2Obj*)pNewObject)->GetPersistName();
 
-                    //! need to set new DataProvider, or does Chart handle this itself?
-
-                    ScRangeListRef xRanges( new ScRangeList );
-                    BOOL bColHeaders = FALSE;
-                    BOOL bRowHeaders = FALSE;
-                    pDoc->GetOldChartParameters( aNewName, *xRanges, bColHeaders, bRowHeaders );
-
-                    if ( xRanges->Count() > 0 )
+                    ::std::vector< ScRangeList > aRangesVector;
+                    pDoc->GetChartRanges( aChartName, aRangesVector, pDoc );
+                    if( !aRangesVector.empty() )
                     {
                         ScDocument* pClipDoc = pClipModel->GetDocument();
 
@@ -1577,7 +1583,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
                             aClipRange = ScRange( nClipStartX, nClipStartY, nSourceTab,
                                                     nClipEndX, nClipEndY, nSourceTab );
 
-                            bInSourceRange = lcl_IsAllInRange( *xRanges, aClipRange );
+                            bInSourceRange = lcl_IsAllInRange( aRangesVector, aClipRange );
                         }
 
                         // always lose references when pasting into a clipboard document (transpose)
@@ -1588,11 +1594,8 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
                                 if ( rDestPos != aClipRange.aStart )
                                 {
                                     //  update the data ranges to the new (copied) position
-                                    ScRangeListRef xNewRanges = new ScRangeList( *xRanges );
-                                    if ( lcl_MoveRanges( *xNewRanges, aClipRange, rDestPos ) )
-                                    {
-                                        pDoc->UpdateChartArea( aNewName, xNewRanges, bColHeaders, bRowHeaders, FALSE );
-                                    }
+                                    if ( lcl_MoveRanges( aRangesVector, aClipRange, rDestPos ) )
+                                        pDoc->SetChartRanges( aChartName, aRangesVector );
                                 }
                             }
                             else
