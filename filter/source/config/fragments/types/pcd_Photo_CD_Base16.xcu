@@ -2,7 +2,7 @@
         <prop oor:name="DetectService"><value>com.sun.star.comp.draw.FormatDetector</value></prop>
         <prop oor:name="URLPattern"/>
         <prop oor:name="Extensions"><value>pcd</value></prop>
-        <prop oor:name="MediaType"><value>image/x-photo-cd</value></prop>>
+        <prop oor:name="MediaType"><value>image/x-photo-cd</value></prop>
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>draw_PCD_Photo_CD_Base16</value></prop>
         <prop oor:name="UIName">
