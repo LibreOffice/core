@@ -54,6 +54,8 @@
 #include <access.hrc>
 #include <acctable.hxx>
 
+#include <com/sun/star/accessibility/XAccessibleText.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::rtl::OUString;
@@ -904,24 +906,72 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleRowDescription(
             sal_Int32 nRow )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    // TODO: Is there any reasonable we can do here?
-    OUString sTmpDesc;
+    // --> OD 2010-03-10 #i87532#
+    // determine table cell in <nRow>th row and in first column of row header table
+    // and return its text content.
+    OUString sRowDesc;
 
     GetTableData().CheckRowAndCol(nRow, 0, this);
 
-    return sTmpDesc;
+    uno::Reference< XAccessibleTable > xTableRowHeader = getAccessibleRowHeaders();
+    if ( xTableRowHeader.is() )
+    {
+        uno::Reference< XAccessible > xRowHeaderCell =
+                        xTableRowHeader->getAccessibleCellAt( nRow, 0 );
+        ASSERT( xRowHeaderCell.is(),
+                "<SwAccessibleTable::getAccessibleRowDescription(..)> - missing row header cell -> serious issue." );
+        uno::Reference< XAccessibleContext > xRowHeaderCellContext =
+                                    xRowHeaderCell->getAccessibleContext();
+        const sal_Int32 nCellChildCount( xRowHeaderCellContext->getAccessibleChildCount() );
+        for ( sal_Int32 nChildIndex = 0; nChildIndex < nCellChildCount; ++nChildIndex )
+        {
+            uno::Reference< XAccessible > xChild = xRowHeaderCellContext->getAccessibleChild( nChildIndex );
+            uno::Reference< XAccessibleText > xChildText( xChild, uno::UNO_QUERY );
+            if ( xChildText.is() )
+            {
+                sRowDesc = sRowDesc + xChildText->getText();
+            }
+        }
+    }
+
+    return sRowDesc;
+    // <--
 }
 
 OUString SAL_CALL SwAccessibleTable::getAccessibleColumnDescription(
             sal_Int32 nColumn )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    // TODO: Is there any reasonable we can do here?
-    OUString sTmpDesc;
+    // --> OD 2010-03-10 #i87532#
+    // determine table cell in first row and in <nColumn>th column of column header table
+    // and return its text content.
+    OUString sColumnDesc;
 
     GetTableData().CheckRowAndCol(0, nColumn, this);
 
-    return sTmpDesc;
+    uno::Reference< XAccessibleTable > xTableColumnHeader = getAccessibleColumnHeaders();
+    if ( xTableColumnHeader.is() )
+    {
+        uno::Reference< XAccessible > xColumnHeaderCell =
+                        xTableColumnHeader->getAccessibleCellAt( 0, nColumn );
+        ASSERT( xColumnHeaderCell.is(),
+                "<SwAccessibleTable::getAccessibleColumnDescription(..)> - missing column header cell -> serious issue." );
+        uno::Reference< XAccessibleContext > xColumnHeaderCellContext =
+                                    xColumnHeaderCell->getAccessibleContext();
+        const sal_Int32 nCellChildCount( xColumnHeaderCellContext->getAccessibleChildCount() );
+        for ( sal_Int32 nChildIndex = 0; nChildIndex < nCellChildCount; ++nChildIndex )
+        {
+            uno::Reference< XAccessible > xChild = xColumnHeaderCellContext->getAccessibleChild( nChildIndex );
+            uno::Reference< XAccessibleText > xChildText( xChild, uno::UNO_QUERY );
+            if ( xChildText.is() )
+            {
+                sColumnDesc = sColumnDesc + xChildText->getText();
+            }
+        }
+    }
+
+    return sColumnDesc;
+    // <--
 }
 
 sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRowExtentAt(
@@ -998,9 +1048,18 @@ uno::Reference< XAccessibleTable > SAL_CALL
         SwAccessibleTable::getAccessibleColumnHeaders(  )
     throw (uno::RuntimeException)
 {
-    // --> OD 2007-06-29 #i77106#
-    return new SwAccessibleTableColHeaders(
-                        GetMap(), static_cast< const SwTabFrm *>( GetFrm() ) );
+    // --> OD 2010-03-10 #i87532#
+    // assure that return accesible object is empty, if no column header exists.
+    SwAccessibleTableColHeaders* pTableColHeaders =
+        new SwAccessibleTableColHeaders( GetMap(), static_cast< const SwTabFrm *>( GetFrm() ) );
+    uno::Reference< XAccessibleTable > xTableColumnHeaders( pTableColHeaders );
+    if ( pTableColHeaders->getAccessibleChildCount() <= 0 )
+    {
+        return uno::Reference< XAccessibleTable >();
+    }
+
+    return xTableColumnHeaders;
+    // <--
 }
 
 uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleRows()
