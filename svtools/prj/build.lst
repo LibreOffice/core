@@ -14,6 +14,7 @@ st	svtools\source\filter.vcl\igif		nmake	-	all	st_vigif st_inc NULL
 st	svtools\source\filter.vcl\jpeg		nmake	-	all	st_vjpeg st_inc NULL
 st	svtools\source\filter.vcl\ixbm		nmake	-	all	st_vixbm st_inc NULL
 st	svtools\source\filter.vcl\ixpm		nmake	-	all	st_vixpm st_inc NULL
+st	svtools\source\graphic				nmake	-	all	st_svtgraphic  st_inc NULL
 st	svtools\source\java					nmake	-	all	st_svtjava  st_inc NULL
 st	svtools\source\misc					nmake	-	all	st__misc st_bmp st_inc NULL
 st	svtools\source\plugapp				nmake	-	all	st_papp st_inc NULL
@@ -22,7 +23,7 @@ st	svtools\source\svrtf				nmake	-	all	st_rtf st_inc NULL
 st	svtools\source\table               	nmake	-	all	st_table st_inc NULL
 st	svtools\source\uno					nmake	-	all	st_uno st_inc NULL
 st	svtools\source\urlobj				nmake	-	all	st__url st_inc NULL
-st  svtools\util                        nmake   -   all st_util st__brw st__ctr st_conf st_ctl st_dial st_edit st__misc st__url  st_html st_papp st_rtf st_table st_uno st_vfilt st_vigif st_vixbm st_vixpm st_vjpeg st_vwmf st_svtjava NULL
+st  svtools\util                        nmake   -   all st_util st_svtgraphic st__brw st__ctr st_conf st_ctl st_dial st_edit st__misc st__url  st_html st_papp st_rtf st_table st_uno st_vfilt st_vigif st_vixbm st_vixpm st_vjpeg st_vwmf st_svtjava NULL
 st	svtools\source\hatchwindow			nmake	-	all	st_hatchwin st_inc NULL
 st	svtools\source\productregistration	nmake	-	all	st_prodreg st_util st_inc NULL
 st  svtools\workben\unodialog           nmake   -   all st_workben_udlg st_util NULL

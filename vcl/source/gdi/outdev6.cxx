@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: outdev6.cxx,v $
- * $Revision: 1.33.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -269,6 +266,9 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
     // try hard to draw it directly, because the emulation layers are slower
     if( !pDisableNative
         && mpGraphics->supportsOperation( OutDevSupport_B2DDraw )
+#if defined UNX && ! defined QUARTZ
+            && GetBitCount() > 8
+#endif
 #ifdef WIN32
         // workaround bad dithering on remote displaying when using GDI+ with toolbar buttoin hilighting
         && !rPolyPoly.IsRect()
