@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salnativewidgets.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -450,6 +447,15 @@ UInt32 AquaSalGraphics::getState( ControlState nState )
     return kThemeStateActive;
 }
 
+UInt32 AquaSalGraphics::getTrackState( ControlState nState )
+{
+    bool bDrawActive = mpFrame ? ([mpFrame->getWindow() isKeyWindow] ? true : false) : true;
+    if( (nState & CTRL_STATE_ENABLED) == 0 || ! bDrawActive )
+            return kThemeTrackInactive;
+
+    return kThemeTrackActive;
+}
+
 /*
  * DrawNativeControl()
  *
@@ -767,7 +773,10 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
             aTrackInfo.attributes           = kThemeTrackHorizontal;
             if( Application::GetSettings().GetLayoutRTL() )
                 aTrackInfo.attributes      |= kThemeTrackRightToLeft;
-            aTrackInfo.enableState          = (nState & CTRL_STATE_ENABLED) ? kThemeTrackActive : kThemeTrackInactive;
+            aTrackInfo.enableState          = getTrackState( nState );
+            // the intro bitmap never gets key anyway; we want to draw that enabled
+            if( nType == CTRL_INTROPROGRESS )
+                aTrackInfo.enableState          = kThemeTrackActive;
             aTrackInfo.filler1              = 0;
             aTrackInfo.trackInfo.progress.phase   = static_cast<UInt8>(CFAbsoluteTimeGetCurrent()*10.0);
 
@@ -799,7 +808,7 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
                 aTrackDraw.attributes = kThemeTrackShowThumb;
                 if( nPart == PART_DRAW_BACKGROUND_HORZ )
                     aTrackDraw.attributes |= kThemeTrackHorizontal;
-                aTrackDraw.enableState = kThemeTrackActive;
+                aTrackDraw.enableState = getTrackState( nState );
 
                 ScrollBarTrackInfo aScrollInfo;
                 aScrollInfo.viewsize = pScrollbarVal->mnVisibleSize;

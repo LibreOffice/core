@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salnativewidgets-gtk.cxx,v $
- * $Revision: 1.47.32.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1089,6 +1086,19 @@ BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
                                          (rControlRegion.GetBoundRect().GetHeight()-indicator_size)/2),
                                   Size( indicator_size, indicator_size ) );
         rNativeContentRegion = Region( aIndicatorRect );
+        returnVal = TRUE;
+    }
+    if( (nType == CTRL_EDITBOX || nType == CTRL_SPINBOX) && nPart == PART_ENTIRE_CONTROL )
+    {
+        NWEnsureGTKEditBox( m_nScreen );
+        GtkWidget* widget = gWidgetData[m_nScreen].gEditBoxWidget;
+        GtkRequisition aReq;
+        gtk_widget_size_request( widget, &aReq );
+        Rectangle aEditRect = rControlRegion.GetBoundRect();
+        aEditRect = Rectangle( aEditRect.TopLeft(),
+                               Size( aEditRect.GetWidth(), aReq.height+1 ) );
+        rNativeBoundingRegion = Region( aEditRect );
+        rNativeContentRegion = rNativeBoundingRegion;
         returnVal = TRUE;
     }
 

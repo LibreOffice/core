@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: imap.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +61,12 @@ UINT16 IMapObject::nActualTextEncoding = (UINT16) RTL_TEXTENCODING_DONTKNOW;
 #pragma optimize ( "", off )
 #endif
 
+IMapObject::IMapObject()
+    : bActive( false )
+    , nReadVersion( 0 )
+{
+}
+
 IMapObject::IMapObject( const String& rURL, const String& rAltText, const String& rDesc,
                         const String& rTarget, const String& rName, BOOL bURLActive )
 : aURL( rURL )
@@ -72,6 +75,7 @@ IMapObject::IMapObject( const String& rURL, const String& rAltText, const String
 , aTarget( rTarget )
 , aName( rName )
 , bActive( bURLActive )
+, nReadVersion( 0 )
 {
 }
 
