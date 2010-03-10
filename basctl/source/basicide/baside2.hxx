@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: baside2.hxx,v $
- * $Revision: 1.26.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -359,6 +356,7 @@ private:
     void                GoOnTop();
     void                AssertValidEditEngine();
 
+    sal_Int32           FormatAndPrint( Printer* pPrinter, sal_Int32 nPage = -1 );
 protected:
     virtual void    Resize();
     virtual void    GetFocus();
@@ -380,7 +378,11 @@ public:
     virtual void    StoreData();
     virtual void    UpdateData();
     virtual BOOL    CanClose();
-    virtual void    PrintData( Printer* pPrinter );
+    // virtual void PrintData( Printer* pPrinter );
+    // return number of pages to be printed
+    virtual sal_Int32 countPages( Printer* pPrinter );
+    // print page
+    virtual void printPage( sal_Int32 nPage, Printer* pPrinter );
     virtual String  GetTitle();
     virtual BasicEntryDescriptor CreateEntryDescriptor();
     virtual BOOL    AllowUndo();

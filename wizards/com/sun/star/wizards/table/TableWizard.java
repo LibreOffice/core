@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TableWizard.java,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -251,7 +248,7 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
     {
         curScenarioSelector = new ScenarioSelector(this, this.curTableDescriptor, slblFields, slblSelFields);
         curFieldFormatter = new FieldFormatter(this, curTableDescriptor);
-        if (this.curTableDescriptor.supportsCoreSQLGrammar())
+        if ( this.curTableDescriptor.supportsPrimaryKeys() )
         {
             curPrimaryKeyHandler = new PrimaryKeyHandler(this, curTableDescriptor);
         }
@@ -265,7 +262,7 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
         boolean bTableCreated = false;
         String schemaname = curFinalizer.getSchemaName();
         String catalogname = curFinalizer.getCatalogName();
-        if (curTableDescriptor.supportsCoreSQLGrammar())
+        if (curTableDescriptor.supportsPrimaryKeys())
         {
             String[] keyfieldnames = curPrimaryKeyHandler.getPrimaryKeyFields(curTableDescriptor);
             if (keyfieldnames != null)
@@ -360,7 +357,7 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
         int i = 0;
         i = insertRoadmapItem(0, true, m_oResource.getResText(UIConsts.RID_TABLE + 2), SOMAINPAGE);
         i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_TABLE + 3), SOFIELDSFORMATPAGE);
-        if (this.curTableDescriptor.supportsCoreSQLGrammar())
+        if (this.curTableDescriptor.supportsPrimaryKeys())
         {
             i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_TABLE + 4), SOPRIMARYKEYPAGE);
         }

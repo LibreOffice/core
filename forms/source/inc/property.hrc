@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: property.hrc,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,7 +60,7 @@ namespace frm
 #define PROPERTY_ID_INPUT_REQUIRED      (PROPERTY_ID_START + 19)
 #define PROPERTY_ID_WRITING_MODE        (PROPERTY_ID_START + 20)
 #define PROPERTY_ID_CONTEXT_WRITING_MODE    (PROPERTY_ID_START + 21)
-    // free
+#define PROPERTY_ID_VERTICAL_ALIGN      (PROPERTY_ID_START + 22)
     // free
     // free
     // free

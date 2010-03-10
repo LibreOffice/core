@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: CommandMetaData.java,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -644,8 +641,8 @@ public class CommandMetaData extends DBMetaData
             rDispatchArguments[1] = Properties.createProperty("ActiveConnection", this.DBConnection);
             rDispatchArguments[2] = Properties.createProperty("Command", _commandname);
             rDispatchArguments[3] = Properties.createProperty("CommandType", new Integer(_commandtype));
-            rDispatchArguments[4] = Properties.createProperty("ShowTreeView", Boolean.FALSE);
-            rDispatchArguments[5] = Properties.createProperty("ShowTreeViewButton", Boolean.FALSE);
+            rDispatchArguments[4] = Properties.createProperty("ShowBrowser", Boolean.FALSE);
+            rDispatchArguments[5] = Properties.createProperty("EnableBrowser", Boolean.FALSE);
             rDispatchArguments[6] = Properties.createProperty("ShowMenu", Boolean.TRUE);
             return showCommandView(".component:DB/DataSourceBrowser", rDispatchArguments,parentFrame);
         }

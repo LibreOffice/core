@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: QueryWizard.java,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -298,6 +295,10 @@ public class QueryWizard extends WizardDialog
         if ((switchToStep(ncurStep, SOSUMMARY_PAGE)) || (ncurStep == SOSUMMARY_PAGE))
         {
             components = CurFinalizer.finish();
+            if ( components == null )
+            {
+                setControlProperty("btnWizardFinish", "Enabled", false);
+            }
         }
     }
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlgfact.cxx,v $
- * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,6 +100,8 @@
 #include "macroass.hxx"
 #include "acccfg.hxx"
 #include "insrc.hxx"
+#include "hyphen.hxx"
+#include "thesdlg.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -119,6 +118,8 @@ IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxDistributeDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractHangulHanjaConversionDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractFmShowColsDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractHyphenWordDialog_Impl)
+IMPL_ABSTDLG_BASE(AbstractThesaurusDialog_Impl)
 
 AbstractSvxZoomDialog_Impl::~AbstractSvxZoomDialog_Impl()                                       \
 {
@@ -270,12 +271,12 @@ void AbstractHangulHanjaConversionDialog_Impl::SetByCharacter( sal_Bool _bByChar
     pDlg->SetByCharacter(_bByCharacter);
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetConversionDirectionState( sal_Bool _bTryBothDirections, HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection )
+void AbstractHangulHanjaConversionDialog_Impl::SetConversionDirectionState( sal_Bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection )
 {
     pDlg->SetConversionDirectionState(_bTryBothDirections, _ePrimaryConversionDirection);
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetConversionFormat( HangulHanjaConversion::ConversionFormat _eType )
+void AbstractHangulHanjaConversionDialog_Impl::SetConversionFormat( editeng::HangulHanjaConversion::ConversionFormat _eType )
 {
      pDlg->SetConversionFormat(_eType);
 }
@@ -324,7 +325,7 @@ sal_Bool AbstractHangulHanjaConversionDialog_Impl::GetUseBothDirections( ) const
     return pDlg->GetUseBothDirections();
 }
 
-HangulHanjaConversion::ConversionDirection AbstractHangulHanjaConversionDialog_Impl::GetDirection( HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const
+editeng::HangulHanjaConversion::ConversionDirection AbstractHangulHanjaConversionDialog_Impl::GetDirection( editeng::HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const
 {
     return pDlg->GetDirection( _eDefaultDirection );
 }
@@ -341,7 +342,7 @@ String   AbstractHangulHanjaConversionDialog_Impl::GetCurrentString( ) const
 {
     return pDlg->GetCurrentString();
 }
-HangulHanjaConversion::ConversionFormat  AbstractHangulHanjaConversionDialog_Impl::GetConversionFormat( ) const
+editeng::HangulHanjaConversion::ConversionFormat     AbstractHangulHanjaConversionDialog_Impl::GetConversionFormat( ) const
 {
     return pDlg->GetConversionFormat();
 }
@@ -354,6 +355,36 @@ void AbstractHangulHanjaConversionDialog_Impl::FocusSuggestion( )
 String  AbstractHangulHanjaConversionDialog_Impl::GetCurrentSuggestion( ) const
 {
     return pDlg->GetCurrentSuggestion();
+}
+
+String AbstractThesaurusDialog_Impl::GetWord()
+{
+    return pDlg->GetWord();
+};
+
+sal_uInt16 AbstractThesaurusDialog_Impl::GetLanguage() const
+{
+    return pDlg->GetLanguage();
+};
+
+Window* AbstractThesaurusDialog_Impl::GetWindow()
+{
+    return pDlg;
+}
+
+void AbstractHyphenWordDialog_Impl::SelLeft()
+{
+    pDlg->SelLeft();
+}
+
+void AbstractHyphenWordDialog_Impl::SelRight()
+{
+    pDlg->SelRight();
+}
+
+Window* AbstractHyphenWordDialog_Impl::GetWindow()
+{
+    return pDlg;
 }
 
 Reference < com::sun::star::embed::XEmbeddedObject > AbstractInsertObjectDialog_Impl::GetObject()
@@ -1101,10 +1132,27 @@ AbstractSvxDistributeDialog*    AbstractDialogFactory_Impl::CreateSvxDistributeD
 }
 
 AbstractHangulHanjaConversionDialog* AbstractDialogFactory_Impl::CreateHangulHanjaConversionDialog(Window* pParent,
-                                                                       HangulHanjaConversion::ConversionDirection _ePrimaryDirection )
+                                                                       editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection )
 {
     HangulHanjaConversionDialog* pDlg = new HangulHanjaConversionDialog( pParent, _ePrimaryDirection);
     return new AbstractHangulHanjaConversionDialog_Impl( pDlg );
+}
+
+AbstractThesaurusDialog* AbstractDialogFactory_Impl::CreateThesaurusDialog( Window* pParent,
+                                ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XThesaurus >  xThesaurus,
+                                const String &rWord, sal_Int16 nLanguage )
+{
+    SvxThesaurusDialog* pDlg = new SvxThesaurusDialog( pParent, xThesaurus, rWord, nLanguage );
+    return new AbstractThesaurusDialog_Impl( pDlg );
+}
+
+AbstractHyphenWordDialog* AbstractDialogFactory_Impl::CreateHyphenWordDialog( Window* pParent,
+                                                const String &rWord, LanguageType nLang,
+                                                ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenator >  &xHyphen,
+                                                SvxSpellWrapper* pWrapper )
+{
+    SvxHyphenWordDialog* pDlg = new SvxHyphenWordDialog( rWord, nLang, pParent, xHyphen, pWrapper );
+    return new AbstractHyphenWordDialog_Impl( pDlg );
 }
 
 AbstractFmShowColsDialog * AbstractDialogFactory_Impl::CreateFmShowColsDialog( Window* pParent )
@@ -1871,7 +1919,7 @@ SfxAbstractPasteDialog* AbstractDialogFactory_Impl::CreatePasteDialog( Window* p
     return new AbstractPasteDialog_Impl( new SvPasteObjectDialog( pParent ) );
 }
 
-SfxAbstractLinksDialog* AbstractDialogFactory_Impl::CreateLinksDialog( Window* pParent, sfx2::SvLinkManager* pMgr, BOOL bHTML, sfx2::SvBaseLink* p)
+SfxAbstractLinksDialog* AbstractDialogFactory_Impl::CreateLinksDialog( Window* pParent, sfx2::LinkManager* pMgr, BOOL bHTML, sfx2::SvBaseLink* p)
 {
     SvBaseLinksDlg* pLinkDlg = new SvBaseLinksDlg( pParent, pMgr, bHTML );
     if ( p )
@@ -1904,4 +1952,3 @@ SvxAbstractInsRowColDlg* AbstractDialogFactory_Impl::CreateSvxInsRowColDlg( Wind
 {
     return new SvxInsRowColDlg( pParent, bCol, nHelpId );
 }
-

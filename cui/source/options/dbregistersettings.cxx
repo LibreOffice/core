@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbregistersettings.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +30,8 @@
 
 #include "dbregistersettings.hxx"
 
+#include <rtl/ustring.hxx>
+
 //........................................................................
 namespace svx
 {
@@ -43,9 +42,9 @@ namespace svx
     //====================================================================
     TYPEINIT1( DatabaseMapItem, SfxPoolItem )
     //--------------------------------------------------------------------
-    DatabaseMapItem::DatabaseMapItem( sal_uInt16 _nId, const TNameLocationMap& _rSettings )
-        :SfxPoolItem(_nId)
-        ,m_aSettings(_rSettings)
+    DatabaseMapItem::DatabaseMapItem( sal_uInt16 _nId, const DatabaseRegistrations& _rRegistrations )
+        :SfxPoolItem( _nId )
+        ,m_aRegistrations( _rRegistrations )
     {
     }
 
@@ -53,19 +52,19 @@ namespace svx
     int DatabaseMapItem::operator==( const SfxPoolItem& _rCompare ) const
     {
         const DatabaseMapItem* pItem = PTR_CAST(DatabaseMapItem, &_rCompare);
-        if (!pItem)
+        if ( !pItem )
             return sal_False;
 
-        if (m_aSettings.size() != pItem->m_aSettings.size())
+        if ( m_aRegistrations.size() != pItem->m_aRegistrations.size() )
             return sal_False;
 
-        return m_aSettings != pItem->m_aSettings;
+        return m_aRegistrations == pItem->m_aRegistrations;
     }
 
     //--------------------------------------------------------------------
-    SfxPoolItem* DatabaseMapItem::Clone( SfxItemPool * ) const
+    SfxPoolItem* DatabaseMapItem::Clone( SfxItemPool* ) const
     {
-        return new DatabaseMapItem(Which(), m_aSettings);
+        return new DatabaseMapItem( Which(), m_aRegistrations );
     }
 
     //--------------------------------------------------------------------

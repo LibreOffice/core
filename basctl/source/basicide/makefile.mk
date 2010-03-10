@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.29 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,7 +47,8 @@ CDEFS+=-DBASICDEBUG
 
 # --- Allgemein ----------------------------------------------------------
 
-EXCEPTIONSFILES=$(SLO)$/scriptdocument.obj  \
+EXCEPTIONSFILES=$(SLO)$/basicrenderable.obj  \
+                $(SLO)$/scriptdocument.obj  \
                 $(SLO)$/basidesh.obj	\
                 $(SLO)$/basides1.obj	\
                 $(SLO)$/basides2.obj	\
@@ -84,7 +81,7 @@ SLOFILES =  $(EXCEPTIONSFILES) \
             $(SLO)$/objdlg.obj	\
 
 SRS1NAME=$(TARGET)
-SRC1FILES=	basidesh.src macrodlg.src moptions.src moduldlg.src objdlg.src brkdlg.src tbxctl.src
+SRC1FILES=	basidesh.src macrodlg.src moptions.src moduldlg.src objdlg.src brkdlg.src tbxctl.src basicprint.src
 
 .INCLUDE :  target.mk
 

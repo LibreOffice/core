@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: eventhandler.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,7 +52,7 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XForm.hpp>
-#include <com/sun/star/form/XFormController.hpp>
+#include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
@@ -66,6 +63,7 @@
 /** === end UNO includes === **/
 
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/evtmethodhelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
@@ -118,7 +116,7 @@ namespace pcr
     using ::com::sun::star::container::XNameContainer;
     using ::com::sun::star::awt::XTabControllerModel;
     using ::com::sun::star::form::XForm;
-    using ::com::sun::star::form::XFormController;
+    using ::com::sun::star::form::runtime::XFormController;
     using ::com::sun::star::beans::UnknownPropertyException;
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::container::NoSuchElementException;
@@ -173,36 +171,6 @@ namespace pcr
     //========================================================================
     namespace
     {
-        //....................................................................
-        Sequence< ::rtl::OUString > lcl_getListenerMethodsForType( const Type& type )
-        {
-            typelib_InterfaceTypeDescription *pType=0;
-            type.getDescription( (typelib_TypeDescription**)&pType);
-
-            if ( !pType )
-                return Sequence< ::rtl::OUString>();
-
-            Sequence< ::rtl::OUString > aNames( pType->nMembers );
-            ::rtl::OUString* pNames = aNames.getArray();
-            for ( sal_Int32 i = 0; i < pType->nMembers; ++i, ++pNames)
-            {
-                // the decription reference
-                typelib_TypeDescriptionReference* pMemberDescriptionReference = pType->ppMembers[i];
-                // the description for the reference
-                typelib_TypeDescription* pMemberDescription = NULL;
-                typelib_typedescriptionreference_getDescription( &pMemberDescription, pMemberDescriptionReference );
-                if ( pMemberDescription )
-                {
-                    typelib_InterfaceMemberTypeDescription* pRealMemberDescription =
-                        reinterpret_cast<typelib_InterfaceMemberTypeDescription*>(pMemberDescription);
-                    *pNames = pRealMemberDescription->pMemberName;
-                }
-            }
-
-            typelib_typedescription_release( (typelib_TypeDescription*)pType );
-            return aNames;
-        }
-
         //....................................................................
         #define DESCRIBE_EVENT( asciinamespace, asciilistener, asciimethod, id_postfix ) \
             s_aKnownEvents.insert( EventMap::value_type( \
@@ -835,7 +803,7 @@ namespace pcr
                         continue;
 
                     // loop through all methods
-                    Sequence< ::rtl::OUString > aMethods( lcl_getListenerMethodsForType( *pListeners ) );
+                    Sequence< ::rtl::OUString > aMethods( comphelper::getEventMethodsForType( *pListeners ) );
 
                     const ::rtl::OUString* pMethods = aMethods.getConstArray();
                     sal_uInt32 methodCount = aMethods.getLength();
@@ -1155,7 +1123,7 @@ namespace pcr
                 m_aContext.createComponent( (const rtl::OUString&)SERVICE_FORMCONTROLLER ), UNO_QUERY_THROW );
             xController->setModel( xComponentAsTCModel );
 
-            xReturn = xController.get();
+            xReturn = xController;
         }
         else
         {
