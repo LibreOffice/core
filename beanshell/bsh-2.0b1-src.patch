@@ -31,19 +31,15 @@
  	<property name="legacy-excludes" 
 --- misc/BeanShell/makefile.mk	Fri Mar 28 15:56:40 2008
 +++ misc/build/BeanShell/makefile.mk	Fri Mar 28 15:56:06 2008
-@@ -1 +1,39 @@
+@@ -1 +1,35 @@
 -dummy
 +#*************************************************************************
 +#
 +# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 +# 
-+# Copyright 2008 by Sun Microsystems, Inc.
++# Copyright 2000, 2010 Oracle and/or its affiliates.
 +#
 +# OpenOffice.org - a multi-platform office productivity suite
-+#
-+# $RCSfile: bsh-2.0b1-src.patch,v $
-+#
-+# $Revision: 1.7 $
 +#
 +# This file is part of OpenOffice.org.
 +#

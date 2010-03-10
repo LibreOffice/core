@@ -2,9 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2008 by Sun Microsystems, Inc.
 #
-# OpenOffice.org - a multi-platform office productivity suite
+#   OpenOffice.org - a multi-platform office productivity suite
 #
 # This file is part of OpenOffice.org.
 #
@@ -13,7 +13,7 @@
 # only, as published by the Free Software Foundation.
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
@@ -25,15 +25,25 @@
 #
 #*************************************************************************
 
-PRJ := ..
-PRJNAME := twain
-TARGET := twain
+.IF "$(SYSTEM_MYSQL)" == "YES"
+  CFLAGS+=-DSYSTEM_MYSQL
+.ELSE
+  .IF "$(LIBMYSQL_PATH)" == ""
+    alltar:
+      @echo "need to have LIBMYSQL_PATH set to the location where libmysql (also known as 'MySQL Connector/C') is installed"
+      @force_dmake_to_error
+  .ENDIF
+.ENDIF
 
-.INCLUDE: settings.mk
-.INCLUDE: target.mk
+.IF "$(GUI)"=="WNT"
 
-ALLTAR: $(OUT)$/inc$/twain.h
+CFLAGS+=-DCPPDBC_WIN32 -D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS
 
-$(OUT)$/inc$/%: $(PRJ)$/inc$/%
-    - $(MKDIR) $(@:d)
-    $(COPY) $< $@
+.ENDIF  # "$(GUI)"=="WNT"
+
+.IF "$(SYSTEM_MYSQL)" != "YES"
+    MYSQL_INC+=-I$(LIBMYSQL_PATH)$/include
+.ENDIF
+
+CFLAGS+=-I$(PRJINC) -I$(PRJINC)$/cppconn $(MYSQL_INC) -DCPPCONN_LIB_BUILD
+

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.19 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -132,6 +128,7 @@ xmlsec_CFLAGS+=$(C_RESTRICTIONFLAGS)
 .ENDIF			# "$(COMNAME)"=="sunpro5"
 .IF "$(EXTRA_CFLAGS)"!=""
 xmlsec_CFLAGS+=$(EXTRA_CFLAGS)
+xmlsec_CPPFLAGS+=$(EXTRA_CFLAGS)
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
 xmlsec_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 .ELIF "$(OS)"=="MACOSX" # "$(SYSBASE)"!=""
