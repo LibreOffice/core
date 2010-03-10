@@ -640,15 +640,14 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
     for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
         // property names look like
-        // "ServiceManager/ThesaurusList/cfg:any['de-CH']"
+        // "ServiceManager/ThesaurusList/de-CH"
 
         const OUString &rName = pPropertyNames[i];
-        sal_Int32 nKeyStart, nKeyEnd;
-        nKeyStart = rName.indexOf( A2OU("['"), 0 );
-        nKeyEnd   = rName.indexOf( A2OU("']"), nKeyStart + 2);
+        sal_Int32 nKeyStart;
+        nKeyStart = rName.lastIndexOf( '/' );
         OUString aKeyText;
-        if (nKeyStart != -1 && nKeyEnd != -1)
-            aKeyText = rName.copy( nKeyStart + 2, nKeyEnd - nKeyStart - 2);
+        if (nKeyStart != -1)
+            aKeyText = rName.copy( nKeyStart + 1 );
         DBG_ASSERT( aKeyText.getLength() != 0, "unexpected key (lang::Locale) string" );
         if (0 == rName.compareTo( aSpellCheckerList, aSpellCheckerList.getLength() ))
         {
