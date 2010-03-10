@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -219,8 +219,10 @@ SalInstance *CreateSalInstance()
 
     if( !(pUsePlugin && *pUsePlugin) )
         pInst = check_headless_plugin();
+    else
+        pInst = tryInstance( OUString::createFromAscii( pUsePlugin ) );
 
-    if( ! pInst && !(pUsePlugin && *pUsePlugin) )
+    if( ! pInst )
         pInst = autodetect_plugin();
 
     // fallback to gen

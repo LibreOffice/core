@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: opropertybag.cxx,v $
- * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -240,7 +237,7 @@ namespace comphelper
         if ( !( _element >>= aProperty ) )
             throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
 
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::osl::ClearableMutexGuard g( m_aMutex );
 
         // check whether the type is allowed, everything else will be checked
         // by m_aDynamicProperties
@@ -254,6 +251,7 @@ namespace comphelper
         // our property info is dirty
         m_pArrayHelper.reset();
 
+        g.clear();
         setModified(sal_True);
     }
 
@@ -346,7 +344,7 @@ namespace comphelper
     //--------------------------------------------------------------------
     void SAL_CALL OPropertyBag::addProperty( const ::rtl::OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::osl::ClearableMutexGuard g( m_aMutex );
 
         // check whether the type is allowed, everything else will be checked
         // by m_aDynamicProperties
@@ -362,19 +360,21 @@ namespace comphelper
         // our property info is dirty
         m_pArrayHelper.reset();
 
+        g.clear();
         setModified(sal_True);
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL OPropertyBag::removeProperty( const ::rtl::OUString& _rName ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::osl::ClearableMutexGuard g( m_aMutex );
 
         m_aDynamicProperties.removeProperty( _rName );
 
         // our property info is dirty
         m_pArrayHelper.reset();
 
+        g.clear();
         setModified(sal_True);
     }
 

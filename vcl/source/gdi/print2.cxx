@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: print2.cxx,v $
- * $Revision: 1.24.86.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,8 +27,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-
-#define _SPOOLPRINTER_EXT
 
 #include <functional>
 #include <algorithm>
@@ -648,7 +643,9 @@ static bool ImplIsActionHandlingTransparency( const MetaAction& rAct )
 bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
                                                      long nMaxBmpDPIX, long nMaxBmpDPIY,
                                                      bool bReduceTransparency, bool bTransparencyAutoMode,
-                                                     bool bDownsampleBitmaps )
+                                                     bool bDownsampleBitmaps,
+                                                     const Color& rBackground
+                                                     )
 {
     MetaAction*             pCurrAct;
     bool                    bTransparent( false );
@@ -737,6 +734,20 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         bool bStillBackground=true; // true until first non-bg action
         nActionNum=0; nLastBgAction=-1;
         pCurrAct=const_cast<GDIMetaFile&>(rInMtf).FirstAction();
+        if( rBackground != Color( COL_TRANSPARENT ) )
+        {
+            aBackgroundComponent.aBgColor = rBackground;
+            if( meOutDevType == OUTDEV_PRINTER )
+            {
+                Printer* pThis = dynamic_cast<Printer*>(this);
+                Point aPageOffset = pThis->GetPageOffsetPixel();
+                aPageOffset = Point( 0, 0 ) - aPageOffset;
+                Size aSize  = pThis->GetPaperSizePixel();
+                aBackgroundComponent.aBounds = Rectangle( aPageOffset, aSize );
+            }
+            else
+                aBackgroundComponent.aBounds = Rectangle( Point( 0, 0 ), GetOutputSizePixel() );
+        }
         while( pCurrAct && bStillBackground )
         {
             switch( pCurrAct->GetType() )
@@ -880,7 +891,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             //
 
             // if aBBCurrAct is empty, it will intersect with no
-            // aCCList member. Thus, we can safe us the check.
+            // aCCList member. Thus, we can save the check.
             // Furthermore, this ensures that non-output-generating
             // actions get their own aCCList entry, which is necessary
             // when copying them to the output metafile (see stage 4
@@ -1110,7 +1121,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         //  ====================================================
         //
 
-        Point aTmpPoint;
+        Point aPageOffset;
         Size aTmpSize( GetOutputSizePixel() );
         if( mpPDFWriter )
         {
@@ -1120,7 +1131,14 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             // also add error code to PDFWriter
             mpPDFWriter->insertError( vcl::PDFWriter::Warning_Transparency_Converted );
         }
-        const Rectangle aOutputRect( aTmpPoint, aTmpSize );
+        else if( meOutDevType == OUTDEV_PRINTER )
+        {
+            Printer* pThis = dynamic_cast<Printer*>(this);
+            aPageOffset = pThis->GetPageOffsetPixel();
+            aPageOffset = Point( 0, 0 ) - aPageOffset;
+            aTmpSize  = pThis->GetPaperSizePixel();
+        }
+        const Rectangle aOutputRect( aPageOffset, aTmpSize );
         bool bTiling = dynamic_cast<Printer*>(this) != NULL;
 
         // iterate over all aCCList members and generate bitmaps for the special ones
@@ -1228,7 +1246,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                             pCurrAct->Execute( &aPaintVDev );
                                         }
 
-                                        if( !( nActionNum % 4 ) )
+                                        if( !( nActionNum % 8 ) )
                                             Application::Reschedule();
                                     }
 

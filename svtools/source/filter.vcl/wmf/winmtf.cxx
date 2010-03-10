@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: winmtf.cxx,v $
- * $Revision: 1.54.136.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1522,9 +1519,9 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
     aTmp.SetFillColor( maBkColor );
 
     if( mnBkMode == TRANSPARENT )
-        maFont.SetTransparent( sal_True );
+        aTmp.SetTransparent( sal_True );
     else
-        maFont.SetTransparent( sal_False );
+        aTmp.SetTransparent( sal_False );
 
     if ( ( mnTextAlign & TA_BASELINE) == TA_BASELINE )
         aTmp.SetAlign( ALIGN_BASELINE );
@@ -2193,5 +2190,10 @@ void WinMtfOutput::Pop()
             mpGDIMetaFile->AddAction( new MetaRasterOpAction( meRasterOp ) );
         vSaveStack.pop_back();
     }
+}
+
+void WinMtfOutput::AddFromGDIMetaFile( GDIMetaFile& rGDIMetaFile )
+{
+   rGDIMetaFile.Play( *mpGDIMetaFile, 0xFFFFFFFF );
 }
 
