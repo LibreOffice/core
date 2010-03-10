@@ -385,11 +385,7 @@ function hStandardbarNewDialog()
 
     '///+<li>click the button</li>
     Kontext "Standardbar"
-    sleep( 1 )
-    try
-        NeuDialog.click()    
-    catch
-    endcatch
+    hClickButton( NeuDialog )
     
     '///+<li>handle possible dialogs (there should never be one)</li>
     kontext "Active"

@@ -48,8 +48,6 @@ sub LoadIncludeFiles
    use "global\system\includes\master.inc"
    use "global\system\includes\gvariabl.inc"
 
-   use "framework\tools\includes\init_tools.inc"
-
    gApplication = "WRITER"
    call GetUseFiles()
 

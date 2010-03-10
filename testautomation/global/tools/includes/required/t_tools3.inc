@@ -1179,3 +1179,33 @@ function hCloseDialog( oDialog as object, sUserFlags as string ) as boolean
     if ( oDialog.notExists( TIMEOUT ) ) then hCloseDialog() = TRUE
 
 end function
+
+'*******************************************************************************
+
+function hWaitForObject( oControl as object, iTime as integer ) as integer
+
+    const CFN = "hWaitForObject()::"
+    dim iWait as integer
+
+    if ( GVERBOSE ) then printlog( CFN & "Entering function for control: " & oControl.name() )
+
+    WaitSlot( 2000 )
+
+    for iWait = 0 to iTime
+        try
+            if ( oControl.isEnabled() ) then
+                printlog( CFN & "Control is enabled: " & oControl.name() )
+                hWaitForObject() = iWait
+                exit function
+            else
+                if ( GVERBOSE ) then printlog( "Waiting..." )
+            endif
+        catch
+            wait( 1 )
+        endcatch
+    next iWait
+
+    printlog( CFN & "Control not found or not enabled, timeout reached" )
+    hWaitForObject() = -1
+
+end function
