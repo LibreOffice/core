@@ -98,7 +98,7 @@ public:
         }
     }
 
-    virtual void Paint( const Rectangle& i_rRect )
+    virtual void Paint( const Rectangle& /*i_rRect*/ )
     {
         const Size aOutputSize( GetOutputSizePixel() );
         const Rectangle aTitleRect( Point( 10, 10 ), Size( aOutputSize.Width() - 20, 20 ) );
