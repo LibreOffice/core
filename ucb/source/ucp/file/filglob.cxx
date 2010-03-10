@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: filglob.cxx,v $
- * $Revision: 1.26.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -286,7 +283,8 @@ namespace fileaccess {
                  errorCode == TASKHANDLING_WRONG_OPEN_ARGUMENT              ||
                  errorCode == TASKHANDLING_WRONG_DELETE_ARGUMENT            ||
                  errorCode == TASKHANDLING_WRONG_TRANSFER_ARGUMENT          ||
-                 errorCode == TASKHANDLING_WRONG_INSERT_ARGUMENT )
+                 errorCode == TASKHANDLING_WRONG_INSERT_ARGUMENT            ||
+                 errorCode == TASKHANDLING_WRONG_CREATENEWCONTENT_ARGUMENT )
         {
             IllegalArgumentException excep;
             excep.ArgumentPosition = 0;
@@ -655,15 +653,15 @@ namespace fileaccess {
                 aAny <<= excep;
                 cancelCommandExecution( aAny,xEnv );
             }
-//          ioErrorCode = IOErrorCode_ALREADY_EXISTING;
-//          cancelCommandExecution(
-//              ioErrorCode,
-//              generateErrorArguments(aUncPath),
-//              xEnv,
-//              rtl::OUString(
-//                  RTL_CONSTASCII_USTRINGPARAM(
-//                      "the folder exists")),
-//              xComProc );
+//              ioErrorCode = IOErrorCode_ALREADY_EXISTING;
+//              cancelCommandExecution(
+//                  ioErrorCode,
+//                  generateErrorArguments(aUncPath),
+//                  xEnv,
+//                  rtl::OUString(
+//                      RTL_CONSTASCII_USTRINGPARAM(
+//                          "the folder exists")),
+//                  xComProc );
         }
         else if( errorCode == TASKHANDLING_ENSUREDIR_FOR_WRITE  ||
                  errorCode == TASKHANDLING_CREATEDIRECTORY_MKDIR )
@@ -814,20 +812,20 @@ namespace fileaccess {
                          errorCode == TASKHANDLING_TRANSFER_BY_MOVE_SOURCESTAT )
                     {
                         ioErrorCode = IOErrorCode_NOT_EXISTING;
-                         aMsg = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        aMsg = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                             "source file/folder does not exist"));
                         break;
                     }
                     else
                     {
                         ioErrorCode = IOErrorCode_GENERAL;
-                         aMsg = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        aMsg = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                             "a general error during transfer command"));
                     break;
                     }
                 default:
                     ioErrorCode = IOErrorCode_GENERAL;
-                     aMsg = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    aMsg = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                         "a general error during transfer command"));
                     break;
             }

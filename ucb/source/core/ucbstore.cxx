@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ucbstore.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1570,7 +1567,9 @@ void SAL_CALL PersistentPropertySet::setPropertyValue(
                     // Write state ( Now it is a directly set value )
                     xNameReplace->replaceByName(
                                     OUString::createFromAscii( "State" ),
-                                    makeAny( PropertyState_DIRECT_VALUE ) );
+                                    makeAny(
+                                        sal_Int32(
+                                            PropertyState_DIRECT_VALUE ) ) );
 
                     // Commit changes.
                     xBatch->commitChanges();
@@ -1854,7 +1853,9 @@ void SAL_CALL PersistentPropertySet::addProperty(
                 // Set state ( always "default" )
                 xNameReplace->replaceByName(
                                     OUString::createFromAscii( "State" ),
-                                    makeAny( PropertyState_DEFAULT_VALUE ) );
+                                    makeAny(
+                                        sal_Int32(
+                                            PropertyState_DEFAULT_VALUE ) ) );
 
                 // Set attributes
                 xNameReplace->replaceByName(
@@ -2330,7 +2331,9 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
                         // Write state ( Now it is a directly set value )
                         xNameReplace->replaceByName(
                                     OUString::createFromAscii( "State" ),
-                                    makeAny( PropertyState_DIRECT_VALUE ) );
+                                    makeAny(
+                                        sal_Int32(
+                                            PropertyState_DIRECT_VALUE ) ) );
 
                         // Commit changes.
                         xBatch->commitChanges();

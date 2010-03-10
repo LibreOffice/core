@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewobjectcontactofsdrobj.cxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +35,8 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdview.hxx>
+
+#include "fmobj.hxx"
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -91,8 +89,9 @@ namespace sdr
                 const bool bHideOle(rSdrView.getHideOle());
                 const bool bHideChart(rSdrView.getHideChart());
                 const bool bHideDraw(rSdrView.getHideDraw());
+                const bool bHideFormControl(rSdrView.getHideFormControl());
 
-                if(bHideOle || bHideChart || bHideDraw)
+                if(bHideOle || bHideChart || bHideDraw || bHideFormControl)
                 {
                     if(OBJ_OLE2 == rObject.GetObjIdentifier())
                     {
@@ -123,8 +122,13 @@ namespace sdr
                     }
                     else
                     {
+                        const bool bIsFormControl = dynamic_cast< const FmFormObj * >( &rObject ) != 0;
+                        if(bIsFormControl && bHideFormControl)
+                        {
+                            return false;
+                        }
                         // any other draw object
-                        if(bHideDraw)
+                        if(!bIsFormControl && bHideDraw)
                         {
                             return false;
                         }

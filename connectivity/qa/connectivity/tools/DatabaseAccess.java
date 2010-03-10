@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RowSetEventListener.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@ import com.sun.star.io.IOException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XOfficeDatabaseDocument;
 import com.sun.star.sdbc.SQLException;
-import com.sun.star.sdbc.XConnection;
+import connectivity.tools.sdb.Connection;
 
 /**
  *
@@ -42,7 +39,7 @@ import com.sun.star.sdbc.XConnection;
  */
 public interface DatabaseAccess
 {
-    XConnection defaultConnection() throws SQLException;
+    Connection defaultConnection() throws SQLException;
 
     void executeSQL(final String statementString) throws SQLException;
 

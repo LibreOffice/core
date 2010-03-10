@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sqliterator.cxx,v $
- * $Revision: 1.60 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -952,21 +949,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                     if ( pColumnRef->isRule() )
                     {
                         bFkt = sal_True;
-                        if ( SQL_ISRULE(pColumnRef,num_value_exp) || SQL_ISRULE(pColumnRef,term) || SQL_ISRULE(pColumnRef,factor) )
-                        {
-                            nType = DataType::DOUBLE;
-                        }
-                        else
-                        {
-                            ::rtl::OUString sFunctionName;
-                            if ( SQL_ISRULE(pColumnRef,length_exp) )
-                                pColumnRef->getChild(0)->getChild(0)->parseNodeToStr(
-                                    sFunctionName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
-                            else
-                                pColumnRef->getChild(0)->parseNodeToStr(
-                                    sFunctionName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
-                            nType = ::connectivity::OSQLParser::getFunctionReturnType( sFunctionName, &m_rParser.getContext() );
-                        }
+                        nType = getFunctionReturnType(pColumnRef);
                     }
                 }
                 /*
@@ -1601,7 +1584,6 @@ void OSQLParseTreeIterator::impl_traverse( sal_uInt32 _nIncludeMask )
     case SQL_STATEMENT_INSERT:
         break;
     default:
-        OSL_ENSURE( false, "OSQLParseTreeIterator::traverseAll: not yet implemented for this statement type!" );
         break;
     }
 }
@@ -2104,3 +2086,84 @@ void OSQLParseTreeIterator::impl_appendError( const SQLException& _rError )
         m_aErrors = _rError;
 }
 // -----------------------------------------------------------------------------
+sal_Int32 OSQLParseTreeIterator::getFunctionReturnType(const OSQLParseNode* _pNode )
+{
+    sal_Int32 nType = DataType::OTHER;
+    ::rtl::OUString sFunctionName;
+    if ( SQL_ISRULE(_pNode,length_exp) )
+    {
+        _pNode->getChild(0)->getChild(0)->parseNodeToStr(sFunctionName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
+        nType = ::connectivity::OSQLParser::getFunctionReturnType( sFunctionName, &m_rParser.getContext() );
+    }
+    else if ( SQL_ISRULE(_pNode,num_value_exp) || SQL_ISRULE(_pNode,term) || SQL_ISRULE(_pNode,factor) )
+    {
+        nType = DataType::DOUBLE;
+    }
+    else
+    {
+        _pNode->getChild(0)->parseNodeToStr(sFunctionName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
+
+        // MIN and MAX have another return type, we have to check the expression itself.
+        // @see http://qa.openoffice.org/issues/show_bug.cgi?id=99566
+        if ( SQL_ISRULE(_pNode,general_set_fct) && (SQL_ISTOKEN(_pNode->getChild(0),MIN) || SQL_ISTOKEN(_pNode->getChild(0),MAX) ))
+        {
+            const OSQLParseNode* pValueExp = _pNode->getChild(3);
+            if (SQL_ISRULE(pValueExp,column_ref))
+            {
+                ::rtl::OUString sColumnName;
+                ::rtl::OUString aTableRange;
+                getColumnRange(pValueExp,sColumnName,aTableRange);
+                OSL_ENSURE(sColumnName.getLength(),"Columnname darf nicht leer sein");
+                Reference<XPropertySet> xColumn = findColumn( sColumnName, aTableRange, true );
+
+                if ( xColumn.is() )
+                {
+                    xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_TYPE)) >>= nType;
+                }
+            }
+            else
+            {
+                if ( SQL_ISRULE(pValueExp,num_value_exp) || SQL_ISRULE(pValueExp,term) || SQL_ISRULE(pValueExp,factor) )
+                {
+                    nType = DataType::DOUBLE;
+                }
+                else if ( SQL_ISRULE(pValueExp,datetime_primary) )
+                {
+                    switch(pValueExp->getChild(0)->getTokenID() )
+                    {
+                        case SQL_TOKEN_CURRENT_DATE:
+                            nType = DataType::DATE;
+                            break;
+                        case SQL_TOKEN_CURRENT_TIME:
+                            nType = DataType::TIME;
+                            break;
+                        case SQL_TOKEN_CURRENT_TIMESTAMP:
+                            nType = DataType::TIMESTAMP;
+                            break;
+                    }
+                }
+                else if ( SQL_ISRULE(pValueExp,value_exp_primary) )
+                {
+                    nType = getFunctionReturnType(pValueExp->getChild(1));
+                }
+                else if ( SQL_ISRULE(pValueExp,concatenation)
+                        || SQL_ISRULE(pValueExp,char_factor)
+                        || SQL_ISRULE(pValueExp,bit_value_fct)
+                        || SQL_ISRULE(pValueExp,char_value_fct)
+                        || SQL_ISRULE(pValueExp,char_substring_fct)
+                        || SQL_ISRULE(pValueExp,fold)
+                        || SQL_ISTOKEN(pValueExp,STRING) )
+                {
+                    nType = DataType::VARCHAR;
+                }
+            }
+            if ( nType == DataType::OTHER )
+                nType = DataType::DOUBLE;
+        }
+        else
+            nType = ::connectivity::OSQLParser::getFunctionReturnType( sFunctionName, &m_rParser.getContext() );
+    }
+
+    return nType;
+}
+

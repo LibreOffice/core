@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: precompiled_svx.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,7 +54,7 @@
 #include "basic/sbxvar.hxx"
 #include "boost/scoped_ptr.hpp"
 #include "boost/shared_ptr.hpp"
-#include "boost/spirit/core.hpp"
+#include "boost/spirit/include/classic_core.hpp"
 #include "bootstrp/sstring.hxx"
 #include "com/sun/star/accessibility/AccessibleEventId.hpp"
 #include "com/sun/star/accessibility/AccessibleEventObject.hpp"
@@ -263,7 +260,7 @@
 #include "com/sun/star/form/XDatabaseParameterListener.hpp"
 #include "com/sun/star/form/XForm.hpp"
 #include "com/sun/star/form/XFormComponent.hpp"
-#include "com/sun/star/form/XFormController.hpp"
+#include "com/sun/star/form/runtime/XFormController.hpp"
 #include "com/sun/star/form/XFormControllerListener.hpp"
 #include "com/sun/star/form/XFormsSupplier.hpp"
 #include "com/sun/star/form/XFormsSupplier2.hpp"
@@ -740,7 +737,7 @@
 #include "sfx2/sfxstatuslistener.hxx"
 #include "sfx2/sfxuno.hxx"
 #include "sfx2/shell.hxx"
-#include "sfx2/srchdefs.hxx"
+#include "svl/srchdefs.hxx"
 #include "sfx2/tplpitem.hxx"
 #include "sfx2/viewfrm.hxx"
 #include "sot/clsids.hxx"

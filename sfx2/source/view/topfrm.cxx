@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: topfrm.cxx,v $
- * $Revision: 1.97 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -370,7 +367,7 @@ void SfxTopViewWin_Impl::StateChanged( StateChangedType nStateChange )
     if ( nStateChange == STATE_CHANGE_INITSHOW )
     {
         SfxObjectShell* pDoc = pFrame->GetObjectShell();
-        if ( pDoc && !pFrame->IsVisible_Impl() )
+        if ( pDoc && !pFrame->IsVisible() )
             pFrame->Show();
 
         pFrame->Resize();

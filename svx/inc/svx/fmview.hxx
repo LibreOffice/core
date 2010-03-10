@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fmview.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +51,9 @@ namespace svx {
 class SdrUnoObj;
 namespace com { namespace sun { namespace star { namespace form {
     class XForm;
-    class XFormController;
+    namespace runtime {
+        class XFormController;
+    }
 } } } }
 
 class SVX_DLLPUBLIC FmFormView : public E3dView
@@ -125,7 +124,7 @@ public:
 
     /** returns the form controller for a given form and a given device
     */
-    SVX_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >
+    SVX_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >
             GetFormController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm, const OutputDevice& _rDevice ) const;
 
     // SdrView

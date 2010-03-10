@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: formcontrolling.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 #include "formcontrolling.hxx"
 #include "fmurl.hxx"
-#include <svx/svxids.hrc>
+#include "svx/svxids.hrc"
 #include "fmprop.hrc"
 #include "svx/fmtools.hxx"
 
@@ -60,7 +57,7 @@ namespace svx
     /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::lang::XMultiServiceFactory;
-    using ::com::sun::star::form::XFormController;
+    using ::com::sun::star::form::runtime::XFormController;
     using ::com::sun::star::form::XForm;
     using ::com::sun::star::form::runtime::FormOperations;
     using ::com::sun::star::uno::Exception;

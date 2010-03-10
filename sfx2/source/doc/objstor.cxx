@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: objstor.cxx,v $
- * $Revision: 1.212.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -869,7 +866,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
                         ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest = new ::comphelper::OInteractionRequest( makeAny( aUpdateRequest ) );
                         pRequest->addContinuation( new ::comphelper::OInteractionApprove );
-                        pRequest->addContinuation( new ::comphelper::OInteractionDisapprove );
+                        pRequest->addContinuation( new ::comphelper::OInteractionAbort );
 
                         typedef ::comphelper::OInteraction< XInteractionAskLater > OInteractionAskLater;
                         OInteractionAskLater* pLater = new OInteractionAskLater;
@@ -952,27 +949,27 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
 
                                     if ( !pFORequest->isAbort() )
                                     {
-                                           SfxAllItemSet aNewParams( pDoc->GetPool() );
-                                           TransformParameters( SID_OPENDOC,
-                                                             pFORequest->getFilterOptions(),
-                                                             aNewParams,
-                                                             NULL );
+                                            SfxAllItemSet aNewParams( pDoc->GetPool() );
+                                            TransformParameters( SID_OPENDOC,
+                                                            pFORequest->getFilterOptions(),
+                                                            aNewParams,
+                                                            NULL );
 
-                                           SFX_ITEMSET_ARG( &aNewParams,
-                                                         pFilterOptions,
-                                                         SfxStringItem,
-                                                         SID_FILE_FILTEROPTIONS,
-                                                         sal_False );
-                                           if ( pFilterOptions )
-                                               pSet->Put( *pFilterOptions );
+                                            SFX_ITEMSET_ARG( &aNewParams,
+                                                        pFilterOptions,
+                                                        SfxStringItem,
+                                                        SID_FILE_FILTEROPTIONS,
+                                                        sal_False );
+                                            if ( pFilterOptions )
+                                                pSet->Put( *pFilterOptions );
 
-                                           SFX_ITEMSET_ARG( &aNewParams,
-                                                         pFilterData,
-                                                         SfxUnoAnyItem,
-                                                         SID_FILTER_DATA,
-                                                         sal_False );
-                                           if ( pFilterData )
-                                               pSet->Put( *pFilterData );
+                                            SFX_ITEMSET_ARG( &aNewParams,
+                                                        pFilterData,
+                                                        SfxUnoAnyItem,
+                                                        SID_FILTER_DATA,
+                                                        sal_False );
+                                            if ( pFilterData )
+                                                pSet->Put( *pFilterData );
                                     }
                                     else
                                         bAbort = TRUE;
@@ -1796,14 +1793,14 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 #define CHAR_POINTER(THE_OUSTRING) ::rtl::OUStringToOString (THE_OUSTRING, RTL_TEXTENCODING_UTF8).pData->buffer
             // Header for a single-valued ASCII EA data item
             typedef struct _EA_ASCII_header {
-            USHORT  usAttr;                 /* value: EAT_ASCII                        */
-            USHORT  usLen;                  /* length of data                          */
-            CHAR    szType[_MAX_PATH];  /* ASCII data fits in here ...             */
+            USHORT      usAttr;                 /* value: EAT_ASCII                        */
+            USHORT      usLen;                  /* length of data                          */
+            CHAR        szType[_MAX_PATH];      /* ASCII data fits in here ...             */
             } EA_ASCII_HEADER;
-            char    filePath[_MAX_PATH];
-            char    fileExt[_MAX_PATH];
-            char    docType[_MAX_PATH];
-            int rc;
+            char   filePath[_MAX_PATH];
+            char   fileExt[_MAX_PATH];
+            char   docType[_MAX_PATH];
+            int    rc;
             oslFileError eRet;
             ::rtl::OUString aSystemFileURL;
             const ::rtl::OUString aFileURL = rMedium.GetName();
@@ -3435,7 +3432,7 @@ sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >&
 
 
 sal_Bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::XStorage >& xSource,
-                                                    const uno::Reference< embed::XStorage >& xTarget )
+                                                   const uno::Reference< embed::XStorage >& xTarget )
 {
     OSL_ENSURE( xSource.is() && xTarget.is(), "Source and/or target storages are not available!\n" );
     if ( !xSource.is() || !xTarget.is() || xSource == xTarget )

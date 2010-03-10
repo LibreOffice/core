@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdograf.hxx,v $
- * $Revision: 1.5.18.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <vcl/graph.hxx>
 #include <svx/svdorect.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include "svx/svxdllapi.h"
 
 //////////////////////////////////////////////////////////////////////////////
@@ -144,6 +141,7 @@ public:
     void                    SetGraphicObject( const GraphicObject& rGrfObj );
     const GraphicObject&    GetGraphicObject( bool bForceSwapIn = false) const;
 
+    void                    NbcSetGraphic(const Graphic& rGrf);
     void                    SetGraphic(const Graphic& rGrf);
     const Graphic&          GetGraphic() const;
 

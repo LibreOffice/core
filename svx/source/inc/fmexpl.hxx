@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fmexpl.hxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,12 +36,17 @@
 #include <sfx2/dockwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <vcl/image.hxx>
+
+/** === begin UNO includes === **/
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
+/** === end UNO includes === **/
 
 #include <svtools/svtreebx.hxx>
 
@@ -57,7 +59,6 @@
 #include <svx/fmview.hxx>
 
 #include "fmexch.hxx"
-#include "svx/fmtools.hxx"
 
 class SdrObjListIter;
 class FmFormShell;
