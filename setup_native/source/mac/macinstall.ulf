@@ -62,7 +62,7 @@ en-US = "Installation failed."
 en-US = "Installation of [PRODUCTNAME] language pack completed." 
 
 [InstallCompleteText2]
-en-US = "Call 'Tools-Options-Language Settings' to change the user interface language."
+en-US = "Call '[PRODUCTNAME]-Preferences-Language Settings-Languages' to change the user interface language."
 
 [InstallCompleteTextPatch]
 en-US = "Installation of [FULLPRODUCTNAME] completed"
