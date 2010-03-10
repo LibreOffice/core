@@ -97,15 +97,16 @@ if [ -z "$md5sum" ]; then
 fi
 
 start_dir=`pwd`
-for i in `cat $1` ; do
+filelist=`cat $1`
+cd $TARFILE_LOCATION
+for i in $filelist ; do
 #   echo $i
     if [ "$i" != `echo $i | sed "s/^http:\///"` ]; then
         tarurl=$i
     # TODO: check for comment
     else
         if [ "$tarurl" != "" ]; then
-            cd $TARFILE_LOCATION
-            if [ ! -f $i ]; then
+            if [ ! -e $i ]; then
                 if [ ! -z $wget ]; then
                     $wget -nv -N $tarurl/$i
                 else
@@ -117,19 +118,19 @@ for i in `cat $1` ; do
                     failed="$failed $i"
                     wret=0
                 fi
-            fi
-            if [ -f $i -a -n "$md5sum" ]; then
-                sum=`$md5sum $i | sed "s/ [ *].*//"`
-                sum2=`echo $i | sed "s/-.*//"`
-                if [ "$sum" != "$sum2" ]; then
-                    echo checksum failure for $i
-                    failed="$failed $i"
+                if [ -e $i -a -n "$md5sum" ]; then
+                    sum=`$md5sum $i | sed "s/ [ *].*//"`
+                    sum2=`echo $i | sed "s/-.*//"`
+                    if [ "$sum" != "$sum2" ]; then
+                        echo checksum failure for $i
+                        failed="$failed $i"
+                    fi
                 fi
             fi
-            cd $start_dir
         fi
     fi
 done
+cd $start_dir
 
 if [ ! -z "$failed" ]; then
     echo
