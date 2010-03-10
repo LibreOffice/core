@@ -487,7 +487,6 @@ ExtrasAnpassen SID_CONFIG
 ExtrasOptionen SID_OPTIONS_TREEDIALOG
 
 ' **** Writer
-ExtrasThesaurusWriter FN_THESAURUS_DLG
 ExtrasKapitelnumerierung FN_NUMBERING_OUTLINE_DLG
 ExtrasZeilennumerierung FN_LINE_NUMBERING_DLG
 ExtrasSeitennummer FN_CHANGE_PAGENUM

@@ -289,13 +289,6 @@ testcase tToolsThesaurus
 
     Kontext "Thesaurus"
     DialogTest ( Thesaurus )
-    printlog " In 'Thesaurus' dialog click 'Language'"
-    Sprache.Click
-    Kontext "SpracheAuswaehlen"
-    DialogTest ( SpracheAuswaehlen )
-    printlog " Close 'Language' dialog"
-    SpracheAuswaehlen.Cancel
-    Kontext "Thesaurus"
     printlog " Close 'Thesaurus' dialog"
     Thesaurus.Cancel
     PrintLog "Close active documents"

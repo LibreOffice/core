@@ -331,9 +331,6 @@ Zusaetze sc:MoreButton:RID_SCDLG_SPEC_FILTER:BTN_MORE
 FilterkriterienMin sc:ImageButton:RID_SCDLG_SPEC_FILTER:RB_CRITERIA_AREA
 FilterergebnisMin sc:ImageButton:RID_SCDLG_SPEC_FILTER:RB_COPY_AREA
 
-*SpracheAuswaehlen HID_THES_LANGUAGE
-Auswahl cui:ListBox:RID_SVXDLG_THES_LANGUAGE:LB_THES_LANGUAGE
-
 *StandardFilter SID_FILTER
 FeldName1 sc:ListBox:RID_SCDLG_FILTER:LB_FIELD1
 Feldname2 sc:ListBox:RID_SCDLG_FILTER:LB_FIELD2
