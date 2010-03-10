@@ -140,7 +140,7 @@ public:
 
     virtual ~Content();
 
-    static com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > getPropertyValuesFromGFileInfo(
+    com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > getPropertyValuesFromGFileInfo(
         GFileInfo *pInfo, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv,
         const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& rProperties);
