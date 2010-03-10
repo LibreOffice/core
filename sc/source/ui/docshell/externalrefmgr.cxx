@@ -1488,9 +1488,9 @@ ScExternalRefManager::LinkListener::~LinkListener()
 
 // ----------------------------------------------------------------------------
 
-ScExternalRefManager::ApiGuard::ApiGuard(ScExternalRefManager* pMgr) :
-    mpMgr(pMgr),
-    mbOldInteractionEnabled(pMgr->mbUserInteractionEnabled)
+ScExternalRefManager::ApiGuard::ApiGuard(ScDocument* pDoc) :
+    mpMgr(pDoc->GetExternalRefManager()),
+    mbOldInteractionEnabled(mpMgr->mbUserInteractionEnabled)
 {
     // We don't want user interaction handled in the API.
     mpMgr->mbUserInteractionEnabled = false;

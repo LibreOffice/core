@@ -5264,8 +5264,7 @@ void SAL_CALL ScCellRangeObj::setFormulaArray(
     ScDocShell* pDocSh = GetDocShell();
     if (pDocSh)
     {
-        ScExternalRefManager* pRefMgr = pDocSh->GetDocument()->GetExternalRefManager();
-        ScExternalRefManager::ApiGuard aExtRefGuard(pRefMgr);
+        ScExternalRefManager::ApiGuard aExtRefGuard(pDocSh->GetDocument());
 
         // GRAM_PODF_A1 for API compatibility.
         bDone = lcl_PutFormulaArray( *pDocSh, aRange, aArray, EMPTY_STRING, formula::FormulaGrammar::GRAM_PODF_A1 );

@@ -394,7 +394,7 @@ public:
     class ApiGuard
     {
     public:
-        ApiGuard(ScExternalRefManager* pMgr);
+        ApiGuard(ScDocument* pDoc);
         ~ApiGuard();
     private:
         ScExternalRefManager* mpMgr;
