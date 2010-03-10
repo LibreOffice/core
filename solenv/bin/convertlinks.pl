@@ -2,7 +2,7 @@
 # convertlinks - a perl script to make hrefs to
 # http://api.openoffice.org/common/ref relativ.
 #
-# Copyright (c) 2000 Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 
 use File::Find;
