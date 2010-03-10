@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oor:node xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="DataAccess" oor:package="org.openoffice.Office">
+ <node oor:name="UserDefinedDriverSettings">
+  <node oor:name="org.openoffice.comp.connectivity.mysql_native.Driver" oor:op="replace">
+   <prop oor:name="DriverName">
+    <value>org.openoffice.comp.connectivity.mysql_native.Driver</value>
+   </prop>
+   <prop oor:name="DriverPageDisplayName">
+    <value>MySQL native driver</value>
+   </prop>
+   <prop oor:name="DriverTypeDisplayName">
+    <value>MySQL native driver</value>
+   </prop>
+   <prop oor:name="DriverDsnPrefix">
+    <value>sdbc:mysqlc:</value>
+   </prop>
+  </node>
+ </node>
+</oor:node>
