@@ -397,41 +397,12 @@ void ConvDicNameContainer::AddConvDics(
 
 namespace
 {
-template<typename T, typename InitData,
-         typename Unique = InitData, typename Data = T>
-class StaticWithInit_ {
-public:
-    /** Gets the static.  Mutual exclusion is performed using the
-        osl global mutex.
-
-        @return
-                static variable
-    */
-    static T & get() {
-        return *rtl_Instance<
-            T, StaticInstanceWithInit,
-            ::osl::MutexGuard, ::osl::GetGlobalMutex,
-            Data, InitData >::create( StaticInstanceWithInit(),
-                                      ::osl::GetGlobalMutex(),
-                                      InitData() );
-    }
-private:
-    struct StaticInstanceWithInit {
-        T * operator () ( Data d ) {
-            static T instance(d);
-            return &instance;
+    struct StaticConvDicList : public rtl::StaticWithInit<
+        uno::Reference<XInterface>, StaticConvDicList> {
+        uno::Reference<XInterface> operator () () {
+            return (cppu::OWeakObject *) new ConvDicList;
         }
     };
-};
-
-//after src680m62 you can replace StaticWithInit_ with rtl::StaticWithInit and remove the above definition of StaticWithInit_
-
-struct StaticConvDicList : public StaticWithInit_<
-    uno::Reference<XInterface>, StaticConvDicList> {
-    uno::Reference<XInterface> operator () () {
-        return (cppu::OWeakObject *) new ConvDicList;
-    }
-};
 }
 
 
