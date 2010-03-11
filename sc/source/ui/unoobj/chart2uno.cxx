@@ -191,7 +191,7 @@ struct TokenTable
     void push_back( FormulaToken* pToken )
     {
         maTokens.push_back( pToken );
-        DBG_ASSERT( maTokens.size()<=mnColCount*mnRowCount, "too much tokens" );
+        DBG_ASSERT( maTokens.size()<= static_cast<sal_uInt32>( mnColCount*mnRowCount ), "too much tokens" );
     }
 
     sal_uInt32 getIndex(SCCOL nCol, SCROW nRow) const
@@ -199,7 +199,7 @@ struct TokenTable
         DBG_ASSERT( nCol<mnColCount, "wrong column index" );
         DBG_ASSERT( nRow<mnRowCount, "wrong row index" );
         sal_uInt32 nRet = static_cast<sal_uInt32>(nCol*mnRowCount + nRow);
-        DBG_ASSERT( maTokens.size()>=mnColCount*mnRowCount, "too few tokens" );
+        DBG_ASSERT( maTokens.size()>= static_cast<sal_uInt32>( mnColCount*mnRowCount ), "too few tokens" );
         return nRet;
     }
 
