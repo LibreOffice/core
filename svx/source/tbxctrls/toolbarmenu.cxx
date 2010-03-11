@@ -853,6 +853,7 @@ void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
                     KeyEvent aKeyEvent( 0, aKeyCode );
                     p->mpControl->KeyInput( aKeyEvent );
                     p->mpControl->Invalidate();
+                    p->mpControl->Update();
                 }
                 else if( !p->mpControl->HasFocus() )
                 {
@@ -873,6 +874,7 @@ void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
                 KeyEvent aKeyEvent( 0, aKeyCode );
                 p->mpControl->KeyInput( aKeyEvent );
                 p->mpControl->Invalidate();
+                p->mpControl->Update();
             }
         }
         break;

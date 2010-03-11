@@ -231,7 +231,29 @@
         <prop oor:name="Controller">
             <value>com.sun.star.comp.chart.ElementSelectorToolbarController</value>
         </prop>
-    </node>
+      </node>
+      <node oor:name="AssignLayout" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AssignLayout</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.presentation.PresentationDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.sd.SlideLayoutController</value>
+        </prop>
+      </node>
+      <node oor:name="InsertPage" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertPage</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.presentation.PresentationDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.sd.InsertSlideController</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="StatusBar">
       <node oor:name="c1" oor:op="replace">
