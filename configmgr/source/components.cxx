@@ -112,7 +112,7 @@ rtl::OUString expand(rtl::OUString const & str) {
 }
 
 static bool singletonCreated = false;
-static Components * singleton; // leaks
+static Components * singleton = 0;
 
 }
 
@@ -122,7 +122,8 @@ void Components::initSingleton(
     OSL_ASSERT(context.is());
     if (!singletonCreated) {
         singletonCreated = true;
-        singleton = new Components(context);
+        static Components theSingleton(context);
+        singleton = &theSingleton;
     }
 }
 
