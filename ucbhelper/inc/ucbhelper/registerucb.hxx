@@ -127,7 +127,3 @@ UCBHELPER_DLLPUBLIC bool registerAtUcb(
 
 }
 #endif // _UCBHELPER_REGISTERUCB_HXX_
-:star::uno::RuntimeException);
-
-}
-#endif // _UCBHELPER_REGISTERUCB_HXX_
