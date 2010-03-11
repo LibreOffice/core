@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: t_doc2.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: obo $ $Date: 2008-07-21 12:08:27 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : thorsten.bosbach@sun.com
@@ -131,6 +125,24 @@ function sMakeReadOnlyDocumentEditable() as boolean
     const CFN = "sMakeReadOnlyDocumentEditable::"
     
     if ( VERBOSE ) then printlog( CFN & "Making document editable (create a copy) if it is readonly" )
+    
+    ' We still run into synchronization problems with the "Make document editable" feature
+    ' because we do not know when this button becomes available and ready for use: The 
+    ' document has to be loaded, then we have to wait for the toolbar to get populated.
+    ' One thing appears to work though: Try to execute the slot using hUseAsyncSlot.
+    ' This is a little bit tricky because the state of the document is altered but if
+    ' the slot has been executed once we know for sure that the button on the toolbar is
+    ' available and can check its state and - if need be - chenge the document state back.
+    
+    ' ========== Workaround begin ==========
+    hUseAsyncSlot( "EditDoc" )
+    kontext "Active"
+    if ( Active.exists() ) then
+        if ( VERBOSE ) then printlog( "Handling create copy message" )
+        Active.yes()
+        wait( 1000 )
+    endif
+    ' ==========  Workaround end  ==========
     
     Kontext "Standardbar"
     if ( Bearbeiten.IsEnabled() ) then

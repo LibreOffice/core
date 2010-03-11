@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: _XOutputStream.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,9 +93,8 @@ public class _XOutputStream extends MultiMethodTest {
 
         XInputStream xInStream = checker.getInStream();
         byte[][] readData = new byte[1][data.length];
-        int iReadBytes = 0;
         try {
-            iReadBytes = xInStream.readBytes(readData, data.length);
+            xInStream.readBytes(readData, data.length);
         } catch(com.sun.star.io.IOException e) {
             log.println("Couldn't read data:" + e);
             res = false;

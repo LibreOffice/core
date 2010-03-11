@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: BuildID.java,v $
- * $Revision: 1.1.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,20 +32,23 @@ import helper.OSHelper;
 
 public class BuildID
 {
-    public static String getBuildID(String _sApp)
+    private static String getOfficePath(String _sApp)
+    {
+        String sOfficePath = "";
+        // TODO: StringHelper.removeQuote?
+        if (_sApp.startsWith("\""))
         {
-            String sOfficePath = "";
-            // TODO: StringHelper.removeQuote?
-            if (_sApp.startsWith("\""))
+            int nIdx = _sApp.indexOf("\"", 1);
+            if (nIdx != -1)
             {
-                int nIdx = _sApp.indexOf("\"", 1);
-                if (nIdx != -1)
-                {
-                    // leave double qoute out.
-                    sOfficePath = _sApp.substring(1, nIdx);
-                }
+                // leave double qoute out.
+                sOfficePath = _sApp.substring(1, nIdx);
             }
-            else
+        }
+        else
+        {
+            // check if _sApp ends with the office executable, if not
+            if (! (_sApp.endsWith("soffice.exe") || _sApp.endsWith("soffice")))
             {
                 // check if a space exist, so we get all until space
                 int nIdx = _sApp.indexOf(" ", 1);
@@ -61,19 +61,34 @@ public class BuildID
                     sOfficePath = _sApp.substring(0, nIdx);
                 }
             }
-            GlobalLogWriter.get().println("Office path: " + sOfficePath);
+            else
+            {
+                sOfficePath = _sApp;
+            }
+        }
+        // GlobalLogWriter.get().println("Office path: " + sOfficePath);
+        return sOfficePath;
+    }
 
-            // String fs = System.getProperty("file.separator");
+    public static String getBuildID(String _sApp)
+        {
+            final String sOfficePath = getOfficePath(_sApp);
+            final String sBuildID = getBuildID(sOfficePath, "buildid");
+            return sBuildID;
+    }
+
+    private static String getBuildID(String _sOfficePath, String _sIniSection)
+        {
+            File aSOfficeFile = new File(_sOfficePath);
             String sBuildID = "";
-            File aSOfficeFile = new File(sOfficePath);
             if (aSOfficeFile.exists())
             {
-                sOfficePath = FileHelper.getPath(sOfficePath);
+                String sOfficePath = FileHelper.getPath(_sOfficePath);
                 // ok. System.out.println("directory: " + sOfficePath);
-                sBuildID = getBuildIDFromBootstrap(sOfficePath);
+                sBuildID = getBuildIDFromBootstrap(sOfficePath, _sIniSection);
                 if (sBuildID.length() == 0)
                 {
-                    sBuildID = getBuildIDFromVersion(sOfficePath);
+                    sBuildID = getBuildIDFromVersion(sOfficePath, _sIniSection);
                 }
             }
             else
@@ -85,7 +100,7 @@ public class BuildID
             return sBuildID;
         }
 
-    private static String getBuildIDFromBootstrap(String _sOfficePath)
+    private static String getBuildIDFromBootstrap(String _sOfficePath, String _sIniSection)
         {
             String sBuildID = "";
             String sOfficePath;
@@ -100,7 +115,7 @@ public class BuildID
             IniFile aIniFile = new IniFile(sOfficePath);
             if (aIniFile.is())
             {
-                sBuildID = aIniFile.getValue("Bootstrap", "buildid");
+                sBuildID = aIniFile.getValue("Bootstrap", /*"buildid"*/ _sIniSection);
             }
             else
             {
@@ -109,7 +124,7 @@ public class BuildID
             return sBuildID;
         }
 
-    private static String getBuildIDFromVersion(String _sOfficePath)
+    private static String getBuildIDFromVersion(String _sOfficePath, String _sIniSection)
         {
             // String fs = System.getProperty("file.separator");
             String sBuildID = "";
@@ -125,7 +140,7 @@ public class BuildID
             IniFile aIniFile = new IniFile(sOfficePath);
             if (aIniFile.is())
             {
-                sBuildID = aIniFile.getValue("Version", "buildid");
+                sBuildID = aIniFile.getValue("Version", /*"buildid"*/ _sIniSection);
             }
             else
             {
@@ -157,5 +172,55 @@ public class BuildID
 //            System.exit(1);
 //        }
 
-}
+            public static String getMaster(String _sOfficePath)
+            {
+                final String sOfficePath = getOfficePath(_sOfficePath);
+                final String sMaster = getBuildID(sOfficePath, "ProductSource");
+                return sMaster;
+            }
 
+            public static String getMinor(String _sOfficePath)
+            {
+                final String sOfficePath = getOfficePath(_sOfficePath);
+                final String sMinor = "m" + getBuildID(sOfficePath, "ProductMinor");
+                return sMinor;
+            }
+
+            public static String getCWSName(String _sOfficePath)
+            {
+                final String sOfficePath = getOfficePath(_sOfficePath);
+                final String sBuildID = getBuildID(sOfficePath, "buildid");
+                String sCWSName = "MWS";
+                int nIdx = sBuildID.indexOf("[CWS:");
+                if (nIdx > 0)
+                {
+                    int nIdx2 = sBuildID.indexOf("]", nIdx);
+                    sCWSName = sBuildID.substring(nIdx + 5, nIdx2);
+                }
+                return sCWSName;
+            }
+
+//    public static void main(String[] args)
+//        {
+//            String sApp;
+//            sApp = "D:/staroffice9_m63/Sun/StarOffice 9/program/soffice.exe";
+//            String sBuildID;
+//            sBuildID = getBuildID(sApp);
+//            System.out.println("BuildID is: " + sBuildID);
+//
+//            String sMaster;
+//            sMaster = getMaster(sApp);
+//            System.out.println("Master is: " + sMaster);
+//
+//            String sMinor;
+//            sMinor = getMinor(sApp);
+//            System.out.println("Minor is: " + sMinor);
+//
+//            String sCWSName;
+//            sCWSName = getCWSName(sApp);
+//            System.out.println("CWSName is: " + sCWSName);
+//
+//            System.exit(1);
+//        }
+
+}

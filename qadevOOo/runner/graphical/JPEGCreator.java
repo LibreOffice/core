@@ -1,31 +1,28 @@
 /*
  * ************************************************************************
  *
- *  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: JPEGCreator.java,v $
- *  $Revision: 1.1.2.2 $
+ * This file is part of OpenOffice.org.
  *
- *  This file is part of OpenOffice.org.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *  OpenOffice.org is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License version 3
- *  only, as published by the Free Software Foundation.
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *  OpenOffice.org is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License version 3 for more details
- *  (a copy is included in the LICENSE file that accompanied this code).
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  version 3 along with OpenOffice.org.  If not, see
- *  <http://www.openoffice.org/license.html>
- *  for a copy of the LGPLv3 License.
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  * ***********************************************************************
  */
@@ -127,9 +124,14 @@ public class JPEGCreator extends EnhancedComplexTestCase
  */
 public static void convertToNearSameFileWithWidth340(String _sJPEGFilename)
 {
+    String sJPEGFilename = _sJPEGFilename.replaceAll("\\\\", "/");
+//    if (OSHelper.isWindows())
+//    {
+//        sJPEGFilename = sJPEGFilename.replaceAll("/", "\\\\");
+//    }
     String sNewJPEGFilename;
-    sNewJPEGFilename = util.utils.replaceAll13(_sJPEGFilename, ".jpg", "_w340.jpg");
-    convertToWidth340(_sJPEGFilename, sNewJPEGFilename);
+    sNewJPEGFilename = util.utils.replaceAll13(sJPEGFilename, ".jpg", "_w340.jpg");
+    convertToWidth340(sJPEGFilename, sNewJPEGFilename);
 }
 
     /**
@@ -156,7 +158,9 @@ private static void convertToWidth340(String _sFrom, String _To)
             }
             if (OSHelper.isWindows())
             {
-                sConvertEXE = "convert.exe";
+                // TODO!
+                // HACK Hard coded!
+                sConvertEXE = "C:\\Programme\\ImageMagick-6.0.3-q8\\convert.exe";
             }
 
             String[] sCommandArray =
@@ -381,14 +385,34 @@ private static void convertToWidth340(String _sFrom, String _To)
         return nPages;
     }
 
-    public static void main(String [] _args)
-    {
-// DONE: give an index.ini file ok
+//    public static void main(String [] _args)
+//    {
+//// DONE: give an index.ini file ok
+////        String args[] = {
+////            "-TimeOut", "3600000",
+////            "-tb", "java_complex",
+////            "-o", "graphical.JPEGCreator",
+////            "-DOC_COMPARATOR_INPUT_PATH", "C:\\CWS\\temp\\output\\index.ini",
+////            "-DOC_COMPARATOR_OUTPUT_PATH", "C:\\CWS\\temp\\output",
+////            "-DOC_COMPARATOR_PRINT_MAX_PAGE", "9999",
+////            "-DOC_COMPARATOR_GFX_OUTPUT_DPI_RESOLUTION", "180",
+////            "-DOC_COMPARATOR_HTML_OUTPUT_PREFIX", "http://so-gfxcmp-lin.germany.sun.com/gfxcmp_ui/cw.php?inifile=",
+//////            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "PDF",      /* default: "OOo" */
+//////            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "msoffice", /* default: "OOo" */
+//////            "-OFFICE_VIEWABLE", "false",
+////            "-AppExecutionCommand", "\"C:/Programme/sun/staroffice 9/program/soffice.exe\"  -norestore -nocrashreport -accept=pipe,name=ll93751;urp;",
+////            "-NoOffice"
+////        };
+//
+//// Done: give a directory, where exist pdf/ps files ok.
+//// Done: inputpath (given file) doesn't exists, ok.
+//// Done: give a ps/pdf file. ok.
+//
 //        String args[] = {
 //            "-TimeOut", "3600000",
 //            "-tb", "java_complex",
 //            "-o", "graphical.JPEGCreator",
-//            "-DOC_COMPARATOR_INPUT_PATH", "C:\\CWS\\temp\\output\\index.ini",
+//            "-DOC_COMPARATOR_INPUT_PATH", "C:\\CWS\\temp\\output\\Names7.odt.pdf",
 //            "-DOC_COMPARATOR_OUTPUT_PATH", "C:\\CWS\\temp\\output",
 //            "-DOC_COMPARATOR_PRINT_MAX_PAGE", "9999",
 //            "-DOC_COMPARATOR_GFX_OUTPUT_DPI_RESOLUTION", "180",
@@ -399,28 +423,8 @@ private static void convertToWidth340(String _sFrom, String _To)
 //            "-AppExecutionCommand", "\"C:/Programme/sun/staroffice 9/program/soffice.exe\"  -norestore -nocrashreport -accept=pipe,name=ll93751;urp;",
 //            "-NoOffice"
 //        };
-
-// Done: give a directory, where exist pdf/ps files ok.
-// Done: inputpath (given file) doesn't exists, ok.
-// Done: give a ps/pdf file. ok.
-
-        String args[] = {
-            "-TimeOut", "3600000",
-            "-tb", "java_complex",
-            "-o", "graphical.JPEGCreator",
-            "-DOC_COMPARATOR_INPUT_PATH", "C:\\CWS\\temp\\output\\Names7.odt.pdf",
-            "-DOC_COMPARATOR_OUTPUT_PATH", "C:\\CWS\\temp\\output",
-            "-DOC_COMPARATOR_PRINT_MAX_PAGE", "9999",
-            "-DOC_COMPARATOR_GFX_OUTPUT_DPI_RESOLUTION", "180",
-            "-DOC_COMPARATOR_HTML_OUTPUT_PREFIX", "http://so-gfxcmp-lin.germany.sun.com/gfxcmp_ui/cw.php?inifile=",
-//            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "PDF",      /* default: "OOo" */
-//            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "msoffice", /* default: "OOo" */
-//            "-OFFICE_VIEWABLE", "false",
-            "-AppExecutionCommand", "\"C:/Programme/sun/staroffice 9/program/soffice.exe\"  -norestore -nocrashreport -accept=pipe,name=ll93751;urp;",
-            "-NoOffice"
-        };
-
-        org.openoffice.Runner.main(args);
-    }
+//
+//        org.openoffice.Runner.main(args);
+//    }
 
 }

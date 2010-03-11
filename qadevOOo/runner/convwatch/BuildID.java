@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: BuildID.java,v $
- * $Revision: 1.6.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -139,28 +136,28 @@ public class BuildID
             }
             return sBuildID;
         }
-    public static void main(String[] args)
-        {
-            String sApp;
-            sApp = "/opt/staroffice8_m116/program/soffice -headless -accept=socket,host=localhost,port=8100;urp;";
-            String sBuildID;
-            sBuildID = getBuildID(sApp);
-            System.out.println("BuildID is: " + sBuildID);
-
-            Date aDate = new Date();
-            long nStart = aDate.getTime();
-            System.out.println("Time:" + nStart);
-            // LLA: Just some more tests for getBuildID
-            // sApp = "/opt/staroffice8_net/program/soffice";
-            // sBuildID = getBuildID(sApp);
-            // System.out.println("BuildID is: " + sBuildID);
-            //
-            // sApp = "\"/opt/staroffice8_net/program/soffice\" test blah";
-            // sBuildID = getBuildID(sApp);
-            //
-            // System.out.println("BuildID is: " + sBuildID);
-            System.exit(1);
-        }
+//    public static void main(String[] args)
+//        {
+//            String sApp;
+//            sApp = "/opt/staroffice8_m116/program/soffice -headless -accept=socket,host=localhost,port=8100;urp;";
+//            String sBuildID;
+//            sBuildID = getBuildID(sApp);
+//            System.out.println("BuildID is: " + sBuildID);
+//
+//            Date aDate = new Date();
+//            long nStart = aDate.getTime();
+//            System.out.println("Time:" + nStart);
+//            // LLA: Just some more tests for getBuildID
+//            // sApp = "/opt/staroffice8_net/program/soffice";
+//            // sBuildID = getBuildID(sApp);
+//            // System.out.println("BuildID is: " + sBuildID);
+//            //
+//            // sApp = "\"/opt/staroffice8_net/program/soffice\" test blah";
+//            // sBuildID = getBuildID(sApp);
+//            //
+//            // System.out.println("BuildID is: " + sBuildID);
+//            System.exit(1);
+//        }
 
 }
 

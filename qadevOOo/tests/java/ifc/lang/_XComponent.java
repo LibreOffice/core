@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: _XComponent.java,v $
- * $Revision: 1.5.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,7 +82,9 @@ public class _XComponent extends MultiMethodTest {
     XEventListener listener2 = new MyEventListener2();
 
     /**
-     * For the cfgmgr2.OSetElement tests: dispose the owner element.
+     * For the (no longer existing) cfgmgr2.OSetElement tests: dispose the owner
+     * element.  TODO: Is this needed for anything else, too, or should it be
+     * removed?
      */
     protected void before() {
         // do not dispose this component, but parent instead

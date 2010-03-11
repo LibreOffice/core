@@ -953,3 +953,6 @@ MigrateMacros .uno:DBMigrateScripts
 ' *** UNO Slots for Basic IDE  ***
 ' ****
 ContextProperties SID_SHOW_PROPERTYBROWSER
+
+' Crash the office, allows to provide an automated test for the crash reporter
+Crash .uno:Crash

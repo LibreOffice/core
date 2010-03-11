@@ -1,31 +1,28 @@
 /*
  * ************************************************************************
  *
- *  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: JPEGComparator.java,v $
- *  $Revision: 1.1.2.6 $
+ * This file is part of OpenOffice.org.
  *
- *  This file is part of OpenOffice.org.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *  OpenOffice.org is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License version 3
- *  only, as published by the Free Software Foundation.
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *  OpenOffice.org is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License version 3 for more details
- *  (a copy is included in the LICENSE file that accompanied this code).
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  version 3 along with OpenOffice.org.  If not, see
- *  <http://www.openoffice.org/license.html>
- *  for a copy of the LGPLv3 License.
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  * ***********************************************************************
  */
@@ -341,6 +338,8 @@ public class JPEGComparator extends EnhancedComplexTestCase
             String sDestination = FileHelper.appendPath(sDestinationPath, sNewSourceBasename);
             FileHelper.copy(sSource, sDestination);
             sSourceBasename = sNewSourceBasename;
+            //
+            JPEGCreator.convertToNearSameFileWithWidth340(sDestination);
         }
         String sDifferenceBasename = "Difference_between_" + FileHelper.getNameNoSuffix(sSourceBasename) + "_and_" + FileHelper.getNameNoSuffix(sDestinationBasename) + ".jpg";
         // String sDifferencePath = sDestinationPath;
@@ -646,30 +645,30 @@ public class JPEGComparator extends EnhancedComplexTestCase
 
 
 
-    public static void main(String [] _args)
-    {
-// give an index.ini file, ok
-// give a directory, where exist jpeg files ok
-// inputpath (given file) doesn't exists
-// give a jpeg file.
-
-        String args[] = {
-            "-TimeOut", "3600000",
-            "-tb", "java_complex",
-            "-o", "graphical.JPEGComparator",
-            "-DOC_COMPARATOR_INPUT_PATH", "C:\\CWS\\temp\\output\\index.ini",
-            "-DOC_COMPARATOR_OUTPUT_PATH", "C:\\CWS\\temp\\output2",
-//            "-DOC_COMPARATOR_INPUT_PATH", "C:\\CWS\\temp\\output\\GroupReport.odt.pdf_180DPI_0001.jpg",
-//            "-DOC_COMPARATOR_OUTPUT_PATH", "C:\\CWS\\temp\\output2\\Report1.odt.pdf_180DPI_0001.jpg",
-            "-DOC_COMPARATOR_HTML_OUTPUT_PREFIX", "http://so-gfxcmp-lin.germany.sun.com/gfxcmp_ui/cw.php?inifile=",
-//            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "PDF",      /* default: "OOo" */
-//            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "msoffice", /* default: "OOo" */
-//            "-OFFICE_VIEWABLE", "false",
-//            "-AppExecutionCommand", "\"C:/Programme/sun/staroffice 9/program/soffice.exe\"  -norestore -nocrashreport -accept=pipe,name=ll93751;urp;",
-            "-NoOffice"
-        };
-
-        org.openoffice.Runner.main(args);
-    }
+//    public static void main(String [] _args)
+//    {
+//// give an index.ini file, ok
+//// give a directory, where exist jpeg files ok
+//// inputpath (given file) doesn't exists
+//// give a jpeg file.
+//
+//        String args[] = {
+//            "-TimeOut", "3600000",
+//            "-tb", "java_complex",
+//            "-o", "graphical.JPEGComparator",
+//            "-DOC_COMPARATOR_INPUT_PATH", "C:\\CWS\\temp\\output\\index.ini",
+//            "-DOC_COMPARATOR_OUTPUT_PATH", "C:\\CWS\\temp\\output2",
+////            "-DOC_COMPARATOR_INPUT_PATH", "C:\\CWS\\temp\\output\\GroupReport.odt.pdf_180DPI_0001.jpg",
+////            "-DOC_COMPARATOR_OUTPUT_PATH", "C:\\CWS\\temp\\output2\\Report1.odt.pdf_180DPI_0001.jpg",
+//            "-DOC_COMPARATOR_HTML_OUTPUT_PREFIX", "http://so-gfxcmp-lin.germany.sun.com/gfxcmp_ui/cw.php?inifile=",
+////            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "PDF",      /* default: "OOo" */
+////            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "msoffice", /* default: "OOo" */
+////            "-OFFICE_VIEWABLE", "false",
+////            "-AppExecutionCommand", "\"C:/Programme/sun/staroffice 9/program/soffice.exe\"  -norestore -nocrashreport -accept=pipe,name=ll93751;urp;",
+//            "-NoOffice"
+//        };
+//
+//        org.openoffice.Runner.main(args);
+//    }
 
 }
