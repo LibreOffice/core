@@ -52,9 +52,10 @@ namespace toolkit
 
 GridColumn::GridColumn()
 : identifier(Any())
-,horizontalAlign(HorizontalAlignment(0))
-,columnWidth(4)
+,columnWidth(10)
 ,bResizeable(true)
+,horizontalAlign(HorizontalAlignment(0))
+
 {
 }
 
@@ -162,13 +163,13 @@ void SAL_CALL GridColumn::setResizeable(sal_Bool value) throw (::com::sun::star:
     bResizeable = value;
 }
 //---------------------------------------------------------------------
-HorizontalAlignment SAL_CALL GridColumn::getHorizontalAlign()
+HorizontalAlignment SAL_CALL GridColumn::getHorizontalAlign() throw (::com::sun::star::uno::RuntimeException)
 {
     return horizontalAlign;
 }
 //---------------------------------------------------------------------
 
-void SAL_CALL GridColumn::setHorizontalAlign(HorizontalAlignment align)
+void SAL_CALL GridColumn::setHorizontalAlign(HorizontalAlignment align) throw (::com::sun::star::uno::RuntimeException)
 {
     horizontalAlign = align;
 }

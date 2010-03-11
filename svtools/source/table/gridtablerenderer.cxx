@@ -108,6 +108,7 @@ namespace svt { namespace table
         _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight() );
 
         _rDevice.Pop();
+        (void)_rStyle;
         (void)_bIsColHeaderArea;
         (void)_bIsRowHeaderArea;
     }
@@ -254,6 +255,7 @@ namespace svt { namespace table
         // TODO: active? selected?
         (void)_bActive;
         (void)_bSelected;
+        (void)_rStyle;
         //at the moment no special paint for selected row header
         _rDevice.Pop();
     }

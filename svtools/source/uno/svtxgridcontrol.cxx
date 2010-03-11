@@ -216,7 +216,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_TEXTCOLOR:
         {
-            com::sun::star::util::Color colorText;
+            sal_Int32 colorText = 0xFFFFFF;
             if( aValue >>= colorText )
             {
                 m_pTableModel->setTextColor(colorText);
@@ -225,7 +225,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_VERTICALALIGN:
         {
-            com::sun::star::style::VerticalAlignment vAlign;
+            com::sun::star::style::VerticalAlignment vAlign(com::sun::star::style::VerticalAlignment(0));
             if( aValue >>= vAlign )
             {
                 switch( vAlign )

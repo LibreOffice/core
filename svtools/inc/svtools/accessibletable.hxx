@@ -34,7 +34,6 @@
 #include <vcl/window.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <svtools/table/tablemodel.hxx>
 
 // ============================================================================
 

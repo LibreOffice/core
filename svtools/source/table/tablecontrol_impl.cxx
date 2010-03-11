@@ -1117,8 +1117,6 @@ namespace svt { namespace table
                 ::com::sun::star::uno::Any rCellData;
                 if(!aCellData.empty() && iter != aCellData.begin()+m_nLeftColumn+nActualCols)
                 {
-                    TableSize nPartlyVisibleCols = impl_getVisibleColumns(false);
-                    TableSize nPartlyVisibleRows = impl_getVisibleRows(false);
                     rCellData = *iter;
                     ++iter;
                     Size siz = m_rAntiImpl.GetSizePixel();
@@ -2099,9 +2097,9 @@ namespace svt { namespace table
     {
         m_nResizingColumn = m_nCurColumn;
         PColumnModel pColumn = m_pModel->getColumnModel(m_nResizingColumn);
-        sal_Int32 colWidth = pColumn->getWidth();
-        //impl_ni_getAccVisibleColWidths();
-        int newColWidth = m_rAntiImpl.LogicToPixel( Size( colWidth, 0 ), MAP_APPFONT ).Width();
+        //sal_Int32 colWidth = pColumn->getWidth();
+        ////impl_ni_getAccVisibleColWidths();
+        //int newColWidth = m_rAntiImpl.LogicToPixel( Size( colWidth, 0 ), MAP_APPFONT ).Width();
         if(m_aVisibleColumnWidthsPixel[m_nResizingColumn-m_nLeftColumn]-1 == rPoint.X() && pColumn->isResizable())
         {
             m_pDataWindow->CaptureMouse();
@@ -2118,7 +2116,7 @@ namespace svt { namespace table
             PColumnModel pColumn = m_pModel->getColumnModel(m_nResizingColumn);
             int maxWidth = pColumn->getMaxWidth();
             int minWidth = pColumn->getMinWidth();
-            int colWidth = pColumn->getWidth();
+            //int colWidth = pColumn->getWidth();
             int resizeCol = m_nResizingColumn-m_nLeftColumn;
             //new position of mouse
             int actX = rPoint.X();
@@ -2234,9 +2232,9 @@ namespace svt { namespace table
     //--------------------------------------------------------------------
     rtl::OUString TableControl_Impl::impl_convertToString(::com::sun::star::uno::Any value)
     {
-        sal_Int32 nInt;
-        sal_Bool bBool;
-        double fDouble;
+        sal_Int32 nInt = 0;
+        sal_Bool bBool = false;
+        double fDouble = 0;
         ::rtl::OUString sNewString;
         ::rtl::OUString sConvertString;
         if(value >>= sConvertString)

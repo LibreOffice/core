@@ -30,7 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
-#include "DefaultGridDataModel.hxx"
+#include "defaultgriddatamodel.hxx"
 #include <comphelper/sequence.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <rtl/ref.hxx>
