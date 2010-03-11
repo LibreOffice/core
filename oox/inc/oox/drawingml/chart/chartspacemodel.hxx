@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: chartspacemodel.hxx,v $
- *
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +57,7 @@ struct ChartSpaceModel
     View3DRef           mxView3D;           /// 3D settings.
     TitleRef            mxTitle;            /// Chart main title.
     LegendRef           mxLegend;           /// Chart legend.
+    ::rtl::OUString     maDrawingPath;      /// Path to drawing fragment with embedded shapes.
     sal_Int32           mnDispBlanksAs;     /// Mode how to display blank values.
     sal_Int32           mnStyle;            /// Index to default formatting.
     bool                mbAutoTitleDel;     /// True = automatic title deleted manually.
