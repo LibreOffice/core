@@ -1245,9 +1245,9 @@ void SelectionFunction::ProcessButtonClick (
             break;
 
         case 1:
-            // Toggle exclusion state.
             if ( ! rpDescriptor)
                 return;
+            // Toggle exclusion state.
             mrSlideSorter.GetController().GetSlotManager()->ChangeSlideExclusionState(
                 (rpDescriptor->HasState(model::PageDescriptor::ST_Selected)
                     ? model::SharedPageDescriptor()
@@ -1256,12 +1256,20 @@ void SelectionFunction::ProcessButtonClick (
             break;
 
         case 0:
-            // Insert page after current page.
-            rSelector.DeselectAllPages();
-            rSelector.SelectPage(rpDescriptor);
+            if ( ! rpDescriptor)
+                return;
+            // When the page under the button is not selected then set the
+            // selection to just this page.
+            if ( ! rpDescriptor->HasState(model::PageDescriptor::ST_Selected))
+            {
+                rSelector.DeselectAllPages();
+                rSelector.SelectPage(rpDescriptor);
+            }
+            // Duplicate the selected pages.  Insert the new pages right
+            // after the current selection and select them
             if (mrSlideSorter.GetViewShell() != NULL)
                 mrSlideSorter.GetViewShell()->GetDispatcher()->Execute(
-                    SID_INSERTPAGE,
+                    SID_DUPLICATE_PAGE,
                     SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
             break;
     }

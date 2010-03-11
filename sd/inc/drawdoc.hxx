@@ -509,6 +509,9 @@ public:
             This flag indicates whether to show the background shape.
         @param bIsPageObj
             This flag indicates whether to show the shapes on the master page.
+        @param nInsertPosition
+            Position where to insert the standard page.  When -1 then the
+            new page set is inserted after the current page.
 
         @return
             Returns an index of the inserted pages that can be used with the
@@ -522,7 +525,8 @@ public:
         AutoLayout eStandardLayout,
         AutoLayout eNotesLayout,
         BOOL bIsPageBack,
-        BOOL bIsPageObj);
+        BOOL bIsPageObj,
+        const sal_Int32 nInsertPosition = -1);
 
     /** This method acts as a simplified front end for the more complex
         <member>DuplicatePage()</member> method.
@@ -565,6 +569,9 @@ public:
             This flag indicates whether to show the background shape.
         @param bIsPageObj
             This flag indicates whether to show the shapes on the master page.
+        @param nInsertPosition
+            Position where to insert the standard page.  When -1 then the
+            new page set is inserted after the current page.
 
         @return
             Returns an index of the inserted pages that can be used with the
@@ -578,7 +585,8 @@ public:
         AutoLayout eStandardLayout,
         AutoLayout eNotesLayout,
         BOOL bIsPageBack,
-        BOOL bIsPageObj);
+        BOOL bIsPageObj,
+        const sal_Int32 nInsertPosition = -1);
 
     /** return the document fonts for latin, cjk and ctl according to the current
         languages set at this document */
@@ -636,6 +644,9 @@ private:
             The standard page to insert.
         @param pNotesPage
             The notes page to insert.
+        @param nInsertPosition
+            Position where to insert the standard page.  When -1 then the
+            new page set is inserted after the current page.
 
         @return
             Returns an index of the inserted pages that can be used with the
@@ -650,9 +661,9 @@ private:
         AutoLayout eNotesLayout,
         BOOL bIsPageBack,
         BOOL bIsPageObj,
-
         SdPage* pStandardPage,
-        SdPage* pNotesPage);
+        SdPage* pNotesPage,
+        sal_Int32 nInsertPosition = -1);
 
     /** Set up a newly created page and insert it into the list of pages.
         @param pPreviousPage

@@ -199,9 +199,7 @@ void InsertionIndicatorHandler::SetPosition (
         {
             mpInsertionIndicatorOverlay->SetLocation(maInsertPosition.GetLocation());
 
-            GetInsertAnimator()->SetInsertPosition(
-                maInsertPosition,
-                maIconSize);
+            GetInsertAnimator()->SetInsertPosition(maInsertPosition);
             mpInsertionIndicatorOverlay->Show();
         }
         else

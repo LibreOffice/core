@@ -1204,6 +1204,7 @@ void SlotManager::DuplicateSelectedSlides (SfxRequest& rRequest)
 {
     // Create a list of the pages that are to be duplicated.  The process of
     // duplication alters the selection.
+    sal_Int32 nInsertPosition (0);
     ::std::vector<SdPage*> aPagesToDuplicate;
     model::PageEnumeration aSelectedPages (
         model::PageEnumerationProvider::CreateSelectedPagesEnumeration(mrSlideSorter.GetModel()));
@@ -1211,18 +1212,44 @@ void SlotManager::DuplicateSelectedSlides (SfxRequest& rRequest)
     {
         model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
         if (pDescriptor && pDescriptor->GetPage())
+        {
             aPagesToDuplicate.push_back(pDescriptor->GetPage());
+            nInsertPosition = pDescriptor->GetPage()->GetPageNum()+2;
+        }
     }
 
+    // Duplicate the pages in aPagesToDuplicate and collect the newly
+    // created pages in aPagesToSelect.
+    const bool bUndo (aPagesToDuplicate.size()>1 && mrSlideSorter.GetView().IsUndoEnabled());
+    if (bUndo)
+        mrSlideSorter.GetView().BegUndo(String(SdResId(STR_INSERTPAGE)));
+
+    ::std::vector<SdPage*> aPagesToSelect;
+    for(::std::vector<SdPage*>::const_iterator
+            iPage(aPagesToDuplicate.begin()),
+            iEnd(aPagesToDuplicate.end());
+        iPage!=iEnd;
+        ++iPage, nInsertPosition+=2)
+    {
+        aPagesToSelect.push_back(
+            mrSlideSorter.GetViewShell()->CreateOrDuplicatePage(
+                rRequest, PK_STANDARD, *iPage, nInsertPosition));
+    }
+    aPagesToDuplicate.clear();
+
+    if (bUndo)
+        mrSlideSorter.GetView().EndUndo();
+
+    // Set the selection to the pages in aPagesToSelect.
+    PageSelector& rSelector (mrSlideSorter.GetController().GetPageSelector());
+    rSelector.DeselectAllPages();
     for_each (
-        aPagesToDuplicate.begin(),
-        aPagesToDuplicate.end(),
+        aPagesToSelect.begin(),
+        aPagesToSelect.end(),
         ::boost::bind(
-            &ViewShell::CreateOrDuplicatePage,
-            mrSlideSorter.GetViewShell(),
-            ::boost::ref(rRequest),
-            PK_STANDARD,
-            _1));
+            static_cast<void (PageSelector::*)(const SdPage*)>(&PageSelector::SelectPage),
+        rSelector,
+        _1));
 }
 
 

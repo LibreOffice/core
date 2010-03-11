@@ -134,9 +134,7 @@ public:
     Implementation (SlideSorter& rSlideSorter);
     virtual ~Implementation (void);
 
-    void SetInsertPosition (
-        const InsertPosition& rInsertPosition,
-        const Size& rIconSize);
+    void SetInsertPosition (const InsertPosition& rInsertPosition);
 
     void Reset (void);
 
@@ -176,11 +174,9 @@ InsertAnimator::InsertAnimator (SlideSorter& rSlideSorter)
 
 
 
-void InsertAnimator::SetInsertPosition (
-    const InsertPosition& rInsertPosition,
-    const Size& rIconSize)
+void InsertAnimator::SetInsertPosition (const InsertPosition& rInsertPosition)
 {
-    mpImplementation->SetInsertPosition(rInsertPosition, rIconSize);
+    mpImplementation->SetInsertPosition(rInsertPosition);
 }
 
 
@@ -216,9 +212,7 @@ InsertAnimator::Implementation::~Implementation (void)
 
 
 
-void InsertAnimator::Implementation::SetInsertPosition (
-    const InsertPosition& rInsertPosition,
-    const Size& rIconSize)
+void InsertAnimator::Implementation::SetInsertPosition (const InsertPosition& rInsertPosition)
 {
     if (maInsertPosition == rInsertPosition)
         return;
@@ -250,7 +244,7 @@ void InsertAnimator::Implementation::SetInsertPosition (
 
 void InsertAnimator::Implementation::Reset (void)
 {
-    SetInsertPosition(InsertPosition(), Size(0,0));
+    SetInsertPosition(InsertPosition());
 }
 
 

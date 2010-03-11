@@ -461,6 +461,9 @@ public:
             This page is either duplicated or becomes the predecessor of the
             new slide.  If NULL a duplication request is ignored.  A new
             slide is inserted as first slide.
+        @param nInsertPosition
+            When -1 (the default) then insert after pPage.  Otherwise insert
+            before the given index (of a standard page).
         @return
             The new slide is returned.  If for some reason a new page can
             not be created then NULL is returned.
@@ -468,7 +471,8 @@ public:
     virtual SdPage* CreateOrDuplicatePage (
         SfxRequest& rRequest,
         PageKind ePageKind,
-        SdPage* pPage);
+        SdPage* pPage,
+        const sal_Int32 nInsertPosition = -1);
 
 
     class Implementation;

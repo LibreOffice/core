@@ -53,9 +53,7 @@ public:
     /** Set the position at which we have to make room for the display of an
         icon.
     */
-    void SetInsertPosition (
-        const InsertPosition& rInsertPosition,
-        const Size& rIconSize);
+    void SetInsertPosition (const InsertPosition& rInsertPosition);
 
     void Reset (void);
 
