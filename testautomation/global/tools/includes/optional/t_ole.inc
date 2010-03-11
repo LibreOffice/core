@@ -55,8 +55,11 @@ end function
 
 '*******************************************************************************
 
-function hGetOleObjectName( ObjectType as string ) as string
+function hGetOleObjectName( cApplication as string ) as string
 
+    ' for cApplication you may pass gApplication.
+
+    dim Application_API_Name as string
     dim oUnoOfficeConnection as object
     dim oUnoConfigurationAccess as object
     dim aPropertyValue(1) as new com.sun.star.beans.PropertyValue
@@ -66,27 +69,26 @@ function hGetOleObjectName( ObjectType as string ) as string
 
     const CFN = "global::tools::includes::optional::t_ole.inc::hGetOleObjectName(): "
     
-    ' Test function parameters. They are <> gApplication as the API is case sensitive
-    select case ObjectType
-    case "Writer"
-    case "Calc"
-    case "Impress"
-    case "Draw"
-    case "Math"
-    case "Chart"
+    select case ( cApplication )
+    case "WRITER" : Application_API_Name = "Writer
+    case "CALC"   : Application_API_Name = "Calc"
+    case "IMPRESS": Application_API_Name = "Impress"
+    case "DRAW"   : Application_API_Name = "Draw"
+    case "MATH"   : Application_API_Name = "Math"
+    case "CHART"  : Application_API_Name = "Chart"
     case else
-        warnlog( CFN & "Invalid object type passed to function: " & ObjectType )
+        warnlog( CFN & "Invalid object type passed to function: " & Application_API_Name )
         warnlog( CFN & "This function is case sensitive." )
         warnlog( CFN & "Supported are: Writer, Calc, Impress, Draw, Math, Chart" )
         hGetOleObjectName() = ""
         exit function
     end select
     
-    if ( GVERBOSE ) then printlog( CFN & "Retrieving OLE name for: " & ObjectType )
+    if ( GVERBOSE ) then printlog( CFN & "Retrieving OLE name for: " & Application_API_Name )
 
     ' ...Embedding is physical path, ObjectNames the top node
     aPropertyValue( 0 ).Name  = "nodepath"
-    aPropertyValue( 0 ).Value = "/org.openoffice.Office.Embedding/ObjectNames/" & ObjectType
+    aPropertyValue( 0 ).Value = "/org.openoffice.Office.Embedding/ObjectNames/" & Application_API_Name
     
     ' Connect to remote UNO
     oUnoOfficeConnection = hGetUnoService( TRUE )
