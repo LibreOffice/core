@@ -97,7 +97,8 @@ SelectionManager::SelectionManager (SlideSorter& rSlideSorter)
       maSelectionBeforeSwitch(),
       mbIsMakeSelectionVisiblePending(true),
       mnInsertionPosition(-1),
-      mnAnimationId(Animator::NotAnAnimationId)
+      mnAnimationId(Animator::NotAnAnimationId),
+      maRequestedTopLeft()
 {
 }
 
@@ -478,19 +479,22 @@ Size SelectionManager::MakeRectangleVisible (const Rectangle& rBox)
             nNewLeft = aModelArea.Left();
     }
 
-    // Scroll.
-    if (nNewTop != aVisibleArea.Top() || nNewLeft != aVisibleArea.Left())
+    // Scroll when the visible area is not already at the requested location
+    // and there is no active animation to scroll to it.
+    if ((nNewTop != aVisibleArea.Top() || nNewLeft != aVisibleArea.Left())
+        && (mnAnimationId==Animator::NotAnAnimationId
+            || maRequestedTopLeft != Point(nNewLeft,nNewTop)))
     {
+        if (mnAnimationId != Animator::NotAnAnimationId)
+            mrController.GetAnimator()->RemoveAnimation(mnAnimationId);
+
+        maRequestedTopLeft = Point(nNewLeft, nNewTop);
         VisibleAreaScroller aAnimation(
             mrSlideSorter,
             aVisibleArea.TopLeft(),
-            Point(nNewLeft, nNewTop));
+            maRequestedTopLeft);
         if (mrSlideSorter.GetProperties()->IsSmoothSelectionScrolling())
-        {
-            if (mnAnimationId != Animator::NotAnAnimationId)
-                mrController.GetAnimator()->RemoveAnimation(mnAnimationId);
             mnAnimationId = mrController.GetAnimator()->AddAnimation(aAnimation, 0, 300);
-        }
         else
             aAnimation(1.0);
     }
@@ -664,6 +668,7 @@ VisibleAreaScroller::VisibleAreaScroller (
         else
             maStart.Y() = aEnd.Y()+gnMaxScrollDistance;
 }
+
 
 
 

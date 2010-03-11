@@ -478,17 +478,6 @@ void SlideSorterView::PostModelChange (void)
     // The new page objects have to be scaled and positioned.
     Layout();
     RequestRepaint();
-
-    // Restore the mouse over state.
-    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
-    if (pWindow)
-    {
-        const Window::PointerState aPointerState (pWindow->GetPointerState());
-        UpdatePageUnderMouse (
-            aPointerState.maPos,
-            (aPointerState.mnState & MOUSE_LEFT)!=0,
-            false);
-    }
 }
 
 
@@ -645,6 +634,13 @@ void SlideSorterView::DeterminePageObjectVisibilities (void)
                     aRange.IsInside(nIndex));
         }
         maVisiblePageRange = aRange;
+
+        // Restore the mouse over state.
+        const Window::PointerState aPointerState (pWindow->GetPointerState());
+        UpdatePageUnderMouse (
+            aPointerState.maPos,
+            (aPointerState.mnState & MOUSE_LEFT)!=0,
+            false);
     }
 }
 

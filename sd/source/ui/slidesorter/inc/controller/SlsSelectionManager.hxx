@@ -176,7 +176,11 @@ private:
     */
     sal_Int32 mnInsertionPosition;
 
+    /** Animation id for a scroll animation the will eventually set the top
+        and left of the visible area to maRequestedTopLeft.
+    */
     Animator::AnimationId mnAnimationId;
+    Point maRequestedTopLeft;
 
     /** Delete the given list of normal pages.  This method is a helper
         function for DeleteSelectedPages().
