@@ -250,46 +250,33 @@ testcase tCheckWindowTitle(sApplication as string, sReference as string)
         case"smath":
         case"basic":
             ToolsMacroMacro
-
             kontext "makro"
-
             if Makro.exists(5) then
                 MakroAus.typeKeys "<end>"
-
                 if (Neu.isEnabled) then
                     Neu.click
-
                     kontext "basicide"
-
                     if BasicIDE.exists(5) then
                         printlog( "Basic IDE open. Good." )
                     else
                         warnlog( "Basic IDE not open. This is unexpected" )
                     endif
-
                 else
                     warnlog( "New-button is unexpectedly disabled." )
                 endif
-
-
                 try
-
                     kontext "neuesmodul"
-
                     if NeuesModul.exists(5) then
                         NeuesModul.OK
                     else
                         warnlog( "New module naming dialog is not open" )
                     endif
-
                 catch
                     warnlog( "Accessing <New module> dialog failed" )
                 endcatch
-
             else
                 warnlog( "Couldn't open Tools->Macros->Organize Macros...->StarOffice Basic..." )
             endif
-
         case"chart":
         case"DATABASE":
         case"soffice":
@@ -306,14 +293,12 @@ testcase tCheckWindowTitle(sApplication as string, sReference as string)
 
     printlog( "Compare the string to a reference" )
     if (ubound(saTemp()) > 0) then
-
         if (saTemp(1) <> sReference) then
-            warnlog "Applicationname not as expected. Sould be: '" & sReference & "', is: '" & saTemp(1) & "'"
+            warnlog "Applicationname not as expected. Should be: '" & sReference & "', is: '" & saTemp(1) & "'"
         endif
-
-        printlog "Productname: '" & saTemp(2) & "'"
+        printlog "Productname: '" + saTemp(2) + "'"
     else
-        warnlog "#i36173# - Applicationname not as expected. Should be: '" & sReference & "', is: '" & "'"
+        warnlog "#i36173# - Applicationname not as expected. Should be: '" & sReference & "', is: '" & saTemp(1) + "'"
     endif
 
     printlog( "Cleanup after test" )
@@ -336,6 +321,5 @@ testcase tCheckWindowTitle(sApplication as string, sReference as string)
 
     printlog( "Close all open documents" )
     hFileCloseAll()
-    
 endcase
 
