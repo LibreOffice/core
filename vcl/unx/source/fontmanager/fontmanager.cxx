@@ -353,9 +353,7 @@ PrintFontManager::PrintFont::PrintFont( fonttype::type eType ) :
         m_nXMax( 0 ),
         m_nYMax( 0 ),
         m_bHaveVerticalSubstitutedGlyphs( false ),
-        m_bUserOverride( false ),
-        m_eEmbeddedbitmap( fcstatus::isunset ),
-        m_eAntialias( fcstatus::isunset )
+        m_bUserOverride( false )
 {
 }
 
@@ -2630,8 +2628,6 @@ void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& r
     rInfo.m_eWeight         = pFont->m_eWeight;
     rInfo.m_ePitch          = pFont->m_ePitch;
     rInfo.m_aEncoding       = pFont->m_aEncoding;
-    rInfo.m_eEmbeddedbitmap = pFont->m_eEmbeddedbitmap;
-    rInfo.m_eAntialias      = pFont->m_eAntialias;
 
     rInfo.m_bEmbeddable  = (pFont->m_eType == fonttype::Type1);
     rInfo.m_bSubsettable = (pFont->m_eType == fonttype::TrueType); // TODO: rename to SfntType
@@ -3936,8 +3932,6 @@ bool PrintFontManager::readOverrideMetrics()
         BuiltinFont* pFont = new BuiltinFont();
         pFont->m_nDirectory = 0;
         pFont->m_bUserOverride = false;
-        pFont->m_eEmbeddedbitmap = fcstatus::isunset;
-        pFont->m_eAntialias = fcstatus::isunset;
         pFont->m_pMetrics = new PrintFontMetrics;
         memset( pFont->m_pMetrics->m_aPages, 0xff, sizeof( pFont->m_pMetrics->m_aPages ) );
         pFont->m_pMetrics->m_bKernPairsQueried = true;

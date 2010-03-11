@@ -32,3 +32,25 @@
  fi
  if test "$echo_libtool_libs" = "yes"; then
    echo @libdir@/@RASQAL_LIBTOOLLIBS@
+--- misc/rasqal-0.9.16/Makefile.am	2010-02-12 08:43:21.000000000 +0000
++++ misc/build/rasqal-0.9.16/Makefile.am	2010-02-12 08:43:56.000000000 +0000
+@@ -22,7 +22,7 @@
+ 
+ noinst_SCRIPTS = rasqal-src-config
+ 
+-SUBDIRS=src utils tests docs data win32
++SUBDIRS=src tests docs data win32
+ 
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = rasqal.pc
+--- misc/rasqal-0.9.16/Makefile.in	2010-02-12 08:43:19.000000000 +0000
++++ misc/build/rasqal-0.9.16/Makefile.in	2010-02-12 08:44:03.000000000 +0000
+@@ -242,7 +242,7 @@
+ with_raptor = @with_raptor@
+ with_redland = @with_redland@
+ noinst_SCRIPTS = rasqal-src-config
+-SUBDIRS = src utils tests docs data win32
++SUBDIRS = src tests docs data win32
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = rasqal.pc
+ EXTRA_DIST = ChangeLog ChangeLog.1 ChangeLog.2 ChangeLog.3 ChangeLog.4 \

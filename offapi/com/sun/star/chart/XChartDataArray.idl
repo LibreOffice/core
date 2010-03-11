@@ -39,6 +39,8 @@
 
 /** gives access to data represented as an array of rows.
 
+    <p>Can be obtained from interface <type>XChartDocument</type> via method getData().</p>
+
     <p>If used for an <type>XYDiagram</type>, the row number 0
     represents the <i>x</i>-values.</p>
  */

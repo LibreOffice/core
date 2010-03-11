@@ -18,3 +18,6 @@ en-US = "Drawing Program"
 
 [startcenter] 
 en-US = "Office"
+
+[javafilter]
+en-US = "Small Device Format Importer"

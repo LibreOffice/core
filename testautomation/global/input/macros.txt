@@ -262,3 +262,20 @@ Sub Main
         msgbox( "Error" )
     endif
 end sub
+
+# ---------------------------------------------------------------------------- #
+
+[i107070]
+Sub Main
+    oSingleton = com.sun.star.logging.LoggerPool
+
+    oInstance1 = oSingleton.get()
+    msgbox oInstance1.dbg_properties
+
+    oCtx = GetDefaultContext()
+    oInstance2 = oSingleton.get( oCtx )
+    msgbox oInstance2.dbg_properties
+
+    ' Uncommenting this should result in an error "Invalid procedure call"
+    oInstanceErr1 = oSingleton.get( 42 )
+End Sub

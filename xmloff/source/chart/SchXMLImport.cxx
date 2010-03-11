@@ -47,7 +47,6 @@
 #include <xmloff/xmlstyle.hxx>
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
-#include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -506,113 +505,6 @@ const SvXMLTokenMap& SchXMLImportHelper::GetRegEquationAttrTokenMap()
 }
 
 // ----------------------------------------
-
-sal_Int32 SchXMLImportHelper::GetNumberOfSeries()
-{
-    if( mxChartDoc.is())
-    {
-        Reference< chart::XChartDataArray > xData( mxChartDoc->getData(), uno::UNO_QUERY );
-        if( xData.is())
-        {
-            Sequence< Sequence< double > > xArray = xData->getData();
-
-            if( xArray.getLength())
-                return xArray[ 0 ].getLength();
-        }
-    }
-
-    return 0;
-}
-
-sal_Int32 SchXMLImportHelper::GetLengthOfSeries()
-{
-    if( mxChartDoc.is())
-    {
-        Reference< chart::XChartDataArray > xData( mxChartDoc->getData(), uno::UNO_QUERY );
-        if( xData.is())
-        {
-            Sequence< Sequence< double > > xArray = xData->getData();
-
-            return xArray.getLength();
-        }
-    }
-
-    return 0;
-}
-
-// -1 means don't change
-void SchXMLImportHelper::ResizeChartData( sal_Int32 nSeries, sal_Int32 nDataPoints )
-{
-    if( mxChartDoc.is())
-    {
-        sal_Bool bWasChanged = sal_False;
-
-        sal_Bool bDataInColumns = sal_True;
-        Reference< beans::XPropertySet > xDiaProp( mxChartDoc->getDiagram(), uno::UNO_QUERY );
-        if( xDiaProp.is())
-        {
-            chart::ChartDataRowSource eRowSource;
-            xDiaProp->getPropertyValue( OUString::createFromAscii( "DataRowSource" )) >>= eRowSource;
-            bDataInColumns = ( eRowSource == chart::ChartDataRowSource_COLUMNS );
-
-            // the chart core treats donut chart with interchanged rows/columns
-            Reference< chart::XDiagram > xDiagram( xDiaProp, uno::UNO_QUERY );
-            if( xDiagram.is())
-            {
-                OUString sChartType = xDiagram->getDiagramType();
-                if( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.DonutDiagram" )))
-                {
-                    bDataInColumns = ! bDataInColumns;
-                }
-            }
-        }
-        sal_Int32 nColCount = bDataInColumns ? nSeries : nDataPoints;
-        sal_Int32 nRowCount = bDataInColumns ? nDataPoints : nSeries;
-
-        Reference< chart::XChartDataArray > xData( mxChartDoc->getData(), uno::UNO_QUERY );
-        if( xData.is())
-        {
-            Sequence< Sequence< double > > xArray = xData->getData();
-
-            // increase number of rows
-            if( xArray.getLength() < nRowCount )
-            {
-                sal_Int32 nOldLen = xArray.getLength();
-                xArray.realloc( nRowCount );
-                if( nColCount == -1 )
-                {
-                    sal_Int32 nSize = xArray[ 0 ].getLength();
-                    for( sal_Int32 i = nOldLen; i < nRowCount; i++ )
-                        xArray[ i ].realloc( nSize );
-                }
-                bWasChanged = sal_True;
-            }
-
-            if( nSeries == -1 &&
-                nRowCount > 0 )
-                nColCount = xArray[ 0 ].getLength();
-
-            // columns
-            if( nColCount > 0 &&
-                xArray[ 0 ].getLength() < nColCount )
-            {
-                if( nDataPoints == -1 )
-                    nRowCount = xArray.getLength();
-
-                for( sal_Int32 i = 0; i < nRowCount; i++ )
-                    xArray[ i ].realloc( nColCount );
-                bWasChanged = sal_True;
-            }
-
-            if( bWasChanged )
-            {
-                xData->setData( xArray );
-                mxChartDoc->attachData(
-                    Reference< chart::XChartData >( xData, uno::UNO_QUERY ));
-            }
-        }
-    }
-}
 
 //static
 void SchXMLImportHelper::DeleteDataSeries(

@@ -136,20 +136,38 @@ published interface XChartDocument: com::sun::star::frame::XModel
     //-------------------------------------------------------------------------
 
     /** @returns
-            the data source of the chart.
+            the data of the chart.
 
-        @see ChartData
+        <p>The returned object supports interface <type>XChartDataArray</type>
+        which can be used to access the concrete data.</p>
+
+        <p>Since OOo 3.3 the returned object also supports interface <type>XComplexDescriptionAccess</type>
+        which can be used to access complex hierarchical axis descriptions.</p>
+
+        @see XChartData
+        @see XChartDataArray
+        @see XComplexDescriptionAccess
      */
     com::sun::star::chart::XChartData getData();
 
     //-------------------------------------------------------------------------
 
-    /** attaches an external data source to the chart.
+    /** attaches data to the chart.
 
-        @see ChartData
+        <p>The given object needs to support interface <type>XChartDataArray</type>.</p>
+
+        <p>Since OOo 3.3 if the given object might support interface <type>XComplexDescriptionAccess</type>
+        which allows to set complex hierarchical axis descriptions.</p>
+
+        <p>The given data is copied before it is applied to the chart.
+        So changing xData after this call will have no effect on the chart.</p>
+
+        @see XChartData
+        @see XChartDataArray
+        @see XComplexDescriptionAccess
 
         @param xData
-            the component that provides the new data.
+            the object that provides the new data.
      */
     void attachData( [in] com::sun::star::chart::XChartData xData );
 

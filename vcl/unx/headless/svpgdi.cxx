@@ -584,3 +584,4 @@ bool SvpSalGraphics::supportsOperation( OutDevSupportType ) const
 {
     return false;
 }
+

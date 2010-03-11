@@ -35,13 +35,6 @@
 #include "SchXMLImport.hxx"
 #include "SchXMLCalculationSettingsContext.hxx"
 
-//  #ifndef _XMLOFF_XMLCHARTSTYLECONTEXT_HXX_
-//  #include "XMLChartStyleContext.hxx"
-//  #endif
-#include <com/sun/star/chart/XChartDocument.hpp>
-#include <com/sun/star/chart/XChartDataArray.hpp>
-#include <com/sun/star/chart/ChartDataRowSource.hpp>
-
 #include "contexts.hxx"
 #include "SchXMLChartContext.hxx"
 

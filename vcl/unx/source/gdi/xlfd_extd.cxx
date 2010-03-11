@@ -102,9 +102,6 @@ ExtendedXlfd::ExtendedXlfd( bool bScalable )
     mbSubsettable  = false;
     mbEmbeddable   = false;
 
-    meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
-    meAntiAlias = ANTIALIAS_DONTKNOW;
-
     mnQuality      = -1;
 }
 

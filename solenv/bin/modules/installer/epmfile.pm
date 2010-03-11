@@ -2544,6 +2544,7 @@ sub create_packages_without_epm
             my $dir = getcwd;
             my $buildroot = $dir . "/" . $epmdir . "buildroot/";
             $buildrootstring = "--buildroot=$buildroot";
+            mkdir($buildroot = $dir . "/" . $epmdir . "BUILD/");
         }
 
         my $systemcall = "$rpmcommand -bb --define \"_unpackaged_files_terminate_build  0\" $specfilename --target $target $buildrootstring 2\>\&1 |";
@@ -2718,6 +2719,15 @@ sub remove_temporary_epm_files
         installer::logger::print_message( "... $systemcall ...\n" );
 
         my $returnvalue = system($systemcall);
+
+        $removedir = $epmdir . "BUILD";
+
+        $systemcall = "rm -rf $removedir";
+
+        installer::logger::print_message( "... $systemcall ...\n" );
+
+        $returnvalue = system($systemcall);
+
 
         my $infoline = "Systemcall: $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
