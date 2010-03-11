@@ -45,7 +45,7 @@ function hOpenHelp() as boolean
         hOpenHelp() = FALSE
     endif
 
-  
+
 end function
 
 '*******************************************************************************
@@ -79,9 +79,9 @@ function hSelectHelpTab( cTab as string ) as boolean
     '///+<li>&quot;index&quot; for the index tab</li>
     '///+<li>&quot;find&quot; for the find tab</li>
     '///+<li>&quot;bookmarks&quot; for the bookmarks tab</li>
-    '///</ul>    
+    '///</ul>
     '///</ol>
-    
+
     '///<u>Returns</u>:
     '///<ol>
     '///+<li>Errorcondition (boolean)</li>
@@ -90,8 +90,8 @@ function hSelectHelpTab( cTab as string ) as boolean
     '///+<li>FALSE if the requested tabpage did not open</li>
     '///</ul>
     '///</ol>
-    
-    '///<u>Description</u>:    
+
+    '///<u>Description</u>:
     '///<ul>
     const CFN = "hSelectHelpTab::"
 
@@ -99,7 +99,7 @@ function hSelectHelpTab( cTab as string ) as boolean
     dim cTabName as string : cTabName = lcase( cTab )
 
     kontext "StarOfficeHelp"
-    
+
     printlog( CFN & "Enter" )
 
     '///+<li>Select the requested Tabpage, verify that it is open</li>
@@ -124,7 +124,7 @@ function hSelectHelpTab( cTab as string ) as boolean
                                call DialogTest( BookmarksPage )
                                brc = true
                            endif
-    case else 
+    case else
         printlog( CFN & "Invalid parameter passed to function: " & cTab )
         printlog( CFN & "Valid are: content, index, find, bookmarks" )
         brc = false
@@ -134,9 +134,9 @@ function hSelectHelpTab( cTab as string ) as boolean
     if ( brc ) then
         printlog( CFN & "Exit: Selected Tabpage: " & cTab )
     endif
- 
+
     '///+<li>Return TRUE or FALSE</li>
-    hSelectHelpTab() = brc    
+    hSelectHelpTab() = brc
 
     '///</ul>
 end function
@@ -153,9 +153,9 @@ function hUseBookmarksContextMenu( cAction as string ) as boolean
     '///+<li>&quot;show&quot;</li>
     '///+<li>&quot;rename&quot;</li>
     '///+<li>&quot;delete&quot;</li>
-    '///</ul>    
+    '///</ul>
     '///</ol>
-    
+
     '///<u>Returns</u>:
     '///<ol>
     '///+<li>Errorcondition (boolean)</li>
@@ -164,13 +164,13 @@ function hUseBookmarksContextMenu( cAction as string ) as boolean
     '///+<li>FALSE on any other error</li>
     '///</ul>
     '///</ol>
-    
-    '///<u>Description</u>:        
+
+    '///<u>Description</u>:
     '///<ul>
     const CFN = "hUseBookmarksContextMenu::"
     dim cSelection as string
     dim iActionPos as integer
-    
+
     printlog( CFN & "Enter" )
 
     '///+<li>Verify that we are on the Bookmarks Page</li>
@@ -196,7 +196,7 @@ function hUseBookmarksContextMenu( cAction as string ) as boolean
         hUseBookmarksContextMenu() = false
         exit function
     endif
-    
+
     '///+<li>Open the context menu and select the requested index</li>
     kontext "Bookmarks"
     Bookmarks.openContextMenu()
@@ -205,7 +205,7 @@ function hUseBookmarksContextMenu( cAction as string ) as boolean
 
     '///+<li>Return TRUE if all went well so far</li>
     hUseBookmarksContextMenu() = true
-   
+
     '///</ul>
 
 end function

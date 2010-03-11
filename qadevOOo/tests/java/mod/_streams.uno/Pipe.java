@@ -88,7 +88,6 @@ public class Pipe extends TestCase {
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         //add relation for io.XOutputStream
-        final XMultiServiceFactory msf = (XMultiServiceFactory)Param.getMSF();
         final XInputStream iStream = (XInputStream)
                 UnoRuntime.queryInterface(XInputStream.class, oObj);
 
@@ -97,7 +96,6 @@ public class Pipe extends TestCase {
 
         tEnv.addObjRelation("XOutputStream.StreamChecker",
             new ifc.io._XOutputStream.StreamChecker() {
-                XInputStream inStream = null;
                 public void resetStreams() {
                 }
 
