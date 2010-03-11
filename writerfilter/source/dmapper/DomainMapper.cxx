@@ -4208,6 +4208,18 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
         //TODO: numbering style should apply current numbering level - not yet supported
     break;
+    case NS_ooxml::LN_ffdata:
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if (pProperties.get() != NULL)
+        {
+            FFDataHandler::Pointer_t pFFDataHandler(new FFDataHandler());
+
+            pProperties->resolve(*pFFDataHandler);
+            m_pImpl->SetFieldFFData(pFFDataHandler);
+        }
+    }
+    break;
     default:
         {
 #ifdef DEBUG_DOMAINMAPPER

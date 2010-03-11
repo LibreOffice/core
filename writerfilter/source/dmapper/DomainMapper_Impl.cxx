@@ -3479,6 +3479,23 @@ void DomainMapper_Impl::SetFieldResult( ::rtl::OUString& rResult )
     }
 }
 
+void DomainMapper_Impl::SetFieldFFData(FFDataHandler::Pointer_t pFFDataHandler)
+{
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("setFieldFFData");
+#endif
+
+    FieldContextPtr pContext = m_aFieldStack.top();
+    if (pContext.get())
+    {
+        pContext->setFFDataHandler(pFFDataHandler);
+    }
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("setFieldFFData");
+#endif
+}
+
 /*-- 29.01.2007 11:33:17---------------------------------------------------
 //the end of field is reached (0x15 appeared) - the command might still be open
   -----------------------------------------------------------------------*/

@@ -53,6 +53,7 @@
 #include <SettingsTable.hxx>
 #include <GraphicImport.hxx>
 #include <OLEHandler.hxx>
+#include <FFDataHandler.hxx>
 #include <map>
 
 #include <string.h>
@@ -135,6 +136,7 @@ class FieldContext
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTOC;//TOX
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTC;//TOX entry
     ::rtl::OUString                                                                 m_sHyperlinkURL;
+    FFDataHandler::Pointer_t                                                        m_pFFDataHandler;
 
 public:
     FieldContext(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xStart);
@@ -159,6 +161,9 @@ public:
 
     void    SetHyperlinkURL( const ::rtl::OUString& rURL ) { m_sHyperlinkURL = rURL; }
     const ::rtl::OUString&                                                      GetHyperlinkURL() { return m_sHyperlinkURL; }
+
+    void setFFDataHandler(FFDataHandler::Pointer_t pFFDataHandler) { m_pFFDataHandler = pFFDataHandler; }
+    FFDataHandler::Pointer_t getFFDataHandler() const { return m_pFFDataHandler; }
 
     ::std::vector<rtl::OUString> GetCommandParts() const;
 };
@@ -490,6 +495,8 @@ public:
     bool IsFieldResultAsString();
     //apply the result text to the related field
     void SetFieldResult( ::rtl::OUString& rResult );
+    // set FFData of top field context
+    void SetFieldFFData( FFDataHandler::Pointer_t pFFDataHandler );
     //the end of field is reached (0x15 appeared) - the command might still be open
     void PopFieldContext();
 

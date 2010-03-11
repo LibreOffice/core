@@ -19,6 +19,7 @@
   <token tokenid="ooxml:trackchange"/>
   <token tokenid="ooxml:object"/>
   <token tokenid="ooxml:tblStart"/>
+  <token tokenid="ooxml:ffdata"/>
   <namespace name="dml-stylesheet" url="http://schemas.openxmlformats.org/drawingml/2006/main" file="dml-stylesheet.rng">
     <start name="theme"/>
     <start name="themeOverride"/>
@@ -22055,6 +22056,8 @@
       <element name="checkBox" tokenid="ooxml:CT_FFData_checkBox"/>
       <element name="ddList" tokenid="ooxml:CT_FFData_ddList"/>
       <element name="textInput" tokenid="ooxml:CT_FFData_textInput"/>
+      <action name="end" action="propagateCharacterPropertiesAsSet" sendtokenid="ooxml:ffdata"/>
+      <action name="end" action="clearProps"/>
     </resource>
     <resource name="CT_FFHelpText" resource="Properties">
       <attribute name="type" tokenid="ooxml:CT_FFHelpText_type"/>
