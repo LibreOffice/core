@@ -94,7 +94,7 @@ oa  offapi\com\sun\star\xsd                 nmake   -   all oa_xsd NULL
 oa  offapi\com\sun\star\inspection          nmake   -   all oa_inspection NULL
 oa	offapi\com\sun\star\ui  				nmake	-	all	oa_ui NULL
 oa	offapi\com\sun\star\ui\dialogs			nmake	-	all	oa_ui_dialogs NULL
-oa	offapi\com\sun\star  				    nmake	-	all	oa_starme - NULL
+oa	offapi\com\sun\star  				    nmake	-	all	oa_starme NULL
 oa	offapi\com\sun\star\security            nmake	-	all	oa_security NULL
 oa	offapi\com\sun\star\xml\crypto\sax     	nmake	-	all	oa_crypto_sax oa_wrapper oa_csax NULL
 oa	offapi\com\sun\star\xml\crypto     	    nmake	-	all	oa_crypto oa_wrapper oa_security NULL
