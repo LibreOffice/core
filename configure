@@ -4786,6 +4786,9 @@ fi
 echo "${ECHO_T}$GCC_HOME" >&6; }
 
 
+save_CC=$CC
+save_CXX=$CXX
+
 if test -n "$with_gcc_home"; then
    if test -z "$CC"; then
       CC="$with_gcc_home/bin/gcc"
@@ -5771,7 +5774,6 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; th
 echo $ECHO_N "checking the GNU gcc compiler version... $ECHO_C" >&6; }
    _gcc_version=`$CC -dumpversion`
    _gcc_major=`echo $_gcc_version | $AWK -F. '{ print \$1 }'`
-   _gcc_longver=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
    GCCVER=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 
    if test "$_gcc_major" -lt "3"; then
@@ -5787,8 +5789,26 @@ echo "$as_me: error: version \"$_gcc_version\" gives internal error with small."
 	    fi
       fi
    fi
-   { echo "$as_me:$LINENO: result: checked (gcc $_gcc_version)" >&5
+   if test "$_os" = "Darwin" -a "$GCCVER" -ge "040100" ; then
+      if test -z "$save_CC" -a -x "$GCC_HOME/bin/gcc-4.0" ; then
+         CC=$GCC_HOME/bin/gcc-4.0
+         GCCVER2=`"$CC" -dumpversion | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+         if test "$GCCVER2" -ge "040000" -a "$GCCVER2" -lt "040100" ; then
+            GCCVER=$GCCVER2
+         fi
+      fi
+      if test "$GCCVER" -ge "040100" ; then
+         { { echo "$as_me:$LINENO: error: You need to use the gcc-4.0 compiler (gcc $_gcc_version won't work with the MacOSX10.4u.sdk) - set CC accordingly" >&5
+echo "$as_me: error: You need to use the gcc-4.0 compiler (gcc $_gcc_version won't work with the MacOSX10.4u.sdk) - set CC accordingly" >&2;}
+   { (exit 1); exit 1; }; }
+      else
+         { echo "$as_me:$LINENO: result: implicitly using CC=$CC" >&5
+echo "${ECHO_T}implicitly using CC=$CC" >&6; }
+      fi
+   else
+      { echo "$as_me:$LINENO: result: checked (gcc $_gcc_version)" >&5
 echo "${ECHO_T}checked (gcc $_gcc_version)" >&6; }
+   fi
    if test "$_os" = "SunOS"; then
       { echo "$as_me:$LINENO: checking gcc linker" >&5
 echo $ECHO_N "checking gcc linker... $ECHO_C" >&6; }
@@ -10102,15 +10122,31 @@ if test "$GXX" = "yes"; then
 echo $ECHO_N "checking the GNU C++ compiler version... $ECHO_C" >&6; }
 
    _gpp_version=`$CXX -dumpversion`
-   _gpp_major=`echo $_gpp_version | $AWK -F. '{ print \$1 }'`
-   _gpp_minor=`echo $_gpp_version | $AWK -F. '{ print \$2 }'`
+   _gpp_majmin=`echo $_gpp_version | $AWK -F. '{ print \$1*100+\$2 }'`
 
-   { echo "$as_me:$LINENO: result: checked (g++ $_gpp_version)" >&5
+   if test "$_os" = "Darwin" -a "$_gpp_majmin" -ge "401" ; then
+      if test -z "$save_CXX" -a -x "$GCC_HOME/bin/g++-4.0" ; then
+         CXX=$GCC_HOME/bin/g++-4.0
+         _gpp_majmin_2=`"$CXX" -dumpversion | $AWK -F. '{ print \$1*100+\$2 }'`
+         if test "$_gpp_majmin_2" -ge "400" -a "$_gpp_majmin_2" -lt "401" ; then
+            _gpp_majmin=$_gpp_majmin_2
+         fi
+      fi
+      if test "$_gpp_majmin" -ge "401" ; then
+         { { echo "$as_me:$LINENO: error: You need to use the g++-4.0 compiler (g++ $_gpp_version won't work with the MacOSX10.4u.sdk) - set CXX accordingly" >&5
+echo "$as_me: error: You need to use the g++-4.0 compiler (g++ $_gpp_version won't work with the MacOSX10.4u.sdk) - set CXX accordingly" >&2;}
+   { (exit 1); exit 1; }; }
+      else
+         { echo "$as_me:$LINENO: result: implicitly using CXX=$CXX" >&5
+echo "${ECHO_T}implicitly using CXX=$CXX" >&6; }
+      fi
+   else
+      { echo "$as_me:$LINENO: result: checked (g++ $_gpp_version)" >&5
 echo "${ECHO_T}checked (g++ $_gpp_version)" >&6; }
+   fi
 
-   if test "$_gpp_major" = "3"; then
-      if test "$_gpp_minor" = "4"; then
-         { echo "$as_me:$LINENO: checking whether $CXX has the enum bug" >&5
+   if test "$_gpp_majmin" = "304"; then
+      { echo "$as_me:$LINENO: checking whether $CXX has the enum bug" >&5
 echo $ECHO_N "checking whether $CXX has the enum bug... $ECHO_C" >&6; }
 if test "$cross_compiling" = yes; then
   { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
@@ -10184,7 +10220,6 @@ rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$a
 fi
 
 
-      fi
    fi
 fi
 
@@ -10326,20 +10361,6 @@ echo $ECHO_N "checking SunStudio C++ Compiler... $ECHO_C" >&6; }
          { echo "$as_me:$LINENO: WARNING: SunStudio C++ was not found" >&5
 echo "$as_me: WARNING: SunStudio C++ was not found" >&2;}
          echo "SunStudio C++ was not found" >> warn
-      else
-         { echo "$as_me:$LINENO: result: checked" >&5
-echo "${ECHO_T}checked" >&6; }
-      fi
-   fi
-fi
-if test "$_os" = "Darwin"; then
-      if test "$CC" = "cc"; then
-      { echo "$as_me:$LINENO: checking Macosx c++ Compiler" >&5
-echo $ECHO_N "checking Macosx c++ Compiler... $ECHO_C" >&6; }
-      if test "$CXX" != "c++"; then
-         { echo "$as_me:$LINENO: WARNING: Macosx C++ was not found" >&5
-echo "$as_me: WARNING: Macosx C++ was not found" >&2;}
-         echo "Macosx C++ was not found" >> warn
       else
          { echo "$as_me:$LINENO: result: checked" >&5
 echo "${ECHO_T}checked" >&6; }
