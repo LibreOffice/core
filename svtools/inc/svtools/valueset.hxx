@@ -429,6 +429,9 @@ public:
     void            SetDoubleClickHdl( const Link& rLink ) { maDoubleClickHdl = rLink; }
     const Link&     GetDoubleClickHdl() const { return maDoubleClickHdl; }
 
+    void            SetHighlightHdl( const Link& rLink );
+    const Link&     GetHighlightHdl() const;
+
 private:
     /** Determine whether RTL (right to left writing) is active.  For this
         method to return <true/> two conditions have to be fullfilled:

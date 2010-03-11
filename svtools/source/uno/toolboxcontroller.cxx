@@ -46,6 +46,8 @@
 #endif
 #include <vcl/toolbox.hxx>
 
+using ::rtl::OUString;
+
 using namespace ::cppu;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
@@ -707,4 +709,23 @@ Reference< ::com::sun::star::awt::XWindow > ToolboxController::getParent() const
 {
     return m_pImpl->m_xParentWindow;
 }
+
+
+void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequence< PropertyValue >& rArgs )
+{
+    try
+    {
+        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY_THROW );
+        URL aURL;
+        aURL.Complete = sCommandURL;
+        getURLTransformer()->parseStrict( aURL );
+
+        Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch( aURL, OUString(), 0 ), UNO_QUERY_THROW );
+        xDispatch->dispatch( aURL, rArgs );
+    }
+    catch( Exception& )
+    {
+    }
+}
+
 } // svt
