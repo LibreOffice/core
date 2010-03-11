@@ -96,6 +96,8 @@
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <vcl/svapp.hxx>
 
+#include <boost/bind.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
@@ -108,8 +110,6 @@ namespace {
     slide show.
 */
 enum SlideExclusionState {UNDEFINED, EXCLUDED, INCLUDED, MIXED};
-
-void ChangeSlideExclusionState (SlideSorter& rSlideSorter, SfxRequest& rRequest);
 
 /** Return for the given set of slides whether they included are
     excluded from the slide show.
@@ -155,8 +155,11 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             break;
 
         case SID_HIDE_SLIDE:
+            ChangeSlideExclusionState(model::SharedPageDescriptor(), true);
+            break;
+
         case SID_SHOW_SLIDE:
-            ChangeSlideExclusionState(mrSlideSorter, rRequest);
+            ChangeSlideExclusionState(model::SharedPageDescriptor(), false);
             break;
 
         case SID_PAGES_PER_ROW:
@@ -238,6 +241,11 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_INSERTPAGE:
         case SID_INSERT_MASTER_PAGE:
             InsertSlide(rRequest);
+            rRequest.Done();
+            break;
+
+        case SID_DUPLICATE_PAGE:
+            DuplicateSelectedSlides(rRequest);
             rRequest.Done();
             break;
 
@@ -1192,6 +1200,34 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
 
 
 
+void SlotManager::DuplicateSelectedSlides (SfxRequest& rRequest)
+{
+    // Create a list of the pages that are to be duplicated.  The process of
+    // duplication alters the selection.
+    ::std::vector<SdPage*> aPagesToDuplicate;
+    model::PageEnumeration aSelectedPages (
+        model::PageEnumerationProvider::CreateSelectedPagesEnumeration(mrSlideSorter.GetModel()));
+    while (aSelectedPages.HasMoreElements())
+    {
+        model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
+        if (pDescriptor && pDescriptor->GetPage())
+            aPagesToDuplicate.push_back(pDescriptor->GetPage());
+    }
+
+    for_each (
+        aPagesToDuplicate.begin(),
+        aPagesToDuplicate.end(),
+        ::boost::bind(
+            &ViewShell::CreateOrDuplicatePage,
+            mrSlideSorter.GetViewShell(),
+            ::boost::ref(rRequest),
+            PK_STANDARD,
+            _1));
+}
+
+
+
+
 void SlotManager::AssignTransitionEffect (void)
 {
     model::SlideSorterModel& rModel (mrSlideSorter.GetModel());
@@ -1251,56 +1287,46 @@ IMPL_LINK(SlotManager, UserEventCallback, void*, EMPTYARG)
 
 
 
-//-----------------------------------------------------------------------------
-
-namespace {
-
-void ChangeSlideExclusionState (
-    SlideSorter& rSlideSorter,
-    SfxRequest& rRequest)
+void SlotManager::ChangeSlideExclusionState (
+    const model::SharedPageDescriptor& rpDescriptor,
+    const bool bExcludeSlide)
 {
-    model::PageEnumeration aSelectedPages (
-        model::PageEnumerationProvider::CreateSelectedPagesEnumeration(rSlideSorter.GetModel()));
-
-    SlideExclusionState eState (UNDEFINED);
-
-    switch (rRequest.GetSlot())
+    if (rpDescriptor)
     {
-        case SID_HIDE_SLIDE:
-            eState = EXCLUDED;
-            break;
-
-        case SID_SHOW_SLIDE:
-            eState = INCLUDED;
-            break;
-
-        default:
-            eState = UNDEFINED;
-            break;
+        mrSlideSorter.GetView().SetState(
+            rpDescriptor,
+            model::PageDescriptor::ST_Excluded,
+            bExcludeSlide);
     }
-
-    if (eState != UNDEFINED)
+    else
     {
-        // Set status at the selected pages.
-        aSelectedPages.Rewind ();
+        model::PageEnumeration aSelectedPages (
+            model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
+                mrSlideSorter.GetModel()));
         while (aSelectedPages.HasMoreElements())
         {
             model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
-            rSlideSorter.GetView().SetState(
+            mrSlideSorter.GetView().SetState(
                 pDescriptor,
                 model::PageDescriptor::ST_Excluded,
-                eState==EXCLUDED);
+                bExcludeSlide);
         }
     }
 
-    SfxBindings& rBindings = rSlideSorter.GetViewShell()->GetViewFrame()->GetBindings();
+    SfxBindings& rBindings (mrSlideSorter.GetViewShell()->GetViewFrame()->GetBindings());
     rBindings.Invalidate(SID_PRESENTATION);
     rBindings.Invalidate(SID_REHEARSE_TIMINGS);
     rBindings.Invalidate(SID_HIDE_SLIDE);
     rBindings.Invalidate(SID_SHOW_SLIDE);
-    rSlideSorter.GetModel().GetDocument()->SetChanged();
+    mrSlideSorter.GetModel().GetDocument()->SetChanged();
 }
 
+
+
+
+//-----------------------------------------------------------------------------
+
+namespace {
 
 
 

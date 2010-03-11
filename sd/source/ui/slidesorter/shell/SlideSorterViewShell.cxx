@@ -578,10 +578,7 @@ bool SlideSorterViewShell::HandleScrollCommand (const CommandEvent& rEvent, ::sd
         OSL_ASSERT(mpSlideSorter.get()!=NULL);
         if (rEvent.GetCommand() == COMMAND_WHEEL)
         {
-            ::rtl::Reference<controller::SelectionFunction> pFunction (
-                mpSlideSorter->GetController().GetCurrentSelectionFunction());
-            if (pFunction.is())
-                pFunction->UpdatePageUnderMouse(rEvent.GetMousePosPixel(), false);
+            mpSlideSorter->GetView().UpdatePageUnderMouse(rEvent.GetMousePosPixel(), false);
         }
     }
 

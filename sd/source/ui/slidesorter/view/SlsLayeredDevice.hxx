@@ -62,6 +62,8 @@ public:
         const sal_Int32 nLayer);
     void InvalidateAllLayers (
         const Rectangle& rInvalidationBox);
+    void InvalidateAllLayers (
+        const Region& rInvalidationRegion);
 
     void RegisterPainter (
         const SharedILayerPainter& rPainter,

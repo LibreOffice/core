@@ -39,6 +39,7 @@ class SdDrawDocument;
 #include "pres.hxx"
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <osl/mutex.hxx>
+#include <vcl/region.hxx>
 
 #include <memory>
 #include <vector>
@@ -195,6 +196,19 @@ public:
     void UpdatePageList (void);
 
     bool IsReadOnly (void) const;
+
+    /** The current selection is saved by copying the ST_Selected state into
+        ST_WasSelected for slides.
+    */
+    void SaveCurrentSelection (void);
+
+    /** The current selection is restored from the ST_WasSelected state from
+        the slides.
+        @returns
+            The returned region has to be repainted to reflect the updated
+            selection states.
+    */
+    Region RestoreSelection (void);
 
 private:
     mutable ::osl::Mutex maMutex;

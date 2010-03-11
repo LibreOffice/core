@@ -30,6 +30,7 @@
 #ifndef SD_SLIDESORTER_SLOT_MANAGER_HXX
 #define SD_SLIDESORTER_SLOT_MANAGER_HXX
 
+#include "model/SlsSharedPageDescriptor.hxx"
 #include <tools/link.hxx>
 #include <memory>
 #include <queue>
@@ -75,6 +76,16 @@ public:
 
     void ExecuteCommandAsynchronously (::std::auto_ptr<Command> pCommand);
 
+    /** Exclude or include one slide or all selected slides.
+        @param rpDescriptor
+            When the pointer is empty then apply the new state to all
+            selected pages.  Otherwise apply the new state to just the
+            specified state.
+    */
+    void ChangeSlideExclusionState (
+        const model::SharedPageDescriptor& rpDescriptor,
+        const bool bExcludeSlide);
+
 private:
     /// The controller for which we manage the slot calls.
     SlideSorter& mrSlideSorter;
@@ -96,6 +107,8 @@ private:
     /** Handle SID_INSERTPAGE slot calls.
     */
     void InsertSlide (SfxRequest& rRequest);
+
+    void DuplicateSelectedSlides (SfxRequest& rRequest);
 
     void AssignTransitionEffect (void);
 

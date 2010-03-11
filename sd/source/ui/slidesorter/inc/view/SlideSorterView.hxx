@@ -95,6 +95,7 @@ public:
     void RequestRepaint (void);
     void RequestRepaint (const model::SharedPageDescriptor& rDescriptor);
     void RequestRepaint (const Rectangle& rRepaintBox);
+    void RequestRepaint (const Region& rRepaintRegion);
 
     Rectangle GetModelArea (void);
 
@@ -190,6 +191,11 @@ public:
     */
     void AddSdrObject (SdrObject& rObject);
 
+    /** The page under the mouse is not highlighted in some contexts.  Call
+        this method on context changes.
+    */
+    void SetIsMouseOverIndicationAllowed (const bool bIsAllowed);
+    void UpdatePageUnderMouse (bool bAnimate);
     void UpdatePageUnderMouse (
         const Point& rMousePosition,
         const bool bIsMouseButtonDown,
@@ -241,6 +247,7 @@ private:
     Orientation meOrientation;
     ::boost::shared_ptr<controller::Properties> mpProperties;
     model::SharedPageDescriptor mpPageUnderMouse;
+    bool mbIsMouseOverIndicationAllowed;
     sal_Int32 mnButtonUnderMouse;
     ::boost::shared_ptr<PageObjectPainter> mpPageObjectPainter;
     ::boost::shared_ptr<SelectionPainter> mpSelectionPainter;

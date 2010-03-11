@@ -88,6 +88,11 @@ interface SlideSorterView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_DUPLICATE_PAGE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_DELETE_PAGE
     [
         ExecMethod = FuTemporary ;

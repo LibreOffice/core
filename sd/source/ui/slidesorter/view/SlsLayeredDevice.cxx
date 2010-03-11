@@ -110,7 +110,8 @@ public:
     ~Layer (void);
 
     void Initialize (const SharedSdWindow& rpTargetWindow);
-    void Invalidate (const Rectangle& rInvalidationBox);
+    void InvalidateRectangle (const Rectangle& rInvalidationBox);
+    void InvalidateRegion (const Region& rInvalidationRegion);
     void Validate (const MapMode& rMapMode);
     void Repaint (
         OutputDevice& rTargetDevice,
@@ -177,7 +178,7 @@ void LayeredDevice::Invalidate (
         return;
     }
 
-    (*mpLayers)[nLayer]->Invalidate(rInvalidationArea);
+    (*mpLayers)[nLayer]->InvalidateRectangle(rInvalidationArea);
 }
 
 
@@ -186,7 +187,16 @@ void LayeredDevice::Invalidate (
 void LayeredDevice::InvalidateAllLayers (const Rectangle& rInvalidationArea)
 {
     for (sal_uInt32 nLayer=0; nLayer<mpLayers->size(); ++nLayer)
-        (*mpLayers)[nLayer]->Invalidate(rInvalidationArea);
+        (*mpLayers)[nLayer]->InvalidateRectangle(rInvalidationArea);
+}
+
+
+
+
+void LayeredDevice::InvalidateAllLayers (const Region& rInvalidationRegion)
+{
+    for (sal_uInt32 nLayer=0; nLayer<mpLayers->size(); ++nLayer)
+        (*mpLayers)[nLayer]->InvalidateRegion(rInvalidationRegion);
 }
 
 
@@ -343,7 +353,7 @@ void LayeredDevice::HandleMapModeChange (void)
         ::std::for_each(
             mpLayers->begin(),
             mpLayers->end(),
-            ::boost::bind(&Layer::Invalidate, _1, ::boost::cref(aLogicWindowBox)));
+            ::boost::bind(&Layer::InvalidateRectangle, _1, ::boost::cref(aLogicWindowBox)));
     }
     else if (maSavedMapMode.GetOrigin() != rMapMode.GetOrigin())
     {
@@ -410,9 +420,17 @@ void Layer::Initialize (const SharedSdWindow& rpTargetWindow)
 
 
 
-void Layer::Invalidate (const Rectangle& rInvalidationBox)
+void Layer::InvalidateRectangle (const Rectangle& rInvalidationBox)
 {
     maInvalidationRegion.Union(rInvalidationBox);
+}
+
+
+
+
+void Layer::InvalidateRegion (const Region& rInvalidationRegion)
+{
+    maInvalidationRegion.Union(rInvalidationRegion);
 }
 
 

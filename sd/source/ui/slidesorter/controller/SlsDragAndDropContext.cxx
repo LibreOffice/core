@@ -65,6 +65,14 @@ DragAndDropContext::DragAndDropContext (SlideSorter& rSlideSorter)
 
 
 
+DragAndDropContext::~DragAndDropContext (void)
+{
+    SetTargetSlideSorter (NULL, Point(0,0), InsertionIndicatorHandler::UnknownMode, false);
+}
+
+
+
+
 void DragAndDropContext::GetPagesFromBookmarks (
     ::std::vector<const SdPage*>& rPages,
     sal_Int32& rnSelectionCount,
@@ -116,22 +124,6 @@ void DragAndDropContext::GetPagesFromSelection (
 
 
 
-DragAndDropContext::~DragAndDropContext (void)
-{
-    if (mpTargetSlideSorter != NULL)
-        mpTargetSlideSorter->GetController().GetScrollBarManager().StopAutoScroll();
-
-    Process();
-
-    if (mpTargetSlideSorter != NULL)
-    {
-        mpTargetSlideSorter->GetController().GetInsertionIndicatorHandler()->End();
-    }
-}
-
-
-
-
 void DragAndDropContext::Dispose (void)
 {
     mnInsertionIndex = -1;
@@ -177,31 +169,6 @@ void DragAndDropContext::UpdatePosition (
 
 
 
-void DragAndDropContext::Process (void)
-{
-    if (mpTargetSlideSorter == NULL)
-        return;
-
-    if (mpTargetSlideSorter->GetProperties()->IsUIReadOnly())
-        return;
-
-    if (mnInsertionIndex >= 0)
-    {
-        // Tell the model to move the selected pages behind the one with the
-        // index mnInsertionIndex which first has to transformed into an index
-        // understandable by the document.
-        USHORT nDocumentIndex = (USHORT)mnInsertionIndex-1;
-        mpTargetSlideSorter->GetController().GetSelectionManager()->MoveSelectedPages(nDocumentIndex);
-
-        ViewShell* pViewShell = mpTargetSlideSorter->GetViewShell();
-        if (pViewShell != NULL)
-            pViewShell->GetViewFrame()->GetBindings().Invalidate(SID_STATUS_PAGE);
-    }
-}
-
-
-
-
 void DragAndDropContext::Show (void)
 {
 }
@@ -224,6 +191,7 @@ void DragAndDropContext::SetTargetSlideSorter (
 {
     if (mpTargetSlideSorter != NULL)
     {
+        mpTargetSlideSorter->GetController().GetScrollBarManager().StopAutoScroll();
         mpTargetSlideSorter->GetController().GetInsertionIndicatorHandler()->End();
     }
 

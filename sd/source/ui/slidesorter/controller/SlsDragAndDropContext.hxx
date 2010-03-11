@@ -93,10 +93,6 @@ private:
         ::std::vector<const SdPage*>& rPages,
         sal_Int32& rnSelectionCount,
         model::PageEnumeration& rSelection) const;
-
-    /** Move the substitution display of the currently selected pages.
-    */
-    void Process (void);
 };
 
 

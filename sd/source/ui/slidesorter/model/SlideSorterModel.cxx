@@ -515,4 +515,38 @@ bool SlideSorterModel::IsReadOnly (void) const
 
 
 
+
+void SlideSorterModel::SaveCurrentSelection (void)
+{
+    PageEnumeration aPages (PageEnumerationProvider::CreateAllPagesEnumeration(*this));
+    while (aPages.HasMoreElements())
+    {
+        SharedPageDescriptor pDescriptor (aPages.GetNextElement());
+        pDescriptor->SetState(
+            PageDescriptor::ST_WasSelected,
+            pDescriptor->HasState(PageDescriptor::ST_Selected));
+    }
+}
+
+
+
+
+Region SlideSorterModel::RestoreSelection (void)
+{
+    Region aRepaintRegion;
+    PageEnumeration aPages (PageEnumerationProvider::CreateAllPagesEnumeration(*this));
+    while (aPages.HasMoreElements())
+    {
+        SharedPageDescriptor pDescriptor (aPages.GetNextElement());
+        if (pDescriptor->SetState(
+            PageDescriptor::ST_Selected,
+            pDescriptor->HasState(PageDescriptor::ST_WasSelected)))
+        {
+            aRepaintRegion.Union(pDescriptor->GetBoundingBox());
+        }
+    }
+    return aRepaintRegion;
+}
+
+
 } } } // end of namespace ::sd::slidesorter::model

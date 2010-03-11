@@ -102,18 +102,12 @@ public:
     */
     void NotifyDragFinished (void);
 
-    /** This is the higher level version of the
-        SlideSorterView::UpdatePageUnderMouse() method.
-        It does not update the page under the mouse when an operation is
-        active that (logically) captures the mouse.
+    /** Call when drag-and-drop or multi selection is started or stopped in
+        order to update permission of mouse over indication.
     */
-    void UpdatePageUnderMouse (
-        const Point& rMousePosition,
-        const bool bIsMouseButtonDown);
+    void UpdateMouseOverIndicationPermission (void);
 
     ::boost::shared_ptr<DragAndDropContext> GetDragAndDropContext (void) const;
-
-    class MouseMultiSelector;
 
 protected:
     SlideSorter& mrSlideSorter;
@@ -144,6 +138,8 @@ private:
     bool mbProcessingMouseButtonDown;
 
     ::boost::shared_ptr<DragAndDropContext> mpDragAndDropContext;
+
+    class MouseMultiSelector;
     ::boost::scoped_ptr<MouseMultiSelector> mpMouseMultiSelector;
 
     /** Remember where the left mouse button was pressed.
@@ -231,6 +227,9 @@ private:
         const FocusManager::FocusMoveDirection eDirection,
         const bool bIsShiftDown,
         const bool bIsControlDown);
+
+    void StopDragAndDrop (void);
+    void StopMouseMultiSelection (void);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

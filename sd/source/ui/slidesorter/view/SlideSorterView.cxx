@@ -337,6 +337,7 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     meOrientation(VERTICAL),
     mpProperties(rSlideSorter.GetProperties()),
     mpPageUnderMouse(),
+    mbIsMouseOverIndicationAllowed(true),
     mnButtonUnderMouse(-1),
     mpPageObjectPainter(),
     mpSelectionPainter()
@@ -636,11 +637,7 @@ void SlideSorterView::DeterminePageObjectVisibilities (void)
         maVisiblePageRange = aRange;
 
         // Restore the mouse over state.
-        const Window::PointerState aPointerState (pWindow->GetPointerState());
-        UpdatePageUnderMouse (
-            aPointerState.maPos,
-            (aPointerState.mnState & MOUSE_LEFT)!=0,
-            false);
+        UpdatePageUnderMouse(false);
     }
 }
 
@@ -730,6 +727,18 @@ void SlideSorterView::RequestRepaint (const Rectangle& rRepaintBox)
     {
         pWindow->Invalidate(rRepaintBox);
         mpLayeredDevice->InvalidateAllLayers(rRepaintBox);
+    }
+}
+
+
+
+void SlideSorterView::RequestRepaint (const Region& rRepaintRegion)
+{
+    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
+    if (pWindow)
+    {
+        pWindow->Invalidate(rRepaintRegion);
+        mpLayeredDevice->InvalidateAllLayers(rRepaintRegion);
     }
 }
 
@@ -893,31 +902,66 @@ void SlideSorterView::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint
 
 
 
+void SlideSorterView::SetIsMouseOverIndicationAllowed (const bool bIsAllowed)
+{
+    mbIsMouseOverIndicationAllowed = bIsAllowed;
+    if ( ! mbIsMouseOverIndicationAllowed)
+        SetPageUnderMouse(model::SharedPageDescriptor());
+    else
+        UpdatePageUnderMouse(false);
+}
+
+
+
+
+void SlideSorterView::UpdatePageUnderMouse (bool bAnimate)
+{
+    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
+    if (pWindow)
+    {
+        const Window::PointerState aPointerState (pWindow->GetPointerState());
+        UpdatePageUnderMouse (
+            aPointerState.maPos,
+            (aPointerState.mnState & MOUSE_LEFT)!=0,
+            bAnimate);
+    }
+}
+
+
+
+
 void SlideSorterView::UpdatePageUnderMouse (
     const Point& rMousePosition,
     const bool bIsMouseButtonDown,
     const bool bAnimate)
 {
-    // Determine page under mouse and show the mouse over effect.
-    model::SharedPageDescriptor pHitDescriptor (
-        mrSlideSorter.GetController().GetPageAt(rMousePosition));
-    SetPageUnderMouse(pHitDescriptor, bAnimate);
-
-    // Handle the mouse being over any buttons.
-    if (pHitDescriptor)
+    if ( ! mbIsMouseOverIndicationAllowed)
     {
-        SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
-        const Point aMouseModelPosition (pWindow->PixelToLogic(rMousePosition));
-        const sal_Int32 nButtonIndex (
-            GetLayouter().GetPageObjectLayouter()->GetButtonIndexAt (
-                pHitDescriptor,
-                aMouseModelPosition));
-        SetButtonUnderMouse(nButtonIndex);
-        if (bIsMouseButtonDown)
+        SetPageUnderMouse(model::SharedPageDescriptor());
+    }
+    else
+    {
+        // Determine page under mouse and show the mouse over effect.
+        model::SharedPageDescriptor pHitDescriptor (
+            mrSlideSorter.GetController().GetPageAt(rMousePosition));
+        SetPageUnderMouse(pHitDescriptor, bAnimate);
+
+        // Handle the mouse being over any buttons.
+        if (pHitDescriptor)
         {
-            pHitDescriptor->GetVisualState().SetActiveButtonState(
-                nButtonIndex,
-                model::VisualState::BS_Pressed);
+            SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
+            const Point aMouseModelPosition (pWindow->PixelToLogic(rMousePosition));
+            const sal_Int32 nButtonIndex (
+                GetLayouter().GetPageObjectLayouter()->GetButtonIndexAt (
+                    pHitDescriptor,
+                    aMouseModelPosition));
+            SetButtonUnderMouse(nButtonIndex);
+            if (bIsMouseButtonDown)
+            {
+                pHitDescriptor->GetVisualState().SetActiveButtonState(
+                    nButtonIndex,
+                    model::VisualState::BS_Pressed);
+            }
         }
     }
 }
@@ -998,7 +1042,11 @@ bool SlideSorterView::SetState (
     const bool bStateValue,
     const bool bAnimate)
 {
-    const bool bModified (rpDescriptor->SetState(eState, bStateValue));
+    model::SharedPageDescriptor pDescriptor (rpDescriptor);
+    if ( ! pDescriptor)
+        return false;
+
+    const bool bModified (pDescriptor->SetState(eState, bStateValue));
     if ( ! bModified)
         return false;
 
@@ -1010,7 +1058,7 @@ bool SlideSorterView::SetState (
         case PageDescriptor::ST_MouseOver:
         case PageDescriptor::ST_Current:
         case PageDescriptor::ST_Excluded:
-            RequestRepaint(rpDescriptor);
+            RequestRepaint(pDescriptor);
             break;
 
         case PageDescriptor::ST_WasSelected:
@@ -1024,11 +1072,11 @@ bool SlideSorterView::SetState (
         const double nEndAlpha (bStateValue ? 0.2 : 1.0);
         if (bAnimate)
         {
-            const double nStartAlpha (rpDescriptor->GetVisualState().GetButtonAlpha());
+            const double nStartAlpha (pDescriptor->GetVisualState().GetButtonAlpha());
 
             // Stop a running animation.
             const Animator::AnimationId nId (
-                rpDescriptor->GetVisualState().GetButtonAlphaAnimationId());
+                pDescriptor->GetVisualState().GetButtonAlphaAnimationId());
             if (nId != Animator::NotAnAnimationId)
                 mrSlideSorter.GetController().GetAnimator()->RemoveAnimation(nId);
 
@@ -1038,24 +1086,24 @@ bool SlideSorterView::SetState (
                 nStartAlpha,
                     nEndAlpha,
                     ::boost::bind(AnimationFunction::Linear, _1)));
-            rpDescriptor->GetVisualState().SetButtonAlphaAnimationId(
+            pDescriptor->GetVisualState().SetButtonAlphaAnimationId(
                 mrSlideSorter.GetController().GetAnimator()->AddAnimation(
                     ::boost::bind(
                         AnimationFunction::ApplyButtonAlphaChange,
-                        rpDescriptor,
+                        pDescriptor,
                         ::boost::ref(*this),
                         ::boost::bind(aBlendFunctor, _1)),
                     bStateValue ? 500 : 0,
                     400,
                     ::boost::bind(
                         &VisualState::SetButtonAlphaAnimationId,
-                        ::boost::ref(rpDescriptor->GetVisualState()),
+                        ::boost::ref(pDescriptor->GetVisualState()),
                         controller::Animator::NotAnAnimationId)
                     ));
         }
         else
         {
-            rpDescriptor->GetVisualState().SetButtonAlpha(nEndAlpha);
+            pDescriptor->GetVisualState().SetButtonAlpha(nEndAlpha);
         }
     }
 
