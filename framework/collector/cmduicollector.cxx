@@ -2088,6 +2088,7 @@ bool WriteToolBarItem( osl::File& rFile, const OUString& aCmd, const OUString& a
     static const char ATTRIBUTE_ITEMSTYLE_LEFT[]        = "left";
     static const char ATTRIBUTE_ITEMSTYLE_AUTOSIZE[]    = "autosize";
     static const char ATTRIBUTE_ITEMSTYLE_DROPDOWN[]    = "dropdown";
+    static const char ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY[]= "dropdownonly";
     static const char ATTRIBUTE_ITEMSTYLE_REPEAT[]      = "repeat";
 
     OString aCmdStr = OUStringToOString( aCmd, RTL_TEXTENCODING_UTF8 );
@@ -2136,7 +2137,10 @@ bool WriteToolBarItem( osl::File& rFile, const OUString& aCmd, const OUString& a
         {
             if ( bBitSet )
                 rFile.write( " ", 1, nWritten );
-            rFile.write( ATTRIBUTE_ITEMSTYLE_DROPDOWN, strlen( ATTRIBUTE_ITEMSTYLE_DROPDOWN ), nWritten );
+            if( (nStyle & TIB_DROPDOWNONLY) == TIB_DROPDOWNONLY )
+                rFile.write( ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY, strlen( ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY ), nWritten );
+            else
+                rFile.write( ATTRIBUTE_ITEMSTYLE_DROPDOWN, strlen( ATTRIBUTE_ITEMSTYLE_DROPDOWN ), nWritten );
             bBitSet = sal_True;
         }
         if ( nStyle & TIB_REPEAT )
