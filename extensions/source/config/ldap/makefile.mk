@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.12 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -31,7 +27,6 @@
 
 PRJ=..$/..$/..
 
-PRJINC=$(PRJ)$/source
 PRJNAME=extensions
 TARGET=ldapbe
 ENABLE_EXCEPTIONS=TRUE
@@ -68,10 +63,7 @@ SOLARINC+= $(LDAPSDKINCLUDES)
 
 SLOFILES=\
     $(SLO)$/ldapuserprofilebe.obj \
-    $(SLO)$/ldapuserprof.obj	\
     $(SLO)$/ldapaccess.obj	\
-    $(SLO)$/ldapuserprofilelayer.obj \
-    $(SLO)$/propertysethelper.obj \
     $(SLO)$/componentdef.obj
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib        

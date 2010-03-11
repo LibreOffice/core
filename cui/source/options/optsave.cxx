@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optsave.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -622,9 +619,17 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
             aDocTypeLB.SelectEntryPos(0);
             FilterHdl_Impl(&aDocTypeLB);
         }
-        catch(Exception& )
+        catch(Exception& e)
         {
-            DBG_ERROR("exception in FilterFactory access");
+            (void) e;
+            DBG_ERROR(
+                rtl::OUStringToOString(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "exception in FilterFactory access: ")) +
+                     e.Message),
+                    RTL_TEXTENCODING_UTF8).
+                getStr());
         }
 
         pImpl->bInitialized = sal_True;
