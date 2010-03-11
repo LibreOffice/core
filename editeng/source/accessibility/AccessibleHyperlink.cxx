@@ -37,7 +37,7 @@
 
 #include "AccessibleHyperlink.hxx"
 #include "editeng/unoedprx.hxx"
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <vcl/keycodes.hxx>
 
 using namespace ::com::sun::star;

@@ -40,7 +40,7 @@
 #include <vos/mutex.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/awt/Point.hpp>
