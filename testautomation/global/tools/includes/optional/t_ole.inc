@@ -77,14 +77,12 @@ function hGetOleObjectName( cApplication as string ) as string
     case "MATH"   : Application_API_Name = "Math"
     case "CHART"  : Application_API_Name = "Chart"
     case else
-        warnlog( CFN & "Invalid object type passed to function: " & Application_API_Name )
-        warnlog( CFN & "This function is case sensitive." )
-        warnlog( CFN & "Supported are: Writer, Calc, Impress, Draw, Math, Chart" )
+        warnlog( CFN & "Invalid object type passed to function: " & cApplication )
         hGetOleObjectName() = ""
         exit function
     end select
     
-    if ( GVERBOSE ) then printlog( CFN & "Retrieving OLE name for: " & Application_API_Name )
+    if ( GVERBOSE ) then printlog( CFN & "Retrieving OLE name for: " & cApplication )
 
     ' ...Embedding is physical path, ObjectNames the top node
     aPropertyValue( 0 ).Name  = "nodepath"
