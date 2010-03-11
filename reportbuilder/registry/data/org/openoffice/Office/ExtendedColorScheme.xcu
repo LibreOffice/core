@@ -1,14 +1,11 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ExtendedColorScheme.xcu,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,90 +36,90 @@
                     <node oor:name="Entries">
                         <node oor:name="ReportHeader" oor:op="replace">
                             <prop oor:name="Color">
-                                <value>0x007Fa04C</value>
+                                <value>8364108</value> <!-- 0x007Fa04C -->
                             </prop>
                             <prop oor:name="DefaultColor">
-                                <value>0x007Fa04C</value>
+                                <value>8364108</value> <!-- 0x007Fa04C -->
                             </prop>
                         </node>
                         <node oor:name="ReportFooter" oor:op="replace">
                             <prop oor:name="Color">
-                                <value>0x007Fa04C</value>
+                                <value>8364108</value> <!-- 0x007Fa04C -->
                             </prop>
                             <prop oor:name="DefaultColor">
-                                <value>0x007Fa04C</value>
+                                <value>8364108</value> <!-- 0x007Fa04C -->
                             </prop>
                         </node>
                         <node oor:name="PageHeader" oor:op="replace">
                             <prop oor:name="Color">
-                                <value>0x00F0C158/</value>
+                                <value>15778136</value> <!-- 0x00F0C158 -->
                             </prop>
                             <prop oor:name="DefaultColor">
-                                <value>0x00F0C158/</value>
+                                <value>15778136</value> <!-- 0x00F0C158 -->
                             </prop>
                         </node>
                         <node oor:name="PageFooter" oor:op="replace">
                             <prop oor:name="Color">
-                                <value>0x00F0C158</value>
+                                <value>15778136</value> <!-- 0x00F0C158 -->
                             </prop>
                             <prop oor:name="DefaultColor">
-                                <value>0x00F0C158</value>
+                                <value>15778136</value> <!-- 0x00F0C158 -->
                             </prop>
                         </node>
                         <node oor:name="GroupHeader" oor:op="replace">
                             <prop oor:name="Color">
-                                <value>0x00AAC1D2</value>
+                                <value>11190738</value> <!-- 0x00AAC1D2 -->
                             </prop>
                             <prop oor:name="DefaultColor">
-                                <value>0x00AAC1D2</value>
+                                <value>11190738</value> <!-- 0x00AAC1D2 -->
                             </prop>
                         </node>
                         <node oor:name="GroupFooter" oor:op="replace">
                             <prop oor:name="Color">
-                                <value>0x00AAC1D2</value>
+                                <value>11190738</value> <!-- 0x00AAC1D2 -->
                             </prop>
                             <prop oor:name="DefaultColor">
-                                <value>0x00AAC1D2</value>
+                                <value>11190738</value> <!-- 0x00AAC1D2 -->
                             </prop>
                         </node>
                         <node oor:name="ColumnHeader" oor:op="replace">
                             <prop oor:name="Color">
-                                <value>0x00AAC1D2</value>
+                                <value>11190738</value> <!-- 0x00AAC1D2 -->
                             </prop>
                             <prop oor:name="DefaultColor">
-                                <value>0x00AAC1D2</value>
+                                <value>11190738</value> <!-- 0x00AAC1D2 -->
                             </prop>
                         </node>
                         <node oor:name="ColumnFooter" oor:op="replace">
                             <prop oor:name="Color">
-                                <value>0x00AAC1D2</value>
+                                <value>11190738</value> <!-- 0x00AAC1D2 -->
                             </prop>
                             <prop oor:name="DefaultColor">
-                                <value>0x00AAC1D2</value>
+                                <value>11190738</value> <!-- 0x00AAC1D2 -->
                             </prop>
                         </node>
                         <node oor:name="Detail" oor:op="replace">
                             <prop oor:name="Color">
-                                <value>0x00F1C4A2</value>
+                                <value>15844514</value> <!-- 0x00F1C4A2 -->
                             </prop>
                             <prop oor:name="DefaultColor">
-                                <value>0x00F1C4A2</value>
+                                <value>15844514</value> <!-- 0x00F1C4A2 -->
                             </prop>
                         </node>
                         <node oor:name="OverlappedControl" oor:op="replace">
                             <prop oor:name="Color">
-                                <value>0x00FF3366</value>
+                                <value>16724838</value> <!-- 0x00FF3366 -->
                             </prop>
                             <prop oor:name="DefaultColor">
-                                <value>0x00FF3366</value>
+                                <value>16724838</value> <!-- 0x00FF3366 -->
                             </prop>
                         </node>
                         <node oor:name="TextBoxBoundContent" oor:op="replace">
                             <prop oor:name="Color">
-                                <value>0x00808080</value>
+                                <value>8421504</value> <!-- 0x00808080 -->
                             </prop>
                             <prop oor:name="DefaultColor">
-                                <value>0x00808080</value>
+                                <value>8421504</value> <!-- 0x00808080 -->
                             </prop>
                         </node>
                     </node>
