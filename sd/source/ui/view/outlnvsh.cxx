@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: outlnvsh.cxx,v $
- * $Revision: 1.90.36.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,8 +42,8 @@
 #include <sot/exchange.hxx>
 #include <svx/ruler.hxx>
 #include <svx/zoomitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/viewfac.hxx>
@@ -56,20 +53,20 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/scrbar.hxx>
 #include <svl/whiter.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 #include <svl/itempool.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <svx/svdorect.hxx>
 #include <sot/formats.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hdl>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svtools/cliplistener.hxx>
-#include <sfx2/srchitem.hxx>
-#include <svx/editobj.hxx>
+#include <svl/srchitem.hxx>
+#include <editeng/editobj.hxx>
 #include "fubullet.hxx"
 #include "optsitem.hxx"
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drviews7.cxx,v $
- * $Revision: 1.78 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,9 +33,9 @@
 #include <svx/fmglob.hxx>
 #include <svx/globl3d.hxx>
 #include <svx/svdouno.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #ifndef _FLDITEM_HXX
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #endif
 #ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
@@ -53,7 +50,7 @@
 #include <svl/whiter.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 

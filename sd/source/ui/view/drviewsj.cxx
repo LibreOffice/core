@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drviewsj.cxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,9 +37,9 @@
 #ifndef _GLOBL3D_HXX //autogen
 #include <svx/globl3d.hxx>
 #endif
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #ifndef _FLDITEM_HXX
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #endif
 #include <svx/svdogrp.hxx>
 #include <svx/svdograf.hxx>

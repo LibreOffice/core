@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: escherex.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,13 +48,8 @@ enum PPT_TextHeader
 
 class PptEscherEx : public EscherEx
 {
-        SvMemoryStream          maFIDCLs;
-
         sal_uInt32  ImplDggContainerSize();
         void        ImplWriteDggContainer( SvStream& rSt );
-
-        sal_uInt32  ImplDggAtomSize();
-        void        ImplWriteDggAtom( SvStream& rSt );
 
         sal_uInt32  ImplOptAtomSize();
         void        ImplWriteOptAtom( SvStream& rSt );
@@ -67,7 +59,7 @@ class PptEscherEx : public EscherEx
 
     public:
 
-                PptEscherEx( SvStream& rOut, UINT32 nDrawings );
+                PptEscherEx( SvStream& rOut );
                 ~PptEscherEx();
 
         void    OpenContainer( UINT16 n_EscherContainer, int nRecInstance = 0 );

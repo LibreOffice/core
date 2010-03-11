@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: epptso.cxx,v $
- * $Revision: 1.107.6.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +47,7 @@
 //#ifndef _SVX_XIT_HXX
 //#include <svx/xit.hxx>
 //#endif
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoashp.hxx>
 #include <com/sun/star/style/VerticalAlignment.hpp>
@@ -103,10 +100,10 @@
 #include <sot/clsids.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/text/FontRelief.hpp>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 /*
-#include <svx/outliner.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdmodel.hxx>
 */
 #include <svtools/fltcall.hxx>
@@ -757,7 +754,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
         nBytesToInsert += ImplDocumentListContainer( NULL );
 
         // nBytes im Stream einfuegen, und abhaengige Container anpassen
-        mpPptEscherEx->InsertAtCurrentPos( nBytesToInsert, TRUE );
+        mpPptEscherEx->InsertAtCurrentPos( nBytesToInsert, false );
 
         // CREATE HYPERLINK CONTAINER
         if ( nExEmbedSize )
@@ -1509,7 +1506,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                     {
                         Point aEmptyPoint = Point();
                         Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
-                        EscherPropertyContainer aPropOpt( (EscherGraphicProvider&)*mpPptEscherEx, mpPicStrm, aRect );
+                        EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect );
                         aPropOpt.CreateGradientProperties( mXPropSet );
                         aPropOpt.GetOpt( ESCHER_Prop_fillColor, nBackgroundColor );
                     }
@@ -1532,7 +1529,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                             {
                                 Point aEmptyPoint = Point();
                                 Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
-                                EscherPropertyContainer aPropOpt( (EscherGraphicProvider&)*mpPptEscherEx, mpPicStrm, aRect );
+                                EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect );
                                 aPropOpt.CreateGradientProperties( mXBackgroundPropSet );
                                 aPropOpt.GetOpt( ESCHER_Prop_fillColor, nBackgroundColor );
                             }
@@ -1995,7 +1992,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
     mnCharHeight = 24;
     if ( GetPropertyValue( mAny, mXPropSet, aCharHeightName, sal_False ) )
     {
-        float fVal;
+        float fVal(0.0);
         if ( mAny >>= fVal )
         {
             mnCharHeight = (sal_uInt16)( fVal + 0.5 );
@@ -2004,7 +2001,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
     }
     if ( GetPropertyValue( mAny, mXPropSet, aCharWeightName, sal_False ) )
     {
-        float fFloat;
+        float fFloat(0.0);
         if ( mAny >>= fFloat )
         {
             if ( fFloat >= ::com::sun::star::awt::FontWeight::SEMIBOLD )
@@ -2040,7 +2037,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
 
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharUnderline" ) ), bGetPropStateValue ) )
     {
-        sal_Int16 nVal;
+        sal_Int16 nVal(0);
         mAny >>= nVal;
         switch ( nVal )
         {
@@ -2055,7 +2052,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
 
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharShadowed" ) ), bGetPropStateValue ) )
     {
-        sal_Bool bBool;
+        sal_Bool bBool(sal_False);
         mAny >>= bBool;
         if ( bBool )
             mnCharAttr |= 0x10;
@@ -2065,7 +2062,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
 
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharRelief" ) ), bGetPropStateValue ) )
     {
-        sal_Int16 nVal;
+        sal_Int16 nVal(0);
         mAny >>= nVal;
         if ( nVal != ::com::sun::star::text::FontRelief::NONE )
             mnCharAttr |= 512;
@@ -4138,7 +4135,7 @@ sal_Bool PPTWriter::ImplCreatePresentationPlaceholder( const sal_Bool bMasterPag
     if ( bRet && bMasterPage )
     {
         mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-        sal_uInt32 nPresShapeID = mpPptEscherEx->GetShapeID();
+        sal_uInt32 nPresShapeID = mpPptEscherEx->GenerateShapeId();
         mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xa00, nPresShapeID );// Flags: HaveAnchor | HasSpt
         EscherPropertyContainer aPropOpt;
         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x50001 );
@@ -4194,7 +4191,7 @@ sal_Bool PPTWriter::ImplCreatePresentationPlaceholder( const sal_Bool bMasterPag
 
 void PPTWriter::ImplCreateShape( sal_uInt32 nType, sal_uInt32 nFlags, EscherSolverContainer& rSolver )
 {
-    sal_uInt32 nId = mpPptEscherEx->GetShapeID();
+    sal_uInt32 nId = mpPptEscherEx->GenerateShapeId();
     mpPptEscherEx->AddShape( nType, nFlags, nId );
     rSolver.AddShape( mXShape, nId );
 }
@@ -4282,7 +4279,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             const ::com::sun::star::awt::Size   aSize100thmm( mXShape->getSize() );
             const ::com::sun::star::awt::Point  aPoint100thmm( mXShape->getPosition() );
             Rectangle   aRect100thmm( Point( aPoint100thmm.X, aPoint100thmm.Y ), Size( aSize100thmm.Width, aSize100thmm.Height ) );
-            EscherPropertyContainer aPropOpt( (EscherGraphicProvider&)*mpPptEscherEx, mpPicStrm, aRect100thmm );
+            EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect100thmm );
 
             if ( bGroup )
             {
@@ -4840,7 +4837,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 sal_uInt16 nChar;
 
                                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                                mnShapeMasterTitle = mpPptEscherEx->GetShapeID();
+                                mnShapeMasterTitle = mpPptEscherEx->GenerateShapeId();
                                 mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xa00, mnShapeMasterTitle );// Flags: HaveAnchor | HasSpt
                                 EscherPropertyContainer aPropertyOptions;
                                 aPropertyOptions.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x50001 );
@@ -4934,7 +4931,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             if ( mnTextSize )
                             {
                                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                                mnShapeMasterBody = mpPptEscherEx->GetShapeID();
+                                mnShapeMasterBody = mpPptEscherEx->GenerateShapeId();
                                 mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xa00, mnShapeMasterBody );  // Flags: HaveAnchor | HasSpt
                                 EscherPropertyContainer aPropOpt2;
                                 aPropOpt2.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x50001 );
@@ -5543,7 +5540,7 @@ void PPTWriter::ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 n
         mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
         EscherPropertyContainer aPropOptSp;
 
-        sal_uInt32 nId = mpPptEscherEx->GetShapeID();
+        sal_uInt32 nId = mpPptEscherEx->GenerateShapeId();
         mpPptEscherEx->AddShape( ESCHER_ShpInst_Line, 0xa02, nId );
         aPropOptSp.AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
         aPropOptSp.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0xa0008 );
@@ -5589,7 +5586,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                 << (INT32)maRect.Right()
                 << (INT32)maRect.Bottom();
 
-    sal_uInt32 nShapeId = mpPptEscherEx->GetShapeID();
+    sal_uInt32 nShapeId = mpPptEscherEx->GenerateShapeId();
     mpPptEscherEx->AddShape( ESCHER_ShpInst_Min, 0x201, nShapeId );     // Flags: Group | Patriarch
     aSolverContainer.AddShape( rXShape, nShapeId );
     EscherPropertyContainer aPropOpt2;
