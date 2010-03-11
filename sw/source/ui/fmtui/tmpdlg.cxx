@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tmpdlg.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,9 +42,9 @@
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/hdft2.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <svl/cjkoptions.hxx>
 #include <numpara.hxx>
 #include <fmtclds.hxx>

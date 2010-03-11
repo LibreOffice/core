@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh2.cxx,v $
- * $Revision: 1.103.144.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,11 +61,11 @@
 #include <svx/svxids.hrc>
 #endif
 #include <svx/drawitem.hxx>
-#include <svx/svxacorr.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/svxacorr.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/fmshell.hxx>
 
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <svx/ofaitem.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <sfx2/app.hxx>
@@ -123,7 +120,7 @@
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <SwStyleNameMapper.hxx>
 
 #include <sfx2/fcontnr.hxx>

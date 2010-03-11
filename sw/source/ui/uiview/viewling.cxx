@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewling.cxx,v $
- * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,25 +49,19 @@
 #include <sfx2/request.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/svxerr.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/thesdlg.hxx>
-#include <svx/SpellPortions.hxx>
+#include <editeng/unolingu.hxx>
+#include <svx/svxdlg.hxx>
+#include <editeng/SpellPortions.hxx>
 #include <swmodule.hxx>
 #include <swwait.hxx>
 #include <initui.hxx>               // fuer SpellPointer
 #include <uitool.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>                // CheckSpellChanges
-#endif
 #include <viewopt.hxx>              // Viewoptions
 #include <swundo.hxx>               // fuer Undo-Ids
 #include <hyp.hxx>                  // Trennung
@@ -79,19 +70,11 @@
 #include <edtwin.hxx>
 #include <crsskip.hxx>
 #include <ndtxt.hxx>
-
-#ifndef _CMDID_H
+#include <vcl/lstbox.hxx>
 #include <cmdid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>              // STR_MULT_INTERACT_SPELL_WARN
-#endif
-#ifndef _VIEW_HRC
 #include <view.hrc>
-#endif
 #include <hhcwrp.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 
@@ -112,11 +95,15 @@
 #include <cppuhelper/bootstrap.hxx>
 #include "stmenu.hxx"              // PopupMenu for smarttags
 #include <svx/dialogs.hrc>
-
+#include <svtools/langtab.hxx>
 #include <unomid.h>
+#include <IMark.hxx>
+#include <xmloff/odffields.hxx>
 
 #include <memory>
+#include <editeng/editerr.hxx>
 
+using namespace sw::mark;
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -418,7 +405,7 @@ IMPL_LINK( SwView, SpellError, LanguageType *, pLang )
         while( pWrtShell->ActionPend() );
     }
     LanguageType eLang = pLang ? *pLang : LANGUAGE_NONE;
-    String aErr(::GetLanguageString( eLang ) );
+    String aErr(SvtLanguageTable::GetLanguageString( eLang ) );
 
     SwEditWin &rEditWin = GetEditWin();
 #if OSL_DEBUG_LEVEL > 1
@@ -614,7 +601,7 @@ void SwView::StartThesaurus()
         pWrtShell->GetSelTxt() : pWrtShell->GetCurWord();
 
     Reference< XThesaurus >  xThes( ::GetThesaurus() );
-    SvxThesaurusDialog *pDlg = NULL;
+    AbstractThesaurusDialog *pDlg = NULL;
 
     if ( !xThes.is() || !xThes->hasLocale( SvxCreateLocale( eLang ) ) )
     {
@@ -625,7 +612,8 @@ void SwView::StartThesaurus()
         // create dialog
         {   //Scope for SwWait-Object
             SwWait aWait( *GetDocShell(), sal_True );
-            pDlg = new SvxThesaurusDialog( &GetEditWin(),
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            pDlg = pFact->CreateThesaurusDialog( &GetEditWin(),
                                            xThes, aTmp, eLang );
         }
 
@@ -651,12 +639,12 @@ void SwView::StartThesaurus()
             else
                 aWinTop.Y() = aBtmPos.Y();
 
-            Size aSz = pDlg->GetSizePixel();
+            Size aSz = pDlg->GetWindow()->GetSizePixel();
             if ( aWinBtm.Y() - aWinTop.Y() > aSz.Height() )
             {
                 aWinTop.X() = ( aWinTop.X() + aWinBtm.X() - aSz.Width() ) / 2;
                 aWinTop.Y() = ( aWinTop.Y() + aWinBtm.Y() - aSz.Height() ) / 2;
-                pDlg->SetPosPixel( aWinTop );
+                pDlg->GetWindow()->SetPosPixel( aWinTop );
             }
         }
 
@@ -922,6 +910,145 @@ sal_Bool SwView::ExecSmartTagPopup( const Point& rPt )
         pWrtShell->SttSelect();
         SwSmartTagPopup aPopup( this, aSmartTagTypes, aStringKeyMaps, xRange );
         aPopup.Execute( aToFill.SVRect(), pEditWin );
+    }
+
+    pWrtShell->Pop( sal_False );
+    pWrtShell->LockView( bOldViewLock );
+
+    return bRet;
+}
+
+
+
+class SwFieldPopup : public PopupMenu
+{
+public:
+    SwFieldPopup()  {
+    InsertItem(1, ::rtl::OUString::createFromAscii("Hello"));
+    }
+};
+
+class SwFieldListBox : public ListBox
+{
+public:
+    SwFieldListBox(Window* pParent) : ListBox(pParent /*, WB_DROPDOWN*/) {
+    }
+
+    void *GetImplWin() {
+    return NULL; //FIXME!!!
+//  return mpImplWin;
+    }
+
+protected:
+    virtual void LoseFocus() {
+//  printf("ListBox: lose focus!!\n");
+    ListBox::LoseFocus();
+    }
+
+    virtual void Select() {
+//  printf("SELECT!!! IsTravelSelect=%i\n", IsTravelSelect());
+    ListBox::Select();
+    }
+};
+
+class SwFieldDialog : public Dialog
+{
+private:
+    SwFieldListBox aListBox;
+    Edit aText;
+    int selection;
+
+    DECL_LINK( MyListBoxHandler, ListBox * );
+
+public:
+    SwFieldDialog(Window* parent, IFieldmark *fieldBM) : Dialog(parent, WB_BORDER | WB_SYSTEMWINDOW | WB_NOSHADOW ), aListBox(this), aText(this, WB_RIGHT | WB_READONLY), selection(-1) {
+
+    assert(fieldBM!=NULL);
+    if (fieldBM!=NULL) {
+        const IFieldmark::parameter_map_t* const pParameters = fieldBM->GetParameters();
+        IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_LISTENTRY));
+        if(pListEntries != pParameters->end())
+        {
+            Sequence< ::rtl::OUString> vListEntries;
+            pListEntries->second >>= vListEntries;
+            for( ::rtl::OUString* pCurrent = vListEntries.getArray();
+                pCurrent != vListEntries.getArray() + vListEntries.getLength();
+                ++pCurrent)
+            {
+                aListBox.InsertEntry(*pCurrent);
+            }
+        }
+    }
+    Size lbSize=aListBox.GetOptimalSize(WINDOWSIZE_PREFERRED);
+    lbSize.Width()+=50;
+    lbSize.Height()+=20;
+    aListBox.SetSizePixel(lbSize);
+    aListBox.SetSelectHdl( LINK( this, SwFieldDialog, MyListBoxHandler ) );
+    aListBox.Show();
+    aText.SetText(rtl::OUString::createFromAscii("Cancel"));
+    Size tSize=aText.GetOptimalSize(WINDOWSIZE_PREFERRED);
+    aText.SetSizePixel(Size(lbSize.Width(), tSize.Height()));
+    aText.SetPosPixel(Point(0, lbSize.Height()));
+    aText.Show();
+    SetSizePixel(Size(lbSize.Width(), lbSize.Height()+tSize.Height()));
+//  SetSizePixel(Size(200, 200));
+    }
+
+    int getSelection() {
+    return selection;
+    }
+protected:
+    /*
+    virtual void LoseFocus() {
+    printf("lose focus!!\n");
+    Dialog::LoseFocus();
+    printf("close:\n");
+    EndDialog(8);
+    }
+    */
+
+    virtual long PreNotify( NotifyEvent& rNEvt ) {
+    if (rNEvt.GetType() == EVENT_LOSEFOCUS && aListBox.GetImplWin()==rNEvt.GetWindow()) {
+        EndDialog(8);
+        return 1;
+    }
+    if (rNEvt.GetType() == EVENT_KEYINPUT) {
+//      printf("PreNotify::KEYINPUT\n");
+    }
+    return Dialog::PreNotify(rNEvt);
+    }
+};
+
+IMPL_LINK( SwFieldDialog, MyListBoxHandler, ListBox *, pBox )
+{
+//    printf("### DROP DOWN SELECT... IsTravelSelect=%i\n", pBox->IsTravelSelect());
+    if (pBox->IsTravelSelect()) {
+    return 0;
+    } else {
+    this->selection=pBox->GetSelectEntryPos();
+    EndDialog(9); //@TODO have meaningfull returns...
+    return 1;
+    }
+}
+
+
+BOOL SwView::ExecFieldPopup( const Point& rPt, IFieldmark *fieldBM )
+{
+    sal_Bool bRet = sal_False;
+    const sal_Bool bOldViewLock = pWrtShell->IsViewLocked();
+    pWrtShell->LockView( sal_True );
+    pWrtShell->Push();
+
+    bRet=sal_True;
+    const Point aPixPos = GetEditWin().LogicToPixel( rPt );
+
+    SwFieldDialog aFldDlg(pEditWin, fieldBM);
+    aFldDlg.SetPosPixel(pEditWin->OutputToScreenPixel(aPixPos));
+
+    /*short ret=*/aFldDlg.Execute();
+    sal_Int32 selection=aFldDlg.getSelection();
+    if (selection>=0) {
+        (*fieldBM->GetParameters())[::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_RESULT)] = makeAny(selection);
     }
 
     pWrtShell->Pop( sal_False );

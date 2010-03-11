@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: calc.cxx,v $
- * $Revision: 1.44.174.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,13 +39,13 @@
 #include <cfloat>
 #include <hintids.hxx>
 #include <rtl/math.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <unotools/useroptions.hxx>
 #include <tools/datetime.hxx>
 #include <svl/zforlist.hxx>
