@@ -866,13 +866,8 @@ function fSplitWindowTitle(sInString as string)
                 qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 3"
                 bError = TRUE
             endif
-
-            '***** Warning: Indention error *****
         case 4:
             if ((NOT bTestToolCommunication) OR (NOT bDebugVersion)) then
-
-
-                '***** Warning: Indention error *****
                 qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 4"
                 bError = TRUE
             endif
@@ -888,32 +883,26 @@ function fSplitWindowTitle(sInString as string)
         if (x > 1) then ' there is more to evaluate
             ' save the current computed values
             for i=0 to 2
-                '***** Warning: Indention error *****
                 sTempReturn2(i) = sTempReturn(i)
             next i
             ' make return array bigger
             redim sTempReturn(4) as string
             ' copy data back
             for i=0 to 2
-                '***** Warning: Indention error *****
                 sTempReturn(i) = sTempReturn2(i)
             next i
             ' set remaining values, if exist
             ' debug version string
             if bDebugVersion then
-                '***** Warning: Indention error *****
                 sTempReturn(3) = mid(sTemp(2),2,len(sTemp(2))-2) ' optional (3) Debug Version
             else
-                '***** Warning: Indention error *****
                 sTempReturn(3) = ""
             endif
             ' TestTool Communication string
             if bTestToolCommunication then
-                '***** Warning: Indention error *****
                 ' if true, then always the two last strings
                 sTempReturn(4) = sTemp(x-1) + " " + sTemp(x)        ' optional (4) TestTool Communication
             else
-                '***** Warning: Indention error *****
                 sTempReturn(4) = ""
             endif
         endif
