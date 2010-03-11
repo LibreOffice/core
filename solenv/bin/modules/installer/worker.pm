@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: worker.pm,v $
-#
-# $Revision: 1.65.56.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -2656,15 +2652,13 @@ sub set_time_stamp
     }
 }
 
-##############################################
-# Include only files from install directory
-# in pkgmap file.
-##############################################
-########################################
-# Generating pathes for cygwin.
-########################################
+############################################################
+# Generating pathes for cygwin (first version)
+# This function has problems with cygwin, if $tmpfilename
+# contains many thousand files (OpenOffice SDK).
+############################################################
 
-sub generate_cygwin_pathes
+sub generate_cygwin_pathes_old
 {
     my ($filesref) = @_;
 
@@ -2682,7 +2676,99 @@ sub generate_cygwin_pathes
     {
         ${$filesref}[$i]->{'cyg_sourcepath'} = $cyg_sourcepathlist[$i];
     }
+
 }
+
+#################################################
+# Generating pathes for cygwin (second version)
+# This function generates smaller files for
+#################################################
+
+sub generate_cygwin_pathes
+{
+    my ($filesref) = @_;
+
+    installer::logger::include_timestamp_into_logfile("Starting generating cygwin pathes");
+
+    my $infoline = "Generating cygwin pathes (generate_cygwin_pathes)\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    my $max = 5000;  # number of pathes in one file
+
+    my @pathcollector = ();
+    my $startnumber = 0;
+    my $counter = 0;
+
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        my $line = ${$filesref}[$i]->{'sourcepath'} . "\n";
+        push(@pathcollector, $line);
+        $counter++;
+
+        if (( $i == $#{$filesref} ) || ((( $counter % $max ) == 0 ) && ( $i > 0 )))
+        {
+            my $tmpfilename = "cygwinhelper_" . $i . ".txt";
+            my $temppath = $installer::globals::temppath;
+            $temppath =~ s/\Q$installer::globals::separator\E\s*$//;
+            $tmpfilename = $temppath . $installer::globals::separator . $tmpfilename;
+            $infoline = "Creating temporary file for cygwin conversion: $tmpfilename (contains $counter pathes)\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            if ( -f $tmpfilename ) { unlink $tmpfilename; }
+
+            installer::files::save_file($tmpfilename, \@pathcollector);
+
+            my $success = 0;
+            my @cyg_sourcepathlist = qx{cygpath -w -f "$tmpfilename"};
+            chomp @cyg_sourcepathlist;
+
+            # Validating the array, it has to contain the correct number of values
+            my $new_pathes = $#cyg_sourcepathlist + 1;
+            if ( $new_pathes == $counter ) { $success = 1; }
+
+            if ($success)
+            {
+                $infoline = "Success: Successfully converted to cygwin pathes!\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
+            else
+            {
+                $infoline = "ERROR: Failed to convert to cygwin pathes!\n";
+                push( @installer::globals::logfileinfo, $infoline);
+                installer::exiter::exit_program("ERROR: Failed to convert to cygwin pathes!", "generate_cygwin_pathes");
+            }
+
+            for ( my $j = 0; $j <= $#cyg_sourcepathlist; $j++ )
+            {
+                my $number = $startnumber + $j;
+                ${$filesref}[$number]->{'cyg_sourcepath'} = $cyg_sourcepathlist[$j];
+            }
+
+            if ( -f $tmpfilename ) { unlink $tmpfilename; }
+
+            @pathcollector = ();
+            $startnumber = $startnumber + $max;
+            $counter = 0;
+        }
+    }
+
+    # Checking existence fo cyg_sourcepath for every file
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        if (( ! exists(${$filesref}[$i]->{'cyg_sourcepath'}) ) || ( ${$filesref}[$i]->{'cyg_sourcepath'} eq "" ))
+        {
+            $infoline = "ERROR: No cygwin sourcepath defined for file ${$filesref}[$i]->{'sourcepath'}\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            installer::exiter::exit_program("ERROR: No cygwin sourcepath defined for file ${$filesref}[$i]->{'sourcepath'}!", "generate_cygwin_pathes");
+        }
+    }
+
+    installer::logger::include_timestamp_into_logfile("Ending generating cygwin pathes");
+}
+
+##############################################
+# Include only files from install directory
+# in pkgmap file.
+##############################################
 
 sub filter_pkgmapfile
 {

@@ -777,6 +777,14 @@ BSH_JAR
 SYSTEM_BSH
 HSQLDB_JAR
 SYSTEM_HSQLDB
+SYSTEM_MYSQL_CPPCONN
+LIBMYSQL_PATH
+MYSQL_DEFINES
+MYSQL_LIB
+MYSQL_INC
+SYSTEM_MYSQL
+MYSQLCONFIG
+ENABLE_MYSQLC
 LUCENE_ANALYZERS_JAR
 LUCENE_CORE_JAR
 SYSTEM_LUCENE
@@ -1066,6 +1074,10 @@ with_system_db
 with_system_lucene
 with_lucene_core_jar
 with_lucene_analyzers_jar
+enable_mysql_connector
+with_system_mysql
+with_libmysql_path
+with_system_mysql_cppconn
 with_system_hsqldb
 with_hsqldb_jar
 with_system_beanshell
@@ -1858,9 +1870,7 @@ Optional Features:
                           assertions, object counting, etc. Larger build.
                           Independent from --enable-debug
 
-  --enable-crashdump[=yes|TRUE|STATIC|no]
-                          Enable (disable) the crashdump feature code.
-                          [default=no]
+  --enable-crashdump      Enable the crashdump feature code.
 
   --enable-cl-standard    For Microsoft C/C++ compiler users, use non-optimizing
                           standard compiler. ( This just disavles optimization
@@ -1927,6 +1937,10 @@ Optional Features:
 
   --disable-randr-link    disable linking with libXrandr, instead dynamically
                            open it at runtime
+
+  --enable-mysql-connector     enables the build of the MySQL Connector/OOo extension.
+                                This requires access to the MySQL Connector/C (aka libmysql) to be given, too, with
+                                either the --with-system-mysql or --with-libmysql-path option.
 
   --enable-presenter-extra-ui   enables extra functionality during slideshow,
                                  e.g. selecting pen color, erasing drawings etc.
@@ -2090,6 +2104,15 @@ Optional Packages:
 
   --with-lucene-core-jar=JARFILE   Specify path to jarfile manually
   --with-lucene-analyzers-jar=JARFILE   Specify path to jarfile manually
+  --with-system-mysql          Use MySQL libraries already on system, for building the MySQL Connector/OOo extension.
+                                Requires MYSQLCONFIG to point to the mysql_config executable.
+
+  --with-libmysql-path         Use Connector/C (libmysql) installation for building the MySQL Connector/OOo extension.
+
+                                Usage: --with-libmysql-path=<absolute path to your Connector/C installation>
+
+  --with-system-mysql-cppconn  Use MySQL C++ Connector libraries already on system
+
   --with-system-hsqldb    Use hsqldb already on system
 
   --with-hsqldb-jar=JARFILE   Specify path to jarfile manually
@@ -3836,8 +3859,6 @@ fi
 # Check whether --enable-crashdump was given.
 if test "${enable_crashdump+set}" = set; then :
   enableval=$enable_crashdump;
-else
-  enable_crashdump=no
 fi
 
 # Check whether --enable-cl-standard was given.
@@ -4132,6 +4153,31 @@ fi
 if test "${with_lucene_analyzers_jar+set}" = set; then :
   withval=$with_lucene_analyzers_jar;  LUCENE_ANALYZERS_JAR="$withval"
 
+fi
+
+# Check whether --enable-mysql-connector was given.
+if test "${enable_mysql_connector+set}" = set; then :
+  enableval=$enable_mysql_connector;
+fi
+
+
+# Check whether --with-system-mysql was given.
+if test "${with_system_mysql+set}" = set; then :
+  withval=$with_system_mysql;
+else
+  with_system_mysql="no"
+fi
+
+
+# Check whether --with-libmysql-path was given.
+if test "${with_libmysql_path+set}" = set; then :
+  withval=$with_libmysql_path;
+fi
+
+
+# Check whether --with-system-mysql-cppconn was given.
+if test "${with_system_mysql_cppconn+set}" = set; then :
+  withval=$with_system_mysql_cppconn;
 fi
 
 
@@ -5308,26 +5354,15 @@ esac
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable crashdump feature" >&5
 $as_echo_n "checking whether to enable crashdump feature... " >&6; }
-if test "$enable_crashdump" = "yes" -o "$enable_crashdump" = "TRUE"; then
+if test "$enable_crashdump" = "yes"; then
    ENABLE_CRASHDUMP="TRUE"
+   BUILD_TYPE="$BUILD_TYPE CRASHREP"
    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-   BUILD_TYPE="$BUILD_TYPE CRASHREP"
 else
-   if test "$enable_crashdump" = "STATIC"; then
-      ENABLE_CRASHDUMP="STATIC"
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes, STATIC" >&5
-$as_echo "yes, STATIC" >&6; }
-      BUILD_TYPE="$BUILD_TYPE CRASHREP"
-   else
-      if test "$enable_crashdump" = "" -o "$enable_crashdump" = "no"; then
-         ENABLE_CRASHDUMP=""
-	 { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+   ENABLE_CRASHDUMP=""
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-      else
-         as_fn_error "--enable-crashdump only accepts yes, no, TRUE or STATIC as parameter." "$LINENO" 5
-      fi
-   fi
 fi
 
 
@@ -13227,6 +13262,267 @@ fi
 
 
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to build the MySQL Connector extension" >&5
+$as_echo_n "checking whether to build the MySQL Connector extension... " >&6; }
+if test -n "$enable_mysql_connector" -a "$enable_mysql_connector" != "no"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+  ENABLE_MYSQLC=YES
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for mysqlc module" >&5
+$as_echo_n "checking for mysqlc module... " >&6; }
+  if test -d mysqlc; then
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: OK" >&5
+$as_echo "OK" >&6; }
+  else
+   as_fn_error "not existing. get it (did you get the -extensions tarball?)" "$LINENO" 5
+  fi
+  BUILD_TYPE="$BUILD_TYPE MYSQLC"
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+  ENABLE_MYSQLC=NO
+fi
+
+
+if test "$ENABLE_MYSQLC" = "YES"; then
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for mysql pre-requisites" >&5
+$as_echo_n "checking for mysql pre-requisites... " >&6; }
+if test -n "$with_system_mysql" -o -n "$with_system_libs" && \
+       test "$with_system_mysql" != "no" && test "$with_system_libs" != "no"; then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: external MySQL" >&5
+$as_echo "external MySQL" >&6; }
+	SYSTEM_MYSQL=YES
+	# Extract the first word of "mysql_config", so it can be a program name with args.
+set dummy mysql_config; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if test "${ac_cv_path_MYSQLCONFIG+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $MYSQLCONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_MYSQLCONFIG="$MYSQLCONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_MYSQLCONFIG="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+MYSQLCONFIG=$ac_cv_path_MYSQLCONFIG
+if test -n "$MYSQLCONFIG"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $MYSQLCONFIG" >&5
+$as_echo "$MYSQLCONFIG" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking MySQL version" >&5
+$as_echo_n "checking MySQL version... " >&6; }
+	MYSQL_VERSION=`$MYSQLCONFIG --version`
+	MYSQL_MAJOR=`$MYSQLCONFIG --version | cut -d"." -f1`
+	if test "$MYSQL_MAJOR" -ge "5"; then
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: OK" >&5
+$as_echo "OK" >&6; }
+	else
+		as_fn_error "too old, use 5.0.x or 5.1.x" "$LINENO" 5
+	fi
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for MySQL Client library" >&5
+$as_echo_n "checking for MySQL Client library... " >&6; }
+	MYSQL_INC=`$MYSQLCONFIG --include`
+	MYSQL_LIB=`$MYSQLCONFIG --libs`
+	MYSQL_DEFINES=`$MYSQLCONFIG --cflags | sed -e s,$MYSQL_INC,,`
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: includes $MYSQL_INC, libraries $MYSQL_LIB" >&5
+$as_echo "includes $MYSQL_INC, libraries $MYSQL_LIB" >&6; }
+else
+    SYSTEM_MYSQL=NO
+    if test -n "$with_libmysql_path"; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: external Connector/C (libmysql)" >&5
+$as_echo "external Connector/C (libmysql)" >&6; }
+        LIBMYSQL=libmysql.so
+        if test "$_os" = "Darwin"; then
+            LIBMYSQL=libmysql.dylib
+        elif test "$_os" = "WINNT"; then
+            LIBMYSQL=libmysql.dll
+        fi
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $LIBMYSQL" >&5
+$as_echo_n "checking for $LIBMYSQL... " >&6; }
+        if test -e "$with_libmysql_path/lib/$LIBMYSQL"; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: found." >&5
+$as_echo "found." >&6; }
+            LIBMYSQL_PATH=$with_libmysql_path
+        else
+            as_fn_error "not found. Please specify proper path in --with-libmysql-path." "$LINENO" 5
+        fi
+    else
+        as_fn_error "not given. Please specify either --with-system-mysql or --with-libmysql-path" "$LINENO" 5
+    fi
+fi
+
+
+
+
+
+
+ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+# FIXME!
+# who thought this too-generic cppconn dir was a good idea?
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking MySQL Connector/C++" >&5
+$as_echo_n "checking MySQL Connector/C++... " >&6; }
+if test -n "$with_system_mysql_cppconn" -o -n "$with_system_libs" && \
+		test "$with_system_mysql_cppconn" != "no" && test "$with_system_libs" != "no"; then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: external" >&5
+$as_echo "external" >&6; }
+	SYSTEM_MYSQL_CPPCONN=YES
+        ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+	ac_fn_cxx_check_header_mongrel "$LINENO" "mysql_driver.h" "ac_cv_header_mysql_driver_h" "$ac_includes_default"
+if test "x$ac_cv_header_mysql_driver_h" = x""yes; then :
+
+else
+  as_fn_error "mysql_driver.h not found. install MySQL C++ Connectivity" "$LINENO" 5
+fi
+
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lmysqlcppconn" >&5
+$as_echo_n "checking for main in -lmysqlcppconn... " >&6; }
+if test "${ac_cv_lib_mysqlcppconn_main+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lmysqlcppconn  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+return main ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_mysqlcppconn_main=yes
+else
+  ac_cv_lib_mysqlcppconn_main=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_mysqlcppconn_main" >&5
+$as_echo "$ac_cv_lib_mysqlcppconn_main" >&6; }
+if test "x$ac_cv_lib_mysqlcppconn_main" = x""yes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBMYSQLCPPCONN 1
+_ACEOF
+
+  LIBS="-lmysqlcppconn $LIBS"
+
+else
+  as_fn_error "MySQL C++ Connectivity lib not found or functional" "$LINENO" 5
+fi
+
+   { $as_echo "$as_me:${as_lineno-$LINENO}: checking version" >&5
+$as_echo_n "checking version... " >&6; }
+      if test "$cross_compiling" = yes; then :
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error "cannot run test program while cross compiling
+See \`config.log' for more details." "$LINENO" 5; }
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <mysql_driver.h>
+
+int main(int argc, char **argv) {
+	sql::Driver *driver;
+	driver = get_driver_instance();
+	if (driver->getMajorVersion() > 1 || \
+	   (driver->getMajorVersion() == 1 && driver->getMinorVersion() > 0) || \
+	   (driver->getMajorVersion() == 1 && driver->getMinorVersion() == 0 && driver->getPatchVersion() >= 6))
+        return 0;
+      else
+        return 1;
+}
+
+_ACEOF
+if ac_fn_cxx_try_run "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: OK" >&5
+$as_echo "OK" >&6; }
+else
+  as_fn_error "not suitable, we need >= 1.0.6" "$LINENO" 5
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
+        ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking STL compatibility" >&5
+$as_echo_n "checking STL compatibility... " >&6; }
+	if test "$WITH_STLPORT" != "no"; then
+		as_fn_error "to use system mysqlcppconn you need to use --without-stlport" "$LINENO" 5
+	else
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: OK" >&5
+$as_echo "OK" >&6; }
+	fi
+
+else
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: internal" >&5
+$as_echo "internal" >&6; }
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for mysqlcppconn module" >&5
+$as_echo_n "checking for mysqlcppconn module... " >&6; }
+        if test -d mysqlcppconn; then
+          { $as_echo "$as_me:${as_lineno-$LINENO}: result: OK" >&5
+$as_echo "OK" >&6; }
+        else
+          as_fn_error "not existing. get it (did you get the -extensions tarball?)" "$LINENO" 5
+        fi
+	BUILD_TYPE="$BUILD_TYPE MYSQLCPPCONN"
+	SYSTEM_MYSQL_CPPCONN=NO
+fi
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+fi
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking which hsqldb to use" >&5
 $as_echo_n "checking which hsqldb to use... " >&6; }
 if test -n "$with_system_hsqldb" -o -n "$with_system_libs" && \
@@ -13540,12 +13836,12 @@ fi
    fi
 
    # check curl version
-   { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether curl is >= 7.9.8" >&5
-$as_echo_n "checking whether curl is >= 7.9.8... " >&6; }
+   { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether curl is >= 7.13.1" >&5
+$as_echo_n "checking whether curl is >= 7.13.1... " >&6; }
    if test "`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $1 }'`" -gt "7" -a \
-	"`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $2 }'`" -gt "9" -a \
-	"`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $3 }'`" -gt "8"; then
-      as_fn_error "no, you need at least curl 7.9,8" "$LINENO" 5
+	"`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $2 }'`" -gt "13" -a \
+	"`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $3 }'`" -gt "1"; then
+      as_fn_error "no, you need at least curl 7.13,1" "$LINENO" 5
    else
       { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.58 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -176,7 +172,7 @@ SCP1FILES += \
 
 .IF "$(ENABLE_CRASHDUMP)" != ""
 SCP1FILES += \
-             file_crashrep_dynamic.par
+             file_crashrep.par
 .ENDIF
 
 SCP1FILES += \
@@ -329,7 +325,7 @@ SCP2FILES += \
 
 .IF "$(ENABLE_CRASHDUMP)" != ""
 SCP2FILES += \
-             file_crashrep_dynamic.par
+             file_crashrep.par
 .ENDIF
 
 SCP2FILES += \

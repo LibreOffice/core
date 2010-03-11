@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,6 +43,10 @@ SCP_PRODUCT_TYPE=osl
 
 .IF "$(ENABLE_GCONF)" != ""
 SCPDEFS+=-DENABLE_GCONF
+.ENDIF
+
+.IF "$(ENABLE_LOCKDOWN)" == "YES"
+SCPDEFS+=-DENABLE_LOCKDOWN
 .ENDIF
 
 .IF "$(ENABLE_GNOMEVFS)" != ""

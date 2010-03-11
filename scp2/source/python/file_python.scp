@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: file_python.scp,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,11 +118,11 @@ End
 
 // Scripting Framework Python configuration settings
 
-File gid_File_Registry_Spool_Oo_Scripting_Python_Xcu
+File gid_File_Share_Registry_Pyuno_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Scripting;
-    Name = "/registry/spool/org/openoffice/Office/Scripting-python.xcu";
+    Dir = gid_Dir_Share_Registry;
+    Name = "pyuno.xcd";
 End
 
 #ifndef SYSTEM_PYTHON

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: file_gnome.scp,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +45,15 @@ File gid_File_Lib_Gnomevfs
     Name = STRING(CONCAT2(ucpgvfs1.uno,UNXSUFFIX));
     RegistryID = gid_Starregistry_Services_Rdb;
     Regmergefile = "ucpgvfs-ucd.txt";
+End
+#endif
+
+#if (defined ENABLE_GNOMEVFS && defined ENABLE_LOCKDOWN) || defined ENABLE_GIO
+File gid_File_Share_Registry_Gnome_Xcd
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry;
+    Name = "gnome.xcd";
 End
 #endif
 
