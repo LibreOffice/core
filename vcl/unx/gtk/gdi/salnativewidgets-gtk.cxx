@@ -3480,7 +3480,8 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     const cairo_font_options_t* pNewOptions = NULL;
     if( GdkScreen* pScreen = gdk_display_get_screen( gdk_display_get_default(), m_nScreen ) )
     {
-#if !GTK_CHECK_VERSION(2,8,1)
+//#if !GTK_CHECK_VERSION(2,8,1)
+#if !GTK_CHECK_VERSION(2,9,0)
     static cairo_font_options_t* (*gdk_screen_get_font_options)(GdkScreen*) =
         (cairo_font_options_t*(*)(GdkScreen*))osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gdk_screen_get_font_options" );
     if( gdk_screen_get_font_options != NULL )
