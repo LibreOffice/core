@@ -1421,6 +1421,9 @@ fi
 AC_MSG_RESULT($GCC_HOME)
 AC_SUBST(GCC_HOME)
 
+save_CC=$CC
+save_CXX=$CXX
+
 if test -n "$with_gcc_home"; then
    if test -z "$CC"; then
       CC="$with_gcc_home/bin/gcc"
@@ -1448,7 +1451,6 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; th
     AC_MSG_CHECKING([the GNU gcc compiler version])
    _gcc_version=`$CC -dumpversion`
    _gcc_major=`echo $_gcc_version | $AWK -F. '{ print \$1 }'`
-   _gcc_longver=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
    GCCVER=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 
    if test "$_gcc_major" -lt "3"; then
@@ -1460,7 +1462,22 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; th
 	    fi
       fi
    fi
-   AC_MSG_RESULT([checked (gcc $_gcc_version)])
+   if test "$_os" = "Darwin" -a "$GCCVER" -ge "040100" ; then
+      if test -z "$save_CC" -a -x "$GCC_HOME/bin/gcc-4.0" ; then
+         CC=$GCC_HOME/bin/gcc-4.0
+         GCCVER2=`"$CC" -dumpversion | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+         if test "$GCCVER2" -ge "040000" -a "$GCCVER2" -lt "040100" ; then
+            GCCVER=$GCCVER2
+         fi
+      fi
+      if test "$GCCVER" -ge "040100" ; then
+         AC_MSG_ERROR([You need to use the gcc-4.0 compiler (gcc $_gcc_version won't work with the MacOSX10.4u.sdk) - set CC accordingly])
+      else
+         AC_MSG_RESULT([implicitly using CC=$CC])
+      fi
+   else
+      AC_MSG_RESULT([checked (gcc $_gcc_version)])
+   fi
    if test "$_os" = "SunOS"; then
       AC_MSG_CHECKING([gcc linker])
       if $CC -Wl,--version 2>&1 |head -n 1| grep -v GNU > /dev/null;then
@@ -2065,14 +2082,27 @@ if test "$GXX" = "yes"; then
    AC_MSG_CHECKING([the GNU C++ compiler version])
 
    _gpp_version=`$CXX -dumpversion`
-   _gpp_major=`echo $_gpp_version | $AWK -F. '{ print \$1 }'`
-   _gpp_minor=`echo $_gpp_version | $AWK -F. '{ print \$2 }'`
-   
-   AC_MSG_RESULT([checked (g++ $_gpp_version)])
+   _gpp_majmin=`echo $_gpp_version | $AWK -F. '{ print \$1*100+\$2 }'`
 
-   if test "$_gpp_major" = "3"; then
-      if test "$_gpp_minor" = "4"; then
-         AC_MSG_CHECKING([whether $CXX has the enum bug])
+   if test "$_os" = "Darwin" -a "$_gpp_majmin" -ge "401" ; then
+      if test -z "$save_CXX" -a -x "$GCC_HOME/bin/g++-4.0" ; then
+         CXX=$GCC_HOME/bin/g++-4.0
+         _gpp_majmin_2=`"$CXX" -dumpversion | $AWK -F. '{ print \$1*100+\$2 }'`
+         if test "$_gpp_majmin_2" -ge "400" -a "$_gpp_majmin_2" -lt "401" ; then
+            _gpp_majmin=$_gpp_majmin_2
+         fi
+      fi
+      if test "$_gpp_majmin" -ge "401" ; then
+         AC_MSG_ERROR([You need to use the g++-4.0 compiler (g++ $_gpp_version won't work with the MacOSX10.4u.sdk) - set CXX accordingly])
+      else
+         AC_MSG_RESULT([implicitly using CXX=$CXX])
+      fi
+   else
+      AC_MSG_RESULT([checked (g++ $_gpp_version)])
+   fi
+
+   if test "$_gpp_majmin" = "304"; then
+      AC_MSG_CHECKING([whether $CXX has the enum bug])
 AC_TRY_RUN([
 extern "C" void abort (void);
 extern "C" void exit (int status);
@@ -2095,7 +2125,6 @@ main (void)
   return 0;
 }
 ],[AC_MSG_ERROR([your version of the GNU C++ compile has a bug which prevents OpenOffice.org from being compiled correctly - please check http://gcc.gnu.org/ml/gcc-patches/2004-07/msg00968.html for details.])], [AC_MSG_RESULT([no])])
-      fi
    fi
 fi
 
@@ -2234,21 +2263,6 @@ if test "$_os" = "SunOS"; then
       fi
    fi 
 fi
-dnl ===================================================================
-dnl Extra checking for the DARWIN compiler
-dnl ===================================================================
-if test "$_os" = "Darwin"; then
-   dnl c++ packaged with cc (gcc) for Macosx
-   if test "$CC" = "cc"; then
-      AC_MSG_CHECKING([Macosx c++ Compiler])
-      if test "$CXX" != "c++"; then
-         AC_MSG_WARN([Macosx C++ was not found])
-         echo "Macosx C++ was not found" >> warn
-      else
-         AC_MSG_RESULT([checked]) 
-      fi
-   fi 
-fi 
 dnl ===================================================================
 dnl Extra checking for the OSF compiler
 dnl ===================================================================
