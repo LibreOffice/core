@@ -155,7 +155,7 @@ public:
     void            Unlock();
     BOOL            IsLocked() const;
 
-    void            StartPopupMode( ToolBox* pParentToolBox );
+    void            StartPopupMode( ToolBox* pParentToolBox, ULONG nPopupModeFlags );
     BOOL            IsInPopupMode() const;
 
     void            TitleButtonClick( USHORT nButton );
@@ -237,6 +237,8 @@ public:
     BOOL IsLocked( const Window *pWin );
 
     void    StartPopupMode( ToolBox *pParentToolBox, const Window *pWin );
+    void    StartPopupMode( ToolBox *pParentToolBox, const Window *pWin, ULONG nPopupModeFlags );
+
     BOOL    IsInPopupMode( const Window *pWin );
     void    EndPopupMode( const Window *pWin );
 
