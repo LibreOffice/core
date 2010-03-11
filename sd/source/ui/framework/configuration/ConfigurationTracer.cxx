@@ -44,16 +44,16 @@ void ConfigurationTracer::TraceConfiguration (
     const char* pMessage)
 {
 #ifdef DEBUG
-    OSL_TRACE("%s at %p {\n", pMessage, rxConfiguration.get());
+    OSL_TRACE("%s at %p {", pMessage, rxConfiguration.get());
     if (rxConfiguration.is())
     {
         TraceBoundResources(rxConfiguration, NULL, 0);
     }
     else
     {
-        OSL_TRACE("    empty\n");
+        OSL_TRACE("    empty");
     }
-    OSL_TRACE("}\n");
+    OSL_TRACE("}");
 #else
     (void)rxConfiguration;
     (void)pMessage;
@@ -77,7 +77,7 @@ void ConfigurationTracer::TraceBoundResources (
         ::rtl::OUString sLine (aResourceList[nIndex]->getResourceURL());
         for (int i=0; i<nIndentation; ++i)
             sLine = sIndentation + sLine;
-        OSL_TRACE("%s\n", OUStringToOString(sLine, RTL_TEXTENCODING_UTF8).getStr());
+        OSL_TRACE("%s", OUStringToOString(sLine, RTL_TEXTENCODING_UTF8).getStr());
         TraceBoundResources(rxConfiguration, aResourceList[nIndex], nIndentation+1);
     }
 #else
