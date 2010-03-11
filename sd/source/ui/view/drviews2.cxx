@@ -101,8 +101,6 @@
 
 #include <strings.hrc>
 
-#include "layoutdialog.hxx"
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 

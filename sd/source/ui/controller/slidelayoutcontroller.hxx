@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: LayerDialogContent.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,42 +25,29 @@
  *
  ************************************************************************/
 
-#ifndef SD_LAYOUTDIALOG_HXX
-#define SD_LAYOUTDIALOG_HXX
+#ifndef __SD_SLIDELAYOUTCONTROLLER_HXX_
+#define __SD_SLIDELAYOUTCONTROLLER_HXX_
 
-#include <svx/toolbarmenu.hxx>
+#include <svtools/popupwindowcontroller.hxx>
 
-#include <svtools/valueset.hxx>
+namespace sd
+{
 
-#include <boost/scoped_ptr.hpp>
-
-class ::Window;
-class ValueSet;
-
-namespace sd {
-
-class ViewShellBase;
-
-class SdLayoutDialogContent : public ToolbarMenu
+class SlideLayoutController : public svt::PopupWindowController
 {
 public:
-    SdLayoutDialogContent( ViewShellBase& rBase, ::Window* pParent, const bool bInsertPage );
-    virtual ~SdLayoutDialogContent();
+    SlideLayoutController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager, const rtl::OUString& sCommandURL, bool bInsertPage );
 
-    virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
-protected:
-    DECL_LINK( SelectHdl, void * );
+    virtual ::Window* createPopupWindow( ::Window* pParent );
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
 private:
-    ViewShellBase& mrBase;
     bool mbInsertPage;
-    ValueSet* mpLayoutSet1;
-    ValueSet* mpLayoutSet2;
-    const rtl::OUString msAssignLayout;
 };
 
+}
 
-} // end of namespace sd
-
-#endif
-
+#endif // __SD_SLIDELAYOUTCONTROLLER_HXX_

@@ -76,9 +76,7 @@ SRC1FILES =\
     LayerDialog.src			\
     PaneDockingWindow.src \
     layeroptionsdlg.src \
-    printdialog.src \
-    layoutdialog.src
-
+    printdialog.src
 
 SLOFILES =  \
         $(SLO)$/inspagob.obj \
@@ -127,8 +125,7 @@ SLOFILES =  \
         $(SLO)$/PaneChildWindows.obj			\
         $(SLO)$/PaneDockingWindow.obj			\
         $(SLO)$/PaneShells.obj \
-        $(SLO)$/printdialog.obj \
-        $(SLO)$/layoutdialog.obj
+        $(SLO)$/printdialog.obj
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 
@@ -155,8 +152,7 @@ LIB1OBJFILES= \
         $(SLO)$/PaneChildWindows.obj		\
         $(SLO)$/PaneDockingWindow.obj		\
         $(SLO)$/PaneShells.obj \
-        $(SLO)$/printdialog.obj \
-        $(SLO)$/layoutdialog.obj
+        $(SLO)$/printdialog.obj
 
 
 LIB2TARGET= $(SLB)$/sdui.lib

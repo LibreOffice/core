@@ -75,6 +75,14 @@ namespace sd
 extern uno::Reference< uno::XInterface > SAL_CALL RandomNode_createInstance( const uno::Reference< lang::XMultiServiceFactory > & _rxFactory );
 extern OUString RandomNode__getImplementationName() throw( uno::RuntimeException );
 extern uno::Sequence< OUString > SAL_CALL RandomNode_getSupportedServiceNames() throw( uno::RuntimeException );
+
+extern uno::Reference< uno::XInterface > SAL_CALL SlideLayoutController_createInstance( const uno::Reference< lang::XMultiServiceFactory > & _rxFactory );
+extern OUString SlideLayoutController_getImplementationName() throw( uno::RuntimeException );
+extern uno::Sequence< OUString >  SlideLayoutController_getSupportedServiceNames() throw( uno::RuntimeException );
+
+extern uno::Reference< uno::XInterface > SAL_CALL InsertSlideController_createInstance( const uno::Reference< lang::XMultiServiceFactory > & _rxFactory );
+extern OUString InsertSlideController_getImplementationName() throw( uno::RuntimeException );
+extern uno::Sequence< OUString >  InsertSlideController_getSupportedServiceNames() throw( uno::RuntimeException );
 }
 
 namespace sd { namespace framework {
@@ -232,7 +240,9 @@ enum FactoryId
     PresenterTextViewServiceFactoryId,
     PresenterHelperServiceFactoryId,
     PresenterPreviewCacheFactoryId,
-    SlideSorterServiceFactoryId
+    SlideSorterServiceFactoryId,
+    SlideLayoutControllerFactoryId,
+    InsertSlideControllerFactoryId,
 };
 typedef ::std::hash_map<OUString, FactoryId, comphelper::UStringHash, comphelper::UStringEqual> FactoryMap;
 
@@ -264,6 +274,8 @@ static ::boost::shared_ptr<FactoryMap> spFactoryMap;
         (*spFactoryMap)[PresenterHelperService_getImplementationName()] = PresenterHelperServiceFactoryId;
         (*spFactoryMap)[PresenterPreviewCache_getImplementationName()] = PresenterPreviewCacheFactoryId;
         (*spFactoryMap)[SlideSorterService_getImplementationName()] = SlideSorterServiceFactoryId;
+        (*spFactoryMap)[SlideLayoutController_getImplementationName()] = SlideLayoutControllerFactoryId;
+        (*spFactoryMap)[InsertSlideController_getImplementationName()] = InsertSlideControllerFactoryId;
     }
     return spFactoryMap;
 };
@@ -370,6 +382,14 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
                 pKey,
                 sd::slidesorter::SlideSorterService_getImplementationName(),
                 sd::slidesorter::SlideSorterService_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::SlideLayoutController_getImplementationName(),
+                sd::SlideLayoutController_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::InsertSlideController_getImplementationName(),
+                sd::InsertSlideController_getSupportedServiceNames());
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -545,6 +565,20 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                         sd::slidesorter::SlideSorterService_getSupportedServiceNames());
                     break;
 
+                case SlideLayoutControllerFactoryId:
+                    xFactory = ::cppu::createSingleFactory(
+                        xMSF,
+                        sd::SlideLayoutController_getImplementationName(),
+                        sd::SlideLayoutController_createInstance,
+                        sd::SlideLayoutController_getSupportedServiceNames());
+                    break;
+
+                case InsertSlideControllerFactoryId:
+                    xFactory = ::cppu::createSingleFactory(
+                        xMSF,
+                        sd::InsertSlideController_getImplementationName(),
+                        sd::InsertSlideController_createInstance,
+                        sd::InsertSlideController_getSupportedServiceNames());
                 default:
                     break;
             }

@@ -73,7 +73,6 @@
 #include "AnimationChildWindow.hxx"
 #include "NavigatorChildWindow.hxx"
 #include "LayerDialogChildWindow.hxx"
-#include "layoutdialog.hxx"
 #include "sdresid.hxx"
 #include "fupoor.hxx"
 #include "fusldlg.hxx"

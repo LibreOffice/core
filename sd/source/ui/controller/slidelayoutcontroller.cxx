@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: LayerDialogContent.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,43 +30,69 @@
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/frame/status/FontHeight.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <vcl/image.hxx>
+#include <memory>
+#include <boost/scoped_ptr.hpp>
 
-#include <sfx2/dockwin.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/imagemgr.hxx>
-#include <sfx2/tbxctrl.hxx>
+#include <vos/mutex.hxx>
+
+#include <vcl/svapp.hxx>
+#include <vcl/toolbox.hxx>
 
 #include <svl/languageoptions.hxx>
 
+#include <svtools/ctrltool.hxx>
+#include <svtools/ctrlbox.hxx>
+#include <svtools/toolbarmenu.hxx>
 #include <svtools/valueset.hxx>
 
-#include <svx/toolbarmenu.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+
+#include <sfx2/imagemgr.hxx>
 
 #include "app.hrc"
-#include "layoutdialog.hxx"
 #include "glob.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "sdresid.hxx"
-#include "View.hxx"
-#include "drawdoc.hxx"
-#include "ViewShellBase.hxx"
-#include "DrawViewShell.hxx"
-#include "layoutdialog.hrc"
+#include "pres.hxx"
+#include "slidelayoutcontroller.hxx"
 
-using ::rtl::OUString;
+using rtl::OUString;
+
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::beans;
 
-namespace sd {
+namespace sd
+{
+
+extern ::rtl::OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const OUString& aCmdURL );
 
 // -----------------------------------------------------------------------
+
+class LayoutToolbarMenu : public svtools::ToolbarMenu
+{
+public:
+    LayoutToolbarMenu( SlideLayoutController& rController, const Reference< XFrame >& xFrame, ::Window* pParent, const bool bInsertPage );
+    virtual ~LayoutToolbarMenu();
+
+protected:
+    DECL_LINK( SelectHdl, void * );
+
+private:
+    SlideLayoutController& mrController;
+    Reference< XFrame > mxFrame;
+    bool mbInsertPage;
+    ValueSet* mpLayoutSet1;
+    ValueSet* mpLayoutSet2;
+};
 
 // -----------------------------------------------------------------------
 
@@ -130,19 +153,16 @@ static void fillLayoutValueSet( ValueSet* pValue, snewfoil_value_info* pInfo, co
 
 // -----------------------------------------------------------------------
 
-
-SdLayoutDialogContent::SdLayoutDialogContent( ViewShellBase& rBase, ::Window* pParent, const bool bInsertPage )
-: ToolbarMenu(rBase.GetFrame()->GetTopFrame()->GetFrameInterface(), pParent, SdResId( DLG_LAYOUTDIALOG ) /*WB_CLIPCHILDREN|WB_DIALOGCONTROL|WB_SYSTEMWINDOW|WB_MOVEABLE|WB_SIZEABLE|WB_CLOSEABLE*/)
-, mrBase(rBase)
+LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const Reference< XFrame >& xFrame, ::Window* pParent, const bool bInsertPage )
+: svtools::ToolbarMenu(xFrame, pParent, WB_CLIPCHILDREN )
+, mrController( rController )
+, mxFrame(xFrame)
 , mbInsertPage( bInsertPage )
 , mpLayoutSet1( 0 )
 , mpLayoutSet2( 0 )
-, msAssignLayout( RTL_CONSTASCII_USTRINGPARAM( ".uno:AssignLayout" ) )
 {
-    String aTitle1( SdResId( STR_HORIZONTAL_LAYOUTS ) );
-    String aTitle2( SdResId( STR_VERTICAL_LAYOUTS ) );
-
-    FreeResource();
+    String aTitle1( SdResId( STR_GLUE_ESCDIR_HORZ ) );
+    String aTitle2( SdResId( STR_GLUE_ESCDIR_VERT ) );
 
     const Color aMenuColor( GetSettings().GetStyleSettings().GetMenuColor() );
     const Color aMenuBarColor( GetSettings().GetStyleSettings().GetMenuBarColor() );
@@ -153,12 +173,12 @@ SdLayoutDialogContent::SdLayoutDialogContent( ViewShellBase& rBase, ::Window* pP
     SvtLanguageOptions aLanguageOptions;
     const bool bVerticalEnabled = aLanguageOptions.IsVerticalTextEnabled();
 
-    SetSelectHdl( LINK( this, SdLayoutDialogContent, SelectHdl ) );
+    SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectHdl ) );
 
-    mpLayoutSet1 = new ValueSet( this, WB_TABSTOP | /* WB_MENUSTYLEVALUESET | */ WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
+    mpLayoutSet1 = new ValueSet( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
 //  mpLayoutSet1->SetHelpId( HID_VALUESET_EXTRUSION_LIGHTING );
 
-    mpLayoutSet1->SetSelectHdl( LINK( this, SdLayoutDialogContent, SelectHdl ) );
+    mpLayoutSet1->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectHdl ) );
     mpLayoutSet1->SetColCount( 4 );
     mpLayoutSet1->EnableFullItemMode( FALSE );
     mpLayoutSet1->SetColor( GetControlBackground() );
@@ -171,10 +191,10 @@ SdLayoutDialogContent::SdLayoutDialogContent( ViewShellBase& rBase, ::Window* pP
 
     if( bVerticalEnabled )
     {
-        mpLayoutSet2 = new ValueSet( this, WB_TABSTOP | /* WB_MENUSTYLEVALUESET | */ WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
+        mpLayoutSet2 = new ValueSet( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
     //  mpLayoutSet2->SetHelpId( HID_VALUESET_EXTRUSION_LIGHTING );
 
-        mpLayoutSet2->SetSelectHdl( LINK( this, SdLayoutDialogContent, SelectHdl ) );
+        mpLayoutSet2->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectHdl ) );
         mpLayoutSet2->SetColCount( 4 );
         mpLayoutSet2->EnableFullItemMode( FALSE );
         mpLayoutSet2->SetColor( GetControlBackground() );
@@ -185,35 +205,30 @@ SdLayoutDialogContent::SdLayoutDialogContent( ViewShellBase& rBase, ::Window* pP
         appendEntry( 1, mpLayoutSet2 );
     }
 
-    //appendSeparator();
-
     OUString sSlotStr;
     Image aSlotImage;
-    Reference< XFrame > xFrame( GetFrame(), UNO_QUERY );
-    if( xFrame.is() )
+    if( mxFrame.is() )
     {
         if( bInsertPage )
             sSlotStr = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DuplicatePage" ) );
         else
             sSlotStr = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Undo" ) );
-        aSlotImage = ::GetImage( xFrame, sSlotStr, FALSE, FALSE );
+        aSlotImage = ::GetImage( mxFrame, sSlotStr, FALSE, FALSE );
+
+        String sSlotTitle;
+        if( bInsertPage )
+            sSlotTitle = ImplRetrieveLabelFromCommand( mxFrame, sSlotStr );
+        else
+            sSlotTitle = String( SdResId( STR_RESET_LAYOUT ) );
+        appendEntry( 2, sSlotTitle, aSlotImage);
     }
 
-    String sSlotTitle;
-    if( bInsertPage )
-        sSlotTitle = mrBase.RetrieveLabelFromCommand( sSlotStr );
-    else
-        sSlotTitle = String( SdResId( STR_RESET_LAYOUT ) );
-    appendEntry( 2, sSlotTitle, aSlotImage);
-
     SetOutputSizePixel( getMenuSize() );
-
-    AddStatusListener( msAssignLayout );
 }
 
 // -----------------------------------------------------------------------
 
-SdLayoutDialogContent::~SdLayoutDialogContent()
+LayoutToolbarMenu::~LayoutToolbarMenu()
 {
 }
 
@@ -222,7 +237,7 @@ SdLayoutDialogContent::~SdLayoutDialogContent()
 
 
 /*
-void SdLayoutDialogContent::DataChanged( const DataChangedEvent& rDCEvt )
+void LayoutToolbarMenu::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SfxDockingWindow::DataChanged( rDCEvt );
 
@@ -237,62 +252,125 @@ void SdLayoutDialogContent::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-/*
-void SdLayoutDialogContent::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
-{
-    if( (nSID == SID_ASSIGN_LAYOUT) && (eState != SFX_ITEM_DISABLED) )
-    {
-        const SfxUInt32Item* pStateItem = dynamic_cast< const SfxUInt32Item* >(pState);
-        if( pStateItem )
-        {
-            meCurrentLayout = static_cast< AutoLayout >( pStateItem->GetValue() );
-            mpLayoutSet1->SelectItem( static_cast<USHORT>(meCurrentLayout)+1 );
-        }
-    }
-}
-*/
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( SdLayoutDialogContent, SelectHdl, void *, pControl )
+IMPL_LINK( LayoutToolbarMenu, SelectHdl, void *, pControl )
 {
     if ( IsInPopupMode() )
         EndPopupMode();
 
-    if( mrBase.GetMainViewShell().get() && mrBase.GetMainViewShell()->GetViewFrame() )
+    Sequence< PropertyValue > aArgs;
+
+    AutoLayout eLayout = AUTOLAYOUT__END;
+
+    OUString sCommandURL( mrController.getCommandURL() );
+
+    if( pControl == mpLayoutSet1 )
     {
-        if( pControl == mpLayoutSet1 )
-        {
-            AutoLayout eLayout = static_cast< AutoLayout >(mpLayoutSet1->GetSelectItemId()-1);
-
-            const SfxUInt32Item aItem(ID_VAL_WHATLAYOUT, eLayout);
-            mrBase.GetMainViewShell()->GetViewFrame()->GetBindings().GetDispatcher()->Execute(mbInsertPage ? SID_INSERTPAGE : SID_ASSIGN_LAYOUT,SFX_CALLMODE_ASYNCHRON,&aItem,0);
-        }
-        else if( pControl == mpLayoutSet2 )
-        {
-            AutoLayout eLayout = static_cast< AutoLayout >(mpLayoutSet2->GetSelectItemId()-1);
-
-            const SfxUInt32Item aItem(ID_VAL_WHATLAYOUT, eLayout);
-            mrBase.GetMainViewShell()->GetViewFrame()->GetBindings().GetDispatcher()->Execute(mbInsertPage ? SID_INSERTPAGE : SID_ASSIGN_LAYOUT,SFX_CALLMODE_ASYNCHRON,&aItem,0);
-        }
-        else
-        {
-            // reset autolayout
-            mrBase.GetMainViewShell()->GetViewFrame()->GetBindings().GetDispatcher()->Execute( mbInsertPage ? SID_DUPLICATE_PAGE : SID_ASSIGN_LAYOUT,SFX_CALLMODE_ASYNCHRON);
-        }
+        eLayout = static_cast< AutoLayout >(mpLayoutSet1->GetSelectItemId()-1);
     }
+    else if( pControl == mpLayoutSet2 )
+    {
+        eLayout = static_cast< AutoLayout >(mpLayoutSet2->GetSelectItemId()-1);
+    }
+
+    if( eLayout != AUTOLAYOUT__END )
+    {
+        aArgs = Sequence< PropertyValue >(1);
+        aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "WhatLayout" ) );
+        aArgs[0].Value <<= (sal_Int32)eLayout;
+    }
+    else if( mbInsertPage )
+    {
+        sCommandURL = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DuplicatePage" ) );
+    }
+
+    mrController.dispatchCommand( sCommandURL, aArgs );
 
     return 0;
 }
 
-void SAL_CALL SdLayoutDialogContent::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException )
+// ====================================================================
+
+OUString SlideLayoutController_getImplementationName()
 {
-    if( Event.FeatureURL.Main.equals( msAssignLayout ) )
-    {
-        sal_Int32 nLayout = 0;
-        Event.State >>= nLayout;
-        OSL_TRACE("SdLayoutDialogContent::statusChanged(%ld)", nLayout );
-    }
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.sd.SlideLayoutController" ));
 }
 
-} // end of namespace sd
+// --------------------------------------------------------------------
+
+Sequence< OUString >  SlideLayoutController_getSupportedServiceNames() throw( RuntimeException )
+{
+    Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ));
+    return aSNS;
+}
+
+// --------------------------------------------------------------------
+
+Reference< XInterface > SAL_CALL SlideLayoutController_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
+{
+    return *new SlideLayoutController( rSMgr, OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:AssignLayout" )), false );
+}
+
+// --------------------------------------------------------------------
+
+OUString InsertSlideController_getImplementationName()
+{
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.sd.InsertSlideController" ));
+}
+
+// --------------------------------------------------------------------
+
+Sequence< OUString >  InsertSlideController_getSupportedServiceNames() throw( RuntimeException )
+{
+    Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ));
+    return aSNS;
+}
+
+// --------------------------------------------------------------------
+
+Reference< XInterface > SAL_CALL InsertSlideController_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
+{
+    return *new SlideLayoutController( rSMgr, OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertPage" )), true );
+}
+
+//========================================================================
+// class SlideLayoutController
+//========================================================================
+
+SlideLayoutController::SlideLayoutController( const Reference< lang::XMultiServiceFactory >& rServiceManager, const rtl::OUString& sCommandURL, bool bInsertPage )
+: svt::PopupWindowController( rServiceManager, Reference< frame::XFrame >(), sCommandURL )
+, mbInsertPage( bInsertPage )
+{
+}
+
+// --------------------------------------------------------------------
+
+::Window* SlideLayoutController::createPopupWindow( ::Window* pParent )
+{
+    return new sd::LayoutToolbarMenu( *this, m_xFrame, pParent, mbInsertPage );
+}
+
+// --------------------------------------------------------------------
+// XServiceInfo
+// --------------------------------------------------------------------
+
+OUString SAL_CALL SlideLayoutController::getImplementationName() throw( RuntimeException )
+{
+    if( mbInsertPage )
+        return InsertSlideController_getImplementationName();
+    else
+        return SlideLayoutController_getImplementationName();
+}
+
+// --------------------------------------------------------------------
+
+Sequence< OUString > SAL_CALL SlideLayoutController::getSupportedServiceNames(  ) throw( RuntimeException )
+{
+    if( mbInsertPage )
+        return InsertSlideController_getSupportedServiceNames();
+    else
+        return SlideLayoutController_getSupportedServiceNames();
+}
+
+}
