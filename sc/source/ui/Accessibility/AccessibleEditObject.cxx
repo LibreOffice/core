@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleEditObject.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_sc.hxx"
 #include "AccessibleEditObject.hxx"
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include "unoguard.hxx"
 #include "AccessibleText.hxx"
 #include "editsrc.hxx"
@@ -51,8 +48,8 @@
 #include <rtl/uuid.h>
 #include <tools/debug.hxx>
 #include <svx/AccessibleTextHelper.hxx>
-#include <svx/editview.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/svdmodel.hxx>
 
 using namespace ::com::sun::star;

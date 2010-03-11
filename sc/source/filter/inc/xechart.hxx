@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xechart.hxx,v $
- * $Revision: 1.7.62.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +28,7 @@
 #ifndef SC_XECHART_HXX
 #define SC_XECHART_HXX
 
+#include <tools/gen.hxx>
 #include "xerecord.hxx"
 #include "xlchart.hxx"
 #include "xlformula.hxx"
@@ -1193,6 +1191,27 @@ private:
     XclExpChAxesSetRef  mxSecnAxesSet;      /// Secondary axes set (CHAXESSET group).
     XclExpChTextRef     mxTitle;            /// Chart title (CHTEXT group).
     XclExpChTextList    maLabels;           /// Data point labels (CHTEXT groups).
+};
+
+// ----------------------------------------------------------------------------
+
+/** Represents the group of DFF and OBJ records containing all drawing shapes
+    embedded in the chart object.
+ */
+class XclExpChartDrawing : public XclExpRecordBase, protected XclExpRoot
+{
+public:
+    explicit            XclExpChartDrawing(
+                            const XclExpRoot& rRoot,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
+                            const Size& rChartSize );
+    virtual             ~XclExpChartDrawing();
+
+    virtual void        Save( XclExpStream& rStrm );
+
+private:
+    ScfRef< XclExpObjectManager > mxObjMgr;
+    ScfRef< XclExpRecordBase > mxObjRecs;
 };
 
 // ----------------------------------------------------------------------------

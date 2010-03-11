@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drawview.cxx,v $
- * $Revision: 1.50.126.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,8 +41,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/writingmodeitem.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/writingmodeitem.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>

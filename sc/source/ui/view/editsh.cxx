@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: editsh.cxx,v $
- * $Revision: 1.35.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,25 +33,25 @@
 //------------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <svx/clipfmtitem.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/cntritem.hxx>
+#include <editeng/cntritem.hxx>
 //CHINA001 #include <svx/chardlg.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editview.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/flditem.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/fontitem.hxx>
 #include <svx/hlnkitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <svl/srchitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/msg.hxx>

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: servuno.cxx,v $
- * $Revision: 1.17.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 #include <tools/debug.hxx>
 #include <svtools/unoimap.hxx>
 #include <svx/unofill.hxx>
-#include <svx/unonrule.hxx>
+#include <editeng/unonrule.hxx>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
 #include "servuno.hxx"
@@ -60,9 +57,65 @@
 // #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
+#include <com/sun/star/script/ScriptEventDescriptor.hpp>
+#include <com/sun/star/document/XCodeNameQuery.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/form/XFormsSupplier.hpp>
+#include <svx/unomod.hxx>
 
 using namespace ::com::sun::star;
 
+class ScVbaCodeNameProvider : public ::cppu::WeakImplHelper1< document::XCodeNameQuery >
+{
+ScDocShell* mpDocShell;
+public:
+    ScVbaCodeNameProvider( ScDocShell* pDocShell ) : mpDocShell( pDocShell ) {}
+    // XCodeNameQuery
+    rtl::OUString SAL_CALL getCodeNameForObject( const uno::Reference< uno::XInterface >& xIf ) throw( uno::RuntimeException )
+    {
+        rtl::OUString sCodeName;
+        if ( mpDocShell )
+        {
+            OSL_TRACE( "*** In ScVbaCodeNameProvider::getCodeNameForObject");
+            // need to find the page ( and index )  for this control
+            uno::Reference< drawing::XDrawPagesSupplier > xSupplier( mpDocShell->GetModel(), uno::UNO_QUERY_THROW );
+            uno::Reference< container::XIndexAccess > xIndex( xSupplier->getDrawPages(), uno::UNO_QUERY_THROW );
+            sal_Int32 nLen = xIndex->getCount();
+            bool bMatched = false;
+            uno::Sequence< script::ScriptEventDescriptor > aFakeEvents;
+            for ( sal_Int32 index = 0; index < nLen; ++index )
+            {
+                try
+                {
+                    uno::Reference< form::XFormsSupplier >  xFormSupplier( xIndex->getByIndex( index ), uno::UNO_QUERY_THROW );
+                    uno::Reference< container::XIndexAccess > xFormIndex( xFormSupplier->getForms(), uno::UNO_QUERY_THROW );
+                    // get the www-standard container
+                    uno::Reference< container::XIndexAccess > xFormControls( xFormIndex->getByIndex(0), uno::UNO_QUERY_THROW );
+                    sal_Int32 nCntrls = xFormControls->getCount();
+                    for( sal_Int32 cIndex = 0; cIndex < nCntrls; ++cIndex )
+                    {
+                        uno::Reference< uno::XInterface > xControl( xFormControls->getByIndex( cIndex ), uno::UNO_QUERY_THROW );
+                        bMatched = ( xControl == xIf );
+                        if ( bMatched )
+                        {
+                            String sName;
+                            mpDocShell->GetDocument()->GetCodeName( static_cast<SCTAB>( index ), sName );
+                            sCodeName = sName;
+                        }
+                    }
+                }
+                catch( uno::Exception& ) {}
+                if ( bMatched )
+                    break;
+            }
+        }
+        // Probably should throw here ( if !bMatched )
+         return sCodeName;
+    }
+
+};
 
 //------------------------------------------------------------------------
 //
@@ -119,6 +172,7 @@ static const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
     { SC_SERVICENAME_CHDATAPROV,            SC_SERVICE_CHDATAPROV },
     { SC_SERVICENAME_FORMULAPARS,           SC_SERVICE_FORMULAPARS },
     { SC_SERVICENAME_OPCODEMAPPER,          SC_SERVICE_OPCODEMAPPER },
+    { "ooo.vba.VBACodeNameProvider",        SC_SERVICE_VBACODENAMEPROVIDER },
 
     // case-correct versions of the service names (#i102468#)
     { "com.sun.star.text.textfield.URL",                SC_SERVICE_URLFIELD },
@@ -180,7 +234,8 @@ static const sal_Char* __FAR_DATA aOldNames[SC_SERVICE_COUNT] =
         "",                                         // SC_SERVICE_SHEETDOCSET
         "",                                         // SC_SERVICE_CHDATAPROV
         "",                                         // SC_SERVICE_FORMULAPARS
-        ""                                          // SC_SERVICE_OPCODEMAPPER
+        "",                                         // SC_SERVICE_OPCODEMAPPER
+        "",                                         // SC_SERVICE_VBACODENAMEPROVIDER
     };
 
 
@@ -383,9 +438,23 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                 ScCompiler* pComp = new ScCompiler(pDoc,aAddress);
                 pComp->SetGrammar( pDoc->GetGrammar() );
                 xRet.set(static_cast<sheet::XFormulaOpCodeMapper*>(new ScFormulaOpCodeMapperObj(::std::auto_ptr<formula::FormulaCompiler> (pComp))));
+                break;
             }
-            break;
+        case SC_SERVICE_VBACODENAMEPROVIDER:
+            {
+                // Only create the excel faking service for excel docs
+                const SfxFilter *pFilt = pDocShell->GetMedium()->GetFilter();
+                if ( pFilt && pFilt->IsAlienFormat() )
+                {
+                    // application/vnd.ms-excel is the mime type for Excel
+                    static const rtl::OUString sExcelMimeType( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.ms-excel" ) );
+                    if ( sExcelMimeType.equals( pFilt->GetMimeType() ) )
+                    xRet.set(static_cast<document::XCodeNameQuery*>(new ScVbaCodeNameProvider( pDocShell )));
+                }
+                break;
+            }
     }
+
     return xRet;
 }
 

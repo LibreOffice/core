@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ElementSelector.hxx,v $
- * $Revision: 1.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +28,7 @@
 #define _CHART_ELEMENTSELECTOR_HXX
 
 #include "ServiceMacros.hxx"
+#include "ObjectHierarchy.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <svtools/toolboxcontroller.hxx>
@@ -48,7 +46,7 @@ namespace chart
 struct ListBoxEntryData
 {
     rtl::OUString UIName;
-    rtl::OUString CID;
+    ObjectHierarchy::tOID OID;
     sal_Int32 nHierarchyDepth;
 
     ListBoxEntryData() : nHierarchyDepth(0)

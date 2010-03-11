@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartModel.hxx,v $
- * $Revision: 1.12.8.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,7 +67,7 @@
 #endif
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 
 // for auto_ptr
 #include <memory>
@@ -150,6 +147,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >          m_xParent;
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XRangeHighlighter > m_xRangeHighlighter;
     ::std::vector< GraphicObject >                                               m_aGraphicObjectVector;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager >   m_xUndoManager;
 
 private:
     //private methods
@@ -194,6 +192,9 @@ private:
             ::com::sun::star::document::XFilter >
         impl_createFilter( const ::com::sun::star::uno::Sequence<
                       ::com::sun::star::beans::PropertyValue > & rMediaDescriptor );
+
+    void impl_adjustAdditionalShapesPositionAndSize(
+        const ::com::sun::star::awt::Size& aVisualAreaSize );
 
 public:
     //no default constructor

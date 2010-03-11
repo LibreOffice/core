@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: chart2uno.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -533,6 +530,14 @@ private:
     };
 
     ::std::list<Item>           m_aDataArray;
+
+    /**
+     * Cached data for getData.  We may also need to cache data for the
+     * numerical and textural data series if they turn out to be bottlenecks
+     * under certain scenarios.
+     */
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > m_aMixedDataCache;
+
     ::com::sun::star::uno::Sequence<sal_Int32>  m_aHiddenValues;
 
     // properties

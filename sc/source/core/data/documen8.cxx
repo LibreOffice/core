@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: documen8.cxx,v $
- * $Revision: 1.52.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,16 +31,16 @@
 
 #define _ZFORLIST_DECLARE_TABLE
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <tools/string.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editstat.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/linkmgr.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/langitem.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/unolingu.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
@@ -1191,7 +1188,7 @@ namespace {
                      (does not include other links from link manager).
     @return  The DDE link, if it exists, otherwise 0. */
 ScDdeLink* lclGetDdeLink(
-        const SvxLinkManager* pLinkManager,
+        const sfx2::LinkManager* pLinkManager,
         const String& rAppl, const String& rTopic, const String& rItem, BYTE nMode,
         USHORT* pnDdePos = NULL )
 {
@@ -1220,7 +1217,7 @@ ScDdeLink* lclGetDdeLink(
 /** Returns a pointer to the specified DDE link.
     @param nDdePos  Index of the DDE link (does not include other links from link manager).
     @return  The DDE link, if it exists, otherwise 0. */
-ScDdeLink* lclGetDdeLink( const SvxLinkManager* pLinkManager, USHORT nDdePos )
+ScDdeLink* lclGetDdeLink( const sfx2::LinkManager* pLinkManager, USHORT nDdePos )
 {
     if( pLinkManager )
     {
