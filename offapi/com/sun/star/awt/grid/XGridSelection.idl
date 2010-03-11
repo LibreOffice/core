@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module awt { module grid {
 
 /** This interfaces provides access to the selection of row for <type>UnoControlGrid</type>.
  */
-interface XGridSelection: com::sun::star::uno::XInterface
+interface XGridSelection
 {
     /** Returns the lowest index of the selection.
         @returns

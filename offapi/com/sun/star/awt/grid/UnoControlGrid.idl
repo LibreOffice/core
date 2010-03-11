@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: UnoControlEdit.idl,v $
+ * $RCSfile: UnoControlGrid.idl,v $
  * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
@@ -69,6 +69,7 @@
 
     The <type>XGridSelection</type> interface provides a bunch of methods to set and get selection for the grid control.
     </p>
+    @since OOo 3.3.0
  */
 service UnoControlGrid
 {

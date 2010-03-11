@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XListBox.idl,v $
- * $Revision: 1.8 $
+ * $RCSfile: XGridControl.idl,v $
+ * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,8 @@ module com {  module sun {  module star {  module awt { module grid {
 /** An interface to a control that displays a tabular data.
 
     @see UnoControlGrid
+
+    @since OOo 3.3.0
  */
 interface XGridControl: XGridSelection
 {
@@ -61,14 +63,6 @@ interface XGridControl: XGridSelection
             If only text should be shown, leave this sequence empty.
     */
     void setToolTip( [in] sequence< string > textForTooltip, [in] sequence< long > columnsForTooltip);
-
-    /** registers a listener for mouse events.
-     */
-    //[oneway] void addMouseListener( [in] com::sun::star::awt::XMouseListener listener );
-
-    /** unregisters a listener for mouse events.
-     */
-    //[oneway] void removeMouseListener( [in] com::sun::star::awt::XMouseListener listener );
 
 };
 

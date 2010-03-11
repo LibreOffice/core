@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XGridColumn.idl,v $
- * $Revision: 1.8 $
+ * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,8 +43,9 @@ module com {  module sun {  module star {  module awt {  module grid {
 //=============================================================================
 
 /** The <type>XGridColumn</types> defines the properties and behavior of a column in a grid control
+    @since OOo 3.3.0
  */
-interface XGridColumn: com::sun::star::uno::XInterface
+interface XGridColumn
 {
     /** Specifies the an idendifier of the colomn.**/
     [attribute] any Identifier;

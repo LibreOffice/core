@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XListBox.idl,v $
- * $Revision: 1.8 $
+ * $RCSfile: XGridControlListener.idl,v $
+ * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module awt { module grid {
 
 //=============================================================================
 
-interface XGridControlListener: com::sun::star::uno::XInterface
+interface XGridControlListener
 {
 
 };

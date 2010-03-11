@@ -46,6 +46,8 @@ module com {  module sun {  module star {  module awt {  module grid {
     @see XGridDataModel
     @see XGridControl
     @see XGridDataListener
+
+    @sonce OOo 3.3.0
  */
 struct GridDataEvent: com::sun::star::lang::EventObject
 {

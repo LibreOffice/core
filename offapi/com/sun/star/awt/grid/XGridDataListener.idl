@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XListBox.idl,v $
- * $Revision: 1.8 $
+ * $RCSfile: XGridDataListener.idl,v $
+ * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +49,8 @@ module com {  module sun {  module star {  module awt { module grid {
 
     <p>Usually you must not implement this interface yourself, but you must notify it correctly if
     you implement the <type>XGridDataModel</type> yourself</p>.
+
+    @since OOo 3.3.0
  */
 interface XGridDataListener: com::sun::star::lang::XEventListener
 {

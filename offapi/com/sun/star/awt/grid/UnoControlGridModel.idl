@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: UnoControlEditModel.idl,v $
- * $Revision: 1.16 $
+ * $RCSfile: UnoControlGridModel.idl,v $
+ * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +53,8 @@ module com {  module sun {  module star {  module awt { module grid {
 //=============================================================================
 
 /** specifies the standard model of a <type>UnoControlGridModel</type>.
+
+    @since OOo 3.3.0
  */
 service UnoControlGridModel
 {

@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: UnoControlEdit.idl,v $
- * $Revision: 1.9 $
+ * $RCSfile: UnoControlGridColumn.idl,v $
+ * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,8 @@
 //=============================================================================
 
 /** Represents a column as used by the <type>DefaultGridColumnModel</type>
+
+    @since OOo 3.3.0
  */
 service GridColumn
 {

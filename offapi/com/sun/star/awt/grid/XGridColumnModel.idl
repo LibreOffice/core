@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XListBox.idl,v $
- * $Revision: 1.8 $
+ * $RCSfile: XGridColumnModel.idl,v $
+ * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,8 +45,10 @@ module com {  module sun {  module star {  module awt { module grid {
     retrieve the column structure that is displayed in the actual control.
 
     If you do not need your own model implementation, you can also use the <type>DefaultGridColumnModel</type>.
+
+    @since OOo 3.3.0
 */
-interface XGridColumnModel: com::sun::star::uno::XInterface
+interface XGridColumnModel
 {
     /** Specifies whether column selection is allowed
     */

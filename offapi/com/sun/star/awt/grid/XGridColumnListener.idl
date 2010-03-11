@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XListBox.idl,v $
- * $Revision: 1.8 $
+ * $RCSfile: XGridColumnListener.idl,v $
+ * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,8 +49,10 @@ module com {  module sun {  module star {  module awt { module grid {
 
     <p>Usually you must not implement this interface yourself, but you must notify it correctly if
     you implement the <type>XGridColumnModel</type> yourself</p>.
+
+    @since OOo 3.3.0
  */
-interface XGridColumnListener: com::sun::star::uno::XInterface
+interface XGridColumnListener
 {
     /**
         Invoked after a column was added to the column model.

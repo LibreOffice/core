@@ -7,7 +7,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XListBox.idl,v $
+ * $RCSfile: XGridDataModel.idl,v $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,8 @@ module com {  module sun {  module star {  module awt { module grid {
     retrieve the content data that is displayed in the actual control.
 
     If you do not need your own model implementation, you can also use the <type>DefaultGridDataModel</type>.
+
+    @since OOo 3.3.0
 */
 interface XGridDataModel: ::com::sun::star::lang::XComponent
 {
