@@ -1,15 +1,9 @@
 #*************************************************************************
 #
-#  $RCSfile: Makefile,v $
-#
-#  $Revision: 1.4 $
-#
-#  last change: $Author: obo $ $Date: 2007-01-25 11:03:04 $
-#
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
 #  
-#  Copyright (c) 2003 by Sun Microsystems, Inc.
+#  Copyright 2000, 2010 Oracle and/or its affiliates.
 #  All rights reserved.
 #
 #  Redistribution and use in source and binary forms, with or without
