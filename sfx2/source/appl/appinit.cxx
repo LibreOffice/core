@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: appinit.cxx,v $
- * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -275,8 +272,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
 
     new SfxErrorHandler(
         RID_SO_ERROR_HANDLER, ERRCODE_AREA_SO, ERRCODE_AREA_SO_END);
-    new SfxErrorHandler(
-        (RID_SJ_START +1), ERRCODE_AREA_JAVA, ERRCODE_AREA_JAVA_END);
     new SfxErrorHandler(
         RID_BASIC_START, ERRCODE_AREA_SBX, ERRCODE_AREA_SBX_END );
 

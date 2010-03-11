@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SettingsExportHelper.cxx,v $
- * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,28 +100,28 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
         break;
         case uno::TypeClass_SHORT:
         {
-            sal_Int16 nInt16;
+            sal_Int16 nInt16 = 0;
             aAny >>= nInt16;
             exportShort(nInt16, rName);
         }
         break;
         case uno::TypeClass_LONG:
         {
-            sal_Int32 nInt32;
+            sal_Int32 nInt32 = 0;
             aAny >>= nInt32;
             exportInt(nInt32, rName);
         }
         break;
         case uno::TypeClass_HYPER:
         {
-            sal_Int64 nInt64;
+            sal_Int64 nInt64 = 0;
             aAny >>= nInt64;
             exportLong(nInt64, rName);
         }
         break;
         case uno::TypeClass_DOUBLE:
         {
-            double fDouble;
+            double fDouble = 0.0;
             aAny >>= fDouble;
             exportDouble(fDouble, rName);
         }

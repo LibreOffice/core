@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: appbas.cxx,v $
- * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,7 +86,7 @@
 
 #define ITEMID_SEARCH SID_SEARCH_ITEM
 
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <vos/socket.hxx>
 
 #define SFX_TYPEMAP

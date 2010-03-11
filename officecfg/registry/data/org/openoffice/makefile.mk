@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,12 +38,16 @@ PACKAGE=org.openoffice
 XCUFILES= \
     Inet.xcu \
     Setup.xcu \
+    System.xcu \
     VCL.xcu \
     FirstStartWizard.xcu \
     UserProfile.xcu \
     Interaction.xcu
 
 MODULEFILES= \
+    Inet-macosx.xcu \
+    Inet-unixdesktop.xcu \
+    Inet-wnt.xcu \
     Setup-brand.xcu \
     Setup-writer.xcu   \
     Setup-calc.xcu   \
@@ -56,22 +56,15 @@ MODULEFILES= \
     Setup-base.xcu   \
     Setup-math.xcu \
     Setup-report.xcu \
-    Setup-start.xcu
+    Setup-start.xcu \
+    UserProfile-gconflockdown.xcu \
+    VCL-gconflockdown.xcu \
+    VCL-unixdesktop.xcu
 
 LOCALIZEDFILES=Setup.xcu
-
-SAMPLEFILES= \
-    LDAP.xcu.sample
 
 .INCLUDE :  target.mk
 
 LANGUAGEPACKS=$(MISC)$/registry$/spool$/Langpack-{$(alllangiso)}.xcu
-SAMPLETARGETS=$(MISC)$/registry$/data$/$(PACKAGEDIR)$/{$(SAMPLEFILES)}
 
 ALLTAR : $(LANGUAGEPACKS)
-ALLTAR : $(SAMPLETARGETS)
-
-$(SAMPLETARGETS) : $(SAMPLEFILES)
-    -$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-

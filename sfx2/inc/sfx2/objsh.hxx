@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: objsh.hxx,v $
- * $Revision: 1.14.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,7 +92,6 @@ class GDIMetaFile;
 class Bitmap;
 class INetURLObject;
 class IndexBitSet;
-class SfxAcceleratorManager;
 class JobSetup;
 class Size;
 class Point;
@@ -770,6 +766,8 @@ public:
     SAL_DLLPRIVATE SfxObjectShell* GetParentShellByModel_Impl();
 
     // configuration items
+    SAL_DLLPRIVATE SfxEventConfigItem_Impl* GetEventConfig_Impl( sal_Bool bForce=sal_False );
+    SAL_DLLPRIVATE SfxToolBoxConfig* GetToolBoxConfig_Impl();
     SAL_DLLPRIVATE sal_uInt16 ImplGetSignatureState( sal_Bool bScriptingContent = FALSE );
 
     SAL_DLLPRIVATE ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation >

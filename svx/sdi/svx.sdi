@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svx.sdi,v $
- * $Revision: 1.78.198.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -6867,31 +6864,6 @@ SfxBoolItem LastRecord SID_FM_RECORD_LAST
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem LaunchStarImage SID_SIM_START
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_APPLICATION;
 ]
 
 //--------------------------------------------------------------------------

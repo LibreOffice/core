@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdotextdecomposition.cxx,v $
- *
- * $Revision: 1.2.18.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +35,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <editstat.hxx>
+#include <editeng/editstat.hxx>
 #include <vcl/salbtype.hxx>
 #include <svx/sdtfchim.hxx>
 #include <svl/itemset.hxx>
@@ -48,10 +44,10 @@
 #include <drawinglayer/animation/animationtiming.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/eeitemid.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/svxenum.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/eeitemid.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/svxenum.hxx>
+#include <editeng/flditem.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <vcl/metaact.hxx>
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
@@ -59,7 +55,7 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <unoapi.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -96,7 +92,7 @@ namespace
 
         // #SJ# ClipRange for BlockText decomposition; only text portions completely
         // inside are to be accepted, so this is different from geometric clipping
-        // (which would allow e.g. upper parts of portions to remain). Only used for 
+        // (which would allow e.g. upper parts of portions to remain). Only used for
         // BlockText (see there)
         basegfx::B2DRange                                           maClipRange;
 

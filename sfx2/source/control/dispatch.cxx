@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dispatch.cxx,v $
- * $Revision: 1.56.126.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3171,3 +3168,14 @@ sal_uInt32 SfxDispatcher::GetDisableFlags() const
     return pImp->nDisableFlags;
 }
 
+SfxModule* SfxDispatcher::GetModule() const
+{
+    for ( sal_uInt16 nShell = 0;; ++nShell )
+    {
+        SfxShell *pSh = GetShell(nShell);
+        if ( pSh == NULL )
+            return 0;
+        if ( pSh->ISA(SfxModule) )
+            return (SfxModule*) pSh;
+    }
+}
