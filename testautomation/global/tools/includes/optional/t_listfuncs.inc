@@ -324,35 +324,13 @@ function hManageComparisionList( sFileIn as string, sFileOut as string, sListOut
     '///<ul>
 
     const CFN = "hManageComparisionList::"
-    
-    '///+<li>The name of the input file may not be empty</li>
-    if ( sFileIn = "" ) then
-        warnlog( CFN & "Invalid parameter: Input filename is empty string" )
-        hManageComparisionList() = 2
-        exit function
-    endif
-    
-    '///+<li>The name of the output-file may not be empty</li>
-    if ( sFileOut = "" ) then
-        warnlog( CFN & "Invalid parameter: Output filename is empty string" )
-        hManageComparisionList() = 3
-        exit function
-    endif    
-    
-    '///+<li>the list should not claim to be empty / be empty</li>
-    if ( listcount( sListOut() ) = 0 ) then
-        qaerrorlog( CFN & "Invalid parameter: Array claims to be empty" )
-        hManageComparisionList() = 4
-        exit function
-    endif   
+    const RC_SUCCESS = 0
     
     ' hListFileGetSize will return -1 if the list does not exist or the number
     ' of lines in the reference file plus additional 10 lines.
     '///+<li>Verify that the reference file exists and is non-empty</li>
-    dim iFileSize as integer
-        iFileSize = hListFileGetSize( sFileIn ) 
-    dim brc as boolean
-        brc = false
+    dim iFileSize as integer : iFileSize = hListFileGetSize( sFileIn )
+    dim irc as integer : irc = 0
     
     '///+<li>Read the reference list and compare</li>
     if ( iFileSize > -1 ) then
@@ -365,7 +343,7 @@ function hManageComparisionList( sFileIn as string, sFileOut as string, sListOut
         ' to other functions both in framework and global module
         'hgetDataFileSection( sFileIn , aReferenceList() , "" , "" , "" )
         listread( aReferenceList(), sFileIn, "utf8" )
-        brc = hListCompare( sListOut() , aReferenceList() )
+        irc = hListCompare( sListOut() , aReferenceList() )
         
     endif
     
@@ -373,28 +351,22 @@ function hManageComparisionList( sFileIn as string, sFileOut as string, sListOut
     ' a) the reference list does not exist
     ' b) the comparision failed
     ' c) the comparision succeeded
-    ' only if hListCompare() returns TRUE the testrun is successful.
+    ' only if hListCompare() returns 0 the testrun is successful.
     ' This means that on any error, the ref-list will be written so it can be
     ' directly reviewed/compared to the "faulty" list without having to run this
     ' test again (after deleting the ref-file)
     '///+<li>In case the lists are not identical, write the new one to the local work directory</li>
-    if ( brc ) then
+    if ( irc = 0 ) then
         printlog( CFN & "Comparision succeeded" )
-        hManageComparisionList() = 0    
+        hManageComparisionList() = RC_SUCCESS
     else
-        printlog( CFN & "Writing: " & sFileOut )
-        listwrite( sListOut(), sFileOut, "UTF8" )
-        qaerrorlog ( CFN & "Reference file review required:" )
-        printlog( "" )
-        printlog( CFN & "Two possible reasons:" )
+        printlog( CFN & "The two compared lists differ. There are two likely reasons:" )
         printlog( CFN & "1) The reference file does not exist at all" )
         printlog( CFN & "2) Reference and actual UI-Content do not match." )
-        printlog( CFN & "Location: " & sFileOut )
-        printlog( CFN & "Target..: " & sFileIn  )
-        printlog( CFn & "Verify the content and copy the file to <Target>" )
-        printlog( "" )
-        printlog( CFN & "Comparision failed" )
-        hManageComparisionList() = 1
+        printlog( CFN & "Verify and copy the file: " & sFileOut )
+        printlog( CFN & "to this location........: " & sFileIn  )
+        listwrite( sListOut(), sFileOut, "UTF8" )
+        hManageComparisionList() = irc
     endif
     
     '///+<li>Return 0 if the lists are identical, 1 if not and 2-4 on any other error</li>
@@ -423,25 +395,26 @@ function hListFileGetSize( sFileIn as string ) as integer
 
     const CFN = "hListFileGetSize::"
     const I_EXTRA_SIZE = 10
+    const RC_FILE_MISSING = -1
+    const RC_FILE_INVALID = -2
     
+    dim iFile as integer
+    dim sLine as string
+    dim iLineCount as integer : iLineCount = 0
+
     '///+<li>Verify that the filename is non-empty</li>
     if ( sFileIn = "" ) then
         warnlog( CFN & "Invalid parameter: Filename is empty string" )
-        hListFileGetSize() = -1
+        hListFileGetSize() = RC_FILE_INVALID
         exit function
     endif
     
     '///+<li>Verify that the file exists</li>
     if ( dir( sFileIn ) = "" ) then
         warnlog( CFN & "File not found: " & sFileIn ) 
-        hListFileGetSize() = -1
+        hListFileGetSize() = RC_FILE_MISSING
         exit function
     endif
-    
-    dim iFile as integer
-    dim sLine as string
-    dim iLineCount as integer
-        iLineCount = 0
     
     '///+<li>Open the file (standard BASIC calls)</li>
     iFile = freefile
@@ -466,7 +439,7 @@ end function
 
 '*******************************************************************************
 
-function hListCompare( aListOne() as String, aListTwo() as String ) as boolean
+function hListCompare( aListOne() as String, aListTwo() as String ) as integer
 
     const CFN = "hListcompare::"
 
@@ -496,8 +469,7 @@ function hListCompare( aListOne() as String, aListTwo() as String ) as boolean
     dim iListOneSize as integer
     
     dim bFound as boolean
-    dim brc as boolean     ' returncode: true only if lists are identical
-        brc = true
+    dim irc as integer : irc = 0
     
     '///+<li>Create a copy of list two so we do not change the original list</li>
     ListCopy( aListTwo() , aTwoOnlyList() )
@@ -529,9 +501,7 @@ function hListCompare( aListOne() as String, aListTwo() as String ) as boolean
         next iListTwoIndex
         
         '///+<li>If there is no match, the item exists in list one only -> copy</li>
-        if ( not bFound ) then
-            hListAppend( aListOne( iListOneIndex ), aOneOnlyList() )
-        end if
+        if ( not bFound ) then hListAppend( aListOne( iListOneIndex ), aOneOnlyList() )
         
     next iListOneIndex
     
@@ -542,17 +512,17 @@ function hListCompare( aListOne() as String, aListTwo() as String ) as boolean
     if ( ListCount( aOneOnlyList() ) > 0 ) then
         printlog( CFN & "Objects have been added to the list" )
         hListPrint( aOneOnlyList() , "Items found in list ONE only (NEW)" )
-        brc = false
+        irc = ListCount( aOneOnlyList() )
     end if
         
     '///+<li>List all items that exist in List Two only</li>
     if ( ListCount( aTwoOnlyList() ) > 0 ) then
         printlog( CFN & "Objects have been removed from the list" )
         hListPrint( aTwoOnlyList() , "Items found in list TWO only (MISSING)" )
-        brc = false
+        irc = ListCount( aOneOnlyList() ) * -1
     end if
 
-    hListCompare() = brc
+    hListCompare() = irc
     '///</ul>
     
 end function
@@ -729,5 +699,38 @@ function hCountMatchesInList( acItemList() as string, cSearchTerm as string ) as
     printlog( CFN & "Exit with result: " & iHitCount )
 
     hCountMatchesInList() = iHitCount
+
+end function
+
+'*******************************************************************************
+
+function hListResultEvaluation( i_diffcount as integer, i_allowed_delta as integer ) as boolean
+
+    ' This function evaluates the outcome of hManageComaprisionList() or
+    ' hListCompare(). This extra step is done because in some cases the
+    ' program installations might differ slightly - in some CWS (when using the
+    ' archive) we can end up having a different set of import/export filters.
+    ' So the evaluation must allow for a specific number of mismatches which is
+    ' specified in i_allowed_delta.
+
+    hListResultEvaluation() = true
+
+    ' If lists are identical we return directly.
+    if ( i_diffcount = 0 ) then
+        printlog( "The lists are identical. Good" )
+        exit function
+    endif
+
+    ' if we have differences we need to have a closer look.
+    ' Note that the difference is optional.
+    if ( i_allowed_delta <> 0 ) then
+        if ( i_diffcount = i_allowed_delta ) then
+            printlog( "The lists have the allowed delta of " & i_allowed_delta )
+            exit function
+        endif
+    endif
+
+    warnlog( "The list check failed, please review the test." )
+    hListResultEvaluation() = false
 
 end function

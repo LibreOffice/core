@@ -120,9 +120,7 @@ testcase tCompareHelpTopics()
     printlog( "Beginning comparision. This will take a while ..." )
     
     irc = hManageComparisionList( sFileIn, sFileOut, aTopicsFromUI() )    
-    if ( irc <> 0 ) then
-	    warnlog( "The list has changed, please review" )
-    endif
+    hListResultEvaluation( irc , 0 )
     
 endcase
 
