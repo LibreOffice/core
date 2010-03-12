@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile:  $
- * $Revision:  $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +88,7 @@ GrFeatureParser::GrFeatureParser(gr::Font & font, const std::string features, co
                 gr::isocode aLang = maLang;
                 for (size_t i = pos; i < nFeatEnd; i++)
                     aLang.rgch[i-pos] = features[i];
-                std::pair<gr::LanguageIterator,gr::LanguageIterator> aSupported
+                sil_std::pair<gr::LanguageIterator,gr::LanguageIterator> aSupported
                     = font.getSupportedLanguages();
                 gr::LanguageIterator iL = aSupported.first;
                 while (iL != aSupported.second)
@@ -142,7 +139,7 @@ void GrFeatureParser::setLang(gr::Font & font, const std::string & lang)
             if (lang[i] == '-') break;
             aLang.rgch[i] = lang[i];
         }
-        std::pair<gr::LanguageIterator,gr::LanguageIterator> aSupported
+        sil_std::pair<gr::LanguageIterator,gr::LanguageIterator> aSupported
                     = font.getSupportedLanguages();
         gr::LanguageIterator iL = aSupported.first;
         while (iL != aSupported.second)
@@ -189,7 +186,7 @@ bool GrFeatureParser::isValid(gr::Font & font, gr::FeatureSetting & setting)
     {
         return false;
     }
-    std::pair< gr::FeatureSettingIterator, gr::FeatureSettingIterator >
+    sil_std::pair< gr::FeatureSettingIterator, gr::FeatureSettingIterator >
         validValues = font.getFeatureSettings(i);
     gr::FeatureSettingIterator j = validValues.first;
     while (j != validValues.second)

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile:  $
- * $Revision:  $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,10 +29,11 @@
 // Parse a string of features specified as ; separated pairs.
 // e.g.
 // 1001=1&2002=2&fav1=0
-
+#include "pregraphitestl.h"
 #include <graphite/GrClient.h>
 #include <graphite/Font.h>
 #include <graphite/GrFeature.h>
+#include "postgraphitestl.h"
 
 namespace grutils
 {

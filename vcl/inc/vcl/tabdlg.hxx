@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabdlg.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +33,7 @@
 #include <vcl/dialog.hxx>
 
 class FixedLine;
+class TabControl;
 
 // ----------------------
 // - TabDialog -
@@ -60,6 +58,8 @@ public:
 
     virtual void        Resize();
     virtual void        StateChanged( StateChangedType nStateChange );
+
+    SAL_DLLPRIVATE TabControl* ImplGetFirstTabControl() const;
 
     void                AdjustLayout();
 

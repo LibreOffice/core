@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ilstbox.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -227,6 +224,7 @@ private:
     long            mnLeft;          // Ausgabe ab Spalte
     long            mnBorder;        // Abstand Rahmen - Text
     long            mnTextHeight;    // Texthoehe
+    ProminentEntry  meProminentType; // where is the "prominent" entry
 
     USHORT          mnSelectModifier;   // Modifiers
 
@@ -309,6 +307,11 @@ public:
 
     void            SetTopEntry( USHORT nTop );
     USHORT          GetTopEntry() const             { return mnTop; }
+    // ShowProminentEntry will set the entry correspoding to nEntryPos
+    // either at top or in the middle depending on the chosen style
+    void            ShowProminentEntry( USHORT nEntryPos );
+    void            SetProminentEntryType( ProminentEntry eType ) { meProminentType = eType; }
+    ProminentEntry  GetProminentEntryType() const { return meProminentType; }
     using Window::IsVisible;
     BOOL            IsVisible( USHORT nEntry ) const;
 
@@ -443,8 +446,12 @@ public:
 
     void            SetTopEntry( USHORT nTop )      { maLBWindow.SetTopEntry( nTop ); }
     USHORT          GetTopEntry() const             { return maLBWindow.GetTopEntry(); }
+    void            ShowProminentEntry( USHORT nPos ) { maLBWindow.ShowProminentEntry( nPos ); }
     using Window::IsVisible;
     BOOL            IsVisible( USHORT nEntry ) const { return maLBWindow.IsVisible( nEntry ); }
+
+    void            SetProminentEntryType( ProminentEntry eType ) { maLBWindow.SetProminentEntryType( eType ); }
+    ProminentEntry  GetProminentEntryType() const { return maLBWindow.GetProminentEntryType(); }
 
     long            GetLeftIndent() const           { return maLBWindow.GetLeftIndent(); }
     void            SetLeftIndent( USHORT n )       { maLBWindow.SetLeftIndent( n ); }
