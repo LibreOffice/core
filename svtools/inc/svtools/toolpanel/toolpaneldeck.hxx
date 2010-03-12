@@ -24,8 +24,8 @@
  *
 ************************************************************************/
 
-#ifndef TOOLPANELDECK_HXX
-#define TOOLPANELDECK_HXX
+#ifndef SVT_TOOLPANELDECK_HXX
+#define SVT_TOOLPANELDECK_HXX
 
 #include "svtools/svtdllapi.h"
 #include "svtools/toolpanel/toolpanel.hxx"
@@ -152,4 +152,4 @@ namespace svt
 } // namespace svt
 //........................................................................
 
-#endif // TOOLPANELDECK_HXX
+#endif // SVT_TOOLPANELDECK_HXX

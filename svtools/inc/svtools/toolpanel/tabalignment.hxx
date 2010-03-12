@@ -24,8 +24,8 @@
  *
 ************************************************************************/
 
-#ifndef TABALIGNMENT_HXX
-#define TABALIGNMENT_HXX
+#ifndef SVT_TABALIGNMENT_HXX
+#define SVT_TABALIGNMENT_HXX
 
 //........................................................................
 namespace svt
@@ -44,4 +44,4 @@ namespace svt
 } // namespace svt
 //........................................................................
 
-#endif // TABALIGNMENT_HXX
+#endif // SVT_TABALIGNMENT_HXX

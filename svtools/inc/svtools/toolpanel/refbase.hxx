@@ -24,8 +24,8 @@
  *
 ************************************************************************/
 
-#ifndef REFBASE_HXX
-#define REFBASE_HXX
+#ifndef SVT_REFBASE_HXX
+#define SVT_REFBASE_HXX
 
 #include <osl/interlck.h>
 
@@ -75,4 +75,4 @@ namespace svt
 } // namespace svt
 //........................................................................
 
-#endif // REFBASE_HXX
+#endif // SVT_REFBASE_HXX
