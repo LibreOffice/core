@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: prj.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -216,6 +213,7 @@ CommandData::CommandData()
     nOSType = 0;
     nCommand = 0;
     pDepList = 0;
+    pCommandList = 0;
 }
 
 /*****************************************************************************/
@@ -233,6 +231,18 @@ CommandData::~CommandData()
         delete pDepList;
 
         pDepList = NULL;
+    }
+    if ( pCommandList )
+    {
+        ByteString *pString = pCommandList->First();
+        while ( pString )
+        {
+            delete pString;
+            pString = pCommandList->Next();
+        }
+        delete pCommandList;
+
+        pCommandList = NULL;
     }
 }
 
@@ -296,6 +306,15 @@ ByteString CommandData::GetCommandTypeString()
 }
 
 /*****************************************************************************/
+void CommandData::AddCommand(ByteString* pCommand)
+/*****************************************************************************/
+{
+    if (!pCommandList)
+        pCommandList = new SByteStringList();
+    pCommandList->Insert(pCommand, LIST_APPEND);
+}
+
+/*****************************************************************************/
 CommandData& CommandData::operator>>  ( SvStream& rStream )
 /*****************************************************************************/
 {
@@ -321,6 +340,14 @@ CommandData& CommandData::operator>>  ( SvStream& rStream )
     {
         rStream << sal_True;
         *pDepList >> rStream;
+    }
+    else
+        rStream << sal_False;
+
+    if (pCommandList)
+    {
+        rStream << sal_True;
+        *pCommandList >> rStream;
     }
     else
         rStream << sal_False;
@@ -361,7 +388,26 @@ CommandData& CommandData::operator<<  ( SvStream& rStream )
         *pDepList << rStream;
     }
     else
+    {
+        if (pDepList)
         DELETEZ (pDepList);
+    }
+
+    BOOL bCommandList;
+    rStream >> bCommandList;
+    if (pCommandList)
+        pCommandList->CleanUp();
+    if (bCommandList)
+    {
+        if (!pCommandList)
+            pCommandList = new SByteStringList();
+        *pCommandList << rStream;
+    }
+    else
+    {
+        if (pCommandList)
+            DELETEZ (pCommandList);
+    }
 
     return *this;
 }
@@ -751,11 +797,12 @@ CommandData* Prj::GetDirectoryList ( USHORT nWhatOS, USHORT nCommand )
 CommandData* Prj::GetDirectoryData( ByteString aLogFileName )
 /*****************************************************************************/
 {
+    PrjList* pPrjList = GetCommandDataList ();
     CommandData *pData = NULL;
-    ULONG nCount_l = Count();
+    ULONG nCount_l = pPrjList->Count();
     for ( ULONG i=0; i<nCount_l; i++ )
     {
-        pData = GetObject(i);
+        pData = pPrjList->GetObject(i);
         if ( pData->GetLogFile() == aLogFileName )
             return pData;
     }
@@ -775,7 +822,9 @@ Prj::Prj() :
     bHardDependencies( FALSE ),
     bFixedDependencies( FALSE ),
     bVisited( FALSE ),
-    bIsAvailable( TRUE )
+    bIsAvailable( TRUE ),
+    pTempCommandDataList (0),
+    bTempCommandDataListPermanent (FALSE)
 /*****************************************************************************/
 {
 }
@@ -790,7 +839,9 @@ Prj::Prj( ByteString aName ) :
     bHardDependencies( FALSE ),
     bFixedDependencies( FALSE ),
     bVisited( FALSE ),
-    bIsAvailable( TRUE )
+    bIsAvailable( TRUE ),
+    pTempCommandDataList (0),
+    bTempCommandDataListPermanent (FALSE)
 /*****************************************************************************/
 {
 }
@@ -954,7 +1005,8 @@ BOOL Prj::InsertDirectory ( ByteString aDirName, USHORT aWhat,
     pData->SetLogFile( aLogFileName );
     pData->SetClientRestriction( rClientRestriction );
 
-    Insert( pData );
+    PrjList* pPrjList = GetCommandDataList ();
+    pPrjList->Insert( pData );
 
     return FALSE;
 }
@@ -966,14 +1018,15 @@ BOOL Prj::InsertDirectory ( ByteString aDirName, USHORT aWhat,
 CommandData* Prj::RemoveDirectory ( ByteString aLogFileName )
 /*****************************************************************************/
 {
-    ULONG nCount_l = Count();
+    PrjList* pPrjList = GetCommandDataList ();
+    ULONG nCount_l = pPrjList->Count();
     CommandData* pData;
     CommandData* pDataFound = NULL;
     SByteStringList* pDataDeps;
 
     for ( USHORT i = 0; i < nCount_l; i++ )
     {
-        pData = GetObject( i );
+        pData = pPrjList->GetObject( i );
         if ( pData->GetLogFile() == aLogFileName )
             pDataFound = pData;
         else
@@ -1030,6 +1083,56 @@ void Prj::ExtractDependencies()
         nPos ++;
         pData = GetObject(nPos);
     }
+}
+
+/*****************************************************************************/
+PrjList* Prj::GetCommandDataList ()
+/*****************************************************************************/
+{
+    if (pTempCommandDataList)
+        return pTempCommandDataList;
+    else
+        return (PrjList*)this;
+}
+
+/*****************************************************************************/
+void Prj::RemoveTempCommandDataList()
+/*****************************************************************************/
+{
+    if (pTempCommandDataList)
+    {
+        delete pTempCommandDataList; // this list remove the elements by itself
+        pTempCommandDataList = NULL;
+    }
+}
+
+/*****************************************************************************/
+void Prj::GenerateTempCommandDataList()
+/*****************************************************************************/
+{
+    if (pTempCommandDataList)
+        RemoveTempCommandDataList();
+    pTempCommandDataList = new PrjList();
+    CommandData* pCommandData = First();
+    while (pCommandData) {
+        SvMemoryStream* pStream = new SvMemoryStream();
+        *pCommandData >> *pStream;
+        CommandData* pNewCommandData = new CommandData();
+        pStream->Seek( STREAM_SEEK_TO_BEGIN );
+        *pNewCommandData << *pStream;
+        pTempCommandDataList->Insert(pNewCommandData, LIST_APPEND);
+        delete pStream;
+        pCommandData = Next();
+    }
+}
+
+/*****************************************************************************/
+void Prj::GenerateEmptyTempCommandDataList()
+/*****************************************************************************/
+{
+    if (pTempCommandDataList)
+        RemoveTempCommandDataList();
+    pTempCommandDataList = new PrjList();
 }
 
 /*****************************************************************************/
@@ -1639,7 +1742,8 @@ void Star::InsertToken ( char *yytext )
                 pStaticDepList = 0;
                 break;
         case 1:
-                    aDirName = yytext;
+                aDirName = yytext;
+                aProjectName = aDirName.GetToken ( 0, 0x5c);
                 break;
         case 2:
                 if ( !strcmp( yytext, ":" ))
@@ -1674,7 +1778,6 @@ void Star::InsertToken ( char *yytext )
                 }
                 if (bPrjDep)
                 {
-                    aProjectName = aDirName.GetToken ( 0, 0x5c);
                     if ( HasProject( aProjectName ))
                     {
                         RemovePrj(GetPrj(aProjectName));
@@ -1708,7 +1811,7 @@ void Star::InsertToken ( char *yytext )
         case 5:
                 if ( !bPrjDep )
                 {
-                    aLogFileName = yytext;
+                    aLogFileName = (ByteString(aProjectName).Append("_")).Append(yytext);
                 }
                 break;
         default:
@@ -1725,7 +1828,8 @@ void Star::InsertToken ( char *yytext )
                         // ggfs. Dependency liste anlegen und ergaenzen
                         if ( !pStaticDepList )
                             pStaticDepList = new SByteStringList;
-                        pStaticDepList->PutString( new ByteString( aItem ));
+                        ByteString* pStr = new ByteString ((ByteString (aProjectName).Append("_")).Append(aItem));
+                        pStaticDepList->PutString( pStr );
                     }
                 }
                 else
@@ -1748,7 +1852,6 @@ void Star::InsertToken ( char *yytext )
                             bHasModes = TRUE;
                         }
 
-                        aProjectName = aDirName.GetToken ( 0, 0x5c);
                         if ( HasProject( aProjectName ))
                         {
                             pPrj = GetPrj( aProjectName );
@@ -1782,7 +1885,6 @@ void Star::InsertToken ( char *yytext )
        der Solar-Projekte einfuegen */
     if ( i == -1 )
     {
-        aProjectName = aDirName.GetToken ( 0, 0x5c);
         if ( HasProject( aProjectName ))
         {
             pPrj = GetPrj( aProjectName );
