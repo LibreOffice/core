@@ -52,15 +52,15 @@ module com {  module sun {  module star {  module awt { module grid {
  */
 interface XGridColumnListener: com::sun::star::uno::XInterface
 {
-    /**
-        Invoked after a column was added to the column model.
-    */
-    void columnAdded( [in] GridColumnEvent event );
-
-    /**
-        Invoked after a column was removed from the column model.
-    */
-    void columnRemoved( [in] GridColumnEvent event );
+ //   /**
+    //  Invoked after a column was added to the column model.
+    //*/
+    //void columnAdded( [in] GridColumnEvent event );
+    //
+ //   /**
+    //  Invoked after a column was removed from the column model.
+    //*/
+    //void columnRemoved( [in] GridColumnEvent event );
 
     /**
         Invoked after a column was modified.
