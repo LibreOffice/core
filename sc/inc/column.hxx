@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: column.hxx,v $
- * $Revision: 1.21.128.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,7 +111,7 @@ private:
 friend class ScDocument;                    // fuer FillInfo
 friend class ScDocumentIterator;
 friend class ScValueIterator;
-friend class ScQueryValueIterator;
+friend class ScDBQueryDataIterator;
 friend class ScColumnIterator;
 friend class ScQueryCellIterator;
 friend class ScMarkedDataIter;
@@ -161,7 +158,7 @@ public:
     SCSIZE      GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const;
     BOOL        HasDataAt(SCROW nRow) const;
     BOOL        HasVisibleDataAt(SCROW nRow) const;
-//UNUSED2009-05 SCROW       GetFirstDataPos() const;
+    SCROW       GetFirstDataPos() const;
     SCROW       GetLastDataPos() const;
     SCROW       GetLastVisDataPos(BOOL bNotes) const;               // ohne Broadcaster
     SCROW       GetFirstVisDataPos(BOOL bNotes) const;

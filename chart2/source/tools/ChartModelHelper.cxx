@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartModelHelper.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,6 @@
 #include "DiagramHelper.hxx"
 #include "DataSourceHelper.hxx"
 #include "ControllerLockGuard.hxx"
-#include "UndoManager.hxx"
 #include "RangeHighlighter.hxx"
 #include "InternalDataProvider.hxx"
 
@@ -57,12 +53,6 @@ namespace chart
 //.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
-
-//static
-uno::Reference< chart2::XUndoManager > ChartModelHelper::createUndoManager()
-{
-    return new UndoManager();
-}
 
 //static
 uno::Reference< chart2::data::XRangeHighlighter > ChartModelHelper::createRangeHighlighter(

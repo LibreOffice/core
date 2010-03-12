@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartDocumentWrapper.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +54,7 @@
 #include "WrappedAddInProperty.hxx"
 #include "WrappedIgnoreProperty.hxx"
 #include "ChartRenderer.hxx"
+#include "UndoManager.hxx"
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
@@ -1490,6 +1488,12 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
             }
         }
         xResult.set( m_xChartView );
+        bServiceFound = true;
+    }
+    else if ( aServiceSpecifier.equals( CHART_UNDOMANAGER_SERVICE_NAME ) )
+    {
+        Reference< chart2::XUndoManager > xUndoManager( new UndoManager() );
+        xResult.set( xUndoManager );
         bServiceFound = true;
     }
     else

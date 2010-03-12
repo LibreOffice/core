@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dpobject.hxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,10 @@
 #include "address.hxx"
 #include "collect.hxx"
 #include "dpoutput.hxx"
+#include "pivot.hxx"
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
+
+#include <boost/shared_ptr.hpp>
 
 //------------------------------------------------------------------
 
@@ -64,6 +64,7 @@ class ScStrCollection;
 class TypedScStrCollection;
 struct PivotField;
 class ScDPCacheTable;
+class ScDPTableData;
 
 struct ScDPServiceDesc
 {
@@ -99,15 +100,19 @@ private:
     ScSheetSourceDesc*      pSheetDesc;     //  for sheet data
     ScImportSourceDesc*     pImpDesc;       //  for database data
     ScDPServiceDesc*        pServDesc;      //  for external service
+    ::boost::shared_ptr<ScDPTableData>  mpTableData;
                                             // cached data
     com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier> xSource;
     ScDPOutput*             pOutput;
     BOOL                    bSettingsChanged;
     BOOL                    bAlive;         // FALSE if only used to hold settings
+    sal_uInt16              mnAutoFormatIndex;
     BOOL                    bAllowMove;
     long                    nHeaderRows;    // page fields plus filter button
+    bool                    mbHeaderLayout;  // TRUE : grid, FALSE : standard
 
 
+    SC_DLLPRIVATE ScDPTableData*    GetTableData();
     SC_DLLPRIVATE void              CreateObjects();
     SC_DLLPRIVATE void              CreateOutput();
 
@@ -135,6 +140,12 @@ public:
     void                SetOutRange(const ScRange& rRange);
     const ScRange&      GetOutRange() const     { return aOutRange; }
 
+    void                SetAutoFormatIndex (const sal_uInt16 nIndex);
+    sal_uInt16          GetAutoFormatIndex() const;
+
+    void                SetHeaderLayout(bool bUseGrid);
+    bool                GetHeaderLayout() const;
+
     void                SetSheetDesc(const ScSheetSourceDesc& rDesc);
     void                SetImportDesc(const ScImportSourceDesc& rDesc);
     void                SetServiceData(const ScDPServiceDesc& rDesc);
@@ -157,7 +168,14 @@ public:
     void                SetTag(const String& rNew);
     const String&       GetTag() const                  { return aTableTag; }
 
-    BOOL                IsDimNameInUse( const String& rName ) const;
+    /**
+     *  Data description cell displays the description of a data dimension if
+     *  and only if there is only one data dimension.  It's usually located at
+     *  the upper-left corner of the table output.
+     */
+    bool                IsDataDescriptionCell(const ScAddress& rPos);
+
+    bool                IsDimNameInUse(const ::rtl::OUString& rName) const;
     String              GetDimName( long nDim, BOOL& rIsDataLayout );
     BOOL                IsDuplicated( long nDim );
     long                GetDimCount();
@@ -190,16 +208,10 @@ public:
     sal_Int32           GetUsedHierarchy( sal_Int32 nDim );
 
     BOOL                GetMembersNA( sal_Int32 nDim, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xMembers );
-    BOOL                GetMembers( sal_Int32 nDim,
-                            com::sun::star::uno::Sequence< rtl::OUString >& rMembers,
-                            com::sun::star::uno::Sequence< sal_Bool >* pVisible = 0,
-                            com::sun::star::uno::Sequence< sal_Bool >* pShowDet = 0 );
-
     BOOL                GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xMembers );
-    BOOL                GetMembers( sal_Int32 nDim, sal_Int32 nHier,
-                            com::sun::star::uno::Sequence< rtl::OUString >& rMembers,
-                            com::sun::star::uno::Sequence< sal_Bool >* pVisible = 0,
-                            com::sun::star::uno::Sequence< sal_Bool >* pShowDet = 0 );
+
+    bool                GetMemberNames( sal_Int32 nDim, ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames );
+    bool                GetMembers( sal_Int32 nDim, sal_Int32 nHier, ::std::vector<ScDPLabelData::Member>& rMembers );
 
     void                UpdateReference( UpdateRefMode eUpdateRefMode,
                                          const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
@@ -220,6 +232,8 @@ public:
     // apply drop-down attribute, initialize nHeaderRows, without accessing the source
     // (button attribute must be present)
     void                RefreshAfterLoad();
+
+    void                BuildAllDimensionMembers();
 
     static BOOL         HasRegisteredSources();
     static com::sun::star::uno::Sequence<rtl::OUString> GetRegisteredSources();
@@ -290,6 +304,11 @@ public:
     String      CreateNewName( USHORT nMin = 1 ) const;
 
     ScSimpleSharedString& GetSharedString();
+
+    void FreeTable(ScDPObject* pDPObj);
+    SC_DLLPUBLIC bool InsertNewTable(ScDPObject* pDPObj);
+
+    bool        HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
 
     ScDPCacheCell* getCacheCellFromPool(const ScDPCacheCell& rCell);
     void clearCacheCellPool();

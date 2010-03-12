@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbfunc.hxx,v $
- * $Revision: 1.12.100.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,7 +77,7 @@ public:
     void            GotoDBArea( const String& rDBName );
 
                     // DB-Bereich vom Cursor
-    ScDBData*       GetDBData( BOOL bMarkArea = TRUE, ScGetDBMode eMode = SC_DB_MAKE );
+    ScDBData*       GetDBData( BOOL bMarkArea = TRUE, ScGetDBMode eMode = SC_DB_MAKE, bool bShrinkToData = false );
 
     void            NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const List& rDelAreaList );
 
@@ -99,6 +96,7 @@ public:
     void            UngroupDataPilot();
     void            DataPilotInput( const ScAddress& rPos, const String& rString );
 
+    bool            DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16* pUserListId = NULL );
     BOOL            DataPilotMove( const ScRange& rSource, const ScAddress& rDest );
 
     BOOL            HasSelectionForDrillDown( USHORT& rOrientation );

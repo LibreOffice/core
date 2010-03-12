@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.12.68.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -80,12 +76,12 @@ SHL1LIBS= 		$(LIB1TARGET)
 
 SHL1STDLIBS=	$(CHARTTOOLS)		\
                 $(CHARTVIEW)		\
+                $(EDITENGLIB)			\
                 $(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
                 $(COMPHELPERLIB)	\
                 $(BASEGFXLIB)		\
                 $(DRAWINGLAYERLIB)	\
-                $(GOODIESLIB)		\
                 $(BASEGFXLIB) 		\
                 $(SALLIB)			\
                 $(SVLLIB)			\
@@ -116,6 +112,7 @@ DEF1NAME=		$(SHL1TARGET)
 # sfx.srs is needed for the strings for UNDO and REDO in the UndoCommandDispatch
 RESLIB1LIST=\
     $(SRS)$/chcdialogs.srs \
+    $(SRS)$/chcmenus.srs \
     $(SOLARCOMMONRESDIR)$/sfx.srs
 
 RESLIB1NAME=	$(TARGET)

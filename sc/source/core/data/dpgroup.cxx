@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dpgroup.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,6 +67,7 @@ using ::rtl::OUStringHash;
 using ::std::vector;
 using ::std::hash_set;
 using ::std::hash_map;
+using ::boost::shared_ptr;
 
 #define D_TIMEFACTOR              86400.0
 
@@ -977,7 +975,7 @@ String lcl_GetNumGroupForValue( double fValue, const ScDPNumGroupInfo& rInfo, bo
     return lcl_GetNumGroupName( fGroupStart, rInfo, bHasNonInteger, cDecSeparator, pFormatter );
 }
 
-ScDPGroupTableData::ScDPGroupTableData( ScDPTableData* pSource, ScDocument* pDocument ) :
+ScDPGroupTableData::ScDPGroupTableData( const shared_ptr<ScDPTableData>& pSource, ScDocument* pDocument ) :
     ScDPTableData(pDocument),
     pSourceData( pSource ),
     pDoc( pDocument )
@@ -992,7 +990,6 @@ ScDPGroupTableData::ScDPGroupTableData( ScDPTableData* pSource, ScDocument* pDoc
 ScDPGroupTableData::~ScDPGroupTableData()
 {
     delete[] pNumGroups;
-    delete pSourceData;
 }
 
 void ScDPGroupTableData::AddGroupDimension( const ScDPGroupDimension& rGroup )

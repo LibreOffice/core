@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unonames.hxx,v $
- * $Revision: 1.82.104.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -561,6 +558,10 @@
 #define SC_UNO_ROWFIELDCOUNT        "RowFieldCount"
 #define SC_UNO_COLUMNFIELDCOUNT     "ColumnFieldCount"
 #define SC_UNO_DATAFIELDCOUNT       "DataFieldCount"
+#define SC_UNO_LAYOUTNAME           "LayoutName"
+#define SC_UNO_FIELD_SUBTOTALNAME   "FieldSubtotalName"
+#define SC_UNO_GRANDTOTAL_NAME      "GrandTotalName"
+#define SC_UNO_HAS_HIDDEN_MEMBER    "HasHiddenMember"
 
 //  (preliminary:)
 #define SC_UNO_REFVALUE             "ReferenceValue"

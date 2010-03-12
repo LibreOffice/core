@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xeroot.cxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
+
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <unotools/saveopt.hxx>
@@ -38,12 +36,13 @@
 #include <svl/eitem.hxx>
 #include "xecontent.hxx"
 #include "xltracer.hxx"
-#include "xehelper.hxx"
+#include "xeescher.hxx"
 #include "xeformula.hxx"
+#include "xehelper.hxx"
 #include "xelink.hxx"
 #include "xename.hxx"
-#include "xestyle.hxx"
 #include "xepivot.hxx"
+#include "xestyle.hxx"
 #include "xeroot.hxx"
 
 #include "excrecds.hxx"  // for filter manager
@@ -145,6 +144,12 @@ XclExpNameManager& XclExpRoot::GetNameManager() const
     return *mrExpData.mxNameMgr;
 }
 
+XclExpObjectManager& XclExpRoot::GetObjectManager() const
+{
+    DBG_ASSERT( mrExpData.mxObjMgr.is(), "XclExpRoot::GetObjectManager - missing object (wrong BIFF?)" );
+    return *mrExpData.mxObjMgr;
+}
+
 XclExpFilterManager& XclExpRoot::GetFilterManager() const
 {
     DBG_ASSERT( mrExpData.mxFilterMgr.is(), "XclExpRoot::GetFilterManager - missing object (wrong BIFF?)" );
@@ -184,6 +189,7 @@ void XclExpRoot::InitializeGlobals()
     if( GetBiff() == EXC_BIFF8 )
     {
         mrExpData.mxSst.reset( new XclExpSst );
+        mrExpData.mxObjMgr.reset( new XclExpObjectManager( GetRoot() ) );
         mrExpData.mxFilterMgr.reset( new XclExpFilterManager( GetRoot() ) );
         mrExpData.mxPTableMgr.reset( new XclExpPivotTableManager( GetRoot() ) );
         // BIFF8: only one link manager for all sheets

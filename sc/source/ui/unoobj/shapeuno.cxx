@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: shapeuno.cxx,v $
- * $Revision: 1.21.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +35,7 @@
 #include <svtools/unoimap.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/unoshape.hxx>
-#include <svx/unofield.hxx>
+#include <editeng/unofield.hxx>
 #include <svx/shapepropertynotifier.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <cppuhelper/implbase2.hxx>

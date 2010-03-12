@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: document.hxx,v $
- * $Revision: 1.115.36.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,7 +66,9 @@ class SvxBoxInfoItem;
 class SvxBoxItem;
 class SvxBrushItem;
 class SvxForbiddenCharactersTable;
-class SvxLinkManager;
+namespace sfx2 {
+    class LinkManager;
+    }
 class SvxSearchItem;
 class SvxShadowItem;
 class Window;
@@ -227,7 +226,7 @@ class ScDocument
 {
 friend class ScDocumentIterator;
 friend class ScValueIterator;
-friend class ScQueryValueIterator;
+friend class ScDBQueryDataIterator;
 friend class ScCellIterator;
 friend class ScQueryCellIterator;
 friend class ScHorizontalCellIterator;
@@ -260,7 +259,7 @@ private:
     ScChartCollection*  pChartCollection;
     std::auto_ptr< ScTemporaryChartLock > apTemporaryChartLock;
     ScPatternAttr*      pSelectionAttr;                 // Attribute eines Blocks
-    mutable SvxLinkManager*     pLinkManager;
+    mutable sfx2::LinkManager*      pLinkManager;
     ScFormulaCell*      pFormulaTree;                   // Berechnungsbaum Start
     ScFormulaCell*      pEOFormulaTree;                 // Berechnungsbaum Ende, letzte Zelle
     ScFormulaCell*      pFormulaTrack;                  // BroadcastTrack Start
@@ -291,6 +290,7 @@ private:
                         mxFormulaParserPool;            /// Pool for all external formula parsers used by this document.
 
     String              aDocName;                       // opt: Dokumentname
+    String              aDocCodeName;                       // opt: Dokumentname
     ScRangePairListRef  xColNameRanges;
     ScRangePairListRef  xRowNameRanges;
 
@@ -420,6 +420,7 @@ private:
 
 public:
     SC_DLLPUBLIC ULONG          GetCellCount() const;       // alle Zellen
+    SCSIZE          GetCellCount(SCTAB nTab, SCCOL nCol) const;
     ULONG           GetWeightedCount() const;   // Formeln und Edit staerker gewichtet
     ULONG           GetCodeCount() const;       // RPN-Code in Formeln
     DECL_LINK( GetUserDefinedColor, USHORT * );
@@ -435,13 +436,15 @@ public:
 
     SC_DLLPUBLIC const String&  GetName() const { return aDocName; }
     void            SetName( const String& r ) { aDocName = r; }
+    const String&   GetCodeName() const { return aDocCodeName; }
+    void            SetCodeName( const String& r ) { aDocCodeName = r; }
 
     void            GetDocStat( ScDocStat& rDocStat );
 
     SC_DLLPUBLIC void           InitDrawLayer( SfxObjectShell* pDocShell = NULL );
     XColorTable*    GetColorTable();
 
-    SC_DLLPUBLIC SvxLinkManager*        GetLinkManager() const;
+    SC_DLLPUBLIC sfx2::LinkManager*     GetLinkManager() const;
 
     SC_DLLPUBLIC const ScDocOptions&        GetDocOptions() const;
     SC_DLLPUBLIC void                   SetDocOptions( const ScDocOptions& rOpt );
@@ -520,6 +523,8 @@ public:
 
     SC_DLLPUBLIC BOOL           HasTable( SCTAB nTab ) const;
     SC_DLLPUBLIC BOOL           GetName( SCTAB nTab, String& rName ) const;
+    SC_DLLPUBLIC BOOL           GetCodeName( SCTAB nTab, String& rName ) const;
+    SC_DLLPUBLIC BOOL           SetCodeName( SCTAB nTab, String& rName );
     SC_DLLPUBLIC BOOL           GetTable( const String& rName, SCTAB& rTab ) const;
     SC_DLLPUBLIC inline SCTAB   GetTableCount() const { return nMaxTableNumber; }
     SvNumberFormatterIndexTable* GetFormatExchangeList() const { return pFormatExchangeList; }
@@ -865,6 +870,8 @@ public:
     BOOL            IsCalculatingFormulaTree() { return bCalculatingFormulaTree; }
 
     USHORT          GetErrCode( const ScAddress& ) const;
+
+    bool            ShrinkToDataArea(SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow) const;
 
     void            GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
                                     SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld );

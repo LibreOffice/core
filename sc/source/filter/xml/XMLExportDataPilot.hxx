@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XMLExportDataPilot.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +31,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <rtl/ustring.hxx>
 #include "global.hxx"
+#include "xmloff/xmltoken.hxx"
 
 class ScXMLExport;
 class ScDocument;
@@ -43,6 +41,7 @@ class ScDPDimensionSaveData;
 class ScDPSaveGroupDimension;
 class ScDPSaveNumGroupDimension;
 struct ScDPNumGroupInfo;
+struct ScQueryParam;
 
 class ScXMLExportDataPilot
 {
@@ -68,6 +67,8 @@ class ScXMLExportDataPilot
     void WriteNumGroupDim(const ScDPSaveNumGroupDimension* pNumGroupDim);
     void WriteDimension(ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData);
     void WriteDimensions(ScDPSaveData* pDPSave);
+
+    void WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient, bool bVisible, const ::rtl::OUString* pGrandTotal);
 
 public:
     ScXMLExportDataPilot(ScXMLExport& rExport);

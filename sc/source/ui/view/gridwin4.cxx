@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gridwin4.cxx,v $
- * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,14 +33,14 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
 #include <svtools/colorcfg.hxx>
-#include <svx/colritem.hxx>
-#include <svx/editview.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/printer.hxx>
 
@@ -73,6 +70,8 @@
 #include "editutil.hxx"
 #include "inputopt.hxx"
 #include "fillinfo.hxx"
+#include "dpcontrol.hxx"
+#include "queryparam.hxx"
 #include "sc.hrc"
 #include <vcl/virdev.hxx>
 
@@ -1203,6 +1202,8 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
 {
     aComboButton.SetOutputDevice( pContentDev );
 
+    ScDPFieldButton aCellBtn(pContentDev, &GetSettings().GetStyleSettings(), &pViewData->GetZoomX(), &pViewData->GetZoomY());
+
     SCCOL nCol;
     SCROW nRow;
     SCSIZE nArrY;
@@ -1284,14 +1285,14 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
                     bool bArrowState = bSimpleQuery && bColumnFound;
                     long    nSizeX;
                     long    nSizeY;
-
                     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
-                    aComboButton.SetOptSizePixel();
-                    DrawComboButton( pViewData->GetScrPos( nCol, nRow, eWhich ),
-                                     nSizeX, nSizeY, bArrowState );
+                    Point aScrPos = pViewData->GetScrPos( nCol, nRow, eWhich );
 
-                    aComboButton.SetPosPixel( aOldPos );    // alten Zustand
-                    aComboButton.SetSizePixel( aOldSize );  // fuer MouseUp/Down
+                    aCellBtn.setBoundingBox(aScrPos, Size(nSizeX-1, nSizeY-1));
+                    aCellBtn.setDrawBaseButton(false);
+                    aCellBtn.setDrawPopupButton(true);
+                    aCellBtn.setHasHiddenMember(bArrowState);
+                    aCellBtn.draw();
                 }
             }
         }
@@ -1318,13 +1319,14 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
                         nPosX -= nSizeX - 2;
                     }
 
-                    pContentDev->SetLineColor( GetSettings().GetStyleSettings().GetLightColor() );
-                    pContentDev->DrawLine( Point(nPosX,nPosY), Point(nPosX,nPosY+nSizeY-1) );
-                    pContentDev->DrawLine( Point(nPosX,nPosY), Point(nPosX+nSizeX-1,nPosY) );
-                    pContentDev->SetLineColor( GetSettings().GetStyleSettings().GetDarkShadowColor() );
-                    pContentDev->DrawLine( Point(nPosX,nPosY+nSizeY-1), Point(nPosX+nSizeX-1,nPosY+nSizeY-1) );
-                    pContentDev->DrawLine( Point(nPosX+nSizeX-1,nPosY), Point(nPosX+nSizeX-1,nPosY+nSizeY-1) );
-                    pContentDev->SetLineColor( COL_BLACK );
+                    String aStr;
+                    pDoc->GetString(nCol, nRow, nTab, aStr);
+                    aCellBtn.setText(aStr);
+                    aCellBtn.setBoundingBox(Point(nPosX, nPosY), Size(nSizeX-1, nSizeY-1));
+                    aCellBtn.setDrawBaseButton(true);
+                    aCellBtn.setDrawPopupButton(pInfo->bPopupButton);
+                    aCellBtn.setHasHiddenMember(pInfo->bFilterActive);
+                    aCellBtn.draw();
                 }
             }
         }

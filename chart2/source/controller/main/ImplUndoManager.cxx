@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ImplUndoManager.cxx,v $
- * $Revision: 1.7.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,7 +107,10 @@ UndoElement::~UndoElement()
 
 void UndoElement::initialize( const Reference< frame::XModel > & xModel )
 {
-    m_xModel.set( UndoElement::cloneModel( xModel ));
+    if ( xModel.is() )
+    {
+        m_xModel.set( UndoElement::cloneModel( xModel ) );
+    }
 }
 
 void UndoElement::dispose()
@@ -354,6 +354,29 @@ UndoElement * UndoElementWithSelection::createFromModel(
         const Reference< frame::XModel > & xModel )
 {
     return new UndoElementWithSelection( getActionString(), xModel );
+}
+
+// ----------------------------------------
+
+ShapeUndoElement::ShapeUndoElement( const OUString& rActionString, SdrUndoAction* pAction )
+    :UndoElement( rActionString, Reference< frame::XModel >() )
+    ,m_pAction( pAction )
+{
+}
+
+ShapeUndoElement::ShapeUndoElement( const ShapeUndoElement& rOther )
+    :UndoElement( rOther )
+    ,m_pAction( rOther.m_pAction )
+{
+}
+
+ShapeUndoElement::~ShapeUndoElement()
+{
+}
+
+SdrUndoAction* ShapeUndoElement::getSdrUndoAction()
+{
+    return m_pAction;
 }
 
 // ========================================

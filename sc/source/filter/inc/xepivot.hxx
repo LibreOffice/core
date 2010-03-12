@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xepivot.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -413,6 +410,10 @@ private:
     /** Writes the SXEX records containing additional pivot table info. */
     void                WriteSxex( XclExpStream& rStrm ) const;
 
+    void                WriteQsiSxTag( XclExpStream& rStrm ) const;
+    /** Writes the SX_AUTOFORMAT records with the autoformat id and header layout */
+    void                WriteSxViewEx9( XclExpStream& rStrm ) const;
+
     // ------------------------------------------------------------------------
 private:
     typedef XclExpRecordList< XclExpPTField >   XclExpPTFieldList;
@@ -422,6 +423,7 @@ private:
     const XclExpPivotCache& mrPCache;       /// The pivot cache this pivot table bases on.
     XclPTInfo           maPTInfo;           /// Info about the pivot table (SXVIEW record).
     XclPTExtInfo        maPTExtInfo;        /// Extended info about the pivot table (SXEX record).
+    XclPTViewEx9Info    maPTViewEx9Info;    /// The selected autoformat (SXVIEWEX9)
     XclExpPTFieldList   maFieldList;        /// All fields in pivot cache order.
     ScfUInt16Vec        maRowFields;        /// Row field indexes.
     ScfUInt16Vec        maColFields;        /// Column field indexes.

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xiroot.hxx,v $
- * $Revision: 1.22.88.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,6 +51,7 @@ class XclImpTabInfo;
 class XclImpNameManager;
 class XclImpLinkManager;
 class XclImpObjectManager;
+class XclImpSheetDrawing;
 class XclImpCondFormatManager;
 class XclImpAutoFilterBuffer;
 class XclImpWebQueryBuffer;
@@ -179,6 +177,8 @@ public:
 
     /** Returns the drawing object manager. */
     XclImpObjectManager& GetObjectManager() const;
+    /** Returns the drawing container of the current sheet. */
+    XclImpSheetDrawing& GetCurrSheetDrawing() const;
     /** Returns the conditional formattings manager. */
     XclImpCondFormatManager& GetCondFormatManager() const;
     /** Returns the filter manager. */

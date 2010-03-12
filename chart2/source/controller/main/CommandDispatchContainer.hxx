@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: CommandDispatchContainer.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +41,10 @@
 namespace chart
 {
 
+class ChartController;
+class DrawCommandDispatch;
+class ShapeController;
+
 /** @HTML
 
     Helper class for implementing the <code>XDispatchProvider</code> interface
@@ -56,9 +57,9 @@ namespace chart
       <li>Check if the command is handled by this class, e.g. Undo.  If so,
         return a corresponding <code>XDispatch</code> implementation, and cache
         this implementation for later use</li>
-      <li>Otherwise send the command to the fallback dispatch provider, if it
+      <li>Otherwise send the command to the chart dispatch provider, if it
         can handle this dispatch (determined by the list of commands given in
-        <code>setFallbackDispatch()</code>).</li>
+        <code>setChartDispatch()</code>).</li>
     </ul>
 
     <p>The <code>XDispatch</code>Provider is designed to return different
@@ -68,17 +69,18 @@ namespace chart
     <p>As most commands need much information of the controller and are
     implemented there, the controller handles most of the commands itself (it
     also implements <code>XDispatch</code>).  Therefore it is set here as
-    fallback dispatch.</p>
+    chart dispatch.</p>
  */
 class CommandDispatchContainer
 {
 public:
-    // note: the fallback dispatcher should be removed when all commands are
-    // handled by other dispatchers.  (Fallback is currently the controller
+    // note: the chart dispatcher should be removed when all commands are
+    // handled by other dispatchers.  (Chart is currently the controller
     // itself)
     explicit CommandDispatchContainer(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
+            ::com::sun::star::uno::XComponentContext > & xContext,
+        ChartController* pController );
 
     void setModel(
         const ::com::sun::star::uno::Reference<
@@ -87,18 +89,18 @@ public:
 //         const ::com::sun::star::uno::Reference<
 //             ::com::sun::star::chart2::XUndoManager > & xUndoManager );
 
-    /** Set a fallback dispatcher that is used for all commands contained in
-        rFallbackCommands
+    /** Set a chart dispatcher that is used for all commands contained in
+        rChartCommands
      */
-    void setFallbackDispatch(
+    void setChartDispatch(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XDispatch > xFallbackDispatch,
-        const ::std::set< ::rtl::OUString > & rFallbackCommands );
+            ::com::sun::star::frame::XDispatch > xChartDispatch,
+        const ::std::set< ::rtl::OUString > & rChartCommands );
 
     /** Returns the dispatch that is able to do the command given in rURL, if
         implemented here.  If the URL is not implemented here, it should be
-        checked whether the command is one of the commands given as fallback via
-        the setFallbackDispatch() method.  If so, call the fallback dispatch.
+        checked whether the command is one of the commands given via
+        the setChartDispatch() method.  If so, call the chart dispatch.
 
         <p>If all this fails, return an empty dispatch.</p>
      */
@@ -119,6 +121,11 @@ public:
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > & xChartController,
             const ::com::sun::star::util::URL & rURL );
 
+    void setDrawCommandDispatch( DrawCommandDispatch* pDispatch );
+    DrawCommandDispatch* getDrawCommandDispatch() { return m_pDrawCommandDispatch; }
+    void setShapeController( ShapeController* pController );
+    ShapeController* getShapeController() { return m_pShapeController; }
+
 private:
     typedef
         ::std::map< ::rtl::OUString,
@@ -136,10 +143,14 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager > m_xUndoManager;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xFallbackDispatcher;
-    ::std::set< ::rtl::OUString >                                          m_aFallbackCommands;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xChartDispatcher;
+    ::std::set< ::rtl::OUString >                                          m_aChartCommands;
 
     ::std::set< ::rtl::OUString >                                          m_aContainerDocumentCommands;
+
+    ChartController* m_pChartController;
+    DrawCommandDispatch* m_pDrawCommandDispatch;
+    ShapeController* m_pShapeController;
 };
 
 } //  namespace chart

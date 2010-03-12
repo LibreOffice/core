@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xerecord.hxx,v $
- * $Revision: 1.14.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,9 +48,6 @@ public:
     /** Overwrite this method to do any operation while saving the record. */
     virtual void        Save( XclExpStream& rStrm );
     virtual void        SaveXml( XclExpXmlStream& rStrm );
-
-//UNUSED2008-05  /** Calls Save(XclExpStream&) nCount times. */
-//UNUSED2008-05  void                SaveRepeated( XclExpStream& rStrm, size_t nCount );
 };
 
 // ----------------------------------------------------------------------------
