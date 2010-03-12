@@ -448,7 +448,6 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* aClient, const Configurati
 #ifdef ENABLE_LOCKDOWN
         case SETTING_AUTO_SAVE:
         {
-            GConfClient* aClient = GconfBackend::getGconfClient();
             GConfValue* aGconfValue = gconf_client_get( aClient, GCONF_AUTO_SAVE_KEY, NULL );
 
             if( ( aGconfValue != NULL ) )
