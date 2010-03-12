@@ -24,8 +24,8 @@
  *
 ************************************************************************/
 
-#ifndef TABLAYOUTER_HXX
-#define TABLAYOUTER_HXX
+#ifndef SVT_TABLAYOUTER_HXX
+#define SVT_TABLAYOUTER_HXX
 
 #include "svtools/svtdllapi.h"
 #include "svtools/toolpanel/decklayouter.hxx"
@@ -91,4 +91,4 @@ namespace svt
 } // namespace svt
 //........................................................................
 
-#endif // TABLAYOUTER_HXX
+#endif // SVT_TABLAYOUTER_HXX

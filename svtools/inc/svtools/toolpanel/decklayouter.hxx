@@ -24,8 +24,8 @@
  *
 ************************************************************************/
 
-#ifndef DECKLAYOUTER_HXX
-#define DECKLAYOUTER_HXX
+#ifndef SVT_DECKLAYOUTER_HXX
+#define SVT_DECKLAYOUTER_HXX
 
 #include <rtl/ref.hxx>
 
@@ -77,4 +77,4 @@ namespace svt
 } // namespace svt
 //........................................................................
 
-#endif // DECKLAYOUTER_HXX
+#endif // SVT_DECKLAYOUTER_HXX

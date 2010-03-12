@@ -24,8 +24,8 @@
  *
 ************************************************************************/
 
-#ifndef TABITEMCONTENT_HXX
-#define TABITEMCONTENT_HXX
+#ifndef SVT_TABITEMCONTENT_HXX
+#define SVT_TABITEMCONTENT_HXX
 
 //........................................................................
 namespace svt
@@ -45,4 +45,4 @@ namespace svt
 } // namespace svt
 //........................................................................
 
-#endif // TABITEMCONTENT_HXX
+#endif // SVT_TABITEMCONTENT_HXX
