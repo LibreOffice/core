@@ -2651,6 +2651,483 @@ void DomainMapper_Impl::AppendFieldCommand(::rtl::OUString& rPartOfCommand)
 
   -----------------------------------------------------------------------*/
 typedef std::multimap < sal_Int32, ::rtl::OUString > TOCStyleMap;
+
+const FieldConversionMap_t & lcl_GetFieldConversion()
+{
+static FieldConversionMap_t aFieldConversionMap;
+static bool bFilled = false;
+if(!bFilled)
+{
+    static const FieldConversion aFields[] =
+    {
+//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ADDRESSBLOCK")),  "",                         "", FIELD_ADDRESSBLOCK  },
+//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ADVANCE")),       "",                         "", FIELD_ADVANCE       },
+        {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ASK")),           "SetExpression",             "SetExpression", FIELD_ASK      },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AUTONUM")),       "SetExpression",            "SetExpression", FIELD_AUTONUM   },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AUTONUMLGL")),     "SetExpression",            "SetExpression", FIELD_AUTONUMLGL },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AUTONUMOUT")),     "SetExpression",            "SetExpression", FIELD_AUTONUMOUT },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AUTHOR")),        "Author",                   "", FIELD_AUTHOR       },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATE")),          "DateTime",                 "", FIELD_DATE         },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("COMMENTS")),      "DocInfo.Description",      "", FIELD_COMMENTS     },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CREATEDATE")),    "DocInfo.CreateDateTime",   "", FIELD_CREATEDATE   },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DOCPROPERTY")),   "",                         "", FIELD_DOCPROPERTY },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DOCVARIABLE")),   "User",                     "", FIELD_DOCVARIABLE  },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EDITTIME")),      "DocInfo.EditTime",         "", FIELD_EDITTIME     },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FILLIN")),        "Input",                    "", FIELD_FILLIN       },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FILENAME")),      "FileName",                 "", FIELD_FILENAME     },
+//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FILESIZE")),      "",                         "", FIELD_FILESIZE     },
+//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMULA")),     "",                           "", FIELD_FORMULA },
+//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMCHECKBOX")),     "",                           "", FIELD_FORMCHECKBOX},
+//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMDROPDOWN")),     "",                           "", FIELD_FORMDROWDOWN},
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMTEXT")),     "InputUser", "", FIELD_FORMTEXT},
+//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GOTOBUTTON")),    "",                         "", FIELD_GOTOBUTTON   },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HYPERLINK")),     "",                         "", FIELD_HYPERLINK    },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IF")),            "ConditionalText",          "", FIELD_IF           },
+//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INFO")),      "","", FIELD_INFO         },
+//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INCLUDEPICTURE")), "",                        "", FIELD_INCLUDEPICTURE},
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KEYWORDS")),      "DocInfo.KeyWords",         "", FIELD_KEYWORDS     },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LASTSAVEDBY")),   "DocInfo.ChangeAuthor",                         "", FIELD_LASTSAVEDBY  },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MACROBUTTON")),   "Macro",                         "", FIELD_MACROBUTTON  },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MERGEFIELD")),    "Database",                 "Database", FIELD_MERGEFIELD},
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MERGEREC")),      "DatabaseNumberOfSet",      "", FIELD_MERGEREC     },
+//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MERGESEQ")),      "",                         "", FIELD_MERGESEQ     },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NEXT")),          "DatabaseNextSet",          "", FIELD_NEXT         },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NEXTIF")),        "DatabaseNextSet",          "", FIELD_NEXTIF       },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PAGE")),          "PageNumber",               "", FIELD_PAGE         },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REF")),           "GetReference",             "", FIELD_REF          },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REVNUM")),        "DocInfo.Revision",         "", FIELD_REVNUM       },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SAVEDATE")),      "DocInfo.Change",           "", FIELD_SAVEDATE     },
+//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SECTION")),       "",                         "", FIELD_SECTION      },
+//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SECTIONPAGES")),  "",                         "", FIELD_SECTIONPAGES },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SEQ")),           "SetExpression",            "SetExpression", FIELD_SEQ          },
+//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SET")),           "","", FIELD_SET          },
+//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SKIPIF")),"",                                 "", FIELD_SKIPIF       },
+//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("STYLEREF")),"",                               "", FIELD_STYLEREF     },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SUBJECT")),       "DocInfo.Subject",          "", FIELD_SUBJECT      },
+//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYMBOL")),"",                                 "", FIELD_SYMBOL       },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TEMPLATE")),      "TemplateName",             "", FIELD_TEMPLATE},
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIME")),          "DateTime",                 "", FIELD_TIME         },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TITLE")),         "DocInfo.Title",            "", FIELD_TITLE        },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("USERINITIALS")),  "ExtendedUser",              "", FIELD_USERINITIALS},
+//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("USERADDRESS")),   "",                         "", FIELD_USERADDRESS  },
+//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("USERNAME")),      "ExtendedUser",             "", FIELD_USERNAME     }
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TOC")), "com.sun.star.text.ContentIndex", "", FIELD_TOC},
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TC")), "com.sun.star.text.ContentIndexMark", "", FIELD_TC},
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NUMCHARS")), "CharacterCount", "", FIELD_NUMCHARS},
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NUMWORDS")), "WordCount", "", FIELD_NUMWORDS},
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NUMPAGES")), "PageCount", "", FIELD_NUMPAGES},
+
+//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")), "", "", FIELD_},
+
+        };
+        size_t nConversions = sizeof(aFields)/sizeof(FieldConversion);
+        for( size_t nConversion = 0; nConversion < nConversions; ++nConversion)
+        {
+            aFieldConversionMap.insert( FieldConversionMap_t::value_type(
+                aFields[nConversion].sWordCommand,
+                aFields[nConversion] ));
+        }
+
+        bFilled = true;
+    }
+
+    return aFieldConversionMap;
+}
+
+void DomainMapper_Impl::handleFieldAsk
+    (FieldContextPtr pContext,
+     PropertyNameSupplier& rPropNameSupplier,
+     uno::Reference< uno::XInterface > & xFieldInterface,
+     uno::Reference< beans::XPropertySet > xFieldProperties)
+{
+    //doesn the command contain a variable name?
+    ::rtl::OUString sVariable, sHint;
+
+    sVariable = lcl_ExctractAskVariableAndHint( pContext->GetCommand(),
+        sHint );
+    if(sVariable.getLength())
+    {
+        // determine field master name
+        uno::Reference< beans::XPropertySet > xMaster =
+            FindOrCreateFieldMaster
+            ("com.sun.star.text.FieldMaster.SetExpression", sVariable );
+
+        // attach the master to the field
+        uno::Reference< text::XDependentTextField > xDependentField
+            ( xFieldInterface, uno::UNO_QUERY_THROW );
+        xDependentField->attachTextFieldMaster( xMaster );
+
+        // set input flag at the field
+        xFieldProperties->setPropertyValue(
+            rPropNameSupplier.GetName(PROP_IS_INPUT), uno::makeAny( true ));
+        // set the prompt
+        xFieldProperties->setPropertyValue(
+            rPropNameSupplier.GetName(PROP_HINT),
+            uno::makeAny( sHint ));
+    }
+    else
+    {
+        //don't insert the field
+        //todo: maybe import a 'normal' input field here?
+        xFieldInterface = 0;
+    }
+}
+
+void DomainMapper_Impl::handleAutoNum
+    (FieldContextPtr pContext,
+    PropertyNameSupplier& rPropNameSupplier,
+    uno::Reference< uno::XInterface > & xFieldInterface,
+    uno::Reference< beans::XPropertySet > xFieldProperties)
+{
+    //create a sequence field master "AutoNr"
+    uno::Reference< beans::XPropertySet > xMaster =
+    FindOrCreateFieldMaster
+        ("com.sun.star.text.FieldMaster.SetExpression",
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoNr") ));
+
+    xMaster->setPropertyValue( rPropNameSupplier.GetName(PROP_SUB_TYPE),
+        uno::makeAny(text::SetVariableType::SEQUENCE));
+
+    //apply the numbering type
+    xFieldProperties->setPropertyValue(
+        rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
+        uno::makeAny( lcl_ParseNumberingType(pContext->GetCommand()) ));
+        // attach the master to the field
+    uno::Reference< text::XDependentTextField > xDependentField
+        ( xFieldInterface, uno::UNO_QUERY_THROW );
+    xDependentField->attachTextFieldMaster( xMaster );
+}
+
+void DomainMapper_Impl::handleAuthor
+    (FieldContextPtr pContext,
+    PropertyNameSupplier& rPropNameSupplier,
+    uno::Reference< uno::XInterface > & xFieldInterface,
+    uno::Reference< beans::XPropertySet > xFieldProperties)
+{
+    xFieldProperties->setPropertyValue
+        ( rPropNameSupplier.GetName(PROP_FULL_NAME), uno::makeAny( true ));
+    ::rtl::OUString sParam =
+        lcl_ExtractParameter(pContext->GetCommand(), sizeof(" AUTHOR") );
+    if(sParam.getLength())
+    {
+        xFieldProperties->setPropertyValue(
+                rPropNameSupplier.GetName( PROP_IS_FIXED ),
+                uno::makeAny( true ));
+        //PROP_CURRENT_PRESENTATION is set later anyway
+    }
+}
+
+    void DomainMapper_Impl::handleDocProperty
+        (FieldContextPtr pContext,
+        PropertyNameSupplier& rPropNameSupplier,
+        uno::Reference< uno::XInterface > & xFieldInterface,
+        uno::Reference< beans::XPropertySet > xFieldProperties)
+{
+    //some docproperties should be imported as document statistic fields, some as DocInfo fields
+    //others should be user fields
+    ::rtl::OUString sParam =
+        lcl_ExtractParameter(pContext->GetCommand(), sizeof(" DOCPROPERTY") );
+
+    if(sParam.getLength())
+    {
+        #define SET_ARABIC      0x01
+        #define SET_FULL_NAME   0x02
+        struct DocPropertyMap
+        {
+            const sal_Char* pDocPropertyName;
+            const sal_Char* pServiceName;
+            sal_uInt8       nFlags;
+        };
+        static const DocPropertyMap aDocProperties[] =
+        {
+            {"Author",           "Author",                  SET_FULL_NAME},
+            {"CreateTime",       "DocInfo.CreateDateTime",  0},
+            {"Characters",       "CharacterCount",          SET_ARABIC},
+            {"Comments",         "DocInfo.Description",     0},
+            {"Keywords",         "DocInfo.KeyWords",        0},
+            {"LastPrinted",      "DocInfo.PrintDateTime",   0},
+            {"LastSavedBy",      "DocInfo.ChangeAuthor",    0},
+            {"LastSavedTime",    "DocInfo.ChangeDateTime",  0},
+            {"Paragraphs",       "ParagraphCount",          SET_ARABIC},
+            {"RevisionNumber",   "DocInfo.Revision",        0},
+            {"Subject",          "DocInfo.Subject",         0},
+            {"Template",         "TemplateName",            0},
+            {"Title",            "DocInfo.Title",           0},
+            {"TotalEditingTime", "DocInfo.EditTime",        9},
+            {"Words",            "WordCount",               SET_ARABIC}
+
+            //other available DocProperties:
+            //Bytes, Category, CharactersWithSpaces, Company
+            //HyperlinkBase,
+            //Lines, Manager, NameofApplication, ODMADocId, Pages,
+            //Security,
+        };
+        //search for a field mapping
+        ::rtl::OUString sFieldServiceName;
+        sal_uInt16 nMap = 0;
+        for( ; nMap < sizeof(aDocProperties) / sizeof(DocPropertyMap);
+            ++nMap )
+        {
+            if(sParam.equalsAscii(aDocProperties[nMap].pDocPropertyName))
+            {
+                sFieldServiceName =
+                ::rtl::OUString::createFromAscii
+                (aDocProperties[nMap].pServiceName);
+                break;
+            }
+        }
+        ::rtl::OUString sServiceName(RTL_CONSTASCII_USTRINGPARAM
+            ("com.sun.star.text.TextField."));
+        bool bIsCustomField = false;
+        if(!sFieldServiceName.getLength())
+        {
+            //create a custom property field
+            sServiceName +=
+                ::rtl::OUString::createFromAscii("DocInfo.Custom");
+            bIsCustomField = true;
+        }
+        else
+        {
+            sServiceName += sFieldServiceName;
+        }
+        xFieldInterface = m_xTextFactory->createInstance(sServiceName);
+        xFieldProperties =
+            uno::Reference< beans::XPropertySet >( xFieldInterface,
+                uno::UNO_QUERY_THROW);
+        if( bIsCustomField )
+            xFieldProperties->setPropertyValue(
+                rPropNameSupplier.GetName(PROP_NAME), uno::makeAny( sParam ));
+        else
+        {
+            if(0 != (aDocProperties[nMap].nFlags & SET_ARABIC))
+                xFieldProperties->setPropertyValue(
+                    rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
+                    uno::makeAny( style::NumberingType::ARABIC ));
+            else if(0 != (aDocProperties[nMap].nFlags & SET_FULL_NAME))
+                xFieldProperties->setPropertyValue(
+                    rPropNameSupplier.GetName(PROP_FULL_NAME),
+                        uno::makeAny( true ));
+        }
+    }
+
+#undef SET_ARABIC
+#undef SET_FULL_NAME
+}
+
+void DomainMapper_Impl::handleToc
+    (FieldContextPtr pContext,
+    PropertyNameSupplier& rPropNameSupplier,
+    uno::Reference< uno::XInterface > & xFieldInterface,
+    uno::Reference< beans::XPropertySet > xFieldProperties,
+    const ::rtl::OUString & sTOCServiceName)
+{
+    ::rtl::OUString sValue;
+    bool bTableOfFigures = false;
+    bool bHyperlinks = false;
+    bool bFromOutline = false;
+    bool bFromEntries = false;
+    sal_Int16 nMaxLevel = 10;
+    ::rtl::OUString sTemplate;
+    ::rtl::OUString sChapterNoSeparator;
+//                  \a Builds a table of figures but does not include the captions's label and number
+    if( lcl_FindInCommand( pContext->GetCommand(), 'a', sValue ))
+    { //make it a table of figures
+        bTableOfFigures = true;
+    }
+//                  \b Uses a bookmark to specify area of document from which to build table of contents
+//                    if( lcl_FindInCommand( pContext->GetCommand(), 'b', sValue ))
+//                    { //todo: sValue contains the bookmark name - unsupported feature
+//                    }
+    if( lcl_FindInCommand( pContext->GetCommand(), 'c', sValue ))
+//                  \c Builds a table of figures of the given label
+    {
+                        //todo: sValue contains the label's name
+        bTableOfFigures = true;
+    }
+//                  \d Defines the separator between sequence and page numbers
+    if( lcl_FindInCommand( pContext->GetCommand(), 'd', sValue ))
+    {
+                        //todo: insert the chapter number into each level and insert the separator additionally
+        sChapterNoSeparator = sValue;
+    }
+//                  \f Builds a table of contents using TC entries instead of outline levels
+    if( lcl_FindInCommand( pContext->GetCommand(), 'f', sValue ))
+    {
+                        //todo: sValue can contain a TOC entry identifier - use unclear
+        bFromEntries = true;
+    }
+//                  \h Hyperlinks the entries and page numbers within the table of contents
+    if( lcl_FindInCommand( pContext->GetCommand(), 'h', sValue ))
+    {
+                        //todo: make all entries to hyperlinks
+        bHyperlinks = true;
+    }
+//                  \l Defines the TC entries field level used to build a table of contents
+//                    if( lcl_FindInCommand( pContext->GetCommand(), 'l', sValue ))
+//                    {
+                            //todo: entries can only be included completely
+//                    }
+//                  \n Builds a table of contents or a range of entries, sucah as “1-9”, in a table of contents without page numbers
+//                    if( lcl_FindInCommand( pContext->GetCommand(), 'n', sValue ))
+//                    {
+                        //todo: what does the description mean?
+//                    }
+//                  \o  Builds a table of contents by using outline levels instead of TC entries
+    if( lcl_FindInCommand( pContext->GetCommand(), 'o', sValue ))
+    {
+        bFromOutline = true;
+        UniString sParam( sValue );
+        xub_StrLen nIndex = 0;
+        sParam.GetToken( 0, '-', nIndex );
+        nMaxLevel = sal_Int16( sParam.Copy( nIndex ).ToInt32( ) );
+    }
+//                  \p Defines the separator between the table entry and its page number
+    if( lcl_FindInCommand( pContext->GetCommand(), 'p', sValue ))
+        {  }
+//                  \s  Builds a table of contents by using a sequence type
+    if( lcl_FindInCommand( pContext->GetCommand(), 's', sValue ))
+        {  }
+//                  \t  Builds a table of contents by using style names other than the standard outline styles
+    if( lcl_FindInCommand( pContext->GetCommand(), 't', sValue ))
+    {
+        sal_Int32 nPos = 0;
+        ::rtl::OUString sToken = sValue.getToken( 1, '"', nPos);
+        sTemplate = sToken.getLength() ? sToken : sValue;
+    }
+//                  \u  Builds a table of contents by using the applied paragraph outline level
+    if( lcl_FindInCommand( pContext->GetCommand(), 'u', sValue ))
+    {
+        bFromOutline = true;
+                        //todo: what doesn 'the applied paragraph outline level' refer to?
+    }
+//                  \w Preserve tab characters within table entries
+//                    if( lcl_FindInCommand( pContext->GetCommand(), 'w', sValue ))
+//                    {
+                        //todo: not supported
+//                    }
+//                  \x Preserve newline characters within table entries
+//                    if( lcl_FindInCommand( pContext->GetCommand(), 'x', sValue ))
+//                    {
+                        //todo: unsupported
+//                    }
+//                  \z Hides page numbers within the table of contens when shown in Web Layout View
+//                    if( lcl_FindInCommand( pContext->GetCommand(), 'z', sValue ))
+//                    { //todo: unsupported feature  }
+
+                    //if there's no option then it should be created from outline
+    if( !bFromOutline && !bFromEntries && !sTemplate.getLength()  )
+        bFromOutline = true;
+
+    uno::Reference< beans::XPropertySet > xTOC(
+        m_xTextFactory->createInstance
+        ( bTableOfFigures ?
+              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
+                ("com.sun.star.text.IllustrationsIndex"))
+            : sTOCServiceName),
+         uno::UNO_QUERY_THROW);
+    xTOC->setPropertyValue(rPropNameSupplier.GetName( PROP_TITLE ), uno::makeAny(::rtl::OUString()));
+    if( !bTableOfFigures )
+    {
+        xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_LEVEL ), uno::makeAny( nMaxLevel ) );
+        xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_CREATE_FROM_OUTLINE ), uno::makeAny( bFromOutline ));
+        xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_CREATE_FROM_MARKS ), uno::makeAny( bFromEntries ));
+        if( sTemplate.getLength() )
+        {
+                            //the string contains comma separated the names and related levels
+                            //like: "Heading 1,1,Heading 2,2"
+            TOCStyleMap aMap;
+            sal_Int32 nLevel;
+            sal_Int32 nPosition = 0;
+            while( nPosition >= 0)
+            {
+                ::rtl::OUString sStyleName = sTemplate.getToken( 0, ',', nPosition );
+                                //empty tokens should be skipped
+                while( !sStyleName.getLength() && nPosition > 0 )
+                    sStyleName = sTemplate.getToken( 0, ',', nPosition );
+                nLevel = sTemplate.getToken( 0, ',', nPosition ).toInt32();
+                if( !nLevel )
+                    nLevel = 1;
+                if( sStyleName.getLength() )
+                    aMap.insert( TOCStyleMap::value_type(nLevel, sStyleName) );
+            }
+            uno::Reference< container::XIndexReplace> xParaStyles;
+            xTOC->getPropertyValue(rPropNameSupplier.GetName(PROP_LEVEL_PARAGRAPH_STYLES)) >>= xParaStyles;
+            for( nLevel = 1; nLevel < 10; ++nLevel)
+            {
+                sal_Int32 nLevelCount = aMap.count( nLevel );
+                if( nLevelCount  )
+                {
+                    TOCStyleMap::iterator aTOCStyleIter = aMap.find( nLevel );
+
+                    uno::Sequence< rtl::OUString> aStyles( nLevelCount );
+                    for ( sal_Int32 nStyle = 0; nStyle < nLevelCount; ++nStyle, ++aTOCStyleIter )
+                    {
+                        aStyles[nStyle] = aTOCStyleIter->second;
+                    }
+                    xParaStyles->replaceByIndex(nLevel - 1, uno::makeAny(aStyles));
+                }
+            }
+            xTOC->setPropertyValue(rPropNameSupplier.GetName(PROP_CREATE_FROM_LEVEL_PARAGRAPH_STYLES), uno::makeAny( true ));
+
+        }
+        if(bHyperlinks  || sChapterNoSeparator.getLength())
+        {
+            uno::Reference< container::XIndexReplace> xLevelFormats;
+            xTOC->getPropertyValue(rPropNameSupplier.GetName(PROP_LEVEL_FORMAT)) >>= xLevelFormats;
+            sal_Int32 nLevelCount = xLevelFormats->getCount();
+                            //start with level 1, 0 is the header level
+            for( sal_Int32 nLevel = 1; nLevel < nLevelCount; ++nLevel)
+            {
+                uno::Sequence< beans::PropertyValues > aLevel;
+                xLevelFormats->getByIndex( nLevel ) >>= aLevel;
+                                //create a copy of the level and add two new entries - hyperlink start and end
+                bool bChapterNoSeparator  = sChapterNoSeparator.getLength() > 0;
+                sal_Int32 nAdd = (bHyperlinks && bChapterNoSeparator) ? 4 : 2;
+                uno::Sequence< beans::PropertyValues > aNewLevel( aLevel.getLength() + nAdd);
+                beans::PropertyValues* pNewLevel = aNewLevel.getArray();
+                if( bHyperlinks )
+                {
+                    beans::PropertyValues aHyperlink(1);
+                    aHyperlink[0].Name = rPropNameSupplier.GetName( PROP_TOKEN_TYPE );
+                    aHyperlink[0].Value <<= rPropNameSupplier.GetName( PROP_TOKEN_HYPERLINK_START );
+                    pNewLevel[0] = aHyperlink;
+                    aHyperlink[0].Value <<= rPropNameSupplier.GetName( PROP_TOKEN_HYPERLINK_END );
+                    pNewLevel[aNewLevel.getLength() -1] = aHyperlink;
+                }
+                if( bChapterNoSeparator )
+                {
+                    beans::PropertyValues aChapterNo(2);
+                    aChapterNo[0].Name = rPropNameSupplier.GetName( PROP_TOKEN_TYPE );
+                    aChapterNo[0].Value <<= rPropNameSupplier.GetName( PROP_TOKEN_CHAPTER_INFO );
+                    aChapterNo[1].Name = rPropNameSupplier.GetName( PROP_CHAPTER_FORMAT );
+                                    //todo: is ChapterFormat::Number correct?
+                    aChapterNo[1].Value <<= (sal_Int16)text::ChapterFormat::NUMBER;
+                    pNewLevel[aNewLevel.getLength() - (bHyperlinks ? 4 : 2) ] = aChapterNo;
+
+                    beans::PropertyValues aChapterSeparator(2);
+                    aChapterSeparator[0].Name = rPropNameSupplier.GetName( PROP_TOKEN_TYPE );
+                    aChapterSeparator[0].Value <<= rPropNameSupplier.GetName( PROP_TOKEN_TEXT );
+                    aChapterSeparator[1].Name = rPropNameSupplier.GetName( PROP_TEXT );
+                    aChapterSeparator[1].Value <<= sChapterNoSeparator;
+                    pNewLevel[aNewLevel.getLength() - (bHyperlinks ? 3 : 1)] = aChapterSeparator;
+                }
+                                //copy the 'old' entries except the last (page no)
+                for( sal_Int32 nToken = 0; nToken < aLevel.getLength() - 1; ++nToken)
+                {
+                    pNewLevel[nToken + 1] = aLevel[nToken];
+                }
+                                //copy page no entry (last or last but one depending on bHyperlinks
+                sal_Int32 nPageNo = aNewLevel.getLength() - (bHyperlinks ? 2 : 3);
+                pNewLevel[nPageNo] = aLevel[aLevel.getLength() - 1];
+
+                xLevelFormats->replaceByIndex( nLevel, uno::makeAny( aNewLevel ) );
+            }
+        }
+    }
+    pContext->SetTOC( xTOC );
+}
+
+
 /*-- 29.01.2007 11:33:16---------------------------------------------------
 //the field command has to be closed (0x14 appeared)
   -----------------------------------------------------------------------*/
@@ -2664,83 +3141,9 @@ void DomainMapper_Impl::CloseFieldCommand()
     OSL_ENSURE( pContext.get(), "no field context available");
     if( pContext.get() )
     {
-        static FieldConversionMap_t aFieldConversionMap;
-        static bool bFilled = false;
         m_bSetUserFieldContent = false;
-        if(!bFilled)
-        {
-            static const FieldConversion aFields[] =
-            {
-    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ADDRESSBLOCK")),  "",                         "", FIELD_ADDRESSBLOCK  },
-    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ADVANCE")),       "",                         "", FIELD_ADVANCE       },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ASK")),           "SetExpression",             "SetExpression", FIELD_ASK      },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AUTONUM")),       "SetExpression",            "SetExpression", FIELD_AUTONUM   },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AUTONUMLGL")),     "SetExpression",            "SetExpression", FIELD_AUTONUMLGL },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AUTONUMOUT")),     "SetExpression",            "SetExpression", FIELD_AUTONUMOUT },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AUTHOR")),        "Author",                   "", FIELD_AUTHOR       },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATE")),          "DateTime",                 "", FIELD_DATE         },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("COMMENTS")),      "DocInfo.Description",      "", FIELD_COMMENTS     },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CREATEDATE")),    "DocInfo.CreateDateTime",   "", FIELD_CREATEDATE   },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DOCPROPERTY")),   "",                         "", FIELD_DOCPROPERTY },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DOCVARIABLE")),   "User",                     "", FIELD_DOCVARIABLE  },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EDITTIME")),      "DocInfo.EditTime",         "", FIELD_EDITTIME     },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FILLIN")),        "Input",                    "", FIELD_FILLIN       },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FILENAME")),      "FileName",                 "", FIELD_FILENAME     },
-    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FILESIZE")),      "",                         "", FIELD_FILESIZE     },
-    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMULA")),     "",                           "", FIELD_FORMULA },
-    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMCHECKBOX")),     "",                           "", FIELD_FORMCHECKBOX},
-    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMDROPDOWN")),     "",                           "", FIELD_FORMDROWDOWN},
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMTEXT")),     "User", "", FIELD_FORMTEXT},
-    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GOTOBUTTON")),    "",                         "", FIELD_GOTOBUTTON   },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HYPERLINK")),     "",                         "", FIELD_HYPERLINK    },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IF")),            "ConditionalText",          "", FIELD_IF           },
-    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INFO")),      "","", FIELD_INFO         },
-    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INCLUDEPICTURE")), "",                        "", FIELD_INCLUDEPICTURE},
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KEYWORDS")),      "DocInfo.KeyWords",         "", FIELD_KEYWORDS     },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LASTSAVEDBY")),   "DocInfo.ChangeAuthor",                         "", FIELD_LASTSAVEDBY  },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MACROBUTTON")),   "Macro",                         "", FIELD_MACROBUTTON  },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MERGEFIELD")),    "Database",                 "Database", FIELD_MERGEFIELD},
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MERGEREC")),      "DatabaseNumberOfSet",      "", FIELD_MERGEREC     },
-    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MERGESEQ")),      "",                         "", FIELD_MERGESEQ     },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NEXT")),          "DatabaseNextSet",          "", FIELD_NEXT         },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NEXTIF")),        "DatabaseNextSet",          "", FIELD_NEXTIF       },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PAGE")),          "PageNumber",               "", FIELD_PAGE         },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REF")),           "GetReference",             "", FIELD_REF          },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REVNUM")),        "DocInfo.Revision",         "", FIELD_REVNUM       },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SAVEDATE")),      "DocInfo.Change",           "", FIELD_SAVEDATE     },
-    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SECTION")),       "",                         "", FIELD_SECTION      },
-    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SECTIONPAGES")),  "",                         "", FIELD_SECTIONPAGES },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SEQ")),           "SetExpression",            "SetExpression", FIELD_SEQ          },
-    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SET")),           "","", FIELD_SET          },
-    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SKIPIF")),"",                                 "", FIELD_SKIPIF       },
-    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("STYLEREF")),"",                               "", FIELD_STYLEREF     },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SUBJECT")),       "DocInfo.Subject",          "", FIELD_SUBJECT      },
-    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYMBOL")),"",                                 "", FIELD_SYMBOL       },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TEMPLATE")),      "TemplateName",             "", FIELD_TEMPLATE},
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIME")),          "DateTime",                 "", FIELD_TIME         },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TITLE")),         "DocInfo.Title",            "", FIELD_TITLE        },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("USERINITIALS")),  "ExtendedUser",              "", FIELD_USERINITIALS},
-    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("USERADDRESS")),   "",                         "", FIELD_USERADDRESS  },
-    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("USERNAME")),      "ExtendedUser",             "", FIELD_USERNAME     }
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TOC")), "com.sun.star.text.ContentIndex", "", FIELD_TOC},
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TC")), "com.sun.star.text.ContentIndexMark", "", FIELD_TC},
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NUMCHARS")), "CharacterCount", "", FIELD_NUMCHARS},
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NUMWORDS")), "WordCount", "", FIELD_NUMWORDS},
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NUMPAGES")), "PageCount", "", FIELD_NUMPAGES},
+        FieldConversionMap_t aFieldConversionMap = lcl_GetFieldConversion();
 
-    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")), "", "", FIELD_},
-
-            };
-            size_t nConversions = sizeof(aFields)/sizeof(FieldConversion);
-            for( size_t nConversion = 0; nConversion < nConversions; ++nConversion)
-            {
-                aFieldConversionMap.insert( FieldConversionMap_t::value_type(
-                        aFields[nConversion].sWordCommand,
-                        aFields[nConversion] ));
-            }
-
-            bFilled = true;
-        }
         try
         {
             uno::Reference< uno::XInterface > xFieldInterface;
@@ -2778,69 +3181,15 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_ADDRESSBLOCK: break;
                     case FIELD_ADVANCE     : break;
                     case FIELD_ASK         :
-                    {
-                        //doesn the command contain a variable name?
-                        ::rtl::OUString sVariable, sHint;
-
-                        sVariable = lcl_ExctractAskVariableAndHint( pContext->GetCommand(), sHint );
-                        if(sVariable.getLength())
-                        {
-                            // determine field master name
-                            uno::Reference< beans::XPropertySet > xMaster = FindOrCreateFieldMaster(
-                                    "com.sun.star.text.FieldMaster.SetExpression", sVariable );
-
-                            // attach the master to the field
-                            uno::Reference< text::XDependentTextField > xDependentField( xFieldInterface, uno::UNO_QUERY_THROW );
-                            xDependentField->attachTextFieldMaster( xMaster );
-
-                            // set input flag at the field
-                            xFieldProperties->setPropertyValue(
-                                    rPropNameSupplier.GetName(PROP_IS_INPUT), uno::makeAny( true ));
-                            // set the prompt
-                            xFieldProperties->setPropertyValue(
-                                    rPropNameSupplier.GetName(PROP_HINT),
-                                    uno::makeAny( sHint ));
-                        }
-                        else
-                        {
-                            //don't insert the field
-                            //todo: maybe import a 'normal' input field here?
-                            xFieldInterface = 0;
-                        }
-                    }
+                        handleFieldAsk(pContext, rPropNameSupplier, xFieldInterface, xFieldProperties);
                     break;
                     case FIELD_AUTONUM    :
                     case FIELD_AUTONUMLGL :
                     case FIELD_AUTONUMOUT :
-                    {
-                        //create a sequence field master "AutoNr"
-                        uno::Reference< beans::XPropertySet > xMaster = FindOrCreateFieldMaster(
-                                    "com.sun.star.text.FieldMaster.SetExpression",
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoNr") ));
-
-                        xMaster->setPropertyValue( rPropNameSupplier.GetName(PROP_SUB_TYPE),
-                                    uno::makeAny(text::SetVariableType::SEQUENCE));
-
-                        //apply the numbering type
-                        xFieldProperties->setPropertyValue(
-                            rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
-                            uno::makeAny( lcl_ParseNumberingType(pContext->GetCommand()) ));
-                            // attach the master to the field
-                        uno::Reference< text::XDependentTextField > xDependentField( xFieldInterface, uno::UNO_QUERY_THROW );
-                        xDependentField->attachTextFieldMaster( xMaster );
-                    }
+                        handleAutoNum(pContext, rPropNameSupplier, xFieldInterface, xFieldProperties);
                     break;
                     case FIELD_AUTHOR       :
-                    {
-                        xFieldProperties->setPropertyValue( rPropNameSupplier.GetName(PROP_FULL_NAME), uno::makeAny( true ));
-                        ::rtl::OUString sParam = lcl_ExtractParameter(pContext->GetCommand(), sizeof(" AUTHOR") );
-                        if(sParam.getLength())
-                        {
-                            xFieldProperties->setPropertyValue(
-                                    rPropNameSupplier.GetName( PROP_IS_FIXED ), uno::makeAny( true ));
-                            //PROP_CURRENT_PRESENTATION is set later anyway
-                        }
-                    }
+                        handleAuthor(pContext, rPropNameSupplier, xFieldInterface, xFieldProperties);
                     break;
                     case FIELD_DATE:
                     {
@@ -2871,86 +3220,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     }
                     break;
                     case FIELD_DOCPROPERTY :
-                    {
-                        //some docproperties should be imported as document statistic fields, some as DocInfo fields
-                        //others should be user fields
-                        ::rtl::OUString sParam = lcl_ExtractParameter(pContext->GetCommand(), sizeof(" DOCPROPERTY") );
-                        if(sParam.getLength())
-                        {
-                            #define SET_ARABIC      0x01
-                            #define SET_FULL_NAME   0x02
-                            struct DocPropertyMap
-                            {
-                                const sal_Char* pDocPropertyName;
-                                const sal_Char* pServiceName;
-                                sal_uInt8       nFlags;
-                            };
-                            static const DocPropertyMap aDocProperties[] =
-                            {
-                                {"Author",           "Author",                  SET_FULL_NAME},
-                                {"CreateTime",       "DocInfo.CreateDateTime",  0},
-                                {"Characters",       "CharacterCount",          SET_ARABIC},
-                                {"Comments",         "DocInfo.Description",     0},
-                                {"Keywords",         "DocInfo.KeyWords",        0},
-                                {"LastPrinted",      "DocInfo.PrintDateTime",   0},
-                                {"LastSavedBy",      "DocInfo.ChangeAuthor",    0},
-                                {"LastSavedTime",    "DocInfo.ChangeDateTime",  0},
-                                {"Paragraphs",       "ParagraphCount",          SET_ARABIC},
-                                {"RevisionNumber",   "DocInfo.Revision",        0},
-                                {"Subject",          "DocInfo.Subject",         0},
-                                {"Template",         "TemplateName",            0},
-                                {"Title",            "DocInfo.Title",           0},
-                                {"TotalEditingTime", "DocInfo.EditTime",        9},
-                                {"Words",            "WordCount",               SET_ARABIC}
-
-                                //other available DocProperties:
-                                //Bytes, Category, CharactersWithSpaces, Company
-                                //HyperlinkBase,
-                                //Lines, Manager, NameofApplication, ODMADocId, Pages,
-                                //Security,
-                            };
-                            //search for a field mapping
-                            ::rtl::OUString sFieldServiceName;
-                            sal_uInt16 nMap = 0;
-                            for( ; nMap < sizeof(aDocProperties) / sizeof(DocPropertyMap); ++nMap )
-                            {
-                                if(sParam.equalsAscii(aDocProperties[nMap].pDocPropertyName))
-                                {
-                                    sFieldServiceName = ::rtl::OUString::createFromAscii(aDocProperties[nMap].pServiceName);
-                                    break;
-                                }
-                            }
-                            ::rtl::OUString sServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField."));
-                            bool bIsCustomField = false;
-                            if(!sFieldServiceName.getLength())
-                            {
-                                //create a custom property field
-                                sServiceName += ::rtl::OUString::createFromAscii("DocInfo.Custom");
-                                bIsCustomField = true;
-                            }
-                            else
-                            {
-                                sServiceName += sFieldServiceName;
-                            }
-                            xFieldInterface = m_xTextFactory->createInstance(sServiceName);
-                            xFieldProperties = uno::Reference< beans::XPropertySet >( xFieldInterface, uno::UNO_QUERY_THROW);
-                            if( bIsCustomField )
-                                xFieldProperties->setPropertyValue(
-                                    rPropNameSupplier.GetName(PROP_NAME), uno::makeAny( sParam ));
-                            else
-                            {
-                                if(0 != (aDocProperties[nMap].nFlags & SET_ARABIC))
-                                    xFieldProperties->setPropertyValue(
-                                        rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
-                                        uno::makeAny( style::NumberingType::ARABIC ));
-                                else if(0 != (aDocProperties[nMap].nFlags & SET_FULL_NAME))
-                                    xFieldProperties->setPropertyValue(
-                                        rPropNameSupplier.GetName(PROP_FULL_NAME), uno::makeAny( true ));
-                            }
-                        }
-                    }
-                    #undef SET_ARABIC
-                    #undef SET_FULL_NAME
+                        handleDocProperty(pContext, rPropNameSupplier, xFieldInterface, xFieldProperties);
                     break;
                     case FIELD_DOCVARIABLE  :
                     {
@@ -2992,10 +3262,6 @@ void DomainMapper_Impl::CloseFieldCommand()
                             FindOrCreateFieldMaster( "com.sun.star.text.FieldMaster.User", sMasterName );
                         uno::Reference< text::XDependentTextField > xDependentField( xFieldInterface, uno::UNO_QUERY_THROW );
                         xDependentField->attachTextFieldMaster( xMaster );
-
-                        xFieldProperties->setPropertyValue
-                            (rPropNameSupplier.GetName(PROP_HINT),
-                            uno::makeAny(pContext->getFFDataHandler()->getTextDefault()));
                     }
                     break;
                     case FIELD_GOTOBUTTON   : break;
@@ -3182,211 +3448,8 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_USERNAME     : //todo: user name is firstname + lastname
                     break;
                     case FIELD_TOC:
-                    {
-                        ::rtl::OUString sValue;
-                        bool bTableOfFigures = false;
-                        bool bHyperlinks = false;
-                        bool bFromOutline = false;
-                        bool bFromEntries = false;
-                        sal_Int16 nMaxLevel = 10;
-                        ::rtl::OUString sTemplate;
-                        ::rtl::OUString sChapterNoSeparator;
-    //                  \a Builds a table of figures but does not include the captions's label and number
-                        if( lcl_FindInCommand( pContext->GetCommand(), 'a', sValue ))
-                        { //make it a table of figures
-                            bTableOfFigures = true;
-                        }
-    //                  \b Uses a bookmark to specify area of document from which to build table of contents
-    //                    if( lcl_FindInCommand( pContext->GetCommand(), 'b', sValue ))
-    //                    { //todo: sValue contains the bookmark name - unsupported feature
-    //                    }
-                        if( lcl_FindInCommand( pContext->GetCommand(), 'c', sValue ))
-    //                  \c Builds a table of figures of the given label
-                        {
-                            //todo: sValue contains the label's name
-                            bTableOfFigures = true;
-                        }
-    //                  \d Defines the separator between sequence and page numbers
-                        if( lcl_FindInCommand( pContext->GetCommand(), 'd', sValue ))
-                        {
-                            //todo: insert the chapter number into each level and insert the separator additionally
-                            sChapterNoSeparator = sValue;
-                        }
-    //                  \f Builds a table of contents using TC entries instead of outline levels
-                        if( lcl_FindInCommand( pContext->GetCommand(), 'f', sValue ))
-                        {
-                            //todo: sValue can contain a TOC entry identifier - use unclear
-                            bFromEntries = true;
-                        }
-    //                  \h Hyperlinks the entries and page numbers within the table of contents
-                        if( lcl_FindInCommand( pContext->GetCommand(), 'h', sValue ))
-                        {
-                            //todo: make all entries to hyperlinks
-                            bHyperlinks = true;
-                        }
-    //                  \l Defines the TC entries field level used to build a table of contents
-    //                    if( lcl_FindInCommand( pContext->GetCommand(), 'l', sValue ))
-    //                    {
-                                //todo: entries can only be included completely
-    //                    }
-    //                  \n Builds a table of contents or a range of entries, sucah as “1-9”, in a table of contents without page numbers
-    //                    if( lcl_FindInCommand( pContext->GetCommand(), 'n', sValue ))
-    //                    {
-                            //todo: what does the description mean?
-    //                    }
-    //                  \o  Builds a table of contents by using outline levels instead of TC entries
-                        if( lcl_FindInCommand( pContext->GetCommand(), 'o', sValue ))
-                        {
-                            bFromOutline = true;
-                            UniString sParam( sValue );
-                            xub_StrLen nIndex = 0;
-                            sParam.GetToken( 0, '-', nIndex );
-                            nMaxLevel = sal_Int16( sParam.Copy( nIndex ).ToInt32( ) );
-                        }
-    //                  \p Defines the separator between the table entry and its page number
-                        if( lcl_FindInCommand( pContext->GetCommand(), 'p', sValue ))
-                        {  }
-    //                  \s  Builds a table of contents by using a sequence type
-                        if( lcl_FindInCommand( pContext->GetCommand(), 's', sValue ))
-                        {  }
-    //                  \t  Builds a table of contents by using style names other than the standard outline styles
-                        if( lcl_FindInCommand( pContext->GetCommand(), 't', sValue ))
-                        {
-                            sal_Int32 nPos = 0;
-                            ::rtl::OUString sToken = sValue.getToken( 1, '"', nPos);
-                            sTemplate = sToken.getLength() ? sToken : sValue;
-                        }
-    //                  \u  Builds a table of contents by using the applied paragraph outline level
-                        if( lcl_FindInCommand( pContext->GetCommand(), 'u', sValue ))
-                        {
-                            bFromOutline = true;
-                            //todo: what doesn 'the applied paragraph outline level' refer to?
-                        }
-    //                  \w Preserve tab characters within table entries
-    //                    if( lcl_FindInCommand( pContext->GetCommand(), 'w', sValue ))
-    //                    {
-                            //todo: not supported
-    //                    }
-    //                  \x Preserve newline characters within table entries
-    //                    if( lcl_FindInCommand( pContext->GetCommand(), 'x', sValue ))
-    //                    {
-                            //todo: unsupported
-    //                    }
-    //                  \z Hides page numbers within the table of contens when shown in Web Layout View
-    //                    if( lcl_FindInCommand( pContext->GetCommand(), 'z', sValue ))
-    //                    { //todo: unsupported feature  }
-
-                        //if there's no option then it should be created from outline
-                        if( !bFromOutline && !bFromEntries && !sTemplate.getLength()  )
-                            bFromOutline = true;
-
-                        uno::Reference< beans::XPropertySet > xTOC(
-                                m_xTextFactory->createInstance(
-                                    bTableOfFigures ?
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.IllustrationsIndex")) :
-                                    ::rtl::OUString::createFromAscii(aIt->second.cFieldServiceName)),
-                                    uno::UNO_QUERY_THROW);
-                        xTOC->setPropertyValue(rPropNameSupplier.GetName( PROP_TITLE ), uno::makeAny(::rtl::OUString()));
-                        if( !bTableOfFigures )
-                        {
-                            xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_LEVEL ), uno::makeAny( nMaxLevel ) );
-                            xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_CREATE_FROM_OUTLINE ), uno::makeAny( bFromOutline ));
-                            xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_CREATE_FROM_MARKS ), uno::makeAny( bFromEntries ));
-                            if( sTemplate.getLength() )
-                            {
-                                //the string contains comma separated the names and related levels
-                                //like: "Heading 1,1,Heading 2,2"
-                                TOCStyleMap aMap;
-                                sal_Int32 nLevel;
-                                sal_Int32 nPosition = 0;
-                                while( nPosition >= 0)
-                                {
-                                    ::rtl::OUString sStyleName = sTemplate.getToken( 0, ',', nPosition );
-                                    //empty tokens should be skipped
-                                    while( !sStyleName.getLength() && nPosition > 0 )
-                                        sStyleName = sTemplate.getToken( 0, ',', nPosition );
-                                    nLevel = sTemplate.getToken( 0, ',', nPosition ).toInt32();
-                                    if( !nLevel )
-                                        nLevel = 1;
-                                    if( sStyleName.getLength() )
-                                        aMap.insert( TOCStyleMap::value_type(nLevel, sStyleName) );
-                                }
-                                uno::Reference< container::XIndexReplace> xParaStyles;
-                                xTOC->getPropertyValue(rPropNameSupplier.GetName(PROP_LEVEL_PARAGRAPH_STYLES)) >>= xParaStyles;
-                                for( nLevel = 1; nLevel < 10; ++nLevel)
-                                {
-                                    sal_Int32 nLevelCount = aMap.count( nLevel );
-                                    if( nLevelCount  )
-                                    {
-                                        TOCStyleMap::iterator aTOCStyleIter = aMap.find( nLevel );
-
-                                        uno::Sequence< rtl::OUString> aStyles( nLevelCount );
-                                        for ( sal_Int32 nStyle = 0; nStyle < nLevelCount; ++nStyle, ++aTOCStyleIter )
-                                        {
-                                            aStyles[nStyle] = aTOCStyleIter->second;
-                                        }
-                                        xParaStyles->replaceByIndex(nLevel - 1, uno::makeAny(aStyles));
-                                    }
-                                }
-                                xTOC->setPropertyValue(rPropNameSupplier.GetName(PROP_CREATE_FROM_LEVEL_PARAGRAPH_STYLES), uno::makeAny( true ));
-
-                            }
-                            if(bHyperlinks  || sChapterNoSeparator.getLength())
-                            {
-                                uno::Reference< container::XIndexReplace> xLevelFormats;
-                                xTOC->getPropertyValue(rPropNameSupplier.GetName(PROP_LEVEL_FORMAT)) >>= xLevelFormats;
-                                sal_Int32 nLevelCount = xLevelFormats->getCount();
-                                //start with level 1, 0 is the header level
-                                for( sal_Int32 nLevel = 1; nLevel < nLevelCount; ++nLevel)
-                                {
-                                    uno::Sequence< beans::PropertyValues > aLevel;
-                                    xLevelFormats->getByIndex( nLevel ) >>= aLevel;
-                                    //create a copy of the level and add two new entries - hyperlink start and end
-                                    bool bChapterNoSeparator  = sChapterNoSeparator.getLength() > 0;
-                                    sal_Int32 nAdd = (bHyperlinks && bChapterNoSeparator) ? 4 : 2;
-                                    uno::Sequence< beans::PropertyValues > aNewLevel( aLevel.getLength() + nAdd);
-                                    beans::PropertyValues* pNewLevel = aNewLevel.getArray();
-                                    if( bHyperlinks )
-                                    {
-                                        beans::PropertyValues aHyperlink(1);
-                                        aHyperlink[0].Name = rPropNameSupplier.GetName( PROP_TOKEN_TYPE );
-                                        aHyperlink[0].Value <<= rPropNameSupplier.GetName( PROP_TOKEN_HYPERLINK_START );
-                                        pNewLevel[0] = aHyperlink;
-                                        aHyperlink[0].Value <<= rPropNameSupplier.GetName( PROP_TOKEN_HYPERLINK_END );
-                                        pNewLevel[aNewLevel.getLength() -1] = aHyperlink;
-                                    }
-                                    if( bChapterNoSeparator )
-                                    {
-                                        beans::PropertyValues aChapterNo(2);
-                                        aChapterNo[0].Name = rPropNameSupplier.GetName( PROP_TOKEN_TYPE );
-                                        aChapterNo[0].Value <<= rPropNameSupplier.GetName( PROP_TOKEN_CHAPTER_INFO );
-                                        aChapterNo[1].Name = rPropNameSupplier.GetName( PROP_CHAPTER_FORMAT );
-                                        //todo: is ChapterFormat::Number correct?
-                                        aChapterNo[1].Value <<= (sal_Int16)text::ChapterFormat::NUMBER;
-                                        pNewLevel[aNewLevel.getLength() - (bHyperlinks ? 4 : 2) ] = aChapterNo;
-
-                                        beans::PropertyValues aChapterSeparator(2);
-                                        aChapterSeparator[0].Name = rPropNameSupplier.GetName( PROP_TOKEN_TYPE );
-                                        aChapterSeparator[0].Value <<= rPropNameSupplier.GetName( PROP_TOKEN_TEXT );
-                                        aChapterSeparator[1].Name = rPropNameSupplier.GetName( PROP_TEXT );
-                                        aChapterSeparator[1].Value <<= sChapterNoSeparator;
-                                        pNewLevel[aNewLevel.getLength() - (bHyperlinks ? 3 : 1)] = aChapterSeparator;
-                                    }
-                                    //copy the 'old' entries except the last (page no)
-                                    for( sal_Int32 nToken = 0; nToken < aLevel.getLength() - 1; ++nToken)
-                                    {
-                                        pNewLevel[nToken + 1] = aLevel[nToken];
-                                    }
-                                    //copy page no entry (last or last but one depending on bHyperlinks
-                                    sal_Int32 nPageNo = aNewLevel.getLength() - (bHyperlinks ? 2 : 3);
-                                    pNewLevel[nPageNo] = aLevel[aLevel.getLength() - 1];
-
-                                    xLevelFormats->replaceByIndex( nLevel, uno::makeAny( aNewLevel ) );
-                                }
-                            }
-                        }
-                        pContext->SetTOC( xTOC );
-                    }
+                        handleToc(pContext, rPropNameSupplier, xFieldInterface, xFieldProperties,
+                                  ::rtl::OUString::createFromAscii(aIt->second.cFieldServiceName));
                     break;
                     case FIELD_TC :
                     {

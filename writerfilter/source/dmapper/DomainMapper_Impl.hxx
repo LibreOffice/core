@@ -489,6 +489,32 @@ public:
     bool IsOpenField() const;
     //collect the pieces of the command
     void AppendFieldCommand(::rtl::OUString& rPartOfCommand);
+    void handleFieldAsk
+        (FieldContextPtr pContext,
+        PropertyNameSupplier& rPropNameSupplier,
+        uno::Reference< uno::XInterface > & xFieldInterface,
+        uno::Reference< beans::XPropertySet > xFieldProperties);
+    void handleAutoNum
+        (FieldContextPtr pContext,
+        PropertyNameSupplier& rPropNameSupplier,
+        uno::Reference< uno::XInterface > & xFieldInterface,
+        uno::Reference< beans::XPropertySet > xFieldProperties);
+    void handleAuthor
+        (FieldContextPtr pContext,
+        PropertyNameSupplier& rPropNameSupplier,
+        uno::Reference< uno::XInterface > & xFieldInterface,
+        uno::Reference< beans::XPropertySet > xFieldProperties);
+    void handleDocProperty
+        (FieldContextPtr pContext,
+        PropertyNameSupplier& rPropNameSupplier,
+        uno::Reference< uno::XInterface > & xFieldInterface,
+        uno::Reference< beans::XPropertySet > xFieldProperties);
+    void handleToc
+        (FieldContextPtr pContext,
+        PropertyNameSupplier& rPropNameSupplier,
+        uno::Reference< uno::XInterface > & xFieldInterface,
+        uno::Reference< beans::XPropertySet > xFieldProperties,
+        const ::rtl::OUString & sTOCServiceName);
     //the field command has to be closed (0x14 appeared)
     void CloseFieldCommand();
     //the _current_ fields require a string type result while TOCs accept richt results
