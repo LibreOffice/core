@@ -162,6 +162,12 @@ enum FieldId
      todo find alternative field
      */
     ,FIELD_FORMULA
+    /* FORMCHECKBOX */
+    ,FIELD_FORMCHECKBOX
+    /* FORMDROPDOWN */
+    ,FIELD_FORMDROPDOWN
+    /* FORMTEXT */
+    ,FIELD_FORMTEXT
     /* GOTOBUTTON text \* MERGEFORMAT ->
         not imported in old ww8 filter
         todo find alternative field
@@ -2681,7 +2687,10 @@ void DomainMapper_Impl::CloseFieldCommand()
                 {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FILLIN")),        "Input",                    "", FIELD_FILLIN       },
                 {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FILENAME")),      "FileName",                 "", FIELD_FILENAME     },
     //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FILESIZE")),      "",                         "", FIELD_FILESIZE     },
-    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMULA")),     "",                           "", FIELD_FORMULA
+    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMULA")),     "",                           "", FIELD_FORMULA },
+    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMCHECKBOX")),     "",                           "", FIELD_FORMCHECKBOX},
+    //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMDROPDOWN")),     "",                           "", FIELD_FORMDROWDOWN},
+                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMTEXT")),     "User", "", FIELD_FORMTEXT},
     //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GOTOBUTTON")),    "",                         "", FIELD_GOTOBUTTON   },
                 {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HYPERLINK")),     "",                         "", FIELD_HYPERLINK    },
                 {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IF")),            "ConditionalText",          "", FIELD_IF           },
@@ -2753,6 +2762,13 @@ void DomainMapper_Impl::CloseFieldCommand()
                     //add the service prefix
                     OUString sServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField."));
                     sServiceName += ::rtl::OUString::createFromAscii(aIt->second.cFieldServiceName );
+
+#ifdef DEBUG_DOMAINMAPPER
+                    dmapper_logger->startElement("fieldService");
+                    dmapper_logger->chars(sServiceName);
+                    dmapper_logger->endElement("fieldService");
+#endif
+
                     xFieldInterface = m_xTextFactory->createInstance(sServiceName);
                     xFieldProperties = uno::Reference< beans::XPropertySet >( xFieldInterface, uno::UNO_QUERY_THROW);
                 }
@@ -2967,6 +2983,21 @@ void DomainMapper_Impl::CloseFieldCommand()
                     break;
                     case FIELD_FILESIZE     : break;
                     case FIELD_FORMULA : break;
+                    case FIELD_FORMCHECKBOX : break;
+                    case FIELD_FORMDROPDOWN : break;
+                    case FIELD_FORMTEXT :
+                    {
+                        ::rtl::OUString sMasterName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMTEXT")));
+                        uno::Reference< beans::XPropertySet > xMaster =
+                            FindOrCreateFieldMaster( "com.sun.star.text.FieldMaster.User", sMasterName );
+                        uno::Reference< text::XDependentTextField > xDependentField( xFieldInterface, uno::UNO_QUERY_THROW );
+                        xDependentField->attachTextFieldMaster( xMaster );
+
+                        xFieldProperties->setPropertyValue
+                            (rPropNameSupplier.GetName(PROP_HINT),
+                            uno::makeAny(pContext->getFFDataHandler()->getTextDefault()));
+                    }
+                    break;
                     case FIELD_GOTOBUTTON   : break;
                     case FIELD_HYPERLINK:
                     {
