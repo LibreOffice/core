@@ -31,11 +31,7 @@
 
 File gid_Brand_File_Bin_Crashreport
     BIN_FILE_BODY;
-  #ifdef UNX
-    Name = "crash_report.bin";
-  #else
-    Name = "crashrep.exe";
-  #endif
+    Name = EXENAME(crashrep);
     Dir = gid_Brand_Dir_Program;
   #ifdef WNT
     FileDescription = "%PRODUCTNAME Crashreporter";
@@ -66,15 +62,3 @@ File gid_Brand_File_Lib_Dbghelp
 End
 
 #endif
-
-#ifdef UNX
- 
-File gid_Brand_File_Bin_Crashreport_Script
-    BIN_FILE_BODY;
-    Name = "crash_report";
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
-End
-
-#endif
-
