@@ -2,12 +2,9 @@
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmltoken.cxx,v $
- * $Revision: 1.131.6.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -155,6 +152,9 @@ namespace xmloff { namespace token {
         // ODF Enhanced namespaces
         TOKEN( "officeooo", XML_NP_OFFICE_EXT ),
         TOKEN( "http://openoffice.org/2009/office", XML_N_OFFICE_EXT ),
+
+        TOKEN( "tableooo", XML_NP_TABLE_EXT ),
+        TOKEN( "http://openoffice.org/2009/table", XML_N_TABLE_EXT ),
 
         // units
         TOKEN( "mm",                              XML_UNIT_MM ),
@@ -528,6 +528,7 @@ namespace xmloff { namespace token {
         TOKEN( "data-label-symbol",               XML_DATA_LABEL_SYMBOL ),
         TOKEN( "data-label-text",                 XML_DATA_LABEL_TEXT ),
         TOKEN( "data-pilot-field",                XML_DATA_PILOT_FIELD ),
+        TOKEN( "data-pilot-grand-total",          XML_DATA_PILOT_GRAND_TOTAL ),
         TOKEN( "data-pilot-level",                XML_DATA_PILOT_LEVEL ),
         TOKEN( "data-pilot-member",               XML_DATA_PILOT_MEMBER ),
         TOKEN( "data-pilot-members",              XML_DATA_PILOT_MEMBERS ),

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdview.cxx,v $
- * $Revision: 1.29.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include "svdstr.hrc"   // Namen aus der Resource
 #include "svdglob.hxx"  // StringCache
@@ -49,8 +46,8 @@
 
 #include "svx/svdoutl.hxx"
 #include "svx/svdview.hxx"
-#include "svx/editview.hxx" // fuer GetField
-#include "svx/flditem.hxx"  // fuer URLField
+#include "editeng/editview.hxx" // fuer GetField
+#include "editeng/flditem.hxx"  // fuer URLField
 #include "svx/obj3d.hxx"
 #include "svx/svddrgmt.hxx"
 #include "svx/svdoutl.hxx"
@@ -977,7 +974,7 @@ BOOL SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
     }
     return bRet;
 }
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 
 Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* pOut, USHORT nModifier, BOOL bLeftDown) const
 {

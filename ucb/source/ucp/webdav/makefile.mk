@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.43 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -87,25 +83,26 @@ CFLAGS+= $(OPENSSL_CFLAGS)
 # --- General -----------------------------------------------------
 
 SLOFILES=\
-    $(SLO)$/webdavservices.obj    	\
-    $(SLO)$/webdavprovider.obj    	\
-    $(SLO)$/webdavcontent.obj     	\
-    $(SLO)$/webdavcontentcaps.obj	\
-    $(SLO)$/webdavresultset.obj     \
-    $(SLO)$/webdavdatasupplier.obj	\
-    $(SLO)$/ContentProperties.obj	\
-    $(SLO)$/DAVProperties.obj	\
-    $(SLO)$/DAVSessionFactory.obj	\
-    $(SLO)$/DAVResourceAccess.obj	\
-    $(SLO)$/NeonUri.obj		\
-    $(SLO)$/NeonInputStream.obj	\
-    $(SLO)$/NeonPropFindRequest.obj	\
-    $(SLO)$/NeonHeadRequest.obj     \
-    $(SLO)$/NeonSession.obj 	\
-    $(SLO)$/DateTimeHelper.obj	\
-    $(SLO)$/LinkSequence.obj	\
-    $(SLO)$/LockSequence.obj	\
-    $(SLO)$/LockEntrySequence.obj	\
+    $(SLO)$/webdavservices.obj \
+    $(SLO)$/webdavprovider.obj \
+    $(SLO)$/webdavcontent.obj \
+    $(SLO)$/webdavcontentcaps.obj \
+    $(SLO)$/webdavresultset.obj \
+    $(SLO)$/webdavdatasupplier.obj \
+    $(SLO)$/ContentProperties.obj \
+    $(SLO)$/DAVProperties.obj \
+    $(SLO)$/DAVSessionFactory.obj \
+    $(SLO)$/DAVResourceAccess.obj \
+    $(SLO)$/NeonUri.obj \
+    $(SLO)$/NeonInputStream.obj \
+    $(SLO)$/NeonPropFindRequest.obj \
+    $(SLO)$/NeonHeadRequest.obj \
+    $(SLO)$/NeonSession.obj \
+    $(SLO)$/NeonLockStore.obj \
+    $(SLO)$/DateTimeHelper.obj \
+    $(SLO)$/LinkSequence.obj \
+    $(SLO)$/LockSequence.obj \
+    $(SLO)$/LockEntrySequence.obj \
     $(SLO)$/UCBDeadPropertyValue.obj
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
@@ -119,16 +116,14 @@ SHL1IMPLIB=i$(TARGET)
 SHL1VERSIONMAP=exports.map
 
 SHL1STDLIBS=\
-        $(CPPUHELPERLIB)        \
-        $(CPPULIB)              \
-        $(SALLIB)               \
-        $(SALHELPERLIB)         \
-        $(UCBHELPERLIB)         \
-        $(COMPHELPERLIB)		\
-        $(NEON3RDLIB)           \
+        $(CPPUHELPERLIB) \
+        $(CPPULIB)       \
+        $(SALLIB)        \
+        $(SALHELPERLIB)  \
+        $(UCBHELPERLIB)  \
+        $(COMPHELPERLIB) \
+        $(NEON3RDLIB)    \
         $(LIBXML2LIB)
-
-
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= $(WSOCK32LIB)
@@ -150,8 +145,6 @@ SHL1STDLIBS+= $(OPENSSLLIBST)
 .ENDIF
 .ENDIF # WNT
 
-
-
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=$(LIB1TARGET)
 
@@ -165,4 +158,3 @@ DEF1NAME=$(SHL1TARGET)
 # --- Targets ----------------------------------------------------------
 
 .INCLUDE: target.mk
-

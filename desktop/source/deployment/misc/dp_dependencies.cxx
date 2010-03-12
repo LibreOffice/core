@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -125,18 +125,6 @@ check(::dp_misc::DescriptionInfoset const & infoset) {
     }
     unsatisfied.realloc(unsat);
     return unsatisfied;
-}
-
-::rtl::OUString
-name(css::uno::Reference< css::xml::dom::XElement > const & dependency) {
-    ::rtl::OUString n(
-        dependency->getAttributeNS(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(xmlNamespace)),
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name"))));
-    return n.getLength() == 0
-        ? ::rtl::OUString(
-            ::String(::dp_misc::getResId(RID_DEPLYOMENT_DEPENDENCIES_UNKNOWN)))
-        : n;
 }
 
 ::rtl::OUString getErrorText( css::uno::Reference< css::xml::dom::XElement > const & dependency )

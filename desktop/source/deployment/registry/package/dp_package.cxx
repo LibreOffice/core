@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dp_package.cxx,v $
- * $Revision: 1.34.16.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -446,12 +443,19 @@ BackendImpl::PackageImpl::isRegistered_(
         AbortChannel::Chain chain( abortChannel, xSubAbortChannel );
         beans::Optional< beans::Ambiguous<sal_Bool> > option(
             xPackage->isRegistered( xSubAbortChannel, xCmdEnv ) );
+
+        //present = true if at least one bundle item has this value.
+        //reg = true if all bundle items have an option value (option.IsPresent == 1)
+        //and all have value of true (option.Value.Value == true)
+        //If not, then the bundle has the status of not registered and ambiguous.
         if (option.IsPresent)
         {
             beans::Ambiguous<sal_Bool> const & status = option.Value;
             if (present)
             {
+                //we never come here in the first iteration
                 if (reg != (status.Value != sal_False)) {
+
                     ambig = true;
                     reg = false;
                     break;
@@ -459,6 +463,7 @@ BackendImpl::PackageImpl::isRegistered_(
             }
             else
             {
+                //we always come here in the first iteration
                 reg = status.Value;
                 present = true;
             }

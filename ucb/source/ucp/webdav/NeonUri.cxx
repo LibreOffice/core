@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: NeonUri.cxx,v $
- * $Revision: 1.25.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,11 +38,6 @@
 #include "../inc/urihelper.hxx"
 
 using namespace webdav_ucp;
-
-    char *scheme;
-    char *host, *userinfo;
-    unsigned int port;
-    char *path, *query, *fragment;
 
 # if defined __SUNPRO_CC
 // FIXME: not sure whether initializing a ne_uri statically is supposed to work
