@@ -8400,7 +8400,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Converts a value into text." ;
+            Text [ en-US ] = "Returns a value if it is text, otherwise an empty string." ;
         };
         ExtraData =
         {
@@ -8416,7 +8416,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            Text [ en-US ] = "The value to be converted." ;
+            Text [ en-US ] = "The value to be checked and returned if it is text." ;
         };
     };
      // -=*# Resource for function ERSETZEN #*=-
