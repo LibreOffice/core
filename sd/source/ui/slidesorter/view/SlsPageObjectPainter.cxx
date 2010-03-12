@@ -289,18 +289,20 @@ void PageObjectPainter::PaintPreview (
     if (rpDescriptor->GetVisualState().GetCurrentVisualState()
         == model::VisualState::VS_Excluded)
     {
-        const Region aSavedClip (rDevice.GetClipRegion());
-
-        rDevice.IntersectClipRegion(aBox);
-
         const BitmapEx aOverlay (mpTheme->GetIcon(Theme::HideSlideOverlay));
         const sal_Int32 nIconWidth (aOverlay.GetSizePixel().Width());
         const sal_Int32 nIconHeight (aOverlay.GetSizePixel().Height());
-        for (sal_Int32 nX=aBox.Left(); nX<aBox.Right(); nX+=nIconWidth)
-            for (sal_Int32 nY=aBox.Top(); nY<aBox.Bottom(); nY+=nIconHeight)
-                rDevice.DrawBitmapEx(Point(nX,nY), aOverlay);
+        if (nIconWidth>0 && nIconHeight>0)
+        {
+            const Region aSavedClip (rDevice.GetClipRegion());
+            rDevice.IntersectClipRegion(aBox);
 
-        rDevice.SetClipRegion(aSavedClip);
+            for (sal_Int32 nX=aBox.Left(); nX<aBox.Right(); nX+=nIconWidth)
+                for (sal_Int32 nY=aBox.Top(); nY<aBox.Bottom(); nY+=nIconHeight)
+                    rDevice.DrawBitmapEx(Point(nX,nY), aOverlay);
+
+            rDevice.SetClipRegion(aSavedClip);
+        }
     }
 }
 
