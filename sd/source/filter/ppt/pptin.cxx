@@ -255,6 +255,8 @@ sal_Bool ImplSdPPTImport::Import()
         return FALSE;
 
     pSdrModel->setLock( sal_True );
+    pSdrModel->EnableUndo(false);
+
     SdrOutliner& rOutl = mpDoc->GetDrawOutliner();
     sal_uInt32 nControlWord = rOutl.GetEditEngine().GetControlWord();
     nControlWord |=  EE_CNTRL_ULSPACESUMMATION;
@@ -1413,6 +1415,7 @@ sal_Bool ImplSdPPTImport::Import()
     xDocProps->setTemplateName(::rtl::OUString());
 
     pSdrModel->setLock( sal_False );
+    pSdrModel->EnableUndo(true);
     return bOk;
 }
 
