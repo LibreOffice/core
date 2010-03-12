@@ -453,4 +453,40 @@ PageSelector::UpdateLock::~UpdateLock (void)
 
 
 
+//===== PageSelector::BroadcastLock ==============================================
+
+PageSelector::BroadcastLock::BroadcastLock (SlideSorter& rSlideSorter)
+    : mrSelector(rSlideSorter.GetController().GetPageSelector()),
+      mbIsMakeSelectionVisiblePending(false)
+{
+    mrSelector.DisableBroadcasting();
+}
+
+
+
+
+PageSelector::BroadcastLock::BroadcastLock (PageSelector& rSelector)
+    : mrSelector(rSelector)
+{
+    mrSelector.DisableBroadcasting();
+}
+
+
+
+
+PageSelector::BroadcastLock::~BroadcastLock (void)
+{
+    mrSelector.EnableBroadcasting(mbIsMakeSelectionVisiblePending);
+}
+
+
+
+
+void PageSelector::BroadcastLock::RequestMakeSelectionVisible (void)
+{
+    mbIsMakeSelectionVisiblePending = true;
+}
+
+
+
 } } } // end of namespace ::sd::slidesorter::controller

@@ -177,6 +177,13 @@ private:
     */
     void GotoNextPage (int nOffset);
 
+    /** Make the slide with the given index the new current slide.
+        @param nIndex
+            Index of the new current slide.  When the new index is outside
+            the range of valid page numbers it is clipped to that range.
+    */
+    void GotoPage (int nIndex);
+
     void ProcessMouseEvent (sal_uInt32 nEventType, const MouseEvent& rEvent);
     void ProcessKeyEvent (const KeyEvent& rEvent);
 

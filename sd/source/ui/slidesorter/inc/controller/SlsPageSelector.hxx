@@ -114,20 +114,6 @@ public:
     void PrepareModelChange (void);
     void HandleModelChange (void);
 
-    /** Enable the broadcasting of selection change events.  This calls the
-        SlideSorterController::SelectionHasChanged() method to do the actual
-        work.  When EnableBroadcasting has been called as many times as
-        DisableBroadcasting() was called before and the selection has been
-        changed in the mean time, this change will be broadcasted.
-    */
-    void EnableBroadcasting (bool bMakeSelectionVisible = true);
-
-    /** Disable the broadcasting o selectio change events.  Subsequent
-        changes of the selection will set a flag that triggers the sending
-        of events when EnableBroadcasting() is called.
-    */
-    void DisableBroadcasting (void);
-
     /** Return the descriptor of the most recently selected page.  This
         works only when the page has not been de-selected in the mean time.
         This method helps the view when it scrolls the selection into the
@@ -196,6 +182,18 @@ public:
         PageSelector& mrSelector;
     };
 
+    class BroadcastLock
+    {
+    public:
+        BroadcastLock (SlideSorter& rSlideSorter);
+        BroadcastLock (PageSelector& rPageSelector);
+        ~BroadcastLock (void);
+        void RequestMakeSelectionVisible (void);
+    private:
+        PageSelector& mrSelector;
+        bool mbIsMakeSelectionVisiblePending;
+    };
+
 private:
     model::SlideSorterModel& mrModel;
     SlideSorter& mrSlideSorter;
@@ -209,6 +207,20 @@ private:
     model::SharedPageDescriptor mpCurrentPage;
     sal_Int32 mnUpdateLockCount;
     bool mbIsUpdateCurrentPagePending;
+
+    /** Enable the broadcasting of selection change events.  This calls the
+        SlideSorterController::SelectionHasChanged() method to do the actual
+        work.  When EnableBroadcasting has been called as many times as
+        DisableBroadcasting() was called before and the selection has been
+        changed in the mean time, this change will be broadcasted.
+    */
+    void EnableBroadcasting (bool bMakeSelectionVisible = true);
+
+    /** Disable the broadcasting o selectio change events.  Subsequent
+        changes of the selection will set a flag that triggers the sending
+        of events when EnableBroadcasting() is called.
+    */
+    void DisableBroadcasting (void);
 
     void CountSelectedPages (void);
     void UpdateCurrentPage (const bool bUpdateOnlyWhenPending = false);

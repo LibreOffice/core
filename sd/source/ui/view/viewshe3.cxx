@@ -257,7 +257,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
             && rBase.GetMainViewShell()->GetShellType()!=ViewShell::ST_DRAW)
         {
             framework::FrameworkHelper::Instance(GetViewShellBase())->RequestTaskPanel(
-            framework::FrameworkHelper::msLayoutTaskPanelURL);
+                framework::FrameworkHelper::msLayoutTaskPanelURL,
+                false);
         }
 
         // AutoLayouts muessen fertig sein

@@ -445,13 +445,11 @@ bool SlideSorterController::Command (
                 // indicator so that the user knows where a page insertion
                 // would take place.
                 mpInsertionIndicatorHandler->Start(false);
+                mpInsertionIndicatorHandler->UpdateIndicatorIcon(
+                    dynamic_cast<Transferable*>(SD_MOD()->pTransferClip));
                 mpInsertionIndicatorHandler->UpdatePosition(
                     pWindow->PixelToLogic(rEvent.GetMousePosPixel()),
                     InsertionIndicatorHandler::MoveMode);
-                mpInsertionIndicatorHandler->UpdateIndicatorIcon(
-                    dynamic_cast<Transferable*>(SD_MOD()->pTransferClip));
-                mpInsertionIndicatorHandler->UpdateIndicatorIcon(
-                    dynamic_cast<Transferable*>(SD_MOD()->pTransferClip));
                 pContext.reset(new InsertionIndicatorHandler::ForceShowContext(
                     mpInsertionIndicatorHandler));
             }

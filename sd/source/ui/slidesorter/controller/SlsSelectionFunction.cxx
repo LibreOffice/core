@@ -459,28 +459,23 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
             bResult = TRUE;
             break;
 
+        case KEY_HOME:
+            GotoPage(0);
+            bResult = TRUE;
+            break;
+
+        case KEY_END:
+            GotoPage(mrSlideSorter.GetModel().GetPageCount()-1);
+            bResult = TRUE;
+            break;
+
         case KEY_DELETE:
         case KEY_BACKSPACE:
         {
             if (mrSlideSorter.GetProperties()->IsUIReadOnly())
                 break;
 
-            int nSelectedPagesCount = 0;
-
-            // Count the selected pages and look if there any objects on any
-            // of the selected pages so that we can warn the user and
-            // prevent an accidental deletion.
-            model::PageEnumeration aSelectedPages (
-                model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
-                    mrSlideSorter.GetModel()));
-            while (aSelectedPages.HasMoreElements())
-            {
-                nSelectedPagesCount++;
-                aSelectedPages.GetNextElement();
-            }
-
-            if (nSelectedPagesCount > 0)
-                 mrController.GetSelectionManager()->DeleteSelectedPages();
+            mrController.GetSelectionManager()->DeleteSelectedPages(rCode.GetCode()==KEY_DELETE);
 
             mnShiftKeySelectionAnchor = -1;
             bResult = TRUE;
@@ -750,23 +745,31 @@ void SelectionFunction::GotoNextPage (int nOffset)
         SdPage* pPage = pDescriptor->GetPage();
         OSL_ASSERT(pPage!=NULL);
         sal_Int32 nIndex = (pPage->GetPageNum()-1) / 2;
-        nIndex += nOffset;
-        USHORT nPageCount = (USHORT)mrSlideSorter.GetModel().GetPageCount();
+        GotoPage(nIndex + nOffset);
+    }
+    mnShiftKeySelectionAnchor = -1;
+}
 
-        if (nIndex >= nPageCount)
-            nIndex = nPageCount - 1;
-        if (nIndex < 0)
-            nIndex = 0;
 
-        mrController.GetFocusManager().SetFocusedPage(nIndex);
-        model::SharedPageDescriptor pNextPageDescriptor (
-            mrSlideSorter.GetModel().GetPageDescriptor (nIndex));
-        if (pNextPageDescriptor.get() != NULL)
-            SetCurrentPage(pNextPageDescriptor);
-        else
-        {
-            OSL_ASSERT(pNextPageDescriptor.get() != NULL);
-        }
+
+
+void SelectionFunction::GotoPage (int nIndex)
+{
+    USHORT nPageCount = (USHORT)mrSlideSorter.GetModel().GetPageCount();
+
+    if (nIndex >= nPageCount)
+        nIndex = nPageCount - 1;
+    if (nIndex < 0)
+        nIndex = 0;
+
+    mrController.GetFocusManager().SetFocusedPage(nIndex);
+    model::SharedPageDescriptor pNextPageDescriptor (
+        mrSlideSorter.GetModel().GetPageDescriptor (nIndex));
+    if (pNextPageDescriptor.get() != NULL)
+        SetCurrentPage(pNextPageDescriptor);
+    else
+    {
+        OSL_ASSERT(pNextPageDescriptor.get() != NULL);
     }
     mnShiftKeySelectionAnchor = -1;
 }
@@ -931,8 +934,8 @@ bool SelectionFunction::ProcessEvent (EventDescriptor& rDescriptor)
 
     bool bResult (true);
 
-    mrController.GetPageSelector().DisableBroadcasting();
-    PageSelector::UpdateLock aLock (mrSlideSorter);
+    PageSelector::BroadcastLock aBroadcastLock (mrSlideSorter);
+    PageSelector::UpdateLock aUpdateLock (mrSlideSorter);
 
     // With the event code determine the type of operation with which to
     // react to the event.
@@ -966,7 +969,8 @@ bool SelectionFunction::ProcessEvent (EventDescriptor& rDescriptor)
             }
     }
 
-    mrController.GetPageSelector().EnableBroadcasting(rDescriptor.mbMakeSelectionVisible);
+    if (rDescriptor.mbMakeSelectionVisible)
+        aBroadcastLock.RequestMakeSelectionVisible();
 
     return bResult;
 }

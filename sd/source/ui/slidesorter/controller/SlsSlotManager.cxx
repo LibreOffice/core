@@ -1077,124 +1077,56 @@ bool SlotManager::RenameSlideFromDrawViewShell( USHORT nPageId, const String & r
 */
 void SlotManager::InsertSlide (SfxRequest& rRequest)
 {
-    PageSelector& rSelector (mrSlideSorter.GetController().GetPageSelector());
-    // The fallback insertion position is after the last slide.
-    sal_Int32 nInsertionIndex (rSelector.GetPageCount() - 1);
-    if (rSelector.GetSelectedPageCount() > 0)
-    {
-        // Deselect all but the last selected slide.
-        bool bLastSelectedSlideSeen (false);
-        for (int nIndex=rSelector.GetPageCount()-1; nIndex>=0; --nIndex)
-        {
-            if (rSelector.IsPageSelected(nIndex))
-            {
-                if (bLastSelectedSlideSeen)
-                    rSelector.DeselectPage (nIndex);
-                else
-                {
-                    nInsertionIndex = nIndex;
-                    bLastSelectedSlideSeen = true;
-                }
-            }
-        }
-    }
-
-    // No selection.  Is there an insertion indicator?
-    else if (mrSlideSorter.GetController().GetInsertionIndicatorHandler()->IsActive())
-    {
-        // Select the page before the insertion indicator.
-        nInsertionIndex
-            = mrSlideSorter.GetController().GetInsertionIndicatorHandler()->GetInsertionPageIndex();
-        nInsertionIndex --;
-        rSelector.SelectPage (nInsertionIndex);
-    }
-
-    // Is there a stored insertion position?
-    else if (mrSlideSorter.GetController().GetSelectionManager()->GetInsertionPosition() >= 0)
-    {
-        nInsertionIndex
-            = mrSlideSorter.GetController().GetSelectionManager()->GetInsertionPosition() - 1;
-        rSelector.SelectPage(nInsertionIndex);
-    }
-
-    // Select the last page when there is at least one page.
-    else if (rSelector.GetPageCount() > 0)
-    {
-        nInsertionIndex = rSelector.GetPageCount() - 1;
-        rSelector.SelectPage (nInsertionIndex);
-    }
-
-    // Hope for the best that CreateOrDuplicatePage() can cope with an empty
-    // selection.
-    else
-    {
-        nInsertionIndex = -1;
-    }
-
+    const sal_Int32 nInsertionIndex (GetInsertionPosition());
     USHORT nPageCount ((USHORT)mrSlideSorter.GetModel().GetPageCount());
 
-    rSelector.DisableBroadcasting();
-    // In order for SlideSorterController::GetActualPage() to select the
-    // selected page as current page we have to turn off the focus
-    // temporarily.
+    PageSelector::BroadcastLock aBroadcastLock (mrSlideSorter);
+
+    SdPage* pNewPage = NULL;
+    if (mrSlideSorter.GetModel().GetEditMode() == EM_PAGE)
     {
-        FocusManager::FocusHider aTemporaryFocusHider (
-            mrSlideSorter.GetController().GetFocusManager());
-
-        SdPage* pPreviousPage = NULL;
-        if (nInsertionIndex >= 0)
-            pPreviousPage = mrSlideSorter.GetModel()
-                .GetPageDescriptor(nInsertionIndex)->GetPage();
-
-        if (mrSlideSorter.GetModel().GetEditMode() == EM_PAGE)
+        SlideSorterViewShell* pShell = dynamic_cast<SlideSorterViewShell*>(
+            mrSlideSorter.GetViewShell());
+        if (pShell != NULL)
         {
-            SlideSorterViewShell* pShell = dynamic_cast<SlideSorterViewShell*>(
-                mrSlideSorter.GetViewShell());
-            if (pShell != NULL)
-            {
-                pShell->CreateOrDuplicatePage (
-                    rRequest,
-                        mrSlideSorter.GetModel().GetPageType(),
-                    pPreviousPage);
-            }
+            pNewPage = pShell->CreateOrDuplicatePage (
+                rRequest,
+                mrSlideSorter.GetModel().GetPageType(),
+                nInsertionIndex>=0
+                    ? mrSlideSorter.GetModel().GetPageDescriptor(nInsertionIndex)->GetPage()
+                        : NULL);
         }
-        else
+    }
+    else
+    {
+        // Use the API to create a new page.
+        SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
+        Reference<drawing::XMasterPagesSupplier> xMasterPagesSupplier (
+            pDocument->getUnoModel(), UNO_QUERY);
+        if (xMasterPagesSupplier.is())
         {
-            // Use the API to create a new page.
-            SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
-            Reference<drawing::XMasterPagesSupplier> xMasterPagesSupplier (
-                pDocument->getUnoModel(), UNO_QUERY);
-            if (xMasterPagesSupplier.is())
+            Reference<drawing::XDrawPages> xMasterPages (
+                xMasterPagesSupplier->getMasterPages());
+            if (xMasterPages.is())
             {
-                Reference<drawing::XDrawPages> xMasterPages (
-                    xMasterPagesSupplier->getMasterPages());
-                if (xMasterPages.is())
-                {
-                    xMasterPages->insertNewByIndex (nInsertionIndex+1);
+                xMasterPages->insertNewByIndex (nInsertionIndex+1);
 
-                    // Create shapes for the default layout.
-                    SdPage* pMasterPage = pDocument->GetMasterSdPage(
-                        (USHORT)(nInsertionIndex+1), PK_STANDARD);
-                    pMasterPage->CreateTitleAndLayout (TRUE,TRUE);
-                }
+                // Create shapes for the default layout.
+                pNewPage = pDocument->GetMasterSdPage(
+                    (USHORT)(nInsertionIndex+1), PK_STANDARD);
+                pNewPage->CreateTitleAndLayout (TRUE,TRUE);
             }
         }
     }
+    if (pNewPage == NULL)
+        return;
 
     // When a new page has been inserted then select it, make it the
     // current page, and focus it.
-    view::SlideSorterView::DrawLock aLock (mrSlideSorter);
-    if (mrSlideSorter.GetModel().GetPageCount() > nPageCount)
-    {
-        nInsertionIndex++;
-        model::SharedPageDescriptor pDescriptor = mrSlideSorter.GetModel().GetPageDescriptor(nInsertionIndex);
-        if (pDescriptor.get() != NULL)
-        {
-            mrSlideSorter.GetController().GetCurrentSlideManager()->SwitchCurrentSlide(pDescriptor);
-            mrSlideSorter.GetController().GetFocusManager().SetFocusedPage(pDescriptor);
-        }
-    }
-    rSelector.EnableBroadcasting();
+    view::SlideSorterView::DrawLock aDrawLock (mrSlideSorter);
+    PageSelector::UpdateLock aUpdateLock (mrSlideSorter);
+    mrSlideSorter.GetController().GetPageSelector().DeselectAllPages();
+    mrSlideSorter.GetController().GetPageSelector().SelectPage(pNewPage);
 }
 
 
@@ -1346,6 +1278,56 @@ void SlotManager::ChangeSlideExclusionState (
     rBindings.Invalidate(SID_HIDE_SLIDE);
     rBindings.Invalidate(SID_SHOW_SLIDE);
     mrSlideSorter.GetModel().GetDocument()->SetChanged();
+}
+
+
+
+
+sal_Int32 SlotManager::GetInsertionPosition (void)
+{
+    PageSelector& rSelector (mrSlideSorter.GetController().GetPageSelector());
+
+    // The insertion indicator is preferred.  After all the user explicitly
+    // used it to define the insertion position.
+    if (mrSlideSorter.GetController().GetInsertionIndicatorHandler()->IsActive())
+    {
+        // Select the page before the insertion indicator.
+        return mrSlideSorter.GetController().GetInsertionIndicatorHandler()->GetInsertionPageIndex()
+            - 1;
+    }
+
+    // Is there a stored insertion position?
+    else if (mrSlideSorter.GetController().GetSelectionManager()->GetInsertionPosition() >= 0)
+    {
+        return mrSlideSorter.GetController().GetSelectionManager()->GetInsertionPosition() - 1;
+    }
+
+    // Use the index of the last selected slide.
+    else if (rSelector.GetSelectedPageCount() > 0)
+    {
+        for (int nIndex=rSelector.GetPageCount()-1; nIndex>=0; --nIndex)
+            if (rSelector.IsPageSelected(nIndex))
+                return nIndex;
+
+        // We should never get here.
+        OSL_ASSERT(false);
+        return rSelector.GetPageCount() - 1;
+    }
+
+    // Select the last page when there is at least one page.
+    else if (rSelector.GetPageCount() > 0)
+    {
+        return rSelector.GetPageCount() - 1;
+    }
+
+    // Hope for the best that CreateOrDuplicatePage() can cope with an empty
+    // selection.
+    else
+    {
+        // We should never get here because there has to be at least one page.
+        OSL_ASSERT(false);
+        return -1;
+    }
 }
 
 

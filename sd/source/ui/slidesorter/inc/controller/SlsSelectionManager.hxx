@@ -68,8 +68,13 @@ public:
 
     /** Delete the currently selected slides.  When this method returns the
         selection is empty.
+        @param bSelectFollowingPage
+            When <TRUE/> then after deleting the selected pages make the
+            slide after the last selected page the new current page.
+            When <FALSE/> then make the first slide before the selected
+            pages the new current slide.
     */
-    void DeleteSelectedPages (void);
+    void DeleteSelectedPages (const bool bSelectFollowingPage = true);
 
     /** Move the maked pages to a position directly after the specified page.
     */
