@@ -90,13 +90,13 @@ struct SfxChildWinInfo
 };
 
 // Factory-Methode eines ChildWindows
-typedef SfxChildWindow* (*SfxChildWinCtor)( Window *pParentWindow,
+typedef SfxChildWindow* (*SfxChildWinCtor)( ::Window *pParentWindow,
                                             sal_uInt16 nId,
                                             SfxBindings *pBindings,
                                             SfxChildWinInfo *pInfo);
 
 // Factory-Methode eines ChildWindowsContexts
-typedef SfxChildWindowContext* (*SfxChildWinContextCtor)( Window *pParentWindow,
+typedef SfxChildWindowContext* (*SfxChildWinContextCtor)( ::Window *pParentWindow,
                                             SfxBindings *pBindings,
                                             SfxChildWinInfo *pInfo);
 struct SfxChildWinContextFactory
@@ -146,8 +146,8 @@ struct SfxChildWindow_Impl;
 class SFX2_DLLPUBLIC SfxChildWindowContext
 {
 friend class SfxChildWindow;
-    Window*             pWindow;
-    sal_uInt16              nContextId;
+    ::Window*           pWindow;
+    sal_uInt16          nContextId;
 
 protected:
                         SfxChildWindowContext( sal_uInt16 nId );
@@ -155,9 +155,9 @@ protected:
 public:
     virtual             ~SfxChildWindowContext();
 
-    void                SetWindow( Window* pWin )
+    void                SetWindow( ::Window* pWin )
                         { pWindow=pWin; }
-    Window*             GetWindow() const
+    ::Window*           GetWindow() const
                         { return pWindow; }
     sal_uInt16              GetContextId() const
                         { return nContextId; }
@@ -172,12 +172,12 @@ public:
 
 class SFX2_DLLPUBLIC SfxChildWindow
 {
-    Window*                 pParent;        // parent window ( Topwindow )
-    sal_uInt16                  nType;          // ChildWindow-Id
+    ::Window*               pParent;        // parent window ( Topwindow )
+    sal_uInt16              nType;          // ChildWindow-Id
 
 protected:
     SfxChildAlignment       eChildAlignment;// aktuelles ::com::sun::star::drawing::Alignment
-    Window*                 pWindow;        // eigentlicher Inhalt
+    ::Window*               pWindow;        // eigentlicher Inhalt
     SfxChildWindow_Impl*    pImp;           // Imp-Daten
 
 private:
@@ -188,14 +188,14 @@ private:
                         { return pContext; }
 
 protected:
-                        SfxChildWindow(Window *pParentWindow, sal_uInt16 nId);
+                        SfxChildWindow(::Window *pParentWindow, sal_uInt16 nId);
 
 public:
     virtual             ~SfxChildWindow();
     void                Destroy();
-    Window*             GetWindow() const
+    ::Window*           GetWindow() const
                         { return pWindow; }
-    Window*             GetParent() const
+    ::Window*           GetParent() const
                         { return pParent; }
     SfxChildAlignment   GetAlignment() const
                         { return eChildAlignment; }
@@ -220,17 +220,17 @@ public:
     sal_uInt16              GetContextId() const
                         { return pContext ? pContext->GetContextId(): 0; }
 
-    Window*             GetContextWindow() const
+    ::Window*           GetContextWindow() const
                         { return pContext ? pContext->GetWindow(): 0; }
 
-    Window*             GetContextWindow( SfxModule *pModule ) const;
+    ::Window*           GetContextWindow( SfxModule *pModule ) const;
 
     virtual SfxChildWinInfo GetInfo() const;
     void                SaveStatus(const SfxChildWinInfo& rInfo);
 
     static void         RegisterChildWindow(SfxModule*, SfxChildWinFactory*);
 
-    static SfxChildWindow* CreateChildWindow( sal_uInt16, Window*, SfxBindings*, SfxChildWinInfo&);
+    static SfxChildWindow* CreateChildWindow( sal_uInt16, ::Window*, SfxBindings*, SfxChildWinInfo&);
     void                SetHideNotDelete( sal_Bool bOn );
     sal_Bool                IsHideNotDelete() const;
     void                SetHideAtToggle( sal_Bool bOn );
@@ -261,19 +261,19 @@ public:
 //------------------------------------------------------------------
 //! demn"achst hinf"allig !
 #define SFX_DECL_CHILDWINDOW_CONTEXT(Class) \
-        static  SfxChildWindowContext* CreateImpl(Window *pParent, \
+        static  SfxChildWindowContext* CreateImpl(::Window *pParent, \
                     SfxBindings *pBindings, SfxChildWinInfo* pInfo ); \
         static  void RegisterChildWindowContext(SfxModule *pMod=0); \
 
 //! Das Macro der Zukunft ...
 #define SFX_DECL_CHILDWINDOWCONTEXT(Class) \
-        static  SfxChildWindowContext* CreateImpl(Window *pParent, \
+        static  SfxChildWindowContext* CreateImpl(::Window *pParent, \
                     SfxBindings *pBindings, SfxChildWinInfo* pInfo ); \
         static  void RegisterChildWindowContext(sal_uInt16, SfxModule *pMod=0); \
 
 //! demn"achst hinf"allig !
 #define SFX_IMPL_CHILDWINDOW_CONTEXT(Class, MyID, ShellClass) \
-        SfxChildWindowContext* __EXPORT Class::CreateImpl( Window *pParent, \
+        SfxChildWindowContext* __EXPORT Class::CreateImpl( ::Window *pParent, \
                 SfxBindings *pBindings, SfxChildWinInfo* pInfo ) \
         {   \
             SfxChildWindowContext *pContext = new Class(pParent, \
@@ -293,7 +293,7 @@ public:
 // CreateImpl mu\s noch als Parameter die Factory mitbekommen wg. ContextId
 // Solange wird diese Id auf 0 gesetzt und in SfxChildWindow::CreateContext gepatched
 #define SFX_IMPL_CHILDWINDOWCONTEXT(Class, MyID) \
-        SfxChildWindowContext* __EXPORT Class::CreateImpl( Window *pParent, \
+        SfxChildWindowContext* __EXPORT Class::CreateImpl( ::Window *pParent, \
                 SfxBindings *pBindings, SfxChildWinInfo* pInfo ) \
         {   \
             SfxChildWindowContext *pContext = new Class(pParent,0,pBindings,pInfo);\
@@ -308,7 +308,7 @@ public:
 
 #define SFX_DECL_CHILDWINDOW(Class) \
     public  :   \
-        static  SfxChildWindow* CreateImpl(Window *pParent, sal_uInt16 nId, \
+        static  SfxChildWindow* CreateImpl(::Window *pParent, sal_uInt16 nId, \
                     SfxBindings *pBindings, SfxChildWinInfo* pInfo ); \
         static  void RegisterChildWindow (sal_Bool bVisible=sal_False, SfxModule *pMod=NULL, sal_uInt16 nFlags=0); \
         static  sal_uInt16 GetChildWindowId ();\
@@ -318,7 +318,7 @@ public:
         SFX_IMPL_POS_CHILDWINDOW(Class, MyID, CHILDWIN_NOPOS)
 
 #define SFX_IMPL_POS_CHILDWINDOW(Class, MyID, Pos) \
-        SfxChildWindow* __EXPORT Class::CreateImpl( Window *pParent, \
+        SfxChildWindow* __EXPORT Class::CreateImpl( ::Window *pParent, \
                 sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo* pInfo ) \
                 {   \
                     SfxChildWindow *pWin = new Class(pParent, nId, pBindings, pInfo);\
