@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: futhes.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,16 +32,16 @@
 #include "futhes.hxx"
 
 #include <tools/pstm.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <svx/dialogs.hrc>
 #include <svx/svxerr.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
 #include "app.hrc"
 #include "strings.hrc"

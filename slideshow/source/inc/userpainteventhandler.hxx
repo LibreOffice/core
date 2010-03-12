@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: userpainteventhandler.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,8 +48,12 @@ namespace slideshow
         {
         public:
             virtual ~UserPaintEventHandler() {}
-
             virtual bool colorChanged( RGBColor const& rUserColor ) = 0;
+        virtual bool widthChanged( double nUserStrokeWidth ) = 0;
+        virtual bool eraseAllInkChanged(bool const& rEraseAllInk) =0;
+            virtual bool eraseInkWidthChanged(sal_Int32 rEraseInkSize) =0;
+            virtual bool switchEraserMode() = 0;
+            virtual bool switchPenMode() = 0;
             virtual bool disable() = 0;
         };
 
