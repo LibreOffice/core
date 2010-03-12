@@ -806,16 +806,18 @@ namespace unnamed_svl_inettype {
 MediaTypeEntry const * seekEntry(UniString const & rTypeName,
                                  MediaTypeEntry const * pMap, sal_Size nSize)
 {
-#if defined DBG_UTIL || defined INETTYPE_DEBUG
+#if defined DBG_UTIL
     static bool bChecked = false;
     if (!bChecked)
     {
         for (sal_Size i = 0; i < nSize - 1; ++i)
-            DBG_ASSERT(pMap[i].m_pTypeName < pMap[i + 1].m_pTypeName,
-                       "seekEntry(): Bad map");
+            DBG_ASSERT(
+                rtl_str_compare(
+                    pMap[i].m_pTypeName, pMap[i + 1].m_pTypeName) < 0,
+                "seekEntry(): Bad map");
         bChecked = true;
     }
-#endif // DBG_UTIL, INETTYPE_DEBUG
+#endif
 
     sal_Size nLow = 0;
     sal_Size nHigh = nSize;
