@@ -215,6 +215,7 @@ namespace svt
 //            aControlValue, ::rtl::OUString(),
 //            aBoundingRegion, aContentRegion
 //        );
+        (void)i_nItemFlags;
         return Rectangle(
             Point( i_rContentArea.Left() - 1, i_rContentArea.Top() - 1 ),
             Size( i_rContentArea.GetWidth() + 2, i_rContentArea.GetHeight() + 2 )
@@ -472,24 +473,6 @@ namespace svt
         private:
             OutputDevice&   m_rDevice;
         };
-
-        //--------------------------------------------------------------------------------------------------------------
-        static void lcl_deflateRect( Rectangle& io_rArea, const Inset& i_rInset )
-        {
-            io_rArea.Left() += i_rInset.nLeft;
-            io_rArea.Top() += i_rInset.nTop;
-            io_rArea.Right() -= i_rInset.nRight;
-            io_rArea.Bottom() -= i_rInset.nBottom;
-        }
-
-        //--------------------------------------------------------------------------------------------------------------
-        static void lcl_inflateRect( Rectangle& io_rArea, const Inset& i_rInset )
-        {
-            io_rArea.Left() -= i_rInset.nLeft;
-            io_rArea.Top() -= i_rInset.nTop;
-            io_rArea.Right() += i_rInset.nRight;
-            io_rArea.Bottom() += i_rInset.nBottom;
-        }
     }
 
     //==================================================================================================================
