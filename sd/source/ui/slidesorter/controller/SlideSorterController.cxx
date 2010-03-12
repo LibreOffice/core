@@ -438,18 +438,22 @@ bool SlideSorterController::Command (
                         else
                             nPopupId = RID_SLIDE_SORTER_MASTER_NOSEL_POPUP;
             }
-
+            ::boost::scoped_ptr<InsertionIndicatorHandler::ForceShowContext> pContext;
             if (pPage == NULL)
             {
                 // When there is no selection, then we show the insertion
                 // indicator so that the user knows where a page insertion
                 // would take place.
-                GetInsertionIndicatorHandler()->Start(false);
-                GetInsertionIndicatorHandler()->UpdatePosition(
+                mpInsertionIndicatorHandler->Start(false);
+                mpInsertionIndicatorHandler->UpdatePosition(
                     pWindow->PixelToLogic(rEvent.GetMousePosPixel()),
                     InsertionIndicatorHandler::MoveMode);
-                GetInsertionIndicatorHandler()->UpdateIndicatorIcon(
+                mpInsertionIndicatorHandler->UpdateIndicatorIcon(
                     dynamic_cast<Transferable*>(SD_MOD()->pTransferClip));
+                mpInsertionIndicatorHandler->UpdateIndicatorIcon(
+                    dynamic_cast<Transferable*>(SD_MOD()->pTransferClip));
+                pContext.reset(new InsertionIndicatorHandler::ForceShowContext(
+                    mpInsertionIndicatorHandler));
             }
 
             pWindow->ReleaseMouse();
@@ -496,8 +500,8 @@ bool SlideSorterController::Command (
                 // finds the right place to insert a new slide.
                 GetSelectionManager()->SetInsertionPosition(
                     GetInsertionIndicatorHandler()->GetInsertionPageIndex());
-                GetInsertionIndicatorHandler()->End();
             }
+            pContext.reset();
             bEventHasBeenHandled = true;
         }
         break;

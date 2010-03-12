@@ -70,6 +70,15 @@ public:
     */
     void End (void);
 
+    class ForceShowContext
+    {
+    public:
+        ForceShowContext (const ::boost::shared_ptr<InsertionIndicatorHandler>& rpHandler);
+        ~ForceShowContext (void);
+    private:
+        const ::boost::shared_ptr<InsertionIndicatorHandler> mpHandler;
+    };
+
     /** Update the indicator icon from the current transferable (from the
         clipboard or an active drag and drop operation.)
     */
@@ -114,11 +123,23 @@ private:
     bool mbIsReadOnly;
     bool mbIsOverSourceView;
     Size maIconSize;
+    bool mbIsForcedShow;
 
     void SetPosition (
         const Point& rPoint,
         const Mode eMode);
     ::boost::shared_ptr<view::InsertAnimator> GetInsertAnimator (void);
+
+    /** Make the insertion indicator visible (that is the show part) and
+        keep it visible, even when the mouse leaves the window (that is the
+        force part).  We need this when a context menu is displayed (mouse
+        over the popup menu triggers a mouse leave event) while the
+        insertion indicator remains visible in the background.
+
+        In effect all calls to End() are ignored until ForceEnd() is called.
+    */
+    void ForceShow (void);
+    void ForceEnd (void);
 };
 
 

@@ -55,7 +55,8 @@ InsertionIndicatorHandler::InsertionIndicatorHandler (SlideSorter& rSlideSorter)
       mbIsActive(false),
       mbIsReadOnly(mrSlideSorter.GetModel().IsReadOnly()),
       mbIsOverSourceView(true),
-      maIconSize(0,0)
+      maIconSize(0,0),
+      mbIsForcedShow(false)
 {
 }
 
@@ -89,10 +90,7 @@ void InsertionIndicatorHandler::Start (const bool bIsOverSourceView)
 
 void InsertionIndicatorHandler::End (void)
 {
-    if ( ! mbIsActive)
-        return;
-
-    if (mbIsReadOnly)
+    if (mbIsForcedShow ||  ! mbIsActive || mbIsReadOnly)
         return;
 
     GetInsertAnimator()->Reset();
@@ -102,6 +100,23 @@ void InsertionIndicatorHandler::End (void)
     meMode = UnknownMode;
 
     mpInsertionIndicatorOverlay->Hide();
+}
+
+
+
+
+void InsertionIndicatorHandler::ForceShow (void)
+{
+    mbIsForcedShow = true;
+}
+
+
+
+
+void InsertionIndicatorHandler::ForceEnd (void)
+{
+    mbIsForcedShow = false;
+    End();
 }
 
 
@@ -272,5 +287,23 @@ bool InsertionIndicatorHandler::IsInsertionTrivial (
 }
 
 
+
+
+//===== InsertionIndicatorHandler::ForceShowContext ===========================
+
+InsertionIndicatorHandler::ForceShowContext::ForceShowContext (
+    const ::boost::shared_ptr<InsertionIndicatorHandler>& rpHandler)
+    : mpHandler(rpHandler)
+{
+    mpHandler->ForceShow();
+}
+
+
+
+
+InsertionIndicatorHandler::ForceShowContext::~ForceShowContext (void)
+{
+    mpHandler->ForceEnd();
+}
 
 } } } // end of namespace ::sd::slidesorter::controller

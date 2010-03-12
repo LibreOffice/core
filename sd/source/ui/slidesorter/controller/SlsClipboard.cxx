@@ -236,10 +236,18 @@ sal_Int32 Clipboard::GetInsertionPosition (::Window* pWindow)
         mrController.GetInsertionIndicatorHandler());
     if (pInsertionIndicatorHandler->IsActive())
     {
+        // Use the insertion index of an active insertion indicator.
         nInsertPosition = pInsertionIndicatorHandler->GetInsertionPageIndex();
+    }
+    else if (mrController.GetSelectionManager()->GetInsertionPosition() >= 0)
+    {
+        // Use the insertion index of an insertion indicator that has been
+        // deactivated a short while ago.
+        nInsertPosition = mrController.GetSelectionManager()->GetInsertionPosition();
     }
     else if (mrController.GetFocusManager().IsFocusShowing())
     {
+        // Use the focus to determine the insertion position.
         SdInsertPasteDlg aDialog (pWindow);
         if (aDialog.Execute() == RET_OK)
         {
@@ -247,10 +255,6 @@ sal_Int32 Clipboard::GetInsertionPosition (::Window* pWindow)
             if ( ! aDialog.IsInsertBefore())
                 nInsertPosition ++;
         }
-    }
-    else
-    {
-        nInsertPosition = mrController.GetSelectionManager()->GetInsertionPosition();
     }
 
     return nInsertPosition;
