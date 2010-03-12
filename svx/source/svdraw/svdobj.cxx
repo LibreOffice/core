@@ -47,7 +47,6 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdovirt.hxx>  // Fuer Add/Del Ref
 #include <svx/svdview.hxx>   // fuer Dragging (Ortho abfragen)
-#include "svdscrol.hxx"
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
 #include <svx/svdogrp.hxx>   // Factory
