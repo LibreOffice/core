@@ -320,7 +320,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_LISTTAB_STOP_POSITION :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ListtabStopPosition")); break;
             case PROP_POSITION_AND_SPACE_MODE :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionAndSpaceMode")); break;
             case PROP_PARA_SPLIT:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaSplit")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+            case PROP_HELP:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Help")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;

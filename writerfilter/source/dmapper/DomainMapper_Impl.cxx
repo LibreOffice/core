@@ -2679,7 +2679,7 @@ if(!bFilled)
 //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMULA")),     "",                           "", FIELD_FORMULA },
 //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMCHECKBOX")),     "",                           "", FIELD_FORMCHECKBOX},
 //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMDROPDOWN")),     "",                           "", FIELD_FORMDROWDOWN},
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMTEXT")),     "InputUser", "", FIELD_FORMTEXT},
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMTEXT")),     "Input", "", FIELD_FORMTEXT},
 //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GOTOBUTTON")),    "",                         "", FIELD_GOTOBUTTON   },
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HYPERLINK")),     "",                         "", FIELD_HYPERLINK    },
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IF")),            "ConditionalText",          "", FIELD_IF           },
@@ -3257,11 +3257,18 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_FORMDROPDOWN : break;
                     case FIELD_FORMTEXT :
                     {
-                        ::rtl::OUString sMasterName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMTEXT")));
-                        uno::Reference< beans::XPropertySet > xMaster =
-                            FindOrCreateFieldMaster( "com.sun.star.text.FieldMaster.User", sMasterName );
-                        uno::Reference< text::XDependentTextField > xDependentField( xFieldInterface, uno::UNO_QUERY_THROW );
-                        xDependentField->attachTextFieldMaster( xMaster );
+                        FFDataHandler::Pointer_t pFFDataHandler
+                            (pContext->getFFDataHandler());
+
+                        xFieldProperties->setPropertyValue
+                            (rPropNameSupplier.GetName(PROP_HINT),
+                            uno::makeAny(pFFDataHandler->getStatusText()));
+                        xFieldProperties->setPropertyValue
+                            (rPropNameSupplier.GetName(PROP_HELP),
+                            uno::makeAny(pFFDataHandler->getHelpText()));
+                        xFieldProperties->setPropertyValue
+                            (rPropNameSupplier.GetName(PROP_CONTENT),
+                            uno::makeAny(pFFDataHandler->getTextDefault()));
                     }
                     break;
                     case FIELD_GOTOBUTTON   : break;
