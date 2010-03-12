@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: crsrsh.cxx,v $
- * $Revision: 1.76 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <hintids.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 
 #include <SwSmartTagMgr.hxx>
 #include <doc.hxx>
@@ -66,7 +63,7 @@
 #include <mdiexp.hxx>           // ...Percent()
 #include <fmteiro.hxx>
 #include <wrong.hxx> // SMARTTAGS
-#include <unoobj.hxx> // SMARTTAGS
+#include <unotextrange.hxx> // SMARTTAGS
 #include <vcl/svapp.hxx>
 #include <numrule.hxx>
 #include <IGrammarContact.hxx>
@@ -3372,8 +3369,8 @@ void lcl_FillTextRange( uno::Reference<text::XTextRange>& rRange,
     SwPosition aEndPos( aStartPos );
     aEndPos.nContent = nBegin + nLen;
 
-    uno::Reference<text::XTextRange> xRange =
-        SwXTextRange::CreateTextRangeFromPosition( rNode.GetDoc(), aStartPos, &aEndPos);
+    const uno::Reference<text::XTextRange> xRange =
+        SwXTextRange::CreateXTextRange(*rNode.GetDoc(), aStartPos, &aEndPos);
 
     rRange = xRange;
 }

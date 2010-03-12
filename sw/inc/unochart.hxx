@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unochart.hxx,v $
- * $Revision: 1.6.256.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +29,8 @@
 
 #include <map>
 #include <set>
+
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
@@ -48,8 +47,8 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
-
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
+
 #include <cppuhelper/interfacecontainer.h>  //OMultiTypeInterfaceContainerHelper
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <cppuhelper/implbase4.hxx> // helper for implementations
@@ -57,17 +56,21 @@
 #include <cppuhelper/implbase10.hxx> // helper for implementations
 #include <cppuhelper/weakref.hxx>
 
+#include <tools/string.hxx>
+#include <tools/link.hxx>
+#include <vcl/timer.hxx>
 
 #include <calbck.hxx>
-#include <unoobj.hxx>
 
 
+class SfxItemPropertySet;
 class SwDoc;
 class SwTable;
 class SwTableBox;
 class SwUnoCrsr;
 struct SwRangeDescriptor;
 class SwSelBoxes;
+class SwFrmFmt;
 
 //////////////////////////////////////////////////////////////////////
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8par2.cxx,v $
- * $Revision: 1.145.76.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,19 +33,19 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/font.hxx>
 #include <hintids.hxx>
-#include <svx/colritem.hxx>
-#include <svx/orphitem.hxx>
-#include <svx/widwitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/charrotateitem.hxx>
-#include <svx/pgrditem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/orphitem.hxx>
+#include <editeng/widwitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/charrotateitem.hxx>
+#include <editeng/pgrditem.hxx>
 #include <msfilter.hxx>
 #include <pam.hxx>              // fuer SwPam
 #include <doc.hxx>
@@ -3482,7 +3479,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
     // --> OD 2005-03-21 #i45301# - anchor nested table inside Writer fly frame
     // only at-character, if absolute position object attributes are available.
     // Thus, default anchor type is as-character anchored.
-    RndStdIds eAnchor( FLY_IN_CNTNT );
+    RndStdIds eAnchor( FLY_AS_CHAR );
     // <--
     if ( nInTable )
     {
@@ -3514,7 +3511,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
                 // <--
                 // --> OD 2005-03-21 #i45301# - anchor nested table Writer fly
                 // frame at-character
-                eAnchor = FLY_AUTO_CNTNT;
+                eAnchor = FLY_AT_CHAR;
                 // <--
             }
         }
@@ -3532,7 +3529,8 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
                 "how could we be in a local apo and have no apo");
         }
 
-        if ( eAnchor == FLY_AUTO_CNTNT && !maTableStack.empty() && !InEqualApo(nNewInTable) )
+        if ((eAnchor == FLY_AT_CHAR)
+            && !maTableStack.empty() && !InEqualApo(nNewInTable) )
         {
             pTableDesc->pParentPos = new SwPosition(*pPaM->GetPoint());
             SfxItemSet aItemSet(rDoc.GetAttrPool(),
@@ -3560,7 +3558,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
             if ( pTableWFlyPara && pTableSFlyPara )
             {
                 WW8FlySet aFlySet( *this, pTableWFlyPara, pTableSFlyPara, false );
-                SwFmtAnchor aAnchor( FLY_AUTO_CNTNT );
+                SwFmtAnchor aAnchor( FLY_AT_CHAR );
                 aAnchor.SetAnchor( pTableDesc->pParentPos );
                 aFlySet.Put( aAnchor );
                 pTableDesc->pFlyFmt->SetFmtAttr( aFlySet );
@@ -3615,8 +3613,8 @@ bool lcl_PamContainsFly(SwPaM & rPam)
 
         switch (pAnchor->GetAnchorId())
         {
-            case FLY_AT_CNTNT:
-            case FLY_AUTO_CNTNT:
+            case FLY_AT_PARA:
+            case FLY_AT_CHAR:
             {
                 const SwPosition* pAPos = pAnchor->GetCntntAnchor();
 

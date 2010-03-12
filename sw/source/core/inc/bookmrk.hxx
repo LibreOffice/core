@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: $
- * $Revision: $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +28,20 @@
 #ifndef _BOOKMRK_HXX
 #define _BOOKMRK_HXX
 
-#include <IMark.hxx>
+#include <cppuhelper/weakref.hxx>
+
 #include <sfx2/Metadatable.hxx>
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
+#include <map>
+
+#include <IMark.hxx>
+
+
+namespace com { namespace sun { namespace star {
+    namespace text { class XTextContent; }
+} } }
 
 struct SwPosition;  // fwd Decl. wg. UI
 class SwDoc;
@@ -48,26 +54,31 @@ namespace sw { namespace mark
     {
         public:
             //getters
-            virtual const SwPosition& GetMarkPos() const
+            virtual SwPosition& GetMarkPos() const
                 { return *m_pPos1; }
             virtual const ::rtl::OUString& GetName() const
                 { return m_aName; }
-            virtual bool IsCoveringPosition(const SwPosition& rPos) const
-                { return GetMarkStart() <= rPos && rPos <= GetMarkEnd(); };
-            virtual const SwPosition& GetOtherMarkPos() const
+            virtual bool IsCoveringPosition(const SwPosition& rPos) const;
+            virtual SwPosition& GetOtherMarkPos() const
             {
                 OSL_PRECOND(IsExpanded(), "<SwPosition::GetOtherMarkPos(..)> - I have no other Pos set." );
                 return *m_pPos2;
             }
-            virtual const SwPosition& GetMarkStart() const
+            virtual SwPosition& GetMarkStart() const
             {
-                if(!m_pPos2 /* !IsExpanded()*/) return *m_pPos1;
-                return *m_pPos1 < *m_pPos2 ? *m_pPos1 : *m_pPos2;
+                if( !IsExpanded() ) return GetMarkPos( );
+                if ( GetMarkPos( ) < GetOtherMarkPos( ) )
+                    return GetMarkPos();
+                else
+                    return GetOtherMarkPos( );
             }
-            virtual const SwPosition& GetMarkEnd() const
+            virtual SwPosition& GetMarkEnd() const
             {
-                if(!m_pPos2 /* !IsExpanded()*/ ) return *m_pPos1;
-                return *m_pPos1 > *m_pPos2 ? *m_pPos1 : *m_pPos2;
+                if( !IsExpanded() ) return GetMarkPos();
+                if ( GetMarkPos( ) > GetOtherMarkPos( ) )
+                    return GetMarkPos( );
+                else
+                    return GetOtherMarkPos( );
             }
             virtual bool IsExpanded() const
                 { return m_pPos2; }
@@ -80,6 +91,8 @@ namespace sw { namespace mark
             virtual void ClearOtherMarkPos()
                 { m_pPos2.reset(); }
 
+            virtual rtl::OUString ToString( ) const;
+
             virtual void Swap()
             {
                 if(m_pPos2)
@@ -90,6 +103,17 @@ namespace sw { namespace mark
             {}
 
             virtual ~MarkBase();
+
+            // SwClient
+            virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
+
+            const ::com::sun::star::uno::WeakReference<
+                ::com::sun::star::text::XTextContent> & GetXBookmark() const
+                    { return m_wXBookmark; }
+            void SetXBookmark(::com::sun::star::uno::Reference<
+                        ::com::sun::star::text::XTextContent> const& xBkmk)
+                    { m_wXBookmark = xBkmk; }
+
         protected:
             MarkBase(const SwPaM& rPaM,
                 const ::rtl::OUString& rName);
@@ -97,11 +121,13 @@ namespace sw { namespace mark
             ::boost::scoped_ptr<SwPosition> m_pPos2;
             ::rtl::OUString m_aName;
             static ::rtl::OUString GenerateNewName(const ::rtl::OUString& rPrefix);
+
+            ::com::sun::star::uno::WeakReference<
+                ::com::sun::star::text::XTextContent> m_wXBookmark;
     };
 
     class NavigatorReminder
         : public MarkBase
-        , virtual public IMark
     {
         public:
             NavigatorReminder(const SwPaM& rPaM);
@@ -185,24 +211,31 @@ namespace sw { namespace mark
             Fieldmark(const SwPaM& rPaM);
 
             // getters
-            ::rtl::OUString GetFieldname() const
+            virtual ::rtl::OUString GetFieldname() const
                 { return m_aFieldname; }
-            ::rtl::OUString GetFieldHelptext() const
+            virtual ::rtl::OUString GetFieldHelptext() const
                 { return m_aFieldHelptext; }
 
-            // setters
-            void SetFieldname(const ::rtl::OUString& aFieldname)
-                { m_aFieldname = aFieldname; }
-            void SetFieldHelptext(const ::rtl::OUString& aFieldHelptext)
-                { m_aFieldHelptext = aFieldHelptext; }
-        private:
-            //int fftype; // Type: 0 = Text, 1 = Check Box, 2 = List
-            //bool ffprot;
+            virtual IFieldmark::parameter_map_t* GetParameters()
+                { return &m_vParams; }
 
+            virtual const IFieldmark::parameter_map_t* GetParameters() const
+                { return &m_vParams; }
+
+            // setters
+            virtual void SetFieldname(const ::rtl::OUString& aFieldname)
+                { m_aFieldname = aFieldname; }
+            virtual void SetFieldHelptext(const ::rtl::OUString& aFieldHelptext)
+                { m_aFieldHelptext = aFieldHelptext; }
+
+            virtual void Invalidate();
+            virtual rtl::OUString ToString() const;
+        private:
             ::rtl::OUString m_aFieldname;
             ::rtl::OUString m_aFieldHelptext;
-            static const ::rtl::OUString our_sNamePrefix;
+            IFieldmark::parameter_map_t m_vParams;
 
+            static const ::rtl::OUString our_sNamePrefix;
     };
 
     class TextFieldmark
@@ -211,9 +244,6 @@ namespace sw { namespace mark
         public:
             TextFieldmark(const SwPaM& rPaM);
             virtual void InitDoc(SwDoc* const io_pDoc);
-        private:
-            //int fftypetxt; // Type of text field: 0 = Regular text, 1 = Number, 2 = Date, 3 = Current date, 4 = Current time, 5 = Calculation
-            //int ffmaxlen; // Number of characters for text field. Zero means unlimited.
     };
 
     class CheckboxFieldmark
@@ -225,11 +255,6 @@ namespace sw { namespace mark
             virtual void InitDoc(SwDoc* const io_pDoc);
             bool IsChecked() const;
             void SetChecked(bool checked);
-        private:
-            bool m_isChecked;
-            //bool ffsize; // 0 = Auto, 1=Exact (see ffhps)
-            //bool ffrecalc;
-            //int ffhps; // Check box size (half-point sizes).
     };
 
 }}

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docfly.cxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -181,7 +178,7 @@ Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
     if( rDoc.GetRootFrm() )
         switch( rAnch.GetAnchorId() )
         {
-        case FLY_IN_CNTNT:
+        case FLY_AS_CHAR:
             if( pFlyFmt && rAnch.GetCntntAnchor() )
             {
                 const SwFrm* pOld = ((SwFlyFrmFmt*)pFlyFmt)->GetFrm( &aRet, FALSE );
@@ -190,8 +187,8 @@ Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
             }
             break;
 
-        case FLY_AT_CNTNT:
-        case FLY_AUTO_CNTNT: // LAYER_IMPL
+        case FLY_AT_PARA:
+        case FLY_AT_CHAR: // LAYER_IMPL
             if( rAnch.GetCntntAnchor() )
             {
                 const SwPosition *pPos = rAnch.GetCntntAnchor();
@@ -213,7 +210,7 @@ Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
             }
             break;
 
-        case FLY_PAGE:
+        case FLY_AT_PAGE:
             {
                 USHORT nPgNum = rAnch.GetPageNum();
                 const SwPageFrm *pPage = (SwPageFrm*)rDoc.GetRootFrm()->Lower();
@@ -249,9 +246,11 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
 
     // ist der neue ein gueltiger Anker?
     if( !aNewAnch.GetCntntAnchor() && (FLY_AT_FLY == nNew ||
-        FLY_AT_CNTNT == nNew || FLY_IN_CNTNT == nNew ||
-        FLY_AUTO_CNTNT == nNew ))
+        (FLY_AT_PARA == nNew) || (FLY_AS_CHAR == nNew) ||
+        (FLY_AT_CHAR == nNew) ))
+    {
         return IGNOREANCHOR;
+    }
 
     if( nOld == nNew )
         return DONTMAKEFRMS;
@@ -264,7 +263,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
     //doppeltes hiden waere so eine art Show!
     rFmt.DelFrms();
 
-    if( FLY_IN_CNTNT == nOld )
+    if ( FLY_AS_CHAR == nOld )
     {
         //Bei InCntnt's wird es spannend: Das TxtAttribut muss vernichtet
         //werden. Leider reisst dies neben den Frms auch noch das Format mit
@@ -295,7 +294,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
     const SfxPoolItem* pItem;
     switch( nNew )
     {
-    case FLY_IN_CNTNT:
+    case FLY_AS_CHAR:
             //Wenn keine Positionsattribute hereinkommen, dann muss dafuer
             //gesorgt werden, das keine unerlaubte automatische Ausrichtung
             //bleibt.
@@ -326,10 +325,10 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
         }
         break;
 
-    case FLY_AT_CNTNT:
-    case FLY_AUTO_CNTNT: // LAYER_IMPL
+    case FLY_AT_PARA:
+    case FLY_AT_CHAR: // LAYER_IMPL
     case FLY_AT_FLY: // LAYER_IMPL
-    case FLY_PAGE:
+    case FLY_AT_PAGE:
         {
             //Wenn keine Positionsattribute hereinschneien korrigieren wir
             //die Position so, dass die Dokumentkoordinaten des Flys erhalten
@@ -345,7 +344,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
             if( text::HoriOrientation::NONE == aOldH.GetHoriOrient() && ( !pItem ||
                 aOldH.GetPos() == ((SwFmtHoriOrient*)pItem)->GetPos() ))
             {
-                SwTwips nPos = FLY_IN_CNTNT == nOld ? 0 : aOldH.GetPos();
+                SwTwips nPos = (FLY_AS_CHAR == nOld) ? 0 : aOldH.GetPos();
                 nPos += aOldAnchorPos.X() - aNewAnchorPos.X();
 
                 if( pItem )
@@ -367,7 +366,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
             if( text::VertOrientation::NONE == aOldV.GetVertOrient() && (!pItem ||
                 aOldV.GetPos() == ((SwFmtVertOrient*)pItem)->GetPos() ) )
             {
-                SwTwips nPos = FLY_IN_CNTNT == nOld ? 0 : aOldV.GetPos();
+                SwTwips nPos = (FLY_AS_CHAR == nOld) ? 0 : aOldV.GetPos();
                 nPos += aOldAnchorPos.Y() - aNewAnchorPos.Y();
                 if( pItem )
                 {
@@ -698,7 +697,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
 //            xub_StrLen nIndx = STRING_NOTFOUND;
             const SwPosition* pOldAsCharAnchorPos( 0L );
             const RndStdIds eOldAnchorType = pContact->GetAnchorId();
-            if ( !_bSameOnly && eOldAnchorType == FLY_IN_CNTNT )
+            if ( !_bSameOnly && eOldAnchorType == FLY_AS_CHAR )
             {
                 pOldAsCharAnchorPos = new SwPosition( pContact->GetCntntAnchor() );
             }
@@ -713,8 +712,8 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
 
             switch ( _eAnchorType )
             {
-            case FLY_AT_CNTNT:
-            case FLY_AUTO_CNTNT:
+            case FLY_AT_PARA:
+            case FLY_AT_CHAR:
                 {
                     const Point aNewPoint = pOldAnchorFrm &&
                                             ( pOldAnchorFrm->IsVertical() ||
@@ -768,10 +767,10 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                         break;
                     }
 
-                    aNewAnch.SetType( FLY_PAGE );
+                    aNewAnch.SetType( FLY_AT_PAGE );
                     // no break
                 }
-            case FLY_PAGE:
+            case FLY_AT_PAGE:
                 {
                     pNewAnchorFrm = GetRootFrm()->Lower();
                     while ( pNewAnchorFrm && !pNewAnchorFrm->Frm().IsInside( aPt ) )
@@ -782,7 +781,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     aNewAnch.SetPageNum( ((SwPageFrm*)pNewAnchorFrm)->GetPhyPageNum());
                 }
                 break;
-            case FLY_IN_CNTNT:
+            case FLY_AS_CHAR:
                 if( _bSameOnly )    // Positions/Groessenaenderung
                 {
                     if( !pOldAnchorFrm )
@@ -805,7 +804,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     bUnmark = ( 0 != i );
                     Point aPoint( aPt );
                     aPoint.X() -= 1;    // nicht im DrawObj landen!!
-                    aNewAnch.SetType( FLY_IN_CNTNT );
+                    aNewAnch.SetType( FLY_AS_CHAR );
                     SwPosition aPos( *((SwCntntFrm*)pNewAnchorFrm)->GetNode() );
                     if ( pNewAnchorFrm->Frm().IsInside( aPoint ) )
                     {
@@ -839,7 +838,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 ASSERT( !this, "unexpected AnchorId." );
             }
 
-            if ( (FLY_IN_CNTNT != _eAnchorType) &&
+            if ( (FLY_AS_CHAR != _eAnchorType) &&
                  pNewAnchorFrm &&
                  ( !_bSameOnly || pNewAnchorFrm != pOldAnchorFrm ) )
             {
@@ -949,8 +948,8 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
         const SwFmtAnchor& rAnchor = (*GetSpzFrmFmts())[ n ]->GetAnchor();
         ULONG nTstSttNd;
         // OD 11.12.2003 #i20622# - to-frame anchored objects are allowed.
-        if ( ( rAnchor.GetAnchorId() == FLY_AT_CNTNT ||
-               rAnchor.GetAnchorId() == FLY_AUTO_CNTNT ) &&
+        if ( ((rAnchor.GetAnchorId() == FLY_AT_PARA) ||
+              (rAnchor.GetAnchorId() == FLY_AT_CHAR)) &&
              0 != rAnchor.GetCntntAnchor() &&
              nFlySttNd <= ( nTstSttNd =
                          rAnchor.GetCntntAnchor()->nNode.GetIndex() ) &&
@@ -971,9 +970,9 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
                       &rDstAnchor = rDest.GetAnchor();
     ULONG nEndOfExtras = GetNodes().GetEndOfExtras().GetIndex();
     BOOL bAllowed = FALSE;
-    if( FLY_PAGE == rSrcAnchor.GetAnchorId() )
+    if ( FLY_AT_PAGE == rSrcAnchor.GetAnchorId() )
     {
-        if( FLY_PAGE == rDstAnchor.GetAnchorId() ||
+        if ( (FLY_AT_PAGE == rDstAnchor.GetAnchorId()) ||
             ( rDstAnchor.GetCntntAnchor() &&
               rDstAnchor.GetCntntAnchor()->nNode.GetIndex() > nEndOfExtras ))
             bAllowed = TRUE;

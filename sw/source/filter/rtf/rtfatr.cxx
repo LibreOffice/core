@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rtfatr.cxx,v $
- * $Revision: 1.75.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,9 +35,7 @@
  */
 #include <hintids.hxx>
 
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #include <vcl/cvtgrf.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/stritem.hxx>
@@ -48,51 +43,45 @@
 #include <svl/whiter.hxx>
 #include <svtools/rtfout.hxx>
 #include <svl/itemiter.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/hyznitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
-#endif
-#include <svx/lspcitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/prntitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/spltitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/crsditem.hxx>
-#ifndef _SVX_CNTRITEM_HXX //autogen
-#include <svx/cntritem.hxx>
-#endif
-#include <svx/postitem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/wrlmitem.hxx>
-#ifndef _SVX_EMPHITEM_HXX
-#include <svx/emphitem.hxx>
-#endif
-#include <svx/twolinesitem.hxx>
-#include <svx/charscaleitem.hxx>
-#include <svx/charrotateitem.hxx>
-#include <svx/charreliefitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/prntitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/spltitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/twolinesitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/charrotateitem.hxx>
+#include <editeng/charreliefitem.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svx/paravertalignitem.hxx>
-#include <svx/hngpnctitem.hxx>
-#include <svx/scriptspaceitem.hxx>
-#include <svx/forbiddenruleitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/charhiddenitem.hxx>
+#include <editeng/paravertalignitem.hxx>
+#include <editeng/hngpnctitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
+#include <editeng/forbiddenruleitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <unotools/charclass.hxx>
 #include <reffld.hxx>
 #include <frmatr.hxx>
@@ -127,9 +116,7 @@
 #include <flddat.hxx>
 #include <pagedesc.hxx>     // fuer SwPageDesc ...
 #include <swtable.hxx>      // fuer SwPageDesc ...
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <swrect.hxx>
 #include <section.hxx>
 #include <wrtswtbl.hxx>
@@ -3592,7 +3579,7 @@ static Writer& OutRTF_SwFmtVertOrient ( Writer& rWrt, const SfxPoolItem& rHt )
         const char* pOrient;
         RndStdIds eAnchor = rRTFWrt.pFlyFmt->GetAnchor().GetAnchorId();
         sal_Int16 eOrient = rFlyVert.GetRelationOrient();
-        if( FLY_PAGE == eAnchor )
+        if (FLY_AT_PAGE == eAnchor)
         {
             if( text::RelOrientation::PAGE_FRAME == eOrient || text::RelOrientation::FRAME == eOrient )
                 pOrient = OOO_STRING_SVTOOLS_RTF_PVPG;
@@ -3648,7 +3635,7 @@ static Writer& OutRTF_SwFmtHoriOrient( Writer& rWrt, const SfxPoolItem& rHt )
         const char* pS;
         RndStdIds eAnchor = rRTFWrt.pFlyFmt->GetAnchor().GetAnchorId();
         sal_Int16 eOrient = rFlyHori.GetRelationOrient();
-        if( FLY_PAGE == eAnchor )
+        if (FLY_AT_PAGE == eAnchor)
         {
             if( text::RelOrientation::PAGE_FRAME == eOrient || text::RelOrientation::FRAME == eOrient )
                 pS = OOO_STRING_SVTOOLS_RTF_PHPG;
@@ -3702,12 +3689,12 @@ static Writer& OutRTF_SwFmtAnchor( Writer& rWrt, const SfxPoolItem& rHt )
         rRTFWrt.bOutFmtAttr = TRUE;
         switch( nId )
         {
-        case FLY_PAGE:
+        case FLY_AT_PAGE:
                 rWrt.Strm() << OOO_STRING_SVTOOLS_RTF_FLYPAGE;
                 rWrt.OutULong( rAnchor.GetPageNum() );
             break;
-        case FLY_AT_CNTNT:
-        case FLY_IN_CNTNT:
+        case FLY_AT_PARA:
+        case FLY_AS_CHAR:
             rWrt.Strm() << OOO_STRING_SVTOOLS_RTF_FLYCNTNT;
             break;
         }

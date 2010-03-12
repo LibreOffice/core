@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsort.cxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +34,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <comphelper/processfactory.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <docary.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
@@ -48,9 +45,7 @@
 #include <swtable.hxx>
 #include <swundo.hxx>
 #include <sortopt.hxx>
-#ifndef _DOCSORT_HXX
 #include <docsort.hxx>
-#endif
 #include <undobj.hxx>
 #include <tblsel.hxx>
 #include <cellatr.hxx>
@@ -341,18 +336,13 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     const SwPosition *pStart = rPaM.Start(), *pEnd = rPaM.End();
     // Index auf den Start der Selektion
 
-    SwFrmFmt* pFmt;
-    const SwFmtAnchor* pAnchor;
-    const SwPosition* pAPos;
-    USHORT n;
-
-    for( n = 0; n < GetSpzFrmFmts()->Count(); ++n )
+    for ( USHORT n = 0; n < GetSpzFrmFmts()->Count(); ++n )
     {
-        pFmt = (SwFrmFmt*)(*GetSpzFrmFmts())[n];
-        pAnchor = &pFmt->GetAnchor();
+        SwFrmFmt *const pFmt = static_cast<SwFrmFmt*>((*GetSpzFrmFmts())[n]);
+        SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
+        SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
 
-        if( FLY_AT_CNTNT == pAnchor->GetAnchorId() &&
-            0 != (pAPos = pAnchor->GetCntntAnchor() ) &&
+        if (pAPos && (FLY_AT_PARA == pAnchor->GetAnchorId()) &&
             pStart->nNode <= pAPos->nNode && pAPos->nNode <= pEnd->nNode )
             return FALSE;
     }
@@ -444,7 +434,7 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 
     DoUndo( FALSE );
 
-    for( n = 0; n < aSortArr.Count(); ++n )
+    for ( USHORT n = 0; n < aSortArr.Count(); ++n )
     {
         SwSortTxtElement* pBox = (SwSortTxtElement*)aSortArr[n];
         aStart      = nBeg + n;

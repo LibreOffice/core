@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mmlayoutpage.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,9 +39,7 @@
 #include <unotools/tempfile.hxx>
 #include <uitool.hxx>
 #include <svx/dlgutil.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <swundo.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
@@ -56,9 +51,7 @@
 #include <fldbas.hxx>
 #include <poolfmt.hxx>
 #include <unotxdoc.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <doc.hxx>
 #include <wrtsh.hxx>
 #include <fmtsrnd.hxx>
@@ -66,7 +59,7 @@
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <svl/urihelper.hxx>
 #include <shellio.hxx>
 #include <osl/file.hxx>
@@ -325,7 +318,7 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
                         RES_FRM_SIZE, RES_FRM_SIZE,
                         RES_SURROUND, RES_SURROUND,
                         0 );
-    aSet.Put(SwFmtAnchor(FLY_PAGE, 1));
+    aSet.Put(SwFmtAnchor(FLY_AT_PAGE, 1));
     if(bAlignLeft)
         aSet.Put(SwFmtHoriOrient( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_PRINT_AREA ));
     else

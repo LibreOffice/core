@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: edtox.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +38,7 @@
 #include <svl/fstathelper.hxx>
 #endif
 #include <sfx2/docfile.hxx>
-#include "svx/unolingu.hxx"
+#include "editeng/unolingu.hxx"
 #include <swtypes.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>
@@ -60,6 +57,9 @@
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>
 #endif
+#include <bookmrk.hxx>
+#include <xmloff/odffields.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -234,6 +234,25 @@ BOOL SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
     }
     return bRet;
 }
+
+BOOL SwEditShell::UpdateField( sw::mark::IFieldmark &fieldBM)
+{
+//    SwDocShell* pDocSh = pDoc->GetDocShell();
+    //@TODO implement me...; add undo etc...
+    if ( pDoc && fieldBM.IsExpanded( ) ) {
+        SwPosition aSttPos = fieldBM.GetMarkStart( );
+        aSttPos.nContent++;
+
+        SwPosition aEndPos = fieldBM.GetMarkEnd( );
+        aEndPos.nContent--;
+
+        SwPaM aPaM( aSttPos, aEndPos );
+        pDoc->DeleteRange(aPaM);
+        pDoc->InsertString(aPaM, String::CreateFromAscii("Implement me ;-)") );
+    }
+    return TRUE;
+}
+
 
 /*--------------------------------------------------------------------
      Beschreibung: Aktuelles Verzeichnis vor oder in dem der Cursor

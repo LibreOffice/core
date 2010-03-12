@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlexp.cxx,v $
- * $Revision: 1.91 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -41,14 +37,13 @@
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/svddef.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <svx/xmlcnitm.hxx>
+#include <editeng/xmlcnitm.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xformsexport.hxx>
@@ -58,14 +53,14 @@
 #include <docsh.hxx>
 #include <docstat.hxx>
 #include <swerror.h>
-#include <unoobj.hxx>
+#include <unotext.hxx>
 #include <xmltexte.hxx>
 #include <xmlexp.hxx>
 #include <sfx2/viewsh.hxx>
 #include <comphelper/processfactory.hxx>
 #include <docary.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <ForbiddenCharactersEnum.hxx>
 
 // for locking SolarMutex: svapp + mutex
@@ -75,6 +70,7 @@
 // --> OD 2007-03-30 #i73788#
 #include <pausethreadstarting.hxx>
 // <--
+
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmltexti.cxx,v $
- * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,17 +44,16 @@
 #include <xmloff/prstylei.hxx>
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlprmap.hxx>
-#ifndef _XMLOFF_TXTPRMAP_HXX
 #include <xmloff/txtprmap.hxx>
-#endif
 #include <xmloff/i18nmap.hxx>
 #include "unocrsr.hxx"
-#include "unoobj.hxx"
+#include "TextCursorHelper.hxx"
 #include "unoframe.hxx"
 #include "doc.hxx"
 #include "unocoll.hxx"
 #include <fmtfsize.hxx>
 #include <fmtanchr.hxx>
+#include <fmtcntnt.hxx>
 #include "xmlimp.hxx"
 #include "xmltbli.hxx"
 #include "xmltexti.hxx"
@@ -75,6 +71,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/embedhlp.hxx>
 #include <svl/urihelper.hxx>
+
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -126,7 +123,7 @@ static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet,
         rItemSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );
     }
 
-    SwFmtAnchor aAnchor( FLY_AUTO_CNTNT );
+    SwFmtAnchor aAnchor( FLY_AT_CHAR );
     rItemSet.Put( aAnchor );
 
     if( pTwipWidth )
