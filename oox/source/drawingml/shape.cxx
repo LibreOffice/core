@@ -47,6 +47,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <com/sun/star/document/XActionLockable.hpp>
 
 using rtl::OUString;
 using namespace ::oox::core;
@@ -365,6 +366,10 @@ Reference< XShape > Shape::createAndInsert(
         }
         rxShapes->add( mxShape );
 
+        Reference< document::XActionLockable > xLockable( mxShape, UNO_QUERY );
+        if( xLockable.is() )
+            xLockable->addActionLock();
+
         // sj: removing default text of placeholder objects such as SlideNumberShape or HeaderShape
         if ( bClearText )
         {
@@ -461,6 +466,8 @@ Reference< XShape > Shape::createAndInsert(
                 getTextBody()->insertAt( rFilterBase, xText, xAt, aCharStyleProperties, mpMasterTextListStyle );
             }
         }
+        if( xLockable.is() )
+            xLockable->removeActionLock();
     }
 
     // use a callback for further processing on the XShape (e.g. charts)
