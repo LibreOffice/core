@@ -74,10 +74,14 @@
 #include "file_path_helper.h"
 
 #define ACT_IGNORE  1
-#define ACT_ABORT   2
-#define ACT_EXIT    3
-#define ACT_SYSTEM  4
-#define ACT_HIDE    5
+#define ACT_EXIT    2
+#define ACT_SYSTEM  3
+#define ACT_HIDE    4
+#ifdef SAL_ENABLE_CRASH_REPORT
+#    define ACT_ABORT   5
+#else
+#    define ACT_ABORT   ACT_SYSTEM
+#endif
 
 #define MAX_PATH_LEN    2048
 
