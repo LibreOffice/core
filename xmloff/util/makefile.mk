@@ -53,17 +53,8 @@ LIB1FILES=	\
 
 # --- Shared-Library -----------------------------------------------
 
-.IF "$(GUI)"!="UNX"
-LIB4TARGET= $(LB)$/ixo.lib
-LIB4FILES=	$(LB)$/_ixo.lib
-.IF "$(GUI)"!="OS2"
-LIB4OBJFILES=\
-    $(OBJ)$/xmlkywd.obj
-.ENDIF
-.ENDIF
-
 SHL1TARGET= xo$(DLLPOSTFIX)
-SHL1IMPLIB= _ixo
+SHL1IMPLIB= i$(SHL1TARGET)
 SHL1USE_EXPORTS=name
 
 SHL1STDLIBS= \
