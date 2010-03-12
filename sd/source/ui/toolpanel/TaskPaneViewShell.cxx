@@ -34,8 +34,6 @@
 #include "TaskPaneViewShell.hxx"
 
 #include "TaskPaneShellManager.hxx"
-#include "ToolPanelChildWindow.hrc"
-#include "ToolPanelChildWindow.hxx"
 #include "taskpane/SlideSorterCacheDisplay.hxx"
 #include "taskpane/ToolPanel.hxx"
 #include "taskpane/TitledControl.hxx"
