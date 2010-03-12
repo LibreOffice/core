@@ -29,6 +29,13 @@ in this Software without prior written authorization from the X Consortium.
 #include "def.h"
 char *hash_lookup( char *symbol, struct symhash *symbols );
 void hash_undefine( char *symbol, struct symhash *symbols );
+int gobble( register struct filepointer *filep, struct inclist *file,
+    struct inclist *file_red, struct symhash *symbols );
+int deftype ( register char *line, register struct filepointer *filep,
+    register struct inclist *file_red, register struct inclist *file,
+    int parse_it, struct symhash *symbols);
+int zero_value(register char *exp, register struct filepointer *filep,
+    register struct inclist *file_red, register struct symhash *symbols);
 
 extern char *directives[];
 extern struct symhash *maininclist;
@@ -412,8 +419,7 @@ static int hash( str )
 {
     /* Hash (Kernighan and Ritchie) */
     register unsigned int hashval = 0;
-    register unsigned int i       = 0;
-    char *s = str;
+    //char *s = str;
 
     for ( ; *str; str++ )
     {
