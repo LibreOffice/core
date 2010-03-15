@@ -498,6 +498,9 @@ $(MISC)/lang/Langpack-%.xcd .ERRREMOVE :
 
 $(MISC)/lang/fcfg_langpack_{$(alllangiso)}.xcd : $(SOLARPCKDIR)/$$(@:b).zip
 
+# It can happen that localized $(SOLARPCKDIR)/fcfg_langpack_*.zip contain
+# zero-sized org/openoffice/TypeDectection/Filter.xcu; filter them out in the
+# find shell command below (see issue 110041):
 $(MISC)/lang/fcfg_langpack_%.xcd .ERRREMOVE :
     $(MKDIRHIER) $(@:d)
     rm -rf $(MISC)/$(@:b).unzip
@@ -505,7 +508,7 @@ $(MISC)/lang/fcfg_langpack_%.xcd .ERRREMOVE :
     cd $(MISC)/$(@:b).unzip && unzip $(SOLARPCKDIR)/$(@:b).zip
     - $(RM) $(MISC)/$(@:b).list
     echo '<list>' $(foreach,i,$(shell cd $(MISC) && \
-        find $(@:b).unzip -name \*.xcu -print) \
+        find $(@:b).unzip -name \*.xcu -size +0c -print) \
         '<filename>$i</filename>') '</list>' > $(MISC)/$(@:b).list
     $(XSLTPROC) --nonet -o $@ $(SOLARENV)/bin/packregistry.xslt \
         $(MISC)/$(@:b).list
