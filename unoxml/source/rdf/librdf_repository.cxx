@@ -27,9 +27,19 @@
 
 #include "librdf_repository.hxx"
 
-#include <comphelper/stlunosequence.hxx>
-#include <comphelper/sequenceasvector.hxx>
-#include <comphelper/makesequence.hxx>
+#include <string.h>
+
+#include <set>
+#include <map>
+#include <functional>
+#include <algorithm>
+
+#include <boost/utility.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/shared_array.hpp>
+#include <boost/bind.hpp>
+
+#include <librdf.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -37,7 +47,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/io/XSeekableInputStream.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
-#include "com/sun/star/rdf/XDocumentRepository.hpp"
+#include <com/sun/star/rdf/XDocumentRepository.hpp>
 #include <com/sun/star/rdf/XLiteral.hpp>
 #include <com/sun/star/rdf/FileFormat.hpp>
 #include <com/sun/star/rdf/URIs.hpp>
@@ -45,24 +55,15 @@
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/Literal.hpp>
 
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <rtl/ref.hxx>
-#include <rtl/ustring.hxx>
 
-#include <librdf.h>
-
-#include <boost/utility.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/shared_array.hpp>
-#include <boost/bind.hpp>
-
-#include <map>
-#include <functional>
-#include <algorithm>
-
-#include <string.h>
+#include <comphelper/stlunosequence.hxx>
+#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/makesequence.hxx>
 
 
 /**
@@ -210,7 +211,6 @@ public:
     rdf::Statement
         convertToStatement(librdf_statement* i_pStmt, librdf_node* i_pContext)
         const;
-    uno::Reference<rdf::XURI> getRDFsLabel() const;
 
 private:
     uno::Reference< uno::XComponentContext > m_xContext;
@@ -309,8 +309,8 @@ public:
             const uno::Reference< rdf::XMetadatable > & i_xElement)
         throw (uno::RuntimeException, lang::IllegalArgumentException,
             rdf::RepositoryException);
-    virtual uno::Sequence<rdf::Statement> SAL_CALL getStatementRDFa(
-            const uno::Reference< rdf::XMetadatable > & i_xElement)
+    virtual beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool > SAL_CALL
+        getStatementRDFa(uno::Reference< rdf::XMetadatable > const& i_xElement)
         throw (uno::RuntimeException, lang::IllegalArgumentException,
             rdf::RepositoryException);
     virtual uno::Reference< container::XEnumeration > SAL_CALL
@@ -388,6 +388,9 @@ private:
 
     /// type conversion helper
     librdf_TypeConverter m_TypeConverter;
+
+    /// set of xml:ids of elements with xhtml:content
+    ::std::set< ::rtl::OUString > m_RDFaXHTMLContentSet;
 };
 
 
@@ -1437,12 +1440,12 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 "librdf_Repository::setStatementRDFa: "
                 "ensureMetadataReference did not"), *this);
     }
+    ::rtl::OUString const sXmlId(mdref.First +
+            ::rtl::OUString::createFromAscii("#") + mdref.Second);
     uno::Reference<rdf::XURI> xXmlId;
     try {
         xXmlId.set( rdf::URI::create(m_xContext,
-                ::rtl::OUString::createFromAscii(s_nsOOo)
-                + mdref.First + ::rtl::OUString::createFromAscii("#")
-                + mdref.Second),
+                ::rtl::OUString::createFromAscii(s_nsOOo) + sXmlId),
             uno::UNO_QUERY_THROW);
     } catch (lang::IllegalArgumentException & iae) {
         throw lang::WrappedTargetRuntimeException(
@@ -1452,15 +1455,18 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     }
 
     ::osl::MutexGuard g(m_aMutex);
-    uno::Reference<rdf::XNode> xText;
+    ::rtl::OUString const content( (i_rRDFaContent.getLength() == 0)
+            ? xTextRange->getString()
+            : i_rRDFaContent );
+    uno::Reference<rdf::XNode> xContent;
     try {
-        if (i_xRDFaDatatype.is() && (i_rRDFaContent.equalsAscii(""))) {
-            xText.set( rdf::Literal::createWithType(m_xContext,
-                    xTextRange->getString(), i_xRDFaDatatype),
+        if (i_xRDFaDatatype.is()) {
+            xContent.set(rdf::Literal::createWithType(m_xContext,
+                    content, i_xRDFaDatatype),
                 uno::UNO_QUERY_THROW);
         } else {
-            xText.set( rdf::Literal::create(m_xContext,
-                xTextRange->getString()), uno::UNO_QUERY_THROW);
+            xContent.set(rdf::Literal::create(m_xContext, content),
+                uno::UNO_QUERY_THROW);
         }
     } catch (lang::IllegalArgumentException & iae) {
         throw lang::WrappedTargetRuntimeException(
@@ -1468,36 +1474,16 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 "librdf_Repository::setStatementRDFa: "
                 "cannot create literal"), *this, uno::makeAny(iae));
     }
-    if (i_rRDFaContent.equalsAscii("")) {
-        removeStatementRDFa(i_xObject);
-        ::std::for_each(::comphelper::stl_begin(i_rPredicates),
-            ::comphelper::stl_end(i_rPredicates),
-            ::boost::bind( &librdf_Repository::addStatementGraph,
-                this, i_xSubject, _1, xText, xXmlId, true));
+    removeStatementRDFa(i_xObject);
+    if (i_rRDFaContent.getLength() == 0) {
+        m_RDFaXHTMLContentSet.erase(sXmlId);
     } else {
-        uno::Reference<rdf::XURI> xLabel( m_TypeConverter.getRDFsLabel() );
-        uno::Reference<rdf::XNode> xContent;
-        try {
-            if (!i_xRDFaDatatype.is()) {
-                xContent.set(rdf::Literal::create(m_xContext, i_rRDFaContent),
-                    uno::UNO_QUERY_THROW);
-            } else {
-                xContent.set(rdf::Literal::createWithType(m_xContext,
-                    i_rRDFaContent, i_xRDFaDatatype), uno::UNO_QUERY_THROW);
-            }
-        } catch (lang::IllegalArgumentException & iae) {
-            throw lang::WrappedTargetRuntimeException(
-                ::rtl::OUString::createFromAscii(
-                    "librdf_Repository::setStatementRDFa: "
-                    "cannot create literal"), *this, uno::makeAny(iae));
-        }
-        removeStatementRDFa(i_xObject);
-        ::std::for_each(::comphelper::stl_begin(i_rPredicates),
-            ::comphelper::stl_end(i_rPredicates),
-            ::boost::bind( &librdf_Repository::addStatementGraph,
-                this, i_xSubject, _1, xContent, xXmlId, true));
-        addStatementGraph(i_xSubject, xLabel, xText, xXmlId, true);
+        m_RDFaXHTMLContentSet.insert(sXmlId);
     }
+    ::std::for_each(::comphelper::stl_begin(i_rPredicates),
+        ::comphelper::stl_end(i_rPredicates),
+        ::boost::bind( &librdf_Repository::addStatementGraph,
+            this, i_xSubject, _1, xContent, xXmlId, true));
 }
 
 void SAL_CALL librdf_Repository::removeStatementRDFa(
@@ -1532,7 +1518,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     clearGraph(xXmlId, true);
 }
 
-uno::Sequence<rdf::Statement> SAL_CALL
+beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool > SAL_CALL
 librdf_Repository::getStatementRDFa(
     const uno::Reference< rdf::XMetadatable > & i_xElement)
 throw (uno::RuntimeException, lang::IllegalArgumentException,
@@ -1544,14 +1530,14 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     }
     const beans::StringPair mdref( i_xElement->getMetadataReference() );
     if (mdref.First.equalsAscii("") || mdref.Second.equalsAscii("")) {
-        return uno::Sequence<rdf::Statement>();
+        return beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool >();
     }
+    ::rtl::OUString const sXmlId(mdref.First +
+            ::rtl::OUString::createFromAscii("#") + mdref.Second);
     uno::Reference<rdf::XURI> xXmlId;
     try {
         xXmlId.set( rdf::URI::create(m_xContext,
-                ::rtl::OUString::createFromAscii(s_nsOOo)
-                + mdref.First + ::rtl::OUString::createFromAscii("#")
-                + mdref.Second),
+                ::rtl::OUString::createFromAscii(s_nsOOo) + sXmlId),
             uno::UNO_QUERY_THROW);
     } catch (lang::IllegalArgumentException & iae) {
         throw lang::WrappedTargetRuntimeException(
@@ -1566,21 +1552,16 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         getStatementsGraph(0, 0, 0, xXmlId, true) );
     OSL_ENSURE(xIter.is(), "getStatementRDFa: no result?");
     if (!xIter.is()) throw uno::RuntimeException();
-    const uno::Reference<rdf::XURI> xLabel( m_TypeConverter.getRDFsLabel() );
     while (xIter->hasMoreElements()) {
         rdf::Statement stmt;
         if (!(xIter->nextElement() >>= stmt)) {
             OSL_ENSURE(false, "getStatementRDFa: result of wrong type?");
         } else {
-            OSL_ENSURE(stmt.Predicate.is(), "getStatementRDFa: no predicate?");
-            if (stmt.Predicate->getStringValue() != xLabel->getStringValue()) {
-                ret.push_back(stmt);
-            } else { // the RDFs:label comes first
-                ret.insert(ret.begin(), stmt);
-            }
+            ret.push_back(stmt);
         }
     }
-    return ret.getAsConstList();
+    return beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool >(
+            ret.getAsConstList(), 0 != m_RDFaXHTMLContentSet.count(sXmlId));
 }
 
 extern "C"
@@ -2213,26 +2194,6 @@ librdf_TypeConverter::convertToStatement(librdf_statement* i_pStmt,
         convertToXURI(librdf_statement_get_predicate(i_pStmt)),
         convertToXNode(librdf_statement_get_object(i_pStmt)),
         convertToXURI(i_pContext));
-}
-
-uno::Reference<rdf::XURI> librdf_TypeConverter::getRDFsLabel() const
-{
-    static uno::Reference< rdf::XURI> xLabel;
-
-    if (!xLabel.is()) {
-        try {
-            // rdfs:label
-            xLabel.set(rdf::URI::createKnown(m_xContext,
-                rdf::URIs::RDFS_LABEL),
-                uno::UNO_QUERY_THROW);
-        } catch (lang::IllegalArgumentException & iae) {
-            throw lang::WrappedTargetRuntimeException(
-                ::rtl::OUString::createFromAscii(
-                    "librdf_TypeConverter::getRDFsLabel: "
-                    "cannot create rdfs:label"), m_rRep, uno::makeAny(iae));
-        }
-    }
-    return xLabel;
 }
 
 } // closing anonymous implementation namespace
