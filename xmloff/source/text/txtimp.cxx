@@ -2191,21 +2191,27 @@ SvI18NMap& XMLTextImportHelper::GetRenameMap()
 void XMLTextImportHelper::InsertBookmarkStartRange(
     const OUString sName,
     const Reference<XTextRange> & rRange,
-    const OUString& i_rXmlId)
+    OUString const& i_rXmlId,
+    ::boost::shared_ptr< ::xmloff::ParsedRDFaAttributes > & i_rpRDFaAttributes)
 {
-    aBookmarkStartRanges[sName] = std::make_pair(rRange, i_rXmlId);
+    aBookmarkStartRanges[sName] =
+        ::boost::make_tuple(rRange, i_rXmlId, i_rpRDFaAttributes);
     aBookmarkVector.push_back(sName);
 }
 
 sal_Bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
     const OUString sName,
     Reference<XTextRange> & o_rRange,
-    OUString& o_rXmlId)
+    OUString & o_rXmlId,
+    ::boost::shared_ptr< ::xmloff::ParsedRDFaAttributes > & o_rpRDFaAttributes)
 {
     if (aBookmarkStartRanges.count(sName))
     {
-        o_rRange.set(aBookmarkStartRanges[sName].first);
-        o_rXmlId = aBookmarkStartRanges[sName].second;
+        BookmarkMapEntry_t & rEntry =
+            (*aBookmarkStartRanges.find(sName)).second;
+        o_rRange.set(rEntry.get<0>());
+        o_rXmlId = rEntry.get<1>();
+        o_rpRDFaAttributes = rEntry.get<2>();
         aBookmarkStartRanges.erase(sName);
         BookmarkVector_t::iterator it=aBookmarkVector.begin();
         while(it!=aBookmarkVector.end() && it->compareTo(sName)!=0) {
@@ -2231,7 +2237,7 @@ sal_Bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
 
 ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > XMLTextImportHelper::GetRangeFor(::rtl::OUString &sName)
 {
-    return aBookmarkStartRanges[sName].first;
+    return aBookmarkStartRanges[sName].get<0>();
 }
 
 

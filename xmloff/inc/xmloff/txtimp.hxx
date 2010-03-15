@@ -36,6 +36,8 @@
 #include <vector>
 #include <memory>
 #include <boost/utility.hpp>
+#include <boost/tuple/tuple.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <tools/list.hxx>
 #include <xmloff/xmlictxt.hxx>
@@ -65,6 +67,10 @@ class XMLSectionImportContext;
 class XMLFontStylesContext;
 template<class A> class XMLPropertyBackpatcher;
 class XMLEventsImportContext;
+
+namespace xmloff {
+    struct ParsedRDFaAttributes;
+}
 
 namespace com { namespace sun { namespace star {
 namespace text { class XText; class XTextCursor; class XTextRange; class XTextContent; }
@@ -417,13 +423,14 @@ class XMLOFF_DLLPUBLIC XMLTextImportHelper : public UniRefBase,
     ::std::vector< ::rtl::OUString >* mpOutlineStylesCandidates;
     // <--
 
+
+    // start range, xml:id, RDFa stuff
+    typedef ::boost::tuple<
+        ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange>,
+        ::rtl::OUString, ::boost::shared_ptr< ::xmloff::ParsedRDFaAttributes > >
+            BookmarkMapEntry_t;
     /// start ranges for open bookmarks
-    ::std::map< ::rtl::OUString,
-                // start range, xml:id
-                ::std::pair<
-                    ::com::sun::star::uno::Reference<
-                        ::com::sun::star::text::XTextRange>,
-                    ::rtl::OUString>,
+    ::std::map< ::rtl::OUString, BookmarkMapEntry_t,
                 ::comphelper::UStringLess> aBookmarkStartRanges;
 
     typedef ::std::vector< ::rtl::OUString> BookmarkVector_t;
@@ -757,14 +764,18 @@ public:
         const ::rtl::OUString sName,
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange> & rRange,
-        const ::rtl::OUString & i_rXmlId);
+        ::rtl::OUString const& i_rXmlId,
+        ::boost::shared_ptr< ::xmloff::ParsedRDFaAttributes > &
+            i_rpRDFaAttributes);
 
     /// process the start of a range reference
     sal_Bool FindAndRemoveBookmarkStartRange(
         const ::rtl::OUString sName,
         ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange> & o_rRange,
-        ::rtl::OUString& o_rXmlId);
+        ::rtl::OUString & o_rXmlId,
+        ::boost::shared_ptr< ::xmloff::ParsedRDFaAttributes > &
+            o_rpRDFaAttributes);
 
     ::rtl::OUString FindActiveBookmarkName();
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > GetRangeFor(::rtl::OUString &sName);
