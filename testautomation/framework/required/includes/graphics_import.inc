@@ -262,9 +262,7 @@ testcase tInFilterCountCompare()
         next iCurrentFilter
         
         irc = hManageComparisionList( cReferencePath, cUIFiltersPath, caUIFilters() )
-        if ( irc <> 0 ) then
-            warnlog( "The list of graphic format filters has changed" )
-        endif
+        hListResultEvaluation( irc , 0 )
         
         printlog( "" )
         printlog( "Verify <All formats>-string" )

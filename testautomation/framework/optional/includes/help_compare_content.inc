@@ -85,9 +85,7 @@ testcase tCompareHelpContent()
     printlog( "" )
     printlog( "Beginning comparision" )
     irc = hManageComparisionList( sFileIn, sFileOut, aTopicsFromUI() )
-    if ( irc <> 0 ) then
-	warnlog( "Something went wrong, please review the log." )
-    endif
+    hListResultEvaluation( irc , 0 )
     
 endcase
 

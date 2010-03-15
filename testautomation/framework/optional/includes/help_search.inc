@@ -81,9 +81,7 @@ testcase tHelpSearch
     sFileIn   = convertpath( cBasePath & cDataFile )
 
     irc       = hManageComparisionList( sFileIn, sFileOut, aUIList() )
-    if ( irc <> 0 ) then
-        warnlog( "Lists are not identical, please review the log" )
-    endif
+    hListResultEvaluation( irc , 0 )
     
     ' ------------ Search whole words only -------------------------------------
     printlog( "" )

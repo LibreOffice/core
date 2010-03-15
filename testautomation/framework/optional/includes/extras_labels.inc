@@ -98,10 +98,6 @@ testcase tLabelTypes()
     TabEtiketten.Cancel()
 
     irc = hManageComparisionList( sFileIn, sFileOut, al_UI_Labels() )
-    if ( irc <> 0 ) then
-        warnlog( "The list of labels (Brand/Types) has changed, please review." )
-    else
-        printlog( "The lists of labels are unchanged. Good." )
-    endif
+    hListResultEvaluation( irc , 0 )
     
 endcase
