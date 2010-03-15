@@ -116,6 +116,7 @@
 #include "MultiPropertySetHelper.hxx"
 #include <xmloff/formlayerexport.hxx>
 #include "XMLTextCharStyleNamesElementExport.hxx"
+#include <comphelper/stlunosequence.hxx>
 
 // --> OD 2008-04-25 #refactorlists#
 #include <txtlists.hxx>
@@ -231,6 +232,21 @@ namespace
     const OUString BoundFrames::our_sAnchorType = OUString::createFromAscii("AnchorType");
     const OUString BoundFrames::our_sAnchorFrame = OUString::createFromAscii("AnchorFrame");
 
+    class FieldParamExporter
+    {
+        public:
+            FieldParamExporter(SvXMLExport* const pExport, Reference<XNameContainer> xFieldParams)
+                : m_pExport(pExport)
+                , m_xFieldParams(xFieldParams)
+                { };
+            void Export();
+
+        private:
+            SvXMLExport* const m_pExport;
+            const Reference<XNameContainer> m_xFieldParams;
+
+            void ExportParameter(const OUString& sKey, const OUString& sValue);
+    };
 }
 
 namespace xmloff
@@ -385,6 +401,55 @@ BoundFrameSets::BoundFrameSets(const Reference<XInterface> xModel)
             Reference<XEnumerationAccess>(xDPS->getDrawPage(), UNO_QUERY),
             &lcl_ShapeFilter));
 };
+
+void FieldParamExporter::Export()
+{
+    static const Type aStringType = ::getCppuType((OUString*)0);
+    static const Type aBoolType = ::getCppuType((sal_Bool*)0);
+    static const Type aSeqType = ::getCppuType((Sequence<OUString>*)0);
+    static const Type aIntType = ::getCppuType((sal_Int32*)0);
+    Sequence<OUString> vParameters(m_xFieldParams->getElementNames());
+    for(const OUString* pCurrent=::comphelper::stl_begin(vParameters); pCurrent!=::comphelper::stl_end(vParameters); ++pCurrent)
+    {
+        const Any aValue = m_xFieldParams->getByName(*pCurrent);
+        const Type aValueType = aValue.getValueType();
+        if(aValueType == aStringType)
+        {
+            OUString sValue;
+            aValue >>= sValue;
+            ExportParameter(*pCurrent,sValue);
+        }
+        else if(aValueType == aBoolType)
+        {
+            sal_Bool bValue = false;
+            aValue >>= bValue;
+            ExportParameter(*pCurrent,OUString::createFromAscii(bValue ? "true" : "false"));
+        }
+        else if(aValueType == aSeqType)
+        {
+            Sequence<OUString> vValue;
+            aValue >>= vValue;
+            for(OUString* pSeqCurrent = ::comphelper::stl_begin(vValue); pSeqCurrent != ::comphelper::stl_end(vValue); ++pSeqCurrent)
+            {
+                ExportParameter(*pCurrent, *pSeqCurrent);
+            }
+        }
+        else if(aValueType == aIntType)
+        {
+            sal_Int32 nValue = 0;
+            aValue >>= nValue;
+            ExportParameter(*pCurrent, OUStringBuffer().append(nValue).makeStringAndClear());
+        }
+    }
+}
+
+void FieldParamExporter::ExportParameter(const OUString& sKey, const OUString& sValue)
+{
+    m_pExport->AddAttribute(XML_NAMESPACE_FIELD, XML_NAME, sKey);
+    m_pExport->AddAttribute(XML_NAMESPACE_FIELD, XML_VALUE, sValue);
+    m_pExport->StartElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
+    m_pExport->EndElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
+}
 
 void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                                   const Reference < XPropertySet > & rPropSet,
@@ -2237,19 +2302,19 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             else if (sType.equals(sTextFieldStart))
             {
                 Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
-                if (xBookmark.is()) {
+                if (xBookmark.is())
+                {
                     GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
                 }
                 Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
-                if (xFormField.is()) {
-                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, ::rtl::OUString::createFromAscii("msoffice.field.FORMTEXT"));
+                if (xFormField.is())
+                {
+                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
                 }
                 GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, sal_False);
-                if (xFormField.is()) {
-                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_NAME, ::rtl::OUString::createFromAscii("Description"));
-                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_VALUE, xFormField->getDescription());
-                    GetExport().StartElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
-                    GetExport().EndElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
+                if (xFormField.is())
+                {
+                    FieldParamExporter(&GetExport(), xFormField->getParameters()).Export();
                 }
                 GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, sal_False);
             }
@@ -2261,32 +2326,19 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             else if (sType.equals(sTextFieldStartEnd))
             {
                 Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
-                if (xBookmark.is()) {
+                if (xBookmark.is())
+                {
                     GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
                 }
                 Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
-                if (xFormField.is()) {
-                    sal_Int16 fftype=xFormField->getType();
-                    switch (fftype) {
-                        case 1:
-                            GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, ::rtl::OUString::createFromAscii("msoffice.field.FORMCHECKBOX"));
-                        break;
-                        default:
-                            DBG_ASSERT(false, "hey ---- add your export stuff here!!");
-                        break;
-                    }
+                if (xFormField.is())
+                {
+                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
                 }
                 GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, sal_False);
-                if (xFormField.is()) {
-                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_NAME, ::rtl::OUString::createFromAscii("Description"));
-                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_VALUE, xFormField->getDescription());
-                    GetExport().StartElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
-                    GetExport().EndElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
-
-                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_NAME, ::rtl::OUString::createFromAscii("Result"));
-                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_VALUE, ::rtl::OUString::valueOf((sal_Int32 )xFormField->getRes()));
-                    GetExport().StartElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
-                    GetExport().EndElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
+                if (xFormField.is())
+                {
+                    FieldParamExporter(&GetExport(), xFormField->getParameters()).Export();
                 }
                 GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, sal_False);
             }

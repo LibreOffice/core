@@ -32,6 +32,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
+#include "ne_alloc.h"
 #include "NeonUri.hxx"
 #include "DAVException.hxx"
 
@@ -127,7 +128,7 @@ NeonUri::NeonUri( const ne_uri * inUri )
         throw DAVException( DAVException::DAV_INVALID_ARG );
 
     init( rtl::OString( uri ), inUri );
-    free( uri );
+    ne_free( uri );
 
     calculateURI();
 }

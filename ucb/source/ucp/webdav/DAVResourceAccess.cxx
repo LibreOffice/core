@@ -960,6 +960,7 @@ void DAVResourceAccess::LOCK(
     while ( bRetry );
 }
 
+#if 0 // currently not used, but please don't remove code
 //=========================================================================
 // refresh existing lock.
 sal_Int64 DAVResourceAccess::LOCK(
@@ -1003,6 +1004,7 @@ sal_Int64 DAVResourceAccess::LOCK(
 
     return nNewTimeout;
 }
+#endif
 
 //=========================================================================
 void DAVResourceAccess::UNLOCK(
