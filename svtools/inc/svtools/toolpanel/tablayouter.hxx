@@ -74,6 +74,7 @@ namespace svt
         // attribute access
         TabItemContent  GetTabItemContent() const;
         void            SetTabItemContent( const TabItemContent& i_eItemContent );
+        TabAlignment    GetTabAlignment() const;
 
         // IDeckLayouter
         virtual Rectangle   Layout( const Rectangle& i_rDeckPlayground );

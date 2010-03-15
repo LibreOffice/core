@@ -112,6 +112,14 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
+    TabAlignment TabDeckLayouter::GetTabAlignment() const
+    {
+        if ( lcl_checkDisposed( *m_pData ) )
+            return TABS_RIGHT;
+        return m_pData->eAlignment;
+    }
+
+    //--------------------------------------------------------------------
     Rectangle TabDeckLayouter::Layout( const Rectangle& i_rDeckPlayground )
     {
         if ( lcl_checkDisposed( *m_pData ) )
