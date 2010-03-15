@@ -4056,6 +4056,65 @@ if test -n "$with_system_saxon" -o -n "$with_system_libs" && \
                [AC_MSG_ERROR(serializer.jar not found.)], [])
           AC_SUBST(SERIALIZER_JAR)
         fi
+
+dnl Saxon comes in two practically available versions, the out-of-date saxonb which
+dnl supports the java extensions that OOo uses, and the up-to-date saxon he 
+dnl "home edition" version, which is crippled to not support those java extensions.
+dnl And as an aside the he one also needs to be tweaked to include 
+dnl a META-INF/services to broadcast that it supports the jaxp transform factory
+
+        AC_MSG_CHECKING([if saxon works])
+        cat > saxontest.java <<_ACEOF
+[import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.stream.StreamSource;
+import java.io.*;
+
+class saxontest {
+    public static void main(String[] args) {
+      System.setProperty("javax.xml.transform.TransformerFactory",
+        "net.sf.saxon.TransformerFactoryImpl");
+      try {
+        TransformerFactory tfactory = TransformerFactory.newInstance();
+        System.out.println("TransformerFactory is" +
+          tfactory.getClass().getName());
+        Transformer transformer = tfactory.newTransformer(
+          new StreamSource(new File(args[0])));
+      } catch(Exception e){
+        e.printStackTrace(System.err);
+        System.exit(-1);
+      }
+      System.exit(0);
+    }
+}
+]
+_ACEOF
+        cat > saxontest.xsl<<_ACEOF
+[<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+ <xsl:template match="/">
+  <xsl:value-of select="math:sqrt(1)" xmlns:math="java:java.lang.Math"/>
+ </xsl:template>
+</xsl:stylesheet>
+]
+_ACEOF
+        javac_cmd="$JAVACOMPILER saxontest.java 1>&2"
+        AC_TRY_EVAL(javac_cmd)
+        if test $? = 0 && test -f ./saxontest.class ; then
+            java_cmd="$JAVAINTERPRETER -cp $SAXON_JAR:. saxontest saxontest.xsl 1>&2"
+            AC_TRY_EVAL(java_cmd)
+            if test $? = 0; then
+              AC_MSG_RESULT([yes])
+            else
+              cat saxontest.java >&5
+              AC_MSG_RESULT([no])
+              AC_MSG_ERROR([Non-functional saxon jar, e.g. crippled saxon-he instead of saxonb])
+            fi
+        else
+          AC_MSG_RESULT([no])
+          cat saxontest.java >&5
+          AC_MSG_ERROR([saxontest could not be compiled, non-functional saxon jar])
+        fi
 else
     AC_MSG_RESULT([internal])
     SYSTEM_SAXON=NO
