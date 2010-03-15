@@ -126,11 +126,11 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    void ToolPanelCollection::RemovePanel( const size_t i_nPosition )
+    PToolPanel ToolPanelCollection::RemovePanel( const size_t i_nPosition )
     {
         OSL_ENSURE( i_nPosition < m_pData->aPanels.size(), "ToolPanelCollection::RemovePanel: illegal position!" );
         if ( i_nPosition >= m_pData->aPanels.size() )
-            return;
+            return NULL;
 
         // if the active panel is going to be removed, activate another one (before the actual removal)
         if ( m_pData->aActivePanel == i_nPosition )
@@ -153,6 +153,9 @@ namespace svt
             m_pData->aListeners.ActivePanelChanged( aOldActive, m_pData->aActivePanel );
         }
 
+        // remember the removed panel for the aller
+        PToolPanel pRemovedPanel( m_pData->aPanels[ i_nPosition ] );
+
         // actually remove
         m_pData->aPanels.erase( m_pData->aPanels.begin() + i_nPosition );
 
@@ -166,6 +169,8 @@ namespace svt
 
         // notify removed panel
         m_pData->aListeners.PanelRemoved( i_nPosition );
+
+        return pRemovedPanel;
     }
 
     //--------------------------------------------------------------------

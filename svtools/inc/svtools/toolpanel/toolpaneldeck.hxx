@@ -100,8 +100,14 @@ namespace svt
         virtual size_t      InsertPanel( const PToolPanel& i_pPanel, const size_t i_nPosition ) = 0;
 
         /** removes a panel specified by its position.
+
+            Note: It is the responsibility of the caller to ensure that the panel is destroyed appropriately. That is,
+            the tool panel deck will <em>not</em> invoke <member>IToolPanel::Dispose</member> on the removed panel.
+            The advantage is that the panel might be re-used later, with the disadvantage that the owner of the panel
+            deck must know whether Dispose must be invoked after removal, or whether the panel will properly
+            dispose itself when its ref count drops to 0.
         */
-        virtual void        RemovePanel( const size_t i_nPosition ) = 0;
+        virtual PToolPanel  RemovePanel( const size_t i_nPosition ) = 0;
 
         /** adds a new listener to be notified when the container content changes. The caller is responsible
             for life time control, i.e. removing the listener before it actually dies.
@@ -134,7 +140,7 @@ namespace svt
                             GetActivePanel() const;
         virtual void        ActivatePanel( const size_t i_nPanel );
         virtual size_t      InsertPanel( const PToolPanel& i_pPanel, const size_t i_nPosition );
-        virtual void        RemovePanel( const size_t i_nPosition );
+        virtual PToolPanel  RemovePanel( const size_t i_nPosition );
         virtual void        AddListener( IToolPanelDeckListener& i_rListener );
         virtual void        RemoveListener( IToolPanelDeckListener& i_rListener );
 

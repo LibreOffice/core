@@ -87,7 +87,7 @@ namespace svt
                             GetActivePanel() const;
         void                ActivatePanel( const size_t i_nPanel );
         size_t              InsertPanel( const PToolPanel& i_pPanel, const size_t i_nPosition );
-        void                RemovePanel( const size_t i_nPosition );
+        PToolPanel          RemovePanel( const size_t i_nPosition );
         void                AddListener( IToolPanelDeckListener& i_rListener );
         void                RemoveListener( IToolPanelDeckListener& i_rListener );
 
@@ -170,9 +170,9 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    void ToolPanelDeck_Impl::RemovePanel( const size_t i_nPosition )
+    PToolPanel ToolPanelDeck_Impl::RemovePanel( const size_t i_nPosition )
     {
-        m_aPanels.RemovePanel( i_nPosition );
+        return m_aPanels.RemovePanel( i_nPosition );
     }
 
     //--------------------------------------------------------------------
@@ -357,9 +357,9 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    void ToolPanelDeck::RemovePanel( const size_t i_nPosition )
+    PToolPanel ToolPanelDeck::RemovePanel( const size_t i_nPosition )
     {
-        m_pImpl->RemovePanel( i_nPosition );
+        return m_pImpl->RemovePanel( i_nPosition );
     }
 
     //--------------------------------------------------------------------
