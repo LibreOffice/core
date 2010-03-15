@@ -49,7 +49,7 @@
 #include <eerdll2.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng.hrc>
-#include <acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/txtrange.hxx>
 #include <vcl/graph.hxx>
