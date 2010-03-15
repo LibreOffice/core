@@ -2067,7 +2067,7 @@ XMLParaContext::~XMLParaContext()
         }
     }
 
-    OUString sCellParaStyleName = xTxtImport->sCellParaStyleDefault;
+    OUString const sCellParaStyleName(xTxtImport->GetCellParaStyleDefault());
     if( sCellParaStyleName.getLength() > 0 )
     {
         // --> OD 2007-08-16 #i80724#

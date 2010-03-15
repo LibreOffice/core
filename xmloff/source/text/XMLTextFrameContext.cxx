@@ -1241,6 +1241,14 @@ void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
                        const OUString& rTargetFrameName,
                        sal_Bool bMap )
 {
+    static ::rtl::OUString s_HyperLinkURL(
+        RTL_CONSTASCII_USTRINGPARAM("HyperLinkURL"));
+    static ::rtl::OUString s_HyperLinkName(
+        RTL_CONSTASCII_USTRINGPARAM("HyperLinkName"));
+    static ::rtl::OUString s_HyperLinkTarget(
+        RTL_CONSTASCII_USTRINGPARAM("HyperLinkTarget"));
+    static ::rtl::OUString s_ServerMap(
+        RTL_CONSTASCII_USTRINGPARAM("ServerMap"));
     if( !xPropSet.is() )
         return;
 
@@ -1248,29 +1256,29 @@ void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
     Reference < XPropertySetInfo > xPropSetInfo =
         xPropSet->getPropertySetInfo();
     if( !xPropSetInfo.is() ||
-        !xPropSetInfo->hasPropertyByName( xTxtImp->sHyperLinkURL ) )
+        !xPropSetInfo->hasPropertyByName(s_HyperLinkURL))
         return;
 
     Any aAny;
     aAny <<= rHRef;
-    xPropSet->setPropertyValue( xTxtImp->sHyperLinkURL, aAny );
+    xPropSet->setPropertyValue( s_HyperLinkURL, aAny );
 
-    if( xPropSetInfo->hasPropertyByName( xTxtImp->sHyperLinkName ) )
+    if (xPropSetInfo->hasPropertyByName(s_HyperLinkName))
     {
         aAny <<= rName;
-        xPropSet->setPropertyValue( xTxtImp->sHyperLinkName, aAny );
+        xPropSet->setPropertyValue(s_HyperLinkName, aAny);
     }
 
-    if( xPropSetInfo->hasPropertyByName( xTxtImp->sHyperLinkTarget ) )
+    if (xPropSetInfo->hasPropertyByName(s_HyperLinkTarget))
     {
         aAny <<= rTargetFrameName;
-        xPropSet->setPropertyValue( xTxtImp->sHyperLinkTarget, aAny );
+        xPropSet->setPropertyValue( s_HyperLinkTarget, aAny );
     }
 
-    if( xPropSetInfo->hasPropertyByName( xTxtImp->sServerMap ) )
+    if (xPropSetInfo->hasPropertyByName(s_ServerMap))
     {
         aAny.setValue( &bMap, ::getBooleanCppuType() );
-        xPropSet->setPropertyValue( xTxtImp->sServerMap, aAny );
+        xPropSet->setPropertyValue(s_ServerMap, aAny);
     }
 }
 

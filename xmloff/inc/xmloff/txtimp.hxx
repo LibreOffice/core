@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _XMLOFF_TEXTIMP_HXX_
-#define _XMLOFF_TEXTIMP_HXX_
+#ifndef XMLOFF_TEXTIMP_HXX
+#define XMLOFF_TEXTIMP_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -33,15 +33,11 @@
 #include <com/sun/star/uno/Reference.h>
 
 #include <map>
-#include <vector>
 #include <memory>
 #include <boost/utility.hpp>
-#include <boost/tuple/tuple.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include <tools/list.hxx>
-#include <xmloff/xmlictxt.hxx>
-#include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmltkmap.hxx>
 
 // functional.hxx is obsolete and should be replaced by its comphelper
@@ -49,20 +45,21 @@
 #include <comphelper/stl_types.hxx>
 #include <xmloff/uniref.hxx>
 
+
 // --> OD 2008-04-25 #refactorlists#
 class XMLTextListsHelper;
 // <--
 
-#include <com/sun/star/text/XFormField.hpp>
-
-
+class SvXMLImportContext;
+class SvXMLTokenMap;
+class SvXMLImportPropertyMapper;
+class SvXMLNamespaceMap;
 class SvXMLImport;
 class SvXMLStylesContext;
 class XMLTextListBlockContext;
 class SvxXMLListStyleContext;
 class XMLPropStyleContext;
 class SvI18NMap;
-class SvStringsDtor;
 class XMLSectionImportContext;
 class XMLFontStylesContext;
 template<class A> class XMLPropertyBackpatcher;
@@ -73,14 +70,19 @@ namespace xmloff {
 }
 
 namespace com { namespace sun { namespace star {
-namespace text { class XText; class XTextCursor; class XTextRange; class XTextContent; }
+namespace text {
+    class XText;
+    class XTextCursor;
+    class XTextRange;
+    class XTextContent;
+    class XFormField;
+}
 namespace frame { class XModel; }
 namespace container { class XNameContainer; class XIndexReplace; class XNameAccess; }
 namespace beans { class XPropertySet; }
 namespace xml { namespace sax { class XAttributeList; } }
 namespace util { struct DateTime; }
 namespace lang { class XMultiServiceFactory; }
-namespace ucb { class XAnyCompare; }
 } } }
 
 enum SwXMLTextElemTokens
@@ -384,128 +386,13 @@ DECLARE_LIST( XMLSectionList_Impl, XMLSectionImportContext* )
 class XMLOFF_DLLPUBLIC XMLTextImportHelper : public UniRefBase,
     private boost::noncopyable
 {
-    ::std::auto_ptr<SvXMLTokenMap> pTextElemTokenMap;
-    ::std::auto_ptr<SvXMLTokenMap> pTextPElemTokenMap;
-    ::std::auto_ptr<SvXMLTokenMap> pTextPAttrTokenMap;
-    ::std::auto_ptr<SvXMLTokenMap> pTextFieldAttrTokenMap;
-    ::std::auto_ptr<SvXMLTokenMap> pTextNumberedParagraphAttrTokenMap;
-    ::std::auto_ptr<SvXMLTokenMap> pTextListBlockAttrTokenMap;
-    ::std::auto_ptr<SvXMLTokenMap> pTextListBlockElemTokenMap;
-    ::std::auto_ptr<SvXMLTokenMap> pTextFrameAttrTokenMap;
-    ::std::auto_ptr<SvXMLTokenMap> pTextContourAttrTokenMap;
-    ::std::auto_ptr<SvXMLTokenMap> pTextHyperlinkAttrTokenMap;
-    ::std::auto_ptr<SvXMLTokenMap> pTextMasterPageElemTokenMap;
-    ::std::auto_ptr<SvStringsDtor> pPrevFrmNames;
-    ::std::auto_ptr<SvStringsDtor> pNextFrmNames;
-
-    // --> OD 2008-04-25 #refactorlists#
-    ::std::auto_ptr<XMLTextListsHelper> mpTextListsHelper;
-    // <--
-
-    SvXMLImportContextRef xAutoStyles;
-    SvXMLImportContextRef xFontDecls;
-
-    XMLSectionList_Impl aSectionList;
-
-    UniReference < SvXMLImportPropertyMapper > xParaImpPrMap;
-    UniReference < SvXMLImportPropertyMapper > xTextImpPrMap;
-    UniReference < SvXMLImportPropertyMapper > xFrameImpPrMap;
-    UniReference < SvXMLImportPropertyMapper > xSectionImpPrMap;
-    UniReference < SvXMLImportPropertyMapper > xRubyImpPrMap;
-
-    ::std::auto_ptr<SvI18NMap> pRenameMap;
-    // --> OD 2006-10-12 #i69629# - change and extend data structure:
-    // - data structure contains candidates of paragraph styles, which
-    //   will be assigned to the outline style
-    // - data structure contains more than one candidate for each list level
-    //   of the outline style
-//    ::rtl::OUString *pOutlineStyles;
-    ::std::vector< ::rtl::OUString >* mpOutlineStylesCandidates;
-    // <--
-
-
-    // start range, xml:id, RDFa stuff
-    typedef ::boost::tuple<
-        ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange>,
-        ::rtl::OUString, ::boost::shared_ptr< ::xmloff::ParsedRDFaAttributes > >
-            BookmarkMapEntry_t;
-    /// start ranges for open bookmarks
-    ::std::map< ::rtl::OUString, BookmarkMapEntry_t,
-                ::comphelper::UStringLess> aBookmarkStartRanges;
-
-    typedef ::std::vector< ::rtl::OUString> BookmarkVector_t;
-    BookmarkVector_t aBookmarkVector;
-
-    /// backpatcher for references to footnotes and endnotes
-    XMLPropertyBackpatcher<sal_Int16> * pFootnoteBackpatcher;
-
-    /// backpatchers for references to sequences
-    XMLPropertyBackpatcher<sal_Int16> * pSequenceIdBackpatcher;
-
-    XMLPropertyBackpatcher< ::rtl::OUString> * pSequenceNameBackpatcher;
-
-    /// name of the last 'open' redline that started between paragraphs
-    ::rtl::OUString sOpenRedlineIdentifier;
-
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::text::XText > xText;
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::text::XTextCursor > xCursor;
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::text::XTextRange > xCursorAsRange;
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XNameContainer > xParaStyles;
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XNameContainer > xTextStyles;
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XNameContainer > xNumStyles;
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XNameContainer > xFrameStyles;
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XNameContainer > xPageStyles;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XIndexReplace > xChapterNumbering;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XNameAccess > xTextFrames;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XNameAccess > xGraphics;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XNameAccess > xObjects;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory;
-
-    SvXMLImport& rSvXMLImport;
-
-    sal_Bool bInsertMode : 1;
-    sal_Bool bStylesOnlyMode : 1;
-    sal_Bool bBlockMode : 1;
-    sal_Bool bProgress : 1;
-    sal_Bool bOrganizerMode : 1;
-    sal_Bool bBodyContentStarted : 1;
-
-    // #107848#
-    // One more flag to remember if we are inside a deleted redline section
-    sal_Bool bInsideDeleteContext : 1;
-
-    SAL_DLLPRIVATE SvXMLTokenMap *_GetTextElemTokenMap();
-    SAL_DLLPRIVATE SvXMLTokenMap *_GetTextPElemTokenMap();
-    SAL_DLLPRIVATE SvXMLTokenMap *_GetTextPAttrTokenMap();
-    SAL_DLLPRIVATE SvXMLTokenMap *_GetTextFrameAttrTokenMap();
-    SAL_DLLPRIVATE SvXMLTokenMap *_GetTextContourAttrTokenMap();
-    SAL_DLLPRIVATE SvXMLTokenMap *_GetTextHyperlinkAttrTokenMap();
-    SAL_DLLPRIVATE SvXMLTokenMap *_GetTextMasterPageElemTokenMap();
-
-    // clean up backpatchers; to be called only by destructor
-    // Code is implemented in XMLPropertyBackpatcher.cxx
-    SAL_DLLPRIVATE void _FinitBackpatcher();
-
-    typedef ::std::pair< ::rtl::OUString, ::rtl::OUString> field_name_type_t;
-    typedef ::std::pair< ::rtl::OUString, ::rtl::OUString > field_param_t;
-    typedef ::std::vector< field_param_t > field_params_t;
-    typedef ::std::pair< field_name_type_t, field_params_t > field_stack_item_t;
-    typedef ::std::stack< field_stack_item_t > field_stack_t;
-
-    field_stack_t aFieldStack;
+private:
+    struct Impl;
+    ::std::auto_ptr<Impl> m_pImpl;
+    /// ugly, but implementation of this is in XMLPropertyBackpatcher.cxx
+    struct BackpatcherImpl;
+    ::boost::shared_ptr<BackpatcherImpl> m_pBackpatcherImpl;
+    ::boost::shared_ptr<BackpatcherImpl> MakeBackpatcherImpl();
 
 protected:
     virtual SvXMLImportContext *CreateTableChildContext(
@@ -522,46 +409,13 @@ protected:
 
 public:
 
-    const ::rtl::OUString sParaStyleName;
-    const ::rtl::OUString sCharStyleName;
-    const ::rtl::OUString sHeadingStyleName;
-    const ::rtl::OUString sNumberingLevel;
-    const ::rtl::OUString sNumberingStartValue;
-    const ::rtl::OUString sNumberingRules;
-    const ::rtl::OUString sParaIsNumberingRestart;
-    const ::rtl::OUString sNumberingIsNumber;
-    const ::rtl::OUString sCurrentPresentation;
-    const ::rtl::OUString sSequenceNumber;
-    const ::rtl::OUString sSourceName;
-    const ::rtl::OUString sChainNextName;
-    const ::rtl::OUString sChainPrevName;
-    const ::rtl::OUString sHyperLinkURL;
-    const ::rtl::OUString sHyperLinkName;
-    const ::rtl::OUString sHyperLinkTarget;
-    const ::rtl::OUString sUnvisitedCharStyleName;
-    const ::rtl::OUString sVisitedCharStyleName;
-    const ::rtl::OUString sTextFrame;
-    const ::rtl::OUString sPageDescName;
-    const ::rtl::OUString sServerMap;
-    const ::rtl::OUString sHyperLinkEvents;
-    const ::rtl::OUString sContent;
-    const ::rtl::OUString sServiceCombinedCharacters;
-    const ::rtl::OUString sNumberingStyleName;
-    // --> OD 2008-04-23 #refactorlists#
-    const ::rtl::OUString sPropNameDefaultListId;
-    const ::rtl::OUString sPropNameListId;
-    const ::rtl::OUString sOutlineLevel;        //#outline level,add by zhaojianwei
-    // <--
-
-    ::rtl::OUString sCellParaStyleDefault;
     XMLTextImportHelper(
-            const ::com::sun::star::uno::Reference <
-                ::com::sun::star::frame::XModel>& rModel,
+            ::com::sun::star::uno::Reference <
+                ::com::sun::star::frame::XModel> const& rModel,
             SvXMLImport& rImport,
-            sal_Bool bInsertM = sal_False, sal_Bool bStylesOnlyM = sal_False,
-            sal_Bool bProgress = sal_False,
-            sal_Bool bBlockMode = sal_False,
-            sal_Bool bOrganizerMode = sal_False );
+            bool const bInsertMode = false, bool const bStylesOnlyMode = false,
+            bool const bProgress = false, bool const bBlockMode = false,
+            bool const bOrganizerMode = false);
 
     ~XMLTextImportHelper();
 
@@ -582,36 +436,33 @@ public:
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             XMLTextType eType = XML_TEXT_TYPE_SHAPE );
 
-    inline const SvXMLTokenMap& GetTextElemTokenMap();
-    inline const SvXMLTokenMap& GetTextPElemTokenMap();
-    inline const SvXMLTokenMap& GetTextPAttrTokenMap();
-    inline const SvXMLTokenMap& GetTextFrameAttrTokenMap();
-    inline const SvXMLTokenMap& GetTextContourAttrTokenMap();
-    inline const SvXMLTokenMap& GetTextHyperlinkAttrTokenMap();
-    inline const SvXMLTokenMap& GetTextMasterPageElemTokenMap();
+    SvXMLTokenMap const& GetTextElemTokenMap();
+    SvXMLTokenMap const& GetTextPElemTokenMap();
+    SvXMLTokenMap const& GetTextPAttrTokenMap();
+    SvXMLTokenMap const& GetTextFrameAttrTokenMap();
+    SvXMLTokenMap const& GetTextContourAttrTokenMap();
+    SvXMLTokenMap const& GetTextHyperlinkAttrTokenMap();
+    SvXMLTokenMap const& GetTextMasterPageElemTokenMap();
 
     const SvXMLTokenMap& GetTextNumberedParagraphAttrTokenMap();
     const SvXMLTokenMap& GetTextListBlockAttrTokenMap();
     const SvXMLTokenMap& GetTextListBlockElemTokenMap();
     const SvXMLTokenMap& GetTextFieldAttrTokenMap(); // impl: txtfldi.cxx
 
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::text::XText > & GetText() { return xText; }
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::text::XTextCursor > & GetCursor() { return xCursor; }
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::text::XTextRange > & GetCursorAsRange()
-    {
-        return xCursorAsRange;
-    }
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::text::XText > & GetText();
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::text::XTextCursor > & GetCursor();
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::text::XTextRange > & GetCursorAsRange();
 
-    sal_Bool IsInsertMode() { return bInsertMode; }
-    sal_Bool IsStylesOnlyMode() { return bStylesOnlyMode; }
-    sal_Bool IsBlockMode() { return bBlockMode; }
-    sal_Bool IsOrganizerMode() { return bOrganizerMode; }
-    sal_Bool IsProgress() { return bProgress; }
+    bool IsInsertMode() const;
+    bool IsStylesOnlyMode() const;
+    bool IsBlockMode() const;
+    bool IsOrganizerMode() const;
+    bool IsProgress() const;
 
-    XMLSectionList_Impl& GetSectionList() { return aSectionList; }
+    XMLSectionList_Impl & GetSectionList();
 
     ::rtl::OUString ConvertStarFonts( const ::rtl::OUString& rChars,
                                       const ::rtl::OUString& rStyleName,
@@ -693,41 +544,25 @@ public:
     XMLPropStyleContext* FindPageMaster(
             const ::rtl::OUString& rName ) const;
 
-    const ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XNameContainer>& GetParaStyles() const
-    {
-           return xParaStyles;
-    }
-
-    const ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XNameContainer>& GetTextStyles() const
-    {
-           return xTextStyles;
-    }
-
-    const ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XNameContainer>& GetNumberingStyles() const
-    {
-           return xNumStyles;
-    }
-
-    const ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XNameContainer>& GetFrameStyles() const
-    {
-           return xFrameStyles;
-    }
-
-    const ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XNameContainer>& GetPageStyles() const
-    {
-           return xPageStyles;
-    }
+    const ::com::sun::star::uno::Reference<
+        ::com::sun::star::container::XNameContainer> & GetParaStyles() const;
 
     const ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XIndexReplace >& GetChapterNumbering() const
-    {
-        return xChapterNumbering;
-    }
+        ::com::sun::star::container::XNameContainer> & GetTextStyles() const;
+
+    const ::com::sun::star::uno::Reference<
+        ::com::sun::star::container::XNameContainer> &
+        GetNumberingStyles() const;
+
+    const ::com::sun::star::uno::Reference<
+        ::com::sun::star::container::XNameContainer> & GetFrameStyles() const;
+
+    const ::com::sun::star::uno::Reference<
+        ::com::sun::star::container::XNameContainer> & GetPageStyles() const;
+
+    const ::com::sun::star::uno::Reference<
+        ::com::sun::star::container::XIndexReplace > &
+        GetChapterNumbering() const;
 
     sal_Bool HasFrameByName( const ::rtl::OUString& rName ) const;
     void ConnectFrameChains( const ::rtl::OUString& rFrmName,
@@ -735,16 +570,17 @@ public:
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet >& rFrmPropSet );
 
-    const UniReference < SvXMLImportPropertyMapper >&
-            GetParaImportPropertySetMapper() const { return xParaImpPrMap; }
-    const UniReference < SvXMLImportPropertyMapper >&
-            GetTextImportPropertySetMapper() const { return xTextImpPrMap; }
-    const UniReference < SvXMLImportPropertyMapper >&
-            GetFrameImportPropertySetMapper() const { return xFrameImpPrMap; }
-    const UniReference < SvXMLImportPropertyMapper >&
-        GetSectionImportPropertySetMapper() const { return xSectionImpPrMap; }
-    const UniReference < SvXMLImportPropertyMapper >&
-        GetRubyImportPropertySetMapper() const { return xRubyImpPrMap; }
+    UniReference< SvXMLImportPropertyMapper > const&
+        GetParaImportPropertySetMapper() const;
+    UniReference< SvXMLImportPropertyMapper > const&
+        GetTextImportPropertySetMapper() const;
+    UniReference< SvXMLImportPropertyMapper > const&
+        GetFrameImportPropertySetMapper() const;
+    UniReference< SvXMLImportPropertyMapper > const&
+        GetSectionImportPropertySetMapper() const;
+    UniReference< SvXMLImportPropertyMapper > const&
+        GetRubyImportPropertySetMapper() const;
+
     static SvXMLImportPropertyMapper *CreateShapeExtPropMapper(SvXMLImport&);
     static SvXMLImportPropertyMapper *CreateCharExtPropMapper(SvXMLImport&, XMLFontStylesContext *pFontDecls = NULL);
     static SvXMLImportPropertyMapper *CreateParaExtPropMapper(SvXMLImport&, XMLFontStylesContext *pFontDecls = NULL);
@@ -900,13 +736,13 @@ public:
 
     // #107848#
     // Access methods to the inside_deleted_section flag (redlining)
-    void SetInsideDeleteContext(sal_Bool bNew) { bInsideDeleteContext = bNew; }
-    sal_Bool IsInsideDeleteContext() const { return bInsideDeleteContext; }
+    void SetInsideDeleteContext(bool const bNew);
+    bool IsInsideDeleteContext() const;
 
-    SvXMLImport& GetXMLImport() { return rSvXMLImport;}
+    SvXMLImport & GetXMLImport();
 
     // --> OD 2008-04-25 #refactorlists#
-    XMLTextListsHelper& GetTextListHelper() { return *mpTextListsHelper; }
+    XMLTextListsHelper & GetTextListHelper();
     // <--
 
     // forwards to TextListHelper; these are used in many places
@@ -914,62 +750,9 @@ public:
     void PushListContext(XMLTextListBlockContext *i_pListBlock = 0);
     /// pop the list context stack
     void PopListContext();
+
+    void SetCellParaStyleDefault(::rtl::OUString const& rNewValue);
+    ::rtl::OUString const& GetCellParaStyleDefault();
 };
-
-inline const SvXMLTokenMap& XMLTextImportHelper::GetTextElemTokenMap()
-{
-    if( !pTextElemTokenMap.get() )
-        pTextElemTokenMap.reset( _GetTextElemTokenMap() );
-
-    return *pTextElemTokenMap;
-}
-
-inline const SvXMLTokenMap& XMLTextImportHelper::GetTextPElemTokenMap()
-{
-    if( !pTextPElemTokenMap.get() )
-        pTextPElemTokenMap.reset( _GetTextPElemTokenMap() );
-
-    return *pTextPElemTokenMap;
-}
-
-inline const SvXMLTokenMap& XMLTextImportHelper::GetTextPAttrTokenMap()
-{
-    if( !pTextPAttrTokenMap.get() )
-        pTextPAttrTokenMap.reset( _GetTextPAttrTokenMap() );
-
-    return *pTextPAttrTokenMap;
-}
-
-inline const SvXMLTokenMap& XMLTextImportHelper::GetTextFrameAttrTokenMap()
-{
-    if( !pTextFrameAttrTokenMap.get() )
-        pTextFrameAttrTokenMap.reset( _GetTextFrameAttrTokenMap() );
-
-    return *pTextFrameAttrTokenMap;
-}
-
-inline const SvXMLTokenMap& XMLTextImportHelper::GetTextContourAttrTokenMap()
-{
-    if( !pTextContourAttrTokenMap.get() )
-        pTextContourAttrTokenMap.reset( _GetTextContourAttrTokenMap() );
-
-    return *pTextContourAttrTokenMap;
-}
-
-inline const SvXMLTokenMap& XMLTextImportHelper::GetTextHyperlinkAttrTokenMap()
-{
-    if( !pTextHyperlinkAttrTokenMap.get() )
-        pTextHyperlinkAttrTokenMap.reset( _GetTextHyperlinkAttrTokenMap() );
-
-    return *pTextHyperlinkAttrTokenMap;
-}
-
-inline const SvXMLTokenMap& XMLTextImportHelper::GetTextMasterPageElemTokenMap()
-{
-    if( !pTextMasterPageElemTokenMap.get() )
-        pTextMasterPageElemTokenMap.reset( _GetTextMasterPageElemTokenMap() );
-
-    return *pTextMasterPageElemTokenMap;
-}
 
 #endif
