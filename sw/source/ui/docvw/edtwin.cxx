@@ -2262,7 +2262,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
 
                 BOOL bIsAutoCorrectChar =  SvxAutoCorrect::IsAutoCorrectChar( aCh );
-                if( !aKeyEvent.GetRepeat() && pACorr && bIsAutoCorrectChar &&
+                BOOL bRunNext = pACorr->HasRunNext();
+                if( !aKeyEvent.GetRepeat() && pACorr && ( bIsAutoCorrectChar || bRunNext ) &&
                         pACfg->IsAutoFmtByInput() &&
                     (( pACorr->IsAutoCorrFlag( ChgWeightUnderl ) &&
                         ( '*' == aCh || '_' == aCh ) ) ||
@@ -2274,14 +2275,13 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     if( '\"' != aCh && '\'' != aCh )        // nur bei "*_" rufen!
                         rSh.UpdateAttr();
                 }
-                else if( !aKeyEvent.GetRepeat() && pACorr && bIsAutoCorrectChar &&
+                else if( !aKeyEvent.GetRepeat() && pACorr && ( bIsAutoCorrectChar || bRunNext ) &&
                         pACfg->IsAutoFmtByInput() &&
                     pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
-                                            ChgOrdinalNumber |
+                                            ChgOrdinalNumber | AddNonBrkSpace |
                                             ChgToEnEmDash | SetINetAttr |
                                             Autocorrect ) &&
-                    '\"' != aCh && '\'' != aCh && '*' != aCh && '_' != aCh &&
-                    !bIsNormalChar
+                    '\"' != aCh && '\'' != aCh && '*' != aCh && '_' != aCh
                     )
                 {
                     FlushInBuffer();
