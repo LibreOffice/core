@@ -1617,13 +1617,19 @@ public:
                 const_cast<SwModify *>(m_TypeDepend.GetRegisteredIn()));
     }
 
+    void DeleteTOXMark()
+    {
+        m_pDoc->DeleteTOXMark(m_pTOXMark); // calls Invalidate() via Modify!
+        m_pTOXMark = 0;
+    }
+
+    void InsertTOXMark(SwTOXMark & rMark, SwPaM & rPam,
+            SwXTextCursor const*const pTextCursor);
+
     void    Invalidate();
 
     // SwClient
     virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
-
-    void InsertTOXMark(SwTOXMark & rMark, SwPaM & rPam,
-            SwXTextCursor const*const pTextCursor);
 };
 
 /* -----------------------------16.10.00 11:24--------------------------------
@@ -1834,8 +1840,7 @@ throw (uno::RuntimeException)
             aPam.GetPoint()->nContent++;
 
         // delete old mark
-        m_pImpl->m_pDoc->DeleteTOXMark(m_pImpl->m_pTOXMark);
-        m_pImpl->m_pTOXMark = 0;
+        m_pImpl->DeleteTOXMark();
 
         m_pImpl->InsertTOXMark(aMark, aPam, 0);
     }
@@ -1969,7 +1974,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     m_pImpl->InsertTOXMark(aMark, aPam,
             dynamic_cast<SwXTextCursor const*>(pCursor));
 
-    m_pImpl->m_pDoc = pDoc;
     m_pImpl->m_bIsDescriptor = sal_False;
 
     const_cast<SwTOXType*>(pTOXType)->Add(&m_pImpl->m_TypeDepend);
@@ -2057,6 +2061,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(SwTOXMark & rMark, SwPaM & rPam,
             0);
     }
 
+    m_pDoc = pDoc;
     m_pTOXMark = & pTxtAttr->GetTOXMark();
     const_cast<SwTOXMark*>(m_pTOXMark)->Add(this);
 }
@@ -2109,7 +2114,7 @@ SwXDocumentIndexMark::dispose() throw (uno::RuntimeException)
     SwTOXType *const pType = m_pImpl->GetTOXType();
     if (pType && m_pImpl->m_pTOXMark)
     {
-        m_pImpl->m_pDoc->DeleteTOXMark(m_pImpl->m_pTOXMark);
+        m_pImpl->DeleteTOXMark(); // call Invalidate() via modify!
     }
 }
 /*-- 14.12.98 10:25:45---------------------------------------------------
@@ -2209,8 +2214,6 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     SwTOXType *const pType = m_pImpl->GetTOXType();
     if (pType && m_pImpl->m_pTOXMark)
     {
-        SwDoc* pLocalDoc = m_pImpl->m_pDoc;
-
         SwTOXMark aMark(*m_pImpl->m_pTOXMark);
         switch(pEntry->nWID)
         {
@@ -2254,8 +2257,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         }
 
         //delete the old mark
-        pLocalDoc->DeleteTOXMark(m_pImpl->m_pTOXMark);
-        m_pImpl->m_pTOXMark = 0;
+        m_pImpl->DeleteTOXMark();
 
         m_pImpl->InsertTOXMark(aMark, aPam, 0);
         pType->Add(& m_pImpl->m_TypeDepend);
