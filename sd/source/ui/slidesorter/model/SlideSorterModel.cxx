@@ -402,7 +402,7 @@ void SlideSorterModel::SetDocumentSlides (
     ::osl::MutexGuard aGuard (maMutex);
 
     // Reset the current page so to cause everbody to release references to it.
-    mrSlideSorter.GetController().GetCurrentSlideManager()->CurrentSlideHasChanged(-1);
+    mrSlideSorter.GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(-1);
 
     mxSlides = rxSlides;
     Resync();
@@ -412,21 +412,22 @@ void SlideSorterModel::SetDocumentSlides (
     {
         SdPage* pPage = pViewShell->getCurrentPage();
         if (pPage != NULL)
-            mrSlideSorter.GetController().GetCurrentSlideManager()->CurrentSlideHasChanged(
-                GetIndex(Reference<drawing::XDrawPage>(pPage->getUnoPage(), UNO_QUERY)));
+            mrSlideSorter.GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
+                pPage);
         else
         {
             // No current page.  This can only be when the slide sorter is
             // the main view shell.  Get current slide form frame view.
             const FrameView* pFrameView = pViewShell->GetFrameView();
             if (pFrameView != NULL)
-                mrSlideSorter.GetController().GetCurrentSlideManager()->CurrentSlideHasChanged(
+                mrSlideSorter.GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
                     pFrameView->GetSelectedPage());
             else
             {
                 // No frame view.  As a last resort use the first slide as
                 // current slide.
-                mrSlideSorter.GetController().GetCurrentSlideManager()->CurrentSlideHasChanged(0);
+                mrSlideSorter.GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
+                    sal_Int32(0));
             }
         }
     }

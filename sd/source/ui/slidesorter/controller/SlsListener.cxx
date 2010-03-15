@@ -503,7 +503,7 @@ void SAL_CALL Listener::propertyChange (
     static const ::rtl::OUString sEditModePropertyName (
         RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode"));
 
-    if (rEvent.PropertyName.equals (sCurrentPagePropertyName))
+    if (rEvent.PropertyName.equals(sCurrentPagePropertyName))
     {
         Any aCurrentPage = rEvent.NewValue;
         Reference<beans::XPropertySet> xPageSet (aCurrentPage, UNO_QUERY);
@@ -521,7 +521,7 @@ void SAL_CALL Listener::propertyChange (
                 // last recently selected page of the PageSelector.  This is
                 // used when making the selection visible.
                 mrController.GetPageSelector().SelectPage(nCurrentPage-1);
-                mrController.GetCurrentSlideManager()->CurrentSlideHasChanged(nCurrentPage-1);
+                mrController.GetCurrentSlideManager()->NotifyCurrentSlideChange(nCurrentPage-1);
             }
             catch (beans::UnknownPropertyException aEvent)
             {

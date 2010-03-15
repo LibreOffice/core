@@ -627,20 +627,32 @@ void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
         }
         else
             rView.GetLayouter().SetColumnCount(nSlidesPerRow,nSlidesPerRow);
-        mpSlideSorter->GetController().GetCurrentSlideManager()->CurrentSlideHasChanged(
-            mpFrameView->GetSelectedPage());
+        if (IsMainViewShell())
+            mpSlideSorter->GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
+                mpFrameView->GetSelectedPage());
         mpSlideSorter->GetController().Rearrange(true);
 
         // DrawMode for 'main' window
         if (GetActiveWindow()->GetDrawMode() != pFrameView->GetDrawMode() )
             GetActiveWindow()->SetDrawMode( pFrameView->GetDrawMode() );
     }
+
+    // When this slide sorter is not displayed in the main window then we do
+    // not share the same frame view and have to find other ways to acquire
+    // certain values.
+    if ( ! IsMainViewShell())
+    {
+        ::boost::shared_ptr<ViewShell> pMainViewShell = GetViewShellBase().GetMainViewShell();
+        if (pMainViewShell.get() != NULL)
+            mpSlideSorter->GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
+                pMainViewShell->getCurrentPage());
+    }
 }
 
 
 
 
-void SlideSorterViewShell::WriteFrameViewData()
+void SlideSorterViewShell::WriteFrameViewData (void)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     if (mpFrameView != NULL)
@@ -680,6 +692,9 @@ void SlideSorterViewShell::SetZoom (long int )
     // The zoom scale is adapted internally to fit a number of columns in
     // the window.
 }
+
+
+
 
 void SlideSorterViewShell::SetZoomRect (const Rectangle& rZoomRect)
 {

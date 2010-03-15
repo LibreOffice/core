@@ -61,7 +61,8 @@ public:
     /** Call this when the current page of the main view shell has been
         switched.  Use SwitchCurrentSlide() to initiate such a switch.
     */
-    void CurrentSlideHasChanged (const sal_Int32 nSlideIndex);
+    void NotifyCurrentSlideChange (const sal_Int32 nSlideIndex);
+    void NotifyCurrentSlideChange (const SdPage* pPage);
 
     /** Call this method to switch the current page of the main view shell
         to the given slide.  Use CurrentSlideHasChanged() when the current

@@ -270,7 +270,7 @@ void SAL_CALL SlideSorterService::setCurrentPage(const Reference<drawing::XDrawP
 {
     ThrowIfDisposed();
     if (mpSlideSorter.get() != NULL)
-        mpSlideSorter->GetController().GetCurrentSlideManager()->CurrentSlideHasChanged(
+        mpSlideSorter->GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
             mpSlideSorter->GetModel().GetIndex(rxSlide));
 }
 

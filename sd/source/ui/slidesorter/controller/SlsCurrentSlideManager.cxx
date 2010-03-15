@@ -72,7 +72,22 @@ CurrentSlideManager::~CurrentSlideManager (void)
 
 
 
-void CurrentSlideManager::CurrentSlideHasChanged (const sal_Int32 nSlideIndex)
+void CurrentSlideManager::NotifyCurrentSlideChange (const SdPage* pPage)
+{
+    if (pPage != NULL)
+        NotifyCurrentSlideChange(
+            mrSlideSorter.GetModel().GetIndex(
+                Reference<drawing::XDrawPage>(
+                    const_cast<SdPage*>(pPage)->getUnoPage(),
+                    UNO_QUERY)));
+    else
+        NotifyCurrentSlideChange(-1);
+}
+
+
+
+
+void CurrentSlideManager::NotifyCurrentSlideChange (const sal_Int32 nSlideIndex)
 {
     if (mnCurrentSlideIndex != nSlideIndex)
     {
