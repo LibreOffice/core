@@ -48,6 +48,7 @@ SLOFILES= \
     $(SLO)$/DomainMapperTableManager.obj \
     $(SLO)$/DomainMapper_Impl.obj \
     $(SLO)$/FFDataHandler.obj \
+    $(SLO)$/FormControlHelper.obj \
     $(SLO)$/FontTable.obj \
     $(SLO)$/GraphicHelpers.obj \
     $(SLO)$/GraphicImport.obj \
