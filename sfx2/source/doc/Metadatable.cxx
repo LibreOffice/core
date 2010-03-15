@@ -33,6 +33,8 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx> // solarmutex
 
+#include <rtl/random.h>
+
 #include <boost/bind.hpp>
 
 #include <memory>
@@ -401,14 +403,16 @@ template< typename T >
 /*static*/ ::rtl::OUString create_id(const
     ::std::hash_map< ::rtl::OUString, T, ::rtl::OUStringHash > & i_rXmlIdMap)
 {
+    static rtlRandomPool s_Pool( rtl_random_createPool() );
     const ::rtl::OUString prefix( ::rtl::OUString::createFromAscii(s_prefix) );
     typename ::std::hash_map< ::rtl::OUString, T, ::rtl::OUStringHash >
         ::const_iterator iter;
     ::rtl::OUString id;
     do
     {
-        const int n( rand() );
-        id = prefix + ::rtl::OUString::valueOf(static_cast<sal_Int64>(n));
+        sal_Int32 n;
+        rtl_random_getBytes(s_Pool, & n, sizeof(n));
+        id = prefix + ::rtl::OUString::valueOf(static_cast<sal_Int32>(abs(n)));
         iter = i_rXmlIdMap.find(id);
     }
     while (iter != i_rXmlIdMap.end());
