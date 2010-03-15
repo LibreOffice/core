@@ -238,7 +238,6 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
         ::boost::shared_ptr<cache::PageCache> pPreviewCache (
             mrSlideSorter.GetView().GetPreviewCache());
         Bitmap aPreview (rRepresentatives[nIndex]);
-        const double nScale (double(aPreviewSize.Width())/double(aPreview.GetSizePixel().Width()));
         const Size aSuperSampleSize(
             aPreviewSize.Width()*gnSuperScaleFactor,
             aPreviewSize.Height()*gnSuperScaleFactor);
