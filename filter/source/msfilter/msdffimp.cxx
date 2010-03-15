@@ -5415,6 +5415,13 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     pRet =
         ProcessObj( rSt, aObjData, pClientData, aTextRect, pRet);
 
+    if ( pRet )
+    {
+        sal_Int32 nGroupProperties( GetPropertyValue( DFF_Prop_fPrint ) );
+        pRet->SetVisible( ( nGroupProperties & 2 ) == 0 );
+        pRet->SetPrintable( ( nGroupProperties & 1 ) != 0 );
+    }
+
     if ( mbTracing )
         mpTracer->RemoveAttribute( aObjData.nSpFlags & SP_FGROUP
                                     ? rtl::OUString::createFromAscii( "GroupShape" )
