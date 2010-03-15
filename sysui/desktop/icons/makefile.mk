@@ -188,7 +188,7 @@ all: \
     $(MISC)$/so7-math-doc.ico \
     $(MISC)$/so7-writer-doc.ico \
     $(MISC)$/so7-writer-tem.ico \
-    $(MISC)$/oxt-extension.ico
+    $(MISC)$/oxt-extension.ico	
 
 $(MISC)$/%.ico: %.ico
     $(COPY) $< $@
