@@ -36,6 +36,7 @@
 #include "CurrentMasterPagesSelector.hxx"
 #include "RecentMasterPagesSelector.hxx"
 #include "AllMasterPagesSelector.hxx"
+#include "taskpane/ToolPanelViewShell.hxx"
 #include "taskpane/TaskPaneControlFactory.hxx"
 #include "taskpane/TitledControl.hxx"
 #include "../TaskPaneShellManager.hxx"
@@ -53,6 +54,19 @@ namespace sd { namespace toolpanel { namespace controls {
 
 MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
     : ScrollPanel (pParent)
+    , m_pPanelViewShell (NULL)
+{
+    impl_construct( rBase );
+}
+
+MasterPagesPanel::MasterPagesPanel (::Window& i_rParentWindow, ToolPanelViewShell& i_rPanelViewShell)
+    :ScrollPanel (i_rParentWindow)
+    ,m_pPanelViewShell( &i_rPanelViewShell )
+{
+    impl_construct( m_pPanelViewShell->GetViewShellBase() );
+}
+
+void MasterPagesPanel::impl_construct( ViewShellBase& rBase )
 {
     SdDrawDocument* pDocument = rBase.GetDocument();
     ::std::auto_ptr<controls::MasterPagesSelector> pSelector;
@@ -121,6 +135,24 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
 
 MasterPagesPanel::~MasterPagesPanel (void)
 {
+    TaskPaneShellManager* pShellManager( GetShellManager() );
+    OSL_ENSURE( pShellManager, "MasterPagesPanel::~MasterPagesPanel: no shell manager anymore - cannot remove sub shells!" );
+    if ( pShellManager )
+    {
+        pShellManager->RemoveSubShell( HID_SD_TASK_PANE_PREVIEW_CURRENT );
+        pShellManager->RemoveSubShell( HID_SD_TASK_PANE_PREVIEW_RECENT );
+        pShellManager->RemoveSubShell( HID_SD_TASK_PANE_PREVIEW_ALL );
+    }
+}
+
+
+
+
+TaskPaneShellManager* MasterPagesPanel::GetShellManager()
+{
+    if ( m_pPanelViewShell )
+        return &m_pPanelViewShell->GetSubShellManager();
+    return TreeNode::GetShellManager();
 }
 
 
@@ -133,6 +165,10 @@ std::auto_ptr<ControlFactory> MasterPagesPanel::CreateControlFactory (ViewShellB
 }
 
 
-
+std::auto_ptr< ControlFactory > MasterPagesPanel::CreateControlFactory( ToolPanelViewShell& i_rToolPanelShell )
+{
+    return std::auto_ptr< ControlFactory >(
+        new RootControlFactoryWithArg< MasterPagesPanel, ToolPanelViewShell >( i_rToolPanelShell ) );
+}
 
 } } } // end of namespace ::sd::toolpanel::controls

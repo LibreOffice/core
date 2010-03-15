@@ -97,14 +97,6 @@ public:
     */
     virtual sal_Int32 GetMinimumWidth (void);
 
-    /** Give each node access to the object bar manager of the tool panel.
-
-        At least the root node has to overwrite this method since the
-        default implementation simply returns the object bar manager of the
-        parent.
-    */
-    virtual ObjectBarManager* GetObjectBarManager (void);
-
     /** The default implementaion always returns <FALSE/>
     */
     virtual bool IsResizable (void);

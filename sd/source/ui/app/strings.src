@@ -1253,6 +1253,14 @@ String DLG_TABLEDESIGNPANE
 {
     Text [ en-US ] = "Table Designs";
 };
+String STR_CUSTOMANIMATIONPANE
+{
+    Text [ en-US ] = "Custom Animation";
+};
+String STR_SLIDE_TRANSITION_PANE
+{
+    Text [ en-US ] = "Slide Transition";
+};
 String STR_NAVIGATOR_SHOW_NAMED_SHAPES
 {
     Text [ en-US ] = "Named shapes";

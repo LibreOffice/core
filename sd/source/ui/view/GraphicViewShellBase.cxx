@@ -104,6 +104,7 @@ void GraphicViewShellBase::Execute (SfxRequest& rRequest)
     switch (nSlotId)
     {
         case SID_RIGHT_PANE:
+        case SID_TOOL_PANEL_PANE:
         case SID_NOTES_WINDOW:
         case SID_SLIDE_SORTER_MULTI_PANE_GUI:
         case SID_DIAMODE:

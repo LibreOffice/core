@@ -34,7 +34,7 @@
 #include "TaskPaneShellManager.hxx"
 
 #include "ViewShellManager.hxx"
-#include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <vcl/window.hxx>
 
 #include <algorithm>
@@ -109,6 +109,21 @@ void TaskPaneShellManager::AddSubShell (
         else
             mpViewShellManager->ActivateSubShell(mrViewShell, nId);
     }
+}
+
+
+
+
+void TaskPaneShellManager::RemoveSubShell (const ShellId i_nShellId)
+{
+    SubShells::iterator pos = maSubShells.find( i_nShellId );
+    ENSURE_OR_RETURN_VOID( pos != maSubShells.end(), "no shell for this ID" );
+    if ( pos->second.mpWindow != NULL )
+    {
+        pos->second.mpWindow->RemoveEventListener( LINK( this, TaskPaneShellManager, WindowCallback ) );
+    }
+    mpViewShellManager->DeactivateSubShell( mrViewShell, pos->first );
+    maSubShells.erase( pos );
 }
 
 

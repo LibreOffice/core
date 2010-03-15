@@ -32,27 +32,24 @@
 #include "precompiled_sd.hxx"
 #include "PaneChildWindows.hxx"
 #include "PaneDockingWindow.hrc"
+#include "PaneDockingWindow.hxx"
+#include "ViewShellBase.hxx"
+#include "framework/FrameworkHelper.hxx"
 #include "app.hrc"
 #include "strings.hrc"
 #include "sdresid.hxx"
+
 #include <sfx2/app.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 
-namespace sd
-{
-    SFX_IMPL_DOCKINGWINDOW(LeftPaneImpressChildWindow, SID_LEFT_PANE_IMPRESS)
-    SFX_IMPL_DOCKINGWINDOW(LeftPaneDrawChildWindow, SID_LEFT_PANE_DRAW)
-    SFX_IMPL_DOCKINGWINDOW(RightPaneChildWindow, SID_RIGHT_PANE)
-}
-
-
-#include "PaneDockingWindow.hxx"
-#include "ViewShellBase.hxx"
-#include "framework/FrameworkHelper.hxx"
-
 namespace sd {
+
+SFX_IMPL_DOCKINGWINDOW(LeftPaneImpressChildWindow, SID_LEFT_PANE_IMPRESS)
+SFX_IMPL_DOCKINGWINDOW(LeftPaneDrawChildWindow, SID_LEFT_PANE_DRAW)
+SFX_IMPL_DOCKINGWINDOW(RightPaneChildWindow, SID_RIGHT_PANE)
+SFX_IMPL_DOCKINGWINDOW( ToolPanelChildWindow, SID_TOOL_PANEL_PANE )
 
 //===== PaneChildWindow =======================================================
 
@@ -61,8 +58,8 @@ PaneChildWindow::PaneChildWindow (
     USHORT nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo,
-    const ResId& rResId,
-    const ::rtl::OUString& rsTitle,
+    const USHORT nDockWinTitleResId,
+    const USHORT nTitleBarResId,
     SfxChildAlignment eAlignment)
     : SfxChildWindow (pParentWindow, nId)
 {
@@ -70,9 +67,8 @@ PaneChildWindow::PaneChildWindow (
         pBindings,
         this,
         pParentWindow,
-        rResId,
-        framework::FrameworkHelper::msLeftImpressPaneURL,
-        rsTitle);
+        SdResId( nDockWinTitleResId ),
+        String( SdResId( nTitleBarResId ) ) );
     eChildAlignment = eAlignment;
     static_cast<SfxDockingWindow*>(pWindow)->Initialize(pInfo);
     SetHideNotDelete(TRUE);
@@ -115,8 +111,8 @@ LeftPaneImpressChildWindow::LeftPaneImpressChildWindow (
         nId,
         pBindings,
         pInfo,
-        SdResId(FLT_LEFT_PANE_IMPRESS_DOCKING_WINDOW),
-        String(SdResId(STR_LEFT_PANE_IMPRESS_TITLE)),
+        FLT_LEFT_PANE_IMPRESS_DOCKING_WINDOW,
+        STR_LEFT_PANE_IMPRESS_TITLE,
         SFX_ALIGN_LEFT)
 {
 }
@@ -136,8 +132,8 @@ LeftPaneDrawChildWindow::LeftPaneDrawChildWindow (
         nId,
         pBindings,
         pInfo,
-        SdResId(FLT_LEFT_PANE_DRAW_DOCKING_WINDOW),
-        String(SdResId(STR_LEFT_PANE_DRAW_TITLE)),
+        FLT_LEFT_PANE_DRAW_DOCKING_WINDOW,
+        STR_LEFT_PANE_DRAW_TITLE,
         SFX_ALIGN_LEFT)
 {
 }
@@ -157,11 +153,22 @@ RightPaneChildWindow::RightPaneChildWindow (
         nId,
         pBindings,
         pInfo,
-        SdResId(FLT_RIGHT_PANE_DOCKING_WINDOW),
-        String(SdResId(STR_RIGHT_PANE_TITLE)),
+        FLT_RIGHT_PANE_DOCKING_WINDOW,
+        STR_RIGHT_PANE_TITLE,
         SFX_ALIGN_RIGHT)
 {
 }
 
+
+//======================================================================================================================
+//= ToolPanelChildWindow
+//======================================================================================================================
+//----------------------------------------------------------------------------------------------------------------------
+ToolPanelChildWindow::ToolPanelChildWindow( ::Window* i_pParentWindow, USHORT i_nId, SfxBindings* i_pBindings,
+        SfxChildWinInfo* i_pChildWindowInfo )
+    :PaneChildWindow( i_pParentWindow, i_nId, i_pBindings, i_pChildWindowInfo,
+        FLT_TOOL_PANEL_DOCKING_WINDOW, STR_RIGHT_PANE_TITLE, SFX_ALIGN_NOALIGNMENT )
+{
+}
 
 } // end of namespace ::sd

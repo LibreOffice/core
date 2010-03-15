@@ -1310,6 +1310,7 @@ void ToolBarRules::MainViewShellChanged (ViewShell::ShellType nShellType)
         case ViewShell::ST_NONE:
         case ViewShell::ST_PRESENTATION:
         case ViewShell::ST_TASK_PANE:
+        case ViewShell::ST_TOOL_PANEL:
         default:
             break;
     }

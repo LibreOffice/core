@@ -60,4 +60,10 @@ ControlFactory::~ControlFactory (void)
 }
 
 
+::std::auto_ptr<TreeNode> ControlFactory::CreateRootControl( ::Window& i_rParent )
+{
+    TreeNode* pNewNode = InternalCreateRootControl( i_rParent );
+    return ::std::auto_ptr<TreeNode>( pNewNode );
+}
+
 } } // end of namespace ::sd::toolpanel

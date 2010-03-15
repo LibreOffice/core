@@ -52,6 +52,11 @@ protected:
     {
         return new TestPanel (pTreeNode);
     }
+    virtual TreeNode* InternalCreateRootControl( ::Window& i_rParent )
+    {
+        OSL_ENSURE( false, "TestPanelFactory::InternalCreateRootControl: not implemented!" );
+        return NULL;
+    }
 };
 
 

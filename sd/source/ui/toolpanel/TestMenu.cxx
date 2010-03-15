@@ -52,6 +52,11 @@ protected:
     {
         return new ColorMenu (pTreeNode);
     }
+    virtual TreeNode* InternalCreateRootControl( ::Window& /*i_rParent*/ )
+    {
+        OSL_ENSURE( false, "ColorMenuFactory::InternalCreateRootControl: not implemented!" );
+        return NULL;
+    }
 };
 
 

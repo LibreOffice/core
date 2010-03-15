@@ -94,6 +94,7 @@
 #include <svl/whiter.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/msgbox.hxx>
+#include <tools/diagnose_ex.h>
 
 #include "fubullet.hxx"
 
@@ -822,6 +823,13 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
                 framework::FrameworkHelper::msTaskPaneURL);
             break;
 
+        case SID_TOOL_PANEL_PANE:
+            mpImpl->SetPaneVisibility(
+                rRequest,
+                framework::FrameworkHelper::msToolPanelPaneURL,
+                framework::FrameworkHelper::msToolPanelViewURL);
+            break;
+
         case SID_NORMAL_MULTI_PANE_GUI:
         case SID_SLIDE_SORTER_MULTI_PANE_GUI:
         case SID_DRAWINGMODE:
@@ -1494,9 +1502,9 @@ void ViewShellBase::Implementation::SetPaneVisibility (
             xConfigurationController->requestResourceDeactivation(
                 xPaneId);
     }
-    catch (RuntimeException&)
+    catch (const Exception &)
     {
-        DBG_ASSERT(false, "ViewShellBase::Implementation::SetPaneVisibility(): caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -1544,6 +1552,11 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                     case SID_RIGHT_PANE:
                         xResourceId = ResourceId::create(
                             xContext, FrameworkHelper::msRightPaneURL);
+                        break;
+
+                    case SID_TOOL_PANEL_PANE:
+                        xResourceId = ResourceId::create(
+                            xContext, FrameworkHelper::msToolPanelPaneURL);
                         break;
 
                     case SID_NORMAL_MULTI_PANE_GUI:

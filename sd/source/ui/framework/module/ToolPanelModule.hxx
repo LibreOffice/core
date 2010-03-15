@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: ImpressModule.cxx,v $
- * $Revision: 1.5 $
+ * $RCSfile: TaskPaneModule.hxx,v $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,41 +28,26 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
+#ifndef SD_FRAMEWORK_TOOL_PANEL_MODULE_HXX
+#define SD_FRAMEWORK_TOOL_PANEL_MODULE_HXX
 
-#include "framework/ImpressModule.hxx"
+#include "ResourceManager.hxx"
 
-#include "framework/FrameworkHelper.hxx"
-#include "ViewTabBarModule.hxx"
-#include "CenterViewFocusModule.hxx"
-#include "SlideSorterModule.hxx"
-#include "TaskPaneModule.hxx"
-#include "ToolPanelModule.hxx"
-#include "ToolBarModule.hxx"
-#include "ShellStackGuard.hxx"
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+#include <rtl/ref.hxx>
 
 namespace sd { namespace framework {
 
+class ReadOnlyModeObserver;
 
-void ImpressModule::Initialize (Reference<frame::XController>& rxController)
+/** This module is responsible for showing the task pane.
+*/
+class ToolPanelModule
 {
-    new CenterViewFocusModule(rxController);
-    new ViewTabBarModule(
-        rxController,
-        FrameworkHelper::CreateResourceId(
-            FrameworkHelper::msViewTabBarURL,
-            FrameworkHelper::msCenterPaneURL));
-    new SlideSorterModule(
-        rxController,
-        FrameworkHelper::msLeftImpressPaneURL);
-    TaskPaneModule::Initialize(rxController);
-    ToolPanelModule::Initialize(rxController);
-    new ToolBarModule(rxController);
-    new ShellStackGuard(rxController);
-}
-
+public:
+    static void Initialize (
+        const ::com::sun::star::uno::Reference<com::sun::star::frame::XController>& rxController);
+};
 
 } } // end of namespace sd::framework
+
+#endif

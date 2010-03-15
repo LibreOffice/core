@@ -63,6 +63,7 @@ class EventMultiplexerEvent;
 namespace sd { namespace toolpanel {
 
 class ControlFactory;
+class ToolPanelViewShell;
 
 
 class LayoutMenu
@@ -96,11 +97,16 @@ public:
         DrawDocShell& rDocumentShell,
         ViewShellBase& rViewShellBase,
         bool bUseOwnScrollBar);
+    LayoutMenu (
+        TreeNode* pParent,
+        ToolPanelViewShell& i_rPanelViewShell);
     virtual ~LayoutMenu (void);
 
     static std::auto_ptr<ControlFactory> CreateControlFactory (
         ViewShellBase& rBase,
         DrawDocShell& rDocShell);
+    static std::auto_ptr<ControlFactory> CreateControlFactory (
+        ToolPanelViewShell& i_rPanelViewShell );
 
     /** Return the name of the currently selected layout.
     */
@@ -143,6 +149,9 @@ public:
     enum MasterMode { MM_NORMAL, MM_MASTER, MM_UNKNOWN };
     void UpdateEnabledState (const MasterMode eMode);
 
+    // TreeNode overridables
+    virtual TaskPaneShellManager* GetShellManager (void);
+
     /** Call this method when the set of displayed layouts is not up-to-date
         anymore.  It will re-assemple this set according to the current
         settings.
@@ -170,6 +179,8 @@ public:
 
 private:
     ViewShellBase& mrBase;
+
+    TaskPaneShellManager*   mpShellManager;
 
     /** Do we use our own scroll bar or is viewport handling done by
         our parent?
@@ -233,6 +244,9 @@ private:
     /** Select the layout that is used by the current page.
     */
     void UpdateSelection (void);
+
+    // internal ctor
+    void    ImplConstruct( DrawDocShell& rDocumentShell );
 
     /** When clicked then set the current page of the view in the center pane.
     */

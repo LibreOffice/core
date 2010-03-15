@@ -47,7 +47,6 @@
 #include "controls/TableDesignPanel.hxx"
 #include "controls/CustomAnimationPanel.hxx"
 #include "controls/SlideTransitionPanel.hxx"
-#include "controls/AnimationSchemesPanel.hxx"
 #include "TitleToolBox.hxx"
 #include "taskpane/ControlContainer.hxx"
 #include "FrameView.hxx"
@@ -260,37 +259,29 @@ void TaskPaneViewShell::Implementation::Setup (
         AddPanel (nId, PID_TABLE_DESIGN);
     }
 
-    {
-        DummyControl aControl (pToolPanel, SdResId(RID_CUSTOMANIMATION_START+0));
-
-        // CustomAnimationPanel
-        nId = pToolPanel->AddControl (
-            controls::CustomAnimationPanel::CreateControlFactory(rBase),
-            aControl.GetText(),
-            HID_SD_CUSTOM_ANIMATIONS,
-            ResourceActivationClickHandler(
-                pFrameworkHelper,
-                    pFrameworkHelper->CreateResourceId(
-                        FrameworkHelper::msCustomAnimationTaskPanelURL, xTaskPaneId),
-                pToolPanel->GetControlContainer()));
-        AddPanel (nId, PID_CUSTOM_ANIMATION);
-    }
+    // CustomAnimationPanel
+    nId = pToolPanel->AddControl (
+        controls::CustomAnimationPanel::CreateControlFactory(rBase),
+        SdResId( STR_CUSTOMANIMATIONPANE ),
+        HID_SD_CUSTOM_ANIMATIONS,
+        ResourceActivationClickHandler(
+            pFrameworkHelper,
+                pFrameworkHelper->CreateResourceId(
+                    FrameworkHelper::msCustomAnimationTaskPanelURL, xTaskPaneId),
+            pToolPanel->GetControlContainer()));
+    AddPanel (nId, PID_CUSTOM_ANIMATION);
 
     // SlideTransitionPanel
-    {
-        DummyControl aControl (pToolPanel, SdResId(RID_CUSTOMANIMATION_START+3));
-
-        nId = pToolPanel->AddControl (
-            controls::SlideTransitionPanel::CreateControlFactory(rBase),
-            aControl.GetText(),
-            HID_SD_SLIDE_TRANSITIONS,
-            ResourceActivationClickHandler(
-                pFrameworkHelper,
-                    pFrameworkHelper->CreateResourceId(
-                        FrameworkHelper::msSlideTransitionTaskPanelURL, xTaskPaneId),
-                pToolPanel->GetControlContainer()));
-        AddPanel (nId, PID_SLIDE_TRANSITION);
-    }
+    nId = pToolPanel->AddControl (
+        controls::SlideTransitionPanel::CreateControlFactory(rBase),
+        SdResId( STR_SLIDE_TRANSITION_PANE ),
+        HID_SD_SLIDE_TRANSITIONS,
+        ResourceActivationClickHandler(
+            pFrameworkHelper,
+                pFrameworkHelper->CreateResourceId(
+                    FrameworkHelper::msSlideTransitionTaskPanelURL, xTaskPaneId),
+            pToolPanel->GetControlContainer()));
+    AddPanel (nId, PID_SLIDE_TRANSITION);
 
 #ifdef SHOW_COLOR_MENU
     // Test Menu.
@@ -422,17 +413,6 @@ TaskPaneViewShell::~TaskPaneViewShell (void)
 {
     GetViewShellBase().GetViewShellManager()->RemoveSubShellFactory(this, mpSubShellManager);
 }
-
-
-
-// static
-void TaskPaneViewShell::RegisterControls (void)
-{
-    SfxModule* pModule = SD_MOD();
-    controls::MasterPagesSelector::RegisterInterface (pModule);
-    LayoutMenu::RegisterInterface (pModule);
-}
-
 
 
 
@@ -836,27 +816,6 @@ sal_uInt32
         }
 
     return nId;
-}
-
-
-
-
-//===== PanelActivation =======================================================
-
-PanelActivation::PanelActivation (ViewShellBase& rBase, TaskPaneViewShell::PanelId nPanelId)
-    : mrBase(rBase),
-      mnPanelId(nPanelId)
-{
-}
-
-void PanelActivation::operator() (bool)
-{
-    toolpanel::TaskPaneViewShell* pTaskPane
-        = dynamic_cast<toolpanel::TaskPaneViewShell*>(
-            framework::FrameworkHelper::Instance(mrBase)
-            ->GetViewShell(framework::FrameworkHelper::msRightPaneURL).get());
-    if (pTaskPane != NULL)
-        pTaskPane->ShowPanel(mnPanelId);
 }
 
 

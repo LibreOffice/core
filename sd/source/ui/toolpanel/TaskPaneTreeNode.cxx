@@ -125,17 +125,6 @@ sal_Int32 TreeNode::GetMinimumWidth (void)
 
 
 
-ObjectBarManager* TreeNode::GetObjectBarManager (void)
-{
-    if (mpParent != NULL)
-        return mpParent->GetObjectBarManager();
-    else
-        return NULL;
-}
-
-
-
-
 bool TreeNode::IsResizable (void)
 {
     return false;

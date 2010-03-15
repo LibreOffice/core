@@ -47,6 +47,7 @@
 #include "GraphicViewShell.hxx"
 #include "OutlineViewShell.hxx"
 #include "TaskPaneViewShell.hxx"
+#include "taskpane/ToolPanelViewShell.hxx"
 #include "PresentationViewShell.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "FrameView.hxx"
@@ -334,6 +335,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
             mxConfigurationController->addResourceFactory(FrameworkHelper::msHandoutViewURL, this);
             mxConfigurationController->addResourceFactory(FrameworkHelper::msPresentationViewURL, this);
             mxConfigurationController->addResourceFactory(FrameworkHelper::msTaskPaneURL, this);
+            mxConfigurationController->addResourceFactory(FrameworkHelper::msToolPanelViewURL, this);
             mxConfigurationController->addResourceFactory(FrameworkHelper::msSlideSorterURL, this);
         }
         catch (RuntimeException&)
@@ -459,6 +461,15 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
                 &rWindow,
                 pFrameView));
     }
+    else if (rsViewURL.equals(FrameworkHelper::msToolPanelViewURL))
+    {
+        pViewShell.reset(
+            new ::sd::toolpanel::ToolPanelViewShell(
+                &rFrame,
+                *mpBase,
+                &rWindow,
+                pFrameView));
+    }
     else if (rsViewURL.equals(FrameworkHelper::msSlideSorterURL))
     {
         pViewShell = ::sd::slidesorter::SlideSorterViewShell::Create (
@@ -535,6 +546,8 @@ bool BasicViewFactory::IsCacheable (const ::boost::shared_ptr<ViewDescriptor>& r
                 FrameworkHelper::msSlideSorterURL, FrameworkHelper::msLeftImpressPaneURL));
             maCacheableResources.push_back(pHelper->CreateResourceId(
                 FrameworkHelper::msTaskPaneURL, FrameworkHelper::msRightPaneURL));
+            maCacheableResources.push_back(pHelper->CreateResourceId(
+                FrameworkHelper::msToolPanelViewURL, FrameworkHelper::msToolPanelPaneURL));
         }
 
         ::std::vector<Reference<XResourceId> >::const_iterator iId;

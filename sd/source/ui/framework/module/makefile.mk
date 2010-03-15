@@ -57,6 +57,7 @@ SLOFILES =      							\
     $(SLO)$/ShellStackGuard.obj				\
     $(SLO)$/SlideSorterModule.obj			\
     $(SLO)$/TaskPaneModule.obj				\
+    $(SLO)$/ToolPanelModule.obj             \
     $(SLO)$/ToolBarModule.obj				\
     $(SLO)$/ViewTabBarModule.obj
 

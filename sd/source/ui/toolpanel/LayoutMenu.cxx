@@ -50,6 +50,7 @@
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageSelector.hxx"
 #include "taskpane/TaskPaneControlFactory.hxx"
+#include "taskpane/ToolPanelViewShell.hxx"
 #include "taskpane/ScrollPanel.hxx"
 #include "tools/SlotStateListener.hxx"
 #include "EventMultiplexer.hxx"
@@ -113,12 +114,49 @@ protected:
         return pScrollPanel;
     }
 
+    virtual TreeNode* InternalCreateRootControl( ::Window& /*i_rParent*/ )
+    {
+        OSL_ENSURE( false, "LayoutMenuFactory::InternalCreateRootControl: not implemented!" );
+        return NULL;
+    }
+
 private:
     ViewShellBase& mrBase;
     DrawDocShell& mrDocShell;
 };
 
 
+
+class LayoutMenuRootFactory
+    : public ControlFactory
+{
+public:
+    LayoutMenuRootFactory (ToolPanelViewShell& i_rPanelViewShell)
+        :mrPanelViewShell(i_rPanelViewShell)
+    {
+    }
+
+protected:
+    virtual TreeNode* InternalCreateControl (TreeNode* pTreeNode)
+    {
+        OSL_ENSURE( false, "LayoutMenuRootFactory::InternalCreateControl: not implemented!" );
+        return NULL;
+    }
+
+    virtual TreeNode* InternalCreateRootControl( ::Window& i_rParent )
+    {
+        ScrollPanel* pScrollPanel = new ScrollPanel (i_rParent);
+        ::std::auto_ptr<TreeNode> pMenu (
+            new LayoutMenu (
+                pScrollPanel,
+                mrPanelViewShell));
+        pScrollPanel->AddControl(pMenu);
+        return pScrollPanel;
+    }
+
+private:
+    ToolPanelViewShell& mrPanelViewShell;
+};
 
 
 SFX_IMPL_INTERFACE(LayoutMenu, SfxShell,
@@ -235,12 +273,41 @@ LayoutMenu::LayoutMenu (
       DragSourceHelper(this),
       DropTargetHelper(this),
       mrBase (rViewShellBase),
+      mpShellManager (NULL),
       mbUseOwnScrollBar (bUseOwnScrollBar),
       mnPreferredColumnCount(3),
       mxListener(NULL),
       mbSelectionUpdatePending(true),
       mbIsMainViewChangePending(false)
 {
+    ImplConstruct( rDocumentShell );
+}
+
+
+
+LayoutMenu::LayoutMenu( TreeNode* pParent, ToolPanelViewShell& i_rPanelViewShell )
+    : ValueSet (pParent->GetWindow()),
+      TreeNode(pParent),
+      DragSourceHelper(this),
+      DropTargetHelper(this),
+      mrBase( i_rPanelViewShell.GetViewShellBase() ),
+      mpShellManager (&i_rPanelViewShell.GetSubShellManager()),
+      mbUseOwnScrollBar( false ),
+      mnPreferredColumnCount(3),
+      mxListener(NULL),
+      mbSelectionUpdatePending(true),
+      mbIsMainViewChangePending(false)
+{
+    ImplConstruct( *mrBase.GetDocument()->GetDocSh() );
+}
+
+
+void LayoutMenu::ImplConstruct( DrawDocShell& rDocumentShell )
+{
+    OSL_ENSURE( mrBase.GetDocument()->GetDocSh() == &rDocumentShell,
+        "LayoutMenu::ImplConstruct: hmm?" );
+    // if this fires, then my assumption that the rDocumentShell parameter to our first ctor is superfluous ...
+
     SetStyle (
         ( GetStyle()  & ~(WB_ITEMBORDER) )
         | WB_TABSTOP
@@ -279,7 +346,6 @@ LayoutMenu::LayoutMenu (
 
 
 
-
 LayoutMenu::~LayoutMenu (void)
 {
     // Tell the shell factory that this object is no longer available.
@@ -303,6 +369,15 @@ LayoutMenu::~LayoutMenu (void)
     DrawDocShell& rDocShell)
 {
     return ::std::auto_ptr<ControlFactory>(new LayoutMenuFactory(rBase, rDocShell));
+}
+
+
+
+
+::std::auto_ptr<ControlFactory> LayoutMenu::CreateControlFactory (
+    ToolPanelViewShell& i_rPanelViewShell )
+{
+    return ::std::auto_ptr<ControlFactory>(new LayoutMenuRootFactory(i_rPanelViewShell));
 }
 
 
@@ -434,6 +509,7 @@ void LayoutMenu::UpdateEnabledState (const MasterMode eMode)
             case ViewShell::ST_OUTLINE:
             case ViewShell::ST_PRESENTATION:
             case ViewShell::ST_TASK_PANE:
+            case ViewShell::ST_TOOL_PANEL:
                 // The complete task pane is disabled for these values or
                 // not even visible.  Disabling the LayoutMenu would be
                 // logical but unnecessary.  The main disadvantage is that
@@ -633,6 +709,13 @@ void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
 
 
 
+
+TaskPaneShellManager* LayoutMenu::GetShellManager()
+{
+    if ( mpShellManager )
+        return mpShellManager;
+    return TreeNode::GetShellManager();
+}
 
 void LayoutMenu::InvalidateContent (void)
 {

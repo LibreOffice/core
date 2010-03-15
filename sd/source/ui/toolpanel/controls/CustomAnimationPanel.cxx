@@ -34,6 +34,7 @@
 #include "CustomAnimationPanel.hxx"
 
 #include "taskpane/TaskPaneControlFactory.hxx"
+#include "taskpane/ToolPanelViewShell.hxx"
 
 #include "strings.hrc"
 #include "sdresid.hxx"
@@ -49,8 +50,17 @@ namespace toolpanel { namespace controls {
 
 CustomAnimationPanel::CustomAnimationPanel(TreeNode* pParent, ViewShellBase& rBase)
     : SubToolPanel (pParent)
+    , m_pPanelViewShell (NULL)
 {
     mpWrappedControl = createCustomAnimationPanel( pParent->GetWindow(), rBase );
+    mpWrappedControl->Show();
+}
+
+CustomAnimationPanel::CustomAnimationPanel(Window& i_rParentWindow, ToolPanelViewShell& i_rPanelViewShell)
+    :SubToolPanel( i_rParentWindow )
+    ,m_pPanelViewShell( &i_rPanelViewShell )
+{
+    mpWrappedControl = createCustomAnimationPanel( &i_rParentWindow, i_rPanelViewShell.GetViewShellBase() );
     mpWrappedControl->Show();
 }
 
@@ -63,6 +73,19 @@ std::auto_ptr<ControlFactory> CustomAnimationPanel::CreateControlFactory (ViewSh
 {
     return std::auto_ptr<ControlFactory>(
         new ControlFactoryWithArgs1<CustomAnimationPanel,ViewShellBase>(rBase));
+}
+
+std::auto_ptr< ControlFactory > CustomAnimationPanel::CreateControlFactory( ToolPanelViewShell& i_rToolPanelShell )
+{
+    return std::auto_ptr< ControlFactory >(
+        new RootControlFactoryWithArg< CustomAnimationPanel, ToolPanelViewShell >( i_rToolPanelShell ) );
+}
+
+TaskPaneShellManager* CustomAnimationPanel::GetShellManager()
+{
+    if ( m_pPanelViewShell )
+        return &m_pPanelViewShell->GetSubShellManager();
+    return SubToolPanel::GetShellManager();
 }
 
 Size CustomAnimationPanel::GetPreferredSize()

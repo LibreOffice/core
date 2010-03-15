@@ -376,6 +376,7 @@ sal_uInt16 ViewShell::Implementation::GetViewId (void)
         // and there is not (yet) a proper ViewShellBase sub class for the
         // remaining types we chose the Impress factory as a fall back.
         case ViewShell::ST_TASK_PANE:
+        case ViewShell::ST_TOOL_PANEL:
         case ViewShell::ST_NONE:
         default:
             return IMPRESS_FACTORY_ID;

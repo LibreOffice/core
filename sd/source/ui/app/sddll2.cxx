@@ -159,6 +159,7 @@ void SdDLL::RegisterControllers()
     ::sd::LeftPaneImpressChildWindow::RegisterChildWindow(0, pMod);
     ::sd::LeftPaneDrawChildWindow::RegisterChildWindow(0, pMod);
     ::sd::RightPaneChildWindow::RegisterChildWindow(0, pMod);
+    ::sd::ToolPanelChildWindow::RegisterChildWindow(0, pMod);
 
     SvxFillToolBoxControl::RegisterControl(0, pMod);
     SvxLineStyleToolBoxControl::RegisterControl(0, pMod);

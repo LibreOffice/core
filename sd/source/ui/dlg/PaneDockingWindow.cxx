@@ -52,7 +52,6 @@ PaneDockingWindow::PaneDockingWindow (
     SfxChildWindow *pChildWindow,
     ::Window* pParent,
     const ResId& rResId,
-    const ::rtl::OUString& rsPaneURL,
     const ::rtl::OUString& rsTitle)
     : SfxDockingWindow (
         _pBindings,
@@ -60,7 +59,6 @@ PaneDockingWindow::PaneDockingWindow (
         pParent,
         rResId
         ),
-      msPaneURL(rsPaneURL),
       msTitle(rsTitle),
       mpTitleToolBox(),
       maBorder (3,1,3,3),
@@ -394,6 +392,16 @@ void PaneDockingWindow::DataChanged (const DataChangedEvent& rEvent)
     }
 }
 
+
+
+
+void PaneDockingWindow::EndDocking( const Rectangle& rRect, BOOL bFloatMode )
+{
+    SfxDockingWindow::EndDocking( rRect, bFloatMode );
+
+    if ( maEndDockingHdl.IsSet() )
+        maEndDockingHdl.Call( this );
+}
 
 
 

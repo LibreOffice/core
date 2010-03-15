@@ -44,8 +44,8 @@ public:
         USHORT nId,
         SfxBindings* pBindings,
         SfxChildWinInfo* pInfo,
-        const ResId& rResId,
-        const ::rtl::OUString& rsTitle,
+        const USHORT nDockWinTitleResId,
+        const USHORT nTitleBarResId,
         SfxChildAlignment eAlignment);
     virtual ~PaneChildWindow (void);
 };
@@ -87,6 +87,20 @@ public:
 };
 
 
+//======================================================================================================================
+//= ToolPanelChildWindow
+//======================================================================================================================
+class ToolPanelChildWindow : public PaneChildWindow
+{
+public:
+    ToolPanelChildWindow(
+        ::Window* i_pParentWindow,
+        USHORT i_nId,
+        SfxBindings* i_pBindings,
+        SfxChildWinInfo* i_pChildWindowInfo );
+
+    SFX_DECL_CHILDWINDOW( ToolPanelChildWindow );
+};
 
 
 } // end of namespace ::sd
