@@ -42,6 +42,7 @@ import com.sun.star.beans.Pair;
 import com.sun.star.beans.StringPair;
 import com.sun.star.container.XNamed;
 import com.sun.star.container.XChild;
+import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XContentEnumerationAccess;
 import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.container.XEnumeration;
@@ -58,10 +59,14 @@ import com.sun.star.text.XSentenceCursor;
 import com.sun.star.text.XParagraphCursor;
 import com.sun.star.text.XFootnote;
 import com.sun.star.text.XTextField;
+import com.sun.star.text.XBookmarksSupplier;
 import com.sun.star.text.TextContentAnchorType;
 import static com.sun.star.text.TextContentAnchorType.*;
 import static com.sun.star.text.ControlCharacter.*;
 import com.sun.star.rdf.XMetadatable;
+import com.sun.star.rdf.Statement;
+import com.sun.star.rdf.XDocumentRepository;
+import com.sun.star.rdf.XRepositorySupplier;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -1323,6 +1328,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
             "testMetaFieldXTextField",
             "testMetaFieldXPropertySet",
             "testLoadStore",
+            "testLoadStoreXmlid",
         };
     }
 
@@ -3854,7 +3860,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
 
     public void testLoadStore() throws Exception
     {
-        XComponent xComp = null;
+        XTextDocument xComp = null;
         String filename = "TESTMETA.odt";
         String file;
         try {
@@ -3862,10 +3868,12 @@ public class TextPortionEnumerationTest extends ComplexTestCase
             xComp = doLoad(file);
             if (xComp != null)
             {
+                checkLoadMeta(xComp);
                 file = m_TmpDir + filename;
                 doStore(xComp, file);
                 close(xComp);
                 xComp = doLoad(file);
+                checkLoadMeta(xComp);
             }
         } finally {
             close(xComp);
@@ -3884,7 +3892,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         log.println("...done");
     }
 
-    public XComponent doLoad(String file) throws Exception
+    public XTextDocument doLoad(String file) throws Exception
     {
         XComponent xComp = null;
 
@@ -3898,13 +3906,19 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         xComp = util.DesktopTools.loadDoc(m_xMSF, file, loadProps);
 //        xComp =  util.DesktopTools.getCLoader(m_xMSF).loadComponentFromURL(file, "_blank", 0, loadProps);
 
-
         XTextDocument xTextDoc = (XTextDocument)
             UnoRuntime.queryInterface(XTextDocument.class, xComp);
 
-        XText xText = xTextDoc.getText();
+        assure("cannot load: " + file, xTextDoc != null);
 
         log.println("...done");
+
+        return xTextDoc;
+    }
+
+    public void checkLoadMeta(XTextDocument xTextDoc) throws Exception
+    {
+        XText xText = xTextDoc.getText();
 
         log.println("Checking meta(-field)s in loaded test document...");
 
@@ -3952,8 +3966,64 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(xTextDoc, root, false);
 
         log.println("...done");
+    }
 
-        return xComp;
+    public void testLoadStoreXmlid() throws Exception
+    {
+        XTextDocument xComp = null;
+        String filename = "TESTXMLID.odt";
+        String file;
+        try {
+            file = util.utils.getFullTestURL(filename);
+            xComp = doLoad(file);
+            if (xComp != null)
+            {
+                checkLoadXmlId(xComp);
+                file = m_TmpDir + filename;
+                doStore(xComp, file);
+                close(xComp);
+                xComp = doLoad(file);
+                checkLoadXmlId(xComp);
+            }
+        } finally {
+            close(xComp);
+        }
+    }
+
+    public void checkLoadXmlId(XTextDocument xTextDoc) throws Exception
+    {
+        XText xText = xTextDoc.getText();
+
+        XRepositorySupplier xRS = (XRepositorySupplier)
+            UnoRuntime.queryInterface(XRepositorySupplier.class, xTextDoc);
+        XDocumentRepository xRepo = (XDocumentRepository)
+            UnoRuntime.queryInterface(XDocumentRepository.class,
+                xRS.getRDFRepository());
+        XBookmarksSupplier xBMS = (XBookmarksSupplier)
+            UnoRuntime.queryInterface(XBookmarksSupplier.class, xTextDoc);
+        XNameAccess xBookmarks = xBMS.getBookmarks();
+        XMetadatable xMark1 = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class, xBookmarks.getByName("mk1"));
+        assure("mark1",
+                eq(xMark1.getMetadataReference(),
+                    new StringPair("content.xml", "id90")));
+
+        XMetadatable xMark2 = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class, xBookmarks.getByName("mk2"));
+        Pair<Statement[], Boolean> result = xRepo.getStatementRDFa(xMark2);
+        assure("mark2", (result.First.length == 1)
+            && result.First[0].Subject.getStringValue().equals("uri:foo")
+            && result.First[0].Predicate.getStringValue().equals("uri:bar")
+            && result.First[0].Object.getStringValue().contains("a fooish bar")
+            );
+
+        XMetadatable xMark3 = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class, xBookmarks.getByName("mk3"));
+        assure("mark3",
+                eq(xMark3.getMetadataReference(),
+                    new StringPair("content.xml", "id91")));
+
+        log.println("...done");
     }
 
     static void close(XComponent i_comp)
@@ -4030,6 +4100,12 @@ public class TextPortionEnumerationTest extends ComplexTestCase
     private StringPair mkId_(String id)
     {
         return new StringPair("content.xml", id);
+    }
+
+    static boolean eq(StringPair i_Left, StringPair i_Right)
+    {
+        return ((i_Left.First).equals(i_Right.First)) &&
+            ((i_Left.Second).equals(i_Right.Second));
     }
 
     public void assure(String str, boolean cond) { super.assure(str, cond); }
