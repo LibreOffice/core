@@ -1573,6 +1573,8 @@ lcl_TypeToPropertyMap_Mark(const TOXTypes eType)
 class SwXDocumentIndexMark::Impl
     : public SwClient
 {
+private:
+    bool m_bInReplaceMark;
 
 public:
 
@@ -1599,6 +1601,7 @@ public:
             const enum TOXTypes eType,
             SwTOXType *const pType, SwTOXMark const*const pMark)
         : SwClient(const_cast<SwTOXMark*>(pMark))
+        , m_bInReplaceMark(false)
         , m_rPropSet(
             *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Mark(eType)))
         , m_eTOXType(eType)
@@ -1623,8 +1626,22 @@ public:
         m_pTOXMark = 0;
     }
 
-    void InsertTOXMark(SwTOXMark & rMark, SwPaM & rPam,
+    void InsertTOXMark(SwTOXType & rTOXType, SwTOXMark & rMark, SwPaM & rPam,
             SwXTextCursor const*const pTextCursor);
+
+    void ReplaceTOXMark(SwTOXType & rTOXType, SwTOXMark & rMark, SwPaM & rPam)
+    {
+        m_bInReplaceMark = true;
+        DeleteTOXMark();
+        m_bInReplaceMark = false;
+        try {
+            InsertTOXMark(rTOXType, rMark, rPam, 0);
+        } catch (...) {
+            OSL_ENSURE(false, "ReplaceTOXMark() failed!");
+            m_ListenerContainer.Disposing();
+            throw;
+        }
+    }
 
     void    Invalidate();
 
@@ -1646,7 +1663,10 @@ void SwXDocumentIndexMark::Impl::Invalidate()
                 &m_TypeDepend);
         }
     }
-    m_ListenerContainer.Disposing();
+    if (!m_bInReplaceMark) // #i109983# only dispose on delete, not on replace!
+    {
+        m_ListenerContainer.Disposing();
+    }
     m_pDoc = 0;
     m_pTOXMark = 0;
 }
@@ -1839,10 +1859,7 @@ throw (uno::RuntimeException)
         else
             aPam.GetPoint()->nContent++;
 
-        // delete old mark
-        m_pImpl->DeleteTOXMark();
-
-        m_pImpl->InsertTOXMark(aMark, aPam, 0);
+        m_pImpl->ReplaceTOXMark(*pType, aMark, aPam);
     }
     else if (m_pImpl->m_bIsDescriptor)
     {
@@ -1971,12 +1988,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         break;
     }
 
-    m_pImpl->InsertTOXMark(aMark, aPam,
+    m_pImpl->InsertTOXMark(*const_cast<SwTOXType *>(pTOXType), aMark, aPam,
             dynamic_cast<SwXTextCursor const*>(pCursor));
 
     m_pImpl->m_bIsDescriptor = sal_False;
-
-    const_cast<SwTOXType*>(pTOXType)->Add(&m_pImpl->m_TypeDepend);
 }
 
 template<typename T> struct NotContainedIn
@@ -1990,7 +2005,8 @@ template<typename T> struct NotContainedIn
     }
 };
 
-void SwXDocumentIndexMark::Impl::InsertTOXMark(SwTOXMark & rMark, SwPaM & rPam,
+void SwXDocumentIndexMark::Impl::InsertTOXMark(
+        SwTOXType & rTOXType, SwTOXMark & rMark, SwPaM & rPam,
         SwXTextCursor const*const pTextCursor)
 {
     SwDoc *const pDoc( rPam.GetDoc() );
@@ -2064,6 +2080,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(SwTOXMark & rMark, SwPaM & rPam,
     m_pDoc = pDoc;
     m_pTOXMark = & pTxtAttr->GetTOXMark();
     const_cast<SwTOXMark*>(m_pTOXMark)->Add(this);
+    const_cast<SwTOXType &>(rTOXType).Add(& m_TypeDepend);
 }
 
 /*-- 14.12.98 10:25:45---------------------------------------------------
@@ -2256,11 +2273,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             aPam.GetPoint()->nContent++;
         }
 
-        //delete the old mark
-        m_pImpl->DeleteTOXMark();
-
-        m_pImpl->InsertTOXMark(aMark, aPam, 0);
-        pType->Add(& m_pImpl->m_TypeDepend);
+        m_pImpl->ReplaceTOXMark(*pType, aMark, aPam);
     }
     else if (m_pImpl->m_bIsDescriptor)
     {
