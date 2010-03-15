@@ -35,6 +35,7 @@
 #include "property.hrc"
 #endif
 #include "property.hxx"
+#include "componenttools.hxx"
 #include "ids.hxx"
 #include "findpos.hxx"
 #include <com/sun/star/io/XPersistObject.hpp>
@@ -172,11 +173,20 @@ Sequence<sal_Int8> SAL_CALL OGridColumn::getImplementationId() throw(RuntimeExce
 //------------------------------------------------------------------
 Sequence<Type> SAL_CALL OGridColumn::getTypes() throw(RuntimeException)
 {
-    Reference<XTypeProvider> xProv;
+    TypeBag aTypes( OGridColumn_BASE::getTypes() );
+    // erase the types which we do not support
+    aTypes.removeType( XFormComponent::static_type() );
+    aTypes.removeType( XServiceInfo::static_type() );
+    aTypes.removeType( XBindableValue::static_type() );
+    aTypes.removeType( XPropertyContainer::static_type() );
+    // but re-add their base class(es)
+    aTypes.addType( XChild::static_type() );
 
-    if (query_aggregation(m_xAggregate, xProv))
-        return concatSequences(OGridColumn_BASE::getTypes(), xProv->getTypes());
-    return OGridColumn_BASE::getTypes();
+    Reference< XTypeProvider > xProv;
+    if ( query_aggregation( m_xAggregate, xProv ))
+        aTypes.addTypes( xProv->getTypes() );
+
+    return aTypes.getTypes();
 }
 
 //------------------------------------------------------------------
