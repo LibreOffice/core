@@ -807,16 +807,11 @@ MediaTypeEntry const * seekEntry(UniString const & rTypeName,
                                  MediaTypeEntry const * pMap, sal_Size nSize)
 {
 #if defined DBG_UTIL
-    static bool bChecked = false;
-    if (!bChecked)
-    {
-        for (sal_Size i = 0; i < nSize - 1; ++i)
-            DBG_ASSERT(
-                rtl_str_compare(
-                    pMap[i].m_pTypeName, pMap[i + 1].m_pTypeName) < 0,
-                "seekEntry(): Bad map");
-        bChecked = true;
-    }
+    for (sal_Size i = 0; i < nSize - 1; ++i)
+        DBG_ASSERT(
+            rtl_str_compare(
+                pMap[i].m_pTypeName, pMap[i + 1].m_pTypeName) < 0,
+            "seekEntry(): Bad map");
 #endif
 
     sal_Size nLow = 0;
