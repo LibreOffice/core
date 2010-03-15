@@ -381,23 +381,26 @@ void PreviewRenderer::SetupOutputSize (
     // First set the map mode to some arbitrary scale that is numerically
     // stable.
     MapMode aMapMode (mpPreviewDevice->GetMapMode());
-    aMapMode.SetMapUnit(MAP_100TH_MM);
-    double nInitialScale = 1;
-    aMapMode.SetScaleX (Fraction(nInitialScale));
-    aMapMode.SetScaleY (Fraction(nInitialScale));
-    aMapMode.SetOrigin (Point(0,0));
+    aMapMode.SetMapUnit(MAP_PIXEL);
 
     // Adapt it to the desired width.
     const Size aPageModelSize (rPage.GetSize());
-    const Size aOutputSize = mpPreviewDevice->LogicToPixel(rPage.GetSize(), aMapMode);
-    const sal_Int32 nFrameWidth (mbHasFrame ? snFrameWidth : 0);
-    const double nFinalScale (nInitialScale * (rFramePixelSize.Width()-2*nFrameWidth)
-        / aOutputSize.Width());
-    aMapMode.SetScaleX (nFinalScale);
-    aMapMode.SetScaleY (nFinalScale);
-    aMapMode.SetOrigin (mpPreviewDevice->PixelToLogic(
-        Point(nFrameWidth,nFrameWidth),aMapMode));
-
+    if (aPageModelSize.Width()>0 || aPageModelSize.Height()>0)
+    {
+        const sal_Int32 nFrameWidth (mbHasFrame ? snFrameWidth : 0);
+        aMapMode.SetScaleX(
+            Fraction(rFramePixelSize.Width()-2*nFrameWidth-1, aPageModelSize.Width()));
+        aMapMode.SetScaleY(
+            Fraction(rFramePixelSize.Height()-2*nFrameWidth-1, aPageModelSize.Height()));
+        aMapMode.SetOrigin(mpPreviewDevice->PixelToLogic(Point(nFrameWidth,nFrameWidth),aMapMode));
+    }
+    else
+    {
+        // We should never get here.
+        OSL_ASSERT(false);
+        aMapMode.SetScaleX(1.0);
+        aMapMode.SetScaleY(1.0);
+    }
     mpPreviewDevice->SetMapMode (aMapMode);
     mpPreviewDevice->SetOutputSizePixel(rFramePixelSize);
 }
