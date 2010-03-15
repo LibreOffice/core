@@ -24,11 +24,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_chart_XChartDataArray_idl__
-#define __com_sun_star_chart_XChartDataArray_idl__
+#ifndef __com_sun_star_chart_XComplexDescriptionAccess_idl__
+#define __com_sun_star_chart_XComplexDescriptionAccess_idl__
 
-#ifndef __com_sun_star_chart_XChartData_idl__
-#include <com/sun/star/chart/XChartData.idl>
+#ifndef __com_sun_star_chart_XChartDataArray_idl__
+#include <com/sun/star/chart/XChartDataArray.idl>
 #endif
 
 //=============================================================================
@@ -37,74 +37,58 @@
 
 //=============================================================================
 
-/** gives access to data represented as an array of rows.
+/** Offers access to complex column and row descriptions.
 
-    <p>Can be obtained from interface <type>XChartDocument</type> via method getData().</p>
+<p>Can be obtained from interface <type>XChartDocument</type> via method getData().</p>
 
-    <p>If used for an <type>XYDiagram</type>, the row number 0
-    represents the <i>x</i>-values.</p>
- */
-published interface XChartDataArray: XChartData
+@since OOo 3.3
+*/
+
+published interface XComplexDescriptionAccess : XChartDataArray
 {
-    //-------------------------------------------------------------------------
-
-    /** retrieves the numerical data as a nested sequence of values.
-
-        @returns
-            the values as a sequence of sequences.  The inner sequence
-            represents rows.
-    */
-    sequence< sequence< double > > getData();
-
-    //-------------------------------------------------------------------------
-
-    /** sets the chart data as an array of numbers.
-
-        @param aData
-            the values as a sequence of sequences.  The inner sequence
-            represents rows.
-     */
-    void setData( [in] sequence< sequence< double > > aData );
-
     //-------------------------------------------------------------------------
 
     /** retrieves the description texts for all rows.
 
         @returns
-            a sequence of strings, each representing the description
-            of a row.
+            a sequence of sequences of strings representing the descriptions
+            of all rows. The outer index represents different rows.
+            The inner index represents the different levels (usually there is only one).
      */
-    sequence< string > getRowDescriptions();
+    sequence< sequence< string > > getComplexRowDescriptions();
 
     //-------------------------------------------------------------------------
 
     /** sets the description texts for all rows.
 
-        @param aRowDescriptions
-            a sequence of strings which represent a description for
-            each row.
+        @param rRowDescriptions
+            a sequence of sequences of strings representing the descriptions of all
+            rows. The outer index represents different rows.
+            The inner index represents the different levels (usually there is only one).
     */
-    void setRowDescriptions( [in] sequence< string > aRowDescriptions );
+    void setComplexRowDescriptions( [in] sequence< sequence< string > > rRowDescriptions );
 
     //-------------------------------------------------------------------------
 
     /** retrieves the description texts for all columns.
 
         @returns
-            a sequence of strings, each representing the description
-            of a column.
+            a sequence of sequences of strings representing the descriptions
+            of all columns. The outer index represents different columns.
+            The inner index represents the different levels (usually there is only one).
      */
-    sequence< string > getColumnDescriptions();
+    sequence< sequence< string > > getComplexColumnDescriptions();
 
     //-------------------------------------------------------------------------
 
     /** sets the description texts for all columns.
 
-        @param aColumnDescriptions
-            a sequence of strings which represent a description for
-            each column.
+        @param rColumnDescriptions
+            a sequence of sequences of strings which represent the descriptions of
+            all columns. The outer index represents different columns.
+            The inner index represents the different levels (usually there is only one).
      */
-    void setColumnDescriptions( [in] sequence< string > aColumnDescriptions );
+    void setComplexColumnDescriptions( [in] sequence< sequence< string > > rColumnDescriptions );
 };
 
 //=============================================================================
