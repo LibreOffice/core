@@ -32,7 +32,6 @@
 #include "DiagramHelper.hxx"
 #include "DataSourceHelper.hxx"
 #include "ControllerLockGuard.hxx"
-#include "UndoManager.hxx"
 #include "RangeHighlighter.hxx"
 #include "InternalDataProvider.hxx"
 
@@ -56,12 +55,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 //static
-uno::Reference< chart2::XUndoManager > ChartModelHelper::createUndoManager()
-{
-    return new UndoManager();
-}
-
-//static
 uno::Reference< chart2::data::XRangeHighlighter > ChartModelHelper::createRangeHighlighter(
         const uno::Reference< view::XSelectionSupplier > & xSelectionSupplier )
 {
@@ -69,23 +62,10 @@ uno::Reference< chart2::data::XRangeHighlighter > ChartModelHelper::createRangeH
 }
 
 //static
-uno::Reference< chart2::data::XDataProvider > ChartModelHelper::createInternalDataProvider()
-{
-    return new InternalDataProvider();
-}
-
-//static
 uno::Reference< chart2::data::XDataProvider > ChartModelHelper::createInternalDataProvider(
-    const uno::Reference< ::com::sun::star::chart::XChartDataArray >& xDataToCopy )
+    const uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc, bool bConnectToModel )
 {
-    return new InternalDataProvider( xDataToCopy );
-}
-
-//static
-uno::Reference< chart2::data::XDataProvider > ChartModelHelper::createInternalDataProvider(
-    const uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc )
-{
-    return new InternalDataProvider( xChartDoc );
+    return new InternalDataProvider( xChartDoc, bConnectToModel );
 }
 
 //static
@@ -110,6 +90,20 @@ uno::Reference< XDiagram > ChartModelHelper::findDiagram( const uno::Reference< 
         ASSERT_EXCEPTION( ex );
     }
     return NULL;
+}
+
+//static
+uno::Reference< XCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( const uno::Reference< frame::XModel >& xModel )
+{
+    uno::Reference< XCoordinateSystem > XCooSys;
+    uno::Reference< XCoordinateSystemContainer > xCooSysCnt( ChartModelHelper::findDiagram( xModel ), uno::UNO_QUERY );
+    if( xCooSysCnt.is() )
+    {
+        uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
+        if( aCooSysSeq.getLength() )
+            XCooSys = aCooSysSeq[0];
+    }
+    return XCooSys;
 }
 
 // static

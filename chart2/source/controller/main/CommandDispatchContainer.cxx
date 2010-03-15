@@ -33,6 +33,9 @@
 #include "StatusBarCommandDispatch.hxx"
 #include "DisposeHelper.hxx"
 #include "macros.hxx"
+#include "ChartController.hxx"
+#include "DrawCommandDispatch.hxx"
+#include "ShapeController.hxx"
 
 #include <comphelper/InlineContainer.hxx>
 
@@ -48,8 +51,11 @@ namespace chart
 {
 
 CommandDispatchContainer::CommandDispatchContainer(
-    const Reference< uno::XComponentContext > & xContext ) :
-        m_xContext( xContext )
+    const Reference< uno::XComponentContext > & xContext, ChartController* pController )
+        :m_xContext( xContext )
+        ,m_pChartController( pController )
+        ,m_pDrawCommandDispatch( NULL )
+        ,m_pShapeController( NULL )
 {
     m_aContainerDocumentCommands =
         ::comphelper::MakeSet< OUString >
@@ -75,21 +81,20 @@ void CommandDispatchContainer::setModel(
 //     m_xUndoManager = xUndoManager;
 // }
 
-void CommandDispatchContainer::setFallbackDispatch(
-    const Reference< frame::XDispatch > xFallbackDispatch,
-    const ::std::set< OUString > & rFallbackCommands )
+void CommandDispatchContainer::setChartDispatch(
+    const Reference< frame::XDispatch > xChartDispatch,
+    const ::std::set< OUString > & rChartCommands )
 {
-    OSL_ENSURE(xFallbackDispatch.is(),"Invalid fall back dispatcher!");
-    m_xFallbackDispatcher.set( xFallbackDispatch );
-    m_aFallbackCommands = rFallbackCommands;
-    m_aToBeDisposedDispatches.push_back( m_xFallbackDispatcher );
+    OSL_ENSURE(xChartDispatch.is(),"Invalid fall back dispatcher!");
+    m_xChartDispatcher.set( xChartDispatch );
+    m_aChartCommands = rChartCommands;
+    m_aToBeDisposedDispatches.push_back( m_xChartDispatcher );
 }
 
 Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
     const util::URL & rURL )
 {
     Reference< frame::XDispatch > xResult;
-
     tDispatchMap::const_iterator aIt( m_aCachedDispatches.find( rURL.Complete ));
     if( aIt != m_aCachedDispatches.end())
     {
@@ -127,10 +132,24 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
             // ToDo: can those dispatches be cached?
             m_aCachedDispatches[ rURL.Complete ].set( xResult );
         }
-        else if( m_xFallbackDispatcher.is() &&
-                 (m_aFallbackCommands.find( rURL.Path ) != m_aFallbackCommands.end()) )
+        else if( m_xChartDispatcher.is() &&
+                 (m_aChartCommands.find( rURL.Path ) != m_aChartCommands.end()) )
         {
-            xResult.set( m_xFallbackDispatcher );
+            xResult.set( m_xChartDispatcher );
+            m_aCachedDispatches[ rURL.Complete ].set( xResult );
+        }
+        // #i12587# support for shapes in chart
+        // Note, that the chart dispatcher must be queried first, because
+        // the chart dispatcher is the default dispatcher for all context
+        // sensitive commands.
+        else if ( m_pDrawCommandDispatch && m_pDrawCommandDispatch->isFeatureSupported( rURL.Complete ) )
+        {
+            xResult.set( m_pDrawCommandDispatch );
+            m_aCachedDispatches[ rURL.Complete ].set( xResult );
+        }
+        else if ( m_pShapeController && m_pShapeController->isFeatureSupported( rURL.Complete ) )
+        {
+            xResult.set( m_pShapeController );
             m_aCachedDispatches[ rURL.Complete ].set( xResult );
         }
     }
@@ -157,8 +176,11 @@ void CommandDispatchContainer::DisposeAndClear()
     m_aCachedDispatches.clear();
     DisposeHelper::DisposeAllElements( m_aToBeDisposedDispatches );
     m_aToBeDisposedDispatches.clear();
-    m_xFallbackDispatcher.clear();
-    m_aFallbackCommands.clear();
+    m_xChartDispatcher.clear();
+    m_aChartCommands.clear();
+    m_pChartController = NULL;
+    m_pDrawCommandDispatch = NULL;
+    m_pShapeController = NULL;
 }
 
 Reference< frame::XDispatch > CommandDispatchContainer::getContainerDispatchForURL(
@@ -177,6 +199,18 @@ Reference< frame::XDispatch > CommandDispatchContainer::getContainerDispatchForU
         }
     }
     return xResult;
+}
+
+void CommandDispatchContainer::setDrawCommandDispatch( DrawCommandDispatch* pDispatch )
+{
+    m_pDrawCommandDispatch = pDispatch;
+    m_aToBeDisposedDispatches.push_back( Reference< frame::XDispatch >( pDispatch ) );
+}
+
+void CommandDispatchContainer::setShapeController( ShapeController* pController )
+{
+    m_pShapeController = pController;
+    m_aToBeDisposedDispatches.push_back( Reference< frame::XDispatch >( pController ) );
 }
 
 } //  namespace chart
