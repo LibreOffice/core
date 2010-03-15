@@ -106,8 +106,8 @@ for i in $filelist ; do
     # TODO: check for comment
     else
         if [ "$tarurl" != "" ]; then
-            if [ ! -e $i ]; then
-                if [ ! -z $wget ]; then
+            if [ ! -f "$i" ]; then
+                if [ ! -z "$wget" ]; then
                     $wget -nv -N $tarurl/$i
                 else
                     echo fetching $i
@@ -118,7 +118,7 @@ for i in $filelist ; do
                     failed="$failed $i"
                     wret=0
                 fi
-                if [ -e $i -a -n "$md5sum" ]; then
+                if [ -f $i -a -n "$md5sum" ]; then
                     sum=`$md5sum $i | sed "s/ [ *].*//"`
                     sum2=`echo $i | sed "s/-.*//"`
                     if [ "$sum" != "$sum2" ]; then
