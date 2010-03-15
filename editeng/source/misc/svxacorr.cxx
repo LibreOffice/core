@@ -363,7 +363,7 @@ SvxAutoCorrect::SvxAutoCorrect( const String& rShareAutocorrFile,
     sUserAutoCorrFile( rUserAutocorrFile ),
     pLangTable( new SvxAutoCorrLanguageTable_Impl ),
     pLastFileTable( new SvxAutoCorrLastFileAskTable_Impl ),
-    pCharClass( 0 ),
+    pCharClass( 0 ), bRunNext( false ),
     cStartDQuote( 0 ), cEndDQuote( 0 ), cStartSQuote( 0 ), cEndSQuote( 0 )
 {
     nFlags = SvxAutoCorrect::GetDefaultFlags();
@@ -380,7 +380,7 @@ SvxAutoCorrect::SvxAutoCorrect( const SvxAutoCorrect& rCpy )
 
     pLangTable( new SvxAutoCorrLanguageTable_Impl ),
     pLastFileTable( new SvxAutoCorrLastFileAskTable_Impl ),
-    pCharClass( 0 ),
+    pCharClass( 0 ), bRunNext( false ),
 
     nFlags( rCpy.nFlags & ~(ChgWordLstLoad|CplSttLstLoad|WrdSttLstLoad)),
     cStartDQuote( rCpy.cStartDQuote ), cEndDQuote( rCpy.cEndDQuote ),
@@ -710,6 +710,9 @@ BOOL SvxAutoCorrect::FnAddNonBrkSpace(
             }
         }
     }
+
+    // Run on the next character if nbsp added
+    bRunNext = bRet;
 
     return bRet;
 }
@@ -1189,9 +1192,21 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
                                     BOOL bInsert )
 {
     ULONG nRet = 0;
+    bRunNext = false;  // if it was set, then it has to be turned off
+
     do{                                 // only for middle check loop !!
         if( cChar )
         {
+            // Remove the NBSP if it wasn't an autocorrection
+            if ( !IsAutoCorrectChar( cChar ) && IsAutoCorrFlag( AddNonBrkSpace ) )
+            {
+                if ( NeedsHardspaceAutocorr( rTxt.GetChar( nInsPos - 1 ) ) &&
+                        isblank( (unsigned char) cChar) == 0 )
+                {
+                    rDoc.Delete( nInsPos - 2, nInsPos - 1 );
+                }
+            }
+
             //JP 10.02.97: doppelte Spaces verhindern
             if( nInsPos && ' ' == cChar &&
                 IsAutoCorrFlag( IgnoreDoubleSpace ) &&
