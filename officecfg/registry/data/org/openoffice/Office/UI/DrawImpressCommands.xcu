@@ -1851,7 +1851,13 @@
                 </prop>
             </node>
 
-            <node oor:name=".uno:MergeCells" oor:op="replace">
+      <node oor:name=".uno:ToolPanel" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Tool Panels</value>
+        </prop>
+      </node>
+
+      <node oor:name=".uno:MergeCells" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Zellen verbinden</value>
                     <value xml:lang="en-US">Merge Cells</value>

@@ -58,6 +58,11 @@
                 <value>private:resource/pane/RightPane</value>
               </prop>
             </node>
+            <node oor:name="R4" oor:op="replace">
+              <prop oor:name="URL">
+                <value>private:resource/pane/ToolPanel</value>
+              </prop>
+            </node>
           </node>
         </node>
         <node oor:name="F1" oor:op="replace">
@@ -101,6 +106,11 @@
               </prop>
             </node>
             <node oor:name="R7" oor:op="replace">
+              <prop oor:name="URL">
+                <value>private:resource/view/ToolPanelPane</value>
+              </prop>
+            </node>
+            <node oor:name="R8" oor:op="replace">
               <prop oor:name="URL">
                 <value>private:resource/view/PresentationView</value>
               </prop>
