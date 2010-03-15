@@ -40,7 +40,7 @@
 '-------------------------------------------------------------------------------
 testcase tiToolsThesaurus
 
- Dim DasWort$
+ Dim DasWort as string
  Dim ZaehlerBedeutung
 
 '/// for normal text, the thesaurus is enabled, if the format->character->language of the word has a thesaurus///'
@@ -57,32 +57,32 @@ testcase tiToolsThesaurus
 	endif
 
     select case iSprache
-       case 01 : DasWort$ = "Hello"
-       case 03 : DasWort$ = "Alo"
+       case 01 : DasWort = "Hello"
+       case 03 : DasWort = "Alo"
        case 07 : printlog "- No Thesaur for Russian available"
                  goto endsub
        case 30 : Printlog "- No Thesaurus available !"
                  goto endsub
-       case 31 : DasWort$ = "Guiten"
-       case 33 : DasWort$ = "Bonjour"
-       case 34 : DasWort$ = "Hola"
+       case 31 : DasWort = "Guiten"
+       case 33 : DasWort = "Bonjour"
+       case 34 : DasWort = "Hola"
        case 35 : Printlog "- No Thesaurus available !"
                  goto endsub
        case 36 : Printlog "- No Thesaurus available !"
                  goto endsub
        case 37 : Printlog "- No Thesaurus available !"
                  goto endsub
-       case 39 : DasWort$ = "Ciao"
+       case 39 : DasWort = "Ciao"
        case 42 : Printlog "- No Thesaurus available !"
                  goto endsub
-       case 45 : DasWort$ = "Hej"
-       case 46 : DasWort$ = "Välkommen"
+       case 45 : DasWort = "Hej"
+       case 46 : DasWort = "Välkommen"
        case 47 : Printlog "- No Thesaurus available !"
                  goto endsub
        case 48 : Printlog "- No Thesaurus in Polish!"
                  goto endsub
-       case 49 : DasWort$ = "Hallo"
-       case 50 : DasWort$ = "Prosojnica"
+       case 49 : DasWort = "Hallo"
+       case 50 : DasWort = "Prosojnica"
        case 51 : Printlog "- No Thesaurus available !"
                  goto endsub
        case 55 : Printlog "- No Thesaurus in Brazilian!"
@@ -92,10 +92,10 @@ testcase tiToolsThesaurus
 
        case else : if bAsianLan then
                      hSetSpellHypLanguage
-                     DasWort$ = "Hello"
+                     DasWort = "Hello"
                   else
                      Warnlog "For the language  " + iSprache +" nothing is prepared yet: insert text here"
-                     DasWort$ = "Hello"
+                     DasWort = "Hello"
                   endif
     end select
 
@@ -110,9 +110,9 @@ testcase tiToolsThesaurus
      PrintLog " No Thesaurus available"
   endcatch
 
-  PrintLog "    Thesaurus with 1 word:  " + DasWort$
+  PrintLog "    Thesaurus with 1 word:  " + DasWort
 
-  Call hTextrahmenErstellen (DasWort$,20,20,50,30)
+  Call hTextrahmenErstellen (DasWort,20,20,50,30)
   sleep 1
 
   hTypeKeys "<Home><SHIFT END>"
@@ -129,23 +129,23 @@ sleep 1
      ExtrasThesaurusDraw							'/// Thesaurus with only 1 word ///'
      Kontext "Thesaurus"
      if Thesaurus.Exists(3) then
-        if Wort.GetSelText <> DasWort$ Then WarnLog "marked word should be:" + DasWort$ + " but it is:" + Wort.GetSelText
-        if Wort.GetSelText = DasWort$ Then PrintLog "  Marked word is correctly changed"	'/// Control if word has changed ///'
-        ZaehlerBedeutung=Bedeutung.GetItemCount
-        if Bedeutung.GetItemCount = 0 Then
+        if CurrentWord.GetSelText <> DasWort Then WarnLog "marked word should be:" + DasWort + " but it is:" + CurrentWord.GetSelText
+        if CurrentWord.GetSelText = DasWort Then PrintLog "  Marked word is correctly changed"	'/// Control if word has changed ///'
+        ZaehlerBedeutung=Alternatives.GetItemCount
+        if Alternatives.GetItemCount = 0 Then
            PrintLog "  There are no suggestions for this word"
            sleep 1
         else
            if ZaehlerBedeutung=1 Then
-              Bedeutung.Select ZaehlerBedeutung
+              Alternatives.Select ZaehlerBedeutung
            else
-              Bedeutung.Select (ZaehlerBedeutung - 1)
+              Alternatives.Select (ZaehlerBedeutung - 1)
            end if
            sleep 1
            Synonym.Select 1									'/// Select synonym 1///'
            sleep 1
             if Ersetzen.GetText=Synonym.GetSelText Then PrintLog "  Meaning transfered into Replace edit field"
-            if Ersetzen.GetText<>Synonym.GetSelText Then WarnLog "  Replacement should have been: '" + Bedeutung.GetSelText + "' but it is '" + Ersetzen.GetText+"'"
+            if Ersetzen.GetText<>Synonym.GetSelText Then WarnLog "  Replacement should have been: '" + Alternatives.GetSelText + "' but it is '" + Ersetzen.GetText+"'"
        endif
        Thesaurus.Cancel
      else
@@ -219,7 +219,8 @@ testcase tiToolsHyphenation2
 
   dim iWaitIndex as integer
   dim sExt as string
-  Dim i : Dim DasWort : Dim DasWort2 : Dim DasWort3 : Dim DasWort4 : Dim DasWort5 : Dim DasWort6 : Dim DasWort7
+  Dim i : Dim DasWort2 : Dim DasWort3 : Dim DasWort4 : Dim DasWort5 : Dim DasWort6 : Dim DasWort7
+  Dim DasWort as string
   dim sDraw as string
   dim sFile as string
   PrintLog "- Tools/Hyphenation2"

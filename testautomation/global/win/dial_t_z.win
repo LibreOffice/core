@@ -141,12 +141,6 @@ Umrandung   sw:CheckBox:DLG_CONV_TEXT_TABLE:CB_BORDER
 Textmarken sw:ComboBox:DLG_INSERT_BOOKMARK:CB_BOOKMARK
 Loeschen sw:PushButton:DLG_INSERT_BOOKMARK:BT_DELETE
 
-*Thesaurus SID_THESAURUS
-Ersetzen cui:Edit:RID_SVXDLG_THESAURUS:ED_REPL
-RecallCurrentWord cui:ImageButton:RID_SVXDLG_THESAURUS:BTN_LEFT
-Wort cui:ComboBox:RID_SVXDLG_THESAURUS:CB_WORD
-Sprache cui:MenuButton:RID_SVXDLG_THESAURUS:MB_LANGUAGE
-
 *Ueberblenden SID_POLYGON_MORPHING
 Attributierung sd:CheckBox:DLG_MORPH:CBX_ATTRIBUTES
 GleicheOrientierung sd:CheckBox:DLG_MORPH:CBX_ORIENTATION
