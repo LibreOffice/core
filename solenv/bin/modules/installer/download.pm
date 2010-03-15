@@ -637,7 +637,7 @@ sub get_download_architecture
     }
     elsif ( $installer::globals::issolarissparcbuild )
     {
-        $arch = "sparc";
+        $arch = "Sparc";
     }
     elsif ( $installer::globals::issolarisx86build )
     {
