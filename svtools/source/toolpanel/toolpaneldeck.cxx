@@ -317,6 +317,13 @@ namespace svt
     ToolPanelDeck::~ToolPanelDeck()
     {
         GetLayouter()->Destroy();
+
+        Hide();
+        for ( size_t i=0; i<GetPanelCount(); ++i )
+        {
+            PToolPanel pPanel( GetPanel( i ) );
+            pPanel->Dispose();
+        }
     }
 
     //--------------------------------------------------------------------

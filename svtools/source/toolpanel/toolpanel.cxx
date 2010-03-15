@@ -24,10 +24,7 @@
  *
 ************************************************************************/
 
-#ifndef SVT_REFBASE_HXX
-#define SVT_REFBASE_HXX
-
-#include <rtl/ref.hxx>
+#include "svtools/toolpanel/toolpanel.hxx"
 
 //........................................................................
 namespace svt
@@ -35,44 +32,21 @@ namespace svt
 //........................................................................
 
     //====================================================================
-    //= RefBase
+    //= ToolPanelBase
     //====================================================================
-    class RefBase : public ::rtl::IReference
+    //--------------------------------------------------------------------
+    ToolPanelBase::ToolPanelBase()
     {
-    protected:
-        RefBase()
-            :m_refCount( 0 )
-        {
-        }
-
-        virtual ~RefBase()
-        {
-        }
-
-        virtual oslInterlockedCount SAL_CALL acquire();
-        virtual oslInterlockedCount SAL_CALL release();
-
-    private:
-        oslInterlockedCount m_refCount;
-    };
-
-#define DECLARE_IREFERENCE()    \
-    virtual oslInterlockedCount SAL_CALL acquire(); \
-    virtual oslInterlockedCount SAL_CALL release();
-
-
-#define IMPLEMENT_IREFERENCE( classname )   \
-    oslInterlockedCount classname::acquire()    \
-    {   \
-        return RefBase::acquire();  \
-    }   \
-    oslInterlockedCount classname::release()    \
-    {   \
-        return RefBase::release();  \
     }
+
+    //--------------------------------------------------------------------
+    ToolPanelBase::~ToolPanelBase()
+    {
+    }
+
+    //--------------------------------------------------------------------
+    IMPLEMENT_IREFERENCE( ToolPanelBase )
 
 //........................................................................
 } // namespace svt
 //........................................................................
-
-#endif // SVT_REFBASE_HXX

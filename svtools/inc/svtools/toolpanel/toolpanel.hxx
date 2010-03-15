@@ -28,11 +28,12 @@
 #define SVT_TOOLPANEL_HXX
 
 #include "svtools/svtdllapi.h"
+#include "svtools/toolpanel/refbase.hxx"
 
 #include <rtl/ustring.hxx>
 #include <vcl/image.hxx>
 
-#include <rtl/ref.hxx>
+#include <boost/noncopyable.hpp>
 
 class Rectangle;
 
@@ -74,12 +75,39 @@ namespace svt
         */
         virtual bool HasFocus() const = 0;
 
+        /** release any resources associated with the panel.
+
+            In particular, implementations should destroy the VCL window which implements the panel window.
+        */
+        virtual void Dispose() = 0;
+
         virtual ~IToolPanel()
         {
         }
     };
 
     typedef ::rtl::Reference< IToolPanel >  PToolPanel;
+
+    //====================================================================
+    //= ToolPanelBase
+    //====================================================================
+    /** base class for tool panel implementations, adding ref count implementation to the IToolPanel interface,
+        but still being abstract
+    */
+    class SVT_DLLPUBLIC ToolPanelBase   :public IToolPanel
+                                        ,public RefBase
+                                        ,public ::boost::noncopyable
+    {
+    protected:
+        ToolPanelBase();
+        ~ToolPanelBase();
+
+    public:
+        DECLARE_IREFERENCE()
+
+    private:
+        oslInterlockedCount m_refCount;
+    };
 
 //........................................................................
 } // namespace svt

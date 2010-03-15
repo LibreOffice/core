@@ -54,6 +54,7 @@ namespace svt
         virtual void SetPosSizePixel( const Rectangle& i_rPanelPlayground );
         virtual void GrabFocus();
         virtual bool HasFocus() const;
+        virtual void Dispose();
 
         DECLARE_IREFERENCE()
     };

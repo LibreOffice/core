@@ -149,6 +149,7 @@ public:
     virtual void SetPosSizePixel( const Rectangle& i_rPanelPlayground );
     virtual void GrabFocus();
     virtual bool HasFocus() const;
+    virtual void Dispose();
 
     // IReference
     virtual oslInterlockedCount SAL_CALL acquire();
@@ -156,7 +157,8 @@ public:
 
 private:
     oslInterlockedCount m_refCount;
-    ColoredPanelWindow  m_aWindow;
+    ::std::auto_ptr< ColoredPanelWindow >
+                        m_pWindow;
     ::rtl::OUString     m_aPanelName;
     BitmapEx            m_aPanelIcon;
 };
@@ -167,7 +169,7 @@ private:
 //-----------------------------------------------------------------------------
 ColoredPanel::ColoredPanel( Window& i_rParent, const Color& i_rColor, const sal_Char* i_pAsciiPanelName )
     :m_refCount(0)
-    ,m_aWindow( i_rParent, i_rColor, ::rtl::OUString::createFromAscii( i_pAsciiPanelName ) )
+    ,m_pWindow( new ColoredPanelWindow( i_rParent, i_rColor, ::rtl::OUString::createFromAscii( i_pAsciiPanelName ) ) )
     ,m_aPanelName( ::rtl::OUString::createFromAscii( i_pAsciiPanelName ) )
     ,m_aPanelIcon()
 {
@@ -179,7 +181,7 @@ ColoredPanel::ColoredPanel( Window& i_rParent, const Color& i_rColor, const sal_
 //-----------------------------------------------------------------------------
 ColoredPanel::ColoredPanel( Window& i_rParent, const Color& i_rColor, const String& i_rPanelName )
     :m_refCount(0)
-    ,m_aWindow( i_rParent, i_rColor, i_rPanelName )
+    ,m_pWindow( new ColoredPanelWindow( i_rParent, i_rColor, i_rPanelName ) )
     ,m_aPanelName( i_rPanelName )
     ,m_aPanelIcon()
 {
@@ -211,31 +213,43 @@ oslInterlockedCount SAL_CALL ColoredPanel::release()
 //-----------------------------------------------------------------------------
 void ColoredPanel::Show()
 {
-    m_aWindow.Show();
+    ENSURE_OR_RETURN_VOID( m_pWindow.get(), "disposed!" );
+    m_pWindow->Show();
 }
 
 //-----------------------------------------------------------------------------
 void ColoredPanel::Hide()
 {
-    m_aWindow.Hide();
+    ENSURE_OR_RETURN_VOID( m_pWindow.get(), "disposed!" );
+    m_pWindow->Hide();
 }
 
 //-----------------------------------------------------------------------------
 void ColoredPanel::SetPosSizePixel( const Rectangle& i_rPanelPlayground )
 {
-    m_aWindow.SetPosSizePixel( i_rPanelPlayground.TopLeft(), i_rPanelPlayground.GetSize() );
+    ENSURE_OR_RETURN_VOID( m_pWindow.get(), "disposed!" );
+    m_pWindow->SetPosSizePixel( i_rPanelPlayground.TopLeft(), i_rPanelPlayground.GetSize() );
 }
 
 //-----------------------------------------------------------------------------
 void ColoredPanel::GrabFocus()
 {
-    m_aWindow.GrabFocus();
+    ENSURE_OR_RETURN_VOID( m_pWindow.get(), "disposed!" );
+    m_pWindow->GrabFocus();
 }
 
 //-----------------------------------------------------------------------------
 bool ColoredPanel::HasFocus() const
 {
-    return m_aWindow.HasChildPathFocus();
+    ENSURE_OR_RETURN_FALSE( m_pWindow.get(), "disposed!" );
+    return m_pWindow->HasChildPathFocus();
+}
+
+//-----------------------------------------------------------------------------
+void ColoredPanel::Dispose()
+{
+    ENSURE_OR_RETURN_VOID( m_pWindow.get(), "disposed!" );
+    m_pWindow.reset();
 }
 
 //-----------------------------------------------------------------------------

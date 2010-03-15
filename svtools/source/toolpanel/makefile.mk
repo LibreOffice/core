@@ -50,6 +50,7 @@ SLOFILES=\
         $(SLO)$/refbase.obj \
         $(SLO)$/tabbargeometry.obj \
         $(SLO)$/tablayouter.obj \
+        $(SLO)$/toolpanel.obj \
         $(SLO)$/toolpanelcollection.obj \
         $(SLO)$/toolpaneldeck.obj \
 
