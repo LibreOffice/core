@@ -268,6 +268,11 @@ SwTxtFld::SwTxtFld( SwFmtFld& rAttr, xub_StrLen nStartPos )
 
 SwTxtFld::~SwTxtFld( )
 {
+    SwFmtFld & rFmtFld( static_cast<SwFmtFld &>(GetAttr()) );
+    if (this == rFmtFld.pTxtAttr)
+    {
+        rFmtFld.pTxtAttr = 0; // #i110140# invalidate!
+    }
 }
 
 /*************************************************************************
