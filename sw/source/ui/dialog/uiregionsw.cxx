@@ -164,15 +164,15 @@ public:
  Beschreibung: User Data Klasse fuer Bereichsinformationen
 ----------------------------------------------------------------------------*/
 
-SectRepr::SectRepr( USHORT nPos, SwSection& rSect ) :
-    aSection( CONTENT_SECTION, aEmptyStr ),
+SectRepr::SectRepr( USHORT nPos, SwSection& rSect )
+    : m_SectionData( rSect )
+    ,
     aBrush( RES_BACKGROUND ),
     aFrmDirItem( FRMDIR_ENVIRONMENT, RES_FRAMEDIR ),
     aLRSpaceItem( RES_LR_SPACE ),
     bSelected(FALSE)
 {
-    aSection = rSect;
-    bContent = aSection.GetLinkFileName().Len() == 0;
+    bContent = m_SectionData.GetLinkFileName().Len() == 0;
     nArrPos=nPos;
     SwSectionFmt *pFmt = rSect.GetFmt();
     if( pFmt )
@@ -192,7 +192,7 @@ void SectRepr::SetFile( const String& rFile )
     String sNewFile( INetURLObject::decode( rFile, INET_HEX_ESCAPE,
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ));
-    String sOldFileName( aSection.GetLinkFileName() );
+    String sOldFileName( m_SectionData.GetLinkFileName() );
     String sSub( sOldFileName.GetToken( 2, sfx2::cTokenSeperator ) );
 
     if( rFile.Len() || sSub.Len() )
@@ -205,19 +205,23 @@ void SectRepr::SetFile( const String& rFile )
         sNewFile += sSub;
     }
 
-    aSection.SetLinkFileName( sNewFile );
+    m_SectionData.SetLinkFileName( sNewFile );
 
     if( rFile.Len() || sSub.Len() )
-        aSection.SetType( FILE_LINK_SECTION );
+    {
+        m_SectionData.SetType( FILE_LINK_SECTION );
+    }
     else
-        aSection.SetType( CONTENT_SECTION );
+    {
+        m_SectionData.SetType( CONTENT_SECTION );
+    }
 }
 
 
 void SectRepr::SetFilter( const String& rFilter )
 {
     String sNewFile;
-    String sOldFileName( aSection.GetLinkFileName() );
+    String sOldFileName( m_SectionData.GetLinkFileName() );
     String sFile( sOldFileName.GetToken( 0, sfx2::cTokenSeperator ) );
     String sSub( sOldFileName.GetToken( 2, sfx2::cTokenSeperator ) );
 
@@ -227,16 +231,18 @@ void SectRepr::SetFilter( const String& rFilter )
     else if( sSub.Len() )
         (( sNewFile = sfx2::cTokenSeperator ) += sfx2::cTokenSeperator ) += sSub;
 
-    aSection.SetLinkFileName( sNewFile );
+    m_SectionData.SetLinkFileName( sNewFile );
 
     if( sNewFile.Len() )
-        aSection.SetType( FILE_LINK_SECTION );
+    {
+        m_SectionData.SetType( FILE_LINK_SECTION );
+    }
 }
 
 void SectRepr::SetSubRegion(const String& rSubRegion)
 {
     String sNewFile;
-    String sOldFileName( aSection.GetLinkFileName() );
+    String sOldFileName( m_SectionData.GetLinkFileName() );
     String sFilter( sOldFileName.GetToken( 1, sfx2::cTokenSeperator ) );
     sOldFileName = sOldFileName.GetToken( 0, sfx2::cTokenSeperator );
 
@@ -244,21 +250,25 @@ void SectRepr::SetSubRegion(const String& rSubRegion)
         (((( sNewFile = sOldFileName ) += sfx2::cTokenSeperator ) += sFilter )
                                        += sfx2::cTokenSeperator ) += rSubRegion;
 
-    aSection.SetLinkFileName( sNewFile );
+    m_SectionData.SetLinkFileName( sNewFile );
 
     if( rSubRegion.Len() || sOldFileName.Len() )
-        aSection.SetType( FILE_LINK_SECTION );
+    {
+        m_SectionData.SetType( FILE_LINK_SECTION );
+    }
     else
-        aSection.SetType( CONTENT_SECTION );
+    {
+        m_SectionData.SetType( CONTENT_SECTION );
+    }
 }
 
 
 String SectRepr::GetFile() const
 {
-    String sLinkFile( aSection.GetLinkFileName() );
+    String sLinkFile( m_SectionData.GetLinkFileName() );
     if( sLinkFile.Len() )
     {
-        if( DDE_LINK_SECTION == aSection.GetType() )
+        if (DDE_LINK_SECTION == m_SectionData.GetType())
         {
             USHORT n = sLinkFile.SearchAndReplace( sfx2::cTokenSeperator, ' ' );
             sLinkFile.SearchAndReplace( sfx2::cTokenSeperator, ' ',  n );
@@ -276,7 +286,7 @@ String SectRepr::GetFile() const
 
 String SectRepr::GetSubRegion() const
 {
-    String sLinkFile( aSection.GetLinkFileName() );
+    String sLinkFile( m_SectionData.GetLinkFileName() );
     if( sLinkFile.Len() )
         sLinkFile = sLinkFile.GetToken( 2, sfx2::cTokenSeperator );
     return sLinkFile;
@@ -552,7 +562,7 @@ void    SwEditRegionDlg::SelectSection(const String& rSectionName)
     while(pEntry)
     {
         SectReprPtr pRepr = (SectReprPtr)pEntry->GetUserData();
-        if(pRepr->GetSection().GetName() == rSectionName)
+        if (pRepr->GetSectionData().GetSectionName() == rSectionName)
             break;
         pEntry = aTree.Next(pEntry);
     }
@@ -589,15 +599,15 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
         // <--
         aFileCB.EnableTriState( TRUE );
 
-        BOOL bHiddenValid       = TRUE;
-        BOOL bProtectValid      = TRUE;
-        BOOL bConditionValid    = TRUE;
+        bool bHiddenValid       = true;
+        bool bProtectValid      = true;
+        bool bConditionValid    = true;
         // --> FME 2004-06-22 #114856# edit in readonly sections
-        BOOL bEditInReadonlyValid = TRUE;
-        BOOL bEditInReadonly    = TRUE;
+        bool bEditInReadonlyValid = true;
+        bool bEditInReadonly    = true;
         // <--
-        BOOL bHidden            = TRUE;
-        BOOL bProtect           = TRUE;
+        bool bHidden            = true;
+        bool bProtect           = true;
         String sCondition;
         BOOL bFirst             = TRUE;
         BOOL bFileValid         = TRUE;
@@ -794,8 +804,10 @@ IMPL_LINK( SwEditRegionDlg, OkHdl, CheckBox *, EMPTYARG )
     {
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
         SwSectionFmt* pFmt = aOrigArray[ pRepr->GetArrPos() ];
-        if( !pRepr->GetSection().IsProtectFlag())
-            pRepr->GetSection().SetPasswd(UNO_NMSPC::Sequence <sal_Int8 >());
+        if (!pRepr->GetSectionData().IsProtectFlag())
+        {
+            pRepr->GetSectionData().SetPassword(uno::Sequence<sal_Int8 >());
+        }
         USHORT nNewPos = rDocFmts.GetPos( pFmt );
         if( USHRT_MAX != nNewPos )
         {
@@ -821,7 +833,7 @@ IMPL_LINK( SwEditRegionDlg, OkHdl, CheckBox *, EMPTYARG )
             if( pFmt->GetLRSpace() != pRepr->GetLRSpace())
                 pSet->Put( pRepr->GetLRSpace());
 
-            rSh.ChgSection( nNewPos, pRepr->GetSection(),
+            rSh.UpdateSection( nNewPos, pRepr->GetSectionData(),
                             pSet->Count() ? pSet : 0 );
             delete pSet;
         }
@@ -1221,8 +1233,8 @@ IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
             nPos = sLink.SearchAndReplace( ' ', sfx2::cTokenSeperator );
             sLink.SearchAndReplace( ' ', sfx2::cTokenSeperator, nPos );
 
-            pSectRepr->GetSection().SetLinkFileName( sLink );
-            pSectRepr->GetSection().SetType( DDE_LINK_SECTION );
+            pSectRepr->GetSectionData().SetLinkFileName( sLink );
+            pSectRepr->GetSectionData().SetType( DDE_LINK_SECTION );
         }
         else
         {
@@ -1343,10 +1355,12 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
                     break;
                 }
             }
-            pRepr->GetSection().SetPasswd(pRepr->GetTempPasswd());
+            pRepr->GetSectionData().SetPassword(pRepr->GetTempPasswd());
         }
         else
-            pRepr->GetSection().SetPasswd(UNO_NMSPC::Sequence <sal_Int8 >());
+        {
+            pRepr->GetSectionData().SetPassword(uno::Sequence<sal_Int8 >());
+        }
         pEntry = aTree.NextSelected(pEntry);
     }
     return 0;
@@ -1368,7 +1382,7 @@ IMPL_LINK( SwEditRegionDlg, NameEditHdl, Edit *, EMPTYARG )
         String  aName = aCurName.GetText();
         aTree.SetEntryText(pEntry,aName);
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
-        pRepr->GetSection().SetName(aName);
+        pRepr->GetSectionData().SetSectionName(aName);
 
         aOK.Enable(aName.Len() != 0);
     }
@@ -1495,8 +1509,8 @@ static void lcl_ReadSections( SfxMedium& rMedium, ComboBox& rBox )
 SwInsertSectionTabDialog::SwInsertSectionTabDialog(
             Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh) :
     SfxTabDialog( pParent, SW_RES(DLG_INSERT_SECTION), &rSet ),
-    rWrtSh(rSh),
-    pToInsertSection(0)
+    rWrtSh(rSh)
+    , m_pSectionData(0)
 {
     String sInsert(SW_RES(ST_INSERT));
     GetOKButton().SetText(sInsert);
@@ -1527,7 +1541,6 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
  * --------------------------------------------------*/
 SwInsertSectionTabDialog::~SwInsertSectionTabDialog()
 {
-    delete pToInsertSection;
 }
 /* -----------------21.05.99 10:23-------------------
  *
@@ -1556,10 +1569,9 @@ void SwInsertSectionTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
  *
  * --------------------------------------------------*/
 
-void SwInsertSectionTabDialog::SetSection(const SwSection& rSect)
+void SwInsertSectionTabDialog::SetSectionData(SwSectionData const& rSect)
 {
-    pToInsertSection = new SwSection(CONTENT_SECTION, aEmptyStr);
-    *pToInsertSection = rSect;
+    m_pSectionData.reset( new SwSectionData(rSect) );
 }
 /* -----------------21.05.99 13:10-------------------
  *
@@ -1567,9 +1579,10 @@ void SwInsertSectionTabDialog::SetSection(const SwSection& rSect)
 short   SwInsertSectionTabDialog::Ok()
 {
     short nRet = SfxTabDialog::Ok();
-    DBG_ASSERT(pToInsertSection, "keiner Section?");
+    DBG_ASSERT(m_pSectionData.get(),
+            "SwInsertSectionTabDialog: no SectionData?");
     const SfxItemSet* pOutputItemSet = GetOutputItemSet();
-    rWrtSh.InsertSection(*pToInsertSection, pOutputItemSet);
+    rWrtSh.InsertSection(*m_pSectionData, pOutputItemSet);
     SfxViewFrame* pViewFrm = rWrtSh.GetView().GetViewFrame();
     uno::Reference< frame::XDispatchRecorder > xRecorder =
             pViewFrm->GetBindings().GetRecorder();
@@ -1582,15 +1595,20 @@ short   SwInsertSectionTabDialog::Ok()
             aRequest.AppendItem(SfxUInt16Item(SID_ATTR_COLUMNS,
                 ((const SwFmtCol*)pCol)->GetColumns().Count()));
         }
-        aRequest.AppendItem(SfxStringItem( FN_PARAM_REGION_NAME, pToInsertSection->GetName()));
-        aRequest.AppendItem(SfxStringItem( FN_PARAM_REGION_CONDITION, pToInsertSection->GetCondition()));
-        aRequest.AppendItem(SfxBoolItem( FN_PARAM_REGION_HIDDEN, pToInsertSection->IsHidden()));
-        aRequest.AppendItem(SfxBoolItem(FN_PARAM_REGION_PROTECT, pToInsertSection->IsProtect()));
+        aRequest.AppendItem(SfxStringItem( FN_PARAM_REGION_NAME,
+                    m_pSectionData->GetSectionName()));
+        aRequest.AppendItem(SfxStringItem( FN_PARAM_REGION_CONDITION,
+                    m_pSectionData->GetCondition()));
+        aRequest.AppendItem(SfxBoolItem( FN_PARAM_REGION_HIDDEN,
+                    m_pSectionData->IsHidden()));
+        aRequest.AppendItem(SfxBoolItem( FN_PARAM_REGION_PROTECT,
+                    m_pSectionData->IsProtectFlag()));
         // --> FME 2004-06-22 #114856# edit in readonly sections
-        aRequest.AppendItem(SfxBoolItem(FN_PARAM_REGION_EDIT_IN_READONLY, pToInsertSection->IsEditInReadonly()));
+        aRequest.AppendItem(SfxBoolItem( FN_PARAM_REGION_EDIT_IN_READONLY,
+                    m_pSectionData->IsEditInReadonlyFlag()));
         // <--
 
-        String sLinkFileName( pToInsertSection->GetLinkFileName() );
+        String sLinkFileName( m_pSectionData->GetLinkFileName() );
         aRequest.AppendItem(SfxStringItem( FN_PARAM_1, sLinkFileName.GetToken( 0, sfx2::cTokenSeperator )));
         aRequest.AppendItem(SfxStringItem( FN_PARAM_2, sLinkFileName.GetToken( 1, sfx2::cTokenSeperator )));
         aRequest.AppendItem(SfxStringItem( FN_PARAM_3, sLinkFileName.GetToken( 2, sfx2::cTokenSeperator )));
@@ -1675,13 +1693,16 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
 
     lcl_FillSubRegionList( *m_pWrtSh, aSubRegionED, &aCurName );
 
-    SwSection* pSect = ((SwInsertSectionTabDialog*)GetTabDialog())->GetSection();
-    if( pSect )     // etwas vorgegeben ?
+    SwSectionData *const pSectionData =
+        static_cast<SwInsertSectionTabDialog*>(GetTabDialog())
+            ->GetSectionData();
+    if (pSectionData) // something set?
     {
-        aCurName.SetText( rSh.GetUniqueSectionName( &pSect->GetName() ));
-        aProtectCB.Check( 0 != pSect->IsProtect() );
-        m_sFileName = pSect->GetLinkFileName();
-        m_sFilePasswd = pSect->GetLinkFilePassWd();
+        aCurName.SetText(
+            rSh.GetUniqueSectionName(& pSectionData->GetSectionName()));
+        aProtectCB.Check( 0 != pSectionData->IsProtectFlag() );
+        m_sFileName = pSectionData->GetLinkFileName();
+        m_sFilePasswd = pSectionData->GetLinkFilePassword();
         aFileCB.Check( 0 != m_sFileName.Len() );
         aFileNameED.SetText( m_sFileName );
         UseFileHdl( &aFileCB );
@@ -1696,16 +1717,18 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
  * --------------------------------------------------*/
 BOOL SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
 {
-    SwSection aSection(CONTENT_SECTION, aCurName.GetText());
+    SwSectionData aSection(CONTENT_SECTION, aCurName.GetText());
     aSection.SetCondition(aConditionED.GetText());
     BOOL bProtected = aProtectCB.IsChecked();
-    aSection.SetProtect(bProtected);
+    aSection.SetProtectFlag(bProtected);
     aSection.SetHidden(aHideCB.IsChecked());
     // --> FME 2004-06-22 #114856# edit in readonly sections
-    aSection.SetEditInReadonly(aEditInReadonlyCB.IsChecked());
+    aSection.SetEditInReadonlyFlag(aEditInReadonlyCB.IsChecked());
     // <--
     if(bProtected)
-        aSection.SetPasswd(m_aNewPasswd);
+    {
+        aSection.SetPassword(m_aNewPasswd);
+    }
     String sFileName = aFileNameED.GetText();
     String sSubRegion = aSubRegionED.GetText();
     BOOL bDDe = aDDECB.IsChecked();
@@ -1733,7 +1756,7 @@ BOOL SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
                     aAbs = pMedium->GetURLObject();
                 aLinkFile = URIHelper::SmartRel2Abs(
                     aAbs, sFileName, URIHelper::GetMaybeFileHdl() );
-                aSection.SetLinkFilePassWd( m_sFilePasswd );
+                aSection.SetLinkFilePassword( m_sFilePasswd );
             }
 
             aLinkFile += sfx2::cTokenSeperator;
@@ -1750,7 +1773,7 @@ BOOL SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
                                         FILE_LINK_SECTION);
         }
     }
-    ((SwInsertSectionTabDialog*)GetTabDialog())->SetSection(aSection);
+    ((SwInsertSectionTabDialog*)GetTabDialog())->SetSectionData(aSection);
     return TRUE;
 }
 /* -----------------21.05.99 10:32-------------------

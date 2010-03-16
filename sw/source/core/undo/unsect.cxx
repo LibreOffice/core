@@ -75,16 +75,14 @@ SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
 }
 
 SwUndoInsSection::SwUndoInsSection(
-        SwPaM const& rPam, SwSection const& rNew,
+        SwPaM const& rPam, SwSectionData const& rNewData,
         SfxItemSet const*const pSet, SwTOXBase const*const pTOXBase)
     : SwUndo( UNDO_INSSECTION ), SwUndRng( rPam )
     , pHistory( 0 )
-    , pSection(new SwSection(rNew.GetType(), rNew.GetName()))
+    , m_pSectionData(new SwSectionData(rNewData))
     , m_pTOXBase(pTOXBase ? new SwTOXBase(*pTOXBase) : 0)
     , pRedlData( 0 ), pAttr( 0 ), nSectNodePos( 0 )
 {
-    *pSection = rNew;
-
     SwDoc& rDoc = *(SwDoc*)rPam.GetDoc();
     if( rDoc.IsRedlineOn() )
     {
@@ -121,7 +119,6 @@ SwUndoInsSection::SwUndoInsSection(
 
 SwUndoInsSection::~SwUndoInsSection()
 {
-    delete pSection;
     delete pRedlData;
     delete pAttr;
 
@@ -187,7 +184,7 @@ void SwUndoInsSection::Redo( SwUndoIter& rUndoIter )
     else
     {
         rDoc.InsertSwSection(*rUndoIter.pAktPam,
-                *pSection, 0, pAttr, true);
+                *m_pSectionData, 0, pAttr, true);
     }
 
     if( pHistory )
@@ -233,7 +230,7 @@ void SwUndoInsSection::Repeat( SwUndoIter& rUndoIter )
     else
     {
         rUndoIter.GetDoc().InsertSwSection( *rUndoIter.pAktPam,
-            *pSection, 0, pAttr);
+            *m_pSectionData, 0, pAttr);
     }
 }
 
@@ -286,8 +283,7 @@ SwUndoDelSection::SwUndoDelSection( const SwSectionFmt& rFmt )
         m_pTOXBase.reset(
             new SwTOXBase(static_cast<SwTOXBaseSection const&>(rSect)) );
     }
-    pSection = new SwSection( rSect.GetType(), rSect.GetName() );
-    *pSection = rSect;
+    m_pSectionData.reset( new SwSectionData(rSect) );
 
     pAttr = ::lcl_GetAttrSet( rSect );
 
@@ -299,7 +295,6 @@ SwUndoDelSection::SwUndoDelSection( const SwSectionFmt& rFmt )
 
 SwUndoDelSection::~SwUndoDelSection()
 {
-    delete pSection;
     delete pAttr;
 }
 
@@ -323,7 +318,7 @@ void SwUndoDelSection::Undo( SwUndoIter& rUndoIter )
         /// OD 04.10.2002 #102894#
         /// remember inserted section node for further calculations
         SwSectionNode* pInsertedSectNd = rDoc.GetNodes().InsertTextSection(
-                aStt, *pFmt, *pSection, 0, & aEnd);
+                aStt, *pFmt, *m_pSectionData, 0, & aEnd);
 
         if( SFX_ITEM_SET == pFmt->GetItemState( RES_FTN_AT_TXTEND ) ||
             SFX_ITEM_SET == pFmt->GetItemState( RES_END_AT_TXTEND ))
@@ -370,8 +365,8 @@ SwUndoChgSection::SwUndoChgSection( const SwSectionFmt& rFmt, BOOL bOnlyAttr )
      : SwUndo( UNDO_CHGSECTION ), bOnlyAttrChgd( bOnlyAttr )
 {
     const SwSection& rSect = *rFmt.GetSection();
-    pSection = new SwSection( rSect.GetType(), rSect.GetName() );
-    *pSection = rSect;
+
+    m_pSectionData.reset( new SwSectionData(rSect) );
 
     pAttr = ::lcl_GetAttrSet( rSect );
 
@@ -381,7 +376,6 @@ SwUndoChgSection::SwUndoChgSection( const SwSectionFmt& rFmt, BOOL bOnlyAttr )
 
 SwUndoChgSection::~SwUndoChgSection()
 {
-    delete pSection;
     delete pAttr;
 }
 
@@ -419,18 +413,16 @@ void SwUndoChgSection::Undo( SwUndoIter& rUndoIter )
 
     if( !bOnlyAttrChgd )
     {
-        BOOL bUpdate = (!rNdSect.IsLinkType() && pSection->IsLinkType() ) ||
-                            ( pSection->GetLinkFileName().Len() &&
-                                pSection->GetLinkFileName() !=
-                                rNdSect.GetLinkFileName());
+        const bool bUpdate =
+               (!rNdSect.IsLinkType() && m_pSectionData->IsLinkType())
+            || (    m_pSectionData->GetLinkFileName().Len()
+                &&  (m_pSectionData->GetLinkFileName() !=
+                        rNdSect.GetLinkFileName()));
 
-        SwSection* pTmp = new SwSection( CONTENT_SECTION, aEmptyStr );
-        *pTmp = rNdSect;        // das aktuelle sichern
-
-        rNdSect = *pSection;    // das alte setzen
-
-        delete pSection;
-        pSection = pTmp;        // das aktuelle ist jetzt das alte
+        // swap stored section data with live section data
+        SwSectionData *const pOld( new SwSectionData(rNdSect) );
+        rNdSect.SetSectionData(*m_pSectionData);
+        m_pSectionData.reset(pOld);
 
         if( bUpdate )
             rNdSect.CreateLink( CREATE_UPDATE );

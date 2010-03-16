@@ -67,7 +67,7 @@ namespace sfx2
 
 class SectRepr
 {
-    SwSection               aSection;
+    SwSectionData           m_SectionData;
     SwFmtCol                aCol;
     SvxBrushItem            aBrush;
     SwFmtFtnAtTxtEnd        aFtnNtAtEnd;
@@ -88,7 +88,8 @@ public:
     BOOL    operator <(SectRepr& rSectRef) const
             {return nArrPos<rSectRef.GetArrPos();}
 
-    SwSection&          GetSection()        { return aSection; }
+    SwSectionData &     GetSectionData()        { return m_SectionData; }
+    SwSectionData const&GetSectionData() const  { return m_SectionData; }
     SwFmtCol&           GetCol()            { return aCol; }
     SvxBrushItem&       GetBackground()     { return aBrush; }
     SwFmtFtnAtTxtEnd&   GetFtnNtAtEnd()     { return aFtnNtAtEnd; }
@@ -98,8 +99,9 @@ public:
     SvxLRSpaceItem&         GetLRSpace()        { return aLRSpaceItem; }
 
     USHORT              GetArrPos() const {return nArrPos;}
-    const String&       GetCondition() const {return aSection.GetCondition();}
-    const String&       GetName() const { return aSection.GetName(); }
+    const String&       GetCondition() const
+                        { return m_SectionData.GetCondition(); }
+    const String&       GetName() const { return m_SectionData.GetSectionName(); }
     String              GetFile() const;
     String              GetSubRegion() const;
     void                SetFile( const String& rFile );
@@ -107,37 +109,38 @@ public:
     void                SetSubRegion( const String& rSubRegion );
 
     void                SetFilePasswd( const String& rPasswd )
-                        { aSection.SetLinkFilePassWd( rPasswd ); }
+                        { m_SectionData.SetLinkFilePassword( rPasswd ); }
     void                SetCondition( const String& rString )
-                        {aSection.SetCondition( rString);}
-    BOOL                IsCondHidden()const
-                        {return aSection.IsCondHidden();}
-    BOOL                IsHidden()const
-                        {return aSection.IsHidden();}
-    BOOL                IsProtect()const
-                        {return aSection.IsProtect();}
+                        { m_SectionData.SetCondition( rString); }
+    bool                IsCondHidden() const
+                        { return m_SectionData.IsCondHidden(); }
+    bool                IsHidden() const
+                        { return m_SectionData.IsHidden(); }
+    bool                IsProtect() const
+                        { return m_SectionData.IsProtectFlag(); }
     // --> FME 2004-06-22 #114856# edit in readonly sections
-    BOOL                 IsEditInReadonly()const
-                        {return aSection.IsEditInReadonly();}
-    void                SetEditInReadonly(BOOL bFlag = TRUE)
-                        {aSection.SetEditInReadonly(bFlag);}
+    bool                IsEditInReadonly() const
+                        { return m_SectionData.IsEditInReadonlyFlag(); }
+    void                SetEditInReadonly(const bool bFlag = true)
+                        { m_SectionData.SetEditInReadonlyFlag(bFlag); }
     // <--
-    void                SetHidden(BOOL bFlag = TRUE)
-                        {aSection.SetHidden(bFlag);}
-    void                SetCondHidden(BOOL bFlag = TRUE)
-                        {aSection.SetCondHidden(bFlag);}
-    void                SetProtect(BOOL bFlag = TRUE)
-                        {aSection.SetProtect(bFlag);}
+    void                SetHidden(const bool bFlag = true)
+                        { m_SectionData.SetHidden(bFlag); }
+    void                SetCondHidden(const bool bFlag = true)
+                        { m_SectionData.SetCondHidden(bFlag); }
+    void                SetProtect(const bool bFlag = true)
+                        { m_SectionData.SetProtectFlag(bFlag); }
     BOOL                IsContent(){return bContent;}
     void                SetContent(BOOL bValue){bContent = bValue;}
-    void                SetSectionType(SectionType eSectionType) {aSection.SetType(eSectionType);}
-    SectionType         GetSectionType(){return aSection.GetType();}
+    void                SetSectionType(SectionType eSectionType) { m_SectionData.SetType(eSectionType); }
+    SectionType         GetSectionType() const { return m_SectionData.GetType() ;}
 
     void                SetSelected(){bSelected = TRUE;}
     BOOL                IsSelected() const {return bSelected;}
 
 
-    const ::com::sun::star::uno::Sequence <sal_Int8 >& GetPasswd() const {return aSection.GetPasswd();}
+    const ::com::sun::star::uno::Sequence <sal_Int8 >& GetPasswd() const
+        { return m_SectionData.GetPassword(); }
     ::com::sun::star::uno::Sequence <sal_Int8 >&    GetTempPasswd() {return aTempPasswd;}
     void                                            SetTempPasswd(const ::com::sun::star::uno::Sequence <sal_Int8 >& aPasswd)    {aTempPasswd = aPasswd;}
 };
@@ -385,7 +388,8 @@ public:
 class SwInsertSectionTabDialog : public SfxTabDialog
 {
     SwWrtShell&     rWrtSh;
-    SwSection*      pToInsertSection;
+    ::std::auto_ptr<SwSectionData> m_pSectionData;
+
 protected:
     virtual void    PageCreated( USHORT nId, SfxTabPage &rPage );
     virtual short   Ok();
@@ -393,8 +397,8 @@ public:
     SwInsertSectionTabDialog(Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
     virtual ~SwInsertSectionTabDialog();
 
-    void        SetSection(const SwSection& rSect);
-    SwSection*  GetSection() { return pToInsertSection;}
+    void        SetSectionData(SwSectionData const& rSect);
+    SwSectionData * GetSectionData() { return m_pSectionData.get(); }
 };
 
 /* -----------------21.05.99 13:07-------------------

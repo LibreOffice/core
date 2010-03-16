@@ -55,7 +55,7 @@ class SwNodeRange;
 class SwOLENode;
 class SwOutlineNodes;
 class SwPaM;
-class SwSection;
+class SwSectionData;
 class SwSectionFmt;
 class SwTOXBase;
 class SwSectionNode;
@@ -313,7 +313,7 @@ public:
         // fuege eine neue SwSection ein
     SwSectionNode* InsertTextSection(SwNodeIndex const& rNdIdx,
                                 SwSectionFmt& rSectionFmt,
-                                SwSection const&,
+                                SwSectionData const&,
                                 SwTOXBase const*const pTOXBase,
                                 SwNodeIndex const*const pEnde,
                                 bool const bInsAtStart = true,

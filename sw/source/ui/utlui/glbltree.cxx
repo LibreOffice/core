@@ -32,18 +32,14 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 #endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svl/stritem.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/urihelper.hxx>
 #include <sfx2/docfile.hxx>
-#ifndef _HELP_HXX //autogen
 #include <vcl/help.hxx>
-#endif
 #include <sot/filelist.hxx>
 #include <svl/eitem.hxx>
 #include <svl/urlbmk.hxx>
@@ -54,13 +50,9 @@
 #include <sfx2/app.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <errhdl.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <content.hxx>
 #include <edglbldc.hxx>
 #include <section.hxx>
@@ -72,12 +64,8 @@
 #include <edtwin.hxx>
 #include <uitool.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
 #ifndef _NAVIPI_HRC
 #include <navipi.hrc>
 #endif
@@ -1471,15 +1459,15 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
             if ( nAddNumber )
                 sSectionName = sTempSectionName;
 
-            SwSection   aSection(CONTENT_SECTION, sSectionName);
-            aSection.SetProtect(TRUE);
-            aSection.SetHidden(FALSE);
+            SwSectionData aSectionData(CONTENT_SECTION, sSectionName);
+            aSectionData.SetProtectFlag(true);
+            aSectionData.SetHidden(false);
 
-            aSection.SetLinkFileName(sFileName);
-            aSection.SetType( FILE_LINK_SECTION);
-            aSection.SetLinkFilePassWd( sFilePassword );
+            aSectionData.SetLinkFileName(sFileName);
+            aSectionData.SetType(FILE_LINK_SECTION);
+            aSectionData.SetLinkFilePassword( sFilePassword );
 
-            rSh.InsertGlobalDocContent( *pAnchorContent, aSection );
+            rSh.InsertGlobalDocContent( *pAnchorContent, aSectionData );
         }
         if ( bMove )
         {

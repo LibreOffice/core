@@ -672,7 +672,8 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
 SwSectionFmt *wwSectionManager::InsertSection(
     SwPaM& rMyPaM, wwSection &rSection)
 {
-    SwSection aSection( CONTENT_SECTION, mrReader.rDoc.GetUniqueSectionName() );
+    SwSectionData aSection( CONTENT_SECTION,
+            mrReader.rDoc.GetUniqueSectionName() );
 
     SfxItemSet aSet( mrReader.rDoc.GetAttrPool(), aFrmFmtSetRange );
 
@@ -685,7 +686,7 @@ SwSectionFmt *wwSectionManager::InsertSection(
     if (0 == mrReader.pWDop->epc)
         aSet.Put( SwFmtEndAtTxtEnd(FTNEND_ATTXTEND));
 
-    aSection.SetProtect(SectionIsProtected(rSection));
+    aSection.SetProtectFlag(SectionIsProtected(rSection));
 
     rSection.mpSection =
         mrReader.rDoc.InsertSwSection( rMyPaM, aSection, 0, & aSet );
@@ -836,9 +837,9 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
         pWkb->Get(nTest, pData);
         String sSectionName = mrReader.aLinkStringMap[SVBT16ToShort( ((WW8_WKB*)pData)->nLinkId) ];
         mrReader.ConvertFFileName(sSectionName, sSectionName);
-        SwSection aSection(FILE_LINK_SECTION, sSectionName);
+        SwSectionData aSection(FILE_LINK_SECTION, sSectionName);
         aSection.SetLinkFileName( sSectionName );
-        aSection.SetProtect(true);
+        aSection.SetProtectFlag(true);
         // --> CMC, OD 2004-06-18 #i19922# improvement:
         // return value of method <Insert> not used.
         mrReader.rDoc.InsertSwSection(*mrReader.pPaM, aSection, 0, 0, false);

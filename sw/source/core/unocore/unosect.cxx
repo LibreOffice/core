@@ -369,7 +369,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
 
     String tmp(m_pImpl->m_sName);
-    SwSection aSect(eType, pDoc->GetUniqueSectionName(&tmp));
+    SwSectionData aSect(eType, pDoc->GetUniqueSectionName(&tmp));
     aSect.SetCondition(m_pImpl->m_pProps->m_sCondition);
     ::rtl::OUStringBuffer sLinkNameBuf(m_pImpl->m_pProps->m_sLinkFileName);
     sLinkNameBuf.append(sfx2::cTokenSeperator);
@@ -379,9 +379,9 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     aSect.SetLinkFileName(sLinkNameBuf.makeStringAndClear());
 
     aSect.SetHidden(m_pImpl->m_pProps->m_bHidden);
-    aSect.SetProtect(m_pImpl->m_pProps->m_bProtect);
+    aSect.SetProtectFlag(m_pImpl->m_pProps->m_bProtect);
     // --> FME 2004-06-22 #114856# edit in readonly sections
-    aSect.SetEditInReadonly(m_pImpl->m_pProps->m_bEditInReadonly);
+    aSect.SetEditInReadonlyFlag(m_pImpl->m_pProps->m_bEditInReadonly);
     // <--
 
     SfxItemSet aSet(pDoc->GetAttrPool(),
@@ -427,7 +427,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     // section password
     if (m_pImpl->m_pProps->m_Password.getLength() > 0)
     {
-        aSect.SetPasswd(m_pImpl->m_pProps->m_Password);
+        aSect.SetPassword(m_pImpl->m_pProps->m_Password);
     }
 
     SwSection *const pRet =
@@ -566,12 +566,10 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         throw uno::RuntimeException();
     }
 
-    SwSection aSection(CONTENT_SECTION, aEmptyStr);
     SwSection *const pSect = (pFmt) ? pFmt->GetSection() : 0;
-    if (pFmt)
-    {
-        aSection = *pSect;
-    }
+    ::std::auto_ptr<SwSectionData> const pSectionData(
+        (pFmt) ? new SwSectionData(*pSect) : 0);
+
     OUString const*const pPropertyNames = rPropertyNames.getConstArray();
     uno::Any const*const pValues = rValues.getConstArray();
     ::std::auto_ptr<SfxItemSet> pItemSet;
@@ -609,7 +607,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    aSection.SetCondition(uTmp);
+                    pSectionData->SetCondition(uTmp);
                 }
             }
             break;
@@ -637,16 +635,16 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    String sLinkFileName(aSection.GetLinkFileName());
-                    if (aSection.GetType() != DDE_LINK_SECTION)
+                    String sLinkFileName(pSectionData->GetLinkFileName());
+                    if (pSectionData->GetType() != DDE_LINK_SECTION)
                     {
                         sLinkFileName = sfx2::cTokenSeperator;
                         sLinkFileName += sfx2::cTokenSeperator;
-                        aSection.SetType(DDE_LINK_SECTION);
+                        pSectionData->SetType(DDE_LINK_SECTION);
                     }
                     sLinkFileName.SetToken(pEntry->nWID - WID_SECT_DDE_TYPE,
                             sfx2::cTokenSeperator, sTmp);
-                    aSection.SetLinkFileName(sLinkFileName);
+                    pSectionData->SetLinkFileName(sLinkFileName);
                 }
             }
             break;
@@ -683,10 +681,10 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    if (aSection.GetType() != FILE_LINK_SECTION &&
+                    if (pSectionData->GetType() != FILE_LINK_SECTION &&
                         aLink.FileURL.getLength())
                     {
-                        aSection.SetType(FILE_LINK_SECTION);
+                        pSectionData->SetType(FILE_LINK_SECTION);
                     }
                     ::rtl::OUStringBuffer sFileNameBuf;
                     if (aLink.FileURL.getLength())
@@ -700,14 +698,14 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                     sFileNameBuf.append(aLink.FilterName);
                     sFileNameBuf.append(sfx2::cTokenSeperator);
                     sFileNameBuf.append(
-                        aSection.GetLinkFileName().GetToken(2,
+                        pSectionData->GetLinkFileName().GetToken(2,
                             sfx2::cTokenSeperator));
                     const ::rtl::OUString sFileName(
                             sFileNameBuf.makeStringAndClear());
-                    aSection.SetLinkFileName(sFileName);
+                    pSectionData->SetLinkFileName(sFileName);
                     if (sFileName.getLength() < 3)
                     {
-                        aSection.SetType(CONTENT_SECTION);
+                        pSectionData->SetType(CONTENT_SECTION);
                     }
                 }
             }
@@ -723,21 +721,21 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    if (aSection.GetType() != FILE_LINK_SECTION &&
+                    if (pSectionData->GetType() != FILE_LINK_SECTION &&
                         sLink.getLength())
                     {
-                        aSection.SetType(FILE_LINK_SECTION);
+                        pSectionData->SetType(FILE_LINK_SECTION);
                     }
-                    String sSectLink(aSection.GetLinkFileName());
+                    String sSectLink(pSectionData->GetLinkFileName());
                     while (3 < sSectLink.GetTokenCount(sfx2::cTokenSeperator))
                     {
                         sSectLink += sfx2::cTokenSeperator;
                     }
                     sSectLink.SetToken(2, sfx2::cTokenSeperator, sLink);
-                    aSection.SetLinkFileName(sSectLink);
+                    pSectionData->SetLinkFileName(sSectLink);
                     if (sSectLink.Len() < 3)
                     {
-                        aSection.SetType(CONTENT_SECTION);
+                        pSectionData->SetType(CONTENT_SECTION);
                     }
                 }
             }
@@ -755,7 +753,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    aSection.SetHidden(!bVal);
+                    pSectionData->SetHidden(!bVal);
                 }
             }
             break;
@@ -772,9 +770,9 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    if (aSection.GetCondition().Len() != 0)
+                    if (pSectionData->GetCondition().Len() != 0)
                     {
-                        aSection.SetCondHidden(!bVal);
+                        pSectionData->SetCondHidden(!bVal);
                     }
                 }
             }
@@ -792,7 +790,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    aSection.SetProtect(bVal);
+                    pSectionData->SetProtectFlag(bVal);
                 }
             }
             break;
@@ -810,7 +808,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    aSection.SetEditInReadonly(bVal);
+                    pSectionData->SetEditInReadonlyFlag(bVal);
                 }
             }
             // <--
@@ -825,7 +823,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    aSection.SetPasswd(aSeq);
+                    pSectionData->SetPassword(aSeq);
                 }
             }
             break;
@@ -934,7 +932,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         {
             if (rFmts[i]->GetSection()->GetName() == pSect->GetName())
             {
-                pDoc->ChgSection(i, aSection, pItemSet.get(),
+                pDoc->UpdateSection(i, *pSectionData, pItemSet.get(),
                         pDoc->IsInReading());
                 {
                     // temporarily remove actions to allow cursor update
@@ -1222,7 +1220,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             case WID_SECT_PASSWORD:
             {
                 pRet[nProperty] <<= (m_bIsDescriptor)
-                    ? m_pProps->m_Password : pSect->GetPasswd();
+                    ? m_pProps->m_Password : pSect->GetPassword();
             }
             break;
             default:
@@ -1562,12 +1560,6 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
         throw uno::RuntimeException();
     }
 
-    SwSection aSection(CONTENT_SECTION, aEmptyStr);
-    SwSection *const pSect = (pFmt) ? pFmt->GetSection() : 0;
-    if (pFmt)
-    {
-        aSection = *pSect;
-    }
     SfxItemPropertySimpleEntry const*const pEntry =
         m_pImpl->m_rPropSet.getPropertyMap()->getByName(rPropertyName);
     if (!pEntry)
@@ -1584,6 +1576,10 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             static_cast<cppu::OWeakObject *>(this));
     }
 
+    SwSection *const pSect = (pFmt) ? pFmt->GetSection() : 0;
+    ::std::auto_ptr<SwSectionData> const pSectionData(
+        (pFmt) ? new SwSectionData(*pSect) : 0);
+
     ::std::auto_ptr<SfxItemSet> pNewAttrSet;
     switch (pEntry->nWID)
     {
@@ -1595,7 +1591,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             }
             else
             {
-                aSection.SetCondition(aEmptyStr);
+                pSectionData->SetCondition(aEmptyStr);
             }
         }
         break;
@@ -1604,10 +1600,11 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
         case WID_SECT_DDE_ELEMENT   :
         case WID_SECT_LINK     :
         case WID_SECT_REGION :
-            aSection.SetType(CONTENT_SECTION);
+            pSectionData->SetType(CONTENT_SECTION);
         break;
         case WID_SECT_DDE_AUTOUPDATE:
-            aSection.SetUpdateType(sfx2::LINKUPDATE_ALWAYS);
+// FIXME this would crash?
+//            aSection.SetUpdateType(sfx2::LINKUPDATE_ALWAYS);
         break;
         case WID_SECT_VISIBLE   :
         {
@@ -1617,7 +1614,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             }
             else
             {
-                aSection.SetHidden(FALSE);
+                pSectionData->SetHidden(false);
             }
         }
         break;
@@ -1629,7 +1626,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             }
             else
             {
-                aSection.SetProtect(FALSE);
+                pSectionData->SetProtectFlag(false);
             }
         }
         break;
@@ -1642,7 +1639,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             }
             else
             {
-                aSection.SetEditInReadonly(FALSE);
+                pSectionData->SetEditInReadonlyFlag(false);
             }
         }
         break;
@@ -1687,7 +1684,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
         {
             if (rFmts[i]->GetSection()->GetName() == pSect->GetName())
             {
-                pDoc->ChgSection(i, aSection, pNewAttrSet.get(),
+                pDoc->UpdateSection(i, *pSectionData, pNewAttrSet.get(),
                     pDoc->IsInReading());
                 {
                     // temporarily remove actions to allow cursor update
@@ -1801,11 +1798,10 @@ throw (uno::RuntimeException)
     SwSectionFmt *const pFmt = m_pImpl->GetSectionFmt();
     if(pFmt)
     {
-        SwSection   aSection(CONTENT_SECTION, aEmptyStr);
         SwSection *const pSect = pFmt->GetSection();
-        aSection = *pSect;
+        SwSectionData aSection(*pSect);
         String sNewName(rName);
-        aSection.SetName(sNewName);
+        aSection.SetSectionName(sNewName);
 
         const SwSectionFmts& rFmts = pFmt->GetDoc()->GetSections();
         sal_uInt16 nApplyPos = USHRT_MAX;
@@ -1824,7 +1820,7 @@ throw (uno::RuntimeException)
         {
             {
                 UnoActionContext aContext(pFmt->GetDoc());
-                pFmt->GetDoc()->ChgSection( nApplyPos, aSection);
+                pFmt->GetDoc()->UpdateSection(nApplyPos, aSection);
             }
             {
                 // temporarily remove actions to allow cursor update

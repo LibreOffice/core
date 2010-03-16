@@ -42,9 +42,9 @@
 #include <rootfrm.hxx>      // SwRootFrm
 
 
-    // SS fuer Bereiche
-const SwSection* SwEditShell::InsertSection( const SwSection& rNew,
-                                             const SfxItemSet* pAttr )
+SwSection const*
+SwEditShell::InsertSection(
+        SwSectionData & rNewData, SfxItemSet const*const pAttr)
 {
     const SwSection* pRet = 0;
     if( !IsTableMode() )
@@ -54,7 +54,7 @@ const SwSection* SwEditShell::InsertSection( const SwSection& rNew,
 
         FOREACHPAM_START(this)
             SwSection const*const pNew =
-                GetDoc()->InsertSwSection( *PCURCRSR, rNew, 0, pAttr );
+                GetDoc()->InsertSwSection( *PCURCRSR, rNewData, 0, pAttr );
             if( !pRet )
                 pRet = pNew;
         FOREACHPAM_END()
@@ -178,11 +178,11 @@ void SwEditShell::DelSectionFmt( USHORT nFmt )
 }
 
 
-void SwEditShell::ChgSection( USHORT nSect, const SwSection& rSect,
-                                const SfxItemSet* pAttr )
+void SwEditShell::UpdateSection(sal_uInt16 const nSect,
+        SwSectionData & rNewData, SfxItemSet const*const pAttr)
 {
     StartAllAction();
-    GetDoc()->ChgSection( nSect, rSect, pAttr );
+    GetDoc()->UpdateSection( nSect, rNewData, pAttr );
     // rufe das AttrChangeNotify auf der UI-Seite.
     CallChgLnk();
     EndAllAction();

@@ -400,11 +400,11 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                 default:
                     {
                         String sNm( INetURLObject( sFileName ).GetName() );
-                        SwSection aSect( FILE_LINK_SECTION,
+                        SwSectionData aSectData( FILE_LINK_SECTION,
                                         GetUniqueSectionName( &sNm ));
                         SwSectionFmt* pFmt = MakeSectionFmt( 0 );
-                        aSect.SetLinkFileName(sFileName  );
-                        aSect.SetProtect();
+                        aSectData.SetLinkFileName(sFileName);
+                        aSectData.SetProtectFlag(true);
 
                         aEndIdx--;  // im InsertSection ist Ende inclusive
                         while( aEndIdx.GetNode().IsStartNode() )
@@ -458,12 +458,12 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                         if (aEndIdx >= aStartIdx)
                         {
                             pSectNd = GetNodes().InsertTextSection(aStartIdx,
-                                *pFmt, aSect, 0, &aEndIdx, false);
+                                *pFmt, aSectData, 0, &aEndIdx, false);
                         }
                         else
                         {
                             pSectNd = GetNodes().InsertTextSection(aEndIdx,
-                                *pFmt, aSect, 0, &aStartIdx, false);
+                                *pFmt, aSectData, 0, &aStartIdx, false);
                         }
                         // <- #i26762#
 
@@ -751,11 +751,11 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                 default:
                     {
                         String sNm( INetURLObject( sFileName ).GetName() );
-                        SwSection aSect( FILE_LINK_SECTION,
+                        SwSectionData aSectData( FILE_LINK_SECTION,
                                         GetUniqueSectionName( &sNm ));
                         SwSectionFmt* pFmt = MakeSectionFmt( 0 );
-                        aSect.SetLinkFileName(sFileName  );
-                        aSect.SetProtect();
+                        aSectData.SetLinkFileName(sFileName);
+                        aSectData.SetProtectFlag(true);
 
                         aEndIdx--;  // im InsertSection ist Ende inclusive
                         while( aEndIdx.GetNode().IsStartNode() )
@@ -805,12 +805,12 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                         if (aEndIdx >= aStartIdx)
                         {
                             pSectNd = GetNodes().InsertTextSection(aStartIdx,
-                                *pFmt, aSect, 0, &aEndIdx, false);
+                                *pFmt, aSectData, 0, &aEndIdx, false);
                         }
                         else
                         {
                             pSectNd = GetNodes().InsertTextSection(aEndIdx,
-                                *pFmt, aSect, 0, &aStartIdx, false);
+                                *pFmt, aSectData, 0, &aStartIdx, false);
                         }
 
                         pSectNd->GetSection().CreateLink( CREATE_CONNECT );

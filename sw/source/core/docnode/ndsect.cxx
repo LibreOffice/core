@@ -137,7 +137,7 @@ bool lcl_IsInSameTblBox( SwNodes& _rNds,
     return true;
 }
 
-void lcl_CheckEmptyLayFrm( SwNodes& rNds, SwSection& rSect,
+void lcl_CheckEmptyLayFrm( SwNodes& rNds, SwSectionData& rSectionData,
                         const SwNode& rStt, const SwNode& rEnd )
 {
     SwNodeIndex aIdx( rStt );
@@ -151,12 +151,14 @@ void lcl_CheckEmptyLayFrm( SwNodes& rNds, SwSection& rSect,
             !CheckNodesRange( rEnd, aIdx, TRUE ) ||
             // OD 04.11.2003 #i21457#
             !lcl_IsInSameTblBox( rNds, rEnd, false ))
-            rSect.SetHidden( FALSE );
+        {
+            rSectionData.SetHidden( false );
+        }
     }
 }
 
 SwSection *
-SwDoc::InsertSwSection(SwPaM const& rRange, SwSection const& rNew,
+SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                        SwTOXBase const*const pTOXBase,
                        SfxItemSet const*const pAttr, bool const bUpdate)
 {
@@ -171,14 +173,15 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSection const& rNew,
 
     // Teste ob das gesamte Dokument versteckt werden soll,
     // koennen wir zur Zeit nicht !!!!
-    if( rNew.IsHidden() && rRange.HasMark() )
+    if (rNewData.IsHidden() && rRange.HasMark())
     {
         const SwPosition *pStt = rRange.Start(), *pEnd = rRange.End();
         if( !pStt->nContent.GetIndex() &&
             pEnd->nNode.GetNode().GetCntntNode()->Len() ==
             pEnd->nContent.GetIndex() )
         {
-            ::lcl_CheckEmptyLayFrm( GetNodes(), const_cast<SwSection&>(rNew),
+            ::lcl_CheckEmptyLayFrm( GetNodes(),
+                                    rNewData,
                                     pStt->nNode.GetNode(),
                                     pEnd->nNode.GetNode() );
         }
@@ -188,7 +191,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSection const& rNew,
     if( DoesUndo() )
     {
         ClearRedo();
-        pUndoInsSect = new SwUndoInsSection(rRange, rNew, pAttr, pTOXBase);
+        pUndoInsSect = new SwUndoInsSection(rRange, rNewData, pAttr, pTOXBase);
         AppendUndo( pUndoInsSect );
         DoUndo( FALSE );
     }
@@ -219,7 +222,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSection const& rNew,
 
             --aEnd;     // im InsertSection ist Ende inclusive
             pNewSectNode = GetNodes().InsertTextSection(
-                        aStt, *pFmt, rNew, pTOXBase, & aEnd);
+                        aStt, *pFmt, rNewData, pTOXBase, & aEnd);
         }
         else
         {
@@ -291,7 +294,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSection const& rNew,
                 }
             }
             pNewSectNode = GetNodes().InsertTextSection(
-                pSttPos->nNode, *pFmt, rNew, pTOXBase, &pEndPos->nNode);
+                pSttPos->nNode, *pFmt, rNewData, pTOXBase, &pEndPos->nNode);
         }
     }
     else
@@ -301,12 +304,12 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSection const& rNew,
         if( !pPos->nContent.GetIndex() )
         {
             pNewSectNode = GetNodes().InsertTextSection(
-                pPos->nNode, *pFmt, rNew, pTOXBase, 0, true);
+                pPos->nNode, *pFmt, rNewData, pTOXBase, 0, true);
         }
         else if( pPos->nContent.GetIndex() == pCNd->Len() )
         {
             pNewSectNode = GetNodes().InsertTextSection(
-                pPos->nNode, *pFmt, rNew, pTOXBase, 0, false);
+                pPos->nNode, *pFmt, rNewData, pTOXBase, 0, false);
         }
         else
         {
@@ -316,7 +319,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSection const& rNew,
             }
             SplitNode( *pPos, false );
             pNewSectNode = GetNodes().InsertTextSection(
-                pPos->nNode, *pFmt, rNew, pTOXBase, 0, true);
+                pPos->nNode, *pFmt, rNewData, pTOXBase, 0, true);
         }
     }
 
@@ -340,7 +343,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSection const& rNew,
     }
 
     // ist eine Condition gesetzt
-    if( rNew.IsHidden() && rNew.GetCondition().Len() )
+    if (rNewData.IsHidden() && rNewData.GetCondition().Len())
     {
         // dann berechne bis zu dieser Position
         SwCalc aCalc( *this );
@@ -374,7 +377,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSection const& rNew,
         DoUndo( TRUE );
     }
 
-    if( rNew.IsLinkType() )
+    if (rNewData.IsLinkType())
     {
         pNewSectNode->GetSection().CreateLink( bUpdate ? CREATE_UPDATE : CREATE_CONNECT );
     }
@@ -615,9 +618,8 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
     SetModified();
 }
 
-void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
-                        const SfxItemSet* pAttr,
-                        sal_Bool bPreventLinkUpdate )
+void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
+        SfxItemSet const*const pAttr, bool const bPreventLinkUpdate)
 {
     SwSectionFmt* pFmt = (*pSectionFmtTbl)[ nPos ];
     SwSection* pSection = pFmt->GetSection();
@@ -625,7 +627,7 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
     /// remember hidden condition flag of SwSection before changes
     bool bOldCondHidden = pSection->IsCondHidden() ? true : false;
 
-    if( *pSection == rSect )
+    if (pSection->DataEquals(rNewData))
     {
         // die Attribute ueberpruefen
         BOOL bOnlyAttrChg = FALSE;
@@ -674,12 +676,19 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
     // versteckt werden soll, koennen wir zur Zeit nicht !!!!
     const SwNodeIndex* pIdx = 0;
     {
-        const SwSectionNode* pSectNd;
-        if( rSect.IsHidden() && 0 != (pIdx = pFmt->GetCntnt().GetCntntIdx() )
-            && 0 != (pSectNd = pIdx->GetNode().GetSectionNode() ) )
+        if (rNewData.IsHidden())
         {
-            ::lcl_CheckEmptyLayFrm( GetNodes(), (SwSection&)rSect,
+            pIdx = pFmt->GetCntnt().GetCntntIdx();
+            if (pIdx)
+            {
+                const SwSectionNode* pSectNd =
+                    pIdx->GetNode().GetSectionNode();
+                if (pSectNd)
+                {
+                    ::lcl_CheckEmptyLayFrm( GetNodes(), rNewData,
                                 *pSectNd, *pSectNd->EndOfSectionNode() );
+                }
+            }
         }
     }
 
@@ -698,13 +707,13 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
     // #56167# Der LinkFileName koennte auch nur aus Separatoren bestehen
     String sCompareString = sfx2::cTokenSeperator;
     sCompareString += sfx2::cTokenSeperator;
-    BOOL bUpdate = ( !pSection->IsLinkType() && rSect.IsLinkType() ) ||
-                        ( rSect.GetLinkFileName().Len() &&
-                            rSect.GetLinkFileName() != sCompareString &&
-                            rSect.GetLinkFileName() !=
-                            pSection->GetLinkFileName());
+    const bool bUpdate =
+           (!pSection->IsLinkType() && rNewData.IsLinkType())
+        || (    rNewData.GetLinkFileName().Len()
+            &&  (rNewData.GetLinkFileName() != sCompareString)
+            &&  (rNewData.GetLinkFileName() != pSection->GetLinkFileName()));
 
-    String sSectName( rSect.GetName() );
+    String sSectName( rNewData.GetSectionName() );
     if( sSectName != pSection->GetName() )
         GetUniqueSectionName( &sSectName );
     else
@@ -717,7 +726,7 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
     /// or it is set to the value of SwSection which is assigned to it.
     /// Discussion with AMA results that the adjustment to the assignment operator
     /// could be very risky -> see notes in bug #102894#.
-    *pSection = rSect;
+    pSection->SetSectionData(rNewData);
 
     if( pAttr )
         pSection->GetFmt()->SetFmtAttr( *pAttr );
@@ -735,7 +744,7 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
         FldsToCalc( aCalc, pIdx->GetIndex(), USHRT_MAX );
         /// OD 04.10.2002 #102894#
         /// Because on using SwSection::operator=() to set up <pSection>
-        /// with <rSect> and the above given note, the hidden condition flag
+        /// with <rNewData> and the above given note, the hidden condition flag
         /// has to be set to FALSE, if hidden condition flag of <pFmt->GetSection()>
         /// (SwSection before the changes) is FALSE (already saved in <bOldCondHidden>)
         /// and new calculated condition is TRUE.
@@ -806,15 +815,15 @@ void lcl_DeleteFtn( SwSectionNode *pNd, ULONG nStt, ULONG nEnd )
     }
 }
 
-inline BOOL lcl_IsTOXSection( const SwSection& rSection )
+static inline bool lcl_IsTOXSection(SwSectionData const& rSectionData)
 {
-    return TOX_CONTENT_SECTION == rSection.GetType() ||
-            TOX_HEADER_SECTION == rSection.GetType();
+    return (TOX_CONTENT_SECTION == rSectionData.GetType())
+        || (TOX_HEADER_SECTION  == rSectionData.GetType());
 }
 
 SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
                                 SwSectionFmt& rSectionFmt,
-                                const SwSection& rSection,
+                                SwSectionData const& rSectionData,
                                 SwTOXBase const*const pTOXBase,
                                 SwNodeIndex const*const pEnde,
                                 bool const bInsAtStart, bool const bCreateFrms)
@@ -828,7 +837,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
 
         if( bInsAtStart )
         {
-            if( !lcl_IsTOXSection( rSection ))
+            if (!lcl_IsTOXSection(rSectionData))
             {
                 do {
                     aInsPos--;
@@ -840,11 +849,15 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
         {
             SwNode* pNd;
             aInsPos++;
-            if( !lcl_IsTOXSection( rSection ))
+            if (!lcl_IsTOXSection(rSectionData))
+            {
                 while( aInsPos.GetIndex() < Count() - 1 &&
                         ( pNd = &aInsPos.GetNode())->IsEndNode() &&
                         pNd->StartOfSectionNode()->IsSectionNode())
+                {
                     aInsPos++;
+                }
+            }
         }
     }
 
@@ -916,7 +929,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
     }
     new SwEndNode( aInsPos, *pSectNd );
 
-    pSectNd->GetSection() = rSection;
+    pSectNd->GetSection().SetSectionData(rSectionData);
     SwSectionFmt* pSectFmt = pSectNd->GetSection().GetFmt();
 
     // Hier bietet sich als Optimierung an, vorhandene Frames nicht zu
@@ -1018,7 +1031,7 @@ SwSectionNode::SwSectionNode(SwNodeIndex const& rIdx,
     }
     pSection = (pTOXBase)
         ? new SwTOXBaseSection(*pTOXBase, rFmt)
-        : new SwSection( CONTENT_SECTION, rFmt.GetName(), & rFmt );
+        : new SwSection( CONTENT_SECTION, rFmt.GetName(), rFmt );
 
     // jetzt noch die Verbindung von Format zum Node setzen
     // Modify unterdruecken, interresiert keinen
@@ -1097,7 +1110,7 @@ SwSectionNode::~SwSectionNode()
 
 SwFrm *SwSectionNode::MakeFrm()
 {
-    pSection->bHiddenFlag = FALSE;
+    pSection->m_Data.SetHiddenFlag(false);
     return new SwSectionFrm( *pSection );
 }
 
@@ -1225,7 +1238,7 @@ void SwSectionNode::MakeFrms( SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx )
 
     *pIdxBehind = *this;
 
-    pSection->bHiddenFlag = TRUE;
+    pSection->m_Data.SetHiddenFlag(true);
 
     if( rNds.IsDocNodes() )
     {
@@ -1252,7 +1265,7 @@ void SwSectionNode::DelFrms()
     pSection->GetFmt()->DelFrms();
 
     // unser Flag muessen wir noch aktualisieren
-    pSection->bHiddenFlag = TRUE;
+    pSection->m_Data.SetHiddenFlag(true);
 
     // Bug 30582: falls der Bereich in Fly oder TabellenBox ist, dann
     //              kann er nur "gehiddet" werden, wenn weiterer Content
@@ -1270,7 +1283,9 @@ void SwSectionNode::DelFrms()
                 !CheckNodesRange( *EndOfSectionNode(), aIdx, TRUE ) ||
                 // OD 04.11.2003 #i21457#
                 !lcl_IsInSameTblBox( rNds, *EndOfSectionNode(), false ))
-                pSection->bHiddenFlag = FALSE;
+            {
+                pSection->m_Data.SetHiddenFlag(false);
+            }
         }
     }
 }

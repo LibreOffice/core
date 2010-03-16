@@ -559,9 +559,9 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
     case RES_FLTR_SECTION:
         MakePoint(pEntry, pDoc, aRegion);   // bislang immer Point==Mark
         pDoc->InsertSwSection(aRegion,
-                *(static_cast<SwFltSection*>(pEntry->pAttr))->GetSection(),
-                0, false);
-        delete(((SwFltSection*)pEntry->pAttr)->GetSection());
+                *(static_cast<SwFltSection*>(pEntry->pAttr))->GetSectionData(),
+                0, 0, false);
+        delete (((SwFltSection*)pEntry->pAttr)->GetSectionData());
         break;
     case RES_FLTR_REDLINE:
         {
@@ -865,19 +865,21 @@ SfxPoolItem* SwFltTOX::Clone(SfxItemPool*) const
 
 //------ hier stehen die Methoden von SwFltSwSection -----------
 
-SwFltSection::SwFltSection(SwSection *pSect) :
-    SfxPoolItem(RES_FLTR_SECTION), pSection(pSect)
+SwFltSection::SwFltSection(SwSectionData *const pSect)
+    : SfxPoolItem(RES_FLTR_SECTION)
+    , m_pSection(pSect)
 {
 }
 
-SwFltSection::SwFltSection(const SwFltSection& rCpy) :
-    SfxPoolItem(RES_FLTR_SECTION), pSection(rCpy.pSection)
+SwFltSection::SwFltSection(const SwFltSection& rCpy)
+    : SfxPoolItem(RES_FLTR_SECTION)
+    , m_pSection(rCpy.m_pSection)
 {
 }
 
 int SwFltSection::operator==(const SfxPoolItem& rItem) const
 {
-    return pSection == ((SwFltSection&)rItem).pSection;
+    return m_pSection == ((SwFltSection&)rItem).m_pSection;
 }
 
 SfxPoolItem* __EXPORT SwFltSection::Clone(SfxItemPool*) const
@@ -962,9 +964,9 @@ SwFltShell::~SwFltShell()
         SwDoc& rDoc = GetDoc();
                         // 1. SectionFmt und Section anlegen
         SwSectionFmt* pSFmt = rDoc.MakeSectionFmt( 0 );
-        SwSection aS( CONTENT_SECTION, String::CreateFromAscii(
+        SwSectionData aSectionData( CONTENT_SECTION, String::CreateFromAscii(
                                 RTL_CONSTASCII_STRINGPARAM("PMW-Protect") ));
-        aS.SetProtect( TRUE );
+        aSectionData.SetProtectFlag( true );
                         // 2. Start- und EndIdx suchen
         const SwNode* pEndNd = &rDoc.GetNodes().GetEndOfContent();
         SwNodeIndex aEndIdx( *pEndNd, -1L );
@@ -973,7 +975,7 @@ SwFltShell::~SwFltShell()
                                                     // Section einfuegen
                         // Section einfuegen
         rDoc.GetNodes().InsertTextSection(
-                aSttIdx, *pSFmt, aS, 0, &aEndIdx, false );
+                aSttIdx, *pSFmt, aSectionData, 0, &aEndIdx, false );
 
         if( !IsFlagSet(SwFltControlStack::DONT_HARD_PROTECT) ){
             SwDocShell* pDocSh = rDoc.GetDocShell();

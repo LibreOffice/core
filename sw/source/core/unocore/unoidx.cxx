@@ -915,9 +915,9 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                     const SwSectionFmt* pTmpFmt = rSects[ i ];
                     if (pTmpFmt == pSectionFmt)
                     {
-                        m_pImpl->m_pDoc->ChgSection( i,
-                            static_cast<SwTOXBaseSection&>(rTOXBase),
-                            & aAttrSet);
+                        SwSectionData tmpData(
+                            static_cast<SwTOXBaseSection&>(rTOXBase));
+                        m_pImpl->m_pDoc->UpdateSection(i, tmpData, & aAttrSet);
                         break;
                     }
                 }

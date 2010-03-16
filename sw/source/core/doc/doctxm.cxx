@@ -369,9 +369,9 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
     String sSectNm( rTOX.GetTOXName() );
     sSectNm = GetUniqueTOXBaseName( *rTOX.GetTOXType(), &sSectNm );
     SwPaM aPam( rPos );
-    SwSection aSection( TOX_CONTENT_SECTION, sSectNm );
+    SwSectionData aSectionData( TOX_CONTENT_SECTION, sSectNm );
     SwTOXBaseSection *const pNewSection = dynamic_cast<SwTOXBaseSection *>(
-        InsertSwSection( aPam, aSection, & rTOX, pSet, false ));
+        InsertSwSection( aPam, aSectionData, & rTOX, pSet, false ));
     if (pNewSection)
     {
         SwSectionNode *const pSectNd = pNewSection->GetFmt()->GetSectionNode();
@@ -397,12 +397,12 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
 // ??Resource
 sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
 
-            SwSection aSect( TOX_HEADER_SECTION, sNm );
+            SwSectionData headerData( TOX_HEADER_SECTION, sNm );
 
             SwNodeIndex aStt( *pHeadNd ); aIdx--;
             SwSectionFmt* pSectFmt = MakeSectionFmt( 0 );
             GetNodes().InsertTextSection(
-                    aStt, *pSectFmt, aSect, 0, &aIdx, true, false);
+                    aStt, *pSectFmt, headerData, 0, &aIdx, true, false);
         }
     }
 
@@ -431,7 +431,7 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( ULONG nSttNd, ULONG nEndNd,
     String sSectNm( rTOX.GetTOXName() );
     sSectNm = GetUniqueTOXBaseName(*rTOX.GetTOXType(), &sSectNm);
 
-    SwSection aSection(TOX_CONTENT_SECTION, sSectNm);
+    SwSectionData aSectionData( TOX_CONTENT_SECTION, sSectNm );
 
     SwNodeIndex aStt( GetNodes(), nSttNd ), aEnd( GetNodes(), nEndNd );
     SwSectionFmt* pFmt = MakeSectionFmt( 0 );
@@ -441,7 +441,7 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( ULONG nSttNd, ULONG nEndNd,
 //  --aEnd;     // im InsertSection ist Ende inclusive
 
     SwSectionNode *const pNewSectionNode =
-        GetNodes().InsertTextSection(aStt, *pFmt, aSection, &rTOX, &aEnd);
+        GetNodes().InsertTextSection(aStt, *pFmt, aSectionData, &rTOX, &aEnd);
     if (!pNewSectionNode)
     {
         DelSectionFmt( pFmt );
@@ -768,7 +768,7 @@ const SwTxtNode* lcl_FindChapterNode( const SwNode& rNd, BYTE nLvl = 0 )
 
 SwTOXBaseSection::SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFmt & rFmt)
     : SwTOXBase( rBase )
-    , SwSection( TOX_CONTENT_SECTION, aEmptyStr, & rFmt )
+    , SwSection( TOX_CONTENT_SECTION, aEmptyStr, rFmt )
 {
     SetProtect( rBase.IsProtected() );
     SwSection::SetName( GetTOXName() );
@@ -953,12 +953,12 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
 // ??Resource
 sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
 
-        SwSection aSect( TOX_HEADER_SECTION, sNm );
+        SwSectionData headerData( TOX_HEADER_SECTION, sNm );
 
         SwNodeIndex aStt( *pHeadNd ); aIdx--;
         SwSectionFmt* pSectFmt = pDoc->MakeSectionFmt( 0 );
         pDoc->GetNodes().InsertTextSection(
-                aStt, *pSectFmt, aSect, 0, &aIdx, true, false);
+                aStt, *pSectFmt, headerData, 0, &aIdx, true, false);
     }
 
     // jetzt waere ein prima Zeitpunkt, um die Numerierung zu updaten

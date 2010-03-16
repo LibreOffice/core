@@ -71,7 +71,7 @@ class SwTableBox;
 struct SwSortOptions;
 class SwFrmFmt;
 class SwHistoryBookmark;
-class SwSection;
+class SwSectionData;
 class SwSectionFmt;
 class SwTOXBase;
 class SvxTabStopItem;
@@ -1382,7 +1382,7 @@ public:
 class SwUndoInsSection : public SwUndo, private SwUndRng
 {
     SwHistory* pHistory;
-    SwSection* pSection;
+    const ::std::auto_ptr<SwSectionData> m_pSectionData;
     const ::std::auto_ptr<SwTOXBase> m_pTOXBase; /// set iff section is TOX
     SwRedlineData* pRedlData;
     SfxItemSet* pAttr;
@@ -1394,7 +1394,7 @@ class SwUndoInsSection : public SwUndo, private SwUndRng
     void Join( SwDoc& rDoc, ULONG nNode );
 
 public:
-    SwUndoInsSection(SwPaM const&, SwSection const&,
+    SwUndoInsSection(SwPaM const&, SwSectionData const&,
         SfxItemSet const*const pSet, SwTOXBase const*const pTOXBase);
     virtual ~SwUndoInsSection();
     virtual void Undo( SwUndoIter& );
@@ -1410,7 +1410,7 @@ public:
 class SwUndoDelSection : public SwUndo
 {
     ULONG nSttNd, nEndNd;
-    SwSection* pSection;
+    ::std::auto_ptr<SwSectionData> m_pSectionData; /// set iff section not TOX
     ::std::auto_ptr<SwTOXBase> m_pTOXBase; /// set iff section is TOX
     SfxItemSet* pAttr;
 public:
@@ -1424,7 +1424,7 @@ public:
 class SwUndoChgSection : public SwUndo
 {
     ULONG nSttNd;
-    SwSection* pSection;
+    ::std::auto_ptr<SwSectionData> m_pSectionData;
     SfxItemSet* pAttr;
     BOOL bOnlyAttrChgd;
 public:
