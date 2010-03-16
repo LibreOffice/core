@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xml2xcd.cxx,v $
- *
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -297,7 +293,7 @@ void XCDGenerator::Main()
 *//*-*************************************************************************************************************/
 void XCDGenerator::impl_printCopyright()
 {
-    fprintf( stderr, "\n(c) Copyright by Sun microsystems, 2001\n" );
+    fprintf( stderr, "\n(c) Copyright 2000, 2010 Oracle and/or its affiliates.\n" );
 }
 
 //*****************************************************************************************************************
@@ -526,13 +522,9 @@ void XCDGenerator::impl_generateCopyright()
     m_aData.sBufferStandard.appendAscii( "<!-- \n"                                                                     );
     m_aData.sBufferStandard.appendAscii( "  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.\n"           );
     m_aData.sBufferStandard.appendAscii( "\n"                                                                          );
-    m_aData.sBufferStandard.appendAscii( "   Copyright 2008 by Sun Microsystems, Inc.\n"                               );
+    m_aData.sBufferStandard.appendAscii( "   Copyright 2000, 2010 Oracle and/or its affiliates.\n"                               );
     m_aData.sBufferStandard.appendAscii( "\n"                                                                          );
     m_aData.sBufferStandard.appendAscii( "   OpenOffice.org - a multi-platform office productivity suite\n"            );
-    m_aData.sBufferStandard.appendAscii( "\n"                                                                          );
-    m_aData.sBufferStandard.appendAscii( "   $RCSfile: xml2xcd.cxx,v $\n"                                               );
-    m_aData.sBufferStandard.appendAscii( "\n"                                                                          );
-    m_aData.sBufferStandard.appendAscii( "   $Revision: 1.12 $\n"                                                       );
     m_aData.sBufferStandard.appendAscii( "\n"                                                                          );
     m_aData.sBufferStandard.appendAscii( "   This file is part of OpenOffice.org.\n"                                   );
     m_aData.sBufferStandard.appendAscii( "\n"                                                                          );
@@ -560,13 +552,9 @@ void XCDGenerator::impl_generateCopyright()
         m_aData.sBufferAdditional.appendAscii( "\n"                                                                          );
         m_aData.sBufferAdditional.appendAscii( "  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.\n"           );
         m_aData.sBufferAdditional.appendAscii( "\n"                                                                          );
-        m_aData.sBufferAdditional.appendAscii( "  Copyright 2008 by Sun Microsystems, Inc.\n"                                );
+        m_aData.sBufferAdditional.appendAscii( "  Copyright 2000, 2010 Oracle and/or its affiliates.\n"                                );
         m_aData.sBufferAdditional.appendAscii( "\n"                                                                          );
         m_aData.sBufferAdditional.appendAscii( "  OpenOffice.org - a multi-platform office productivity suite\n"             );
-        m_aData.sBufferAdditional.appendAscii( "\n"                                                                          );
-        m_aData.sBufferAdditional.appendAscii( "  $RCSfile: xml2xcd.cxx,v $\n"                                                );
-        m_aData.sBufferAdditional.appendAscii( "\n"                                                                          );
-        m_aData.sBufferAdditional.appendAscii( "  $Revision: 1.12 $\n"                                                        );
         m_aData.sBufferAdditional.appendAscii( "\n"                                                                          );
         m_aData.sBufferAdditional.appendAscii( "  This file is part of OpenOffice.org.\n"                                    );
         m_aData.sBufferAdditional.appendAscii( "\n"                                                                          );

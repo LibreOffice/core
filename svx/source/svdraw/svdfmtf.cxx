@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdfmtf.cxx,v $
- * $Revision: 1.20.84.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,29 +29,29 @@
 #include "precompiled_svx.hxx"
 
 #include "svdfmtf.hxx"
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <math.h>
 #include <svx/xpoly.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/shdditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/shdditem.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xflgrit.hxx>
-#include <fontitem.hxx>
-#include <svx/akrnitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/akrnitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/colritem.hxx>
 #include <vcl/metric.hxx>
-#include <svx/charscaleitem.hxx>
+#include <editeng/charscaleitem.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/svdmodel.hxx>

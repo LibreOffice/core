@@ -1,10 +1,8 @@
 mkdir: %_DEST%\inc%_EXT%\configmgr
-..\%__SRC%\lib\behelper.uno.so %_DEST%\lib%_EXT%\behelper.uno.so
-..\%__SRC%\lib\configmgr*.uno.so %_DEST%\lib%_EXT%\configmgr*.uno.so
-..\%__SRC%\lib\sysmgr*.uno.so %_DEST%\lib%_EXT%\sysmgr*.uno.so
-..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
-..\%__SRC%\bin\behelper*.dll %_DEST%\bin%_EXT%\behelper*.dll
-..\%__SRC%\bin\configmg*.dll %_DEST%\bin%_EXT%\configmg*.dll
-..\%__SRC%\bin\sysmgr*.dll %_DEST%\bin%_EXT%\sysmgr*.dll
-
-..\%__SRC%\misc\configmgr2.uno.xml %_DEST%\xml%_EXT%\configmgr2.uno.xml
+mkdir: %_DEST%\inc%_EXT%\configmgr\detail
+..\%__SRC%\bin\configmgr.dll %_DEST%\bin%_EXT%\configmgr.dll
+..\%__SRC%\lib\iconfigmgr.lib %_DEST%\lib%_EXT%\iconfigmgr.lib
+..\%__SRC%\lib\libconfigmgr.dylib %_DEST%\lib%_EXT%\libconfigmgr.dylib
+..\%__SRC%\lib\libconfigmgr.so %_DEST%\lib%_EXT%\libconfigmgr.so
+..\inc\configmgr\detail\configmgrdllapi.hxx %_DEST%\inc%_EXT%\configmgr\detail\configmgrdllapi.hxx
+..\inc\configmgr\update.hxx %_DEST%\inc%_EXT%\configmgr\update.hxx
