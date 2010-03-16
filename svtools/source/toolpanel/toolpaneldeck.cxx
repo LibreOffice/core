@@ -33,6 +33,8 @@
 #include "svtools/toolpanel/toolpaneldeck.hxx"
 #include "svtools/toolpanel/tablayouter.hxx"
 
+#include <tools/diagnose_ex.h>
+
 #include <boost/optional.hpp>
 
 //........................................................................
@@ -131,9 +133,11 @@ namespace svt
     //--------------------------------------------------------------------
     void ToolPanelDeck_Impl::SetLayouter( const PDeckLayouter& i_pNewLayouter )
     {
-        OSL_ENSURE( i_pNewLayouter.get(), "ToolPanelDeck_Impl::SetLayouter: invalid layouter!" );
-        if ( !i_pNewLayouter.get() )
-            return;
+        ENSURE_OR_RETURN_VOID( i_pNewLayouter.get(), "invalid layouter" );
+
+        if ( m_pLayouter.get() )
+            m_pLayouter->Destroy();
+
         m_pLayouter = i_pNewLayouter;
 
         ImplDoLayout();
