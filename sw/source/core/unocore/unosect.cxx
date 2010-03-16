@@ -930,7 +930,8 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         UnoActionContext aContext(pDoc);
         for (sal_uInt16 i = 0; i < rFmts.Count(); i++)
         {
-            if (rFmts[i]->GetSection()->GetName() == pSect->GetName())
+            if (rFmts[i]->GetSection()->GetSectionName()
+                    == pSect->GetSectionName())
             {
                 pDoc->UpdateSection(i, *pSectionData, pItemSet.get(),
                         pDoc->IsInReading());
@@ -1145,7 +1146,8 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             {
                 if (pFmt)
                 {
-                    pRet[nProperty] <<= OUString(pFmt->GetSection()->GetName());
+                    pRet[nProperty] <<=
+                        OUString(pFmt->GetSection()->GetSectionName());
                 }
             }
             break;
@@ -1682,7 +1684,8 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
         UnoActionContext aContext(pDoc);
         for (sal_uInt16 i = 0; i < rFmts.Count(); i++)
         {
-            if (rFmts[i]->GetSection()->GetName() == pSect->GetName())
+            if (rFmts[i]->GetSection()->GetSectionName()
+                    == pSect->GetSectionName())
             {
                 pDoc->UpdateSection(i, *pSectionData, pNewAttrSet.get(),
                     pDoc->IsInReading());
@@ -1775,7 +1778,7 @@ OUString SAL_CALL SwXTextSection::getName() throw (uno::RuntimeException)
     SwSectionFmt const*const pFmt = m_pImpl->GetSectionFmt();
     if(pFmt)
     {
-        sRet = pFmt->GetSection()->GetName();
+        sRet = pFmt->GetSection()->GetSectionName();
     }
     else if (m_pImpl->m_bIsDescriptor)
     {
@@ -1811,7 +1814,7 @@ throw (uno::RuntimeException)
             {
                 nApplyPos = i;
             }
-            else if(sNewName == rFmts[i]->GetSection()->GetName())
+            else if (sNewName == rFmts[i]->GetSection()->GetSectionName())
             {
                 throw uno::RuntimeException();
             }

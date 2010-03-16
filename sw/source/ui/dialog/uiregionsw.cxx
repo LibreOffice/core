@@ -103,7 +103,8 @@ void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAvailNames
                     (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
                     && TOX_HEADER_SECTION != eTmpType )
             {
-                    String* pString = new String(pFmt->GetSection()->GetName());
+                    String* pString =
+                        new String(pFmt->GetSection()->GetSectionName());
                     if(pAvailNames)
                         pAvailNames->InsertEntry(*pString);
                     rSubRegions.InsertEntry(*pString);
@@ -123,7 +124,8 @@ void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAvailNames
                     (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
                     && TOX_HEADER_SECTION != eTmpType )
                 {
-                    String* pString = new String(pFmt->GetSection()->GetName());
+                    String* pString =
+                        new String(pFmt->GetSection()->GetSectionName());
                     if(pAvailNames)
                         pAvailNames->InsertEntry(*pString);
                     rSubRegions.InsertEntry(*pString);
@@ -470,7 +472,7 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry
                 SectRepr* pSectRepr = new SectRepr( n,
                                             *(pSect=pFmt->GetSection()) );
                 Image aImg = BuildBitmap( pSect->IsProtect(),pSect->IsHidden(), FALSE);
-                pEntry = aTree.InsertEntry( pSect->GetName(), aImg, aImg );
+                pEntry = aTree.InsertEntry(pSect->GetSectionName(), aImg, aImg);
                 Image aHCImg = BuildBitmap( pSect->IsProtect(),pSect->IsHidden(), TRUE);
                 aTree.SetExpandedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
                 aTree.SetCollapsedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
@@ -503,7 +505,8 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry
                                     FindArrPos( pSect->GetFmt() ), *pSect );
                     Image aImage = BuildBitmap( pSect->IsProtect(),
                                             pSect->IsHidden(), FALSE);
-                    pNEntry=aTree.InsertEntry( pSect->GetName(), aImage, aImage, pEntry);
+                    pNEntry = aTree.InsertEntry(
+                        pSect->GetSectionName(), aImage, aImage, pEntry);
                     Image aHCImg = BuildBitmap( pSect->IsProtect(),pSect->IsHidden(), TRUE);
                     aTree.SetExpandedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
                     aTree.SetCollapsedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);

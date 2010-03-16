@@ -714,7 +714,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
             &&  (rNewData.GetLinkFileName() != pSection->GetLinkFileName()));
 
     String sSectName( rNewData.GetSectionName() );
-    if( sSectName != pSection->GetName() )
+    if (sSectName != pSection->GetSectionName())
         GetUniqueSectionName( &sSectName );
     else
         sSectName.Erase();
@@ -732,7 +732,9 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
         pSection->GetFmt()->SetFmtAttr( *pAttr );
 
     if( sSectName.Len() )
-        pSection->SetName( sSectName );
+    {
+        pSection->SetSectionName( sSectName );
+    }
 
     // ist eine Condition gesetzt
     if( pSection->IsHidden() && pSection->GetCondition().Len() )
@@ -1320,10 +1322,14 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     {
         // beim Move den Namen beibehalten
         if( rNds.GetDoc() == pDoc && pDoc->IsCopyIsMove() )
-            pNewSect->SetName( GetSection().GetName() );
+        {
+            pNewSect->SetSectionName( GetSection().GetSectionName() );
+        }
         else
-            pNewSect->SetName( pDoc->GetUniqueSectionName(
-                                        &GetSection().GetName() ) );
+        {
+            pNewSect->SetSectionName(
+                pDoc->GetUniqueSectionName( &GetSection().GetSectionName() ));
+        }
     }
 
 
@@ -1461,7 +1467,7 @@ String SwDoc::GetUniqueSectionName( const String* pChkStr ) const
     for( n = 0; n < pSectionFmtTbl->Count(); ++n )
         if( 0 != ( pSectNd = (*pSectionFmtTbl)[ n ]->GetSectionNode( FALSE ) ))
         {
-            const String& rNm = pSectNd->GetSection().GetName();
+            const String& rNm = pSectNd->GetSection().GetSectionName();
             if( rNm.Match( aName ) == nNmLen )
             {
                 // Nummer bestimmen und das Flag setzen

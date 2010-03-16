@@ -1510,7 +1510,7 @@ OUString SAL_CALL SwXDocumentIndex::getName() throw (uno::RuntimeException)
     }
     else if(pSectionFmt)
     {
-        uRet = OUString(pSectionFmt->GetSection()->GetName());
+        uRet = OUString(pSectionFmt->GetSection()->GetSectionName());
     }
     else
     {

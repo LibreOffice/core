@@ -767,7 +767,7 @@ void    SwGlobalTree::Display(BOOL bOnlyUpdateUserData)
                 case GLBLDOC_SECTION:
                 {
                     const SwSection* pSect = pCont->GetSection();
-                    sEntry = pSect->GetName();
+                    sEntry = pSect->GetSectionName();
                     aImage = aEntryImages.GetImage(SID_SW_START + CONTENT_TYPE_REGION);
                 }
                 break;
@@ -935,7 +935,8 @@ void    SwGlobalTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
         case CTX_EDIT_LINK:
         {
             DBG_ASSERT(pCont, "Edit ohne Entry ? " );
-            SfxStringItem aName(FN_EDIT_REGION, pCont->GetSection()->GetName());
+            SfxStringItem aName(FN_EDIT_REGION,
+                    pCont->GetSection()->GetSectionName());
             rDispatch.Execute(FN_EDIT_REGION, SFX_CALLMODE_ASYNCHRON, &aName, 0L);
         }
         break;
@@ -1242,7 +1243,7 @@ BOOL    SwGlobalTree::Update(BOOL bHard)
                     String sTemp = GetEntryText(pEntry);
                     if(eType != pRight->GetType() ||
                         eType == GLBLDOC_SECTION &&
-                            pLeft->GetSection()->GetName() != sTemp ||
+                            (pLeft->GetSection()->GetSectionName() != sTemp) ||
                         eType == GLBLDOC_TOXBASE && pLeft->GetTOX()->GetTitle() != sTemp)
                             bCopy = bRet = TRUE;
                 }
@@ -1444,7 +1445,8 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
             while ( nCount < nSectCount )
             {
                 const SwSectionFmt& rFmt = rSh.GetSectionFmt(nCount);
-                if ( rFmt.GetSection()->GetName() == sTempSectionName && rFmt.IsInNodesArr() )
+                if ((rFmt.GetSection()->GetSectionName() == sTempSectionName)
+                    && rFmt.IsInNodesArr())
                 {
                     nCount = 0;
                     nAddNumber++;

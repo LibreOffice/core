@@ -687,7 +687,7 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
         if( 0 != ( pSectNd = (*pSectionFmtTbl)[ n ]->GetSectionNode( FALSE ) )&&
              TOX_CONTENT_SECTION == (pSect = &pSectNd->GetSection())->GetType())
         {
-            const String& rNm = pSect->GetName();
+            const String& rNm = pSect->GetSectionName();
             if( rNm.Match( aName ) == nNmLen )
             {
                 // Nummer bestimmen und das Flag setzen
@@ -733,7 +733,7 @@ BOOL SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
     if(bRet)
     {
         pTOX->SetTOXName(rName);
-        pTOX->SwTOXBaseSection::SetName(rName);
+        pTOX->SetSectionName(rName);
         SetModified();
     }
     return bRet;
@@ -771,7 +771,7 @@ SwTOXBaseSection::SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFmt & rFmt)
     , SwSection( TOX_CONTENT_SECTION, aEmptyStr, rFmt )
 {
     SetProtect( rBase.IsProtected() );
-    SwSection::SetName( GetTOXName() );
+    SetSectionName( GetTOXName() );
 }
 
 

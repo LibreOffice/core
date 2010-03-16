@@ -130,7 +130,7 @@ SwSectionData::SwSectionData(SectionType const eType, String const& rName)
 // this must have the same semantics as operator=()
 SwSectionData::SwSectionData(SwSection const& rSection)
     : m_eType(rSection.GetType())
-    , m_sSectionName(rSection.GetName())
+    , m_sSectionName(rSection.GetSectionName())
     , m_sCondition(rSection.GetCondition())
     , m_sLinkFileName(rSection.GetLinkFileName())
     , m_sLinkFilePassword(rSection.GetLinkFilePassword())
@@ -1006,7 +1006,8 @@ extern "C" {
         const SwSectionPtr pFSect = *(SwSectionPtr*)pFirst;
         const SwSectionPtr pSSect = *(SwSectionPtr*)pSecond;
         ASSERT( pFSect && pSSect, "ungueltige Sections" );
-        StringCompare eCmp = pFSect->GetName().CompareTo( pSSect->GetName() );
+        StringCompare const eCmp =
+            pFSect->GetSectionName().CompareTo( pSSect->GetSectionName() );
         return eCmp == COMPARE_EQUAL ? 0
                             : eCmp == COMPARE_LESS ? 1 : -1;
     }

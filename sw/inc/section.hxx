@@ -187,8 +187,8 @@ public:
 
     void SetSectionData(SwSectionData const& rData);
 
-    String const& GetName() const           { return m_Data.GetSectionName(); }
-    void SetName(String const& rName)       { m_Data.SetSectionName(rName); }
+    String const& GetSectionName() const    { return m_Data.GetSectionName(); }
+    void SetSectionName(String const& rName){ m_Data.SetSectionName(rName); }
     SectionType GetType() const             { return m_Data.GetType(); }
     void SetType(SectionType const eType)   { return m_Data.SetType(eType); }
 
