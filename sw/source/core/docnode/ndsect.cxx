@@ -1021,20 +1021,28 @@ SwSectionNode* SwNode::FindSectionNode()
 // SwSectionNode
 //---------
 
-SwSectionNode::SwSectionNode(SwNodeIndex const& rIdx,
-        SwSectionFmt & rFmt, SwTOXBase const*const pTOXBase)
-    : SwStartNode( rIdx, ND_SECTIONNODE )
+// ugly hack to make m_pSection const
+static SwSectionFmt &
+lcl_initParent(SwSectionNode & rThis, SwSectionFmt & rFmt)
 {
-    SwSectionNode* pParent = StartOfSectionNode()->FindSectionNode();
+    SwSectionNode *const pParent =
+        rThis.StartOfSectionNode()->FindSectionNode();
     if( pParent )
     {
         // das Format beim richtigen Parent anmelden.
         rFmt.SetDerivedFrom( pParent->GetSection().GetFmt() );
     }
-    pSection = (pTOXBase)
-        ? new SwTOXBaseSection(*pTOXBase, rFmt)
-        : new SwSection( CONTENT_SECTION, rFmt.GetName(), rFmt );
+    return rFmt;
+}
 
+SwSectionNode::SwSectionNode(SwNodeIndex const& rIdx,
+        SwSectionFmt & rFmt, SwTOXBase const*const pTOXBase)
+    : SwStartNode( rIdx, ND_SECTIONNODE )
+    , m_pSection( (pTOXBase)
+        ? new SwTOXBaseSection(*pTOXBase, lcl_initParent(*this, rFmt))
+        : new SwSection( CONTENT_SECTION, rFmt.GetName(),
+                lcl_initParent(*this, rFmt) ) )
+{
     // jetzt noch die Verbindung von Format zum Node setzen
     // Modify unterdruecken, interresiert keinen
     rFmt.LockModify();
@@ -1075,7 +1083,7 @@ SwFrm* SwClearDummies( SwFrm* pFrm )
 SwSectionNode::~SwSectionNode()
 {
     {
-        SwClientIter aIter( *(pSection->GetFmt()) );
+        SwClientIter aIter( *(m_pSection->GetFmt()) );
         SwClient *pLast = aIter.GoStart();
         while ( pLast )
         {
@@ -1091,7 +1099,7 @@ SwSectionNode::~SwSectionNode()
     }
     SwDoc* pDoc = GetDoc();
 
-    SwSectionFmt* pFmt = pSection->GetFmt();
+    SwSectionFmt* pFmt = m_pSection->GetFmt();
     if( pFmt )
     {
         // das Attribut entfernen, weil die Section ihr Format loescht
@@ -1105,15 +1113,14 @@ SwSectionNode::~SwSectionNode()
     // verhinder beim Loeschen aus der Undo/Redo-History einen rekursiven Aufruf
     if( bUndo && &pDoc->GetNodes() != &GetNodes() )
         pDoc->DoUndo( FALSE );
-    DELETEZ( pSection );
     pDoc->DoUndo( bUndo );
 }
 
 
 SwFrm *SwSectionNode::MakeFrm()
 {
-    pSection->m_Data.SetHiddenFlag(false);
-    return new SwSectionFrm( *pSection );
+    m_pSection->m_Data.SetHiddenFlag(false);
+    return new SwSectionFrm( *m_pSection );
 }
 
 //Methode erzeugt fuer den vorhergehenden Node alle Ansichten vom
@@ -1240,7 +1247,7 @@ void SwSectionNode::MakeFrms( SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx )
 
     *pIdxBehind = *this;
 
-    pSection->m_Data.SetHiddenFlag(true);
+    m_pSection->m_Data.SetHiddenFlag(true);
 
     if( rNds.IsDocNodes() )
     {
@@ -1264,10 +1271,10 @@ void SwSectionNode::DelFrms()
     }
 
     SwNodes& rNds = GetNodes();
-    pSection->GetFmt()->DelFrms();
+    m_pSection->GetFmt()->DelFrms();
 
     // unser Flag muessen wir noch aktualisieren
-    pSection->m_Data.SetHiddenFlag(true);
+    m_pSection->m_Data.SetHiddenFlag(true);
 
     // Bug 30582: falls der Bereich in Fly oder TabellenBox ist, dann
     //              kann er nur "gehiddet" werden, wenn weiterer Content
@@ -1286,7 +1293,7 @@ void SwSectionNode::DelFrms()
                 // OD 04.11.2003 #i21457#
                 !lcl_IsInSameTblBox( rNds, *EndOfSectionNode(), false ))
             {
-                pSection->m_Data.SetHiddenFlag(false);
+                m_pSection->m_Data.SetHiddenFlag(false);
             }
         }
     }
@@ -1316,7 +1323,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     SwNodeIndex aInsPos( *pEndNd );
 
     // Werte uebertragen
-    SwSection* pNewSect = pSectNd->pSection;
+    SwSection *const pNewSect = pSectNd->m_pSection.get();
 
     if (TOX_CONTENT_SECTION != GetSection().GetType())
     {
@@ -1358,9 +1365,9 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
                                                  : CREATE_NONE );
 
     // falls als Server aus dem Undo kopiert wird, wieder eintragen
-    if( pSection->IsServer() && pDoc->GetUndoNds() == &rNds )
+    if (m_pSection->IsServer() && (pDoc->GetUndoNds() == &rNds))
     {
-        pNewSect->SetRefObject( pSection->GetObject() );
+        pNewSect->SetRefObject( m_pSection->GetObject() );
         pDoc->GetLinkManager().InsertServer( pNewSect->GetObject() );
     }
 
@@ -1369,7 +1376,8 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
 
 BOOL SwSectionNode::IsCntntHidden() const
 {
-    ASSERT( !pSection->IsHidden(), "That's simple: Hidden Section => Hidden Content" );
+    ASSERT( !m_pSection->IsHidden(),
+            "That's simple: Hidden Section => Hidden Content" );
     SwNodeIndex aTmp( *this, 1 );
     ULONG nEnd = EndOfSectionIndex();
     while( aTmp < nEnd )
@@ -1395,7 +1403,7 @@ BOOL SwSectionNode::IsCntntHidden() const
 
 void SwSectionNode::NodesArrChgd()
 {
-    SwSectionFmt* pFmt = pSection->GetFmt();
+    SwSectionFmt *const pFmt = m_pSection->GetFmt();
     if( pFmt )
     {
         SwNodes& rNds = GetNodes();
@@ -1431,20 +1439,28 @@ void SwSectionNode::NodesArrChgd()
         {
             ASSERT( pDoc == GetDoc(),
                     "verschieben in unterschiedliche Documente?" );
-            if( pSection->IsLinkType() )        // den Link austragen
-                pSection->CreateLink( pDoc->GetRootFrm() ? CREATE_CONNECT
+            if (m_pSection->IsLinkType())
+            {
+                m_pSection->CreateLink( pDoc->GetRootFrm() ? CREATE_CONNECT
                                                          : CREATE_NONE );
+            }
 
-            if( pSection->IsServer() )                  // als Server austragen
-                pDoc->GetLinkManager().InsertServer( pSection->GetObject() );
+            if (m_pSection->IsServer())
+            {
+                pDoc->GetLinkManager().InsertServer( m_pSection->GetObject() );
+            }
         }
         else
         {
-            if( CONTENT_SECTION != pSection->GetType() )        // den Link austragen
-                pDoc->GetLinkManager().Remove( &pSection->GetBaseLink() );
+            if (CONTENT_SECTION != m_pSection->GetType())
+            {
+                pDoc->GetLinkManager().Remove( &m_pSection->GetBaseLink() );
+            }
 
-            if( pSection->IsServer() )                  // als Server austragen
-                pDoc->GetLinkManager().RemoveServer( pSection->GetObject() );
+            if (m_pSection->IsServer())
+            {
+                pDoc->GetLinkManager().RemoveServer( m_pSection->GetObject() );
+            }
         }
     }
 }
