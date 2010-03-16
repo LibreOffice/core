@@ -655,7 +655,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
             if( DoesUndo() )
             {
                 ClearRedo();
-                AppendUndo( new SwUndoChgSection( *pFmt, TRUE ) );
+                AppendUndo( MakeUndoUpdateSection( *pFmt, true ) );
                 // --> FME 2004-10-13 #i32968#
                 // Inserting columns in the section causes MakeFrmFmt to put two
                 // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
@@ -696,7 +696,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
     if( DoesUndo() )
     {
         ClearRedo();
-        AppendUndo( new SwUndoChgSection( *pFmt, FALSE ) );
+        AppendUndo( MakeUndoUpdateSection( *pFmt, false ) );
         // --> FME 2004-10-13 #i32968#
         // Inserting columns in the section causes MakeFrmFmt to put two
         // objects of type SwUndoFrmFmt on the undo stack. We don't want them.

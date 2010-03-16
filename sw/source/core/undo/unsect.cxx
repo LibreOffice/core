@@ -393,46 +393,69 @@ void SwUndoDelSection::Redo( SwUndoIter& rUndoIter )
 
 ////////////////////////////////////////////////////////////////////////////
 
-SwUndoChgSection::SwUndoChgSection( const SwSectionFmt& rFmt, BOOL bOnlyAttr )
-     : SwUndo( UNDO_CHGSECTION ), bOnlyAttrChgd( bOnlyAttr )
+class SwUndoUpdateSection
+    : public SwUndo
 {
-    const SwSection& rSect = *rFmt.GetSection();
+private:
+    ::std::auto_ptr<SwSectionData> m_pSectionData;
+    ::std::auto_ptr<SfxItemSet> m_pAttrSet;
+    ULONG const m_nStartNode;
+    bool const m_bOnlyAttrChanged;
 
-    m_pSectionData.reset( new SwSectionData(rSect) );
+public:
+    SwUndoUpdateSection(
+        SwSection const&, SwNodeIndex const*const, bool const bOnlyAttr);
+    virtual ~SwUndoUpdateSection();
+    virtual void Undo( SwUndoIter& );
+    virtual void Redo( SwUndoIter& );
+    OUT_UNDOBJ( SwUndoUpdateSection )
+};
 
-    pAttr = ::lcl_GetAttrSet( rSect );
-
-    nSttNd = rFmt.GetCntnt().GetCntntIdx()->GetIndex();
+SW_DLLPRIVATE SwUndo *
+MakeUndoUpdateSection(SwSectionFmt const& rFormat, bool const bOnlyAttr)
+{
+    return new SwUndoUpdateSection(*rFormat.GetSection(),
+                rFormat.GetCntnt().GetCntntIdx(), bOnlyAttr);
 }
 
-
-SwUndoChgSection::~SwUndoChgSection()
+SwUndoUpdateSection::SwUndoUpdateSection(
+        SwSection const& rSection, SwNodeIndex const*const pIndex,
+        bool const bOnlyAttr)
+    : SwUndo( UNDO_CHGSECTION )
+    , m_pSectionData( new SwSectionData(rSection) )
+    , m_pAttrSet( ::lcl_GetAttrSet(rSection) )
+    , m_nStartNode( pIndex->GetIndex() )
+    , m_bOnlyAttrChanged( bOnlyAttr )
 {
-    delete pAttr;
 }
 
+SwUndoUpdateSection::~SwUndoUpdateSection()
+{
+}
 
-void SwUndoChgSection::Undo( SwUndoIter& rUndoIter )
+void SwUndoUpdateSection::Undo( SwUndoIter& rUndoIter )
 {
     SwDoc& rDoc = rUndoIter.GetDoc();
-    SwSectionNode* pSectNd = rDoc.GetNodes()[ nSttNd ]->GetSectionNode();
+    SwSectionNode *const pSectNd =
+        rDoc.GetNodes()[ m_nStartNode ]->GetSectionNode();
     ASSERT( pSectNd, "wo ist mein SectionNode?" );
 
     SwSection& rNdSect = pSectNd->GetSection();
     SwFmt* pFmt = rNdSect.GetFmt();
 
     SfxItemSet* pCur = ::lcl_GetAttrSet( rNdSect );
-    if( pAttr )
+    if (m_pAttrSet.get())
     {
         // das Content- und Protect-Item muss bestehen bleiben
         const SfxPoolItem* pItem;
-        pAttr->Put( pFmt->GetFmtAttr( RES_CNTNT ));
+        m_pAttrSet->Put( pFmt->GetFmtAttr( RES_CNTNT ));
         if( SFX_ITEM_SET == pFmt->GetItemState( RES_PROTECT, TRUE, &pItem ))
-            pAttr->Put( *pItem );
-        pFmt->DelDiffs( *pAttr );
-        pAttr->ClearItem( RES_CNTNT );
-        pFmt->SetFmtAttr( *pAttr );
-        delete pAttr;
+        {
+            m_pAttrSet->Put( *pItem );
+        }
+        pFmt->DelDiffs( *m_pAttrSet );
+        m_pAttrSet->ClearItem( RES_CNTNT );
+        pFmt->SetFmtAttr( *m_pAttrSet );
     }
     else
     {
@@ -441,9 +464,9 @@ void SwUndoChgSection::Undo( SwUndoIter& rUndoIter )
         pFmt->ResetFmtAttr( RES_HEADER, RES_OPAQUE );
         pFmt->ResetFmtAttr( RES_SURROUND, RES_FRMATR_END-1 );
     }
-    pAttr = pCur;
+    m_pAttrSet.reset(pCur);
 
-    if( !bOnlyAttrChgd )
+    if (!m_bOnlyAttrChanged)
     {
         const bool bUpdate =
                (!rNdSect.IsLinkType() && m_pSectionData->IsLinkType())
@@ -466,8 +489,8 @@ void SwUndoChgSection::Undo( SwUndoIter& rUndoIter )
     }
 }
 
-
-void SwUndoChgSection::Redo( SwUndoIter& rUndoIter )
+void SwUndoUpdateSection::Redo( SwUndoIter& rUndoIter )
 {
     Undo( rUndoIter );
 }
+

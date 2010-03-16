@@ -1413,19 +1413,8 @@ public:
 
 SW_DLLPRIVATE SwUndo * MakeUndoDelSection(SwSectionFmt const&);
 
-class SwUndoChgSection : public SwUndo
-{
-    ULONG nSttNd;
-    ::std::auto_ptr<SwSectionData> m_pSectionData;
-    SfxItemSet* pAttr;
-    BOOL bOnlyAttrChgd;
-public:
-    SwUndoChgSection( const SwSectionFmt&, BOOL bOnlyAttrChgd );
-    virtual ~SwUndoChgSection();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    OUT_UNDOBJ( SwUndoChgSection )
-};
+SW_DLLPRIVATE SwUndo * MakeUndoUpdateSection(SwSectionFmt const&, bool const);
+
 
 //------------ Undo von verschieben/stufen von Gliederung ----------------
 
