@@ -68,6 +68,7 @@
 #include <fmteiro.hxx>
 // <--
 #include <swerror.h>
+#include <unosection.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1182,6 +1183,49 @@ const SwSection* SwSectionFmt::GetGlobalDocSection() const
         return &pNd->GetSection();
     return 0;
 }
+
+// sw::Metadatable
+::sfx2::IXmlIdRegistry& SwSectionFmt::GetRegistry()
+{
+    return GetDoc()->GetXmlIdRegistry();
+}
+
+bool SwSectionFmt::IsInClipboard() const
+{
+    return GetDoc()->IsClipBoard();
+}
+
+bool SwSectionFmt::IsInUndo() const
+{
+    return !IsInNodesArr();
+}
+
+bool SwSectionFmt::IsInContent() const
+{
+    SwNodeIndex const*const pIdx = GetCntnt(FALSE).GetCntntIdx();
+    OSL_ENSURE(pIdx, "SwSectionFmt::IsInContent: no index?");
+    return (pIdx) ? !GetDoc()->IsInHeaderFooter(*pIdx) : true;
+}
+
+// n.b.: if the section format represents an index, then there is both a
+// SwXDocumentIndex and a SwXTextSection instance for this single core object.
+// these two can both implement XMetadatable and forward to the same core
+// section format.  but here only one UNO object can be returned,
+// so always return the text section.
+uno::Reference< rdf::XMetadatable >
+SwSectionFmt::MakeUnoObject()
+{
+    uno::Reference<rdf::XMetadatable> xMeta;
+    SwSection *const pSection( GetSection() );
+    if (pSection)
+    {
+        xMeta.set(  SwXTextSection::CreateXTextSection(this,
+                        TOX_HEADER_SECTION == pSection->GetType()),
+                    uno::UNO_QUERY );
+    }
+    return xMeta;
+}
+
 
 // --> OD 2007-02-14 #b6521322#
 // Method to break section links inside a linked section

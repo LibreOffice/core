@@ -32,10 +32,11 @@
 
 #include <com/sun/star/uno/Sequence.h>
 
-#include <sfx2/lnkbase.hxx>
 #include <tools/rtti.hxx>
 #include <tools/ref.hxx>
 #include <svl/svarray.hxx>
+#include <sfx2/lnkbase.hxx>
+#include <sfx2/Metadatable.hxx>
 
 #include <frmfmt.hxx>
 
@@ -282,7 +283,9 @@ public:
 
 enum SectionSort { SORTSECT_NOT, SORTSECT_NAME, SORTSECT_POS };
 
-class SW_DLLPUBLIC SwSectionFmt : public SwFrmFmt
+class SW_DLLPUBLIC SwSectionFmt
+    : public SwFrmFmt
+    , public ::sfx2::Metadatable
 {
     friend class SwDoc;
 
@@ -341,6 +344,14 @@ public:
     SW_DLLPRIVATE void SetXTextSection(::com::sun::star::uno::Reference<
                     ::com::sun::star::text::XTextSection> const& xTextSection)
             { m_wXTextSection = xTextSection; }
+
+    // sfx2::Metadatable
+    virtual ::sfx2::IXmlIdRegistry& GetRegistry();
+    virtual bool IsInClipboard() const;
+    virtual bool IsInUndo() const;
+    virtual bool IsInContent() const;
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::rdf::XMetadatable > MakeUnoObject();
 
 };
 
