@@ -160,14 +160,16 @@ void SwFmtFld::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     if( !pTxtAttr )
         return;
 
+    // don't do anything, especially not expand!
+    if( pNew && pNew->Which() == RES_OBJECTDYING )
+        return;
+
     SwTxtNode* pTxtNd = (SwTxtNode*)&pTxtAttr->GetTxtNode();
     ASSERT( pTxtNd, "wo ist denn mein Node?" );
     if( pNew )
     {
         switch( pNew->Which() )
         {
-        case RES_OBJECTDYING:
-                return; // don't do anything, especially not expand!
         case RES_TXTATR_FLDCHG:
                 // "Farbe hat sich geaendert !"
                 // this, this fuer "nur Painten"
@@ -192,6 +194,8 @@ void SwFmtFld::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         case RES_FMT_CHG:
                 pTxtNd->Modify( pOld, pNew );
                 return;
+        default:
+                break;
         }
     }
 
