@@ -1196,6 +1196,7 @@ class MSFILTER_DLLPUBLIC EscherPropertyContainer
 
         void        Commit( SvStream& rSt, sal_uInt16 nVersion = 3, sal_uInt16 nRecType = ESCHER_OPT );
 
+        sal_Bool    CreateShapeProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape );
         sal_Bool    CreateOLEGraphicProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXOleObject );
 
         /** Creates a complex ESCHER_Prop_fillBlip containing the BLIP directly (for Excel charts). */
