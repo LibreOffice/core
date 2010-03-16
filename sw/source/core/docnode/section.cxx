@@ -723,7 +723,7 @@ SwSectionFmt::~SwSectionFmt()
 }
 
 
-SwSectionPtr SwSectionFmt::_GetSection() const
+SwSection * SwSectionFmt::GetSection() const
 {
     if( GetDepends() )
     {
@@ -1161,7 +1161,7 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
 }
 
 
-SwSectionNode* SwSectionFmt::GetSectionNode( BOOL bAlways )
+SwSectionNode* SwSectionFmt::GetSectionNode(bool const bAlways)
 {
     const SwNodeIndex* pIdx = GetCntnt(FALSE).GetCntntIdx();
     if( pIdx && ( bAlways || &pIdx->GetNodes() == &GetDoc()->GetNodes() ))

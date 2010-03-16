@@ -293,7 +293,6 @@ class SW_DLLPUBLIC SwSectionFmt : public SwFrmFmt
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::text::XTextSection> m_wXTextSection;
 
-    /* SW_DLLPUBLIC */ SwSection* _GetSection() const;
     SW_DLLPRIVATE void UpdateParent();      // Parent wurde veraendert
 
 protected:
@@ -313,7 +312,7 @@ public:
         // erfrage vom Format Informationen
     virtual BOOL GetInfo( SfxPoolItem& ) const;
 
-    SwSection* GetSection() const { return (SwSection*)_GetSection(); }
+    SwSection* GetSection() const;
     inline SwSectionFmt* GetParent() const;
     inline SwSection* GetParentSection() const;
 
@@ -328,9 +327,10 @@ public:
     // befindet.
     BOOL IsInNodesArr() const;
 
-          SwSectionNode* GetSectionNode( BOOL bAlways = FALSE );
-    const SwSectionNode* GetSectionNode( BOOL bAlways = FALSE ) const
-    {   return ((SwSectionFmt*)this)->GetSectionNode( bAlways ); }
+          SwSectionNode* GetSectionNode(bool const bEvenIfInUndo = false);
+    const SwSectionNode* GetSectionNode(bool const bEvenIfInUndo = false) const
+        { return const_cast<SwSectionFmt *>(this)
+                ->GetSectionNode(bEvenIfInUndo); }
 
     // ist die Section eine gueltige fuers GlobalDocument?
     const SwSection* GetGlobalDocSection() const;
@@ -368,7 +368,9 @@ inline SwSection* SwSectionFmt::GetParentSection() const
     SwSectionFmt* pParent = GetParent();
     SwSection* pRet = 0;
     if( pParent )
-        pRet = pParent->_GetSection();
+    {
+        pRet = pParent->GetSection();
+    }
     return pRet;
 }
 
