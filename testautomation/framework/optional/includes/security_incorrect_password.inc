@@ -32,46 +32,39 @@
 '\******************************************************************************
 
 testcase tIncorrectPassword( filetypeID as string )
-
  
-    const WORKFILE = "password"
-    dim suffix as string 
-    dim workpath as string
-
     dim rc as integer
     dim brc as boolean
     dim iCurrentFilter as integer
     dim cCurrentFilter as string
+    dim filepath as string
     
     const PASSWORD_VALID = "MyPasswd09#+1"
     const PASSWORD_FALSE = "MyPasswd00#+1"
     const DOC_ID = "f_sec_incorrect_password.bas testdocument"
-    
-    workpath = hGetWorkPath()
-    
-    suffix = hGetSuffix( filetypeID )
+
+    printlog( "Build a valid filename with full path and suffix" )
+    filepath = hGetWorkPath() & "password" & hGetSuffix( filetypeID )
+    printlog( "The workfile is: " & filepath )
     
     printlog( "Delete the workfile - if it was left over by a former testrun" )
-    hDeleteFile( workpath & WORKFILE & suffix )    
+    hDeleteFile( filepath )
 
     printlog( "Make sure we have exactly one single document open" )
-    do while( getDocumentCount > 0 )
-        hDestroyDocument()
-    loop
-    hCreateDocument()
+    hInitSingleDoc()
 
     printlog( "Change the document" )
     hChangeDoc()
 
     printlog( "Click on FileSave" )
-    FileSave
+    hUseAsyncSlot( "FileSave" )
 
     Kontext "SpeichernDlg"
     printlog( "Check the password checkbox" )
     Passwort.check()
     
-    printlog( "Name the file as " & workpath & WORKFILE )
-    Dateiname.settext( workpath & WORKFILE )
+    printlog( "Name the file as " & filepath )
+    Dateiname.settext( filepath )
     
     if ( filetypeID <> "current" ) then
         for iCurrentFilter = 1 to DateiTyp.getItemCount()
@@ -115,21 +108,20 @@ testcase tIncorrectPassword( filetypeID as string )
     endif
 
     printlog( "Load the file again" )
-    hFileOpen( workpath & WORKFILE & suffix )
+    hFileOpen( filepath )
+
+    printlog( "Enter incorrect password" )
     brc = hSecurityEnterPasswordOnLoad( PASSWORD_FALSE , false )
-    if ( not brc ) then
-        warnlog( "Something went wrong while using the password dialog" )
-    endif
-    
+    if ( not brc ) then warnlog( "Something went wrong while using the password dialog" )
+
+    printlog( "Close the document" )
     hDestroyDocument()
 
     printlog( "Verify that we have no open documents" )
-    if ( getDocumentCount <> 0 ) then
-        warnlog( "No documents should be open at this point" )
-    endif
+    if ( getDocumentCount > 0 ) then warnlog( "No documents should be open at this point" )
 
     printlog( "Delete the workfile" )
-    hDeleteFile( workpath & WORKFILE & suffix )
+    hDeleteFile( filepath )
 
 
 endcase
