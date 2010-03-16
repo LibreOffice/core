@@ -27,6 +27,8 @@
 #ifndef SVT_REFBASE_HXX
 #define SVT_REFBASE_HXX
 
+#include "svtools/svtdllapi.h"
+
 #include <rtl/ref.hxx>
 
 //........................................................................
@@ -37,7 +39,7 @@ namespace svt
     //====================================================================
     //= RefBase
     //====================================================================
-    class RefBase : public ::rtl::IReference
+    class SVT_DLLPUBLIC RefBase : public ::rtl::IReference
     {
     protected:
         RefBase()
