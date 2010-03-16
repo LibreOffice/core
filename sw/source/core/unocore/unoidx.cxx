@@ -1551,6 +1551,25 @@ SwXDocumentIndex::setName(const OUString& rName) throw (uno::RuntimeException)
     }
 }
 
+// MetadatableMixin
+::sfx2::Metadatable* SwXDocumentIndex::GetCoreObject()
+{
+    SwSectionFmt *const pSectionFmt( m_pImpl->GetSectionFmt() );
+    return pSectionFmt;
+}
+
+uno::Reference<frame::XModel> SwXDocumentIndex::GetModel()
+{
+    SwSectionFmt *const pSectionFmt( m_pImpl->GetSectionFmt() );
+    if (pSectionFmt)
+    {
+        SwDocShell const*const pShell( pSectionFmt->GetDoc()->GetDocShell() );
+        return (pShell) ? pShell->GetModel() : 0;
+    }
+    return 0;
+}
+
+
 /******************************************************************
  * SwXDocumentIndexMark
  ******************************************************************/
