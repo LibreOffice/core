@@ -1136,9 +1136,37 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    class KeyInputHandler
+    {
+    public:
+        KeyInputHandler( Control& i_rControl, const KeyEvent& i_rKeyEvent )
+            :m_rControl( i_rControl )
+            ,m_rKeyEvent( i_rKeyEvent )
+            ,m_bHandled( false )
+        {
+        }
+
+        ~KeyInputHandler()
+        {
+            if ( !m_bHandled )
+                m_rControl.Control::KeyInput( m_rKeyEvent );
+        }
+
+        void   setHandled()
+        {
+            m_bHandled = true;
+        }
+
+    private:
+        Control&        m_rControl;
+        const KeyEvent& m_rKeyEvent;
+        bool            m_bHandled;
+    };
+
+    //------------------------------------------------------------------------------------------------------------------
     void PanelTabBar::KeyInput( const KeyEvent& i_rKeyEvent )
     {
-        Control::KeyInput( i_rKeyEvent );
+        KeyInputHandler aKeyInputHandler( *this, i_rKeyEvent );
 
         const KeyCode& rKeyCode( i_rKeyEvent.GetKeyCode() );
         if ( rKeyCode.GetModifier() != 0 )
@@ -1191,6 +1219,9 @@ namespace svt
             m_pImpl->m_aFocusedItem.reset( ( *m_pImpl->m_aFocusedItem + nPanelCount - 1 ) % nPanelCount );
         }
         m_pImpl->InvalidateItem( *m_pImpl->m_aFocusedItem );
+
+        // don't delegate to base class
+        aKeyInputHandler.setHandled();
     }
 
     //------------------------------------------------------------------------------------------------------------------
