@@ -80,12 +80,11 @@
 
 using namespace ::com::sun::star;
 
+
 // sw/inc/docary.hxx
 SV_IMPL_PTRARR( SwSectionFmts, SwSectionFmtPtr )
 
 #define FILE_NAME_LENGTH 17
-
-SV_IMPL_OP_PTRARR_SORT( SectReprArr, SectReprPtr )
 
 static void   lcl_ReadSections( SfxMedium& rMedium, ComboBox& rBox );
 
@@ -166,26 +165,82 @@ public:
  Beschreibung: User Data Klasse fuer Bereichsinformationen
 ----------------------------------------------------------------------------*/
 
+class SectRepr
+{
+private:
+    SwSectionData           m_SectionData;
+    SwFmtCol                m_Col;
+    SvxBrushItem            m_Brush;
+    SwFmtFtnAtTxtEnd        m_FtnNtAtEnd;
+    SwFmtEndAtTxtEnd        m_EndNtAtEnd;
+    SwFmtNoBalancedColumns  m_Balance;
+    SvxFrameDirectionItem   m_FrmDirItem;
+    SvxLRSpaceItem          m_LRSpaceItem;
+    USHORT                  m_nArrPos;
+    // zeigt an, ob evtl. Textinhalt im Bereich ist
+    bool                    m_bContent  : 1;
+    // fuer Multiselektion erst markieren, dann mit der TreeListBox arbeiten!
+    bool                    m_bSelected : 1;
+    uno::Sequence<sal_Int8> m_TempPasswd;
+
+public:
+    SectRepr(USHORT nPos, SwSection& rSect);
+    bool    operator==(SectRepr& rSectRef) const
+            { return m_nArrPos == rSectRef.GetArrPos(); }
+
+    bool    operator< (SectRepr& rSectRef) const
+            { return m_nArrPos <  rSectRef.GetArrPos(); }
+
+    SwSectionData &     GetSectionData()        { return m_SectionData; }
+    SwSectionData const&GetSectionData() const  { return m_SectionData; }
+    SwFmtCol&               GetCol()            { return m_Col; }
+    SvxBrushItem&           GetBackground()     { return m_Brush; }
+    SwFmtFtnAtTxtEnd&       GetFtnNtAtEnd()     { return m_FtnNtAtEnd; }
+    SwFmtEndAtTxtEnd&       GetEndNtAtEnd()     { return m_EndNtAtEnd; }
+    SwFmtNoBalancedColumns& GetBalance()        { return m_Balance; }
+    SvxFrameDirectionItem&  GetFrmDir()         { return m_FrmDirItem; }
+    SvxLRSpaceItem&         GetLRSpace()        { return m_LRSpaceItem; }
+
+    USHORT              GetArrPos() const { return m_nArrPos; }
+    String              GetFile() const;
+    String              GetSubRegion() const;
+    void                SetFile(String const& rFile);
+    void                SetFilter(String const& rFilter);
+    void                SetSubRegion(String const& rSubRegion);
+
+    bool                IsContent() { return m_bContent; }
+    void                SetContent(bool const bValue) { m_bContent = bValue; }
+
+    void                SetSelected() { m_bSelected = true; }
+    bool                IsSelected() const { return m_bSelected; }
+
+    uno::Sequence<sal_Int8> & GetTempPasswd() { return m_TempPasswd; }
+    void SetTempPasswd(const uno::Sequence<sal_Int8> & rPasswd)
+        { m_TempPasswd = rPasswd; }
+};
+
+
+SV_IMPL_OP_PTRARR_SORT( SectReprArr, SectReprPtr )
+
 SectRepr::SectRepr( USHORT nPos, SwSection& rSect )
     : m_SectionData( rSect )
-    ,
-    aBrush( RES_BACKGROUND ),
-    aFrmDirItem( FRMDIR_ENVIRONMENT, RES_FRAMEDIR ),
-    aLRSpaceItem( RES_LR_SPACE ),
-    bSelected(FALSE)
+    , m_Brush( RES_BACKGROUND )
+    , m_FrmDirItem( FRMDIR_ENVIRONMENT, RES_FRAMEDIR )
+    , m_LRSpaceItem( RES_LR_SPACE )
+    , m_nArrPos(nPos)
+    , m_bContent(m_SectionData.GetLinkFileName().Len() == 0)
+    , m_bSelected(false)
 {
-    bContent = m_SectionData.GetLinkFileName().Len() == 0;
-    nArrPos=nPos;
     SwSectionFmt *pFmt = rSect.GetFmt();
     if( pFmt )
     {
-        aCol = pFmt->GetCol();
-        aBrush = pFmt->GetBackground();
-        aFtnNtAtEnd = pFmt->GetFtnAtTxtEnd();
-        aEndNtAtEnd = pFmt->GetEndAtTxtEnd();
-        aBalance.SetValue(pFmt->GetBalancedColumns().GetValue());
-        aFrmDirItem = pFmt->GetFrmDir();
-        aLRSpaceItem = pFmt->GetLRSpace();
+        m_Col = pFmt->GetCol();
+        m_Brush = pFmt->GetBackground();
+        m_FtnNtAtEnd = pFmt->GetFtnAtTxtEnd();
+        m_EndNtAtEnd = pFmt->GetEndAtTxtEnd();
+        m_Balance.SetValue(pFmt->GetBalancedColumns().GetValue());
+        m_FrmDirItem = pFmt->GetFrmDir();
+        m_LRSpaceItem = pFmt->GetLRSpace();
     }
 }
 
@@ -293,7 +348,6 @@ String SectRepr::GetSubRegion() const
         sLinkFile = sLinkFile.GetToken( 2, sfx2::cTokenSeperator );
     return sLinkFile;
 }
-
 
 
 
@@ -416,7 +470,8 @@ BOOL SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
     while( pEntry )
     {
         SectReprPtr pRepr = (SectReprPtr)pEntry->GetUserData();
-        if(!pRepr->GetTempPasswd().getLength() && pRepr->GetPasswd().getLength())
+        if (!pRepr->GetTempPasswd().getLength()
+            && pRepr->GetSectionData().GetPassword().getLength())
         {
             SwTestPasswdDlg aPasswdDlg(this);
             bRet = FALSE;
@@ -425,7 +480,8 @@ BOOL SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
                 String sNewPasswd( aPasswdDlg.GetPassword() );
                 UNO_NMSPC::Sequence <sal_Int8 > aNewPasswd;
                 SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
-                if(SvPasswordHelper::CompareHashPassword(pRepr->GetPasswd(), sNewPasswd))
+                if (SvPasswordHelper::CompareHashPassword(
+                        pRepr->GetSectionData().GetPassword(), sNewPasswd))
                 {
                     pRepr->SetTempPasswd(aNewPasswd);
                     bRet = TRUE;
@@ -620,29 +676,32 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
         while( pEntry )
         {
             SectRepr* pRepr=(SectRepr*) pEntry->GetUserData();
+            SwSectionData const& rData( pRepr->GetSectionData() );
             if(bFirst)
             {
-                sCondition = pRepr->GetCondition();
-                bHidden         = pRepr->IsHidden();
-                bProtect        = pRepr->IsProtect();
+                sCondition      = rData.GetCondition();
+                bHidden         = rData.IsHidden();
+                bProtect        = rData.IsProtectFlag();
                 // --> FME 2004-06-22 #114856# edit in readonly sections
-                bEditInReadonly = pRepr->IsEditInReadonly();
+                bEditInReadonly = rData.IsEditInReadonlyFlag();
                 // <--
-                bFile           = pRepr->GetSectionType() != CONTENT_SECTION;
-                aCurPasswd      = pRepr->GetPasswd();
+                bFile           = (rData.GetType() != CONTENT_SECTION);
+                aCurPasswd      = rData.GetPassword();
             }
             else
             {
-                String sTemp(pRepr->GetCondition());
+                String sTemp(rData.GetCondition());
                 if(sCondition != sTemp)
                     bConditionValid = FALSE;
-                bHiddenValid      = bHidden == pRepr->IsHidden();
-                bProtectValid     = bProtect == pRepr->IsProtect();
+                bHiddenValid      = (bHidden == rData.IsHidden());
+                bProtectValid     = (bProtect == rData.IsProtectFlag());
                 // --> FME 2004-06-22 #114856# edit in readonly sections
-                bEditInReadonlyValid = bEditInReadonly == pRepr->IsEditInReadonly();
+                bEditInReadonlyValid =
+                    (bEditInReadonly == rData.IsEditInReadonlyFlag());
                 // <--
-                bFileValid        = (pRepr->GetSectionType() != CONTENT_SECTION) == bFile;
-                bPasswdValid      =  aCurPasswd == pRepr->GetPasswd();
+                bFileValid        = (bFile ==
+                    (rData.GetType() != CONTENT_SECTION));
+                bPasswdValid      = (aCurPasswd == rData.GetPassword());
             }
             pEntry = pBox->NextSelected(pEntry);
             bFirst = FALSE;
@@ -698,13 +757,14 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
         aCurName    .Enable(TRUE);
         aOptionsPB  .Enable(TRUE);
         SectRepr* pRepr=(SectRepr*) pEntry->GetUserData();
-        aConditionED.SetText(pRepr->GetCondition());
+        SwSectionData const& rData( pRepr->GetSectionData() );
+        aConditionED.SetText(rData.GetCondition());
         aHideCB.Enable();
-        aHideCB.SetState(pRepr->IsHidden() ? STATE_CHECK : STATE_NOCHECK);
+        aHideCB.SetState((rData.IsHidden()) ? STATE_CHECK : STATE_NOCHECK);
         BOOL bHide = STATE_CHECK == aHideCB.GetState();
         aConditionED.Enable(bHide);
         aConditionFT.Enable(bHide);
-         aPasswdCB.Check(pRepr->GetPasswd().getLength() > 0);
+        aPasswdCB.Check(rData.GetPassword().getLength() > 0);
 
         aOK.Enable();
         aPasswdCB.Enable();
@@ -720,7 +780,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
             aFileCB.Check(TRUE);
             aFileNameED.SetText(aFile);
             aSubRegionED.SetText(sSub);
-            aDDECB.Check(pRepr->GetSectionType() == DDE_LINK_SECTION );
+            aDDECB.Check(rData.GetType() == DDE_LINK_SECTION);
         }
         else
         {
@@ -731,11 +791,13 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
         }
         UseFileHdl(&aFileCB);
         DDEHdl( &aDDECB );
-        aProtectCB.SetState(pRepr->IsProtect() ? STATE_CHECK : STATE_NOCHECK);
+        aProtectCB.SetState((rData.IsProtectFlag())
+                ? STATE_CHECK : STATE_NOCHECK);
         aProtectCB.Enable();
 
         // --> FME 2004-06-22 #114856# edit in readonly sections
-        aEditInReadonlyCB.SetState( pRepr->IsEditInReadonly() ? STATE_CHECK : STATE_NOCHECK);
+        aEditInReadonlyCB.SetState((rData.IsEditInReadonlyFlag())
+                ? STATE_CHECK : STATE_NOCHECK);
         aEditInReadonlyCB.Enable();
         // <--
 
@@ -878,7 +940,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeProtectHdl, TriStateBox *, pBox )
     while( pEntry )
     {
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
-        pRepr->SetProtect(bCheck);
+        pRepr->GetSectionData().SetProtectFlag(bCheck);
         Image aImage = BuildBitmap( bCheck,
                                     STATE_CHECK == aHideCB.GetState(), FALSE);
         aTree.SetExpandedEntryBmp(pEntry, aImage, BMP_COLOR_NORMAL);
@@ -906,7 +968,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, TriStateBox *, pBox )
     while( pEntry )
     {
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
-        pRepr->SetHidden(STATE_CHECK == pBox->GetState());
+        pRepr->GetSectionData().SetHidden(STATE_CHECK == pBox->GetState());
         Image aImage = BuildBitmap(STATE_CHECK == aProtectCB.GetState(),
                                     STATE_CHECK == pBox->GetState(), FALSE);
         aTree.SetExpandedEntryBmp(pEntry, aImage, BMP_COLOR_NORMAL);
@@ -939,7 +1001,8 @@ IMPL_LINK( SwEditRegionDlg, ChangeEditInReadonlyHdl, TriStateBox *, pBox )
     while( pEntry )
     {
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
-        pRepr->SetEditInReadonly(STATE_CHECK == pBox->GetState());
+        pRepr->GetSectionData().SetEditInReadonlyFlag(
+                STATE_CHECK == pBox->GetState());
         pEntry = aTree.NextSelected(pEntry);
     }
 
@@ -1043,7 +1106,7 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
             {
                 pSectRepr->SetFile(aEmptyStr);
                 pSectRepr->SetSubRegion(aEmptyStr);
-                pSectRepr->SetFilePasswd(aEmptyStr);
+                pSectRepr->GetSectionData().SetLinkFilePassword(aEmptyStr);
             }
 
             pEntry = aTree.NextSelected(pEntry);
@@ -1252,7 +1315,7 @@ IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
                     aAbs, sTmp, URIHelper::GetMaybeFileHdl() );
             }
             pSectRepr->SetFile( sTmp );
-            pSectRepr->SetFilePasswd( aEmptyStr );
+            pSectRepr->GetSectionData().SetLinkFilePassword( aEmptyStr );
         }
     }
     else
@@ -1274,6 +1337,7 @@ IMPL_LINK( SwEditRegionDlg, DDEHdl, CheckBox*, pBox )
     {
         BOOL bFile = aFileCB.IsChecked();
         SectReprPtr pSectRepr = (SectRepr*)pEntry->GetUserData();
+        SwSectionData & rData( pSectRepr->GetSectionData() );
         BOOL bDDE = pBox->IsChecked();
         if(bDDE)
         {
@@ -1282,13 +1346,13 @@ IMPL_LINK( SwEditRegionDlg, DDEHdl, CheckBox*, pBox )
             aDDECommandFT.Show();
             aSubRegionFT.Hide();
             aSubRegionED.Hide();
-            if(FILE_LINK_SECTION == pSectRepr->GetSectionType() )
+            if (FILE_LINK_SECTION == rData.GetType())
             {
                 pSectRepr->SetFile(aEmptyStr);
                 aFileNameED.SetText(aEmptyStr);
-                pSectRepr->SetFilePasswd( aEmptyStr );
+                rData.SetLinkFilePassword( aEmptyStr );
             }
-            pSectRepr->SetSectionType( DDE_LINK_SECTION );
+            rData.SetType(DDE_LINK_SECTION);
         }
         else
         {
@@ -1300,11 +1364,11 @@ IMPL_LINK( SwEditRegionDlg, DDEHdl, CheckBox*, pBox )
             aSubRegionED.Enable(bFile);
             aSubRegionFT.Enable(bFile);
             aSubRegionED.Enable(bFile);
-            if(DDE_LINK_SECTION == pSectRepr->GetSectionType() )
+            if (DDE_LINK_SECTION == rData.GetType())
             {
-                pSectRepr->SetSectionType( FILE_LINK_SECTION );
+                rData.SetType(FILE_LINK_SECTION);
                 pSectRepr->SetFile(aEmptyStr);
-                pSectRepr->SetFilePasswd( aEmptyStr );
+                rData.SetLinkFilePassword( aEmptyStr );
                 aFileNameED.SetText(aEmptyStr);
             }
         }
@@ -1406,7 +1470,7 @@ IMPL_LINK( SwEditRegionDlg, ConditionEditHdl, Edit *, pEdit )
     while( pEntry )
     {
         SectReprPtr pRepr = (SectReprPtr)pEntry->GetUserData();
-        pRepr->SetCondition (pEdit->GetText());
+        pRepr->GetSectionData().SetCondition(pEdit->GetText());
         pEntry = aTree.NextSelected(pEntry);
     }
     return 0;
@@ -1437,7 +1501,7 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
         SectReprPtr pSectRepr = (SectRepr*)pEntry->GetUserData();
         pSectRepr->SetFile( sFileName );
         pSectRepr->SetFilter( sFilterName );
-        pSectRepr->SetFilePasswd( sPassword );
+        pSectRepr->GetSectionData().SetLinkFilePassword(sPassword);
         aFileNameED.SetText( pSectRepr->GetFile() );
     }
 
