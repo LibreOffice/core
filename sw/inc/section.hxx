@@ -170,8 +170,8 @@ class SW_DLLPUBLIC SwSection
 private:
     SwSectionData m_Data;
 
-    SwServerObjectRef refObj;   // falls DataServer -> Pointer gesetzt
-    ::sfx2::SvBaseLinkRef refLink;
+    SwServerObjectRef m_RefObj; // set if DataServer
+    ::sfx2::SvBaseLinkRef m_RefLink;
 
     SW_DLLPRIVATE void ImplSetHiddenFlag(
             bool const bHidden, bool const bCondition);
@@ -243,20 +243,21 @@ public:
 
     // Daten Server-Methoden
     void SetRefObject( SwServerObject* pObj );
-    const SwServerObject* GetObject() const     {  return &refObj; }
-          SwServerObject* GetObject()           {  return &refObj; }
-    BOOL IsServer() const                       {  return refObj.Is(); }
+    const SwServerObject* GetObject() const {  return & m_RefObj; }
+          SwServerObject* GetObject()       {  return & m_RefObj; }
+    bool IsServer() const                   {  return m_RefObj.Is(); }
 
     // Methoden fuer gelinkte Bereiche
-    USHORT GetUpdateType() const        { return refLink->GetUpdateMode();  }
-    void SetUpdateType( USHORT nType )  { refLink->SetUpdateMode( nType );  }
+    USHORT GetUpdateType() const    { return m_RefLink->GetUpdateMode(); }
+    void SetUpdateType(USHORT const nType )
+        { m_RefLink->SetUpdateMode(nType); }
 
-    BOOL IsConnected() const        { return refLink.Is(); }
-    void UpdateNow()                { refLink->Update(); }
-    void Disconnect()               { refLink->Disconnect(); }
+    bool IsConnected() const        { return m_RefLink.Is(); }
+    void UpdateNow()                { m_RefLink->Update(); }
+    void Disconnect()               { m_RefLink->Disconnect(); }
 
-    const ::sfx2::SvBaseLink& GetBaseLink() const    { return *refLink; }
-          ::sfx2::SvBaseLink& GetBaseLink()          { return *refLink; }
+    const ::sfx2::SvBaseLink& GetBaseLink() const    { return *m_RefLink; }
+          ::sfx2::SvBaseLink& GetBaseLink()          { return *m_RefLink; }
 
     void CreateLink( LinkCreateType eType );
 

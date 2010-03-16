@@ -257,11 +257,13 @@ SwSection::~SwSection()
 
         if (CONTENT_SECTION != m_Data.GetType())
         {
-            pDoc->GetLinkManager().Remove( refLink );
+            pDoc->GetLinkManager().Remove( m_RefLink );
         }
 
-        if( refObj.Is() )                   // als Server austragen
-            pDoc->GetLinkManager().RemoveServer( &refObj );
+        if (m_RefObj.Is())
+        {
+            pDoc->GetLinkManager().RemoveServer( &m_RefObj );
+        }
 
         // ist die Section der letzte Client im Format, kann dieses
         // geloescht werden
@@ -277,8 +279,10 @@ SwSection::~SwSection()
             pDoc->DoUndo( bUndo );
         }
     }
-    if( refObj.Is() )
-        refObj->Closed();
+    if (m_RefObj.Is())
+    {
+        m_RefObj->Closed();
+    }
 }
 
 void SwSection::SetSectionData(SwSectionData const& rData)
@@ -557,7 +561,7 @@ void SwSection::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 
 void SwSection::SetRefObject( SwServerObject* pObj )
 {
-    refObj = pObj;
+    m_RefObj = pObj;
 }
 
 
@@ -574,21 +578,21 @@ void SwSection::SetCondHidden(bool const bFlag)
 // setze/erfrage den gelinkten FileNamen
 const String& SwSection::GetLinkFileName() const
 {
-    if( refLink.Is() )
+    if (m_RefLink.Is())
     {
         String sTmp;
         switch (m_Data.GetType())
         {
         case DDE_LINK_SECTION:
-            sTmp = refLink->GetLinkSourceName();
+            sTmp = m_RefLink->GetLinkSourceName();
             break;
 
         case FILE_LINK_SECTION:
             {
                 String sRange, sFilter;
-                if( refLink->GetLinkManager() &&
-                    refLink->GetLinkManager()->GetDisplayNames(
-                        refLink, 0, &sTmp, &sRange, &sFilter ) )
+                if (m_RefLink->GetLinkManager() &&
+                    m_RefLink->GetLinkManager()->GetDisplayNames(
+                        m_RefLink, 0, &sTmp, &sRange, &sFilter ))
                 {
                     ( sTmp += sfx2::cTokenSeperator ) += sFilter;
                     ( sTmp += sfx2::cTokenSeperator ) += sRange;
@@ -612,9 +616,9 @@ const String& SwSection::GetLinkFileName() const
 
 void SwSection::SetLinkFileName(const String& rNew, String const*const pPassWd)
 {
-    if( refLink.Is() )
+    if (m_RefLink.Is())
     {
-        refLink->SetLinkSourceName( rNew );
+        m_RefLink->SetLinkSourceName( rNew );
     }
     m_Data.SetLinkFileName(rNew);
     if( pPassWd )
@@ -1708,14 +1712,18 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
 
     USHORT nUpdateType = sfx2::LINKUPDATE_ALWAYS;
 
-    if( !refLink.Is() )
-        // dann mal den BaseLink aufbauen
-        refLink = new SwIntrnlSectRefLink( *pFmt, nUpdateType, FORMAT_RTF );
+    if (!m_RefLink.Is())
+    {
+        // create BaseLink
+        m_RefLink = new SwIntrnlSectRefLink( *pFmt, nUpdateType, FORMAT_RTF );
+    }
     else
-        // sonst aus dem Linkmanager entfernen
-        pFmt->GetDoc()->GetLinkManager().Remove( refLink );
+    {
+        pFmt->GetDoc()->GetLinkManager().Remove( m_RefLink );
+    }
 
-    SwIntrnlSectRefLink* pLnk = (SwIntrnlSectRefLink*)&refLink;
+    SwIntrnlSectRefLink *const pLnk =
+        static_cast<SwIntrnlSectRefLink*>(& m_RefLink);
 
     String sCmd( m_Data.GetLinkFileName() );
     xub_StrLen nPos;
@@ -1773,15 +1781,15 @@ void SwSection::BreakLink()
     }
 
     // release link, if it exists
-    if ( refLink.Is() )
+    if (m_RefLink.Is())
     {
         SwSectionFmt *const pFormat( GetFmt() );
         ASSERT(pFormat, "SwSection::BreakLink: no format?");
         if (pFormat)
         {
-            pFormat->GetDoc()->GetLinkManager().Remove( refLink );
+            pFormat->GetDoc()->GetLinkManager().Remove( m_RefLink );
         }
-        refLink.Clear();
+        m_RefLink.Clear();
     }
     // change type
     SetType( CONTENT_SECTION );
