@@ -136,17 +136,20 @@ struct PanelDescriptor
 // =====================================================================================================================
 /** Inner implementation class of ToolPanelViewShell.
 */
-class ToolPanelViewShell::Implementation
+class ToolPanelViewShell::Implementation : public ::svt::IToolPanelDeckListener
 {
 public:
     static const size_t mnInvalidId = static_cast< size_t >( -1 );
 
-    Implementation();
+    Implementation( ToolPanelViewShell& i_rPanelViewShell );
     ~Implementation();
 
     /** Here the panels are created that are shown in the task pane.
     */
     void Setup( ToolPanelViewShell& i_rViewShell, ToolPanelDeck& i_rPanelDeck );
+    /** clean up the instance
+    */
+    void Cleanup( ToolPanelDeck& i_rPanelDeck );
 
     size_t GetPanelCount() const
     {
@@ -155,7 +158,7 @@ public:
 
     const PanelDescriptor& GetPanel( const size_t i_nLogicalPanelIndex ) const
     {
-        return maPanels[ i_nLogicalPanelIndex ];
+        return m_aPanels[ i_nLogicalPanelIndex ];
     }
 
     void    TogglePanelVisibility( const size_t i_nLogicalPanelIndex, ToolPanelDeck& i_rPanelDeck );
@@ -181,7 +184,8 @@ private:
     void RegisterPanel( size_t i_nPosition, PanelId i_nPanelId, const ::svt::PToolPanel& i_rPanel );
 
     typedef ::std::vector< PanelDescriptor >    PanelDescriptors;
-    PanelDescriptors    maPanels;
+    PanelDescriptors    m_aPanels;
+    ToolPanelViewShell& m_rPanelViewShell;
 };
 
 // =====================================================================================================================
@@ -307,6 +311,15 @@ void ToolPanelViewShell::Implementation::Setup( ToolPanelViewShell& i_rViewShell
 
     // activate default panel
     i_rPanelDeck.ActivatePanelResource( nPanelPosToActivate );
+
+    // add as listener to the panel deck
+    i_rPanelDeck.AddListener( *this );
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void ToolPanelViewShell::Implementation::Cleanup( ToolPanelDeck& i_rPanelDeck )
+{
+    i_rPanelDeck.RemoveListener( *this );
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -324,7 +337,7 @@ void ToolPanelViewShell::Initialize()
 ToolPanelViewShell::ToolPanelViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, ::Window* pParentWindow,
         FrameView* pFrameViewArgument )
     :ViewShell(pFrame, pParentWindow, rViewShellBase)
-    ,mpImpl( new Implementation )
+    ,mpImpl( new Implementation( *this ) )
     ,mpPanelDeck( new ToolPanelDeck( *mpContentWindow.get(), *this ) )
     ,mbIsInitialized(false)
     ,mpSubShellManager()
@@ -382,6 +395,11 @@ ToolPanelViewShell::ToolPanelViewShell( SfxViewFrame* pFrame, ViewShellBase& rVi
 // ---------------------------------------------------------------------------------------------------------------------
 ToolPanelViewShell::~ToolPanelViewShell()
 {
+    if ( mbIsInitialized )
+    {
+        mpImpl->Cleanup( *mpPanelDeck );
+    }
+
     // reset our impl before destroying the panel deck, to ensure the hidden panels are properly
     // disposed/destroyed, too
     mpImpl.reset();
@@ -687,8 +705,9 @@ void ToolPanelViewShell::ActivatePanel( const PanelId i_ePanelId )
 // = ToolPanelViewShell:Implementation - implementation
 // =====================================================================================================================
 // ---------------------------------------------------------------------------------------------------------------------
-ToolPanelViewShell::Implementation::Implementation()
-    :maPanels( PanelDescriptors::size_type( PID__END ) )
+ToolPanelViewShell::Implementation::Implementation( ToolPanelViewShell& i_rPanelViewShell )
+    :m_aPanels( PanelDescriptors::size_type( PID__END ) )
+    ,m_rPanelViewShell( i_rPanelViewShell )
 {
 }
 
@@ -700,18 +719,18 @@ ToolPanelViewShell::Implementation::~Implementation()
 // ---------------------------------------------------------------------------------------------------------------------
 void ToolPanelViewShell::Implementation::TogglePanelVisibility( const size_t i_nLogicalPanelIndex, ToolPanelDeck& i_rPanelDeck )
 {
-    ENSURE_OR_RETURN_VOID( i_nLogicalPanelIndex < maPanels.size(), "illegal index" );
+    ENSURE_OR_RETURN_VOID( i_nLogicalPanelIndex < m_aPanels.size(), "illegal index" );
 
     // get the actual panel index, within the deck
     size_t nActualPanelIndex(0);
     for ( size_t i=0; i < i_nLogicalPanelIndex; ++i )
     {
-        if ( !maPanels[i].bHidden )
+        if ( !m_aPanels[i].bHidden )
             ++nActualPanelIndex;
     }
-    if ( maPanels[ i_nLogicalPanelIndex ].bHidden )
+    if ( m_aPanels[ i_nLogicalPanelIndex ].bHidden )
     {
-        OSL_VERIFY( i_rPanelDeck.InsertPanel( maPanels[ i_nLogicalPanelIndex ].pPanel, nActualPanelIndex ) == nActualPanelIndex );
+        OSL_VERIFY( i_rPanelDeck.InsertPanel( m_aPanels[ i_nLogicalPanelIndex ].pPanel, nActualPanelIndex ) == nActualPanelIndex );
         // if there has not been an active panel before, activate the newly inserted one
         ::boost::optional< size_t > aActivePanel( i_rPanelDeck.GetActivePanel() );
         if ( !aActivePanel )
@@ -719,17 +738,17 @@ void ToolPanelViewShell::Implementation::TogglePanelVisibility( const size_t i_n
     }
     else
     {
-        OSL_VERIFY( i_rPanelDeck.RemovePanel( nActualPanelIndex ).get() == maPanels[ i_nLogicalPanelIndex ].pPanel.get() );
+        OSL_VERIFY( i_rPanelDeck.RemovePanel( nActualPanelIndex ).get() == m_aPanels[ i_nLogicalPanelIndex ].pPanel.get() );
     }
-    maPanels[ i_nLogicalPanelIndex ].bHidden = !maPanels[ i_nLogicalPanelIndex ].bHidden;
+    m_aPanels[ i_nLogicalPanelIndex ].bHidden = !m_aPanels[ i_nLogicalPanelIndex ].bHidden;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 void ToolPanelViewShell::Implementation::DeactivatePanelDirectly( const PanelId i_nPanelId, ToolPanelDeck& i_rPanelDeck )
 {
-    for ( size_t i=0; i<maPanels.size(); ++i )
+    for ( size_t i=0; i<m_aPanels.size(); ++i )
     {
-        if ( maPanels[i].nId == i_nPanelId )
+        if ( m_aPanels[i].nId == i_nPanelId )
         {
             if ( i_rPanelDeck.GetActivePanel() == i )
                 i_rPanelDeck.ActivatePanelDirectly( ::boost::optional< size_t >() );
@@ -742,16 +761,16 @@ void ToolPanelViewShell::Implementation::DeactivatePanelDirectly( const PanelId 
 void ToolPanelViewShell::Implementation::ActivatePanelDirectly( const PanelId i_nPanelId, ToolPanelDeck& i_rPanelDeck )
 {
     size_t nActualPanelIndex(0);
-    for ( size_t i=0; i<maPanels.size(); ++i )
+    for ( size_t i=0; i<m_aPanels.size(); ++i )
     {
-        if ( maPanels[i].nId == i_nPanelId )
+        if ( m_aPanels[i].nId == i_nPanelId )
         {
-            if ( maPanels[i].bHidden )
+            if ( m_aPanels[i].bHidden )
                 TogglePanelVisibility( i, i_rPanelDeck );
             i_rPanelDeck.ActivatePanelDirectly( nActualPanelIndex );
             return;
         }
-        if ( !maPanels[i].bHidden )
+        if ( !m_aPanels[i].bHidden )
             ++nActualPanelIndex;
     }
     OSL_ENSURE( false, "ToolPanelViewShell::ActivatePanelDirectly: don't have a panel with the given ID!" );
@@ -760,9 +779,53 @@ void ToolPanelViewShell::Implementation::ActivatePanelDirectly( const PanelId i_
 // ---------------------------------------------------------------------------------------------------------------------
 void ToolPanelViewShell::Implementation::RegisterPanel( size_t i_nPosition, PanelId i_nPanelId, const ::svt::PToolPanel& i_rPanel )
 {
-    OSL_PRECOND( maPanels[ i_nPosition ].nId == PID_UNKNOWN, "ToolPanelViewShell::Implementation::RegisterPanel: "
+    OSL_PRECOND( m_aPanels[ i_nPosition ].nId == PID_UNKNOWN, "ToolPanelViewShell::Implementation::RegisterPanel: "
         "already registered a panel for this ID!" );
-    maPanels[ i_nPosition ] = PanelDescriptor( i_nPanelId, i_rPanel );
+    m_aPanels[ i_nPosition ] = PanelDescriptor( i_nPanelId, i_rPanel );
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void ToolPanelViewShell::Implementation::PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition )
+{
+    (void)i_pPanel;
+    (void)i_nPosition;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void ToolPanelViewShell::Implementation::PanelRemoved( const size_t i_nPosition )
+{
+    (void)i_nPosition;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void ToolPanelViewShell::Implementation::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
+{
+    (void)i_rOldActive;
+    PaneDockingWindow* pDockingWindow = dynamic_cast< PaneDockingWindow* >( m_rPanelViewShell.GetDockingWindow() );
+    ENSURE_OR_RETURN_VOID( pDockingWindow, "ToolPanelViewShell::Implementation::ActivePanelChanged: no PaneDockingWindow!?" );
+    if ( !i_rNewActive )
+        pDockingWindow->SetTitle( String( SdResId( STR_RIGHT_PANE_TITLE ) ) );
+    else
+    {
+        size_t nNewActive( *i_rNewActive );
+        for ( size_t i=0; i < m_aPanels.size(); ++i )
+        {
+            if ( m_aPanels[i].bHidden )
+                continue;
+
+            if ( !nNewActive )
+            {
+                pDockingWindow->SetTitle( m_aPanels[i].pPanel->GetDisplayName() );
+                break;
+            }
+            --nNewActive;
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void ToolPanelViewShell::Implementation::Dying()
+{
 }
 
 } } // end of namespace ::sd::toolpanel
