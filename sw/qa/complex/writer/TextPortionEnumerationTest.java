@@ -42,6 +42,7 @@ import com.sun.star.beans.Pair;
 import com.sun.star.beans.StringPair;
 import com.sun.star.container.XNamed;
 import com.sun.star.container.XChild;
+import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XContentEnumerationAccess;
 import com.sun.star.container.XEnumerationAccess;
@@ -60,6 +61,8 @@ import com.sun.star.text.XParagraphCursor;
 import com.sun.star.text.XFootnote;
 import com.sun.star.text.XTextField;
 import com.sun.star.text.XBookmarksSupplier;
+import com.sun.star.text.XTextSectionsSupplier;
+import com.sun.star.text.XDocumentIndexesSupplier;
 import com.sun.star.text.TextContentAnchorType;
 import static com.sun.star.text.TextContentAnchorType.*;
 import static com.sun.star.text.ControlCharacter.*;
@@ -3994,6 +3997,8 @@ public class TextPortionEnumerationTest extends ComplexTestCase
     {
         XText xText = xTextDoc.getText();
 
+        log.println("Checking bookmarks in loaded test document...");
+
         XRepositorySupplier xRS = (XRepositorySupplier)
             UnoRuntime.queryInterface(XRepositorySupplier.class, xTextDoc);
         XDocumentRepository xRepo = (XDocumentRepository)
@@ -4022,6 +4027,139 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         assure("mark3",
                 eq(xMark3.getMetadataReference(),
                     new StringPair("content.xml", "id91")));
+
+        log.println("...done");
+
+        log.println("Checking sections in loaded test document...");
+
+        XTextSectionsSupplier xTSS = (XTextSectionsSupplier)
+            UnoRuntime.queryInterface(XTextSectionsSupplier.class, xTextDoc);
+
+        XNameAccess xSections = xTSS.getTextSections();
+
+        XMetadatable xSection1 = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class, xSections.getByName("Section 1"));
+        assure("idsection1", eq(xSection1.getMetadataReference(),
+                    new StringPair("content.xml", "idSection1")));
+
+        XMetadatable xSection2 = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class, xSections.getByName("Section 2"));
+        assure("idSection2", eq(xSection2.getMetadataReference(),
+                    new StringPair("content.xml", "idSection2")));
+
+        XMetadatable xSection3 = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class,
+                xSections.getByName("Table of Contents1_Head"));
+        assure("idTOCTitle", eq(xSection3.getMetadataReference(),
+                    new StringPair("content.xml", "idTOCTitle")));
+
+        XMetadatable xSection4 = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class,
+                xSections.getByName("Alphabetical Index1_Head"));
+        assure("idAITitle", eq(xSection4.getMetadataReference(),
+                    new StringPair("content.xml", "idAITitle")));
+
+        XMetadatable xSection5 = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class,
+                xSections.getByName("Illustration Index1_Head"));
+        assure("idIITitle", eq(xSection5.getMetadataReference(),
+                    new StringPair("content.xml", "idIITitle")));
+
+        XMetadatable xSection6 = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class,
+                xSections.getByName("Index of Tables1_Head"));
+        assure("idIOTTitle", eq(xSection6.getMetadataReference(),
+                    new StringPair("content.xml", "idIOTTitle")));
+
+        XMetadatable xSection7 = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class,
+                xSections.getByName("User-Defined1_Head"));
+        assure("idUDTitle", eq(xSection7.getMetadataReference(),
+                    new StringPair("content.xml", "idUDTitle")));
+
+        XMetadatable xSection8 = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class,
+                xSections.getByName("Table of Objects1_Head"));
+        assure("idTOOTitle", eq(xSection8.getMetadataReference(),
+                    new StringPair("content.xml", "idTOOTitle")));
+
+        XMetadatable xSection9 = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class, xSections.getByName("Bibliography1_Head"));
+        assure("idBibTitle", eq(xSection9.getMetadataReference(),
+                    new StringPair("content.xml", "idBibTitle")));
+
+        log.println("...done");
+
+        log.println("Checking indexes in loaded test document...");
+
+        XDocumentIndexesSupplier xDIS = (XDocumentIndexesSupplier)
+            UnoRuntime.queryInterface(XDocumentIndexesSupplier.class, xTextDoc);
+        XIndexAccess xIndexesIA = xDIS.getDocumentIndexes();
+        XNameAccess xIndexes =
+            UnoRuntime.queryInterface(XNameAccess.class, xIndexesIA);
+
+        XMetadatable xIndex1 = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class, xIndexes.getByName("Table of Contents1"));
+        assure("idTOC", eq(xIndex1.getMetadataReference(),
+                    new StringPair("content.xml", "idTOC")));
+        XMetadatable xIndex1s = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class, xSections.getByName("Table of Contents1"));
+        assure("idTOC", eq(xIndex1s.getMetadataReference(),
+                    new StringPair("content.xml", "idTOC")));
+
+        XMetadatable xIndex2 = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class, xIndexes.getByName("Alphabetical Index1"));
+        assure("idAI", eq(xIndex2.getMetadataReference(),
+                    new StringPair("content.xml", "idAI")));
+        XMetadatable xIndex2s = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class, xSections.getByName("Alphabetical Index1"));
+        assure("idAI", eq(xIndex2s.getMetadataReference(),
+                    new StringPair("content.xml", "idAI")));
+
+        XMetadatable xIndex3 = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class, xIndexes.getByName("Illustration Index1"));
+        assure("idII", eq(xIndex3.getMetadataReference(),
+                    new StringPair("content.xml", "idII")));
+        XMetadatable xIndex3s = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class, xSections.getByName("Illustration Index1"));
+        assure("idII", eq(xIndex3s.getMetadataReference(),
+                    new StringPair("content.xml", "idII")));
+
+        XMetadatable xIndex4 = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class, xIndexes.getByName("Index of Tables1"));
+        assure("idIOT", eq(xIndex4.getMetadataReference(),
+                    new StringPair("content.xml", "idIOT")));
+        XMetadatable xIndex4s = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class, xSections.getByName("Index of Tables1"));
+        assure("idIOT", eq(xIndex4s.getMetadataReference(),
+                    new StringPair("content.xml", "idIOT")));
+
+        XMetadatable xIndex5 = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class, xIndexes.getByName("User-Defined1"));
+        assure("idUD", eq(xIndex5.getMetadataReference(),
+                    new StringPair("content.xml", "idUD")));
+        XMetadatable xIndex5s = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class, xSections.getByName("User-Defined1"));
+        assure("idUD", eq(xIndex5s.getMetadataReference(),
+                    new StringPair("content.xml", "idUD")));
+
+        XMetadatable xIndex6 = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class, xIndexes.getByName("Table of Objects1"));
+        assure("idTOO", eq(xIndex6.getMetadataReference(),
+                    new StringPair("content.xml", "idTOO")));
+        XMetadatable xIndex6s = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class, xSections.getByName("Table of Objects1"));
+        assure("idTOO", eq(xIndex6s.getMetadataReference(),
+                    new StringPair("content.xml", "idTOO")));
+
+        XMetadatable xIndex7 = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class, xIndexes.getByName("Bibliography1"));
+        assure("idBib", eq(xIndex7.getMetadataReference(),
+                    new StringPair("content.xml", "idBib")));
+        XMetadatable xIndex7s = (XMetadatable) UnoRuntime.queryInterface(
+                XMetadatable.class, xSections.getByName("Bibliography1"));
+        assure("idBib", eq(xIndex7s.getMetadataReference(),
+                    new StringPair("content.xml", "idBib")));
 
         log.println("...done");
     }
