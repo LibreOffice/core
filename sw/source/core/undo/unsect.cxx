@@ -78,25 +78,24 @@ SwUndoInsSection::SwUndoInsSection(
         SwPaM const& rPam, SwSectionData const& rNewData,
         SfxItemSet const*const pSet, SwTOXBase const*const pTOXBase)
     : SwUndo( UNDO_INSSECTION ), SwUndRng( rPam )
-    , pHistory( 0 )
     , m_pSectionData(new SwSectionData(rNewData))
-    , m_pTOXBase(pTOXBase ? new SwTOXBase(*pTOXBase) : 0)
-    , pRedlData( 0 ), pAttr( 0 ), nSectNodePos( 0 )
+    , m_pTOXBase( (pTOXBase) ? new SwTOXBase(*pTOXBase) : 0 )
+    , m_pAttrSet( (pSet && pSet->Count()) ? new SfxItemSet( *pSet ) : 0 )
+    , m_pHistory(0)
+    , m_pRedlData(0)
+    , m_nSectionNodePos(0)
+    , m_bSplitAtStart(false)
+    , m_bSplitAtEnd(false)
+    , m_bUpdateFtn(false)
 {
     SwDoc& rDoc = *(SwDoc*)rPam.GetDoc();
     if( rDoc.IsRedlineOn() )
     {
-        pRedlData = new SwRedlineData( nsRedlineType_t::REDLINE_INSERT,
-                                        rDoc.GetRedlineAuthor() );
+        m_pRedlData.reset(new SwRedlineData( nsRedlineType_t::REDLINE_INSERT,
+                                        rDoc.GetRedlineAuthor() ));
         SetRedlineMode( rDoc.GetRedlineMode() );
     }
 
-    bSplitAtStt = FALSE;
-    bSplitAtEnd = FALSE;
-    bUpdateFtn = FALSE;
-
-    if( pSet && pSet->Count() )
-        pAttr = new SfxItemSet( *pSet );
 
     if( !rPam.HasMark() )
     {
@@ -109,32 +108,25 @@ SwUndoInsSection::SwUndoInsSection(
             aBrkSet.Put( *pCNd->GetpSwAttrSet() );
             if( aBrkSet.Count() )
             {
-                pHistory = new SwHistory;
-                pHistory->CopyFmtAttr( aBrkSet, pCNd->GetIndex() );
+                m_pHistory.reset( new SwHistory );
+                m_pHistory->CopyFmtAttr( aBrkSet, pCNd->GetIndex() );
             }
         }
     }
 }
 
-
 SwUndoInsSection::~SwUndoInsSection()
 {
-    delete pRedlData;
-    delete pAttr;
-
-    if( pHistory )
-        delete pHistory;
 }
-
-
 
 void SwUndoInsSection::Undo( SwUndoIter& rUndoIter )
 {
     SwDoc& rDoc = rUndoIter.GetDoc();
 
-    RemoveIdxFromSection( rDoc, nSectNodePos );
+    RemoveIdxFromSection( rDoc, m_nSectionNodePos );
 
-    SwSectionNode* pNd = rDoc.GetNodes()[ nSectNodePos ]->GetSectionNode();
+    SwSectionNode *const pNd =
+        rDoc.GetNodes()[ m_nSectionNodePos ]->GetSectionNode();
     ASSERT( pNd, "wo ist mein SectionNode?" );
 
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
@@ -152,19 +144,25 @@ void SwUndoInsSection::Undo( SwUndoIter& rUndoIter )
         rDoc.DelSectionFmt( pNd->GetSection().GetFmt() );
 
     // muessen wir noch zusammenfassen ?
-    if( bSplitAtStt )
-        Join( rDoc, nSttNode );
-
-    if( bSplitAtEnd )
-        Join( rDoc, nEndNode );
-
-    if ( pHistory )
+    if (m_bSplitAtStart)
     {
-        pHistory->TmpRollback( &rDoc, 0, false );
+        Join( rDoc, nSttNode );
     }
 
-    if( bUpdateFtn )
+    if (m_bSplitAtEnd)
+    {
+        Join( rDoc, nEndNode );
+    }
+
+    if (m_pHistory.get())
+    {
+        m_pHistory->TmpRollback( &rDoc, 0, false );
+    }
+
+    if (m_bUpdateFtn)
+    {
         rDoc.GetFtnIdxs().UpdateFtn( aIdx );
+    }
 
     SetPaM( rUndoIter );
 }
@@ -179,25 +177,29 @@ void SwUndoInsSection::Redo( SwUndoIter& rUndoIter )
     if (m_pTOXBase.get())
     {
         pUpdateTOX = rDoc.InsertTableOf( *rUndoIter.pAktPam->GetPoint(),
-                                        *m_pTOXBase, pAttr, TRUE );
+                                        *m_pTOXBase, m_pAttrSet.get(), true);
     }
     else
     {
         rDoc.InsertSwSection(*rUndoIter.pAktPam,
-                *m_pSectionData, 0, pAttr, true);
+                *m_pSectionData, 0, m_pAttrSet.get(), true);
     }
 
-    if( pHistory )
-        pHistory->SetTmpEnd( pHistory->Count() );
+    if (m_pHistory.get())
+    {
+        m_pHistory->SetTmpEnd( m_pHistory->Count() );
+    }
 
-    SwSectionNode* pSectNd = rDoc.GetNodes()[ nSectNodePos ]->GetSectionNode();
-    if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
+    SwSectionNode *const pSectNd =
+        rDoc.GetNodes()[ m_nSectionNodePos ]->GetSectionNode();
+    if (m_pRedlData.get() &&
+        IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode()))
     {
         RedlineMode_t eOld = rDoc.GetRedlineMode();
         rDoc.SetRedlineMode_intern((RedlineMode_t)(eOld & ~nsRedlineMode_t::REDLINE_IGNORE));
 
         SwPaM aPam( *pSectNd->EndOfSectionNode(), *pSectNd, 1 );
-        rDoc.AppendRedline( new SwRedline( *pRedlData, aPam ), true);
+        rDoc.AppendRedline( new SwRedline( *m_pRedlData, aPam ), true);
         rDoc.SetRedlineMode_intern( eOld );
     }
     else if( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
@@ -225,12 +227,12 @@ void SwUndoInsSection::Repeat( SwUndoIter& rUndoIter )
     if (m_pTOXBase.get())
     {
         rUndoIter.GetDoc().InsertTableOf( *rUndoIter.pAktPam->GetPoint(),
-                                            *m_pTOXBase, pAttr, TRUE );
+                                        *m_pTOXBase, m_pAttrSet.get(), true);
     }
     else
     {
         rUndoIter.GetDoc().InsertSwSection( *rUndoIter.pAktPam,
-            *m_pSectionData, 0, pAttr);
+            *m_pSectionData, 0, m_pAttrSet.get());
     }
 }
 
@@ -247,7 +249,7 @@ void SwUndoInsSection::Join( SwDoc& rDoc, ULONG nNode )
     }
     pTxtNd->JoinNext();
 
-    if( pHistory )
+    if (m_pHistory.get())
     {
         SwIndex aCntIdx( pTxtNd, 0 );
         pTxtNd->RstAttr( aCntIdx, pTxtNd->Len(), 0, 0, true );
@@ -255,20 +257,27 @@ void SwUndoInsSection::Join( SwDoc& rDoc, ULONG nNode )
 }
 
 
-void SwUndoInsSection::SaveSplitNode( SwTxtNode* pTxtNd, BOOL bAtStt )
+void
+SwUndoInsSection::SaveSplitNode(SwTxtNode *const pTxtNd, bool const bAtStart)
 {
     if( pTxtNd->GetpSwpHints() )
     {
-        if( !pHistory )
-            pHistory = new SwHistory;
-        pHistory->CopyAttr( pTxtNd->GetpSwpHints(), pTxtNd->GetIndex(), 0,
+        if (!m_pHistory.get())
+        {
+            m_pHistory.reset( new SwHistory );
+        }
+        m_pHistory->CopyAttr( pTxtNd->GetpSwpHints(), pTxtNd->GetIndex(), 0,
                             pTxtNd->GetTxt().Len(), false );
     }
 
-    if( bAtStt )
-        bSplitAtStt = TRUE;
+    if (bAtStart)
+    {
+        m_bSplitAtStart = true;
+    }
     else
-        bSplitAtEnd = TRUE;
+    {
+        m_bSplitAtEnd = true;
+    }
 }
 
 

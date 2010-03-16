@@ -24,8 +24,18 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _UNDOBJ_HXX
-#define _UNDOBJ_HXX
+#ifndef SW_UNDOBJ_HXX
+#define SW_UNDOBJ_HXX
+
+// --> OD 2006-11-01 #130889#
+#include <vector>
+// <--
+#include <memory>
+
+#include <boost/shared_ptr.hpp>
+
+#include <com/sun/star/uno/Sequence.h>
+
 #include <tools/mempool.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
@@ -36,23 +46,16 @@
 #include <svl/svstdarr.hxx>
 #endif
 #include <svl/itemset.hxx>
-#include <com/sun/star/uno/Sequence.h>
+
+#include <svx/svdundo.hxx> // #111827#
+
 #include <numrule.hxx>
 #include <itabenum.hxx>
 #include <format.hxx>
 #include <SwRewriter.hxx>
-#include <svx/svdundo.hxx> // #111827#
-
 #include <swundo.hxx>
-
 #include <IMark.hxx>
 #include <IDocumentContentOperations.hxx>
-// --> OD 2006-11-01 #130889#
-#include <vector>
-// <--
-
-#include <boost/shared_ptr.hpp>
-#include <memory>
 
 
 class SwUndoIter;
@@ -1381,15 +1384,16 @@ public:
 
 class SwUndoInsSection : public SwUndo, private SwUndRng
 {
-    SwHistory* pHistory;
+private:
     const ::std::auto_ptr<SwSectionData> m_pSectionData;
     const ::std::auto_ptr<SwTOXBase> m_pTOXBase; /// set iff section is TOX
-    SwRedlineData* pRedlData;
-    SfxItemSet* pAttr;
-    ULONG nSectNodePos;
-    BOOL bSplitAtStt : 1;
-    BOOL bSplitAtEnd : 1;
-    BOOL bUpdateFtn : 1;
+    const ::std::auto_ptr<SfxItemSet> m_pAttrSet;
+    ::std::auto_ptr<SwHistory> m_pHistory;
+    ::std::auto_ptr<SwRedlineData> m_pRedlData;
+    ULONG m_nSectionNodePos;
+    bool m_bSplitAtStart : 1;
+    bool m_bSplitAtEnd : 1;
+    bool m_bUpdateFtn : 1;
 
     void Join( SwDoc& rDoc, ULONG nNode );
 
@@ -1402,9 +1406,9 @@ public:
     virtual void Repeat( SwUndoIter& );
     OUT_UNDOBJ( SwUndoInsSection )
 
-    void SetSectNdPos( ULONG nPos )         { nSectNodePos = nPos; }
-    void SaveSplitNode( SwTxtNode* pTxtNd, BOOL bAtStt );
-    void SetUpdtFtnFlag( BOOL bFlag )       { bUpdateFtn = bFlag; }
+    void SetSectNdPos(ULONG const nPos)     { m_nSectionNodePos = nPos; }
+    void SaveSplitNode(SwTxtNode *const pTxtNd, bool const bAtStart);
+    void SetUpdtFtnFlag(bool const bFlag)   { m_bUpdateFtn = bFlag; }
 };
 
 class SwUndoDelSection : public SwUndo
