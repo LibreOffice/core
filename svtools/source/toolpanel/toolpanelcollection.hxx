@@ -52,7 +52,7 @@ namespace svt
         virtual PToolPanel  GetPanel( const size_t i_nPos ) const;
         virtual ::boost::optional< size_t >
                             GetActivePanel() const;
-        virtual void        ActivatePanel( const size_t i_nPanel );
+        virtual void        ActivatePanel( const ::boost::optional< size_t >& i_rPanel );
         virtual size_t      InsertPanel( const PToolPanel& i_pPanel, const size_t i_nPosition );
         virtual PToolPanel  RemovePanel( const size_t i_nPosition );
         virtual void        AddListener( IToolPanelDeckListener& i_rListener );

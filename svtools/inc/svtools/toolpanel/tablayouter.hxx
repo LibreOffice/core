@@ -37,12 +37,14 @@
 
 #include <boost/noncopyable.hpp>
 
+class Window;
+
 //........................................................................
 namespace svt
 {
 //........................................................................
 
-    class ToolPanelDeck;
+    class IToolPanelDeck;
 
     struct TabDeckLayouter_Data;
 
@@ -55,17 +57,18 @@ namespace svt
     {
     public:
         /** creates a new layouter
-            @param i_rPanelDeck
-                the panel deck which the layouter is responsible for. Provides access to the panels
-                container, and can and should be used as parent for any other windows which the layouter
-                needs to create.
+            @param i_rParent
+                is the parent window for any VCL windows the layouter needs to create.
+            @param i_rPanels
+                is the panel deck which the layouter is responsible for.
             @param i_eAlignment
                 specifies the alignment of the panel selector
             @param TabItemContent
                 specifies the content to show on the tab items
         */
         TabDeckLayouter(
-            ToolPanelDeck& i_rPanelDeck,
+            Window& i_rParent,
+            IToolPanelDeck& i_rPanels,
             const TabAlignment i_eAlignment,
             const TabItemContent i_eItemContent
         );

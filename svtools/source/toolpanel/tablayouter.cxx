@@ -47,10 +47,11 @@ namespace svt
         ::std::auto_ptr< PanelTabBar >
                             pTabBar;
 
-        TabDeckLayouter_Data( ToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
+        TabDeckLayouter_Data( Window& i_rParent, IToolPanelDeck& i_rPanels,
+                const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
             :eAlignment( i_eAlignment )
-            ,rPanels( i_rPanelDeck )
-            ,pTabBar( new PanelTabBar( i_rPanelDeck, i_rPanelDeck, i_eAlignment, i_eItemContent ) )
+            ,rPanels( i_rPanels )
+            ,pTabBar( new PanelTabBar( i_rParent, i_rPanels, i_eAlignment, i_eItemContent ) )
         {
             pTabBar->Show();
         }
@@ -82,8 +83,9 @@ namespace svt
     //= TabDeckLayouter
     //====================================================================
     //--------------------------------------------------------------------
-    TabDeckLayouter::TabDeckLayouter( ToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
-        :m_pData( new TabDeckLayouter_Data( i_rPanelDeck, i_eAlignment, i_eItemContent ) )
+    TabDeckLayouter::TabDeckLayouter( Window& i_rParent, IToolPanelDeck& i_rPanels,
+            const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
+        :m_pData( new TabDeckLayouter_Data( i_rParent, i_rPanels, i_eAlignment, i_eItemContent ) )
     {
     }
 

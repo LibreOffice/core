@@ -90,8 +90,12 @@ namespace svt
 
         /** activates the panel with the given number. If the given number is larger or equal to the number of panels
             in the deck, this will be reported via an assertion in non-product builds, and otherwise ignored.
+            @param i_rPanel
+                the number of the panel to activate. If this is not set, the currently active panel is de-activated,
+                and no new panel is activated at all. Whether or not this makes sense for your application is at
+                your own discretion.
         */
-        virtual void        ActivatePanel( const size_t i_nPanel ) = 0;
+        virtual void        ActivatePanel( const ::boost::optional< size_t >& i_rPanel ) = 0;
 
         /** inserts a new panel into the container. NULL panels are not allowed, as are positions greater than the
             current panel count. Violations of this will be reported via an assertion in the non-product version, and
@@ -138,7 +142,7 @@ namespace svt
         virtual PToolPanel  GetPanel( const size_t i_nPos ) const;
         virtual ::boost::optional< size_t >
                             GetActivePanel() const;
-        virtual void        ActivatePanel( const size_t i_nPanel );
+        virtual void        ActivatePanel( const ::boost::optional< size_t >& i_rPanel );
         virtual size_t      InsertPanel( const PToolPanel& i_pPanel, const size_t i_nPosition );
         virtual PToolPanel  RemovePanel( const size_t i_nPosition );
         virtual void        AddListener( IToolPanelDeckListener& i_rListener );

@@ -85,7 +85,7 @@ namespace svt
         PToolPanel          GetPanel( const size_t i_nPos ) const;
         ::boost::optional< size_t >
                             GetActivePanel() const;
-        void                ActivatePanel( const size_t i_nPanel );
+        void                ActivatePanel( const ::boost::optional< size_t >& i_rPanel );
         size_t              InsertPanel( const PToolPanel& i_pPanel, const size_t i_nPosition );
         PToolPanel          RemovePanel( const size_t i_nPosition );
         void                AddListener( IToolPanelDeckListener& i_rListener );
@@ -158,9 +158,9 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    void ToolPanelDeck_Impl::ActivatePanel( const size_t i_nPanel )
+    void ToolPanelDeck_Impl::ActivatePanel( const ::boost::optional< size_t >& i_rPanel )
     {
-        m_aPanels.ActivatePanel( i_nPanel );
+        m_aPanels.ActivatePanel( i_rPanel );
     }
 
     //--------------------------------------------------------------------
@@ -249,7 +249,7 @@ namespace svt
 
         if ( !!aActivatePanel )
         {
-            ActivatePanel( *aActivatePanel );
+            ActivatePanel( aActivatePanel );
         }
     }
 
@@ -310,7 +310,7 @@ namespace svt
         ,m_pImpl( new ToolPanelDeck_Impl( *this ) )
     {
         // use a default layouter
-        SetLayouter( PDeckLayouter( new TabDeckLayouter( *this, TABS_RIGHT, TABITEM_IMAGE_AND_TEXT ) ) );
+        SetLayouter( PDeckLayouter( new TabDeckLayouter( *this, *this, TABS_RIGHT, TABITEM_IMAGE_AND_TEXT ) ) );
     }
 
     //--------------------------------------------------------------------
@@ -345,9 +345,9 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    void ToolPanelDeck::ActivatePanel( const size_t i_nPanel )
+    void ToolPanelDeck::ActivatePanel( const ::boost::optional< size_t >& i_rPanel )
     {
-        m_pImpl->ActivatePanel( i_nPanel );
+        m_pImpl->ActivatePanel( i_rPanel );
     }
 
     //--------------------------------------------------------------------

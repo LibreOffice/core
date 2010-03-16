@@ -76,17 +76,20 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    void ToolPanelCollection::ActivatePanel( const size_t i_nPanel )
+    void ToolPanelCollection::ActivatePanel( const ::boost::optional< size_t >& i_rPanel )
     {
-        OSL_ENSURE( i_nPanel < GetPanelCount(), "ToolPanelCollection::ActivatePanel: illegal panel no.!" );
-        if ( i_nPanel >= GetPanelCount() )
-            return;
+        if ( !!i_rPanel )
+        {
+            OSL_ENSURE( *i_rPanel < GetPanelCount(), "ToolPanelCollection::ActivatePanel: illegal panel no.!" );
+            if ( *i_rPanel >= GetPanelCount() )
+                return;
+        }
 
-        if ( m_pData->aActivePanel == i_nPanel )
+        if ( m_pData->aActivePanel == i_rPanel )
             return;
 
         const ::boost::optional< size_t > aOldPanel( m_pData->aActivePanel );
-        m_pData->aActivePanel = i_nPanel;
+        m_pData->aActivePanel = i_rPanel;
 
         // notify listeners
         m_pData->aListeners.ActivePanelChanged( aOldPanel, m_pData->aActivePanel );
