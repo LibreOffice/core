@@ -74,6 +74,9 @@ SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
     return pAttr;
 }
 
+
+////////////////////////////////////////////////////////////////////////////
+
 SwUndoInsSection::SwUndoInsSection(
         SwPaM const& rPam, SwSectionData const& rNewData,
         SfxItemSet const*const pSet, SwTOXBase const*const pTOXBase)
@@ -281,32 +284,48 @@ SwUndoInsSection::SaveSplitNode(SwTxtNode *const pTxtNd, bool const bAtStart)
 }
 
 
-// -----------------------------
+////////////////////////////////////////////////////////////////////////////
 
-SwUndoDelSection::SwUndoDelSection( const SwSectionFmt& rFmt )
-     : SwUndo( UNDO_DELSECTION )
+class SwUndoDelSection
+    : public SwUndo
 {
-    const SwSection& rSect = *rFmt.GetSection();
-    if( rSect.ISA( SwTOXBaseSection ))
-    {
-        m_pTOXBase.reset(
-            new SwTOXBase(static_cast<SwTOXBaseSection const&>(rSect)) );
-    }
-    m_pSectionData.reset( new SwSectionData(rSect) );
+private:
+    ::std::auto_ptr<SwSectionData> const m_pSectionData; /// section not TOX
+    ::std::auto_ptr<SwTOXBase> const m_pTOXBase; /// set iff section is TOX
+    ::std::auto_ptr<SfxItemSet> const m_pAttrSet;
+    ULONG const m_nStartNode;
+    ULONG const m_nEndNode;
 
-    pAttr = ::lcl_GetAttrSet( rSect );
+public:
+    SwUndoDelSection(SwSection const&, SwNodeIndex const*const);
+    virtual ~SwUndoDelSection();
+    virtual void Undo( SwUndoIter& );
+    virtual void Redo( SwUndoIter& );
+    OUT_UNDOBJ( SwUndoDelSection )
+};
 
-    const SwNodeIndex* pIdx = rFmt.GetCntnt().GetCntntIdx();
-    nSttNd = pIdx->GetIndex();
-    nEndNd = pIdx->GetNode().EndOfSectionIndex();
+SW_DLLPRIVATE SwUndo * MakeUndoDelSection(SwSectionFmt const& rFormat)
+{
+    return new SwUndoDelSection(*rFormat.GetSection(),
+                rFormat.GetCntnt().GetCntntIdx());
 }
 
+SwUndoDelSection::SwUndoDelSection(
+            SwSection const& rSection, SwNodeIndex const*const pIndex)
+    : SwUndo( UNDO_DELSECTION )
+    , m_pSectionData( new SwSectionData(rSection) )
+    , m_pTOXBase( rSection.ISA( SwTOXBaseSection )
+            ? new SwTOXBase(static_cast<SwTOXBaseSection const&>(rSection))
+            : 0 )
+    , m_pAttrSet( ::lcl_GetAttrSet(rSection) )
+    , m_nStartNode( pIndex->GetIndex() )
+    , m_nEndNode( pIndex->GetNode().EndOfSectionIndex() )
+{
+}
 
 SwUndoDelSection::~SwUndoDelSection()
 {
-    delete pAttr;
 }
-
 
 void SwUndoDelSection::Undo( SwUndoIter& rUndoIter )
 {
@@ -314,15 +333,18 @@ void SwUndoDelSection::Undo( SwUndoIter& rUndoIter )
 
     if (m_pTOXBase.get())
     {
-        rDoc.InsertTableOf( nSttNd, nEndNd-2, *m_pTOXBase, pAttr );
+        rDoc.InsertTableOf(m_nStartNode, m_nEndNode-2, *m_pTOXBase,
+                m_pAttrSet.get());
     }
     else
     {
-        SwNodeIndex aStt( rDoc.GetNodes(), nSttNd );
-        SwNodeIndex aEnd( rDoc.GetNodes(), nEndNd-2 );
+        SwNodeIndex aStt( rDoc.GetNodes(), m_nStartNode );
+        SwNodeIndex aEnd( rDoc.GetNodes(), m_nEndNode-2 );
         SwSectionFmt* pFmt = rDoc.MakeSectionFmt( 0 );
-        if( pAttr )
-            pFmt->SetFmtAttr( *pAttr );
+        if (m_pAttrSet.get())
+        {
+            pFmt->SetFmtAttr( *m_pAttrSet );
+        }
 
         /// OD 04.10.2002 #102894#
         /// remember inserted section node for further calculations
@@ -357,18 +379,19 @@ void SwUndoDelSection::Undo( SwUndoIter& rUndoIter )
     }
 }
 
-
 void SwUndoDelSection::Redo( SwUndoIter& rUndoIter )
 {
     SwDoc& rDoc = rUndoIter.GetDoc();
 
-    SwSectionNode* pNd = rDoc.GetNodes()[ nSttNd ]->GetSectionNode();
+    SwSectionNode *const pNd =
+        rDoc.GetNodes()[ m_nStartNode ]->GetSectionNode();
     ASSERT( pNd, "wo ist mein SectionNode?" );
     // einfach das Format loeschen, der Rest erfolgt automatisch
     rDoc.DelSectionFmt( pNd->GetSection().GetFmt() );
 }
 
 
+////////////////////////////////////////////////////////////////////////////
 
 SwUndoChgSection::SwUndoChgSection( const SwSectionFmt& rFmt, BOOL bOnlyAttr )
      : SwUndo( UNDO_CHGSECTION ), bOnlyAttrChgd( bOnlyAttr )

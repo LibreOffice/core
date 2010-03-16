@@ -558,7 +558,7 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
                 EndUndo(UNDO_DELSECTION, NULL);
                 return ;
             }
-            AppendUndo( new SwUndoDelSection( *pFmt ) );
+            AppendUndo( MakeUndoDelSection( *pFmt ) );
         }
         else if( bDelNodes && pIdx && &GetNodes() == &pIdx->GetNodes() &&
                 0 != (pSectNd = pIdx->GetNode().GetSectionNode() ))

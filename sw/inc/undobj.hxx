@@ -1411,19 +1411,7 @@ public:
     void SetUpdtFtnFlag(bool const bFlag)   { m_bUpdateFtn = bFlag; }
 };
 
-class SwUndoDelSection : public SwUndo
-{
-    ULONG nSttNd, nEndNd;
-    ::std::auto_ptr<SwSectionData> m_pSectionData; /// set iff section not TOX
-    ::std::auto_ptr<SwTOXBase> m_pTOXBase; /// set iff section is TOX
-    SfxItemSet* pAttr;
-public:
-    SwUndoDelSection( const SwSectionFmt& );
-    virtual ~SwUndoDelSection();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    OUT_UNDOBJ( SwUndoDelSection )
-};
+SW_DLLPRIVATE SwUndo * MakeUndoDelSection(SwSectionFmt const&);
 
 class SwUndoChgSection : public SwUndo
 {
