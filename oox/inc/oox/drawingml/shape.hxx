@@ -122,6 +122,7 @@ public:
     void                            setName( const rtl::OUString& rName ) { msName = rName; }
     ::rtl::OUString                 getName( ) { return msName; }
     void                            setId( const rtl::OUString& rId ) { msId = rId; }
+    void                            setHidden( sal_Bool bHidden ) { mbHidden = bHidden; }
     void                            setSubType( sal_uInt32 nSubType ) { mnSubType = nSubType; }
     sal_Int32                       getSubType() const { return mnSubType; }
     void                            setIndex( sal_uInt32 nIndex ) { mnIndex = nIndex; }
@@ -201,6 +202,7 @@ private:
     sal_Int32                       mnRotation;
     sal_Bool                        mbFlipH;
     sal_Bool                        mbFlipV;
+    sal_Bool                        mbHidden;
 };
 
 ::rtl::OUString GetShapeType( sal_Int32 nType );

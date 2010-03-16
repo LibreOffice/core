@@ -93,6 +93,7 @@ Shape::Shape( const sal_Char* pServiceName )
 , mnRotation( 0 )
 , mbFlipH( false )
 , mbFlipV( false )
+, mbHidden( false )
 {
     if ( pServiceName )
         msServiceName = OUString::createFromAscii( pServiceName );
@@ -178,6 +179,7 @@ void Shape::applyShapeReference( const Shape& rReferencedShape )
     mnRotation = rReferencedShape.mnRotation;
     mbFlipH = rReferencedShape.mbFlipH;
     mbFlipV = rReferencedShape.mbFlipV;
+    mbHidden = rReferencedShape.mbHidden;
 }
 
 // for group shapes, the following method is also adding each child
@@ -364,6 +366,12 @@ Reference< XShape > Shape::createAndInsert(
                 xNamed->setName( msName );
         }
         rxShapes->add( mxShape );
+
+        if ( mbHidden )
+        {
+            const OUString sHidden( CREATE_OUSTRING( "NumberingLevel" ) );
+            xSet->setPropertyValue( sHidden, Any( mbHidden ) );
+        }
 
         // sj: removing default text of placeholder objects such as SlideNumberShape or HeaderShape
         if ( bClearText )
