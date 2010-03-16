@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: editsh.hxx,v $
- * $Revision: 1.70 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <tools/string.hxx>
 #include <svl/svarray.hxx>
 #include <vcl/font.hxx>
-#include <svx/swafopt.hxx>
+#include <editeng/swafopt.hxx>
 #include "swdllapi.h"
 #include <crsrsh.hxx>   // fuer Basisklasse
 #include <itabenum.hxx>
@@ -44,6 +41,7 @@
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
 #include <fldupde.hxx>
 #include <tblenum.hxx>
+#include <IMark.hxx>
 
 #include <vector>
 #include <swundo.hxx>
@@ -58,7 +56,6 @@ class SvUShortsSort;
 class SvNumberFormatter;
 class SfxPoolItem;
 class SfxItemSet;
-class SvxLinkManager;
 class SvxAutoCorrect;
 
 class SwField;          // fuer Felder
@@ -121,7 +118,9 @@ struct SpellPortion;
 typedef std::vector<SpellPortion> SpellPortions;
 }
 
-
+namespace sfx2{
+class LinkManager;
+}
 
 #define GETSELTXT_PARABRK_TO_BLANK      0
 #define GETSELTXT_PARABRK_KEEP          1
@@ -414,6 +413,9 @@ public:
     USHORT              GetTOXTypeCount(TOXTypes eTyp) const;
     const SwTOXType*    GetTOXType(TOXTypes eTyp, USHORT nId) const;
     void                InsertTOXType(const SwTOXType& rTyp);
+
+    // new field stuff
+    BOOL                UpdateField(sw::mark::IFieldmark &fieldBM);
 
     //AutoMark file
     const String&   GetTOIAutoMarkURL() const;
@@ -849,8 +851,8 @@ public:
     // Optimierung UI
     void SetNewDoc(BOOL bNew = TRUE);
 
-          SvxLinkManager& GetLinkManager();
-    inline const SvxLinkManager& GetLinkManager() const;
+    sfx2::LinkManager& GetLinkManager();
+    inline const sfx2::LinkManager& GetLinkManager() const;
 
     // linken Rand ueber Objectleiste einstellen (aenhlich dem Stufen von
     // Numerierungen), optional kann man "um" den Offset stufen oder "auf"
@@ -952,7 +954,7 @@ inline void SwEditShell::ApplyViewOptions( const SwViewOption &rOpt )
     SwEditShell::EndAction();
 }
 
-inline const SvxLinkManager& SwEditShell::GetLinkManager() const
+inline const sfx2::LinkManager& SwEditShell::GetLinkManager() const
 {   return ((SwEditShell*)this)->GetLinkManager();  }
 
 /*

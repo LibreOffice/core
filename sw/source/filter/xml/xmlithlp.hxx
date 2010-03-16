@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlithlp.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include <sal/types.h>
 #include <xmloff/xmlement.hxx>
 #include "hintids.hxx"  // for following include
-#include <svx/brshitem.hxx> // for SvxGraphicsPosition
+#include <editeng/brshitem.hxx> // for SvxGraphicsPosition
 
 class SvxBorderLine;
 struct SvXMLEnumMapEntry;

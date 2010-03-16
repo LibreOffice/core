@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unotxdoc.hxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,7 +72,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <svl/itemprop.hxx>
 #include <svx/fmdmod.hxx>
-#include <svx/UnoForbiddenCharsTable.hxx>
+#include <editeng/UnoForbiddenCharsTable.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <cppuhelper/implbase4.hxx> // helper for implementations

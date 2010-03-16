@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pagechg.cxx,v $
- * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +71,7 @@
 #include "htmltbl.hxx"
 #include "pagedesc.hxx"
 #include "poolfmt.hxx"
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <swfntcch.hxx> // SwFontAccess
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
