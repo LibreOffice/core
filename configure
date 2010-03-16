@@ -15008,14 +15008,16 @@ fi
 
 
 
-if test "$_os" = "Darwin" && test "$with_system_python" != "no"; then
-   with_system_python=yes
-fi
 { echo "$as_me:$LINENO: checking which python to use" >&5
 echo $ECHO_N "checking which python to use... $ECHO_C" >&6; }
-if test -n "$with_system_python" -o -n "$with_system_libs" && \
+if test "$_os" = "Darwin" && test "$with_system_python" != "no"; then
+   with_system_python=yes
+   { echo "$as_me:$LINENO: result: compiling against MacOSX10.4u.sdk (python version 2.3)" >&5
+echo "${ECHO_T}compiling against MacOSX10.4u.sdk (python version 2.3)" >&6; }
+   PYTHON_CFLAGS="-I/Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/Python.framework/Versions/2.3/include/python2.3"
+   PYTHON_LIBS="-framework Python"
+elif test -n "$with_system_python" -o -n "$with_system_libs" && \
 	test "$with_system_python" != "no"; then
-   SYSTEM_PYTHON=YES
    { echo "$as_me:$LINENO: result: external" >&5
 echo "${ECHO_T}external" >&6; }
 
@@ -15208,13 +15210,10 @@ echo "${ECHO_T}$am_cv_python_pyexecdir" >&6; }
    python_include=`$PYTHON -c "import distutils.sysconfig; print distutils.sysconfig.get_config_var('INCLUDEPY');"`
    python_version=`$PYTHON -c "import distutils.sysconfig; print distutils.sysconfig.get_config_var('VERSION');"`
    PYTHON_CFLAGS="-I$python_include"
-
-   if test "$_os" = "Darwin"; then
-      PYTHON_LIBS="-framework Python"
-   else
-      PYTHON_LIBS="-lpython$python_version"
-   fi
-
+   PYTHON_LIBS="-lpython$python_version"
+fi
+if test "$with_system_python" != "no" ; then
+   SYSTEM_PYTHON=YES
       save_CPPFLAGS="$CPPFLAGS"
    CPPFLAGS="$CPPFLAGS $PYTHON_CFLAGS"
    if test "${ac_cv_header_Python_h+set}" = set; then
