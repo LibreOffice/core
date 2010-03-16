@@ -60,11 +60,9 @@ class LoginDialog : public ModalDialog
     FixedLine       aLogin2FL;
     FixedText       aPathFT;
     Edit            aPathED;
-    FixedInfo       aPathInfo;
     PushButton      aPathBtn;
     FixedText       aNameFT;
     Edit            aNameED;
-    FixedInfo       aNameInfo;
     FixedText       aPasswordFT;
     Edit            aPasswordED;
     FixedText       aAccountFT;
@@ -90,9 +88,9 @@ public:
     virtual ~LoginDialog();
 
     String          GetPath() const                             { return aPathED.GetText(); }
-    void            SetPath( const String& rNewPath )           { aPathED.SetText( rNewPath ); aPathInfo.SetText( rNewPath ); }
+    void            SetPath( const String& rNewPath )           { aPathED.SetText( rNewPath ); }
     String          GetName() const                             { return aNameED.GetText(); }
-    void            SetName( const String& rNewName );
+    void            SetName( const String& rNewName )           { aNameED.SetText( rNewName ); }
     String          GetPassword() const                         { return aPasswordED.GetText(); }
     void            SetPassword( const String& rNew )           { aPasswordED.SetText( rNew ); }
     String          GetAccount() const                          { return aAccountED.GetText(); }
@@ -107,6 +105,9 @@ public:
     void            ClearPassword();
     void            ClearAccount();
 };
+
+// -----------------------------------------------------------------------
+
 
 //............................................................................
 //............................................................................
