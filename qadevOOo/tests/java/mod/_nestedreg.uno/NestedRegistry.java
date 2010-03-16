@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: NestedRegistry.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -139,7 +136,6 @@ public class NestedRegistry extends TestCase {
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
         Object oInterface = null;
-        Object fileAcc = null;
 
         final String tmpDir = utils.getOfficeTempDirSys(
                                     (XMultiServiceFactory)Param.getMSF()) ;
