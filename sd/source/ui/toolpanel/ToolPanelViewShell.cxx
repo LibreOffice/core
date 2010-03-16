@@ -40,7 +40,6 @@
 #include "PaneDockingWindow.hxx"
 #include "FrameView.hxx"
 #include "Window.hxx"
-#include "PaneDockingWindow.hxx"
 #include "ToolPanelDeck.hxx"
 #include "sdmod.hxx"
 #include "app.hrc"
@@ -50,9 +49,12 @@
 #include "strings.hrc"
 #include "sdresid.hxx"
 #include "framework/FrameworkHelper.hxx"
+
+/** === begin UNO includes === **/
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
 #include <com/sun/star/drawing/XDrawSubController.hpp>
+/** === end UNO includes === **/
 
 #include <svx/dlgctrl.hxx>
 #include <sfx2/imagemgr.hxx>
@@ -95,6 +97,7 @@ using ::com::sun::star::uno::Type;
 using ::com::sun::star::accessibility::XAccessible;
 using ::com::sun::star::drawing::XDrawSubController;
 using ::com::sun::star::frame::XFrame;
+using ::com::sun::star::drawing::framework::XResourceId;
 /** === end UNO using === **/
 
 using ::sd::framework::FrameworkHelper;
@@ -109,18 +112,18 @@ namespace sd { namespace toolpanel {
 */
 struct PanelDescriptor
 {
-    ToolPanelViewShell::PanelId nId;
-    ::svt::PToolPanel           pPanel;
-    bool                        bHidden;
+    PanelId             nId;
+    ::svt::PToolPanel   pPanel;
+    bool                bHidden;
 
     PanelDescriptor()
-        :nId( ToolPanelViewShell::PID_UNKNOWN )
+        :nId( PID_UNKNOWN )
         ,pPanel()
         ,bHidden( false )
     {
     }
 
-    PanelDescriptor( const ToolPanelViewShell::PanelId i_nPanelId, const ::svt::PToolPanel& i_rPanel )
+    PanelDescriptor( const PanelId i_nPanelId, const ::svt::PToolPanel& i_rPanel )
         :nId( i_nPanelId )
         ,pPanel( i_rPanel )
         ,bHidden( false )
@@ -156,6 +159,23 @@ public:
     }
 
     void    TogglePanelVisibility( const size_t i_nLogicalPanelIndex, ToolPanelDeck& i_rPanelDeck );
+
+    /** ensures the panel with the given ID is visible, and directly activates it, bypassing the configuration controller
+    */
+    void    ActivatePanelDirectly( const PanelId i_nPanelId, ToolPanelDeck& i_rPanelDeck );
+
+    /** de-activates the panel given by ID, bypassing the configuration controller
+
+        If the panel is not active currently, nothing happens.
+    */
+    void    DeactivatePanelDirectly( const PanelId i_nPanelId, ToolPanelDeck& i_rPanelDeck );
+
+protected:
+    // IToolPanelDeckListener overridables
+    virtual void PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition );
+    virtual void PanelRemoved( const size_t i_nPosition );
+    virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
+    virtual void Dying();
 
 private:
     void RegisterPanel( size_t i_nPosition, PanelId i_nPanelId, const ::svt::PToolPanel& i_rPanel );
@@ -201,38 +221,84 @@ void ToolPanelViewShell::Implementation::Setup( ToolPanelViewShell& i_rViewShell
         USHORT                  nTitleResourceID;
         ULONG                   nHelpID;
         PanelId                 nPanelID;
+        ::rtl::OUString         sResourceURL;
     };
 
     PanelDescriptor aPanels[] = {
         // "Master Pages"
-        { &controls::MasterPagesPanel::CreateControlFactory, "PresentationLayout", STR_TASKPANEL_MASTER_PAGE_TITLE, HID_SD_SLIDE_DESIGNS, PID_MASTER_PAGES },
+        {   &controls::MasterPagesPanel::CreateControlFactory,
+            "PresentationLayout",
+            STR_TASKPANEL_MASTER_PAGE_TITLE,
+            HID_SD_SLIDE_DESIGNS,
+            PID_MASTER_PAGES,
+            FrameworkHelper::msMasterPagesTaskPanelURL
+        },
         // "Layout"
-        { &LayoutMenu::CreateControlFactory, "ModifyPage", STR_TASKPANEL_LAYOUT_MENU_TITLE, HID_SD_SLIDE_LAYOUTS, PID_LAYOUT },
+        {   &LayoutMenu::CreateControlFactory,
+            "ModifyPage",
+            STR_TASKPANEL_LAYOUT_MENU_TITLE,
+            HID_SD_SLIDE_LAYOUTS,
+            PID_LAYOUT,
+            FrameworkHelper::msLayoutTaskPanelURL
+        },
         // "Tables Design"
-        { &controls::TableDesignPanel::CreateControlFactory, "InsertTable", DLG_TABLEDESIGNPANE, HID_SD_TABLE_DESIGN, PID_TABLE_DESIGN },
+        {   &controls::TableDesignPanel::CreateControlFactory,
+            "InsertTable",
+            DLG_TABLEDESIGNPANE,
+            HID_SD_TABLE_DESIGN,
+            PID_TABLE_DESIGN,
+            FrameworkHelper::msTableDesignPanelURL
+        },
         // "Custom Animation"
-        { &controls::CustomAnimationPanel::CreateControlFactory, "CustomAnimation", STR_CUSTOMANIMATIONPANE, HID_SD_CUSTOM_ANIMATIONS, PID_CUSTOM_ANIMATION },
+        {   &controls::CustomAnimationPanel::CreateControlFactory,
+            "CustomAnimation",
+            STR_CUSTOMANIMATIONPANE,
+            HID_SD_CUSTOM_ANIMATIONS,
+            PID_CUSTOM_ANIMATION,
+            FrameworkHelper::msCustomAnimationTaskPanelURL
+        },
         // "Slide Transition"
-        { &controls::SlideTransitionPanel::CreateControlFactory, "RehearseTimings", STR_SLIDE_TRANSITION_PANE, HID_SD_SLIDE_TRANSITIONS, PID_SLIDE_TRANSITION }
+        {   &controls::SlideTransitionPanel::CreateControlFactory,
+            "RehearseTimings",
+            STR_SLIDE_TRANSITION_PANE,
+            HID_SD_SLIDE_TRANSITIONS,
+            PID_SLIDE_TRANSITION,
+            FrameworkHelper::msSlideTransitionTaskPanelURL
+        }
     };
 
+    // compose the resource ID for the ToolPanel view
+    ::boost::shared_ptr< FrameworkHelper > pFrameworkHelper( FrameworkHelper::Instance( i_rViewShell.GetViewShellBase() ) );
+    const Reference< XResourceId > xToolPanelId( pFrameworkHelper->CreateResourceId( FrameworkHelper::msToolPanelViewURL, FrameworkHelper::msToolPanelPaneURL ) );
+
+    // want to activate the "Layout" panel later on, need to translate its PanelId to an actual position
     const PanelId nPanelIdToActivate = PID_LAYOUT;
     size_t nPanelPosToActivate = size_t( -1 );
 
+    // create the panels
     Reference< XFrame > xFrame( i_rViewShell.GetViewShellBase().GetViewFrame()->GetFrame()->GetFrameInterface() );
     const BOOL bHiContrast( i_rPanelDeck.GetSettings().GetStyleSettings().GetHighContrastMode() );
     for ( size_t i=0; i < sizeof( aPanels ) / sizeof( aPanels[0] ); ++i )
     {
+        // compose the command name, and obtain the image for it
         ::rtl::OUStringBuffer aCommandName;
         aCommandName.appendAscii( ".uno:" );
         aCommandName.appendAscii( aPanels[i].pImageCommandName );
+        const Image aPanelImage( GetImage( xFrame, aCommandName.makeStringAndClear(), FALSE, bHiContrast ) );
 
+        // compose the resource ID of the panel
+        const Reference< XResourceId > xPanelId( pFrameworkHelper->CreateResourceId( aPanels[i].sResourceURL, xToolPanelId ) );
+
+        // create and insert the panel
         size_t nPanelPos = i_rPanelDeck.CreateAndInsertPanel(
             (*aPanels[i].pFactory)( i_rViewShell ),
-            GetImage( xFrame, aCommandName.makeStringAndClear(), FALSE, bHiContrast ),
+            aPanelImage,
             aPanels[i].nTitleResourceID,
-            aPanels[i].nHelpID
+            aPanels[i].nHelpID,
+            xPanelId
         );
+
+        // remember it
         RegisterPanel( nPanelPos, aPanels[i].nPanelID, i_rPanelDeck.GetPanel( nPanelPos ) );
 
         if ( nPanelIdToActivate == aPanels[i].nPanelID )
@@ -240,7 +306,7 @@ void ToolPanelViewShell::Implementation::Setup( ToolPanelViewShell& i_rViewShell
     }
 
     // activate default panel
-    i_rPanelDeck.ActivatePanel( nPanelPosToActivate );
+    i_rPanelDeck.ActivatePanelResource( nPanelPosToActivate );
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -604,7 +670,17 @@ bool ToolPanelViewShell::RelocateToParentWindow( ::Window* pParentWindow )
     return true;
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
+void ToolPanelViewShell::DeactivatePanel( const PanelId i_ePanelId )
+{
+    mpImpl->DeactivatePanelDirectly( i_ePanelId, *mpPanelDeck );
+}
 
+// ---------------------------------------------------------------------------------------------------------------------
+void ToolPanelViewShell::ActivatePanel( const PanelId i_ePanelId )
+{
+    mpImpl->ActivatePanelDirectly( i_ePanelId, *mpPanelDeck );
+}
 
 
 // =====================================================================================================================
@@ -639,13 +715,46 @@ void ToolPanelViewShell::Implementation::TogglePanelVisibility( const size_t i_n
         // if there has not been an active panel before, activate the newly inserted one
         ::boost::optional< size_t > aActivePanel( i_rPanelDeck.GetActivePanel() );
         if ( !aActivePanel )
-            i_rPanelDeck.ActivatePanel( nActualPanelIndex );
+            i_rPanelDeck.ActivatePanelResource( nActualPanelIndex );
     }
     else
     {
         OSL_VERIFY( i_rPanelDeck.RemovePanel( nActualPanelIndex ).get() == maPanels[ i_nLogicalPanelIndex ].pPanel.get() );
     }
     maPanels[ i_nLogicalPanelIndex ].bHidden = !maPanels[ i_nLogicalPanelIndex ].bHidden;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void ToolPanelViewShell::Implementation::DeactivatePanelDirectly( const PanelId i_nPanelId, ToolPanelDeck& i_rPanelDeck )
+{
+    for ( size_t i=0; i<maPanels.size(); ++i )
+    {
+        if ( maPanels[i].nId == i_nPanelId )
+        {
+            if ( i_rPanelDeck.GetActivePanel() == i )
+                i_rPanelDeck.ActivatePanelDirectly( ::boost::optional< size_t >() );
+            return;
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void ToolPanelViewShell::Implementation::ActivatePanelDirectly( const PanelId i_nPanelId, ToolPanelDeck& i_rPanelDeck )
+{
+    size_t nActualPanelIndex(0);
+    for ( size_t i=0; i<maPanels.size(); ++i )
+    {
+        if ( maPanels[i].nId == i_nPanelId )
+        {
+            if ( maPanels[i].bHidden )
+                TogglePanelVisibility( i, i_rPanelDeck );
+            i_rPanelDeck.ActivatePanelDirectly( nActualPanelIndex );
+            return;
+        }
+        if ( !maPanels[i].bHidden )
+            ++nActualPanelIndex;
+    }
+    OSL_ENSURE( false, "ToolPanelViewShell::ActivatePanelDirectly: don't have a panel with the given ID!" );
 }
 
 // ---------------------------------------------------------------------------------------------------------------------

@@ -1658,8 +1658,8 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
     // Set the visibility state of the toolpanel and one of its top
     // level panels.
     BOOL bShowToolPanel = TRUE;
-    toolpanel::TaskPaneViewShell::PanelId nPanelId (
-        toolpanel::TaskPaneViewShell::PID_UNKNOWN);
+    toolpanel::PanelId nPanelId (
+        toolpanel::PID_UNKNOWN);
     bool bPanelIdGiven = false;
 
     // Extract the given arguments.
@@ -1680,7 +1680,7 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
             if (pPanelId != NULL)
             {
                 nPanelId = static_cast<
-                    toolpanel::TaskPaneViewShell::PanelId>(
+                    toolpanel::PanelId>(
                         pPanelId->GetValue());
                 bPanelIdGiven = true;
             }
@@ -1690,7 +1690,7 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
     // Ignore the request for some combinations of panels and view
     // shell types.
     if (bPanelIdGiven
-        && ! (nPanelId==toolpanel::TaskPaneViewShell::PID_LAYOUT
+        && ! (nPanelId==toolpanel::PID_LAYOUT
             && mrBase.GetMainViewShell()!=NULL
             && mrBase.GetMainViewShell()->GetShellType()==ViewShell::ST_OUTLINE))
     {

@@ -38,18 +38,34 @@ namespace sd { namespace toolpanel
 {
 //......................................................................................................................
 
+    /** === begin UNO using === **/
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::uno::XInterface;
+    using ::com::sun::star::uno::UNO_QUERY;
+    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::com::sun::star::uno::UNO_SET_THROW;
+    using ::com::sun::star::uno::Exception;
+    using ::com::sun::star::uno::RuntimeException;
+    using ::com::sun::star::uno::Any;
+    using ::com::sun::star::uno::makeAny;
+    using ::com::sun::star::uno::Sequence;
+    using ::com::sun::star::uno::Type;
+    using ::com::sun::star::drawing::framework::XResourceId;
+    /** === end UNO using === **/
+
     //==================================================================================================================
     //= TaskPaneToolPanel
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
     TaskPaneToolPanel::TaskPaneToolPanel( ToolPanelDeck& i_rPanelDeck, ::std::auto_ptr< ControlFactory >& i_rControlFactory,
-                const Image& i_rImage, const USHORT i_nTitleResId, const ULONG i_nHelpId )
+                const Image& i_rImage, const USHORT i_nTitleResId, const ULONG i_nHelpId, const Reference< XResourceId >& i_rPanelResourceId )
         :m_pPanelDeck( &i_rPanelDeck )
         ,m_pControlFactory( i_rControlFactory )
         ,m_pControl()
         ,m_aImage( i_rImage )
         ,m_sTitle( SdResId( i_nTitleResId ) )
         ,m_aHelpId( i_nHelpId )
+        ,m_xPanelResourceId( i_rPanelResourceId )
     {
         ENSURE_OR_THROW( m_pControlFactory.get(), "illegal control factory" );
     }

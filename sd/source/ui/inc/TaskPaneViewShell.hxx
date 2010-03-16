@@ -34,6 +34,7 @@
 #include "ViewShell.hxx"
 #include "glob.hxx"
 #include "framework/FrameworkHelper.hxx"
+#include "taskpane/PanelId.hxx"
 #include <vcl/button.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/viewfac.hxx>
@@ -67,20 +68,6 @@ class TaskPaneViewShell
 public:
     TYPEINFO();
     SFX_DECL_INTERFACE(SD_IF_SDTASKPANEVIEWSHELL)
-
-    /** List of top level panels that can be shown in the task pane.
-    */
-    enum PanelId
-    {
-        PID__START = 0,
-        PID_UNKNOWN = PID__START,
-        PID_MASTER_PAGES,
-        PID_LAYOUT,
-        PID_TABLE_DESIGN,
-        PID_CUSTOM_ANIMATION,
-        PID_SLIDE_TRANSITION,
-        PID__END = PID_SLIDE_TRANSITION
-    };
 
     TaskPaneViewShell (
         SfxViewFrame* pFrame,

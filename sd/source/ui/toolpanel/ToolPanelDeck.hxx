@@ -30,6 +30,10 @@
 #include "taskpane/TaskPaneTreeNode.hxx"
 #include "taskpane/TaskPaneControlFactory.hxx"
 
+/** === begin UNO includes === **/
+#include <com/sun/star/drawing/framework/XResourceId.hpp>
+/** === end UNO includes === **/
+
 #include <svtools/toolpanel/toolpaneldeck.hxx>
 #include <svtools/toolpanel/tabalignment.hxx>
 #include <svtools/toolpanel/tabitemcontent.hxx>
@@ -59,10 +63,30 @@ namespace sd { namespace toolpanel
             ::std::auto_ptr< ControlFactory >& i_rControlFactory,
             const Image& i_rImage,
             const USHORT i_nTitleResId,
-            const ULONG i_nHelpId
+            const ULONG i_nHelpId,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >& i_rPanelResourceId
         );
 
         void    SetTabsLayout( const ::svt::TabAlignment i_eTabAlignment, const ::svt::TabItemContent i_eTabContent );
+
+        /** directly activates the given panel, without re-routing the activation request through the drawing
+            framework's configuration controller.
+        */
+        void    ActivatePanelDirectly( const ::boost::optional< size_t >& i_rPanel );
+
+        /** activates the given panel by delegating the acvtivation request to the drawing framework's configuration
+            controller.
+        */
+        void    ActivatePanelResource( const size_t i_nPanel );
+
+    protected:
+        // IToolPanelDeck
+        /** this method, which is part of the callback used by the PanelSelector, does not forward the request to
+            the base class. Instead, it forwards it to the ToolPanelViewShell, which transforms it into a request
+            to the drawing framework's configuration controller, which in turn will end up in our public
+            ActivatePanelDirectly method.
+        */
+        virtual void        ActivatePanel( const ::boost::optional< size_t >& i_rPanel );
 
     private:
         ToolPanelViewShell& m_rViewShell;

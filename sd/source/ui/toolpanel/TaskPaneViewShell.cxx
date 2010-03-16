@@ -131,7 +131,7 @@ public:
     /** Make a new panel known to the translation table that translates
         between internal indices as returned by
         ControlContainer::AddControl() and public indices defined by
-        TaskPaneViewShell::PanelId.
+        PanelId.
     */
     void AddPanel (sal_uInt32 nInternalId, PanelId nPublicId);
 
@@ -152,7 +152,7 @@ public:
 private:
     /** This map translates between internal indices returned by
         ControlContainer::AddControl() and public indices defined by
-        TaskPaneViewShell::PanelId.
+        PanelId.
     */
     typedef ::std::vector<PanelId> InternalIdToPanelIdMap;
     InternalIdToPanelIdMap maIndexMap;
@@ -790,7 +790,7 @@ void TaskPaneViewShell::Implementation::AddPanel (
 
 
 
-TaskPaneViewShell::PanelId
+PanelId
     TaskPaneViewShell::Implementation::GetPublicId (
         sal_uInt32 nInternalId) const
 {
@@ -805,7 +805,7 @@ TaskPaneViewShell::PanelId
 
 sal_uInt32
     TaskPaneViewShell::Implementation::GetInternalId (
-        TaskPaneViewShell::PanelId nPublicId) const
+        PanelId nPublicId) const
 {
     sal_uInt32 nId = mnInvalidId;
     for (sal_uInt32 nI=0; nI<maIndexMap.size(); nI++)

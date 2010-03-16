@@ -58,8 +58,8 @@ namespace sd { namespace toolpanel
             ::std::auto_ptr< ControlFactory >& i_rControlFactory,
             const Image& i_rImage,
             const USHORT i_nTitleResId,
-            const ULONG i_nHelpId/*,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >& i_rPanelContent*/
+            const ULONG i_nHelpId,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >& i_rPanelResourceId
         );
         ~TaskPaneToolPanel();
 
@@ -73,6 +73,10 @@ namespace sd { namespace toolpanel
         virtual bool HasFocus() const;
         virtual void Dispose();
 
+        // own attributes
+        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >&
+                getResourceId() const { return m_xPanelResourceId; }
+
     private:
         bool    impl_ensureControl();
 
@@ -83,6 +87,8 @@ namespace sd { namespace toolpanel
         const Image                         m_aImage;
         const String                        m_sTitle;
         const SmartId                       m_aHelpId;
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >
+                                            m_xPanelResourceId;
     };
 
 //......................................................................................................................
