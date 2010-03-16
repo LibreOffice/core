@@ -301,7 +301,6 @@ public:
     virtual ~SwUndoDelSection();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
-    OUT_UNDOBJ( SwUndoDelSection )
 };
 
 SW_DLLPRIVATE SwUndo * MakeUndoDelSection(SwSectionFmt const& rFormat)
@@ -408,7 +407,6 @@ public:
     virtual ~SwUndoUpdateSection();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
-    OUT_UNDOBJ( SwUndoUpdateSection )
 };
 
 SW_DLLPRIVATE SwUndo *
