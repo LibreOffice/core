@@ -28,14 +28,19 @@
 #define INCLUDED_FORM_CONTROL_HELPER_HXX
 
 #include <FFDataHandler.hxx>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 namespace writerfilter {
 namespace dmapper {
 
+using namespace ::com::sun::star;
+
 class FormControlHelper
 {
 public:
-    FormControlHelper(FFDataHandler::Pointer_t pFFData);
+    FormControlHelper(uno::Reference<text::XTextDocument> rTextDocument,
+                      FFDataHandler::Pointer_t pFFData);
     ~FormControlHelper();
 
     bool insertCheckBox();

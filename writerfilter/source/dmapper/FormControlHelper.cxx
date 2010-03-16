@@ -25,12 +25,18 @@
  *
  ************************************************************************/
 
-#include <com/sun/star/uno/Type.hxx>
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/form/XFormComponent.hpp>
+#include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/form/XForm.hpp>
+#include <com/sun/star/form/XFormComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Type.hxx>
+
 #include "FormControlHelper.hxx"
 
 namespace writerfilter {
@@ -40,14 +46,50 @@ using namespace ::com::sun::star;
 
 struct FormControlHelper::FormControlHelper_Impl
 {
-    uno::Reference<lang::XMultiServiceFactory> rServiceFactory;
-    uno::Reference<form::XFormComponent> rFormComponent;
     awt::Size aSize;
+    uno::Reference<form::XForm> rForm;
+    uno::Reference<form::XFormComponent> rFormComponent;
+    uno::Reference<lang::XMultiServiceFactory> rServiceFactory;
+    uno::Reference<text::XTextDocument> rTextDocument;
+    uno::Reference<text::XTextRange> rTextRange;
+
+    uno::Reference<lang::XMultiServiceFactory> getServiceFactory();
+    uno::Reference<form::XForm> getForm();
+    uno::Reference<container::XIndexContainer> getFormComps();
 };
 
-FormControlHelper::FormControlHelper(FFDataHandler::Pointer_t pFFData)
+uno::Reference<lang::XMultiServiceFactory> FormControlHelper::FormControlHelper_Impl::getServiceFactory()
+{
+    uno::Reference<lang::XMultiServiceFactory> xFactory(rTextDocument, uno::UNO_QUERY);
+
+    return xFactory;
+}
+
+uno::Reference<form::XForm> FormControlHelper::FormControlHelper_Impl::getForm()
+{
+    if (! rForm.is())
+    {
+        uno::Reference<uno::XInterface>
+            xRef(rServiceFactory->createInstance
+                 (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.Form"))));
+        rForm = uno::Reference<form::XForm>(xRef, uno::UNO_QUERY);
+    }
+
+    return rForm;
+}
+
+uno::Reference<container::XIndexContainer> FormControlHelper::FormControlHelper_Impl::getFormComps()
+{
+    uno::Reference<container::XIndexContainer> xIndexContainer(getForm(), uno::UNO_QUERY);
+
+    return xIndexContainer;
+}
+
+FormControlHelper::FormControlHelper(uno::Reference<text::XTextDocument> rTextDocument,
+                                     FFDataHandler::Pointer_t pFFData)
     : m_pFFData(pFFData), m_pImpl(new FormControlHelper_Impl)
 {
+    m_pImpl->rTextDocument = rTextDocument;
 }
 
 FormControlHelper::~FormControlHelper()
@@ -100,6 +142,53 @@ bool FormControlHelper::createCheckbox()
 
 bool FormControlHelper::insertControl()
 {
+    uno::Reference<container::XIndexContainer> xFormComps(m_pImpl->getFormComps());
+    if (! xFormComps.is())
+        return false;
+
+    uno::Any aAny;
+    aAny <<= m_pImpl->rFormComponent;
+    xFormComps->insertByIndex(xFormComps->getCount(), aAny);
+
+    if (! m_pImpl->getServiceFactory().is())
+        return false;
+
+    uno::Reference<uno::XInterface> xInterface =
+        m_pImpl->getServiceFactory()->createInstance
+        (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape")));
+
+    if (! xInterface.is())
+        return false;
+
+    uno::Reference<drawing::XShape> xShape(xInterface, uno::UNO_QUERY);
+
+    if (! xShape.is())
+        return false;
+
+    xShape->setSize(m_pImpl->aSize);
+
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+
+    sal_uInt16 nTmp = text::TextContentAnchorType_AS_CHARACTER;
+    aAny <<= nTmp;
+
+    static const ::rtl::OUString sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType"));
+    xShapeProps->setPropertyValue(sAnchorType, aAny);
+
+    static const ::rtl::OUString sVertOrient(RTL_CONSTASCII_USTRINGPARAM("VertOrient"));
+    nTmp = text::VertOrientation::TOP;
+    aAny <<= nTmp;
+    xShapeProps->setPropertyValue(sVertOrient, aAny);
+
+    aAny <<= m_pImpl->rTextRange;
+
+    static const ::rtl::OUString sTextRange(RTL_CONSTASCII_USTRINGPARAM("TextRange"));
+    xShapeProps->setPropertyValue(sTextRange, aAny);
+
+    uno::Reference<drawing::XControlShape> xControlShape(xShape, uno::UNO_QUERY);
+    uno::Reference<awt::XControlModel> xControlModel(m_pImpl->rFormComponent, uno::UNO_QUERY);
+    xControlShape->setControl(xControlModel);
+
     return true;
 }
 
