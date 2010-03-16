@@ -1339,13 +1339,8 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 ' *******************************************************************************
-' * $RCSfile: Wizard.frm,v $
 ' *
-' * Description:
-' *
-' * Last change: $Date: 2008/10/07 11:35:55 $ $Revision: 1.42.66.2 $
-' *
-' * Copyright 2005 Sun Microsystems, Inc. All rights reserved. Use of this
+' * Copyright 2000, 2010 Oracle and/or its affiliates. All rights reserved. Use of this
 ' * product is subject to license terms.
 ' *
 ' *******************************************************************************

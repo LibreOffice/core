@@ -2,12 +2,6 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: pdfioutdev_gpl.hxx,v $
- *
- *  $Revision: 1.1.2.1 $
- *
- *  last change: $Author: cmc $ $Date: 2008/08/25 16:17:55 $
- *
  *  The Contents of this file are made available subject to
  *  the terms of GNU General Public License Version 2.
  *
