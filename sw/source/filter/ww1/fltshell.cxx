@@ -972,7 +972,8 @@ SwFltShell::~SwFltShell()
         SwNodeIndex aSttIdx( *pSttNd, 1L );         // +1 -> hinter StartNode
                                                     // Section einfuegen
                         // Section einfuegen
-        rDoc.GetNodes().InsertSection( aSttIdx, *pSFmt, aS, &aEndIdx, FALSE );
+        rDoc.GetNodes().InsertTextSection(
+                aSttIdx, *pSFmt, aS, 0, &aEndIdx, false );
 
         if( !IsFlagSet(SwFltControlStack::DONT_HARD_PROTECT) ){
             SwDocShell* pDocSh = rDoc.GetDocShell();

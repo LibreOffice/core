@@ -74,18 +74,15 @@ SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
     return pAttr;
 }
 
-SwUndoInsSection::SwUndoInsSection( const SwPaM& rPam, const SwSection& rNew,
-                                    const SfxItemSet* pSet )
-    : SwUndo( UNDO_INSSECTION ), SwUndRng( rPam ),
-    pHistory( 0 ), pRedlData( 0 ), pAttr( 0 ), nSectNodePos( 0 )
+SwUndoInsSection::SwUndoInsSection(
+        SwPaM const& rPam, SwSection const& rNew,
+        SfxItemSet const*const pSet, SwTOXBase const*const pTOXBase)
+    : SwUndo( UNDO_INSSECTION ), SwUndRng( rPam )
+    , pHistory( 0 )
+    , pSection(new SwSection(rNew.GetType(), rNew.GetName()))
+    , m_pTOXBase(pTOXBase ? new SwTOXBase(*pTOXBase) : 0)
+    , pRedlData( 0 ), pAttr( 0 ), nSectNodePos( 0 )
 {
-    if( rNew.ISA( SwTOXBaseSection ))
-    {
-        const SwTOXBase& rBase = (SwTOXBaseSection&)rNew;
-        pSection = new SwTOXBaseSection( rBase );
-    }
-    else
-        pSection = new SwSection( rNew.GetType(), rNew.GetName() );
     *pSection = rNew;
 
     SwDoc& rDoc = *(SwDoc*)rPam.GetDoc();
@@ -182,15 +179,15 @@ void SwUndoInsSection::Redo( SwUndoIter& rUndoIter )
     SetPaM( rUndoIter );
 
     const SwTOXBaseSection* pUpdateTOX = 0;
-    if( pSection->ISA( SwTOXBaseSection ))
+    if (m_pTOXBase.get())
     {
-        const SwTOXBase& rBase = *(SwTOXBaseSection*)pSection;
         pUpdateTOX = rDoc.InsertTableOf( *rUndoIter.pAktPam->GetPoint(),
-                                        rBase, pAttr, TRUE );
+                                        *m_pTOXBase, pAttr, TRUE );
     }
     else
     {
-        rDoc.InsertSwSection( *rUndoIter.pAktPam, *pSection, pAttr, true );
+        rDoc.InsertSwSection(*rUndoIter.pAktPam,
+                *pSection, 0, pAttr, true);
     }
 
     if( pHistory )
@@ -228,16 +225,15 @@ void SwUndoInsSection::Redo( SwUndoIter& rUndoIter )
 
 void SwUndoInsSection::Repeat( SwUndoIter& rUndoIter )
 {
-    if( pSection->ISA( SwTOXBaseSection ))
+    if (m_pTOXBase.get())
     {
-        const SwTOXBase& rBase = *(SwTOXBaseSection*)pSection;
         rUndoIter.GetDoc().InsertTableOf( *rUndoIter.pAktPam->GetPoint(),
-                                            rBase, pAttr, TRUE );
+                                            *m_pTOXBase, pAttr, TRUE );
     }
     else
     {
         rUndoIter.GetDoc().InsertSwSection( *rUndoIter.pAktPam,
-            *pSection, pAttr );
+            *pSection, 0, pAttr);
     }
 }
 
@@ -287,11 +283,10 @@ SwUndoDelSection::SwUndoDelSection( const SwSectionFmt& rFmt )
     const SwSection& rSect = *rFmt.GetSection();
     if( rSect.ISA( SwTOXBaseSection ))
     {
-        const SwTOXBase& rBase = (SwTOXBaseSection&)rSect;
-        pSection = new SwTOXBaseSection( rBase );
+        m_pTOXBase.reset(
+            new SwTOXBase(static_cast<SwTOXBaseSection const&>(rSect)) );
     }
-    else
-        pSection = new SwSection( rSect.GetType(), rSect.GetName() );
+    pSection = new SwSection( rSect.GetType(), rSect.GetName() );
     *pSection = rSect;
 
     pAttr = ::lcl_GetAttrSet( rSect );
@@ -313,10 +308,9 @@ void SwUndoDelSection::Undo( SwUndoIter& rUndoIter )
 {
     SwDoc& rDoc = rUndoIter.GetDoc();
 
-    if( pSection->ISA( SwTOXBaseSection ))
+    if (m_pTOXBase.get())
     {
-        const SwTOXBase& rBase = *(SwTOXBaseSection*)pSection;
-        rDoc.InsertTableOf( nSttNd, nEndNd-2, rBase, pAttr );
+        rDoc.InsertTableOf( nSttNd, nEndNd-2, *m_pTOXBase, pAttr );
     }
     else
     {
@@ -328,8 +322,8 @@ void SwUndoDelSection::Undo( SwUndoIter& rUndoIter )
 
         /// OD 04.10.2002 #102894#
         /// remember inserted section node for further calculations
-        SwSectionNode* pInsertedSectNd =
-                rDoc.GetNodes().InsertSection( aStt, *pFmt, *pSection, &aEnd );
+        SwSectionNode* pInsertedSectNd = rDoc.GetNodes().InsertTextSection(
+                aStt, *pFmt, *pSection, 0, & aEnd);
 
         if( SFX_ITEM_SET == pFmt->GetItemState( RES_FTN_AT_TXTEND ) ||
             SFX_ITEM_SET == pFmt->GetItemState( RES_END_AT_TXTEND ))

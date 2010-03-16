@@ -838,7 +838,7 @@ SwSectionFmt *rtfSections::InsertSection(SwPaM& rMyPaM, rtfSection &rSection)
         nRTLPgn ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR));
 
     rSection.mpSection =
-        mrReader.pDoc->InsertSwSection( rMyPaM, aSection, &aSet );
+        mrReader.pDoc->InsertSwSection( rMyPaM, aSection, 0, &aSet );
     ASSERT(rSection.mpSection, "section not inserted!");
     if (!rSection.mpSection)
         return 0;

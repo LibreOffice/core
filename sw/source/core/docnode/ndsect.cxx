@@ -155,8 +155,10 @@ void lcl_CheckEmptyLayFrm( SwNodes& rNds, SwSection& rSect,
     }
 }
 
-SwSection* SwDoc::InsertSwSection( const SwPaM& rRange, const SwSection& rNew,
-                            const SfxItemSet* pAttr, bool bUpdate )
+SwSection *
+SwDoc::InsertSwSection(SwPaM const& rRange, SwSection const& rNew,
+                       SwTOXBase const*const pTOXBase,
+                       SfxItemSet const*const pAttr, bool const bUpdate)
 {
     const SwNode* pPrvNd = 0;
     USHORT nRegionRet = 0;
@@ -186,7 +188,7 @@ SwSection* SwDoc::InsertSwSection( const SwPaM& rRange, const SwSection& rNew,
     if( DoesUndo() )
     {
         ClearRedo();
-        pUndoInsSect = new SwUndoInsSection( rRange, rNew, pAttr );
+        pUndoInsSect = new SwUndoInsSection(rRange, rNew, pAttr, pTOXBase);
         AppendUndo( pUndoInsSect );
         DoUndo( FALSE );
     }
@@ -216,7 +218,8 @@ SwSection* SwDoc::InsertSwSection( const SwPaM& rRange, const SwSection& rNew,
                 aEnd++;
 
             --aEnd;     // im InsertSection ist Ende inclusive
-            pNewSectNode = GetNodes().InsertSection( aStt, *pFmt, rNew, &aEnd );
+            pNewSectNode = GetNodes().InsertTextSection(
+                        aStt, *pFmt, rNew, pTOXBase, & aEnd);
         }
         else
         {
@@ -287,8 +290,8 @@ SwSection* SwDoc::InsertSwSection( const SwPaM& rRange, const SwSection& rNew,
                     pEndPos->nContent.Assign( pTNd, nCntnt );
                 }
             }
-            pNewSectNode = GetNodes().InsertSection( pSttPos->nNode, *pFmt, rNew,
-                                                    &pEndPos->nNode );
+            pNewSectNode = GetNodes().InsertTextSection(
+                pSttPos->nNode, *pFmt, rNew, pTOXBase, &pEndPos->nNode);
         }
     }
     else
@@ -297,11 +300,13 @@ SwSection* SwDoc::InsertSwSection( const SwPaM& rRange, const SwSection& rNew,
         const SwCntntNode* pCNd = pPos->nNode.GetNode().GetCntntNode();
         if( !pPos->nContent.GetIndex() )
         {
-            pNewSectNode = GetNodes().InsertSection( pPos->nNode, *pFmt, rNew, 0, TRUE );
+            pNewSectNode = GetNodes().InsertTextSection(
+                pPos->nNode, *pFmt, rNew, pTOXBase, 0, true);
         }
         else if( pPos->nContent.GetIndex() == pCNd->Len() )
         {
-            pNewSectNode = GetNodes().InsertSection( pPos->nNode, *pFmt, rNew, 0, FALSE );
+            pNewSectNode = GetNodes().InsertTextSection(
+                pPos->nNode, *pFmt, rNew, pTOXBase, 0, false);
         }
         else
         {
@@ -310,7 +315,8 @@ SwSection* SwDoc::InsertSwSection( const SwPaM& rRange, const SwSection& rNew,
                 pUndoInsSect->SaveSplitNode( (SwTxtNode*)pCNd, TRUE );
             }
             SplitNode( *pPos, false );
-            pNewSectNode = GetNodes().InsertSection( pPos->nNode, *pFmt, rNew, 0, TRUE );
+            pNewSectNode = GetNodes().InsertTextSection(
+                pPos->nNode, *pFmt, rNew, pTOXBase, 0, true);
         }
     }
 
@@ -806,11 +812,12 @@ inline BOOL lcl_IsTOXSection( const SwSection& rSection )
             TOX_HEADER_SECTION == rSection.GetType();
 }
 
-SwSectionNode* SwNodes::InsertSection( const SwNodeIndex& rNdIdx,
+SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
                                 SwSectionFmt& rSectionFmt,
                                 const SwSection& rSection,
-                                const SwNodeIndex* pEnde,
-                                BOOL bInsAtStart, BOOL bCreateFrms )
+                                SwTOXBase const*const pTOXBase,
+                                SwNodeIndex const*const pEnde,
+                                bool const bInsAtStart, bool const bCreateFrms)
 {
     SwNodeIndex aInsPos( rNdIdx );
     if( !pEnde )        // kein Bereich also neue Section davor/hinter anlegen
@@ -841,7 +848,8 @@ SwSectionNode* SwNodes::InsertSection( const SwNodeIndex& rNdIdx,
         }
     }
 
-    SwSectionNode* pSectNd = new SwSectionNode( aInsPos, rSectionFmt );
+    SwSectionNode *const pSectNd =
+            new SwSectionNode(aInsPos, rSectionFmt, pTOXBase);
     if( pEnde )
     {
         // Sonderfall fuer die Reader/Writer
@@ -998,7 +1006,8 @@ SwSectionNode* SwNode::FindSectionNode()
 // SwSectionNode
 //---------
 
-SwSectionNode::SwSectionNode( const SwNodeIndex& rIdx, SwSectionFmt& rFmt )
+SwSectionNode::SwSectionNode(SwNodeIndex const& rIdx,
+        SwSectionFmt & rFmt, SwTOXBase const*const pTOXBase)
     : SwStartNode( rIdx, ND_SECTIONNODE )
 {
     SwSectionNode* pParent = StartOfSectionNode()->FindSectionNode();
@@ -1007,7 +1016,9 @@ SwSectionNode::SwSectionNode( const SwNodeIndex& rIdx, SwSectionFmt& rFmt )
         // das Format beim richtigen Parent anmelden.
         rFmt.SetDerivedFrom( pParent->GetSection().GetFmt() );
     }
-    pSection = new SwSection( CONTENT_SECTION, rFmt.GetName(), &rFmt );
+    pSection = (pTOXBase)
+        ? new SwTOXBaseSection(*pTOXBase, rFmt)
+        : new SwSection( CONTENT_SECTION, rFmt.GetName(), & rFmt );
 
     // jetzt noch die Verbindung von Format zum Node setzen
     // Modify unterdruecken, interresiert keinen
@@ -1083,32 +1094,6 @@ SwSectionNode::~SwSectionNode()
     pDoc->DoUndo( bUndo );
 }
 
-// setze ein neues SectionObject. Erstmal nur gedacht fuer die
-// neuen VerzeichnisSections. Der geht ueber in den Besitz des Nodes!
-void SwSectionNode::SetNewSection( SwSection* pNewSection )
-{
-    ASSERT( pNewSection, "ohne Pointer geht hier nichts" );
-    if( pNewSection )
-    {
-        SwNode2Layout aN2L( *this );
-
-        // einige Flags sollten ueber nommen werden!
-        pNewSection->bProtectFlag = pSection->bProtectFlag;
-        pNewSection->bHiddenFlag = pSection->bHiddenFlag;
-        pNewSection->bHidden = pSection->bHidden;
-        pNewSection->bCondHiddenFlag = pSection->bCondHiddenFlag;
-
-        // The section frame contains a pointer to the section. That for,
-        // the frame must be destroyed before deleting the section.
-        DelFrms();
-
-        delete pSection;
-        pSection = pNewSection;
-
-        ULONG nIdx = GetIndex();
-        aN2L.RestoreUpperFrms( GetNodes(), nIdx, nIdx + 1 );
-    }
-}
 
 SwFrm *SwSectionNode::MakeFrm()
 {
@@ -1299,37 +1284,31 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     SwSectionFmt* pSectFmt = pDoc->MakeSectionFmt( 0 );
     pSectFmt->CopyAttrs( *GetSection().GetFmt() );
 
-    SwSectionNode* pSectNd = new SwSectionNode( rIdx, *pSectFmt );
+    ::std::auto_ptr<SwTOXBase> pTOXBase;
+    if (TOX_CONTENT_SECTION == GetSection().GetType())
+    {
+        ASSERT( GetSection().ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
+        SwTOXBaseSection const& rTBS(
+            dynamic_cast<SwTOXBaseSection const&>(GetSection()));
+        pTOXBase.reset( new SwTOXBase(rTBS, pDoc) );
+    }
+
+    SwSectionNode *const pSectNd =
+        new SwSectionNode(rIdx, *pSectFmt, pTOXBase.get());
     SwEndNode* pEndNd = new SwEndNode( rIdx, *pSectNd );
     SwNodeIndex aInsPos( *pEndNd );
 
     // Werte uebertragen
     SwSection* pNewSect = pSectNd->pSection;
 
-    switch( GetSection().GetType() )
+    if (TOX_CONTENT_SECTION != GetSection().GetType())
     {
-    case TOX_CONTENT_SECTION:
-        {
-            ASSERT( GetSection().ISA( SwTOXBaseSection ), "keine TOXBaseSection!" );
-            SwTOXBaseSection& rTOXSect = (SwTOXBaseSection&)GetSection();
-            SwTOXBase aTmp( rTOXSect, pDoc );
-
-            SwTOXBaseSection* pNew = new SwTOXBaseSection( aTmp );
-
-            pNewSect = pNew;
-            pSectFmt->Add( pNewSect );
-            pSectNd->SetNewSection( pNew );
-        }
-        break;
-
-    default:
         // beim Move den Namen beibehalten
         if( rNds.GetDoc() == pDoc && pDoc->IsCopyIsMove() )
             pNewSect->SetName( GetSection().GetName() );
         else
             pNewSect->SetName( pDoc->GetUniqueSectionName(
                                         &GetSection().GetName() ) );
-        break;
     }
 
 

@@ -73,6 +73,7 @@ class SwFrmFmt;
 class SwHistoryBookmark;
 class SwSection;
 class SwSectionFmt;
+class SwTOXBase;
 class SvxTabStopItem;
 class SwDDEFieldType;
 class Graphic;
@@ -1382,6 +1383,7 @@ class SwUndoInsSection : public SwUndo, private SwUndRng
 {
     SwHistory* pHistory;
     SwSection* pSection;
+    const ::std::auto_ptr<SwTOXBase> m_pTOXBase; /// set iff section is TOX
     SwRedlineData* pRedlData;
     SfxItemSet* pAttr;
     ULONG nSectNodePos;
@@ -1392,8 +1394,8 @@ class SwUndoInsSection : public SwUndo, private SwUndRng
     void Join( SwDoc& rDoc, ULONG nNode );
 
 public:
-    SwUndoInsSection( const SwPaM&, const SwSection&,
-                        const SfxItemSet* pSet );
+    SwUndoInsSection(SwPaM const&, SwSection const&,
+        SfxItemSet const*const pSet, SwTOXBase const*const pTOXBase);
     virtual ~SwUndoInsSection();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
@@ -1409,6 +1411,7 @@ class SwUndoDelSection : public SwUndo
 {
     ULONG nSttNd, nEndNd;
     SwSection* pSection;
+    ::std::auto_ptr<SwTOXBase> m_pTOXBase; /// set iff section is TOX
     SfxItemSet* pAttr;
 public:
     SwUndoDelSection( const SwSectionFmt& );

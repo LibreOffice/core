@@ -456,11 +456,15 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                         SwNodeIndex aStartIdx(*pSttNd);
 
                         if (aEndIdx >= aStartIdx)
-                            pSectNd = GetNodes().InsertSection
-                                (aStartIdx, *pFmt, aSect, &aEndIdx, FALSE );
+                        {
+                            pSectNd = GetNodes().InsertTextSection(aStartIdx,
+                                *pFmt, aSect, 0, &aEndIdx, false);
+                        }
                         else
-                            pSectNd = GetNodes().InsertSection
-                                (aEndIdx, *pFmt, aSect, &aStartIdx, FALSE );
+                        {
+                            pSectNd = GetNodes().InsertTextSection(aEndIdx,
+                                *pFmt, aSect, 0, &aStartIdx, false);
+                        }
                         // <- #i26762#
 
                         pSectNd->GetSection().CreateLink( CREATE_CONNECT );
@@ -799,11 +803,15 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                         SwNodeIndex aStartIdx(*pSttNd);
 
                         if (aEndIdx >= aStartIdx)
-                            pSectNd = GetNodes().InsertSection
-                                (aStartIdx, *pFmt, aSect, &aEndIdx, FALSE );
+                        {
+                            pSectNd = GetNodes().InsertTextSection(aStartIdx,
+                                *pFmt, aSect, 0, &aEndIdx, false);
+                        }
                         else
-                            pSectNd = GetNodes().InsertSection
-                                (aEndIdx, *pFmt, aSect, &aStartIdx, FALSE );
+                        {
+                            pSectNd = GetNodes().InsertTextSection(aEndIdx,
+                                *pFmt, aSect, 0, &aStartIdx, false);
+                        }
 
                         pSectNd->GetSection().CreateLink( CREATE_CONNECT );
                     }

@@ -688,7 +688,7 @@ SwSectionFmt *wwSectionManager::InsertSection(
     aSection.SetProtect(SectionIsProtected(rSection));
 
     rSection.mpSection =
-        mrReader.rDoc.InsertSwSection( rMyPaM, aSection, &aSet );
+        mrReader.rDoc.InsertSwSection( rMyPaM, aSection, 0, & aSet );
     ASSERT(rSection.mpSection, "section not inserted!");
     if (!rSection.mpSection)
         return 0;
@@ -841,7 +841,7 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
         aSection.SetProtect(true);
         // --> CMC, OD 2004-06-18 #i19922# improvement:
         // return value of method <Insert> not used.
-        mrReader.rDoc.InsertSwSection(*mrReader.pPaM, aSection, 0, false);
+        mrReader.rDoc.InsertSwSection(*mrReader.pPaM, aSection, 0, 0, false);
     }
 
     wwSection aLastSection(*mrReader.pPaM->GetPoint());

@@ -55,6 +55,7 @@ class SwOLENode;
 class SwRect;
 class SwSection;
 class SwSectionFmt;
+class SwTOXBase;
 class SwSectionNode;
 class SwStartNode;
 class SwTabFrm;
@@ -555,14 +556,11 @@ protected:
     virtual ~SwSectionNode();
 
 public:
-    SwSectionNode( const SwNodeIndex&, SwSectionFmt& rFmt );
+    SwSectionNode(SwNodeIndex const&,
+        SwSectionFmt & rFmt, SwTOXBase const*const pTOXBase);
 
     const SwSection& GetSection() const { return *pSection; }
     SwSection& GetSection() { return *pSection; }
-
-    // setze ein neues SectionObject. Erstmal nur gedacht fuer die
-    // neuen VerzeichnisSections. Der geht ueber in den Besitz des Nodes!
-    void SetNewSection( SwSection* pNewSection );
 
     SwFrm *MakeFrm();
 

@@ -431,7 +431,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
 
     SwSection *const pRet =
-        pDoc->InsertSwSection( aPam, aSect, aSet.Count() ? &aSet : 0 );
+        pDoc->InsertSwSection( aPam, aSect, 0, aSet.Count() ? &aSet : 0 );
     pRet->GetFmt()->Add(m_pImpl.get());
     pRet->GetFmt()->SetXObject(static_cast< ::cppu::OWeakObject*>(this));
 

@@ -1803,8 +1803,9 @@ public:
     inline const Link& GetOle2Link() const {return aOle2Link;}
 
     // insert section (the ODF kind of section, not the nodesarray kind)
-    SwSection* InsertSwSection( const SwPaM& rRange, const SwSection& rNew,
-                    const SfxItemSet* pAttr = 0, bool bUpdate = true);
+    SwSection * InsertSwSection(SwPaM const& rRange, SwSection const&,
+            SwTOXBase const*const pTOXBase = 0,
+            SfxItemSet const*const pAttr = 0, bool const bUpdate = true);
     sal_uInt16 IsInsRegionAvailable( const SwPaM& rRange,
                                 const SwNode** ppSttNd = 0 ) const;
     SwSection* GetCurrSection( const SwPosition& rPos ) const;
