@@ -70,14 +70,12 @@ SLOFILES =	\
         $(SLO)$/sdresid.obj		\
         $(SLO)$/sdpopup.obj		\
         $(SLO)$/sdxfer.obj		\
-        $(SLO)$/tmplctrl.obj	\
-        $(SLO)$/layoutctrl.obj
+        $(SLO)$/tmplctrl.obj
 
 EXCEPTIONSFILES= \
         $(SLO)$/sdxfer.obj		\
         $(SLO)$/sdmod1.obj		\
-        $(SLO)$/tmplctrl.obj	\
-        $(SLO)$/layoutctrl.obj
+        $(SLO)$/tmplctrl.obj
 
 .IF "$(GUI)" == "WNT"
 
