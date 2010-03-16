@@ -1371,6 +1371,9 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
         pDoc->GetLinkManager().InsertServer( pNewSect->GetObject() );
     }
 
+    // METADATA: copy xml:id; must be done after insertion of node
+    pSectFmt->RegisterAsCopyOf(*GetSection().GetFmt());
+
     return pSectNd;
 }
 

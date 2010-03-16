@@ -293,11 +293,13 @@ private:
     ::std::auto_ptr<SwSectionData> const m_pSectionData; /// section not TOX
     ::std::auto_ptr<SwTOXBase> const m_pTOXBase; /// set iff section is TOX
     ::std::auto_ptr<SfxItemSet> const m_pAttrSet;
+    ::boost::shared_ptr< ::sfx2::MetadatableUndo > const m_pMetadataUndo;
     ULONG const m_nStartNode;
     ULONG const m_nEndNode;
 
 public:
-    SwUndoDelSection(SwSection const&, SwNodeIndex const*const);
+    SwUndoDelSection(
+        SwSectionFmt const&, SwSection const&, SwNodeIndex const*const);
     virtual ~SwUndoDelSection();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
@@ -305,18 +307,20 @@ public:
 
 SW_DLLPRIVATE SwUndo * MakeUndoDelSection(SwSectionFmt const& rFormat)
 {
-    return new SwUndoDelSection(*rFormat.GetSection(),
+    return new SwUndoDelSection(rFormat, *rFormat.GetSection(),
                 rFormat.GetCntnt().GetCntntIdx());
 }
 
 SwUndoDelSection::SwUndoDelSection(
-            SwSection const& rSection, SwNodeIndex const*const pIndex)
+            SwSectionFmt const& rSectionFmt, SwSection const& rSection,
+            SwNodeIndex const*const pIndex)
     : SwUndo( UNDO_DELSECTION )
     , m_pSectionData( new SwSectionData(rSection) )
     , m_pTOXBase( rSection.ISA( SwTOXBaseSection )
             ? new SwTOXBase(static_cast<SwTOXBaseSection const&>(rSection))
             : 0 )
     , m_pAttrSet( ::lcl_GetAttrSet(rSection) )
+    , m_pMetadataUndo( rSectionFmt.CreateUndo() )
     , m_nStartNode( pIndex->GetIndex() )
     , m_nEndNode( pIndex->GetNode().EndOfSectionIndex() )
 {
@@ -375,6 +379,7 @@ void SwUndoDelSection::Undo( SwUndoIter& rUndoIter )
             aInsertedSect.SetCondHidden( bRecalcCondHidden );
         }
 
+        pFmt->RestoreMetadata(m_pMetadataUndo);
     }
 }
 
