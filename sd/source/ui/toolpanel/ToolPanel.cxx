@@ -38,6 +38,7 @@
 #include "taskpane/TitledControl.hxx"
 #include "taskpane/ControlContainer.hxx"
 #include "TaskPaneViewShell.hxx"
+#include "taskpane/ToolPanelViewShell.hxx"
 #include "taskpane/TaskPaneControlFactory.hxx"
 #include "AccessibleTaskPane.hxx"
 
@@ -46,6 +47,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace sd { namespace toolpanel {
 
@@ -59,7 +61,23 @@ ToolPanel::ToolPanel (
     TaskPaneViewShell& rViewShell)
     : Control (pParentWindow, WB_DIALOGCONTROL),
       TreeNode (NULL),
-      mrViewShell(rViewShell),
+      mpTaskPaneViewShell( &rViewShell ),
+      mpToolPanelViewShell( NULL ),
+      mbRearrangeActive(false)
+{
+    SetBackground (Wallpaper ());
+}
+
+
+
+
+ToolPanel::ToolPanel (
+    Window* pParentWindow,
+    ToolPanelViewShell& rViewShell)
+    : Control (pParentWindow, WB_DIALOGCONTROL),
+      TreeNode (NULL),
+      mpTaskPaneViewShell( NULL ),
+      mpToolPanelViewShell( &rViewShell ),
       mbRearrangeActive(false)
 {
     SetBackground (Wallpaper ());
@@ -125,6 +143,29 @@ sal_uInt32 ToolPanel::AddControl (
     return mpControlContainer->AddControl (pChild);
 }
 
+
+
+
+Rectangle ToolPanel::GetActiveControlContentArea() const
+{
+    const Rectangle aAllRect( Point(), GetOutputSizePixel() );
+
+    const sal_uInt32 nActiveControlIndex( mpControlContainer->GetActiveControlIndex() );
+    if ( nActiveControlIndex >= mpControlContainer->GetControlCount() )
+        return aAllRect;
+
+    TreeNode* pChild = mpControlContainer->GetControl( nActiveControlIndex );
+    TitledControl* pTitledControl = dynamic_cast< TitledControl* >( pChild );
+    ENSURE_OR_RETURN( pTitledControl, "invalid active child", aAllRect );
+
+    TreeNode* pActiveControl( pTitledControl->GetControl() );
+    ENSURE_OR_RETURN( pActiveControl, "invalid active control", aAllRect );
+
+    return Rectangle(
+        ScreenToOutputPixel( pActiveControl->GetWindow()->OutputToScreenPixel( Point( 0, 0 ) ) ),
+        pActiveControl->GetWindow()->GetOutputSizePixel()
+    );
+}
 
 
 
@@ -271,7 +312,11 @@ bool ToolPanel::IsResizable (void)
 
 TaskPaneShellManager* ToolPanel::GetShellManager (void)
 {
-    return &mrViewShell.GetSubShellManager();
+    if ( mpTaskPaneViewShell != NULL )
+        return &mpTaskPaneViewShell->GetSubShellManager();
+    if ( mpToolPanelViewShell != NULL )
+        return &mpToolPanelViewShell->GetSubShellManager();
+    return TreeNode::GetShellManager();
 }
 
 

@@ -128,7 +128,6 @@ public:
 private:
     class Implementation;
     ::boost::scoped_ptr< Implementation >   mpImpl;
-    ::boost::scoped_ptr< ToolPanelDeck >    mpPanelDeck;
 
     bool mbIsInitialized;
 

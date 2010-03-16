@@ -28,6 +28,7 @@
 
 #include "ToolPanelDeck.hxx"
 #include "taskpane/ToolPanelViewShell.hxx"
+#include "ToolPanelDrawer.hxx"
 #include "taskpane/ControlContainer.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include "TaskPaneToolPanel.hxx"
@@ -69,12 +70,23 @@ namespace sd { namespace toolpanel
         :ToolPanelDeck_Base( i_rParent, 0 )
         ,m_rViewShell( i_rViewShell )
     {
-        SetTabsLayout( ::svt::TABS_RIGHT, ::svt::TABITEM_IMAGE_ONLY );
+        SetDrawersLayout();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     ToolPanelDeck::~ToolPanelDeck()
     {
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void ToolPanelDeck::SetDrawersLayout()
+    {
+        const ::svt::PDeckLayouter pLayouter( GetLayouter() );
+        const ToolPanelDrawer* pDrawerLayouter = dynamic_cast< const ToolPanelDrawer* >( pLayouter.get() );
+        if ( pDrawerLayouter != NULL )
+            // already have the proper layout
+            return;
+        SetLayouter( new ToolPanelDrawer( *this, *this ) );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -86,6 +98,7 @@ namespace sd { namespace toolpanel
             &&  ( pTabLayouter->GetTabAlignment() == i_eTabAlignment )
             &&  ( pTabLayouter->GetTabItemContent() == i_eTabContent )
             )
+            // already have the requested layout
             return;
 
         if ( pTabLayouter && ( pTabLayouter->GetTabAlignment() == i_eTabAlignment ) )

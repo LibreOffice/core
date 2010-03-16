@@ -42,6 +42,7 @@ class Window;
 namespace sd { namespace toolpanel {
 
 class TaskPaneViewShell;
+class ToolPanelViewShell;
 class ControlFactory;
 
 /** This control is basically a layout manager for the vertical
@@ -64,6 +65,10 @@ public:
         ::Window* pParentWindow,
         TaskPaneViewShell& rViewShell);
 
+    ToolPanel (
+        ::Window* pParentWindow,
+        ToolPanelViewShell& rViewShell);
+
     virtual ~ToolPanel (void);
 
     /** Append the given control to the end of the list of controls that are
@@ -84,6 +89,11 @@ public:
         const String& rTitle,
         ULONG nHelpId,
         const TitledControl::ClickHandler& rClickHandler);
+
+    /** returns the area occupied by the content of the active control (i.e. the area of the active control,
+        minus the are for its title)
+    */
+    Rectangle GetActiveControlContentArea() const;
 
     virtual void Resize (void);
 
@@ -110,7 +120,8 @@ protected:
     void ListHasChanged (void);
 
 private:
-    TaskPaneViewShell& mrViewShell;
+    TaskPaneViewShell*  mpTaskPaneViewShell;
+    ToolPanelViewShell* mpToolPanelViewShell;
 
     /// Guard against recursive calls or Rearrange().
     bool mbRearrangeActive;

@@ -67,7 +67,14 @@ namespace sd { namespace toolpanel
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >& i_rPanelResourceId
         );
 
+        /** activates a layout where the active panel is selected via tabs at the right/left/top/bottom (depending on
+            the given TabAlignment value).
+        */
         void    SetTabsLayout( const ::svt::TabAlignment i_eTabAlignment, const ::svt::TabItemContent i_eTabContent );
+
+        /** activates the "classical" layout with the panels being represneted by stacked drawers
+        */
+        void    SetDrawersLayout();
 
         /** directly activates the given panel, without re-routing the activation request through the drawing
             framework's configuration controller.

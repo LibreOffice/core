@@ -62,6 +62,7 @@ SLOFILES =      								\
     $(SLO)$/TaskPaneViewShell.obj               \
     $(SLO)$/ToolPanelViewShell.obj              \
     $(SLO)$/ToolPanelDeck.obj                   \
+    $(SLO)$/ToolPanelDrawer.obj                 \
     $(SLO)$/TaskPaneToolPanel.obj               \
                                                 \
     $(SLO)$/EmptyWindow.obj						\
