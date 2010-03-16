@@ -287,13 +287,13 @@ UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xN
 
         pEntry->AddItem( pUnoItem );
 
+        mpTreeImpl->insert( pEntry, pParent, nPos );
+
         if( msDefaultExpandedGraphicURL.getLength() )
             mpTreeImpl->SetExpandedEntryBmp( pEntry, maDefaultExpandedImage );
 
         if( msDefaultCollapsedGraphicURL.getLength() )
             mpTreeImpl->SetCollapsedEntryBmp( pEntry, maDefaultCollapsedImage );
-
-        mpTreeImpl->insert( pEntry, pParent, nPos );
 
         updateEntry( pEntry );
     }
