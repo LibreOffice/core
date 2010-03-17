@@ -1287,8 +1287,14 @@ testcase tToolsThesaurus
     if ReplaceWith.GetText <> "" then Warnlog "- Though no word has been selected there is a replacetext in the textfield!"
     printlog "Set language dependent word in textfield Current Word"
     CurrentWord.Settext sWordInitial
-    if Alternatives.GetSelText(1) = "" then Warnlog "No alternatives text"
-    if ReplaceWith.Gettext <> Alternatives.GetSelText(1) then Warnlog "Replace with textfield was not filled with word from alternative"
+    wait 500
+    if Alternatives.GetItemCount > 0 then
+        Warnlog "No alternatives text"
+    else
+        if ReplaceWith.Gettext <> Alternatives.GetSelText(1) then
+            Warnlog "Replace with textfield was not filled with word from alternative"
+        endif
+    endif
     sWordToBeFound = ReplaceWith.GetText
     Thesaurus.OK
     Call wTypeKeys "<Home><Shift End>"
@@ -1315,7 +1321,7 @@ testcase tToolsThesaurus
     wait 500
     if CurrentWord.GetSeltext = sWordInitial then
     	sWordToBeFound = ReplaceWith.Gettext   	
-		if Alternatives.GetItemCount > 0 then			
+		if Alternatives.GetItemCount = 0 then
 			printlog "Select last entry in alternatives list"
 			Alternatives.Select Alternatives.GetItemCount
 			Alternatives.TypeKeys "<Space>"
@@ -1328,7 +1334,7 @@ testcase tToolsThesaurus
 			Call wTypeKeys "<Home><Shift End>"
 			wait 200
 			EditCopy
-			if GetClipboardText <> sWordReplacedWith then Warnlog "Text has not been correctly replaced, not => " + sWordReplacedWith + " but => " + GetClipboardText
+			if GetClipboardText <> sWordToBeFound then Warnlog "Text has not been correctly replaced, not => " + sWordToBeFound + " but => " + GetClipboardText
 		else
 			Warnlog "- No Alternative for current word"
 			Thesaurus.Ok
@@ -1359,7 +1365,7 @@ testcase tToolsThesaurus
 			Call wTypeKeys "<Home><Shift End>"
 			wait 200
 			EditCopy
-			if GetClipboardText <> sWordReplacedWith then Warnlog "Text has not been correctly replaced, not => " + sWordReplacedWith + " but => " + GetClipboardText
+			if GetClipboardText <> sWordToBeFound then Warnlog "Text has not been correctly replaced, not => " + sWordToBeFound + " but => " + GetClipboardText
 		else
 			Warnlog "- No Alternative for current word"
 			Thesaurus.Ok
