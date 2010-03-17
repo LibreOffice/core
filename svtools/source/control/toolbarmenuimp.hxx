@@ -45,7 +45,7 @@
 
 #include <vector>
 
-#include "svtools/framestatuslistener.hxx"
+#include "framestatuslistener.hxx"
 
 #include "svtools/valueset.hxx"
 

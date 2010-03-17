@@ -33,8 +33,6 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>
 
-#include <sfx2/viewfrm.hxx>
-
 #include "svtools/popupwindowcontroller.hxx"
 
 using rtl::OUString;
