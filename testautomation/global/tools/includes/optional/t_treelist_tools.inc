@@ -31,8 +31,6 @@
 '*
 '\******************************************************************************
 
-private const DEBUG_ENABLE = false
-
 function hGetNodeCount( oControl as object ) as integer
     
     '///<h3>Retrieve the number of visible (open) nodes from a treelist</h3>
@@ -64,9 +62,7 @@ function hGetNodeCount( oControl as object ) as integer
         '///+<li>Verify that the control is enabled</li>
         if ( oControl.isEnabled() ) then
 
-            if ( DEBUG_ENABLE ) then
-                printlog( CFN & "Regular access, control available and enabled" )
-            endif
+            if ( GVERBOSE ) then printlog( CFN & "Regular access, control available and enabled" )
             
             '///+<li>get the number of items from the control</li>
             iCount = oControl.getItemCount()
@@ -83,9 +79,9 @@ function hGetNodeCount( oControl as object ) as integer
             iCount = 0
         endcatch
     endif
-    if ( DEBUG_ENABLE ) then
-        printlog( CFN & "Exit with nodecount = " & iCount )
-    endif
+
+    if ( GVERBOSE ) then printlog( CFN & "Exit with nodecount = " & iCount )
+
     hGetNodeCount = iCount
     '///</ul>
     
@@ -111,9 +107,7 @@ function hSelectTopNode( oControl as object ) as boolean
         hSelectTopNode() = false
     endcatch
     
-    if ( DEBUG_ENABLE ) then
-        printlog( CFN & "Selected Node: " & oControl.getText() )
-    endif
+    if ( GVERBOSE ) then printlog( CFN & "Selected Node: " & oControl.getText() )
     
 end function
 
@@ -137,13 +131,9 @@ function hSelectNextNode( oControl as object ) as integer
     
     iPosAfter = oControl.getSelIndex()
     
-    if ( iPosAfter = iPosBefore ) then
-        hSelectNextNode() = 0
-    endif
+    if ( iPosAfter = iPosBefore ) then hSelectNextNode() = 0
     
-    if ( iPosAfter = ( iPosBefore + 1 ) ) then
-        hSelectnextNode() = iPosAfter
-    endif
+    if ( iPosAfter = ( iPosBefore + 1 ) ) then hSelectNextNode() = iPosAfter
     
     printlog( CFN & "Selected node: " & oControl.getText() )
     
@@ -184,7 +174,7 @@ function hExpandNode( oControl as object, iNode as integer ) as integer
     
     dim iOldNodeCount as integer
     
-    if ( DEBUG_ENABLE ) then 
+    if ( GVERBOSE ) then
         printlog( CFN & "Enter with option (Control): " & oControl.name() )
         printlog( CFN & "Enter with option (iNode): " & iNode )
     endif
@@ -229,7 +219,7 @@ function hExpandAllNodes( oControl as object ) as integer
     iNodeRefCount = -1
     iIteration = 0
     
-    if ( DEBUG_ENABLE ) then
+    if ( GVERBOSE ) then
         printlog( CFN & "Initial iNodeCurCount: " & iNodeCurCount )
         printlog( CFN & "Initial iNodeRefCount: " & iNodeRefCount )    
     endif
@@ -245,7 +235,7 @@ function hExpandAllNodes( oControl as object ) as integer
         
         iNodeCurCount = hGetNodeCount( oControl )
         
-        if ( DEBUG_ENABLE ) then
+        if ( GVERBOSE ) then
             printlog( "" )
             printlog( CFN & "Exit iteration....: " & iIteration    )
             printlog( CFN & "Exit iNodeCurCount: " & iNodeCurCount )
@@ -254,7 +244,7 @@ function hExpandAllNodes( oControl as object ) as integer
         
     loop
     
-    if ( DEBUG_ENABLE ) then
+    if ( GVERBOSE ) then
         printlog( CFN & "Exit with " & iNodeCurCount & _
         " items after " & iIteration & " iterations" )
     endif
@@ -392,7 +382,7 @@ function hSelectTheLastNode( oControl as object ) as integer
         iCurrentNodeCount = hGetNodeCount( oControl )
         hExpandNode( oControl, iCurrentNodeCount )
         
-        if ( DEBUG_ENABLE ) then
+        if ( GVERBOSE ) then
             printlog( CFN & "Nodename.....: " & oControl.getText() )
             printlog( CFN & "Node position: " & iCurrentNodeCount )
         endif
@@ -415,51 +405,6 @@ function hVerifyNodeName( oControl as object , cName as string ) as boolean
     
     hVerifyNodeName() = false
     if ( oControl.getSelText() = cName ) then hVerifyNodeName() = true
-    
-end function
-
-'*******************************************************************************
-
-function hWaitForTreelist( oTreeList as object, cContext as string, iItemCount as integer ) as boolean
-    
-    '///<h3>Wait for a treelist to get populated (java related delay)</h3>
-    '///<b>IMPORTANT: Do not use unless absolutely necessary</b>
-    '///+<p>Retrieve the number of items from the treelist until a specified
-    '///+ number has been reached.</p>
-    
-    const CFN = "hWaitForTreelist::"
-    dim iTry as integer
-    dim iObjects as integer
-    dim brc as boolean
-    
-    brc = false
-    iTry = 0
-    
-    kontext cContext
-    
-    qaerrorlog( CFN & "Stupid function, do not use" )
-   
-    iObjects = 0
-    do while ( iObjects < iItemCount )
-        
-        iTry = iTry + 1
-        iObjects = hGetNodeCount( oTreeList )
-        
-        if ( iObjects >= iItemCount ) then
-       	    brc = true
-       	    exit do
-        endif
-
-        ' Failsafe mechanism
-        if ( iTry = 10 ) then
-            qaerrorlog( CFN & "Requested number of items never reached" )
-            brc = false
-            exit do
-        endif        
-
-    loop
-    
-    hWaitForTreelist() = brc
     
 end function
 
