@@ -676,7 +676,7 @@ String OTableTreeListBox::getQualifiedTableName( SvLBoxEntry* _pEntry ) const
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    return String(),
+    return String();
 }
 
 //------------------------------------------------------------------------
