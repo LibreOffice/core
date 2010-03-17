@@ -400,7 +400,7 @@ VAR_SAMP                                        {SQL_NEW_KEYWORD(SQL_TOKEN_VAR_S
 <SQL>\"	{ return gatherString('\"',0); }
 <SQL>`	{ return gatherString('`' ,0); }											 
 
-<PREDICATE_GER,PREDICATE_ENG,DATE>"["		{ return gatherString(']' ,0);}
+<PREDICATE_GER,PREDICATE_ENG,DATE,SQL>"["		{ return gatherString(']' ,0);}
 
 \'		{ return gatherString('\'',1); }
 
