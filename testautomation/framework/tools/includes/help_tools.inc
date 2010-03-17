@@ -215,7 +215,7 @@ end function
 function hHelpGetAboutItemCount() as integer
 
     printlog( "Get the number of applications listed in the help listbox (should be 8)" )
-    const I_ABOUT_ITEMS = 8
+    const ABOUT_ITEMS = 8
 
     dim itemcount as integer
 
