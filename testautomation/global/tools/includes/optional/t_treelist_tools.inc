@@ -54,6 +54,7 @@ function hGetNodeCount( oControl as object ) as integer
     
     
     const CFN = "hGetNodeCount::"
+    const RETVAL_FAILURE = 0
     dim iCount as integer
     
     '///+<li>Verify that the control exists</li>
@@ -68,7 +69,7 @@ function hGetNodeCount( oControl as object ) as integer
             iCount = oControl.getItemCount()
         else
             printlog( CFN & "Failure: Control claims to be disabled." )
-            iCount = 0
+            iCount = RETVAL_FAILURE
         endif
     else
         try
@@ -76,7 +77,7 @@ function hGetNodeCount( oControl as object ) as integer
             iCount = oControl.getItemCount()
         catch
             printlog( CFN & "Failure: Control not available." )
-            iCount = 0
+            iCount = RETVAL_FAILURE
         endcatch
     endif
 
@@ -272,7 +273,7 @@ function hGetVisibleNodeNames( oControl as object , lsList() as string ) as inte
     dim iNodeCount as integer
     dim iThisNode as integer
     
-    printlog( CFN & "Enter" )
+    if ( GVERBOSE ) then printlog( CFN & "Enter" )
     
     iNodeCount = hGetNodeCount( oControl )
 
@@ -288,7 +289,7 @@ function hGetVisibleNodeNames( oControl as object , lsList() as string ) as inte
     endif
     
     hGetVisibleNodeNames() = listcount( lsList() )
-    printlog( CFN & "Exit" )
+    if ( GVERBOSE ) then printlog( CFN & "Exit" )
     
 end function
 
@@ -317,6 +318,7 @@ function hSelectNodeByName( oControl as object , _name as string ) as integer
     '///</ul>
     
     const CFN = "hSelectNodeByName::"
+    const RETVAL_FAILURE = 0
     
     dim iThisNode as integer
     dim iCurrentNode as integer
@@ -324,9 +326,9 @@ function hSelectNodeByName( oControl as object , _name as string ) as integer
     
     dim cNodeName as string
     
-    printlog( CFN & "Enter with option (NodeName): " & _name )
+    if ( GVERBOSE ) then printlog( CFN & "Enter with option (NodeName): " & _name )
     
-    iThisNode = 0
+    iThisNode = RETVAL_FAILURE
     
     ' First we try to jump to the node directly, if this fails we use the
     ' slower but safer method (expand all nodes and step through)
@@ -349,10 +351,10 @@ function hSelectNodeByName( oControl as object , _name as string ) as integer
         next iCurrentNode
     endcatch
     
-    if ( iThisNode = 0 ) then
+    if ( iThisNode = RETVAL_FAILURE ) then
         printlog( CFN & "Exit: Node not found." )
     else
-        printlog( CFN & "Exit: Node selected at pos: " & iThisNode )
+        if ( GVERBOSE ) then printlog( CFN & "Exit: Node selected at pos: " & iThisNode )
     endif
     
     hSelectNodeByName() = iThisNode
@@ -373,7 +375,7 @@ function hSelectTheLastNode( oControl as object ) as integer
     const CFN = "hSelectTheLastNode::"
     dim iCurrentNodeCount as integer
     
-    printlog( CFN & "Enter with option (control): " & oControl.name() )
+    if ( GVERBOSE ) then printlog( CFN & "Enter with option (control): " & oControl.name() )
     
     iCurrentNodeCount = -1
     
@@ -389,7 +391,7 @@ function hSelectTheLastNode( oControl as object ) as integer
         
     loop
     
-    printlog( CFN & "Exit with result: " & iCurrentNodeCount )
+    if ( GVERBOSE ) then printlog( CFN & "Exit with result: " & iCurrentNodeCount )
     hSelectTheLastNode() = iCurrentNodeCount
     
 end function
@@ -419,8 +421,9 @@ function hGetListItems( oControl as object, aList() as string ) as integer
     '///</ul>
     
     const CFN = "hGetListItems::"
+    const RETVAL_FAILURE = 0
     
-    printlog( CFN & "Enter with option (control): " & oControl.name() )
+    if ( GVERBOSE ) then printlog( CFN & "Enter with option (control): " & oControl.name() )
     
     dim iItemCount as integer
     dim iCurrentItem as integer
@@ -429,7 +432,7 @@ function hGetListItems( oControl as object, aList() as string ) as integer
     iItemCount = oControl.getItemCount()
     if ( iItemCount > ubound( aList() ) ) then
         printlog( CFN & "Array too small, needed: " & iItemCount )
-        hGetListItems() = 0
+        hGetListItems() = RETVAL_FAILURE
         exit function
     endif
     
@@ -441,7 +444,7 @@ function hGetListItems( oControl as object, aList() as string ) as integer
         
     next iCurrentItem
     
-    printlog( CFN & "Exit with  number of items: " & iItemCount )
+    if ( GVERBOSE ) then printlog( CFN & "Exit with  number of items: " & iItemCount )
     hGetListItems() = iItemCount
     
 end function
