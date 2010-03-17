@@ -36,13 +36,13 @@ TARGET=zipintro
 DEFAULT_FLAVOURS=dev dev_nologo nologo broffice dev_broffice nologo_broffice nologo_dev_broffice intro
 
 ZIP1LIST= \
-    $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/dev$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
+    $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/dev$/introabout$/intro.png $(INTRO_BITMAPS)) \
     $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/introabout$/about.png $(ABOUT_BITMAPS))
 ZIP2LIST= \
-    $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/dev_nologo$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
+    $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/dev_nologo$/introabout$/intro.png $(INTRO_BITMAPS)) \
     $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/introabout$/about.png $(ABOUT_BITMAPS))
 ZIP3LIST= \
-    $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/nologo$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
+    $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/nologo$/introabout$/intro.png $(INTRO_BITMAPS)) \
     $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/introabout$/about.png $(ABOUT_BITMAPS))
 ZIP4LIST= \
     $(null,$(INTRO_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/introabout$/intro.png $(INTRO_BITMAPS)) \
@@ -54,11 +54,11 @@ ZIP6LIST= \
     $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/broffice$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
     $(null,$(ABOUT_BITMAPS) $(MISC)$/ooo_custom_images$/broffice$/introabout$/about.bmp $(ABOUT_BITMAPS))
 ZIP7LIST= \
-        $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/nologo_broffice$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
-        $(null,$(ABOUT_BITMAPS) $(MISC)$/ooo_custom_images$/broffice$/introabout$/about.bmp $(ABOUT_BITMAPS))
+    $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/nologo_broffice$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
+    $(null,$(ABOUT_BITMAPS) $(MISC)$/ooo_custom_images$/broffice$/introabout$/about.bmp $(ABOUT_BITMAPS))
 ZIP8LIST= \
-        $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/dev_nologo_broffice$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
-        $(null,$(ABOUT_BITMAPS) $(MISC)$/ooo_custom_images$/broffice$/introabout$/about.bmp $(ABOUT_BITMAPS))
+    $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/dev_nologo_broffice$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
+    $(null,$(ABOUT_BITMAPS) $(MISC)$/ooo_custom_images$/broffice$/introabout$/about.bmp $(ABOUT_BITMAPS))
 
 ZIP1TARGET=dev_intro
 ZIP1DEPS=$(ZIP1LIST)
