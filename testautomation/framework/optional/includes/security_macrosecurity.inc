@@ -59,7 +59,10 @@ testcase tMacroSecurityLevels( cFileFormat )
         cWorkFile = convertToURL( cWorkFile )
 
     dim iSecLevel as integer
-    dim brc as boolean
+
+    const EXPECTED_MESSAGECOUNT = 1
+    const ALLOW_ONE_EXTRA_MESSAGEBOX = 1
+    const ALLOW_NO_EXTRA_MESSAGEBOXES = 0
     
     ' We have quite a bunch of possible combinations here. Some trigger a security warning
     ' others do not. Depending on the security level we either get no warning at all, the
@@ -76,7 +79,7 @@ testcase tMacroSecurityLevels( cFileFormat )
     ' *) Covered by test "f_sec_trusted_path.bas"
     
     printlog( "Load a document with macro for each of the four security levels" )
-    for iSecLevel = 0 to 3
+    for iSecLevel = GC_MACRO_SECURITY_LEVEL_LOW to GC_MACRO_SECURITY_LEVEL_VERYHIGH
 
         printlog( "Set macro security level to " & iSecLevel )
         hSetMacroSecurityAPI( iSecLevel )
@@ -86,46 +89,46 @@ testcase tMacroSecurityLevels( cFileFormat )
         
         printlog( "Check security level dependent behavior" )
         select case iSecLevel
-        case 0 : brc = hIdentifyExecutedMacro()
-                 if ( not brc ) then
-                     if ( gApplication = "MATH" ) then
-                         qaerrorlog( "#i68291# Math document forgets eventbinding" )
-                     else
-                         warnlog( "#i53711# Macro was not found/executed" )
-                     endif
-                 endif   
-                 
-        case 1 : brc = hAllowMacroExecution()
-                 if ( not brc ) then
-                     warnlog( "Macro execution warning missing, chek the file/security settings" )
-                 endif
-                 brc = hIdentifyExecutedMacro()
-                 if ( not brc ) then
-                     if ( gApplication = "MATH" ) then
-                         qaerrorlog( "#i68291# Math document forgets eventbinding" )
-                     else
-                         warnlog( "#i53711# Macro was not found/executed" )
-                     endif
-                 endif
-                 
-        case 2 : brc = hHandleActivesOnLoad( 1 , 1 )
-                 if ( not brc ) then
-                     qaerrorlog( "#i53710# unexpected second messagebox" )
-                 endif
-                 brc = hIdentifyExecutedMacro()
-                 if ( brc ) then
-                     warnlog( "Macro was executed" )
-                 endif                 
-                 
-        case 3 : brc = hHandleActivesOnLoad( 1 , 0 )
-                 brc = hIdentifyExecutedMacro()
-                 if ( brc ) then
-                     warnlog( "Macro was executed" )
-                 endif
+        case 0 :
+
+            if ( not hIdentifyExecutedMacro() ) then
+                warnlog( "#i110184# - Macro was not executed" )
+            endif
+
+        case 1 : 
+
+            if ( not hAllowMacroExecution() )   then
+                warnlog( "Macro execution warning missing, chek the file/security settings" )
+            endif
+
+            if ( not hIdentifyExecutedMacro() ) then
+                warnlog( "#i110184# - Macro was not executed" )
+            endif
+
+        case 2 : 
+
+            if ( not hHandleActivesOnLoad( EXPECTED_MESSAGECOUNT , ALLOW_ONE_EXTRA_MESSAGEBOX ) ) then
+                warnlog( "#i53710# unexpected second messagebox" )
+            endif
+
+            if ( hIdentifyExecutedMacro() ) then
+                warnlog( "Macro was executed" )
+            endif
+
+        case 3 : 
+
+            if ( not hHandleActivesOnLoad( EXPECTED_MESSAGECOUNT , ALLOW_NO_EXTRA_MESSAGEBOXES ) ) then
+                warnlog( "#i53710# unexpected second messagebox" )
+            endif
+
+            if ( hIdentifyExecutedMacro() ) then
+                warnlog( "Macro was executed" )
+            endif
+
         end select
 
         printlog( "Close document" )
-        brc = hDestroyDocument()
+        hDestroyDocument()
 
     next iSecLevel
 
