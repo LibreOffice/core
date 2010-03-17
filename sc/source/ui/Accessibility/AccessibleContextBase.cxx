@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleContextBase.cxx,v $
- * $Revision: 1.33.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +44,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
 #include <toolkit/helper/convert.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <comphelper/sequence.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/unohelp.hxx>
@@ -627,4 +624,9 @@ void ScAccessibleContextBase::IsObjectValid() const
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
         throw lang::DisposedException();
+}
+
+void ScAccessibleContextBase::SetRole(sal_Int16 nRole)
+{
+    maRole = nRole;
 }

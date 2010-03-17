@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vbapalette.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +27,7 @@
 #ifndef SC_VBAPALETTE_HXX
 #define SC_VBAPALETTE_HXX
 
-#include "vbahelper.hxx"
+#include "excelvbahelper.hxx"
 #include <document.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
 
@@ -42,7 +39,7 @@ public:
     ScVbaPalette(  SfxObjectShell* pShell = NULL ) : m_pShell( pShell ){}
     // if no palette available e.g. because the document doesn't have a
     // palette defined then a default palette will be returned.
-    css::uno::Reference< css::container::XIndexAccess > getPalette();
+    css::uno::Reference< css::container::XIndexAccess > getPalette() const;
     static css::uno::Reference< css::container::XIndexAccess > getDefaultPalette();
 };
 

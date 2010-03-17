@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: token.hxx,v $
- * $Revision: 1.15.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,12 +51,17 @@ void ScRefTokenHelper::compileRangeRepresentation(
     const sal_Unicode cSep = GetScCompilerNativeSymbol(ocSep).GetChar(0);
     const sal_Unicode cQuote = '\'';
 
+    // #i107275# ignore parentheses
+    OUString aRangeStr = rRangeStr;
+    while( (aRangeStr.getLength() >= 2) && (aRangeStr[ 0 ] == '(') && (aRangeStr[ aRangeStr.getLength() - 1 ] == ')') )
+        aRangeStr = aRangeStr.copy( 1, aRangeStr.getLength() - 2 );
+
     bool bFailure = false;
     sal_Int32 nOffset = 0;
     while (nOffset >= 0 && !bFailure)
     {
         OUString aToken;
-        ScRangeStringConverter::GetTokenByOffset(aToken, rRangeStr, nOffset, cSep, cQuote);
+        ScRangeStringConverter::GetTokenByOffset(aToken, aRangeStr, nOffset, cSep, cQuote);
         if (nOffset < 0)
             break;
 

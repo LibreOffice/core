@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabvwsh.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,9 +36,11 @@
 #include "scitems.hxx"
 #include <svx/galbrws.hxx>
 #include <svx/imapdlg.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/app.hxx>
 #include <avmedia/mediaplayer.hxx>
 
@@ -96,6 +95,10 @@ SFX_IMPL_INTERFACE(ScTabViewShell,SfxViewShell,ScResId(SCSTR_TABVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION(GalleryChildWindow::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScSpellDialogChildWindow::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION( ::avmedia::MediaPlayer::GetChildWindowId() );
+
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    SFX_CHILDWINDOW_REGISTRATION(ScValidityRefChildWin::GetChildWindowId());
+    //-->Added by PengYunQuan for Validity Cell Range Picker
 }
 
 SFX_IMPL_VIEWFACTORY( ScTabViewShell, ScResId(STR_NONAME) )
@@ -105,4 +108,9 @@ SFX_IMPL_VIEWFACTORY( ScTabViewShell, ScResId(STR_NONAME) )
 
 //------------------------------------------------------------------
 
-
+IMPL_LINK( ScTabViewShell, HtmlOptionsHdl, void*, EMPTYARG )
+{
+    // Invalidierung, falls blinkender Text erlaubt/verboten wurde
+    GetViewFrame()->GetBindings().Invalidate(SID_DRAW_TEXT_MARQUEE);
+    return 0;
+}

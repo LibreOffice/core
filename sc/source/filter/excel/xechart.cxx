@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xechart.cxx,v $
- * $Revision: 1.10.62.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +33,7 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
@@ -63,7 +61,7 @@
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
 
 #include <vcl/outdev.hxx>
-#include <svx/escherex.hxx>
+#include <filter/msfilter/escherex.hxx>
 
 #include "document.hxx"
 #include "rangelst.hxx"
@@ -71,6 +69,7 @@
 #include "compiler.hxx"
 #include "tokenarray.hxx"
 #include "token.hxx"
+#include "xeescher.hxx"
 #include "xeformula.hxx"
 #include "xehelper.hxx"
 #include "xepage.hxx"
@@ -88,6 +87,7 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::i18n::XBreakIterator;
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::drawing::XShape;
+using ::com::sun::star::drawing::XShapes;
 
 using ::com::sun::star::chart2::IncrementData;
 using ::com::sun::star::chart2::RelativePosition;
@@ -2904,6 +2904,15 @@ XclExpChAxesSet::XclExpChAxesSet( const XclExpChRoot& rRoot, sal_uInt16 nAxesSet
 {
     maData.mnAxesSetId = nAxesSetId;
     SetFutureRecordContext( 0, nAxesSetId );
+
+    /*  Need to set a reasonable size for the plot area, otherwise Excel will
+        move away embedded shapes while auto-sizing the plot area. This is just
+        a wild guess, but will be fixed with implementing manual positioning of
+        chart elements. */
+    maData.maRect.mnX = 262;
+    maData.maRect.mnY = 626;
+    maData.maRect.mnWidth = 3187;
+    maData.maRect.mnHeight = 2633;
 }
 
 sal_uInt16 XclExpChAxesSet::Convert( Reference< XDiagram > xDiagram, sal_uInt16 nFirstGroupIdx )
@@ -3126,7 +3135,6 @@ XclExpChChart::XclExpChChart( const XclExpRoot& rRoot,
     maRect.mnHeight = static_cast< sal_Int32 >( aPtSize.Height() << 16 );
 
     // global chart properties (default values)
-    ::set_flag( maProps.mnFlags, EXC_CHPROPS_MANSERIES );
     ::set_flag( maProps.mnFlags, EXC_CHPROPS_SHOWVISIBLEONLY, false );
     ::set_flag( maProps.mnFlags, EXC_CHPROPS_MANPLOTAREA );
     maProps.mnEmptyMode = EXC_CHPROPS_EMPTY_SKIP;
@@ -3242,12 +3250,49 @@ void XclExpChChart::WriteBody( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
+XclExpChartDrawing::XclExpChartDrawing( const XclExpRoot& rRoot,
+        const Reference< XModel >& rxModel, const Size& rChartSize ) :
+    XclExpRoot( rRoot )
+{
+    if( (rChartSize.Width() > 0) && (rChartSize.Height() > 0) )
+    {
+        ScfPropertySet aPropSet( rxModel );
+        Reference< XShapes > xShapes;
+        if( aPropSet.GetProperty( xShapes, EXC_CHPROP_ADDITIONALSHAPES ) && xShapes.is() && (xShapes->getCount() > 0) )
+        {
+            /*  Create a new independent object manager with own DFF stream for the
+                DGCONTAINER, pass global manager as parent for shared usage of
+                global DFF data (picture container etc.). */
+            mxObjMgr.reset( new XclExpEmbeddedObjectManager( GetObjectManager(), rChartSize, EXC_CHART_UNIT, EXC_CHART_UNIT ) );
+            // initialize the drawing object list
+            mxObjMgr->StartSheet();
+            // process the draw page (convert all shapes)
+            mxObjRecs = mxObjMgr->ProcessDrawing( xShapes );
+            // finalize the DFF stream
+            mxObjMgr->EndDocument();
+        }
+    }
+}
+
+XclExpChartDrawing::~XclExpChartDrawing()
+{
+}
+
+void XclExpChartDrawing::Save( XclExpStream& rStrm )
+{
+    if( mxObjRecs.is() )
+        mxObjRecs->Save( rStrm );
+}
+
+// ----------------------------------------------------------------------------
+
 XclExpChart::XclExpChart( const XclExpRoot& rRoot, Reference< XModel > xModel, const Rectangle& rChartRect ) :
     XclExpSubStream( EXC_BOF_CHART ),
     XclExpRoot( rRoot )
 {
     AppendNewRecord( new XclExpChartPageSettings( rRoot ) );
     AppendNewRecord( new XclExpBoolRecord( EXC_ID_PROTECT, false ) );
+    AppendNewRecord( new XclExpChartDrawing( rRoot, xModel, rChartRect.GetSize() ) );
     AppendNewRecord( new XclExpUInt16Record( EXC_ID_CHUNITS, EXC_CHUNITS_TWIPS ) );
 
     Reference< XChartDocument > xChartDoc( xModel, UNO_QUERY );

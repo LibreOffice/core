@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: servobj.hxx,v $
- * $Revision: 1.6.46.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +28,8 @@
 #ifndef SC_SERVOBJ_HXX
 #define SC_SERVOBJ_HXX
 
-#include <svtools/lstner.hxx>
-#include <svtools/listener.hxx>
+#include <svl/lstner.hxx>
+#include <svl/listener.hxx>
 #include <sfx2/linksrc.hxx>
 #include "global.hxx"
 #include "address.hxx"

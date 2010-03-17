@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tp_ChartType.cxx,v $
- * $Revision: 1.8.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -854,7 +851,7 @@ ChartTypeTabPage::ChartTypeTabPage( Window* pParent
     m_aSubTypeList.SetColCount(4);
     m_aSubTypeList.SetLineCount(1);
 
-    bool bIsHighContrast = ( true && GetDisplayBackground().GetColor().IsDark() );
+    bool bIsHighContrast = ( true && GetSettings().GetStyleSettings().GetHighContrastMode() );
 
     m_aChartTypeDialogControllerList.push_back(new ColumnChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new BarChartDialogController() );
@@ -1070,7 +1067,7 @@ void ChartTypeTabPage::fillAllControls( const ChartTypeParameter& rParameter, bo
     m_nChangingCalls++;
     if( m_pCurrentMainType && bAlsoResetSubTypeList )
     {
-        bool bIsHighContrast = ( true && GetDisplayBackground().GetColor().IsDark() );
+        bool bIsHighContrast = ( true && GetSettings().GetStyleSettings().GetHighContrastMode() );
         m_pCurrentMainType->fillSubTypeList( m_aSubTypeList, bIsHighContrast, rParameter );
     }
     m_aSubTypeList.SelectItem( static_cast<USHORT>( rParameter.nSubTypeIndex) );

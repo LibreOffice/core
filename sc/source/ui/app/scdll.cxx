@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scdll.cxx,v $
- * $Revision: 1.44.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 
 
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
 #ifndef _FM_FMOBJFAC_HXX
@@ -96,7 +93,7 @@
 #include <svx/selctrl.hxx>
 #include <svx/insctrl.hxx>
 #include <svx/zoomctrl.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/modctrl.hxx>
 #include <svx/pszctrl.hxx>
 #include <svx/fntctl.hxx>
@@ -327,6 +324,10 @@ void ScDLL::Init()
     GalleryChildWindow          ::RegisterChildWindow(FALSE, pMod);
     ScSpellDialogChildWindow    ::RegisterChildWindow(FALSE, pMod);
     ::avmedia::MediaPlayer      ::RegisterChildWindow(FALSE, pMod);
+
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    ScValidityRefChildWin::RegisterChildWindow(FALSE, pMod);
+    //-->Added by PengYunQuan for Validity Cell Range Picker
 
     //  Edit-Engine-Felder, soweit nicht schon in OfficeApplication::Init
 

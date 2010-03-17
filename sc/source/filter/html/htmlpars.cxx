@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmlpars.cxx,v $
- * $Revision: 1.34.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,22 +32,21 @@
 
 #define SC_HTMLPARS_CXX
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <svx/algitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/impgrf.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/parhtml.hxx>
 #include <svtools/htmlkywd.hxx>
@@ -1375,8 +1371,8 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
 
     USHORT nFormat;
     Graphic* pGraphic = new Graphic;
-    GraphicFilter* pFilter = ::GetGrfFilter();
-    if ( GRFILTER_OK != ::LoadGraphic( pImage->aURL, pImage->aFilterName,
+    GraphicFilter* pFilter = GraphicFilter::GetGraphicFilter();
+    if ( GRFILTER_OK != GraphicFilter::LoadGraphic( pImage->aURL, pImage->aFilterName,
             *pGraphic, pFilter, &nFormat ) )
     {
         delete pGraphic;

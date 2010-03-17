@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: GraphicPropertyItemConverter.cxx,v $
- * $Revision: 1.13.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,10 +33,7 @@
 #include "ItemPropertyMap.hxx"
 #include "PropertyHelper.hxx"
 #include "CommonConverters.hxx"
-
-// #ifndef _SFXINTITEM_HXX
-// #include <svtools/intitem.hxx>
-// #endif
+#include <editeng/memberids.hrc>
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xflbmtit.hxx>
@@ -51,9 +45,9 @@
 #include <svx/xflgrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xlntrit.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 // for SfxBoolItem
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 // for XFillGradientStepCountItem
 #include <svx/xgrscit.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>

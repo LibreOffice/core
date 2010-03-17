@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: output2.cxx,v $
- * $Revision: 1.56.142.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,25 +34,25 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/algitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svx/colritem.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editstat.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/forbiddencharacterstable.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/rotmodit.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/unolingu.hxx>
-#include <svtools/zforlist.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
@@ -63,7 +60,7 @@
 
 #ifndef _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 #include "output.hxx"

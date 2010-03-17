@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: address.cxx,v $
- * $Revision: 1.11.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -365,7 +362,10 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         {
             p = lcl_ParseQuotedName(p, rExternDocName);
             if (!*p || *p != ']' || !rExternDocName.Len())
+            {
+                rExternDocName.Erase();
                 return start;
+            }
         }
         else
         {
@@ -418,7 +418,10 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         // Excel does not allow [ and ] characters in sheet names though.
         p = lcl_ParseQuotedName(p, rExternDocName);
         if (!*p || *p != '!')
+        {
+            rExternDocName.Erase();
             return start;
+        }
         if (rExternDocName.Len())
         {
             xub_StrLen nOpen = rExternDocName.Search( '[');

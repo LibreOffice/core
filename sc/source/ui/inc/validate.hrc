@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: validate.hrc,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +58,9 @@
 #define CB_SORTLIST             28
 #define EDT_LIST                29
 #define FT_SOURCEHINT           30
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+#define RB_VALIDITY_REF         88
+//-->Added by PengYunQuan for Validity Cell Range Picker
 
 /*  Position indexes for "Allow" list box.
     They do not map directly to ScValidationMode and can safely be modified to

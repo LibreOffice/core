@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: defltuno.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +29,9 @@
 #include "precompiled_sc.hxx"
 
 
-
-#include <svtools/smplhint.hxx>
-#include <svtools/itemprop.hxx>
+#include <editeng/memberids.hrc>
+#include <svl/smplhint.hxx>
+#include <svl/itemprop.hxx>
 #include <svx/unomid.hxx>
 #include <i18npool/mslangid.hxx>
 

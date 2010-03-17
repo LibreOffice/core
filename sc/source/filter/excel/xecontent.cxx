@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xecontent.cxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,11 +37,11 @@
 #include <com/sun/star/sheet/XAreaLink.hpp>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <formula/grammar.hxx>
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
 #include "document.hxx"
 #include "validat.hxx"
 #include "unonames.hxx"
@@ -748,19 +745,19 @@ void XclExpCFImpl::WriteBody( XclExpStream& rStrm )
             // font used flag for underline -> 0 = used, 1 = default
             sal_uInt32 nFontFlags3 = mbUnderlUsed ? 0 : EXC_CF_FONT_UNDERL;
 
-            rStrm.WriteZeroBytes( 64 );
+            rStrm.WriteZeroBytesToRecord( 64 );
             rStrm   << nHeight
                     << nStyle
                     << maFontData.mnWeight
                     << EXC_FONTESC_NONE
                     << maFontData.mnUnderline;
-            rStrm.WriteZeroBytes( 3 );
+            rStrm.WriteZeroBytesToRecord( 3 );
             rStrm   << nColor
                     << sal_uInt32( 0 )
                     << nFontFlags1
                     << EXC_CF_FONT_ESCAPEM      // escapement never used -> set the flag
                     << nFontFlags3;
-            rStrm.WriteZeroBytes( 16 );
+            rStrm.WriteZeroBytesToRecord( 16 );
             rStrm   << sal_uInt16( 1 );         // must be 1
         }
 

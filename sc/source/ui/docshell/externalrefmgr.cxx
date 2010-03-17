@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: externalrefmgr.cxx,v $
- * $Revision: 1.1.2.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,13 +52,13 @@
 #include "sfx2/fcontnr.hxx"
 #include "sfx2/sfxsids.hrc"
 #include "sfx2/objsh.hxx"
-#include "svtools/broadcast.hxx"
-#include "svtools/smplhint.hxx"
-#include "svtools/itemset.hxx"
-#include "svtools/stritem.hxx"
-#include "svtools/urihelper.hxx"
-#include "svtools/zformat.hxx"
-#include "svx/linkmgr.hxx"
+#include "svl/broadcast.hxx"
+#include "svl/smplhint.hxx"
+#include "svl/itemset.hxx"
+#include "svl/stritem.hxx"
+#include "svl/urihelper.hxx"
+#include "svl/zformat.hxx"
+#include "sfx2/linkmgr.hxx"
 #include "tools/urlobj.hxx"
 #include "unotools/ucbhelper.hxx"
 
@@ -1061,8 +1058,11 @@ void ScExternalRefLink::DataChanged(const String& /*rMimeType*/, const Any& /*rV
     else
     {
         // The source document has changed.
+        ScDocShell* pDocShell = ScDocShell::GetViewData()->GetDocShell();
+        ScDocShellModificator aMod(*pDocShell);
         pMgr->switchSrcFile(mnFileId, aFile, aFilter);
         maFilterName = aFilter;
+        aMod.SetDocumentModified();
     }
 }
 
@@ -1994,7 +1994,7 @@ void ScExternalRefManager::maybeLinkExternalFile(sal_uInt16 nFileId)
 
     String aFilter, aOptions;
     ScDocumentLoader::GetFilterName(*pFileName, aFilter, aOptions, true, false);
-    SvxLinkManager* pLinkMgr = mpDoc->GetLinkManager();
+    sfx2::LinkManager* pLinkMgr = mpDoc->GetLinkManager();
     ScExternalRefLink* pLink = new ScExternalRefLink(mpDoc, nFileId, aFilter);
     DBG_ASSERT(pFileName, "ScExternalRefManager::insertExternalFileLink: file name pointer is NULL");
     pLinkMgr->InsertFileLink(*pLink, OBJECT_CLIENT_FILE, *pFileName, &aFilter);

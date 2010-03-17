@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ui_pch.hxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +40,7 @@
 
 #include <tools/solar.h>
 #include <tools/string.hxx>
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #include <tools/rtti.hxx>
 #include <string.h>
 #include <tools/contnr.hxx>
@@ -53,9 +50,9 @@
 #include <tools/link.hxx>
 #include <i18npool/lang.h>
 #include <sfx2/sfx.hrc>
-#include <svtools/memberid.hrc>
+#include <svl/memberid.hrc>
 #include <sfx2/sfxsids.hrc>
-#include <svtools/cntwids.hrc>
+#include <svl/cntwids.hrc>
 #include <tools/resid.hxx>
 #include <tools/rc.hxx>
 #include <tools/resmgr.hxx>
@@ -95,28 +92,28 @@
 #include <global.hxx>
 #include <vcl/syswin.hxx>
 #include <tools/debug.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <vcl/ctrl.hxx>
-#include <svtools/hint.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/hint.hxx>
+#include <svl/poolitem.hxx>
 #include <vcl/image.hxx>
 #include <vcl/timer.hxx>
 #include <tools/unqidx.hxx>
 #include <vcl/symbol.hxx>
 #include <vcl/fixed.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 #include <vcl/timer.hxx>
 #include <sc.hrc>
 #include <stdarg.h>
 #include <svx/dialogs.hrc>
 #include <basic/sbxdef.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <sfx2/shell.hxx>
 #include <vcl/window.hxx>
 #include <vcl/group.hxx>
 #include <tools/unqid.hxx>
 #include <tools/table.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <rangelst.hxx>
@@ -127,15 +124,15 @@
 #include <vcl/spinfld.hxx>
 #include <vcl/combobox.hxx>
 #include <tools/pstm.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/eitem.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/tabdlg.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
 #include <shellids.hxx>
 #include <vcl/event.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svtools/confitem.hxx>
 #include <markdata.hxx>
 #include <svx/optgrid.hxx>
@@ -150,7 +147,7 @@
 #include <column.hxx>
 #include <markarr.hxx>
 #include <vcl/mapmod.hxx>
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #include <vcl/seleng.hxx>
 #include <rsc/rscsfx.hxx>
 #include <svx/zoomitem.hxx>
@@ -165,23 +162,23 @@
 #include <sfx2/module.hxx>
 #include <dbfunc.hxx>
 #include <vcl/accel.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/objsh.hxx>
 #include <target.hxx>
 #include <tabvwsh.hxx>
-#include <svtools/inethist.hxx>
-#include <svtools/inetdef.hxx>
+#include <svl/inethist.hxx>
+#include <svl/inetdef.hxx>
 #include <sfx2/sfxdefs.hxx>
-#include <svtools/cancel.hxx>
+#include <svl/cancel.hxx>
 #include <svtools/compat.hxx>
-#include <svtools/inetmsg.hxx>
+#include <svl/inetmsg.hxx>
 #include <sfx2/app.hxx>
 #include <tools/urlobj.hxx>
 #include <scdll.hxx>
 #include <sfx2/msg.hxx>
-#include <svtools/ownlist.hxx>
+#include <svl/ownlist.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/frame.hxx>
@@ -207,9 +204,9 @@
 #include <svx/svdtypes.hxx>
 #include <vcl/btndlg.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <vcl/edit.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <collect.hxx>
 #include <svx/svdsob.hxx>
 #include <vcl/imagebtn.hxx>
@@ -239,7 +236,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/graph.h>
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <svtools/stdctrl.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <conditio.hxx>
@@ -248,7 +245,7 @@
 #include <uiitems.hxx>
 #include <svx/svdmodel.hxx>
 #include <vcl/gdiobj.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/pageitem.hxx>
 #include <anyrefdg.hxx>
 #include <basic/sbxcore.hxx>
@@ -300,17 +297,16 @@
 #include <cell.hxx>
 #include <stddef.h>
 #include <tools/mempool.hxx>
-#include <svtools/style.hrc>
+#include <svl/style.hrc>
 #include <drawview.hxx>
 #include <svx/view3d.hxx>
 #include <svx/def3d.hxx>
-#include <goodies/vector3d.hxx>
 #include <vcl/floatwin.hxx>
 #include <basic/sbxobj.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/xtextit0.hxx>
 #include <svx/svdtrans.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <reffact.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdoattr.hxx>
@@ -324,11 +320,11 @@
 #include <fupoor.hxx>
 #include <docpool.hxx>
 #include <vcl/button.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/svdorect.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <stlpool.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <inputhdl.hxx>
 #include <svx/svdpage.hxx>
 

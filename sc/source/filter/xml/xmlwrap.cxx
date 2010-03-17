@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlwrap.cxx,v $
- * $Revision: 1.69.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,8 +42,8 @@
 #include <svx/xmlgrhlp.hxx>
 #include <svtools/sfxecode.hxx>
 #include <sfx2/frame.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/container/XChild.hpp>
@@ -71,7 +68,7 @@
 
 #include <svx/xmleohlp.hxx>
 #include <rtl/logfile.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 
 #include "document.hxx"
 #include "xmlwrap.hxx"
@@ -737,12 +734,8 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
         {
             // old stream is still in this file's storage - open read-only
 
-            SfxMedium* pSrcMed = rDoc.GetDocumentShell()->GetMedium();
-            String aSrcURL = pSrcMed->GetOrigURL();
-
-            // SfxMedium must not be read-only, or it will create a temp file in GetStorage
-            SfxMedium aTmpMedium( aSrcURL, STREAM_READWRITE, FALSE, NULL, NULL );
-            uno::Reference<embed::XStorage> xTmpStorage = aTmpMedium.GetStorage();
+            // #i106854# use the document's storage directly, without a temporary SfxMedium
+            uno::Reference<embed::XStorage> xTmpStorage = rDoc.GetDocumentShell()->GetStorage();
             uno::Reference<io::XStream> xSrcStream;
             uno::Reference<io::XInputStream> xSrcInput;
             try

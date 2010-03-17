@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -64,7 +60,7 @@ SLOFILES= \
         $(SLO)$/vbaworksheet.obj \
         $(SLO)$/vbaoutline.obj \
         $(SLO)$/vbafont.obj\
-        $(SLO)$/vbahelper.obj\
+        $(SLO)$/excelvbahelper.obj\
         $(SLO)$/vbainterior.obj\
         $(SLO)$/vbawsfunction.obj\
         $(SLO)$/vbawindow.obj\
@@ -81,28 +77,11 @@ SLOFILES= \
         $(SLO)$/vbapalette.obj \
         $(SLO)$/vbaborders.obj \
         $(SLO)$/vbacharacters.obj \
-        $(SLO)$/vbacombobox.obj \
         $(SLO)$/vbavalidation.obj \
-                $(SLO)$/vbacontrol.obj \
-                $(SLO)$/vbacontrols.obj \
                 $(SLO)$/vbaoleobject.obj \
                 $(SLO)$/vbaoleobjects.obj \
-                $(SLO)$/vbabutton.obj \
-                $(SLO)$/vbalabel.obj \
-                $(SLO)$/vbatextbox.obj \
                 $(SLO)$/vbatextboxshape.obj \
-                $(SLO)$/vbaradiobutton.obj \
-                $(SLO)$/vbalistbox.obj \
-        $(SLO)$/vbalistcontrolhelper.obj \
-                $(SLO)$/vbapropvalue.obj \
                 $(SLO)$/vbapane.obj \
-                $(SLO)$/vbashape.obj \
-                $(SLO)$/vbacolorformat.obj \
-                $(SLO)$/vbashapes.obj \
-                $(SLO)$/vbalineformat.obj \
-                $(SLO)$/vbafillformat.obj \
-                $(SLO)$/vbapictureformat.obj \
-                $(SLO)$/vbashaperange.obj \
                 $(SLO)$/vbatextframe.obj \
                 $(SLO)$/vbacharttitle.obj \
                 $(SLO)$/vbacharts.obj \
@@ -116,24 +95,10 @@ SLOFILES= \
                 $(SLO)$/vbastyle.obj \
                 $(SLO)$/vbastyles.obj \
                 $(SLO)$/vbaassistant.obj \
-                $(SLO)$/vbauserform.obj \
-                $(SLO)$/vbacheckbox.obj \
-                $(SLO)$/vbatogglebutton.obj \
-                $(SLO)$/vbaframe.obj \
-                $(SLO)$/vbascrollbar.obj \
-                $(SLO)$/vbaprogressbar.obj \
-                $(SLO)$/vbamultipage.obj \
-                $(SLO)$/vbapages.obj \
-                $(SLO)$/vbacommandbarcontrol.obj \
-                $(SLO)$/vbacommandbarcontrols.obj \
-                $(SLO)$/vbacommandbar.obj \
-                $(SLO)$/vbacommandbars.obj \
                 $(SLO)$/vbahyperlink.obj \
                 $(SLO)$/vbapagesetup.obj \
                 $(SLO)$/vbapagebreak.obj \
                 $(SLO)$/vbapagebreaks.obj \
-                $(SLO)$/vbaspinbutton.obj \
-                $(SLO)$/vbaimage.obj \
                 $(SLO)$/service.obj
 .ENDIF
 # --- Targets ------------------------------------------------------

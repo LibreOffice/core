@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartView.cxx,v $
- * $Revision: 1.46.22.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,6 +71,7 @@
 // header for class Application
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
+#include <svx/unofill.hxx>
 
 #include <time.h>
 
@@ -103,7 +101,8 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
-#include <svtools/languageoptions.hxx>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <svl/languageoptions.hxx>
 #include <sot/clsids.hxx>
 
 //.............................................................................
@@ -426,6 +425,8 @@ VCoordinateSystem* addCooSysToList( std::vector< VCoordinateSystem* >& rVCooSysL
             rtl::OUString aCooSysParticle( ObjectIdentifier::createParticleForCoordinateSystem( xCooSys, xChartModel ) );
             pVCooSys->setParticle(aCooSysParticle);
 
+            pVCooSys->setExplicitCategoriesProvider( new ExplicitCategoriesProvider(xCooSys,xChartModel) );
+
             rVCooSysList.push_back( pVCooSys );
         }
     }
@@ -576,13 +577,13 @@ private:
     std::vector< VCoordinateSystem* >& m_rVCooSysList;
     ::std::map< uno::Reference< XAxis >, AxisUsage > m_aAxisUsageList;
     sal_Int32 m_nMaxAxisIndex;
-    bool m_bShiftXAxisTicks;
+    bool m_bChartTypeUsesShiftedXAxisTicksPerDefault;
 };
 
 SeriesPlotterContainer::SeriesPlotterContainer( std::vector< VCoordinateSystem* >& rVCooSysList )
         : m_rVCooSysList( rVCooSysList )
         , m_nMaxAxisIndex(0)
-        , m_bShiftXAxisTicks(false)
+        , m_bChartTypeUsesShiftedXAxisTicksPerDefault(false)
 {
 }
 
@@ -677,7 +678,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             uno::Reference< XChartType > xChartType( aChartTypeList[nT] );
 
             if(nT==0)
-                m_bShiftXAxisTicks = ChartTypeHelper::shiftTicksAtXAxisPerDefault( xChartType );
+                m_bChartTypeUsesShiftedXAxisTicksPerDefault = ChartTypeHelper::shiftTicksAtXAxisPerDefault( xChartType );
 
             bool bExcludingPositioning = DiagramPositioningMode_EXCLUDING == DiagramHelper::getDiagramPositioningMode( xDiagram );
             VSeriesPlotter* pPlotter = VSeriesPlotter::createSeriesPlotter( xChartType, nDimensionCount, bExcludingPositioning );
@@ -932,7 +933,9 @@ void SeriesPlotterContainer::doAutoScaling( const uno::Reference< frame::XModel 
 
             for( nC=0; nC < aVCooSysList_X.size(); nC++)
             {
-                if( m_bShiftXAxisTicks )
+                ExplicitCategoriesProvider* pExplicitCategoriesProvider = aVCooSysList_X[nC]->getExplicitCategoriesProvider();
+
+                if( m_bChartTypeUsesShiftedXAxisTicksPerDefault || (aExplicitScale.AxisType==AxisType::CATEGORY && pExplicitCategoriesProvider && pExplicitCategoriesProvider->hasComplexCategories() ) )
                     aExplicitIncrement.ShiftedPosition = true;
                 aVCooSysList_X[nC]->setExplicitScaleAndIncrement( 0, nAxisIndex, aExplicitScale, aExplicitIncrement );
             }
@@ -1844,7 +1847,8 @@ sal_Int32 lcl_getExplicitNumberFormatKeyForAxis(
                                 if(!aLabeledSeq[nLSeqIdx].is())
                                     continue;
                                 Reference< data::XDataSequence > xSeq( aLabeledSeq[nLSeqIdx]->getValues());
-                                OSL_ASSERT( xSeq.is());
+                                if(!xSeq.is())
+                                    continue;
                                 Reference< beans::XPropertySet > xSeqProp( xSeq, uno::UNO_QUERY );
                                 ::rtl::OUString aRole;
                                 bool bTakeIntoAccount =
@@ -2516,6 +2520,8 @@ void ChartView::createShapes()
     {
         // /--
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        // #i12587# support for shapes in chart
+        m_pDrawModelWrapper->getSdrModel().EnableUndo( FALSE );
         m_pDrawModelWrapper->clearMainDrawPage();
         // \--
     }
@@ -2675,6 +2681,13 @@ void ChartView::createShapes()
         lcl_removeEmptyGroupShapes( xPageShapes );
     }
 
+    // #i12587# support for shapes in chart
+    if ( m_pDrawModelWrapper )
+    {
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        m_pDrawModelWrapper->getSdrModel().EnableUndo( TRUE );
+    }
+
 #if OSL_DEBUG_LEVEL > 0
     clock_t nEnd = clock();
     double fDuration =(double(nEnd-nStart)*1000.0)/double(CLOCKS_PER_SEC);
@@ -2697,6 +2710,12 @@ void ChartView::impl_updateView()
     if( !m_xChartModel.is() || !m_pDrawModelWrapper )
         return;
 
+    // #i12587# support for shapes in chart
+    if ( m_bSdrViewIsInEditMode )
+    {
+        return;
+    }
+
     if( m_bViewDirty && !m_bInViewUpdate )
     {
         m_bInViewUpdate = true;
@@ -2711,7 +2730,6 @@ void ChartView::impl_updateView()
                 // /--
                 ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
                 m_pDrawModelWrapper->lockControllers();
-                m_pDrawModelWrapper->updateTablesFromChartModel( m_xChartModel );
                 // \--
             }
 
@@ -2786,8 +2804,22 @@ void ChartView::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     //#i77362 change notification for changes on additional shapes are missing
     if( m_bInViewUpdate )
         return;
-    if( m_bSdrViewIsInEditMode )
-        return;
+
+    // #i12587# support for shapes in chart
+    if ( m_bSdrViewIsInEditMode && m_xChartModel.is() )
+    {
+        uno::Reference< view::XSelectionSupplier > xSelectionSupplier( m_xChartModel->getCurrentController(), uno::UNO_QUERY );
+        if ( xSelectionSupplier.is() )
+        {
+            ::rtl::OUString aSelObjCID;
+            uno::Any aSelObj( xSelectionSupplier->getSelection() );
+            aSelObj >>= aSelObjCID;
+            if ( aSelObjCID.getLength() > 0 )
+            {
+                return;
+            }
+        }
+    }
 
     const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >(&rHint);
     if( !pSdrHint )
@@ -2806,6 +2838,9 @@ void ChartView::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             bShapeChanged = true;
             break;
         case HINT_MODELCLEARED:
+            bShapeChanged = true;
+            break;
+        case HINT_ENDEDIT:
             bShapeChanged = true;
             break;
         default:
@@ -2979,6 +3014,88 @@ void SAL_CALL ChartView::removeVetoableChangeListener( const ::rtl::OUString& /*
     OSL_ENSURE(false,"not implemented");
 }
 
+// ____ XMultiServiceFactory ____
+
+Reference< uno::XInterface > ChartView::createInstance( const ::rtl::OUString& aServiceSpecifier )
+    throw (uno::Exception, uno::RuntimeException)
+{
+    SdrModel* pModel = ( m_pDrawModelWrapper ? &m_pDrawModelWrapper->getSdrModel() : NULL );
+    if ( pModel )
+    {
+        if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DashTable" ) ) == 0 )
+        {
+            if ( !m_xDashTable.is() )
+            {
+                m_xDashTable = SvxUnoDashTable_createInstance( pModel );
+            }
+            return m_xDashTable;
+        }
+        else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.GradientTable" ) ) == 0 )
+        {
+            if ( !m_xGradientTable.is() )
+            {
+                m_xGradientTable = SvxUnoGradientTable_createInstance( pModel );
+            }
+            return m_xGradientTable;
+        }
+        else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.HatchTable" ) ) == 0 )
+        {
+            if ( !m_xHatchTable.is() )
+            {
+                m_xHatchTable = SvxUnoHatchTable_createInstance( pModel );
+            }
+            return m_xHatchTable;
+        }
+        else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.BitmapTable" ) ) == 0 )
+        {
+            if ( !m_xBitmapTable.is() )
+            {
+                m_xBitmapTable = SvxUnoBitmapTable_createInstance( pModel );
+            }
+            return m_xBitmapTable;
+        }
+        else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.TransparencyGradientTable" ) ) == 0 )
+        {
+            if ( !m_xTransGradientTable.is() )
+            {
+                m_xTransGradientTable = SvxUnoTransGradientTable_createInstance( pModel );
+            }
+            return m_xTransGradientTable;
+        }
+        else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.MarkerTable" ) ) == 0 )
+        {
+            if ( !m_xMarkerTable.is() )
+            {
+                m_xMarkerTable = SvxUnoMarkerTable_createInstance( pModel );
+            }
+            return m_xMarkerTable;
+        }
+    }
+
+    return 0;
+}
+
+Reference< uno::XInterface > ChartView::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const uno::Sequence< uno::Any >& Arguments )
+    throw (uno::Exception, uno::RuntimeException)
+{
+    OSL_ENSURE( Arguments.getLength(), "ChartView::createInstanceWithArguments: arguments are ignored" );
+    (void) Arguments; // avoid warning
+    return createInstance( ServiceSpecifier );
+}
+
+uno::Sequence< ::rtl::OUString > ChartView::getAvailableServiceNames() throw (uno::RuntimeException)
+{
+    uno::Sequence< ::rtl::OUString > aServiceNames( 6 );
+
+    aServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DashTable" ) );
+    aServiceNames[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GradientTable" ) );
+    aServiceNames[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.HatchTable" ) );
+    aServiceNames[3] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.BitmapTable" ) );
+    aServiceNames[4] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.TransparencyGradientTable" ) );
+    aServiceNames[5] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.MarkerTable" ) );
+
+    return aServiceNames;
+}
 
 //.............................................................................
 } //namespace chart

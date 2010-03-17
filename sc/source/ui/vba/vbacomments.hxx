@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vbacomments.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,8 +31,8 @@
 
 #include <ooo/vba/excel/XComments.hpp>
 
-#include "vbahelper.hxx"
-#include "vbacollectionimpl.hxx"
+#include "excelvbahelper.hxx"
+#include <vbahelper/vbacollectionimpl.hxx>
 #include "vbacomment.hxx"
 
 typedef CollTestImplHelper< ov::excel::XComments > ScVbaComments_BASE;

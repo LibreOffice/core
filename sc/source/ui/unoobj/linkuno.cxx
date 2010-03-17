@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: linkuno.cxx,v $
- * $Revision: 1.18.134.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +30,8 @@
 
 
 
-#include <svtools/smplhint.hxx>
-#include <svx/linkmgr.hxx>
+#include <svl/smplhint.hxx>
+#include <sfx2/linkmgr.hxx>
 
 #include "linkuno.hxx"
 #include "miscuno.hxx"
@@ -131,7 +128,7 @@ ScTableLink* ScSheetLinkObj::GetLink_Impl() const
 {
     if (pDocShell)
     {
-        SvxLinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
+        sfx2::LinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
         USHORT nCount = pLinkManager->GetLinks().Count();
         for (USHORT i=0; i<nCount; i++)
         {
@@ -304,7 +301,7 @@ void ScSheetLinkObj::setFileName(const rtl::OUString& rNewName)
     ScTableLink* pLink = GetLink_Impl();
     if (pLink)
     {
-        //  pLink->Refresh mit neuem Dateinamen bringt SvxLinkManager durcheinander
+        //  pLink->Refresh mit neuem Dateinamen bringt sfx2::LinkManager durcheinander
         //  darum per Hand die Tabellen umsetzen und Link per UpdateLinks neu erzeugen
 
         String aNewStr(ScGlobal::GetAbsDocName( String(rNewName), pDocShell ));
@@ -605,7 +602,7 @@ ScAreaLink* lcl_GetAreaLink( ScDocShell* pDocShell, USHORT nPos )
 {
     if (pDocShell)
     {
-        SvxLinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
+        sfx2::LinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
         USHORT nTotalCount = pLinkManager->GetLinks().Count();
         USHORT nAreaCount = 0;
         for (USHORT i=0; i<nTotalCount; i++)
@@ -678,7 +675,7 @@ void ScAreaLinkObj::Modify_Impl( const rtl::OUString* pNewFile, const rtl::OUStr
         //! Undo fuer Loeschen
         //! Undo zusammenfassen
 
-        SvxLinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
+        sfx2::LinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
         pLinkManager->Remove( pLink );
         pLink = NULL;   // bei Remove geloescht
 
@@ -1004,7 +1001,7 @@ void SAL_CALL ScAreaLinksObj::removeByIndex( sal_Int32 nIndex ) throw(uno::Runti
     {
         //! SetAddUndo oder so
 
-        SvxLinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
+        sfx2::LinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
         pLinkManager->Remove( pLink );
     }
 }
@@ -1026,7 +1023,7 @@ sal_Int32 SAL_CALL ScAreaLinksObj::getCount() throw(uno::RuntimeException)
     INT32 nAreaCount = 0;
     if (pDocShell)
     {
-        SvxLinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
+        sfx2::LinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
         USHORT nTotalCount = pLinkManager->GetLinks().Count();
         for (USHORT i=0; i<nTotalCount; i++)
         {

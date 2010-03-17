@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: table1.cxx,v $
- * $Revision: 1.25.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -125,6 +122,7 @@ extern BOOL bIsOlk, bOderSo;
 ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
                     BOOL bColInfo, BOOL bRowInfo ) :
     aName( rNewName ),
+    aCodeName( rNewName ),
     bScenario( FALSE ),
     bLayoutRTL( FALSE ),
     bLoadingRTL( FALSE ),
@@ -238,6 +236,8 @@ void ScTable::SetName( const String& rNewName )
         bIsOlk = bOderSo = TRUE;
     aName = rNewName;
     aUpperName.Erase();         // invalidated if the name is changed
+
+    // SetStreamValid is handled in ScDocument::RenameTab
 }
 
 const String& ScTable::GetUpperName() const
@@ -291,6 +291,9 @@ void ScTable::SetLink( BYTE nMode,
     aLinkOpt = rOpt;        // Filter-Optionen
     aLinkTab = rTab;        // Tabellenname in Quelldatei
     nLinkRefreshDelay = nRefreshDelay;  // refresh delay in seconds, 0==off
+
+    if (IsStreamValid())
+        SetStreamValid(FALSE);
 }
 
 USHORT ScTable::GetOptimalColWidth( SCCOL nCol, OutputDevice* pDev,
@@ -1457,17 +1460,26 @@ void ScTable::DoColResize( SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd )
 void ScTable::SetRepeatColRange( const ScRange* pNew )
 {
     SET_PRINTRANGE( pRepeatColRange, pNew );
+
+    if (IsStreamValid())
+        SetStreamValid(FALSE);
 }
 
 void ScTable::SetRepeatRowRange( const ScRange* pNew )
 {
     SET_PRINTRANGE( pRepeatRowRange, pNew );
+
+    if (IsStreamValid())
+        SetStreamValid(FALSE);
 }
 
 void ScTable::ClearPrintRanges()
 {
     aPrintRanges.clear();
     bPrintEntireSheet = FALSE;
+
+    if (IsStreamValid())
+        SetStreamValid(FALSE);
 }
 
 void ScTable::AddPrintRange( const ScRange& rNew )
@@ -1475,6 +1487,9 @@ void ScTable::AddPrintRange( const ScRange& rNew )
     bPrintEntireSheet = FALSE;
     if( aPrintRanges.size() < 0xFFFF )
         aPrintRanges.push_back( rNew );
+
+    if (IsStreamValid())
+        SetStreamValid(FALSE);
 }
 
 //UNUSED2009-05 void ScTable::SetPrintRange( const ScRange& rNew )

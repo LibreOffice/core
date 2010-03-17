@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: table5.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -249,6 +246,9 @@ void ScTable::RemoveManualBreaks()
 
     if (pRowFlags)
         pRowFlags->AndValue( 0, MAXROW, sal::static_int_cast<BYTE>(~CR_MANUALBREAK) );
+
+    if (IsStreamValid())
+        SetStreamValid(FALSE);
 }
 
 BOOL ScTable::HasManualBreaks() const
@@ -287,6 +287,9 @@ void ScTable::SetProtection(const ScTableProtection* pProtect)
         pTabProtection.reset(new ScTableProtection(*pProtect));
     else
         pTabProtection.reset(NULL);
+
+    if (IsStreamValid())
+        SetStreamValid(FALSE);
 }
 
 ScTableProtection* ScTable::GetProtection()

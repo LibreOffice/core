@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cellsh.sdi,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +48,9 @@ interface CellSelection
     SID_VIEW_DATA_SOURCE_BROWSER [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_OPENDLG_FUNCTION        [ ExecMethod = Execute; StateMethod = GetCellState; ]
     SID_INS_FUNCTION            [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+
+    // no Exec/StateMethod needed, but SfxDispatcher complains if the slot is not included in the shell
+    SID_VALIDITY_REFERENCE []
 
     // Datenbank-Operationen {
     SID_SORT_ASCENDING      [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]

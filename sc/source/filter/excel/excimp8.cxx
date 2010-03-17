@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: excimp8.cxx,v $
- * $Revision: 1.127.4.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,27 +33,27 @@
 
 #include <scitems.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 
 #include <svtools/wmf.hxx>
 
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/editdata.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editstat.hxx>
-#include <svx/colritem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/svxmsbas.hxx>
+#include <filter/msfilter/svxmsbas.hxx>
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
@@ -102,6 +99,10 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <basic/basmgr.hxx>
+#include <cppuhelper/component_context.hxx>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <sfx2/app.hxx>
 
 
 using namespace com::sun::star;
@@ -113,7 +114,7 @@ using namespace com::sun::star;
 
 
 ImportExcel8::ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm ) :
-    ImportExcel( rImpData, rStrm )
+    ImportExcel( rImpData, rStrm ), mnTab(0)
 {
     delete pFormConv;
 
@@ -236,9 +237,15 @@ void ImportExcel8::Codename( BOOL bWorkbookGlobals )
         if( aName.Len() )
         {
             if( bWorkbookGlobals )
+            {
                 GetExtDocOptions().GetDocSettings().maGlobCodeName = aName;
+                GetDoc().SetCodeName( aName );
+            }
             else
+            {
                 GetExtDocOptions().AppendCodeName( aName );
+                GetDoc().SetCodeName( mnTab++, aName );
+            }
         }
     }
 }
@@ -246,16 +253,6 @@ void ImportExcel8::Codename( BOOL bWorkbookGlobals )
 void ImportExcel8::SheetProtection( void )
 {
     GetSheetProtectBuffer().ReadOptions( aIn, GetCurrScTab() );
-}
-
-bool lcl_hasVBAEnabled()
-{
-    uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY);
-        // test if vba service is present
-    uno::Reference< uno::XComponentContext > xCtx( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), uno::UNO_QUERY );
-    uno::Reference< uno::XInterface > xGlobals( xCtx->getValueByName( ::rtl::OUString::createFromAscii( "/singletons/ooo.vba.theGlobals") ), uno::UNO_QUERY );
-
-    return xGlobals.is();
 }
 
 void ImportExcel8::ReadBasic( void )
@@ -273,7 +270,7 @@ void ImportExcel8::ReadBasic( void )
         if( bLoadCode || bLoadStrg )
         {
             SvxImportMSVBasic aBasicImport( *pShell, *xRootStrg, bLoadCode, bLoadStrg );
-            bool bAsComment = !bLoadExecutable || !lcl_hasVBAEnabled();
+        bool bAsComment = !bLoadExecutable;
             aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA, bAsComment );
         }
     }

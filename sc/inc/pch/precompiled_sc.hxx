@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: precompiled_sc.hxx,v $
- * $Revision: 1.8.160.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -152,20 +149,20 @@
 #include <sot/exchange.hxx>
 #include <sot/factory.hxx>
 #include <sot/storage.hxx>
-#include <svtools/brdcst.hxx>
-#include <svtools/cenumitm.hxx>
-#include <svtools/cintitem.hxx>
-#include <svtools/fltrcfg.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/listener.hxx>
-#include <svtools/lstner.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/solar.hrc>
-#include <svtools/useroptions.hxx>
-#include <svx/editobj.hxx>
-#include <svx/eeitem.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/cenumitm.hxx>
+#include <svl/cintitem.hxx>
+#include <unotools/fltrcfg.hxx>
+#include <svl/intitem.hxx>
+#include <svl/listener.hxx>
+#include <svl/lstner.hxx>
+#include <unotools/pathoptions.hxx>
+#include <svl/solar.hrc>
+#include <unotools/useroptions.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/fmglob.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/sdangitm.hxx>
 #include <svx/sderitm.hxx>
 #include <svx/sdmetitm.hxx>

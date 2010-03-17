@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewfunc.hxx,v $
- * $Revision: 1.34.128.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,14 +31,14 @@
 
 #ifndef _SVSTDARR_SHORTS
 #define _SVSTDARR_SHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #endif
 
 #ifndef _SVSTDARR_STRINGS
 
 #define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #endif
 #include <com/sun/star/embed/XEmbeddedObject.hpp>

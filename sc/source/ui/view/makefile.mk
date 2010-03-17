@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -140,7 +136,6 @@ SLOFILES =  \
         $(SLO)$/dbfunc2.obj     \
         $(SLO)$/tabvwsh2.obj
 .ELSE
-
     NOOPTFILES=\
         $(SLO)$/drawview.obj	\
         $(SLO)$/dbfunc2.obj     \
@@ -157,11 +152,13 @@ EXCEPTIONSFILES= \
     $(SLO)$/cellsh1.obj \
     $(SLO)$/drawvie4.obj \
     $(SLO)$/formatsh.obj \
-        $(SLO)$/scextopt.obj \
+    $(SLO)$/gridwin2.obj \
+    $(SLO)$/scextopt.obj \
     $(SLO)$/tabvwshb.obj \
     $(SLO)$/viewdata.obj \
     $(SLO)$/viewfun5.obj \
-    $(SLO)$/viewfun7.obj
+    $(SLO)$/viewfun7.obj \
+    $(SLO)$/reffact.obj
 
 # goal seek -O2
 

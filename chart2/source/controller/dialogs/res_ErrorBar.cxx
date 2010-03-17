@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: res_ErrorBar.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +40,7 @@
 
 #include <rtl/math.hxx>
 #include <vcl/dialog.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 using namespace ::com::sun::star;
 
@@ -682,7 +679,7 @@ BOOL ErrorBarResources::FillItemSet(SfxItemSet& rOutAttrs) const
 
 void ErrorBarResources::FillValueSets()
 {
-    bool bIsHighContrast = ( true && m_aRbConst.GetDisplayBackground().GetColor().IsDark() );
+    bool bIsHighContrast = ( true && m_aRbConst.GetSettings().GetStyleSettings().GetHighContrastMode() );
 
     // do not scale images, show then centered
 //     m_aFiPositive.SetStyle( (m_aFiPositive.GetStyle() & (~WB_SCALE)) | WB_CENTER );

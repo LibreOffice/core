@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cell.hxx,v $
- * $Revision: 1.30.38.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,14 +32,14 @@
 
 #include <set>
 #include <tools/mempool.hxx>
-#include <svtools/listener.hxx>
+#include <svl/listener.hxx>
 #include "global.hxx"
 #include "rangenam.hxx"
 #include "formula/grammar.hxx"
 #include "tokenarray.hxx"
 #include "formularesult.hxx"
 #include <rtl/ustrbuf.hxx>
-#include <vcl/fontcvt.hxx>
+#include <unotools/fontcvt.hxx>
 #include "scdllapi.h"
 
 #define USE_MEMPOOL

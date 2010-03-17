@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: progress.cxx,v $
- * $Revision: 1.7.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,8 +37,8 @@
 #include <sfx2/progress.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svtools/eitem.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/eitem.hxx>
+#include <svl/itemset.hxx>
 
 #define SC_PROGRESS_CXX
 #include "progress.hxx"

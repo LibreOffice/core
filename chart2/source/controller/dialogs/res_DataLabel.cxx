@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: res_DataLabel.cxx,v $
- * $Revision: 1.5.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,21 +39,21 @@
 
 // header for class SvxNumberInfoItem
 #include <svx/numinf.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 // for SfxUInt32Item
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 // header for class SfxStringItem
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 //SfxIntegerListItem
-#include <svtools/ilstitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <svl/ilstitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/frmdiritem.hxx>
 
 // header for define RET_OK
 #include <vcl/msgbox.hxx>
 #include <svx/svxids.hrc>
 // header for SvNumberFormatter
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <svtools/controldims.hrc>
 
 

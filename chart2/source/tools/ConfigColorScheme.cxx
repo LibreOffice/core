@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ConfigColorScheme.cxx,v $
- * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,6 +73,7 @@ public:
 
 protected:
     // ____ ::utl::ConfigItem ____
+    virtual void                    Commit();
     virtual void Notify( const Sequence< OUString > & aPropertyNames );
 
 private:
@@ -99,6 +97,9 @@ void ChartConfigItem::Notify( const Sequence< OUString > & aPropertyNames )
             m_rListener.notify( aPropertyNames[nIdx] );
     }
 }
+
+void ChartConfigItem::Commit()
+{}
 
 void ChartConfigItem::addPropertyNotification( const OUString & rPropertyName )
 {

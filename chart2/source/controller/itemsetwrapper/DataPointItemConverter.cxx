@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DataPointItemConverter.cxx,v $
- * $Revision: 1.19.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,15 +46,15 @@
 
 // header for class XFillColorItem
 #include <svx/xflclit.hxx>
-#include <svtools/intitem.hxx>
-#include <svx/sizeitem.hxx>
+#include <svl/intitem.hxx>
+#include <editeng/sizeitem.hxx>
 // header for class SfxStringItem
-#include <svtools/stritem.hxx>
-#include <svx/brshitem.hxx>
+#include <svl/stritem.hxx>
+#include <editeng/brshitem.hxx>
 //SfxIntegerListItem
-#include <svtools/ilstitem.hxx>
+#include <svl/ilstitem.hxx>
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <vcl/graph.hxx>
 #include <com/sun/star/graphic/XGraphic.hpp>
 

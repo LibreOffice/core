@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scdlgfact.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1425,13 +1422,19 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScParagraphDlg( Windo
 
 //add for ScValidationDlg begin
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScValidationDlg( Window* pParent,
-                                                        const SfxItemSet* pArgSet,int nId  )
+//<!--Modified by PengYunQuan for Validity Cell Range Picker
+//                                                      const SfxItemSet* pArgSet,int nId  )
+                                                        const SfxItemSet* pArgSet,int nId, ScTabViewShell *pTabVwSh  )
+//-->Modified by PengYunQuan for Validity Cell Range Picke
 {
     SfxTabDialog* pDlg=NULL;
     switch ( nId )
     {
         case TAB_DLG_VALIDATION :
-            pDlg = new ScValidationDlg( pParent, pArgSet );
+            //<!--Modified by PengYunQuan for Validity Cell Range Picker
+            //pDlg = new ScValidationDlg( pParent, pArgSet );
+            pDlg = new ScValidationDlg( pParent, pArgSet, pTabVwSh );
+            //-->Modified by PengYunQuan for Validity Cell Range Picker
             break;
         default:
             break;

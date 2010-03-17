@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleContextBase.hxx,v $
- * $Revision: 1.23.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +47,7 @@
 #include <cppuhelper/interfacecontainer.h>
 
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <cppuhelper/compbase5.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -318,6 +315,8 @@ protected:
     void SetName(const rtl::OUString& rName) { msName = rName; }
     /// Use this method to set initial Description without notification
     void SetDescription(const rtl::OUString& rDesc) { msDescription = rDesc; }
+
+    void SetRole(sal_Int16 nRole);
 
     /// Reference to the parent object.
     ::com::sun::star::uno::Reference<

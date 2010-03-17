@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabvwsh2.cxx,v $
- * $Revision: 1.27.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,10 +38,10 @@
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/moduleoptions.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/whiter.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <sfx2/dispatch.hxx>
 
 #include "tabvwsh.hxx"
@@ -67,7 +64,7 @@
 
 // #98185# Create default drawing objects via keyboard
 #include <svx/svdpagv.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/svdpage.hxx>
 #include <fuconcustomshape.hxx>
 

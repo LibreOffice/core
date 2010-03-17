@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlexprt.cxx,v $
- * $Revision: 1.213.94.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include "xmlexprt.hxx"
 #include "XMLConverter.hxx"
@@ -88,14 +85,14 @@
 
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <svx/unoshape.hxx>
 #include <comphelper/extract.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
 
@@ -1139,7 +1136,7 @@ void ScXMLExport::WriteRowContent()
 {
     ScMyRowFormatRange aRange;
     sal_Int32 nIndex(-1);
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     sal_Int32 nPrevCol(0);
 #endif
     sal_Int32 nCols(0);
@@ -1148,7 +1145,7 @@ void ScXMLExport::WriteRowContent()
     sal_Bool bIsFirst(sal_True);
     while (pRowFormatRanges->GetNext(aRange))
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         DBG_ASSERT(bIsFirst || (!bIsFirst && (nPrevCol + nCols == aRange.nStartColumn)), "here are some columns missing");
 #endif
         if (bIsFirst)
@@ -1158,7 +1155,7 @@ void ScXMLExport::WriteRowContent()
             bIsAutoStyle = aRange.bIsAutoStyle;
             nCols = aRange.nRepeatColumns;
             bIsFirst = sal_False;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             nPrevCol = aRange.nStartColumn;
 #endif
         }
@@ -1185,7 +1182,7 @@ void ScXMLExport::WriteRowContent()
                 bIsAutoStyle = aRange.bIsAutoStyle;
                 nCols = aRange.nRepeatColumns;
                 nPrevValidationIndex = aRange.nValidationIndex;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 nPrevCol = aRange.nStartColumn;
 #endif
             }
@@ -1575,6 +1572,26 @@ static bool lcl_CopyStreamElement( const uno::Reference< io::XInputStream >& xIn
     return true;    // successful
 }
 
+static void lcl_SkipBytesInBlocks( const uno::Reference< io::XInputStream >& xInput, sal_Int32 nBytesToSkip )
+{
+    // skipBytes in zip stream is implemented as reading.
+    // For now, split into several calls to avoid allocating a large buffer.
+    // Later, skipBytes should be changed.
+
+    const sal_Int32 nMaxSize = 32*1024;
+
+    if ( nBytesToSkip > 0 )
+    {
+        sal_Int32 nRemaining = nBytesToSkip;
+        while ( nRemaining > 0 )
+        {
+            sal_Int32 nSkip = std::min( nRemaining, nMaxSize );
+            xInput->skipBytes( nSkip );
+            nRemaining -= nSkip;
+        }
+    }
+}
+
 void ScXMLExport::CopySourceStream( sal_Int32 nStartOffset, sal_Int32 nEndOffset, sal_Int32& rNewStart, sal_Int32& rNewEnd )
 {
     uno::Reference<xml::sax::XDocumentHandler> xHandler = GetDocHandler();
@@ -1598,7 +1615,7 @@ void ScXMLExport::CopySourceStream( sal_Int32 nStartOffset, sal_Int32 nEndOffset
             rNewStart = (sal_Int32)xDestSeek->getPosition();
 
             if ( nStartOffset > nSourceStreamPos )
-                xSourceStream->skipBytes( nStartOffset - nSourceStreamPos );
+                lcl_SkipBytesInBlocks( xSourceStream, nStartOffset - nSourceStreamPos );
 
             if ( !lcl_CopyStreamElement( xSourceStream, xDestStream, nEndOffset - nStartOffset ) )
             {

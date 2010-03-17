@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibilityHints.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +30,8 @@
 
 #include "viewdata.hxx"
 #include <com/sun/star/uno/XInterface.hpp>
-#include <svtools/smplhint.hxx>
-#include <svtools/hint.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 
 #define SC_HINT_ACC_SIMPLE_START    SFX_HINT_USER00
 #define SC_HINT_ACC_TABLECHANGED    SC_HINT_ACC_SIMPLE_START + 1

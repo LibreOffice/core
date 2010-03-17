@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewfun5.cxx,v $
- * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,9 +50,9 @@
 #include <sot/clsids.hxx>
 #include <sot/formats.hxx>
 #include <sot/filelist.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/stritem.hxx>
+#include <unotools/pathoptions.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/transfer.hxx>
 #include <vcl/graph.hxx>
 

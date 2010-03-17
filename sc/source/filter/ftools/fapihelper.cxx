@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fapihelper.cxx,v $
- * $Revision: 1.10.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,8 +39,8 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svtools/stritem.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/stritem.hxx>
+#include <svl/itemset.hxx>
 #include "miscuno.hxx"
 
 using ::rtl::OUString;

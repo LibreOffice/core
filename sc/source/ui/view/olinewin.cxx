@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: olinewin.cxx,v $
- * $Revision: 1.15.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -167,7 +164,7 @@ void ScOutlineWindow::InitSettings()
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     SetBackground( rStyleSettings.GetFaceColor() );
     maLineColor = rStyleSettings.GetButtonTextColor();
-    mpSymbols = ScGlobal::GetOutlineSymbols( !!GetBackground().GetColor().IsDark() );
+    mpSymbols = ScGlobal::GetOutlineSymbols( rStyleSettings.GetHighContrastMode() );
     Invalidate();
 }
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vbarange.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,12 +50,15 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 
-//#include "vbahelperinterface.hxx"
+//#include <vbahelper/vbahelperinterface.hxx>
 #include "vbaformat.hxx"
+#include <formula/grammar.hxx>
 
 class ScTableSheetsObj;
 class ScCellRangesBase;
 class ScCellRangeObj;
+class ScDocShell;
+class ScDocument;
 
 //typedef InheritedHelperInterfaceImpl1< ov::excel::XRange >  ScVbaRange_BASE;
 typedef ScVbaFormat< ov::excel::XRange > ScVbaRange_BASE;

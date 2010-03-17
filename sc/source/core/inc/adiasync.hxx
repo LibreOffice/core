@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: adiasync.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +28,8 @@
 #ifndef SC_ADIASYNC_HXX
 #define SC_ADIASYNC_HXX
 
-#include <svtools/broadcast.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/broadcast.hxx>
+#include <svl/svarray.hxx>
 
 #include "callform.hxx"
 

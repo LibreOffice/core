@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleDocumentPagePreview.cxx,v $
- * $Revision: 1.38.128.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1213,7 +1210,7 @@ void ScShapeChilds::FillShapes(const Rectangle& aPixelPaintRect, const MapMode& 
 //UNUSED2008-05      if (rItr->mxShape.get() == xShape.get())
 //UNUSED2008-05          bResult = sal_True; // if the shape is found
 //UNUSED2008-05
-//UNUSED2008-05  /*#ifndef PRODUCT // test whether it finds truly the correct shape (perhaps it is not really sorted)
+//UNUSED2008-05  /*#ifdef DBG_UTIL // test whether it finds truly the correct shape (perhaps it is not really sorted)
 //UNUSED2008-05      ScShapeChildVec::iterator aDebugItr = std::find(rShapes.begin(), rShapes.end(), aShape);
 //UNUSED2008-05      DBG_ASSERT(rItr == aDebugItr, "wrong Shape found");
 //UNUSED2008-05  #endif*/

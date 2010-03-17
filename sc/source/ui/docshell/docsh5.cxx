@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh5.cxx,v $
- * $Revision: 1.20.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +39,7 @@
 #include <vcl/waitobj.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
 
@@ -840,8 +837,9 @@ BOOL ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRec
     ScDocShellModificator aModificator( *this );
 
     // #i92477# be consistent with ScDocFunc::InsertTable: any index past the last sheet means "append"
+    // #i101139# nDestTab must be the target position, not APPEND (for CopyTabProtection etc.)
     if ( nDestTab >= aDocument.GetTableCount() )
-        nDestTab = SC_TAB_APPEND;
+        nDestTab = aDocument.GetTableCount();
 
     if (bCopy)
     {
