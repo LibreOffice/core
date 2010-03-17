@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: lstbox.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -168,8 +165,12 @@ public:
     long            GetEntryFlags( USHORT nPos ) const;
 
     void            SetTopEntry( USHORT nPos );
+    void            ShowProminentEntry( USHORT nPos );
     void            SetTopEntryStr( const XubString& rStr );
     USHORT          GetTopEntry() const;
+
+    void            SetProminentEntryType( ProminentEntry eType );
+    ProminentEntry  GetProminentEntryType() const;
 
     void            SaveValue() { mnSaveValue = GetSelectEntryPos(); }
     USHORT          GetSavedValue() const { return mnSaveValue; }

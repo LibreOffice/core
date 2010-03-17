@@ -42,16 +42,6 @@
  *                           in recognize() routine
  */
 
-/*************************************************************************
- *
- *  $RCSfile: parseAFM.cxx,v $
- *
- *  $Revision: 1.11 $
- *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:08:31 $
- *
- ************************************************************************/
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
