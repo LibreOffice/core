@@ -113,7 +113,15 @@ namespace sd { namespace toolpanel
     //------------------------------------------------------------------------------------------------------------------
     void ToolPanelDrawer::SetFocusToPanelSelector()
     {
-        // TODO
+        const size_t nPanelCount( m_rPanelDeck.GetPanelCount() );
+        if ( !nPanelCount )
+            // nothing to focus
+            return;
+        ::boost::optional< size_t > aActivePanel( m_rPanelDeck.GetActivePanel() );
+        if ( !aActivePanel )
+            aActivePanel = 0;
+        ENSURE_OR_RETURN_VOID( *aActivePanel < m_aDrawers.size(), "ToolPanelDrawer::SetFocusToPanelSelector: invalid active panel, or inconsistent drawers!" );
+        m_aDrawers[ *aActivePanel ]->GetWindow()->GrabFocus();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -145,8 +153,6 @@ namespace sd { namespace toolpanel
     //------------------------------------------------------------------------------------------------------------------
     void ToolPanelDrawer::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
     {
-        impl_triggerRearrange();
-
         if ( !!i_rOldActive )
         {
             OSL_ENSURE( *i_rOldActive < m_aDrawers.size(), "ToolPanelDrawer::ActivePanelChanged: illegal old index!" );
@@ -158,6 +164,8 @@ namespace sd { namespace toolpanel
             OSL_ENSURE( *i_rNewActive < m_aDrawers.size(), "ToolPanelDrawer::ActivePanelChanged: illegal new index!" );
             m_aDrawers[ *i_rNewActive ]->Expand( true );
         }
+
+        impl_triggerRearrange();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -187,18 +195,38 @@ namespace sd { namespace toolpanel
     IMPL_LINK( ToolPanelDrawer, OnWindowEvent, VclSimpleEvent*, i_pEvent )
     {
         const VclWindowEvent* pWindowEvent = PTR_CAST( VclWindowEvent, i_pEvent );
-        if ( !pWindowEvent )
-            return 0L;
+        ENSURE_OR_RETURN( pWindowEvent, "no WindowEvent", 0L );
 
+        bool bActivatePanel = false;
         switch ( pWindowEvent->GetId() )
         {
             case VCLEVENT_WINDOW_MOUSEBUTTONUP:
             {
-                const size_t nPanelPos = impl_getPanelPositionFromWindow( pWindowEvent->GetWindow() );
-                m_rPanelDeck.ActivatePanel( nPanelPos );
-                return 1L;
+                const MouseEvent* pMouseEvent = static_cast< const MouseEvent* >( pWindowEvent->GetData() );
+                ENSURE_OR_RETURN( pMouseEvent, "no mouse event with MouseButtonUp", 0L );
+                if ( pMouseEvent->GetButtons() == MOUSE_LEFT )
+                {
+                    bActivatePanel = true;
+                }
             }
             break;
+            case VCLEVENT_WINDOW_KEYINPUT:
+            {
+                const KeyEvent* pKeyEvent = static_cast< const KeyEvent* >( pWindowEvent->GetData() );
+                ENSURE_OR_RETURN( pKeyEvent, "no key event with KeyInput", 0L );
+                const KeyCode& rKeyCode( pKeyEvent->GetKeyCode() );
+                if ( ( rKeyCode.GetModifier() == 0 ) && ( rKeyCode.GetCode() == KEY_RETURN ) )
+                {
+                    bActivatePanel = true;
+                }
+            }
+            break;
+        }
+        if ( bActivatePanel )
+        {
+            const size_t nPanelPos = impl_getPanelPositionFromWindow( pWindowEvent->GetWindow() );
+            m_rPanelDeck.ActivatePanel( nPanelPos );
+            return 1L;
         }
         return 0L;
     }

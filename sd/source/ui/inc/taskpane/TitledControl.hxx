@@ -101,7 +101,6 @@ public:
 
     virtual void Resize (void);
     virtual void GetFocus (void);
-    virtual void LoseFocus (void);
     virtual void KeyInput (const KeyEvent& rEvent);
 
     //    void Select (bool bExpansionState);

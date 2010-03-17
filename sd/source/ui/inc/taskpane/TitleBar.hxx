@@ -88,8 +88,8 @@ public:
     virtual bool Expand (bool bFlag = true);
     virtual bool IsExpanded (void) const;
     virtual void SetEnabledState(bool bFlag);
-
-    void SetFocus (bool bFlag);
+    virtual void GetFocus (void);
+    virtual void LoseFocus (void);
 
     virtual void MouseMove(const MouseEvent& rEvent);
     /** Empty implementation prevents forwarding to docking window.

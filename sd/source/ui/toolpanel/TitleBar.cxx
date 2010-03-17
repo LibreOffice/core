@@ -63,7 +63,7 @@ namespace sd { namespace toolpanel {
 const int TitleBar::snIndentationWidth = 16;
 
 TitleBar::TitleBar ( ::Window* pParent, const String& rsTitle, TitleBarType eType, bool bIsExpandable)
-: ::Window (pParent)
+: ::Window (pParent, WB_TABSTOP)
 , TreeNode(this)
 , meType(eType)
 , msTitle(rsTitle)
@@ -219,10 +219,21 @@ void TitleBar::SetEnabledState(bool bFlag)
 }
 
 
-void TitleBar::SetFocus (bool bFlag)
+
+
+void TitleBar::GetFocus()
 {
-    mbFocused = bFlag;
-    Invalidate ();
+    mbFocused = true;
+    Invalidate();
+}
+
+
+
+
+void TitleBar::LoseFocus()
+{
+    mbFocused = false;
+    Invalidate();
 }
 
 

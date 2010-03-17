@@ -222,17 +222,7 @@ void TitledControl::GetFocus (void)
 {
     ::Window::GetFocus();
     if (GetTitleBar() != NULL)
-        GetTitleBar()->SetFocus (true);
-}
-
-
-
-
-void TitledControl::LoseFocus (void)
-{
-    ::Window::LoseFocus();
-    if (GetTitleBar() != NULL)
-        GetTitleBar()->SetFocus (false);
+        GetTitleBar()->GrabFocus();
 }
 
 

@@ -67,7 +67,7 @@ namespace sd { namespace toolpanel
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
     ToolPanelDeck::ToolPanelDeck( Window& i_rParent, ToolPanelViewShell& i_rViewShell )
-        :ToolPanelDeck_Base( i_rParent, 0 )
+        :ToolPanelDeck_Base( i_rParent, WB_DIALOGCONTROL )
         ,m_rViewShell( i_rViewShell )
     {
         SetDrawersLayout();
