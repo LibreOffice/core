@@ -101,6 +101,7 @@
 #include "vcl/lazydelete.hxx"
 
 #include <set>
+#include <typeinfo>
 
 using namespace rtl;
 using namespace ::com::sun::star::uno;
@@ -4326,13 +4327,23 @@ Window::Window( Window* pParent, const ResId& rResId )
 #if OSL_DEBUG_LEVEL > 0
 namespace
 {
-    const sal_Char* lcl_getWindowClassName( const Window& i_rWindow )
+    void lcl_appendWindowInfo( ByteString& io_rErrorString, const Window& i_rWindow )
     {
-        return typeid( i_rWindow ).name();
+        // skip border windows, they don't carry information which helps diagnosing the problem
+        const Window* pWindow( &i_rWindow );
+        while ( pWindow && ( pWindow->GetType() == WINDOW_BORDERWINDOW ) )
+            pWindow = pWindow->GetWindow( WINDOW_FIRSTCHILD );
+        if ( !pWindow )
+            pWindow = &i_rWindow;
+
+        io_rErrorString += char(13);
+        io_rErrorString += typeid( *pWindow ).name();
+        io_rErrorString += " (window text: '";
+        io_rErrorString += ByteString( pWindow->GetText(), RTL_TEXTENCODING_UTF8 );
+        io_rErrorString += "')";
     }
 }
 #endif
-
 // -----------------------------------------------------------------------
 
 Window::~Window()
@@ -4466,9 +4477,7 @@ Window::~Window()
             if ( ImplIsRealParentPath( pTempWin ) )
             {
                 bError = TRUE;
-                if ( aErrorStr.Len() )
-                    aErrorStr += "; ";
-                aErrorStr += ByteString( pTempWin->GetText(), RTL_TEXTENCODING_UTF8 );
+                lcl_appendWindowInfo( aErrorStr, *pTempWin );
             }
             pTempWin = pTempWin->mpWindowImpl->mpNextOverlap;
         }
@@ -4489,9 +4498,7 @@ Window::~Window()
             if ( ImplIsRealParentPath( pTempWin ) )
             {
                 bError = TRUE;
-                if ( aErrorStr.Len() )
-                    aErrorStr += "; ";
-                aErrorStr += ByteString( pTempWin->GetText(), RTL_TEXTENCODING_UTF8 );
+                lcl_appendWindowInfo( aErrorStr, *pTempWin );
             }
             pTempWin = pTempWin->mpWindowImpl->mpFrameData->mpNextFrame;
         }
@@ -4513,10 +4520,8 @@ Window::~Window()
             pTempWin = mpWindowImpl->mpFirstChild;
             while ( pTempWin )
             {
-                aTempStr += ByteString( pTempWin->GetText(), RTL_TEXTENCODING_UTF8 );
+                lcl_appendWindowInfo( aTempStr, *pTempWin );
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
-                if ( pTempWin )
-                    aTempStr += "; ";
             }
             DBG_ERROR( aTempStr.GetBuffer() );
             GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
@@ -4530,10 +4535,8 @@ Window::~Window()
             pTempWin = mpWindowImpl->mpFirstOverlap;
             while ( pTempWin )
             {
-                aTempStr += ByteString( pTempWin->GetText(), RTL_TEXTENCODING_UTF8 );
+                lcl_appendWindowInfo( aTempStr, *pTempWin );
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
-                if ( pTempWin )
-                    aTempStr += "; ";
             }
             DBG_ERROR( aTempStr.GetBuffer() );
             GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
