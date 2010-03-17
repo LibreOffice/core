@@ -101,35 +101,41 @@ function hCompareSubStrings( cRef as string, cSub as string ) as integer
     '///<ul>
     
     const CFN = "hCompareSubStrings::"
+    const RETVAL_INVALID_PARAMETER = -1
+    const RETVAL_MATCH_NONE        =  0
+    const RETVAL_MATCH_EXACT       =  1
+    const RETVAL_MATCH_SUBSTRING   =  2
 
     '///+<li>Test function parameters</li>
     if ( ( cRef = "" ) or ( cSub = "" ) ) then
         warnlog( CFN & "invalid parameter(s): Empty string passed." )
-        hCompareSubStrings() = -1
+        hCompareSubStrings() = RETVAL_INVALID_PARAMETER
         exit function
     endif
     
     dim irc as integer
 
     '///+<li>Test if we have a substring</li>
-    if ( instr( cRef, cSub ) > 0 ) then
-        irc = 2
+    if ( instr( cRef, cSub ) ) then
+        irc = RETVAL_MATCH_SUBSTRING
     else
-        irc = 0
+        irc = RETVAL_MATCH_NONE
     endif
 
     '///+<li>Test if we have an exact match</li>
-    if ( irc = 2 ) then
+    if ( irc = RETVAL_MATCH_SUBSTRING ) then
         if ( ( cRef = cSub ) and ( len( cRef ) = len( cSub ) ) ) then
-            irc = 1
+            irc = RETVAL_MATCH_EXACT
         endif
     endif
-    
-    select case irc
-    case 0 : printlog( CFN & "No matching substring found" )
-    case 1 : printlog( CFN & "Strings are identical" )
-    case 2 : printlog( CFN & "String is substring" )
-    end select
+
+    if ( GVERBOSE ) then
+        select case irc
+        case RETVAL_MATCH_NONE      : printlog( CFN & "No matching substring found" )
+        case RETVAL_MATCH_EXACT     : printlog( CFN & "Strings are identical" )
+        case RETVAL_MATCH_SUBSTRING : printlog( CFN & "String is substring" )
+        end select
+    endif
     
     hCompareSubStrings() = irc
     '///</ul>
@@ -162,8 +168,7 @@ function hGetDirTreeLevel( cFullPath as string ) as integer
     
     dim iCurrentChar as integer
     dim cCurrentChar as string
-    dim iSeparatorCount as integer
-        iSeparatorCount = 0
+    dim iSeparatorCount as integer : iSeparatorCount = 0
     
     '///+<li>Walk through the string</li>
     '///<ul>
@@ -173,9 +178,7 @@ function hGetDirTreeLevel( cFullPath as string ) as integer
         cCurrentChar = mid( cFullPath , iCurrentChar , 1 )
         
         '///+<li>If it is a separtator, increase the counter</li>
-        if ( cCurrentChar = gPathSigne ) then
-            iSeparatorCount = iSeparatorCount + 1
-        endif
+        if ( cCurrentChar = gPathSigne ) then iSeparatorCount = iSeparatorCount + 1
         
     next iCurrentChar
     '///</ul>
@@ -232,7 +235,7 @@ function hGetStringFromStaticTextField( oControl as object ) as string
     dim cCopy as string
     dim cText as string
 
-    printlog( CFN & "Enter" )
+    if ( GVERBOSE ) then printlog( CFN & "Enter" )
 
     '///<u>Description:</u>
     '///<ul>
@@ -250,14 +253,14 @@ function hGetStringFromStaticTextField( oControl as object ) as string
             oControl.typeKeys(   cCopy    )
     
             cText = getClipboardText()
-            printlog( CFN & "Exit with result: " & cText )
+            if ( GVERBOSE ) then printlog( CFN & "Exit with result: " & cText )
         else
             ctext = ""
-            qaerrorlog( CFN & "Exit: Control exists but is not visible" )
+            warnlog( CFN & "Exit: Control exists but is not visible" )
         endif
     else
         cText = ""
-        qaerrorlog( CFN & "Exit: Control does not exist in this context" )
+        warnlog( CFN & "Exit: Control does not exist in this context" )
     endif
 
     '///</ul>
@@ -304,17 +307,16 @@ function hConvertStringToLong( cValue as string ) as long
     '///</ol>
 
     const CFN = "hConvertStringToLong::"
-    printlog( CFN & "Enter with option: " & cValue )
-    dim brc as boolean 'a multi purpose boolean returnvalue
+    const ONE_CHARACTER = 1
 
-    dim iLen as integer
-        iLen = len( cValue )
+    if ( GVERBOSE ) then printlog( CFN & "Enter with option: " & cValue )
+
+    dim iLen as integer : iLen = len( cValue )
 
     dim iChar as integer
     dim cChar as string
 
-    dim cStringValue as string
-        cStringValue = ""
+    dim cStringValue as string : cStringValue = ""
 
     '///<u>Description:</u>
     '///<ul>
@@ -323,7 +325,7 @@ function hConvertStringToLong( cValue as string ) as long
     for iChar = 1 to iLen
 
         '///+<li>Get the current character</li>
-        cChar = mid( cValue , iChar , 1 )
+        cChar = mid( cValue , iChar , ONE_CHARACTER )
 
         '///+<li>Copy valid characters to temporary string, drop invalid, exit on first space or other character</li>
         select case cChar
@@ -344,7 +346,7 @@ function hConvertStringToLong( cValue as string ) as long
     next iChar
     '///</ul>
 
-    printlog( CFN & "Exit with value: " & cStringValue )
+    if ( GVERBOSE ) then printlog( CFN & "Exit with value: " & cStringValue )
 
     '///+<li>Convert string to long integer and return to calling function</li>
     hConvertStringToLong() = val( cStringValue )
