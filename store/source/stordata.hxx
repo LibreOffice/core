@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: stordata.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,7 +90,7 @@ struct OStoreDataPageData : public store::OStorePageData
     {
         base::m_aGuard.m_nMagic = store::htonl(self::theTypeId);
         base::m_aDescr.m_nUsed  = store::htons(self::thePageSize);
-        memset (m_pData, 0, capacity());
+        if (capacity()) memset (m_pData, 0, capacity());
     }
 
     /** guard (external representation).

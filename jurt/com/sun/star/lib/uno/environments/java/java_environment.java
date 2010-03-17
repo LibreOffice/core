@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: java_environment.java,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +34,6 @@ import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 /**
  * The java_environment is the environment where objects and
@@ -159,70 +155,64 @@ public final class java_environment implements IEnvironment {
     }
 
     private static final class Registry {
-        public Object register(Object object, String oid, Type type) {
-            synchronized (map) {
-                cleanUp();
-                Level1Entry l1 = getLevel1Entry(oid);
-                if (l1 != null) {
-                    Level2Entry l2 = l1.get(type);
-                    if (l2 != null) {
-                        Object o = l2.get();
-                        if (o != null) {
-                            l2.acquire();
-                            return o;
-                        }
+        public synchronized Object register(
+            Object object, String oid, Type type)
+        {
+            cleanUp();
+            Level1Entry l1 = level1map.get(oid);
+            if (l1 != null) {
+                Level2Entry l2 = l1.level2map.get(type);
+                if (l2 != null) {
+                    Object o = l2.get();
+                    if (o != null) {
+                        l2.acquire();
+                        return o;
                     }
                 }
-                // TODO  If a holder references an unreachable object, but still
-                // has a positive count, it is replaced with a new holder
-                // (referencing a reachable object, and with a count of 1).  Any
-                // later calls to revoke that should decrement the count of the
-                // previous holder would now decrement the count of the new
-                // holder, removing it prematurely.  This is a design flaw that
-                // will be fixed when IEnvironment.revokeInterface is changed to
-                // no longer use counting.  (And this problem is harmless, as
-                // currently a holder either references a strongly held object
-                // and uses register/revoke to control it, or references a
-                // weakly held proxy and never revokes it.)
-                if (l1 == null) {
-                    l1 = new Level1Entry();
-                    map.put(oid, l1);
-                }
-                l1.add(new Level2Entry(oid, type, object, queue));
             }
+            // TODO  If a holder references an unreachable object, but still has
+            // a positive count, it is replaced with a new holder (referencing a
+            // reachable object, and with a count of 1).  Any later calls to
+            // revoke that should decrement the count of the previous holder
+            // would now decrement the count of the new holder, removing it
+            // prematurely.  This is a design flaw that will be fixed when
+            // IEnvironment.revokeInterface is changed to no longer use
+            // counting.  (And this problem is harmless, as currently a holder
+            // either references a strongly held object and uses register/revoke
+            // to control it, or references a weakly held proxy and never
+            // revokes it.)
+            if (l1 == null) {
+                l1 = new Level1Entry();
+                level1map.put(oid, l1);
+            }
+            l1.level2map.put(type, new Level2Entry(oid, type, object, queue));
             return object;
         }
 
-        public boolean revoke(String oid, Type type) {
-            synchronized (map) {
-                Level1Entry l1 = getLevel1Entry(oid);
-                Level2Entry l2 = null;
-                if (l1 != null) {
-                    l2 = l1.get(type);
-                    if (l2 != null && l2.release()) {
-                        removeLevel2Entry(oid, l1, l2);
-                    }
+        public synchronized boolean revoke(String oid, Type type) {
+            Level1Entry l1 = level1map.get(oid);
+            Level2Entry l2 = null;
+            if (l1 != null) {
+                l2 = l1.level2map.get(type);
+                if (l2 != null && l2.release()) {
+                    removeLevel2Entry(l1, oid, type);
                 }
-                cleanUp();
-                return l2 != null;
             }
+            cleanUp();
+            return l2 != null;
         }
 
-        public Object get(String oid, Type type) {
-            synchronized (map) {
-                Level1Entry l1 = getLevel1Entry(oid);
-                return l1 == null ? null : l1.find(type);
-            }
+        public synchronized Object get(String oid, Type type) {
+            Level1Entry l1 = level1map.get(oid);
+            return l1 == null ? null : l1.find(type);
         }
 
-        public void clear() {
-            synchronized (map) {
-                map.clear();
-                cleanUp();
-            }
+        public synchronized void clear() {
+            level1map.clear();
+            cleanUp();
         }
 
-        // must only be called while synchronized on map:
+        // must only be called while synchronized on this Registry:
         private void cleanUp() {
             for (;;) {
                 Level2Entry l2 = (Level2Entry) queue.poll();
@@ -235,55 +225,38 @@ public final class java_environment implements IEnvironment {
                 // created since now e1.get() == null), and only then e1 is
                 // enqueued.  To not erroneously remove the new e2 in that case,
                 // check whether the map still contains e1:
-                String oid = l2.getOid();
-                Level1Entry l1 = getLevel1Entry(oid);
-                if (l1 != null && l1.get(l2.getType()) == l2) {
-                    removeLevel2Entry(oid, l1, l2);
+                Level1Entry l1 = level1map.get(l2.oid);
+                if (l1 != null && l1.level2map.get(l2.type) == l2) {
+                    removeLevel2Entry(l1, l2.oid, l2.type);
                 }
             }
         }
 
-        // must only be called while synchronized on map:
-        private Level1Entry getLevel1Entry(String oid) {
-            return (Level1Entry) map.get(oid);
-        }
-
-        // must only be called while synchronized on map:
-        private void removeLevel2Entry(String oid, Level1Entry l1,
-                                       Level2Entry l2) {
-            if (l1.remove(l2)) {
-                map.remove(oid);
+        // must only be called while synchronized on this Registry:
+        private void removeLevel2Entry(Level1Entry l1, String oid, Type type) {
+            l1.level2map.remove(type);
+            if (l1.level2map.isEmpty()) {
+                level1map.remove(oid);
             }
         }
 
         private static final class Level1Entry {
-            // must only be called while synchronized on map:
-            public Level2Entry get(Type type) {
-                for (Iterator i = list.iterator(); i.hasNext();) {
-                    Level2Entry l2 = (Level2Entry) i.next();
-                    if (l2.getType().equals(type)) {
-                        return l2;
-                    }
-                }
-                return null;
-            }
-
-            // must only be called while synchronized on map:
+            // must only be called while synchronized on enclosing Registry:
             public Object find(Type type) {
                 // First, look for an exactly matching entry; then, look for an
                 // arbitrary entry for a subtype of the request type:
-                for (Iterator i = list.iterator(); i.hasNext();) {
-                    Level2Entry l2 = (Level2Entry) i.next();
-                    if (l2.getType().equals(type)) {
-                        Object o = l2.get();
-                        if (o != null) {
-                            return o;
-                        }
+                Level2Entry l2 = level2map.get(type);
+                if (l2 != null) {
+                    Object o = l2.get();
+                    if (o != null) {
+                        return o;
                     }
                 }
-                for (Iterator i = list.iterator(); i.hasNext();) {
-                    Level2Entry l2 = (Level2Entry) i.next();
-                    if (type.isSupertypeOf(l2.getType())) {
+                for (Iterator<Level2Entry> i = level2map.values().iterator();
+                     i.hasNext();)
+                {
+                    l2 = i.next();
+                    if (type.isSupertypeOf(l2.type)) {
                         Object o = l2.get();
                         if (o != null) {
                             return o;
@@ -293,53 +266,37 @@ public final class java_environment implements IEnvironment {
                 return null;
             }
 
-            // must only be called while synchronized on map:
-            public void add(Level2Entry l2) {
-                list.add(l2);
-            }
-
-            // must only be called while synchronized on map:
-            public boolean remove(Level2Entry l2) {
-                list.remove(l2);
-                return list.isEmpty();
-            }
-
-            private final LinkedList list = new LinkedList(); // of Level2Entry
+            public final HashMap<Type, Level2Entry> level2map =
+                new HashMap<Type, Level2Entry>();
         }
 
-        private static final class Level2Entry extends WeakReference {
-            public Level2Entry(String oid, Type type, Object object,
-                               ReferenceQueue queue) {
+        private static final class Level2Entry extends WeakReference<Object> {
+            public Level2Entry(
+                String oid, Type type, Object object, ReferenceQueue queue)
+            {
                 super(object, queue);
                 this.oid = oid;
                 this.type = type;
             }
 
-            public String getOid() {
-                return oid;
-            }
-
-            public Type getType() {
-                return type;
-            }
-
-            // must only be called while synchronized on map:
+            // must only be called while synchronized on enclosing Registry:
             public void acquire() {
                 ++count;
             }
 
-            // must only be called while synchronized on map:
+            // must only be called while synchronized on enclosing Registry:
             public boolean release() {
                 return --count == 0;
             }
 
-            private final String oid;
-            private final Type type;
+            public final String oid;
+            public final Type type;
+
             private int count = 1;
         }
 
-        private final HashMap map = new HashMap();
-            // from OID (String) to Level1Entry
+        private final HashMap<String, Level1Entry> level1map =
+            new HashMap<String, Level1Entry>();
         private final ReferenceQueue queue = new ReferenceQueue();
     }
 

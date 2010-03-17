@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: thread.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,7 +114,7 @@ public:
         osl_joinWithThread(m_hThread);
     }
 
-    sal_Bool SAL_CALL isRunning()
+    sal_Bool SAL_CALL isRunning() const
     {
         return osl_isThreadRunning(m_hThread);
     }
@@ -128,7 +125,7 @@ public:
             osl_setThreadPriority(m_hThread, Priority);
     }
 
-    oslThreadPriority SAL_CALL getPriority()
+    oslThreadPriority SAL_CALL getPriority() const
     {
         return m_hThread ? osl_getThreadPriority(m_hThread) : osl_Thread_PriorityUnknown;
     }

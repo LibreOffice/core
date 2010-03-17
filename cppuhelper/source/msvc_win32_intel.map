@@ -271,3 +271,9 @@ UDK_3.5 { # OOo 3.0
     global:
         ??0OPropertySetHelper@cppu@@QAE@AAU?$OBroadcastHelperVar@VOMultiTypeInterfaceContainerHelper@cppu@@VType@uno@star@sun@com@@@1@PAVIEventNotificationHook@1@_N@Z;
 } UDK_3.4;
+
+UDK_3.6 { # OOo 3.3
+    global:
+        ?disposeWeakConnectionPoint@OWeakObject@cppu@@IAEXXZ;
+        ?clear@WeakReferenceHelper@uno@star@sun@com@@QAAXXZ;
+} UDK_3.5;

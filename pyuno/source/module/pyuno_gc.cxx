@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pyuno_gc.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +40,12 @@ public:
 };
 StaticDestructorGuard guard;
 
+static bool isAfterUnloadOrPy_Finalize()
+{
+    return g_destructorsOfStaticObjectsHaveBeenCalled ||
+        !Py_IsInitialized();
+}
+
 class GCThread : public ::osl::Thread
 {
     PyObject *mPyObject;
@@ -64,7 +67,7 @@ GCThread::GCThread( PyInterpreterState *interpreter, PyObject * object ) :
 void GCThread::run()
 {
     //  otherwise we crash here, when main has been left already
-    if( g_destructorsOfStaticObjectsHaveBeenCalled )
+    if( isAfterUnloadOrPy_Finalize() )
         return;
     try
     {
@@ -100,7 +103,7 @@ void GCThread::onTerminated()
 void decreaseRefCount( PyInterpreterState *interpreter, PyObject *object )
 {
     //  otherwise we crash in the last after main ...
-    if( g_destructorsOfStaticObjectsHaveBeenCalled )
+    if( isAfterUnloadOrPy_Finalize() )
         return;
 
     // delegate to a new thread, because there does not seem

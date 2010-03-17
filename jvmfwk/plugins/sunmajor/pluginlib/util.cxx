@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: util.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -127,7 +124,7 @@ extern VendorSupportMapEntry gVendorMap[];
 
 bool getSDKInfoFromRegistry(vector<OUString> & vecHome);
 bool getJREInfoFromRegistry(vector<OUString>& vecJavaHome);
-rtl::OUString decodeOutput(const rtl::OString& s);
+bool decodeOutput(const rtl::OString& s, rtl::OUString* out);
 
 
 
@@ -300,13 +297,14 @@ class AsynchReader: public Thread
 public:
 
     AsynchReader(oslFileHandle & rHandle);
-
+#if OSL_DEBUG_LEVEL >= 2
     /** only call this function after this thread has finished.
 
         That is, call join on this instance and then call getData.
 
      */
     OString getData();
+#endif
 };
 
 AsynchReader::AsynchReader(oslFileHandle & rHandle):
@@ -314,11 +312,13 @@ AsynchReader::AsynchReader(oslFileHandle & rHandle):
 {
 }
 
+#if OSL_DEBUG_LEVEL >= 2
 OString AsynchReader::getData()
 {
     OSL_ASSERT(isRunning() == sal_False );
     return OString(m_arData.get(), m_nDataSize);
 }
+#endif
 
 void AsynchReader::run()
 {
@@ -452,7 +452,9 @@ bool getJavaProps(const OUString & exePath,
             break;
         JFW_TRACE2(OString("[Java framework] line:\" ")
                + aLine + OString(" \".\n"));
-        OUString sLine = decodeOutput(aLine);
+        OUString sLine;
+        if (!decodeOutput(aLine, &sLine))
+            continue;
         JFW_TRACE2(OString("[Java framework] line:\" ")
                + OString( CHAR_POINTER(sLine)) + OString(" \".\n"));
         sLine = sLine.trim();
@@ -486,8 +488,9 @@ bool getJavaProps(const OUString & exePath,
     readable strings. The strings are encoded as integer values separated
     by spaces.
  */
-rtl::OUString decodeOutput(const rtl::OString& s)
+bool decodeOutput(const rtl::OString& s, rtl::OUString* out)
 {
+    OSL_ASSERT(out != 0);
     OUStringBuffer buff(512);
     sal_Int32 nIndex = 0;
     do
@@ -495,14 +498,19 @@ rtl::OUString decodeOutput(const rtl::OString& s)
         OString aToken = s.getToken( 0, ' ', nIndex );
         if (aToken.getLength())
         {
+            for (sal_Int32 i = 0; i < aToken.getLength(); ++i)
+            {
+                if (aToken[i] < '0' || aToken[i] > '9')
+                    return false;
+            }
             sal_Unicode value = (sal_Unicode)(aToken.toInt32());
             buff.append(value);
         }
     } while (nIndex >= 0);
 
-    OUString sDecoded(buff.makeStringAndClear());
-    JFW_TRACE2(sDecoded);
-    return sDecoded;
+    *out = buff.makeStringAndClear();
+    JFW_TRACE2(*out);
+    return true;
 }
 
 
@@ -793,8 +801,9 @@ OUString resolveDirPath(const OUString & path)
 {
     OUString ret;
     OUString sResolved;
+    //getAbsoluteFileURL also resolves links
     if (File::getAbsoluteFileURL(
-        rtl::OUString(), path, sResolved) != File::E_None)
+            OUSTR("file:///"), path, sResolved) != File::E_None)
         return OUString();
 
     //check if this is a valid path and if it is a directory
@@ -824,7 +833,7 @@ OUString resolveFilePath(const OUString & path)
     OUString sResolved;
 
     if (File::getAbsoluteFileURL(
-        rtl::OUString(), path, sResolved) != File::E_None)
+            OUSTR("file:///"), path, sResolved) != File::E_None)
         return OUString();
 
     //check if this is a valid path to a file or and if it is a link

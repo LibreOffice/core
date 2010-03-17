@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,7 +37,7 @@ DLLPRE = # no leading "lib" on .so files
 
 SHL1TARGET = $(TARGET)
 SHL1OBJS = $(SLO)$/test_weak.obj
-SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(CPPUNITLIB) $(SALLIB)
+SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(CPPUNITLIB) $(SALLIB) $(TESTSHL2LIB)
 SHL1VERSIONMAP = version.map
 SHL1IMPLIB = i$(SHL1TARGET)
 DEF1NAME = $(SHL1TARGET)
@@ -53,4 +49,4 @@ SLOFILES = $(SHL1OBJS)
 ALLTAR: test
 
 test .PHONY: $(SHL1TARGETN)
-    testshl2 $(SHL1TARGETN)
+    $(TESTSHL2) $(SHL1TARGETN)

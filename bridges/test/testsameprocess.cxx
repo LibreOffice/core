@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: testsameprocess.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,11 +27,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_bridges.hxx"
-#if OSL_DEBUG_LEVEL == 0
-#undef NDEBUG
-#define NDEBUG
-#endif
-#include <assert.h>
 #include <osl/time.h>
 
 #include <osl/mutex.hxx>
@@ -201,7 +193,7 @@ int main( int argc, char *argv[] )
 
             Reference < XBridge > rBridge = rFactory->getBridge(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("bla blub")) );
-            assert( ! rBridge.is() );
+            OSL_ASSERT( ! rBridge.is() );
 
         }
         catch( Exception & )

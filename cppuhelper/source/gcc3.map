@@ -373,3 +373,11 @@ UDK_3.5 { # OOo 3.0
         _ZN4cppu18OPropertySetHelperC1ERNS_19OBroadcastHelperVarINS_34OMultiTypeInterfaceContainerHelperEN3com3sun4star3uno4TypeEEEPNS_22IEventNotificationHookEb;
         _ZN4cppu18OPropertySetHelperC2ERNS_19OBroadcastHelperVarINS_34OMultiTypeInterfaceContainerHelperEN3com3sun4star3uno4TypeEEEPNS_22IEventNotificationHookEb;
 } UDK_3.4;
+
+UDK_3.6 { # OOo 3.3
+    global:
+        _ZN4cppu11OWeakObject26disposeWeakConnectionPointEv;
+        _ZN3com3sun4star3uno19WeakReferenceHelperaSERKNS2_9ReferenceINS2_10XInterfaceEEE;
+        _ZN3com3sun4star3uno19WeakReferenceHelper5clearEv;
+} UDK_3.5;
+

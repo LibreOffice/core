@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: file.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -466,6 +463,7 @@ oslFileError FileHandle_Impl::readFileAt (
                 oslFileError result = syncFile();
                 if (result != osl_File_E_None)
                     return (result);
+                m_bufptr = -1, m_buflen = 0;
 
                 if (nBytesRequested >= m_bufsiz)
                 {
@@ -535,6 +533,7 @@ oslFileError FileHandle_Impl::writeFileAt (
                 oslFileError result = syncFile();
                 if (result != osl_File_E_None)
                     return (result);
+                m_bufptr = -1, m_buflen = 0;
 
                 if (nBytesToWrite >= m_bufsiz)
                 {
@@ -1009,7 +1008,7 @@ SAL_CALL osl_syncFile(oslFileHandle Handle)
 
     FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
 
-    OSL_FILE_TRACE("osl_syncFile(%d)", pImpl->m_fd);
+    OSL_TRACE("osl_syncFile(%d)", pImpl->m_fd);
     oslFileError result = pImpl->syncFile();
     if (result != osl_File_E_None)
         return (result);
@@ -1079,6 +1078,29 @@ SAL_CALL osl_mapFile (
                 nSize -= nSize;
             }
         }
+    }
+    if (uFlags & osl_File_MapFlag_WillNeed)
+    {
+        // On Linux, madvise(..., MADV_WILLNEED) appears to have the undesirable
+        // effect of not returning until the data has actually been paged in, so
+        // that its net effect would typically be to slow down the process
+        // (which could start processing at the beginning of the data while the
+        // OS simultaneously pages in the rest); on other platforms, it remains
+        // to be evaluated whether madvise or equivalent is available and
+        // actually useful:
+#if defined MACOSX
+        int e = posix_madvise(p, nLength, POSIX_MADV_WILLNEED);
+        if (e != 0)
+        {
+            OSL_TRACE(
+                "posix_madvise(..., POSIX_MADV_WILLNEED) failed with %d", e);
+        }
+#elif defined SOLARIS
+        if (madvise(static_cast< caddr_t >(p), nLength, MADV_WILLNEED) != 0)
+        {
+            OSL_TRACE("madvise(..., MADV_WILLNEED) failed with %d", errno);
+        }
+#endif
     }
     return osl_File_E_None;
 }

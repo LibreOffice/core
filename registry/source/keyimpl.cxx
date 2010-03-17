@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: keyimpl.cxx,v $
- * $Revision: 1.9.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -365,7 +362,7 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
         return REG_SET_VALUE_FAILED;
     }
 
-    rValue.flush();
+    //rValue.flush();
     rtl_freeMemory(pBuffer);
     return REG_NO_ERROR;
 }
@@ -424,7 +421,7 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32* pValueL
         return REG_SET_VALUE_FAILED;
     }
 
-    rValue.flush();
+    //rValue.flush();
     rtl_freeMemory(pBuffer);
     return REG_NO_ERROR;
 }
@@ -492,7 +489,7 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
         return REG_SET_VALUE_FAILED;
     }
 
-    rValue.flush();
+    //rValue.flush();
     rtl_freeMemory(pBuffer);
     return REG_NO_ERROR;
 }
@@ -560,7 +557,7 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
         return REG_SET_VALUE_FAILED;
     }
 
-    rValue.flush();
+    //rValue.flush();
     rtl_freeMemory(pBuffer);
     return REG_NO_ERROR;
 }

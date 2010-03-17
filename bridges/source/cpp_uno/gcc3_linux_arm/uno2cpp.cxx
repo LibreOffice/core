@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: uno2cpp.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +42,17 @@
 #include <stdio.h>
 #include <string.h>
 
-#if defined(__ARM_EABI__) && !defined(__SOFTFP__)
+/*
+ * Based on http://gcc.gnu.org/PR41443
+ * References to __SOFTFP__ are incorrect for EABI; the __SOFTFP__ code
+ * should be used for *soft-float ABI* whether or not VFP is enabled,
+ * and __SOFTFP__ does specifically mean soft-float not soft-float ABI.
+ *
+ * Changing the conditionals to __SOFTFP__ || __ARM_EABI__ then
+ * -mfloat-abi=softfp should work.  -mfloat-abi=hard won't; that would
+ * need both a new macro to identify the hard-VFP ABI.
+ */
+#if !defined(__ARM_EABI__) && !defined(__SOFTFP__)
 #error Not Implemented
 
 /*
@@ -103,7 +110,7 @@ namespace arm
 
 void MapReturn(long r0, long r1, typelib_TypeClass eReturnType, void *pRegisterReturn)
 {
-#ifndef __SOFTFP__
+#if !defined(__ARM_EABI__) && !defined(__SOFTFP__)
     register float fret asm("f0");
     register double dret asm("f0");
 #endif
@@ -128,14 +135,14 @@ void MapReturn(long r0, long r1, typelib_TypeClass eReturnType, void *pRegisterR
             *(unsigned char*)pRegisterReturn = (unsigned char)r0;
             break;
         case typelib_TypeClass_FLOAT:
-#ifdef __SOFTFP__
+#if defined(__ARM_EABI__) || defined(__SOFTFP__)
             ((long*)pRegisterReturn)[0] = r0;
 #else
             *(float*)pRegisterReturn = fret;
 #endif
         break;
         case typelib_TypeClass_DOUBLE:
-#ifdef __SOFTFP__
+#if defined(__ARM_EABI__) || defined(__SOFTFP__)
             ((long*)pRegisterReturn)[1] = r1;
             ((long*)pRegisterReturn)[0] = r0;
 #else
