@@ -415,6 +415,9 @@ FormatStylesLoad SID_TEMPLATE_LOAD
 FormatStylist SID_STYLE_DESIGNER
 FormatControl SID_FM_CTL_PROPERTIES
 FormatForm SID_FM_PROPERTIES
+FormatChangeCaseToSentence .uno:ChangeCaseToSentenceCase
+FormatChangeCaseCapitalizeEveryWord .uno:ChangeCaseToTitleCase
+FormatChangeCaseToggleCase .uno:ChangeCaseToToggleCase
 FormatChangeCaseUpper .uno:ChangeCaseToUpper
 FormatChangeCaseLower .uno:ChangeCaseToLower
 FormatChangeCaseHalfWidth .uno:ChangeCaseToHalfWidth
