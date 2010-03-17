@@ -1232,6 +1232,7 @@ testcase tToolsThesaurus
     Dim sWordToBeFound as string
     Dim sWordReplacedWith as string
     Dim i as integer
+    Dim j as integer
     Dim TheFile as String
 
     PrintLog "- Tools / Thesaurus"
@@ -1287,11 +1288,12 @@ testcase tToolsThesaurus
     if ReplaceWith.GetText <> "" then Warnlog "- Though no word has been selected there is a replacetext in the textfield!"
     printlog "Set language dependent word in textfield Current Word"
     CurrentWord.Settext sWordInitial
+
     wait 500
     if Alternatives.GetItemCount = 0 then
         Warnlog "No alternatives text"
     else
-        if ReplaceWith.Gettext <> Alternatives.GetSelText(1) then
+        if ReplaceWith.Gettext <> Alternatives.GetText(Alternatives.GetSelIndex) then
             Warnlog "Replace with textfield was not filled with word from alternative"
         endif
     endif
