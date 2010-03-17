@@ -67,9 +67,9 @@
 #include "OutlineViewShell.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "PresentationViewShell.hxx"
-#include "TaskPaneViewShell.hxx"
 #include "FormShellManager.hxx"
 #include "ToolBarManager.hxx"
+#include "taskpane/PanelId.hxx"
 #include "Window.hxx"
 #include "framework/ConfigurationController.hxx"
 #include "DocumentRenderer.hxx"
@@ -823,13 +823,6 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
                 framework::FrameworkHelper::msTaskPaneURL);
             break;
 
-        case SID_TOOL_PANEL_PANE:
-            mpImpl->SetPaneVisibility(
-                rRequest,
-                framework::FrameworkHelper::msToolPanelPaneURL,
-                framework::FrameworkHelper::msToolPanelViewURL);
-            break;
-
         case SID_NORMAL_MULTI_PANE_GUI:
         case SID_SLIDE_SORTER_MULTI_PANE_GUI:
         case SID_DRAWINGMODE:
@@ -1552,11 +1545,6 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                     case SID_RIGHT_PANE:
                         xResourceId = ResourceId::create(
                             xContext, FrameworkHelper::msRightPaneURL);
-                        break;
-
-                    case SID_TOOL_PANEL_PANE:
-                        xResourceId = ResourceId::create(
-                            xContext, FrameworkHelper::msToolPanelPaneURL);
                         break;
 
                     case SID_NORMAL_MULTI_PANE_GUI:

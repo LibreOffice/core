@@ -71,7 +71,6 @@
 #include "sdresid.hxx"
 #include "OutlineViewShell.hxx"
 #include "ViewShellBase.hxx"
-#include "TaskPaneViewShell.hxx"
 #ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
 #endif

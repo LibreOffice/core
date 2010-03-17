@@ -78,17 +78,6 @@ public:
 /** Shell that displays the right pane for both Impress and Draw.  The shell
     does not do anything else and has especially no slots.
 */
-class RightPaneShell
-    : public SfxShell
-{
-public:
-    TYPEINFO();
-    SFX_DECL_INTERFACE(SD_IF_SDRIGHTPANESHELL)
-
-    RightPaneShell (void);
-    virtual ~RightPaneShell (void);
-};
-
 class ToolPanelPaneShell : public SfxShell
 {
 public:

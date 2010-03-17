@@ -49,7 +49,7 @@ namespace sd { namespace toolpanel {
 /** The TaskPaneShellManager implements the ViewShellManager::ShellFactory
     interface.  However, it does not create or delete shells.  It only
     gives the ViewShellManager access to the sub shells of the
-    TaskPaneViewShell.  Life time control of the sub shells is managed by
+    ToolPanelViewShell.  Life time control of the sub shells is managed by
     the sub shells themselves.
 */
 class TaskPaneShellManager

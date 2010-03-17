@@ -27,7 +27,6 @@
 #include "precompiled_sd.hxx"
 
 #include "ToolPanelDrawer.hxx"
-#include "taskpane/ToolPanel.hxx"
 #include "taskpane/TitleBar.hxx"
 
 #include <tools/diagnose_ex.h>

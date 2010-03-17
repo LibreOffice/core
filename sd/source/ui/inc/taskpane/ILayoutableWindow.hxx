@@ -51,7 +51,7 @@ public:
 
 
 /** This interface has to be implemented by windows that want to be
-    layouted by a ToolPanel, SubToolPanel, or ScrollablePanel object.
+    layouted by a SubToolPanel or ScrollablePanel object.
 */
 class ILayoutableWindow
 {

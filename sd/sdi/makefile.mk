@@ -70,7 +70,6 @@ SVSDI1DEPEND= \
     outlnvsh.sdi \
     SlideSorterController.sdi \
     ViewShellBase.sdi \
-    TaskPaneViewShell.sdi \
     ToolPanelViewShell.sdi \
     sdslots.hrc \
     $(PRJ)$/inc$/app.hrc
@@ -93,7 +92,6 @@ SVSDI2DEPEND= \
         mediaob.sdi \
     outlnvsh.sdi \
     ViewShellBase.sdi \
-    TaskPaneViewShell.sdi \
     ToolPanelViewShell.sdi \
     sdslots.hrc \
     $(PRJ)$/inc$/app.hrc

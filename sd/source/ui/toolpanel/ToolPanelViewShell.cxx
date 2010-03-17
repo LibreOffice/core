@@ -308,7 +308,7 @@ void ToolPanelViewShell::Implementation::Setup()
 
     // compose the resource ID for the ToolPanel view
     ::boost::shared_ptr< FrameworkHelper > pFrameworkHelper( FrameworkHelper::Instance( m_rPanelViewShell.GetViewShellBase() ) );
-    const Reference< XResourceId > xToolPanelId( pFrameworkHelper->CreateResourceId( FrameworkHelper::msToolPanelViewURL, FrameworkHelper::msToolPanelPaneURL ) );
+    const Reference< XResourceId > xToolPanelId( pFrameworkHelper->CreateResourceId( FrameworkHelper::msTaskPaneURL, FrameworkHelper::msRightPaneURL ) );
 
     // want to activate the "Layout" panel later on, need to translate its PanelId to an actual position
     const PanelId nPanelIdToActivate = PID_LAYOUT;
@@ -410,7 +410,7 @@ ToolPanelViewShell::ToolPanelViewShell( SfxViewFrame* pFrame, ViewShellBase& rVi
     ,mpSubShellManager()
     ,mnMenuId(0)
 {
-    meShellType = ST_TOOL_PANEL;
+    meShellType = ST_TASK_PANE;
 
     mpContentWindow->SetCenterAllowed( false );
     pParentWindow->SetStyle( pParentWindow->GetStyle() | WB_DIALOGCONTROL );

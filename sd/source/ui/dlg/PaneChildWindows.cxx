@@ -48,8 +48,7 @@ namespace sd {
 
 SFX_IMPL_DOCKINGWINDOW(LeftPaneImpressChildWindow, SID_LEFT_PANE_IMPRESS)
 SFX_IMPL_DOCKINGWINDOW(LeftPaneDrawChildWindow, SID_LEFT_PANE_DRAW)
-SFX_IMPL_DOCKINGWINDOW(RightPaneChildWindow, SID_RIGHT_PANE)
-SFX_IMPL_DOCKINGWINDOW( ToolPanelChildWindow, SID_TOOL_PANEL_PANE )
+SFX_IMPL_DOCKINGWINDOW( ToolPanelChildWindow, SID_RIGHT_PANE)
 
 //===== PaneChildWindow =======================================================
 
@@ -139,25 +138,6 @@ LeftPaneDrawChildWindow::LeftPaneDrawChildWindow (
 }
 
 
-
-
-//===== RightPaneChildWindow ==================================================
-
-RightPaneChildWindow::RightPaneChildWindow (
-    ::Window* pParentWindow,
-    USHORT nId,
-    SfxBindings* pBindings,
-    SfxChildWinInfo* pInfo)
-    : PaneChildWindow(
-        pParentWindow,
-        nId,
-        pBindings,
-        pInfo,
-        FLT_RIGHT_PANE_DOCKING_WINDOW,
-        STR_RIGHT_PANE_TITLE,
-        SFX_ALIGN_RIGHT)
-{
-}
 
 
 //======================================================================================================================

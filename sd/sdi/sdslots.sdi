@@ -107,6 +107,5 @@ ModulePrefix( "Sd" )
         include "ViewShellBase.sdi"
         include "mediaob.sdi"
         include "tables.sdi"
-        include "TaskPaneViewShell.sdi"
         include "ToolPanelViewShell.sdi"
 }

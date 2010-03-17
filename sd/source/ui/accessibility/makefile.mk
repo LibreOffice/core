@@ -60,7 +60,6 @@ SLOFILES =      									\
     $(SLO)$/AccessibleScrollPanel.obj				\
     $(SLO)$/AccessibleSlideSorterView.obj			\
     $(SLO)$/AccessibleSlideSorterObject.obj			\
-    $(SLO)$/AccessibleTaskPane.obj					\
     $(SLO)$/AccessibleTreeNode.obj					\
     $(SLO)$/SdShapeTypes.obj
 

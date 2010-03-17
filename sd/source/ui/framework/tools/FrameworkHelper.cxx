@@ -187,8 +187,6 @@ const OUString FrameworkHelper::msLeftDrawPaneURL(
     msPaneURLPrefix + OUString::createFromAscii("LeftDrawPane"));
 const OUString FrameworkHelper::msRightPaneURL(
     msPaneURLPrefix + OUString::createFromAscii("RightPane"));
-const OUString FrameworkHelper::msToolPanelPaneURL(
-    msPaneURLPrefix + OUString::createFromAscii("ToolPanel"));
 
 
 // View URLs.
@@ -211,8 +209,6 @@ const OUString FrameworkHelper::msPresentationViewURL(
     msViewURLPrefix + OUString::createFromAscii("PresentationView"));
 const OUString FrameworkHelper::msTaskPaneURL(
     msViewURLPrefix + OUString::createFromAscii("TaskPane"));
-const OUString FrameworkHelper::msToolPanelViewURL(
-    msViewURLPrefix + OUString::createFromAscii("ToolPanelPane"));
 
 
 // Tool bar URLs.
@@ -594,7 +590,6 @@ ViewShell::ShellType FrameworkHelper::GetViewId (const rtl::OUString& rsViewURL)
         (*mpViewURLMap)[msSlideSorterURL] = ViewShell::ST_SLIDE_SORTER;
         (*mpViewURLMap)[msPresentationViewURL] = ViewShell::ST_PRESENTATION;
         (*mpViewURLMap)[msTaskPaneURL] = ViewShell::ST_TASK_PANE;
-        (*mpViewURLMap)[msToolPanelViewURL] = ViewShell::ST_TOOL_PANEL;
     }
     ViewURLMap::const_iterator iView (mpViewURLMap->find(rsViewURL));
     if (iView != mpViewURLMap->end())
@@ -618,7 +613,6 @@ ViewShell::ShellType FrameworkHelper::GetViewId (const rtl::OUString& rsViewURL)
         case ViewShell::ST_SLIDE_SORTER : return msSlideSorterURL;
         case ViewShell::ST_PRESENTATION : return msPresentationViewURL;
         case ViewShell::ST_TASK_PANE : return msTaskPaneURL;
-        case ViewShell::ST_TOOL_PANEL: return msToolPanelViewURL;
         default:
             return OUString();
     }

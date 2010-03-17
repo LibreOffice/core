@@ -31,7 +31,6 @@
 
 #include "precompiled_sd.hxx"
 #include "TaskPanelFactory.hxx"
-#include "TaskPaneViewShell.hxx"
 #include "taskpane/ToolPanelViewShell.hxx"
 #include "DrawController.hxx"
 #include "framework/FrameworkHelper.hxx"
@@ -44,7 +43,6 @@ using namespace ::com::sun::star::drawing::framework;
 
 using ::rtl::OUString;
 using ::sd::framework::FrameworkHelper;
-using ::sd::toolpanel::TaskPaneViewShell;
 
 namespace sd { namespace framework {
 
@@ -265,21 +263,11 @@ Reference<XResource> SAL_CALL TaskPanelFactory::createResource (
             const ::rtl::OUString sPaneURL = aResourceURLs[ aResourceURLs.size() - 1 ];
             const ::boost::shared_ptr< ViewShell > pPaneViewShell( pFrameworkHelper->GetViewShell( sPaneURL ) );
 
-            toolpanel::TaskPaneViewShell* pTaskPane = dynamic_cast< toolpanel::TaskPaneViewShell* >( pPaneViewShell.get() );
-            if ( pTaskPane != NULL )
+            toolpanel::ToolPanelViewShell* pToolPanel = dynamic_cast< toolpanel::ToolPanelViewShell* >( pPaneViewShell.get() );
+            if ( pToolPanel != NULL )
             {
                 xResource = new TaskPanelResource( rxResourceId );
-                pTaskPane->ShowPanel(ePanelId);
-                pTaskPane->ExpandPanel(ePanelId);
-            }
-            else
-            {
-                toolpanel::ToolPanelViewShell* pToolPanel = dynamic_cast< toolpanel::ToolPanelViewShell* >( pPaneViewShell.get() );
-                if ( pToolPanel != NULL )
-                {
-                    xResource = new TaskPanelResource( rxResourceId );
-                    pToolPanel->ActivatePanel( ePanelId );
-                }
+                pToolPanel->ActivatePanel( ePanelId );
             }
 
             OSL_POSTCOND( xResource.is(), "TaskPanelFactory::createResource: did not find the given resource!" );
@@ -312,23 +300,13 @@ void SAL_CALL TaskPanelFactory::releaseResource (
         if ( pPaneViewShell != NULL )
         {
             toolpanel::PanelId ePanelId( lcl_getPanelId( xResourceId->getResourceURL() ) );
-            toolpanel::TaskPaneViewShell* pTaskPane( dynamic_cast< toolpanel::TaskPaneViewShell* >( pPaneViewShell.get() ) );
             toolpanel::ToolPanelViewShell* pToolPanel = dynamic_cast< toolpanel::ToolPanelViewShell* >( pPaneViewShell.get() );
 
             if  (   ( ePanelId != toolpanel::PID_UNKNOWN )
-                &&  (   ( pTaskPane != NULL )
-                    ||  ( pToolPanel != NULL )
-                    )
+                &&  ( pToolPanel != NULL )
                 )
             {
-                if ( pTaskPane != NULL )
-                {
-                    pTaskPane->CollapsePanel( ePanelId );
-                }
-                if ( pToolPanel != NULL )
-                {
-                    pToolPanel->DeactivatePanel( ePanelId );
-                }
+                pToolPanel->DeactivatePanel( ePanelId );
             }
             else
             {

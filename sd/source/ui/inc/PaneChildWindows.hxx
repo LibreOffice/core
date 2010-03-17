@@ -77,16 +77,6 @@ public:
 
 
 
-class RightPaneChildWindow
-    : public PaneChildWindow
-{
-public:
-    RightPaneChildWindow (::Window*, USHORT, SfxBindings*, SfxChildWinInfo*);
-
-    SFX_DECL_CHILDWINDOW(RightPaneChildWindow);
-};
-
-
 //======================================================================================================================
 //= ToolPanelChildWindow
 //======================================================================================================================

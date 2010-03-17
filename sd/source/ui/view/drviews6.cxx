@@ -84,7 +84,6 @@
 #include "FrameView.hxx"
 #include "Window.hxx"
 #include "DrawDocShell.hxx"
-#include "TaskPaneViewShell.hxx"
 #include "framework/FrameworkHelper.hxx"
 
 namespace sd {

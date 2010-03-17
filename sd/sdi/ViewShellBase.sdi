@@ -164,32 +164,6 @@ SfxBoolItem RightPane SID_RIGHT_PANE
     GroupId = GID_MODIFY;
 ]
 
-SfxBoolItem ToolPanel SID_TOOL_PANEL_PANE
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_MODIFY;
-]
-
 SfxVoidItem NotesChildWindow SID_NOTES_WINDOW
 
 [
@@ -310,11 +284,6 @@ interface ViewShellBaseView
         StateMethod = GetState;
     ]
     SID_RIGHT_PANE
-    [
-        ExecMethod = Execute;
-        StateMethod = GetState;
-    ]
-    SID_TOOL_PANEL_PANE
     [
         ExecMethod = Execute;
         StateMethod = GetState;

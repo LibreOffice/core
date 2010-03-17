@@ -72,7 +72,6 @@
 #endif
 #include "DrawViewShell.hxx"
 #include "OutlineViewShell.hxx"
-#include "TaskPaneViewShell.hxx"
 #include "drawview.hxx"
 
 #include "sdattr.hxx"
@@ -83,6 +82,7 @@
 #include "Window.hxx"
 #include "DrawDocShell.hxx"
 #include "FrameView.hxx"
+#include "framework/FrameworkHelper.hxx"
 #include "optsitem.hxx"
 #include "sdresid.hxx"
 
@@ -256,7 +256,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
             && rBase.GetMainViewShell()->GetShellType()!=ViewShell::ST_DRAW)
         {
             framework::FrameworkHelper::Instance(GetViewShellBase())->RequestTaskPanel(
-            framework::FrameworkHelper::msLayoutTaskPanelURL);
+                framework::FrameworkHelper::msLayoutTaskPanelURL);
         }
 
         // AutoLayouts muessen fertig sein

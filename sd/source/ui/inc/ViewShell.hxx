@@ -118,8 +118,7 @@ public:
         ST_OUTLINE,
         ST_SLIDE_SORTER,
         ST_PRESENTATION,
-        ST_TASK_PANE,
-        ST_TOOL_PANEL
+        ST_TASK_PANE
     };
     static const int MAX_HSPLIT_CNT = 1;
     static const int MAX_VSPLIT_CNT = 1;

@@ -59,8 +59,7 @@ namespace {
         FullScreenPaneId,
         LeftImpressPaneId,
         LeftDrawPaneId,
-        RightPaneId,
-        ToolPanelPaneId
+        RightPaneId
     };
 
     static const sal_Int32 gnConfigurationUpdateStartEvent(0);
@@ -244,11 +243,6 @@ void SAL_CALL BasicPaneFactory::initialize (const Sequence<Any>& aArguments)
                 aDescriptor.mePaneId = RightPaneId;
                 mpPaneContainer->push_back(aDescriptor);
                 xCC->addResourceFactory(aDescriptor.msPaneURL, this);
-
-                aDescriptor.msPaneURL = FrameworkHelper::msToolPanelPaneURL;
-                aDescriptor.mePaneId = ToolPanelPaneId;
-                mpPaneContainer->push_back(aDescriptor);
-                xCC->addResourceFactory(aDescriptor.msPaneURL, this);
             }
 
             // Register as configuration change listener.
@@ -318,7 +312,6 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
                 case LeftImpressPaneId:
                 case LeftDrawPaneId:
                 case RightPaneId:
-                case ToolPanelPaneId:
                     xPane = CreateChildWindowPane(
                         rxPaneId,
                         *iDescriptor);
@@ -539,11 +532,6 @@ Reference<XResource> BasicPaneFactory::CreateChildWindowPane (
                 break;
 
             case RightPaneId:
-                pShell.reset(new RightPaneShell());
-                nChildWindowId = ::sd::RightPaneChildWindow::GetChildWindowId();
-                break;
-
-            case ToolPanelPaneId:
                 pShell.reset(new ToolPanelPaneShell());
                 nChildWindowId = ::sd::ToolPanelChildWindow::GetChildWindowId();
                 break;

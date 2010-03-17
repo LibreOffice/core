@@ -56,9 +56,9 @@ enum TreeNodeStateChangeEventId {
 
 
 /** Base class for all members of the object hierarchy that makes up the
-    tool panel.  There are usually at least three levels.  At the top level
-    is the ToolPanel with one instance: the root of the tree.  At the
-    middle level there are SubToolPanels and Window/Control objects.  At the
+    tool panel. In the task pane, there are multiple hierarchies of such nodes,
+    with every panel having an own tree. The pane node is the root of the tree, below
+    that there are SubToolPanels and Window/Control objects. At the
     lowest level there are only Window or Control objects.
 
     This class provides the means of communication between objects on
@@ -146,7 +146,7 @@ public:
     ControlContainer& GetControlContainer (void);
 
     /** Give each node access to a shell manage.  This usually is the shell
-        manager of the TaskPaneViewShell.
+        manager of the ToolPanelViewShell.
 
         At least the root node has to overwrite this method since the
         default implementation simply returns the shell manager of its

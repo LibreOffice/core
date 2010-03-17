@@ -112,39 +112,6 @@ LeftDrawPaneShell::~LeftDrawPaneShell (void)
 
 
 
-//===== RightPaneShell ========================================================
-
-#undef ShellClass
-#define ShellClass RightPaneShell
-
-SFX_SLOTMAP(RightPaneShell)
-{
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
-};
-
-SFX_IMPL_INTERFACE(RightPaneShell, SfxShell, SdResId(STR_RIGHT_PANE_SHELL))
-{
-    SFX_CHILDWINDOW_REGISTRATION(
-        ::sd::RightPaneChildWindow::GetChildWindowId());
-}
-
-TYPEINIT1(RightPaneShell, SfxShell);
-
-
-
-RightPaneShell::RightPaneShell (void)
-    : SfxShell()
-{
-    SetName(rtl::OUString::createFromAscii("RightPane"));
-}
-
-
-
-
-RightPaneShell::~RightPaneShell (void)
-{
-}
-
 //===== ToolPanelPaneShell ========================================================
 
 #undef ShellClass

@@ -149,8 +149,8 @@ void ToolPanelModule::Initialize (const Reference<frame::XController>& rxControl
         new ResourceManager(
             rxController,
             FrameworkHelper::CreateResourceId(
-                FrameworkHelper::msToolPanelViewURL,
-                FrameworkHelper::msToolPanelPaneURL)));
+                FrameworkHelper::msTaskPaneURL,
+                FrameworkHelper::msRightPaneURL)));
     pResourceManager->AddActiveMainView(FrameworkHelper::msImpressViewURL);
     pResourceManager->AddActiveMainView(FrameworkHelper::msNotesViewURL);
     pResourceManager->AddActiveMainView(FrameworkHelper::msHandoutViewURL);

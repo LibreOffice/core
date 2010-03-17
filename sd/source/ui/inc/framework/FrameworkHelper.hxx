@@ -80,7 +80,6 @@ public:
     static const ::rtl::OUString msLeftImpressPaneURL;
     static const ::rtl::OUString msLeftDrawPaneURL;
     static const ::rtl::OUString msRightPaneURL;
-    static const ::rtl::OUString msToolPanelPaneURL;
 
     // URLs of frequently used views.
     static const ::rtl::OUString msViewURLPrefix;
@@ -92,7 +91,6 @@ public:
     static const ::rtl::OUString msSlideSorterURL;
     static const ::rtl::OUString msPresentationViewURL;
     static const ::rtl::OUString msTaskPaneURL;
-    static const ::rtl::OUString msToolPanelViewURL;
 
     // URLs of frequently used tool bars.
     static const ::rtl::OUString msToolBarURLPrefix;

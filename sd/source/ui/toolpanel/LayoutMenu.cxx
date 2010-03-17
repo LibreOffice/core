@@ -509,7 +509,6 @@ void LayoutMenu::UpdateEnabledState (const MasterMode eMode)
             case ViewShell::ST_OUTLINE:
             case ViewShell::ST_PRESENTATION:
             case ViewShell::ST_TASK_PANE:
-            case ViewShell::ST_TOOL_PANEL:
                 // The complete task pane is disabled for these values or
                 // not even visible.  Disabling the LayoutMenu would be
                 // logical but unnecessary.  The main disadvantage is that
