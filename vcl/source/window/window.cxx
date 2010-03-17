@@ -4323,6 +4323,17 @@ Window::Window( Window* pParent, const ResId& rResId )
 }
 
 // -----------------------------------------------------------------------
+#if OSL_DEBUG_LEVEL > 0
+namespace
+{
+    const sal_Char* lcl_getWindowClassName( const Window& i_rWindow )
+    {
+        return typeid( i_rWindow ).name();
+    }
+}
+#endif
+
+// -----------------------------------------------------------------------
 
 Window::~Window()
 {
