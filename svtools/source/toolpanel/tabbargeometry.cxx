@@ -196,10 +196,10 @@ namespace svt
         ,m_aItemsRect()
         ,m_aButtonForwardRect()
     {
-        m_aItemsInset.nLeft   = ITEMS_INSET_LEFT;
-        m_aItemsInset.nTop    = ITEMS_INSET_TOP;
-        m_aItemsInset.nRight  = ITEMS_INSET_RIGHT;
-        m_aItemsInset.nBottom = ITEMS_INSET_BOTTOM;
+        m_aItemsInset.Left()   = ITEMS_INSET_LEFT;
+        m_aItemsInset.Top()    = ITEMS_INSET_TOP;
+        m_aItemsInset.Right()  = ITEMS_INSET_RIGHT;
+        m_aItemsInset.Bottom() = ITEMS_INSET_BOTTOM;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -217,8 +217,8 @@ namespace svt
         // the available size
         Size aOutputSize( getItemsRect().GetSize() );
         // shrunk by the outer space
-        aOutputSize.Width() -= m_aItemsInset.nRight;
-        aOutputSize.Height() -= m_aItemsInset.nBottom;
+        aOutputSize.Width() -= m_aItemsInset.Right();
+        aOutputSize.Height() -= m_aItemsInset.Bottom();
         const Rectangle aFitInto( Point( 0, 0 ), aOutputSize );
 
         TabItemContent eItemContent( getItemContent() );
@@ -267,16 +267,16 @@ namespace svt
     {
         if ( io_rItems.empty() )
             return Size(
-                m_aItemsInset.nLeft + m_aItemsInset.nRight,
-                m_aItemsInset.nTop + m_aItemsInset.nBottom
+                m_aItemsInset.Left() + m_aItemsInset.Right(),
+                m_aItemsInset.Top() + m_aItemsInset.Bottom()
             );
 
         // the rect of the last item
         const Rectangle& rLastItemRect( i_bMinimalSize ? io_rItems.rbegin()->aIconOnlyArea : io_rItems.rbegin()->aCompleteArea );
         const Point aBottomRight( rLastItemRect.BottomRight() );
         return Size(
-                    aBottomRight.X() + 1 + m_aItemsInset.nRight,
-                    aBottomRight.Y() + 1 + m_aItemsInset.nBottom
+                    aBottomRight.X() + 1 + m_aItemsInset.Right(),
+                    aBottomRight.Y() + 1 + m_aItemsInset.Bottom()
                 );
     }
 
@@ -320,7 +320,7 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     Point TabBarGeometry::getFirstItemPosition() const
     {
-        return Point( m_aItemsInset.nLeft, m_aItemsInset.nTop );
+        return Point( m_aItemsInset.Left(), m_aItemsInset.Top() );
     }
 
 //......................................................................................................................

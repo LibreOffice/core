@@ -29,10 +29,10 @@
 
 #include "svtools/toolpanel/tabalignment.hxx"
 
-#include "inset.hxx"
 #include "tabitemdescriptor.hxx"
 
 #include <tools/gen.hxx>
+#include <tools/svborder.hxx>
 
 //......................................................................................................................
 namespace svt
@@ -121,7 +121,7 @@ namespace svt
         /// specifies the content to be displayed in the tab items
         TabItemContent      m_eTabItemContent;
         /// specifies the inset to be used in the items area, depends on the actual alignment
-        Inset               m_aItemsInset;
+        SvBorder            m_aItemsInset;
         // the (logical) rectangle to be used for the "back" button, empty if the button is not needed
         Rectangle           m_aButtonBackRect;
         // the (logical) rectangle to be used for the items

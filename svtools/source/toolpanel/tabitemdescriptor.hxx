@@ -30,8 +30,6 @@
 #include "svtools/toolpanel/toolpanel.hxx"
 #include "svtools/toolpanel/tabitemcontent.hxx"
 
-#include "inset.hxx"
-
 #include <tools/gen.hxx>
 #include <osl/diagnose.h>
 
