@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cspline.cpp,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -171,5 +168,6 @@ void PeriodicSpline (int N, double* x, double* a, double*& b, double*& c,
     d[i] = oneThird*(c[i+1]-c[i])/h[i];
   }
 
+  delete[] h;
   sys.DeleteMatrix(N+1,mat);
 }

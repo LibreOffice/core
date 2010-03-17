@@ -18,6 +18,7 @@ mkdir: %_DEST%\inc%_EXT%\oox\vml
 ..\%__SRC%\inc\tokens.hxx %_DEST%\inc%_EXT%\oox\core\tokens.hxx
 
 ..\source\token\tokens.txt %_DEST%\inc%_EXT%\oox\token.txt
+..\source\token\namespaces.txt %_DEST%\inc%_EXT%\oox\namespaces.txt
 ..\inc\oox\dllapi.h %_DEST%\inc%_EXT%\oox\dllapi.h
 ..\inc\oox\helper\binarystreambase.hxx %_DEST%\inc%_EXT%\oox\helper\binarystreambase.hxx
 ..\inc\oox\helper\helper.hxx %_DEST%\inc%_EXT%\oox\helper\helper.hxx

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: resourcemodel.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -265,6 +262,16 @@ void WW8StreamHandler::startCharacterGroup()
 void WW8StreamHandler::endCharacterGroup()
 {
     output.addItem("</character-group>");
+}
+
+void WW8StreamHandler::startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > /*xShape*/ )
+{
+    output.addItem("<shape>");
+}
+
+void WW8StreamHandler::endShape( )
+{
+    output.addItem( "</shape>" );
 }
 
 void WW8StreamHandler::text(const sal_uInt8 * data, size_t len)

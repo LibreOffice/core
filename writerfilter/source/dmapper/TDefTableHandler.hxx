@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TDefTableHandler.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,6 +53,10 @@ private:
     ::std::vector< ::com::sun::star::table::BorderLine >    m_aRightBorderLines;
     ::std::vector< ::com::sun::star::table::BorderLine >    m_aTopBorderLines;
     ::std::vector< ::com::sun::star::table::BorderLine >    m_aBottomBorderLines;
+    ::std::vector< ::com::sun::star::table::BorderLine >    m_aInsideHBorderLines;
+    ::std::vector< ::com::sun::star::table::BorderLine >    m_aInsideVBorderLines;
+    ::std::vector< ::com::sun::star::table::BorderLine >    m_aTl2brBorderLines;
+    ::std::vector< ::com::sun::star::table::BorderLine >    m_aTr2blBorderLines;
 
     //values of the current border
     sal_Int32                                           m_nLineWidth;

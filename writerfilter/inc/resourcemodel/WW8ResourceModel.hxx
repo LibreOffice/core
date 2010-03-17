@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WW8ResourceModel.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,7 @@
 #include <memory>
 #include <boost/shared_ptr.hpp>
 #include <sal/types.h>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <WriterFilterDllApi.hxx>
 #include <resourcemodel/OutputWithDepth.hxx>
@@ -218,6 +216,13 @@ public:
        Receives end mark for group with the same character properties.
      */
     virtual void endCharacterGroup() = 0;
+
+    /**
+      Receives a shape.
+     */
+    virtual void startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape ) = 0;
+
+    virtual void endShape( ) = 0;
 
     /**
        Receives 8-bit per character text.

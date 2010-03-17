@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DomainMapperTableHandler.hxx,v $
- *
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,6 +62,8 @@ class DomainMapperTableHandler : public TableDataHandler<Handle_t , TablePropert
     RowSequencePointer_t    m_pRowSeq;
     TableSequencePointer_t  m_pTableSeq;
 
+    Handle_t               m_xTableRange;
+
     // properties
     PropertyMapVector2      m_aCellProperties;
     PropertyMapVector1      m_aRowProperties;
@@ -87,6 +85,11 @@ public:
     virtual void endRow();
     virtual void startCell(const Handle_t & start, TablePropertyMapPtr pProps);
     virtual void endCell(const Handle_t & end);
+
+    virtual Handle_t* getTable( )
+    {
+        return &m_xTableRange;
+    };
 };
 
 }}

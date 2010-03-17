@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -151,6 +147,8 @@ OOXMLGPERFFASTTOKENXSL=gperffasttokenhandler.xsl
 
 OOXMLRESOURCEIDSHXX=$(OOXMLHXXOUTDIR)$/resourceids.hxx
 
+NSPROCESS=namespace_preprocess.pl
+
 TOKENXML=$(OOXMLCXXOUTDIR)$/token.xml
 TOKENXMLTMP=$(OOXMLCXXOUTDIR)$/token.tmp
 
@@ -162,6 +160,7 @@ OOXMLVALUESHXX=$(OOXMLCXXOUTDIR)$/OOXMLvalues.hxx
 OOXMLVALUESCXX=$(OOXMLCXXOUTDIR)$/OOXMLvalues.cxx
 GPERFFASTTOKENHXX=$(OOXMLHXXOUTDIR)$/gperffasttoken.hxx
 MODELPROCESSED=$(MISC)$/model_preprocessed.xml
+NSXSL=$(MISC)$/namespacesmap.xsl
 
 OOXMLGENHEADERS= \
     $(OOXMLFASTRESOURCESHXX) \
@@ -186,9 +185,15 @@ $(TOKENXMLTMP): $(SOLARVER)$/$(INPATH)$/inc$(UPDMINOREXT)$/oox$/token.txt
 $(TOKENXML): tokenxmlheader $(TOKENXMLTMP) tokenxmlfooter
     @$(TYPE) tokenxmlheader $(TOKENXMLTMP) tokenxmlfooter > $@
 
-$(MODELPROCESSED): $(OOXMLPREPROCESSXSL) $(OOXMLMODEL)
+$(MISC)$/$(OOXMLPREPROCESSXSL): $(OOXMLPREPROCESSXSL)
+    @$(COPY) $(PWD)$/$(OOXMLPREPROCESSXSL) $(MISC)
+
+$(NSXSL) : $(OOXMLMODEL) $(SOLARVER)$/$(INPATH)$/inc$(UPDMINOREXT)$/oox$/namespaces.txt $(NSPROCESS)
+    @$(PERL) $(NSPROCESS) $(SOLARVER)$/$(INPATH)$/inc$(UPDMINOREXT)$/oox$/namespaces.txt > $@
+
+$(MODELPROCESSED): $(NSXSL) $(MISC)$/$(OOXMLPREPROCESSXSL) $(OOXMLMODEL)
     @echo "Making:   " $(@:f)
-    $(COMMAND_ECHO)$(XSLTPROC) $(OOXMLPREPROCESSXSL) $(OOXMLMODEL) > $@
+    $(COMMAND_ECHO)$(XSLTPROC) $(NSXSL) $(OOXMLMODEL) > $@
 
 $(OOXMLHXXOUTDIRCREATED):
     @$(MKDIRHIER) $(OOXMLHXXOUTDIR)

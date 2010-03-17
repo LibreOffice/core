@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ShapeContextHandler.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +29,11 @@
 #include "oox/vml/vmldrawingfragment.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"
+
+#if DEBUG
+#include <iostream>
+using namespace std;
+#endif
 
 namespace oox { namespace shape {
 
@@ -72,7 +74,7 @@ ShapeContextHandler::getGraphicShapeContext(::sal_Int32 Element )
             case XML_graphic:
                 mpShape.reset(new Shape("com.sun.star.drawing.OLE2Shape" ));
                 mxGraphicShapeContext.set
-                (new GraphicalObjectFrameContext(*rFragmentHandler, pMasterShape, mpShape));
+                (new GraphicalObjectFrameContext(*rFragmentHandler, pMasterShape, mpShape, true));
                 break;
             case XML_pic:
                 mpShape.reset(new Shape("com.sun.star.drawing.GraphicObjectShape" ));
@@ -90,6 +92,9 @@ ShapeContextHandler::getGraphicShapeContext(::sal_Int32 Element )
 uno::Reference<xml::sax::XFastContextHandler>
 ShapeContextHandler::getDrawingShapeContext()
 {
+#if DEBUG
+    clog << "ShapeContextHandler::getDrawingShapeContext" << endl;
+#endif
     if (!mxDrawingFragmentHandler.is())
     {
         mpDrawing.reset( new oox::vml::Drawing( *mxFilterBase, mxDrawPage, oox::vml::VMLDRAWING_WORD ) );
@@ -109,6 +114,7 @@ ShapeContextHandler::getContextHandler()
 
     switch (mnStartToken & NMSP_MASK)
     {
+        case NMSP_DOC:
         case NMSP_VML:
             xResult.set(getDrawingShapeContext());
             break;
@@ -179,6 +185,9 @@ ShapeContextHandler::createFastChildContext
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
+#if DEBUG
+    clog << "ShapeContextHandler::createFastChildContext" << endl;
+#endif
     uno::Reference< xml::sax::XFastContextHandler > xResult;
     uno::Reference< xml::sax::XFastContextHandler > xContextHandler(getContextHandler());
 
@@ -231,7 +240,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
         }
         else if (mpShape.get() != NULL)
         {
-            mpShape->addShape(*mxFilterBase, mpThemePtr, xShapes);
+            mpShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes);
             xResult.set(mpShape->getXShape());
         }
     }

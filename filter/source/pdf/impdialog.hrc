@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: impdialog.hrc,v $
- * $Revision: 1.15.80.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,10 +80,12 @@
 #define CB_EXPORTFORMFIELDS         20
 #define FT_FORMSFORMAT              21
 #define LB_FORMSFORMAT              22
-#define CB_EXPORTEMPTYPAGES         23
-#define CB_ADDSTREAM                24
+#define CB_ALLOWDUPLICATEFIELDNAMES 23
+#define CB_EXPORTEMPTYPAGES         24
+#define CB_ADDSTREAM                25
 
-#define CB_PDFA_1B_SELECT           25
+#define CB_PDFA_1B_SELECT           26
+#define CB_EXPORTNOTESPAGES         27
 
 #define FL_OLD_PAGES        51
 #define RB_OLD_ALL          52

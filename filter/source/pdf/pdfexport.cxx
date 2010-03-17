@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pdfexport.cxx,v $
- * $Revision: 1.69.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,10 +48,10 @@
 #include <unotools/processfactory.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #include <comphelper/string.hxx>
 
-#include <svtools/saveopt.hxx> // only for testing of relative saving options in PDF
+#include <unotools/saveopt.hxx> // only for testing of relative saving options in PDF
 
 #include <vcl/graphictools.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -81,31 +78,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::view;
 
-sal_Bool GetPropertyValue( Any& rAny, const Reference< XPropertySet > & rXPropSet, const sal_Char* pName )
-{
-    sal_Bool bRetValue = sal_True;
-    try
-    {
-        rAny = rXPropSet->getPropertyValue( String::CreateFromAscii( pName ) );
-        if ( !rAny.hasValue() )
-            bRetValue = sal_False;
-    }
-    catch( ::com::sun::star::uno::Exception& )
-    {
-        bRetValue = sal_False;
-    }
-    return bRetValue;
-}
-
-OUString GetProperty( const Reference< XPropertySet > & rXPropSet, const sal_Char* pName )
-{
-    OUString aRetValue;
-    Any aAny;
-    if ( GetPropertyValue( aAny, rXPropSet, pName ) )
-        aAny >>= aRetValue;
-    return aRetValue;
-}
-
 // -------------
 // - PDFExport -
 // -------------
@@ -131,6 +103,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::
     mnQuality                   ( 90 ),
     mnFormsFormat               ( 0 ),
     mbExportFormFields          ( sal_True ),
+    mbAllowDuplicateFieldNames  ( sal_False ),
     mnProgressValue             ( 0 ),
     mbRemoveTransparencies      ( sal_False ),
     mbWatermark                 ( sal_False ),
@@ -462,6 +435,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     rFilterData[ nData ].Value >>= mbExportFormFields;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ) )
                     rFilterData[ nData ].Value >>= mnFormsFormat;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "AllowDuplicateFieldNames" ) ) )
+                    rFilterData[ nData ].Value >>= mbAllowDuplicateFieldNames;
 //viewer properties
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerToolbar" ) ) )
                     rFilterData[ nData ].Value >>= mbHideViewerToolbar;
@@ -707,6 +682,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     aContext.SubmitFormat = PDFWriter::FDF;
                     break;
             }
+            aContext.AllowDuplicateFieldNames = mbAllowDuplicateFieldNames;
 
             //get model
             Reference< frame::XModel > xModel( mxSrcDoc, UNO_QUERY );
@@ -891,7 +867,10 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     }
                 }
 
-                bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aMultiSelection, aRenderOptions, nPageCount );
+                if( nPageCount > 0 )
+                    bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aMultiSelection, aRenderOptions, nPageCount );
+                else
+                    bRet = FALSE;
 
                 if ( bRet && bSecondPassForImpressNotes )
                 {
@@ -940,14 +919,8 @@ void PDFExport::showErrors( const std::set< PDFWriter::ErrorCode >& rErrors )
 {
     if( ! rErrors.empty() )
     {
-        ByteString aResMgrName( "pdffilter" );
-        ResMgr* pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
-        if ( pResMgr )
-        {
-            ImplErrorDialog aDlg( rErrors, *pResMgr );
-            aDlg.Execute();
-            delete pResMgr;
-        }
+        ImplErrorDialog aDlg( rErrors );
+        aDlg.Execute();
     }
 }
 
@@ -1209,71 +1182,83 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                     const Size&     rSize= pA->GetSize();
                     const Gradient& rTransparenceGradient = pA->GetGradient();
 
-                    const Size  aDstSizeTwip( rDummyVDev.PixelToLogic( rDummyVDev.LogicToPixel( rSize ), MAP_TWIP ) );
-                    sal_Int32   nMaxBmpDPI = mbUseLosslessCompression ? 300 : 72;
-                    if ( mbReduceImageResolution )
+                    // special case constant alpha value
+                    if( rTransparenceGradient.GetStartColor() == rTransparenceGradient.GetEndColor() )
                     {
-                        if ( nMaxBmpDPI > mnMaxImageResolution )
-                            nMaxBmpDPI = mnMaxImageResolution;
+                        const Color aTransCol( rTransparenceGradient.GetStartColor() );
+                        const USHORT nTransPercent = aTransCol.GetLuminance() * 100 / 255;
+                        rWriter.BeginTransparencyGroup();
+                        ImplWriteActions( rWriter, NULL, aTmpMtf, rDummyVDev );
+                        rWriter.EndTransparencyGroup( Rectangle( rPos, rSize ), nTransPercent );
                     }
-                    const sal_Int32 nPixelX = (sal_Int32)((double)aDstSizeTwip.Width() * (double)nMaxBmpDPI / 1440.0);
-                    const sal_Int32 nPixelY = (sal_Int32)((double)aDstSizeTwip.Height() * (double)nMaxBmpDPI / 1440.0);
-                    if ( nPixelX && nPixelY )
+                    else
                     {
-                        Size aDstSizePixel( nPixelX, nPixelY );
-                        VirtualDevice* pVDev = new VirtualDevice;
-                        if( pVDev->SetOutputSizePixel( aDstSizePixel ) )
+                        const Size  aDstSizeTwip( rDummyVDev.PixelToLogic( rDummyVDev.LogicToPixel( rSize ), MAP_TWIP ) );
+                        sal_Int32   nMaxBmpDPI = mbUseLosslessCompression ? 300 : 72;
+                        if ( mbReduceImageResolution )
                         {
-                            Bitmap          aPaint, aMask;
-                            AlphaMask       aAlpha;
-                            Point           aPoint;
-
-                            MapMode aMapMode( rDummyVDev.GetMapMode() );
-                            aMapMode.SetOrigin( aPoint );
-                            pVDev->SetMapMode( aMapMode );
-                            Size aDstSize( pVDev->PixelToLogic( aDstSizePixel ) );
-
-                            Point   aMtfOrigin( aTmpMtf.GetPrefMapMode().GetOrigin() );
-                            if ( aMtfOrigin.X() || aMtfOrigin.Y() )
-                                aTmpMtf.Move( -aMtfOrigin.X(), -aMtfOrigin.Y() );
-                            double  fScaleX = (double)aDstSize.Width() / (double)aTmpMtf.GetPrefSize().Width();
-                            double  fScaleY = (double)aDstSize.Height() / (double)aTmpMtf.GetPrefSize().Height();
-                            if( fScaleX != 1.0 || fScaleY != 1.0 )
-                                aTmpMtf.Scale( fScaleX, fScaleY );
-                            aTmpMtf.SetPrefMapMode( aMapMode );
-
-                            // create paint bitmap
-                            aTmpMtf.WindStart();
-                            aTmpMtf.Play( pVDev, aPoint, aDstSize );
-                            aTmpMtf.WindStart();
-
-                            pVDev->EnableMapMode( FALSE );
-                            aPaint = pVDev->GetBitmap( aPoint, aDstSizePixel );
-                            pVDev->EnableMapMode( TRUE );
-
-                            // create mask bitmap
-                            pVDev->SetLineColor( COL_BLACK );
-                            pVDev->SetFillColor( COL_BLACK );
-                            pVDev->DrawRect( Rectangle( aPoint, aDstSize ) );
-                            pVDev->SetDrawMode( DRAWMODE_WHITELINE | DRAWMODE_WHITEFILL | DRAWMODE_WHITETEXT |
-                                                DRAWMODE_WHITEBITMAP | DRAWMODE_WHITEGRADIENT );
-                            aTmpMtf.WindStart();
-                            aTmpMtf.Play( pVDev, aPoint, aDstSize );
-                            aTmpMtf.WindStart();
-                            pVDev->EnableMapMode( FALSE );
-                            aMask = pVDev->GetBitmap( aPoint, aDstSizePixel );
-                            pVDev->EnableMapMode( TRUE );
-
-                            // create alpha mask from gradient
-                            pVDev->SetDrawMode( DRAWMODE_GRAYGRADIENT );
-                            pVDev->DrawGradient( Rectangle( aPoint, aDstSize ), rTransparenceGradient );
-                            pVDev->SetDrawMode( DRAWMODE_DEFAULT );
-                            pVDev->EnableMapMode( FALSE );
-                            pVDev->DrawMask( aPoint, aDstSizePixel, aMask, Color( COL_WHITE ) );
-                            aAlpha = pVDev->GetBitmap( aPoint, aDstSizePixel );
-                            ImplWriteBitmapEx( rWriter, rDummyVDev, rPos, rSize, BitmapEx( aPaint, aAlpha ) );
+                            if ( nMaxBmpDPI > mnMaxImageResolution )
+                                nMaxBmpDPI = mnMaxImageResolution;
                         }
-                        delete pVDev;
+                        const sal_Int32 nPixelX = (sal_Int32)((double)aDstSizeTwip.Width() * (double)nMaxBmpDPI / 1440.0);
+                        const sal_Int32 nPixelY = (sal_Int32)((double)aDstSizeTwip.Height() * (double)nMaxBmpDPI / 1440.0);
+                        if ( nPixelX && nPixelY )
+                        {
+                            Size aDstSizePixel( nPixelX, nPixelY );
+                            VirtualDevice* pVDev = new VirtualDevice;
+                            if( pVDev->SetOutputSizePixel( aDstSizePixel ) )
+                            {
+                                Bitmap          aPaint, aMask;
+                                AlphaMask       aAlpha;
+                                Point           aPoint;
+
+                                MapMode aMapMode( rDummyVDev.GetMapMode() );
+                                aMapMode.SetOrigin( aPoint );
+                                pVDev->SetMapMode( aMapMode );
+                                Size aDstSize( pVDev->PixelToLogic( aDstSizePixel ) );
+
+                                Point   aMtfOrigin( aTmpMtf.GetPrefMapMode().GetOrigin() );
+                                if ( aMtfOrigin.X() || aMtfOrigin.Y() )
+                                    aTmpMtf.Move( -aMtfOrigin.X(), -aMtfOrigin.Y() );
+                                double  fScaleX = (double)aDstSize.Width() / (double)aTmpMtf.GetPrefSize().Width();
+                                double  fScaleY = (double)aDstSize.Height() / (double)aTmpMtf.GetPrefSize().Height();
+                                if( fScaleX != 1.0 || fScaleY != 1.0 )
+                                    aTmpMtf.Scale( fScaleX, fScaleY );
+                                aTmpMtf.SetPrefMapMode( aMapMode );
+
+                                // create paint bitmap
+                                aTmpMtf.WindStart();
+                                aTmpMtf.Play( pVDev, aPoint, aDstSize );
+                                aTmpMtf.WindStart();
+
+                                pVDev->EnableMapMode( FALSE );
+                                aPaint = pVDev->GetBitmap( aPoint, aDstSizePixel );
+                                pVDev->EnableMapMode( TRUE );
+
+                                // create mask bitmap
+                                pVDev->SetLineColor( COL_BLACK );
+                                pVDev->SetFillColor( COL_BLACK );
+                                pVDev->DrawRect( Rectangle( aPoint, aDstSize ) );
+                                pVDev->SetDrawMode( DRAWMODE_WHITELINE | DRAWMODE_WHITEFILL | DRAWMODE_WHITETEXT |
+                                                    DRAWMODE_WHITEBITMAP | DRAWMODE_WHITEGRADIENT );
+                                aTmpMtf.WindStart();
+                                aTmpMtf.Play( pVDev, aPoint, aDstSize );
+                                aTmpMtf.WindStart();
+                                pVDev->EnableMapMode( FALSE );
+                                aMask = pVDev->GetBitmap( aPoint, aDstSizePixel );
+                                pVDev->EnableMapMode( TRUE );
+
+                                // create alpha mask from gradient
+                                pVDev->SetDrawMode( DRAWMODE_GRAYGRADIENT );
+                                pVDev->DrawGradient( Rectangle( aPoint, aDstSize ), rTransparenceGradient );
+                                pVDev->SetDrawMode( DRAWMODE_DEFAULT );
+                                pVDev->EnableMapMode( FALSE );
+                                pVDev->DrawMask( aPoint, aDstSizePixel, aMask, Color( COL_WHITE ) );
+                                aAlpha = pVDev->GetBitmap( aPoint, aDstSizePixel );
+                                ImplWriteBitmapEx( rWriter, rDummyVDev, rPos, rSize, BitmapEx( aPaint, aAlpha ) );
+                            }
+                            delete pVDev;
+                        }
                     }
                 }
                 break;
@@ -1349,7 +1334,6 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                                 PolyPolygon aEndArrow;
                                 double fTransparency( aStroke.getTransparency() );
                                 double fStrokeWidth( aStroke.getStrokeWidth() );
-                                SvtGraphicStroke::JoinType eJT( aStroke.getJoinType() );
                                 SvtGraphicStroke::DashArray aDashArray;
 
                                 aStroke.getStartArrow( aStartArrow );
@@ -1358,8 +1342,6 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
 
                                 bSkipSequence = sal_True;
                                 if ( aStartArrow.Count() || aEndArrow.Count() )
-                                    bSkipSequence = sal_False;
-                                if ( (sal_uInt32)eJT > 2 )
                                     bSkipSequence = sal_False;
                                 if ( aDashArray.size() && ( fStrokeWidth != 0.0 ) && ( fTransparency == 0.0 ) )
                                     bSkipSequence = sal_False;
@@ -1388,7 +1370,40 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                                             break;
                                     }
                                     aInfo.m_aDashArray = aDashArray;
-                                    rWriter.DrawPolyLine( aPath, aInfo );
+
+                                    if(SvtGraphicStroke::joinNone == aStroke.getJoinType()
+                                        && fStrokeWidth > 0.0)
+                                    {
+                                        // emulate no edge rounding by handling single edges
+                                        const sal_uInt16 nPoints(aPath.GetSize());
+                                        const bool bCurve(aPath.HasFlags());
+
+                                        for(sal_uInt16 a(0); a + 1 < nPoints; a++)
+                                        {
+                                            if(bCurve
+                                                && POLY_NORMAL != aPath.GetFlags(a + 1)
+                                                && a + 2 < nPoints
+                                                && POLY_NORMAL != aPath.GetFlags(a + 2)
+                                                && a + 3 < nPoints)
+                                            {
+                                                const Polygon aSnippet(4,
+                                                    aPath.GetConstPointAry() + a,
+                                                    aPath.GetConstFlagAry() + a);
+                                                rWriter.DrawPolyLine( aSnippet, aInfo );
+                                                a += 2;
+                                            }
+                                            else
+                                            {
+                                                const Polygon aSnippet(2,
+                                                    aPath.GetConstPointAry() + a);
+                                                rWriter.DrawPolyLine( aSnippet, aInfo );
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        rWriter.DrawPolyLine( aPath, aInfo );
+                                    }
                                 }
                             }
                             else if ( pA->GetComment().Equals( "XPATHFILL_SEQ_BEGIN" ) )

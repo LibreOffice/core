@@ -1,33 +1,29 @@
 <!--
 /*************************************************************************
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
- * Copyright 2008 by Sun Microsystems, Inc.
- *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: resourcestools.xsl,v $
- *
- * $Revision: 1.49 $
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- *  <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
+  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  
+  Copyright 2000, 2010 Oracle and/or its affiliates.
+ 
+  OpenOffice.org - a multi-platform office productivity suite
+ 
+  This file is part of OpenOffice.org.
+ 
+  OpenOffice.org is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License version 3
+  only, as published by the Free Software Foundation.
+ 
+  OpenOffice.org is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Lesser General Public License version 3 for more details
+  (a copy is included in the LICENSE file that accompanied this code).
+ 
+  You should have received a copy of the GNU Lesser General Public License
+  version 3 along with OpenOffice.org.  If not, see
+  <http://www.openoffice.org/license.html>
+  for a copy of the LGPLv3 License.
+
  ************************************************************************/
 
 -->
@@ -92,6 +88,20 @@
            match="rng:define" use="ancestor::rng:grammar/@application"/>
 
   <xsl:key name="namespace-aliases" match="//namespace-alias" use="@name"/>
+  
+  <!-- Tiny template helping devs to debug -->
+  <xsl:template name="dbg_path">
+    <xsl:text>/*</xsl:text>
+    <xsl:for-each select="ancestor::*">
+      <xsl:value-of select="name(.)"/>
+      <xsl:text>/</xsl:text>
+    </xsl:for-each>
+    <xsl:value-of select="name(.)"/>
+    <xsl:text>[@name=</xsl:text>
+    <xsl:value-of select="@name"/>
+    <xsl:text>]</xsl:text>
+    <xsl:text>*/</xsl:text>
+  </xsl:template>
 
   <xsl:template name="licenseheader">
     <xsl:text>
@@ -398,7 +408,7 @@ public:
        Generate switch body for createFastChildContext
   -->
   <xsl:template name="switchbodycreatechildcontext">
-    <xsl:for-each select=".//rng:element[@name]">
+      <xsl:for-each select=".//rng:element[@name]">
         <xsl:call-template name="caselabelfasttoken"/>
         <xsl:variable name="createstatement">
           <xsl:call-template name="fastelementcreatestatement"/>
@@ -1543,6 +1553,12 @@ uno::Reference &lt; xml::sax::XFastParser &gt; OOXMLStreamImpl::getFastParser()
       </xsl:if>
     </xsl:for-each>
   </xsl:template>
+  
+  <xsl:template name="fastcharactersstringvalue">
+      <xsl:text>
+        
+        msValue = sText;</xsl:text>
+  </xsl:template>
 
   <xsl:template name="fastattributesstringvalue">
     <xsl:for-each select=".//rng:attribute">
@@ -1554,6 +1570,12 @@ uno::Reference &lt; xml::sax::XFastParser &gt; OOXMLStreamImpl::getFastParser()
         <xsl:call-template name="fasttoken"/>
         <xsl:text>);</xsl:text>
     </xsl:for-each>
+  </xsl:template>
+  
+  <xsl:template name="fastcharactersintvalue">
+    <xsl:text>
+
+        mnValue = sText.toInt32();</xsl:text>
   </xsl:template>
 
   <xsl:template name="fastattributesintvalue">
@@ -1568,6 +1590,12 @@ uno::Reference &lt; xml::sax::XFastParser &gt; OOXMLStreamImpl::getFastParser()
     </xsl:for-each>
   </xsl:template>
 
+  <xsl:template name="fastcharactershexvalue">
+    <xsl:text>
+      
+      mnValue = sText.toInt32(16);</xsl:text>
+  </xsl:template>
+  
   <xsl:template name="fastattributeshexvalue">
     <xsl:for-each select=".//rng:attribute">
       <xsl:text>
@@ -1580,6 +1608,12 @@ uno::Reference &lt; xml::sax::XFastParser &gt; OOXMLStreamImpl::getFastParser()
     </xsl:for-each>
   </xsl:template>
 
+  <xsl:template name="fastcharactersboolvalue">
+    <xsl:text>
+      
+      setValue( sText );</xsl:text>
+  </xsl:template>
+  
   <xsl:template name="fastattributesboolvalue">
     <xsl:for-each select=".//rng:attribute">
       <xsl:text>
@@ -1590,6 +1624,35 @@ uno::Reference &lt; xml::sax::XFastParser &gt; OOXMLStreamImpl::getFastParser()
         <xsl:call-template name="fasttoken"/>
         <xsl:text>));</xsl:text>
     </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="fastcharacterslistvalue">
+    <xsl:variable name="bodywithns">        
+      <xsl:for-each select="rng:ref">
+        <xsl:variable name="refname" select="@name"/>
+        <xsl:variable name="refns">
+          <xsl:call-template name="searchdefinenamespace">
+            <xsl:with-param name="name" select="@name"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="valname">
+          <xsl:for-each select="/model/namespace[@name=substring-before($refns, ':')]">
+            <xsl:for-each select="./rng:grammar/rng:define[@name=substring-after($refns, ':')]">
+              <xsl:call-template name="valuenamefordefine"/>
+            </xsl:for-each>
+          </xsl:for-each>
+        </xsl:variable>
+        <xsl:text>
+          mpValue = OOXMLValue::Pointer_t (new </xsl:text>
+        <xsl:value-of select="$valname"/>
+      <xsl:text>( sText ) );</xsl:text>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:if test="string-length($bodywithns) > 0">
+      <xsl:text>
+      </xsl:text>
+      <xsl:value-of select="$bodywithns"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="fastattributeslistvalue">
@@ -1739,9 +1802,9 @@ void </xsl:text>
       </xsl:if>
         <!-- </xsl:if> -->
   </xsl:template>
-
+  
   <xsl:template name="fastelementcreatestatement">
-    <xsl:for-each select=".//rng:ref">
+    <xsl:for-each select=".//rng:ref">  
       <xsl:choose>
         <xsl:when test="@name='BUILT_IN_ANY_TYPE'">
           <xsl:text>createFromStart(Element, Attribs)</xsl:text>
@@ -1999,6 +2062,29 @@ void </xsl:text>
 
   <xsl:template name="fastcharactersbody">
     <xsl:variable name="name" select="@name"/>
+    <!-- ST values as text -->
+    <xsl:variable name="resource">
+      <xsl:call-template name="contextresource"/>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$resource = 'StringValue'">
+        <xsl:call-template name="fastcharactersstringvalue"/>
+      </xsl:when>
+      <xsl:when test="$resource = 'IntegerValue'">
+        <xsl:call-template name="fastcharactersintvalue"/>
+      </xsl:when>
+      <xsl:when test="$resource = 'HexValue'">
+        <xsl:call-template name="fastcharactershexvalue"/>
+      </xsl:when>
+      <xsl:when test="$resource = 'BooleanValue'">
+        <xsl:call-template name="fastcharactersboolvalue"/>
+      </xsl:when>
+      <xsl:when test="$resource = 'ListValue'">
+        <xsl:call-template name="fastcharacterslistvalue"/>
+      </xsl:when>
+    </xsl:choose>
+
+    <!-- characters action -->
     <xsl:for-each select="ancestor::namespace/resource[@name = $name]//action[@name='characters']">
       <xsl:call-template name="chooseaction"/>
     </xsl:for-each>

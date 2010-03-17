@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ListTable.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,6 +75,8 @@ public:
 //                      writerfilter::Reference<Properties>::Pointer_t ref);
 
     sal_uInt32          size() const;
+    rtl::OUString GetStyleName( sal_Int32 nListId );
+    void CreateNumberingRules( );
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace >
             GetNumberingRules(sal_Int32 nListId);
 

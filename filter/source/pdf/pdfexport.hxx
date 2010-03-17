@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pdfexport.hxx,v $
- * $Revision: 1.14.80.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,6 +74,7 @@ private:
     sal_Int32               mnQuality;
     sal_Int32               mnFormsFormat;
     sal_Bool                mbExportFormFields;
+    sal_Bool                mbAllowDuplicateFieldNames;
     sal_Int32               mnProgressValue;
     sal_Bool                mbRemoveTransparencies;
 

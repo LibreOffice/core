@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: resourcemodel.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +47,9 @@ public:
     virtual void props(writerfilter::Reference<Properties>::Pointer_t ref);
     virtual void table(Id name,
                        writerfilter::Reference<Table>::Pointer_t ref);
+
+    virtual void startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+    virtual void endShape( );
 
     virtual void substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref);
 

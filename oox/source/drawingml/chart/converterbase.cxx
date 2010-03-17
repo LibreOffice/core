@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: converterbase.cxx,v $
- *
- * $Revision: 1.4.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -168,11 +164,11 @@ struct ConverterData
     typedef ::std::map< TitleKey, TitleLayoutInfo > TitleMap;
 
     ObjectFormatter     maFormatter;
+    TitleMap            maTitles;
     XmlFilterBase&      mrFilter;
     ChartConverter&     mrConverter;
     Reference< XChartDocument > mxDoc;
     Size                maSize;
-    TitleMap            maTitles;
 
     explicit            ConverterData(
                             XmlFilterBase& rFilter,

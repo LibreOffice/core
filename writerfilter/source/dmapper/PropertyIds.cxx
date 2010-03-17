@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PropertyIds.cxx,v $
- * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -315,9 +312,12 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_STREAM_NAME:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamName")); break;
             case PROP_BITMAP :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Bitmap")); break;
             case PROP_IS_DATE :   sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDate")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+            case PROP_CNF_STYLE  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CnfStyle")); break;
+            case PROP_INDENT_AT :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IndentAt")); break;
+            case PROP_FIRST_LINE_INDENT :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstLineIndent")); break;
+            case PROP_NUMBERING_STYLE_NAME  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingStyleName")); break;
+            case PROP_LISTTAB_STOP_POSITION :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ListtabStopPosition")); break;
+            case PROP_POSITION_AND_SPACE_MODE :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionAndSpaceMode")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;

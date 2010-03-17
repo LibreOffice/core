@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pdfdialog.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include "impdialog.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/dialog.hxx>
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #include <com/sun/star/view/XRenderable.hpp>
 
 using namespace ::rtl;
@@ -44,8 +41,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
-
-//uncomment this to use the Tabbed PDF dialog (under development !)
 
 // -----------------------
 // - PDFDialog functions -
@@ -100,16 +95,12 @@ Reference< XInterface > SAL_CALL PDFDialog_createInstance( const Reference< XMul
 PDFDialog::PDFDialog( const Reference< XMultiServiceFactory > &rxMSF )
 : PDFDialog_Base( rxMSF )
 {
-    ByteString aResMgrName( "pdffilter" );
-
-    mpResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
 }
 
 // -----------------------------------------------------------------------------
 
 PDFDialog::~PDFDialog()
 {
-    delete mpResMgr;
 }
 
 // -----------------------------------------------------------------------------
@@ -142,9 +133,9 @@ Dialog* PDFDialog::createDialog( Window* pParent )
 {
     Dialog* pRet = NULL;
 
-    if( mpResMgr && mxSrcDoc.is() )
+    if( mxSrcDoc.is() )
     {
-        ImpPDFTabDialog* pDlg = new ImpPDFTabDialog( pParent, *mpResMgr, maFilterData, mxSrcDoc, m_aContext.getLegacyServiceFactory() );
+        ImpPDFTabDialog* pDlg = new ImpPDFTabDialog( pParent, maFilterData, mxSrcDoc, m_aContext.getLegacyServiceFactory() );
         pRet = pDlg;
     }
 

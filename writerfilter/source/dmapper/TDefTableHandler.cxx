@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TDefTableHandler.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -155,6 +152,11 @@ void TDefTableHandler::attribute(Id rName, Value & rVal)
         case NS_rtf::LN_UNUSED2_15: // 0x2877
             // ignored
         break;
+        case NS_ooxml::LN_CT_Border_themeColor:
+        case NS_ooxml::LN_CT_Border_themeTint:
+        case NS_ooxml::LN_CT_Border_themeShade:
+            // ignored
+        break;
         default:
             OSL_ENSURE(false, "unknown attribute");
     }
@@ -199,6 +201,12 @@ void TDefTableHandler::localResolve(Id rName, writerfilter::Reference<Properties
             case NS_rtf::LN_BRCRIGHT:
                 m_aRightBorderLines.push_back(aBorderLine);
             break;
+            case NS_ooxml::LN_CT_TcBorders_insideH:
+                m_aInsideHBorderLines.push_back(aBorderLine);
+            break;
+            case NS_ooxml::LN_CT_TcBorders_insideV:
+                m_aInsideVBorderLines.push_back(aBorderLine);
+            break;
             default:;
         }
     }
@@ -219,6 +227,10 @@ void TDefTableHandler::sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_TcBorders_bottom:
         /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TcBorders_right:
+        case NS_ooxml::LN_CT_TcBorders_insideH:
+        case NS_ooxml::LN_CT_TcBorders_insideV:
+        case NS_ooxml::LN_CT_TcBorders_tl2br:
+        case NS_ooxml::LN_CT_TcBorders_tr2bl:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             localResolve( rSprm.getId(), pProperties );
@@ -281,6 +293,10 @@ void TDefTableHandler::fillCellProperties(
         pCellProperties->Insert( PROP_BOTTOM_BORDER, false, uno::makeAny( m_aBottomBorderLines[nCell] ) );
     if( m_aRightBorderLines.size() > nCell )
         pCellProperties->Insert( PROP_RIGHT_BORDER, false, uno::makeAny( m_aRightBorderLines[nCell] ) );
+    if( m_aInsideHBorderLines.size() > nCell )
+        pCellProperties->Insert( META_PROP_HORIZONTAL_BORDER, false, uno::makeAny( m_aInsideHBorderLines[nCell] ) );
+    if( m_aInsideVBorderLines.size() > nCell )
+        pCellProperties->Insert( META_PROP_VERTICAL_BORDER, false, uno::makeAny( m_aInsideVBorderLines[nCell] ) );
 }
 /*-- 09.05.2007 13:14:17---------------------------------------------------
 

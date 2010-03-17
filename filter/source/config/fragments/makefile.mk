@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.22 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -185,7 +181,11 @@ $(ALL_FLAGS) : $(INCLUDE_FRAGMENTS)
 
 .IF "$(SOLAR_JAVA)"==""
 #cmc, hack to workaround the java build requirement
+.IF "$(SYSTEM_PYTHON)" == "YES"
 MERGE:=python ../tools/merge/pyAltFCFGMerge
+.ELSE
+MERGE:=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/python ../tools/merge/pyAltFCFGMerge
+.ENDIF
 .ELSE
 MERGE    := $(JAVAI) -jar $(SOLARBINDIR)$/FCFGMerge.jar
 .ENDIF

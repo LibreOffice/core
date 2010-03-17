@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.13 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -43,6 +39,9 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=           $(SLO)$/BorderHandler.obj \
+                    $(SLO)$/TblStylePrHandler.obj \
+                    $(SLO)$/GraphicHelpers.obj \
+                    $(SLO)$/TablePropertiesHandler.obj \
                     $(SLO)$/CellColorHandler.obj \
                     $(SLO)$/CellMarginHandler.obj \
                     $(SLO)$/SectionColumnHandler.obj \
@@ -60,9 +59,11 @@ SLOFILES=           $(SLO)$/BorderHandler.obj \
                     $(SLO)$/PropertyIds.obj  \
                     $(SLO)$/StyleSheetTable.obj \
                     $(SLO)$/TDefTableHandler.obj \
-            $(SLO)$/ThemeTable.obj \
+                    $(SLO)$/ThemeTable.obj \
+                    $(SLO)$/SettingsTable.obj \
                     $(SLO)$/ModelEventListener.obj\
-                    $(SLO)$/OLEHandler.obj
+                    $(SLO)$/OLEHandler.obj \
+                    $(SLO)$/PageBordersHandler.obj 
 
 # --- Targets ----------------------------------
 

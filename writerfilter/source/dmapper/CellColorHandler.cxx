@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: CellColorHandler.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,6 +107,11 @@ void CellColorHandler::attribute(Id rName, Value & rVal)
 //            }
 //        }
 //        break;
+        case NS_ooxml::LN_CT_Shd_themeFill:
+        case NS_ooxml::LN_CT_Shd_themeFillTint:
+        case NS_ooxml::LN_CT_Shd_themeFillShade:
+            // ignored
+            break;
         default:
             OSL_ENSURE( false, "unknown attribute");
     }

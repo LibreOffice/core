@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OOXMLFastContextHandler.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -252,6 +249,9 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
     logger("MEMORY", buffer);
 #endif
 
+#if DEBUG
+    clog << "Token: " << fastTokenToId(Element) << endl;
+#endif
     attributes(Attribs);
     lcl_startFastElement(Element, Attribs);
 }
@@ -1870,6 +1870,16 @@ void OOXMLFastContextHandlerTextTable::lcl_startFastElement
 {
     mnTableDepth++;
 
+    boost::shared_ptr<OOXMLPropertySet> pProps( new OOXMLPropertySetImpl );
+    {
+        OOXMLValue::Pointer_t pVal
+            (new OOXMLIntegerValue(mnTableDepth));
+        OOXMLProperty::Pointer_t pProp
+            (new OOXMLPropertyImpl(NS_ooxml::LN_tblStart, pVal, OOXMLPropertyImpl::SPRM));
+        pProps->add(pProp);
+    }
+    mpParserState->setCharacterProperties(pProps);
+
     startAction(Element);
 }
 
@@ -1954,10 +1964,9 @@ void SAL_CALL ShapesNoAdd::remove(const uno::Reference< drawing::XShape > & xSha
 
 OOXMLFastContextHandlerShape::OOXMLFastContextHandlerShape
 (OOXMLFastContextHandler * pContext)
-: OOXMLFastContextHandlerProperties(pContext)
+: OOXMLFastContextHandlerProperties(pContext), m_bShapeSent( false )
 {
     uno::Reference<uno::XComponentContext> xContext(getComponentContext());
-
     if (xContext.is())
     {
         uno::Reference<XMultiComponentFactory> rServiceManager
@@ -2008,7 +2017,9 @@ void OOXMLFastContextHandlerShape::lcl_startFastElement
     startAction(Element);
 
     if (mrShapeContext.is())
+    {
         mrShapeContext->startFastElement(Element, Attribs);
+    }
 }
 
 void SAL_CALL OOXMLFastContextHandlerShape::startUnknownElement
@@ -2029,6 +2040,27 @@ void OOXMLFastContextHandlerShape::setToken(Token_t nToken)
         mrShapeContext->setStartToken(nToken);
 }
 
+void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
+{
+    if ( mrShapeContext.is() && !m_bShapeSent )
+    {
+        uno::Reference<drawing::XShape> xShape(mrShapeContext->getShape());
+        if (xShape.is())
+        {
+            OOXMLValue::Pointer_t
+                pValue(new OOXMLShapeValue(xShape));
+            newProperty(NS_ooxml::LN_shape, pValue);
+            m_bShapeSent = true;
+
+            bool bIsPicture = Element == ( NS_picture | OOXML_pic );
+
+            // Notify the dmapper that the shape is ready to use
+            if ( !bIsPicture )
+                mpStream->startShape( xShape );
+        }
+    }
+}
+
 void OOXMLFastContextHandlerShape::lcl_endFastElement
 (Token_t Element)
     throw (uno::RuntimeException, xml::sax::SAXException)
@@ -2036,21 +2068,15 @@ void OOXMLFastContextHandlerShape::lcl_endFastElement
     if (mrShapeContext.is())
     {
         mrShapeContext->endFastElement(Element);
-
-        uno::Reference<drawing::XShape> xShape(mrShapeContext->getShape());
-
-        if (xShape.is())
-        {
-            awt::Point aPoint(xShape->getPosition());
-            awt::Size aSize(xShape->getSize());
-
-            OOXMLValue::Pointer_t
-                pValue(new OOXMLShapeValue(xShape));
-            newProperty(NS_ooxml::LN_shape, pValue);
-        }
+        sendShape( Element );
     }
 
     OOXMLFastContextHandlerProperties::lcl_endFastElement(Element);
+
+    // Ending the shape should be the last thing to do
+    bool bIsPicture = Element == ( NS_picture | OOXML_pic );
+    if ( !bIsPicture )
+        mpStream->endShape( );
 }
 
 void SAL_CALL OOXMLFastContextHandlerShape::endUnknownElement
@@ -2091,6 +2117,7 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
                 pWrapper->addNamespace(NS_wordprocessingml);
                 pWrapper->addNamespace(NS_vml_wordprocessingDrawing);
                 pWrapper->addNamespace(NS_office);
+                pWrapper->addToken( NS_vml|OOXML_textbox );
 
                 xContextHandler.set(pWrapper);
             }
@@ -2098,6 +2125,7 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
                 xContextHandler.set(this);
             break;
     }
+
 
     return xContextHandler;
 }
@@ -2207,6 +2235,11 @@ void OOXMLFastContextHandlerWrapper::addNamespace(const Id & nId)
     mMyNamespaces.insert(nId);
 }
 
+void OOXMLFastContextHandlerWrapper::addToken( Token_t Token )
+{
+    mMyTokens.insert( Token );
+}
+
 void OOXMLFastContextHandlerWrapper::lcl_startFastElement
 (Token_t Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
@@ -2251,7 +2284,9 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
     debug_logger->endElement("Wrapper-createChildContext");
 #endif
 
-    if (mMyNamespaces.find(nNameSpace) != mMyNamespaces.end())
+    bool bInNamespaces = mMyNamespaces.find(nNameSpace) != mMyNamespaces.end();
+    bool bInTokens = mMyTokens.find( Element ) != mMyTokens.end( );
+    if ( bInNamespaces )
         xResult.set(createFromStart(Element, Attribs));
     else if (mxContext.is())
     {
@@ -2264,6 +2299,12 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
     }
     else
         xResult.set(this);
+
+    if ( bInTokens )
+    {
+        OOXMLFastContextHandlerShape* pShapeCtx = (OOXMLFastContextHandlerShape*)mpParent;
+        pShapeCtx->sendShape( Element );
+    }
 
     return xResult;
 }

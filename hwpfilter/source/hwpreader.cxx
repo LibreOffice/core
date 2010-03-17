@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hwpreader.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -4476,10 +4473,20 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 
                               if( bIsNatural == sal_False ){
                                   PeriodicSpline(n, tarr, xarr, xb, carr, darr);
+                                  // prevent memory leak
+                                  delete[] carr;
+                                  carr = 0;
+                                  delete[] darr;
+                                  darr = 0;
                                   PeriodicSpline(n, tarr, yarr, yb, carr, darr);
                               }
                               else{
                                   NaturalSpline(n, tarr, xarr, xb, carr, darr);
+                                  // prevent memory leak
+                                  delete[] carr;
+                                  carr = 0;
+                                  delete[] darr;
+                                  darr = 0;
                                   NaturalSpline(n, tarr, yarr, yb, carr, darr);
                               }
 

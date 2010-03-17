@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docprophandler.cxx,v $
- * $Revision: 1.2.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,13 +75,15 @@ void OOXMLDocPropHandler::AddCustomProperty( const uno::Any& aAny )
 {
     if ( m_aCustomPropertyName.getLength() )
     {
-        uno::Reference< beans::XPropertyContainer > xUserProps = m_xDocProp->getUserDefinedProperties();
+        const uno::Reference< beans::XPropertyContainer > xUserProps =
+            m_xDocProp->getUserDefinedProperties();
         if ( !xUserProps.is() )
             throw uno::RuntimeException();
 
         try
         {
-            xUserProps->addProperty( m_aCustomPropertyName, beans::PropertyAttribute::TRANSIENT, aAny );
+            xUserProps->addProperty( m_aCustomPropertyName,
+                    beans::PropertyAttribute::REMOVEABLE, aAny );
         }
         catch( beans::PropertyExistException& )
         {

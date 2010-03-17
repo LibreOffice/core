@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: himgutil.cpp,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,7 +103,8 @@ const char *GetEmbImgname(const EmPicture * empic)
     char *ptr;
     const char *ext;
 
-    tmpnam(fname);
+    if (tmpnam(fname) == NULL)
+        return NULL;
     if (!empic || !empic->name[0] || (0 == (ptr = strrchr(fname, DIRSEP))))
         return NULL;
     switch (ImageMagicType((uchar *) empic->data))

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WW8Analyzer.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -165,6 +162,14 @@ void WW8Analyzer::substream(Id /*name*/,
 }
 
 void WW8Analyzer::info(const string & /*info*/)
+{
+}
+
+void WW8Analyzer::startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > /*xShape*/ )
+{
+}
+
+void WW8Analyzer::endShape( )
 {
 }
 

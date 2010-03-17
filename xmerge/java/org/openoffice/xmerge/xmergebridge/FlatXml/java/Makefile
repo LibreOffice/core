@@ -72,7 +72,6 @@ DK_CLASSPATH =	$(subst $(EMPTYSTRING) $(EMPTYSTRING),, \
 		$(CLASSES_DIR)$(PS)jurt.jar\
 		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)unoil.jar\
 		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)ridl.jar\
-		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)sandbox.jar\
 		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)java_uno.jar\
 		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)juh.jar\
         $(PATH_SEPARATOR)$(CLASSPATH) \

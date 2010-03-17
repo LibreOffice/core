@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PropertyMap.hxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -158,6 +155,7 @@ class SectionPropertyMap : public PropertyMap
 
     ::com::sun::star::table::BorderLine*    m_pBorderLines[4];
     sal_Int32                               m_nBorderDistances[4];
+    sal_Int32                               m_nBorderParams;
 
     bool                                    m_bTitlePage;
     sal_Int16                               m_nColumnCount;
@@ -202,6 +200,9 @@ class SectionPropertyMap : public PropertyMap
     bool HasHeader( bool bFirstPage ) const;
     bool HasFooter( bool bFirstPage ) const;
 
+    void SetBorderDistance( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xStyle,
+        PropertyIds eMarginId, PropertyIds eDistId, sal_Int32 nDistance, sal_Int32 nOffsetFrom );
+
 public:
         explicit SectionPropertyMap(bool bIsFirstSection);
         ~SectionPropertyMap();
@@ -227,6 +228,7 @@ public:
             bool bFirst );
 
     void SetBorder( BorderPosition ePos, sal_Int32 nLineDistance, const ::com::sun::star::table::BorderLine& rBorderLine );
+    void SetBorderParams( sal_Int32 nSet ) { m_nBorderParams = nSet; }
 
     void SetColumnCount( sal_Int16 nCount ) { m_nColumnCount = nCount; }
     void SetColumnDistance( sal_Int32 nDist ) { m_nColumnDistance = nDist; }
@@ -376,6 +378,9 @@ typedef boost::shared_ptr<ParagraphProperties>  ParagraphPropertiesPtr;
 /*-- 14.06.2007 12:12:34---------------------------------------------------
     property map of a stylesheet
   -----------------------------------------------------------------------*/
+
+#define WW_OUTLINE_MAX  sal_Int16( 9 )
+
 class StyleSheetPropertyMap : public PropertyMap, public ParagraphProperties
 
 {
@@ -405,6 +410,8 @@ class StyleSheetPropertyMap : public PropertyMap, public ParagraphProperties
 
     sal_Int32               mnListId;
     sal_Int16               mnListLevel;
+
+    sal_Int16               mnOutlineLevel;
 public:
     explicit StyleSheetPropertyMap();
     ~StyleSheetPropertyMap();
@@ -479,6 +486,12 @@ public:
     sal_Int16   GetListLevel() const            { return mnListLevel; }
     void        SetListLevel(sal_Int16 nLevel)  { mnListLevel = nLevel; }
 
+    sal_Int16   GetOutlineLevel() const            { return mnOutlineLevel; }
+    void        SetOutlineLevel(sal_Int16 nLevel)
+    {
+        if ( nLevel < WW_OUTLINE_MAX )
+            mnOutlineLevel = nLevel;
+    }
 };
 /*-- 27.12.2007 12:38:06---------------------------------------------------
 

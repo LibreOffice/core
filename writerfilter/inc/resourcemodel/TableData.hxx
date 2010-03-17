@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TableData.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -276,6 +273,11 @@ class WRITERFILTER_DLLPUBLIC TableData
     typedef ::std::vector<RowPointer_t> Rows;
 
     /**
+       the table properties
+     */
+    PropertiesPointer mpTableProps;
+
+    /**
        the data of the rows of the table
     */
     Rows mRows;
@@ -347,6 +349,22 @@ public:
     void insertCellProperties(unsigned int i, PropertiesPointer pProps)
     {
         mpRow->insertCellProperties(i, pProps);
+    }
+
+    void insertTableProperties( PropertiesPointer pProps )
+    {
+        if ( mpTableProps.get( ) )
+            mpTableProps->insert( pProps );
+        else
+            mpTableProps = pProps;
+    }
+
+    /**
+      Return the table properties.
+     */
+    PropertiesPointer getTableProperties( )
+    {
+        return mpTableProps;
     }
 
     /**
