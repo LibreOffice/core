@@ -125,6 +125,7 @@ function hMacroOrganizerRunMacro( cMacroName as string ) as integer
         hExpandAllNodes( MakroAus )
         iMacroPosition = hSelectNodeByName( MakroAus, cMacroName )
         if ( iMacroPosition ) then
+            iMacroPosition = hSelectNextNode( MakroAus )
             if ( hClickButton( Ausfuehren ) ) then
                 hMacroOrganizerRunMacro() = iMacroPosition
             else
