@@ -127,19 +127,23 @@ function hOpenDigitalSignaturesDialog() as boolean
     '///<u>Description</u>:
     '///<ul>
 
-    dim brc as boolean
     const CFN = "hOpenDigitalSignaturesDialog::"
+    const FILE_MENU_POSITION = 1
+    const SIGNATURES_MENU_POSITION_OTHER = 15
+    const SIGNATURES_MENU_POSITION_MATH  = 14
+
+    hOpenDigitalSignaturesDialog() = false
 
     '///+<li>Open the file-menu</li>
     call hUseMenu()
-    call hMenuSelectNr( 1 )
+    call hMenuSelectNr( FILE_MENU_POSITION )
                                                                                 
     '///+<li>Select &quot;Digital signatures...&quot;</li>
     try
-        if ( ucase( gApplication ) = "MATH" ) then
-            call hMenuSelectNr( 14 )
+        if ( gApplication = "MATH" ) then
+            call hMenuSelectNr( SIGNATURES_MENU_POSITION_MATH )
         else
-            call hMenuSelectNr( 15 )
+            call hMenuSelectNr( SIGNATURES_MENU_POSITION_OTHER )
         endif
     catch
         warnlog( CFN & "Failed to execute menuitem <Digital Signature...>" )
@@ -155,13 +159,9 @@ function hOpenDigitalSignaturesDialog() as boolean
     kontext "DigitalSignature"
     if ( DigitalSignature.exists() ) then
         printlog( CFN & "Digital signatures is open" )
-        brc = true
-    else
-        brc = false
+        hOpenDigitalSignaturesDialog() = true
     endif
-
     '///</ul>
-    hOpenDigitalSignaturesDialog() = brc
 
 end function
 
@@ -188,10 +188,11 @@ function hAllowMacroExecution() as boolean
     '///<ul>
 
     const CFN = "hAllowMacroExecution::"
+    const MAX_WAIT_FOR_SECURITY_DIALOG = 5
 
     '///+<li>Verify that the Macro security Warning is displayed</li>
     kontext "SecurityWarning"
-    if ( SecurityWarning.exists( 5 ) ) then
+    if ( SecurityWarning.exists( MAX_WAIT_FOR_SECURITY_DIALOG ) ) then
 
         '///+<li>Click &quot;Run&quot; to allow macro execution</li>
         printlog( CFN & "Allowing macro execution" )
@@ -373,8 +374,7 @@ function hRemoveTrustedPath( cPath as string ) as boolean
     dim iPathCount as integer
     dim iCurrentPathItem as integer
 
-    dim brc as boolean
-        brc = false
+    dim brc as boolean : brc = false
 
     '///<u>Description</u>:
     '///<ul>
@@ -386,7 +386,7 @@ function hRemoveTrustedPath( cPath as string ) as boolean
     hToolsOptions( "StarOffice" , "Security" )
 
     '///+<li>Click Macro Security</li>
-    MacroSecurity.click()
+    hClickButton( MacroSecurity )
 
     '///+<li>Switch to the Trusted Paths tab</li>
     hSwitchMacroSecurityTab( "trustedpaths" )
@@ -410,16 +410,13 @@ function hRemoveTrustedPath( cPath as string ) as boolean
     next iCurrentPathItem
          
     '///+<li>Close the dialog</li>
-    TabTrustedSources.ok()
+    hCloseDialog( TabTrustedSources, "ok" )
 
     '///+<li>Close Tools/Options</li>
     Kontext "OptionenDlg"
-    OptionenDlg.ok()
+    hCloseDialog( OptionenDlg, "ok" )
 
-    if ( not brc ) then
-        printlog( CFN & "The trusted path was not found in the list" )
-    endif
-
+    if ( not brc ) then printlog( CFN & "The trusted path was not found in the list" )
     hRemoveTrustedPath() = brc
 
     '///</ul>
@@ -462,9 +459,8 @@ function hSecurityEnterPasswordOnSave( cPassword as string ) as boolean
     '///</ol>
 
     const CFN = "hSecurityEnterPasswordOnSave::"
-    printlog( CFN & "Enter" )
-    dim brc as boolean 'a multi purpose boolean returnvalue
-        brc = true
+    if ( GVERBOSE ) then printlog( CFN & "Enter" )
+    hSecurityEnterPasswordOnSave() = true
 
     '///<u>Description:</u>
     '///<ul>
@@ -492,7 +488,7 @@ function hSecurityEnterPasswordOnSave( cPassword as string ) as boolean
             Active.OK()
         else
             qaerrorlog( CFN & "Warning about faulty password confirmation is missing" )
-            brc = false
+            hSecurityEnterPasswordOnSave() = false
         endif
         
         '///+<li>We should now be back on the password dialog</li>
@@ -513,14 +509,14 @@ function hSecurityEnterPasswordOnSave( cPassword as string ) as boolean
         else
             
             qaerrorlog( CFN & "The password dialog is missing after confirmation error" )     
-            brc = false
+            hSecurityEnterPasswordOnSave() = false
         
         endif
         
     else
     
         qaerrorlog( CFN & "The password dialog did not open" )
-        brc = false
+        hSecurityEnterPasswordOnSave() = false
         
     endif
     
@@ -529,12 +525,11 @@ function hSecurityEnterPasswordOnSave( cPassword as string ) as boolean
     if ( SpeichernDlg.exists() ) then
         qaerrorlog( CFN & "File Save dialog is open, cancelling." )
         SpeichernDlg.cancel()
-        brc = false
+        hSecurityEnterPasswordOnSave() = false
     endif
     '///</ul>
 
-    printlog( CFN & "Exit with result: " & brc )
-    hSecurityEnterPasswordOnSave() = brc 
+    if ( GVERBOSE ) then printlog( CFN & "Exit" )
 
 end function
 
@@ -575,11 +570,12 @@ function hSecurityEnterPasswordOnLoad( cPassword as string, bValid as boolean ) 
     '///</ol>
 
     const CFN = "hSecurityEnterPasswordOnLoad::"
-    printlog( CFN & "Enter with option (Password): " & cPassword )
-    printlog( CFN & "Enter with option (Validity): " & bValid )
-    dim brc as boolean 'a multi purpose boolean returnvalue
-        brc = true
-    dim cMsg as string
+    if ( GVERBOSE ) then
+        printlog( CFN & "Enter with option (Password): " & cPassword )
+        printlog( CFN & "Enter with option (Validity): " & bValid )
+    endif
+
+    hSecurityEnterPasswordOnLoad() = true
 
     '///<u>Description:</u>
     '///<ul>
@@ -598,14 +594,7 @@ function hSecurityEnterPasswordOnLoad( cPassword as string, bValid as boolean ) 
             '///+<li>Look for a warning message</li>
             kontext "Active"
             if ( Active.exists( 1 ) ) then
-            
-                cMsg = Active.getText()
-                cMsg = hRemoveLineBreaks( cMsg )
-                if ( bValid ) then
-                    warnlog( CFN & "Message: " & cMsg )
-                else
-                    printlog( CFN & "Message: " & cMsg )
-                endif
+                printlog( CFN & "Message: " & Active.getText() )
                 
                 '///+<li>Close the messagebox</li>
                 Active.ok()
@@ -613,46 +602,31 @@ function hSecurityEnterPasswordOnLoad( cPassword as string, bValid as boolean ) 
                 '///+<li>Close the Password dialog with &quot;Cancel&quot;</li>
                 kontext "PasswordFileOpen"
                 if ( PasswordFileopen.exists( 2 ) ) then
-                
-                    PasswordFileOpen.cancel()
-                    
+                    hCloseDialog( PasswordFileOpen, "cancel" )
                 else
-                
                     qaerrorlog( CFN & "Password dialog is not present" )
-                    brc = false
-                    
+                    hSecurityEnterPasswordOnLoad() = false
                 endif
             else
-                
                 qaerrorlog( CFN & "Warning about incorrect password is missing" )
-                brc = false
-    
+                hSecurityEnterPasswordOnLoad() = false
             endif
             
         else
-        
             kontext "Active"
             if ( Active.exists( 1 ) ) then
-                
-                cMsg = Active.getText()
-                cMsg = hRemoveLIneBreaks( cMsg )
-                qaerrorlog( CFN & "Unexpected messagebox: " & cMsg )
-                brc = false
-                
+                warnlog( CFN & "Unexpected messagebox: " & Active.getText() )
+                hSecurityEnterPasswordOnLoad() = false
             endif
-            
         endif
         '///</ul>
         
     else
-    
-        qaerrorlog( CFN & "Password dialog is missing" )
-        brc = false
-        
+        warnlog( CFN & "Password dialog is missing" )
+        hSecurityEnterPasswordOnLoad() = false
     endif
     '///</ul>
 
     printlog( CFN & "Exit with result:" & brc )
-    hSecurityEnterPasswordOnLoad() = brc
-
+  
 end function
