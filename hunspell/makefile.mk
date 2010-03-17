@@ -43,7 +43,8 @@ TARFILE_ROOTDIR=hunspell-1.2.8
 
 PATCH_FILES=\
     hunspell-1.2.8.patch \
-    hunspell-consts-1.2.8.patch # hunspell#2064983
+    hunspell-consts-1.2.8.patch 	# hunspell#2064983 \
+    hunspell-1.2.8-thesfix.patch	# hunspell #i107768
 
 .IF "$(GUI)"=="UNX"
 #CONFIGURE_DIR=$(BUILD_DIR)
