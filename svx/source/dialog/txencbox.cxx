@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txencbox.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -178,36 +175,10 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
 
 //------------------------------------------------------------------------
 
-// static
-rtl_TextEncoding SvxTextEncodingBox::GetBestMimeEncoding()
-{
-    const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding(
-            gsl_getSystemTextEncoding() );
-    if ( !pCharSet )
-    {
-        // If the system locale is unknown to us, e.g. LC_ALL=xx, match the UI
-        // language if possible.
-        ::com::sun::star::lang::Locale aLocale(
-                Application::GetSettings().GetUILocale() );
-        rtl_Locale * pLocale = rtl_locale_register( aLocale.Language.getStr(),
-                aLocale.Country.getStr(), aLocale.Variant.getStr() );
-        rtl_TextEncoding nEnc = osl_getTextEncodingFromLocale( pLocale );
-        pCharSet = rtl_getBestMimeCharsetFromTextEncoding( nEnc );
-    }
-    rtl_TextEncoding nRet;
-    if ( pCharSet )
-        nRet = rtl_getTextEncodingFromMimeCharset( pCharSet );
-    else
-        nRet = RTL_TEXTENCODING_UTF8;
-    return nRet;
-}
-
-//------------------------------------------------------------------------
-
 void SvxTextEncodingBox::FillWithMimeAndSelectBest()
 {
     FillFromTextEncodingTable( sal_False, 0xffffffff, RTL_TEXTENCODING_INFO_MIME );
-    rtl_TextEncoding nEnc = GetBestMimeEncoding();
+    rtl_TextEncoding nEnc = SvtSysLocale::GetBestMimeEncoding();
     SelectTextEncoding( nEnc );
 }
 

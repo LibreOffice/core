@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ucbserv.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +34,7 @@
 #include "ucbstore.hxx"
 #include "ucbprops.hxx"
 #include "provprox.hxx"
+#include "cmdenv.hxx"
 
 using namespace rtl;
 using namespace com::sun::star::uno;
@@ -46,7 +44,7 @@ using namespace com::sun::star::registry;
 //=========================================================================
 static sal_Bool writeInfo( void * pRegistryKey,
                            const OUString & rImplementationName,
-                              Sequence< OUString > const & rServiceNames )
+                               Sequence< OUString > const & rServiceNames )
 {
     OUString aKeyName( OUString::createFromAscii( "/" ) );
     aKeyName += rImplementationName;
@@ -124,7 +122,15 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void *, void * pRegistryKey )
 
     writeInfo( pRegistryKey,
        UcbContentProviderProxyFactory::getImplementationName_Static(),
-       UcbContentProviderProxyFactory::getSupportedServiceNames_Static() );
+       UcbContentProviderProxyFactory::getSupportedServiceNames_Static() ) &&
+
+    //////////////////////////////////////////////////////////////////////
+    // Command Environment.
+    //////////////////////////////////////////////////////////////////////
+
+    writeInfo( pRegistryKey,
+       ucb_cmdenv::UcbCommandEnvironment::getImplementationName_Static(),
+       ucb_cmdenv::UcbCommandEnvironment::getSupportedServiceNames_Static() );
 }
 
 //=========================================================================
@@ -176,6 +182,17 @@ extern "C" void * SAL_CALL component_getFactory(
     {
         xFactory
             = UcbContentProviderProxyFactory::createServiceFactory( xSMgr );
+    }
+
+    //////////////////////////////////////////////////////////////////////
+    // Command Environment.
+    //////////////////////////////////////////////////////////////////////
+
+    else if ( ucb_cmdenv::UcbCommandEnvironment::getImplementationName_Static().
+                compareToAscii( pImplName ) == 0 )
+    {
+        xFactory
+            = ucb_cmdenv::UcbCommandEnvironment::createServiceFactory( xSMgr );
     }
 
     //////////////////////////////////////////////////////////////////////
