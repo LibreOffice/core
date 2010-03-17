@@ -112,9 +112,10 @@ testcase tGroupBoxWithDatasource
         endif
     Kontext "TabDataForm"         
     '/// set the table TT_Control
-     printlog "set the table TT_Control"    
-	 Content.setText("TT_Control")
-     Content.TypeKeys "<RETURN>" , true       
+    printlog "set the table TT_Control"    
+    Content.setText("TT_Control")
+    Content.TypeKeys "<RETURN>" , true
+    sleep(1)
   	Kontext "ControlPropertiesDialog"
    	 ControlPropertiesDialog.Close
    	sleep(3)
@@ -787,72 +788,72 @@ endcase
 
 testcase tTableControl
 
-    printlog "- Formular toolbox: Tablecontrol element (" & gApplication & ")"
-    '/// open a new textdocument & insert a table control
-    call hNewDocument
-    sleep(1)
+  printlog "- Formular toolbox: Tablecontrol element (" & gApplication & ")"
+  '/// open a new textdocument & insert a table control
+  call hNewDocument
+  sleep(1)
+    
+  call hToolbarSelect("MoreControls",true)
 
-    call hToolbarSelect("MoreControls",true)
-
-    Kontext "MoreControls"
-    Grid.Click
-    call hDrawingWithSelection ( 40, 20, 60, 40 )
-    sleep(10)
-    '/// take as datasource table biblio, mark it & next
-    '/// select some fields (in both directions) & create
-    '/// switch off the design view & open the database beamer (TODO)
-    '/// compare the header & the contents with the table control (TODO)
-    Dim k as integer
-    Kontext "AutopilotTableElement"
-    AutopilotTableElement.MouseDown (10,10)
-    AutopilotTableElement.MouseUp (10,10)
-    if AutopilotTableElement.Exists(3) then
-    printlog "  - Autopilot Table Element: Page 1/2"
-    Kontext "TabListBoxData"
-    DataSource.Select(sDSName)
-    sleep (1)
-    Kontext "LoginDialog"
-    if LoginDialog.Exists(3) then
-        printlog "login dialog"
-        LoginPassword.SetText "testtool"
-        LoginDialog.OK
+  Kontext "MoreControls"
+   Grid.Click
+   call hDrawingWithSelection ( 40, 20, 60, 40 )
+   sleep(10)
+   '/// take as datasource table biblio, mark it & next
+   '/// select some fields (in both directions) & create
+   '/// switch off the design view & open the database beamer (TODO)
+   '/// compare the header & the contents with the table control (TODO)
+	Dim k as integer
+	Kontext "AutopilotTableElement"
+	AutopilotTableElement.MouseDown (10,10)
+	AutopilotTableElement.MouseUp (10,10)
+	if AutopilotTableElement.Exists(3) then
+    	printlog "  - Autopilot Table Element: Page 1/2"
+		Kontext "TabListBoxData"
+		DataSource.Select(sDSName)
+		sleep (1)
+		Kontext "LoginDialog"
+        if LoginDialog.Exists(3) then
+        	printlog "login dialog"
+                LoginPassword.SetText "testtool"
+	        LoginDialog.OK
+	        sleep (1)
+        end if	    
         sleep (1)
-    end if
-    sleep (1)
-    Kontext "TabListBoxData"
-    Table.Select("TT_Control")
-    sleep(3)
-    Kontext "AutopilotTableElement"
-    if NextButton.IsEnabled then
-        NextButton.Click
-    else
-        warnlog "In first window the 'Next'-button is disabled!"
-        AutopilotTableElement.Cancel
-    end if
-    sleep(1)
-    printlog "  - Autopilot Table Element: Page 2/2"
-    Kontext "TabTableFieldSelection"
-    ExistingFields.Select("ID")
-    AddTo.Click
-    ExistingFields.Select("Colors")
-    AddTo.Click
-    ExistingFields.Select("InfoColor")
-    AddTo.Click
-    sleep(1)
-    Kontext "AutopilotTableElement"
-    if CreateButton.IsEnabled then
-        CreateButton.Click
-    else
-        warnlog "In fourth window the 'Create'-button is disabled!"
-        AutopilotTableElement.Cancel
-    end if
-    else
-        warnlog "- Autopilot for Table Element didn't appear!"
-    end if
-    sleep(2)
-
-    hCloseDocument
-
+   		Kontext "TabListBoxData"
+		Table.Select("TT_Control")
+		sleep(3)
+		Kontext "AutopilotTableElement"
+    	if NextButton.IsEnabled then
+			NextButton.Click
+		else
+			warnlog "In first window the 'Next'-button is disabled!"
+       		AutopilotTableElement.Cancel
+		end if
+		sleep(1)
+		printlog "  - Autopilot Table Element: Page 2/2"
+		Kontext "TabTableFieldSelection"
+		ExistingFields.Select("ID")
+		AddTo.Click
+		ExistingFields.Select("Colors")
+		AddTo.Click
+		ExistingFields.Select("InfoColor")
+		AddTo.Click
+		sleep(1)
+		Kontext "AutopilotTableElement"
+		if CreateButton.IsEnabled then
+			CreateButton.Click
+		else
+			warnlog "In fourth window the 'Create'-button is disabled!"
+			AutopilotTableElement.Cancel
+		end if
+	else
+		warnlog "- Autopilot for Table Element didn't appear!"
+	end if
+	sleep(2)
+	
+	hCloseDocument
+	
 endcase
 
 '-------------------------------------------------------------------------
