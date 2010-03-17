@@ -1633,11 +1633,13 @@ void X11SalGraphics::GetDevFontSubstList( OutputDevice* )
 void cairosubcallback( void* pPattern )
 {
     CairoWrapper& rCairo = CairoWrapper::get();
-    if( rCairo.isValid() )
-    {
+    if( !rCairo.isValid() )
+        return;
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-        rCairo.ft_font_options_substitute( rStyleSettings.GetCairoFontOptions(), pPattern);
-    }
+    const void* pFontOptions = rStyleSettings.GetCairoFontOptions();
+    if( !pFontOptions )
+        return;
+    rCairo.ft_font_options_substitute( pFontOptions, pPattern );
 }
 
 bool GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize,
