@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartController.hxx,v $
- * $Revision: 1.12.44.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,6 +57,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XModeChangeListener.hpp>
+#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XLayoutManagerListener.hpp>
@@ -90,6 +88,8 @@ namespace graphic {
 namespace chart
 {
 //.............................................................................
+
+enum ChartDrawMode { CHARTDRAW_INSERT, CHARTDRAW_SELECT };
 
 class WindowController
 {
@@ -158,6 +158,9 @@ class ChartController   : public ::cppu::WeakImplHelper12 <
         >
         , public WindowController
 {
+    friend class DrawCommandDispatch;
+    friend class ShapeController;
+
 public:
     //no default constructor
     ChartController(::com::sun::star::uno::Reference<
@@ -466,6 +469,13 @@ public:
 
     static bool isObjectDeleteable( const ::com::sun::star::uno::Any& rSelection );
 
+    void setDrawMode( ChartDrawMode eMode ) { m_eDrawMode = eMode; }
+    ChartDrawMode getDrawMode() const { return m_eDrawMode; }
+
+    bool isShapeContext() const;
+
+    DECL_LINK( NotifyUndoActionHdl, SdrUndoAction* );
+
 public:
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
@@ -480,6 +490,7 @@ public:
 
 private:
     DrawModelWrapper* GetDrawModelWrapper();
+    DrawViewWrapper* GetDrawViewWrapper();
 
 private:
     class TheModelRef;
@@ -580,6 +591,8 @@ private:
             ::com::sun::star::frame::XLayoutManagerEventBroadcaster >
                                                   m_xLayoutManagerEventBroadcaster;
 
+    ChartDrawMode       m_eDrawMode;
+
 private:
     //private methods
 
@@ -640,11 +653,11 @@ private:
     void                executeDispatch_DeleteMinorGrid();
 
     void SAL_CALL       executeDispatch_InsertSpecialCharacter();
-    void SAL_CALL       executeDispatch_EditText();
+    void SAL_CALL       executeDispatch_EditText( const Point* pMousePixel = NULL );
     void SAL_CALL       executeDispatch_SourceData();
     void SAL_CALL       executeDispatch_MoveSeries( sal_Bool bForward );
 
-    void                StartTextEdit();
+    void                StartTextEdit( const Point* pMousePixel = NULL );
     bool                EndTextEdit();
 
     void SAL_CALL       executeDispatch_View3D();
@@ -662,9 +675,12 @@ private:
     void                executeDispatch_ToggleLegend();
     void                executeDispatch_ToggleGridHorizontal();
 
+    void impl_ShapeControllerDispatch( const ::com::sun::star::util::URL& rURL,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
+
     //
     DECL_LINK( DoubleClickWaitingHdl, void* );
-    void execute_DoubleClick();
+    void execute_DoubleClick( const Point* pMousePixel = NULL );
     void startDoubleClickWaiting();
     void stopDoubleClickWaiting();
 
@@ -704,6 +720,8 @@ private:
 
     void impl_PasteGraphic( ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > & xGraphic,
                             const ::Point & aPosition );
+    void impl_PasteShapes( SdrModel* pModel );
+    void impl_PasteStringAsTextShape( const ::rtl::OUString& rString, const ::com::sun::star::awt::Point& rPosition );
     void impl_SetMousePointer( const MouseEvent & rEvent );
 
     void impl_ClearSelection();

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ScatterChartTypeTemplate.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -222,12 +219,6 @@ StackMode ScatterChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex *
     return StackMode_NONE;
 }
 
-bool ScatterChartTypeTemplate::supportsCategories() const
-{
-    return false;
-}
-
-
 void SAL_CALL ScatterChartTypeTemplate::applyStyle(
     const Reference< chart2::XDataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
@@ -252,10 +243,10 @@ void SAL_CALL ScatterChartTypeTemplate::applyStyle(
 }
 
 // ____ XChartTypeTemplate ____
-Sequence< OUString > SAL_CALL ScatterChartTypeTemplate::getAvailableCreationParameterNames()
+sal_Bool SAL_CALL ScatterChartTypeTemplate::supportsCategories()
     throw (uno::RuntimeException)
 {
-    return Sequence< OUString >();
+    return sal_False;
 }
 
 sal_Bool SAL_CALL ScatterChartTypeTemplate::matchesTemplate(

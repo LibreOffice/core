@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: table3.cxx,v $
- * $Revision: 1.30.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +58,7 @@
 #include "progress.hxx"
 #include "cellform.hxx"
 #include "postit.hxx"
+#include "queryparam.hxx"
 
 #include <vector>
 
@@ -1867,6 +1865,11 @@ void ScTable::GetFilteredFilterEntries(
 BOOL ScTable::GetDataEntries(SCCOL nCol, SCROW nRow, TypedScStrCollection& rStrings, BOOL bLimit)
 {
     return aCol[nCol].GetDataEntries( nRow, rStrings, bLimit );
+}
+
+SCSIZE ScTable::GetCellCount(SCCOL nCol) const
+{
+    return aCol[nCol].GetCellCount();
 }
 
 ULONG ScTable::GetCellCount() const

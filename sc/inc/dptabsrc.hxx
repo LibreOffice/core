@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dptabsrc.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +30,7 @@
 
 #include <vector>
 #include <hash_map>
+#include <memory>
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 #include "global.hxx"       // enum ScSubTotalFunc
@@ -108,7 +106,7 @@ class ScDPSource : public cppu::WeakImplHelper6<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    ScDPTableData*          pData;              // data source
+    ScDPTableData*          pData;              // data source (ScDPObject manages its life time)
     ScDPDimensions*         pDimensions;        // api objects
                                                 // settings:
     long                    nColDims[SC_DAPI_MAXFIELDS];
@@ -136,6 +134,8 @@ private:
     List                    aRowLevelList;
     BOOL                    bResultOverflow;
 
+    ::std::auto_ptr<rtl::OUString> mpGrandTotalName;
+
     void                    CreateRes_Impl();
     void                    FillMemberResults();
     void                    FillLevelList( USHORT nOrientation, List& rList );
@@ -162,11 +162,15 @@ public:
     ScDPTableData*          GetData()       { return pData; }
     const ScDPTableData*    GetData() const { return pData; }
 
+    void                    SetGrandTotalName(const ::rtl::OUString& rName);
+    const ::rtl::OUString*  GetGrandTotalName() const;
+
     USHORT                  GetOrientation(long nColumn);
     void                    SetOrientation(long nColumn, USHORT nNew);
     long                    GetPosition(long nColumn);
 
     long                    GetDataDimensionCount();
+    ScDPDimension*          GetDataDimension(long nIndex);
     String                  GetDataDimName(long nIndex);
     BOOL                    IsDataLayoutDimension(long nDim);
     USHORT                  GetDataLayoutOrientation();
@@ -333,12 +337,15 @@ private:
     long                nUsedHier;
     USHORT              nFunction;          // enum GeneralFunction
     String              aName;              // if empty, take from source
+    ::std::auto_ptr<rtl::OUString> mpLayoutName;
+    ::std::auto_ptr<rtl::OUString> mpSubtotalName;
     long                nSourceDim;         // >=0 if dup'ed
     ::com::sun::star::sheet::DataPilotFieldReference
                         aReferenceValue;    // settings for "show data as" / "displayed value"
     BOOL                bHasSelectedPage;
     String              aSelectedPage;
     ScDPItemData*       pSelectedData;      // internal, temporary, created from aSelectedPage
+    sal_Bool            mbHasHiddenMember;
 
 public:
                             ScDPDimension( ScDPSource* pSrc, long nD );
@@ -349,6 +356,9 @@ public:
 
     ScDPDimension*          CreateCloneObject();
     ScDPHierarchies*        GetHierarchiesObject();
+
+    SC_DLLPUBLIC const ::rtl::OUString*  GetLayoutName() const;
+    const ::rtl::OUString*  GetSubtotalName() const;
 
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
@@ -736,7 +746,7 @@ private:
     long            nLev;
 
     ScDPItemData    maData;
-//  String          aCaption;           // visible name (changeable by user)
+    ::std::auto_ptr<rtl::OUString> mpLayoutName;
 
     sal_Int32       nPosition;          // manual sorting
     BOOL            bVisible;
@@ -750,6 +760,7 @@ public:
     BOOL                    IsNamedItem( const ScDPItemData& r ) const;
     String                  GetNameStr() const;
     void                    FillItemData( ScDPItemData& rData ) const;
+    SC_DLLPUBLIC const ::rtl::OUString*  GetLayoutName() const;
 
     sal_Int32               Compare( const ScDPMember& rOther ) const;      // visible order
 

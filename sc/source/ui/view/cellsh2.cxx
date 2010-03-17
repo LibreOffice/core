@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cellsh2.cxx,v $
- * $Revision: 1.34.24.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -762,7 +759,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     //  select database range or data
                     pTabViewShell->GetDBData( TRUE, SC_DB_OLD );
-                    const ScMarkData& rMark = GetViewData()->GetMarkData();
+                    ScMarkData& rMark = GetViewData()->GetMarkData();
                     if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
                         pTabViewShell->MarkDataArea( FALSE );
 
@@ -828,6 +825,19 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             ScMarkType eType = GetViewData()->GetSimpleArea(aRange);
                             if ( (eType & SC_MARK_SIMPLE) == SC_MARK_SIMPLE )
                             {
+                                // Shrink the range to the data area.
+                                SCCOL nStartCol = aRange.aStart.Col(), nEndCol = aRange.aEnd.Col();
+                                SCROW nStartRow = aRange.aStart.Row(), nEndRow = aRange.aEnd.Row();
+                                if (pDoc->ShrinkToDataArea(aRange.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow))
+                                {
+                                    aRange.aStart.SetCol(nStartCol);
+                                    aRange.aStart.SetRow(nStartRow);
+                                    aRange.aEnd.SetCol(nEndCol);
+                                    aRange.aEnd.SetRow(nEndRow);
+                                    rMark.SetMarkArea(aRange);
+                                    pTabViewShell->MarkRange(aRange);
+                                }
+
                                 BOOL bOK = TRUE;
                                 if ( pDoc->HasSubTotalCells( aRange ) )
                                 {

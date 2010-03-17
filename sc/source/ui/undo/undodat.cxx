@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: undodat.cxx,v $
- * $Revision: 1.12.128.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +50,7 @@
 #include "olinefun.hxx"
 #include "dpobject.hxx"
 #include "attrib.hxx"
+#include "hints.hxx"
 #include "sc.hrc"
 
 // -----------------------------------------------------------------------
@@ -1876,7 +1874,7 @@ void __EXPORT ScUndoDataPilot::Undo()
             else
             {
                 //  delete inserted object
-                pDoc->GetDPCollection()->Free(pDocObj);
+                pDoc->GetDPCollection()->FreeTable(pDocObj);
             }
         }
     }
@@ -1886,7 +1884,7 @@ void __EXPORT ScUndoDataPilot::Undo()
 
         ScDPObject* pDestObj = new ScDPObject( *pOldDPObject );
         pDestObj->SetAlive(TRUE);
-        if ( !pDoc->GetDPCollection()->Insert(pDestObj) )
+        if ( !pDoc->GetDPCollection()->InsertNewTable(pDestObj) )
         {
             DBG_ERROR("cannot insert DPObject");
             DELETEZ( pDestObj );
@@ -1903,6 +1901,12 @@ void __EXPORT ScUndoDataPilot::Undo()
     if (pViewShell)
     {
         //! set current sheet
+    }
+
+    if (pNewDPObject)
+    {
+        // notify API objects
+        pDoc->BroadcastUno( ScDataPilotModifiedHint( pNewDPObject->GetName() ) );
     }
 
     EndUndo();

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabvwsh4.cxx,v $
- * $Revision: 1.76.102.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,15 +34,15 @@
 
 #include <sfx2/topfrm.hxx>
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <svx/fmshell.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <svx/prtqry.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pvfundlg.cxx,v $
- * $Revision: 1.12.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,12 +47,15 @@
 #include "pvfundlg.hrc"
 #include "globstr.hrc"
 
+#include <vector>
+
 // ============================================================================
 
 using namespace ::com::sun::star::sheet;
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Sequence;
+using ::std::vector;
 
 // ============================================================================
 
@@ -83,6 +83,25 @@ bool lclFillListBox( ListBoxType& rLBox, const Sequence< OUString >& rStrings, U
                 rLBox.InsertEntry( ScGlobal::GetRscString( STR_EMPTYDATA ), nEmptyPos );
                 bEmpty = true;
             }
+        }
+    }
+    return bEmpty;
+}
+
+template< typename ListBoxType >
+bool lclFillListBox( ListBoxType& rLBox, const vector<ScDPLabelData::Member>& rMembers, USHORT nEmptyPos = LISTBOX_APPEND )
+{
+    bool bEmpty = false;
+    vector<ScDPLabelData::Member>::const_iterator itr = rMembers.begin(), itrEnd = rMembers.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        OUString aName = itr->getDisplayName();
+        if (aName.getLength())
+            rLBox.InsertEntry(aName);
+        else
+        {
+            rLBox.InsertEntry(ScGlobal::GetRscString(STR_EMPTYDATA), nEmptyPos);
+            bEmpty = true;
         }
     }
     return bEmpty;
@@ -255,7 +274,7 @@ void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScDPFuncData&
     maLbFunc.SetSelection( nFuncMask );
 
     // field name
-    maFtName.SetText( rLabelData.maName );
+    maFtName.SetText(rLabelData.getDisplayName());
 
     // "More button" controls
     maBtnMore.AddWindow( &maFlDisplay );
@@ -273,7 +292,7 @@ void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScDPFuncData&
 
     // base field list box
     for( ScDPLabelDataVec::const_iterator aIt = mrLabelVec.begin(), aEnd = mrLabelVec.end(); aIt != aEnd; ++aIt )
-        maLbBaseField.InsertEntry( aIt->maName );
+        maLbBaseField.InsertEntry(aIt->getDisplayName());
 
     // base item list box
     maLbBaseItem.SetSeparatorPos( SC_BASEITEM_USER_POS - 1 );
@@ -416,8 +435,6 @@ void ScDPSubtotalDlg::FillLabelData( ScDPLabelData& rLabelData ) const
     rLabelData.mnUsedHier = maLabelData.mnUsedHier;
     rLabelData.mbShowAll = maCbShowAll.IsChecked();
     rLabelData.maMembers = maLabelData.maMembers;
-    rLabelData.maVisible = maLabelData.maVisible;
-    rLabelData.maShowDet = maLabelData.maShowDet;
     rLabelData.maSortInfo = maLabelData.maSortInfo;
     rLabelData.maLayoutInfo = maLabelData.maLayoutInfo;
     rLabelData.maShowInfo = maLabelData.maShowInfo;
@@ -426,7 +443,7 @@ void ScDPSubtotalDlg::FillLabelData( ScDPLabelData& rLabelData ) const
 void ScDPSubtotalDlg::Init( const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData )
 {
     // field name
-    maFtName.SetText( rLabelData.maName );
+    maFtName.SetText(rLabelData.getDisplayName());
 
     // radio buttons
     maRbNone.SetClickHdl( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
@@ -549,9 +566,8 @@ void ScDPSubtotalOptDlg::FillLabelData( ScDPLabelData& rLabelData ) const
 
     rLabelData.maMembers = maLabelData.maMembers;
     ULONG nVisCount = maLbHide.GetEntryCount();
-    rLabelData.maVisible.realloc( nVisCount );
     for( USHORT nPos = 0; nPos < nVisCount; ++nPos )
-        rLabelData.maVisible[ nPos ] = !maLbHide.IsChecked( nPos );
+        rLabelData.maMembers[nPos].mbVisible = !maLbHide.IsChecked(nPos);
 
     // *** HIERARCHY ***
 
@@ -565,7 +581,8 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
     sal_Int32 nSortMode = maLabelData.maSortInfo.Mode;
 
     // sort fields list box
-    maLbSortBy.InsertEntry( maLabelData.maName );
+    maLbSortBy.InsertEntry(maLabelData.getDisplayName());
+
     for( ScDPNameVec::const_iterator aIt = rDataFields.begin(), aEnd = rDataFields.end(); aIt != aEnd; ++aIt )
     {
         maLbSortBy.InsertEntry( *aIt );
@@ -658,8 +675,9 @@ void ScDPSubtotalOptDlg::InitHideListBox()
 {
     maLbHide.Clear();
     lclFillListBox( maLbHide, maLabelData.maMembers );
-    for( sal_Int32 nVisIdx = 0, nVisSize = maLabelData.maVisible.getLength(); nVisIdx < nVisSize; ++nVisIdx )
-        maLbHide.CheckEntryPos( static_cast< USHORT >( nVisIdx ), !maLabelData.maVisible[ nVisIdx ] );
+    size_t n = maLabelData.maMembers.size();
+    for (size_t i = 0; i < n; ++i)
+        maLbHide.CheckEntryPos(static_cast<USHORT>(i), !maLabelData.maMembers[i].mbVisible);
     bool bEnable = maLbHide.GetEntryCount() > 0;
     maFlHide.Enable( bEnable );
     maLbHide.Enable( bEnable );
@@ -692,8 +710,7 @@ IMPL_LINK( ScDPSubtotalOptDlg, SelectHdl, ListBox*, pLBox )
 {
     if( pLBox == &maLbHierarchy )
     {
-        mrDPObj.GetMembers( maLabelData.mnCol, maLbHierarchy.GetSelectEntryPos(),
-            maLabelData.maMembers, &maLabelData.maVisible, &maLabelData.maShowDet );
+        mrDPObj.GetMembers(maLabelData.mnCol, maLbHierarchy.GetSelectEntryPos(), maLabelData.maMembers);
         InitHideListBox();
     }
     return 0;
@@ -707,7 +724,9 @@ ScDPShowDetailDlg::ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, USHOR
     maLbDims        ( this, ScResId( LB_DIMS ) ),
     maBtnOk         ( this, ScResId( BTN_OK ) ),
     maBtnCancel     ( this, ScResId( BTN_CANCEL ) ),
-    maBtnHelp       ( this, ScResId( BTN_HELP ) )
+    maBtnHelp       ( this, ScResId( BTN_HELP ) ),
+
+    mrDPObj(rDPObj)
 {
     FreeResource();
 
@@ -721,7 +740,13 @@ ScDPShowDetailDlg::ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, USHOR
         {
             const ScDPSaveDimension* pDimension = pSaveData ? pSaveData->GetExistingDimensionByName(aName) : 0;
             if ( !pDimension || (pDimension->GetOrientation() != nOrient) )
+            {
+                const OUString* pLayoutName = pDimension->GetLayoutName();
+                if (pLayoutName)
+                    aName = *pLayoutName;
                 maLbDims.InsertEntry( aName );
+                maNameIndexMap.insert(DimNameIndexMap::value_type(aName, nDim));
+            }
         }
     }
     if( maLbDims.GetEntryCount() )
@@ -737,7 +762,17 @@ short ScDPShowDetailDlg::Execute()
 
 String ScDPShowDetailDlg::GetDimensionName() const
 {
-    return maLbDims.GetSelectEntry();
+    // Look up the internal dimension name which may be different from the
+    // displayed field name.
+    String aSelectedName = maLbDims.GetSelectEntry();
+    DimNameIndexMap::const_iterator itr = maNameIndexMap.find(aSelectedName);
+    if (itr == maNameIndexMap.end())
+        // This should never happen!
+        return aSelectedName;
+
+    long nDim = itr->second;
+    BOOL bIsDataLayout = false;
+    return mrDPObj.GetDimName(nDim, bIsDataLayout);
 }
 
 IMPL_LINK( ScDPShowDetailDlg, DblClickHdl, ListBox*, pLBox )
