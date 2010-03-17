@@ -70,6 +70,7 @@ SHL1IMPLIB= i$(TARGET)
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=   $(SHL1TARGET)
+DEF1EXPORTFILE=	exports.dxp
 
 # === MACAB impl library ==========================
 
