@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WindowsSystemEnvironment.java,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +29,7 @@ package com.sun.star.servicetag;
 
 // The Service Tags team maintains the latest version of the implementation
 // for system environment data collection.  JDK will include a copy of
-// the most recent released version for a JDK release.  We rename
+// the most recent released version for a JDK release.        We rename
 // the package to com.sun.servicetag so that the Sun Connection
 // product always uses the latest version from the com.sun.scn.servicetags
 // package. JDK and users of the com.sun.servicetag API
@@ -42,6 +38,8 @@ package com.sun.star.servicetag;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Windows implementation of the SystemEnvironment class.
@@ -71,6 +69,13 @@ class WindowsSystemEnvironment extends SystemEnvironment {
         }
         setCpuManufacturer(cpuMfr);
 
+        setSockets(getWindowsSockets());
+        setCores(getWindowsCores());
+        setVirtCpus(getWindowsVirtCpus());
+        setPhysMem(getWindowsPhysMem());
+        setCpuName(getWmicResult("cpu", "get", "Name"));
+        setClockRate(getWmicResult("cpu", "get", "MaxClockSpeed"));
+
         // try to remove the temp file that gets created from running wmic cmds
         try {
             // look in the current working directory
@@ -81,6 +86,44 @@ class WindowsSystemEnvironment extends SystemEnvironment {
         } catch (Exception e) {
             // ignore the exception
         }
+    }
+
+    private String getWindowsVirtCpus() {
+        String res = getWmicResult("cpu", "get", "NumberOfLogicalProcessors");
+        if (res == null || res.equals("")) {
+            res = "1";
+        }
+        return res;
+    }
+
+    private String getWindowsCores() {
+        String res = getWmicResult("cpu", "get", "NumberOfCores");
+        if (res == null || res.equals("")) {
+            res = "1";
+        }
+        return res;
+    }
+
+    private String getWindowsSockets() {
+        String res = getFullWmicResult("cpu", "get", "DeviceID");
+        Set<String> set = new HashSet<String>();
+        for (String line : res.split("\n")) {
+            line = line.trim();
+            if (line.equals("")) {
+                continue;
+            }
+            set.add(line);
+        }
+        if (set.size() == 0) {
+            return "1";
+        }
+        return "" + set.size();
+    }
+
+    private String getWindowsPhysMem() {
+        String mem = getWmicResult("computersystem", "get", "TotalPhysicalMemory");
+        long l = Long.parseLong(mem);
+        return "" + ((long) (l / (1024*1024)));
     }
 
 
@@ -141,5 +184,49 @@ class WindowsSystemEnvironment extends SystemEnvironment {
             }
         }
         return res.trim();
+    }
+
+    private String getFullWmicResult(String alias, String verb, String property) {
+        String res = "";
+        BufferedReader in = null;
+        try {
+            ProcessBuilder pb = new ProcessBuilder("cmd", "/C", "WMIC", alias, verb, property);
+            Process p = pb.start();
+            // need this for executing windows commands (at least
+            // needed for executing wmic command)
+            BufferedWriter bw = new BufferedWriter(
+                new OutputStreamWriter(p.getOutputStream()));
+            bw.write(13);
+            bw.flush();
+            bw.close();
+
+            p.waitFor();
+            if (p.exitValue() == 0) {
+                in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                String line = null;
+                while ((line = in.readLine()) != null) {
+                    line = line.trim();
+                    if (line.length() == 0) {
+                        continue;
+                    }
+                    if (line.toLowerCase().indexOf(property.toLowerCase()) != -1) {
+                        continue;
+                    }
+                    res += line + "\n";
+                }
+            }
+
+        } catch (Exception e) {
+            // ignore the exception
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    // ignore
+                }
+            }
+        }
+        return res;
     }
 }

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.28 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -43,38 +39,28 @@ all:
     @echo "    see http://www.mozilla.org/issues/show_bug.cgi?id=91209"
 .ENDIF
 
-#mozilla specific stuff.
+# --- begin of mozilla specific stuff
 MOZ_LIB=$(SOLARVERSION)$/$(INPATH)$/lib$(UPDMINOREXT)
 MOZ_INC=$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla
 
 .IF "$(OS)"=="WNT" 
-.IF "$(USE_SHELL)"=="4nt"
-MOZ_EMBED_LIB := $(shell @+-dir /ba:f $(MOZ_LIB)$/embed_base_s.lib 2>NUL )
-MOZ_REG_LIB	  := $(shell @+-dir /ba:f $(MOZ_LIB)$/mozreg_s.lib 2>NUL )
-.ELSE	#"$(USE_SHELL)"=="4nt"
-MOZ_EMBED_LIB := $(shell @-test -f $(MOZ_LIB)$/embed_base_s.lib && echo $(MOZ_LIB)$/embed_base_s.lib )
-MOZ_REG_LIB	  := $(shell @-test -f $(MOZ_LIB)$/mozreg_s.lib && echo $(MOZ_LIB)$/mozreg_s.lib )
-.ENDIF
+  MOZ_EMBED_LIB := $(shell @-test -f $(MOZ_LIB)$/embed_base_s.lib && echo $(MOZ_LIB)$/embed_base_s.lib )
+  MOZ_REG_LIB	  := $(shell @-test -f $(MOZ_LIB)$/mozreg_s.lib && echo $(MOZ_LIB)$/mozreg_s.lib )
 
-.IF X"$(MOZ_EMBED_LIB)"=="X"
-MOZ_EMBED_LIB := $(MOZ_LIB)$/baseembed_s.lib
-.ENDIF
-.IF X"$(MOZ_REG_LIB)" == "X"
-MOZ_REG_LIB := $(MOZ_LIB)$/mozreg.lib
-.ENDIF
-.ENDIF
+  MOZ_EMBED_LIB *:= $(MOZ_LIB)$/baseembed_s.lib
+  MOZ_REG_LIB *:= $(MOZ_LIB)$/mozreg.lib
 
-.IF "$(OS)"=="WNT" 
-.IF "$(COM)"=="GCC"
-MOZ_LIB_XPCOM= -L$(MOZ_LIB) -lembed_base_s -lnspr4 -lmozreg_s -lxpcom -lxpcom_core
-.ELSE
-LIB += $(MOZ_LIB)
-MOZ_LIB_XPCOM= $(MOZ_EMBED_LIB) $(MOZ_LIB)$/nspr4.lib $(MOZ_REG_LIB) $(MOZ_LIB)$/xpcom.lib $(MOZ_LIB)$/xpcom_core.lib
-.ENDIF
+  .IF "$(COM)"=="GCC"
+    MOZ_LIB_XPCOM= -L$(MOZ_LIB) -lembed_base_s -lnspr4 -lmozreg_s -lxpcom -lxpcom_core
+  .ELSE
+    LIB += $(MOZ_LIB)
+    MOZ_LIB_XPCOM= $(MOZ_EMBED_LIB) $(MOZ_LIB)$/nspr4.lib $(MOZ_REG_LIB) $(MOZ_LIB)$/xpcom.lib $(MOZ_LIB)$/xpcom_core.lib
+  .ENDIF
+
 .ELSE "$(OS)"=="WNT" 
-MOZ_LIB_XPCOM= -L$(MOZ_LIB) -lnspr4 -lxpcom_core -lmozreg_s -lembed_base_s
+  MOZ_LIB_XPCOM = -L$(MOZ_LIB) -lnspr4 -lxpcom_core -lmozreg_s -lembed_base_s
 .ENDIF
-#End of mozilla specific stuff.
+# --- end of mozilla specific stuff
 
 USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
@@ -86,10 +72,6 @@ COMPONENT_CONFIG_SCHEMA=$(TARGET)2.xcs
 .ENDIF
 
 # --- Settings ----------------------------------
-
-.IF "$(DBGUTIL_OJ)"!=""
-ENVCFLAGS+=/FR$(SLO)$/
-.ENDIF
 
 .INCLUDE : $(PRJ)$/makefile.pmk
 
@@ -121,7 +103,6 @@ DEF1NAME=	$(SHL1TARGET)
 DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt \
             $(SLB)$/$(TARGET).lib
 DEFLIB1NAME=$(TARGET)
-#DEF1EXPORTFILE=	exports.dxp
 
 
 # --- Files -------------------------------------
@@ -165,6 +146,7 @@ DEPOBJFILES=$(SLO2FILES)
 # --- MOZAB BASE Library -----------------------------------
 
 SHL2VERSIONMAP= $(TARGET2).map
+SHL2NOCHECK=TRUE
 SHL2TARGET=	$(TARGET2)$(DLLPOSTFIX)
 SHL2OBJS=$(SLO2FILES)
 SHL2STDLIBS=\

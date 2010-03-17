@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdocapt.cxx,v $
- * $Revision: 1.30.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_svx.hxx"
 #include <tools/bigint.hxx>
 #include <svx/xlnwtit.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xpoly.hxx>
@@ -51,7 +48,7 @@
 #include <svx/xflhtit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xfltrit.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/sdr/properties/captionproperties.hxx>
 #include <vcl/salbtype.hxx>     // FRound
 #include <svx/sdr/contact/viewcontactofsdrcaptionobj.hxx>

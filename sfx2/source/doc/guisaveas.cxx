@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: guisaveas.cxx,v $
- * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,12 +59,11 @@
 
 #include "guisaveas.hxx"
 
-#include <svtools/pathoptions.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/adrparse.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <svl/itemset.hxx>
+#include <unotools/useroptions.hxx>
+#include <unotools/saveopt.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
@@ -841,7 +837,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     ::rtl::OUString aAdjustToType;
 
     // bSetStandardName == true means that user agreed to store document in the default (default default ;-)) format
-    if ( !(( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED )) && 
+    if ( !(( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED )) &&
         ( bSetStandardName || GetStorable()->hasLocation() ))
     {
         uno::Sequence< beans::PropertyValue > aOldFilterProps;

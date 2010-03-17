@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: textlayoutdevice.hxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.8 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:17 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -49,9 +41,10 @@ class VirtualDevice;
 class Font;
 class String;
 class OutputDevice;
+class GDIMetaFile;
 
-namespace drawinglayer { namespace primitive2d {
-    class FontAttributes;
+namespace drawinglayer { namespace attribute {
+    class FontAttribute;
 }}
 
 namespace basegfx {
@@ -66,18 +59,27 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** TextLayouterDevice class
+
+            This helper class exists to isolate all accesses to VCL
+            text formatting/handling functionality for primitive implementations.
+            When in the future FontHandling may move to an own library independent
+            from VCL, primitives will be prepared.
+         */
         class TextLayouterDevice
         {
-            // internally used VirtualDevice
+            /// internally used VirtualDevice
             VirtualDevice&                  mrDevice;
 
         public:
+            /// constructor/destructor
             TextLayouterDevice();
             ~TextLayouterDevice();
 
+            /// tooling methods
             void setFont(const Font& rFont);
-            void setFontAttributes(
-                const FontAttributes& rFontAttributes,
+            void setFontAttribute(
+                const attribute::FontAttribute& rFontAttribute,
                 double fFontScaleX,
                 double fFontScaleY,
                 const ::com::sun::star::lang::Locale & rLocale);
@@ -105,6 +107,15 @@ namespace drawinglayer
                 const String& rText,
                 xub_StrLen nIndex,
                 xub_StrLen nLength) const;
+
+            double getFontAscent() const;
+            double getFontDescent() const;
+
+            void addTextRectActions(
+                const Rectangle& rRectangle,
+                const String& rText,
+                sal_uInt16 nStyle,
+                GDIMetaFile& rGDIMetaFile);
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -116,23 +127,25 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        // Create a VCL-Font based on the definitions in FontAttributes
-        // and the given FontScaling. The FontScaling defines the FontHeight
-        // (fFontScaleY) and the FontWidth (fFontScaleX). The combination of
-        // both defines FontStretching, where no stretching happens at
-        // fFontScaleY == fFontScaleX
-        Font getVclFontFromFontAttributes(
-            const FontAttributes& rFontAttributes,
+        /** Create a VCL-Font based on the definitions in FontAttribute
+            and the given FontScaling. The FontScaling defines the FontHeight
+            (fFontScaleY) and the FontWidth (fFontScaleX). The combination of
+            both defines FontStretching, where no stretching happens at
+            fFontScaleY == fFontScaleX
+         */
+        Font getVclFontFromFontAttribute(
+            const attribute::FontAttribute& rFontAttribute,
             double fFontScaleX,
             double fFontScaleY,
             double fFontRotation,
             const ::com::sun::star::lang::Locale & rLocale);
 
-        // Generate FontAttributes DataSet derived from the given VCL-Font.
-        // The FontScaling with fFontScaleY, fFontScaleX relationship (see
-        // above) will be set in return parameter o_rSize to allow further
-        // processing
-        FontAttributes getFontAttributesFromVclFont(
+        /** Generate FontAttribute DataSet derived from the given VCL-Font.
+            The FontScaling with fFontScaleY, fFontScaleX relationship (see
+            above) will be set in return parameter o_rSize to allow further
+            processing
+         */
+        attribute::FontAttribute getFontAttributeFromVclFont(
             basegfx::B2DVector& o_rSize,
             const Font& rFont,
             bool bRTL,

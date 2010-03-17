@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: overlayline.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,8 +110,15 @@ namespace sdr
             if(nCount)
             {
                 // create range primitives
-                const basegfx::BColor aRGBColor(getBaseColor().getBColor());
+                const bool bInvert(OVERLAY_INVERT == maLastOverlayType);
+                basegfx::BColor aRGBColor(getBaseColor().getBColor());
                 aRetval.realloc(nCount);
+
+                if(bInvert)
+                {
+                    // force color to white for invert to get a full invert
+                    aRGBColor = basegfx::BColor(1.0, 1.0, 1.0);
+                }
 
                 for(sal_uInt32 a(0);a < nCount; a++)
                 {
@@ -125,7 +129,7 @@ namespace sdr
                             aRGBColor));
                 }
 
-                if(OVERLAY_INVERT == maLastOverlayType)
+                if(bInvert)
                 {
                     // embed all in invert primitive
                     const drawinglayer::primitive2d::Primitive2DReference aInvert(

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: shapeexport2.cxx,v $
- * $Revision: 1.66 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +51,7 @@
 #include <xmloff/xmluconv.hxx>
 #include "XMLImageMapExport.hxx"
 #include "xexptran.hxx"
-#include <vcl/salbtype.hxx>     // FRound
+#include <tools/gen.hxx>        // FRound
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 

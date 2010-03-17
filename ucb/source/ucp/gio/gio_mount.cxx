@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gio_mount.cxx,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,7 +65,7 @@ static void ooo_mount_operation_class_init (OOoMountOperationClass *klass)
 using namespace com::sun::star;
 
 static void ooo_mount_operation_ask_password (GMountOperation *op,
-    const char *message, const char *default_user,
+    const char * /*message*/, const char *default_user,
     const char *default_domain, GAskPasswordFlags flags)
 {
     uno::Reference< task::XInteractionHandler > xIH;

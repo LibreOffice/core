@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtfldi.cxx,v $
- * $Revision: 1.71.66.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2048,6 +2045,11 @@ XMLUserDocInfoImportContext::XMLUserDocInfoImportContext(
                                       sLocalName, nToken,
                                       sal_False, sal_False)
     , sPropertyName(RTL_CONSTASCII_USTRINGPARAM(sAPI_name))
+    , sPropertyNumberFormat(RTL_CONSTASCII_USTRINGPARAM(sAPI_number_format))
+    , sPropertyIsFixedLanguage(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed_language))
+    , nFormat(0)
+    , bFormatOK(sal_False)
+    , bIsDefaultLanguage( sal_True )
 {
     bValid = sal_False;
 }
@@ -2058,6 +2060,17 @@ void XMLUserDocInfoImportContext::ProcessAttribute(
 {
     switch (nAttrToken)
     {
+        case XML_TOK_TEXTFIELD_DATA_STYLE_NAME:
+        {
+            sal_Int32 nKey = GetImportHelper().GetDataStyleKey(
+                                               sAttrValue, &bIsDefaultLanguage);
+            if (-1 != nKey)
+            {
+                nFormat = nKey;
+                bFormatOK = sal_True;
+            }
+            break;
+        }
         case XML_TOK_TEXTFIELD_NAME:
         {
             if (!bValid)
@@ -2080,11 +2093,26 @@ void XMLUserDocInfoImportContext::PrepareField(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet)
 {
+    uno::Any aAny;
     if ( aName.getLength() )
     {
-        uno::Any aAny;
         aAny <<= aName;
         xPropertySet->setPropertyValue(sPropertyName, aAny);
+    }
+    Reference<XPropertySetInfo> xPropertySetInfo(
+        xPropertySet->getPropertySetInfo());
+    if (bFormatOK &&
+        xPropertySetInfo->hasPropertyByName(sPropertyNumberFormat))
+    {
+        aAny <<= nFormat;
+        xPropertySet->setPropertyValue(sPropertyNumberFormat, aAny);
+
+        if( xPropertySetInfo->hasPropertyByName( sPropertyIsFixedLanguage ) )
+        {
+            sal_Bool bIsFixedLanguage = ! bIsDefaultLanguage;
+            aAny.setValue( &bIsFixedLanguage, ::getBooleanCppuType() );
+            xPropertySet->setPropertyValue( sPropertyIsFixedLanguage, aAny );
+        }
     }
 
     // call superclass to handle "fixed"

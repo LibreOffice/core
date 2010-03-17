@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: appinit.cxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,9 +72,9 @@
 #include <unotools/tempfile.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/startoptions.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/internaloptions.hxx>
+#include <unotools/startoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/internaloptions.hxx>
 
 
 #define DEFINE_CONST_OUSTRING(CONSTASCII)       OUString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))

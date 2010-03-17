@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: grafctrl.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +28,8 @@
 #ifndef _SVX_GRAFCTRL_HXX
 #define _SVX_GRAFCTRL_HXX
 
-#include <svtools/lstner.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/lstner.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include "svx/svxdllapi.h"
 

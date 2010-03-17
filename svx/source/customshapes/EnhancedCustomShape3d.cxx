@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: EnhancedCustomShape3d.cxx,v $
- * $Revision: 1.19.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,8 +34,8 @@
 #include <svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoashp.hxx>
-#include <svtools/poolitem.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/itemset.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xsflclit.hxx>
 #include <svx/xit.hxx>
@@ -323,7 +320,17 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         Point aCenter( aSnapRect.Center() );
 
         SfxItemSet aSet( pCustomShape->GetMergedItemSet() );
-        aSet.ClearItem( SDRATTR_TEXTDIRECTION );    //SJ: vertical writing is not required, by removing this item no outliner is created
+
+        //SJ: vertical writing is not required, by removing this item no outliner is created
+        aSet.ClearItem( SDRATTR_TEXTDIRECTION );
+
+        // #i105323# For 3D AutoShapes, the shadow attribute has to be applied to each
+        // created visualisation helper model shape individually. The shadow itself
+        // will then be rendered from the 3D renderer correctly for the whole 3D scene
+        // (and thus behind all objects of which the visualisation may be built). So,
+        // dio NOT remove it from the ItemSet here.
+        // aSet.ClearItem(SDRATTR_SHADOW);
+
         std::vector< E3dCompoundObject* > aPlaceholderObjectList;
 
         double fExtrusionBackward, fExtrusionForward;

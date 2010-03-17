@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: controlprimitive2d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.6 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -54,6 +46,7 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/window.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -230,12 +223,8 @@ namespace drawinglayer
                                 }
 
                                 // short form for scale and translate transformation
-                                basegfx::B2DHomMatrix aBitmapTransform;
-
-                                aBitmapTransform.set(0L, 0L, aBitmapSizeLogic.getX());
-                                aBitmapTransform.set(1L, 1L, aBitmapSizeLogic.getY());
-                                aBitmapTransform.set(0L, 2L, aTranslate.getX());
-                                aBitmapTransform.set(1L, 2L, aTranslate.getY());
+                                const basegfx::B2DHomMatrix aBitmapTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                    aBitmapSizeLogic.getX(), aBitmapSizeLogic.getY(), aTranslate.getX(), aTranslate.getY()));
 
                                 // create primitive
                                 xRetval = new BitmapPrimitive2D(BitmapEx(aContent), aBitmapTransform);
@@ -266,7 +255,7 @@ namespace drawinglayer
             return xRetval;
         }
 
-        Primitive2DSequence ControlPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence ControlPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // try to create a bitmap decomposition. If that fails for some reason,
             // at least create a replacement decomposition.
@@ -283,7 +272,7 @@ namespace drawinglayer
         ControlPrimitive2D::ControlPrimitive2D(
             const basegfx::B2DHomMatrix& rTransform,
             const uno::Reference< awt::XControlModel >& rxControlModel)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             mxControlModel(rxControlModel),
             mxXControl(),
@@ -295,7 +284,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& rTransform,
             const uno::Reference< awt::XControlModel >& rxControlModel,
             const uno::Reference< awt::XControl >& rxXControl)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             mxControlModel(rxControlModel),
             mxXControl(rxXControl),
@@ -316,7 +305,7 @@ namespace drawinglayer
         bool ControlPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
             // use base class compare operator
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const ControlPrimitive2D& rCompare = (ControlPrimitive2D&)rPrimitive;
 
@@ -365,23 +354,23 @@ namespace drawinglayer
             ::osl::MutexGuard aGuard( m_aMutex );
             const basegfx::B2DVector aNewScaling(rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
 
-            if(getLocalDecomposition().hasElements())
+            if(getBuffered2DDecomposition().hasElements())
             {
                 if(!maLastViewScaling.equal(aNewScaling))
                 {
                     // conditions of last local decomposition have changed, delete
-                    const_cast< ControlPrimitive2D* >(this)->setLocalDecomposition(Primitive2DSequence());
+                    const_cast< ControlPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
                 }
             }
 
-            if(!getLocalDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().hasElements())
             {
                 // remember ViewTransformation
                 const_cast< ControlPrimitive2D* >(this)->maLastViewScaling = aNewScaling;
             }
 
             // use parent implementation
-            return BasePrimitive2D::get2DDecomposition(rViewInformation);
+            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
         // provide unique ID

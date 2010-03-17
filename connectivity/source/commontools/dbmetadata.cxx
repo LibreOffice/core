@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbmetadata.cxx,v $
- * $Revision: 1.10.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -254,6 +251,27 @@ namespace dbtools
             DBG_UNHANDLED_EXCEPTION();
         }
         return supportsSubQueries;
+    }
+
+    //--------------------------------------------------------------------
+    bool DatabaseMetaData::supportsPrimaryKeys() const
+    {
+        lcl_checkConnected( *m_pImpl );
+
+        bool doesSupportPrimaryKeys = false;
+        try
+        {
+            Any setting;
+            if  (   !( lcl_getConnectionSetting( "PrimaryKeySupport", *m_pImpl, setting ) )
+                ||  !( setting >>= doesSupportPrimaryKeys )
+                )
+                doesSupportPrimaryKeys = m_pImpl->xConnectionMetaData->supportsCoreSQLGrammar();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return doesSupportPrimaryKeys;
     }
 
     //--------------------------------------------------------------------

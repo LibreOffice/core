@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scene3d.cxx,v $
- * $Revision: 1.34.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,17 +37,17 @@
 #endif
 #include "globl3d.hxx"
 #include <svx/svdpage.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/e3dundo.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svxids.hrc>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/e3ditem.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/svx3ditems.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/sdr/properties/e3dsceneproperties.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>

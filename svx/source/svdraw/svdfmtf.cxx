@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdfmtf.cxx,v $
- * $Revision: 1.20.84.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,32 +29,29 @@
 #include "precompiled_svx.hxx"
 
 #include "svdfmtf.hxx"
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <math.h>
 #include <svx/xpoly.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/shdditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/shdditem.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xflclit.hxx>
-
 #include <svx/xgrad.hxx>
 #include <svx/xflgrit.hxx>
-#include <fontitem.hxx>
-#include <svx/akrnitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/akrnitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/colritem.hxx>
 #include <vcl/metric.hxx>
-
-#include <svx/charscaleitem.hxx>
-
+#include <editeng/charscaleitem.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/svdmodel.hxx>
@@ -70,12 +64,13 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdetc.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <vcl/salbtype.hxx>     // FRound
-
-// #i73407#
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <svx/xlinjoit.hxx>
+#include <svx/xlndsit.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -84,6 +79,8 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(SdrModel& rModel):
     pLineAttr(NULL),pFillAttr(NULL),pTextAttr(NULL),
     pPage(NULL),pModel(NULL),nLayer(0),
     nLineWidth(0),
+    maLineJoin(basegfx::B2DLINEJOIN_NONE),
+    maDash(XDASH_RECT, 0, 0, 0, 0, 0),
     bFntDirty(TRUE),
     bLastObjWasPolyWithoutLine(FALSE),bNoLine(FALSE),bNoFill(FALSE),bLastObjWasLine(FALSE)
 {
@@ -277,6 +274,9 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, FASTBOOL bForceText
     {
         if ( nLineWidth )
             pLineAttr->Put( XLineWidthItem( nLineWidth ) );
+        else
+            pLineAttr->Put( XLineWidthItem( 0 ) );
+
         aOldLineColor = aVD.GetLineColor();
         if( aVD.IsLineColor() )
         {
@@ -285,6 +285,34 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, FASTBOOL bForceText
         }
         else
             pLineAttr->Put(XLineStyleItem(XLINE_NONE));
+
+        switch(maLineJoin)
+        {
+            default : // basegfx::B2DLINEJOIN_NONE
+                pLineAttr->Put(XLineJointItem(XLINEJOINT_NONE));
+                break;
+            case basegfx::B2DLINEJOIN_MIDDLE:
+                pLineAttr->Put(XLineJointItem(XLINEJOINT_MIDDLE));
+                break;
+            case basegfx::B2DLINEJOIN_BEVEL:
+                pLineAttr->Put(XLineJointItem(XLINEJOINT_BEVEL));
+                break;
+            case basegfx::B2DLINEJOIN_MITER:
+                pLineAttr->Put(XLineJointItem(XLINEJOINT_MITER));
+                break;
+            case basegfx::B2DLINEJOIN_ROUND:
+                pLineAttr->Put(XLineJointItem(XLINEJOINT_ROUND));
+                break;
+        }
+
+        if(((maDash.GetDots() && maDash.GetDotLen()) || (maDash.GetDashes() && maDash.GetDashLen())) && maDash.GetDistance())
+        {
+            pLineAttr->Put(XLineDashItem(String(), maDash));
+        }
+        else
+        {
+            pLineAttr->Put(XLineDashItem(String(), XDash(XDASH_RECT)));
+        }
     }
     else
         bNoLine = TRUE;
@@ -385,12 +413,10 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaLineAction& rAct)
     if(!aStart.equal(aEnd))
     {
         basegfx::B2DPolygon aLine;
-        basegfx::B2DHomMatrix aTransform;
+        const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(fScaleX, fScaleY, aOfs.X(), aOfs.Y()));
 
         aLine.append(aStart);
         aLine.append(aEnd);
-        aTransform.scale(fScaleX, fScaleY);
-        aTransform.translate(aOfs.X(), aOfs.Y());
         aLine.transform(aTransform);
 
         const LineInfo& rLineInfo = rAct.GetLineInfo();
@@ -402,12 +428,19 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaLineAction& rAct)
             bCreateLineObject = false;
         }
 
-        nLineWidth = nNewLineWidth;
-
         if(bCreateLineObject)
         {
             SdrPathObj* pPath = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aLine));
+            nLineWidth = nNewLineWidth;
+            maLineJoin = rLineInfo.GetLineJoin();
+            maDash = XDash(XDASH_RECT,
+                rLineInfo.GetDotCount(), rLineInfo.GetDotLen(),
+                rLineInfo.GetDashCount(), rLineInfo.GetDashLen(),
+                rLineInfo.GetDistance());
             SetAttributes(pPath);
+            nLineWidth = 0;
+            maLineJoin = basegfx::B2DLINEJOIN_NONE;
+            maDash = XDash();
             InsertObj(pPath, false);
         }
     }
@@ -581,10 +614,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolyLineAction& rAct )
 
     if(aSource.count())
     {
-        basegfx::B2DHomMatrix aTransform;
-
-        aTransform.scale(fScaleX, fScaleY);
-        aTransform.translate(aOfs.X(), aOfs.Y());
+        const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(fScaleX, fScaleY, aOfs.X(), aOfs.Y()));
         aSource.transform(aTransform);
     }
 
@@ -601,12 +631,21 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolyLineAction& rAct )
         bCreateLineObject = false;
     }
 
-    nLineWidth = nNewLineWidth;
-
     if(bCreateLineObject)
     {
-        SdrPathObj* pPath = new SdrPathObj(OBJ_PLIN, basegfx::B2DPolyPolygon(aSource));
+        SdrPathObj* pPath = new SdrPathObj(
+            aSource.isClosed() ? OBJ_POLY : OBJ_PLIN,
+            basegfx::B2DPolyPolygon(aSource));
+        nLineWidth = nNewLineWidth;
+        maLineJoin = rLineInfo.GetLineJoin();
+        maDash = XDash(XDASH_RECT,
+            rLineInfo.GetDotCount(), rLineInfo.GetDotLen(),
+            rLineInfo.GetDashCount(), rLineInfo.GetDashLen(),
+            rLineInfo.GetDistance());
         SetAttributes(pPath);
+        nLineWidth = 0;
+        maLineJoin = basegfx::B2DLINEJOIN_NONE;
+        maDash = XDash();
         InsertObj(pPath, false);
     }
 }
@@ -618,10 +657,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolygonAction& rAct )
 
     if(aSource.count())
     {
-        basegfx::B2DHomMatrix aTransform;
-
-        aTransform.scale(fScaleX, fScaleY);
-        aTransform.translate(aOfs.X(), aOfs.Y());
+        const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(fScaleX, fScaleY, aOfs.X(), aOfs.Y()));
         aSource.transform(aTransform);
 
         if(!bLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(basegfx::B2DPolyPolygon(aSource)))
@@ -643,10 +679,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaPolyPolygonAction& rAct)
 
     if(aSource.count())
     {
-        basegfx::B2DHomMatrix aTransform;
-
-        aTransform.scale(fScaleX, fScaleY);
-        aTransform.translate(aOfs.X(), aOfs.Y());
+        const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(fScaleX, fScaleY, aOfs.X(), aOfs.Y()));
         aSource.transform(aTransform);
 
         if(!bLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(aSource))
@@ -710,8 +743,8 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const XubString& rS
     if (!aFnt.IsTransparent())
     {
         SfxItemSet aAttr(*pFillAttr->GetPool(),XATTR_FILL_FIRST,XATTR_FILL_LAST);
-        pFillAttr->Put(XFillStyleItem(XFILL_SOLID));
-        pFillAttr->Put(XFillColorItem(String(), aFnt.GetFillColor()));
+        aAttr.Put(XFillStyleItem(XFILL_SOLID));
+        aAttr.Put(XFillColorItem(String(), aFnt.GetFillColor()));
         pText->SetMergedItemSet(aAttr);
     }
     sal_uInt32 nWink = aFnt.GetOrientation();
@@ -791,9 +824,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction& rAct )
 
     if(aSource.count())
     {
-        basegfx::B2DHomMatrix aTransform;
-        aTransform.scale(fScaleX, fScaleY);
-        aTransform.translate(aOfs.X(), aOfs.Y());
+        const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(fScaleX, fScaleY, aOfs.X(), aOfs.Y()));
         aSource.transform(aTransform);
 
         if(!bLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(aSource))
@@ -886,12 +917,6 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pM
 
             if(aSource.count())
             {
-                basegfx::B2DHomMatrix aTransform;
-
-                aTransform.scale(fScaleX, fScaleY);
-                aTransform.translate(aOfs.X(), aOfs.Y());
-                aSource.transform(aTransform);
-
                 if(!bLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(aSource))
                 {
                     const Gradient& rGrad = pAct->GetGradient();
@@ -912,7 +937,20 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pM
                     aXGradient.SetEndIntens(rGrad.GetEndIntensity());
                     aXGradient.SetSteps(rGrad.GetSteps());
 
-                    SetAttributes(pPath);
+                    if(aVD.IsLineColor())
+                    {
+                        // switch line off; when there was one there will be a
+                        // META_POLYLINE_ACTION following creating another object
+                        const Color aLineColor(aVD.GetLineColor());
+                        aVD.SetLineColor();
+                        SetAttributes(pPath);
+                        aVD.SetLineColor(aLineColor);
+                    }
+                    else
+                    {
+                        SetAttributes(pPath);
+                    }
+
                     aGradAttr.Put(XFillStyleItem(XFILL_GRADIENT));
                     aGradAttr.Put(XFillGradientItem(&pModel->GetItemPool(), aXGradient));
                     pPath->SetMergedItemSet(aGradAttr);

@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: transformprimitive2d.hxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.3 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:17 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -45,26 +37,47 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** TransformPrimitive2D class
+
+            This is one of the basic grouping primitives and it provides
+            embedding a sequence of primitives (a geometry) into a
+            transformation. All renderers have to handle this, usually by
+            building a current transformation stack (linear combination)
+            and applying this to all to-be-rendered geometry. If not handling
+            this, the output will be mostly wrong since this primitive is
+            widely used.
+
+            It does transform by embedding an existing geometry into a
+            transformation as Child-content. This allows re-usage of the
+            refcounted Uno-Api primitives and their existung, buffered
+            decompositions.
+
+            It could e.g. be used to show a single object geometry in 1000
+            different, transformed states without the need to create those
+            thousand primitive contents.
+         */
         class TransformPrimitive2D : public GroupPrimitive2D
         {
         private:
+            // the transformation to apply to the child geometry
             basegfx::B2DHomMatrix                   maTransformation;
 
         public:
+            /// constructor
             TransformPrimitive2D(
                 const basegfx::B2DHomMatrix& rTransformation,
                 const Primitive2DSequence& rChildren);
 
-            // get data
+            /// data read access
             const basegfx::B2DHomMatrix& getTransformation() const { return maTransformation; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // get range
+            /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

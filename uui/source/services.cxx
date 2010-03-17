@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: services.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +34,7 @@
 
 #include "interactionhandler.hxx"
 #include "requeststringresolver.hxx"
+#include "passwordcontainer.hxx"
 
 using namespace rtl;
 using namespace com::sun::star::uno;
@@ -46,18 +44,18 @@ using namespace com::sun::star::registry;
 namespace {
 
 sal_Bool writeInfo( void * pRegistryKey,
-                    const char * pImplementationName,
+                    const OUString & rImplementationName,
                     Sequence< OUString > const & rServiceNames )
 {
     OUString aKeyName( OUString::createFromAscii( "/" ) );
-    aKeyName += OUString::createFromAscii( pImplementationName );
+    aKeyName += rImplementationName;
     aKeyName += OUString::createFromAscii( "/UNO/SERVICES" );
 
     Reference< XRegistryKey > xKey;
     try
     {
-    xKey = static_cast< XRegistryKey * >(
-        pRegistryKey )->createKey( aKeyName );
+        xKey = static_cast< XRegistryKey * >(
+            pRegistryKey )->createKey( aKeyName );
     }
     catch ( InvalidRegistryException const & )
     {
@@ -65,21 +63,21 @@ sal_Bool writeInfo( void * pRegistryKey,
 
     if ( !xKey.is() )
     {
-    return sal_False;
+        return sal_False;
     }
     sal_Bool bSuccess = sal_True;
 
     for ( sal_Int32 n = 0; n < rServiceNames.getLength(); ++n )
     {
-    try
-    {
-        xKey->createKey( rServiceNames[ n ] );
-    }
-    catch ( InvalidRegistryException const & )
-    {
-        bSuccess = sal_False;
-        break;
-    }
+        try
+        {
+            xKey->createKey( rServiceNames[ n ] );
+        }
+        catch ( InvalidRegistryException const & )
+        {
+            bSuccess = sal_False;
+            break;
+        }
     }
     return bSuccess;
 }
@@ -114,16 +112,26 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(void *, void * pRegistryKey)
     //////////////////////////////////////////////////////////////////////
 
     writeInfo( pRegistryKey,
-           UUIInteractionHandler::m_aImplementationName,
-           UUIInteractionHandler::getSupportedServiceNames_static() ) &&
+            OUString::createFromAscii(
+                UUIInteractionHandler::m_aImplementationName ),
+            UUIInteractionHandler::getSupportedServiceNames_static() ) &&
 
     //////////////////////////////////////////////////////////////////////
     // UUI Interaction Request String Resolver.
     //////////////////////////////////////////////////////////////////////
 
     writeInfo( pRegistryKey,
-           UUIInteractionRequestStringResolver::m_aImplementationName,
-           UUIInteractionRequestStringResolver::getSupportedServiceNames_static() );
+            OUString::createFromAscii(
+                UUIInteractionRequestStringResolver::m_aImplementationName ),
+            UUIInteractionRequestStringResolver::getSupportedServiceNames_static() ) &&
+
+    //////////////////////////////////////////////////////////////////////
+    // UUI Password Container Interaction Handler.
+    //////////////////////////////////////////////////////////////////////
+
+    writeInfo( pRegistryKey,
+            uui::PasswordContainerInteractionHandler::getImplementationName_Static(),
+            uui::PasswordContainerInteractionHandler::getSupportedServiceNames_Static() );
 }
 
 //============================================================================
@@ -142,7 +150,7 @@ extern "C" void * SAL_CALL component_getFactory(sal_Char const * pImplName,
     void * pRet = 0;
 
     Reference< XMultiServiceFactory > xSMgr(
-    reinterpret_cast< XMultiServiceFactory * >( pServiceManager ) );
+        reinterpret_cast< XMultiServiceFactory * >( pServiceManager ) );
     Reference< XSingleServiceFactory > xFactory;
 
     //////////////////////////////////////////////////////////////////////
@@ -153,10 +161,9 @@ extern "C" void * SAL_CALL component_getFactory(sal_Char const * pImplName,
                          UUIInteractionHandler::m_aImplementationName)
          == 0)
     {
-    xFactory =
+        xFactory =
             cppu::createSingleFactory(
-                static_cast< XMultiServiceFactory * >(
-                    pServiceManager),
+                static_cast< XMultiServiceFactory * >(pServiceManager),
                 OUString::createFromAscii(
                     UUIInteractionHandler::m_aImplementationName),
                 &UUIInteractionHandler::createInstance,
@@ -171,10 +178,9 @@ extern "C" void * SAL_CALL component_getFactory(sal_Char const * pImplName,
                   UUIInteractionRequestStringResolver::m_aImplementationName)
           == 0)
     {
-    xFactory =
+        xFactory =
             cppu::createSingleFactory(
-                static_cast< XMultiServiceFactory * >(
-                    pServiceManager),
+                static_cast< XMultiServiceFactory * >(pServiceManager),
                 OUString::createFromAscii(
                     UUIInteractionRequestStringResolver::m_aImplementationName),
                 &UUIInteractionRequestStringResolver::createInstance,
@@ -182,11 +188,22 @@ extern "C" void * SAL_CALL component_getFactory(sal_Char const * pImplName,
     }
 
     //////////////////////////////////////////////////////////////////////
+    // UUI Password Container Interaction Handler.
+    //////////////////////////////////////////////////////////////////////
+
+    else if ( uui::PasswordContainerInteractionHandler::getImplementationName_Static().
+                compareToAscii( pImplName ) == 0 )
+    {
+        xFactory =
+            uui::PasswordContainerInteractionHandler::createServiceFactory( xSMgr );
+    }
+
+    //////////////////////////////////////////////////////////////////////
 
     if ( xFactory.is() )
     {
-    xFactory->acquire();
-    pRet = xFactory.get();
+        xFactory->acquire();
+        pRet = xFactory.get();
     }
 
     return pRet;

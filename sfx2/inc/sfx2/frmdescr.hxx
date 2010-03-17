@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: frmdescr.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,10 +31,10 @@
 #include "sfx2/dllapi.h"
 
 #include <sfx2/sfxsids.hrc>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/string.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tools/gen.hxx>
 
 class SvStream;

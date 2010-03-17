@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Object.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +40,7 @@
 #include <vos/mutex.hxx>
 #include <osl/thread.h>
 #include <com/sun/star/uno/Sequence.hxx>
-
+#include "java/LocalRef.hxx"
 #include "resource/jdbc_log.hrc"
 #include <rtl/logfile.hxx>
 #include <comphelper/logging.hxx>
@@ -395,10 +392,9 @@ void java_lang_Object::callVoidMethodWithStringArg( const char* _pMethodName, jm
     OSL_ENSURE( t.pEnv, "java_lang_Object::callIntMethod: no Java enviroment anymore!" );
     obtainMethodId(t.pEnv, _pMethodName,"(Ljava/lang/String;)V", _inout_MethodID);
 
-    jstring str = convertwchar_tToJavaString(t.pEnv,_nArgument);
+    jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,_nArgument));
     // call method
-    t.pEnv->CallVoidMethod( object, _inout_MethodID , str);
-    t.pEnv->DeleteLocalRef(str);
+    t.pEnv->CallVoidMethod( object, _inout_MethodID , str.get());
     ThrowSQLException( t.pEnv, NULL );
 }
 // -------------------------------------------------------------------------
@@ -417,10 +413,9 @@ sal_Int32 java_lang_Object::callIntMethodWithStringArg( const char* _pMethodName
             //        *this
             //    );
 
-    jstring str = convertwchar_tToJavaString(t.pEnv,_nArgument);
+    jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,_nArgument));
     // call method
-    jint out = t.pEnv->CallIntMethod( object, _inout_MethodID , str);
-    t.pEnv->DeleteLocalRef(str);
+    jint out = t.pEnv->CallIntMethod( object, _inout_MethodID , str.get());
     ThrowSQLException( t.pEnv, NULL );
     return (sal_Int32)out;
 }

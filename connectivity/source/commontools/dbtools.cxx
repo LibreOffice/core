@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbtools.cxx,v $
- * $Revision: 1.74.46.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -213,6 +210,7 @@ sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
         case DataType::CHAR:
         case DataType::VARCHAR:
         case DataType::LONGVARCHAR:
+        case DataType::CLOB:
             nFormat = _xTypes->getStandardFormat(NumberFormat::TEXT, _rLocale);
             break;
         case DataType::DATE:
@@ -234,10 +232,10 @@ sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
         case DataType::STRUCT:
         case DataType::ARRAY:
         case DataType::BLOB:
-        case DataType::CLOB:
         case DataType::REF:
         default:
-            nFormat = NumberFormat::UNDEFINED;
+            nFormat = _xTypes->getStandardFormat(NumberFormat::UNDEFINED, _rLocale);
+            //nFormat = NumberFormat::UNDEFINED;
     }
     return nFormat;
 }
@@ -1387,16 +1385,18 @@ namespace
         ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
         Reference< XPropertySetInfo > xInfo = _xTable->getPropertySetInfo();
         if (    xInfo.is()
-            &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME))
-            &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))
             &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_NAME)) )
         {
 
             ::rtl::OUString aCatalog;
             ::rtl::OUString aSchema;
             ::rtl::OUString aTable;
-            _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)) >>= _out_rCatalog;
-            _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))  >>= _out_rSchema;
+            if (    xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME))
+                &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) )
+            {
+                _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)) >>= _out_rCatalog;
+                _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))  >>= _out_rSchema;
+            }
             _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))        >>= _out_rName;
         }
         else
@@ -1778,15 +1778,31 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
     Reference<XIndexAccess>  xParamsAsIndicies = xParameters.is() ? xParameters->getParameters() : Reference<XIndexAccess>();
     Reference<XNameAccess>   xParamsAsNames(xParamsAsIndicies, UNO_QUERY);
     sal_Int32 nParamCount = xParamsAsIndicies.is() ? xParamsAsIndicies->getCount() : 0;
-    if ( (nParamCount && _aParametersSet.empty()) || ::std::count(_aParametersSet.begin(),_aParametersSet.end(),true) != nParamCount )
+    ::std::bit_vector aNewParameterSet( _aParametersSet );
+    if ( nParamCount || ::std::count(aNewParameterSet.begin(),aNewParameterSet.end(),true) != nParamCount )
     {
+        static const ::rtl::OUString PROPERTY_NAME(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME));
+        aNewParameterSet.resize(nParamCount ,false);
+        typedef ::std::map< ::rtl::OUString, ::std::vector<sal_Int32> > TParameterPositions;
+        TParameterPositions aParameterNames;
+        for(sal_Int32 i = 0; i < nParamCount; ++i)
+        {
+            Reference<XPropertySet> xParam(xParamsAsIndicies->getByIndex(i),UNO_QUERY);
+            ::rtl::OUString sName;
+            xParam->getPropertyValue(PROPERTY_NAME) >>= sName;
+
+            TParameterPositions::iterator aFind = aParameterNames.find(sName);
+            if ( aFind != aParameterNames.end() )
+                aNewParameterSet[i] = true;
+            aParameterNames[sName].push_back(i+1);
+        }
         // build an interaction request
         // two continuations (Ok and Cancel)
         OInteractionAbort* pAbort = new OInteractionAbort;
         OParameterContinuation* pParams = new OParameterContinuation;
         // the request
         ParametersRequest aRequest;
-        Reference<XIndexAccess> xWrappedParameters = new OParameterWrapper(_aParametersSet,xParamsAsIndicies);
+        Reference<XIndexAccess> xWrappedParameters = new OParameterWrapper(aNewParameterSet,xParamsAsIndicies);
         aRequest.Parameters = xWrappedParameters;
         aRequest.Connection = _xConnection;
         OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));
@@ -1814,11 +1830,10 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
             Reference< XPropertySet > xParamColumn(xWrappedParameters->getByIndex(i),UNO_QUERY);
             if (xParamColumn.is())
             {
-#ifdef DBG_UTIL
                 ::rtl::OUString sName;
-                xParamColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sName;
+                xParamColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
                 OSL_ENSURE(sName.equals(pFinalValues->Name), "::dbaui::askForParameters: inconsistent parameter names!");
-#endif
+
                 // determine the field type and ...
                 sal_Int32 nParamType = 0;
                 xParamColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nParamType;
@@ -1826,21 +1841,17 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
                 sal_Int32 nScale = 0;
                 if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE), xParamColumn))
                     xParamColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)) >>= nScale;
-                // and set the value
-                ::std::bit_vector::const_iterator aIter = _aParametersSet.begin();
-                ::std::bit_vector::const_iterator aEnd = _aParametersSet.end();
-                sal_Int32 j = 0;
-                sal_Int32 nParamPos = -1;
-                for(; aIter != aEnd && j <= i; ++aIter)
+                    // (the index of the parameters is one-based)
+                TParameterPositions::iterator aFind = aParameterNames.find(pFinalValues->Name);
+                ::std::vector<sal_Int32>::iterator aIterPos = aFind->second.begin();
+                ::std::vector<sal_Int32>::iterator aEndPos = aFind->second.end();
+                for(;aIterPos != aEndPos;++aIterPos)
                 {
-                    ++nParamPos;
-                    if ( !*aIter )
+                    if ( _aParametersSet.empty() || !_aParametersSet[(*aIterPos)-1] )
                     {
-                        ++j;
+                        _xParameters->setObjectWithInfo(*aIterPos, pFinalValues->Value, nParamType, nScale);
                     }
                 }
-                _xParameters->setObjectWithInfo(nParamPos + 1, pFinalValues->Value, nParamType, nScale);
-                    // (the index of the parameters is one-based)
             }
         }
     }
@@ -1850,9 +1861,20 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
                        sal_Int32 parameterIndex,
                        const Any& x,
                        sal_Int32 sqlType,
-                       sal_Int32 /*scale*/)  throw(SQLException, RuntimeException)
+                       sal_Int32 scale)  throw(SQLException, RuntimeException)
 {
-    if(!x.hasValue())
+    ORowSetValue aVal;
+    aVal.fill(x);
+    setObjectWithInfo(_xParams,parameterIndex,aVal,sqlType,scale);
+}
+// -----------------------------------------------------------------------------
+void setObjectWithInfo(const Reference<XParameters>& _xParams,
+                       sal_Int32 parameterIndex,
+                       const ::connectivity::ORowSetValue& _rValue,
+                       sal_Int32 sqlType,
+                       sal_Int32 scale)  throw(SQLException, RuntimeException)
+{
+    if ( _rValue.isNull() )
         _xParams->setNull(parameterIndex,sqlType);
     else
     {
@@ -1860,65 +1882,62 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
         {
             case DataType::DECIMAL:
             case DataType::NUMERIC:
-                _xParams->setObjectWithInfo(parameterIndex,x,sqlType,0);
+                _xParams->setObjectWithInfo(parameterIndex,_rValue.makeAny(),sqlType,scale);
                 break;
             case DataType::CHAR:
             case DataType::VARCHAR:
-            //case DataType::DECIMAL:
-            //case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
-                _xParams->setString(parameterIndex,::comphelper::getString(x));
+                _xParams->setString(parameterIndex,_rValue);
                 break;
-            case DataType::BIGINT:
+            case DataType::CLOB:
                 {
-                    sal_Int64 nValue = 0;
-                    if(x >>= nValue)
+                    Any x(_rValue.makeAny());
+                    ::rtl::OUString sValue;
+                    if ( x >>= sValue )
+                        _xParams->setString(parameterIndex,sValue);
+                    else
                     {
-                        _xParams->setLong(parameterIndex,nValue);
-                        break;
+                        Reference< XClob > xClob;
+                        if(x >>= xClob)
+                            _xParams->setClob(parameterIndex,xClob);
+                        else
+                        {
+                            Reference< ::com::sun::star::io::XInputStream > xStream;
+                            if(x >>= xStream)
+                                _xParams->setCharacterStream(parameterIndex,xStream,xStream->available());
+                        }
                     }
                 }
+                break;
+            case DataType::BIGINT:
+                if ( _rValue.isSigned() )
+                    _xParams->setLong(parameterIndex,_rValue);
+                else
+                    _xParams->setString(parameterIndex,_rValue);
                 break;
 
             case DataType::FLOAT:
+                _xParams->setFloat(parameterIndex,_rValue);
+                break;
             case DataType::REAL:
-                {
-                    float nValue = 0;
-                    if(x >>= nValue)
-                    {
-                        _xParams->setFloat(parameterIndex,nValue);
-                        break;
-                    }
-                }
-                // run through if we couldn't set a float value
             case DataType::DOUBLE:
-                _xParams->setDouble(parameterIndex,::comphelper::getDouble(x));
+                _xParams->setDouble(parameterIndex,_rValue);
                 break;
             case DataType::DATE:
-                {
-                    ::com::sun::star::util::Date aValue;
-                    if(x >>= aValue)
-                        _xParams->setDate(parameterIndex,aValue);
-                }
+                _xParams->setDate(parameterIndex,_rValue);
                 break;
             case DataType::TIME:
-                {
-                    ::com::sun::star::util::Time aValue;
-                    if(x >>= aValue)
-                        _xParams->setTime(parameterIndex,aValue);
-                }
+                _xParams->setTime(parameterIndex,_rValue);
                 break;
             case DataType::TIMESTAMP:
-                {
-                    ::com::sun::star::util::DateTime aValue;
-                    if(x >>= aValue)
-                        _xParams->setTimestamp(parameterIndex,aValue);
-                }
+                _xParams->setTimestamp(parameterIndex,_rValue);
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
+            case DataType::BLOB:
                 {
+                    Any x(_rValue.makeAny());
                     Sequence< sal_Int8> aBytes;
                     if(x >>= aBytes)
                         _xParams->setBytes(parameterIndex,aBytes);
@@ -1944,16 +1963,25 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
-                _xParams->setBoolean(parameterIndex,::cppu::any2bool(x));
+                _xParams->setBoolean(parameterIndex,_rValue);
                 break;
             case DataType::TINYINT:
-                _xParams->setByte(parameterIndex,(sal_Int8)::comphelper::getINT32(x));
+                if ( _rValue.isSigned() )
+                    _xParams->setByte(parameterIndex,_rValue);
+                else
+                    _xParams->setShort(parameterIndex,_rValue);
                 break;
             case DataType::SMALLINT:
-                _xParams->setShort(parameterIndex,(sal_Int16)::comphelper::getINT32(x));
+                if ( _rValue.isSigned() )
+                    _xParams->setShort(parameterIndex,_rValue);
+                else
+                    _xParams->setInt(parameterIndex,_rValue);
                 break;
             case DataType::INTEGER:
-                _xParams->setInt(parameterIndex,::comphelper::getINT32(x));
+                if ( _rValue.isSigned() )
+                    _xParams->setInt(parameterIndex,_rValue);
+                else
+                    _xParams->setLong(parameterIndex,_rValue);
                 break;
             default:
                 {

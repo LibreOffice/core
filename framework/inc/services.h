@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: services.h,v $
- * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -127,6 +124,7 @@ namespace framework{
 #define SERVICENAME_IMAGEMANAGER                                DECLARE_ASCII("com.sun.star.ui.ImageManager"                        )
 #define SERVICENAME_TABWINDOWSERVICE                            DECLARE_ASCII("com.sun.star.ui.dialogs.TabContainerWindow"          )
 #define SERVICENAME_WINDOWCONTENTFACTORYMANAGER                 DECLARE_ASCII("com.sun.star.ui.WindowContentFactoryManager"         )
+#define SERVICENAME_DISPLAYACCESS                               DECLARE_ASCII("com.sun.star.awt.DisplayAccess"                      )
 
 //_________________________________________________________________________________________________________________
 //  used implementationnames by framework

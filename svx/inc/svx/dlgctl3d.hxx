@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlgctl3d.hxx,v $
- * $Revision: 1.4.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/button.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include "svx/svxdllapi.h"
 #include <basegfx/vector/b3dvector.hxx>
 

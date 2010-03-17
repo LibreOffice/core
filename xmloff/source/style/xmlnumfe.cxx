@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlnumfe.cxx,v $
- * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,10 +31,10 @@
 #define _SVSTDARR_ULONGS
 #define _ZFORLIST_DECLARE_TABLE
 
-#include <svtools/svstdarr.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/numuno.hxx>
+#include <svl/svstdarr.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
+#include <svl/numuno.hxx>
 #include <i18npool/mslangid.hxx>
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
@@ -60,8 +57,8 @@
 #include <xmloff/xmlnumfi.hxx>      // SvXMLNumFmtDefaults
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
-#include <svtools/nfsymbol.hxx>
+#include <svl/svstdarr.hxx>
+#include <svl/nfsymbol.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlexp.hxx>
 

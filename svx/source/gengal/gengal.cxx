@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gengal.cxx,v $
- * $Revision: 1.10.288.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +40,7 @@
 #include <comphelper/regpathhelper.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
@@ -70,10 +68,9 @@
 #include <rtl/bootstrap.hxx>
 
 #include <galtheme.hxx>
-#include <gallery1.hxx>
+#include <svx/gallery1.hxx>
 
 using namespace ::vos;
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::lang;
@@ -221,7 +218,7 @@ static void PrintHelp()
     fprintf( stdout, "\t\t\tare required.\n");
 }
 
-static OUString Smartify( const OUString &rPath )
+static rtl::OUString Smartify( const rtl::OUString &rPath )
 {
     INetURLObject aURL;
     aURL.SetSmartURL( rPath );
@@ -234,7 +231,7 @@ static OUString Smartify( const OUString &rPath )
 void GalApp::Init()
 {
     if( getenv( "OOO_INSTALL_PREFIX" ) == NULL ) {
-        OUString fileName = GetAppFileName();
+        rtl::OUString fileName = GetAppFileName();
         int lastSlash = fileName.lastIndexOf( '/' );
 #ifdef WNT
         // Don't know which directory separators GetAppFileName() returns on Windows.
@@ -242,9 +239,9 @@ void GalApp::Init()
         if( fileName.lastIndexOf( '\\' ) > lastSlash )
             lastSlash = fileName.lastIndexOf( '\\' );
 #endif
-        OUString baseBinDir = fileName.copy( 0, lastSlash );
-        OUString installPrefix = baseBinDir + OUString::createFromAscii( "/../.." );
-        OUString assignment = OUString::createFromAscii( "OOO_INSTALL_PREFIX=" ) + installPrefix;
+        rtl::OUString baseBinDir = fileName.copy( 0, lastSlash );
+        rtl::OUString installPrefix = baseBinDir + rtl::OUString::createFromAscii( "/../.." );
+        rtl::OUString assignment = rtl::OUString::createFromAscii( "OOO_INSTALL_PREFIX=" ) + installPrefix;
         putenv( strdup( OUSTRING_CSTR( assignment )));
     }
     OSL_TRACE( "OOO_INSTALL_PREFIX=%s", getenv( "OOO_INSTALL_PREFIX" ) );
@@ -262,7 +259,7 @@ void GalApp::Init()
 
 void GalApp::InitUCB()
 {
-    OUString aEmpty;
+    rtl::OUString aEmpty;
     Sequence< Any > aArgs(6);
     aArgs[0]
         <<= rtl::OUString::createFromAscii(UCB_CONFIGURATION_KEY1_LOCAL);
@@ -287,7 +284,7 @@ void GalApp::Main()
 
     for( USHORT i = 0; i < GetCommandLineParamCount(); i++ )
     {
-        OUString aParam = GetCommandLineParam( i );
+        rtl::OUString aParam = GetCommandLineParam( i );
 
         if( aParam.equalsAscii( "--help" ) ||
             aParam.equalsAscii( "-h" ) )

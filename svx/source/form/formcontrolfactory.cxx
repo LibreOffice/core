@@ -1,30 +1,27 @@
 /*************************************************************************
-* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
-* Copyright 2008 by Sun Microsystems, Inc.
-*
-* OpenOffice.org - a multi-platform office productivity suite
-*
-* $RCSfile: formcontrolfactory.cxx,v $
-*
-* $Revision: 1.1.2.3 $
-*
-* This file is part of OpenOffice.org.
-*
-* OpenOffice.org is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License version 3
-* only, as published by the Free Software Foundation.
-*
-* OpenOffice.org is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Lesser General Public License version 3 for more details
-* (a copy is included in the LICENSE file that accompanied this code).
-*
-* You should have received a copy of the GNU Lesser General Public License
-* version 3 along with OpenOffice.org.  If not, see
-* <http://www.openoffice.org/license.html>
-* for a copy of the LGPLv3 License.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
@@ -44,8 +41,6 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
@@ -53,11 +48,12 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/awt/FontDescriptor.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/numbers.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <tools/gen.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -88,15 +84,16 @@ namespace svxform
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::container::XChild;
     using ::com::sun::star::form::XGridColumnFactory;
-    using ::com::sun::star::lang::XServiceInfo;
-    using ::com::sun::star::style::XStyleFamiliesSupplier;
-    using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::style::VerticalAlignment_MIDDLE;
     using ::com::sun::star::beans::Property;
     using ::com::sun::star::uno::TypeClass_DOUBLE;
     using ::com::sun::star::uno::TypeClass_LONG;
     using ::com::sun::star::util::XNumberFormats;
     using ::com::sun::star::util::XNumberFormatTypes;
+    using ::com::sun::star::awt::FontDescriptor;
+    using ::com::sun::star::lang::Locale;
+    using ::com::sun::star::lang::XServiceInfo;
+    using ::com::sun::star::container::XNameAccess;
     /** === end UNO using === **/
     namespace FormComponentType = ::com::sun::star::form::FormComponentType;
     namespace ScrollBarOrientation = ::com::sun::star::awt::ScrollBarOrientation;
@@ -236,65 +233,6 @@ namespace svxform
             }
             return aInfo;
         }
-        /*
-            ATTENTION!
-            Broken for solaris? It seems that the old used template argument TYPE was already
-            defined as a macro ... which expand to ... "TYPE "!?
-            All platforms are OK - excepting Solaris. There the line "template< class TYPE >"
-            was expanded to "template < class TYPE " where the closing ">" was missing.
-        */
-        #ifdef MYTYPE
-            #error "Who defines the macro MYTYPE, which is used as template argument here?"
-        #endif
-
-        //....................................................................
-        template< class MYTYPE >
-        Reference< MYTYPE > getTypedModelNode( const Reference< XInterface >& _rxModelNode )
-        {
-            Reference< MYTYPE > xTypedNode( _rxModelNode, UNO_QUERY );
-            if ( xTypedNode.is() )
-                return xTypedNode;
-            else
-            {
-                Reference< XChild > xChild( _rxModelNode, UNO_QUERY );
-                if ( xChild.is() )
-                    return getTypedModelNode< MYTYPE >( xChild->getParent() );
-                else
-                    return NULL;
-            }
-        }
-
-        //....................................................................
-        static bool lcl_getDocumentDefaultStyleAndFamily( const Reference< XInterface >& _rxDocument, ::rtl::OUString& _rFamilyName, ::rtl::OUString& _rStyleName ) SAL_THROW(( Exception ))
-        {
-            bool bSuccess = true;
-            Reference< XServiceInfo > xDocumentSI( _rxDocument, UNO_QUERY );
-            if ( xDocumentSI.is() )
-            {
-                if (  xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ) )
-                   || xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.WebDocument" ) ) )
-                   )
-                {
-                    _rFamilyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParagraphStyles" ) );
-                    _rStyleName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-                }
-                else if ( xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ) ) )
-                {
-                    _rFamilyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CellStyles" ) );
-                    _rStyleName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Default" ) );
-                }
-                else if (  xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) )
-                        || xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) )
-                        )
-                {
-                    _rFamilyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "graphics" ) );
-                    _rStyleName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "standard" ) );
-                }
-                else
-                    bSuccess = false;
-            }
-            return bSuccess;
-        }
 
         //....................................................................
         static const sal_Char* aCharacterAndParagraphProperties[] =
@@ -430,41 +368,13 @@ namespace svxform
         //....................................................................
         static void lcl_initializeCharacterAttributes( const Reference< XPropertySet >& _rxModel )
         {
-            // need to initialize the attributes from the "Default" style of the document we live in
-
             try
             {
-                // the style family collection
-                Reference< XStyleFamiliesSupplier > xSuppStyleFamilies = getTypedModelNode< XStyleFamiliesSupplier >( _rxModel.get() );
-                Reference< XNameAccess > xStyleFamilies;
-                if ( xSuppStyleFamilies.is() )
-                    xStyleFamilies = xSuppStyleFamilies->getStyleFamilies();
-                OSL_ENSURE( xStyleFamilies.is(), "lcl_initializeCharacterAttributes: could not obtain the style families!" );
-                if ( !xStyleFamilies.is() )
-                    return;
+                Reference< XPropertySet > xStyle( ControlLayouter::getDefaultDocumentTextStyle( _rxModel ), UNO_SET_THROW );
 
-                // the names of the family, and the style - depends on the document type we live in
-                ::rtl::OUString sFamilyName, sStyleName;
-                bool bKnownDocumentType = lcl_getDocumentDefaultStyleAndFamily( xSuppStyleFamilies.get(), sFamilyName, sStyleName );
-                OSL_ENSURE( bKnownDocumentType, "lcl_initializeCharacterAttributes: Huh? What document type is this?" );
-                if ( !bKnownDocumentType )
-                    return;
-
-                // the concrete style
-                Reference< XNameAccess > xStyleFamily( xStyleFamilies->getByName( sFamilyName ), UNO_QUERY );
-                Reference< XPropertySet > xStyle;
-                if ( xStyleFamily.is() )
-                    xStyleFamily->getByName( sStyleName ) >>= xStyle;
-                OSL_ENSURE( xStyle.is(), "lcl_initializeCharacterAttributes: could not retrieve the style!" );
-                if ( !xStyle.is() )
-                    return;
-
-                // transfer all properties which are described by the com.sun.star.style.
-                Reference< XPropertySetInfo > xSourcePropInfo( xStyle->getPropertySetInfo() );
-                Reference< XPropertySetInfo > xDestPropInfo( _rxModel->getPropertySetInfo() );
-                OSL_ENSURE( xSourcePropInfo.is() && xDestPropInfo.is(), "lcl_initializeCharacterAttributes: no property set info!" );
-                if ( !xSourcePropInfo.is() || !xDestPropInfo.is() )
-                    return;
+                // transfer all properties which are described by the style
+                Reference< XPropertySetInfo > xSourcePropInfo( xStyle->getPropertySetInfo(), UNO_SET_THROW );
+                Reference< XPropertySetInfo > xDestPropInfo( _rxModel->getPropertySetInfo(), UNO_SET_THROW );
 
                 ::rtl::OUString sPropertyName;
                 const sal_Char** pCharacterProperty = aCharacterAndParagraphProperties;
@@ -519,7 +429,8 @@ namespace svxform
                 case FormComponentType::COMBOBOX:
                 {
                     sal_Bool bDropDown = !_rControlBoundRect.IsEmpty() && ( _rControlBoundRect.GetWidth() >= 3 * _rControlBoundRect.GetHeight() );
-                    _rxControlModel->setPropertyValue( FM_PROP_DROPDOWN, makeAny( (sal_Bool)bDropDown ) );
+                    if ( xPSI->hasPropertyByName( FM_PROP_DROPDOWN ) )
+                        _rxControlModel->setPropertyValue( FM_PROP_DROPDOWN, makeAny( (sal_Bool)bDropDown ) );
                     _rxControlModel->setPropertyValue( FM_PROP_LINECOUNT, makeAny( sal_Int16( 20 ) ) );
                 }
                 break;

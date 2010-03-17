@@ -3,12 +3,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DataAccess.xcu,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -156,7 +153,7 @@
     </node>
   </node>
   <node oor:name="RegisteredNames">
-    <node oor:name="Bibliography" oor:op="replace">
+    <node oor:name="org.openoffice.Bibliography" oor:op="replace">
         <prop oor:name="Location" oor:type="xs:string">
             <value>$(userurl)/database/biblio.odb</value>
         </prop>

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewcontactoftableobj.cxx,v $
- * $Revision: 1.4.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +45,7 @@
 #include <svx/sdr/attribute/sdrtextattribute.hxx>
 #include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
-#include <svx/borderline.hxx>
+#include <editeng/borderline.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 
 #include "cell.hxx"
@@ -64,7 +61,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrCellPrimitive2D : public BasePrimitive2D
+        class SdrCellPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             basegfx::B2DHomMatrix                       maTransform;
@@ -72,13 +69,13 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrCellPrimitive2D(
                 const basegfx::B2DHomMatrix& rTransform,
                 const attribute::SdrFillTextAttribute& rSdrFTAttribute)
-            :   BasePrimitive2D(),
+            :   BufferedDecompositionPrimitive2D(),
                 maTransform(rTransform),
                 maSdrFTAttribute(rSdrFTAttribute)
             {
@@ -95,7 +92,7 @@ namespace drawinglayer
             DeclPrimitrive2DIDBlock()
         };
 
-        Primitive2DSequence SdrCellPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DSequence SdrCellPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DSequence aRetval;
 
@@ -132,7 +129,7 @@ namespace drawinglayer
 
         bool SdrCellPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrCellPrimitive2D& rCompare = (SdrCellPrimitive2D&)rPrimitive;
 
@@ -155,7 +152,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrBorderlinePrimitive2D : public BasePrimitive2D
+        class SdrBorderlinePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             basegfx::B2DHomMatrix                       maTransform;
@@ -173,7 +170,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrBorderlinePrimitive2D(
@@ -187,7 +184,7 @@ namespace drawinglayer
                 bool bRightIsOutside,
                 bool bTopIsOutside,
                 bool bInTwips)
-            :   BasePrimitive2D(),
+            :   BufferedDecompositionPrimitive2D(),
                 maTransform(rTransform),
                 maLeftLine(rLeftLine),
                 maBottomLine(rBottomLine),
@@ -282,7 +279,7 @@ namespace drawinglayer
             return (double)nValue;
         }
 
-        Primitive2DSequence SdrBorderlinePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DSequence SdrBorderlinePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DSequence xRetval(4);
             sal_uInt32 nInsert(0);
@@ -462,7 +459,7 @@ namespace drawinglayer
 
         bool SdrBorderlinePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrBorderlinePrimitive2D& rCompare = (SdrBorderlinePrimitive2D&)rPrimitive;
 

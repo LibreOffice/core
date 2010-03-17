@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdrellipseprimitive2d.hxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +41,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrEllipsePrimitive2D : public BasePrimitive2D
+        class SdrEllipsePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             ::basegfx::B2DHomMatrix                     maTransform;
@@ -53,7 +49,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrEllipsePrimitive2D(
@@ -91,7 +87,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrEllipseSegmentPrimitive2D(

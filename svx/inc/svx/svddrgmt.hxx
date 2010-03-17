@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svddrgmt.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,6 +104,22 @@ public:
 
 //////////////////////////////////////////////////////////////////////////////
 
+class SdrDragEntryPrimitive2DSequence : public SdrDragEntry
+{
+private:
+    drawinglayer::primitive2d::Primitive2DSequence  maPrimitive2DSequence;
+
+public:
+    SdrDragEntryPrimitive2DSequence(
+        const drawinglayer::primitive2d::Primitive2DSequence& rSequence,
+        bool bAddToTransparent);
+    virtual ~SdrDragEntryPrimitive2DSequence();
+
+    virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod);
+};
+
+//////////////////////////////////////////////////////////////////////////////
+
 class SdrDragEntryPointGlueDrag : public SdrDragEntry
 {
 private:
@@ -138,6 +151,7 @@ protected:
     void clearSdrDragEntries() { for(sal_uInt32 a(0); a < maSdrDragEntries.size(); a++) { delete maSdrDragEntries[a]; } maSdrDragEntries.clear(); }
     void addSdrDragEntry(SdrDragEntry* pNew) { if(pNew) { maSdrDragEntries.push_back(pNew); }}
     virtual void createSdrDragEntries();
+    virtual void createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify);
 
     // access for derivated classes to maOverlayObjectList
     void clearOverlayObjectList() { maOverlayObjectList.clear(); }
@@ -235,6 +249,9 @@ private:
     bool                        bYSnapped;
 
     void ImpCheckSnap(const Point& rPt);
+
+protected:
+    virtual void createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify);
 
 public:
     TYPEINFO();

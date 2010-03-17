@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: animatedprimitive2d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.5 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:20 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -52,33 +44,12 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence AnimatedSwitchPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
-        {
-            if(getChildren().hasElements())
-            {
-                const double fState(getAnimationEntry().getStateAtTime(rViewInformation.getViewTime()));
-                const sal_uInt32 nLen(getChildren().getLength());
-                sal_uInt32 nIndex(basegfx::fround(fState * (double)nLen));
-
-                if(nIndex >= nLen)
-                {
-                    nIndex = nLen - 1L;
-                }
-
-                const Primitive2DReference xRef(getChildren()[nIndex], uno::UNO_QUERY_THROW);
-                return Primitive2DSequence(&xRef, 1L);
-            }
-
-            return Primitive2DSequence();
-        }
-
         AnimatedSwitchPrimitive2D::AnimatedSwitchPrimitive2D(
             const animation::AnimationEntry& rAnimationEntry,
             const Primitive2DSequence& rChildren,
             bool bIsTextAnimation)
         :   GroupPrimitive2D(rChildren),
             mpAnimationEntry(0),
-            mfDecomposeViewTime(0.0),
             mbIsTextAnimation(bIsTextAnimation)
         {
             // clone given animation description
@@ -105,29 +76,22 @@ namespace drawinglayer
 
         Primitive2DSequence AnimatedSwitchPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            ::osl::MutexGuard aGuard( m_aMutex );
-
-            if(getLocalDecomposition().hasElements() && mfDecomposeViewTime != rViewInformation.getViewTime())
+            if(getChildren().hasElements())
             {
-                // conditions of last local decomposition have changed, delete
-                const_cast< AnimatedSwitchPrimitive2D* >(this)->setLocalDecomposition(Primitive2DSequence());
+                const double fState(getAnimationEntry().getStateAtTime(rViewInformation.getViewTime()));
+                const sal_uInt32 nLen(getChildren().getLength());
+                sal_uInt32 nIndex(basegfx::fround(fState * (double)nLen));
+
+                if(nIndex >= nLen)
+                {
+                    nIndex = nLen - 1L;
+                }
+
+                const Primitive2DReference xRef(getChildren()[nIndex], uno::UNO_QUERY_THROW);
+                return Primitive2DSequence(&xRef, 1L);
             }
 
-            if(!getLocalDecomposition().hasElements())
-            {
-                // remember time
-                const_cast< AnimatedSwitchPrimitive2D* >(this)->mfDecomposeViewTime = rViewInformation.getViewTime();
-            }
-
-            // use parent implementation
-            return GroupPrimitive2D::get2DDecomposition(rViewInformation);
-        }
-
-        basegfx::B2DRange AnimatedSwitchPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
-        {
-            // to get range from decomposition and not from group content, call implementation from
-            // BasePrimitive2D here
-            return BasePrimitive2D::getB2DRange(rViewInformation);
+            return Primitive2DSequence();
         }
 
         // provide unique ID
@@ -142,7 +106,15 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence AnimatedBlinkPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        AnimatedBlinkPrimitive2D::AnimatedBlinkPrimitive2D(
+            const animation::AnimationEntry& rAnimationEntry,
+            const Primitive2DSequence& rChildren,
+            bool bIsTextAnimation)
+        :   AnimatedSwitchPrimitive2D(rAnimationEntry, rChildren, bIsTextAnimation)
+        {
+        }
+
+        Primitive2DSequence AnimatedBlinkPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             if(getChildren().hasElements())
             {
@@ -157,14 +129,6 @@ namespace drawinglayer
             return Primitive2DSequence();
         }
 
-        AnimatedBlinkPrimitive2D::AnimatedBlinkPrimitive2D(
-            const animation::AnimationEntry& rAnimationEntry,
-            const Primitive2DSequence& rChildren,
-            bool bIsTextAnimation)
-        :   AnimatedSwitchPrimitive2D(rAnimationEntry, rChildren, bIsTextAnimation)
-        {
-        }
-
         // provide unique ID
         ImplPrimitrive2DIDBlock(AnimatedBlinkPrimitive2D, PRIMITIVE2D_ID_ANIMATEDBLINKPRIMITIVE2D)
 
@@ -172,41 +136,30 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
-// helper class for AnimatedInterpolatePrimitive2D
 
 namespace drawinglayer
 {
     namespace primitive2d
     {
-        BufferedMatrixDecompose::BufferedMatrixDecompose(const basegfx::B2DHomMatrix& rMatrix)
-        :   maB2DHomMatrix(rMatrix),
-            maScale(0.0, 0.0),
-            maTranslate(0.0, 0.0),
-            mfRotate(0.0),
-            mfShearX(0.0),
-            mbDecomposed(false)
+        AnimatedInterpolatePrimitive2D::AnimatedInterpolatePrimitive2D(
+            const std::vector< basegfx::B2DHomMatrix >& rmMatrixStack,
+            const animation::AnimationEntry& rAnimationEntry,
+            const Primitive2DSequence& rChildren,
+            bool bIsTextAnimation)
+        :   AnimatedSwitchPrimitive2D(rAnimationEntry, rChildren, bIsTextAnimation),
+            maMatrixStack()
         {
-        }
+            // copy matrices to locally pre-decomposed matrix stack
+            const sal_uInt32 nCount(rmMatrixStack.size());
+            maMatrixStack.reserve(nCount);
 
-        void BufferedMatrixDecompose::ensureDecompose() const
-        {
-            if(!mbDecomposed)
+            for(sal_uInt32 a(0L); a < nCount; a++)
             {
-                BufferedMatrixDecompose* pThis = const_cast< BufferedMatrixDecompose* >(this);
-                maB2DHomMatrix.decompose(pThis->maScale, pThis->maTranslate, pThis->mfRotate, pThis->mfShearX);
-                pThis->mbDecomposed = true;
+                maMatrixStack.push_back(basegfx::tools::B2DHomMatrixBufferedDecompose(rmMatrixStack[a]));
             }
         }
-    } // end of anonymous namespace
-} // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
-        Primitive2DSequence AnimatedInterpolatePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence AnimatedInterpolatePrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             const sal_uInt32 nSize(maMatrixStack.size());
 
@@ -227,21 +180,18 @@ namespace drawinglayer
                 const sal_uInt32 nIndA(sal_uInt32(floor(fIndex)));
                 const double fOffset(fIndex - (double)nIndA);
                 basegfx::B2DHomMatrix aTargetTransform;
+                std::vector< basegfx::tools::B2DHomMatrixBufferedDecompose >::const_iterator aMatA(maMatrixStack.begin() + nIndA);
 
                 if(basegfx::fTools::equalZero(fOffset))
                 {
                     // use matrix from nIndA directly
-                    aTargetTransform = maMatrixStack[nIndA].getB2DHomMatrix();
+                    aTargetTransform = aMatA->getB2DHomMatrix();
                 }
                 else
                 {
-                    // interpolate. Get involved matrices and ensure they are decomposed
+                    // interpolate. Get involved buffered decomposed matrices
                     const sal_uInt32 nIndB((nIndA + 1L) % nSize);
-                    std::vector< BufferedMatrixDecompose >::const_iterator aMatA(maMatrixStack.begin() + nIndA);
-                    std::vector< BufferedMatrixDecompose >::const_iterator aMatB(maMatrixStack.begin() + nIndB);
-
-                    aMatA->ensureDecompose();
-                    aMatB->ensureDecompose();
+                    std::vector< basegfx::tools::B2DHomMatrixBufferedDecompose >::const_iterator aMatB(maMatrixStack.begin() + nIndB);
 
                     // interpolate for fOffset [0.0 .. 1.0[
                     const basegfx::B2DVector aScale(basegfx::interpolate(aMatA->getScale(), aMatB->getScale(), fOffset));
@@ -250,10 +200,8 @@ namespace drawinglayer
                     const double fShearX(((aMatB->getShearX() - aMatA->getShearX()) * fOffset) + aMatA->getShearX());
 
                     // build matrix for state
-                    aTargetTransform.scale(aScale.getX(), aScale.getY());
-                    aTargetTransform.shearX(fShearX);
-                    aTargetTransform.rotate(fRotate);
-                    aTargetTransform.translate(aTranslate.getX(), aTranslate.getY());
+                    aTargetTransform = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                        aScale, fShearX, fRotate, aTranslate);
                 }
 
                 // create new transform primitive reference, return new sequence
@@ -263,23 +211,6 @@ namespace drawinglayer
             else
             {
                 return getChildren();
-            }
-        }
-
-        AnimatedInterpolatePrimitive2D::AnimatedInterpolatePrimitive2D(
-            const std::vector< basegfx::B2DHomMatrix >& rmMatrixStack,
-            const animation::AnimationEntry& rAnimationEntry,
-            const Primitive2DSequence& rChildren,
-            bool bIsTextAnimation)
-        :   AnimatedSwitchPrimitive2D(rAnimationEntry, rChildren, bIsTextAnimation),
-            maMatrixStack()
-        {
-            // copy matrices
-            const sal_uInt32 nCount(rmMatrixStack.size());
-
-            for(sal_uInt32 a(0L); a < nCount; a++)
-            {
-                maMatrixStack.push_back(BufferedMatrixDecompose(rmMatrixStack[a]));
             }
         }
 

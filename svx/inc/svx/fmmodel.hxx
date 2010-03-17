@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fmmodel.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,14 +86,16 @@ public:
     /** check whether the OpenInDesignMode has been set explicitly or been loaded (<FALSE/>)
         or if it still has the default value from construction (<TRUE/>)
     */
-    sal_Bool    OpenInDesignModeIsDefaulted( );
+    sal_Bool    OpenInDesignModeIsDefaulted();
 
-//#if 0 // _SOLAR__PRIVATE
-    void        implSetOpenInDesignMode( sal_Bool _bOpenDesignMode, sal_Bool _bForce );
+    /** determines whether form controls should use the SdrModel's reference device for text rendering
+    */
+    sal_Bool    ControlsUseRefDevice() const;
 
     FmXUndoEnvironment& GetUndoEnv();
-//#endif
 
+private:
+    void        implSetOpenInDesignMode( sal_Bool _bOpenDesignMode, sal_Bool _bForce );
 };
 
 #endif          // _FM_FMMODEL_HXX

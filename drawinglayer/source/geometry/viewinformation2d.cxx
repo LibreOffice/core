@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: viewinformation2d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.7 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:31:07 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -81,11 +73,17 @@ namespace drawinglayer
             basegfx::B2DRange                           maDiscreteViewport;
 
             // the DrawPage which is target of visualisation. This is needed e.g. for
-            // the view-dependent decomposition of PageNumber TextFields
+            // the view-dependent decomposition of PageNumber TextFields.
+            // This parameter is buffered here, but mainly resides in mxExtendedInformation,
+            // so it will be interpreted, but held there. It will also not be added
+            // to mxExtendedInformation in impFillViewInformationFromContent (it's there already)
             uno::Reference< drawing::XDrawPage >        mxVisualizedPage;
 
             // the point in time
             double                                      mfViewTime;
+
+            // bitfield
+            bool                                        mbReducedDisplayQuality : 1;
 
             // the complete PropertyValue representation (if already created)
             uno::Sequence< beans::PropertyValue >       mxViewInformation;
@@ -125,6 +123,12 @@ namespace drawinglayer
                 return s_sNameProperty;
             }
 
+            const ::rtl::OUString& getNamePropertyReducedDisplayQuality()
+            {
+                static ::rtl::OUString s_sNameProperty(RTL_CONSTASCII_USTRINGPARAM("ReducedDisplayQuality"));
+                return s_sNameProperty;
+            }
+
             void impInterpretPropertyValues(const uno::Sequence< beans::PropertyValue >& rViewParameters)
             {
                 if(rViewParameters.hasElements())
@@ -139,7 +143,17 @@ namespace drawinglayer
                     {
                         const beans::PropertyValue& rProp = rViewParameters[a];
 
-                        if(rProp.Name == getNamePropertyObjectTransformation())
+                        if(rProp.Name == getNamePropertyReducedDisplayQuality())
+                        {
+                            // extra information; add to filtered information
+                            mxExtendedInformation[nExtendedInsert++] = rProp;
+
+                            // for performance reasons, also cache content locally
+                            sal_Bool bSalBool(false);
+                            rProp.Value >>= bSalBool;
+                            mbReducedDisplayQuality = bSalBool;
+                        }
+                        else if(rProp.Name == getNamePropertyObjectTransformation())
                         {
                             com::sun::star::geometry::AffineMatrix2D aAffineMatrix2D;
                             rProp.Value >>= aAffineMatrix2D;
@@ -185,6 +199,7 @@ namespace drawinglayer
                 const bool bViewportUsed(!maViewport.isEmpty());
                 const bool bTimeUsed(0.0 < mfViewTime);
                 const bool bVisualizedPageUsed(mxVisualizedPage.is());
+                const bool bReducedDisplayQualityUsed(true == mbReducedDisplayQuality);
                 const bool bExtraInformation(mxExtendedInformation.hasElements());
                 sal_uInt32 nIndex(0);
                 const sal_uInt32 nCount(
@@ -193,6 +208,7 @@ namespace drawinglayer
                     (bViewportUsed ? 1 : 0) +
                     (bTimeUsed ? 1 : 0) +
                     (bVisualizedPageUsed ? 1 : 0) +
+                    (bReducedDisplayQualityUsed ? 1 : 0) +
                     (bExtraInformation ? mxExtendedInformation.getLength() : 0));
 
                 mxViewInformation.realloc(nCount);
@@ -265,6 +281,7 @@ namespace drawinglayer
                 maDiscreteViewport(),
                 mxVisualizedPage(rxDrawPage),
                 mfViewTime(fViewTime),
+                mbReducedDisplayQuality(false),
                 mxViewInformation(),
                 mxExtendedInformation()
             {
@@ -281,6 +298,7 @@ namespace drawinglayer
                 maDiscreteViewport(),
                 mxVisualizedPage(),
                 mfViewTime(),
+                mbReducedDisplayQuality(false),
                 mxViewInformation(rViewParameters),
                 mxExtendedInformation()
             {
@@ -353,6 +371,11 @@ namespace drawinglayer
             const uno::Reference< drawing::XDrawPage >& getVisualizedPage() const
             {
                 return mxVisualizedPage;
+            }
+
+            bool getReducedDisplayQuality() const
+            {
+                return mbReducedDisplayQuality;
             }
 
             const uno::Sequence< beans::PropertyValue >& getViewInformationSequence() const
@@ -499,6 +522,11 @@ namespace drawinglayer
         const basegfx::B2DRange& ViewInformation2D::getDiscreteViewport() const
         {
             return mpViewInformation2D->getDiscreteViewport();
+        }
+
+        bool ViewInformation2D::getReducedDisplayQuality() const
+        {
+            return mpViewInformation2D->getReducedDisplayQuality();
         }
 
         const uno::Sequence< beans::PropertyValue >& ViewInformation2D::getViewInformationSequence() const

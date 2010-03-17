@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docvor.cxx,v $
- * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,17 +41,17 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/print.hxx>
-#include <svtools/style.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/style.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/imagemgr.hxx>
 #include <vcl/waitobj.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/color.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <sot/exchange.hxx>
 #include <comphelper/storagehelper.hxx>
 
@@ -81,7 +78,7 @@
 #endif
 #include <comphelper/processfactory.hxx>
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 static const char cDelim = ':';
 BOOL SfxOrganizeListBox_Impl::bDropMoveOk = TRUE;
@@ -1188,7 +1185,7 @@ void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
     // einfuegen
     BmpColorMode eColorMode = BMP_COLOR_NORMAL;
 
-    if ( GetDisplayBackground().GetColor().IsDark() )
+    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
         eColorMode = BMP_COLOR_HIGHCONTRAST;
 
 
@@ -1480,7 +1477,7 @@ const Image &SfxOrganizeListBox_Impl::GetClosedBmp(USHORT nLevel) const
 */
 
 {
-    BOOL            bHC = GetBackground().GetColor().IsDark();
+    BOOL            bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
     const Image*    pRet = NULL;
 
     switch( nLevel )
@@ -1514,7 +1511,7 @@ const Image &SfxOrganizeListBox_Impl::GetOpenedBmp(USHORT nLevel) const
 */
 
 {
-    BOOL         bHC = GetBackground().GetColor().IsDark();
+    BOOL         bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
     const Image* pRet = NULL;
 
     switch( nLevel )

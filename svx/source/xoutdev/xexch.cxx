@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xexch.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,13 +35,13 @@
 #include <svx/xflasit.hxx>
 #include <svx/xfillit0.hxx>
 #ifndef _SFXIPOOL_HXX
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #endif
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #ifndef _SFXIPOOL_HXX
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #endif
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/xdef.hxx>
 #include "xexch.hxx"
 

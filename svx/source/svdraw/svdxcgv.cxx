@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdxcgv.cxx,v $
- * $Revision: 1.34.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_svx.hxx"
 
 #include <vector>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include "xexch.hxx"
 #include <svx/xflclit.hxx>
 #include <svx/svdxcgv.hxx>
@@ -52,8 +49,8 @@
 #include "svdglob.hxx"  // StringCache
 #include "xoutbmp.hxx"
 #include <vcl/metaact.hxx>
-#include <svtools/poolitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/itempool.hxx>
 #include <tools/bigint.hxx>
 #include <sot/formats.hxx>
 
@@ -62,7 +59,7 @@
 #include <vcl/virdev.hxx>
 
 // b4967543
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
 // #i72535#
 #include "fmobj.hxx"

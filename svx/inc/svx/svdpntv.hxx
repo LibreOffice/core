@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdpntv.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,19 +28,20 @@
 #ifndef _SVDPNTV_HXX
 #define _SVDPNTV_HXX
 
-#include <svtools/brdcst.hxx>
-#include <svtools/lstner.hxx>
-#include <svtools/smplhint.hxx>
-#include <svtools/undo.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/lstner.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/undo.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svdlayer.hxx>  // fuer SetOfByte
 #include <vcl/window.hxx>
 #include <svtools/colorcfg.hxx>
 #include <com/sun/star/awt/XControlContainer.hpp>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/timer.hxx>
 #include "svx/svxdllapi.h"
 #include <svtools/optionsdrawinglayer.hxx>
+#include <unotools/options.hxx>
 
 //************************************************************
 //   Pre-Defines
@@ -127,7 +125,7 @@ typedef ::std::vector< SdrPaintWindow* > SdrPaintWindowVector;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class SVX_DLLPUBLIC SdrPaintView : public SfxListener, public SfxRepeatTarget, public SfxBroadcaster
+class SVX_DLLPUBLIC SdrPaintView : public SfxListener, public SfxRepeatTarget, public SfxBroadcaster, public ::utl::ConfigurationListener
 {
     friend class                SdrPageView;
     friend class                FrameAnimator;
@@ -214,10 +212,11 @@ protected:
     // is this a preview renderer?
     unsigned                    mbPreviewRenderer : 1;
 
-    // flags for calc for suppressing OLE, CHART or DRAW objects
+    // flags for calc and sw for suppressing OLE, CHART or DRAW objects
     unsigned                    mbHideOle : 1;
     unsigned                    mbHideChart : 1;
-    unsigned                    mbHideDraw : 1;
+    unsigned                    mbHideDraw : 1;             // hide draw objects other than form controls
+    unsigned                    mbHideFormControl : 1;      // hide form controls only
 
 public:
     // #114898#
@@ -241,6 +240,7 @@ protected:
 protected:
     void AppendPaintWindow(SdrPaintWindow& rNew);
     SdrPaintWindow* RemovePaintWindow(SdrPaintWindow& rOld);
+    void ConfigurationChanged( ::utl::ConfigurationBroadcaster*, sal_uInt32 );
 
 public:
     sal_uInt32 PaintWindowCount() const { return maPaintWindows.size(); }
@@ -431,13 +431,15 @@ public:
     sal_Bool IsPreviewRenderer() const { return (sal_Bool )mbPreviewRenderer; }
     void SetPreviewRenderer(bool bOn) { if((unsigned)bOn != mbPreviewRenderer) { mbPreviewRenderer=bOn; }}
 
-    // access methods for calc hide object modes
+    // access methods for calc and sw hide object modes
     bool getHideOle() const { return mbHideOle; }
     bool getHideChart() const { return mbHideChart; }
     bool getHideDraw() const { return mbHideDraw; }
+    bool getHideFormControl() const { return mbHideFormControl; }
     void setHideOle(bool bNew) { if(bNew != (bool)mbHideOle) mbHideOle = bNew; }
     void setHideChart(bool bNew) { if(bNew != (bool)mbHideChart) mbHideChart = bNew; }
     void setHideDraw(bool bNew) { if(bNew != (bool)mbHideDraw) mbHideDraw = bNew; }
+    void setHideFormControl(bool bNew) { if(bNew != (bool)mbHideFormControl) mbHideFormControl = bNew; }
 
     void SetGridCoarse(const Size& rSiz) { aGridBig=rSiz; }
     void SetGridFine(const Size& rSiz) { aGridFin=rSiz; if (aGridFin.Height()==0) aGridFin.Height()=aGridFin.Width(); if (bGridVisible) InvalidateAllWin(); } // #40479#

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: objsh.hxx,v $
- * $Revision: 1.14.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,7 +55,7 @@
 //#if 0 // _SOLAR__PRIVATE
 #include <vcl/timer.hxx>
 //#endif
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/bitmap.hxx>
 #include <sot/storage.hxx>
@@ -96,7 +93,6 @@ class Bitmap;
 class INetURLObject;
 class IndexBitSet;
 class SfxTopFrame;
-class SfxAcceleratorManager;
 class JobSetup;
 class Size;
 class Point;
@@ -261,6 +257,7 @@ public:
                                 TYPEINFO();
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXDOCSH)
 
+    static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
     /* Stampit disable/enable cancel button for print jobs
        default = true = enable! */
     void                        Stamp_SetPrintCancelState(sal_Bool bState);
@@ -303,6 +300,9 @@ public:
     sal_Bool                    IsReadOnlyUI() const;
     void                        SetNoName();
     sal_Bool                    IsInModalMode() const;
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    virtual sal_Bool            AcceptStateUpdate() const;
+    //-->Added by PengYunQuan for Validity Cell Range Picker
     sal_Bool                    HasModalViews() const;
     sal_Bool                    IsHelpDocument() const;
 
@@ -589,7 +589,7 @@ public:
                                         sal_uInt16 nIdx2 = INDEX_IGNORE,
                                         sal_uInt16 nIdx3 = INDEX_IGNORE);
 
-    virtual sal_Bool            Print( Printer &rPrt,
+    sal_Bool                    Print( Printer &rPrt,
                                        sal_uInt16 nIdx1,
                                        sal_uInt16 nIdx2 = INDEX_IGNORE,
                                        sal_uInt16 nIdx3 = INDEX_IGNORE,
@@ -794,7 +794,6 @@ public:
 
     // configuration items
     SAL_DLLPRIVATE SfxEventConfigItem_Impl* GetEventConfig_Impl( sal_Bool bForce=sal_False );
-    SAL_DLLPRIVATE SfxAcceleratorManager* GetAccMgr_Impl();
     SAL_DLLPRIVATE SfxToolBoxConfig* GetToolBoxConfig_Impl();
     SAL_DLLPRIVATE sal_uInt16 ImplGetSignatureState( sal_Bool bScriptingContent = FALSE );
 
@@ -889,6 +888,7 @@ public:
     virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
     SfxObjectShell*         GetObjectShell() const
                             { return pObjSh; }
+
 };
 
 #endif

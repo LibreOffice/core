@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: filedlghelper.cxx,v $
- * $Revision: 1.144 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,17 +68,17 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/securityoptions.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/securityoptions.hxx>
+#include <svl/itemset.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/viewoptions.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/viewoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svtools/helpid.hrc>
-#include <svtools/pickerhelper.hxx>
+#include <svl/pickerhelper.hxx>
 #include <comphelper/docpasswordrequest.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
@@ -801,7 +798,9 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
 
             aData << aBmp;
 
-            Sequence < sal_Int8 > aBuffer( (sal_Int8*) aData.GetData(), aData.GetSize() );
+            const Sequence < sal_Int8 > aBuffer(
+                static_cast< const sal_Int8* >(aData.GetData()),
+                aData.GetEndOfData() );
 
             aAny <<= aBuffer;
         }

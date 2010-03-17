@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewfrm.cxx,v $
- * $Revision: 1.136.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,13 +41,13 @@
 #ifndef _SPLITWIN_HXX //autogen
 #include <vcl/splitwin.hxx>
 #endif
-#include <svtools/moduleoptions.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/slstitm.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/undo.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/whiter.hxx>
+#include <svl/undo.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -90,7 +87,7 @@
 #include <basic/sbx.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <svtools/asynclink.hxx>
-#include <svtools/sharecontrolfile.hxx>
+#include <svl/sharecontrolfile.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1331,7 +1328,7 @@ String SfxViewFrame::UpdateTitle()
 
     // Name des SbxObjects
     String aSbxName = pObjSh->SfxShell::GetName();
-    if ( IsVisible_Impl() )
+    if ( IsVisible() )
     {
         aSbxName += ':';
         aSbxName += String::CreateFromInt32(pImp->nDocViewNo);
@@ -1801,7 +1798,7 @@ sal_uInt16 SfxViewFrame::Count(TypeId aType)
     {
         SfxViewFrame *pFrame = rFrames[i];
         if ( ( !aType || pFrame->IsA(aType) ) &&
-             pFrame->IsVisible_Impl() )
+             pFrame->IsVisible() )
             ++nFound;
     }
     return nFound;
@@ -1825,7 +1822,7 @@ SfxViewFrame* SfxViewFrame::GetFirst
         SfxViewFrame *pFrame = rFrames.GetObject(nPos);
         if ( ( !pDoc || pDoc == pFrame->GetObjectShell() ) &&
              ( !aType || pFrame->IsA(aType) ) &&
-             ( !bOnlyIfVisible || pFrame->IsVisible_Impl()) )
+             ( !bOnlyIfVisible || pFrame->IsVisible()) )
             return pFrame;
     }
 
@@ -1857,7 +1854,7 @@ SfxViewFrame* SfxViewFrame::GetNext
         SfxViewFrame *pFrame = rFrames.GetObject(nPos);
         if ( ( !pDoc || pDoc == pFrame->GetObjectShell() ) &&
              ( !aType || pFrame->IsA(aType) ) &&
-             ( !bOnlyIfVisible || pFrame->IsVisible_Impl()) )
+             ( !bOnlyIfVisible || pFrame->IsVisible()) )
             return pFrame;
     }
     return 0;
@@ -1870,7 +1867,7 @@ void SfxViewFrame::CloseHiddenFrames_Impl()
     for ( sal_uInt16 nPos=0; nPos<rFrames.Count(); )
     {
         SfxViewFrame *pFrame = rFrames.GetObject(nPos);
-        if ( !pFrame->IsVisible_Impl() )
+        if ( !pFrame->IsVisible() )
             pFrame->DoClose();
         else
             nPos++;
@@ -2142,7 +2139,7 @@ void SfxViewFrame::Show()
 }
 
 //--------------------------------------------------------------------
-sal_Bool SfxViewFrame::IsVisible_Impl() const
+sal_Bool SfxViewFrame::IsVisible() const
 {
     //Window *pWin = pImp->bInCtor ? 0 : &GetWindow();
     //return GetFrame()->HasComponent() || pImp->bObjLocked || ( pWin && pWin->IsVisible() );
@@ -2172,7 +2169,7 @@ void SfxViewFrame::MakeActive_Impl( BOOL bGrabFocus )
 {
     if ( GetViewShell() && !GetFrame()->IsClosing_Impl() )
     {
-        if ( IsVisible_Impl() )
+        if ( IsVisible() )
         {
             if ( GetViewShell() )
             {

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdotable.cxx,v $
- * $Revision: 1.4.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,9 +42,9 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <svtools/style.hxx>
-#include "editstat.hxx"
-#include "svx/outlobj.hxx"
+#include <svl/style.hxx>
+#include "editeng/editstat.hxx"
+#include "editeng/outlobj.hxx"
 #include "svx/svdview.hxx"
 #include "svx/sdr/properties/textproperties.hxx"
 #include "svx/svdotable.hxx"
@@ -62,14 +59,14 @@
 #include "tablelayouter.hxx"
 #include "svx/svdetc.hxx"
 #include "tablehandles.hxx"
-#include "svx/boxitem.hxx"
+#include "editeng/boxitem.hxx"
 #include "svx/framelink.hxx"
 #include "svx/sdr/table/tabledesign.hxx"
 #include "svx/svdundo.hxx"
 #include "svdstr.hrc"
 #include "svdglob.hxx"
-#include "svx/writingmodeitem.hxx"
-#include "svx/frmdiritem.hxx"
+#include "editeng/writingmodeitem.hxx"
+#include "editeng/frmdiritem.hxx"
 #include "svx/xflhtit.hxx"
 #include "svx/xflftrit.hxx"
 #include "svx/xfltrit.hxx"
@@ -2575,7 +2572,7 @@ basegfx::B2DPolyPolygon SdrTableObj::getSpecialDragPoly(const SdrDragStat& rDrag
     basegfx::B2DPolyPolygon aRetval;
     const SdrHdl* pHdl = rDrag.GetHdl();
 
-    if(HDL_USER == pHdl->GetKind())
+    if( pHdl && (HDL_USER == pHdl->GetKind()) )
     {
         const TableEdgeHdl* pEdgeHdl = dynamic_cast< const TableEdgeHdl* >( pHdl );
 

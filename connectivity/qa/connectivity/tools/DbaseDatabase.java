@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DbaseDatabase.java,v $
- * $Revision: 1.4.50.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +62,8 @@ public class DbaseDatabase extends AbstractDatabase
     private void createDBDocument() throws Exception
     {
         final File documentFile = File.createTempFile("dbase", ".odb");
-        documentFile.deleteOnExit();
+        if ( documentFile.exists() )
+            documentFile.delete();
         final File subPath = new File(documentFile.getParent() + File.separator + documentFile.getName().replaceAll(".odb", "") + File.separator );
         subPath.mkdir();
         //subPath.deleteOnExit();

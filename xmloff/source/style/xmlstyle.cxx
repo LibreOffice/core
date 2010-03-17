@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlstyle.cxx,v $
- * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,8 +43,8 @@
 #endif
 #include <tools/debug.hxx>
 #include <tools/list.hxx>
-#include <svtools/cntnrsrt.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/cntnrsrt.hxx>
+#include <svl/itemset.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -283,7 +280,7 @@ class SvXMLStylesContext_Impl
     SvXMLStyleIndices_Impl  *pIndices;
     sal_Bool bAutomaticStyle;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     sal_uInt32 nIndexCreated;
 #endif
 
@@ -317,7 +314,7 @@ SvXMLStylesContext_Impl::SvXMLStylesContext_Impl( sal_Bool bAuto ) :
     aStyles( 20, 5 ),
     pIndices( 0 ),
     bAutomaticStyle( bAuto )
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 ,   nIndexCreated( 0 )
 #endif
 {}
@@ -363,7 +360,7 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext(
 
     if( !pIndices && bCreateIndex && aStyles.Count() > 0 )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         DBG_ASSERT( 0==nIndexCreated,
                     "Performance warning: sdbcx::Index created multiple times" );
 #endif
@@ -379,7 +376,7 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext(
                 delete pStyleIndex;
             }
         }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ((SvXMLStylesContext_Impl *)this)->nIndexCreated++;
 #endif
     }

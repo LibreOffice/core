@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fmobj.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,11 +83,13 @@ public:
 
     virtual sal_uInt32 GetObjInventor() const;
     virtual sal_uInt16 GetObjIdentifier() const;
-    virtual void ReformatText();
+    virtual void NbcReformatText();
 
     virtual SdrObject*  Clone() const;
     // #116235# virtual SdrObject*  Clone(SdrPage* pPage, SdrModel* pModel) const;
     virtual void        operator= (const SdrObject& rObj);
+
+    virtual void SetModel(SdrModel* pNewModel);
 
     virtual void clonedFrom(const FmFormObj* _pSource);
 
@@ -124,6 +123,10 @@ private:
         its parent.
     */
     void    impl_isolateControlModel_nothrow();
+
+    /** forwards the reference device of our SdrModel to the control model
+    */
+    void    impl_checkRefDevice_nothrow( bool _force = false );
 };
 
 

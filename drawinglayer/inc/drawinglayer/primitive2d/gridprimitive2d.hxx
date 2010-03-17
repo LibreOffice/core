@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: gridprimitive2d.hxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.4 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:30:17 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -48,29 +40,47 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class GridPrimitive2D : public BasePrimitive2D
+        /** GridPrimitive2D class
+
+            This primitive is specialized to Grid visualisation. The graphic definition
+            (Transform) contains the whole grid area, but will of course be combined
+            with the visible area (Viewport) when decomposed. Also a reolution-dependent
+            point reduction is used to not create too much grid visualisation data. This
+            makes this primitive highly view-dependent and it dynamically buffers
+            the last decomposition dependent from the Viewport used.
+         */
+        class GridPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
+            /// The geometry definition for the grid area
             basegfx::B2DHomMatrix                           maTransform;
+
+            /// grid layout definitions
             double                                          mfWidth;
             double                                          mfHeight;
             double                                          mfSmallestViewDistance;
             double                                          mfSmallestSubdivisionViewDistance;
             sal_uInt32                                      mnSubdivisionsX;
             sal_uInt32                                      mnSubdivisionsY;
+
+            /// Grid color for single-pixel grid points
             basegfx::BColor                                 maBColor;
+
+            /// The Bitmap (with alpha) for grid cross points
             BitmapEx                                        maCrossMarker;
 
-            // the last used object to view transformtion and the last Viewport,
-            // used from getDecomposition for decide buffering
+            /** the last used object to view transformtion and the last Viewport,
+                used from getDecomposition for decide buffering
+             */
             basegfx::B2DHomMatrix                           maLastObjectToViewTransformation;
             basegfx::B2DRange                               maLastViewport;
 
         protected:
-            // create local decomposition
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            /// create local decomposition
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
+            /// constructor
             GridPrimitive2D(
                 const basegfx::B2DHomMatrix& rTransform,
                 double fWidth,
@@ -82,7 +92,7 @@ namespace drawinglayer
                 const basegfx::BColor& rBColor,
                 const BitmapEx& rCrossMarker);
 
-            // get data
+            /// data read access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
             double getWidth() const { return mfWidth; }
             double getHeight() const { return mfHeight; }
@@ -93,16 +103,16 @@ namespace drawinglayer
             const basegfx::BColor& getBColor() const { return maBColor; }
             const BitmapEx& getCrossMarker() const { return maCrossMarker; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // get 2d range
+            /// get 2d range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
 
-            // Overload standard getDecomposition call to be view-dependent here
+            /// Overload standard getDecomposition call to be view-dependent here
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
         };
     } // end of namespace primitive2d

@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: helplineprimitive2d.hxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.4 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:30:17 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -47,32 +39,52 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** HelplineStyle2D definition
+
+            The available styles of Helplines
+        */
         enum HelplineStyle2D
         {
             HELPLINESTYLE2D_POINT,
             HELPLINESTYLE2D_LINE
         };
 
-        class HelplinePrimitive2D : public BasePrimitive2D
+        /** HelplinePrimitive2D class
+
+            This primitive provides a view-dependent helpline definition. The Helpline
+            is defined by a line equation (Point and vector) and a style. When the style
+            is a line, dependent from Viewport the visible part of that Helpline is
+            constructed. For Point, a cross is constructed. This primitive is highly
+            view-dependent.
+
+            The visualisation uses the two given colors to create a dashed line with
+            the given dash length.
+         */
+        class HelplinePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
+            /// Helpline geometry definition
             basegfx::B2DPoint                               maPosition;
             basegfx::B2DVector                              maDirection;
             HelplineStyle2D                                 meStyle;
+
+            /// Helpline style definition
             basegfx::BColor                                 maRGBColA;
             basegfx::BColor                                 maRGBColB;
             double                                          mfDiscreteDashLength;
 
-            // the last used object to view transformtion and the last Viewport,
-            // used from getDecomposition for decide buffering
+            /** the last used object to view transformtion and the last Viewport,
+                used from getDecomposition for decide buffering
+             */
             basegfx::B2DHomMatrix                           maLastObjectToViewTransformation;
             basegfx::B2DRange                               maLastViewport;
 
         protected:
-            // create local decomposition
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            /// create local decomposition
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
+            /// constructor
             HelplinePrimitive2D(
                 const basegfx::B2DPoint& rPosition,
                 const basegfx::B2DVector& rDirection,
@@ -81,7 +93,7 @@ namespace drawinglayer
                 const basegfx::BColor& aRGBColB,
                 double fDiscreteDashLength);
 
-            // get data
+            /// data read access
             const basegfx::B2DPoint getPosition() const { return maPosition; }
             const basegfx::B2DVector getDirection() const { return maDirection; }
             HelplineStyle2D getStyle() const { return meStyle; }
@@ -89,13 +101,13 @@ namespace drawinglayer
             const basegfx::BColor& getRGBColB() const { return maRGBColB; }
             double getDiscreteDashLength() const { return mfDiscreteDashLength; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
 
-            // Overload standard getDecomposition call to be view-dependent here
+            /// Overload standard getDecomposition call to be view-dependent here
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
         };
     } // end of namespace primitive2d

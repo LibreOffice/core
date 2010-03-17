@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: objserv.cxx,v $
- * $Revision: 1.106 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,20 +51,20 @@
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <tools/urlobj.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 
 #include <comphelper/string.hxx>
 #include <basic/sbx.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <svtools/asynclink.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include <comphelper/documentconstants.hxx>
 
 #include <sfx2/app.hxx>
@@ -1262,21 +1259,13 @@ sal_uInt16 SfxObjectShell::ImplCheckSignaturesInformation( const uno::Sequence< 
     bool bCompleteSignature = true;
     if( nInfos )
     {
-        //These errors of certificates are allowed
-        sal_Int32 nNonErrors = security::CertificateValidity::VALID |
-                               security::CertificateValidity::UNKNOWN_REVOKATION;
-        //Build a  mask to filter out the allowed errors
-        sal_Int32 nMask = ~nNonErrors;
-
         nResult = SIGNATURESTATE_SIGNATURES_OK;
         for ( int n = 0; n < nInfos; n++ )
         {
             if ( bCertValid )
             {
                 sal_Int32 nCertStat = aInfos[n].CertificateStatus;
-                // "subtract" the allowed error flags from the result
-                sal_Int32 nErrors = ( nCertStat & nMask );
-                bCertValid = nErrors > 0 ? sal_False : sal_True;
+                bCertValid = nCertStat == security::CertificateValidity::VALID ? sal_True : sal_False;
             }
 
             if ( !aInfos[n].SignatureIsValid )
@@ -1512,3 +1501,19 @@ void SfxObjectShell::SignScriptingContent()
     ImplSign( TRUE );
 }
 
+// static
+const uno::Sequence<sal_Int8>& SfxObjectShell::getUnoTunnelId()
+{
+    static uno::Sequence<sal_Int8> * pSeq = 0;
+    if( !pSeq )
+    {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+        if( !pSeq )
+        {
+            static uno::Sequence< sal_Int8 > aSeq( 16 );
+            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
+            pSeq = &aSeq;
+        }
+    }
+    return *pSeq;
+}

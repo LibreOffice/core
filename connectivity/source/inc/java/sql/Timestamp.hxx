@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Timestamp.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,6 +51,7 @@ namespace connectivity
         java_sql_Date( const ::com::sun::star::util::Date& _rOut );
 
         operator ::com::sun::star::util::Date();
+        static jclass st_getMyClass();
     };
 
 
@@ -73,6 +71,7 @@ namespace connectivity
         java_sql_Time( JNIEnv * pEnv, jobject myObj ) : java_util_Date( pEnv, myObj ){}
         java_sql_Time( const ::com::sun::star::util::Time& _rOut );
         operator ::com::sun::star::util::Time();
+        static jclass st_getMyClass();
     };
 
     //**************************************************************
@@ -93,6 +92,7 @@ namespace connectivity
 
         sal_Int32 getNanos();
         void  setNanos(sal_Int32 n);
+        static jclass st_getMyClass();
     };
 }
 #endif // _CONNECTIVITY_JAVA_SQL_TIMESTAMP_HXX_

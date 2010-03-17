@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: app.cxx,v $
- * $Revision: 1.112 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,19 +42,19 @@
 #include <tools/config.hxx>
 #include <basic/basrdll.hxx>
 #include <svtools/asynclink.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
 #endif
-#include <svtools/eitem.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/eitem.hxx>
+#include <svl/urlbmk.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 
-#include <svtools/svdde.hxx>
+#include <svl/svdde.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <osl/file.hxx>
@@ -65,7 +62,7 @@
 #endif
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -136,29 +133,28 @@
 #define DDE_AVAILABLE
 #endif
 
-#include <svtools/saveopt.hxx>
-#include <svtools/undoopt.hxx>
+#include <unotools/saveopt.hxx>
+#include <unotools/undoopt.hxx>
 #include <svtools/helpopt.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/viewoptions.hxx>
-#include <svtools/moduleoptions.hxx>
-#include <svtools/historyoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/viewoptions.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <unotools/historyoptions.hxx>
 #include <svtools/menuoptions.hxx>
-#include <svtools/addxmltostorageoptions.hxx>
 #include <svtools/miscopt.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/startoptions.hxx>
-#include <svtools/securityoptions.hxx>
-#include <svtools/localisationoptions.hxx>
-#include <svtools/inetoptions.hxx>
-#include <svtools/fontoptions.hxx>
-#include <svtools/internaloptions.hxx>
-#include <svtools/workingsetoptions.hxx>
-#include <svtools/syslocaleoptions.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/useroptions.hxx>
+#include <unotools/startoptions.hxx>
+#include <unotools/securityoptions.hxx>
+#include <unotools/localisationoptions.hxx>
+#include <unotools/inetoptions.hxx>
+#include <unotools/fontoptions.hxx>
+#include <unotools/internaloptions.hxx>
+#include <unotools/workingsetoptions.hxx>
+#include <unotools/syslocaleoptions.hxx>
+#include <unotools/syslocale.hxx>
 #include <framework/addonsoptions.hxx>
 #include <svtools/ttprops.hxx>
-#include <svtools/extendedsecurityoptions.hxx>
+#include <unotools/extendedsecurityoptions.hxx>
 
 using namespace ::com::sun::star;
 
@@ -359,7 +355,7 @@ SfxApplication::SfxApplication()
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ initialize DDE" );
 
 #ifdef DDE_AVAILABLE
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     InitializeDde();
 #else
     if( !InitializeDde() )

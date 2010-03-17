@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlnumi.cxx,v $
- * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
-#include <vcl/vclenum.hxx>
+#include <tools/fontenum.hxx>
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -73,7 +70,7 @@
 #include <xmloff/xmlnumi.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 

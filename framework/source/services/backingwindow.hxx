@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: backingwindow.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +35,7 @@
 #include "vcl/bitmapex.hxx"
 #include "vcl/toolbox.hxx"
 
-#include "svtools/moduleoptions.hxx"
+#include "unotools/moduleoptions.hxx"
 #include "svtools/acceleratorexecute.hxx"
 
 #include "com/sun/star/frame/XDispatchProvider.hpp"
@@ -173,6 +170,7 @@ namespace framework
         virtual void        DataChanged( const DataChangedEvent& rDCEvt );
         virtual Window*     GetParentLabelFor( const Window* pLabel ) const;
         virtual Window*     GetParentLabeledBy( const Window* pLabeled ) const;
+    virtual void        GetFocus();
 
         void setOwningFrame( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame );
     };

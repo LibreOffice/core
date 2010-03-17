@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.19 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -54,24 +50,12 @@ SRC1FILES =  \
 
 LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
 LIB1OBJFILES= \
-        $(SLO)$/writingmodeitem.obj \
-        $(SLO)$/frmitems.obj \
-        $(SLO)$/paraitem.obj \
-        $(SLO)$/textitem.obj \
-        $(SLO)$/flditem.obj \
-        $(SLO)$/svxfont.obj \
-        $(SLO)$/paperinf.obj    \
         $(SLO)$/drawitem.obj	\
-        $(SLO)$/itemtype.obj	\
         $(SLO)$/chrtitem.obj	\
-        $(SLO)$/bulitem.obj \
         $(SLO)$/e3ditem.obj \
-        $(SLO)$/numitem.obj \
         $(SLO)$/grfitem.obj \
         $(SLO)$/clipfmtitem.obj \
-        $(SLO)$/xmlcnitm.obj \
-        $(SLO)$/customshapeitem.obj \
-        $(SLO)$/charhiddenitem.obj
+        $(SLO)$/customshapeitem.obj 
 
 LIB2TARGET= $(SLB)$/$(TARGET).lib
 LIB2OBJFILES= \
@@ -79,7 +63,7 @@ LIB2OBJFILES= \
         $(SLO)$/postattr.obj	\
         $(SLO)$/hlnkitem.obj \
         $(SLO)$/pageitem.obj	\
-                $(SLO)$/viewlayoutitem.obj    \
+        $(SLO)$/viewlayoutitem.obj    \
         $(SLO)$/algitem.obj \
         $(SLO)$/rotmodit.obj \
         $(SLO)$/numinf.obj	\
@@ -93,11 +77,6 @@ LIB2OBJFILES= \
 SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
 
 EXCEPTIONSFILES= \
-        $(SLO)$/paraitem.obj \
-        $(SLO)$/frmitems.obj \
-        $(SLO)$/numitem.obj\
-        $(SLO)$/xmlcnitm.obj\
-        $(SLO)$/flditem.obj \
         $(SLO)$/customshapeitem.obj
 
 .INCLUDE :	target.mk

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: elementexport.cxx,v $
- * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,14 +55,13 @@
 #include <com/sun/star/awt/ImagePosition.hpp>
 /** === end UNO includes === **/
 
-#include <vcl/wintypes.hxx>     // for check states
+#include <tools/wintypes.hxx>       // for check states
 #include <xmloff/txtprmap.hxx>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <tools/urlobj.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <vcl/wintypes.hxx>     // for check states
 #include <xmloff/XMLEventExport.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>

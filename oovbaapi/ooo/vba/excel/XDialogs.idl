@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XDialogs.idl,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +30,6 @@
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
 #endif
-#ifndef __ooo_vba_XCollection_idl__
-#include <ooo/vba/XCollection.idl>
-#endif
 
 #ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
@@ -44,15 +38,9 @@
 //=============================================================================
 
 module ooo {  module vba {  module excel {
-interface XApplication;
-//=============================================================================
 
-//interface XDialogs : ::ooo::vba::XCollection
-interface XDialogs
+interface XDialogs : com::sun::star::uno::XInterface
 {
-    interface ::ooo::vba::XHelperInterface;
-
-        [attribute, readonly] long Count;
 
     any Item( [in] any Index );
 };

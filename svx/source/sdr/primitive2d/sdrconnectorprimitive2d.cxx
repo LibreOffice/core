@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdrconnectorprimitive2d.cxx,v $
- *
- * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +43,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrConnectorPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DSequence SdrConnectorPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DSequence aRetval;
 
@@ -87,7 +83,7 @@ namespace drawinglayer
         SdrConnectorPrimitive2D::SdrConnectorPrimitive2D(
             const attribute::SdrLineShadowTextAttribute& rSdrLSTAttribute,
             const ::basegfx::B2DPolygon& rUnitPolygon)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maSdrLSTAttribute(rSdrLSTAttribute),
             maUnitPolygon(rUnitPolygon)
         {
@@ -95,7 +91,7 @@ namespace drawinglayer
 
         bool SdrConnectorPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrConnectorPrimitive2D& rCompare = (SdrConnectorPrimitive2D&)rPrimitive;
 

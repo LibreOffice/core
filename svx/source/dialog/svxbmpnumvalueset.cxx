@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svxbmpnumvalueset.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,21 +34,21 @@
 #include <tools/shl.hxx>
 #include <i18npool/mslangid.hxx>
 #include <svtools/valueset.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #ifndef _SVX_HELPID_HRC
 #include <helpid.hrc>
 #endif
-#include <svx/numitem.hxx>
-#include <svtools/eitem.hxx>
+#include <editeng/numitem.hxx>
+#include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
 #include <gallery.hxx>
-#include <svtools/urihelper.hxx>
-#include <svx/brshitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/urihelper.hxx>
+#include <editeng/brshitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/msgbox.hxx>
-#include <flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <dlgutil.hxx>
 #ifndef _XTABLE_HXX //autogen
 
@@ -60,9 +57,9 @@
 #include <drawitem.hxx>
 #include <numvset.hxx>
 #include <htmlmode.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/ctrltool.hxx>
-#include <unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -73,7 +70,7 @@
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 
 #include <algorithm>
-#include "opengrf.hxx"
+#include <sfx2/opengrf.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;

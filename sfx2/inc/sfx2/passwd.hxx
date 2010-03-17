@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: passwd.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,10 +65,9 @@ private:
     USHORT          mnMinLen;
     USHORT          mnExtras;
 
-//#if 0 // _SOLAR__PRIVATE
+    bool            mbAsciiOnly;
     DECL_DLLPRIVATE_LINK( EditModifyHdl, Edit* );
     DECL_DLLPRIVATE_LINK( OKHdl, OKButton* );
-//#endif
 
 public:
     SfxPasswordDialog( Window* pParent, const String* pGroupText = NULL );
@@ -84,6 +80,7 @@ public:
     void            SetMaxLen( USHORT Len );
     void            SetEditHelpId( ULONG nId ) { maPasswordED.SetHelpId( nId ); }
     void            ShowExtras( USHORT nExtras ) { mnExtras = nExtras; }
+    void            AllowAsciiOnly( bool i_bAsciiOnly = true ) { mbAsciiOnly = i_bAsciiOnly; }
 
     virtual short   Execute();
 };

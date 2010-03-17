@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdrtextprimitive2d.hxx,v $
- *
- * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +32,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <tools/color.hxx>
 #include <svx/sdr/attribute/sdrformtextattribute.hxx>
 #include <tools/weakbase.hxx>
@@ -52,7 +48,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrTextPrimitive2D : public BasePrimitive2D
+        class SdrTextPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             // The text model data; this sould later just be the OutlinerParaObject or
@@ -131,7 +127,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrContourTextPrimitive2D(
@@ -173,7 +169,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrPathTextPrimitive2D(
@@ -223,7 +219,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrBlockTextPrimitive2D(
@@ -277,7 +273,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrStretchTextPrimitive2D(

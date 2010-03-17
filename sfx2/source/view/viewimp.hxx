@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewimp.hxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +55,7 @@ typedef SfxShell* SfxShellPtr_Impl;
 SV_DECL_PTRARR( SfxShellArr_Impl, SfxShellPtr_Impl, 4, 4 )
 
 // struct SfxViewShell_Impl ----------------------------------------------
+#if 0
 class SfxAsyncPrintExec_Impl : public SfxListener
 {
     SfxViewShell*                   pView;
@@ -72,6 +70,7 @@ public:
 
     void                            AddRequest( SfxRequest& rReq );
 };
+#endif
 
 class SfxClipboardChangeListener;
 
@@ -98,7 +97,7 @@ struct SfxViewShell_Impl
     USHORT                      nFamily;
     SfxBaseController*          pController;
     ::svt::AcceleratorExecute*  pAccExec;
-    SfxAsyncPrintExec_Impl*     pPrinterCommandQueue;
+//  SfxAsyncPrintExec_Impl*     pPrinterCommandQueue;
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aPrintOpts;
     ::rtl::Reference< SfxClipboardChangeListener > xClipboardListener;
 

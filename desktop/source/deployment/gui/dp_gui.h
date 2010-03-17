@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dp_gui.h,v $
- * $Revision: 1.24.86.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,6 @@
 
 #include "dp_gui_updatedata.hxx"
 #include "dp_misc.h"
-#include "dp_gui_updatability.hxx"
 #include "dp_gui.hrc"
 #include "rtl/ref.hxx"
 #include "rtl/instance.hxx"

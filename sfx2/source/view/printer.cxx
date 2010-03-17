@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: printer.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/printdlg.hxx>
-#include <svtools/printwarningoptions.hxx>
+#include <unotools/printwarningoptions.hxx>
 #include <svtools/printoptions.hxx>
 #include <vector>
 
@@ -546,14 +543,17 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog( Window *pParent,
     // TabPage einh"angen
     pPage = pViewSh->CreatePrintOptionsPage( this, *pOptions );
     DBG_ASSERT( pPage, "CreatePrintOptions != SFX_VIEW_HAS_PRINTOPTIONS" );
-    pPage->Reset( *pOptions );
-    SetHelpId( pPage->GetHelpId() );
-    pPage->Show();
+    if( pPage )
+    {
+        pPage->Reset( *pOptions );
+        SetHelpId( pPage->GetHelpId() );
+        pPage->Show();
+    }
 
     // Dialoggr"o\se bestimmen
     Size a6Sz = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
     Size aBtnSz = LogicToPixel( Size( 50, 14 ), MAP_APPFONT );
-    Size aOutSz( pPage->GetSizePixel() );
+    Size aOutSz( pPage ? pPage->GetSizePixel() : Size() );
     aOutSz.Height() += 6;
     long nWidth = aBtnSz.Width();
     nWidth += a6Sz.Width();
@@ -589,6 +589,9 @@ SfxPrintOptionsDialog::~SfxPrintOptionsDialog()
 
 short SfxPrintOptionsDialog::Execute()
 {
+    if( ! pPage )
+        return RET_CANCEL;
+
     short nRet = ModalDialog::Execute();
     if ( nRet == RET_OK )
         pPage->FillItemSet( *pOptions );

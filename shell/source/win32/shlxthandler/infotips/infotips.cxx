@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: infotips.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +42,8 @@
 #include <stdio.h>
 #include <utility>
 #include <stdlib.h>
+
+
 #define MAX_STRING 80
 #define KB 1024.0
 const std::wstring WSPACE = std::wstring(SPACE);

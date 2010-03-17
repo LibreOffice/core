@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ftpcontentcaps.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +46,7 @@ using namespace ftp;
 uno::Sequence< beans::Property > FTPContent::getProperties(
     const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/)
 {
-    #define PROPS_COUNT 7
+    #define PROPS_COUNT 8
 
     static const beans::Property aPropsInfoTable[] =
     {
@@ -91,7 +88,7 @@ uno::Sequence< beans::Property > FTPContent::getProperties(
         beans::Property(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateCreated" ) ),
             -1,
-            getCppuType( static_cast< util::DateTime* >( 0 ) ),
+            getCppuType( static_cast< util::DateTime * >( 0 ) ),
             beans::PropertyAttribute::BOUND
             | beans::PropertyAttribute::READONLY
         ),
@@ -101,10 +98,19 @@ uno::Sequence< beans::Property > FTPContent::getProperties(
             getCppuBooleanType(),
             beans::PropertyAttribute::BOUND
             | beans::PropertyAttribute::READONLY
+        ),
+        beans::Property(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                "CreatableContentsInfo" ) ),
+            -1,
+            getCppuType(
+                static_cast< const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+            beans::PropertyAttribute::BOUND
+            | beans::PropertyAttribute::READONLY
         )
     };
 
-    return uno::Sequence< beans::Property >( aPropsInfoTable,PROPS_COUNT);
+    return uno::Sequence< beans::Property >( aPropsInfoTable, PROPS_COUNT );
 }
 
 //=========================================================================
@@ -112,7 +118,7 @@ uno::Sequence< beans::Property > FTPContent::getProperties(
 uno::Sequence< ucb::CommandInfo > FTPContent::getCommands(
     const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
-//  osl::MutexGuard aGuard( m_aMutex );
+// osl::MutexGuard aGuard( m_aMutex );
 
     //=================================================================
     //
@@ -120,7 +126,7 @@ uno::Sequence< ucb::CommandInfo > FTPContent::getCommands(
     //
     //=================================================================
 
-    #define COMMAND_COUNT 7
+    #define COMMAND_COUNT 8
 
     static const ucb::CommandInfo aCommandInfoTable[] =
     {
@@ -167,10 +173,15 @@ uno::Sequence< ucb::CommandInfo > FTPContent::getCommands(
         ucb::CommandInfo(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
             -1,
-            getCppuType( static_cast< sal_Bool * >( 0 ) )
+            getCppuBooleanType()
+        ),
+        ucb::CommandInfo(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "createNewContent" ) ),
+            -1,
+            getCppuType( static_cast< ucb::ContentInfo * >( 0 ) )
         )
     };
 
-    return uno::Sequence<ucb::CommandInfo>(aCommandInfoTable,COMMAND_COUNT);
+    return uno::Sequence< ucb::CommandInfo >( aCommandInfoTable, COMMAND_COUNT );
 }
 

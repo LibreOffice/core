@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: prnmon.cxx,v $
- * $Revision: 1.25.46.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,8 +36,8 @@
 #include <vcl/msgbox.hxx>
 #include <svtools/asynclink.hxx>
 
-#include <svtools/printwarningoptions.hxx>
-#include <svtools/eitem.hxx>
+#include <unotools/printwarningoptions.hxx>
+#include <svl/eitem.hxx>
 
 #ifndef GCC
 #endif
@@ -274,10 +271,12 @@ SfxPrintProgress::SfxPrintProgress( SfxViewShell* pViewSh, FASTBOOL bShow )
                  String(SfxResId(STR_PRINTING)), 1, FALSE ),
     pImp( new SfxPrintProgress_Impl( pViewSh, pViewSh->GetPrinter() ) )
 {
+    #if 0
     pImp->pPrinter->SetEndPrintHdl( LINK( this, SfxPrintProgress, EndPrintNotify ) );
     pImp->pPrinter->SetErrorHdl( LINK( this, SfxPrintProgress, PrintErrorNotify ) );
     pImp->pPrinter->SetStartPrintHdl( LINK( this, SfxPrintProgress, StartPrintNotify ) );
     pImp->bCallbacks = TRUE;
+    #endif
 
     SfxObjectShell* pDoc = pViewSh->GetObjectShell();
     SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_HIDDEN, FALSE );
@@ -307,7 +306,7 @@ SfxPrintProgress::~SfxPrintProgress()
     // ggf. Callbacks entfermen
     if ( pImp->bCallbacks )
     {
-        pImp->pPrinter->SetEndPrintHdl( Link() );
+        // pImp->pPrinter->SetEndPrintHdl( Link() );
         pImp->pPrinter->SetErrorHdl( Link() );
         pImp->bCallbacks = FALSE;
     }
@@ -410,7 +409,7 @@ IMPL_LINK( SfxPrintProgress, EndPrintNotify, void *, EMPTYARG )
     //! if( pMDI->IsPrinterChanged() ) pMDI->Changed( 0L );
 
     // Callbacks rausnehmen
-    pImp->pPrinter->SetEndPrintHdl( Link() );
+    // pImp->pPrinter->SetEndPrintHdl( Link() );
     pImp->pPrinter->SetErrorHdl( Link() );
     pImp->bCallbacks = FALSE;
 

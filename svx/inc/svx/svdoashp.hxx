@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdoashp.hxx,v $
- * $Revision: 1.6.90.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -178,6 +175,8 @@ public:
 
     virtual UINT16 GetObjIdentifier() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
+
+    virtual void SetModel(SdrModel* pNewModel);
 
     virtual void RecalcSnapRect();
 

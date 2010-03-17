@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: appdata.cxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,17 +30,17 @@
 #include <tools/cachestr.hxx>
 #include <tools/config.hxx>
 #ifndef _INETSTRM_HXX //autogen
-#include <svtools/inetstrm.hxx>
+#include <svl/inetstrm.hxx>
 #endif
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 #define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <vos/mutex.hxx>
 
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/dateitem.hxx>
+#include <svl/dateitem.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/wrkwin.hxx>
 #include "comphelper/processfactory.hxx"
@@ -109,7 +106,6 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
         pEventConfig(0),
         pDisabledSlotList( 0 ),
         pSecureURLs(0),
-        pMiscConfig(0),
         pSaveOptions( 0 ),
         pUndoOptions( 0 ),
         pHelpOptions( 0 ),

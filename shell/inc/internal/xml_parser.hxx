@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xml_parser.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +28,7 @@
 #ifndef _XML_PARSER_HXX_
 #define _XML_PARSER_HXX_
 
-#ifdef SYSTEM_EXPAT
 #include <expat.h>
-#else
-#include <external/expat/xmlparse.h>
-#endif
 #include <stdexcept>
 
 //-----------------------------------------------------
@@ -74,9 +67,6 @@ class xml_parser
 public:
     //########################################################
     xml_parser(const XML_Char* EncodingName = 0);
-
-    //########################################################
-    xml_parser(const XML_Char* EncodingName, XML_Char NamespaceSeparator);
 
     //########################################################
     ~xml_parser();
@@ -126,10 +116,6 @@ public:
     /** Returns the currently used document handler or null if
         no document handler was set before. */
     i_xml_parser_event_handler* get_document_handler() const;
-
-    //############################################
-    void set_encoding(const XML_Char* Encoding);
-
 private:
 
     void init();

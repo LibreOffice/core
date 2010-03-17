@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: inettbc.cxx,v $
- * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,11 +37,11 @@
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #endif
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/cancel.hxx>
-#include <svtools/historyoptions.hxx>
-#include <svtools/folderrestriction.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/cancel.hxx>
+#include <unotools/historyoptions.hxx>
+#include <svl/folderrestriction.hxx>
 #include <vcl/toolbox.hxx>
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
@@ -57,9 +54,9 @@
 #endif
 #include <rtl/ustring.hxx>
 
-#include <svtools/itemset.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/pathoptions.hxx>
+#include <svl/itemset.hxx>
+#include <svl/urihelper.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/asynclink.hxx>
 #include <svtools/inettbc.hxx>
 

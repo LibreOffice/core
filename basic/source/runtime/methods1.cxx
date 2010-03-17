@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: methods1.cxx,v $
- * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +41,7 @@
 #ifndef _SBX_HXX
 #include <basic/sbx.hxx>
 #endif
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <tools/fsys.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>

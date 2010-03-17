@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: chinese_translationdialog.src,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,13 +65,13 @@ ModalDialog DLG_CHINESETRANSLATION
     Moveable = TRUE ;
     SVLook = TRUE;
 
-    Text [ en-US ] = "Chinese Translation";
+    Text [ en-US ] = "Chinese Conversion";
 
     FixedLine FL_DIRECTION
     {
         Pos = MAP_APPFONT ( COL_1 , ROW_1 ) ;
         Size = MAP_APPFONT ( FULL_WIDTH - COL_1 - RSC_SP_DLG_INNERBORDER_RIGHT, RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ en-US ] = "Translation direction";
+        Text [ en-US ] = "Conversion direction";
     };
 
     DIRECTION_RADIOBUTTONS( COL_2, ROW_2, (FULL_WIDTH - COL_2 - RSC_SP_DLG_INNERBORDER_RIGHT) )

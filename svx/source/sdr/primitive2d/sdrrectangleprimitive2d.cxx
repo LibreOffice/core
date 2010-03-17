@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdrrectangleprimitive2d.cxx,v $
- *
- * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +43,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrRectanglePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DSequence SdrRectanglePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DSequence aRetval;
             Primitive2DSequence aHitTestContent;
@@ -68,7 +64,7 @@ namespace drawinglayer
                         *getSdrLFSTAttribute().getFill(),
                         getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
-            else if(getTextFrame())
+            else if(getForceFillForHitTest())
             {
                 // if no fill and it's a text frame, create a fill for HitTest and
                 // BoundRect fallback
@@ -89,7 +85,7 @@ namespace drawinglayer
                         getTransform(),
                         *getSdrLFSTAttribute().getLine()));
             }
-            else if(!getTextFrame())
+            else if(!getForceFillForHitTest())
             {
                 // if initially no line is defined and it's not a text frame, create
                 // a line for HitTest and BoundRect
@@ -127,19 +123,19 @@ namespace drawinglayer
             const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
             double fCornerRadiusX,
             double fCornerRadiusY,
-            bool bTextFrame)
-        :   BasePrimitive2D(),
+            bool bForceFillForHitTest)
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
             mfCornerRadiusX(fCornerRadiusX),
             mfCornerRadiusY(fCornerRadiusY),
-            mbTextFrame(bTextFrame)
+            mbForceFillForHitTest(bForceFillForHitTest)
         {
         }
 
         bool SdrRectanglePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrRectanglePrimitive2D& rCompare = (SdrRectanglePrimitive2D&)rPrimitive;
 
@@ -147,7 +143,7 @@ namespace drawinglayer
                     && getCornerRadiusY() == rCompare.getCornerRadiusY()
                     && getTransform() == rCompare.getTransform()
                     && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute()
-                    && getTextFrame() == rCompare.getTextFrame());
+                    && getForceFillForHitTest() == rCompare.getForceFillForHitTest());
             }
 
             return false;

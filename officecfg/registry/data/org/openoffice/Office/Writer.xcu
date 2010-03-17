@@ -3,12 +3,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Writer.xcu,v $
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -701,33 +698,6 @@
     </prop>
     <node oor:name="Topics"/>
   </node>
- </node>
- <node oor:name="Cursor" >
-  <node oor:name="DirectCursor" >
-    <prop oor:name="UseDirectCursor" install:module="directcursor">
-     <value>true</value>
-    </prop>
-    <prop oor:name="Insert" install:module="directcursor">
-      <value>3</value>
-    </prop>
-  </node>
- </node>
- <node oor:name="DefaultFont" install:module="defaultfontarial">
-     <prop oor:name="Standard">
-       <value >Arial</value>
-     </prop>
-     <prop oor:name="Heading">
-       <value >Arial</value>
-     </prop>
-     <prop oor:name="List">
-       <value >Arial</value>
-     </prop>
-     <prop oor:name="Caption">
-       <value >Arial</value>
-     </prop>
-     <prop oor:name="Index">
-       <value >Arial</value>
-     </prop>
  </node>
  <node oor:name="Layout" >
   <node oor:name="Other" >

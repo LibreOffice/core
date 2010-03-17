@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: HsqlDatabase.java,v $
- * $Revision: 1.4.50.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +27,7 @@
 package connectivity.tools;
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.ElementExistException;
 import com.sun.star.frame.XStorable;
@@ -71,7 +69,8 @@ public class HsqlDatabase extends AbstractDatabase
     private void createDBDocument() throws Exception
     {
         final File documentFile = File.createTempFile("testdb", ".odb");
-        documentFile.deleteOnExit();
+        if ( documentFile.exists() )
+            documentFile.delete();
         m_databaseDocumentFile = URLHelper.getFileURLFromSystemPath(documentFile);
 
         m_databaseDocument = (XOfficeDatabaseDocument) UnoRuntime.queryInterface(
@@ -82,9 +81,9 @@ public class HsqlDatabase extends AbstractDatabase
         dsProperties.setPropertyValue("URL", "sdbc:embedded:hsqldb");
 
         final XStorable storable = (XStorable) UnoRuntime.queryInterface(XStorable.class, m_databaseDocument);
-        storable.storeAsURL(m_databaseDocumentFile, new PropertyValue[]
-                {
-                });
+        storable.storeAsURL( m_databaseDocumentFile, new PropertyValue[]
+            {   new PropertyValue( "PickListEntry", 0, false, PropertyState.DIRECT_VALUE )
+            } );
     }
 
     /** drops the table with a given name
@@ -207,10 +206,8 @@ public class HsqlDatabase extends AbstractDatabase
     public void createTableInSDBCX(final HsqlTableDescriptor _tableDesc) throws SQLException, ElementExistException
     {
         final XPropertySet sdbcxDescriptor = _tableDesc.createSdbcxDescriptor(defaultConnection());
-        final XTablesSupplier suppTables = (XTablesSupplier) UnoRuntime.queryInterface(
-                XTablesSupplier.class, defaultConnection());
-        final XAppend appendTable = (XAppend) UnoRuntime.queryInterface(
-                XAppend.class, suppTables.getTables());
+        final XTablesSupplier suppTables = UnoRuntime.queryInterface( XTablesSupplier.class, defaultConnection().getXConnection() );
+        final XAppend appendTable = UnoRuntime.queryInterface( XAppend.class, suppTables.getTables() );
         appendTable.appendByDescriptor(sdbcxDescriptor);
     }
 }

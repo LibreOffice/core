@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: appcfg.cxx,v $
- * $Revision: 1.74 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,40 +43,39 @@
 #include <vcl/sound.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/string.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/slstitm.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/szitem.hxx>
-#include <svtools/undo.hxx>
+#include <svl/itempool.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/szitem.hxx>
+#include <svl/undo.hxx>
 
 #define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svtools/ttprops.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sot/exchange.hxx>
 
 //#include <svtools/agprop.hxx>
 //#include <sj2/sjapplet.hxx>
-#include <svtools/isethint.hxx>
+#include <svl/isethint.hxx>
 
 #include <unotools/configmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/wldcrd.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include <svtools/helpopt.hxx>
-#include <svtools/undoopt.hxx>
-#include <svtools/securityoptions.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/inetoptions.hxx>
+#include <unotools/undoopt.hxx>
+#include <unotools/securityoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/inetoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <vcl/toolbox.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <svtools/misccfg.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
@@ -1075,10 +1071,3 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSync
 
 IMPL_OBJHINT( SfxStringHint, String )
 
-SfxMiscCfg* SfxApplication::GetMiscConfig()
-{
-    if ( !pAppData_Impl->pMiscConfig )
-        pAppData_Impl->pMiscConfig = new SfxMiscCfg;
-
-    return pAppData_Impl->pMiscConfig;
-}

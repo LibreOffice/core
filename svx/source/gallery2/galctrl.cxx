@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: galctrl.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,10 +35,14 @@
 #include "helpid.hrc"
 #include "galbrws2.hxx"
 #include "galtheme.hxx"
-#include "galmisc.hxx"
+#include "svx/galmisc.hxx"
 #include "galctrl.hxx"
-#include "AccessibleStringWrap.hxx"
-#include <svx/svxfont.hxx>
+#include "editeng/AccessibleStringWrap.hxx"
+#include <editeng/svxfont.hxx>
+#include "galobj.hxx"
+#include <avmedia/mediawindow.hxx>
+#include "gallery.hrc"
+#include <svtools/filter.hxx>
 
 // -----------
 // - Defines -
@@ -80,6 +81,28 @@ GalleryPreview::GalleryPreview( Window* pParent, const ResId & rResId  ) :
 
 GalleryPreview::~GalleryPreview()
 {
+}
+
+
+bool GalleryPreview::SetGraphic( const INetURLObject& _aURL )
+{
+    bool bRet = true;
+    Graphic aGraphic;
+    if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ) )
+    {
+        aGraphic = BitmapEx( GAL_RESID( RID_SVXBMP_GALLERY_MEDIA ) );
+    }
+    else
+    {
+        GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
+        GalleryProgress aProgress( pFilter );
+        if( pFilter->ImportGraphic( aGraphic, _aURL, GRFILTER_FORMAT_DONTKNOW ) )
+            bRet = false;
+    }
+
+    SetGraphic( aGraphic );
+    Invalidate();
+    return bRet;
 }
 
 // ------------------------------------------------------------------------

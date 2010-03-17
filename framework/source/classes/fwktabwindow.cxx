@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: backingwindow.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +62,6 @@ namespace framework
 {
 
 // class FwkTabControl ---------------------------------------------------
-
 FwkTabControl::FwkTabControl( Window* pParent, const ResId& rResId ) :
 
     TabControl( pParent, rResId )
@@ -334,6 +330,11 @@ IMPL_LINK( FwkTabWindow, CloseHdl, PushButton *, EMPTYARG )
 void FwkTabWindow::AddEventListener( const Link& rEventListener )
 {
     m_aTabCtrl.AddEventListener( rEventListener );
+}
+
+void FwkTabWindow::RemoveEventListener( const Link& rEventListener )
+{
+    m_aTabCtrl.RemoveEventListener( rEventListener );
 }
 
 // -----------------------------------------------------------------------

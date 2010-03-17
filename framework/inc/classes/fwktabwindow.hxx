@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: backingwindow.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -125,6 +122,7 @@ public:
     ~FwkTabWindow();
 
     void            AddEventListener( const Link& rEventListener );
+    void            RemoveEventListener( const Link& rEventListener );
     FwkTabPage*     AddTabPage( sal_Int32 nIndex, const css::uno::Sequence< css::beans::NamedValue >& rProperties );
     void            ActivatePage( sal_Int32 nIndex );
     void            RemovePage( sal_Int32 nIndex );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: autorecovery.hxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -239,7 +236,8 @@ class AutoRecovery  : public  css::lang::XTypeProvider
             E_SESSION_SAVE              =  64,
             E_SESSION_RESTORE           = 128,
             E_DISABLE_AUTORECOVERY      = 256,
-            E_SET_AUTOSAVE_STATE        = 512
+            E_SET_AUTOSAVE_STATE        = 512,
+            E_SESSION_QUIET_QUIT        = 1024
         };
 
         //---------------------------------------
@@ -881,6 +879,10 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         //---------------------------------------
         // TODO document me
         void implts_doSessionSave(const DispatchParams& aParams);
+
+        //---------------------------------------
+        // TODO document me
+        void implts_doSessionQuietQuit(const DispatchParams& aParams);
 
         //---------------------------------------
         // TODO document me

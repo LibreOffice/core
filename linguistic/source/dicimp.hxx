@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dicimp.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +39,7 @@
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
 
+#include "defs.hxx"
 #include "misc.hxx"
 
 
@@ -49,7 +47,7 @@
 
 #define DIC_MAX_ENTRIES     30000
 
-INT16           ReadDicVersion( SvStream *pStream, USHORT &nLng, BOOL &bNeg );
+INT16           ReadDicVersion( SvStreamPtr &rpStream, USHORT &nLng, BOOL &bNeg );
 const String    GetDicExtension();
 
 ///////////////////////////////////////////////////////////////////////////

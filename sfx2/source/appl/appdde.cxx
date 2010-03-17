@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: appdde.cxx,v $
- * $Revision: 1.19.142.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,17 +28,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 #include <vcl/wrkwin.hxx>
-#include <svtools/rectitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/rectitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <basic/sbstar.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/svdde.hxx>
+#include <svl/stritem.hxx>
+#include <svl/svdde.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/linkmgr.hxx>
 
 #include <tools/urlobj.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #ifndef GCC
 #endif
 

@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.65 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -54,26 +50,22 @@ SRC1FILES =  \
         dlgctrl.src \
         docrecovery.src \
         fontwork.src \
-        frmdirlbox.src \
         frmsel.src \
         hdft.src \
-        hyperdlg.src \
-        hyphen.src \
         hyprlink.src \
         imapdlg.src \
-        impgrf.src \
         langbox.src \
         language.src \
-        lingu.src \
         passwd.src \
         prtqry.src \
         rubydialog.src\
         ruler.src \
         srchdlg.src \
+        svxbmpnumvalueset.src \
         swframeposstrings.src \
-        thesdlg.src \
         txenctab.src \
-        ucsubset.src
+        ucsubset.src \
+        optgrid.src     
 
 SRS2NAME=drawdlgs
 SRC2FILES =  \
@@ -85,16 +77,10 @@ LIB1OBJFILES= \
         $(SLO)$/dialmgr.obj\
         $(SLO)$/dlgutil.obj \
         $(SLO)$/framelink.obj\
-        $(SLO)$/hangulhanja.obj \
-        $(SLO)$/hyphen.obj \
-        $(SLO)$/impgrf.obj \
         $(SLO)$/langbox.obj \
-        $(SLO)$/opengrf.obj \
         $(SLO)$/simptabl.obj \
-        $(SLO)$/splwrap.obj \
         $(SLO)$/svxdlg.obj \
         $(SLO)$/stddlg.obj \
-        $(SLO)$/thesdlg.obj
 
 LIB2TARGET=$(SLB)$/$(TARGET).lib
 
@@ -129,7 +115,6 @@ LIB2OBJFILES= \
         $(SLO)$/passwd.obj \
         $(SLO)$/pfiledlg.obj \
         $(SLO)$/prtqry.obj \
-        $(SLO)$/radiobtnbox.obj \
         $(SLO)$/relfld.obj \
         $(SLO)$/rlrcitem.obj \
         $(SLO)$/rubydialog.obj \
@@ -139,7 +124,6 @@ LIB2OBJFILES= \
         $(SLO)$/srchdlg.obj \
         $(SLO)$/strarray.obj \
         $(SLO)$/svxbmpnumvalueset.obj\
-        $(SLO)$/svxbox.obj \
         $(SLO)$/svxgrahicitem.obj \
         $(SLO)$/svxruler.obj \
         $(SLO)$/swframeexample.obj \
@@ -148,7 +132,9 @@ LIB2OBJFILES= \
         $(SLO)$/txenctab.obj \
         $(SLO)$/wrapfield.obj \
         $(SLO)$/_bmpmask.obj \
-        $(SLO)$/_contdlg.obj
+        $(SLO)$/_contdlg.obj \
+        $(SLO)$/optgrid.obj
+        
 
 .IF "$(GUI)"=="UNX"
 LIB2OBJFILES +=    $(SLO)$/sendreportunx.obj
@@ -166,12 +152,3 @@ SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
 
 .INCLUDE :  target.mk
 
-$(INCCOM)$/cuilib.hxx: makefile.mk
-.IF "$(GUI)"=="UNX"
-    $(RM) $@
-    echo \#define DLL_NAME \"libcui$(DLLPOSTFIX)$(DLLPOST)\" >$@
-.ELSE
-    echo $(EMQ)#define DLL_NAME $(EMQ)"cui$(DLLPOSTFIX)$(DLLPOST)$(EMQ)" >$@
-.ENDIF
-
-$(SLO)$/svxdlg.obj : $(INCCOM)$/cuilib.hxx

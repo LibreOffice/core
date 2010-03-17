@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Timestamp.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,6 +68,10 @@ java_sql_Date::~java_sql_Date()
 
 jclass java_sql_Date::getMyClass() const
 {
+    return st_getMyClass();
+}
+jclass java_sql_Date::st_getMyClass()
+{
     // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass )
         theClass = findMyClass("java/sql/Date");
@@ -94,12 +95,15 @@ java_sql_Time::~java_sql_Time()
 
 jclass java_sql_Time::getMyClass() const
 {
+    return st_getMyClass();
+}
+jclass java_sql_Time::st_getMyClass()
+{
     // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass )
         theClass = findMyClass("java/sql/Time");
     return theClass;
 }
-
 java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_util_Date( NULL, (jobject)NULL )
 {
     SDBThreadAttach t;
@@ -140,12 +144,15 @@ java_sql_Timestamp::~java_sql_Timestamp()
 
 jclass java_sql_Timestamp::getMyClass() const
 {
+    return st_getMyClass();
+}
+jclass java_sql_Timestamp::st_getMyClass()
+{
     // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass )
         theClass = findMyClass("java/sql/Timestamp");
     return theClass;
 }
-
 java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _rOut)
                    :java_util_Date( NULL, (jobject)NULL )
 {

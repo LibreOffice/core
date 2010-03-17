@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: edittest.cxx,v $
- * $Revision: 1.20.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,13 +28,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include <svx/editeng.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/editview.hxx>
-#include <svx/editobj.hxx>
-#include <editstat.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
 #include <eerdll.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/svxacorr.hxx>
 #include <tools/fsys.hxx>
@@ -69,30 +66,30 @@
 #include <sfx2/sfxuno.hxx>
 
 // SVX
-#include <svx/lrspitem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/akrnitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <fontitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/akrnitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <fwdtitem.hxx>
 
 // SVTOOLS
-#include <svtools/undo.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/undo.hxx>
+#include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
+#include <svl/poolitem.hxx>
 #include <svtools/printdlg.hxx>
 
 #include <osl/file.hxx>

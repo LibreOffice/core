@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XWorkbooks.idl,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,9 +42,8 @@ module ooo {  module vba {  module excel {
 
 //=============================================================================
 
-interface XWorkbooks
+interface XWorkbooks : com::sun::star::uno::XInterface
 {
-    interface ::ooo::vba::XCollection;
     any Add();
     any Open([in] string Filename, [in] any UpdateLinks, [in] any ReadOnly, [in] any Format, [in] any Password, [in] any WriteResPassword, [in] any IgnoreReadOnlyRecommended, [in] any Origin, [in] any Delimiter, [in] any Editable, [in] any Notify, [in] any Converter, [in] any AddToMru);
 

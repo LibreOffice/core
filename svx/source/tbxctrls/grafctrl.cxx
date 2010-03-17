@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: grafctrl.cxx,v $
- * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,9 +38,9 @@
 #endif
 #include <vcl/fixed.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/whiter.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
@@ -56,8 +53,8 @@
 #include <svx/svxids.hrc>
 #include "grafctrl.hrc"
 #include <svx/dialogs.hrc>
-#include <svx/brshitem.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/sdgcpitm.hxx>
 //CHINA001 #include "../dialog/grfpage.hxx"
 #include <svx/itemwin.hxx>

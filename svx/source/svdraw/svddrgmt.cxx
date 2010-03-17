@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svddrgmt.cxx,v $
- * $Revision: 1.21.6.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,6 +81,7 @@
 #include <svx/svdovirt.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -206,6 +204,32 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntrySdrObject::createPrim
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+SdrDragEntryPrimitive2DSequence::SdrDragEntryPrimitive2DSequence(
+    const drawinglayer::primitive2d::Primitive2DSequence& rSequence,
+    bool bAddToTransparent)
+:   SdrDragEntry(),
+    maPrimitive2DSequence(rSequence)
+{
+    // add parts to transparent overlay stuff eventually
+    setAddToTransparent(bAddToTransparent);
+}
+
+SdrDragEntryPrimitive2DSequence::~SdrDragEntryPrimitive2DSequence()
+{
+}
+
+drawinglayer::primitive2d::Primitive2DSequence SdrDragEntryPrimitive2DSequence::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod)
+{
+    drawinglayer::primitive2d::Primitive2DReference aTransformPrimitive2D(
+        new drawinglayer::primitive2d::TransformPrimitive2D(
+            rDragMethod.getCurrentTransformation(),
+            maPrimitive2DSequence));
+
+    return drawinglayer::primitive2d::Primitive2DSequence(&aTransformPrimitive2D, 1);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 SdrDragEntryPointGlueDrag::SdrDragEntryPointGlueDrag(const std::vector< basegfx::B2DPoint >& rPositions, bool bIsPointDrag)
 :   maPositions(rPositions),
     mbIsPointDrag(bIsPointDrag)
@@ -318,6 +342,13 @@ void SdrDragMethod::createSdrDragEntries()
     }
 }
 
+void SdrDragMethod::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify)
+{
+    // add full obejct drag; Clone() at the object has to work
+    // for this
+    addSdrDragEntry(new SdrDragEntrySdrObject(rOriginal, rObjectContact, bModify));
+}
+
 void SdrDragMethod::createSdrDragEntries_SolidDrag()
 {
     const sal_uInt32 nMarkAnz(getSdrDragView().GetMarkedObjectCount());
@@ -359,7 +390,7 @@ void SdrDragMethod::createSdrDragEntries_SolidDrag()
                                 {
                                     // add full obejct drag; Clone() at the object has to work
                                     // for this
-                                    addSdrDragEntry(new SdrDragEntrySdrObject(*pCandidate, rOC, true));
+                                    createSdrDragEntryForSdrObject(*pCandidate, rOC, true);
                                 }
 
                                 if(bAddWireframe)
@@ -575,9 +606,8 @@ void SdrDragMethod::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
         const double fScaleY(fabs(aScale.getY()) / (basegfx::fTools::equalZero(aPolyRange.getHeight()) ? 1.0 : aPolyRange.getHeight()));
 
         // prepare transform matrix for polygon
-        basegfx::B2DHomMatrix aPolyTransform;
-
-        aPolyTransform.translate(-aPolyRange.getMinX(), -aPolyRange.getMinY());
+        basegfx::B2DHomMatrix aPolyTransform(basegfx::tools::createTranslateB2DHomMatrix(
+            -aPolyRange.getMinX(), -aPolyRange.getMinY()));
         aPolyTransform.scale(fScaleX, fScaleY);
 
         // normally the poly should be moved back, but the translation is in the object
@@ -1358,6 +1388,21 @@ Pointer SdrDragObjOwn::GetSdrDragPointer() const
 
 TYPEINIT1(SdrDragMove,SdrDragMethod);
 
+void SdrDragMove::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool /*bModify*/)
+{
+    // for SdrDragMove, use current Primitive2DSequence of SdrObject visualisation
+    // in given ObjectContact directly
+    sdr::contact::ViewContact& rVC = rOriginal.GetViewContact();
+    sdr::contact::ViewObjectContact& rVOC = rVC.GetViewObjectContact(rObjectContact);
+    sdr::contact::DisplayInfo aDisplayInfo;
+
+    // Do not use the last ViewPort set at the OC from the last ProcessDisplay(),
+    // here we want the complete primitive sequence without visibility clippings
+    rObjectContact.resetViewPort();
+
+    addSdrDragEntry(new SdrDragEntryPrimitive2DSequence(rVOC.getPrimitive2DSequenceHierarchy(aDisplayInfo), true));
+}
+
 void SdrDragMove::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 {
     rTarget.Move(Size(DragStat().GetDX(), DragStat().GetDY()));
@@ -1401,11 +1446,7 @@ bool SdrDragMove::BeginSdrDrag()
 
 basegfx::B2DHomMatrix SdrDragMove::getCurrentTransformation()
 {
-    basegfx::B2DHomMatrix aRetval;
-
-    aRetval.translate(DragStat().GetDX(), DragStat().GetDY());
-
-    return aRetval;
+    return basegfx::tools::createTranslateB2DHomMatrix(DragStat().GetDX(), DragStat().GetDY());
 }
 
 void SdrDragMove::ImpCheckSnap(const Point& rPt)
@@ -1730,9 +1771,8 @@ bool SdrDragResize::BeginSdrDrag()
 
 basegfx::B2DHomMatrix SdrDragResize::getCurrentTransformation()
 {
-    basegfx::B2DHomMatrix aRetval;
-
-    aRetval.translate(-DragStat().Ref1().X(), -DragStat().Ref1().Y());
+    basegfx::B2DHomMatrix aRetval(basegfx::tools::createTranslateB2DHomMatrix(
+        -DragStat().Ref1().X(), -DragStat().Ref1().Y()));
     aRetval.scale(aXFact, aYFact);
     aRetval.translate(DragStat().Ref1().X(), DragStat().Ref1().Y());
 
@@ -2016,13 +2056,9 @@ bool SdrDragRotate::BeginSdrDrag()
 
 basegfx::B2DHomMatrix SdrDragRotate::getCurrentTransformation()
 {
-    basegfx::B2DHomMatrix aRetval;
-
-    aRetval.translate(-DragStat().GetRef1().X(), -DragStat().GetRef1().Y());
-    aRetval.rotate(-atan2(nSin, nCos));
-    aRetval.translate(DragStat().GetRef1().X(), DragStat().GetRef1().Y());
-
-    return aRetval;
+    return basegfx::tools::createRotateAroundPoint(
+        DragStat().GetRef1().X(), DragStat().GetRef1().Y(),
+        -atan2(nSin, nCos));
 }
 
 void SdrDragRotate::MoveSdrDrag(const Point& rPnt_)
@@ -2172,9 +2208,8 @@ bool SdrDragShear::BeginSdrDrag()
 
 basegfx::B2DHomMatrix SdrDragShear::getCurrentTransformation()
 {
-    basegfx::B2DHomMatrix aRetval;
-
-    aRetval.translate(-DragStat().GetRef1().X(), -DragStat().GetRef1().Y());
+    basegfx::B2DHomMatrix aRetval(basegfx::tools::createTranslateB2DHomMatrix(
+        -DragStat().GetRef1().X(), -DragStat().GetRef1().Y()));
 
     if (bResize)
     {
@@ -2472,7 +2507,7 @@ basegfx::B2DHomMatrix SdrDragMirror::getCurrentTransformation()
         const double fDeltaY(DragStat().GetRef2().Y() - DragStat().GetRef1().Y());
         const double fRotation(atan2(fDeltaY, fDeltaX));
 
-        aRetval.translate(-DragStat().GetRef1().X(), -DragStat().GetRef1().Y());
+        aRetval = basegfx::tools::createTranslateB2DHomMatrix(-DragStat().GetRef1().X(), -DragStat().GetRef1().Y());
         aRetval.rotate(-fRotation);
         aRetval.scale(1.0, -1.0);
         aRetval.rotate(fRotation);

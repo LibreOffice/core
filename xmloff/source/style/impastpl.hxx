@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: impastpl.hxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 #include <sal/types.h>
 #include <tools/list.hxx>
-#include <svtools/cntnrsrt.hxx>
+#include <svl/cntnrsrt.hxx>
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <com/sun/star/uno/Reference.h>

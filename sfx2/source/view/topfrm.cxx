@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: topfrm.cxx,v $
- * $Revision: 1.97 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,15 +57,15 @@
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <vcl/menu.hxx>
-#include <svtools/rectitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/rectitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/asynclink.hxx>
 #include <svtools/sfxecode.hxx>
 #include <vcl/dialog.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <svl/urihelper.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/bootstrap.hxx>
 
@@ -370,7 +367,7 @@ void SfxTopViewWin_Impl::StateChanged( StateChangedType nStateChange )
     if ( nStateChange == STATE_CHANGE_INITSHOW )
     {
         SfxObjectShell* pDoc = pFrame->GetObjectShell();
-        if ( pDoc && !pFrame->IsVisible_Impl() )
+        if ( pDoc && !pFrame->IsVisible() )
             pFrame->Show();
 
         pFrame->Resize();
@@ -535,7 +532,7 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHi
         aTitle += String(aProductName);
         aTitle += ' ';
         aTitle += String( GetModuleName_Impl( aDocServiceName ) );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ::rtl::OUString aDefault;
         aTitle += DEFINE_CONST_UNICODE(" [");
         String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
@@ -1098,7 +1095,7 @@ String SfxTopViewFrame::UpdateTitle()
     aTitle += ' ';
     ::rtl::OUString aDocServiceName( GetObjectShell()->GetFactory().GetDocumentServiceName() );
     aTitle += String( GetModuleName_Impl( aDocServiceName ) );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ::rtl::OUString aDefault;
     aTitle += DEFINE_CONST_UNICODE(" [");
     String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));

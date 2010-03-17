@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sbstar.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,6 +71,11 @@ class StarBASIC : public SbxObject
     BOOL            bDocBasic;
     BasicLibInfo*   pLibInfo;           // Info block for basic manager
     SbLanguageMode  eLanguageMode;      // LanguageMode of the basic object
+    BOOL            bQuit;
+
+    SbxObjectRef pVBAGlobals;
+    SbxObject* getVBAGlobals( );
+
 protected:
     BOOL            CError( SbError, const String&, xub_StrLen, xub_StrLen, xub_StrLen );
 private:
@@ -196,6 +198,10 @@ public:
 
     SbxObjectRef getRTL( void ) { return pRtl; }
     BOOL IsDocBasic() { return bDocBasic; }
+    SbxVariable* VBAFind( const String& rName, SbxClassType t );
+    bool GetUNOConstant( const sal_Char* _pAsciiName, ::com::sun::star::uno::Any& aOut );
+    void QuitAndExitApplication();
+    BOOL IsQuitApplication() { return bQuit; };
 };
 
 #ifndef __SB_SBSTARBASICREF_HXX

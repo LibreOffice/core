@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: objcont.cxx,v $
- * $Revision: 1.78 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,27 +38,28 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <tools/cachestr.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <vcl/wrkwin.hxx>
 
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/rectitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/rectitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/ctloptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <tools/datetime.hxx>
 #include <math.h>
 
-#include <svtools/saveopt.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/saveopt.hxx>
+#include <unotools/useroptions.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/oldprintadaptor.hxx>
 
 #include <sfx2/app.hxx>
 #include "sfxresid.hxx"
@@ -961,11 +959,8 @@ BOOL SfxObjectShell::Remove
         String aName(pMySheet->GetName());
         String aEmpty;
         SfxStyleFamily  eFamily = pMySheet->GetFamily();
-        if (pMySheet)
-        {
-            pMyPool->Remove(pMySheet);
-            bRet = TRUE;
-        }
+        pMyPool->Remove(pMySheet);
+        bRet = TRUE;
 
         SfxStyleSheetBase* pTestSheet = pMyPool->First();
         while (pTestSheet)
@@ -986,20 +981,10 @@ BOOL SfxObjectShell::Remove
 
             pTestSheet = pMyPool->Next();
         }
-        if(bRet)
-            SetModified( TRUE );
+
+        SetModified( TRUE );
     }
-/*
-    else if (nIdx1 == CONTENT_CONFIG)
-    {
-        if (GetConfigManager()->RemoveItem(nIdx2))
-        {
-            SetModified(TRUE);
-            bRet = TRUE;
-            SFX_APP()->GetDispatcher_Impl()->Update_Impl(TRUE);
-        }
-    }
-*/
+
     return bRet;
 }
 
@@ -1031,26 +1016,18 @@ BOOL SfxObjectShell::Print
             if ( !pStyle )
                 return TRUE;
 
-            if ( !rPrt.StartJob(String(SfxResId(STR_STYLES))) )
-            {
-                delete pIter;
-                return FALSE;
-            }
-            if ( !rPrt.StartPage() )
-            {
-                delete pIter;
-                return FALSE;
-            }
-            Reference< task::XStatusIndicator > xStatusIndicator;
-            xStatusIndicator = SFX_APP()->GetStatusIndicator();
-            if ( xStatusIndicator.is() )
-                xStatusIndicator->start( String(SfxResId(STR_PRINT_STYLES)), nStyles );
+            // pepare adaptor for old style StartPage/EndPage printing
+            boost::shared_ptr< Printer > pPrinter( new Printer( rPrt.GetJobSetup() ) );
+            vcl::OldStylePrintAdaptor* pAdaptor = new vcl::OldStylePrintAdaptor( pPrinter );
+            boost::shared_ptr< vcl::PrinterController > pController( pAdaptor );
 
-            rPrt.SetMapMode(MapMode(MAP_10TH_MM));
+            pAdaptor->StartPage();
+
+            pPrinter->SetMapMode(MapMode(MAP_10TH_MM));
             Font aFont( DEFINE_CONST_UNICODE( "Arial" ), Size(0, 64));   // 18pt
             aFont.SetWeight(WEIGHT_BOLD);
-            rPrt.SetFont(aFont);
-            const Size aPageSize(rPrt.GetOutputSize());
+            pPrinter->SetFont(aFont);
+            const Size aPageSize(pPrinter->GetOutputSize());
             const USHORT nXIndent = 200;
             USHORT nYIndent = 200;
             Point aOutPos(nXIndent, nYIndent);
@@ -1059,68 +1036,66 @@ BOOL SfxObjectShell::Print
                 aHeader += *pObjectName;
             else
                 aHeader += GetTitle();
-            long nTextHeight( rPrt.GetTextHeight() );
-            rPrt.DrawText(aOutPos, aHeader);
+            long nTextHeight( pPrinter->GetTextHeight() );
+            pPrinter->DrawText(aOutPos, aHeader);
             aOutPos.Y() += nTextHeight;
             aOutPos.Y() += nTextHeight/2;
             aFont.SetSize(Size(0, 35)); // 10pt
             nStyles = 1;
             while(pStyle)
             {
-                if ( xStatusIndicator.is() )
-                    xStatusIndicator->setValue( nStyles++ );
-                // Ausgabe des Vorlagennamens
+                // print template name
                 String aStr(pStyle->GetName());
                 aFont.SetWeight(WEIGHT_BOLD);
-                rPrt.SetFont(aFont);
-                nTextHeight = rPrt.GetTextHeight();
-                // Seitenwechsel
+                pPrinter->SetFont(aFont);
+                nTextHeight = pPrinter->GetTextHeight();
+                // check for new page
                 if ( aOutPos.Y() + nTextHeight*2 >
                     aPageSize.Height() - (long) nYIndent )
                 {
-                    rPrt.EndPage();
-                    rPrt.StartPage();
+                    pAdaptor->EndPage();
+                    pAdaptor->StartPage();
                     aOutPos.Y() = nYIndent;
                 }
-                rPrt.DrawText(aOutPos, aStr);
+                pPrinter->DrawText(aOutPos, aStr);
                 aOutPos.Y() += nTextHeight;
 
-                // Ausgabe der Vorlagenbeschreibung
+                // print template description
                 aFont.SetWeight(WEIGHT_NORMAL);
-                rPrt.SetFont(aFont);
+                pPrinter->SetFont(aFont);
                 aStr = pStyle->GetDescription();
                 const char cDelim = ' ';
                 USHORT nStart = 0, nIdx = 0;
 
-                nTextHeight = rPrt.GetTextHeight();
-                // wie viele Worte passen auf eine Zeile
+                nTextHeight = pPrinter->GetTextHeight();
+                // break text into lines
                 while(nIdx < aStr.Len())
                 {
                     USHORT  nOld = nIdx;
                     long nTextWidth;
                     nIdx = aStr.Search(cDelim, nStart);
-                    nTextWidth = rPrt.GetTextWidth(aStr, nStart, nIdx-nStart);
+                    nTextWidth = pPrinter->GetTextWidth(aStr, nStart, nIdx-nStart);
                     while(nIdx != STRING_NOTFOUND &&
                           aOutPos.X() + nTextWidth <
                           aPageSize.Width() - (long) nXIndent)
                     {
                         nOld = nIdx;
                         nIdx = aStr.Search(cDelim, nIdx+1);
-                        nTextWidth = rPrt.GetTextWidth(aStr, nStart, nIdx-nStart);
+                        nTextWidth = pPrinter->GetTextWidth(aStr, nStart, nIdx-nStart);
                     }
                     String aTmp(aStr, nStart, nIdx == STRING_NOTFOUND?
                                 STRING_LEN :
                                 nOld-nStart);
                     if ( aTmp.Len() )
                     {
-                        nStart = nOld+1;    // wegen trailing space
+                        nStart = nOld+1;    // trailing space
                     }
                     else
                     {
                         USHORT nChar = 1;
                         while(
                             nStart + nChar < aStr.Len() &&
-                            aOutPos.X() + rPrt.GetTextWidth(
+                            aOutPos.X() + pPrinter->GetTextWidth(
                                 aStr, nStart, nChar) <
                             aPageSize.Width() - nXIndent)
                             ++nChar;
@@ -1131,19 +1106,19 @@ BOOL SfxObjectShell::Print
                     if ( aOutPos.Y() + nTextHeight*2 >
                         aPageSize.Height() - nYIndent )
                     {
-                        rPrt.EndPage();
-                        rPrt.StartPage();
+                        pAdaptor->EndPage();
+                        pAdaptor->StartPage();
                         aOutPos.Y() = nYIndent;
                     }
-                    rPrt.DrawText(aOutPos, aTmp);
-                    aOutPos.Y() += rPrt.GetTextHeight();
+                    pPrinter->DrawText(aOutPos, aTmp);
+                    aOutPos.Y() += pPrinter->GetTextHeight();
                 }
                 pStyle = pIter->Next();
             }
-            rPrt.EndPage();
-            rPrt.EndJob();
-            if ( xStatusIndicator.is() )
-                xStatusIndicator->end();
+            pAdaptor->EndPage();
+
+            Printer::PrintJob( pController, rPrt.GetJobSetup() );
+
             delete pIter;
             break;
         }
@@ -1423,31 +1398,35 @@ sal_Bool SfxObjectShell::IsHelpDocument() const
 
 void SfxObjectShell::ResetFromTemplate( const String& rTemplateName, const String& rFileName )
 {
-    uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
-    xDocProps->setTemplateURL( ::rtl::OUString() );
-    xDocProps->setTemplateName( ::rtl::OUString() );
-    xDocProps->setTemplateDate( util::DateTime() );
-    xDocProps->resetUserData( ::rtl::OUString() );
-
-    // TODO/REFACTOR:
-    // Title?
-
-    if( ::utl::LocalFileHelper::IsLocalFile( rFileName ) )
+    // only care about reseting this data for openoffice formats otherwise
+    if ( IsOwnStorageFormat_Impl( *GetMedium())  )
     {
-        String aFoundName;
-        if( SFX_APP()->Get_Impl()->GetDocumentTemplates()->GetFull( String(), rTemplateName, aFoundName ) )
+        uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
+        xDocProps->setTemplateURL( ::rtl::OUString() );
+        xDocProps->setTemplateName( ::rtl::OUString() );
+        xDocProps->setTemplateDate( util::DateTime() );
+        xDocProps->resetUserData( ::rtl::OUString() );
+
+        // TODO/REFACTOR:
+        // Title?
+
+        if( ::utl::LocalFileHelper::IsLocalFile( rFileName ) )
         {
-            INetURLObject aObj( rFileName );
-            xDocProps->setTemplateURL( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
-            xDocProps->setTemplateName( rTemplateName );
+            String aFoundName;
+            if( SFX_APP()->Get_Impl()->GetDocumentTemplates()->GetFull( String(), rTemplateName, aFoundName ) )
+            {
+                INetURLObject aObj( rFileName );
+                xDocProps->setTemplateURL( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
+                xDocProps->setTemplateName( rTemplateName );
 
-            ::DateTime now;
-            xDocProps->setTemplateDate( util::DateTime(
-                now.Get100Sec(), now.GetSec(), now.GetMin(),
-                now.GetHour(), now.GetDay(), now.GetMonth(),
-                now.GetYear() ) );
+                ::DateTime now;
+                xDocProps->setTemplateDate( util::DateTime(
+                    now.Get100Sec(), now.GetSec(), now.GetMin(),
+                    now.GetHour(), now.GetDay(), now.GetMonth(),
+                    now.GetYear() ) );
 
-            SetQueryLoadTemplate( sal_True );
+                SetQueryLoadTemplate( sal_True );
+            }
         }
     }
 }

@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: autorecovery.cxx,v $
- *
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,7 +76,7 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <tools/link.hxx>
 #include <tools/string.hxx>
 #include <unotools/tempfile.hxx>
@@ -91,7 +87,7 @@
 #include <osl/file.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
-#include <svtools/documentlockfile.hxx>
+#include <svl/documentlockfile.hxx>
 
 #include <tools/urlobj.hxx>
 
@@ -170,6 +166,7 @@ static const ::rtl::OUString CMD_DO_RECOVERY                 = ::rtl::OUString::
 static const ::rtl::OUString CMD_DO_ENTRY_BACKUP             = ::rtl::OUString::createFromAscii("/doEntryBackup"          );    // try to store a temp or original file to a user defined location
 static const ::rtl::OUString CMD_DO_ENTRY_CLEANUP            = ::rtl::OUString::createFromAscii("/doEntryCleanUp"         );    // remove the specified entry from the recovery cache
 static const ::rtl::OUString CMD_DO_SESSION_SAVE             = ::rtl::OUString::createFromAscii("/doSessionSave"          );    // save all open documents if e.g. a window manager closes an user session
+static const ::rtl::OUString CMD_DO_SESSION_QUIET_QUIT       = ::rtl::OUString::createFromAscii("/doSessionQuietQuit"     );    // let the current session be quietly closed ( the saving should be done using doSessionSave previously ) if e.g. a window manager closes an user session
 static const ::rtl::OUString CMD_DO_SESSION_RESTORE          = ::rtl::OUString::createFromAscii("/doSessionRestore"       );    // restore a saved user session from disc
 static const ::rtl::OUString CMD_DO_DISABLE_RECOVERY         = ::rtl::OUString::createFromAscii("/disableRecovery"        );    // disable recovery and auto save (!) temp. for this office session
 static const ::rtl::OUString CMD_DO_SET_AUTOSAVE_STATE       = ::rtl::OUString::createFromAscii("/setAutoSaveState"       );    // disable/enable auto save (not crash save) for this office session
@@ -722,6 +719,16 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
             LOG_RECOVERY("... do session save ...")
             bAllowAutoSaveReactivation = sal_False;
             implts_doSessionSave(aParams);
+        }
+        else
+        if (
+            ((eJob & AutoRecovery::E_SESSION_QUIET_QUIT    ) == AutoRecovery::E_SESSION_QUIET_QUIT ) &&
+            ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) != AutoRecovery::E_DISABLE_AUTORECOVERY)
+            )
+        {
+            LOG_RECOVERY("... do session quiet quit ...")
+            bAllowAutoSaveReactivation = sal_False;
+            implts_doSessionQuietQuit(aParams);
         }
         else
         if (
@@ -1987,66 +1994,6 @@ void AutoRecovery::implts_changeAllDocVisibility(sal_Bool bVisible)
 }
 
 //-----------------------------------------------
-void AutoRecovery::implts_prepareSessionShutdown()
-{
-    LOG_RECOVERY("AutoRecovery::implts_prepareSessionShutdown() starts ...")
-
-    // a) reset modified documents (of course the must be saved before this method is called!)
-    // b) close it without showing any UI!
-
-    // SAFE ->
-    CacheLockGuard aCacheLock(this, m_aLock, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
-
-    AutoRecovery::TDocumentList::iterator pIt;
-    for (  pIt  = m_lDocCache.begin();
-           pIt != m_lDocCache.end()  ;
-         ++pIt                       )
-    {
-        AutoRecovery::TDocumentInfo& rInfo = *pIt;
-
-        // Prevent us from deregistration of these documents.
-        // Because we close these documents by ourself (see XClosable below) ...
-        // it's fact, that we reach our deregistration method. There we
-        // must not(!) update our configuration ... Otherwhise all
-        // session data are lost !!!
-        rInfo.IgnoreClosing = sal_True;
-
-        // reset modified flag of these documents (ignoring the notification about it!)
-        // Otherwise a message box is shown on closing these models.
-        implts_stopModifyListeningOnDoc(rInfo);
-        css::uno::Reference< css::util::XModifiable > xModify(rInfo.Document, css::uno::UNO_QUERY);
-        if (xModify.is())
-            xModify->setModified(sal_False);
-
-        // close the model.
-        css::uno::Reference< css::util::XCloseable > xClose(rInfo.Document, css::uno::UNO_QUERY);
-        if (xClose.is())
-        {
-            try
-            {
-                xClose->close(sal_False);
-            }
-            /*
-            catch(const css::lang::DisposedException&)
-                {
-                    // closed ... disposed ... always the same .-)
-                }
-            */
-            catch(const css::uno::Exception&)
-                {
-                    // At least it's only a try to close these documents before anybody else it does.
-                    // So it seams to be possible to ignore any error here .-)
-                }
-
-            rInfo.Document.clear();
-        }
-    }
-
-    aCacheLock.unlock();
-    // <- SAFE
-}
-
-//-----------------------------------------------
 /* Currently the document is not closed in case of crash,
    so the lock file must be removed explicitly
 */
@@ -2069,6 +2016,77 @@ void lc_removeLockFile(AutoRecovery::TDocumentInfo& rInfo)
     }
 }
 
+
+//-----------------------------------------------
+void AutoRecovery::implts_prepareSessionShutdown()
+{
+    LOG_RECOVERY("AutoRecovery::implts_prepareSessionShutdown() starts ...")
+
+    // a) reset modified documents (of course the must be saved before this method is called!)
+    // b) close it without showing any UI!
+
+    // SAFE ->
+    CacheLockGuard aCacheLock(this, m_aLock, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
+
+    AutoRecovery::TDocumentList::iterator pIt;
+    for (  pIt  = m_lDocCache.begin();
+           pIt != m_lDocCache.end()  ;
+         ++pIt                       )
+    {
+        AutoRecovery::TDocumentInfo& rInfo = *pIt;
+
+        // WORKAROUND... Since the documents are not closed the lock file must be removed explicitly
+        // it is not done on documents saving since shutdown can be cancelled
+        lc_removeLockFile( rInfo );
+
+        // Prevent us from deregistration of these documents.
+        // Because we close these documents by ourself (see XClosable below) ...
+        // it's fact, that we reach our deregistration method. There we
+        // must not(!) update our configuration ... Otherwhise all
+        // session data are lost !!!
+        rInfo.IgnoreClosing = sal_True;
+
+        // reset modified flag of these documents (ignoring the notification about it!)
+        // Otherwise a message box is shown on closing these models.
+        implts_stopModifyListeningOnDoc(rInfo);
+
+        // if the session save is still running the documents should not be thrown away,
+        // actually that would be a bad sign, that means that the SessionManager tryes
+        // to kill the session before the saving is ready
+        if ((m_eJob & AutoRecovery::E_SESSION_SAVE) != AutoRecovery::E_SESSION_SAVE)
+        {
+            css::uno::Reference< css::util::XModifiable > xModify(rInfo.Document, css::uno::UNO_QUERY);
+            if (xModify.is())
+                xModify->setModified(sal_False);
+
+            // close the model.
+            css::uno::Reference< css::util::XCloseable > xClose(rInfo.Document, css::uno::UNO_QUERY);
+            if (xClose.is())
+            {
+                try
+                {
+                    xClose->close(sal_False);
+                }
+                /*
+                catch(const css::lang::DisposedException&)
+                    {
+                        // closed ... disposed ... always the same .-)
+                    }
+                */
+                catch(const css::uno::Exception&)
+                    {
+                        // At least it's only a try to close these documents before anybody else it does.
+                        // So it seams to be possible to ignore any error here .-)
+                    }
+
+                rInfo.Document.clear();
+            }
+        }
+    }
+
+    aCacheLock.unlock();
+    // <- SAFE
+}
 
 //-----------------------------------------------
 /* TODO WORKAROUND:
@@ -2750,6 +2768,9 @@ void AutoRecovery::implts_informListener(      sal_Int32                      eJ
     if ((eJob & AutoRecovery::E_SESSION_SAVE) == AutoRecovery::E_SESSION_SAVE)
         sFeature.append(CMD_DO_SESSION_SAVE);
     else
+    if ((eJob & AutoRecovery::E_SESSION_QUIET_QUIT) == AutoRecovery::E_SESSION_QUIET_QUIT)
+        sFeature.append(CMD_DO_SESSION_QUIET_QUIT);
+    else
     if ((eJob & AutoRecovery::E_SESSION_RESTORE) == AutoRecovery::E_SESSION_RESTORE)
         sFeature.append(CMD_DO_SESSION_RESTORE);
     else
@@ -2791,6 +2812,9 @@ sal_Int32 AutoRecovery::implst_classifyJob(const css::util::URL& aURL)
         else
         if (aURL.Path.equals(CMD_DO_SESSION_SAVE))
             return AutoRecovery::E_SESSION_SAVE;
+        else
+        if (aURL.Path.equals(CMD_DO_SESSION_QUIET_QUIT))
+            return AutoRecovery::E_SESSION_QUIET_QUIT;
         else
         if (aURL.Path.equals(CMD_DO_SESSION_RESTORE))
             return AutoRecovery::E_SESSION_RESTORE;
@@ -2968,14 +2992,6 @@ void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
 {
     LOG_RECOVERY("AutoRecovery::implts_doSessionSave()")
 
-    // try to make sure next time office will be started user wont be
-    // notified about any other might be running office instance
-    // remove ".lock" file from disc !
-    // it is done as a first action for session save since Gnome sessions
-    // do not provide enough time for shutdown, and the dialog looks to be
-    // confusing for the user
-    AutoRecovery::st_impl_removeLockFile();
-
     // Be sure to know all open documents realy .-)
     implts_verifyCacheAgainstDesktopDocumentList();
 
@@ -2991,7 +3007,8 @@ void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
     AutoRecovery::ETimerType eSuggestedTimer    = AutoRecovery::E_DONT_START_TIMER;
     do
     {
-        eSuggestedTimer = implts_saveDocs(bAllowUserIdleLoop, sal_True, &aParams);
+        // do not remove lock files of the documents, it will be done on session quit
+        eSuggestedTimer = implts_saveDocs(bAllowUserIdleLoop, sal_False, &aParams);
     }
     while(eSuggestedTimer == AutoRecovery::E_CALL_ME_BACK);
 
@@ -3001,6 +3018,23 @@ void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
     // Of course following restore session must be started without
     // any "handle" state ...
     implts_resetHandleStates(sal_False);
+
+    // flush config cached back to disc.
+    impl_flushALLConfigChanges();
+}
+
+//-----------------------------------------------
+void AutoRecovery::implts_doSessionQuietQuit(const DispatchParams& /*aParams*/)
+{
+    LOG_RECOVERY("AutoRecovery::implts_doSessionQuietQuit()")
+
+    // try to make sure next time office will be started user wont be
+    // notified about any other might be running office instance
+    // remove ".lock" file from disc !
+    // it is done as a first action for session save since Gnome sessions
+    // do not provide enough time for shutdown, and the dialog looks to be
+    // confusing for the user
+    AutoRecovery::st_impl_removeLockFile();
 
     // reset all modified documents, so the dont show any UI on closing ...
     // and close all documents, so we can shutdown the OS!
@@ -3019,6 +3053,7 @@ void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
     // flush config cached back to disc.
     impl_flushALLConfigChanges();
 }
+
 
 //-----------------------------------------------
 void AutoRecovery::implts_doSessionRestore(const DispatchParams& aParams)

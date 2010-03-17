@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sfxbasecontroller.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -493,7 +490,9 @@ public:
     virtual void SAL_CALL removeTitleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitleChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
 //#if 0 // _SOLAR__PRIVATE
-    SAL_DLLPRIVATE SfxViewShell* GetViewShell_Impl() const;
+    // FIXME: TL needs this in sw/source/ui/uno/unotxdoc.cxx now;
+    // either the _Impl name should vanish or there should be an "official" API
+    SfxViewShell* GetViewShell_Impl() const;
     SAL_DLLPRIVATE BOOL HandleEvent_Impl( NotifyEvent& rEvent );
     SAL_DLLPRIVATE BOOL HasKeyListeners_Impl();
     SAL_DLLPRIVATE BOOL HasMouseClickListeners_Impl();

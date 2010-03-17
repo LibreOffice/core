@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FValue.hxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,9 +41,15 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/sdb/XColumn.hpp>
 
 namespace connectivity
 {
+    namespace detail
+    {
+        class IValueSource;
+    }
+
     class OOO_DLLPUBLIC_DBTOOLS ORowSetValue
     {
         union
@@ -361,6 +364,12 @@ namespace connectivity
                   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>& _xRow);
 
         void fill(const ::com::sun::star::uno::Any& _rValue);
+
+        void fill( const sal_Int32 _nType,
+                   const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxColumn );
+
+    private:
+        void impl_fill( const sal_Int32 _nType, sal_Bool _bNullable, const detail::IValueSource& _rValueSource );
     };
 
     /// ORowSetValueDecorator decorates a ORowSetValue so the value is "refcounted"

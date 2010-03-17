@@ -29,6 +29,7 @@
 #define ATTRIBUTE_WIDTH             "width"
 #define ATTRIBUTE_USER              "userdefined"
 #define ATTRIBUTE_HELPID            "helpid"
+#define ATTRIBUTE_TOOLTIP           "tooltip"
 #define ATTRIBUTE_ITEMSTYLE         "style"
 
 #define ATTRIBUTE_ID                "id"
@@ -78,6 +79,8 @@
 #define ATTRIBUTE_ITEMSTYLE_AUTOSIZE        "autosize"
 #define ATTRIBUTE_ITEMSTYLE_DROPDOWN        "dropdown"
 #define ATTRIBUTE_ITEMSTYLE_REPEAT          "repeat"
+#define ATTRIBUTE_ITEMSTYLE_TEXT    "text"
 #define ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY    "dropdownonly"
+#define ATTRIBUTE_ITEMSTYLE_IMAGE    "image"
 
 #endif // __FRAMEWORK_XML_TOOLBOXCONFIGURATIONDEFINES_HXX_

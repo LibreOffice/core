@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: odma_datasupplier.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -329,10 +326,10 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
     // now close the query
     odm = NODMQueryClose(ContentProvider::getHandle(), pQueryId);
 
-    delete lpszDMSList;
-    delete pQueryId;
-    delete lpszDocId;
-    delete lpszDocName;
+    delete [] lpszDMSList;
+    delete [] pQueryId;
+    delete [] lpszDocId;
+    delete [] lpszDocName;
 
     if ( !bFound )
         m_pImpl->m_bCountFinal = sal_True;

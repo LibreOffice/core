@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fontworkgallery.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_svx.hxx"
 #include <com/sun/star/text/WritingMode.hpp>
 #include <sfx2/app.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/fmmodel.hxx>
 #include <sfx2/dispatch.hxx>
 #include <dlgutil.hxx>
@@ -45,8 +42,8 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include "toolbarmenu.hxx"
 
 #include "fontworkgallery.hxx"
@@ -397,7 +394,7 @@ void FontWorkAlignmentWindow::implInit()
 {
     SetHelpId( HID_POPUP_FONTWORK_ALIGN );
 
-    bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
+    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
     mpMenu->SetHelpId( HID_POPUP_FONTWORK_ALIGN );
@@ -477,7 +474,7 @@ void FontWorkAlignmentWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
-        bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
+        bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
         mpMenu->appendEntry( 0, String( SVX_RES( STR_ALIGN_LEFT ) ), bHighContrast ? maImgAlgin1h : maImgAlgin1 );
         mpMenu->appendEntry( 1, String( SVX_RES( STR_ALIGN_CENTER ) ), bHighContrast ? maImgAlgin2h : maImgAlgin2 );
@@ -637,7 +634,7 @@ void FontWorkCharacterSpacingWindow::implInit()
 {
     SetHelpId( HID_POPUP_FONTWORK_CHARSPACE );
 
-//  bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
+//  bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
     mpMenu->SetHelpId( HID_POPUP_FONTWORK_CHARSPACE );
@@ -754,7 +751,7 @@ void FontWorkCharacterSpacingWindow::DataChanged( const DataChangedEvent& rDCEvt
 
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
-//      bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
+//      bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
         mpMenu->appendEntry( 0, String( SVX_RES( STR_CHARS_SPACING_VERY_TIGHT ) ), MIB_CHECKABLE );
         mpMenu->appendEntry( 1, String( SVX_RES( STR_CHARS_SPACING_TIGHT ) ), MIB_CHECKABLE );

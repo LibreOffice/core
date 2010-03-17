@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: setup.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,12 +116,13 @@ private:
                                  LPTSTR *pNext, boolean bStripQuotes = false );
     boolean     IsAdmin();
 
-
     boolean     GetCommandLine();
 
     boolean     IsTerminalServerInstalled() const;
     void        AddFileToPatchList( TCHAR* pPath, TCHAR* pFile );
     boolean     IsPatchInstalled( TCHAR* pBaseDir, TCHAR* pFileName );
+    boolean     InstallRuntimes( TCHAR* pProductCode, TCHAR* pFileName );
+
 public:
                     SetupAppX();
                    ~SetupAppX();
@@ -136,6 +134,7 @@ public:
     virtual boolean ChooseLanguage( long& rLanguage );
     virtual boolean CheckVersion();
     virtual boolean CheckForUpgrade();
+    virtual boolean InstallRuntimes();
     virtual boolean Install( long nLanguage );
 
     virtual UINT    GetError() const;

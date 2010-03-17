@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dispatch.cxx,v $
- * $Revision: 1.56.126.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,14 +30,14 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <svtools/itempool.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/whiter.hxx>
+#include <svl/intitem.hxx>
 #ifndef _SFXEITEM_HXX //autogen
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #endif
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
@@ -50,7 +47,7 @@
 #include <stdlib.h>             // wg. bsearch
 
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svtools/helpopt.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -3215,3 +3212,14 @@ sal_uInt32 SfxDispatcher::GetDisableFlags() const
     return pImp->nDisableFlags;
 }
 
+SfxModule* SfxDispatcher::GetModule() const
+{
+    for ( sal_uInt16 nShell = 0;; ++nShell )
+    {
+        SfxShell *pSh = GetShell(nShell);
+        if ( pSh == NULL )
+            return 0;
+        if ( pSh->ISA(SfxModule) )
+            return (SfxModule*) pSh;
+    }
+}

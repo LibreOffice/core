@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtimp.cxx,v $
- * $Revision: 1.143.2.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include <tools/debug.hxx>
 #ifndef _SVSTDARR_STRINGSDTOR_DECL
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -92,6 +89,8 @@
 // --> OD 2008-04-25 #refactorlists#
 #include <txtlists.hxx>
 // <--
+#include <xmloff/odffields.hxx>
+#include <comphelper/stlunosequence.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -112,6 +111,8 @@ using ::com::sun::star::util::DateTime;
 using namespace ::com::sun::star::ucb;
 
 using ::comphelper::UStringLess;
+
+
 
 static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
 {
@@ -446,6 +447,70 @@ static __FAR_DATA SvXMLTokenMapEntry aTextMasterPageElemTokenMap[] =
 // maximum allowed length of combined characters field
 #define MAX_COMBINED_CHARACTERS 6
 
+
+namespace
+{
+    class FieldParamImporter
+    {
+        public:
+            typedef pair<OUString,OUString> field_param_t;
+            typedef vector<field_param_t> field_params_t;
+            FieldParamImporter(const field_params_t* const pInParams, Reference<XNameContainer> xOutParams)
+                : m_pInParams(pInParams)
+                , m_xOutParams(xOutParams)
+            { };
+            void Import();
+
+        private:
+            const field_params_t* const m_pInParams;
+            Reference<XNameContainer> m_xOutParams;
+    };
+
+    void FieldParamImporter::Import()
+    {
+        ::std::vector<OUString> vListEntries;
+        ::std::map<OUString, Any> vOutParams;
+        for(field_params_t::const_iterator pCurrent = m_pInParams->begin();
+            pCurrent != m_pInParams->end();
+            ++pCurrent)
+        {
+            if(pCurrent->first.equalsAscii(ODF_FORMDROPDOWN_RESULT))
+            {
+                // sal_Int32
+                vOutParams[pCurrent->first] = makeAny(pCurrent->second.toInt32());
+            }
+            else if(pCurrent->first.equalsAscii(ODF_FORMCHECKBOX_RESULT))
+            {
+                // bool
+                vOutParams[pCurrent->first] = makeAny(pCurrent->second.toBoolean());
+            }
+            else if(pCurrent->first.equalsAscii(ODF_FORMDROPDOWN_LISTENTRY))
+            {
+                // sequence
+                vListEntries.push_back(pCurrent->second);
+            }
+            else
+                vOutParams[pCurrent->first] = makeAny(pCurrent->second);
+        }
+        if(!vListEntries.empty())
+        {
+            Sequence<OUString> vListEntriesSeq(vListEntries.size());
+            copy(vListEntries.begin(), vListEntries.end(), ::comphelper::stl_begin(vListEntriesSeq));
+            vOutParams[OUString::createFromAscii(ODF_FORMDROPDOWN_LISTENTRY)] = makeAny(vListEntriesSeq);
+        }
+        for(::std::map<OUString, Any>::const_iterator pCurrent = vOutParams.begin();
+            pCurrent != vOutParams.end();
+            ++pCurrent)
+        {
+            try
+            {
+                m_xOutParams->insertByName(pCurrent->first, pCurrent->second);
+            }
+            catch(ElementExistException)
+            { }
+        }
+    }
+}
 
 XMLTextImportHelper::XMLTextImportHelper(
         const Reference < XModel >& rModel,
@@ -1508,8 +1573,6 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     return sStyleName;
 }
 
-// --> OD 2006-10-12 #i69629#
-// adjustments to reflect change of internal data structure <mpOutlineStylesCandidates>
 void XMLTextImportHelper::FindOutlineStyleName( ::rtl::OUString& rStyleName,
                                                 sal_Int8 nOutlineLevel )
 {
@@ -1560,9 +1623,7 @@ void XMLTextImportHelper::FindOutlineStyleName( ::rtl::OUString& rStyleName,
     }
     // else: we already had a style name, so we let it pass.
 }
-// <--
 
-// --> OD 2006-10-12 #i69629#
 void XMLTextImportHelper::AddOutlineStyleCandidate( const sal_Int8 nOutlineLevel,
                                                     const OUString& rStyleName )
 {
@@ -1572,29 +1633,18 @@ void XMLTextImportHelper::AddOutlineStyleCandidate( const sal_Int8 nOutlineLevel
     {
         if( !mpOutlineStylesCandidates )
         {
-#ifdef IRIX
-            /* GCC 2 bug when member function is called as part of an array
-             * initialiser
-             */
-            sal_Int8 count = xChapterNumbering->getCount();
-            mpOutlineStylesCandidates = new ::std::vector<OUString>[count];
-#else
             mpOutlineStylesCandidates = new ::std::vector<OUString>[xChapterNumbering->getCount()];
-#endif
         }
         mpOutlineStylesCandidates[nOutlineLevel-1].push_back( rStyleName );
     }
 }
-// <--
 
-// --> OD 2006-10-12 #i69629#
 void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
 {
     if ( ( mpOutlineStylesCandidates != NULL || bSetEmptyLevels ) &&
          xChapterNumbering.is() &&
          !IsInsertMode() )
     {
-        // --> OD 2007-12-19 #152540#
         bool bChooseLastOne( false );
         {
             if ( GetXMLImport().IsTextDocInOOoFileFormat() )
@@ -1607,15 +1657,12 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
                 sal_Int32 nBuild( 0 );
                 if ( GetXMLImport().getBuildIds( nUPD, nBuild ) )
                 {
-                    // --> OD 2008-03-19 #i86058#
                     // check explicitly on certain versions
                     bChooseLastOne = ( nUPD == 641 ) || ( nUPD == 645 ) ||  // prior OOo 2.0
                                      ( nUPD == 680 && nBuild <= 9073 ); // OOo 2.0 - OOo 2.0.4
-                    // <--
                 }
             }
         }
-        // <--
 
         OUString sOutlineStyleName;
         {
@@ -1624,8 +1671,15 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
             xChapterNumRule->getPropertyValue(sName) >>= sOutlineStyleName;
         }
 
-        OUString sEmpty;
-        sal_Int32 nCount = xChapterNumbering->getCount();
+        const sal_Int32 nCount = xChapterNumbering->getCount();
+        // --> OD 2009-11-13 #i106218#
+        // First collect all paragraph styles choosen for assignment to each
+        // list level of the outline style, then perform the intrinsic assignment.
+        // Reason: The assignment of a certain paragraph style to a list level
+        //         of the outline style causes side effects on the children
+        //         paragraph styles in Writer.
+        ::std::vector<OUString> sChosenStyles(nCount);
+        // <--
         for( sal_Int32 i=0; i < nCount; ++i )
         {
             if ( bSetEmptyLevels ||
@@ -1634,17 +1688,12 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
             {
                 // determine, which candidate is one to be assigned to the list
                 // level of the outline style
-                OUString sChoosenStyle( sEmpty );
                 if ( mpOutlineStylesCandidates &&
                      !mpOutlineStylesCandidates[i].empty() )
                 {
-                    // --> OD 2007-12-19 #152540#
                     if ( bChooseLastOne )
-                    // <--
                     {
-                        // --> OD 2006-11-06 #i71249# - take last added one
-                        sChoosenStyle = mpOutlineStylesCandidates[i].back();
-                        // <--
+                        sChosenStyles[i] = mpOutlineStylesCandidates[i].back();
                     }
                     else
                     {
@@ -1655,24 +1704,32 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
                                                     sNumberingStyleName,
                                                     sOutlineStyleName ) )
                             {
-                                sChoosenStyle = mpOutlineStylesCandidates[i][j];
+                                sChosenStyles[i] = mpOutlineStylesCandidates[i][j];
                                 break;
                             }
                         }
                     }
                 }
-
-                Sequence < PropertyValue > aProps( 1 );
-                PropertyValue *pProps = aProps.getArray();
-                pProps->Name = sHeadingStyleName;
-                pProps->Value <<= sChoosenStyle;
-
+            }
+        }
+        // --> OD 2009-11-13 #i106218#
+        Sequence < PropertyValue > aProps( 1 );
+        PropertyValue *pProps = aProps.getArray();
+        pProps->Name = sHeadingStyleName;
+        for ( sal_Int32 i = 0; i < nCount; ++i )
+        {
+            // --> OD 2009-12-11 #i107610#
+            if ( bSetEmptyLevels ||
+                 sChosenStyles[i].getLength() > 0 )
+            // <--
+            {
+                pProps->Value <<= sChosenStyles[i];
                 xChapterNumbering->replaceByIndex( i, makeAny( aProps ) );
             }
         }
+        // <--
     }
 }
-// <--
 
 void XMLTextImportHelper::SetHyperlink(
     SvXMLImport& rImport,
@@ -2288,18 +2345,9 @@ bool XMLTextImportHelper::hasCurrentFieldCtx()
 void XMLTextImportHelper::setCurrentFieldParamsTo(::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField> &xFormField)
 {
     DBG_ASSERT(!aFieldStack.empty(), "stack is empty: not good! Do a pushFieldCtx before...");
-    if (!aFieldStack.empty() && xFormField.is()) {
-        field_params_t &params=aFieldStack.top().second;
-        for (field_params_t::iterator i=params.begin();i!=params.end();i++) {
-            rtl::OUString name=i->first;
-            rtl::OUString value=i->second;
-            if (name.compareToAscii("Description")==0){
-                xFormField->setDescription(value);
-            } else if (name.compareToAscii("Result")==0){
-                xFormField->setRes((sal_Int16)value.toInt32());
-            }
-
-        }
+    if (!aFieldStack.empty() && xFormField.is())
+    {
+        FieldParamImporter(&aFieldStack.top().second, xFormField->getParameters()).Import();
     }
 }
 
