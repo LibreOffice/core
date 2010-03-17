@@ -908,12 +908,12 @@ void SAL_CALL SwXTextView::setRubyList(
   -----------------------------------------------------------------------*/
 SfxObjectShellRef SwXTextView::BuildTmpSelectionDoc( SfxObjectShellRef& /*rRef*/ )
 {
-    SwWrtShell* pOldSh = &m_pView->GetWrtShell();
-    SfxPrinter *pPrt = pOldSh->getIDocumentDeviceAccess()->getPrinter( false );
+    SwWrtShell& rOldSh = m_pView->GetWrtShell();
+    SfxPrinter *pPrt = rOldSh.getIDocumentDeviceAccess()->getPrinter( false );
     SwDocShell* pDocSh;
     SfxObjectShellRef xDocSh( pDocSh = new SwDocShell( /*pPrtDoc, */SFX_CREATE_MODE_STANDARD ) );
     xDocSh->DoInitNew( 0 );
-    pOldSh->FillPrtDoc(pDocSh->GetDoc(),  pPrt);
+    rOldSh.FillPrtDoc(pDocSh->GetDoc(),  pPrt);
     SfxViewFrame* pDocFrame = SfxViewFrame::CreateViewFrame( *xDocSh, 0, TRUE );
     SwView* pDocView = (SwView*) pDocFrame->GetViewShell();
     pDocView->AttrChangedNotify( &pDocView->GetWrtShell() );//Damit SelectShell gerufen wird.
@@ -922,21 +922,18 @@ SfxObjectShellRef SwXTextView::BuildTmpSelectionDoc( SfxObjectShellRef& /*rRef*/
     IDocumentDeviceAccess* pIDDA = pSh->getIDocumentDeviceAccess();
     SfxPrinter* pTempPrinter = pIDDA->getPrinter( true );
 
-    if( pOldSh )
+    const SwPageDesc& rCurPageDesc = rOldSh.GetPageDesc(rOldSh.GetCurPageDesc());
+
+    IDocumentDeviceAccess* pIDDA_old = rOldSh.getIDocumentDeviceAccess();
+
+    if( pIDDA_old->getPrinter( false ) )
     {
-        const SwPageDesc& rCurPageDesc = pOldSh->GetPageDesc(pOldSh->GetCurPageDesc());
-
-        IDocumentDeviceAccess* pIDDA_old = pOldSh->getIDocumentDeviceAccess();
-
-        if( pIDDA_old->getPrinter( false ) )
-        {
-            pIDDA->setJobsetup( *pIDDA_old->getJobsetup() );
-            //#69563# if it isn't the same printer then the pointer has been invalidated!
-            pTempPrinter = pIDDA->getPrinter( true );
-        }
-
-        pTempPrinter->SetPaperBin(rCurPageDesc.GetMaster().GetPaperBin().GetValue());
+        pIDDA->setJobsetup( *pIDDA_old->getJobsetup() );
+        //#69563# if it isn't the same printer then the pointer has been invalidated!
+        pTempPrinter = pIDDA->getPrinter( true );
     }
+
+    pTempPrinter->SetPaperBin(rCurPageDesc.GetMaster().GetPaperBin().GetValue());
 
     return xDocSh;
 }

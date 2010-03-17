@@ -238,10 +238,7 @@ BOOL SwFEShell::SelectObj( const Point& rPt, BYTE nFlag, SdrObject *pObj )
             if( bForget )
             {
                 pDView->UnmarkAll();
-                if ( pTmpObj )
-                    pDView->MarkObj( pTmpObj, Imp()->GetPageView(), bAddSelect, bEnterGroup );
-                else
-                    pDView->MarkObj( rPt, MINMOVE );
+                pDView->MarkObj( pTmpObj, Imp()->GetPageView(), bAddSelect, bEnterGroup );
                 break;
             }
         }
