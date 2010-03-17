@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pptshape.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +50,7 @@ public:
     void addShape(
             const oox::core::XmlFilterBase& rFilterBase,
             const SlidePersist& rPersist,
-            const oox::drawingml::ThemePtr& rxTheme,
+            const oox::drawingml::Theme* pTheme,
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
             const com::sun::star::awt::Rectangle* pShapeRect = 0,
             ::oox::drawingml::ShapeIdMap* pShapeMap = 0 );

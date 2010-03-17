@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drawingfragment.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,25 +41,19 @@ namespace xls {
 // ============================================================================
 
 /** Absolute position in spreadsheet (in EMUs) independent from cells. */
-struct AnchorPosModel
+struct AnchorPosModel : public ::oox::drawingml::EmuPoint
 {
-    sal_Int64           mnX;                /// Absolute X coordinate (EMUs).
-    sal_Int64           mnY;                /// Absolute Y coordinate (EMUs).
-
-    explicit            AnchorPosModel();
-    inline bool         isValid() const { return (mnX >= 0) && (mnY >= 0); }
+    inline explicit     AnchorPosModel() : ::oox::drawingml::EmuPoint( -1, -1 ) {}
+    inline bool         isValid() const { return (X >= 0) && (Y >= 0); }
 };
 
 // ----------------------------------------------------------------------------
 
 /** Absolute size in spreadsheet (in EMUs). */
-struct AnchorSizeModel
+struct AnchorSizeModel : public ::oox::drawingml::EmuSize
 {
-    sal_Int64           mnWidth;            /// Total width (EMUs).
-    sal_Int64           mnHeight;           /// Total height (EMUs).
-
-    explicit            AnchorSizeModel();
-    inline bool         isValid() const { return (mnWidth >= 0) && (mnHeight >= 0); }
+    inline explicit     AnchorSizeModel() : ::oox::drawingml::EmuSize( -1, -1 ) {}
+    inline bool         isValid() const { return (Width >= 0) && (Height >= 0); }
 };
 
 // ----------------------------------------------------------------------------
