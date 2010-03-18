@@ -30,6 +30,7 @@
 #include <FFDataHandler.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include "FieldTypes.hxx"
 
 namespace writerfilter {
 namespace dmapper {
@@ -39,11 +40,13 @@ using namespace ::com::sun::star;
 class FormControlHelper
 {
 public:
-    FormControlHelper(uno::Reference<text::XTextDocument> rTextDocument,
+    typedef boost::shared_ptr<FormControlHelper> Pointer_t;
+    FormControlHelper(FieldId eFieldId,
+                      uno::Reference<text::XTextDocument> rTextDocument,
                       FFDataHandler::Pointer_t pFFData);
     ~FormControlHelper();
 
-    bool insertCheckBox();
+    bool insertControl();
 
 private:
     FFDataHandler::Pointer_t m_pFFData;
@@ -52,7 +55,6 @@ private:
     ImplPointer_t m_pImpl;
 
     bool createCheckbox();
-    bool insertControl();
 };
 
 }

@@ -46,6 +46,7 @@ using namespace ::com::sun::star;
 
 struct FormControlHelper::FormControlHelper_Impl
 {
+    FieldId m_eFieldId;
     awt::Size aSize;
     uno::Reference<form::XForm> rForm;
     uno::Reference<form::XFormComponent> rFormComponent;
@@ -60,9 +61,10 @@ struct FormControlHelper::FormControlHelper_Impl
 
 uno::Reference<lang::XMultiServiceFactory> FormControlHelper::FormControlHelper_Impl::getServiceFactory()
 {
-    uno::Reference<lang::XMultiServiceFactory> xFactory(rTextDocument, uno::UNO_QUERY);
+    if (! rServiceFactory.is())
+        rServiceFactory = uno::Reference<lang::XMultiServiceFactory>(rTextDocument, uno::UNO_QUERY);
 
-    return xFactory;
+    return rServiceFactory;
 }
 
 uno::Reference<form::XForm> FormControlHelper::FormControlHelper_Impl::getForm()
@@ -70,7 +72,7 @@ uno::Reference<form::XForm> FormControlHelper::FormControlHelper_Impl::getForm()
     if (! rForm.is())
     {
         uno::Reference<uno::XInterface>
-            xRef(rServiceFactory->createInstance
+            xRef(getServiceFactory()->createInstance
                  (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.Form"))));
         rForm = uno::Reference<form::XForm>(xRef, uno::UNO_QUERY);
     }
@@ -85,10 +87,12 @@ uno::Reference<container::XIndexContainer> FormControlHelper::FormControlHelper_
     return xIndexContainer;
 }
 
-FormControlHelper::FormControlHelper(uno::Reference<text::XTextDocument> rTextDocument,
+FormControlHelper::FormControlHelper(FieldId eFieldId,
+                                     uno::Reference<text::XTextDocument> rTextDocument,
                                      FFDataHandler::Pointer_t pFFData)
     : m_pFFData(pFFData), m_pImpl(new FormControlHelper_Impl)
 {
+    m_pImpl->m_eFieldId = eFieldId;
     m_pImpl->rTextDocument = rTextDocument;
 }
 
@@ -96,15 +100,16 @@ FormControlHelper::~FormControlHelper()
 {
 }
 
-bool FormControlHelper::insertCheckBox()
-{
-    return true;
-}
-
 bool FormControlHelper::createCheckbox()
 {
+    uno::Reference<lang::XMultiServiceFactory>
+        xServiceFactory(m_pImpl->getServiceFactory());
+
+    if (! xServiceFactory.is())
+        return false;
+
     uno::Reference<uno::XInterface> xInterface =
-        m_pImpl->rServiceFactory->createInstance
+        xServiceFactory->createInstance
         (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.CheckBox")));
 
     if (!xInterface.is())
@@ -142,12 +147,26 @@ bool FormControlHelper::createCheckbox()
 
 bool FormControlHelper::insertControl()
 {
+    bool bCreated = false;
+
+    switch (m_pImpl->m_eFieldId)
+    {
+    case FIELD_FORMCHECKBOX:
+        bCreated = createCheckbox();
+        break;
+    default:
+        break;
+    }
+
+    if (!bCreated)
+        return false;
+
     uno::Reference<container::XIndexContainer> xFormComps(m_pImpl->getFormComps());
     if (! xFormComps.is())
         return false;
 
-    uno::Any aAny;
-    aAny <<= m_pImpl->rFormComponent;
+    uno::Any aAny(&m_pImpl->rFormComponent,
+                  ::getCppuType((const uno::Reference<form::XFormComponent >*)0));
     xFormComps->insertByIndex(xFormComps->getCount(), aAny);
 
     if (! m_pImpl->getServiceFactory().is())

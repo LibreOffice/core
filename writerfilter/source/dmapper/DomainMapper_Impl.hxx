@@ -54,6 +54,7 @@
 #include <GraphicImport.hxx>
 #include <OLEHandler.hxx>
 #include <FFDataHandler.hxx>
+#include <FormControlHelper.hxx>
 #include <map>
 
 #include <string.h>
@@ -137,6 +138,7 @@ class FieldContext
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTC;//TOX entry
     ::rtl::OUString                                                                 m_sHyperlinkURL;
     FFDataHandler::Pointer_t                                                        m_pFFDataHandler;
+    FormControlHelper::Pointer_t                                                    m_pFormControlHelper;
 
 public:
     FieldContext(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xStart);
@@ -164,6 +166,9 @@ public:
 
     void setFFDataHandler(FFDataHandler::Pointer_t pFFDataHandler) { m_pFFDataHandler = pFFDataHandler; }
     FFDataHandler::Pointer_t getFFDataHandler() const { return m_pFFDataHandler; }
+
+    void setFormControlHelper(FormControlHelper::Pointer_t pFormControlHelper) { m_pFormControlHelper = pFormControlHelper; }
+    FormControlHelper::Pointer_t getFormControlHelper() const { return m_pFormControlHelper; }
 
     ::std::vector<rtl::OUString> GetCommandParts() const;
 };
