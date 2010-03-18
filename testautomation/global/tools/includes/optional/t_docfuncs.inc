@@ -311,10 +311,9 @@ function hDocumentTypeKeys( cString as string ) as boolean
     '///<ul>
     
     const CFN = "global::tools::includes::optional::t_docfuncs.inc::hDocumentTypeKeys::"
-    dim brc as boolean
-        brc = true
         
     if ( GVERBOSE ) then printlog( CFN & "Enter" )
+    hDocumentTypeKeys() = true
     
     '///+<li>Set focus to the current documenttype determined by gApplication</li>
     '///+<li>Type the string passed as function parameter</li>
@@ -335,15 +334,12 @@ function hDocumentTypeKeys( cString as string ) as boolean
                         DocumentWriter.typeKeys( cString )
     case else
         warnlog( CFN & "Exit: Unknown gApplication: " & gApplication )
-        brc = false
+        hDocumentTypeKeys() = false
+        exit function
     end select
     
     '///+<li>Print some message to the log on success</li>
-    if ( brc ) then
-        printlog( CFN & "Exit: Sent keystroke to " & gApplication )
-    endif
-    
-    hDocumentTypeKeys() = brc
+    printlog( CFN & "Exit: Sent keystroke to " & gApplication )
     '///</ul>
     
 end function
@@ -366,11 +362,10 @@ function hDestroyDocument() as boolean
     if ( Active.Exists( 2 ) ) then
         printlog( "Msgbox: " & Active.getText() )
         try
-            Active.No
+            hCloseDialog( Active, "no" )
         catch
-            Active.Click ( 202 )
+            hCloseDialog( Active, "202" )
         endcatch
-        wait( 1000 )
     end if
     
     if ( getDocumentCount() = iDocCount ) then hCloseDocument()
