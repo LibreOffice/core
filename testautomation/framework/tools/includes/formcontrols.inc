@@ -510,7 +510,7 @@ function hGetControlPosYO( iControl as integer ) as integer
     '///</ul>
     '///</ul>
 
-    select case iControl
+    select case ( iControl )
     case  1,  7, 13, 19 : hGetControlPosYO() = yOffset
     case  2,  8, 14, 20 : hGetControlPosYO() = yOffset + 1 * yDistance
     case  3,  9, 15, 21 : hGetControlPosYO() = yOffset + 2 * yDistance
@@ -703,7 +703,7 @@ function hSelectControl( iControl as integer ) as boolean
     const SELECT_UPPER_LEFT   = 2
     const SELECT_LOWER_RIGHT  = 3
     const SELECT_FRAME_AROUND = 4
-    const EXTRA_FRAME_SIZE    = 2
+    const EXTRA_FRAME_SIZE    = 1
     const SELECTION_METHODS   = 4
     const BUTTON_TIMEOUT      = -1
 
@@ -746,7 +746,6 @@ function hSelectControl( iControl as integer ) as boolean
     for iCurrentSelectionMethod = 1 to SELECTION_METHODS
         
         Kontext "BasicIDE"
-        
         select case ( iCurrentSelectionMethod )
         case SELECT_MIDDLE
 
@@ -758,16 +757,16 @@ function hSelectControl( iControl as integer ) as boolean
 
         case SELECT_UPPER_LEFT
 
-            xPos = hGetControlPosXO( iControl )  
-            yPos = hGetControlPosYO( iControl ) 
+            xPos = hGetControlPosXO( iControl ) + EXTRA_FRAME_SIZE
+            yPos = hGetControlPosYO( iControl ) + EXTRA_FRAME_SIZE
             DialogWindow.MouseMove( xPos, yPos )
             DialogWindow.MouseDown( xPos, yPos )
             DialogWindow.MouseUp  ( xPos, yPos )
 
         case SELECT_LOWER_RIGHT
 
-            xPos = hGetControlPosXE( iControl )  
-            yPos = hGetControlPosYE( iControl )
+            xPos = hGetControlPosXE( iControl ) - EXTRA_FRAME_SIZE
+            yPos = hGetControlPosYE( iControl ) - EXTRA_FRAME_SIZE
             DialogWindow.MouseMove( xPos, yPos )
             DialogWindow.MouseDown( xPos, yPos )
             DialogWindow.MouseUp  ( xPos, yPos )
@@ -778,7 +777,7 @@ function hSelectControl( iControl as integer ) as boolean
             yPos = hGetControlPosYO( iControl ) - EXTRA_FRAME_SIZE
             DialogWindow.MouseMove( xPos, yPos )
             DialogWindow.MouseDown( xPos, yPos )
-            DialogWindow.MouseUp  ( xPos, yPos ) 
+            'DialogWindow.MouseUp  ( xPos, yPos )
             
             xPos = hGetControlPosXE( iControl ) + EXTRA_FRAME_SIZE
             yPos = hGetControlPosYE( iControl ) + EXTRA_FRAME_SIZE
@@ -792,8 +791,6 @@ function hSelectControl( iControl as integer ) as boolean
         if ( hUseAsyncSlot( "ContextProperties" ) <> BUTTON_TIMEOUT ) then
             hSelectControl() = true
             exit for
-        else
-            printlog( "hSelectControl(): Method " & iCurrentSelectionMethod & " failed." )
         endif
         
     next iCurrentSelectionMethod
