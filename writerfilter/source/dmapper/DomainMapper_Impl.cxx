@@ -3396,7 +3396,8 @@ void DomainMapper_Impl::PopFieldContext()
                         FormControlHelper::Pointer_t pFormControlHelper(pContext->getFormControlHelper());
                         if (pFormControlHelper.get() != NULL)
                         {
-                            pFormControlHelper->insertControl();
+                            uno::Reference<text::XTextRange> xTxtRange(xCrsr, uno::UNO_QUERY);
+                            pFormControlHelper->insertControl(xTxtRange);
                         }
                         else if(pContext->GetHyperlinkURL().getLength())
                         {
@@ -3404,8 +3405,7 @@ void DomainMapper_Impl::PopFieldContext()
                             xCrsr->gotoEnd( true );
 
                             uno::Reference< beans::XPropertySet > xCrsrProperties( xCrsr, uno::UNO_QUERY_THROW );
-                            xCrsrProperties->setPropertyValue(
-                                                              rPropNameSupplier.GetName(PROP_HYPER_LINK_U_R_L), uno::
+                            xCrsrProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_HYPER_LINK_U_R_L), uno::
                                                               makeAny(pContext->GetHyperlinkURL()));
                         }
                     }

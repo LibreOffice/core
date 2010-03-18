@@ -29,8 +29,11 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
+#include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -48,16 +51,30 @@ struct FormControlHelper::FormControlHelper_Impl
 {
     FieldId m_eFieldId;
     awt::Size aSize;
+    uno::Reference<drawing::XDrawPage> rDrawPage;
     uno::Reference<form::XForm> rForm;
     uno::Reference<form::XFormComponent> rFormComponent;
     uno::Reference<lang::XMultiServiceFactory> rServiceFactory;
     uno::Reference<text::XTextDocument> rTextDocument;
-    uno::Reference<text::XTextRange> rTextRange;
 
+    uno::Reference<drawing::XDrawPage> getDrawPage();
     uno::Reference<lang::XMultiServiceFactory> getServiceFactory();
     uno::Reference<form::XForm> getForm();
     uno::Reference<container::XIndexContainer> getFormComps();
 };
+
+uno::Reference<drawing::XDrawPage> FormControlHelper::FormControlHelper_Impl::getDrawPage()
+{
+    if (! rDrawPage.is())
+    {
+        uno::Reference<drawing::XDrawPageSupplier>
+            xDrawPageSupplier(rTextDocument, uno::UNO_QUERY);
+        if (xDrawPageSupplier.is())
+            rDrawPage = xDrawPageSupplier->getDrawPage();
+    }
+
+    return rDrawPage;
+}
 
 uno::Reference<lang::XMultiServiceFactory> FormControlHelper::FormControlHelper_Impl::getServiceFactory()
 {
@@ -71,10 +88,43 @@ uno::Reference<form::XForm> FormControlHelper::FormControlHelper_Impl::getForm()
 {
     if (! rForm.is())
     {
-        uno::Reference<uno::XInterface>
-            xRef(getServiceFactory()->createInstance
-                 (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.Form"))));
-        rForm = uno::Reference<form::XForm>(xRef, uno::UNO_QUERY);
+        uno::Reference<form::XFormsSupplier> xFormsSupplier(getDrawPage(), uno::UNO_QUERY);
+
+        if (xFormsSupplier.is())
+        {
+            uno::Reference<container::XNameContainer> xFormsNamedContainer(xFormsSupplier->getForms());
+            static ::rtl::OUString sDOCXForm(RTL_CONSTASCII_USTRINGPARAM("DOCX-Standard"));
+
+            ::rtl::OUString sFormName(sDOCXForm);
+            sal_uInt16 nUnique = 0;
+
+            while (xFormsNamedContainer->hasByName(sFormName))
+            {
+                ++nUnique;
+                sFormName = sDOCXForm;
+                sFormName += ::rtl::OUString::valueOf(nUnique);
+            }
+
+            uno::Reference<uno::XInterface>
+                xForm(getServiceFactory()->createInstance
+                      (::rtl::OUString
+                       (RTL_CONSTASCII_USTRINGPARAM
+                        ("com.sun.star.form.component.Form"))));
+            if (xForm.is())
+            {
+                uno::Reference<beans::XPropertySet>
+                    xFormProperties(xForm, uno::UNO_QUERY);
+                uno::Any aAny(&sFormName, ::getCppuType((::rtl::OUString *) 0));
+                static ::rtl::OUString sName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")));
+                xFormProperties->setPropertyValue(sName, aAny);
+            }
+
+            rForm = uno::Reference<form::XForm>(xForm, uno::UNO_QUERY);
+
+            uno::Reference<container::XIndexContainer> xForms(xFormsNamedContainer, uno::UNO_QUERY);
+            uno::Any aAny(&xForm, ::getCppuType((uno::Reference<form::XForm>*)0));
+            xForms->insertByIndex(xForms->getCount(), aAny);
+        }
     }
 
     return rForm;
@@ -145,7 +195,7 @@ bool FormControlHelper::createCheckbox()
     return true;
 }
 
-bool FormControlHelper::insertControl()
+bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> xTextRange)
 {
     bool bCreated = false;
 
@@ -199,7 +249,7 @@ bool FormControlHelper::insertControl()
     aAny <<= nTmp;
     xShapeProps->setPropertyValue(sVertOrient, aAny);
 
-    aAny <<= m_pImpl->rTextRange;
+    aAny <<= xTextRange;
 
     static const ::rtl::OUString sTextRange(RTL_CONSTASCII_USTRINGPARAM("TextRange"));
     xShapeProps->setPropertyValue(sTextRange, aAny);

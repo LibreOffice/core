@@ -46,7 +46,7 @@ public:
                       FFDataHandler::Pointer_t pFFData);
     ~FormControlHelper();
 
-    bool insertControl();
+    bool insertControl(uno::Reference<text::XTextRange> xTextRange);
 
 private:
     FFDataHandler::Pointer_t m_pFFData;
