@@ -67,8 +67,7 @@ testcase tAllControlsOnDialog( cMajor as string )
         cApplication = hNumericDoctype( iApplication )
 
         printlog( "Build the filename" )
-        sFile = hGetWorkPath() & "basic" & hGetSuffix( cMajor )
-        sFile = ConvertPath( sFile )
+        sFile = convertpath( hGetWorkPath() & "basic" & hGetSuffix( cMajor ) )
         printlog( "Using file: " & sFile )
         
         printlog( "Delete the file, if it exists" )
@@ -77,19 +76,14 @@ testcase tAllControlsOnDialog( cMajor as string )
         printlog( "Open a second document" )
         printlog( "" )
         printlog( cApplication )
-        brc = hCreateDocument()
-        if ( not brc ) then
-            warnlog( "Failed to create a new document, aborting" )
-            goto endsub
-        endif
+        hCreateDocument()
 
         printlog( "Create a new module for the new document" )
         printlog( "Create a new dialog in BasicIDE" )
         printlog( "Open the macro controls float" )
-        bOpen = hInitFormControls( CMODULE )
-        if ( not bOpen ) then
+        if ( not hInitFormControls( CMODULE ) ) then
             printlog( "Aborting due to previous errors" )
-            call hCloseDocument()
+            hDestroyDocument()
             goto endsub
         endif
 
@@ -115,16 +109,17 @@ testcase tAllControlsOnDialog( cMajor as string )
         
         ToolsMacro_uno
         kontext "Makro"
-        irc = hSelectNodeByName( MakroAus , CMODULE )
-        if ( irc = 0 ) then
+        irc = 
+        if ( hSelectNodeByName( MakroAus , CMODULE ) ) then
+            printlog( "The node was found. Good." )
+        else
             qaerrorlog( "Searching node by name failed. Using fallback" )
             hSelectTheLastnode( MakroAus )
-        else
-            printlog( "The node was found. Good." )
         endif
         
-        brc = hIsMacroEditButtonEnabled()
-        if ( not brc ) then
+        if ( hIsMacroEditButtonEnabled() ) then
+            printlog( "Edit Macro-Button is enabled. Good." )
+        endif
             warnlog( "Edit-Button is not enabled, the test cannot continue" )
             kontext "Makro"
             Makro.cancel()
@@ -134,32 +129,30 @@ testcase tAllControlsOnDialog( cMajor as string )
             
         printlog( "Click 'Edit' to edit the module" )
         printlog( "Edit the module" )
-        Bearbeiten.Click()
-        if ( WaitSlot <> WSFinished ) then
-            warnlog( "Slot not finished after 1 second" )
-        endif
+        hClickButton( Bearbeiten )
 
         kontext "BasicIDE"
         printlog( "Find the dialog we created before" )
         ' try to find our dialog again by stepping through the tabbar
-        bOpen = hFindFirstDialog()
-        if ( not bOpen ) then
+        if ( hFindFirstDialog() ) then
+            printlog( "First dialog found. Good." )
+        else
             warnlog( "Could access dialog, aborting test" )
             hCloseBasicIde()
-            brc = hDestroyDocument()
+            hDestroyDocument()
             goto endsub
         endif
 
         printlog( "Open the macro controls float" )
         ' if the dialog is open, open the macro controls toolbar as well,
         ' we need access to the "properties" button
-        bOpen = hShowMacroControls()
-        if ( not bOpen ) then
-            warnlog( "Could not open macro controls, aborting" )
-            hCloseBasicIde()
-            brc = hDestroyDocument()
-            goto endsub
-        endif
+        'bOpen = hShowMacroControls()
+        'if ( not bOpen ) then
+        '    warnlog( "Could not open macro controls, aborting" )
+        '    hCloseBasicIde()
+        '    brc = hDestroyDocument()
+        '    goto endsub
+        'endif
         
         printlog( "Select every control, open its properties and verify its name, close properties" )
         for iCurrentControl = 1 to ICONTROLCOUNT
@@ -205,52 +198,51 @@ testcase tAllControlsOnDialog( cMajor as string )
         printlog "Open tools/macro and select the last module for the current document"
         printlog( "open the basic-IDE of this document, open controls, activate 'Select-mode' and open the properties" )
         ToolsMacro_uno
+
         kontext "Makro"
-        irc = hSelectNodeByName( MakroAus , CMODULE )
-        if ( irc = 0 ) then
+        if ( hSelectNodeByName( MakroAus , CMODULE ) ) then
+            printlog( "The node was found. Good." )
+        else
             qaerrorlog( "Searching node by name failed. Using fallback" )
             hSelectTheLastnode( MakroAus )
-        else
-            printlog( "The node was found. Good." )
         endif
         
-        brc = hIsMacroEditButtonEnabled()
-        if ( not brc ) then
+        if ( hIsMacroEditButtonEnabled() ) then
+            printlog( "Edit button is enabled. Good." )
+        else
             warnlog( "Edit-Button is not enabled, the test cannot continue" )
             kontext "Makro"
             Makro.cancel()
-            brc = hDestroyDocument()
+            hDestroyDocument()
             goto endsub
         endif
             
         printlog( "Click 'Edit' to edit the module" )
         printlog( "Edit the module" )
-        Bearbeiten.Click()
-        if ( WaitSlot <> WSFinished ) then
-            warnlog( "Slot not finished after 1 second" )
-        endif
+        hClickButton( Bearbeiten )
 
         kontext "BasicIDE"
         printlog( "Find the dialog we created before" )
         ' try to find our dialog again by stepping through the tabbar
-        bOpen = hFindFirstDialog()
-        if ( not bOpen ) then
+        if ( hFindFirstDialog() ) then
+            printlog( "First dialog found. Good." )
+        else
             warnlog( "Could access dialog, aborting test" )
             hCloseBasicIde()
-            brc = hDestroyDocument()
+            hDestroyDocument()
             goto endsub
         endif
 
         printlog( "Open the macro controls float" )
         ' if the dialog is open, open the macro controls toolbar as well,
         ' we need access to the "properties" button
-        bOpen = hShowMacroControls()
-        if ( not bOpen ) then
-            warnlog( "Could not open macro controls, aborting" )
-            hCloseBasicIde()
-            brc = hDestroyDocument()
-            goto endsub
-        endif
+        'bOpen = hShowMacroControls()
+        'if ( not bOpen ) then
+        '    warnlog( "Could not open macro controls, aborting" )
+        '    hCloseBasicIde()
+        '    hDestroyDocument()
+        '    goto endsub
+        'endif
         
         printlog( "Select every control, open its properties and verify its name, close properties" )
         for iCurrentControl = 1 to ICONTROLCOUNT
@@ -276,12 +268,10 @@ testcase tAllControlsOnDialog( cMajor as string )
         
         printlog( "Cleanup: Close the document" )
         printlog( "Close the document" )
-        brc = hDestroyDocument()
+        hDestroyDocument()
         
         printlog( "Cleanup: Delete the file we created" )
         hDeleteFile( sFile )
-        
-        printlog( "Repeat this for every application" )
         
     next iApplication
 
