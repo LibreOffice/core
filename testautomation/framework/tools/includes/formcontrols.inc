@@ -783,8 +783,9 @@ function hSelectControl( iControl as integer ) as boolean
 
         end select
         
-        
-        hUseAsyncSlot( "ContextProperties" )
+        ' We exit the loop as soon as the control is selected. Only then the slot
+        ' ContextProperties becomes available
+        if ( hUseAsyncSlot( "ContextProperties" ) <> -1 ) then exit for
 
         '///+<li>Check that the ToolsCollectionBar is open</li>
         'kontext "ToolsCollectionBar"
