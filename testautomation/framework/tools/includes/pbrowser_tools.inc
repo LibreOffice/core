@@ -108,6 +108,9 @@ function hPBSetControlName( cControl as string ) as boolean
     '///<u>Description</u>:
     '///<ul>
     '///+<li>Test that the control &quot;NameText&quot; exists</li>
+
+    ' Note: A number of fallbacks are used here because the entryfield "NameText"
+    ' is less than reliable. My hope is that one of the methods succeeds.
     kontext "TabGeneralControl"
     if ( NameText.exists() ) then
         '///+<li>Set the new name</li>
@@ -119,7 +122,6 @@ function hPBSetControlName( cControl as string ) as boolean
         TabGeneralControl.typeKeys( "<RETURN>" )
         WaitSlot()
 
-        printlog( CFN & "Verifying rename..." )
         if ( NameText.getText() = cControl ) then
             printlog( CFN & "Name is set ok: " & cControl )
             hPBSetControlName() = true
@@ -302,6 +304,8 @@ function hSetPBTabPage( iPage as integer ) as boolean
 
 end function
 
+'*******************************************************************************
+
 function hDeleteEntryFieldContent( oControl as object ) as boolean
 
     oControl.typeKeys( "<HOME>" )
@@ -314,4 +318,4 @@ function hDeleteEntryFieldContent( oControl as object ) as boolean
         hDeleteEntryFieldContent() = false
     endif
 
-exit function
+end function

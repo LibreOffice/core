@@ -131,16 +131,16 @@ testcase tAllControlsOnDialog( cMajor as string )
         printlog( "Select every control, open its properties and verify its name, close properties" )
         for iCurrentControl = 1 to ICONTROLCOUNT
 
+            sCurrentControl = hGetControlName( iCurrentControl )
             if ( hSelectControl( iCurrentControl ) ) then
                 kontext "ControlPropertiesTabControl"
                 if ( ControlPropertiesTabControl.exists( 5 ) ) then
                     wait( 300 )
-                    sCurrentControl = hGetControlName( iCurrentControl )
                     hPBGetControlName( sCurrentControl )
                     hUseAsyncSlot( "ContextProperties" )
                     kontext "ControlPropertiesTabControl" : ControlPropertiesTabControl.notExists( 3 )
                 else
-                    warnlog( "Property browser not open" )
+                    warnlog( "Property browser not open for " &  )
                 endif
             else
                 warnlog( "Failed to select control: " & sCurrentControl )
@@ -199,16 +199,16 @@ testcase tAllControlsOnDialog( cMajor as string )
         printlog( "Select every control, open its properties and verify its name, close properties" )
         for iCurrentControl = 1 to ICONTROLCOUNT
 
+            sCurrentControl = hGetControlName( iCurrentControl )
             if ( hSelectControl( iCurrentControl ) ) then
                 kontext "ControlPropertiesTabControl"
                 if ( ControlPropertiesTabControl.exists( 5 ) ) then
                     wait( 300 )
-                    sCurrentControl = hGetControlName( iCurrentControl )
                     hPBGetControlName( sCurrentControl )
                     hUseAsyncSlot( "ContextProperties" )
                     kontext "ControlPropertiesTabControl" : ControlPropertiesTabControl.notExists( 3 )
                 else
-                    warnlog( "Property browser not open" )
+                    warnlog( "Property browser not open for " &  )
                 endif
             else
                 warnlog( "Failed to select control: " & sCurrentControl )

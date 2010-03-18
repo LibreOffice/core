@@ -327,7 +327,8 @@ function hDrawControlOnDialog( iControl as integer ) as string
     
     '///+<li>click the desired control</li> 
     sControl = hInsertControl( iControl )
-    printlog( CFN & " at XO=" & iXO & _
+    printlog( CFN & " Index=" & iControl & _
+                    " at XO=" & iXO & _
                     " XE=" & iXE & _
                     " YO=" & iYO & _
                     " YE=" & iYE & _
