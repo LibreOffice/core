@@ -43,6 +43,7 @@ sub main
 
     PrintLog "-------------------------" + gApplication + "-------------------"
     Call tiToolsThesaurus
+    Call tiToolsThesaurusWithoutText
     Call tiToolsHyphenation1
     Call tiToolsHyphenation2
     Call tToolsMacro
@@ -50,6 +51,7 @@ sub main
     gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
     Call tiToolsThesaurus
+    Call tiToolsThesaurusWithoutText
     Call tiToolsHyphenation1
     Call tiToolsHyphenation2
     Call tToolsMacro
