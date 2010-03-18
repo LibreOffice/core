@@ -221,6 +221,7 @@ namespace svt { namespace table
     ::com::sun::star::uno::Sequence< sal_Int32 >& getColumnsForTooltip();
     ::com::sun::star::uno::Sequence< ::rtl::OUString >& getTextForTooltip();
     void setTooltip(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aText, const ::com::sun::star::uno::Sequence< sal_Int32 >& nCols);
+    void clearSelection();
     void selectionChanged(bool _bChanged);
 
     protected:

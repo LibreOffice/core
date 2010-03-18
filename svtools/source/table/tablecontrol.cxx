@@ -175,6 +175,11 @@ namespace svt { namespace table
         return m_pImpl->goTo( _nColPos, _nRowPos );
     }
     //--------------------------------------------------------------------
+    void TableControl::clearSelection()
+    {
+        m_pImpl->clearSelection();
+    }
+    //--------------------------------------------------------------------
     void TableControl::InvalidateDataWindow(RowPos _nRowStart, RowPos _nRowEnd, bool _bRemoved)
     {
         Rectangle _rRect;

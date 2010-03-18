@@ -478,6 +478,7 @@ void SAL_CALL SVTXGridControl::rowRemoved(const ::com::sun::star::awt::grid::Gri
             deselectAllRows();
         if(m_pTableModel->hasRowHeaders())
             m_pTableModel->getRowHeaderName().clear();
+        pTable->clearSelection();
         m_pTableModel->getCellContent().clear();
         if(pTable->isAccessibleAlive())
         {
