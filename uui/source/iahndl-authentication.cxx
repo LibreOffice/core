@@ -67,10 +67,9 @@ executeLoginDialog(
     {
         vos::OGuard aGuard(Application::GetSolarMutex());
 
-        bool bAccount = (rInfo.GetFlags() & LOGINERROR_FLAG_MODIFY_ACCOUNT)
-                            != 0;
-        bool bSavePassword = rInfo.GetIsPersistentPassword()
-                             || rInfo.GetIsSavePassword();
+        bool bAccount
+            = (rInfo.GetFlags() & LOGINERROR_FLAG_MODIFY_ACCOUNT) != 0;
+        bool bSavePassword   = rInfo.GetCanRememberPassword();
         bool bCanUseSysCreds = rInfo.GetCanUseSystemCredentials();
 
         sal_uInt16 nFlags = 0;
@@ -82,10 +81,8 @@ executeLoginDialog(
             nFlags |= LF_NO_ACCOUNT;
         if (!(rInfo.GetFlags() & LOGINERROR_FLAG_MODIFY_USER_NAME))
             nFlags |= LF_USERNAME_READONLY;
-
         if (!bSavePassword)
             nFlags |= LF_NO_SAVEPASSWORD;
-
         if (!bCanUseSysCreds)
             nFlags |= LF_NO_USESYSCREDS;
 
@@ -109,12 +106,13 @@ executeLoginDialog(
 
         if (bSavePassword)
         {
-            xDialog->
-                SetSavePasswordText(ResId(rInfo.GetIsPersistentPassword() ?
-                                              RID_SAVE_PASSWORD :
-                                              RID_KEEP_PASSWORD,
-                                          *xManager.get()));
-            xDialog->SetSavePassword(rInfo.GetIsSavePassword());
+            xDialog->SetSavePasswordText(
+                ResId(rInfo.GetIsRememberPersistent()
+                          ? RID_SAVE_PASSWORD
+                          : RID_KEEP_PASSWORD,
+                      *xManager.get()));
+
+            xDialog->SetSavePassword(rInfo.GetIsRememberPassword());
         }
 
         if ( bCanUseSysCreds )
@@ -126,7 +124,7 @@ executeLoginDialog(
         rInfo.SetUserName(xDialog->GetName());
         rInfo.SetPassword(xDialog->GetPassword());
         rInfo.SetAccount(xDialog->GetAccount());
-        rInfo.SetSavePassword(xDialog->IsSavePassword());
+        rInfo.SetIsRememberPassword(xDialog->IsSavePassword());
 
         if ( bCanUseSysCreds )
           rInfo.SetIsUseSystemCredentials( xDialog->IsUseSystemCredentials() );
@@ -136,6 +134,61 @@ executeLoginDialog(
         throw uno::RuntimeException(
                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
                   uno::Reference< uno::XInterface >());
+    }
+}
+
+void
+getRememberModes(
+    uno::Sequence< ucb::RememberAuthentication > const & rRememberModes,
+    ucb::RememberAuthentication & rPreferredMode,
+    ucb::RememberAuthentication & rAlternateMode )
+{
+    sal_Int32 nCount = rRememberModes.getLength();
+    OSL_ENSURE( (nCount > 0) && (nCount < 4),
+                "ucb::RememberAuthentication sequence size mismatch!" );
+    if ( nCount == 1 )
+    {
+        rPreferredMode = rAlternateMode = rRememberModes[ 0 ];
+        return;
+    }
+    else
+    {
+        //bool bHasRememberModeNo = false;
+        bool bHasRememberModeSession = false;
+        bool bHasRememberModePersistent = false;
+
+        for (sal_Int32 i = 0; i < nCount; ++i)
+        {
+            switch ( rRememberModes[i] )
+            {
+            case ucb::RememberAuthentication_NO:
+                //bHasRememberModeNo = true;
+                break;
+            case ucb::RememberAuthentication_SESSION:
+                bHasRememberModeSession = true;
+                break;
+            case ucb::RememberAuthentication_PERSISTENT:
+                bHasRememberModePersistent = true;
+                break;
+            default:
+                OSL_TRACE( "Unsupported RememberAuthentication value" );
+                break;
+            }
+        }
+
+        if (bHasRememberModePersistent)
+        {
+            rPreferredMode = ucb::RememberAuthentication_PERSISTENT;
+            if (bHasRememberModeSession)
+                rAlternateMode = ucb::RememberAuthentication_SESSION;
+            else
+                rAlternateMode = ucb::RememberAuthentication_NO;
+        }
+        else
+        {
+            rPreferredMode = ucb::RememberAuthentication_SESSION;
+            rAlternateMode = ucb::RememberAuthentication_NO;
+        }
     }
 }
 
@@ -161,7 +214,7 @@ handleAuthenticationRequest_(
         xSupplyAuthentication2.set(xSupplyAuthentication, uno::UNO_QUERY);
 
     //////////////////////////
-    // First, try to obatin credentials from password container service.
+    // First, try to obtain credentials from password container service.
     uui::PasswordContainerHelper aPwContainerHelper(xServiceFactory);
     if (aPwContainerHelper.handleAuthenticationRequest(rRequest,
                                                        xSupplyAuthentication,
@@ -174,26 +227,20 @@ handleAuthenticationRequest_(
 
     //////////////////////////
     // Second, try to obtain credentials from user via password dialog.
-    bool bRemember;
-    bool bRememberPersistent;
+    ucb::RememberAuthentication eDefaultRememberMode
+        = ucb::RememberAuthentication_SESSION;
+    ucb::RememberAuthentication ePreferredRememberMode
+        = eDefaultRememberMode;
+    ucb::RememberAuthentication eAlternateRememberMode
+        = ucb::RememberAuthentication_NO;
+
     if (xSupplyAuthentication.is())
     {
-        ucb::RememberAuthentication eDefault;
-        uno::Sequence< ucb::RememberAuthentication >
-            aModes(xSupplyAuthentication->getRememberPasswordModes(eDefault));
-        bRemember = eDefault != ucb::RememberAuthentication_NO;
-        bRememberPersistent = false;
-        for (sal_Int32 i = 0; i < aModes.getLength(); ++i)
-            if (aModes[i] == ucb::RememberAuthentication_PERSISTENT)
-            {
-                bRememberPersistent = true;
-                break;
-            }
-    }
-    else
-    {
-        bRemember = false;
-        bRememberPersistent = false;
+        getRememberModes(
+            xSupplyAuthentication->getRememberPasswordModes(
+                eDefaultRememberMode),
+            ePreferredRememberMode,
+            eAlternateRememberMode);
     }
 
     sal_Bool bCanUseSystemCredentials;
@@ -220,10 +267,16 @@ handleAuthenticationRequest_(
     if (rRequest.HasPassword)
         aInfo.SetPassword(rRequest.Password);
     aInfo.SetErrorText(rRequest.Diagnostic);
-    aInfo.SetPersistentPassword(bRememberPersistent);
-    aInfo.SetSavePassword(bRemember);
+
+    aInfo.SetCanRememberPassword(
+        ePreferredRememberMode != eAlternateRememberMode);
+    aInfo.SetIsRememberPassword(
+        eDefaultRememberMode != ucb::RememberAuthentication_NO);
+    aInfo.SetIsRememberPersistent(
+        ePreferredRememberMode == ucb::RememberAuthentication_PERSISTENT);
+
     aInfo.SetCanUseSystemCredentials(bCanUseSystemCredentials);
-    aInfo.SetIsUseSystemCredentials( bDefaultUseSystemCredentials );
+    aInfo.SetIsUseSystemCredentials(bDefaultUseSystemCredentials);
     aInfo.SetModifyAccount(rRequest.HasAccount
                            && xSupplyAuthentication.is()
                            && xSupplyAuthentication->canSetAccount());
@@ -242,13 +295,24 @@ handleAuthenticationRequest_(
                 xSupplyAuthentication->setUserName(aInfo.GetUserName());
             if (xSupplyAuthentication->canSetPassword())
                 xSupplyAuthentication->setPassword(aInfo.GetPassword());
-            xSupplyAuthentication->
-                setRememberPassword(
-                    aInfo.GetIsSavePassword() ?
-                       bRememberPersistent ?
-                       ucb::RememberAuthentication_PERSISTENT :
-                           ucb::RememberAuthentication_SESSION :
-                               ucb::RememberAuthentication_NO);
+
+            if (ePreferredRememberMode != eAlternateRememberMode)
+            {
+                // user had te choice.
+                if (aInfo.GetIsRememberPassword())
+                    xSupplyAuthentication->setRememberPassword(
+                        ePreferredRememberMode);
+                else
+                    xSupplyAuthentication->setRememberPassword(
+                        eAlternateRememberMode);
+            }
+            else
+            {
+                // user had no choice.
+                xSupplyAuthentication->setRememberPassword(
+                    ePreferredRememberMode);
+            }
+
             if (rRequest.HasRealm)
             {
                 if (xSupplyAuthentication->canSetRealm())
@@ -267,22 +331,31 @@ handleAuthenticationRequest_(
         //////////////////////////
         // Third, store credentials in password container.
 
-        if ( aInfo.GetIsUseSystemCredentials() )
+        if (aInfo.GetIsUseSystemCredentials())
         {
-            if (aInfo.GetIsSavePassword())
+            if (aInfo.GetIsRememberPassword() ||
+                (eAlternateRememberMode == ucb::RememberAuthentication_SESSION))
             {
-                aPwContainerHelper.addRecord(
-                    rURL.getLength() ? rURL : rRequest.ServerName,
-                    rtl::OUString(), // empty u/p -> sys creds
-                    uno::Sequence< rtl::OUString >(),
-                    xIH,
-                    bRememberPersistent);
+                if (!aPwContainerHelper.addRecord(
+                        rURL.getLength() ? rURL : rRequest.ServerName,
+                        rtl::OUString(), // empty u/p -> sys creds
+                        uno::Sequence< rtl::OUString >(),
+                        xIH,
+                        !aInfo.GetIsRememberPassword()
+                            ? false /* SESSION */
+                            : ePreferredRememberMode
+                                == ucb::RememberAuthentication_PERSISTENT))
+                {
+                    xSupplyAuthentication->setRememberPassword(
+                        ucb::RememberAuthentication_NO);
+                }
             }
         }
         // Empty user name can not be valid:
         else if (aInfo.GetUserName().Len() != 0)
         {
-            if (aInfo.GetIsSavePassword())
+            if (aInfo.GetIsRememberPassword() ||
+                (eAlternateRememberMode == ucb::RememberAuthentication_SESSION))
             {
                 uno::Sequence< rtl::OUString >
                     aPassList(aInfo.GetAccount().Len() == 0 ? 1 : 2);
@@ -290,12 +363,19 @@ handleAuthenticationRequest_(
                 if (aInfo.GetAccount().Len() != 0)
                     aPassList[1] = aInfo.GetAccount();
 
-                aPwContainerHelper.addRecord(
-                    rURL.getLength() ? rURL : rRequest.ServerName,
-                    aInfo.GetUserName(),
-                    aPassList,
-                    xIH,
-                    bRememberPersistent);
+                if (!aPwContainerHelper.addRecord(
+                        rURL.getLength() ? rURL : rRequest.ServerName,
+                        aInfo.GetUserName(),
+                        aPassList,
+                        xIH,
+                        !aInfo.GetIsRememberPassword()
+                            ? false /* SESSION */
+                            : ePreferredRememberMode
+                                == ucb::RememberAuthentication_PERSISTENT))
+                {
+                    xSupplyAuthentication->setRememberPassword(
+                        ucb::RememberAuthentication_NO);
+                }
             }
         }
         break;
