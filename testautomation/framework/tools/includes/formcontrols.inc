@@ -406,6 +406,7 @@ function hDrawControl( xPos as integer, _
     DialogWindow.MouseUp( 20 , 20 )
     
     try
+        DialogWindow.MouseMove ( xPos, yPos )
         DialogWindow.MouseDown ( xPos, yPos )
         DialogWindow.MouseMove ( xEnd, yEnd )
         DialogWindow.MouseUp   ( xEnd, yEnd )
@@ -740,6 +741,7 @@ function hSelectControl( iControl as integer ) as boolean
     '///+<li>Rubberband around the control (Mouse movement)</li>
     '///+<li>Deselct everything and use <TAB> to activate the control</li>
     '///</ol>
+
     for iCurrentSelectionMethod = 1 to SELECTION_METHODS
         
         Kontext "BasicIDE"
