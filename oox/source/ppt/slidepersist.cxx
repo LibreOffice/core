@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: slidepersist.cxx,v $
- * $Revision: 1.7.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -146,9 +143,9 @@ void SlidePersist::createXShapes( const XmlFilterBase& rFilterBase )
         {
             PPTShape* pPPTShape = dynamic_cast< PPTShape* >( (*aChildIter).get() );
             if ( pPPTShape )
-                pPPTShape->addShape( rFilterBase, *this, getTheme(), xShapes, 0, &getShapeMap() );
+                pPPTShape->addShape( rFilterBase, *this, getTheme().get(), xShapes, 0, &getShapeMap() );
             else
-                (*aChildIter)->addShape( rFilterBase, getTheme(), xShapes, 0, &getShapeMap() );
+                (*aChildIter)->addShape( rFilterBase, getTheme().get(), xShapes, 0, &getShapeMap() );
 
             aChildIter++;
         }
