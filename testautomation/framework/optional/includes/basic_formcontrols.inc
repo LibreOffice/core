@@ -37,8 +37,8 @@ testcase tAllControlsOnDialog( cMajor as string )
 
     printlog( "Insert all available controls into a BASIC dialog and verify that changed settings persist a save/load cycle" )
     
-    qaerrorlog( "#i105685# - Test disabled" )
-    goto endsub
+    'qaerrorlog( "#i105685# - Test disabled" )
+    'goto endsub
 
     dim iApplication as Integer ' numeric expression for gApplication
     dim cApplication as string  ' Name of the current application
@@ -59,14 +59,14 @@ testcase tAllControlsOnDialog( cMajor as string )
     dim irc as integer
     
     const CMODULE = "tacod" ' abbreviation for tAllControlsOnDialog
+    const BUTTON_TIMEOUT = -1
 
     printlog( "Perform the test for one application only: WRITER" )
     for iApplication = 1 to 1
     
-        printlog( "Set document type" )
         cApplication = hNumericDoctype( iApplication )
+        printlog( "Document type: " & cApplication )
 
-        printlog( "Build the filename" )
         sFile = convertpath( hGetWorkPath() & "basic" & hGetSuffix( cMajor ) )
         printlog( "Using file: " & sFile )
         
@@ -74,13 +74,9 @@ testcase tAllControlsOnDialog( cMajor as string )
         hDeleteFile( sFile )
                 
         printlog( "Open a second document" )
-        printlog( "" )
-        printlog( cApplication )
         hCreateDocument()
 
-        printlog( "Create a new module for the new document" )
-        printlog( "Create a new dialog in BasicIDE" )
-        printlog( "Open the macro controls float" )
+        printlog( "Create a new module for the new document, new Dialog, open macro controls" )
         if ( not hInitFormControls( CMODULE ) ) then
             printlog( "Aborting due to previous errors" )
             hDestroyDocument()
@@ -93,23 +89,25 @@ testcase tAllControlsOnDialog( cMajor as string )
             sCurrentControl = hDrawControlOnDialog( iCurrentControl )
             listappend( lsControlNames() , sCurrentControl )
             hUseAsyncSlot( "ContextProperties" )
-            hPBSetControlName( sCurrentControl )
-            hUseAsyncSlot( "ContextProperties" )
+            kontext "ControlPropertiesTabControl"
+            if ( ControlPropertiesTabControl.exists( 1 ) then
+                hPBSetControlName( sCurrentControl )
+                hUseAsyncSlot( "ContextProperties" )
+            else
+                warnlog( "Property browser not open" )
+            endif
 
         next iCurrentControl
         
-
         Kontext "BASICIDE"
         printlog( "close the BASIC-IDE" )
         hCloseBasicIde()
-        
         
         printlog( "" )
         printlog( "Test case 1: Verify that settings survive a close and reopen of the BASIC IDE" )
         
         ToolsMacro_uno
         kontext "Makro"
-        irc = 
         if ( hSelectNodeByName( MakroAus , CMODULE ) ) then
             printlog( "The node was found. Good." )
         else
@@ -117,19 +115,14 @@ testcase tAllControlsOnDialog( cMajor as string )
             hSelectTheLastnode( MakroAus )
         endif
         
-        if ( hIsMacroEditButtonEnabled() ) then
-            printlog( "Edit Macro-Button is enabled. Good." )
-        endif
+        printlog( "Edit the module" )
+        if ( hClickButton( Bearbeiten ) = BUTTON_TIMEOUT ) then
             warnlog( "Edit-Button is not enabled, the test cannot continue" )
             kontext "Makro"
-            Makro.cancel()
-            brc = hDestroyDocument()
+            hCloseDialog( Makro, "cancel" )
+            hDestroyDocument()
             goto endsub
         endif
-            
-        printlog( "Click 'Edit' to edit the module" )
-        printlog( "Edit the module" )
-        hClickButton( Bearbeiten )
 
         kontext "BasicIDE"
         printlog( "Find the dialog we created before" )
@@ -143,28 +136,23 @@ testcase tAllControlsOnDialog( cMajor as string )
             goto endsub
         endif
 
-        printlog( "Open the macro controls float" )
-        ' if the dialog is open, open the macro controls toolbar as well,
-        ' we need access to the "properties" button
-        'bOpen = hShowMacroControls()
-        'if ( not bOpen ) then
-        '    warnlog( "Could not open macro controls, aborting" )
-        '    hCloseBasicIde()
-        '    brc = hDestroyDocument()
-        '    goto endsub
-        'endif
-        
         printlog( "Select every control, open its properties and verify its name, close properties" )
         for iCurrentControl = 1 to ICONTROLCOUNT
 
-            if ( instr( gtSysName, "Solaris" ) > 0 ) then
+            if ( instr( gtSysName, "Solaris" ) ) then
                 qaerrorlog( "Skipping frame control on Solaris" )
             else
                 hSelectControl( iCurrentControl )
                 hUseAsyncSlot( "ContextProperties" )
-                sCurrentControl = lsControlNames( iCurrentControl )
-                hPBGetControlName( sCurrentControl )
-                hUseAsyncSlot( "ContextProperties" )
+                kontext "ControlPropertiesTabControl"
+                if ( ControlPropertiesTabControl.exists( 1 ) then
+                    sCurrentControl = lsControlNames( iCurrentControl )
+                    hPBGetControlName( sCurrentControl )
+                    hUseAsyncSlot( "ContextProperties" )
+                else
+                    warnlog( "Property browser not open" )
+                endif
+
             endif
             
         next iCurrentControl
@@ -173,29 +161,22 @@ testcase tAllControlsOnDialog( cMajor as string )
         ListAllDelete( lsControlNames() )
        
         printlog( "Cleanup: Close the BASIC-IDE" )
-        printlog( "Close the BASIC IDE" )
         hCloseBasicIde()        
         
-        if ( getDocumentCount <> 1 ) then
-            warnlog( "Number of open documents is incorrect, expected one only" )
-        endif 
+        if ( getDocumentCount <> 1 ) then warnlog( "Number of open documents is incorrect, expected one only" )
 
-        printlog "Save the document"
         printlog( "save the document" )
         Call hFileSaveAsKill( sFile )
 
-        printlog "Close it"
         printlog( "close the document" )
-        brc = hDestroyDocument()
+        hDestroyDocument()
 
         printlog( "" ) 
         printlog( "Test case 2: Verify that all items keep their names after close and reload of the document" )
         
         printlog( "Open the file again" )
-        printlog( "Open the document" )
         hFileOpen( sFile )
 
-        printlog "Open tools/macro and select the last module for the current document"
         printlog( "open the basic-IDE of this document, open controls, activate 'Select-mode' and open the properties" )
         ToolsMacro_uno
 
@@ -207,19 +188,14 @@ testcase tAllControlsOnDialog( cMajor as string )
             hSelectTheLastnode( MakroAus )
         endif
         
-        if ( hIsMacroEditButtonEnabled() ) then
-            printlog( "Edit button is enabled. Good." )
-        else
+        printlog( "Edit the module" )
+        if ( hClickButton( Bearbeiten ) = BUTTON_TIMEOUT ) then
             warnlog( "Edit-Button is not enabled, the test cannot continue" )
             kontext "Makro"
-            Makro.cancel()
+            hCloseDialog( Makro, "cancel" )
             hDestroyDocument()
             goto endsub
         endif
-            
-        printlog( "Click 'Edit' to edit the module" )
-        printlog( "Edit the module" )
-        hClickButton( Bearbeiten )
 
         kontext "BasicIDE"
         printlog( "Find the dialog we created before" )
@@ -233,17 +209,6 @@ testcase tAllControlsOnDialog( cMajor as string )
             goto endsub
         endif
 
-        printlog( "Open the macro controls float" )
-        ' if the dialog is open, open the macro controls toolbar as well,
-        ' we need access to the "properties" button
-        'bOpen = hShowMacroControls()
-        'if ( not bOpen ) then
-        '    warnlog( "Could not open macro controls, aborting" )
-        '    hCloseBasicIde()
-        '    hDestroyDocument()
-        '    goto endsub
-        'endif
-        
         printlog( "Select every control, open its properties and verify its name, close properties" )
         for iCurrentControl = 1 to ICONTROLCOUNT
 
@@ -252,9 +217,15 @@ testcase tAllControlsOnDialog( cMajor as string )
             else
                 hSelectControl( iCurrentControl )
                 hUseAsyncSlot( "ContextProperties" )
-                sCurrentControl = lsControlNames( iCurrentControl )
-                hPBGetControlName( sCurrentControl )
-                hUseAsyncSlot( "ContextProperties" )
+                kontext "ControlPropertiesTabControl"
+                if ( ControlPropertiesTabControl.exists( 1 ) then
+                    sCurrentControl = lsControlNames( iCurrentControl )
+                    hPBGetControlName( sCurrentControl )
+                    hUseAsyncSlot( "ContextProperties" )
+                else
+                    warnlog( "Property browser not open" )
+                endif
+
             endif
             
         next iCurrentControl
@@ -263,11 +234,9 @@ testcase tAllControlsOnDialog( cMajor as string )
         ListAllDelete( lsControlNames() )
        
         printlog( "Cleanup: Close the BASIC-IDE" )
-        printlog( "Close the BASIC IDE" )
         hCloseBasicIde()
         
         printlog( "Cleanup: Close the document" )
-        printlog( "Close the document" )
         hDestroyDocument()
         
         printlog( "Cleanup: Delete the file we created" )
