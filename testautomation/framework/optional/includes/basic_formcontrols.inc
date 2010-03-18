@@ -98,9 +98,9 @@ testcase tAllControlsOnDialog( cMajor as string )
 
             sCurrentControl = hDrawControlOnDialog( iCurrentControl )
             listappend( lsControlNames() , sCurrentControl )
-            hOpenPropertyBrowser()
+            hUseAsyncSlot( "ContextProperties" )
             hPBSetControlName( sCurrentControl )
-            hClosePropertyBrowser()
+            hUseAsyncSlot( "ContextProperties" )
 
         next iCurrentControl
         
@@ -168,10 +168,10 @@ testcase tAllControlsOnDialog( cMajor as string )
                 qaerrorlog( "Skipping frame control on Solaris" )
             else
                 hSelectControl( iCurrentControl )
-                hOpenPropertyBrowser()
+                hUseAsyncSlot( "ContextProperties" )
                 sCurrentControl = lsControlNames( iCurrentControl )
                 hPBGetControlName( sCurrentControl )
-                hClosePropertyBrowser()
+                hUseAsyncSlot( "ContextProperties" )
             endif
             
         next iCurrentControl
@@ -259,10 +259,10 @@ testcase tAllControlsOnDialog( cMajor as string )
                 qaerrorlog( "Skipping frame control on Solaris" )
             else
                 hSelectControl( iCurrentControl )
-                hOpenPropertyBrowser()
+                hUseAsyncSlot( "ContextProperties" )
                 sCurrentControl = lsControlNames( iCurrentControl )
                 hPBGetControlName( sCurrentControl )
-                hClosePropertyBrowser()
+                hUseAsyncSlot( "ContextProperties" )
             endif
             
         next iCurrentControl
