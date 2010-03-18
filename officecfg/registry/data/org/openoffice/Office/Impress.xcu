@@ -102,11 +102,6 @@
             </node>
             <node oor:name="R7" oor:op="replace">
               <prop oor:name="URL">
-                <value>private:resource/view/ToolPanelPane</value>
-              </prop>
-            </node>
-            <node oor:name="R8" oor:op="replace">
-              <prop oor:name="URL">
                 <value>private:resource/view/PresentationView</value>
               </prop>
             </node>
