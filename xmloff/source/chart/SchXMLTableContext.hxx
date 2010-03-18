@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SchXMLTableContext.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +45,6 @@ namespace com { namespace sun { namespace star {
     }}
     namespace chart {
         class XChartDocument;
-        class XChartDataArray;
         struct ChartSeriesAddress;
 }}}}
 
@@ -99,21 +95,11 @@ private:
                            sal_Int32& nRows, sal_Int32& nColumns );
 
 public:
-    /// The data for the ChartDocument is applied linearly
-    static void applyTableSimple(
-        const SchXMLTable& rTable,
-        const com::sun::star::uno::Reference< com::sun::star::chart::XChartDataArray > & xData );
-
-    /** The data for the ChartDocument is applied by reading the
-        table, the addresses of series, the addresses of labels,
-        the cell-range-address for the categories
-     */
     static void applyTableToInternalDataProvider( const SchXMLTable& rTable,
                             com::sun::star::uno::Reference< com::sun::star::chart2::XChartDocument > xChartDoc );
 
-    /** Second part of applyTableToInternalDataProvider that has to be called after the data series
-        got their styles set.  This function reorders local data to fit the
-        correct data structure.
+    /** This function reorders local data to fit the correct data structure.
+        Call it after the data series got their styles set.
      */
     static void switchRangesFromOuterToInternalIfNecessary( const SchXMLTable& rTable,
                                   const tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
@@ -223,7 +209,7 @@ private:
     SchXMLTable& mrTable;
     rtl::OUString maCellContent;
     rtl::OUString maRangeId;
-    sal_Bool mbReadPara;
+    sal_Bool mbReadText;
 
 public:
     SchXMLTableCellContext( SchXMLImportHelper& rImpHelper,

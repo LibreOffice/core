@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewcontactofgraphic.cxx,v $
- * $Revision: 1.14.18.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,8 +54,8 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <svx/sdr/primitive2d/sdrtextprimitive2d.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/colritem.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 

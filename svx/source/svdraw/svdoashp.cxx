@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdoashp.cxx,v $
- * $Revision: 1.51.52.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,10 +60,10 @@
 #include <svx/svdoedge.hxx>  // #32383# Die Verbinder nach Move nochmal anbroadcasten
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
-#include <svx/eeitem.hxx>
-#include "editstat.hxx"
+#include <editeng/eeitem.hxx>
+#include "editeng/editstat.hxx"
 #include <svx/svdoutl.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/sdtfchim.hxx>
 #include "../customshapes/EnhancedCustomShapeGeometry.hxx"
 #include "../customshapes/EnhancedCustomShapeTypeNames.hxx"
@@ -77,7 +74,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
-#include <svx/writingmodeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/svxids.hrc>
 #include <svl/whiter.hxx>
