@@ -301,33 +301,22 @@ end function
 
 function hCloseCollectionBar() as boolean
 
-    '///<h3>Close the ToolsCollectionBar (Macro Controls Float)</h3>
-    '///<i>Starting point: Basic Dialog editor is open, ToolsCollectionBar is open</i>
-    '///<ul>
-    
     const CFN = "hCloseCollectionBar::"
-    const RETRIES = 3
-    
-    dim iTry as integer
-        iTry = 0
-    
-    '///+<li>Try to close the ToolsCollectionBar max 3 times</li>
-    kontext "ToolsCollectionBar"
-    while ( ToolsCollectionBar.exists( 1 ) )
-        iTry = iTry + 1
-        printlog( CFN & "Closing ToolsCollectionBar..." )
-        ToolsCollectionBar.close()
-        
-        if ( iTry = RETRIES ) then
-            printlog( CFN & "Failed to close ToolsCollectionBar" )
-            hCloseCollectionBar() = false
-            exit function
-        endif
-    wend
 
-    hCloseCollectionBar() = true
-    '///</ul>
-    
+    kontext "ToolsCollectionBar"
+    if ( ToolsCollectionBar.exists() ) then
+
+        if ( hCloseDialog( ToolsCollectionBar, "close" ) ) then
+            printlog( "Closed Macro Controls Float" )
+            hCloseCollectionBar() = true
+        else
+            hCloseCollectionBar() = false
+        endif
+    else
+        printlog( "Macro Controls Float not open" )
+        hCloseCollectionBar() = true
+    endif
+
 end function
 
 '*******************************************************************************
