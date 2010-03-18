@@ -52,17 +52,13 @@ testcase tAllControlsOnDialog( cMajor as string )
     ' the workfile and the filter (Tested for 569, 645, 680)
     dim sFile as string
 
-    ' errorstatus: if false, something went wrong and the test cancels
-    ' trying to recover somehow
-    dim bOpen as boolean
-    dim brc as boolean 
-    dim irc as integer
-    
     const CMODULE = "tacod" ' abbreviation for tAllControlsOnDialog
     const BUTTON_TIMEOUT = -1
+    const UPPER_BOUNDARY = 1
 
-    printlog( "Perform the test for one application only: WRITER" )
-    for iApplication = 1 to 1
+    ' Currently set to test writer only. Increase upper boundary to add applications
+    ' Up to 4 should be useful
+    for iApplication = 1 to UPPER_BOUNDARY
     
         cApplication = hNumericDoctype( iApplication )
         printlog( "Document type: " & cApplication )
@@ -76,7 +72,7 @@ testcase tAllControlsOnDialog( cMajor as string )
         printlog( "Open a second document" )
         hCreateDocument()
 
-        printlog( "Create a new module for the new document, new Dialog, open macro controls" )
+        printlog( "Create a new module for the new document, new dialog, open macro controls" )
         if ( not hInitFormControls( CMODULE ) ) then
             printlog( "Aborting due to previous errors" )
             hDestroyDocument()
@@ -90,7 +86,7 @@ testcase tAllControlsOnDialog( cMajor as string )
             listappend( lsControlNames() , sCurrentControl )
             hUseAsyncSlot( "ContextProperties" )
             kontext "ControlPropertiesTabControl"
-            if ( ControlPropertiesTabControl.exists( 1 ) then
+            if ( ControlPropertiesTabControl.exists( 1 ) ) then
                 hPBSetControlName( sCurrentControl )
                 hUseAsyncSlot( "ContextProperties" )
             else
@@ -126,11 +122,10 @@ testcase tAllControlsOnDialog( cMajor as string )
 
         kontext "BasicIDE"
         printlog( "Find the dialog we created before" )
-        ' try to find our dialog again by stepping through the tabbar
         if ( hFindFirstDialog() ) then
             printlog( "First dialog found. Good." )
         else
-            warnlog( "Could access dialog, aborting test" )
+            warnlog( "Could not access dialog, aborting test" )
             hCloseBasicIde()
             hDestroyDocument()
             goto endsub
@@ -145,7 +140,7 @@ testcase tAllControlsOnDialog( cMajor as string )
                 hSelectControl( iCurrentControl )
                 hUseAsyncSlot( "ContextProperties" )
                 kontext "ControlPropertiesTabControl"
-                if ( ControlPropertiesTabControl.exists( 1 ) then
+                if ( ControlPropertiesTabControl.exists( 1 ) ) then
                     sCurrentControl = lsControlNames( iCurrentControl )
                     hPBGetControlName( sCurrentControl )
                     hUseAsyncSlot( "ContextProperties" )
@@ -199,11 +194,10 @@ testcase tAllControlsOnDialog( cMajor as string )
 
         kontext "BasicIDE"
         printlog( "Find the dialog we created before" )
-        ' try to find our dialog again by stepping through the tabbar
         if ( hFindFirstDialog() ) then
             printlog( "First dialog found. Good." )
         else
-            warnlog( "Could access dialog, aborting test" )
+            warnlog( "Could not access dialog, aborting test" )
             hCloseBasicIde()
             hDestroyDocument()
             goto endsub
@@ -212,13 +206,13 @@ testcase tAllControlsOnDialog( cMajor as string )
         printlog( "Select every control, open its properties and verify its name, close properties" )
         for iCurrentControl = 1 to ICONTROLCOUNT
 
-            if ( instr( gtSysName, "Solaris" ) > 0 ) then
+            if ( instr( gtSysName, "Solaris" ) ) then
                 qaerrorlog( "Skipping frame control on Solaris" )
             else
                 hSelectControl( iCurrentControl )
                 hUseAsyncSlot( "ContextProperties" )
                 kontext "ControlPropertiesTabControl"
-                if ( ControlPropertiesTabControl.exists( 1 ) then
+                if ( ControlPropertiesTabControl.exists( 1 ) ) then
                     sCurrentControl = lsControlNames( iCurrentControl )
                     hPBGetControlName( sCurrentControl )
                     hUseAsyncSlot( "ContextProperties" )

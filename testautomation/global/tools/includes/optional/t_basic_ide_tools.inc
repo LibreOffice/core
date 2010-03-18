@@ -227,39 +227,36 @@ function hFindFirstDialog() as boolean
     '///<i>Starting point: Basic IDE must be open and has the focus</i>
     '///<ul>
     
-    dim iPosOverTabbar as integer
-    dim brc as boolean
     const CFN = "hFindFirstDialog::"
+    const REPEAT_COUNT = 5 ' number of times to send a keystroke to BASIC IDE
+    const PROBE_STEPPING = 5
+    const VERTICALLY_CENTERED = 50
+    const MAX_NUMBER_OF_RETRIES = 20
+
+    dim iPosOverTabbar as integer
 
     '///+<li>Set focus to Basic IDE, maximize it</li>
     kontext "BasicIde"
     BasicIde.maximize()
     
 
-    brc = false
+    hFindFirstDialog() = false
 
     '///+<li>move pointer over the tabbar and click until a dialog opens (hopefully)</li>
-    for iPosOverTabbar = 1 to 20
+    for iPosOverTabbar = 1 to MAX_NUMBER_OF_RETRIES
 
-        Tabbar.MouseDown ( 5 * iPosOverTabbar , 50 )
-        Tabbar.MouseUp   ( 5 * iPosOverTabbar , 50 )
+        Tabbar.MouseDown ( PROBE_STEPPING * iPosOverTabbar , VERTICALLY_CENTERED )
+        Tabbar.MouseUp   ( PROBE_STEPPING * iPosOverTabbar , VERTICALLY_CENTERED )
 
         if ( DialogWindow.Exists() ) then
-            brc = true
-            DialogWindow.typeKeys( "<up>", 5 )
+            printlog( "BASIC Dialog window found" )
+            hFindFirstDialog() = true
+            DialogWindow.typeKeys( "<UP><LEFT>" , REPEAT_COUNT )
             exit for
         endif
 
     next iPosOverTabbar
-    
-    '///+<li>Return TRUE on success, FALSE on failure</li>
-    if ( brc ) then
-        printlog( CFN & "Found dialog" )
-    else
-        printlog( CFN & "Could not find the first dialog via tabbar" )
-    endif
-    hFindFirstDialog() = brc
-    '///</ul>
+       '///</ul>
 
 end function
 

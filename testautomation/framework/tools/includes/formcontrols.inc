@@ -703,6 +703,7 @@ function hSelectControl( iControl as integer ) as boolean
     const SELECT_FRAME_AROUND = 4
     const EXTRA_FRAME_SIZE    = 2
     const SELECTION_METHODS   = 4
+    const BUTTON_TIMEOUT      = -1
 
     hSelectControl() = false
 
@@ -785,19 +786,7 @@ function hSelectControl( iControl as integer ) as boolean
         
         ' We exit the loop as soon as the control is selected. Only then the slot
         ' ContextProperties becomes available
-        if ( hUseAsyncSlot( "ContextProperties" ) <> -1 ) then exit for
-
-        '///+<li>Check that the ToolsCollectionBar is open</li>
-        'kontext "ToolsCollectionBar"
-        'if ( ToolsCollectionBar.exists() ) then
-        '    wait( 300 )
-        '    if ( OpenProperties.isEnabled() ) then
-        '        hSelectControl() = true
-        '        exit for
-        '    else
-        '        wait( 500 )
-        '    endif
-        'endif
+        if ( hUseAsyncSlot( "ContextProperties" ) <> BUTTON_TIMEOUT ) then exit for
         
     next iCurrentSelectionMethod
     '///</ul>
