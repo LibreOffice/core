@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -131,6 +131,41 @@ public:
     bool    SupportsCTL() const     { return ((mnMiscFlags & CTL_FLAG) != 0); }
 
     bool    operator==( const ImplFontMetric& ) const;
+};
+
+// ------------------
+// - ImplFontHints -
+// ------------------
+
+class ImplFontOptions
+{
+public:
+    FontEmbeddedBitmap meEmbeddedBitmap; // whether the embedded bitmaps should be used
+    FontAntiAlias      meAntiAlias;      // whether the font should be antialiased
+    FontAutoHint       meAutoHint;       // whether the font should be autohinted
+    FontHinting        meHinting;        // whether the font should be hinted
+    FontHintStyle      meHintStyle;      // type of font hinting to be used
+public:
+    ImplFontOptions() :
+        meEmbeddedBitmap(EMBEDDEDBITMAP_DONTKNOW),
+        meAntiAlias(ANTIALIAS_DONTKNOW),
+        meAutoHint(AUTOHINT_DONTKNOW),
+        meHinting(HINTING_DONTKNOW),
+        meHintStyle(HINT_SLIGHT)
+    {}
+    ImplFontOptions( FontEmbeddedBitmap eEmbeddedBitmap, FontAntiAlias eAntiAlias,
+        FontAutoHint eAutoHint, FontHinting eHinting, FontHintStyle eHintStyle) :
+        meEmbeddedBitmap(eEmbeddedBitmap),
+        meAntiAlias(eAntiAlias),
+        meAutoHint(eAutoHint),
+        meHinting(eHinting),
+        meHintStyle(eHintStyle)
+    {}
+    FontAutoHint GetUseAutoHint() const { return meAutoHint; }
+    FontHintStyle GetHintStyle() const { return meHintStyle; }
+    bool DontUseEmbeddedBitmaps() const { return meEmbeddedBitmap == EMBEDDEDBITMAP_FALSE; }
+    bool DontUseAntiAlias() const { return meAntiAlias == ANTIALIAS_FALSE; }
+    bool DontUseHinting() const { return (meHinting == HINTING_FALSE) || (GetHintStyle() == HINT_NONE); }
 };
 
 // -------------------

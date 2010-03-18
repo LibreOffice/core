@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -33,6 +33,7 @@
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
+
 class FreetypeServerFont;
 struct FT_GlyphRec_;
 
@@ -85,10 +86,6 @@ public:
     int                   GetFaceNum() const        { return mnFaceNum; }
     int                   GetSynthetic() const      { return mnSynthetic; }
     sal_IntPtr            GetFontId() const         { return mnFontId; }
-    bool                  DontUseAntiAlias() const
-        { return maDevFontAttributes.UseAntiAlias() == ANTIALIAS_FALSE; }
-    bool                  DontUseEmbeddedBitmaps() const
-        { return maDevFontAttributes.UseEmbeddedBitmap() == EMBEDDEDBITMAP_FALSE; }
     bool                  IsSymbolFont() const      { return maDevFontAttributes.IsSymbolFont(); }
     const ImplFontAttributes& GetFontAttributes() const { return maDevFontAttributes; }
 
@@ -178,6 +175,7 @@ public:
     virtual int                 GetFontFaceNum() const { return mpFontInfo->GetFaceNum(); }
     virtual bool                TestFont() const;
     virtual void*               GetFtFace() const;
+    virtual void                SetFontOptions( const ImplFontOptions&);
     virtual int                 GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
     virtual bool                NeedsArtificialBold() const { return mbArtBold; }
     virtual bool                NeedsArtificialItalic() const { return mbArtItalic; }
@@ -213,6 +211,7 @@ private:
     int                         mnWidth;
     int                         mnPrioEmbedded;
     int                         mnPrioAntiAlias;
+    int                         mnPrioAutoHint;
     FtFontInfo*                 mpFontInfo;
     FT_Int                      mnLoadFlags;
     double                      mfStretch;

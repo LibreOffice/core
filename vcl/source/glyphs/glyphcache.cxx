@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -69,13 +69,22 @@ GlyphCache::GlyphCache( GlyphCachePeer& rPeer )
 
 GlyphCache::~GlyphCache()
 {
-// TODO:
-//  for( FontList::iterator it = maFontList.begin(); it != maFontList.end(); ++it )
-//      delete const_cast<ServerFont*>( it->second );
+    InvalidateAllGlyphs();
     if( mpFtManager )
         delete mpFtManager;
 }
 
+// -----------------------------------------------------------------------
+
+void GlyphCache::InvalidateAllGlyphs()
+{
+#if 0 // TODO: implement uncaching of all glyph shapes and metrics
+    for( FontList::iterator it = maFontList.begin(); it != maFontList.end(); ++it )
+        delete const_cast<ServerFont*>( it->second );
+    maFontList.clear();
+    mpCurrentGCFont = NULL;
+#endif
+}
 
 // -----------------------------------------------------------------------
 
@@ -582,3 +591,4 @@ int ExtraKernInfo::GetUnscaledKernValue( sal_Unicode cLeft, sal_Unicode cRight )
 }
 
 // =======================================================================
+

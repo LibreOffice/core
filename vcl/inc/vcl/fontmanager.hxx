@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -49,6 +49,7 @@
 // forward declarations
 namespace utl { class MultiAtomProvider; } // see unotools/atom.hxx
 class FontSubsetInfo;
+class ImplFontOptions;
 
 namespace psp {
 class PPDParser; // see ppdparser.hxx
@@ -162,8 +163,6 @@ struct FastPrintFontInfo
     weight::type                        m_eWeight;
     pitch::type                         m_ePitch;
     rtl_TextEncoding                    m_aEncoding;
-    fcstatus::type                      m_eEmbeddedbitmap;
-    fcstatus::type                      m_eAntialias;
     bool                                m_bSubsettable;
     bool                                m_bEmbeddable;
 
@@ -175,9 +174,7 @@ struct FastPrintFontInfo
             m_eWidth( width::Unknown ),
             m_eWeight( weight::Unknown ),
             m_ePitch( pitch::Unknown ),
-            m_aEncoding( RTL_TEXTENCODING_DONTKNOW ),
-            m_eEmbeddedbitmap( fcstatus::isunset ),
-            m_eAntialias( fcstatus::isunset )
+            m_aEncoding( RTL_TEXTENCODING_DONTKNOW )
     {}
 };
 
@@ -293,9 +290,6 @@ class VCL_DLLPUBLIC PrintFontManager
         int                                         m_nYMax;
         bool                                        m_bHaveVerticalSubstitutedGlyphs;
         bool                                        m_bUserOverride;
-
-        fcstatus::type                              m_eEmbeddedbitmap;
-        fcstatus::type                              m_eAntialias;
 
         std::map< sal_Unicode, sal_Int32 >          m_aEncodingVector;
         std::map< sal_Unicode, rtl::OString >       m_aNonEncoded;
@@ -736,10 +730,11 @@ public:
     false else
      */
     bool matchFont( FastPrintFontInfo& rInfo, const com::sun::star::lang::Locale& rLocale );
+    bool getFontOptions( const FastPrintFontInfo&, int nSize, void (*subcallback)(void*), ImplFontOptions& rResult ) const;
 
     rtl::OUString Substitute( const rtl::OUString& rFontName, rtl::OUString& rMissingCodes,
-        const rtl::OString& rLangAttrib, italic::type eItalic, weight::type eWeight,
-        width::type eWidth, pitch::type ePitch) const;
+        const rtl::OString& rLangAttrib, italic::type& rItalic, weight::type& rWeight,
+        width::type& rWidth, pitch::type& rPitch) const;
     bool hasFontconfig() const { return m_bFontconfigSuccess; }
 
     int FreeTypeCharIndex( void *pFace, sal_uInt32 aChar );

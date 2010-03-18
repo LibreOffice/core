@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salgdi.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -237,9 +234,10 @@ public:
     void                   ReleaseFonts() { SetFont( NULL, 0 ); }
     // get the current font's metrics
     virtual void            GetFontMetric( ImplFontMetricData* ) = 0;
+
     // get kernign pairs of the current font
     // return only PairCount if (pKernPairs == NULL)
-    virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs ) = 0;
+    virtual ULONG           GetKernPairs( ULONG nMaxPairCount, ImplKernPairData* ) = 0;
     // get the repertoire of the current font
     virtual ImplFontCharMap* GetImplFontCharMap() const = 0;
     // graphics must fill supplied font list

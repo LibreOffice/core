@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vclenum.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -281,6 +278,27 @@ enum FontEmbeddedBitmap { EMBEDDEDBITMAP_DONTKNOW, EMBEDDEDBITMAP_FALSE, EMBEDDE
 #define ENUM_FONTANTIALIAS_DECLARED
 
 enum FontAntiAlias { ANTIALIAS_DONTKNOW, ANTIALIAS_FALSE, ANTIALIAS_TRUE };
+
+#endif
+
+#ifndef ENUM_FONTAUTOHINT_DECLARED
+#define ENUM_FONTAUTOHINT_DECLARED
+
+enum FontAutoHint { AUTOHINT_DONTKNOW, AUTOHINT_FALSE, AUTOHINT_TRUE };
+
+#endif
+
+#ifndef ENUM_FONTHINTING_DECLARED
+#define ENUM_FONTHINTING_DECLARED
+
+enum FontHinting { HINTING_DONTKNOW, HINTING_FALSE, HINTING_TRUE };
+
+#endif
+
+#ifndef ENUM_FONTHINTSTYLE_DECLARED
+#define ENUM_FONTHINTSTYLE_DECLARED
+
+enum FontHintStyle { HINT_NONE, HINT_SLIGHT, HINT_MEDIUM, HINT_FULL };
 
 #endif
 

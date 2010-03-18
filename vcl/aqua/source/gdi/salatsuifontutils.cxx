@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -217,9 +217,6 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
     // all scalable fonts on this platform are subsettable
     rDFA.mbSubsettable  = true;
     rDFA.mbEmbeddable   = false;
-    // TODO: these members are needed only for our X11 platform targets
-    rDFA.meAntiAlias    = ANTIALIAS_DONTKNOW;
-    rDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
 
     // prepare iterating over all name strings of the font
     ItemCount nFontNameCount = 0;

@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -1283,32 +1283,6 @@ ImplDevFontAttributes PspGraphics::Info2DevFontAttributes( const psp::FastPrintF
     aDFA.mbSymbolFlag   = (rInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL);
     aDFA.mbSubsettable  = rInfo.m_bSubsettable;
     aDFA.mbEmbeddable   = rInfo.m_bEmbeddable;
-
-    switch (rInfo.m_eEmbeddedbitmap)
-    {
-        default:
-            aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
-            break;
-        case psp::fcstatus::istrue:
-            aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_TRUE;
-            break;
-        case psp::fcstatus::isfalse:
-            aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_FALSE;
-            break;
-    }
-
-    switch (rInfo.m_eAntialias)
-    {
-        default:
-            aDFA.meAntiAlias = ANTIALIAS_DONTKNOW;
-            break;
-        case psp::fcstatus::istrue:
-            aDFA.meAntiAlias = ANTIALIAS_TRUE;
-            break;
-        case psp::fcstatus::isfalse:
-            aDFA.meAntiAlias = ANTIALIAS_FALSE;
-            break;
-    }
 
     switch( rInfo.m_eType )
     {

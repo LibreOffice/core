@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salgdi.h,v $
- * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -253,7 +250,7 @@ public:
     virtual void            SetTextColor( SalColor nSalColor );
     virtual USHORT          SetFont( ImplFontSelectData*, int nFallbackLevel );
     virtual void            GetFontMetric( ImplFontMetricData* );
-    virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs );
+    virtual ULONG           GetKernPairs( ULONG nMaxPairs, ImplKernPairData* );
     virtual ImplFontCharMap* GetImplFontCharMap() const;
     virtual void            GetDevFontList( ImplDevFontList* );
     virtual void            GetDevFontSubstList( OutputDevice* );
