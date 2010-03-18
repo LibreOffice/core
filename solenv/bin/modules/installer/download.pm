@@ -570,23 +570,11 @@ sub get_download_platformname
 {
     my $platformname = "";
 
-    if (( $installer::globals::islinuxintelrpmbuild ) || ( $installer::globals::islinuxinteldebbuild ))
+    if ( $installer::globals::islinuxbuild )
     {
         $platformname = "Linux";
     }
-    elsif (( $installer::globals::islinuxppcrpmbuild ) || ( $installer::globals::islinuxppcdebbuild ))
-    {
-        $platformname = "Linux";
-    }
-    elsif (( $installer::globals::islinuxx86_64rpmbuild ) || ( $installer::globals::islinuxx86_64debbuild ))
-    {
-        $platformname = "Linux";
-    }
-    elsif ( $installer::globals::issolarissparcbuild )
-    {
-        $platformname = "Solaris";
-    }
-    elsif ( $installer::globals::issolarisx86build )
+    elsif ( $installer::globals::issolarisbuild )
     {
         $platformname = "Solaris";
     }
@@ -594,15 +582,11 @@ sub get_download_platformname
     {
         $platformname = "Win";
     }
-    elsif ( $installer::globals::isfreebsdpkgbuild )
+    elsif ( $installer::globals::isfreebsdbuild )
     {
         $platformname = "FreeBSD";
     }
-    elsif ( $installer::globals::compiler =~ /^unxmacxi/ )
-    {
-        $platformname = "MacOS";
-    }
-    elsif ( $installer::globals::compiler =~ /^unxmacxp/ )
+    elsif ( $installer::globals::ismacbuild )
     {
         $platformname = "MacOS";
     }
