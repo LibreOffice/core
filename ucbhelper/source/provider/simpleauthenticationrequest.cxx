@@ -67,7 +67,7 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
        sal_True,
        sal_True,
        aRequest.HasAccount,
-       sal_False,
+       sal_True,
        sal_False );
 }
 //=========================================================================
@@ -149,7 +149,7 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
        eUserNameType == ENTITY_MODIFY,
        ePasswordType == ENTITY_MODIFY,
        eAccountType == ENTITY_MODIFY,
-       sal_False,
+       sal_True,
        sal_False );
 }
 
@@ -216,7 +216,7 @@ void SimpleAuthenticationRequest::initialize(
     aRememberModes[ 0 ] = ucb::RememberAuthentication_NO;
     aRememberModes[ 1 ] = ucb::RememberAuthentication_SESSION;
     if (bAllowPersistentStoring)
-        aRememberModes[ 1 ] = ucb::RememberAuthentication_PERSISTENT;
+        aRememberModes[ 2 ] = ucb::RememberAuthentication_PERSISTENT;
 
     m_xAuthSupplier
         = new InteractionSupplyAuthentication(
