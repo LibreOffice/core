@@ -308,6 +308,8 @@ end function
 
 function hDeleteEntryFieldContent( oControl as object ) as boolean
 
+    printlog( "Original name is: " & oControl.getText() )
+
     oControl.typeKeys( "<HOME>" )
     oControl.typeKeys( "<SHIFT END>" )
     oControl.typeKeys( "<DELETE>" )
