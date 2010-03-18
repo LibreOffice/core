@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.58 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -67,6 +63,7 @@ SHL1IMPLIB= sdi
 
 # dynamic libraries
 SHL1STDLIBS+= \
+    $(EDITENGLIB) \
     $(SVXCORELIB) \
     $(SVXLIB) \
     $(SFXLIB) \
@@ -74,7 +71,6 @@ SHL1STDLIBS+= \
     $(CPPCANVASLIB) \
     $(BASEGFXLIB) \
     $(DRAWINGLAYERLIB) \
-    $(GOODIESLIB) \
     $(BASEGFXLIB) \
     $(SVTOOLLIB) \
     $(TKLIB) \
@@ -199,6 +195,7 @@ LIB4FILES=	\
 
 SHL4STDLIBS= \
     $(ISDLIB) \
+    $(EDITENGLIB) \
     $(SVXCORELIB) \
     $(SVXLIB) \
     $(SFXLIB) \
@@ -250,12 +247,12 @@ SHL5LIBS      = $(SLB)$/ppt.lib $(SLB)$/eppt.lib
 DEF5NAME=$(SHL5TARGET)
 
 SHL5STDLIBS = $(ISDLIB) \
+              $(EDITENGLIB)       \
               $(SVXCORELIB)       \
               $(MSFILTERLIB)   \
               $(SFX2LIB)          \
               $(SVTOOLLIB)        \
               $(SOTLIB)           \
-              $(GOODIESLIB)       \
               $(VCLLIB)           \
               $(SVLLIB)           \
               $(SOTLIB)           \

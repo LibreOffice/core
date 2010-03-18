@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuolbull.cxx,v $
- * $Revision: 1.11.104.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,12 +32,12 @@
 #include "fuolbull.hxx"
 #include <vcl/msgbox.hxx>
 #include <svl/intitem.hxx>
-#include <svx/outliner.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/eeitem.hxx>
 #include <sfx2/request.hxx>
 #include <svl/intitem.hxx>
 
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <svx/svxids.hrc>
 #include "OutlineView.hxx"
 #include "OutlineViewShell.hxx"

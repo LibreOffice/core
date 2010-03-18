@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuparagr.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 
 #include "fuparagr.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -41,8 +38,8 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svxids.hrc>
-#include <svx/editdata.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svx/svdoutl.hxx>
 
 #include "app.hrc"

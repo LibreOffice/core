@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drawdoc.cxx,v $
- * $Revision: 1.87 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,39 +32,39 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 
 #include <svx/svxids.hrc>
-#include <sfx2/srchitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/scriptspaceitem.hxx>
+#include <svl/srchitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
 
 #include <unotools/useroptions.hxx>
 
 #include <sfx2/printer.hxx>
 #include <sfx2/topfrm.hxx>
 #include <sfx2/app.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svx/dialogs.hrc>
 #include "Outliner.hxx"
 #include "app.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/editstat.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/fontitem.hxx>
 #include <svl/flagitem.hxx>
 #include <svx/svdoattr.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/bulitem.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/bulitem.hxx>
+#include <editeng/numitem.hxx>
 #include <svx/svditer.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svl/itempool.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <svx/xtable.hxx>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <unotools/saveopt.hxx>
 #include <comphelper/extract.hxx>
 #include <i18npool/mslangid.hxx>
@@ -284,7 +281,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     if (mpDocSh)
     {
-        SetLinkManager( new SvxLinkManager(mpDocSh) );
+        SetLinkManager( new sfx2::LinkManager(mpDocSh) );
     }
 
     ULONG nCntrl = rOutliner.GetControlWord();

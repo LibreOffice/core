@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drawview.cxx,v $
- * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +34,7 @@
 #include <svx/svdpagv.hxx>
 #include <sfx2/request.hxx>
 #include <svl/style.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #ifndef _VIEW3D_HXX //autogen
 #include <svx/view3d.hxx>
 #endif
@@ -49,10 +46,10 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdorect.hxx>
 #include <svl/poolitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/bulitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/bulitem.hxx>
 #include <svl/itempool.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/numitem.hxx>
 #include <svl/whiter.hxx>
 
 #include <sfx2/viewfrm.hxx>

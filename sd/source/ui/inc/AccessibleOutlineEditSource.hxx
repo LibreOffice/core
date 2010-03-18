@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleOutlineEditSource.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,10 +32,10 @@
 #include <vcl/svapp.hxx>
 #include <svl/brdcst.hxx>
 #include <svl/lstner.hxx>
-#include <svx/unoedsrc.hxx>
-#include <svx/editdata.hxx>
-#include <svx/unoforou.hxx>
-#include <svx/unoviwou.hxx>
+#include <editeng/unoedsrc.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/unoforou.hxx>
+#include <editeng/unoviwou.hxx>
 
 class OutlinerView;
 class SdrOutliner;

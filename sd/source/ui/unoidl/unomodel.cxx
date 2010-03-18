@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unomodel.cxx,v $
- * $Revision: 1.114 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,21 +40,20 @@
 #include <com/sun/star/presentation/XPresentation2.hpp>
 
 #include <osl/mutex.hxx>
+#include <comphelper/serviceinfohelper.hxx>
 
-#ifndef _UTL_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
 
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
-#include <svx/unofield.hxx>
+#include <editeng/unofield.hxx>
 #include <unomodel.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/UnoForbiddenCharsTable.hxx>
+#include <editeng/UnoForbiddenCharsTable.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <svx/UnoNamespaceMap.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdsob.hxx>
@@ -65,17 +61,16 @@
 #include <svx/unofill.hxx>
 #include <svx/unopool.hxx>
 #include <svx/svdorect.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <vos/mutex.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
-
-#include <svtools/unoimap.hxx>
-#include <svx/unolingu.hxx>
+#include <svx/svdpool.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/svdpagv.hxx>
-
+#include <svtools/unoimap.hxx>
 #include <svx/unoshape.hxx>
-#include <svx/unonrule.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/unonrule.hxx>
+#include <editeng/eeitem.hxx>
 
 // #99870# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
 #include <svx/xmleohlp.hxx>
@@ -212,7 +207,7 @@ const SvxItemPropertySet* ImplGetDrawModelPropertySet()
         { MAP_CHAR_LEN(sUNO_Prop_HasValidSignatures),   WID_MODEL_HASVALIDSIGNATURES, &::getCppuType(static_cast< const sal_Bool * >(0)), beans::PropertyAttribute::READONLY, 0 },
         { 0,0,0,0,0,0 }
     };
-    static SvxItemPropertySet aDrawModelPropertySet_Impl( aDrawModelPropertyMap_Impl );
+    static SvxItemPropertySet aDrawModelPropertySet_Impl( aDrawModelPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
     return &aDrawModelPropertySet_Impl;
 }
 
@@ -3016,7 +3011,7 @@ OUString SAL_CALL SdDocLinkTargets::getImplementationName()
 sal_Bool SAL_CALL SdDocLinkTargets::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getSupportedServiceNames()
