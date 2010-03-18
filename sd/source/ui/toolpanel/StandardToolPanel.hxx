@@ -24,8 +24,10 @@
  *
 ************************************************************************/
 
-#ifndef SD_UI_TASKPANE_PANELID_HXX
-#define SD_UI_TASKPANE_PANELID_HXX
+#ifndef SD_TOOLPANEL_STANDARDTOOLPANEL_HXX
+#define SD_TOOLPANEL_STANDARDTOOLPANEL_HXX
+
+#include "TaskPaneToolPanel.hxx"
 
 //......................................................................................................................
 namespace sd { namespace toolpanel
@@ -33,24 +35,42 @@ namespace sd { namespace toolpanel
 //......................................................................................................................
 
     //==================================================================================================================
-    //= PanelId
+    //= StandardToolPanel
     //==================================================================================================================
-    /** List of top level panels that can be shown in the task pane.
+    /** an IToolPanel implementation for one of the standard (aka built-in) tool panels
     */
-    enum PanelId
+    class StandardToolPanel : public TaskPaneToolPanel
     {
-        PID_UNKNOWN             = 0,
-        PID_MASTER_PAGES        = 1,
-        PID_LAYOUT              = 2,
-        PID_TABLE_DESIGN        = 3,
-        PID_CUSTOM_ANIMATION    = 4,
-        PID_SLIDE_TRANSITION    = 5,
+    public:
+        StandardToolPanel(
+            ToolPanelDeck& i_rPanelDeck,
+            ::std::auto_ptr< ControlFactory >& i_rControlFactory,
+            const USHORT i_nTitleResId,
+            const Image& i_rImage,
+            const ULONG i_nHelpId,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >& i_rPanelResourceId
+        );
+        ~StandardToolPanel();
 
-        PID_FIRST_CUSTOM_PANEL  = 6
+        // IToolPanel overridables
+        virtual void Dispose();
+
+        // TaskPaneToolPanel overridables
+        virtual const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >& getResourceId() const;
+        virtual ::Window* getPanelWindow() const;
+
+    private:
+        bool    impl_ensureControl();
+
+    private:
+        ::std::auto_ptr< ControlFactory >   m_pControlFactory;
+        ::std::auto_ptr< TreeNode >         m_pControl;
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >
+                                            m_xPanelResourceId;
     };
 
 //......................................................................................................................
 } } // namespace sd::toolpanel
 //......................................................................................................................
 
-#endif // SD_UI_TASKPANE_PANELID_HXX
+#endif // SD_TOOLPANEL_STANDARDTOOLPANEL_HXX

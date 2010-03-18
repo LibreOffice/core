@@ -132,6 +132,7 @@ namespace sd { namespace toolpanel
         pTitleBar->GetWindow()->Show();
         pTitleBar->GetWindow()->AddEventListener( LINK( this, ToolPanelDrawer, OnWindowEvent ) );
         m_aDrawers.insert( m_aDrawers.begin() + i_nPosition, pTitleBar );
+        impl_triggerRearrange();
     }
 
     //------------------------------------------------------------------------------------------------------------------

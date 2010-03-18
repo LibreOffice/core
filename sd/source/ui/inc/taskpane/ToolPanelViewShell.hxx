@@ -129,8 +129,6 @@ private:
     class Implementation;
     ::boost::scoped_ptr< Implementation >   mpImpl;
 
-    bool mbIsInitialized;
-
     ::boost::shared_ptr<TaskPaneShellManager> mpSubShellManager;
 
     /** The id of the menu in the menu bar/tool box of the parent docking

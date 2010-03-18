@@ -112,20 +112,6 @@ namespace sd { namespace toolpanel
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    size_t ToolPanelDeck::CreateAndInsertPanel( ::std::auto_ptr< ControlFactory >& i_rControlFactory,
-        const Image& i_rImage, const USHORT i_nTitleResId, const ULONG i_nHelpId, const Reference< XResourceId >& i_rPanelResourceId )
-    {
-        // create panel
-        ::svt::PToolPanel pNewPanel( new TaskPaneToolPanel(
-            *this, i_rControlFactory,
-            i_rImage, i_nTitleResId, i_nHelpId,
-            i_rPanelResourceId
-        ) );
-        // insert as new panel
-        return InsertPanel( pNewPanel, GetPanelCount() );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
     void ToolPanelDeck::ActivatePanelDirectly( const ::boost::optional< size_t >& i_rPanel )
     {
         ToolPanelDeck_Base::ActivatePanel( i_rPanel );

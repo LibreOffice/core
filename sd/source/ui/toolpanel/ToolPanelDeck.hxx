@@ -58,15 +58,6 @@ namespace sd { namespace toolpanel
         );
         ~ToolPanelDeck();
 
-        // panel maintenance
-        size_t  CreateAndInsertPanel(
-            ::std::auto_ptr< ControlFactory >& i_rControlFactory,
-            const Image& i_rImage,
-            const USHORT i_nTitleResId,
-            const ULONG i_nHelpId,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >& i_rPanelResourceId
-        );
-
         /** activates a layout where the active panel is selected via tabs at the right/left/top/bottom (depending on
             the given TabAlignment value).
         */

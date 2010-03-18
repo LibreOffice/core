@@ -24,33 +24,56 @@
  *
 ************************************************************************/
 
-#ifndef SD_UI_TASKPANE_PANELID_HXX
-#define SD_UI_TASKPANE_PANELID_HXX
+#ifndef SD_WORKBENCH_CTP_PANEL_HXX
+#define SD_WORKBENCH_CTP_PANEL_HXX
+
+/** === begin UNO includes === **/
+#include <com/sun/star/drawing/framework/XView.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
+#include <com/sun/star/drawing/framework/XResourceId.hpp>
+/** === end UNO includes === **/
+
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 //......................................................................................................................
-namespace sd { namespace toolpanel
+namespace sd { namespace colortoolpanel
 {
 //......................................................................................................................
 
     //==================================================================================================================
-    //= PanelId
+    //= class SingleColorPanel
     //==================================================================================================================
-    /** List of top level panels that can be shown in the task pane.
-    */
-    enum PanelId
+    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::drawing::framework::XView
+                                    >   SingleColorPanel_Base;
+    class SingleColorPanel  :public ::cppu::BaseMutex
+                            ,public SingleColorPanel_Base
     {
-        PID_UNKNOWN             = 0,
-        PID_MASTER_PAGES        = 1,
-        PID_LAYOUT              = 2,
-        PID_TABLE_DESIGN        = 3,
-        PID_CUSTOM_ANIMATION    = 4,
-        PID_SLIDE_TRANSITION    = 5,
+    public:
+        SingleColorPanel(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XConfigurationController >& i_rConfigController,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >& i_rResourceId
+        );
 
-        PID_FIRST_CUSTOM_PANEL  = 6
+        // XView
+        // (no methods)
+
+        // XResource
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId > SAL_CALL getResourceId(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL isAnchorOnly(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    protected:
+        ~SingleColorPanel();
+
+    private:
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >            m_xContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >   m_xResourceId;
     };
 
 //......................................................................................................................
-} } // namespace sd::toolpanel
+} } // namespace sd::colortoolpanel
 //......................................................................................................................
 
-#endif // SD_UI_TASKPANE_PANELID_HXX
+#endif // SD_WORKBENCH_CTP_PANEL_HXX

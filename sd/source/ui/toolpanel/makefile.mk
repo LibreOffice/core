@@ -62,6 +62,8 @@ SLOFILES =      								\
     $(SLO)$/ToolPanelDeck.obj                   \
     $(SLO)$/ToolPanelDrawer.obj                 \
     $(SLO)$/TaskPaneToolPanel.obj               \
+    $(SLO)$/CustomToolPanel.obj                 \
+    $(SLO)$/StandardToolPanel.obj               \
                                                 \
     $(SLO)$/EmptyWindow.obj						\
     $(SLO)$/LayoutMenu.obj                      \

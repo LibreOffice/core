@@ -31,6 +31,8 @@
 
 #include "TaskPaneShellManager.hxx"
 #include "TaskPaneFocusManager.hxx"
+#include "StandardToolPanel.hxx"
+#include "CustomToolPanel.hxx"
 #include "controls/MasterPagesPanel.hxx"
 #include "LayoutMenu.hxx"
 #include "controls/TableDesignPanel.hxx"
@@ -74,6 +76,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <tools/diagnose_ex.h>
+#include <unotools/confignode.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 
 #include <vector>
 
@@ -183,7 +188,7 @@ public:
     */
     size_t GetPanelCount() const
     {
-        return size_t( PID__END );
+        return m_aPanels.size();
     }
 
     const PanelDescriptor& GetPanel( const size_t i_nLogicalPanelIndex ) const
@@ -214,11 +219,20 @@ private:
     void RegisterPanel( size_t i_nPosition, PanelId i_nPanelId, const ::svt::PToolPanel& i_rPanel );
     void UpdateDockingWindowTitle();
 
+    /** creates the built-in panels, returns the position of the panel to activate initially
+    */
+    size_t SetupDefaultPanels();
+
+    /** creates the custom panels
+    */
+    void SetupCustomPanels();
+
     typedef ::std::vector< PanelDescriptor >    PanelDescriptors;
-    PanelDescriptors                        m_aPanels;
-    ToolPanelViewShell&                     m_rPanelViewShell;
-    ::boost::scoped_ptr< ToolPanelDeck >    m_pPanelDeck;
-    PanelSelectorLayout                     m_eCurrentLayout;
+    PanelDescriptors                            m_aPanels;
+    ToolPanelViewShell&                         m_rPanelViewShell;
+    ::boost::scoped_ptr< ToolPanelDeck >        m_pPanelDeck;
+    PanelSelectorLayout                         m_eCurrentLayout;
+    bool                                        m_bInitialized;
 };
 
 // =====================================================================================================================
@@ -249,7 +263,7 @@ SFX_IMPL_INTERFACE(ToolPanelViewShell, SfxShell, SdResId(STR_TASKPANEVIEWSHELL))
 TYPEINIT1(ToolPanelViewShell, ViewShell);
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::Implementation::Setup()
+size_t ToolPanelViewShell::Implementation::SetupDefaultPanels()
 {
     typedef std::auto_ptr<ControlFactory> (*ControlFactoryFactory)( ToolPanelViewShell& i_rToolPanelShell );
 
@@ -263,7 +277,8 @@ void ToolPanelViewShell::Implementation::Setup()
         ::rtl::OUString         sResourceURL;
     };
 
-    PanelDescriptor aPanels[] = {
+    PanelDescriptor aPanels[] =
+    {
         // "Master Pages"
         {   &controls::MasterPagesPanel::CreateControlFactory,
             "PresentationLayout",
@@ -329,20 +344,69 @@ void ToolPanelViewShell::Implementation::Setup()
         const Reference< XResourceId > xPanelId( pFrameworkHelper->CreateResourceId( aPanels[i].sResourceURL, xToolPanelId ) );
 
         // create and insert the panel
-        size_t nPanelPos = m_pPanelDeck->CreateAndInsertPanel(
+        ::svt::PToolPanel pNewPanel( new StandardToolPanel(
+            *m_pPanelDeck,
             (*aPanels[i].pFactory)( m_rPanelViewShell ),
-            aPanelImage,
             aPanels[i].nTitleResourceID,
+            aPanelImage,
             aPanels[i].nHelpID,
             xPanelId
-        );
+        ) );
+        const size_t nPanelPos = m_pPanelDeck->InsertPanel( pNewPanel, m_pPanelDeck->GetPanelCount() );
 
         // remember it
-        RegisterPanel( nPanelPos, aPanels[i].nPanelID, m_pPanelDeck->GetPanel( nPanelPos ) );
+        RegisterPanel( nPanelPos, aPanels[i].nPanelID, pNewPanel );
 
         if ( nPanelIdToActivate == aPanels[i].nPanelID )
             nPanelPosToActivate = nPanelPos;
     }
+
+    return nPanelPosToActivate;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void ToolPanelViewShell::Implementation::SetupCustomPanels()
+{
+    // compose the resource ID for the ToolPanel view
+    ::boost::shared_ptr< FrameworkHelper > pFrameworkHelper( FrameworkHelper::Instance( m_rPanelViewShell.GetViewShellBase() ) );
+    const Reference< XResourceId > xToolPanelId( pFrameworkHelper->CreateResourceId( FrameworkHelper::msTaskPaneURL, FrameworkHelper::msRightPaneURL ) );
+
+    // get the config node holding the custom tool panel descriptions
+    ::utl::OConfigurationTreeRoot aConfig( ::comphelper::ComponentContext( ::comphelper::getProcessServiceFactory() ),
+        "/org.openoffice.Office.Impress/MultiPaneGUI/ToolPanel/CustomPanels", false );
+    const Sequence< ::rtl::OUString > aCustomPanelDescs( aConfig.getNodeNames() );
+
+    // create panels
+    size_t nCustomPanelNo = 0;
+    for (   const ::rtl::OUString* panelNodeName = aCustomPanelDescs.getConstArray();
+            panelNodeName != aCustomPanelDescs.getConstArray() + aCustomPanelDescs.getLength();
+            ++panelNodeName
+        )
+    {
+        ::utl::OConfigurationNode aPanelDesc( aConfig.openNode( *panelNodeName ) );
+
+        // create and insert the panel
+        ::svt::PToolPanel pNewPanel( new CustomToolPanel( *m_pPanelDeck, aPanelDesc, xToolPanelId, pFrameworkHelper ) );
+        const size_t nPanelPos = m_pPanelDeck->InsertPanel( pNewPanel, m_pPanelDeck->GetPanelCount() );
+
+        // remember it
+        RegisterPanel( nPanelPos, PanelId( PID_FIRST_CUSTOM_PANEL + nCustomPanelNo ), pNewPanel );
+        ++nCustomPanelNo;
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void ToolPanelViewShell::Implementation::Setup()
+{
+    if ( m_bInitialized )
+        return;
+    m_bInitialized = true;
+
+    // standard (built-in) panels
+    const size_t nPanelPosToActivate = SetupDefaultPanels();
+
+    // custom panels
+    SetupCustomPanels();
 
     // activate default panel
     m_pPanelDeck->ActivatePanelResource( nPanelPosToActivate );
@@ -387,18 +451,27 @@ void ToolPanelViewShell::Implementation::SetLayout( const PanelSelectorLayout i_
 // ---------------------------------------------------------------------------------------------------------------------
 void ToolPanelViewShell::Implementation::Cleanup()
 {
-    m_pPanelDeck->RemoveListener( *this );
+    if ( !m_bInitialized )
+    {
+        m_pPanelDeck->RemoveListener( *this );
+        // remove the panels which are not under the control of the panel deck currently
+        for (   PanelDescriptors::iterator panelPos = m_aPanels.begin();
+                panelPos != m_aPanels.end();
+                ++panelPos
+            )
+        {
+            if ( panelPos->bHidden )
+                panelPos->pPanel->Dispose();
+        }
+        m_aPanels.clear();
+    }
     m_pPanelDeck.reset();
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 void ToolPanelViewShell::Initialize()
 {
-    if ( !mbIsInitialized )
-    {
-        mbIsInitialized = true;
-        mpImpl->Setup();
-    }
+    mpImpl->Setup();
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -406,7 +479,6 @@ ToolPanelViewShell::ToolPanelViewShell( SfxViewFrame* pFrame, ViewShellBase& rVi
         FrameView* pFrameViewArgument )
     :ViewShell(pFrame, pParentWindow, rViewShellBase)
     ,mpImpl( new Implementation( *this, *mpContentWindow.get() ) )
-    ,mbIsInitialized(false)
     ,mpSubShellManager()
     ,mnMenuId(0)
 {
@@ -462,10 +534,7 @@ ToolPanelViewShell::ToolPanelViewShell( SfxViewFrame* pFrame, ViewShellBase& rVi
 // ---------------------------------------------------------------------------------------------------------------------
 ToolPanelViewShell::~ToolPanelViewShell()
 {
-    if ( mbIsInitialized )
-    {
-        mpImpl->Cleanup();
-    }
+    mpImpl->Cleanup();
 
     // reset our impl before destroying the panel deck, to ensure the hidden panels are properly
     // disposed/destroyed, too
@@ -800,10 +869,11 @@ void ToolPanelViewShell::ActivatePanel( const PanelId i_ePanelId )
 // =====================================================================================================================
 // ---------------------------------------------------------------------------------------------------------------------
 ToolPanelViewShell::Implementation::Implementation( ToolPanelViewShell& i_rPanelViewShell, ::Window& i_rPanelDeckParent )
-    :m_aPanels( PanelDescriptors::size_type( PID__END ) )
+    :m_aPanels()
     ,m_rPanelViewShell( i_rPanelViewShell )
     ,m_pPanelDeck( new ToolPanelDeck( i_rPanelDeckParent, i_rPanelViewShell ) )
     ,m_eCurrentLayout( LAYOUT_DRAWERS )
+    ,m_bInitialized( false )
 {
 }
 
@@ -875,6 +945,9 @@ void ToolPanelViewShell::Implementation::ActivatePanelDirectly( const PanelId i_
 // ---------------------------------------------------------------------------------------------------------------------
 void ToolPanelViewShell::Implementation::RegisterPanel( size_t i_nPosition, PanelId i_nPanelId, const ::svt::PToolPanel& i_rPanel )
 {
+    if ( i_nPosition >= m_aPanels.size() )
+        m_aPanels.resize( i_nPosition + 1 );
+
     OSL_PRECOND( m_aPanels[ i_nPosition ].nId == PID_UNKNOWN, "ToolPanelViewShell::Implementation::RegisterPanel: "
         "already registered a panel for this ID!" );
     m_aPanels[ i_nPosition ] = PanelDescriptor( i_nPanelId, i_rPanel );

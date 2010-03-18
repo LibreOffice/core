@@ -24,21 +24,27 @@
  *
 ************************************************************************/
 
-#ifndef SD_TASKPANETOOLPANEL_HXX
-#define SD_TASKPANETOOLPANEL_HXX
+#ifndef SD_TOOLPANEL_CUSTOMTOOLPANEL_HXX
+#define SD_TOOLPANEL_CUSTOMTOOLPANEL_HXX
 
-#include "taskpane/TaskPaneControlFactory.hxx"
+#include "TaskPaneToolPanel.hxx"
 
 /** === begin UNO includes === **/
+#include <com/sun/star/drawing/framework/XPane2.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 /** === end UNO includes === **/
 
-#include <svtools/toolpanel/toolpanel.hxx>
+#include <boost/shared_ptr.hpp>
 
-#include <vcl/image.hxx>
-#include <vcl/smartid.hxx>
+namespace utl
+{
+    class OConfigurationNode;
+}
 
-#include <memory>
+namespace sd { namespace framework
+{
+    class FrameworkHelper;
+} }
 
 //......................................................................................................................
 namespace sd { namespace toolpanel
@@ -48,47 +54,42 @@ namespace sd { namespace toolpanel
     class ToolPanelDeck;
 
     //==================================================================================================================
-    //= TaskPaneToolPanel
+    //= CustomToolPanel
     //==================================================================================================================
-    class TaskPaneToolPanel : public ::svt::ToolPanelBase
+    /** is a ::svt::IToolPanel implementation for custom tool panels, i.e. those defined in the configuration, and
+        implemented by external components.
+    */
+    class CustomToolPanel : public TaskPaneToolPanel
     {
-    protected:
-        TaskPaneToolPanel(
-            ToolPanelDeck& i_rPanelDeck,
-            const String& i_rPanelName,
-            const Image& i_rImage,
-            const SmartId& i_rHelpId
-        );
-        ~TaskPaneToolPanel();
-
     public:
+        CustomToolPanel(
+            ToolPanelDeck& i_rPanelDeck,
+            const ::utl::OConfigurationNode& i_rPanelConfig,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >& i_rPaneResourceId,
+            const ::boost::shared_ptr< framework::FrameworkHelper >& i_pFrameworkHelper
+        );
+        ~CustomToolPanel();
+
         // IToolPanel overridables
-        virtual ::rtl::OUString GetDisplayName() const;
-        virtual Image GetImage() const;
-        virtual void Show();
-        virtual void Hide();
-        virtual void SetPosSizePixel( const Rectangle& i_rPanelPlayground );
-        virtual void GrabFocus();
-        virtual bool HasFocus() const;
         virtual void Dispose();
 
-        // own overridables
-        virtual const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >& getResourceId() const = 0;
-        virtual ::Window* getPanelWindow() const = 0;
-
     protected:
-        bool            isDisposed() const { return m_pPanelDeck == NULL; }
-        ToolPanelDeck&  getPanelDeck() { OSL_ENSURE( !isDisposed(), "already disposed!" ); return *m_pPanelDeck; }
+        // TaskPaneToolPanel overridables
+        virtual const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >& getResourceId() const;
+        virtual ::Window* getPanelWindow() const;
 
     private:
-        ToolPanelDeck*  m_pPanelDeck;
-        const Image     m_aPanelImage;
-        const String    m_sPanelName;
-        const SmartId   m_aHelpId;
+        bool    impl_ensurePanel() const;
+
+    private:
+        ::boost::shared_ptr< framework::FrameworkHelper >                                       m_pFrameworkHelper;
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >   m_xPanelResourceId;
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XPane2 >        m_xPanel;
+        bool                                                                                    m_bAttemptedPanelCreation;
     };
 
 //......................................................................................................................
 } } // namespace sd::toolpanel
 //......................................................................................................................
 
-#endif // SD_TASKPANETOOLPANEL_HXX
+#endif // SD_TOOLPANEL_CUSTOMTOOLPANEL_HXX

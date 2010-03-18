@@ -26,11 +26,14 @@
 
 #include "precompiled_sd.hxx"
 
-#include "TaskPaneToolPanel.hxx"
+#include "StandardToolPanel.hxx"
 #include "ToolPanelDeck.hxx"
+#include "sdresid.hxx"
+
+/** === begin UNO includes === **/
+/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
-#include <vcl/window.hxx>
 
 //......................................................................................................................
 namespace sd { namespace toolpanel
@@ -53,80 +56,54 @@ namespace sd { namespace toolpanel
     /** === end UNO using === **/
 
     //==================================================================================================================
-    //= TaskPaneToolPanel
+    //= StandardToolPanel
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    TaskPaneToolPanel::TaskPaneToolPanel( ToolPanelDeck& i_rPanelDeck, const String& i_rPanelName, const Image& i_rImage,
-            const SmartId& i_rHelpId )
-        :m_pPanelDeck( &i_rPanelDeck )
-        ,m_aPanelImage( i_rImage )
-        ,m_sPanelName( i_rPanelName )
-        ,m_aHelpId( i_rHelpId )
+    StandardToolPanel::StandardToolPanel( ToolPanelDeck& i_rPanelDeck, ::std::auto_ptr< ControlFactory >& i_rControlFactory,
+            const USHORT i_nTitleResId, const Image& i_rImage, const ULONG i_nHelpId,
+            const Reference< XResourceId >& i_rPanelResourceId )
+        :TaskPaneToolPanel( i_rPanelDeck, SdResId( i_nTitleResId ), i_rImage, SmartId( i_nHelpId ) )
+        ,m_pControlFactory( i_rControlFactory )
+        ,m_xPanelResourceId( i_rPanelResourceId )
     {
+        ENSURE_OR_THROW( m_pControlFactory.get(), "illegal control factory" );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    TaskPaneToolPanel::~TaskPaneToolPanel()
+    StandardToolPanel::~StandardToolPanel()
     {
+        m_pControl.reset();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString TaskPaneToolPanel::GetDisplayName() const
+    void StandardToolPanel::Dispose()
     {
-        return m_sPanelName;
+        m_pControl.reset();
+        TaskPaneToolPanel::Dispose();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Image TaskPaneToolPanel::GetImage() const
+    const Reference< XResourceId >& StandardToolPanel::getResourceId() const
     {
-        return m_aPanelImage;
+        return m_xPanelResourceId;
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TaskPaneToolPanel::Show()
+    ::Window* StandardToolPanel::getPanelWindow() const
     {
-        Window* pPanelWindow( getPanelWindow() );
-        ENSURE_OR_RETURN_VOID( pPanelWindow, "no window to show" );
-        pPanelWindow->Show();
+        ENSURE_OR_RETURN( const_cast< StandardToolPanel* >( this )->impl_ensureControl(), "StandardToolPanel::getPanelWindow: no control!", NULL );
+        return m_pControl->GetWindow();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TaskPaneToolPanel::Hide()
+    bool StandardToolPanel::impl_ensureControl()
     {
-        Window* pPanelWindow( getPanelWindow() );
-        ENSURE_OR_RETURN_VOID( pPanelWindow, "no window to hide" );
-        pPanelWindow->Hide();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void TaskPaneToolPanel::SetPosSizePixel( const Rectangle& i_rPanelPlayground )
-    {
-        Window* pPanelWindow( getPanelWindow() );
-        ENSURE_OR_RETURN_VOID( pPanelWindow, "no window to position" );
-        pPanelWindow->SetPosSizePixel( i_rPanelPlayground.TopLeft(), i_rPanelPlayground.GetSize() );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void TaskPaneToolPanel::GrabFocus()
-    {
-        Window* pPanelWindow( getPanelWindow() );
-        ENSURE_OR_RETURN_VOID( pPanelWindow, "no window to focus" );
-        pPanelWindow->GrabFocus();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    bool TaskPaneToolPanel::HasFocus() const
-    {
-        Window* pPanelWindow( getPanelWindow() );
-        ENSURE_OR_RETURN_FALSE( pPanelWindow, "no window to ask" );
-        return pPanelWindow->HasChildPathFocus();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void TaskPaneToolPanel::Dispose()
-    {
-        ENSURE_OR_RETURN_VOID( m_pPanelDeck, "disposed twice" );
-        m_pPanelDeck = NULL;
+        if ( m_pControl.get() )
+            return true;
+        if ( isDisposed() )
+            return false;
+        m_pControl = m_pControlFactory->CreateRootControl( getPanelDeck() );
+        return ( m_pControl.get() != NULL );
     }
 
 //......................................................................................................................
