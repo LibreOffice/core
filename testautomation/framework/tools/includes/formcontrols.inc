@@ -403,13 +403,13 @@ function hDrawControl( xPos as integer, _
     '///</ol>
     '///</ul>
     
-    DialogWindow.MouseUp( 20 , 20 )
+    DialogWindow.MouseUp( 20 , 20 ) : wait 100
     
     try
-        DialogWindow.MouseMove ( xPos, yPos )
-        DialogWindow.MouseDown ( xPos, yPos )
-        DialogWindow.MouseMove ( xEnd, yEnd )
-        DialogWindow.MouseUp   ( xEnd, yEnd )
+        DialogWindow.MouseMove ( xPos, yPos ) : wait 100
+        DialogWindow.MouseDown ( xPos, yPos ) : wait 100
+        DialogWindow.MouseMove ( xEnd, yEnd ) : wait 100
+        DialogWindow.MouseUp   ( xEnd, yEnd ) : wait 100
         hDrawControl() = true
     catch
         warnlog( "#i39852# " & CFN & "Unable to complete mouseactions on dialog" )
@@ -788,7 +788,10 @@ function hSelectControl( iControl as integer ) as boolean
         
         ' We exit the loop as soon as the control is selected. Only then the slot
         ' ContextProperties becomes available
-        if ( hUseAsyncSlot( "ContextProperties" ) <> BUTTON_TIMEOUT ) then exit for
+        if ( hUseAsyncSlot( "ContextProperties" ) <> BUTTON_TIMEOUT ) then
+            hSelectControl() = true
+            exit for
+        endif
         
     next iCurrentSelectionMethod
     '///</ul>
