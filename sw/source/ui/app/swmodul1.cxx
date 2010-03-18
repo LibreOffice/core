@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swmodul1.cxx,v $
- * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,13 +39,13 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #include <svx/dataaccessdescriptor.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brshitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <swmodule.hxx>
 #include <swtypes.hxx>

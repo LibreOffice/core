@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unosect.cxx,v $
- * $Revision: 1.60 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,8 +34,8 @@
 #include <cmdid.h>
 #include <hintids.hxx>
 #include <svl/urihelper.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/xmlcnitm.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/xmlcnitm.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <vos/mutex.hxx>
@@ -63,10 +60,11 @@
 #include <doctxm.hxx>
 #include <fmtftntx.hxx>
 #include <fmtclbl.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <editeng/frmdiritem.hxx>
 #include <fmtcntnt.hxx>
-#include <svx/frmdiritem.hxx>
 /* #109700# */
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 
 
 using namespace ::com::sun::star;

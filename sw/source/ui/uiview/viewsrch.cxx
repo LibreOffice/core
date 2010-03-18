@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewsrch.cxx,v $
- * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,12 +43,12 @@
 #endif
 #include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/srchdlg.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
-#include "svx/unolingu.hxx"
+#include "editeng/unolingu.hxx"
 #include <swmodule.hxx>
 #include <swwait.hxx>
 #include <workctrl.hxx>
