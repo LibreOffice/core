@@ -57,7 +57,6 @@
 
 #include <stdio.h>
 
-#define const /**/
 typedef int Bool;
 #define False 0
 #define True 1
@@ -72,5 +71,5 @@ typedef struct _if_parser {
     char *data;
 } IfParser;
 
-char *ParseIfExpression (/* IfParser *, const char *, int * */);
+const char *ParseIfExpression (/* IfParser *, const char *, int * */);
 
