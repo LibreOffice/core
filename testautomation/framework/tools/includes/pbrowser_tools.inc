@@ -111,12 +111,12 @@ function hPBSetControlName( cControl as string ) as boolean
     kontext "TabGeneralControl"
     if ( NameText.exists() ) then
         '///+<li>Set the new name</li>
-        WaitSlot()
+        hDeleteEntryFieldContent( NameText )
 
         ' Name the control and append some Spaces which should be truncated.
         printlog( CFN & "Naming control: " & cControl )
         NameText.setText( cControl )
-        TabGeneralControl.typeKeys( "   <RETURN>" )
+        TabGeneralControl.typeKeys( "<RETURN>" )
         WaitSlot()
 
         printlog( CFN & "Verifying rename..." )
@@ -301,3 +301,17 @@ function hSetPBTabPage( iPage as integer ) as boolean
     '///</ul>
 
 end function
+
+function hDeleteEntryFieldContent( oControl as object ) as boolean
+
+    oControl.typeKeys( "<HOME>" )
+    oControl.typeKeys( "<SHIFT END>" )
+    oControl.typeKeys( "<DELETE>" )
+
+    if ( oControl.getText() = "" ) then
+        hDeleteEntryFieldContent() = true
+    else
+        hDeleteEntryFieldContent() = false
+    endif
+
+exit function

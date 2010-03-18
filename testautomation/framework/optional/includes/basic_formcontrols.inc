@@ -43,8 +43,6 @@ testcase tAllControlsOnDialog( cMajor as string )
     dim iApplication as Integer ' numeric expression for gApplication
     dim cApplication as string  ' Name of the current application
     
-    dim lsControlNames( 30 ) as string  ' list containing the names of the controls
-
     ' number of controls and the name of the current control
     dim iCurrentControl as integer
     dim sCurrentControl as string
@@ -83,7 +81,6 @@ testcase tAllControlsOnDialog( cMajor as string )
         for iCurrentControl = 1 to ICONTROLCOUNT
 
             sCurrentControl = hDrawControlOnDialog( iCurrentControl )
-            listappend( lsControlNames() , sCurrentControl )
             hUseAsyncSlot( "ContextProperties" )
             kontext "ControlPropertiesTabControl"
             if ( ControlPropertiesTabControl.exists( 1 ) ) then
@@ -138,7 +135,7 @@ testcase tAllControlsOnDialog( cMajor as string )
                 kontext "ControlPropertiesTabControl"
                 if ( ControlPropertiesTabControl.exists( 5 ) ) then
                     wait( 300 )
-                    sCurrentControl = lsControlNames( iCurrentControl )
+                    sCurrentControl = hGetControlName( iCurrentControl )
                     hPBGetControlName( sCurrentControl )
                     hUseAsyncSlot( "ContextProperties" )
                     kontext "ControlPropertiesTabControl" : ControlPropertiesTabControl.notExists( 3 )
@@ -150,9 +147,6 @@ testcase tAllControlsOnDialog( cMajor as string )
             endif
             
         next iCurrentControl
-        
-        ' we need to delete the list-content otherwise we run into index-problems
-        ListAllDelete( lsControlNames() )
        
         printlog( "Cleanup: Close the BASIC-IDE" )
         hCloseBasicIde()        
@@ -209,7 +203,7 @@ testcase tAllControlsOnDialog( cMajor as string )
                 kontext "ControlPropertiesTabControl"
                 if ( ControlPropertiesTabControl.exists( 5 ) ) then
                     wait( 300 )
-                    sCurrentControl = lsControlNames( iCurrentControl )
+                    sCurrentControl = hGetControlName( iCurrentControl )
                     hPBGetControlName( sCurrentControl )
                     hUseAsyncSlot( "ContextProperties" )
                     kontext "ControlPropertiesTabControl" : ControlPropertiesTabControl.notExists( 3 )
@@ -221,10 +215,7 @@ testcase tAllControlsOnDialog( cMajor as string )
             endif
             
         next iCurrentControl
-        
-        ' we need to delete the list-content otherwise we run into index-problems
-        ListAllDelete( lsControlNames() )
-       
+            
         printlog( "Cleanup: Close the BASIC-IDE" )
         hCloseBasicIde()
         
