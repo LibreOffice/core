@@ -38,6 +38,7 @@
 #include "framework/FrameworkHelper.hxx"
 
 #include <comphelper/scopeguard.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <boost/bind.hpp>
 
@@ -247,8 +248,7 @@ void ConfigurationUpdater::UpdateConfiguration (void)
     }
     catch (RuntimeException e)
     {
-        OSL_TRACE("caught exception while updating the current configuration");
-        DBG_ASSERT(false, "caught exception while updating the current configuration");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
 #if defined VERBOSE && VERBOSE>0
@@ -343,7 +343,7 @@ void ConfigurationUpdater::UpdateCore (const ConfigurationClassifier& rClassifie
     }
     catch(RuntimeException)
     {
-        OSL_ASSERT(false);
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 

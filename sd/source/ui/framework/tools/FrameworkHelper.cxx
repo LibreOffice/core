@@ -55,6 +55,7 @@
 #include "vcl/svapp.hxx"
 #include <osl/doublecheckedlocking.h>
 #include <osl/getglobalmutex.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -720,7 +721,7 @@ void FrameworkHelper::HandleModeChangeSlot (
     }
     catch (RuntimeException&)
     {
-        OSL_TRACE("HandleModeChangeSlot: caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -855,7 +856,7 @@ void FrameworkHelper::UpdateConfiguration (void)
         }
         catch (RuntimeException&)
         {
-            DBG_ASSERT(false, "FrameworkHelper::UpdateConfiguration: caught exception");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }
@@ -1056,7 +1057,7 @@ CallbackCaller::CallbackCaller (
     }
     catch (RuntimeException&)
     {
-        DBG_ASSERT(false,"ConfigurationUpdateGuard: caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -1083,7 +1084,7 @@ void CallbackCaller::disposing (void)
     }
     catch (RuntimeException&)
     {
-        DBG_ASSERT(false,"~ConfigurationUpdateGuard: caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 

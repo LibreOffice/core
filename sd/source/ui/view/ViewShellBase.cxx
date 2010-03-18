@@ -1633,7 +1633,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
     }
     catch (RuntimeException&)
     {
-        DBG_ASSERT(false, "ViewShellBase::Implementation::GetSlotState(): caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
 }

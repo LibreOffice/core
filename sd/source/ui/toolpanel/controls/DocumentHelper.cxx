@@ -46,6 +46,7 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include "stlpool.hxx"
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -248,9 +249,7 @@ SdPage* DocumentHelper::AddMasterPage (
         catch (uno::Exception& rException)
         {
             pClonedMasterPage = NULL;
-            OSL_TRACE("caught exception while adding master page: %s",
-                ::rtl::OUStringToOString(rException.Message,
-                    RTL_TEXTENCODING_UTF8).getStr());
+            DBG_UNHANDLED_EXCEPTION();
         }
         catch (::std::exception rException)
         {

@@ -53,6 +53,8 @@
 #include "sdpage.hxx"
 #include "FrameView.hxx"
 
+#include <tools/diagnose_ex.h>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -228,13 +230,9 @@ sal_Int32 SlideSorterModel::GetIndex (const Reference<drawing::XDrawPage>& rxSli
                 return nNumber;
             }
         }
-        catch (beans::UnknownPropertyException&)
+        catch (uno::Exception&)
         {
-            OSL_ASSERT(false);
-        }
-        catch (lang::DisposedException&)
-        {
-            OSL_ASSERT(false);
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 

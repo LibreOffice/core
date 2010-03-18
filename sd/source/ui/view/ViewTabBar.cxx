@@ -57,6 +57,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/processfactory.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -475,7 +476,7 @@ bool ViewTabBar::ActivatePage (void)
     }
     catch (RuntimeException&)
     {
-        DBG_ASSERT(false,"ViewTabBar::ActivatePage(): caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     return false;

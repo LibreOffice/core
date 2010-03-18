@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -126,8 +127,7 @@ void ConfigurationControllerBroadcaster::NotifyListeners (
         }
         catch(RuntimeException&)
         {
-            DBG_ASSERT(false,
-                "ConfigurationController: caught exception while notifying listeners");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }
@@ -215,8 +215,7 @@ void ConfigurationControllerBroadcaster::DisposeAndClear (void)
                 }
                 catch (RuntimeException&)
                 {
-                    DBG_ASSERT(false,
-                        "ConfigurationController: caught exception while notifying dispose");
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
             else

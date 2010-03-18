@@ -38,6 +38,7 @@
 #include "ViewShellBase.hxx"
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <cppuhelper/compbase1.hxx>
+#include <tools/diagnose_ex.h>
 #include "slideshow.hxx"
 
 using namespace ::com::sun::star;
@@ -158,7 +159,7 @@ PresentationFactory::PresentationFactory (
     }
     catch (RuntimeException&)
     {
-        OSL_ASSERT(false);
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -312,7 +313,7 @@ void SAL_CALL PresentationFactoryProvider::initialize(
         }
         catch (RuntimeException&)
         {
-            OSL_ASSERT(false);
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }

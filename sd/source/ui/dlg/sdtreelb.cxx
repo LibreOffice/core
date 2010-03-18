@@ -59,6 +59,7 @@
 
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <svtools/embedtransfer.hxx>
+#include <tools/diagnose_ex.h>
 #include <ViewShell.hxx>
 
 using namespace com::sun::star;
@@ -1271,7 +1272,7 @@ sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
     }
     catch (com::sun::star::uno::Exception&)
     {
-        OSL_ASSERT(false);
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     if (nRet == DND_ACTION_NONE)

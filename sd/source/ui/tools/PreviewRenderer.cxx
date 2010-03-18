@@ -45,6 +45,7 @@
 #include <svx/editstat.hxx>
 #include <tools/link.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/diagnose_ex.h>
 
 
 namespace sd {
@@ -134,7 +135,7 @@ Image PreviewRenderer::RenderPage (
         }
         catch (const com::sun::star::uno::Exception&)
         {
-            OSL_TRACE("PreviewRenderer::RenderPage: caught exception");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -196,7 +197,7 @@ Image PreviewRenderer::RenderSubstitution (
     }
     catch (const com::sun::star::uno::Exception&)
     {
-        OSL_TRACE("PreviewRenderer::RenderPage: caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     return aPreview;
@@ -305,7 +306,7 @@ void PreviewRenderer::PaintPage (const SdPage* pPage)
     }
     catch (const ::com::sun::star::uno::Exception&)
     {
-        OSL_TRACE("PreviewRenderer::PaintPage: caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     // Restore the previous online spelling and redlining states.

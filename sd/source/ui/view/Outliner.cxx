@@ -61,6 +61,7 @@
 #include <svx/editeng.hxx>
 #include <vcl/metric.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <tools/diagnose_ex.h>
 
 #include "strings.hrc"
 #include "sdstring.hrc"
@@ -977,7 +978,7 @@ void Outliner::ProvideNextTextObject (void)
     }
     catch (::com::sun::star::uno::Exception e)
     {
-        OSL_TRACE ("Outliner %p: caught exception while ending text edit mode", this);
+        DBG_UNHANDLED_EXCEPTION();
     }
     SetUpdateMode(FALSE);
     OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
