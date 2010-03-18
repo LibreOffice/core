@@ -31,6 +31,8 @@
 '*
 '\******************************************************************************
 
+private const ICONTROLCOUNT = 22
+
 testcase tAllControlsOnDialog( cMajor as string )
 
     printlog( "Insert all available controls into a BASIC dialog and verify that changed settings persist a save/load cycle" )
