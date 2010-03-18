@@ -302,14 +302,6 @@ function hDrawControlOnDialog( iControl as integer ) as string
 
     const CFN = "hDrawControlOnDialog::"
     
-    '///+<li>Verify function parameter (this is a top level function)</li> 
-    if ( ( iControl < 1 ) or ( iControl > ICONTROLCOUNT ) ) then
-        warnlog( CFN & "Invalid control-number (iControl) passed: " & iControl )
-        hDrawControlOnDialog() = false
-        exit function
-    endif    
-    
-    
     dim sControl as string   ' The name of the current control
     dim brc as boolean       ' some returnvalue
     
@@ -675,8 +667,7 @@ function hSelectControl( iControl as integer ) as boolean
     '///+ dialog pane. To prevent the controls from overlapping each other
     '///+ they are arranged in rows and columns. Each control is identified
     '///+ by a unique number (see description for hInsertControl(...)). The 
-    '///+ dimensions are defined in hGetControlParams(...). The coordinates
-    '///+ returned by this function can be used to draw and to select a control.</i><br>
+    '///+ dimensions are defined in hGetControlParams(...).</i><br>
     '///<u>Input</u>:
     '///<ol>
     '///+<li>Number of the control (integer)</li>
@@ -699,13 +690,14 @@ function hSelectControl( iControl as integer ) as boolean
     dim yPos as integer
     dim iCurrentSelectionMethod as integer
 
-    const SELECT_MIDDLE       = 1
-    const SELECT_UPPER_LEFT   = 2
-    const SELECT_LOWER_RIGHT  = 3
-    const SELECT_FRAME_AROUND = 4
-    const EXTRA_FRAME_SIZE    = 1
-    const SELECTION_METHODS   = 4
-    const BUTTON_TIMEOUT      = -1
+    const SELECT_MIDDLE       = 1 ' click into the middle of the control
+    const SELECT_UPPER_LEFT   = 2 ' click the upper left corner of the control
+    const SELECT_LOWER_RIGHT  = 3 ' click the lower right corner of the control
+    const SELECT_FRAME_AROUND = 4 ' select by drawing a frame around the control
+
+    const EXTRA_FRAME_SIZE    = 1 ' one percent in-/outside the border of the control
+    const SELECTION_METHODS   = 4 ' this function sports four ways of seleting a control
+    const REPEAT_COUNT        = 5 ' number of times to send a keystroke to the dialog window
 
     hSelectControl() = false
 
@@ -744,8 +736,13 @@ function hSelectControl( iControl as integer ) as boolean
     '///</ol>
 
     for iCurrentSelectionMethod = 1 to SELECTION_METHODS
+
+        select case ( iControl )
+        case 11 : iCurrentSelectionMethod = 4
+        end select
         
         Kontext "BasicIDE"
+        DialogWindow.typeKeys( "<UP><LEFT>" , REPEAT_COUNT )
         select case ( iCurrentSelectionMethod )
         case SELECT_MIDDLE
 
@@ -777,7 +774,6 @@ function hSelectControl( iControl as integer ) as boolean
             yPos = hGetControlPosYO( iControl ) - EXTRA_FRAME_SIZE
             DialogWindow.MouseMove( xPos, yPos )
             DialogWindow.MouseDown( xPos, yPos )
-            'DialogWindow.MouseUp  ( xPos, yPos )
             
             xPos = hGetControlPosXE( iControl ) + EXTRA_FRAME_SIZE
             yPos = hGetControlPosYE( iControl ) + EXTRA_FRAME_SIZE
@@ -785,13 +781,13 @@ function hSelectControl( iControl as integer ) as boolean
             DialogWindow.MouseUp  ( xPos, yPos )
 
         end select
-        
-        ' We exit the loop as soon as the control is selected. Only then the slot
-        ' ContextProperties becomes available
-        if ( hUseAsyncSlot( "ContextProperties" ) <> BUTTON_TIMEOUT ) then
+
+        try
+            ContextProperties
             hSelectControl() = true
             exit for
-        endif
+        catch
+        endcatch
         
     next iCurrentSelectionMethod
     '///</ul>
