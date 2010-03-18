@@ -332,12 +332,14 @@ void XcuParser::handleComponentData(XmlReader & reader) {
         Data::findNode(
             valueParser_.getLayer(), data_->components, componentName_));
     if (!node.is()) {
-        throw css::uno::RuntimeException(
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unknown component ")) +
-             componentName_ +
-             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" in ")) +
-             reader.getUrl()),
-            css::uno::Reference< css::uno::XInterface >());
+        OSL_TRACE(
+            "configmgr unknown component %s in %s",
+            rtl::OUStringToOString(
+                componentName_, RTL_TEXTENCODING_UTF8).getStr(),
+            rtl::OUStringToOString(
+                reader.getUrl(), RTL_TEXTENCODING_UTF8).getStr());
+        state_.push(State()); // ignored
+        return;
     }
     switch (op) {
     case OPERATION_MODIFY:
@@ -389,17 +391,11 @@ void XcuParser::handleItem(XmlReader & reader) {
         data_->resolvePathRepresentation(
             path, &modificationPath_, &finalizedLayer));
     if (!node.is()) {
-        //TODO: Within Components::parseModificationLayer (but only there) it
-        // can rightly happen that data is read that does not match a schema
-        // (that no schema exists, or that the schema specifies a different
-        // type), namely if the schema was brought along by an extension that
-        // has been removed or replaced; instead of taking care of that at all
-        // the relevant places, as a hack, only "top-level" <item>s (that only
-        // appear in modification layer data) with unknown path are filtered out
-        // here.
         OSL_TRACE(
-            "configmgr unknown <item path=\"%s\">",
-            rtl::OUStringToOString(path, RTL_TEXTENCODING_UTF8).getStr());
+            "configmgr unknown item %s in %s",
+            rtl::OUStringToOString(path, RTL_TEXTENCODING_UTF8).getStr(),
+            rtl::OUStringToOString(
+                reader.getUrl(), RTL_TEXTENCODING_UTF8).getStr());
         state_.push(State()); // ignored
         return;
     }
@@ -672,17 +668,10 @@ void XcuParser::handleUnknownGroupProp(
     XmlReader const & reader, GroupNode * group, rtl::OUString const & name,
     Type type, Operation operation, bool finalized)
 {
-    if (!group->isExtensible()) {
-        throw css::uno::RuntimeException(
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unknown prop ")) +
-             name + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" in ")) +
-             reader.getUrl()),
-            css::uno::Reference< css::uno::XInterface >());
-    }
     switch (operation) {
     case OPERATION_REPLACE:
     case OPERATION_FUSE:
-        {
+        if (group->isExtensible()) {
             if (type == TYPE_ERROR) {
                 throw css::uno::RuntimeException(
                     (rtl::OUString(
@@ -705,12 +694,15 @@ void XcuParser::handleUnknownGroupProp(
                 modificationPath_.push_back(name);
                 modifications_->add(modificationPath_);
             }
+            break;
         }
-        break;
+        // fall through
     default:
         OSL_TRACE(
-            "ignoring modify or remove of unknown (presumably extension)"
-            " property");
+            "configmgr unknown property %s in %s",
+            rtl::OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr(),
+            rtl::OUStringToOString(
+                reader.getUrl(), RTL_TEXTENCODING_UTF8).getStr());
         state_.push(State());
         break;
     }
@@ -879,11 +871,13 @@ void XcuParser::handleGroupNode(
     rtl::Reference< Node > child(
         Data::findNode(valueParser_.getLayer(), group->getMembers(), name));
     if (!child.is()) {
-        throw css::uno::RuntimeException(
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unknown node ")) +
-             name + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" in ")) +
-             reader.getUrl()),
-            css::uno::Reference< css::uno::XInterface >());
+        OSL_TRACE(
+            "configmgr unknown node %s in %s",
+            rtl::OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr(),
+            rtl::OUStringToOString(
+                reader.getUrl(), RTL_TEXTENCODING_UTF8).getStr());
+        state_.push(State()); // ignored
+        return;
     }
     if (op != OPERATION_MODIFY && op != OPERATION_FUSE) {
         throw css::uno::RuntimeException(
