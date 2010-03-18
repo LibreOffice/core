@@ -2548,6 +2548,7 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     // is a new medium "from scratch", so no version should be stored into it
     SfxItemSet* pSet = new SfxAllItemSet(*pRetrMedium->GetItemSet());
     pSet->ClearItem( SID_VERSION );
+    pSet->ClearItem( SID_DOC_BASEURL );
 
     // create a medium as a copy; this medium is only for writingm, because it uses the same name as the original one
     // writing is done through a copy, that will be transferred to the target ( of course after calling HandsOff )
@@ -2833,6 +2834,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     pMergedParams->ClearItem( SID_STREAM );
     pMergedParams->ClearItem( SID_CONTENT );
     pMergedParams->ClearItem( SID_DOC_READONLY );
+    pMergedParams->ClearItem( SID_DOC_BASEURL );
 
     pMergedParams->ClearItem( SID_REPAIRPACKAGE );
 
