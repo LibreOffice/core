@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dumperbase.hxx,v $
- * $Revision: 1.4.20.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,6 +100,9 @@ const sal_Unicode OOX_DUMP_ARRAYSEP         = ';';
 const sal_Unicode OOX_DUMP_EMPTYVALUE       = '~';
 const sal_Unicode OOX_DUMP_CMDPROMPT        = '?';
 const sal_Unicode OOX_DUMP_PLACEHOLDER      = '\x01';
+
+typedef ::std::pair< ::rtl::OUString, ::rtl::OUString > OUStringPair;
+typedef ::std::pair< sal_Int64, sal_Int64 >             Int64Pair;
 
 typedef ::std::vector< ::rtl::OUString >    OUStringVector;
 typedef ::std::vector< sal_Int64 >          Int64Vector;
@@ -409,6 +409,7 @@ public:
     // string conversion ------------------------------------------------------
 
     static ::rtl::OUString trimSpaces( const ::rtl::OUString& rStr );
+    static ::rtl::OUString trimTrailingNul( const ::rtl::OUString& rStr );
 
     static ::rtl::OString convertToUtf8( const ::rtl::OUString& rStr );
     static DataType     convertToDataType( const ::rtl::OUString& rStr );
@@ -420,6 +421,8 @@ public:
     static bool         convertStringToInt( sal_Int64& ornData, const ::rtl::OUString& rData );
     static bool         convertStringToDouble( double& orfData, const ::rtl::OUString& rData );
     static bool         convertStringToBool( const ::rtl::OUString& rData );
+
+    static OUStringPair convertStringToPair( const ::rtl::OUString& rString, sal_Unicode cSep = '=' );
 
     // string to list conversion ----------------------------------------------
 
@@ -767,10 +770,10 @@ class FlagsList : public NameListBase
 public:
     explicit            FlagsList( const SharedConfigData& rCfgData );
 
+    /** Returns the flags to be ignored on output. */
+    inline sal_Int64    getIgnoreFlags() const { return mnIgnore; }
     /** Sets flags to be ignored on output. */
-    template< typename Type >
-    inline void         setIgnoreFlags( Type nIgnore )
-                            { mnIgnore = static_cast< sal_Int64 >( nIgnore ); }
+    inline void         setIgnoreFlags( sal_Int64 nIgnore ) { mnIgnore = nIgnore; }
 
 protected:
     virtual void        implProcessConfigItemStr(
@@ -807,12 +810,20 @@ protected:
     virtual void        implIncludeList( const NameListBase& rList );
 
 private:
+    struct ExtItemFormatKey
+    {
+        sal_Int64           mnKey;
+        Int64Pair           maFilter;
+        inline explicit     ExtItemFormatKey( sal_Int64 nKey ) : mnKey( nKey ), maFilter( 0, 0 ) {}
+        bool                operator<( const ExtItemFormatKey& rRight ) const;
+
+    };
     struct ExtItemFormat : public ItemFormat
     {
         bool                mbShiftValue;
         inline explicit     ExtItemFormat() : mbShiftValue( true ) {}
     };
-    typedef ::std::map< sal_Int64, ExtItemFormat > ExtItemFormatMap;
+    typedef ::std::map< ExtItemFormatKey, ExtItemFormat > ExtItemFormatMap;
     ExtItemFormatMap    maFmtMap;
 };
 
@@ -860,6 +871,17 @@ private:
 };
 
 static const NameListWrapper NO_LIST;
+
+// ============================================================================
+
+class ItemFormatMap : public ::std::map< sal_Int64, ItemFormat >
+{
+public:
+    inline explicit     ItemFormatMap() {}
+    inline explicit     ItemFormatMap( const NameListRef& rxNameList ) { insertFormats( rxNameList ); }
+
+    void                insertFormats( const NameListRef& rxNameList );
+};
 
 // ============================================================================
 // ============================================================================
@@ -1585,8 +1607,8 @@ protected:
     sal_Unicode         dumpChar( const String& rName, rtl_TextEncoding eTextEnc );
     sal_Unicode         dumpUnicode( const String& rName );
 
-    ::rtl::OUString     dumpCharArray( const String& rName, sal_Int32 nLen, rtl_TextEncoding eTextEnc );
-    ::rtl::OUString     dumpUnicodeArray( const String& rName, sal_Int32 nLen );
+    ::rtl::OUString     dumpCharArray( const String& rName, sal_Int32 nLen, rtl_TextEncoding eTextEnc, bool bHideTrailingNul = false );
+    ::rtl::OUString     dumpUnicodeArray( const String& rName, sal_Int32 nLen, bool bHideTrailingNul = false );
 
     ::rtl::OUString     dumpNullCharArray( const String& rName, rtl_TextEncoding eTextEnc );
     ::rtl::OUString     dumpNullUnicodeArray( const String& rName );
