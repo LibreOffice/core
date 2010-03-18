@@ -188,7 +188,7 @@ function hPBGetControlName( cControl as string ) as boolean
     kontext "TabGeneralControl"
     if ( TabGeneralControl.exists( 1 ) ) then
         if ( TabGeneralControl.isVisible() ) then
-
+            wait( 300 )
             cControlName = NameText.getText()
 
             '///+<li>Verify that the name is correct</li>

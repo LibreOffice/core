@@ -140,7 +140,7 @@ testcase tAllControlsOnDialog( cMajor as string )
                     hUseAsyncSlot( "ContextProperties" )
                     kontext "ControlPropertiesTabControl" : ControlPropertiesTabControl.notExists( 3 )
                 else
-                    warnlog( "Property browser not open for " &  )
+                    warnlog( "Property browser not open for " & sCurrentControl )
                 endif
             else
                 warnlog( "Failed to select control: " & sCurrentControl )
@@ -148,15 +148,15 @@ testcase tAllControlsOnDialog( cMajor as string )
             
         next iCurrentControl
        
-        printlog( "Cleanup: Close the BASIC-IDE" )
+        printlog( "Close the BASIC-IDE" )
         hCloseBasicIde()        
         
         if ( getDocumentCount <> 1 ) then warnlog( "Number of open documents is incorrect, expected one only" )
 
-        printlog( "save the document" )
+        printlog( "Save the document" )
         Call hFileSaveAsKill( sFile )
 
-        printlog( "close the document" )
+        printlog( "Close the document" )
         hDestroyDocument()
 
         printlog( "" ) 
@@ -165,7 +165,7 @@ testcase tAllControlsOnDialog( cMajor as string )
         printlog( "Open the file again" )
         hFileOpen( sFile )
 
-        printlog( "open the basic-IDE of this document, open controls, activate 'Select-mode' and open the properties" )
+        printlog( "Open the basic-IDE from this document, open controls, activate 'Select-mode' and open the properties" )
         ToolsMacro_uno
 
         kontext "Makro"
@@ -208,7 +208,7 @@ testcase tAllControlsOnDialog( cMajor as string )
                     hUseAsyncSlot( "ContextProperties" )
                     kontext "ControlPropertiesTabControl" : ControlPropertiesTabControl.notExists( 3 )
                 else
-                    warnlog( "Property browser not open for " &  )
+                    warnlog( "Property browser not open for " & sCurrentControl )
                 endif
             else
                 warnlog( "Failed to select control: " & sCurrentControl )

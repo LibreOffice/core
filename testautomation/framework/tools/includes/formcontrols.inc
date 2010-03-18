@@ -792,6 +792,8 @@ function hSelectControl( iControl as integer ) as boolean
         if ( hUseAsyncSlot( "ContextProperties" ) <> BUTTON_TIMEOUT ) then
             hSelectControl() = true
             exit for
+        else
+            printlog( "hSelectControl(): Method " & iCurrentSelectionMethod & " failed." )
         endif
         
     next iCurrentSelectionMethod
