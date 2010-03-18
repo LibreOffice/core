@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docfmt.cxx,v $
- * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,11 +36,11 @@
 #include <rtl/logfile.hxx>
 #include <svl/itemiter.hxx>
 #include <sfx2/app.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <svl/whiter.hxx>
 #ifndef _ZFORLIST_HXX //autogen
 #define _ZFORLIST_DECLARE_TABLE

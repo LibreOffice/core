@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewstat.cxx,v $
- * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,12 +38,12 @@
 #include <sfx2/objitem.hxx>
 #include <svl/imageitm.hxx>
 #include <svl/languageoptions.hxx>
-#include <svx/protitem.hxx>
-#include <svx/linkmgr.hxx>
-#include <svx/langitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/protitem.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <sfx2/msgpool.hxx>
 #include <swmodule.hxx>
 #include <tox.hxx>

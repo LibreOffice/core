@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8par4.cxx,v $
- * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +40,6 @@
 #include <hintids.hxx>
 #include <svx/svdoole2.hxx>
 #include <filter/msfilter/msdffimp.hxx>
-#include <svx/impgrf.hxx>
 #include <svx/unoapi.hxx>
 #include <filter/msfilter/msocximex.hxx>
 
@@ -63,6 +59,7 @@
 #include <shellio.hxx>
 #include <ndole.hxx>
 
+#include <svtools/filter.hxx>
 
 #include "ww8scan.hxx"
 #include "ww8par.hxx"
