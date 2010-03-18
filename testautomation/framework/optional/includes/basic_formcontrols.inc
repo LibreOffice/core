@@ -137,8 +137,7 @@ testcase tAllControlsOnDialog( cMajor as string )
             if ( instr( gtSysName, "Solaris" ) ) then
                 qaerrorlog( "Skipping frame control on Solaris" )
             else
-                hSelectControl( iCurrentControl )
-                hUseAsyncSlot( "ContextProperties" )
+                hSelectControl( iCurrentControl ) ' opens the property browser
                 kontext "ControlPropertiesTabControl"
                 if ( ControlPropertiesTabControl.exists( 1 ) ) then
                     sCurrentControl = lsControlNames( iCurrentControl )
@@ -209,8 +208,7 @@ testcase tAllControlsOnDialog( cMajor as string )
             if ( instr( gtSysName, "Solaris" ) ) then
                 qaerrorlog( "Skipping frame control on Solaris" )
             else
-                hSelectControl( iCurrentControl )
-                hUseAsyncSlot( "ContextProperties" )
+                hSelectControl( iCurrentControl ) ' opens the property browser
                 kontext "ControlPropertiesTabControl"
                 if ( ControlPropertiesTabControl.exists( 1 ) ) then
                     sCurrentControl = lsControlNames( iCurrentControl )

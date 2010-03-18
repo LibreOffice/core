@@ -107,7 +107,7 @@ function hGetBasicWorkFile( cMajorID as string ) as string
     printlog( CFN & sFile & " for " & gApplication & " (" & cMajorID & ")" )
         
     '///+<li>Return the path as string</li>
-    hGetBasicWorkFile() = convertpath( sFile )
+    hGetBasicWorkFile() = sFile
     
     '///</ul>
 
@@ -122,25 +122,30 @@ function hOpenBasicIDE() as boolean
     '///<ul>
     
     const CFN = "hOpenBasicIDE::"
+    const BUTTON_TIMEOUT = -1
     
     '///+<li>Select the last module in the treelist, verify that it can be edited</li>
-    hSelectTheLastModule( true )
+    if ( hSelectTheLastModule( true ) ) then
     
-    '///+<li>Click the Edit-button</li>
-    Bearbeiten.click()
-    
-    '///+<li>Maximize the Basic IDE (required to ensure proper operation of mousemovements)</li>
-    sleep( 2 )
-    kontext "BasicIde"
-    BasicIde.maximize()
-    
-    '///+<li>Verify that the Basic IDE is open, return TRUE on success</li>
-    if ( BasicIde.exists() ) then
-       printlog( CFN & "Open Basic-IDE for existing module: success" )
-       hOpenBasicIDE() = true
+        '///+<li>Click the Edit-button</li>
+        if ( hClickButton( Bearbeiten) <> BUTTON_TIMEOUT ) then
+
+            kontext "BASICIDE"
+            if ( BasicIDE.exists( 2 ) ) then
+                printlog( "Basic IDE is open" )
+                BasicIDE.maximize()
+                hOpenBasicIDE() = true
+            else
+                warnlog( CFN & "Failed to open BASIC IDE" )
+                hOpenBasicIDE() = false
+            endif
+        else
+            warnlog( CFN & "Edit button is not enabled, cannot open BASIC IDE"
+            hOpenBasicIDE() = false
+        endif
     else
-       printlog( CFN & "Open Basic-IDE for existing module: failure" )
-       hOpenBasicIDE() = false
+        warnlog( CFN & "Unable to select the last module" )
+        hOpenBasicIDE() = false
     endif
     
     '///</ul>
@@ -161,16 +166,12 @@ function hCloseBasicIDE() as boolean
     '///<ul>
     
     use "global\tools\includes\optional\t_docfuncs.inc"
-    
-    const CFN = "hCloseBasicIDE::"
-    dim brc as boolean
 
     '///+<li>Close the macro controls float</li>
     hCloseCollectionBar()
 
     '///+<li>Try to close the current document</li>
-    brc = hDestroyDocument()
-    if ( brc ) then
+    if ( hDestroyDocument() ) then
         hCloseBasicIDE() = true
     else
         hCloseBasicIDE() = false
@@ -188,31 +189,37 @@ function hReOpenBasicDialog() as boolean
     '///<i>Starting point: Focus on document containing at least one macro</i><br>
     '///<i>IMPORTANT: Errorhandling is incomplete, test may end up in undefined state</i>
     '///<ul>
-    
-    dim brc as boolean
 
+    const CFN = "hReopenBasicDialog: "
+    const BUTTON_TIMEOUT = -1
+    
     '///+<li>open the macro dialog, select the last module</li>
-    brc = hSelectTheLastModule( true )
-    if ( not brc ) then
-        warnlog( "Could not open the last module for editing." )
+    if ( hSelectTheLastModule( true ) ) then
+
+        '///+<li>edit the module</li>
+        if ( hClickButton( Bearbeiten ) <> BUTTON_TIMEOUT ) then
+
+            '///+<li>find the dialog window.</li>
+            kontext "BasicIDE"
+            BasicIde.maximize()
+
+            if ( hFindFirstDialog() ) then
+                printlog( "BASIC IDE is open." )
+                hReOpenBasicDialog() = true
+            else
+                warnlog( CFN & "Could not find any dialog" )
+                hReOpenBasicDialog() = false
+            endif
+        else
+            warnlog( CFN & "Unable to click Edit button, BASIC IDE not open" )
+            hReOpenBasicDialog() = false
+        endif
+    else
+        warnlog( CFN & "Could not open the last module for editing." )
         hReOpenBasicDialog() = false
         exit function
     endif
 
-    '///+<li>edit the module</li>
-    Bearbeiten.Click()
-
-    '///+<li>find the dialog window.</li>
-    kontext "BasicIDE"
-    BasicIde.maximize()
-
-    brc = hFindFirstDialog() 
-    if ( not brc ) then
-        warnlog( "Could not find any dialog" )
-        hReOpenBasicDialog() = false
-    else
-        hReOpenBasicDialog() = true
-    endif
     
     '///+<li>Return TRUE on success, FALSE on failure</li>
     '///</ul>
