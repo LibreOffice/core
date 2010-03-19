@@ -55,6 +55,7 @@
 #include <editeng/langitem.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <svx/zoomslideritem.hxx>
+#include <svtools/xwindowitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -540,8 +541,8 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                     // xmlsec05:    new password dialog
                     Window* pParent;
                     const SfxPoolItem* pParentItem;
-                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_PARENTWINDOW, FALSE, &pParentItem ) )
-                        pParent = ( Window* ) ( ( const OfaPtrItem* ) pParentItem )->GetValue();
+                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_XWINDOW, FALSE, &pParentItem ) )
+                        pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
                     else
                         pParent = &GetViewFrame()->GetWindow();
                     SfxPasswordDialog aPasswdDlg( pParent );
@@ -576,8 +577,8 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             //              message box for wrong password
             Window* pParent;
             const SfxPoolItem* pParentItem;
-            if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_PARENTWINDOW, FALSE, &pParentItem ) )
-                pParent = ( Window* ) ( ( const OfaPtrItem* ) pParentItem )->GetValue();
+            if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_XWINDOW, FALSE, &pParentItem ) )
+                pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
             else
                 pParent = &GetViewFrame()->GetWindow();
             SfxPasswordDialog aPasswdDlg( pParent );
