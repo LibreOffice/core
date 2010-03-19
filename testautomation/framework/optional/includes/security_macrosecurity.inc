@@ -89,23 +89,23 @@ testcase tMacroSecurityLevels( cFileFormat )
         
         printlog( "Check security level dependent behavior" )
         select case iSecLevel
-        case 0 :
+        case GC_MACRO_SECURITY_LEVEL_LOW :
 
             if ( not hIdentifyExecutedMacro() ) then
                 warnlog( "#i110184# - Macro was not executed" )
             endif
 
-        case 1 : 
+        case GC_MACRO_SECURITY_LEVEL_MEDIUM :
 
             if ( not hAllowMacroExecution() )   then
-                warnlog( "Macro execution warning missing, chek the file/security settings" )
+                warnlog( "#i110184# - Macro execution warning missing, check the file/security settings" )
             endif
 
             if ( not hIdentifyExecutedMacro() ) then
                 warnlog( "#i110184# - Macro was not executed" )
             endif
 
-        case 2 : 
+        case GC_MACRO_SECURITY_LEVEL_HIGH :
 
             if ( not hHandleActivesOnLoad( EXPECTED_MESSAGECOUNT , ALLOW_ONE_EXTRA_MESSAGEBOX ) ) then
                 warnlog( "#i53710# unexpected second messagebox" )
@@ -115,7 +115,7 @@ testcase tMacroSecurityLevels( cFileFormat )
                 warnlog( "Macro was executed" )
             endif
 
-        case 3 : 
+        case GC_MACRO_SECURITY_LEVEL_VERYHIGH :
 
             if ( not hHandleActivesOnLoad( EXPECTED_MESSAGECOUNT , ALLOW_NO_EXTRA_MESSAGEBOXES ) ) then
                 warnlog( "#i53710# unexpected second messagebox" )
