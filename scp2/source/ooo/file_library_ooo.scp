@@ -1325,7 +1325,7 @@ STD_UNO_LIB_FILE( gid_File_Lib_Sf_Prothdlr, protocolhandler )
 File gid_File_Lib_Sfx
     Name = LIBNAME(sfx);
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,PATCH,UNO_COMPONENT);
     Dir = SCP2_OOO_BIN_DIR;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
