@@ -39,6 +39,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing::framework;
 
 using ::rtl::OUString;
@@ -239,7 +240,7 @@ namespace
 
 Reference<XResource> SAL_CALL TaskPanelFactory::createResource (
     const Reference<XResourceId>& rxResourceId)
-    throw (RuntimeException)
+    throw (RuntimeException, IllegalArgumentException, WrappedTargetException)
 {
     Reference<XResource> xResource;
 

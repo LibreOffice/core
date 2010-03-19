@@ -62,7 +62,7 @@ namespace sd { namespace colortoolpanel
         ~ResourceFactory();
 
         // XResourceFactory
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResource > SAL_CALL createResource( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >& xResourceId ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResource > SAL_CALL createResource( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >& xResourceId ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
         virtual void SAL_CALL releaseResource( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResource >& xResource ) throw (::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo

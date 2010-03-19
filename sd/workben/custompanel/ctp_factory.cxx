@@ -58,6 +58,7 @@ namespace sd { namespace colortoolpanel
     using ::com::sun::star::lang::NotInitializedException;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::drawing::framework::XResourceFactoryManager;
+    using ::com::sun::star::lang::WrappedTargetException;
     /** === end UNO using === **/
 
     //==================================================================================================================
@@ -87,16 +88,15 @@ namespace sd { namespace colortoolpanel
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XResource > SAL_CALL ResourceFactory::createResource( const Reference< XResourceId >& i_rResourceId ) throw (RuntimeException)
+    Reference< XResource > SAL_CALL ResourceFactory::createResource( const Reference< XResourceId >& i_rResourceId ) throw (RuntimeException, IllegalArgumentException, WrappedTargetException)
     {
         FactoryGuard aGuard( *this );
         if ( !i_rResourceId.is() )
-            // TODO: the API should allow me to throw an IllegalArgumentException here
-            throw NULL;
+            throw IllegalArgumentException( ::rtl::OUString::createFromAscii( "illegal resource ID" ), *this, 1 );
 
         const ::rtl::OUString sResourceURL( i_rResourceId->getResourceURL() );
         if ( sResourceURL != lcl_getSingleColorViewURL() )
-            return NULL;
+            throw IllegalArgumentException( ::rtl::OUString::createFromAscii( "unsupported resource URL" ), *this, 1 );
 
         return new SingleColorPanel( m_xContext, m_xControllerManager->getConfigurationController(), i_rResourceId );
     }

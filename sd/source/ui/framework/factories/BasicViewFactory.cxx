@@ -59,6 +59,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing::framework;
 
 using ::rtl::OUString;
@@ -193,7 +194,7 @@ void SAL_CALL BasicViewFactory::disposing (void)
 
 Reference<XResource> SAL_CALL BasicViewFactory::createResource (
     const Reference<XResourceId>& rxViewId)
-    throw(RuntimeException)
+    throw(RuntimeException, IllegalArgumentException, WrappedTargetException)
 {
     Reference<XResource> xView;
     const bool bIsCenterPane (

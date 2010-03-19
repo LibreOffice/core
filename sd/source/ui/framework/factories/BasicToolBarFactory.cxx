@@ -42,6 +42,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing::framework;
 
 namespace sd { namespace framework {
@@ -195,7 +196,7 @@ void SAL_CALL BasicToolBarFactory::disposing (
 
 Reference<XResource> SAL_CALL BasicToolBarFactory::createResource (
     const Reference<XResourceId>& rxToolBarId)
-    throw (RuntimeException)
+    throw (RuntimeException, IllegalArgumentException, WrappedTargetException)
 {
     ThrowIfDisposed();
 
