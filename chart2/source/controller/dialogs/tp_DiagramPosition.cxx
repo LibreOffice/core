@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tp_DiagramPosition.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,8 +38,8 @@
 #include <svx/svdview.hxx>
 //GetModuleFieldUnit
 #include <svx/dlgutil.hxx>
-#include <svtools/rectitem.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/rectitem.hxx>
+#include <svl/aeitem.hxx>
 // header for class SvxDoubleItem
 #include <svx/chrtitem.hxx>
 
@@ -132,7 +129,7 @@ DiagramPositionTabPage::DiagramPositionTabPage( Window* pParent, const SfxItemSe
 void DiagramPositionTabPage::Construct()
 {
     // get range and work area
-    meDlgUnit = GetModuleFieldUnit( &GetItemSet() );
+    meDlgUnit = GetModuleFieldUnit( GetItemSet() );
     SetFieldUnit( maMtrPosX, meDlgUnit, TRUE );
     SetFieldUnit( maMtrPosY, meDlgUnit, TRUE );
     SetFieldUnit( maMtrWidth, meDlgUnit, TRUE );

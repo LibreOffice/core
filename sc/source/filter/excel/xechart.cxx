@@ -3263,7 +3263,7 @@ XclExpChartDrawing::XclExpChartDrawing( const XclExpRoot& rRoot,
             /*  Create a new independent object manager with own DFF stream for the
                 DGCONTAINER, pass global manager as parent for shared usage of
                 global DFF data (picture container etc.). */
-            mxObjMgr.reset( new XclExpEmbeddedObjectManager( GetObjectManager(), rChartSize, EXC_CHART_UNIT, EXC_CHART_UNIT ) );
+            mxObjMgr.reset( new XclExpEmbeddedObjectManager( GetObjectManager(), rChartSize, EXC_CHART_TOTALUNITS, EXC_CHART_TOTALUNITS ) );
             // initialize the drawing object list
             mxObjMgr->StartSheet();
             // process the draw page (convert all shapes)

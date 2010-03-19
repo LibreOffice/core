@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DiagramItemConverter.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,11 +34,11 @@
 #include "macros.hxx"
 #include "servicenames.hxx"
 #include "chartview/ExplicitValueProvider.hxx"
-#include <svtools/rectitem.hxx>
+#include <svl/rectitem.hxx>
 #include "ItemPropertyMap.hxx"
 #include "GraphicPropertyItemConverter.hxx"
 #include <svx/chrtitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 
 #include <functional>
 #include <algorithm>
