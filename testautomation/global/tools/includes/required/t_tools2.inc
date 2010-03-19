@@ -264,7 +264,7 @@ function hGetUNOService(optional bSilent as boolean, optional byRef sUnoPortExte
     
     ' To not to change the old behaviour, set variable if parameter is not given
     if (isMissing(bSilent)) then
-        bSilent = FALSE
+        bSilent = TRUE
     end if
 
     ' master.inc::sStartUpOffice needs just the Port Numberr from UNO, to pass it to first start up
