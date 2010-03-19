@@ -1009,12 +1009,13 @@ testcase tEditFields
             ' more than 12 (usually 15) selectable options.
             ' This is done to make sure that we have an enabled "Edit..." button
             ' in the "Edit Fields" dialog called later in this test
-            for iCurrentTypeCount = 1 to FeldTyp.getItemCount()
-                FeldTyp.select( iCurrentTypeCount )
+            printlog( "Search for suitable field type" )
+            for iCurrentType = 1 to FeldTyp.getItemCount()
+                FeldTyp.select( iCurrentType )
                 if ( Auswahl.isEnabled() and Auswahl.getItemCount() > 12 ) then
                     exit for
                 endif
-            next iCurrentTypeCount
+            next iCurrentType
 
             hClickButton( Einfuegen )
             hCloseDialog( TabDokumentFeldbefehle , "close" )
