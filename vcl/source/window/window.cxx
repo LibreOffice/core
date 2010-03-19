@@ -298,6 +298,8 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
     aTmpSt.SetHighContrastMode( FALSE );
     rSettings.SetStyleSettings( aTmpSt );
     ImplGetFrame()->UpdateSettings( rSettings );
+    // reset default border width for layouters
+    ImplGetSVData()->maAppData.mnDefaultLayoutBorder = -1;
 
     // Verify availability of the configured UI font, otherwise choose "Andale Sans UI"
     String aUserInterfaceFont;

@@ -411,11 +411,9 @@ void PrintDialog::NUpTabPage::showAdvancedControls( bool i_bShow )
 
 void PrintDialog::NUpTabPage::setupLayout()
 {
-    Size aBorder( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
-    long nIndent = 3*aBorder.Width();
-
     maLayout.setParentWindow( this );
-    maLayout.setOuterBorder( aBorder.Width() );
+    maLayout.setOuterBorder( -1 );
+    long nIndent = 3*WindowArranger::getDefaultBorder();
 
     maLayout.addWindow( &maNupLine );
     boost::shared_ptr< vcl::RowOrColumn > xRow( new vcl::RowOrColumn( &maLayout, false ) );
@@ -455,7 +453,7 @@ void PrintDialog::NUpTabPage::setupLayout()
     xMainCol->addRow( &maNupOrderTxt, &maNupOrderBox, nIndent );
     xMainCol->setBorders( xMainCol->addWindow( &maBorderCB ), nIndent, 0, 0, 0 );
 
-    xSpacer.reset( new vcl::Spacer( xMainCol.get(), 0, Size( 10, aBorder.Width() ) ) );
+    xSpacer.reset( new vcl::Spacer( xMainCol.get(), 0, Size( 10, WindowArranger::getDefaultBorder() ) ) );
     xMainCol->addChild( xSpacer );
 
     xRow.reset( new vcl::RowOrColumn( xMainCol.get(), false ) );
@@ -552,10 +550,8 @@ void PrintDialog::JobTabPage::setupLayout()
     // sets the results of GetOptimalSize in a normal ListBox
     maPrinters.SetDropDownLineCount( 4 );
 
-    Size aBorder( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
-
     maLayout.setParentWindow( this );
-    maLayout.setOuterBorder( aBorder.Width() );
+    maLayout.setOuterBorder( -1 );
 
     // add printer fixed line
     maLayout.addWindow( &maPrinterFL );
@@ -575,7 +571,7 @@ void PrintDialog::JobTabPage::setupLayout()
     // remember details controls
     mxDetails = xIndent;
     // create a column for the details
-    boost::shared_ptr< vcl::LabelColumn > xLabelCol( new vcl::LabelColumn( xIndent.get(), aBorder.Height() ) );
+    boost::shared_ptr< vcl::LabelColumn > xLabelCol( new vcl::LabelColumn( xIndent.get() ) );
     xIndent->setChild( xLabelCol );
     xLabelCol->addRow( &maStatusLabel, &maStatusTxt );
     xLabelCol->addRow( &maLocationLabel, &maLocationTxt );
@@ -583,7 +579,7 @@ void PrintDialog::JobTabPage::setupLayout()
 
     // add print range and copies columns
     maLayout.addWindow( &maCopies );
-    boost::shared_ptr< vcl::RowOrColumn > xRangeRow( new vcl::RowOrColumn( &maLayout, false, aBorder.Width() ) );
+    boost::shared_ptr< vcl::RowOrColumn > xRangeRow( new vcl::RowOrColumn( &maLayout, false ) );
     maLayout.addChild( xRangeRow );
 
     // create print range and add to range row
@@ -679,15 +675,13 @@ PrintDialog::OutputOptPage::~OutputOptPage()
 
 void PrintDialog::OutputOptPage::setupLayout()
 {
-    Size aBorder( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
-
     maLayout.setParentWindow( this );
-    maLayout.setOuterBorder( aBorder.Width() );
+    maLayout.setOuterBorder( -1 );
 
     maLayout.addWindow( &maOptionsLine );
-    boost::shared_ptr<vcl::Indenter> xIndent( new vcl::Indenter( &maLayout, aBorder.Width() ) );
+    boost::shared_ptr<vcl::Indenter> xIndent( new vcl::Indenter( &maLayout, -1 ) );
     maLayout.addChild( xIndent );
-    boost::shared_ptr<vcl::RowOrColumn> xCol( new vcl::RowOrColumn( xIndent.get(), aBorder.Height() ) );
+    boost::shared_ptr<vcl::RowOrColumn> xCol( new vcl::RowOrColumn( xIndent.get() ) );
     xIndent->setChild( xCol );
     mxOptGroup = xCol;
     xCol->addWindow( &maToFileBox );
@@ -927,13 +921,11 @@ PrintDialog::~PrintDialog()
 
 void PrintDialog::setupLayout()
 {
-    Size aBorder( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
-
     maLayout.setParentWindow( this );
 
     boost::shared_ptr< vcl::RowOrColumn > xPreviewAndTab( new vcl::RowOrColumn( &maLayout, false ) );
     size_t nIndex = maLayout.addChild( xPreviewAndTab, 5 );
-    maLayout.setBorders( nIndex, aBorder.Width(), aBorder.Width(), aBorder.Width(), 0 );
+    maLayout.setBorders( nIndex, -1, -1, -1, 0 );
 
     // setup column for preview and sub controls
     boost::shared_ptr< vcl::RowOrColumn > xPreview( new vcl::RowOrColumn( xPreviewAndTab.get() ) );
@@ -962,7 +954,7 @@ void PrintDialog::setupLayout()
     // add the row for the buttons
     boost::shared_ptr< vcl::RowOrColumn > xButtons( new vcl::RowOrColumn( &maLayout, false ) );
     nIndex = maLayout.addChild( xButtons );
-    maLayout.setBorders( nIndex, aBorder.Width(), 0, aBorder.Width(), aBorder.Width() );
+    maLayout.setBorders( nIndex, -1, 0, -1, -1 );
 
     Size aMinSize( maCancelButton.GetSizePixel() );
     // insert help button
@@ -1068,8 +1060,6 @@ void updateMaxSize( const Size& i_rCheckSize, Size& o_rMaxSize )
 
 void PrintDialog::setupOptionalUI()
 {
-    Size aBorder( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
-
     std::vector<vcl::RowOrColumn*> aDynamicColumns;
     vcl::RowOrColumn* pCurColumn = 0;
 
@@ -1239,10 +1229,10 @@ void PrintDialog::setupOptionalUI()
             // reset subgroup counter
             nCurSubGroup = 0;
 
-            aDynamicColumns.push_back( new vcl::RowOrColumn( NULL, true, aBorder.Width() ) );
+            aDynamicColumns.push_back( new vcl::RowOrColumn( NULL, true ) );
             pCurColumn = aDynamicColumns.back();
             pCurColumn->setParentWindow( pNewGroup );
-            pCurColumn->setOuterBorder( aBorder.Width() );
+            pCurColumn->setOuterBorder( -1 );
             bSubgroupOnStaticPage = false;
             bOnStaticPage = false;
         }
@@ -1272,7 +1262,7 @@ void PrintDialog::setupOptionalUI()
             }
 
             // add an indent to the current column
-            vcl::Indenter* pIndent = new vcl::Indenter( pCurColumn, aBorder.Width() );
+            vcl::Indenter* pIndent = new vcl::Indenter( pCurColumn, -1 );
             pCurColumn->addChild( pIndent );
             // and create a column inside the indent
             pCurColumn = new vcl::RowOrColumn( pIndent );

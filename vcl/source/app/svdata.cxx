@@ -131,6 +131,9 @@ void ImplInitSVData()
             break;
         }
     }
+
+    // mark default layout border as unitialized
+    pImplSVData->maAppData.mnDefaultLayoutBorder = -1;
 }
 
 // -----------------------------------------------------------------------

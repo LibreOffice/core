@@ -110,6 +110,11 @@ namespace vcl
 
 
     public:
+        static long getDefaultBorder();
+
+        static long getBorderValue( long nBorder )
+        { return nBorder >= 0 ? nBorder : getDefaultBorder(); }
+
         WindowArranger( WindowArranger* i_pParent = NULL )
         : m_pParentWindow( i_pParent ? i_pParent->m_pParentWindow : NULL )
         , m_pParentArranger( i_pParent )
@@ -207,7 +212,7 @@ namespace vcl
 
     public:
         RowOrColumn( WindowArranger* i_pParent = NULL,
-                     bool bColumn = true, long i_nBorderWidth = 5 )
+                     bool bColumn = true, long i_nBorderWidth = -1 )
         : WindowArranger( i_pParent )
         , m_nBorderWidth( i_nBorderWidth )
         , m_bColumn( bColumn )
@@ -251,7 +256,7 @@ namespace vcl
         }
 
     public:
-        LabeledElement( WindowArranger* i_pParent = NULL, int i_nLabelStyle = 0, long i_nDistance = 5 )
+        LabeledElement( WindowArranger* i_pParent = NULL, int i_nLabelStyle = 0, long i_nDistance = -1 )
         : WindowArranger( i_pParent )
         , m_nDistance( i_nDistance )
         , m_nLabelColumnWidth( 0 )
@@ -281,7 +286,7 @@ namespace vcl
     {
         long getLabelWidth() const;
     public:
-        LabelColumn( WindowArranger* i_pParent = NULL, long i_nBorderWidth = 5 )
+        LabelColumn( WindowArranger* i_pParent = NULL, long i_nBorderWidth = -1 )
         : RowOrColumn( i_pParent, true, i_nBorderWidth )
         {}
         virtual ~LabelColumn();
@@ -304,7 +309,7 @@ namespace vcl
         { return i_nIndex == 0 ? &m_aElement : NULL; }
 
     public:
-        Indenter( WindowArranger* i_pParent = NULL, long i_nIndent = 15 )
+        Indenter( WindowArranger* i_pParent = NULL, long i_nIndent = 3*getDefaultBorder() )
         : WindowArranger( i_pParent )
         , m_nIndent( i_nIndent )
         {}
@@ -395,8 +400,8 @@ namespace vcl
 
     public:
         MatrixArranger( WindowArranger* i_pParent = NULL,
-                        long i_nBorderX = 5,
-                        long i_nBorderY = 5 )
+                        long i_nBorderX = -1,
+                        long i_nBorderY = -1 )
         : WindowArranger( i_pParent )
         , m_nBorderX( i_nBorderX )
         , m_nBorderY( i_nBorderY )
