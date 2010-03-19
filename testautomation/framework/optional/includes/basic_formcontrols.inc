@@ -52,7 +52,7 @@ testcase tAllControlsOnDialog( cMajor as string )
 
     const CMODULE = "tacod" ' abbreviation for tAllControlsOnDialog
     const BUTTON_TIMEOUT = -1
-    const UPPER_BOUNDARY = 1
+    const UPPER_BOUNDARY = 1 ' 1 = only writer, increase to add Calc, Impress, Draw...
 
     ' Currently set to test writer only. Increase upper boundary to add applications
     ' Up to 4 should be useful

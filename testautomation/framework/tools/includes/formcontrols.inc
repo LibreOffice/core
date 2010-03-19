@@ -737,10 +737,6 @@ function hSelectControl( iControl as integer ) as boolean
 
     for iCurrentSelectionMethod = 1 to SELECTION_METHODS
 
-        select case ( iControl )
-        case 11 : iCurrentSelectionMethod = 4
-        end select
-        
         Kontext "BasicIDE"
         DialogWindow.typeKeys( "<UP><LEFT>" , REPEAT_COUNT )
         select case ( iCurrentSelectionMethod )
@@ -783,6 +779,10 @@ function hSelectControl( iControl as integer ) as boolean
         end select
 
         try
+            if ( iControl = 11 ) then
+                wait( 100 )
+                printlog( "tried method: " & iCurrentSelectionMethod )
+            endif
             ContextProperties
             hSelectControl() = true
             exit for
