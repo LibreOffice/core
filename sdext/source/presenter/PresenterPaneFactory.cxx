@@ -174,7 +174,7 @@ void SAL_CALL PresenterPaneFactory::disposing (void)
 
 Reference<XResource> SAL_CALL PresenterPaneFactory::createResource (
     const Reference<XResourceId>& rxPaneId)
-    throw (RuntimeException)
+    throw (RuntimeException, IllegalArgumentException, WrappedTargetException)
 {
     ThrowIfDisposed();
 
