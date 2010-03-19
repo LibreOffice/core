@@ -990,7 +990,7 @@ testcase tEditFields
     Call hNewDocument()
 
     printlog( "Insert->Field->Other" )
-    InsertFieldsOther
+    hUseAsyncSlot( "InsertFieldsOther" )
 
     ' Note that the tabdialog does not have a unique ID yet, so we treat it as "Active"
     kontext
@@ -1004,33 +1004,29 @@ testcase tEditFields
         if ( TabDokumentFeldbefehle.isVisible() ) then
             Feldtyp.select( 1 )
             Auswahl.select( 1 )
-            Einfuegen.click()
+            hClickButton( Einfuegen )
             hCloseDialog( TabDokumentFeldbefehle , "close" )
 
             PrintLog( "Move cursor infront of field (start of document)" )
             Call wTypeKeys("<Home>")
 
             PrintLog( "Edit / Fields" )
-            EditFields
+            hUseAsyncSlot( "EditFields" )
 
             Kontext "FeldbefehlBearbeitenDokument"
             if ( FeldbefehlBearbeitenDokument.exists( 2 ) ) then
                 Call DialogTest ( FeldbefehlBearbeitenDokument )
 
                 PrintLog( "In 'Edit Fields' dialog select 'Edit'" )
-                if ( Bearbeiten.IsVisible() and Bearbeiten.IsEnabled() ) then
-                    Bearbeiten.Click()
+                hClickButton( Bearbeiten )
 
-                    Kontext "TabBenutzerdaten"
-                    if ( TabBenutzerdaten.exists( 2 ) ) then
-                        printlog( "<TabBenutzerdaten> is open. Good." )
-                        call DialogTest( TabBenutzerdaten )
-                        hCloseDialog( TabBenutzerdaten, "cancel" )
-                    else
-                        warnlog( "<TabBenutzerdaten> did not open" )
-                    endif
+                Kontext "TabBenutzerdaten"
+                if ( TabBenutzerdaten.exists( 2 ) ) then
+                    printlog( "<TabBenutzerdaten> is open. Good." )
+                    call DialogTest( TabBenutzerdaten )
+                    hCloseDialog( TabBenutzerdaten, "cancel" )
                 else
-                    Warnlog( "Button 'Edit' in Dialog disabled!" )
+                    warnlog( "<TabBenutzerdaten> did not open" )
                 endif
             else
                 warnlog( "<TabDokumentFeldbefehle> is not visible" )

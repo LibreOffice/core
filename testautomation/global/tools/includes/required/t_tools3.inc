@@ -988,7 +988,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
     const RETVAL_TIMEOUT = -1  ' Returnvalue if slot is not available
     const CFN = "global::tools::includes::required::hUseAsyncSlot(): "
 
-    printlog( "Executing <" & cSlot & ">" )
+    printlog( "Execute <" & cSlot & ">" )
     WaitSlot()
 
     for iRetries = 1 to MAX_RETRIES
@@ -1010,7 +1010,6 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "editchangescomment"             : EditChangesComment
 
             case "editpaste"                      : EditPaste
-            case "editcopy"                       : EditCopy
             case "editcut"                        : EditCut
             case "editselectall"                  : EditSelectAll
             case "editselectallmath"              : EditSelectAllMath
@@ -1031,6 +1030,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "editobjectsavecopyas"           : EditObjectSaveCopyAs
             case "edithyperlink"                  : EditHyperlink
             case "editlinkswriter"                : EditLinksWriter
+            case "editfields"                     : EditFields
 
             case "formatcharttype"                : FormatChartType
             case "formatcontrol"                  : FormatControl
@@ -1061,6 +1061,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "formatpagewriter"               : FormatPageWriter
             case "formatautoformatapply"          : FormatAutoformatApply
 
+            case "insertfieldsother"              : InsertFieldsOther
             case "insertindexesbibliographyentry" : InsertIndexesBibliographyEntry
 
             case "contextpositionandsize"         : ContextPositionAndSize
@@ -1104,7 +1105,7 @@ function hClickButton( oButton as object ) as integer
     const RETVAL_TIMEOUT = -1  ' Return -1 if the button is not available
     const CFN = "global::tools::includes::required::hClickButton(): "
 
-    printlog( "Clicking <" & oButton.name() & ">" )
+    printlog( "Click <" & oButton.name() & ">" )
     WaitSlot()
 
     for iRetries = 1 to MAX_RETRIES
