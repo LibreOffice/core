@@ -182,6 +182,7 @@
 #define RID_OFA_TP_INTERNATIONAL_IMPR   (RID_OFA_START + 254)       // 4 impress
 */
 
+#define SID_ATTR_XWINDOW                (RID_OFA_START + 250)
 #define SID_ATTR_PARENTWINDOW           (RID_OFA_START + 255)
 
 // --------------------------------------------------------------------------
