@@ -218,6 +218,8 @@ function hGetPathSigne(sPlatform as string) as string
     '/// <u>Input</u>: string of class gPlatform
     '/// <u>Output</u>: string which can be used as seperator in directories
 
+    printlog( " *** CALLED HGETPATHSIGNE *** " )
+
     select case sPlatform
     case "w95" : hGetPathSigne = "\"
     case "w98" : hGetPathSigne = "\"

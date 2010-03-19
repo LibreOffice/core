@@ -117,6 +117,8 @@ end function
 function fSetMeasurementToCM() as string
 '/// Sets the measurement unit to centimeter (cm) and returns the unit.
     Dim i as integer
+
+    const LANGUAGE_CODE_JAPANESE = 81
     
     Call hNewDocument
     ToolsOptions
@@ -124,7 +126,7 @@ function fSetMeasurementToCM() as string
             case "WRITER"
             Call hToolsOptions("WRITER","GENERAL")
                                                 Masseinheit.Select(2)
-                                                if iSprache = 81 then
+                                                if iSprache = LANGUAGE_CODE_JAPANESE then
                                                     fSetMeasurementToCM = Right$( Tabulatorenabstand.Gettext, 3 )        
                                                 else
                                                     fSetMeasurementToCM = Right$( Tabulatorenabstand.Gettext, 2 )        
@@ -132,7 +134,7 @@ function fSetMeasurementToCM() as string
             case "CALC"
             Call hToolsOptions("CALC","GENERAL")
                                                 Masseinheit.Select(2)
-                                                if iSprache = 81 then
+                                                if iSprache = LANGUAGE_CODE_JAPANESE then
                                                     fSetMeasurementToCM = Right$( Tabulator.Gettext , 3 )        
                                                 else
                                                     fSetMeasurementToCM = Right$( Tabulator.Gettext , 2 )        
@@ -140,7 +142,7 @@ function fSetMeasurementToCM() as string
             case "IMPRESS"
             Call hToolsOptions("IMPRESS","GENERAL")
                                                 Masseinheit.Select(2)
-                                                if iSprache = 81 then
+                                                if iSprache = LANGUAGE_CODE_JAPANESE then
                                                     fSetMeasurementToCM = Right$( Tabulatorabstand.Gettext, 3 )        
                                                 else
                                                     fSetMeasurementToCM = Right$( Tabulatorabstand.Gettext, 2 )        
@@ -148,7 +150,7 @@ function fSetMeasurementToCM() as string
             case "DRAW"
             Call hToolsOptions("DRAW","GENERAL")
                                                 Masseinheit.Select(2)
-                                                if iSprache = 81 then
+                                                if iSprache = LANGUAGE_CODE_JAPANESE then
                                                     fSetMeasurementToCM = Right$( Tabulatorabstand.Gettext, 3 )        
                                                 else
                                                     fSetMeasurementToCM = Right$( Tabulatorabstand.Gettext, 2 )        
@@ -156,7 +158,7 @@ function fSetMeasurementToCM() as string
             case "MASTERDOCUMENT"
             Call hToolsOptions("WRITER","GENERAL")
                                                 Masseinheit.Select(2)
-                                                if iSprache = 81 then
+                                                if iSprache = LANGUAGE_CODE_JAPANESE then
                                                     fSetMeasurementToCM = Right$( Tabulatorenabstand.Gettext, 3 )        
                                                 else
                                                     fSetMeasurementToCM = Right$( Tabulatorenabstand.Gettext, 2 )        
@@ -168,7 +170,7 @@ function fSetMeasurementToCM() as string
                                                 'because .sdw, .sxw etc. export to HTML depends on it.
                                                 Call hToolsOptions("WRITER","GENERAL")
                                                 Masseinheit.Select(2)
-                                                if iSprache = 81 then
+                                                if iSprache = LANGUAGE_CODE_JAPANESE then
                                                     fSetMeasurementToCM = Right$( Tabulatorenabstand.Gettext, 3 )        
                                                 else
                                                     fSetMeasurementToCM = Right$( Tabulatorenabstand.Gettext, 2 )        
