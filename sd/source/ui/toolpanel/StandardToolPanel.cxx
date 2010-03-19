@@ -102,7 +102,7 @@ namespace sd { namespace toolpanel
             return true;
         if ( isDisposed() )
             return false;
-        m_pControl = m_pControlFactory->CreateRootControl( getPanelDeck() );
+        m_pControl = m_pControlFactory->CreateRootControl( getPanelWindowAnchor() );
         return ( m_pControl.get() != NULL );
     }
 

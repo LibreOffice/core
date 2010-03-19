@@ -71,6 +71,13 @@ namespace sd { namespace toolpanel
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    Window& TaskPaneToolPanel::getPanelWindowAnchor()
+    {
+        OSL_ENSURE( !isDisposed(), "already disposed!" );
+        return m_pPanelDeck->GetPanelWindowAnchor();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString TaskPaneToolPanel::GetDisplayName() const
     {
         return m_sPanelName;
@@ -83,15 +90,16 @@ namespace sd { namespace toolpanel
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TaskPaneToolPanel::Show()
+    void TaskPaneToolPanel::Activate( ::Window& i_rParentWindow )
     {
         Window* pPanelWindow( getPanelWindow() );
         ENSURE_OR_RETURN_VOID( pPanelWindow, "no window to show" );
+        pPanelWindow->SetPosSizePixel( Point(), i_rParentWindow.GetSizePixel() );
         pPanelWindow->Show();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TaskPaneToolPanel::Hide()
+    void TaskPaneToolPanel::Deactivate()
     {
         Window* pPanelWindow( getPanelWindow() );
         ENSURE_OR_RETURN_VOID( pPanelWindow, "no window to hide" );
@@ -99,11 +107,11 @@ namespace sd { namespace toolpanel
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TaskPaneToolPanel::SetPosSizePixel( const Rectangle& i_rPanelPlayground )
+    void TaskPaneToolPanel::SetSizePixel( const Size& i_rPanelWindowSize )
     {
         Window* pPanelWindow( getPanelWindow() );
-        ENSURE_OR_RETURN_VOID( pPanelWindow, "no window to position" );
-        pPanelWindow->SetPosSizePixel( i_rPanelPlayground.TopLeft(), i_rPanelPlayground.GetSize() );
+        ENSURE_OR_RETURN_VOID( pPanelWindow, "no window to resize" );
+        pPanelWindow->SetSizePixel( i_rPanelWindowSize );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -112,14 +120,6 @@ namespace sd { namespace toolpanel
         Window* pPanelWindow( getPanelWindow() );
         ENSURE_OR_RETURN_VOID( pPanelWindow, "no window to focus" );
         pPanelWindow->GrabFocus();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    bool TaskPaneToolPanel::HasFocus() const
-    {
-        Window* pPanelWindow( getPanelWindow() );
-        ENSURE_OR_RETURN_FALSE( pPanelWindow, "no window to ask" );
-        return pPanelWindow->HasChildPathFocus();
     }
 
     //------------------------------------------------------------------------------------------------------------------

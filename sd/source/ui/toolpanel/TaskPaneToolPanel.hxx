@@ -65,11 +65,10 @@ namespace sd { namespace toolpanel
         // IToolPanel overridables
         virtual ::rtl::OUString GetDisplayName() const;
         virtual Image GetImage() const;
-        virtual void Show();
-        virtual void Hide();
-        virtual void SetPosSizePixel( const Rectangle& i_rPanelPlayground );
+        virtual void Activate( ::Window& i_rParentWindow );
+        virtual void Deactivate();
+        virtual void SetSizePixel( const Size& i_rPanelWindowSize );
         virtual void GrabFocus();
-        virtual bool HasFocus() const;
         virtual void Dispose();
 
         // own overridables
@@ -78,7 +77,7 @@ namespace sd { namespace toolpanel
 
     protected:
         bool            isDisposed() const { return m_pPanelDeck == NULL; }
-        ToolPanelDeck&  getPanelDeck() { OSL_ENSURE( !isDisposed(), "already disposed!" ); return *m_pPanelDeck; }
+        Window&         getPanelWindowAnchor();
 
     private:
         ToolPanelDeck*  m_pPanelDeck;
