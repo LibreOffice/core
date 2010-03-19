@@ -34,13 +34,16 @@
 #include "PaneDockingWindow.hxx"
 #include "Window.hxx"
 #include "ViewShellBase.hxx"
+#include "framework/FrameworkHelper.hxx"
 #include "sdresid.hxx"
 #include "res_bmp.hrc"
 #include <sfx2/dispatch.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/taskpanelist.hxx>
+#include <vcl/splitwin.hxx>
+#include <vcl/svapp.hxx>
 #include <tools/wintypes.hxx>
-#include "framework/FrameworkHelper.hxx"
+#include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -55,11 +58,7 @@ PaneDockingWindow::PaneDockingWindow (
     const ResId& rResId,
     const ::rtl::OUString& rsPaneURL,
     const ::rtl::OUString& rsTitle)
-    : SfxDockingWindow (
-        _pBindings,
-        pChildWindow,
-        pParent,
-        rResId),
+    : SfxDockingWindow (_pBindings, pChildWindow, pParent, rResId),
       msPaneURL(rsPaneURL),
       msTitle(rsTitle),
       mpTitleToolBox(),
@@ -121,7 +120,7 @@ void PaneDockingWindow::Layout (void)
 
     Size aWindowSize (GetOutputSizePixel());
     Size aToolBoxSize (0,0);
-    int nTitleBarHeight (GetSettings().GetStyleSettings().GetTitleHeight());
+    mnTitleBarHeight = GetSettings().GetStyleSettings().GetTitleHeight();
 
     // Place the title tool box.
     if (mpTitleToolBox.get() != NULL)
@@ -132,20 +131,20 @@ void PaneDockingWindow::Layout (void)
             mpTitleToolBox->ShowItem (1);
 
         aToolBoxSize = mpTitleToolBox->CalcWindowSizePixel();
-        if (aToolBoxSize.Height() > nTitleBarHeight)
-            nTitleBarHeight = aToolBoxSize.Height();
+        if (aToolBoxSize.Height() > mnTitleBarHeight)
+            mnTitleBarHeight = aToolBoxSize.Height();
         mpTitleToolBox->SetPosSizePixel (
             Point(aWindowSize.Width()-aToolBoxSize.Width(),
-                (nTitleBarHeight-aToolBoxSize.Height())/2),
+                (mnTitleBarHeight-aToolBoxSize.Height())/2),
             aToolBoxSize);
     }
 
     // Place the content window.
-    if (nTitleBarHeight < aToolBoxSize.Height())
-        nTitleBarHeight = aToolBoxSize.Height();
-    aWindowSize.Height() -= nTitleBarHeight;
+    if (mnTitleBarHeight < aToolBoxSize.Height())
+        mnTitleBarHeight = aToolBoxSize.Height();
+    aWindowSize.Height() -= mnTitleBarHeight;
     mpContentWindow->SetPosSizePixel(
-        Point(maBorder.Left(),nTitleBarHeight+maBorder.Top()),
+        Point(maBorder.Left(),mnTitleBarHeight+maBorder.Top()),
         Size (aWindowSize.Width()-maBorder.Left()-maBorder.Right(),
             aWindowSize.Height()-maBorder.Top()-maBorder.Bottom()));
 }
@@ -159,10 +158,6 @@ void PaneDockingWindow::Paint (const Rectangle& rRectangle)
         Layout();
 
     SfxDockingWindow::Paint (rRectangle);
-    int nTitleBarHeight (GetSettings().GetStyleSettings().GetTitleHeight());
-    Size aToolBoxSize = mpTitleToolBox->CalcWindowSizePixel();
-    if (aToolBoxSize.Height() > nTitleBarHeight)
-        nTitleBarHeight = aToolBoxSize.Height();
     Color aOriginalLineColor (GetLineColor());
     Color aOriginalFillColor (GetFillColor());
     SetFillColor (GetSettings().GetStyleSettings().GetDialogColor());
@@ -180,7 +175,7 @@ void PaneDockingWindow::Paint (const Rectangle& rRectangle)
     int nInnerLeft = nOuterLeft + maBorder.Left() - 1;
     int nOuterRight = aWindowSize.Width() - 1;
     int nInnerRight = nOuterRight - maBorder.Right() + 1;
-    int nInnerTop = nTitleBarHeight + maBorder.Top() - 1;
+    int nInnerTop = mnTitleBarHeight + maBorder.Top() - 1;
     int nOuterBottom = aWindowSize.Height() - 1;
     int nInnerBottom = nOuterBottom - maBorder.Bottom() + 1;
 
@@ -420,6 +415,43 @@ void PaneDockingWindow::MouseButtonDown (const MouseEvent& rEvent)
 ::boost::shared_ptr<ToolBox> PaneDockingWindow::GetTitleToolBox (void) const
 {
     return mpTitleToolBox;
+}
+
+
+
+
+void PaneDockingWindow::SetValidSizeRange (const Range aValidSizeRange)
+{
+    SplitWindow* pSplitWindow = dynamic_cast<SplitWindow*>(GetParent());
+    if (pSplitWindow != NULL)
+    {
+        const USHORT nId (pSplitWindow->GetItemId(static_cast< ::Window*>(this)));
+        const USHORT nSetId (pSplitWindow->GetSet(nId));
+        // Because the PaneDockingWindow paints its own decoration, we have
+        // to compensate the valid size range for that.
+        sal_Int32 nCompensation (pSplitWindow->IsHorizontal()
+            ? mnTitleBarHeight + maBorder.Top() + maBorder.Bottom()
+            : maBorder.Left() + maBorder.Right());
+        pSplitWindow->SetItemSizeRange(
+            nSetId,
+            Range(
+                aValidSizeRange.Min() + nCompensation,
+                aValidSizeRange.Max() + nCompensation));
+    }
+}
+
+
+
+
+PaneDockingWindow::Orientation PaneDockingWindow::GetOrientation (void) const
+{
+    SplitWindow* pSplitWindow = dynamic_cast<SplitWindow*>(GetParent());
+    if (pSplitWindow == NULL)
+        return UnknownOrientation;
+    else if (pSplitWindow->IsHorizontal())
+        return HorizontalOrientation;
+    else
+        return VerticalOrientation;
 }
 
 

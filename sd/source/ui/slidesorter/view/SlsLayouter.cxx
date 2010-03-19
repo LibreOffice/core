@@ -33,37 +33,285 @@
 #include "view/SlsLayouter.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
-
 #include "Window.hxx"
+#include <rtl/math.hxx>
 #include <basegfx/numeric/ftools.hxx>
+
+namespace {
+    sal_Int32 RoundToInt (const double nValue)
+    {
+        return sal_Int32(::rtl::math::round(nValue));
+    }
+}
 
 
 namespace sd { namespace slidesorter { namespace view {
 
+class Layouter::Implementation
+{
+public:
+    SharedSdWindow mpWindow;
+    sal_Int32 mnRequestedLeftBorder;
+    sal_Int32 mnRequestedRightBorder;
+    sal_Int32 mnRequestedTopBorder;
+    sal_Int32 mnRequestedBottomBorder;
+    sal_Int32 mnLeftBorder;
+    sal_Int32 mnRightBorder;
+    sal_Int32 mnTopBorder;
+    sal_Int32 mnBottomBorder;
+    sal_Int32 mnVerticalGap;
+    sal_Int32 mnHorizontalGap;
+    Size maMinimalSize;
+    Size maPreferredSize;
+    Size maMaximalSize;
+    sal_Int32 mnMinimalColumnCount;
+    sal_Int32 mnMaximalColumnCount;
+    sal_Int32 mnPageCount;
+    sal_Int32 mnColumnCount;
+    sal_Int32 mnRowCount;
+    /// The maximum number of columns.  Can only be larger than the current
+    /// number of columns when there are not enough pages to fill all
+    /// available columns.
+    sal_Int32 mnMaxColumnCount;
+    /// The maximum number of rows.  Can only be larger than the current
+    /// number of rows when there are not enough pages to fill all available
+    /// rows.
+    sal_Int32 mnMaxRowCount;
+    Size maPageObjectSize;
+
+    ::boost::shared_ptr<PageObjectLayouter> mpPageObjectLayouter;
+
+    enum GapMembership {
+        GM_NONE,
+        GM_PREVIOUS,
+        GM_BOTH,
+        GM_NEXT,
+        GM_PAGE_BORDER
+    };
+
+    static Implementation* Create (
+        const Implementation& rImplementation,
+        const Layouter::Orientation eOrientation);
+
+    virtual Layouter::Orientation GetOrientation (void) const = 0;
+
+    bool Rearrange (
+        const Size& rWindowSize,
+        const Size& rPreviewModelSize,
+        const sal_uInt32 nPageCount);
+
+    /** Calculate the row that the point with the given vertical coordinate
+        is over.  The horizontal component is ignored.
+        @param nYPosition
+            Vertical position in model coordinates.
+        @param bIncludeBordersAndGaps
+            When this flag is <TRUE/> then the area of borders and gaps are
+            interpreted as belonging to one of the rows.
+        @param eGapMembership
+            Specifies to what row the gap areas belong.  Here GM_NONE
+            corresponds to bIncludeBordersAndGaps being <FALSE/>.  When
+            GM_BOTH is given then the upper half is associated to the row
+            above and the lower half to the row below.  Values of
+            GM_PREVIOUS and GM_NEXT associate the whole gap area with the
+            row above or below respectively.
+    */
+    sal_Int32 GetRowAtPosition (
+        sal_Int32 nYPosition,
+        bool bIncludeBordersAndGaps,
+        GapMembership eGapMembership = GM_NONE) const;
+
+    /** Calculate the column that the point with the given horizontal
+        coordinate is over.  The verical component is ignored.
+        @param nXPosition
+            Horizontal position in model coordinates.
+        @param bIncludeBordersAndGaps
+            When this flag is <TRUE/> then the area of borders and gaps are
+            interpreted as belonging to one of the columns.
+        @param eGapMembership
+            Specifies to what column the gap areas belong.  Here GM_NONE
+            corresponds to bIncludeBordersAndGaps being <FALSE/>.  When
+            GM_BOTH is given then the left half is associated with the
+            column at the left and the right half with the column to the
+            right.  Values of GM_PREVIOUS and GM_NEXT associate the whole
+            gap area with the column to the left or right respectively.
+    */
+    sal_Int32 GetColumnAtPosition (
+        sal_Int32 nXPosition,
+        bool bIncludeBordersAndGaps,
+        GapMembership eGapMembership = GM_NONE) const;
+
+    /** This method is typically called from GetRowAtPosition() and
+        GetColumnAtPosition() to handle a position that lies inside the gap
+        between two adjacent rows or columns.
+        @param nDistanceIntoGap
+            Vertical distance from the bottom of the upper row down into the
+            gap or or horizontal distance from the right edge right into the
+            gap.
+        @param eGapMemberhship
+            This value decides what areas in the gap belong to which (or no)
+            row or column.
+        @param nIndex
+            The row index of the upper row or the column index of the left
+            column.
+        @param nGap
+             Width or height of the gap in model coordiantes between the
+             page borders.
+        @return
+           Returns either the index of the upper row (as given as nRow), the
+           index of the lower row (nRow+1) or -1 to indicate that the
+           position belongs to no row.
+        */
+    sal_Int32 ResolvePositionInGap (
+        sal_Int32 nDistanceIntoGap,
+        GapMembership eGapMembership,
+        sal_Int32 nIndex,
+        sal_Int32 nGap) const;
+
+    /** Calculate the logical part of the insert position, i.e. the page
+        after whicht to insert.
+    */
+    virtual void CalculateLogicalInsertPosition (
+        const Point& rModelPosition,
+        InsertPosition& rPosition) const = 0;
+
+    /** Calculate the geometrical part of the insert position, i.e. the
+        location of where to display the insertion indicator and the
+        distances about which the leading and trailing pages have to be
+        moved to make room for the indicator.
+    */
+    void CalculateGeometricPosition (
+        InsertPosition& rPosition,
+        const Size& rIndicatorSize,
+        const bool bIsVertical,
+        model::SlideSorterModel& rModel) const;
+
+    /** Return the bounding box of the preview or, when selected, of the page
+        object.  Thus, it returns something like a visual bounding box.
+    */
+    Rectangle GetInnerBoundingBox (
+        model::SlideSorterModel& rModel,
+        const sal_Int32 nIndex) const;
+
+    Range GetValidHorizontalSizeRange (void) const;
+    Range GetValidVerticalSizeRange (void) const;
+
+    Size CalculateTargetSize (
+        const Size& rWindowSize,
+        const Size& rPreviewModelSize,
+        const bool bCalculateWidth,
+        const bool bCalculateHeight) const;
+
+    Rectangle GetPageObjectBox (
+        const sal_Int32 nIndex,
+        const bool bIncludeBorderAndGap = false) const;
+
+    Rectangle GetPageObjectBox (
+        const sal_Int32 nRow,
+        const sal_Int32 nColumn) const;
+
+    Rectangle AddBorderAndGap (
+        const Rectangle& rBoundingBox,
+        const sal_Int32 nRow,
+        const sal_Int32 nColumn) const;
+
+    Rectangle GetTotalBoundingBox (void) const;
+
+    virtual ~Implementation (void);
+protected:
+    Implementation (const SharedSdWindow& rpWindow);
+    Implementation (const Implementation& rImplementation);
+
+    virtual void CalculateRowAndColumnCount (const Size& rWindowSize) = 0;
+    virtual void CalculateMaxRowAndColumnCount (const Size& rWindowSize) = 0;
+    virtual Size CalculateTargetSize (
+        const Size& rWindowSize,
+        const Size& rPreviewModelSize) const = 0;
+    void CalculateVerticalLogicalInsertPosition (
+        const Point& rModelPosition,
+        InsertPosition& rPosition) const;
+};
+
+
+/** The vertical layouter has one column and as many rows as there are
+    pages.
+*/
+class VerticalImplementation : public Layouter::Implementation
+{
+public:
+    VerticalImplementation (const SharedSdWindow& rpWindow);
+    VerticalImplementation (const Implementation& rImplementation);
+
+    virtual Layouter::Orientation GetOrientation (void) const;
+
+    void CalculateLogicalInsertPosition (
+        const Point& rModelPosition,
+        InsertPosition& rPosition) const;
+
+protected:
+    virtual void CalculateRowAndColumnCount (const Size& rWindowSize);
+    virtual void CalculateMaxRowAndColumnCount (const Size& rWindowSize);
+    virtual Size CalculateTargetSize (
+        const Size& rWindowSize,
+        const Size& rPreviewModelSize) const;
+};
+
+
+/** The horizontal layouter has one row and as many columns as there are
+    pages.
+*/
+class HorizontalImplementation : public Layouter::Implementation
+{
+public:
+    HorizontalImplementation (const SharedSdWindow& rpWindow);
+    HorizontalImplementation (const Implementation& rImplementation);
+
+    virtual Layouter::Orientation GetOrientation (void) const;
+
+    void CalculateLogicalInsertPosition (
+        const Point& rModelPosition,
+        InsertPosition& rPosition) const;
+
+protected:
+    virtual void CalculateRowAndColumnCount (const Size& rWindowSize);
+    virtual void CalculateMaxRowAndColumnCount (const Size& rWindowSize);
+    virtual Size CalculateTargetSize (
+        const Size& rWindowSize,
+        const Size& rPreviewModelSize) const;
+};
+
+
+/** The number of columns of the grid layouter is defined via a control in
+    the slide sorter tool bar.  The number of rows is calculated from the
+    number of columns and the number of pages.
+*/
+class GridImplementation : public Layouter::Implementation
+{
+public:
+    GridImplementation (const SharedSdWindow& rpWindow);
+    GridImplementation (const Implementation& rImplementation);
+
+    virtual Layouter::Orientation GetOrientation (void) const;
+
+    void CalculateLogicalInsertPosition (
+        const Point& rModelPosition,
+        InsertPosition& rPosition) const;
+
+protected:
+    virtual void CalculateRowAndColumnCount (const Size& rWindowSize);
+    virtual void CalculateMaxRowAndColumnCount (const Size& rWindowSize);
+    virtual Size CalculateTargetSize (
+        const Size& rWindowSize,
+        const Size& rPreviewModelSize) const;
+};
+
+
+
+
+//===== Layouter ==============================================================
+
 Layouter::Layouter (const SharedSdWindow& rpWindow)
-    : mpWindow(rpWindow),
-      mnRequestedLeftBorder(5),
-      mnRequestedRightBorder(5),
-      mnRequestedTopBorder(5),
-      mnRequestedBottomBorder(5),
-      mnLeftBorder(5),
-      mnRightBorder(5),
-      mnTopBorder(5),
-      mnBottomBorder(5),
-      mnVerticalGap (10),
-      mnHorizontalGap(10),
-      mnMinimalWidth(100),
-      mnPreferredWidth(200),
-      mnMaximalWidth(300),
-      mnMinimalColumnCount(1),
-      mnMaximalColumnCount(4),
-      mnPageCount(0),
-      mnColumnCount(1),
-      mnRowCount(0),
-      mnMaxColumnCount(0),
-      mnMaxRowCount(0),
-      maPageObjectSize(1,1),
-      mbIsVertical(true)
+    : mpImplementation(new GridImplementation(rpWindow)),
+      mpWindow(rpWindow)
 {
 }
 
@@ -79,23 +327,7 @@ Layouter::~Layouter (void)
 
 ::boost::shared_ptr<PageObjectLayouter> Layouter::GetPageObjectLayouter (void) const
 {
-    return mpPageObjectLayouter;
-}
-
-
-
-
-void Layouter::SetObjectWidth (
-    sal_Int32 nMinimalWidth,
-    sal_Int32 nMaximalWidth,
-    sal_Int32 nPreferredWidth)
-{
-    if (nMinimalWidth <= nPreferredWidth && nPreferredWidth <= nMaximalWidth)
-    {
-        mnMinimalWidth = nMinimalWidth;
-        mnPreferredWidth = nMaximalWidth;
-        mnMaximalWidth = nPreferredWidth;
-    }
+    return mpImplementation->mpPageObjectLayouter;
 }
 
 
@@ -108,13 +340,13 @@ void Layouter::SetBorders (
     sal_Int32 nBottomBorder)
 {
     if (nLeftBorder >= 0)
-        mnRequestedLeftBorder = nLeftBorder;
+        mpImplementation->mnRequestedLeftBorder = nLeftBorder;
     if (nRightBorder >= 0)
-        mnRequestedRightBorder = nRightBorder;
+        mpImplementation->mnRequestedRightBorder = nRightBorder;
     if (nTopBorder >= 0)
-        mnRequestedTopBorder = nTopBorder;
+        mpImplementation->mnRequestedTopBorder = nTopBorder;
     if (nBottomBorder >= 0)
-        mnRequestedBottomBorder = nBottomBorder;
+        mpImplementation->mnRequestedBottomBorder = nBottomBorder;
 }
 
 
@@ -125,9 +357,9 @@ void Layouter::SetGaps (
     sal_Int32 nVerticalGap)
 {
     if (nHorizontalGap >= 0)
-        mnHorizontalGap = nHorizontalGap;
+        mpImplementation->mnHorizontalGap = nHorizontalGap;
     if (nVerticalGap >= 0)
-        mnVerticalGap = nVerticalGap;
+        mpImplementation->mnVerticalGap = nVerticalGap;
 }
 
 
@@ -140,193 +372,46 @@ void Layouter::SetColumnCount (
 {
     if (nMinimalColumnCount <= nMaximalColumnCount)
     {
-        mnMinimalColumnCount = nMinimalColumnCount;
-        mnMaximalColumnCount = nMaximalColumnCount;
+        mpImplementation->mnMinimalColumnCount = nMinimalColumnCount;
+        mpImplementation->mnMaximalColumnCount = nMaximalColumnCount;
     }
 }
 
 
 
 
-bool Layouter::RearrangeHorizontal (
+bool Layouter::Rearrange (
+    const Orientation eOrientation,
     const Size& rWindowSize,
     const Size& rPageSize,
     const sal_uInt32 nPageCount)
 {
     OSL_ASSERT(mpWindow);
 
-    mbIsVertical = false;
-    mnPageCount = nPageCount;
+    if (eOrientation != mpImplementation->GetOrientation())
+        mpImplementation.reset(Implementation::Create(*mpImplementation, eOrientation));
 
-    if (rWindowSize.Width() > 0
-        && rWindowSize.Height() > 0
-        && rPageSize.Width() > 0
-        && rPageSize.Height() > 0)
-    {
-        // Calculate the column count.
-        mnColumnCount = nPageCount;
-        mnRowCount = 1;
-
-        // Update the border values.
-        mnLeftBorder = mnRequestedLeftBorder;
-        mnTopBorder = mnRequestedTopBorder;
-        mnRightBorder = mnRequestedRightBorder;
-        mnBottomBorder = mnRequestedBottomBorder;
-        if (mnColumnCount > 1)
-        {
-            int nMinimumBorderWidth = mnHorizontalGap/2;
-            if (mnLeftBorder < nMinimumBorderWidth)
-                mnLeftBorder = nMinimumBorderWidth;
-            if (mnRightBorder < nMinimumBorderWidth)
-                mnRightBorder = nMinimumBorderWidth;
-        }
-        else
-        {
-            int nMinimumBorderHeight = mnVerticalGap/2;
-            if (mnTopBorder < nMinimumBorderHeight)
-                mnTopBorder = nMinimumBorderHeight;
-            if (mnBottomBorder < nMinimumBorderHeight)
-                mnBottomBorder = nMinimumBorderHeight;
-        }
-
-        // Calculate the width of each page object.
-        sal_uInt32 nTargetHeight = 0;
-        sal_uInt32 nRowCount = 1;
-        if (mnColumnCount > 0)
-            nTargetHeight = (rWindowSize.Height()
-                - mnTopBorder
-                - mnBottomBorder
-                - (nRowCount-1) * mnVerticalGap
-                )
-            / nRowCount;
-        sal_uInt32 nMinimalHeight (mnMinimalWidth * rPageSize.Height() / rPageSize.Width());
-        sal_uInt32 nMaximalHeight (mnMaximalWidth * rPageSize.Height() / rPageSize.Width());
-        if (nTargetHeight < nMinimalHeight)
-            nTargetHeight = nMinimalHeight;
-        if (nTargetHeight > nMaximalHeight)
-            nTargetHeight = nMaximalHeight;
-
-        // Setup the page object layouter and ask it for the page object size.
-        mpPageObjectLayouter.reset(
-            new PageObjectLayouter(
-                Size(0, nTargetHeight),
-                rPageSize,
-                mpWindow,
-                nPageCount));
-        maPageObjectSize = mpPageObjectLayouter->GetPageObjectSize();
-
-        mnMaxColumnCount = (rWindowSize.Width() - mnLeftBorder - mnRightBorder)
-            / (maPageObjectSize.Width()  + mnHorizontalGap);
-        mnMaxRowCount = 1;
-
-        return true;
-    }
-    else
-        return false;
+    return mpImplementation->Rearrange(rWindowSize, rPageSize, nPageCount);
 }
 
 
 
 
-bool Layouter::RearrangeVertical (
-    const Size& rWindowSize,
-    const Size& rPreviewModelSize,
-    const sal_uInt32 nPageCount)
+void Layouter::_SetZoom (double nZoomFactor)
 {
-    OSL_ASSERT(mpWindow);
-
-    mbIsVertical = true;
-    mnPageCount = nPageCount;
-
-    if (rWindowSize.Width() > 0
-        && rWindowSize.Height() > 0
-        && rPreviewModelSize.Width() > 0
-        && rPreviewModelSize.Height() > 0)
-    {
-        // Calculate the column count.
-        mnColumnCount = (rWindowSize.Width() - mnRequestedLeftBorder - mnRequestedRightBorder)
-            / (mnPreferredWidth  + mnHorizontalGap);
-        if (mnColumnCount < mnMinimalColumnCount)
-            mnColumnCount = mnMinimalColumnCount;
-        if (mnColumnCount > mnMaximalColumnCount)
-            mnColumnCount = mnMaximalColumnCount;
-        mnRowCount = (nPageCount + mnColumnCount-1)/mnColumnCount;
-
-        // Update the border values.
-        mnLeftBorder = mnRequestedLeftBorder;
-        mnTopBorder = mnRequestedTopBorder;
-        mnRightBorder = mnRequestedRightBorder;
-        mnBottomBorder = mnRequestedBottomBorder;
-        if (mnColumnCount > 1)
-        {
-            int nMinimumBorderWidth = mnHorizontalGap/2;
-            if (mnLeftBorder < nMinimumBorderWidth)
-                mnLeftBorder = nMinimumBorderWidth;
-            if (mnRightBorder < nMinimumBorderWidth)
-                mnRightBorder = nMinimumBorderWidth;
-        }
-        else
-        {
-            int nMinimumBorderHeight = mnVerticalGap/2;
-            if (mnTopBorder < nMinimumBorderHeight)
-                mnTopBorder = nMinimumBorderHeight;
-            if (mnBottomBorder < nMinimumBorderHeight)
-                mnBottomBorder = nMinimumBorderHeight;
-        }
-
-        // Calculate the width of each page object.
-        sal_Int32 nTargetWidth = 0;
-        if (mnColumnCount > 0)
-            nTargetWidth = (rWindowSize.Width()
-                - mnLeftBorder
-                - mnRightBorder
-                - (mnColumnCount-1) * mnHorizontalGap
-                )
-                / mnColumnCount;
-        if (nTargetWidth < mnMinimalWidth)
-            nTargetWidth = mnMinimalWidth;
-        if (nTargetWidth > mnMaximalWidth)
-            nTargetWidth = mnMaximalWidth;
-
-        // Setup the page object layouter and ask it for the page object size.
-        mpPageObjectLayouter.reset(
-            new PageObjectLayouter(
-                Size(nTargetWidth, 0),
-                rPreviewModelSize,
-                mpWindow,
-                nPageCount));
-        maPageObjectSize = mpPageObjectLayouter->GetPageObjectSize();
-
-        mnMaxColumnCount = (rWindowSize.Width() - mnLeftBorder - mnRightBorder)
-            / (maPageObjectSize.Width()  + mnHorizontalGap);
-        mnMaxRowCount = (rWindowSize.Height() - mnTopBorder - mnBottomBorder)
-            / (maPageObjectSize.Height()  + mnVerticalGap);
-
-        return true;
-    }
-    else
-        return false;
+    _SetZoom(Fraction(nZoomFactor));
 }
 
 
 
 
-void Layouter::SetZoom (double nZoomFactor)
-{
-    SetZoom(Fraction(nZoomFactor));
-}
-
-
-
-
-void Layouter::SetZoom (Fraction nZoomFactor)
+void Layouter::_SetZoom (Fraction nZoomFactor)
 {
     OSL_ASSERT(mpWindow);
 
     MapMode aMapMode (mpWindow->GetMapMode());
     aMapMode.SetScaleX (nZoomFactor);
     aMapMode.SetScaleY (nZoomFactor);
-    //    maPageObjectPixelSize = mpWindow->LogicToPixel (maPageObjectModelSize);
     mpWindow->SetMapMode (aMapMode);
 }
 
@@ -335,7 +420,7 @@ void Layouter::SetZoom (Fraction nZoomFactor)
 
 sal_Int32 Layouter::GetColumnCount (void) const
 {
-    return mnColumnCount;
+    return mpImplementation->mnColumnCount;
 }
 
 
@@ -343,7 +428,7 @@ sal_Int32 Layouter::GetColumnCount (void) const
 
 sal_Int32 Layouter::GetRowCount (void) const
 {
-    return mnRowCount;
+    return mpImplementation->mnRowCount;
 }
 
 
@@ -351,7 +436,7 @@ sal_Int32 Layouter::GetRowCount (void) const
 
 sal_Int32 Layouter::GetRow (const sal_Int32 nIndex) const
 {
-    return nIndex / mnColumnCount;
+    return nIndex / mpImplementation->mnColumnCount;
 }
 
 
@@ -359,7 +444,7 @@ sal_Int32 Layouter::GetRow (const sal_Int32 nIndex) const
 
 sal_Int32 Layouter::GetColumn (const sal_Int32 nIndex) const
 {
-    return nIndex % mnColumnCount;
+    return nIndex % mpImplementation->mnColumnCount;
 }
 
 
@@ -367,9 +452,9 @@ sal_Int32 Layouter::GetColumn (const sal_Int32 nIndex) const
 
 sal_Int32 Layouter::GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) const
 {
-    const sal_Int32 nIndex (nRow * mnColumnCount + nColumn);
+    const sal_Int32 nIndex (nRow * mpImplementation->mnColumnCount + nColumn);
     OSL_ASSERT(nIndex>=0);
-    return ::std::min(nIndex, mnPageCount-1);
+    return ::std::min(nIndex, mpImplementation->mnPageCount-1);
 }
 
 
@@ -377,7 +462,7 @@ sal_Int32 Layouter::GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) con
 
 bool Layouter::IsColumnCountFixed (void) const
 {
-    return mnMinimalColumnCount == mnMaximalColumnCount;
+    return mpImplementation->mnMinimalColumnCount == mpImplementation->mnMaximalColumnCount;
 }
 
 
@@ -385,7 +470,7 @@ bool Layouter::IsColumnCountFixed (void) const
 
 Size Layouter::GetPageObjectSize (void) const
 {
-    return maPageObjectSize;
+    return mpImplementation->maPageObjectSize;
 }
 
 
@@ -395,70 +480,15 @@ Rectangle Layouter::GetPageObjectBox (
     const sal_Int32 nIndex,
     const bool bIncludeBorderAndGap) const
 {
-    const sal_Int32 nRow (GetRow(nIndex));
-    const sal_Int32 nColumn (GetColumn(nIndex));
-    Rectangle aBoundingBox(
-        Point (mnLeftBorder
-            + nColumn * maPageObjectSize.Width()
-            + (nColumn>0 ? nColumn : 0) * mnHorizontalGap,
-            mnTopBorder
-            + nRow * maPageObjectSize.Height()
-            + (nRow>0 ? nRow : 0) * mnVerticalGap),
-        maPageObjectSize);
-    if (bIncludeBorderAndGap)
-    {
-        if (nColumn == 0)
-            aBoundingBox.Left() = 0;
-        else
-            aBoundingBox.Left() -= mnHorizontalGap/2;
-        if (nColumn == mnColumnCount-1)
-            aBoundingBox.Right() += mnRightBorder;
-        else
-            aBoundingBox.Right() += mnHorizontalGap/2;
-        if (nRow == 0)
-            aBoundingBox.Top() = 0;
-        else
-            aBoundingBox.Top() -= mnVerticalGap/2;
-        if (nRow == mnRowCount-1)
-            aBoundingBox.Bottom() += mnBottomBorder;
-        else
-            aBoundingBox.Bottom() += mnVerticalGap/2;
-    }
-    return aBoundingBox;
+    return mpImplementation->GetPageObjectBox(nIndex, bIncludeBorderAndGap);
 }
 
 
 
 
-Rectangle Layouter::GetPageBox (const sal_Int32 nObjectCount) const
+Rectangle Layouter::GetTotalBoundingBox (void) const
 {
-    sal_Int32 nCount (nObjectCount);
-    if (nCount < 0)
-        nCount = mnPageCount;
-
-    sal_Int32 nHorizontalSize = 0;
-    sal_Int32 nVerticalSize = 0;
-    if (mnColumnCount > 0)
-    {
-        sal_Int32 nRowCount = (nCount+mnColumnCount-1) / mnColumnCount;
-        nHorizontalSize =
-            mnLeftBorder
-            + mnRightBorder
-            + mnColumnCount * maPageObjectSize.Width();
-        if (mnColumnCount > 1)
-            nHorizontalSize +=  (mnColumnCount-1) * mnHorizontalGap;
-        nVerticalSize =
-            mnTopBorder
-            + mnBottomBorder
-            + nRowCount * maPageObjectSize.Height();
-        if (nRowCount > 1)
-            nVerticalSize += (nRowCount-1) * mnVerticalGap;
-    }
-
-    return Rectangle (
-        Point(0,0),
-        Size (nHorizontalSize, nVerticalSize)
-        );
+    return mpImplementation->GetTotalBoundingBox();
 }
 
 
@@ -470,194 +500,31 @@ InsertPosition Layouter::GetInsertPosition (
     model::SlideSorterModel& rModel) const
 {
     InsertPosition aPosition;
-    CalculateLogicalInsertPosition(rModelPosition, aPosition);
-    CalculateGeometricPosition(aPosition, rIndicatorSize, GetColumnCount()==1, rModel);
+    mpImplementation->CalculateLogicalInsertPosition(
+        rModelPosition,
+        aPosition);
+    mpImplementation->CalculateGeometricPosition(
+        aPosition,
+        rIndicatorSize,
+        GetColumnCount()==1,
+        rModel);
     return aPosition;
 }
 
 
 
 
-void Layouter::CalculateLogicalInsertPosition (
-    const Point& rModelPosition,
-    InsertPosition& rPosition) const
+Range Layouter::GetValidHorizontalSizeRange (void) const
 {
-    // Determine logical position.
-    if (mnColumnCount == 1)
-    {
-        const sal_Int32 nY = rModelPosition.Y() - mnTopBorder + maPageObjectSize.Height()/2;
-        const sal_Int32 nRowHeight (maPageObjectSize.Height() + mnVerticalGap);
-        rPosition.mnRow = ::std::min(mnPageCount, nY / nRowHeight);
-        rPosition.mnColumn = 0;
-        rPosition.mnIndex = rPosition.mnRow;
-        rPosition.mbIsAtRunStart = (rPosition.mnRow == 0);
-        rPosition.mbIsAtRunEnd = (rPosition.mnRow == mnRowCount);
-        rPosition.mbIsExtraSpaceNeeded = (rPosition.mnRow >= mnMaxRowCount);
-    }
-    else
-    {
-        rPosition.mnRow = ::std::min(
-            mnRowCount-1,
-            GetRowAtPosition (rModelPosition.Y(), true, GM_BOTH));
-
-        const sal_Int32 nX = rModelPosition.X() - mnLeftBorder + maPageObjectSize.Width()/2;
-        const sal_Int32 nRowWidth (maPageObjectSize.Width() + mnHorizontalGap);
-        rPosition.mnColumn = ::std::min(mnColumnCount, nX / nRowWidth);
-        rPosition.mnIndex = rPosition.mnRow * mnColumnCount + rPosition.mnColumn;
-
-        rPosition.mbIsAtRunStart = (rPosition.mnColumn == 0);
-        rPosition.mbIsAtRunEnd = (rPosition.mnColumn == mnColumnCount);
-
-        if (rPosition.mnIndex >= mnPageCount)
-        {
-            rPosition.mnIndex = mnPageCount;
-            rPosition.mnRow = mnRowCount-1;
-            rPosition.mnColumn = mnPageCount%mnColumnCount;
-            rPosition.mbIsAtRunEnd = true;
-        }
-        rPosition.mbIsExtraSpaceNeeded = (rPosition.mnColumn >= mnMaxColumnCount);
-    }
+    return mpImplementation->GetValidHorizontalSizeRange();
 }
 
 
 
 
-void Layouter::CalculateGeometricPosition (
-    InsertPosition& rPosition,
-    const Size& rIndicatorSize,
-    const bool bIsVertical,
-    model::SlideSorterModel& rModel) const
+Range Layouter::GetValidVerticalSizeRange (void) const
 {
-    // 1. Determine right/bottom of the leading page and the left/top of the
-    // trailing page object and how to distribute the missing space.
-    sal_Int32 nLeadingLocation (0);
-    sal_Int32 nTrailingLocation (0);
-    bool bIsLeadingFixed (false);
-    bool bIsTrailingFixed (false);
-    sal_Int32 nSecondaryLocation (0);
-
-    if (rPosition.mbIsAtRunStart)
-    {
-        // Place indicator at the top of the column.
-        const Rectangle aOuterBox (GetPageObjectBox(rPosition.mnIndex));
-        const Rectangle aInnerBox (GetInnerBoundingBox(rModel, rPosition.mnIndex));
-        if (bIsVertical)
-        {
-            nLeadingLocation = aOuterBox.Top();
-            nTrailingLocation = aInnerBox.Top();
-            nSecondaryLocation = aInnerBox.Center().X();
-        }
-        else
-        {
-            nLeadingLocation = aOuterBox.Left();
-            nTrailingLocation = aInnerBox.Left();
-            nSecondaryLocation = aInnerBox.Center().Y();
-        }
-        bIsLeadingFixed = true;
-    }
-    else if (rPosition.mbIsAtRunEnd)
-    {
-        // Place indicator at the bottom/right of the column/row.
-
-        const Rectangle aOuterBox (GetPageObjectBox(rPosition.mnIndex-1));
-        const Rectangle aInnerBox (GetInnerBoundingBox(rModel, rPosition.mnIndex-1));
-        if (bIsVertical)
-        {
-            nLeadingLocation = aInnerBox.Bottom();
-            nTrailingLocation = aOuterBox.Bottom();
-            nSecondaryLocation = aInnerBox.Center().X();
-        }
-        else
-        {
-            nLeadingLocation = aInnerBox.Right();
-            nTrailingLocation = aOuterBox.Right();
-            nSecondaryLocation = aInnerBox.Center().Y();
-        }
-        bIsTrailingFixed = true;
-        if ( ! rPosition.mbIsExtraSpaceNeeded)
-            bIsLeadingFixed = true;
-    }
-    else
-    {
-        // Place indicator between two rows/columns.
-        const Rectangle aBox1 (GetInnerBoundingBox(rModel, rPosition.mnIndex-1));
-        const Rectangle aBox2 (GetInnerBoundingBox(rModel, rPosition.mnIndex));
-        if (bIsVertical)
-        {
-            nLeadingLocation = aBox1.Bottom();
-            nTrailingLocation = aBox2.Top();
-            nSecondaryLocation = (aBox1.Center().X() + aBox2.Center().X()) / 2;
-        }
-        else
-        {
-            nLeadingLocation = aBox1.Right();
-            nTrailingLocation = aBox2.Left();
-            nSecondaryLocation = (aBox1.Center().Y() + aBox2.Center().Y()) / 2;
-        }
-    }
-
-    // 2. Calculate the location of the insert indicator and the offsets of
-    // leading and trailing pages.
-    const sal_Int32 nAvailableSpace (nTrailingLocation - nLeadingLocation);
-    const sal_Int32 nRequiredSpace (bIsVertical ? rIndicatorSize.Height():rIndicatorSize.Width());
-    const sal_Int32 nMissingSpace (::std::max(sal_Int32(0), nRequiredSpace - nAvailableSpace));
-    sal_Int32 nPrimaryLocation (0);
-    sal_Int32 nLeadingOffset (0);
-    sal_Int32 nTrailingOffset (0);
-    if (bIsLeadingFixed)
-    {
-        nPrimaryLocation = nLeadingLocation + nRequiredSpace/2;
-        if ( ! bIsTrailingFixed)
-            nTrailingOffset = nMissingSpace;
-    }
-    else if (bIsTrailingFixed)
-    {
-        nPrimaryLocation = nTrailingLocation - nRequiredSpace/2;
-        nLeadingOffset = -nMissingSpace;
-    }
-    else
-    {
-        nPrimaryLocation = (nLeadingLocation + nTrailingLocation) /2;
-        nLeadingOffset = -nMissingSpace/2;
-        nTrailingOffset = nMissingSpace + nLeadingOffset;
-    }
-
-    if (bIsVertical)
-    {
-        rPosition.maLocation = Point(nSecondaryLocation, nPrimaryLocation);
-        rPosition.maLeadingOffset = Point(0, nLeadingOffset);
-        rPosition.maTrailingOffset = Point(0, nTrailingOffset);
-    }
-    else
-    {
-        rPosition.maLocation = Point(nPrimaryLocation, nSecondaryLocation);
-        rPosition.maLeadingOffset = Point(nLeadingOffset, 0);
-        rPosition.maTrailingOffset = Point(nTrailingOffset, 0);
-    }
-}
-
-
-
-
-Rectangle Layouter::GetInnerBoundingBox (
-    model::SlideSorterModel& rModel,
-    const sal_Int32 nIndex) const
-{
-    model::SharedPageDescriptor pDescriptor (rModel.GetPageDescriptor(nIndex));
-    if ( ! pDescriptor)
-        return Rectangle();
-
-    const Point aLocation (pDescriptor->GetLocation(true));
-    if (pDescriptor->HasState(model::PageDescriptor::ST_Selected))
-        return GetPageObjectLayouter()->GetBoundingBox(
-            aLocation,
-            PageObjectLayouter::PageObject,
-            PageObjectLayouter::ModelCoordinateSystem);
-    else
-        return GetPageObjectLayouter()->GetBoundingBox(
-            aLocation,
-            PageObjectLayouter::Preview,
-            PageObjectLayouter::ModelCoordinateSystem);
+    return mpImplementation->GetValidVerticalSizeRange();
 }
 
 
@@ -665,12 +532,17 @@ Rectangle Layouter::GetInnerBoundingBox (
 
 Range Layouter::GetRangeOfVisiblePageObjects (const Rectangle& aVisibleArea) const
 {
-    sal_Int32 nRow0 = GetRowAtPosition (aVisibleArea.Top(), true, GM_BOTH);
-    sal_Int32 nRow1 = GetRowAtPosition (aVisibleArea.Bottom(),
-        true, GM_BOTH);
+    const sal_Int32 nRow0 (mpImplementation->GetRowAtPosition (
+        aVisibleArea.Top(),
+        true,
+        Implementation::GM_BOTH));
+    const sal_Int32 nRow1 (mpImplementation->GetRowAtPosition (
+        aVisibleArea.Bottom(),
+        true,
+        Implementation::GM_BOTH));
     return Range(
-        ::std::min(nRow0 * mnColumnCount, mnPageCount-1),
-        ::std::min((nRow1+1) * mnColumnCount - 1, mnPageCount-1));
+        ::std::min(nRow0*mpImplementation->mnColumnCount, mpImplementation->mnPageCount-1),
+        ::std::min((nRow1+1)*mpImplementation->mnColumnCount-1, mpImplementation->mnPageCount-1));
 }
 
 
@@ -680,15 +552,19 @@ sal_Int32 Layouter::GetIndexAtPoint (
     const Point& rPosition,
     const bool bIncludePageBorders) const
 {
-    sal_Int32 nRow = GetRowAtPosition (rPosition.Y(),
-        bIncludePageBorders,
-        bIncludePageBorders ? GM_PAGE_BORDER : GM_NONE);
-    sal_Int32 nColumn = GetColumnAtPosition (rPosition.X(),
-        bIncludePageBorders,
-        bIncludePageBorders ? GM_PAGE_BORDER : GM_NONE);
+    const sal_Int32 nRow (
+        mpImplementation->GetRowAtPosition (
+            rPosition.Y(),
+            bIncludePageBorders,
+            bIncludePageBorders ? Implementation::GM_PAGE_BORDER : Implementation::GM_NONE));
+    const sal_Int32 nColumn (
+        mpImplementation->GetColumnAtPosition (
+            rPosition.X(),
+            bIncludePageBorders,
+            bIncludePageBorders ? Implementation::GM_PAGE_BORDER : Implementation::GM_NONE));
 
     if (nRow >= 0 && nColumn >= 0)
-        return nRow * mnColumnCount + nColumn;
+        return nRow * mpImplementation->mnColumnCount + nColumn;
     else
         return -1;
 }
@@ -696,15 +572,142 @@ sal_Int32 Layouter::GetIndexAtPoint (
 
 
 
-bool Layouter::IsVertical (void) const
+//===== Layouter::Implementation ==============================================
+
+Layouter::Implementation* Layouter::Implementation::Create (
+    const Implementation& rImplementation,
+    const Layouter::Orientation eOrientation)
 {
-    return mbIsVertical;
+    switch (eOrientation)
+    {
+        case HORIZONTAL: return new HorizontalImplementation(rImplementation);
+        case VERTICAL: return new VerticalImplementation(rImplementation);
+        case GRID:
+        default: return new GridImplementation(rImplementation);
+    }
 }
 
 
 
 
-sal_Int32 Layouter::GetRowAtPosition (
+Layouter::Implementation::Implementation (const SharedSdWindow& rpWindow)
+    : mpWindow(rpWindow),
+      mnRequestedLeftBorder(5),
+      mnRequestedRightBorder(5),
+      mnRequestedTopBorder(5),
+      mnRequestedBottomBorder(5),
+      mnLeftBorder(5),
+      mnRightBorder(5),
+      mnTopBorder(5),
+      mnBottomBorder(5),
+      mnVerticalGap (10),
+      mnHorizontalGap(10),
+      maMinimalSize(100,75),
+      maPreferredSize(200,150),
+      maMaximalSize(300,200),
+      mnMinimalColumnCount(1),
+      mnMaximalColumnCount(15),
+      mnPageCount(0),
+      mnColumnCount(1),
+      mnRowCount(0),
+      mnMaxColumnCount(0),
+      mnMaxRowCount(0),
+      maPageObjectSize(1,1)
+{
+}
+
+
+
+
+Layouter::Implementation::Implementation (const Implementation& rImplementation)
+    : mpWindow(rImplementation.mpWindow),
+      mnRequestedLeftBorder(rImplementation.mnRequestedLeftBorder),
+      mnRequestedRightBorder(rImplementation.mnRequestedRightBorder),
+      mnRequestedTopBorder(rImplementation.mnRequestedTopBorder),
+      mnRequestedBottomBorder(rImplementation.mnRequestedBottomBorder),
+      mnLeftBorder(rImplementation.mnLeftBorder),
+      mnRightBorder(rImplementation.mnRightBorder),
+      mnTopBorder(rImplementation.mnTopBorder),
+      mnBottomBorder(rImplementation.mnBottomBorder),
+      mnVerticalGap(rImplementation.mnVerticalGap),
+      mnHorizontalGap(rImplementation.mnHorizontalGap),
+      maMinimalSize(rImplementation.maMinimalSize),
+      maPreferredSize(rImplementation.maPreferredSize),
+      maMaximalSize(rImplementation.maMaximalSize),
+      mnMinimalColumnCount(rImplementation.mnMinimalColumnCount),
+      mnMaximalColumnCount(rImplementation.mnMaximalColumnCount),
+      mnPageCount(rImplementation.mnPageCount),
+      mnColumnCount(rImplementation.mnColumnCount),
+      mnRowCount(rImplementation.mnRowCount),
+      mnMaxColumnCount(rImplementation.mnMaxColumnCount),
+      mnMaxRowCount(rImplementation.mnMaxRowCount),
+      maPageObjectSize(rImplementation.maPageObjectSize)
+{
+}
+
+
+
+
+Layouter::Implementation::~Implementation (void)
+{
+}
+
+
+
+
+bool Layouter::Implementation::Rearrange  (
+    const Size& rWindowSize,
+    const Size& rPreviewModelSize,
+    const sal_uInt32 nPageCount)
+{
+    mnPageCount = nPageCount;
+
+    if (rWindowSize.Width()<=0 || rWindowSize.Height()<=0)
+        return false;
+    if (rPreviewModelSize.Width()<=0 || rPreviewModelSize.Height()<=0)
+        return false;
+
+    CalculateRowAndColumnCount(rWindowSize);
+
+    // Update the border values.
+    mnLeftBorder = mnRequestedLeftBorder;
+    mnTopBorder = mnRequestedTopBorder;
+    mnRightBorder = mnRequestedRightBorder;
+    mnBottomBorder = mnRequestedBottomBorder;
+    if (mnColumnCount > 1)
+    {
+        int nMinimumBorderWidth = mnHorizontalGap/2;
+        if (mnLeftBorder < nMinimumBorderWidth)
+            mnLeftBorder = nMinimumBorderWidth;
+        if (mnRightBorder < nMinimumBorderWidth)
+            mnRightBorder = nMinimumBorderWidth;
+    }
+    else
+    {
+        int nMinimumBorderHeight = mnVerticalGap/2;
+        if (mnTopBorder < nMinimumBorderHeight)
+            mnTopBorder = nMinimumBorderHeight;
+        if (mnBottomBorder < nMinimumBorderHeight)
+            mnBottomBorder = nMinimumBorderHeight;
+    }
+
+    mpPageObjectLayouter.reset(
+        new PageObjectLayouter(
+            CalculateTargetSize(rWindowSize, rPreviewModelSize),
+            rPreviewModelSize,
+            mpWindow,
+            mnPageCount));
+    maPageObjectSize = mpPageObjectLayouter->GetPageObjectSize();
+
+    CalculateMaxRowAndColumnCount(rWindowSize);
+
+    return true;
+}
+
+
+
+
+sal_Int32 Layouter::Implementation::GetRowAtPosition (
     sal_Int32 nYPosition,
     bool bIncludeBordersAndGaps,
     GapMembership eGapMembership) const
@@ -743,7 +746,7 @@ sal_Int32 Layouter::GetRowAtPosition (
 
 
 
-sal_Int32 Layouter::GetColumnAtPosition (
+sal_Int32 Layouter::Implementation::GetColumnAtPosition (
     sal_Int32 nXPosition,
     bool bIncludeBordersAndGaps,
     GapMembership eGapMembership) const
@@ -786,7 +789,7 @@ sal_Int32 Layouter::GetColumnAtPosition (
 
 
 
-sal_Int32 Layouter::ResolvePositionInGap (
+sal_Int32 Layouter::Implementation::ResolvePositionInGap (
     sal_Int32 nDistanceIntoGap,
     GapMembership eGapMembership,
     sal_Int32 nIndex,
@@ -843,18 +846,597 @@ sal_Int32 Layouter::ResolvePositionInGap (
 
 
 
+void Layouter::Implementation::CalculateGeometricPosition (
+    InsertPosition& rPosition,
+    const Size& rIndicatorSize,
+    const bool bIsVertical,
+    model::SlideSorterModel& rModel) const
+{
+    // 1. Determine right/bottom of the leading page and the left/top of the
+    // trailing page object and how to distribute the missing space.
+    sal_Int32 nLeadingLocation (0);
+    sal_Int32 nTrailingLocation (0);
+    bool bIsLeadingFixed (false);
+    bool bIsTrailingFixed (false);
+    sal_Int32 nSecondaryLocation (0);
+    const sal_Int32 nIndex (rPosition.GetIndex());
+
+    if (rPosition.IsAtRunStart())
+    {
+        // Place indicator at the top of the column.
+        const Rectangle aOuterBox (GetPageObjectBox(nIndex));
+        const Rectangle aInnerBox (GetInnerBoundingBox(rModel, nIndex));
+        if (bIsVertical)
+        {
+            nLeadingLocation = aOuterBox.Top();
+            nTrailingLocation = aInnerBox.Top();
+            nSecondaryLocation = aInnerBox.Center().X();
+        }
+        else
+        {
+            nLeadingLocation = aOuterBox.Left();
+            nTrailingLocation = aInnerBox.Left();
+            nSecondaryLocation = aInnerBox.Center().Y();
+        }
+        bIsLeadingFixed = true;
+    }
+    else if (rPosition.IsAtRunEnd())
+    {
+        // Place indicator at the bottom/right of the column/row.
+
+        const Rectangle aOuterBox (GetPageObjectBox(nIndex-1));
+        const Rectangle aInnerBox (GetInnerBoundingBox(rModel, nIndex-1));
+        if (bIsVertical)
+        {
+            nLeadingLocation = aInnerBox.Bottom();
+            nTrailingLocation = aOuterBox.Bottom();
+            nSecondaryLocation = aInnerBox.Center().X();
+        }
+        else
+        {
+            nLeadingLocation = aInnerBox.Right();
+            nTrailingLocation = aOuterBox.Right();
+            nSecondaryLocation = aInnerBox.Center().Y();
+        }
+        bIsTrailingFixed = true;
+        if ( ! rPosition.IsExtraSpaceNeeded())
+            bIsLeadingFixed = true;
+    }
+    else
+    {
+        // Place indicator between two rows/columns.
+        const Rectangle aBox1 (GetInnerBoundingBox(rModel, nIndex-1));
+        const Rectangle aBox2 (GetInnerBoundingBox(rModel, nIndex));
+        if (bIsVertical)
+        {
+            nLeadingLocation = aBox1.Bottom();
+            nTrailingLocation = aBox2.Top();
+            nSecondaryLocation = (aBox1.Center().X() + aBox2.Center().X()) / 2;
+        }
+        else
+        {
+            nLeadingLocation = aBox1.Right();
+            nTrailingLocation = aBox2.Left();
+            nSecondaryLocation = (aBox1.Center().Y() + aBox2.Center().Y()) / 2;
+        }
+    }
+
+    // 2. Calculate the location of the insert indicator and the offsets of
+    // leading and trailing pages.
+    const sal_Int32 nAvailableSpace (nTrailingLocation - nLeadingLocation);
+    const sal_Int32 nRequiredSpace (bIsVertical ? rIndicatorSize.Height():rIndicatorSize.Width());
+    const sal_Int32 nMissingSpace (::std::max(sal_Int32(0), nRequiredSpace - nAvailableSpace));
+    sal_Int32 nPrimaryLocation (0);
+    sal_Int32 nLeadingOffset (0);
+    sal_Int32 nTrailingOffset (0);
+    if (bIsLeadingFixed)
+    {
+        nPrimaryLocation = nLeadingLocation + nRequiredSpace/2;
+        if ( ! bIsTrailingFixed)
+            nTrailingOffset = nMissingSpace;
+    }
+    else if (bIsTrailingFixed)
+    {
+        nPrimaryLocation = nTrailingLocation - nRequiredSpace/2;
+        nLeadingOffset = -nMissingSpace;
+    }
+    else
+    {
+        nPrimaryLocation = (nLeadingLocation + nTrailingLocation) /2;
+        nLeadingOffset = -nMissingSpace/2;
+        nTrailingOffset = nMissingSpace + nLeadingOffset;
+    }
+
+    if (bIsVertical)
+    {
+        rPosition.SetGeometricalPosition(
+            Point(nSecondaryLocation, nPrimaryLocation),
+            Point(0, nLeadingOffset),
+            Point(0, nTrailingOffset));
+    }
+    else
+    {
+        rPosition.SetGeometricalPosition(
+            Point(nPrimaryLocation, nSecondaryLocation),
+            Point(nLeadingOffset, 0),
+            Point(nTrailingOffset, 0));
+    }
+}
+
+
+
+
+Rectangle Layouter::Implementation::GetInnerBoundingBox (
+    model::SlideSorterModel& rModel,
+    const sal_Int32 nIndex) const
+{
+    model::SharedPageDescriptor pDescriptor (rModel.GetPageDescriptor(nIndex));
+    if ( ! pDescriptor)
+        return Rectangle();
+
+    const Point aLocation (pDescriptor->GetLocation(true));
+    if (pDescriptor->HasState(model::PageDescriptor::ST_Selected))
+        return mpPageObjectLayouter->GetBoundingBox(
+            aLocation,
+            PageObjectLayouter::PageObject,
+            PageObjectLayouter::ModelCoordinateSystem);
+    else
+        return mpPageObjectLayouter->GetBoundingBox(
+            aLocation,
+            PageObjectLayouter::Preview,
+            PageObjectLayouter::ModelCoordinateSystem);
+}
+
+
+
+
+Range Layouter::Implementation::GetValidHorizontalSizeRange (void) const
+{
+    return Range(
+        mnLeftBorder + maMinimalSize.Width() + mnRightBorder,
+        mnLeftBorder + maMaximalSize.Width() + mnRightBorder);
+}
+
+
+
+
+Range Layouter::Implementation::GetValidVerticalSizeRange (void) const
+{
+    return Range(
+        mnTopBorder + maMinimalSize.Height() + mnBottomBorder,
+        mnTopBorder + maMaximalSize.Height() + mnBottomBorder);
+}
+
+
+
+
+Size Layouter::Implementation::CalculateTargetSize (
+    const Size& rWindowSize,
+    const Size& rPreviewModelSize,
+    const bool bCalculateWidth,
+    const bool bCalculateHeight) const
+{
+    if (mnColumnCount<=0 || mnRowCount<=0)
+        return maPreferredSize;
+    if ( ! (bCalculateWidth || bCalculateHeight))
+    {
+        OSL_ASSERT(bCalculateWidth || bCalculateHeight);
+        return maPreferredSize;
+    }
+
+    const double nPreviewAspectRatio (
+        double(rPreviewModelSize.Width())/double(rPreviewModelSize.Height()));
+
+    // Calculate the width of each page object.
+    Size aTargetSize (0,0);
+    if (bCalculateWidth)
+        aTargetSize.setWidth(
+            (rWindowSize.Width() - mnLeftBorder - mnRightBorder
+                - (mnColumnCount-1) * mnHorizontalGap)
+                    / mnColumnCount);
+    else if (bCalculateHeight)
+        aTargetSize.setHeight(
+            (rWindowSize.Height() - mnTopBorder - mnBottomBorder
+                - (mnRowCount-1) * mnVerticalGap)
+                    / mnRowCount);
+
+    if (bCalculateWidth)
+    {
+        if (aTargetSize.Width() < maMinimalSize.Width())
+            aTargetSize.setWidth(maMinimalSize.Width());
+        else if (aTargetSize.Width() > maMaximalSize.Width())
+            aTargetSize.setWidth(maMaximalSize.Width());
+    }
+    else if (bCalculateHeight)
+    {
+        if (aTargetSize.Height() < maMinimalSize.Height())
+            aTargetSize.setHeight(maMinimalSize.Height());
+        else if (aTargetSize.Height() > maMaximalSize.Height())
+            aTargetSize.setHeight(maMaximalSize.Height());
+    }
+
+    return aTargetSize;
+}
+
+
+
+
+Rectangle Layouter::Implementation::GetPageObjectBox (
+    const sal_Int32 nIndex,
+    const bool bIncludeBorderAndGap) const
+{
+    const sal_Int32 nRow (nIndex / mnColumnCount);
+    const sal_Int32 nColumn (nIndex % mnColumnCount);
+
+    const Rectangle aBoundingBox (GetPageObjectBox(nRow,nColumn));
+    if (bIncludeBorderAndGap)
+        return AddBorderAndGap(aBoundingBox, nRow, nColumn);
+    else
+        return aBoundingBox;
+}
+
+
+
+
+Rectangle Layouter::Implementation::GetPageObjectBox (
+    const sal_Int32 nRow,
+    const sal_Int32 nColumn) const
+{
+    return Rectangle(
+        Point (mnLeftBorder
+            + nColumn * maPageObjectSize.Width()
+            + (nColumn>0 ? nColumn : 0) * mnHorizontalGap,
+            mnTopBorder
+            + nRow * maPageObjectSize.Height()
+            + (nRow>0 ? nRow : 0) * mnVerticalGap),
+        maPageObjectSize);
+}
+
+
+
+
+
+Rectangle Layouter::Implementation::AddBorderAndGap (
+    const Rectangle& rBoundingBox,
+    const sal_Int32 nRow,
+    const sal_Int32 nColumn) const
+{
+    Rectangle aBoundingBox (rBoundingBox);
+
+    if (nColumn == 0)
+        aBoundingBox.Left() = 0;
+    else
+        aBoundingBox.Left() -= mnHorizontalGap/2;
+    if (nColumn == mnColumnCount-1)
+        aBoundingBox.Right() += mnRightBorder;
+    else
+        aBoundingBox.Right() += mnHorizontalGap/2;
+    if (nRow == 0)
+        aBoundingBox.Top() = 0;
+    else
+        aBoundingBox.Top() -= mnVerticalGap/2;
+    if (nRow == mnRowCount-1)
+        aBoundingBox.Bottom() += mnBottomBorder;
+    else
+        aBoundingBox.Bottom() += mnVerticalGap/2;
+    return aBoundingBox;
+}
+
+
+
+
+Rectangle Layouter::Implementation::GetTotalBoundingBox (void) const
+{
+    sal_Int32 nHorizontalSize = 0;
+    sal_Int32 nVerticalSize = 0;
+    if (mnColumnCount > 0)
+    {
+        sal_Int32 nRowCount = (mnPageCount+mnColumnCount-1) / mnColumnCount;
+        nHorizontalSize =
+            mnLeftBorder
+            + mnRightBorder
+            + mnColumnCount * maPageObjectSize.Width();
+        if (mnColumnCount > 1)
+            nHorizontalSize +=  (mnColumnCount-1) * mnHorizontalGap;
+        nVerticalSize =
+            mnTopBorder
+            + mnBottomBorder
+            + nRowCount * maPageObjectSize.Height();
+        if (nRowCount > 1)
+            nVerticalSize += (nRowCount-1) * mnVerticalGap;
+    }
+
+    return Rectangle (
+        Point(0,0),
+        Size (nHorizontalSize, nVerticalSize)
+        );
+}
+
+
+
+
+void Layouter::Implementation::CalculateVerticalLogicalInsertPosition (
+    const Point& rModelPosition,
+    InsertPosition& rPosition) const
+{
+    const sal_Int32 nY = rModelPosition.Y() - mnTopBorder + maPageObjectSize.Height()/2;
+    const sal_Int32 nRowHeight (maPageObjectSize.Height() + mnVerticalGap);
+    const sal_Int32 nRow (::std::min(mnPageCount, nY / nRowHeight));
+    rPosition.SetLogicalPosition (
+        nRow,
+        0,
+        nRow,
+        (nRow == 0),
+        (nRow == mnRowCount),
+        (nRow >= mnMaxRowCount));
+}
+
+
+
+
+//===== HorizontalImplementation ================================================
+
+HorizontalImplementation::HorizontalImplementation (const SharedSdWindow& rpWindow)
+    : Implementation(rpWindow)
+{
+}
+
+
+
+
+HorizontalImplementation::HorizontalImplementation (const Implementation& rImplementation)
+    : Implementation(rImplementation)
+{
+}
+
+
+
+
+Layouter::Orientation HorizontalImplementation::GetOrientation (void) const
+{
+    return Layouter::HORIZONTAL;
+}
+
+
+
+
+void HorizontalImplementation::CalculateRowAndColumnCount (const Size& rWindowSize)
+{
+    (void)rWindowSize;
+
+    // Row and column count are fixed (for a given page count.)
+    mnColumnCount = mnPageCount;
+    mnRowCount = 1;
+}
+
+
+
+
+void HorizontalImplementation::CalculateMaxRowAndColumnCount (const Size& rWindowSize)
+{
+    mnMaxColumnCount = (rWindowSize.Width() - mnLeftBorder - mnRightBorder)
+        / (maPageObjectSize.Width()  + mnHorizontalGap);
+    mnMaxRowCount = 1;
+}
+
+
+
+
+Size HorizontalImplementation::CalculateTargetSize (
+    const Size& rWindowSize,
+    const Size& rPreviewModelSize) const
+{
+    return Implementation::CalculateTargetSize(rWindowSize, rPreviewModelSize, false, true);
+}
+
+
+
+
+void HorizontalImplementation::CalculateLogicalInsertPosition (
+    const Point& rModelPosition,
+    InsertPosition& rPosition) const
+{
+    const sal_Int32 nX = rModelPosition.X() - mnLeftBorder + maPageObjectSize.Width()/2;
+    const sal_Int32 nColumnWidth (maPageObjectSize.Width() + mnHorizontalGap);
+    const sal_Int32 nColumn (::std::min(mnPageCount, nX / nColumnWidth));
+    rPosition.SetLogicalPosition (
+        0,
+        nColumn,
+        nColumn,
+        (nColumn == 0),
+        (nColumn == mnColumnCount),
+        (nColumn >= mnMaxColumnCount));
+}
+
+
+
+
+//===== VerticalImplementation ================================================
+
+VerticalImplementation::VerticalImplementation (const SharedSdWindow& rpWindow)
+    : Implementation(rpWindow)
+{
+}
+
+
+
+
+VerticalImplementation::VerticalImplementation (const Implementation& rImplementation)
+    : Implementation(rImplementation)
+{
+}
+
+
+
+
+Layouter::Orientation VerticalImplementation::GetOrientation (void) const
+{
+    return Layouter::VERTICAL;
+}
+
+
+
+
+void VerticalImplementation::CalculateRowAndColumnCount (const Size& rWindowSize)
+{
+    (void)rWindowSize;
+
+    // Row and column count are fixed (for a given page count.)
+    mnRowCount = mnPageCount;
+    mnColumnCount = 1;
+
+}
+
+
+
+
+void VerticalImplementation::CalculateMaxRowAndColumnCount (const Size& rWindowSize)
+{
+    mnMaxRowCount = (rWindowSize.Height() - mnTopBorder - mnBottomBorder)
+        / (maPageObjectSize.Height()  + mnVerticalGap);
+    mnMaxColumnCount = 1;
+}
+
+
+
+
+Size VerticalImplementation::CalculateTargetSize (
+    const Size& rWindowSize,
+    const Size& rPreviewModelSize) const
+{
+    return Implementation::CalculateTargetSize(rWindowSize, rPreviewModelSize, true, false);
+}
+
+
+
+
+void VerticalImplementation::CalculateLogicalInsertPosition (
+    const Point& rModelPosition,
+    InsertPosition& rPosition) const
+{
+    return CalculateVerticalLogicalInsertPosition(rModelPosition, rPosition);
+}
+
+
+
+
+//===== GridImplementation ================================================
+
+GridImplementation::GridImplementation (const SharedSdWindow& rpWindow)
+    : Implementation(rpWindow)
+{
+}
+
+
+
+
+GridImplementation::GridImplementation (const Implementation& rImplementation)
+    : Implementation(rImplementation)
+{
+}
+
+
+
+
+Layouter::Orientation GridImplementation::GetOrientation (void) const
+{
+    return Layouter::GRID;
+}
+
+
+
+
+void GridImplementation::CalculateRowAndColumnCount (const Size& rWindowSize)
+{
+    // Calculate the column count.
+    mnColumnCount
+        = (rWindowSize.Width() - mnRequestedLeftBorder - mnRequestedRightBorder)
+        / (maPreferredSize.Width()  + mnHorizontalGap);
+    if (mnColumnCount < mnMinimalColumnCount)
+        mnColumnCount = mnMinimalColumnCount;
+    if (mnColumnCount > mnMaximalColumnCount)
+        mnColumnCount = mnMaximalColumnCount;
+    mnRowCount = (mnPageCount + mnColumnCount-1)/mnColumnCount;
+}
+
+
+
+
+void GridImplementation::CalculateMaxRowAndColumnCount (const Size& rWindowSize)
+{
+    mnMaxColumnCount = (rWindowSize.Width() - mnLeftBorder - mnRightBorder)
+        / (maPageObjectSize.Width()  + mnHorizontalGap);
+    mnMaxRowCount = (rWindowSize.Height() - mnTopBorder - mnBottomBorder)
+        / (maPageObjectSize.Height()  + mnVerticalGap);
+}
+
+
+
+
+
+Size GridImplementation::CalculateTargetSize (
+    const Size& rWindowSize,
+    const Size& rPreviewModelSize) const
+{
+    return Implementation::CalculateTargetSize(rWindowSize, rPreviewModelSize, true, true);
+}
+
+
+
+
+void GridImplementation::CalculateLogicalInsertPosition (
+    const Point& rModelPosition,
+    InsertPosition& rPosition) const
+{
+    if (mnColumnCount == 1)
+    {
+        CalculateVerticalLogicalInsertPosition(rModelPosition, rPosition);
+    }
+    else
+    {
+        // Handle the general case of more than one column.
+        sal_Int32 nRow (::std::min(
+            mnRowCount-1,
+            GetRowAtPosition (rModelPosition.Y(), true, GM_BOTH)));
+        const sal_Int32 nX = rModelPosition.X() - mnLeftBorder + maPageObjectSize.Width()/2;
+        const sal_Int32 nColumnWidth (maPageObjectSize.Width() + mnHorizontalGap);
+        sal_Int32 nColumn (::std::min(mnColumnCount, nX / nColumnWidth));
+        sal_Int32 nIndex (nRow * mnColumnCount + nColumn);
+        bool bIsAtRunEnd (nColumn == mnColumnCount);
+
+        if (nIndex >= mnPageCount)
+        {
+            nIndex = mnPageCount;
+            nRow = mnRowCount-1;
+            nColumn = mnPageCount%mnColumnCount;
+            bIsAtRunEnd = true;
+        }
+
+        rPosition.SetLogicalPosition (
+            nRow,
+            nColumn,
+            nIndex,
+            (nColumn == 0),
+            bIsAtRunEnd,
+            (nColumn >= mnMaxColumnCount));
+    }
+}
+
+
+
+
 //===== InsertPosition ========================================================
 
 InsertPosition::InsertPosition (void)
     : mnRow(-1),
       mnColumn(-1),
       mnIndex(-1),
-      maLocation(0,0),
-      maLeadingOffset(0,0),
-      maTrailingOffset(0,0),
       mbIsAtRunStart(false),
       mbIsAtRunEnd(false),
-      mbIsExtraSpaceNeeded(false)
+      mbIsExtraSpaceNeeded(false),
+      maLocation(0,0),
+      maLeadingOffset(0,0),
+      maTrailingOffset(0,0)
 {
 }
 
@@ -868,12 +1450,12 @@ InsertPosition& InsertPosition::operator= (const InsertPosition& rInsertPosition
         mnRow = rInsertPosition.mnRow;
         mnColumn = rInsertPosition.mnColumn;
         mnIndex = rInsertPosition.mnIndex;
-        maLocation = rInsertPosition.maLocation;
-        maLeadingOffset = rInsertPosition.maLeadingOffset;
-        maTrailingOffset = rInsertPosition.maTrailingOffset;
         mbIsAtRunStart = rInsertPosition.mbIsAtRunStart;
         mbIsAtRunEnd = rInsertPosition.mbIsAtRunEnd;
         mbIsExtraSpaceNeeded = rInsertPosition.mbIsExtraSpaceNeeded;
+        maLocation = rInsertPosition.maLocation;
+        maLeadingOffset = rInsertPosition.maLeadingOffset;
+        maTrailingOffset = rInsertPosition.maTrailingOffset;
     }
     return *this;
 }
@@ -898,6 +1480,38 @@ bool InsertPosition::operator== (const InsertPosition& rInsertPosition) const
 bool InsertPosition::operator!= (const InsertPosition& rInsertPosition) const
 {
     return !operator==(rInsertPosition);
+}
+
+
+
+
+void InsertPosition::SetLogicalPosition (
+    const sal_Int32 nRow,
+    const sal_Int32 nColumn,
+    const sal_Int32 nIndex,
+    const bool bIsAtRunStart,
+    const bool bIsAtRunEnd,
+    const bool bIsExtraSpaceNeeded)
+{
+    mnRow = nRow;
+    mnColumn = nColumn;
+    mnIndex = nIndex;
+    mbIsAtRunStart = bIsAtRunStart;
+    mbIsAtRunEnd = bIsAtRunEnd;
+    mbIsExtraSpaceNeeded = bIsExtraSpaceNeeded;
+}
+
+
+
+
+void InsertPosition::SetGeometricalPosition(
+    const Point aLocation,
+    const Point aLeadingOffset,
+    const Point aTrailingOffset)
+{
+    maLocation = aLocation;
+    maLeadingOffset = aLeadingOffset;
+    maTrailingOffset = aTrailingOffset;
 }
 
 

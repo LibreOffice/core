@@ -389,12 +389,7 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
 
         case KEY_ESCAPE:
             // When there is an active multiselection or drag-and-drop
-            // operation then stop that.  Otherwise transfer the focus to
-            // the tool box.
-
-            if ( ! (mpDragAndDropContext || mpMouseMultiSelector))
-                rFocusManager.SetFocusToToolBox();
-
+            // operation then stop that.
             StopDragAndDrop();
             if (mpMouseMultiSelector)
             {
@@ -1125,7 +1120,8 @@ void SelectionFunction::ProcessButtonUpEvent (const EventDescriptor& rDescriptor
         case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE | OVER_BUTTON:
         case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE | OVER_BUTTON:
             if (mnButtonDownButtonIndex == rDescriptor.mnButtonIndex
-                && mnButtonDownPageIndex == rDescriptor.mpHitDescriptor->GetPageIndex())
+                && mnButtonDownPageIndex == rDescriptor.mpHitDescriptor->GetPageIndex()
+                && rDescriptor.mpHitDescriptor->GetVisualState().GetButtonAlpha()<0.7)
             {
                 ProcessButtonClick(rDescriptor.mpHitDescriptor, mnButtonDownButtonIndex);
             }
@@ -1146,7 +1142,7 @@ void SelectionFunction::ProcessMouseMotionEvent (const EventDescriptor& rDescrip
     switch (rDescriptor.mnEventCode)
     {
         case ANY_MODIFIER(MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE):
-            SetCurrentPage(rDescriptor.mpHitDescriptor);
+            //            SetCurrentPage(rDescriptor.mpHitDescriptor);
             // Fallthrough
 
         // A mouse motion without visible substitution starts that.

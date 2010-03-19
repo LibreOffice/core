@@ -34,6 +34,7 @@
 #include "SlideSorter.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "model/SlsSharedPageDescriptor.hxx"
+#include "view/SlsLayouter.hxx"
 
 #include "View.hxx"
 #include <sfx2/viewfrm.hxx>
@@ -88,9 +89,11 @@ public:
     virtual ~SlideSorterView (void);
     void Dispose (void);
 
-    enum Orientation { HORIZONTAL, VERTICAL, GRID };
-    void SetOrientation (const Orientation eOrientation);
-    Orientation GetOrientation (void) const;
+    /** Set the general way of layouting the page objects.  Note that this
+        method does not trigger any repaints or layouts.
+    */
+    bool SetOrientation (const Layouter::Orientation eOrientation);
+    Layouter::Orientation GetOrientation (void) const;
 
     void RequestRepaint (void);
     void RequestRepaint (const model::SharedPageDescriptor& rDescriptor);
@@ -211,6 +214,8 @@ public:
         const bool bStateValue,
         const bool bAnimate = true);
 
+    void UpdateOrientation (void);
+
     ::boost::shared_ptr<PageObjectPainter> GetPageObjectPainter (void);
     ::boost::shared_ptr<LayeredDevice> GetLayeredDevice (void) const;
 
@@ -244,7 +249,7 @@ private:
     bool mbModelChangedWhileModifyEnabled;
     Size maPreviewSize;
     bool mbPreciousFlagUpdatePending;
-    Orientation meOrientation;
+    Layouter::Orientation meOrientation;
     ::boost::shared_ptr<controller::Properties> mpProperties;
     model::SharedPageDescriptor mpPageUnderMouse;
     bool mbIsMouseOverIndicationAllowed;
@@ -258,9 +263,6 @@ private:
     void DeterminePageObjectVisibilities (void);
 
     void UpdatePreciousFlags (void);
-
-    ::drawinglayer::primitive2d::Primitive2DSequence GetPrimitive2DHierarchy (
-        const Region& rPaintArea) const;
 };
 
 

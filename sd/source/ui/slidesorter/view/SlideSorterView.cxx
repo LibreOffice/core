@@ -54,6 +54,7 @@
 #include "cache/SlsCacheContext.hxx"
 #include "taskpane/SlideSorterCacheDisplay.hxx"
 #include "DrawDocShell.hxx"
+#include "PaneDockingWindow.hxx"
 
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
@@ -122,97 +123,8 @@ private:
     SlideSorterView& mrView;
 };
 
-class AnimatedSphere
-{
-public:
-    AnimatedSphere (
-        const Size& rWindowSize,
-        const double nStartTime)
-        : mnCenterX(rand() * rWindowSize.Width() / RAND_MAX),
-          mnCenterY(rand() * rWindowSize.Height() / RAND_MAX),
-          mnStartRadius(10),
-          mnEndRadius(rand() * 150 / RAND_MAX),
-          maColor(GetColor()),
-          mnLocalTime(-nStartTime),
-          mnValue(0),
-          mnStartTime(nStartTime),
-          mbIsValid(rWindowSize.Width()>10 && rWindowSize.Height()>10),
-          mnSpeedUp(0.5 + rand() * 1.0 / RAND_MAX)
-    {
-    }
 
-    void SetTime (const double nTime)
-    {
-        mnLocalTime = (nTime - mnStartTime) * mnSpeedUp;
-        if (mnLocalTime >= 0 && mnLocalTime <= mnSpeedUp)
-            mnValue = controller::AnimationFunction::SlowInSlowOut_0to0_Sine(mnLocalTime/mnSpeedUp);
-        else
-            mnValue = 0;
-    }
 
-    bool IsExpired (void)
-    {
-        return mnLocalTime >= mnSpeedUp || ! mbIsValid;
-    }
-
-    Rectangle GetBoundingBox (void)
-    {
-        if (mnLocalTime < 0)
-            return Rectangle();
-
-        const double nRadius (mnStartRadius*(1-mnValue) + mnEndRadius*mnValue);
-        const sal_Int32 nIntRadius (ceil(nRadius)+1);
-        return Rectangle(
-            mnCenterX-nIntRadius,
-            mnCenterY-nIntRadius,
-            mnCenterX+nIntRadius,
-            mnCenterY+nIntRadius);
-    }
-
-    void Paint (OutputDevice& rDevice)
-    {
-        if (mnLocalTime < 0 || ! mbIsValid)
-            return;
-
-        rDevice.SetFillColor(maColor);
-        rDevice.SetLineColor();
-
-        const Rectangle aBox (GetBoundingBox());
-        const USHORT nSavedAntialiasingMode (rDevice.GetAntialiasing());
-        rDevice.SetAntialiasing(nSavedAntialiasingMode | ANTIALIASING_ENABLE_B2DDRAW);
-        rDevice.DrawPolygon(
-            ::basegfx::tools::createPolygonFromRect(
-                ::basegfx::B2DRectangle(aBox.Left(), aBox.Top(), aBox.Right(), aBox.Bottom()),
-                1.0,
-                1.0));
-        rDevice.SetAntialiasing(nSavedAntialiasingMode);
-    }
-
-private:
-    const sal_Int32 mnCenterX;
-    const sal_Int32 mnCenterY;
-    const double mnStartRadius;
-    const double mnEndRadius;
-    const Color maColor;
-    double mnLocalTime;
-    double mnValue;
-    const double mnStartTime;
-    const bool mbIsValid;
-    const double mnSpeedUp;
-
-    static Color GetColor (void)
-    {
-        Color aColor;
-        do
-        {
-            aColor.SetRed(rand() * 255 / RAND_MAX);
-            aColor.SetGreen(rand() * 255 / RAND_MAX);
-            aColor.SetBlue(rand() * 255 / RAND_MAX);
-        }
-        while (aColor.GetGreen()<=aColor.GetRed() || aColor.GetGreen()<=aColor.GetBlue());
-        return aColor;
-    }
-};
 
 class BackgroundPainter
     : public ILayerPainter,
@@ -220,31 +132,15 @@ class BackgroundPainter
 {
 public:
     BackgroundPainter (
-        const ::boost::shared_ptr<controller::Animator>& rpAnimator,
         const SharedSdWindow& rpWindow,
-        const Color aBackgroundColor,
-        const bool bIsAnimated)
-        : mpAnimator(rpAnimator),
-          maBackgroundColor(aBackgroundColor),
-          maSpheres(),
-          mpInvalidator(),
-          mpWindow(rpWindow),
-          mnAnimationId(controller::Animator::NotAnAnimationId)
+        const Color aBackgroundColor)
+        : maBackgroundColor(aBackgroundColor),
+          mpWindow(rpWindow)
     {
-        if (bIsAnimated)
-        {
-            mnAnimationId = mpAnimator->AddInfiniteAnimation(::boost::ref(*this), 0.01);
-
-            for (sal_Int32 nIndex=0; nIndex<10; ++nIndex)
-                maSpheres.push_back(::boost::shared_ptr<AnimatedSphere>(
-                    new AnimatedSphere(rpWindow->GetSizePixel(), nIndex*0.3)));
-        }
     }
 
     ~BackgroundPainter (void)
     {
-        if (mnAnimationId >= 0)
-            mpAnimator->RemoveAnimation(mnAnimationId);
     }
 
     virtual void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea)
@@ -252,66 +148,16 @@ public:
         rDevice.SetFillColor(maBackgroundColor);
         rDevice.SetLineColor();
         rDevice.DrawRect(rRepaintArea);
-
-        for (SphereVector::const_iterator
-                 iSphere(maSpheres.begin()),
-                 iEnd(maSpheres.end());
-             iSphere!=iEnd;
-             ++iSphere)
-        {
-            if (rRepaintArea.IsOver((*iSphere)->GetBoundingBox()))
-                (*iSphere)->Paint(rDevice);
-        }
     }
 
     virtual void SetLayerInvalidator (const SharedILayerInvalidator& rpInvalidator)
     {
-        Invalidate();
-        mpInvalidator = rpInvalidator;
-        Invalidate();
-    }
-
-    void operator () (const double nTime)
-    {
-        Invalidate();
-
-        for (SphereVector::iterator
-                 iSphere(maSpheres.begin()),
-                 iEnd(maSpheres.end());
-             iSphere!=iEnd;
-             ++iSphere)
-        {
-            if ((*iSphere)->IsExpired())
-                (*iSphere).reset(
-                    new AnimatedSphere(mpWindow->GetSizePixel(), nTime));
-            else
-                (*iSphere)->SetTime(nTime);
-        }
-
-        Invalidate();
+        (void)rpInvalidator;
     }
 
 private:
-    const ::boost::shared_ptr<controller::Animator> mpAnimator;
     const Color maBackgroundColor;
-    typedef ::std::vector< ::boost::shared_ptr<AnimatedSphere> > SphereVector;
-    SphereVector maSpheres;
-    SharedILayerInvalidator mpInvalidator;
     SharedSdWindow mpWindow;
-    controller::Animator::AnimationId mnAnimationId;
-
-    void Invalidate (void)
-    {
-        if (mpInvalidator)
-            for (SphereVector::const_iterator
-                     iSphere(maSpheres.begin()),
-                     iEnd(maSpheres.end());
-                 iSphere!=iEnd;
-                 ++iSphere)
-            {
-                mpInvalidator->Invalidate((*iSphere)->GetBoundingBox());
-            }
-    }
 };
 
 
@@ -334,7 +180,7 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     mbModelChangedWhileModifyEnabled(true),
     maPreviewSize(0,0),
     mbPreciousFlagUpdatePending(true),
-    meOrientation(VERTICAL),
+    meOrientation(Layouter::GRID),
     mpProperties(rSlideSorter.GetProperties()),
     mpPageUnderMouse(),
     mbIsMouseOverIndicationAllowed(true),
@@ -342,8 +188,6 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     mpPageObjectPainter(),
     mpSelectionPainter()
 {
-    OSL_TRACE("layered device at %x", mpLayeredDevice.get());
-
     // Hide the page that contains the page objects.
     SetPageVisible (FALSE);
 
@@ -352,7 +196,6 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     // the SlideSorterView destructor the layered device is destroyed and
     // with it the only reference to the wrapper which therefore is also
     // destroyed.
-    OSL_TRACE("layered device at %x", mpLayeredDevice.get());
     mpLayeredDevice->RegisterPainter(SharedILayerPainter(new Painter(*this)), 2);
 }
 
@@ -374,9 +217,6 @@ SlideSorterView::~SlideSorterView (void)
 void SlideSorterView::Init (void)
 {
     HandleModelChange();
-
-    //    mpSelectionPainter.reset(new SelectionPainter(mrSlideSorter));
-    //    mpLayeredDevice->RegisterPainter(mpSelectionPainter, 1);
 }
 
 
@@ -389,7 +229,7 @@ void SlideSorterView::Dispose (void)
     mpLayeredDevice->Dispose();
     mpPreviewCache.reset();
 
-    // hide the page to avoid problems in the view when deleting
+    // Hide the page to avoid problems in the view when deleting
     // visualized objects
     HideSdrPage();
 
@@ -448,11 +288,6 @@ void SlideSorterView::LocalModelHasChanged(void)
 
     // First call our base class.
     View::ModelHasChanged ();
-
-    // Initialize everything that depends on a page view, now that we have
-    // one.
-    //      SetApplicationDocumentColor(
-    //          Application::GetSettings().GetStyleSettings().GetWindowColor());
 }
 
 
@@ -514,39 +349,99 @@ void SlideSorterView::HandleDrawModeChange (void)
 
 void SlideSorterView::Resize (void)
 {
+    UpdateOrientation();
+
     if ( ! mpLayeredDevice->HasPainter(0))
         mpLayeredDevice->RegisterPainter(
             SharedILayerPainter(new BackgroundPainter(
-                mrSlideSorter.GetController().GetAnimator(),
                 mrSlideSorter.GetContentWindow(),
-                mrSlideSorter.GetTheme()->GetColor(Theme::Background),
-                false)),
+                mrSlideSorter.GetTheme()->GetColor(Theme::Background))),
             0);
 
     mpLayeredDevice->Resize();
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if (mrModel.GetPageCount()>0 && pWindow)
     {
-        bool bRearrangeSuccess (false);
-        if (meOrientation == HORIZONTAL)
-        {
-            bRearrangeSuccess = mpLayouter->RearrangeHorizontal (
+        const bool bRearrangeSuccess (
+            mpLayouter->Rearrange (
+                meOrientation,
                 pWindow->GetSizePixel(),
                 mrModel.GetPageDescriptor(0)->GetPage()->GetSize(),
-                mrModel.GetPageCount());
-        }
-        else
-        {
-            bRearrangeSuccess = mpLayouter->RearrangeVertical (
-                pWindow->GetSizePixel(),
-                mrModel.GetPageDescriptor(0)->GetPage()->GetSize(),
-                mrModel.GetPageCount());
-        }
+                mrModel.GetPageCount()));
 
         if (bRearrangeSuccess)
         {
             Layout();
             RequestRepaint();
+        }
+    }
+}
+
+
+
+
+void SlideSorterView::UpdateOrientation (void)
+{
+    // The layout of slides depends on whether the slide sorter is
+    // displayed in the center or the side pane.
+    if (mrSlideSorter.GetViewShell()->IsMainViewShell())
+        SetOrientation(Layouter::GRID);
+    else
+    {
+        // Get access to the docking window.
+        ::Window* pWindow = mrSlideSorter.GetContentWindow().get();
+        PaneDockingWindow* pDockingWindow = NULL;
+        while (pWindow!=NULL && pDockingWindow==NULL)
+        {
+            pDockingWindow = dynamic_cast<PaneDockingWindow*>(pWindow);
+            pWindow = pWindow->GetParent();
+        }
+
+        if (pDockingWindow != NULL)
+        {
+            const long nScrollBarSize (
+                Application::GetSettings().GetStyleSettings().GetScrollBarSize());
+            switch (pDockingWindow->GetOrientation())
+            {
+                case PaneDockingWindow::HorizontalOrientation:
+                    if (SetOrientation(Layouter::HORIZONTAL))
+                    {
+                        const Range aRange (mpLayouter->GetValidVerticalSizeRange());
+                        pDockingWindow->SetValidSizeRange(Range(
+                            aRange.Min() + nScrollBarSize,
+                            aRange.Max() + nScrollBarSize));
+                    }
+                    break;
+
+                case PaneDockingWindow::VerticalOrientation:
+                    if (SetOrientation(Layouter::VERTICAL))
+                    {
+                        const Range aRange (mpLayouter->GetValidHorizontalSizeRange());
+                        pDockingWindow->SetValidSizeRange(Range(
+                            aRange.Min() + nScrollBarSize,
+                            aRange.Max() + nScrollBarSize));
+                    }
+                    break;
+
+                case PaneDockingWindow::UnknownOrientation:
+                    if (SetOrientation(Layouter::GRID))
+                    {
+                        const sal_Int32 nAdditionalSize (10);
+                        pDockingWindow->SetMinOutputSizePixel(Size(
+                            mpLayouter->GetValidHorizontalSizeRange().Min()
+                                + nScrollBarSize
+                                + nAdditionalSize,
+                            mpLayouter->GetValidVerticalSizeRange().Min()
+                                + nScrollBarSize
+                                + nAdditionalSize));
+                    }
+                    return;
+            }
+        }
+        else
+        {
+            OSL_ASSERT(pDockingWindow!=NULL);
+            SetOrientation(Layouter::GRID);
         }
     }
 }
@@ -561,7 +456,7 @@ void SlideSorterView::Layout ()
     {
         // Set the model area, i.e. the smallest rectangle that includes all
         // page objects.
-        const Rectangle aViewBox (mpLayouter->GetPageBox(mrModel.GetPageCount()));
+        const Rectangle aViewBox (mpLayouter->GetTotalBoundingBox());
         pWindow->SetViewOrigin (aViewBox.TopLeft());
         pWindow->SetViewSize (aViewBox.GetSize());
 
@@ -679,16 +574,21 @@ void SlideSorterView::UpdatePreciousFlags (void)
 
 
 
-void SlideSorterView::SetOrientation (const Orientation eOrientation)
+bool SlideSorterView::SetOrientation (const Layouter::Orientation eOrientation)
 {
-    meOrientation = eOrientation;
-    RequestRepaint();
+    if (meOrientation != eOrientation)
+    {
+        meOrientation = eOrientation;
+        return true;
+    }
+    else
+        return false;
 }
 
 
 
 
-SlideSorterView::Orientation SlideSorterView::GetOrientation (void) const
+Layouter::Orientation SlideSorterView::GetOrientation (void) const
 {
     return meOrientation;
 }
@@ -747,7 +647,7 @@ void SlideSorterView::RequestRepaint (const Region& rRepaintRegion)
 
 Rectangle SlideSorterView::GetModelArea (void)
 {
-    return mpLayouter->GetPageBox(mrModel.GetPageCount());
+    return mpLayouter->GetTotalBoundingBox();
 }
 
 
@@ -917,7 +817,7 @@ void SlideSorterView::SetIsMouseOverIndicationAllowed (const bool bIsAllowed)
 void SlideSorterView::UpdatePageUnderMouse (bool bAnimate)
 {
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
-    if (pWindow)
+    if (pWindow && ! pWindow->IsMouseCaptured())
     {
         const Window::PointerState aPointerState (pWindow->GetPointerState());
         UpdatePageUnderMouse (

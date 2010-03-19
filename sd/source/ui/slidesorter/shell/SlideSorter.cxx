@@ -200,26 +200,25 @@ void SlideSorter::Init (void)
     SetupListeners ();
 
     // Initialize the window.
-    SharedSdWindow pWindow (GetContentWindow());
-    if (pWindow != NULL)
+    SharedSdWindow pContentWindow (GetContentWindow());
+    if (pContentWindow)
     {
-        ::Window* pParentWindow = pWindow->GetParent();
+        ::Window* pParentWindow = pContentWindow->GetParent();
         if (pParentWindow != NULL)
             pParentWindow->SetBackground(Wallpaper());
-        pWindow->SetBackground(Wallpaper());
-        pWindow->SetViewOrigin (Point(0,0));
+        pContentWindow->SetBackground(Wallpaper());
+        pContentWindow->SetViewOrigin (Point(0,0));
         // We do our own scrolling while dragging a page selection.
-        pWindow->SetUseDropScroll (false);
+        pContentWindow->SetUseDropScroll (false);
         // Change the winbits so that the active window accepts the focus.
-        pWindow->SetStyle ((pWindow->GetStyle() & ~WB_DIALOGCONTROL) | WB_TABSTOP);
-        pWindow->Hide();
+        pContentWindow->SetStyle ((pContentWindow->GetStyle() & ~WB_DIALOGCONTROL) | WB_TABSTOP);
+        pContentWindow->Hide();
 
         // Set view pointer of base class.
         SetupControls(pParentWindow);
 
         mbIsValid = true;
     }
-
 }
 
 
@@ -694,7 +693,6 @@ long ContentWindow::Notify (NotifyEvent& rEvent)
     (void)rEvent;
     return 0;
 }
-
 
 
 

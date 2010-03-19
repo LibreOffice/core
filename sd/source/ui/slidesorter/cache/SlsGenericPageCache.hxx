@@ -81,11 +81,18 @@ public:
         receives the correctly sized preview bitmap.
         @param rRequestData
             This data is used to determine the preview.
+        @param bResize
+            When <TRUE/> then when the available bitmap has not the
+            requested size, it is scaled before it is returned.  When
+            <FALSE/> then the bitmap is returned in the wrong size and it is
+            the task of the caller to scale it.
         @return
             Returns a bitmap that is either empty, contains a scaled (up or
             down) version or is the requested bitmap.
     */
-    BitmapEx GetPreviewBitmap (CacheKey aKey);
+    BitmapEx GetPreviewBitmap (
+        const CacheKey aKey,
+        const bool bResize);
 
     /** When the requested preview bitmap does not yet exist or is not
         up-to-date then the rendering of one is scheduled.  Otherwise this
@@ -100,33 +107,33 @@ public:
             unsure use <TRUE/>.
     */
     void RequestPreviewBitmap (
-        CacheKey aKey,
-        bool bMayBeUpToDate = true);
+        const CacheKey aKey,
+        const bool bMayBeUpToDate = true);
 
     /** Tell the cache to replace the bitmap associated with the given
         request data with a new one that reflects recent changes in the
         content of the page object.
     */
-    void InvalidatePreviewBitmap (CacheKey aKey);
+    void InvalidatePreviewBitmap (const CacheKey aKey);
 
     /** Call this method when a view-object-contact object is being deleted
         and does not need (a) its current bitmap in the cache and (b) a
         requested a new bitmap.
     */
-    void ReleasePreviewBitmap (CacheKey aKey);
+    void ReleasePreviewBitmap (const CacheKey aKey);
 
     /** Call this method when all preview bitmaps have to be generated anew.
         This is the case when the size of the page objects on the screen has
         changed or when the model has changed.
     */
-    void InvalidateCache (bool bUpdateCache);
+    void InvalidateCache (const bool bUpdateCache);
 
     /** With the precious flag you can control whether a bitmap can be
         removed from the cache or reduced in size to make room for other
         bitmaps or is so precious that it will not be touched.  A typical
         use is to set the precious flag for the visible pages.
     */
-    void SetPreciousFlag (CacheKey aKey, bool bIsPrecious);
+    void SetPreciousFlag (const CacheKey aKey, const bool bIsPrecious);
 
     /** Return <TRUE/> when there is no preview bitmap in the cache.
     */

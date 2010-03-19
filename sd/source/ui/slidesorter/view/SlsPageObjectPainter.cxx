@@ -59,7 +59,6 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/virdev.hxx>
-#include <canvas/elapsedtime.hxx>
 
 using namespace ::drawinglayer::primitive2d;
 using namespace ::basegfx;
@@ -209,10 +208,14 @@ void PageObjectPainter::PaintPageObject (
 
 void PageObjectPainter::NotifyResize (void)
 {
-    maNormalBackground.SetEmpty();
-    maSelectionBackground.SetEmpty();
-    maFocusedSelectionBackground.SetEmpty();
-    maMouseOverBackground.SetEmpty();
+    if ( ! mpPageObjectLayouter
+        || mpPageObjectLayouter->GetPageObjectSize() != maNewSlideIcon.GetSizePixel())
+    {
+        maNormalBackground.SetEmpty();
+        maSelectionBackground.SetEmpty();
+        maFocusedSelectionBackground.SetEmpty();
+        maMouseOverBackground.SetEmpty();
+    }
 }
 
 
@@ -270,7 +273,7 @@ void PageObjectPainter::PaintPreview (
     OutputDevice& rDevice,
     const model::SharedPageDescriptor& rpDescriptor) const
 {
-    Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
+    const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
         rpDescriptor,
         PageObjectLayouter::Preview,
         PageObjectLayouter::ModelCoordinateSystem));
@@ -278,12 +281,17 @@ void PageObjectPainter::PaintPreview (
     if (mpCache != NULL)
     {
         const SdrPage* pPage = rpDescriptor->GetPage();
-        BitmapEx aBitmap (mpCache->GetPreviewBitmap(pPage));
-        if (aBitmap.GetSizePixel() != aBox.GetSize())
-            aBitmap.Scale(aBox.GetSize());
         mpCache->SetPreciousFlag(pPage, true);
 
-        rDevice.DrawBitmapEx(aBox.TopLeft(), aBitmap);
+        const Bitmap aBitmap (mpCache->GetPreviewBitmap(pPage,false).GetBitmap());
+        if (aBitmap.GetSizePixel() != aBox.GetSize())
+        {
+            rDevice.DrawBitmap(aBox.TopLeft(), aBox.GetSize(), aBitmap);
+        }
+        else
+        {
+            rDevice.DrawBitmap(aBox.TopLeft(), aBitmap);
+        }
     }
 
     if (rpDescriptor->GetVisualState().GetCurrentVisualState()

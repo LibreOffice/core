@@ -78,15 +78,17 @@ void PageCache::ChangeSize (
 
 
 
-BitmapEx PageCache::GetPreviewBitmap (CacheKey aKey)
+BitmapEx PageCache::GetPreviewBitmap (
+    const CacheKey aKey,
+    const bool bResize)
 {
-    return mpImplementation->GetPreviewBitmap(aKey);
+    return mpImplementation->GetPreviewBitmap(aKey, bResize);
 }
 
 
 
 
-void PageCache::RequestPreviewBitmap (CacheKey aKey)
+void PageCache::RequestPreviewBitmap (const CacheKey aKey)
 {
     return mpImplementation->RequestPreviewBitmap(aKey);
 }
@@ -106,8 +108,7 @@ void PageCache::InvalidatePreviewBitmap (
 
 
 
-void PageCache::ReleasePreviewBitmap (
-    CacheKey aKey)
+void PageCache::ReleasePreviewBitmap (const CacheKey aKey)
 {
     mpImplementation->ReleasePreviewBitmap(aKey);
 }
@@ -115,7 +116,7 @@ void PageCache::ReleasePreviewBitmap (
 
 
 
-void PageCache::InvalidateCache (bool bUpdateCache)
+void PageCache::InvalidateCache (const bool bUpdateCache)
 {
     mpImplementation->InvalidateCache(bUpdateCache);
 }
@@ -124,8 +125,8 @@ void PageCache::InvalidateCache (bool bUpdateCache)
 
 
 void PageCache::SetPreciousFlag (
-    CacheKey aKey,
-    bool bIsPrecious)
+    const CacheKey aKey,
+    const bool bIsPrecious)
 {
     mpImplementation->SetPreciousFlag(aKey, bIsPrecious);
 }

@@ -43,6 +43,7 @@
 #include "model/SlsPageDescriptor.hxx"
 #include "controller/SlideSorterController.hxx"
 
+
 namespace sd { namespace slidesorter { namespace cache {
 
 GenericPageCache::GenericPageCache (
@@ -134,7 +135,9 @@ void GenericPageCache::ChangePreviewSize (
 
 
 
-BitmapEx GenericPageCache::GetPreviewBitmap (CacheKey aKey)
+BitmapEx GenericPageCache::GetPreviewBitmap (
+    const CacheKey aKey,
+    const bool bResize)
 {
     OSL_ASSERT(aKey != NULL);
 
@@ -147,13 +150,15 @@ BitmapEx GenericPageCache::GetPreviewBitmap (CacheKey aKey)
         ::boost::shared_ptr<BitmapEx> pPreview(mpBitmapCache->GetBitmap(pPage));
         OSL_ASSERT(pPreview.get() != NULL);
         aPreview = *pPreview;
-        Size aBitmapSize (aPreview.GetSizePixel());
-        if (aBitmapSize != maPreviewSize)
+        const Size aBitmapSize (aPreview.GetSizePixel());
+        if (bResize && aBitmapSize != maPreviewSize)
         {
             // Scale the bitmap to the desired size when that is possible,
             // i.e. the bitmap is not empty.
             if (aBitmapSize.Width()>0 && aBitmapSize.Height()>0)
-                aPreview.Scale (maPreviewSize, BMP_SCALE_FAST);
+            {
+                aPreview.Scale(maPreviewSize, BMP_SCALE_FAST);
+            }
         }
         bMayBeUpToDate = true;
     }
@@ -172,8 +177,8 @@ BitmapEx GenericPageCache::GetPreviewBitmap (CacheKey aKey)
 
 
 void GenericPageCache::RequestPreviewBitmap (
-    CacheKey aKey,
-    bool bMayBeUpToDate)
+    const CacheKey aKey,
+    const bool bMayBeUpToDate)
 {
     OSL_ASSERT(aKey != NULL);
 
@@ -211,7 +216,7 @@ void GenericPageCache::RequestPreviewBitmap (
 
 
 
-void GenericPageCache::InvalidatePreviewBitmap (CacheKey aKey)
+void GenericPageCache::InvalidatePreviewBitmap (const CacheKey aKey)
 {
     if (mpBitmapCache.get() != NULL)
         mpBitmapCache->InvalidateBitmap(mpCacheContext->GetPage(aKey));
@@ -220,7 +225,7 @@ void GenericPageCache::InvalidatePreviewBitmap (CacheKey aKey)
 
 
 
-void GenericPageCache::ReleasePreviewBitmap (CacheKey aKey)
+void GenericPageCache::ReleasePreviewBitmap (const CacheKey aKey)
 {
     if (mpBitmapCache.get() != NULL)
     {
@@ -254,9 +259,9 @@ void GenericPageCache::ReleasePreviewBitmap (CacheKey aKey)
 
 
 
-void GenericPageCache::InvalidateCache (bool bUpdateCache)
+void GenericPageCache::InvalidateCache (const bool bUpdateCache)
 {
-    if (mpBitmapCache.get() != NULL)
+    if (mpBitmapCache)
     {
         // When the cache is being invalidated then it makes no sense to
         // continue creating preview bitmaps.  However, this may be
@@ -276,7 +281,9 @@ void GenericPageCache::InvalidateCache (bool bUpdateCache)
 
 
 
-void GenericPageCache::SetPreciousFlag (CacheKey aKey, bool bIsPrecious)
+void GenericPageCache::SetPreciousFlag (
+    const CacheKey aKey,
+    const bool bIsPrecious)
 {
     ProvideCacheAndProcessor();
 

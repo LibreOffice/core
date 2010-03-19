@@ -800,17 +800,21 @@ Rectangle  SlideSorterController::Rearrange (bool bForce)
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow)
     {
+        if (bForce)
+            mrView.UpdateOrientation();
+
         // Place the scroll bars.
-        aNewContentArea = GetScrollBarManager().PlaceScrollBars(maTotalWindowArea);
+        aNewContentArea = GetScrollBarManager().PlaceScrollBars(
+            maTotalWindowArea,
+            mrView.GetOrientation() != view::Layouter::VERTICAL,
+            mrView.GetOrientation() != view::Layouter::HORIZONTAL);
 
         bool bSizeHasChanged (false);
         // Only when bForce is not true we have to test for a size change in
         // order to determine whether the window and the view have to be resized.
         if ( ! bForce)
         {
-            Rectangle aCurrentContentArea (
-                pWindow->GetPosPixel(),
-                pWindow->GetOutputSizePixel());
+            Rectangle aCurrentContentArea (pWindow->GetPosPixel(), pWindow->GetOutputSizePixel());
             bSizeHasChanged = (aNewContentArea != aCurrentContentArea);
         }
         if (bForce || bSizeHasChanged)
@@ -860,7 +864,7 @@ void SlideSorterController::SetZoom (long int nZoom)
 
     {
         SlideSorterView::DrawLock aLock (mrSlideSorter);
-        mrView.GetLayouter().SetZoom(nZoom/100.0);
+        mrView.GetLayouter()._SetZoom(nZoom/100.0);
         mrView.Layout();
         GetScrollBarManager().UpdateScrollBars (false);
         mrView.GetPreviewCache()->InvalidateCache();

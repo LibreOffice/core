@@ -112,13 +112,6 @@ TYPEINIT1(SlideSorterViewShell, ViewShell);
         pViewShell->Initialize();
         if (pViewShell->mpSlideSorter.get() == NULL)
             pViewShell.reset();
-
-        // The layout of slides depends on whether the slide sorter is
-        // displayed in the center or the side pane.
-        if (bIsCenterPane)
-            pViewShell->mpSlideSorter->GetView().SetOrientation(view::SlideSorterView::GRID);
-        else
-            pViewShell->mpSlideSorter->GetView().SetOrientation(view::SlideSorterView::VERTICAL);
     }
     catch(Exception&)
     {
@@ -571,7 +564,29 @@ void SlideSorterViewShell::ArrangeGUIElements (void)
 
 bool SlideSorterViewShell::HandleScrollCommand (const CommandEvent& rEvent, ::sd::Window* pWindow)
 {
-    bool bDone = ViewShell::HandleScrollCommand(rEvent, pWindow);
+    bool bDone (false);
+
+    if (rEvent.GetCommand() == COMMAND_WHEEL
+        && mpSlideSorter->GetView().GetOrientation() == view::Layouter::HORIZONTAL)
+    {
+        // Make the wheel scroll the horizontal scroll bar.  For this we
+        // change the IsHoriz() flag of the CommandWheelData structure.
+        CommandWheelData* pData = (CommandWheelData*)rEvent.GetData();
+        CommandEvent aEvent (
+            rEvent.GetMousePosPixel(),
+            COMMAND_WHEEL,
+            FALSE,
+            new CommandWheelData(
+                pData->GetDelta(),
+                pData->GetNotchDelta(),
+                pData->GetScrollLines(),
+                pData->GetMode(),
+                pData->GetModifier(),
+                TRUE));
+        bDone = ViewShell::HandleScrollCommand(aEvent, pWindow);
+    }
+    else
+        bDone = ViewShell::HandleScrollCommand(rEvent, pWindow);
 
     if (bDone)
     {
@@ -617,16 +632,12 @@ void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
         view::SlideSorterView& rView (mpSlideSorter->GetView());
 
         USHORT nSlidesPerRow (pFrameView->GetSlidesPerRow());
-        if (nSlidesPerRow == 0 || ! IsMainViewShell())
+        if (nSlidesPerRow > 0
+            && rView.GetOrientation() == view::Layouter::GRID
+            && IsMainViewShell())
         {
-            // When a value of 0 (automatic) is given or the the slide
-            // sorter is displayed in a side pane then we ignore the value
-            // of the frame view and adapt the number of columns
-            // automatically to the window width.
-            rView.GetLayouter().SetColumnCount(1,1);
-        }
-        else
             rView.GetLayouter().SetColumnCount(nSlidesPerRow,nSlidesPerRow);
+        }
         if (IsMainViewShell())
             mpSlideSorter->GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
                 mpFrameView->GetSelectedPage());

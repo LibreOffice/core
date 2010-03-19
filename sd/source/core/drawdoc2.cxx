@@ -1469,8 +1469,7 @@ USHORT SdDrawDocument::CreatePage (
 
 
 
-USHORT SdDrawDocument::DuplicatePage (
-    const USHORT nPageNum)
+USHORT SdDrawDocument::DuplicatePage (USHORT nPageNum)
 {
     PageKind ePageKind = PK_STANDARD;
 

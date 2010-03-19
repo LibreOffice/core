@@ -436,7 +436,7 @@ Size SelectionManager::MakeRectangleVisible (const Rectangle& rBox)
     sal_Int32 nNewTop (aVisibleArea.Top());
     sal_Int32 nNewLeft (aVisibleArea.Left());
 
-    if (mrSlideSorter.GetView().GetOrientation() != SlideSorterView::HORIZONTAL)
+    if (mrSlideSorter.GetView().GetOrientation() != Layouter::HORIZONTAL)
     {
         // Scroll the visible area to make aSelectionBox visible.
         if (mrSlideSorter.GetProperties()->IsCenterSelection())
@@ -461,7 +461,7 @@ Size SelectionManager::MakeRectangleVisible (const Rectangle& rBox)
 
     }
 
-    if (mrSlideSorter.GetView().GetOrientation() != SlideSorterView::VERTICAL)
+    if (mrSlideSorter.GetView().GetOrientation() != Layouter::VERTICAL)
     {
         // Scroll the visible area to make aSelectionBox visible.
         if (mrSlideSorter.GetProperties()->IsCenterSelection())
@@ -547,7 +547,7 @@ bool SelectionManager::DoesSelectionExceedVisibleArea (const Rectangle& rSelecti
         Rectangle(
             Point(0,0),
             pWindow->GetOutputSizePixel())));
-    if (mrSlideSorter.GetView().GetOrientation() == SlideSorterView::VERTICAL)
+    if (mrSlideSorter.GetView().GetOrientation() != Layouter::HORIZONTAL)
         return rSelectionBox.GetHeight() > aVisibleArea.GetHeight();
     else
         return rSelectionBox.GetWidth() > aVisibleArea.GetWidth();

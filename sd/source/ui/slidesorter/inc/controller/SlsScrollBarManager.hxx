@@ -116,20 +116,25 @@ public:
         bool bScrollToCurrentPosition = true);
 
     /** Place the scroll bars inside the given area.  When the available
-        area is not large enough for the content to display the resulting
-        behaviour depends on the mbUseVerticalScrollBar flag.  When it is
-        set to true then a vertical scroll bar is shown.  Otherwise the
-        height of the returned area is enlarged so that the content fits
-        into it.
+        area is not large enough for the content to display the horizontal
+        and/or vertical scroll bar is enabled.
         @param rAvailableArea
             The scroll bars will be placed inside this rectangle.  It is
             expected to be given in pixel relative to its parent.
+        @param bIsHorizontalScrollBarAllowed
+            Only when this flag is <TRUE/> the horizontal scroll may be
+            displayed.
+        @param bIsVerticalScrollBarAllowed
+            Only when this flag is <TRUE/> the horizontal scroll may be
+            displayed.
         @return
             Returns the space that remains after the scroll bars are
-            placed.  When the mbUseVerticalScrollBar flag is false then the
-            returned rectangle may be larger than the given one.
+            placed.
     */
-    Rectangle PlaceScrollBars (const Rectangle& rAvailableArea);
+    Rectangle PlaceScrollBars (
+        const Rectangle& rAvailableArea,
+        const bool bIsHorizontalScrollBarAllowed,
+        const bool bIsVerticalScrollBarAllowed);
 
     /** Update the vertical and horizontal scroll bars so that the visible
         area has the given top and left values.
@@ -231,7 +236,10 @@ private:
             The area that is enclosed by the scroll bars is returned.  It
             will be filled with the SlideSorterView.
     */
-    Rectangle DetermineScrollBarVisibilities (const Rectangle& rAvailableArea);
+    Rectangle DetermineScrollBarVisibilities(
+        const Rectangle& rAvailableArea,
+        const bool bIsHorizontalScrollBarAllowed,
+        const bool bIsVerticalScrollBarAllowed);
 
     /** Typically called by DetermineScrollBarVisibilities() this method
         tests a specific configuration of the two scroll bars being visible

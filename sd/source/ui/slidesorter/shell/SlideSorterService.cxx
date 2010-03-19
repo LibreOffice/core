@@ -38,6 +38,7 @@
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlideSorterView.hxx"
+#include "view/SlsLayouter.hxx"
 #include "DrawController.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -50,7 +51,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
-using ::sd::slidesorter::view::SlideSorterView;
+using ::sd::slidesorter::view::Layouter;
 
 namespace sd { namespace slidesorter {
 
@@ -448,7 +449,7 @@ sal_Bool SAL_CALL SlideSorterService::getIsOrientationVertical (void)
     if (mpSlideSorter.get() == NULL || ! mpSlideSorter->IsValid())
         return true;
     else
-        return mpSlideSorter->GetView().GetOrientation() == SlideSorterView::VERTICAL;
+        return mpSlideSorter->GetView().GetOrientation() != Layouter::HORIZONTAL;
 }
 
 
@@ -460,8 +461,8 @@ void SAL_CALL SlideSorterService::setIsOrientationVertical (sal_Bool bValue)
     ThrowIfDisposed();
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
         mpSlideSorter->GetView().SetOrientation(bValue
-            ? SlideSorterView::VERTICAL
-            : SlideSorterView::HORIZONTAL);
+            ? Layouter::GRID
+            : Layouter::HORIZONTAL);
 }
 
 

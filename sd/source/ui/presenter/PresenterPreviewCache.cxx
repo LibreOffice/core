@@ -213,7 +213,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterPreviewCache::getSlidePreview (
     if (pPage == NULL)
         throw RuntimeException();
 
-    const BitmapEx aPreview (mpCache->GetPreviewBitmap(pPage));
+    const BitmapEx aPreview (mpCache->GetPreviewBitmap(pPage,true));
     if (aPreview.IsEmpty())
         return NULL;
     else

@@ -200,6 +200,8 @@ public:
     */
     ::boost::shared_ptr<controller::Properties> GetProperties (void) const;
 
+    /** Return the active theme wich gives access to colors and fonts.
+    */
     ::boost::shared_ptr<view::Theme> GetTheme (void) const;
 
 protected:
