@@ -936,7 +936,6 @@ uno::Sequence< uno::Sequence<Reference<deploy::XPackage> > >
         lang::IllegalArgumentException,
         uno::RuntimeException)
 {
-    uno::Sequence< uno::Sequence<Reference<deploy::XPackage> > > seqSeq;
     try
     {
         id2extensions mapExt;
@@ -964,10 +963,13 @@ uno::Sequence< uno::Sequence<Reference<deploy::XPackage> > >
         ::std::vector< ::std::vector<Reference<deploy::XPackage> > >::const_iterator
               citVecVec = vecExtensions.begin();
         sal_Int32 j = 0;
+        uno::Sequence< uno::Sequence<Reference<deploy::XPackage> > > seqSeq(vecExtensions.size());
         for (;citVecVec != vecExtensions.end(); citVecVec++, j++)
         {
             seqSeq[j] = comphelper::containerToSequence(*citVecVec);
         }
+        return seqSeq;
+
     } catch (deploy::DeploymentException& ) {
         throw;
     } catch (ucb::CommandFailedException & ) {
@@ -983,9 +985,7 @@ uno::Sequence< uno::Sequence<Reference<deploy::XPackage> > >
         throw deploy::DeploymentException(
             OUSTR("Extension Manager: exception during enableExtension"),
             static_cast<OWeakObject*>(this), exc);
-    }
-
-    return seqSeq;
+   }
 }
 
 void ExtensionManager::reinstallDeployedExtensions(
