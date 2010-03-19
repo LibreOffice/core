@@ -988,7 +988,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
     const RETVAL_TIMEOUT = -1  ' Returnvalue if slot is not available
     const CFN = "global::tools::includes::required::hUseAsyncSlot(): "
 
-    printlog( "Execute <" & cSlot & ">" )
+    if ( GVERBOSE ) then printlog( "Execute <" & cSlot & ">" )
     WaitSlot()
 
     for iRetries = 1 to MAX_RETRIES
@@ -1105,7 +1105,7 @@ function hClickButton( oButton as object ) as integer
     const RETVAL_TIMEOUT = -1  ' Return -1 if the button is not available
     const CFN = "global::tools::includes::required::hClickButton(): "
 
-    printlog( "Click <" & oButton.name() & ">" )
+    if ( GVERBOSE ) then printlog( "Click <" & oButton.name() & ">" )
     WaitSlot()
 
     for iRetries = 1 to MAX_RETRIES
@@ -1161,7 +1161,9 @@ function hCloseDialog( oDialog as object, sUserFlags as string ) as boolean
     ' Find out whether the dialog must exist (default) or is just closed as a precaution ("optional")
     if ( instr( sFlags, "optional") > 0 ) then bDialogMustExist = FALSE
 
-    printlog( "Closing dialog <" & oDialog.name() & "> using the flags <" & sFlags & ">.")
+    if ( GVERBOSE ) then
+        printlog( "Closing dialog <" & oDialog.name() & "> using the flags <" & sFlags & ">.")
+    endif
 
     if ( oDialog.exists() ) then
         select case( iClosingMethod )
