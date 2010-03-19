@@ -205,6 +205,111 @@ testcase tiToolsThesaurusWithoutText
 
 endcase
 '-------------------------------------------------------------------------------
+testcase tiToolsThesaurusContextMenu
+
+    Dim sWord as string
+    Dim sExt as string
+    Dim iItemCount as Integer
+
+    'for normal text, the thesaurus is enabled,
+    'if the format->character->language of the word has a thesaurus
+    'unfortunately in textboxes this doesn't work, you can give the word a langauge,
+    'but this is been ignored by our thesaurus
+    'so especially for asian languages you have to set a default language in the options,
+    'to be able to use the thesaurus there - fallback to englisch,
+    'because there is no thesaurus for cjk languages
+
+    'As long as OOo has no modules for that, disabled
+    if gOOO = True then
+        printlog "No spellchecking in OOo"
+        goto endsub
+    endif
+
+    'First we make sure we test a language where Thesaurus
+    select case iSprache
+       case 01 : sWord = "Hello"
+       case 03 : sWord = "Alo"
+       case 07 : printlog "- No Thesaur for Russian available"
+                 goto endsub
+       case 30 : Printlog "- No Thesaurus available !"
+                 goto endsub
+       case 31 : sWord = "Guiten"
+       case 33 : sWord = "Bonjour"
+       case 34 : sWord = "Hola"
+       case 35 : Printlog "- No Thesaurus available !"
+                 goto endsub
+       case 36 : Printlog "- No Thesaurus available !"
+                 goto endsub
+       case 37 : Printlog "- No Thesaurus available !"
+                 goto endsub
+       case 39 : sWord = "Ciao"
+       case 42 : Printlog "- No Thesaurus available !"
+                 goto endsub
+       case 45 : sWord = "Hej"
+       case 46 : sWord = "Välkommen"
+       case 47 : Printlog "- No Thesaurus available !"
+                 goto endsub
+       case 48 : Printlog "- No Thesaurus in Polish!"
+                 goto endsub
+       case 49 : sWord = "Hallo"
+       case 50 : sWord = "Prosojnica"
+       case 51 : Printlog "- No Thesaurus available !"
+                 goto endsub
+       case 55 : Printlog "- No Thesaurus in Brazilian!"
+                 goto endsub
+       case 90 : Printlog "- No Thesaurus available !"
+                 goto endsub
+
+       case else : if bAsianLan then
+                     hSetSpellHypLanguage
+                     sWord = "Hello"
+                  else
+                     Warnlog "For the language  " + iSprache +" nothing is prepared yet: insert text here"
+                     sWord = "Hello"
+                  endif
+    end select
+
+    PrintLog "Thesaurus with 1 word: " + sWord
+
+    if( Ucase(gApplication) = "DRAW" ) then
+        sExt = ".odg"
+        Kontext "DrawDocument"
+    elseif( Ucase(gApplication) = "IMPRESS" ) then
+        sExt = ".odp"
+        Kontext "ImpressDocument"
+    endif
+
+    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_" + iSprache + sExt)
+
+    Call hTextrahmenErstellen (sWord,20,20,50,30)
+    sleep 1
+
+    printlog "select the word"
+    hTypeKeys "<Home><SHIFT END>"
+    
+    hOpenContextMenu
+
+    hMenuSelectNr(14) ' the synonyms
+    iItemCount = hMenuItemGetCount
+    printlog iItemCount
+    if(iItemCount <= 2 ) then ' none and Thesaurus item
+        warnlog "There should be a synonymus display for the word '" + sWord + "' but it isn't."
+    endif
+
+    hMenuSelectNr(iItemCount) ' the last item
+
+    Kontext "Thesaurus"
+    if Thesaurus.Exists(5) then
+        printlog "Thesaurus dialog appear from the context menu"
+        Thesaurus.Cancel
+    else
+        warnlog "the thesaurus dialog does not appear fro mthe context menu of a selected word"
+    endif
+
+    call hCloseDocument
+
+endcase
+'-------------------------------------------------------------------------------
 testcase tiToolsHyphenation1
 
    printlog "   - Hyphenation without any text"

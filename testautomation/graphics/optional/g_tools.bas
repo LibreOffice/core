@@ -44,6 +44,7 @@ sub main
     PrintLog "-------------------------" + gApplication + "-------------------"
     Call tiToolsThesaurus
     Call tiToolsThesaurusWithoutText
+    Call tiToolsThesaurusContextMenu
     Call tiToolsHyphenation1
     Call tiToolsHyphenation2
     Call tToolsMacro
@@ -52,6 +53,7 @@ sub main
     PrintLog "-------------------------" + gApplication + "-------------------"
     Call tiToolsThesaurus
     Call tiToolsThesaurusWithoutText
+    Call tiToolsThesaurusContextMenu
     Call tiToolsHyphenation1
     Call tiToolsHyphenation2
     Call tToolsMacro
