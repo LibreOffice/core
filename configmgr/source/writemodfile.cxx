@@ -463,13 +463,25 @@ void writeModifications(
             // components themselves have no parent but must have children
         if (node.is()) {
             writeData(handle, RTL_CONSTASCII_STRINGPARAM("<item oor:path=\""));
-            writeAttributeValue(
-                handle,
-                (grandparentPathRepresentation +
-                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
-                 Data::createSegment(parent->getTemplateName(), parentName)));
-            writeData(handle, RTL_CONSTASCII_STRINGPARAM("\">"));
-            writeNode(components, handle, parent, nodeName, node);
+            if (parent->kind() == Node::KIND_LOCALIZED_PROPERTY) {
+                writeAttributeValue(handle, grandparentPathRepresentation);
+                writeData(
+                    handle, RTL_CONSTASCII_STRINGPARAM("\"><prop oor:name=\""));
+                writeAttributeValue(handle, parentName);
+                writeData(
+                    handle, RTL_CONSTASCII_STRINGPARAM("\" oor:op=\"fuse\">"));
+                writeNode(components, handle, parent, nodeName, node);
+                writeData(handle, RTL_CONSTASCII_STRINGPARAM("</prop>"));
+            } else {
+                writeAttributeValue(
+                    handle,
+                    (grandparentPathRepresentation +
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
+                     Data::createSegment(
+                         parent->getTemplateName(), parentName)));
+                writeData(handle, RTL_CONSTASCII_STRINGPARAM("\">"));
+                writeNode(components, handle, parent, nodeName, node);
+            }
             writeData(handle, RTL_CONSTASCII_STRINGPARAM("</item>"));
         } else {
             writeData(handle, RTL_CONSTASCII_STRINGPARAM("<item oor:path=\""));
