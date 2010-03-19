@@ -985,6 +985,7 @@ endcase
 testcase tEditFields
 
     PrintLog( "Edit/Fields: Edit Fields dialog: " & gApplication )
+    dim iCurrentType as integer
 
     PrintLog( "Open new document" )
     Call hNewDocument()
@@ -1000,10 +1001,21 @@ testcase tEditFields
         Active.setPage( TabDokumentFeldbefehle )
 
         kontext "TabDokumentFeldbefehle"
-        printlog( "Select any item from the user data, insert the field, close the dialog" )
+        printlog( "Select sender item from the user data, insert the field, close the dialog" )
         if ( TabDokumentFeldbefehle.isVisible() ) then
-            Feldtyp.select( 1 )
-            Auswahl.select( 1 )
+
+            ' Search for the sender item in the "Type" listbox by counting the
+            ' number of items in the "Select" box. Only the sender item has
+            ' more than 12 (usually 15) selectable options.
+            ' This is done to make sure that we have an enabled "Edit..." button
+            ' in the "Edit Fields" dialog called later in this test
+            for iCurrentTypeCount = 1 to FeldTyp.getItemCount()
+                FeldTyp.select( iCurrentTypeCount )
+                if ( Auswahl.isEnabled() and Auswahl.getItemCount() > 12 ) then
+                    exit for
+                endif
+            next iCurrentTypeCount
+
             hClickButton( Einfuegen )
             hCloseDialog( TabDokumentFeldbefehle , "close" )
 
