@@ -49,6 +49,8 @@
 #define PLATFORM_LINUX_IA64         "linux_ia64"
 #define PLATFORM_LINUX_S390         "linux_s390"
 #define PLATFORM_LINUX_S390x        "linux_s390x"
+#define PLATFORM_LINUX_HPPA         "linux_hppa"
+#define PLATFORM_LINUX_ALPHA        "linux_alpha"
 
 
 
@@ -146,6 +148,10 @@ namespace
             ret = checkOSandCPU(OUSTR("Linux"), OUSTR("S390"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_S390x)))
             ret = checkOSandCPU(OUSTR("Linux"), OUSTR("S390x"));
+        else if (token.equals(OUSTR(PLATFORM_LINUX_HPPA)))
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("HPPA"));
+        else if (token.equals(OUSTR(PLATFORM_LINUX_ALPHA)))
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("ALPHA"));
         else if (token.equals(OUSTR(PLATFORM_SOLARIS_SPARC)))
             ret = checkOSandCPU(OUSTR("Solaris"), OUSTR("SPARC"));
         else if (token.equals(OUSTR(PLATFORM_SOLARIS_SPARC64)))
