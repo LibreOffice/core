@@ -56,28 +56,41 @@ namespace svt
         /// retrieves the image associated with the panel, if any
         virtual Image GetImage() const = 0;
 
-        /// shows the panel window
-        virtual void Show() = 0;
+        /** activates the panel
 
-        /// hides the panel window
-        virtual void Hide() = 0;
+            Usually, this means the panel's Window is created (if not previosly done so) and shown.
 
-        /// sets the position of the panel window
-        virtual void SetPosSizePixel( const Rectangle& i_rPanelPlayground ) = 0;
+            @param i_rParentWindow
+                the parent window to anchor the panel window at. Subsequent calls to the Activate
+                method will always get the same parent window. The complete area of this window is
+                available, and should be used, for the panel window.
+        */
+        virtual void Activate( Window& i_rParentWindow ) = 0;
+
+        /** deactivates the panel
+
+            There are different ways how an implementation could deactivate a panel. The easiest way
+            would be to simply hide the associated Window. Alternatively, you could completely destroy it,
+            or decide to cache it by re-parenting it to another (temporary, invisible) window.
+        */
+        virtual void Deactivate() = 0;
+
+        /** sets a new size for the panel's Window
+
+            The panel window is always expected to be positioned at (0,0), relative to the parent window
+            which was passed to the Activate member. Resizing the panel window is necessary when the size of
+            this parent window changes. Effectively, this method is a means of convenience, to relief panel
+            implementations from reacting on size changes of their parent window themselves.
+        */
+        virtual void SetSizePixel( const Size& i_rPanelWindowSize ) = 0;
 
         /// sets the focus to the panel window
         virtual void GrabFocus() = 0;
 
-        /** determines whether the panel window, or any of its children, currently has the focus
-
-            Effectively, an implementation simply needs to redelegate this to its panel window's HasChildPathFocus
-            method.
-        */
-        virtual bool HasFocus() const = 0;
-
         /** release any resources associated with the panel.
 
-            In particular, implementations should destroy the VCL window which implements the panel window.
+            In particular, implementations should ultimately destroy the VCL window which implements the panel
+            window. No subsequent calls to any other method will happen after Destroy has been called.
         */
         virtual void Dispose() = 0;
 

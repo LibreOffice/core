@@ -49,11 +49,10 @@ namespace svt
         // IToolPanel
         virtual ::rtl::OUString GetDisplayName() const;
         virtual Image GetImage() const;
-        virtual void Show();
-        virtual void Hide();
-        virtual void SetPosSizePixel( const Rectangle& i_rPanelPlayground );
+        virtual void Activate( Window& i_rParentWindow );
+        virtual void Deactivate();
+        virtual void SetSizePixel( const Size& i_rPanelWindowSize );
         virtual void GrabFocus();
-        virtual bool HasFocus() const;
         virtual void Dispose();
 
         DECLARE_IREFERENCE()

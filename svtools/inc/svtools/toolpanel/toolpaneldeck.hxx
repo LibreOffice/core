@@ -137,6 +137,13 @@ namespace svt
         PDeckLayouter       GetLayouter() const;
         void                SetLayouter( const PDeckLayouter& i_pNewLayouter );
 
+        /** returns the window which acts as anchor for the panel windows.
+
+            This is a single dedicated window, which is passed to the IToolPanel::ActivatePanel method
+            whenever a panel is activated, to act as parent window for the panel's VCL-Window.
+        */
+        Window&             GetPanelWindowAnchor();
+
         // IToolPanelDeck
         virtual size_t      GetPanelCount() const;
         virtual PToolPanel  GetPanel( const size_t i_nPos ) const;

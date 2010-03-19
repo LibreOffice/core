@@ -50,17 +50,17 @@ namespace svt
     IMPLEMENT_IREFERENCE( DummyPanel )
 
     //--------------------------------------------------------------------
-    void DummyPanel::Show()
+    void DummyPanel::Activate( Window& )
     {
     }
 
     //--------------------------------------------------------------------
-    void DummyPanel::Hide()
+    void DummyPanel::Deactivate()
     {
     }
 
     //--------------------------------------------------------------------
-    void DummyPanel::SetPosSizePixel( const Rectangle& /*i_rPanelPlayground*/ )
+    void DummyPanel::SetSizePixel( const Size& )
     {
     }
 
@@ -79,12 +79,6 @@ namespace svt
     //--------------------------------------------------------------------
     void DummyPanel::GrabFocus()
     {
-    }
-
-    //--------------------------------------------------------------------
-    bool DummyPanel::HasFocus() const
-    {
-        return false;
     }
 
     //--------------------------------------------------------------------

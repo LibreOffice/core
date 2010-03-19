@@ -144,11 +144,10 @@ public:
     // IToolPanel
     virtual ::rtl::OUString GetDisplayName() const;
     virtual Image GetImage() const;
-    virtual void Show();
-    virtual void Hide();
-    virtual void SetPosSizePixel( const Rectangle& i_rPanelPlayground );
+    virtual void Activate( Window& i_rParentWindow );
+    virtual void Deactivate();
+    virtual void SetSizePixel( const Size& i_rPanelWindowSize );
     virtual void GrabFocus();
-    virtual bool HasFocus() const;
     virtual void Dispose();
 
     // IReference
@@ -211,24 +210,28 @@ oslInterlockedCount SAL_CALL ColoredPanel::release()
 }
 
 //-----------------------------------------------------------------------------
-void ColoredPanel::Show()
+void ColoredPanel::Activate( Window& i_rParentWindow )
 {
     ENSURE_OR_RETURN_VOID( m_pWindow.get(), "disposed!" );
+    OSL_ENSURE( &i_rParentWindow == m_pWindow->GetParent(), "ColoredPanel::Activate: unexpected new parent window!" );
+        // the documentation of IToolPanel::Activate says it is guaranteed that the parent window is
+        // always the same ...
+    m_pWindow->SetPosSizePixel( Point(), i_rParentWindow.GetSizePixel() );
     m_pWindow->Show();
 }
 
 //-----------------------------------------------------------------------------
-void ColoredPanel::Hide()
+void ColoredPanel::Deactivate()
 {
     ENSURE_OR_RETURN_VOID( m_pWindow.get(), "disposed!" );
     m_pWindow->Hide();
 }
 
 //-----------------------------------------------------------------------------
-void ColoredPanel::SetPosSizePixel( const Rectangle& i_rPanelPlayground )
+void ColoredPanel::SetSizePixel( const Size& i_rPanelWindowSize )
 {
     ENSURE_OR_RETURN_VOID( m_pWindow.get(), "disposed!" );
-    m_pWindow->SetPosSizePixel( i_rPanelPlayground.TopLeft(), i_rPanelPlayground.GetSize() );
+    m_pWindow->SetSizePixel( i_rPanelWindowSize );
 }
 
 //-----------------------------------------------------------------------------
@@ -236,13 +239,6 @@ void ColoredPanel::GrabFocus()
 {
     ENSURE_OR_RETURN_VOID( m_pWindow.get(), "disposed!" );
     m_pWindow->GrabFocus();
-}
-
-//-----------------------------------------------------------------------------
-bool ColoredPanel::HasFocus() const
-{
-    ENSURE_OR_RETURN_FALSE( m_pWindow.get(), "disposed!" );
-    return m_pWindow->HasChildPathFocus();
 }
 
 //-----------------------------------------------------------------------------
@@ -733,10 +729,10 @@ PanelDemoMainWindow::PanelDemoMainWindow()
     m_aToolPanelDeck.SetPosSizePixel( Point( 20, 20 ), Size( 500, 300 ) );
     m_aToolPanelDeck.SetBorderStyle( WINDOW_BORDER_MONO );
 
-    m_aToolPanelDeck.InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck, Color( COL_RED ), "Red" ) ), m_aToolPanelDeck.GetPanelCount() );
-    m_aToolPanelDeck.InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck, Color( COL_GREEN ), "Some flavor of Green" ) ), m_aToolPanelDeck.GetPanelCount() );
-    m_aToolPanelDeck.InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck, RGB_COLORDATA( 255, 255, 0 ), "Yellow is ugly" ) ), m_aToolPanelDeck.GetPanelCount() );
-    m_aToolPanelDeck.InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck, RGB_COLORDATA( 0, 0, 128 ), "Blue is the Color" ) ), m_aToolPanelDeck.GetPanelCount() );
+    m_aToolPanelDeck.InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck.GetPanelWindowAnchor(), Color( COL_RED ), "Red" ) ), m_aToolPanelDeck.GetPanelCount() );
+    m_aToolPanelDeck.InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck.GetPanelWindowAnchor(), Color( COL_GREEN ), "Some flavor of Green" ) ), m_aToolPanelDeck.GetPanelCount() );
+    m_aToolPanelDeck.InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck.GetPanelWindowAnchor(), RGB_COLORDATA( 255, 255, 0 ), "Yellow is ugly" ) ), m_aToolPanelDeck.GetPanelCount() );
+    m_aToolPanelDeck.InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck.GetPanelWindowAnchor(), RGB_COLORDATA( 0, 0, 128 ), "Blue is the Color" ) ), m_aToolPanelDeck.GetPanelCount() );
 
     m_aToolPanelDeck.ActivatePanel( size_t( 0 ) );
     m_aToolPanelDeck.Show();
@@ -812,7 +808,7 @@ IToolPanelDeck& PanelDemoMainWindow::GetToolPanelDeck()
 //-----------------------------------------------------------------------------
 PToolPanel PanelDemoMainWindow::CreateToolPanel( const Color& i_rColor, const String& i_rPanelName )
 {
-    return PToolPanel( new ColoredPanel( m_aToolPanelDeck, i_rColor, i_rPanelName ) );
+    return PToolPanel( new ColoredPanel( m_aToolPanelDeck.GetPanelWindowAnchor(), i_rColor, i_rPanelName ) );
 }
 
 //=============================================================================

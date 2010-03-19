@@ -65,12 +65,13 @@ namespace svt
     public:
         ToolPanelDeck_Impl( ToolPanelDeck& i_rDeck )
             :m_rDeck( i_rDeck )
+            ,m_aPanelAnchor( &i_rDeck )
             ,m_aPanels()
             ,m_pDummyPanel( new DummyPanel )
             ,m_pLayouter()
-            ,m_aPanelPlayground()
         {
             m_aPanels.AddListener( *this );
+            m_aPanelAnchor.Show();
         }
 
         ~ToolPanelDeck_Impl()
@@ -81,6 +82,8 @@ namespace svt
 
         PDeckLayouter       GetLayouter() const { return m_pLayouter; }
         void                SetLayouter( const PDeckLayouter& i_pNewLayouter );
+
+        Window&             GetPanelWindowAnchor() { return m_aPanelAnchor; }
 
         // IToolPanelDeck equivalents
         size_t              GetPanelCount() const;
@@ -113,12 +116,12 @@ namespace svt
 
     private:
         ToolPanelDeck&      m_rDeck;
+        Window              m_aPanelAnchor;
         ToolPanelCollection m_aPanels;
         PToolPanel          m_pDummyPanel;
         PanelDeckListeners  m_aListeners;
 
         PDeckLayouter       m_pLayouter;
-        Rectangle           m_aPanelPlayground;
     };
 
     //--------------------------------------------------------------------
@@ -184,17 +187,18 @@ namespace svt
     {
         const Rectangle aDeckPlayground( Point(), m_rDeck.GetOutputSizePixel() );
 
-        // let the layouter do the main work
-        m_aPanelPlayground = aDeckPlayground;
+        // ask the layouter what is left for our panel, and position the panel container window appropriately
+        Rectangle aPlaygroundArea( aDeckPlayground );
         OSL_ENSURE( m_pLayouter.get(), "ToolPanelDeck_Impl::ImplDoLayout: no layouter!" );
         if ( m_pLayouter.get() )
         {
-            m_aPanelPlayground = m_pLayouter->Layout( aDeckPlayground );
+            aPlaygroundArea = m_pLayouter->Layout( aDeckPlayground );
         }
+        m_aPanelAnchor.SetPosSizePixel( aPlaygroundArea.TopLeft(), aPlaygroundArea.GetSize() );
 
-        // and position the active panel
+        // position the active panel
         const PToolPanel pActive( GetActiveOrDummyPanel_Impl() );
-        pActive->SetPosSizePixel( m_aPanelPlayground );
+        pActive->SetSizePixel( m_aPanelAnchor.GetSizePixel() );
     }
 
     //--------------------------------------------------------------------
@@ -243,7 +247,7 @@ namespace svt
         case ACTION_TOGGLE_FOCUS:
             {
                 PToolPanel pActivePanel( GetActiveOrDummyPanel_Impl() );
-                if ( !pActivePanel->HasFocus() )
+                if ( !m_aPanelAnchor.HasChildPathFocus() )
                     pActivePanel->GrabFocus();
                 else
                     GetLayouter()->SetFocusToPanelSelector();
@@ -285,13 +289,12 @@ namespace svt
         if ( !!i_rOldActive )
         {
             const PToolPanel pOldActive( m_aPanels.GetPanel( *i_rOldActive ) );
-            pOldActive->Hide();
+            pOldActive->Deactivate();
         }
 
         // position and show the new panel
         const PToolPanel pNewActive( !i_rNewActive ? m_pDummyPanel : m_aPanels.GetPanel( *i_rNewActive ) );
-        pNewActive->SetPosSizePixel( m_aPanelPlayground );
-        pNewActive->Show();
+        pNewActive->Activate( m_aPanelAnchor );
         pNewActive->GrabFocus();
 
         // multiplex to our own listeners
@@ -388,6 +391,12 @@ namespace svt
     void ToolPanelDeck::RemoveListener( IToolPanelDeckListener& i_rListener )
     {
         m_pImpl->RemoveListener( i_rListener );
+    }
+
+    //--------------------------------------------------------------------
+    Window& ToolPanelDeck::GetPanelWindowAnchor()
+    {
+        return m_pImpl->GetPanelWindowAnchor();
     }
 
     //--------------------------------------------------------------------
