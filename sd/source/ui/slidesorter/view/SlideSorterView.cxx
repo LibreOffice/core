@@ -666,6 +666,7 @@ void SlideSorterView::CompleteRedraw (
     const Region& rPaintArea,
     sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
+    (void)pRedirector;
 #ifdef DEBUG_TIMING
     const double nStartTime (gaTimer.getElapsedTime());
     OSL_TRACE("SlideSorterView::CompleteRedraw start at %f, %s",

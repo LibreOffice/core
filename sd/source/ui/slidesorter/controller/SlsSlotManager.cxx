@@ -1078,7 +1078,6 @@ bool SlotManager::RenameSlideFromDrawViewShell( USHORT nPageId, const String & r
 void SlotManager::InsertSlide (SfxRequest& rRequest)
 {
     const sal_Int32 nInsertionIndex (GetInsertionPosition());
-    USHORT nPageCount ((USHORT)mrSlideSorter.GetModel().GetPageCount());
 
     PageSelector::BroadcastLock aBroadcastLock (mrSlideSorter);
 
@@ -1175,7 +1174,7 @@ void SlotManager::DuplicateSelectedSlides (SfxRequest& rRequest)
     // Set the selection to the pages in aPagesToSelect.
     PageSelector& rSelector (mrSlideSorter.GetController().GetPageSelector());
     rSelector.DeselectAllPages();
-    for_each (
+    ::std::for_each (
         aPagesToSelect.begin(),
         aPagesToSelect.end(),
         ::boost::bind(

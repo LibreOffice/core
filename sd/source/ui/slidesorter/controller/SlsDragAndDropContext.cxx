@@ -41,7 +41,7 @@
 #include "controller/SlsSelectionManager.hxx"
 #include "controller/SlsTransferable.hxx"
 #include "DrawDocShell.hxx"
-#include "DrawDoc.hxx"
+#include "drawdoc.hxx"
 #include "app.hrc"
 #include <sfx2/bindings.hxx>
 #include <boost/bind.hpp>
