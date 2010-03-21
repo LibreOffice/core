@@ -56,10 +56,29 @@ using namespace ::com::sun::star::frame;
 
 namespace svt
 {
+
+struct DispatchInfo
+{
+    Reference< XDispatch > mxDispatch;
+    const URL maURL;
+    const Sequence< PropertyValue > maArgs;
+
+    DispatchInfo( const Reference< XDispatch >& xDispatch, const URL& rURL, const Sequence< PropertyValue >& rArgs )
+        : mxDispatch( xDispatch ), maURL( rURL ), maArgs( rArgs ) {}
+};
+
 struct ToolboxController_Impl
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >          m_xParentWindow;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xUrlTransformer;
+    rtl::OUString m_sModuleName;
+     sal_uInt16 m_nToolBoxId;
+
+    DECL_STATIC_LINK( ToolboxController_Impl, ExecuteHdl_Impl, DispatchInfo* );
+
+    ToolboxController_Impl()
+        : m_nToolBoxId( SAL_MAX_UINT16 )
+    {}
 };
 
 ToolboxController::ToolboxController(
@@ -168,11 +187,6 @@ void SAL_CALL ToolboxController::release() throw ()
 void SAL_CALL ToolboxController::initialize( const Sequence< Any >& aArguments )
 throw ( Exception, RuntimeException )
 {
-    const rtl::OUString aFrameName( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-    const rtl::OUString aCommandURLName( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
-    const rtl::OUString aServiceManagerName( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
-    const rtl::OUString aParentWindow( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
-
     bool bInitialized( true );
 
     {
@@ -194,14 +208,16 @@ throw ( Exception, RuntimeException )
         {
             if ( aArguments[i] >>= aPropValue )
             {
-                if ( aPropValue.Name.equalsAscii( "Frame" ))
+                if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Frame") ))
                     m_xFrame.set(aPropValue.Value,UNO_QUERY);
-                else if ( aPropValue.Name.equalsAscii( "CommandURL" ))
+                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("CommandURL") ))
                     aPropValue.Value >>= m_aCommandURL;
-                else if ( aPropValue.Name.equalsAscii( "ServiceManager" ))
+                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ServiceManager") ))
                     m_xServiceManager.set(aPropValue.Value,UNO_QUERY);
-                else if ( aPropValue.Name.equalsAscii( "ParentWindow" ))
+                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ParentWindow") ))
                     m_pImpl->m_xParentWindow.set(aPropValue.Value,UNO_QUERY);
+                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ModuleName" ) ) )
+                    aPropValue.Value >>= m_pImpl->m_sModuleName;
             }
         }
 
@@ -707,6 +723,10 @@ Reference< ::com::sun::star::awt::XWindow > ToolboxController::getParent() const
     return m_pImpl->m_xParentWindow;
 }
 
+const rtl::OUString& ToolboxController::getModuleName() const
+{
+    return m_pImpl->m_sModuleName;
+}
 
 void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequence< PropertyValue >& rArgs )
 {
@@ -718,11 +738,61 @@ void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequ
         getURLTransformer()->parseStrict( aURL );
 
         Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch( aURL, OUString(), 0 ), UNO_QUERY_THROW );
-        xDispatch->dispatch( aURL, rArgs );
+
+        Application::PostUserEvent( STATIC_LINK(0, ToolboxController_Impl, ExecuteHdl_Impl), new DispatchInfo( xDispatch, aURL, rArgs ) );
+
     }
     catch( Exception& )
     {
     }
+}
+
+//--------------------------------------------------------------------
+
+IMPL_STATIC_LINK_NOINSTANCE( ToolboxController_Impl, ExecuteHdl_Impl, DispatchInfo*, pDispatchInfo )
+{
+    pDispatchInfo->mxDispatch->dispatch( pDispatchInfo->maURL, pDispatchInfo->maArgs );
+    delete pDispatchInfo;
+    return 0;
+}
+
+void ToolboxController::enable( bool bEnable )
+{
+    ToolBox* pToolBox = 0;
+    sal_uInt16 nItemId = 0;
+    if( getToolboxId( nItemId, &pToolBox ) )
+    {
+        pToolBox->EnableItem( nItemId, bEnable ? TRUE : FALSE );
+    }
+}
+
+bool ToolboxController::getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox )
+{
+    if( (m_pImpl->m_nToolBoxId != SAL_MAX_UINT16) && (ppToolBox == 0) )
+        return m_pImpl->m_nToolBoxId;
+
+    ToolBox* pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );
+
+    if( (m_pImpl->m_nToolBoxId == SAL_MAX_UINT16) && pToolBox )
+    {
+        const sal_uInt16 nCount = pToolBox->GetItemCount();
+        for ( sal_uInt16 nPos = 0; nPos < nCount; ++nPos )
+        {
+            const sal_uInt16 nItemId = pToolBox->GetItemId( nPos );
+            if ( pToolBox->GetItemCommand( nItemId ) == String( m_aCommandURL ) )
+            {
+                m_pImpl->m_nToolBoxId = nItemId;
+                break;
+            }
+        }
+    }
+
+    if( ppToolBox )
+        *ppToolBox = pToolBox;
+
+    rItemId = m_pImpl->m_nToolBoxId;
+
+    return (rItemId != SAL_MAX_UINT16) && (( ppToolBox == 0) || (*ppToolBox != 0) );
 }
 
 } // svt

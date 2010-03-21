@@ -48,6 +48,8 @@
 #define INCLUDED_HASH_MAP
 #endif
 
+class ToolBox;
+
 namespace svt
 {
 struct ToolboxController_Impl;
@@ -104,10 +106,15 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createItemWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& Parent ) throw (::com::sun::star::uno::RuntimeException);
 
         const rtl::OUString& getCommandURL() const { return  m_aCommandURL; }
+        const rtl::OUString& getModuleName() const;
 
         void dispatchCommand( const ::rtl::OUString& sCommandURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
 
+        void enable( bool bEnable );
+
     protected:
+        bool getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox );
+
         struct Listener
         {
             Listener( const ::com::sun::star::util::URL& rURL, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& rDispatch ) :
