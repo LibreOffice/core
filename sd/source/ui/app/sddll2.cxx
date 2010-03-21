@@ -57,10 +57,10 @@
 #include <svx/f3dchild.hxx>
 #include <svx/grafctrl.hxx>
 #include <svx/tbxcustomshapes.hxx>
-#include <svx/fontworkgallery.hxx>
 #include <svx/lboxctrl.hxx>
 #include <svx/clipboardctl.hxx>
-#include <svx/extrusioncontrols.hxx>
+#include <svx/extrusioncolorcontrol.hxx>
+#include <svx/fontworkgallery.hxx>
 #include <svx/tbxcolor.hxx>
 #include <avmedia/mediaplayer.hxx>
 #include <avmedia/mediatoolbox.hxx>
@@ -195,15 +195,9 @@ void SdDLL::RegisterControllers()
 
     SvxClipBoardControl::RegisterControl( SID_PASTE, pMod );
 
-    svx::ExtrusionDepthControl::RegisterControl( SID_EXTRUSION_DEPTH_FLOATER, pMod );
-    svx::ExtrusionDirectionControl::RegisterControl( SID_EXTRUSION_DIRECTION_FLOATER, pMod );
-    svx::ExtrusionLightingControl::RegisterControl( SID_EXTRUSION_LIGHTING_FLOATER, pMod );
-    svx::ExtrusionSurfaceControl::RegisterControl( SID_EXTRUSION_SURFACE_FLOATER, pMod );
     svx::ExtrusionColorControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
-
     svx::FontWorkShapeTypeControl::RegisterControl( SID_FONTWORK_SHAPE_TYPE, pMod );
-    svx::FontWorkAlignmentControl::RegisterControl( SID_FONTWORK_ALIGNMENT_FLOATER, pMod );
-    svx::FontWorkCharacterSpacingControl::RegisterControl( SID_FONTWORK_CHARACTER_SPACING_FLOATER, pMod );
+
     ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );
     XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pMod );
     SdTemplateControl::RegisterControl( SID_STATUS_LAYOUT, pMod );
