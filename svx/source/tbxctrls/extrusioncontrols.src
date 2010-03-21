@@ -200,93 +200,81 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
     };
 };
 
-DockingWindow RID_SVXFLOAT_EXTRUSION_DEPTH
+String RID_SVXSTR_EXTRUSION_CUSTOM
 {
-    Border = FALSE ;
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    Sizeable = FALSE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
+    Text [ en-US ] = "~Custom...";
+};
 
-    Text [ en-US ] = "Extrusion Depth" ;
+String RID_SVXSTR_EXTRUSION_INFINITY
+{
+    Text [ en-US ] = "~Infinity";
+};
 
-    String STR_CUSTOM
-    {
-        Text [ en-US ] = "~Custom...";
-    };
+Image RID_SVXIMG_EXTRUSION_DEPTH_0
+{
+    ImageBitmap = Bitmap { File = "extrusion0inch_16.bmp"; };
+    MASKCOLOR
+};
+Image RID_SVXIMG_EXTRUSION_DEPTH_0_H
+{
+    ImageBitmap = Bitmap { File = "extrusion0inch_16_h.bmp"; };
+    MASKCOLOR
+};
 
-    String STR_INFINITY
-    {
-        Text [ en-US ] = "~Infinity";
-    };
+Image RID_SVXIMG_EXTRUSION_DEPTH_1
+{
+    ImageBitmap = Bitmap { File = "extrusion05inch_16.bmp"; };
+    MASKCOLOR
+};
+Image RID_SVXIMG_EXTRUSION_DEPTH_1_H
+{
+    ImageBitmap = Bitmap { File = "extrusion05inch_16_h.bmp"; };
+    MASKCOLOR
+};
 
-    Image IMG_DEPTH_0
-    {
-        ImageBitmap = Bitmap { File = "extrusion0inch_16.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_DEPTH_0_H
-    {
-        ImageBitmap = Bitmap { File = "extrusion0inch_16_h.bmp"; };
-        MASKCOLOR
-    };
+Image RID_SVXIMG_EXTRUSION_DEPTH_2
+{
+    ImageBitmap = Bitmap { File = "extrusion1inch_16.bmp"; };
+    MASKCOLOR
+};
 
-    Image IMG_DEPTH_1
-    {
-        ImageBitmap = Bitmap { File = "extrusion05inch_16.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_DEPTH_1_H
-    {
-        ImageBitmap = Bitmap { File = "extrusion05inch_16_h.bmp"; };
-        MASKCOLOR
-    };
+Image RID_SVXIMG_EXTRUSION_DEPTH_2_H
+{
+    ImageBitmap = Bitmap { File = "extrusion1inch_16_h.bmp"; };
+    MASKCOLOR
+};
 
-    Image IMG_DEPTH_2
-    {
-        ImageBitmap = Bitmap { File = "extrusion1inch_16.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_DEPTH_2_H
-    {
-        ImageBitmap = Bitmap { File = "extrusion1inch_16_h.bmp"; };
-        MASKCOLOR
-    };
+Image RID_SVXIMG_EXTRUSION_DEPTH_3
+{
+    ImageBitmap = Bitmap { File = "extrusion2inch_16.bmp"; };
+    MASKCOLOR
+};
+Image RID_SVXIMG_EXTRUSION_DEPTH_3_H
+{
+    ImageBitmap = Bitmap { File = "extrusion2inch_16_h.bmp"; };
+    MASKCOLOR
+};
 
-    Image IMG_DEPTH_3
-    {
-        ImageBitmap = Bitmap { File = "extrusion2inch_16.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_DEPTH_3_H
-    {
-        ImageBitmap = Bitmap { File = "extrusion2inch_16_h.bmp"; };
-        MASKCOLOR
-    };
+Image RID_SVXIMG_EXTRUSION_DEPTH_4
+{
+    ImageBitmap = Bitmap { File = "extrusion4inch_16.bmp"; };
+    MASKCOLOR
+};
+Image RID_SVXIMG_EXTRUSION_DEPTH_4_H
+{
+    ImageBitmap = Bitmap { File = "extrusion4inch_16_h.bmp"; };
+    MASKCOLOR
+};
 
-    Image IMG_DEPTH_4
-    {
-        ImageBitmap = Bitmap { File = "extrusion4inch_16.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_DEPTH_4_H
-    {
-        ImageBitmap = Bitmap { File = "extrusion4inch_16_h.bmp"; };
-        MASKCOLOR
-    };
-
-    Image IMG_DEPTH_INFINITY
-    {
-        ImageBitmap = Bitmap { File = "extrusioninfinity_16.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_DEPTH_INFINITY_H
-    {
-        ImageBitmap = Bitmap { File = "extrusioninfinity_16_h.bmp"; };
-        MASKCOLOR
-    };
+Image RID_SVXIMG_EXTRUSION_DEPTH_INFINITY
+{
+    ImageBitmap = Bitmap { File = "extrusioninfinity_16.bmp"; };
+    MASKCOLOR
+};
+Image RID_SVXIMG_EXTRUSION_DEPTH_INFINITY_H
+{
+    ImageBitmap = Bitmap { File = "extrusioninfinity_16_h.bmp"; };
+    MASKCOLOR
 };
 
 DockingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING

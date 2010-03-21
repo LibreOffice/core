@@ -183,6 +183,17 @@
             <value>com.sum.star.comp.framework.LanguageSelectionMenuController</value>
         </prop>
       </node>
+      <node oor:name="ExtrusionDepthController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ExtrusionDepthFloater</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ExtrusionDepthController</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="ToolBar">
       <node oor:name="c1" oor:op="replace">
@@ -238,7 +249,73 @@
         </prop>
         <prop oor:name="Controller">
           <value>com.sun.star.comp.sd.InsertSlideController</value>
-    </prop>
+        </prop>
+      </node>
+      <node oor:name="ExtrusionDepthController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ExtrusionDepthFloater</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.PopupMenuController</value>
+        </prop>
+      </node>
+    <node oor:name="ExtrusionDirectionFloater" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ExtrusionDirectionFloater</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ExtrusionDirectionController</value>
+        </prop>
+      </node>
+      <node oor:name="ExtrusionLightingFloater" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ExtrusionLightingFloater</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ExtrusionLightingController</value>
+        </prop>
+      </node>
+      <node oor:name="ExtrusionSurfaceFloater" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ExtrusionSurfaceFloater</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ExtrusionSurfaceController</value>
+        </prop>
+      </node>
+      <node oor:name="FontworkAlignmentFloater" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FontworkAlignmentFloater</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.FontworkAlignmentController</value>
+        </prop>
+      </node>
+      <node oor:name="FontworkCharacterSpacingFloater" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FontworkCharacterSpacingFloater</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.FontworkCharacterSpacingController</value>
+        </prop>
       </node>
       <node oor:name="c3" oor:op="replace">
         <prop oor:name="Command">

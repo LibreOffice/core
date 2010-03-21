@@ -69,7 +69,6 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\editstat.hxx %_DEST%\inc%_EXT%\svx\editstat.hxx
 ..\inc\editund2.hxx %_DEST%\inc%_EXT%\svx\editund2.hxx
 ..\inc\eerdll.hxx %_DEST%\inc%_EXT%\svx\editdll.hxx
-..\inc\extrusioncontrols.hxx %_DEST%\inc%_EXT%\svx\extrusioncontrols.hxx
 ..\inc\flstitem.hxx %_DEST%\inc%_EXT%\svx\flstitem.hxx
 ..\inc\fmgridif.hxx %_DEST%\inc%_EXT%\svx\fmgridif.hxx
 ..\inc\fmobjfac.hxx %_DEST%\inc%_EXT%\svx\fmobjfac.hxx
@@ -484,7 +483,7 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\viewlayoutitem.hxx %_DEST%\inc%_EXT%\svx\viewlayoutitem.hxx
 ..\inc\svx\zoomslideritem.hxx %_DEST%\inc%_EXT%\svx\zoomslideritem.hxx
 ..\inc\svx\zoomsliderctrl.hxx %_DEST%\inc%_EXT%\svx\zoomsliderctrl.hxx
-
+..\inc\svx\extrusioncolorcontrol.hxx %_DEST%\inc%_EXT%\svx\extrusioncolorcontrol.hxx
 
 ..\inc\svx\itemtype.hxx %_DEST%\inc%_EXT%\svx\itemtype.hxx
 ..\inc\svx\outliner.hxx %_DEST%\inc%_EXT%\svx\outliner.hxx
@@ -686,7 +685,6 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\table
 ..\inc\svx\selectioncontroller.hxx %_DEST%\inc%_EXT%\svx\selectioncontroller.hxx
 ..\inc\svx\helperhittest3d.hxx %_DEST%\inc%_EXT%\svx\helperhittest3d.hxx
 ..\inc\svx\optimprove.hxx %_DEST%\inc%_EXT%\svx\optimprove.hxx
-..\inc\svx\toolbarmenu.hxx %_DEST%\inc%_EXT%\svx\toolbarmenu.hxx
 ..\inc\svx\msvbahelper.hxx %_DEST%\inc%_EXT%\svx\msvbahelper.hxx
 
 ..\%__SRC%\bin\*-layout.zip %_DEST%\pck%_EXT%\*.*

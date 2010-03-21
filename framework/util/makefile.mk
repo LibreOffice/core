@@ -56,7 +56,6 @@ LIB1OBJFILES=   \
                 $(SLO)$/rootitemcontainer.obj                   \
                 $(SLO)$/constitemcontainer.obj                  \
                 $(SLO)$/jobconst.obj                            \
-                $(SLO)$/popupmenucontrollerbase.obj             \
                 $(SLO)$/mischelper.obj                          \
                 $(SLO)$/propertysethelper.obj
 
@@ -196,7 +195,8 @@ SHL3OBJS=       $(SLO)$/mediatypedetectionhelper.obj\
                 $(SLO)$/dispatchrecorder.obj        \
                 $(SLO)$/dispatchrecordersupplier.obj\
                 $(SLO)$/dispatchhelper.obj          \
-                $(SLO)$/popupmenudispatcher.obj           \
+                $(SLO)$/popupmenudispatcher.obj     \
+                $(SLO)$/popupmenucontroller.obj
 
 SHL3STDLIBS=    \
                 $(FWILIB)                           \
