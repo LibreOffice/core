@@ -57,7 +57,7 @@
 #include <osl/mutex.hxx>
 #include <toolkit/helper/mutexhelper.hxx>
 #include <toolkit/helper/macros.hxx>
-
+#include <com/sun/star/awt/grid/XGridSelectionListener.hpp>
 //  ----------------------------------------------------
 //  class ListenerMultiplexerBase
 //  ----------------------------------------------------
@@ -247,8 +247,12 @@ DECL_LISTENERMULTIPLEXER_START_DLLPUB( TreeEditListenerMultiplexer, ::com::sun::
     virtual void SAL_CALL nodeEdited( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& Node, const ::rtl::OUString& NewText ) throw (::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
-
-
+//  ----------------------------------------------------
+//  class SelectionListenerMultiplexer
+//  ----------------------------------------------------
+DECL_LISTENERMULTIPLEXER_START_DLLPUB( SelectionListenerMultiplexer, ::com::sun::star::awt::grid::XGridSelectionListener )
+    void SAL_CALL selectionChanged( const ::com::sun::star::awt::grid::GridSelectionEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+DECL_LISTENERMULTIPLEXER_END
 
 #endif // _TOOLKIT_HELPER_LISTENERMULTIPLEXER_HXX_
 

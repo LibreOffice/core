@@ -69,15 +69,16 @@ namespace svt { namespace table
         ,m_pImpl( new TableControl_Impl( *this ) )
         ,m_nCols(*( new ::com::sun::star::uno::Sequence< sal_Int32 >(0) ))
         ,m_aText(*( new ::com::sun::star::uno::Sequence< ::rtl::OUString >(0) ))
+        ,m_bSelectionChanged(false)
     {
-        m_pImpl->getDataWindow()->SetMouseButtonDownHdl( LINK( this, TableControl, ImplMouseButtonDownHdl ) );
-        m_pImpl->getDataWindow()->SetMouseButtonUpHdl( LINK( this, TableControl, ImplMouseButtonUpHdl ) );
+        m_pImpl->getDataWindow()->SetSelectHdl( LINK( this, TableControl, ImplSelectHdl ) );
         m_pAccessTable.reset(new ::svt::table::AccessibleTableControl_Impl());
     }
 
     //--------------------------------------------------------------------
     TableControl::~TableControl()
     {
+        ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
         DELETEZ( m_pImpl );
         if ( m_pAccessTable->m_pAccessible )
         {
@@ -107,6 +108,14 @@ namespace svt { namespace table
     {
         if ( !m_pImpl->getInputHandler()->KeyInput( *m_pImpl, rKEvt ) )
             Control::KeyInput( rKEvt );
+        else
+        {
+            if(m_bSelectionChanged)
+            {
+                Select();
+                m_bSelectionChanged = false;
+            }
+        }
     }
     //--------------------------------------------------------------------
     void TableControl::Resize()
@@ -163,13 +172,21 @@ namespace svt { namespace table
         return m_pImpl->goTo( _nColPos, _nRowPos );
     }
     //--------------------------------------------------------------------
-    void TableControl::InvalidateDataWindow(RowPos _nRowStart, bool _bRemoved)
+    void TableControl::InvalidateDataWindow(RowPos _nRowStart, RowPos _nRowEnd, bool _bRemoved)
     {
         Rectangle _rRect;
         if(_bRemoved)
-            return m_pImpl->invalidateRows(_nRowStart, _rRect);
+            m_pImpl->invalidateRows(_nRowStart, _rRect);
         else
-            return m_pImpl->invalidateRow(_nRowStart, _rRect);
+        {
+            if(m_bSelectionChanged)
+            {
+                m_pImpl->invalidateSelectedRegion(_nRowStart, _nRowEnd, _rRect);
+                m_bSelectionChanged = false;
+            }
+            else
+                m_pImpl->invalidateRow(_nRowStart, _rRect);
+        }
     }
     //--------------------------------------------------------------------
     std::vector<sal_Int32>& TableControl::GetSelectedRows()
@@ -177,7 +194,7 @@ namespace svt { namespace table
         return m_pImpl->getSelectedRows();
     }
     //--------------------------------------------------------------------
-    void TableControl::removeSelectedRow(RowPos _nRowPos)
+    void TableControl::RemoveSelectedRow(RowPos _nRowPos)
     {
         m_pImpl->removeSelectedRow(_nRowPos);
     }
@@ -186,20 +203,6 @@ namespace svt { namespace table
     RowPos TableControl::GetCurrentRow(const Point& rPoint)
     {
         return m_pImpl->getCurrentRow( rPoint );
-    }
-
-    //--------------------------------------------------------------------
-
-    IMPL_LINK( TableControl, ImplMouseButtonDownHdl, MouseEvent*, pData )
-    {
-        CallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, pData );
-        return 1;
-    }
-
-    IMPL_LINK( TableControl, ImplMouseButtonUpHdl, MouseEvent*, pData )
-    {
-        CallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONUP, pData );
-        return 1;
     }
 
     SelectionEngine* TableControl::getSelEngine()
@@ -342,6 +345,13 @@ namespace svt { namespace table
             cellContent = aRowContent[_nColPos];
     }
     return cellContent;
+}
+// -----------------------------------------------------------------------------
+
+::rtl::OUString TableControl::GetAccessibleCellText( sal_Int32 _nRowPos, sal_Int32 _nColPos)
+{
+    ::com::sun::star::uno::Any cellContent = GetCellContent(_nRowPos, _nColPos);
+    return m_pImpl->impl_convertToString(cellContent);
 }
 // -----------------------------------------------------------------------------
 
@@ -553,7 +563,23 @@ void TableControl::setTooltip(const ::com::sun::star::uno::Sequence< ::rtl::OUSt
     m_aText = aText;
     m_nCols = nCols;
 }
+// -----------------------------------------------------------------------
+void TableControl::selectionChanged(bool _bChanged)
+{
+    m_bSelectionChanged = _bChanged;
+}
+// -----------------------------------------------------------------------
 
+IMPL_LINK( TableControl, ImplSelectHdl, void*, EMPTYARG )
+{
+    Select();
+    return 1;
+}
+// -----------------------------------------------------------------------
+void TableControl::Select()
+{
+    ImplCallEventListenersAndHandler( VCLEVENT_TABLEROW_SELECT, m_aSelectHdl, this );
+}
 //........................................................................
 }} // namespace svt::table
 //........................................................................

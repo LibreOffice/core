@@ -35,9 +35,6 @@
 #include <toolkit/helper/servicenames.hxx>
 #include <rtl/ref.hxx>
 
-#include <com/sun/star/awt/XFixedText.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -57,9 +54,9 @@ namespace toolkit
 ///////////////////////////////////////////////////////////////////////
 
 DefaultGridDataModel::DefaultGridDataModel()
-: rowHeight(10),
+: rowHeight(0),
   rowHeaders(std::vector< ::rtl::OUString >()),
-  m_nRowHeaderWidth(7)
+  m_nRowHeaderWidth(10)
 {
 }
 

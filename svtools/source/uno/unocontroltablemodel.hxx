@@ -47,7 +47,6 @@
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/style/HorizontalAlignment.hpp>
-//#include <toolkit/helper/listenermultiplexer.hxx>
 
 
 using namespace ::svt::table;
@@ -55,7 +54,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt::grid;
 
 class UnoControlTableColumn : public IColumnModel
-    {
+{
     private:
         ColumnID        m_nID;
         String          m_sName;
@@ -123,8 +122,6 @@ class UnoControlTableColumn : public IColumnModel
         inline void            SetColumnWidth( ColPos _nColumn, TableMetrics _nWidth100thMM );
         /// retrieves the width of a column, in 1/100th millimeters
         inline TableMetrics    GetColumnWidth( ColPos _nColumn );
-
-        // TODO: setters and getters for ID, Name, Resizable, MinWidth, MaxWidth
 
     public:
         // ITableModel overridables

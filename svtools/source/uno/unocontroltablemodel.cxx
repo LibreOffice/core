@@ -70,6 +70,7 @@ using namespace ::com::sun::star::uno;
         ,m_nWidth( 4  )
         ,m_nMinWidth( 0 )   // no min width
         ,m_nMaxWidth( 0 )   // no max width
+        ,m_nPrefWidth ( 0 )
         ,m_xHorizontalAlign(com::sun::star::style::HorizontalAlignment(0))
     {
     }
@@ -83,11 +84,7 @@ using namespace ::com::sun::star::uno;
     //--------------------------------------------------------------------
     bool UnoControlTableColumn::setID( const ColumnID _nID )
     {
-        // TODO: conflict check
-
         m_nID = _nID;
-        // TODO: notifications?
-
         return true;
     }
 
@@ -101,7 +98,6 @@ using namespace ::com::sun::star::uno;
     void UnoControlTableColumn::setName( const String& _rName )
     {
         m_sName = _rName;
-        // TODO: notifications?
     }
     //--------------------------------------------------------------------
     bool UnoControlTableColumn::isResizable() const
@@ -113,7 +109,6 @@ using namespace ::com::sun::star::uno;
     void UnoControlTableColumn::setResizable( bool _bResizable )
     {
         m_bIsResizable = _bResizable;
-        // TODO: notifications?
     }
 
     //--------------------------------------------------------------------
@@ -126,7 +121,6 @@ using namespace ::com::sun::star::uno;
     void UnoControlTableColumn::setWidth( TableMetrics _nWidth )
     {
         m_nWidth = _nWidth;
-        // TODO: notifications?
     }
 
     //--------------------------------------------------------------------
@@ -139,7 +133,6 @@ using namespace ::com::sun::star::uno;
     void UnoControlTableColumn::setMinWidth( TableMetrics _nMinWidth )
     {
         m_nMinWidth = _nMinWidth;
-        // TODO: notifications?
     }
 
     //--------------------------------------------------------------------
@@ -152,7 +145,6 @@ using namespace ::com::sun::star::uno;
     void UnoControlTableColumn::setMaxWidth( TableMetrics _nMaxWidth )
     {
         m_nMaxWidth = _nMaxWidth;
-        // TODO: notifications?
     }
     //--------------------------------------------------------------------
     TableMetrics UnoControlTableColumn::getPreferredWidth() const
@@ -164,7 +156,6 @@ using namespace ::com::sun::star::uno;
     void UnoControlTableColumn::setPreferredWidth( TableMetrics _nPrefWidth )
     {
         m_nPrefWidth = _nPrefWidth;
-        // TODO: notifications?
     }
     //--------------------------------------------------------------------
     ::com::sun::star::style::HorizontalAlignment UnoControlTableColumn::getHorizontalAlign()
@@ -195,7 +186,6 @@ using namespace ::com::sun::star::uno;
         TableMetrics                    nColumnHeaderHeight;
         TableMetrics                    nRowHeaderWidth;
         std::vector<rtl::OUString>&     aRowHeadersTitle;
-        //std::vector<std::vector<rtl::OUString> >& aCellContent;
         std::vector<std::vector< Any > >&   aCellContent;
         ::com::sun::star::util::Color m_xLineColor;
         ::com::sun::star::util::Color m_xHeaderColor;
@@ -213,11 +203,10 @@ using namespace ::com::sun::star::uno;
             ,bHScroll           ( false     )
             ,pRenderer          (           )
             ,pInputHandler      (           )
-            ,nRowHeight         ( 15 )   // 40 mm
-            ,nColumnHeaderHeight( 10 )   // 50 mm
-            ,nRowHeaderWidth    ( 10 )    // 50 mm
+            ,nRowHeight         ( 0 )
+            ,nColumnHeaderHeight( 0 )
+            ,nRowHeaderWidth    ( 10 )
             ,aRowHeadersTitle   ( *(new std::vector<rtl::OUString>(0)))
-            //,aCellContent     ( *(new std::vector<std::vector<OUString> >(0)))
             ,aCellContent       ( *(new std::vector<std::vector< Any > >(0))    )
             ,m_xLineColor( 0xFFFFFF )
             ,m_xHeaderColor( 0xFFFFFF )
@@ -245,24 +234,12 @@ using namespace ::com::sun::star::uno;
     //--------------------------------------------------------------------
     UnoControlTableModel::~UnoControlTableModel()
     {
-        //if(!m_pImpl->aCellContent.empty())
-        //{
-        //  ::std::vector<std::vector<Any> >::iterator iter = m_pImpl->aCellContent.begin();
-        //  for(;iter!=m_pImpl->aCellContent.end();++iter)
-        //  {
-        //      std::vector<Any> vectIn = *iter;
-        //      std::vector<Any>::iterator iterIn = vectIn.begin();
-        //      for(;iterIn!=vectIn.end();++iterIn)
-        //          DELETEZ(*iterIn);
-        //  }
-        //}
         DELETEZ( m_pImpl );
     }
 
     //--------------------------------------------------------------------
     TableSize UnoControlTableModel::getColumnCount() const
     {
-        //m_pImpl->aColumns.resize( m_xColumnModel->getColumnCount());
         return (TableSize)m_pImpl->aColumns.size();
     }
 
@@ -454,54 +431,9 @@ using namespace ::com::sun::star::uno;
         return m_pImpl->bHScroll;
     }
     //--------------------------------------------------------------------
- //   void UnoControlTableModel::setCellContent(std::vector<std::vector<rtl::OUString> > cellContent)
- //   {
-    //  //if(cellContent.empty())
-    //  //{
-    //  //  unsigned int i = m_pImpl->aColumns.size();
-    //  //  std::vector<rtl::OUString>& emptyCells;
-    //  //  while(i!=0)
-    //  //  {
-    //  //      cellContent.push_back(emptyCells);
-    //  //      --i;
-    //  //  }
-    //  //}
-    //  //std::vector<rtl::OUString> cCC;
-    //  //for(::std::vector<std::vector<rtl::OUString> >::iterator iter = cellContent.begin(); iter!= cellContent.end();++iter)
-    //  //{
-    //  //  cCC = *iter;
-    //  //  m_pImpl->aCellContent.push_back(cCC);
-    //  //}
-    //  m_pImpl->aCellContent.swap( cellContent );
- //   }
-
-    //std::vector<std::vector<rtl::OUString> >& UnoControlTableModel::getCellContent()
- //   {
-    //  return m_pImpl->aCellContent;
- //   }
-    //--------------------------------------------------------------------
     void UnoControlTableModel::setCellContent(std::vector<std::vector< Any > > cellContent)
     {
-        //::vos::OGuard aGuard( GetMutex() );
-        /*
-        if(cellContent.empty())
-        {
-            unsigned int i = m_pImpl->aColumns.size();
-            std::vector<Window> emptyCells;
-            while(i!=0)
-            {
-                cellContent.push_back(emptyCells);
-                --i;
-            }
-        }
-        */
-
-        m_pImpl->aCellContent.swap( cellContent );
-
-        /*for(::std::vector<std::vector<Window> >::iterator iter = cellContent.begin(); iter!= cellContent.end();++iter)
-        {
-            m_pImpl->aCellContent.push_back(*iter);
-        }*/
+        m_pImpl->aCellContent = cellContent;
     }
 
     std::vector<std::vector< Any > >& UnoControlTableModel::getCellContent()
@@ -512,20 +444,7 @@ using namespace ::com::sun::star::uno;
     //--------------------------------------------------------------------
     void UnoControlTableModel::setRowHeaderName(std::vector<rtl::OUString> cellColumnContent)
     {
-        if(cellColumnContent.empty())
-        {
-            unsigned int i = m_pImpl->aColumns.size();
-            while(i!=0)
-            {
-                cellColumnContent.push_back(rtl::OUString::createFromAscii(""));
-                --i;
-            }
-        }
-        for(::std::vector<rtl::OUString>::iterator iter = cellColumnContent.begin(); iter!= cellColumnContent.end();++iter)
-        {
-            rtl::OUString s = *iter;
-            m_pImpl->aRowHeadersTitle.push_back(*iter);
-        }
+        m_pImpl->aRowHeadersTitle = cellColumnContent;
     }
 
     std::vector<rtl::OUString>& UnoControlTableModel::getRowHeaderName()

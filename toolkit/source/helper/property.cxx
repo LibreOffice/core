@@ -286,8 +286,9 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_3     ( "ReferenceDevice",        REFERENCE_DEVICE,       Reference< XDevice >,BOUND, MAYBEDEFAULT, TRANSIENT ),
             DECL_PROP_3     ( "EvenRowBackgroundColor",  GRID_EVEN_ROW_BACKGROUND,     sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_3     ( "HeaderBackgroundColor",   GRID_HEADER_BACKGROUND,       sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
-            DECL_PROP_3     ( "LineColor",               GRID_LINE_COLOR,              sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID )
-            };
+            DECL_PROP_3     ( "LineColor",               GRID_LINE_COLOR,              sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "RowBackgroundColor",     GRID_ROW_BACKGROUND,     sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID )
+    };
             pPropertyInfos = aImplPropertyInfos;
             nElements = sizeof( aImplPropertyInfos ) / sizeof( ImplPropertyInfo );
         }
