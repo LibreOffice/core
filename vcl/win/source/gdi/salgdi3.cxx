@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -895,11 +895,7 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXA& rE
             aDFA.mnQuality += 500;
     }
 
-    aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
-    aDFA.meAntiAlias = ANTIALIAS_DONTKNOW;
-
     // TODO: add alias names
-
     return aDFA;
 }
 
@@ -973,9 +969,6 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
         ||  aDFA.maName.EqualsAscii( "ZapfDingbats" ) )
             aDFA.mnQuality += 500;
     }
-
-    aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
-    aDFA.meAntiAlias = ANTIALIAS_DONTKNOW;
 
     // TODO: add alias names
     return aDFA;
@@ -2305,8 +2298,6 @@ static bool ImplGetFontAttrFromFile( const String& rFontFileURL,
     rDFA.mePitch      = PITCH_DONTKNOW;;
     rDFA.mbSubsettable= true;
     rDFA.mbEmbeddable = false;
-    rDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
-    rDFA.meAntiAlias = ANTIALIAS_DONTKNOW;
 
     // Create temporary file name
     char aFileName[] = "soAAT.fot";
@@ -2433,8 +2424,6 @@ bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     aDFA.mePitch      = PITCH_DONTKNOW;;
     aDFA.mbSubsettable= true;
     aDFA.mbEmbeddable = false;
-    aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
-    aDFA.meAntiAlias = ANTIALIAS_DONTKNOW;
 
     /*
     // TODO: improve ImplDevFontAttributes using the "font resource file"
