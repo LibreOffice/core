@@ -60,8 +60,6 @@ namespace accessibility {
 using namespace com::sun::star::accessibility::AccessibleStateType;
 // ============================================================================
 
-// Ctor/Dtor/disposing --------------------------------------------------------
-
 DBG_NAME( AccessibleGridControlBase )
 
 AccessibleGridControlBase::AccessibleGridControlBase(
@@ -76,13 +74,10 @@ AccessibleGridControlBase::AccessibleGridControlBase(
     m_aDescription( rTable.GetAccessibleObjectDescription( eObjType ) ),
     m_aClientId(0)
 {
-    DBG_CTOR( AccessibleGridControlBase, NULL );
 }
 
 AccessibleGridControlBase::~AccessibleGridControlBase()
 {
-//    DBG_DTOR( AccessibleGridControlBase, NULL );
-
     if( isAlive() )
     {
         // increment ref count to prevent double call of Dtor
@@ -521,7 +516,6 @@ GridControlAccessibleElement::GridControlAccessibleElement( const Reference< XAc
                                                             AccessibleTableControlObjType  eObjType )
     :AccessibleGridControlBase( rxParent, rTable, eObjType )
 {
-//  DBG_CTOR( GridControlAccessibleElement, NULL );
 }
 
 // XInterface -----------------------------------------------------------------
@@ -540,7 +534,6 @@ Reference< XAccessibleContext > SAL_CALL GridControlAccessibleElement::getAccess
 // ----------------------------------------------------------------------------
 GridControlAccessibleElement::~GridControlAccessibleElement( )
 {
-//  DBG_DTOR( GridControlAccessibleElement, NULL );
 }
 
 // ============================================================================
