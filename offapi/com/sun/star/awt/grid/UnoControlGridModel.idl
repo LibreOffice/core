@@ -101,10 +101,11 @@ service UnoControlGridModel
         <p>The default value is <member scope="com::sun::star::view">SelectionType::SINGLE</member></p>
     */
     [property] ::com::sun::star::view::SelectionType SelectionModel;
-    /** Specifies the background color of odd rows. If color for even rows isn't set, then specifies
-        the color of all rows. Default value is white.
+
+    /** Specifies the background color of rows. If color for even rows is set, then specifies
+        the color of odd rows. Default value is white.
     */
-    [property] ::com::sun::star::util::Color BackgroundColor;
+    [property] ::com::sun::star::util::Color RowBackgroundColor;
 
     /** Specifies the background color of even rows. Default value is white.
     */
