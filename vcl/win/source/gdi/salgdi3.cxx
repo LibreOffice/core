@@ -386,17 +386,17 @@ static Unicode2LangType aLangFromCodeChart[]= {
     {0x31A0, 0x31BF, LANGUAGE_CHINESE_TRADITIONAL}, // Bopomofo Extended
     {0x31C0, 0x31EF, LANGUAGE_DEFAULT_CJK},         // CJK Ideographs
     {0x31F0, 0x31FF, LANGUAGE_JAPANESE},            // Japanese Katakana Phonetic Extensions
-    {0x3200, 0x321F, LANGUAGE_KOREAN},
-    {0x3220, 0x325F, LANGUAGE_DEFAULT_CJK},
-    {0x3260, 0x327F, LANGUAGE_KOREAN},
-    {0x3280, 0x32CF, LANGUAGE_DEFAULT_CJK},
+    {0x3200, 0x321F, LANGUAGE_KOREAN},              // Parenthesized Hangul
+    {0x3220, 0x325F, LANGUAGE_DEFAULT_CJK},         // Parenthesized Ideographs
+    {0x3260, 0x327F, LANGUAGE_KOREAN},              // Circled Hangul
+    {0x3280, 0x32CF, LANGUAGE_DEFAULT_CJK},         // Circled Ideographs
     {0x32d0, 0x32FF, LANGUAGE_JAPANESE},            // Japanese Circled Katakana
     {0x3400, 0x4DBF, LANGUAGE_DEFAULT_CJK},         // CJK Unified Ideographs Extension A
     {0x4E00, 0x9FCF, LANGUAGE_DEFAULT_CJK},         // Unified CJK Ideographs
     {0xA720, 0xA7FF, LANGUAGE_ENGLISH},             // Latin Extended-D
     {0xAC00, 0xD7AF, LANGUAGE_KOREAN},              // Hangul Syllables, Korean-specific
     {0xF900, 0xFAFF, LANGUAGE_DEFAULT_CJK},         // CJK Compatibility Ideographs
-    {0xFB00, 0xFB4F, LANGUAGE_HEBREW},              // Hebrew present forms
+    {0xFB00, 0xFB4F, LANGUAGE_HEBREW},              // Hebrew Presentation Forms
     {0xFB50, 0xFDFF, LANGUAGE_ARABIC_PRIMARY_ONLY}, // Arabic Presentation Forms-A
     {0xFE70, 0xFEFE, LANGUAGE_ARABIC_PRIMARY_ONLY}, // Arabic Presentation Forms-B
     {0xFF65, 0xFF9F, LANGUAGE_JAPANESE},            // Japanese Halfwidth Katakana variant
@@ -484,7 +484,7 @@ class WinGlyphFallbackSubstititution
 :    public ImplGlyphFallbackFontSubstitution
 {
 public:
-    WinGlyphFallbackSubstititution( HDC );
+    explicit    WinGlyphFallbackSubstititution( HDC );
 
     bool FindFontSubstitute( ImplFontSelectData&, rtl::OUString& rMissingChars ) const;
 private:
