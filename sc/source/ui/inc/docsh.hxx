@@ -399,6 +399,7 @@ public:
 
     static ScDocShell* GetShellByNum( USHORT nDocNo );
     static String   GetOwnFilterName();
+        static String   GetHtmlFilterName();
     static String   GetWebQueryFilterName();
     static String   GetAsciiFilterName();
     static String   GetLotusFilterName();

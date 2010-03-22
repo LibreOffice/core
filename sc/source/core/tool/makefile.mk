@@ -105,6 +105,7 @@ SLOFILES =  \
         $(SLO)$/refupdat.obj \
         $(SLO)$/scmatrix.obj \
         $(SLO)$/sctictac.obj \
+        $(SLO)$/stringutil.obj \
         $(SLO)$/subtotal.obj \
         $(SLO)$/token.obj \
         $(SLO)$/unitconv.obj \
@@ -131,6 +132,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/prnsave.obj \
         $(SLO)$/queryparam.obj \
         $(SLO)$/reftokenhelper.obj \
+        $(SLO)$/stringutil.obj \
         $(SLO)$/token.obj
 
 # [kh] POWERPC compiler problem
