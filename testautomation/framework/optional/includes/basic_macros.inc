@@ -115,7 +115,7 @@ testcase tMakro_Dialog
     hCloseBasicIde()
     
     printlog( "Open the Basic Macro Organizer" )
-    brc = hOpenBasicOrganizerFromDoc()
+    ToolsMacro_uno
 
     printlog( "Select the last Module for the current document" )
     iPos = hSelectTheLastNode( MakroAus )
@@ -316,7 +316,7 @@ testcase tMakro_Dialog
     endif
 
     printlog( "Open the BASIC Macro Organizer" )
-    brc = hOpenBasicOrganizerFromDoc()
+    ToolsMacro_uno
     
     printlog( "Select the last macro from the list" )
     kontext "makro"
@@ -365,7 +365,7 @@ testcase tMakro_Dialog
     endif
     
     printlog( "Open macro organizer from the current document" )
-    brc = hOpenBasicOrganizerFromDoc()
+    ToolsMacro_uno
     
     printlog( "Select the last item in the treelist" )
     brc = hSelectTheLastNode( MakroAus )

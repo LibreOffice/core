@@ -97,7 +97,7 @@ testcase tProtectedLibraries
     printlog( "Restart the application" )
     call ExitRestartTheOffice()
     
-    hOpenBasicOrganizerFromDoc()
+    ToolsMacro_uno
     
     printlog( "Select the protected library" )
     Kontext "Makro"

@@ -583,47 +583,33 @@ function hInitBasicIde( cModule as string ) as boolean
 
     '///<h3>Get from a new document to the Basic IDE in one go</h3>
     '///<i>Starting point: New, plain document</i>
-    '///<ul>
-    
-    use "global\tools\includes\optional\t_basic_organizer_tools.inc"
-    use "global\tools\includes\optional\t_listfuncs.inc"
 
     const CFN = "hInitBasicIde::"
 
-    if ( cModule = "" ) then
-        warnlog( CFN & "Invalid parameter passed to function" )
-        hInitBasicIde() = false
-        exit function
-    endif        
-    
-    '///+<li>Open the basic Organizer</li>
-    if ( not hOpenBasicOrganizerFromDoc() ) then
-        warnlog( CFN & "Could not open the Basic Organizer, aborting" )
-        hInitBasicIde() = false
-        exit function
-    endif
+    ToolsMacro_uno
 
-    '///+<li>Create a new module for the current document</li>
-    if ( not hCreateModuleForDoc( cModule ) ) then
-        warnlog( CFN & "The Basic-IDE is not open, aborting" )
-        hInitBasicIde() = false
-        
-        kontext "Makro"
-        if ( Makro.exists() ) then
-            printlog( CFN & "Closed Macro Organizer" )
-            Makro.cancel()
+    kontext "Makro"
+    if ( Makro.exists( 2 ) ) then
+
+        if ( hCreateModuleForDoc( cModule ) ) then
+
+            kontext "BasicIDE"
+            if ( BasicIDE.exists( 2 ) ) then
+
+                BasicIDE.maximize()
+                hInitBasicIde() = true
+            else
+                warnlog( CFN & "Failed to open BASIC IDE" )
+                hInitBasicIde() = false
+            endif
+        else
+            warnlog( CFN & "Failed to create a module for the current document" )
+            hInitBasicIde() = false
         endif
-        exit function
+    else
+        warnlog( CFN & "Failed to open macro organizer" )
+        hInitBasicIde() = false
     endif
-    
-    '///+<li>Maximize the BasicIDE</li>
-    kontext "BasicIde"
-    BasicIde.maximize()
-    
-    '///+<li>Verify that the Basic IDE is open, return TRUE on success, FASLE on failure</li>
-    hInitBasicIde() = true
-    '///</ul>
-    '///NOTE: The function will try to to clean up after itself in case of any error    
     
 end function 
 

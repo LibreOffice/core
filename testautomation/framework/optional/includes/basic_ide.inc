@@ -160,7 +160,7 @@ testcase tBasic_IDE_Toolbar_Dialogs
     hCreateDocument()
 
     printlog "create a new module "
-    brc = hOpenBasicOrganizerFromDoc()
+    ToolsMacro_uno
     brc = hCreateModuleForDoc()
 
     kontext "basicide"
