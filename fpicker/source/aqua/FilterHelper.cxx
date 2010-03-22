@@ -391,29 +391,24 @@ sal_Bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-//    OSL_TRACE("filter event handler called");
-
     if (m_aCurrentFilter == NULL) {
         OSL_TRACE("filter name is null");
         return sal_True;
     }
 
     NSFileManager *manager = [NSFileManager defaultManager];
-    MacOSBOOL bDir = NO;
-    if ([manager fileExistsAtPath:sFilename isDirectory:&bDir] && bDir == YES) {
-//        OSL_TRACE(" folder");
-        return sal_True;
+    NSDictionary* pAttribs = [manager fileAttributesAtPath: sFilename traverseLink: NO];
+    if( pAttribs )
+    {
+        NSObject* pType = [pAttribs objectForKey: NSFileType];
+        if( pType && [pType isKindOfClass: [NSString class]] )
+        {
+            NSString* pT = (NSString*)pType;
+            if( [pT isEqualToString: NSFileTypeDirectory]    ||
+                [pT isEqualToString: NSFileTypeSymbolicLink] )
+                return sal_True;
+        }
     }
-
-    NSFileWrapper *wrapper = [[NSFileWrapper alloc] initWithPath:sFilename];
-    MacOSBOOL bIsLink = [wrapper isSymbolicLink];
-    [wrapper release];
-    if (bIsLink) {
-//    OSL_TRACE(" symboliclink");
-        return sal_True;
-    }
-
-//    OSL_TRACE(" file");
 
     FilterList::iterator filter = ::std::find_if(m_pFilterList->begin(), m_pFilterList->end(), FilterTitleMatch(m_aCurrentFilter));
     if (filter == m_pFilterList->end()) {
@@ -424,7 +419,6 @@ sal_Bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
     OUStringList suffixList = filter->getFilterSuffixList();
 
     {
-//        OSL_TRACE(" starting to work");
         rtl::OUString aName = [sFilename OUString];
         rtl::OUString allMatcher = rtl::OUString::createFromAscii(".*");
         for(OUStringList::iterator iter = suffixList.begin(); iter != suffixList.end(); iter++) {

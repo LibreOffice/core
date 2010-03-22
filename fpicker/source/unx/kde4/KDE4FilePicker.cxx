@@ -139,8 +139,6 @@ KDE4FilePicker::KDE4FilePicker( const uno::Reference<lang::XMultiServiceFactory>
 
     //default mode
     _dialog->setOperationMode(KFileDialog::Opening);
-
-    _dialog->setStyleSheet("color: black;");
 }
 
 KDE4FilePicker::~KDE4FilePicker()
@@ -185,6 +183,7 @@ sal_Int16 SAL_CALL KDE4FilePicker::execute()
 
     _dialog->clearFilter();
     _dialog->setFilter(_filter);
+    _dialog->filterWidget()->setEditable(false);
 
     //block and wait for user input
     if (_dialog->exec() == KFileDialog::Accepted)
@@ -236,7 +235,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL KDE4FilePicker::getFiles()
         QCheckBox *cb = dynamic_cast<QCheckBox*> (
             _customWidgets[ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION ]);
 
-        if (cb->isChecked())
+        if (cb && cb->isChecked())
         {
             extension = _dialog->currentFilter(); // assuming filter value is like this *.ext
             extension.replace("*","");
@@ -631,13 +630,13 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
 
         case FILESAVE_AUTOEXTENSION:
             operationMode = KFileDialog::Saving;
-            addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION );
+            //addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION );
             break;
 
         case FILESAVE_AUTOEXTENSION_PASSWORD:
         {
             operationMode = KFileDialog::Saving;
-            addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION );
+            //addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION );
             addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD );
             break;
         }
@@ -688,6 +687,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
     }
 
     _dialog->setOperationMode(operationMode);
+    _dialog->setConfirmOverwrite(true);
 }
 
 void SAL_CALL KDE4FilePicker::cancel()
