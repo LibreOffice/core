@@ -46,9 +46,6 @@ namespace sdr
             ViewObjectContactOfGroup(ObjectContact& rObjectContact, ViewContact& rViewContact);
             virtual ~ViewObjectContactOfGroup();
 
-            // test this VOC for visibility concerning model-view stuff like e.g. Layer
-            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const;
-
             // This method recursively paints the draw hierarchy.
             virtual drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const;
         };

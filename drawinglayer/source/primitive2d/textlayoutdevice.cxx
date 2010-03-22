@@ -215,8 +215,8 @@ namespace drawinglayer
 
         double TextLayouterDevice::getTextWidth(
             const String& rText,
-            xub_StrLen nIndex,
-            xub_StrLen nLength) const
+            sal_uInt32 nIndex,
+            sal_uInt32 nLength) const
         {
             return mrDevice.GetTextWidth(rText, nIndex, nLength);
         }
@@ -224,15 +224,22 @@ namespace drawinglayer
         bool TextLayouterDevice::getTextOutlines(
             basegfx::B2DPolyPolygonVector& rB2DPolyPolyVector,
             const String& rText,
-            xub_StrLen nIndex,
-            xub_StrLen nLength,
-            const ::std::vector< double >& rDXArray)
+            sal_uInt32 nIndex,
+            sal_uInt32 nLength,
+            const ::std::vector< double >& rDXArray) const
         {
             const sal_uInt32 nDXArrayCount(rDXArray.size());
+            sal_uInt32 nTextLength(nLength);
+            const sal_uInt32 nStringLength(rText.Len());
+
+            if(nTextLength + nIndex > nStringLength)
+            {
+                nTextLength = nStringLength - nIndex;
+            }
 
             if(nDXArrayCount)
             {
-                OSL_ENSURE(nDXArrayCount == nLength, "DXArray size does not correspond to text portion size (!)");
+                OSL_ENSURE(nDXArrayCount == nTextLength, "DXArray size does not correspond to text portion size (!)");
                 std::vector< sal_Int32 > aIntegerDXArray(nDXArrayCount);
 
                 for(sal_uInt32 a(0); a < nDXArrayCount; a++)
@@ -266,10 +273,18 @@ namespace drawinglayer
 
         basegfx::B2DRange TextLayouterDevice::getTextBoundRect(
             const String& rText,
-            xub_StrLen nIndex,
-            xub_StrLen nLength) const
+            sal_uInt32 nIndex,
+            sal_uInt32 nLength) const
         {
-            if(nLength)
+            sal_uInt32 nTextLength(nLength);
+            const sal_uInt32 nStringLength(rText.Len());
+
+            if(nTextLength + nIndex > nStringLength)
+            {
+                nTextLength = nStringLength - nIndex;
+            }
+
+            if(nTextLength)
             {
                 Rectangle aRect;
 
@@ -283,7 +298,9 @@ namespace drawinglayer
                 // #i104432#, #i102556# take empty results into account
                 if(!aRect.IsEmpty())
                 {
-                    return basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+                    return basegfx::B2DRange(
+                        aRect.Left(), aRect.Top(),
+                        aRect.Right(), aRect.Bottom());
                 }
             }
 
@@ -306,11 +323,41 @@ namespace drawinglayer
             const Rectangle& rRectangle,
             const String& rText,
             sal_uInt16 nStyle,
-            GDIMetaFile& rGDIMetaFile)
+            GDIMetaFile& rGDIMetaFile) const
         {
             mrDevice.AddTextRectActions(
                 rRectangle, rText, nStyle, rGDIMetaFile);
         }
+
+        ::std::vector< double > TextLayouterDevice::getTextArray(
+            const String& rText,
+            sal_uInt32 nIndex,
+            sal_uInt32 nLength) const
+        {
+            ::std::vector< double > aRetval;
+            sal_uInt32 nTextLength(nLength);
+            const sal_uInt32 nStringLength(rText.Len());
+
+            if(nTextLength + nIndex > nStringLength)
+            {
+                nTextLength = nStringLength - nIndex;
+            }
+
+            if(nTextLength)
+            {
+                aRetval.reserve(nTextLength);
+                sal_Int32* pArray = new sal_Int32[nTextLength];
+                mrDevice.GetTextArray(rText, pArray, nIndex, nLength);
+
+                for(sal_uInt32 a(0); a < nTextLength; a++)
+                {
+                    aRetval.push_back(pArray[a]);
+                }
+            }
+
+            return aRetval;
+        }
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 

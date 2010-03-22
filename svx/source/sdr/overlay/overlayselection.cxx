@@ -35,7 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <drawinglayer/primitive2d/invertprimitive2d.hxx>
-#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 
@@ -141,8 +141,8 @@ namespace sdr
                 {
                     // embed all rectangles in transparent paint
                     const double fTransparence(mnLastTransparence / 100.0);
-                    const drawinglayer::primitive2d::Primitive2DReference aUnifiedAlpha(
-                        new drawinglayer::primitive2d::UnifiedAlphaPrimitive2D(
+                    const drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparence(
+                        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                             aRetval,
                             fTransparence));
 
@@ -156,13 +156,13 @@ namespace sdr
 
                         // add both to result
                         aRetval.realloc(2);
-                        aRetval[0] = aUnifiedAlpha;
+                        aRetval[0] = aUnifiedTransparence;
                         aRetval[1] = aSelectionOutline;
                     }
                     else
                     {
                         // just add transparent part
-                        aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedAlpha, 1);
+                        aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedTransparence, 1);
                     }
                 }
             }

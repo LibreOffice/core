@@ -34,8 +34,13 @@
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
+
 class SfxItemSet;
-namespace drawinglayer { namespace attribute { class SdrFormTextOutlineAttribute; }}
+
+namespace drawinglayer { namespace attribute {
+    class ImpSdrFormTextAttribute;
+    class SdrFormTextOutlineAttribute;
+}}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -46,53 +51,36 @@ namespace drawinglayer
         class SdrFormTextAttribute
         {
         private:
-            // FormText (FontWork) Attributes
-            sal_Int32                                   mnFormTextDistance;     // distance from line in upright direction
-            sal_Int32                                   mnFormTextStart;        // shift from polygon start
-            sal_Int32                                   mnFormTextShdwXVal;     // shadow distance or 10th degrees
-            sal_Int32                                   mnFormTextShdwYVal;     // shadow distance or scaling
-            sal_uInt16                                  mnFormTextShdwTransp;   // shadow transparence
-            XFormTextStyle                              meFormTextStyle;        // on/off and char orientation
-            XFormTextAdjust                             meFormTextAdjust;       // adjustment (left/right/center) and scale
-            XFormTextShadow                             meFormTextShadow;       // shadow mode
-            Color                                       maFormTextShdwColor;    // shadow color
-
-            // outline attributes; used when getFormTextOutline() is true and (for
-            // shadow) when getFormTextShadow() != XFTSHADOW_NONE
-            SdrFormTextOutlineAttribute*                mpOutline;
-            SdrFormTextOutlineAttribute*                mpShadowOutline;
-
-            // bitfield
-            unsigned                                    mbFormTextMirror : 1;   // change orientation
-            unsigned                                    mbFormTextOutline : 1;  // show contour of objects
+            ImpSdrFormTextAttribute*            mpSdrFormTextAttribute;
 
         public:
+            /// constructors/assignmentoperator/destructor
             SdrFormTextAttribute(const SfxItemSet& rSet);
-            ~SdrFormTextAttribute();
-
-            // copy constructor and assigment operator
+            SdrFormTextAttribute();
             SdrFormTextAttribute(const SdrFormTextAttribute& rCandidate);
             SdrFormTextAttribute& operator=(const SdrFormTextAttribute& rCandidate);
+            ~SdrFormTextAttribute();
+
+            // checks if the incarnation is default constructed
+            bool isDefault() const;
 
             // compare operator
             bool operator==(const SdrFormTextAttribute& rCandidate) const;
 
-            // data access
-            sal_Int32 getFormTextDistance() const { return mnFormTextDistance; }
-            sal_Int32 getFormTextStart() const { return mnFormTextStart; }
-            sal_Int32 getFormTextShdwXVal() const { return mnFormTextShdwXVal; }
-            sal_Int32 getFormTextShdwYVal() const { return mnFormTextShdwYVal; }
-            sal_uInt16 getFormTextShdwTransp() const { return mnFormTextShdwTransp; }
-            XFormTextStyle getFormTextStyle() const { return meFormTextStyle; }
-            XFormTextAdjust getFormTextAdjust() const { return meFormTextAdjust; }
-            XFormTextShadow getFormTextShadow() const { return meFormTextShadow; }
-            Color getFormTextShdwColor() const { return maFormTextShdwColor; }
-
-            const SdrFormTextOutlineAttribute* getOutline() const { return mpOutline; }
-            const SdrFormTextOutlineAttribute* getShadowOutline() const { return mpShadowOutline; }
-
-            bool getFormTextMirror() const { return mbFormTextMirror; }
-            bool getFormTextOutline() const { return mbFormTextOutline; }
+            // data read access
+            sal_Int32 getFormTextDistance() const;
+            sal_Int32 getFormTextStart() const;
+            sal_Int32 getFormTextShdwXVal() const;
+            sal_Int32 getFormTextShdwYVal() const;
+            sal_uInt16 getFormTextShdwTransp() const;
+            XFormTextStyle getFormTextStyle() const;
+            XFormTextAdjust getFormTextAdjust() const;
+            XFormTextShadow getFormTextShadow() const;
+            Color getFormTextShdwColor() const;
+            const SdrFormTextOutlineAttribute& getOutline() const;
+            const SdrFormTextOutlineAttribute& getShadowOutline() const;
+            bool getFormTextMirror() const;
+            bool getFormTextOutline() const;
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer

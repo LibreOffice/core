@@ -54,14 +54,11 @@
 #include <svx/sdsxyitm.hxx>
 #include <svx/sdshcitm.hxx>
 #include <svx/sdshtitm.hxx>
-#include <drawinglayer/attribute/fillattribute.hxx>
 #include <drawinglayer/attribute/sdrfillbitmapattribute.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
-#include <drawinglayer/attribute/sdrattribute.hxx>
 #include <svx/svdotext.hxx>
 #include <drawinglayer/attribute/fillbitmapattribute.hxx>
 #include <svx/sdr/attribute/sdrtextattribute.hxx>
-#include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svl/itempool.hxx>
 #include <vcl/svapp.hxx>
@@ -69,10 +66,22 @@
 #include <svx/svx3ditems.hxx>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
-#include <drawinglayer/attribute/sdrattribute3d.hxx>
 #include <drawinglayer/attribute/sdrallattribute3d.hxx>
 #include <svx/rectenum.hxx>
 #include <svx/sdtfchim.hxx>
+#include <svx/svdoutl.hxx>
+#include <svx/svdmodel.hxx>
+#include <editstat.hxx>
+#include <drawinglayer/attribute/fillhatchattribute.hxx>
+#include <drawinglayer/attribute/fillgradientattribute.hxx>
+#include <svx/sdr/attribute/sdrshadowtextattribute.hxx>
+#include <svx/sdr/attribute/sdrlineshadowtextattribute.hxx>
+#include <svx/sdr/attribute/sdrformtextattribute.hxx>
+#include <svx/sdr/attribute/sdrlinefillshadowtextattribute.hxx>
+#include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
+#include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
+#include <drawinglayer/attribute/sdrlightattribute3d.hxx>
+#include <svx/sdr/attribute/sdrfilltextattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -214,9 +223,8 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        attribute::SdrLineAttribute* createNewSdrLineAttribute(const SfxItemSet& rSet)
+        attribute::SdrLineAttribute createNewSdrLineAttribute(const SfxItemSet& rSet)
         {
-            attribute::SdrLineAttribute* pRetval(0L);
             const XLineStyle eStyle(((XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue());
 
             if(XLINE_NONE != eStyle)
@@ -246,7 +254,7 @@ namespace drawinglayer
                         }
                     }
 
-                    pRetval = new attribute::SdrLineAttribute(
+                    return attribute::SdrLineAttribute(
                         XLineJointtoB2DLineJoin(eJoint),
                         (double)nWidth,
                         (double)nTransparence * 0.01,
@@ -256,12 +264,13 @@ namespace drawinglayer
                 }
             }
 
-            return pRetval;
+            return attribute::SdrLineAttribute();
         }
 
-        attribute::SdrLineStartEndAttribute* createNewSdrLineStartEndAttribute(const SfxItemSet& rSet, double fWidth)
+        attribute::SdrLineStartEndAttribute createNewSdrLineStartEndAttribute(
+            const SfxItemSet& rSet,
+            double fWidth)
         {
-            attribute::SdrLineStartEndAttribute* pRetval(0L);
             const sal_Int32 nTempStartWidth(((const XLineStartWidthItem&)(rSet.Get(XATTR_LINESTARTWIDTH))).GetValue());
             const sal_Int32 nTempEndWidth(((const XLineEndWidthItem&)(rSet.Get(XATTR_LINEENDWIDTH))).GetValue());
             basegfx::B2DPolyPolygon aStartPolyPolygon;
@@ -321,15 +330,16 @@ namespace drawinglayer
 
             if(bStartActive || bEndActive)
             {
-                pRetval = new attribute::SdrLineStartEndAttribute(aStartPolyPolygon, aEndPolyPolygon, fStartWidth, fEndWidth, bStartActive, bEndActive, bStartCentered, bEndCentered);
+                return attribute::SdrLineStartEndAttribute(
+                    aStartPolyPolygon, aEndPolyPolygon, fStartWidth, fEndWidth,
+                    bStartActive, bEndActive, bStartCentered, bEndCentered);
             }
 
-            return pRetval;
+            return attribute::SdrLineStartEndAttribute();
         }
 
-        attribute::SdrShadowAttribute* createNewSdrShadowAttribute(const SfxItemSet& rSet)
+        attribute::SdrShadowAttribute createNewSdrShadowAttribute(const SfxItemSet& rSet)
         {
-            attribute::SdrShadowAttribute* pRetval(0L);
             const bool bShadow(((SdrShadowItem&)rSet.Get(SDRATTR_SHADOW)).GetValue());
 
             if(bShadow)
@@ -367,16 +377,15 @@ namespace drawinglayer
                         (double)((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue());
                     const Color aColor(((SdrShadowColorItem&)(rSet.Get(SDRATTR_SHADOWCOLOR))).GetColorValue());
 
-                    pRetval = new attribute::SdrShadowAttribute(aOffset, (double)nTransparence * 0.01, aColor.getBColor());
+                    return attribute::SdrShadowAttribute(aOffset, (double)nTransparence * 0.01, aColor.getBColor());
                 }
             }
 
-            return pRetval;
+            return attribute::SdrShadowAttribute();
         }
 
-        attribute::SdrFillAttribute* createNewSdrFillAttribute(const SfxItemSet& rSet)
+        attribute::SdrFillAttribute createNewSdrFillAttribute(const SfxItemSet& rSet)
         {
-            attribute::SdrFillAttribute* pRetval(0L);
             const XFillStyle eStyle(((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue());
 
             if(XFILL_NONE != eStyle)
@@ -391,9 +400,9 @@ namespace drawinglayer
                 if(100 != nTransparence)
                 {
                     const Color aColor(((const XFillColorItem&)(rSet.Get(XATTR_FILLCOLOR))).GetColorValue());
-                    attribute::FillGradientAttribute* pGradient(0L);
-                    attribute::FillHatchAttribute* pHatch(0L);
-                    attribute::SdrFillBitmapAttribute* pBitmap(0L);
+                    attribute::FillGradientAttribute aGradient;
+                    attribute::FillHatchAttribute aHatch;
+                    attribute::SdrFillBitmapAttribute aBitmap;
 
                     switch(eStyle)
                     {
@@ -405,10 +414,10 @@ namespace drawinglayer
                         }
                         case XFILL_GRADIENT :
                         {
-                            XGradient aGradient(((XFillGradientItem&)(rSet.Get(XATTR_FILLGRADIENT))).GetGradientValue());
+                            XGradient aXGradient(((XFillGradientItem&)(rSet.Get(XATTR_FILLGRADIENT))).GetGradientValue());
 
-                            const Color aStartColor(aGradient.GetStartColor());
-                            const sal_uInt16 nStartIntens(aGradient.GetStartIntens());
+                            const Color aStartColor(aXGradient.GetStartColor());
+                            const sal_uInt16 nStartIntens(aXGradient.GetStartIntens());
                             basegfx::BColor aStart(aStartColor.getBColor());
 
                             if(nStartIntens != 100)
@@ -417,8 +426,8 @@ namespace drawinglayer
                                 aStart = interpolate(aBlack, aStart, (double)nStartIntens * 0.01);
                             }
 
-                            const Color aEndColor(aGradient.GetEndColor());
-                            const sal_uInt16 nEndIntens(aGradient.GetEndIntens());
+                            const Color aEndColor(aXGradient.GetEndColor());
+                            const sal_uInt16 nEndIntens(aXGradient.GetEndIntens());
                             basegfx::BColor aEnd(aEndColor.getBColor());
 
                             if(nEndIntens != 100)
@@ -427,12 +436,12 @@ namespace drawinglayer
                                 aEnd = interpolate(aBlack, aEnd, (double)nEndIntens * 0.01);
                             }
 
-                            pGradient = new attribute::FillGradientAttribute(
-                                XGradientStyleToGradientStyle(aGradient.GetGradientStyle()),
-                                (double)aGradient.GetBorder() * 0.01,
-                                (double)aGradient.GetXOffset() * 0.01,
-                                (double)aGradient.GetYOffset() * 0.01,
-                                (double)aGradient.GetAngle() * F_PI1800,
+                            aGradient = attribute::FillGradientAttribute(
+                                XGradientStyleToGradientStyle(aXGradient.GetGradientStyle()),
+                                (double)aXGradient.GetBorder() * 0.01,
+                                (double)aXGradient.GetXOffset() * 0.01,
+                                (double)aXGradient.GetYOffset() * 0.01,
+                                (double)aXGradient.GetAngle() * F_PI1800,
                                 aStart,
                                 aEnd,
                                 ((const XGradientStepCountItem&)rSet.Get(XATTR_GRADIENTSTEPCOUNT)).GetValue());
@@ -444,7 +453,7 @@ namespace drawinglayer
                             const XHatch& rHatch(((XFillHatchItem&)(rSet.Get(XATTR_FILLHATCH))).GetHatchValue());
                             const Color aColorB(rHatch.GetColor());
 
-                            pHatch = new attribute::FillHatchAttribute(
+                            aHatch = attribute::FillHatchAttribute(
                                 XHatchStyleToHatchStyle(rHatch.GetHatchStyle()),
                                 (double)rHatch.GetDistance(),
                                 (double)rHatch.GetAngle() * F_PI1800,
@@ -455,23 +464,25 @@ namespace drawinglayer
                         }
                         case XFILL_BITMAP :
                         {
-                            pBitmap = createNewSdrFillBitmapAttribute(rSet);
+                            aBitmap = createNewSdrFillBitmapAttribute(rSet);
                             break;
                         }
                     }
 
-                    pRetval = new attribute::SdrFillAttribute(
+                    return attribute::SdrFillAttribute(
                         (double)nTransparence * 0.01,
                         aColor.getBColor(),
-                        pGradient, pHatch, pBitmap);
+                        aGradient,
+                        aHatch,
+                        aBitmap);
                 }
             }
 
-            return pRetval;
+            return attribute::SdrFillAttribute();
         }
 
         // #i101508# Support handing over given text-to-border distances
-        attribute::SdrTextAttribute* createNewSdrTextAttribute(
+        attribute::SdrTextAttribute createNewSdrTextAttribute(
             const SfxItemSet& rSet,
             const SdrText& rText,
             const sal_Int32* pLeft,
@@ -479,7 +490,6 @@ namespace drawinglayer
             const sal_Int32* pRight,
             const sal_Int32* pLower)
         {
-            attribute::SdrTextAttribute* pRetval(0);
             const SdrTextObj& rTextObj = rText.GetObject();
 
             if(rText.GetOutlinerParaObject() && rText.GetModel())
@@ -519,7 +529,11 @@ namespace drawinglayer
                 const SdrFitToSizeType eFit(rTextObj.GetFitToSize());
                 const SdrTextAniKind eAniKind(rTextObj.GetTextAniKind());
 
-                pRetval = new attribute::SdrTextAttribute(
+                // #i107346#
+                const SdrOutliner& rDrawTextOutliner = rText.GetModel()->GetDrawOutliner(&rTextObj);
+                const bool bWrongSpell(rDrawTextOutliner.GetControlWord() & EE_CNTRL_ONLINESPELLING);
+
+                return attribute::SdrTextAttribute(
                     rText,
                     aOutlinerParaObject,
                     ((const XFormTextStyleItem&)rSet.Get(XATTR_FORMTXTSTYLE)).GetValue(),
@@ -535,18 +549,19 @@ namespace drawinglayer
                     SDRTEXTANI_BLINK == eAniKind,
                     SDRTEXTANI_SCROLL == eAniKind || SDRTEXTANI_ALTERNATE == eAniKind || SDRTEXTANI_SLIDE == eAniKind,
                     bInEditMode,
-                    ((const SdrTextFixedCellHeightItem&)rSet.Get(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
+                    ((const SdrTextFixedCellHeightItem&)rSet.Get(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue(),
+                    bWrongSpell);
             }
 
-            return pRetval;
+            return attribute::SdrTextAttribute();
         }
 
-        attribute::FillGradientAttribute* createNewTransparenceGradientAttribute(const SfxItemSet& rSet)
+        attribute::FillGradientAttribute createNewTransparenceGradientAttribute(const SfxItemSet& rSet)
         {
-            attribute::FillGradientAttribute* pRetval = 0L;
             const SfxPoolItem* pGradientItem;
 
-            if(SFX_ITEM_SET == rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, TRUE, &pGradientItem) && ((XFillFloatTransparenceItem*)pGradientItem)->IsEnabled())
+            if(SFX_ITEM_SET == rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, TRUE, &pGradientItem)
+                && ((XFillFloatTransparenceItem*)pGradientItem)->IsEnabled())
             {
                 // test if float transparence is completely transparent
                 const XGradient& rGradient = ((XFillFloatTransparenceItem*)pGradientItem)->GetGradientValue();
@@ -559,7 +574,7 @@ namespace drawinglayer
                     const double fStartLum(nStartLuminance / 255.0);
                     const double fEndLum(nEndLuminance / 255.0);
 
-                    pRetval = new attribute::FillGradientAttribute(
+                    return attribute::FillGradientAttribute(
                         XGradientStyleToGradientStyle(rGradient.GetGradientStyle()),
                         (double)rGradient.GetBorder() * 0.01,
                         (double)rGradient.GetXOffset() * 0.01,
@@ -571,12 +586,11 @@ namespace drawinglayer
                 }
             }
 
-            return pRetval;
+            return attribute::FillGradientAttribute();
         }
 
-        attribute::SdrFillBitmapAttribute* createNewSdrFillBitmapAttribute(const SfxItemSet& rSet)
+        attribute::SdrFillBitmapAttribute createNewSdrFillBitmapAttribute(const SfxItemSet& rSet)
         {
-            attribute::SdrFillBitmapAttribute* pRetval(0L);
             Bitmap aBitmap((((const XFillBitmapItem&)(rSet.Get(XATTR_FILLBITMAP))).GetBitmapValue()).GetBitmap());
 
             // make sure it's not empty, use default instead
@@ -623,7 +637,7 @@ namespace drawinglayer
                 (double)((const SfxUInt16Item&) (rSet.Get(XATTR_FILLBMP_POSOFFSETX))).GetValue(),
                 (double)((const SfxUInt16Item&) (rSet.Get(XATTR_FILLBMP_POSOFFSETY))).GetValue());
 
-            pRetval = new attribute::SdrFillBitmapAttribute(
+            return attribute::SdrFillBitmapAttribute(
                 aBitmap,
                 aSize,
                 aOffset,
@@ -632,252 +646,174 @@ namespace drawinglayer
                 ((const SfxBoolItem&) (rSet.Get(XATTR_FILLBMP_TILE))).GetValue(),
                 ((const SfxBoolItem&) (rSet.Get(XATTR_FILLBMP_STRETCH))).GetValue(),
                 ((const SfxBoolItem&) (rSet.Get(XATTR_FILLBMP_SIZELOG))).GetValue());
-
-            return pRetval;
         }
 
-        attribute::SdrShadowTextAttribute* createNewSdrShadowTextAttribute(const SfxItemSet& rSet, const SdrText& rText, bool bSuppressText)
+        attribute::SdrShadowTextAttribute createNewSdrShadowTextAttribute(
+            const SfxItemSet& rSet,
+            const SdrText* pText,
+            bool bSuppressText)
         {
-            attribute::SdrShadowTextAttribute* pRetval(0L);
-            attribute::SdrShadowAttribute* pShadow(0L);
-            attribute::SdrTextAttribute* pText(0L);
+            attribute::SdrTextAttribute aText;
 
             // #i98072# added option to suppress text
             // look for text first
-            if(!bSuppressText)
+            if(!bSuppressText && pText)
             {
-                pText = createNewSdrTextAttribute(rSet, rText);
+                aText = createNewSdrTextAttribute(rSet, *pText);
             }
 
             // try shadow
-            pShadow = createNewSdrShadowAttribute(rSet);
+            const attribute::SdrShadowAttribute aShadow(createNewSdrShadowAttribute(rSet));
 
-            if(pShadow && !pShadow->isVisible())
-            {
-                delete pShadow;
-                pShadow = 0L;
-            }
-
-            if(pText || pShadow)
-            {
-                pRetval = new attribute::SdrShadowTextAttribute(pShadow, pText);
-            }
-
-            return pRetval;
+            return attribute::SdrShadowTextAttribute(aShadow, aText);
         }
 
-        attribute::SdrLineShadowTextAttribute* createNewSdrLineShadowTextAttribute(const SfxItemSet& rSet, const SdrText& rText)
+        attribute::SdrLineShadowTextAttribute createNewSdrLineShadowTextAttribute(
+            const SfxItemSet& rSet,
+            const SdrText* pText)
         {
-            attribute::SdrLineShadowTextAttribute* pRetval(0L);
-            attribute::SdrLineAttribute* pLine(0L);
-            attribute::SdrLineStartEndAttribute* pLineStartEnd(0L);
-            attribute::SdrShadowAttribute* pShadow(0L);
-            attribute::SdrTextAttribute* pText(0L);
+            attribute::SdrLineAttribute aLine;
+            attribute::SdrLineStartEndAttribute aLineStartEnd;
+            attribute::SdrTextAttribute aText;
             bool bFontworkHideContour(false);
 
             // look for text first
-            pText = createNewSdrTextAttribute(rSet, rText);
-
-            // when object has text and text is fontwork and hide contour is set for fontwork, force
-            // line and fill style to empty
-            if(pText && pText->getSdrFormTextAttribute() && pText->isHideContour())
+            if(pText)
             {
-                bFontworkHideContour = true;
+                aText = createNewSdrTextAttribute(rSet, *pText);
+
+                // when object has text and text is fontwork and hide contour is set for fontwork, force
+                // line and fill style to empty
+                if(!aText.isDefault()
+                    && !aText.getSdrFormTextAttribute().isDefault()
+                    && aText.isHideContour())
+                {
+                    bFontworkHideContour = true;
+                }
             }
 
             // try line style
             if(!bFontworkHideContour)
             {
-                pLine = createNewSdrLineAttribute(rSet);
+                aLine = createNewSdrLineAttribute(rSet);
 
-                if(pLine && !pLine->isVisible())
-                {
-                    delete pLine;
-                    pLine = 0L;
-                }
-
-                if(pLine)
+                if(!aLine.isDefault())
                 {
                     // try LineStartEnd
-                    pLineStartEnd = createNewSdrLineStartEndAttribute(rSet, pLine->getWidth());
-
-                    if(pLineStartEnd && !pLineStartEnd->isVisible())
-                    {
-                        delete pLineStartEnd;
-                        pLineStartEnd = 0L;
-                    }
+                    aLineStartEnd = createNewSdrLineStartEndAttribute(rSet, aLine.getWidth());
                 }
             }
 
-            // try shadow
-            if(pLine || pText)
+            if(!aLine.isDefault() || !aText.isDefault())
             {
-                pShadow = createNewSdrShadowAttribute(rSet);
+                // try shadow
+                const attribute::SdrShadowAttribute aShadow(createNewSdrShadowAttribute(rSet));
 
-                if(pShadow && !pShadow->isVisible())
-                {
-                    delete pShadow;
-                    pShadow = 0L;
-                }
+                return attribute::SdrLineShadowTextAttribute(aLine, aLineStartEnd, aShadow, aText);
             }
 
-            if(pLine || pText)
-            {
-                pRetval = new attribute::SdrLineShadowTextAttribute(pLine, pLineStartEnd, pShadow, pText);
-            }
-
-            return pRetval;
+            return attribute::SdrLineShadowTextAttribute();
         }
 
-        attribute::SdrLineFillShadowTextAttribute* createNewSdrLineFillShadowTextAttribute(const SfxItemSet& rSet, const SdrText& rText)
+        attribute::SdrLineFillShadowTextAttribute createNewSdrLineFillShadowTextAttribute(
+            const SfxItemSet& rSet,
+            const SdrText* pText)
         {
-            attribute::SdrLineFillShadowTextAttribute* pRetval(0L);
-            attribute::SdrLineAttribute* pLine(0L);
-            attribute::SdrFillAttribute* pFill(0L);
-            attribute::SdrLineStartEndAttribute* pLineStartEnd(0L);
-            attribute::SdrShadowAttribute* pShadow(0L);
-            attribute::FillGradientAttribute* pFillFloatTransGradient(0L);
-            attribute::SdrTextAttribute* pText(0L);
+            attribute::SdrLineAttribute aLine;
+            attribute::SdrFillAttribute aFill;
+            attribute::SdrLineStartEndAttribute aLineStartEnd;
+            attribute::SdrShadowAttribute aShadow;
+            attribute::FillGradientAttribute aFillFloatTransGradient;
+            attribute::SdrTextAttribute aText;
             bool bFontworkHideContour(false);
 
             // look for text first
-            pText = createNewSdrTextAttribute(rSet, rText);
-
-            // when object has text and text is fontwork and hide contour is set for fontwork, force
-            // line and fill style to empty
-            if(pText && pText->getSdrFormTextAttribute() && pText->isHideContour())
+            if(pText)
             {
-                bFontworkHideContour = true;
+                aText = createNewSdrTextAttribute(rSet, *pText);
+
+                // when object has text and text is fontwork and hide contour is set for fontwork, force
+                // line and fill style to empty
+                if(!aText.getSdrFormTextAttribute().isDefault() && aText.isHideContour())
+                {
+                    bFontworkHideContour = true;
+                }
             }
 
-            // try line style
             if(!bFontworkHideContour)
             {
-                pLine = createNewSdrLineAttribute(rSet);
+                // try line style
+                aLine = createNewSdrLineAttribute(rSet);
 
-                if(pLine && !pLine->isVisible())
-                {
-                    delete pLine;
-                    pLine = 0L;
-                }
-
-                if(pLine)
+                if(!aLine.isDefault())
                 {
                     // try LineStartEnd
-                    pLineStartEnd = createNewSdrLineStartEndAttribute(rSet, pLine->getWidth());
-
-                    if(pLineStartEnd && !pLineStartEnd->isVisible())
-                    {
-                        delete pLineStartEnd;
-                        pLineStartEnd = 0L;
-                    }
-                }
-            }
-
-            // try fill style
-            if(!bFontworkHideContour)
-            {
-                pFill = createNewSdrFillAttribute(rSet);
-
-                if(pFill && !pFill->isVisible())
-                {
-                    delete pFill;
-                    pFill = 0L;
+                    aLineStartEnd = createNewSdrLineStartEndAttribute(rSet, aLine.getWidth());
                 }
 
-                if(pFill)
+                // try fill style
+                aFill = createNewSdrFillAttribute(rSet);
+
+                if(!aFill.isDefault())
                 {
                     // try fillfloattransparence
-                    pFillFloatTransGradient = createNewTransparenceGradientAttribute(rSet);
+                    aFillFloatTransGradient = createNewTransparenceGradientAttribute(rSet);
                 }
             }
 
-            // try shadow
-            if(pLine || pFill || pText)
+            if(!aLine.isDefault() || !aFill.isDefault() || !aText.isDefault())
             {
-                pShadow = createNewSdrShadowAttribute(rSet);
+                // try shadow
+                aShadow = createNewSdrShadowAttribute(rSet);
 
-                if(pShadow && !pShadow->isVisible())
-                {
-                    delete pShadow;
-                    pShadow = 0L;
-                }
+                return attribute::SdrLineFillShadowTextAttribute(
+                    aLine, aFill, aLineStartEnd, aShadow, aFillFloatTransGradient, aText);
             }
 
-            if(pLine || pFill || pText)
-            {
-                pRetval = new attribute::SdrLineFillShadowTextAttribute(pLine, pFill, pLineStartEnd, pShadow, pFillFloatTransGradient, pText);
-            }
-
-            return pRetval;
+            return attribute::SdrLineFillShadowTextAttribute();
         }
 
-        attribute::SdrLineFillShadowAttribute* createNewSdrLineFillShadowAttribute(const SfxItemSet& rSet, bool bSuppressFill)
+        attribute::SdrLineFillShadowAttribute3D createNewSdrLineFillShadowAttribute(const SfxItemSet& rSet, bool bSuppressFill)
         {
-            attribute::SdrLineFillShadowAttribute* pRetval(0L);
-            attribute::SdrLineAttribute* pLine(0L);
-            attribute::SdrFillAttribute* pFill(0L);
-            attribute::SdrLineStartEndAttribute* pLineStartEnd(0L);
-            attribute::SdrShadowAttribute* pShadow(0L);
-            attribute::FillGradientAttribute* pFillFloatTransGradient(0L);
+            attribute::SdrFillAttribute aFill;
+            attribute::SdrLineStartEndAttribute aLineStartEnd;
+            attribute::SdrShadowAttribute aShadow;
+            attribute::FillGradientAttribute aFillFloatTransGradient;
 
             // try line style
-            pLine = createNewSdrLineAttribute(rSet);
+            const attribute::SdrLineAttribute aLine(createNewSdrLineAttribute(rSet));
 
-            if(pLine && !pLine->isVisible())
-            {
-                delete pLine;
-                pLine = 0L;
-            }
-
-            if(pLine)
+            if(!aLine.isDefault())
             {
                 // try LineStartEnd
-                pLineStartEnd = createNewSdrLineStartEndAttribute(rSet, pLine->getWidth());
-
-                if(pLineStartEnd && !pLineStartEnd->isVisible())
-                {
-                    delete pLineStartEnd;
-                    pLineStartEnd = 0L;
-                }
+                aLineStartEnd = createNewSdrLineStartEndAttribute(rSet, aLine.getWidth());
             }
 
             // try fill style
-            pFill = bSuppressFill ? 0 : createNewSdrFillAttribute(rSet);
-
-            if(pFill && !pFill->isVisible())
+            if(!bSuppressFill)
             {
-                delete pFill;
-                pFill = 0L;
-            }
+                aFill = createNewSdrFillAttribute(rSet);
 
-            if(pFill)
-            {
-                // try fillfloattransparence
-                pFillFloatTransGradient = createNewTransparenceGradientAttribute(rSet);
-            }
-
-            // try shadow
-            if(pLine || pFill)
-            {
-                pShadow = createNewSdrShadowAttribute(rSet);
-
-                if(pShadow && !pShadow->isVisible())
+                if(!aFill.isDefault())
                 {
-                    delete pShadow;
-                    pShadow = 0L;
+                    // try fillfloattransparence
+                    aFillFloatTransGradient = createNewTransparenceGradientAttribute(rSet);
                 }
             }
 
-            if(pLine || pFill)
+            if(!aLine.isDefault() || !aFill.isDefault())
             {
-                pRetval = new attribute::SdrLineFillShadowAttribute(pLine, pFill, pLineStartEnd, pShadow, pFillFloatTransGradient);
+                // try shadow
+                aShadow = createNewSdrShadowAttribute(rSet);
+
+                return attribute::SdrLineFillShadowAttribute3D(
+                    aLine, aFill, aLineStartEnd, aShadow, aFillFloatTransGradient);
             }
 
-            return pRetval;
+            return attribute::SdrLineFillShadowAttribute3D();
         }
 
-        attribute::SdrSceneAttribute* createNewSdrSceneAttribute(const SfxItemSet& rSet)
+        attribute::SdrSceneAttribute createNewSdrSceneAttribute(const SfxItemSet& rSet)
         {
             // get perspective
             ::com::sun::star::drawing::ProjectionMode aProjectionMode(::com::sun::star::drawing::ProjectionMode_PARALLEL);
@@ -914,10 +850,10 @@ namespace drawinglayer
             // get two sided lighting
             const bool bTwoSidedLighting(((const Svx3DTwoSidedLightingItem&)rSet.Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING)).GetValue());
 
-            return new attribute::SdrSceneAttribute(fDistance, fShadowSlant, aProjectionMode, aShadeMode, bTwoSidedLighting);
+            return attribute::SdrSceneAttribute(fDistance, fShadowSlant, aProjectionMode, aShadeMode, bTwoSidedLighting);
         }
 
-        attribute::SdrLightingAttribute* createNewSdrLightingAttribute(const SfxItemSet& rSet)
+        attribute::SdrLightingAttribute createNewSdrLightingAttribute(const SfxItemSet& rSet)
         {
             // extract lights from given SfxItemSet (from scene)
             ::std::vector< attribute::Sdr3DLightAttribute > aLightVector;
@@ -982,7 +918,7 @@ namespace drawinglayer
             const Color aAmbientValue(((const Svx3DAmbientcolorItem&)rSet.Get(SDRATTR_3DSCENE_AMBIENTCOLOR)).GetValue());
             const basegfx::BColor aAmbientLight(aAmbientValue.getBColor());
 
-            return new attribute::SdrLightingAttribute(aAmbientLight, aLightVector);
+            return attribute::SdrLightingAttribute(aAmbientLight, aLightVector);
         }
 
         void calculateRelativeCornerRadius(sal_Int32 nRadius, const basegfx::B2DRange& rObjectRange, double& rfCornerRadiusX, double& rfCornerRadiusY)
@@ -1039,57 +975,50 @@ namespace drawinglayer
         }
 
         // #i101508# Support handing over given text-to-border distances
-        attribute::SdrFillTextAttribute* createNewSdrFillTextAttribute(
+        attribute::SdrFillTextAttribute createNewSdrFillTextAttribute(
             const SfxItemSet& rSet,
-            const SdrText* pSdrText,
+            const SdrText* pText,
             const sal_Int32* pLeft,
             const sal_Int32* pUpper,
             const sal_Int32* pRight,
             const sal_Int32* pLower)
         {
-            attribute::SdrFillTextAttribute* pRetval(0L);
-            attribute::SdrFillAttribute* pFill(0L);
-            attribute::FillGradientAttribute* pFillFloatTransGradient(0L);
-            attribute::SdrTextAttribute* pText(0L);
+            attribute::SdrFillAttribute aFill;
+            attribute::FillGradientAttribute aFillFloatTransGradient;
+            attribute::SdrTextAttribute aText;
             bool bFontworkHideContour(false);
 
             // look for text first
-            if(pSdrText)
+            if(pText)
             {
-                pText = createNewSdrTextAttribute(rSet, *pSdrText, pLeft, pUpper, pRight, pLower);
+                aText = createNewSdrTextAttribute(rSet, *pText, pLeft, pUpper, pRight, pLower);
+
+                // when object has text and text is fontwork and hide contour is set for fontwork, force
+                // fill style to empty
+                if(!aText.getSdrFormTextAttribute().isDefault() && aText.isHideContour())
+                {
+                    bFontworkHideContour = true;
+                }
             }
 
-            // when object has text and text is fontwork and hide contour is set for fontwork, force
-            // fill style to empty
-            if(pText && pText->getSdrFormTextAttribute() && pText->isHideContour())
-            {
-                bFontworkHideContour = true;
-            }
-
-            // try fill style
             if(!bFontworkHideContour)
             {
-                pFill = createNewSdrFillAttribute(rSet);
+                // try fill style
+                aFill = createNewSdrFillAttribute(rSet);
 
-                if(pFill && !pFill->isVisible())
-                {
-                    delete pFill;
-                    pFill = 0L;
-                }
-
-                if(pFill)
+                if(!aFill.isDefault())
                 {
                     // try fillfloattransparence
-                    pFillFloatTransGradient = createNewTransparenceGradientAttribute(rSet);
+                    aFillFloatTransGradient = createNewTransparenceGradientAttribute(rSet);
                 }
             }
 
-            if(pFill || pText)
+            if(!aFill.isDefault() || !aText.isDefault())
             {
-                pRetval = new attribute::SdrFillTextAttribute(pFill, pFillFloatTransGradient, pText);
+                return attribute::SdrFillTextAttribute(aFill, aFillFloatTransGradient, aText);
             }
 
-            return pRetval;
+            return attribute::SdrFillTextAttribute();
         }
 
     } // end of namespace primitive2d

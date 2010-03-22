@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: graphicproperties.cxx,v $
+ * $Revision: 1.12.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -26,43 +29,52 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_drawinglayer.hxx"
+#include "precompiled_svx.hxx"
 
-#include <drawinglayer/primitive3d/hittestprimitive3d.hxx>
-#include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
-
-//////////////////////////////////////////////////////////////////////////////
-
-using namespace com::sun::star;
+#include <svx/sdr/properties/oleproperties.hxx>
+#include <svl/itemset.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xlineit0.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace drawinglayer
+namespace sdr
 {
-    namespace primitive3d
+    namespace properties
     {
-        HitTestPrimitive3D::HitTestPrimitive3D(
-            const Primitive3DSequence& rChildren)
-        :   GroupPrimitive3D(rChildren)
+        OleProperties::OleProperties(SdrObject& rObj)
+        :   RectangleProperties(rObj)
         {
         }
 
-        basegfx::B3DRange HitTestPrimitive3D::getB3DRange(const geometry::ViewInformation3D& rViewInformation) const
+        OleProperties::OleProperties(const OleProperties& rProps, SdrObject& rObj)
+        :   RectangleProperties(rProps, rObj)
         {
-            return getB3DRangeFromPrimitive3DSequence(getChildren(), rViewInformation);
         }
 
-        Primitive3DSequence HitTestPrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        OleProperties::~OleProperties()
         {
-            // return empty sequence
-            return Primitive3DSequence();
         }
 
-        // provide unique ID
-        ImplPrimitrive3DIDBlock(HitTestPrimitive3D, PRIMITIVE3D_ID_HITTESTPRIMITIVE3D)
+        BaseProperties& OleProperties::Clone(SdrObject& rObj) const
+        {
+            return *(new OleProperties(*this, rObj));
+        }
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+        void OleProperties::ForceDefaultAttributes()
+        {
+            // call parent
+            RectangleProperties::ForceDefaultAttributes();
+
+            // force ItemSet
+            GetObjectItemSet();
+
+            // #i108221#
+            mpItemSet->Put( XFillStyleItem(XFILL_NONE) );
+            mpItemSet->Put( XLineStyleItem(XLINE_NONE) );
+        }
+    } // end of namespace properties
+} // end of namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
 // eof

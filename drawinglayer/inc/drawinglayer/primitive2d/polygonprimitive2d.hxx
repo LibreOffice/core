@@ -33,6 +33,8 @@
 #include <drawinglayer/attribute/strokeattribute.hxx>
 #include <drawinglayer/attribute/linestartendattribute.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/color/bcolor.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // PolygonHairlinePrimitive2D class

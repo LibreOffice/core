@@ -35,7 +35,7 @@
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
-#include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
@@ -95,7 +95,7 @@ namespace drawinglayer
                     // extract BoundRect from bitmaps in world coordinates
                     const primitive2d::BitmapPrimitive2D& rBitmapCandidate(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
                     basegfx::B2DHomMatrix aLocalTransform(getViewInformation2D().getObjectTransformation() * rBitmapCandidate.getTransform());
-                    basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                    basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
                     aPolygon.transform(aLocalTransform);
                     maExtractedContour.push_back(basegfx::B2DPolyPolygon(aPolygon));
                     break;
@@ -105,15 +105,15 @@ namespace drawinglayer
                     // extract BoundRect from MetaFiles in world coordinates
                     const primitive2d::MetafilePrimitive2D& rMetaCandidate(static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate));
                     basegfx::B2DHomMatrix aLocalTransform(getViewInformation2D().getObjectTransformation() * rMetaCandidate.getTransform());
-                    basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                    basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
                     aPolygon.transform(aLocalTransform);
                     maExtractedContour.push_back(basegfx::B2DPolyPolygon(aPolygon));
                     break;
                 }
-                case PRIMITIVE2D_ID_ALPHAPRIMITIVE2D :
+                case PRIMITIVE2D_ID_TRANSPARENCEPRIMITIVE2D :
                 {
                     // sub-transparence group. Look at children
-                    const primitive2d::AlphaPrimitive2D& rTransCandidate(static_cast< const primitive2d::AlphaPrimitive2D& >(rCandidate));
+                    const primitive2d::TransparencePrimitive2D& rTransCandidate(static_cast< const primitive2d::TransparencePrimitive2D& >(rCandidate));
                     process(rTransCandidate.getChildren());
                     break;
                 }

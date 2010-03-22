@@ -30,7 +30,6 @@
 
 #include <svx/sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <svx/sdr/contact/viewobjectcontactofsdrole2obj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/primitive2d/sdrole2primitive2d.hxx>
@@ -72,59 +71,51 @@ namespace sdr
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createPrimitive2DSequenceWithParameters(
             bool bHighContrast) const
         {
-            drawinglayer::primitive2d::Primitive2DSequence xRetval;
-            SdrText* pSdrText = GetOle2Obj().getText(0);
+            // take unrotated snap rect (direct model data) for position and size
+            const Rectangle& rRectangle = GetOle2Obj().GetGeoRect();
+            const basegfx::B2DRange aObjectRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
 
-            if(pSdrText)
-            {
-                // take unrotated snap rect (direct model data) for position and size
-                const Rectangle& rRectangle = GetOle2Obj().GetGeoRect();
-                const basegfx::B2DRange aObjectRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
+            // create object matrix
+            const GeoStat& rGeoStat(GetOle2Obj().GetGeoStat());
+            const double fShearX(rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0);
+            const double fRotate(rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0);
+            const basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                aObjectRange.getWidth(), aObjectRange.getHeight(), fShearX, fRotate,
+                aObjectRange.getMinX(), aObjectRange.getMinY()));
 
-                // create object matrix
-                const GeoStat& rGeoStat(GetOle2Obj().GetGeoStat());
-                const double fShearX(rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0);
-                const double fRotate(rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0);
-                const basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                    aObjectRange.getWidth(), aObjectRange.getHeight(), fShearX, fRotate,
-                    aObjectRange.getMinX(), aObjectRange.getMinY()));
+            // Prepare attribute settings, will be used soon anyways
+            const SfxItemSet& rItemSet = GetOle2Obj().GetMergedItemSet();
+            const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
+                drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
+                    rItemSet,
+                    GetOle2Obj().getText(0)));
 
-                // Prepare attribute settings, will be used soon anyways
-                const SfxItemSet& rItemSet = GetOle2Obj().GetMergedItemSet();
-                drawinglayer::attribute::SdrLineFillShadowTextAttribute* pAttribute = drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(rItemSet, *pSdrText);
+            // #i102063# embed OLE content in an own primitive; this will be able to decompose accessing
+            // the weak SdrOle2 reference and will also implement getB2DRange() for fast BoundRect
+            // calculations without OLE Graphic access (which may trigger e.g. chart recalculation).
+            // It will also take care of HighContrast and ScaleContent
+            const drawinglayer::primitive2d::Primitive2DReference xOleContent(
+                new drawinglayer::primitive2d::SdrOleContentPrimitive2D(
+                    GetOle2Obj(),
+                    aObjectMatrix,
 
-                if(!pAttribute)
-                {
-                    // force existence, even when not visible
-                    pAttribute = new drawinglayer::attribute::SdrLineFillShadowTextAttribute(0, 0, 0, 0, 0, 0);
-                }
+                    // #i104867# add GraphicVersion number to be able to check for
+                    // content change in the primitive later
+                    GetOle2Obj().getEmbeddedObjectRef().getGraphicVersion(),
 
-                // #i102063# embed OLE content in an own primitive; this will be able to decompose accessing
-                // the weak SdrOle2 reference and will also implement getB2DRange() for fast BoundRect
-                // calculations without OLE Graphic access (which may trigger e.g. chart recalculation).
-                // It will also take care of HighContrast and ScaleContent
-                const drawinglayer::primitive2d::Primitive2DReference xOleContent(
-                    new drawinglayer::primitive2d::SdrOleContentPrimitive2D(
-                        GetOle2Obj(),
-                        aObjectMatrix,
+                    bHighContrast));
 
-                        // #i104867# add GraphicVersion number to be able to check for
-                        // content change in the primitive later
-                        GetOle2Obj().getEmbeddedObjectRef().getGraphicVersion(),
-
-                        bHighContrast));
-
-                // create primitive. Use Ole2 primitive here. Prepare attribute settings, will be used soon anyways.
-                const drawinglayer::primitive2d::Primitive2DSequence xOLEContent(&xOleContent, 1);
-                const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::SdrOle2Primitive2D(
+            // create primitive. Use Ole2 primitive here. Prepare attribute settings, will
+            // be used soon anyways. Always create primitives to allow the decomposition of
+            // SdrOle2Primitive2D to create needed invisible elements for HitTest and/or BoundRect
+            const drawinglayer::primitive2d::Primitive2DSequence xOLEContent(&xOleContent, 1);
+            const drawinglayer::primitive2d::Primitive2DReference xReference(
+                new drawinglayer::primitive2d::SdrOle2Primitive2D(
                     xOLEContent,
                     aObjectMatrix,
-                    *pAttribute));
-                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-                delete pAttribute;
-            }
+                    aAttribute));
 
-            return xRetval;
+            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
         }
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createViewIndependentPrimitive2DSequence() const

@@ -217,7 +217,7 @@ namespace drawinglayer
         }
         else
         {
-            aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0));
+            aUnitPolygon = basegfx::tools::createUnitPolygon();
         }
 
         // make sure steps is not too high/low

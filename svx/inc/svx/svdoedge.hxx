@@ -157,19 +157,16 @@ public:
 class SVX_DLLPUBLIC SdrEdgeObj : public SdrTextObj
 {
 private:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
     // to allow sdr::properties::ConnectorProperties access to ImpSetAttrToEdgeInfo()
     friend class sdr::properties::ConnectorProperties;
 
     friend class                SdrCreateView;
     friend class                ImpEdgeHdl;
 
-    // DrawContact section
-private:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
 protected:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+
     SdrObjConnection            aCon1;  // Verbindungszustand des Linienanfangs
     SdrObjConnection            aCon2;  // Verbindungszustand des Linienendes
 
