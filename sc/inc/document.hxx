@@ -824,9 +824,9 @@ public:
     BOOL            IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     BOOL            IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
-    SC_DLLPUBLIC BOOL           HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-                            SCCOL nCol2, SCROW nRow2, SCTAB nTab2, USHORT nMask );
-    SC_DLLPUBLIC BOOL           HasAttrib( const ScRange& rRange, USHORT nMask );
+    SC_DLLPUBLIC bool           HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                                           SCCOL nCol2, SCROW nRow2, SCTAB nTab2, USHORT nMask );
+    SC_DLLPUBLIC bool           HasAttrib( const ScRange& rRange, USHORT nMask );
 
     void            GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                     const SvxBorderLine** ppLeft,
