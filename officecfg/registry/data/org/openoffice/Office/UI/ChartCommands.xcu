@@ -656,6 +656,29 @@
                     <value xml:lang="en-US">Number of lines in combination chart</value>
                 </prop>
             </node>
+            <node oor:name=".uno:TextAttributes" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Te~xt...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ObjectTitleDescription" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Description...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:RenameObject" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Name...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:LineArrowEnd" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Line Ends with Arrow</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
         </node>
 
         <!-- menu items with sub menu -->

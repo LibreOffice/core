@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: NeonUri.cxx,v $
- * $Revision: 1.25.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
+#include "ne_alloc.h"
 #include "NeonUri.hxx"
 #include "DAVException.hxx"
 
@@ -130,7 +128,7 @@ NeonUri::NeonUri( const ne_uri * inUri )
         throw DAVException( DAVException::DAV_INVALID_ARG );
 
     init( rtl::OString( uri ), inUri );
-    free( uri );
+    ne_free( uri );
 
     calculateURI();
 }

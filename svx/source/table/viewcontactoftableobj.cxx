@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewcontactoftableobj.cxx,v $
- * $Revision: 1.4.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +45,7 @@
 #include <svx/sdr/attribute/sdrtextattribute.hxx>
 #include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
-#include <svx/borderline.hxx>
+#include <editeng/borderline.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 
 #include "cell.hxx"

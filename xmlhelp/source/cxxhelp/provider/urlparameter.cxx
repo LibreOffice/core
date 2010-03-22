@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: urlparameter.cxx,v $
- * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -995,20 +992,11 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             parString[last++] = "'css'";
 
             parString[last++] = "vendorname";
-            parString[last++] = rtl::OString('\'') +
-                rtl::OString( pDatabases->getVendorName().getStr(),
-                              pDatabases->getVendorName().getLength(),
-                              RTL_TEXTENCODING_UTF8 ) + rtl::OString('\'');
+            parString[last++] = rtl::OString("''");
             parString[last++] = "vendorversion";
-            parString[last++] = rtl::OString('\'') +
-                rtl::OString( pDatabases->getVendorVersion().getStr(),
-                              pDatabases->getVendorVersion().getLength(),
-                              RTL_TEXTENCODING_UTF8 ) + rtl::OString('\'');
+            parString[last++] = rtl::OString("''");
             parString[last++] = "vendorshort";
-            parString[last++] = rtl::OString('\'') +
-                rtl::OString( pDatabases->getVendorShort().getStr(),
-                              pDatabases->getVendorShort().getLength(),
-                              RTL_TEXTENCODING_UTF8 ) + rtl::OString('\'');
+            parString[last++] = rtl::OString("''");
         }
 
         // Do we need to add extension path?

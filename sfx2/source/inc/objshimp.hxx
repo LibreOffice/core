@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: objshimp.hxx,v $
- * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,13 +56,11 @@ struct MarkData_Impl
 
 class SfxFrame;
 class SfxToolBoxConfig;
-class SfxAcceleratorManager;
 class SfxBasicManagerHolder;
 
 struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
 {
     ::comphelper::EmbeddedObjectContainer* mpObjectContainer;
-    SfxAcceleratorManager*  pAccMgr;
     SfxConfigManager*   pCfgMgr;
     SfxBasicManagerHolder*
                         pBasicManager;
