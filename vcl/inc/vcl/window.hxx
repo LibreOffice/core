@@ -54,6 +54,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <vcl/smartid.hxx>
+#include <boost/shared_ptr.hpp>
 
 class VirtualDevice;
 struct ImplDelData;
@@ -125,7 +126,11 @@ namespace dnd {
     class XDropTarget;
 } } } } }
 
-namespace vcl { struct ControlLayoutData; }
+namespace vcl {
+    struct ControlLayoutData;
+    class WindowArranger;
+    struct ExtWindowImpl;
+}
 
 // ---------------
 // - WindowTypes -
@@ -475,6 +480,9 @@ public:
     SAL_DLLPRIVATE BOOL                ImplUpdatePos();
     SAL_DLLPRIVATE void                ImplUpdateSysObjPos();
     SAL_DLLPRIVATE WindowImpl*         ImplGetWindowImpl() const { return mpWindowImpl; }
+    SAL_DLLPRIVATE void                ImplFreeExtWindowImpl();
+    // creates ExtWindowImpl on demand, but may return NULL (e.g. if mbInDtor)
+    SAL_DLLPRIVATE vcl::ExtWindowImpl* ImplGetExtWindowImpl() const;
     /** check whether a font is suitable for UI
 
     The font to be tested will be checked whether it could display a
@@ -540,6 +548,7 @@ public:
     SAL_DLLPRIVATE BOOL        ImplRegisterAccessibleNativeFrame();
     SAL_DLLPRIVATE void        ImplRevokeAccessibleNativeFrame();
     SAL_DLLPRIVATE void        ImplCallResize();
+    SAL_DLLPRIVATE void        ImplExtResize();
     SAL_DLLPRIVATE void        ImplCallMove();
     SAL_DLLPRIVATE Rectangle   ImplOutputToUnmirroredAbsoluteScreenPixel( const Rectangle& rRect ) const;
     SAL_DLLPRIVATE void        ImplMirrorFramePos( Point &pt ) const;
@@ -1142,6 +1151,11 @@ public:
 
     virtual XubString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
+
+    // ExtImpl
+
+    // layouting
+    boost::shared_ptr< vcl::WindowArranger >    getLayout();
 };
 
 

@@ -113,7 +113,7 @@ namespace vcl
         static long getDefaultBorder();
 
         static long getBorderValue( long nBorder )
-        { return nBorder >= 0 ? nBorder : getDefaultBorder(); }
+        { return nBorder >= 0 ? nBorder : -nBorder * getDefaultBorder(); }
 
         WindowArranger( WindowArranger* i_pParent = NULL )
         : m_pParentWindow( i_pParent ? i_pParent->m_pParentWindow : NULL )

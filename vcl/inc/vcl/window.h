@@ -103,7 +103,10 @@ namespace dnd {
     class XDropTarget;
 } } } } }
 
-namespace vcl { struct ControlLayoutData; }
+namespace vcl {
+    struct ControlLayoutData;
+    struct ExtWindowImpl;
+}
 
 
 
@@ -244,6 +247,7 @@ public:
 
     ImplDelData*        mpFirstDel;
     void*               mpUserData;
+    vcl::ExtWindowImpl* mpExtImpl;
     Cursor*             mpCursor;
     Pointer             maPointer;
     Fraction            maZoom;

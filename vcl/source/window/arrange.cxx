@@ -52,7 +52,7 @@ long WindowArranger::getDefaultBorder()
         OutputDevice* pDefDev = Application::GetDefaultDevice();
         if( pDefDev )
         {
-            Size aBorder( pDefDev->LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
+            Size aBorder( pDefDev->LogicToPixel( Size( 3, 3 ), MapMode( MAP_APPFONT ) ) );
             nResult = pSVData->maAppData.mnDefaultLayoutBorder = aBorder.Height();
         }
     }
@@ -611,7 +611,7 @@ long LabelColumn::getLabelWidth() const
             }
         }
     }
-    return nWidth + getBorderWidth();
+    return nWidth + getBorderValue( getBorderWidth() );
 }
 
 Size LabelColumn::getOptimalSize( WindowSizeType i_eType ) const
@@ -656,12 +656,12 @@ Size LabelColumn::getOptimalSize( WindowSizeType i_eType ) const
         }
         if( aElementSize.Height() )
         {
-            aColumnSize.Height() += getBorderWidth() + aElementSize.Height();
+            aColumnSize.Height() += getBorderValue( getBorderWidth() ) + aElementSize.Height();
         }
     }
     if( nEle > 0 && aColumnSize.Height() )
     {
-        aColumnSize.Height() -= getBorderWidth(); // for the first element
+        aColumnSize.Height() -= getBorderValue( getBorderWidth() ); // for the first element
         aColumnSize.Height() += 2*nOuterBorder;
     }
     return aColumnSize;
@@ -730,7 +730,7 @@ void Indenter::resize()
     long nOuterBorder = getBorderValue( m_nOuterBorder );
     long nIndent = getBorderValue( m_nIndent );
     Point aPt( m_aManagedArea.TopLeft() );
-    aPt.X() += nOuterBorder + m_nIndent;
+    aPt.X() += nOuterBorder + nIndent;
     aPt.Y() += nOuterBorder;
     Size aSz( m_aManagedArea.GetSize() );
     aSz.Width()  -= 2*nOuterBorder + nIndent;

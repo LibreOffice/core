@@ -597,6 +597,7 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mpDlgCtrlDownWindow = NULL;         // window for dialog control
     mpWindowImpl->mpFirstDel          = NULL;         // Dtor notification list
     mpWindowImpl->mpUserData          = NULL;         // user data
+    mpWindowImpl->mpExtImpl           = NULL;         // extended implementation data
     mpWindowImpl->mpCursor            = NULL;         // cursor
     mpWindowImpl->mpControlFont       = NULL;         // font propertie
     mpWindowImpl->mpVCLXWindow        = NULL;
@@ -1129,6 +1130,8 @@ void Window::ImplCallResize()
     // #88419# Most classes don't call the base class in Resize() and Move(),
     // => Call ImpleResize/Move instead of Resize/Move directly...
     ImplCallEventListeners( VCLEVENT_WINDOW_RESIZE );
+
+    ImplExtResize();
 }
 
 // -----------------------------------------------------------------------
@@ -4329,6 +4332,8 @@ Window::Window( Window* pParent, const ResId& rResId )
 
 Window::~Window()
 {
+    ImplFreeExtWindowImpl();
+
     vcl::LazyDeletor<Window>::Undelete( this );
 
     DBG_DTOR( Window, ImplDbgCheckWindow );
