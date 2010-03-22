@@ -36,7 +36,6 @@
 #include <svtools/accessibletable.hxx>
 #include <comphelper/types.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-//#include "svtools/table/tablecontrol.hxx"
 
 // ============================================================================
 
@@ -77,8 +76,6 @@ public:
     AccessibleGridControlHeader*                                m_pColumnHeaderBar;
 };
 
-// Ctor/Dtor/disposing --------------------------------------------------------
-
 DBG_NAME( AccessibleGridControl )
 
 AccessibleGridControl::AccessibleGridControl(
@@ -86,7 +83,6 @@ AccessibleGridControl::AccessibleGridControl(
             IAccessibleTable& _rTable )
     : AccessibleGridControlBase( _rxParent, _rTable, TCTYPE_GRIDCONTROL )
 {
-//    DBG_CTOR( AccessibleTableControl, NULL );
     m_pImpl.reset( new AccessibleGridControl_Impl() );
     m_pImpl->m_aCreator = _rxCreator;
 }
@@ -94,7 +90,6 @@ AccessibleGridControl::AccessibleGridControl(
 // -----------------------------------------------------------------------------
 AccessibleGridControl::~AccessibleGridControl()
 {
-    DBG_DTOR( AccessibleGridControl, NULL );
 }
 // -----------------------------------------------------------------------------
 
@@ -334,13 +329,11 @@ AccessibleGridControlAccess::AccessibleGridControlAccess( const Reference< XAcce
         ,m_rTable( _rTable )
         ,m_pContext( NULL )
 {
-    DBG_CTOR( AccessibleGridControlAccess, NULL );
 }
 
 // -----------------------------------------------------------------------------
 AccessibleGridControlAccess::~AccessibleGridControlAccess()
 {
-    DBG_DTOR( AccessibleGridControlAccess, NULL );
 }
 
 // -----------------------------------------------------------------------------

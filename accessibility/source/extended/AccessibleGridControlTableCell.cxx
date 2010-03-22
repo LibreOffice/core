@@ -68,7 +68,6 @@ namespace accessibility
     // =============================================================================
     // = AccessibleGridControlCell
     // =============================================================================
-    //DBG_NAME( svt_AccessibleGridControlCell )
     // -----------------------------------------------------------------------------
     AccessibleGridControlCell::AccessibleGridControlCell(
             const Reference< XAccessible >& _rxParent, IAccessibleTable& _rTable,
@@ -77,7 +76,6 @@ namespace accessibility
         ,m_nRowPos( _nRowPos )
         ,m_nColPos( _nColPos )
     {
-//      DBG_CTOR( svt_AccessibleGridControlCell, NULL );
         // set accessible name here, because for that we need the position of the cell
         // and so the base class isn't capable of doing this
         ::rtl::OUString aAccName;
@@ -107,8 +105,7 @@ namespace accessibility
     ::rtl::OUString AccessibleGridControlTableCell::implGetText()
     {
         ensureIsAlive();
-        //return mpTable->GetAccessibleCellText( getRowPos(), static_cast< USHORT >( getColumnPos() ) );
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "test" ));
+        return m_aTable.GetAccessibleCellText( getRowPos(),  getColumnPos() );
     }
 
     ::com::sun::star::lang::Locale AccessibleGridControlTableCell::implGetLocale()
@@ -366,12 +363,12 @@ namespace accessibility
         //!!! don't know how to put a string into the clipboard
         return sal_False;
     }
+
     Rectangle AccessibleGridControlTableCell::implGetBoundingBox()
     {
         return Rectangle(Point(0,0),Point(0,0));//To Do - return headercell rectangle
     }
     // -----------------------------------------------------------------------------
-
     Rectangle AccessibleGridControlTableCell::implGetBoundingBoxOnScreen()
     {
         return Rectangle(Point(0,0),Point(0,0));//To Do - return headercell rectangle
