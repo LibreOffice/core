@@ -52,13 +52,6 @@
 namespace sd { namespace toolpanel { namespace controls {
 
 
-MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
-    : ScrollPanel (pParent)
-    , m_pPanelViewShell (NULL)
-{
-    impl_construct( rBase );
-}
-
 MasterPagesPanel::MasterPagesPanel (::Window& i_rParentWindow, ToolPanelViewShell& i_rPanelViewShell)
     :ScrollPanel (i_rParentWindow)
     ,m_pPanelViewShell( &i_rPanelViewShell )
@@ -156,13 +149,6 @@ TaskPaneShellManager* MasterPagesPanel::GetShellManager()
 }
 
 
-
-
-std::auto_ptr<ControlFactory> MasterPagesPanel::CreateControlFactory (ViewShellBase& rBase)
-{
-    return std::auto_ptr<ControlFactory>(
-        new ControlFactoryWithArgs1<MasterPagesPanel,ViewShellBase>(rBase));
-}
 
 
 std::auto_ptr< ControlFactory > MasterPagesPanel::CreateControlFactory( ToolPanelViewShell& i_rToolPanelShell )

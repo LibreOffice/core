@@ -50,14 +50,10 @@ class CustomAnimationPanel
 {
 public:
     CustomAnimationPanel (
-        TreeNode* pParent,
-        ViewShellBase& rBase);
-    CustomAnimationPanel (
         Window& i_rParentWindow,
         ToolPanelViewShell& i_rPanelViewShell);
     virtual ~CustomAnimationPanel (void);
 
-    static std::auto_ptr<ControlFactory> CreateControlFactory (ViewShellBase& rBase);
     static std::auto_ptr<ControlFactory> CreateControlFactory (ToolPanelViewShell& i_rPanelViewShell);
 
     // TreeNode overridables

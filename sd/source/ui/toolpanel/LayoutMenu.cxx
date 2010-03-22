@@ -88,45 +88,6 @@ using ::sd::framework::FrameworkHelper;
 
 namespace sd { namespace toolpanel {
 
-/** This factory class stores references to ViewShellBase and DrawDocShell
-    and passes them to new LayoutMenu objects.
-*/
-class LayoutMenuFactory
-    : public ControlFactory
-{
-public:
-    LayoutMenuFactory (ViewShellBase& rBase, DrawDocShell& rDocShell)
-        : mrBase(rBase),
-          mrDocShell(rDocShell)
-    {}
-
-protected:
-    virtual TreeNode* InternalCreateControl (TreeNode* pTreeNode)
-    {
-        ScrollPanel* pScrollPanel = new ScrollPanel (pTreeNode);
-        ::std::auto_ptr<TreeNode> pMenu (
-            new LayoutMenu (
-                pScrollPanel,
-                mrDocShell,
-                mrBase,
-                false));
-        pScrollPanel->AddControl(pMenu);
-        return pScrollPanel;
-    }
-
-    virtual TreeNode* InternalCreateRootControl( ::Window& /*i_rParent*/ )
-    {
-        OSL_ENSURE( false, "LayoutMenuFactory::InternalCreateRootControl: not implemented!" );
-        return NULL;
-    }
-
-private:
-    ViewShellBase& mrBase;
-    DrawDocShell& mrDocShell;
-};
-
-
-
 class LayoutMenuRootFactory
     : public ControlFactory
 {
@@ -137,13 +98,7 @@ public:
     }
 
 protected:
-    virtual TreeNode* InternalCreateControl (TreeNode* pTreeNode)
-    {
-        OSL_ENSURE( false, "LayoutMenuRootFactory::InternalCreateControl: not implemented!" );
-        return NULL;
-    }
-
-    virtual TreeNode* InternalCreateRootControl( ::Window& i_rParent )
+    virtual TreeNode* InternalCreateControl( ::Window& i_rParent )
     {
         ScrollPanel* pScrollPanel = new ScrollPanel (i_rParent);
         ::std::auto_ptr<TreeNode> pMenu (
@@ -263,28 +218,6 @@ static snewfoil_value_info standard[] =
 
 
 
-LayoutMenu::LayoutMenu (
-    TreeNode* pParent,
-    DrawDocShell& rDocumentShell,
-    ViewShellBase& rViewShellBase,
-    bool bUseOwnScrollBar)
-    : ValueSet (pParent->GetWindow()),
-      TreeNode(pParent),
-      DragSourceHelper(this),
-      DropTargetHelper(this),
-      mrBase (rViewShellBase),
-      mpShellManager (NULL),
-      mbUseOwnScrollBar (bUseOwnScrollBar),
-      mnPreferredColumnCount(3),
-      mxListener(NULL),
-      mbSelectionUpdatePending(true),
-      mbIsMainViewChangePending(false)
-{
-    ImplConstruct( rDocumentShell );
-}
-
-
-
 LayoutMenu::LayoutMenu( TreeNode* pParent, ToolPanelViewShell& i_rPanelViewShell )
     : ValueSet (pParent->GetWindow()),
       TreeNode(pParent),
@@ -359,16 +292,6 @@ LayoutMenu::~LayoutMenu (void)
     Clear();
     Link aLink (LINK(this,LayoutMenu,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->RemoveEventListener (aLink);
-}
-
-
-
-
-::std::auto_ptr<ControlFactory> LayoutMenu::CreateControlFactory (
-    ViewShellBase& rBase,
-    DrawDocShell& rDocShell)
-{
-    return ::std::auto_ptr<ControlFactory>(new LayoutMenuFactory(rBase, rDocShell));
 }
 
 

@@ -49,15 +49,6 @@ namespace toolpanel { namespace controls {
 
 
 
-SlideTransitionPanel::SlideTransitionPanel(TreeNode* pParent, ViewShellBase& rBase)
-    : SubToolPanel (pParent),
-      maPreferredSize( 100, 200 ),
-      m_pPanelViewShell( NULL )
-{
-    mpWrappedControl = createSlideTransitionPanel( pParent->GetWindow(), rBase );
-    mpWrappedControl->Show();
-}
-
 SlideTransitionPanel::SlideTransitionPanel(Window& i_rParentWindow, ToolPanelViewShell& i_rToolPanelShell)
     :SubToolPanel( i_rParentWindow )
     ,maPreferredSize( 100, 200 )
@@ -70,12 +61,6 @@ SlideTransitionPanel::SlideTransitionPanel(Window& i_rParentWindow, ToolPanelVie
 SlideTransitionPanel::~SlideTransitionPanel()
 {
     delete mpWrappedControl;
-}
-
-std::auto_ptr<ControlFactory> SlideTransitionPanel::CreateControlFactory (ViewShellBase& rBase)
-{
-    return std::auto_ptr<ControlFactory>(
-        new ControlFactoryWithArgs1<SlideTransitionPanel,ViewShellBase>(rBase));
 }
 
 std::auto_ptr< ControlFactory > SlideTransitionPanel::CreateControlFactory( ToolPanelViewShell& i_rToolPanelShell )

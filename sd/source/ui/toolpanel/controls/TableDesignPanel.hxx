@@ -50,14 +50,10 @@ class TableDesignPanel
 {
 public:
     TableDesignPanel (
-        TreeNode* pParent,
-        ViewShellBase& rBase);
-    TableDesignPanel (
         ::Window& i_rParentWindow,
         ToolPanelViewShell& i_rPanelViewShell);
     virtual ~TableDesignPanel (void);
 
-    static std::auto_ptr<ControlFactory> CreateControlFactory (ViewShellBase& rBase);
     static std::auto_ptr<ControlFactory> CreateControlFactory (ToolPanelViewShell& i_rToolPanelShell);
 
     // TreeNode overridables

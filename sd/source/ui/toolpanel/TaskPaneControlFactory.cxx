@@ -51,18 +51,9 @@ ControlFactory::~ControlFactory (void)
 
 
 
-::std::auto_ptr<TreeNode> ControlFactory::CreateControl (TreeNode* pTreeNode)
+::std::auto_ptr<TreeNode> ControlFactory::CreateControl( ::Window& i_rParent )
 {
-    // Create a new control by using the protected virtual hook.
-    TreeNode* pNewNode = InternalCreateControl(pTreeNode);
-
-    return ::std::auto_ptr<TreeNode>(pNewNode);
-}
-
-
-::std::auto_ptr<TreeNode> ControlFactory::CreateRootControl( ::Window& i_rParent )
-{
-    TreeNode* pNewNode = InternalCreateRootControl( i_rParent );
+    TreeNode* pNewNode = InternalCreateControl( i_rParent );
     return ::std::auto_ptr<TreeNode>( pNewNode );
 }
 

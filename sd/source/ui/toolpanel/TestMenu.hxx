@@ -50,7 +50,7 @@ class ColorMenu
       public TreeNode
 {
 public:
-    ColorMenu (TreeNode* pParent);
+    ColorMenu (::Window* i_pParent);
     virtual ~ColorMenu (void);
 
     static ::std::auto_ptr<ControlFactory> CreateControlFactory (void);

@@ -49,14 +49,10 @@ class SlideTransitionPanel
 {
 public:
     SlideTransitionPanel (
-        TreeNode* pParent,
-        ViewShellBase& rBase);
-    SlideTransitionPanel (
         Window& i_rParentWindow,
         ToolPanelViewShell& i_rToolPanelShell);
     virtual ~SlideTransitionPanel (void);
 
-    static std::auto_ptr<ControlFactory> CreateControlFactory (ViewShellBase& rBase);
     static std::auto_ptr<ControlFactory> CreateControlFactory (ToolPanelViewShell& i_rToolPanelShell);
 
     // TreeNode overridables

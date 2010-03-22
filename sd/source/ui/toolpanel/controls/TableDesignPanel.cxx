@@ -48,14 +48,6 @@ namespace sd
 namespace toolpanel { namespace controls {
 
 
-TableDesignPanel::TableDesignPanel(TreeNode* pParent, ViewShellBase& rBase)
-    : SubToolPanel (pParent)
-    ,m_pPanelViewShell( NULL )
-{
-    mpWrappedControl = createTableDesignPanel( pParent->GetWindow(), rBase );
-    mpWrappedControl->Show();
-}
-
 TableDesignPanel::TableDesignPanel( ::Window& i_rParentWindow, ToolPanelViewShell& i_rPanelViewShell )
     :SubToolPanel( i_rParentWindow )
     ,m_pPanelViewShell( &i_rPanelViewShell )
@@ -67,12 +59,6 @@ TableDesignPanel::TableDesignPanel( ::Window& i_rParentWindow, ToolPanelViewShel
 TableDesignPanel::~TableDesignPanel()
 {
     delete mpWrappedControl;
-}
-
-std::auto_ptr<ControlFactory> TableDesignPanel::CreateControlFactory (ViewShellBase& rBase)
-{
-    return std::auto_ptr<ControlFactory>(
-        new ControlFactoryWithArgs1<TableDesignPanel,ViewShellBase>(rBase));
 }
 
 std::auto_ptr< ControlFactory > TableDesignPanel::CreateControlFactory( ToolPanelViewShell& i_rToolPanelShell )

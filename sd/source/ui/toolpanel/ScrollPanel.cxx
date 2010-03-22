@@ -122,7 +122,7 @@ ScrollPanel::~ScrollPanel (void)
         // control instead of pNode directly.
         TitledControl* pTitledControl = static_cast<TitledControl*>(pNode);
         if (pTitledControl != NULL)
-            pControl = pTitledControl->GetControl(false);
+            pControl = pTitledControl->GetControl();
 
         // Remove this object as listener from the control.
         if (pControl != NULL && pControl->GetWindow()!=NULL)

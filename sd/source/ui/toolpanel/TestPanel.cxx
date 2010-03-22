@@ -48,14 +48,9 @@ class TestPanelFactory
     : public ControlFactory
 {
 protected:
-    virtual TreeNode* InternalCreateControl (TreeNode* pTreeNode)
+    virtual TreeNode* InternalCreateControl( ::Window& i_rParent )
     {
-        return new TestPanel (pTreeNode);
-    }
-    virtual TreeNode* InternalCreateRootControl( ::Window& i_rParent )
-    {
-        OSL_ENSURE( false, "TestPanelFactory::InternalCreateRootControl: not implemented!" );
-        return NULL;
+        return new TestPanel (i_rParent);
     }
 };
 
@@ -117,8 +112,8 @@ private:
 };
 
 
-TestPanel::TestPanel (TreeNode* pParent)
-    : SubToolPanel (pParent)
+TestPanel::TestPanel (::Window& i_rParent)
+    : SubToolPanel (i_rParent)
 {
     // Create a scrollable panel with two list boxes.
     ScrollPanel* pScrollPanel = new ScrollPanel (this);

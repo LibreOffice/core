@@ -61,58 +61,16 @@ public:
     ControlFactory (void);
     virtual ~ControlFactory (void);
 
-    /** Derived classes should overload InternalCreateControl(), not this
-        method.
-    */
-    ::std::auto_ptr<TreeNode> CreateControl (TreeNode* pTreeNode);
-
     /** creates a tree node which acts as root of an own tree
 
-        An implementation is allowed to return NULL here, but <em>must</em> return non-NULL then in the other
-        factory method.
         Derived classes should overload InternalCreateControl.
     */
-    ::std::auto_ptr<TreeNode> CreateRootControl( ::Window& i_rParent );
+    ::std::auto_ptr<TreeNode> CreateControl( ::Window& i_rParent );
 
 protected:
-    /** This is the internal hook for derived classes to overload in order
-        to provide a new control instance.
-    */
-    virtual TreeNode* InternalCreateControl (TreeNode* pTreeNode) = 0;
-
-    virtual TreeNode* InternalCreateRootControl( ::Window& i_rParent ) = 0;
+    virtual TreeNode* InternalCreateControl( ::Window& i_rParent ) = 0;
 };
 
-
-
-/** A simple helper class that realizes a ControlFactory that provides its
-    newly created controls with one additional argument (additional to the
-    parent TreeNode).
-*/
-template<class ControlType, class ArgumentType>
-class ControlFactoryWithArgs1
-    : public ControlFactory
-{
-public:
-    ControlFactoryWithArgs1 (ArgumentType& rArgument)
-        : mrArgument(rArgument)
-    {}
-
-protected:
-    virtual TreeNode* InternalCreateControl (TreeNode* pTreeNode)
-    {
-        return new ControlType(pTreeNode, mrArgument);
-    }
-
-    virtual TreeNode* InternalCreateRootControl( ::Window& i_rParent )
-    {
-        OSL_ENSURE( false, "ControlFactoryWithArgs1::InternalCreateRootControl: not implemented!" );
-        return NULL;
-    }
-
-private:
-    ArgumentType& mrArgument;
-};
 
 
 /** A simple helper class that realizes a ControlFactory that is able to create root controls, providing
@@ -128,13 +86,7 @@ public:
     {}
 
 protected:
-    virtual TreeNode* InternalCreateControl (TreeNode* pTreeNode)
-    {
-        OSL_ENSURE( false, "ControlFactoryWithArgs1::InternalCreateControl: not implemented!" );
-        return NULL;
-    }
-
-    virtual TreeNode* InternalCreateRootControl( ::Window& i_rParent )
+    virtual TreeNode* InternalCreateControl( ::Window& i_rParent )
     {
         return new ControlType( i_rParent, mrArgument );
     }

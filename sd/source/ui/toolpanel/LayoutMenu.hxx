@@ -80,31 +80,16 @@ public:
     /** Create a new layout menu.  Depending on the given flag it
         displays its own scroll bar or lets a surrounding window
         handle that.
-        @param rDocumentShell
-            Used to determine writing direction.
-        @param rViewShellBase
-            Gives access to the view shell at whose active page the
-            layout will be set.
-        @param bUseOwnScrollBar
-            When <TRUE/> then we will show our own scroll bar when not
-            all icons can be displayed in the visible window area.
-            When <FALSE/> then rely on an outer scroll bar.  In this
-            case we will set the height of the window so that all
-            icons are visible.
+        @param i_pParent
+            the parent node in the control tree
+        @param i_rPanelViewShell
+            the view shell of the task pane.
     */
     LayoutMenu (
-        TreeNode* pParent,
-        DrawDocShell& rDocumentShell,
-        ViewShellBase& rViewShellBase,
-        bool bUseOwnScrollBar);
-    LayoutMenu (
-        TreeNode* pParent,
+        TreeNode* i_pParent,
         ToolPanelViewShell& i_rPanelViewShell);
     virtual ~LayoutMenu (void);
 
-    static std::auto_ptr<ControlFactory> CreateControlFactory (
-        ViewShellBase& rBase,
-        DrawDocShell& rDocShell);
     static std::auto_ptr<ControlFactory> CreateControlFactory (
         ToolPanelViewShell& i_rPanelViewShell );
 

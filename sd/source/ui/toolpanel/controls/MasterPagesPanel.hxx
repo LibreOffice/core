@@ -54,9 +54,6 @@ class MasterPagesPanel
 {
 public:
     MasterPagesPanel (
-        TreeNode* pParent,
-        ViewShellBase& rBase);
-    MasterPagesPanel (
         ::Window& i_rParentWindow,
         ToolPanelViewShell& i_rPanelViewShell);
     virtual ~MasterPagesPanel (void);
@@ -64,7 +61,6 @@ public:
     // TreeNode overridables
     virtual TaskPaneShellManager* GetShellManager (void);
 
-    static std::auto_ptr<ControlFactory> CreateControlFactory (ViewShellBase& rBase);
     static std::auto_ptr<ControlFactory> CreateControlFactory (ToolPanelViewShell& i_rToolPanelShell);
 
 private:

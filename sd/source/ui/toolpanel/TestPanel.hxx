@@ -45,7 +45,7 @@ class TestPanel
     : public SubToolPanel
 {
 public:
-    TestPanel (TreeNode* pParent);
+    TestPanel (::Window& i_rParent);
     virtual ~TestPanel (void);
 
     static std::auto_ptr<ControlFactory> CreateControlFactory (void);

@@ -48,21 +48,16 @@ class ColorMenuFactory
     : public ControlFactory
 {
 protected:
-    virtual TreeNode* InternalCreateControl (TreeNode* pTreeNode)
+    virtual TreeNode* InternalCreateControl( ::Window& i_rParent )
     {
-        return new ColorMenu (pTreeNode);
-    }
-    virtual TreeNode* InternalCreateRootControl( ::Window& /*i_rParent*/ )
-    {
-        OSL_ENSURE( false, "ColorMenuFactory::InternalCreateRootControl: not implemented!" );
-        return NULL;
+        return new ColorMenu (&i_rParent);
     }
 };
 
 
-ColorMenu::ColorMenu (TreeNode* pParent)
-    : Window (pParent->GetWindow()),
-      TreeNode(pParent),
+ColorMenu::ColorMenu (::Window* i_pParent)
+    : Window (i_pParent),
+      TreeNode(NULL),
       maSet (this),
       mnPreferredColumnCount(2)
 {
@@ -79,7 +74,7 @@ ColorMenu::ColorMenu (TreeNode* pParent)
 
     Fill ();
     maSet.Show();
-    pParent->RequestResize();
+    i_pParent->Resize();
 }
 
 

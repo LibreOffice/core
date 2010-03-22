@@ -136,7 +136,7 @@ namespace sd { namespace toolpanel
             return true;
         if ( isDisposed() )
             return false;
-        m_pControl = m_pControlFactory->CreateRootControl( getPanelWindowAnchor() );
+        m_pControl = m_pControlFactory->CreateControl( getPanelWindowAnchor() );
         return ( m_pControl.get() != NULL );
     }
 
