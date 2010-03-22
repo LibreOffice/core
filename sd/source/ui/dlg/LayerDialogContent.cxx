@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: LayerDialogContent.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 
 #include <svx/gallery.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/aeitem.hxx>
 #include <vcl/msgbox.hxx>
