@@ -2292,23 +2292,19 @@ sub is_output_tree {
     };
     return '';
 };
-
 sub get_tmp_dir {
     my $tmp_dir;
-    if( defined($ENV{TMPDIR}) ) {
-       $tmp_dir = $ENV{TMPDIR} . '/';
-    } elsif( defined($ENV{TMP}) ) {
+    if( defined($ENV{TMP}) ) {
        $tmp_dir = $ENV{TMP} . '/';
     } else {
        $tmp_dir = '/tmp/';
     }
-    $tmp_dir = tempdir ( DIR => $tmp_dir );
-    if (!-d $tmp_dir) {
-        print_error("Cannot create temporary directory for checkout in $tmp_dir") if ($@);
-    };
+    $tmp_dir .= $$ while (-e $tmp_dir);
+    $tmp_dir = CorrectPath($tmp_dir);
+    eval {mkpath($tmp_dir)};
+    print_error("Cannot create temporary directory in $tmp_dir") if ($@);
     return $tmp_dir;
 };
-
 
 sub retrieve_build_list {
     my $module = shift;
