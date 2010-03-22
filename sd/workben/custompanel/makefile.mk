@@ -92,12 +92,3 @@ EXTENSION_PACKDEPS=makefile.mk
 .INCLUDE : target.mk
 .INCLUDE : extension_post.mk
 
-# xcu files: copy
-
-#$(COMPONENT_XCU) : ./Impress.xcu
-#    @-$(MKDIRHIER) $(@:d)
-#    $(COPY) $< $@
-
-#$(COMPONENT_LIBRARY) : $(BIN)/$(SHL1TARGET)$(DLLPOST)
-#	@@-$(MKDIRHIER) $(@:d)
-#    @$(COPY) $< $@
