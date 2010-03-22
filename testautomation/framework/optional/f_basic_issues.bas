@@ -49,6 +49,7 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     
     use "global\tools\includes\optional\t_basic_ide_tools.inc"
+    use "global\tools\includes\optional\t_treelist_tools.inc"
     use "global\tools\includes\optional\t_macro_tools.inc"
 
     gApplication = "WRITER"

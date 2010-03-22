@@ -65,7 +65,7 @@ testcase tMacroUsertemplate
 
     brc = hCreateDocument()
     
-    brc = hOpenBasicOrganizerFromDoc()
+    ToolsMacro_uno
 
     iCurrentNode = hSelectNodeByName( MakroAus, "Module1" )
     if ( iCurrentNode = 0 ) then    

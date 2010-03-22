@@ -44,11 +44,7 @@ testcase tDeleteModulesAtRunningBasic
     Call hNewDocument()
 
     printlog( "Open the BASIC Organizer" )
-    brc = hOpenBasicOrganizerFromDoc()
-    if ( not brc ) then
-        warnlog( "Unable to open BASIC organizer for the document" )
-        goto endsub
-    endif
+    ToolsMacro_uno
 
     printlog( "Create a new module for the current document" )
     brc = hCreateModuleForDoc()

@@ -41,7 +41,7 @@ testcase tUpdtMacroAssignment
     
     printlog( "Create a new BASIC-module for this document" )
     
-    brc = hOpenBasicOrganizerFromDoc()
+    ToolsMacro_uno
     
     brc = hCreateModuleForDoc( "tUpdtBasicIde" )
     if ( not brc ) then

@@ -85,7 +85,7 @@ testcase tBasicDocuments
     endif
 
     printlog( "Open the BASIC organizer" )
-    brc = hOpenBasicOrganizerFromDoc()
+    ToolsMacro_uno
 
     printlog( "Retreive the names of all nodes from the treelist" )
     hGetVisibleNodeNames( MakroAus , cNodeListA() )

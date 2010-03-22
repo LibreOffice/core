@@ -102,166 +102,86 @@ endcase
 
 testcase tInvalidModuleNames
 
+    printlog( "Try to give BASIC modules invalid names (which should fail)" )
 
-    dim brc as boolean
-    dim cMsg as string
     dim iCurrentName as Integer
-    
     dim sSeparator as String 
     dim cModuleName as string
 
-    hBasicModuleCreateNew()
-
-
     Randomize
     iCurrentName = Int( 24 * RND ) + 1 ' Range from 1 to 24
-
     cModuleName = hCreateInvalidModuleName( iCurrentName )
-    printlog( "" )
     printlog( "Trying module name: " & cModuleName )
 
-    brc = hNameBasicModule( cModuleName )
-    
-    if ( brc ) then
+    if ( hCreateModuleForDoc( cModuleName ) ) then
         warnlog( "Basic-Ide should not open for invalid module names" )
         
         ' try to recover and continue for other names
-        brc = hCloseBasicIde()
-        brc = hDestroyDocument
-        brc = hBasicModuleCreateNew()
-        
-        ' if we cannot recover, exit the test
-        if ( not brc ) then
-            goto endsub
+        hCloseBasicIde()
+        hDestroyDocument
+    else
+        kontext "Active"
+        if ( Active.exists( 2 ) ) then
+            if( Active.getButtonCount() = 1 ) then
+                printlog( "Invalid module name warning displayed, good." )
+                printlog( Active.getText() )
+                hCloseDialog( Active, "ok" )
+
+                kontext "NeuesModul"
+                if ( NeuesModul.exists( 2 ) ) then
+                    hCloseDialog( NeuesModul, "cancel" )
+                else
+                    warnlog( "<NeuesModul> dialog should show after failed naming attempt" )
+                endif
+            else
+                warnlog( "Unexpected messagebox" )
+                printlog( Active.getText() )
+                hCloseDialog( Active, "close" )
+            endif
+        else
+            warnlog( "<Invalid name> Messagebox missing" )
         endif
     endif
 
+    kontext "Makro"
+    hCloseDialog( Makro, "close" )
+    hDestroyDocument()
 
-    printlog( "Close the naming dialog (cancel)" )
-    kontext "neuesmodul"
-    if ( NeuesModul.Exists() ) then
-        NeuesModul.Cancel()
-    endif
-
-    printlog( "Clsoe macro dialog (if it exists)" )
-    kontext "makro"
-    if ( Makro.Exists() ) then
-        Makro.Close()
-    endif
-    
-    printlog( "Close the document" )
-    brc = hDestroyDocument()
-    
 endcase
 
 '*******************************************************************************
 
 testcase tValidModuleNames
 
+    printlog( "Try using BASIC reserved names (and others) as module names (which should work)" )
 
-    dim brc as boolean
-    dim cMsg as string
     dim iCurrentName as Integer
-    
-    dim sKeyword as String
-
-    hBasicModuleCreateNew()
+    dim sModuleName as String
 
     Randomize
     iCurrentName = Int( 8 * RND ) + 1 ' Range from 1 to 8
 
     select case iCurrentName
-        case 1  : sKeyword = "option"
-        case 2  : sKeyword = "sub"
-        case 3  : sKeyword = "function"
-        case 4  : sKeyword = "end"
-        case 5  : sKeyword = "exit"
-        case 6  : sKeyword = "_underscore1"
-        case 7  : sKeyword = "underscore_2"
-        case 8  : sKeyWord = "ThisIsQuiteALongNameForAModuleDontYouThink"
+        case 1  : sModuleName = "option"
+        case 2  : sModuleName = "sub"
+        case 3  : sModuleName = "function"
+        case 4  : sModuleName = "end"
+        case 5  : sModuleName = "exit"
+        case 6  : sModuleName = "_underscore1"
+        case 7  : sModuleName = "underscore_2"
+        case 8  : sModuleName = "ThisIsQuiteALongNameForAModuleDontYouThink"
     end select
 
-    printlog( "" )
-    printlog( "Trying module name: " & sKeyword )
-
-    brc = hNameBasicModule( sKeyword )
-    
-    if ( brc ) then
-        
-        ' try to recover and continue for other names
-        brc = hCloseBasicIde()
-        brc = hDestroyDocument
-        brc = hBasicModuleCreateNew()
-        
-        ' if we cannot recover, exit the test
-        if ( not brc ) then
-            goto endsub
-        endif
+    if ( hCreateModuleForDoc( sModuleName ) ) then
+        printlog( "The module name was accepted: " & sModuleName )
+        hCloseBasicIDE()
+        hDestroyDocument()
+    else
+        warnlog( "The module name was not accepted: " & sModuleName )
+        goto endsub
     endif
-
-    printlog( "Close the naming dialog (cancel)" )
-    kontext "neuesmodul"
-    if ( NeuesModul.Exists() ) then
-        NeuesModul.Cancel()
-    endif
-
-    printlog( "Clsoe macro dialog (if it exists)" )
-    kontext "makro"
-    if ( Makro.Exists() ) then
-        Makro.Close()
-    endif
-    
-    printlog( "Close the document" )
-    brc = hDestroyDocument()
     
 endcase
-
-'*******************************************************************************
-
-function hBasicModuleCreateNew() as boolean
-
-
-    dim brc as boolean
-        brc = false
-        
-    dim iPos as integer
-        
-    const CFN = "hBasicModuleCreateNew::"
-
-    gApplication = "WRITER"
-    brc = hCreateDocument()
-    
-    brc = hOpenBasicOrganizerFromDoc()
-    if ( not brc ) then
-        warnlog( CFN & "Could not open the BASIC Macro Organizer, aborting" )
-        hDestroyDocument()
-    endif     
-    
-    if ( brc ) then
-        iPos = hSelectTheLastNode( MakroAus )
-        if ( not Neu.isEnabled() ) then
-            warnlog( CFN & "New button is disabled for the current module, aborting" )
-            kontext "Makro"
-            Makro.cancel()
-            brc = hDestroyDocument()
-        endif
-    endif 
-    
-    if ( brc ) then
-    
-        printlog( "Click 'New'" )
-        Neu.Click()
-        
-        kontext "NeuesModul"
-        if ( Neuesmodul.exists() ) then
-            brc = true
-            printlog( CFN & "Naming dialog is open"
-        endif
-    endif 
-    
-    hBasicModuleCreateNew() = brc
-    
-end function
 
 '*******************************************************************************
 
@@ -284,13 +204,13 @@ function hHandleInvalidNameWarning( cTabName as string ) as boolean
     	
     	    printlog( CFN & "Message: " & active.getText() )
     	    
-	        active.ok()
+	    active.ok()
     	    brc = true
     	   
     	else
     	
-    		if ( not brc ) then
-    			warnlog( CFN & "Invalid name warning missing" )
+            if ( not brc ) then
+                warnlog( CFN & "Invalid name warning missing" )
     	    endif
     	
         endif

@@ -43,8 +43,8 @@ testcase tBasicIdeModuleHide
     gApplication = "WRITER"
     call hNewDocument()
     
-    brc = hOpenBasicOrganizerFromDoc()
-    brc = hCreateModuleForDoc()
+    ToolsMacro_uno
+    hCreateModuleForDoc()
     
     brc = hInsertMacro( 1 )
     if ( brc ) then

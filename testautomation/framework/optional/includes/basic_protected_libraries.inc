@@ -47,7 +47,7 @@ testcase tProtectedLibraries
     dim iCurrentLib as integer
     dim cMsg as string
     
-    hOpenBasicOrganizerFromDoc()
+    ToolsMacro_uno
     
     printlog( "Select My Macros" )
     kontext "Makro"

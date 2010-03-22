@@ -47,8 +47,8 @@ testcase tBasic_IDE_Toolbar_Module
     gApplication = "WRITER"
     hCreateDocument()
 
-    brc = hOpenBasicOrganizerFromDoc()
-    brc = hCreateModuleForDoc()
+    ToolsMacro_uno
+    hCreateModuleForDoc()
 
 
     kontext "macrobar"

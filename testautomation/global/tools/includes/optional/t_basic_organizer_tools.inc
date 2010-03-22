@@ -70,66 +70,42 @@ end function
 
 function hCreateModuleForDoc( optional cName as string ) as boolean
 
-    use "global\tools\includes\optional\t_treelist_tools.inc"
-    use "global\tools\includes\optional\t_stringtools.inc"
-
     '///<h3>Create a new Basic module for the current document</h3>
     '///<i>Starting point: Basic Macro Organizer is visible and has focus</i>
-    '///<ul>
-
     const CFN = "hCreateModuleForDoc::"
-
-    dim iWait as integer   ' how long we had to wait for the IDE to open
-    dim iPos as integer
-    dim brc as boolean : brc = false
-    dim cMsg as string
-
-    ' make sure that we have a name for the module
+    const DEFAULT_WAIT = 2
     if ( isMissing( cName ) ) then cName = "TTModule"
 
-    '///+<li>Select the last module (it should belong to the current document)</li>
     kontext "Makro"
-    iPos = hSelectTheLastNode( MakroAus )
-    
-    '///+<li>Click the New-Button, name the module</li>
-    if ( not hClickButton( Neu ) ) then
-        warnlog( CFN & "New-button is disabled" )
-        hCreateModuleForDoc() = false
-        exit function
-    endif
-    
-    '///+<li>If the module already exists we end up on the Deletion dialog</li>
-    kontext "Active"
-    if ( Active.exists() ) then
-        printlog( "Module seems to exist, deleting Main: " & active.getText() )
-        hCloseDialog( Active, "yes" )
-    endif
-    
-    Kontext "NeuesModul"
-    if ( NeuesModul.exists( 1 ) ) then
-        Modulname.SetText( cName )
-        hCloseDialog( NeuesModul, "ok" )
-    else
-        warnlog( CFN & "Failed create a new module, aborting" )
-        hCreateModuleForDoc() = false
+    if ( hSelectTheLastNode( MakroAus ) > 0 ) then
+
         kontext "Makro"
-        hCloseDialog( Makro, "cancel" )
-        exit function
-    endif
-    
-    '///+<li>Wait for the BASIC_IDE to open, verify</li>
-    ' BasicIDE is bad for "Kontexting", using the default toolbar instead
-    kontext "MacroBar"
-    if ( MacroBar.exists( 3 ) ) then
-        printlog( CFN & "Exit: New module: " & cName & ". IDE is open" )
-        hCreateModuleForDoc() = true
+        if ( hClickButton( Neu ) ) then
+
+            Kontext "NeuesModul"
+            if ( NeuesModul.exists( DEFAULT_WAIT ) ) then
+                Modulname.SetText( cName )
+                hCloseDialog( NeuesModul, "ok" )
+
+                kontext "BasicIDE"
+                if ( BasicIde.exists( DEFAULT_WAIT ) ) then
+                    hCreateModuleForDoc() = true
+                else
+                    warnlog( CFN & "BASIC IDE is not open" )
+                    hCreateModuleForDoc() = false
+                endif
+            else
+                warnlog( CFN & "Dialog <NeuesModul> did not open" )
+                hCreateModuleForDoc() = false
+            endif
+        else
+            warnlog( CFN & "Failed to click <Neu> button" )
+            hCreateModuleForDoc() = false
+        endif
     else
-        warnlog( CFN & "Exit: Failed to create the Module" )
+        warnlog( CFN & "Failed to select the last node" )
         hCreateModuleForDoc() = false
     endif
-        
-    '///+<li>Return TRUE on success, FALSE on failure</li>
-    '///</ul>
 
 end function
 
@@ -173,27 +149,6 @@ function hOpenBasicObjectOrganizer( iTabPage as integer ) as boolean
     '///+<li>Return TRUE on success, FALSE on failure</li>
     '///</ul>
 
-    
-end function
-
-'*******************************************************************************
-
-function hOpenBasicOrganizerFromDoc() as boolean
-
-    '///<h3>Open the Basic Macro Organizer from a plain document</h3>
-    '///<i>Starting point: Plain document</i>
-    '///<ul>
-    
-    const CFN = "hOpenBasicOrganizerFromDoc::"
-    hOpenBasicOrganizerFromDoc() = false
-    
-    '///+<li>Use the slot ToolsMacro_uno to open the Basic Macro organizer</li>
-    ToolsMacro_uno
-    
-    '///+<li>Verify that the dialog is open</li>
-    kontext "Makro"
-    if ( Makro.exists( 2 ) ) then hOpenBasicOrganizerFromDoc() = true
-    '///</ul>
     
 end function
 

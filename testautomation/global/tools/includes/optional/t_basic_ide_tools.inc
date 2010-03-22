@@ -207,19 +207,17 @@ function hFindFirstDialog() as boolean
     const MAX_NUMBER_OF_RETRIES = 20
 
     dim iPosOverTabbar as integer
+    hFindFirstDialog() = false
 
     '///+<li>Set focus to Basic IDE, maximize it</li>
     kontext "BasicIde"
     BasicIde.maximize()
-    
 
-    hFindFirstDialog() = false
 
     '///+<li>move pointer over the tabbar and click until a dialog opens (hopefully)</li>
     for iPosOverTabbar = 1 to MAX_NUMBER_OF_RETRIES
 
-        Tabbar.MouseDown ( PROBE_STEPPING * iPosOverTabbar , VERTICALLY_CENTERED )
-        Tabbar.MouseUp   ( PROBE_STEPPING * iPosOverTabbar , VERTICALLY_CENTERED )
+        BASICIDE.typeKeys( "<MOD1 PAGEUP>" )
 
         if ( DialogWindow.Exists() ) then
             printlog( "BASIC Dialog window found" )
@@ -300,7 +298,7 @@ function hIsEditWindowEmpty() as boolean
 
     '///<h3>Test if the Basic-EditWindow is empty</h3>
     '///<i>Starting point: Basic IDE editor is open and has the focus</i>
-    const CFN & "hIsEditWindowEmpty(): "
+    const CFN = "hIsEditWindowEmpty(): "
     const SLOT_TIMEOUT = -1
     
     hUseAsyncSlot( "EditSelectAll" )
@@ -849,7 +847,7 @@ function hIDESelectTabByIndex( iIndex as integer ) as string
     hSelectMenuNr( 3 )
     
     '///+<li>Copy the selected string to the clipboard</li>
-    EditCopy
+    hUseAsyncSlot( "EditCopy" )
     
     '///+<li>Send ESC to the tabbar to deselect the tab</li>
     Kontext "Tabbar"

@@ -51,32 +51,29 @@ testcase tMakro_In_All_Apps
         printlog( cApp )
 
         printlog( "Open a new document" )
-        brc = hCreateDocument()
+        hCreateDocument()
         
-        brc = hInitBasicIde( CMACRO )
-        if ( not brc ) then
+        if ( not hInitBasicIde( CMACRO ) ) then
             warnlog( "Could not open the BASIC Macro Organizer, aborting" )
             call hDestroyDocument()
             goto endsub
         endif
         
         printlog "Close the BASIC-IDE"
-        brc = hCloseBasicIde()
+        hCloseBasicIde()
         
         printlog( "Close the navigator (Master-doc)" )
         kontext "Navigator"
         hCloseDialog( Navigator, "close,optional" )
         
         printlog( "Close the document" )
-        FileClose
+        hUseAsyncSlot( "FileClose" )
 
         printlog( "Close the messagebox (document changed)" )
         kontext "messagebox"
         if ( MessageBox.Exists( 1 ) ) then
-            cMsg = MessageBox.getText()
-            cMsg = hRemoveLineBreaks( cMsg )
-            printlog( "MessageBox: " & cMsg )
-            MessageBox.No()
+            printlog( "MessageBox: " & MessageBox.getText() )
+            hCloseDialog( Messagebox, "no" )
         else
             warnlog( "No warning for changed document" )
         end if
