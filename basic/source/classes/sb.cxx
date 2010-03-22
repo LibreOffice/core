@@ -68,7 +68,7 @@ using com::sun::star::uno::Reference;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::lang::XMultiServiceFactory;
-;
+
 const static String aThisComponent( RTL_CONSTASCII_USTRINGPARAM("ThisComponent") );
 const static String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
 
