@@ -585,7 +585,7 @@ function hUseMenu ()
     '///<b> function hUseMenu () </b>///'
     '///+ very global function: depends on 'gApplication' just activates the menu-bar ///'
 
-    Select Case Ucase(gApplication)
+    Select Case ( gApplication )
     Case "WRITER"
 
         Kontext "DocumentWriter"
@@ -646,7 +646,7 @@ function hOpenContextMenu()
 
     '/// very global function: depends on 'gApplication' just opens the Context Menu ///'
 
-    Select Case Ucase(gApplication)
+    Select Case ( gApplication )
     Case "WRITER"
 
         Kontext "DocumentWriter"
