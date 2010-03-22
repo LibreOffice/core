@@ -212,7 +212,7 @@ namespace basegfx
 
         bool operator==( const B3I64Tuple& rTup ) const
         {
-            return rTup.mnX == mnX && rTup.mnY == mnY && rTup.mnZ == mnZ;
+            return this == &rTup || (rTup.mnX == mnX && rTup.mnY == mnY && rTup.mnZ == mnZ);
         }
 
         bool operator!=( const B3I64Tuple& rTup ) const
