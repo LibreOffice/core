@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: langtab.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,8 +29,8 @@
 
 
 #include <tools/resary.hxx>
-
-#include "svtdllapi.h"
+#include <i18npool/lang.h>
+#include <svtools/svtdllapi.h>
 
 //========================================================================
 //  class SvtLanguageTable
@@ -50,6 +47,7 @@ public:
 
     sal_uInt32      GetEntryCount() const;
     LanguageType    GetTypeAtIndex( sal_uInt32 nIndex ) const;
+    static String   GetLanguageString( const LanguageType eType );
 };
 
 // Add LRE or RLE embedding characters to the string based on the

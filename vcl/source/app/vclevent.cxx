@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vclevent.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +31,29 @@
 #include "vcl/vclevent.hxx"
 #include "vcl/svdata.hxx"
 
+#include <com/sun/star/accessibility/XAccessible.hpp>
+
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::accessibility::XAccessible;
+
 TYPEINIT0(VclSimpleEvent);
 TYPEINIT1(VclWindowEvent, VclSimpleEvent);
 TYPEINIT1(VclMenuEvent, VclSimpleEvent);
+
+VclAccessibleEvent::VclAccessibleEvent( ULONG n, const Reference<XAccessible>& rxAccessible ) :
+    VclSimpleEvent(n),
+    mxAccessible(rxAccessible)
+{
+}
+
+VclAccessibleEvent::~VclAccessibleEvent()
+{
+}
+
+Reference<XAccessible> VclAccessibleEvent::GetAccessible() const
+{
+    return mxAccessible;
+}
 
 void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
 {
@@ -118,9 +135,8 @@ void VclEventListeners2::callListeners( VclSimpleEvent* i_pEvent )
 {
     vcl::DeletionListener aDel( this );
 
-    m_aIterators.push_back( ListenerIt() );
+    m_aIterators.push_back(ListenerIt(m_aListeners.begin()));
     size_t nIndex = m_aIterators.size() - 1;
-    m_aIterators[ nIndex ].m_aIt = m_aListeners.begin();
     while( ! aDel.isDeleted() && m_aIterators[ nIndex ].m_aIt != m_aListeners.end() )
     {
         m_aIterators[ nIndex ].m_aIt->Call( i_pEvent );

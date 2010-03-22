@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: jpeg.h,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,7 +61,7 @@ void*   JPEGMalloc( size_t size );
 void    JPEGFree( void *ptr );
 long    JPEGCallback( void* pCallbackData, long nPercent );
 
-long    WriteJPEG( void* pJPEGWriter, void* pOStm, long nWidth, long nHeight,
+long    WriteJPEG( void* pJPEGWriter, void* pOStm, long nWidth, long nHeight, long bGreyScale,
                    long nQualityPercent, void* pCallbackData );
 void*   GetScanline( void* pJPEGWriter, long nY );
 
