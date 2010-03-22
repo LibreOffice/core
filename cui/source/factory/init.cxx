@@ -36,7 +36,7 @@
 // caution: needs C-Linkage since dynamically loaded via symbol name
 extern "C"
 {
-bool GetSpecialCharsForEdit(Window* i_pParent, const Font& i_rFont, String& o_rResult)
+SAL_DLLPUBLIC_EXPORT bool GetSpecialCharsForEdit(Window* i_pParent, const Font& i_rFont, String& o_rResult)
 {
     bool bRet = false;
     SvxCharacterMap* aDlg = new SvxCharacterMap( i_pParent );
