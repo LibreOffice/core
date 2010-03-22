@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DrawController.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -737,7 +734,7 @@ Reference < beans::XPropertySetInfo >  DrawController::getPropertySetInfo()
 }
 
 
-uno::Reference< form::XFormController > SAL_CALL DrawController::getFormController( const uno::Reference< form::XForm >& Form ) throw (uno::RuntimeException)
+uno::Reference< form::runtime::XFormController > SAL_CALL DrawController::getFormController( const uno::Reference< form::XForm >& Form ) throw (uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
@@ -746,7 +743,7 @@ uno::Reference< form::XFormController > SAL_CALL DrawController::getFormControll
     ::boost::shared_ptr<ViewShell> pViewShell = mpBase->GetMainViewShell();
     ::sd::Window* pWindow = pViewShell ? pViewShell->GetActiveWindow() : NULL;
 
-    uno::Reference< form::XFormController > xController( NULL );
+    uno::Reference< form::runtime::XFormController > xController( NULL );
     if ( pFormShell && pSdrView && pWindow )
         xController = pFormShell->GetFormController( Form, *pSdrView, *pWindow );
     return xController;

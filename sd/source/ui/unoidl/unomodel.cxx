@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unomodel.cxx,v $
- * $Revision: 1.114 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,21 +40,20 @@
 #include <com/sun/star/presentation/XPresentation2.hpp>
 
 #include <osl/mutex.hxx>
+#include <comphelper/serviceinfohelper.hxx>
 
-#ifndef _UTL_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
 
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
-#include <svx/unofield.hxx>
+#include <editeng/unofield.hxx>
 #include <unomodel.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/UnoForbiddenCharsTable.hxx>
+#include <editeng/UnoForbiddenCharsTable.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <svx/UnoNamespaceMap.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdsob.hxx>
@@ -65,16 +61,16 @@
 #include <svx/unofill.hxx>
 #include <svx/unopool.hxx>
 #include <svx/svdorect.hxx>
+#include <editeng/flditem.hxx>
 #include <vos/mutex.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
-
-#include <svtools/unoimap.hxx>
-#include <svx/unolingu.hxx>
+#include <svx/svdpool.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/svdpagv.hxx>
-
+#include <svtools/unoimap.hxx>
 #include <svx/unoshape.hxx>
-#include <svx/unonrule.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/unonrule.hxx>
+#include <editeng/eeitem.hxx>
 
 // #99870# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
 #include <svx/xmleohlp.hxx>
@@ -111,6 +107,12 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 
+#include <com/sun/star/office/XAnnotation.hpp>
+#include <com/sun/star/office/XAnnotationAccess.hpp>
+#include <com/sun/star/office/XAnnotationEnumeration.hpp>
+#include <com/sun/star/geometry/RealPoint2D.hpp>
+#include <com/sun/star/util/DateTime.hpp>
+
 using ::rtl::OUString;
 
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
@@ -121,8 +123,6 @@ using namespace ::cppu;
 using namespace ::com::sun::star;
 
 extern uno::Reference< uno::XInterface > SdUnoCreatePool( SdDrawDocument* pDrawModel );
-
-///////////////////////////////////////////////////////////////////////
 
 class SdUnoForbiddenCharsTable : public SvxUnoForbiddenCharsTable,
                                  public SfxListener
@@ -207,7 +207,7 @@ const SvxItemPropertySet* ImplGetDrawModelPropertySet()
         { MAP_CHAR_LEN(sUNO_Prop_HasValidSignatures),   WID_MODEL_HASVALIDSIGNATURES, &::getCppuType(static_cast< const sal_Bool * >(0)), beans::PropertyAttribute::READONLY, 0 },
         { 0,0,0,0,0,0 }
     };
-    static SvxItemPropertySet aDrawModelPropertySet_Impl( aDrawModelPropertyMap_Impl );
+    static SvxItemPropertySet aDrawModelPropertySet_Impl( aDrawModelPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
     return &aDrawModelPropertySet_Impl;
 }
 
@@ -1516,7 +1516,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
     sal_Bool bExportNotesPages = sal_False;
     for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
-        if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) ) )
+        if( rxOptions[ nProperty ].Name.equalsAscii( "ExportNotesPages" ) )
             rxOptions[ nProperty].Value >>= bExportNotesPages;
     }
     uno::Sequence< beans::PropertyValue > aRenderer;
@@ -1602,6 +1602,42 @@ sal_Int32 ImplPDFGetBookmarkPage( const String& rBookmark, SdDrawDocument& rDoc 
     if ( nPgNum != SDRPAGE_NOTFOUND )
         nPage = ( nPgNum - 1 ) / 2;
     return nPage;
+}
+
+void ImplPDFExportComments( uno::Reference< drawing::XDrawPage > xPage, vcl::PDFExtOutDevData& rPDFExtOutDevData )
+{
+    try
+    {
+        uno::Reference< office::XAnnotationAccess > xAnnotationAccess( xPage, uno::UNO_QUERY_THROW );
+        uno::Reference< office::XAnnotationEnumeration > xAnnotationEnumeration( xAnnotationAccess->createAnnotationEnumeration() );
+
+        LanguageType eLanguage = Application::GetSettings().GetLanguage();
+        while( xAnnotationEnumeration->hasMoreElements() )
+        {
+            uno::Reference< office::XAnnotation > xAnnotation( xAnnotationEnumeration->nextElement() );
+
+            geometry::RealPoint2D aRealPoint2D( xAnnotation->getPosition() );
+            uno::Reference< text::XText > xText( xAnnotation->getTextRange() );
+//          rtl::OUString sInitials( getInitials( sAuthor ) );
+            util::DateTime aDateTime( xAnnotation->getDateTime() );
+
+            Date aDate( aDateTime.Day, aDateTime.Month, aDateTime.Year );
+            Time aTime;
+            String aStr( SvxDateTimeField::GetFormatted( aDate, aTime, SVXDATEFORMAT_B, *(SD_MOD()->GetNumberFormatter()), eLanguage ) );
+
+            vcl::PDFNote aNote;
+            String sTitle( xAnnotation->getAuthor() );
+            sTitle.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
+            sTitle += aStr;
+            aNote.Title = sTitle;
+            aNote.Contents = xText->getString();
+            rPDFExtOutDevData.CreateNote( Rectangle( Point( static_cast< long >( aRealPoint2D.X * 100 ),
+                static_cast< long >( aRealPoint2D.Y * 100 ) ), Size( 1000, 1000 ) ), aNote );
+        }
+    }
+    catch( uno::Exception& )
+    {
+    }
 }
 
 void ImplPDFExportShapeInteraction( uno::Reference< drawing::XShape > xShape, SdDrawDocument& rDoc, vcl::PDFExtOutDevData& rPDFExtOutDevData )
@@ -1846,7 +1882,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
         for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
         {
             if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) )
-                rxOptions[ nProperty].Value >>= xRenderDevice;
+                rxOptions[ nProperty ].Value >>= xRenderDevice;
             else if ( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) ) )
             {
                 rxOptions[ nProperty].Value >>= bExportNotesPages;
@@ -1942,6 +1978,8 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                             uno::Reference< drawing::XDrawPage > xPage( uno::Reference< drawing::XDrawPage >::query( pPage->getUnoPage() ) );
                             if ( xPage.is() )
                             {
+                                if ( pPDFExtOutDevData->GetIsExportNotes() )
+                                    ImplPDFExportComments( xPage, *pPDFExtOutDevData );
                                 uno::Reference< beans::XPropertySet > xPagePropSet( xPage, uno::UNO_QUERY );
                                 if( xPagePropSet.is() )
                                 {
@@ -2991,7 +3029,7 @@ OUString SAL_CALL SdDocLinkTargets::getImplementationName()
 sal_Bool SAL_CALL SdDocLinkTargets::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getSupportedServiceNames()
