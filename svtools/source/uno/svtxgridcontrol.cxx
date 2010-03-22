@@ -130,7 +130,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
 
     TableControl* pTable = (TableControl*)GetWindow();
     const StyleSettings& rStyleSettings = GetWindow()->GetSettings().GetStyleSettings();
-    com::sun::star::awt::FontDescriptor& aFont = VCLUnoHelper::CreateFontDescriptor( rStyleSettings.GetAppFont() );
+    const com::sun::star::awt::FontDescriptor& aFont = VCLUnoHelper::CreateFontDescriptor( rStyleSettings.GetAppFont() );
 
     switch( GetPropertyId( PropertyName ) )
     {
