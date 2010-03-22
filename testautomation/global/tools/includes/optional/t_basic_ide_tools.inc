@@ -103,15 +103,12 @@ function hOpenBasicIDE() as boolean
 
     '///<h3>Open the Basic IDE for the last module listed in the Macro Organizer</h3>
     '///<i>Starting point: Basic Macro Organizer has focus</i>
-    '///<ul>
     
     const CFN = "hOpenBasicIDE::"
     const BUTTON_TIMEOUT = -1
     
-    '///+<li>Select the last module in the treelist, verify that it can be edited</li>
     if ( hSelectTheLastModule( true ) ) then
     
-        '///+<li>Click the Edit-button</li>
         if ( hClickButton( Bearbeiten) <> BUTTON_TIMEOUT ) then
 
             kontext "BASICIDE"
@@ -131,8 +128,6 @@ function hOpenBasicIDE() as boolean
         warnlog( CFN & "Unable to select the last module" )
         hOpenBasicIDE() = false
     endif
-    
-    '///</ul>
 
 end function
 
@@ -153,19 +148,13 @@ function hReOpenBasicDialog() as boolean
 
     '///<h3>Open BASIC-IDE after loading a workfile with documentbound macro</h3>
     '///<i>Starting point: Focus on document containing at least one macro</i><br>
-    '///<i>IMPORTANT: Errorhandling is incomplete, test may end up in undefined state</i>
-    '///<ul>
-
     const CFN = "hReopenBasicDialog: "
     const BUTTON_TIMEOUT = -1
     
-    '///+<li>open the macro dialog, select the last module</li>
     if ( hSelectTheLastModule( true ) ) then
 
-        '///+<li>edit the module</li>
         if ( hClickButton( Bearbeiten ) <> BUTTON_TIMEOUT ) then
 
-            '///+<li>find the dialog window.</li>
             kontext "BasicIDE"
             BasicIde.maximize()
 
@@ -183,12 +172,7 @@ function hReOpenBasicDialog() as boolean
     else
         warnlog( CFN & "Could not open the last module for editing." )
         hReOpenBasicDialog() = false
-        exit function
     endif
-
-    
-    '///+<li>Return TRUE on success, FALSE on failure</li>
-    '///</ul>
 
 end function
 
@@ -595,7 +579,6 @@ function hInitBasicIde( cModule as string ) as boolean
 
             kontext "BasicIDE"
             if ( BasicIDE.exists( 2 ) ) then
-
                 BasicIDE.maximize()
                 hInitBasicIde() = true
             else
