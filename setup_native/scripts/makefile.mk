@@ -50,7 +50,8 @@ UNIXTEXT= \
 UNIXTEXT+= $(BIN)$/stclient_wrapper.sh
 .ENDIF
 
-FAKEDB=$(BIN)$/noarch/fake-db-1.0-0.noarch.rpm
+NOARCH=$(BIN)$/noarch
+FAKEDB=$(NOARCH)/fake-db-1.0-0.noarch.rpm
 FAKEDBROOT=$(COMMONMISC)/$(TARGET)/fake-db-root
 
 # --- Targets ------------------------------------------------------
@@ -73,6 +74,7 @@ $(BIN)$/install: install_$(OS:l).sh
 $(FAKEDB) : fake-db.spec 
     $(MKDIRHIER) $(FAKEDBROOT)
     $(RPM) --define "_builddir $(shell @cd $(FAKEDBROOT) && pwd)" --define "_rpmdir $(shell @cd $(BIN) && pwd)" -bb $<
+    chmod g+w $(NOARCH)
 
 $(BIN)$/install: $(FAKEDB)
 
