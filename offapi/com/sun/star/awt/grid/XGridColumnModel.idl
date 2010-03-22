@@ -33,6 +33,7 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 #include <com/sun/star/awt/grid/XGridColumn.idl>
+
 #include <com/sun/star/awt/grid/XGridColumnListener.idl>
 
 //=============================================================================
@@ -50,9 +51,9 @@ module com {  module sun {  module star {  module awt { module grid {
 */
 interface XGridColumnModel
 {
-    /** Specifies whether column selection is allowed
-    */
-    [attribute] boolean ColumnSelectionAllowed;
+    ///** Specifies whether column selection is allowed
+    //*/
+    //[attribute] boolean ColumnSelectionAllowed;
 
     /**Specifies the height of column header.
     */
@@ -102,23 +103,16 @@ interface XGridColumnModel
     */
     void setDefaultColumns([in] long elements);
 
+    /**Creates new XGridColumn with the settings of other column. To be used if the columns which are added to
+        the column model have the same settings.
+        @param column
+            the column, which is already created
+    */
+    XGridColumn copyColumn( [in] XGridColumn column );
+
     /*
     long getTotalColumnWidth();
     */
-
-    /** Adds a listener for the <type>GridColumnEvent</type> posted after the grid changes.
-        @param Listener
-            the listener to add.
-    */
-    [oneway] void addColumnListener( [in] XGridColumnListener  listener);
-
-    //-------------------------------------------------------------------------
-
-    /** Removes a listener previously added with <method>addColumnListener()</method>.
-        @param Listener
-            the listener to remove.
-    */
-    [oneway] void removeColumnListener( [in] XGridColumnListener listener);
 };
 
 //=============================================================================
