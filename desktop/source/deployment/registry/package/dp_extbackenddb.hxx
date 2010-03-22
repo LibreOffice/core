@@ -58,11 +58,15 @@ namespace bundle {
  */
 class ExtensionBackendDb: public dp_registry::backend::BackendDb
 {
+protected:
+    virtual ::rtl::OUString getDbNSName();
+
+    virtual ::rtl::OUString getRootElementName();
+
 public:
     struct Data
     {
-        ::rtl::OUString identifier;
-        /* every element consists of a pair of the url to the item (jar,rdb, etc)
+         /* every element consists of a pair of the url to the item (jar,rdb, etc)
            and the media type
          */
         ::std::vector< ::std::pair< ::rtl::OUString, ::rtl::OUString> > items;
@@ -80,9 +84,6 @@ public:
     void removeEntry(::rtl::OUString const & url);
     Data getEntry(::rtl::OUString const & url);
 
-    virtual ::rtl::OUString getDbNSName();
-
-    virtual ::rtl::OUString getRootElementName();
 };
 
 

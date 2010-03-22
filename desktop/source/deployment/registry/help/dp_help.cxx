@@ -79,8 +79,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
             ::rtl::Reference<PackageRegistryBackend> const & myBackend,
             OUString const & url, OUString const & name,
             Reference<deployment::XPackageTypeInfo> const & xPackageType,
-            bool bUseDb)
-            : Package( myBackend, url, name, name, xPackageType, bUseDb)
+            bool bRemoved, OUString const & identifier)
+            : Package( myBackend, url, name, name, xPackageType, bRemoved, identifier)
             {}
     };
     friend class PackageImpl;
@@ -88,7 +88,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
-        sal_Bool bNoFileAccess,
+        sal_Bool bRemoved, OUString const & identifier,
         Reference<XCommandEnvironment> const & xCmdEnv );
 
     void implProcessHelp( Reference< deployment::XPackage > xPackage, bool doRegisterPackage );
@@ -140,7 +140,7 @@ BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 //______________________________________________________________________________
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & url, OUString const & mediaType_,
-    sal_Bool bNoFileAccess,
+    sal_Bool bRemoved, OUString const & identifier,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     // we don't support auto detection:
@@ -155,14 +155,19 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     {
         if (type.EqualsIgnoreCaseAscii("application"))
         {
-            ::ucbhelper::Content ucbContent( url, xCmdEnv );
+            OUString name;
+            if (!bRemoved)
+            {
+                ::ucbhelper::Content ucbContent( url, xCmdEnv );
+                name = ucbContent.getPropertyValue(
+                    StrTitle::get() ).get<OUString>();
+            }
+
             if (subType.EqualsIgnoreCaseAscii(
                     "vnd.sun.star.help"))
             {
                 return new PackageImpl(
-                    this, url,
-                    ucbContent.getPropertyValue( StrTitle::get() ).get<OUString>(),
-                    m_xHelpTypeInfo, bNoFileAccess);
+                    this, url, name, m_xHelpTypeInfo, bRemoved, identifier);
             }
         }
     }

@@ -89,14 +89,14 @@ class BackendImpl : public t_helper
             OUString const & url,
             Reference<XCommandEnvironment> const &xCmdEnv,
             OUString const & scriptURL, OUString const & dialogURL,
-            bool bUseDb);
+            bool bRemoved, OUString const & identifier);
     };
     friend class PackageImpl;
 
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
-        sal_Bool bNoFileAccess,
+        sal_Bool bRemoved, OUString const & identifier,
         Reference<XCommandEnvironment> const & xCmdEnv );
 
     rtl::OUString getRegisteredFlagFileURL( Reference< deployment::XPackage > xPackage );
@@ -125,11 +125,12 @@ BackendImpl::PackageImpl::PackageImpl(
     ::rtl::Reference<BackendImpl> const & myBackend,
     OUString const & url,
     Reference<XCommandEnvironment> const &xCmdEnv,
-    OUString const & scriptURL, OUString const & dialogURL, bool bUseDb )
+    OUString const & scriptURL, OUString const & dialogURL, bool bRemoved,
+    OUString const & identifier)
     : Package( myBackend.get(), url,
                OUString(), OUString(), // will be late-initialized
                scriptURL.getLength() > 0 ? myBackend->m_xBasicLibTypeInfo
-               : myBackend->m_xDialogLibTypeInfo, bUseDb),
+               : myBackend->m_xDialogLibTypeInfo, bRemoved, identifier),
       m_scriptURL( scriptURL ),
       m_dialogURL( dialogURL )
 {
@@ -191,7 +192,7 @@ BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 //______________________________________________________________________________
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & url, OUString const & mediaType_,
-    sal_Bool bNoFileAccess,
+    sal_Bool bRemoved, OUString const & identifier,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     OUString mediaType( mediaType_ );
@@ -234,7 +235,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 }
                 return new PackageImpl( this, url, xCmdEnv,
                                         makeURL( url, OUSTR("script.xlb") ),
-                                        dialogURL, bNoFileAccess);
+                                        dialogURL, bRemoved, identifier);
             }
             else if (subType.EqualsIgnoreCaseAscii(
                          "vnd.sun.star.dialog-library")) {
@@ -242,7 +243,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                     this, url, xCmdEnv,
                     OUString() /* no script lib */,
                     makeURL( url, OUSTR("dialog.xlb") ),
-                    bNoFileAccess);
+                    bRemoved, identifier);
             }
         }
     }

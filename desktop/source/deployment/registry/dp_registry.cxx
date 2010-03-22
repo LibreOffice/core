@@ -127,7 +127,7 @@ public:
     // XPackageRegistry
     virtual Reference<deployment::XPackage> SAL_CALL bindPackage(
         OUString const & url, OUString const & mediaType, sal_Bool bNoFileAccess,
-        Reference<XCommandEnvironment> const & xCmdEnv )
+        OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
         throw (deployment::DeploymentException, CommandFailedException,
                lang::IllegalArgumentException, RuntimeException);
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
@@ -458,8 +458,8 @@ void PackageRegistryImpl::update() throw (RuntimeException)
 // XPackageRegistry
 //______________________________________________________________________________
 Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
-    OUString const & url, OUString const & mediaType_, sal_Bool bNoFileAccess,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    OUString const & url, OUString const & mediaType_, sal_Bool bRemoved,
+    OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
     throw (deployment::DeploymentException, CommandFailedException,
            lang::IllegalArgumentException, RuntimeException)
 {
@@ -497,7 +497,7 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
         for ( ; iPos != iEnd; ++iPos )
         {
             try {
-                return (*iPos)->bindPackage( url, mediaType, bNoFileAccess, xCmdEnv );
+                return (*iPos)->bindPackage( url, mediaType, bRemoved, identifier, xCmdEnv );
             }
             catch (lang::IllegalArgumentException &) {
             }
@@ -526,7 +526,7 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
                 getResourceString(RID_STR_UNSUPPORTED_MEDIA_TYPE) + mediaType,
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
         }
-        return iFind->second->bindPackage( url, mediaType, bNoFileAccess, xCmdEnv );
+        return iFind->second->bindPackage( url, mediaType, bRemoved, identifier, xCmdEnv );
     }
 }
 

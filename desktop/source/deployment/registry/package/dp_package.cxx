@@ -77,9 +77,9 @@
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ucb;
+
 namespace css = ::com::sun::star;
-namespace cssu = ::com::sun::star::uno;
+
 using ::rtl::OUString;
 
 namespace dp_registry {
@@ -105,46 +105,49 @@ class BackendImpl : public ImplBaseT
         Sequence< Reference<deployment::XPackage> > m_bundle;
         Sequence< Reference<deployment::XPackage> > * m_pBundle;
 
-        ExtensionBackendDb::Data m_data;
+        ExtensionBackendDb::Data m_dbData;
 
         Reference<deployment::XPackage> bindBundleItem(
             OUString const & url, OUString const & mediaType,
-            Reference<XCommandEnvironment> const & xCmdEnv,
+            sal_Bool bRemoved, //that is, useing data base information
+            OUString const & identifier,
+            Reference<ucb::XCommandEnvironment> const & xCmdEnv,
             bool notifyDetectionError = true );
 
         typedef ::std::vector< Reference<deployment::XPackage> > t_packagevec;
         void scanBundle(
             t_packagevec & bundle,
             ::rtl::Reference<AbortChannel> const & abortChannel,
-            Reference<XCommandEnvironment> const & xCmdEnv );
+            Reference<ucb::XCommandEnvironment> const & xCmdEnv );
         void scanLegacyBundle(
             t_packagevec & bundle,
             OUString const & url,
             ::rtl::Reference<AbortChannel> const & abortChannel,
-            Reference<XCommandEnvironment> const & xCmdEnv,
+            Reference<ucb::XCommandEnvironment> const & xCmdEnv,
             bool skip_registration = false );
-        ::std::vector<Reference<deployment::XPackage> > getPackagesFromDb();
+        ::std::vector<Reference<deployment::XPackage> > getPackagesFromDb(
+            Reference<ucb::XCommandEnvironment> const & xCmdEnv);
         bool checkPlatform(
-            css::uno::Reference< css::ucb::XCommandEnvironment > const &  environment);
+            Reference<ucb::XCommandEnvironment > const &  environment);
 
         bool checkDependencies(
-            css::uno::Reference< css::ucb::XCommandEnvironment > const &
+            Reference<ucb::XCommandEnvironment > const &
                 environment,
             DescriptionInfoset const & description);
             // throws css::uno::RuntimeException,
             // css::deployment::DeploymentException
 
         ::sal_Bool checkLicense(
-            css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv,
+            Reference< ucb::XCommandEnvironment > const & xCmdEnv,
             DescriptionInfoset const & description, bool bInstalled,
             OUString const & aContextName )
-                throw (css::deployment::DeploymentException,
-                    css::ucb::CommandFailedException,
-                    css::ucb::CommandAbortedException,
-                    css::uno::RuntimeException);
+                throw (deployment::DeploymentException,
+                       ucb::CommandFailedException,
+                       ucb::CommandAbortedException,
+                       RuntimeException);
         // @throws DeploymentException
         OUString getTextFromURL(
-            const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
+            const Reference< ucb::XCommandEnvironment >& xCmdEnv,
             const OUString& licenseUrl);
 
         DescriptionInfoset getDescriptionInfoset();
@@ -153,12 +156,12 @@ class BackendImpl : public ImplBaseT
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
             ::rtl::Reference<AbortChannel> const & abortChannel,
-            Reference<XCommandEnvironment> const & xCmdEnv );
+            Reference<ucb::XCommandEnvironment> const & xCmdEnv );
         virtual void processPackage_(
             ::osl::ResettableMutexGuard & guard,
             bool registerPackage,
             ::rtl::Reference<AbortChannel> const & abortChannel,
-            Reference<XCommandEnvironment> const & xCmdEnv );
+            Reference<ucb::XCommandEnvironment> const & xCmdEnv );
 
         virtual void SAL_CALL disposing();
 
@@ -171,51 +174,66 @@ class BackendImpl : public ImplBaseT
             OUString const & name,
             Reference<deployment::XPackageTypeInfo> const & xPackageType,
             bool legacyBundle,
-            bool useDb);
+            bool bRemoved,
+            OUString const & identifier);
 
         // XPackage
         virtual sal_Bool SAL_CALL isBundle() throw (RuntimeException);
+
         virtual Sequence< Reference<deployment::XPackage> > SAL_CALL getBundle(
             Reference<task::XAbortChannel> const & xAbortChannel,
-            Reference<XCommandEnvironment> const & xCmdEnv )
+            Reference<ucb::XCommandEnvironment> const & xCmdEnv )
             throw (deployment::DeploymentException,
-                   CommandFailedException, CommandAbortedException,
+                   ucb::CommandFailedException,
+                   ucb::CommandAbortedException,
                    lang::IllegalArgumentException, RuntimeException);
-        virtual OUString SAL_CALL getDescription() throw (RuntimeException);
+        virtual OUString SAL_CALL getDescription()
+            throw (deployment::ExtensionRemovedException, RuntimeException);
+
         virtual void SAL_CALL exportTo(
             OUString const & destFolderURL, OUString const & newTitle,
             sal_Int32 nameClashAction,
-            Reference<XCommandEnvironment> const & xCmdEnv )
-            throw (CommandFailedException, CommandAbortedException,
+            Reference<ucb::XCommandEnvironment> const & xCmdEnv )
+            throw (deployment::ExtensionRemovedException,
+                   ucb::CommandFailedException,
+                   ucb::CommandAbortedException,
                    RuntimeException);
 
         virtual ::sal_Bool SAL_CALL checkPrerequisites(
-            const css::uno::Reference< css::task::XAbortChannel >& xAbortChannel,
-            const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
+            const Reference< task::XAbortChannel >& xAbortChannel,
+            const Reference< ucb::XCommandEnvironment >& xCmdEnv,
             ::sal_Bool bInstalled, OUString const & aContextName)
-            throw (css::deployment::DeploymentException,
-                css::ucb::CommandFailedException,
-                css::ucb::CommandAbortedException,
-                css::uno::RuntimeException);
+            throw (deployment::ExtensionRemovedException,
+                   deployment::DeploymentException,
+                   ucb::CommandFailedException,
+                   ucb::CommandAbortedException,
+                   RuntimeException);
 
         virtual ::sal_Bool SAL_CALL checkDependencies(
-            const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv )
-            throw (css::deployment::DeploymentException,
-                css::ucb::CommandFailedException,
-                css::uno::RuntimeException);
+            const Reference< ucb::XCommandEnvironment >& xCmdEnv )
+            throw (deployment::DeploymentException,
+                   deployment::ExtensionRemovedException,
+                   ucb::CommandFailedException,
+                   RuntimeException);
 
         virtual beans::Optional<OUString> SAL_CALL getIdentifier()
             throw (RuntimeException);
 
-        virtual OUString SAL_CALL getVersion() throw (RuntimeException);
+        virtual OUString SAL_CALL getVersion()
+            throw (deployment::ExtensionRemovedException, RuntimeException);
 
         virtual Sequence<OUString> SAL_CALL getUpdateInformationURLs()
-            throw (RuntimeException);
+            throw (deployment::ExtensionRemovedException, RuntimeException);
 
-        virtual css::beans::StringPair SAL_CALL getPublisherInfo() throw (css::uno::RuntimeException);
+        virtual beans::StringPair SAL_CALL getPublisherInfo()
+            throw (deployment::ExtensionRemovedException, RuntimeException);
 
         virtual OUString SAL_CALL getDisplayName() throw (RuntimeException);
-        virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL getIcon( ::sal_Bool bHighContrast ) throw (css::uno::RuntimeException);
+
+        virtual Reference< graphic::XGraphic > SAL_CALL
+        getIcon( ::sal_Bool bHighContrast )
+            throw (deployment::ExtensionRemovedException,
+                   RuntimeException);
     };
     friend class PackageImpl;
 
@@ -233,8 +251,8 @@ class BackendImpl : public ImplBaseT
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
-        sal_Bool bNoFileAccess,
-        Reference<XCommandEnvironment> const & xCmdEnv );
+        sal_Bool bRemoved, OUString const & identifier,
+        Reference<ucb::XCommandEnvironment> const & xCmdEnv );
 
     virtual void SAL_CALL disposing();
 
@@ -344,8 +362,8 @@ BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 //______________________________________________________________________________
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & url, OUString const & mediaType_,
-    sal_Bool bNoFileAccess,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    sal_Bool bRemoved, OUString const & identifier,
+    Reference<ucb::XCommandEnvironment> const & xCmdEnv )
 {
     OUString mediaType( mediaType_ );
     if (mediaType.getLength() == 0)
@@ -393,21 +411,24 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     {
         if (type.EqualsIgnoreCaseAscii("application"))
         {
-            ::ucbhelper::Content ucbContent;
-            OUString name;
+
             //In case a XPackage is created for a removed extension, we cannot
             //obtain the name
-            if (create_ucb_content(&ucbContent, url, xCmdEnv, false ))
+            OUString name;
+            if (!bRemoved)
+            {
+                ::ucbhelper::Content ucbContent( url, xCmdEnv );
                 name = ucbContent.getPropertyValue(
                     StrTitle::get() ).get<OUString>();
+            }
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.package-bundle")) {
                 return new PackageImpl(
-                    this, url, name, m_xBundleTypeInfo, false, bNoFileAccess);
+                    this, url, name, m_xBundleTypeInfo, false, bRemoved, identifier);
             }
             else if (subType.EqualsIgnoreCaseAscii(
                          "vnd.sun.star.legacy-package-bundle")) {
                 return new PackageImpl(
-                    this, url, name, m_xLegacyBundleTypeInfo, true, bNoFileAccess);
+                    this, url, name, m_xLegacyBundleTypeInfo, true, bRemoved, identifier);
             }
         }
     }
@@ -447,16 +468,15 @@ BackendImpl::PackageImpl::PackageImpl(
     OUString const & url,
     OUString const & name,
     Reference<deployment::XPackageTypeInfo> const & xPackageType,
-    bool legacyBundle,
-    bool useDb)
+    bool legacyBundle, bool bRemoved, OUString const & identifier)
     : Package( myBackend, url, name, name /* display-name */,
-               xPackageType, useDb ),
+               xPackageType, bRemoved, identifier),
       m_url_expanded( expandUnoRcUrl( url ) ),
       m_legacyBundle( legacyBundle ),
       m_pBundle( 0 )
 {
-    if (useDb)
-        m_data = getMyBackend()->readDataFromDb(url);
+    if (bRemoved)
+        m_dbData = getMyBackend()->readDataFromDb(url);
 }
 
 BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
@@ -491,10 +511,17 @@ beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::PackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard &,
     ::rtl::Reference<AbortChannel> const & abortChannel,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    Reference<ucb::XCommandEnvironment> const & xCmdEnv )
 {
+    //In case the object was created for a removed extension (m_bRemoved = true)
+    //but the extension is not registered, then bundle will be empty. Then
+    //the return value will be Optional<...>.IsPresent= false. Althoug this is
+    //not true, this does not matter. Then registerPackage or revokePackage
+    //would never be called for the items. But since the extension is removed
+    //and not registered anyway, this does not matter.
     const Sequence< Reference<deployment::XPackage> > bundle(
         getBundle( abortChannel.get(), xCmdEnv ) );
+
     bool reg = false;
     bool present = false;
     bool ambig = false;
@@ -723,10 +750,13 @@ bool BackendImpl::PackageImpl::checkDependencies(
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
         sal_Bool bInstalled, OUString const & aContextName)
         throw (css::deployment::DeploymentException,
-            css::ucb::CommandFailedException,
-            css::ucb::CommandAbortedException,
-            css::uno::RuntimeException)
+               css::deployment::ExtensionRemovedException,
+               css::ucb::CommandFailedException,
+               css::ucb::CommandAbortedException,
+               css::uno::RuntimeException)
 {
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
     DescriptionInfoset info = getDescriptionInfoset();
     if (!info.hasDescription())
         return sal_True;
@@ -742,6 +772,8 @@ bool BackendImpl::PackageImpl::checkDependencies(
             css::ucb::CommandFailedException,
             css::uno::RuntimeException)
 {
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
     DescriptionInfoset info = getDescriptionInfoset();
     if (!info.hasDescription())
         return sal_True;
@@ -753,8 +785,8 @@ beans::Optional<OUString> BackendImpl::PackageImpl::getIdentifier()
     throw (RuntimeException)
 {
     OUString identifier;
-    if (m_bUseDb)
-        identifier =  m_data.identifier;
+    if (m_bRemoved)
+        identifier = m_identifier;
     else
         identifier = dp_misc::generateIdentifier(
             getDescriptionInfoset().getIdentifier(), m_name);
@@ -765,18 +797,24 @@ beans::Optional<OUString> BackendImpl::PackageImpl::getIdentifier()
 
 OUString BackendImpl::PackageImpl::getVersion() throw (RuntimeException)
 {
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
     return getDescriptionInfoset().getVersion();
 }
 
 Sequence<OUString> BackendImpl::PackageImpl::getUpdateInformationURLs()
-    throw (RuntimeException)
+    throw (deployment::ExtensionRemovedException, RuntimeException)
 {
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
     return getDescriptionInfoset().getUpdateInformationUrls();
 }
 
 beans::StringPair BackendImpl::PackageImpl::getPublisherInfo()
-    throw (RuntimeException)
+    throw (deployment::ExtensionRemovedException, RuntimeException)
 {
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
     ::std::pair< OUString, OUString > aInfo = getDescriptionInfoset().getLocalizedPublisherNameAndURL();
     beans::StringPair aStrPair( aInfo.first, aInfo.second );
     return aStrPair;
@@ -784,8 +822,11 @@ beans::StringPair BackendImpl::PackageImpl::getPublisherInfo()
 
 //______________________________________________________________________________
 uno::Reference< graphic::XGraphic > BackendImpl::PackageImpl::getIcon( sal_Bool bHighContrast )
-    throw ( RuntimeException )
+    throw (deployment::ExtensionRemovedException, RuntimeException )
 {
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
+
     uno::Reference< graphic::XGraphic > xGraphic;
 
     OUString aIconURL = getDescriptionInfoset().getIconURL( bHighContrast );
@@ -816,7 +857,7 @@ void BackendImpl::PackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
     bool doRegisterPackage,
     ::rtl::Reference<AbortChannel> const & abortChannel,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    Reference<ucb::XCommandEnvironment> const & xCmdEnv )
 {
     const Sequence< Reference<deployment::XPackage> > bundle(
         getBundle( abortChannel.get(), xCmdEnv ) );
@@ -838,7 +879,7 @@ void BackendImpl::PackageImpl::processPackage_(
             catch (RuntimeException &) {
                 throw;
             }
-            catch (CommandAbortedException &) {
+            catch (ucb::CommandAbortedException &) {
                 throw;
             }
             catch (Exception &) {
@@ -876,7 +917,7 @@ void BackendImpl::PackageImpl::processPackage_(
                         catch (RuntimeException &) {
                             throw;
                         }
-                        catch (CommandAbortedException &) {
+                        catch (ucb::CommandAbortedException &) {
                             throw;
                         }
                         catch (Exception &) {
@@ -893,7 +934,7 @@ void BackendImpl::PackageImpl::processPackage_(
 
                 deployment::DeploymentException dpExc;
                 if (exc >>= dpExc) {
-                    throw CommandFailedException(
+                    throw ucb::CommandFailedException(
                         dpExc.Message, dpExc.Context, dpExc.Cause );
                 }
                 else {
@@ -905,7 +946,6 @@ void BackendImpl::PackageImpl::processPackage_(
                 ::std::make_pair(xPackage->getURL(),
                                  xPackage->getPackageType()->getMediaType()));
         }
-        data.identifier = getIdentifier().Value;
         getMyBackend()->addDataToDb(getURL(), data);
     }
     else
@@ -924,7 +964,7 @@ void BackendImpl::PackageImpl::processPackage_(
             catch (RuntimeException &) {
                 throw;
             }
-            catch (CommandAbortedException &) {
+            catch (ucb::CommandAbortedException &) {
                 throw;
             }
             catch (Exception &) {
@@ -957,6 +997,9 @@ void BackendImpl::PackageImpl::processPackage_(
 //______________________________________________________________________________
 OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException)
 {
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
+
     const OUString sRelativeURL(getDescriptionInfoset().getLocalizedDescriptionURL());
     OUString sDescription;
     if (sRelativeURL.getLength())
@@ -977,9 +1020,14 @@ OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException)
 //______________________________________________________________________________
 void BackendImpl::PackageImpl::exportTo(
     OUString const & destFolderURL, OUString const & newTitle,
-    sal_Int32 nameClashAction, Reference<XCommandEnvironment> const & xCmdEnv )
-    throw (CommandFailedException, CommandAbortedException, RuntimeException)
+    sal_Int32 nameClashAction, Reference<ucb::XCommandEnvironment> const & xCmdEnv )
+    throw (ucb::CommandFailedException,
+           deployment::ExtensionRemovedException,
+           ucb::CommandAbortedException, RuntimeException)
 {
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
+
     ::ucbhelper::Content sourceContent( m_url_expanded, xCmdEnv );
     OUString title(newTitle);
     if (title.getLength() == 0)
@@ -989,25 +1037,25 @@ void BackendImpl::PackageImpl::exportTo(
                                    rtl_UriEncodeIgnoreEscapes,
                                    RTL_TEXTENCODING_UTF8 ) ) );
 
-    if (nameClashAction == NameClash::ASK)
+    if (nameClashAction == ucb::NameClash::ASK)
     {
         if (create_ucb_content(
                 0, destURL, xCmdEnv, false /* no throw */ )) {
             bool replace = false, abort = false;
             if (! interactContinuation(
-                    Any( NameClashResolveRequest(
+                    Any( ucb::NameClashResolveRequest(
                              OUSTR("file already exists: ") + title,
                              static_cast<OWeakObject *>(this),
                              task::InteractionClassification_QUERY,
                              destFolderURL, title, OUString() ) ),
-                    XInteractionReplaceExistingData::static_type(), xCmdEnv,
+                    ucb::XInteractionReplaceExistingData::static_type(), xCmdEnv,
                     &replace, &abort ) || !replace) {
                 return;
             }
         }
     }
-    else if (nameClashAction != NameClash::OVERWRITE) {
-        throw CommandFailedException(
+    else if (nameClashAction != ucb::NameClash::OVERWRITE) {
+        throw ucb::CommandFailedException(
             OUSTR("unsupported nameClashAction!"),
             static_cast<OWeakObject *>(this), Any() );
     }
@@ -1033,11 +1081,11 @@ void BackendImpl::PackageImpl::exportTo(
         while (xResultSet->next())
         {
             ::ucbhelper::Content subContent(
-                Reference<XContentAccess>(
+                Reference<ucb::XContentAccess>(
                     xResultSet, UNO_QUERY_THROW )->queryContent(), xCmdEnv );
             if (! destFolderContent.transferContent(
                     subContent, ::ucbhelper::InsertOperation_COPY,
-                    OUString(), NameClash::OVERWRITE ))
+                    OUString(), ucb::NameClash::OVERWRITE ))
                 throw RuntimeException( OUSTR("UCB transferContent() failed!"),
                                         static_cast<OWeakObject *>(this) );
             progress.update( Any() ); // animating progress bar
@@ -1145,7 +1193,7 @@ void BackendImpl::PackageImpl::exportTo(
 
         if (! metainfFolderContent.transferContent(
                 manifestContent, ::ucbhelper::InsertOperation_COPY,
-                OUString(), NameClash::OVERWRITE ))
+                OUString(), ucb::NameClash::OVERWRITE ))
             throw RuntimeException( OUSTR("UCB transferContent() failed!"),
                                     static_cast<OWeakObject *>(this) );
     }
@@ -1154,7 +1202,7 @@ void BackendImpl::PackageImpl::exportTo(
     try {
         destFolderContent.executeCommand( OUSTR("flush"), Any() );
     }
-    catch (UnsupportedCommandException &) {
+    catch (ucb::UnsupportedCommandException &) {
     }
 }
 
@@ -1167,18 +1215,18 @@ sal_Bool BackendImpl::PackageImpl::isBundle() throw (RuntimeException)
 //______________________________________________________________________________
 Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
     Reference<task::XAbortChannel> const & xAbortChannel,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    Reference<ucb::XCommandEnvironment> const & xCmdEnv )
     throw (deployment::DeploymentException,
-           CommandFailedException, CommandAbortedException,
+           ucb::CommandFailedException, ucb::CommandAbortedException,
            lang::IllegalArgumentException, RuntimeException)
 {
     Sequence< Reference<deployment::XPackage> > * pBundle = m_pBundle;
     if (pBundle == 0)
     {
         t_packagevec bundle;
-        if (m_bUseDb)
+        if (m_bRemoved)
         {
-            bundle = getPackagesFromDb();
+            bundle = getPackagesFromDb(xCmdEnv);
         }
         else
         {
@@ -1203,7 +1251,8 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
 
                     if (mediaType.getLength() > 0) {
                         const Reference<deployment::XPackage> xPackage(
-                            bindBundleItem( getURL(), mediaType, xCmdEnv ) );
+                            bindBundleItem( getURL(), mediaType, false, OUString(),
+                                            xCmdEnv ) );
                         if (xPackage.is())
                             bundle.push_back( xPackage );
                         // continue scanning:
@@ -1221,10 +1270,10 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
             catch (RuntimeException &) {
                 throw;
             }
-            catch (CommandFailedException &) {
+            catch (ucb::CommandFailedException &) {
                 throw;
             }
-            catch (CommandAbortedException &) {
+            catch (ucb::CommandAbortedException &) {
                 throw;
             }
             catch (deployment::DeploymentException &) {
@@ -1302,7 +1351,8 @@ inline bool isBundle_( OUString const & mediaType )
 //______________________________________________________________________________
 Reference<deployment::XPackage> BackendImpl::PackageImpl::bindBundleItem(
     OUString const & url, OUString const & mediaType,
-    Reference<XCommandEnvironment> const & xCmdEnv,
+    sal_Bool bRemoved, OUString const & identifier,
+    Reference<ucb::XCommandEnvironment> const & xCmdEnv,
     bool notifyDetectionError )
 {
     // ignore any nested bundles:
@@ -1312,13 +1362,13 @@ Reference<deployment::XPackage> BackendImpl::PackageImpl::bindBundleItem(
     Reference<deployment::XPackage>xPackage;
     try {
         xPackage.set( getMyBackend()->m_xRootRegistry->bindPackage(
-                          url, mediaType, false, xCmdEnv ) );
+                          url, mediaType, bRemoved, identifier, xCmdEnv ) );
         OSL_ASSERT( xPackage.is() );
     }
     catch (RuntimeException &) {
         throw;
     }
-    catch (CommandFailedException &) {
+    catch (ucb::CommandFailedException &) {
         // ignore already handled error
     }
     catch (Exception &) {
@@ -1351,7 +1401,7 @@ Reference<deployment::XPackage> BackendImpl::PackageImpl::bindBundleItem(
 void BackendImpl::PackageImpl::scanBundle(
     t_packagevec & bundle,
     ::rtl::Reference<AbortChannel> const & abortChannel,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    Reference<ucb::XCommandEnvironment> const & xCmdEnv )
 {
     OSL_ASSERT( !m_legacyBundle );
 
@@ -1448,7 +1498,7 @@ void BackendImpl::PackageImpl::scanBundle(
         if (bundle.end() == std::find_if(bundle.begin(), bundle.end(), XPackage_eq(url)))
         {
             const Reference<deployment::XPackage> xPackage(
-                bindBundleItem( url, mediaType, xCmdEnv ) );
+                bindBundleItem( url, mediaType, false, OUString(), xCmdEnv ) );
             if (xPackage.is())
                 bundle.push_back( xPackage );
         }
@@ -1487,7 +1537,7 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
     t_packagevec & bundle,
     OUString const & url,
     ::rtl::Reference<AbortChannel> const & abortChannel,
-    Reference<XCommandEnvironment> const & xCmdEnv,
+    Reference<ucb::XCommandEnvironment> const & xCmdEnv,
     bool skip_registration )
 {
     ::ucbhelper::Content ucbContent( url, xCmdEnv );
@@ -1523,8 +1573,8 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
 
         OUString mediaType;
         const Reference<deployment::XPackage> xPackage(
-            bindBundleItem( path, OUString() /* detect */, xCmdEnv,
-                            false /* ignore detection errors */ ) );
+            bindBundleItem( path, OUString() /* detect */, false, OUString(),
+                            xCmdEnv, false /* ignore detection errors */ ) );
         if (xPackage.is()) {
             const Reference<deployment::XPackageTypeInfo> xPackageType(
                 xPackage->getPackageType() );
@@ -1559,8 +1609,12 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
     }
 }
 
-OUString BackendImpl::PackageImpl::getDisplayName() throw (RuntimeException)
+OUString BackendImpl::PackageImpl::getDisplayName()
+    throw (deployment::ExtensionRemovedException, RuntimeException)
 {
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
+
     OUString sName = getDescriptionInfoset().getLocalizedDisplayName();
     if (sName.getLength() == 0)
         return m_displayName;
@@ -1568,11 +1622,22 @@ OUString BackendImpl::PackageImpl::getDisplayName() throw (RuntimeException)
         return sName;
 }
 
-::std::vector<Reference<deployment::XPackage> > BackendImpl::PackageImpl::getPackagesFromDb()
+::std::vector<Reference<deployment::XPackage> >
+BackendImpl::PackageImpl::getPackagesFromDb(
+    Reference<ucb::XCommandEnvironment> const & xCmdEnv)
 {
-    //get the data base entry for this extension
+    ::std::vector<Reference<deployment::XPackage> > retVector;
 
-    return ::std::vector<Reference<deployment::XPackage> >();
+    typedef ::std::vector< ::std::pair<OUString, OUString> >::const_iterator ITC;
+    for (ITC i = m_dbData.items.begin(); i != m_dbData.items.end(); i++)
+    {
+        Reference<deployment::XPackage> xExtension =
+            bindBundleItem(i->first, i->second, true, m_identifier, xCmdEnv);
+        OSL_ASSERT(xExtension.is());
+        retVector.push_back(xExtension);
+    }
+
+    return retVector;
 }
 
 } // anon namespace

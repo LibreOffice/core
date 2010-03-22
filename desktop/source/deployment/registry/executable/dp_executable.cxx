@@ -72,9 +72,10 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         inline ExecutablePackageImpl(
             ::rtl::Reference<PackageRegistryBackend> const & myBackend,
             OUString const & url, OUString const & name,
-            Reference<deployment::XPackageTypeInfo> const & xPackageType, bool bUseDb)
+            Reference<deployment::XPackageTypeInfo> const & xPackageType,
+            bool bRemoved, OUString const & identifier)
             : Package( myBackend, url, name, name /* display-name */,
-                       xPackageType, bUseDb) //,
+                       xPackageType, bRemoved, identifier)
             {}
     };
     friend class ExecutablePackageImpl;
@@ -84,8 +85,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
-        OUString const & url, OUString const & mediaType, sal_Bool bNoFileAccess,
-        Reference<XCommandEnvironment> const & xCmdEnv );
+        OUString const & url, OUString const & mediaType, sal_Bool bRemoved,
+        OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv );
 
     Reference<deployment::XPackageTypeInfo> m_xExecutableTypeInfo;
 
@@ -125,8 +126,8 @@ BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 
 // PackageRegistryBackend
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
-    OUString const & url, OUString const & mediaType, sal_Bool bNoFileAccess,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    OUString const & url, OUString const & mediaType, sal_Bool bRemoved,
+    OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
 {
     if (mediaType.getLength() == 0)
     {
@@ -141,13 +142,17 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     {
         if (type.EqualsIgnoreCaseAscii("application"))
         {
-            ::ucbhelper::Content ucbContent( url, xCmdEnv );
-            const OUString name( ucbContent.getPropertyValue(
-                dp_misc::StrTitle::get() ).get<OUString>() );
+            OUString name;
+            if (!bRemoved)
+            {
+                ::ucbhelper::Content ucbContent( url, xCmdEnv );
+                name = ucbContent.getPropertyValue(
+                    dp_misc::StrTitle::get() ).get<OUString>();
+            }
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.executable"))
             {
                 return new BackendImpl::ExecutablePackageImpl(
-                    this, url, name,  m_xExecutableTypeInfo, bNoFileAccess);
+                    this, url, name,  m_xExecutableTypeInfo, bRemoved, identifier);
             }
         }
     }

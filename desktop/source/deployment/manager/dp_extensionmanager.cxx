@@ -284,9 +284,6 @@ Reference<deploy::XPackage> ExtensionManager::getExtensionAndStatus(
   contain any items which need to be registered then the extension cannot
   actually be disabled (because it cannot be registered). In this case false is
   returned. If there is no user extension then also false is returned.
-
-  A user extension is regarded as disabled if there is an extension in a
- repository with a lower priority that is registered.
  */
 bool ExtensionManager::isUserExtensionDisabled(
     OUString const & identifier, OUString const & fileName,
@@ -295,36 +292,19 @@ bool ExtensionManager::isUserExtensionDisabled(
 
 {
     bool bDisabled = false;
-    ::std::list<Reference<deploy::XPackage> > listExtensions =
-          getExtensionsWithSameId(identifier, fileName);
-    ::std::list<Reference<deploy::XPackage> >::const_iterator
-          iext = listExtensions.begin();
-    bool bCheckOptional = false;
-    Reference<deploy::XPackage> xActive;
-    for (; iext != listExtensions.end(); iext++)
+    Reference<deploy::XPackage> xExtension;
+    try
+    {   //will throw an exception if the extension does not exist
+        xExtension = m_userRepository->getDeployedPackage(
+            identifier, fileName, Reference<ucb::XCommandEnvironment>());
+    } catch(lang::IllegalArgumentException &)
     {
-        if (iext->is())
-        {
-            if (!(*iext)->isRegistered(xAbortChannel, xCmdEnv).IsPresent)
-            {
-                // IsPresent must be the same for all extnesions
-                OSL_ASSERT(!bCheckOptional);
-                break;
-            }
-            else
-            {
-                bCheckOptional = true;
-                if ((*iext)->isRegistered(xAbortChannel, xCmdEnv).Value.Value)
-                {
-                    xActive = *iext;
-                    break;
-                }
-            }
-        }
-        Reference<deploy::XPackage> const & xUser = listExtensions.front();
-        if (xUser.is()
-            && xActive.is()
-            && xUser != xActive)
+    }
+    if (xExtension.is())
+    {
+        beans::Optional<beans::Ambiguous<sal_Bool> > reg =
+            xExtension->isRegistered(xAbortChannel, xCmdEnv);
+        if (reg.IsPresent && ! reg.Value.Value)
             bDisabled = true;
     }
     return bDisabled;
@@ -1105,13 +1085,13 @@ void ExtensionManager::synchronize(
                 const OUString id = dp_misc::getIdentifier(xExtension);
                 const OUString fileName = xExtension->getName();
 
-                bool bUserDisabled = isUserExtensionDisabled(
-                    id, xExtension->getName(), xAbortChannel, xCmdEnv);
+                 bool bUserDisabled = isUserExtensionDisabled(
+                     id, xExtension->getName(), xAbortChannel, xCmdEnv);
                 xExtension->revokePackage(xAbortChannel, xCmdEnv);
                 xPackageManager->removePackage(
                     id, fileName, xAbortChannel, xCmdEnv);
                 activateExtension(
-                    id, fileName, bUserDisabled, xAbortChannel, xCmdEnv);
+                    id, fileName, /*bUserDisabled*/ false, xAbortChannel, xCmdEnv);
             }
             catch (...)
             {

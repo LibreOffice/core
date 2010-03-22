@@ -60,6 +60,7 @@ namespace component {
 <?xml version="1.0"?>
 <component-backend-db xmlns="http://openoffice.org/extensionmanager/component-registry/2010">
   <component url="vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/uno_packages/5CD5.tmp_/leaves1.oxt/extensionoptions.jar">
+    <name>FileName</name>
     <java-type-library>true</java-type-library>
     <implementation-names>
       <name>com.sun.star.comp.extensionoptions.OptionsEventHandler$_OptionsEventHandler</name>
@@ -80,6 +81,11 @@ namespace component {
  */
 class ComponentBackendDb: public dp_registry::backend::BackendDb
 {
+protected:
+    virtual ::rtl::OUString getDbNSName();
+
+    virtual ::rtl::OUString getRootElementName();
+
 public:
     struct Data
     {
@@ -99,10 +105,7 @@ public:
 
     void addEntry(::rtl::OUString const & url, Data const & data);
     void removeEntry(::rtl::OUString const & url);
-
-    virtual ::rtl::OUString getDbNSName();
-
-    virtual ::rtl::OUString getRootElementName();
+    Data getEntry(::rtl::OUString const & url);
 
 
 };

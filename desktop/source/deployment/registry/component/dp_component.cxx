@@ -123,6 +123,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
         const OUString m_loader;
         Reference<XComponentContext> m_xRemoteContext;
+        ComponentBackendDb::Data m_registeredComponentsDb;
 
         enum reg {
             REG_UNINIT, REG_VOID, REG_REGISTERED, REG_NOT_REGISTERED, REG_MAYBE_REGISTERED
@@ -152,16 +153,11 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         const Reference<registry::XSimpleRegistry> getRDB_RO() const;
 
     public:
-        inline ComponentPackageImpl(
+        ComponentPackageImpl(
             ::rtl::Reference<PackageRegistryBackend> const & myBackend,
             OUString const & url, OUString const & name,
             Reference<deployment::XPackageTypeInfo> const & xPackageType,
-            OUString const & loader, bool bUseDb )
-            : Package( myBackend, url, name, name /* display-name */,
-                       xPackageType, bUseDb ),
-              m_loader( loader ),
-              m_registered( REG_UNINIT )
-            {}
+            OUString const & loader, bool bRemoved, OUString const & identifier);
     };
     friend class ComponentPackageImpl;
 
@@ -186,15 +182,11 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
             Reference<XCommandEnvironment> const & xCmdEnv );
 
     public:
-        inline TypelibraryPackageImpl(
+        TypelibraryPackageImpl(
             ::rtl::Reference<PackageRegistryBackend> const & myBackend,
             OUString const & url, OUString const & name,
             Reference<deployment::XPackageTypeInfo> const & xPackageType,
-            bool jarFile, bool bUseDb )
-            : Package( myBackend, url, name, name /* display-name */,
-                       xPackageType, bUseDb),
-              m_jarFile( jarFile )
-            {}
+            bool jarFile, bool bRemoved, OUString const & identifier);
     };
     friend class TypelibraryPackageImpl;
 
@@ -215,7 +207,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
-        sal_Bool bNoFileAccess,
+        sal_Bool bNoFileAccess, OUString const & identifier,
         Reference<XCommandEnvironment> const & xCmdEnv );
 
     virtual void SAL_CALL disposing();
@@ -238,6 +230,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
     void addDataToDb(OUString const & url, ComponentBackendDb::Data const & data);
     void deleteDataFromDb(OUString const & url);
+    ComponentBackendDb::Data readDataFromDb(OUString const & url);
 
 
     //These rdbs are for writing new service entries. The rdb files are copies
@@ -285,6 +278,24 @@ public:
 };
 
 //______________________________________________________________________________
+
+BackendImpl::ComponentPackageImpl::ComponentPackageImpl(
+    ::rtl::Reference<PackageRegistryBackend> const & myBackend,
+    OUString const & url, OUString const & name,
+    Reference<deployment::XPackageTypeInfo> const & xPackageType,
+    OUString const & loader, bool bRemoved, OUString const & identifier)
+    : Package( myBackend, url, name, name /* display-name */,
+               xPackageType, bRemoved, identifier),
+      m_loader( loader ),
+      m_registered( REG_UNINIT )
+{
+    if (bRemoved)
+    {
+        m_registeredComponentsDb = getMyBackend()->readDataFromDb(url);
+    }
+}
+
+
 const Reference<registry::XSimpleRegistry>
 BackendImpl::ComponentPackageImpl::getRDB() const
 {
@@ -593,6 +604,14 @@ void BackendImpl::deleteDataFromDb(OUString const & url)
         m_backendDb->removeEntry(url);
 }
 
+ComponentBackendDb::Data BackendImpl::readDataFromDb(OUString const & url)
+{
+    ComponentBackendDb::Data data;
+    if (m_backendDb.get())
+        data = m_backendDb->getEntry(url);
+    return data;
+}
+
 // XPackageRegistry
 //______________________________________________________________________________
 Sequence< Reference<deployment::XPackageTypeInfo> >
@@ -605,7 +624,7 @@ BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 //______________________________________________________________________________
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & url, OUString const & mediaType_,
-    sal_Bool bNoFileAccess,
+    sal_Bool bRemoved, OUString const & identifier,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     OUString mediaType(mediaType_);
@@ -661,9 +680,14 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     {
         if (type.EqualsIgnoreCaseAscii("application"))
         {
-            ::ucbhelper::Content ucbContent( url, xCmdEnv );
-            const OUString name( ucbContent.getPropertyValue(
-                                     StrTitle::get() ).get<OUString>() );
+            OUString name;
+            if (!bRemoved)
+            {
+                ::ucbhelper::Content ucbContent( url, xCmdEnv );
+                name = ucbContent.getPropertyValue(
+                    StrTitle::get() ).get<OUString>();
+            }
+
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.uno-component"))
             {
                 // xxx todo: probe and evaluate component xml description
@@ -679,19 +703,19 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                             return new BackendImpl::ComponentPackageImpl(
                                 this, url, name, m_xDynComponentTypeInfo,
                                 OUSTR("com.sun.star.loader.SharedLibrary"),
-                                bNoFileAccess );
+                                bRemoved, identifier);
                         }
                         if (value.EqualsIgnoreCaseAscii("Java")) {
                             return new BackendImpl::ComponentPackageImpl(
                                 this, url, name, m_xJavaComponentTypeInfo,
                                 OUSTR("com.sun.star.loader.Java2"),
-                                bNoFileAccess );
+                                bRemoved, identifier);
                         }
                         if (value.EqualsIgnoreCaseAscii("Python")) {
                             return new BackendImpl::ComponentPackageImpl(
                                 this, url, name, m_xPythonComponentTypeInfo,
                                 OUSTR("com.sun.star.loader.Python"),
-                                bNoFileAccess);
+                                bRemoved, identifier);
                         }
                     }
                 }
@@ -707,12 +731,12 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                     {
                         return new BackendImpl::TypelibraryPackageImpl(
                             this, url, name, m_xRDBTypelibTypeInfo,
-                            false /* rdb */, bNoFileAccess);
+                            false /* rdb */, bRemoved, identifier);
                     }
                     if (value.EqualsIgnoreCaseAscii("Java")) {
                         return new BackendImpl::TypelibraryPackageImpl(
                             this, url, name, m_xJavaTypelibTypeInfo,
-                            true /* jar */, bNoFileAccess);
+                            true /* jar */, bRemoved, identifier);
                     }
                 }
             }
@@ -749,16 +773,13 @@ void BackendImpl::unorc_verify_init(
                 sal_Int32 index = sizeof ("UNO_JAVA_CLASSPATH=") - 1;
                 do {
                     OUString token( line.getToken( 0, ' ', index ).trim() );
-                    if (token.getLength() > 0) {
-                        // cleanup, check if existing:
-                        if (create_ucb_content(
-                                0, expandUnoRcTerm(token), xCmdEnv,
-                                false /* no throw */ )) {
-                            m_jar_typelibs.push_back( token );
-                        }
-                        else
-                            OSL_ENSURE(
-                                0, "### invalid UNO_JAVA_CLASSPATH entry!" );
+                    if (token.getLength() > 0)
+                    {
+                        //The jar file may not exist anymore if a shared or bundled
+                        //extension was removed, but it can still be in the unorc
+                        //After running XExtensionManager::synchronize, the unorc is
+                        //cleaned up
+                        m_jar_typelibs.push_back( token );
                     }
                 }
                 while (index >= 0);
@@ -768,17 +789,15 @@ void BackendImpl::unorc_verify_init(
                 sal_Int32 index = sizeof ("UNO_TYPES=") - 1;
                 do {
                     OUString token( line.getToken( 0, ' ', index ).trim() );
-                    if (token.getLength() > 0) {
+                    if (token.getLength() > 0)
+                    {
                         if (token[ 0 ] == '?')
                             token = token.copy( 1 );
-                        // cleanup, check if existing:
-                        if (create_ucb_content(
-                                0, expandUnoRcTerm(token),
-                                xCmdEnv, false /* no throw */ )) {
-                            m_rdb_typelibs.push_back( token );
-                        }
-                        else
-                            OSL_ENSURE( 0, "### invalid UNO_TYPES entry!" );
+                        //The RDB file may not exist anymore if a shared or bundled
+                        //extension was removed, but it can still be in the unorc.
+                        //After running XExtensionManager::synchronize, the unorc is
+                        //cleaned up
+                        m_rdb_typelibs.push_back( token );
                     }
                 }
                 while (index >= 0);
@@ -1211,8 +1230,12 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
     const bool java = m_loader.equalsAsciiL(
         RTL_CONSTASCII_STRINGPARAM("com.sun.star.loader.Java2") );
     const OUString url( getURL() );
-    bool isJavaTypelib = java &&
-        !jarManifestHeaderPresent( url, OUSTR("UNO-Type-Path"), xCmdEnv );
+    bool isJavaTypelib;
+    if (m_bRemoved)
+        isJavaTypelib = m_registeredComponentsDb.javaTypeLibrary;
+    else
+        isJavaTypelib = java &&
+            !jarManifestHeaderPresent( url, OUSTR("UNO-Type-Path"), xCmdEnv );
 
     ComponentBackendDb::Data data;
     data.javaTypeLibrary = isJavaTypelib;
@@ -1330,8 +1353,15 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
 
         t_stringlist implNames;
         t_stringpairvec singletons;
-        getComponentInfo( &implNames, &singletons, xContext );
-
+        if (m_bRemoved)
+        {
+            implNames = m_registeredComponentsDb.implementationNames;
+            singletons = m_registeredComponentsDb.singletons;
+        }
+        else
+        {
+            getComponentInfo( &implNames, &singletons, xContext );
+        }
         // factories live removal:
         const Reference<container::XSet> xSet(
             that->getComponentContext()->getServiceManager(), UNO_QUERY_THROW );
@@ -1405,6 +1435,16 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
 }
 
 //##############################################################################
+BackendImpl::TypelibraryPackageImpl::TypelibraryPackageImpl(
+    ::rtl::Reference<PackageRegistryBackend> const & myBackend,
+    OUString const & url, OUString const & name,
+    Reference<deployment::XPackageTypeInfo> const & xPackageType,
+    bool jarFile, bool bRemoved, OUString const & identifier)
+    : Package( myBackend, url, name, name /* display-name */,
+               xPackageType, bRemoved, identifier),
+      m_jarFile( jarFile )
+{
+}
 
 // Package
 BackendImpl * BackendImpl::TypelibraryPackageImpl::getMyBackend() const

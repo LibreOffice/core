@@ -44,6 +44,7 @@ import com.sun.star.io.XOutputStream;
 import com.sun.star.io.XTruncate;
 
 import com.sun.star.deployment.XPackage;
+import com.sun.star.deployment.ExtensionRemovedException;
 
 public class UnoPkgContainer extends ParcelContainer
 {
@@ -336,7 +337,15 @@ public class UnoPkgContainer extends ParcelContainer
         LogUtils.DEBUG("** processUnoPackage getURL() -> " + uri );
         LogUtils.DEBUG("** processUnoPackage getName() -> " + dPackage.getName() );
         LogUtils.DEBUG("** processUnoPackage getMediaType() -> " + dPackage.getPackageType().getMediaType() );
-        LogUtils.DEBUG("** processUnoPackage getDisplayName() -> " + dPackage.getDisplayName() );
+        try
+        {
+            LogUtils.DEBUG("** processUnoPackage getDisplayName() -> " + dPackage.getDisplayName() );
+        }
+        catch (com.sun.star.deployment.ExtensionRemovedException e)
+        {
+            throw new com.sun.star.lang.WrappedTargetException(e.toString(), this, e);
+        }
+
         processUnoPackage( uri, language );
 
         db = getUnoPackagesDB();

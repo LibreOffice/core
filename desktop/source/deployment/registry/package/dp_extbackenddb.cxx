@@ -46,22 +46,6 @@ using ::rtl::OUString;
 #define EXTENSION_REG_NS "http://openoffice.org/extensionmanager/extension-registry/2010"
 #define ROOT_ELEMENT_NAME "extension-backend-db"
 
-// /extension-backend-db/extension
-#define EXTENSION_ELEMENT "extension"
-
-// /extension-backend-db/extension/extension-items
-#define EXTENSION_ITEMS "extension-items"
-
-// /extension-backend-db/extension/extension-items/item
-#define EXTENSION_ITEMS_ITEM "item"
-
-// /extension-backend-db/extension/extension-items/item/url
-#define ITEM_URL "url"
-
-// /extension-backend-db/extension/extension-items/item/media-type
-#define ITEM_MEDIA_TYP "media-type"
-
-
 namespace dp_registry {
 namespace backend {
 namespace bundle {
@@ -109,13 +93,13 @@ void ExtensionBackendDb::addEntry(::rtl::OUString const & url, Data const & data
         root->appendChild(extensionNodeNode);
 
         // <identifier>...</identifier>
-        Reference<css::xml::dom::XNode> identifierNode(
-            doc->createElement(OUSTR("identifier")), UNO_QUERY_THROW);
-        extensionNodeNode->appendChild(identifierNode);
+//         Reference<css::xml::dom::XNode> identifierNode(
+//             doc->createElement(OUSTR("identifier")), UNO_QUERY_THROW);
+//         extensionNodeNode->appendChild(identifierNode);
 
-        Reference<css::xml::dom::XNode> identifierValue(
-            doc->createTextNode(data.identifier), UNO_QUERY_THROW);
-        identifierNode->appendChild(identifierValue);
+//         Reference<css::xml::dom::XNode> identifierValue(
+//             doc->createTextNode(data.identifier), UNO_QUERY_THROW);
+//         identifierNode->appendChild(identifierValue);
 
 
         writeVectorOfPair(
@@ -145,30 +129,41 @@ void ExtensionBackendDb::removeEntry(::rtl::OUString const & url)
 
 ExtensionBackendDb::Data ExtensionBackendDb::getEntry(::rtl::OUString const & url)
 {
-    ExtensionBackendDb::Data retData;
-    const OUString sExpression(
-        OUSTR("reg:extension[@url = \"") + url + OUSTR("\"]"));
-    Reference<css::xml::dom::XDocument> doc = getDocument();
-    Reference<css::xml::dom::XNode> root = doc->getFirstChild();
+    try
+    {
+        ExtensionBackendDb::Data retData;
+        const OUString sExpression(
+            OUSTR("reg:extension[@url = \"") + url + OUSTR("\"]"));
+        Reference<css::xml::dom::XDocument> doc = getDocument();
+        Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
-    Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
-        //find the extension element that is to be removed
-    Reference<css::xml::dom::XNode> aNode =
-        xpathApi->selectSingleNode(root, sExpression);
-    OSL_ASSERT(aNode.is());
+        Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
 
-    const OUString sExprIdentifier(OUSTR("reg:identifier/text()"));
+        Reference<css::xml::dom::XNode> aNode =
+            xpathApi->selectSingleNode(root, sExpression);
+        if (aNode.is())
+        {
+//             const OUString sExprIdentifier(OUSTR("reg:identifier/text()"));
 
-    Reference<css::xml::dom::XNode> idValueNode =
-        xpathApi->selectSingleNode(aNode, sExprIdentifier);
-    retData.identifier = idValueNode->getNodeValue();
+//             Reference<css::xml::dom::XNode> idValueNode =
+//                 xpathApi->selectSingleNode(aNode, sExprIdentifier);
+//             retData.identifier = idValueNode->getNodeValue();
 
-    retData.items =
-        readVectorOfPair(
-            aNode,
-            OUSTR("reg:extension-items"),
-            OUSTR("reg:item"), OUSTR("reg:url"), OUSTR("reg:media-type"));
-    return retData;
+            retData.items =
+                readVectorOfPair(
+                    aNode,
+                    OUSTR("reg:extension-items"),
+                    OUSTR("reg:item"), OUSTR("reg:url"), OUSTR("reg:media-type"));
+        }
+        return retData;
+    }
+    catch(css::uno::Exception &)
+    {
+        Any exc( ::cppu::getCaughtException() );
+        throw css::deployment::DeploymentException(
+            OUSTR("Extension Manager: failed to read data entry in backend db: ") +
+            m_urlDb, 0, exc);
+    }
 }
 
 } // namespace bundle

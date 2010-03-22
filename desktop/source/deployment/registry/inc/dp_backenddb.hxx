@@ -97,6 +97,12 @@ protected:
         ::rtl::OUString const & sFirstTagName,
         ::rtl::OUString const & sSecondTagName);
 
+    ::std::list< ::rtl::OUString> readList(
+        css::uno::Reference<css::xml::dom::XNode> const & parent,
+        ::rtl::OUString const & sListTagName,
+        ::rtl::OUString const & sMemberTagName);
+
+
 
 
     /*  returns the namespace which is to be written as xmlns attribute

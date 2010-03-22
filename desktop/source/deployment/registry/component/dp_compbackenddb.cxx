@@ -92,6 +92,16 @@ void ComponentBackendDb::addEntry(::rtl::OUString const & url, Data const & data
 
         root->appendChild(componentNode);
 
+//         Reference<css::xml::dom::XNode> name(
+//             doc->createElement(OUSTR("name")), UNO_QUERY_THROW);
+
+//         componentNode->appendChild(name);
+
+//         Reference<css::xml::dom::XNode> nameValue(
+//             doc->createTextNode(data.name),
+//             UNO_QUERY_THROW);
+//         name->appendChild(nameValue);
+
         Reference<css::xml::dom::XNode> javaTypeLibNode(
             doc->createElement(OUSTR("java-type-library")), UNO_QUERY_THROW);
 
@@ -134,6 +144,54 @@ void ComponentBackendDb::removeEntry(::rtl::OUString const & url)
     removeElement(sExpression);
 }
 
+ComponentBackendDb::Data ComponentBackendDb::getEntry(::rtl::OUString const & url)
+{
+    try
+    {
+        ComponentBackendDb::Data retData;
+        const OUString sExpression(
+            OUSTR("reg:component[@url = \"") + url + OUSTR("\"]"));
+        Reference<css::xml::dom::XDocument> doc = getDocument();
+        Reference<css::xml::dom::XNode> root = doc->getFirstChild();
+
+        Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
+        //find the extension element that is to be removed
+        Reference<css::xml::dom::XNode> aNode =
+            xpathApi->selectSingleNode(root, sExpression);
+        if (aNode.is())
+        {
+//             const OUString sExprName(OUSTR("reg:name/text()"));
+
+//             Reference<css::xml::dom::XNode> nameValue =
+//                 xpathApi->selectSingleNode(aNode, sExprName);
+//             retData.name = nameValue->getNodeValue();
+
+            const OUString sExprJavaTypeLib(OUSTR("reg:java-type-library/text()"));
+
+            Reference<css::xml::dom::XNode> idValueNode =
+                xpathApi->selectSingleNode(aNode, sExprJavaTypeLib);
+            retData.javaTypeLibrary =
+                idValueNode->getNodeValue().equals(OUSTR("true")) ? true : false;
+
+            retData.implementationNames =
+                readList(
+                    aNode, OUSTR("reg:implementation-names"), OUSTR("reg:name"));
+
+            retData.singletons =
+                readVectorOfPair(
+                    aNode, OUSTR("reg:singletons"), OUSTR("item"), OUSTR("key"),
+                    OUSTR("value"));
+        }
+        return retData;
+    }
+    catch(css::uno::Exception &)
+    {
+        Any exc( ::cppu::getCaughtException() );
+        throw css::deployment::DeploymentException(
+            OUSTR("Extension Manager: failed to read data entry in backend db: ") +
+            m_urlDb, 0, exc);
+    }
+}
 
 
 } // namespace bundle

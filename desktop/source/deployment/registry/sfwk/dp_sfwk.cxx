@@ -83,7 +83,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     public:
         PackageImpl(
             ::rtl::Reference<BackendImpl> const & myBackend,
-            OUString const & url, OUString const & libType, bool bUseDb);
+            OUString const & url, OUString const & libType, bool bRemoved,
+            OUString const & identifier);
         // XPackage
         virtual OUString SAL_CALL getDescription() throw (RuntimeException);
     };
@@ -92,7 +93,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
-        sal_Bool bNoFileAccess,
+        sal_Bool bRemoved, OUString const & identifier,
         Reference<XCommandEnvironment> const & xCmdEnv );
 
     const Reference<deployment::XPackageTypeInfo> m_xTypeInfo;
@@ -133,9 +134,10 @@ OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException)
 //______________________________________________________________________________
 BackendImpl::PackageImpl::PackageImpl(
     ::rtl::Reference<BackendImpl> const & myBackend,
-    OUString const & url, OUString const & libType, bool bUseDb)
+    OUString const & url, OUString const & libType, bool bRemoved,
+    OUString const & identifier)
     : Package( myBackend.get(), url, OUString(), OUString(),
-               myBackend->m_xTypeInfo, bUseDb ),
+               myBackend->m_xTypeInfo, bRemoved, identifier),
       m_descr(libType)
 {
     initPackageHandler();
@@ -219,8 +221,8 @@ BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 // PackageRegistryBackend
 //______________________________________________________________________________
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
-    OUString const & url, OUString const & mediaType_, sal_Bool bNoFileAccess,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    OUString const & url, OUString const & mediaType_, sal_Bool bRemoved,
+    OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
 {
     OUString mediaType( mediaType_ );
     if (mediaType.getLength() == 0)
@@ -296,7 +298,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 dp_misc::TRACE(OUSTR(" BackEnd detected lang = ") + lang + OUSTR("\n"));
                 dp_misc::TRACE(OUSTR(" for url ") + sParcelDescURL + OUSTR("\n") );
                 dp_misc::TRACE("******************************\n");
-                return new PackageImpl( this, url, sfwkLibType, bNoFileAccess);
+                return new PackageImpl( this, url, sfwkLibType, bRemoved, identifier);
             }
         }
     }

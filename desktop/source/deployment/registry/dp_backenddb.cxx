@@ -259,31 +259,41 @@ BackendDb::readVectorOfPair(
     OUString const & sFirstTagName,
     OUString const & sSecondTagName)
 {
-    OSL_ASSERT(parent.is());
-    Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
-    OUString sExprPairs(
-        sListTagName + OUSTR("/") + sPairTagName);
-    Reference<css::xml::dom::XNodeList> listPairs =
-        xpathApi->selectNodeList(parent, sExprPairs);
-
-    ::std::vector< ::std::pair< OUString, OUString > > retVector;
-    sal_Int32 length = listPairs->getLength();
-    for (sal_Int32 i = 0; i < length; i++)
+    try
     {
-        Reference<css::xml::dom::XNode> aPair = listPairs->item(i);
-        OUString sExprFirst(sFirstTagName + OUSTR("/text()"));
-        Reference<css::xml::dom::XNode> first =
-            xpathApi->selectSingleNode(aPair, sExprFirst);
+        OSL_ASSERT(parent.is());
+        Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
+        OUString sExprPairs(
+            sListTagName + OUSTR("/") + sPairTagName);
+        Reference<css::xml::dom::XNodeList> listPairs =
+            xpathApi->selectNodeList(parent, sExprPairs);
 
-        OUString sExprSecond(sSecondTagName + OUSTR("/text()"));
-        Reference<css::xml::dom::XNode> second =
-            xpathApi->selectSingleNode(aPair, sExprSecond);
-        OSL_ASSERT(first.is() && second.is());
+        ::std::vector< ::std::pair< OUString, OUString > > retVector;
+        sal_Int32 length = listPairs->getLength();
+        for (sal_Int32 i = 0; i < length; i++)
+        {
+            Reference<css::xml::dom::XNode> aPair = listPairs->item(i);
+            OUString sExprFirst(sFirstTagName + OUSTR("/text()"));
+            Reference<css::xml::dom::XNode> first =
+                xpathApi->selectSingleNode(aPair, sExprFirst);
 
-        retVector.push_back(::std::make_pair(
-                                first->getNodeValue(), second->getNodeValue()));
+            OUString sExprSecond(sSecondTagName + OUSTR("/text()"));
+            Reference<css::xml::dom::XNode> second =
+                xpathApi->selectSingleNode(aPair, sExprSecond);
+            OSL_ASSERT(first.is() && second.is());
+
+            retVector.push_back(::std::make_pair(
+                                    first->getNodeValue(), second->getNodeValue()));
+        }
+        return retVector;
     }
-    return retVector;
+    catch(css::uno::Exception &)
+    {
+        Any exc( ::cppu::getCaughtException() );
+        throw css::deployment::DeploymentException(
+            OUSTR("Extension Manager: failed to read data entry in backend db: ") +
+            m_urlDb, 0, exc);
+    }
 }
 
 void BackendDb::writeSimpleList(
@@ -326,6 +336,40 @@ void BackendDb::writeSimpleList(
     }
 
 }
+
+::std::list< OUString> BackendDb::readList(
+    Reference<css::xml::dom::XNode> const & parent,
+    OUString const & sListTagName,
+    OUString const & sMemberTagName)
+{
+    try
+    {
+        OSL_ASSERT(parent.is());
+        Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
+        OUString sExprList(
+            sListTagName + OUSTR("/") + sMemberTagName + OUSTR("/text()"));
+        Reference<css::xml::dom::XNodeList> list =
+            xpathApi->selectNodeList(parent, sExprList);
+
+        ::std::list<OUString > retList;
+        sal_Int32 length = list->getLength();
+        for (sal_Int32 i = 0; i < length; i++)
+        {
+            Reference<css::xml::dom::XNode> member = list->item(i);
+            retList.push_back(member->getNodeValue());
+        }
+        return retList;
+    }
+    catch(css::uno::Exception &)
+    {
+        Any exc( ::cppu::getCaughtException() );
+        throw css::deployment::DeploymentException(
+            OUSTR("Extension Manager: failed to read data entry in backend db: ") +
+            m_urlDb, 0, exc);
+    }
+}
+
+
 
 } // namespace backend
 } // namespace dp_registry

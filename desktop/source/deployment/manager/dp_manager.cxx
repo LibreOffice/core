@@ -567,7 +567,7 @@ OUString PackageManagerImpl::detectMediaType(
         try {
             Reference<deployment::XPackage> xPackage(
                 m_xRegistry->bindPackage(
-                    url, OUString(), false, ucbContent.getCommandEnvironment() ) );
+                    url, OUString(), false, OUString(), ucbContent.getCommandEnvironment() ) );
             const Reference<deployment::XPackageTypeInfo> xPackageType(
                 xPackage->getPackageType() );
             OSL_ASSERT( xPackageType.is() );
@@ -785,7 +785,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
         //XPackage objects, even if the second extension is the same.
         //Therefore bindPackage does not need a guard here.
         xPackage = m_xRegistry->bindPackage(
-            makeURL( destFolder, title_enc ), mediaType, false, xCmdEnv );
+            makeURL( destFolder, title_enc ), mediaType, false, OUString(), xCmdEnv );
 
         OSL_ASSERT( xPackage.is() );
         if (xPackage.is())
@@ -877,16 +877,6 @@ void PackageManagerImpl::removePackage(
            RuntimeException)
 {
     check();
-    if (m_readOnly)
-    {
-        OUString message;
-        if (m_context == OUSTR("shared"))
-            message = OUSTR("You need write permissions in order to remove a shared extension!");
-        else
-            message = OUSTR("You need write permissions in order to remove this extension!");
-        throw deployment::DeploymentException(
-            message, static_cast<OWeakObject *>(this), Any() );
-    }
 
     Reference<XCommandEnvironment> xCmdEnv;
     if (m_xLogFile.is())
@@ -900,7 +890,12 @@ void PackageManagerImpl::removePackage(
             const ::osl::MutexGuard guard(getMutex());
             //Check if this extension exist and throw an IllegalArgumentException
             //if it does not
+            //If the files of the extension are already removed, or there is a
+            //different extension at the same place, for example after updating the
+            //extension, then the returned object is that which uses the database data.
             xPackage = getDeployedPackage_(id, fileName, xCmdEnv );
+
+
             //Because the extension is only removed the next time the extension
             //manager runs after restarting OOo, we need to indicate that a
             //shared extension was "deleted". When a user starts OOo, then it
@@ -908,7 +903,7 @@ void PackageManagerImpl::removePackage(
             //the flag file it will then recognize, that the extension was
             //deleted and can then update the extnesion database of the shared
             //extensions in the user installation.
-            if (m_context.equals(OUSTR("shared")))
+            if (! m_readOnly && !xPackage->isRemoved() && m_context.equals(OUSTR("shared")))
             {
                 ActivePackages::Data val;
                 m_activePackagesDB->get( & val, id, fileName);
@@ -1010,8 +1005,17 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
                     static_cast<sal_Int16>(-1) );
         }
     }
-    return m_xRegistry->bindPackage(
-        getDeployPath( data ), data.mediaType, false, xCmdEnv );
+    Reference<deployment::XPackage> xExtension;
+    try
+    {
+        xExtension = m_xRegistry->bindPackage(
+            getDeployPath( data ), data.mediaType, false, OUString(), xCmdEnv );
+    }
+    catch (deployment::InvalidRemovedParameterException& e)
+    {
+        xExtension = e.Extension;
+    }
+    return xExtension;
 }
 
 //______________________________________________________________________________
@@ -1149,17 +1153,6 @@ void PackageManagerImpl::reinstallDeployedPackages(
            lang::IllegalArgumentException, RuntimeException)
 {
     check();
-    if (m_readOnly)
-    {
-        OUString message;
-        if (m_context == OUSTR("shared"))
-            message = OUSTR("You need write permissions in order to install shared extensions!");
-        else
-            message = OUSTR("You need write permissions in order to install extensions!");
-        throw deployment::DeploymentException(
-            message, static_cast<OWeakObject *>(this), Any() );
-    }
-
     if (office_is_running())
         throw RuntimeException(
             OUSTR("You must close any running Office process before "
@@ -1303,8 +1296,10 @@ void PackageManagerImpl::synchronizeRemovedExtensions(
                 OSL_ENSURE(infoset.hasDescription(),
                            "Extension Manager: bundled and shared extensions "
                            "must have an identifer and a version");
-                if ( ! i->first.equals(*(infoset.getIdentifier()))
-                       || ! i->second.version.equals(infoset.getVersion()))
+                if (infoset.hasDescription() &&
+                    infoset.getIdentifier() &&
+                    (! i->first.equals(*(infoset.getIdentifier()))
+                   || ! i->second.version.equals(infoset.getVersion())))
                 {
                     bRemoved = true;
                 }
@@ -1313,7 +1308,7 @@ void PackageManagerImpl::synchronizeRemovedExtensions(
         if (bRemoved)
         {
             Reference<deployment::XPackage> xPackage = m_xRegistry->bindPackage(
-                url, i->second.mediaType, true, xCmdEnv );
+                url, i->second.mediaType, true, i->first, xCmdEnv );
             OSL_ASSERT(xPackage.is()); //Even if the files are removed, we must get the object.
             removedExtensions.push_back(xPackage);
         }
@@ -1382,7 +1377,7 @@ void PackageManagerImpl::synchronizeAddedExtensions(
                 url = appendURLSegement(url, sExtFolder);
             }
             Reference<deployment::XPackage> xPackage = m_xRegistry->bindPackage(
-                url, OUString(), false, xCmdEnv );
+                url, OUString(), false, OUString(), xCmdEnv );
             if (xPackage.is())
             {
                 try

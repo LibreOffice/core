@@ -36,6 +36,7 @@
 #include "comphelper/unwrapargs.hxx"
 #include "ucbhelper/content.hxx"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
+#include "com/sun/star/deployment/InvalidRemovedParameterException.hpp"
 #include "com/sun/star/beans/StringPair.hpp"
 
 
@@ -131,29 +132,40 @@ void PackageRegistryBackend::disposing()
 // XPackageRegistry
 //______________________________________________________________________________
 Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
-    OUString const & url, OUString const & mediaType, sal_Bool  bNoFileAccess ,
-    Reference<XCommandEnvironment> const & xCmdEnv )
-    throw (deployment::DeploymentException, CommandFailedException,
+    OUString const & url, OUString const & mediaType, sal_Bool  bRemoved,
+    OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
+    throw (deployment::DeploymentException,
+           deployment::InvalidRemovedParameterException,
+           ucb::CommandFailedException,
            lang::IllegalArgumentException, RuntimeException)
 {
     ::osl::ResettableMutexGuard guard( getMutex() );
     check();
-    if (!bNoFileAccess)
+
+    t_string2ref::const_iterator const iFind( m_bound.find( url ) );
+    if (iFind != m_bound.end())
     {
-        //We only save those object which were created with bNoFileAccess = false
-        t_string2ref::const_iterator const iFind( m_bound.find( url ) );
-        if (iFind != m_bound.end())
+        Reference<deployment::XPackage> xPackage( iFind->second );
+        if (xPackage.is())
         {
-            Reference<deployment::XPackage> xPackage( iFind->second );
-            if (xPackage.is())
-                return xPackage;
+            if (mediaType.getLength() &&
+                mediaType != xPackage->getPackageType()->getMediaType())
+                throw lang::IllegalArgumentException
+                    (OUSTR("XPackageRegistry::bindPackage: media type does not match"),
+                     static_cast<OWeakObject*>(this), 1);
+            if (xPackage->isRemoved() != bRemoved)
+                throw deployment::InvalidRemovedParameterException(
+                    OUSTR("XPackageRegistry::bindPackage: bRemoved parameter does not match"),
+                    static_cast<OWeakObject*>(this), xPackage->isRemoved(), xPackage);
+            return xPackage;
         }
     }
+
     guard.clear();
 
     Reference<deployment::XPackage> xNewPackage;
     try {
-        xNewPackage = bindPackage_( url, mediaType,  bNoFileAccess, xCmdEnv );
+        xNewPackage = bindPackage_( url, mediaType, bRemoved, identifier, xCmdEnv );
     }
     catch (RuntimeException &) {
         throw;
@@ -175,24 +187,22 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
     }
 
     guard.reset();
-    if (!bNoFileAccess)
-    {
-        //We only save those object which were created with bNoFileAccess = false
-        ::std::pair< t_string2ref::iterator, bool > insertion(
-            m_bound.insert( t_string2ref::value_type( url, xNewPackage ) ) );
-        if (insertion.second)
-        { // first insertion
-            OSL_ASSERT( Reference<XInterface>(insertion.first->second)
-                == xNewPackage );
-        }
-        else
-        { // found existing entry
-            Reference<deployment::XPackage> xPackage( insertion.first->second );
-            if (xPackage.is())
-                return xPackage;
-            insertion.first->second = xNewPackage;
-        }
+
+    ::std::pair< t_string2ref::iterator, bool > insertion(
+        m_bound.insert( t_string2ref::value_type( url, xNewPackage ) ) );
+    if (insertion.second)
+    { // first insertion
+        OSL_ASSERT( Reference<XInterface>(insertion.first->second)
+                    == xNewPackage );
     }
+    else
+    { // found existing entry
+        Reference<deployment::XPackage> xPackage( insertion.first->second );
+        if (xPackage.is())
+            return xPackage;
+        insertion.first->second = xNewPackage;
+    }
+
     guard.clear();
     xNewPackage->addEventListener( this ); // listen for disposing events
     return xNewPackage;
@@ -211,14 +221,16 @@ Package::Package( ::rtl::Reference<PackageRegistryBackend> const & myBackend,
                   OUString const & name,
                   OUString const & displayName,
                   Reference<deployment::XPackageTypeInfo> const & xPackageType,
-    bool bUseDb)
+                  bool bRemoved,
+                  OUString const & identifier)
     : t_PackageBase( getMutex() ),
       m_myBackend( myBackend ),
       m_url( url ),
       m_name( name ),
       m_displayName( displayName ),
       m_xPackageType( xPackageType ),
-      m_bUseDb(bUseDb)
+      m_bRemoved(bRemoved),
+      m_identifier(identifier)
 {
 }
 
@@ -314,10 +326,13 @@ sal_Bool Package::isBundle() throw (RuntimeException)
         const css::uno::Reference< css::ucb::XCommandEnvironment >&,
         sal_Bool, ::rtl::OUString const &)
         throw (css::deployment::DeploymentException,
-            css::ucb::CommandFailedException,
-            css::ucb::CommandAbortedException,
-            css::uno::RuntimeException)
+               css::deployment::ExtensionRemovedException,
+               css::ucb::CommandFailedException,
+               css::ucb::CommandAbortedException,
+               css::uno::RuntimeException)
 {
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
     return true;
 }
 
@@ -325,9 +340,12 @@ sal_Bool Package::isBundle() throw (RuntimeException)
 ::sal_Bool Package::checkDependencies(
         const css::uno::Reference< css::ucb::XCommandEnvironment >& )
         throw (css::deployment::DeploymentException,
-            css::ucb::CommandFailedException,
-            css::uno::RuntimeException)
+               css::deployment::ExtensionRemovedException,
+               css::ucb::CommandFailedException,
+               css::uno::RuntimeException)
 {
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
     return true;
 }
 
@@ -351,12 +369,19 @@ OUString Package::getName() throw (RuntimeException)
 
 beans::Optional<OUString> Package::getIdentifier() throw (RuntimeException)
 {
+    if (m_bRemoved)
+        return beans::Optional<OUString>(true, m_identifier);
+
     return beans::Optional<OUString>();
 }
 
 //______________________________________________________________________________
-OUString Package::getVersion() throw (RuntimeException)
+OUString Package::getVersion() throw (
+    deployment::ExtensionRemovedException,
+    RuntimeException)
 {
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
     return OUString();
 }
 
@@ -367,33 +392,49 @@ OUString Package::getURL() throw (RuntimeException)
 }
 
 //______________________________________________________________________________
-OUString Package::getDisplayName() throw (RuntimeException)
+OUString Package::getDisplayName() throw (
+    deployment::ExtensionRemovedException, RuntimeException)
 {
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
     return m_displayName;
 }
 
 //______________________________________________________________________________
-OUString Package::getDescription() throw (RuntimeException)
+OUString Package::getDescription() throw (
+    deployment::ExtensionRemovedException,RuntimeException)
 {
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
     return OUString();
 }
 
 //______________________________________________________________________________
-Sequence<OUString> Package::getUpdateInformationURLs() throw (RuntimeException)
+Sequence<OUString> Package::getUpdateInformationURLs() throw (
+    deployment::ExtensionRemovedException, RuntimeException)
 {
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
     return Sequence<OUString>();
 }
 
 //______________________________________________________________________________
-css::beans::StringPair Package::getPublisherInfo() throw (RuntimeException)
+css::beans::StringPair Package::getPublisherInfo() throw (
+    deployment::ExtensionRemovedException, RuntimeException)
 {
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
     css::beans::StringPair aEmptyPair;
     return aEmptyPair;
 }
 
 //______________________________________________________________________________
-uno::Reference< css::graphic::XGraphic > Package::getIcon( sal_Bool /*bHighContrast*/ ) throw ( RuntimeException )
+uno::Reference< css::graphic::XGraphic > Package::getIcon( sal_Bool /*bHighContrast*/ )
+    throw (deployment::ExtensionRemovedException, RuntimeException )
 {
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
+
     uno::Reference< css::graphic::XGraphic > aEmpty;
     return aEmpty;
 }
@@ -409,8 +450,12 @@ Reference<deployment::XPackageTypeInfo> Package::getPackageType()
 void Package::exportTo(
     OUString const & destFolderURL, OUString const & newTitle,
     sal_Int32 nameClashAction, Reference<XCommandEnvironment> const & xCmdEnv )
-    throw (CommandFailedException, CommandAbortedException, RuntimeException)
+    throw (deployment::ExtensionRemovedException,
+           CommandFailedException, CommandAbortedException, RuntimeException)
 {
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
+
     ::ucbhelper::Content destFolder( destFolderURL, xCmdEnv );
     ::ucbhelper::Content sourceContent( getURL(), xCmdEnv );
     if (! destFolder.transferContent(
@@ -493,7 +538,8 @@ void Package::processPackage_impl(
                        (doRegisterPackage ? !option.Value.Value
                                         : option.Value.Value)));
             if (action) {
-                OUString displayName( getDisplayName() );
+
+                OUString displayName = isRemoved() ? getName() : getDisplayName();
                 ProgressLevel progress(
                     xCmdEnv,
                     (doRegisterPackage
@@ -542,9 +588,12 @@ void Package::registerPackage(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
     throw (deployment::DeploymentException,
+           deployment::ExtensionRemovedException,
            CommandFailedException, CommandAbortedException,
            lang::IllegalArgumentException, RuntimeException)
 {
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
     processPackage_impl( true /* register */, xAbortChannel, xCmdEnv );
 }
 
@@ -579,7 +628,13 @@ OUString Package::getRepositoryName()
 {
     PackageRegistryBackend * backEnd = getMyBackend();
     return backEnd->getContext();
- }
+}
+
+sal_Bool Package::isRemoved()
+    throw (RuntimeException)
+{
+    return m_bRemoved;
+}
 
 //##############################################################################
 
@@ -596,13 +651,15 @@ OUString Package::TypeInfo::getMediaType() throw (RuntimeException)
 }
 
 //______________________________________________________________________________
-OUString Package::TypeInfo::getDescription() throw (RuntimeException)
+OUString Package::TypeInfo::getDescription()
+    throw (deployment::ExtensionRemovedException, RuntimeException)
 {
     return getShortDescription();
 }
 
 //______________________________________________________________________________
-OUString Package::TypeInfo::getShortDescription() throw (RuntimeException)
+OUString Package::TypeInfo::getShortDescription()
+    throw (deployment::ExtensionRemovedException, RuntimeException)
 {
     return m_shortDescr;
 }
