@@ -44,6 +44,8 @@ namespace svt { namespace table
         :Window( &_rTableControl.getAntiImpl() )
         ,m_rTableControl        ( _rTableControl )
     {
+        //Color backgroundColor = GetControlBackground();
+        //SetBackground( backgroundColor );
     }
 
     //--------------------------------------------------------------------
@@ -75,15 +77,17 @@ namespace svt { namespace table
         if ( !m_rTableControl.getInputHandler()->MouseButtonDown( m_rTableControl, rMEvt ) )
             Window::MouseButtonDown( rMEvt );
         else
-            m_aMouseButtonDownHdl.Call( (MouseEvent*) &rMEvt);
+        {
+            Point aPoint = rMEvt.GetPosPixel();
+            if(m_rTableControl.getCurrentRow(aPoint) >= 0)
+                m_aSelectHdl.Call( NULL );
+        }
         m_rTableControl.getAntiImpl().LoseFocus();
     }
     void TableDataWindow::MouseButtonUp( const MouseEvent& rMEvt )
     {
         if ( !m_rTableControl.getInputHandler()->MouseButtonUp( m_rTableControl, rMEvt ) )
             Window::MouseButtonUp( rMEvt );
-        else
-            m_aMouseButtonUpHdl.Call( (MouseEvent*) &rMEvt);
         m_rTableControl.getAntiImpl().GetFocus();
     }
     void TableDataWindow::SetPointer( const Pointer& rPointer )

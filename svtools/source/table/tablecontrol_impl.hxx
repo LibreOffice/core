@@ -118,6 +118,7 @@ namespace svt { namespace table
         RowPos              m_nAnchor;
         bool                m_bResizing;
         ColPos              m_nResizingColumn;
+        bool                m_bResizingGrid;
 
 #if DBG_UTIL
     #define INV_SCROLL_POSITION     1
@@ -186,15 +187,12 @@ namespace svt { namespace table
         virtual RowPos  getCurrentRow (const Point& rPoint);
 
         void setCursorAtCurrentCell(const Point& rPoint);
-        /** proves whether the vector with the selected rows contains the current row*/
+        /** checks whether the vector with the selected rows contains the current row*/
         BOOL    isRowSelected(::std::vector<RowPos> selectedRows, RowPos current);
-        /** returns the position of the current row in the selecttion vector */
+        /** returns the position of the current row in the selection vector */
         int getRowSelectedNumber(::std::vector<RowPos> selectedRows, RowPos current);
-        /** _rCellRect contains the region, which should be invalidate after some action e.g. selectiong row*/
+        /** _rCellRect contains the region, which should be invalidate after some action e.g. selecting row*/
         void    invalidateSelectedRegion(RowPos _nPrevRow, RowPos _nCurRow, Rectangle& _rCellRect );
-        /** _rCellRect contains the region, which should be invalidate after some action e.g. selectiong row*/
-        //vielleicht kann man mit den anderen verschmelzen, mit einer Überprüfung ob prev==curr?
-        void    invalidateSelectedRow( RowPos _nCurRow, Rectangle& _rCellRect );
         /** to be called when a new row is added to the control*/
         void    invalidateRow(RowPos _nRowPos, Rectangle& _rCellRect );
         /** returns the vector, which contains the selected rows*/
@@ -202,7 +200,6 @@ namespace svt { namespace table
         /** updates the vector, which contains the selected rows after removing the row nRowPos*/
         void    removeSelectedRow(RowPos _nRowPos);
         void    invalidateRows(RowPos _nRowStart, Rectangle& _rCellRect );
-        //virtual void DoubleClick();
 
         // IAbstractTableControl
         virtual void    hideCursor();
@@ -232,6 +229,8 @@ namespace svt { namespace table
             minus the row and column header areas.
         */
         void        impl_getAllVisibleDataCellArea( Rectangle& _rCellArea ) const;
+
+        ::rtl::OUString impl_convertToString(::com::sun::star::uno::Any _value);
     private:
         /** toggles the cursor visibility
 
@@ -319,7 +318,6 @@ namespace svt { namespace table
 
         void impl_ni_getAccVisibleColWidths();
         void impl_updateLeftColumn();
-        ::rtl::OUString impl_convertToString(::com::sun::star::uno::Any _value);
 
         DECL_LINK( OnScroll, ScrollBar* );
     };

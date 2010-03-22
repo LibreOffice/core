@@ -80,11 +80,7 @@ namespace svt { namespace table
 
         // fill the rows with alternating background colors
         _rDevice.Push( PUSH_FILLCOLOR | PUSH_LINECOLOR);
-        //default background and line color is white
-        //background and lines should have same color, that's means lines aren't visible
-        //in case line color isn't set and background color is set, this should be changed
         Color background = m_pImpl->rModel.getHeaderBackgroundColor();
-        //Color background = _rStyle.GetBackgroundColor();
         Color line = m_pImpl->rModel.getLineColor();
         //default background and line color is white
         //background and lines should have same color, that's means lines aren't visible
@@ -102,7 +98,6 @@ namespace svt { namespace table
             _rDevice.SetFillColor(background);
         }
         _rDevice.DrawRect( _rArea );
-
         // delimiter lines at bottom/right
         _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
         _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight() );
@@ -148,7 +143,10 @@ namespace svt { namespace table
             nHorFlag = TEXT_DRAW_CENTER;
         else if(m_pImpl->rModel.getColumnModel(_nCol)->getHorizontalAlign() == 2)
             nHorFlag = TEXT_DRAW_RIGHT;
-        _rDevice.DrawText( _rArea, sHeaderText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
+        Rectangle aRect(_rArea);
+        aRect.Left()+=4; aRect.Right()-=4;
+        aRect.Top()+=4; aRect.Bottom()-=4;
+        _rDevice.DrawText( aRect, sHeaderText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
         _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
         _rDevice.Pop();
 
@@ -251,7 +249,10 @@ namespace svt { namespace table
             nHorFlag = TEXT_DRAW_CENTER;
         else if(m_pImpl->rModel.getColumnModel(0)->getHorizontalAlign() == 2)
             nHorFlag = TEXT_DRAW_RIGHT;
-        _rDevice.DrawText( _rArea, _rText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
+        Rectangle aRect(_rArea);
+        aRect.Left()+=4; aRect.Right()-=4;
+        aRect.Top()+=4; aRect.Bottom()-=4;
+        _rDevice.DrawText( aRect, _rText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
         // TODO: active? selected?
         (void)_bActive;
         (void)_bSelected;
@@ -376,8 +377,6 @@ namespace svt { namespace table
             Rectangle aRect( _rArea );
             ++aRect.Left(); --aRect.Right();
             aRect.Top(); aRect.Bottom();
-
-            String sText;
             if(_bSelected)
             {
                 _rDevice.SetTextColor(_rStyle.GetHighlightTextColor());
@@ -396,7 +395,10 @@ namespace svt { namespace table
                 nHorFlag = TEXT_DRAW_CENTER;
             else if(m_pImpl->rModel.getColumnModel(_nColumn)->getHorizontalAlign() == 2)
                 nHorFlag = TEXT_DRAW_RIGHT;
-            _rDevice.DrawText( aRect, _rText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
+            Rectangle textRect(_rArea);
+            textRect.Left()+=4; textRect.Right()-=4;
+            textRect.Top()+=4; textRect.Bottom()-=4;
+            _rDevice.DrawText( textRect, _rText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
         }
         _rDevice.Pop();
 

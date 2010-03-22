@@ -101,8 +101,10 @@ public:
 
     virtual ::sal_Int32 SAL_CALL getMinSelectionIndex() throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getMaxSelectionIndex() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL insertIndexIntervall(::sal_Int32 start, ::sal_Int32 length) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeIndexIntervall(::sal_Int32 start, ::sal_Int32 length) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL selectRows(const ::com::sun::star::uno::Sequence< ::sal_Int32 >& rangeOfRows) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL selectAllRows() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL deselectRows(const ::com::sun::star::uno::Sequence< ::sal_Int32 >& rangeOfRows) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL deselectAllRows() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::sal_Int32 > SAL_CALL getSelection() throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL isSelectionEmpty() throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL isSelectedIndex(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException);
@@ -116,6 +118,7 @@ public:
     using UnoControl::getPeer;
 private:
     ::com::sun::star::view::SelectionType mSelectionMode;
+    SelectionListenerMultiplexer    m_aSelectionListeners;
 };
 
 } // toolkit

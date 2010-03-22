@@ -43,6 +43,15 @@ using namespace ::com::sun::star::awt::grid;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::style;
 
+#define COLWIDTH ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ColWidth" ))
+#define MAXWIDTH ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MaxWidth" ))
+#define MINWIDTH ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MinWidth" ))
+#define PREFWIDTH ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PrefWidth" ))
+#define HALIGN ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HAlign" ))
+#define TITLE ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" ))
+#define COLRESIZE ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ColumnResize" ))
+#define UPDATE ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UpdateWidth" ))
+
 namespace toolkit
 {
 
@@ -52,10 +61,11 @@ namespace toolkit
 
 GridColumn::GridColumn()
 : identifier(Any())
-,columnWidth(10)
+,index(0)
+,columnWidth(4)
+,preferredWidth(0)
 ,bResizeable(true)
 ,horizontalAlign(HorizontalAlignment(0))
-
 {
 }
 
@@ -67,6 +77,39 @@ GridColumn::~GridColumn()
 
 //---------------------------------------------------------------------
 
+void GridColumn::broadcast( broadcast_column_type eType, const GridColumnEvent& aEvent )
+{
+    ::cppu::OInterfaceContainerHelper* pIter = BrdcstHelper.getContainer( XGridColumnListener::static_type() );
+    if( pIter )
+    {
+        ::cppu::OInterfaceIteratorHelper aListIter(*pIter);
+        while(aListIter.hasMoreElements())
+        {
+            XGridColumnListener* pListener = static_cast<XGridColumnListener*>(aListIter.next());
+            switch( eType )
+            {
+                case column_attribute_changed:  pListener->columnChanged(aEvent); break;
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------------------
+
+void GridColumn::broadcast_changed(::rtl::OUString name, Any oldValue, Any newValue)
+{
+    Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
+    GridColumnEvent aEvent( xSource, name, oldValue, newValue, index);
+    broadcast( column_attribute_changed, aEvent);
+}
+
+void SAL_CALL GridColumn::updateColumn(const ::rtl::OUString& name, sal_Int32 width) throw (::com::sun::star::uno::RuntimeException)
+{
+    if(PREFWIDTH == name)
+        preferredWidth = width;
+    else if (COLWIDTH == name)
+        columnWidth = width;
+}
 //---------------------------------------------------------------------
 // XGridColumn
 //---------------------------------------------------------------------
@@ -87,6 +130,7 @@ void SAL_CALL GridColumn::setIdentifier(const ::com::sun::star::uno::Any & value
 
 ::sal_Int32 SAL_CALL GridColumn::getColumnWidth() throw (::com::sun::star::uno::RuntimeException)
 {
+    broadcast_changed(UPDATE, Any(columnWidth), Any());
     return columnWidth;
 }
 
@@ -95,11 +139,13 @@ void SAL_CALL GridColumn::setIdentifier(const ::com::sun::star::uno::Any & value
 void SAL_CALL GridColumn::setColumnWidth(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
 {
     columnWidth = value;
+    broadcast_changed(COLWIDTH, Any(columnWidth),Any(value));
 }
 //--------------------------------------------------------------------
 
 ::sal_Int32 SAL_CALL GridColumn::getPreferredWidth() throw (::com::sun::star::uno::RuntimeException)
 {
+    broadcast_changed(UPDATE, Any(preferredWidth), Any());
     return preferredWidth;
 }
 
@@ -108,6 +154,7 @@ void SAL_CALL GridColumn::setColumnWidth(::sal_Int32 value) throw (::com::sun::s
 void SAL_CALL GridColumn::setPreferredWidth(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
 {
     preferredWidth = value;
+    broadcast_changed(PREFWIDTH, Any(preferredWidth),Any(value));
 }
 //--------------------------------------------------------------------
 
@@ -121,6 +168,7 @@ void SAL_CALL GridColumn::setPreferredWidth(::sal_Int32 value) throw (::com::sun
 void SAL_CALL GridColumn::setMaxWidth(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
 {
     maxWidth = value;
+    broadcast_changed(MAXWIDTH, Any(maxWidth),Any(value));
 }
 //--------------------------------------------------------------------
 
@@ -134,6 +182,7 @@ void SAL_CALL GridColumn::setMaxWidth(::sal_Int32 value) throw (::com::sun::star
 void SAL_CALL GridColumn::setMinWidth(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
 {
     minWidth = value;
+    broadcast_changed(MINWIDTH, Any(minWidth),Any(value));
 }
 
 //--------------------------------------------------------------------
@@ -148,6 +197,7 @@ void SAL_CALL GridColumn::setMinWidth(::sal_Int32 value) throw (::com::sun::star
 void SAL_CALL GridColumn::setTitle(const ::rtl::OUString & value) throw (::com::sun::star::uno::RuntimeException)
 {
     title = value;
+    broadcast_changed(TITLE, Any(title),Any(value));
 }
 //--------------------------------------------------------------------
 
@@ -161,6 +211,7 @@ sal_Bool SAL_CALL GridColumn::getResizeable() throw (::com::sun::star::uno::Runt
 void SAL_CALL GridColumn::setResizeable(sal_Bool value) throw (::com::sun::star::uno::RuntimeException)
 {
     bResizeable = value;
+    broadcast_changed(COLRESIZE, Any(bResizeable),Any(value));
 }
 //---------------------------------------------------------------------
 HorizontalAlignment SAL_CALL GridColumn::getHorizontalAlign() throw (::com::sun::star::uno::RuntimeException)
@@ -172,6 +223,19 @@ HorizontalAlignment SAL_CALL GridColumn::getHorizontalAlign() throw (::com::sun:
 void SAL_CALL GridColumn::setHorizontalAlign(HorizontalAlignment align) throw (::com::sun::star::uno::RuntimeException)
 {
     horizontalAlign = align;
+    broadcast_changed(HALIGN, Any(horizontalAlign),Any(align));
+}
+//---------------------------------------------------------------------
+void SAL_CALL GridColumn::addColumnListener( const Reference< XGridColumnListener >& xListener ) throw (RuntimeException)
+{
+    BrdcstHelper.addListener( XGridColumnListener::static_type(), xListener );
+}
+
+//---------------------------------------------------------------------
+
+void SAL_CALL GridColumn::removeColumnListener( const Reference< XGridColumnListener >& xListener ) throw (RuntimeException)
+{
+    BrdcstHelper.removeListener( XGridColumnListener::static_type(), xListener );
 }
 
 //---------------------------------------------------------------------
@@ -180,22 +244,30 @@ void SAL_CALL GridColumn::setHorizontalAlign(HorizontalAlignment align) throw (:
 
 void SAL_CALL GridColumn::dispose() throw (RuntimeException)
 {
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    ::com::sun::star::lang::EventObject aEvent;
+    aEvent.Source.set( static_cast< ::cppu::OWeakObject* >( this ) );
+    BrdcstHelper.aLC.disposeAndClear( aEvent );
 }
 
 //---------------------------------------------------------------------
 
 void SAL_CALL GridColumn::addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException)
 {
-    (void) xListener;
+    BrdcstHelper.addListener( XEventListener::static_type(), xListener );
 }
 
 //---------------------------------------------------------------------
 
 void SAL_CALL GridColumn::removeEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException)
 {
-    (void) xListener;
+    BrdcstHelper.removeListener( XEventListener::static_type(), xListener );
 }
-
+void SAL_CALL GridColumn::setIndex(sal_Int32 _nIndex) throw (::com::sun::star::uno::RuntimeException)
+{
+    index = _nIndex;
+}
 //---------------------------------------------------------------------
 // XServiceInfo
 //---------------------------------------------------------------------

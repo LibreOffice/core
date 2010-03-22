@@ -127,6 +127,8 @@ public:
     virtual ::rtl::OUString GetColumnName( sal_Int32 _nIndex ) const = 0;
     virtual ::com::sun::star::uno::Any GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const = 0;
     virtual std::vector<sal_Int32>& GetSelectedRows() = 0;
+    virtual void RemoveSelectedRow(sal_Int32 _nRowPos) = 0;
+    virtual ::rtl::OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) = 0;
 };
 
 // ----------------------------------------------------------------------------

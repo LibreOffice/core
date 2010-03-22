@@ -67,12 +67,13 @@ namespace svt { namespace table
     class TableControl : public Control, public IAccessibleTable
     {
     private:
-        DECL_LINK( ImplMouseButtonDownHdl, MouseEvent* );
-        DECL_LINK( ImplMouseButtonUpHdl, MouseEvent* );
+        DECL_DLLPRIVATE_LINK( ImplSelectHdl, void* );
 
         TableControl_Impl*  m_pImpl;
         ::com::sun::star::uno::Sequence< sal_Int32 >& m_nCols;
         ::com::sun::star::uno::Sequence< ::rtl::OUString >& m_aText;
+        Link m_aSelectHdl;
+        bool m_bSelectionChanged;
     public:
         ::std::auto_ptr< AccessibleTableControl_Impl > m_pAccessTable;
 
@@ -152,16 +153,19 @@ namespace svt { namespace table
         }
         virtual void        Resize();
 
+        virtual void        Select();
+        void                SetSelectHdl( const Link& rLink )       { m_aSelectHdl = rLink; }
+        const Link&         GetSelectHdl() const                    { return m_aSelectHdl; }
+
         /**invalidates the table if table has been changed e.g. new row added
         */
-        void InvalidateDataWindow(RowPos _nRowStart, bool _bRemoved);
+        void InvalidateDataWindow(RowPos _nRowStart, RowPos _nRowEnd, bool _bRemoved);
         /**gets the vector, which contains the selected rows
         */
         std::vector<sal_Int32>& GetSelectedRows();
         /**after removing a row, updates the vector which contains the selected rows
             if the row, which should be removed, is selected, it will be erased from the vector
         */
-        void removeSelectedRow(RowPos _nRowPos);
         SelectionEngine* getSelEngine();
         TableDataWindow* getDataWindow();
 
@@ -209,10 +213,12 @@ namespace svt { namespace table
         virtual sal_Bool HasColHeader();
         virtual sal_Bool isAccessibleAlive( ) const;
         virtual void commitGridControlEvent( sal_Int16 _nEventId, const com::sun::star::uno::Any& _rNewValue, const com::sun::star::uno::Any& _rOldValue );
-
+        virtual void RemoveSelectedRow(RowPos _nRowPos);
+        virtual ::rtl::OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos);
         ::com::sun::star::uno::Sequence< sal_Int32 >& getColumnsForTooltip();
         ::com::sun::star::uno::Sequence< ::rtl::OUString >& getTextForTooltip();
         void setTooltip(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aText, const ::com::sun::star::uno::Sequence< sal_Int32 >& nCols);
+        void selectionChanged(bool _bChanged);
 
     protected:
     /// retrieves the XAccessible implementation associated with the GridControl instance
