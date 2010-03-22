@@ -78,7 +78,7 @@ CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) ./configure --prefix=$(MYCWD)/python-in
 .IF "$(OS)$(CPU)" == "SOLARISI"
 CONFIGURE_ACTION += --disable-ipv6
 .ENDIF
-BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) ; $(GNUMAKE) install ; chmod -R ug+w $(MYCWD)/python-inst
+BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) && $(GNUMAKE) install && chmod -R ug+w $(MYCWD)/python-inst && chmod g+w Include
 .ELSE
 # ----------------------------------
 # WINDOWS
@@ -93,7 +93,7 @@ python_LDFLAGS=-mno-cygwin -mthreads
 python_LDFLAGS+=-shared-libgcc
 .ENDIF
 CONFIGURE_ACTION=./configure --prefix=$(MYCWD)/python-inst --enable-shared CC="$(CC:s/guw.exe //)" CXX="$(CXX:s/guw.exe //)" MACHDEP=MINGW32 LN="cp -p" CFLAGS="$(python_CFLAGS)" LDFLAGS="$(python_LDFLAGS)"
-BUILD_ACTION=$(ENV_BUILD) make ; make install
+BUILD_ACTION=$(ENV_BUILD) make && make install
 .ELSE
 #PYTHONPATH:=..$/Lib
 #.EXPORT : PYTHONPATH
