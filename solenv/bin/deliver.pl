@@ -107,9 +107,17 @@ $opt_checkdlst      = 0;
 $delete_common      = 1;            # for "-delete": if defined delete files from common tree also
 
 if ($^O ne 'cygwin') {              # iz59477 - cygwin needes a dot "." at the end of filenames to disable
-  $maybedot     = '';               # some .exe transformation magic.
+    $maybedot     = '';             # some .exe transformation magic.
 } else {
-  $maybedot     = '.';
+    my $cygvernum = `uname -r`;
+    my @cygvernum = split( /\./, $cygvernum);
+    $cygvernum = shift @cygvernum;
+    $cygvernum .= shift @cygvernum;
+    if ( $cygvernum < 17 ) {
+        $maybedot     = '.';
+    } else {
+        $maybedot     = '';               # no longer works with cygwin 1.7. other magic below.
+    }
 }
 
 ($gui       = lc($ENV{GUI}))        || die "Can't determine 'GUI'. Please set environment.\n";
@@ -828,6 +836,11 @@ sub copy_if_newer
             sleep $try;
             $try ++;
             $success = rename($temp_file, $to);
+            if ( $^O eq 'cygwin' && $to =~ /\.bin$/) {
+                # hack to survive automatically added .exe for executables renamed to
+                # *.bin - will break if there is intentionally a .bin _and_ .bin.exe file.
+                $success = rename( "$to.exe", $to ) if -f "$to.exe";
+            }
         }
         if ( $success ) {
             # handle special packaging of *.dylib files for Mac OS X
@@ -1200,16 +1213,7 @@ sub zip_files
         next if ( $opt_check );
 
         local $work_file = "";
-        if ( $ext) {
-            # We are delivering into a minor. Zip files must not contain the
-            # minor extension, so we have to pre and post process it.
-            #
-            # Pre process: add minor extension to path, create working copy in
-            # temp directory.
-            $work_file = get_tempfilename() . ".zip";
-            die "Error: temp file $work_file already exists" if ( -e $work_file);
-            zipped_path_extension($zip_file, $work_file, $ext, 1) if ( -e $zip_file );
-        } elsif ( $zip_file eq $common_zip_file) {
+        if ( $zip_file eq $common_zip_file) {
             # Zip file in common tree: work on uniq copy to avoid collisions
             $work_file = $zip_file;
             $work_file =~ s/\.zip$//;
@@ -1259,14 +1263,9 @@ sub zip_files
                 print ZIP "$file\n";
             }
             close(ZIP);
+            fix_broken_cygwin_created_zips($work_file) if $^O eq "cygwin";
         }
-        if ( $ext ) {
-            # Post process: strip minor from stored path again
-            zipped_path_extension($work_file, $zip_file, $ext, 0);
-            if (( -e $work_file ) && ($work_file ne $zip_file)) {
-                unlink $work_file;
-            }
-        } elsif ( $zip_file eq $common_zip_file) {
+        if ( $zip_file eq $common_zip_file) {
             # rename work file back
             if ( -e $work_file ) {
                 if ( -e $zip_file) {
@@ -1290,45 +1289,30 @@ sub zip_files
     }
 }
 
-sub zipped_path_extension
+sub fix_broken_cygwin_created_zips
 # add given extension to or strip it from stored path
 {
     require Archive::Zip; import Archive::Zip;
-    my ($from, $to, $extension, $with_ext) = @_;
+    my $zip_file = shift;
 
     $zip = Archive::Zip->new();
-    if ( -e $from) {
-        die 'Error: zip read error' unless $zip->read( $from) == 0;
-        my $name;
-        my $newmember;
-        my $DateTime = 0;
-        foreach my $member ( $zip->members() ) {
-            $name = $member->fileName();
-            if ( $with_ext ) {
-                if ( $name !~ m#$extension/# ) {
-                    $name =~ s#^(.*?)/#$1$extension/#o;
-                }
-            } else {
-                $name =~ s#^(.*?)$extension/#$1/#o;
-            }
-            $member->fileName( $name );
-            if ( $member->lastModTime() ) {
-                if ( $DateTime < $member->lastModTime() ) {
-                    $DateTime = $member->lastModTime();
-                }
-            }
-        }
-        if ( -e $to ) {
-            die 'Error: zip write error' unless $zip->overwrite( ) == 0;
-            File::Copy::move( $from, $to) or die "Error $!: cannot move $from $to";
-        } else {
-            die 'Error: zip write error' unless $zip->writeToFileNamed( $to ) == 0;
-        }
-        utime $DateTime, $DateTime, $to;
-    } else {
-        die "Error: file $from does not exist" if ( ! $opt_delete);
+    unless ( $zip->read($work_file) == AZ_OK ) {
+        die "Error: can't open zip file '$zip_file' to fix broken cygwin file permissions";
     }
-    return;
+    my $latest_member_mod_time = 0;
+    foreach $member ( $zip->members() ) {
+        my $attributes = $member->unixFileAttributes();
+        $attributes &= ~0xFE00;
+        print $member->fileName($name) . ": " . sprintf("%lo", $attributes) if $is_debug;
+        $attributes |= 0x10; # add group write permission
+        print "-> " . sprintf("%lo", $attributes) . "\n" if $is_debug;
+        $member->unixFileAttributes($attributes);
+        if ( $latest_member_mod_time < $member->lastModTime() ) {
+            $latest_member_mod_time = $member->lastModTime();
+        }
+    }
+    die "Error: can't overwrite zip file '$zip_file' for fixing permissions" unless $zip->overwrite() == AZ_OK;
+    utime($latest_member_mod_time, $latest_member_mod_time, $zip_file);
 }
 
 sub get_tempfilename
