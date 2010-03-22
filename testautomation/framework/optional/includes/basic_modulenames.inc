@@ -33,7 +33,6 @@
 
 testcase tBasicIdeModuleNames
 
-
     dim rc as integer
     dim brc as boolean
     dim i as integer

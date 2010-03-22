@@ -696,7 +696,7 @@ end function
 function hCreateBasicWorkFiles() as string
 
     '///<H3>Create a macro, attach it to a file, save the file</H3>
-    '///<i>Starting point: The first doc or any other plain document</i>
+    '///<i>Starting point: Any plain document or the backing window</i>
     '///<ul>
     const CFN = "hCreateBasicWorkFiles::"
     const CMACRO = "TestMacro"
