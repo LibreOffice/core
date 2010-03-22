@@ -67,6 +67,7 @@ UnoTreeModel::UnoTreeModel()
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
+    ImplRegisterProperty( BASEPROPERTY_TABSTOP );
     ImplRegisterProperty( BASEPROPERTY_TREE_SELECTIONTYPE );
     ImplRegisterProperty( BASEPROPERTY_TREE_EDITABLE );
     ImplRegisterProperty( BASEPROPERTY_TREE_DATAMODEL );
