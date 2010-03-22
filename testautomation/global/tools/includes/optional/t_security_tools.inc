@@ -68,30 +68,37 @@ function hSetPasswordRecommendation( bEnable as boolean ) as boolean
 
         '///+<li>Click on the &quot;Options...&quot; button</li>
         kontext "TabSecurity"
-        hClickButton( Options )
+        if ( hClickButton( Options ) ) then
         
-        kontext "TabSecurityOptionsAndWarnings"
-        if ( TabSecurityOptionsAndWarnings.exists( 1 ) ) then
-        
-            '///+<li>Retrieve the current setting for passwor recommendation</li>     
-            if ( RecommendPasswordProtectionOnSaving.isChecked() ) then
-                hSetPasswordRecommendation() = true
+            kontext "TabSecurityOptionsAndWarnings"
+            if ( TabSecurityOptionsAndWarnings.exists( 1 ) ) then
+
+                '///+<li>Retrieve the current setting for passwor recommendation</li>
+                if ( RecommendPasswordProtectionOnSaving.isChecked() ) then
+                    hSetPasswordRecommendation() = true
+                else
+                    hSetPasswordRecommendation() = false
+                endif
+
+                '///+<li>Set the requested state</li>
+                if ( bEnable ) then
+                    printlog( CFN & "Enabled password recommendation" )
+                    RecommendPasswordProtectionOnSaving.check()
+                else
+                    printlog( CFN & "Disabled password recommendation" )
+                    RecommendPasswordProtectionOnSaving.uncheck()
+                endif
+
+                hCloseDialog( TabSecurityOptionsAndWarnings, "ok" )
+
             else
+                warnlog( "Failed to open security options page" )
                 hSetPasswordRecommendation() = false
             endif
-                                                    
-            '///+<li>Set the requested state</li>                                                                                   
-            if ( bEnable ) then
-                printlog( CFN & "Enabled password recommendation" )
-                RecommendPasswordProtectionOnSaving.check()
-            else
-                printlog( CFN & "Disabled password recommendation" )
-                RecommendPasswordProtectionOnSaving.uncheck()
-            endif
             
-            hCloseDialog( TabSecurityOptionsAndWarnings, "ok" )
         else
-            warnlog( "Failed to open security options page" )
+            warnlog( CFN & "Unable to click options button" )
+            hSetPasswordRecommendation() = false
         endif
 
         '///+<li>Close Tools/Options</li>

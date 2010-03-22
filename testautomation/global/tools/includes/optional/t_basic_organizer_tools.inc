@@ -81,48 +81,39 @@ function hCreateModuleForDoc( optional cName as string ) as boolean
 
     dim iWait as integer   ' how long we had to wait for the IDE to open
     dim iPos as integer
-    dim brc as boolean     ' boolean returncode, a temporary variable
-        brc = false
+    dim brc as boolean : brc = false
     dim cMsg as string
 
     ' make sure that we have a name for the module
-    if ( isMissing( cName ) ) Then
-        cName = "TTModule"
-    endif
+    if ( isMissing( cName ) ) then cName = "TTModule"
 
     '///+<li>Select the last module (it should belong to the current document)</li>
     kontext "Makro"
     iPos = hSelectTheLastNode( MakroAus )
     
     '///+<li>Click the New-Button, name the module</li>
-    if ( Neu.isEnabled() ) then
-        'printlog( CFN & "New-button is enabled" )
-    else
+    if ( not hClickButton( Neu ) ) then
         warnlog( CFN & "New-button is disabled" )
         hCreateModuleForDoc() = false
         exit function
     endif
     
-    Neu.Click()
-    
     '///+<li>If the module already exists we end up on the Deletion dialog</li>
     kontext "Active"
     if ( Active.exists() ) then
-        cMsg = active.getText()
-        cMsg = hRemoveLineBreaks( cMsg )
-        printlog( "Module seems to exist, deleting Main: " & cMsg )
-        Active.Yes()
+        printlog( "Module seems to exist, deleting Main: " & active.getText() )
+        hCloseDialog( Active, "yes" )
     endif
     
     Kontext "NeuesModul"
-    if ( NeuesModul.exists() ) then
+    if ( NeuesModul.exists( 1 ) ) then
         Modulname.SetText( cName )
-        NeuesModul.OK()
+        hCloseDialog( NeuesModul, "ok" )
     else
         warnlog( CFN & "Failed create a new module, aborting" )
         hCreateModuleForDoc() = false
         kontext "Makro"
-        Makro.cancel()
+        hCloseDialog( Makro, "cancel" )
         exit function
     endif
     
@@ -131,13 +122,12 @@ function hCreateModuleForDoc( optional cName as string ) as boolean
     kontext "MacroBar"
     if ( MacroBar.exists( 3 ) ) then
         printlog( CFN & "Exit: New module: " & cName & ". IDE is open" )
-        brc = true
+        hCreateModuleForDoc() = true
     else
         warnlog( CFN & "Exit: Failed to create the Module" )
-        brc = false
+        hCreateModuleForDoc() = false
     endif
         
-    hCreateModuleForDoc() = brc
     '///+<li>Return TRUE on success, FALSE on failure</li>
     '///</ul>
 
@@ -157,17 +147,12 @@ function hOpenBasicObjectOrganizer( iTabPage as integer ) as boolean
     ' BASIC-IDE
     ' NOTE: This is the organizer for libraries, modules and dialogs,
     '       not the one to run or assign macros!
-
-    dim iMenuSize as integer
-    dim brc as boolean
-    
     '///+<li>Open the context menu of the tabbar</li>
     kontext "basicide"
-    Tabbar.OpenContextMenu
+    Tabbar.OpenContextMenu()
     
     '///+<li>Select the last entry of the context menu (dynamic menu!)</li>
-    iMenuSize = hMenuItemgetCount()
-    if ( iMenuSize = 2 ) then
+    if ( hMenuItemGetCount() = 2 ) then
         printlog( " * short context menu (no edit-window)" )
         hMenuSelectNr( 2 )
     else
@@ -178,13 +163,12 @@ function hOpenBasicObjectOrganizer( iTabPage as integer ) as boolean
     WaitSlot()
 
     '///+<li>On the basic object organizer switch to the Modules tab</li>
-    brc = hSelectBasicObjectOrganizerTab( 1 )
-    if ( not brc ) then
+    if ( hSelectBasicObjectOrganizerTab( 1 ) ) then
+        printlog( CFN & "Requested page is open" )
+        hOpenBasicObjectOrganizer() = true
+    else
         warnlog( CFN & "Failed to open requested Tabpage" )
         hOpenBasicObjectOrganizer() = false
-    else
-        printlog( CFN & "Requested page is open" )
-        hOpenBasicObjectOrganizer = true
     endif
     '///+<li>Return TRUE on success, FALSE on failure</li>
     '///</ul>
@@ -201,24 +185,14 @@ function hOpenBasicOrganizerFromDoc() as boolean
     '///<ul>
     
     const CFN = "hOpenBasicOrganizerFromDoc::"
+    hOpenBasicOrganizerFromDoc() = false
     
     '///+<li>Use the slot ToolsMacro_uno to open the Basic Macro organizer</li>
     ToolsMacro_uno
     
     '///+<li>Verify that the dialog is open</li>
     kontext "Makro"
-    if ( not Makro.exists() ) then
-        warnlog( CFN & "Could not open Macro Organizer" )
-        hOpenBasicOrganizerFromDoc() = false
-        exit function
-    endif
-    
-    call dialogtest( Makro )
-    
-    '///+<li>Return TRUE on success, FALSE on failure</li>
-    printlog( CFN & "Basic Organizer is open" )
-    hOpenBasicOrganizerFromDoc() = true
-    kontext "Makro"
+    if ( Makro.exists( 2 ) ) then hOpenBasicOrganizerFromDoc() = true
     '///</ul>
     
 end function
@@ -239,13 +213,6 @@ function hSelectBasicObjectOrganizerTab( iTabPage as integer ) as boolean
     '///Description:
     '///<ul>
     
-    '///+<li>Verify function parameters</li>
-    if ( ( iTabPage < 1 ) or ( iTabPage > 3 ) ) then
-        warnlog( CFN & "Illegal argument passed to function: " & iTabPage )
-        hSelectBasicObjectOrganizerTab() = false
-        exit function
-    endif
-
     '///+<li>Switch between tabpages 1, 2 or 3</li>
     select case iTabPage
     case 1 : 
@@ -295,12 +262,6 @@ function hDeleteLibrary( iLocation as integer, cLibName as string ) as boolean
     const CFN = "hDeleteLibrary::"
     const ITABPOS = 3
 
-    '///+<li>Verify function parameters</li>
-    if ( ( iLocation < 1 ) or ( iLocation > 3 ) ) then
-        warnlog( CFN & "Invalid parameter passed to function" )
-        hDeleteLibrary() = false
-    endif
-    
     dim iObjectCount as integer
     dim iCurrentObject as integer
     dim cCurrentObjectName as string
@@ -310,7 +271,7 @@ function hDeleteLibrary( iLocation as integer, cLibName as string ) as boolean
     
     '///+<li>Click Manage-button</li>
     Kontext "Makro"
-    Verwalten.click()
+    hClickButton( Verwalten )
     
     '///+<li>Go to the Libraries Tab on the Macro Object Organizer</li>
     hSelectBasicObjectOrganizerTab( ITABPOS )
@@ -329,7 +290,7 @@ function hDeleteLibrary( iLocation as integer, cLibName as string ) as boolean
         if ( cCurrentObjectName = cLibName ) then
         
             '///+<li>Click Delete</li>
-            Loeschen.click()
+            hClickButton( Loeschen )
             exit for
         endif
     
@@ -337,7 +298,7 @@ function hDeleteLibrary( iLocation as integer, cLibName as string ) as boolean
     
     '///+<li>Confirm to delete library</li>
     Kontext "Active"
-    if ( Active.exists() ) then
+    if ( Active.exists( 1 ) ) then
         active.yes()
     else
         warnlog( CFN & "No confirmation for delete" )
@@ -354,91 +315,13 @@ function hDeleteLibrary( iLocation as integer, cLibName as string ) as boolean
     endif
     
     '///+<li>Cancel Macro Object Organizer</li>
-    TabBibliotheken.cancel()
+    hCloseDialog( TabBibliotheken, "cancel" )
     
     '///+<li>Cancel Basic Macro Organizer</li>
     Kontext "Makro"
-    Makro.cancel()
+    hCloseDialog( Makro, "cancel" )
     '///+<li>Return TRUE on success, FALSE on failure</li>
     '///</ul>
-    
-end function
-
-'*******************************************************************************
-
-function hIsMacroEditButtonEnabled() as boolean
-
-    '///<h3>Test whether the "Edit..." button is enabled or not</h3>
-    '///<i>Starting point: Basic Macro Organizer</i>
-    '///<ul>
-
-    const CFN = "hIsMacroEditButtonEnabled::"
-    dim brc as boolean
-
-    '///+<li>Check that the macro dialog is open</li>
-    Kontext "Makro"
-    if ( not Makro.exists() ) then
-        warnlog( "Macro organizer is not open, aborting function" )
-        hIsMacroEditButtonEnabled() = false
-        exit function
-    endif
-    
-    '///+<li>Verify that the Edit...-Button exists and is enabled</li>
-    if ( bearbeiten.exists() ) then
-        if ( bearbeiten.isEnabled() ) then
-            printlog( CFN & "Button exists and is enabled" )
-            brc = true
-        else
-            printlog( CFN & "Button exists but is disabled" )
-            brc = false
-        endif
-    else
-        warnlog( CFN & "Button does not exist" )
-        brc = false
-    endif
-
-    '///+<li>Return TRUE if button exists and is enabled</li>
-    '///</ul>
-    hIsMacroEditButtonEnabled() = brc
-    
-end function
-
-'*******************************************************************************
-
-function hIsMacroNewButtonEnabled() as boolean
-
-    '///<h3>Find out whether the "New..." button is enabled or not</h3>
-    '///<i>Starting point: Basic Macro Organizer</i>
-    '///<ul>
-    
-    const CFN = "hIsMacroNewButtonEnabled::"
-    dim brc as boolean
-
-    '///+<li>Check that the macro dialog is open</li>
-    Kontext "Makro"
-    if ( not Makro.exists() ) then
-        warnlog( "Macro organizer is not open, aborting function" )
-        hIsMacroNewButtonEnabled() = false
-        exit function
-    endif
-    
-    '///+<li>Verify that the New...-Button exists and is enabled</li>
-    if ( neu.exists() ) then
-        if ( neu.isEnabled() ) then
-            printlog( CFN & "Button exists and is enabled" )
-            brc = true
-        else
-            printlog( CFN & "Button exists but is disabled" )
-            brc = false
-        endif
-    else
-        warnlog( CFN & "Button does not exist" )
-        brc = false
-    endif
-
-    '///+<li>Return TRUE if button exists and is enabled</li>
-    '///</ul>    
-    hIsMacroNewButtonEnabled() = brc
     
 end function
 
@@ -466,12 +349,7 @@ function hNameBasicModule( cName as string ) as boolean
     '///<u>Description</u>:
     '///<ul>
     
-    use "global\tools\includes\optional\t_stringtools.inc"
-    
     const CFN = "hNameBasicModule::"
-    dim brc as boolean
-        brc = true
-    dim cMsg as string
     
     '///+<li>Verify that the naming dialog is open</li>
     kontext "NeuesModul"
@@ -484,22 +362,20 @@ function hNameBasicModule( cName as string ) as boolean
     Modulname.SetText( cName )
     
     '///+<li>Accept the name with OK</li>
-    NeuesModul.OK()
+    hCloseDialog( NeuesModul, "ok" )
     
     '///+<li>If there is no warning, the name should be valid.</li>
     kontext "BasicIDE"
     if ( BasicIde.exists( 2 ) ) then
-        brc = true
+        hNameBasicModule() = true
         printlog( CFN & "Name accepted, Basic-Ide is open" )
     else
-        brc = false
+        hNameBasicModule() = false
         '///+<li>Look for invalid name warning, close it</li>
         kontext "active"
         if ( active.exists() ) then
-            cMsg = active.getText()
-            cMsg = hRemoveLineBreaks( cMsg 
-            printlog( CFN & "Msgbox: " & cMsg )
-            active.ok()
+            printlog( CFN & "Msgbox: " & active.exists() )
+            hCloseDialog( active, "ok" )
         endif
         
         '///+<li>If the name is invalid, get back to the naming-dialog</li>
@@ -510,8 +386,6 @@ function hNameBasicModule( cName as string ) as boolean
             warnlog( CFN & "Naming failed but we are not on the naming dialog" )
         endif
     endif
-    
-    hNameBasicModule() = brc
     '///</ul>
     
 end function

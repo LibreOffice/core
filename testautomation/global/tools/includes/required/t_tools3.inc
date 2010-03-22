@@ -1139,6 +1139,7 @@ function hCloseDialog( oDialog as object, sUserFlags as string ) as boolean
     const METHOD_CANCEL = 2
     const METHOD_OK     = 3
     const METHOD_202    = 4
+    const METHOD_YES    = 5
     const TIMEOUT       = 2 ' Maximum time to wait for a dialog to close
 
     dim sFlags as string : sFlags = lcase( sUserFlags )
@@ -1152,6 +1153,8 @@ function hCloseDialog( oDialog as object, sUserFlags as string ) as boolean
         iClosingMethod = METHOD_CANCEL
     elseif ( instr( sFlags, "202" ) ) then
         iClosingMethod = METHOD_202
+    elseif ( instr( sFlags, "yes" ) ) then
+        iClosingMethod = METHOD_YES
     elseif ( instr( sFlags, "ok" ) ) then
         iClosingMethod = METHOD_OK
     else
@@ -1171,6 +1174,7 @@ function hCloseDialog( oDialog as object, sUserFlags as string ) as boolean
         case METHOD_CANCEL : oDialog.cancel()
         case METHOD_OK     : oDialog.ok()
         case METHOD_202    : oDialog.click( 202 )
+        case METHOD_YES    : oDialog.yes()
         case else :
             warnlog( CFN & " Script error: Allowed closing methods are <cancel>, <close> and <ok>." )
         end select
