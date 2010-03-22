@@ -7,7 +7,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 # options -p (for compatibility)
 #         -mode mode
 #
-# Copyright (c) 2000 Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 
 use Cwd;
 
