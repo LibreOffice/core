@@ -595,6 +595,13 @@ namespace svt
             aItemContentSize.Width() += 2 * ITEM_TEXT_FLOW_SPACE;
         }
 
+        if ( !bUseImage && !bUseText )
+        {
+            // have a minimal size - this is pure heuristics, but if it doesn't suit your needs, then give your panels
+            // a name and or image! :)
+            aItemContentSize = Size( 14, 14 );
+        }
+
         aItemContentSize.Width() += 2 * ITEM_OUTER_SPACE;
         aItemContentSize.Height() += 2 * ITEM_OUTER_SPACE;
 

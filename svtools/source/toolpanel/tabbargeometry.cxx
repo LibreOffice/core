@@ -259,7 +259,8 @@ namespace svt
 
         const ItemDescriptor& rLastItem( *io_rItems.rbegin() );
         const Point aLastItemBottomRight( rLastItem.GetCurrentRect().BottomRight() );
-        return aFitInto.IsInside( aLastItemBottomRight );
+        return  aFitInto.Left() <= aLastItemBottomRight.X()
+            &&  aFitInto.Right() >= aLastItemBottomRight.X();
     }
 
     //------------------------------------------------------------------------------------------------------------------
