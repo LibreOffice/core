@@ -143,27 +143,408 @@ Applying Goal Seek
 Applying Multiple Operations
 Applying Multiple Sheets
 Validity of Cell Contents
+Macros and Programming
+General Information and User Interface Usage
+StarOffice Basic Help
+Programming with StarOffice Basic 
+StarOffice Basic Glossary
+Basics
+Syntax
+StarOffice Basic IDE
+IDE Overview
+The Basic Editor
+Watch Window
+Macro Toolbar
+Macro
+Command Reference
+Using Procedures and Functions
+Libraries, Modules and Dialogs
+Run-Time Functions, Statements, and Operators
+Screen I/O Functions
+File I/O Functions
+Date and Time Functions
+Error-Handling Functions
+Logical Operators
+Mathematical Operators
+Numeric Functions
+Controlling Program Execution
+Variables
+Comparison Operators
+Strings
+Other Commands
+Alphabetic List of Functions, Statements, and Operators
+Abs Function [Runtime]
+AND Operator [Runtime]
+Array Function [Runtime]
+Asc Function [Runtime]
+Atn Function [Runtime]
+Beep Statement [Runtime]
+Blue Function [Runtime]
+CBool Function [Runtime]
+CByte Function [Runtime]
+CDateFromIso Function [Runtime]
+CDateToIso Function [Runtime]
+CDate Function [Runtime]
+CDbl Function [Runtime]
+CInt Function [Runtime]
+CLng Function [Runtime]
+CSng Function[Runtime]
+CStr Function [Runtime]
+Call Statement [Runtime]
+ChDir Statement [Runtime]
+ChDrive Statement [Runtime]
+Choose Function [Runtime]
+Chr Function [Runtime]
+Close Statement [Runtime]
+Comparison Operators [Runtime]
+Const Statement [Runtime]
+ConvertFromURL Function [Runtime]
+ConvertToURL Function [Runtime]
+Cos Function [Runtime]
+CreateUnoDialog Function [Runtime]
+CreateUnoListener Function [Runtime]
+CreateUnoService Function [Runtime]
+CreateUnoStruct Function [Runtime]
+CurDir Function [Runtime]
+DateSerial Function [Runtime]
+DateValue Function [Runtime]
+Date Statement [Runtime]
+Day Function [Runtime]
+Declare Statement [Runtime]
+DefBool Statement [Runtime]
+DefDate Statement [Runtime]
+DefDbl Statement [Runtime]
+DefInt Statement [Runtime]
+DefLng Statement [Runtime]
+DefObj Statement [Runtime]
+DefVar Statement [Runtime]
+DimArray Function [Runtime]
+Dim Statement [Runtime]
+Dir Function [Runtime]
+Do...Loop Statement [Runtime]
+Comparison Operators [Runtime]
+End Statement [Runtime]
+Environ Function [Runtime]
+Eof Function [Runtime]
+EqualUnoObjects Function [Runtime]
+Eqv Operator [Runtime]
+Erl Function [Runtime]
+Err Function [Runtime]
+Error Function [Runtime]
+Error-Handling Functions
+Exit Statement [Runtime]
+Exp Function [Runtime]
+FileAttr-Function [Runtime]
+FileCopy Statement [Runtime]
+FileDateTime Function [Runtime]
+FileExists Function [Runtime]
+FileLen-Function [Runtime]
+FindObject Function [Runtime]
+FindPropertyObject Function [Runtime]
+Fix Function [Runtime]
+For...Next Statement [Runtime]
+Format Function [Runtime]
+FreeFile Function[Runtime]
+FreeLibrary Function [Runtime]
+Function Statement [Runtime]
+Further Statements
+Generating Random Numbers
+GetAttr Function [Runtime]
+GetProcessServiceManager Function [Runtime]
+GetSolarVersion Function [Runtime]
+GetSystemTicks Function [Runtime]
+Get Statement [Runtime]
+GlobalScope [Runtime]
+GoSub...Return Statement [Runtime]
+GoTo Statement [Runtime]
+Green Function [Runtime]
+HasUnoInterfaces Function [Runtime]
+Hex Function [Runtime]
+Hour Function [Runtime]
+IIf Statement [Runtime]
+If...Then...Else Statement [Runtime]
+Imp-Operator [Runtime]
+InStr Function [Runtime]
+InputBox Function [Runtime]
+Input# Statement [Runtime]
+Int Function [Runtime]
+IsArray Function [Runtime]
+IsDate Function [Runtime]
+IsEmpty Function [Runtime]
+IsMissing function [Runtime]
+IsNull Function [Runtime]
+IsNumeric Function [Runtime]
+IsObject Function [Runtime]
+IsUnoStruct Function [Runtime]
+Join Function [Runtime]
+Kill Statement [Runtime]
+LBound Function [Runtime]
+LCase Function [Runtime]
+LSet Statement [Runtime]
+LTrim Function [Runtime]
+Left Function [Runtime]
+Len Function [Runtime]
+Let Statement [Runtime]
+Line Input # Statement [Runtime]
+Loc Function [Runtime]
+Lof Function [Runtime]
+Log Function [Runtime]
+Mid Function, Mid Statement [Runtime]
+Minute Function [Runtime]
+MkDir Statement [Runtime]
+Mod-Operator [Runtime]
+Month Function [Runtime]
+MsgBox Function [Runtime]
+MsgBox Statement [Runtime]
+Name Statement [Runtime]
+Not-Operator [Runtime]
+Now Function [Runtime]
+Numeric Functions
+Oct Function [Runtime]
+On Error GoTo ... Resume Statement [Runtime]
+On...GoSub Statement; On...GoTo Statement [Runtime]
+Open Statement[Runtime]
+Option Base Statement [Runtime]
+Option Explicit Statement [Runtime]
+Optional (in Function Statement) [Runtime]
+Or-Operator [Runtime]
+Print Statement [Runtime]
+Public Statement [Runtime]
+Put Statement [Runtime]
+QBColor Function [Runtime]
+RGB Function [Runtime]
+RSet Statement [Runtime]
+RTrim Function [Runtime]
+Randomize Statement [Runtime]
+ReDim Statement [Runtime]
+Red Function [Runtime]
+Rem Statement [Runtime]
+Reset Statement [Runtime]
+Right Function [Runtime]
+RmDir Statement [Runtime]
+Rnd Function [Runtime]
+Second Function [Runtime]
+Seek Function [Runtime]
+Seek Statement [Runtime]
+Select...Case Statement [Runtime]
+SetAttr Statement [Runtime]
+Set Statement[Runtime]
+Sgn Function [Runtime]
+Shell Function [Runtime]
+Sin Function [Runtime]
+Space Function [Runtime]
+Split Function [Runtime]
+Sqr Function [Runtime]
+Square Root Calculation
+Static Statement [Runtime]
+Stop Statement [Runtime]
+StrComp Function [Runtime]
+Str Function [Runtime]
+String Function [Runtime]
+Sub Statement [Runtime]
+Switch Function [Runtime]
+Tan Function [Runtime]
+TimeSerial Function [Runtime]
+TimeValue Function [Runtime]
+Time Statement [Runtime]
+Timer Function [Runtime]
+Trigonometric Functions
+Trim Function [Runtime]
+TwipsPerPixelX Function [Runtime]
+TwipsPerPixelY Function [Runtime]
+TypeName Function; VarType Function[Runtime]
+UBound Function [Runtime]
+UCase Function [Runtime]
+Val Function [Runtime]
+Wait Statement [Runtime]
+WeekDay Function [Runtime]
+While...Wend Statement[Runtime]
+With Statement [Runtime]
+Write Statement [Runtime]
+Xor-Operator [Runtime]
+Year Function [Runtime]
+"-" Operator [Runtime]
+"*" Operator [Runtime]
+"+" Operator [Runtime]
+"/" Operator [Runtime]
+"^" Operator [Runtime]
+Guides
+Changing the Properties of Controls in the Dialog Editor
+Creating Controls in the Dialog Editor
+Programming Examples for Controls in the Dialog Editor
+Opening a Dialog With Program Code
+Creating a Basic Dialog
+Organizing Libraries and Modules
+Using Variables
+Using Objects
+Debugging a Basic Program
+Event-Driven Macros
 Charts and Diagrams
 General Information
 Charts in StarOffice
 StarOffice Chart Features
 Shortcuts for Charts
-Formulas
-General Information and User Interface Usage
-Welcome to the StarOffice Math Help
-StarOffice Math Features
-Instructions for Using StarOffice Math
-Shortcuts (StarOffice Math Accessibility)
-Command and Menu Reference
-Menus
-Toolbars
-Working with Formulas
-Manually Aligning Formula Parts
-Changing Default Attributes
-Merging Formula Parts in Brackets
-Entering Comments
-Entering Line Breaks
-Inserting Brackets
+Installation
+Changing the Association of Microsoft Office Document Types
+Common Help Topics
+General Information
+Shortcut Keys
+General Glossary
+Glossary of Internet Terms
+Accessibility in StarOffice
+Shortcuts (StarOffice Accessibility)
+General Shortcut Keys in StarOffice
+Versions and Build Numbers
+StarOffice and Microsoft Office
+Using Microsoft Office and StarOffice
+Comparing Microsoft Office and StarOffice Terms
+About Converting Microsoft Office Documents
+Changing the Association of Microsoft Office Document Types
+StarOffice Options
+Options
+User Data
+General
+Paths
+Writing Aids
+Colors
+General
+Fonts
+View
+Print Options
+Memory
+Appearance
+Accessibility
+Load/Save options
+Internet options
+Text Document Options
+HTML Document Options
+Spreadsheet Options
+Presentation Options
+Drawing Options
+Formula
+Chart options
+VBA Properties
+Microsoft Office
+Languages
+Language Setting Options
+Data sources options
+Wizards
+Wizard
+Letter Wizard
+Letter Wizard
+Fax Wizard
+Fax Wizard
+Agenda Wizard
+Agenda Wizard
+Presentation Wizard
+Presentation Wizard
+HTML Export Wizard
+HTML Export
+Document Converter Wizard
+Document Converter
+Euro Converter Wizard
+Configuring StarOffice
+Configuring StarOffice
+Extension Manager
+Changing Icon Views
+Adding Buttons to Toolbars 
+Changing Your Working Directory 
+Changing Default Templates
+Registering an Address Book
+Inserting and Editing Buttons
+Working with the User Interface
+Navigation to Quickly Reach Objects
+Navigator for Document Overview
+Showing, Docking and Hiding Windows
+Showing Navigation Pane of the Help
+Switching Between Insert Mode and Overwrite Mode
+Using Toolbars
+Printing, Faxing, Sending
+Printing Address Labels
+Printing in Black and White
+Sending Documents as E-mail
+Sending Faxes and Configuring StarOffice for Faxing
+Drag & Drop
+Dragging and Dropping Within a StarOffice Document
+Moving and Copying Text in Documents
+Copying Spreadsheet Areas to Text Documents
+Copying Graphics Between Documents
+Copying Graphics From the Gallery
+Drag-and-Drop With the Data Source View
+Copy and Paste
+Copying Drawing Objects Into Other Documents
+Copying Graphics Between Documents
+Copying Graphics From the Gallery
+Copying Spreadsheet Areas to Text Documents
+Charts and Diagrams
+Inserting Charts
+Charts in StarOffice
+Load, Save, Import, Export
+Opening Documents
+Opening documents saved in other formats
+Saving Documents
+Saving Documents Automatically
+Saving Documents in Other Formats
+Importing and Exporting Data in Text Format
+Links and References
+Inserting Hyperlinks
+Relative and Absolute Links
+Editing Hyperlinks
+Document Version Tracking
+Comparing Versions of a Document
+Merging Versions
+Recording Changes
+Recording and Displaying Changes
+Accepting or Rejecting Changes
+Version Management
+Labels and Business Cards
+Creating and Printing Labels and Business Cards
+Inserting External Data
+Inserting Data From Spreadsheets
+Inserting Data From Text Documents
+Inserting, Editing, Saving Bitmaps
+Adding Graphics to the Gallery
+Automatic Functions
+Turning off Automatic URL Recognition
+Searching and Replacing
+Searching With a Form Filter
+Searching With the Hyperlink Bar
+Searching Tables and Form Documents
+List of Regular Expressions
+Guides
+Applying Line Styles
+Changing the Color of Text
+Changing the Title of a Document
+Creating Round Corners
+Defining Background Colors or Background Graphics
+Defining Line Ends
+Defining Line Styles
+Editing Graphic Objects 
+Drawing Lines in Text
+First Steps
+Inserting Objects From the Gallery
+Inserting Protected Spaces, Hyphens and Conditional Separators
+Inserting Special Characters
+Inserting and Editing Tab Stops
+Protecting Content in StarOffice
+Protecting Records
+Selecting the Maximum Printable Area on a Page
+Selecting Measurement Units
+Selecting the Document Language
+Table Design
+Turning off Bullets and Numbering for Individual Paragraphs
+Database Functionality
+General Information
+StarOffice Database
+Database Overview
+Creating a New Database
+Working with Tables
+Working with Queries
+Working with Forms
+Creating Reports 
+Registering and Deleting a Database 
+Importing and Exporting Data in Base 
+Executing SQL Commands
 Text Documents
 General Information and User Interface Usage
 Welcome to the StarOffice Writer Help
@@ -230,7 +611,7 @@ Using Sections
 Inserting, Editing, and Linking Text Frames
 Editing Sections
 Inserting Sections
-Tables of Content and Indexes
+Tables of Contents and Indexes
 Outline Numbering
 User-Defined Indexes
 Creating a Table of Contents
@@ -469,400 +850,19 @@ Creating a Custom Slide Show
 Changing the Slide Order
 Zooming With the Keypad
 Rehearse Timings of Slide Changes
-Macros and Programming
+Formulas
 General Information and User Interface Usage
-StarOffice Basic Help
-Programming with StarOffice Basic 
-StarOffice Basic Glossary
-Basics
-Syntax
-StarOffice Basic IDE
-IDE Overview
-The Basic Editor
-Watch Window
-Macro Toolbar
-Macro
-Command Reference
-Using Procedures and Functions
-Libraries, Modules and Dialogs
-Run-Time Functions, Statements, and Operators
-Screen I/O Functions
-File I/O Functions
-Date and Time Functions
-Error-Handling Functions
-Logical Operators
-Mathematical Operators
-Numeric Functions
-Controlling Program Execution
-Variables
-Comparison Operators
-Strings
-Other Commands
-Alphabetic List of Functions, Statements, and Operators
-Abs Function [Runtime]
-AND Operator [Runtime]
-Array Function [Runtime]
-Asc Function [Runtime]
-Atn Function [Runtime]
-Beep Statement [Runtime]
-Blue Function [Runtime]
-CBool Function [Runtime]
-CByte Function [Runtime]
-CDateFromIso Function [Runtime]
-CDateToIso Function [Runtime]
-CDate Function [Runtime]
-CDbl Function [Runtime]
-CInt Function [Runtime]
-CLng Function [Runtime]
-CSng Function[Runtime]
-CStr Function [Runtime]
-Call Statement [Runtime]
-ChDir Statement [Runtime]
-ChDrive Statement [Runtime]
-Choose Function [Runtime]
-Chr Function [Runtime]
-Close Statement [Runtime]
-Comparison Operators [Runtime]
-Const Statement [Runtime]
-ConvertFromURL Function [Runtime]
-ConvertToURL Function [Runtime]
-Cos Function [Runtime]
-CreateUnoDialog Function [Runtime]
-CreateUnoListener Function [Runtime]
-CreateUnoService Function [Runtime]
-CreateUnoStruct Function [Runtime]
-CurDir Function [Runtime]
-DateSerial Function [Runtime]
-DateValue Function [Runtime]
-Date Statement [Runtime]
-Day Function [Runtime]
-Declare Statement [Runtime]
-DefBool Statement [Runtime]
-DefDate Statement [Runtime]
-DefDbl Statement [Runtime]
-DefInt Statement [Runtime]
-DefLng Statement [Runtime]
-DefObj Statement [Runtime]
-DefVar Statement [Runtime]
-DimArray Function [Runtime]
-Dim Statement [Runtime]
-Dir Function [Runtime]
-Do...Loop Statement [Runtime]
-Comparison Operators [Runtime]
-End Statement [Runtime]
-Environ Function [Runtime]
-Eof Function [Runtime]
-EqualUnoObjects Function [Runtime]
-Eqv Operator [Runtime]
-Erl Function [Runtime]
-Err Function [Runtime]
-Error Function [Runtime]
-Error-Handling Functions
-Exit Statement [Runtime]
-Exp Function [Runtime]
-FileAttr-Function [Runtime]
-FileCopy Statement [Runtime]
-FileDateTime Function [Runtime]
-FileExists Function [Runtime]
-FileLen-Function [Runtime]
-FindObject Function [Runtime]
-FindPropertyObject Function [Runtime]
-Fix Function [Runtime]
-For...Next Statement [Runtime]
-Format Function [Runtime]
-FreeFile Function[Runtime]
-FreeLibrary Function [Runtime]
-Function Statement [Runtime]
-Further Statements
-Generating Random Numbers
-GetAttr Function [Runtime]
-GetProcessServiceManager Function [Runtime]
-GetSolarVersion Function [Runtime]
-GetSystemTicks Function [Runtime]
-Get Statement [Runtime]
-GlobalScope [Runtime]
-GoSub...Return Statement [Runtime]
-GoTo Statement [Runtime]
-Green Function [Runtime]
-HasUnoInterfaces Function [Runtime]
-Hex Function [Runtime]
-Hour Function [Runtime]
-IIf Statement [Runtime]
-If...Then...Else Statement [Runtime]
-Imp-Operator [Runtime]
-InStr Function [Runtime]
-InputBox Function [Runtime]
-Input# Statement [Runtime]
-Int Function [Runtime]
-IsArray Function [Runtime]
-IsDate Function [Runtime]
-IsEmpty Function [Runtime]
-IsMissing function [Runtime]
-IsNull Function [Runtime]
-IsNumeric Function [Runtime]
-IsObject Function [Runtime]
-IsUnoStruct Function [Runtime]
-Join Function [Runtime]
-Kill Statement [Runtime]
-LBound Function [Runtime]
-LCase Function [Runtime]
-LSet Statement [Runtime]
-LTrim Function [Runtime]
-Left Function [Runtime]
-Len Function [Runtime]
-Let Statement [Runtime]
-Line Input # Statement [Runtime]
-Loc Function [Runtime]
-Lof Function [Runtime]
-Log Function [Runtime]
-Mid Function, Mid Statement [Runtime]
-Minute Function [Runtime]
-MkDir Statement [Runtime]
-Mod-Operator [Runtime]
-Month Function [Runtime]
-MsgBox Function [Runtime]
-MsgBox Statement [Runtime]
-Name Statement [Runtime]
-Not-Operator [Runtime]
-Now Function [Runtime]
-Numeric Functions
-Oct Function [Runtime]
-On Error GoTo ... Resume Statement [Runtime]
-On...GoSub Statement; On...GoTo Statement [Runtime]
-Open Statement[Runtime]
-Option Base Statement [Runtime]
-Option Explicit Statement [Runtime]
-Optional (in Function Statement) [Runtime]
-Or-Operator [Runtime]
-Print Statement [Runtime]
-Public Statement [Runtime]
-Put Statement [Runtime]
-QBColor Function [Runtime]
-RGB Function [Runtime]
-RSet Statement [Runtime]
-RTrim Function [Runtime]
-Randomize Statement [Runtime]
-ReDim Statement [Runtime]
-Red Function [Runtime]
-Rem Statement [Runtime]
-Reset Statement [Runtime]
-Right Function [Runtime]
-RmDir Statement [Runtime]
-Rnd Function [Runtime]
-Second Function [Runtime]
-Seek Function [Runtime]
-Seek Statement [Runtime]
-Select...Case Statement [Runtime]
-SetAttr Statement [Runtime]
-Set Statement[Runtime]
-Sgn Function [Runtime]
-Shell Function [Runtime]
-Sin Function [Runtime]
-Space Function [Runtime]
-Split Function [Runtime]
-Sqr Function [Runtime]
-Square Root Calculation
-Static Statement [Runtime]
-Stop Statement [Runtime]
-StrComp Function [Runtime]
-Str Function [Runtime]
-String Function [Runtime]
-Sub Statement [Runtime]
-Switch Function [Runtime]
-Tan Function [Runtime]
-TimeSerial Function [Runtime]
-TimeValue Function [Runtime]
-Time Statement [Runtime]
-Timer Function [Runtime]
-Trigonometric Functions
-Trim Function [Runtime]
-TwipsPerPixelX Function [Runtime]
-TwipsPerPixelY Function [Runtime]
-TypeName Function; VarType Function[Runtime]
-UBound Function [Runtime]
-UCase Function [Runtime]
-Val Function [Runtime]
-Wait Statement [Runtime]
-WeekDay Function [Runtime]
-While...Wend Statement[Runtime]
-With Statement [Runtime]
-Write Statement [Runtime]
-Xor-Operator [Runtime]
-Year Function [Runtime]
-"-" Operator [Runtime]
-"*" Operator [Runtime]
-"+" Operator [Runtime]
-"/" Operator [Runtime]
-"^" Operator [Runtime]
-Guides
-Changing the Properties of Controls in the Dialog Editor
-Creating Controls in the Dialog Editor
-Programming Examples for Controls in the Dialog Editor
-Opening a Dialog With Program Code
-Creating a Basic Dialog
-Organizing Libraries and Modules
-Using Variables
-Using Objects
-Debugging a Basic Program
-Event-Driven Macros
-Installation
-Changing the Association of Microsoft Office Document Types
-Common Help Topics
-General Information
-Shortcut Keys
-General Glossary
-Glossary of Internet Terms
-Accessibility in StarOffice
-Shortcuts (StarOffice Accessibility)
-General Shortcut Keys in StarOffice
-Versions and Build Numbers
-StarOffice and Microsoft Office
-Using Microsoft Office and StarOffice
-Comparing Microsoft Office and StarOffice Terms
-About Converting Microsoft Office Documents
-Changing the Association of Microsoft Office Document Types
-StarOffice Options
-Options
-User Data
-General
-Paths
-Writing Aids
-Colors
-General
-Fonts
-View
-Print Options
-Memory
-Appearance
-Accessibility
-Load/Save options
-Internet options
-Text Document Options
-HTML Document Options
-Spreadsheet Options
-Presentation Options
-Drawing Options
-Formula
-Chart options
-VBA Properties
-Microsoft Office
-Languages
-Language Setting Options
-Data sources options
-Wizards
-Wizard
-Letter Wizard
-Letter Wizard
-Fax Wizard
-Fax Wizard
-Agenda Wizard
-Agenda Wizard
-Presentation Wizard
-Presentation Wizard
-HTML Export Wizard
-HTML Export
-Document Converter Wizard
-Document Converter
-Euro Converter Wizard
-Configuring StarOffice
-Configuring StarOffice
-Extension Manager
-Changing Icon Views
-Adding Buttons to Toolbars 
-Changing Your Working Directory 
-Changing Default Templates
-Registering an Address Book
-Inserting and Editing Buttons
-Working with the User Interface
-Navigation to Quickly Reach Objects
-Navigator for Document Overview
-Showing, Docking and Hiding Windows
-Showing Navigation Pane of the Help
-Switching Between Insert Mode and Overwrite Mode
-Using Toolbars
-Printing, Faxing, Sending
-Printing Address Labels
-Printing in Black and White
-Sending Documents as E-mail
-Sending Faxes and Configuring StarOffice for Faxing
-Drag & Drop
-Dragging and Dropping Within a StarOffice Document
-Moving and Copying Text in Documents
-Copying Spreadsheet Areas to Text Documents
-Copying Graphics Between Documents
-Copying Graphics From the Gallery
-Drag-and-Drop With the Data Source View
-Copy and Paste
-Copying Drawing Objects Into Other Documents
-Copying Graphics Between Documents
-Copying Graphics From the Gallery
-Copying Spreadsheet Areas to Text Documents
-Charts and Diagrams
-Inserting Charts
-Charts in StarOffice
-Load, Save, Import, Export
-Opening Documents
-Opening documents saved in other formats
-Saving Documents
-Saving Documents Automatically
-Saving Documents in Other Formats
-Importing and Exporting Data in Text Format
-Links and References
-Inserting Hyperlinks
-Relative and Absolute Links
-Editing Hyperlinks
-Document Version Tracking
-Comparing Versions of a Document
-Merging Versions
-Recording Changes
-Recording and Displaying Changes
-Accepting or Rejecting Changes
-Version Management
-Labels and Business Cards
-Creating and Printing Labels and Business Cards
-Inserting External Data
-Inserting Data From Spreadsheets
-Inserting Data From Text Documents
-Inserting, Editing, Saving Bitmaps
-Adding Graphics to the Gallery
-Automatic Functions
-Turning off Automatic URL Recognition
-Searching and Replacing
-Searching With a Form Filter
-Searching With the Hyperlink Bar
-Searching Tables and Form Documents
-List of Regular Expressions
-Guides
-Applying Line Styles
-Changing the Color of Text
-Changing the Title of a Document
-Creating Round Corners
-Defining Background Colors or Background Graphics
-Defining Line Ends
-Defining Line Styles
-Editing Graphic Objects 
-Drawing Lines in Text
-First Steps
-Inserting Objects From the Gallery
-Inserting Protected Spaces, Hyphens and Conditional Separators
-Inserting Special Characters
-Inserting and Editing Tab Stops
-Protecting Content in StarOffice
-Protecting Records
-Selecting the Maximum Printable Area on a Page
-Selecting Measurement Units
-Selecting the Document Language
-Table Design
-Turning off Bullets and Numbering for Individual Paragraphs
-Database Functionality
-General Information
-StarOffice Database
-Database Overview
-Creating a New Database
-Working with Tables
-Working with Queries
-Working with Forms
-Creating Reports 
-Registering and Deleting a Database 
-Importing and Exporting Data in Base 
-Executing SQL Commands
+Welcome to the StarOffice Math Help
+StarOffice Math Features
+Instructions for Using StarOffice Math
+Shortcuts (StarOffice Math Accessibility)
+Command and Menu Reference
+Menus
+Toolbars
+Working with Formulas
+Manually Aligning Formula Parts
+Changing Default Attributes
+Merging Formula Parts in Brackets
+Entering Comments
+Entering Line Breaks
+Inserting Brackets

@@ -83,16 +83,6 @@ Art sc:ListBox:RID_SCDLG_DAPIDATA:LB_OBJTYPE
 *DatenquelleLiteraturdatenbank HID_DLG_DBCHANGE
 Auswahl HID_SELECTION_TLB
 
-*Diagramdata SID_DIAGRAM_DATA
-Toolbox2 HID_SCH_TBX_DATA
-InsertRow HID_SCH_TBI_DATA_INSERT_ROW
-InsertColumn HID_SCH_TBI_DATA_INSERT_COL
-DeleteRow HID_SCH_TBI_DATA_DELETE_ROW
-DeleteColumn HID_SCH_TBI_DATA_DELETE_COL
-SwapColumns HID_SCH_TBI_DATA_SWAP_COL
-SwapRows HID_SCH_TBI_DATA_SWAP_ROW
-Tables HID_SCH_CTL_DATA
-DataSeriesLabel HID_SCH_DATA_SERIES_LABEL
 
 *Dokumenteigenschaften SID_DOCINFO
 
@@ -214,8 +204,6 @@ AusDruckereinstellung sd:CheckBox:TP_PRINT_OPTIONS:CBX_PAPERBIN
 
 *DruckerZusaetzeWriter HID_OPTPRINT_PAGE
 Grafiken sw:CheckBox:TP_OPTPRINT_PAGE:CB_PGRF
-Tabellen sw:CheckBox:TP_OPTPRINT_PAGE:CB_PTAB
-Zeichnungen sw:CheckBox:TP_OPTPRINT_PAGE:CB_PDRAW
 Kontrollfelder sw:CheckBox:TP_OPTPRINT_PAGE:CB_CTRLFLD
 Hintergrund sw:CheckBox:TP_OPTPRINT_PAGE:CB_BACKGROUND
 HiddenText sw:CheckBox:TP_OPTPRINT_PAGE:CB_HIDDEN_TEXT
@@ -224,7 +212,6 @@ RightToLeft sw:CheckBox:TP_OPTPRINT_PAGE:CB_PROSPECT_RTL
 SchwarzDrucken sw:CheckBox:TP_OPTPRINT_PAGE:CB_BLACK_FONT
 LinkeSeiten sw:CheckBox:TP_OPTPRINT_PAGE:CB_LEFTP
 RechteSeiten sw:CheckBox:TP_OPTPRINT_PAGE:CB_RIGHTP
-Umgekehrt sw:CheckBox:TP_OPTPRINT_PAGE:CB_REVERSE
 Prospekt sw:CheckBox:TP_OPTPRINT_PAGE:CB_PROSPECT
 Keine sw:RadioButton:TP_OPTPRINT_PAGE:RB_NO
 NurNotizen sw:RadioButton:TP_OPTPRINT_PAGE:RB_ONLY
@@ -289,15 +276,15 @@ Groesse svtools:RadioButton:DLG_EXPORT_VEC:RB_SIZE_VEC
 Breite svtools:MetricField:DLG_EXPORT_VEC:MTF_SIZEX_VEC
 Hoehe svtools:MetricField:DLG_EXPORT_VEC:MTF_SIZEY_VEC
 
-*EPSOptionen goodies:ModalDialog:DLG_EXPORT_EPS
-VorschauTif goodies:CheckBox:DLG_EXPORT_EPS:CB_PREVIEW_TIFF
-InterchangeEPSI goodies:CheckBox:DLG_EXPORT_EPS:CB_PREVIEW_EPSI
-Level1 goodies:RadioButton:DLG_EXPORT_EPS:RB_LEVEL1
-Level2 goodies:RadioButton:DLG_EXPORT_EPS:RB_LEVEL2
-Farbe goodies:RadioButton:DLG_EXPORT_EPS:RB_COLOR
-Graustufen goodies:RadioButton:DLG_EXPORT_EPS:RB_GRAYSCALE
-LZWKodierung goodies:RadioButton:DLG_EXPORT_EPS:RB_COMPRESSION_LZW
-Keine goodies:RadioButton:DLG_EXPORT_EPS:RB_COMPRESSION_NONE
+*EPSOptionen filter:ModalDialog:DLG_EXPORT_EPS
+VorschauTif filter:CheckBox:DLG_EXPORT_EPS:CB_PREVIEW_TIFF
+InterchangeEPSI filter:CheckBox:DLG_EXPORT_EPS:CB_PREVIEW_EPSI
+Level1 filter:RadioButton:DLG_EXPORT_EPS:RB_LEVEL1
+Level2 filter:RadioButton:DLG_EXPORT_EPS:RB_LEVEL2
+Farbe filter:RadioButton:DLG_EXPORT_EPS:RB_COLOR
+Graustufen filter:RadioButton:DLG_EXPORT_EPS:RB_GRAYSCALE
+LZWKodierung filter:RadioButton:DLG_EXPORT_EPS:RB_COMPRESSION_LZW
+Keine filter:RadioButton:DLG_EXPORT_EPS:RB_COMPRESSION_NONE
 
 *EtikettenSynchronisieren HID_SYNC_BTN
 Synchronisieren SW:PUSHBUTTON:DLG_SYNC_BTN:BTN_SYNC
@@ -492,9 +479,9 @@ Aktualisieren HID_TEMPLDLG_UPDATEBYEXAMPLE
 Vorlagenliste HID_TEMPLATE_FMT
 Gruppenliste HID_TEMPLATE_FILTER
 
-*GifOptionen goodies:ModalDialog:DLG_EXPORT_GIF
-Interlace goodies:CheckBox:DLG_EXPORT_GIF:CBX_INTERLACED
-TransparentSpeichern goodies:CheckBox:DLG_EXPORT_GIF:CBX_TRANSLUCENT
+*GifOptionen filter:ModalDialog:DLG_EXPORT_GIF
+Interlace filter:CheckBox:DLG_EXPORT_GIF:CBX_INTERLACED
+TransparentSpeichern filter:CheckBox:DLG_EXPORT_GIF:CBX_TRANSLUCENT
 
 *GroupingDlg HID_SC_DPDATEGROUP
 AutoStart sc:RadioButton:RID_SCDLG_DPNUMGROUP:RB_AUTOSTART

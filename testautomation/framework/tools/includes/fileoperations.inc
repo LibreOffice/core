@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: fileoperations.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:54 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : joerg.skottke@sun.com
@@ -872,6 +866,8 @@ function hFindFileObjectViaFileOpen( cName as string ) as integer
     dim iPathItems as integer
     dim asPathList( 100 ) as string
     
+    dim iWait as integer ' some increment variable
+    
     printlog( CFN & "Enter with option (File): " & cName )
 
     '///+<li>If a fully qualified path has been provided we have to split it up</li>
@@ -899,6 +895,21 @@ function hFindFileObjectViaFileOpen( cName as string ) as integer
         
     '///+<li>get the number of items in the filepicker</li>
     kontext "OeffnenDlg"
+    iWait = 0
+    while ( DateiAuswahl.getItemCount() = 0 )
+        wait( 100 )
+        iWait = iWait + 1
+        if ( iWait = 10 ) then
+            warnlog( "Filepicker is not populated within reasonable timeframe, aborting" )
+            kontext "OeffnenDlg"
+            OeffnenDlg.Close()
+            hFindFileObjectViaFileOpen() = 0
+            exit function
+        else
+            printlog( "Waiting for filepicker list to populate..." )
+        endif
+    wend
+    
     iFileOpenItemCount = DateiAuswahl.getItemCount()
     
     '///+<li>Jump to the first item in the filelist and select it with SPACE</li>

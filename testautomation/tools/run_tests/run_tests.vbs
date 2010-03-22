@@ -1,97 +1,28 @@
 '*************************************************************************
 '*
-'*  OpenOffice.org - a multi-platform office productivity suite
-'*
-'*  $RCSfile: run_tests.vbs,v $
-'*
-'*  $Revision: 1.1 $
-'*
-'*  last change: $Author: andreschnabel $ $Date: 2008/04/05 09:02:23 $
-'*
-'*  The Contents of this file are made available subject to
-'*  the terms of GNU Lesser General Public License Version 2.1.
-'*
-'*
-'*    GNU Lesser General Public License Version 2.1
-'*    =============================================
-'*    Copyright 2005 by Sun Microsystems, Inc.
-'*    901 San Antonio Road, Palo Alto, CA 94303, USA
-'*
-'*    This library is free software; you can redistribute it and/or
-'*    modify it under the terms of the GNU Lesser General Public
-'*    License version 2.1, as published by the Free Software Foundation.
-'*
-'*    This library is distributed in the hope that it will be useful,
-'*    but WITHOUT ANY WARRANTY; without even the implied warranty of
-'*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-'*    Lesser General Public License for more details.
-'*
-'*    You should have received a copy of the GNU Lesser General Public
-'*    License along with this library; if not, write to the Free Software
-'*    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-'*    MA  02111-1307  USA
-'*
-'########################################################################
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
 '
-' Owner : andreschnabel@openoffice.org
+' OpenOffice.org - a multi-platform office productivity suite
 '
-' short description :   run several testscripts on windows
-'   
-'   - list of scripts to run is read from stdin
-'   - this script has been tested on WindowsXP and may run on Win2003
-'       and Windows Vista
-'   - the script does *not* Support Win9x / WinME or WindowsNT
-'   - before you start the script set sLocation and sTestTool
-'   - run this script with:
-'       cscript.exe runtests.vbs <list_of_testscripts
+' This file is part of OpenOffice.org.
 '
-'########################################################################
-
-
-' set location of testscripts (the 'qatesttool' directory)
-sLocation = "c:\testautomation\"
-
-' set location of TestTool
-' (full path including executable 'testtool.exe')
-sTestTool = "c:\Testtool\testtool.exe"
-
-
-'------------------------------------------------------------------------
-'--- the main script starts here ---
-'------------------------------------------------------------------------
-Dim oFSO	' AS FileSystemObject
-Dim oStdIn	' As TextStream
-Dim WshShell	' as WScript.Shell
-Dim oExec	' as WshExec
-
-' get Objects for Scripting
-Set oFSO = CreateObject ("Scripting.FileSystemObject")
-Set oStdIn =  WScript.StdIn
-Set WshShell = CreateObject("WScript.Shell")
-
-
-'--- platform specific settings
-' Read Environment and do Windows Version specific stuff
-' nothing done yet 
-
-
-'--- if sLocation is not set manuall try to get the location form testtoolrc
-If not oFSO.FolderExists(sLocation) Then
-   '--- Read Location from testtool.ini
-   WScript.Echo "Read Location from testtool.ini - not implemented yet"
-End If
-
-'--- set location of close-office file
-' (see cvs)
-sExitOfficeBas = sLocation & "global\tools\resetoffice.bas"
-
-'--- if sTestTool is not set manuall try to get the location form testtoolrc
-If not oFSO.FileExists(sTestTool) Then
-   '--- Read testtool path from testtool.ini
-   WScript.Echo "Read testtool path from testtool.ini - not implemented yet"
-End If
-
-
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 WScript.Echo "****************************************************"
 WScript.Echo "************ STARTING ************"
 WScript.Echo "****************************************************"

@@ -1,34 +1,28 @@
 	'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: wr_o_2.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:32:54 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -451,14 +445,12 @@ testcase tToolsOptionsWriterPrint1
     ' sMetricField(i) and sTempMetricField(i)
     '(1) = Grafiken
     '(2) = Tabellen
-    '(3) = Zeichnungen
     '(4) = Kontrollfelder
     '(5) = Hintergrund
     '(6) = SchwarzDrucken
     '
     '(7) = LinkeSeiten
     '(8) = RechteSeiten
-    '(9) = Umgekehrt
     '(10)= Prospekt
     '
     '(11)= EinzelneDruckauftraege
@@ -480,20 +472,18 @@ testcase tToolsOptionsWriterPrint1
     Call hToolsOptions ("WRITER","PRINT")
 
     bCheckboxes(1) = Grafiken.IsChecked
-    bCheckboxes(2) = Tabellen.IsChecked
-    bCheckboxes(3) = Zeichnungen.IsChecked
-    bCheckboxes(4) = Kontrollfelder.IsChecked
-    bCheckboxes(5) = Hintergrund.IsChecked
-    bCheckboxes(6) = SchwarzDrucken.IsChecked
+    bCheckboxes(2) = Kontrollfelder.IsChecked
+    bCheckboxes(3) = Hintergrund.IsChecked
+    bCheckboxes(4) = SchwarzDrucken.IsChecked
+    bCheckboxes(5) = HiddenText.IsChecked
+    bCheckboxes(6) = TextPlaceholder.IsChecked
 
     bCheckboxes(7) = LinkeSeiten.IsChecked
     bCheckboxes(8) = RechteSeiten.IsChecked
-    bCheckboxes(9) = Umgekehrt.IsChecked
-    bCheckboxes(10)= Prospekt.IsChecked
+    bCheckboxes(9)= Prospekt.IsChecked
 
-    bCheckboxes(11)= EinzelneDruckauftraege.IsChecked
-    bCheckboxes(12)= AusDruckereinstellung.IsChecked
-    bCheckboxes(13)= LeereSeitenDrucken.IsChecked
+    bCheckboxes(10)= LeereSeitenDrucken.IsChecked
+    bCheckboxes(11)= AusDruckereinstellung.IsChecked
 
     iListBox(1) = Fax.GetSelText
 
@@ -504,21 +494,19 @@ testcase tToolsOptionsWriterPrint1
 
     printlog ("'/// - all states inverting ///")
 
-    if bCheckboxes(1) then Grafiken.UnCheck               else Grafiken.Check
-    if bCheckboxes(2) then Tabellen.UnCheck               else Tabellen.Check
-    if bCheckboxes(3) then Zeichnungen.UnCheck            else Zeichnungen.Check
-    if bCheckboxes(4) then Kontrollfelder.UnCheck         else Kontrollfelder.Check
-    if bCheckboxes(5) then Hintergrund.UnCheck            else Hintergrund.Check
-    if bCheckboxes(6) then SchwarzDrucken.UnCheck         else SchwarzDrucken.Check
+    if bCheckboxes(1) then Grafiken.UnCheck             else Grafiken.Check
+    if bCheckboxes(2) then Kontrollfelder.UnCheck       else Kontrollfelder.Check
+    if bCheckboxes(3) then Hintergrund.UnCheck          else Hintergrund.Check
+    if bCheckboxes(4) then SchwarzDrucken.UnCheck       else SchwarzDrucken.Check
+    if bCheckboxes(5) then HiddenText.UnCheck           else HiddenText.Check
+    if bCheckboxes(6) then TextPlaceholder.UnCheck      else TextPlaceholder.Check
 
-    if bCheckboxes(7) then LinkeSeiten.UnCheck            else LinkeSeiten.Check
-    if bCheckboxes(8) then RechteSeiten.UnCheck           else RechteSeiten.Check
-    if bCheckboxes(9) then Umgekehrt.UnCheck              else Umgekehrt.Check
-    if bCheckboxes(10) then Prospekt.UnCheck               else Prospekt.Check
+    if bCheckboxes(7) then LinkeSeiten.UnCheck          else LinkeSeiten.Check
+    if bCheckboxes(8) then RechteSeiten.UnCheck         else RechteSeiten.Check
+    if bCheckboxes(9) then Prospekt.UnCheck            else Prospekt.Check
 
-    if bCheckboxes(11) then EinzelneDruckauftraege.UnCheck else EinzelneDruckauftraege.Check
-    if bCheckboxes(12) then AusDruckereinstellung.UnCheck  else AusDruckereinstellung.Check
-    if bCheckboxes(13) then LeereSeitenDrucken.UnCheck  else LeereSeitenDrucken.Check
+    if bCheckboxes(10) then LeereSeitenDrucken.UnCheck else LeereSeitenDrucken.Check
+    if bCheckboxes(11) then AusDruckereinstellung.UnCheck  else AusDruckereinstellung.Check
 
     if (Keine.IsChecked = True) then NurNotizen.Check else Keine.Check
 
@@ -574,21 +562,19 @@ testcase tToolsOptionsWriterPrint1
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "PRINT" )
 
-    if ( bCheckboxes(1) = Grafiken.IsChecked               ) then WarnLog "Grafiken state changed"
-    if ( bCheckboxes(2) = Tabellen.IsChecked               ) then WarnLog "Tabellen state changed"
-    if ( bCheckboxes(3) = Zeichnungen.IsChecked            ) then WarnLog "Zeichnungen state changed"
-    if ( bCheckboxes(4) = Kontrollfelder.IsChecked         ) then WarnLog "Kontrollfelder state changed"
-    if ( bCheckboxes(5) = Hintergrund.IsChecked            ) then WarnLog "Hintergrund state changed"
-    if ( bCheckboxes(6) = SchwarzDrucken.IsChecked         ) then WarnLog "SchwarzDrucken state changed"
+    if ( bCheckboxes(1) = Grafiken.IsChecked        ) then WarnLog "Grafiken state changed"
+    if ( bCheckboxes(2) = Kontrollfelder.IsChecked  ) then WarnLog "Kontrollfelder state changed"
+    if ( bCheckboxes(3) = Hintergrund.IsChecked     ) then WarnLog "Hintergrund state changed"
+    if ( bCheckboxes(4) = SchwarzDrucken.IsChecked  ) then WarnLog "SchwarzDrucken state changed"
+    if ( bCheckboxes(5) = HiddenText.IsChecked      ) then WarnLog "HiddenText state changed"
+    if ( bCheckboxes(6) = TextPlaceholder.IsChecked ) then WarnLog "TextPlaceholder state changed"
 
     if ( bCheckboxes(7) = LinkeSeiten.IsChecked            ) then WarnLog "LinkeSeiten state changed"
     if ( bCheckboxes(8) = RechteSeiten.IsChecked           ) then WarnLog "RechteSeiten state changed"
-    if ( bCheckboxes(9) = Umgekehrt.IsChecked              ) then WarnLog "Umgekehrt state changed"
-    if ( bCheckboxes(10)= Prospekt.IsChecked               ) then WarnLog "Prospekt state changed"
+    if ( bCheckboxes(9)= Prospekt.IsChecked               ) then WarnLog "Prospekt state changed"
 
-    if ( bCheckboxes(11)= EinzelneDruckauftraege.IsChecked ) then WarnLog "EinzelneDruckauftraege state changed"
-    if ( bCheckboxes(12)= AusDruckereinstellung.IsChecked  ) then WarnLog "AusDruckereinstellung state changed"
-    if ( bCheckboxes(13)= LeereSeitenDrucken.IsChecked  ) then WarnLog "'Print automatically inserted blank pages' state changed"
+    if ( bCheckboxes(10)= LeereSeitenDrucken.IsChecked  ) then WarnLog "'Print automatically inserted blank pages' state changed"
+    if ( bCheckboxes(11)= AusDruckereinstellung.IsChecked  ) then WarnLog "AusDruckereinstellung state changed"
 
     if ( Fax.GetSelIndex <> iTempListBox(1) ) Then warnlog "Fax state changed"
 
@@ -613,18 +599,17 @@ testcase tToolsOptionsWriterPrint1
     printlog ("'/// - all UnCheck -> o ///")
 
     Grafiken.UnCheck
-    Tabellen.UnCheck
-    Zeichnungen.UnCheck
     Kontrollfelder.UnCheck
     Hintergrund.UnCheck
     SchwarzDrucken.UnCheck
+    HiddenText.UnCheck
+    TextPlaceholder.UnCheck
 
     LinkeSeiten.UnCheck
     RechteSeiten.UnCheck
-    Umgekehrt.UnCheck
     Prospekt.UnCheck
 
-    EinzelneDruckauftraege.UnCheck
+    LeereSeitenDrucken.UnCheck
     AusDruckereinstellung.UnCheck
 
     if (NurNotizen.IsChecked = True) then Dokumentende.Check else NurNotizen.Check
@@ -644,20 +629,19 @@ testcase tToolsOptionsWriterPrint1
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "PRINT" )
 
-    if Grafiken.IsChecked       then WarnLog "Grafiken x"
-    if Tabellen.IsChecked       then WarnLog "Tabellen x"
-    if Zeichnungen.IsChecked    then WarnLog "Zeichnungen x"
-    if Kontrollfelder.IsChecked then WarnLog "Kontrollfelder x"
-    if Hintergrund.IsChecked    then WarnLog "Hintergrund x"
-    if SchwarzDrucken.IsChecked then WarnLog "SchwarzDrucken x"
+    if Grafiken.IsChecked           then WarnLog "Grafiken is checked"
+    if Kontrollfelder.IsChecked     then WarnLog "Kontrollfelder is checked"
+    if Hintergrund.IsChecked        then WarnLog "Hintergrund is checked"
+    if SchwarzDrucken.IsChecked     then WarnLog "SchwarzDrucken is checked"
+    if HiddenText.IsChecked         then WarnLog "HiddenText is checked"
+    if TextPlaceholder.IsChecked    then WarnLog "TextPlaceholder is checked"
 
-    if LinkeSeiten.IsChecked    then WarnLog "LinkeSeiten x"
-    if RechteSeiten.IsChecked   then WarnLog "RechteSeiten x"
-    if Umgekehrt.IsChecked      then WarnLog "Umgekehrt x"
-    if Prospekt.IsChecked       then WarnLog "Prospekt x"
+    if LinkeSeiten.IsChecked    then WarnLog "LinkeSeiten is checked"
+    if RechteSeiten.IsChecked   then WarnLog "RechteSeiten is checked"
+    if Prospekt.IsChecked       then WarnLog "Prospekt is checked"
 
-    if EinzelneDruckauftraege.IsChecked then WarnLog "EinzelneDruckauftraege x"
-    if AusDruckereinstellung.IsChecked  then WarnLog "AusDruckereinstellung x"
+    if LeereSeitenDrucken.IsChecked then WarnLog "LeereSeitenDrucken is checked"
+    if AusDruckereinstellung.IsChecked  then WarnLog "AusDruckereinstellung is checked"
 
     if ( bTempRadioBut(1) <> Keine.IsChecked       ) then WarnLog "Keine state changed"
     if ( bTempRadioBut(2) <> NurNotizen.IsChecked  ) then WarnLog "NurNotizen state changed"
@@ -669,18 +653,17 @@ testcase tToolsOptionsWriterPrint1
     Printlog ("'/// - all Check -> x ///")
 
     Grafiken.Check
-    Tabellen.Check
-    Zeichnungen.Check
     Kontrollfelder.Check
     Hintergrund.Check
     SchwarzDrucken.Check
+    HiddenText.Check
+    TextPlaceholder.Check
 
     LinkeSeiten.Check
     RechteSeiten.Check
-    Umgekehrt.Check
     Prospekt.Check
 
-    EinzelneDruckauftraege.Check
+    LeereSeitenDrucken.Check
     AusDruckereinstellung.Check
 
     if (Dokumentende.IsChecked = True) then Seitenende.Check else Dokumentende.Check
@@ -700,20 +683,19 @@ testcase tToolsOptionsWriterPrint1
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "PRINT" )
 
-    if not Grafiken.IsChecked                then WarnLog "Grafiken o"
-    if not Tabellen.IsChecked                then WarnLog "Tabellen o"
-    if not Zeichnungen.IsChecked             then WarnLog "Zeichnungen o"
-    if not Kontrollfelder.IsChecked          then WarnLog "Kontrollfelder o"
-    if not Hintergrund.IsChecked             then WarnLog "Hintergrund o"
-    if not SchwarzDrucken.IsChecked          then WarnLog "SchwarzDrucken o"
+    if not Grafiken.IsChecked           then WarnLog "Grafiken is unchecked"
+    if not Kontrollfelder.IsChecked     then WarnLog "Kontrollfelder is unchecked"
+    if not Hintergrund.IsChecked        then WarnLog "Hintergrund is unchecked"
+    if not SchwarzDrucken.IsChecked     then WarnLog "SchwarzDrucken is unchecked"
+    if not HiddenText.IsChecked         then WarnLog "HiddenText is unchecked "
+    if not TextPlaceholder.IsChecked    then WarnLog "TextPlaceholder is unchecked"
 
-    if not LinkeSeiten.IsChecked             then WarnLog "LinkeSeiten o"
-    if not RechteSeiten.IsChecked            then WarnLog "RechteSeiten o"
-    if not Umgekehrt.IsChecked               then WarnLog "Umgekehrt o"
-    if not Prospekt.IsChecked                then WarnLog "Prospekt o"
+    if not LinkeSeiten.IsChecked             then WarnLog "LinkeSeiten is unchecked"
+    if not RechteSeiten.IsChecked            then WarnLog "RechteSeiten is unchecked"
+    if not Prospekt.IsChecked                then WarnLog "Prospekt is unchecked"
 
-    if not EinzelneDruckauftraege.IsChecked  then WarnLog "EinzelneDruckauftraege o"
-    if not AusDruckereinstellung.IsChecked   then WarnLog "AusDruckereinstellung o"
+    if not LeereSeitenDrucken.IsChecked  then WarnLog "LeereSeitenDrucken is unchecked"
+    if not AusDruckereinstellung.IsChecked   then WarnLog "AusDruckereinstellung is unchecked"
 
     ' This state will be saved with the document
     if ( bTempRadioBut(1) <> Keine.IsChecked       ) then WarnLog "Keine state changed"
@@ -730,21 +712,19 @@ testcase tToolsOptionsWriterPrint1
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "PRINT" )
 
-    if ( bCheckboxes(1) =  TRUE ) then  Grafiken.Check                else Grafiken.UnCheck
-    if ( bCheckboxes(2) =  TRUE ) then  Tabellen.Check                else Tabellen.UnCheck
-    if ( bCheckboxes(3) =  TRUE ) then  Zeichnungen.Check             else Zeichnungen.UnCheck
-    if ( bCheckboxes(4) =  TRUE ) then  Kontrollfelder.Check          else Kontrollfelder.UnCheck
-    if ( bCheckboxes(5) =  TRUE ) then  Hintergrund.Check             else Hintergrund.UnCheck
-    if ( bCheckboxes(6) =  TRUE ) then  SchwarzDrucken.Check          else SchwarzDrucken.UnCheck
+    if ( bCheckboxes(1) = TRUE ) then Grafiken.Check else Grafiken.Uncheck
+    if ( bCheckboxes(2) = TRUE ) then Kontrollfelder.Check else Kontrollfelder.UnCheck
+    if ( bCheckboxes(3) = TRUE ) then Hintergrund.Check else Hintergrund.Uncheck
+    if ( bCheckboxes(4) = TRUE ) then SchwarzDrucken.Check else  SchwarzDrucken.UnCheck
+    if ( bCheckboxes(5) = TRUE ) then HiddenText.check else HiddenText.Uncheck
+    if ( bCheckboxes(6) = TRUE ) then TextPlaceholder.check else TextPlaceholder.Uncheck
 
-    if ( bCheckboxes(7) =  TRUE ) then  LinkeSeiten.Check             else LinkeSeiten.UnCheck
-    if ( bCheckboxes(8) =  TRUE ) then  RechteSeiten.Check            else RechteSeiten.UnCheck
-    if ( bCheckboxes(9) =  TRUE ) then  Umgekehrt.Check               else Umgekehrt.UnCheck
-    if ( bCheckboxes(10) = TRUE ) then  Prospekt.Check                else Prospekt.UnCheck
+    if ( bCheckboxes(7) = TRUE ) then LinkeSeiten.Check else LinkeSeiten.Uncheck
+    if ( bCheckboxes(8) = TRUE ) then RechteSeiten.Check else RechteSeiten.Uncheck
+    if ( bCheckboxes(9) = TRUE ) then Prospekt.Check else Prospekt.Uncheck
 
-    if ( bCheckboxes(11) = TRUE ) then  EinzelneDruckauftraege.Check  else EinzelneDruckauftraege.UnCheck
-    if ( bCheckboxes(12) = TRUE ) then  AusDruckereinstellung.Check   else AusDruckereinstellung.UnCheck
-    if ( bCheckboxes(13) = TRUE ) then  LeereSeitenDrucken.Check   else LeereSeitenDrucken.UnCheck
+    if ( bCheckboxes(10) = TRUE ) then LeereSeitenDrucken.Check else LeereSeitenDrucken.UnCheck
+    if ( bCheckboxes(11) = TRUE ) then AusDruckereinstellung.Check else AusDruckereinstellung.UnCheck
 
     try
         Fax.Select (iListBox(1))

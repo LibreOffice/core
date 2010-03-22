@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: t_tools2.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-13 10:27:11 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -36,52 +30,6 @@
 '* short description : Global Tools II
 '*
 '\*************************************************************************************
-
-sub GetOLEDefaultNames
-
- '/// Reads the names of all OLE objects from a reference file.
-'///+ The OLE name-files are language dependent and should be created 
-'///+ using the the <i>getnames.bas</i> script running on Windows
-'///+ The files are (per this revision) written and read utf-8 encoded.
-'///+ The OLE names are stored in global variables.
-
-    const CFN = "t_tools2::GetOLEDefaultNames():"
-  
-    dim sPath as string
-        sPath = gTesttoolPath & "global\input\olenames\" & gProductName
-      
-    dim sFile as String              ' the file that contains the OLE names
-        sFile = convertpath( sPath & "\ole_" & iSprache & ".txt" )
-      
-    dim sFilterList(20) as String    ' the list that temporarily holds the OLE names
-        sFilterlist( 0 ) = "0"
-      
-    printlog( CFN & "Using OLE names from: " & sFile )
-
-    ' Find the reference file. Warn if not found and exit
-    if ( Dir ( sFile ) = "" ) then
-   
-        Warnlog( CFN & " The file for default-filter-names is missing."
-        PrintLog( "Please create the list with ..\global\tools\getnames.bas::GetFilterNames!" )
-        exit sub
-      
-    end if
-
-    ' Read the file data into an array (sFilterList), utf-8 encoded
-    call ListRead ( sFilterList(), sFile, "utf8" )
-
-    ' Evaluate the array and assign the data to global variables.
-    gOLEWriter  = hGetValueForKeyAsString( sFilterList() , "WRITER"  )
-    gOLECalc    = hGetValueForKeyAsString( sFilterList() , "CALC"    )
-    gOLEImpress = hGetValueForKeyAsString( sFilterList() , "IMPRESS" )
-    gOLEDraw    = hGetValueForKeyAsString( sFilterList() , "DRAW"    )
-    gOLEMath    = hGetValueForKeyAsString( sFilterList() , "MATH"    )
-    gOLEChart   = hGetValueForKeyAsString( sFilterList() , "CHART"   )
-    gOLEOthers  = hGetValueForKeyAsString( sFilterList() , "OTHER"   )
-
-end sub
-
-'-------------------------------------------------------------------------
 
 function hSetLocaleStrings (fLocale as String, TBOstringLocale() as String ) as Boolean
 'TODO: JSI, make real description from it!
@@ -763,7 +711,7 @@ function fGetProductName as string
     'Using the bootstraprc/bootstrap.ini file in ../program dir
     'to get the value of 'ProductKey'
     
-    if gPlatform = lcase("osx") then
+    if ( lcase( gPlatform ) = "osx" ) then
     	sfile = convertPath(gNetzOfficePath + "MacOS/bootstrap")
     else
     	sfile = convertPath(gNetzOfficePath + "program/bootstrap")
@@ -826,7 +774,7 @@ function FindBuildID as String
    ' bootstrap.ini/rc part
    if (gSamePC = TRUE) then
         ' since CWS nativefixer18 the information from bootstrap file is spread across bootstrap and version
-        if gPlatform = lcase("osx") then
+        if ( lcase( gPlatform ) = "osx" ) then
             sPlatformProgramPath = "MacOS"
         else
             sPlatformProgramPath = "program"
