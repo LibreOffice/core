@@ -74,7 +74,7 @@ static WeakReference< XModuleUIConfigurationManagerSupplier > m_xModuleCfgMgrSup
 static WeakReference< XURLTransformer >                       m_xURLTransformer;
 static ModuleIdToImagegMgr                                    m_aModuleIdToImageMgrMap;
 
-Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast )
+Image SAL_CALL GetImage( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast )
 {
     // TODO/LATeR: shouldn't this become a method at SfxViewFrame?! That would save the UnoTunnel
     if ( !rFrame.is() )
