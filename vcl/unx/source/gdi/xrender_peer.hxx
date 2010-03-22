@@ -29,6 +29,7 @@
 #define _SV_XRENDER_PEER_HXX
 
 #include <tools/prex.h>
+struct _XTrap; // on some older systems this is not declared within Xrender.h
 #include <X11/extensions/Xrender.h>
 #include <tools/postx.h>
 
@@ -84,7 +85,7 @@ public:
                     const XRenderPictFormat*, int nXSrc, int nYSrc,
                     const XTrapezoid*, int nCount ) const;
     bool        AddTraps( Picture aDst, int nXOfs, int nYOfs,
-                    const XTrap*, int nCount ) const;
+                    const _XTrap*, int nCount ) const;
 
     bool        AreTrapezoidsSupported() const
 #ifdef XRENDER_LINK
@@ -120,7 +121,7 @@ private:
                     const XRenderColor*,int,int,unsigned int,unsigned int);
     void        (*mpXRenderCompositeTrapezoids)(Display*,int,Picture,Picture,
                     const XRenderPictFormat*,int,int,const XTrapezoid*,int);
-    void        (*mpXRenderAddTraps)(Display*,Picture,int,int,const XTrap*,int);
+    void        (*mpXRenderAddTraps)(Display*,Picture,int,int,const _XTrap*,int);
 #endif // XRENDER_LINK
 };
 
@@ -326,7 +327,7 @@ inline void XRenderPeer::CompositeTrapezoids( int nOp,
 }
 
 inline bool XRenderPeer::AddTraps( Picture aDst, int nXOfs, int nYOfs,
-    const XTrap* pTraps, int nCount ) const
+    const _XTrap* pTraps, int nCount ) const
 {
 #ifdef XRENDER_LINK
     XRenderAddTraps( mpDisplay, aDst, nXOfs, nYOfs, pTraps, nCount );

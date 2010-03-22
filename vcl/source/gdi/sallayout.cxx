@@ -133,13 +133,13 @@ int GetVerticalFlags( sal_UCS4 nChar )
         /* #i52932# remember:
          nChar == 0x2010 || nChar == 0x2015
          nChar == 0x2016 || nChar == 0x2026
-
          are GF_NONE also, but already handled in the first if
         */
         if((nChar >= 0x3008 && nChar <= 0x301C && nChar != 0x3012)
-        ||  nChar == 0xFF3B || nChar == 0xFF3D
+        || (nChar == 0xFF3B || nChar == 0xFF3D)
         || (nChar >= 0xFF5B && nChar <= 0xFF9F) // halfwidth forms
-        ||  nChar == 0xFFE3 )
+        || (nChar == 0xFFE3)
+        || (nChar >= 0x02F800 && nChar <= 0x02FFFF) )
             return GF_NONE; // not rotated
         else if( nChar == 0x30fc )
             return GF_ROTR; // right

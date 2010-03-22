@@ -88,8 +88,18 @@ QRect region2QRect( const Region& rControlRegion )
 {
     Rectangle aRect = rControlRegion.GetBoundRect();
 
-    return QRect( QPoint( aRect.Left(), aRect.Top() ),
-          QPoint( aRect.Right(), aRect.Bottom() ) );
+    return QRect(aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight());
+}
+
+KDESalGraphics::KDESalGraphics() :
+    m_image(0)
+{
+}
+
+KDESalGraphics::~KDESalGraphics()
+{
+    if (m_image)
+        delete m_image;
 }
 
 BOOL KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart part )
@@ -133,6 +143,9 @@ BOOL KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart par
 
     if (type == CTRL_RADIOBUTTON) return true;
 
+    if (type == CTRL_SLIDER && (part == PART_TRACK_HORZ_AREA || part == PART_TRACK_VERT_AREA) )
+        return true;
+
     return false;
 
     if ( (type == CTRL_TAB_ITEM) && (part == PART_ENTIRE_CONTROL) ) return true;
@@ -143,7 +156,6 @@ BOOL KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart par
     return false;
 }
 
-
 BOOL KDESalGraphics::hitTestNativeControl( ControlType, ControlPart,
                                            const Region&, const Point&,
                                            SalControlHandle&, BOOL& )
@@ -151,28 +163,59 @@ BOOL KDESalGraphics::hitTestNativeControl( ControlType, ControlPart,
     return FALSE;
 }
 
-void lcl_drawFrame( QRect& i_rRect, QPainter& i_rPainter, QStyle::PrimitiveElement i_nElement,
-                    ControlState i_nState, const ImplControlValue& i_rValue )
+/// helper drawing methods
+namespace
 {
+    void draw( QStyle::ControlElement element, QStyleOption* option, QImage* image, QStyle::State state )
+    {
+        option->state |= state;
+        option->rect = image->rect();
+
+        QPainter painter(image);
+        kapp->style()->drawControl(element, option, &painter);
+    }
+
+    void draw( QStyle::PrimitiveElement element, QStyleOption* option, QImage* image, QStyle::State state, int nAdjust = 0 )
+    {
+        option->state |= state;
+        option->rect = image->rect();
+        if( nAdjust )
+            option->rect.adjust( nAdjust, nAdjust, -nAdjust, -nAdjust );
+
+        QPainter painter(image);
+        kapp->style()->drawPrimitive(element, option, &painter);
+    }
+
+    void draw( QStyle::ComplexControl element, QStyleOptionComplex* option, QImage* image, QStyle::State state )
+    {
+        option->state |= state;
+        option->rect = image->rect();
+
+        QPainter painter(image);
+        kapp->style()->drawComplexControl(element, option, &painter);
+    }
+
+    void lcl_drawFrame(QStyle::PrimitiveElement element, QImage* image, QStyle::State state)
+    {
     #if ( QT_VERSION >= QT_VERSION_CHECK( 4, 5, 0 ) )
-    QStyleOptionFrameV3 styleOption;
-    styleOption.frameShape = QFrame::StyledPanel;
+        QStyleOptionFrameV3 option;
+        option.frameShape = QFrame::StyledPanel;
+        option.state = QStyle::State_Sunken;
     #else
-    QStyleOptionFrame styleOption;
-    QFrame aFrame( NULL );
-    aFrame.setFrameRect( QRect(0, 0, i_rRect.width(), i_rRect.height()) );
-    aFrame.setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
-    aFrame.ensurePolished();
-    styleOption.initFrom( &aFrame );
-    styleOption.lineWidth = aFrame.lineWidth();
-    styleOption.midLineWidth = aFrame.midLineWidth();
+        QStyleOptionFrame option;
+
+        QFrame aFrame( NULL );
+        aFrame.setFrameRect( QRect(0, 0, image->width(), image->height()) );
+        aFrame.setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+        aFrame.ensurePolished();
+
+        option.initFrom( &aFrame );
+        option.lineWidth = aFrame.lineWidth();
+        option.midLineWidth = aFrame.midLineWidth();
     #endif
-    styleOption.rect = QRect(0, 0, i_rRect.width(), i_rRect.height());
-    styleOption.state = vclStateValue2StateFlag( i_nState, i_rValue );
-    #if ( QT_VERSION < QT_VERSION_CHECK( 4, 5, 0 ) )
-    styleOption.state |= QStyle::State_Sunken;
-    #endif
-    kapp->style()->drawPrimitive(i_nElement, &styleOption, &i_rPainter);
+
+        draw(element, &option, image, state);
+    }
 }
 
 BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
@@ -188,10 +231,6 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
     BOOL returnVal = true;
 
-    Display* dpy = GetXDisplay();
-    XLIB_Window drawable = GetDrawable();
-    GC gc = SelectPen();
-
     QRect widgetRect = region2QRect(rControlRegion);
     if( type == CTRL_SPINBOX && part == PART_ALL_BUTTONS )
         type = CTRL_SPINBUTTONS;
@@ -204,337 +243,287 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
                             aButtonRect.Right(), aButtonRect.Bottom() );
     }
 
-    //draw right onto the window
-    QPixmap pixmap(widgetRect.width(), widgetRect.height());
-
-    if (pixmap.isNull())
+    //if no image, or resized, make a new image
+    if (!m_image || m_image->size() != widgetRect.size())
     {
-        return false;
+        if (m_image)
+            delete m_image;
+
+        m_image = new QImage( widgetRect.width(),
+                              widgetRect.height(),
+                              QImage::Format_ARGB32 );
     }
+    m_image->fill(KApplication::palette().color(QPalette::Window).rgb());
 
-    QPainter painter(&pixmap);
-    // painter.setBackgroundMode(Qt::OpaqueMode);
 
-    //copy previous screen contents for proper blending
-    #if ( QT_VERSION >= QT_VERSION_CHECK( 4, 5, 0 ) )
-    QPixmap screen = QPixmap::fromX11Pixmap(drawable);
-    painter.drawPixmap(0,0, screen, widgetRect.left(), widgetRect.top(), widgetRect.width(), widgetRect.height());
-    #else
-    const QX11Info& rX11Info( pixmap.x11Info() );
-    X11SalGraphics::CopyScreenArea( dpy,
-                              drawable, GetScreenNumber(), GetBitCount(),
-                              pixmap.handle(), rX11Info.screen(), rX11Info.depth(),
-                              GetDisplay()->GetCopyGC( GetScreenNumber() ),
-                              widgetRect.left(), widgetRect.top(), widgetRect.width(), widgetRect.height(),
-                              0, 0 );
-    #endif
+    XLIB_Region pTempClipRegion = 0;
 
     if (type == CTRL_PUSHBUTTON)
     {
-        QStyleOptionButton styleOption;
-
-        styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-        styleOption.state =vclStateValue2StateFlag( nControlState, value );
-
-        kapp->style()->drawControl( QStyle::CE_PushButton, &styleOption, &painter);
+        QStyleOptionButton option;
+        draw( QStyle::CE_PushButton, &option, m_image,
+              vclStateValue2StateFlag(nControlState, value) );
     }
     else if ( (type == CTRL_MENUBAR))
     {
         if (part == PART_MENU_ITEM)
         {
-            QStyleOptionMenuItem styleOption;
-
-            styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-            styleOption.state = vclStateValue2StateFlag( nControlState, value );
-
-            kapp->style()->drawControl( QStyle::CE_MenuBarItem, &styleOption, &painter);
+            QStyleOptionMenuItem option;
+            draw( QStyle::CE_MenuBarItem, &option, m_image,
+                  vclStateValue2StateFlag(nControlState, value) );
+        }
+        else if (part == PART_ENTIRE_CONTROL)
+        {
         }
         else
         {
-            pixmap.fill(KApplication::palette().color(QPalette::Window));
+            returnVal = false;
         }
     }
     else if (type == CTRL_MENU_POPUP)
     {
         if (part == PART_MENU_ITEM)
         {
-            QStyleOptionMenuItem styleOption;
-
-            styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-            styleOption.state = vclStateValue2StateFlag( nControlState, value );
-
-            kapp->style()->drawControl( QStyle::CE_MenuItem, &styleOption, &painter);
+            QStyleOptionMenuItem option;
+            draw( QStyle::CE_MenuItem, &option, m_image,
+                  vclStateValue2StateFlag(nControlState, value) );
         }
-        else if (part == PART_MENU_ITEM_CHECK_MARK)
+        else if (part == PART_MENU_ITEM_CHECK_MARK && (nControlState & CTRL_STATE_PRESSED) )
         {
-            QStyleOptionButton styleOption;
-
-            styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-            styleOption.state = vclStateValue2StateFlag( nControlState, value );
-
-            if (nControlState & CTRL_STATE_PRESSED)
-            {
-                kapp->style()->drawPrimitive( QStyle::PE_IndicatorMenuCheckMark, &styleOption, &painter);
-            }
+            QStyleOptionButton option;
+            draw( QStyle::PE_IndicatorMenuCheckMark, &option, m_image,
+                  vclStateValue2StateFlag(nControlState, value) );
         }
-        else if (part == PART_MENU_ITEM_RADIO_MARK)
+        else if (part == PART_MENU_ITEM_RADIO_MARK && (nControlState & CTRL_STATE_PRESSED) )
         {
-            QStyleOptionButton styleOption;
-
-            styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-            styleOption.state = vclStateValue2StateFlag( nControlState, value );
-
-            if (nControlState & CTRL_STATE_PRESSED)
-            {
-                kapp->style()->drawPrimitive( QStyle::PE_IndicatorRadioButton, &styleOption, &painter);
-            }
+            QStyleOptionButton option;
+            draw( QStyle::PE_IndicatorRadioButton, &option, m_image,
+                  vclStateValue2StateFlag(nControlState, value) );
         }
         else
         {
-            pixmap.fill(KApplication::palette().color(QPalette::Window));
-
             #if ( QT_VERSION >= QT_VERSION_CHECK( 4, 5, 0 ) )
-            QStyleOptionFrameV3 styleOption;
+            QStyleOptionFrameV3 option;
+            option.frameShape = QFrame::StyledPanel;
             #else
-            QStyleOptionFrameV2 styleOption;
+            QStyleOptionFrameV2 option;
             #endif
-
-            styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-            styleOption.state = vclStateValue2StateFlag( nControlState, value );
-            #if ( QT_VERSION >= QT_VERSION_CHECK( 4, 5, 0 ) )
-            styleOption.frameShape = QFrame::StyledPanel;
-            #endif
-
-            kapp->style()->drawPrimitive( QStyle::PE_FrameMenu, &styleOption, &painter);
+            draw( QStyle::PE_FrameMenu, &option, m_image,
+                  vclStateValue2StateFlag(nControlState, value) );
         }
     }
     else if ( (type == CTRL_TOOLBAR) && (part == PART_BUTTON) )
     {
-        QStyleOptionToolButton styleOption;
+        QStyleOptionToolButton option;
 
-        styleOption.arrowType = Qt::NoArrow;
-        styleOption.subControls = QStyle::SC_ToolButton;
+        option.arrowType = Qt::NoArrow;
+        option.subControls = QStyle::SC_ToolButton;
 
-        styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-        styleOption.state = vclStateValue2StateFlag( nControlState, value );
-        styleOption.state |= QStyle::State_Raised | QStyle::State_Enabled | QStyle::State_AutoRaise;
+        option.state = vclStateValue2StateFlag( nControlState, value );
+        option.state |= QStyle::State_Raised | QStyle::State_Enabled | QStyle::State_AutoRaise;
 
-        kapp->style()->drawComplexControl( QStyle::CC_ToolButton, &styleOption, &painter);
+        draw( QStyle::CC_ToolButton, &option, m_image,
+              vclStateValue2StateFlag(nControlState, value) );
     }
     else if ( (type == CTRL_TOOLBAR) && (part == PART_ENTIRE_CONTROL) )
     {
-        QStyleOptionToolBar styleOption;
+        QStyleOptionToolBar option;
 
-        styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-        styleOption.state = vclStateValue2StateFlag( nControlState, value );
+        option.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
+        option.state = vclStateValue2StateFlag( nControlState, value );
 
-        kapp->style()->drawControl( QStyle::CE_ToolBar, &styleOption, &painter);
+        draw( QStyle::CE_ToolBar, &option, m_image,
+              vclStateValue2StateFlag(nControlState, value) );
     }
     else if ( (type == CTRL_TOOLBAR) && (part == PART_THUMB_VERT) )
     {
-        QStyleOption styleOption;
+        const int tw = widgetRect.width();
+        widgetRect.setWidth(kapp->style()->pixelMetric(QStyle::PM_ToolBarHandleExtent));
 
-        int width = kapp->style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
+        QStyleOption option;
+        option.state = QStyle::State_Horizontal;
 
-        styleOption.rect = QRect(0, 0, width, widgetRect.height());
-        styleOption.state = QStyle::State_Horizontal;
+        draw( QStyle::PE_IndicatorToolBarHandle, &option, m_image,
+              vclStateValue2StateFlag(nControlState, value) );
 
-        kapp->style()->drawPrimitive( QStyle::PE_IndicatorToolBarHandle, &styleOption, &painter);
+        widgetRect.setWidth(tw);
     }
     else if (type == CTRL_EDITBOX)
     {
-        pixmap.fill(KApplication::palette().color(QPalette::Window));
+        QStyleOptionFrameV2 option;
+        draw( QStyle::PE_PanelLineEdit, &option, m_image,
+              vclStateValue2StateFlag(nControlState, value), 2 );
 
-        //TODO hover?? OO does not seem to do this for line edits
-
-        #if ( QT_VERSION >= QT_VERSION_CHECK( 4, 5, 0 ) )
-        QStyleOptionFrameV3 styleOption;
-        #else
-        QStyleOptionFrameV2 styleOption;
-        #endif
-
-        styleOption.state = vclStateValue2StateFlag( nControlState, value );
-
-        //TODO...how does the line edit draw itself internally??
-        styleOption.rect = QRect(2, 2, widgetRect.width()-4, widgetRect.height()-4);
-        kapp->style()->drawPrimitive( QStyle::PE_PanelLineEdit, &styleOption, &painter);
-
-        styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-        kapp->style()->drawPrimitive( QStyle::PE_FrameLineEdit, &styleOption, &painter);
+        draw( QStyle::PE_FrameLineEdit, &option, m_image,
+              vclStateValue2StateFlag(nControlState, value), 0 );
     }
     else if (type == CTRL_COMBOBOX)
     {
-        pixmap.fill(KApplication::palette().color(QPalette::Window));
+        QStyleOptionComboBox option;
+        option.editable = true;
 
-        QStyleOptionComboBox styleOption;
-
-        styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-        styleOption.state = vclStateValue2StateFlag( nControlState, value );
-
-        styleOption.editable = true;
-
-        kapp->style()->drawComplexControl(QStyle::CC_ComboBox, &styleOption, &painter);
+        draw( QStyle::CC_ComboBox, &option, m_image,
+              vclStateValue2StateFlag(nControlState, value) );
     }
     else if (type == CTRL_LISTBOX)
     {
         if( part == PART_WINDOW )
         {
-            lcl_drawFrame( widgetRect, painter, QStyle::PE_Frame, nControlState, value );
+            lcl_drawFrame( QStyle::PE_Frame, m_image,
+                           vclStateValue2StateFlag(nControlState, value) );
         }
         else
         {
-            QStyleOptionComboBox styleOption;
-
-            styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-            styleOption.state = vclStateValue2StateFlag( nControlState, value );
-
+            QStyleOptionComboBox option;
             if (part == PART_SUB_EDIT)
             {
-                kapp->style()->drawControl(QStyle::CE_ComboBoxLabel, &styleOption, &painter);
+                draw( QStyle::CE_ComboBoxLabel, &option, m_image,
+                      vclStateValue2StateFlag(nControlState, value) );
             }
             else
             {
-                kapp->style()->drawComplexControl(QStyle::CC_ComboBox, &styleOption, &painter);
+                draw( QStyle::CC_ComboBox, &option, m_image,
+                      vclStateValue2StateFlag(nControlState, value) );
             }
         }
     }
     else if (type == CTRL_LISTNODE)
     {
-        QStyleOption styleOption;
-
-        styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-        styleOption.state = vclStateValue2StateFlag( nControlState, value );
-
-        styleOption.state |= QStyle::State_Item;
-        styleOption.state |= QStyle::State_Children;
+        QStyleOption option;
+        option.state = QStyle::State_Item | QStyle::State_Children;
 
         if (nControlState & CTRL_STATE_PRESSED)
-        {
-            styleOption.state |= QStyle::State_Open;
-        }
+            option.state |= QStyle::State_Open;
 
-        kapp->style()->drawPrimitive(QStyle::PE_IndicatorBranch, &styleOption, &painter);
+        draw( QStyle::PE_IndicatorBranch, &option, m_image,
+              vclStateValue2StateFlag(nControlState, value) );
     }
     else if (type == CTRL_CHECKBOX)
     {
-        QStyleOptionButton styleOption;
-
-        styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-        styleOption.state = vclStateValue2StateFlag( nControlState, value );
-
-        kapp->style()->drawControl(QStyle::CE_CheckBox, &styleOption, &painter);
+        QStyleOptionButton option;
+        draw( QStyle::CE_CheckBox, &option, m_image,
+               vclStateValue2StateFlag(nControlState, value) );
     }
     else if (type == CTRL_SCROLLBAR)
     {
-        pixmap.fill(KApplication::palette().color(QPalette::Window));
-
         if ((part == PART_DRAW_BACKGROUND_VERT) || (part == PART_DRAW_BACKGROUND_HORZ))
         {
+            QStyleOptionSlider option;
             ScrollbarValue* sbVal = static_cast<ScrollbarValue *> ( value.getOptionalVal() );
-
-            QStyleOptionSlider styleOption;
-            styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
 
             //if the scroll bar is active (aka not degenrate...allow for hover events
             if (sbVal->mnVisibleSize < sbVal->mnMax)
-            {
-                styleOption.state = vclStateValue2StateFlag( nControlState, value );
-                styleOption.state |= QStyle::State_MouseOver;
-            }
+                option.state = QStyle::State_MouseOver;
 
             //horizontal or vertical
             if (part == PART_DRAW_BACKGROUND_VERT)
-            {
-                styleOption.orientation = Qt::Vertical;
-            }
+                option.orientation = Qt::Vertical;
             else
-            {
-                styleOption.state |= QStyle::State_Horizontal;
-            }
+                option.state |= QStyle::State_Horizontal;
 
             //setup parameters from the OO values
-            styleOption.minimum = sbVal->mnMin;
-            styleOption.maximum = sbVal->mnMax - sbVal->mnVisibleSize;
-            styleOption.sliderValue = sbVal->mnCur;
-            styleOption.sliderPosition = sbVal->mnCur;
-            styleOption.pageStep = sbVal->mnVisibleSize;
+            option.minimum = sbVal->mnMin;
+            option.maximum = sbVal->mnMax - sbVal->mnVisibleSize;
+            option.sliderValue = sbVal->mnCur;
+            option.sliderPosition = sbVal->mnCur;
+            option.pageStep = sbVal->mnVisibleSize;
 
             //setup the active control...always the slider
             if (sbVal->mnThumbState & CTRL_STATE_ROLLOVER)
-            {
-                styleOption.activeSubControls = QStyle::SC_ScrollBarSlider;
-            }
+                option.activeSubControls = QStyle::SC_ScrollBarSlider;
 
-            kapp->style()->drawComplexControl(QStyle::CC_ScrollBar, &styleOption, &painter);
+            draw( QStyle::CC_ScrollBar, &option, m_image,
+                  vclStateValue2StateFlag(nControlState, value) );
+        }
+        else
+        {
+            returnVal = false;
         }
     }
     else if (type == CTRL_SPINBOX)
     {
-        pixmap.fill(KApplication::palette().color(QPalette::Window));
+        QStyleOptionSpinBox option;
 
-        QStyleOptionSpinBox styleOption;
-        styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-        styleOption.state = vclStateValue2StateFlag( nControlState, value );
         // determine active control
         SpinbuttonValue* pSpinVal = (SpinbuttonValue *)(value.getOptionalVal());
         if( pSpinVal )
         {
             if( (pSpinVal->mnUpperState & CTRL_STATE_PRESSED) )
-                styleOption.activeSubControls |= QStyle::SC_SpinBoxUp;
+                option.activeSubControls |= QStyle::SC_SpinBoxUp;
             if( (pSpinVal->mnLowerState & CTRL_STATE_PRESSED) )
-                styleOption.activeSubControls |= QStyle::SC_SpinBoxDown;
+                option.activeSubControls |= QStyle::SC_SpinBoxDown;
         }
 
-        kapp->style()->drawComplexControl(QStyle::CC_SpinBox, &styleOption, &painter);
+        draw( QStyle::CC_SpinBox, &option, m_image,
+              vclStateValue2StateFlag(nControlState, value) );
     }
     else if (type == CTRL_GROUPBOX)
     {
-        QStyleOptionGroupBox styleOption;
-        styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-        styleOption.state = vclStateValue2StateFlag( nControlState, value );
-
-        kapp->style()->drawComplexControl(QStyle::CC_GroupBox, &styleOption, &painter);
+        QStyleOptionGroupBox option;
+        draw( QStyle::CC_GroupBox, &option, m_image,
+              vclStateValue2StateFlag(nControlState, value) );
     }
     else if (type == CTRL_RADIOBUTTON)
     {
-        QStyleOptionButton styleOption;
-        styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-        styleOption.state = vclStateValue2StateFlag( nControlState, value );
-
-        kapp->style()->drawControl(QStyle::CE_RadioButton, &styleOption, &painter);
+        QStyleOptionButton option;
+        draw( QStyle::CE_RadioButton, &option, m_image,
+              vclStateValue2StateFlag(nControlState, value) );
     }
     else if (type == CTRL_TOOLTIP)
     {
-        QStyleOption styleOption;
-        styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-        styleOption.state = vclStateValue2StateFlag( nControlState, value );
-
-        kapp->style()->drawPrimitive(QStyle::PE_PanelTipLabel, &styleOption, &painter);
+        QStyleOption option;
+        draw( QStyle::PE_PanelTipLabel, &option, m_image,
+              vclStateValue2StateFlag(nControlState, value) );
     }
     else if (type == CTRL_FRAME)
     {
-        pixmap.fill(KApplication::palette().color(QPalette::Window));
-        lcl_drawFrame( widgetRect, painter, QStyle::PE_Frame, nControlState, value );
+        lcl_drawFrame( QStyle::PE_Frame, m_image,
+                       vclStateValue2StateFlag(nControlState, value) );
+
+        int size = kapp->style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
+        pTempClipRegion = XCreateRegion();
+        XRectangle xRect = { widgetRect.left(), widgetRect.top(), widgetRect.width(), widgetRect.height() };
+        XUnionRectWithRegion( &xRect, pTempClipRegion, pTempClipRegion );
+        XLIB_Region pSubtract = XCreateRegion();
+        xRect.x += size;
+        xRect.y += size;
+        xRect.width -= 2* size;
+        xRect.height -= 2*size;
+        XUnionRectWithRegion( &xRect, pSubtract, pSubtract );
+        XSubtractRegion( pTempClipRegion, pSubtract, pTempClipRegion );
+        XDestroyRegion( pSubtract );
     }
     else if (type == CTRL_FIXEDBORDER)
     {
-        pixmap.fill(KApplication::palette().color(QPalette::Window));
-        lcl_drawFrame( widgetRect, painter, QStyle::PE_FrameWindow, nControlState, value );
+        lcl_drawFrame( QStyle::PE_FrameWindow, m_image,
+                       vclStateValue2StateFlag(nControlState, value) );
     }
     else if (type == CTRL_WINDOW_BACKGROUND)
     {
-        pixmap.fill(KApplication::palette().color(QPalette::Window));
+        m_image->fill(KApplication::palette().color(QPalette::Window).rgb());
     }
     else if (type == CTRL_FIXEDLINE)
     {
-        QStyleOptionMenuItem styleOption;
+        QStyleOptionMenuItem option;
+        option.menuItemType = QStyleOptionMenuItem::Separator;
+        option.state |= QStyle::State_Item;
 
-        styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-        styleOption.state = vclStateValue2StateFlag( nControlState, value );
-        styleOption.menuItemType = QStyleOptionMenuItem::Separator;
-        styleOption.state |= QStyle::State_Item;
+        draw( QStyle::CE_MenuItem, &option, m_image,
+              vclStateValue2StateFlag(nControlState, value) );
+    }
+    else if (type == CTRL_SLIDER && (part == PART_TRACK_HORZ_AREA || part == PART_TRACK_VERT_AREA))
+    {
+        SliderValue* slVal = static_cast<SliderValue *> ( value.getOptionalVal() );
+        QStyleOptionSlider option;
 
-        kapp->style()->drawControl( QStyle::CE_MenuItem, &styleOption, &painter);
+        option.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
+        option.state = vclStateValue2StateFlag( nControlState, value );
+        option.maximum     = slVal->mnMax;
+        option.minimum     = slVal->mnMin;
+        option.sliderPosition = option.sliderValue = slVal->mnCur;
+        option.orientation = (part == PART_TRACK_HORZ_AREA) ? Qt::Horizontal : Qt::Vertical;
+
+        draw( QStyle::CC_Slider, &option, m_image, vclStateValue2StateFlag(nControlState, value) );
     }
     else
     {
@@ -543,11 +532,35 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
     if (returnVal)
     {
-        X11SalGraphics::CopyScreenArea( dpy,
-            pixmap.handle(), pixmap.x11Info().screen(), pixmap.x11Info().depth(),
-            drawable, GetScreenNumber(), GetVisual().GetDepth(), gc,
-            0, 0, widgetRect.width(), widgetRect.height(), widgetRect.left(), widgetRect.top() );
+        GC gc = SelectFont();
+
+        if( gc )
+        {
+            if( pTempClipRegion )
+            {
+                if( pClipRegion_ )
+                    XIntersectRegion( pTempClipRegion, pClipRegion_, pTempClipRegion );
+                XSetRegion( GetXDisplay(), gc, pTempClipRegion );
+            }
+            QPixmap pixmap = QPixmap::fromImage(*m_image, Qt::ColorOnly | Qt::OrderedDither | Qt::OrderedAlphaDither);
+            X11SalGraphics::CopyScreenArea( GetXDisplay(),
+                pixmap.handle(), pixmap.x11Info().screen(), pixmap.x11Info().depth(),
+                GetDrawable(), GetScreenNumber(), GetVisual().GetDepth(),
+                gc, 0, 0, widgetRect.width(), widgetRect.height(), widgetRect.left(), widgetRect.top());
+
+            if( pTempClipRegion )
+            {
+                if( pClipRegion_ )
+                    XSetRegion( GetXDisplay(), gc, pClipRegion_ );
+                else
+                    XSetClipMask( GetXDisplay(), gc, None );
+            }
+        }
+        else
+            returnVal = false;
     }
+    if( pTempClipRegion )
+        XDestroyRegion( pTempClipRegion );
 
     return returnVal;
 }
@@ -759,6 +772,24 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
             boundingRect = contentRect;
 
             retVal = true;
+            break;
+        }
+        case CTRL_SLIDER:
+        {
+            const int w = kapp->style()->pixelMetric(QStyle::PM_SliderLength);
+            if( part == PART_THUMB_HORZ )
+            {
+                contentRect = QRect(boundingRect.left(), boundingRect.top(), w, boundingRect.height());
+                boundingRect = contentRect;
+                retVal = true;
+            }
+            else if( part == PART_THUMB_VERT )
+            {
+                contentRect = QRect(boundingRect.left(), boundingRect.top(), boundingRect.width(), w);
+                boundingRect = contentRect;
+                retVal = true;
+            }
+            break;
         }
         default:
             break;

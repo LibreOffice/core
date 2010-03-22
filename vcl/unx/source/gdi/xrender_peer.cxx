@@ -25,6 +25,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_vcl.hxx"
+
 #include <stdio.h>
 #include <rtl/ustring.hxx>
 #include <osl/module.h>
@@ -172,7 +175,7 @@ void XRenderPeer::InitRenderLib()
 #if 0 // not having trapezoid support is supported
     if( !pFunc ) return;
 #endif
-    mpXRenderAddTraps = (void(*)(Display*,Picture,int,int,const XTrap*,int))pFunc;
+    mpXRenderAddTraps = (void(*)(Display*,Picture,int,int,const _XTrap*,int))pFunc;
 
 #endif // XRENDER_LINK
 

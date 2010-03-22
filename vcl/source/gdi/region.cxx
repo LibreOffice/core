@@ -45,6 +45,7 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
@@ -1997,6 +1998,32 @@ const basegfx::B2DPolyPolygon Region::GetB2DPolyPolygon() const
         aRet = mpImplRegion->mpPolyPoly->getB2DPolyPolygon();
         // TODO: cache the converted polygon?
         // mpImplRegion->mpB2DPolyPoly = aRet;
+    }
+
+    return aRet;
+}
+
+// -----------------------------------------------------------------------
+
+basegfx::B2DPolyPolygon Region::ConvertToB2DPolyPolygon()
+{
+    DBG_CHKTHIS( Region, ImplDbgTestRegion );
+
+    basegfx::B2DPolyPolygon aRet;
+
+    if( HasPolyPolygon() )
+        aRet = GetB2DPolyPolygon();
+    else
+    {
+        RegionHandle aHdl = BeginEnumRects();
+        Rectangle aSubRect;
+        while( GetNextEnumRect( aHdl, aSubRect ) )
+        {
+            basegfx::B2DPolygon aPoly( basegfx::tools::createPolygonFromRect(
+                 basegfx::B2DRectangle( aSubRect.Left(), aSubRect.Top(), aSubRect.Right(), aSubRect.Bottom() ) ) );
+            aRet.append( aPoly );
+        }
+        EndEnumRects( aHdl );
     }
 
     return aRet;

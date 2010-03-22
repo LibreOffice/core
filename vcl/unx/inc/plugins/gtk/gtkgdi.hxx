@@ -168,6 +168,11 @@ protected:
                             const clipList& rClipList,
                             ControlState nState, const ImplControlValue& aValue,
                             SalControlHandle& rControlHandle, const OUString& rCaption );
+    BOOL NWPaintGTKSlider( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
+                           const Rectangle& rControlRectangle,
+                           const clipList& rClipList,
+                           ControlState nState, const ImplControlValue& aValue,
+                           SalControlHandle& rControlHandle, const OUString& rCaption );
     BOOL NWPaintGTKListNode( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                             const Rectangle& rControlRectangle,
                             const clipList& rClipList,

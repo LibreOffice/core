@@ -99,6 +99,8 @@ struct NWFWidgetData
     GtkWidget *  gTooltipPopup;
     GtkWidget *  gProgressBar;
     GtkWidget *  gTreeView;
+    GtkWidget *  gHScale;
+    GtkWidget *  gVScale;
 
     NWPixmapCacheList* gNWPixmapCacheList;
     NWPixmapCache* gCacheTabItems;
@@ -131,10 +133,12 @@ struct NWFWidgetData
         gMenuItemMenuWidget( NULL ),
         gMenuItemCheckMenuWidget( NULL ),
         gMenuItemRadioMenuWidget( NULL ),
-    gImageMenuItem( NULL ),
+        gImageMenuItem( NULL ),
         gTooltipPopup( NULL ),
         gProgressBar( NULL ),
         gTreeView( NULL ),
+        gHScale( NULL ),
+        gVScale( NULL ),
         gNWPixmapCacheList( NULL ),
         gCacheTabItems( NULL ),
         gCacheTabPages( NULL )
@@ -172,6 +176,7 @@ static void NWEnsureGTKMenu             ( int nScreen );
 static void NWEnsureGTKTooltip          ( int nScreen );
 static void NWEnsureGTKProgressBar      ( int nScreen );
 static void NWEnsureGTKTreeView         ( int nScreen );
+static void NWEnsureGTKSlider           ( int nScreen );
 
 static void NWConvertVCLStateToGTKState( ControlState nVCLState, GtkStateType* nGTKState, GtkShadowType* nGTKShadow );
 static void NWAddWidgetToCacheWindow( GtkWidget* widget, int nScreen );
@@ -589,7 +594,12 @@ BOOL GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
                 )                                                   ||
         ((nType == CTRL_LISTNODE || nType == CTRL_LISTNET) &&
                 (   (nPart == PART_ENTIRE_CONTROL) )
+                )                                                   ||
+        ((nType == CTRL_SLIDER) &&
+                (   (nPart == PART_TRACK_HORZ_AREA)
+                ||  (nPart == PART_TRACK_VERT_AREA)
                 )
+        )
         )
         return( TRUE );
 
@@ -875,6 +885,10 @@ BOOL GtkSalGraphics::drawNativeControl( ControlType nType,
         // don't actually draw anything; gtk treeviews do not draw lines
         returnVal = true;
     }
+    else if( (nType == CTRL_SLIDER) )
+    {
+        returnVal = NWPaintGTKSlider( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rControlHandle, rCaption );
+    }
 
     if( pixmap )
     {
@@ -1101,6 +1115,30 @@ BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
                                Size( aEditRect.GetWidth(), aReq.height+1 ) );
         rNativeBoundingRegion = Region( aEditRect );
         rNativeContentRegion = rNativeBoundingRegion;
+        returnVal = TRUE;
+    }
+    if( (nType == CTRL_SLIDER) && (nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT) )
+    {
+        NWEnsureGTKSlider( m_nScreen );
+        GtkWidget* widget = (nPart == PART_THUMB_HORZ) ? gWidgetData[m_nScreen].gHScale : gWidgetData[m_nScreen].gVScale;
+        gint slider_length = 10;
+        gint slider_width = 10;
+        gtk_widget_style_get( widget,
+                              "slider-width", &slider_width,
+                              "slider-length", &slider_length,
+                              (char *)NULL);
+        Rectangle aRect( rControlRegion.GetBoundRect() );
+        if( nPart == PART_THUMB_HORZ )
+        {
+            aRect.Right() = aRect.Left() + slider_length - 1;
+            aRect.Bottom() = aRect.Top() + slider_width - 1;
+        }
+        else
+        {
+            aRect.Bottom() = aRect.Top() + slider_length - 1;
+            aRect.Right() = aRect.Left() + slider_width - 1;
+        }
+        rNativeBoundingRegion = rNativeContentRegion = Region( aRect );
         returnVal = TRUE;
     }
 
@@ -3012,6 +3050,133 @@ BOOL GtkSalGraphics::NWPaintGTKProgress(
     return bRet;
 }
 
+BOOL GtkSalGraphics::NWPaintGTKSlider(
+            GdkDrawable*,
+            ControlType, ControlPart nPart,
+            const Rectangle& rControlRectangle,
+            const clipList&,
+            ControlState nState, const ImplControlValue& rValue,
+            SalControlHandle&, const OUString& )
+{
+    NWEnsureGTKSlider( m_nScreen );
+
+    gint            w, h;
+    w = rControlRectangle.GetWidth();
+    h = rControlRectangle.GetHeight();
+
+    SliderValue* pVal = (SliderValue*)rValue.getOptionalVal();
+
+    GdkPixmap* pixmap = NWGetPixmapFromScreen( rControlRectangle );
+    if( ! pixmap )
+        return FALSE;
+
+    (void)pVal;
+
+    GdkDrawable* const &pixDrawable = GDK_DRAWABLE( pixmap );
+    GtkWidget* pWidget = (nPart == PART_TRACK_HORZ_AREA)
+                         ? GTK_WIDGET(gWidgetData[m_nScreen].gHScale)
+                         : GTK_WIDGET(gWidgetData[m_nScreen].gVScale);
+    const gchar* pDetail = (nPart == PART_TRACK_HORZ_AREA) ? "hscale" : "vscale";
+    GtkOrientation eOri = (nPart == PART_TRACK_HORZ_AREA) ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL;
+    GtkStateType eState = (nState & CTRL_STATE_ENABLED) ? GTK_STATE_ACTIVE : GTK_STATE_INSENSITIVE;
+    gint slider_width = 10;
+    gint slider_length = 10;
+    gint trough_border = 0;
+    gtk_widget_style_get( pWidget,
+                          "slider-width", &slider_width,
+                          "slider-length", &slider_length,
+                          "trough-border", &trough_border,
+                          NULL);
+
+    eState = (nState & CTRL_STATE_ENABLED) ? GTK_STATE_NORMAL : GTK_STATE_INSENSITIVE;
+    if( nPart == PART_TRACK_HORZ_AREA )
+    {
+        gtk_paint_box( pWidget->style,
+                       pixDrawable,
+                       eState,
+                       GTK_SHADOW_IN,
+                       NULL,
+                       pWidget,
+                       "trough",
+                       0, (h-slider_width-2*trough_border)/2, w, slider_width + 2*trough_border);
+        gint x = (w - slider_length + 1) * (pVal->mnCur - pVal->mnMin) / (pVal->mnMax - pVal->mnMin);
+        gtk_paint_slider( pWidget->style,
+                          pixDrawable,
+                          eState,
+                          GTK_SHADOW_OUT,
+                          NULL,
+                          pWidget,
+                          pDetail,
+                          x, (h-slider_width)/2,
+                          slider_length, slider_width,
+                          eOri );
+    }
+    else
+    {
+        gtk_paint_box( pWidget->style,
+                       pixDrawable,
+                       eState,
+                       GTK_SHADOW_IN,
+                       NULL,
+                       pWidget,
+                       "trough",
+                       (w-slider_width-2*trough_border)/2, 0, slider_width + 2*trough_border, h);
+        gint y = (h - slider_length + 1) * (pVal->mnCur - pVal->mnMin) / (pVal->mnMax - pVal->mnMin);
+        gtk_paint_slider( pWidget->style,
+                          pixDrawable,
+                          eState,
+                          GTK_SHADOW_OUT,
+                          NULL,
+                          pWidget,
+                          pDetail,
+                          (w-slider_width)/2, y,
+                          slider_width, slider_length,
+                          eOri );
+    }
+    #if 0
+    // paint background
+    gtk_paint_flat_box( gWidgetData[m_nScreen].gProgressBar->style,
+                        pixDrawable,
+                        GTK_STATE_NORMAL,
+                        GTK_SHADOW_NONE,
+                        NULL,
+                        gWidgetData[m_nScreen].gProgressBar,
+                        "trough",
+                        0, 0, w, h );
+    if( nProgressWidth > 0 )
+    {
+        // paint progress
+        if( Application::GetSettings().GetLayoutRTL() )
+        {
+            gtk_paint_box( gWidgetData[m_nScreen].gProgressBar->style,
+                           pixDrawable,
+                           GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
+                           NULL,
+                           gWidgetData[m_nScreen].gProgressBar,
+                           "bar",
+                           w-nProgressWidth, 0, nProgressWidth, h
+                           );
+        }
+        else
+        {
+            gtk_paint_box( gWidgetData[m_nScreen].gProgressBar->style,
+                           pixDrawable,
+                           GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
+                           NULL,
+                           gWidgetData[m_nScreen].gProgressBar,
+                           "bar",
+                           0, 0, nProgressWidth, h
+                           );
+        }
+    }
+    #endif
+
+    BOOL bRet = NWRenderPixmapToScreen( pixmap, rControlRectangle );
+    g_object_unref( pixmap );
+
+    return bRet;
+}
+
 //----
 
 static Rectangle NWGetListBoxButtonRect( int nScreen,
@@ -3960,5 +4125,19 @@ static void NWEnsureGTKTreeView( int nScreen )
     {
         gWidgetData[nScreen].gTreeView = gtk_tree_view_new ();
         NWAddWidgetToCacheWindow( gWidgetData[nScreen].gTreeView, nScreen );
+    }
+}
+
+static void NWEnsureGTKSlider( int nScreen )
+{
+    if( !gWidgetData[nScreen].gHScale )
+    {
+        gWidgetData[nScreen].gHScale = gtk_hscale_new_with_range(0, 10, 1);
+        NWAddWidgetToCacheWindow( gWidgetData[nScreen].gHScale, nScreen );
+    }
+    if( !gWidgetData[nScreen].gVScale )
+    {
+        gWidgetData[nScreen].gVScale = gtk_vscale_new_with_range(0, 10, 1);
+        NWAddWidgetToCacheWindow( gWidgetData[nScreen].gVScale, nScreen );
     }
 }
