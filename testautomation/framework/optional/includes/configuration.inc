@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: configuration.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: obo $ $Date: 2008-07-25 08:02:50 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* Owner : thorsten.bosbach@sun.com
@@ -105,7 +99,7 @@ testcase tToolsCustomizeKeyboardFunction(lList())
 	i87952 = ".uno:InsertApplet"
 	i92080 = ".uno:SaveGraphic"
 	i96322 = ".uno:ActivateStyleApply"
-	i100037 = ".uno:AcceptTracedChange, .uno:DeleteComment, .uno:RejectTracedChange, .uno:ReplyNote, .uno:TaskPaneInsertPage"
+	i100037 = ".uno:AcceptTracedChange, .uno:DeleteComment, .uno:RejectTracedChange, .uno:ReplyNote, .uno:TaskPaneInsertPage, .uno:ValidityReference"
     
     Call hNewDocument
     sleep 2
@@ -137,52 +131,52 @@ testcase tToolsCustomizeKeyboardFunction(lList())
                         listAppend(lList(),sTemp2)
                         bErrorFound = false
                         if (inStr(i60617,sTemp2)>0) then
-                            qaErrorLog "#i60617# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i60617# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(sTemp2,i64346)>0) then
-                            qaErrorLog "#i64346# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i64346# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i43969,sTemp2)>0) then
-                            qaErrorLog "#i41265# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i41265# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i80850,sTemp2)>0) then
-                            qaErrorLog "#i80850# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i80850# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i84982,sTemp2)>0) then
-                            qaErrorLog "#i84982# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i84982# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i84983,sTemp2)>0) then
-                            qaErrorLog "#i84983# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i84983# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i87950,sTemp2)>0) then
-                            qaErrorLog "#i87950# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i87950# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i87951,sTemp2)>0) then
-                            qaErrorLog "#i87951# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i87951# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i87952,sTemp2)>0) then
-                            qaErrorLog "#i87952# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            warnLog "#i87952# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i92080,sTemp2)>0) then
-                            qaErrorLog "#i92080# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i92080# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i96322,sTemp2)>0) then
-                            qaErrorLog "#i96322# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i96322# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         
                         if (inStr(i100037,sTemp2)>0) then
-                            qaErrorLog "#i100037# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i100037# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if ( not bErrorFound ) then

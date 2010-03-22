@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: _XSingleSelectQueryComposer.java,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,7 +78,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
      * @see om.sun.star.sdb.XSingleSelectQueryAnalyzer
      * @see com.sun.star.beans.XPropertySet
      */
-    protected void before() throws Exception {
+    protected void before() /* throws Exception*/ {
 
         xQueryAna = (XSingleSelectQueryAnalyzer)
                       UnoRuntime.queryInterface(XSingleSelectQueryAnalyzer.class,
@@ -103,7 +100,14 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
 
         }
 
-        colName = AnyConverter.toString(tEnv.getObjRelation("colName"));
+        try
+        {
+            colName = AnyConverter.toString(tEnv.getObjRelation("colName"));
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
+        {
+            colName = null;
+        }
 
         if (colName == null) {
             throw new StatusException(Status.failed(
