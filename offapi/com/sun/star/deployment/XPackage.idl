@@ -33,6 +33,7 @@
 #include <com/sun/star/beans/StringPair.idl>
 #include <com/sun/star/deployment/DeploymentException.idl>
 #include <com/sun/star/deployment/XPackageTypeInfo.idl>
+#include <com/sun/star/deployment/ExtensionRemovedException.idl>
 #include <com/sun/star/graphic/XGraphic.idl>
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
@@ -96,6 +97,7 @@ interface XPackage
         [in] boolean installed,
         [in] string aContextName)
         raises (DeploymentException,
+                ExtensionRemovedException,
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException);
 
@@ -116,6 +118,7 @@ interface XPackage
     boolean checkDependencies(
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,
+                ExtensionRemovedException,
                 com::sun::star::ucb::CommandFailedException);
 
 
@@ -152,6 +155,7 @@ interface XPackage
         [in] com::sun::star::task::XAbortChannel xAbortChannel,
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,
+                ExtensionRemovedException,
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
@@ -181,6 +185,9 @@ interface XPackage
     boolean isBundle();
 
     /** Gets packages of the bundle.
+
+        If <member>isRemoved</member> returns true then getBundle may return an
+        empty sequence in case the object is not registered.
 
         @param xAbortChannel
                abort channel to asynchronously abort the registration process,
@@ -225,7 +232,8 @@ interface XPackage
         @return
                 the textual version representation
     */
-    string getVersion();
+    string getVersion()
+        raises (ExtensionRemovedException);
 
     /** returns the location of the package.
 
@@ -240,14 +248,16 @@ interface XPackage
         @return
                 display name of the package
     */
-    string getDisplayName();
+    string getDisplayName()
+        raises (ExtensionRemovedException);
 
     /** returns a description string to describe the  package.
 
         @return
                 description
     */
-    string getDescription();
+    string getDescription()
+         raises (ExtensionRemovedException);
 
     /** returns a sequence of update information URLs.
 
@@ -258,8 +268,8 @@ interface XPackage
         @return
                 update information URLs
     */
-    sequence<string> getUpdateInformationURLs();
-
+    sequence<string> getUpdateInformationURLs()
+        raises (ExtensionRemovedException);
     /** returns the publisher info for a package, the strings
         might be empty, if there are no publisher
 
@@ -269,8 +279,8 @@ interface XPackage
         represents the URL to the publisher.
     */
 
-    ::com::sun::star::beans::StringPair getPublisherInfo();
-
+    ::com::sun::star::beans::StringPair getPublisherInfo()
+        raises (ExtensionRemovedException);
     /** returns the <type>XPackageTypeInfo</type>, e.g. media-type etc.
 
         @return
@@ -293,8 +303,10 @@ interface XPackage
                    [in] string newTitle,
                    [in] long nameClashAction,
                    [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
-        raises (com::sun::star::ucb::CommandFailedException,
-                com::sun::star::ucb::CommandAbortedException);
+        raises (
+            ExtensionRemovedException,
+            com::sun::star::ucb::CommandFailedException,
+            com::sun::star::ucb::CommandAbortedException);
 
     /** returns an icon for a package.
 
@@ -305,11 +317,19 @@ interface XPackage
             database application window, or <NULL/> if the default icon
             should be used.
     */
-    com::sun::star::graphic::XGraphic getIcon( [in] boolean highContrast );
+    com::sun::star::graphic::XGraphic getIcon( [in] boolean highContrast )
+        raises (ExtensionRemovedException);
 
     /** returns the name of the repository where this object comes from.
      */
     string getRepositoryName();
+
+    /** indicates if this object represents a removed extension or extension
+        item. This is the case when it was created by providing
+        <code>true</code> for the <code>removed</code> parameter in the function
+        <member>XPackageRegistry::bindPackage</member>.
+     */
+    boolean isRemoved();
 };
 
 }; }; }; };
