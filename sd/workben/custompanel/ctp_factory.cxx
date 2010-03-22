@@ -33,6 +33,7 @@
 #include <com/sun/star/lang/NotInitializedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/drawing/framework/XResourceFactoryManager.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 /** === end UNO includes === **/
 
 //......................................................................................................................
@@ -59,6 +60,7 @@ namespace sd { namespace colortoolpanel
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::drawing::framework::XResourceFactoryManager;
     using ::com::sun::star::lang::WrappedTargetException;
+    using ::com::sun::star::lang::XComponent;
     /** === end UNO using === **/
 
     //==================================================================================================================
@@ -68,7 +70,7 @@ namespace sd { namespace colortoolpanel
     {
         const ::rtl::OUString& lcl_getSingleColorViewURL()
         {
-            static ::rtl::OUString s_sSingleColorViewURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/view/SingleColorView" ) );
+            static ::rtl::OUString s_sSingleColorViewURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolpanel/SingleColorView" ) );
             return s_sSingleColorViewURL;
         }
     }
@@ -105,8 +107,14 @@ namespace sd { namespace colortoolpanel
     void SAL_CALL ResourceFactory::releaseResource( const Reference< XResource >& i_rResource ) throw (RuntimeException)
     {
         FactoryGuard aGuard( *this );
-        // TODO: place your code here
-        (void)i_rResource;
+
+        // here, we could decide to actually not destroy the resource, but cache it. In this case, we would need
+        // to re-parent the VCL window to another, temporary window, or *at least* hide it.
+
+        // However, for the simplicity of this example, we will simply dispose the component here, which will destroy
+        // all associated resources, including the VCL window.
+        Reference< XComponent > xComponent( i_rResource, UNO_QUERY_THROW );
+        xComponent->dispose();
     }
 
     //------------------------------------------------------------------------------------------------------------------

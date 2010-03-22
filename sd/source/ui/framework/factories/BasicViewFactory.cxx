@@ -377,7 +377,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
             pDescriptor->mpViewShell,
             rxViewId,
             rxPane->getWindow());
-        pDescriptor->mxView = Reference<XResource>(pDescriptor->mpWrapper);
+        pDescriptor->mxView.set( pDescriptor->mpWrapper->queryInterface( XResource::static_type() ), UNO_QUERY_THROW );
     }
 
     return pDescriptor;

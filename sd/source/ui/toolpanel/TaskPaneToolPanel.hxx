@@ -65,15 +65,15 @@ namespace sd { namespace toolpanel
         // IToolPanel overridables
         virtual ::rtl::OUString GetDisplayName() const;
         virtual Image GetImage() const;
-        virtual void Activate( ::Window& i_rParentWindow );
-        virtual void Deactivate();
-        virtual void SetSizePixel( const Size& i_rPanelWindowSize );
-        virtual void GrabFocus();
         virtual void Dispose();
+        // those are still abstract, and waiting to be overloaded
+        virtual void Activate( ::Window& i_rParentWindow ) = 0;
+        virtual void Deactivate() = 0;
+        virtual void SetSizePixel( const Size& i_rPanelWindowSize ) = 0;
+        virtual void GrabFocus() = 0;
 
         // own overridables
         virtual const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >& getResourceId() const = 0;
-        virtual ::Window* getPanelWindow() const = 0;
 
     protected:
         bool            isDisposed() const { return m_pPanelDeck == NULL; }

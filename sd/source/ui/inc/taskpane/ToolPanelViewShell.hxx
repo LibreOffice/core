@@ -54,7 +54,7 @@ class TitleToolBox;
 class TitleBar;
 class TitledControl;
 class ToolPanelDeck;
-
+class ToolPanelViewShell_Impl;
 /** The tool panel is a view shell for some very specific reasons:
     - It fits better into the concept of panes being docking windows whose
     content, a view shell, can be exchanged on runtime.
@@ -99,6 +99,10 @@ public:
 
     TaskPaneShellManager& GetSubShellManager (void) const;
 
+    /** returns the window which should be used as parent for tool panel windows
+    */
+    ::Window*   GetToolPanelParentWindow();
+
     /** activates the given panel, bypassing the configuration controller, deactivates the previously active one.
     */
     void    ActivatePanel( const PanelId i_ePanelId );
@@ -106,6 +110,14 @@ public:
     /** deactivates the given panel, bypassing the configuration controller
     */
     void    DeactivatePanel( const PanelId i_ePanelId );
+
+    /** Return a pointer to the docking window that is the parent or a
+        predecessor of the content window.
+        @return
+            When the view shell is not placed in a docking window, e.g. when
+            shown in the center pane, then <NULL?> is returned.
+    */
+    DockingWindow* GetDockingWindow (void);
 
     /** Called when a mouse button has been pressed but not yet
         released, this handler is used to show the popup menu of the
@@ -126,8 +138,7 @@ public:
     virtual bool RelocateToParentWindow (::Window* pParentWindow);
 
 private:
-    class Implementation;
-    ::boost::scoped_ptr< Implementation >   mpImpl;
+    ::boost::scoped_ptr< ToolPanelViewShell_Impl >   mpImpl;
 
     ::boost::shared_ptr<TaskPaneShellManager> mpSubShellManager;
 
@@ -145,14 +156,6 @@ private:
     */
     ::std::auto_ptr<PopupMenu> CreatePopupMenu (bool bIsDocking);
 
-
-    /** Return a pointer to the docking window that is the parent or a
-        predecessor of the content window.
-        @return
-            When the view shell is not placed in a docking window, e.g. when
-            shown in the center pane, then <NULL?> is returned.
-    */
-    DockingWindow* GetDockingWindow (void);
 
     /** connects to a (new) (Pane)DockingWindow
     */

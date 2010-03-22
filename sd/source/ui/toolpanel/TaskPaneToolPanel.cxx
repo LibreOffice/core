@@ -90,39 +90,6 @@ namespace sd { namespace toolpanel
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TaskPaneToolPanel::Activate( ::Window& i_rParentWindow )
-    {
-        Window* pPanelWindow( getPanelWindow() );
-        ENSURE_OR_RETURN_VOID( pPanelWindow, "no window to show" );
-        pPanelWindow->SetPosSizePixel( Point(), i_rParentWindow.GetSizePixel() );
-        pPanelWindow->Show();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void TaskPaneToolPanel::Deactivate()
-    {
-        Window* pPanelWindow( getPanelWindow() );
-        ENSURE_OR_RETURN_VOID( pPanelWindow, "no window to hide" );
-        pPanelWindow->Hide();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void TaskPaneToolPanel::SetSizePixel( const Size& i_rPanelWindowSize )
-    {
-        Window* pPanelWindow( getPanelWindow() );
-        ENSURE_OR_RETURN_VOID( pPanelWindow, "no window to resize" );
-        pPanelWindow->SetSizePixel( i_rPanelWindowSize );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void TaskPaneToolPanel::GrabFocus()
-    {
-        Window* pPanelWindow( getPanelWindow() );
-        ENSURE_OR_RETURN_VOID( pPanelWindow, "no window to focus" );
-        pPanelWindow->GrabFocus();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
     void TaskPaneToolPanel::Dispose()
     {
         ENSURE_OR_RETURN_VOID( m_pPanelDeck, "disposed twice" );

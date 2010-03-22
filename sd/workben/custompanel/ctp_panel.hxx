@@ -29,13 +29,17 @@
 
 /** === begin UNO includes === **/
 #include <com/sun/star/drawing/framework/XView.hpp>
+#include <com/sun/star/view/XToolPanel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
+#include <com/sun/star/awt/XPaintListener.hpp>
 /** === end UNO includes === **/
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/basemutex.hxx>
+
+#include <boost/scoped_ptr.hpp>
 
 //......................................................................................................................
 namespace sd { namespace colortoolpanel
@@ -45,8 +49,10 @@ namespace sd { namespace colortoolpanel
     //==================================================================================================================
     //= class SingleColorPanel
     //==================================================================================================================
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::drawing::framework::XView
-                                    >   SingleColorPanel_Base;
+    typedef ::cppu::WeakComponentImplHelper3    <   ::com::sun::star::drawing::framework::XView
+                                                ,   ::com::sun::star::view::XToolPanel
+                                                ,   ::com::sun::star::awt::XPaintListener
+                                                >   SingleColorPanel_Base;
     class SingleColorPanel  :public ::cppu::BaseMutex
                             ,public SingleColorPanel_Base
     {
@@ -57,6 +63,9 @@ namespace sd { namespace colortoolpanel
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >& i_rResourceId
         );
 
+        // XToolPanel
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getWindow(  ) throw (::com::sun::star::uno::RuntimeException);
+
         // XView
         // (no methods)
 
@@ -64,12 +73,22 @@ namespace sd { namespace colortoolpanel
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId > SAL_CALL getResourceId(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL isAnchorOnly(  ) throw (::com::sun::star::uno::RuntimeException);
 
+        // XPaintListener
+        virtual void SAL_CALL windowPaint( const ::com::sun::star::awt::PaintEvent& e ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XEventListener
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XComponent equivalents
+        virtual void SAL_CALL disposing();
+
     protected:
         ~SingleColorPanel();
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >            m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >   m_xResourceId;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                      m_xWindow;
     };
 
 //......................................................................................................................

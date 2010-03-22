@@ -33,22 +33,26 @@
 
 #include "MutexOwner.hxx"
 #include <com/sun/star/drawing/framework/XView.hpp>
+#include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/drawing/framework/XRelocatableResource.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <osl/mutex.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 #include <boost/shared_ptr.hpp>
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper4 <
-      ::com::sun::star::drawing::framework::XView,
-      ::com::sun::star::lang::XUnoTunnel,
-      ::com::sun::star::awt::XWindowListener,
-      ::com::sun::star::drawing::framework::XRelocatableResource
-    > ViewShellWrapperInterfaceBase;
+typedef ::cppu::WeakComponentImplHelper3    <   ::com::sun::star::lang::XUnoTunnel
+                                            ,   ::com::sun::star::awt::XWindowListener
+                                            ,   ::com::sun::star::drawing::framework::XRelocatableResource
+                                            >   ViewShellWrapperInterfaceBase;
+typedef ::cppu::ImplHelper1 <   ::com::sun::star::drawing::framework::XView
+                            >   ViewShellWrapper_ViewBase;
+typedef ::cppu::ImplHelper1 <   ::com::sun::star::drawing::framework::XPane
+                            >   ViewShellWrapper_PaneBase;
 
 } // end of anonymous namespace.
 
@@ -60,9 +64,10 @@ namespace sd { namespace framework {
     Most importantly it provides a tunnel to the ViewShell implementation.
     Then it forwards size changes of the pane window to the view shell.
 */
-class ViewShellWrapper
-    : private sd::MutexOwner,
-      public ViewShellWrapperInterfaceBase
+class ViewShellWrapper  :private sd::MutexOwner
+                        ,public ViewShellWrapperInterfaceBase
+                        ,public ViewShellWrapper_ViewBase
+                        ,public ViewShellWrapper_PaneBase
 {
 public:
     /** Create a new ViewShellWrapper object that wraps the given ViewShell
@@ -93,22 +98,26 @@ public:
     */
     ::boost::shared_ptr<ViewShell> GetViewShell (void);
 
-    /** Returns whether there is exactly one reference to the called
-        ViewShellWrapper object (the number of references to the wrapped
-        ViewShell object is not taken into account).  This method is
-        typically used by the owner of a ViewShellWrapper object to verify
-        that, at the end of the ViewShellWrapper object's lifetime, the
-        owner holds the last reference and by releasing it will destroy the
-        object.
-    */
-    bool IsUnique (void);
-
-
     // XUnoTunnel
 
     virtual sal_Int64 SAL_CALL getSomething (const com::sun::star::uno::Sequence<sal_Int8>& rId)
         throw (com::sun::star::uno::RuntimeException);
 
+    // XInterface
+
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire(  ) throw ();
+    virtual void SAL_CALL release(  ) throw ();
+
+    // XTypeProvider
+
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XPane
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getWindow(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas > SAL_CALL getCanvas(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XResource
 
@@ -154,10 +163,14 @@ public:
         throw (com::sun::star::uno::RuntimeException);
 
 private:
-    ::boost::shared_ptr<ViewShell> mpViewShell;
-    const ::com::sun::star::uno::Reference<
-        com::sun::star::drawing::framework::XResourceId> mxViewId;
-    ::com::sun::star::uno::Reference<com::sun::star::awt::XWindow> mxWindow;
+    ::boost::shared_ptr< ViewShell >                                                            mpViewShell;
+    const ::com::sun::star::uno::Reference< com::sun::star::drawing::framework::XResourceId >   mxViewId;
+    ::com::sun::star::uno::Reference<com::sun::star::awt::XWindow >                             mxWindow;
+    const bool                                                                                  mbIsPane;
+
+private:
+    // only to be called when mbIsPane is <TRUE/>
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > impl_getPaneWindowOrCanvas( const bool i_bWindow );
 };
 
 } } // end of namespace sd::framework

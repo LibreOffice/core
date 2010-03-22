@@ -31,6 +31,7 @@
 
 /** === begin UNO includes === **/
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
+#include <com/sun/star/awt/PosSize.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/processfactory.hxx>
@@ -62,7 +63,9 @@ namespace sd { namespace toolpanel
     using ::com::sun::star::drawing::framework::XResourceId;
     using ::com::sun::star::drawing::framework::ResourceId;
     using ::com::sun::star::drawing::framework::XResource;
+    using ::com::sun::star::awt::XWindow;
     /** === end UNO using === **/
+    namespace PosSize = ::com::sun::star::awt::PosSize;
 
     //==================================================================================================================
     //= helper
@@ -98,8 +101,10 @@ namespace sd { namespace toolpanel
         :TaskPaneToolPanel( i_rPanelDeck, lcl_getPanelConfig( i_rPanelConfig, "DisplayTitle" ), Image() /* TODO */, SmartId() /* TODO */ )
         ,m_pFrameworkHelper( i_pFrameworkHelper )
         ,m_xPanelResourceId()
-        ,m_xPanel()
+        ,m_xResource()
+        ,m_xToolPanel()
         ,m_bAttemptedPanelCreation( false )
+        ,m_nResourceAccessLock( 0 )
     {
         ENSURE_OR_THROW( m_pFrameworkHelper.get() != NULL, "invalid framework helper" );
         ENSURE_OR_THROW( i_rPaneResourceId.is(), "invalid pane resource id" );
@@ -126,20 +131,93 @@ namespace sd { namespace toolpanel
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    void CustomToolPanel::Activate( ::Window& i_rParentWindow )
+    {
+        OSL_ENSURE( &getPanelWindowAnchor() == &i_rParentWindow,
+            "CustomToolPanel::Activate: invalid new parent window" );
+        // getPanelWindowAnchor() is what is returned in the TaskPane's XPane::getWindow method. So,
+        // any custom panel which is loaded into the TaskPane will use this window as parent window.
+        // Consequently, this is the window which shall be passed here, since this method is intended to
+        // re-create the panel with the given parent.
+
+        // we do not need to do anything here. The XResourceFactory::createResource method of the custom
+        // tool panel already created and showed the window.
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void CustomToolPanel::Deactivate()
+    {
+        // When a certain tool panel is activated, this is routed through the drawing framework, which ensures
+        // that the resource associated with the previously active panel is deactivated, which calls the
+        // XResourceFactory::destroyResource at our custom panel's factory.
+
+        // So, we do not have to do anything here - except forgetting the XResource, at it might (or might not,
+        // if cached by the factory) be re-created next time.
+        m_xResource.clear();
+        m_xToolPanel.clear();
+        m_bAttemptedPanelCreation = false;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void CustomToolPanel::SetSizePixel( const Size& i_rPanelWindowSize )
+    {
+        impl_ensurePanel();
+        if ( !m_xToolPanel.is() )
+            // if the custom panel does not support XPanel, this just means it is its own responsibility
+            // to resize/layout everything within the pane window.
+            return;
+
+        try
+        {
+            Reference< XWindow > xPanelWindow( m_xToolPanel->getWindow(), UNO_SET_THROW );
+            xPanelWindow->setPosSize( 0, 0, i_rPanelWindowSize.Width(), i_rPanelWindowSize.Height(),
+                PosSize::POSSIZE );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void CustomToolPanel::GrabFocus()
+    {
+        impl_ensurePanel();
+        if ( !m_xToolPanel.is() )
+            // if the custom panel does not support XPanel, this just means it is its own responsibility
+            // to care for focus handling
+            return;
+
+        try
+        {
+            Reference< XWindow > xPanelWindow( m_xToolPanel->getWindow(), UNO_SET_THROW );
+            xPanelWindow->setFocus();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void CustomToolPanel::Dispose()
     {
-        if ( m_xPanel.is() )
-        {
-            try
-            {
-                // TODO: obtain the factory for our panel, and invoke its destroyResource method
-            }
-            catch ( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION();
-            }
-        }
+        // nothing to do here. Lifetime handling of the XResource which this panel represents is done by
+        // the drawing framework, we ourself do not have resources to release.
         TaskPaneToolPanel::Dispose();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void CustomToolPanel::LockResourceAccess()
+    {
+        ++m_nResourceAccessLock;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void CustomToolPanel::UnlockResourceAccess()
+    {
+        OSL_ENSURE( m_nResourceAccessLock > 0, "CustomToolPanel::UnlockResourceAccess: not locked!" );
+        --m_nResourceAccessLock;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -149,33 +227,25 @@ namespace sd { namespace toolpanel
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::Window* CustomToolPanel::getPanelWindow() const
+    void CustomToolPanel::impl_ensurePanel()
     {
-        ENSURE_OR_RETURN( impl_ensurePanel(), "could not create the panel", NULL );
-        // TODO
-        return NULL;
-    }
+        ENSURE_OR_RETURN_VOID( !isDisposed(), "already disposed" );
 
-    //------------------------------------------------------------------------------------------------------------------
-    bool CustomToolPanel::impl_ensurePanel() const
-    {
-        ENSURE_OR_RETURN_FALSE( !isDisposed(), "already disposed" );
-
-        if ( !m_bAttemptedPanelCreation )
+        if ( ( m_nResourceAccessLock == 0 ) && !m_bAttemptedPanelCreation )
         {
-            const_cast< CustomToolPanel* >( this )->m_bAttemptedPanelCreation = true;
+            m_bAttemptedPanelCreation = true;
 
             try
             {
                 Reference< XConfigurationController > xConfigController( m_pFrameworkHelper->GetConfigurationController(), UNO_QUERY_THROW );
-                Reference< XResource > xToolPanelResource( xConfigController->getResource( m_xPanelResourceId ) );
+                m_xResource.set( xConfigController->getResource( m_xPanelResourceId ), UNO_QUERY_THROW );
+                m_xToolPanel.set( m_xResource, UNO_QUERY );
             }
             catch( const Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
         }
-        return m_xPanel.is();
     }
 
 //......................................................................................................................

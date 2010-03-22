@@ -30,8 +30,10 @@
 #include "TaskPaneToolPanel.hxx"
 
 /** === begin UNO includes === **/
-#include <com/sun/star/drawing/framework/XPane2.hpp>
+#include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
+#include <com/sun/star/drawing/framework/XResource.hpp>
+#include <com/sun/star/view/XToolPanel.hpp>
 /** === end UNO includes === **/
 
 #include <boost/shared_ptr.hpp>
@@ -71,21 +73,33 @@ namespace sd { namespace toolpanel
         ~CustomToolPanel();
 
         // IToolPanel overridables
+        virtual void Activate( ::Window& i_rParentWindow );
+        virtual void Deactivate();
+        virtual void SetSizePixel( const Size& i_rPanelWindowSize );
+        virtual void GrabFocus();
         virtual void Dispose();
+
+        /** locks (aka prevents) the access to the associated XResource object
+        */
+        void    LockResourceAccess();
+        /** unlocks (aka allows) the access to the associated XResource object
+        */
+        void    UnlockResourceAccess();
 
     protected:
         // TaskPaneToolPanel overridables
         virtual const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >& getResourceId() const;
-        virtual ::Window* getPanelWindow() const;
 
     private:
-        bool    impl_ensurePanel() const;
+        void    impl_ensurePanel();
 
     private:
         ::boost::shared_ptr< framework::FrameworkHelper >                                       m_pFrameworkHelper;
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >   m_xPanelResourceId;
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XPane2 >        m_xPanel;
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResource >     m_xResource;
+        ::com::sun::star::uno::Reference< ::com::sun::star::view::XToolPanel >                  m_xToolPanel;
         bool                                                                                    m_bAttemptedPanelCreation;
+        sal_uInt32                                                                              m_nResourceAccessLock;
     };
 
 //......................................................................................................................

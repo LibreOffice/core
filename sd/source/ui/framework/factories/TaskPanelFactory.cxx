@@ -266,10 +266,7 @@ Reference<XResource> SAL_CALL TaskPanelFactory::createResource (
 
             toolpanel::ToolPanelViewShell* pToolPanel = dynamic_cast< toolpanel::ToolPanelViewShell* >( pPaneViewShell.get() );
             if ( pToolPanel != NULL )
-            {
                 xResource = new TaskPanelResource( rxResourceId );
-                pToolPanel->ActivatePanel( ePanelId );
-            }
 
             OSL_POSTCOND( xResource.is(), "TaskPanelFactory::createResource: did not find the given resource!" );
         }

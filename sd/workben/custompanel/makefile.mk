@@ -62,9 +62,10 @@ LIB1OBJFILES= \
         $(SLO)/ctp_panel.obj
 
 SHL1STDLIBS= \
-        $(CPPULIB)                  \
-        $(SALLIB)                   \
-        $(SALHELPERLIB)             \
+        $(TOOLSLIB)         \
+        $(CPPULIB)          \
+        $(SALLIB)           \
+        $(SALHELPERLIB)     \
         $(CPPUHELPERLIB)
 
 SHL1VERSIONMAP=$(TARGET).map

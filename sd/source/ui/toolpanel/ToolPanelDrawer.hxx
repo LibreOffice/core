@@ -84,6 +84,7 @@ private:
         Window&                     m_rParentWindow;
         ::svt::IToolPanelDeck&      m_rPanelDeck;
         ::std::vector< PTitleBar >  m_aDrawers;
+        ::boost::optional< size_t > m_aLastKnownActivePanel;
     };
 
 //......................................................................................................................

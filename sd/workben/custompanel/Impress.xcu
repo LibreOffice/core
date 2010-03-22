@@ -6,7 +6,7 @@
       <node oor:name="CustomPanels">
         <node oor:name="org.openoffice.example.colorpanel.SingleColorPanel" oor:op="replace">
           <prop oor:name="ResourceURL" oor:type="xs:string">
-            <value>private:resource/view/SingleColorView</value>
+            <value>private:resource/toolpanel/SingleColorView</value>
           </prop>
           <prop oor:name="DisplayTitle" oor:type="xs:string">
             <value>Single Color Panel</value>
@@ -23,7 +23,7 @@
           <node oor:name="ResourceList">
             <node oor:name="SingleColorView" oor:op="replace">
               <prop oor:name="URL">
-                <value>private:resource/view/SingleColorView</value>
+                <value>private:resource/toolpanel/SingleColorView</value>
               </prop>
             </node>
           </node>

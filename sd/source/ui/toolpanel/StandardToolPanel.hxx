@@ -53,14 +53,18 @@ namespace sd { namespace toolpanel
         ~StandardToolPanel();
 
         // IToolPanel overridables
+        virtual void Activate( ::Window& i_rParentWindow );
+        virtual void Deactivate();
+        virtual void SetSizePixel( const Size& i_rPanelWindowSize );
+        virtual void GrabFocus();
         virtual void Dispose();
 
         // TaskPaneToolPanel overridables
         virtual const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >& getResourceId() const;
-        virtual ::Window* getPanelWindow() const;
 
     private:
-        bool    impl_ensureControl();
+        bool        impl_ensureControl();
+        ::Window*   impl_getPanelWindow() const;
 
     private:
         ::std::auto_ptr< ControlFactory >   m_pControlFactory;

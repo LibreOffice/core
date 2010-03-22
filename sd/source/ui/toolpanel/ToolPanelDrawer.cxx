@@ -44,6 +44,7 @@ namespace sd { namespace toolpanel
         :m_rParentWindow( i_rParentWindow )
         ,m_rPanelDeck( i_rPanels )
         ,m_aDrawers()
+        ,m_aLastKnownActivePanel()
     {
         m_rPanelDeck.AddListener( *this );
 
@@ -68,7 +69,9 @@ namespace sd { namespace toolpanel
             return i_rDeckPlayground;
 
         const int nWidth( i_rDeckPlayground.GetWidth() );
-        const ::boost::optional< size_t > aActivePanel( m_rPanelDeck.GetActivePanel() );
+        ::boost::optional< size_t > aActivePanel( m_rPanelDeck.GetActivePanel() );
+        if ( !aActivePanel )
+            aActivePanel = m_aLastKnownActivePanel;
 
         // arrange the title bars which are *above* the active panel (or *all* if there is no active panel), plus
         // the title bar of the active panel itself

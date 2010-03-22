@@ -76,6 +76,39 @@ namespace sd { namespace toolpanel
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    void StandardToolPanel::Activate( ::Window& i_rParentWindow )
+    {
+        Window* pPanelWindow( impl_getPanelWindow() );
+        ENSURE_OR_RETURN_VOID( pPanelWindow, "no window to show" );
+        pPanelWindow->SetPosSizePixel( Point(), i_rParentWindow.GetSizePixel() );
+        pPanelWindow->Show();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void StandardToolPanel::Deactivate()
+    {
+        Window* pPanelWindow( impl_getPanelWindow() );
+        ENSURE_OR_RETURN_VOID( pPanelWindow, "no window to hide" );
+        pPanelWindow->Hide();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void StandardToolPanel::SetSizePixel( const Size& i_rPanelWindowSize )
+    {
+        Window* pPanelWindow( impl_getPanelWindow() );
+        ENSURE_OR_RETURN_VOID( pPanelWindow, "no window to resize" );
+        pPanelWindow->SetSizePixel( i_rPanelWindowSize );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void StandardToolPanel::GrabFocus()
+    {
+        Window* pPanelWindow( impl_getPanelWindow() );
+        ENSURE_OR_RETURN_VOID( pPanelWindow, "no window to focus" );
+        pPanelWindow->GrabFocus();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void StandardToolPanel::Dispose()
     {
         m_pControl.reset();
@@ -89,10 +122,11 @@ namespace sd { namespace toolpanel
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::Window* StandardToolPanel::getPanelWindow() const
+    ::Window* StandardToolPanel::impl_getPanelWindow() const
     {
-        ENSURE_OR_RETURN( const_cast< StandardToolPanel* >( this )->impl_ensureControl(), "StandardToolPanel::getPanelWindow: no control!", NULL );
-        return m_pControl->GetWindow();
+        if ( const_cast< StandardToolPanel* >( this )->impl_ensureControl() )
+            return m_pControl->GetWindow();
+        return NULL;
     }
 
     //------------------------------------------------------------------------------------------------------------------

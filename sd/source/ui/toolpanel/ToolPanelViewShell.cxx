@@ -79,6 +79,8 @@
 #include <unotools/confignode.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 #include <vector>
 
@@ -103,6 +105,11 @@ using ::com::sun::star::accessibility::XAccessible;
 using ::com::sun::star::drawing::XDrawSubController;
 using ::com::sun::star::frame::XFrame;
 using ::com::sun::star::drawing::framework::XResourceId;
+using ::com::sun::star::drawing::framework::XConfigurationChangeListener;
+using ::com::sun::star::drawing::framework::ConfigurationChangeEvent;
+using ::com::sun::star::lang::EventObject;
+using ::com::sun::star::lang::DisposedException;
+using ::com::sun::star::drawing::framework::XConfigurationControllerBroadcaster;
 /** === end UNO using === **/
 
 using ::sd::framework::FrameworkHelper;
@@ -112,7 +119,7 @@ namespace sd { namespace toolpanel {
 // =====================================================================================================================
 // = PanelDescriptor
 // =====================================================================================================================
-/** is a helper class for ToolPanelViewShell::Implementation, holding the details about a single panel which is not
+/** is a helper class for ToolPanelViewShell_Impl, holding the details about a single panel which is not
     contained in the IToolPanel implementation itself.
 */
 struct PanelDescriptor
@@ -149,17 +156,53 @@ enum PanelSelectorLayout
 };
 
 // =====================================================================================================================
-// = ToolPanelViewShell::Implementation - declaration
+// = ConfigurationListener - declaration
+// =====================================================================================================================
+typedef ::cppu::WeakImplHelper1 <   XConfigurationChangeListener
+                                >   ConfigurationListener_Base;
+
+class ConfigurationListener :public ::cppu::BaseMutex
+                            ,public ConfigurationListener_Base
+{
+public:
+    ConfigurationListener( ToolPanelViewShell_Impl& i_rShellImpl );
+
+    // XConfigurationChangeListener
+    virtual void SAL_CALL notifyConfigurationChange( const ConfigurationChangeEvent& aEvent ) throw (RuntimeException);
+
+    // XEventListener
+    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
+
+    // XComponent equivalents (not available per UNO interface)
+    void    dispose();
+
+protected:
+    ~ConfigurationListener();
+
+    void impl_checkDisposed_throw()
+    {
+        if ( !m_pShellImpl )
+            throw DisposedException( ::rtl::OUString(), *this );
+    }
+
+private:
+    ToolPanelViewShell_Impl* m_pShellImpl;
+};
+
+// =====================================================================================================================
+// = ToolPanelViewShell_Impl - declaration
 // =====================================================================================================================
 /** Inner implementation class of ToolPanelViewShell.
 */
-class ToolPanelViewShell::Implementation : public ::svt::IToolPanelDeckListener
+class ToolPanelViewShell_Impl : public ::svt::IToolPanelDeckListener
 {
 public:
     static const size_t mnInvalidId = static_cast< size_t >( -1 );
 
-    Implementation( ToolPanelViewShell& i_rPanelViewShell, ::Window& i_rPanelDeckParent );
-    ~Implementation();
+    ToolPanelViewShell_Impl( ToolPanelViewShell& i_rPanelViewShell, ::Window& i_rPanelDeckParent );
+    ~ToolPanelViewShell_Impl();
+
+    ToolPanelViewShell& GetAntiImpl() { return m_rPanelViewShell; }
 
     /** Here the panels are created that are shown in the task pane.
     */
@@ -178,10 +221,16 @@ public:
     PanelSelectorLayout
             GetLayout() const { return m_eCurrentLayout; }
 
+    /** called by our configuration controller listener when the request to activate a tool panel has been observed.
+    */
+    void    OnToolPanelActivationRequest( const ::rtl::OUString& i_rResourceURL );
+
     /** provides access to the the VCL window of the panel deck
     */
           ::Window& GetPanelDeck()       { return *m_pPanelDeck.get(); }
     const ::Window& GetPanelDeck() const { return *m_pPanelDeck.get(); }
+
+    ::Window* GetToolPanelParentWindow() { return m_pPanelDeck.get() ? &m_pPanelDeck->GetPanelWindowAnchor() : NULL; }
 
     /** returns the logical number of panels. This is greater than or equal to the number of panels displayed in the
         panel deck
@@ -231,9 +280,87 @@ private:
     PanelDescriptors                            m_aPanels;
     ToolPanelViewShell&                         m_rPanelViewShell;
     ::boost::scoped_ptr< ToolPanelDeck >        m_pPanelDeck;
+    ::rtl::Reference< ConfigurationListener >   m_pConfigListener;
     PanelSelectorLayout                         m_eCurrentLayout;
     bool                                        m_bInitialized;
 };
+
+// =====================================================================================================================
+// = ConfigurationListener - implementation
+// =====================================================================================================================
+// ---------------------------------------------------------------------------------------------------------------------
+ConfigurationListener::ConfigurationListener( ToolPanelViewShell_Impl& i_rShellImpl )
+    :m_pShellImpl( &i_rShellImpl )
+{
+    ::boost::shared_ptr< FrameworkHelper > pFrameworkHelper( FrameworkHelper::Instance( i_rShellImpl.GetAntiImpl().GetViewShellBase() ) );
+    Reference< XConfigurationControllerBroadcaster > xBroadcaster;
+    if ( pFrameworkHelper.get() )
+        xBroadcaster.set( pFrameworkHelper->GetConfigurationController().get() );
+    ENSURE_OR_THROW( pFrameworkHelper.get(), "no access to the config controller" );
+
+    osl_incrementInterlockedCount( &m_refCount );
+    {
+        xBroadcaster->addConfigurationChangeListener( this, ::rtl::OUString(), Any() );
+    }
+    osl_decrementInterlockedCount( &m_refCount );
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+ConfigurationListener::~ConfigurationListener()
+{
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void SAL_CALL ConfigurationListener::notifyConfigurationChange( const ConfigurationChangeEvent& i_rEvent ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    impl_checkDisposed_throw();
+
+//    if ( i_rEvent.Type == FrameworkHelper::msConfigurationUpdateStartEvent )
+//    {
+//        m_pShellImpl->GetPanelDeck().SetUpdateMode( FALSE );
+//        return;
+//    }
+//    if ( i_rEvent.Type == FrameworkHelper::msConfigurationUpdateEndEvent )
+//    {
+//        m_pShellImpl->GetPanelDeck().SetUpdateMode( TRUE );
+//        return;
+//    }
+//
+    // is this an event we're interested in?
+    if ( i_rEvent.Type != FrameworkHelper::msResourceActivationEvent )
+        return;
+
+    // is this a resource we're interested in? Must be anchored in the task pane ...
+    Reference< XResourceId > xAnchorId;
+    if ( i_rEvent.ResourceId.is() )
+        xAnchorId = i_rEvent.ResourceId->getAnchor();
+    if ( !xAnchorId.is() )
+        return;
+    const ::rtl::OUString sAnchorURL( xAnchorId->getResourceURL() );
+    if ( sAnchorURL != FrameworkHelper::msTaskPaneURL )
+        return;
+
+    m_pShellImpl->OnToolPanelActivationRequest( i_rEvent.ResourceId->getResourceURL() );
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void SAL_CALL ConfigurationListener::disposing( const EventObject& i_rEvent ) throw (RuntimeException)
+{
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        impl_checkDisposed_throw();
+    }
+
+    dispose();
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void ConfigurationListener::dispose()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    m_pShellImpl = NULL;
+}
 
 // =====================================================================================================================
 // = helpers
@@ -263,7 +390,7 @@ SFX_IMPL_INTERFACE(ToolPanelViewShell, SfxShell, SdResId(STR_TASKPANEVIEWSHELL))
 TYPEINIT1(ToolPanelViewShell, ViewShell);
 
 // ---------------------------------------------------------------------------------------------------------------------
-size_t ToolPanelViewShell::Implementation::SetupDefaultPanels()
+size_t ToolPanelViewShell_Impl::SetupDefaultPanels()
 {
     typedef std::auto_ptr<ControlFactory> (*ControlFactoryFactory)( ToolPanelViewShell& i_rToolPanelShell );
 
@@ -365,7 +492,7 @@ size_t ToolPanelViewShell::Implementation::SetupDefaultPanels()
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::Implementation::SetupCustomPanels()
+void ToolPanelViewShell_Impl::SetupCustomPanels()
 {
     // compose the resource ID for the ToolPanel view
     ::boost::shared_ptr< FrameworkHelper > pFrameworkHelper( FrameworkHelper::Instance( m_rPanelViewShell.GetViewShellBase() ) );
@@ -396,7 +523,7 @@ void ToolPanelViewShell::Implementation::SetupCustomPanels()
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::Implementation::Setup()
+void ToolPanelViewShell_Impl::Setup()
 {
     if ( m_bInitialized )
         return;
@@ -417,11 +544,14 @@ void ToolPanelViewShell::Implementation::Setup()
     // initialize panel selector
     SetLayout( LAYOUT_DRAWERS, true );
 
+    // listen at the configuration
+    m_pConfigListener.set( new ConfigurationListener( *this ) );
+
     m_pPanelDeck->Show();
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::Implementation::SetLayout( const PanelSelectorLayout i_eLayout, const bool i_bForce )
+void ToolPanelViewShell_Impl::SetLayout( const PanelSelectorLayout i_eLayout, const bool i_bForce )
 {
     if ( !i_bForce && ( m_eCurrentLayout == i_eLayout ) )
         return;
@@ -449,9 +579,9 @@ void ToolPanelViewShell::Implementation::SetLayout( const PanelSelectorLayout i_
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::Implementation::Cleanup()
+void ToolPanelViewShell_Impl::Cleanup()
 {
-    if ( !m_bInitialized )
+    if ( m_bInitialized )
     {
         m_pPanelDeck->RemoveListener( *this );
         // remove the panels which are not under the control of the panel deck currently
@@ -464,8 +594,46 @@ void ToolPanelViewShell::Implementation::Cleanup()
                 panelPos->pPanel->Dispose();
         }
         m_aPanels.clear();
+
+        if ( m_pConfigListener.is() )
+            m_pConfigListener->dispose();
     }
     m_pPanelDeck.reset();
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void ToolPanelViewShell_Impl::OnToolPanelActivationRequest( const ::rtl::OUString& i_rResourceURL )
+{
+    // look up the panel which belongs to the given resource
+    for ( size_t i=0; i<GetPanelCount(); ++i )
+    {
+        const PanelDescriptor& rPanel = GetPanel( i );
+        const TaskPaneToolPanel* pPanel( dynamic_cast< const TaskPaneToolPanel* >( rPanel.pPanel.get() ) );
+        ENSURE_OR_CONTINUE( pPanel != NULL, "ToolPanelViewShell::OnToolPanelActivationRequest: illegal panel implementation!" );
+
+        Reference< XResourceId > xPanelId( pPanel->getResourceId() );
+        ::rtl::OUString sPanelURL( xPanelId.is() ? xPanelId->getResourceURL() : ::rtl::OUString() );
+        ENSURE_OR_CONTINUE( sPanelURL.getLength(), "illegal panel resource!" );
+
+        if ( sPanelURL == i_rResourceURL )
+        {
+            CustomToolPanel* pCustomPanel = dynamic_cast< CustomToolPanel* >( rPanel.pPanel.get() );
+            OSL_ENSURE( ( pCustomPanel != NULL ) == ( rPanel.nId >= PID_FIRST_CUSTOM_PANEL ),
+                "ToolPanelViewShell::OnToolPanelActivationRequest: inconsistency!" );
+            if ( pCustomPanel != NULL )
+            {
+                // if that's a custom tool panel, then temporarily disable the access of the tool panel implementation
+                // to the XPane object. Otherwise, it would request this resource from the configuration controller during
+                // the below ActivatePanelDirectly call, which would fail, since the resource is just to be created.
+                pCustomPanel->LockResourceAccess();
+            }
+            ActivatePanelDirectly( rPanel.nId );
+            if ( pCustomPanel != NULL )
+            {
+                pCustomPanel->UnlockResourceAccess();
+            }
+        }
+    }
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -478,7 +646,7 @@ void ToolPanelViewShell::Initialize()
 ToolPanelViewShell::ToolPanelViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, ::Window* pParentWindow,
         FrameView* pFrameViewArgument )
     :ViewShell(pFrame, pParentWindow, rViewShellBase)
-    ,mpImpl( new Implementation( *this, *mpContentWindow.get() ) )
+    ,mpImpl( new ToolPanelViewShell_Impl( *this, *mpContentWindow.get() ) )
     ,mpSubShellManager()
     ,mnMenuId(0)
 {
@@ -852,6 +1020,12 @@ bool ToolPanelViewShell::RelocateToParentWindow( ::Window* pParentWindow )
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
+::Window* ToolPanelViewShell::GetToolPanelParentWindow()
+{
+    return mpImpl->GetToolPanelParentWindow();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
 void ToolPanelViewShell::DeactivatePanel( const PanelId i_ePanelId )
 {
     mpImpl->DeactivatePanelDirectly( i_ePanelId );
@@ -865,10 +1039,10 @@ void ToolPanelViewShell::ActivatePanel( const PanelId i_ePanelId )
 
 
 // =====================================================================================================================
-// = ToolPanelViewShell:Implementation - implementation
+// = ToolPanelViewShell_Impl - implementation
 // =====================================================================================================================
 // ---------------------------------------------------------------------------------------------------------------------
-ToolPanelViewShell::Implementation::Implementation( ToolPanelViewShell& i_rPanelViewShell, ::Window& i_rPanelDeckParent )
+ToolPanelViewShell_Impl::ToolPanelViewShell_Impl( ToolPanelViewShell& i_rPanelViewShell, ::Window& i_rPanelDeckParent )
     :m_aPanels()
     ,m_rPanelViewShell( i_rPanelViewShell )
     ,m_pPanelDeck( new ToolPanelDeck( i_rPanelDeckParent, i_rPanelViewShell ) )
@@ -878,12 +1052,12 @@ ToolPanelViewShell::Implementation::Implementation( ToolPanelViewShell& i_rPanel
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-ToolPanelViewShell::Implementation::~Implementation()
+ToolPanelViewShell_Impl::~ToolPanelViewShell_Impl()
 {
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::Implementation::TogglePanelVisibility( const size_t i_nLogicalPanelIndex )
+void ToolPanelViewShell_Impl::TogglePanelVisibility( const size_t i_nLogicalPanelIndex )
 {
     ENSURE_OR_RETURN_VOID( i_nLogicalPanelIndex < m_aPanels.size(), "illegal index" );
 
@@ -910,7 +1084,7 @@ void ToolPanelViewShell::Implementation::TogglePanelVisibility( const size_t i_n
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::Implementation::DeactivatePanelDirectly( const PanelId i_nPanelId )
+void ToolPanelViewShell_Impl::DeactivatePanelDirectly( const PanelId i_nPanelId )
 {
     for ( size_t i=0; i<m_aPanels.size(); ++i )
     {
@@ -924,7 +1098,7 @@ void ToolPanelViewShell::Implementation::DeactivatePanelDirectly( const PanelId 
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::Implementation::ActivatePanelDirectly( const PanelId i_nPanelId )
+void ToolPanelViewShell_Impl::ActivatePanelDirectly( const PanelId i_nPanelId )
 {
     size_t nActualPanelIndex(0);
     for ( size_t i=0; i<m_aPanels.size(); ++i )
@@ -943,34 +1117,34 @@ void ToolPanelViewShell::Implementation::ActivatePanelDirectly( const PanelId i_
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::Implementation::RegisterPanel( size_t i_nPosition, PanelId i_nPanelId, const ::svt::PToolPanel& i_rPanel )
+void ToolPanelViewShell_Impl::RegisterPanel( size_t i_nPosition, PanelId i_nPanelId, const ::svt::PToolPanel& i_rPanel )
 {
     if ( i_nPosition >= m_aPanels.size() )
         m_aPanels.resize( i_nPosition + 1 );
 
-    OSL_PRECOND( m_aPanels[ i_nPosition ].nId == PID_UNKNOWN, "ToolPanelViewShell::Implementation::RegisterPanel: "
+    OSL_PRECOND( m_aPanels[ i_nPosition ].nId == PID_UNKNOWN, "ToolPanelViewShell_Impl::RegisterPanel: "
         "already registered a panel for this ID!" );
     m_aPanels[ i_nPosition ] = PanelDescriptor( i_nPanelId, i_rPanel );
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::Implementation::PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition )
+void ToolPanelViewShell_Impl::PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition )
 {
     (void)i_pPanel;
     (void)i_nPosition;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::Implementation::PanelRemoved( const size_t i_nPosition )
+void ToolPanelViewShell_Impl::PanelRemoved( const size_t i_nPosition )
 {
     (void)i_nPosition;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::Implementation::UpdateDockingWindowTitle()
+void ToolPanelViewShell_Impl::UpdateDockingWindowTitle()
 {
     PaneDockingWindow* pDockingWindow = dynamic_cast< PaneDockingWindow* >( m_rPanelViewShell.GetDockingWindow() );
-    ENSURE_OR_RETURN_VOID( pDockingWindow, "ToolPanelViewShell::Implementation::UpdateDockingWindowTitle: no PaneDockingWindow!?" );
+    ENSURE_OR_RETURN_VOID( pDockingWindow, "ToolPanelViewShell_Impl::UpdateDockingWindowTitle: no PaneDockingWindow!?" );
 
     ::boost::optional< size_t > aActivePanel( m_pPanelDeck->GetActivePanel() );
     if ( !aActivePanel || ( GetLayout() == LAYOUT_DRAWERS ) )
@@ -994,7 +1168,7 @@ void ToolPanelViewShell::Implementation::UpdateDockingWindowTitle()
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::Implementation::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
+void ToolPanelViewShell_Impl::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
 {
     if ( GetLayout() == LAYOUT_DRAWERS )
         // no adjustment of the title when we use the classical "drawers" layout
@@ -1006,7 +1180,7 @@ void ToolPanelViewShell::Implementation::ActivePanelChanged( const ::boost::opti
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::Implementation::Dying()
+void ToolPanelViewShell_Impl::Dying()
 {
 }
 
