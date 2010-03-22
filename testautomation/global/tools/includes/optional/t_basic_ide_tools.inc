@@ -545,13 +545,13 @@ function hInitFormControls( cModule as string ) as boolean
     '///Description:
     '///<ul>
     
-    const CFN = "hInitFormControls::"    
+    const CFN = "hInitFormControls::"
+    hInitFormControls() = false
     '///+<li>Create and edit a new module for the current document</li>
 
     if ( not hInitBasicIde( cModule ) ) then
         warnlog( "Could not create new module" )
         hCloseBasicIde()
-        hInitFormControls() = false
         exit function
     endif     
     
@@ -562,7 +562,6 @@ function hInitFormControls( cModule as string ) as boolean
     if ( not hNewDialog() ) then
         warnlog( "Could not create Basic-Dialog" )
         hCloseBasicIde()
-        hInitFormControls() = false
         exit function
     endif    
     
@@ -570,7 +569,6 @@ function hInitFormControls( cModule as string ) as boolean
     if ( not hShowMacroControls() ) then
         warnlog( CFN & "Could not tear off the macro controls float" )
         hCloseBasicIde()
-        hInitFormControls() = false
         exit function            
     endif
     
@@ -600,20 +598,15 @@ function hInitBasicIde( cModule as string ) as boolean
         exit function
     endif        
     
-    ' some multi-purpose return code 
-    dim brc as boolean 
-    
     '///+<li>Open the basic Organizer</li>
-    brc = hOpenBasicOrganizerFromDoc()
-    if ( not brc ) then
+    if ( not hOpenBasicOrganizerFromDoc() ) then
         warnlog( CFN & "Could not open the Basic Organizer, aborting" )
         hInitBasicIde() = false
         exit function
     endif
 
     '///+<li>Create a new module for the current document</li>
-    brc = hCreateModuleForDoc( cModule )
-    if ( not brc ) then
+    if ( not hCreateModuleForDoc( cModule ) ) then
         warnlog( CFN & "The Basic-IDE is not open, aborting" )
         hInitBasicIde() = false
         
@@ -645,19 +638,12 @@ function hInsertMacro( _id as integer ) as boolean
     '///<ul>
     
     const CFN = "hInsertMacro::"
-    dim brc as boolean
-    
-    if ( ( _id < 1 ) or ( _id > 3 ) ) then
-        warnlog( CFN & "Invalid parameter passed to function: " & _id )
-        hInsertMacro() = false
-        exit function
-    endif
-    
     kontext "basicide"
+
+    qaerrorlog( CFN & "This function is deprecated, remove me!" )
     
     '///+<li>Delete the content of the edit window</li>
-    brc = hDeleteMacro()
-    if ( not brc ) then
+    if ( not hDeleteMacro() ) then
         warnlog( CFN & "Content of Basic-IDE was not deleted" )
         hInsertMacro() = false
         exit function
@@ -702,6 +688,7 @@ function hTestMacro( _id as integer ) as integer
     '///<ul>
     
     const CFN = "hTestMacro::"
+    qaerrorlog( CFN & "This function is deprecated, remove me!" )
 
     kontext "basicide"
 
@@ -747,54 +734,44 @@ function hCreateBasicWorkFiles() as string
     const CFN = "hCreateBasicWorkFiles::"
     const CMACRO = "TestMacro"
     
-    ' some returncodes
-    dim brc as boolean
-    dim irc as integer
-    dim crc as string
-    
-    dim sFile as string
-        sFile = hGetBasicWorkFile( "CURRENT" )
+    dim sFile as string : sFile = hGetBasicWorkFile( "CURRENT" )
         
     '///+<li>Open a new document</li>
-    call hCreateDocument()
+    hCreateDocument()
     
     '///+<li>Change the document (to save it)</li>
-    crc = hChangeDoc()
-    printlog( CFN & crc )
+    printlog( CFN & hChangeDoc() )
     
     '///+<li>Open Basic-Organizer, select the document and create a module</li>
-    brc = hInitBasicIde( CMACRO )
-    if ( not brc ) then
+    if ( not hInitBasicIde( CMACRO ) ) then
         printlog( CFN & "Unable to create a module, aborting" )
-        call hDestroyDocument()
+        hDestroyDocument()
         hCreateBasicWorkFiles() = ""
         exit function
     endif
     
     '///+<li>Insert a macro that triggers a messagebox</li>
-    brc = hInsertMacro( 3 )
-    if ( not brc ) then
+    if ( not hInsertMacro( 3 ) ) then
         printlog( CFN & "Unable to insert macro, aborting" )
         hCloseBasicIde()
-        call hDestroyDocument()
+        hDestroyDocument()
         hCreateBasicWorkFiles() = ""
         exit function
     endif
     
     '///+<li>Close the Basic-IDE</li>
-    brc = hCloseBasicIde()
+    hCloseBasicIde()
     
     '///+<li>Save the file without autoextension, overwrite existing</li>
-    brc = hFileSaveAsKill( sFile )
-    if ( not brc ) then
+    if ( not hFileSaveAsKill( sFile ) ) then
         printlog( CFN & "Unknown error while saving the file. Resetting" )
-        call ExitRestartTheOffice
+        ExitRestartTheOffice
         hCreateBasicWorkFiles() = ""
         exit function
     endif
     
     '///+<li>Close the document</li>
-    call hDestroyDocument()
+    hDestroyDocument()
     
     '///</ul>
     
@@ -804,9 +781,6 @@ end function
 '*******************************************************************************
 
 function hIDESelectTabByIndex( iIndex as integer ) as string
-
-    use "global\tools\includes\optional\t_accels.inc"
-
 
     '///<h3>Select a tab within the BASIC-IDE by index</h3>
      '///<i>The BASIC-IDE has to be open and has the focus. This function
@@ -846,7 +820,6 @@ function hIDESelectTabByIndex( iIndex as integer ) as string
     
     dim cTabName as string
     dim iCurrentTab as integer
-    dim cAccel as string
 
     '///<u>Description:</u>
     '///<ul>
@@ -856,15 +829,14 @@ function hIDESelectTabByIndex( iIndex as integer ) as string
     '///+<li>Retrieve the accelerator to switch tabs</li>
     '///+<li>Switch tabs</li>
     select case iIndex
-    case 0   :  cAccel = ""
-    case 1   :  cAccel = hGetAccel( "IDE_SWITCH_TAB-" )
-                for iTab = 1 to 20
-                    BasicIDE.typeKeys( cAccel )
-                next iTab
-    case else:  cAccel = hGetAccel( "IDE_SWITCH_TAB+" )
-                for iTab = 1 to iIndex
-                    BasicIDE.typeKeys( cAccel )
-                next iTab
+    case 1   :
+        for iTab = 1 to 20
+            BasicIDE.typeKeys( "<MOD1 PAGEDOWN>" )
+        next iTab
+    case else:  
+        for iTab = 1 to iIndex
+            BasicIDE.typeKeys( "<MOD1 PAGEUP>" )
+        next iTab
     end select
     
     '///+<li>Select the Tabbar</li>
@@ -887,7 +859,7 @@ function hIDESelectTabByIndex( iIndex as integer ) as string
     cTabName = getClipboardText
     
     '///+<li>Print exit message, set return value</li>
-    printlog( CFN & "Exit with result: " & cTabName )
+    if ( GVERBOSE ) then printlog( CFN & "Exit with result: " & cTabName )
     hIDESelectTabByIndex() = cTabName
     '///</ul>
 
