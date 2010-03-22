@@ -194,9 +194,9 @@ public final class OfficeConnection {
             return done;
         }
 
-        InputStream in;
-        PrintStream out;
-        boolean done = false;
+        private final InputStream in;
+        private final PrintStream out;
+        private boolean done = false;
     }
 
     private String description;
