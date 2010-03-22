@@ -818,8 +818,8 @@ L10N_MODULE*=$(SOLARSRC)$/l10n
 ALT_L10N_MODULE*=$(SOLARSRC)$/l10n_so
 
 .IF "$(WITH_LANG)"!=""
-.INCLUDE .IGNORE: $(L10N_MODULE)/localization_present.mk
-.INCLUDE .IGNORE: $(ALT_L10N_MODULE)/localization_present.mk
+.INCLUDE .IGNORE: $(L10N_MODULE)/$(COMMON_OUTDIR)$(PROEXT)/inc/localization_present.mk
+.INCLUDE .IGNORE: $(ALT_L10N_MODULE)/$(COMMON_OUTDIR)$(PROEXT)/inc/localization_present.mk
 
 # check for localizations not hosted in l10n module. if a file exists there
 # it won't in l10n
