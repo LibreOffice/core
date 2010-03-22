@@ -1858,6 +1858,9 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
     pSocket->m_nLastError=0;
     nFD = pSocket->m_Socket;
 
+    if (nFD == OSL_INVALID_SOCKET)
+        return;
+
     pSocket->m_Socket = OSL_INVALID_SOCKET;
 
 #if defined(LINUX)
@@ -1904,6 +1907,7 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
 #endif /* OSL_DEBUG_LEVEL */
             close(nConnFD);
         }
+        pSocket->m_bIsAccepting = sal_False;
     }
 #endif /* LINUX */
 

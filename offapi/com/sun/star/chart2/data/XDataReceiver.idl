@@ -73,24 +73,6 @@ interface XDataReceiver : ::com::sun::star::uno::XInterface
      */
     void attachDataProvider( [in] XDataProvider xProvider );
 
-    /** Sets the data for the chart as a whole.  When this method is
-        called, all currently set data is removed.  It is replaced by
-        the data that is returned by the current
-        <type>XDataProvider</type> by using the given range
-        representation.
-
-        @param aRangeRepresentation
-            This range representation must be in a format that is
-            understood by the currently attached
-            <type>XDataProvider</type>.
-
-        @throws com::sun::star::lang::IllegalArgumentException
-            If the range representation could not dealt with by the
-            current data provider, or there is currently no data
-            provider at all.
-     */
-//     void setRangeRepresentation( [in] string aRangeRepresentation )
-//         raises( com::sun::star::lang::IllegalArgumentException );
     void setArguments( [in] sequence< com::sun::star::beans::PropertyValue > aArguments )
         raises( com::sun::star::lang::IllegalArgumentException );
 

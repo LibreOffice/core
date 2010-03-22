@@ -51,10 +51,6 @@ struct InterpretedData
     /**
      */
     data::XLabeledDataSequence                  Categories;
-
-    /**
-     */
-    sequence< data::XLabeledDataSequence >      UnusedData;
 };
 
 } ; // chart2

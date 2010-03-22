@@ -54,12 +54,15 @@ extern "C" {
 #define PATHTYPE_MASK_TYPE                  0xFF
 #define PATHTYPE_IS_VOLUME                  0x0100
 #define PATHTYPE_IS_SERVER                  0x0200
+#define PATHTYPE_IS_LONGPATH                0x0400
 
 #define VALIDATEPATH_NORMAL                 0x0000
 #define VALIDATEPATH_ALLOW_WILDCARDS        0x0001
 #define VALIDATEPATH_ALLOW_ELLIPSE          0x0002
 #define VALIDATEPATH_ALLOW_RELATIVE         0x0004
 #define VALIDATEPATH_ALLOW_UNC              0x0008
+
+#define MAX_LONG_PATH 32767
 
 DWORD IsValidFilePath (
     rtl_uString *  path,
@@ -71,7 +74,8 @@ DWORD IsValidFilePath (
 DWORD GetCaseCorrectPathName (
     LPCTSTR lpszShortPath,  // file name
     LPTSTR  lpszLongPath,   // path buffer
-    DWORD   cchBuffer       // size of path buffer
+    DWORD   cchBuffer,      // size of path buffer
+    BOOL bCheckExistence
 );
 
 oslFileError _osl_getSystemPathFromFileURL (

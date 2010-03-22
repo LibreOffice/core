@@ -766,27 +766,28 @@ FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
         ::getCppuType( (const Sequence< sal_Int16 > *)0 );
     rShortSeqType.getDescription( &m_pShortSeqTD );
     // script.XInvocation
-    typelib_InterfaceTypeDescription * pTD = 0;
+    typelib_TypeDescription * pTD = 0;
     const Type & rInvType = ::getCppuType(
         (const Reference< script::XInvocation > *)0 );
-    TYPELIB_DANGER_GET(
-        (typelib_TypeDescription **)&pTD, rInvType.getTypeLibType() );
-    if( ! pTD->aBase.bComplete )
-        typelib_typedescription_complete( (typelib_TypeDescription **)&pTD );
+    TYPELIB_DANGER_GET( &pTD, rInvType.getTypeLibType() );
+    typelib_InterfaceTypeDescription * pITD;
+    pITD = reinterpret_cast<typelib_InterfaceTypeDescription*>(pTD);
+    if( ! pITD->aBase.bComplete )
+        typelib_typedescription_complete( &pTD );
     ::typelib_typedescriptionreference_getDescription(
-        &m_pInvokMethodTD, pTD->ppMembers[ 1 ] ); // invoke()
+        &m_pInvokMethodTD, pITD->ppMembers[ 1 ] ); // invoke()
     ::typelib_typedescriptionreference_getDescription(
-        &m_pSetValueTD, pTD->ppMembers[ 2 ] ); // setValue()
+        &m_pSetValueTD, pITD->ppMembers[ 2 ] ); // setValue()
     ::typelib_typedescriptionreference_getDescription(
-        &m_pGetValueTD, pTD->ppMembers[ 3 ] ); // getValue()
+        &m_pGetValueTD, pITD->ppMembers[ 3 ] ); // getValue()
     // script.XTypeConverter
     const Type & rTCType =
         ::getCppuType( (const Reference< script::XTypeConverter > *)0 );
-    TYPELIB_DANGER_GET(
-        (typelib_TypeDescription **)&pTD, rTCType.getTypeLibType() );
+    TYPELIB_DANGER_GET( &pTD, rTCType.getTypeLibType() );
+    pITD = reinterpret_cast<typelib_InterfaceTypeDescription*>(pTD);
     ::typelib_typedescriptionreference_getDescription(
-        &m_pConvertToTD, pTD->ppMembers[ 0 ] ); // convertTo()
-    TYPELIB_DANGER_RELEASE( (typelib_TypeDescription *)pTD );
+        &m_pConvertToTD, pITD->ppMembers[ 0 ] ); // convertTo()
+    TYPELIB_DANGER_RELEASE( pTD );
 
     if (!m_pInvokMethodTD || !m_pSetValueTD || !m_pGetValueTD ||
         !m_pConvertToTD ||
