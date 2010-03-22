@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -1013,18 +1013,6 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
         return nRet;
     }
 
-    // read and lseek are used to check the possibility to access the data
-    // not a nice solution, but it allows to avoid a crash in case it is an opened samba file
-    // generally, reading of one byte should not affect the performance
-    char nCh;
-    if ( 1 != read( SourceFileFD, &nCh, 1 )
-      || -1 == lseek( SourceFileFD, 0, SEEK_SET ) )
-    {
-        nRet = errno;
-        (void) close( SourceFileFD );
-        return nRet;
-    }
-
     DestFileFD=open(pszDestFileName, O_WRONLY | O_CREAT, mode);
 
     if ( DestFileFD < 0 )
@@ -1041,6 +1029,19 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
         close(SourceFileFD);
         close(DestFileFD);
         return 0;
+    }
+
+    // read and lseek are used to check the possibility to access the data
+    // not a nice solution, but it allows to avoid a crash in case it is an opened samba file
+    // generally, reading of one byte should not affect the performance
+    char nCh;
+    if ( 1 != read( SourceFileFD, &nCh, 1 )
+      || -1 == lseek( SourceFileFD, 0, SEEK_SET ) )
+    {
+        nRet = errno;
+        close( SourceFileFD );
+        close( DestFileFD );
+        return nRet;
     }
 
     size_t nWritten = 0;

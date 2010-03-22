@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: stortree.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -273,8 +270,7 @@ storeError OStoreBTreeNodeObject::remove (
         if (xPageL->usageCount() == 0)
         {
             // Free empty link node.
-            OStorePageData aPageHead;
-            eErrCode = rBIOS.free (aPageHead, xPageL->location());
+            eErrCode = rBIOS.free (xPageL->location());
             if (eErrCode != store_E_None)
                 return eErrCode;
 
@@ -298,7 +294,7 @@ storeError OStoreBTreeNodeObject::remove (
                     {
                         rPageL.merge (rPageR);
 
-                        eErrCode = rBIOS.free (aPageHead, rPageR.location());
+                        eErrCode = rBIOS.free (rPageR.location());
                     }
                 }
             }
