@@ -1381,7 +1381,7 @@ SPECIAL_UNO_LIB_FILE(gid_File_Lib_Srtrs1,srtrs1)
 STD_LIB_FILE( gid_File_Lib_Sts , sts)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Svl, svl )
-STD_UNO_LIB_FILE( gid_File_Lib_Svtools, svt )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Svtools, svt )
 
 STD_LIB_FILE( gid_File_Lib_Svx_Core, svxcore)
 STD_UNO_LIB_FILE( gid_File_Lib_Svx, svx)
