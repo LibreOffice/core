@@ -218,8 +218,6 @@ function hGetPathSigne(sPlatform as string) as string
     '/// <u>Input</u>: string of class gPlatform
     '/// <u>Output</u>: string which can be used as seperator in directories
 
-    printlog( " *** CALLED HGETPATHSIGNE *** " )
-
     select case sPlatform
     case "w95" : hGetPathSigne = "\"
     case "w98" : hGetPathSigne = "\"
@@ -258,6 +256,7 @@ function ConvertPath ( sDatei$, optional sPlatform as string ) as String
     dim sLocalPlatGroup as string
     dim sLocalPathSigne as string
 
+    printlog( " *** convertpath( in ): " & sDatei$ )
     if (isMissing(sPlatform)) then
         sLocalPlatGroup = gPlatGroup
         sLocalPathSigne = gPathSigne
@@ -291,6 +290,8 @@ function ConvertPath ( sDatei$, optional sPlatform as string ) as String
         s1$ = Mid( s1$ , i+1 )
         s3$ = s3$ + s2$ + sLocalPathSigne
     loop until s1$=""
+
+    printlog( " *** convertpath( out): " & s3$ + s1$ )
 
     ConvertPath = s3$ + s1$
 end function
