@@ -285,12 +285,6 @@ testcase tBasic_IDE_Toolbar_Dialogs
             printlog( """Save Source Text"" is disabled" )
         endcatch
 
-
-        bIsOpen = hShowMacroControls()
-        if ( bIsOpen ) then
-            ToolsCollectionBar.Close()
-        end if
-
         hCloseBasicIDE()
         hDestroyDocument()
     else
