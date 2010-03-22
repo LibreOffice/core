@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: socket.c,v $
- * $Revision: 1.29.60.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1861,6 +1858,9 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
     pSocket->m_nLastError=0;
     nFD = pSocket->m_Socket;
 
+    if (nFD == OSL_INVALID_SOCKET)
+        return;
+
     pSocket->m_Socket = OSL_INVALID_SOCKET;
 
 #if defined(LINUX)
@@ -1907,6 +1907,7 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
 #endif /* OSL_DEBUG_LEVEL */
             close(nConnFD);
         }
+        pSocket->m_bIsAccepting = sal_False;
     }
 #endif /* LINUX */
 
