@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: node.cxx,v $
- * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1651,7 +1648,7 @@ void SmBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
                     "Sm : unterschiedliche Fontgroessen");
         aTmpSize.Width() = Min((long) nBraceHeight * 60L / 100L,
                             rFormat.GetBaseSize().Height() * 3L / 2L);
-        // correction factor since change from StarMath to StarSymbol font
+        // correction factor since change from StarMath to OpenSymbol font
         // because of the different font width in the FontMetric
         aTmpSize.Width() *= 182;
         aTmpSize.Width() /= 267;
@@ -2694,7 +2691,7 @@ void SmMathSymbolNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocSh
 
     DBG_ASSERT(GetFont().GetCharSet() == RTL_TEXTENCODING_SYMBOL  ||
                GetFont().GetCharSet() == RTL_TEXTENCODING_UNICODE,
-        "incorrect charset for character from StarMath/StarSymbol font");
+        "incorrect charset for character from StarMath/OpenSymbol font");
 
     Flags() |= FLG_FONT | FLG_ITALIC;
 };

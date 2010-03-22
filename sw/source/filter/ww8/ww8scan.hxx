@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8scan.hxx,v $
- * $Revision: 1.85.12.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -295,6 +292,8 @@ private:
         machen wir uns hiermit einen PLC:
     */
     void GeneratePLCF( SvStream* pSt, INT32 nPN, INT32 ncpN );
+
+    void MakeFailedPLCF();
 public:
     WW8PLCF( SvStream* pSt, WW8_FC nFilePos, INT32 nPLCF, int nStruct,
         WW8_CP nStartPos = -1 );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unomailmerge.cxx,v $
- * $Revision: 1.26.206.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -725,6 +722,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         // when mail merge is called as command line macro
         aMergeDesc.bPrintAsync = sal_False;
         aMergeDesc.aPrintOptions = aPrintSettings;
+        aMergeDesc.bCreateSingleFile = true;
     }
     else /* FILE and MAIL*/
     {

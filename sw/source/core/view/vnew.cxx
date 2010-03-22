@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vnew.cxx,v $
- * $Revision: 1.31.210.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,11 +113,8 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
     // Only setup the printer if we need one:
     const IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
     const bool bBrowseMode = pIDSA->get(IDocumentSettingAccess::BROWSE_MODE);
-    const bool bCreatePrinter = !bBrowseMode &&
-                                !pIDSA->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE);
-    SfxPrinter* pPrinter = getIDocumentDeviceAccess()->getPrinter( bCreatePrinter );
-    if( pPrinter )
-        InitPrt( pPrinter, pPDFOut );
+    if( pPDFOut )
+        InitPrt( pPDFOut );
     // <--
 
     // --> FME 2005-03-16 #i44963# Good occasion to check if page sizes in

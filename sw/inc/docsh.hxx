@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh.hxx,v $
- * $Revision: 1.48.72.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -183,6 +180,7 @@ public:
 
     // Doc rausreichen aber VORSICHT
     inline SwDoc*                   GetDoc() { return pDoc; }
+    inline const SwDoc*             GetDoc() const { return pDoc; }
     IDocumentDeviceAccess*          getIDocumentDeviceAccess();
     const IDocumentSettingAccess*   getIDocumentSettingAccess() const;
     IDocumentChartDataProviderAccess*       getIDocumentChartDataProviderAccess();

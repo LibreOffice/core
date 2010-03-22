@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mn.src,v $
- * $Revision: 1.53.118.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1064,12 +1061,6 @@ Menu MN_PPREVIEW_POPUPMENU
             Identifier = FN_PRINT_PAGEPREVIEW ;
             HelpID = FN_PRINT_PAGEPREVIEW ;
             Text [ en-US ] = "Print" ;
-        };
-        MenuItem
-        {
-            Identifier = FN_PREVIEW_PRINT_OPTIONS;
-            HelpID = FN_PREVIEW_PRINT_OPTIONS;
-            Text [ en-US ] = "Print Options";
         };
         SEPARATOR ;
         MenuItem

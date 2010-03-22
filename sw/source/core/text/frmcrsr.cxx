@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: frmcrsr.cxx,v $
- * $Revision: 1.44.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,10 +38,10 @@
 #include "colfrm.hxx"
 #include "txttypes.hxx"
 #include <sfx2/printer.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lspcitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <pormulti.hxx>     // SwMultiPortion
 #include <doc.hxx>
 #include <sortedobjs.hxx>

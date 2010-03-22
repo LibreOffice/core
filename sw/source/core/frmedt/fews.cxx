@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fews.cxx,v $
- * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <tools/list.hxx>
-//#ifndef _SVDVMARK_HXX //autogen
-//#include <svx/svdvmark.hxx>
-//#endif
 #include <svx/svdobj.hxx>
 #include <init.hxx>
 #include <fesh.hxx>
@@ -71,7 +64,9 @@
 // OD 2004-03-29 #i26791#
 #include <dcontact.hxx>
 
+
 using namespace com::sun::star;
+
 
 TYPEINIT1(SwFEShell,SwEditShell)
 
@@ -780,12 +775,12 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     BOOL bVertic = FALSE;
     BOOL bRTL = FALSE;
 
-    if( FLY_PAGE == _nAnchorId || FLY_AT_FLY == _nAnchorId ) // LAYER_IMPL
+    if ((FLY_AT_PAGE == _nAnchorId) || (FLY_AT_FLY == _nAnchorId)) // LAYER_IMPL
     {
         const SwFrm* pTmp = pFrm;
         // OD 06.11.2003 #i22305#
-        if ( FLY_PAGE == _nAnchorId ||
-             ( FLY_AT_FLY == _nAnchorId && !_bFollowTextFlow ) )
+        if ((FLY_AT_PAGE == _nAnchorId) ||
+            ((FLY_AT_FLY == _nAnchorId) && !_bFollowTextFlow))
         {
             pFrm = pPage;
         }
@@ -906,7 +901,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             aPos = (pFrm->Frm().*fnRect->fnGetPos)();
         // OD 08.09.2003 #i17567#, #108749#, #110354# - allow negative positions
         // for fly frames anchor to paragraph/to character.
-        if ( _nAnchorId == FLY_AT_CNTNT || _nAnchorId == FLY_AUTO_CNTNT )
+        if ((_nAnchorId == FLY_AT_PARA) || (_nAnchorId == FLY_AT_CHAR))
         {
             // The rectangle, the fly frame can be positioned in, is determined
             // horizontally by the frame area of the horizontal environment
@@ -985,7 +980,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             // fly frame). Thus, assure this.
             const SwTxtFrm* pTxtFrm( dynamic_cast<const SwTxtFrm*>(pFrm) );
             if ( pTxtFrm &&
-                 _nAnchorId == FLY_AUTO_CNTNT &&
+                 (_nAnchorId == FLY_AT_CHAR) &&
                  ( _eVertRelOrient == text::RelOrientation::CHAR ||
                    _eVertRelOrient == text::RelOrientation::TEXT_LINE ) )
             {
@@ -1032,7 +1027,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             // position (<aPos.X()> respectively <aPos.Y()>), if object is
             // anchored to character and horizontal aligned at character.
             if ( pTxtFrm &&
-                 _nAnchorId == FLY_AUTO_CNTNT &&
+                 (_nAnchorId == FLY_AT_CHAR) &&
                  _eHoriRelOrient == text::RelOrientation::CHAR )
             {
                 SwTwips nLeft = 0L;
