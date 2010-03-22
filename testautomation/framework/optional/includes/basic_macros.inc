@@ -34,16 +34,12 @@
 
 testcase tMakro_In_All_Apps
 
-
-    dim brc as boolean
+    printlog( "Attach a macro to all application types" )
+    
     dim cApp as string
     dim iApp as Integer
-    dim bBug as Boolean
-    dim cMsg as string
-    bBug = FALSE
     
     const CMACRO = "AppMakro"
-    
 
     for iApp = 1 to 7
 
@@ -86,9 +82,6 @@ endcase
 
 testcase tMakro_Dialog
 
-    dim brc as boolean
-    dim cMsg as string
-    
     dim iPos as integer
     dim iLibraryItemCount as integer
     
@@ -100,12 +93,12 @@ testcase tMakro_Dialog
     
     
     gApplication = "WRITER"
+
     printlog( "Open a new document" )
-    brc = hCreateDocument()
+    hCreateDocument()
     
     printlog( "Create a new library, a new module, open Basic-Ide" )
-    brc = hInitBasicIde( CMACRO )
-    if ( not brc ) then
+    if ( not hInitBasicIde( CMACRO ) ) then
         warnlog( CFN & "Could not open BASIC-IDE, aborting" )
         goto endsub
     endif
@@ -115,8 +108,9 @@ testcase tMakro_Dialog
     hCloseBasicIde()
     
     printlog( "Open the Basic Macro Organizer" )
-    ToolsMacro_uno
+    ToolsMacro_uno : WaitSlot()
 
+    kontext "Makro"
     printlog( "Select the last Module for the current document" )
     iPos = hSelectTheLastNode( MakroAus )
     
@@ -124,8 +118,7 @@ testcase tMakro_Dialog
     Verwalten.Click()
     
     printlog( "Select Modules-tab" )
-    brc = hSelectBasicObjectOrganizerTab( 1 )
-
+    hSelectBasicObjectOrganizerTab( 1 )
     
     printlog( "Press 'new module'" )
     kontext "tabmodule"
@@ -135,7 +128,7 @@ testcase tMakro_Dialog
     printlog( "Cancel the dialog" )
     NeuesModul.Cancel()
 
-    brc = hSelectBasicObjectOrganizerTab( 2 )
+    hSelectBasicObjectOrganizerTab( 2 )
 
     kontext "tabdialogs"
     printlog( "Press 'new dialog'" )
@@ -147,7 +140,7 @@ testcase tMakro_Dialog
 
     kontext
     printlog( "Select the libraries Tab" )
-    brc = hSelectBasicObjectOrganizerTab( 3 )
+    hSelectBasicObjectOrganizerTab( 3 )
 
     
     printlog( "Press 'New' on the libraries tab" )
@@ -166,9 +159,7 @@ testcase tMakro_Dialog
     printlog( "Close the warning" )
     kontext "active"
     if ( Active.Exists() ) then
-        cMsg = active.getText()
-        cMsg = hRemoveLineBreaks( cMsg )
-        printlog( "MessageBox: " & cMsg )
+        printlog( "MessageBox: " & active.getText() )
         Active.Yes()
     else
         warnlog( "Deletion warning is missing" )
@@ -281,9 +272,7 @@ testcase tMakro_Dialog
     printlog( "Close the warning with YES" )
     kontext "active"
     if ( Active.Exists() ) then
-        cMsg = active.getText()
-        cMsg = hRemoveLineBreaks( cMsg )
-        printlog( "MessageBox: " & cMsg )
+        printlog( "MessageBox: " & active.getText() )
         Active.Yes()
     else
         warnlog( "Expected confirmation dialog for delete" )
@@ -299,13 +288,11 @@ testcase tMakro_Dialog
         hInsertMacro( 3 )
     
         printlog( "Close the basic-document" )
-        brc = hCloseBasicIde()
+        hCloseBasicIde()
 
         kontext "active"
         if ( Active.Exists ( 2 ) ) then
-            cMsg = active.getText()
-            cMsg = hRemoveLineBreaks( cMsg )
-            warnlog( "Unexpected MessageBox: " & cMsg )
+            warnlog( "Unexpected MessageBox: " & active.getText() )
             Active.NO()
         endif
 
@@ -320,7 +307,7 @@ testcase tMakro_Dialog
     
     printlog( "Select the last macro from the list" )
     kontext "makro"
-    iPos = hSelectTheLastNode( MakroAus )
+    hSelectTheLastNode( MakroAus )
     
     printlog( "Assign the macro, Tools/customize dialog should open" )
     if ( not hClickButton( Zuordnen ) ) then
@@ -328,14 +315,11 @@ testcase tMakro_Dialog
     endif
 
     printlog( "Activate all tapages and cancel the Tools/Customize dialog" )
-    
-    brc = hToolsCustomizeSelectTab( "menu" )
-    brc = hToolsCustomizeSelectTab( "keyboard" )
-    if ( not brc ) then
+    if ( not hToolsCustomizeSelectTab( "keyboard" ) ) then
         qaerrorlog( "#i61765# Keyboard tab missing when called via Tools/Macros->Assign" )
     endif
-    brc = hToolsCustomizeSelectTab( "events" )
-    brc = hToolsCustomizeSelectTab( "toolbars" )
+    hToolsCustomizeSelectTab( "events" )
+    hToolsCustomizeSelectTab( "toolbars" )
 
     printlog( "Cancel Tools/Customize dialog -> Macro Organizer should be open" )
     kontext "TabCustomizeToolbars"
@@ -354,12 +338,10 @@ testcase tMakro_Dialog
     
     kontext "active"
     if ( active.exists() ) then
-        cMsg = active.getText()
-        cMsg = hRemoveLineBreaks( cMsg )
-        if ( cMsg = "TTMacro3" ) then
+        if ( active.getText() = "TTMacro3" ) then
             printlog( "The correct macro has been executed" )
         else
-            warnlog( "Unknown Messagebox: " & cMsg ) 
+            warnlog( "Unknown Messagebox: " & active.getText() )
         endif
         Active.OK()
     endif
@@ -368,7 +350,7 @@ testcase tMakro_Dialog
     ToolsMacro_uno
     
     printlog( "Select the last item in the treelist" )
-    brc = hSelectTheLastNode( MakroAus )
+    hSelectTheLastNode( MakroAus )
 
     printlog( "Delete the new module" )
     Loeschen.Click()
@@ -376,9 +358,7 @@ testcase tMakro_Dialog
     printlog( "Close the deletion warning" )
     kontext "active"
     if ( active.exists() ) then
-        cMsg = active.getText()
-        cMsg = hRemoveLineBreaks( cMsg )
-        printlog( "MessageBox: " & cMsg )
+        printlog( "MessageBox: " & active.getText() )
         Active.Yes()
     else
         warnlog( "No confirmation dialog for delete" )
@@ -390,7 +370,6 @@ testcase tMakro_Dialog
     
     printlog( "Close the document" )
     Call hDestroyDocument()
-    
     
 endcase
 
