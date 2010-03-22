@@ -58,9 +58,12 @@ namespace vcl
         {
             GDIMetaFile         maMtf;
             Size                maOrigSize;
+            Size                maPreviewSize;
             VirtualDevice       maPageVDev;
             rtl::OUString       maReplacementString;
             rtl::OUString       maToolTipString;
+
+            bool useHCColorReplacement() const;
         public:
             PrintPreviewWindow( Window* pParent, const ResId& );
             virtual ~PrintPreviewWindow();
@@ -296,6 +299,7 @@ namespace vcl
         bool isPrintToFile();
         int getCopyCount();
         bool isCollate();
+        bool isSingleJobs();
 
         void previewForward();
         void previewBackward();
@@ -324,6 +328,7 @@ namespace vcl
         bool isCanceled() const { return mbCanceled; }
         void setProgress( int i_nCurrent, int i_nMax = -1 );
         void tick();
+        void reset();
 
         virtual void Paint( const Rectangle& );
     };

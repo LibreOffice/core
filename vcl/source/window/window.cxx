@@ -8152,7 +8152,7 @@ const XubString& Window::GetHelpText() const
         {
             rtl::OUStringBuffer aTxt( 64+mpWindowImpl->maHelpText.Len() );
             aTxt.append( mpWindowImpl->maHelpText );
-            aTxt.appendAscii( "\n+++++++++++++++\n" );
+            aTxt.appendAscii( "\n------------------\n" );
             if( bStrHelpId )
                 aTxt.append( rtl::OUString( aStrHelpId ) );
             else
