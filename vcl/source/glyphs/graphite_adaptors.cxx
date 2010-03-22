@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile:  $
- * $Revision:  $
  *
  * This file is part of OpenOffice.org.
  *
@@ -171,7 +168,7 @@ GraphiteFontAdaptor::~GraphiteFontAdaptor() throw()
     mpFeatures = NULL;
 }
 
-void GraphiteFontAdaptor::UniqueCacheInfo(std::wstring & face_name_out, bool & bold_out, bool & italic_out)
+void GraphiteFontAdaptor::UniqueCacheInfo(sil_std::wstring & face_name_out, bool & bold_out, bool & italic_out)
 {
     face_name_out = maFontProperties.szFaceName;
     bold_out = maFontProperties.fBold;

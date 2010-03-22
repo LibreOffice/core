@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoiface.cxx,v $
- * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -549,86 +546,6 @@ void VCLXMultiLineEdit::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 
 }
 //  ----------------------------------------------------
-//  class VCLXFileDialog
-//  ----------------------------------------------------
-/*
-VCLXFileDialog::VCLXFileDialog()
-{
-}
-
-VCLXFileDialog::~VCLXFileDialog()
-{
-}
-
-::com::sun::star::uno::Any VCLXFileDialog::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XXX*, this ) );
-    return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
-}
-
-// ::com::sun::star::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXFileDialog )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XXX>* ) NULL )
-IMPL_XTYPEPROVIDER_END
-
-void VCLXFileDialog::setPath( const ::rtl::OUString& rPath )
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    FileDialog* pDlg = (FileDialog*)GetWindow();
-    if ( pDlg )
-        pDlg->SetPath( ::rtl::OUStringToOString( rPath, CHARSET_SYSTEM ) );
-}
-
-::rtl::OUString VCLXFileDialog::getPath()
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    ::rtl::OUString aPath;
-    FileDialog* pDlg = (FileDialog*)GetWindow();
-    if ( pDlg )
-        aPath = StringToOUString( pDlg->GetPath(), CHARSET_SYSTEM );
-    return aPath;
-}
-
-void VCLXFileDialog::setFilters( const ::com::sun::star::uno::Sequence< ::rtl::OUString>& rFilterNames, const ::com::sun::star::uno::Sequence< ::rtl::OUString>& rMasks )
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    FileDialog* pDlg = (FileDialog*)GetWindow();
-    if ( pDlg )
-    {
-        sal_uInt32 nFlts = rFilterNames.getLength();
-        for ( sal_uInt32 n = 0; n < nFlts; n++ )
-            pDlg->AddFilter(
-                    ::rtl::OUStringToOString( rFilterNames.getConstArray()[n], CHARSET_SYSTEM ),
-                    ::rtl::OUStringToOString( rMasks.getConstArray()[n], CHARSET_SYSTEM ) );
-    }
-}
-
-void VCLXFileDialog::setCurrentFilter( const ::rtl::OUString& rFilterName )
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    FileDialog* pDlg = (FileDialog*)GetWindow();
-    if ( pDlg )
-        pDlg->SetCurFilter( ::rtl::OUStringToOString( rFilterName, CHARSET_SYSTEM ) );
-}
-
-::rtl::OUString VCLXFileDialog::getCurrentFilter()
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    ::rtl::OUString aFilter;
-    FileDialog* pDlg = (FileDialog*)GetWindow();
-    if ( pDlg )
-        aFilter = StringToOUString( pDlg->GetCurFilter(), CHARSET_SYSTEM );
-    return aFilter;
-}
-*/
-
-//  ----------------------------------------------------
 //  class VCLXFileControl
 //  ----------------------------------------------------
 VCLXFileControl::VCLXFileControl() : maTextListeners( *this )
@@ -1133,7 +1050,7 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
         case ::com::sun::star::uno::TypeClass_DOUBLE:
             if (pField->TreatingAsNumber())
             {
-                double d;
+                double d = 0.0;
                 rValue >>= d;
                 aReturn <<= d;
             }
@@ -1145,7 +1062,7 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
                     // should never fail
 
                 Color* pDum;
-                double d;
+                double d = 0.0;
                 rValue >>= d;
                 String sConverted;
                 pFormatter->GetOutputString(d, 0, sConverted, &pDum);

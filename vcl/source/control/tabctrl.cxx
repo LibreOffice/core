@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabctrl.cxx,v $
- * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,25 +27,24 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <tools/debug.hxx>
+#include "tools/debug.hxx"
 
-#ifndef _SV_RC_H
-#include <tools/rc.h>
-#endif
-#include <vcl/svdata.hxx>
-#ifndef _SV_APP_HXX
-#include <vcl/svapp.hxx>
-#endif
-#include <vcl/help.hxx>
-#include <vcl/event.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/button.hxx>
-#include <vcl/tabpage.hxx>
-#include <vcl/tabctrl.hxx>
-#include <vcl/controldata.hxx>
-#include <vcl/sound.hxx>
+#include "tools/rc.h"
+#include "vcl/svdata.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/help.hxx"
+#include "vcl/event.hxx"
+#include "vcl/menu.hxx"
+#include "vcl/button.hxx"
+#include "vcl/tabpage.hxx"
+#include "vcl/tabctrl.hxx"
+#include "vcl/controllayout.hxx"
+#include "vcl/controldata.hxx"
+#include "vcl/sound.hxx"
+#include "vcl/lstbox.hxx"
+#include "vcl/smartid.hxx"
 
-#include <vcl/window.h>
+#include "vcl/window.h"
 
 #include <hash_map>
 #include <vector>
@@ -87,6 +83,8 @@ struct ImplTabCtrlData
     std::vector< Rectangle >        maTabRectangles;
     Point                           maItemsOffset;       // offset of the tabitems
     std::vector< ImplTabItem >      maItemList;
+    ListBox*                        mpListBox;
+    Size                            maMinSize;
 };
 
 // -----------------------------------------------------------------------
@@ -153,15 +151,24 @@ void TabControl::ImplInit( Window* pParent, WinBits nStyle )
     mbRestoreUnqId              = FALSE;
     mbSingleLine                = FALSE;
     mbScroll                    = FALSE;
-    mbColored                   = FALSE;
+    mbRestoreSmartId            = FALSE;
     mbSmallInvalidate           = FALSE;
     mbExtraSpace                = FALSE;
     mpTabCtrlData               = new ImplTabCtrlData;
     mpTabCtrlData->mpLeftBtn    = NULL;
     mpTabCtrlData->mpRightBtn   = NULL;
+    mpTabCtrlData->mpListBox    = NULL;
 
 
     ImplInitSettings( TRUE, TRUE, TRUE );
+
+    if( (nStyle & WB_DROPDOWN) )
+    {
+        mpTabCtrlData->mpListBox = new ListBox( this, WB_DROPDOWN );
+        mpTabCtrlData->mpListBox->SetPosSizePixel( Point( 0, 0 ), Size( 200, 20 ) );
+        mpTabCtrlData->mpListBox->SetSelectHdl( LINK( this, TabControl, ImplListBoxSelectHdl ) );
+        mpTabCtrlData->mpListBox->Show();
+    }
 
     // if the tabcontrol is drawn (ie filled) by a native widget, make sure all contols will have transparent background
     // otherwise they will paint with a wrong background
@@ -286,6 +293,8 @@ TabControl::~TabControl()
     // TabCtrl-Daten loeschen
     if ( mpTabCtrlData )
     {
+        if( mpTabCtrlData->mpListBox )
+            delete mpTabCtrlData->mpListBox;
         if ( mpTabCtrlData->mpLeftBtn )
             delete mpTabCtrlData->mpLeftBtn;
         if ( mpTabCtrlData->mpRightBtn )
@@ -693,6 +702,8 @@ void TabControl::ImplChangeTabPage( USHORT nId, USHORT nOldId )
             pCtrlParent->SetHelpId( 0 );
         if ( mbRestoreUnqId )
             pCtrlParent->SetUniqueId( 0 );
+        if( mbRestoreSmartId )
+            pCtrlParent->SetSmartHelpId( SmartId() );
         pOldPage->DeactivatePage();
     }
 
@@ -700,8 +711,8 @@ void TabControl::ImplChangeTabPage( USHORT nId, USHORT nOldId )
     {
         pPage->SetPosSizePixel( aRect.TopLeft(), aRect.GetSize() );
 
-        // Hier Page aktivieren, damit die Controls entsprechend umgeschaltet
-        // werden koennen und HilfeId gegebenenfalls beim Parent umsetzen
+        // activate page here so the conbtrols can be switched
+        // also set the help id of the parent window to that of the tab page
         if ( !GetHelpId() )
         {
             mbRestoreHelpId = TRUE;
@@ -711,6 +722,11 @@ void TabControl::ImplChangeTabPage( USHORT nId, USHORT nOldId )
         {
             mbRestoreUnqId = TRUE;
             pCtrlParent->SetUniqueId( pPage->GetUniqueId() );
+        }
+        if( ! GetSmartHelpId().HasAny() )
+        {
+            mbRestoreSmartId = TRUE;
+            pCtrlParent->SetSmartHelpId( pPage->GetSmartHelpId() );
         }
 
         pPage->ActivatePage();
@@ -791,7 +807,7 @@ void TabControl::ImplSetFirstPagePos( USHORT )
 
 void TabControl::ImplShowFocus()
 {
-    if ( !GetPageCount() )
+    if ( !GetPageCount() || mpTabCtrlData->mpListBox )
         return;
 
     // make sure the focussed item rect is computed using a bold font
@@ -1062,16 +1078,27 @@ IMPL_LINK( TabControl, ImplScrollBtnHdl, PushButton*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( TabControl, ImplListBoxSelectHdl, ListBox*, EMPTYARG )
+{
+    SelectTabPage( GetPageId( mpTabCtrlData->mpListBox->GetSelectEntryPos() ) );
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 void TabControl::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( rMEvt.IsLeft() )
+    if( mpTabCtrlData->mpListBox == NULL )
     {
-        USHORT nPageId = GetPageId( rMEvt.GetPosPixel() );
-        ImplTabItem* pItem = ImplGetItem( nPageId );
-        if( pItem && pItem->mbEnabled )
-            SelectTabPage( nPageId );
-        else
-            Sound::Beep( SOUND_ERROR, this );
+        if( rMEvt.IsLeft() )
+        {
+            USHORT nPageId = GetPageId( rMEvt.GetPosPixel() );
+            ImplTabItem* pItem = ImplGetItem( nPageId );
+            if( pItem && pItem->mbEnabled )
+                SelectTabPage( nPageId );
+            else
+                Sound::Beep( SOUND_ERROR, this );
+        }
     }
 }
 
@@ -1079,7 +1106,9 @@ void TabControl::MouseButtonDown( const MouseEvent& rMEvt )
 
 void TabControl::KeyInput( const KeyEvent& rKEvt )
 {
-    if ( GetPageCount() > 1 )
+    if( mpTabCtrlData->mpListBox )
+        mpTabCtrlData->mpListBox->KeyInput( rKEvt );
+    else if ( GetPageCount() > 1 )
     {
         KeyCode aKeyCode = rKEvt.GetKeyCode();
         USHORT  nKeyCode = aKeyCode.GetCode();
@@ -1224,7 +1253,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
         }
     }
 
-    if ( !mpTabCtrlData->maItemList.empty() )
+    if ( !mpTabCtrlData->maItemList.empty() && mpTabCtrlData->mpListBox == NULL )
     {
         // Some native toolkits (GTK+) draw tabs right-to-left, with an
         // overlap between adjacent tabs
@@ -1294,6 +1323,18 @@ void TabControl::Resize()
     if ( !IsReallyShown() )
         return;
 
+    if( mpTabCtrlData->mpListBox )
+    {
+        // get the listbox' preferred size
+        Size aTabCtrlSize( GetSizePixel() );
+        long nPrefWidth = mpTabCtrlData->mpListBox->GetOptimalSize( WINDOWSIZE_PREFERRED ).Width();
+        if( nPrefWidth > aTabCtrlSize.Width() )
+            nPrefWidth = aTabCtrlSize.Width();
+        Size aNewSize( nPrefWidth, LogicToPixel( Size( 12, 12 ), MapMode( MAP_APPFONT ) ).Height() );
+        Point aNewPos( (aTabCtrlSize.Width() - nPrefWidth) / 2, 0 );
+        mpTabCtrlData->mpListBox->SetPosSizePixel( aNewPos, aNewSize );
+    }
+
     mbFormat = TRUE;
 
     // Aktuelle TabPage resizen/positionieren
@@ -1343,8 +1384,16 @@ void TabControl::Resize()
 
 void TabControl::GetFocus()
 {
-    ImplShowFocus();
-    SetInputContext( InputContext( GetFont() ) );
+    if( ! mpTabCtrlData->mpListBox )
+    {
+        ImplShowFocus();
+        SetInputContext( InputContext( GetFont() ) );
+    }
+    else
+    {
+        if( mpTabCtrlData->mpListBox->IsReallyVisible() )
+            mpTabCtrlData->mpListBox->GrabFocus();
+    }
     Control::GetFocus();
 }
 
@@ -1352,7 +1401,8 @@ void TabControl::GetFocus()
 
 void TabControl::LoseFocus()
 {
-    HideFocus();
+    if( ! mpTabCtrlData->mpListBox )
+        HideFocus();
     Control::LoseFocus();
 }
 
@@ -1446,7 +1496,7 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
 
 void TabControl::Command( const CommandEvent& rCEvt )
 {
-    if ( (rCEvt.GetCommand() == COMMAND_CONTEXTMENU) && (GetPageCount() > 1) )
+    if( (mpTabCtrlData->mpListBox == NULL) && (rCEvt.GetCommand() == COMMAND_CONTEXTMENU) && (GetPageCount() > 1) )
     {
         Point   aMenuPos;
         BOOL    bMenu;
@@ -1490,7 +1540,11 @@ void TabControl::StateChanged( StateChangedType nType )
     Control::StateChanged( nType );
 
     if ( nType == STATE_CHANGE_INITSHOW )
+    {
         ImplPosCurTabPage();
+        if( mpTabCtrlData->mpListBox )
+            Resize();
+    }
     else if ( nType == STATE_CHANGE_UPDATEMODE )
     {
         if ( IsUpdateMode() )
@@ -1601,7 +1655,7 @@ long TabControl::PreNotify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
-long TabControl::Notify( NotifyEvent& rNEvt )
+bool TabControl::ImplHandleNotifyEvent( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) && (GetPageCount() > 1) )
     {
@@ -1629,8 +1683,16 @@ long TabControl::Notify( NotifyEvent& rNEvt )
             }
         }
     }
+    return false;
+}
 
-    return Control::Notify( rNEvt );
+
+// -----------------------------------------------------------------------
+
+long TabControl::Notify( NotifyEvent& rNEvt )
+{
+
+    return ImplHandleNotifyEvent( rNEvt ) ? TRUE : Control::Notify( rNEvt );
 }
 
 // -----------------------------------------------------------------------
@@ -1708,23 +1770,33 @@ void TabControl::InsertPage( USHORT nPageId, const XubString& rText,
     DBG_ASSERT( GetPagePos( nPageId ) == TAB_PAGE_NOTFOUND,
                 "TabControl::InsertPage(): PageId already exists" );
 
-    // set current page id
-    if ( !mnCurPageId )
-        mnCurPageId = nPageId;
-
     // insert new page item
     ImplTabItem* pItem = NULL;
     if( nPos == TAB_APPEND || size_t(nPos) >= mpTabCtrlData->maItemList.size() )
     {
         mpTabCtrlData->maItemList.push_back( ImplTabItem() );
         pItem = &mpTabCtrlData->maItemList.back();
+        if( mpTabCtrlData->mpListBox )
+            mpTabCtrlData->mpListBox->InsertEntry( rText );
     }
     else
     {
         std::vector< ImplTabItem >::iterator new_it =
             mpTabCtrlData->maItemList.insert( mpTabCtrlData->maItemList.begin() + nPos, ImplTabItem() );
         pItem = &(*new_it);
+        if( mpTabCtrlData->mpListBox )
+            mpTabCtrlData->mpListBox->InsertEntry( rText, nPos);
     }
+    if( mpTabCtrlData->mpListBox )
+    {
+        if( ! mnCurPageId )
+            mpTabCtrlData->mpListBox->SelectEntryPos( 0 );
+        mpTabCtrlData->mpListBox->SetDropDownLineCount( mpTabCtrlData->mpListBox->GetEntryCount() );
+    }
+
+    // set current page id
+    if ( !mnCurPageId )
+        mnCurPageId = nPageId;
 
     // init new page item
     pItem->mnId             = nPageId;
@@ -1739,6 +1811,8 @@ void TabControl::InsertPage( USHORT nPageId, const XubString& rText,
         Invalidate();
 
     ImplFreeLayoutData();
+    if( mpTabCtrlData->mpListBox ) // reposition/resize listbox
+        Resize();
 
     ImplCallEventListeners( VCLEVENT_TABPAGE_INSERTED, (void*) (ULONG)nPageId );
 }
@@ -1756,6 +1830,11 @@ void TabControl::RemovePage( USHORT nPageId )
         std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin() + nPos;
         bool bIsCurrentPage = (it->mnId == mnCurPageId);
         mpTabCtrlData->maItemList.erase( it );
+        if( mpTabCtrlData->mpListBox )
+        {
+            mpTabCtrlData->mpListBox->RemoveEntry( nPos );
+            mpTabCtrlData->mpListBox->SetDropDownLineCount( mpTabCtrlData->mpListBox->GetEntryCount() );
+        }
 
         // If current page is removed, than first page gets the current page
         if ( bIsCurrentPage  )
@@ -1793,6 +1872,8 @@ void TabControl::Clear()
     // clear item list
     mpTabCtrlData->maItemList.clear();
     mnCurPageId = 0;
+    if( mpTabCtrlData->mpListBox )
+        mpTabCtrlData->mpListBox->Clear();
 
     ImplFreeLayoutData();
 
@@ -1813,6 +1894,9 @@ void TabControl::EnablePage( USHORT i_nPageId, bool i_bEnable )
     {
         pItem->mbEnabled = i_bEnable;
         mbFormat = TRUE;
+        if( mpTabCtrlData->mpListBox )
+            mpTabCtrlData->mpListBox->SetEntryFlags( GetPagePos( i_nPageId ),
+                                                     i_bEnable ? 0 : (LISTBOX_ENTRY_FLAG_DISABLE_SELECTION | LISTBOX_ENTRY_FLAG_DRAW_DISABLED) );
         if( pItem->mnId == mnCurPageId )
         {
              // SetCurPageId will change to an enabled page
@@ -1937,6 +2021,8 @@ void TabControl::SelectTabPage( USHORT nPageId )
             nPageId = mnActPageId;
             mnActPageId = 0;
             SetCurPageId( nPageId );
+            if( mpTabCtrlData->mpListBox )
+                mpTabCtrlData->mpListBox->SelectEntryPos( GetPagePos( nPageId ) );
             ImplCallEventListeners( VCLEVENT_TABPAGE_ACTIVATE, (void*) (ULONG) nPageId );
         }
     }
@@ -2001,6 +2087,12 @@ void TabControl::SetPageText( USHORT nPageId, const XubString& rText )
     {
         pItem->maText = rText;
         mbFormat = TRUE;
+        if( mpTabCtrlData->mpListBox )
+        {
+            USHORT nPos = GetPagePos( nPageId );
+            mpTabCtrlData->mpListBox->RemoveEntry( nPos );
+            mpTabCtrlData->mpListBox->InsertEntry( rText, nPos );
+        }
         if ( IsUpdateMode() )
             Invalidate();
         ImplFreeLayoutData();
@@ -2216,3 +2308,25 @@ Point TabControl::GetItemsOffset() const
 }
 
 // -----------------------------------------------------------------------
+
+Size TabControl::GetOptimalSize(WindowSizeType eType) const
+{
+    switch (eType) {
+    case WINDOWSIZE_MINIMUM:
+        return mpTabCtrlData ? mpTabCtrlData->maMinSize : Size();
+    default:
+        return Control::GetOptimalSize( eType );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void TabControl::SetMinimumSizePixel( const Size& i_rSize )
+{
+    if( mpTabCtrlData )
+        mpTabCtrlData->maMinSize = i_rSize;
+}
+
+// -----------------------------------------------------------------------
+
+

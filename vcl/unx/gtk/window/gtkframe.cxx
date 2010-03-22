@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gtkframe.cxx,v $
- * $Revision: 1.84.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1315,7 +1312,7 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             setMinMaxSize();
 
             // #i45160# switch to desktop where a dialog with parent will appear
-            if( m_pParent && m_pParent->m_nWorkArea != m_nWorkArea )
+            if( m_pParent && m_pParent->m_nWorkArea != m_nWorkArea && GTK_WIDGET_MAPPED(m_pParent->m_pWindow) )
                 getDisplay()->getWMAdaptor()->switchToWorkArea( m_pParent->m_nWorkArea );
 
             if( isFloatGrabWindow() &&
@@ -3127,10 +3124,13 @@ void GtkSalFrame::signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer fram
     // redraw itself to adjust to the new style
     // where there IS no new style resulting in tremendous unnecessary flickering
     if( pPrevious != NULL )
+    {
         // signalStyleSet does NOT usually have the gdk lock
         // so post user event to safely dispatch the SALEVENT_SETTINGSCHANGED
         // note: settings changed for multiple frames is avoided in winproc.cxx ImplHandleSettings
         pThis->getDisplay()->SendInternalEvent( pThis, NULL, SALEVENT_SETTINGSCHANGED );
+        pThis->getDisplay()->SendInternalEvent( pThis, NULL, SALEVENT_FONTCHANGED );
+    }
 
     /* #i64117# gtk sets a nice background pixmap
     *  but we actually don't really want that, so save

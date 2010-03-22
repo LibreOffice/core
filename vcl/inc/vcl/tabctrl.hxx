@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabctrl.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,15 +28,16 @@
 #ifndef _SV_TABCTRL_HXX
 #define _SV_TABCTRL_HXX
 
-#include <vcl/sv.h>
-#include <vcl/dllapi.h>
-#include <vcl/ctrl.hxx>
+#include "vcl/sv.h"
+#include "vcl/dllapi.h"
+#include "vcl/ctrl.hxx"
 
 struct ImplTabItem;
 struct ImplTabCtrlData;
 class ImplTabItemList;
 class TabPage;
 class PushButton;
+class ListBox;
 
 // --------------------
 // - TabControl-Types -
@@ -72,7 +70,7 @@ private:
     BOOL                mbRestoreUnqId;
     BOOL                mbSingleLine;
     BOOL                mbScroll;
-    BOOL                mbColored;
+    BOOL                mbRestoreSmartId;
     BOOL                mbSmallInvalidate;
     BOOL                mbExtraSpace;
     Link                maActivateHdl;
@@ -95,6 +93,11 @@ private:
     SAL_DLLPRIVATE void         ImplPaint( const Rectangle& rRect, bool bLayout = false );
     SAL_DLLPRIVATE void         ImplFreeLayoutData();
     DECL_DLLPRIVATE_LINK(       ImplScrollBtnHdl, PushButton* pBtn );
+    DECL_DLLPRIVATE_LINK(       ImplListBoxSelectHdl, ListBox* );
+
+public:
+    // just for dialog control
+    SAL_DLLPRIVATE bool         ImplHandleNotifyEvent( NotifyEvent& rEvt );
 
 protected:
     using Window::ImplInit;
@@ -127,6 +130,9 @@ public:
 
     virtual void        ActivatePage();
     virtual long        DeactivatePage();
+
+    virtual Size GetOptimalSize(WindowSizeType eType) const;
+    void                SetMinimumSizePixel( const Size& );
 
     void                SetTabPageSizePixel( const Size& rSize );
     Size                GetTabPageSizePixel() const;

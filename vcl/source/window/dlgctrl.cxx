@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlgctrl.cxx,v $
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +33,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
+#include <vcl/tabdlg.hxx>
 #include <vcl/button.hxx>
 #include <vcl/window.h>
 
@@ -886,6 +884,20 @@ BOOL Window::ImplDlgCtrl( const KeyEvent& rKEvt, BOOL bKeyInput )
         }
 
         return TRUE;
+    }
+
+    // if we have come here (and therefore the strange "formular" logic above
+    // turned up no result, then let's try to find a customer for Ctrl-TAB
+    if ( nKeyCode == KEY_TAB && aKeyCode.IsMod1() && ! aKeyCode.IsMod2() )
+    {
+        TabDialog* pDlg = dynamic_cast<TabDialog*>(this);
+        if( pDlg )
+        {
+            TabControl* pTabCtrl = pDlg->ImplGetFirstTabControl();
+            NotifyEvent aEvt( bKeyInput ? EVENT_KEYINPUT : EVENT_KEYUP,
+                              pTabCtrl, &rKEvt );
+            return pTabCtrl->ImplHandleNotifyEvent( aEvt );
+        }
     }
 
     return FALSE;

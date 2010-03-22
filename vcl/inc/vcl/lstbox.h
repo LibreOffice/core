@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: lstbox.h,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,5 +56,10 @@
     word breaks for the entry text.
 */
 #define LISTBOX_ENTRY_FLAG_MULTILINE                0x0000002
+
+/** this flags lets the item be drawn disabled (e.g. in grey text)
+    usage only guaranteed with LISTBOX_ENTRY_FLAG_DISABLE_SELECTION
+*/
+#define LISTBOX_ENTRY_FLAG_DRAW_DISABLED            0x0000004
 
 #endif  // _SV_LSTBOX_H
