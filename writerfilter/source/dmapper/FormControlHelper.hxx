@@ -54,7 +54,8 @@ private:
     typedef boost::shared_ptr<FormControlHelper_Impl> ImplPointer_t;
     ImplPointer_t m_pImpl;
 
-    bool createCheckbox();
+    bool createCheckbox(uno::Reference<text::XTextRange> xTextRange,
+                        const ::rtl::OUString & rControlName);
 };
 
 }

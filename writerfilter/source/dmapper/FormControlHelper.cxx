@@ -25,6 +25,8 @@
  *
  ************************************************************************/
 
+#include <math.h>
+
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -114,7 +116,7 @@ uno::Reference<form::XForm> FormControlHelper::FormControlHelper_Impl::getForm()
             {
                 uno::Reference<beans::XPropertySet>
                     xFormProperties(xForm, uno::UNO_QUERY);
-                uno::Any aAny(&sFormName, ::getCppuType((::rtl::OUString *) 0));
+                uno::Any aAny(sFormName);
                 static ::rtl::OUString sName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")));
                 xFormProperties->setPropertyValue(sName, aAny);
             }
@@ -122,7 +124,7 @@ uno::Reference<form::XForm> FormControlHelper::FormControlHelper_Impl::getForm()
             rForm = uno::Reference<form::XForm>(xForm, uno::UNO_QUERY);
 
             uno::Reference<container::XIndexContainer> xForms(xFormsNamedContainer, uno::UNO_QUERY);
-            uno::Any aAny(&xForm, ::getCppuType((uno::Reference<form::XForm>*)0));
+            uno::Any aAny(xForm);
             xForms->insertByIndex(xForms->getCount(), aAny);
         }
     }
@@ -150,7 +152,8 @@ FormControlHelper::~FormControlHelper()
 {
 }
 
-bool FormControlHelper::createCheckbox()
+bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRange,
+                                       const ::rtl::OUString & rControlName)
 {
     uno::Reference<lang::XMultiServiceFactory>
         xServiceFactory(m_pImpl->getServiceFactory());
@@ -171,7 +174,25 @@ bool FormControlHelper::createCheckbox()
 
     uno::Reference<beans::XPropertySet> xPropSet(xInterface, uno::UNO_QUERY);
 
-    m_pImpl->aSize.Width = 16 * m_pFFData->getCheckboxHeight();
+    sal_uInt32 nCheckBoxHeight = 16 * m_pFFData->getCheckboxHeight();
+
+    if (m_pFFData->getCheckboxAutoHeight())
+    {
+        uno::Reference<beans::XPropertySet> xTextRangeProps(xTextRange, uno::UNO_QUERY);
+
+        try
+        {
+            static ::rtl::OUString sCharHeight(RTL_CONSTASCII_USTRINGPARAM("CharHeight"));
+            float fCheckBoxHeight;
+            xTextRangeProps->getPropertyValue(sCharHeight) >>= fCheckBoxHeight;
+            nCheckBoxHeight = floor(fCheckBoxHeight * 16);
+        }
+        catch (beans::UnknownPropertyException & rException)
+        {
+        }
+    }
+
+    m_pImpl->aSize.Width = nCheckBoxHeight;
     m_pImpl->aSize.Height = m_pImpl->aSize.Width;
 
     uno::Any aAny;
@@ -179,7 +200,6 @@ bool FormControlHelper::createCheckbox()
     {
         aAny <<= m_pFFData->getStatusText();
 
-        xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), aAny);
         xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HelpText")), aAny);
     }
 
@@ -192,6 +212,9 @@ bool FormControlHelper::createCheckbox()
         xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HelpF1Text")), aAny);
     }
 
+    aAny <<= rControlName;
+    xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), aAny);
+
     return true;
 }
 
@@ -199,10 +222,35 @@ bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> xTextRang
 {
     bool bCreated = false;
 
+    uno::Reference<container::XNameContainer> xFormCompsByName(m_pImpl->getForm(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexContainer> xFormComps(m_pImpl->getFormComps());
+    if (! xFormComps.is())
+        return false;
+
+    static ::rtl::OUString sControl(RTL_CONSTASCII_USTRINGPARAM("Control"));
+
+    sal_Int32 nControl = 0;
+    bool bDone = false;
+    ::rtl::OUString sControlName;
+
+    do
+    {
+        ::rtl::OUString sTmp(sControl);
+        sTmp += ::rtl::OUString::valueOf(nControl);
+
+        nControl++;
+        if (! xFormCompsByName->hasByName(sTmp))
+        {
+            sControlName = sTmp;
+            bDone = true;
+        }
+    }
+    while (! bDone);
+
     switch (m_pImpl->m_eFieldId)
     {
     case FIELD_FORMCHECKBOX:
-        bCreated = createCheckbox();
+        bCreated = createCheckbox(xTextRange, sControlName);
         break;
     default:
         break;
@@ -211,12 +259,7 @@ bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> xTextRang
     if (!bCreated)
         return false;
 
-    uno::Reference<container::XIndexContainer> xFormComps(m_pImpl->getFormComps());
-    if (! xFormComps.is())
-        return false;
-
-    uno::Any aAny(&m_pImpl->rFormComponent,
-                  ::getCppuType((const uno::Reference<form::XFormComponent >*)0));
+    uno::Any aAny(m_pImpl->rFormComponent);
     xFormComps->insertByIndex(xFormComps->getCount(), aAny);
 
     if (! m_pImpl->getServiceFactory().is())
@@ -257,6 +300,8 @@ bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> xTextRang
     uno::Reference<drawing::XControlShape> xControlShape(xShape, uno::UNO_QUERY);
     uno::Reference<awt::XControlModel> xControlModel(m_pImpl->rFormComponent, uno::UNO_QUERY);
     xControlShape->setControl(xControlModel);
+
+    m_pImpl->getDrawPage()->add(xShape);
 
     return true;
 }
