@@ -261,11 +261,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                 if( !bSubContentProcessing || !pObject->IsNotVisibleAsMaster() )
                 {
                     eKind = pObjectsSdPage ? pObjectsSdPage->GetPresObjKind(pObject) : PRESOBJ_NONE;
-
-                    if( eKind != PRESOBJ_BACKGROUND )
-                    {
-                        bCreateOutline = true;
-                    }
+                    bCreateOutline = true;
                 }
             }
             else if( ( pObject->GetObjInventor() == SdrInventor ) && ( pObject->GetObjIdentifier() == OBJ_TEXT ) )
@@ -311,7 +307,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                     // create dashed border
                     {
                         // create object polygon
-                        basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                        basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
                         aPolygon.transform(aObjectMatrix);
 
                         // create line and stroke attribute

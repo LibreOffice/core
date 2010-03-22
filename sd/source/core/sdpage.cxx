@@ -177,6 +177,29 @@ SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex )
     return 0;
 }
 
+/** create background properties */
+void SdPage::EnsureMasterPageDefaultBackground()
+{
+    if(mbMaster)
+    {
+        // no hard attributes on MasterPage attributes
+        getSdrPageProperties().ClearItem();
+        SfxStyleSheet* pSheetForPresObj = GetStyleSheetForMasterPageBackground();
+
+        if(pSheetForPresObj)
+        {
+            // set StyleSheet for background fill attributes
+            getSdrPageProperties().SetStyleSheet(pSheetForPresObj);
+        }
+        else
+        {
+            // no style found, assert and set at least XFILL_NONE
+            OSL_ENSURE(false, "No Style for MasterPageBackground fill found (!)");
+            getSdrPageProperties().PutItem(XFillStyleItem(XFILL_NONE));
+        }
+    }
+}
+
 /** creates a presentation object with the given PresObjKind on this page. A user call will be set
 */
 SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rectangle& rRect, BOOL /* bInsert */ )
@@ -284,15 +307,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
             BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_TABLE ) );
             Graphic aGraphic( aBmpEx );
             ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
-        }
-        break;
-
-        case PRESOBJ_BACKGROUND:
-        {
-            pSdrObj = new SdrRectObj();
-            pSdrObj->SetMoveProtect(TRUE);
-            pSdrObj->SetResizeProtect(TRUE);
-            pSdrObj->SetMarkProtect(TRUE);
         }
         break;
 
@@ -446,18 +460,9 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         {
             SdrLayerAdmin& rLayerAdmin = pModel->GetLayerAdmin();
 
-            if (eObjKind == PRESOBJ_BACKGROUND)
-            {
-                // Hintergrund der MasterPage
-                pSdrObj->SetLayer( rLayerAdmin.
-                    GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE) );
-            }
-            else
-            {
-                // Hintergrundobjekte der MasterPage
-                pSdrObj->SetLayer( rLayerAdmin.
-                    GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE) );
-            }
+            // Hintergrundobjekte der MasterPage
+            pSdrObj->SetLayer( rLayerAdmin.
+                GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE) );
         }
 
         // Objekt am StyleSheet anmelden
@@ -524,6 +529,25 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
 |*
 \************************************************************************/
 
+SfxStyleSheet* SdPage::GetStyleSheetForMasterPageBackground() const
+{
+    String aName(GetLayoutName());
+    String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
+    USHORT nPos = aName.Search(aSep);
+
+    if (nPos != STRING_NOTFOUND)
+    {
+        nPos = nPos + aSep.Len();
+        aName.Erase(nPos);
+    }
+
+    aName += String(SdResId(STR_LAYOUT_BACKGROUND));
+
+    SfxStyleSheetBasePool* pStShPool = pModel->GetStyleSheetPool();
+    SfxStyleSheetBase*     pResult   = pStShPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
+    return (SfxStyleSheet*)pResult;
+}
+
 SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind) const
 {
     String aName(GetLayoutName());
@@ -547,10 +571,6 @@ SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind) const
 
         case PRESOBJ_TITLE:
             aName += String(SdResId(STR_LAYOUT_TITLE));
-            break;
-
-        case PRESOBJ_BACKGROUND:
-            aName += String(SdResId(STR_LAYOUT_BACKGROUND));
             break;
 
         case PRESOBJ_NOTES:
@@ -718,9 +738,7 @@ void SdPage::CreateTitleAndLayout(BOOL bInit, BOOL bCreate )
     **************************************************************************/
     if( mePageKind == PK_STANDARD )
     {
-        SdrObject* pMasterBackground = pMasterPage->GetPresObj( PRESOBJ_BACKGROUND );
-        if( pMasterBackground == NULL )
-            pMasterPage->CreateDefaultPresObj(PRESOBJ_BACKGROUND, true);
+        pMasterPage->EnsureMasterPageDefaultBackground();
     }
 
     if( ( (SdDrawDocument*) GetModel() )->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
@@ -903,15 +921,6 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
             DBG_ERROR("SdPage::CreateDefaultPresObj() - this should not happen!");
             return NULL;
         }
-    }
-    else if( eObjKind == PRESOBJ_BACKGROUND )
-    {
-        Point aBackgroundPos ( GetLftBorder(), GetUppBorder() );
-        Size aBackgroundSize ( GetSize() );
-        aBackgroundSize.Width()  -= GetLftBorder() + GetRgtBorder() - 1;
-        aBackgroundSize.Height() -= GetUppBorder() + GetLwrBorder() - 1;
-        Rectangle aBackgroundRect(aBackgroundPos, aBackgroundSize);
-        return CreatePresObj( PRESOBJ_BACKGROUND, FALSE, aBackgroundRect, bInsert );
     }
     else
     {
@@ -1646,7 +1655,6 @@ void SdPage::SetSize(const Size& aSize)
     if (aSize != aOldSize)
     {
         FmFormPage::SetSize(aSize);
-        AdjustBackgroundSize();
 
         if (aOldSize.Height() == 10 && aOldSize.Width() == 10)
         {
@@ -1677,7 +1685,6 @@ void SdPage::SetBorder(INT32 nLft, INT32 nUpp, INT32 nRgt, INT32 nLwr)
         nRgt != GetRgtBorder() || nLwr != GetLwrBorder() )
     {
         FmFormPage::SetBorder(nLft, nUpp, nRgt, nLwr);
-        AdjustBackgroundSize();
     }
 }
 
@@ -1693,7 +1700,6 @@ void SdPage::SetLftBorder(INT32 nBorder)
     if (nBorder != GetLftBorder() )
     {
         FmFormPage::SetLftBorder(nBorder);
-        AdjustBackgroundSize();
     }
 }
 
@@ -1709,7 +1715,6 @@ void SdPage::SetRgtBorder(INT32 nBorder)
     if (nBorder != GetRgtBorder() )
     {
         FmFormPage::SetRgtBorder(nBorder);
-        AdjustBackgroundSize();
     }
 }
 
@@ -1725,7 +1730,6 @@ void SdPage::SetUppBorder(INT32 nBorder)
     if (nBorder != GetUppBorder() )
     {
         FmFormPage::SetUppBorder(nBorder);
-        AdjustBackgroundSize();
     }
 }
 
@@ -1741,7 +1745,6 @@ void SdPage::SetLwrBorder(INT32 nBorder)
     if (nBorder != GetLwrBorder() )
     {
         FmFormPage::SetLwrBorder(nBorder);
-        AdjustBackgroundSize();
     }
 }
 
@@ -1756,7 +1759,6 @@ void SdPage::SetBackgroundFullSize( BOOL bIn )
     if( bIn != mbBackgroundFullSize )
     {
         mbBackgroundFullSize = bIn;
-        AdjustBackgroundSize();
     }
 }
 
@@ -1846,18 +1848,10 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
 
         if (pObj)
         {
-            USHORT nIndexBackground = 0;
             // #88084# remember aTopLeft as original TopLeft
             Point aTopLeft(pObj->GetCurrentBoundRect().TopLeft());
 
-            if (bIsPresObjOnMaster && (pObj == GetPresObj(PRESOBJ_BACKGROUND, nIndexBackground)) )
-            {
-                /**************************************************************
-                * 1. Praesentationsobjekte auf Handzettelseite sollen nur positioniert werden
-                * 2. Hintergrundobjekt wird nicht skaliert
-                **************************************************************/
-            }
-            else if (!pObj->IsEdgeObj())
+            if (!pObj->IsEdgeObj())
             {
                 /**************************************************************
                 * Objekt skalieren
@@ -1972,7 +1966,6 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                     }
 
                                     pOutlineSheet->GetItemSet().Put(aTempSet);
-
                                     pOutlineSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                                 }
                             }
@@ -2568,43 +2561,6 @@ const String& SdPage::GetName() const
 
     const_cast< SdPage* >(this)->maCreatedPageName = aCreatedPageName;
     return maCreatedPageName;
-}
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
-void SdPage::AdjustBackgroundSize()
-{
-    SdrObject* pObj = GetPresObj(PRESOBJ_BACKGROUND);
-
-    if (pObj)
-    {
-        // Hintergrund-Objekt verschieben
-        pObj->SetMoveProtect(FALSE);
-        pObj->SetResizeProtect(FALSE);
-
-        {
-            sd::ScopeLockGuard aGuard( maLockAutoLayoutArrangement );
-
-            Point aBackgroundPos;
-            Size aBackgroundSize( GetSize() );
-
-            if( !mbBackgroundFullSize )
-            {
-                aBackgroundPos = Point( GetLftBorder(), GetUppBorder() );
-                aBackgroundSize.Width()  -= GetLftBorder() + GetRgtBorder() - 1;
-                aBackgroundSize.Height() -= GetUppBorder() + GetLwrBorder() - 1;
-            }
-            Rectangle aBackgroundRect (aBackgroundPos, aBackgroundSize);
-            pObj->SetLogicRect(aBackgroundRect);
-        }
-        pObj->SetMoveProtect(TRUE);
-        pObj->SetResizeProtect(TRUE);
-    }
 }
 
 /*************************************************************************

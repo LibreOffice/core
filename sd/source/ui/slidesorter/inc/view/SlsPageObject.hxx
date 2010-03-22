@@ -54,7 +54,8 @@ public:
 private:
     model::SharedPageDescriptor mpDescriptor;
 
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact (void);
+protected:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 };
 
 

@@ -74,8 +74,6 @@ public:
 
     void    PresPaint(const Region& rRegion);
 
-    virtual SdrObject* GetMaxToBtmObj(SdrObject* pObj) const;
-
     virtual void DeleteMarked(); // from SdrView
 protected:
     virtual void ModelHasChanged();
