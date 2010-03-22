@@ -1243,7 +1243,8 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
                 else if ( bIsNextRun && !IsAutoCorrectChar( cChar ) )
                 {
                     // Remove the NBSP if it wasn't an autocorrection
-                    if ( NeedsHardspaceAutocorr( rTxt.GetChar( nInsPos - 1 ) ) && isblank( (unsigned char) cChar) == 0 )
+                    if ( NeedsHardspaceAutocorr( rTxt.GetChar( nInsPos - 1 ) ) &&
+                            cChar != ' ' && cChar != '\t' && cChar != CHAR_HARDBLANK )
                     {
                         // Look for the last HARD_SPACE
                         xub_StrLen nPos = nInsPos - 1;
