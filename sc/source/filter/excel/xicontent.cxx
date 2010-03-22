@@ -710,7 +710,7 @@ void XclImpValidation::ReadDval( XclImpStream& rStrm )
     if( nObjId != EXC_DVAL_NOOBJ )
     {
         DBG_ASSERT( nObjId <= 0xFFFF, "XclImpValidation::ReadDval - invalid object ID" );
-        rRoot.GetObjectManager().SetSkipObj( rRoot.GetCurrScTab(), static_cast< sal_uInt16 >( nObjId ) );
+        rRoot.GetCurrSheetDrawing().SetSkipObj( static_cast< sal_uInt16 >( nObjId ) );
     }
 }
 
