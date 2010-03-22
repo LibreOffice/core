@@ -43,8 +43,6 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::awt::grid;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::style;
-//#define COLUMNSELECTIONALLOWED ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ColumnSelectionAllowed" ))
-//#define COLUMNRESIZED ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ColumnResized" ))
 
 namespace toolkit
 {
@@ -65,71 +63,6 @@ DefaultGridColumnModel::DefaultGridColumnModel(const Reference< XMultiServiceFac
 DefaultGridColumnModel::~DefaultGridColumnModel()
 {
 }
-
-//---------------------------------------------------------------------
-
-//void DefaultGridColumnModel::broadcast( broadcast_type eType, const GridColumnEvent& aEvent )
-//{
-//  ::cppu::OInterfaceContainerHelper* pIter = BrdcstHelper.getContainer( XGridColumnListener::static_type() );
-//  if( pIter )
-//  {
-//      ::cppu::OInterfaceIteratorHelper aListIter(*pIter);
-//      while(aListIter.hasMoreElements())
-//      {
-//          XGridColumnListener* pListener = static_cast<XGridColumnListener*>(aListIter.next());
-//          switch( eType )
-//          {
-//          case column_added:      pListener->columnAdded(aEvent); break;
-//          case column_removed:    pListener->columnRemoved(aEvent); break;
-//          case column_changed:    pListener->columnChanged(aEvent); break;
-//          }
-//      }
-//  }
-//}
-//
-////---------------------------------------------------------------------
-//
-//void DefaultGridColumnModel::broadcast_changed( ::rtl::OUString name, Any oldValue, Any newValue)
-//{
-//  Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
-//  GridColumnEvent aEvent( xSource, name, oldValue, newValue, 0, NULL );
-//  broadcast( column_changed, aEvent);
-//}
-//
-////---------------------------------------------------------------------
-//
-//void DefaultGridColumnModel::broadcast_add( sal_Int32 index, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > & rColumn )
-//{
-//  Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
-//  GridColumnEvent aEvent( xSource, ::rtl::OUString(), Any(), Any(), index, rColumn );
-//  broadcast( column_added, aEvent);
-//}
-//
-////---------------------------------------------------------------------
-//
-//void DefaultGridColumnModel::broadcast_remove( sal_Int32 index, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > & rColumn )
-//{
-//  Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
-//  GridColumnEvent aEvent( xSource, ::rtl::OUString(), Any(), Any(), index, rColumn );
-//  broadcast( column_removed, aEvent);
-//}
-
-//---------------------------------------------------------------------
-// XDefaultGridColumnModel
-//---------------------------------------------------------------------
-//::sal_Bool SAL_CALL DefaultGridColumnModel::getColumnSelectionAllowed() throw (::com::sun::star::uno::RuntimeException)
-//{
-//  return selectionAllowed;
-//}
-//
-////---------------------------------------------------------------------
-//
-//void SAL_CALL DefaultGridColumnModel::setColumnSelectionAllowed(::sal_Bool value) throw (::com::sun::star::uno::RuntimeException)
-//{
-//  sal_Bool oldValue = selectionAllowed;
-//  selectionAllowed = value;
-//  broadcast_changed( COLUMNSELECTIONALLOWED, Any(oldValue) , Any(selectionAllowed));
-//}
 
 //---------------------------------------------------------------------
 
@@ -168,19 +101,6 @@ DefaultGridColumnModel::~DefaultGridColumnModel()
     else
         return Reference< XGridColumn >();
 }
-//---------------------------------------------------------------------
-//void SAL_CALL DefaultGridColumnModel::addColumnListener( const Reference< XGridColumnListener >& xListener ) throw (RuntimeException)
-//{
-//  BrdcstHelper.addListener( XGridColumnListener::static_type(), xListener );
-//}
-//
-////---------------------------------------------------------------------
-//
-//void SAL_CALL DefaultGridColumnModel::removeColumnListener( const Reference< XGridColumnListener >& xListener ) throw (RuntimeException)
-//{
-//  BrdcstHelper.removeListener( XGridColumnListener::static_type(), xListener );
-//}
-
 //---------------------------------------------------------------------
 void SAL_CALL DefaultGridColumnModel::setColumnHeaderHeight(sal_Int32 _value) throw (::com::sun::star::uno::RuntimeException)
 {

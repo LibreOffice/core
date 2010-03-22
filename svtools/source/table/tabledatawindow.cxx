@@ -44,8 +44,6 @@ namespace svt { namespace table
         :Window( &_rTableControl.getAntiImpl() )
         ,m_rTableControl        ( _rTableControl )
     {
-        //Color backgroundColor = GetControlBackground();
-        //SetBackground( backgroundColor );
     }
 
     //--------------------------------------------------------------------

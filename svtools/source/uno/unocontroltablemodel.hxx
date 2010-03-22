@@ -148,9 +148,9 @@ class UnoControlTableColumn : public IColumnModel
         virtual ScrollbarVisibility getHorizontalScrollbarVisibility(int overAllWidth, int actWidth) const;
         virtual void                setVerticalScrollbarVisibility(bool _bVScroll) const;
         virtual void                setHorizontalScrollbarVisibility(bool _bHScroll) const;
-        virtual void                setCellContent(std::vector<std::vector< Any > > cellContent);
+        virtual void                setCellContent(const std::vector<std::vector< Any > >& cellContent);
         virtual std::vector<std::vector< Any > >&   getCellContent();
-        virtual void                setRowHeaderName(std::vector<rtl::OUString> cellColumnContent);
+        virtual void                setRowHeaderName(const std::vector<rtl::OUString>& cellColumnContent);
         virtual std::vector<rtl::OUString>& getRowHeaderName();
         virtual ::com::sun::star::util::Color getLineColor();
         virtual void                setLineColor(::com::sun::star::util::Color _rColor);

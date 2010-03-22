@@ -213,17 +213,6 @@ void SAL_CALL UnoGridControl::setToolTip(const ::com::sun::star::uno::Sequence< 
 {
     Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->setToolTip( text, columns );
 }
-/*
-void SAL_CALL UnoGridControl::addMouseListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener > & listener) throw (::com::sun::star::uno::RuntimeException)
-{
-     Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->addMouseListener( listener );
-}
-
-void SAL_CALL UnoGridControl::removeMouseListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener > & listener) throw (::com::sun::star::uno::RuntimeException)
-{
-    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->removeMouseListener( listener );
-}
-*/
 // -------------------------------------------------------------------
 // XGridSelection
 // -------------------------------------------------------------------

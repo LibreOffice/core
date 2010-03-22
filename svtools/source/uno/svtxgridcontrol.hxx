@@ -78,8 +78,6 @@ public:
     virtual void SAL_CALL dataChanged(const ::com::sun::star::awt::grid::GridDataEvent & Event) throw (::com::sun::star::uno::RuntimeException);
 
     //XGridColumnListener overridables
-    //virtual void SAL_CALL columnAdded(const ::com::sun::star::awt::grid::GridColumnEvent& Event) throw (::com::sun::star::uno::RuntimeException);
-    //virtual void SAL_CALL columnRemoved(const ::com::sun::star::awt::grid::GridColumnEvent & Event) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL columnChanged(const ::com::sun::star::awt::grid::GridColumnEvent & Event) throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);

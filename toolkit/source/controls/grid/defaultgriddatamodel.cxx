@@ -41,7 +41,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::awt::grid;
 using namespace ::com::sun::star::lang;
-//using namespace ::com::sun::star::style;
 
 #define ROWHEIGHT ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowHeight" ))
 #define ROWHEADERS ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowHeaders" ))
@@ -182,18 +181,6 @@ void SAL_CALL DefaultGridDataModel::addRow(const ::rtl::OUString & headername, c
     std::vector< Any > newRow;
     for ( int i = 0; i < rRowdata.getLength();i++)
     {
-        //OUString title(rRowdata[i]);
-
-        // create and use interal a UnoControlFixedText for text content
-        //Reference< XFixedText > xFixedText( m_xFactory->createInstance ( OUString::createFromAscii( "com.sun.star.awt.UnoControlFixedText"    ) ), UNO_QUERY_THROW );
-        //Reference< XControl > xFixedTextControl( xFixedText , UNO_QUERY );
-        //
-        //Reference< XControlModel > xFixedTextModel( m_xFactory->createInstance ( OUString::createFromAscii( "com.sun.star.awt.UnoControlFixedTextModel"   ) ), UNO_QUERY );
-        //Reference< ::com::sun::star::beans::XPropertySet > xFixedTextModelPropSet( xFixedTextModel, UNO_QUERY );
-        //xFixedTextModelPropSet->setPropertyValue( OUString::createFromAscii( "Label"), makeAny( title ) );
-
-        //xFixedTextControl->setModel( xFixedTextModel );
-
         newRow.push_back(rRowdata[i]);
     }
 
@@ -209,12 +196,6 @@ void SAL_CALL DefaultGridDataModel::removeRow(::sal_Int32 index) throw (::com::s
 {
     if ( index >= 0 && index <= getRowCount()-1)
     {
-    /*  if(Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->isSelectedIndex( index ))
-        {
-            ::com::sun::star::uno::Sequence<::sal_Int32> selectedRows = Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->getSelection();
-            selectedRow.erase(selectedRows.begin()+index);
-        }*/
-
         ::rtl::OUString headerName( (::rtl::OUString) rowHeaders[index] );
         rowHeaders.erase(rowHeaders.begin() + index);
 

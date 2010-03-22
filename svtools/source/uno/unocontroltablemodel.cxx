@@ -53,13 +53,11 @@ using namespace ::com::sun::star::uno;
         ,m_sName()
         ,m_bIsResizable( true )
         ,m_nWidth( 4  )
-        ,m_nMinWidth( 0 )   // no min width
-        ,m_nMaxWidth( 0 )   // no max width
+        ,m_nMinWidth( 0 )
+        ,m_nMaxWidth( 0 )
         ,m_nPrefWidth ( 0 )
         ,m_xHorizontalAlign(com::sun::star::style::HorizontalAlignment(0))
     {
-        //m_nID = m_xGridColumn->getIdentifier();
-        //m_nWidth = m_xGridColumn->getColumnWidth();
         m_sName = m_xGridColumn->getTitle();
     }
     //--------------------------------------------------------------------
@@ -68,8 +66,8 @@ using namespace ::com::sun::star::uno;
         ,m_sName()
         ,m_bIsResizable( true )
         ,m_nWidth( 4  )
-        ,m_nMinWidth( 0 )   // no min width
-        ,m_nMaxWidth( 0 )   // no max width
+        ,m_nMinWidth( 0 )
+        ,m_nMaxWidth( 0 )
         ,m_nPrefWidth ( 0 )
         ,m_xHorizontalAlign(com::sun::star::style::HorizontalAlignment(0))
     {
@@ -293,7 +291,6 @@ using namespace ::com::sun::star::uno;
     void UnoControlTableModel::addTableModelListener( const PTableModelListener& listener )
     {
         (void) listener;
-        //listener->onTableModelChanged(PTableModel(this));
         // TODO
         DBG_ERROR( "DefaultTableModel::addTableModelListener: not yet implemented!" );
     }
@@ -431,18 +428,17 @@ using namespace ::com::sun::star::uno;
         return m_pImpl->bHScroll;
     }
     //--------------------------------------------------------------------
-    void UnoControlTableModel::setCellContent(std::vector<std::vector< Any > > cellContent)
+    void UnoControlTableModel::setCellContent(const std::vector<std::vector< Any > >& cellContent)
     {
         m_pImpl->aCellContent = cellContent;
     }
 
     std::vector<std::vector< Any > >& UnoControlTableModel::getCellContent()
     {
-        //::vos::OGuard aGuard( GetMutex() );
         return m_pImpl->aCellContent;
     }
     //--------------------------------------------------------------------
-    void UnoControlTableModel::setRowHeaderName(std::vector<rtl::OUString> cellColumnContent)
+    void UnoControlTableModel::setRowHeaderName(const std::vector<rtl::OUString>& cellColumnContent)
     {
         m_pImpl->aRowHeadersTitle = cellColumnContent;
     }

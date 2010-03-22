@@ -190,9 +190,8 @@ namespace svt { namespace table
         {
             return false;
         }
-        virtual void setCellContent(std::vector<std::vector< ::com::sun::star::uno::Any > > pCellEntryType)
+        virtual void setCellContent(const std::vector<std::vector< ::com::sun::star::uno::Any > >& )
         {
-            (void)pCellEntryType;
         }
         virtual ::com::sun::star::util::Color getLineColor()
         {
@@ -248,9 +247,8 @@ namespace svt { namespace table
         {
             return *( new std::vector<std::vector< ::com::sun::star::uno::Any > >);
         }
-        virtual void setRowHeaderName(std::vector<rtl::OUString> pCellEntryType)
+        virtual void setRowHeaderName(const std::vector<rtl::OUString>& )
         {
-            (void)pCellEntryType;
         }
         virtual std::vector<rtl::OUString>& getRowHeaderName()
         {
@@ -1169,7 +1167,6 @@ namespace svt { namespace table
                     it!=m_nRowSelected.end();++it)
                     {
                         invalidateSelectedRegion(*it, *it, rCells);
-                        //m_pDataWindow->Invalidate(rCells);
                     }
                     m_nRowSelected.clear();
                 }
@@ -1203,7 +1200,6 @@ namespace svt { namespace table
                     it!=m_nRowSelected.end();++it)
                     {
                         invalidateSelectedRegion(*it, *it, rCells);
-                        //m_pDataWindow->Invalidate(rCells);
                     }
                     m_nRowSelected.clear();
                 }
@@ -1327,7 +1323,6 @@ namespace svt { namespace table
                         it!=m_nRowSelected.end();++it)
                         {
                             invalidateSelectedRegion(*it, *it, rCells);
-                            //m_pDataWindow->Invalidate(rCells);
                         }
                         m_nRowSelected.clear();
                         m_nRowSelected.push_back(m_nCurRow);
@@ -1415,7 +1410,6 @@ namespace svt { namespace table
                         it!=m_nRowSelected.end();++it)
                         {
                             invalidateSelectedRegion(*it, *it, rCells);
-                            //m_pDataWindow->Invalidate(rCells);
                         }
                         m_nRowSelected.clear();
                         m_nRowSelected.push_back(m_nCurRow);
@@ -1547,7 +1541,6 @@ namespace svt { namespace table
             Rectangle aCellRect;
             impl_getCellRect( m_nCurColumn, m_nCurRow, aCellRect );
 
-            // const StyleSettings& rStyle = m_rAntiImpl.GetSettings().GetStyleSettings();
             if ( _bShow )
             {
                 pRenderer->ShowCellCursor( *m_pDataWindow, aCellRect);
@@ -1673,7 +1666,6 @@ namespace svt { namespace table
     //this method is to be called, when a new row is added
     void TableControl_Impl::invalidateRow(RowPos _nRowPos, Rectangle& _rCellRect)
     {
-        //DBG_CHECK_ME();
         if(m_nCurRow < 0)
             m_nCurRow = 0;
         if(m_nCursorHidden == 2)
@@ -1719,7 +1711,6 @@ namespace svt { namespace table
     //-------------------------------------------------------------------------------
     void TableControl_Impl::invalidateRows(RowPos _nRowStart, Rectangle& _rCellRect)
     {
-        //DBG_CHECK_ME();
         (void)_nRowStart;
         (void)_rCellRect;
         impl_ni_updateScrollbars();
@@ -1728,7 +1719,6 @@ namespace svt { namespace table
             m_nTopRow--;
         else
             m_nTopRow = 0;
-        //m_pDataWindow->Invalidate(_rCellRect);
         m_pDataWindow->Invalidate();
     }
 
@@ -2063,9 +2053,6 @@ namespace svt { namespace table
         m_bResizingGrid = false;
         m_nResizingColumn = m_nCurColumn;
         PColumnModel pColumn = m_pModel->getColumnModel(m_nResizingColumn);
-        //sal_Int32 colWidth = pColumn->getWidth();
-        ////impl_ni_getAccVisibleColWidths();
-        //int newColWidth = m_rAntiImpl.LogicToPixel( Size( colWidth, 0 ), MAP_APPFONT ).Width();
         if(m_aVisibleColumnWidthsPixel[m_nResizingColumn-m_nLeftColumn]-1 == rPoint.X() && pColumn->isResizable())
         {
             m_pDataWindow->CaptureMouse();
@@ -2082,7 +2069,6 @@ namespace svt { namespace table
             PColumnModel pColumn = m_pModel->getColumnModel(m_nResizingColumn);
             int maxWidth = pColumn->getMaxWidth();
             int minWidth = pColumn->getMinWidth();
-            //int colWidth = pColumn->getWidth();
             int resizeCol = m_nResizingColumn-m_nLeftColumn;
             //new position of mouse
             int actX = rPoint.X();
@@ -2260,9 +2246,6 @@ namespace svt { namespace table
         {
             //selecting region,
             int diff = m_pTableControl->m_nCurRow - curRow;
-            //bool isAlreadySelected = m_pTableControl->isRowSelected(m_pTableControl->m_nRowSelected, m_pTableControl->m_nAnchor);
-        /*  if(!isAlreadySelected && m_nCurrentRow != m_pTableControl->m_nCurRow)
-                m_pTableControl->m_nRowSelected.push_back(m_nAnchor);*/
             //selected region lies above the last selection
             if( diff >= 0)
             {

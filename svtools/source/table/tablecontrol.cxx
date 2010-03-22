@@ -260,7 +260,6 @@ namespace svt { namespace table
                 aRetText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ColumnHeaderBar" ) );
                 break;
             case TCTYPE_TABLECELL:
-                //Window* pWin = GetCellContent(_nRow, _nCol);
                 aRetText = GetRowName(_nRow);
                 break;
             case TCTYPE_ROWHEADERCELL:
@@ -387,10 +386,6 @@ void TableControl::FillAccessibleStateSet(
             break;
         case TCTYPE_TABLECELL:
             {
-                //sal_Int32 nRow = GetCurRow();
-                //sal_uInt16 nColumn = GetCurColumnId();
-                //if ( IsFieldVisible(nRow,nColumn) )
-                //  rStateSet.AddState( AccessibleStateType::VISIBLE );
                 rStateSet.AddState( AccessibleStateType::TRANSIENT );
                 rStateSet.AddState( AccessibleStateType::SELECTABLE);
                 if( GetSelectedRowCount()>0)

@@ -447,13 +447,13 @@ namespace svt { namespace table
         virtual bool hasHorizontalScrollbar() = 0;
         /** fills cells with content
         */
-        virtual void setCellContent(std::vector< std::vector< ::com::sun::star::uno::Any > > cellContent)=0;
+        virtual void setCellContent(const std::vector< std::vector< ::com::sun::star::uno::Any > >& cellContent)=0;
         /** gets the content of the cells
         */
         virtual std::vector< std::vector< ::com::sun::star::uno::Any > >&   getCellContent() = 0;
         /**sets title of header rows
         */
-        virtual void setRowHeaderName(std::vector<rtl::OUString> cellColumnContent)=0;
+        virtual void setRowHeaderName(const std::vector<rtl::OUString>& cellColumnContent)=0;
         /** gets title of header rows
         */
         virtual std::vector<rtl::OUString>&   getRowHeaderName() = 0;

@@ -321,7 +321,7 @@ namespace svt { namespace table
 
         DECL_LINK( OnScroll, ScrollBar* );
     };
-    //see seleng.hxx, seleng.cxx, FunctionSet overwritables, part of selection engine
+    //see seleng.hxx, seleng.cxx, FunctionSet overridables, part of selection engine
     class TableFunctionSet : public FunctionSet
     {
         friend class TableDataWindow;

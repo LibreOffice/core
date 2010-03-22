@@ -111,8 +111,6 @@ sal_Int32 SAL_CALL SVTXGridControl::getItemIndexAtPoint(::sal_Int32 x, ::sal_Int
 void SAL_CALL SVTXGridControl::setToolTip(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& text, const com::sun::star::uno::Sequence< sal_Int32 >& columns) throw (::com::sun::star::uno::RuntimeException)
 {
     TableControl* pTable = (TableControl*)GetWindow();
-    /*std::vector< sal_Int32 > newCols(
-            comphelper::sequenceToContainer< std::vector< sal_Int32 > >(columns));*/
     pTable->setTooltip(text, columns);
 }
 
@@ -268,9 +266,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                         {
                             std::vector< Any > newRow;
                             Sequence< Any > rawRowData = cellData[i];
-                            //check whether the data row vector length matches with the column count,
-                            //all cells must have some content even if it is empty string
-                            //preventing errors
+                            //check whether the data row vector length matches with the column count
                             if(m_xColumnModel->getColumnCount() == 0)
                             {
                                 for ( ::svt::table::ColPos col = 0; col < rawRowData.getLength(); ++col )
