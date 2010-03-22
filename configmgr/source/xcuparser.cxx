@@ -399,6 +399,23 @@ void XcuParser::handleItem(XmlReader & reader) {
         state_.push(State()); // ignored
         return;
     }
+    switch (node->kind()) {
+    case Node::KIND_PROPERTY:
+    case Node::KIND_LOCALIZED_VALUE:
+        OSL_TRACE(
+            "configmgr item of bad type %s in %s",
+            rtl::OUStringToOString(path, RTL_TEXTENCODING_UTF8).getStr(),
+            rtl::OUStringToOString(
+                reader.getUrl(), RTL_TEXTENCODING_UTF8).getStr());
+        state_.push(State()); // ignored
+        return;
+    case Node::KIND_LOCALIZED_PROPERTY:
+        valueParser_.type_ = dynamic_cast< LocalizedPropertyNode * >(
+            node.get())->getStaticType();
+        break;
+    default:
+        break;
+    }
     OSL_ASSERT(!modificationPath_.empty());
     componentName_ = modificationPath_.front();
     if (modifications_ == 0) {
