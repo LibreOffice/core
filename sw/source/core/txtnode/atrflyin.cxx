@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: atrflyin.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,8 +121,8 @@ void SwTxtFlyCnt::CopyFlyFmt( SwDoc* pDoc )
     BOOL bUndo = pDoc->DoesUndo();
     pDoc->DoUndo( FALSE );
     SwFmtAnchor aAnchor( pFmt->GetAnchor() );
-    if( FLY_PAGE != aAnchor.GetAnchorId() &&
-        pDoc != pFmt->GetDoc() )        // Unterschiedliche Docs?
+    if ((FLY_AT_PAGE != aAnchor.GetAnchorId()) &&
+        (pDoc != pFmt->GetDoc()))   // different documents?
     {
         // JP 03.06.96: dann sorge dafuer, das der koperierte Anker auf
         //              gueltigen Content zeigt! Die Umsetzung auf die
@@ -137,8 +134,10 @@ void SwTxtFlyCnt::CopyFlyFmt( SwDoc* pDoc )
 
         SwPosition* pPos = (SwPosition*)aAnchor.GetCntntAnchor();
         pPos->nNode = aIdx;
-        if( FLY_IN_CNTNT == aAnchor.GetAnchorId() )
+        if (FLY_AS_CHAR == aAnchor.GetAnchorId())
+        {
             pPos->nContent.Assign( pCNd, 0 );
+        }
         else
         {
             pPos->nContent.Assign( 0, 0 );
@@ -181,7 +180,7 @@ void SwTxtFlyCnt::SetAnchor( const SwTxtNode *pNode )
     else
         aPos.nNode = aAnchor.GetCntntAnchor()->nNode;
 
-    aAnchor.SetType( FLY_IN_CNTNT );        // defaulten !!
+    aAnchor.SetType( FLY_AS_CHAR );        // default!
     aAnchor.SetAnchor( &aPos );
 
     // beim Ankerwechsel werden immer alle FlyFrms vom Attribut geloescht

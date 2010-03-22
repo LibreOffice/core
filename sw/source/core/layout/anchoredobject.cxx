@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: anchoredobject.cxx,v $
- * $Revision: 1.27.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,8 +39,8 @@
 #include <fmtsrnd.hxx>
 #include <svx/svdobj.hxx>
 #include <dcontact.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <sortedobjs.hxx>
 #include <pagefrm.hxx>
 // <--
@@ -306,7 +303,7 @@ void SwAnchoredObject::CheckCharRectAndTopOfLine(
          GetAnchorFrm()->IsTxtFrm() )
     {
         const SwFmtAnchor& rAnch = GetFrmFmt().GetAnchor();
-        if ( rAnch.GetAnchorId() == FLY_AUTO_CNTNT &&
+        if ( (rAnch.GetAnchorId() == FLY_AT_CHAR) &&
              rAnch.GetCntntAnchor() )
         {
             // --> OD 2004-07-14 #117380# - if requested, assure that anchor frame,
@@ -540,8 +537,8 @@ bool SwAnchoredObject::ConsiderObjWrapInfluenceOnObjPos() const
     // <--
     {
         const SwFmtAnchor& rAnchor = rObjFmt.GetAnchor();
-        if ( ( rAnchor.GetAnchorId() == FLY_AUTO_CNTNT ||
-               rAnchor.GetAnchorId() == FLY_AT_CNTNT ) &&
+        if ( ((rAnchor.GetAnchorId() == FLY_AT_CHAR) ||
+              (rAnchor.GetAnchorId() == FLY_AT_PARA)) &&
              rObjFmt.GetSurround().GetSurround() != SURROUND_THROUGHT )
         {
             // --> OD 2004-09-23 #i34520# - text also wraps around anchored
@@ -792,7 +789,7 @@ void SwAnchoredObject::UpdateObjInSortedList()
         AnchorFrm()->GetDrawObjs()->Update( *this );
         // update its position in the sorted object list of its page frame
         // note: as-character anchored object aren't registered at a page frame
-        if ( GetFrmFmt().GetAnchor().GetAnchorId() != FLY_IN_CNTNT )
+        if ( GetFrmFmt().GetAnchor().GetAnchorId() != FLY_AS_CHAR )
         {
             GetPageFrm()->GetSortedObjs()->Update( *this );
         }
@@ -859,8 +856,8 @@ SwTxtFrm* SwAnchoredObject::FindAnchorCharFrm()
     if ( mpAnchorFrm )
     {
         const SwFmtAnchor& rAnch = GetFrmFmt().GetAnchor();
-        if ( rAnch.GetAnchorId() == FLY_AUTO_CNTNT ||
-             rAnch.GetAnchorId() == FLY_IN_CNTNT )
+        if ((rAnch.GetAnchorId() == FLY_AT_CHAR) ||
+            (rAnch.GetAnchorId() == FLY_AS_CHAR))
         {
             pAnchorCharFrm = &(static_cast<SwTxtFrm*>(AnchorFrm())->
                         GetFrmAtOfst( rAnch.GetCntntAnchor()->nContent.GetIndex() ));

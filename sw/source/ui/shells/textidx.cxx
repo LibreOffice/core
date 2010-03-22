@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textidx.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,14 +29,12 @@
 #include "precompiled_sw.hxx"
 
 #include <hintids.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <fmtfsize.hxx>
 #include <fldbas.hxx>
 #include <uiitems.hxx>
@@ -55,6 +50,8 @@
 #include "swabstdlg.hxx"
 #include <index.hrc>
 #include <globals.hrc>
+
+
 // STATIC DATA -----------------------------------------------------------
 
 void SwTextShell::ExecIdx(SfxRequest &rReq)
@@ -136,7 +133,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
                             0   );
             SwWrtShell& rSh = GetShell();
             SwRect aRect;
-            rSh.CalcBoundRect(aRect, FLY_IN_CNTNT);
+            rSh.CalcBoundRect(aRect, FLY_AS_CHAR);
 
             long nWidth = aRect.Width();
             aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));

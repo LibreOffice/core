@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: inftxt.cxx,v $
- * $Revision: 1.123.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,24 +34,24 @@
 #include <unotools/lingucfg.hxx>
 #include <hintids.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/hngpnctitem.hxx>
-#include <svx/scriptspaceitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/splwrap.hxx>
-#include <svx/pgrditem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/hngpnctitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/splwrap.hxx>
+#include <editeng/pgrditem.hxx>
 // --> OD 2008-01-17 #newlistlevelattrs#
 #ifndef _SVX_TSTPITEM_HXX
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #endif
 // <--
 
 #include <SwSmartTagMgr.hxx>
 #include <linguistic/lngprops.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <breakit.hxx>
-#include <svx/forbiddenruleitem.hxx>
+#include <editeng/forbiddenruleitem.hxx>
 #include <txatbase.hxx>
 #include <fmtinfmt.hxx>
 #include <swmodule.hxx>
@@ -1145,26 +1142,29 @@ void SwTxtPaintInfo::DrawCheckBox( const SwFieldFormPortion &rPor, bool checked)
 {
     SwRect aIntersect;
     CalcRect( rPor, &aIntersect, 0 );
-    if ( aIntersect.HasArea() ) {
-    if (OnWin()) {
-        OutputDevice* pOutDev = (OutputDevice*)GetOut();
-        pOutDev->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-        pOutDev->SetLineColor( Color(220, 233, 245));
-        pOutDev->SetFillColor( Color(220, 233, 245));
-        pOutDev->DrawRect( aIntersect.SVRect() );
-        pOutDev->Pop();
-    }
-    const int delta=10;
-    Rectangle r(aIntersect.Left()+delta, aIntersect.Top()+delta, aIntersect.Right()-delta, aIntersect.Bottom()-delta);
-    pOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-    pOut->SetLineColor( Color(0, 0, 0));
-    pOut->SetFillColor();
-    pOut->DrawRect( r );
-    if (checked) {
-        pOut->DrawLine(r.TopLeft(), r.BottomRight());
-        pOut->DrawLine(r.TopRight(), r.BottomLeft());
+    if ( aIntersect.HasArea() )
+    {
+        if (OnWin() && SwViewOption::IsFieldShadings() &&
+                !GetOpt().IsPagePreview())
+        {
+            OutputDevice* pOut_ = (OutputDevice*)GetOut();
+            pOut_->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+            pOut_->SetFillColor( SwViewOption::GetFieldShadingsColor() );
+            pOut_->SetLineColor();
+            pOut_->DrawRect( aIntersect.SVRect() );
+            pOut_->Pop();
+        }
+        const int delta=10;
+        Rectangle r(aIntersect.Left()+delta, aIntersect.Top()+delta, aIntersect.Right()-delta, aIntersect.Bottom()-delta);
+        pOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+        pOut->SetLineColor( Color(0, 0, 0));
+        pOut->SetFillColor();
+        pOut->DrawRect( r );
+        if (checked) {
+            pOut->DrawLine(r.TopLeft(), r.BottomRight());
+            pOut->DrawLine(r.TopRight(), r.BottomLeft());
+        }
         pOut->Pop();
-    }
     }
 }
 
@@ -1219,14 +1219,22 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
                 }
             }
             bool bIsStartMark=(1==GetLen() && CH_TXT_ATR_FIELDSTART==GetTxt().GetChar(GetIdx()));
-            if(pFieldmark) OSL_TRACE("Found Fieldmark");
+            if(pFieldmark) {
+                OSL_TRACE("Found Fieldmark");
+#if DEBUG
+                rtl::OUString str = pFieldmark->ToString( );
+                fprintf( stderr, "%s\n", rtl::OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr( ) );
+#endif
+            }
             if(bIsStartMark) OSL_TRACE("Found StartMark");
-            if (OnWin() && (pFieldmark!=NULL || bIsStartMark))
+            if (OnWin() && (pFieldmark!=NULL || bIsStartMark) &&
+                    SwViewOption::IsFieldShadings() &&
+                    !GetOpt().IsPagePreview())
             {
                 OutputDevice* pOutDev = (OutputDevice*)GetOut();
                 pOutDev->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-                pOutDev->SetLineColor( Color(220, 233, 245));
-                pOutDev->SetFillColor( Color(220, 233, 245));
+                pOutDev->SetFillColor( SwViewOption::GetFieldShadingsColor() );
+                pOutDev->SetLineColor( );
                 pOutDev->DrawRect( aIntersect.SVRect() );
                 pOutDev->Pop();
             }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swxml.cxx,v $
- * $Revision: 1.84 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +69,7 @@
 #include <fltini.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
-#include <unoobj.hxx>
+#include <unotextrange.hxx>
 #include <swmodule.hxx>
 #include <SwXMLSectionList.hxx>
 
@@ -788,9 +785,8 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     }
     else if( bInsertMode )
     {
-        uno::Reference<XTextRange> xInsertTextRange =
-            SwXTextRange::CreateTextRangeFromPosition( &rDoc, *rPaM.GetPoint(),
-                                                           0 );
+        const uno::Reference<text::XTextRange> xInsertTextRange =
+            SwXTextRange::CreateXTextRange(rDoc, *rPaM.GetPoint(), 0);
         OUString sTextInsertModeRange(
                 RTL_CONSTASCII_USTRINGPARAM("TextInsertModeRange"));
         xInfoSet->setPropertyValue( sTextInsertModeRange,

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unotxdoc.cxx,v $
- * $Revision: 1.134 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +50,10 @@
 #include <svl/stritem.hxx>
 #include <unotxdoc.hxx>
 #include <svl/numuno.hxx>
-#include <unoobj.hxx>
+#include <fldbas.hxx>
+#include <unotextbodyhf.hxx>
+#include <unotextrange.hxx>
+#include <unotextcursor.hxx>
 #include <unosett.hxx>
 #include <unocoll.hxx>
 #include <unoredlines.hxx>
@@ -94,9 +94,9 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/reflection/XIdlClassProvider.hpp>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svx/unofill.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <sfx2/progress.hxx>
 #include <swmodule.hxx>
 #include <docstat.hxx>
@@ -108,7 +108,7 @@
 #include <SwXDocumentSettings.hxx>
 #include <SwXPrintPreviewSettings.hxx>
 #include <doc.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
 #include <drawdoc.hxx>
 #include <SwStyleNameMapper.hxx>
@@ -122,7 +122,7 @@
 ///////////////////////////Modified on Jun. 14th//////////////////////////
 ///////////////////////for getDocumentLanguages///////////////////////////
 //-->
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <doc.hxx>
 #include <docary.hxx>      //SwCharFmts
 #include <i18npool/mslangid.hxx>
@@ -144,8 +144,8 @@
 #include <set>
 #include <vector>
 
-#include <svx/eeitem.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/svdoutl.hxx>
 #include <svl/languageoptions.hxx>
 #include <svx/svdview.hxx>
@@ -764,19 +764,12 @@ Reference< util::XReplaceDescriptor >  SwXTextDocument::createReplaceDescriptor(
 SwUnoCrsr*  SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & xCrsr)
 {
     getText();
-     XText* pText = xBodyText.get();
+    XText *const pText = xBodyText.get();
     SwXBodyText* pBText = (SwXBodyText*)pText;
-    xCrsr = pBText->CreateTextCursor(sal_True);
+    SwXTextCursor *const pXTextCursor = pBText->CreateTextCursor(true);
+    xCrsr.set( static_cast<text::XWordCursor*>(pXTextCursor) );
 
-    Reference<XUnoTunnel> xRangeTunnel( xCrsr, UNO_QUERY);
-    SwXTextCursor* pxUnoCrsr = 0;
-    if(xRangeTunnel.is())
-    {
-        pxUnoCrsr = reinterpret_cast<SwXTextCursor*>(xRangeTunnel->getSomething(
-                                SwXTextCursor::getUnoTunnelId()));
-    }
-
-    SwUnoCrsr*  pUnoCrsr = pxUnoCrsr->GetCrsr();
+    SwUnoCrsr *const pUnoCrsr = pXTextCursor->GetCursor();
     pUnoCrsr->SetRemainInSection(sal_False);
     return pUnoCrsr;
 }
@@ -1007,10 +1000,7 @@ Reference< XIndexAccess >
     if(!pResultCrsr)
         throw RuntimeException();
     Reference< XIndexAccess >  xRet;
-    if(nResult)
-        xRet = new SwXTextRanges(pResultCrsr);
-    else
-        xRet = new SwXTextRanges();
+    xRet = new SwXTextRanges( (nResult) ? pResultCrsr : 0 );
     delete pResultCrsr;
     return xRet;
 }
@@ -1030,11 +1020,10 @@ Reference< XInterface >  SwXTextDocument::findFirst(const Reference< util::XSear
     Reference< XInterface >  xRet;
     if(nResult)
     {
-        Reference< XTextRange >  xTempRange = SwXTextRange::CreateTextRangeFromPosition(
-                        pDocShell->GetDoc(),
-                        *pResultCrsr->GetPoint(),
-                        pResultCrsr->GetMark());
-        xRet = *new SwXTextCursor(xTempRange->getText(), pResultCrsr);
+        const uno::Reference< text::XText >  xParent =
+            ::sw::CreateParentXText(*pDocShell->GetDoc(),
+                    *pResultCrsr->GetPoint());
+        xRet = *new SwXTextCursor(xParent, *pResultCrsr);
         delete pResultCrsr;
     }
     return xRet;
@@ -1058,12 +1047,11 @@ Reference< XInterface >  SwXTextDocument::findNext(const Reference< XInterface >
     Reference< XInterface >  xRet;
     if(nResult)
     {
-        Reference< XTextRange >  xTempRange = SwXTextRange::CreateTextRangeFromPosition(
-                        pDocShell->GetDoc(),
-                        *pResultCrsr->GetPoint(),
-                        pResultCrsr->GetMark());
+        const uno::Reference< text::XText >  xParent =
+            ::sw::CreateParentXText(*pDocShell->GetDoc(),
+                    *pResultCrsr->GetPoint());
 
-        xRet = *new SwXTextCursor(xTempRange->getText(), pResultCrsr);
+        xRet = *new SwXTextCursor(xParent, *pResultCrsr);
         delete pResultCrsr;
     }
     return xRet;
@@ -2423,7 +2411,7 @@ void SwXTextDocument::updateLinks(  ) throw(RuntimeException)
     if(!IsValid())
         throw RuntimeException();
     SwDoc* pDoc = pDocShell->GetDoc();
-      SvxLinkManager& rLnkMan = pDoc->GetLinkManager();
+      sfx2::LinkManager& rLnkMan = pDoc->GetLinkManager();
     if( rLnkMan.GetLinks().Count() )
     {
         UnoActionContext aAction(pDoc);

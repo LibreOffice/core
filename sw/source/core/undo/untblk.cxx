@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: untblk.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,10 +66,10 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
             for( USHORT n = 0; n < nArrLen; ++n )
             {
                 SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[n];
-                const SwFmtAnchor* pAnchor = &pFmt->GetAnchor();
-                const SwPosition* pAPos;
-                if ( pAnchor->GetAnchorId() == FLY_AT_CNTNT &&
-                     0 != ( pAPos = pAnchor->GetCntntAnchor()) &&
+                SwFmtAnchor const*const  pAnchor = &pFmt->GetAnchor();
+                const SwPosition* pAPos = pAnchor->GetCntntAnchor();
+                if (pAPos &&
+                    (pAnchor->GetAnchorId() == FLY_AT_PARA) &&
                      nSttNode == pAPos->nNode.GetIndex() )
                 {
                     if( !pFrmFmts )
@@ -124,10 +121,10 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, BOOL bScanFlys,
         for( USHORT n = 0; n < nArrLen; ++n )
         {
             SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[n];
-            const SwFmtAnchor* pAnchor = &pFmt->GetAnchor();
-            const SwPosition* pAPos;
-            if( pAnchor->GetAnchorId() == FLY_AT_CNTNT &&
-                0 != ( pAPos = pAnchor->GetCntntAnchor()) &&
+            SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
+            SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
+            if (pAPos &&
+                (pAnchor->GetAnchorId() == FLY_AT_PARA) &&
                 nSttNode == pAPos->nNode.GetIndex() )
             {
                 if( !pFrmFmts ||

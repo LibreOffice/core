@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unostyle.cxx,v $
- * $Revision: 1.83.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
+#include <svx/svxids.hrc>
 #include <hintids.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -40,14 +37,14 @@
 #include <svl/style.hxx>
 #include <svl/itemiter.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/flstitem.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/flstitem.hxx>
+#include <editeng/paperinf.hxx>
 #include <pagedesc.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
@@ -61,29 +58,20 @@
 #include <unoprnms.hxx>
 #include <shellio.hxx>
 #include <docstyle.hxx>
-#include <unoobj.hxx>
+#include <unotextbodyhf.hxx>
 #include <fmthdft.hxx>
 #include <fmtpdsc.hxx>
 #include <tools/urlobj.hxx>
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
 #include <poolfmt.hxx>
 #include "unoevent.hxx"
 #include <fmtruby.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/printer.hxx>
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
-/*
-#include <com/sun/star/frame/XModel.hpp>
-*/
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPPP_
 #include <com/sun/star/beans/NamedValue.hpp>
-#endif
 #include <istyleaccess.hxx>
 #include <GetMetricVal.hxx>
 #include <fmtfsize.hxx>
@@ -1266,6 +1254,7 @@ sal_Bool SwStyleProperties_Impl::GetProperty(const ::rtl::OUString& rName, uno::
             bRet = sal_True;
             break;
         }
+        ++nPos;
         ++aIt;
     }
 
@@ -3444,6 +3433,29 @@ void SwXPageStyle::setPropertyValues(
 /* -----------------------------04.11.03 13:50--------------------------------
 
  ---------------------------------------------------------------------------*/
+static uno::Reference<text::XText>
+lcl_makeHeaderFooter(
+    const sal_uInt16 nRes, const bool bHeader, SwFrmFmt const*const pFrmFmt)
+{
+    if (!pFrmFmt) { return 0; }
+
+    const SfxItemSet& rSet = pFrmFmt->GetAttrSet();
+    const SfxPoolItem* pItem;
+    if (SFX_ITEM_SET == rSet.GetItemState(nRes, sal_True, &pItem))
+    {
+        SwFrmFmt *const pHeadFootFmt = (bHeader)
+            ? static_cast<SwFmtHeader*>(const_cast<SfxPoolItem*>(pItem))->
+                    GetHeaderFmt()
+            : static_cast<SwFmtFooter*>(const_cast<SfxPoolItem*>(pItem))->
+                    GetFooterFmt();
+        if (pHeadFootFmt)
+        {
+            return SwXHeadFootText::CreateXHeadFootText(*pHeadFootFmt, bHeader);
+        }
+    }
+    return 0;
+}
+
 uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
         const uno::Sequence< OUString >& rPropertyNames )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
@@ -3476,7 +3488,8 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                 GetBasePool()->SetSearchMask(GetFamily(), nSaveMask );
             }
             sal_uInt16 nRes = 0;
-            sal_Bool bHeader = sal_False, bAll = sal_False, bLeft = sal_False, bRight = sal_False;
+            bool bHeader = false;
+            sal_Bool bAll = sal_False, bLeft = sal_False, bRight = sal_False;
             switch(pEntry->nWID)
             {
                 case FN_UNO_HEADER_ON:
@@ -3582,7 +3595,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                 case  FN_UNO_HEADER_RIGHT :
                     bRight = sal_True; goto Header;
 Header:
-                    bHeader = sal_True;
+                    bHeader = true;
                     nRes = RES_HEADER; goto MakeObject;
                 case  FN_UNO_FOOTER       :
                     bAll = sal_True; goto Footer;
@@ -3603,27 +3616,18 @@ MakeObject:
                     // TextRight does the same as Text and is for
                     // comptability only.
                     if( bLeft && !bShare )
-                        pFrmFmt = &rDesc.GetLeft();
-                    else
-                        pFrmFmt = &rDesc.GetMaster();
-                    if(pFrmFmt)
                     {
-                        const SfxItemSet& rSet = pFrmFmt->GetAttrSet();
-                        const SfxPoolItem* pItem;
-                        SwFrmFmt* pHeadFootFmt;
-                        if(SFX_ITEM_SET == rSet.GetItemState(nRes, sal_True, &pItem) &&
-                        0 != (pHeadFootFmt = bHeader ?
-                                    ((SwFmtHeader*)pItem)->GetHeaderFmt() :
-                                        ((SwFmtFooter*)pItem)->GetFooterFmt()))
-                        {
-                            // gibt es schon ein Objekt dafuer?
-                            SwXHeadFootText* pxHdFt = (SwXHeadFootText*)SwClientIter( *pHeadFootFmt ).
-                                            First( TYPE( SwXHeadFootText ));
-                            uno::Reference< text::XText >  xRet = pxHdFt;
-                            if(!pxHdFt)
-                                xRet = new SwXHeadFootText(*pHeadFootFmt, bHeader);
-                            pRet[nProp].setValue(&xRet, ::getCppuType((uno::Reference<text::XText>*)0));
-                        }
+                        pFrmFmt = &rDesc.GetLeft();
+                    }
+                    else
+                    {
+                        pFrmFmt = &rDesc.GetMaster();
+                    }
+                    const uno::Reference< text::XText > xRet =
+                        lcl_makeHeaderFooter(nRes, bHeader, pFrmFmt);
+                    if (xRet.is())
+                    {
+                        pRet[nProp] <<= xRet;
                     }
                 }
                 break;
