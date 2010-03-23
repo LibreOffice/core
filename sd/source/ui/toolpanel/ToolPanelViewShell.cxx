@@ -347,6 +347,7 @@ void SAL_CALL ConfigurationListener::notifyConfigurationChange( const Configurat
 // ---------------------------------------------------------------------------------------------------------------------
 void SAL_CALL ConfigurationListener::disposing( const EventObject& i_rEvent ) throw (RuntimeException)
 {
+    (void)i_rEvent;
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         impl_checkDisposed_throw();
@@ -471,9 +472,10 @@ size_t ToolPanelViewShell_Impl::SetupDefaultPanels()
         const Reference< XResourceId > xPanelId( pFrameworkHelper->CreateResourceId( aPanels[i].sResourceURL, xToolPanelId ) );
 
         // create and insert the panel
+        ::std::auto_ptr< ControlFactory > pControlFactory( (*aPanels[i].pFactory)( m_rPanelViewShell ) );
         ::svt::PToolPanel pNewPanel( new StandardToolPanel(
             *m_pPanelDeck,
-            (*aPanels[i].pFactory)( m_rPanelViewShell ),
+            pControlFactory,
             aPanels[i].nTitleResourceID,
             aPanelImage,
             aPanels[i].nHelpID,
@@ -964,6 +966,7 @@ Reference< XAccessible > ToolPanelViewShell::CreateAccessibleDocumentView( ::sd:
 //            xAccessible = mpTaskPane->CreateAccessibleObject(
 //                pParentWindow->GetAccessible());
 //    }
+    (void)pWindow;
 
     return xAccessible;
 }
