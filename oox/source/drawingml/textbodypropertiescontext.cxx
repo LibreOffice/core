@@ -112,7 +112,8 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
     // ST_TextVerticalType
     mrTextBodyProp.moVert = aAttribs.getToken( XML_vert );
     bool bRtl = aAttribs.getBool( XML_rtl, false );
-    if( mrTextBodyProp.moVert.get( XML_horz ) == XML_vert ) {
+    sal_Int32 tVert = mrTextBodyProp.moVert.get( XML_horz );
+    if( tVert == XML_vert || tVert == XML_eaVert || tVert == XML_vert270 || tVert == XML_mongolianVert ) {
     mrTextBodyProp.maPropertyMap[ PROP_TextWritingMode ]
         <<= ( bRtl ? WritingMode_RL_TB : WritingMode_LR_TB );
     // workaround for TB_LR as using WritingMode2 doesn't work
