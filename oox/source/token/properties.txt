@@ -397,6 +397,7 @@ VertJustify
 VerticalAlign
 VerticalSplitMode
 VerticalSplitPositionTwips
+Visible
 VisibleSize
 VisualArea
 VisualEffect
