@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: flowfrm.cxx,v $
- * $Revision: 1.71 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,16 +38,16 @@
 #include "dflyobj.hxx"
 #include "frmtool.hxx"
 #include "dcontact.hxx"
-#include <svx/brkitem.hxx>
-#include <svx/keepitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/keepitem.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtanchr.hxx>
 #include <fmtpdsc.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <tgrditem.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
-#include <svx/pgrditem.hxx>
+#include <editeng/pgrditem.hxx>
 #include <paratr.hxx>
 
 #include "ftnfrm.hxx"
@@ -513,10 +510,10 @@ BOOL SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
             pParent->pLower = pStart;
         else
         //Modified for #i100782#,04/03/2009
-        //If the pParent has more than 1 child nodes, former design will 
-        //ignore them directly without any collection work. It will make some 
+        //If the pParent has more than 1 child nodes, former design will
+        //ignore them directly without any collection work. It will make some
         //dangling pointers. This lead the crash...
-        //The new design will find the last child of pParent in loop way, and 
+        //The new design will find the last child of pParent in loop way, and
         //add the pStart after the last child.
         //  pParent->Lower()->pNext = pStart;
         {

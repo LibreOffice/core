@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoidx.cxx,v $
- * $Revision: 1.68 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,8 +39,13 @@
 #include <tools/debug.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/unolingu.hxx>
-
+#include <editeng/unolingu.hxx>
+#include <com/sun/star/text/ChapterFormat.hpp>
+#include <com/sun/star/text/ReferenceFieldPart.hpp>
+#include <com/sun/star/text/BibliographyDataField.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <hints.hxx>
 #include <cmdid.h>
 #include <swtypes.hxx>
@@ -52,9 +54,7 @@
 #include <doc.hxx>
 #include <docary.hxx>
 #include <poolfmt.hxx>
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
 #include <pagedesc.hxx>
 #include <fmtcntnt.hxx>
 #include <unomap.hxx>
