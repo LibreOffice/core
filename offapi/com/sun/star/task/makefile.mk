@@ -41,7 +41,6 @@ PACKAGE=com$/sun$/star$/task
 IDLFILES=\
     ClassifiedInteractionRequest.idl\
     DocumentMacroConfirmationRequest.idl\
-    DocumentMacroConfirmationRequest2.idl\
     DocumentPasswordRequest.idl\
     DocumentMSPasswordRequest.idl\
     ErrorCodeRequest.idl\

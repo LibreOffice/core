@@ -83,6 +83,7 @@ IDLFILES=\
     XDocumentInsertable.idl\
     XDocumentProperties.idl\
     XDocumentPropertiesSupplier.idl\
+    XDocumentRecovery.idl\
     XDocumentSubStorageSupplier.idl\
     XEmbeddedObjectResolver.idl\
     XEmbeddedObjectSupplier.idl\
