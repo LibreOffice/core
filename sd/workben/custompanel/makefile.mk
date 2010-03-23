@@ -62,7 +62,6 @@ LIB1OBJFILES= \
         $(SLO)/ctp_panel.obj
 
 SHL1STDLIBS= \
-        $(TOOLSLIB)         \
         $(CPPULIB)          \
         $(SALLIB)           \
         $(SALHELPERLIB)     \
