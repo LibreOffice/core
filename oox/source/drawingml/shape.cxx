@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "oox/drawingml/shape.hxx"
+#include "oox/drawingml/customshapeproperties.hxx"
 #include "oox/drawingml/theme.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/lineproperties.hxx"
@@ -214,8 +215,8 @@ void Shape::addChildren(
     aIter = rMaster.maChildren.begin();
     while( aIter != rMaster.maChildren.end() )
     {
-        Rectangle aShapeRect;
-        Rectangle* pShapeRect = 0;
+        awt::Rectangle aShapeRect;
+        awt::Rectangle* pShapeRect = 0;
         if ( ( nGlobalLeft != SAL_MAX_INT32 ) && ( nGlobalRight != SAL_MIN_INT32 ) && ( nGlobalTop != SAL_MAX_INT32 ) && ( nGlobalBottom != SAL_MIN_INT32 ) )
         {
             sal_Int32 nGlobalWidth = nGlobalRight - nGlobalLeft;
@@ -292,6 +293,35 @@ Reference< XShape > Shape::createAndInsert(
     {
         // if global position is used, add it to transformation
         aTransformation.translate( aPosition.X / 360.0, aPosition.Y / 360.0 );
+    }
+
+    if ( mpCustomShapePropertiesPtr && mpCustomShapePropertiesPtr->getPolygon().count() )
+    {
+    ::basegfx::B2DPolyPolygon& rPolyPoly = mpCustomShapePropertiesPtr->getPolygon();
+
+    if( rPolyPoly.count() > 0 ) {
+        if( rPolyPoly.areControlPointsUsed() ) {
+        // TODO Beziers
+        } else {
+        uno::Sequence< uno::Sequence< awt::Point > > aPolyPolySequence( rPolyPoly.count() );
+
+        for (sal_uInt32 j = 0; j < rPolyPoly.count(); j++ ) {
+            ::basegfx::B2DPolygon aPoly = rPolyPoly.getB2DPolygon( j );
+
+            // now creating the corresponding PolyPolygon
+            sal_Int32 i, nNumPoints = aPoly.count();
+            uno::Sequence< awt::Point > aPointSequence( nNumPoints );
+            awt::Point* pPoints = aPointSequence.getArray();
+            for( i = 0; i < nNumPoints; ++i )
+            {
+            const ::basegfx::B2DPoint aPoint( aPoly.getB2DPoint( i ) );
+            pPoints[ i ] = awt::Point( static_cast< sal_Int32 >( aPoint.getX() ), static_cast< sal_Int32 >( aPoint.getY() ) );
+            }
+            aPolyPolySequence.getArray()[ j ] = aPointSequence;
+        }
+        maShapeProperties[ PROP_PolyPolygon ] <<= aPolyPolySequence;
+        }
+    }
     }
 
     // special for lineshape
