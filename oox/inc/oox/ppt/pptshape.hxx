@@ -61,9 +61,11 @@ public:
     ShapeLocation getShapeLocation() const { return meShapeLocation; };
     sal_Bool isReferenced() const { return mbReferenced; };
     void setReferenced( sal_Bool bReferenced ){ mbReferenced = bReferenced; };
+        void setPlaceholder( oox::drawingml::ShapePtr pPlaceholder ) { mpPlaceholder = pPlaceholder; }
 
 protected:
 
+        oox::drawingml::ShapePtr mpPlaceholder;
 };
 
 } }

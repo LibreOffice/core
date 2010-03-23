@@ -28,6 +28,7 @@
 #include "oox/ppt/pptshape.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
+#include "oox/drawingml/textbody.hxx"
 #include "tokens.hxx"
 
 #include <com/sun/star/container/XNamed.hpp>
@@ -40,6 +41,7 @@
 
 using rtl::OUString;
 using namespace ::oox::core;
+using namespace ::oox::drawingml;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
@@ -159,7 +161,19 @@ void PPTShape::addShape(
             // use style from master slide for placeholders only, otherwise use slide's style, which might be the default style from presentation
             if ( !aMasterTextListStyle.get() )
                     aMasterTextListStyle = ( mnSubType && rSlidePersist.getMasterPersist().get() ) ? rSlidePersist.getMasterPersist()->getOtherTextStyle() : rSlidePersist.getOtherTextStyle();
-            setMasterTextListStyle( aMasterTextListStyle );
+
+            if( aMasterTextListStyle.get() && getTextBody().get() ) {
+                TextListStylePtr aCombinedTextListStyle (new TextListStyle());
+
+                aCombinedTextListStyle->apply( *aMasterTextListStyle.get() );
+
+                if( mpPlaceholder.get() && mpPlaceholder->getTextBody().get() )
+                aCombinedTextListStyle->apply( mpPlaceholder->getTextBody()->getTextListStyle() );
+                 aCombinedTextListStyle->apply( getTextBody()->getTextListStyle() );
+
+                setMasterTextListStyle( aCombinedTextListStyle );
+            } else
+                setMasterTextListStyle( aMasterTextListStyle );
 
             Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect, bClearText ) );
             if ( !rSlidePersist.isMasterPage() && rSlidePersist.getPage().is() && ( (sal_Int32)mnSubType == XML_title ) )

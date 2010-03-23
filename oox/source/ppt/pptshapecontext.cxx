@@ -201,6 +201,7 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
                     PPTShape* pPPTShape = dynamic_cast< PPTShape* >( pPlaceholder.get() );
                     if ( pPPTShape )
                     pPPTShape->setReferenced( sal_True );
+                    pPPTShapePtr->setPlaceholder( pPlaceholder );
                 }
             }
         }
