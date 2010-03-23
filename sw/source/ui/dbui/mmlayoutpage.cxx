@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mmlayoutpage.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +59,7 @@
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <svl/urihelper.hxx>
 #include <shellio.hxx>
 #include <osl/file.hxx>

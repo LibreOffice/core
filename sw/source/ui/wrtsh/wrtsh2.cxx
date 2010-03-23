@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrtsh2.cxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -241,6 +238,13 @@ BOOL SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 
     return bResult;
 }
+
+BOOL SwWrtShell::UpdateField( sw::mark::IFieldmark &fieldBM )
+{
+    return SwEditShell::UpdateField(fieldBM);
+}
+
+
 
     // ein Klick aus das angegebene Feld. Der Cursor steht auf diesem.
     // Fuehre die vor definierten Aktionen aus.

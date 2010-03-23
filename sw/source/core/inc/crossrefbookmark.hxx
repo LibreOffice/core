@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: crossrefbookmark.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,10 +45,10 @@ namespace sw { namespace mark
                 const ::rtl::OUString& rPrefix);
 
             // getters
-            virtual const SwPosition& GetOtherMarkPos() const;
-            virtual const SwPosition& GetMarkStart() const
+            virtual SwPosition& GetOtherMarkPos() const;
+            virtual SwPosition& GetMarkStart() const
                 { return *m_pPos1; }
-            virtual const SwPosition& GetMarkEnd() const
+            virtual SwPosition& GetMarkEnd() const
                 { return *m_pPos1; }
             virtual bool IsExpanded() const
                 { return false; }
