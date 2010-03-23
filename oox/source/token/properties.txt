@@ -364,6 +364,7 @@ TargetFrame
 TextAutoGrowHeight
 TextBreak
 TextColor
+TextFitToSize
 TextHorizontalAdjust
 TextLeftDistance
 TextLowerDistance

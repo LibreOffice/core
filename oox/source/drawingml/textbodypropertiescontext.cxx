@@ -150,6 +150,9 @@ Reference< XFastContextHandler > TextBodyPropertiesContext::createFastChildConte
                 mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;   // CT_TextNoAutofit
                 break;
             case NMSP_DRAWINGML|XML_normAutofit:    // CT_TextNormalAutofit
+                mrTextBodyProp.maPropertyMap[ PROP_TextFitToSize ] <<= true;
+                mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;
+                break;
             case NMSP_DRAWINGML|XML_spAutoFit:
                 mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= true;
                 break;
