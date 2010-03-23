@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: eppt.cxx,v $
- * $Revision: 1.64.78.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,14 +53,14 @@
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <tools/zcodec.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <sot/storinfo.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 #include <vcl/virdev.hxx>
 #include <svtools/wmf.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <sfx2/docinf.hxx>
 
 #define PPT_TRANSITION_TYPE_NONE            0
@@ -208,7 +205,7 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage,
     if ( !mpPicStrm )
         mpPicStrm = mrStg->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "Pictures" ) ) );
 
-    mpPptEscherEx = new PptEscherEx( *mpStrm, mnDrawings );
+    mpPptEscherEx = new PptEscherEx( *mpStrm );
 
     if ( !ImplGetStyleSheets() )
         return;
@@ -1697,7 +1694,7 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
     mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xc00 );                     // Flags: Connector | Background | HasSpt
     Point aEmptyPoint = Point();
     Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
-    EscherPropertyContainer aPropOpt( (EscherGraphicProvider&)*mpPptEscherEx, mpPicStrm, aRect );
+    EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect );
     aPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillSolid );
     ::com::sun::star::drawing::FillStyle aFS( ::com::sun::star::drawing::FillStyle_NONE );
     if ( ImplGetPropertyValue( rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ) ) ) )
