@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SchXMLExportHelper.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +44,6 @@ namespace com { namespace sun { namespace star {
     namespace chart {
         class XDiagram;
         class XChartDocument;
-        class XChartDataArray;
         struct ChartSeriesAddress;
     }
     namespace chart2 {
@@ -117,6 +113,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > mxAdditionalShapes;
 
     tDataSequenceCont m_aDataSequencesToExport;
+    rtl::OUString maCategoriesRange;
 
     /** first parseDocument: collect autostyles and store names in this queue
         second parseDocument: export content and use names from this queue
@@ -182,8 +179,6 @@ private:
     SAL_DLLPRIVATE void addSize( com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape );
     /// fills the member msString with the appropriate String (i.e. "A3")
     SAL_DLLPRIVATE void getCellAddress( sal_Int32 nCol, sal_Int32 nRow );
-    /// interchanges rows and columns of the sequence given
-    SAL_DLLPRIVATE void swapDataArray( com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< double > >& rSequence );
     /// exports a string as a paragraph element
     SAL_DLLPRIVATE void exportText( const ::rtl::OUString& rText, bool bConvertTabsLFs = false );
     SAL_DLLPRIVATE void exportErrorBarRanges();

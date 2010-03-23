@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: extensionmigration.cxx,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -241,16 +238,6 @@ namespace migration
         {
             xPkg->registerPackage(uno::Reference< task::XAbortChannel >(),
                 uno::Reference< ucb::XCommandEnvironment> ());
-        }
-    }
-
-    void ExtensionMigration::registerConfigurationPackage( const uno::Reference< deployment::XPackage > & xPkg)
-    {
-        const ::rtl::OUString sMediaType = xPkg->getPackageType()->getMediaType();
-        if ( (sMediaType.equals(sConfigurationDataType) || sMediaType.equals(sConfigurationSchemaType) ) )
-        {
-            xPkg->revokePackage(uno::Reference< task::XAbortChannel >(), uno::Reference< ucb::XCommandEnvironment> ());
-            xPkg->registerPackage(uno::Reference< task::XAbortChannel >(), uno::Reference< ucb::XCommandEnvironment> ());
         }
     }
 

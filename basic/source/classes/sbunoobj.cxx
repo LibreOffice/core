@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sbunoobj.cxx,v $
- * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,6 +103,7 @@ TYPEINIT1(SbUnoObject,SbxObject)
 TYPEINIT1(SbUnoClass,SbxObject)
 TYPEINIT1(SbUnoService,SbxObject)
 TYPEINIT1(SbUnoServiceCtor,SbxMethod)
+TYPEINIT1(SbUnoSingleton,SbxObject)
 
 typedef WeakImplHelper1< XAllListener > BasicAllListenerHelper;
 
@@ -3302,6 +3300,18 @@ SbxVariable* SbUnoClass::Find( const XubString& rName, SbxClassType t )
                         pRes->PutObject( xWrapper );
                     }
                 }
+
+                // An UNO singleton?
+                if( !pRes )
+                {
+                    SbUnoSingleton* pUnoSingleton = findUnoSingleton( aNewName );
+                    if( pUnoSingleton )
+                    {
+                        pRes = new SbxVariable( SbxVARIANT );
+                        SbxObjectRef xWrapper = (SbxObject*)pUnoSingleton;
+                        pRes->PutObject( xWrapper );
+                    }
+                }
             }
         }
 
@@ -3581,6 +3591,90 @@ SbxInfo* SbUnoServiceCtor::GetInfo()
     return pRet;
 }
 
+
+SbUnoSingleton* findUnoSingleton( const String& rName )
+{
+    SbUnoSingleton* pSbUnoSingleton = NULL;
+
+    Reference< XHierarchicalNameAccess > xTypeAccess = getTypeProvider_Impl();
+    if( xTypeAccess->hasByHierarchicalName( rName ) )
+    {
+        Any aRet = xTypeAccess->getByHierarchicalName( rName );
+        Reference< XTypeDescription > xTypeDesc;
+        aRet >>= xTypeDesc;
+
+        if( xTypeDesc.is() )
+        {
+            TypeClass eTypeClass = xTypeDesc->getTypeClass();
+            if( eTypeClass == TypeClass_SINGLETON )
+            {
+                Reference< XSingletonTypeDescription > xSingletonTypeDesc( xTypeDesc, UNO_QUERY );
+                if( xSingletonTypeDesc.is() )
+                    pSbUnoSingleton = new SbUnoSingleton( rName, xSingletonTypeDesc );
+            }
+        }
+    }
+    return pSbUnoSingleton;
+}
+
+SbUnoSingleton::SbUnoSingleton( const String& aName_,
+    const Reference< XSingletonTypeDescription >& xSingletonTypeDesc )
+        : SbxObject( aName_ )
+        , m_xSingletonTypeDesc( xSingletonTypeDesc )
+{
+    SbxVariableRef xGetMethodRef =
+        new SbxMethod( String( RTL_CONSTASCII_USTRINGPARAM( "get" ) ), SbxOBJECT );
+    QuickInsert( (SbxVariable*)xGetMethodRef );
+}
+
+void SbUnoSingleton::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
+                           const SfxHint& rHint, const TypeId& rHintType )
+{
+    const SbxHint* pHint = PTR_CAST(SbxHint,&rHint);
+    if( pHint )
+    {
+        SbxVariable* pVar = pHint->GetVar();
+        SbxArray* pParams = pVar->GetParameters();
+        UINT32 nParamCount = pParams ? ((UINT32)pParams->Count() - 1) : 0;
+        UINT32 nAllowedParamCount = 1;
+
+        Reference < XComponentContext > xContextToUse;
+        if( nParamCount > 0 )
+        {
+            // Check if first parameter is a context and use it then
+            Reference < XComponentContext > xFirstParamContext;
+            Any aArg1 = sbxToUnoValue( pParams->Get( 1 ) );
+            if( (aArg1 >>= xFirstParamContext) && xFirstParamContext.is() )
+                xContextToUse = xFirstParamContext;
+        }
+
+        if( !xContextToUse.is() )
+        {
+            Reference < XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+            xContextToUse.set( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" )) ), UNO_QUERY_THROW );
+            --nAllowedParamCount;
+        }
+
+        if( nParamCount > nAllowedParamCount )
+        {
+            StarBASIC::Error( SbERR_BAD_ARGUMENT );
+            return;
+        }
+
+        Any aRetAny;
+        if( xContextToUse.is() )
+        {
+            String aSingletonName( RTL_CONSTASCII_USTRINGPARAM("/singletons/") );
+            aSingletonName += GetName();
+            Reference < XInterface > xRet;
+            xContextToUse->getValueByName( aSingletonName ) >>= xRet;
+            aRetAny <<= xRet;
+        }
+        unoToSbxValue( pVar, aRetAny );
+    }
+    else
+        SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+}
 
 
 //========================================================================

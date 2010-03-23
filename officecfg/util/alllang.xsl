@@ -3,13 +3,9 @@
  *
   DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   
-  Copyright 2008 by Sun Microsystems, Inc.
+  Copyright 2000, 2010 Oracle and/or its affiliates.
  
   OpenOffice.org - a multi-platform office productivity suite
- 
-  $RCSfile: alllang.xsl,v $
- 
-  $Revision: 1.14 $
  
   This file is part of OpenOffice.org.
  
@@ -27,7 +23,7 @@
   version 3 along with OpenOffice.org.  If not, see
   <http://www.openoffice.org/license.html>
   for a copy of the LGPLv3 License.
- 
+
  ************************************************************************ -->
 
 <xsl:transform 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
@@ -316,6 +312,9 @@
 			<xsl:when test="not ($dataval)">
 				<xsl:value-of select="true()"/>
 			</xsl:when>
+            <xsl:when test="$dataval/@oor:external">
+                <xsl:value-of select="false()"/>
+            </xsl:when>
 			<xsl:when test="not ($schemaval)">
 				<xsl:choose>
 					<xsl:when test="$dataval/@xsi:nil='true'">

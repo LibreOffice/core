@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -256,9 +256,9 @@ private:
     virtual ~Thread();
 
     virtual void execute();
-
+#if 0
     void handleGeneralError(css::uno::Any const & exception) const;
-
+#endif
     void handleSpecificError(
         css::uno::Reference< css::deployment::XPackage > const & package,
         css::uno::Any const & exception) const;
@@ -413,7 +413,7 @@ void UpdateDialog::Thread::execute()
         m_dialog.checkingDone();
     }
 }
-
+#if 0
 void UpdateDialog::Thread::handleGeneralError(css::uno::Any const & exception)
     const
 {
@@ -427,7 +427,7 @@ void UpdateDialog::Thread::handleGeneralError(css::uno::Any const & exception)
         m_dialog.addGeneralError(message);
     }
 }
-
+#endif
 //Parameter package can be null
 void UpdateDialog::Thread::handleSpecificError(
     css::uno::Reference< css::deployment::XPackage > const & package,
@@ -782,7 +782,7 @@ void UpdateDialog::addDisabledUpdate(UpdateDialog::DisabledUpdate const & data)
         SvLBoxButtonKind_disabledCheckbox);
         // position overflow is rather harmless
 }
-
+#if 0
 void UpdateDialog::addGeneralError(rtl::OUString const & message) {
     std::vector< rtl::OUString >::size_type n = m_generalErrors.size();
     m_generalErrors.push_back(message);
@@ -793,7 +793,7 @@ void UpdateDialog::addGeneralError(rtl::OUString const & message) {
         UpdateDialog::Index::newGeneralError(n), SvLBoxButtonKind_staticImage);
         // position overflow is rather harmless
 }
-
+#endif
 void UpdateDialog::addSpecificError(UpdateDialog::SpecificError const & data) {
     std::vector< UpdateDialog::SpecificError >::size_type n =
         m_specificErrors.size();

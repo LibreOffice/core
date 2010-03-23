@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: galmisc.cxx,v $
- * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +42,7 @@
 #include <avmedia/mediawindow.hxx>
 #include <vcl/svapp.hxx>
 
-#include "svx/impgrf.hxx"
+#include "svtools/filter.hxx"
 #include <svx/svdpage.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/fmmodel.hxx>
@@ -129,7 +126,7 @@ USHORT GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
 
     if( pIStm )
     {
-        GraphicFilter*      pGraphicFilter = GetGrfFilter();
+        GraphicFilter*      pGraphicFilter = GraphicFilter::GetGraphicFilter();
         GalleryProgress*    pProgress = bShowProgress ? new GalleryProgress( pGraphicFilter ) : NULL;
         USHORT              nFormat;
 
