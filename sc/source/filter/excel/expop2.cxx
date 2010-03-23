@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: expop2.cxx,v $
- * $Revision: 1.35.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -144,14 +141,11 @@ ExportBiff8::ExportBiff8( XclExpRootData& rExpData, SvStream& rStrm ) :
     ExportBiff5( rExpData, rStrm )
 {
     pExcRoot->eDateiTyp = Biff8;
-    pExcRoot->pEscher = new XclEscher( GetRoot(), GetDoc().GetTableCount() );
 }
 
 
 ExportBiff8::~ExportBiff8()
 {
-    delete pExcRoot->pEscher;
-    pExcRoot->pEscher = NULL;
 }
 
 
@@ -162,16 +156,12 @@ ExportXml2007::ExportXml2007( XclExpRootData& rExpData, SvStream& rStrm )
     pExcRoot = &GetOldRoot();
     pExcRoot->pER = this;
     pExcRoot->eDateiTyp = Biff8;
-    pExcRoot->pEscher = new XclEscher( *pExcRoot->pER, GetDoc().GetTableCount() );
     pExcDoc = new ExcDocument( *this );
 }
 
 
 ExportXml2007::~ExportXml2007()
 {
-    delete pExcRoot->pEscher;
-    pExcRoot->pEscher = NULL;
-
     delete pExcDoc;
 }
 

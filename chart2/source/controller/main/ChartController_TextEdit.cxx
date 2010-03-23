@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartController_TextEdit.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,7 +52,7 @@
 #include <vos/mutex.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svl/stritem.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/fontitem.hxx>
 
 //.............................................................................
 namespace chart
@@ -67,15 +64,15 @@ using namespace ::com::sun::star;
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-void SAL_CALL ChartController::executeDispatch_EditText()
+void SAL_CALL ChartController::executeDispatch_EditText( const Point* pMousePixel )
 {
-    this->StartTextEdit();
+    this->StartTextEdit( pMousePixel );
 }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-void ChartController::StartTextEdit()
+void ChartController::StartTextEdit( const Point* pMousePixel )
 {
     //the first marked object will be edited
 
@@ -114,6 +111,18 @@ void ChartController::StartTextEdit()
         */
         m_pDrawViewWrapper->SetEditMode();
 
+        // #i12587# support for shapes in chart
+        if ( pMousePixel )
+        {
+            OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
+            if ( pOutlinerView )
+            {
+                MouseEvent aEditEvt( *pMousePixel, 1, MOUSE_SYNTHETIC, MOUSE_LEFT, 0 );
+                pOutlinerView->MouseButtonDown( aEditEvt );
+                pOutlinerView->MouseButtonUp( aEditEvt );
+            }
+        }
+
         //we invalidate the outliner region because the outliner has some
         //paint problems (some characters are painted twice a little bit shifted)
         m_pChartWindow->Invalidate( m_pDrawViewWrapper->GetMarkedObjBoundRect() );
@@ -142,22 +151,38 @@ bool ChartController::EndTextEdit()
         String aString = pOutliner->GetText(
                             pOutliner->GetParagraph( 0 ),
                             pOutliner->GetParagraphCount() );
-        uno::Reference< beans::XPropertySet > xPropSet =
-            ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), getModel() );
 
-        // lock controllers till end of block
-        ControllerLockGuard aCLGuard( m_aModel->getModel());
-
-        //Paragraph* pPara =
-        TitleHelper::setCompleteString( aString, uno::Reference<
-            ::com::sun::star::chart2::XTitle >::query( xPropSet ), m_xCC );
-        try
+        ::rtl::OUString aObjectCID = m_aSelection.getSelectedCID();
+        if ( aObjectCID.getLength() > 0 )
         {
-            m_xUndoManager->postAction( C2U("Edit Text") );
+            uno::Reference< beans::XPropertySet > xPropSet =
+                ObjectIdentifier::getObjectPropertySet( aObjectCID, getModel() );
+
+            // lock controllers till end of block
+            ControllerLockGuard aCLGuard( m_aModel->getModel());
+
+            TitleHelper::setCompleteString( aString, uno::Reference<
+                ::com::sun::star::chart2::XTitle >::query( xPropSet ), m_xCC );
+
+            try
+            {
+                m_xUndoManager->postAction( C2U("Edit Text") );
+            }
+            catch( uno::RuntimeException& e)
+            {
+                ASSERT_EXCEPTION( e );
+            }
         }
-        catch( uno::RuntimeException& e)
+        else
         {
-            ASSERT_EXCEPTION( e );
+            try
+            {
+                m_xUndoManager->cancelAction();
+            }
+            catch ( uno::RuntimeException& e )
+            {
+                ASSERT_EXCEPTION( e );
+            }
         }
     }
     return true;

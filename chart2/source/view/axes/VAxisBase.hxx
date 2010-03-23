@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: VAxisBase.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,6 +67,7 @@ public:
                 throw (::com::sun::star::uno::RuntimeException);
 
     virtual sal_Int32 estimateMaximumAutoMainIncrementCount();
+    virtual void createAllTickInfos( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos );
 
     void setExrtaLinePositionAtOtherAxis( const double& fCrossingAt );
 
@@ -77,7 +75,7 @@ public:
     //-------------------------------------------------------------------------
 protected: //methods
     sal_Int32 getIndexOfLongestLabel( const ::com::sun::star::uno::Sequence< rtl::OUString >& rLabels );
-    void removeTextShapesFromTicks( TickIter& rIter, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget );
+    void removeTextShapesFromTicks();
     void updateUnscaledValuesAtTicks( TickIter& rIter );
 
     virtual bool prepareShapeCreation();

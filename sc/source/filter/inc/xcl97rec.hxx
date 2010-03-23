@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xcl97rec.hxx,v $
- * $Revision: 1.48.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,88 +32,35 @@
 #include "xcl97esc.hxx"
 #include "xlstyle.hxx"
 
-#include <vector>
-
-// --- class XclMsodrawing_Base --------------------------------------
-
-class XclMsodrawing_Base
-{
-protected:
-        XclEscher*              pEscher;
-        sal_Size                nStartPos;      // position in OffsetMap
-        sal_Size                nStopPos;       // position in OffsetMap
-
-public:
-                                XclMsodrawing_Base( XclEscher& rEscher, sal_Size nInitialSize = 0 );
-    virtual                     ~XclMsodrawing_Base();
-
-    inline  XclEscher*          GetEscher() const   { return pEscher; }
-    inline  XclEscherEx*        GetEscherEx() const { return pEscher->GetEx(); }
-            void                UpdateStopPos();
-            sal_Size            GetDataLen() const;
-};
-
-
-// --- class XclMsodrawinggroup --------------------------------------
-
-class XclMsodrawinggroup : public XclMsodrawing_Base, public XclExpRecord
-{
-private:
-
-    virtual void                WriteBody( XclExpStream& rStrm );
-
-public:
-                                XclMsodrawinggroup( RootData& rRoot,
-                                    UINT16 nEscherType = 0 );
-    virtual                     ~XclMsodrawinggroup();
-};
-
-
-// --- class XclMsodrawing -------------------------------------------
-
-class XclMsodrawing : public XclMsodrawing_Base, public XclExpRecord
-{
-private:
-
-    virtual void                WriteBody( XclExpStream& rStrm );
-
-public:
-                                XclMsodrawing(
-                                    const XclExpRoot& rRoot,
-                                    UINT16 nEscherType = 0,
-                                    sal_Size nInitialSize = 0 );
-    virtual                     ~XclMsodrawing();
-};
-
-
-// --- class XclObjList ----------------------------------------------
+// ============================================================================
 
 class XclObj;
-class XclMsodrawing;
+class XclExpMsoDrawing;
 
-class XclObjList : public List, public ExcEmptyRec, protected XclExpRoot
+class XclExpObjList : public List, public ExcEmptyRec, protected XclExpRoot
 {
-private:
-        XclMsodrawing*          pMsodrawingPerSheet;
-        XclMsodrawing*          pSolverContainer;
-
 public:
-                                XclObjList( const XclExpRoot& rRoot );
-    virtual                     ~XclObjList();
+    explicit            XclExpObjList( const XclExpRoot& rRoot, XclEscherEx& rEscherEx );
+    virtual             ~XclExpObjList();
 
-            XclObj*             First() { return (XclObj*) List::First(); }
-            XclObj*             Next()  { return (XclObj*) List::Next(); }
+    XclObj*             First() { return (XclObj*) List::First(); }
+    XclObj*             Next() { return (XclObj*) List::Next(); }
 
-                                /// return: 1-based ObjId
-                                ///! count>=0xFFFF: Obj will be deleted, return 0
-            UINT16              Add( XclObj* );
+    /// return: 1-based ObjId
+    ///! count>=0xFFFF: Obj will be deleted, return 0
+    UINT16              Add( XclObj* );
 
-    inline  XclMsodrawing*      GetMsodrawingPerSheet() { return pMsodrawingPerSheet; }
+    inline XclExpMsoDrawing* GetMsodrawingPerSheet() { return pMsodrawingPerSheet; }
 
                                 /// close groups and DgContainer opened in ctor
-            void                EndSheet();
+    void                EndSheet();
 
-    virtual void                Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm );
+
+private:
+    XclEscherEx&        mrEscherEx;
+    XclExpMsoDrawing*   pMsodrawingPerSheet;
+    XclExpMsoDrawing*   pSolverContainer;
 };
 
 
@@ -128,8 +72,9 @@ class SdrTextObj;
 class XclObj : public XclExpRecord
 {
 protected:
-        XclMsodrawing*      pMsodrawing;
-        XclMsodrawing*      pClientTextbox;
+        XclEscherEx&        mrEscherEx;
+        XclExpMsoDrawing*   pMsodrawing;
+        XclExpMsoDrawing*   pClientTextbox;
         XclTxo*             pTxo;
         sal_uInt16          mnObjType;
         UINT16              nObjId;
@@ -140,7 +85,9 @@ protected:
 
     /** @param bOwnEscher  If set to true, this object will create its escher data.
         See SetOwnEscher() for details. */
-    explicit                    XclObj( const XclExpRoot& rRoot, sal_uInt16 nObjType, bool bOwnEscher = false );
+    explicit                    XclObj( XclExpObjectManager& rObjMgr, sal_uInt16 nObjType, bool bOwnEscher = false );
+
+    void                        ImplWriteAnchor( const XclExpRoot& rRoot, const SdrObject* pSdrObj, const Rectangle* pChildAnchor );
 
                                 // overwritten for writing MSODRAWING record
     virtual void                WriteBody( XclExpStream& rStrm );
@@ -182,27 +129,15 @@ public:
                                 //! actually writes ESCHER_ClientTextbox
             void                SetText( const XclExpRoot& rRoot, const SdrTextObj& rObj );
 
-    inline  void                UpdateStopPos();
-
     virtual void                Save( XclExpStream& rStrm );
 };
-
-
-inline void XclObj::UpdateStopPos()
-{
-    if ( pClientTextbox )
-        pClientTextbox->UpdateStopPos();
-    else
-        pMsodrawing->UpdateStopPos();
-}
-
 
 // --- class XclObjComment -------------------------------------------
 
 class XclObjComment : public XclObj
 {
 public:
-                                XclObjComment( const XclExpRoot& rRoot,
+                                XclObjComment( XclExpObjectManager& rObjMgr,
                                     const Rectangle& rRect, const EditTextObject& rEditObj, SdrObject* pCaption, bool bVisible );
     virtual                     ~XclObjComment();
 
@@ -227,7 +162,7 @@ private:
 
 protected:
 public:
-                                XclObjDropDown( const XclExpRoot& rRoot, const ScAddress& rPos, BOOL bFilt );
+                                XclObjDropDown( XclExpObjectManager& rObjMgr, const ScAddress& rPos, BOOL bFilt );
     virtual                     ~XclObjDropDown();
 };
 
@@ -274,7 +209,7 @@ private:
     virtual void                WriteSubRecs( XclExpStream& rStrm );
 
 public:
-                                XclObjOle( const XclExpRoot& rRoot, const SdrObject& rObj );
+                                XclObjOle( XclExpObjectManager& rObjMgr, const SdrObject& rObj );
     virtual                     ~XclObjOle();
 
     virtual void                Save( XclExpStream& rStrm );
@@ -289,7 +224,7 @@ private:
     virtual void                WriteSubRecs( XclExpStream& rStrm );
 
 public:
-                                XclObjAny( const XclExpRoot& rRoot );
+                                XclObjAny( XclExpObjectManager& rObjMgr );
     virtual                     ~XclObjAny();
 
     virtual void                Save( XclExpStream& rStrm );
@@ -566,6 +501,19 @@ public:
 
 private:
     virtual void        WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
+/** End of User Interface Records */
+class XclExpInterfaceEnd : public XclExpRecord
+{
+public:
+    explicit XclExpInterfaceEnd();
+    virtual ~XclExpInterfaceEnd();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
 };
 
 // ============================================================================

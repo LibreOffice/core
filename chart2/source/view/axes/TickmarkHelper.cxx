@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TickmarkHelper.cxx,v $
- * $Revision: 1.15.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +48,7 @@ TickInfo::TickInfo()
 , aTickScreenPosition(0.0,0.0)
 , bPaintIt( true )
 , xTextShape( NULL )
+, nFactorForLimitedTextWidth(1)
 {
 }
 
@@ -62,10 +60,45 @@ void TickInfo::updateUnscaledValue( const uno::Reference< XScaling >& xInverseSc
         this->fUnscaledTickValue = this->fScaledTickValue;
 }
 
-TickIter::TickIter( const uno::Sequence< uno::Sequence< double > >& rTicks
+sal_Int32 TickInfo::getScreenDistanceBetweenTicks( const TickInfo& rOherTickInfo ) const
+{
+    //return the positive distance between the two first tickmarks in screen values
+
+    B2DVector aDistance = rOherTickInfo.aTickScreenPosition - aTickScreenPosition;
+    sal_Int32 nRet = static_cast<sal_Int32>(aDistance.getLength());
+    if(nRet<0)
+        nRet *= -1;
+    return nRet;
+}
+
+PureTickIter::PureTickIter( ::std::vector< TickInfo >& rTickInfoVector )
+            : m_rTickVector(rTickInfoVector)
+            , m_aTickIter(m_rTickVector.begin())
+{
+}
+PureTickIter::~PureTickIter()
+{
+}
+TickInfo* PureTickIter::firstInfo()
+{
+    m_aTickIter = m_rTickVector.begin();
+    if(m_aTickIter!=m_rTickVector.end())
+        return &*m_aTickIter;
+    return 0;
+}
+TickInfo* PureTickIter::nextInfo()
+{
+    m_aTickIter++;
+    if(m_aTickIter!=m_rTickVector.end())
+        return &*m_aTickIter;
+    return 0;
+}
+
+EquidistantTickIter::EquidistantTickIter( const uno::Sequence< uno::Sequence< double > >& rTicks
                    , const ExplicitIncrementData& rIncrement
                    , sal_Int32 nMinDepth, sal_Int32 nMaxDepth )
-                : m_pSimpleTicks(&rTicks), m_pInfoTicks(NULL)
+                : m_pSimpleTicks(&rTicks)
+                , m_pInfoTicks(0)
                 , m_rIncrement(rIncrement)
                 , m_nMinDepth(0), m_nMaxDepth(0)
                 , m_nTickCount(0), m_pnPositions(NULL)
@@ -75,10 +108,11 @@ TickIter::TickIter( const uno::Sequence< uno::Sequence< double > >& rTicks
     initIter( nMinDepth, nMaxDepth );
 }
 
-TickIter::TickIter( ::std::vector< ::std::vector< TickInfo > >& rTicks
+EquidistantTickIter::EquidistantTickIter( ::std::vector< ::std::vector< TickInfo > >& rTicks
                    , const ExplicitIncrementData& rIncrement
                    , sal_Int32 nMinDepth, sal_Int32 nMaxDepth )
-                : m_pSimpleTicks(NULL), m_pInfoTicks(&rTicks)
+                : m_pSimpleTicks(NULL)
+                , m_pInfoTicks(&rTicks)
                 , m_rIncrement(rIncrement)
                 , m_nMinDepth(0), m_nMaxDepth(0)
                 , m_nTickCount(0), m_pnPositions(NULL)
@@ -88,7 +122,7 @@ TickIter::TickIter( ::std::vector< ::std::vector< TickInfo > >& rTicks
     initIter( nMinDepth, nMaxDepth );
 }
 
-void TickIter::initIter( sal_Int32 /*nMinDepth*/, sal_Int32 nMaxDepth )
+void EquidistantTickIter::initIter( sal_Int32 /*nMinDepth*/, sal_Int32 nMaxDepth )
 {
     m_nMaxDepth = nMaxDepth;
     if(nMaxDepth<0 || m_nMaxDepth>getMaxDepth())
@@ -131,14 +165,14 @@ void TickIter::initIter( sal_Int32 /*nMinDepth*/, sal_Int32 nMaxDepth )
     }
 }
 
-TickIter::~TickIter()
+EquidistantTickIter::~EquidistantTickIter()
 {
     delete[] m_pnPositions;
     delete[] m_pnPreParentCount;
     delete[] m_pbIntervalFinished;
 }
 
-sal_Int32 TickIter::getStartDepth() const
+sal_Int32 EquidistantTickIter::getStartDepth() const
 {
     //find the depth of the first visible tickmark:
     //it is the depth of the smallest value
@@ -159,7 +193,7 @@ sal_Int32 TickIter::getStartDepth() const
     return nReturnDepth;
 }
 
-double* TickIter::firstValue()
+double* EquidistantTickIter::firstValue()
 {
     if( gotoFirst() )
     {
@@ -169,14 +203,14 @@ double* TickIter::firstValue()
     return NULL;
 }
 
-TickInfo* TickIter::firstInfo()
+TickInfo* EquidistantTickIter::firstInfo()
 {
     if( m_pInfoTicks && gotoFirst() )
         return &(*m_pInfoTicks)[m_nCurrentDepth][m_pnPositions[m_nCurrentDepth]];
     return NULL;
 }
 
-sal_Int32 TickIter::getIntervalCount( sal_Int32 nDepth )
+sal_Int32 EquidistantTickIter::getIntervalCount( sal_Int32 nDepth )
 {
     if(nDepth>m_rIncrement.SubIncrements.getLength() || nDepth<0)
         return 0;
@@ -187,7 +221,7 @@ sal_Int32 TickIter::getIntervalCount( sal_Int32 nDepth )
     return m_rIncrement.SubIncrements[nDepth-1].IntervalCount;
 }
 
-bool TickIter::isAtLastPartTick()
+bool EquidistantTickIter::isAtLastPartTick()
 {
     if(!m_nCurrentDepth)
         return false;
@@ -206,7 +240,7 @@ bool TickIter::isAtLastPartTick()
     return bRet;
 }
 
-bool TickIter::gotoFirst()
+bool EquidistantTickIter::gotoFirst()
 {
     if( m_nMaxDepth<0 )
         return false;
@@ -222,7 +256,7 @@ bool TickIter::gotoFirst()
     return true;
 }
 
-bool TickIter::gotoNext()
+bool EquidistantTickIter::gotoNext()
 {
     if( m_nCurrentPos < 0 )
         return false;
@@ -253,7 +287,7 @@ bool TickIter::gotoNext()
     return true;
 }
 
-bool TickIter::gotoIndex( sal_Int32 nTickIndex )
+bool EquidistantTickIter::gotoIndex( sal_Int32 nTickIndex )
 {
     if( nTickIndex < 0 )
         return false;
@@ -271,16 +305,16 @@ bool TickIter::gotoIndex( sal_Int32 nTickIndex )
     return true;
 }
 
-sal_Int32 TickIter::getCurrentIndex() const
+sal_Int32 EquidistantTickIter::getCurrentIndex() const
 {
     return m_nCurrentPos;
 }
-sal_Int32 TickIter::getMaxIndex() const
+sal_Int32 EquidistantTickIter::getMaxIndex() const
 {
     return m_nTickCount-1;
 }
 
-double* TickIter::nextValue()
+double* EquidistantTickIter::nextValue()
 {
     if( gotoNext() )
     {
@@ -290,7 +324,7 @@ double* TickIter::nextValue()
     return NULL;
 }
 
-TickInfo* TickIter::nextInfo()
+TickInfo* EquidistantTickIter::nextInfo()
 {
     if( m_pInfoTicks && gotoNext() &&
         static_cast< sal_Int32 >(
@@ -649,7 +683,7 @@ void TickmarkHelper::getAllTicksShifted( ::std::vector< ::std::vector< TickInfo 
 
 void TickmarkHelper::addSubTicks( sal_Int32 nDepth, uno::Sequence< uno::Sequence< double > >& rParentTicks ) const
 {
-    TickIter aIter( rParentTicks, m_rIncrement, 0, nDepth-1 );
+    EquidistantTickIter aIter( rParentTicks, m_rIncrement, 0, nDepth-1 );
     double* pfNextParentTick = aIter.firstValue();
     if(!pfNextParentTick)
         return;
@@ -756,11 +790,7 @@ sal_Int32 TickmarkHelper_2D::getTickScreenDistance( TickIter& rIter )
     if(!pSecondTickInfo  || !pFirstTickInfo)
         return -1;
 
-    B2DVector aDistance = pSecondTickInfo->aTickScreenPosition-pFirstTickInfo->aTickScreenPosition;
-    sal_Int32 nRet = static_cast<sal_Int32>(aDistance.getLength());
-    if(nRet<0)
-        nRet *= -1;
-    return nRet;
+    return pFirstTickInfo->getScreenDistanceBetweenTicks( *pSecondTickInfo );
 }
 
 B2DVector TickmarkHelper_2D::getTickScreenPosition2D( double fScaledLogicTickValue ) const
@@ -800,7 +830,7 @@ void TickmarkHelper_2D::addPointSequenceForTickLine( drawing::PointSequenceSeque
     rPoints[nSequenceIndex][1].Y = static_cast<sal_Int32>(aEnd.getY());
 }
 
-B2DVector TickmarkHelper_2D::getDistanceAxisTickToText( const AxisProperties& rAxisProperties ) const
+B2DVector TickmarkHelper_2D::getDistanceAxisTickToText( const AxisProperties& rAxisProperties, bool bIncludeFarAwayDistanceIfSo, bool bIncludeSpaceBetweenTickAndText ) const
 {
     bool bFarAwayLabels = false;
     if( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START == rAxisProperties.m_eLabelPos
@@ -846,8 +876,9 @@ B2DVector TickmarkHelper_2D::getDistanceAxisTickToText( const AxisProperties& rA
     if( rAxisProperties.m_fInnerDirectionSign != rAxisProperties.m_fLabelDirectionSign )
         aOrthoLabelDirection*=-1.0;
     aOrthoLabelDirection.normalize();
-    aLabelDirection += aOrthoLabelDirection*AXIS2D_TICKLABELSPACING;
-    if( bFarAwayLabels )
+    if( bIncludeSpaceBetweenTickAndText )
+        aLabelDirection += aOrthoLabelDirection*AXIS2D_TICKLABELSPACING;
+    if( bFarAwayLabels && bIncludeFarAwayDistanceIfSo )
         aLabelDirection += m_aAxisLineToLabelLineShift;
     return aLabelDirection;
 }
@@ -879,27 +910,6 @@ void TickmarkHelper_2D::updateScreenValues( ::std::vector< ::std::vector< TickIn
     }
 }
 
-//'hide' tickmarks with identical screen values in aAllTickInfos
-void TickmarkHelper_2D::hideIdenticalScreenValues(
-        ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const
-{
-    TickIter aIter( rAllTickInfos, m_rIncrement );
-
-    TickInfo* pPreviousTickInfo = aIter.firstInfo();
-    if(!pPreviousTickInfo)
-        return;
-    pPreviousTickInfo->bPaintIt = true;
-    for( TickInfo* pTickInfo = aIter.nextInfo(); pTickInfo; pTickInfo = aIter.nextInfo())
-    {
-        pTickInfo->bPaintIt =
-            ( static_cast<sal_Int32>(pTickInfo->aTickScreenPosition.getX())
-            != static_cast<sal_Int32>(pPreviousTickInfo->aTickScreenPosition.getX()) )
-            ||
-            ( static_cast<sal_Int32>(pTickInfo->aTickScreenPosition.getY())
-            != static_cast<sal_Int32>(pPreviousTickInfo->aTickScreenPosition.getY()) );
-        pPreviousTickInfo = pTickInfo;
-    }
-}
 //-----------------------------------------------------------------------------
 // ___TickmarkHelper_3D___
 //-----------------------------------------------------------------------------

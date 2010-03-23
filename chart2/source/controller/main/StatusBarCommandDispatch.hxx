@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: StatusBarCommandDispatch.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +28,7 @@
 #define CHART2_STATUSBARCOMMANDDISPATCH_HXX
 
 #include "CommandDispatch.hxx"
+#include "ObjectIdentifier.hxx"
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -103,7 +101,7 @@ private:
     ::com::sun::star::uno::Reference<
             ::com::sun::star::view::XSelectionSupplier > m_xSelectionSupplier;
     bool m_bIsModified;
-    ::rtl::OUString m_aSelectedCID;
+    ObjectIdentifier m_aSelectedOID;
 };
 
 } //  namespace chart

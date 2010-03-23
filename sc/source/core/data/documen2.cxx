@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: documen2.cxx,v $
- * $Revision: 1.75.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,11 +32,11 @@
 
 #define _ZFORLIST_DECLARE_TABLE
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
-#include <svx/editeng.hxx>
-#include <svx/forbiddencharacterstable.hxx>
-#include <svx/linkmgr.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
 #include <sfx2/bindings.hxx>
@@ -228,7 +225,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
     if ( eMode == SCDOCMODE_DOCUMENT )
     {
         if ( pDocShell )
-            pLinkManager = new SvxLinkManager( pDocShell );
+            pLinkManager = new sfx2::LinkManager( pDocShell );
 
         xPoolHelper = new ScPoolHelper( this );
 
@@ -263,11 +260,11 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
     aTrackTimer.SetTimeout( 100 );
 }
 
-SvxLinkManager* ScDocument::GetLinkManager()  const
+sfx2::LinkManager*  ScDocument::GetLinkManager()  const
 {
     if ( bAutoCalc && !pLinkManager && pShell)
     {
-        pLinkManager = new SvxLinkManager( pShell );
+        pLinkManager = new sfx2::LinkManager( pShell );
     }
     return pLinkManager;
 }

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.19.72.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -102,6 +98,8 @@ SLOFILES=   	\
                 $(SLO)$/dlg_ChartType_UNO.obj \
                 $(SLO)$/dlg_ChartType.obj \
                 $(SLO)$/dlg_NumberFormat.obj \
+                $(SLO)$/dlg_ShapeFont.obj \
+                $(SLO)$/dlg_ShapeParagraph.obj \
                 $(SLO)$/RangeSelectionButton.obj \
                 $(SLO)$/RangeSelectionHelper.obj \
                 $(SLO)$/RangeSelectionListener.obj \
@@ -154,7 +152,9 @@ SRC1FILES=		\
                 dlg_InsertErrorBars.src \
                 dlg_InsertTitle.src \
                 dlg_ChartType.src \
-                dlg_CreationWizard.src
+                dlg_CreationWizard.src \
+                dlg_ShapeFont.src \
+                dlg_ShapeParagraph.src
 
 SRS1NAME=$(TARGET)
 

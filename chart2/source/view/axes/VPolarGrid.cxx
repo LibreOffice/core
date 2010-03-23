@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: VPolarGrid.cxx,v $
- * $Revision: 1.10.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,7 +90,7 @@ void VPolarGrid::createLinePointSequence_ForAngleAxis(
         xInverseScaling = rScale.Scaling->getInverseScaling();
 
     sal_Int32 nTick = 0;
-    TickIter aIter( rAllTickInfos, rIncrement, 0, 0 );
+    EquidistantTickIter aIter( rAllTickInfos, rIncrement, 0, 0 );
     for( TickInfo* pTickInfo = aIter.firstInfo()
         ; pTickInfo
         ; pTickInfo = aIter.nextInfo(), nTick++ )

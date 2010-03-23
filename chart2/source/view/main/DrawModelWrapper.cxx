@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DrawModelWrapper.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +38,7 @@
 // header for class SfxBoolItem
 #include <svl/eitem.hxx>
 // header for define EE_PARA_HYPHENATE
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 // header for class Svx3DPercentDiagonalItem
 #include <svx/svx3ditems.hxx>
 // header for class SvtPathOptions
@@ -57,7 +54,7 @@
 // header for class SdrOutliner
 #include <svx/svdoutl.hxx>
 // header for class LinguMgr
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 // header for class Application
 #include <vcl/svapp.hxx>
 // header for class VirtualDevice
@@ -134,7 +131,7 @@ DrawModelWrapper::DrawModelWrapper(
 
     SetScaleUnit(MAP_100TH_MM);
     SetScaleFraction(Fraction(1, 1));
-    SetDefaultFontHeight(847);     // 24pt
+    SetDefaultFontHeight(423);     // 12pt
 
     SfxItemPool* pMasterPool = &GetItemPool();
     pMasterPool->SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
@@ -391,77 +388,6 @@ SdrObject* DrawModelWrapper::getNamedSdrObject( const String& rObjectCID, SdrObj
             return pObj;
     }
     return 0;
-}
-
-namespace
-{
-    void impl_addOrExchangeElements( const uno::Reference< uno::XInterface >& xSource
-        , const uno::Reference< uno::XInterface >& xTarget )
-    {
-        uno::Reference< container::XNameContainer > xSourceContainer( xSource, uno::UNO_QUERY );
-        uno::Reference< container::XNameContainer > xTargetContainer( xTarget, uno::UNO_QUERY );
-
-        if(!xSourceContainer.is()||!xTargetContainer.is())
-            return;
-
-        try
-        {
-            //put each element of xSourceContainer to xTargetContainer
-            uno::Sequence< rtl::OUString > aNames( xSourceContainer->getElementNames() );
-            for( sal_Int32 nN = aNames.getLength(); nN--; )
-            {
-                rtl::OUString aName(aNames[nN]);
-                uno::Any aNewValue( xSourceContainer->getByName( aName ) );
-                if( xTargetContainer->hasByName(aName) )
-                {
-                    uno::Any aOldValue( xTargetContainer->getByName( aName ) );
-                    if( aOldValue != aNewValue )
-                        xTargetContainer->replaceByName(aName,aNewValue);
-                }
-                else
-                    xTargetContainer->insertByName( aName, aNewValue );
-            }
-        }
-        catch( const uno::Exception & ex )
-        {
-            ASSERT_EXCEPTION( ex );
-        }
-    }
-}
-
-void DrawModelWrapper::updateTablesFromChartModel( const uno::Reference< frame::XModel >& xChartModel )
-{
-    //all gradients, etc contained in the model need to be offered fot the view and GUI also:
-
-    DBG_ASSERT( xChartModel.is(),"need a chart model for updateTablesFromChartModel");
-    if( !xChartModel.is() )
-        return;
-
-    uno::Reference< lang::XMultiServiceFactory > xTableFactory( xChartModel, uno::UNO_QUERY );
-    DBG_ASSERT( xTableFactory.is(), "new model is expected to implement service factory for gradient table etc" );
-    if( !xTableFactory.is()  )
-        return;
-
-    //todo? colorTable...
-    //impl_addOrExchangeElements( xTableFactory->createInstance( C2U("com.sun.star.drawing.XXX") )
-    //                          , SvxUnoXColorTable_createInstance( this->GetColorTable() ) );
-    impl_addOrExchangeElements( xTableFactory->createInstance( C2U("com.sun.star.drawing.DashTable") )
-                              , SvxUnoXDashTable_createInstance( this->GetDashList() ) );
-    impl_addOrExchangeElements( xTableFactory->createInstance( C2U("com.sun.star.drawing.MarkerTable") )
-                              , SvxUnoXLineEndTable_createInstance( this->GetLineEndList() ) );
-    impl_addOrExchangeElements( xTableFactory->createInstance( C2U("com.sun.star.drawing.GradientTable") )
-                              , SvxUnoXGradientTable_createInstance( this->GetGradientList() ) );
-    impl_addOrExchangeElements( xTableFactory->createInstance( C2U("com.sun.star.drawing.HatchTable") )
-                              , SvxUnoXHatchTable_createInstance( this->GetHatchList() ) );
-    impl_addOrExchangeElements( xTableFactory->createInstance( C2U("com.sun.star.drawing.BitmapTable") )
-                              , SvxUnoXBitmapTable_createInstance( this->GetBitmapList() ) );
-
-    // transparency gradients
-    uno::Reference< uno::XInterface > xSource(
-        xTableFactory->createInstance( C2U("com.sun.star.drawing.TransparencyGradientTable")));
-    uno::Reference< uno::XInterface > xTarget(
-        this->getShapeFactory()->createInstance( C2U("com.sun.star.drawing.TransparencyGradientTable")));
-    impl_addOrExchangeElements( xSource, xTarget );
 }
 
 //static

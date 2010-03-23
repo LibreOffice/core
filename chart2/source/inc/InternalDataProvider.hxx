@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: InternalDataProvider.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,8 +27,10 @@
 #ifndef CHART2_INTERNALDATAPROVIDER_HXX
 #define CHART2_INTERNALDATAPROVIDER_HXX
 
+#include "InternalData.hxx"
+
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/chart/XChartDataArray.hpp>
+#include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
@@ -52,12 +51,11 @@ namespace chart
 
 namespace impl
 {
-class InternalData;
 
 typedef ::cppu::WeakImplHelper6<
         ::com::sun::star::chart2::XInternalDataProvider,
         ::com::sun::star::chart2::data::XRangeXMLConversion,
-        ::com::sun::star::chart::XChartDataArray,
+        ::com::sun::star::chart::XComplexDescriptionAccess,
         ::com::sun::star::util::XCloneable,
         ::com::sun::star::lang::XInitialization,
         ::com::sun::star::lang::XServiceInfo >
@@ -78,16 +76,9 @@ class InternalDataProvider :
         public impl::InternalDataProvider_Base
 {
 public:
-    explicit InternalDataProvider();
     explicit InternalDataProvider(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & _xContext);
-    /// sets the internal data to the given data
-    explicit InternalDataProvider(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart::XChartDataArray > & xDataToCopy );
-    /// copies the data from the given data provider for all given used ranges
     explicit InternalDataProvider( const ::com::sun::star::uno::Reference<
-                                       ::com::sun::star::chart2::XChartDocument > & xChartDoc );
-    // copy-CTOR
+                                       ::com::sun::star::chart2::XChartDocument > & xChartDoc, bool bConnectToModel );
     explicit InternalDataProvider( const InternalDataProvider & rOther );
     virtual ~InternalDataProvider();
 
@@ -112,6 +103,10 @@ public:
     virtual void SAL_CALL deleteSequence( ::sal_Int32 nAtIndex )
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL appendSequence()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL insertComplexCategoryLevel( ::sal_Int32 nLevel )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL deleteComplexCategoryLevel( ::sal_Int32 nLevel )
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL insertDataPointForAllSequences( ::sal_Int32 nAfterIndex )
         throw (::com::sun::star::uno::RuntimeException);
@@ -154,7 +149,21 @@ public:
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
 
-    // ____ XChartDataArray ____
+    // ____ XComplexDescriptionAccess ____
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > SAL_CALL
+        getComplexRowDescriptions() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setComplexRowDescriptions(
+        const ::com::sun::star::uno::Sequence<
+        ::com::sun::star::uno::Sequence< ::rtl::OUString > >& aRowDescriptions )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > SAL_CALL
+        getComplexColumnDescriptions() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setComplexColumnDescriptions(
+        const ::com::sun::star::uno::Sequence<
+        ::com::sun::star::uno::Sequence< ::rtl::OUString > >& aColumnDescriptions )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XChartDataArray (base of XComplexDescriptionAccess) ____
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > > SAL_CALL getData()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setData(
@@ -192,29 +201,27 @@ public:
         throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::uno::Exception);
 
 private:
-    impl::InternalData &  getInternalData();
-    const impl::InternalData &  getInternalData() const;
-
-    void addDataSequenceToMap(
+    void lcl_addDataSequenceToMap(
         const ::rtl::OUString & rRangeRepresentation,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataSequence > & xSequence );
+
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataSequence >
-        createDataSequenceAndAddToMap( const ::rtl::OUString & rRangeRepresentation,
+        lcl_createDataSequenceAndAddToMap( const ::rtl::OUString & rRangeRepresentation,
                                        const ::rtl::OUString & rRole );
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataSequence >
-        createDataSequenceAndAddToMap( const ::rtl::OUString & rRangeRepresentation );
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XDataSequence >
-        createErrorBarDataSequenceAndAddToMap( const ::rtl::OUString & rRangeRepresentation );
-    void deleteMapReferences( const ::rtl::OUString & rRangeRepresentation );
-    void adaptMapReferences(
+        lcl_createDataSequenceAndAddToMap( const ::rtl::OUString & rRangeRepresentation );
+
+    void lcl_deleteMapReferences( const ::rtl::OUString & rRangeRepresentation );
+
+    void lcl_adaptMapReferences(
         const ::rtl::OUString & rOldRangeRepresentation,
         const ::rtl::OUString & rNewRangeRepresentation );
-    void increaseMapReferences( sal_Int32 nBegin, sal_Int32 nEnd );
-    void decreaseMapReferences( sal_Int32 nBegin, sal_Int32 nEnd );
+
+    void lcl_increaseMapReferences( sal_Int32 nBegin, sal_Int32 nEnd );
+    void lcl_decreaseMapReferences( sal_Int32 nBegin, sal_Int32 nEnd );
 
     typedef ::std::multimap< ::rtl::OUString,
             ::com::sun::star::uno::WeakReference< ::com::sun::star::chart2::data::XDataSequence > >
@@ -228,14 +235,9 @@ private:
         referred to by some component (weak reference is valid), the range will
         be adapted.
      */
-    mutable tSequenceMap m_aSequenceMap;
-    mutable ::std::auto_ptr< impl::InternalData > m_apData;
+    tSequenceMap m_aSequenceMap;
+    InternalData m_aInternalData;
     bool m_bDataInColumns;
-
-//     typedef ::std::map< ::rtl::OUString,
-//             ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > >
-//         tHardRefSequenceMap;
-//     tHardRefSequenceMap m_aErrorBarSequences;
 };
 
 } //  namespace chart

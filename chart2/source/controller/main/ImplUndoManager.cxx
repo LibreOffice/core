@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ImplUndoManager.cxx,v $
- * $Revision: 1.7.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,7 @@
 #include "DataSourceHelper.hxx"
 #include "ChartModelHelper.hxx"
 
-#include <com/sun/star/chart/XChartDataArray.hpp>
+#include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
@@ -55,7 +52,7 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
-using ::com::sun::star::chart::XChartDataArray;
+using ::com::sun::star::chart::XComplexDescriptionAccess;
 
 namespace chart
 {
@@ -72,13 +69,13 @@ void ImplApplyDataToModel(
     // copy data from stored internal data provider
     if( xDoc.is() && xDoc->hasInternalDataProvider())
     {
-        Reference< XChartDataArray > xCurrentData( xDoc->getDataProvider(), uno::UNO_QUERY );
-        Reference< XChartDataArray > xSavedData( xData, uno::UNO_QUERY );
+        Reference< XComplexDescriptionAccess > xCurrentData( xDoc->getDataProvider(), uno::UNO_QUERY );
+        Reference< XComplexDescriptionAccess > xSavedData( xData, uno::UNO_QUERY );
         if( xCurrentData.is() && xSavedData.is())
         {
             xCurrentData->setData( xSavedData->getData());
-            xCurrentData->setRowDescriptions( xSavedData->getRowDescriptions());
-            xCurrentData->setColumnDescriptions( xSavedData->getColumnDescriptions());
+            xCurrentData->setComplexRowDescriptions( xSavedData->getComplexRowDescriptions());
+            xCurrentData->setComplexColumnDescriptions( xSavedData->getComplexColumnDescriptions());
         }
     }
 }
@@ -110,7 +107,10 @@ UndoElement::~UndoElement()
 
 void UndoElement::initialize( const Reference< frame::XModel > & xModel )
 {
-    m_xModel.set( UndoElement::cloneModel( xModel ));
+    if ( xModel.is() )
+    {
+        m_xModel.set( UndoElement::cloneModel( xModel ) );
+    }
 }
 
 void UndoElement::dispose()
@@ -354,6 +354,29 @@ UndoElement * UndoElementWithSelection::createFromModel(
         const Reference< frame::XModel > & xModel )
 {
     return new UndoElementWithSelection( getActionString(), xModel );
+}
+
+// ----------------------------------------
+
+ShapeUndoElement::ShapeUndoElement( const OUString& rActionString, SdrUndoAction* pAction )
+    :UndoElement( rActionString, Reference< frame::XModel >() )
+    ,m_pAction( pAction )
+{
+}
+
+ShapeUndoElement::ShapeUndoElement( const ShapeUndoElement& rOther )
+    :UndoElement( rOther )
+    ,m_pAction( rOther.m_pAction )
+{
+}
+
+ShapeUndoElement::~ShapeUndoElement()
+{
+}
+
+SdrUndoAction* ShapeUndoElement::getSdrUndoAction()
+{
+    return m_pAction;
 }
 
 // ========================================

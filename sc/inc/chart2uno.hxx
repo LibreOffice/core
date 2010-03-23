@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: chart2uno.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -190,24 +187,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
         getSupportedServiceNames() throw(
                 ::com::sun::star::uno::RuntimeException);
-
-    /**
-     * Check the current list of reference tokens, and add the upper left
-     * corner of the minimum range that encloses all ranges if certain
-     * conditions are met.
-     *
-     * @param rRefTokens list of reference tokens
-     *
-     * @return true if the corner was added, false otherwise.
-     */
-    static bool addUpperLeftCornerIfMissing(::std::vector<ScSharedTokenRef>& rRefTokens);
-
-private:
-
-    void detectRangesFromDataSource(::std::vector<ScSharedTokenRef>& rRefTokens,
-                                    ::com::sun::star::chart::ChartDataRowSource& rRowSource,
-                                    bool& rRowSourceDetected,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >& xDataSource);
 
 private:
 
@@ -533,6 +512,14 @@ private:
     };
 
     ::std::list<Item>           m_aDataArray;
+
+    /**
+     * Cached data for getData.  We may also need to cache data for the
+     * numerical and textural data series if they turn out to be bottlenecks
+     * under certain scenarios.
+     */
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > m_aMixedDataCache;
+
     ::com::sun::star::uno::Sequence<sal_Int32>  m_aHiddenValues;
 
     // properties

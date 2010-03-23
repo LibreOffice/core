@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartModelHelper.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +34,6 @@
 #include <com/sun/star/chart2/XUndoManager.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XRangeHighlighter.hpp>
-#include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <com/sun/star/awt/Size.hpp>
@@ -58,18 +54,11 @@ namespace chart
 class OOO_DLLPUBLIC_CHARTTOOLS ChartModelHelper
 {
 public:
-    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager > createUndoManager();
-
     static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XRangeHighlighter > createRangeHighlighter(
             const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier >& xSelectionSupplier );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > createInternalDataProvider();
-
     static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > createInternalDataProvider(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartDataArray >& xDataToCopy );
-
-    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > createInternalDataProvider(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc, bool bConnectToModel );
 
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram >
@@ -78,6 +67,10 @@ public:
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram >
         findDiagram( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc );
+
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XCoordinateSystem >
+        getFirstCoordinateSystem( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
 
     SAL_DLLPRIVATE static ::std::vector< ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XDataSeries > > getDataSeries(

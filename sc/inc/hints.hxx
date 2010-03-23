@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hints.hxx,v $
- * $Revision: 1.5.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -171,6 +168,18 @@ public:
                     ~ScDBRangeRefreshedHint();
 
     const ScImportParam&  GetImportParam() const    { return aParam; }
+};
+
+class ScDataPilotModifiedHint : public SfxHint
+{
+    String          maName;
+
+public:
+                    TYPEINFO();
+                    ScDataPilotModifiedHint( const String& rName );
+                    ~ScDataPilotModifiedHint();
+
+    const String&   GetName() const { return maName; }
 };
 
 #endif

@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.30.168.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -76,6 +72,7 @@ SLOFILES =  \
         $(SLO)$/detdata.obj  \
         $(SLO)$/detfunc.obj  \
         $(SLO)$/docoptio.obj \
+        $(SLO)$/doubleref.obj \
         $(SLO)$/editutil.obj \
         $(SLO)$/filtopt.obj \
         $(SLO)$/formulaparserpool.obj \
@@ -95,6 +92,7 @@ SLOFILES =  \
         $(SLO)$/printopt.obj \
         $(SLO)$/prnsave.obj \
         $(SLO)$/progress.obj \
+        $(SLO)$/queryparam.obj \
         $(SLO)$/rangelst.obj \
         $(SLO)$/rangenam.obj \
         $(SLO)$/rangeseq.obj \
@@ -122,6 +120,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/chartlock.obj \
         $(SLO)$/chgtrack.obj \
         $(SLO)$/compiler.obj \
+        $(SLO)$/doubleref.obj \
         $(SLO)$/formulaparserpool.obj \
         $(SLO)$/interpr1.obj \
         $(SLO)$/interpr2.obj \
@@ -130,6 +129,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/interpr5.obj \
         $(SLO)$/lookupcache.obj \
         $(SLO)$/prnsave.obj \
+        $(SLO)$/queryparam.obj \
         $(SLO)$/reftokenhelper.obj \
         $(SLO)$/token.obj
 

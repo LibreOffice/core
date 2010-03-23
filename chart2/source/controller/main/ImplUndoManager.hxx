@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ImplUndoManager.hxx,v $
- * $Revision: 1.5.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +37,9 @@
 
 #include <utility>
 #include <deque>
+
+
+class SdrUndoAction;
 
 namespace com { namespace sun { namespace star {
 namespace chart2 {
@@ -147,6 +147,19 @@ private:
                          ::com::sun::star::frame::XModel > & xModel );
 
     ::com::sun::star::uno::Any m_aSelection;
+};
+
+class ShapeUndoElement : public UndoElement
+{
+public:
+    ShapeUndoElement( const ::rtl::OUString& rActionString, SdrUndoAction* pAction );
+    ShapeUndoElement( const ShapeUndoElement& rOther );
+    virtual ~ShapeUndoElement();
+
+    SdrUndoAction* getSdrUndoAction();
+
+private:
+    SdrUndoAction* m_pAction;
 };
 
 /** Note that all models that are put into this container are at some point

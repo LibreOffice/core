@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartModel_Persistence.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,28 +29,36 @@
 #include "precompiled_chart2.hxx"
 
 #include "ChartModel.hxx"
-#include "ImplChartModel.hxx"
 #include "MediaDescriptorHelper.hxx"
 #include "ChartDebugTrace.hxx"
 #include "macros.hxx"
 #include "ChartViewHelper.hxx"
 #include "ChartModelHelper.hxx"
+#include "AxisHelper.hxx"
+#include "ThreeDHelper.hxx"
+
+#include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+
 #include <ucbhelper/content.hxx>
 #ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
 #include <vcl/cvtgrf.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <vcl/svapp.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -407,7 +412,88 @@ void SAL_CALL ChartModel::initNew()
     createInternalDataProvider( sal_False );
     try
     {
-        m_pImplChartModel->CreateDefaultChart();
+        // create default chart
+        impl_removeAllDiagrams();
+
+        Reference< chart2::XChartTypeTemplate > xTemplate( impl_createDefaultChartTypeTemplate() );
+        if( xTemplate.is())
+        {
+            try
+            {
+                Reference< chart2::data::XDataSource > xDataSource( impl_createDefaultData() );
+                Sequence< beans::PropertyValue > aParam;
+
+                bool bSupportsCategories = xTemplate->supportsCategories();
+                if( bSupportsCategories )
+                {
+                    aParam.realloc( 1 );
+                    aParam[0] = beans::PropertyValue( C2U("HasCategories"), -1, uno::makeAny( true ),
+                                                      beans::PropertyState_DIRECT_VALUE );
+                }
+
+                Reference< chart2::XDiagram > xDiagram( xTemplate->createDiagramByDataSource( xDataSource, aParam ) );
+
+                impl_appendDiagram( xDiagram );
+
+                bool bIsRTL = Application::GetSettings().GetLayoutRTL();
+                //reverse x axis for rtl charts
+                if( bIsRTL )
+                    AxisHelper::setRTLAxisLayout( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 ) );
+
+                // create and attach legend
+                Reference< chart2::XLegend > xLegend(
+                    m_xContext->getServiceManager()->createInstanceWithContext(
+                        C2U( "com.sun.star.chart2.Legend" ), m_xContext ), uno::UNO_QUERY_THROW );
+                Reference< beans::XPropertySet > xLegendProperties( xLegend, uno::UNO_QUERY );
+                if( xLegendProperties.is() )
+                {
+                    xLegendProperties->setPropertyValue( C2U( "FillStyle" ), uno::makeAny( drawing::FillStyle_NONE ));
+                    xLegendProperties->setPropertyValue( C2U( "LineStyle" ), uno::makeAny( drawing::LineStyle_NONE ));
+                    xLegendProperties->setPropertyValue( C2U( "LineColor" ), uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ));  // gray30
+                    xLegendProperties->setPropertyValue( C2U( "FillColor" ), uno::makeAny( static_cast< sal_Int32 >( 0xe6e6e6 ) ) ); // gray10
+
+                    if( bIsRTL )
+                        xLegendProperties->setPropertyValue( C2U( "AnchorPosition" ), uno::makeAny( chart2::LegendPosition_LINE_START ));
+                }
+                if(xDiagram.is())
+                    xDiagram->setLegend( xLegend );
+
+                // set simple 3D look
+                Reference< beans::XPropertySet > xDiagramProperties( xDiagram, uno::UNO_QUERY );
+                if( xDiagramProperties.is() )
+                {
+                    xDiagramProperties->setPropertyValue( C2U("RightAngledAxes"), uno::makeAny( sal_True ));
+                    xDiagramProperties->setPropertyValue( C2U("D3DScenePerspective"), uno::makeAny( drawing::ProjectionMode_PARALLEL ));
+                    ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme_Simple );
+                }
+
+                //set some new 'defaults' for wall and floor
+                if( xDiagram.is() )
+                {
+                    Reference< beans::XPropertySet > xWall( xDiagram->getWall() );
+                    if( xWall.is() )
+                    {
+                        xWall->setPropertyValue( C2U( "LineStyle" ), uno::makeAny( drawing::LineStyle_SOLID ) );
+                        xWall->setPropertyValue( C2U( "FillStyle" ), uno::makeAny( drawing::FillStyle_NONE ) );
+                        xWall->setPropertyValue( C2U( "LineColor" ), uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ) ); // gray30
+                        xWall->setPropertyValue( C2U( "FillColor" ), uno::makeAny( static_cast< sal_Int32 >( 0xe6e6e6 ) ) ); // gray10
+                    }
+                    Reference< beans::XPropertySet > xFloor( xDiagram->getFloor() );
+                    if( xFloor.is() )
+                    {
+                        xFloor->setPropertyValue( C2U( "LineStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
+                        xFloor->setPropertyValue( C2U( "FillStyle" ), uno::makeAny( drawing::FillStyle_SOLID ) );
+                        xFloor->setPropertyValue( C2U( "LineColor" ), uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ) ); // gray30
+                        xFloor->setPropertyValue( C2U( "FillColor" ), uno::makeAny( static_cast< sal_Int32 >( 0xcccccc ) ) ); // gray20
+                    }
+
+                }
+            }
+            catch( uno::Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
+            }
+        }
         ChartModelHelper::setIncludeHiddenCells( false, this );
     }
     catch( uno::Exception & ex )

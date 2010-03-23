@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ObjectNameProvider.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,8 +45,6 @@
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
-
-// #include <unotools/syslocale.hxx>
 
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
@@ -200,7 +195,7 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
 
         replaceParamterInString( aCategory
             , C2U("%CATEGORYVALUE")
-            , ExplicitCategoriesProvider::getCategoryByIndex( xCooSys, nPointIndex )
+            , ExplicitCategoriesProvider::getCategoryByIndex( xCooSys, xChartModel, nPointIndex )
             );
 
         aRet = aCategory;

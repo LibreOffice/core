@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartController.cxx,v $
- * $Revision: 1.30.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +50,10 @@
 #include "dlg_CreationWizard.hxx"
 #include "dlg_ChartType.hxx"
 //#include "svx/ActionDescriptionProvider.hxx"
+#include "AccessibleChartView.hxx"
+#include "DrawCommandDispatch.hxx"
+#include "ShapeController.hxx"
+#include "UndoManager.hxx"
 
 #include <comphelper/InlineContainer.hxx>
 
@@ -100,6 +101,7 @@ namespace chart
 //.............................................................................
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
@@ -127,7 +129,8 @@ ChartController::ChartController(uno::Reference<uno::XComponentContext> const & 
     , m_bWaitingForMouseUp(false)
     , m_bConnectingToView(false)
     , m_xUndoManager( 0 )
-    , m_aDispatchContainer( m_xCC )
+    , m_aDispatchContainer( m_xCC, this )
+    , m_eDrawMode( CHARTDRAW_SELECT )
 {
     DBG_CTOR(ChartController,NULL);
 //     m_aDispatchContainer.setUndoManager( m_xUndoManager );
@@ -441,6 +444,11 @@ APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTAT
                     //@todo: createElement should become unnecessary, remove when #i79198# is fixed
                     xLayoutManager->createElement(  C2U( "private:resource/toolbar/toolbar" ) );
                     xLayoutManager->requestElement( C2U( "private:resource/toolbar/toolbar" ) );
+
+                    // #i12587# support for shapes in chart
+                    xLayoutManager->createElement(  C2U( "private:resource/toolbar/drawbar" ) );
+                    xLayoutManager->requestElement( C2U( "private:resource/toolbar/drawbar" ) );
+
                     xLayoutManager->requestElement( C2U( "private:resource/statusbar/statusbar" ) );
                     xLayoutManager->unlock();
 
@@ -562,13 +570,27 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
 
     // set new model at dispatchers
     m_aDispatchContainer.setModel( aNewModelRef->getModel());
-    ControllerCommandDispatch * pDispatch = new ControllerCommandDispatch( m_xCC, this );
+    ControllerCommandDispatch * pDispatch = new ControllerCommandDispatch( m_xCC, this, &m_aDispatchContainer );
     pDispatch->initialize();
 
     // the dispatch container will return "this" for all commands returned by
     // impl_getAvailableCommands().  That means, for those commands dispatch()
     // is called here at the ChartController.
-    m_aDispatchContainer.setFallbackDispatch( pDispatch, impl_getAvailableCommands() );
+    m_aDispatchContainer.setChartDispatch( pDispatch, impl_getAvailableCommands() );
+
+    DrawCommandDispatch* pDrawDispatch = new DrawCommandDispatch( m_xCC, this );
+    if ( pDrawDispatch )
+    {
+        pDrawDispatch->initialize();
+        m_aDispatchContainer.setDrawCommandDispatch( pDrawDispatch );
+    }
+
+    ShapeController* pShapeController = new ShapeController( m_xCC, this );
+    if ( pShapeController )
+    {
+        pShapeController->initialize();
+        m_aDispatchContainer.setShapeController( pShapeController );
+    }
 
 #ifdef TEST_ENABLE_MODIFY_LISTENER
     uno::Reference< util::XModifyBroadcaster > xMBroadcaster( aNewModelRef->getModel(),uno::UNO_QUERY );
@@ -1064,7 +1086,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
 
     void SAL_CALL ChartController
 ::dispatch( const util::URL& rURL
-            , const uno::Sequence< beans::PropertyValue >& /* rArgs */ )
+            , const uno::Sequence< beans::PropertyValue >& rArgs )
             throw (uno::RuntimeException)
 {
     //@todo avoid OString (see Mathias mail on bug #104387#)
@@ -1164,7 +1186,16 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
     else if( aCommand.equals("FormatSelection") )
         this->executeDispatch_ObjectProperties();
     else if( aCommand.equals("TransformDialog"))
-        this->executeDispatch_PositionAndSize();
+    {
+        if ( isShapeContext() )
+        {
+            this->impl_ShapeControllerDispatch( rURL, rArgs );
+        }
+        else
+        {
+            this->executeDispatch_PositionAndSize();
+        }
+    }
     else if( lcl_isFormatObjectCommand(aCommand) )
         this->executeDispatch_FormatObject(rURL.Path);
     //more format
@@ -1174,10 +1205,28 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
         this->executeDispatch_ChartType();
     else if( aCommand.equals("View3D"))
         this->executeDispatch_View3D();
-    else if( aCommand.equals("Forward"))
-        this->executeDispatch_MoveSeries( sal_True );
-    else if( aCommand.equals("Backward"))
-        this->executeDispatch_MoveSeries( sal_False );
+    else if ( aCommand.equals( "Forward" ) )
+    {
+        if ( isShapeContext() )
+        {
+            this->impl_ShapeControllerDispatch( rURL, rArgs );
+        }
+        else
+        {
+            this->executeDispatch_MoveSeries( sal_True );
+        }
+    }
+    else if ( aCommand.equals( "Backward" ) )
+    {
+        if ( isShapeContext() )
+        {
+            this->impl_ShapeControllerDispatch( rURL, rArgs );
+        }
+        else
+        {
+            this->executeDispatch_MoveSeries( sal_False );
+        }
+    }
     else if( aCommand.equals("NewArrangement"))
         this->executeDispatch_NewArrangement();
     else if( aCommand.equals("ToggleLegend"))
@@ -1393,6 +1442,20 @@ void SAL_CALL ChartController::modified( const lang::EventObject& /* aEvent */ )
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
+IMPL_LINK( ChartController, NotifyUndoActionHdl, SdrUndoAction*, pUndoAction )
+{
+    ::rtl::OUString aObjectCID = m_aSelection.getSelectedCID();
+    if ( aObjectCID.getLength() == 0 )
+    {
+        UndoManager* pUndoManager = UndoManager::getImplementation( m_xUndoManager );
+        if ( pUndoManager )
+        {
+            pUndoManager->addShapeUndoAction( pUndoAction );
+        }
+    }
+    return 0L;
+}
+
 DrawModelWrapper* ChartController::GetDrawModelWrapper()
 {
     if( !m_pDrawModelWrapper.get() )
@@ -1400,16 +1463,26 @@ DrawModelWrapper* ChartController::GetDrawModelWrapper()
         ExplicitValueProvider* pProvider = ExplicitValueProvider::getExplicitValueProvider( m_xChartView );
         if( pProvider )
             m_pDrawModelWrapper = pProvider->getDrawModelWrapper();
+        if ( m_pDrawModelWrapper.get() )
+        {
+            m_pDrawModelWrapper->getSdrModel().SetNotifyUndoActionHdl( LINK( this, ChartController, NotifyUndoActionHdl ) );
+        }
     }
     return m_pDrawModelWrapper.get();
 }
 
-uno::Reference< accessibility::XAccessible > ChartController::CreateAccessible()
+DrawViewWrapper* ChartController::GetDrawViewWrapper()
 {
-    uno::Reference< accessibility::XAccessible > xResult(
-        m_xCC->getServiceManager()->createInstanceWithContext(
-            CHART2_ACCESSIBLE_SERVICE_NAME, m_xCC ), uno::UNO_QUERY );
+    if ( !m_pDrawViewWrapper )
+    {
+        impl_createDrawViewController();
+    }
+    return m_pDrawViewWrapper;
+}
 
+uno::Reference< XAccessible > ChartController::CreateAccessible()
+{
+    uno::Reference< XAccessible > xResult = new AccessibleChartView( m_xCC, GetDrawViewWrapper() );
     impl_initializeAccessible( uno::Reference< lang::XInitialization >( xResult, uno::UNO_QUERY ) );
     return xResult;
 }
@@ -1441,7 +1514,7 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         uno::Reference<frame::XModel> xModel(m_aModel->getModel());
         aArguments[1]=uno::makeAny(xModel);
         aArguments[2]=uno::makeAny(m_xChartView);
-        uno::Reference< accessibility::XAccessible > xParent;
+        uno::Reference< XAccessible > xParent;
         if( m_pChartWindow )
         {
             Window* pParentWin( m_pChartWindow->GetAccessibleParentWindow());

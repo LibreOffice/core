@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xlescher.cxx,v $
- * $Revision: 1.14.90.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -162,12 +159,16 @@ void lclMirrorRectangle( Rectangle& rRect )
     rRect.Right() = -nLeft;
 }
 
+sal_uInt16 lclGetEmbeddedScale( long nPageSize, sal_Int32 nPageScale, long nPos, double fPosScale )
+{
+    return static_cast< sal_uInt16 >( nPos * fPosScale / nPageSize * nPageScale + 0.5 );
+}
+
 } // namespace
 
 // ----------------------------------------------------------------------------
 
-XclObjAnchor::XclObjAnchor( SCTAB nScTab ) :
-    mnScTab( nScTab ),
+XclObjAnchor::XclObjAnchor() :
     mnLX( 0 ),
     mnTY( 0 ),
     mnRX( 0 ),
@@ -175,35 +176,61 @@ XclObjAnchor::XclObjAnchor( SCTAB nScTab ) :
 {
 }
 
-Rectangle XclObjAnchor::GetRect( ScDocument& rDoc, MapUnit eMapUnit ) const
+Rectangle XclObjAnchor::GetRect( ScDocument& rDoc, SCTAB nScTab, MapUnit eMapUnit ) const
 {
     double fScale = lclGetTwipsScale( eMapUnit );
     Rectangle aRect(
-        lclGetXFromCol( rDoc, mnScTab, maFirst.mnCol, mnLX, fScale ),
-        lclGetYFromRow( rDoc, mnScTab, maFirst.mnRow, mnTY, fScale ),
-        lclGetXFromCol( rDoc, mnScTab, maLast.mnCol,  mnRX + 1, fScale ),
-        lclGetYFromRow( rDoc, mnScTab, maLast.mnRow,  mnBY, fScale ) );
+        lclGetXFromCol( rDoc, nScTab, maFirst.mnCol, mnLX, fScale ),
+        lclGetYFromRow( rDoc, nScTab, maFirst.mnRow, mnTY, fScale ),
+        lclGetXFromCol( rDoc, nScTab, maLast.mnCol,  mnRX + 1, fScale ),
+        lclGetYFromRow( rDoc, nScTab, maLast.mnRow,  mnBY, fScale ) );
 
     // #106948# adjust coordinates in mirrored sheets
-    if( rDoc.IsLayoutRTL( mnScTab ) )
+    if( rDoc.IsLayoutRTL( nScTab ) )
         lclMirrorRectangle( aRect );
     return aRect;
 }
 
-void XclObjAnchor::SetRect( ScDocument& rDoc, const Rectangle& rRect, MapUnit eMapUnit )
+void XclObjAnchor::SetRect( ScDocument& rDoc, SCTAB nScTab, const Rectangle& rRect, MapUnit eMapUnit )
 {
     Rectangle aRect( rRect );
     // #106948# adjust coordinates in mirrored sheets
-    if( rDoc.IsLayoutRTL( mnScTab ) )
+    if( rDoc.IsLayoutRTL( nScTab ) )
         lclMirrorRectangle( aRect );
 
     double fScale = lclGetTwipsScale( eMapUnit );
     long nDummy = 0;
-    lclGetColFromX( rDoc, mnScTab, maFirst.mnCol, mnLX, 0,             nDummy, aRect.Left(),   fScale );
-    lclGetColFromX( rDoc, mnScTab, maLast.mnCol,  mnRX, maFirst.mnCol, nDummy, aRect.Right(),  fScale );
+    lclGetColFromX( rDoc, nScTab, maFirst.mnCol, mnLX, 0,             nDummy, aRect.Left(),   fScale );
+    lclGetColFromX( rDoc, nScTab, maLast.mnCol,  mnRX, maFirst.mnCol, nDummy, aRect.Right(),  fScale );
     nDummy = 0;
-    lclGetRowFromY( rDoc, mnScTab, maFirst.mnRow, mnTY, 0,             nDummy, aRect.Top(),    fScale );
-    lclGetRowFromY( rDoc, mnScTab, maLast.mnRow,  mnBY, maFirst.mnRow, nDummy, aRect.Bottom(), fScale );
+    lclGetRowFromY( rDoc, nScTab, maFirst.mnRow, mnTY, 0,             nDummy, aRect.Top(),    fScale );
+    lclGetRowFromY( rDoc, nScTab, maLast.mnRow,  mnBY, maFirst.mnRow, nDummy, aRect.Bottom(), fScale );
+}
+
+void XclObjAnchor::SetRect( const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 nScaleY,
+        const Rectangle& rRect, MapUnit eMapUnit, bool bDffAnchor )
+{
+    double fScale = 1.0;
+    switch( eMapUnit )
+    {
+        case MAP_TWIP:      fScale = HMM_PER_TWIPS; break;  // Calc twips -> 1/100mm
+        case MAP_100TH_MM:  fScale = 1.0;           break;  // Calc 1/100mm -> 1/100mm
+        default:            DBG_ERRORFILE( "XclObjAnchor::SetRect - map unit not implemented" );
+    }
+
+    /*  In objects with DFF client anchor, the position of the shape is stored
+        in the cell address components of the client anchor. In old BIFF3-BIFF5
+        objects, the position is stored in the offset components of the anchor. */
+    (bDffAnchor ? maFirst.mnCol : mnLX) = lclGetEmbeddedScale( rPageSize.Width(),  nScaleX, rRect.Left(),   fScale );
+    (bDffAnchor ? maFirst.mnRow : mnTY) = lclGetEmbeddedScale( rPageSize.Height(), nScaleY, rRect.Top(),    fScale );
+    (bDffAnchor ? maLast.mnCol  : mnRX) = lclGetEmbeddedScale( rPageSize.Width(),  nScaleX, rRect.Right(),  fScale );
+    (bDffAnchor ? maLast.mnRow  : mnBY) = lclGetEmbeddedScale( rPageSize.Height(), nScaleY, rRect.Bottom(), fScale );
+
+    // for safety, clear the other members
+    if( bDffAnchor )
+        mnLX = mnTY = mnRX = mnBY = 0;
+    else
+        Set( 0, 0, 0, 0 );
 }
 
 // ----------------------------------------------------------------------------

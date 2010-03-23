@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dapiuno.hxx,v $
- * $Revision: 1.10.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +31,8 @@
 #include "global.hxx"
 #include "dpobject.hxx"
 #include "rangeutl.hxx"     // ScArea
+#include "cellsuno.hxx"     // for XModifyListenerArr_Impl
+
 #include <svl/lstner.hxx>
 #include <svl/itemprop.hxx>
 
@@ -42,6 +41,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
 
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupInfo.hpp>
@@ -316,11 +316,15 @@ public:
 // ============================================================================
 
 class ScDataPilotTableObj : public ScDataPilotDescriptorBase,
-                            public com::sun::star::sheet::XDataPilotTable2
+                            public com::sun::star::sheet::XDataPilotTable2,
+                            public com::sun::star::util::XModifyBroadcaster
 {
 private:
     SCTAB                   nTab;
     String                  aName;
+    XModifyListenerArr_Impl aModifyListeners;
+
+    void                    Refreshed_Impl();
 
 public:
                             ScDataPilotTableObj(ScDocShell* pDocSh, SCTAB nT, const String& rN);
@@ -331,6 +335,8 @@ public:
                                     throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   acquire() throw();
     virtual void SAL_CALL   release() throw();
+
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     virtual ScDPObject* GetDPObject() const;
     virtual void SetDPObject(ScDPObject* pDPObj);
@@ -363,6 +369,14 @@ public:
     virtual ::com::sun::star::table::CellRangeAddress SAL_CALL getOutputRangeByType( sal_Int32 nType )
                                 throw(::com::sun::star::lang::IllegalArgumentException,
                                       ::com::sun::star::uno::RuntimeException);
+
+                            // XModifyBroadcaster
+    virtual void SAL_CALL   addModifyListener( const ::com::sun::star::uno::Reference<
+                                                ::com::sun::star::util::XModifyListener >& aListener )
+                                throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   removeModifyListener( const ::com::sun::star::uno::Reference<
+                                                ::com::sun::star::util::XModifyListener >& aListener )
+                                throw (::com::sun::star::uno::RuntimeException);
 
                             // XTypeProvider (overloaded)
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ExplicitCategoriesProvider.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,36 +35,71 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include "charttoolsdllapi.hxx"
 
+#include <vector>
+
 namespace chart
 {
 
-class OOO_DLLPUBLIC_CHARTTOOLS ExplicitCategoriesProvider :
-        public ::cppu::WeakImplHelper1<
-        ::com::sun::star::chart2::data::XTextualDataSequence
-        >
+struct OOO_DLLPUBLIC_CHARTTOOLS ComplexCategory
+{
+    rtl::OUString Text;
+    sal_Int32 Count;
+
+    ComplexCategory( const rtl::OUString& rText, sal_Int32 nCount ) : Text( rText ), Count (nCount)
+    {}
+};
+
+class OOO_DLLPUBLIC_CHARTTOOLS SplitCategoriesProvider
+{
+public:
+    virtual ~SplitCategoriesProvider();
+
+    virtual sal_Int32 getLevelCount() const = 0;
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > getStringsForLevel( sal_Int32 nIndex ) const = 0;
+};
+
+class OOO_DLLPUBLIC_CHARTTOOLS ExplicitCategoriesProvider
 {
 public:
     ExplicitCategoriesProvider( const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::chart2::XCoordinateSystem >& xCooSysModel );
-    SAL_DLLPRIVATE virtual ~ExplicitCategoriesProvider();
+                        ::com::sun::star::chart2::XCoordinateSystem >& xCooSysModel
+                       , const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::frame::XModel >& xChartModel
+                       );
+    virtual ~ExplicitCategoriesProvider();
 
-    //XTextualDataSequence
-    SAL_DLLPRIVATE virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getTextualData()
-        throw (::com::sun::star::uno::RuntimeException);
+    void init();
+
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > getSimpleCategories();
+    ::std::vector< ComplexCategory > getCategoriesByLevel( sal_Int32 nLevel );
 
     static ::rtl::OUString getCategoryByIndex(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XCoordinateSystem >& xCooSysModel,
-        sal_Int32 nIndex );
+          const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XCoordinateSystem >& xCooSysModel
+        , const ::com::sun::star::uno::Reference<
+            ::com::sun::star::frame::XModel >& xChartModel
+        , sal_Int32 nIndex );
+
+    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getExplicitSimpleCategories(
+            const SplitCategoriesProvider& rSplitCategoriesProvider );
+
+    bool hasComplexCategories() const;
+    sal_Int32 getCategoryLevelCount() const;
+
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::data::XLabeledDataSequence> >& getSplitCategoriesList();
 
 private: //member
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aExplicitCategories;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aExplicitCategories;
+    ::std::vector< ::std::vector< ComplexCategory > >   m_aComplexCats;
     bool volatile m_bDirty;
 
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::chart2::XCoordinateSystem > m_xCooSysModel;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XLabeledDataSequence> m_xCategories;
+        ::com::sun::star::chart2::data::XLabeledDataSequence> m_xOriginalCategories;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::data::XLabeledDataSequence> > m_aSplitCategoriesList;
 };
 
 } //  namespace chart

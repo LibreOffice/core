@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AreaChart.cxx,v $
- * $Revision: 1.53.42.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +48,7 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <tools/debug.hxx>
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <rtl/math.hxx>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/NormalsKind.hpp>
@@ -75,7 +72,6 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
                      , bool bNoArea
                      , PlottingPositionHelper* pPlottingPositionHelper
                      , bool bConnectLastToFirstPoint
-                     , bool bAddOneToXMax
                      , bool bExpandIfValuesCloseToBorder
                      , sal_Int32 nKeepAspectRatio
                      , const drawing::Direction3D& rAspectRatio
@@ -87,7 +83,6 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
         , m_bSymbol( ChartTypeHelper::isSupportingSymbolProperties(xChartTypeModel,nDimensionCount) )
         , m_bIsPolarCooSys( bConnectLastToFirstPoint )
         , m_bConnectLastToFirstPoint( bConnectLastToFirstPoint )
-        , m_bAddOneToXMax(bAddOneToXMax)
         , m_bExpandIfValuesCloseToBorder( bExpandIfValuesCloseToBorder )
         , m_nKeepAspectRatio(nKeepAspectRatio)
         , m_aGivenAspectRatio(rAspectRatio)
@@ -126,14 +121,17 @@ AreaChart::~AreaChart()
     delete m_pMainPosHelper;
 }
 
+double AreaChart::getMinimumX()
+{
+    if( m_bCategoryXAxis && m_bIsPolarCooSys )//the angle axis in net charts needs a different autoscaling
+        return 1.0;//first category (index 0) matches with real number 1.0
+    return VSeriesPlotter::getMinimumX();
+}
+
 double AreaChart::getMaximumX()
 {
-    if( m_bAddOneToXMax )
-    {
-        //return category count
-        sal_Int32 nPointCount = getPointCount();
-        return nPointCount+1;
-    }
+    if( m_bCategoryXAxis && m_bIsPolarCooSys )//the angle axis in net charts needs a different autoscaling
+        return getPointCount()+1;
     return VSeriesPlotter::getMaximumX();
 }
 

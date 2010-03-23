@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.28.42.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -68,6 +64,7 @@ SLOFILES=	\
     $(SLO)$/DiagramHelper.obj \
     $(SLO)$/ExponentialRegressionCurveCalculator.obj \
     $(SLO)$/ImplOPropertySet.obj \
+    $(SLO)$/InternalData.obj \
     $(SLO)$/InternalDataProvider.obj \
     $(SLO)$/LabeledDataSequence.obj \
     $(SLO)$/LinearRegressionCurveCalculator.obj \
@@ -105,9 +102,6 @@ SLOFILES=	\
     $(SLO)$/ChartDebugTrace.obj \
     $(SLO)$/_serviceregistration_tools.obj \
     $(SLO)$/UncachedDataSequence.obj \
-    $(SLO)$/UndoManager.obj \
-    $(SLO)$/UndoGuard.obj \
-    $(SLO)$/ImplUndoManager.obj \
     $(SLO)$/XMLRangeHelper.obj \
     $(SLO)$/ModifyListenerHelper.obj \
     $(SLO)$/ModifyListenerCallBack.obj \

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xlescher.hxx,v $
- * $Revision: 1.22.90.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -315,18 +312,21 @@ bool operator<( const XclObjId& rL, const XclObjId& rR );
 /** Represents the position (anchor) of an object in a Calc document. */
 struct XclObjAnchor : public XclRange
 {
-    SCTAB               mnScTab;    /// Calc sheet index.
     sal_uInt16          mnLX;       /// X offset in left column (1/1024 of column width).
     sal_uInt16          mnTY;       /// Y offset in top row (1/256 of row height).
     sal_uInt16          mnRX;       /// X offset in right column (1/1024 of column width).
     sal_uInt16          mnBY;       /// Y offset in bottom row (1/256 of row height).
 
-    explicit            XclObjAnchor( SCTAB nScTab );
+    explicit            XclObjAnchor();
 
     /** Calculates a rectangle from the contained coordinates. */
-    Rectangle           GetRect( ScDocument& rDoc, MapUnit eMapUnit ) const;
-    /** Initializes the anchor coordinates from a rectangle. */
-    void                SetRect( ScDocument& rDoc, const Rectangle& rRect, MapUnit eMapUnit );
+    Rectangle           GetRect( ScDocument& rDoc, SCTAB nScTab, MapUnit eMapUnit ) const;
+    /** Initializes the anchor coordinates for a sheet. */
+    void                SetRect( ScDocument& rDoc, SCTAB nScTab, const Rectangle& rRect, MapUnit eMapUnit );
+
+    /** Initializes the anchor coordinates for an embedded draw page. */
+    void                SetRect( const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 nScaleY,
+                            const Rectangle& rRect, MapUnit eMapUnit, bool bDffAnchor );
 };
 
 template< typename StreamType >
