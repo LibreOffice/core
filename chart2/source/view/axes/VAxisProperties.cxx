@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: VAxisProperties.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -147,6 +144,18 @@ TickmarkProperties AxisProperties::makeTickmarkProperties(
     return aTickmarkProperties;
 }
 
+TickmarkProperties AxisProperties::makeTickmarkPropertiesForComplexCategories(
+    sal_Int32 nTickLength, sal_Int32 nTickStartDistanceToAxis, sal_Int32 /*nTextLevel*/ ) const
+{
+    sal_Int32 nTickmarkStyle = (m_fLabelDirectionSign==m_fInnerDirectionSign) ? 2/*outside*/ : 1/*inside*/;
+
+    TickmarkProperties aTickmarkProperties;
+    aTickmarkProperties.Length = nTickLength;// + nTextLevel*( lcl_calcTickLengthForDepth(0,nTickmarkStyle) );
+    aTickmarkProperties.RelativePos = static_cast<sal_Int32>(lcl_getTickOffset(aTickmarkProperties.Length+nTickStartDistanceToAxis,nTickmarkStyle));
+    aTickmarkProperties.aLineProperties = this->makeLinePropertiesForDepth( 0 );
+    return aTickmarkProperties;
+}
+
 //static
 TickmarkProperties AxisProperties::getBiggestTickmarkProperties()
 {
@@ -161,7 +170,7 @@ TickmarkProperties AxisProperties::getBiggestTickmarkProperties()
 //--------------------------------------------------------------------------
 
 AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
-                              , const uno::Reference< data::XTextualDataSequence >& xAxisTextProvider )
+                              , ExplicitCategoriesProvider* pExplicitCategoriesProvider )
     : m_xAxisModel(xAxisModel)
     , m_nDimensionIndex(0)
     , m_bIsMainAxis(true)
@@ -176,7 +185,6 @@ AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
     , m_bAxisBetweenCategories(false)
     , m_fLabelDirectionSign(1.0)
     , m_fInnerDirectionSign(1.0)
-    , m_bLabelsOutside(true)
     , m_aLabelAlignment(LABEL_ALIGN_RIGHT_TOP)
     , m_bDisplayLabels( true )
     , m_nNumberFormatKey(0)
@@ -186,8 +194,9 @@ AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
     , m_aLineProperties()
     //for category axes
     , m_nAxisType(AxisType::REALNUMBER)
-    , m_xAxisTextProvider(xAxisTextProvider)
-    , m_bTickmarksAtIndicatedValue(false)
+    , m_bComplexCategories(false)
+    , m_pExplicitCategoriesProvider(pExplicitCategoriesProvider)
+    , m_xAxisTextProvider(0)
 {
 }
 
@@ -206,7 +215,6 @@ AxisProperties::AxisProperties( const AxisProperties& rAxisProperties )
     , m_bAxisBetweenCategories( rAxisProperties.m_bAxisBetweenCategories )
     , m_fLabelDirectionSign( rAxisProperties.m_fLabelDirectionSign )
     , m_fInnerDirectionSign( rAxisProperties.m_fInnerDirectionSign )
-    , m_bLabelsOutside( rAxisProperties.m_bLabelsOutside )
     , m_aLabelAlignment( rAxisProperties.m_aLabelAlignment )
     , m_bDisplayLabels( rAxisProperties.m_bDisplayLabels )
     , m_nNumberFormatKey( rAxisProperties.m_nNumberFormatKey )
@@ -216,8 +224,9 @@ AxisProperties::AxisProperties( const AxisProperties& rAxisProperties )
     , m_aLineProperties( rAxisProperties.m_aLineProperties )
     //for category axes
     , m_nAxisType( rAxisProperties.m_nAxisType )
+    , m_bComplexCategories( rAxisProperties.m_bComplexCategories )
+    , m_pExplicitCategoriesProvider( rAxisProperties.m_pExplicitCategoriesProvider )
     , m_xAxisTextProvider( rAxisProperties.m_xAxisTextProvider )
-    , m_bTickmarksAtIndicatedValue( rAxisProperties.m_bTickmarksAtIndicatedValue )
 {
     if( rAxisProperties.m_pfMainLinePositionAtOtherAxis )
         m_pfMainLinePositionAtOtherAxis = new double(*rAxisProperties.m_pfMainLinePositionAtOtherAxis);

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unonames.hxx,v $
- * $Revision: 1.82.104.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -577,6 +574,15 @@
 #define SC_UNO_RPTEMPTY             "RepeatIfEmpty"
 #define SC_UNO_DRILLDOWN            "DrillDownOnDoubleClick"
 #define SC_UNO_SHOWFILT             "ShowFilterButton"
+#define SC_UNO_IMPORTDESC           "ImportDescriptor"
+#define SC_UNO_SOURCESERV           "SourceServiceName"
+#define SC_UNO_SERVICEARG           "ServiceArguments"
+
+// properties in data pilot descriptor ServiceArguments
+#define SC_UNO_SOURCENAME           "SourceName"
+#define SC_UNO_OBJECTNAME           "ObjectName"
+#define SC_UNO_USERNAME             "UserName"
+#define SC_UNO_PASSWORD             "Password"
 
 //  range selection
 #define SC_UNONAME_INITVAL          "InitialValue"

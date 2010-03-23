@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dpobject.cxx,v $
- * $Revision: 1.23.30.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -787,13 +784,10 @@ bool ScDPObject::IsDimNameInUse(const OUString& rName) const
         if (!xPropSet.is())
             continue;
 
-        Any any = xPropSet->getPropertyValue(OUString::createFromAscii(SC_UNO_LAYOUTNAME));
-        OUString aLayoutName;
-        if (any >>= aLayoutName)
-        {
-            if (aLayoutName.equalsIgnoreAsciiCase(rName))
-                return true;
-        }
+        OUString aLayoutName = ScUnoHelpFunctions::GetStringProperty(
+            xPropSet, OUString::createFromAscii(SC_UNO_LAYOUTNAME), OUString());
+        if (aLayoutName.equalsIgnoreAsciiCase(rName))
+            return true;
     }
     return false;
 }

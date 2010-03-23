@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartModel.hxx,v $
- * $Revision: 1.12.8.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +47,8 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/chart2/XUndoSupplier.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
+#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 
 // public API
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
@@ -70,7 +69,7 @@
 #endif
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 
 // for auto_ptr
 #include <memory>
@@ -84,7 +83,6 @@ namespace chart
 
 namespace impl
 {
-    class ImplChartModel;
 
 // Note: needed for queryInterface (if it calls the base-class implementation)
 typedef ::comphelper::WeakImplHelper20<
@@ -139,8 +137,6 @@ private:
 
 //  ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aPrinterOptions;
 
-    ::std::auto_ptr< impl::ImplChartModel >                                     m_pImplChartModel;
-
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >      m_xOldModelAgg;
 
@@ -150,6 +146,40 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >          m_xParent;
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XRangeHighlighter > m_xRangeHighlighter;
     ::std::vector< GraphicObject >                                               m_aGraphicObjectVector;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >   m_xDataProvider;
+    /** is only valid if m_xDataProvider is set. If m_xDataProvider is set to an
+        external data provider this reference must be set to 0
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >   m_xInternalDataProvider;
+
+    ::com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >
+                                m_xOwnNumberFormatsSupplier;
+    ::com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >
+                                m_xNumberFormatsSupplier;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartTypeManager >
+        m_xChartTypeManager;
+
+    // Diagram Access
+    typedef ::std::vector< ::com::sun::star::uno::Reference<
+                                ::com::sun::star::chart2::XDiagram > >
+        tDiagramContainer;
+
+    tDiagramContainer                     m_aDiagrams;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle >
+                                          m_xTitle;
+
+    bool                                  m_bIsDisposed;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                                          m_xPageBackground;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager >
+                                          m_xUndoManager;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xXMLNamespaceMap;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >     m_xModifyListener;
 
 private:
     //private methods
@@ -194,6 +224,19 @@ private:
             ::com::sun::star::document::XFilter >
         impl_createFilter( const ::com::sun::star::uno::Sequence<
                       ::com::sun::star::beans::PropertyValue > & rMediaDescriptor );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartTypeTemplate > impl_createDefaultChartTypeTemplate();
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource > impl_createDefaultData();
+
+    void impl_adjustAdditionalShapesPositionAndSize(
+        const ::com::sun::star::awt::Size& aVisualAreaSize );
+
+    void impl_removeAllDiagrams();
+    void impl_appendDiagram( const ::com::sun::star::uno::Reference<
+                            ::com::sun::star::chart2::XDiagram > & xDiagram );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
+        impl_getNumberFormatsSupplier();
 
 public:
     //no default constructor
