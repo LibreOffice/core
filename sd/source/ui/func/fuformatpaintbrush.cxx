@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuformatpaintbrush.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,9 +37,9 @@
 #include <svx/globl3d.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdotable.hxx>
-#include <svx/outliner.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editeng.hxx>
 
 #define _SD_DLL // fuer SD_MOD()
 #include "sdmod.hxx"

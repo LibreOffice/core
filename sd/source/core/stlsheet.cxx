@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: stlsheet.cxx,v $
- * $Revision: 1.23.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,24 +35,24 @@
 #include <osl/mutex.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-
+#include <comphelper/serviceinfohelper.hxx>
 #include <boost/bind.hpp>
 
 #include "eetext.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svx/svdoattr.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <svl/smplhint.hxx>
 #include <svl/itemset.hxx>
 
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
-#include <svx/bulitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/bulitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svx/unoshprp.hxx>
 #include <svx/unoshape.hxx>
-
+#include <svx/svdpool.hxx>
 #include "stlsheet.hxx"
 #include "sdresid.hxx"
 #include "sdpage.hxx"
@@ -104,7 +101,7 @@ static SvxItemPropertySet& GetStylePropertySet()
         {0,0,0,0,0,0}
     };
 
-    static SvxItemPropertySet aPropSet( aFullPropertyMap_Impl );
+    static SvxItemPropertySet aPropSet( aFullPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
     return aPropSet;
 }
 
@@ -965,7 +962,7 @@ OUString SAL_CALL SdStyleSheet::getImplementationName() throw(RuntimeException)
 
 sal_Bool SAL_CALL SdStyleSheet::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 // --------------------------------------------------------------------
@@ -1170,7 +1167,7 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
         }
         else if(!SvxUnoTextRangeBase::SetPropertyValueHelper( aSet, pEntry, aValue, aSet ))
         {
-            GetStylePropertySet().setPropertyValue( pEntry, aValue, aSet );
+            SvxItemPropertySet_setPropertyValue( GetStylePropertySet(), pEntry, aValue, aSet );
         }
 
         rStyleSet.Put( aSet );
@@ -1249,7 +1246,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
                 return aAny;
 
             // Hole Wert aus ItemSet
-            aAny = GetStylePropertySet().getPropertyValue( pEntry, aSet );
+            aAny = SvxItemPropertySet_getPropertyValue( GetStylePropertySet(),pEntry, aSet );
         }
 
         if( *pEntry->pType != aAny.getValueType() )
@@ -1436,7 +1433,7 @@ Any SAL_CALL SdStyleSheet::getPropertyDefault( const OUString& aPropertyName ) t
         SfxItemPool& rMyPool = GetPool().GetPool();
         SfxItemSet aSet( rMyPool,   pEntry->nWID, pEntry->nWID);
         aSet.Put( rMyPool.GetDefaultItem( pEntry->nWID ) );
-        aRet = GetStylePropertySet().getPropertyValue( pEntry, aSet );
+        aRet = SvxItemPropertySet_getPropertyValue( GetStylePropertySet(), pEntry, aSet );
     }
     return aRet;
 }
