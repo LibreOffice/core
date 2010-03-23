@@ -342,7 +342,7 @@ namespace dxcanvas
             GraphicsPathSharedPtr pGradientPath(
                 tools::graphicsPathFromB2DPolygon( rValues.maGradientPoly ) );
 
-            ENSURE_OR_RETURN( pGradientPath.get(),
+            ENSURE_OR_RETURN_FALSE( pGradientPath.get(),
                                "ParametricPolyPolygon::fillPolygonalGradient(): Could not clone path" );
 
             PathGradientBrushSharedPtr pGradientBrush;
