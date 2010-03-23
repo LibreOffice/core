@@ -539,11 +539,11 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
             // If the entry is already stored in the zip file in the format we
             // want for this write...copy it raw
-            if ( !bUseNonSeekableAccess &&
-                ( bRawStream || bTransportOwnEncrStreamAsRaw ||
-                    ( pStream->IsPackageMember()          && !bToBeEncrypted &&
-                        ( pStream->aEntry.nMethod == DEFLATED &&  bToBeCompressed ) ||
-                        ( pStream->aEntry.nMethod == STORED   && !bToBeCompressed ) ) ) )
+            if ( !bUseNonSeekableAccess
+              && ( bRawStream || bTransportOwnEncrStreamAsRaw
+                || ( pStream->IsPackageMember() && !bToBeEncrypted
+                  && ( ( pStream->aEntry.nMethod == DEFLATED && bToBeCompressed )
+                    || ( pStream->aEntry.nMethod == STORED && !bToBeCompressed ) ) ) ) )
             {
                 // If it's a PackageMember, then it's an unbuffered stream and we need
                 // to get a new version of it as we can't seek backwards.
