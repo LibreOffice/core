@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: bmp.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,10 +28,12 @@
 #ifndef _DTRANS_BMP_HXX_
 #define _DTRANS_BMP_HXX_
 
+#include "tools/prex.h"
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include "tools/postx.h"
 
 #include <sal/types.h>
 #include <com/sun/star/awt/XBitmap.hpp>

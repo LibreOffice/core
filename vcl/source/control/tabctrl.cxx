@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabctrl.cxx,v $
- * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1658,7 +1655,7 @@ long TabControl::PreNotify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
-long TabControl::Notify( NotifyEvent& rNEvt )
+bool TabControl::ImplHandleNotifyEvent( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) && (GetPageCount() > 1) )
     {
@@ -1686,8 +1683,16 @@ long TabControl::Notify( NotifyEvent& rNEvt )
             }
         }
     }
+    return false;
+}
 
-    return Control::Notify( rNEvt );
+
+// -----------------------------------------------------------------------
+
+long TabControl::Notify( NotifyEvent& rNEvt )
+{
+
+    return ImplHandleNotifyEvent( rNEvt ) ? TRUE : Control::Notify( rNEvt );
 }
 
 // -----------------------------------------------------------------------
