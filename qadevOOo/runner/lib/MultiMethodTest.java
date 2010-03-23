@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: MultiMethodTest.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -167,7 +164,8 @@ public class MultiMethodTest
         if (! entry.entryName.equals("ifc.qadevooo._SelfTest"))
         {
             String ifcName = getInterfaceName();
-            System.out.println("checking : " + ifcName);
+            // System.out.println("checking : " + ifcName);
+            System.out.print("checking: [" + entry.longName + "]");
 
             // defining a name of the class corresponding to the tested interface
             // or service
@@ -186,12 +184,12 @@ public class MultiMethodTest
             }
             catch (ClassNotFoundException cnfE)
             {
-
+                System.out.println();
                 cnfE.printStackTrace(log);
                 log.println("could not find a class : " + getTestedClassName());
                 return null;
-
             }
+            System.out.println(" is iface: [" + testedClassName + "] testcode: [" + entry.entryName + "]");
 
             // quering the tested interface from the tested object
             XInterface tCase = tEnv.getTestObject();
@@ -234,7 +232,8 @@ public class MultiMethodTest
             DescEntry aSubEntry = entry.SubEntries[i];
             try
             {
-                executeMethod(aSubEntry.entryName);
+                final String sEntryName = aSubEntry.entryName;
+                executeMethod(sEntryName);
             }
             catch (Exception e)
             {
@@ -258,7 +257,7 @@ public class MultiMethodTest
      * Is called before calling method tests, but after initialization.
      * Subclasses may override to perform actions before method tests.
      */
-    protected void before() throws Exception
+    protected void before()
     {
     }
 
@@ -321,13 +320,15 @@ public class MultiMethodTest
     /**
      * Checks if the <code>method</code> is optional in the service.
      */
-    protected boolean isOptional(String method)
+    protected boolean isOptional(String _method)
     {
         for (int k = 0; k < entry.SubEntryCount; k++)
         {
-            if (entry.SubEntries[k].entryName.equals(method))
+            final String sName = entry.SubEntries[k].entryName;
+            if (sName.equals(_method))
             {
-                return entry.SubEntries[k].isOptional;
+                final boolean bIsOptional = entry.SubEntries[k].isOptional;
+                return bIsOptional;
             }
         }
         return false;
@@ -370,6 +371,7 @@ public class MultiMethodTest
             log.println("Execute: " + method);
             callMethod(method);
             log.println(method + ": " + tRes.getStatusFor(method));
+            log.println();
         }
     }
 
