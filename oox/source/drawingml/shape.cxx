@@ -439,7 +439,6 @@ Reference< XShape > Shape::createAndInsert(
         aFillProperties.assignUsed( getFillProperties() );
 
         PropertyMap aShapeProperties;
-        aShapeProperties.insert( getShapeProperties().begin(), getShapeProperties().end() );
         if( mxCreateCallback.get() )
             aShapeProperties.insert( mxCreateCallback->getShapeProperties().begin(), mxCreateCallback->getShapeProperties().end() );
 
@@ -447,6 +446,7 @@ Reference< XShape > Shape::createAndInsert(
         if( mpTextBody.get() )
             aShapeProperties.insert( mpTextBody->getTextProperties().maPropertyMap.begin(), mpTextBody->getTextProperties().maPropertyMap.end() );
 
+        aShapeProperties.insert( getShapeProperties().begin(), getShapeProperties().end() );
         // applying properties
         PropertySet aPropSet( xSet );
         if ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.GraphicObjectShape" ) )
