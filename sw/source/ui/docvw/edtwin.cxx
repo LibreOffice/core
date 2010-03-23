@@ -3364,11 +3364,16 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                     bNoInterrupt = bTmpNoInterrupt;
                 }
-                if( !bOverURLGrf && !bOnlyText )
+                if ( !bOverURLGrf && !bOnlyText )
                 {
                     const int nSelType = rSh.GetSelectionType();
-                    if( nSelType == nsSelectionType::SEL_OLE ||
-                        nSelType == nsSelectionType::SEL_GRF )
+                    // --> OD 2009-12-30 #i89920#
+                    // Check in general, if an object is selectable at given position.
+                    // Thus, also text fly frames in background become selectable via Ctrl-Click.
+                    if ( nSelType & nsSelectionType::SEL_OLE ||
+                         nSelType & nsSelectionType::SEL_GRF ||
+                         rSh.IsObjSelectable( aDocPos ) )
+                    // <--
                     {
                         MV_KONTEXT( &rSh );
                         if( !rSh.IsFrmSelected() )

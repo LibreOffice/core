@@ -100,6 +100,7 @@ public:
 
     //Wir nehemen die Groessenbehandlung vollstaendig selbst in die Hand.
     virtual const Rectangle& GetCurrentBoundRect() const;
+    virtual const Rectangle& GetLastBoundRect() const;
     virtual       void       RecalcBoundRect();
     virtual       void       RecalcSnapRect();
     virtual const Rectangle& GetSnapRect()  const;
