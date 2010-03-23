@@ -58,6 +58,7 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
     AttributeList aAttribs( rXAttributes );
     mrTextCharacterProperties.moLang        = aAttribs.getString( XML_lang );
     mrTextCharacterProperties.moHeight      = aAttribs.getInteger( XML_sz );
+    mrTextCharacterProperties.moSpacing     = aAttribs.getInteger( XML_spc );
     mrTextCharacterProperties.moUnderline   = aAttribs.getToken( XML_u );
     mrTextCharacterProperties.moStrikeout   = aAttribs.getToken( XML_strike );
 //    mrTextCharacterProperties.moCaseMap     = aAttribs.getToken( XML_cap );

@@ -27,7 +27,9 @@
 
 #include "oox/drawingml/textbodypropertiescontext.hxx"
 
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
+#include <com/sun/star/text/WritingMode.hpp>
 #include "oox/drawingml/textbodyproperties.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/helper/attributelist.hxx"
@@ -38,8 +40,9 @@
 
 using ::rtl::OUString;
 using namespace ::oox::core;
-using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
@@ -78,9 +81,12 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
 
 
     // ST_TextAnchoringType
-//   sal_Int32 nAnchoringType = xAttributes->getOptionalValueToken( XML_anchor, XML_t );
+    mrTextBodyProp.maPropertyMap[ PROP_TextVerticalAdjust ] <<= GetTextVerticalAdjust( xAttributes->getOptionalValueToken( XML_anchor, XML_t ) );
 
-//   bool bAnchorCenter = aAttribs.getBool( XML_anchorCtr, false );
+    bool bAnchorCenter = aAttribs.getBool( XML_anchorCtr, false );
+    if( bAnchorCenter )
+    mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
+        TextHorizontalAdjust_CENTER;
 
 //   bool bCompatLineSpacing = aAttribs.getBool( XML_compatLnSpc, false );
 //   bool bForceAA = aAttribs.getBool( XML_forceAA, false );
@@ -105,6 +111,15 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
 
     // ST_TextVerticalType
     mrTextBodyProp.moVert = aAttribs.getToken( XML_vert );
+    bool bRtl = aAttribs.getBool( XML_rtl, false );
+    if( mrTextBodyProp.moVert.get( XML_horz ) == XML_vert ) {
+    mrTextBodyProp.maPropertyMap[ PROP_TextWritingMode ]
+        <<= ( bRtl ? WritingMode_RL_TB : WritingMode_LR_TB );
+    // workaround for TB_LR as using WritingMode2 doesn't work
+    if( !bAnchorCenter )
+        mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
+        TextHorizontalAdjust_LEFT;
+    }
 }
 
 // --------------------------------------------------------------------

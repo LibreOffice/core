@@ -57,6 +57,7 @@ CharFontPitchComplex
 CharHeight
 CharHeightAsian
 CharHeightComplex
+CharKerning
 CharLocale
 CharLocaleAsian
 CharLocaleComplex
@@ -363,12 +364,14 @@ TargetFrame
 TextAutoGrowHeight
 TextBreak
 TextColor
+TextHorizontalAdjust
 TextLeftDistance
 TextLowerDistance
 TextOverlap
 TextRightDistance
 TextRotation
 TextUpperDistance
+TextVerticalAdjust
 TextWordWrap
 TextWritingMode
 Toggle
