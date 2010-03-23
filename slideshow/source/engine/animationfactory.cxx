@@ -151,7 +151,7 @@ namespace slideshow
 
                 virtual bool operator()( const ::basegfx::B2DTuple& rValue )
                 {
-                    ENSURE_OR_RETURN( mpAttrLayer && mpShape,
+                    ENSURE_OR_RETURN_FALSE( mpAttrLayer && mpShape,
                                        "TupleAnimation::operator(): Invalid ShapeAttributeLayer" );
 
                     ValueT aValue( rValue.getX(),
@@ -314,7 +314,7 @@ namespace slideshow
 
                 virtual bool operator()( double nValue )
                 {
-                    ENSURE_OR_RETURN( mpAttrLayer && mpShape,
+                    ENSURE_OR_RETURN_FALSE( mpAttrLayer && mpShape,
                                        "PathAnimation::operator(): Invalid ShapeAttributeLayer" );
 
                     ::basegfx::B2DPoint rOutPos = ::basegfx::tools::getPositionRelative( maPathPoly,
@@ -534,7 +534,7 @@ namespace slideshow
                  */
                 bool operator()( const ValueT& x )
                 {
-                    ENSURE_OR_RETURN( mpAttrLayer && mpShape,
+                    ENSURE_OR_RETURN_FALSE( mpAttrLayer && mpShape,
                                        "GenericAnimation::operator(): Invalid ShapeAttributeLayer" );
 
                     ((*mpAttrLayer).*mpSetValueFunc)( maSetterModifier( x ) );
@@ -549,7 +549,7 @@ namespace slideshow
                  */
                 bool operator()( ValueT x )
                 {
-                    ENSURE_OR_RETURN( mpAttrLayer && mpShape,
+                    ENSURE_OR_RETURN_FALSE( mpAttrLayer && mpShape,
                                        "GenericAnimation::operator(): Invalid ShapeAttributeLayer" );
 
                     ((*mpAttrLayer).*mpSetValueFunc)( maSetterModifier( x ) );

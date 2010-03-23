@@ -57,8 +57,12 @@ public:
     GraphicDocShell (
         SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
         BOOL bSdDataObj=FALSE,
-        DocumentType=DOCUMENT_TYPE_DRAW,
-        BOOL bScriptSupport=TRUE);
+        DocumentType=DOCUMENT_TYPE_DRAW);
+
+    GraphicDocShell (
+        const sal_uInt64 nModelCreationFlags,
+        BOOL bSdDataObj=FALSE,
+        DocumentType=DOCUMENT_TYPE_DRAW);
 
     virtual ~GraphicDocShell (void);
 };

@@ -42,7 +42,6 @@
 #include <unotools/useroptions.hxx>
 
 #include <sfx2/printer.hxx>
-#include <sfx2/topfrm.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <svx/dialogs.hrc>

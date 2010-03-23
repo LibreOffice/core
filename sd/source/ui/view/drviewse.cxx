@@ -66,7 +66,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <svl/urihelper.hxx>
-#include <sfx2/topfrm.hxx>
 #include <sfx2/docfile.hxx>
 
 #include "DrawViewShell.hxx"

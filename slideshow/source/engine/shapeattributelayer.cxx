@@ -211,7 +211,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::revokeChildLayer( const ShapeAttributeLayerSharedPtr& rChildLayer )
         {
-            ENSURE_OR_RETURN( rChildLayer,
+            ENSURE_OR_RETURN_FALSE( rChildLayer,
                                "ShapeAttributeLayer::revokeChildLayer(): Will not remove NULL child" );
 
             if( !haveChild() )

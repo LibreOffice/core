@@ -396,11 +396,10 @@ Reference< ::com::sun::star::frame::XLayoutManager>
 
     if (mxLayoutManager.get() == NULL)
     {
-        if (mrBase.GetViewFrame()!=NULL
-            && mrBase.GetViewFrame()->GetFrame()!=NULL)
+        if (mrBase.GetViewFrame()!=NULL)
         {
             Reference<beans::XPropertySet> xFrameProperties (
-                mrBase.GetViewFrame()->GetFrame()->GetFrameInterface(),
+                mrBase.GetViewFrame()->GetFrame().GetFrameInterface(),
                 UNO_QUERY);
             if (xFrameProperties.is())
             {

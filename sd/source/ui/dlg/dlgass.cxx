@@ -1591,14 +1591,13 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
             aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aDocFile ));
             aReq.AppendItem( SfxStringItem( SID_REFERER, aEmptyStr ) );
             aReq.AppendItem( SfxStringItem( SID_TARGETNAME, aTargetStr ) );
-            aReq.AppendItem( SfxBoolItem( SID_VIEW, FALSE ) );
+            aReq.AppendItem( SfxBoolItem( SID_HIDDEN, TRUE ) );
             aReq.AppendItem( SfxBoolItem( SID_PREVIEW, bDocPreview ) );
 
-            const SfxObjectShellItem* pRet = (SfxObjectShellItem*)
-                SFX_APP()->ExecuteSlot( aReq );
+            const SfxViewFrameItem* pRet = PTR_CAST( SfxViewFrameItem, SFX_APP()->ExecuteSlot( aReq ) );
 
-            if( pRet && pRet->GetObjectShell() )
-                xDocShell = pRet->GetObjectShell();
+            if ( pRet && pRet->GetFrame() && pRet->GetFrame()->GetObjectShell() )
+                xDocShell = pRet->GetFrame()->GetObjectShell();
         }
 
 

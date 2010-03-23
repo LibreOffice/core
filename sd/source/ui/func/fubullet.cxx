@@ -210,7 +210,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         SfxAbstractDialog* pDlg = pFact ? pFact->CreateSfxDialog( &mpView->GetViewShell()->GetViewFrame()->GetWindow(), aSet,
-            mpView->GetViewShell()->GetViewFrame()->GetFrame()->GetFrameInterface(),
+            mpView->GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface(),
             RID_SVXDLG_CHARMAP ) : 0;
         if( !pDlg )
             return;

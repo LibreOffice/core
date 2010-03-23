@@ -66,12 +66,9 @@ uno::Reference< uno::XInterface > SAL_CALL SdDrawingDocument_createInstance(
 
     SdDLL::Init();
 
-    const SfxObjectCreateMode eCreateMode = ( _nCreationFlags & SFXMODEL_EMBEDDED_OBJECT ) ? SFX_CREATE_MODE_EMBEDDED : SFX_CREATE_MODE_STANDARD;
-    const bool bScriptSupport = ( _nCreationFlags & SFXMODEL_DISABLE_EMBEDDED_SCRIPTS ) == 0;
-
     SfxObjectShell* pShell =
         new ::sd::GraphicDocShell(
-            eCreateMode, FALSE, DOCUMENT_TYPE_DRAW, bScriptSupport );
+            _nCreationFlags, FALSE, DOCUMENT_TYPE_DRAW );
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
@@ -98,12 +95,9 @@ uno::Reference< uno::XInterface > SAL_CALL SdPresentationDocument_createInstance
 
     SdDLL::Init();
 
-    const SfxObjectCreateMode eCreateMode = ( _nCreationFlags & SFXMODEL_EMBEDDED_OBJECT ) ? SFX_CREATE_MODE_EMBEDDED : SFX_CREATE_MODE_STANDARD;
-    const bool bScriptSupport = ( _nCreationFlags & SFXMODEL_DISABLE_EMBEDDED_SCRIPTS ) == 0;
-
     SfxObjectShell* pShell =
         new ::sd::DrawDocShell(
-            eCreateMode, FALSE, DOCUMENT_TYPE_IMPRESS, bScriptSupport );
+            _nCreationFlags, FALSE, DOCUMENT_TYPE_IMPRESS );
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 

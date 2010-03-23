@@ -700,7 +700,7 @@ bool ActivityImpl::perform()
     if( !isActive() )
         return false;
 
-    ENSURE_OR_RETURN(
+    ENSURE_OR_RETURN_FALSE(
         mpDrawShape,
         "ActivityImpl::perform(): still active, but NULL draw shape" );
 

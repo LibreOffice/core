@@ -138,7 +138,7 @@ namespace slideshow
 
         bool ViewAppletShape::startApplet( const ::basegfx::B2DRectangle& rBounds )
         {
-            ENSURE_OR_RETURN( mpViewLayer && mpViewLayer->getCanvas() && mpViewLayer->getCanvas()->getUNOCanvas().is(),
+            ENSURE_OR_RETURN_FALSE( mpViewLayer && mpViewLayer->getCanvas() && mpViewLayer->getCanvas()->getUNOCanvas().is(),
                                "ViewAppletShape::startApplet(): Invalid or disposed view" );
             try
             {
