@@ -282,7 +282,7 @@ void SAL_CALL AccessibleGridControlTable::clearAccessibleSelection()
     TCSolarGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
-    for(int i=0;i<m_aTable.GetSelectedRows().size();i++)
+    for(unsigned int i=0;i<m_aTable.GetSelectedRows().size();i++)
         m_aTable.RemoveSelectedRow((sal_Int32)i);
 }
 void SAL_CALL AccessibleGridControlTable::selectAllAccessibleChildren()
