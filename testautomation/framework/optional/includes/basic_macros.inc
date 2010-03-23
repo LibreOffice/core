@@ -310,7 +310,7 @@ testcase tMakro_Dialog
     hSelectTheLastNode( MakroAus )
     
     printlog( "Assign the macro, Tools/customize dialog should open" )
-    if ( not hClickButton( Zuordnen ) ) then
+    if ( hClickButton( Zuordnen ) = -1 ) then
         warnlog( "#i106853# Assign-Button is disabled or macro is missing" )
     endif
 

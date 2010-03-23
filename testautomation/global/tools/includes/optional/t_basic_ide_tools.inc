@@ -266,12 +266,13 @@ function hDeleteMacro() as boolean
 
     '///<h3>Delete all text in the Basic IDE editor</h3>
     '///<i>Starting point: Basic IDE is open, has focus, code can be edited</i>
-    ' Common for all actions is that we delete the existing macro before
-    ' inserting the new one. This fails if the accelerator for SelectAll
-    ' is incorrect, we try to recover by doing this manually then.
-    '///+<li>Delete the entire content of the Basic IDE editor</li>
+    const TIMEOUT = -1
     kontext "BasicIDE"
-    hUseAsyncSlot( "EditSelectAll" )
+    if ( hUseAsyncSlot( "EditSelectAll" ) = TIMEOUT ) then
+        qaerrorlog( "<EditSelectAll> is not enabled in BASIC IDE" )
+        BasicIDE.typeKeys( "<MOD1 HOME>" )
+        BasicIDE.typeKeys( "<MOD1 SHIFT END>" )
+    endif
     BasicIDE.typeKeys( "<DELETE>" )
     hDeleteMacro() = hIsEditWindowEmpty()
 
