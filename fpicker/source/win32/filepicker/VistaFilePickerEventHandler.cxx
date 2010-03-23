@@ -125,14 +125,14 @@ STDMETHODIMP VistaFilePickerEventHandler::OnFileOk(IFileDialog* /*pDialog*/)
 }
 
 //-----------------------------------------------------------------------------------------
-STDMETHODIMP VistaFilePickerEventHandler::OnFolderChanging(IFileDialog* pDialog,
-                                                           IShellItem*  pFolder)
+STDMETHODIMP VistaFilePickerEventHandler::OnFolderChanging(IFileDialog* /*pDialog*/,
+                                                           IShellItem*  /*pFolder*/)
 {
     return E_NOTIMPL;
 }
 
 //-----------------------------------------------------------------------------------------
-STDMETHODIMP VistaFilePickerEventHandler::OnFolderChange(IFileDialog* pDialog)
+STDMETHODIMP VistaFilePickerEventHandler::OnFolderChange(IFileDialog* /*pDialog*/)
 {
     impl_sendEvent(E_DIRECTORY_CHANGED, 0);
     return S_OK;
@@ -250,7 +250,7 @@ void lcl_updateVersionListDirectly(IFileDialog* pDialog)
 }
 
 //-----------------------------------------------------------------------------------------
-STDMETHODIMP VistaFilePickerEventHandler::OnSelectionChange(IFileDialog* pDialog)
+STDMETHODIMP VistaFilePickerEventHandler::OnSelectionChange(IFileDialog* /*pDialog*/)
 {
     impl_sendEvent(E_FILE_SELECTION_CHANGED, 0);
     //lcl_updateVersionListDirectly(pDialog);
@@ -258,16 +258,16 @@ STDMETHODIMP VistaFilePickerEventHandler::OnSelectionChange(IFileDialog* pDialog
 }
 
 //-----------------------------------------------------------------------------------------
-STDMETHODIMP VistaFilePickerEventHandler::OnShareViolation(IFileDialog*                 pDialog  ,
-                                                           IShellItem*                  pItem    ,
-                                                           FDE_SHAREVIOLATION_RESPONSE* pResponse)
+STDMETHODIMP VistaFilePickerEventHandler::OnShareViolation(IFileDialog*                 /*pDialog*/  ,
+                                                           IShellItem*                  /*pItem*/   ,
+                                                           FDE_SHAREVIOLATION_RESPONSE* /*pResponse*/)
 {
     impl_sendEvent(E_CONTROL_STATE_CHANGED, css::ui::dialogs::CommonFilePickerElementIds::LISTBOX_FILTER);
     return S_OK;
 }
 
 //-----------------------------------------------------------------------------------------
-STDMETHODIMP VistaFilePickerEventHandler::OnTypeChange(IFileDialog* pDialog)
+STDMETHODIMP VistaFilePickerEventHandler::OnTypeChange(IFileDialog* /*pDialog*/)
 {
     /*
     IFileDialogCustomize               *iCustomize;
@@ -299,32 +299,32 @@ STDMETHODIMP VistaFilePickerEventHandler::OnTypeChange(IFileDialog* pDialog)
 }
 
 //-----------------------------------------------------------------------------------------
-STDMETHODIMP VistaFilePickerEventHandler::OnOverwrite(IFileDialog*            pDialog  ,
-                                                      IShellItem*             pItem    ,
-                                                      FDE_OVERWRITE_RESPONSE* pResponse)
+STDMETHODIMP VistaFilePickerEventHandler::OnOverwrite(IFileDialog*            /*pDialog*/  ,
+                                                      IShellItem*             /*pItem*/    ,
+                                                      FDE_OVERWRITE_RESPONSE* /*pResponse*/)
 {
     return E_NOTIMPL;
 }
 
 //-----------------------------------------------------------------------------------------
-STDMETHODIMP VistaFilePickerEventHandler::OnItemSelected(IFileDialogCustomize* pCustomize,
+STDMETHODIMP VistaFilePickerEventHandler::OnItemSelected(IFileDialogCustomize* /*pCustomize*/,
                                                          DWORD                 nIDCtl    ,
-                                                         DWORD                 nIDItem   )
+                                                         DWORD                 /*nIDItem*/   )
 {
-    impl_sendEvent(E_CONTROL_STATE_CHANGED, nIDCtl);
+    impl_sendEvent(E_CONTROL_STATE_CHANGED, static_cast<sal_Int16>( nIDCtl ));
     return S_OK;
 }
 
 //-----------------------------------------------------------------------------------------
-STDMETHODIMP VistaFilePickerEventHandler::OnButtonClicked(IFileDialogCustomize* pCustomize,
+STDMETHODIMP VistaFilePickerEventHandler::OnButtonClicked(IFileDialogCustomize* /*pCustomize*/,
                                                           DWORD                 nIDCtl    )
 {
-    impl_sendEvent(E_CONTROL_STATE_CHANGED, nIDCtl);
+    impl_sendEvent(E_CONTROL_STATE_CHANGED, static_cast<sal_Int16>( nIDCtl));
     return S_OK;
 }
 
 //-----------------------------------------------------------------------------------------
-STDMETHODIMP VistaFilePickerEventHandler::OnCheckButtonToggled(IFileDialogCustomize* pCustomize,
+STDMETHODIMP VistaFilePickerEventHandler::OnCheckButtonToggled(IFileDialogCustomize* /*pCustomize*/,
                                                                DWORD                 nIDCtl    ,
                                                                BOOL                  bChecked  )
 {
@@ -353,15 +353,15 @@ STDMETHODIMP VistaFilePickerEventHandler::OnCheckButtonToggled(IFileDialogCustom
     if (nIDCtl == css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION)
         m_pInternalNotify->onAutoExtensionChanged(bChecked);
 
-    impl_sendEvent(E_CONTROL_STATE_CHANGED, nIDCtl);
+    impl_sendEvent(E_CONTROL_STATE_CHANGED, static_cast<sal_Int16>( nIDCtl));
     return S_OK;
 }
 
 //-----------------------------------------------------------------------------------------
-STDMETHODIMP VistaFilePickerEventHandler::OnControlActivating(IFileDialogCustomize* pCustomize,
+STDMETHODIMP VistaFilePickerEventHandler::OnControlActivating(IFileDialogCustomize* /*pCustomize*/,
                                                               DWORD                 nIDCtl    )
 {
-    impl_sendEvent(E_CONTROL_STATE_CHANGED, nIDCtl);
+    impl_sendEvent(E_CONTROL_STATE_CHANGED, static_cast<sal_Int16>( nIDCtl));
     return S_OK;
 }
 
