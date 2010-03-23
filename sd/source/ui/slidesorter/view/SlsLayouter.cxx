@@ -1015,6 +1015,8 @@ Size Layouter::Implementation::GetTargetSize (
     const bool bCalculateWidth,
     const bool bCalculateHeight) const
 {
+    (void)rPreviewModelSize;
+
     if (mnColumnCount<=0 || mnRowCount<=0)
         return maPreferredSize;
     if ( ! (bCalculateWidth || bCalculateHeight))
@@ -1022,9 +1024,6 @@ Size Layouter::Implementation::GetTargetSize (
         OSL_ASSERT(bCalculateWidth || bCalculateHeight);
         return maPreferredSize;
     }
-
-    const double nPreviewAspectRatio (
-        double(rPreviewModelSize.Width())/double(rPreviewModelSize.Height()));
 
     // Calculate the width of each page object.
     Size aTargetSize (0,0);

@@ -104,6 +104,8 @@ TYPEINIT1(SlideSorterViewShell, ViewShell);
     FrameView* pFrameViewArgument,
     const bool bIsCenterPane)
 {
+    (void)bIsCenterPane;
+
     ::boost::shared_ptr<SlideSorterViewShell> pViewShell;
     try
     {
