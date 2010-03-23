@@ -235,6 +235,15 @@ namespace pcr
         */
         void impl_fillQueryNames_throw( ::std::vector< ::rtl::OUString >& _out_rNames ) const;
 
+        /** describes the UI for selecting a query name
+
+            @precond
+                m_xRowSetConnection is not <NULL/>
+        */
+        void impl_fillQueryNames_throw( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xQueryNames
+                    ,::std::vector< ::rtl::OUString >& _out_rNames
+                    ,const ::rtl::OUString& _sName = ::rtl::OUString() ) const;
+
         /** describes the UI for selecting a ListSource (for list-like form controls)
             @precond
                 ->m_xRowSetConnection is not <NULL/>

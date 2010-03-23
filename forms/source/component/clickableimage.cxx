@@ -814,9 +814,6 @@ namespace frm
                     if( sReferer.getLength() )
                         m_pMedium->SetReferer( OUStringToString(sReferer, CHARSET_SYSTEM) );
                 }
-
-                // Keinen Eintrag im Roter Button Menu
-                m_pMedium->SetDontCreateCancellable();
             }
     #else
             if( pObjSh )
@@ -834,9 +831,6 @@ namespace frm
                 if( sReferer.getLength() )
                     m_pMedium->SetReferer( sReferer );
             }
-
-            // Keinen Eintrag im Roter Button Menu
-            m_pMedium->SetDontCreateCancellable();
     #endif
 
             // Downloading-Flag auf sal_True setzen. Es werden dann auch

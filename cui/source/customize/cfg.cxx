@@ -1964,7 +1964,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
         }
 
         if ( !_inout_rxFrame.is() && SfxViewFrame::Current() )
-            _inout_rxFrame = SfxViewFrame::Current()->GetFrame()->GetFrameInterface();
+            _inout_rxFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
 
         if ( !_inout_rxFrame.is() )
         {

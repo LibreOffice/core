@@ -456,7 +456,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
         running = false;
     }
 
-    public void finishWizard() {
+    public boolean finishWizard() {
         boolean bSaveSuccess = false; // pesimistic :(
         XTextDocument xTextDocument;
 
@@ -477,7 +477,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
                     int answer = SystemDialog.showMessageBox(xMSF, xControl.getPeer(), "MessBox", VclWindowPeerAttribute.YES_NO + VclWindowPeerAttribute.DEF_NO, resources.resFileExists);
                     if (answer == 3) // user said: no, do not overwrite....
-                        return;
+                        return false;
                 }
 
             agendaTemplate.xTextDocument.lockControllers();
@@ -547,10 +547,11 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             }
         } else {
             agendaTemplate.xTextDocument.unlockControllers();
-            return;
+            return false;
         }
         xDialog.endExecute();
         running = false;
+        return true;
     }
 
     private void closeDocument() {

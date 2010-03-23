@@ -63,6 +63,7 @@
 #include <comphelper/property.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
+#include <connectivity/formattedcolumnvalue.hxx>
 #include <connectivity/predicateinput.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -103,7 +104,7 @@ namespace frm
     //---------------------------------------------------------------------
     OFilterControl::OFilterControl( const Reference< XMultiServiceFactory >& _rxORB )
         :m_aTextListeners( *this )
-        ,m_xORB( _rxORB )
+        ,m_aContext( _rxORB )
         ,m_aParser( _rxORB )
         ,m_nControlClass( FormComponentType::TEXTFIELD )
         ,m_bFilterList( sal_False )
@@ -130,12 +131,11 @@ namespace frm
         if ( !m_xFormatter.is() )
         {
             // we can create one from the connection, if it's an SDB connection
-            Reference< XNumberFormatsSupplier > xFormatSupplier = ::dbtools::getNumberFormats( m_xConnection, sal_True, m_xORB );
+            Reference< XNumberFormatsSupplier > xFormatSupplier = ::dbtools::getNumberFormats( m_xConnection, sal_True, m_aContext.getLegacyServiceFactory() );
 
             if ( xFormatSupplier.is() )
             {
-                m_xFormatter = m_xFormatter.query(
-                    m_xORB->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.NumberFormatter" ) ) ) );
+                m_aContext.createComponent( "com.sun.star.util.NumberFormatter", m_xFormatter );
                 if ( m_xFormatter.is() )
                     m_xFormatter->attachNumberFormatsSupplier( xFormatSupplier );
             }
@@ -377,170 +377,114 @@ namespace frm
             // already asserted in ensureInitialized
             return;
 
-        // declare here for later disposal
-        Reference< XResultSet > xListCursor;
-        Reference< XStatement > xStatement;
+        // ensure the cursor and the statement are disposed as soon as we leave
+        ::utl::SharedUNOComponent< XResultSet > xListCursor;
+        ::utl::SharedUNOComponent< XStatement > xStatement;
 
         try
         {
             m_bFilterListFilled = sal_True;
 
-            Reference< XPropertySet >  xSet(getModel(), UNO_QUERY);
-            if (xSet.is() && m_xField.is())
+            if ( !m_xField.is() )
+                return;
+
+            ::rtl::OUString sFieldName;
+            m_xField->getPropertyValue( PROPERTY_NAME ) >>= sFieldName;
+
+            // here we need a table to which the field belongs to
+            const Reference< XChild > xModelAsChild( getModel(), UNO_QUERY_THROW );
+            const Reference< XRowSet > xForm( xModelAsChild->getParent(), UNO_QUERY_THROW );
+            const Reference< XPropertySet > xFormProps( xForm, UNO_QUERY_THROW );
+
+            // create a query composer
+            const Reference< XConnection > xConnection( ::dbtools::getConnection( xForm ), UNO_SET_THROW );
+            const Reference< XSQLQueryComposerFactory >  xFactory( xConnection, UNO_QUERY_THROW );
+            const Reference< XSQLQueryComposer > xComposer( xFactory->createQueryComposer(), UNO_SET_THROW );
+
+            // set the statement on the composer
+            ::rtl::OUString sStatement;
+            xFormProps->getPropertyValue( PROPERTY_ACTIVECOMMAND ) >>= sStatement;
+            xComposer->setQuery( sStatement );
+
+            // the field we're bound to
+            const Reference< XColumnsSupplier > xSuppColumns( xComposer, UNO_QUERY_THROW );
+            const Reference< XNameAccess > xFieldNames( xSuppColumns->getColumns(), UNO_SET_THROW );
+            if ( !xFieldNames->hasByName( sFieldName ) )
+                return;
+            ::rtl::OUString sRealFieldName, sTableName;
+            const Reference< XPropertySet > xComposerFieldProps( xFieldNames->getByName( sFieldName ), UNO_QUERY_THROW );
+            xComposerFieldProps->getPropertyValue( PROPERTY_REALNAME ) >>= sRealFieldName;
+            xComposerFieldProps->getPropertyValue( PROPERTY_TABLENAME ) >>= sTableName;
+
+            // obtain the table of the field
+            const Reference< XTablesSupplier > xSuppTables( xComposer, UNO_QUERY_THROW );
+            const Reference< XNameAccess > xTablesNames( xSuppTables->getTables(), UNO_SET_THROW );
+            const Reference< XNamed > xNamedTable( xTablesNames->getByName( sTableName ), UNO_QUERY_THROW );
+            sTableName = xNamedTable->getName();
+
+            // create a statement selecting all values for the given field
+            ::rtl::OUStringBuffer aStatement;
+
+            const Reference< XDatabaseMetaData >  xMeta( xConnection->getMetaData(), UNO_SET_THROW );
+            const ::rtl::OUString sQuoteChar = xMeta->getIdentifierQuoteString();
+
+            aStatement.appendAscii( "SELECT DISTINCT " );
+            aStatement.append( sQuoteChar );
+            aStatement.append( sRealFieldName );
+            aStatement.append( sQuoteChar );
+
+            // if the field had an alias in our form's statement, give it this alias in the new statement, too
+            if ( sFieldName.getLength() && ( sFieldName != sRealFieldName ) )
             {
-                ::rtl::OUString sName;
-                m_xField->getPropertyValue(PROPERTY_NAME) >>= sName;
-
-                // here we need a table to which the field belongs to
-                Reference< XChild > xModelAsChild( xSet, UNO_QUERY );
-                Reference< XRowSet > xForm( xModelAsChild->getParent(), UNO_QUERY );
-                Reference< XPropertySet > xFormAsSet( xForm, UNO_QUERY );
-
-                // Connection holen
-                Reference< XConnection > xConnection;
-                if ( xForm.is() )
-                    xConnection = ::dbtools::getConnection( xForm );
-                Reference< XSQLQueryComposerFactory >  xFactory( xConnection, UNO_QUERY );
-                OSL_ENSURE( xFactory.is() && xFormAsSet.is(), "OFilterControl::implInitFilterList: invalid form or invalid connection!" );
-                if ( !xFactory.is() || !xFormAsSet.is() )
-                    return;
-
-                // create a query composer
-                Reference< XSQLQueryComposer > xComposer = xFactory->createQueryComposer();
-                OSL_ENSURE( xComposer.is() , "OFilterControl::implInitFilterList: invalid query composer!" );
-                if ( !xComposer.is() )
-                    return;
-
-                // set the statement on the composer, ...
-                ::rtl::OUString sStatement;
-                xFormAsSet->getPropertyValue( PROPERTY_ACTIVECOMMAND ) >>= sStatement;
-                 xComposer->setQuery( sStatement );
-
-                // ... and ask it for the involved tables and queries
-                Reference< XTablesSupplier > xSuppTables( xComposer, UNO_QUERY );
-                Reference< XColumnsSupplier > xSuppColumns( xComposer, UNO_QUERY );
-
-                Reference< XNameAccess > xFieldNames;
-                if ( xSuppColumns.is() ) xFieldNames = xSuppColumns->getColumns();
-                Reference< XNameAccess > xTablesNames;
-                if ( xSuppTables.is() ) xTablesNames = xSuppTables->getTables();
-
-                if ( !xFieldNames.is() || !xTablesNames.is() )
-                {
-                    OSL_ENSURE( sal_False, "OFilterControl::implInitFilterList: invalid query composer (no fields or no tables supplied)!" );
-                    return;
-                }
-
-                // search the field
-                Reference< XPropertySet >  xComposerFieldAsSet;
-                if ( xFieldNames->hasByName( sName ) )
-                    xFieldNames->getByName( sName ) >>= xComposerFieldAsSet;
-
-                if  (   xComposerFieldAsSet.is()
-                    &&  ::comphelper::hasProperty( PROPERTY_TABLENAME, xComposerFieldAsSet )
-                    &&  ::comphelper::hasProperty( PROPERTY_REALNAME, xComposerFieldAsSet )
-                    )
-                {
-                    ::rtl::OUString sFieldName, sTableName;
-                    xComposerFieldAsSet->getPropertyValue(PROPERTY_REALNAME) >>= sFieldName;
-                    xComposerFieldAsSet->getPropertyValue(PROPERTY_TABLENAME) >>= sTableName;
-
-                    // no possibility to create a select statement
-                    // looking for the complete table name
-                    if (!xTablesNames->hasByName(sTableName))
-                        return;
-
-                    // this is the tablename
-                    Reference< XNamed > xName;
-                    xTablesNames->getByName(sTableName) >>= xName;
-                    OSL_ENSURE(xName.is(),"No XName interface!");
-                    sTableName = xName->getName();
-
-                    // ein Statement aufbauen und abschicken als query
-                    // Access to the connection
-
-                    Reference< XColumn >  xDataField;
-
-                    Reference< XDatabaseMetaData >  xMeta = xConnection->getMetaData();
-                    ::rtl::OUString aQuote = xMeta->getIdentifierQuoteString();
-                    ::rtl::OUStringBuffer aStatement;
-                    aStatement.appendAscii( "SELECT DISTINCT " );
-                    aStatement.append( ::dbtools::quoteName( aQuote, sName ) );
-
-                    if ( sFieldName.getLength() && ( sName != sFieldName ) )
-                    {
-                        aStatement.appendAscii(" AS ");
-                        aStatement.append( ::dbtools::quoteName(aQuote, sFieldName) );
-                    }
-
-                    aStatement.appendAscii( " FROM " );
-
-                    ::rtl::OUString sCatalog, sSchema, sTable;
-                    ::dbtools::qualifiedNameComponents( xMeta, sTableName, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
-                    aStatement.append( ::dbtools::composeTableNameForSelect( xConnection, sCatalog, sSchema, sTable ) );
-
-                    ::rtl::OUString sSelectStatement( aStatement.makeStringAndClear( ) );
-                    xStatement = xConnection->createStatement();
-                    xListCursor = xStatement->executeQuery( sSelectStatement );
-
-                    Reference< XColumnsSupplier >  xSupplyCols(xListCursor, UNO_QUERY);
-                    Reference< XIndexAccess >  xFields;
-                    if (xSupplyCols.is())
-                        xFields = Reference< XIndexAccess > (xSupplyCols->getColumns(), UNO_QUERY);
-                    if (xFields.is())
-                        xFields->getByIndex(0) >>= xDataField;
-                    if (!xDataField.is())
-                        return;
-
-
-                    sal_Int16 i = 0;
-                    ::std::vector< ::rtl::OUString> aStringList;
-                    aStringList.reserve(16);
-                    ::rtl::OUString aStr;
-
-                    ::com::sun::star::util::Date aNullDate( ::dbtools::DBTypeConversion::getStandardDate() );
-                    sal_Int32 nFormatKey = 0;
-                    try
-                    {
-                        m_xFormatter->getNumberFormatsSupplier()->getNumberFormatSettings()->getPropertyValue(::rtl::OUString::createFromAscii("NullDate"))
-                            >>= aNullDate;
-                        nFormatKey = ::comphelper::getINT32(m_xField->getPropertyValue(PROPERTY_FORMATKEY));
-                    }
-                    catch(const Exception&)
-                    {
-                    }
-
-
-                    sal_Int16 nKeyType = ::comphelper::getNumberFormatType(m_xFormatter->getNumberFormatsSupplier()->getNumberFormats(), nFormatKey);
-                    while ( xListCursor->next() && ( i++ < SHRT_MAX) )
-                    {
-                        aStr = ::dbtools::DBTypeConversion::getValue(xDataField, m_xFormatter, aNullDate, nFormatKey, nKeyType);
-                        aStringList.push_back(aStr);
-                    }
-
-                    Sequence< ::rtl::OUString> aStringSeq(aStringList.size());
-                    ::rtl::OUString* pustrStrings = aStringSeq.getArray();
-                    for (i = 0; i < (sal_Int16)aStringList.size(); ++i)
-                        pustrStrings[i] = aStringList[i];
-
-                    Reference< XComboBox >  xComboBox( getPeer(), UNO_QUERY);
-                    if ( xComboBox.is() )
-                    {
-                        xComboBox->addItems(aStringSeq, 0);
-                        // set the drop down line count
-                        sal_Int16 nLineCount = ::std::min( (sal_Int16)10, (sal_Int16)aStringSeq.getLength() );
-                        xComboBox->setDropDownLineCount( nLineCount );
-                    }
-                }
+                aStatement.appendAscii(" AS ");
+                aStatement.append( sQuoteChar );
+                aStatement.append( sFieldName );
+                aStatement.append( sQuoteChar );
             }
+
+            aStatement.appendAscii( " FROM " );
+
+            ::rtl::OUString sCatalog, sSchema, sTable;
+            ::dbtools::qualifiedNameComponents( xMeta, sTableName, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
+            aStatement.append( ::dbtools::composeTableNameForSelect( xConnection, sCatalog, sSchema, sTable ) );
+
+            // execute the statement
+            xStatement.reset( xConnection->createStatement() );
+            const ::rtl::OUString sSelectStatement( aStatement.makeStringAndClear( ) );
+            xListCursor.reset( xStatement->executeQuery( sSelectStatement ) );
+
+            // retrieve the one column which we take the values from
+            const Reference< XColumnsSupplier > xSupplyCols( xListCursor, UNO_QUERY_THROW );
+            const Reference< XIndexAccess > xFields( xSupplyCols->getColumns(), UNO_QUERY_THROW );
+            const Reference< XPropertySet > xDataField( xFields->getByIndex(0), UNO_QUERY_THROW );
+
+            // ensure the values will be  formatted according to the field format
+            const ::dbtools::FormattedColumnValue aFormatter( m_xFormatter, xDataField );
+
+            ::std::vector< ::rtl::OUString > aProposals;
+            aProposals.reserve(16);
+
+            while ( xListCursor->next() && ( aProposals.size() < size_t( SHRT_MAX ) ) )
+            {
+                const ::rtl::OUString sCurrentValue = aFormatter.getFormattedValue();
+                aProposals.push_back( sCurrentValue );
+            }
+
+            // fill the list items into our peer
+            Sequence< ::rtl::OUString> aStringSeq( aProposals.size() );
+            ::std::copy( aProposals.begin(), aProposals.end(), aStringSeq.getArray() );
+
+            const Reference< XComboBox >  xComboBox( getPeer(), UNO_QUERY_THROW );
+            xComboBox->addItems( aStringSeq, 0 );
+
+            // set the drop down line count to something reasonable
+            const sal_Int16 nLineCount = ::std::min( sal_Int16( 16 ), sal_Int16( aStringSeq.getLength() ) );
+            xComboBox->setDropDownLineCount( nLineCount );
         }
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-
-        ::comphelper::disposeComponent( xListCursor );
-        ::comphelper::disposeComponent( xStatement );
     }
 
     // XFocusListener
@@ -584,7 +528,7 @@ namespace frm
             aNewText.trim();
             if ( aNewText.getLength() )
             {
-                ::dbtools::OPredicateInputController aPredicateInput( m_xORB, m_xConnection, getParseContext() );
+                ::dbtools::OPredicateInputController aPredicateInput( m_aContext.getLegacyServiceFactory(), m_xConnection, getParseContext() );
                 ::rtl::OUString sErrorMessage;
                 if ( !aPredicateInput.normalizePredicateString( aNewText, m_xField, &sErrorMessage ) )
                 {
@@ -777,7 +721,8 @@ namespace frm
             aArgs[1] <<= PropertyValue(::rtl::OUString::createFromAscii("ParentWindow"), 0, makeAny( m_xMessageParent ), PropertyState_DIRECT_VALUE);
 
             static ::rtl::OUString s_sDialogServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.sdb.ErrorMessageDialog" );
-            Reference< XExecutableDialog > xErrorDialog( m_xORB->createInstanceWithArguments( s_sDialogServiceName, aArgs ), UNO_QUERY );
+
+            Reference< XExecutableDialog > xErrorDialog( m_aContext.createComponentWithArguments( s_sDialogServiceName, aArgs ), UNO_QUERY );
             if ( xErrorDialog.is() )
                 xErrorDialog->execute();
             else
@@ -788,7 +733,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "displayException: could not display the error message!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 

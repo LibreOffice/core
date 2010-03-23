@@ -27,9 +27,7 @@
 package com.sun.star.wizards.form;
 
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.uno.Type;
-import com.sun.star.lang.XComponent;
 import com.sun.star.wizards.common.Properties;
 
 /** This class capsulates the class, that implements the minimal component, a
@@ -82,10 +80,7 @@ public class CallFormWizard
      */
     public static class FormWizardImplementation extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.lang.XTypeProvider, com.sun.star.task.XJobExecutor
     {
-
-        PropertyValue[] databaseproperties;
-        public XComponent Document = null;
-        public XComponent DocumentDefinition = null;
+        private PropertyValue[] m_wizardContext;
 
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
          * @param xmultiservicefactoryInitialization A special service factory
@@ -94,9 +89,7 @@ public class CallFormWizard
         public FormWizardImplementation(com.sun.star.lang.XMultiServiceFactory xmultiservicefactoryInitialization)
         {
             super();
-            xmultiservicefactory = xmultiservicefactoryInitialization;
-            registerProperty("Document", (short) (PropertyAttribute.READONLY | PropertyAttribute.MAYBEVOID));
-            registerProperty("DocumentDefinition", (short) (PropertyAttribute.READONLY | PropertyAttribute.MAYBEVOID));
+            m_serviceFactory = xmultiservicefactoryInitialization;
         }
 
         public void trigger(String sEvent)
@@ -105,19 +98,8 @@ public class CallFormWizard
             {
                 if (sEvent.compareTo("start") == 0)
                 {
-                    FormWizard CurFormWizard = new FormWizard(xmultiservicefactory);
-                    XComponent[] obj = CurFormWizard.startFormWizard(xmultiservicefactory, databaseproperties);
-                    if (obj != null)
-                    {
-                        DocumentDefinition = obj[0];
-                        Document = obj[1];
-                    }
-                }
-                else if (sEvent.compareTo("end") == 0)
-                {
-                    DocumentDefinition = null;
-                    Document = null;
-                    databaseproperties = null;
+                    FormWizard CurFormWizard = new FormWizard( m_serviceFactory, m_wizardContext );
+                    CurFormWizard.startFormWizard();
                 }
             }
             catch (Exception exception)
@@ -131,7 +113,7 @@ public class CallFormWizard
         private static final String __serviceName = "com.sun.star.wizards.form.CallFormWizard";
         /** The service manager, that gives access to all registered services.
          */
-        private com.sun.star.lang.XMultiServiceFactory xmultiservicefactory;
+        private com.sun.star.lang.XMultiServiceFactory m_serviceFactory;
 
         /** This method is a member of the interface for initializing an object
          * directly after its creation.
@@ -142,7 +124,7 @@ public class CallFormWizard
          */
         public void initialize(Object[] object) throws com.sun.star.uno.Exception
         {
-            databaseproperties = Properties.convertToPropertyValueArray(object);
+            m_wizardContext = Properties.convertToPropertyValueArray(object);
         }
 
         /** This method returns an array of all supported service names.

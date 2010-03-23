@@ -30,13 +30,16 @@ package com.sun.star.wizards.report;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.container.XNamed;
+import com.sun.star.frame.XController;
 import com.sun.star.frame.XFrame;
-// import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.sdb.CommandType;
+import com.sun.star.sdbc.SQLException;
 import com.sun.star.table.XCellRange;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
@@ -52,6 +55,8 @@ import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.lang.XMultiServiceFactory;
 
+import com.sun.star.sdb.application.DatabaseObject;
+import com.sun.star.sdb.application.XDatabaseDocumentUI;
 import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.wizards.db.DBMetaData;
 import com.sun.star.wizards.db.SQLQueryComposer;
@@ -59,6 +64,8 @@ import com.sun.star.wizards.document.OfficeDocument;
 import com.sun.star.wizards.ui.UIConsts;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -67,11 +74,12 @@ import java.util.Vector;
 public class ReportTextImplementation extends ReportImplementationHelper implements IReportDocument
 {
 
-    private ReportTextDocument m_aDoc;
-    private Object m_aInitialDoc;
-    private Resource m_aResource;
+    private ReportTextDocument  m_aDoc;
+    private Object              m_aInitialDoc;
+    private Resource            m_resource;
+    private XDatabaseDocumentUI m_documentUI;
 
-    public void setInitialDocument(Object _aDoc)
+    private void setInitialDocument(Object _aDoc)
     {
         m_aInitialDoc = _aDoc;
     }
@@ -87,15 +95,15 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         {
             if (m_aInitialDoc instanceof XTextDocument)
             {
-                m_aDoc = new ReportTextDocument(getMSF(), (XTextDocument) m_aInitialDoc, m_aResource, getRecordParser());
+                m_aDoc = new ReportTextDocument(getMSF(), (XTextDocument) m_aInitialDoc, m_resource, getRecordParser());
             }
             else if (m_aInitialDoc instanceof String)
             {
-                m_aDoc = new ReportTextDocument(getMSF(), (String) m_aInitialDoc, m_aResource, getRecordParser());
+                m_aDoc = new ReportTextDocument(getMSF(), (String) m_aInitialDoc, m_resource, getRecordParser());
             }
             else
             {
-                throw new RuntimeException("Unknown type for setInitialDoc() given.");
+                throw new RuntimeException("Unknown type for setInitialDocument() given.");
             }
         }
         return m_aDoc;
@@ -103,40 +111,37 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
 
     public void clearDocument()
     {
-        int dummy = 0;
-        /*CurReportDocument.*/ getDoc().oTextSectionHandler.removeAllTextSections();
-        /*CurReportDocument.*/ getDoc().oTextTableHandler.removeAllTextTables();
-        /*CurReportDocument.*/ getDoc().DBColumnsVector = new Vector();
-    //getRecordParser().setGroupFieldNames(new String[]{});
-    // CurGroupFieldHandler.removeGroupFieldNames();
+        getDoc().oTextSectionHandler.removeAllTextSections();
+        getDoc().oTextTableHandler.removeAllTextTables();
+        getDoc().DBColumnsVector = new Vector();
     }
 
-    private ReportTextImplementation(XMultiServiceFactory _xMSF, Resource _oResource)
+    protected ReportTextImplementation( XMultiServiceFactory i_serviceFactory )
     {
-        super(_xMSF, ReportLayouter.SOOPTLANDSCAPE);
-        m_aResource = _oResource;
+        super( i_serviceFactory, ReportLayouter.SOOPTLANDSCAPE );
     }
 
-    static IReportDocument create(XMultiServiceFactory _xMSF /*, String _sPreviewURL */, Resource _oResource)
+    public void initialize( final XDatabaseDocumentUI i_documentUI, final Resource i_resource )
     {
-        ReportTextImplementation a = new ReportTextImplementation(_xMSF, _oResource);
-        String sPreviewURL = a.getLayoutPath(); // a.getReportPath() + "/stl-default.ott";
-        a.setInitialDocument(sPreviewURL);
-        a.initialResources();
-        return a;
+        m_documentUI = i_documentUI;
+        m_resource = i_resource;
+
+        if ( m_aInitialDoc == null )
+            setInitialDocument( getLayoutPath() );
+
+        initialResources();
     }
 
-    static IReportDocument create(XMultiServiceFactory _xMSF, XTextDocument _aDoc, Resource _oResource)
+    static IReportDocument create( XMultiServiceFactory i_serviceFactory, XDatabaseDocumentUI i_documentUI, XTextDocument i_initialDocument, Resource i_resources )
     {
-        ReportTextImplementation a = new ReportTextImplementation(_xMSF, _oResource);
-        a.setInitialDocument(_aDoc);
-        a.initialResources();
+        ReportTextImplementation a = new ReportTextImplementation( i_serviceFactory );
+        a.setInitialDocument(i_initialDocument);
+        a.initialize( i_documentUI, i_resources );
         return a;
     }
 
     public XWindowPeer getWizardParent()
     {
-        // throw new UnsupportedOperationException("Not supported yet.");
         return getDoc().xWindowPeer;
     }
     static String sMsgQueryCreationImpossible;
@@ -149,11 +154,11 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
 
     private void initialResources()
     {
-        sReportFormNotExisting = m_aResource.getResText(UIConsts.RID_REPORT + 64);
-        sMsgQueryCreationImpossible = m_aResource.getResText(UIConsts.RID_REPORT + 65);
-        sMsgHiddenControlMissing = m_aResource.getResText(UIConsts.RID_REPORT + 66);
-        sMsgEndAutopilot = m_aResource.getResText(UIConsts.RID_DB_COMMON + 33);
-        sMsgNoConnection = m_aResource.getResText(UIConsts.RID_DB_COMMON + 14);
+        sReportFormNotExisting = m_resource.getResText(UIConsts.RID_REPORT + 64);
+        sMsgQueryCreationImpossible = m_resource.getResText(UIConsts.RID_REPORT + 65);
+        sMsgHiddenControlMissing = m_resource.getResText(UIConsts.RID_REPORT + 66);
+        sMsgEndAutopilot = m_resource.getResText(UIConsts.RID_DB_COMMON + 33);
+        sMsgNoConnection = m_resource.getResText(UIConsts.RID_DB_COMMON + 14);
     }
 
     public void addTextSectionCopies()
@@ -181,8 +186,8 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         try
         {
             XInterface xTextSection = (XInterface) getDocumentServiceFactory().createInstance("com.sun.star.text.TextSection");
-            XTextContent xTextSectionContent = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xTextSection);
-            xNamedTextSection = (XNamed) UnoRuntime.queryInterface(XNamed.class, xTextSection);
+            XTextContent xTextSectionContent = UnoRuntime.queryInterface( XTextContent.class, xTextSection );
+            xNamedTextSection = UnoRuntime.queryInterface( XNamed.class, xTextSection );
             xTextCursor.gotoEnd(false);
             xTextCursor.getText().insertTextContent(xTextCursor, xTextSectionContent, true);
             Helper.setUnoPropertyValue(xTextSection, "LinkRegion", sLinkRegion);
@@ -192,7 +197,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                 if (bIsGroupTable == true)
                 {
                     XTextTable xTextTable = getDoc().oTextTableHandler.getlastTextTable();
-                    XCellRange xCellRange = (XCellRange) UnoRuntime.queryInterface(XCellRange.class, xTextTable);
+                    XCellRange xCellRange = UnoRuntime.queryInterface( XCellRange.class, xTextTable );
                     CurDBColumn.modifyCellContent(xCellRange, CurGroupValue);
                 }
             }
@@ -207,7 +212,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
     private void renameTableofLastSection(String _snewname)
     {
         XTextTable xTextTable = getDoc().oTextTableHandler.getlastTextTable();
-        XNamed xNamedTable = (XNamed) UnoRuntime.queryInterface(XNamed.class, xTextTable);
+        XNamed xNamedTable = UnoRuntime.queryInterface( XNamed.class, xTextTable );
         xNamedTable.setName(_snewname);
     }
 
@@ -227,7 +232,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             if (oDBForm != null)
             {
                 String sMsg = sMsgHiddenControlMissing + (char) 13 + sMsgEndAutopilot;
-                XNameAccess xNamedForm = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oDBForm);
+                XNameAccess xNamedForm = UnoRuntime.queryInterface( XNameAccess.class, oDBForm );
                 getRecordParser().Command = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "Command", sMsg);
                 String sCommandType = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "CommandType", sMsg);
                 String sGroupFieldNames = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "GroupFieldNames", sMsg);
@@ -342,7 +347,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                 {
                     CurGroupTableName = ReportTextDocument.TBLGROUPSECTION + Integer.toString(ColIndex + 1);
                     oTable = getDoc().oTextTableHandler.xTextTablesSupplier.getTextTables().getByName(CurGroupTableName);
-                    xGroupBaseTables[ColIndex] = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, oTable);
+                    xGroupBaseTables[ColIndex] = UnoRuntime.queryInterface( XTextTable.class, oTable );
                     CurGroupValue = getRecordParser().getGroupColumnValue(ColIndex);
                     OldGroupFieldValues[ColIndex] = CurGroupValue;
                     CurDBColumn = (DBColumn) getDoc().DBColumnsVector.elementAt(ColIndex);
@@ -570,24 +575,23 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
 
     public void liveupdate_updateReportTitle(String _sTitleName)
     {
-        int dummy = 0;
-    // getDoc().updateReportTitle(_sTitleName);
     }
 
-//    public void finish()
-//    {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
     public void addReportToDBView()
     {
         getRecordParser().addReportDocument(getComponent(), true);
     }
 
-    public XComponent[] createFinalReportDocument(String sReportName, boolean _bAsTemplate, boolean _bOpenInDesign)
+    public void createAndOpenReportDocument( String sReportName, boolean _bAsTemplate, boolean _bOpenInDesign )
     {
-        // create the real report document, filled with content
-        XComponent[] ret = getRecordParser().openReportDocument(sReportName, _bAsTemplate, _bOpenInDesign);
-        return ret;
+        try
+        {
+            m_documentUI.loadComponent( DatabaseObject.REPORT, sReportName, _bOpenInDesign );
+        }
+        catch ( Exception ex )
+        {
+            Logger.getLogger( ReportTextImplementation.class.getName() ).log( Level.SEVERE, null, ex );
+        }
     }
 
     public void initializeFieldColumns(final int _nType, final String TableName, final String[] FieldNames)
@@ -711,8 +715,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
     public void importReportData(ReportWizard _aWizard)
     {
         Dataimport CurDataimport = new Dataimport(_aWizard.xMSF);
-        CurDataimport.CurReportDocument = _aWizard.CurReportDocument;
-        // CurDataimport.showProgressDisplay(xMSF, false);
+        CurDataimport.CurReportDocument = this;
         _aWizard.importReportData(_aWizard.xMSF, CurDataimport);
     }
 
@@ -724,7 +727,6 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
     public void setCommand(String _sCommand)
     {
         getRecordParser().Command = _sCommand;
-    // throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void checkInvariants() throws java.lang.Exception

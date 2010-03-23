@@ -208,7 +208,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
         running = false;
     }
 
-    public void finishWizard()
+    public boolean finishWizard()
     {
         switchToStep(getCurrentStep(), getMaxStep());
         myFaxDoc.setWizardTemplateDocInfo(resources.resFaxWizardDialog_title, resources.resTemplateDescription);
@@ -235,7 +235,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
                     int answer = SystemDialog.showMessageBox(xMSF, xControl.getPeer(), "MessBox", VclWindowPeerAttribute.YES_NO + VclWindowPeerAttribute.DEF_NO, resources.resOverwriteWarning);
                     if (answer == 3) // user said: no, do not overwrite....
                     {
-                        return;
+                        return false;
                     }
                 }
             }
@@ -293,7 +293,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
             xDialog.endExecute();
             running = false;
         }
-
+        return true;
     }
 
     public void closeDocument()
