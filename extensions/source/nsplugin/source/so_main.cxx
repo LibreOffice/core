@@ -148,16 +148,6 @@ sal_Bool dump_plugin_message(PLUGIN_MSG* pMsg)
     return sal_True;
 }
 
-int prepareEnviron()
-{
-    // if child process inherit the chdir() property from parent process, if yes, no getNewLibraryPath() needed
-    const char* pNewLibraryPath = getNewLibraryPath();
-    putenv( (char*) pNewLibraryPath );
-    SoPluginInstance::SetSODir((char *)findProgramDir());
-
-    return 0;
-}
-
 int Set_Window(PLUGIN_MSG* pMsg)
 {
     dump_plugin_message(pMsg);
