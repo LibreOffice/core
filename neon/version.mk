@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: version.mk,v $
-#
-# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -32,9 +28,9 @@
 # the major
 NEON_MAJOR=0
 # the minor
-NEON_MINOR=28
+NEON_MINOR=29
 # the micro
-NEON_MICRO=2
+NEON_MICRO=3
 
 # concat
 NEON_VERSION=$(NEON_MAJOR)$(NEON_MINOR)$(NEON_MICRO)
