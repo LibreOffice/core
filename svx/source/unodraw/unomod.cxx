@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unomod.cxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,10 +38,11 @@
 #include <svl/itemprop.hxx>
 #include <svtools/unoevent.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/serviceinfohelper.hxx>
 
 #include <cppuhelper/implbase2.hxx>
 #include <unofill.hxx>
-#include <unonrule.hxx>
+#include <editeng/unonrule.hxx>
 #include <svtools/unoimap.hxx>
 #include <svx/fmdpage.hxx>
 #include <svx/fmmodel.hxx>
@@ -57,7 +55,7 @@
 #include <svx/svdtypes.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unopage.hxx>
-#include <svx/unofield.hxx>
+#include <editeng/unofield.hxx>
 #include <svx/unomod.hxx>
 #include <svx/unomodel.hxx>
 #include <svx/svdobj.hxx>
@@ -213,66 +211,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( 
 
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createTextField( const ::rtl::OUString& ServiceSpecifier ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
-    uno::Reference< uno::XInterface > xRet;
-
-    const OUString aTextFieldPrexit( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.textfield.") );
-
-    // #i93308# up to OOo 3.2 we used this wrong namespace name with the capital T & F. This is
-    // fixed since OOo 3.2 but for compatibility we will still provide support for the wrong notation.
-    const OUString aTextFieldPrexit2( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField.") );
-
-    if( (ServiceSpecifier.compareTo( aTextFieldPrexit, aTextFieldPrexit.getLength() ) == 0) ||
-        (ServiceSpecifier.compareTo( aTextFieldPrexit2, aTextFieldPrexit2.getLength() ) == 0) )
-    {
-        OUString aFieldType( ServiceSpecifier.copy( aTextFieldPrexit.getLength() ) );
-
-        sal_Int32 nId = ID_UNKNOWN;
-
-        if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DateTime") ) )
-        {
-            nId = ID_DATEFIELD;
-        }
-        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("URL") ) )
-        {
-            nId = ID_URLFIELD;
-        }
-        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("PageNumber") ) )
-        {
-            nId = ID_PAGEFIELD;
-        }
-        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("PageCount") ) )
-        {
-            nId = ID_PAGESFIELD;
-        }
-        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SheetName") ) )
-        {
-            nId = ID_TABLEFIELD;
-        }
-        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("FileName") ) )
-        {
-            nId = ID_EXT_FILEFIELD;
-        }
-        else if (aFieldType.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("docinfo.Title") ) ||
-                 aFieldType.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("DocInfo.Title") ) )
-        {
-            nId = ID_FILEFIELD;
-        }
-        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Author") ) )
-        {
-            nId = ID_AUTHORFIELD;
-        }
-        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Measure") ) )
-        {
-            nId = ID_MEASUREFIELD;
-        }
-
-        if( nId != ID_UNKNOWN )
-            xRet = (::cppu::OWeakObject * )new SvxUnoTextField( nId );
-    }
-
-    return xRet;
+    return SvxUnoTextCreateTextField( ServiceSpecifier );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstanceWithArguments( const OUString&, const uno::Sequence< ::com::sun::star::uno::Any >& )
@@ -650,7 +589,7 @@ OUString SAL_CALL SvxUnoDrawingModel::getImplementationName()
 sal_Bool SAL_CALL SvxUnoDrawingModel::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getSupportedServiceNames() throw(uno::RuntimeException)
@@ -810,5 +749,30 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawPagesAccess::getSupportedServiceNam
     uno::Sequence< OUString > aSeq( &aService, 1 );
     return aSeq;
 }
+#include <editeng/unonrule.hxx>
+com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCreateNumRule( SdrModel* pModel ) throw()
+{
+    SvxNumRule* pDefaultRule = NULL;
+    if( pModel )
+    {
+        SvxNumBulletItem* pItem = (SvxNumBulletItem*) pModel->GetItemPool().GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
+        if( pItem )
+        {
+            pDefaultRule = pItem->GetNumRule();
+        }
+    }
+
+    if( pDefaultRule )
+    {
+        return SvxCreateNumRule( pDefaultRule );
+    }
+    else
+    {
+        SvxNumRule aTempRule( 0, 10, false );
+        return SvxCreateNumRule( &aTempRule );
+    }
+}
+
+///////////////////////////////////////////////////////////////////////
 
 #endif

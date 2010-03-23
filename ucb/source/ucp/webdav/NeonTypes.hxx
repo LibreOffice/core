@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: NeonTypes.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,7 @@
 #include <ne_utils.h>
 #include <ne_basic.h>
 #include <ne_props.h>
+#include <ne_locks.h>
 
 typedef ne_session                  HttpSession;
 typedef ne_status                   HttpStatus;
@@ -42,5 +40,7 @@ typedef ne_server_capabilities      HttpServerCapabilities;
 
 typedef ne_propname                 NeonPropName;
 typedef ne_prop_result_set          NeonPropFindResultSet;
+
+typedef struct ne_lock              NeonLock;
 
 #endif // _NEONTYPES_HXX_
