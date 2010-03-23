@@ -31,8 +31,8 @@
 #ifndef _DBA_CORE_DEFINITIONCONTAINER_HXX_
 #include "definitioncontainer.hxx"
 #endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -42,6 +42,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMECONTAINER_HPP_
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAME_HPP_
+#include <com/sun/star/container/XHierarchicalName.hpp>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -60,9 +63,10 @@
 namespace dbaccess
 {
 //........................................................................
-typedef ::cppu::ImplHelper4 <   ::com::sun::star::frame::XComponentLoader
+typedef ::cppu::ImplHelper5 <   ::com::sun::star::frame::XComponentLoader
                             ,   ::com::sun::star::lang::XMultiServiceFactory
                             ,   ::com::sun::star::container::XHierarchicalNameContainer
+                            ,   ::com::sun::star::container::XHierarchicalName
                             ,   ::com::sun::star::embed::XTransactedObject
                             >   ODocumentContainer_Base;
 //==========================================================================
@@ -110,6 +114,10 @@ public:
     // XHierarchicalNameContainer
     virtual void SAL_CALL insertByHierarchicalName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeByHierarchicalName( const ::rtl::OUString& Name ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // XHierarchicalName
+    virtual ::rtl::OUString SAL_CALL getHierarchicalName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL composeHierarchicalName( const ::rtl::OUString& aRelativeName ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
     // XNameContainer
     virtual void SAL_CALL removeByName( const ::rtl::OUString& _rName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
