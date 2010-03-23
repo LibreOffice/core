@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleGridControlHeaderCell.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,9 +36,9 @@ namespace accessibility
         sal_Int32   m_nColumnRowId;
     public:
         AccessibleGridControlHeaderCell(sal_Int32 _nColumnRowId,
-                                          const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxParent,
-                                          ::svt::table::IAccessibleTable& _rTable,
-                                          ::svt::table::AccessibleTableControlObjType  _eObjType);
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxParent,
+                        ::svt::table::IAccessibleTable& _rTable,
+                        ::svt::table::AccessibleTableControlObjType  _eObjType);
         /** @return  The count of visible children. */
         virtual sal_Int32 SAL_CALL getAccessibleChildCount() throw ( ::com::sun::star::uno::RuntimeException );
 
@@ -59,8 +56,8 @@ namespace accessibility
 
         /** Queries for a new interface. */
         ::com::sun::star::uno::Any SAL_CALL queryInterface(
-            const ::com::sun::star::uno::Type& rType )
-        throw ( ::com::sun::star::uno::RuntimeException );
+                const ::com::sun::star::uno::Type& rType )
+            throw ( ::com::sun::star::uno::RuntimeException );
 
         /** Aquires the object (calls acquire() on base class). */
         virtual void SAL_CALL acquire() throw ();

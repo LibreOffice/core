@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleGridControlHeader.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,11 +78,11 @@ Reference< XAccessible > SAL_CALL
 AccessibleGridControlHeader::getAccessibleChild( sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
-   TCSolarGuard aSolarGuard;
+    TCSolarGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
 
     if (nChildIndex<0 || nChildIndex>=getAccessibleChildCount())
-        throw IndexOutOfBoundsException();
+    throw IndexOutOfBoundsException();
     ensureIsAlive();
     Reference< XAccessible > xChild;
     if(m_eObjType == svt::table::TCTYPE_COLUMNHEADERBAR)
@@ -104,11 +101,11 @@ AccessibleGridControlHeader::getAccessibleChild( sal_Int32 nChildIndex )
 sal_Int32 SAL_CALL AccessibleGridControlHeader::getAccessibleIndexInParent()
     throw ( uno::RuntimeException )
 {
-    ensureIsAlive();
-    if(m_eObjType == svt::table::TCTYPE_ROWHEADERBAR && m_aTable.HasColHeader())
-        return 1;
-    else
-        return 0;
+     ensureIsAlive();
+     if(m_eObjType == svt::table::TCTYPE_ROWHEADERBAR && m_aTable.HasColHeader())
+         return 1;
+     else
+         return 0;
 }
 
 // XAccessibleComponent -------------------------------------------------------
@@ -124,8 +121,8 @@ AccessibleGridControlHeader::getAccessibleAtPoint( const awt::Point& rPoint )
     sal_Int32 nRow = 0;
     sal_Int32 nColumnPos = 0;
     sal_Bool bConverted = isRowBar() ?
-        m_aTable.ConvertPointToCellAddress( nRow, nColumnPos, VCLPoint( rPoint ) ) :
-        m_aTable.ConvertPointToCellAddress( nRow, nColumnPos, VCLPoint( rPoint ) );
+    m_aTable.ConvertPointToCellAddress( nRow, nColumnPos, VCLPoint( rPoint ) ) :
+    m_aTable.ConvertPointToCellAddress( nRow, nColumnPos, VCLPoint( rPoint ) );
 
     return bConverted ? implGetChild( nRow, nColumnPos ) : Reference< XAccessible >();
 }

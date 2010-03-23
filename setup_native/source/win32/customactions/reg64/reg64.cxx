@@ -1,31 +1,28 @@
 /*************************************************************************
 *
-* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
-* Copyright 2008 by Sun Microsystems, Inc.
-*
-* OpenOffice.org - a multi-platform office productivity suite
-*
-* $RCSfile: shellextensions.cxx,v $
-* $Revision: 1.7 $
-*
-* This file is part of OpenOffice.org.
-*
-* OpenOffice.org is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License version 3
-* only, as published by the Free Software Foundation.
-*
-* OpenOffice.org is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Lesser General Public License version 3 for more details
-* (a copy is included in the LICENSE file that accompanied this code).
-*
-* You should have received a copy of the GNU Lesser General Public License
-* version 3 along with OpenOffice.org.  If not, see
-* <http://www.openoffice.org/license.html>
-* for a copy of the LGPLv3 License.
-*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 ************************************************************************/
 
 /*
@@ -368,13 +365,13 @@ bool DoRegEntries( MSIHANDLE& rhMSI, OPERATION op, MSIHANDLE& rhView)
             case(-1):
                     if (isInstall4AllUsers)
                     {
-                        key = HKEY_CURRENT_USER;
-                        OutputDebugStringFormat(L"HKEY_CURRENT_USER" );
+                        key = HKEY_LOCAL_MACHINE;
+                        OutputDebugStringFormat(L"HKEY_LOCAL_MACHINE" );
                     }
                     else
                     {
-                        key = HKEY_LOCAL_MACHINE;
-                        OutputDebugStringFormat(L"HKEY_LOCAL_MACHINE" );
+                        key = HKEY_CURRENT_USER;
+                        OutputDebugStringFormat(L"HKEY_CURRENT_USER" );
                     }
                 break;
             case(0):
@@ -393,7 +390,9 @@ bool DoRegEntries( MSIHANDLE& rhMSI, OPERATION op, MSIHANDLE& rhView)
                     key = HKEY_USERS;
                     OutputDebugStringFormat(L"HKEY_USERS" );
                 break;
-
+            default:
+                    OutputDebugStringFormat(L"Unknown Root!" );
+                break;
         }
 
         OutputDebugStringFormat(L"Key:");

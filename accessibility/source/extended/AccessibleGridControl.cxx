@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleGridControl.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,17 +60,17 @@ public:
     /** The data table child. */
     Reference<
         ::com::sun::star::accessibility::XAccessible >          m_xTable;
-    AccessibleGridControlTable*                                 m_pTable;
+    AccessibleGridControlTable*             m_pTable;
 
     /** The header bar for rows. */
     Reference<
         ::com::sun::star::accessibility::XAccessible >          m_xRowHeaderBar;
-    AccessibleGridControlHeader*                                m_pRowHeaderBar;
+    AccessibleGridControlHeader*                m_pRowHeaderBar;
 
     /** The header bar for columns (first row of the table). */
     Reference<
         ::com::sun::star::accessibility::XAccessible >          m_xColumnHeaderBar;
-    AccessibleGridControlHeader*                                m_pColumnHeaderBar;
+    AccessibleGridControlHeader*                m_pColumnHeaderBar;
 };
 
 DBG_NAME( AccessibleGridControl )
@@ -97,7 +94,7 @@ void SAL_CALL AccessibleGridControl::disposing()
 {
     ::osl::MutexGuard aGuard( getOslMutex() );
 
-    m_pImpl->m_pTable           = NULL;
+    m_pImpl->m_pTable       = NULL;
     m_pImpl->m_pColumnHeaderBar = NULL;
     m_pImpl->m_pRowHeaderBar    = NULL;
     m_pImpl->m_aCreator         = Reference< XAccessible >();
@@ -141,7 +138,8 @@ AccessibleGridControl::getAccessibleChild( sal_Int32 nChildIndex )
     {
         if(nChildIndex == 0 && m_aTable.HasColHeader())
         {
-            if(!m_pImpl->m_xColumnHeaderBar.is()){
+            if(!m_pImpl->m_xColumnHeaderBar.is())
+            {
                 AccessibleGridControlHeader* pColHeaderBar = new AccessibleGridControlHeader(m_pImpl->m_aCreator, m_aTable, svt::table::TCTYPE_COLUMNHEADERBAR);
                 m_pImpl->m_xColumnHeaderBar = pColHeaderBar;
             }
@@ -149,7 +147,8 @@ AccessibleGridControl::getAccessibleChild( sal_Int32 nChildIndex )
         }
         else if(m_aTable.HasRowHeader() && (nChildIndex == 1 || nChildIndex == 0))
         {
-            if(!m_pImpl->m_xRowHeaderBar.is()){
+            if(!m_pImpl->m_xRowHeaderBar.is())
+            {
                 AccessibleGridControlHeader* pRowHeaderBar = new AccessibleGridControlHeader(m_pImpl->m_aCreator, m_aTable, svt::table::TCTYPE_ROWHEADERBAR);
                 m_pImpl->m_xRowHeaderBar = pRowHeaderBar;
             }
@@ -162,7 +161,6 @@ AccessibleGridControl::getAccessibleChild( sal_Int32 nChildIndex )
             xChild = m_pImpl->m_xTable;
         }
     }
-
     return xChild;
 }
 // -----------------------------------------------------------------------------
@@ -198,11 +196,11 @@ AccessibleGridControl::getAccessibleAtPoint( const awt::Point& rPoint )
         {
             Reference< XAccessible > xCurrChild( implGetFixedChild( nIndex ) );
             Reference< XAccessibleComponent >
-                xCurrChildComp( xCurrChild, uno::UNO_QUERY );
+            xCurrChildComp( xCurrChild, uno::UNO_QUERY );
 
             if( xCurrChildComp.is() &&
-                    VCLRectangle( xCurrChildComp->getBounds() ).IsInside( aPoint ) )
-                xChild = xCurrChild;
+                VCLRectangle( xCurrChildComp->getBounds() ).IsInside( aPoint ) )
+            xChild = xCurrChild;
         }
     }
     return xChild;
@@ -215,7 +213,7 @@ void SAL_CALL AccessibleGridControl::grabFocus()
     TCSolarGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
-    m_aTable.GrabFocus();
+        m_aTable.GrabFocus();
 }
 // -----------------------------------------------------------------------------
 
@@ -258,7 +256,6 @@ Reference< XAccessible > AccessibleGridControl::implGetTable()
     {
         m_pImpl->m_pTable = createAccessibleTable();
         m_pImpl->m_xTable  = m_pImpl->m_pTable;
-
     }
     return m_pImpl->m_xTable;
 }
@@ -300,7 +297,7 @@ AccessibleGridControl::implGetFixedChild( sal_Int32 nChildIndex )
     Reference< XAccessible > xRet;
     switch( nChildIndex )
     {
-        case TCINDEX_COLUMNHEADERBAR:
+          case TCINDEX_COLUMNHEADERBAR:
             xRet = implGetHeaderBar( TCTYPE_COLUMNHEADERBAR );
         break;
         case TCINDEX_ROWHEADERBAR:
@@ -316,7 +313,7 @@ AccessibleGridControl::implGetFixedChild( sal_Int32 nChildIndex )
 AccessibleGridControlTable* AccessibleGridControl::createAccessibleTable()
 {
     Reference< XAccessible > xCreator = (Reference< XAccessible >)m_pImpl->m_aCreator;
-    DBG_ASSERT( xCreator.is(), "accessibility/extended/AccessibleGirdControl::createAccessibleTable: my creator died - how this?" );
+        DBG_ASSERT( xCreator.is(), "accessibility/extended/AccessibleGirdControl::createAccessibleTable: my creator died - how this?" );
     return new AccessibleGridControlTable( xCreator, m_aTable, TCTYPE_TABLE );
 }
 // ============================================================================

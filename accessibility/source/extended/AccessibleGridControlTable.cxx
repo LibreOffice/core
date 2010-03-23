@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleGridControlTable.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +88,6 @@ sal_Int32 SAL_CALL AccessibleGridControlTable::getAccessibleIndexInParent()
         return 1;
     else
         return 2;
-
 }
 
 // XAccessibleComponent -------------------------------------------------------
@@ -176,7 +172,6 @@ Sequence< sal_Int32 > SAL_CALL AccessibleGridControlTable::getSelectedAccessible
     TCSolarGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
-
     Sequence< sal_Int32 > aSelSeq;
     implGetSelectedRows( aSelSeq );
     return aSelSeq;
@@ -186,13 +181,6 @@ Sequence< sal_Int32 > SAL_CALL AccessibleGridControlTable::getSelectedAccessible
 Sequence< sal_Int32 > SAL_CALL AccessibleGridControlTable::getSelectedAccessibleColumns()
     throw ( uno::RuntimeException )
 {
-//    TCSolarGuard aSolarGuard;
-//    ::osl::MutexGuard aGuard( getOslMutex() );
-//    ensureIsAlive();
-//
-//    Sequence< sal_Int32 > aSelSeq;
-//    implGetSelectedColumns( aSelSeq );
-//    return aSelSeq;
     Sequence< sal_Int32 > aSelSeq(0);
     return aSelSeq;
 }
@@ -221,11 +209,6 @@ sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleRowSelected( sal_Int32
 sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleColumnSelected( sal_Int32 nColumn )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
-    /*TCSolarGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
-    ensureIsAlive();
-    ensureIsValidColumn( nColumn );
-    return implIsColumnSelected( nColumn );*/
     (void) nColumn;
     return sal_False;
 }

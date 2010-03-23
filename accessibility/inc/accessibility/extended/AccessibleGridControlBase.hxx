@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleGridControlBase.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,8 +96,8 @@ public:
         @param eDescrText  The constant for the description text. */
     AccessibleGridControlBase(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible >& rxParent,
-            ::svt::table::IAccessibleTable& rTable,
+                ::com::sun::star::accessibility::XAccessible >& rxParent,
+        ::svt::table::IAccessibleTable& rTable,
         ::svt::table::AccessibleTableControlObjType  eObjType );
 
 protected:
@@ -138,14 +135,14 @@ public:
             The relation set (the GridControl does not have one).
     */
     virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL
-    getAccessibleRelationSet()
+    ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL
+        getAccessibleRelationSet()
         throw ( ::com::sun::star::uno::RuntimeException );
 
     /** @return  The set of current states. */
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL
-    getAccessibleStateSet()
+        getAccessibleStateSet()
         throw ( ::com::sun::star::uno::RuntimeException );
 
     /** @return  The parent's locale. */
@@ -410,7 +407,7 @@ protected:
 
 private:
     GridControlAccessibleElement();                                             // never implemented
-    GridControlAccessibleElement( const GridControlAccessibleElement& );            // never implemented
+    GridControlAccessibleElement( const GridControlAccessibleElement& );        // never implemented
     GridControlAccessibleElement& operator=( const GridControlAccessibleElement& ); // never implemented
 };
 
