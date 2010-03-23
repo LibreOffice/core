@@ -560,7 +560,7 @@ namespace utl
     //------------------------------------------------------------------------
     OConfigurationTreeRoot::OConfigurationTreeRoot( const ::comphelper::ComponentContext& i_rContext, const sal_Char* i_pAsciiNodePath, const bool i_bUpdatable )
         :OConfigurationNode( lcl_createConfigurationRoot( lcl_getConfigProvider( i_rContext.getLegacyServiceFactory() ),
-            ::rtl::OUString::createFromAscii( i_pAsciiNodePath ), i_bUpdatable, -1, false ) )
+            ::rtl::OUString::createFromAscii( i_pAsciiNodePath ), i_bUpdatable, -1, false ).get() )
         ,m_xCommitter()
     {
         if ( i_bUpdatable )

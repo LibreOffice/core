@@ -36,6 +36,7 @@
 #include <boost/noncopyable.hpp>
 
 class Rectangle;
+class Window;
 
 //........................................................................
 namespace svt
