@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoapi.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <sal/types.h>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <svl/poolitem.hxx>
 #include "svx/svxdllapi.h"
 
@@ -62,9 +59,6 @@ SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDraw
 
 /** returns the SdrPage from the given StarOffice API wrapper */
 SVX_DLLPUBLIC SdrPage* GetSdrPageFromXDrawPage( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage ) throw() ;
-
-/** returns a GraphicObject for this URL */
-SVX_DLLPUBLIC GraphicObject CreateGraphicObjectFromURL( const ::rtl::OUString &rURL ) throw() ;
 
 /** returns the SvxNumBulletItem with the given name from the pool or a null if there is no item
     with that name
@@ -103,22 +97,6 @@ SVX_DLLPUBLIC void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String
     for the current language.
 */
 SVX_DLLPUBLIC void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& rApiName, String& rInternalName ) throw();
-
-/** returns the which id for the given property name.  This only works for
-    properties of shapes (map SVXMAP_SHAPE is used for searching)
-
-    Note: As this function has no access to SvxItemPropertySet but only to
-    SfxItemPropertyMap, the search in the map is not done via bsearch, but by
-    linear search.
- */
-// os: unused function
-//SVX_DLLPUBLIC sal_Int16 SvxUnoGetWhichIdForNamedProperty( const ::rtl::OUString & rPropName );
-
-/** converts the given any with a metric to 100th/mm if needed */
-SVX_DLLPUBLIC void SvxUnoConvertToMM( const SfxMapUnit eSourceMapUnit, com::sun::star::uno::Any & rMetric ) throw();
-
-/** converts the given any with a metric from 100th/mm to the given metric if needed */
-SVX_DLLPUBLIC void SvxUnoConvertFromMM( const SfxMapUnit eDestinationMapUnit, com::sun::star::uno::Any & rMetric ) throw();
 
 #endif // _SVX_UNOAPI_HXX_
 

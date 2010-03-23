@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdobj.cxx,v $
- * $Revision: 1.99.16.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,14 +82,14 @@
 #include <svx/xflftrit.hxx>
 #include "svx/xlinjoit.hxx"
 #include <svx/unopage.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/xenum.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xhatch.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/svdpool.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <vcl/salbtype.hxx>     // FRound
 #include <svl/whiter.hxx>
 

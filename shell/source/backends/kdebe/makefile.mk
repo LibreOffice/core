@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -35,11 +31,7 @@ TARGET=kdebe
 
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
-
-COMP1TYPELIST=$(TARGET)
-COMPRDB=$(SOLARBINDIR)$/types.rdb
-UNOUCROUT=$(OUT)$/inc$/$(TARGET)
-INCPRE=$(UNOUCROUT)
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings ---
 
@@ -64,12 +56,8 @@ CFLAGS+=$(KDE_CFLAGS)
 # --- Files ---
 
 SLOFILES=\
-    $(SLO)$/kdebackend.obj \
-    $(SLO)$/kdecommonlayer.obj \
-    $(SLO)$/kdeinetlayer.obj \
-    $(SLO)$/kdevcllayer.obj \
-    $(SLO)$/kdepathslayer.obj \
-    $(SLO)$/kdebecdef.obj
+    $(SLO)$/kdeaccess.obj \
+    $(SLO)$/kdebackend.obj
 
 SHL1NOCHECK=TRUE
 SHL1TARGET=$(TARGET)1.uno   
@@ -81,9 +69,8 @@ SHL1LINKFLAGS+=$(KDE_LIBS) -lkio
 SHL1STDLIBS=    \
         $(CPPUHELPERLIB) \
         $(CPPULIB) \
-        $(SALLIB)
-        
-SHL1VERSIONMAP=exports.map
+        $(SALLIB) \
+
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
