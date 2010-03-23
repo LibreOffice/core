@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: libs.mk,v $
-#
-# $Revision: 1.134.2.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -182,7 +178,6 @@ BTCOMMUNILIB=-lbtcommuni$(DLLPOSTFIX)
 AUTOMATIONLIB=-lsts$(DLLPOSTFIX)
 SVLLIB=-lsvl$(DLLPOSTFIX)
 TKTLIB=-ltkt$(DLLPOSTFIX)
-GOODIESLIB=-lgo$(DLLPOSTFIX)
 SAXLIB=-lsax$(DLLPOSTFIX)
 MAILLIB=-lmail
 DOCMGRLIB=-ldmg$(DLLPOSTFIX)
@@ -210,7 +205,7 @@ ZLIB3RDLIB=-lzlib
 #i34482# Blackdown/Sun jdk is in the libsearch patch and has a libjpeg :-(
 .IF "$(OS)" == "FREEBSD"
 JPEG3RDLIB=/usr/local/lib/libjpeg.so
-.ELIF "$(CPUNAME)" == "X86_64"
+.ELIF "$(CPUNAME)" == "X86_64" || "$(CPUNAME)" == "S390X" || "$(CPUNAME)" == "POWERPC64"
 JPEG3RDLIB=/usr/lib64/libjpeg.so
 .ELSE
 JPEG3RDLIB=/usr/lib/libjpeg.so
@@ -245,6 +240,7 @@ FWILIB=-lfwi$(DLLPOSTFIX)
 SVXCORELIB=-lsvxcore$(DLLPOSTFIX)
 MSFILTERLIB=-lmsfilter$(DLLPOSTFIX)
 SVXLIB=-lsvx$(DLLPOSTFIX)
+EDITENGLIB=-lediteng$(DLLPOSTFIX)
 BASCTLLIB=-lbasctl$(DLLPOSTFIX)
 BASICIDELIB=-lybctl
 SVXLLIB=-lsvxl
@@ -344,6 +340,7 @@ PYUNOLIB=-lpyuno
 LPSOLVELIB=-llpsolve55
 SOFFICELIB=-lsofficeapp
 UNOPKGAPPLIB=-lunopkgapp
+CONFIGMGRLIB=-lconfigmgr
 
 .ELSE				# ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 
@@ -421,7 +418,6 @@ BTCOMMUNILIB=ibtcommuni.lib
 AUTOMATIONLIB=ists.lib
 SVLLIB=isvl.lib
 PLUGAPPLIB=plugapp.lib
-GOODIESLIB=igo.lib
 SAXLIB=isax.lib
 MAILLIB=mail.lib
 DOCMGRLIB=docmgr.lib
@@ -432,6 +428,7 @@ SJLIB=sj.lib
 SVXCORELIB=isvxcore.lib
 MSFILTERLIB=imsfilter.lib
 SVXLIB=isvx.lib
+EDITENGLIB=iediteng.lib
 BASCTLLIB=basctl.lib
 BASICIDELIB=ybctl.lib
 SVXLLIB=svxl.lib
@@ -525,5 +522,6 @@ PYUNOLIB=ipyuno.lib
 LPSOLVELIB=lpsolve55.lib
 SOFFICELIB=isofficeapp.lib
 UNOPKGAPPLIB=iunopkgapp.lib
+CONFIGMGRLIB=iconfigmgr.lib
 
 .ENDIF              # ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
