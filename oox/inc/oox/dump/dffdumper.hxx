@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dffdumper.hxx,v $
- * $Revision: 1.3.22.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,10 +59,15 @@ protected:
 private:
     void                constructDffObj();
 
+    sal_uInt32          dumpDffSimpleColor( const String& rName );
+    sal_uInt32          dumpDffColor( const String& rName );
+
+    void                dumpDffOpt();
     sal_uInt16          dumpDffOptPropHeader();
-    void                dumpDffOptPropValue( sal_uInt16 nPropId, sal_uInt32 nValue );
 
 private:
+    ItemFormatMap       maSimpleProps;
+    ItemFormatMap       maComplexProps;
     sal_uInt16          mnInstVer;
     sal_Int32           mnRealSize;
 };

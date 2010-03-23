@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: workbookhelper.cxx,v $
- * $Revision: 1.5.20.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -320,8 +317,6 @@ public:
     inline WorksheetBuffer& getWorksheets() const { return *mxWorksheets; }
     /** Returns the office theme object read from the theme substorage. */
     inline ThemeBuffer& getTheme() const { return *mxTheme; }
-    /** Returns the office theme object reference read from the theme substorage. */
-    inline ::boost::shared_ptr< Theme > getThemeRef() const { return mxTheme; }
     /** Returns all cell formatting objects read from the styles substream. */
     inline StylesBuffer& getStyles() const { return *mxStyles; }
     /** Returns the shared strings read from the shared strings substream. */
@@ -962,11 +957,6 @@ WorksheetBuffer& WorkbookHelper::getWorksheets() const
 ThemeBuffer& WorkbookHelper::getTheme() const
 {
     return mrBookData.getTheme();
-}
-
-::boost::shared_ptr< Theme > WorkbookHelper::getThemeRef() const
-{
-    return mrBookData.getThemeRef();
 }
 
 StylesBuffer& WorkbookHelper::getStyles() const
