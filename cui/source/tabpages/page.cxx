@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: page.cxx,v $
- * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,22 +47,24 @@
 #include "helpid.hrc"
 #include "page.hxx"
 #include <svx/pageitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/pbinitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/pbinitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include "svx/dlgutil.hxx"
 #include <dialmgr.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/paperinf.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/module.hxx>
 #include <svl/stritem.hxx>
-#include <svx/dialmgr.hxx>  // for RID_SVXSTR_PAPERBIN...
-#include <svx/dialogs.hrc>  // for RID_SVXSTR_PAPERBIN..., RID_SVXPAGE_PAGE
+#include <svx/dialogs.hrc>  // for RID_SVXPAGE_PAGE
+#include <editeng/eerdll.hxx>
+#include <editeng/editrids.hrc> // for RID_SVXSTR_PAPERBIN...,
+#include <svx/svxids.hrc>
 
 // #i4219#
 #include <svtools/optionsdrawinglayer.hxx>
@@ -347,7 +346,7 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     }
     Init_Impl();
 
-    FieldUnit eFUnit = GetModuleFieldUnit( &rAttr );
+    FieldUnit eFUnit = GetModuleFieldUnit( rAttr );
     SetFieldUnit( aLeftMarginEdit, eFUnit );
     SetFieldUnit( aRightMarginEdit, eFUnit );
     SetFieldUnit( aTopMarginEdit, eFUnit );
@@ -547,7 +546,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     String aBinName;
 
     if ( PAPERBIN_PRINTER_SETTINGS  == nPaperBin )
-        aBinName = SVX_RESSTR( RID_SVXSTR_PAPERBIN_SETTINGS );
+        aBinName = EE_RESSTR( RID_SVXSTR_PAPERBIN_SETTINGS );
     else
         aBinName = pImpl->mpDefPrinter->GetPaperBinName( (USHORT)nPaperBin );
 
@@ -1000,10 +999,10 @@ IMPL_LINK( SvxPageDescPage, PaperBinHdl_Impl, ListBox *, EMPTYARG )
     aPaperTrayBox.SetUpdateMode( FALSE );
     aPaperTrayBox.Clear();
     USHORT nEntryPos = aPaperTrayBox.InsertEntry(
-        SVX_RESSTR( RID_SVXSTR_PAPERBIN_SETTINGS ) );
+        EE_RESSTR( RID_SVXSTR_PAPERBIN_SETTINGS ) );
     aPaperTrayBox.SetEntryData( nEntryPos,
         (void*)(ULONG)PAPERBIN_PRINTER_SETTINGS );
-    String aPaperBin( SVX_RES( RID_SVXSTR_PAPERBIN ) );
+    String aPaperBin( EditResId( RID_SVXSTR_PAPERBIN ) );
     USHORT nBinCount = pImpl->mpDefPrinter->GetPaperBinCount();
 
     for ( USHORT i = 0; i < nBinCount; ++i )

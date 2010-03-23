@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: certificateviewer.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -128,16 +125,8 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     //Verify the certificate
     sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(mpDlg->mxCert,
          Sequence<Reference<css::security::XCertificate> >());
-    //We currently have two status
-    //These errors are alloweds
-    sal_Int32 validCertErrors = css::security::CertificateValidity::VALID
-        | css::security::CertificateValidity::UNKNOWN_REVOKATION;
 
-    //Build a  mask to filter out the allowed errors
-    sal_Int32 mask = ~validCertErrors;
-    // "subtract" the allowed error flags from the result
-    sal_Int32 certErrors = certStatus & mask;
-    bool bCertValid = certErrors > 0 ? false : true;
+    bool bCertValid = certStatus == css::security::CertificateValidity::VALID ?  true : false;
 
     bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
     if ( !bCertValid )
@@ -488,16 +477,7 @@ void CertificateViewerCertPathTP::ActivatePage()
             //Verify the certificate
             sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(rCert,
                  Sequence<Reference<css::security::XCertificate> >());
-            //We currently have two status
-            //These errors are alloweds
-            sal_Int32 validCertErrors = css::security::CertificateValidity::VALID
-                | css::security::CertificateValidity::UNKNOWN_REVOKATION;
-
-            //Build a  mask to filter out the allowed errors
-            sal_Int32 mask = ~validCertErrors;
-            // "subtract" the allowed error flags from the result
-            sal_Int32 certErrors = certStatus & mask;
-            bool bCertValid = certErrors > 0 ? false : true;
+            bool bCertValid = certStatus == css::security::CertificateValidity::VALID ? true : false;
             pParent = InsertCert( pParent, sName, rCert, bCertValid);
         }
 

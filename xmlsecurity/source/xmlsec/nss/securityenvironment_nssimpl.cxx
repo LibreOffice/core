@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: securityenvironment_nssimpl.cxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,12 +33,13 @@
 #include "nssrenam.h"
 #include "cert.h"
 #include "secerr.h"
+#include "ocsp.h"
 
 #include <sal/config.h>
 #include "securityenvironment_nssimpl.hxx"
 #include "x509certificate_nssimpl.hxx"
 #include <rtl/uuid.h>
-
+#include "../diagnose.hxx"
 
 #include <sal/types.h>
 //For reasons that escape me, this is what xmlsec does when size_t is not 4
@@ -65,9 +63,12 @@
 #include <vector>
 #include "boost/scoped_array.hpp"
 
+#include "secerror.hxx"
+
 // MM : added for password exception
 #include <com/sun/star/security/NoPasswordException.hpp>
 namespace csss = ::com::sun::star::security;
+using namespace xmlsecurity;
 using namespace ::com::sun::star::security;
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno ;
@@ -81,6 +82,14 @@ using ::com::sun::star::security::XCertificate ;
 
 extern X509Certificate_NssImpl* NssCertToXCert( CERTCertificate* cert ) ;
 extern X509Certificate_NssImpl* NssPrivKeyToXCert( SECKEYPrivateKey* ) ;
+
+
+struct UsageDescription
+{
+    SECCertificateUsage usage;
+    char const * const description;
+};
+
 
 
 char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*arg*/ )
@@ -753,7 +762,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
                    const Sequence< Reference< csss::XCertificate > >&  intermediateCerts )
     throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException )
 {
-    sal_Int32 validity = 0;
+    sal_Int32 validity = csss::CertificateValidity::INVALID;
     const X509Certificate_NssImpl* xcert ;
     const CERTCertificate* cert ;
     ::std::vector<CERTCertificate*> vecTmpNSSCertificates;
@@ -762,10 +771,9 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         throw RuntimeException() ;
     }
 
-    OSL_TRACE("[xmlsecurity] Start verification of certificate: %s",
+    xmlsec_trace("Start verification of certificate: \n %s \n",
               OUStringToOString(
-                  aCert->getIssuerName(), osl_getThreadTextEncoding()).getStr());
-
+                  aCert->getSubjectName(), osl_getThreadTextEncoding()).getStr());
 
     xcert = reinterpret_cast<X509Certificate_NssImpl*>(
        sal::static_int_cast<sal_uIntPtr>(xCertTunnel->getSomething( X509Certificate_NssImpl::getUnoTunnelId() ))) ;
@@ -773,12 +781,16 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         throw RuntimeException() ;
     }
 
+    //CERT_PKIXVerifyCert does not take a db as argument. It will therefore
+    //internally use CERT_GetDefaultCertDB
+    //Make sure m_pHandler is the default DB
+    OSL_ASSERT(m_pHandler == CERT_GetDefaultCertDB());
+    CERTCertDBHandle * certDb = m_pHandler != NULL ? m_pHandler : CERT_GetDefaultCertDB();
     cert = xcert->getNssCert() ;
     if( cert != NULL )
     {
 
         //prepare the intermediate certificates
-        CERTCertDBHandle * certDb = m_pHandler != NULL ? m_pHandler : CERT_GetDefaultCertDB();
         for (sal_Int32 i = 0; i < intermediateCerts.getLength(); i++)
         {
             Sequence<sal_Int8> der = intermediateCerts[i]->getEncoded();
@@ -793,140 +805,172 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
                                            PR_TRUE  /* copyDER */);
              if (!certTmp)
              {
-                 OSL_TRACE("[xmlsecurity] Failed to add a temporary certificate: %s",
+                 xmlsec_trace("Failed to add a temporary certificate: %s",
                            OUStringToOString(intermediateCerts[i]->getIssuerName(),
                                              osl_getThreadTextEncoding()).getStr());
 
              }
              else
              {
-                 OSL_TRACE("[xmlsecurity] Added temporary certificate: %s",
+                 xmlsec_trace("Added temporary certificate: %s",
                            certTmp->subjectName ? certTmp->subjectName : "");
                  vecTmpNSSCertificates.push_back(certTmp);
              }
         }
 
 
-        int64 timeboundary ;
         SECStatus status ;
 
-        //Get the system clock time
-        timeboundary = PR_Now() ;
-        SECCertificateUsage usage = 0;
+        CERTVerifyLog log;
+        log.arena = PORT_NewArena(512);
+        log.head = log.tail = NULL;
+        log.count = 0;
 
-        // create log
+        CERT_EnableOCSPChecking(certDb);
+        CERT_DisableOCSPDefaultResponder(certDb);
+        CERTValOutParam cvout[5];
+        CERTValInParam cvin[3];
 
-        CERTVerifyLog realLog;
-        CERTVerifyLog *log;
+        cvin[0].type = cert_pi_useAIACertFetch;
+        cvin[0].value.scalar.b = PR_TRUE;
 
-        log = &realLog;
+        PRUint64 revFlagsLeaf[2];
+        PRUint64 revFlagsChain[2];
+        CERTRevocationFlags rev;
+        rev.leafTests.number_of_defined_methods = 2;
+        rev.leafTests.cert_rev_flags_per_method = revFlagsLeaf;
+        //the flags are defined in cert.h
+        //We check both leaf and chain.
+        //It is enough if one revocation method has fresh info,
+        //but at least one must have some. Otherwise validation fails.
+        //!!! using leaf test and CERT_REV_MI_REQUIRE_SOME_FRESH_INFO_AVAILABLE
+        // when validating a root certificate will result in "revoked". Usually
+        //there is no revocation information available for the root cert because
+        //it must be trusted anyway and it does itself issue revocation information.
+        //When we use the flag here and OOo shows the certification path then the root
+        //cert is invalid while all other can be valid. It would probably best if
+        //this interface method returned the whole chain.
+        //Otherwise we need to check if the certificate is self-signed and if it is
+        //then not use the flag when doing the leaf-test.
+        rev.leafTests.cert_rev_flags_per_method[cert_revocation_method_crl] =
+            CERT_REV_M_TEST_USING_THIS_METHOD
+            | CERT_REV_M_IGNORE_IMPLICIT_DEFAULT_SOURCE;
+        rev.leafTests.cert_rev_flags_per_method[cert_revocation_method_ocsp] =
+            CERT_REV_M_TEST_USING_THIS_METHOD
+            | CERT_REV_M_IGNORE_IMPLICIT_DEFAULT_SOURCE;
+        rev.leafTests.number_of_preferred_methods = 0;
+        rev.leafTests.preferred_methods = NULL;
+        rev.leafTests.cert_rev_method_independent_flags =
+            CERT_REV_MI_TEST_ALL_LOCAL_INFORMATION_FIRST;
+//            | CERT_REV_MI_REQUIRE_SOME_FRESH_INFO_AVAILABLE;
+
+        rev.chainTests.number_of_defined_methods = 2;
+        rev.chainTests.cert_rev_flags_per_method = revFlagsChain;
+        rev.chainTests.cert_rev_flags_per_method[cert_revocation_method_crl] =
+            CERT_REV_M_TEST_USING_THIS_METHOD
+            | CERT_REV_M_IGNORE_IMPLICIT_DEFAULT_SOURCE;
+        rev.chainTests.cert_rev_flags_per_method[cert_revocation_method_ocsp] =
+            CERT_REV_M_TEST_USING_THIS_METHOD
+            | CERT_REV_M_IGNORE_IMPLICIT_DEFAULT_SOURCE;
+        rev.chainTests.number_of_preferred_methods = 0;
+        rev.chainTests.preferred_methods = NULL;
+        rev.chainTests.cert_rev_method_independent_flags =
+            CERT_REV_MI_TEST_ALL_LOCAL_INFORMATION_FIRST;
+//            | CERT_REV_MI_REQUIRE_SOME_FRESH_INFO_AVAILABLE;
 
 
-        log->count = 0;
-        log->head = NULL;
-        log->tail = NULL;
-        log->arena = PORT_NewArena( DER_DEFAULT_CHUNKSIZE );
+        cvin[1].type = cert_pi_revocationFlags;
+        cvin[1].value.pointer.revocation = &rev;
+        // does not work, not implemented yet in 3.12.4
+//         cvin[2].type = cert_pi_keyusage;
+//         cvin[2].value.scalar.ui = KU_DIGITAL_SIGNATURE;
+        cvin[2].type = cert_pi_end;
 
-        //CERTVerifyLog *log;
-        //PRArenaPool *arena;
+        cvout[0].type = cert_po_trustAnchor;
+        cvout[0].value.pointer.cert = NULL;
+        cvout[1].type = cert_po_errorLog;
+        cvout[1].value.pointer.log = &log;
+        cvout[2].type = cert_po_end;
 
-        //arena = PORT_NewArena( DER_DEFAULT_CHUNKSIZE );
-        //log = PORT_ArenaZNew( arena, CERTVerifyLog );
-        //log->arena = arena;
-        validity = csss::CertificateValidity::INVALID;
+        // We check SSL server certificates, CA certificates and signing sertificates.
+        //
+        // ToDo check keyusage, looking at CERT_KeyUsageAndTypeForCertUsage (
+        // mozilla/security/nss/lib/certdb/certdb.c indicates that
+        // certificateUsageSSLClient, certificateUsageSSLServer and certificateUsageSSLCA
+        // are sufficient. They cover the key usages for digital signature, key agreement
+        // and encipherment and certificate signature
 
-        if( m_pHandler != NULL )
+        //never use the following usages because they are not checked properly
+        // certificateUsageUserCertImport
+        // certificateUsageVerifyCA
+        // certificateUsageAnyCA
+        // certificateUsageProtectedObjectSigner
+
+        UsageDescription arUsages[] =
         {
-            //JL: We must not pass a particular usage in the requiredUsages argument (the 4th) because,
-            //then ONLY these are verified. For example, we pass
-            //certificateUsageSSLClient | certificateUsageSSLServer. Then checking a certificate which
-            // is a valid certificateUsageEmailSigner but no certificateUsageSSLClient | certificateUsageSSLServer
-            //will result in CertificateValidity::INVALID.
-            //Only if the argument "requiredUsages" has a value (other than zero)
-            //then the function will return SECFailure in case
-            //the certificate is not suitable for the provided usage. That is, in the previous
-            //example the function returns SECFailure.
-            status = CERT_VerifyCertificate(
-                m_pHandler, ( CERTCertificate* )cert, PR_TRUE,
-                (SECCertificateUsage)0, timeboundary , NULL, log, &usage);
-        }
-        else
+           {certificateUsageSSLClient, "certificateUsageSSLClient" },
+           {certificateUsageSSLServer, "certificateUsageSSLServer" },
+           {certificateUsageSSLCA, "certificateUsageSSLCA" },
+           {certificateUsageEmailSigner, "certificateUsageEmailSigner"}, //only usable for end certs
+           {certificateUsageEmailRecipient, "certificateUsageEmailRecipient"}
+        };
+
+        int numUsages = sizeof(arUsages) / sizeof(UsageDescription);
+        for (int i = 0; i < numUsages; i++)
         {
-            status = CERT_VerifyCertificate(
-                CERT_GetDefaultCertDB(), ( CERTCertificate* )cert,
-                PR_TRUE, (SECCertificateUsage)0, timeboundary ,NULL, log, &usage);
-        }
+            xmlsec_trace("Testing usage %d of %d: %s (0x%x)", i + 1,
+                      numUsages, arUsages[i].description, (int) arUsages[i].usage);
 
-        if( status == SECSuccess )
-        {
-            // JL & TKR : certificateUsageUserCertImport,
-            // certificateUsageVerifyCA and certificateUsageAnyCA dont check the chain
+            status = CERT_PKIXVerifyCert(const_cast<CERTCertificate *>(cert), arUsages[i].usage,
+                                         cvin, cvout, NULL);
+            if( status == SECSuccess )
+            {
+                xmlsec_trace("CERT_PKIXVerifyCert returned SECSuccess.");
+                //When an intermediate or root certificate is checked then we expect the usage
+                //certificateUsageSSLCA. This, however, will be only set when in the trust settings dialog
+                //the button "This certificate can identify websites" is checked. If for example only
+                //"This certificate can identify mail users" is set then the end certificate can
+                //be validated and the returned usage will conain certificateUsageEmailRecipient.
+                //But checking directly the root or intermediate certificate will fail. In the
+                //certificate path view the end certificate will be shown as valid but the others
+                //will be displayed as invalid.
 
-            //When an intermediate or root certificate is checked then we expect the usage
-            //certificateUsageSSLCA. This, however, will be only set when in the trust settings dialog
-            //the button "This certificate can identify websites" is checked. If for example only
-            //"This certificate can identify mail users" is set then the end certificate can
-            //be validated and the returned usage will conain certificateUsageEmailRecipient.
-            //But checking directly the root or intermediate certificate will fail. In the
-            //certificate path view the end certificate will be shown as valid but the others
-            //will be displayed as invalid.
-
-            if (usage & certificateUsageEmailSigner
-                || usage & certificateUsageEmailRecipient
-                || usage & certificateUsageSSLCA
-                || usage & certificateUsageSSLServer
-                || usage & certificateUsageSSLClient
-                // || usage & certificateUsageUserCertImport
-                // || usage & certificateUsageVerifyCA
-                || usage & certificateUsageStatusResponder )
-                // || usage & certificateUsageAnyCA )
                 validity = csss::CertificateValidity::VALID;
+                xmlsec_trace("Certificate is valid.\n");
+                CERTCertificate * issuerCert = cvout[0].value.pointer.cert;
+                if (issuerCert)
+                {
+                    xmlsec_trace("Root certificate: %s", issuerCert->subjectName);
+                    CERT_DestroyCertificate(issuerCert);
+                };
+
+                break;
+            }
             else
-                validity = csss::CertificateValidity::INVALID;
+            {
+                PRIntn err = PR_GetError();
+                xmlsec_trace("Error: , %d = %s", err, getCertError(err));
 
+                /* Display validation results */
+                if ( log.count > 0)
+                {
+                    CERTVerifyLogNode *node = NULL;
+                    printChainFailure(&log);
+
+                    for (node = log.head; node; node = node->next) {
+                        if (node->cert)
+                            CERT_DestroyCertificate(node->cert);
+                    }
+                    log.head = log.tail = NULL;
+                    log.count = 0;
+                }
+                xmlsec_trace("Certificate is invalid.\n");
+            }
         }
-        // always check what kind of error occured, even SECStatus says Success
-        //JL: When we call CERT_VerifyCertificate whit the parameter requiredUsages == 0 then all
-        //possible usages are checked. Then there are certainly usages for which the certificate
-        //is not intended. For these usages there will be NO flag set in the argument returnedUsages
-        // (the last arg) and there will be error codes set in the log. Therefore we cannot
-        //set the CertificateValidity to INVALID because there is a log entry.
-//         CERTVerifyLogNode *logNode = 0;
 
-//         logNode = log->head;
-//         while ( logNode != NULL )
-//         {
-//             sal_Int32 errorCode = 0;
-//             errorCode = logNode->error;
-
-//             switch ( errorCode )
-//             {
-//                 // JL & TKR: Any error are treated as invalid because we cannot say that we get all occurred errors from NSS
-// /*
-//                 case ( SEC_ERROR_REVOKED_CERTIFICATE ):
-//                     validity |= csss::CertificateValidity::REVOKED;
-//                 break;
-//                 case ( SEC_ERROR_EXPIRED_CERTIFICATE ):
-//                     validity |= csss::CertificateValidity::TIME_INVALID;
-//                 break;
-//                 case ( SEC_ERROR_CERT_USAGES_INVALID):
-//                     validity |= csss::CertificateValidity::INVALID;
-//                 break;
-//                 case ( SEC_ERROR_UNTRUSTED_ISSUER ):
-//                 case ( SEC_ERROR_UNTRUSTED_CERT ):
-//                     validity |= csss::CertificateValidity::UNTRUSTED;
-//                 break;
-//  */
-//                 default:
-//                     validity |= csss::CertificateValidity::INVALID;
-//                 break;
-//             }
-//             logNode = logNode->next;
-//        }
     }
     else
     {
-
         validity = ::com::sun::star::security::CertificateValidity::INVALID ;
     }
 
@@ -934,15 +978,9 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
     std::vector<CERTCertificate*>::const_iterator cert_i;
     for (cert_i = vecTmpNSSCertificates.begin(); cert_i != vecTmpNSSCertificates.end(); cert_i++)
     {
-        OSL_TRACE("[xmlsecurity] Destroying temporary certificate");
+        xmlsec_trace("Destroying temporary certificate");
         CERT_DestroyCertificate(*cert_i);
     }
-#if OSL_DEBUG_LEVEL > 1
-    if (validity == ::com::sun::star::security::CertificateValidity::VALID)
-        OSL_TRACE("[xmlsecurity] Certificate is valid.");
-    else
-        OSL_TRACE("[xmlsecurity] Certificate is invalid.");
-#endif
     return validity ;
 }
 

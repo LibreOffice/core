@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: x509certificate_mscryptimpl.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -263,24 +260,27 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
     }
 }
 
-::rtl::OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com::sun::star::uno::RuntimeException) {
-    if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL ) {
-        char* subject ;
+::rtl::OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com::sun::star::uno::RuntimeException)
+{
+    if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL )
+    {
+        wchar_t* subject ;
         DWORD cbSubject ;
 
-        cbSubject = CertNameToStr(
+        cbSubject = CertNameToStrW(
             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
             &( m_pCertContext->pCertInfo->Subject ),
             CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG ,
             NULL, 0
         ) ;
 
-        if( cbSubject != 0 ) {
-            subject = new char[ cbSubject ] ;
+        if( cbSubject != 0 )
+        {
+            subject = new wchar_t[ cbSubject ] ;
             if( subject == NULL )
                 throw RuntimeException() ;
 
-            cbSubject = CertNameToStr(
+            cbSubject = CertNameToStrW(
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
                 &( m_pCertContext->pCertInfo->Subject ),
                 CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG ,
@@ -292,22 +292,17 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
                 throw RuntimeException() ;
             }
 
-            // By CP , for correct encoding
-            sal_uInt16 encoding ;
-            rtl_Locale *pLocale = NULL ;
-            osl_getProcessLocale( &pLocale ) ;
-            encoding = osl_getTextEncodingFromLocale( pLocale ) ;
-            // CP end
-
-            if(subject[cbSubject-1] == 0) cbSubject--; //delimit the last 0x00;
-            OUString xSubject(subject , cbSubject ,encoding ) ; //By CP
+            OUString xSubject(subject);
             delete [] subject ;
 
             return replaceTagSWithTagST(xSubject);
-        } else {
+        } else
+        {
             return OUString() ;
         }
-    } else {
+    }
+    else
+    {
         return OUString() ;
     }
 }
