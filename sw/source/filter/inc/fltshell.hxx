@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fltshell.hxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,11 +33,9 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <hintids.hxx>
-#ifndef _KEYCOD_HXX //autogen
 #include <vcl/keycod.hxx>
-#endif
 #include <tools/datetime.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <poolfmt.hxx>
 #include <fmtornt.hxx>
 #include <ndindex.hxx>
@@ -556,7 +551,7 @@ public:
         pOut->EndTable(); }
 // methoden zur verwaltung von Flys
     BOOL IsInFly() { return pOut->IsInFly(); }
-    BOOL BeginFly( RndStdIds eAnchor = FLY_AT_CNTNT, BOOL bAbsolutePos = FALSE );
+    BOOL BeginFly( RndStdIds eAnchor = FLY_AT_PARA, BOOL bAbsolutePos = FALSE );
     void SetFlyAnchor( RndStdIds eAnchor )
         { pOut->SetFlyAnchor( eAnchor ); }
     void SetFlyXPos( short nXPos, sal_Int16 eHRel = com::sun::star::text::RelOrientation::FRAME,

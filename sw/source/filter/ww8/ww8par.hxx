@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8par.hxx,v $
- * $Revision: 1.159.12.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <tools/string.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/msocximex.hxx>
-#include <svx/frmdir.hxx>
+#include <editeng/frmdir.hxx>
 #include <fltshell.hxx>         // fuer den Attribut Stack
 
 #ifndef __SGI_STL_VECTOR
@@ -60,6 +57,8 @@
 #include "ww8glsy.hxx"
 #include "wrtww8.hxx"
 #include "../inc/msfilter.hxx"
+#include <xmloff/odffields.hxx>
+#include <IMark.hxx>
 
 class SwDoc;
 class SwPaM;
@@ -362,43 +361,35 @@ namespace sw
             Position(const SwPosition &rPos);
             Position(const Position &rPos);
             operator SwPosition() const;
+            SwNodeIndex GetPtNode() { return maPtNode; };
+            xub_StrLen GetPtCntnt() { return mnPtCntnt; };
         };
     }
 }
 
 class FieldEntry
 {
-public:
-    sw::hack::Position maStartPos;
-    sal_uInt16 mnFieldId;
-    FieldEntry(SwPosition &rPos, sal_uInt16 nFieldId) throw();
-    FieldEntry(const FieldEntry &rOther) throw();
-    FieldEntry &operator=(const FieldEntry &rOther) throw();
-    void Swap(FieldEntry &rOther) throw();
-};
+    private:
+        ::rtl::OUString msBookmarkName;
+        ::rtl::OUString msMarkType;
+        ::sw::mark::IFieldmark::parameter_map_t maParams;
 
-class WW8NewFieldCtx
-{
-private:
-    SwNodeIndex maPtNode;
-    xub_StrLen mnPtCntnt;
-    ::rtl::OUString msBookmarkName;
-    ::rtl::OUString msMarkType;
-    typedef ::std::pair< ::rtl::OUString, ::rtl::OUString> Param_t;
-    typedef ::std::vector< Param_t > Params_t;
-    Params_t maParams;
-  SwPaM * mpPaM;
+    public:
+        sw::hack::Position maStartPos;
+        sal_uInt16 mnFieldId;
+        FieldEntry(SwPosition &rPos, sal_uInt16 nFieldId) throw();
+        FieldEntry(const FieldEntry &rOther) throw();
+        FieldEntry &operator=(const FieldEntry &rOther) throw();
+        void Swap(FieldEntry &rOther) throw();
 
-public:
-    WW8NewFieldCtx(SwPosition &aStartPos, ::rtl::OUString sBookmarkName, ::rtl::OUString sMarkType);
-    ~WW8NewFieldCtx();
+        SwNodeIndex GetPtNode() { return maStartPos.GetPtNode(); };
+        xub_StrLen GetPtCntnt() { return maStartPos.GetPtCntnt(); };
 
-    SwNodeIndex GetPtNode() { return maPtNode; };
-    xub_StrLen GetPtCntnt() { return mnPtCntnt; };
-    ::rtl::OUString GetBookmarkName();
-    ::rtl::OUString GetMarkType();
-    void AddParam(::rtl::OUString name, ::rtl::OUString value);
-    void SetCurrentFieldParamsTo(::sw::mark::IFieldmark* pFieldmark);
+        ::rtl::OUString GetBookmarkName();
+        ::rtl::OUString GetBookmarkType();
+        void SetBookmarkName(::rtl::OUString bookmarkName);
+        void SetBookmarkType(::rtl::OUString bookmarkType);
+        ::sw::mark::IFieldmark::parameter_map_t& getParameters();
 };
 
 
@@ -434,7 +425,6 @@ private:
     bool mbWasParaEnd;
     bool mbHasBorder;
     bool mbFirstPara;
-    std::deque<WW8NewFieldCtx *> maFieldCtxStack;
 public:
     WW8ReaderSave(SwWW8ImplReader* pRdr, WW8_CP nStart=-1);
     void Restore(SwWW8ImplReader* pRdr);
@@ -888,9 +878,6 @@ private:
     */
     std::deque<FieldEntry> maFieldStack;
     typedef std::deque<FieldEntry>::const_iterator mycFieldIter;
-
-    typedef std::deque<WW8NewFieldCtx *> WW8NewFieldCtxStack_t;
-    WW8NewFieldCtxStack_t maNewFieldCtxStack;
 
     /*
     A stack of open footnotes. Should only be one in it at any time.
