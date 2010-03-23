@@ -303,7 +303,7 @@ testcase tMakro_Dialog
     endif
 
     printlog( "Open the BASIC Macro Organizer" )
-    ToolsMacro_uno
+    ToolsMacro_uno : WaitSlot()
     
     printlog( "Select the last macro from the list" )
     kontext "makro"
@@ -347,9 +347,10 @@ testcase tMakro_Dialog
     endif
     
     printlog( "Open macro organizer from the current document" )
-    ToolsMacro_uno
+    ToolsMacro_uno : WaitSlot()
     
     printlog( "Select the last item in the treelist" )
+    kontext "Makro"
     hSelectTheLastNode( MakroAus )
 
     printlog( "Delete the new module" )
