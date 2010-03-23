@@ -479,13 +479,24 @@ void SfxObjectShell::UpdateDocInfoForSave()
 
 //--------------------------------------------------------------------
 
+static void
+lcl_add(util::Duration & rDur, Time const& rTime)
+{
+    // here we don't care about overflow: rDur is converted back to seconds
+    // anyway, and Time cannot store more than ~4000 hours
+    rDur.Hours   += rTime.GetHour();
+    rDur.Minutes += rTime.GetMin();
+    rDur.Seconds += rTime.GetSec();
+}
+
 // Bearbeitungszeit aktualisieren
 void SfxObjectShell::UpdateTime_Impl(
     const uno::Reference<document::XDocumentProperties> & i_xDocProps)
 {
     // Get old time from documentinfo
-    sal_Int32 secs = i_xDocProps->getEditingDuration();
-    Time aOldTime(secs/3600, (secs%3600)/60, secs%60);
+    const sal_Int32 secs = i_xDocProps->getEditingDuration();
+    util::Duration editDuration(sal_False, 0, 0, 0,
+            secs/3600, (secs%3600)/60, secs%60, 0);
 
     // Initialize some local member! Its neccessary for wollow operations!
     DateTime    aNow                    ;   // Date and time at current moment
@@ -522,13 +533,14 @@ void SfxObjectShell::UpdateTime_Impl(
             nAddTime    +=  aNow                    ;
         }
 
-        aOldTime += nAddTime;
+        lcl_add(editDuration, nAddTime);
     }
 
     pImp->nTime = aNow;
     try {
-        i_xDocProps->setEditingDuration(
-            aOldTime.GetHour()*3600+aOldTime.GetMin()*60+aOldTime.GetSec());
+        const sal_Int32 newSecs( (editDuration.Hours*3600)
+            + (editDuration.Minutes*60) + editDuration.Seconds);
+        i_xDocProps->setEditingDuration(newSecs);
         i_xDocProps->setEditingCycles(i_xDocProps->getEditingCycles() + 1);
     }
     catch (lang::IllegalArgumentException &)
