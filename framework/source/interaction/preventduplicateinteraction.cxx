@@ -109,6 +109,20 @@ void PreventDuplicateInteraction::useDefaultUUIHandler()
 }
 
 //_________________________________________________________________________________________________________________
+css::uno::Any SAL_CALL PreventDuplicateInteraction::queryInterface( const css::uno::Type& aType )
+    throw (css::uno::RuntimeException)
+{
+    if ( aType.equals( XInteractionHandler2::static_type() ) )
+    {
+        ::osl::ResettableMutexGuard aLock(m_aLock);
+        css::uno::Reference< css::task::XInteractionHandler2 > xHandler( m_xHandler, css::uno::UNO_QUERY );
+        if ( !xHandler.is() )
+            return css::uno::Any();
+    }
+    return ::cppu::WeakImplHelper1< css::task::XInteractionHandler2 >::queryInterface( aType );
+}
+
+//_________________________________________________________________________________________________________________
 
 void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css::task::XInteractionRequest >& xRequest)
     throw(css::uno::RuntimeException)
@@ -162,6 +176,65 @@ void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css
             }
         }
     }
+}
+
+//_________________________________________________________________________________________________________________
+
+::sal_Bool SAL_CALL PreventDuplicateInteraction::handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& xRequest )
+            throw (css::uno::RuntimeException)
+{
+    css::uno::Any aRequest  = xRequest->getRequest();
+    sal_Bool      bHandleIt = sal_True;
+
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+
+    InteractionList::iterator pIt;
+    for (  pIt  = m_lInteractionRules.begin();
+           pIt != m_lInteractionRules.end()  ;
+         ++pIt                               )
+    {
+        InteractionInfo& rInfo = *pIt;
+
+        if (aRequest.isExtractableTo(rInfo.m_aInteraction))
+        {
+            ++rInfo.m_nCallCount;
+            rInfo.m_xRequest = xRequest;
+            bHandleIt = (rInfo.m_nCallCount <= rInfo.m_nMaxCount);
+            break;
+        }
+    }
+
+    css::uno::Reference< css::task::XInteractionHandler2 > xHandler( m_xHandler, css::uno::UNO_QUERY );
+    OSL_ENSURE( xHandler.is() || !m_xHandler.is(),
+        "PreventDuplicateInteraction::handleInteractionRequest: inconsistency!" );
+
+    aLock.clear();
+    // <- SAFE
+
+    if (
+        (bHandleIt    ) &&
+        (xHandler.is())
+       )
+    {
+        return xHandler->handleInteractionRequest(xRequest);
+    }
+    else
+    {
+        const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
+        sal_Int32 c = lContinuations.getLength();
+        sal_Int32 i = 0;
+        for (i=0; i<c; ++i)
+        {
+            css::uno::Reference< css::task::XInteractionAbort > xAbort(lContinuations[i], css::uno::UNO_QUERY);
+            if (xAbort.is())
+            {
+                xAbort->select();
+                break;
+            }
+        }
+    }
+    return false;
 }
 
 //_________________________________________________________________________________________________________________

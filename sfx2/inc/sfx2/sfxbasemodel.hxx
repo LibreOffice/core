@@ -43,6 +43,7 @@
 #include <com/sun/star/document/XDocumentInfo.hpp>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XDocumentRecovery.hpp>
 
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 
@@ -55,6 +56,8 @@
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/lang/NotInitializedException.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
 #include <com/sun/star/util/XModifiable2.hpp>
@@ -82,6 +85,8 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/script/XStarBasicAccess.hpp>
 #include <osl/mutex.hxx>
+#include <vos/mutex.hxx>
+#include <vcl/svapp.hxx>
 
 #include <tools/link.hxx>
 
@@ -91,9 +96,9 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 //________________________________________________________________________________________________________
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_29)
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_29
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 29
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_30)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_30
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 30
 #include <comphelper/implbase_var.hxx>
 #endif
 
@@ -196,8 +201,12 @@ class   SfxPrinter;
 class   SfxViewShell;
 class   SfxObjectShell                      ;
 class   SfxEventHint;
+class   SfxViewFrame;
 struct  IMPL_SfxBaseModel_DataContainer     ;   // impl. struct to hold member of class SfxBaseModel
 
+namespace sfx { namespace intern {
+    class ViewCreationGuard;
+} }
 //________________________________________________________________________________________________________
 //  class declarations
 //________________________________________________________________________________________________________
@@ -228,10 +237,11 @@ struct  IMPL_SfxBaseModel_DataContainer     ;   // impl. struct to hold member o
                  SfxListener
 */
 
-typedef ::comphelper::WeakImplHelper29  <   XCHILD
+typedef ::comphelper::WeakImplHelper30  <   XCHILD
                                         ,   XDOCUMENTINFOSUPPLIER
                                         ,   ::com::sun::star::document::XDocumentPropertiesSupplier
                                         ,   ::com::sun::star::rdf::XDocumentMetadataAccess
+                                        ,   ::com::sun::star::document::XDocumentRecovery
                                         ,   XEVENTBROADCASTER
                                         ,   XEVENTLISTENER
                                         ,   XEVENTSSUPPLIER
@@ -1284,6 +1294,18 @@ public:
     virtual ::rtl::OUString SAL_CALL getUntitledPrefix()
         throw (css::uno::RuntimeException);
 
+    // css.document.XDocumentRecovery
+    virtual ::sal_Bool SAL_CALL wasModifiedSinceLastSave()
+        throw ( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL storeToRecoveryFile( const ::rtl::OUString& i_TargetLocation, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_MediaDescriptor )
+        throw ( ::com::sun::star::uno::RuntimeException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::lang::WrappedTargetException );
+    virtual void SAL_CALL recoverFromFile( const ::rtl::OUString& i_SourceLocation, const ::rtl::OUString& i_SalvagedFile, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_MediaDescriptor )
+        throw ( ::com::sun::star::uno::RuntimeException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::lang::WrappedTargetException );
+
     //____________________________________________________________________________________________________
 
     // ::com::sun::star::rdf::XNode:
@@ -1463,6 +1485,7 @@ public:
 
     SAL_DLLPRIVATE sal_Bool impl_isDisposed() const ;
     sal_Bool IsDisposed() const ;
+    sal_Bool IsInitialized() const;
 
     ::com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess > SAL_CALL getViewData() throw (::com::sun::star::uno::RuntimeException);
     void SAL_CALL setViewData( const ::com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess >& aData ) throw (::com::sun::star::uno::RuntimeException);
@@ -1472,7 +1495,6 @@ public:
 
     /** returns true if someone added a XEventListener to this XEventBroadcaster */
     sal_Bool hasEventListeners() const;
-
 
 protected:
 
@@ -1517,6 +1539,13 @@ private:
     SAL_DLLPRIVATE css::uno::Reference< css::frame::XTitle > impl_getTitleHelper ();
     SAL_DLLPRIVATE css::uno::Reference< css::frame::XUntitledNumbers > impl_getUntitledHelper ();
 
+    SAL_DLLPRIVATE SfxViewFrame* FindOrCreateViewFrame_Impl(
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame,
+                        ::sfx::intern::ViewCreationGuard& i_rGuard
+                    ) const;
+
+    SAL_DLLPRIVATE void NotifyModifyListeners_Impl() const;
+
 //________________________________________________________________________________________________________
 //  private variables and methods
 //________________________________________________________________________________________________________
@@ -1526,8 +1555,41 @@ private:
     IMPL_SfxBaseModel_DataContainer*    m_pData ;
     // cannot be held in m_pData, since it needs to be accessed in non-threadsafe context
     const bool                          m_bSupportEmbeddedScripts;
+    const bool                          m_bSupportDocRecovery;
 
 } ; // class SfxBaseModel
+
+class SFX2_DLLPUBLIC SfxModelGuard
+{
+public:
+    enum AllowedModelState
+    {
+        // not yet initialized
+        E_INITIALIZING,
+        // fully alive, i.e. initialized, and not yet disposed
+        E_FULLY_ALIVE
+    };
+
+    SfxModelGuard( SfxBaseModel& i_rModel, const AllowedModelState i_eState = E_FULLY_ALIVE )
+        :m_aGuard( Application::GetSolarMutex() )
+    {
+        if ( i_rModel.IsDisposed() )
+            throw ::com::sun::star::lang::DisposedException( ::rtl::OUString(), *&i_rModel );
+        if ( ( i_eState != E_INITIALIZING ) && !i_rModel.IsInitialized() )
+            throw ::com::sun::star::lang::NotInitializedException( ::rtl::OUString(), *&i_rModel );
+    }
+    ~SfxModelGuard()
+    {
+    }
+
+    void clear()
+    {
+        m_aGuard.clear();
+    }
+
+private:
+    ::vos::OClearableGuard  m_aGuard;
+};
 
 #undef css
 

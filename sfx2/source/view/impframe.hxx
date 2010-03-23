@@ -28,8 +28,6 @@
 #ifndef _SFX_IMPFRAME_HXX
 #define _SFX_IMPFRAME_HXX
 
-#include <svl/cancel.hxx>
-
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>                  // SvBorder
 
@@ -51,60 +49,51 @@ class SfxObjectShell;
 #define FRAME_SEARCH_CREATE     0x00000008
 #endif
 
-class SfxFrame_Impl : public SfxBroadcaster, public SvCompatWeakBase, public SfxListener
+class SfxFrame_Impl : public SfxBroadcaster, public SvCompatWeakBase
 {
-friend class SfxFrame;
-
+public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame;
-    String                    aFrameIdName;
     sal_uInt32                nType;
-    sal_uInt32                nHistoryPos;
     SfxViewFrame*             pCurrentViewFrame;
-    SfxObjectShell*           pCurrentObjectShell;
     SfxFrameDescriptor*       pDescr;
-    sal_uInt16                nFrameId;
     sal_uInt16                nLocks;
-    sal_Bool                  bCloseOnUnlock : 1;
     sal_Bool                  bClosing : 1;
     sal_Bool                  bPrepClosing : 1;
     sal_Bool                  bInCancelTransfers : 1;
     sal_Bool                  bOwnsBindings : 1;
     sal_Bool                  bReleasingComponent : 1;
-    sal_Bool                  bFocusLocked : 1;
     sal_Bool                  bInPlace : 1;
-    SfxCancelManager*         pCancelMgr;
-    SfxCancellable*           pLoadCancellable;
     SfxFrame*                 pFrame;
-    const SfxItemSet*         pSet;
     SfxWorkWindow*            pWorkWin;
     SvBorder                  aBorder;
+    // formerly SfxTopFrame
+    Window*                   pExternalContainerWindow;
+    bool                      bHidden;
+    bool                      bLockResize;
+    bool                      bMenuBarOn;
 
-    SfxFrame_Impl( SfxFrame* pAntiImplP ) :
-                              SvCompatWeakBase( pAntiImplP ),
-                              nType( 0L ),
-                              nHistoryPos( 0 ),
-                              pCurrentViewFrame( NULL ),
-                              pCurrentObjectShell( NULL ),
-                              pDescr( NULL ),
-                              nFrameId( 0 ),
-                              nLocks( 0 ),
-                              bCloseOnUnlock( sal_False ),
-                              bClosing(sal_False),
-                              bPrepClosing(sal_False),
-                              bInCancelTransfers( sal_False ),
-                              bOwnsBindings( sal_False ),
-                              bReleasingComponent( sal_False ),
-                              bFocusLocked( sal_False ),
-                              bInPlace( sal_False ),
-                              pCancelMgr( 0 ),
-                              pLoadCancellable( 0 ),
-                              pFrame( pAntiImplP ),
-                              pSet( 0 ),
-                              pWorkWin( 0 )
-                              {}
+    SfxFrame_Impl( SfxFrame* pAntiImplP )
+        :SvCompatWeakBase( pAntiImplP )
+        ,nType( 0L )
+        ,pCurrentViewFrame( NULL )
+        ,pDescr( NULL )
+        ,nLocks( 0 )
+        ,bClosing(sal_False)
+        ,bPrepClosing(sal_False)
+        ,bInCancelTransfers( sal_False )
+        ,bOwnsBindings( sal_False )
+        ,bReleasingComponent( sal_False )
+        ,bInPlace( sal_False )
+        ,pFrame( pAntiImplP )
+        ,pWorkWin( 0 )
+        ,pExternalContainerWindow( NULL )
+        ,bHidden( false )
+        ,bLockResize( false )
+        ,bMenuBarOn( true )
+    {
+    }
 
-    virtual ~SfxFrame_Impl() { delete pCancelMgr; delete pLoadCancellable; }
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual ~SfxFrame_Impl() { }
 };
 
 #endif

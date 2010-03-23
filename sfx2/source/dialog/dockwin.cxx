@@ -161,7 +161,7 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
     if (xFactoryMgr.is())
     {
         SfxDispatcher* pDispatcher = pBindings->GetDispatcher();
-        uno::Reference< frame::XFrame > xFrame( pDispatcher->GetFrame()->GetFrame()->GetFrameInterface(), uno::UNO_QUERY );
+        uno::Reference< frame::XFrame > xFrame( pDispatcher->GetFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
         uno::Sequence< uno::Any > aArgs(2);
         beans::PropertyValue      aPropValue;
         aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
@@ -1852,7 +1852,7 @@ long SfxDockingWindow::Notify( NotifyEvent& rEvt )
         }
 
         if ( nHelpId )
-            SfxHelp::OpenHelpAgent( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), nHelpId );
+            SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), nHelpId );
 
         // In VCL geht Notify zun"achst an das Fenster selbst,
         // also base class rufen, sonst erf"ahrt der parent nichts

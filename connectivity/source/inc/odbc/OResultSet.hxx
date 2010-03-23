@@ -173,6 +173,7 @@ namespace connectivity
             sal_Bool moveImpl(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool _bRetrieveData);
             TVoidPtr allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex);
             SQLRETURN unbind(sal_Bool _bUnbindHandle = sal_True);
+            SWORD impl_getColumnType_nothrow(sal_Int32 columnIndex);
 
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;

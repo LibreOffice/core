@@ -116,9 +116,6 @@ BOOL SfxApplication::QueryExit_Impl()
         }
     }
 */
-    // alles canceln was zu canceln ist
-    GetCancelManager()->Cancel(TRUE);
-
 /*
     SfxObjectShell *pLastDocSh = SfxObjectShell::GetFirst();
     if ( bQuit )

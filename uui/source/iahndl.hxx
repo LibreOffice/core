@@ -68,6 +68,8 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
+#include <hash_map>
+
 class Window;
 
 //============================================================================
@@ -84,15 +86,18 @@ struct InteractionHandlerData
 
 typedef std::vector< InteractionHandlerData > InteractionHandlerDataList;
 
+typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > Continuations;
+
+typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >    StringHashMap;
+
 //============================================================================
 class UUIInteractionHelper
 {
 private:
-    osl::Mutex m_aPropertyMutex;
-    com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory > m_xServiceFactory;
-    com::sun::star::uno::Sequence< com::sun::star::uno::Any > m_aProperties;
-
+    mutable osl::Mutex                                                                      m_aPropertyMutex;
+            ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >  m_xServiceFactory;
+            ::com::sun::star::uno::Sequence< com::sun::star::uno::Any >                     m_aProperties;
+            StringHashMap                                                                   m_aTypedCustomHandlers;
     UUIInteractionHelper(UUIInteractionHelper &); // not implemented
     void operator =(UUIInteractionHelper); // not implemented
 
@@ -155,7 +160,7 @@ private:
         SAL_THROW(());
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>
-    getParentXWindow()
+    getParentXWindow() const
         SAL_THROW(());
 
     rtl::OUString
@@ -165,6 +170,10 @@ private:
     com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >
     getInteractionHandler()
         SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    bool    handleTypedHandlerImplementations(
+                ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest > const &  rRequest
+            );
 
     bool
     tryOtherInteractionHandler(
@@ -328,6 +337,11 @@ private:
         com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionRequest > const & rRequest)
         SAL_THROW((::com::sun::star::uno::RuntimeException));
+
+    bool    handleCustomRequest(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& i_rRequest,
+                const ::rtl::OUString& i_rServiceName
+            ) const;
 };
 
 class ErrorResource: private Resource
