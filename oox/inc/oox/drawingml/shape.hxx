@@ -126,6 +126,7 @@ public:
     void                            setSubType( sal_uInt32 nSubType ) { mnSubType = nSubType; }
     sal_Int32                       getSubType() const { return mnSubType; }
     void                            setIndex( sal_uInt32 nIndex ) { mnIndex = nIndex; }
+    sal_Int32                       getIndex() { return mnIndex; }
 
     // setDefaults has to be called if styles are imported (OfficeXML is not storing properties having the default value)
     void                            setDefaults();
