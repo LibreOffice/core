@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: accessibletable.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,9 +94,8 @@ public:
     virtual ::rtl::OUString GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType, sal_Int32 _nPosition = -1) const= 0;
 
     /** Fills the StateSet with all states (except DEFUNC and SHOWING, done by
-        the accessible object), depending on the specified object type. */
-    virtual void FillAccessibleStateSet(
-            ::utl::AccessibleStateSetHelper& rStateSet,
+            the accessible object), depending on the specified object type. */
+    virtual void FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet,
             AccessibleTableControlObjType eObjType ) const= 0;
 
     // Window

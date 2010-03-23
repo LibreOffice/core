@@ -1,26 +1,27 @@
 /*************************************************************************
-* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
-* Copyright 2009 by Sun Microsystems, Inc.
-*
-* OpenOffice.org - a multi-platform office productivity suite
-*
-* This file is part of OpenOffice.org.
-*
-* OpenOffice.org is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License version 3
-* only, as published by the Free Software Foundation.
-*
-* OpenOffice.org is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Lesser General Public License version 3 for more details
-* (a copy is included in the LICENSE file that accompanied this code).
-*
-* You should have received a copy of the GNU Lesser General Public License
-* version 3 along with OpenOffice.org.  If not, see
-* <http://www.openoffice.org/license.html>
-* for a copy of the LGPLv3 License.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
@@ -170,95 +171,82 @@ namespace svt { namespace table
         {
             return 0;
         }
-        virtual ScrollbarVisibility getVerticalScrollbarVisibility(int overAllHeight, int actHeight) const
+    virtual ScrollbarVisibility getVerticalScrollbarVisibility(int , int ) const
         {
-            (void)overAllHeight;
-            (void)actHeight;
-            return ScrollbarShowNever;
+        return ScrollbarShowNever;
         }
-        virtual ScrollbarVisibility getHorizontalScrollbarVisibility(int overAllWidth, int actWidth) const
+        virtual ScrollbarVisibility getHorizontalScrollbarVisibility(int , int ) const
         {
-            (void)overAllWidth;
-            (void)actWidth;
-            return ScrollbarShowNever;
+        return ScrollbarShowNever;
         }
-        virtual bool hasVerticalScrollbar()
-        {
-            return false;
-        }
-        virtual bool hasHorizontalScrollbar()
-        {
-            return false;
-        }
-        virtual void setCellContent(const std::vector<std::vector< ::com::sun::star::uno::Any > >& )
-        {
-        }
-        virtual ::com::sun::star::util::Color getLineColor()
-        {
-            return 0;
-        }
-        virtual void setLineColor(::com::sun::star::util::Color _rColor)
-        {
-            (void)_rColor;
-        }
-        virtual ::com::sun::star::util::Color getHeaderBackgroundColor()
-        {
-            return -1;
-        }
-
-        virtual void setHeaderBackgroundColor(::com::sun::star::util::Color _rColor)
-        {
-            (void)_rColor;
-        }
-        virtual ::com::sun::star::util::Color getTextColor()
-        {
-            return 0;
-        }
-        virtual void setTextColor(::com::sun::star::util::Color _rColor)
-        {
-            (void)_rColor;
-        }
-        virtual ::com::sun::star::util::Color getOddRowBackgroundColor()
-        {
-            return -1;
-        }
-        virtual void setOddRowBackgroundColor(::com::sun::star::util::Color _rColor)
-        {
-            (void)_rColor;
-        }
-        virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign()
-        {
-            return com::sun::star::style::VerticalAlignment(0);
-        }
-        virtual void setVerticalAlign(com::sun::star::style::VerticalAlignment _Align)
-        {
-            (void)_Align;
-        }
-        virtual ::com::sun::star::util::Color getEvenRowBackgroundColor()
-        {
-            return -1;
-        }
-        virtual void setEvenRowBackgroundColor(::com::sun::star::util::Color _rColor)
-        {
-            (void)_rColor;
-        }
-
-        virtual std::vector<std::vector< ::com::sun::star::uno::Any > >& getCellContent()
-        {
-            return *( new std::vector<std::vector< ::com::sun::star::uno::Any > >);
-        }
-        virtual void setRowHeaderName(const std::vector<rtl::OUString>& )
-        {
-        }
-        virtual std::vector<rtl::OUString>& getRowHeaderName()
-        {
-            aRowHeaderNames.clear();
-            aRowHeaderNames.push_back(rtl::OUString::createFromAscii(""));
-            return aRowHeaderNames;
-        }
-
-        private:
-            std::vector<rtl::OUString> aRowHeaderNames;
+    virtual bool hasVerticalScrollbar()
+    {
+        return false;
+    }
+    virtual bool hasHorizontalScrollbar()
+    {
+        return false;
+    }
+    virtual void setCellContent(const std::vector<std::vector< ::com::sun::star::uno::Any > >& )
+    {
+    }
+    virtual ::com::sun::star::util::Color getLineColor()
+    {
+        return 0;
+    }
+    virtual void setLineColor(::com::sun::star::util::Color )
+    {
+    }
+    virtual ::com::sun::star::util::Color getHeaderBackgroundColor()
+    {
+        return -1;
+    }
+    virtual void setHeaderBackgroundColor(::com::sun::star::util::Color )
+    {
+    }
+    virtual ::com::sun::star::util::Color getTextColor()
+    {
+        return 0;
+    }
+    virtual void setTextColor(::com::sun::star::util::Color )
+    {
+    }
+    virtual ::com::sun::star::util::Color getOddRowBackgroundColor()
+    {
+        return -1;
+    }
+    virtual void setOddRowBackgroundColor(::com::sun::star::util::Color )
+    {
+    }
+    virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign()
+    {
+        return com::sun::star::style::VerticalAlignment(0);
+    }
+    virtual void setVerticalAlign(com::sun::star::style::VerticalAlignment )
+    {
+    }
+    virtual ::com::sun::star::util::Color getEvenRowBackgroundColor()
+    {
+        return -1;
+    }
+    virtual void setEvenRowBackgroundColor(::com::sun::star::util::Color )
+    {
+    }
+    virtual std::vector<std::vector< ::com::sun::star::uno::Any > >& getCellContent()
+    {
+        return *( new std::vector<std::vector< ::com::sun::star::uno::Any > >);
+    }
+    virtual void setRowHeaderName(const std::vector<rtl::OUString>& )
+    {
+    }
+    virtual std::vector<rtl::OUString>& getRowHeaderName()
+    {
+        aRowHeaderNames.clear();
+        aRowHeaderNames.push_back(rtl::OUString::createFromAscii(""));
+        return aRowHeaderNames;
+    }
+    private:
+        std::vector<rtl::OUString> aRowHeaderNames;
     };
 
 
@@ -428,33 +416,33 @@ namespace svt { namespace table
         ,m_pModel               ( new EmptyTableModel           )
         ,m_pInputHandler        (                               )
         ,m_nRowHeightPixel      ( 15                            )
-        ,m_nColHeaderHeightPixel( 0                             )
+    ,m_nColHeaderHeightPixel( 0                             )
         ,m_nRowHeaderWidthPixel ( 0                             )
         ,m_nColumnCount         ( 0                             )
         ,m_nRowCount            ( 0                             )
         ,m_nCurColumn           ( COL_INVALID                   )
         ,m_nCurRow              ( ROW_INVALID                   )
         ,m_nLeftColumn          ( 0                             )
-        ,m_nTopRow              ( 0                             )
+    ,m_nTopRow              ( 0                             )
         ,m_nCursorHidden        ( 1                             )
         ,m_pDataWindow          ( new TableDataWindow( *this )  )
-        ,m_pVScroll             ( NULL                          )
+    ,m_pVScroll             ( NULL                          )
         ,m_pHScroll             ( NULL                          )
         ,m_pScrollCorner        ( NULL                          )
-        ,m_pSelEngine           (                               )
-        ,m_nRowSelected         (                               )
-        ,m_pTableFunctionSet    ( new TableFunctionSet(this )   )
-        ,m_nAnchor              (-1                             )
-        ,m_bResizing            ( false                         )
-        ,m_nResizingColumn      ( 0                             )
-        ,m_bResizingGrid        ( false                         )
+    ,m_pSelEngine       (               )
+    ,m_nRowSelected     (               )
+    ,m_pTableFunctionSet    ( new TableFunctionSet(this )   )
+    ,m_nAnchor      (-1             )
+    ,m_bResizing        ( false             )
+    ,m_nResizingColumn  ( 0             )
+    ,m_bResizingGrid    ( false             )
 #if DBG_UTIL
         ,m_nRequiredInvariants ( INV_SCROLL_POSITION )
 #endif
     {
         DBG_CTOR( TableControl_Impl, TableControl_Impl_checkInvariants );
-        m_pSelEngine = new SelectionEngine(m_pDataWindow, m_pTableFunctionSet);
-        m_pSelEngine->SetSelectionMode(SINGLE_SELECTION);
+    m_pSelEngine = new SelectionEngine(m_pDataWindow, m_pTableFunctionSet);
+    m_pSelEngine->SetSelectionMode(SINGLE_SELECTION);
         m_pDataWindow->SetPosPixel( Point( 0, 0 ) );
         m_pDataWindow->Show();
     }
@@ -467,8 +455,8 @@ namespace svt { namespace table
         DELETEZ( m_pVScroll );
         DELETEZ( m_pHScroll );
         DELETEZ( m_pScrollCorner );
-        DELETEZ( m_pTableFunctionSet );
-        DELETEZ( m_pSelEngine );
+    DELETEZ( m_pTableFunctionSet );
+    DELETEZ( m_pSelEngine );
         DELETEZ( m_pDataWindow );
     }
 
@@ -562,8 +550,8 @@ namespace svt { namespace table
         m_pInputHandler.reset();
         m_nColumnCount = m_nRowCount = 0;
 
-        m_nRowHeightPixel = m_rAntiImpl.LogicToPixel( Size( 0, m_pModel->getRowHeight() ), MAP_APPFONT ).Height();
-        if ( m_pModel->hasColumnHeaders() )
+    m_nRowHeightPixel = m_rAntiImpl.LogicToPixel( Size( 0, m_pModel->getRowHeight() ), MAP_APPFONT ).Height();
+    if ( m_pModel->hasColumnHeaders() )
            m_nColHeaderHeightPixel = m_rAntiImpl.LogicToPixel( Size( 0, m_pModel->getColumnHeaderHeight() ), MAP_APPFONT ).Height();
         if ( m_pModel->hasRowHeaders() )
             m_nRowHeaderWidthPixel = m_rAntiImpl.LogicToPixel( Size( m_pModel->getRowHeaderWidth(), 0 ), MAP_APPFONT).Width();
@@ -591,88 +579,88 @@ namespace svt { namespace table
         m_aColumnWidthsPixel.reserve( colCount );
         m_aAccColumnWidthsPixel.reserve( colCount );
         long accumulatedPixelWidth = 0;
-        double gridWidth = m_rAntiImpl.GetSizePixel().Width()-4;
-        if(m_pModel->hasRowHeaders())
+    double gridWidth = m_rAntiImpl.GetSizePixel().Width()-4;
+    if(m_pModel->hasRowHeaders())
+    {
+        TableMetrics rowHeaderWidth = m_pModel->getRowHeaderWidth();
+        gridWidth-= m_rAntiImpl.LogicToPixel( Size( rowHeaderWidth, 0 ), MAP_APPFONT ).Width();
+    }
+    if(m_pModel->hasVerticalScrollbar())
+    {
+        sal_Int32 scrollbarWidth = m_rAntiImpl.GetSettings().GetStyleSettings().GetScrollBarSize();
+        gridWidth-=scrollbarWidth;
+    }
+    double colWidthsSum = 0.0;
+    double colWithoutFixedWidthsSum = 0.0;
+    double minColWithoutFixedSum = 0.0;
+    for ( ColPos col = 0; col < colCount; ++col )
         {
-            TableMetrics rowHeaderWidth = m_pModel->getRowHeaderWidth();
-            gridWidth-= m_rAntiImpl.LogicToPixel( Size( rowHeaderWidth, 0 ), MAP_APPFONT ).Width();
+        PColumnModel pColumn = m_pModel->getColumnModel( col );
+        DBG_ASSERT( !!pColumn, "TableControl_Impl::impl_ni_updateColumnWidths: invalid column returned by the model!" );
+        if ( !pColumn )
+            continue;
+        TableMetrics colWidth = 0;
+        TableMetrics colPrefWidth = pColumn->getPreferredWidth();
+        bool bResizable = pColumn->isResizable();
+        if(pColumn->getMinWidth() == 0 && bResizable)
+        {
+            pColumn->setMinWidth(1);
+            minColWithoutFixedSum+=m_rAntiImpl.LogicToPixel( Size( 1, 0 ), MAP_APPFONT ).Width();
         }
-        if(m_pModel->hasVerticalScrollbar())
+        if(pColumn->getMaxWidth() == 0 && bResizable)
+            pColumn->setMaxWidth(m_rAntiImpl.LogicToPixel( Size( (int)gridWidth, 0 ), MAP_APPFONT ).Width());
+        if( colPrefWidth != 0)
         {
-            sal_Int32 scrollbarWidth = m_rAntiImpl.GetSettings().GetStyleSettings().GetScrollBarSize();
-            gridWidth-=scrollbarWidth;
-        }
-        double colWidthsSum = 0.0;
-        double colWithoutFixedWidthsSum = 0.0;
-        double minColWithoutFixedSum = 0.0;
-        for ( ColPos col = 0; col < colCount; ++col )
-        {
-            PColumnModel pColumn = m_pModel->getColumnModel( col );
-            DBG_ASSERT( !!pColumn, "TableControl_Impl::impl_ni_updateColumnWidths: invalid column returned by the model!" );
-            if ( !pColumn )
-                continue;
-            TableMetrics colWidth = 0;
-            TableMetrics colPrefWidth = pColumn->getPreferredWidth();
-            bool bResizable = pColumn->isResizable();
-            if(pColumn->getMinWidth() == 0 && bResizable)
+            if(m_bResizingGrid)
             {
-                pColumn->setMinWidth(1);
-                minColWithoutFixedSum+=m_rAntiImpl.LogicToPixel( Size( 1, 0 ), MAP_APPFONT ).Width();
-            }
-            if(pColumn->getMaxWidth() == 0 && bResizable)
-                pColumn->setMaxWidth(m_rAntiImpl.LogicToPixel( Size( (int)gridWidth, 0 ), MAP_APPFONT ).Width());
-            if( colPrefWidth != 0)
-            {
-                if(m_bResizingGrid)
-                {
-                    colWidth = pColumn->getWidth();
-                    pColumn->setPreferredWidth(0);
-                }
-                else
-                {
-                    colWidth = colPrefWidth;
-                    pColumn->setWidth(colPrefWidth);
-                }
+                colWidth = pColumn->getWidth();
+                pColumn->setPreferredWidth(0);
             }
             else
-                colWidth = pColumn->getWidth();
-            long pixelWidth = m_rAntiImpl.LogicToPixel( Size( colWidth, 0 ), MAP_APPFONT ).Width();
-            if(bResizable && colPrefWidth == 0)
-                colWithoutFixedWidthsSum+=pixelWidth;
-            colWidthsSum+=pixelWidth;
-        }
-        gridWidth = gridWidth - colWidthsSum + colWithoutFixedWidthsSum;
-        double scalingFactor = 1.0;
-        if(m_bResizingGrid)
-        {
-            if(gridWidth > (minColWithoutFixedSum+colWidthsSum - colWithoutFixedWidthsSum))
-                scalingFactor = gridWidth/colWithoutFixedWidthsSum;
+            {
+                colWidth = colPrefWidth;
+                pColumn->setWidth(colPrefWidth);
+            }
         }
         else
+            colWidth = pColumn->getWidth();
+        long pixelWidth = m_rAntiImpl.LogicToPixel( Size( colWidth, 0 ), MAP_APPFONT ).Width();
+        if(bResizable && colPrefWidth == 0)
+            colWithoutFixedWidthsSum+=pixelWidth;
+        colWidthsSum+=pixelWidth;
+    }
+    gridWidth = gridWidth - colWidthsSum + colWithoutFixedWidthsSum;
+    double scalingFactor = 1.0;
+    if(m_bResizingGrid)
+    {
+        if(gridWidth > (minColWithoutFixedSum+colWidthsSum - colWithoutFixedWidthsSum))
+            scalingFactor = gridWidth/colWithoutFixedWidthsSum;
+    }
+    else
+    {
+        if(colWidthsSum < gridWidth)
         {
-            if(colWidthsSum < gridWidth)
-            {
-                if(colWithoutFixedWidthsSum>0)
-                    scalingFactor = gridWidth/colWithoutFixedWidthsSum;
-            }
+            if(colWithoutFixedWidthsSum>0)
+                scalingFactor = gridWidth/colWithoutFixedWidthsSum;
         }
-        long pixelWidth = 0;
-        for ( ColPos col = 0; col < colCount; ++col )
+    }
+    long pixelWidth = 0;
+    for ( ColPos col = 0; col < colCount; ++col )
+    {
+        PColumnModel pColumn = m_pModel->getColumnModel( col );
+        DBG_ASSERT( !!pColumn, "TableControl_Impl::impl_ni_updateColumnWidths: invalid column returned by the model!" );
+        if ( !pColumn )
+            continue;
+        TableMetrics colWidth = pColumn->getWidth();
+        if(pColumn->isResizable() && pColumn->getPreferredWidth() == 0)
         {
-            PColumnModel pColumn = m_pModel->getColumnModel( col );
-            DBG_ASSERT( !!pColumn, "TableControl_Impl::impl_ni_updateColumnWidths: invalid column returned by the model!" );
-            if ( !pColumn )
-                continue;
-            TableMetrics colWidth = pColumn->getWidth();
-            if(pColumn->isResizable() && pColumn->getPreferredWidth() == 0)
-            {
-                colWidth*=scalingFactor;
-                pColumn->setWidth(colWidth);
-            }
-            pixelWidth = m_rAntiImpl.LogicToPixel( Size( colWidth, 0 ), MAP_APPFONT ).Width();
-            m_aColumnWidthsPixel.push_back( pixelWidth );
-            m_aAccColumnWidthsPixel.push_back( accumulatedPixelWidth += pixelWidth );
+            colWidth*=scalingFactor;
+            pColumn->setWidth(colWidth);
         }
+        pixelWidth = m_rAntiImpl.LogicToPixel( Size( colWidth, 0 ), MAP_APPFONT ).Width();
+        m_aColumnWidthsPixel.push_back( pixelWidth );
+        m_aAccColumnWidthsPixel.push_back( accumulatedPixelWidth += pixelWidth );
+    }
     }
 
     //--------------------------------------------------------------------
@@ -905,20 +893,20 @@ namespace svt { namespace table
     void TableControl_Impl::onResize()
     {
         DBG_CHECK_ME();
-        if(m_nRowCount != 0)
+    if(m_nRowCount != 0)
+    {
+        if(m_nColumnCount != 0)
         {
-            if(m_nColumnCount != 0)
-            {
-                if(m_bResizingGrid)
-                    impl_ni_updateColumnWidths();
-                impl_ni_updateScrollbars();
-                m_bResizingGrid = true;
-            }
+            if(m_bResizingGrid)
+                impl_ni_updateColumnWidths();
+            impl_ni_updateScrollbars();
+            m_bResizingGrid = true;
         }
+    }
     }
 
     //--------------------------------------------------------------------
-  void TableControl_Impl::doPaintContent( const Rectangle& _rUpdateRect )
+    void TableControl_Impl::doPaintContent( const Rectangle& _rUpdateRect )
     {
         DBG_CHECK_ME();
 
@@ -1010,69 +998,69 @@ namespace svt { namespace table
         Rectangle aAllDataCellsArea;
         impl_getAllVisibleDataCellArea( aAllDataCellsArea );
 
-        //get the vector, which contains row vectors, each containing the data for the cells in this row
-        std::vector<std::vector< ::com::sun::star::uno::Any > >& aCellContent = m_pModel->getCellContent();
-        //if the vector is empty, fill it with empty data, so the table can be painted
-        if(aCellContent.empty())
+    //get the vector, which contains row vectors, each containing the data for the cells in this row
+    std::vector<std::vector< ::com::sun::star::uno::Any > >& aCellContent = m_pModel->getCellContent();
+    //if the vector is empty, fill it with empty data, so the table can be painted
+    if(aCellContent.empty())
+    {
+        std::vector< ::com::sun::star::uno::Any > emptyCells;
+        while(m_nRowCount!=0)
         {
-            std::vector< ::com::sun::star::uno::Any > emptyCells;
+            aCellContent.push_back( emptyCells);
+            --m_nRowCount;
+        }
+    }
+    std::vector<std::vector< ::com::sun::star::uno::Any > >::iterator it = aCellContent.begin()+m_nTopRow;
+    //get the vector, which contains the row header titles
+    std::vector<rtl::OUString>& aRowHeaderContent = m_pModel->getRowHeaderName();
+    ::std::vector<rtl::OUString>::iterator itRowName = aRowHeaderContent.begin();
+
+    if(m_pModel->hasRowHeaders())
+    {
+        //if the vector is empty, fill it with empty strings, so the table can be painted
+        if(aRowHeaderContent.empty())
+        {
             while(m_nRowCount!=0)
             {
-                aCellContent.push_back( emptyCells);
+                aRowHeaderContent.push_back(rtl::OUString::createFromAscii(""));
                 --m_nRowCount;
             }
         }
-        std::vector<std::vector< ::com::sun::star::uno::Any > >::iterator it = aCellContent.begin()+m_nTopRow;
-        //get the vector, which contains the row header titles
-        std::vector<rtl::OUString>& aRowHeaderContent = m_pModel->getRowHeaderName();
-        ::std::vector<rtl::OUString>::iterator itRowName = aRowHeaderContent.begin();
-
-        if(m_pModel->hasRowHeaders())
-        {
-            //if the vector is empty, fill it with empty strings, so the table can be painted
-            if(aRowHeaderContent.empty())
-            {
-                while(m_nRowCount!=0)
-                {
-                    aRowHeaderContent.push_back(rtl::OUString::createFromAscii(""));
-                    --m_nRowCount;
-                }
-            }
-            itRowName = aRowHeaderContent.begin()+m_nTopRow;
-        }
+        itRowName = aRowHeaderContent.begin()+m_nTopRow;
+    }
         for ( TableRowGeometry aRowIterator( *this, aAllCellsWithHeaders, getTopRow() );
               aRowIterator.isValid();
               aRowIterator.moveDown() )
         {
             if ( _rUpdateRect.GetIntersection( aRowIterator.getRect() ).IsEmpty() )
+        {
+            if(it < aCellContent.end()-1)
             {
-                if(it < aCellContent.end()-1)
-                {
-                    if(m_pModel->hasRowHeaders())
-                        ++itRowName;
-                    ++it;
-                }
+                if(m_pModel->hasRowHeaders())
+                    ++itRowName;
+                ++it;
+            }
                 continue;
-            }
+        }
             bool isActiveRow = ( aRowIterator.getRow() == getCurRow() );
-            bool isSelectedRow = false;
-            if(!m_nRowSelected.empty())
+        bool isSelectedRow = false;
+        if(!m_nRowSelected.empty())
+        {
+            for(std::vector<RowPos>::iterator itSel=m_nRowSelected.begin();
+                itSel!=m_nRowSelected.end();++itSel)
             {
-                for(std::vector<RowPos>::iterator itSel=m_nRowSelected.begin();
-                                itSel!=m_nRowSelected.end();++itSel)
-                {
-                    if(*itSel == aRowIterator.getRow())
-                        isSelectedRow = true;
-                }
+                if(*itSel == aRowIterator.getRow())
+                    isSelectedRow = true;
             }
-            std::vector< ::com::sun::star::uno::Any > aCellData;
+        }
+        std::vector< ::com::sun::star::uno::Any > aCellData;
             if(it != aCellContent.begin()+m_nTopRow+nActualRows)
-            {
-                aCellData = *it;
-                if(it < aCellContent.end()-1)
-                    ++it;
-            }
-            ::std::vector< ::com::sun::star::uno::Any >::iterator iter = aCellData.begin()+m_nLeftColumn;
+        {
+            aCellData = *it;
+            if(it < aCellContent.end()-1)
+                ++it;
+        }
+        ::std::vector< ::com::sun::star::uno::Any >::iterator iter = aCellData.begin()+m_nLeftColumn;
 
             // give the redenderer a chance to prepare the row
             pRenderer->PrepareRow( aRowIterator.getRow(), isActiveRow, isSelectedRow,
@@ -1081,15 +1069,14 @@ namespace svt { namespace table
             // paint the row header
             if ( m_pModel->hasRowHeaders() )
             {
-                rtl::OUString rowHeaderName;
-                if(itRowName != aRowHeaderContent.begin()+m_nTopRow+nActualRows)
-                {
-                    rowHeaderName = *itRowName;
-                    if(itRowName < m_pModel->getRowHeaderName().end()-1)
-                        ++itRowName;
-                }
+            rtl::OUString rowHeaderName;
+            if(itRowName != aRowHeaderContent.begin()+m_nTopRow+nActualRows)
+            {
+                rowHeaderName = *itRowName;
+                if(itRowName < m_pModel->getRowHeaderName().end()-1)
+                    ++itRowName;
+            }
                 Rectangle aCurrentRowHeader( aRowHeaderArea.GetIntersection( aRowIterator.getRect() ) );
-                //rStyle.SetBackgroundColor(m_rAntiImpl.getHeaderBackgroundColor());
                 pRenderer->PaintRowHeader( isActiveRow, isSelectedRow, *m_pDataWindow, aCurrentRowHeader,
                     rStyle, rowHeaderName );
             }
@@ -1102,30 +1089,29 @@ namespace svt { namespace table
                   aCell.moveRight()
                 )
             {
-
-                bool isSelectedColumn = false;
-                ::com::sun::star::uno::Any rCellData;
-                if(!aCellData.empty() && iter != aCellData.begin()+m_nLeftColumn+nActualCols)
+            bool isSelectedColumn = false;
+            ::com::sun::star::uno::Any rCellData;
+            if(!aCellData.empty() && iter != aCellData.begin()+m_nLeftColumn+nActualCols)
+            {
+                rCellData = *iter;
+                if(iter < aCellData.end()-1)
+                    ++iter;
+                Size siz = m_rAntiImpl.GetSizePixel();
+                ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >xGraphic;
+                if(rCellData>>=xGraphic)
                 {
-                    rCellData = *iter;
-                    if(iter < aCellData.end()-1)
-                        ++iter;
-                    Size siz = m_rAntiImpl.GetSizePixel();
-                    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >xGraphic;
-                    if(rCellData>>=xGraphic)
-                    {
-                        Image* pImage = new Image(xGraphic);
-                        if(pImage!=NULL)
-                            pRenderer->PaintCellImage( aCell.getColumn(), isSelectedRow || isSelectedColumn, isActiveRow,
+                    Image* pImage = new Image(xGraphic);
+                    if(pImage!=NULL)
+                        pRenderer->PaintCellImage( aCell.getColumn(), isSelectedRow || isSelectedColumn, isActiveRow,
                                 *m_pDataWindow, aCell.getRect(), rStyle, pImage );
-                    }
-                    else
-                    {
-                        ::rtl::OUString sContent = impl_convertToString(rCellData);
-                        pRenderer->PaintCellString( aCell.getColumn(), isSelectedRow || isSelectedColumn, isActiveRow,
-                        *m_pDataWindow, aCell.getRect(), rStyle, sContent );
-                    }
                 }
+                else
+                {
+                    ::rtl::OUString sContent = impl_convertToString(rCellData);
+                    pRenderer->PaintCellString( aCell.getColumn(), isSelectedRow || isSelectedColumn, isActiveRow,
+                        *m_pDataWindow, aCell.getRect(), rStyle, sContent );
+                }
+        }
            }
         }
     }
@@ -1158,74 +1144,70 @@ namespace svt { namespace table
         switch ( _eAction )
         {
         case cursorDown:
-            if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
+        if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
+        {
+            //if other rows already selected, deselect them
+            if(m_nRowSelected.size()>0)
             {
-                //if other rows already selected, deselect them
-                if(m_nRowSelected.size()>0)
+                for(std::vector<RowPos>::iterator it=m_nRowSelected.begin();
+                        it!=m_nRowSelected.end();++it)
                 {
-                    for(std::vector<RowPos>::iterator it=m_nRowSelected.begin();
-                    it!=m_nRowSelected.end();++it)
-                    {
-                        invalidateSelectedRegion(*it, *it, rCells);
-                    }
-                    m_nRowSelected.clear();
+                    invalidateSelectedRegion(*it, *it, rCells);
                 }
-                if(m_nCurRow < m_nRowCount-1)
-                {
-                    ++m_nCurRow;
-                    m_nRowSelected.push_back(m_nCurRow);
-                }
-                else
-                    m_nRowSelected.push_back(m_nCurRow);
-                invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
-                ensureVisible(m_nCurColumn,m_nCurRow,false);
-                m_rAntiImpl.selectionChanged(true);
-                bSuccess = true;
+                m_nRowSelected.clear();
+            }
+            if(m_nCurRow < m_nRowCount-1)
+            {
+                ++m_nCurRow;
+                m_nRowSelected.push_back(m_nCurRow);
             }
             else
-            {
-                if ( m_nCurRow < m_nRowCount - 1 )
-                {
-                    bSuccess = goTo( m_nCurColumn, m_nCurRow + 1 );
-                }
-            }
+                m_nRowSelected.push_back(m_nCurRow);
+            invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+            ensureVisible(m_nCurColumn,m_nCurRow,false);
+            m_rAntiImpl.selectionChanged(true);
+            bSuccess = true;
+        }
+        else
+        {
+            if ( m_nCurRow < m_nRowCount - 1 )
+                bSuccess = goTo( m_nCurColumn, m_nCurRow + 1 );
+        }
             break;
 
         case cursorUp:
-            if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
+        if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
+        {
+            if(m_nRowSelected.size()>0)
             {
-                if(m_nRowSelected.size()>0)
-                {
-                    for(std::vector<RowPos>::iterator it=m_nRowSelected.begin();
+                for(std::vector<RowPos>::iterator it=m_nRowSelected.begin();
                     it!=m_nRowSelected.end();++it)
-                    {
-                        invalidateSelectedRegion(*it, *it, rCells);
-                    }
-                    m_nRowSelected.clear();
-                }
-                if(m_nCurRow>0)
                 {
-                    --m_nCurRow;
-                    m_nRowSelected.push_back(m_nCurRow);
-                    invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                    invalidateSelectedRegion(*it, *it, rCells);
                 }
-                else
-                {
-                    m_nRowSelected.push_back(m_nCurRow);
-                    invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
-                }
-                ensureVisible(m_nCurColumn,m_nCurRow,false);
-                m_rAntiImpl.selectionChanged(true);
-                bSuccess = true;
+                m_nRowSelected.clear();
+            }
+            if(m_nCurRow>0)
+            {
+                --m_nCurRow;
+                m_nRowSelected.push_back(m_nCurRow);
+                invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
             }
             else
             {
-                if ( m_nCurRow > 0 )
-                {
-                    bSuccess = goTo( m_nCurColumn, m_nCurRow - 1 );
-                }
+                m_nRowSelected.push_back(m_nCurRow);
+                invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
             }
-            break;
+            ensureVisible(m_nCurColumn,m_nCurRow,false);
+            m_rAntiImpl.selectionChanged(true);
+            bSuccess = true;
+        }
+        else
+        {
+            if ( m_nCurRow > 0 )
+                bSuccess = goTo( m_nCurColumn, m_nCurRow - 1 );
+        }
+        break;
         case cursorLeft:
             if ( m_nCurColumn > 0 )
                 bSuccess = goTo( m_nCurColumn - 1, m_nCurRow );
@@ -1279,252 +1261,251 @@ namespace svt { namespace table
         case cursorBottomRight:
             bSuccess = goTo( m_nColumnCount - 1, m_nRowCount - 1 );
             break;
-
-        case cursorSelectRow:
+    case cursorSelectRow:
+    {
+        if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
+            return bSuccess = false;
+        //pos is the position of the current row in the vector of selected rows, if current row is selected
+        int pos = getRowSelectedNumber(m_nRowSelected, m_nCurRow);
+        //if current row is selected, it should be deselected, when ALT+SPACE are pressed
+        if(pos>-1)
         {
-            if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
-                return bSuccess = false;
-            //pos is the position of the current row in the vector of selected rows, if current row is selected
-            int pos = getRowSelectedNumber(m_nRowSelected, m_nCurRow);
-            //if current row is selected, it should be deselected, when ALT+SPACE are pressed
-            if(pos>-1)
+            m_nRowSelected.erase(m_nRowSelected.begin()+pos);
+            if(m_nRowSelected.empty() && m_nAnchor != -1)
+                m_nAnchor = -1;
+        }
+        //else select the row->put it in the vector
+        else
+            m_nRowSelected.push_back(m_nCurRow);
+        invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+        m_rAntiImpl.selectionChanged(true);
+        bSuccess = true;
+    }
+        break;
+    case cursorSelectRowUp:
+    {
+        if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
+            return bSuccess = false;
+        else if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
+        {
+            //if there are other selected rows, deselect them
+            return false;
+        }
+        else
+        {
+            //there are other selected rows
+            if(m_nRowSelected.size()>0)
             {
-                m_nRowSelected.erase(m_nRowSelected.begin()+pos);
-                if(m_nRowSelected.empty() && m_nAnchor != -1)
-                    m_nAnchor = -1;
+                //the anchor wasn't set -> a region is not selected, that's why clear all selection
+                //and select the current row
+                if(m_nAnchor==-1)
+                {
+                    for(std::vector<RowPos>::iterator it=m_nRowSelected.begin();
+                        it!=m_nRowSelected.end();++it)
+                    {
+                        invalidateSelectedRegion(*it, *it, rCells);
+                    }
+                    m_nRowSelected.clear();
+                    m_nRowSelected.push_back(m_nCurRow);
+                    invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                }
+                else
+                {
+                    //a region is already selected, prevRow is last selected row and the row above - nextRow - should be selected
+                    int prevRow = getRowSelectedNumber(m_nRowSelected, m_nCurRow);
+                    int nextRow = getRowSelectedNumber(m_nRowSelected, m_nCurRow-1);
+                    if(prevRow>-1)
+                     {
+                         //if m_nCurRow isn't the upper one, can move up, otherwise not
+                        if(m_nCurRow>0)
+                             m_nCurRow--;
+                         else
+                             return bSuccess = true;
+                         //if nextRow already selected, deselect it, otherwise select it
+                         if(nextRow>-1 && m_nRowSelected[nextRow] == m_nCurRow)
+                         {
+                             m_nRowSelected.erase(m_nRowSelected.begin()+prevRow);
+                             invalidateSelectedRegion(m_nCurRow+1, m_nCurRow+1, rCells);
+                         }
+                         else
+                        {
+                             m_nRowSelected.push_back(m_nCurRow);
+                             invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                         }
+                     }
+                    else
+                    {
+                        if(m_nCurRow>0)
+                        {
+                            m_nRowSelected.push_back(m_nCurRow);
+                            m_nCurRow--;
+                            m_nRowSelected.push_back(m_nCurRow);
+                            invalidateSelectedRegion(m_nCurRow+1, m_nCurRow, rCells);
+                        }
+                    }
+                }
             }
-            //else select the row->put it in the vector
             else
-                m_nRowSelected.push_back(m_nCurRow);
-            invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+            {
+                //if nothing is selected and the current row isn't the upper one
+                //select the current and one row above
+                //otherwise select only the upper row
+                if(m_nCurRow>0)
+                {
+                    m_nRowSelected.push_back(m_nCurRow);
+                    m_nCurRow--;
+                    m_nRowSelected.push_back(m_nCurRow);
+                    invalidateSelectedRegion(m_nCurRow+1, m_nCurRow, rCells);
+                }
+                else
+                {
+                    m_nRowSelected.push_back(m_nCurRow);
+                    invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                }
+            }
+            m_pSelEngine->SetAnchor(TRUE);
+            m_nAnchor = m_nCurRow;
+            ensureVisible(m_nCurColumn, m_nCurRow, false);
             m_rAntiImpl.selectionChanged(true);
             bSuccess = true;
         }
-        break;
-        case cursorSelectRowUp:
+    }
+    break;
+    case cursorSelectRowDown:
+    {
+        if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
+            bSuccess = false;
+        else if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
         {
-            if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
-                return bSuccess = false;
-            else if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
+            bSuccess = false;
+        }
+        else
+        {
+            if(m_nRowSelected.size()>0)
             {
-                //if there are other selected rows, deselect them
-                return false;
-            }
-            else
-            {
-                //there are other selected rows
-                if(m_nRowSelected.size()>0)
+                //the anchor wasn't set -> a region is not selected, that's why clear all selection
+                //and select the current row
+                if(m_nAnchor==-1)
                 {
-                //  the anchor wasn't set -> a region is not selected, that's why clear all selection
-                //  and select the current row
-                    if(m_nAnchor==-1)
-                    {
-                        for(std::vector<RowPos>::iterator it=m_nRowSelected.begin();
+                    for(std::vector<RowPos>::iterator it=m_nRowSelected.begin();
                         it!=m_nRowSelected.end();++it)
-                        {
-                            invalidateSelectedRegion(*it, *it, rCells);
-                        }
-                        m_nRowSelected.clear();
-                        m_nRowSelected.push_back(m_nCurRow);
-                        invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
-                    }
-                    else
                     {
-                        //a region is already selected, prevRow is last selected row and the row above - nextRow - should be selected
-                        int prevRow = getRowSelectedNumber(m_nRowSelected, m_nCurRow);
-                        int nextRow = getRowSelectedNumber(m_nRowSelected, m_nCurRow-1);
-                        if(prevRow>-1)
+                        invalidateSelectedRegion(*it, *it, rCells);
+                    }
+                    m_nRowSelected.clear();
+                    m_nRowSelected.push_back(m_nCurRow);
+                    invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                    }
+                else
+                {
+                    //a region is already selected, prevRow is last selected row and the row beneath - nextRow - should be selected
+                    int prevRow = getRowSelectedNumber(m_nRowSelected, m_nCurRow);
+                    int nextRow = getRowSelectedNumber(m_nRowSelected, m_nCurRow+1);
+                    if(prevRow>-1)
+                     {
+                         //if m_nCurRow isn't the last one, can move down, otherwise not
+                         if(m_nCurRow<m_nRowCount-1)
+                             m_nCurRow++;
+                         else
+                            return bSuccess = true;
+                         //if next row already selected, deselect it, otherwise select it
+                         if(nextRow>-1 && m_nRowSelected[nextRow] == m_nCurRow)
                          {
-                             //if m_nCurRow isn't the upper one, can move up, otherwise not
-                            if(m_nCurRow>0)
-                                 m_nCurRow--;
-                             else
-                                 return bSuccess = true;
-                             //if nextRow already selected, deselect it, otherwise select it
-                             if(nextRow>-1 && m_nRowSelected[nextRow] == m_nCurRow)
-                             {
-                                 m_nRowSelected.erase(m_nRowSelected.begin()+prevRow);
-                                 invalidateSelectedRegion(m_nCurRow+1, m_nCurRow+1, rCells);
-                             }
-                             else
-                            {
-                                 m_nRowSelected.push_back(m_nCurRow);
-                                 invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
-                             }
+                             m_nRowSelected.erase(m_nRowSelected.begin()+prevRow);
+                             invalidateSelectedRegion(m_nCurRow-1, m_nCurRow-1, rCells);
                          }
-                        else
-                        {
-                            if(m_nCurRow>0)
-                            {
-                                m_nRowSelected.push_back(m_nCurRow);
-                                m_nCurRow--;
-                                m_nRowSelected.push_back(m_nCurRow);
-                                invalidateSelectedRegion(m_nCurRow+1, m_nCurRow, rCells);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    //if nothing is selected and the current row isn't the upper one
-                    //select the current and one row above
-                    //otherwise select only the upper row
-                    if(m_nCurRow>0)
-                    {
-                        m_nRowSelected.push_back(m_nCurRow);
-                        m_nCurRow--;
-                        m_nRowSelected.push_back(m_nCurRow);
-                        invalidateSelectedRegion(m_nCurRow+1, m_nCurRow, rCells);
-                    }
-                    else
-                    {
-                        m_nRowSelected.push_back(m_nCurRow);
-                        invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
-                    }
-                }
-                m_pSelEngine->SetAnchor(TRUE);
-                m_nAnchor = m_nCurRow;
-                ensureVisible(m_nCurColumn, m_nCurRow, false);
-                m_rAntiImpl.selectionChanged(true);
-                bSuccess = true;
-            }
-        }
-        break;
-        case cursorSelectRowDown:
-        {
-            if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
-                bSuccess = false;
-            else if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
-            {
-                bSuccess = false;
-            }
-            else
-            {
-                if(m_nRowSelected.size()>0)
-                {
-                    //the anchor wasn't set -> a region is not selected, that's why clear all selection
-                    //and select the current row
-                    if(m_nAnchor==-1)
-                    {
-                        for(std::vector<RowPos>::iterator it=m_nRowSelected.begin();
-                        it!=m_nRowSelected.end();++it)
-                        {
-                            invalidateSelectedRegion(*it, *it, rCells);
-                        }
-                        m_nRowSelected.clear();
-                        m_nRowSelected.push_back(m_nCurRow);
-                        invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
-                    }
-                    else
-                    {
-                        //a region is already selected, prevRow is last selected row and the row beneath - nextRow - should be selected
-                        int prevRow = getRowSelectedNumber(m_nRowSelected, m_nCurRow);
-                        int nextRow = getRowSelectedNumber(m_nRowSelected, m_nCurRow+1);
-                        if(prevRow>-1)
+                         else
                          {
-                             //if m_nCurRow isn't the last one, can move down, otherwise not
-                             if(m_nCurRow<m_nRowCount-1)
-                                 m_nCurRow++;
-                             else
-                                return bSuccess = true;
-                             //if next row already selected, deselect it, otherwise select it
-                             if(nextRow>-1 && m_nRowSelected[nextRow] == m_nCurRow)
-                             {
-                                 m_nRowSelected.erase(m_nRowSelected.begin()+prevRow);
-                                 invalidateSelectedRegion(m_nCurRow-1, m_nCurRow-1, rCells);
-                             }
-                             else
-                             {
-                                 m_nRowSelected.push_back(m_nCurRow);
-                                 invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
-                             }
-                        }
-                        else
-                        {
-                            if(m_nCurRow<m_nRowCount-1)
-                            {
-                                m_nRowSelected.push_back(m_nCurRow);
-                                m_nCurRow++;
-                                m_nRowSelected.push_back(m_nCurRow);
-                                invalidateSelectedRegion(m_nCurRow-1, m_nCurRow, rCells);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    //there wasn't any selection, select current and row beneath, otherwise only row beneath
-                    if(m_nCurRow<m_nRowCount-1)
-                    {
-                        m_nRowSelected.push_back(m_nCurRow);
-                        m_nCurRow++;
-                        m_nRowSelected.push_back(m_nCurRow);
-                        invalidateSelectedRegion(m_nCurRow-1, m_nCurRow, rCells);
+                             m_nRowSelected.push_back(m_nCurRow);
+                             invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                         }
                     }
                     else
                     {
-                        m_nRowSelected.push_back(m_nCurRow);
-                        invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                        if(m_nCurRow<m_nRowCount-1)
+                        {
+                            m_nRowSelected.push_back(m_nCurRow);
+                            m_nCurRow++;
+                            m_nRowSelected.push_back(m_nCurRow);
+                            invalidateSelectedRegion(m_nCurRow-1, m_nCurRow, rCells);
+                        }
                     }
                 }
-                m_pSelEngine->SetAnchor(TRUE);
-                m_nAnchor = m_nCurRow;
-                ensureVisible(m_nCurColumn, m_nCurRow, false);
-                m_rAntiImpl.selectionChanged(true);
-                bSuccess = true;
             }
-        }
-        break;
-        case cursorSelectRowAreaTop:
-        {
-            if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
-                bSuccess = false;
-            else if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
-                bSuccess = false;
             else
             {
-                //select the region between the current and the upper row
-                RowPos iter = m_nCurRow;
-                invalidateSelectedRegion(m_nCurRow, 0, rCells);
-                //put the rows in vector
-                while(iter>=0)
+                //there wasn't any selection, select current and row beneath, otherwise only row beneath
+                if(m_nCurRow<m_nRowCount-1)
                 {
-                    if(!isRowSelected(m_nRowSelected, iter))
-                        m_nRowSelected.push_back(iter);
-                    --iter;
+                    m_nRowSelected.push_back(m_nCurRow);
+                    m_nCurRow++;
+                    m_nRowSelected.push_back(m_nCurRow);
+                    invalidateSelectedRegion(m_nCurRow-1, m_nCurRow, rCells);
                 }
-                m_nCurRow = 0;
-                m_nAnchor = m_nCurRow;
-                m_pSelEngine->SetAnchor(TRUE);
-                ensureVisible(m_nCurColumn, 0, false);
-                m_rAntiImpl.selectionChanged(true);
-                bSuccess = true;
+                else
+                {
+                    m_nRowSelected.push_back(m_nCurRow);
+                    invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                }
             }
+            m_pSelEngine->SetAnchor(TRUE);
+            m_nAnchor = m_nCurRow;
+            ensureVisible(m_nCurColumn, m_nCurRow, false);
+            m_rAntiImpl.selectionChanged(true);
+            bSuccess = true;
         }
+    }
         break;
-        case cursorSelectRowAreaBottom:
+    case cursorSelectRowAreaTop:
+    {
+        if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
+            bSuccess = false;
+        else if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
+            bSuccess = false;
+        else
         {
-            if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
-                return bSuccess = false;
-            else if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
-                return bSuccess = false;
-            //select the region between the current and the last row
+            //select the region between the current and the upper row
             RowPos iter = m_nCurRow;
-            invalidateSelectedRegion(m_nCurRow, m_nRowCount-1, rCells);
-            //put the rows in the vector
-            while(iter<=m_nRowCount)
+            invalidateSelectedRegion(m_nCurRow, 0, rCells);
+            //put the rows in vector
+            while(iter>=0)
             {
                 if(!isRowSelected(m_nRowSelected, iter))
                     m_nRowSelected.push_back(iter);
-                ++iter;
+                --iter;
             }
-            m_nCurRow = m_nRowCount-1;
+            m_nCurRow = 0;
             m_nAnchor = m_nCurRow;
             m_pSelEngine->SetAnchor(TRUE);
-            ensureVisible(m_nCurColumn, m_nRowCount-1, false);
+            ensureVisible(m_nCurColumn, 0, false);
             m_rAntiImpl.selectionChanged(true);
             bSuccess = true;
         }
+    }
+        break;
+    case cursorSelectRowAreaBottom:
+    {
+        if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
+            return bSuccess = false;
+        else if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
+            return bSuccess = false;
+        //select the region between the current and the last row
+        RowPos iter = m_nCurRow;
+        invalidateSelectedRegion(m_nCurRow, m_nRowCount-1, rCells);
+        //put the rows in the vector
+        while(iter<=m_nRowCount)
+        {
+            if(!isRowSelected(m_nRowSelected, iter))
+                m_nRowSelected.push_back(iter);
+            ++iter;
+        }
+        m_nCurRow = m_nRowCount-1;
+        m_nAnchor = m_nCurRow;
+        m_pSelEngine->SetAnchor(TRUE);
+        ensureVisible(m_nCurColumn, m_nRowCount-1, false);
+        m_rAntiImpl.selectionChanged(true);
+        bSuccess = true;
+    }
         break;
         default:
             DBG_ERROR( "TableControl_Impl::dispatchAction: unsupported action!" );
@@ -1540,15 +1521,10 @@ namespace svt { namespace table
         {
             Rectangle aCellRect;
             impl_getCellRect( m_nCurColumn, m_nCurRow, aCellRect );
-
-            if ( _bShow )
-            {
-                pRenderer->ShowCellCursor( *m_pDataWindow, aCellRect);
-            }
-            else
-            {
-                pRenderer->HideCellCursor( *m_pDataWindow, aCellRect);
-            }
+        if ( _bShow )
+            pRenderer->ShowCellCursor( *m_pDataWindow, aCellRect);
+        else
+            pRenderer->HideCellCursor( *m_pDataWindow, aCellRect);
         }
     }
 
@@ -1625,7 +1601,6 @@ namespace svt { namespace table
         }
         showCursor();
     }
-
     //-------------------------------------------------------------------------------
     void TableControl_Impl::invalidateSelectedRegion(RowPos _nPrevRow, RowPos _nCurRow, Rectangle& _rCellRect)
     {
@@ -1661,7 +1636,6 @@ namespace svt { namespace table
         }
         m_pDataWindow->Invalidate(_rCellRect);
     }
-
     //-------------------------------------------------------------------------------
     //this method is to be called, when a new row is added
     void TableControl_Impl::invalidateRow(RowPos _nRowPos, Rectangle& _rCellRect)
@@ -1675,13 +1649,12 @@ namespace svt { namespace table
         impl_ni_updateScrollbars();
         m_pDataWindow->Invalidate(_rRow.getRect());
     }
-
     //-------------------------------------------------------------------------------
     std::vector<RowPos>& TableControl_Impl::getSelectedRows()
     {
         return m_nRowSelected;
     }
-
+    //-------------------------------------------------------------------------------
     void TableControl_Impl::removeSelectedRow(RowPos _nRowPos)
     {
         int i =0;
@@ -1708,18 +1681,18 @@ namespace svt { namespace table
         else
             m_nCurRow = _nRowPos-1;
     }
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
     void TableControl_Impl::invalidateRows(RowPos _nRowStart, Rectangle& _rCellRect)
     {
-        (void)_nRowStart;
-        (void)_rCellRect;
-        impl_ni_updateScrollbars();
-        TableSize nVisibleRows = impl_getVisibleRows(true);
-        if(m_nTopRow+nVisibleRows>m_nRowCount && m_nRowCount>=nVisibleRows)
-            m_nTopRow--;
-        else
-            m_nTopRow = 0;
-        m_pDataWindow->Invalidate();
+    (void)_nRowStart;
+    (void)_rCellRect;
+    impl_ni_updateScrollbars();
+    TableSize nVisibleRows = impl_getVisibleRows(true);
+    if(m_nTopRow+nVisibleRows>m_nRowCount && m_nRowCount>=nVisibleRows)
+        m_nTopRow--;
+    else
+        m_nTopRow = 0;
+    m_pDataWindow->Invalidate();
     }
 
     //--------------------------------------------------------------------
@@ -1892,15 +1865,17 @@ namespace svt { namespace table
 
         return (TableSize)( m_nLeftColumn - nOldLeftColumn );
     }
-
+    //-------------------------------------------------------------------------------
     SelectionEngine* TableControl_Impl::getSelEngine()
     {
-        return m_pSelEngine;
+    return m_pSelEngine;
     }
+    //-------------------------------------------------------------------------------
     TableDataWindow* TableControl_Impl::getDataWindow()
     {
-        return m_pDataWindow;
+    return m_pDataWindow;
     }
+    //-------------------------------------------------------------------------------
     BOOL TableControl_Impl::isRowSelected(::std::vector<RowPos> selectedRows, RowPos current)
     {
         for(::std::vector<RowPos>::iterator it=selectedRows.begin();
@@ -1911,7 +1886,7 @@ namespace svt { namespace table
         }
         return FALSE;
     }
-
+    //-------------------------------------------------------------------------------
     int TableControl_Impl::getRowSelectedNumber(::std::vector<RowPos> selectedRows, RowPos current)
     {
         int pos = -1;
@@ -1924,6 +1899,7 @@ namespace svt { namespace table
         }
         return pos;
     }
+    //-------------------------------------------------------------------------------
     void TableControl_Impl::setTooltip(const Point& rPoint )
     {
         ::rtl::OUString aTooltipText;
@@ -1960,9 +1936,7 @@ namespace svt { namespace table
             for(int i=0; i<text.getLength(); i++)
             {
                 if(i==0)
-                {
                     aTooltipText = text[i];
-                }
                 else
                 {
                     aTooltipText+= ::rtl::OUString::createFromAscii("\n");
@@ -1975,9 +1949,7 @@ namespace svt { namespace table
             int nCols = cols.getLength();
             int mText = text.getLength();
             if(nCols < mText )
-            {
                 cols.realloc(mText);
-            }
             else if(mText < nCols)
                 text.realloc(nCols);
             for(int i=0; i<cols.getLength(); i++)
@@ -2023,9 +1995,7 @@ namespace svt { namespace table
         int newColWidth = m_rAntiImpl.LogicToPixel( Size( colWidth, 0 ), MAP_APPFONT ).Width();
         //subtract 1 from m_aAccColumnWidthPixel because right border should be part of the current cell
         if(m_aVisibleColumnWidthsPixel[resizingColumn]-1 == rPoint.X() && pColumn->isResizable())
-        {
             aNewPointer = Pointer( POINTER_HSPLIT );
-        }
         //MouseButton was pressed but not yet released, mouse is moving
         if(m_bResizing)
         {
@@ -2046,7 +2016,6 @@ namespace svt { namespace table
         }
         m_pDataWindow->SetPointer(aNewPointer);
     }
-
     //--------------------------------------------------------------------
     bool TableControl_Impl::startResizeColumn(const Point& rPoint)
     {
@@ -2094,29 +2063,29 @@ namespace svt { namespace table
                     pColumn->setPreferredWidth(minWidth);
                 if(m_nLeftColumn != 0)
                     impl_updateLeftColumn();
-            }
-            else if(oldX < actX)
-            {
-                if(actWidth < maxWidth)
-                {
-                    newActWidth = m_rAntiImpl.PixelToLogic( Size( actWidth, 0 ), MAP_APPFONT ).Width();
-                    pColumn->setPreferredWidth(newActWidth);
-                }
-                else
-                    pColumn->setPreferredWidth(maxWidth);
-            }
-            m_nCurColumn = m_nResizingColumn;
-            impl_ni_updateColumnWidths();
-            impl_ni_updateScrollbars();
-            m_pDataWindow->Invalidate(INVALIDATE_UPDATE);
-            m_pDataWindow->SetPointer(Pointer());
-            m_bResizing = false;
-            m_bResizingGrid = true;
         }
-        m_pDataWindow->ReleaseMouse();
-        return m_bResizing;
+        else if(oldX < actX)
+        {
+            if(actWidth < maxWidth)
+            {
+                newActWidth = m_rAntiImpl.PixelToLogic( Size( actWidth, 0 ), MAP_APPFONT ).Width();
+                pColumn->setPreferredWidth(newActWidth);
+            }
+            else
+                pColumn->setPreferredWidth(maxWidth);
+        }
+        m_nCurColumn = m_nResizingColumn;
+        impl_ni_updateColumnWidths();
+        impl_ni_updateScrollbars();
+        m_pDataWindow->Invalidate(INVALIDATE_UPDATE);
+        m_pDataWindow->SetPointer(Pointer());
+        m_bResizing = false;
+        m_bResizingGrid = true;
     }
-
+    m_pDataWindow->ReleaseMouse();
+    return m_bResizing;
+    }
+    //-------------------------------------------------------------------------------
     void TableControl_Impl::impl_ni_getAccVisibleColWidths()
     {
         TableSize nVisCols = impl_getVisibleColumns(true);
@@ -2140,6 +2109,7 @@ namespace svt { namespace table
             nVisCols--;
         }
     }
+    //-------------------------------------------------------------------------------
     void TableControl_Impl::impl_updateLeftColumn()
     {
         int nVisCols = m_aVisibleColumnWidthsPixel.size();
@@ -2204,32 +2174,32 @@ namespace svt { namespace table
         return 0L;
     }
     //---------------------------------------------------------------------------------------
-    TableFunctionSet::TableFunctionSet(TableControl_Impl* _pTableControl):
-        m_pTableControl( _pTableControl)
-       ,m_nCurrentRow (-2)
+    TableFunctionSet::TableFunctionSet(TableControl_Impl* _pTableControl)
+        :m_pTableControl( _pTableControl)
+    ,m_nCurrentRow (-2)
     {
     }
-
+    //-------------------------------------------------------------------------------
     TableFunctionSet::~TableFunctionSet()
     {
     }
-
+    //-------------------------------------------------------------------------------
     void TableFunctionSet::BeginDrag()
     {
     }
-
+    //-------------------------------------------------------------------------------
     void TableFunctionSet::CreateAnchor()
     {
         m_pTableControl->m_nAnchor = m_pTableControl->m_nCurRow;
     }
-
-   void TableFunctionSet::DestroyAnchor()
-   {
+    //-------------------------------------------------------------------------------
+    void TableFunctionSet::DestroyAnchor()
+    {
         m_pTableControl->m_nAnchor = -1;
-   }
-
-   BOOL TableFunctionSet::SetCursorAtPoint(const Point& rPoint, BOOL bDontSelectAtCursor)
-   {
+    }
+    //-------------------------------------------------------------------------------
+    BOOL TableFunctionSet::SetCursorAtPoint(const Point& rPoint, BOOL bDontSelectAtCursor)
+    {
         BOOL bHandled = FALSE;
         Rectangle rCells;
         //curRow is the row where the mouse click happened, m_nCurRow is the last selected row, before the mouse click
@@ -2280,10 +2250,8 @@ namespace svt { namespace table
         //no region selected
         else
         {
-            if(m_pTableControl->m_nRowSelected.empty())
-            {
+            if(m_pTableControl->m_nRowSelected.empty()
                 m_pTableControl->m_nRowSelected.push_back(curRow);
-            }
             else
             {
                 if(m_pTableControl->m_pSelEngine->GetSelectionMode()==SINGLE_SELECTION)
@@ -2307,7 +2275,7 @@ namespace svt { namespace table
         m_pTableControl->ensureVisible(m_pTableControl->m_nCurColumn,m_pTableControl->m_nCurRow,false);
         return bHandled;
     }
-
+    //-------------------------------------------------------------------------------
     BOOL TableFunctionSet::IsSelectionAtPoint( const Point& rPoint )
     {
         m_pTableControl->m_pSelEngine->AddAlways(FALSE);
@@ -2322,7 +2290,7 @@ namespace svt { namespace table
             return selected;
         }
     }
-
+    //-------------------------------------------------------------------------------
     void TableFunctionSet::DeselectAtPoint( const Point& rPoint )
     {
         (void)rPoint;
@@ -2341,13 +2309,14 @@ namespace svt { namespace table
         }
         m_pTableControl->m_nRowSelected.erase(m_pTableControl->m_nRowSelected.begin()+pos);
     }
+    //-------------------------------------------------------------------------------
     void TableFunctionSet::DeselectAll()
     {
         if(!m_pTableControl->m_nRowSelected.empty())
         {
             Rectangle rCells;
             for(std::vector<RowPos>::iterator it=m_pTableControl->m_nRowSelected.begin();
-            it!=m_pTableControl->m_nRowSelected.end();++it)
+                it!=m_pTableControl->m_nRowSelected.end();++it)
             {
                 m_pTableControl->invalidateSelectedRegion(*it, *it, rCells);
             }

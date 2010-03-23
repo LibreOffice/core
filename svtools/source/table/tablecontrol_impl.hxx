@@ -1,26 +1,27 @@
 /*************************************************************************
-* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
-* Copyright 2009 by Sun Microsystems, Inc.
-*
-* OpenOffice.org - a multi-platform office productivity suite
-*
-* This file is part of OpenOffice.org.
-*
-* OpenOffice.org is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License version 3
-* only, as published by the Free Software Foundation.
-*
-* OpenOffice.org is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Lesser General Public License version 3 for more details
-* (a copy is included in the LICENSE file that accompanied this code).
-*
-* You should have received a copy of the GNU Lesser General Public License
-* version 3 along with OpenOffice.org.  If not, see
-* <http://www.openoffice.org/license.html>
-* for a copy of the LGPLv3 License.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 ************************************************************************/
 
 #ifndef SVTOOLS_TABLECONTROL_IMPL_HXX
@@ -62,63 +63,63 @@ namespace svt { namespace table
         friend class TableRowGeometry;
         friend class TableColumnGeometry;
         friend class SuspendInvariants;
-        friend class TableFunctionSet;
+    friend class TableFunctionSet;
     private:
         /// the control whose impl-instance we implemnt
-        TableControl&       m_rAntiImpl;
+        TableControl&           m_rAntiImpl;
         /// the model of the table control
-        PTableModel         m_pModel;
+        PTableModel             m_pModel;
         /// the input handler to use, usually the input handler as provided by ->m_pModel
-        PTableInputHandler  m_pInputHandler;
+        PTableInputHandler      m_pInputHandler;
         /// the widths of the single columns, measured in pixel
-        ArrayOfLong         m_aColumnWidthsPixel;
+        ArrayOfLong             m_aColumnWidthsPixel;
         /** the accumulated widths of the single columns, i.e. their exclusive right borders,
             <strong<not</strong> counting the space for a possible row header column
         */
-        ArrayOfLong         m_aAccColumnWidthsPixel;
+        ArrayOfLong             m_aAccColumnWidthsPixel;
 
-        ArrayOfLong         m_aVisibleColumnWidthsPixel;
+    ArrayOfLong     m_aVisibleColumnWidthsPixel;
         /// the height of a single row in the table, measured in pixels
-        long                m_nRowHeightPixel;
+        long                    m_nRowHeightPixel;
         /// the height of the column header row in the table, measured in pixels
-        long                m_nColHeaderHeightPixel;
+        long                    m_nColHeaderHeightPixel;
         /// the width of the row header column in the table, measured in pixels
-        long                m_nRowHeaderWidthPixel;
+        long                    m_nRowHeaderWidthPixel;
 
         /// the number of columns in the table control. Cached model value.
-        TableSize           m_nColumnCount;
+        TableSize               m_nColumnCount;
         /// the number of rows in the table control. Cached model value.
-        TableSize           m_nRowCount;
+        TableSize               m_nRowCount;
 
-        ColPos              m_nCurColumn;
-        RowPos              m_nCurRow;
-        ColPos              m_nLeftColumn;
-        RowPos              m_nTopRow;
+        ColPos                  m_nCurColumn;
+        RowPos                  m_nCurRow;
+        ColPos                  m_nLeftColumn;
+        RowPos                  m_nTopRow;
 
-        sal_Int32           m_nCursorHidden;
+        sal_Int32               m_nCursorHidden;
 
         /** the window to contain all data content, including header bars
 
             The window's upper left corner is at position (0,0), relative to the
             table control, which is the direct parent of the data window.
         */
-        TableDataWindow*    m_pDataWindow;
+        TableDataWindow*        m_pDataWindow;
         /// the vertical scrollbar, if any
-        ScrollBar*          m_pVScroll;
+        ScrollBar*              m_pVScroll;
         /// the horizontal scrollbar, if any
         ScrollBar*          m_pHScroll;
-        ScrollBarBox*       m_pScrollCorner;
-        //selection engine - for determining selection range, e.g. single, multiple
-        SelectionEngine*    m_pSelEngine;
-        //vector which contains the selected rows
-        std::vector<RowPos> m_nRowSelected;
-        //part of selection engine
-        TableFunctionSet*   m_pTableFunctionSet;
-        //part of selection engine
-        RowPos              m_nAnchor;
-        bool                m_bResizing;
-        ColPos              m_nResizingColumn;
-        bool                m_bResizingGrid;
+        ScrollBarBox*           m_pScrollCorner;
+    //selection engine - for determining selection range, e.g. single, multiple
+    SelectionEngine*        m_pSelEngine;
+    //vector which contains the selected rows
+    std::vector<RowPos>     m_nRowSelected;
+    //part of selection engine
+    TableFunctionSet*       m_pTableFunctionSet;
+    //part of selection engine
+    RowPos              m_nAnchor;
+    bool            m_bResizing;
+    ColPos          m_nResizingColumn;
+    bool            m_bResizingGrid;
 
 #if DBG_UTIL
     #define INV_SCROLL_POSITION     1
@@ -183,36 +184,36 @@ namespace svt { namespace table
                 <TRUE/> if it's okay that the given cooordinate is only partially visible
         */
         void    ensureVisible( ColPos _nColumn, RowPos _nRow, bool _bAcceptPartialVisibility );
-        /** returns the row, which contains the input point*/
-        virtual RowPos  getCurrentRow (const Point& rPoint);
+    /** returns the row, which contains the input point*/
+    virtual RowPos  getCurrentRow (const Point& rPoint);
 
-        void setCursorAtCurrentCell(const Point& rPoint);
-        /** checks whether the vector with the selected rows contains the current row*/
-        BOOL    isRowSelected(::std::vector<RowPos> selectedRows, RowPos current);
-        /** returns the position of the current row in the selection vector */
-        int getRowSelectedNumber(::std::vector<RowPos> selectedRows, RowPos current);
-        /** _rCellRect contains the region, which should be invalidate after some action e.g. selecting row*/
-        void    invalidateSelectedRegion(RowPos _nPrevRow, RowPos _nCurRow, Rectangle& _rCellRect );
-        /** to be called when a new row is added to the control*/
-        void    invalidateRow(RowPos _nRowPos, Rectangle& _rCellRect );
-        /** returns the vector, which contains the selected rows*/
-        std::vector<RowPos>& getSelectedRows();
-        /** updates the vector, which contains the selected rows after removing the row nRowPos*/
-        void    removeSelectedRow(RowPos _nRowPos);
-        void    invalidateRows(RowPos _nRowStart, Rectangle& _rCellRect );
+    void setCursorAtCurrentCell(const Point& rPoint);
+    /** checks whether the vector with the selected rows contains the current row*/
+    BOOL    isRowSelected(::std::vector<RowPos> selectedRows, RowPos current);
+    /** returns the position of the current row in the selection vector */
+    int getRowSelectedNumber(::std::vector<RowPos> selectedRows, RowPos current);
+    /** _rCellRect contains the region, which should be invalidate after some action e.g. selecting row*/
+    void    invalidateSelectedRegion(RowPos _nPrevRow, RowPos _nCurRow, Rectangle& _rCellRect );
+    /** to be called when a new row is added to the control*/
+    void    invalidateRow(RowPos _nRowPos, Rectangle& _rCellRect );
+    /** returns the vector, which contains the selected rows*/
+    std::vector<RowPos>& getSelectedRows();
+    /** updates the vector, which contains the selected rows after removing the row nRowPos*/
+    void    removeSelectedRow(RowPos _nRowPos);
+    void    invalidateRows(RowPos _nRowStart, Rectangle& _rCellRect );
 
         // IAbstractTableControl
         virtual void    hideCursor();
         virtual void    showCursor();
         virtual bool    dispatchAction( TableControlAction _eAction );
-        virtual SelectionEngine* getSelEngine();
-        virtual void setTooltip(const Point& rPoint );
-        virtual void resizeColumn(const Point& rPoint);
-        virtual bool startResizeColumn(const Point& rPoint);
-        virtual bool endResizeColumn(const Point& rPoint);
+    virtual SelectionEngine* getSelEngine();
+    virtual void setTooltip(const Point& rPoint );
+    virtual void resizeColumn(const Point& rPoint);
+    virtual bool startResizeColumn(const Point& rPoint);
+    virtual bool endResizeColumn(const Point& rPoint);
 
-        TableDataWindow* getDataWindow();
-        /** retrieves the area occupied by the totality of (at least partially) visible cells
+    TableDataWindow* getDataWindow();
+    /** retrieves the area occupied by the totality of (at least partially) visible cells
 
             The returned area includes row and column headers. Also, it takes into
             account the the fact that there might be less columns than would normally
@@ -230,7 +231,7 @@ namespace svt { namespace table
         */
         void        impl_getAllVisibleDataCellArea( Rectangle& _rCellArea ) const;
 
-        ::rtl::OUString impl_convertToString(::com::sun::star::uno::Any _value);
+    ::rtl::OUString impl_convertToString(::com::sun::star::uno::Any _value);
     private:
         /** toggles the cursor visibility
 

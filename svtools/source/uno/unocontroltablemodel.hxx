@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unocontroltablemodel.hxx,v $
- * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,7 +64,7 @@ class UnoControlTableColumn : public IColumnModel
 
     public:
         UnoControlTableColumn(Reference<XGridColumn>);
-        UnoControlTableColumn();
+    UnoControlTableColumn();
 
         // IColumnModel overridables
         virtual ColumnID        getID() const;
@@ -82,16 +79,16 @@ class UnoControlTableColumn : public IColumnModel
         virtual void            setMinWidth( TableMetrics _nMinWidth );
         virtual TableMetrics    getMaxWidth() const;
         virtual void            setMaxWidth( TableMetrics _nMaxWidth );
-        virtual TableMetrics    getPreferredWidth() const;
+    virtual TableMetrics    getPreferredWidth() const;
         virtual void            setPreferredWidth( TableMetrics _nPrefWidth );
-        virtual ::com::sun::star::style::HorizontalAlignment getHorizontalAlign();
-        virtual void setHorizontalAlign(::com::sun::star::style::HorizontalAlignment _xAlign);
-    };
+    virtual ::com::sun::star::style::HorizontalAlignment getHorizontalAlign();
+    virtual void setHorizontalAlign(::com::sun::star::style::HorizontalAlignment _xAlign);
+};
 
-    struct UnoControlTableModel_Impl;
+struct UnoControlTableModel_Impl;
 
-    class UnoControlTableModel : public ITableModel
-    {
+class UnoControlTableModel : public ITableModel
+{
     private:
         UnoControlTableModel_Impl*     m_pImpl;
 
@@ -127,17 +124,17 @@ class UnoControlTableColumn : public IColumnModel
         // ITableModel overridables
         virtual TableSize           getColumnCount() const;
         virtual TableSize           getRowCount() const;
-        virtual void                setColumnCount(TableSize _nColCount);
+    virtual void                setColumnCount(TableSize _nColCount);
         virtual void                setRowCount(TableSize _nRowCount);
         virtual bool                hasColumnHeaders() const;
         virtual bool                hasRowHeaders() const;
-        virtual void                setRowHeaders(bool _bRowHeaders);
-        virtual void                setColumnHeaders(bool _bColumnHeaders);
+    virtual void                setRowHeaders(bool _bRowHeaders);
+    virtual void                setColumnHeaders(bool _bColumnHeaders);
         virtual bool                isCellEditable( ColPos col, RowPos row ) const;
         virtual void                addTableModelListener( const PTableModelListener& listener );
         virtual void                removeTableModelListener( const PTableModelListener& listener );
         virtual PColumnModel        getColumnModel( ColPos column );
-        virtual std::vector<PColumnModel>& getColumnModel();
+    virtual std::vector<PColumnModel>& getColumnModel();
         virtual PColumnModel        getColumnModelByID( ColumnID id );
         virtual PTableRenderer      getRenderer() const;
         virtual PTableInputHandler  getInputHandler() const;
@@ -146,35 +143,35 @@ class UnoControlTableColumn : public IColumnModel
         virtual TableMetrics        getRowHeaderWidth() const;
         virtual ScrollbarVisibility getVerticalScrollbarVisibility(int overAllHeight, int actHeight) const;
         virtual ScrollbarVisibility getHorizontalScrollbarVisibility(int overAllWidth, int actWidth) const;
-        virtual void                setVerticalScrollbarVisibility(bool _bVScroll) const;
+    virtual void                setVerticalScrollbarVisibility(bool _bVScroll) const;
         virtual void                setHorizontalScrollbarVisibility(bool _bHScroll) const;
-        virtual void                setCellContent(const std::vector<std::vector< Any > >& cellContent);
-        virtual std::vector<std::vector< Any > >&   getCellContent();
-        virtual void                setRowHeaderName(const std::vector<rtl::OUString>& cellColumnContent);
-        virtual std::vector<rtl::OUString>& getRowHeaderName();
-        virtual ::com::sun::star::util::Color getLineColor();
-        virtual void                setLineColor(::com::sun::star::util::Color _rColor);
-        virtual ::com::sun::star::util::Color getHeaderBackgroundColor();
-        virtual void                setHeaderBackgroundColor(::com::sun::star::util::Color _rColor);
-        virtual ::com::sun::star::util::Color getTextColor();
-        virtual void                setTextColor(::com::sun::star::util::Color _rColor);
-        virtual ::com::sun::star::util::Color getOddRowBackgroundColor();
-        virtual void                setOddRowBackgroundColor(::com::sun::star::util::Color _rColor);
-        virtual ::com::sun::star::util::Color getEvenRowBackgroundColor();
-        virtual void                setEvenRowBackgroundColor(::com::sun::star::util::Color _rColor);
-        virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign();
-        virtual void                setVerticalAlign(::com::sun::star::style::VerticalAlignment _rAlign);
-        virtual bool                hasVerticalScrollbar();
-        virtual bool                hasHorizontalScrollbar();
-    };
+    virtual void                setCellContent(const std::vector<std::vector< Any > >& cellContent);
+    virtual std::vector<std::vector< Any > >&   getCellContent();
+    virtual void                setRowHeaderName(const std::vector<rtl::OUString>& cellColumnContent);
+    virtual std::vector<rtl::OUString>& getRowHeaderName();
+    virtual ::com::sun::star::util::Color getLineColor();
+    virtual void                setLineColor(::com::sun::star::util::Color _rColor);
+    virtual ::com::sun::star::util::Color getHeaderBackgroundColor();
+    virtual void                setHeaderBackgroundColor(::com::sun::star::util::Color _rColor);
+    virtual ::com::sun::star::util::Color getTextColor();
+    virtual void                setTextColor(::com::sun::star::util::Color _rColor);
+    virtual ::com::sun::star::util::Color getOddRowBackgroundColor();
+    virtual void                setOddRowBackgroundColor(::com::sun::star::util::Color _rColor);
+    virtual ::com::sun::star::util::Color getEvenRowBackgroundColor();
+    virtual void                setEvenRowBackgroundColor(::com::sun::star::util::Color _rColor);
+    virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign();
+    virtual void                setVerticalAlign(::com::sun::star::style::VerticalAlignment _rAlign);
+    virtual bool                hasVerticalScrollbar();
+    virtual bool                hasHorizontalScrollbar();
+};
 
-    inline void UnoControlTableModel::SetColumnWidth( ColPos _nColumn, TableMetrics _nWidth100thMM )
-    {
+inline void UnoControlTableModel::SetColumnWidth( ColPos _nColumn, TableMetrics _nWidth100thMM )
+{
         getColumnModel( _nColumn )->setWidth( _nWidth100thMM );
-    }
+}
 
-    inline TableMetrics UnoControlTableModel::GetColumnWidth( ColPos _nColumn )
-    {
-        return getColumnModel( _nColumn )->getWidth();
-    }
+inline TableMetrics UnoControlTableModel::GetColumnWidth( ColPos _nColumn )
+{
+    return getColumnModel( _nColumn )->getWidth();
+}
  #endif // _UNOCONTROL_TABLEMODEL_HXX_

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: defaultgriddatamodel.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,7 +67,7 @@ public:
     virtual void SAL_CALL setRowHeaders(const ::com::sun::star::uno::Sequence< ::rtl::OUString > & value) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< Any > > SAL_CALL getData() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addRow(const ::rtl::OUString & headername, const ::com::sun::star::uno::Sequence< Any > & data) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeRow(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException);
+       virtual void SAL_CALL removeRow(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException);
     virtual void SAL_CALL removeDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException);
     virtual void SAL_CALL removeAll() throw (RuntimeException);

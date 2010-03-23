@@ -1,26 +1,27 @@
 /*************************************************************************
-* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
-* Copyright 2009 by Sun Microsystems, Inc.
-*
-* OpenOffice.org - a multi-platform office productivity suite
-*
-* This file is part of OpenOffice.org.
-*
-* OpenOffice.org is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License version 3
-* only, as published by the Free Software Foundation.
-*
-* OpenOffice.org is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Lesser General Public License version 3 for more details
-* (a copy is included in the LICENSE file that accompanied this code).
-*
-* You should have received a copy of the GNU Lesser General Public License
-* version 3 along with OpenOffice.org.  If not, see
-* <http://www.openoffice.org/license.html>
-* for a copy of the LGPLv3 License.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 ************************************************************************/
 
 #ifndef SVTOOLS_INC_TABLE_TABLEMODEL_HXX
@@ -443,33 +444,32 @@ namespace svt { namespace table
         */
         virtual ScrollbarVisibility getHorizontalScrollbarVisibility(int overAllWidth, int actWidth) const = 0;
 
-        virtual bool hasVerticalScrollbar() =0;
-        virtual bool hasHorizontalScrollbar() = 0;
-        /** fills cells with content
-        */
-        virtual void setCellContent(const std::vector< std::vector< ::com::sun::star::uno::Any > >& cellContent)=0;
-        /** gets the content of the cells
-        */
-        virtual std::vector< std::vector< ::com::sun::star::uno::Any > >&   getCellContent() = 0;
-        /**sets title of header rows
-        */
-        virtual void setRowHeaderName(const std::vector<rtl::OUString>& cellColumnContent)=0;
-        /** gets title of header rows
-        */
-        virtual std::vector<rtl::OUString>&   getRowHeaderName() = 0;
-
-        virtual ::com::sun::star::util::Color getLineColor() = 0;
-        virtual void setLineColor(::com::sun::star::util::Color _rColor) = 0;
-        virtual ::com::sun::star::util::Color getHeaderBackgroundColor() = 0;
-        virtual void setHeaderBackgroundColor(::com::sun::star::util::Color _rColor) = 0;
-        virtual ::com::sun::star::util::Color getTextColor() = 0;
-        virtual void setTextColor(::com::sun::star::util::Color _rColor) = 0;
-        virtual ::com::sun::star::util::Color getOddRowBackgroundColor() = 0;
-        virtual void setOddRowBackgroundColor(::com::sun::star::util::Color _rColor) = 0;
-        virtual ::com::sun::star::util::Color getEvenRowBackgroundColor() = 0;
-        virtual void setEvenRowBackgroundColor(::com::sun::star::util::Color _rColor) = 0;
-        virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign() = 0;
-        virtual void setVerticalAlign(::com::sun::star::style::VerticalAlignment _xAlign) = 0;
+    virtual bool hasVerticalScrollbar() =0;
+    virtual bool hasHorizontalScrollbar() = 0;
+    /** fills cells with content
+    */
+    virtual void setCellContent(const std::vector< std::vector< ::com::sun::star::uno::Any > >& cellContent)=0;
+    /** gets the content of the cells
+    */
+    virtual std::vector< std::vector< ::com::sun::star::uno::Any > >&   getCellContent() = 0;
+    /**sets title of header rows
+    */
+    virtual void setRowHeaderName(const std::vector<rtl::OUString>& cellColumnContent)=0;
+    /** gets title of header rows
+    */
+    virtual std::vector<rtl::OUString>&   getRowHeaderName() = 0;
+    virtual ::com::sun::star::util::Color getLineColor() = 0;
+    virtual void setLineColor(::com::sun::star::util::Color _rColor) = 0;
+    virtual ::com::sun::star::util::Color getHeaderBackgroundColor() = 0;
+    virtual void setHeaderBackgroundColor(::com::sun::star::util::Color _rColor) = 0;
+    virtual ::com::sun::star::util::Color getTextColor() = 0;
+    virtual void setTextColor(::com::sun::star::util::Color _rColor) = 0;
+    virtual ::com::sun::star::util::Color getOddRowBackgroundColor() = 0;
+    virtual void setOddRowBackgroundColor(::com::sun::star::util::Color _rColor) = 0;
+    virtual ::com::sun::star::util::Color getEvenRowBackgroundColor() = 0;
+    virtual void setEvenRowBackgroundColor(::com::sun::star::util::Color _rColor) = 0;
+    virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign() = 0;
+    virtual void setVerticalAlign(::com::sun::star::style::VerticalAlignment _xAlign) = 0;
 
         /// destroys the table model instance
         virtual ~ITableModel() { }

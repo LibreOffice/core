@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unocontroltablemodel.cxx,v $
- * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,10 +52,10 @@ using namespace ::com::sun::star::uno;
         ,m_nWidth( 4  )
         ,m_nMinWidth( 0 )
         ,m_nMaxWidth( 0 )
-        ,m_nPrefWidth ( 0 )
-        ,m_xHorizontalAlign(com::sun::star::style::HorizontalAlignment(0))
+    ,m_nPrefWidth ( 0 )
+    ,m_xHorizontalAlign(com::sun::star::style::HorizontalAlignment(0))
     {
-        m_sName = m_xGridColumn->getTitle();
+    m_sName = m_xGridColumn->getTitle();
     }
     //--------------------------------------------------------------------
     UnoControlTableColumn::UnoControlTableColumn()
@@ -68,8 +65,8 @@ using namespace ::com::sun::star::uno;
         ,m_nWidth( 4  )
         ,m_nMinWidth( 0 )
         ,m_nMaxWidth( 0 )
-        ,m_nPrefWidth ( 0 )
-        ,m_xHorizontalAlign(com::sun::star::style::HorizontalAlignment(0))
+    ,m_nPrefWidth ( 0 )
+    ,m_xHorizontalAlign(com::sun::star::style::HorizontalAlignment(0))
     {
     }
 
@@ -176,42 +173,42 @@ using namespace ::com::sun::star::uno;
         TableSize                       nRowCount;
         bool                            bHasColumnHeaders;
         bool                            bHasRowHeaders;
-        bool                            bVScroll;
-        bool                            bHScroll;
+    bool                            bVScroll;
+    bool                            bHScroll;
         PTableRenderer                  pRenderer;
         PTableInputHandler              pInputHandler;
         TableMetrics                    nRowHeight;
         TableMetrics                    nColumnHeaderHeight;
         TableMetrics                    nRowHeaderWidth;
-        std::vector<rtl::OUString>&     aRowHeadersTitle;
-        std::vector<std::vector< Any > >&   aCellContent;
-        ::com::sun::star::util::Color m_xLineColor;
-        ::com::sun::star::util::Color m_xHeaderColor;
-        ::com::sun::star::util::Color m_xTextColor;
-        ::com::sun::star::util::Color m_xRowColor1;
-        ::com::sun::star::util::Color m_xRowColor2;
-        ::com::sun::star::style::VerticalAlignment m_xVerticalAlign;
+    std::vector<rtl::OUString>&     aRowHeadersTitle;
+    std::vector<std::vector< Any > >&   aCellContent;
+    ::com::sun::star::util::Color m_xLineColor;
+    ::com::sun::star::util::Color m_xHeaderColor;
+    ::com::sun::star::util::Color m_xTextColor;
+    ::com::sun::star::util::Color m_xRowColor1;
+    ::com::sun::star::util::Color m_xRowColor2;
+    ::com::sun::star::style::VerticalAlignment m_xVerticalAlign;
 
         UnoControlTableModel_Impl()
-            :aColumns           ( *(new std::vector< PColumnModel> (0)))
-            ,nRowCount          ( 0         )
+            :aColumns       ( *(new std::vector< PColumnModel> (0)))
+        ,nRowCount          ( 0         )
             ,bHasColumnHeaders  ( false     )
             ,bHasRowHeaders     ( false     )
-            ,bVScroll           ( false     )
-            ,bHScroll           ( false     )
+        ,bVScroll       ( false     )
+            ,bHScroll       ( false     )
             ,pRenderer          (           )
             ,pInputHandler      (           )
             ,nRowHeight         ( 0 )
             ,nColumnHeaderHeight( 0 )
             ,nRowHeaderWidth    ( 10 )
-            ,aRowHeadersTitle   ( *(new std::vector<rtl::OUString>(0)))
-            ,aCellContent       ( *(new std::vector<std::vector< Any > >(0))    )
-            ,m_xLineColor( 0xFFFFFF )
-            ,m_xHeaderColor( 0xFFFFFF )
-            ,m_xTextColor( 0 )      //black as default
-            ,m_xRowColor1( 0xFFFFFF )
-            ,m_xRowColor2( 0xFFFFFF )
-            ,m_xVerticalAlign(com::sun::star::style::VerticalAlignment(0))
+        ,aRowHeadersTitle   ( *(new std::vector<rtl::OUString>(0)))
+        ,aCellContent   ( *(new std::vector<std::vector< Any > >(0))    )
+        ,m_xLineColor   ( 0xFFFFFF )
+        ,m_xHeaderColor ( 0xFFFFFF )
+        ,m_xTextColor   ( 0 )//black as default
+        ,m_xRowColor1   ( 0xFFFFFF )
+        ,m_xRowColor2   ( 0xFFFFFF )
+        ,m_xVerticalAlign   (com::sun::star::style::VerticalAlignment(0))
         {
         }
     };
@@ -502,8 +499,8 @@ using namespace ::com::sun::star::uno;
     {
         m_pImpl->m_xRowColor2 = _rColor;
     }
-        //--------------------------------------------------------------------
-    com::sun::star::style::VerticalAlignment UnoControlTableModel::getVerticalAlign()
+    //--------------------------------------------------------------------
+    ::com::sun::star::style::VerticalAlignment UnoControlTableModel::getVerticalAlign()
     {
         return  m_pImpl->m_xVerticalAlign;
     }

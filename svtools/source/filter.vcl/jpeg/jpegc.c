@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: jpegc.c,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,8 @@
 #include "jpeglib.h"
 #include "jerror.h"
 #include "jpeg.h"
-
+#include "rtl/alloc.h"
+#include "osl/diagnose.h"
 
 struct my_error_mgr
 {
@@ -81,6 +79,9 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
     long                            nWidth;
     long                            nHeight;
     long                            nAlignedWidth;
+    JSAMPLE * range_limit;
+    HPBYTE pScanLineBuffer = NULL;
+    long nScanLineBufferComponents = 0;
     // declare bDecompCreated volatile because of gcc
     // warning: variable 'bDecompCreated' might be clobbered by `longjmp' or `vfork'
     volatile long                   bDecompCreated = 0;
@@ -106,8 +107,12 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
     cinfo.output_gamma = 1.0;
     cinfo.raw_data_out = FALSE;
     cinfo.quantize_colors = FALSE;
-    if ( cinfo.jpeg_color_space != JCS_GRAYSCALE )
+    if ( cinfo.jpeg_color_space == JCS_YCbCr )
         cinfo.out_color_space = JCS_RGB;
+    else if ( cinfo.jpeg_color_space == JCS_YCCK )
+        cinfo.out_color_space = JCS_CMYK;
+
+    OSL_ASSERT(cinfo.out_color_space == JCS_CMYK || cinfo.out_color_space == JCS_GRAYSCALE || cinfo.out_color_space == JCS_RGB);
 
     /* change scale for preview import */
     if( nPreviewWidth || nPreviewHeight )
@@ -151,6 +156,14 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
     aCreateBitmapParam.bGray = cinfo.output_components == 1;
     pDIB = CreateBitmap( pJPEGReader, &aCreateBitmapParam );
     nAlignedWidth = aCreateBitmapParam.nAlignedWidth;
+    range_limit=cinfo.sample_range_limit;
+
+    if ( cinfo.out_color_space == JCS_CMYK )
+    {
+            nScanLineBufferComponents = cinfo.output_width * 4;
+        pScanLineBuffer = rtl_allocateMemory( nScanLineBufferComponents );
+    }
+
     if( pDIB )
     {
         if( aCreateBitmapParam.bTopDown )
@@ -163,17 +176,37 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
 
         for ( *pLines = 0; *pLines < nHeight; (*pLines)++ )
         {
+            if (pScanLineBuffer!=NULL) { // in other words cinfo.out_color_space == JCS_CMYK
+            int i;
+            int j;
+            jpeg_read_scanlines( &cinfo, (JSAMPARRAY) &pScanLineBuffer, 1 );
+            // convert CMYK to RGB
+            for( i=0, j=0; i < nScanLineBufferComponents; i+=4, j+=3 )
+            {
+                int c_=255-pScanLineBuffer[i+0];
+                int m_=255-pScanLineBuffer[i+1];
+                int y_=255-pScanLineBuffer[i+2];
+                int k_=255-pScanLineBuffer[i+3];
+                pTmp[j+0]=range_limit[ 255L - ( c_ + k_ ) ];
+                pTmp[j+1]=range_limit[ 255L - ( m_ + k_ ) ];
+                pTmp[j+2]=range_limit[ 255L - ( y_ + k_ ) ];
+            }
+            } else {
             jpeg_read_scanlines( &cinfo, (JSAMPARRAY) &pTmp, 1 );
-
+            }
             /* PENDING ??? */
             if ( cinfo.err->msg_code == 113 )
-                break;
+            break;
 
             pTmp += nAlignedWidth;
         }
     }
 
     jpeg_finish_decompress( &cinfo );
+    if (pScanLineBuffer!=NULL) {
+        rtl_freeMemory( pScanLineBuffer );
+        pScanLineBuffer=NULL;
+    }
 
 Exit:
 

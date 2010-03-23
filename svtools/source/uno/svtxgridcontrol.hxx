@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SVTXGridControl.hxx,v $
- * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,7 +67,7 @@ protected:
     void            ImplCallItemListeners();
 
 public:
-    SVTXGridControl();
+        SVTXGridControl();
     ~SVTXGridControl();
     //XGridDataListener overridables
     virtual void SAL_CALL rowAdded(const ::com::sun::star::awt::grid::GridDataEvent& Event) throw (::com::sun::star::uno::RuntimeException);
@@ -82,9 +79,9 @@ public:
 
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { VCLXWindow::acquire(); }
-    void                                        SAL_CALL release() throw()  { VCLXWindow::release(); }
+    ::com::sun::star::uno::Any      SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void                    SAL_CALL acquire() throw()  { VCLXWindow::acquire(); }
+    void                    SAL_CALL release() throw()  { VCLXWindow::release(); }
 
     // ::com::sun::star::lang::XTypeProvider
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);

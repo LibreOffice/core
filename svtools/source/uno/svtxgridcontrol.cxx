@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SVTXGridControl.cxx,v $
- * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,10 +84,10 @@ SVTXGridControl::~SVTXGridControl()
 ::com::sun::star::uno::Any SVTXGridControl::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::grid::XGridControl*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::grid::XGridDataListener*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::grid::XGridColumnListener*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XTypeProvider*, this ) );
+                                SAL_STATIC_CAST( ::com::sun::star::awt::grid::XGridControl*, this ),
+                                SAL_STATIC_CAST( ::com::sun::star::awt::grid::XGridDataListener*, this ),
+                                SAL_STATIC_CAST( ::com::sun::star::awt::grid::XGridColumnListener*, this ),
+                                SAL_STATIC_CAST( ::com::sun::star::lang::XTypeProvider*, this ) );
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
@@ -392,11 +389,11 @@ void SVTXGridControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_GRID_SHOWCOLUMNHEADER,
                      BASEPROPERTY_GRID_DATAMODEL,
                      BASEPROPERTY_GRID_COLUMNMODEL,
-                     BASEPROPERTY_GRID_SELECTIONMODE,
-                     BASEPROPERTY_GRID_EVEN_ROW_BACKGROUND,
-                     BASEPROPERTY_GRID_HEADER_BACKGROUND,
-                     BASEPROPERTY_GRID_LINE_COLOR,
-                     BASEPROPERTY_GRID_ROW_BACKGROUND,
+             BASEPROPERTY_GRID_SELECTIONMODE,
+             BASEPROPERTY_GRID_EVEN_ROW_BACKGROUND,
+             BASEPROPERTY_GRID_HEADER_BACKGROUND,
+             BASEPROPERTY_GRID_LINE_COLOR,
+             BASEPROPERTY_GRID_ROW_BACKGROUND,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds, true );
 }
@@ -469,6 +466,12 @@ void SAL_CALL SVTXGridControl::rowRemoved(const ::com::sun::star::awt::grid::Gri
         if(m_pTableModel->hasRowHeaders())
             m_pTableModel->getRowHeaderName().clear();
         m_pTableModel->getCellContent().clear();
+        if(pTable->isAccessibleAlive())
+        {
+            pTable->commitGridControlEvent(TABLE_MODEL_CHANGED,
+                 makeAny( AccessibleTableModelChange(DELETE, 0, m_pTableModel->getColumnCount(), 0, m_pTableModel->getColumnCount())),
+                Any());
+        }
     }
     else if(Event.index >= 0 && Event.index < m_pTableModel->getRowCount())
     {
@@ -541,10 +544,10 @@ void SAL_CALL  SVTXGridControl::dataChanged(const ::com::sun::star::awt::grid::G
     (void) Event;
 }
 
- void SAL_CALL SVTXGridControl::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
- {
+void SAL_CALL SVTXGridControl::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
+{
     VCLXWindow::disposing( Source );
- }
+}
 
 ::sal_Int32 SAL_CALL SVTXGridControl::getMinSelectionIndex() throw (::com::sun::star::uno::RuntimeException)
 {
