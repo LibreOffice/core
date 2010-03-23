@@ -61,6 +61,7 @@
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/UseBackupException.hpp>
+#include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <ContentInfo.hxx>
@@ -661,13 +662,27 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                 else if ( aNamedValue.Name.equalsAscii( "StorageFormat" ) )
                 {
                     ::rtl::OUString aFormatName;
-                    aNamedValue.Value >>= aFormatName;
-                    if ( aFormatName.equals( PACKAGE_STORAGE_FORMAT_STRING ) )
-                        m_nFormat = PACKAGE_FORMAT;
-                    else if ( aFormatName.equals( ZIP_STORAGE_FORMAT_STRING ) )
-                        m_nFormat = ZIP_FORMAT;
-                    else if ( aFormatName.equals( OFOPXML_STORAGE_FORMAT_STRING ) )
-                        m_nFormat = OFOPXML_FORMAT;
+                    sal_Int32 nFormatID = 0;
+                    if ( aNamedValue.Value >>= aFormatName )
+                    {
+                        if ( aFormatName.equals( PACKAGE_STORAGE_FORMAT_STRING ) )
+                            m_nFormat = PACKAGE_FORMAT;
+                        else if ( aFormatName.equals( ZIP_STORAGE_FORMAT_STRING ) )
+                            m_nFormat = ZIP_FORMAT;
+                        else if ( aFormatName.equals( OFOPXML_STORAGE_FORMAT_STRING ) )
+                            m_nFormat = OFOPXML_FORMAT;
+                        else
+                            throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 );
+                    }
+                    else if ( aNamedValue.Value >>= nFormatID )
+                    {
+                        if ( nFormatID != embed::StorageFormats::PACKAGE
+                          && nFormatID != embed::StorageFormats::ZIP
+                          && nFormatID != embed::StorageFormats::OFOPXML )
+                            throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 );
+
+                        m_nFormat = nFormatID;
+                    }
                     else
                         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 );
 

@@ -57,11 +57,6 @@
 
 #include "mutexholder.hxx"
 
-
-#define PACKAGE_STORAGE 0
-#define ZIP_STORAGE     1
-#define OFOPXML_STORAGE 2
-
 #define RELINFO_NO_INIT             1
 #define RELINFO_READ                2
 #define RELINFO_CHANGED             3
@@ -179,7 +174,7 @@ struct OStorage_Impl
 
     sal_Int16 m_nStorageType; // the mode in wich the storage is used
 
-    // the _rels substorage that is handled in a special way in OFOPXML_STORAGE
+    // the _rels substorage that is handled in a special way in embed::StorageFormats::OFOPXML
     SotElement_Impl* m_pRelStorElement;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xRelStorage;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > m_aRelInfo;

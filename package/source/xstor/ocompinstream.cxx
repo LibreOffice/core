@@ -29,6 +29,7 @@
 #include "precompiled_package.hxx"
 
 #include "ocompinstream.hxx"
+#include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <osl/diagnose.h>
 
@@ -107,7 +108,7 @@ uno::Any SAL_CALL OInputCompStream::queryInterface( const uno::Type& rType )
     if ( aReturn.hasValue() == sal_True )
         return aReturn ;
 
-    if ( m_nStorageType == OFOPXML_STORAGE )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
         aReturn <<= ::cppu::queryInterface
                     (   rType
@@ -356,7 +357,7 @@ sal_Bool SAL_CALL OInputCompStream::hasByID(  const ::rtl::OUString& sID )
         throw lang::DisposedException();
     }
 
-    if ( m_nStorageType != OFOPXML_STORAGE )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
     try
@@ -384,7 +385,7 @@ sal_Bool SAL_CALL OInputCompStream::hasByID(  const ::rtl::OUString& sID )
         throw lang::DisposedException();
     }
 
-    if ( m_nStorageType != OFOPXML_STORAGE )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
     uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
@@ -409,7 +410,7 @@ sal_Bool SAL_CALL OInputCompStream::hasByID(  const ::rtl::OUString& sID )
         throw lang::DisposedException();
     }
 
-    if ( m_nStorageType != OFOPXML_STORAGE )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
     uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
@@ -434,7 +435,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OInputCompStream::getRelationshipByI
         throw lang::DisposedException();
     }
 
-    if ( m_nStorageType != OFOPXML_STORAGE )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
     // TODO/LATER: in future the unification of the ID could be checked
@@ -464,7 +465,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
         throw lang::DisposedException();
     }
 
-    if ( m_nStorageType != OFOPXML_STORAGE )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
     uno::Sequence< uno::Sequence< beans::StringPair > > aResult;
@@ -499,7 +500,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
         throw lang::DisposedException();
     }
 
-    if ( m_nStorageType != OFOPXML_STORAGE )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
     // TODO/LATER: in future the information could be taken directly from m_pImpl when possible
@@ -530,7 +531,7 @@ void SAL_CALL OInputCompStream::insertRelationshipByID(  const ::rtl::OUString& 
         throw lang::DisposedException();
     }
 
-    if ( m_nStorageType != OFOPXML_STORAGE )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
     throw io::IOException(); // TODO: Access denied
@@ -550,7 +551,7 @@ void SAL_CALL OInputCompStream::removeRelationshipByID(  const ::rtl::OUString& 
         throw lang::DisposedException();
     }
 
-    if ( m_nStorageType != OFOPXML_STORAGE )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
     throw io::IOException(); // TODO: Access denied
@@ -570,7 +571,7 @@ void SAL_CALL OInputCompStream::insertRelationships(  const uno::Sequence< uno::
         throw lang::DisposedException();
     }
 
-    if ( m_nStorageType != OFOPXML_STORAGE )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
     throw io::IOException(); // TODO: Access denied
@@ -589,7 +590,7 @@ void SAL_CALL OInputCompStream::clearRelationships()
         throw lang::DisposedException();
     }
 
-    if ( m_nStorageType != OFOPXML_STORAGE )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
     throw io::IOException(); // TODO: Access denied
