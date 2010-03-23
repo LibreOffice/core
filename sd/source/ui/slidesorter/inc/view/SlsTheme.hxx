@@ -67,18 +67,18 @@ public:
 
     enum FontType {
         PageNumberFont,
-        PageCountFont
+        PageCountFont,
+        ButtonFont
     };
     static ::boost::shared_ptr<Font> GetFont (
         const FontType eType,
         const OutputDevice& rDevice);
 
-    static ColorData GetColorForVisualState (const model::VisualState::State eState);
-
     enum ColorType {
         Background,
         PageBackground,
         ButtonBackground,
+        ButtonText,
         MouseOverColor,
         PageNumberBorder,
         PageNumberColor,
@@ -86,6 +86,7 @@ public:
         PreviewBorder
     };
     ColorData GetColor (const ColorType eType);
+    void SetColor (const ColorType eType, const ColorData aColorData);
 
     enum GradientColorType {
         NormalPage,
@@ -97,11 +98,22 @@ public:
         Border1,
         Border2,
         Fill1,
-        Fill2
+        Fill2,
+        Base
     };
     ColorData GetGradientColor (
         const GradientColorType eType,
         const GradientColorClass eClass);
+    sal_Int32 GetGradientOffset (
+        const GradientColorType eType,
+        const GradientColorClass eClass);
+    void SetGradient (
+        const GradientColorType eType,
+        const ColorData aBaseColor,
+        const sal_Int32 nFillStartOffset,
+        const sal_Int32 nFillEndOffset,
+        const sal_Int32 nBorderStartOffset,
+        const sal_Int32 nBorderEndOffset);
 
     enum IconType
     {
@@ -111,14 +123,29 @@ public:
     };
     BitmapEx GetIcon (const IconType eType);
 
+    enum IntegerValueType
+    {
+        ButtonCornerRadius,
+        ButtonMaxAlpha
+    };
+    sal_Int32 GetIntegerValue (const IntegerValueType eType) const;
+    void SetIntegerValue (const IntegerValueType eType, const sal_Int32 nValue);
+
 private:
     class GradientDescriptor
     {
     public:
+        ColorData maBaseColor;
+
         ColorData maFillColor1;
         ColorData maFillColor2;
         ColorData maBorderColor1;
         ColorData maBorderColor2;
+
+        sal_Int32 mnFillOffset1;
+        sal_Int32 mnFillOffset2;
+        sal_Int32 mnBorderOffset1;
+        sal_Int32 mnBorderOffset2;
     };
     ColorData maBackgroundColor;
     ColorData maPageBackgroundColor;
@@ -129,6 +156,11 @@ private:
     BitmapEx maRawShadow;
     BitmapEx maRawInsertShadow;
     BitmapEx maHideSlideOverlay;
+    ::std::vector<ColorData> maColor;
+    sal_Int32 mnButtonCornerRadius;
+    sal_Int32 mnButtonMaxAlpha;
+
+    GradientDescriptor& GetGradient (const GradientColorType eType);
 };
 
 

@@ -49,7 +49,8 @@ PRJINC=..$/..
 SLOFILES =      						\
     $(SLO)$/SlideSorter.obj				\
     $(SLO)$/SlideSorterService.obj		\
-    $(SLO)$/SlideSorterViewShell.obj
+    $(SLO)$/SlideSorterViewShell.obj	\
+    $(SLO)$/SlsDebugDialog.obj
 
 EXCEPTIONSFILES= 
 

@@ -195,12 +195,6 @@ public:
     Range GetValidHorizontalSizeRange (void) const;
     Range GetValidVerticalSizeRange (void) const;
 
-    Size CalculateTargetSize (
-        const Size& rWindowSize,
-        const Size& rPreviewModelSize,
-        const bool bCalculateWidth,
-        const bool bCalculateHeight) const;
-
     Rectangle GetPageObjectBox (
         const sal_Int32 nIndex,
         const bool bIncludeBorderAndGap = false) const;
@@ -226,6 +220,11 @@ protected:
     virtual Size CalculateTargetSize (
         const Size& rWindowSize,
         const Size& rPreviewModelSize) const = 0;
+    Size GetTargetSize (
+        const Size& rWindowSize,
+        const Size& rPreviewModelSize,
+        const bool bCalculateWidth,
+        const bool bCalculateHeight) const;
     void CalculateVerticalLogicalInsertPosition (
         const Point& rModelPosition,
         InsertPosition& rPosition) const;
@@ -1010,7 +1009,7 @@ Range Layouter::Implementation::GetValidVerticalSizeRange (void) const
 
 
 
-Size Layouter::Implementation::CalculateTargetSize (
+Size Layouter::Implementation::GetTargetSize (
     const Size& rWindowSize,
     const Size& rPreviewModelSize,
     const bool bCalculateWidth,
@@ -1226,7 +1225,7 @@ Size HorizontalImplementation::CalculateTargetSize (
     const Size& rWindowSize,
     const Size& rPreviewModelSize) const
 {
-    return Implementation::CalculateTargetSize(rWindowSize, rPreviewModelSize, false, true);
+    return Implementation::GetTargetSize(rWindowSize, rPreviewModelSize, false, true);
 }
 
 
@@ -1304,7 +1303,7 @@ Size VerticalImplementation::CalculateTargetSize (
     const Size& rWindowSize,
     const Size& rPreviewModelSize) const
 {
-    return Implementation::CalculateTargetSize(rWindowSize, rPreviewModelSize, true, false);
+    return Implementation::GetTargetSize(rWindowSize, rPreviewModelSize, true, false);
 }
 
 
@@ -1378,7 +1377,7 @@ Size GridImplementation::CalculateTargetSize (
     const Size& rWindowSize,
     const Size& rPreviewModelSize) const
 {
-    return Implementation::CalculateTargetSize(rWindowSize, rPreviewModelSize, true, true);
+    return Implementation::GetTargetSize(rWindowSize, rPreviewModelSize, true, true);
 }
 
 

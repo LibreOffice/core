@@ -60,7 +60,7 @@ public:
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor);
 
-    void NotifyResize (void);
+    void NotifyResize (const bool bForce = false);
 
     /** Called when the theme changes, either because it is replaced with
         another or because the system colors have changed.  So, even when
@@ -84,6 +84,7 @@ private:
     Bitmap maSelectionBackground;
     Bitmap maFocusedSelectionBackground;
     Bitmap maMouseOverBackground;
+    ::rtl::OUString msUnhideString;
 
     void PaintBackground (
         OutputDevice& rDevice,
@@ -98,6 +99,9 @@ private:
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor) const;
     void PaintButtons (
+        OutputDevice& rDevice,
+        const model::SharedPageDescriptor& rpDescriptor) const;
+    void PaintWideButton (
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor) const;
     void PrepareBackgrounds (OutputDevice& rDevice);

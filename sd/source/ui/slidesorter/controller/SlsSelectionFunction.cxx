@@ -1325,10 +1325,23 @@ SelectionFunction::EventDescriptor::EventDescriptor (
     {
         mpHitPage = mpHitDescriptor->GetPage();
 
-        mnButtonIndex
-            = rSlideSorter.GetView().GetLayouter().GetPageObjectLayouter()->GetButtonIndexAt(
+        if (mpHitDescriptor->HasState(model::PageDescriptor::ST_Excluded))
+        {
+            if (rSlideSorter.GetView().GetLayouter().GetPageObjectLayouter()->GetBoundingBox(
                 mpHitDescriptor,
-                maMouseModelPosition);
+                view::PageObjectLayouter::WideButton,
+                view::PageObjectLayouter::ModelCoordinateSystem).IsInside(maMouseModelPosition))
+            {
+                mnButtonIndex = view::PageObjectLayouter::ShowHideButtonIndex;
+            }
+        }
+        else
+        {
+            mnButtonIndex
+                = rSlideSorter.GetView().GetLayouter().GetPageObjectLayouter()->GetButtonIndexAt(
+                    mpHitDescriptor,
+                    maMouseModelPosition);
+        }
     }
 }
 

@@ -80,7 +80,9 @@ public:
         // Indicator whether or not there is a slide transition associated
         // with this slide.
         TransitionEffectIndicator,
-        ButtonArea,
+        // Wide button placed without border at the bottom of the preview.
+        WideButton,
+        // Individual button.  Specify nIndex when calling GetBoundingBox().
         Button
     };
     /** Two coordinate systems are supported.  They differ only in
@@ -91,7 +93,16 @@ public:
     */
     enum CoordinateSystem {
         WindowCoordinateSystem,
-        ModelCoordinateSystem};
+        ModelCoordinateSystem
+    };
+
+    enum ButtonIndex {
+        MinButtonIndex = 0,
+        StartShowButtonIndex = MinButtonIndex,
+        ShowHideButtonIndex = 1,
+        DuplicateButtonIndex = 2,
+        MaxButtonIndex = DuplicateButtonIndex
+    };
 
     /** Return the bounding box of the page object or one of its graphical
         parts.
@@ -148,7 +159,7 @@ private:
     Rectangle maPageNumberFrameBoundingBox;
     Rectangle maPreviewBoundingBox;
     Rectangle maTransitionEffectBoundingBox;
-    Rectangle maButtonAreaBoundingBox;
+    Rectangle maWideButtonBoundingBox;
     const Image maTransitionEffectIcon;
     const ::boost::shared_ptr<Font> mpPageNumberFont;
 

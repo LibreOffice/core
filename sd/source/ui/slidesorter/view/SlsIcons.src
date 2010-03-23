@@ -32,34 +32,19 @@
 
 Resource IMG_ICONS
 {
-    Image IMAGE_INSERTION_INDICATOR_NORMAL
-    {
-        ImageBitmap = Bitmap { File = "moving_50.png" ; };
-    };
-
-    Image IMAGE_INSERTION_INDICATOR_MASK
-    {
-        ImageBitmap = Bitmap { File = "moving_50_mask.png" ; };
-    };
-
-    Image IMAGE_INSERTION_INDICATOR_SELECT
-    {
-        ImageBitmap = Bitmap { File = "moving_50_select.png" ; };
-    };
-
     Image IMAGE_PRESENTATION
     {
-        ImageBitmap = Bitmap { File = "commandimagelist/lc_presentation.png" ; };
+        ImageBitmap = Bitmap { File = "slide_sorter_command1.png" ; };
     };
 
     Image IMAGE_SHOW_SLIDE
     {
-        ImageBitmap = Bitmap { File = "commandimagelist/lc_showslide.png" ; };
+        ImageBitmap = Bitmap { File = "slide_sorter_command2.png" ; };
     };
 
     Image IMAGE_NEW_SLIDE
     {
-        ImageBitmap = Bitmap { File = "commandimagelist/lc_insertpage.png" ; };
+        ImageBitmap = Bitmap { File = "slide_sorter_command3.png" ; };
     };
 
     Image IMAGE_SHADOW
@@ -75,5 +60,10 @@ Resource IMG_ICONS
     Image IMAGE_HIDE_SLIDE_OVERLAY
     {
         ImageBitmap = Bitmap { File = "slide_sorter_hide_slide_overlay.png" ; };
+    };
+
+    String STRING_UNHIDE
+    {
+        Text [ en-US ] = "unhide" ;
     };
 };

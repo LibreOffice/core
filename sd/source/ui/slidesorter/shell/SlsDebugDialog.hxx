@@ -6,8 +6,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: CondFormat.hrc,v $
- * $Revision: 1.4 $
+ * $RCSfile: SlideSorterService.hxx,v $
+ *
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,21 +29,33 @@
  *
  ************************************************************************/
 
-#ifndef SD_SLIDESORTER_ICONS_HRC
-#define SD_SLIDESORTER_ICONS_HRC
+#ifndef SD_DEBUG_DIALOG_HXX
+#define SD_DEBUG_DIALOG_HXX
 
-#include "glob.hrc"
+#ifdef DEBUG
 
-#define IMG_ICONS RID_SLIDESORTER_ICONS
+#include <boost/noncopyable.hpp>
 
-#define IMAGE_PRESENTATION 1
-#define IMAGE_SHOW_SLIDE 2
-#define IMAGE_NEW_SLIDE 3
+class WorkWindow;
 
-#define IMAGE_SHADOW 10
-#define IMAGE_INSERT_SHADOW 11
-#define IMAGE_HIDE_SLIDE_OVERLAY 12
+namespace sd { namespace slidesorter {
 
-#define STRING_UNHIDE 13
+class SlideSorter;
 
+class SlideSorterDebugDialog
+    : public ::boost::noncopyable
+{
+public:
+    static void ShowDebugDialog (SlideSorter& rSlideSorter);
+
+private:
+    WorkWindow* mpTopLevelWindow;
+
+    SlideSorterDebugDialog (SlideSorter& rSlideSorter);
+};
+
+
+} } // end of namespace ::sd::slidesorter
+
+#endif
 #endif

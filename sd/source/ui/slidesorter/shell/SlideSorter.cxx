@@ -34,6 +34,7 @@
 
 #include "SlideSorterChildWindow.hrc"
 #include "SlideSorterViewShell.hxx"
+#include "SlsDebugDialog.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsScrollBarManager.hxx"
 #include "controller/SlsProperties.hxx"
@@ -219,6 +220,8 @@ void SlideSorter::Init (void)
 
         mbIsValid = true;
     }
+
+    SlideSorterDebugDialog::ShowDebugDialog(*this);
 }
 
 

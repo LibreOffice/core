@@ -69,8 +69,6 @@ const static ColorData BackgroundColorData = 0xffffff;
 
 const static ColorData gnMouseOverColor = 0x59000000 | StellaBlue;
 
-const static double gnCornerRadius = 4.0;
-
 
 ColorData ChangeLuminance (const ColorData aColorData, const int nValue)
 {
@@ -93,13 +91,27 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
       maSelectedAndFocusedGradient(),
       maMouseOverGradient(),
       maRawShadow(),
-      maRawInsertShadow()
+      maRawInsertShadow(),
+      maColor(PreviewBorder+1),
+      mnButtonCornerRadius(3),
+      mnButtonMaxAlpha(255 * 20/100)
 {
     LocalResource aResource (IMG_ICONS);
 
     maRawShadow = Image(SdResId(IMAGE_SHADOW)).GetBitmapEx();
     maRawInsertShadow = Image(SdResId(IMAGE_INSERT_SHADOW)).GetBitmapEx();
     maHideSlideOverlay  = Image(SdResId(IMAGE_HIDE_SLIDE_OVERLAY)).GetBitmapEx();
+
+    maColor.resize(PreviewBorder+1);
+    maColor[Background] = maBackgroundColor;
+    maColor[PageBackground] = AirForceBlue;
+    maColor[ButtonBackground] = AirForceBlue;
+    maColor[ButtonText] = AntiqueWhite;
+    maColor[MouseOverColor] = gnMouseOverColor;
+    maColor[PageNumberBorder] = Azure;
+    maColor[PageNumberColor] = 0x0848a8f;
+    maColor[Selection] = StellaBlue;
+    maColor[PreviewBorder] = 0x949599;
 
     Update(rpProperties);
 }
@@ -112,23 +124,14 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
     maBackgroundColor = rpProperties->GetBackgroundColor().GetColor();
     maPageBackgroundColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
 
+    maColor[Background] = maBackgroundColor;
+
 #ifdef USE_SYSTEM_SELECTION_COLOR
     const ColorData aSelectionColor (rpProperties->GetSelectionColor().GetColor());
 
-    maSelectedGradient.maFillColor1 = ChangeLuminance(aSelectionColor, +50);
-    maSelectedGradient.maFillColor2 = ChangeLuminance(aSelectionColor, -10);
-    maSelectedGradient.maBorderColor1 = ChangeLuminance(aSelectionColor, -10);
-    maSelectedGradient.maBorderColor2 = ChangeLuminance(aSelectionColor, -30);
-
-    maSelectedAndFocusedGradient.maFillColor1 = ChangeLuminance(aSelectionColor, +30);
-    maSelectedAndFocusedGradient.maFillColor2 = ChangeLuminance(aSelectionColor, -30);
-    maSelectedAndFocusedGradient.maBorderColor1 = ChangeLuminance(aSelectionColor, -30);
-    maSelectedAndFocusedGradient.maBorderColor2 = ChangeLuminance(aSelectionColor, -50);
-
-    maMouseOverGradient.maFillColor1 = ChangeLuminance(aSelectionColor, +90);
-    maMouseOverGradient.maFillColor2 = ChangeLuminance(aSelectionColor, +30);
-    maMouseOverGradient.maBorderColor1 = ChangeLuminance(aSelectionColor, +10);
-    maMouseOverGradient.maBorderColor2 = ChangeLuminance(aSelectionColor, +30);
+    SetGradient(SelectedPage, aSelectionColor, +50,-10, -10,-30);
+    SetGradient(SelectedAndFocusedPage, aSelectionColor, +30,-30, -30,-50);
+    SetGradient(MouseOverPage, aSelectionColor, +90,+30, +10,+30);
 
 #else
 
@@ -148,10 +151,7 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
     maMouseOverGradient.maBorderColor2 = 0x0e85cd;
 #endif
 
-    maNormalGradient.maFillColor1 = maBackgroundColor;
-    maNormalGradient.maFillColor2 = maBackgroundColor;
-    maNormalGradient.maBorderColor1 = maBackgroundColor;
-    maNormalGradient.maBorderColor2 = maBackgroundColor;
+    SetGradient(NormalPage, maBackgroundColor, 0,0, 0,0);
 }
 
 
@@ -175,8 +175,20 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
             pFont.reset(new Font(Application::GetSettings().GetStyleSettings().GetAppFont()));
             pFont->SetTransparent(TRUE);
             pFont->SetWeight(WEIGHT_NORMAL);
-            const Size aSize (pFont->GetSize());
-            pFont->SetSize(Size(aSize.Width()*5/3, aSize.Height()*5/3));
+            {
+                const Size aSize (pFont->GetSize());
+                pFont->SetSize(Size(aSize.Width()*5/3, aSize.Height()*5/3));
+            }
+            break;
+
+        case ButtonFont:
+            pFont.reset(new Font(Application::GetSettings().GetStyleSettings().GetAppFont()));
+            pFont->SetTransparent(TRUE);
+            pFont->SetWeight(WEIGHT_BOLD);
+            {
+                const Size aSize (pFont->GetSize());
+                pFont->SetSize(Size(aSize.Width()*4/3, aSize.Height()*4/3));
+            }
             break;
     }
 
@@ -196,68 +208,23 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
 
 
 
-ColorData Theme::GetColorForVisualState (const model::VisualState::State eState)
+ColorData Theme::GetColor (const ColorType eType)
 {
-    ColorData nColor;
-    switch (eState)
-    {
-        case model::VisualState::VS_Selected:
-            nColor = 0x80000000 | StellaBlue;
-            break;
-
-        case model::VisualState::VS_Focused:
-            nColor = AndroidGreen;
-            break;
-
-        case model::VisualState::VS_Current:
-            nColor = 0x80000000 | StellaBlue;
-            //            aColor = mpProperties->GetSelectionColor();
-            break;
-
-        case model::VisualState::VS_Excluded:
-            nColor = 0x88000000;
-            break;
-
-        case model::VisualState::VS_None:
-        default:
-            nColor = 0x80000000 | AntiqueWhite;
-            break;
-    }
-
-    return nColor;
+    if (eType>=0 && eType<maColor.size())
+        return maColor[eType];
+    else
+        return 0;
 }
 
 
 
 
-ColorData Theme::GetColor (const ColorType eType)
+void Theme::SetColor (
+    const ColorType eType,
+    const ColorData aData)
 {
-    switch(eType)
-    {
-        case Background:
-            return maBackgroundColor;
-
-        case PageBackground:
-
-        case ButtonBackground:
-            return AirForceBlue;
-
-        case MouseOverColor:
-            return gnMouseOverColor;
-
-        case PageNumberBorder:
-            return Azure;
-
-        case PageNumberColor:
-            return 0x0848a8f;
-
-        case Selection:
-            return StellaBlue;
-
-        case PreviewBorder:
-            return 0x949599;
-    }
-    return 0;
+    if (eType>=0 && eType<maColor.size())
+        maColor[eType] = aData;
 }
 
 
@@ -267,45 +234,63 @@ ColorData Theme::GetGradientColor (
     const GradientColorType eType,
     const GradientColorClass eClass)
 {
-    GradientDescriptor* pDescriptor = NULL;
-    switch(eType)
+    GradientDescriptor& rDescriptor (GetGradient(eType));
+
+    switch (eClass)
     {
-        case NormalPage:
-            pDescriptor = &maNormalGradient;
-            break;
-
-        case SelectedPage:
-            pDescriptor = &maSelectedGradient;
-            break;
-
-        case SelectedAndFocusedPage:
-            pDescriptor = &maSelectedAndFocusedGradient;
-            break;
-
-        case MouseOverPage:
-            pDescriptor = &maMouseOverGradient;
-            break;
-
-        default:
-            OSL_ASSERT(false);
-            break;
+        case Border1: return rDescriptor.maBorderColor1;
+        case Border2: return rDescriptor.maBorderColor2;
+        case Fill1: return rDescriptor.maFillColor1;
+        case Fill2: return rDescriptor.maFillColor2;
+        default: OSL_ASSERT(false); // fall through
+        case Base: return rDescriptor.maBaseColor;
     }
+}
 
-    if (pDescriptor != NULL)
+
+
+
+sal_Int32 Theme::GetGradientOffset (
+    const GradientColorType eType,
+    const GradientColorClass eClass)
+{
+    GradientDescriptor& rDescriptor (GetGradient(eType));
+
+    switch (eClass)
     {
-        switch (eClass)
-        {
-            case Border1: return pDescriptor->maBorderColor1;
-            case Border2: return pDescriptor->maBorderColor2;
-            case Fill1: return pDescriptor->maFillColor1;
-            case Fill2: return pDescriptor->maFillColor2;
-
-            default:
-                OSL_ASSERT(false);
-                break;
-        }
+        case Border1: return rDescriptor.mnBorderOffset1;
+        case Border2: return rDescriptor.mnBorderOffset2;
+        case Fill1: return rDescriptor.mnFillOffset1;
+        case Fill2: return rDescriptor.mnFillOffset2;
+        default: OSL_ASSERT(false); // fall through
+        case Base: return 0;
     }
-    return 0;
+}
+
+
+
+
+void Theme::SetGradient (
+    const GradientColorType eType,
+    const ColorData aBaseColor,
+    const sal_Int32 nFillStartOffset,
+    const sal_Int32 nFillEndOffset,
+    const sal_Int32 nBorderStartOffset,
+    const sal_Int32 nBorderEndOffset)
+{
+    GradientDescriptor& rGradient (GetGradient(eType));
+
+    rGradient.maBaseColor = aBaseColor;
+
+    rGradient.maFillColor1 = ChangeLuminance(aBaseColor, nFillStartOffset);
+    rGradient.maFillColor2 = ChangeLuminance(aBaseColor, nFillEndOffset);
+    rGradient.maBorderColor1 = ChangeLuminance(aBaseColor, nBorderStartOffset);
+    rGradient.maBorderColor2 = ChangeLuminance(aBaseColor, nBorderEndOffset);
+
+    rGradient.mnFillOffset1 = nFillStartOffset;
+    rGradient.mnFillOffset2 = nFillEndOffset;
+    rGradient.mnBorderOffset1 = nBorderStartOffset;
+    rGradient.mnBorderOffset2 = nBorderEndOffset;
 }
 
 
@@ -328,5 +313,74 @@ BitmapEx Theme::GetIcon (const IconType eType)
             return BitmapEx();
     }
 }
+
+
+
+
+sal_Int32 Theme::GetIntegerValue (const IntegerValueType eType) const
+{
+    switch (eType)
+    {
+        case ButtonCornerRadius:
+            return mnButtonCornerRadius;
+
+        case ButtonMaxAlpha:
+            return mnButtonMaxAlpha;
+
+        default:
+            return 0;
+    }
+}
+
+
+
+
+void Theme::SetIntegerValue (const IntegerValueType eType, const sal_Int32 nValue)
+{
+    switch (eType)
+    {
+        case ButtonCornerRadius:
+            mnButtonCornerRadius = nValue;
+            break;
+
+        case ButtonMaxAlpha:
+            mnButtonMaxAlpha = nValue;
+            break;
+
+        default:
+            break;
+    }
+}
+
+
+
+
+Theme::GradientDescriptor& Theme::GetGradient (const GradientColorType eType)
+{
+    switch(eType)
+    {
+        default:
+            OSL_ASSERT(false);
+            // fall through
+
+        case NormalPage:
+            return maNormalGradient;
+            break;
+
+        case SelectedPage:
+            return maSelectedGradient;
+            break;
+
+        case SelectedAndFocusedPage:
+            return maSelectedAndFocusedGradient;
+            break;
+
+        case MouseOverPage:
+            return maMouseOverGradient;
+            break;
+    }
+}
+
+
 
 } } } // end of namespace ::sd::slidesorter::view

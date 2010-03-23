@@ -970,7 +970,9 @@ bool SlideSorterView::SetState (
     // Fade in or out the buttons.
     if (eState == PageDescriptor::ST_MouseOver)
     {
-        const double nEndAlpha (bStateValue ? 0.2 : 1.0);
+        const double nEndAlpha (bStateValue
+            ? mrSlideSorter.GetTheme()->GetIntegerValue(Theme::ButtonMaxAlpha)/255.0
+            : 1.0);
         if (bAnimate)
         {
             const double nStartAlpha (pDescriptor->GetVisualState().GetButtonAlpha());

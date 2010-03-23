@@ -64,7 +64,7 @@ PageObjectLayouter::PageObjectLayouter (
       maPageNumberAreaBoundingBox(),
       maPreviewBoundingBox(),
       maTransitionEffectBoundingBox(),
-      maButtonAreaBoundingBox(),
+      maWideButtonBoundingBox(),
       maTransitionEffectIcon(IconCache::Instance().GetIcon(BMP_FADE_EFFECT_INDICATOR)),
       mpPageNumberFont(Theme::GetFont(Theme::PageNumberFont, *rpWindow))
 {
@@ -100,11 +100,14 @@ PageObjectLayouter::PageObjectLayouter (
             maPreviewBoundingBox.Bottom() - aIconSize.Height()),
         aIconSize);
 
-    maButtonAreaBoundingBox = Rectangle(
-        0,
-        maPageObjectBoundingBox.Bottom() - gaButtonSize.Height() - gnButtonGap,
-        maPageObjectBoundingBox.Right() - gnButtonGap,
-        maPageObjectBoundingBox.Bottom() - gnButtonGap);
+    // The wide "unhide" button is placed at the lower edge of the preview.
+    // Add 1 pixel at the sides to compensate for the missing border around
+    // the button.
+    maWideButtonBoundingBox = Rectangle(
+        maPreviewBoundingBox.Left() - 1,
+        maPreviewBoundingBox.Bottom() - gaButtonSize.Height() - 1,
+        maPreviewBoundingBox.Right() + 1,
+        maPreviewBoundingBox.Bottom() + 1);
 }
 
 
@@ -225,16 +228,16 @@ Rectangle PageObjectLayouter::GetBoundingBox (
             aBoundingBox = maTransitionEffectBoundingBox;
             break;
 
-        case ButtonArea:
-            aBoundingBox = maButtonAreaBoundingBox;
+        case WideButton:
+            aBoundingBox = maWideButtonBoundingBox;
             break;
 
         case Button:
             aBoundingBox = Rectangle(
-                maPageObjectBoundingBox.BottomRight()
+                maPreviewBoundingBox.BottomRight()
                     - Point(
-                        (nIndex+1)*(gaButtonSize.Width() + gnButtonGap),
-                        gaButtonSize.Height() + gnButtonGap),
+                        (nIndex+1)*gaButtonSize.Width() + nIndex*gnButtonGap,
+                        gaButtonSize.Height()),
                 gaButtonSize);
             break;
     }
@@ -315,7 +318,7 @@ sal_Int32 PageObjectLayouter::GetButtonIndexAt (
     const model::SharedPageDescriptor& rpPageDescriptor,
     const Point& rWindowLocation)
 {
-    if ( ! GetBoundingBox(rpPageDescriptor, ButtonArea, ModelCoordinateSystem)
+    if ( ! GetBoundingBox(rpPageDescriptor, Preview, ModelCoordinateSystem)
         .IsInside(rWindowLocation))
     {
         return -1;
