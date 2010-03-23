@@ -66,7 +66,7 @@ testcase tLoadForm
     printlog "execute the form filter"    
 	FM_FF_Execute
 	wait(1000)
-    qaerrorlog "workarounf issue 102010"
+    printlog "workaround issue 102010"
 	DocumentWriter.TypeKeys "<MOD1 F6>" , true
     sleep(1)
     DocumentWriter.TypeKeys "<MOD1 F5>" , true   
@@ -99,7 +99,7 @@ testcase tLoadForm
 	FM_FF_Execute
 	wait(1000)
     
-    qaerrorlog "workarounf issue 102010"
+    printlog "workaround issue 102010"
     DocumentWriter.TypeKeys "<MOD1 F6>" , true
     sleep(1)
     DocumentWriter.TypeKeys "<MOD1 F5>" , true   
@@ -141,11 +141,7 @@ testcase tFF_Navigator
     printlog "activate the form based filter"    
 	FM_FormFilter_Start
 	wait(1000)
-    '/// open the FormFilterNavigator
-    printlog "open the FormFilterNavigator"    
-	FM_FF_Navigator
-	wait(1000)
-	Kontext "DocumentWriter"
+    Kontext "DocumentWriter"
     '/// press CTRL + F5 to get into the first textbox
     printlog "press CTRL + F5 to get into the first textbox"
 	DocumentWriter.TypeKeys "<MOD1 F5>" , true
@@ -161,7 +157,13 @@ testcase tFF_Navigator
 	DocumentWriter.TypeKeys "like '%value%'" , true
 	DocumentWriter.TypeKeys "<RETURN>" , true
 	wait(1000)
-	Kontext "FilterNavigator"
+    Kontext "FilterNavigator"
+    '/// open the FormFilterNavigator
+    printlog "open the FormFilterNavigator"
+    if( NOT FilterNavigator.exists(3)) then
+	FM_FF_Navigator
+    endif
+    wait(1000)
     '/// check if the filter criterion is insert in the form filter navigator
     printlog "check if the filter criterion is insert in the form filter navigator"    
 	FilterNavigator.TypeKeys "<END>"
