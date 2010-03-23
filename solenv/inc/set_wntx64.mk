@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: set_wntx64.mk,v $
-#
-# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -128,6 +124,7 @@ COMCTL32LIB_X64=$(LIBPATH_X64)/comctl32.lib
 CRYPT32LIB_X64=$(LIBPATH_X64)/crypt32.lib
 GDIPLUSLIB_X64=$(LIBPATH_X64)/gdiplus.lib
 DBGHELPLIB_X64=$(LIBPATH_X64)/dbghelp.lib
+PROPSYSLIB_X64=$(LIBPATH_X64)/propsys.lib
 MSILIB_X64=$(LIBPATH_X64)/msi.lib
 DDRAWLIB_X64=$(LIBPATH_X64)/ddraw.lib
 SHLWAPILIB_X64=$(LIBPATH_X64)/shlwapi.lib
