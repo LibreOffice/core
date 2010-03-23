@@ -270,8 +270,9 @@ function hDeleteMacro() as boolean
     ' inserting the new one. This fails if the accelerator for SelectAll
     ' is incorrect, we try to recover by doing this manually then.
     '///+<li>Delete the entire content of the Basic IDE editor</li>
+    kontext "BasicIDE"
     hUseAsyncSlot( "EditSelectAll" )
-    hUseAsyncSlot( "EditCut" )
+    BasicIDE.typeKeys( "<DELETE>" )
     hDeleteMacro() = hIsEditWindowEmpty()
 
 end function
@@ -284,18 +285,17 @@ function hIsEditWindowEmpty() as boolean
     '///<i>Starting point: Basic IDE editor is open and has the focus</i>
     const CFN = "hIsEditWindowEmpty(): "
     const SLOT_TIMEOUT = -1
-    
-    hUseAsyncSlot( "EditSelectAll" )
-    if ( hUseAsyncSlot( "EditCopy" ) <> SLOT_TIMEOUT ) then
-        qaerrorlog( "EditCopy should not be enabled for empty Basic IDE editor" )
-    endif
 
-    if ( GetClipBoardText() <> "" ) then
+    SetClipboard( "" )
+    hUseAsyncSlot( "EditSelectAll" )
+    hUseAsyncSlot( "EditCopy" )
+
+    if ( GetClipBoardText() = "" ) then
+        hIsEditWindowEmpty() = true
+    else
         warnlog( CFN & "Edit window is not empty" )
         printlog( GetClipboardText )
         hIsEditWindowEmpty() = false
-    else
-        hIsEditWindowEmpty() = true
     endif
     
 end function
