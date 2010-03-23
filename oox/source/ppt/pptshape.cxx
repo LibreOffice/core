@@ -155,8 +155,10 @@ void PPTShape::addShape(
                     break;
                 }
             }
+
+            // use style from master slide for placeholders only, otherwise use slide's style, which might be the default style from presentation
             if ( !aMasterTextListStyle.get() )
-                aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getOtherTextStyle() : rSlidePersist.getOtherTextStyle();
+                    aMasterTextListStyle = ( mnSubType && rSlidePersist.getMasterPersist().get() ) ? rSlidePersist.getMasterPersist()->getOtherTextStyle() : rSlidePersist.getOtherTextStyle();
             setMasterTextListStyle( aMasterTextListStyle );
 
             Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect, bClearText ) );
