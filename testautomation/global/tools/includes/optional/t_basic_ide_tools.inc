@@ -607,7 +607,7 @@ function hInsertMacro( _id as integer ) as boolean
     const CFN = "hInsertMacro::"
     kontext "basicide"
 
-    qaerrorlog( CFN & "This function is deprecated, remove me!" )
+    printlog( CFN & "This function is deprecated" )
     
     '///+<li>Delete the content of the edit window</li>
     if ( not hDeleteMacro() ) then
