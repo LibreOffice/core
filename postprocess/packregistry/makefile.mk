@@ -136,6 +136,7 @@ MY_FILES_lingucomponent = \
 MY_FILES_main = \
     $(MY_XCS)/FirstStartWizard.xcs \
     $(MY_XCS)/Inet.xcs \
+    $(MY_XCS)/Interaction.xcs \
     $(MY_XCS)/LDAP.xcs \
     $(MY_XCS)/Office/Accelerators.xcs \
     $(MY_XCS)/Office/Addons.xcs \
@@ -219,6 +220,7 @@ MY_FILES_main = \
     $(MY_XCS)/ucb/Store.xcs \
     $(MY_XCU)/FirstStartWizard.xcu \
     $(MY_XCU)/Inet.xcu \
+    $(MY_XCU)/Interaction.xcu \
     $(MY_XCU)/Office/Accelerators.xcu \
     $(MY_XCU)/Office/Calc.xcu \
     $(MY_XCU)/Office/Canvas.xcu \
