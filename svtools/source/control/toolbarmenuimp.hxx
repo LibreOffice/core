@@ -61,8 +61,8 @@ typedef std::vector< ToolbarMenuEntry * > ToolbarMenuEntryVector;
 const int EXTRAITEMHEIGHT = 0; // 4;
 const int SEPARATOR_HEIGHT = 4;
 const int TITLE_ID = -1;
-const int BORDER_X = 0;
-const int BORDER_Y = 0;
+const int BORDER_X = 2;
+const int BORDER_Y = 2;
 
 // --------------------
 // - ToolbarMenuEntry -

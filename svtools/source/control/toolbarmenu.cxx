@@ -591,102 +591,73 @@ Size ToolbarMenu::implCalcSize()
     Size aSz;
     Size aMaxImgSz;
     long nMaxTextWidth = 0;
-    long nMinMenuItemHeight = nFontHeight;
+    long nMinMenuItemHeight = nFontHeight+2;
     sal_Bool bCheckable = sal_False;
 
     const int nEntryCount = mpImpl->maEntryVector.size();
     int nEntry;
 
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
-    if ( rSettings.GetUseImagesInMenus() )
-    {
-        nMinMenuItemHeight = 16;
+    const bool bUseImages = rSettings.GetUseImagesInMenus();
 
+    // get maximum image size
+    if( bUseImages )
+    {
         for( nEntry = 0; nEntry < nEntryCount; nEntry++ )
         {
             ToolbarMenuEntry* pEntry = mpImpl->maEntryVector[nEntry];
             if( pEntry && pEntry->mbHasImage )
             {
-                Size aImgSz = pEntry->maImage.GetSizePixel();
-                if ( aImgSz.Height() > aMaxImgSz.Height() )
-                    aMaxImgSz.Height() = aImgSz.Height();
-                if ( aImgSz.Height() > nMinMenuItemHeight )
-                    nMinMenuItemHeight = aImgSz.Height();
-                break;
+                Size aImgSz( pEntry->maImage.GetSizePixel() );
+                nMinMenuItemHeight = std::max( nMinMenuItemHeight, aImgSz.Height() + 6 );
+                aMaxImgSz.Width() = std::max( aMaxImgSz.Width(), aImgSz.Width() );
             }
         }
     }
-
-    for( nEntry = 0; nEntry < nEntryCount; nEntry++ )
-    {
-        ToolbarMenuEntry* pEntry = mpImpl->maEntryVector[nEntry];
-
-        if( pEntry )
-        {
-            pEntry->maSize.Height() = 0;
-            pEntry->maSize.Width() = 0;
-
-
-            if ( ( pEntry->mnBits ) & ( MIB_RADIOCHECK | MIB_CHECKABLE ) )
-                bCheckable = sal_True;
-
-            // Image:
-            if( pEntry->mbHasImage )
-            {
-                Size aImgSz = pEntry->maImage.GetSizePixel();
-                if ( (aImgSz.Width() + 4) > aMaxImgSz.Width() )
-                    aMaxImgSz.Width() = aImgSz.Width() + 4;
-                if ( (aImgSz.Height() + 4) > aMaxImgSz.Height() )
-                    aMaxImgSz.Height() = aImgSz.Height() + 4;
-                if ( (aImgSz.Height() + 4) > pEntry->maSize.Height() )
-                    pEntry->maSize.Height() = aImgSz.Height() + 4;
-            }
-        }
-    }
-
-    int gfxExtra = Max( nExtra, 7L );
-
-    if ( aMaxImgSz.Width() )
-        mpImpl->mnTextPos += gfxExtra;
-    if ( bCheckable )
-        mpImpl->mnTextPos += 16;
 
     mpImpl->mnCheckPos = nExtra;
     mpImpl->mnImagePos = nExtra;
     mpImpl->mnTextPos = mpImpl->mnImagePos + aMaxImgSz.Width();
 
+    if ( aMaxImgSz.Width() )
+        mpImpl->mnTextPos += std::max( nExtra, 7L );
+    if ( bCheckable )
+        mpImpl->mnTextPos += 16;
+
+    // set heights, calc maximum width
     for( nEntry = 0; nEntry < nEntryCount; nEntry++ )
     {
         ToolbarMenuEntry* pEntry = mpImpl->maEntryVector[nEntry];
 
         if( pEntry )
         {
-            // Text:
-            if( pEntry->mbHasText )
-            {
-                long nTextWidth = GetCtrlTextWidth( pEntry->maText ) + mpImpl->mnTextPos;
-                nMaxTextWidth = Max( nTextWidth, nMaxTextWidth );
+            if ( ( pEntry->mnBits ) & ( MIB_RADIOCHECK | MIB_CHECKABLE ) )
+                bCheckable = sal_True;
 
-                pEntry->maSize.Height() = Max( Max( GetTextHeight(), pEntry->maSize.Height() ), nMinMenuItemHeight );
+            // Text:
+            if( pEntry->mbHasText || pEntry->mbHasImage )
+            {
+                pEntry->maSize.Height() = nMinMenuItemHeight;
+
+                if( pEntry->mbHasText )
+                {
+                    long nTextWidth = GetCtrlTextWidth( pEntry->maText ) + mpImpl->mnTextPos + nExtra;
+                    nMaxTextWidth = std::max( nTextWidth, nMaxTextWidth );
+                }
             }
             // Control:
             else if( pEntry->mpControl )
             {
                 Size aControlSize( pEntry->mpControl->GetOutputSizePixel() );
 
-                nMaxTextWidth = Max( aControlSize.Width(), nMaxTextWidth );
-                pEntry->maSize.Height() = Max( aControlSize.Height(), pEntry->maSize.Height() ) + 1;
+                nMaxTextWidth = std::max( aControlSize.Width(), nMaxTextWidth );
+                pEntry->maSize.Height() = aControlSize.Height() + 1;
             }
-            aSz.Height() += pEntry->maSize.Height();
-        }
-        else
-        {
-            aSz.Height() += SEPARATOR_HEIGHT;
+
         }
     }
 
     aSz.Width() = nMaxTextWidth + (BORDER_X<<1);
-    aSz.Height() += BORDER_Y<<1;
 
     // positionate controls
     int nY = BORDER_Y;
@@ -696,12 +667,12 @@ Size ToolbarMenu::implCalcSize()
 
         if( pEntry )
         {
+            pEntry->maSize.Width() = nMaxTextWidth;
+
             if( pEntry->mpControl )
             {
                 Size aControlSize( pEntry->mpControl->GetOutputSizePixel() );
                 Point aControlPos( (aSz.Width() - aControlSize.Width())>>1, nY);
-                if( pEntry->mbHasText )
-                    aControlPos.X() += GetCtrlTextWidth( pEntry->maText ) + 4*gfxExtra;
 
                 pEntry->mpControl->SetPosPixel( aControlPos );
 
@@ -719,6 +690,8 @@ Size ToolbarMenu::implCalcSize()
             nY += SEPARATOR_HEIGHT;
         }
     }
+
+    aSz.Height() += nY + BORDER_Y;
 
     return aSz;
 }
@@ -1415,10 +1388,10 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                         aTmpPos.Y() += (pEntry->maSize.Height()-pEntry->maImage.GetSizePixel().Height())/2;
 
                         Rectangle aSelRect( aTmpPos, pEntry->maImage.GetSizePixel() );
-                        aSelRect.nLeft -= 2;
-                        aSelRect.nTop -= 2;
-                        aSelRect.nRight += 2;
-                        aSelRect.nBottom += 2;
+                        aSelRect.nLeft -= 1;
+                        aSelRect.nTop -= 1;
+                        aSelRect.nRight += 1;
+                        aSelRect.nBottom += 1;
                         DrawSelectionBackground( aSelRect, false, true, TRUE, TRUE );
                     }
                     else
