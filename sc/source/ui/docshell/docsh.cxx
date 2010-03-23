@@ -57,7 +57,6 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/sfx.hrc>
-#include <sfx2/topfrm.hxx>
 #include <sfx2/objface.hxx>
 #include <svl/srchitem.hxx>
 #include <unotools/fltrcfg.hxx>
@@ -2156,7 +2155,7 @@ USHORT __EXPORT ScDocShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 {
     if(SC_MOD()->GetCurRefDlgId()>0)
     {
-        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this, TYPE(SfxTopViewFrame) );
+        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
         if( pFrame )
         {
             SfxViewShell* p = pFrame->GetViewShell();
@@ -2308,21 +2307,18 @@ ScDocShell::ScDocShell( const ScDocShell& rShell )
 
 //------------------------------------------------------------------
 
-ScDocShell::ScDocShell( SfxObjectCreateMode eMode, const bool _bScriptSupport )
-    :   SfxObjectShell( eMode ),
-        __SCDOCSHELL_INIT
+ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags )
+    :   SfxObjectShell( i_nSfxCreationFlags )
+    ,   __SCDOCSHELL_INIT
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ScDocShell" );
 
     SetPool( &SC_MOD()->GetPool() );
 
-    bIsInplace = (eMode == SFX_CREATE_MODE_EMBEDDED);
+    bIsInplace = (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED);
     //  wird zurueckgesetzt, wenn nicht inplace
 
     pDocFunc = new ScDocFunc(*this);
-
-    if ( !_bScriptSupport )
-        SetHasNoBasic();
 
     //  SetBaseModel needs exception handling
     ScModelObj::CreateAndSet( this );
