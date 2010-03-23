@@ -45,6 +45,13 @@
 #include <memory>
 #include <map>
 
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+#include <list>
+#include "dpobject.hxx"
+#include "dptabdat.hxx"
+// End Comments
+
 class KeyEvent;
 class OutputDevice;
 class SdrObject;
@@ -256,6 +263,11 @@ private:
     ScRangeName*        pRangeName;
     ScDBCollection*     pDBCollection;
     ScDPCollection*     pDPCollection;
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    std::list<ScDPObject>        m_listDPObjectsInClip;
+    std::list<ScDPTableDataCache*>   m_listDPObjectsCaches;
+    // End Comments
     ScChartCollection*  pChartCollection;
     std::auto_ptr< ScTemporaryChartLock > apTemporaryChartLock;
     ScPatternAttr*      pSelectionAttr;                 // Attribute eines Blocks
@@ -492,6 +504,17 @@ public:
     SC_DLLPUBLIC ScDPCollection*        GetDPCollection();
     ScDPObject*         GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
     ScDPObject*         GetDPAtBlock( const ScRange& rBlock ) const;
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    SC_DLLPUBLIC ScDPTableDataCache*    GetDPObjectCache( long nID );
+    SC_DLLPUBLIC ScDPTableDataCache*    GetUsedDPObjectCache ( ScRange rRange );
+    SC_DLLPUBLIC long                                 AddDPObjectCache( ScDPTableDataCache* pData );
+    SC_DLLPUBLIC void                                 RemoveDPObjectCache( long nID );
+    SC_DLLPUBLIC void                                 RemoveUnusedDPObjectCaches();
+    SC_DLLPUBLIC void                                 GetUsedDPObjectCache( std::list<ScDPTableDataCache*>& usedlist );
+    SC_DLLPUBLIC long                                 GetNewDPObjectCacheId ();
+    // End Comments
+
     SC_DLLPUBLIC ScChartCollection* GetChartCollection() const;
 
     void                StopTemporaryChartLock();
