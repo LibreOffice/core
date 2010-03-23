@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: brwctrlr.hxx,v $
- * $Revision: 1.40.6.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,6 +101,8 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >         m_xFormControllerImpl;
         mutable ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >
                                                                                         m_xParser;      // for sorting 'n filtering
+
+        sal_Int32               m_nRowSetPrivileges;    // cached Privileges property of m_xRowSet
 
         AutoTimer               m_aInvalidateClipboard;             // for testing the state of the CUT/COPY/PASTE-slots
 
