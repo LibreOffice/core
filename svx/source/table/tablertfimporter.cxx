@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tablertfimporter.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,19 +36,19 @@
 #include <tools/stream.hxx>
 #include <svtools/rtftoken.h>
 
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/outlobj.hxx>
 
 #include "cell.hxx"
 #include "celltypes.hxx"
 #include "svx/svdotable.hxx"
 #include "svx/svdoutl.hxx"
-#include "svx/editeng.hxx"
-#include "svx/editdata.hxx"
+#include "editeng/editeng.hxx"
+#include "editeng/editdata.hxx"
 #include "svx/svdmodel.hxx"
-#include "svxrtf.hxx"
+#include "editeng/svxrtf.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
