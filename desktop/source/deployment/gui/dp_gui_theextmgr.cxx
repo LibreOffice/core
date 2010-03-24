@@ -47,6 +47,10 @@
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
+#define USER_PACKAGE_MANAGER    OUSTR("user")
+#define SHARED_PACKAGE_MANAGER  OUSTR("shared")
+#define BUNDLED_PACKAGE_MANAGER OUSTR("bundled")
+
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
@@ -67,14 +71,17 @@ TheExtensionManager::TheExtensionManager( Window *pParent,
     m_pExtMgrDialog( NULL ),
     m_pUpdReqDialog( NULL )
 {
-    m_sPackageManagers.realloc(2);
-    m_sPackageManagers[0] = deployment::thePackageManagerFactory::get( m_xContext )->getPackageManager( OUSTR("user") );
-    m_sPackageManagers[1] = deployment::thePackageManagerFactory::get( m_xContext )->getPackageManager( OUSTR("shared") );;
+    m_sPackageManagers.realloc(3);
+    m_sPackageManagers[0] = deployment::thePackageManagerFactory::get( m_xContext )->getPackageManager( USER_PACKAGE_MANAGER );
+    m_sPackageManagers[1] = deployment::thePackageManagerFactory::get( m_xContext )->getPackageManager( SHARED_PACKAGE_MANAGER );
+    m_sPackageManagers[2] = deployment::thePackageManagerFactory::get( m_xContext )->getPackageManager( BUNDLED_PACKAGE_MANAGER );
 
     for ( sal_Int32 i = 0; i < m_sPackageManagers.getLength(); ++i )
     {
         m_sPackageManagers[i]->addModifyListener( this );
     }
+
+    m_xExtensionManager = deployment::ExtensionManager::get( xContext );
 
     uno::Reference< lang::XMultiServiceFactory > xConfig(
         xContext->getServiceManager()->createInstanceWithContext(
@@ -206,26 +213,34 @@ bool TheExtensionManager::isVisible()
 bool TheExtensionManager::checkUpdates( bool /* bShowUpdateOnly */, bool /*bParentVisible*/ )
 {
     std::vector< TUpdateListEntry > vEntries;
+    uno::Sequence< uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
 
-    for ( sal_Int32 i = 0; i < m_sPackageManagers.getLength(); ++i )
+    try {
+        xAllPackages = m_xExtensionManager->getAllExtensions( uno::Reference< task::XAbortChannel >(),
+                                                              uno::Reference< ucb::XCommandEnvironment >() );
+    } catch ( deployment::DeploymentException & ) {
+        return false;
+    } catch ( ucb::CommandFailedException & ) {
+        return false;
+    } catch ( ucb::CommandAbortedException & ) {
+        return false;
+    } catch ( lang::IllegalArgumentException & e ) {
+        throw uno::RuntimeException( e.Message, e.Context );
+    }
+
+    for ( sal_Int32 i = 0; i < xAllPackages.getLength(); ++i )
     {
-        uno::Sequence< uno::Reference< deployment::XPackage > > xPackages;
-        try {
-            xPackages = m_sPackageManagers[i]->getDeployedPackages( uno::Reference< task::XAbortChannel >(),
-                                                                    uno::Reference< ucb::XCommandEnvironment >() );
-            for ( sal_Int32 k = 0; k < xPackages.getLength(); ++k )
+        uno::Sequence< uno::Reference< deployment::XPackage > > xPackageList = xAllPackages[i];
+
+        for ( sal_Int32 j = 0; j < xPackageList.getLength(); ++j )
+        {
+            uno::Reference< deployment::XPackage > xPackage = xPackageList[j];
+            if ( xPackage.is() )
             {
-                TUpdateListEntry pEntry( new UpdateListEntry( xPackages[k], m_sPackageManagers[i] ) );
+                TUpdateListEntry pEntry( new UpdateListEntry( xPackage, m_sPackageManagers[j] ) );
                 vEntries.push_back( pEntry );
+                break;
             }
-        } catch ( deployment::DeploymentException & ) {
-            continue;
-        } catch ( ucb::CommandFailedException & ) {
-            continue;
-        } catch ( ucb::CommandAbortedException & ) {
-            return true;
-        } catch ( lang::IllegalArgumentException & e ) {
-            throw uno::RuntimeException( e.Message, e.Context );
         }
     }
 
@@ -342,10 +357,38 @@ bool TheExtensionManager::createPackageList( const uno::Reference< deployment::X
 //------------------------------------------------------------------------------
 void TheExtensionManager::createPackageList()
 {
-    for ( sal_Int32 i = 0; i < m_sPackageManagers.getLength(); ++i )
+    uno::Sequence< uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
+
+    try {
+        xAllPackages = m_xExtensionManager->getAllExtensions( uno::Reference< task::XAbortChannel >(),
+                                                              uno::Reference< ucb::XCommandEnvironment >() );
+    } catch ( deployment::DeploymentException & ) {
+        return;
+    } catch ( ucb::CommandFailedException & ) {
+        return;
+    } catch ( ucb::CommandAbortedException & ) {
+        return;
+    } catch ( lang::IllegalArgumentException & e ) {
+        throw uno::RuntimeException( e.Message, e.Context );
+    }
+
+    for ( sal_Int32 i = 0; i < xAllPackages.getLength(); ++i )
     {
-        if ( ! createPackageList( m_sPackageManagers[i] ) )
-            break;
+        uno::Sequence< uno::Reference< deployment::XPackage > > xPackageList = xAllPackages[i];
+
+        for ( sal_Int32 j = 0; j < xPackageList.getLength(); ++j )
+        {
+            uno::Reference< deployment::XPackage > xPackage = xPackageList[j];
+            if ( xPackage.is() )
+            {
+                PackageState eState = getPackageState( xPackage );
+                getDialogHelper()->addPackageToList( xPackage, m_sPackageManagers[j] );
+                // When the package is enabled, we can stop here, otherwise we have to look for
+                // another version of this package
+                if ( ( eState == REGISTERED ) || ( eState == NOT_AVAILABLE ) )
+                    break;
+            }
+        }
     }
 }
 

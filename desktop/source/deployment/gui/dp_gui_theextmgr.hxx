@@ -34,6 +34,8 @@
 
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/deployment/XPackageManager.hpp"
+#include "com/sun/star/deployment/XExtensionManager.hpp"
+#include "com/sun/star/deployment/ExtensionManager.hpp"
 #include "com/sun/star/frame/XDesktop.hpp"
 #include "com/sun/star/frame/XTerminateListener.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
@@ -57,6 +59,7 @@ class TheExtensionManager :
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop >           m_xDesktop;
+    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > m_xExtensionManager;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager> > m_sPackageManagers;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xNameAccessNodes;
 
@@ -111,6 +114,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getContext() const { return m_xContext; }
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > getUserPkgMgr() const { return m_sPackageManagers[0]; }
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > getSharedPkgMgr() const { return m_sPackageManagers[1]; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > getExtensionManager() const { return m_xExtensionManager; }
 
     //-----------------
     static ::rtl::Reference<TheExtensionManager> get(

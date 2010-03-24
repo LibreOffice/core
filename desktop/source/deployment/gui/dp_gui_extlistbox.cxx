@@ -951,7 +951,7 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
     if ( m_vEntries.empty() )
     {
         pEntry->m_bHasOptions = m_pManager->supportsOptions( xPackage );
-        pEntry->m_bShared     = ( m_pManager->getSharedPkgMgr() == xPackageManager );
+        pEntry->m_bShared     = ( m_pManager->getUserPkgMgr() != xPackageManager );
         pEntry->m_bNew        = m_bInCheckMode;
         m_vEntries.push_back( pEntry );
     }
@@ -960,7 +960,7 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
         if ( !FindEntryPos( pEntry, 0, m_vEntries.size()-1, nPos ) )
         {
             pEntry->m_bHasOptions = m_pManager->supportsOptions( xPackage );
-            pEntry->m_bShared     = ( m_pManager->getSharedPkgMgr() == xPackageManager );
+            pEntry->m_bShared     = ( m_pManager->getUserPkgMgr() != xPackageManager );
             pEntry->m_bNew        = m_bInCheckMode;
             m_vEntries.insert( m_vEntries.begin()+nPos, pEntry );
         }

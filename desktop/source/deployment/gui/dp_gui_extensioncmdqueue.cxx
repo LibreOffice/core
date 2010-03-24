@@ -946,11 +946,12 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
 
     try
     {
-        uno::Reference< deployment::XPackage > xPackage( xPackageManager->addPackage(
-                                                            rPackageURL, OUString() /* detect media-type */,
-                                                            xAbortChannel, rCmdEnv.get() ) );
+        OUString sPackageManager = xPackageManager->getContext();
+        uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
+        uno::Reference< deployment::XPackage > xPackage( xExtMgr->addExtension( rPackageURL, sPackageManager,
+                                                                                xAbortChannel, rCmdEnv.get() ) );
         OSL_ASSERT( xPackage.is() );
-   }
+    }
     catch ( ucb::CommandFailedException & )
     {
         // When the extension is already installed we'll get a dialog asking if we want to overwrite. If we then press
@@ -976,8 +977,14 @@ void ExtensionCmdQueue::Thread::_removeExtension( ::rtl::Reference< ProgressCmdE
     OUString id( dp_misc::getIdentifier( xPackage ) );
     try
     {
-        xPackageManager->removePackage( id, xPackage->getName(), xAbortChannel, rCmdEnv.get() );
+        OUString sPackageManager = xPackageManager->getContext();
+        uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
+        xExtMgr->removeExtension( id, xPackage->getName(), sPackageManager, xAbortChannel, rCmdEnv.get() );
     }
+    catch ( deployment::DeploymentException & )
+    {}
+    catch ( ucb::CommandFailedException & )
+    {}
     catch ( ucb::CommandAbortedException & )
     {}
 
