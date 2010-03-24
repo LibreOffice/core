@@ -29,7 +29,8 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
    xmlns:oor="http://openoffice.org/2001/registry">
   <xsl:strip-space elements="*"/>
-  <xsl:preserve-space elements="value"/>
+  <xsl:preserve-space elements="value it"/>
+    <!-- TODO: strip space from "value" elements that have "it" children -->
   <xsl:template match="/">
     <oor:data xmlns:xs="http://www.w3.org/2001/XMLSchema"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -63,7 +64,7 @@
   </xsl:template>
   <xsl:template
      match="oor:component-schema|oor:component-data|templates|component|group|
-            set|node-ref|prop|item|value|node">
+            set|node-ref|prop|item|value|it|unicode|node">
     <xsl:copy copy-namespaces="no">
       <!-- prune oor:component-data xmlns:install="..." namespaces (would only
            work in XSLT 2.0, however) -->
