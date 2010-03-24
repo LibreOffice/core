@@ -60,6 +60,63 @@ namespace {
 
 namespace css = com::sun::star;
 
+// Conservatively merge a template or component (and its recursive parts) into
+// an existing instance:
+void merge(
+    rtl::Reference< Node > const & original,
+    rtl::Reference< Node > const & update)
+{
+    OSL_ASSERT(
+        original.is() && update.is() && original->kind() == update->kind() &&
+        update->getFinalized() == Data::NO_LAYER);
+    if (update->getLayer() >= original->getLayer() &&
+        update->getLayer() <= original->getFinalized())
+    {
+        switch (original->kind()) {
+        case Node::KIND_PROPERTY:
+        case Node::KIND_LOCALIZED_PROPERTY:
+        case Node::KIND_LOCALIZED_VALUE:
+            break; //TODO: merge certain parts?
+        case Node::KIND_GROUP:
+            if (dynamic_cast< GroupNode * >(original.get())->isExtensible()) {
+                for (NodeMap::iterator i2(update->getMembers().begin());
+                     i2 != update->getMembers().end(); ++i2)
+                {
+                    NodeMap::iterator i1(
+                        original->getMembers().find(i2->first));
+                    if (i1 == original->getMembers().end()) {
+                        if (i2->second->kind() == Node::KIND_PROPERTY) {
+                            original->getMembers().insert(*i2);
+                        }
+                    } else if (i2->second->kind() == i1->second->kind()) {
+                        merge(i1->second, i2->second);
+                    }
+                }
+            }
+            break;
+        case Node::KIND_SET:
+            for (NodeMap::iterator i2(update->getMembers().begin());
+                 i2 != update->getMembers().end(); ++i2)
+            {
+                NodeMap::iterator i1(original->getMembers().find(i2->first));
+                if (i1 == original->getMembers().end()) {
+                    if (dynamic_cast< SetNode * >(original.get())->
+                        isValidTemplate(i2->second->getTemplateName()))
+                    {
+                        original->getMembers().insert(*i2);
+                    }
+                } else if (i2->second->kind() == i1->second->kind() &&
+                           (i2->second->getTemplateName() ==
+                            i1->second->getTemplateName()))
+                {
+                    merge(i1->second, i2->second);
+                }
+            }
+            break;
+        }
+    }
+}
+
 }
 
 XcsParser::XcsParser(int layer, Data * data):
@@ -218,15 +275,30 @@ void XcsParser::endElement(XmlReader const & reader) {
         Element top(elements_.top());
         elements_.pop();
         if (top.node.is()) {
-            NodeMap * map;
             if (elements_.empty()) {
                 switch (state_) {
                 case STATE_TEMPLATES:
-                    map = &data_->templates;
+                    {
+                        NodeMap::iterator i(data_->templates.find(top.name));
+                        if (i == data_->templates.end()) {
+                            data_->templates.insert(
+                                NodeMap::value_type(top.name, top.node));
+                        } else {
+                            merge(i->second, top.node);
+                        }
+                    }
                     break;
                 case STATE_COMPONENT:
-                    map = &data_->components;
-                    state_ = STATE_COMPONENT_DONE;
+                    {
+                        NodeMap::iterator i(data_->components.find(top.name));
+                        if (i == data_->components.end()) {
+                            data_->components.insert(
+                                NodeMap::value_type(top.name, top.node));
+                        } else {
+                            merge(i->second, top.node);
+                        }
+                        state_ = STATE_COMPONENT_DONE;
+                    }
                     break;
                 default:
                     OSL_ASSERT(false);
@@ -235,10 +307,9 @@ void XcsParser::endElement(XmlReader const & reader) {
                             RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
                         css::uno::Reference< css::uno::XInterface >());
                 }
-            } else {
-                map = &elements_.top().node->getMembers();
-            }
-            if (!map->insert(NodeMap::value_type(top.name, top.node)).second) {
+            } else if (!elements_.top().node->getMembers().insert(
+                           NodeMap::value_type(top.name, top.node)).second)
+            {
                 throw css::uno::RuntimeException(
                     (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("duplicate ")) +
                      top.name +
