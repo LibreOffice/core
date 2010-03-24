@@ -37,6 +37,7 @@
 #include <dcontact.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
+#include <xmloff/odffields.hxx>
 #include <editsh.hxx>
 #include <errhdl.hxx>
 #include <fmtanchr.hxx>
@@ -305,6 +306,17 @@ namespace sw { namespace mark
         : m_pDoc(&rDoc)
     { }
 
+    void MarkManager::dumpFieldmarks( ) const
+    {
+        const_iterator_t pIt = m_vFieldmarks.begin();
+        for (; pIt != m_vFieldmarks.end( ); pIt++)
+        {
+            rtl::OUString str = (*pIt)->ToString();
+            OSL_TRACE("%s\n",
+                ::rtl::OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr());
+        }
+    }
+
     ::sw::mark::IMark* MarkManager::makeMark(const SwPaM& rPaM,
         const ::rtl::OUString& rName,
         const IDocumentMarkAccess::MarkType eType)
@@ -408,6 +420,30 @@ namespace sw { namespace mark
         lcl_DebugMarks(m_vFieldmarks);
 #endif
         return pMark.get();
+    }
+
+    ::sw::mark::IFieldmark* MarkManager::makeFieldBookmark( const SwPaM& rPaM,
+        const rtl::OUString& rName,
+        const rtl::OUString& rType )
+    {
+        sw::mark::IMark* pMark = makeMark( rPaM, rName,
+                IDocumentMarkAccess::TEXT_FIELDMARK );
+        sw::mark::IFieldmark* pFieldMark = dynamic_cast<sw::mark::IFieldmark*>( pMark );
+        pFieldMark->SetFieldname( rType );
+
+        return pFieldMark;
+    }
+
+    ::sw::mark::IFieldmark* MarkManager::makeNoTextFieldBookmark( const SwPaM& rPaM,
+        const rtl::OUString& rName,
+        const rtl::OUString& rType)
+    {
+        sw::mark::IMark* pMark = makeMark( rPaM, rName,
+                IDocumentMarkAccess::CHECKBOX_FIELDMARK );
+        sw::mark::IFieldmark* pFieldMark = dynamic_cast<sw::mark::IFieldmark*>( pMark );
+        pFieldMark->SetFieldname( rType );
+
+        return pFieldMark;
     }
 
     ::sw::mark::IMark* MarkManager::getMarkForTxtNode(const SwTxtNode& rTxtNode,
@@ -763,12 +799,7 @@ namespace sw { namespace mark
     {
         const_iterator_t pFieldmark = find_if(
             m_vFieldmarks.begin(),
-            // we do not need to check marks starting behind the positon
-            lower_bound(
-                m_vFieldmarks.begin(),
-                m_vFieldmarks.end(),
-                rPos,
-                bind(&IMark::StartsAfter, _1, _2)),
+            m_vFieldmarks.end( ),
             bind(&IMark::IsCoveringPosition, _1, rPos));
         if(pFieldmark == m_vFieldmarks.end()) return NULL;
         return dynamic_cast<IFieldmark*>(pFieldmark->get());

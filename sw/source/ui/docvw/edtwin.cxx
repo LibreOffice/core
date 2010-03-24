@@ -137,6 +137,7 @@
 
 #include <IMark.hxx>
 #include <doc.hxx>
+#include <xmloff/odffields.hxx>
 
 #include "PostItMgr.hxx"
 #include "postit.hxx"
@@ -146,6 +147,7 @@
 //#define TEST_FOR_BUG91313
 #endif
 
+using namespace sw::mark;
 using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
@@ -2311,6 +2313,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                         ChgToEnEmDash | SetINetAttr |
                                         Autocorrect ) &&
                 !rSh.HasReadonlySel() )
+        /*  {
+                pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
+                                        ChgFractionSymbol | ChgOrdinalNumber |
+                                        ChgToEnEmDash | SetINetAttr |
+                                        Autocorrect ) &&
+                !rSh.HasReadonlySel() ) */
             {
                 FlushInBuffer();
                 rSh.AutoCorrect( *pACorr, static_cast< sal_Unicode >('\0') );
@@ -3608,10 +3616,10 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     pAnchorMarker->ChgHdl( pHdl );
                     if( aNew.X() || aNew.Y() )
                     {
-                         pAnchorMarker->SetPos( aNew );
-                         pAnchorMarker->SetLastPos( aDocPt );
-                         //OLMpSdrView->RefreshAllIAOManagers();
-                     }
+                        pAnchorMarker->SetPos( aNew );
+                        pAnchorMarker->SetLastPos( aDocPt );
+                        //OLMpSdrView->RefreshAllIAOManagers();
+                    }
                 }
                 else
                 {
@@ -4177,7 +4185,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
                         SwContentAtPos aCntntAtPos( SwContentAtPos::SW_CLICKFIELD |
                                                     SwContentAtPos::SW_INETATTR |
-                                                    SwContentAtPos::SW_SMARTTAG );
+                                                    SwContentAtPos::SW_SMARTTAG  | SwContentAtPos::SW_FORMCTRL);
 
                         if( rSh.GetContentAtPos( aDocPt, aCntntAtPos, TRUE ) )
                         {
@@ -4197,6 +4205,29 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     // execute smarttag menu
                                     if ( bExecSmarttags && SwSmartTagMgr::Get().IsSmartTagsEnabled() )
                                         rView.ExecSmartTagPopup( aDocPt );
+                            }
+                            else if ( SwContentAtPos::SW_FORMCTRL == aCntntAtPos.eCntntAtPos )
+                            {
+                                ASSERT( aCntntAtPos.aFnd.pFldmark != NULL, "where is my field ptr???");
+                                if ( aCntntAtPos.aFnd.pFldmark != NULL)
+                                {
+                                    IFieldmark *fieldBM = const_cast< IFieldmark* > ( aCntntAtPos.aFnd.pFldmark );
+                                    //SwDocShell* pDocSh = rView.GetDocShell();
+                                    //SwDoc *pDoc=pDocSh->GetDoc();
+                                    if (fieldBM->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX ) )
+                                    {
+                                        ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(fieldBM);
+                                        pCheckboxFm->SetChecked(!pCheckboxFm->IsChecked());
+                                        pCheckboxFm->Invalidate();
+                                        rSh.InvalidateWindows( rView.GetVisArea() );
+                                    } else if (fieldBM->GetFieldname().equalsAscii( ODF_FORMDROPDOWN) ) {
+                                        rView.ExecFieldPopup( aDocPt, fieldBM );
+                                        fieldBM->Invalidate();
+                                        rSh.InvalidateWindows( rView.GetVisArea() );
+                                    } else {
+                                        // unknown type..
+                                    }
+                                }
                             }
                             else // if ( SwContentAtPos::SW_INETATTR == aCntntAtPos.eCntntAtPos )
                             {
