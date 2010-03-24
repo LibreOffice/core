@@ -191,7 +191,7 @@ static ::rtl::OUString ImplGetParameterString( const TransferableObjectDescripto
         for ( sal_Int32 nInd = 0; nInd < aQuotedParamChars.getLength(); nInd++ )
         {
             sal_Unicode nChar = aQuotedParamChars.getStr()[nInd];
-            if ( nChar >= 0 && nChar < 128 )
+            if ( nChar < 128 )
                 pToAccept[nChar] = sal_True;
         }
 
