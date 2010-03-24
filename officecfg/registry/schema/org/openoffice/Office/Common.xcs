@@ -5343,6 +5343,13 @@
 						</info>
 						<value>true</value>
                     </prop>
+                    <prop oor:name="EmbedStandardFonts" oor:type="xs:boolean">
+						<info>
+							<author>pl</author>
+							<desc>Specifies whether to embed the 14 standard PDF fonts or not.</desc>
+						</info>
+						<value>false</value>
+                    </prop>
 					<prop oor:name="FormsType" oor:type="xs:int">
 						<info>
 							<desc>Specifies the submitted format of a PDF form.</desc>
