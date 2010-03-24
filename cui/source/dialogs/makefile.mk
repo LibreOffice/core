@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.65 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -54,6 +50,7 @@ SRC1FILES =  \
         gallery.src \
         grfflt.src \
         hangulhanjadlg.src \
+        hyphen.src \
         hlmarkwn.src \
         hyperdlg.src \
         iconcdlg.src \
@@ -70,6 +67,7 @@ SRC1FILES =  \
         srchxtra.src \
         svuidlg.src \
         tbxform.src \
+        thesdlg.src \
         zoom.src \
 
 
@@ -90,6 +88,7 @@ SLOFILES+=\
         $(SLO)$/hlmailtp.obj \
         $(SLO)$/hlmarkwn.obj \
         $(SLO)$/hltpbase.obj \
+        $(SLO)$/hyphen.obj \
         $(SLO)$/iconcdlg.obj \
         $(SLO)$/insdlg.obj \
         $(SLO)$/insrc.obj \
@@ -108,6 +107,7 @@ SLOFILES+=\
         $(SLO)$/SpellDialog.obj \
         $(SLO)$/splitcelldlg.obj \
         $(SLO)$/srchxtra.obj \
+        $(SLO)$/thesdlg.obj \
         $(SLO)$/zoom.obj \
 
 
