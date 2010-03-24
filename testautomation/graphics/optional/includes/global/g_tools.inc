@@ -43,6 +43,7 @@ testcase tiToolsThesaurus
     Dim sWord as string
     Dim sChangedWord as string
     Dim sReplaceWord as string
+    Dim sAlternativeText as string
     Dim sExt as string
     Dim ZaehlerBedeutung
 
@@ -145,8 +146,16 @@ testcase tiToolsThesaurus
             Alternatives.Select 1
 
             printlog "check if the selected alternative apprear in the ReplaceWith field."
-            if ( ReplaceWith.getText() <> Alternatives.getSeltext(1,3) ) then
-                warnlog "the text is no transfered to the ReplaceWith field."
+
+            sAlternativeText = Alternatives.getSeltext(1,3)
+            'remove the part in the () if there is any
+            if( Instr(sAlternativeText, "(") <> 0 ) then
+                sAlternativeText = left(sAlternativeText, Instr(sAlternativeText, "(") - 2 )
+            endif
+
+            if ( ReplaceWith.getText() <> sAlternativeText ) then
+                warnlog "the text is no transfered to the ReplaceWith field. " +_
+                "ReplaceWith = "  + ReplaceWith.getText() + ", Alternative = " + sAlternativeText
             else
                 printlog "the text is transfered to the ReplaceWith field."
             endif
@@ -189,7 +198,7 @@ testcase tiToolsThesaurusWithoutText
     try
         ExtrasThesaurusDraw
     catch
-        PrintLog "the Thesaurus is correctly not available"
+        printlog "the Thesaurus is correctly not available"
         call hCloseDocument
         goto endsub
     endcatch
