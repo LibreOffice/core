@@ -323,12 +323,23 @@ sal_Int32 PageObjectLayouter::GetButtonIndexAt (
     {
         return -1;
     }
-    for (sal_Int32 nIndex=0; nIndex<3; ++nIndex)
+    if (rpPageDescriptor->HasState(model::PageDescriptor::ST_Excluded))
     {
-        if (GetBoundingBox(rpPageDescriptor, Button, ModelCoordinateSystem, nIndex)
+        if (GetBoundingBox(rpPageDescriptor, WideButton, ModelCoordinateSystem)
             .IsInside(rWindowLocation))
         {
-            return nIndex;
+            return ShowHideButtonIndex;
+        }
+    }
+    else
+    {
+        for (sal_Int32 nIndex=0; nIndex<3; ++nIndex)
+        {
+            if (GetBoundingBox(rpPageDescriptor, Button, ModelCoordinateSystem, nIndex)
+                .IsInside(rWindowLocation))
+            {
+                return nIndex;
+            }
         }
     }
     return -1;

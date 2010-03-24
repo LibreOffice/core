@@ -1122,7 +1122,14 @@ void SelectionFunction::ProcessButtonUpEvent (const EventDescriptor& rDescriptor
             {
                 ProcessButtonClick(rDescriptor.mpHitDescriptor, mnButtonDownButtonIndex);
             }
-            mrSlideSorter.GetView().SetButtonUnderMouse(rDescriptor.mnButtonIndex, true);
+            // Update state of button under mouse (typically from pressed to
+            // mouse over).  Note that the button under the mouse can change
+            // when the exclusions state changes (three buttons vs. wide button.)
+            mrSlideSorter.GetView().SetButtonUnderMouse(
+                mrSlideSorter.GetView().GetLayouter().GetPageObjectLayouter()->GetButtonIndexAt(
+                    rDescriptor.mpHitDescriptor,
+                    rDescriptor.maMouseModelPosition),
+                true);
             break;
 
         case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE:

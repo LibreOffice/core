@@ -49,10 +49,6 @@
 #include "Window.hxx"
 #include "sdpage.hxx"
 #include "sdresid.hxx"
-#include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-#include <drawinglayer/primitive2d/textprimitive2d.hxx>
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <vcl/svapp.hxx>

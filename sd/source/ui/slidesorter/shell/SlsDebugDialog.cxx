@@ -47,9 +47,16 @@ using namespace ::sd::slidesorter::view;
 
 namespace sd { namespace slidesorter {
 
+class DebugControl
+{
+public:
+    DebugControl (void) {};
+    virtual ~DebugControl (void) {}
+};
+
 //===== TextButton ============================================================
 
-class TextButton : public PushButton
+class TextButton : public PushButton, public DebugControl
 {
 public:
     typedef ::boost::function<void(TextButton*)> Action;
@@ -84,7 +91,7 @@ private:
 
 //===== ColorControl ==========================================================
 
-class ColorControl
+class ColorControl : public DebugControl
 {
 public:
     typedef ::boost::function<ColorData(void)> ColorGetter;
@@ -147,6 +154,18 @@ public:
         mpColorValue->Show();
 
         UpdateDisplay();
+    }
+
+    virtual ~ColorControl (void)
+    {
+        delete mpTitle;
+        delete mpRedSlider;
+        delete mpGreenSlider;
+        delete mpBlueSlider;
+        delete mpTextValue;
+        delete mpColorValue;
+
+        delete mpContainer;
     }
 
     void SetColor (const ColorData aColorData)
@@ -219,7 +238,7 @@ IMPL_LINK(ColorControl, UpdateColor, void*, EMPTYARG)
 
 //===== GradientControl =======================================================
 
-class GradientControl
+class GradientControl : public DebugControl
 {
 public:
     typedef ::boost::function<void(void)> Updater;
@@ -268,6 +287,25 @@ public:
             mpTheme->GetGradientOffset(eType, Theme::Border2), 160, nWidth);
 
         Update(0);
+    }
+
+    virtual ~GradientControl (void)
+    {
+        delete mpColorControl;
+        delete mpFillOffset1Slider;
+        delete mpFillOffset1Text;
+        delete mpFillOffset1Color;
+        delete mpFillOffset2Slider;
+        delete mpFillOffset2Text;
+        delete mpFillOffset2Color;
+        delete mpBorderOffset1Slider;
+        delete mpBorderOffset1Text;
+        delete mpBorderOffset1Color;
+        delete mpBorderOffset2Slider;
+        delete mpBorderOffset2Text;
+        delete mpBorderOffset2Color;
+
+        delete mpContainer;
     }
 
     void Initialize (
@@ -395,7 +433,7 @@ IMPL_LINK(GradientControl, Update, void*, EMPTYARG)
 
 //===== SliderControl =========================================================
 
-class SliderControl
+class SliderControl : public DebugControl
 {
 public:
     typedef ::boost::function<sal_Int32(void)> ValueGetter;
@@ -442,6 +480,14 @@ public:
         UpdateValue(0);
     }
 
+    virtual ~SliderControl (void)
+    {
+        delete mpTitle;
+        delete mpSlider;
+        delete mpTextValue;
+        delete mpContainer;
+    }
+
 private:
     ValueGetter maGetter;
     ValueSetter maSetter;
@@ -478,7 +524,7 @@ IMPL_LINK(SliderControl, UpdateValue, void*, EMPTYARG)
 
 //===== ChoiceControl =========================================================
 
-class ChoiceControl
+class ChoiceControl : public DebugControl
 {
 public:
     typedef ::boost::function<Theme::GradientColorType(void)> ValueGetter;
@@ -524,6 +570,13 @@ public:
         UpdateValue(0);
     }
 
+    virtual ~ChoiceControl (void)
+    {
+        delete mpComboBox;
+        delete mpSubControl;
+        delete mpContainer;
+    }
+
 private:
     ::std::map<USHORT, int> maValues;
     ValueGetter maGetter;
@@ -552,7 +605,7 @@ IMPL_LINK(ChoiceControl, UpdateValue, void*, EMPTYARG)
 
 //===== BoolControl ===========================================================
 
-class BoolControl
+class BoolControl : public DebugControl
 {
 public:
     typedef ::boost::function<sal_Int32(void)> ValueGetter;
@@ -587,6 +640,12 @@ public:
         mpButton->Check(maGetter() == mnOnValue ? TRUE : FALSE);
         mpButton->SetToggleHdl(LINK(this, BoolControl, UpdateValue));
         mpButton->Show();
+    }
+
+    virtual ~BoolControl (void)
+    {
+        delete mpButton;
+        delete mpContainer;
     }
 
 private:
@@ -633,28 +692,29 @@ SlideSorterDebugDialog* SlideSorterDebugDialog::CreateDebugDialog (SlideSorter& 
 
 
 SlideSorterDebugDialog::SlideSorterDebugDialog (SlideSorter& rSlideSorter)
-    : mpTopLevelWindow(new WorkWindow(NULL, WB_STDWORK))
+    : mpTopLevelWindow(new WorkWindow(NULL, WB_STDWORK)),
+      maControls()
 {
     ::boost::shared_ptr<view::Theme> pTheme(rSlideSorter.GetTheme());
 
     mpTopLevelWindow->SetSizePixel(Size(300,510));
 
-    new TextButton(
+    maControls.push_back(new TextButton(
         mpTopLevelWindow,
         "Close",
         Rectangle(195,480,100,25),
-        ::boost::bind(&WorkWindow::Close, mpTopLevelWindow));
+        ::boost::bind(&WorkWindow::Close, mpTopLevelWindow)));
 
-    new ColorControl(
+    maControls.push_back(new ColorControl(
         mpTopLevelWindow,
         "Unhide Button Background",
         Rectangle(10,10,290,110),
         ::boost::bind(&view::Theme::GetColor, pTheme, view::Theme::ButtonBackground),
         ::boost::bind(&view::Theme::SetColor, pTheme, view::Theme::ButtonBackground, _1),
         ::boost::bind(&view::SlideSorterView::RequestRepaint,
-            ::boost::ref(rSlideSorter.GetView())));
+            ::boost::ref(rSlideSorter.GetView()))));
 
-    new SliderControl(
+    maControls.push_back(new SliderControl(
         mpTopLevelWindow,
         "Max Button Alpha",
         Rectangle(10,120,290,200),
@@ -662,7 +722,7 @@ SlideSorterDebugDialog::SlideSorterDebugDialog (SlideSorter& rSlideSorter)
         ::boost::bind(&view::Theme::GetIntegerValue, pTheme, view::Theme::ButtonMaxAlpha),
         ::boost::bind(&view::Theme::SetIntegerValue, pTheme, view::Theme::ButtonMaxAlpha, _1),
         ::boost::bind(&view::SlideSorterView::RequestRepaint,
-            ::boost::ref(rSlideSorter.GetView())));
+            ::boost::ref(rSlideSorter.GetView()))));
 
     GradientControl* pControl = new GradientControl(
         mpTopLevelWindow,
@@ -675,16 +735,16 @@ SlideSorterDebugDialog::SlideSorterDebugDialog (SlideSorter& rSlideSorter)
         "SelectedAndFocused",
         "MouseOver"
     };
-    new ChoiceControl(
+    maControls.push_back(new ChoiceControl(
         mpTopLevelWindow,
         Rectangle(10,210,290,470),
         aValues,
         4,
         pControl,
         ::boost::bind(&GradientControl::GetType, pControl),
-        ::boost::bind(&GradientControl::SetType, pControl, _1));
+        ::boost::bind(&GradientControl::SetType, pControl, _1)));
 
-    new BoolControl(
+    maControls.push_back(new BoolControl(
         mpTopLevelWindow,
         "Alternative Button Paint Style",
         Rectangle(10,480,290,500),
@@ -692,7 +752,7 @@ SlideSorterDebugDialog::SlideSorterDebugDialog (SlideSorter& rSlideSorter)
         ::boost::bind(&view::Theme::GetIntegerValue, pTheme, view::Theme::ButtonPaintType),
         ::boost::bind(&view::Theme::SetIntegerValue, pTheme, view::Theme::ButtonPaintType, _1),
         ::boost::bind(&view::SlideSorterView::RequestRepaint,
-            ::boost::ref(rSlideSorter.GetView())));
+            ::boost::ref(rSlideSorter.GetView()))));
 
     mpTopLevelWindow->Show(true);
 }
@@ -702,22 +762,18 @@ SlideSorterDebugDialog::SlideSorterDebugDialog (SlideSorter& rSlideSorter)
 
 SlideSorterDebugDialog::~SlideSorterDebugDialog (void)
 {
-    DeleteWindow(mpTopLevelWindow);
+    for (::std::vector<DebugControl*>::const_iterator
+             iControl(maControls.begin()),
+             iEnd(maControls.end());
+         iControl!=iEnd;
+         ++iControl)
+    {
+        delete *iControl;
+    }
+    delete mpTopLevelWindow;
 }
 
 
-
-
-void SlideSorterDebugDialog::DeleteWindow (::Window* pWindow)
-{
-    if (pWindow == NULL)
-        return;
-
-    while (pWindow->GetChildCount() > 0)
-        DeleteWindow(pWindow->GetChild(0));
-
-    delete pWindow;
-}
 
 
 } } // end of namespace ::sd::slidesorter
