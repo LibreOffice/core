@@ -33,7 +33,7 @@
 
 testcase tBasicVBACompatSecurityCheck()
 
-    printlog( "Test VBA Security feature )
+    printlog( "Test VBA Security feature" )
     printlog( "VBA macros may not ignore global macro security setting" )
     
     ' This test case is based on the use cases provided in issue #i109699
