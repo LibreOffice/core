@@ -1006,9 +1006,6 @@ sub sResetTheOffice as boolean
     Dim sDefaultLocaleCJK as string
     Dim sDefaultLocaleCTL as string
     Dim sfgetL10Nvalue as string
-    Dim SetupXML as String
-    Dim SetupXMLNet as string
-    Dim SetupXMLDefault as string
     Dim sLanOutIni as string
 
     sString = "qa:qatesttool:calc:options:inc:coption1.inc:: "
@@ -1017,25 +1014,11 @@ sub sResetTheOffice as boolean
     ' only run on UNIX platforms; there is a problem with the quickstarter on win32
     if ("unx" = gPlatgroup) then
         try
-            SetupXML = gOfficePath & ConvertPath("user\registry\data\org\openoffice\Setup.xcu")
-            ' function 'fgetL10Nvalue' is also in this library
-            sLanOutIni = fgetL10Nvalue(SetupXML)
+            sLanOutIni = fgetL10Nvalue()
         catch
-            try
-                ' BugID 98315 -> looking in networkpath for the language until bug will be fixed.
-                SetupXMLNet = gNetzOfficePath & ConvertPath("share\registry\data\org\openoffice\Setup.xcu")
-                sLanOutIni = fgetL10Nvalue(SetupXMLNet)
-            catch
-                try
-                    ' It is an English FAT version 645m9s2 or higher.
-                    SetupXMLDefault = gOfficePath & ConvertPath("share\registry\data\org\openoffice\Setup.xcu")
-                    sLanOutIni = fgetL10Nvalue(SetupXMLDefault)
-                catch
-                    warnlog sString & SetupXML & " not found => can't get the correct Office-Language!."
-                    sResetTheOffice = FALSE
-                    Exit sub
-                endcatch
-            endcatch
+            warnlog sString & "can't get the correct Office-Language!."
+            sResetTheOffice = FALSE
+            Exit sub
         endcatch
 
         uno=hGetUnoService()
@@ -1273,6 +1256,10 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "formatpagewriter"               : FormatPageWriter
             
             case "insertindexesbibliographyentry" : InsertIndexesBibliographyEntry
+            case "insertobjectchart"              : InsertObjectChart
+            case "inserttablewriter"              : InsertTableWriter
+            case "insertobjectformulawriter"      : InsertObjectFormulaWriter
+            case "insertfloatingframe"            : InsertFloatingFrame
             
             case "contextpositionandsize"         : ContextPositionAndSize
             
@@ -1281,6 +1268,9 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "toolsupdatefields"              : ToolsUpdateFields
             case "toolsupdatelinks"               : ToolsUpdateLinks
             case "toolslanguagehangulhanjaconversion" : ToolsLanguageHangulHanjaConversion
+            
+            ' This is the property browser in the BASIC IDE
+            case "contextproperties"              : ContextProperties
             
             case else : warnlog( "Unknown slot called: " & cSlot )
             end select
