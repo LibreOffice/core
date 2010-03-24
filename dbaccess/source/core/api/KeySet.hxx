@@ -88,7 +88,7 @@ namespace dbaccess
                             const ::rtl::OUString& _rsUpdateTableName,
                             SelectColumnsMetaData& _rColumnAssignments /* out */);
 
-    typedef ::std::pair<ORowSetRow,sal_Int32> OKeySetValue;
+    typedef ::std::pair<ORowSetRow,::std::pair<sal_Int32,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow> > > OKeySetValue;
     typedef ::std::map<sal_Int32,OKeySetValue > OKeySetMatrix;
     typedef ::std::map<sal_Int32,ORowSetValueVector > OUpdatedParameter;
     // is used when the source supports keys
@@ -113,6 +113,7 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >   m_xComposer;
         ::rtl::OUString                                                                 m_sUpdateTableName;
         ::rtl::OUString                                                                 m_aSelectComposedTableName;
+        ::std::vector< ::rtl::OUString >                        m_aFilterColumns;
 
         sal_Bool m_bRowCountFinal;
 

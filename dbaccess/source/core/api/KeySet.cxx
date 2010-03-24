@@ -602,13 +602,24 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
 
     i = 1;
     // first the set values
+    bool bRefetch = true;
     aIter = m_pColumnNames->begin();
     sal_uInt16 j = 0;
+    Reference<XRow> xRow;
     for(;aIter != aEnd;++aIter,++j)
     {
         sal_Int32 nPos = aIter->second.nPosition;
         if((_rInsertRow->get())[nPos].isModified())
         {
+            if ( bRefetch )
+            {
+                bRefetch = ::std::find(m_aFilterColumns.begin(),m_aFilterColumns.end(),aIter->first) == m_aFilterColumns.end();
+                if ( !bRefetch )
+                {
+                    xRow =  new OPrivateRow(_rInsertRow->get());
+                }
+            }
+
             impl_convertValue_throw(_rInsertRow,aIter->second);
             (_rInsertRow->get())[nPos].setSigned((_rOrginalRow->get())[nPos].isSigned());
             setParameter(i++,xParameter,(_rInsertRow->get())[nPos],aIter->second.nType,aIter->second.nScale);
