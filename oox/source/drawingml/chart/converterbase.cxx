@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: converterbase.cxx,v $
- *
- * $Revision: 1.4.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +40,7 @@ using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::frame::XModel;
+using ::com::sun::star::awt::Size;
 using ::com::sun::star::chart2::XChartDocument;
 using ::oox::core::XmlFilterBase;
 
@@ -55,16 +52,18 @@ namespace chart {
 
 struct ConverterData
 {
+    ObjectFormatter     maFormatter;
     XmlFilterBase&      mrFilter;
     ChartConverter&     mrConverter;
     Reference< XChartDocument > mxDoc;
-    ObjectFormatter     maFormatter;
+    Size                maSize;
 
     explicit            ConverterData(
                             XmlFilterBase& rFilter,
                             ChartConverter& rChartConverter,
+                            const ChartSpaceModel& rChartModel,
                             const Reference< XChartDocument >& rxChartDoc,
-                            const ChartSpaceModel& rChartSpace );
+                            const Size& rChartSize );
                         ~ConverterData();
 };
 
@@ -73,12 +72,14 @@ struct ConverterData
 ConverterData::ConverterData(
         XmlFilterBase& rFilter,
         ChartConverter& rChartConverter,
+        const ChartSpaceModel& rChartModel,
         const Reference< XChartDocument >& rxChartDoc,
-        const ChartSpaceModel& rChartSpace ) :
+        const Size& rChartSize ) :
+    maFormatter( rFilter, rxChartDoc, rChartModel ),
     mrFilter( rFilter ),
     mrConverter( rChartConverter ),
     mxDoc( rxChartDoc ),
-    maFormatter( rFilter, rxChartDoc, rChartSpace )
+    maSize( rChartSize )
 {
     OSL_ENSURE( mxDoc.is(), "ConverterData::ConverterData - missing chart document" );
     // lock the model to suppress internal updates during conversion
@@ -110,9 +111,10 @@ ConverterData::~ConverterData()
 ConverterRoot::ConverterRoot(
         XmlFilterBase& rFilter,
         ChartConverter& rChartConverter,
+        const ChartSpaceModel& rChartModel,
         const Reference< XChartDocument >& rxChartDoc,
-        const ChartSpaceModel& rChartSpace ) :
-    mxData( new ConverterData( rFilter, rChartConverter, rxChartDoc, rChartSpace ) )
+        const Size& rChartSize ) :
+    mxData( new ConverterData( rFilter, rChartConverter, rChartModel, rxChartDoc, rChartSize ) )
 {
 }
 
@@ -153,6 +155,11 @@ ChartConverter& ConverterRoot::getChartConverter() const
 Reference< XChartDocument > ConverterRoot::getChartDocument() const
 {
     return mxData->mxDoc;
+}
+
+const Size& ConverterRoot::getChartSize() const
+{
+    return mxData->maSize;
 }
 
 ObjectFormatter& ConverterRoot::getFormatter() const

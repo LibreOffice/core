@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: eschesdo.cxx,v $
- * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,7 +56,6 @@
 #include <vcl/cvtgrf.hxx>
 
 using ::rtl::OUString;
-using namespace ::vos;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -150,7 +146,7 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
 #define ADD_SHAPE( nType, nFlags )                              \
 {                                                               \
     nShapeType = nType;                                         \
-    nShapeID = mpEscherEx->GetShapeID();                        \
+    nShapeID = mpEscherEx->GenerateShapeId();                   \
     rObj.SetShapeId( nShapeID );                                \
     mpEscherEx->AddShape( (UINT32)nType, (UINT32)nFlags, nShapeID );    \
     rSolverContainer.AddShape( rObj.GetShapeRef(), nShapeID );  \
@@ -186,7 +182,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
     UINT32 nGrpShapeID = 0;
 
     do {
-        mpHostAppData = mpEscherEx->StartShape( rObj.GetShapeRef() );
+        mpHostAppData = mpEscherEx->StartShape( rObj.GetShapeRef(), (mpEscherEx->GetGroupLevel() > 1) ? &rObj.GetRect() : 0 );
         if ( mpHostAppData && mpHostAppData->DontWriteShape() )
             break;
 
@@ -242,8 +238,8 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         const ::com::sun::star::awt::Point  aPoint100thmm( rObj.GetShapeRef()->getPosition() );
         Rectangle   aRect100thmm( Point( aPoint100thmm.X, aPoint100thmm.Y ), Size( aSize100thmm.Width, aSize100thmm.Height ) );
         if ( !mpPicStrm )
-            mpPicStrm = mpEscherEx->QueryPicStream();
-        EscherPropertyContainer aPropOpt( (EscherGraphicProvider&)*mpEscherEx, mpPicStrm, aRect100thmm );
+            mpPicStrm = mpEscherEx->QueryPictureStream();
+        EscherPropertyContainer aPropOpt( mpEscherEx->GetGraphicProvider(), mpPicStrm, aRect100thmm );
 
         // #i51348# shape name
         if( aShapeName.Len() > 0 )
@@ -768,7 +764,7 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
     UINT16 nShapeType = 0;
     do
     {
-        mpHostAppData = mpEscherEx->StartShape( rObj.GetShapeRef() );
+        mpHostAppData = mpEscherEx->StartShape( rObj.GetShapeRef(), (mpEscherEx->GetGroupLevel() > 1) ? &rObj.GetRect() : 0 );
         if ( mpHostAppData && mpHostAppData->DontWriteShape() )
             break;
 
@@ -776,8 +772,8 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
         const ::com::sun::star::awt::Point  aPoint100thmm( rObj.GetShapeRef()->getPosition() );
         Rectangle   aRect100thmm( Point( aPoint100thmm.X, aPoint100thmm.Y ), Size( aSize100thmm.Width, aSize100thmm.Height ) );
         if ( !mpPicStrm )
-            mpPicStrm = mpEscherEx->QueryPicStream();
-        EscherPropertyContainer aPropOpt( (EscherGraphicProvider&)*mpEscherEx, mpPicStrm, aRect100thmm );
+            mpPicStrm = mpEscherEx->QueryPictureStream();
+        EscherPropertyContainer aPropOpt( mpEscherEx->GetGraphicProvider(), mpPicStrm, aRect100thmm );
         rObj.SetAngle( rObj.ImplGetInt32PropertyValue( ::rtl::OUString::createFromAscii("RotateAngle")));
         INT32 nAngle = rObj.GetAngle();
         if( rObj.GetType().EqualsAscii( "drawing.Line" ))
@@ -806,7 +802,7 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
         else
         {
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
-            nShapeID = mpEscherEx->GetShapeID();
+            nShapeID = mpEscherEx->GenerateShapeId();
             mpEscherEx->AddShape( nShapeType = ESCHER_ShpInst_TextBox, 0xa00, nShapeID );
             if ( rObj.ImplGetText() )
                 aPropOpt.CreateTextProperties( rObj.mXPropSet,
@@ -866,7 +862,7 @@ UINT32 ImplEESdrWriter::ImplEnterAdditionalTextGroup( const Reference< XShape >&
 {
     mpHostAppData = mpEscherEx->EnterAdditionalTextGroup();
     UINT32 nGrpId = mpEscherEx->EnterGroup( pBoundRect );
-    mpHostAppData = mpEscherEx->StartShape( rShape );
+    mpHostAppData = mpEscherEx->StartShape( rShape, pBoundRect );
     return nGrpId;
 }
 
@@ -938,7 +934,7 @@ ImplEscherExSdr::~ImplEscherExSdr()
 
 // -------------------------------------------------------------------
 
-SvxDrawPage* ImplEscherExSdr::ImplInitPage( const SdrPage& rPage )
+bool ImplEscherExSdr::ImplInitPage( const SdrPage& rPage )
 {
     do
     {
@@ -964,12 +960,32 @@ SvxDrawPage* ImplEscherExSdr::ImplInitPage( const SdrPage& rPage )
         else
             pSvxDrawPage = SvxDrawPage::getImplementation(mXDrawPage);
 
-        return pSvxDrawPage;
+        return pSvxDrawPage != 0;
     } while ( 0 );
 
-    return NULL;
+    return false;
 }
 
+// -------------------------------------------------------------------
+
+bool ImplEscherExSdr::ImplInitUnoShapes( const Reference< XShapes >& rxShapes )
+{
+    // eventually write SolverContainer of current page, deletes the Solver
+    ImplFlushSolverContainer();
+
+    if( !rxShapes.is() )
+        return false;
+
+    mpSdrPage = 0;
+    mXDrawPage.clear();
+    mXShapes = rxShapes;
+
+    if( !ImplInitPageValues() )    // ImplEESdrWriter
+        return false;
+
+    mpSolverContainer = new EscherSolverContainer;
+    return true;
+}
 
 // -------------------------------------------------------------------
 
@@ -1024,6 +1040,13 @@ void EscherEx::AddSdrPage( const SdrPage& rPage )
         mpImplEscherExSdr->ImplWriteCurrentPage();
 }
 
+// -------------------------------------------------------------------
+
+void EscherEx::AddUnoShapes( const Reference< XShapes >& rxShapes )
+{
+    if ( mpImplEscherExSdr->ImplInitUnoShapes( rxShapes ) )
+        mpImplEscherExSdr->ImplWriteCurrentPage();
+}
 
 // -------------------------------------------------------------------
 
@@ -1045,7 +1068,7 @@ void EscherEx::EndSdrObjectPage()
 
 // -------------------------------------------------------------------
 
-EscherExHostAppData* EscherEx::StartShape( const Reference< XShape >& /* rShape */ )
+EscherExHostAppData* EscherEx::StartShape( const Reference< XShape >& /* rShape */, const Rectangle* /*pChildAnchor*/ )
 {
     return NULL;
 }
@@ -1054,13 +1077,6 @@ EscherExHostAppData* EscherEx::StartShape( const Reference< XShape >& /* rShape 
 
 void EscherEx::EndShape( UINT16 /* nShapeType */, UINT32 /* nShapeID */ )
 {
-}
-
-// -------------------------------------------------------------------
-
-SvStream* EscherEx::QueryPicStream()
-{
-    return NULL;
 }
 
 // -------------------------------------------------------------------
@@ -1075,7 +1091,7 @@ UINT32 EscherEx::QueryTextID( const Reference< XShape >&, UINT32 )
 UINT32 EscherEx::AddDummyShape()
 {
     OpenContainer( ESCHER_SpContainer );
-    UINT32 nShapeID = GetShapeID();
+    UINT32 nShapeID = GenerateShapeId();
     AddShape( ESCHER_ShpInst_Rectangle, 0xa00, nShapeID );
 //??    aSolverContainer.AddShape( mXShape, nShapeID );
     CloseContainer();
@@ -1113,16 +1129,12 @@ ImplEESdrObject::ImplEESdrObject( ImplEscherExSdr& rEx,
 {
     SdrPage* pPage = rObj.GetPage();
     DBG_ASSERT( pPage, "ImplEESdrObject::ImplEESdrObject: no SdrPage" );
-    if( pPage )
+    if( pPage && rEx.ImplInitPage( *pPage ) )
     {
-        SvxDrawPage* pSvxDrawPage = rEx.ImplInitPage( *pPage );
-        if( pSvxDrawPage )
-        {
-            // why not declare a const parameter if the object will
-            // not be modified?
-            mXShape = uno::Reference< drawing::XShape >::query( ((SdrObject*)&rObj)->getUnoShape() );;
-            Init( rEx );
-        }
+        // why not declare a const parameter if the object will
+        // not be modified?
+        mXShape = uno::Reference< drawing::XShape >::query( ((SdrObject*)&rObj)->getUnoShape() );;
+        Init( rEx );
     }
 }
 
