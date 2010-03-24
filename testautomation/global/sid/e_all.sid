@@ -745,7 +745,6 @@ ToolsPageFormatting FN_REPAGINATE
 
 ' **** Calc
 ToolsSpellcheckAutoCheckCalc SID_AUTOSPELL_CHECK
-ToolsLanguageThesaurusCalc .uno:Thesaurus
 ToolsLanguageHyphenateCalc .uno:Hyphenate
 ToolsDetectiveRemoveAllTraces SID_DETECTIVE_DEL_ALL
 ToolsDetectiveFillMode SID_DETECTIVE_FILLMODE
