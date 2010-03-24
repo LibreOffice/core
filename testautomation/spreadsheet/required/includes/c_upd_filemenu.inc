@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: c_upd_filemenu.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: rt $ $Date: 2008-07-31 19:05:11 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/***********************************************************************
 '*
 '* owner : oliver.craemer@sun.com
@@ -48,7 +42,6 @@
 ' #0 tFileSaveAsDBF
 ' #1 tFileVersions
 ' #1 tFilePagePreview
-' #1 tFilePrint
 '*
 '\***********************************************************************
 
@@ -67,7 +60,7 @@ sub c_upd_filemenu
     Call tFileSaveAsDBF
     Call tFileVersions
     Call tFilePagePreview
-    Call tFilePrint
+    Call g_printing()
 
 end sub
 
@@ -507,7 +500,7 @@ testcase tFileSaveAsDBF
     Kontext
     if Active.exists(2) then
         printlog " "
-        warnlog "The following warning exists. This could be #i87325:"
+        warnlog "#i87325# - Unexpected messagebox"
         Printlog Active.GetText
         Printlog " "
         Active.OK
@@ -596,71 +589,3 @@ testcase tFilePagePreview
 
 endcase
 
-'-----------------------------------------------------------
-
-testcase tFilePrint
-
-    '/// Open new Spreadsheet document
-    Printlog " Open new Spreadsheet document"
-    Call hNewDocument
-    '/// Enter some text
-    Printlog " Enter some text"
-    Kontext "DocumentCalc"
-    DocumentCalc.Typekeys "Test <RETURN>"
-    '/// Open File-Print
-    Printlog " Open File-Print"
-    FilePrint
-    '/// Look for warning regarding missing printer
-    '/// -> If configuration is missing only this MsgBox is tested
-    Kontext
-    if Active.Exists(2) then
-        if Active.GetRT = 304 then
-            Printlog Active.GetText
-            QAErrorLog "No printer is configured for this system"
-        else
-            Printlog Active.GetText
-            warnlog "There is an unexpected warning!"
-        end if
-        '/// Close messagebox with OK
-        Printlog " Close messagebox with OK"
-        Active.OK
-        '/// Cancel Print dialog
-        Printlog " Cancel Print dialog"
-        Kontext "DruckenDLG"
-        DruckenDLG.Cancel
-        '/// Close document
-        Printlog " Close document"
-        Call hCloseDocument
-        goto endsub
-    end if
-    Kontext "DruckenDLG"
-    '/// Check existence of print dilaog
-    Call DialogTest ( DruckenDLG )
-    '/// Invoke the print options dialog
-    Printlog " Invoke the print options dialog"
-    Kontext "DruckenDLG"
-    Zusaetze.Click
-    Kontext "TabPrintCalcOptions"
-    '/// Check existence of print options dilaog
-    Call DialogTest ( TabPrintCalcOptions )
-    '/// Cancel print options dialog
-    Printlog " Cancel print options dialog"
-    TabPrintCalcOptions.Cancel
-    '/// Check option 'Print to file'
-    Printlog " Check option 'Print to file'"         
-    Kontext "DruckenDLG"
-    AusdruckInDatei.check
-    '/// Commit print dialog
-    Printlog " Commit print dialog"
-    DruckenDLG.OK
-    '/// (Save file dialog should be visible now)
-    Kontext "SpeichernDLG"
-    '/// Check existence of save dilaog
-    Call DialogTest ( SpeichernDLG )
-    '/// Cancel save dialog
-    Printlog " Cancel save dialog"
-    SpeichernDLG.Cancel
-    '/// Close document
-    Printlog " Close document"
-    Call hCloseDocument
-endcase

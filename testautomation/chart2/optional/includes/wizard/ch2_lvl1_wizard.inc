@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: ch2_lvl1_wizard.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: obo $ $Date: 2008-07-22 10:36:56 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : oliver.craemer@sun.com
@@ -550,53 +544,16 @@ testcase tCreateNewLineChart
     end if    
     printlog "Format / Data Ranges"   
     FormatDataRanges
-    Kontext
-    Active.SetPage TabChartTypeDataRange        
-    Kontext "TabChartTypeDataRange"
-    if TabChartTypeDataRange.Exists(2) then        
-        printlog "Check substrings '$A$2:$C$13', '$A$19', '$B$1:$C$13', '$E$1:$F$13' and '$B$17:$E$17' in Data Range"        
-        sControlString = DataRange.GetText
-        printlog "Data Range is: " & sControlString
-        if instr ( sControlString , "$A$2:$C$13" ) = 0 Then
-            warnlog "Data range wasn't correctly preserved after save and reload: $A$2:$C$13"
-        endif
-        if instr ( sControlString , "$A$19" ) = 0 Then
-            warnlog "Data range wasn't correctly preserved after save and reload: $A$19"
-        endif
-        if instr ( sControlString , "$B$1:$C$13" ) = 0 Then
-           QAErrorlog "#i100780#Data range wasn't correctly preserved after save and reload: $B$1:$C$13"
-        endif
-        if instr ( sControlString , "$E$1:$F$13" ) = 0 Then
-            warnlog "Data range wasn't correctly preserved after save and reload: $E$1:$F$13"
-        endif
-        if instr ( sControlString , "$B$17:$E$17" ) = 0 Then
-            warnlog "Data range wasn't correctly preserved after save and reload: $B$17:$E$17"
-        endif        
-        printlog "Check if Radio Button ROWS is checked"
-        if Rows.IsChecked then
-            warnlog "Radio Button ROWS (disabled) wasn't preserved after save and reload."
-        endif        
-        printlog "Check if Radio Button COLUMNS is unchecked"
-        if NOT Columns.IsChecked then
-            warnlog "Radio Button COLUMNS (enabled) wasn't preserved after save and reload."
-        endif        
-        printlog "Check if 'First row as label' box is unchecked"
-        if NOT FirstRowAsLabel.IsChecked then
-            warnlog "Check box 'First row as label' (enabled) wasn't preserved after save and reload."
-        endif        
-        printlog "Check if 'First column as label' box is checked"
-        if NOT FirstColumnAsLabel.IsChecked then
-            warnlog "Check box 'First column as label' (enabled) wasn't preserved after save and reload."
-        endif
-    else
-        warnlog "Tab page Data Range was not up!"
-        FormatDataRanges        
-    end if    
     printlog "Switch to tab page Data Series"
     Kontext
+    Active.SetPage TabFormatDataRangesDataRange 'Due to bug #i77237# the tabpage has to be switched once before 'OK' or 'Cancel' can be used
     Active.SetPage TabFormatDataRangesDataSeries 
     Kontext "TabChartTypeDataSeries"
-    if TabChartTypeDataSeries.Exists(2) then        
+    if TabChartTypeDataSeries.Exists(2) then
+        printlog "Verify that there are 4 data series"
+        if DataSeries.GetItemCount <> 4 then
+            warnlog "There should be 4 dataseries, but there are " & DataSeries.GetItemCount
+        end if
         printlog "Select 4th entry in Data Series"
         if fSetListBoxByItem ( DataSeries , 4 ) > 0 then
             warnlog "Selecting 4th item in Data Series failed. EXITING!"

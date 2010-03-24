@@ -1,16 +1,16 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
+'* 
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
 '*
-'* $RCSfile: g_print.bas,v $
+'* $RCSfile: w_drawing_tools.bas,v $
 '*
 '* $Revision: 1.1 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:37 $
+'* last change: $Author: fredrikh $ $Date: 2008-06-18 09:11:25 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -31,34 +31,48 @@
 '*
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* owner :  helge.delfs@sun.com
 '*
-'* short description : Graphics Function: Print
+'* short description : Tools / Autocorrection test
 '*
-'\******************************************************************
+'\*******************************************************************
 
-public glLocale (15*20) as string
+global gSeperator as String
+global gMeasurementUnit as String
 
 sub main
-    PrintLog "------------------------- g_print test -------------------------"
-    Call hStatusIn ( "Graphics","g_print.bas")
+    Dim StartZeit
+    StartZeit = Now()
 
-    use "graphics\tools\id_tools.inc"
-    use "graphics\optional\includes\global\g_print.inc"
+    use "writer\tools\includes\w_tools.inc"
+    use "writer\tools\includes\w_tool3.inc"
+    use "writer\tools\includes\w_tools_autocorrection.inc"
+    use "writer\optional\includes\autocorrection\w_autocorrect1.inc"
+    use "writer\optional\includes\autocorrection\w_autocorrect2.inc"
 
-    PrintLog "-------------------------" + gApplication + "-------------------"
-    call tFilePrint
+    printlog Chr(13) + "Loading of Include - Files takes: " + Wielange ( StartZeit )
+    printlog Chr(13) + "******* Writer - Autocorrection - Test *******"
+    'Getting the decimal seperator from global function
+    gSeperator = GetDecimalSeperator()
+    'Setting the measurement unit to centimeters.
+    gMeasurementUnit = fSetMeasurementToCM()
 
-    gApplication = "DRAW"
-    PrintLog "-------------------------" + gApplication + "-------------------"
-    call tFilePrint
+    Call hStatusIn ( "writer" , "w_autocorrection.bas" )
+
+    Call w_autocorrect1
+    Call w_autocorrect2
 
     Call hStatusOut
+
+    Printlog Chr(13) + "End of Autocorrect - Test :"
+    Printlog "Duration: "+ WieLange ( StartZeit )
+    Printlog "Date: " +  Date + "    Time: " + Time
+
 end sub
 
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication = "IMPRESS"
     Call GetUseFiles
+    gApplication = "WRITER"
 end sub

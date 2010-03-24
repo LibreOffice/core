@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Pipe.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +88,6 @@ public class Pipe extends TestCase {
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         //add relation for io.XOutputStream
-        final XMultiServiceFactory msf = (XMultiServiceFactory)Param.getMSF();
         final XInputStream iStream = (XInputStream)
                 UnoRuntime.queryInterface(XInputStream.class, oObj);
 
@@ -100,7 +96,6 @@ public class Pipe extends TestCase {
 
         tEnv.addObjRelation("XOutputStream.StreamChecker",
             new ifc.io._XOutputStream.StreamChecker() {
-                XInputStream inStream = null;
                 public void resetStreams() {
                 }
 

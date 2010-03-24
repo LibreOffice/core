@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_insertgraphic1.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:30:39 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -455,39 +449,34 @@ endcase
 
 testcase tInsertGraphic_8
 
-  Dim iFileType      as Integer
-  Dim iFileNumber as Integer
-
-    iFileType = 1  'filter (Format <All>)
-
-    if gPlatGroup = "unx" then
-        iFileNumber = 4  '4 graphic files. (directory hidden on Unix)
-    else
-        iFileNumber = 5  '4 graphic files and 1 directory.
-    end if
-
-  PrintLog "- Test preselect Filter (Format <All>)"
- '/// Test preselect Filter (Format <All>)
-
-  Call hNewDocument
-
-  '/// Insert a Graphic , Insert/Graphics/From file
-   InsertGraphicsFromFile
-
-  '/// Select filter (Format <All>)
-   Kontext "GrafikEinfuegenDlg"
-    Dateiname.Settext (ConvertPath (gTesttoolpath + "writer\optional\input\insertgraphic") )
-    Sleep 1
-    Oeffnen.Click
-
-    Dateityp.Select iFileType
-    Sleep 1
-
-  '/// Check if Filter (Format <All>) works well
-    if DateiAuswahl.GetItemCount <> iFileNumber then Warnlog "Filter (Format <All>) does NOT work well"
-   GrafikEinfuegenDlg.Cancel
-
-  Call hCloseDocument
+	Dim iFileType      as Integer
+	Dim iFileNumber as Integer
+	
+	iFileType = 1  'filter (Format <All>)	
+	iFileNumber = 4
+	
+	PrintLog "- Test preselect Filter (Format <All>)"
+	'/// Test preselect Filter (Format <All>)
+	
+	Call hNewDocument
+	
+	'/// Insert a Graphic , Insert/Graphics/From file
+	InsertGraphicsFromFile
+	
+	'/// Select filter (Format <All>)
+	Kontext "GrafikEinfuegenDlg"
+	Dateiname.Settext (ConvertPath (gTesttoolpath + "writer\optional\input\insertgraphic") )
+	Sleep 1
+	Oeffnen.Click
+	
+	Dateityp.Select iFileType
+	Sleep 1
+	
+	'/// Check if Filter (Format <All>) works well
+	if DateiAuswahl.GetItemCount <> iFileNumber then Warnlog "Filter (Format <All>) does NOT work well"
+	GrafikEinfuegenDlg.Cancel
+	
+	Call hCloseDocument
 
 endcase
 
@@ -495,39 +484,34 @@ endcase
 
 testcase tInsertGraphic_9
 
-  Dim iFileType      as Integer
-  Dim iFileNumber as Integer
-
-    iFileType   = 2  'another filter except for (Format <All>) -- bmp
-
-    if gPlatGroup = "unx" then
-      iFileNumber = 1
-    else
-      iFileNumber = 2  'the first is the .svn-directory
-    end if
-
-  PrintLog "- Test preselect Filter excepte for (Format <All>)"
- '/// Test preselect Filter excepte for (Format <All>)
-
-  Call hNewDocument
-
-  '/// Insert a Graphic , Insert/Graphics/From file
-   InsertGraphicsFromFile
-
-  '/// Select filter 'BMP'
-   Kontext "GrafikEinfuegenDlg"
-    Dateiname.Settext (ConvertPath (gTesttoolpath + "writer\optional\input\insertgraphic") )
-    Sleep 1
-    Oeffnen.Click
-
-    Dateityp.Select iFileType
-    Sleep 1
-
-  '/// Check if Filter BMP works well
-    if DateiAuswahl.GetItemCount <> iFileNumber then Warnlog "Filter BMP does NOT work well"
-   GrafikEinfuegenDlg.Cancel
-
-  Call hCloseDocument
+	Dim iFileType      as Integer
+	Dim iFileNumber as Integer
+	
+	iFileType   = 2  'another filter except for (Format <All>) -- bmp	
+	iFileNumber = 1
+	
+	PrintLog "- Test preselect Filter excepte for (Format <All>)"
+	'/// Test preselect Filter excepte for (Format <All>)
+	
+	Call hNewDocument
+	
+	'/// Insert a Graphic , Insert/Graphics/From file
+	InsertGraphicsFromFile
+	
+	'/// Select filter 'BMP'
+	Kontext "GrafikEinfuegenDlg"
+	Dateiname.Settext (ConvertPath (gTesttoolpath + "writer\optional\input\insertgraphic") )
+	Sleep 1
+	Oeffnen.Click
+	
+	Dateityp.Select iFileType
+	Sleep 1
+	
+	'/// Check if Filter BMP works well
+	if DateiAuswahl.GetItemCount <> iFileNumber then Warnlog "Filter BMP does NOT work well"
+	GrafikEinfuegenDlg.Cancel
+	
+	Call hCloseDocument
 
 endcase
 

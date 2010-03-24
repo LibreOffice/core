@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PerformanceContainer.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -235,18 +232,19 @@ public class PerformanceContainer /* extends *//* implements */ {
             }
         }
 
-    public static void main(String[] args) {
+//    public static void main(String[] args) {
+//
+///*
+// BorderRemover a = new BorderRemover();
+//        try
+//        {
+//            a.createNewImageWithoutBorder(args[0], args[1]);
+//        }
+//        catch(java.io.IOException e)
+//        {
+//            System.out.println("Exception caught.");
+//        }
+// */
+//    }
 
-/*
- BorderRemover a = new BorderRemover();
-        try
-        {
-            a.createNewImageWithoutBorder(args[0], args[1]);
-        }
-        catch(java.io.IOException e)
-        {
-            System.out.println("Exception caught.");
-        }
- */
-    }
 }

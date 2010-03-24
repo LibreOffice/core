@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PropertyHelper.java,v $
- * $Revision: 1.4.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,6 +63,18 @@ public class PropertyHelper
 //                {
 //                    aSaveProperties = new PropertyValue[0];
 //                }
+
+// show properties?
+//                 if (_aPropertyList.size() > 0)
+//                 {
+//                     // aSaveProperties = new PropertyValue[_aPropertyList.size()];
+//                     for (int i = 0;i<_aPropertyList.size(); i++)
+//                     {
+//                         PropertyValue aProp = (PropertyValue) _aPropertyList.get(i);
+//                         showProperty(aProp);
+//                     }
+//                 }
+
             }
             return aSaveProperties;
         }

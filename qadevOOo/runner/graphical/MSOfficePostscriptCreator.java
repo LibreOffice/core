@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: MSOfficePostscriptCreator.java,v $
- * $Revision: 1.1.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -983,8 +980,8 @@ public class MSOfficePostscriptCreator implements IOffice
         return sType;
     }
 
-    public static void main(String [] _args)
-    {
-        String sTest = getXMLDocumentFormat("c:/cws/temp/input/Blah Fasel.xml");
-    }
+//    public static void main(String [] _args)
+//    {
+//        String sTest = getXMLDocumentFormat("c:/cws/temp/input/Blah Fasel.xml");
+//    }
 }
