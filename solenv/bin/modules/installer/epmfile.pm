@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: epmfile.pm,v $
-#
-# $Revision: 1.87 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -2548,6 +2544,7 @@ sub create_packages_without_epm
             my $dir = getcwd;
             my $buildroot = $dir . "/" . $epmdir . "buildroot/";
             $buildrootstring = "--buildroot=$buildroot";
+            mkdir($buildroot = $dir . "/" . $epmdir . "BUILD/");
         }
 
         my $systemcall = "$rpmcommand -bb --define \"_unpackaged_files_terminate_build  0\" $specfilename --target $target $buildrootstring 2\>\&1 |";
@@ -2722,6 +2719,15 @@ sub remove_temporary_epm_files
         installer::logger::print_message( "... $systemcall ...\n" );
 
         my $returnvalue = system($systemcall);
+
+        $removedir = $epmdir . "BUILD";
+
+        $systemcall = "rm -rf $removedir";
+
+        installer::logger::print_message( "... $systemcall ...\n" );
+
+        $returnvalue = system($systemcall);
+
 
         my $infoline = "Systemcall: $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
