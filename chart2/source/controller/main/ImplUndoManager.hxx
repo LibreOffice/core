@@ -38,6 +38,9 @@
 #include <utility>
 #include <deque>
 
+
+class SdrUndoAction;
+
 namespace com { namespace sun { namespace star {
 namespace chart2 {
     class XInternalDataProvider;
@@ -144,6 +147,19 @@ private:
                          ::com::sun::star::frame::XModel > & xModel );
 
     ::com::sun::star::uno::Any m_aSelection;
+};
+
+class ShapeUndoElement : public UndoElement
+{
+public:
+    ShapeUndoElement( const ::rtl::OUString& rActionString, SdrUndoAction* pAction );
+    ShapeUndoElement( const ShapeUndoElement& rOther );
+    virtual ~ShapeUndoElement();
+
+    SdrUndoAction* getSdrUndoAction();
+
+private:
+    SdrUndoAction* m_pAction;
 };
 
 /** Note that all models that are put into this container are at some point
