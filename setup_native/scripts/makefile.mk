@@ -70,6 +70,7 @@ $(BIN)$/install: install_$(OS:l).sh
 .ENDIF
 
 .IF "$(OS)" == "LINUX"
+.IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 
 $(FAKEDB) : fake-db.spec 
     $(MKDIRHIER) $(FAKEDBROOT)
@@ -82,7 +83,8 @@ $(BIN)$/uninstall: uninstall_linux.sh
     $(TYPE) $< | tr -d "\015" > $@
     -chmod 775 $@
 
-.ENDIF
+.ENDIF          # "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
+.ENDIF          # "$(OS)" == "LINUX"
 
 .IF "$(OS)" == "SOLARIS"
 
