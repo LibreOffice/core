@@ -50,6 +50,7 @@ SLOFILES = \
     $(SLO)$/AccessibleStaticTextBase.obj		\
     $(SLO)$/AccessibleParaManager.obj			\
     $(SLO)$/AccessibleEditableTextPara.obj		\
+    $(SLO)$/AccessibleHyperlink.obj			    \
     $(SLO)$/AccessibleImageBullet.obj			
     
 # --- Tagets -------------------------------------------------------
