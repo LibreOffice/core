@@ -185,7 +185,7 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRan
             static ::rtl::OUString sCharHeight(RTL_CONSTASCII_USTRINGPARAM("CharHeight"));
             float fCheckBoxHeight;
             xTextRangeProps->getPropertyValue(sCharHeight) >>= fCheckBoxHeight;
-            nCheckBoxHeight = floor(fCheckBoxHeight * 16);
+            nCheckBoxHeight = floor(fCheckBoxHeight * 35.3);
         }
         catch (beans::UnknownPropertyException & rException)
         {
@@ -288,7 +288,7 @@ bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> xTextRang
     xShapeProps->setPropertyValue(sAnchorType, aAny);
 
     static const ::rtl::OUString sVertOrient(RTL_CONSTASCII_USTRINGPARAM("VertOrient"));
-    nTmp = text::VertOrientation::TOP;
+    nTmp = text::VertOrientation::CENTER;
     aAny <<= nTmp;
     xShapeProps->setPropertyValue(sVertOrient, aAny);
 
