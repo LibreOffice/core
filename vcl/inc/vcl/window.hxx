@@ -483,6 +483,7 @@ public:
     SAL_DLLPRIVATE void                ImplFreeExtWindowImpl();
     // creates ExtWindowImpl on demand, but may return NULL (e.g. if mbInDtor)
     SAL_DLLPRIVATE vcl::ExtWindowImpl* ImplGetExtWindowImpl() const;
+    SAL_DLLPRIVATE void                ImplDeleteOwnedChildren();
     /** check whether a font is suitable for UI
 
     The font to be tested will be checked whether it could display a
@@ -1156,6 +1157,44 @@ public:
 
     // layouting
     boost::shared_ptr< vcl::WindowArranger >    getLayout();
+
+    /* add a child Window
+       addWindow will do the following things
+       - insert the passed window into the child list (equivalent to i_pWin->SetParent( this ))
+       - assign a name to the passed window for identification purposes
+         the name is basically free style, only the '/' character must not be used as it is
+         used for concatenation to form hierarchical names
+         caution: the last non empty token repsctive to '/' will be the actual name used
+       - mark the window as "owned", meaning that the added Window will be destroyed by
+         the parent's desctructor.
+         This means: do not pass in member windows or stack objects here. Do not cause
+         the destructor of the added window to be called in any way.
+
+         to avoid ownership pass i_bTakeOwnership as "false"
+    */
+    void addWindow( Window* i_pWin, const rtl::OUString& i_rName, bool i_bTakeOwnership = true );
+
+    /* remove a child Window
+       the remove window functions will
+       - reparent the searched window (equivalent to i_pWin->SetParent( i_pNewParent ))
+       - return a pointer to the removed window or NULL if i_pWin was not found
+       caution: ownership passes to the new parent or the caller, if the new parent was NULL
+    */
+    Window* removeWindow( Window* i_pWin, Window* i_pNewParent = NULL );
+    /* removeWindow by name will only work for direct children. if i_rName
+       is a hierachical name, the last non empty token will be used to get the child window
+    */
+    Window* removeWindow( const rtl::OUString& i_rName, Window* i_pNewParent = NULL );
+
+    /* find a child window by name
+       the name passed here can be hierarchical to find descendants in any depth
+       path delimiter is '/'
+    */
+    Window* findWindow( const rtl::OUString& i_rName ) const;
+
+    /* return the name of this window
+    */
+    const rtl::OUString& getName() const;
 };
 
 
