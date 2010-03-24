@@ -134,6 +134,10 @@ sal_Bool AstModule::dump(RegistryKey& rKey)
             }
         }
     }
+    if ( getNodeType() == NT_root )
+    {
+        localKey.releaseKey();
+    }
     return AstDeclaration::dump(rKey);
 }
 
