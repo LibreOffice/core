@@ -274,20 +274,3 @@ void TabDialog::AdjustLayout()
     ImplPosControls();
 }
 
-// -----------------------------------------------------------------------
-
-TabControl* TabDialog::ImplGetFirstTabControl() const
-{
-    Window* pChild = GetWindow( WINDOW_FIRSTCHILD );
-    while ( pChild )
-    {
-        if ( pChild->IsVisible() && (pChild != mpViewWindow) )
-        {
-            if ( pChild->GetType() == WINDOW_TABCONTROL )
-                return (TabControl*)pChild;
-        }
-        pChild = pChild->GetWindow( WINDOW_NEXT );
-    }
-    return NULL;
-}
-
