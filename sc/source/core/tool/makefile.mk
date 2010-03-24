@@ -116,6 +116,7 @@ SLOFILES =  \
 EXCEPTIONSFILES= \
         $(SLO)$/addincol.obj \
         $(SLO)$/cellkeytranslator.obj \
+        $(SLO)$/charthelper.obj \
         $(SLO)$/chartarr.obj \
         $(SLO)$/chartlis.obj \
         $(SLO)$/chartlock.obj \

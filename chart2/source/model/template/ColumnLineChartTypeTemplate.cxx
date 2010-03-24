@@ -39,6 +39,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 
 #include <algorithm>
 
@@ -270,7 +271,11 @@ void SAL_CALL ColumnLineChartTypeTemplate::applyStyle(
 {
     ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
 
-    if( nChartTypeIndex==1 ) // lines
+    if( nChartTypeIndex==0 ) // columns
+    {
+        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "BorderStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
+    }
+    else if( nChartTypeIndex==1 ) // lines
     {
         Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY );
         if( xProp.is() )
