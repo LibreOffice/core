@@ -59,7 +59,7 @@ FAKEDBROOT=$(COMMONMISC)/$(TARGET)/fake-db-root
 .ENDIF # L10N_framework
 .INCLUDE :	target.mk
 .IF "$(L10N_framework)"==""
-.IF "$(OS)" == "SOLARIS" || "$(OS)" == "LINUX"
+.IF "$(OS)" == "SOLARIS" || ( "$(OS)" == "LINUX" && "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)" )
 
 ALLTAR: $(BIN)$/install $(BIN)$/uninstall
 
@@ -78,12 +78,12 @@ $(FAKEDB) : fake-db.spec
     chmod g+w $(NOARCH)
 
 $(BIN)$/install: $(FAKEDB)
+.ENDIF          # "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 
 $(BIN)$/uninstall: uninstall_linux.sh
     $(TYPE) $< | tr -d "\015" > $@
     -chmod 775 $@
 
-.ENDIF          # "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 .ENDIF          # "$(OS)" == "LINUX"
 
 .IF "$(OS)" == "SOLARIS"
