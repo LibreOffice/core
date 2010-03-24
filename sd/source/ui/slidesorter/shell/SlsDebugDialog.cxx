@@ -254,7 +254,6 @@ public:
     {
         const double nWidth (rBoundingBox.GetWidth());
         ::boost::shared_ptr<Theme> pTheme (mrSlideSorter.GetTheme());
-        const ColorData aStartColor (pTheme->GetGradientColor(eType, Theme::Base));
 
         mpContainer->SetPosSizePixel(rBoundingBox.TopLeft(), rBoundingBox.GetSize());
         mpContainer->Show();
@@ -502,7 +501,6 @@ public:
         const double nWidth (rBoundingBox.GetWidth());
         const double nLeft (0);
         const double nTop (0);
-        const sal_Int32 nStartValue (maGetter ? maGetter() : 0);
 
         mpContainer->SetPosSizePixel(rBoundingBox.TopLeft(), rBoundingBox.GetSize());
         mpContainer->Show();
@@ -580,7 +578,6 @@ public:
         const double nWidth (rBoundingBox.GetWidth());
         const double nLeft (0);
         const double nTop (0);
-        const sal_Int32 nStartValue (maGetter ? maGetter() : 0);
 
         mpContainer->SetPosSizePixel(rBoundingBox.TopLeft(), rBoundingBox.GetSize());
         mpContainer->Show();
