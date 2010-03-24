@@ -56,6 +56,7 @@ sub LoadIncludeFiles
 
     use "global\tools\includes\optional\t_basic_organizer_tools.inc"
     use "global\tools\includes\optional\t_treelist_tools.inc"
+    use "global\tools\includes\optional\t_security_tools.inc"
 
     use "framework\optional\includes\basic_vba_compat_tools.inc"
     
