@@ -46,6 +46,7 @@
 #include "osl/diagnose.h"
 #include "osl/file.hxx"
 #include "rtl/bootstrap.hxx"
+#include "rtl/logfile.h"
 #include "rtl/ref.hxx"
 #include "rtl/string.h"
 #include "rtl/textenc.h"
@@ -316,6 +317,7 @@ Components::Components(
     context_(context)
 {
     OSL_ASSERT(context.is());
+    RTL_LOGFILE_TRACE_AUTHOR("configmgr", "sb", "begin parsing");
     parseXcsXcuLayer(
         0,
         expand(
@@ -389,6 +391,7 @@ Components::Components(
             "configmgr error reading user modification layer: %s",
             rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
     }
+    RTL_LOGFILE_TRACE_AUTHOR("configmgr", "sb", "end parsing");
 }
 
 Components::~Components() {}
