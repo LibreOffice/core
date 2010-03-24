@@ -774,6 +774,7 @@ void ChartController::execute_Tracking( const TrackingEvent& /* rTEvt */ )
 void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 {
     ControllerLockGuard aCLGuard( m_aModel->getModel());
+    bool bMouseUpWithoutMouseDown = !m_bWaitingForMouseUp;
     m_bWaitingForMouseUp = false;
     bool bNotifySelectionChange = false;
     {
@@ -907,9 +908,8 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
             else
                 m_aSelection.resetPossibleSelectionAfterSingleClickWasEnsured();
         }
-        else if( isDoubleClick(rMEvt) )
+        else if( isDoubleClick(rMEvt) && !bMouseUpWithoutMouseDown /*#i106966#*/ )
         {
-            // #i12587# support for shapes in chart
             Point aMousePixel = rMEvt.GetPosPixel();
             execute_DoubleClick( &aMousePixel );
         }
