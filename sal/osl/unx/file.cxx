@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: file.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1081,6 +1078,29 @@ SAL_CALL osl_mapFile (
                 nSize -= nSize;
             }
         }
+    }
+    if (uFlags & osl_File_MapFlag_WillNeed)
+    {
+        // On Linux, madvise(..., MADV_WILLNEED) appears to have the undesirable
+        // effect of not returning until the data has actually been paged in, so
+        // that its net effect would typically be to slow down the process
+        // (which could start processing at the beginning of the data while the
+        // OS simultaneously pages in the rest); on other platforms, it remains
+        // to be evaluated whether madvise or equivalent is available and
+        // actually useful:
+#if defined MACOSX
+        int e = posix_madvise(p, nLength, POSIX_MADV_WILLNEED);
+        if (e != 0)
+        {
+            OSL_TRACE(
+                "posix_madvise(..., POSIX_MADV_WILLNEED) failed with %d", e);
+        }
+#elif defined SOLARIS
+        if (madvise(static_cast< caddr_t >(p), nLength, MADV_WILLNEED) != 0)
+        {
+            OSL_TRACE("madvise(..., MADV_WILLNEED) failed with %d", errno);
+        }
+#endif
     }
     return osl_File_E_None;
 }
