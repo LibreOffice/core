@@ -1084,6 +1084,7 @@ void SchXMLExportHelper::parseDocument( Reference< chart::XChartDocument >& rCha
                     aDataProviderURL = OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) );
             }
             mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aDataProviderURL );
+            mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         }
 
         OUString sChartType( xDiagram->getDiagramType() );
