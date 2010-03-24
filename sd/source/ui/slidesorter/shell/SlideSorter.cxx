@@ -142,7 +142,8 @@ SlideSorter::SlideSorter (
       mpScrollBarBox(rpScrollBarBox),
       mbLayoutPending(true),
       mpProperties(new controller::Properties()),
-      mpTheme(new view::Theme(mpProperties))
+      mpTheme(new view::Theme(mpProperties)),
+      mpDebugDialog()
 {
 }
 
@@ -167,7 +168,8 @@ SlideSorter::SlideSorter (
       mpScrollBarBox(new ScrollBarBox(&rParentWindow)),
       mbLayoutPending(true),
       mpProperties(new controller::Properties()),
-      mpTheme(new view::Theme(mpProperties))
+      mpTheme(new view::Theme(mpProperties)),
+      mpDebugDialog()
 {
 }
 
@@ -218,7 +220,7 @@ void SlideSorter::Init (void)
         mbIsValid = true;
     }
 
-    SlideSorterDebugDialog::ShowDebugDialog(*this);
+    mpDebugDialog.reset(SlideSorterDebugDialog::CreateDebugDialog(*this));
 }
 
 

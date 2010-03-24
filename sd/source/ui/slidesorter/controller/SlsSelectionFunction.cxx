@@ -1122,6 +1122,7 @@ void SelectionFunction::ProcessButtonUpEvent (const EventDescriptor& rDescriptor
             {
                 ProcessButtonClick(rDescriptor.mpHitDescriptor, mnButtonDownButtonIndex);
             }
+            mrSlideSorter.GetView().SetButtonUnderMouse(rDescriptor.mnButtonIndex, true);
             break;
 
         case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE:

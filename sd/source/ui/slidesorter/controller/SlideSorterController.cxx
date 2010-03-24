@@ -651,7 +651,7 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
                 // Update theme colors.
                 mrSlideSorter.GetProperties()->HandleDataChangeEvent();
                 mrSlideSorter.GetTheme()->Update(mrSlideSorter.GetProperties());
-                mrView.GetPageObjectPainter()->SetTheme(mrSlideSorter.GetTheme());
+                mrView.HandleDataChangeEvent();
             }
             break;
 

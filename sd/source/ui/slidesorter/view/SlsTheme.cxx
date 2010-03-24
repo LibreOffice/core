@@ -94,7 +94,8 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
       maRawInsertShadow(),
       maColor(PreviewBorder+1),
       mnButtonCornerRadius(3),
-      mnButtonMaxAlpha(255 * 20/100)
+      mnButtonMaxAlpha(255 * 20/100),
+      mnButtonPaintType(0)
 {
     LocalResource aResource (IMG_ICONS);
 
@@ -210,7 +211,7 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
 
 ColorData Theme::GetColor (const ColorType eType)
 {
-    if (eType>=0 && eType<maColor.size())
+    if (eType>=0 && sal_uInt32(eType)<maColor.size())
         return maColor[eType];
     else
         return 0;
@@ -223,7 +224,7 @@ void Theme::SetColor (
     const ColorType eType,
     const ColorData aData)
 {
-    if (eType>=0 && eType<maColor.size())
+    if (eType>=0 && sal_uInt32(eType)<maColor.size())
         maColor[eType] = aData;
 }
 
@@ -327,6 +328,9 @@ sal_Int32 Theme::GetIntegerValue (const IntegerValueType eType) const
         case ButtonMaxAlpha:
             return mnButtonMaxAlpha;
 
+        case ButtonPaintType:
+            return mnButtonPaintType;
+
         default:
             return 0;
     }
@@ -347,6 +351,10 @@ void Theme::SetIntegerValue (const IntegerValueType eType, const sal_Int32 nValu
             mnButtonMaxAlpha = nValue;
             break;
 
+        case ButtonPaintType:
+            mnButtonPaintType = nValue;
+            break;
+
         default:
             break;
     }
@@ -365,19 +373,15 @@ Theme::GradientDescriptor& Theme::GetGradient (const GradientColorType eType)
 
         case NormalPage:
             return maNormalGradient;
-            break;
 
         case SelectedPage:
             return maSelectedGradient;
-            break;
 
         case SelectedAndFocusedPage:
             return maSelectedAndFocusedGradient;
-            break;
 
         case MouseOverPage:
             return maMouseOverGradient;
-            break;
     }
 }
 

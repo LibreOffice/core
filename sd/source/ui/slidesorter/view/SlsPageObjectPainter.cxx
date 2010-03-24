@@ -200,10 +200,7 @@ void PageObjectPainter::PaintPageObject (
     PaintPreview(rDevice, rpDescriptor);
     PaintPageNumber(rDevice, rpDescriptor);
     PaintTransitionEffect(rDevice, rpDescriptor);
-    if (rpDescriptor->HasState(model::PageDescriptor::ST_Excluded))
-        PaintWideButton(rDevice, rpDescriptor);
-    else
-        PaintButtons(rDevice, rpDescriptor);
+    PaintButtons(rDevice, rpDescriptor);
 
     rDevice.SetAntialiasing(nSavedAntialiasingMode);
 }
@@ -230,7 +227,7 @@ void PageObjectPainter::NotifyResize (const bool bForce)
 void PageObjectPainter::SetTheme (const ::boost::shared_ptr<view::Theme>& rpTheme)
 {
     mpTheme = rpTheme;
-    NotifyResize();
+    NotifyResize(true);
 }
 
 
@@ -386,6 +383,22 @@ void PageObjectPainter::PaintButtons (
     OutputDevice& rDevice,
     const model::SharedPageDescriptor& rpDescriptor) const
 {
+    if (rpDescriptor->HasState(model::PageDescriptor::ST_Excluded))
+        PaintWideButton(rDevice, rpDescriptor);
+    else
+        if (mpTheme->GetIntegerValue(Theme::ButtonPaintType) == 0)
+            PaintButtonsType0(rDevice, rpDescriptor);
+        else
+            PaintButtonsType1(rDevice, rpDescriptor);
+}
+
+
+
+
+void PageObjectPainter::PaintButtonsType0 (
+    OutputDevice& rDevice,
+    const model::SharedPageDescriptor& rpDescriptor) const
+{
     if (rpDescriptor->GetVisualState().GetButtonAlpha() >= 1)
         return;
 
@@ -462,7 +475,7 @@ void PageObjectPainter::PaintButtons (
 
 
 
-void PageObjectPainter::PaintWideButton (
+void PageObjectPainter::PaintButtonsType1 (
     OutputDevice& rDevice,
     const model::SharedPageDescriptor& rpDescriptor) const
 {
@@ -472,41 +485,151 @@ void PageObjectPainter::PaintWideButton (
     const USHORT nSavedAntialiasingMode (rDevice.GetAntialiasing());
     rDevice.SetAntialiasing(nSavedAntialiasingMode | ANTIALIASING_ENABLE_B2DDRAW);
 
-    // Determine background color.
-    Color aButtonFillColor (mpTheme->GetColor(Theme::ButtonBackground));
-    switch (rpDescriptor->GetVisualState().GetButtonState(PageObjectLayouter::ShowHideButtonIndex))
-    {
-        case model::VisualState::BS_Normal:
-            break;
-
-        case model::VisualState::BS_MouseOver:
-            aButtonFillColor.IncreaseLuminance(50);
-            break;
-
-        case model::VisualState::BS_Pressed:
-            aButtonFillColor.DecreaseLuminance(50);
-            break;
-    }
-    rDevice.SetFillColor(aButtonFillColor);
     rDevice.SetLineColor();
 
+    // Determine state for the background.
+    model::VisualState::ButtonState eState (model::VisualState::BS_Normal);
+    for (int nButtonIndex=0; nButtonIndex<3; ++nButtonIndex)
+    {
+        const model::VisualState::ButtonState eButtonState (
+            rpDescriptor->GetVisualState().GetButtonState(nButtonIndex));
+        if (eButtonState != model::VisualState::BS_Normal)
+        {
+            eState = eButtonState;
+            break;
+        }
+    }
+
+    // Paint the button background with the state of the button under the mouse.
+    PaintWideButtonBackground(rDevice, rpDescriptor, eState);
+
+    // Paint the icons.
+    for (int nButtonIndex=0; nButtonIndex<3; ++nButtonIndex)
+    {
+        const Rectangle aBox (
+            mpPageObjectLayouter->GetBoundingBox(
+                rpDescriptor,
+                PageObjectLayouter::Button,
+                PageObjectLayouter::ModelCoordinateSystem,
+                nButtonIndex));
+
+        // Choose icon.
+        const BitmapEx* pImage = NULL;
+        switch (nButtonIndex)
+        {
+            case 0:
+                pImage = &maNewSlideIcon;
+                break;
+            case 1:
+                pImage = &maShowSlideIcon;
+                break;
+            case 2:
+                pImage = &maStartPresentationIcon;
+                break;
+        }
+
+        // Adjust luminosity of icon to indicate its state.
+        Bitmap aIcon (pImage->GetBitmap());
+        switch (rpDescriptor->GetVisualState().GetButtonState(nButtonIndex))
+        {
+            case model::VisualState::BS_Normal:
+                break;
+
+            case model::VisualState::BS_MouseOver:
+                aIcon.Adjust(+30);
+                break;
+
+            case model::VisualState::BS_Pressed:
+                aIcon.Adjust(-30);
+                break;
+        }
+
+        // Paint icon over the button background.
+        if (pImage != NULL)
+        {
+            AlphaMask aMask (pImage->GetMask());
+            AdaptTransparency(
+                aMask,
+                rpDescriptor->GetVisualState().GetButtonAlpha());
+            rDevice.DrawImage(
+                Point(
+                    aBox.Left()+(aBox.GetWidth()-pImage->GetSizePixel().Width())/2,
+                    aBox.Top()+(aBox.GetHeight()-pImage->GetSizePixel().Height())/2),
+                BitmapEx(aIcon, aMask));
+        }
+    }
+
+    rDevice.SetAntialiasing(nSavedAntialiasingMode);
+}
+
+
+
+
+Rectangle PageObjectPainter::PaintWideButtonBackground (
+    OutputDevice& rDevice,
+    const model::SharedPageDescriptor& rpDescriptor,
+    const model::VisualState::ButtonState eState) const
+{
     const Rectangle aBox (
         mpPageObjectLayouter->GetBoundingBox(
             rpDescriptor,
             PageObjectLayouter::WideButton,
             PageObjectLayouter::ModelCoordinateSystem));
-    const double nCornerRadius(mpTheme->GetIntegerValue(Theme::ButtonCornerRadius));
-    rDevice.DrawTransparent(
-        ::basegfx::B2DPolyPolygon(
-            ::basegfx::tools::createPolygonFromRect(
-                ::basegfx::B2DRectangle(aBox.Left(), aBox.Top(), aBox.Right(), aBox.Bottom()),
-                nCornerRadius/aBox.GetWidth(),
-                nCornerRadius/aBox.GetHeight())),
-        rpDescriptor->GetVisualState().GetButtonAlpha());
+    if (rpDescriptor->GetVisualState().GetButtonAlpha() < 1)
+    {
+        const USHORT nSavedAntialiasingMode (rDevice.GetAntialiasing());
+        rDevice.SetAntialiasing(nSavedAntialiasingMode | ANTIALIASING_ENABLE_B2DDRAW);
+
+        // Determine background color.
+        Color aButtonFillColor (mpTheme->GetColor(Theme::ButtonBackground));
+        switch (eState)
+        {
+            case model::VisualState::BS_Normal:
+                break;
+
+            case model::VisualState::BS_MouseOver:
+                aButtonFillColor.IncreaseLuminance(50);
+                break;
+
+            case model::VisualState::BS_Pressed:
+                aButtonFillColor.DecreaseLuminance(50);
+                break;
+        }
+        rDevice.SetFillColor(aButtonFillColor);
+        rDevice.SetLineColor();
+
+        const double nCornerRadius(mpTheme->GetIntegerValue(Theme::ButtonCornerRadius));
+        rDevice.DrawTransparent(
+            ::basegfx::B2DPolyPolygon(
+                ::basegfx::tools::createPolygonFromRect(
+                    ::basegfx::B2DRectangle(aBox.Left(), aBox.Top(), aBox.Right(), aBox.Bottom()),
+                    nCornerRadius/aBox.GetWidth(),
+                    nCornerRadius/aBox.GetHeight())),
+            rpDescriptor->GetVisualState().GetButtonAlpha());
+
+        rDevice.SetAntialiasing(nSavedAntialiasingMode);
+    }
+    return aBox;
+}
+
+
+
+
+void PageObjectPainter::PaintWideButton (
+    OutputDevice& rDevice,
+    const model::SharedPageDescriptor& rpDescriptor) const
+{
+    const Rectangle aButtonBox (PaintWideButtonBackground(
+        rDevice,
+        rpDescriptor,
+        rpDescriptor->GetVisualState().GetButtonState(PageObjectLayouter::ShowHideButtonIndex)));
 
     // Paint text over the button background.
-    rDevice.SetTextColor(mpTheme->GetColor(Theme::ButtonText));
-    rDevice.DrawText(aBox, msUnhideString, TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER);
+    if (rpDescriptor->GetVisualState().GetButtonAlpha() < 1)
+    {
+        rDevice.SetTextColor(mpTheme->GetColor(Theme::ButtonText));
+        rDevice.DrawText(aButtonBox, msUnhideString, TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER);
+    }
 }
 
 

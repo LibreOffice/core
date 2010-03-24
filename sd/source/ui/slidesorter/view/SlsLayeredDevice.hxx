@@ -49,6 +49,10 @@ class Window;
 
 namespace sd { namespace slidesorter { namespace view {
 
+/** A simple wrapper around an OutputDevice that provides support for
+    independent layers and buffering.
+    Each layer may contain any number of painters.
+*/
 class LayeredDevice
     : public ::boost::enable_shared_from_this<LayeredDevice>
 

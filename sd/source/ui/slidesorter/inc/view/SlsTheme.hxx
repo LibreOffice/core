@@ -126,7 +126,8 @@ public:
     enum IntegerValueType
     {
         ButtonCornerRadius,
-        ButtonMaxAlpha
+        ButtonMaxAlpha,
+        ButtonPaintType
     };
     sal_Int32 GetIntegerValue (const IntegerValueType eType) const;
     void SetIntegerValue (const IntegerValueType eType, const sal_Int32 nValue);
@@ -159,6 +160,7 @@ private:
     ::std::vector<ColorData> maColor;
     sal_Int32 mnButtonCornerRadius;
     sal_Int32 mnButtonMaxAlpha;
+    sal_Int32 mnButtonPaintType;
 
     GradientDescriptor& GetGradient (const GradientColorType eType);
 };

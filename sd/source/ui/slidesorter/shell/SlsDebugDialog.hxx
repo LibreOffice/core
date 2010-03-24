@@ -32,11 +32,10 @@
 #ifndef SD_DEBUG_DIALOG_HXX
 #define SD_DEBUG_DIALOG_HXX
 
-#ifdef DEBUG
-
 #include <boost/noncopyable.hpp>
 
 class WorkWindow;
+class Window;
 
 namespace sd { namespace slidesorter {
 
@@ -46,16 +45,17 @@ class SlideSorterDebugDialog
     : public ::boost::noncopyable
 {
 public:
-    static void ShowDebugDialog (SlideSorter& rSlideSorter);
+    static SlideSorterDebugDialog* CreateDebugDialog (SlideSorter& rSlideSorter);
+    ~SlideSorterDebugDialog (void);
 
 private:
     WorkWindow* mpTopLevelWindow;
 
     SlideSorterDebugDialog (SlideSorter& rSlideSorter);
+    void DeleteWindow (::Window* pWindow);
 };
 
 
 } } // end of namespace ::sd::slidesorter
 
-#endif
 #endif

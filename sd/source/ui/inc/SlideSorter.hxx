@@ -72,6 +72,8 @@ typedef ::boost::shared_ptr<sd::Window> SharedSdWindow;
 
 namespace sd { namespace slidesorter {
 
+class SlideSorterDebugDialog;
+
 /** Show previews for all the slides in a document and allow the user to
     insert or delete slides and modify the order of the slides.
 
@@ -251,6 +253,8 @@ private:
     */
     ::boost::shared_ptr<controller::Properties> mpProperties;
     ::boost::shared_ptr<view::Theme> mpTheme;
+
+    ::boost::scoped_ptr<SlideSorterDebugDialog> mpDebugDialog;
 
     SlideSorter (
         ViewShell& rViewShell,

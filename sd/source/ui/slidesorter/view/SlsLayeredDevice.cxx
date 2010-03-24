@@ -295,7 +295,9 @@ void LayeredDevice::Repaint (const Region& rRepaintRegion)
 
 void LayeredDevice::RepaintRectangle (const Rectangle& rRepaintRectangle)
 {
-    if (mpLayers->size() <= 1)
+    if (mpLayers->size() == 0)
+        return;
+    else if (mpLayers->size() == 1)
     {
         // Just copy the main layer into the target device.
         (*mpLayers)[0]->Repaint(*mpTargetWindow, rRepaintRectangle);
@@ -457,6 +459,9 @@ void Layer::Validate (const MapMode& rMapMode)
 
 void Layer::ValidateRectangle (const Rectangle& rBox)
 {
+    if ( ! mpLayerDevice)
+        return;
+
     const Region aSavedClipRegion (mpLayerDevice->GetClipRegion());
     mpLayerDevice->SetClipRegion(Region(rBox));
 

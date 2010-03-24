@@ -101,9 +101,19 @@ private:
     void PaintButtons (
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor) const;
+    void PaintButtonsType0 (
+        OutputDevice& rDevice,
+        const model::SharedPageDescriptor& rpDescriptor) const;
+    void PaintButtonsType1 (
+        OutputDevice& rDevice,
+        const model::SharedPageDescriptor& rpDescriptor) const;
     void PaintWideButton (
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor) const;
+    Rectangle PaintWideButtonBackground (
+        OutputDevice& rDevice,
+        const model::SharedPageDescriptor& rpDescriptor,
+        const model::VisualState::ButtonState eState) const;
     void PrepareBackgrounds (OutputDevice& rDevice);
     void PaintBorder (
         OutputDevice& rDevice,

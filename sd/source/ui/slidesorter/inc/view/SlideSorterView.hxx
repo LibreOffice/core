@@ -32,6 +32,7 @@
 #include "model/SlsPageDescriptor.hxx"
 #include "model/SlsSharedPageDescriptor.hxx"
 #include "view/SlsLayouter.hxx"
+#include "view/SlsILayerPainter.hxx"
 
 #include "View.hxx"
 #include <sfx2/viewfrm.hxx>
@@ -66,6 +67,7 @@ class LayeredDevice;
 class Layouter;
 class PageObjectPainter;
 class SelectionPainter;
+
 
 class SlideSorterView
     : public sd::View,
@@ -146,6 +148,8 @@ public:
         utl::ConfigurationBroadcaster* pBroadcaster,
         sal_uInt32 nHint);
 
+    void HandleDataChangeEvent (void);
+
     void Layout (void);
     /** This tells the view that it has to re-determine the visibility of
         the page objects before painting them the next time.
@@ -203,7 +207,9 @@ public:
     void SetPageUnderMouse (
         const model::SharedPageDescriptor& rpDescriptor,
         const bool bAnimate = true);
-    void SetButtonUnderMouse (const sal_Int32 nButtonIndex);
+    void SetButtonUnderMouse (
+        const sal_Int32 nButtonIndex,
+        const bool bForce = false);
 
     bool SetState (
         const model::SharedPageDescriptor& rpDescriptor,
@@ -254,6 +260,7 @@ private:
     ::boost::shared_ptr<PageObjectPainter> mpPageObjectPainter;
     ::boost::shared_ptr<SelectionPainter> mpSelectionPainter;
     Region maRedrawRegion;
+    SharedILayerPainter mpBackgroundPainter;
 
     /** Determine the visibility of all page objects.
     */

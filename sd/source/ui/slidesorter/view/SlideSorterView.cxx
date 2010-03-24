@@ -64,21 +64,16 @@
 #include <svx/svdopage.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnclit.hxx>
-#include <com/sun/star/presentation/FadeEffect.hpp>
 #include <vcl/svapp.hxx>
 #include <tools/poly.hxx>
 #include <vcl/lineinfo.hxx>
 #include <algorithm>
-#include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include <drawinglayer/processor2d/vclpixelprocessor2d.hxx>
 #include <svl/itempool.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 #include <canvas/elapsedtime.hxx>
 #include <boost/bind.hpp>
 
@@ -97,29 +92,29 @@ using ::sd::slidesorter::controller::AnimationFunction;
 
 namespace sd { namespace slidesorter { namespace view {
 
-
-/** Wrapper around the SlideSorterView that supports the IPainter interface
-    and that allows the LayeredDevice to hold the SlideSorterView (held as
-    scoped_ptr by the SlideSorter) as shared_ptr.
-*/
-class Painter : public ILayerPainter
-{
-public:
-    Painter (SlideSorterView& rView) : mrView(rView) {}
-    virtual ~Painter (void) {}
-
-    virtual void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea)
+namespace {
+    /** Wrapper around the SlideSorterView that supports the IPainter
+        interface and that allows the LayeredDevice to hold the
+        SlideSorterView (held as scoped_ptr by the SlideSorter) as
+        shared_ptr.
+    */
+    class Painter : public ILayerPainter
     {
-        mrView.Paint(rDevice,rRepaintArea);
-    }
-    virtual void SetLayerInvalidator (const SharedILayerInvalidator&)
-    {
-    }
+    public:
+        Painter (SlideSorterView& rView) : mrView(rView) {}
+        virtual ~Painter (void) {}
 
-private:
-    SlideSorterView& mrView;
-};
+        virtual void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea)
+        {
+            mrView.Paint(rDevice,rRepaintArea);
+        }
 
+        virtual void SetLayerInvalidator (const SharedILayerInvalidator&) {}
+
+    private:
+        SlideSorterView& mrView;
+    };
+}
 
 
 
@@ -128,17 +123,8 @@ class BackgroundPainter
       public ::boost::noncopyable
 {
 public:
-    BackgroundPainter (
-        const SharedSdWindow& rpWindow,
-        const Color aBackgroundColor)
-        : maBackgroundColor(aBackgroundColor),
-          mpWindow(rpWindow)
-    {
-    }
-
-    ~BackgroundPainter (void)
-    {
-    }
+    BackgroundPainter (const Color aBackgroundColor) : maBackgroundColor(aBackgroundColor) {}
+    virtual ~BackgroundPainter (void) {}
 
     virtual void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea)
     {
@@ -147,14 +133,12 @@ public:
         rDevice.DrawRect(rRepaintArea);
     }
 
-    virtual void SetLayerInvalidator (const SharedILayerInvalidator& rpInvalidator)
-    {
-        (void)rpInvalidator;
-    }
+    virtual void SetLayerInvalidator (const SharedILayerInvalidator&) {}
+
+    void SetColor (const Color aColor) { maBackgroundColor = aColor; }
 
 private:
-    const Color maBackgroundColor;
-    SharedSdWindow mpWindow;
+    Color maBackgroundColor;
 };
 
 
@@ -183,17 +167,25 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     mbIsMouseOverIndicationAllowed(true),
     mnButtonUnderMouse(-1),
     mpPageObjectPainter(),
-    mpSelectionPainter()
+    mpSelectionPainter(),
+    mpBackgroundPainter(
+        new BackgroundPainter(mrSlideSorter.GetTheme()->GetColor(Theme::Background)))
 {
     // Hide the page that contains the page objects.
     SetPageVisible (FALSE);
+
+
+    // Register the background painter on level 0
+    mpLayeredDevice->RegisterPainter(mpBackgroundPainter, 0);
 
     // Wrap a shared_ptr held wrapper around this view and register it as
     // painter at the layered device.  There is no explicit destruction: in
     // the SlideSorterView destructor the layered device is destroyed and
     // with it the only reference to the wrapper which therefore is also
     // destroyed.
-    mpLayeredDevice->RegisterPainter(SharedILayerPainter(new Painter(*this)), 2);
+    // The painter is placed on level 0, like the background painter, so
+    // that it is buffered.
+    mpLayeredDevice->RegisterPainter(SharedILayerPainter(new Painter(*this)), 0);
 }
 
 
@@ -344,16 +336,25 @@ void SlideSorterView::HandleDrawModeChange (void)
 
 
 
+void SlideSorterView::HandleDataChangeEvent (void)
+{
+    GetPageObjectPainter()->SetTheme(mrSlideSorter.GetTheme());
+
+    // Update the color used by the background painter.
+    ::boost::shared_ptr<BackgroundPainter> pPainter (
+        ::boost::dynamic_pointer_cast<BackgroundPainter>(mpBackgroundPainter));
+    if (pPainter)
+        pPainter->SetColor(mrSlideSorter.GetTheme()->GetColor(Theme::Background));
+
+    RequestRepaint();
+}
+
+
+
+
 void SlideSorterView::Resize (void)
 {
     UpdateOrientation();
-
-    if ( ! mpLayeredDevice->HasPainter(0))
-        mpLayeredDevice->RegisterPainter(
-            SharedILayerPainter(new BackgroundPainter(
-                mrSlideSorter.GetContentWindow(),
-                mrSlideSorter.GetTheme()->GetColor(Theme::Background))),
-            0);
 
     mpLayeredDevice->Resize();
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
@@ -916,9 +917,11 @@ void SlideSorterView::SetPageUnderMouse (
 
 
 
-void SlideSorterView::SetButtonUnderMouse (const sal_Int32 nButtonIndex)
+void SlideSorterView::SetButtonUnderMouse (
+    const sal_Int32 nButtonIndex,
+    const bool bForce)
 {
-    if (mnButtonUnderMouse != nButtonIndex)
+    if (mnButtonUnderMouse != nButtonIndex || bForce)
     {
         if (mpPageUnderMouse)
         {
@@ -967,9 +970,10 @@ bool SlideSorterView::SetState (
     // Fade in or out the buttons.
     if (eState == PageDescriptor::ST_MouseOver)
     {
-        const double nEndAlpha (bStateValue
-            ? mrSlideSorter.GetTheme()->GetIntegerValue(Theme::ButtonMaxAlpha)/255.0
-            : 1.0);
+        const double nMinAlpha (
+            mrSlideSorter.GetTheme()->GetIntegerValue(Theme::ButtonMaxAlpha)/255.0);
+        const static double nMaxAlpha (1.0);
+        const double nEndAlpha (bStateValue ? nMinAlpha : nMaxAlpha);
         if (bAnimate)
         {
             const double nStartAlpha (pDescriptor->GetVisualState().GetButtonAlpha());
@@ -983,9 +987,19 @@ bool SlideSorterView::SetState (
             const ::boost::function<double(double)> aBlendFunctor (
                 ::boost::bind(
                     AnimationFunction::Blend,
-                nStartAlpha,
+                    nStartAlpha,
                     nEndAlpha,
                     ::boost::bind(AnimationFunction::Linear, _1)));
+
+            // Delay the fade in a little bit when the buttons are not
+            // visible at all so that we do not leave a trail of
+            // half-visible buttons when the mouse is moved across the
+            // screen.  No delay on fade out or when the buttons are already
+            // showing.  Fade out is faster than fade in.
+            double nStartOffset (bStateValue ? 500 : 100);
+            const double nDuration (bStateValue ? 400 : 250);
+            if (nStartAlpha>nMinAlpha && nStartAlpha<nMaxAlpha)
+                nStartOffset = 0;
             pDescriptor->GetVisualState().SetButtonAlphaAnimationId(
                 mrSlideSorter.GetController().GetAnimator()->AddAnimation(
                     ::boost::bind(
@@ -993,8 +1007,8 @@ bool SlideSorterView::SetState (
                         pDescriptor,
                         ::boost::ref(*this),
                         ::boost::bind(aBlendFunctor, _1)),
-                    bStateValue ? 500 : 0,
-                    400,
+                    nStartOffset,
+                    nDuration,
                     ::boost::bind(
                         &VisualState::SetButtonAlphaAnimationId,
                         ::boost::ref(pDescriptor->GetVisualState()),
