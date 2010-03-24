@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdxfer.cxx,v $
- * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,24 +36,24 @@
 #ifndef _UNTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
 #endif
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/svdpagv.hxx>
 #include <sfx2/app.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <sot/storage.hxx>
 #include <svl/itempool.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/editobj.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
 #include <tools/urlobj.hxx>
 #include <sot/formats.hxx>
 #include <svl/urlbmk.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 
 //#ifndef _SVDETC_HXX //autogen
 //#include <svx/svdetc.hxx>

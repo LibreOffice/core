@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: bmcache.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 
 #include <limits.h>     // LONG_MAX
 #include <tools/solar.h>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include "bmcache.hxx"
 
 // eine Struktur fuer die Cache-Eintraege
