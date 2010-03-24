@@ -266,7 +266,7 @@ bool XcsParser::startElement(
 }
 
 void XcsParser::endElement(XmlReader const & reader) {
-    if (valueParser_.endElement(reader)) {
+    if (valueParser_.endElement()) {
         return;
     }
     if (ignoring_ > 0) {

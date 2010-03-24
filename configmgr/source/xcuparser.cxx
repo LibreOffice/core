@@ -209,8 +209,8 @@ bool XcuParser::startElement(
     return true;
 }
 
-void XcuParser::endElement(XmlReader const & reader) {
-    if (valueParser_.endElement(reader)) {
+void XcuParser::endElement(XmlReader const &) {
+    if (valueParser_.endElement()) {
         return;
     }
     OSL_ASSERT(!state_.empty());
