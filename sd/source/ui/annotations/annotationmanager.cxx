@@ -338,7 +338,7 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
         if( pArgs )
         {
             const SfxPoolItem*  pPoolItem = NULL;
-            if( SFX_ITEM_SET == pArgs->GetItemState( SID_DELETE_POSTIT, TRUE, &pPoolItem ) )
+            if( SFX_ITEM_SET == pArgs->GetItemState( SID_DELETEALLBYAUTHOR_POSTIT, TRUE, &pPoolItem ) )
             {
                 OUString sAuthor( (( const SfxStringItem* ) pPoolItem )->GetValue() );
                 DeleteAnnotationsByAuthor( sAuthor );
@@ -1091,7 +1091,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
         }
     }
 
-    nId = pMenu->Execute( pParent, rContextRect, POPUPMENU_EXECUTE_DOWN );
+    nId = pMenu->Execute( pParent, rContextRect, POPUPMENU_EXECUTE_DOWN|POPUPMENU_NOMOUSEUPCLOSE );
     switch( nId )
     {
     case SID_REPLYTO_POSTIT:
