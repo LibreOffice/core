@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: basic_delete_modules.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:13 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '*  owner : joerg.skottke@sun.com
@@ -43,20 +37,20 @@ testcase tDeleteModulesAtRunningBasic
 
     dim brc as boolean
     const MAX_WAIT = 3000
-    
+    dim iMenuItemCount as integer
 
     printlog( "Open a new writer-doc" )
     gApplication = "WRITER"
-
     Call hNewDocument()
 
-    printlog( "Create a new module " )
+    printlog( "Open the BASIC Organizer" )
     brc = hOpenBasicOrganizerFromDoc()
     if ( not brc ) then
         warnlog( "Unable to open BASIC organizer for the document" )
         goto endsub
     endif
-    
+
+    printlog( "Create a new module for the current document" )
     brc = hCreateModuleForDoc()
     if ( not brc ) then
         warnlog( "Unable to create a basic module for the document" )
@@ -82,15 +76,14 @@ testcase tDeleteModulesAtRunningBasic
     Tabbar.OpenContextMenu()
 
     try
-        if ( hMenuItemGetCount() = 5 ) then
-            warnlog( "#i101972# - Disabled entries are shown in context menu on tab bar" )
-        end if
+        iMenuItemCount = hMenuItemGetCount()
 
-
-        if ( hMenuItemGetCount() = 3 ) then
-            warnlog( "Delete is active in context menu for a running macro => BUG!" )
-        end if
-
+        select case ( iMenuItemCount )
+        case 2  : printlog( "Correct number of items in menu: " & iMenuItemCount )
+        case 3  : warnlog ( "Delete is active in context menu for a running macro => BUG!" )
+        case 5  : warnlog ( "#i101972# - Disabled entries are shown in context menu on tab bar" )
+        default : warnlog ( "Incorrect itemcount in context menu: " & iMenuItemCount )
+        end select
     catch
         warnlog( "Unable to retrieve the number of menuitems" )
     endcatch
@@ -104,8 +97,7 @@ testcase tDeleteModulesAtRunningBasic
         warnlog( "Slot not finished, timeout reached" )
     endif
 
-    Call hCloseDocument()
-    Call hCloseDocument()
+    Call hFileCloseAll()
 
 endcase
 

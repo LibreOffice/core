@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ComplexTestCase.java,v $
- * $Revision: 1.16.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,8 +44,6 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
     protected static TestParameters param = null;
     /** Log writer **/
     protected static LogWriter log = null;
-    /** Description entry **/
-    protected DescEntry subEntry = null;
     /**
      * The method name which will be written into f.e. the data base
      **/
@@ -56,42 +51,33 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
     /** Maximal time one method is allowed to execute
      * Can be set with parameter 'ThreadTimeOut'
      **/
-    protected int mThreadTimeOut = 0;
+    protected int m_nThreadTimeOut = 0;
     /** Continue a test even if it did fail **/
     // public static final boolean CONTINUE = true;
 
     /** End a test if it did fail **/
     public static final boolean BREAK = true;
 
+    private boolean m_bBeforeCalled;
+
     /**
-     * Call test. It is expected, that an environment is
-     * given to this test.
-     *
-     * @param entry The name of the test method that should be called.
-     * @param environment The environment for the test.
+     * is called before the real test starts
      */
-    public void executeMethods(DescEntry entry, TestParameters environment)
+    private void before()
     {
-
-        // get the environment
-        param = environment;
-        log = entry.Logger;
-
-        mThreadTimeOut = param.getInt("ThreadTimeOut");
-        if (mThreadTimeOut == 0)
-        {
-            mThreadTimeOut = 300000;
-        }
-        // start with the before() method
-        boolean beforeWorked = true;
         try
         {
             Method before = this.getClass().getMethod("before", new Class[] {} );
             before.invoke(this, new Object[] {} );
+
+            // beforeWorked = false;
+            m_bBeforeCalled = true;
         }
         catch (java.lang.NoSuchMethodException e)
         {
             // simply ignore
+            int dummy = 0;
+            m_bBeforeCalled = true;
         }
         catch (java.lang.IllegalAccessException e)
         {
@@ -99,7 +85,6 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
         }
         catch (java.lang.reflect.InvocationTargetException e)
         {
-            beforeWorked = false;
             Throwable t = e.getTargetException();
             if (!(t instanceof RuntimeException) || state)
             {
@@ -113,12 +98,25 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
             }
         }
 
+    }
 
-        //executeMethodTests
-        for (int i = 0; i < entry.SubEntries.length; i++)
+    /** Description entry **/
+    // protected DescEntry subEntry = null;
+
+    private void test_method(DescEntry _entry)
+    {
+
+        m_nThreadTimeOut = param.getInt("ThreadTimeOut");
+        if (m_nThreadTimeOut == 0)
         {
-            subEntry = entry.SubEntries[i];
-            if (beforeWorked)
+            m_nThreadTimeOut = 300000;
+        }
+
+        for (int i = 0; i < _entry.SubEntries.length; i++)
+        {
+
+            DescEntry subEntry = _entry.SubEntries[i];
+            if (m_bBeforeCalled)
             {
                 state = true;
                 message = "";
@@ -141,10 +139,7 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
                 {
                     String sParameter = (entryName.substring(entryName.indexOf("(") + 1, entryName.indexOf(")")));
                     mTestMethodName = entryName;
-                    parameter = new String[]
-                            {
-                                sParameter
-                            };
+                    parameter = new String[] { sParameter };
                     entryName = entryName.substring(0, entryName.indexOf("("));
                     testMethod = this.getClass().getMethod(entryName, new Class[] { String.class });
                 }
@@ -173,7 +168,7 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
                     int sleepingStep = 1000;
                     int factor = 0;
 
-                    while (th.isAlive() && (lastPing != newPing || factor * sleepingStep < mThreadTimeOut))
+                    while (th.isAlive() && (lastPing != newPing || factor * sleepingStep < m_nThreadTimeOut))
                     {
                         Thread.sleep(sleepingStep);
                         factor++;
@@ -196,7 +191,7 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
                 {
                     log.println("Destroy " + mTestMethodName);
                     th.destroy();
-                    subEntry.State = "Test did sleep for " + (mThreadTimeOut / 1000) + " seconds and has been killed!";
+                    subEntry.State = "Test did sleep for " + (m_nThreadTimeOut / 1000) + " seconds and has been killed!";
                     subEntry.hasErrorMsg = true;
                     subEntry.ErrorMsg = subEntry.State;
                     continue;
@@ -228,8 +223,14 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
             subEntry.hasErrorMsg = !state;
             subEntry.ErrorMsg = message;
         }
+    }
 
-        if (beforeWorked)
+    /**
+     * after() is called after the test is done
+     */
+    private void after()
+    {
+        if (m_bBeforeCalled)
         {
             // the after() method
             try
@@ -264,7 +265,37 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
                 }
             }
         }
+
     }
+
+
+
+    /**
+     * Call test. It is expected, that an environment is
+     * given to this test.
+     *
+     * @param entry The name of the test method that should be called.
+     * @param environment The environment for the test.
+     */
+    public void executeMethods(DescEntry entry, TestParameters environment)
+    {
+        m_bBeforeCalled = false;
+
+        // get the environment
+        param = environment;
+        log = entry.Logger;
+
+
+        // start with the before() method
+        before();
+
+        //executeMethodTests
+        test_method(entry);
+
+        // cleanup
+        after();
+    }
+
 
     /**
      * Implement this method in the Complex test.

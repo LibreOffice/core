@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: basic_fat.java,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +26,6 @@
  ************************************************************************/
 package base;
 
-import base.TestBase;
 
 import basicrunner.BasicIfcTest;
 import basicrunner.BasicTestCase;
@@ -72,7 +68,7 @@ public class basic_fat implements TestBase
     /**
      *  Execute a test.
      *  @param param The test parameters.
-     *  @param return True, if the test was executed.
+     * @return True, if the test was executed.
      */
     public boolean executeTest(TestParameters param)
     {
