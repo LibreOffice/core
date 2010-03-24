@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xeroot.hxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,6 +52,7 @@ class XclExpNumFmtBuffer;
 class XclExpXFBuffer;
 class XclExpLinkManager;
 class XclExpNameManager;
+class XclExpObjectManager;
 class XclExpFilterManager;
 class XclExpPivotTableManager;
 
@@ -73,6 +71,7 @@ struct XclExpRootData : public XclRootData
     typedef ScfRef< XclExpXFBuffer >            XclExpXFBfrRef;
     typedef ScfRef< XclExpNameManager >         XclExpNameMgrRef;
     typedef ScfRef< XclExpLinkManager >         XclExpLinkMgrRef;
+    typedef ScfRef< XclExpObjectManager >       XclExpObjectMgrRef;
     typedef ScfRef< XclExpFilterManager >       XclExpFilterMgrRef;
     typedef ScfRef< XclExpPivotTableManager >   XclExpPTableMgrRef;
 
@@ -89,6 +88,7 @@ struct XclExpRootData : public XclRootData
     XclExpNameMgrRef    mxNameMgr;          /// Internal defined names.
     XclExpLinkMgrRef    mxGlobLinkMgr;      /// Global link manager for defined names.
     XclExpLinkMgrRef    mxLocLinkMgr;       /// Local link manager for a sheet.
+    XclExpObjectMgrRef  mxObjMgr;           /// All drawing objects.
     XclExpFilterMgrRef  mxFilterMgr;        /// Manager for filtered areas in all sheets.
     XclExpPTableMgrRef  mxPTableMgr;        /// All pivot tables and pivot caches.
 
@@ -137,6 +137,8 @@ public:
     XclExpLinkManager&  GetLocalLinkManager() const;
     /** Returns the buffer that contains internal defined names. */
     XclExpNameManager&  GetNameManager() const;
+    /** Returns the drawing object manager. */
+    XclExpObjectManager& GetObjectManager() const;
     /** Returns the filter manager. */
     XclExpFilterManager& GetFilterManager() const;
     /** Returns the pivot table manager. */

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DiagramHelper.hxx,v $
- * $Revision: 1.9.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -226,18 +223,14 @@ public:
                 ::com::sun::star::chart2::XDiagram > & xDiagram );
 
     static ::com::sun::star::uno::Sequence< rtl::OUString >
-        generateAutomaticCategories(
+        getExplicitSimpleCategories(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartDocument > & xChartDoc );
 
     SAL_DLLPRIVATE static ::com::sun::star::uno::Sequence< rtl::OUString >
-        generateAutomaticCategories(
+        generateAutomaticCategoriesFromCooSys(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XCoordinateSystem > & xCooSys );
-
-    SAL_DLLPRIVATE static void generateAutomaticCategoriesFromChartType(
-            ::com::sun::star::uno::Sequence< rtl::OUString >& rRet,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
 
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartType >

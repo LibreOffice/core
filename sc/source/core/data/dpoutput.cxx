@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dpoutput.cxx,v $
- * $Revision: 1.17.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,9 +34,9 @@
 
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/wghtitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
 #include "dpoutput.hxx"
@@ -454,14 +451,12 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                             if ( xLevNam.is() && xLevRes.is() )
                             {
                                 String aName = xLevNam->getName();
-                                OUString aCaption = aName; // Caption equals the field name by default.
                                 Reference<XPropertySet> xPropSet(xLevel, UNO_QUERY);
-                                if (xPropSet.is())
-                                {
-                                    Any any = xPropSet->getPropertyValue(
-                                        OUString::createFromAscii(SC_UNO_LAYOUTNAME));
-                                    any >>= aCaption;
-                                }
+                                // Caption equals the field name by default.
+                                // #i108948# use ScUnoHelpFunctions::GetStringProperty, because
+                                // LayoutName is new and may not be present in external implementation
+                                OUString aCaption = ScUnoHelpFunctions::GetStringProperty( xPropSet,
+                                    OUString::createFromAscii(SC_UNO_LAYOUTNAME), aName );
 
                                 bool bRowFieldHasMember = false;
                                 switch ( eDimOrient )

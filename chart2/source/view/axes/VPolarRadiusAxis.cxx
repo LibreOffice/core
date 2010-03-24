@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: VPolarRadiusAxis.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +49,6 @@ VPolarRadiusAxis::VPolarRadiusAxis( const AxisProperties& rAxisProperties
 {
     m_aAxisProperties.m_fLabelDirectionSign=0.0;
     m_aAxisProperties.m_fInnerDirectionSign=0.0;
-    m_aAxisProperties.m_bLabelsOutside=true;
     m_aAxisProperties.m_bIsMainAxis=false;
     m_aAxisProperties.m_aLabelAlignment=LABEL_ALIGN_RIGHT;
     m_aAxisProperties.init();
@@ -159,7 +155,7 @@ void SAL_CALL VPolarRadiusAxis::createShapes()
     AxisProperties aAxisProperties(m_aAxisProperties);
 
     sal_Int32 nTick = 0;
-    TickIter aIter( aAngleTickInfos, rAngleIncrement, 0, 0 );
+    EquidistantTickIter aIter( aAngleTickInfos, rAngleIncrement, 0, 0 );
     for( TickInfo* pTickInfo = aIter.firstInfo()
         ; pTickInfo; pTickInfo = aIter.nextInfo(), nTick++ )
     {

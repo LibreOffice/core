@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: attarray.cxx,v $
- * $Revision: 1.25.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,12 +34,12 @@
 
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/bolnitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/shaditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/bolnitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/shaditem.hxx>
 #include <svl/poolcach.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <unotools/fontcvt.hxx>
 
 #include "attarray.hxx"

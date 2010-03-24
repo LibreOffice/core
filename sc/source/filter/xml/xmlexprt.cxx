@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlexprt.cxx,v $
- * $Revision: 1.213.94.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include "xmlexprt.hxx"
 #include "XMLConverter.hxx"
@@ -91,11 +88,11 @@
 #include <svl/zforlist.hxx>
 #include <svx/unoshape.hxx>
 #include <comphelper/extract.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
 

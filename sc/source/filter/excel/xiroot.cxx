@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xiroot.cxx,v $
- * $Revision: 1.24.88.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -207,6 +204,12 @@ XclImpLinkManager& XclImpRoot::GetLinkManager() const
 XclImpObjectManager& XclImpRoot::GetObjectManager() const
 {
     return *mrImpData.mxObjMgr;
+}
+
+XclImpSheetDrawing& XclImpRoot::GetCurrSheetDrawing() const
+{
+    DBG_ASSERT( !IsInGlobals(), "XclImpRoot::GetCurrSheetDrawing - must not be called from workbook globals" );
+    return mrImpData.mxObjMgr->GetSheetDrawing( GetCurrScTab() );
 }
 
 XclImpCondFormatManager& XclImpRoot::GetCondFormatManager() const

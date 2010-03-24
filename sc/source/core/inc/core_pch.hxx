@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: core_pch.hxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -174,10 +171,10 @@
 #include <vcl/combobox.hxx>
 #include <vcl/combobox.h>
 #include <refupdat.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <conditio.hxx>
 #include <brdcst.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <dociter.hxx>
 #include <scdll.hxx>
 #include <stdio.h>
@@ -208,35 +205,35 @@
 #include <svx/pageitem.hxx>
 #include <dbcolect.hxx>
 #include <userlist.hxx>
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <basic/sbxvar.hxx>
 #include <basic/sbxcore.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdsob.hxx>
 #include <svx/svdglue.hxx>
-#include <svx/langitem.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <callform.hxx>
 #include <validat.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <sot/exchange.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <vcl/fonttype.hxx>
-#include <svx/editobj.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svl/stritem.hxx>
 #include <pivot.hxx>
 #include <vcl/gdimtf.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdlayer.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <ctype.h>
 #include <vcl/font.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/postitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/postitem.hxx>
 #include <svx/svditer.hxx>
-#include <svx/udlnitem.hxx>
+#include <editeng/udlnitem.hxx>
 #include <adiasync.hxx>
 #include <sfx2/bindings.hxx>
 #include <ddelink.hxx>
