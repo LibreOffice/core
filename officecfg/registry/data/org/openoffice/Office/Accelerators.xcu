@@ -394,6 +394,7 @@
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="de">.uno:AlignBlock</value>
       <value xml:lang="en-US">.uno:Bold</value>
+      <value xml:lang="es">.uno:SearchDialog</value>
      </prop>
     </node>
     <node oor:name="B_SHIFT_MOD1" oor:op="replace">
@@ -459,6 +460,7 @@
     <node oor:name="E_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:AlignHorizontalCenter</value>
+      <value xml:lang="es">.uno:SelectAll</value>
      </prop>
     </node>
     <node oor:name="F11" oor:op="replace">
@@ -828,6 +830,7 @@
     <node oor:name="U_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:Underline</value>
+      <value xml:lang="es">.uno:AddDirect</value>
      </prop>
     </node>
     <node oor:name="U_SHIFT_MOD1" oor:op="replace">
@@ -988,6 +991,7 @@
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="de">.uno:JustifyPara</value>
       <value xml:lang="en-US">.uno:Bold</value>
+      <value xml:lang="es">.uno:SearchDialog</value>
      </prop>
     </node>
     <node oor:name="B_SHIFT_MOD1" oor:op="replace">
@@ -1023,6 +1027,7 @@
     <node oor:name="E_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:CenterPara</value>
+      <value xml:lang="es">.uno:SelectAll</value>
      </prop>
     </node>
     <node oor:name="F11" oor:op="replace">
@@ -1228,6 +1233,7 @@
     <node oor:name="U_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:Underline</value>
+      <value xml:lang="es">.uno:AddDirect</value>
      </prop>
     </node>
     <node oor:name="U_SHIFT_MOD1" oor:op="replace">
@@ -1336,6 +1342,7 @@
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="de">.uno:JustifyPara</value>
       <value xml:lang="en-US">.uno:Bold</value>
+      <value xml:lang="es">.uno:SearchDialog</value>
      </prop>
     </node>
     <node oor:name="B_SHIFT_MOD1" oor:op="replace">
@@ -1421,6 +1428,7 @@
     <node oor:name="E_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:CenterPara</value>
+      <value xml:lang="es">.uno:SelectAll</value>
      </prop>
     </node>
     <node oor:name="F10_MOD1" oor:op="replace">
@@ -1835,6 +1843,7 @@
     <node oor:name="U_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:Underline</value>
+      <value xml:lang="es">.uno:AddDirect</value>
      </prop>
     </node>
     <node oor:name="U_SHIFT_MOD1" oor:op="replace">
@@ -1931,6 +1940,7 @@
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="de">.uno:JustifyPara</value>
       <value xml:lang="en-US">.uno:Bold</value>
+      <value xml:lang="es">.uno:SearchDialog</value>
      </prop>
     </node>
     <node oor:name="B_SHIFT_MOD1" oor:op="replace">
@@ -1971,6 +1981,7 @@
     <node oor:name="E_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:CenterPara</value>
+      <value xml:lang="es">.uno:SelectAll</value>
      </prop>
     </node>
     <node oor:name="F11" oor:op="replace">
@@ -2201,6 +2212,7 @@
     <node oor:name="U_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:Underline</value>
+      <value xml:lang="es">.uno:AddDirect</value>
      </prop>
     </node>
     <node oor:name="U_SHIFT_MOD1" oor:op="replace">
@@ -2361,6 +2373,7 @@
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="de">.uno:JustifyPara</value>
       <value xml:lang="en-US">.uno:Bold</value>
+      <value xml:lang="es">.uno:SearchDialog</value>
      </prop>
     </node>
     <node oor:name="B_SHIFT_MOD1" oor:op="replace">
@@ -2446,6 +2459,7 @@
     <node oor:name="E_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:CenterPara</value>
+      <value xml:lang="es">.uno:SelectAll</value>
      </prop>
     </node>
     <node oor:name="F10_MOD1" oor:op="replace">
@@ -2860,6 +2874,7 @@
     <node oor:name="U_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:Underline</value>
+      <value xml:lang="es">.uno:AddDirect</value>
      </prop>
     </node>
     <node oor:name="U_SHIFT_MOD1" oor:op="replace">
@@ -2973,6 +2988,7 @@
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="de">.uno:JustifyPara</value>
       <value xml:lang="en-US">.uno:Bold</value>
+      <value xml:lang="es">.uno:SearchDialog</value>
      </prop>
     </node>
     <node oor:name="B_SHIFT_MOD1" oor:op="replace">
@@ -3063,6 +3079,7 @@
     <node oor:name="E_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:CenterPara</value>
+      <value xml:lang="es">.uno:SelectAll</value>
      </prop>
     </node>
     <node oor:name="F10_MOD1" oor:op="replace">
@@ -3497,6 +3514,7 @@
     <node oor:name="U_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:Underline</value>
+      <value xml:lang="es">.uno:AddDirect</value>
      </prop>
     </node>
     <node oor:name="U_SHIFT_MOD1" oor:op="replace">
@@ -3595,6 +3613,7 @@
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="de">.uno:JustifyPara</value>
       <value xml:lang="en-US">.uno:Bold</value>
+      <value xml:lang="es">.uno:SearchDialog</value>
      </prop>
     </node>
     <node oor:name="B_SHIFT_MOD1" oor:op="replace">
@@ -3680,6 +3699,7 @@
     <node oor:name="E_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:CenterPara</value>
+      <value xml:lang="es">.uno:SelectAll</value>
      </prop>
     </node>
     <node oor:name="F10_MOD1" oor:op="replace">
@@ -4094,6 +4114,7 @@
     <node oor:name="U_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:Underline</value>
+      <value xml:lang="es">.uno:AddDirect</value>
      </prop>
     </node>
     <node oor:name="U_SHIFT_MOD1" oor:op="replace">
@@ -4197,6 +4218,7 @@
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="de">.uno:JustifyPara</value>
       <value xml:lang="en-US">.uno:Bold</value>
+      <value xml:lang="es">.uno:SearchDialog</value>
      </prop>
     </node>
     <node oor:name="B_SHIFT_MOD1" oor:op="replace">
@@ -4254,7 +4276,7 @@
       <value xml:lang="en-US">.uno:ParaRightToLeft</value>
      </prop>
     </node>
-    <node oor:name="END" oor:op="replace">
+     <node oor:name="END" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:GoToEndOfLine</value>
      </prop>
@@ -4282,6 +4304,7 @@
     <node oor:name="E_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:CenterPara</value>
+      <value xml:lang="es">.uno:SelectAll</value>
      </prop>
     </node>
     <node oor:name="F10_MOD1" oor:op="replace">
@@ -4696,6 +4719,7 @@
     <node oor:name="U_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:Underline</value>
+      <value xml:lang="es">.uno:AddDirect</value>
      </prop>
     </node>
     <node oor:name="U_SHIFT_MOD1" oor:op="replace">
@@ -4804,6 +4828,7 @@
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="de">.uno:JustifyPara</value>
       <value xml:lang="en-US">.uno:Bold</value>
+      <value xml:lang="es">.uno:SearchDialog</value>
      </prop>
     </node>
     <node oor:name="B_SHIFT_MOD1" oor:op="replace">
@@ -4889,6 +4914,7 @@
     <node oor:name="E_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:CenterPara</value>
+      <value xml:lang="es">.uno:SelectAll</value>
      </prop>
     </node>
     <node oor:name="F10_MOD1" oor:op="replace">
@@ -5303,6 +5329,7 @@
     <node oor:name="U_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:Underline</value>
+      <value xml:lang="es">.uno:AddDirect</value>
      </prop>
     </node>
     <node oor:name="U_SHIFT_MOD1" oor:op="replace">
@@ -5541,7 +5568,19 @@
       <value xml:lang="en-US">.uno:Paste</value>
      </prop>
     </node>
-    <node oor:name="OPEN" oor:op="replace">
+     <node oor:name="K_MOD1" oor:op="replace">
+       <prop oor:name="Command">
+         <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+         <value xml:lang="es">.uno:Italic</value>
+       </prop>
+     </node>
+     <node oor:name="N_MOD1" oor:op="replace">
+       <prop oor:name="Command">
+         <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+         <value xml:lang="es">.uno:Bold</value>
+       </prop>
+     </node>
+     <node oor:name="OPEN" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:Open</value>
      </prop>
@@ -5615,7 +5654,19 @@
       <value xml:lang="en-US">.uno:Paste</value>
      </prop>
     </node>
-    <node oor:name="OPEN" oor:op="replace">
+     <node oor:name="K_MOD1" oor:op="replace">
+       <prop oor:name="Command">
+         <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+         <value xml:lang="es">.uno:Italic</value>
+       </prop>
+     </node>
+     <node oor:name="N_MOD1" oor:op="replace">
+       <prop oor:name="Command">
+         <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+         <value xml:lang="es">.uno:Bold</value>
+       </prop>
+     </node>
+     <node oor:name="OPEN" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:Open</value>
      </prop>
@@ -5624,6 +5675,20 @@
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:Paste</value>
      </prop>
+    </node>
+    <node oor:name="S_MOD1" oor:op="replace">
+      <prop oor:name="Command">
+        <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+        <value xml:lang="es">.uno:Underline</value>
+      </prop>
+    </node>
+    <node oor:name="T_MOD1" oor:op="replace">
+      <prop oor:name="Command">
+        <value xml:lang="x-no-translate" install:module="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+        <value xml:lang="de" install:module="unxwnt">.uno:SubScript</value>
+        <value xml:lang="es" install:module="unxwnt">.uno:AlignHorizontalCenter</value>
+        <value xml:lang="en-US" install:module="macosx">.uno:DesignerDialog</value>
+      </prop>
     </node>
     <node oor:name="UNDO" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
