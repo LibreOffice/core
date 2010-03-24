@@ -64,10 +64,12 @@ testcase tBasicVBACompatSecurityCheck()
         hFileOpen( cTestFile )
 
         printlog( "Probe for macro execution warning..." )
-        if ( hAllowMacroExecution() ) then
-            printlog( "Macro execution warning displayed, good" )
-        else
-            warnlog( "Macro execution warning is missing" )
+        if ( iSecurityLevel = GC_MACRO_SECURITY_LEVEL_MEDIUM ) then
+            if ( hAllowMacroExecution() ) then
+                printlog( "Macro execution warning displayed, good" )
+            else
+                warnlog( "Macro execution warning is missing" )
+            endif
         endif
 
         kontext "Active"
