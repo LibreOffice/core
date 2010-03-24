@@ -74,6 +74,8 @@ MODULEFILES= \
     Common-base.xcu   \
     Common-math.xcu   \
     Common-unx.xcu   \
+    Common-unixdesktop.xcu \
+    Common-gconflockdown.xcu \
     Common-macosx.xcu   \
     Common-wnt.xcu   \
     Common-UseOOoFileDialogs.xcu \
@@ -84,6 +86,7 @@ MODULEFILES= \
     Common-korea.xcu   \
     Paths-macosx.xcu    \
     Paths-unxwnt.xcu    \
+    Paths-unixdesktop.xcu \
     Writer-cjk.xcu \
     Writer-javamail.xcu \
     Impress-ogltrans.xcu \
@@ -94,8 +97,8 @@ MODULEFILES= \
     Embedding-math.xcu   \
     Embedding-base.xcu   \
     Embedding-writer.xcu \
-    UI-brand.xcu
-
+    UI-brand.xcu \
+    Recovery-gconflockdown.xcu
 
 LOCALIZEDFILES= \
     Accelerators.xcu \
