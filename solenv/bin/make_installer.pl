@@ -1369,7 +1369,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # try it again later.
             ####################################################
 
-            if (( $installer::globals::patch ) || ( $installer::globals::languagepack ) || ( $installer::globals::packageformat eq "native" ) || ( $installer::globals::packageformat eq "osx" )) { $allvariableshashref->{'POOLPRODUCT'} = 0; }
+            if (( $installer::globals::patch ) ||
+                ( $installer::globals::languagepack ) ||
+                ( $installer::globals::packageformat eq "native" ) ||
+                ( $installer::globals::packageformat eq "portable" ) ||
+                ( $installer::globals::packageformat eq "osx" )) { $allvariableshashref->{'POOLPRODUCT'} = 0; }
 
             if ( $allvariableshashref->{'POOLPRODUCT'} )
             {
