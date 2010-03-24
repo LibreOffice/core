@@ -115,8 +115,9 @@ testcase t_macros()
     const RESTYPE_2 = 2
     const RESTYPE_3 = 3
 
-    const CLOSE_METHOD_OK = 1
+    const CLOSE_METHOD_OK     = 1
     const CLOSE_METHOD_CANCEL = 2
+    const CLOSE_METHOD_NO     = 4
 
     const REQUIRES_EXACT_MATCH = TRUE
     const REQUIRES_FUZZY_MATCH = FALSE
@@ -240,7 +241,7 @@ testcase t_macros()
     if ( hTestActive( "1x" , CLOSE_METHOD_OK     , REQUIRES_EXACT_MATCH ) <> RESTYPE_2 ) then warnlog( "Wrong resource type" )
     if ( hTestActive( "2x" , CLOSE_METHOD_CANCEL , REQUIRES_EXACT_MATCH ) <> RESTYPE_3 ) then warnlog( "Wrong resource type" )
     if ( hTestActive( "3x" , CLOSE_METHOD_CANCEL , REQUIRES_EXACT_MATCH ) <> RESTYPE_3 ) then warnlog( "Wrong resource type" )
-    if ( hTestActive( "4x" , CLOSE_METHOD_CANCEL , REQUIRES_EXACT_MATCH ) <> RESTYPE_2 ) then warnlog( "Wrong resource type" )
+    if ( hTestActive( "4x" , CLOSE_METHOD_NO     , REQUIRES_EXACT_MATCH ) <> RESTYPE_2 ) then warnlog( "Wrong resource type" )
     if ( hTestActive( "5x" , CLOSE_METHOD_CANCEL , REQUIRES_EXACT_MATCH ) <> RESTYPE_2 ) then warnlog( "Wrong resource type" )
     if ( hTestActive( "16" , CLOSE_METHOD_CANCEL , REQUIRES_EXACT_MATCH ) <> RESTYPE_3 ) then warnlog( "Wrong resource type" )
     if ( hTestActive( "32" , CLOSE_METHOD_CANCEL , REQUIRES_EXACT_MATCH ) <> RESTYPE_3 ) then warnlog( "Wrong resource type" )
