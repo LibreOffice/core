@@ -106,23 +106,24 @@ struct PasswordToOpenModifyDialog_Impl
 {
     Window *                    m_pParent;
 
+    FixedLine                   m_aFileEncryptionFL;
     FixedText                   m_aPasswdToOpenFT;
     Edit                        m_aPasswdToOpenED;
     FixedText                   m_aReenterPasswdToOpenFT;
     PasswordReenterEdit_Impl    m_aReenterPasswdToOpenED;
-    FixedImage                  m_aPasswdToOpenMatchFI;
+//    FixedImage                  m_aPasswdToOpenMatchFI;
     FixedText                   m_aPasswdNoteFT;
     FixedLine                   m_aButtonsFL;
     MoreButton                  m_aMoreFewerOptionsBTN;
     OKButton                    m_aOk;
     CancelButton                m_aCancel;
     FixedLine                   m_aFileSharingOptionsFL;
+    CheckBox                    m_aOpenReadonlyCB;
     FixedText                   m_aPasswdToModifyFT;
     Edit                        m_aPasswdToModifyED;
     FixedText                   m_aReenterPasswdToModifyFT;
     PasswordReenterEdit_Impl    m_aReenterPasswdToModifyED;
-    FixedImage                  m_aPasswdToModifyMatchFI;
-    CheckBox                    m_aOpenReadonlyCB;
+//    FixedImage                  m_aPasswdToModifyMatchFI;
 
 
     DECL_LINK( ModifyHdl, Edit * );
@@ -137,28 +138,31 @@ PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
         sal_uInt16 nMinPasswdLen,
         sal_uInt16 nMaxPasswdLen ) :
     m_pParent( pParent ),
+    m_aFileEncryptionFL         ( pParent, CUI_RES( FL_FILE_ENCRYPTION ) ),
     m_aPasswdToOpenFT           ( pParent, CUI_RES( FT_PASSWD_TO_OPEN ) ),
     m_aPasswdToOpenED           ( pParent, CUI_RES( ED_PASSWD_TO_OPEN ) ),
     m_aReenterPasswdToOpenFT    ( pParent, CUI_RES( FT_REENTER_PASSWD_TO_OPEN ) ),
     m_aReenterPasswdToOpenED    ( pParent, CUI_RES( ED_REENTER_PASSWD_TO_OPEN ) ),
-    m_aPasswdToOpenMatchFI      ( pParent, CUI_RES( FI_PASSWD_TO_OPEN_MATCH ) ),
+//    m_aPasswdToOpenMatchFI      ( pParent, CUI_RES( FI_PASSWD_TO_OPEN_MATCH ) ),
     m_aPasswdNoteFT             ( pParent, CUI_RES( FT_PASSWD_NOTE ) ),
     m_aButtonsFL                ( pParent, CUI_RES( FL_BUTTONS ) ),
     m_aMoreFewerOptionsBTN      ( pParent, CUI_RES( BTN_MORE_FEWER_OPTIONS ) ),
     m_aOk                       ( pParent, CUI_RES( BTN_OK ) ),
     m_aCancel                   ( pParent, CUI_RES( BTN_CANCEL ) ),
     m_aFileSharingOptionsFL     ( pParent, CUI_RES( FL_FILE_SHARING_OPTIONS ) ),
+    m_aOpenReadonlyCB           ( pParent, CUI_RES( CB_OPEN_READONLY ) ),
     m_aPasswdToModifyFT         ( pParent, CUI_RES( FT_PASSWD_TO_MODIFY ) ),
     m_aPasswdToModifyED         ( pParent, CUI_RES( ED_PASSWD_TO_MODIFY ) ),
     m_aReenterPasswdToModifyFT  ( pParent, CUI_RES( FT_REENTER_PASSWD_TO_MODIFY ) ),
-    m_aReenterPasswdToModifyED  ( pParent, CUI_RES( ED_REENTER_PASSWD_TO_MODIFY ) ),
-    m_aPasswdToModifyMatchFI    ( pParent, CUI_RES( FI_PASSWD_TO_MODIFY_MATCH ) ),
-    m_aOpenReadonlyCB           ( pParent, CUI_RES( CB_OPEN_READONLY ) )
+    m_aReenterPasswdToModifyED  ( pParent, CUI_RES( ED_REENTER_PASSWD_TO_MODIFY ) )
+//    m_aPasswdToModifyMatchFI    ( pParent, CUI_RES( FI_PASSWD_TO_MODIFY_MATCH ) )
 {
+/*
     const sal_Bool bHighContrast = pParent->GetSettings().GetStyleSettings().GetHighContrastMode();
     const Image aImage( CUI_RES( bHighContrast ? IMG_PASSWD_MATCH_HC : IMG_PASSWD_MATCH ) );
     m_aPasswdToOpenMatchFI.SetImage( aImage );
     m_aPasswdToModifyMatchFI.SetImage( aImage );
+*/
 
     m_aMoreFewerOptionsBTN.SetMoreText( String( CUI_RES( STR_MORE_OPTIONS ) ) );
     m_aMoreFewerOptionsBTN.SetLessText( String( CUI_RES( STR_FEWER_OPTIONS ) ) );
@@ -209,8 +213,8 @@ IMPL_LINK( PasswordToOpenModifyDialog_Impl, ModifyHdl, Edit *, EMPTYARG /*pEdit*
 
     m_aOk.Enable( bToOpenMatch && bToModifyMatch && !bBothEmpty );
 
-    m_aPasswdToOpenMatchFI.Enable( bToOpenMatch && !bBothEmpty );
-    m_aPasswdToModifyMatchFI.Enable( bToModifyMatch && !bBothEmpty );
+//    m_aPasswdToOpenMatchFI.Enable( bToOpenMatch && !bBothEmpty );
+//    m_aPasswdToModifyMatchFI.Enable( bToModifyMatch && !bBothEmpty );
 
     return 0;
 }
