@@ -34,7 +34,6 @@
 #include "vos/mutex.hxx"
 
 #include "toolkit/helper/vclunohelper.hxx"
-
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/deployment/XPackageManagerFactory.hpp"
 #include "com/sun/star/deployment/thePackageManagerFactory.hpp"
@@ -46,6 +45,10 @@
 #include "dp_identifier.hxx"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
+
+#define USER_PACKAGE_MANAGER    OUSTR("user")
+#define SHARED_PACKAGE_MANAGER  OUSTR("shared")
+#define BUNDLED_PACKAGE_MANAGER OUSTR("bundled")
 
 #define USER_PACKAGE_MANAGER    OUSTR("user")
 #define SHARED_PACKAGE_MANAGER  OUSTR("shared")
@@ -329,16 +332,14 @@ void TheExtensionManager::terminateDialog()
 //------------------------------------------------------------------------------
 bool TheExtensionManager::createPackageList( const uno::Reference< deployment::XPackageManager > &xPackageManager )
 {
-    uno::Sequence< uno::Reference< deployment::XPackage > > packages;
+    uno::Sequence< uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
 
     try {
-        packages = xPackageManager->getDeployedPackages( uno::Reference< task::XAbortChannel >(),
-                                                         uno::Reference< ucb::XCommandEnvironment >() );
+        xAllPackages = m_xExtensionManager->getAllExtensions( uno::Reference< task::XAbortChannel >(),
+                                                              uno::Reference< ucb::XCommandEnvironment >() );
     } catch ( deployment::DeploymentException & ) {
-        //handleGeneralError(e.Cause);
         return true;
     } catch ( ucb::CommandFailedException & ) {
-        //handleGeneralError(e.Reason);
         return true;
     } catch ( ucb::CommandAbortedException & ) {
         return false;
@@ -346,9 +347,24 @@ bool TheExtensionManager::createPackageList( const uno::Reference< deployment::X
         throw uno::RuntimeException( e.Message, e.Context );
     }
 
-    for ( sal_Int32 j = 0; j < packages.getLength(); ++j )
+    for ( sal_Int32 i = 0; i < xAllPackages.getLength(); ++i )
     {
-        getDialogHelper()->addPackageToList( packages[j], xPackageManager );
+        uno::Sequence< uno::Reference< deployment::XPackage > > xPackageList = xAllPackages[i];
+
+        for ( sal_Int32 j = 0; j < xPackageList.getLength(); ++j )
+        {
+            uno::Reference< deployment::XPackage > xPackage = xPackageList[j];
+            if ( xPackage.is() )
+            {
+                PackageState eState = getPackageState( xPackage );
+                getDialogHelper()->addPackageToList( xPackage, m_sPackageManagers[j] );
+                // When the package is enabled, we can stop here, otherwise we have to look for
+                // another version of this package
+                if ( ( eState == REGISTERED ) || ( eState == NOT_AVAILABLE ) )
+                    break;
+            }
+        }
+
     }
 
     return true;
