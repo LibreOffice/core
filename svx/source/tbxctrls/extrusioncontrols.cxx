@@ -529,7 +529,7 @@ ExtrusionDepthController::ExtrusionDepthController( const Reference< lang::XMult
 
 ::Window* ExtrusionDepthController::createPopupWindow( ::Window* pParent )
 {
-    return new ExtrusionDirectionWindow( *this, m_xFrame, pParent );
+    return new ExtrusionDepthWindow( *this, m_xFrame, pParent );
 }
 
 
