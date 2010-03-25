@@ -279,49 +279,9 @@ namespace ucb { namespace ucp { namespace ext
 
             if ( aOpenCommand.Sink.is() )
             {
-                // Open document - supply document data stream.
-
-                // Check open mode
-                if  (   ( aOpenCommand.Mode == OpenMode::DOCUMENT_SHARE_DENY_NONE )
-                    ||  ( aOpenCommand.Mode == OpenMode::DOCUMENT_SHARE_DENY_WRITE )
-                    )
-                {
-                    // unsupported.
-                    ::ucbhelper::cancelCommandExecution( makeAny( UnsupportedOpenModeException(
-                        ::rtl::OUString(), *this, sal_Int16( aOpenCommand.Mode ) ) ),
-                        i_rEvironment );
-                    // unreachable
-                }
-
-                ::rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
-                Reference< XOutputStream > xOut( aOpenCommand.Sink, UNO_QUERY );
-                if ( xOut.is() )
-                  {
-                    OSL_ENSURE( false, "Content::execute( open->out ): not implemented!" );
-                    // TODO: write data into xOut
-                  }
-                else
-                  {
-                    Reference< XActiveDataSink > xDataSink( aOpenCommand.Sink, UNO_QUERY );
-                      if ( xDataSink.is() )
-                    {
-                        Reference< XInputStream > xIn
-                            /* @@@ your XInputStream + XSeekable impl. object */;
-                        // TODO
-                        OSL_ENSURE( false, "Content::execute( open->sink ): not implemented!" );
-                        xDataSink->setInputStream( xIn );
-                    }
-                      else
-                    {
-                        // Note: aOpenCommand.Sink may contain an XStream
-                        //       implementation. Support for this type of
-                        //       sink is optional...
-                        ::ucbhelper::cancelCommandExecution( makeAny( UnsupportedDataSinkException(
-                            ::rtl::OUString(), *this, aOpenCommand.Sink ) ),
-                            i_rEvironment );
-                        // unreachable
-                    }
-                  }
+                const ::rtl::OUString sPhysicalContentURL( getPhysicalURL() );
+                ::ucbhelper::Content aRequestedContent( sPhysicalContentURL, i_rEvironment );
+                aRet = aRequestedContent.executeCommand( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ), makeAny( aOpenCommand ) );
             }
         }
 
