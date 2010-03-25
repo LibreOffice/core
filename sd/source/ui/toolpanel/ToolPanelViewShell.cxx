@@ -475,7 +475,6 @@ ToolPanelViewShell_Impl::PanelActivation ToolPanelViewShell_Impl::SetupDefaultPa
     PanelActivation aPanelToActivate;
     try
     {
-        ::boost::shared_ptr< FrameworkHelper > pFrameworkHelper( FrameworkHelper::Instance( m_rPanelViewShell.GetViewShellBase() ) );
         Reference< XConfigurationController > xCC( pFrameworkHelper->GetConfigurationController(), UNO_QUERY_THROW );
         Reference< XConfiguration > xConfiguration( xCC->getRequestedConfiguration(), UNO_QUERY_THROW );
         Sequence< Reference< XResourceId > > aViewIds( xConfiguration->getResources(
