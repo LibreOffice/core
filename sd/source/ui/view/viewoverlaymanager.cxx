@@ -78,12 +78,10 @@ class ImageButtonHdl;
 
 // --------------------------------------------------------------------
 
-Image ViewOverlayManager::maSmallButtonImages[ViewOverlayManager::ButtonCount];
-Image ViewOverlayManager::maLargeButtonImages[ViewOverlayManager::ButtonCount];
+Image ViewOverlayManager::maSmallButtonImages[BMP_PLACEHOLDER_SMALL_END - BMP_PLACEHOLDER_SMALL_START];
+Image ViewOverlayManager::maLargeButtonImages[BMP_PLACEHOLDER_LARGE_END - BMP_PLACEHOLDER_LARGE_START];
 
-static USHORT gButtonSlots[ViewOverlayManager::ButtonCount] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
-static USHORT gButtonResId[ViewOverlayManager::ButtonCount] = { BMP_PLACEHOLDER_TABLE_57X71, BMP_PLACEHOLDER_CHART_57X71, BMP_PLACEHOLDER_IMAGE_57X71, BMP_PLACEHOLDER_MOVIE_57X71 };
-//static USHORT gButtonResIdHc[ViewOverlayManager::ButtonCount] = { BMP_PLACEHOLDER_TABLE_57X71_H, BMP_PLACEHOLDER_CHART_57X71_H, BMP_PLACEHOLDER_IMAGE_57X71_H, BMP_PLACEHOLDER_MOVIE_57X71_H };
+static USHORT gButtonSlots[] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
 
 // --------------------------------------------------------------------
 
@@ -138,7 +136,7 @@ private:
 class ImageButtonHdl : public SmartHdl
 {
 public:
-    ImageButtonHdl( const SmartTagReference& xTag, USHORT nSID, const Image& rImage, const Point& rPnt );
+    ImageButtonHdl( const SmartTagReference& xTag, USHORT nSID, const Image& rImage, const Image& rImageMO, const Point& rPnt );
     virtual ~ImageButtonHdl();
     virtual void CreateB2dIAObject();
     virtual BOOL IsFocusHdl() const;
@@ -153,15 +151,17 @@ public:
 private:
     rtl::Reference< ChangePlaceholderTag > mxTag;
     Image                           maImage;
+    Image                           maImageMO;
     USHORT mnSID;
 };
 
 // --------------------------------------------------------------------
 
-ImageButtonHdl::ImageButtonHdl( const SmartTagReference& xTag, USHORT nSID, const Image& rImage, const Point& rPnt )
+ImageButtonHdl::ImageButtonHdl( const SmartTagReference& xTag, USHORT nSID, const Image& rImage, const Image& rImageMO, const Point& rPnt )
 : SmartHdl( xTag, rPnt )
 , mxTag( dynamic_cast< ChangePlaceholderTag* >( xTag.get() ) )
 , maImage( rImage )
+, maImageMO( rImageMO )
 , mnSID( nSID )
 {
 }
@@ -193,16 +193,10 @@ void ImageButtonHdl::CreateB2dIAObject()
     // first throw away old one
     GetRidOfIAObject();
 
-//  const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-
     const Point aTagPos( GetPos() );
     basegfx::B2DPoint aPosition( aTagPos.X(), aTagPos.Y() );
 
-//    const bool bFocused = IsFocusHdl() && pHdlList && (pHdlList->GetFocusHdl() == this);
-
-    BitmapEx aBitmapEx( maImage.GetBitmapEx() );
-
-    const double fAlpha = isMouseOver() ? 0.0 : 0.6;
+    BitmapEx aBitmapEx( isMouseOver() ? maImageMO.GetBitmapEx() : maImage.GetBitmapEx() );
 
     if(pHdlList)
     {
@@ -223,8 +217,7 @@ void ImageButtonHdl::CreateB2dIAObject()
                     {
                         ::sdr::overlay::OverlayObject* pOverlayObject = 0;
 
-                        // animate focused handles
-                        pOverlayObject = new ::sdr::overlay::OverlayBitmapEx( aPosition, aBitmapEx, 0, 0, fAlpha );
+                        pOverlayObject = new ::sdr::overlay::OverlayBitmapEx( aPosition, aBitmapEx, 0, 0 );
                         rPageWindow.GetOverlayManager()->add(*pOverlayObject);
                         maOverlayGroup.append(*pOverlayObject);
                     }
@@ -329,6 +322,8 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
 {
     if( mxPlaceholderObj.is() )
     {
+        const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
+
         SdrObject* pPlaceholder = mxPlaceholderObj.get();
         SmartTagReference xThis( this );
         const Rectangle& rSnapRect = pPlaceholder->GetSnapRect();
@@ -343,7 +338,7 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
         if( 50 > nShapeSizePix )
             return;
 
-        Image* pImages = &ViewOverlayManager::maSmallButtonImages[0]; //(nShapeSizePix > 300) ? &ViewOverlayManager::maLargeButtonImages[0] : &ViewOverlayManager::maSmallButtonImages[0];
+        Image* pImages = (nShapeSizePix > 300) ? &ViewOverlayManager::maLargeButtonImages[0] : &ViewOverlayManager::maSmallButtonImages[0];
 
         Size aButtonSize( pDev->PixelToLogic(pImages[0].GetSizePixel()) );
         if( 100 > nShapeSizePix )
@@ -351,14 +346,11 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
             aButtonSize.Width() >>= 1; aButtonSize.Height() >>= 1;
         }
 
-        const long nBorderPix = (nShapeSizePix > 100) ? 4 : (nShapeSizePix > 50) ? 2 : 1;
-        Size aBorder( pDev->PixelToLogic(Size(nBorderPix,nBorderPix)) );
+        const int nColumns = 2;
+        const int nRows = 2;
 
-        const int nColumns = (ViewOverlayManager::ButtonCount+1) >> 1;
-        const int nRows = (ViewOverlayManager::ButtonCount + nColumns - 1) / nColumns;
-
-        long all_width = (nColumns * aButtonSize.Width()) + ((nColumns-1) * aBorder.Width());
-        long all_height = (nRows * aButtonSize.Height()) + ((nRows-1) * aBorder.Height());
+        long all_width = nColumns * aButtonSize.Width();
+        long all_height = nRows * aButtonSize.Height();
 
         Point aPos( rSnapRect.Center() );
         aPos.X() -= all_width >> 1;
@@ -366,18 +358,24 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
 
         long nStartX = aPos.X();
 
-        for( int i = 0, c = 0; i < ViewOverlayManager::ButtonCount; i++ )
+        for( int i = 0, c = 0; i < 8; i++ )
         {
             Image aImg( pImages[i] );
+            Image aImgMO( pImages[i+4] );
+
             if( 100 > nShapeSizePix )
             {
                 BitmapEx b( aImg.GetBitmapEx() );
                 const double scale = 0.5;
                 b.Scale( scale, scale );
                 aImg = Image(b);
+
+                b = aImgMO.GetBitmapEx();
+                b.Scale( scale, scale );
+                aImgMO = Image(b);
             }
 
-            ImageButtonHdl* pHdl = new ImageButtonHdl( xThis, gButtonSlots[i], aImg, aPoint );
+            ImageButtonHdl* pHdl = new ImageButtonHdl( xThis, gButtonSlots[i>>1], aImg, aImgMO, aPoint );
             pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
             pHdl->SetPageView( mrView.GetSdrPageView() );
 
@@ -388,12 +386,12 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
             if( ++c == nColumns )
             {
                 aPos.X() = nStartX;
-                aPos.Y() += aButtonSize.Height() + aBorder.Height();
+                aPos.Y() += aButtonSize.Height();
                 c = 0;
             }
             else
             {
-                aPos.X() += aButtonSize.Width() + aBorder.Width();
+                aPos.X() += aButtonSize.Width();
             }
         }
     }
@@ -421,14 +419,7 @@ void ChangePlaceholderTag::deselect()
 }
 
 // --------------------------------------------------------------------
-/*
-static Image lcl_getslotimage( ::com::sun::star::uno::Reference<com::sun::star::frame::XFrame>& xFrame, USHORT nSID, BOOL b1, BOOL b2 )
-{
-    rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
-    aSlotURL += rtl::OUString::valueOf( sal_Int32( nSID ));
-    return ::GetImage( xFrame, aSlotURL, b1, b2 );
-}
-*/
+
 ViewOverlayManager::ViewOverlayManager( ViewShellBase& rViewShellBase )
 : mrBase( rViewShellBase )
 , mnUpdateTagsEvent( 0 )
@@ -459,18 +450,10 @@ ViewOverlayManager::~ViewOverlayManager()
 
 void ViewOverlayManager::UpdateImages()
 {
-    try
+    for( sal_uInt16 i = 0; i < (BMP_PLACEHOLDER_SMALL_END-BMP_PLACEHOLDER_SMALL_START); i++ )
     {
-        Reference<XFrame> xFrame(mrBase.GetFrame()->GetTopFrame()->GetFrameInterface(), UNO_QUERY_THROW);
-        for( int i = 0; i < ButtonCount; i++ )
-        {
-            maSmallButtonImages[i] = loadImageResource( gButtonResId[i] );
-//          maLargeButtonImages[i] = lcl_getslotimage( xFrame, mnButtonSlots[i], TRUE, FALSE );
-        }
-    }
-    catch( Exception& )
-    {
-        DBG_ERROR( "ViewOverlayManager::ViewOverlayManager(), exception caught!" );
+        maSmallButtonImages[i] = loadImageResource( BMP_PLACEHOLDER_SMALL_START + i );
+        maLargeButtonImages[i] = loadImageResource( BMP_PLACEHOLDER_LARGE_START + i );
     }
 }
 

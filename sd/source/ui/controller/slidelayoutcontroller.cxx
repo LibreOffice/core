@@ -164,11 +164,6 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
     String aTitle1( SdResId( STR_GLUE_ESCDIR_HORZ ) );
     String aTitle2( SdResId( STR_GLUE_ESCDIR_VERT ) );
 
-    const Color aMenuColor( GetSettings().GetStyleSettings().GetMenuColor() );
-    const Color aMenuBarColor( GetSettings().GetStyleSettings().GetMenuBarColor() );
-    const Color aMenuTextColor( GetSettings().GetStyleSettings().GetMenuBarColor() );
-    const Color aMenuBarTextColor( GetSettings().GetStyleSettings().GetMenuBarTextColor() );
-
     const bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
     SvtLanguageOptions aLanguageOptions;
     const bool bVerticalEnabled = aLanguageOptions.IsVerticalTextEnabled();
@@ -204,6 +199,8 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
         appendEntry( -1, aTitle2 );
         appendEntry( 1, mpLayoutSet2 );
     }
+
+    appendSeparator();
 
     OUString sSlotStr;
     Image aSlotImage;
