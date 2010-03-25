@@ -103,22 +103,22 @@ namespace svt { namespace table
         {
             return false;
         }
-        virtual void                setRowHeaders(bool _bRowHeaders)
+    virtual void                setRowHeaders(bool _bRowHeaders)
         {
             (void)_bRowHeaders;
         }
-        virtual void                setColumnHeaders(bool _bColumnHeaders)
+    virtual void                setColumnHeaders(bool _bColumnHeaders)
         {
-            (void)_bColumnHeaders;
+        (void)_bColumnHeaders;
         }
-        void setColumnCount(TableSize _nColCount)
-        {
-            (void) _nColCount;
-        }
-        void setRowCount(TableSize _nRowCount)
-        {
-             (void)_nRowCount;
-        }
+    void setColumnCount(TableSize _nColCount)
+    {
+        (void) _nColCount;
+    }
+    void setRowCount(TableSize _nRowCount)
+    {
+        (void)_nRowCount;
+    }
         virtual bool                isCellEditable( ColPos col, RowPos row ) const
         {
             (void)col;
@@ -919,21 +919,15 @@ namespace svt { namespace table
 
         // our current style settings, to be passed to the renderer
         const StyleSettings& rStyle = m_rAntiImpl.GetSettings().GetStyleSettings();
-
+    m_nRowCount = m_pModel->getRowCount();
+    TableSize nVisibleRows = impl_getVisibleRows(true);
+    TableSize nActualRows = m_nRowCount;
+    if(m_nRowCount>nVisibleRows)
+        nActualRows = nVisibleRows;
         // the area occupied by all (at least partially) visible cells, including
         // headers
         Rectangle aAllCellsWithHeaders;
         impl_getAllVisibleCellsArea( aAllCellsWithHeaders );
-
-        m_nRowCount = m_pModel->getRowCount();
-        TableSize nVisibleRows = impl_getVisibleRows(true);
-        TableSize nVisibleColumns = impl_getVisibleColumns(true);
-        TableSize nActualRows = m_nRowCount;
-        TableSize nActualCols = m_nColumnCount;
-        if(m_nRowCount>nVisibleRows)
-            nActualRows = nVisibleRows;
-        if(m_nColumnCount>nVisibleColumns)
-            nActualCols = nVisibleColumns;
         // ............................
         // draw the header column area
         if ( getModel()->hasColumnHeaders() )
@@ -964,17 +958,15 @@ namespace svt { namespace table
 
         // the area occupied by the row header, if any
         Rectangle aRowHeaderArea;
-        if ( getModel()->hasRowHeaders() )
+        if ( m_pModel->hasRowHeaders() )
         {
             aRowHeaderArea = aAllCellsWithHeaders;
             aRowHeaderArea.Right() = m_nRowHeaderWidthPixel - 1;
-            if(m_nTopRow+nActualRows>m_nRowCount)
-                aRowHeaderArea.Bottom() = m_nRowHeightPixel * (nActualRows -1)+ m_nColHeaderHeightPixel - 1;
-            else
-                aRowHeaderArea.Bottom() = m_nRowHeightPixel * nActualRows + m_nColHeaderHeightPixel - 1;
-            pRenderer->PaintHeaderArea(
-                *m_pDataWindow, aRowHeaderArea, false, true, rStyle
-            );
+        if(m_nTopRow+nActualRows>m_nRowCount)
+            aRowHeaderArea.Bottom() = m_nRowHeightPixel * (nActualRows -1)+ m_nColHeaderHeightPixel - 1;
+        else
+            aRowHeaderArea.Bottom() = m_nRowHeightPixel * nActualRows + m_nColHeaderHeightPixel - 1;
+        pRenderer->PaintHeaderArea(*m_pDataWindow, aRowHeaderArea, false, true, rStyle);
             // Note that strictly, aRowHeaderArea also contains the intersection between column
             // and row header area. However, below we go to paint this intersection, again,
             // so this hopefully doesn't hurt if we already paint it here.
@@ -997,51 +989,13 @@ namespace svt { namespace table
         // paint all rows
         Rectangle aAllDataCellsArea;
         impl_getAllVisibleDataCellArea( aAllDataCellsArea );
-
-    //get the vector, which contains row vectors, each containing the data for the cells in this row
-    std::vector<std::vector< ::com::sun::star::uno::Any > >& aCellContent = m_pModel->getCellContent();
-    //if the vector is empty, fill it with empty data, so the table can be painted
-    if(aCellContent.empty())
-    {
-        std::vector< ::com::sun::star::uno::Any > emptyCells;
-        while(m_nRowCount!=0)
-        {
-            aCellContent.push_back( emptyCells);
-            --m_nRowCount;
-        }
-    }
-    std::vector<std::vector< ::com::sun::star::uno::Any > >::iterator it = aCellContent.begin()+m_nTopRow;
-    //get the vector, which contains the row header titles
-    std::vector<rtl::OUString>& aRowHeaderContent = m_pModel->getRowHeaderName();
-    ::std::vector<rtl::OUString>::iterator itRowName = aRowHeaderContent.begin();
-
-    if(m_pModel->hasRowHeaders())
-    {
-        //if the vector is empty, fill it with empty strings, so the table can be painted
-        if(aRowHeaderContent.empty())
-        {
-            while(m_nRowCount!=0)
-            {
-                aRowHeaderContent.push_back(rtl::OUString::createFromAscii(""));
-                --m_nRowCount;
-            }
-        }
-        itRowName = aRowHeaderContent.begin()+m_nTopRow;
-    }
+    ::std::vector< std::vector< ::com::sun::star::uno::Any > >& aCellContent = m_pModel->getCellContent();
         for ( TableRowGeometry aRowIterator( *this, aAllCellsWithHeaders, getTopRow() );
               aRowIterator.isValid();
               aRowIterator.moveDown() )
         {
             if ( _rUpdateRect.GetIntersection( aRowIterator.getRect() ).IsEmpty() )
-        {
-            if(it < aCellContent.end()-1)
-            {
-                if(m_pModel->hasRowHeaders())
-                    ++itRowName;
-                ++it;
-            }
-                continue;
-        }
+            continue;
             bool isActiveRow = ( aRowIterator.getRow() == getCurRow() );
         bool isSelectedRow = false;
         if(!m_nRowSelected.empty())
@@ -1053,15 +1007,6 @@ namespace svt { namespace table
                     isSelectedRow = true;
             }
         }
-        std::vector< ::com::sun::star::uno::Any > aCellData;
-            if(it != aCellContent.begin()+m_nTopRow+nActualRows)
-        {
-            aCellData = *it;
-            if(it < aCellContent.end()-1)
-                ++it;
-        }
-        ::std::vector< ::com::sun::star::uno::Any >::iterator iter = aCellData.begin()+m_nLeftColumn;
-
             // give the redenderer a chance to prepare the row
             pRenderer->PrepareRow( aRowIterator.getRow(), isActiveRow, isSelectedRow,
             *m_pDataWindow, aRowIterator.getRect().GetIntersection( aAllDataCellsArea ), rStyle );
@@ -1069,20 +1014,13 @@ namespace svt { namespace table
             // paint the row header
             if ( m_pModel->hasRowHeaders() )
             {
-            rtl::OUString rowHeaderName;
-            if(itRowName != aRowHeaderContent.begin()+m_nTopRow+nActualRows)
-            {
-                rowHeaderName = *itRowName;
-                if(itRowName < m_pModel->getRowHeaderName().end()-1)
-                    ++itRowName;
-            }
-                Rectangle aCurrentRowHeader( aRowHeaderArea.GetIntersection( aRowIterator.getRect() ) );
-                pRenderer->PaintRowHeader( isActiveRow, isSelectedRow, *m_pDataWindow, aCurrentRowHeader,
+            Rectangle aCurrentRowHeader( aRowHeaderArea.GetIntersection( aRowIterator.getRect() ) );
+            rtl::OUString rowHeaderName = m_pModel->getRowHeaderName()[aRowIterator.getRow()];
+            pRenderer->PaintRowHeader( isActiveRow, isSelectedRow, *m_pDataWindow, aCurrentRowHeader,
                     rStyle, rowHeaderName );
             }
             if ( !colCount )
                 continue;
-
             // paint all cells in this row
             for ( TableCellGeometry aCell( aRowIterator, m_nLeftColumn );
                   aCell.isValid();
@@ -1090,29 +1028,23 @@ namespace svt { namespace table
                 )
             {
             bool isSelectedColumn = false;
-            ::com::sun::star::uno::Any rCellData;
-            if(!aCellData.empty() && iter != aCellData.begin()+m_nLeftColumn+nActualCols)
+            Size siz = m_rAntiImpl.GetSizePixel();
+            ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >xGraphic;
+            ::com::sun::star::uno::Any rCellData = aCellContent[aRowIterator.getRow()][aCell.getColumn()];
+            if(rCellData>>=xGraphic)
             {
-                rCellData = *iter;
-                if(iter < aCellData.end()-1)
-                    ++iter;
-                Size siz = m_rAntiImpl.GetSizePixel();
-                ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >xGraphic;
-                if(rCellData>>=xGraphic)
-                {
-                    Image* pImage = new Image(xGraphic);
-                    if(pImage!=NULL)
-                        pRenderer->PaintCellImage( aCell.getColumn(), isSelectedRow || isSelectedColumn, isActiveRow,
+                Image* pImage = new Image(xGraphic);
+                if(pImage!=NULL)
+                    pRenderer->PaintCellImage( aCell.getColumn(), isSelectedRow || isSelectedColumn, isActiveRow,
                                 *m_pDataWindow, aCell.getRect(), rStyle, pImage );
-                }
-                else
-                {
-                    ::rtl::OUString sContent = impl_convertToString(rCellData);
-                    pRenderer->PaintCellString( aCell.getColumn(), isSelectedRow || isSelectedColumn, isActiveRow,
+            }
+            else
+            {
+                ::rtl::OUString sContent = impl_convertToString(rCellData);
+                pRenderer->PaintCellString( aCell.getColumn(), isSelectedRow || isSelectedColumn, isActiveRow,
                         *m_pDataWindow, aCell.getRect(), rStyle, sContent );
-                }
+            }
         }
-           }
         }
     }
     //--------------------------------------------------------------------
@@ -2250,7 +2182,7 @@ namespace svt { namespace table
         //no region selected
         else
         {
-            if(m_pTableControl->m_nRowSelected.empty()
+            if(m_pTableControl->m_nRowSelected.empty())
                 m_pTableControl->m_nRowSelected.push_back(curRow);
             else
             {
