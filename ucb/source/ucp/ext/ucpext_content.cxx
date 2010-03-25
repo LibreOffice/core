@@ -324,8 +324,8 @@ namespace ucb { namespace ucp { namespace ext
     //------------------------------------------------------------------------------------------------------------------
     bool Content::denotesRootContent( const ::rtl::OUString& i_rContentIdentifier )
     {
-        const sal_Char* pScheme = "vnd.oracle.ooo.extension";
-        const sal_Int32 nSchemeLength = sizeof( "vnd.oracle.ooo.extension" ) - 1;
+        const sal_Char* pScheme = "vnd.sun.star.extension";
+        const sal_Int32 nSchemeLength = sizeof( "vnd.sun.star.extension" ) - 1;
         ENSURE_OR_RETURN_FALSE( i_rContentIdentifier.matchAsciiL( pScheme, nSchemeLength ), "illegal content URL" );
         return i_rContentIdentifier.copy( nSchemeLength ).equalsAsciiL( ":/", 2 );
     }

@@ -113,13 +113,13 @@ namespace ucb { namespace ucp { namespace ext
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString ContentProvider::getRootURL()
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.oracle.ooo.extension:/" ) );
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.extension:/" ) );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString ContentProvider::getArtificialNodeContentType()
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.oracle.ooo.extension-content" ) );
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.star.extension-content" ) );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -127,7 +127,7 @@ namespace ucb { namespace ucp { namespace ext
         throw( IllegalIdentifierException, RuntimeException )
     {
         // Check URL scheme...
-        const ::rtl::OUString aScheme( rtl::OUString::createFromAscii( "vnd.oracle.ooo.extension" ) );
+        const ::rtl::OUString aScheme( rtl::OUString::createFromAscii( "vnd.sun.star.extension" ) );
         if ( !i_rIdentifier->getContentProviderScheme().equalsIgnoreAsciiCase( aScheme ) )
             throw IllegalIdentifierException();
 

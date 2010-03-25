@@ -183,7 +183,7 @@
                 <value>com.sun.star.ucb.ExtensionContentProvider</value>
               </prop>
               <prop oor:name="URLTemplate">
-                <value>vnd.oracle.ooo.extension</value>
+                <value>vnd.sun.star.extension</value>
               </prop>
               <prop oor:name="Arguments">
                 <value/>
