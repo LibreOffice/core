@@ -194,38 +194,72 @@ Bitmap BMP_FOILH_09_H
 };
 
 
-Bitmap BMP_PLACEHOLDER_CHART_57X71
+Bitmap BMP_PLACEHOLDER_CHART_SMALL
 {
-    File = "placeholder_chart_57x71.png";
+    File = "placeholder_chart_small.png";
 };
-Bitmap BMP_PLACEHOLDER_CHART_57X71_H
+Bitmap BMP_PLACEHOLDER_CHART_SMALL_HOVER
 {
-    File = "placeholder_chart_57x71_h.png";
+    File = "placeholder_chart_small_hover.png";
 };
-Bitmap BMP_PLACEHOLDER_IMAGE_57X71
+Bitmap BMP_PLACEHOLDER_IMAGE_SMALL
 {
-    File = "placeholder_image_57x71.png";
+    File = "placeholder_image_small.png";
 };
-Bitmap BMP_PLACEHOLDER_IMAGE_57X71_H
+Bitmap BMP_PLACEHOLDER_IMAGE_SMALL_HOVER
 {
-    File = "placeholder_image_57x71_h.png";
+    File = "placeholder_image_small_hover.png";
 };
-Bitmap BMP_PLACEHOLDER_MOVIE_57X71
+Bitmap BMP_PLACEHOLDER_MOVIE_SMALL
 {
-    File = "placeholder_movie_57x71.png";
+    File = "placeholder_movie_small.png";
 };
-Bitmap BMP_PLACEHOLDER_MOVIE_57X71_H
+Bitmap BMP_PLACEHOLDER_MOVIE_SMALL_HOVER
 {
-    File = "placeholder_movie_57x71_h.png";
+    File = "placeholder_movie_small_hover.png";
 };
-Bitmap BMP_PLACEHOLDER_TABLE_57X71
+Bitmap BMP_PLACEHOLDER_TABLE_SMALL
 {
-    File = "placeholder_table_57x71.png";
+    File = "placeholder_table_small.png";
 };
-Bitmap BMP_PLACEHOLDER_TABLE_57X71_H
+Bitmap BMP_PLACEHOLDER_TABLE_SMALL_HOVER
 {
-    File = "placeholder_table_57x71_h.png";
+    File = "placeholder_table_small_hover.png";
 };
+
+Bitmap BMP_PLACEHOLDER_CHART_LARGE
+{
+    File = "placeholder_chart_large.png";
+};
+Bitmap BMP_PLACEHOLDER_CHART_LARGE_HOVER
+{
+    File = "placeholder_chart_large_hover.png";
+};
+Bitmap BMP_PLACEHOLDER_IMAGE_LARGE
+{
+    File = "placeholder_image_large.png";
+};
+Bitmap BMP_PLACEHOLDER_IMAGE_LARGE_HOVER
+{
+    File = "placeholder_image_large_hover.png";
+};
+Bitmap BMP_PLACEHOLDER_MOVIE_LARGE
+{
+    File = "placeholder_movie_large.png";
+};
+Bitmap BMP_PLACEHOLDER_MOVIE_LARGE_HOVER
+{
+    File = "placeholder_movie_large_hover.png";
+};
+Bitmap BMP_PLACEHOLDER_TABLE_LARGE
+{
+    File = "placeholder_table_large.png";
+};
+Bitmap BMP_PLACEHOLDER_TABLE_LARGE_HOVER
+{
+    File = "placeholder_table_large_hover.png";
+};
+
 Bitmap BMP_FOILN_01
 {
     File = "foiln01.bmp" ;

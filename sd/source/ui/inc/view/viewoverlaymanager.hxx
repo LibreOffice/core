@@ -35,6 +35,7 @@
 #include <svl/lstner.hxx>
 #include "EventMultiplexer.hxx"
 #include "ViewShellBase.hxx"
+#include "res_bmp.hrc"
 
 namespace sd
 {
@@ -58,9 +59,8 @@ public:
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
-    static const int ButtonCount = 4;
-    static Image maLargeButtonImages[ButtonCount];
-    static Image maSmallButtonImages[ButtonCount];
+    static Image maLargeButtonImages[BMP_PLACEHOLDER_LARGE_END - BMP_PLACEHOLDER_LARGE_START];
+    static Image maSmallButtonImages[BMP_PLACEHOLDER_SMALL_END - BMP_PLACEHOLDER_SMALL_START];
 
 private:
     void UpdateImages();

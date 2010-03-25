@@ -660,6 +660,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
                 Size aSz( SvxPaperInfo::GetPaperSize(PAPER_SCREEN, MAP_100TH_MM) );
                 pPage->SetSize( Size( aSz.Height(), aSz.Width() ) );
                 pPage->SetBorder(0, 0, 0, 0);
+                pPage->SetAutoLayout( AUTOLAYOUT_TITLE, TRUE, TRUE );
             }
 
             InsertPage(pPage, 1);
