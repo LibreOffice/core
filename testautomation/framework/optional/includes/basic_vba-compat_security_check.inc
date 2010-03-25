@@ -38,17 +38,15 @@ testcase tBasicVBACompatSecurityCheck()
     
     ' This test case is based on the use cases provided in issue #i109699
     
-    dim cFile as string : cFile = "Book1.xls"
-    
-    dim cTestFile as string
-        cTestFile = gTesttoolPath & "framework/optional/input/vba-compat/" & cFile
-        
     const IMPORT_EXCEL_MACROS = TRUE
     const EXEC_EXCEL_MACROS   = TRUE
 
     const MACRO_IDENTIFICATION_MESSAGE = "Clicked"
     const MACRO_NAME = "CommandButton1_Click"
 
+    const WORK_FILE = "framework/optional/input/vba-compat/Book1.xls"
+
+    dim cTestFile as string : cTestFile = gTesttoolPath & WORK_FILE
     dim iSecurityLevel as integer
 
 
@@ -63,8 +61,13 @@ testcase tBasicVBACompatSecurityCheck()
         printlog( "Load the test file" )
         hFileOpen( cTestFile )
 
-        printlog( "Deny macro execution" )
-        hDenyMacroExecution()
+        printlog( "Deny macro execution or close macros blocked message" )
+        if ( iSecurityLevel = GC_MACRO_SECURITY_LEVEL_MEDIUM ) then
+            hDenyMacroExecution()
+        else
+            kontext "Active"
+            Active.ok()
+        endif
 
         printlog( "Try to execute macro via macro organizer" )
         hMacroOrganizerRunMacro( MACRO_NAME )
