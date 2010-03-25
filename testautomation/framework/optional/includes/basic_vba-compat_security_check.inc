@@ -72,6 +72,9 @@ testcase tBasicVBACompatSecurityCheck()
             endif
         endif
 
+        printlog( "Try to execute the macro" )
+        hMacroOrganizerRunMacro( "CommandButton1_Click" )
+
         kontext "Active"
         printlog( "Probe for macro..." )
         if ( Active.exists( 3 ) ) then
@@ -97,20 +100,33 @@ testcase tBasicVBACompatSecurityCheck()
         hSetMacroSecurityAPI( iSecurityLevel )
 
         printlog( "Reload file" )
-        hFileOpen( cTestFile )
+        if ( not hFileOpen( cTestFile ) ) then
 
-        kontext "Active"
-        printlog( "Probe for macro or security message" )
-        if ( Active.exists() ) then
-            if ( Active.getText() = MACRO_IDENTIFICATION_MESSAGE ) then
-                warnlog( "Macro was executed" )
-                Active.ok()
+            kontext "Active"
+            Active.ok()
+
+            printlog( "Try to execute the macro" )
+            hMacroOrganizerRunMacro( "CommandButton1_Click" )
+
+            kontext "Active"
+            if ( Active.exists( 2 ) ) then
+                if ( Active.getText() = MACRO_IDENTIFICATION_MESSAGE ) then
+                    warnlog( "Macro was executed" )
+                    Active.ok()
+                else
+                    printlog( "Macro was not executed, message displayed" )
+                    Active.ok()
+
+                    kontext "Makro"
+                    Makro.cancel()
+                endif
             else
-                printlog( "Macro was not executed, message displayed" )
-                Active.ok()
+                warnlog( "Message about blocked macro execution is missing, trying to recover" )
+                kontext "Makro"
+                if ( Makro.exists() ) then Makro.cancel()
             endif
         else
-            warnlog( "Message for disabled macro execution was not displayed" )
+            warnlog( "Message about blocked macro execution is missing" )
         endif
 
         printlog( "Close file" )
