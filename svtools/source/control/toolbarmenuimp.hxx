@@ -61,8 +61,8 @@ typedef std::vector< ToolbarMenuEntry * > ToolbarMenuEntryVector;
 const int EXTRAITEMHEIGHT = 0; // 4;
 const int SEPARATOR_HEIGHT = 4;
 const int TITLE_ID = -1;
-const int BORDER_X = 2;
-const int BORDER_Y = 2;
+const int BORDER_X = 0;
+const int BORDER_Y = 0;
 
 // --------------------
 // - ToolbarMenuEntry -
@@ -79,7 +79,6 @@ public:
 
     bool mbHasText;
     bool mbHasImage;
-    bool mbHasControl;
     bool mbChecked;
     bool mbEnabled;
 
@@ -104,6 +103,11 @@ public:
     sal_Int32 getAccessibleChildCount() throw (::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > getAccessibleChild( sal_Int32 index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     void selectAccessibleChild( sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
+    bool HasCheck() const
+    {
+        return mbChecked || ( mnBits & ( MIB_RADIOCHECK | MIB_CHECKABLE | MIB_AUTOCHECK ) );
+    }
 };
 
 // ---------------
