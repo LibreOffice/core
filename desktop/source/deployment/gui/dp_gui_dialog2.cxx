@@ -291,6 +291,7 @@ void ExtBoxWithBtns_Impl::SetButtonPos( const Rectangle& rRect )
 // -----------------------------------------------------------------------
 void ExtBoxWithBtns_Impl::SetButtonStatus( const TEntry_Impl pEntry )
 {
+    pEntry->m_bHasButtons = false;
     if ( ( pEntry->m_eState == REGISTERED ) || ( pEntry->m_eState == NOT_AVAILABLE ) )
     {
         m_pEnableBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
@@ -302,24 +303,32 @@ void ExtBoxWithBtns_Impl::SetButtonStatus( const TEntry_Impl pEntry )
         m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_ENABLE );
     }
 
-    if ( ( pEntry->m_eState == NOT_AVAILABLE ) || pEntry->m_bMissingDeps )
+    if ( !pEntry->m_bUser || ( pEntry->m_eState == NOT_AVAILABLE ) || pEntry->m_bMissingDeps )
         m_pEnableBtn->Hide();
     else
     {
         m_pEnableBtn->Enable( !pEntry->m_bLocked );
         m_pEnableBtn->Show();
+        pEntry->m_bHasButtons = true;
     }
 
     if ( pEntry->m_bHasOptions )
     {
         m_pOptionsBtn->Enable( pEntry->m_bHasOptions );
         m_pOptionsBtn->Show();
+        pEntry->m_bHasButtons = true;
     }
     else
         m_pOptionsBtn->Hide();
 
-    m_pRemoveBtn->Show();
-    m_pRemoveBtn->Enable( !pEntry->m_bLocked );
+    if ( pEntry->m_bUser || pEntry->m_bShared )
+    {
+        m_pRemoveBtn->Enable( !pEntry->m_bLocked );
+        m_pRemoveBtn->Show();
+        pEntry->m_bHasButtons = true;
+    }
+    else
+        m_pRemoveBtn->Hide();
 }
 
 // -----------------------------------------------------------------------
@@ -778,10 +787,9 @@ long ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage 
 }
 
 //------------------------------------------------------------------------------
-void ExtMgrDialog::prepareChecking( const uno::Reference< deployment::XPackageManager > &xPackageManager )
+void ExtMgrDialog::prepareChecking()
 {
-    if ( xPackageManager.is() )
-        m_pExtensionBox->prepareChecking( xPackageManager );
+    m_pExtensionBox->prepareChecking();
 }
 
 //------------------------------------------------------------------------------
@@ -1323,10 +1331,9 @@ long UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::X
 }
 
 //------------------------------------------------------------------------------
-void UpdateRequiredDialog::prepareChecking( const uno::Reference< deployment::XPackageManager > &xPackageManager )
+void UpdateRequiredDialog::prepareChecking()
 {
-    if ( xPackageManager.is() )
-        m_pExtensionBox->prepareChecking( xPackageManager );
+    m_pExtensionBox->prepareChecking();
 }
 
 //------------------------------------------------------------------------------

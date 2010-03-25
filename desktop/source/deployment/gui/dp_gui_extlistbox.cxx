@@ -58,9 +58,11 @@ Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
     m_bLocked( false ),
     m_bHasOptions( false ),
     m_bShared( false ),
+    m_bUser( false ),
     m_bNew( false ),
     m_bChecked( false ),
     m_bMissingDeps( false ),
+    m_bHasButtons( false ),
     m_eState( eState ),
     m_pPublisher( NULL ),
     m_xPackage( xPackage ),
@@ -177,6 +179,8 @@ ExtensionBox_Impl::ExtensionBox_Impl( Dialog* pParent, TheExtensionManager *pMan
     m_nTopIndex( 0 ),
     m_nActiveHeight( 0 ),
     m_nExtraHeight( 2 ),
+    m_aSharedImage( DialogHelper::getResId( RID_IMG_SHARED ) ),
+    m_aSharedImageHC( DialogHelper::getResId( RID_IMG_SHARED_HC ) ),
     m_aLockedImage( DialogHelper::getResId( RID_IMG_LOCKED ) ),
     m_aLockedImageHC( DialogHelper::getResId( RID_IMG_LOCKED_HC ) ),
     m_aWarningImage( DialogHelper::getResId( RID_IMG_WARNING ) ),
@@ -380,7 +384,10 @@ void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
     if ( aTextHeight < m_nStdHeight )
         aTextHeight = m_nStdHeight;
 
-    m_nActiveHeight = aTextHeight + m_nExtraHeight;
+    if ( m_vEntries[ nPos ]->m_bHasButtons )
+        m_nActiveHeight = aTextHeight + m_nExtraHeight;
+    else
+        m_nActiveHeight = aTextHeight + 2;
 }
 
 //------------------------------------------------------------------------------
@@ -469,13 +476,15 @@ void ExtensionBox_Impl::selectEntry( const long nPos )
 
         if ( IsReallyVisible() )
         {
-            m_bNeedsRecalc = true;
             m_bAdjustActive = true;
         }
     }
 
     if ( IsReallyVisible() )
+    {
+        m_bNeedsRecalc = true;
         Invalidate();
+    }
 
     guard.clear();
 }
@@ -595,7 +604,12 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     aPos.Y() += aTextHeight;
     if ( pEntry->m_bActive )
     {
-        DrawText( Rectangle( aPos.X(), aPos.Y(), rRect.Right(), rRect.Bottom() - m_nExtraHeight ),
+        long nExtraHeight = 0;
+
+        if ( pEntry->m_bHasButtons )
+            nExtraHeight = m_nExtraHeight;
+
+        DrawText( Rectangle( aPos.X(), aPos.Y(), rRect.Right(), rRect.Bottom() - nExtraHeight ),
                   sDescription, TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
     }
     else
@@ -615,10 +629,13 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     }
 
     // Draw status icons
-    if ( pEntry->m_bShared )
+    if ( !pEntry->m_bUser )
     {
         aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SMALL_ICON_SIZE), TOP_OFFSET );
-        DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aLockedImageHC : m_aLockedImage );
+        if ( pEntry->m_bLocked )
+            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aLockedImageHC : m_aLockedImage );
+        else
+            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aSharedImageHC : m_aSharedImage );
     }
     if ( ( pEntry->m_eState == AMBIGUOUS ) || pEntry->m_bMissingDeps )
     {
@@ -950,18 +967,12 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
     if ( m_vEntries.empty() )
     {
-        pEntry->m_bHasOptions = m_pManager->supportsOptions( xPackage );
-        pEntry->m_bShared     = ( m_pManager->getUserPkgMgr() != xPackageManager );
-        pEntry->m_bNew        = m_bInCheckMode;
         m_vEntries.push_back( pEntry );
     }
     else
     {
         if ( !FindEntryPos( pEntry, 0, m_vEntries.size()-1, nPos ) )
         {
-            pEntry->m_bHasOptions = m_pManager->supportsOptions( xPackage );
-            pEntry->m_bShared     = ( m_pManager->getUserPkgMgr() != xPackageManager );
-            pEntry->m_bNew        = m_bInCheckMode;
             m_vEntries.insert( m_vEntries.begin()+nPos, pEntry );
         }
         else if ( !m_bInCheckMode )
@@ -969,6 +980,12 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
             OSL_ENSURE( 0, "ExtensionBox_Impl::addEntry(): Will not add duplicate entries"  );
         }
     }
+
+    pEntry->m_bHasOptions = m_pManager->supportsOptions( xPackage );
+    pEntry->m_bUser       = ( m_pManager->getUserPkgMgr() == xPackageManager );
+    pEntry->m_bShared     = !pEntry->m_bUser && ( m_pManager->getSharedPkgMgr() == xPackageManager );
+    pEntry->m_bNew        = m_bInCheckMode;
+
     //access to m_nActive must be guarded
     if ( !m_bInCheckMode && m_bHasActive && ( m_nActive >= nPos ) )
         m_nActive += 1;
@@ -1084,16 +1101,13 @@ void ExtensionBox_Impl::RemoveUnlocked()
 }
 
 //------------------------------------------------------------------------------
-void ExtensionBox_Impl::prepareChecking( const uno::Reference< deployment::XPackageManager > &xPackageMgr )
+void ExtensionBox_Impl::prepareChecking()
 {
     m_bInCheckMode = true;
     typedef std::vector< TEntry_Impl >::iterator ITER;
     for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
     {
-        if ( (*iIndex)->m_xPackageManager == xPackageMgr )
-            (*iIndex)->m_bChecked = false;
-        else
-            (*iIndex)->m_bChecked = true;
+        (*iIndex)->m_bChecked = false;
         (*iIndex)->m_bNew = false;
     }
 }

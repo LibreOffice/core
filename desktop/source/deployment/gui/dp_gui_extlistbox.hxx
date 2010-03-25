@@ -65,13 +65,15 @@ typedef ::boost::shared_ptr< Entry_Impl > TEntry_Impl;
 
 struct Entry_Impl
 {
-    bool            m_bActive;
-    bool            m_bLocked;
-    bool            m_bHasOptions;
-    bool            m_bShared;
-    bool            m_bNew;
-    bool            m_bChecked;
-    bool            m_bMissingDeps;
+    bool            m_bActive       :1;
+    bool            m_bLocked       :1;
+    bool            m_bHasOptions   :1;
+    bool            m_bUser         :1;
+    bool            m_bShared       :1;
+    bool            m_bNew          :1;
+    bool            m_bChecked      :1;
+    bool            m_bMissingDeps  :1;
+    bool            m_bHasButtons   :1;
     PackageState    m_eState;
     String          m_sTitle;
     String          m_sVersion;
@@ -135,6 +137,8 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     long            m_nActiveHeight;
     long            m_nExtraHeight;
     Size            m_aOutputSize;
+    Image           m_aSharedImage;
+    Image           m_aSharedImageHC;
     Image           m_aLockedImage;
     Image           m_aLockedImageHC;
     Image           m_aWarningImage;
@@ -209,7 +213,7 @@ public:
     void            updateEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
     void            removeEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
 
-    void            prepareChecking( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageMgr );
+    void            prepareChecking();
     void            checkEntries();
 
     TheExtensionManager*    getExtensionManager() const { return m_pManager; }

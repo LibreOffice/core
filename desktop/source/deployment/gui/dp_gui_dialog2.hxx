@@ -85,7 +85,7 @@ public:
     virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
                                       const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > & ) = 0;
 
-    virtual void    prepareChecking( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager ) = 0;
+    virtual void    prepareChecking() = 0;
     virtual void    checkEntries() = 0;
 
     static ResId    getResId( USHORT nId );
@@ -169,7 +169,7 @@ public:
     bool updatePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
 
-    virtual void    prepareChecking( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager );
+    virtual void    prepareChecking();
     virtual void    checkEntries();
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > raiseAddPicker( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager );
@@ -242,7 +242,7 @@ public:
     bool updatePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
 
-    virtual void    prepareChecking( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager );
+    virtual void    prepareChecking();
     virtual void    checkEntries();
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > raiseAddPicker( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager );

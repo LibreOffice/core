@@ -74,7 +74,6 @@ private:
     // liste der packages ( xpackage?, mit parent manager, ... )
 
     void createPackageList();
-    bool createPackageList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager );
 
 public:
     static ::rtl::Reference<TheExtensionManager> s_ExtMgr;

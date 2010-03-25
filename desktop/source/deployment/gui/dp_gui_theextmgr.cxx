@@ -235,7 +235,8 @@ bool TheExtensionManager::checkUpdates( bool /* bShowUpdateOnly */, bool /*bPare
     {
         uno::Sequence< uno::Reference< deployment::XPackage > > xPackageList = xAllPackages[i];
 
-        for ( sal_Int32 j = 0; j < xPackageList.getLength(); ++j )
+        // we don't want update notifications for bundled packages
+        for ( sal_Int32 j = 0; ( j < 2 ) && ( j < xPackageList.getLength() ); ++j )
         {
             uno::Reference< deployment::XPackage > xPackage = xPackageList[j];
             if ( xPackage.is() )
@@ -327,47 +328,6 @@ void TheExtensionManager::terminateDialog()
         m_pUpdReqDialog = NULL;
         Application::Quit();
     }
-}
-
-//------------------------------------------------------------------------------
-bool TheExtensionManager::createPackageList( const uno::Reference< deployment::XPackageManager > &xPackageManager )
-{
-    uno::Sequence< uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
-
-    try {
-        xAllPackages = m_xExtensionManager->getAllExtensions( uno::Reference< task::XAbortChannel >(),
-                                                              uno::Reference< ucb::XCommandEnvironment >() );
-    } catch ( deployment::DeploymentException & ) {
-        return true;
-    } catch ( ucb::CommandFailedException & ) {
-        return true;
-    } catch ( ucb::CommandAbortedException & ) {
-        return false;
-    } catch ( lang::IllegalArgumentException & e ) {
-        throw uno::RuntimeException( e.Message, e.Context );
-    }
-
-    for ( sal_Int32 i = 0; i < xAllPackages.getLength(); ++i )
-    {
-        uno::Sequence< uno::Reference< deployment::XPackage > > xPackageList = xAllPackages[i];
-
-        for ( sal_Int32 j = 0; j < xPackageList.getLength(); ++j )
-        {
-            uno::Reference< deployment::XPackage > xPackage = xPackageList[j];
-            if ( xPackage.is() )
-            {
-                PackageState eState = getPackageState( xPackage );
-                getDialogHelper()->addPackageToList( xPackage, m_sPackageManagers[j] );
-                // When the package is enabled, we can stop here, otherwise we have to look for
-                // another version of this package
-                if ( ( eState == REGISTERED ) || ( eState == NOT_AVAILABLE ) )
-                    break;
-            }
-        }
-
-    }
-
-    return true;
 }
 
 //------------------------------------------------------------------------------
@@ -553,8 +513,8 @@ void TheExtensionManager::modified( ::lang::EventObject const & rEvt )
     uno::Reference< deployment::XPackageManager > xPackageManager( rEvt.Source, uno::UNO_QUERY );
     if ( xPackageManager.is() )
     {
-        getDialogHelper()->prepareChecking( xPackageManager );
-        createPackageList( xPackageManager );
+        getDialogHelper()->prepareChecking();
+        createPackageList();
         getDialogHelper()->checkEntries();
     }
 }
