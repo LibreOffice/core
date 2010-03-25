@@ -2088,7 +2088,14 @@ void GtkSalFrame::ToTop( USHORT nFlags )
              *  is set to false.
              */
             if( (m_nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_FLOAT_FOCUSABLE)) )
+            {
+                // sad but true: this can cause an XError, we need to catch that
+                // to do this we need to synchronize with the XServer
+                getDisplay()->GetXLib()->PushXErrorLevel( true );
                 XSetInputFocus( getDisplay()->GetDisplay(), GDK_WINDOW_XWINDOW( m_pWindow->window ), RevertToParent, CurrentTime );
+                XSync( getDisplay()->GetDisplay(), False );
+                getDisplay()->GetXLib()->PopXErrorLevel();
+            }
         }
         else
         {
