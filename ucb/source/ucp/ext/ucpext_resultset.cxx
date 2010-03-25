@@ -73,16 +73,18 @@ namespace ucb { namespace ucp { namespace ext
     //------------------------------------------------------------------------------------------------------------------
     void ResultSet::initStatic()
     {
+        ::rtl::Reference< DataSupplier > pDataSupplier( new DataSupplier(
+            m_xSMgr,
+            m_xContent,
+            m_aCommand.Mode
+        ) );
         m_xResultSet1 = new ::ucbhelper::ResultSet(
             m_xSMgr,
             m_aCommand.Properties,
-            new DataSupplier(
-                m_xSMgr,
-                m_xContent,
-                m_aCommand.Mode
-            ),
+            pDataSupplier.get(),
             m_xEnvironment
         );
+        pDataSupplier->fetchData();
     }
 
     //------------------------------------------------------------------------------------------------------------------

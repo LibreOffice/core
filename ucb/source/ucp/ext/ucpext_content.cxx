@@ -49,13 +49,19 @@
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
+#include <com/sun/star/deployment/XPackageInformationProvider.hpp>
 /** === end UNO includes === **/
 
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
+#include <ucbhelper/content.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/string.hxx>
+#include <comphelper/componentcontext.hxx>
+#include <rtl/ustrbuf.hxx>
+
+#include <algorithm>
 
 //......................................................................................................................
 namespace ucb { namespace ucp { namespace ext
@@ -97,9 +103,37 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::beans::PropertyChangeEvent;
     using ::com::sun::star::lang::IllegalAccessException;
     using ::com::sun::star::ucb::CommandInfo;
+    using ::com::sun::star::deployment::XPackageInformationProvider;
     /** === end UNO using === **/
     namespace OpenMode = ::com::sun::star::ucb::OpenMode;
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
+
+    //==================================================================================================================
+    //= helper
+    //==================================================================================================================
+    namespace
+    {
+        //--------------------------------------------------------------------------------------------------------------
+        ::rtl::OUString lcl_compose( const ::rtl::OUString& i_rBaseURL, const ::rtl::OUString& i_rRelativeURL )
+        {
+            ENSURE_OR_RETURN( i_rBaseURL.getLength(), "illegal base URL", i_rRelativeURL );
+
+            ::rtl::OUStringBuffer aComposer( i_rBaseURL );
+            if ( i_rBaseURL.getStr()[ i_rBaseURL.getLength() - 1 ] != '/' )
+                aComposer.append( sal_Unicode( '/' ) );
+            aComposer.append( i_rRelativeURL );
+            return aComposer.makeStringAndClear();
+        }
+
+        //--------------------------------------------------------------------------------------------------------------
+        struct SelectPropertyName : public ::std::unary_function< Property, ::rtl::OUString >
+        {
+            const ::rtl::OUString& operator()( const Property& i_rProperty ) const
+            {
+                return i_rProperty.Name;
+            }
+        };
+    }
 
     //==================================================================================================================
     //= Content
@@ -108,7 +142,38 @@ namespace ucb { namespace ucp { namespace ext
     Content::Content( const Reference< XMultiServiceFactory >& i_rORB, ::ucbhelper::ContentProviderImplHelper* i_pProvider,
                       const Reference< XContentIdentifier >& i_rIdentifier )
         :Content_Base( i_rORB, i_pProvider, i_rIdentifier )
+        ,m_eExtContentType( E_UNKNOWN )
+        ,m_aIsFolder()
+        ,m_aContentType()
+        ,m_sExtensionId()
+        ,m_sPathIntoExtension()
     {
+        if ( denotesRootContent( getIdentifier() ) )
+        {
+            m_eExtContentType = E_ROOT;
+        }
+        else if ( denotesRootContent( getParentURL() ) )
+        {
+            m_eExtContentType = E_EXTENSION_ROOT;
+        }
+        else
+        {
+            m_eExtContentType = E_EXTENSION_CONTENT;
+        }
+
+        if ( m_eExtContentType != E_ROOT )
+        {
+            const ::rtl::OUString sRootURL = ContentProvider::getRootURL();
+            m_sExtensionId = getIdentifier()->getContentIdentifier().copy( sRootURL.getLength() );
+
+            const sal_Int32 nNextSep = m_sExtensionId.indexOf( '/' );
+            if ( nNextSep > -1 )
+            {
+                m_sPathIntoExtension = m_sExtensionId.copy( nNextSep + 1 );
+                m_sExtensionId = m_sExtensionId.copy( 0, nNextSep );
+            }
+            m_sExtensionId = Content::deescapeIdentifier( m_sExtensionId );
+        }
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -134,7 +199,8 @@ namespace ucb { namespace ucp { namespace ext
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL Content::getContentType() throw( RuntimeException )
     {
-        return m_aProps.aContentType;
+        impl_determineContentType();
+        return *m_aContentType;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -204,7 +270,7 @@ namespace ucb { namespace ucp { namespace ext
                   ( aOpenCommand.Mode == OpenMode::DOCUMENTS ) );
 
 
-            if ( bOpenFolder && m_aProps.bIsFolder )
+            if ( bOpenFolder && impl_isFolder() )
             {
                 Reference< XDynamicResultSet > xSet = new ResultSet(
                     m_xSMgr, this, aOpenCommand, i_rEvironment );
@@ -231,6 +297,7 @@ namespace ucb { namespace ucp { namespace ext
                 Reference< XOutputStream > xOut( aOpenCommand.Sink, UNO_QUERY );
                 if ( xOut.is() )
                   {
+                    OSL_ENSURE( false, "Content::execute( open->out ): not implemented!" );
                     // TODO: write data into xOut
                   }
                 else
@@ -241,6 +308,7 @@ namespace ucb { namespace ucp { namespace ext
                         Reference< XInputStream > xIn
                             /* @@@ your XInputStream + XSeekable impl. object */;
                         // TODO
+                        OSL_ENSURE( false, "Content::execute( open->sink ): not implemented!" );
                         xDataSink->setInputStream( xIn );
                     }
                       else
@@ -284,26 +352,43 @@ namespace ucb { namespace ucp { namespace ext
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    bool Content::denotesRootContent( const Reference< XContentIdentifier >& i_rIdentifier )
+    ::rtl::OUString Content::deescapeIdentifier( const ::rtl::OUString& i_rIdentifier )
+    {
+        const ::rtl::OUString sQuoteQuotes = ::comphelper::string::searchAndReplaceAllAsciiWithAscii(
+            i_rIdentifier, "%%", "%" );
+        const ::rtl::OUString sQuoteSlashes = ::comphelper::string::searchAndReplaceAllAsciiWithAscii(
+            i_rIdentifier, "%47", "/" );
+        return sQuoteSlashes;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    bool Content::denotesRootContent( const ::rtl::OUString& i_rContentIdentifier )
     {
         const sal_Char* pScheme = "vnd.oracle.ooo.extension";
         const sal_Int32 nSchemeLength = sizeof( "vnd.oracle.ooo.extension" ) - 1;
-        const ::rtl::OUString sIdentifier( i_rIdentifier->getContentIdentifier() );
-        ENSURE_OR_RETURN_FALSE( sIdentifier.matchAsciiL( pScheme, nSchemeLength ), "illegal content URL" );
-        return sIdentifier.copy( nSchemeLength ).equalsAsciiL( ":/", 2 );
+        ENSURE_OR_RETURN_FALSE( i_rContentIdentifier.matchAsciiL( pScheme, nSchemeLength ), "illegal content URL" );
+        return i_rContentIdentifier.copy( nSchemeLength ).equalsAsciiL( ":/", 2 );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString Content::getParentURL()
     {
         const ::rtl::OUString sURL = m_xIdentifier->getContentIdentifier();
-        const ::rtl::OUString sParentURL( sURL.copy( 0, sURL.lastIndexOf( '/' ) + 1 ) );
+        ENSURE_OR_RETURN( sURL.getLength(), "unexpected content URL", ::rtl::OUString() );
+        sal_Int32 nCopyUpTo = sURL.lastIndexOf( '/' ) + 1;
+        if ( ( nCopyUpTo == sURL.getLength() ) && ( nCopyUpTo > 1 ) )
+        {
+            nCopyUpTo = sURL.lastIndexOf( '/', nCopyUpTo - 2 ) + 1;
+            if ( nCopyUpTo == 0 )
+                nCopyUpTo = sURL.getLength();
+        }
+        const ::rtl::OUString sParentURL( sURL.copy( 0, nCopyUpTo ) );
         return sParentURL;
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XRow > Content::getPropertyValues( const Reference< XMultiServiceFactory >& i_rORB,
-                const Sequence< Property >& i_rProperties, const ContentProperties& i_rData )
+    Reference< XRow > Content::getArtificialNodePropertyValues( const Reference< XMultiServiceFactory >& i_rORB,
+        const Sequence< Property >& i_rProperties, const ::rtl::OUString& i_rTitle )
     {
         // note: empty sequence means "get values of all supported properties".
         ::rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( i_rORB );
@@ -321,19 +406,19 @@ namespace ucb { namespace ucp { namespace ext
                 // Process Core properties.
                 if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
                 {
-                    xRow->appendString ( rProp, i_rData.aContentType );
+                    xRow->appendString ( rProp, ContentProvider::getArtificialNodeContentType() );
                 }
                 else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
                 {
-                    xRow->appendString ( rProp, i_rData.aTitle );
+                    xRow->appendString ( rProp, i_rTitle );
                 }
                 else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
                 {
-                    xRow->appendBoolean( rProp, i_rData.bIsDocument );
+                    xRow->appendBoolean( rProp, sal_False );
                 }
                 else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
                 {
-                    xRow->appendBoolean( rProp, i_rData.bIsFolder );
+                    xRow->appendBoolean( rProp, sal_True );
                 }
                 else
                 {
@@ -349,34 +434,86 @@ namespace ucb { namespace ucp { namespace ext
                           -1,
                           getCppuType( static_cast< const ::rtl::OUString * >( 0 ) ),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-                i_rData.aContentType );
+                ContentProvider::getArtificialNodeContentType() );
             xRow->appendString ( Property( ::rtl::OUString::createFromAscii( "Title" ),
                           -1,
                           getCppuType( static_cast< const ::rtl::OUString * >( 0 ) ),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-                i_rData.aTitle );
+                i_rTitle );
             xRow->appendBoolean( Property( ::rtl::OUString::createFromAscii( "IsDocument" ),
                           -1,
                           getCppuBooleanType(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-                i_rData.bIsDocument );
+                sal_False );
             xRow->appendBoolean( Property( ::rtl::OUString::createFromAscii( "IsFolder" ),
                           -1,
                           getCppuBooleanType(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-                i_rData.bIsFolder );
+                sal_True );
         }
 
         return Reference< XRow >( xRow.get() );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XRow > Content::getPropertyValues( const Sequence< Property >& i_rProperties, const Reference< XCommandEnvironment >& /* xEnv */)
+    ::rtl::OUString Content::getPhysicalURL() const
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        return getPropertyValues( m_xSMgr,
-                                  i_rProperties,
-                                  m_aProps );
+        ENSURE_OR_RETURN( m_eExtContentType != E_ROOT, "illegal call", ::rtl::OUString() );
+
+        // create an ucb::XContent for the physical file within the deployed extension
+        const ::comphelper::ComponentContext aContext( m_xSMgr );
+        const Reference< XPackageInformationProvider > xPackageInfo(
+            aContext.getSingleton( "com.sun.star.deployment.PackageInformationProvider" ), UNO_QUERY_THROW );
+        const ::rtl::OUString sPackageLocation( xPackageInfo->getPackageLocation( m_sExtensionId ) );
+
+        if ( m_sPathIntoExtension.getLength() == 0 )
+            return sPackageLocation;
+        return lcl_compose( sPackageLocation, m_sPathIntoExtension );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Reference< XRow > Content::getPropertyValues( const Sequence< Property >& i_rProperties, const Reference< XCommandEnvironment >& i_rEnv )
+    {
+        ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+
+        switch ( m_eExtContentType )
+        {
+        case E_ROOT:
+            return getArtificialNodePropertyValues( m_xSMgr, i_rProperties, ContentProvider::getRootURL() );
+        case E_EXTENSION_ROOT:
+            return getArtificialNodePropertyValues( m_xSMgr, i_rProperties, m_sExtensionId );
+        case E_EXTENSION_CONTENT:
+        {
+            const ::rtl::OUString sPhysicalContentURL( getPhysicalURL() );
+            ::ucbhelper::Content aRequestedContent( sPhysicalContentURL, i_rEnv );
+
+            // translate the property request
+            Sequence< ::rtl::OUString > aPropertyNames( i_rProperties.getLength() );
+            ::std::transform(
+                i_rProperties.getConstArray(),
+                i_rProperties.getConstArray() + i_rProperties.getLength(),
+                aPropertyNames.getArray(),
+                SelectPropertyName()
+            );
+            const Sequence< Any > aPropertyValues = aRequestedContent.getPropertyValues( aPropertyNames );
+            const ::rtl::Reference< ::ucbhelper::PropertyValueSet > xValueRow = new ::ucbhelper::PropertyValueSet( m_xSMgr );
+            sal_Int32 i=0;
+            for (   const Any* value = aPropertyValues.getConstArray();
+                    value != aPropertyValues.getConstArray() + aPropertyValues.getLength();
+                    ++value, ++i
+                )
+            {
+                xValueRow->appendObject( aPropertyNames[i], *value );
+            }
+            return xValueRow.get();
+        }
+        break;
+        default:
+            OSL_ENSURE( false, "Content::getPropertyValues: unhandled case!" );
+        }
+
+        OSL_ENSURE( false, "Content::getPropertyValues: unreachable!" );
+        return NULL;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -438,14 +575,11 @@ namespace ucb { namespace ucp { namespace ext
             ///////////////////////////////////////////////////////////////
             // Optional standard commands
             ///////////////////////////////////////////////////////////////
-
-    #ifdef IMPLEMENT_COMMAND_OPEN
             , CommandInfo(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
                 -1,
                 getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
             )
-    #endif
         };
 
         return Sequence< CommandInfo >( aCommandInfoTable, nCommandCount );
@@ -482,6 +616,51 @@ namespace ucb { namespace ucp { namespace ext
             )
         };
         return Sequence< Property >( aProperties, sizeof( aProperties ) / sizeof( aProperties[0] ) );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    bool Content::impl_isFolder()
+    {
+        if ( !!m_aIsFolder )
+            return *m_aIsFolder;
+
+        bool bIsFolder = false;
+        try
+        {
+            Sequence< Property > aProps(1);
+            aProps[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) );
+            Reference< XRow > xRow( getPropertyValues( aProps, NULL ), UNO_SET_THROW );
+            bIsFolder = xRow->getBoolean(1);
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        m_aIsFolder.reset( bIsFolder );
+        return *m_aIsFolder;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void Content::impl_determineContentType()
+    {
+        if ( !!m_aContentType )
+            return;
+
+        m_aContentType.reset( ContentProvider::getArtificialNodeContentType() );
+        if ( m_eExtContentType == E_EXTENSION_CONTENT )
+        {
+            try
+            {
+                Sequence< Property > aProps(1);
+                aProps[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) );
+                Reference< XRow > xRow( getPropertyValues( aProps, NULL ), UNO_SET_THROW );
+                m_aContentType.reset( xRow->getString(1) );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
     }
 
 //......................................................................................................................

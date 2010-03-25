@@ -48,10 +48,12 @@ namespace ucb { namespace ucp { namespace ext
     {
     public:
         DataSupplier(
-            const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& i_rORB,
+            const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& i_rORB,
             const rtl::Reference< Content >& rContent,
             const sal_Int32 nOpenMode
         );
+
+        void    fetchData();
 
     protected:
         virtual ~DataSupplier();

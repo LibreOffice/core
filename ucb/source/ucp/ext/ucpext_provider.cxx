@@ -111,6 +111,18 @@ namespace ucb { namespace ucp { namespace ext
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    ::rtl::OUString ContentProvider::getRootURL()
+    {
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.oracle.ooo.extension:/" ) );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::rtl::OUString ContentProvider::getArtificialNodeContentType()
+    {
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.oracle.ooo.extension-content" ) );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     Reference< XContent > SAL_CALL ContentProvider::queryContent( const Reference< XContentIdentifier  >& i_rIdentifier )
         throw( IllegalIdentifierException, RuntimeException )
     {

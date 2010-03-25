@@ -55,6 +55,10 @@ namespace ucb { namespace ucp { namespace ext
 
         // XContentProvider
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > SAL_CALL queryContent( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifier >& Identifier ) throw (::com::sun::star::ucb::IllegalIdentifierException, ::com::sun::star::uno::RuntimeException);
+
+    public:
+        static ::rtl::OUString getRootURL();
+        static ::rtl::OUString getArtificialNodeContentType();
     };
 
 //......................................................................................................................

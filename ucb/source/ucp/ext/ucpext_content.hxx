@@ -36,6 +36,7 @@
 #include <ucbhelper/contenthelper.hxx>
 
 #include <list>
+#include <boost/optional.hpp>
 
 //......................................................................................................................
 namespace ucb { namespace ucp { namespace ext
@@ -43,20 +44,15 @@ namespace ucb { namespace ucp { namespace ext
 //......................................................................................................................
 
     //==================================================================================================================
-    //= ContentProvider
+    //= ExtensionContentType
     //==================================================================================================================
-    struct ContentProperties
+    enum ExtensionContentType
     {
-        ::rtl::OUString aTitle;         // Title
-        ::rtl::OUString aContentType;   // ContentType
-        bool            bIsDocument;    // IsDocument
-        bool            bIsFolder;      // IsFolder
+        E_ROOT,
+        E_EXTENSION_ROOT,
+        E_EXTENSION_CONTENT,
 
-        ContentProperties()
-            :bIsDocument( false )
-            ,bIsFolder( true )
-        {
-        }
+        E_UNKNOWN
     };
 
     //==================================================================================================================
@@ -66,23 +62,38 @@ namespace ucb { namespace ucp { namespace ext
     class Content : public Content_Base
     {
     public:
-        static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
-            getPropertyValues(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& rProperties,
-                const ContentProperties& rData
-            );
-
         Content(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
             ::ucbhelper::ContentProviderImplHelper* pProvider,
             const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifier >& Identifier
         );
 
-        static bool denotesRootContent( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifier >& i_rIdentifier );
+        static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
+            getArtificialNodePropertyValues(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& rProperties,
+                const ::rtl::OUString& rTitle
+            );
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
+            getPropertyValues(
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& rProperties,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& xEnv
+            );
 
         static ::rtl::OUString
             escapeIdentifier( const ::rtl::OUString& i_rIdentifier );
+        static ::rtl::OUString
+            deescapeIdentifier( const ::rtl::OUString& i_rIdentifier );
+
+        virtual ::rtl::OUString getParentURL();
+
+        ExtensionContentType getExtensionContentType() const { return m_eExtContentType; }
+
+        /** retrieves the URL of the underlying physical content. Not to be called when getExtensionContentType()
+            returns E_ROOT.
+        */
+        ::rtl::OUString getPhysicalURL() const;
 
     protected:
         virtual ~Content();
@@ -113,28 +124,31 @@ namespace ucb { namespace ucp { namespace ext
                 throw   (   ::com::sun::star::uno::RuntimeException
                         );
 
-    protected:
-        const ContentProperties&    getProperties() const { return m_aProps; }
-              ContentProperties&    getProperties()       { return m_aProps; }
-
     private:
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > getProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& i_rEnv );
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::CommandInfo > getCommands( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& i_rEnv );
-        virtual ::rtl::OUString getParentURL();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
-            getPropertyValues(
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& rProperties,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& xEnv
-            );
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
             setPropertyValues(
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rValues,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& xEnv
             );
 
+        static bool denotesRootContent( const ::rtl::OUString& i_rContentIdentifier );
+        static bool denotesRootContent( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifier >& i_rIdentifier )
+        {
+            return denotesRootContent( i_rIdentifier->getContentIdentifier() );
+        }
+
+        bool impl_isFolder();
+        void impl_determineContentType();
+
     private:
-        ContentProperties   m_aProps;
+        ExtensionContentType                    m_eExtContentType;
+        ::boost::optional< bool >               m_aIsFolder;
+        ::boost::optional< ::rtl::OUString >    m_aContentType;
+        ::rtl::OUString                         m_sExtensionId;
+        ::rtl::OUString                         m_sPathIntoExtension;
     };
 
 //......................................................................................................................

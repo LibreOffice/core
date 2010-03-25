@@ -28,6 +28,7 @@
 
 #include "ucpext_datasupplier.hxx"
 #include "ucpext_content.hxx"
+#include "ucpext_provider.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/deployment/XPackageInformationProvider.hpp>
@@ -36,9 +37,13 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <ucbhelper/providerhelper.hxx>
+#include <ucbhelper/content.hxx>
+#include <ucbhelper/propertyvalueset.hxx>
 #include <tools/diagnose_ex.h>
+#include <rtl/ustrbuf.hxx>
 
 #include <vector>
+#include <boost/shared_ptr.hpp>
 
 //......................................................................................................................
 namespace ucb { namespace ucp { namespace ext
@@ -65,8 +70,10 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::ucb::ResultSetException;
     using ::com::sun::star::deployment::XPackageInformationProvider;
     using ::com::sun::star::beans::Property;
+    using ::com::sun::star::sdbc::XResultSet;
+    using ::com::sun::star::sdbc::XRow;
+    using ::com::sun::star::ucb::XCommandEnvironment;
     /** === end UNO using === **/
-
     //==================================================================================================================
     //= ResultListEntry
     //==================================================================================================================
@@ -74,15 +81,8 @@ namespace ucb { namespace ucp { namespace ext
     {
         ::rtl::OUString                 sId;
         Reference< XContentIdentifier > xId;
-        ContentProperties               aProperties;
-        Reference< XContent >           xContent;
+        ::rtl::Reference< Content >     pContent;
         Reference< XRow >               xRow;
-
-        ResultListEntry( const ::rtl::OUString& i_rParentId, const ::rtl::OUString& i_rLocalId )
-        {
-            aProperties.aTitle = i_rLocalId;
-            sId = i_rParentId + Content::escapeIdentifier( i_rLocalId );
-        }
     };
 
     typedef ::std::vector< ResultListEntry >    ResultList;
@@ -114,6 +114,24 @@ namespace ucb { namespace ucp { namespace ext
     }
 
     //==================================================================================================================
+    //= helper
+    //==================================================================================================================
+    namespace
+    {
+        ::rtl::OUString lcl_compose( const ::rtl::OUString& i_rBaseURL, const ::rtl::OUString& i_rRelativeURL )
+        {
+            ENSURE_OR_RETURN( i_rBaseURL.getLength(), "illegal base URL", i_rRelativeURL );
+
+            ::rtl::OUStringBuffer aComposer( i_rBaseURL );
+            if ( i_rBaseURL.getStr()[ i_rBaseURL.getLength() - 1 ] != '/' )
+                aComposer.append( sal_Unicode( '/' ) );
+            aComposer.append( i_rRelativeURL );
+            return aComposer.makeStringAndClear();
+        }
+    }
+
+
+    //==================================================================================================================
     //= DataSupplier
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
@@ -122,16 +140,23 @@ namespace ucb { namespace ucp { namespace ext
                                 const sal_Int32 i_nOpenMode )
         :m_pImpl( new DataSupplier_Impl( i_rORB, i_rContent, i_nOpenMode ) )
     {
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void DataSupplier::fetchData()
+    {
         try
         {
-            if ( Content::denotesRootContent( m_pImpl->m_xContent->getIdentifier() ) )
+            const ::comphelper::ComponentContext aContext( m_pImpl->m_xSMgr );
+            const Reference< XPackageInformationProvider > xPackageInfo(
+                aContext.getSingleton( "com.sun.star.deployment.PackageInformationProvider" ), UNO_QUERY_THROW );
+
+            const ::rtl::OUString sContentIdentifier( m_pImpl->m_xContent->getIdentifier()->getContentIdentifier() );
+
+            switch ( m_pImpl->m_xContent->getExtensionContentType() )
             {
-                const ::rtl::OUString sContentId( m_pImpl->m_xContent->getIdentifier()->getContentIdentifier() );
-
-                const ::comphelper::ComponentContext aContext( i_rORB );
-                Reference< XPackageInformationProvider > xPackageInfo(
-                    aContext.getSingleton( "com.sun.star.deployment.PackageInformationProvider" ), UNO_QUERY_THROW );
-
+            case E_ROOT:
+            {
                 Sequence< Sequence< ::rtl::OUString > > aExtensionInfo( xPackageInfo->getExtensionList() );
                 for (   const Sequence< ::rtl::OUString >* pExtInfo = aExtensionInfo.getConstArray();
                         pExtInfo != aExtensionInfo.getConstArray() + aExtensionInfo.getLength();
@@ -140,10 +165,36 @@ namespace ucb { namespace ucp { namespace ext
                 {
                     ENSURE_OR_CONTINUE( pExtInfo->getLength() > 0, "illegal extension info" );
 
-                    ResultListEntry aEntry( sContentId, (*pExtInfo)[0] );
-                    aEntry.aProperties.aContentType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.oracle.ooo.extension-content" ) );
-                    m_pImpl->m_aResults.push_back( ResultListEntry( aEntry ) );
+                    const ::rtl::OUString& rLocalId = (*pExtInfo)[0];
+                    ResultListEntry aEntry;
+                    aEntry.sId = lcl_compose( sContentIdentifier, Content::escapeIdentifier( rLocalId ) );
+                    m_pImpl->m_aResults.push_back( aEntry );
                 }
+            }
+            break;
+            case E_EXTENSION_ROOT:
+            case E_EXTENSION_CONTENT:
+            {
+                const ::rtl::OUString sPackageLocation( m_pImpl->m_xContent->getPhysicalURL() );
+                ::ucbhelper::Content aWrappedContent( sPackageLocation, getResultSet()->getEnvironment() );
+
+                // obtain the properties which our result set is set up for from the wrapped content
+                Sequence< ::rtl::OUString > aPropertyNames(1);
+                aPropertyNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
+
+                const Reference< XResultSet > xFolderContent( aWrappedContent.createCursor( aPropertyNames ), UNO_SET_THROW );
+                const Reference< XRow > xContentRow( xFolderContent, UNO_QUERY_THROW );
+                while ( xFolderContent->next() )
+                {
+                    ResultListEntry aEntry;
+                    aEntry.sId = lcl_compose( sContentIdentifier, xContentRow->getString( 1 ) );
+                    m_pImpl->m_aResults.push_back( aEntry );
+                }
+            }
+            break;
+            default:
+                OSL_ENSURE( false, "DataSupplier::fetchData: unimplemented content type!" );
+                break;
             }
         }
         catch( const Exception& )
@@ -202,9 +253,10 @@ namespace ucb { namespace ucp { namespace ext
         ::osl::Guard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
         ENSURE_OR_RETURN( i_nIndex < m_pImpl->m_aResults.size(), "illegal index!", NULL );
 
-        Reference< XContent > xContent( m_pImpl->m_aResults[ i_nIndex ].xContent );
-        if ( xContent.is() )
-            return xContent;
+
+        ::rtl::Reference< Content > pContent( m_pImpl->m_aResults[ i_nIndex ].pContent );
+        if ( pContent.is() )
+            return pContent.get();
 
         Reference< XContentIdentifier > xId( queryContentIdentifier( i_nIndex ) );
         if ( xId.is() )
@@ -212,8 +264,10 @@ namespace ucb { namespace ucp { namespace ext
             try
             {
                 Reference< XContent > xContent( m_pImpl->m_xContent->getProvider()->queryContent( xId ) );
-                m_pImpl->m_aResults[ i_nIndex ].xContent = xContent;
-                return xContent;
+                ::rtl::Reference< Content > pContent( dynamic_cast< Content* >( xContent.get() ) );
+                OSL_ENSURE( pContent.is() || !xContent.is(), "DataSupplier::queryContent: invalid content implementation!" );
+                m_pImpl->m_aResults[ i_nIndex ].pContent = pContent;
+                return pContent.get();
 
             }
             catch ( const IllegalIdentifierException& )
@@ -259,15 +313,38 @@ namespace ucb { namespace ucp { namespace ext
     //------------------------------------------------------------------------------------------------------------------
     Reference< XRow > DataSupplier::queryPropertyValues( sal_uInt32 i_nIndex  )
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
+        ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
         ENSURE_OR_RETURN( i_nIndex < m_pImpl->m_aResults.size(), "DataSupplier::queryPropertyValues: illegal index!", NULL );
 
         Reference< XRow > xRow = m_pImpl->m_aResults[ i_nIndex ].xRow;
         if ( xRow.is() )
             return xRow;
 
-        xRow = Content::getPropertyValues( m_pImpl->m_xSMgr, getResultSet()->getProperties(),
-            m_pImpl->m_aResults[ i_nIndex ].aProperties );
+        ENSURE_OR_RETURN( queryContent( i_nIndex ).is(), "could not retrieve the content", NULL );
+
+        switch ( m_pImpl->m_xContent->getExtensionContentType() )
+        {
+        case E_ROOT:
+        {
+            const ::rtl::OUString& rId( m_pImpl->m_aResults[ i_nIndex ].sId );
+            const ::rtl::OUString sTitle = Content::deescapeIdentifier( rId.copy( rId.indexOf( '/' ) + 1 ) );
+            xRow = Content::getArtificialNodePropertyValues( m_pImpl->m_xSMgr, getResultSet()->getProperties(), sTitle );
+        }
+        break;
+
+        case E_EXTENSION_ROOT:
+        case E_EXTENSION_CONTENT:
+        {
+            xRow = m_pImpl->m_aResults[ i_nIndex ].pContent->getPropertyValues(
+                getResultSet()->getProperties(), getResultSet()->getEnvironment() );
+        }
+        break;
+        default:
+            OSL_ENSURE( false, "DataSupplier::queryPropertyValues: unhandled case!" );
+            break;
+        }
+
+        m_pImpl->m_aResults[ i_nIndex ].xRow = xRow;
         return xRow;
     }
 
