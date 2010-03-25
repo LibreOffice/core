@@ -177,7 +177,7 @@ namespace svt { namespace table
     {
         Rectangle _rRect;
         if(_bRemoved)
-            m_pImpl->invalidateRows(_nRowStart, _rRect);
+            m_pImpl->invalidateRows();
         else
         {
             if(m_bSelectionChanged)

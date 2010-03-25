@@ -200,7 +200,7 @@ namespace svt { namespace table
     std::vector<RowPos>& getSelectedRows();
     /** updates the vector, which contains the selected rows after removing the row nRowPos*/
     void    removeSelectedRow(RowPos _nRowPos);
-    void    invalidateRows(RowPos _nRowStart, Rectangle& _rCellRect );
+    void    invalidateRows();
 
         // IAbstractTableControl
         virtual void    hideCursor();

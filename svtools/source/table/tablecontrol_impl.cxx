@@ -899,7 +899,7 @@ namespace svt { namespace table
         {
             if(m_bResizingGrid)
                 impl_ni_updateColumnWidths();
-            impl_ni_updateScrollbars();
+            invalidateRows();
             m_bResizingGrid = true;
         }
     }
@@ -1614,10 +1614,8 @@ namespace svt { namespace table
             m_nCurRow = _nRowPos-1;
     }
     //------------------------------------------------------------------------------
-    void TableControl_Impl::invalidateRows(RowPos _nRowStart, Rectangle& _rCellRect)
+    void TableControl_Impl::invalidateRows()
     {
-    (void)_nRowStart;
-    (void)_rCellRect;
     impl_ni_updateScrollbars();
     TableSize nVisibleRows = impl_getVisibleRows(true);
     if(m_nTopRow+nVisibleRows>m_nRowCount && m_nRowCount>=nVisibleRows)
