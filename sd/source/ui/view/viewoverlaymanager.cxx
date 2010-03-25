@@ -303,7 +303,7 @@ bool ChangePlaceholderTag::KeyInput( const KeyEvent& rKEvt )
 }
 
 /** returns true if the SmartTag consumes this event. */
-bool ChangePlaceholderTag::RequestHelp( const HelpEvent& rHEvt )
+bool ChangePlaceholderTag::RequestHelp( const HelpEvent& /*rHEvt*/ )
 {
 /*
     Rectangle aItemRect( rHEvt.GetMousePosPixel(), Size(1,1) );
