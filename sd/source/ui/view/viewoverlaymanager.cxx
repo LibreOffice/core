@@ -338,14 +338,15 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
         if( 50 > nShapeSizePix )
             return;
 
-        Image* pImages = (nShapeSizePix > 300) ? &ViewOverlayManager::maLargeButtonImages[0] : &ViewOverlayManager::maSmallButtonImages[0];
+        Image* pImages = (nShapeSizePix > 250) ? &ViewOverlayManager::maLargeButtonImages[0] : &ViewOverlayManager::maSmallButtonImages[0];
 
         Size aButtonSize( pDev->PixelToLogic(pImages[0].GetSizePixel()) );
+/*
         if( 100 > nShapeSizePix )
         {
             aButtonSize.Width() >>= 1; aButtonSize.Height() >>= 1;
         }
-
+*/
         const int nColumns = 2;
         const int nRows = 2;
 
@@ -358,11 +359,11 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
 
         long nStartX = aPos.X();
 
-        for( int i = 0, c = 0; i < 8; i++ )
+        for( int i = 0, c = 0; i < 4; i++ )
         {
             Image aImg( pImages[i] );
             Image aImgMO( pImages[i+4] );
-
+/*
             if( 100 > nShapeSizePix )
             {
                 BitmapEx b( aImg.GetBitmapEx() );
@@ -374,7 +375,7 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
                 b.Scale( scale, scale );
                 aImgMO = Image(b);
             }
-
+*/
             ImageButtonHdl* pHdl = new ImageButtonHdl( xThis, gButtonSlots[i>>1], aImg, aImgMO, aPoint );
             pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
             pHdl->SetPageView( mrView.GetSdrPageView() );
