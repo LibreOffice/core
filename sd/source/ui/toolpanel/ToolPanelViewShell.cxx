@@ -55,6 +55,7 @@
 /** === begin UNO includes === **/
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
+#include <com/sun/star/drawing/framework/AnchorBindingMode.hpp>
 #include <com/sun/star/drawing/XDrawSubController.hpp>
 /** === end UNO includes === **/
 
@@ -110,6 +111,9 @@ using ::com::sun::star::drawing::framework::ConfigurationChangeEvent;
 using ::com::sun::star::lang::EventObject;
 using ::com::sun::star::lang::DisposedException;
 using ::com::sun::star::drawing::framework::XConfigurationControllerBroadcaster;
+using ::com::sun::star::drawing::framework::XConfigurationController;
+using ::com::sun::star::drawing::framework::XConfiguration;
+using ::com::sun::star::drawing::framework::AnchorBindingMode_DIRECT;
 /** === end UNO using === **/
 
 using ::sd::framework::FrameworkHelper;
@@ -268,9 +272,20 @@ private:
     void RegisterPanel( size_t i_nPosition, PanelId i_nPanelId, const ::svt::PToolPanel& i_rPanel );
     void UpdateDockingWindowTitle();
 
-    /** creates the built-in panels, returns the position of the panel to activate initially
+    /** creates the built-in panels, returns the position of the panel to initially activate
     */
-    size_t SetupDefaultPanels();
+    struct PanelActivation
+    {
+        size_t  nPanelPos;
+        bool    bActivateAsResource;
+
+        PanelActivation()
+            :nPanelPos( size_t( -1 ) )
+            ,bActivateAsResource( true )
+        {
+        }
+    };
+    PanelActivation SetupDefaultPanels();
 
     /** creates the custom panels
     */
@@ -391,7 +406,7 @@ SFX_IMPL_INTERFACE(ToolPanelViewShell, SfxShell, SdResId(STR_TASKPANEVIEWSHELL))
 TYPEINIT1(ToolPanelViewShell, ViewShell);
 
 // ---------------------------------------------------------------------------------------------------------------------
-size_t ToolPanelViewShell_Impl::SetupDefaultPanels()
+ToolPanelViewShell_Impl::PanelActivation ToolPanelViewShell_Impl::SetupDefaultPanels()
 {
     typedef std::auto_ptr<ControlFactory> (*ControlFactoryFactory)( ToolPanelViewShell& i_rToolPanelShell );
 
@@ -453,9 +468,35 @@ size_t ToolPanelViewShell_Impl::SetupDefaultPanels()
     ::boost::shared_ptr< FrameworkHelper > pFrameworkHelper( FrameworkHelper::Instance( m_rPanelViewShell.GetViewShellBase() ) );
     const Reference< XResourceId > xToolPanelId( pFrameworkHelper->CreateResourceId( FrameworkHelper::msTaskPaneURL, FrameworkHelper::msRightPaneURL ) );
 
-    // want to activate the "Layout" panel later on, need to translate its PanelId to an actual position
-    const PanelId nPanelIdToActivate = PID_LAYOUT;
-    size_t nPanelPosToActivate = size_t( -1 );
+    // determine which panel should be activated initially.
+    // Default to PID_LAYOUT, but check whether the requested configuration already contains a tool panel, in this case,
+    // use that one.
+    PanelId nPanelToActivate = PID_LAYOUT;
+    PanelActivation aPanelToActivate;
+    try
+    {
+        ::boost::shared_ptr< FrameworkHelper > pFrameworkHelper( FrameworkHelper::Instance( m_rPanelViewShell.GetViewShellBase() ) );
+        Reference< XConfigurationController > xCC( pFrameworkHelper->GetConfigurationController(), UNO_QUERY_THROW );
+        Reference< XConfiguration > xConfiguration( xCC->getRequestedConfiguration(), UNO_QUERY_THROW );
+        Sequence< Reference< XResourceId > > aViewIds( xConfiguration->getResources(
+            FrameworkHelper::CreateResourceId( FrameworkHelper::msTaskPaneURL, FrameworkHelper::msRightPaneURL ),
+            FrameworkHelper::msTaskPanelURLPrefix, AnchorBindingMode_DIRECT ) );
+
+        if ( aViewIds.getLength() > 0 )
+        {
+            const ::rtl::OUString sResourceURL( aViewIds[0]->getResourceURL() );
+            PanelId nRequestedPanel = GetStandardPanelId( sResourceURL );
+            if ( nRequestedPanel != PID_UNKNOWN )
+            {
+                nPanelToActivate = nRequestedPanel;
+                aPanelToActivate.bActivateAsResource = false;
+            }
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 
     // create the panels
     Reference< XFrame > xFrame( m_rPanelViewShell.GetViewShellBase().GetViewFrame()->GetFrame()->GetFrameInterface() );
@@ -486,11 +527,11 @@ size_t ToolPanelViewShell_Impl::SetupDefaultPanels()
         // remember it
         RegisterPanel( nPanelPos, aPanels[i].nPanelID, pNewPanel );
 
-        if ( nPanelIdToActivate == aPanels[i].nPanelID )
-            nPanelPosToActivate = nPanelPos;
+        if ( nPanelToActivate == aPanels[i].nPanelID )
+            aPanelToActivate.nPanelPos = nPanelPos;
     }
 
-    return nPanelPosToActivate;
+    return aPanelToActivate;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -532,13 +573,16 @@ void ToolPanelViewShell_Impl::Setup()
     m_bInitialized = true;
 
     // standard (built-in) panels
-    const size_t nPanelPosToActivate = SetupDefaultPanels();
+    const PanelActivation aPanelToActivate = SetupDefaultPanels();
 
     // custom panels
     SetupCustomPanels();
 
     // activate default panel
-    m_pPanelDeck->ActivatePanelResource( nPanelPosToActivate );
+    if ( aPanelToActivate.bActivateAsResource )
+        m_pPanelDeck->ActivatePanelResource( aPanelToActivate.nPanelPos );
+    else
+        m_pPanelDeck->ActivatePanelDirectly( aPanelToActivate.nPanelPos );
 
     // add as listener to the panel deck
     m_pPanelDeck->AddListener( *this );
@@ -1185,6 +1229,39 @@ void ToolPanelViewShell_Impl::ActivePanelChanged( const ::boost::optional< size_
 // ---------------------------------------------------------------------------------------------------------------------
 void ToolPanelViewShell_Impl::Dying()
 {
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+PanelId GetStandardPanelId( const ::rtl::OUString& i_rTaskPanelResourceURL )
+{
+    PanelId ePanelId( PID_UNKNOWN );
+
+    if ( i_rTaskPanelResourceURL.equals( FrameworkHelper::msMasterPagesTaskPanelURL ) )
+    {
+        ePanelId = PID_MASTER_PAGES;
+    }
+    else if ( i_rTaskPanelResourceURL.equals( FrameworkHelper::msLayoutTaskPanelURL ) )
+    {
+        ePanelId = PID_LAYOUT;
+    }
+    else if ( i_rTaskPanelResourceURL.equals( FrameworkHelper::msTableDesignPanelURL ) )
+    {
+        ePanelId = PID_TABLE_DESIGN;
+    }
+    else if ( i_rTaskPanelResourceURL.equals( FrameworkHelper::msCustomAnimationTaskPanelURL ) )
+    {
+        ePanelId = PID_CUSTOM_ANIMATION;
+    }
+    else if ( i_rTaskPanelResourceURL.equals( FrameworkHelper::msSlideTransitionTaskPanelURL ) )
+    {
+        ePanelId = PID_SLIDE_TRANSITION;
+    }
+    else
+    {
+        OSL_ENSURE( false, "GetStandardPanelId: cannot translate the given resource URL!" );
+    }
+
+    return ePanelId;
 }
 
 } } // end of namespace ::sd::toolpanel

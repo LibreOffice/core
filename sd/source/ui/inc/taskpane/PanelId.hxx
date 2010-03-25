@@ -49,6 +49,8 @@ namespace sd { namespace toolpanel
         PID_FIRST_CUSTOM_PANEL  = 6
     };
 
+    PanelId GetStandardPanelId( const ::rtl::OUString& i_rTaskPanelResourceURL );
+
 //......................................................................................................................
 } } // namespace sd::toolpanel
 //......................................................................................................................

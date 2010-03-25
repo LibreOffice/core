@@ -202,40 +202,6 @@ namespace
             sResourceURL = xResourceId->getResourceURL();
         }
     }
-
-    toolpanel::PanelId lcl_getPanelId( const ::rtl::OUString& i_rResourceURL )
-    {
-        toolpanel::PanelId ePanelId( toolpanel::PID_UNKNOWN );
-
-        // TODO: this translation table PanelId<->PanelResourceURL is used in multiple files,
-        // perhaps it is worth putting this into a dedicated helper/meta-data class.
-        if ( i_rResourceURL.equals( FrameworkHelper::msMasterPagesTaskPanelURL ) )
-        {
-            ePanelId = toolpanel::PID_MASTER_PAGES;
-        }
-        else if ( i_rResourceURL.equals( FrameworkHelper::msLayoutTaskPanelURL ) )
-        {
-            ePanelId = toolpanel::PID_LAYOUT;
-        }
-        else if ( i_rResourceURL.equals( FrameworkHelper::msTableDesignPanelURL ) )
-        {
-            ePanelId = toolpanel::PID_TABLE_DESIGN;
-        }
-        else if ( i_rResourceURL.equals( FrameworkHelper::msCustomAnimationTaskPanelURL ) )
-        {
-            ePanelId = toolpanel::PID_CUSTOM_ANIMATION;
-        }
-        else if ( i_rResourceURL.equals( FrameworkHelper::msSlideTransitionTaskPanelURL ) )
-        {
-            ePanelId = toolpanel::PID_SLIDE_TRANSITION;
-        }
-        else
-        {
-            OSL_ENSURE( false, "lcl_getPanelId: cannot translate the given resource URL!" );
-        }
-
-        return ePanelId;
-    }
 }
 
 Reference<XResource> SAL_CALL TaskPanelFactory::createResource (
@@ -251,7 +217,7 @@ Reference<XResource> SAL_CALL TaskPanelFactory::createResource (
 
     if ( sResourceURL.match( FrameworkHelper::msTaskPanelURLPrefix ) )
     {
-        toolpanel::PanelId ePanelId( lcl_getPanelId( sResourceURL ) );
+        toolpanel::PanelId ePanelId( toolpanel::GetStandardPanelId( sResourceURL ) );
 
         if ( ( ePanelId != toolpanel::PID_UNKNOWN ) && ( mpViewShellBase != NULL ) )
         {
@@ -297,7 +263,7 @@ void SAL_CALL TaskPanelFactory::releaseResource (
         const ::boost::shared_ptr< ViewShell > pPaneViewShell( pFrameworkHelper->GetViewShell( sPaneURL ) );
         if ( pPaneViewShell != NULL )
         {
-            toolpanel::PanelId ePanelId( lcl_getPanelId( xResourceId->getResourceURL() ) );
+            toolpanel::PanelId ePanelId( toolpanel::GetStandardPanelId( xResourceId->getResourceURL() ) );
             toolpanel::ToolPanelViewShell* pToolPanel = dynamic_cast< toolpanel::ToolPanelViewShell* >( pPaneViewShell.get() );
 
             if  (   ( ePanelId != toolpanel::PID_UNKNOWN )
