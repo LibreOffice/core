@@ -1597,7 +1597,7 @@ SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucppkg1,ucppkg1)
 
 SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucptdoc1, ucptdoc1.uno)
 
-SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucptext, ucpext.uno)
+SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucpext, ucpext.uno)
 
 SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucpexpand1, ucpexpand1.uno)
 
