@@ -123,6 +123,7 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow( svt::ToolboxController& rCon
     mpDirectionSet->SetOutputSizePixel( Size( 72, 72 ) );
 
     appendEntry( 2, mpDirectionSet );
+    appendSeparator();
     appendEntry( 0, String( SVX_RES( STR_PERSPECTIVE ) ), bHighContrast ? maImgPerspectiveH : maImgPerspective );
     appendEntry( 1, String( SVX_RES( STR_PARALLEL ) ), bHighContrast ? maImgParallelH : maImgParallel );
 
@@ -251,11 +252,9 @@ IMPL_LINK( ExtrusionDirectionWindow, SelectHdl, void *, pControl )
     return 0;
 }
 
-/*************************************************************************
-|*
-|* SvxLineEndToolBoxControl
-|*
-\************************************************************************/
+// =======================================================================
+// ExtrusionDirectionControl
+// =======================================================================
 
 ExtrusionDirectionControl::ExtrusionDirectionControl( const Reference< lang::XMultiServiceFactory >& rServiceManager )
 : svt::PopupWindowController( rServiceManager, Reference< frame::XFrame >(), OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDirectionFloater" ) ) )
@@ -340,97 +339,199 @@ double ExtrusionDepthDialog::getDepth() const
 double aDepthListInch[] = { 0, 1270,2540,5080,10160 };
 double aDepthListMM[] = { 0, 1000, 2500, 5000, 10000 };
 
-ExtrusionDepthController::ExtrusionDepthController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager )
-: svt::PopupMenuControllerBase( xServiceManager )
+ExtrusionDepthWindow::ExtrusionDepthWindow( svt::ToolboxController& rController, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, Window* pParentWindow )
+: ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_EXTRUSION_DIRECTION ))
+, mrController( rController )
+, maImgDepth0( SVX_RES( IMG_DEPTH_0 ) )
+, maImgDepth1( SVX_RES( IMG_DEPTH_1 ) )
+, maImgDepth2( SVX_RES( IMG_DEPTH_2 ) )
+, maImgDepth3( SVX_RES( IMG_DEPTH_3 ) )
+, maImgDepth4( SVX_RES( IMG_DEPTH_4 ) )
+, maImgDepthInfinity( SVX_RES( IMG_DEPTH_INFINITY ) )
+, maImgDepth0h( SVX_RES( IMG_DEPTH_0_H ) )
+, maImgDepth1h( SVX_RES( IMG_DEPTH_1_H ) )
+, maImgDepth2h( SVX_RES( IMG_DEPTH_2_H ) )
+, maImgDepth3h( SVX_RES( IMG_DEPTH_3_H ) )
+, maImgDepth4h( SVX_RES( IMG_DEPTH_4_H ) )
+, maImgDepthInfinityh( SVX_RES( IMG_DEPTH_INFINITY_H ) )
 , mfDepth( -1.0 )
 , msExtrusionDepth( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDepth" ) )
 , msMetricUnit( RTL_CONSTASCII_USTRINGPARAM( ".uno:MetricUnit" ) )
 {
+    SetHelpId( HID_MENU_EXTRUSION_DEPTH );
+
+    SetSelectHdl( LINK( this, ExtrusionDepthWindow, SelectHdl ) );
+
+    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
+
+    String aEmpty;
+    appendEntry( 0, aEmpty, bHighContrast ? maImgDepth0h : maImgDepth0 );
+    appendEntry( 1, aEmpty, bHighContrast ? maImgDepth1h : maImgDepth1 );
+    appendEntry( 2, aEmpty, bHighContrast ? maImgDepth2h : maImgDepth2 );
+    appendEntry( 3, aEmpty, bHighContrast ? maImgDepth3h : maImgDepth3 );
+    appendEntry( 4, aEmpty, bHighContrast ? maImgDepth4h : maImgDepth4 );
+    appendEntry( 5, String( SVX_RES( STR_INFINITY ) ), bHighContrast ? maImgDepthInfinityh : maImgDepthInfinity );
+    appendEntry( 6, String( SVX_RES( STR_CUSTOM ) ) );
+
+    SetOutputSizePixel( getMenuSize() );
+
+    FreeResource();
+
+    AddStatusListener( msExtrusionDepth );
+    AddStatusListener( msMetricUnit );
+}
+
+// -----------------------------------------------------------------------
+
+void ExtrusionDepthWindow::implSetDepth( double fDepth )
+{
+    mfDepth = fDepth;
+    int i;
+    for( i = 0; i < 7; i++ )
+    {
+        if( i == 5 )
+        {
+            checkEntry( i, fDepth >= 338666 );
+        }
+        else if( i != 6 )
+        {
+            checkEntry( i, (fDepth == (IsMetric( meUnit ) ? aDepthListMM[i] : aDepthListInch[i]) ) );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
+{
+    meUnit = eUnit;
+    USHORT nResource = IsMetric( eUnit ) ? RID_SVXSTR_DEPTH_0 : RID_SVXSTR_DEPTH_0_INCH;
+
     for( int i = 0; i < 5; i++ )
     {
-        maImgDepth[i] = Image( SVX_RES( RID_SVXIMG_EXTRUSION_DEPTH_0 + i ) );
-        maImgDepth_hc[i] = Image( SVX_RES( RID_SVXIMG_EXTRUSION_DEPTH_0_H + i ) );
-    }
-
-    maImgDepthInfinity = Image( SVX_RES( RID_SVXIMG_EXTRUSION_DEPTH_INFINITY ) );
-    maImgDepthInfinityh = Image( SVX_RES( RID_SVXIMG_EXTRUSION_DEPTH_INFINITY_H ) );
+        String aStr( SVX_RES( nResource + i ) );
+        setEntryText( i, aStr );
+    };
 }
 
-// XPopupMenuController
-void SAL_CALL ExtrusionDepthController::updatePopupMenu() throw (RuntimeException)
+// -----------------------------------------------------------------------
+
+void SAL_CALL ExtrusionDepthWindow::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException )
 {
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    bool bShowImages( rSettings.GetUseImagesInMenus() );
-    bool bHiContrast( rSettings.GetHighContrastMode() );
-
-    updateCommand( msExtrusionDepth );
-    updateCommand( msMetricUnit );
-
-    Reference< awt::XPopupMenuExtended > xPopupMenu( m_xPopupMenu, UNO_QUERY );
-    if( xPopupMenu.is() )
+    if( Event.FeatureURL.Main.equals( msExtrusionDepth ) )
     {
-        // clear existing entries
-        if( m_xPopupMenu->getItemCount() )
-            m_xPopupMenu->removeItem( 0, m_xPopupMenu->getItemCount() );
-
-        USHORT nResource = IsMetric( meUnit ) ? RID_SVXSTR_DEPTH_0 : RID_SVXSTR_DEPTH_0_INCH;
-
-        Reference< XGraphic > xGraphic;
-
-        for( int i = 0; i < 5; i++ )
+        if( !Event.IsEnabled )
         {
-            OUString aStr( String( SVX_RES( nResource + i ) ) );
-            m_xPopupMenu->insertItem( i+1, aStr, awt::MenuItemStyle::CHECKABLE, i+1 );
-            if( bShowImages )
+            implSetDepth( 0 );
+        }
+        else
+        {
+            double fValue = 0.0;
+            if( Event.State >>= fValue )
+                implSetDepth( fValue );
+        }
+    }
+    else if( Event.FeatureURL.Main.equals( msMetricUnit ) )
+    {
+        if( Event.IsEnabled )
+        {
+            sal_Int32 nValue = 0;
+            if( Event.State >>= nValue )
             {
-                if( bHiContrast )
-                    xGraphic = maImgDepth_hc[i].GetXGraphic();
-                else
-                    xGraphic = maImgDepth[i].GetXGraphic();
+                implFillStrings( static_cast<FieldUnit>(nValue) );
+                if( mfDepth >= 0.0 )
+                    implSetDepth( mfDepth );
             }
-            xPopupMenu->setItemImage( i+1, xGraphic, sal_False );
-
-            xPopupMenu->checkItem( i+1, (mfDepth == (IsMetric( meUnit ) ? aDepthListMM[i] : aDepthListInch[i])) ? TRUE : FALSE );
         }
-
-        if( bShowImages )
-        {
-            if( bHiContrast )
-                xGraphic = maImgDepthInfinityh.GetXGraphic();
-            else
-                xGraphic = maImgDepthInfinity.GetXGraphic();
-        }
-        m_xPopupMenu->insertItem( 6, OUString(  String( SVX_RES( RID_SVXSTR_EXTRUSION_INFINITY ) ) ), awt::MenuItemStyle::CHECKABLE, 6 );
-        xPopupMenu->setItemImage( 6, xGraphic, sal_False );
-        xPopupMenu->checkItem( 6, (mfDepth >= 338666) ? TRUE : FALSE );
-
-        m_xPopupMenu->insertItem( 7, OUString( String( SVX_RES( RID_SVXSTR_EXTRUSION_CUSTOM ) ) ), awt::MenuItemStyle::CHECKABLE, 7 );
     }
 }
 
 // -----------------------------------------------------------------------
 
-ExtrusionDepthController::~ExtrusionDepthController()
+void ExtrusionDepthWindow::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    ToolbarMenu::DataChanged( rDCEvt );
+
+    if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    {
+        bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
+
+        setEntryImage( 0, bHighContrast ? maImgDepth0h : maImgDepth0 );
+        setEntryImage( 1, bHighContrast ? maImgDepth1h : maImgDepth1 );
+        setEntryImage( 2, bHighContrast ? maImgDepth2h : maImgDepth2 );
+        setEntryImage( 3, bHighContrast ? maImgDepth3h : maImgDepth3 );
+        setEntryImage( 4, bHighContrast ? maImgDepth4h : maImgDepth4 );
+        setEntryImage( 5, bHighContrast ? maImgDepthInfinityh : maImgDepthInfinity );
+    }
+}
+
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( ExtrusionDepthWindow, SelectHdl, void *, EMPTYARG )
+{
+    int nSelected = getSelectedEntryId();
+    if( nSelected != -1 )
+    {
+        if( nSelected == 6 )
+        {
+            if ( IsInPopupMode() )
+                EndPopupMode();
+
+            const rtl::OUString aCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDepthDialog" ));
+
+            Any a;
+            Sequence< PropertyValue > aArgs( 2 );
+            aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Depth" ));
+            aArgs[0].Value <<= mfDepth;
+            aArgs[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Metric" ));
+            aArgs[1].Value <<= static_cast<sal_Int32>( meUnit );
+
+            mrController.dispatchCommand( aCommand, aArgs );
+        }
+        else
+        {
+            double fDepth;
+
+            if( nSelected == 5 )
+            {
+                fDepth = 338666.6;
+            }
+            else
+            {
+                fDepth = IsMetric( meUnit ) ? aDepthListMM[nSelected] : aDepthListInch[nSelected];
+            }
+
+            Sequence< PropertyValue > aArgs( 1 );
+            aArgs[0].Name = msExtrusionDepth.copy(5);
+            aArgs[0].Value <<= fDepth;
+
+            mrController.dispatchCommand( msExtrusionDepth,  aArgs );
+            implSetDepth( fDepth );
+
+            if ( IsInPopupMode() )
+                EndPopupMode();
+        }
+    }
+    return 0;
+}
+
+// =======================================================================
+// ExtrusionDirectionControl
+// =======================================================================
+
+ExtrusionDepthController::ExtrusionDepthController( const Reference< lang::XMultiServiceFactory >& rServiceManager )
+: svt::PopupWindowController( rServiceManager, Reference< frame::XFrame >(), OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDepthFloater" ) ) )
 {
 }
 
 // -----------------------------------------------------------------------
-// XEventListener
-// -----------------------------------------------------------------------
 
-void SAL_CALL ExtrusionDepthController::disposing( const EventObject& ) throw ( RuntimeException )
+::Window* ExtrusionDepthController::createPopupWindow( ::Window* pParent )
 {
-    Reference< awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
-
-    osl::MutexGuard aLock( m_aMutex );
-    m_xFrame.clear();
-    m_xDispatch.clear();
-    m_xServiceManager.clear();
-
-    if ( m_xPopupMenu.is() )
-        m_xPopupMenu->removeMenuListener( Reference< awt::XMenuListener >(( OWeakObject *)this, UNO_QUERY ));
-    m_xPopupMenu.clear();
+    return new ExtrusionDirectionWindow( *this, m_xFrame, pParent );
 }
+
 
 // -----------------------------------------------------------------------
 // XServiceInfo
@@ -470,89 +571,6 @@ Sequence< OUString > SAL_CALL ExtrusionDepthController::getSupportedServiceNames
 {
     return ExtrusionDepthController_getSupportedServiceNames();
 }
-
-// -----------------------------------------------------------------------
-// XStatusListener
-// -----------------------------------------------------------------------
-
-void SAL_CALL ExtrusionDepthController::statusChanged( const frame::FeatureStateEvent& Event ) throw ( RuntimeException )
-{
-    if( Event.FeatureURL.Main.equals( msExtrusionDepth ) )
-    {
-        if( Event.IsEnabled )
-        {
-            Event.State >>= mfDepth;
-        }
-    }
-    else if( Event.FeatureURL.Main.equals( msMetricUnit ) )
-    {
-        if( Event.IsEnabled )
-        {
-            sal_Int32 nValue = 0;
-            if( Event.State >>= nValue )
-                meUnit = (FieldUnit)nValue;
-        }
-    }
-}
-
-// -----------------------------------------------------------------------
-// XMenuListener
-// -----------------------------------------------------------------------
-
-void SAL_CALL ExtrusionDepthController::select( const awt::MenuEvent& rEvent ) throw (RuntimeException)
-{
-    if( rEvent.MenuId )
-    {
-        if( rEvent.MenuId == 7 )
-        {
-            const rtl::OUString aCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDepthDialog" ));
-
-            Sequence< PropertyValue > aArgs( 2 );
-            aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Depth" ));
-            aArgs[0].Value <<= mfDepth;
-            aArgs[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Metric" ));
-            aArgs[1].Value <<= (sal_Int32)meUnit;
-
-            dispatchCommand( aCommand, aArgs );
-        }
-        else
-        {
-            double fDepth;
-
-            if( rEvent.MenuId == 6 )
-            {
-                fDepth = 338666.6;
-            }
-            else
-            {
-                fDepth = IsMetric( meUnit ) ? aDepthListMM[rEvent.MenuId-1] : aDepthListInch[rEvent.MenuId-1];
-            }
-
-            Sequence< PropertyValue > aArgs( 1 );
-            aArgs[0].Name = msExtrusionDepth.copy(5);
-            aArgs[0].Value <<= fDepth;
-
-            dispatchCommand( msExtrusionDepth, aArgs );
-        }
-    }
-}
-
-// -----------------------------------------------------------------------
-// XInitialization
-// -----------------------------------------------------------------------
-
-void SAL_CALL ExtrusionDepthController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
-{
-    osl::MutexGuard aLock( m_aMutex );
-
-    sal_Bool bInitalized( m_bInitialized );
-    if ( !bInitalized )
-    {
-        svt::PopupMenuControllerBase::initialize( aArguments );
-        m_aBaseURL = ::rtl::OUString();
-    }
-}
-// -----------------------------------------------------------------------
 
 
 // ####################################################################
@@ -615,6 +633,7 @@ ExtrusionLightingWindow::ExtrusionLightingWindow( svt::ToolboxController& rContr
     mpLightingSet->SetOutputSizePixel( Size( 72, 72 ) );
 
     appendEntry( 3, mpLightingSet );
+    appendSeparator();
     appendEntry( 0, String( SVX_RES( STR_BRIGHT ) ), bHighContrast ? maImgBrighth : maImgBright );
     appendEntry( 1, String( SVX_RES( STR_NORMAL ) ), bHighContrast ? maImgNormalh : maImgNormal );
     appendEntry( 2, String( SVX_RES( STR_DIM ) ), bHighContrast ? maImgDimh : maImgDim );
@@ -923,7 +942,7 @@ ExtrusionSurfaceControl::ExtrusionSurfaceControl( const Reference< lang::XMultiS
 
 ::Window* ExtrusionSurfaceControl::createPopupWindow( ::Window* pParent )
 {
-    return new ExtrusionLightingWindow( *this, m_xFrame, pParent );
+    return new ExtrusionSurfaceWindow( *this, m_xFrame, pParent );
 }
 
 // -----------------------------------------------------------------------
