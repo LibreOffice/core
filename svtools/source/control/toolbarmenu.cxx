@@ -1386,7 +1386,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
     USHORT nBorder = 0; long nStartY = 0; // from Menu implementations, needed when we support native menu background & scrollable menu
 
     long nFontHeight = GetTextHeight();
-    long nExtra = nFontHeight/4;
+//    long nExtra = nFontHeight/4;
 
     long nCheckHeight = 0, nRadioHeight = 0, nMaxCheckWidth = 0;
     ImplGetNativeCheckAndRadioSize( this, nCheckHeight, nRadioHeight, nMaxCheckWidth );
