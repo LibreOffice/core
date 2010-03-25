@@ -60,7 +60,7 @@ class ExtensionBackendDb: public dp_registry::backend::BackendDb
 {
 protected:
     virtual ::rtl::OUString getDbNSName();
-
+    virtual ::rtl::OUString getNSPrefix();
     virtual ::rtl::OUString getRootElementName();
 
 public:

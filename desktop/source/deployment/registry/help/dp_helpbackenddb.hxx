@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: dp_backend.h,v $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -25,8 +28,8 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_DP_COMPBACKENDDB_HXX
-#define INCLUDED_DP_COMPBACKENDDB_HXX
+#if ! defined INCLUDED_DP_HELPBACKENDDB_HXX
+#define INCLUDED_DP_HELPBACKENDDB_HXX
 
 #include "rtl/ustring.hxx"
 #include "rtl/string.hxx"
@@ -51,62 +54,41 @@ namespace com { namespace sun { namespace star {
 
 namespace dp_registry {
 namespace backend {
-namespace component {
+namespace help {
 
 /* The XML file stores the extensions which are currently registered.
    They will be removed when they are revoked.
    The format looks like this:
 
 <?xml version="1.0"?>
-<component-backend-db xmlns="http://openoffice.org/extensionmanager/component-registry/2010">
-  <component url="vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/uno_packages/5CD5.tmp_/leaves1.oxt/extensionoptions.jar">
-    <name>FileName</name>
-    <java-type-library>true</java-type-library>
-    <implementation-names>
-      <name>com.sun.star.comp.extensionoptions.OptionsEventHandler$_OptionsEventHandler</name>
-      ...
-    </implementation-names>
-    <singletons>
-      <item>
-        <key>com.sun.star.java.theJavaVirtualMachine</key>
-        <value>com.sun.star.java.JavaVirtualMachine</value>
-      </item>
-      ...
-    </singletons>
-  </component>
-
-  <component ...>
-  ...
-</component-backend-db>
  */
-class ComponentBackendDb: public dp_registry::backend::BackendDb
+class HelpBackendDb: public dp_registry::backend::BackendDb
 {
 protected:
     virtual ::rtl::OUString getDbNSName();
+
     virtual ::rtl::OUString getNSPrefix();
+
     virtual ::rtl::OUString getRootElementName();
 
 public:
     struct Data
     {
-        Data(): javaTypeLibrary(false) {};
-
-        ::std::list< ::rtl::OUString> implementationNames;
-        /* every singleton has a key and a value
+        /* the URL to the folder containing the compiled help files, etc.
          */
-        ::std::vector< ::std::pair< ::rtl::OUString, ::rtl::OUString> >singletons;
-        bool javaTypeLibrary;
+        ::rtl::OUString dataUrl;
+
     };
 
 public:
 
-    ComponentBackendDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
+    HelpBackendDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
                         ::rtl::OUString const & url);
 
     void addEntry(::rtl::OUString const & url, Data const & data);
     void removeEntry(::rtl::OUString const & url);
     Data getEntry(::rtl::OUString const & url);
-
+    ::std::list< ::rtl::OUString> getAllDataUrls();
 
 };
 

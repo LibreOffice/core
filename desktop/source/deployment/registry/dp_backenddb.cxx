@@ -98,9 +98,10 @@ css::uno::Reference<css::xml::dom::XDocument> BackendDb::getDocument()
             //Create a new document and insert some basic stuff
             m_doc = xDocBuilder->newDocument();
             Reference<css::xml::dom::XElement> rootNode =
-                m_doc->createElement(getRootElementName());
-            rootNode->setAttribute(
-                OUSTR("xmlns"), getDbNSName());
+                m_doc->createElementNS(getDbNSName(), getNSPrefix() +
+                                       OUSTR(":") + getRootElementName());
+//             rootNode->setAttribute(
+//                 OUSTR("xmlns"), getDbNSName());
             m_doc->appendChild(Reference<css::xml::dom::XNode>(
                                    rootNode, UNO_QUERY_THROW));
             save();
@@ -133,22 +134,11 @@ Reference<css::xml::xpath::XXPathAPI> BackendDb::getXPathAPI()
                 OUSTR(" Could not create service com.sun.star.xml.xpath.XPathAPI"), 0);
 
         m_xpathApi->registerNS(
-            OUSTR("reg"), getDbNSName());
+            getNSPrefix(), getDbNSName());
     }
 
     return m_xpathApi;
 }
-
-// OUString BackendDb::getDbNSName()
-// {
-//     return OUString();
-// }
-
-
-// OUString BackendDb::getRootElementName()
-// {
-//     return OUString();
-// }
 
 void BackendDb::removeElement(::rtl::OUString const & sXPathExpression)
 {
@@ -193,12 +183,13 @@ void BackendDb::writeVectorOfPair(
     css::uno::Reference<css::xml::dom::XNode> const & xParent)
 {
     try{
-
+        const OUString sNameSpace = getDbNSName();
+        OSL_ASSERT(sNameSpace.getLength());
         Reference<css::xml::dom::XDocument> doc = getDocument();
         Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
         Reference<css::xml::dom::XElement> vectorNode(
-            doc->createElement(sVectorTagName));
+            doc->createElementNS(sNameSpace, sVectorTagName));
 
         xParent->appendChild(
             Reference<css::xml::dom::XNode>(
@@ -207,14 +198,14 @@ void BackendDb::writeVectorOfPair(
         for (CIT i = vecPairs.begin(); i != vecPairs.end(); i++)
         {
             Reference<css::xml::dom::XElement> pairNode(
-                doc->createElement(sPairTagName));
+                doc->createElementNS(sNameSpace, sPairTagName));
 
             vectorNode->appendChild(
                 Reference<css::xml::dom::XNode>(
                     pairNode, css::uno::UNO_QUERY_THROW));
 
             Reference<css::xml::dom::XElement> firstNode(
-                doc->createElement(sFirstTagName));
+                doc->createElementNS(sNameSpace, sFirstTagName));
 
             pairNode->appendChild(
                 Reference<css::xml::dom::XNode>(
@@ -228,7 +219,7 @@ void BackendDb::writeVectorOfPair(
                     firstTextNode, css::uno::UNO_QUERY_THROW));
 
             Reference<css::xml::dom::XElement> secondNode(
-                doc->createElement(sSecondTagName));
+                doc->createElementNS(sNameSpace, sSecondTagName));
 
             pairNode->appendChild(
                 Reference<css::xml::dom::XNode>(
@@ -304,10 +295,11 @@ void BackendDb::writeSimpleList(
 {
     try
     {
+        const OUString sNameSpace = getDbNSName();
         Reference<css::xml::dom::XDocument> doc = getDocument();
 
         Reference<css::xml::dom::XElement> listNode(
-            doc->createElement(sListTagName));
+            doc->createElementNS(sNameSpace, sListTagName));
 
         xParent->appendChild(
             Reference<css::xml::dom::XNode>(
@@ -317,7 +309,7 @@ void BackendDb::writeSimpleList(
         for (ITC_ITEMS i = list.begin(); i != list.end(); i++)
         {
             Reference<css::xml::dom::XNode> memberNode(
-                doc->createElement(sMemberTagName), css::uno::UNO_QUERY_THROW);
+                doc->createElementNS(sNameSpace, sMemberTagName), css::uno::UNO_QUERY_THROW);
 
             listNode->appendChild(memberNode);
 

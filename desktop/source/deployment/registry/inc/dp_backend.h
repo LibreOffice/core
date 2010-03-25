@@ -43,6 +43,7 @@
 #include "com/sun/star/deployment/InvalidRemovedParameterException.hpp"
 #include <memory>
 #include <hash_map>
+#include <list>
 #include "dp_registry.hrc"
 
 namespace dp_registry
@@ -313,6 +314,23 @@ protected:
     PackageRegistryBackend(
         css::uno::Sequence<css::uno::Any> const & args,
         css::uno::Reference<css::uno::XComponentContext> const & xContext );
+
+    /* creates a folder with a unique name.
+       If url is empty then it is created in the the backend folder, otherwise
+       at a location relative to that folder specified by url.
+    */
+    ::rtl::OUString createFolder(
+        ::rtl::OUString const & relUrl,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
+    /* deletes folders and files.
+
+       All folder all files which end with ".tmp" or ".tmp_" and which are
+       not used are deleted.
+     */
+    void deleteUnusedFolders(
+        ::rtl::OUString const & relUrl,
+        ::std::list< ::rtl::OUString> const & usedFolders);
+
 
 public:
     struct StrRegisteringPackage : public ::dp_misc::StaticResourceString<

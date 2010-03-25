@@ -44,6 +44,7 @@ using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
 #define EXTENSION_REG_NS "http://openoffice.org/extensionmanager/component-registry/2010"
+#define NS_PREFIX "comp"
 #define ROOT_ELEMENT_NAME "component-backend-db"
 
 namespace dp_registry {
@@ -62,6 +63,11 @@ OUString ComponentBackendDb::getDbNSName()
     return OUSTR(EXTENSION_REG_NS);
 }
 
+OUString ComponentBackendDb::getNSPrefix()
+{
+    return OUSTR(NS_PREFIX);
+}
+
 OUString ComponentBackendDb::getRootElementName()
 {
     return OUSTR(ROOT_ELEMENT_NAME);
@@ -70,20 +76,21 @@ OUString ComponentBackendDb::getRootElementName()
 void ComponentBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
 {
     try{
-
+        const OUString sNameSpace = getDbNSName();
+        const OUString sPrefix = getNSPrefix();
         Reference<css::xml::dom::XDocument> doc = getDocument();
         Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
 #if    OSL_DEBUG_LEVEL > 0
         //There must not be yet an entry with the same url
         OUString sExpression(
-            OUSTR("reg:component[@url = \"") + url + OUSTR("\"]"));
+            sPrefix + OUSTR(":component[@url = \"") + url + OUSTR("\"]"));
         Reference<css::xml::dom::XNode> _extensionNode =
             getXPathAPI()->selectSingleNode(root, sExpression);
         OSL_ASSERT(! _extensionNode.is());
 #endif
         Reference<css::xml::dom::XElement> componentElement(
-            doc->createElement(OUSTR("component")));
+            doc->createElementNS(sNameSpace, sPrefix + OUSTR(":component")));
 
         componentElement->setAttribute(OUSTR("url"), url);
 
@@ -92,18 +99,8 @@ void ComponentBackendDb::addEntry(::rtl::OUString const & url, Data const & data
 
         root->appendChild(componentNode);
 
-//         Reference<css::xml::dom::XNode> name(
-//             doc->createElement(OUSTR("name")), UNO_QUERY_THROW);
-
-//         componentNode->appendChild(name);
-
-//         Reference<css::xml::dom::XNode> nameValue(
-//             doc->createTextNode(data.name),
-//             UNO_QUERY_THROW);
-//         name->appendChild(nameValue);
-
         Reference<css::xml::dom::XNode> javaTypeLibNode(
-            doc->createElement(OUSTR("java-type-library")), UNO_QUERY_THROW);
+            doc->createElementNS(sNameSpace, sPrefix + OUSTR(":java-type-library")), UNO_QUERY_THROW);
 
         componentNode->appendChild(javaTypeLibNode);
 
@@ -114,16 +111,16 @@ void ComponentBackendDb::addEntry(::rtl::OUString const & url, Data const & data
 
         writeSimpleList(
             data.implementationNames,
-            OUSTR("implementation-names"),
-            OUSTR("name"),
+            sPrefix + OUSTR(":implementation-names"),
+            sPrefix + OUSTR(":name"),
             componentNode);
 
         writeVectorOfPair(
             data.singletons,
-            OUSTR("singletons"),
-            OUSTR("item"),
-            OUSTR("key"),
-            OUSTR("value"),
+            sPrefix + OUSTR(":singletons"),
+            sPrefix + OUSTR(":item"),
+            sPrefix + OUSTR(":key"),
+            sPrefix + OUSTR(":value"),
             componentNode);
 
         save();
@@ -140,7 +137,7 @@ void ComponentBackendDb::addEntry(::rtl::OUString const & url, Data const & data
 void ComponentBackendDb::removeEntry(::rtl::OUString const & url)
 {
     OUString sExpression(
-        OUSTR("reg:component[@url = \"") + url + OUSTR("\"]"));
+        OUSTR(NS_PREFIX) + OUSTR(":component[@url = \"") + url + OUSTR("\"]"));
     removeElement(sExpression);
 }
 
@@ -148,9 +145,10 @@ ComponentBackendDb::Data ComponentBackendDb::getEntry(::rtl::OUString const & ur
 {
     try
     {
+        const OUString sPrefix = getNSPrefix();
         ComponentBackendDb::Data retData;
         const OUString sExpression(
-            OUSTR("reg:component[@url = \"") + url + OUSTR("\"]"));
+            sPrefix + OUSTR(":component[@url = \"") + url + OUSTR("\"]"));
         Reference<css::xml::dom::XDocument> doc = getDocument();
         Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
@@ -160,13 +158,7 @@ ComponentBackendDb::Data ComponentBackendDb::getEntry(::rtl::OUString const & ur
             xpathApi->selectSingleNode(root, sExpression);
         if (aNode.is())
         {
-//             const OUString sExprName(OUSTR("reg:name/text()"));
-
-//             Reference<css::xml::dom::XNode> nameValue =
-//                 xpathApi->selectSingleNode(aNode, sExprName);
-//             retData.name = nameValue->getNodeValue();
-
-            const OUString sExprJavaTypeLib(OUSTR("reg:java-type-library/text()"));
+            const OUString sExprJavaTypeLib(sPrefix + OUSTR(":java-type-library/text()"));
 
             Reference<css::xml::dom::XNode> idValueNode =
                 xpathApi->selectSingleNode(aNode, sExprJavaTypeLib);
@@ -175,12 +167,17 @@ ComponentBackendDb::Data ComponentBackendDb::getEntry(::rtl::OUString const & ur
 
             retData.implementationNames =
                 readList(
-                    aNode, OUSTR("reg:implementation-names"), OUSTR("reg:name"));
+                    aNode,
+                    sPrefix + OUSTR(":implementation-names"),
+                    sPrefix + OUSTR(":name"));
 
             retData.singletons =
                 readVectorOfPair(
-                    aNode, OUSTR("reg:singletons"), OUSTR("item"), OUSTR("key"),
-                    OUSTR("value"));
+                    aNode,
+                    sPrefix + OUSTR(":singletons"),
+                    sPrefix + OUSTR(":item"),
+                    sPrefix + OUSTR(":key"),
+                    sPrefix + OUSTR(":value"));
         }
         return retData;
     }

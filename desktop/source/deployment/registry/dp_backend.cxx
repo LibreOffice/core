@@ -31,13 +31,18 @@
 #include "dp_backend.h"
 #include "dp_ucb.h"
 #include "rtl/uri.hxx"
+#include "osl/file.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "comphelper/servicedecl.hxx"
 #include "comphelper/unwrapargs.hxx"
 #include "ucbhelper/content.hxx"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/deployment/InvalidRemovedParameterException.hpp"
+#include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
+#include "com/sun/star/ucb/IOErrorCode.hpp"
 #include "com/sun/star/beans/StringPair.hpp"
+#include "com/sun/star/sdbc/XResultSet.hpp"
+#include "com/sun/star/sdbc/XRow.hpp"
 
 
 using namespace ::dp_misc;
@@ -206,6 +211,87 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
     guard.clear();
     xNewPackage->addEventListener( this ); // listen for disposing events
     return xNewPackage;
+}
+
+OUString PackageRegistryBackend::createFolder(
+    OUString const & relUrl,
+    Reference<ucb::XCommandEnvironment> const & xCmdEnv)
+{
+    OUString sDataFolder = makeURL(getCachePath(), relUrl);
+    //make sure the folder exist
+    ucbhelper::Content dataContent;
+    ::dp_misc::create_folder(&dataContent, sDataFolder, xCmdEnv);
+
+    OUString sDataFolderURL = dp_misc::expandUnoRcUrl(sDataFolder);
+
+    OUString tempEntry;
+    if (::osl::File::createTempFile(
+            &sDataFolderURL, 0, &tempEntry ) != ::osl::File::E_None)
+        throw RuntimeException(
+            OUSTR("::osl::File::createTempFile() failed!"), 0 );
+    tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
+    OUString destFolder= makeURL(sDataFolder, tempEntry) + OUSTR("_");
+    ::ucbhelper::Content destFolderContent;
+    dp_misc::create_folder( &destFolderContent, destFolder, xCmdEnv );
+
+    return destFolder;
+}
+
+void PackageRegistryBackend::deleteUnusedFolders(
+    OUString const & relUrl,
+    ::std::list< OUString> const & usedFolders)
+{
+    try
+    {
+        const OUString sDataFolder = makeURL(getCachePath(), relUrl);
+        ::ucbhelper::Content tempFolder(
+            sDataFolder, Reference<ucb::XCommandEnvironment>());
+        Reference<sdbc::XResultSet> xResultSet(
+            tempFolder.createCursor(
+                Sequence<OUString>( &StrTitle::get(), 1 ),
+                ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
+        // get all temp directories:
+        ::std::vector<OUString> tempEntries;
+
+        char tmp[] = ".tmp";
+
+        while (xResultSet->next())
+        {
+            OUString title(
+                Reference<sdbc::XRow>(
+                    xResultSet, UNO_QUERY_THROW )->getString(
+                        1 /* Title */ ) );
+
+            if (title.endsWithAsciiL(tmp, sizeof(tmp) - 1))
+                tempEntries.push_back(
+                    makeURLAppendSysPathSegment(sDataFolder, title));
+        }
+
+        for ( ::std::size_t pos = 0; pos < tempEntries.size(); ++pos )
+        {
+            //usedFolders contains the urls to the folders which have
+            //a trailing underscore
+            const OUString  tempFile = tempEntries[ pos ];
+            const OUString tempFolder = tempFile + OUSTR("_");
+
+            if (::std::find( usedFolders.begin(), usedFolders.end(), tempFolder ) ==
+                usedFolders.end())
+            {
+                erase_path( tempFolder, Reference<XCommandEnvironment>(),
+                            false /* no throw: ignore errors */ );
+                erase_path( tempFile, Reference<XCommandEnvironment>(),
+                            false /* no throw: ignore errors */ );
+            }
+        }
+    }
+    catch (ucb::InteractiveAugmentedIOException& e)
+    {
+        //In case the folder containing all the data folder does not
+        //exist yet, we ignore the exception
+        if (e.Code != ucb::IOErrorCode_NOT_EXISTING)
+            throw e;
+    }
+
 }
 
 //##############################################################################

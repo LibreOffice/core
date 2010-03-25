@@ -39,6 +39,7 @@
 #include "rtl/bootstrap.hxx"
 #include "osl/diagnose.h"
 #include "osl/file.hxx"
+#include "osl/security.hxx"
 #include "cppuhelper/weakref.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/implbase1.hxx"
@@ -237,23 +238,37 @@ void PackageManagerImpl::initActivationLayer(
                     ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
             // get all temp directories:
             ::std::vector<OUString> tempEntries;
+            ::std::vector<OUString> removedEntries;
             while (xResultSet->next())
             {
                 OUString title(
                     Reference<sdbc::XRow>(
                         xResultSet, UNO_QUERY_THROW )->getString(
                             1 /* Title */ ) );
-                const char extensionRemoved[] = ".tmpremoved";
+
+                const char extensionRemoved[] = "removed";
                 if (title.endsWithAsciiL(
                         extensionRemoved, sizeof(extensionRemoved) - 1))
-                    continue;
-
-                tempEntries.push_back( ::rtl::Uri::encode(
-                                           title, rtl_UriCharClassPchar,
-                                           rtl_UriEncodeIgnoreEscapes,
-                                           RTL_TEXTENCODING_UTF8 ) );
+                {
+                    //save the file name withouth the "removed" part
+                    sal_Int32 index = title.lastIndexOfAsciiL(
+                        extensionRemoved, sizeof(extensionRemoved) - 1);
+                    OUString remFile = title.copy(0, index);
+                    removedEntries.push_back(::rtl::Uri::encode(
+                                                remFile, rtl_UriCharClassPchar,
+                                                rtl_UriEncodeIgnoreEscapes,
+                                                RTL_TEXTENCODING_UTF8 ) );
+                }
+                else
+                {
+                    tempEntries.push_back( ::rtl::Uri::encode(
+                                               title, rtl_UriCharClassPchar,
+                                               rtl_UriEncodeIgnoreEscapes,
+                                               RTL_TEXTENCODING_UTF8 ) );
+                }
             }
 
+            bool bShared = m_context.equals(OUSTR("shared")) ? true : false;
             for ( ::std::size_t pos = 0; pos < tempEntries.size(); ++pos )
             {
                 OUString const & tempEntry = tempEntries[ pos ];
@@ -261,9 +276,44 @@ void PackageManagerImpl::initActivationLayer(
                 if (::std::find_if( id2temp.begin(), id2temp.end(), match ) ==
                     id2temp.end())
                 {
+                    const OUString url(
+                        makeURL(m_activePackages_expanded, tempEntry ) );
+
+                    //In case of shared extensions, new entries are regarded as
+                    //added extensions if there is no xxx.tmpremoved file.
+                    if (bShared)
+                    {
+                        if (::std::find(removedEntries.begin(), removedEntries.end(), tempEntry) ==
+                            removedEntries.end())
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            //Make sure only the same user removes the extension, who
+                            //previously unregistered it. This is avoid races if multiple instances
+                            //of OOo are running which all have write access to the shared installation.
+                            //For example, user a uses extension a, removes the extension, but keeps OOo
+                            //running. Parts of the extension may still be loaded and used by OOo.
+                            //Therefore the extension is only deleted the next time the extension manager is
+                            //run after restarting OOo. While OOo is still running, another user starts OOo
+                            //which would deleted the extension files. If the same user starts another
+                            //instance of OOo then the lock file will prevent this.
+                            OUString aUserName;
+                            ::osl::Security aSecurity;
+                            aSecurity.getUserName( aUserName );
+                            ucbhelper::Content remFileContent(
+                                url + OUSTR("removed"), Reference<XCommandEnvironment>());
+                            ::rtl::ByteSequence data = dp_misc::readFile(remFileContent);
+                            ::rtl::OString osData(reinterpret_cast<const sal_Char*>(data.getConstArray()),
+                                                  data.getLength());
+                            OUString sData = ::rtl::OStringToOUString(
+                                osData, RTL_TEXTENCODING_UTF8);
+                            if (!sData.equals(aUserName))
+                                continue;
+                        }
+                    }
                     // temp entry not needed anymore:
-                    const OUString url( makeURL( m_activePackages_expanded,
-                                                 tempEntry ) );
                     erase_path( url + OUSTR("_"),
                                 Reference<XCommandEnvironment>(),
                                 false /* no throw: ignore errors */ );
@@ -911,7 +961,11 @@ void PackageManagerImpl::removePackage(
                 OUString url(makeURL(m_activePackages_expanded,
                                      val.temporaryName + OUSTR("removed")));
                 ::ucbhelper::Content contentRemoved(url, xCmdEnv );
-                ::rtl::OString stamp("1");
+                OUString aUserName;
+                ::osl::Security aSecurity;
+                aSecurity.getUserName( aUserName );
+
+                ::rtl::OString stamp = ::rtl::OUStringToOString(aUserName, RTL_TEXTENCODING_UTF8);
                 Reference<css::io::XInputStream> xData(
                     ::xmlscript::createInputStream(
                         ::rtl::ByteSequence(

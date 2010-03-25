@@ -115,6 +115,7 @@ protected:
     virtual ~PackageRegistryImpl();
     PackageRegistryImpl() : t_helper( getMutex() ) {}
 
+
 public:
     static Reference<deployment::XPackageRegistry> create(
         OUString const & context,
@@ -536,7 +537,6 @@ PackageRegistryImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
     return comphelper::containerToSequence(m_typesInfos);
 }
-
 } // anon namespace
 
 //==============================================================================

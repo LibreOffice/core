@@ -109,6 +109,11 @@ protected:
         into the root element.
      */
     virtual ::rtl::OUString getDbNSName()=0;
+    /* return the namespace prefix which is to be registered with the XPath API.
+
+       The prefix can then be used in XPath expressions.
+    */
+    virtual ::rtl::OUString getNSPrefix()=0;
     /* returns the name of the root element without any namespace prefix.
      */
     virtual ::rtl::OUString getRootElementName()=0;

@@ -44,6 +44,7 @@ using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
 #define EXTENSION_REG_NS "http://openoffice.org/extensionmanager/extension-registry/2010"
+#define NS_PREFIX "ext"
 #define ROOT_ELEMENT_NAME "extension-backend-db"
 
 namespace dp_registry {
@@ -62,6 +63,11 @@ OUString ExtensionBackendDb::getDbNSName()
     return OUSTR(EXTENSION_REG_NS);
 }
 
+OUString ExtensionBackendDb::getNSPrefix()
+{
+    return OUSTR(NS_PREFIX);
+}
+
 OUString ExtensionBackendDb::getRootElementName()
 {
     return OUSTR(ROOT_ELEMENT_NAME);
@@ -71,20 +77,23 @@ void ExtensionBackendDb::addEntry(::rtl::OUString const & url, Data const & data
 {
     try{
 
+        const OUString sNameSpace = getDbNSName();
+        const OUString sPrefix = getNSPrefix();
         Reference<css::xml::dom::XDocument> doc = getDocument();
         Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
 #if    OSL_DEBUG_LEVEL > 0
         //There must not be yet an entry with the same url
         OUString sExpression(
-            OUSTR("reg:extension[@url = \"") + url + OUSTR("\"]"));
+            sPrefix + OUSTR(":extension[@url = \"") + url + OUSTR("\"]"));
         Reference<css::xml::dom::XNode> _extensionNode =
             getXPathAPI()->selectSingleNode(root, sExpression);
         OSL_ASSERT(! _extensionNode.is());
 #endif
         // <extension url="file:///...">
         Reference<css::xml::dom::XElement> extensionNode(
-            doc->createElement(OUSTR("extension")));
+            doc->createElementNS(sNameSpace,
+                                 sPrefix + OUSTR(":extension")));
 
         extensionNode->setAttribute(OUSTR("url"), url);
 
@@ -92,22 +101,12 @@ void ExtensionBackendDb::addEntry(::rtl::OUString const & url, Data const & data
             extensionNode, css::uno::UNO_QUERY_THROW);
         root->appendChild(extensionNodeNode);
 
-        // <identifier>...</identifier>
-//         Reference<css::xml::dom::XNode> identifierNode(
-//             doc->createElement(OUSTR("identifier")), UNO_QUERY_THROW);
-//         extensionNodeNode->appendChild(identifierNode);
-
-//         Reference<css::xml::dom::XNode> identifierValue(
-//             doc->createTextNode(data.identifier), UNO_QUERY_THROW);
-//         identifierNode->appendChild(identifierValue);
-
-
         writeVectorOfPair(
             data.items,
-            OUSTR("extension-items"),
-            OUSTR("item"),
-            OUSTR("url"),
-            OUSTR("media-type"),
+            sPrefix + OUSTR(":extension-items"),
+            sPrefix + OUSTR(":item"),
+            sPrefix + OUSTR(":url"),
+            sPrefix + OUSTR(":media-type"),
             extensionNodeNode);
         save();
     }
@@ -123,7 +122,7 @@ void ExtensionBackendDb::addEntry(::rtl::OUString const & url, Data const & data
 void ExtensionBackendDb::removeEntry(::rtl::OUString const & url)
 {
     OUString sExpression(
-        OUSTR("reg:extension[@url = \"") + url + OUSTR("\"]"));
+        OUSTR(NS_PREFIX) + OUSTR(":extension[@url = \"") + url + OUSTR("\"]"));
     removeElement(sExpression);
 }
 
@@ -131,9 +130,10 @@ ExtensionBackendDb::Data ExtensionBackendDb::getEntry(::rtl::OUString const & ur
 {
     try
     {
+        const OUString sPrefix = getNSPrefix();
         ExtensionBackendDb::Data retData;
         const OUString sExpression(
-            OUSTR("reg:extension[@url = \"") + url + OUSTR("\"]"));
+            sPrefix + OUSTR(":extension[@url = \"") + url + OUSTR("\"]"));
         Reference<css::xml::dom::XDocument> doc = getDocument();
         Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
@@ -143,17 +143,13 @@ ExtensionBackendDb::Data ExtensionBackendDb::getEntry(::rtl::OUString const & ur
             xpathApi->selectSingleNode(root, sExpression);
         if (aNode.is())
         {
-//             const OUString sExprIdentifier(OUSTR("reg:identifier/text()"));
-
-//             Reference<css::xml::dom::XNode> idValueNode =
-//                 xpathApi->selectSingleNode(aNode, sExprIdentifier);
-//             retData.identifier = idValueNode->getNodeValue();
-
             retData.items =
                 readVectorOfPair(
                     aNode,
-                    OUSTR("reg:extension-items"),
-                    OUSTR("reg:item"), OUSTR("reg:url"), OUSTR("reg:media-type"));
+                    sPrefix + OUSTR(":extension-items"),
+                    sPrefix + OUSTR(":item"),
+                    sPrefix + OUSTR(":url"),
+                    sPrefix + OUSTR(":media-type"));
         }
         return retData;
     }
