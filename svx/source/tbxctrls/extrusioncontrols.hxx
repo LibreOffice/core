@@ -96,14 +96,23 @@ public:
 
 //========================================================================
 
-class ExtrusionDepthController : public svt::PopupMenuControllerBase
+class ExtrusionDepthWindow : public svtools::ToolbarMenu
 {
-    using svt::PopupMenuControllerBase::disposing;
 private:
-    Image maImgDepth[5];
+    svt::ToolboxController& mrController;
+
+    Image maImgDepth0;
+    Image maImgDepth1;
+    Image maImgDepth2;
+    Image maImgDepth3;
+    Image maImgDepth4;
     Image maImgDepthInfinity;
 
-    Image maImgDepth_hc[5];
+    Image maImgDepth0h;
+    Image maImgDepth1h;
+    Image maImgDepth2h;
+    Image maImgDepth3h;
+    Image maImgDepth4h;
     Image maImgDepthInfinityh;
 
     FieldUnit   meUnit;
@@ -112,28 +121,30 @@ private:
     const rtl::OUString msExtrusionDepth;
     const rtl::OUString msMetricUnit;
 
+    DECL_LINK( SelectHdl, void * );
+
+    void    implFillStrings( FieldUnit eUnit );
+    void    implSetDepth( double fDepth );
+
 public:
-    ExtrusionDepthController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
-    virtual ~ExtrusionDepthController();
+    ExtrusionDepthWindow( svt::ToolboxController& rController, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, Window* pParentWindow );
+
+    virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+};
+
+//========================================================================
+
+class ExtrusionDepthController : public svt::PopupWindowController
+{
+public:
+    ExtrusionDepthController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
+
+    virtual ::Window* createPopupWindow( ::Window* pParent );
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
-
-    // XInitialization
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-
-    // XStatusListener
-    virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
-
-    // XMenuListener
-    virtual void SAL_CALL select( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
-
-    // XEventListener
-    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
-
-    // XPopupMenuController
-    virtual void SAL_CALL updatePopupMenu() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 };
 
 //========================================================================

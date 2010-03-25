@@ -379,19 +379,6 @@
 #define RID_SVXDLG_TEXTCONTROL_CHARATTR     (RID_SVX_START + 286)
 #define RID_SVXDLG_TEXTCONTROL_PARAATTR     (RID_SVX_START + 287)
 
-#define RID_SVXIMG_EXTRUSION_DEPTH_0        (RID_SVX_START + 288)
-#define RID_SVXIMG_EXTRUSION_DEPTH_1        (RID_SVX_START + 289)
-#define RID_SVXIMG_EXTRUSION_DEPTH_2        (RID_SVX_START + 290)
-#define RID_SVXIMG_EXTRUSION_DEPTH_3        (RID_SVX_START + 291)
-#define RID_SVXIMG_EXTRUSION_DEPTH_4        (RID_SVX_START + 292)
-#define RID_SVXIMG_EXTRUSION_DEPTH_0_H      (RID_SVX_START + 293)
-#define RID_SVXIMG_EXTRUSION_DEPTH_1_H      (RID_SVX_START + 294)
-#define RID_SVXIMG_EXTRUSION_DEPTH_2_H      (RID_SVX_START + 295)
-#define RID_SVXIMG_EXTRUSION_DEPTH_3_H      (RID_SVX_START + 296)
-#define RID_SVXIMG_EXTRUSION_DEPTH_4_H      (RID_SVX_START + 297)
-#define RID_SVXIMG_EXTRUSION_DEPTH_INFINITY (RID_SVX_START + 298)
-#define RID_SVXIMG_EXTRUSION_DEPTH_INFINITY_H (RID_SVX_START + 299)
-
 // !!! please update RID_SVX_FIRSTFREE !!! see line 46
 
 // Strings ------------------------------------------------------------------
@@ -624,9 +611,6 @@
 #define RID_SVXSTR_SALMON                   (RID_SVX_START + 545)
 #define RID_SVXSTR_SEABLUE                  (RID_SVX_START + 546)
 #define RID_SVXSTR_COLOR_SUN                (RID_SVX_START + 547)
-
-#define RID_SVXSTR_EXTRUSION_CUSTOM         (RID_SVX_START + 548)
-#define RID_SVXSTR_EXTRUSION_INFINITY       (RID_SVX_START + 549)
 
 // JP: string resource ids for table-autoformat-names, used in SW/SC
 // !!! Urgent: the order of Ids is persistent. New Ids have to append !!!
