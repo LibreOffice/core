@@ -113,7 +113,7 @@ namespace ucb { namespace ucp { namespace ext
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString ContentProvider::getRootURL()
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.extension:/" ) );
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.extension://" ) );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -123,19 +123,68 @@ namespace ucb { namespace ucp { namespace ext
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    namespace
+    {
+        void lcl_ensureAndTransfer( ::rtl::OUString& io_rIdentifierFragment, ::rtl::OUStringBuffer& o_rNormalization, const sal_Unicode i_nLeadingChar )
+        {
+            if ( ( io_rIdentifierFragment.getLength() == 0 ) || ( io_rIdentifierFragment[0] != i_nLeadingChar ) )
+                throw IllegalIdentifierException();
+            io_rIdentifierFragment = io_rIdentifierFragment.copy( 1 );
+            o_rNormalization.append( i_nLeadingChar );
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     Reference< XContent > SAL_CALL ContentProvider::queryContent( const Reference< XContentIdentifier  >& i_rIdentifier )
         throw( IllegalIdentifierException, RuntimeException )
     {
         // Check URL scheme...
-        const ::rtl::OUString aScheme( rtl::OUString::createFromAscii( "vnd.sun.star.extension" ) );
-        if ( !i_rIdentifier->getContentProviderScheme().equalsIgnoreAsciiCase( aScheme ) )
+        const ::rtl::OUString sScheme( rtl::OUString::createFromAscii( "vnd.sun.star.extension" ) );
+        if ( !i_rIdentifier->getContentProviderScheme().equalsIgnoreAsciiCase( sScheme ) )
             throw IllegalIdentifierException();
 
-        // normalize the scheme
+        // normalize the identifier
         const ::rtl::OUString sIdentifier( i_rIdentifier->getContentIdentifier() );
+
+        // the scheme needs to be lower-case
         ::rtl::OUStringBuffer aComposer;
-        aComposer.append( sIdentifier.copy( 0, aScheme.getLength() ).toAsciiLowerCase() );
-        aComposer.append( sIdentifier.copy( aScheme.getLength() ) );
+        aComposer.append( sIdentifier.copy( 0, sScheme.getLength() ).toAsciiLowerCase() );
+
+        // one : is required after the scheme
+        ::rtl::OUString sRemaining( sIdentifier.copy( sScheme.getLength() ) );
+        lcl_ensureAndTransfer( sRemaining, aComposer, ':' );
+
+        // and at least one /
+        lcl_ensureAndTransfer( sRemaining, aComposer, '/' );
+
+        // the normalized form requires one additional /, but we also accept identifiers which don't have it
+        if ( sRemaining.getLength() == 0 )
+        {
+            // the root content is a special case, it requires ///
+            aComposer.appendAscii( "//" );
+        }
+        else
+        {
+            if ( sRemaining[0] != '/' )
+            {
+                aComposer.append( sal_Unicode( '/' ) );
+                aComposer.append( sRemaining );
+            }
+            else
+            {
+                lcl_ensureAndTransfer( sRemaining, aComposer, '/' );
+                // by now, we moved "vnd.sun.star.extension://" from the URL to aComposer
+                if ( sRemaining.getLength() == 0 )
+                {
+                    // again, it's the root content, but one / is missing
+                    aComposer.append( sal_Unicode( '/' ) );
+                }
+                else
+                {
+                    aComposer.append( sRemaining );
+                }
+            }
+        }
         const Reference< XContentIdentifier > xNormalizedIdentifier( new ::ucbhelper::ContentIdentifier( m_xSMgr, aComposer.makeStringAndClear() ) );
 
         ::osl::MutexGuard aGuard( m_aMutex );

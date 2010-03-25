@@ -135,10 +135,6 @@ namespace ucb { namespace ucp { namespace ext
             );
 
         static bool denotesRootContent( const ::rtl::OUString& i_rContentIdentifier );
-        static bool denotesRootContent( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifier >& i_rIdentifier )
-        {
-            return denotesRootContent( i_rIdentifier->getContentIdentifier() );
-        }
 
         bool impl_isFolder();
         void impl_determineContentType();

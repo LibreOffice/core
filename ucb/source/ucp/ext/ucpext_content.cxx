@@ -149,23 +149,29 @@ namespace ucb { namespace ucp { namespace ext
         ,m_sExtensionId()
         ,m_sPathIntoExtension()
     {
-        if ( denotesRootContent( getIdentifier() ) )
+        const ::rtl::OUString sURL( getIdentifier()->getContentIdentifier() );
+        if ( denotesRootContent( sURL ) )
         {
             m_eExtContentType = E_ROOT;
         }
-        else if ( denotesRootContent( getParentURL() ) )
-        {
-            m_eExtContentType = E_EXTENSION_ROOT;
-        }
         else
         {
-            m_eExtContentType = E_EXTENSION_CONTENT;
+            const ::rtl::OUString sRelativeURL( sURL.copy( ContentProvider::getRootURL().getLength() ) );
+            const sal_Int32 nSepPos = sRelativeURL.indexOf( '/' );
+            if ( ( nSepPos == -1 ) || ( nSepPos == sRelativeURL.getLength() - 1 ) )
+            {
+                m_eExtContentType = E_EXTENSION_ROOT;
+            }
+            else
+            {
+                m_eExtContentType = E_EXTENSION_CONTENT;
+            }
         }
 
         if ( m_eExtContentType != E_ROOT )
         {
             const ::rtl::OUString sRootURL = ContentProvider::getRootURL();
-            m_sExtensionId = getIdentifier()->getContentIdentifier().copy( sRootURL.getLength() );
+            m_sExtensionId = sURL.copy( sRootURL.getLength() );
 
             const sal_Int32 nNextSep = m_sExtensionId.indexOf( '/' );
             if ( nNextSep > -1 )
@@ -322,26 +328,70 @@ namespace ucb { namespace ucp { namespace ext
     //------------------------------------------------------------------------------------------------------------------
     bool Content::denotesRootContent( const ::rtl::OUString& i_rContentIdentifier )
     {
-        const sal_Char* pScheme = "vnd.sun.star.extension";
-        const sal_Int32 nSchemeLength = sizeof( "vnd.sun.star.extension" ) - 1;
-        ENSURE_OR_RETURN_FALSE( i_rContentIdentifier.matchAsciiL( pScheme, nSchemeLength ), "illegal content URL" );
-        return i_rContentIdentifier.copy( nSchemeLength ).equalsAsciiL( ":/", 2 );
+        const ::rtl::OUString sRootURL( ContentProvider::getRootURL() );
+        if ( i_rContentIdentifier == sRootURL )
+            return true;
+
+        // the root URL contains only two trailing /, but we also recognize 3 of them as denoting the root URL
+        if  (   i_rContentIdentifier.match( sRootURL )
+            &&  ( i_rContentIdentifier.getLength() == sRootURL.getLength() + 1 )
+            &&  ( i_rContentIdentifier[ i_rContentIdentifier.getLength() - 1 ] == '/' )
+            )
+            return true;
+
+        return false;
     }
 
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString Content::getParentURL()
     {
-        const ::rtl::OUString sURL = m_xIdentifier->getContentIdentifier();
-        ENSURE_OR_RETURN( sURL.getLength(), "unexpected content URL", ::rtl::OUString() );
-        sal_Int32 nCopyUpTo = sURL.lastIndexOf( '/' ) + 1;
-        if ( ( nCopyUpTo == sURL.getLength() ) && ( nCopyUpTo > 1 ) )
+        const ::rtl::OUString sRootURL( ContentProvider::getRootURL() );
+
+        switch ( m_eExtContentType )
         {
-            nCopyUpTo = sURL.lastIndexOf( '/', nCopyUpTo - 2 ) + 1;
-            if ( nCopyUpTo == 0 )
-                nCopyUpTo = sURL.getLength();
+        case E_ROOT:
+            // don't have a parent
+            return sRootURL;
+
+        case E_EXTENSION_ROOT:
+            // our parent is the root itself
+            return sRootURL;
+
+        case E_EXTENSION_CONTENT:
+        {
+            const ::rtl::OUString sURL = m_xIdentifier->getContentIdentifier();
+
+            // cut the root URL
+            ENSURE_OR_BREAK( sURL.match( sRootURL, 0 ), "illegal URL structure - no root" );
+            ::rtl::OUString sRelativeURL( sURL.copy( sRootURL.getLength() ) );
+
+            // cut the extension ID
+            const ::rtl::OUString sSeparatedExtensionId( encodeIdentifier( m_sExtensionId ) + ::rtl::OUString( sal_Unicode( '/' ) ) );
+            ENSURE_OR_BREAK( sRelativeURL.match( sSeparatedExtensionId ), "illegal URL structure - no extension ID" );
+            sRelativeURL = sRelativeURL.copy( sSeparatedExtensionId.getLength() );
+
+            // cut the final slash (if any)
+            ENSURE_OR_BREAK( sRelativeURL.getLength(), "illegal URL structure - ExtensionContent should have a level below the extension ID" );
+            if ( sRelativeURL.getStr()[ sRelativeURL.getLength() - 1 ] == '/' )
+                sRelativeURL = sRelativeURL.copy( 0, sRelativeURL.getLength() - 1 );
+
+            // remove the last segment
+            const sal_Int32 nLastSep = sRelativeURL.lastIndexOf( '/' );
+            sRelativeURL = sRelativeURL.copy( 0, nLastSep != -1 ? nLastSep : 0 );
+
+            ::rtl::OUStringBuffer aComposer;
+            aComposer.append( sRootURL );
+            aComposer.append( sSeparatedExtensionId );
+            aComposer.append( sRelativeURL );
+            return aComposer.makeStringAndClear();
         }
-        const ::rtl::OUString sParentURL( sURL.copy( 0, nCopyUpTo ) );
-        return sParentURL;
+        break;
+
+        default:
+            OSL_ENSURE( false, "Content::getParentURL: unhandled case!" );
+            break;
+        }
+        return ::rtl::OUString();
     }
 
     //------------------------------------------------------------------------------------------------------------------
