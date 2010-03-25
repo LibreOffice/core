@@ -1,5 +1,5 @@
     <node oor:name="writer_web_StarOffice_XML_Writer" oor:op="replace">
-        <prop oor:name="Flags"><value>EXPORT TEMPLATE ALIEN</value></prop>
+        <prop oor:name="Flags"><value>EXPORT TEMPLATE ALIEN ENCRYPTION</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"/>
         <prop oor:name="UserData"><value>CXML</value></prop>
