@@ -124,12 +124,11 @@ void ReplaceProductNameHookProc( String& rStr )
 
             aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::ABOUTBOXPRODUCTVERSION );
             aRet >>= aTmp;
-            rOOOVendor = aTmp;
+            rAboutBoxVersion = aTmp;
 
             aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::OOOVENDOR );
             aRet >>= aTmp;
-            rAboutBoxVersion = aTmp;
-
+            rOOOVendor = aTmp;
 
             if ( !rExtension.Len() )
             {
