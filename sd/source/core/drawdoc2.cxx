@@ -660,7 +660,6 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
                 Size aSz( SvxPaperInfo::GetPaperSize(PAPER_SCREEN, MAP_100TH_MM) );
                 pPage->SetSize( Size( aSz.Height(), aSz.Width() ) );
                 pPage->SetBorder(0, 0, 0, 0);
-                pPage->SetAutoLayout( AUTOLAYOUT_TITLE, TRUE, TRUE );
             }
 
             InsertPage(pPage, 1);
@@ -731,6 +730,10 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         pNotesPage->TRG_SetMasterPage( *pNotesMPage );
         if( bClipboard )
             pNotesMPage->SetLayoutName( pPage->GetLayoutName() );
+
+
+        if( !pRefPage && (meDocType != DOCUMENT_TYPE_DRAW) )
+            pPage->SetAutoLayout( AUTOLAYOUT_TITLE, TRUE, TRUE );
 
         mpWorkStartupTimer = new Timer();
         mpWorkStartupTimer->SetTimeoutHdl( LINK(this, SdDrawDocument, WorkStartupHdl) );
