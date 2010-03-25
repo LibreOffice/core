@@ -47,6 +47,7 @@ testcase tBasicVBACompatSecurityCheck()
     const EXEC_EXCEL_MACROS   = TRUE
 
     const MACRO_IDENTIFICATION_MESSAGE = "Clicked"
+    const MACRO_NAME = "CommandButton1_Click"
 
     dim iSecurityLevel as integer
 
@@ -54,8 +55,7 @@ testcase tBasicVBACompatSecurityCheck()
     printlog( "Set VBA macro handling to import and execute" )
     hSetExcelBasicImportMode( IMPORT_EXCEL_MACROS, EXEC_EXCEL_MACROS )
 
-    printlog( "Macros should execute for security levels LOW and MEDIUM" )
-    for iSecurityLevel = GC_MACRO_SECURITY_LEVEL_LOW to GC_MACRO_SECURITY_LEVEL_MEDIUM
+    for iSecurityLevel = GC_MACRO_SECURITY_LEVEL_MEDIUM to GC_MACRO_SECURITY_LEVEL_VERYHIGH
 
         printlog( "Adjust security level" )
         hSetMacroSecurityAPI( iSecurityLevel )
@@ -63,71 +63,29 @@ testcase tBasicVBACompatSecurityCheck()
         printlog( "Load the test file" )
         hFileOpen( cTestFile )
 
-        printlog( "Probe for macro execution warning..." )
-        if ( iSecurityLevel = GC_MACRO_SECURITY_LEVEL_MEDIUM ) then
-            if ( hAllowMacroExecution() ) then
-                printlog( "Macro execution warning displayed, good" )
-            else
-                warnlog( "Macro execution warning is missing" )
-            endif
-        endif
+        printlog( "Deny macro execution" )
+        hDenyMacroExecution()
 
-        printlog( "Try to execute the macro" )
-        hMacroOrganizerRunMacro( "CommandButton1_Click" )
+        printlog( "Try to execute macro via macro organizer" )
+        hMacroOrganizerRunMacro( MACRO_NAME )
 
+        printlog( "Probe for warning message (or macro)" )
         kontext "Active"
-        printlog( "Probe for macro..." )
-        if ( Active.exists( 3 ) ) then
+        if ( Active.exists( 2 ) ) then
             if ( Active.getText() = MACRO_IDENTIFICATION_MESSAGE ) then
-                printlog( "Macro was executed" )
+                warnlog( "Macro was executed though macro execution has been denied" )
                 Active.ok()
             else
-                warnlog( "Macro was not executed" )
+                printlog( "Macro execution blocked - warning is displayed." )
+                Active.ok()
             endif
         else
-            warnlog( "Expected macro was not executed" )
+            warnlog( "No warning message for blocked macro execution" )
         endif
 
-        printlog( "Close file" )
-        hDestroyDocument()
-
-    next iSecurityLevel
-
-    printlog( "Macros should *not* execute for HIGH and VERY HIGH security levels" )
-    for iSecurityLevel = GC_MACRO_SECURITY_LEVEL_HIGH to GC_MACRO_SECURITY_LEVEL_VERYHIGH
-
-        printlog( "Adjust security level" )
-        hSetMacroSecurityAPI( iSecurityLevel )
-
-        printlog( "Reload file" )
-        if ( not hFileOpen( cTestFile ) ) then
-
-            kontext "Active"
-            Active.ok()
-
-            printlog( "Try to execute the macro" )
-            hMacroOrganizerRunMacro( "CommandButton1_Click" )
-
-            kontext "Active"
-            if ( Active.exists( 2 ) ) then
-                if ( Active.getText() = MACRO_IDENTIFICATION_MESSAGE ) then
-                    warnlog( "Macro was executed" )
-                    Active.ok()
-                else
-                    printlog( "Macro was not executed, message displayed" )
-                    Active.ok()
-
-                    kontext "Makro"
-                    Makro.cancel()
-                endif
-            else
-                warnlog( "Message about blocked macro execution is missing, trying to recover" )
-                kontext "Makro"
-                if ( Makro.exists() ) then Makro.cancel()
-            endif
-        else
-            warnlog( "Message about blocked macro execution is missing" )
-        endif
+        ' recover silently, the warnings above should say it all.
+        kontext "Makro"
+        if ( Makro.exists() ) then Makro.cancel()
 
         printlog( "Close file" )
         hDestroyDocument()
