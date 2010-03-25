@@ -404,6 +404,7 @@ protected:
     int             processRandREvent( XEvent* );
 
     void            doDestruct();
+    void            addXineramaScreenUnique( long i_nX, long i_nY, long i_nWidth, long i_nHeight );
 public:
     static  SalDisplay     *GetSalDisplay( Display* display );
     static  BOOL            BestVisual( Display     *pDisp,
