@@ -340,7 +340,7 @@ double aDepthListInch[] = { 0, 1270,2540,5080,10160 };
 double aDepthListMM[] = { 0, 1000, 2500, 5000, 10000 };
 
 ExtrusionDepthWindow::ExtrusionDepthWindow( svt::ToolboxController& rController, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, Window* pParentWindow )
-: ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_EXTRUSION_DIRECTION ))
+: ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_EXTRUSION_DEPTH ))
 , mrController( rController )
 , maImgDepth0( SVX_RES( IMG_DEPTH_0 ) )
 , maImgDepth1( SVX_RES( IMG_DEPTH_1 ) )
