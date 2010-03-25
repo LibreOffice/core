@@ -264,7 +264,7 @@ namespace ucb { namespace ucp { namespace ext
             try
             {
                 Reference< XContent > xContent( m_pImpl->m_xContent->getProvider()->queryContent( xId ) );
-                ::rtl::Reference< Content > pContent( dynamic_cast< Content* >( xContent.get() ) );
+                pContent.set( dynamic_cast< Content* >( xContent.get() ) );
                 OSL_ENSURE( pContent.is() || !xContent.is(), "DataSupplier::queryContent: invalid content implementation!" );
                 m_pImpl->m_aResults[ i_nIndex ].pContent = pContent;
                 return pContent.get();
