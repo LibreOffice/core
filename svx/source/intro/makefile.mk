@@ -40,6 +40,10 @@ RSCLOCINC!:=$(RSCLOCINC);$(PRJ)$/RES
 OOO_VENDOR*=$(USER)$(USERNAME)
 RSCDEFS+=-DOOO_VENDOR="$(OOO_VENDOR)"
 
+.IF "x$(OOO_VENDOR)x" == "xx" 
+.EXPORT : OOO_VENDOR
+.ENDIF
+
 # --- Allgemein -----------------------------------------------------------
 
 LOCALIZE_ME=intro_tmpl.hrc
