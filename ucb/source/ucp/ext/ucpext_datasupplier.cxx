@@ -167,7 +167,7 @@ namespace ucb { namespace ucp { namespace ext
 
                     const ::rtl::OUString& rLocalId = (*pExtInfo)[0];
                     ResultListEntry aEntry;
-                    aEntry.sId = lcl_compose( sContentIdentifier, Content::escapeIdentifier( rLocalId ) );
+                    aEntry.sId = lcl_compose( sContentIdentifier, Content::encodeIdentifier( rLocalId ) );
                     m_pImpl->m_aResults.push_back( aEntry );
                 }
             }
@@ -327,7 +327,7 @@ namespace ucb { namespace ucp { namespace ext
         case E_ROOT:
         {
             const ::rtl::OUString& rId( m_pImpl->m_aResults[ i_nIndex ].sId );
-            const ::rtl::OUString sTitle = Content::deescapeIdentifier( rId.copy( rId.indexOf( '/' ) + 1 ) );
+            const ::rtl::OUString sTitle = Content::decodeIdentifier( rId.copy( rId.indexOf( '/' ) + 1 ) );
             xRow = Content::getArtificialNodePropertyValues( m_pImpl->m_xSMgr, getResultSet()->getProperties(), sTitle );
         }
         break;

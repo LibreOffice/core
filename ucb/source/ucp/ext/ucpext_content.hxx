@@ -82,9 +82,9 @@ namespace ucb { namespace ucp { namespace ext
             );
 
         static ::rtl::OUString
-            escapeIdentifier( const ::rtl::OUString& i_rIdentifier );
+            encodeIdentifier( const ::rtl::OUString& i_rIdentifier );
         static ::rtl::OUString
-            deescapeIdentifier( const ::rtl::OUString& i_rIdentifier );
+            decodeIdentifier( const ::rtl::OUString& i_rIdentifier );
 
         virtual ::rtl::OUString getParentURL();
 

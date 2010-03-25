@@ -60,6 +60,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/uri.h>
 
 #include <algorithm>
 
@@ -172,7 +173,7 @@ namespace ucb { namespace ucp { namespace ext
                 m_sPathIntoExtension = m_sExtensionId.copy( nNextSep + 1 );
                 m_sExtensionId = m_sExtensionId.copy( 0, nNextSep );
             }
-            m_sExtensionId = Content::deescapeIdentifier( m_sExtensionId );
+            m_sExtensionId = Content::decodeIdentifier( m_sExtensionId );
         }
     }
 
@@ -302,23 +303,20 @@ namespace ucb { namespace ucp { namespace ext
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString Content::escapeIdentifier( const ::rtl::OUString& i_rIdentifier )
+    ::rtl::OUString Content::encodeIdentifier( const ::rtl::OUString& i_rIdentifier )
     {
-        const ::rtl::OUString sQuoteQuotes = ::comphelper::string::searchAndReplaceAllAsciiWithAscii(
-            i_rIdentifier, "%", "%%" );
-        const ::rtl::OUString sQuoteSlashes = ::comphelper::string::searchAndReplaceAllAsciiWithAscii(
-            i_rIdentifier, "/", "%47" );
-        return sQuoteSlashes;
+        ::rtl::OUString sEncoded;
+        rtl_uriEncode( i_rIdentifier.pData, rtl_getUriCharClass( rtl_UriCharClassUricNoSlash ),
+            rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8, &sEncoded.pData );
+        return sEncoded;
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString Content::deescapeIdentifier( const ::rtl::OUString& i_rIdentifier )
+    ::rtl::OUString Content::decodeIdentifier( const ::rtl::OUString& i_rIdentifier )
     {
-        const ::rtl::OUString sQuoteQuotes = ::comphelper::string::searchAndReplaceAllAsciiWithAscii(
-            i_rIdentifier, "%%", "%" );
-        const ::rtl::OUString sQuoteSlashes = ::comphelper::string::searchAndReplaceAllAsciiWithAscii(
-            i_rIdentifier, "%47", "/" );
-        return sQuoteSlashes;
+        ::rtl::OUString sDecoded;
+        rtl_uriDecode( i_rIdentifier.pData, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8, &sDecoded.pData );
+        return sDecoded;
     }
 
     //------------------------------------------------------------------------------------------------------------------
