@@ -1337,6 +1337,7 @@ void ImplDevFontList::InitGenericGlyphFallback( void ) const
         "muktinarrow", "",
         "phetsarathot", "",
         "padauk", "pinlonmyanmar", "",
+        "iskoolapota", "lklug", "",
         0
     };
 

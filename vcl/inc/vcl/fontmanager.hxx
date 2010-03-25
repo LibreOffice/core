@@ -437,7 +437,7 @@ class VCL_DLLPUBLIC PrintFontManager
     false else (e.g. no libfontconfig found)
     */
     bool initFontconfig();
-    int  countFontconfigFonts();
+    int  countFontconfigFonts( std::hash_map<rtl::OString, int, rtl::OStringHash>& o_rVisitedPaths );
     /* deinitialize fontconfig
      */
     void deinitFontconfig();
