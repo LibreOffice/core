@@ -54,8 +54,6 @@
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/configuration/backend/XLayer.hpp>
-#include <com/sun/star/configuration/backend/XSingleLayerStratum.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
@@ -68,8 +66,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace com::sun::star::container;
-using namespace com::sun::star::configuration;
-using namespace com::sun::star::configuration::backend;
 using com::sun::star::uno::Exception;
 using namespace com::sun::star;
 
@@ -628,16 +624,6 @@ void MigrationImpl::copyFiles()
 
 void MigrationImpl::runServices()
 {
-
-    //create stratum for old user layer
-    OUString aOldLayerURL = m_aInfo.userdata;
-    aOldLayerURL += OUString::createFromAscii("/user/registry");
-    OUString aStratumSvc = OUString::createFromAscii("com.sun.star.configuration.backend.LocalSingleStratum");
-    uno::Sequence< uno::Any > stratumArgs(1);
-    stratumArgs[0] = uno::makeAny(aOldLayerURL);
-    uno::Reference< XSingleLayerStratum> xStartum( m_xFactory->createInstanceWithArguments(
-        aStratumSvc, stratumArgs), uno::UNO_QUERY);
-
     // Build argument array
     uno::Sequence< uno::Any > seqArguments(2);
     seqArguments[0] = uno::makeAny(NamedValue(
