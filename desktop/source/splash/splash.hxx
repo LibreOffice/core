@@ -89,6 +89,7 @@ private:
     BitmapEx        _aIntroBmp;
     Color           _cProgressFrameColor;
     Color           _cProgressBarColor;
+    bool            _bNativeProgress;
     OUString        _sAppName;
     std::vector< FullScreenProgressRatioValue > _sFullScreenProgressRatioValues;
 

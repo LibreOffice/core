@@ -60,6 +60,7 @@ SplashScreen::SplashScreen(const Reference< XMultiServiceFactory >& rSMgr)
     , _vdev(*((IntroWindow*)this))
     , _cProgressFrameColor(sal::static_int_cast< ColorData >(NOT_LOADED))
     , _cProgressBarColor(sal::static_int_cast< ColorData >(NOT_LOADED))
+    , _bNativeProgress(true)
     , _iMax(100)
     , _iProgress(0)
     , _eBitmapMode(BM_DEFAULTMODE)
@@ -297,6 +298,9 @@ void SplashScreen::loadConfig()
         OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressPosition" ) ) );
     OUString sFullScreenSplash = implReadBootstrapKey(
         OUString( RTL_CONSTASCII_USTRINGPARAM( "FullScreenSplash" ) ) );
+    OUString sNativeProgress = implReadBootstrapKey(
+        OUString( RTL_CONSTASCII_USTRINGPARAM( "NativeProgress" ) ) );
+
 
     // Determine full screen splash mode
     _bFullScreenSplash = (( sFullScreenSplash.getLength() > 0 ) &&
@@ -345,6 +349,11 @@ void SplashScreen::loadConfig()
             nBlue = static_cast< UINT8 >( sProgressBarColor.getToken( 0, ',', idx ).toInt32() );
             _cProgressBarColor = Color( nRed, nGreen, nBlue );
         }
+    }
+
+    if( sNativeProgress.getLength() )
+    {
+        _bNativeProgress = sNativeProgress.toBoolean();
     }
 
     if ( sSize.getLength() )
@@ -618,7 +627,7 @@ void SplashScreen::Paint( const Rectangle&)
     BOOL bNativeOK = FALSE;
 
     // in case of native controls we need to draw directly to the window
-    if( IsNativeControlSupported( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL ) )
+    if( _bNativeProgress && IsNativeControlSupported( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL ) )
     {
         DrawBitmapEx( Point(), _aIntroBmp );
 
