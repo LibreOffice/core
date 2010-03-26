@@ -1101,6 +1101,7 @@ void OCopyTableWizard::insertColumn(sal_Int32 _nPos,OFieldDescription* _pField)
 
         m_aDestVec.insert(m_aDestVec.begin() + _nPos,
             m_vDestColumns.insert(ODatabaseExport::TColumns::value_type(_pField->GetName(),_pField)).first);
+        m_mNameMapping[_pField->GetName()] = _pField->GetName();
     }
 }
 // -----------------------------------------------------------------------------
