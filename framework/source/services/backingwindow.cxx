@@ -296,7 +296,13 @@ void BackingWindow::initBackground()
     SetBackground( GetSettings().GetStyleSettings().GetWorkspaceGradient() );
 
     bool bDark = GetSettings().GetStyleSettings().GetHighContrastMode();
-    maWelcomeTextColor = maLabelTextColor =  bDark ? Color( COL_WHITE ) : Color( 0x26, 0x35, 0x42 );
+    if( bDark )
+        maWelcomeTextColor = maLabelTextColor = Color( COL_WHITE );
+    else if( mnLayoutStyle == 1 )
+        maWelcomeTextColor = maLabelTextColor = Color( COL_BLACK );
+    else
+        maWelcomeTextColor = maLabelTextColor = Color( 0x26, 0x35, 0x42 );
+
     Color aTextBGColor( bDark ? COL_BLACK : COL_WHITE );
 
     // select image set
@@ -615,14 +621,6 @@ void BackingWindow::layoutButtonAndText(
 
 void BackingWindow::Paint( const Rectangle& )
 {
-    bool bDark = GetSettings().GetStyleSettings().GetHighContrastMode();
-
-    Color aBackColor( bDark ? COL_BLACK : COL_WHITE );
-
-    // fill control rect
-    SetLineColor();
-    SetFillColor( aBackColor );
-    DrawRect( maControlRect );
 
     // draw bitmap
     if( GetSettings().GetLayoutRTL() )
