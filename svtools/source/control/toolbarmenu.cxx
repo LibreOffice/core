@@ -881,18 +881,6 @@ ToolbarMenuEntry* ToolbarMenu::implSearchEntry( int nEntryId ) const
 
 // --------------------------------------------------------------------
 
-static void implDeselectControl( Control* pControl )
-{
-    ValueSet* pValueSet = dynamic_cast< ValueSet* >( pControl );
-    if( pValueSet )
-    {
-        pValueSet->SetNoSelection();
-        pValueSet->Invalidate();
-    }
-}
-
-// --------------------------------------------------------------------
-
 void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
 {
     Size    aSz( GetOutputSizePixel() );
