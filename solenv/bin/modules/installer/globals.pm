@@ -268,7 +268,7 @@ BEGIN
     $isopensourceproduct = 1;
     $manufacturer = "";
     $longmanufacturer = "";
-    $sundirname = "Sun";
+    $sundirname = "";
     $codefilename = "codes.txt";
     $componentfilename = "components.txt";
     $productcode = "";
