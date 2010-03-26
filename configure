@@ -6983,7 +6983,7 @@ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
 else
   ac_cv_header_stdc=no
 fi
-rm -f -r conftest*
+rm -f conftest*
 
 fi
 
@@ -7004,7 +7004,7 @@ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
 else
   ac_cv_header_stdc=no
 fi
-rm -f -r conftest*
+rm -f conftest*
 
 fi
 
@@ -8859,7 +8859,7 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 ;;
 esac
-rm -f -r conftest*
+rm -f conftest*
   if test $ac_cv_sys_file_offset_bits = unknown; then
     { echo "$as_me:$LINENO: checking for _LARGE_FILES value needed for large files" >&5
 echo $ECHO_N "checking for _LARGE_FILES value needed for large files... $ECHO_C" >&6; }
@@ -8980,7 +8980,7 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 ;;
 esac
-rm -f -r conftest*
+rm -f conftest*
   fi
 fi
 
@@ -11005,7 +11005,7 @@ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
 else
   stlvisok=no
 fi
-rm -f -r conftest*
+rm -f conftest*
 
       { echo "$as_me:$LINENO: result: $stlvisok" >&5
 echo "${ECHO_T}$stlvisok" >&6; }
@@ -15016,8 +15016,8 @@ if test "$_os" = "Darwin" && test "$with_system_python" != "no"; then
 echo "${ECHO_T}compiling against MacOSX10.4u.sdk (python version 2.3)" >&6; }
    PYTHON_CFLAGS="-I/Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/Python.framework/Versions/2.3/include/python2.3"
    PYTHON_LIBS="-framework Python"
-elif test -n "$with_system_python" -o -n "$with_system_libs" && \
-	test "$with_system_python" != "no"; then
+elif test "$with_system_python" != "no" -o -n "$with_system_libs"; then
+   with_system_python=yes
    { echo "$as_me:$LINENO: result: external" >&5
 echo "${ECHO_T}external" >&6; }
 
@@ -15212,7 +15212,7 @@ echo "${ECHO_T}$am_cv_python_pyexecdir" >&6; }
    PYTHON_CFLAGS="-I$python_include"
    PYTHON_LIBS="-lpython$python_version"
 fi
-if test "$with_system_python" != "no" ; then
+if test "$with_system_python" = "yes" ; then
    SYSTEM_PYTHON=YES
       save_CPPFLAGS="$CPPFLAGS"
    CPPFLAGS="$CPPFLAGS $PYTHON_CFLAGS"
@@ -20025,7 +20025,7 @@ _ACEOF
       eval "ac_im_$ac_var=\`\${MAKE-make} $ac_var 2>/dev/null | sed -n 's/^$ac_var=//p'\`"
     done
     # Open Windows xmkmf reportedly sets LIBDIR instead of USRLIBDIR.
-    for ac_extension in a so sl dylib la dll; do
+    for ac_extension in a so sl; do
       if test ! -f "$ac_im_usrlibdir/libX11.$ac_extension" &&
 	 test -f "$ac_im_libdir/libX11.$ac_extension"; then
 	ac_im_usrlibdir=$ac_im_libdir; break
@@ -20178,7 +20178,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 for ac_dir in `echo "$ac_x_includes $ac_x_header_dirs" | sed s/include/lib/g`
 do
   # Don't even attempt the hair of trying to link an X program!
-  for ac_extension in a so sl dylib la dll; do
+  for ac_extension in a so sl; do
     if test -r "$ac_dir/libX11.$ac_extension"; then
       ac_x_libraries=$ac_dir
       break 2
