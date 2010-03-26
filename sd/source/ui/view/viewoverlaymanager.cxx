@@ -376,7 +376,7 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
                 aImgMO = Image(b);
             }
 */
-            ImageButtonHdl* pHdl = new ImageButtonHdl( xThis, gButtonSlots[i>>1], aImg, aImgMO, aPoint );
+            ImageButtonHdl* pHdl = new ImageButtonHdl( xThis, gButtonSlots[i], aImg, aImgMO, aPoint );
             pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
             pHdl->SetPageView( mrView.GetSdrPageView() );
 
@@ -426,7 +426,11 @@ ViewOverlayManager::ViewOverlayManager( ViewShellBase& rViewShellBase )
 , mnUpdateTagsEvent( 0 )
 {
     Link aLink( LINK(this,ViewOverlayManager,EventMultiplexerListener) );
-    mrBase.GetEventMultiplexer()->AddEventListener(aLink, tools::EventMultiplexerEvent::EID_CURRENT_PAGE);
+    mrBase.GetEventMultiplexer()->AddEventListener(aLink, tools::EventMultiplexerEvent::EID_CURRENT_PAGE
+        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
+        | tools::EventMultiplexerEvent::EID_VIEW_ADDED
+        | tools::EventMultiplexerEvent::EID_BEGIN_TEXT_EDIT
+        | tools::EventMultiplexerEvent::EID_END_TEXT_EDIT );
 
     StartListening( *mrBase.GetDocShell() );
 }
@@ -514,7 +518,7 @@ bool ViewOverlayManager::CreateTags()
 
         for( std::list< SdrObject* >::const_iterator iter( rShapes.begin() ); iter != rShapes.end(); iter++ )
         {
-            if( (*iter)->IsEmptyPresObj() && ((*iter)->GetObjIdentifier() == OBJ_OUTLINETEXT) && !static_cast<SdrTextObj*>((*iter))->HasEditText() )
+            if( (*iter)->IsEmptyPresObj() && ((*iter)->GetObjIdentifier() == OBJ_OUTLINETEXT) && (mrBase.GetDrawView()->GetTextEditObject() != (*iter)) )
             {
                 rtl::Reference< SmartTag > xTag( new ChangePlaceholderTag( *this, *mrBase.GetMainViewShell()->GetView(), *(*iter) ) );
                 maTagVector.push_back(xTag);
@@ -554,6 +558,10 @@ IMPL_LINK(ViewOverlayManager,EventMultiplexerListener,
 {
     switch (pEvent->meEventId)
     {
+        case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
+        case tools::EventMultiplexerEvent::EID_VIEW_ADDED:
+        case tools::EventMultiplexerEvent::EID_BEGIN_TEXT_EDIT:
+        case tools::EventMultiplexerEvent::EID_END_TEXT_EDIT:
         case tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
             UpdateTags();
             break;
