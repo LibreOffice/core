@@ -3551,6 +3551,12 @@
 					</info>
 					<value/>
 				</prop>
+				<prop oor:name="StartCenterLayoutStyle" oor:type="xs:int">
+					<info>
+						<desc>Contains a number deciding the layout style of the start center</desc>
+					</info>
+					<value>0</value>
+				</prop>
             </group>
 			<group oor:name="Registration">
 				<info>

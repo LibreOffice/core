@@ -67,6 +67,7 @@
 #define STR_BACKING_INFOHELP                19
 #define BMP_BACKING_TPLREP                  20
 #define STR_BACKING_TPLREP                  21
+#define BMP_BACKING_FOLDER                  22
 
 #define RES_BACKING_IMAGES                  (DLG_BACKING+1)
 #define RES_BACKING_IMAGES_HC               (DLG_BACKING+2)

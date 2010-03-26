@@ -85,6 +85,10 @@ Window DLG_BACKING
     {
         File = "template_32.png";
     };
+    Bitmap BMP_BACKING_FOLDER
+    {
+        File = "folder_32.png";
+    };
     Bitmap BMP_BACKING_EXT
     {
         File = "extension_plus_26.png";

@@ -127,10 +127,10 @@ namespace framework
         Size                            maButtonImageSize;
 
         bool                            mbInitControls;
+        sal_Int32                       mnLayoutStyle;
         svt::AcceleratorExecute*        mpAccExec;
+        long                            mnBtnPos;
 
-
-        static const long nBtnPos = 240;
         static const int nItemId_Extensions = 1;
         static const int nItemId_Reg = 2;
         static const int nItemId_Info = 3;
