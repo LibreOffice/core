@@ -146,6 +146,7 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     mnBtnPos( 240 )
 {
     mnColumnWidth[0] = mnColumnWidth[1] = 0;
+    mnTextColumnWidth[0] = mnTextColumnWidth[1] = 0;
 
     try
     {
@@ -347,7 +348,7 @@ void BackingWindow::initBackground()
     maOpenText.SetControlBackground( aTextBGColor );
 
     if( mnLayoutStyle == 1 )
-        mnBtnPos = maBackgroundLeft.GetSizePixel().Width();
+        mnBtnPos = maBackgroundLeft.GetSizePixel().Width() + 40;
 }
 
 void BackingWindow::initControls()
@@ -504,10 +505,10 @@ void BackingWindow::initControls()
     {
         layoutButtonAndText( NULL, 0, aFileNewAppsAvailable,
                              aModuleOptions, SvtModuleOptions::E_SWRITER,
-                             maTemplateButton, maTemplateText, aMnemns, maTemplateString );
+                             maOpenButton, maOpenText, aMnemns, maOpenString );
         layoutButtonAndText( NULL, 1, aFileNewAppsAvailable,
                              aModuleOptions, SvtModuleOptions::E_SWRITER,
-                             maOpenButton, maOpenText, aMnemns, maOpenString );
+                             maTemplateButton, maTemplateText, aMnemns, maTemplateString );
         nYPos += 10;
     }
 
@@ -515,15 +516,23 @@ void BackingWindow::initControls()
     if( mnColumnWidth[0] + mnColumnWidth[1] + mnBtnPos + 20 > maControlRect.GetWidth() )
         maControlRect.Right() = maControlRect.Left() + mnColumnWidth[0] + mnColumnWidth[1] + mnBtnPos + 20;
 
+    mnTextColumnWidth[0] = mnColumnWidth[0];
+    mnTextColumnWidth[1] = mnColumnWidth[1];
+
     if( mnLayoutStyle == 1 )
     {
         if( maControlRect.GetWidth() < maControlRect.GetHeight() * 3 / 2 )
         {
             maControlRect.Right() = maControlRect.Left() + maControlRect.GetHeight() * 3 / 2;
-            long nDelta = (maControlRect.GetWidth() - mnBtnPos - mnColumnWidth[1] - mnColumnWidth[0] - 20)/2;
+            long nDelta = (maControlRect.GetWidth() - mnBtnPos - mnColumnWidth[1] - mnColumnWidth[0] - 20);
             mnColumnWidth[0] += nDelta/2;
             mnColumnWidth[1] += nDelta/2;
         }
+    }
+    else
+    {
+        mnColumnWidth[0] += 30;
+        mnColumnWidth[1] += 30;
     }
 
     maToolbox.SetSelectHdl( LINK( this, BackingWindow, ToolboxHdl ) );
@@ -586,7 +595,7 @@ void BackingWindow::layoutButtonAndText(
 
     long nTextWidth = i_rBtn.GetTextWidth( i_rBtn.GetText() );
 
-    nTextWidth += maButtonImageSize.Width() + 30;
+    nTextWidth += maButtonImageSize.Width();
     if( nColumn >= 0 && nColumn < static_cast<int>(sizeof(mnColumnWidth)/sizeof(mnColumnWidth[0])) )
     {
         if( nTextWidth > mnColumnWidth[nColumn] )
@@ -724,27 +733,27 @@ void BackingWindow::Resize()
     else
         nYPos += nWDelta/2 - nDiff;
 
-    maWriterButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos, nYPos ), Size( mnColumnWidth[0], maButtonImageSize.Height() ) );
-    maDrawButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos + mnColumnWidth[0], nYPos ), Size( mnColumnWidth[1], maButtonImageSize.Height() ) );
+    maWriterButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos, nYPos ), Size( mnTextColumnWidth[0], maButtonImageSize.Height() ) );
+    maDrawButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos + mnColumnWidth[0], nYPos ), Size( mnTextColumnWidth[1], maButtonImageSize.Height() ) );
     nYPos += nBDelta - nDiff;
-    maCalcButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos, nYPos ), Size( mnColumnWidth[0], maButtonImageSize.Height() ) );
-    maDBButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos + mnColumnWidth[0], nYPos ), Size( mnColumnWidth[1], maButtonImageSize.Height() ) );
+    maCalcButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos, nYPos ), Size( mnTextColumnWidth[0], maButtonImageSize.Height() ) );
+    maDBButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos + mnColumnWidth[0], nYPos ), Size( mnTextColumnWidth[1], maButtonImageSize.Height() ) );
     nYPos += nBDelta - nDiff;
-    maImpressButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos, nYPos ), Size( mnColumnWidth[0], maButtonImageSize.Height() ) );
-    maMathButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos + mnColumnWidth[0], nYPos ), Size( mnColumnWidth[1], maButtonImageSize.Height() ) );
+    maImpressButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos, nYPos ), Size( mnTextColumnWidth[0], maButtonImageSize.Height() ) );
+    maMathButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos + mnColumnWidth[0], nYPos ), Size( mnTextColumnWidth[1], maButtonImageSize.Height() ) );
 
     nYPos += nB2Delta - nDiff;
     if( mnLayoutStyle == 0 )
     {
-        maTemplateButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos, nYPos ), Size( mnColumnWidth[0], maButtonImageSize.Height() ) );
+        maTemplateButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos, nYPos ), Size( mnTextColumnWidth[0], maButtonImageSize.Height() ) );
         nYPos += nBDelta - nDiff;
-        maOpenButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos, nYPos ), Size( mnColumnWidth[0], maButtonImageSize.Height() ) );
+        maOpenButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos, nYPos ), Size( mnTextColumnWidth[0], maButtonImageSize.Height() ) );
         nYPos += nBDelta - nDiff;
     }
     else
     {
-        maTemplateButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos, nYPos ), Size( mnColumnWidth[0], maButtonImageSize.Height() ) );
-        maOpenButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos + mnColumnWidth[0], nYPos ), Size( mnColumnWidth[1], maButtonImageSize.Height() ) );
+        maOpenButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos, nYPos ), Size( mnTextColumnWidth[0], maButtonImageSize.Height() ) );
+        maTemplateButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos + mnColumnWidth[0], nYPos ), Size( mnTextColumnWidth[1], maButtonImageSize.Height() ) );
     }
 }
 

@@ -121,6 +121,7 @@ namespace framework
         Rectangle                       maControlRect;
 
         long                            mnColumnWidth[2];
+        long                            mnTextColumnWidth[2];
         Color                           maLabelTextColor;
         Color                           maWelcomeTextColor;
 
