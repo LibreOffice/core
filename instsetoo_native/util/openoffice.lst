@@ -92,6 +92,7 @@ OpenOffice
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
 		}
@@ -156,6 +157,7 @@ OpenOffice_wJRE
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
 		}
@@ -227,6 +229,7 @@ OpenOffice_Dev
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
 		}
@@ -270,6 +273,7 @@ URE
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_LAYOUT_STYLE 0
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
 			PACKAGEMAP package_names_ext.txt
         }
@@ -315,6 +319,7 @@ OpenOffice_SDK
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_LAYOUT_STYLE 0
         }
         active 1
         compression 5
@@ -364,6 +369,7 @@ OpenOffice_Dev_SDK
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_LAYOUT_STYLE 0
         }
         active 1
         compression 5
@@ -427,6 +433,7 @@ BrOffice
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/BrOffice/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/BrOffice/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/BrOffice/templates.jsp?cid=926383
+            STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
 		}
@@ -495,6 +502,7 @@ BrOffice_wJRE
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/BrOffice/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/BrOffice/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/BrOffice/templates.jsp?cid=926383
+            STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
 		}
@@ -569,6 +577,7 @@ BrOffice_Dev
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/BrOffice/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/BrOffice/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/BrOffice/templates.jsp?cid=926383
+            STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
 		}
