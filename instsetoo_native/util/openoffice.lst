@@ -29,6 +29,7 @@ Globals
 			PROGRESSSIZE 412,7
 			PROGRESSPOSITION 14,230
 			PROGRESSFRAMECOLOR 58,159,232
+			NATIVEPROGRESS true
 			REGISTRYLAYERNAME Layers
             SERVICEPACK 1
             UPDATE_DATABASE 1
@@ -399,6 +400,7 @@ BrOffice
 			PROGRESSSIZE 
 			PROGRESSPOSITION 
 			PROGRESSFRAMECOLOR 
+			NATIVEPROGRESS
 			UPDATEURL http://update36.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt
@@ -467,6 +469,7 @@ BrOffice_wJRE
 			PROGRESSSIZE 
 			PROGRESSPOSITION 
 			PROGRESSFRAMECOLOR 
+			NATIVEPROGRESS
 			UPDATEURL http://update36.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt
@@ -538,6 +541,7 @@ BrOffice_Dev
 			PROGRESSSIZE 
 			PROGRESSPOSITION 
 			PROGRESSFRAMECOLOR 
+			NATIVEPROGRESS
 			BASISPACKAGEPREFIX ooobasis-dev
 			UREPACKAGEPREFIX ooodev
 			SOLSUREPACKAGEPREFIX ooodev

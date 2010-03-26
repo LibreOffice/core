@@ -818,6 +818,15 @@ ProfileItem gid_Brand_Profileitem_Soffice_ProgressFrameColor_So
     Value = "${PROGRESSFRAMECOLOR}";
 End
 
+ProfileItem gid_Brand_Profileitem_Soffice_NativeProgress_So
+    ProfileID = gid_Brand_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 6;
+    Key = "NativeProgress";
+    Value = "${NATIVEPROGRESS}";
+End
+
 #ifdef WNT
 ProfileItem gid_Brand_Profileitem_Soffice_Hideeula
     ProfileID = gid_Brand_Profile_Soffice_Ini;
