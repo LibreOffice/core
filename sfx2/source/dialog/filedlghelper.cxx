@@ -466,23 +466,14 @@ sal_Bool FileDialogHelper_Impl::isInOpenMode() const
 
 namespace {
 
-bool lclCheckODFPasswordCapability( const SfxFilter* pFilter )
+sal_Bool lclCheckPasswordCapability( const SfxFilter* pFilter )
 {
-    return pFilter && pFilter->IsOwnFormat() && pFilter->UsesStorage() && (pFilter->GetVersion() >= SOFFICE_FILEFORMAT_60);
+    return pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_ENCRYPTION );
 }
 
-bool lclCheckMSPasswordCapability( const SfxFilter* pFilter )
+sal_Bool lclCheckPasswordToModifyCapability( const SfxFilter* pFilter )
 {
-    // TODO #i105076# this should be in the filter configuration!!!
-    return pFilter && CheckMSPasswordCapabilityForExport( pFilter->GetFilterName() );
-}
-
-bool lclCheckPasswordCapability( const SfxFilter* pFilter )
-{
-    return
-        lclCheckODFPasswordCapability( pFilter ) ||
-        // TODO #i105076# this should be in the filter configuration!!!
-        lclCheckMSPasswordCapability( pFilter );
+    return pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_PASSWORDTOMODIFY );
 }
 
 }
@@ -546,7 +537,7 @@ void FileDialogHelper_Impl::updateSelectionBox()
         return;
 
     // Does the selection box exist?
-    bool bSelectionBoxFound = false;
+    sal_Bool bSelectionBoxFound = sal_False;
     uno::Reference< XControlInformation > xCtrlInfo( mxFileDlg, UNO_QUERY );
     if ( xCtrlInfo.is() )
     {
@@ -555,7 +546,7 @@ void FileDialogHelper_Impl::updateSelectionBox()
         for ( sal_uInt32 nCtrl = 0; nCtrl < nCount; ++nCtrl )
             if ( aCtrlList[ nCtrl ].equalsAscii("SelectionBox") )
             {
-                bSelectionBoxFound = true;
+                bSelectionBoxFound = sal_False;
                 break;
             }
     }
@@ -1550,6 +1541,10 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
         {
             SFX_ITEMSET_ARG( rpSet, pPassItem, SfxStringItem, SID_PASSWORD, FALSE );
             mbPwdCheckBoxState = ( pPassItem != NULL );
+
+            // in case the document has password to modify, the dialog should be shown
+            SFX_ITEMSET_ARG( rpSet, pPassToModifyItem, SfxStringItem, SID_PASSWORDTOMODIFY, FALSE );
+            mbPwdCheckBoxState |= ( pPassToModifyItem && pPassToModifyItem->GetValue() );
         }
 
         SFX_ITEMSET_ARG( rpSet, pSelectItem, SfxBoolItem, SID_SELECTION, FALSE );
@@ -1560,6 +1555,9 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
 
         // the password will be set in case user decide so
         rpSet->ClearItem( SID_PASSWORD );
+        rpSet->ClearItem( SID_RECOMMENDREADONLY );
+        rpSet->ClearItem( SID_PASSWORDTOMODIFY );
+
     }
 
     if ( mbHasPassword && !mbPwdCheckBoxState )
@@ -1656,18 +1654,26 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                     if( xInteractionHandler.is() )
                     {
                         // TODO: need a save way to distinguish MS filters from other filters
-                        bool bMSType = CheckMSPasswordCapabilityForExport( rFilter );
+                        sal_Bool bMSType = CheckMSPasswordCapabilityForExport( rFilter );
                         ::comphelper::DocPasswordRequestType eType = bMSType ?
                             ::comphelper::DocPasswordRequestType_MS :
                             ::comphelper::DocPasswordRequestType_STANDARD;
 
-                        ::comphelper::DocPasswordRequest* pPasswordRequest = new ::comphelper::DocPasswordRequest(
-                            eType, ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)) );
+                        ::rtl::Reference< ::comphelper::DocPasswordRequest > pPasswordRequest( new ::comphelper::DocPasswordRequest( eType, ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)), lclCheckPasswordToModifyCapability( getCurentSfxFilter() ) ) );
 
                         uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest );
                         xInteractionHandler->handle( rRequest );
-                        if ( pPasswordRequest->isPassword() )
-                            rpSet->Put( SfxStringItem( SID_PASSWORD, pPasswordRequest->getPassword() ) );
+                        if ( pPasswordRequest->isSelected() )
+                        {
+                            if ( pPasswordRequest->isPassword() )
+                                rpSet->Put( SfxStringItem( SID_PASSWORD, pPasswordRequest->getPassword() ) );
+
+                            if ( pPasswordRequest->isRecommendReadOnly() )
+                                rpSet->Put( SfxBoolItem( SID_RECOMMENDREADONLY, sal_True ) );
+
+                            if ( pPasswordRequest->getPasswordToModify().getLength() )
+                                rpSet->Put( SfxStringItem( SID_PASSWORDTOMODIFY, pPasswordRequest->getPasswordToModify() ) );
+                        }
                         else
                             return ERRCODE_ABORT;
                     }
