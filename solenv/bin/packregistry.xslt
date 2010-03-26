@@ -68,15 +68,21 @@
     <xsl:copy copy-namespaces="no">
       <!-- prune oor:component-data xmlns:install="..." namespaces (would only
            work in XSLT 2.0, however) -->
-      <xsl:for-each select="@*">
-        <xsl:attribute name="{name()}">
-          <xsl:value-of select="."/>
-        </xsl:attribute>
-      </xsl:for-each>
+      <xsl:apply-templates select="@*"/>
       <xsl:apply-templates/>
+    </xsl:copy>
+  </xsl:template>
+  <xsl:template match="value[it]">
+    <xsl:copy copy-namespaces="no">
+      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates select="*"/>
+        <!-- ignore text elements (which must be whitespace only) -->
     </xsl:copy>
   </xsl:template>
   <xsl:template match="info|import|uses|constraints"/>
     <!-- TODO: no longer strip elements when they are eventually read by
          configmgr implementation -->
+  <xsl:template match="@*">
+    <xsl:copy/>
+  </xsl:template>
 </xsl:stylesheet>
