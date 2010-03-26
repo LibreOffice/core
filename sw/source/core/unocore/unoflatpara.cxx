@@ -33,6 +33,7 @@
 
 #include <svx/unolingu.hxx>
 
+#include <unobaseclass.hxx>
 #include <unoflatpara.hxx>
 
 #include <vos/mutex.hxx>
@@ -268,6 +269,24 @@ css::uno::Sequence< ::sal_Int32 > SAL_CALL SwXFlatParagraph::getLanguagePortions
     return css::uno::Sequence< ::sal_Int32>();
 }
 
+
+const uno::Sequence< sal_Int8 >&
+SwXFlatParagraph::getUnoTunnelId()
+{
+    static uno::Sequence<sal_Int8> aSeq(CreateUnoTunnelId());
+    return aSeq;
+}
+
+
+sal_Int64 SAL_CALL
+SwXFlatParagraph::getSomething(
+        const uno::Sequence< sal_Int8 >& rId)
+    throw (uno::RuntimeException)
+{
+    return sw::UnoTunnelImpl(rId, this);
+}
+
+
 /******************************************************************************
  * SwXFlatParagraphIterator
  ******************************************************************************/
@@ -429,8 +448,9 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(co
     if (!mpDoc)
         return xRet;
 
-    text::XFlatParagraph* pFP = xPara.get();
-    SwXFlatParagraph* pFlatParagraph = static_cast<SwXFlatParagraph*>(pFP);
+    const uno::Reference<lang::XUnoTunnel> xFPTunnel(xPara, uno::UNO_QUERY);
+    OSL_ASSERT(xFPTunnel.is());
+    SwXFlatParagraph* const pFlatParagraph(sw::UnoTunnelGetImplementation<SwXFlatParagraph>(xFPTunnel));
 
     if ( !pFlatParagraph )
         return xRet;
@@ -475,8 +495,9 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaBefore(c
     if (!mpDoc)
         return xRet;
 
-    text::XFlatParagraph* pFP = xPara.get();
-    SwXFlatParagraph* pFlatParagraph = static_cast<SwXFlatParagraph*>(pFP);
+    const uno::Reference<lang::XUnoTunnel> xFPTunnel(xPara, uno::UNO_QUERY);
+    OSL_ASSERT(xFPTunnel.is());
+    SwXFlatParagraph* const pFlatParagraph(sw::UnoTunnelGetImplementation<SwXFlatParagraph>(xFPTunnel));
 
     if ( !pFlatParagraph )
         return xRet;
@@ -511,4 +532,3 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaBefore(c
 
     return xRet;
 }
-
