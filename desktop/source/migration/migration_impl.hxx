@@ -64,7 +64,6 @@ struct migration_step
     strings_v excludeFiles;
     strings_v includeConfig;
     strings_v excludeConfig;
-    strings_v configComponents;
     rtl::OUString service;
 };
 
@@ -80,15 +79,11 @@ private:
     migrations_vr m_vrMigrations; // list of all migration specs from config
     install_info m_aInfo;       // info about the version being migrated
     strings_vr m_vrFileList;      // final list of files to be copied
-    strings_vr m_vrConfigList;    // final list of nodes to be copied
-    strings_vr m_vrServiceList;   // final list of services to be called
 
     // initializer functions...
     migrations_vr readMigrationSteps();
     install_info findInstallation();
     strings_vr compileFileList();
-    strings_vr compileConfigList();
-    strings_vr compileServiceList();
 
     // helpers
     void substract(strings_v& va, const strings_v& vb_c) const;

@@ -119,7 +119,7 @@ void merge(
 
 }
 
-XcsParser::XcsParser(int layer, Data * data):
+XcsParser::XcsParser(int layer, Data & data):
     valueParser_(layer), data_(data), state_(STATE_START)
 {}
 
@@ -279,9 +279,9 @@ void XcsParser::endElement(XmlReader const & reader) {
                 switch (state_) {
                 case STATE_TEMPLATES:
                     {
-                        NodeMap::iterator i(data_->templates.find(top.name));
-                        if (i == data_->templates.end()) {
-                            data_->templates.insert(
+                        NodeMap::iterator i(data_.templates.find(top.name));
+                        if (i == data_.templates.end()) {
+                            data_.templates.insert(
                                 NodeMap::value_type(top.name, top.node));
                         } else {
                             merge(i->second, top.node);
@@ -290,9 +290,9 @@ void XcsParser::endElement(XmlReader const & reader) {
                     break;
                 case STATE_COMPONENT:
                     {
-                        NodeMap::iterator i(data_->components.find(top.name));
-                        if (i == data_->components.end()) {
-                            data_->components.insert(
+                        NodeMap::iterator i(data_.components.find(top.name));
+                        if (i == data_.components.end()) {
+                            data_.components.insert(
                                 NodeMap::value_type(top.name, top.node));
                         } else {
                             merge(i->second, top.node);
@@ -443,7 +443,7 @@ void XcsParser::handleNodeRef(XmlReader & reader) {
             css::uno::Reference< css::uno::XInterface >());
     }
     rtl::Reference< Node > tmpl(
-        data_->getTemplate(
+        data_.getTemplate(
             valueParser_.getLayer(),
             xmldata::parseTemplateReference(
                 component, hasNodeType, nodeType, 0)));
