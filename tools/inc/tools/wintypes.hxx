@@ -205,6 +205,7 @@ typedef sal_Int64 WinBits;
 #define WB_SMALLSTYLE           ((WinBits)0x04000000)
 #define WB_TOGGLE               ((WinBits)SAL_CONST_INT64(0x1000000000))
 #define WB_BEVELBUTTON          ((WinBits)SAL_CONST_INT64(0x2000000000))
+#define WB_FLATBUTTON           ((WinBits)SAL_CONST_INT64(0x4000000000))
 
 // Window-Bits for FixedText
 #define WB_PATHELLIPSIS         ((WinBits)0x00100000)
