@@ -343,7 +343,9 @@ void FontWorkShapeTypeControl::Select( BOOL )
 
 }
 
-// ####################################################################
+// ========================================================================
+// FontWorkAlignmentWindow
+// ========================================================================
 
 class FontWorkAlignmentWindow : public ToolbarMenu
 {
@@ -479,6 +481,8 @@ IMPL_LINK( FontWorkAlignmentWindow, SelectHdl, void *, EMPTYARG )
 }
 
 // ========================================================================
+// FontWorkAlignmentControl
+// ========================================================================
 
 class FontWorkAlignmentControl : public svt::PopupWindowController
 {
@@ -492,6 +496,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 };
 
+
+// -----------------------------------------------------------------------
 
 FontWorkAlignmentControl::FontWorkAlignmentControl( const Reference< lang::XMultiServiceFactory >& rServiceManager )
 : svt::PopupWindowController( rServiceManager, Reference< frame::XFrame >(), OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkAlignment" ) ) )
@@ -544,17 +550,6 @@ Sequence< OUString > SAL_CALL FontWorkAlignmentControl::getSupportedServiceNames
     return FontWorkAlignmentControl_getSupportedServiceNames();
 }
 
-/** todo ?
-void FontWorkAlignmentControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
-{
-    USHORT nId = GetId();
-    ToolBox& rTbx = GetToolBox();
-
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
-}
-
-*/
 
 // ####################################################################
 
@@ -576,6 +571,8 @@ private:
     void    implSetKernCharacterPairs( sal_Bool bKernOnOff, bool bEnabled );
 
 };
+
+// -----------------------------------------------------------------------
 
 FontWorkCharacterSpacingWindow::FontWorkCharacterSpacingWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, Window* pParentWindow )
 : ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_FONTWORK_CHARSPACING ))
@@ -722,6 +719,8 @@ IMPL_LINK( FontWorkCharacterSpacingWindow, SelectHdl, void *, EMPTYARG )
 }
 
 // ========================================================================
+// FontWorkCharacterSpacingControl
+// ========================================================================
 
 class FontWorkCharacterSpacingControl : public svt::PopupWindowController
 {
@@ -786,20 +785,10 @@ Sequence< OUString > SAL_CALL FontWorkCharacterSpacingControl::getSupportedServi
 {
     return FontWorkCharacterSpacingControl_getSupportedServiceNames();
 }
-// -----------------------------------------------------------------------
 
-/** todo ?
-void FontWorkCharacterSpacingControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* )
-{
-    USHORT nId = GetId();
-    ToolBox& rTbx = GetToolBox();
-
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
-}
-*/
-
-// -----------------------------------------------------------------------
+// ========================================================================
+// FontworkCharacterSpacingDialog
+// ========================================================================
 
 FontworkCharacterSpacingDialog::FontworkCharacterSpacingDialog( Window* pParent, sal_Int32 nScale )
 :   ModalDialog( pParent, SVX_RES( RID_SVX_MDLG_FONTWORK_CHARSPACING ) ),
