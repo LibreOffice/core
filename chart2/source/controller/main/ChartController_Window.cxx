@@ -1714,7 +1714,11 @@ bool ChartController::requestQuickHelp(
         lang::EventObject aEvent( xSelectionSupplier );
         ::cppu::OInterfaceIteratorHelper aIt( *pIC );
         while( aIt.hasMoreElements() )
-            (static_cast< view::XSelectionChangeListener*>(aIt.next()))->selectionChanged( aEvent );
+        {
+            uno::Reference< view::XSelectionChangeListener > xListener( aIt.next(), uno::UNO_QUERY );
+            if( xListener.is() )
+                xListener->selectionChanged( aEvent );
+        }
     }
 }
 

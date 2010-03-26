@@ -482,7 +482,8 @@ void ChartDataWrapper::fireChartDataChangeEvent(
         uno::Reference<
             ::com::sun::star::chart::XChartDataChangeEventListener > xListener(
                 aIter.next(), uno::UNO_QUERY );
-        xListener->chartDataChanged( aEvent );
+        if( xListener.is() )
+            xListener->chartDataChanged( aEvent );
     }
 }
 
