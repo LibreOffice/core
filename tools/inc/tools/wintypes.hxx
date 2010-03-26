@@ -178,10 +178,11 @@ typedef sal_Int64 WinBits;
 #define WB_NOLABEL              ((WinBits)0x02000000)
 #define WB_SORT                 ((WinBits)0x04000000)
 #define WB_DROPDOWN             ((WinBits)0x08000000)
+#define WB_HIDE                 ((WinBits)SAL_CONST_INT64(0x80000000))
 #define WB_AUTOHSCROLL          ((WinBits)SAL_CONST_INT64(0x10000000))
 #define WB_DOCKABLE             ((WinBits)SAL_CONST_INT64(0x20000000))
 #define WB_AUTOVSCROLL          ((WinBits)SAL_CONST_INT64(0x40000000))
-#define WB_HYPHENATION          (((WinBits)SAL_CONST_INT64(0x80000000)) | WB_WORDBREAK)
+#define WB_HYPHENATION          (((WinBits)SAL_CONST_INT64(0x800000000)) | WB_WORDBREAK)
 #define WB_CHILDDLGCTRL         ((WinBits)SAL_CONST_INT64(0x100000000000))
 
 // system floating window
@@ -193,7 +194,6 @@ typedef sal_Int64 WinBits;
 #define WB_DEFAULTWIN           ((WinBits)SAL_CONST_INT64(0x4000000000))
 #define WB_NEEDSFOCUS           ((WinBits)SAL_CONST_INT64(0x1000000000))
 
-#define WB_HIDE                 ((WinBits)SAL_CONST_INT64(0x80000000))
 #define WB_HSCROLL              WB_HORZ
 #define WB_VSCROLL              WB_VERT
 #define WB_TOPIMAGE             WB_TOP
