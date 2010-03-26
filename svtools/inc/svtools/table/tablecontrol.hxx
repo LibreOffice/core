@@ -71,8 +71,8 @@ namespace svt { namespace table
     DECL_DLLPRIVATE_LINK( ImplSelectHdl, void* );
 
         TableControl_Impl*  m_pImpl;
-    ::com::sun::star::uno::Sequence< sal_Int32 >& m_nCols;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >& m_aText;
+    ::com::sun::star::uno::Sequence< sal_Int32 > m_nCols;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aText;
     Link m_aSelectHdl;
     bool m_bSelectionChanged;
     public:

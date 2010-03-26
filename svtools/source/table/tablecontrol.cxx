@@ -68,8 +68,6 @@ namespace svt { namespace table
     TableControl::TableControl( Window* _pParent, WinBits _nStyle )
         :Control( _pParent, _nStyle )
         ,m_pImpl( new TableControl_Impl( *this ) )
-        ,m_nCols(*( new ::com::sun::star::uno::Sequence< sal_Int32 >(0) ))
-        ,m_aText(*( new ::com::sun::star::uno::Sequence< ::rtl::OUString >(0) ))
         ,m_bSelectionChanged(false)
     {
         m_pImpl->getDataWindow()->SetSelectHdl( LINK( this, TableControl, ImplSelectHdl ) );
@@ -339,11 +337,7 @@ namespace svt { namespace table
     ::com::sun::star::uno::Any cellContent = ::com::sun::star::uno::Any(::rtl::OUString::createFromAscii(""));
     std::vector<std::vector< ::com::sun::star::uno::Any > >& aTableContent = GetModel()->getCellContent();
     if(&aTableContent)
-    {
-        std::vector< ::com::sun::star::uno::Any >& aRowContent = aTableContent[_nRowPos];
-        if(&aRowContent)
-            cellContent = aRowContent[_nColPos];
-    }
+        cellContent = aTableContent[_nRowPos][_nColPos];
     return cellContent;
 }
 // -----------------------------------------------------------------------------
@@ -351,7 +345,7 @@ namespace svt { namespace table
 ::rtl::OUString TableControl::GetAccessibleCellText( sal_Int32 _nRowPos, sal_Int32 _nColPos)
 {
     ::com::sun::star::uno::Any cellContent = GetCellContent(_nRowPos, _nColPos);
-    return m_pImpl->impl_convertToString(cellContent);
+    return m_pImpl->convertToString(cellContent);
 }
 // -----------------------------------------------------------------------------
 
@@ -525,23 +519,13 @@ void TableControl::commitGridControlEvent( sal_Int16 _nEventId, const Any& _rNew
 Rectangle TableControl::calcHeaderRect(sal_Bool _bIsColumnBar,BOOL _bOnScreen)
 {
     (void)_bOnScreen;
-    Rectangle aRectTable, aRectTableWithHeaders;
-    m_pImpl->impl_getAllVisibleDataCellArea(aRectTable);
-    m_pImpl->impl_getAllVisibleCellsArea(aRectTableWithHeaders);
-    Size aSizeTable(aRectTable.GetSize());
-    Size aSizeTableWithHeaders(aRectTableWithHeaders.GetSize());
-    if(_bIsColumnBar)
-        return Rectangle(aRectTableWithHeaders.TopLeft(),Size(aSizeTableWithHeaders.Width()-aSizeTable.Width(), aSizeTableWithHeaders.Height()));
-    else
-        return Rectangle(aRectTableWithHeaders.TopLeft(),Size(aSizeTableWithHeaders.Width(), aSizeTableWithHeaders.Height()-aSizeTable.Height()));
+    return m_pImpl->calcHeaderRect(_bIsColumnBar);
 }
 // -----------------------------------------------------------------------------
 Rectangle TableControl::calcTableRect(BOOL _bOnScreen)
 {
     (void)_bOnScreen;
-    Rectangle aRect;
-    m_pImpl->impl_getAllVisibleDataCellArea(aRect);
-    return aRect;
+    return m_pImpl->calcTableRect();
 }
 //--------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< sal_Int32 >& TableControl::getColumnsForTooltip()

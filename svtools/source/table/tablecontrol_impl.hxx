@@ -189,9 +189,9 @@ namespace svt { namespace table
 
     void setCursorAtCurrentCell(const Point& rPoint);
     /** checks whether the vector with the selected rows contains the current row*/
-    BOOL    isRowSelected(::std::vector<RowPos> selectedRows, RowPos current);
+    BOOL    isRowSelected(const ::std::vector<RowPos>& selectedRows, RowPos current);
     /** returns the position of the current row in the selection vector */
-    int getRowSelectedNumber(::std::vector<RowPos> selectedRows, RowPos current);
+    int getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current);
     /** _rCellRect contains the region, which should be invalidate after some action e.g. selecting row*/
     void    invalidateSelectedRegion(RowPos _nPrevRow, RowPos _nCurRow, Rectangle& _rCellRect );
     /** to be called when a new row is added to the control*/
@@ -213,25 +213,10 @@ namespace svt { namespace table
     virtual bool endResizeColumn(const Point& rPoint);
 
     TableDataWindow* getDataWindow();
-    /** retrieves the area occupied by the totality of (at least partially) visible cells
 
-            The returned area includes row and column headers. Also, it takes into
-            account the the fact that there might be less columns than would normally
-            find room in the control.
-
-            As a result of respecting the partial visibility of rows and columns,
-            the returned area might be larger than the data window's output size.
-        */
-        void        impl_getAllVisibleCellsArea( Rectangle& _rCellArea ) const;
-
-        /** retrieves the area occupied by all (at least partially) visible data cells.
-
-            Effectively, the returned area is the same as returned by ->impl_getAllVisibleCellsArea,
-            minus the row and column header areas.
-        */
-        void        impl_getAllVisibleDataCellArea( Rectangle& _rCellArea ) const;
-
-    ::rtl::OUString impl_convertToString(::com::sun::star::uno::Any _value);
+    ::rtl::OUString convertToString(const ::com::sun::star::uno::Any& _value);
+    Rectangle calcHeaderRect(bool bColHeader);
+    Rectangle calcTableRect();
     private:
         /** toggles the cursor visibility
 
@@ -316,6 +301,23 @@ namespace svt { namespace table
                 column range were reached.
         */
         TableSize   impl_ni_ScrollColumns( TableSize _nRowDelta );
+            /** retrieves the area occupied by the totality of (at least partially) visible cells
+
+            The returned area includes row and column headers. Also, it takes into
+            account the the fact that there might be less columns than would normally
+            find room in the control.
+
+            As a result of respecting the partial visibility of rows and columns,
+            the returned area might be larger than the data window's output size.
+        */
+        void        impl_getAllVisibleCellsArea( Rectangle& _rCellArea ) const;
+
+        /** retrieves the area occupied by all (at least partially) visible data cells.
+
+            Effectively, the returned area is the same as returned by ->impl_getAllVisibleCellsArea,
+            minus the row and column header areas.
+        */
+        void        impl_getAllVisibleDataCellArea( Rectangle& _rCellArea ) const;
 
         void impl_ni_getAccVisibleColWidths();
         void impl_updateLeftColumn();

@@ -234,7 +234,7 @@ namespace svt { namespace table
     }
     virtual std::vector<std::vector< ::com::sun::star::uno::Any > >& getCellContent()
     {
-        return *( new std::vector<std::vector< ::com::sun::star::uno::Any > >);
+        return m_aCellContent;
     }
     virtual void setRowHeaderName(const std::vector<rtl::OUString>& )
     {
@@ -247,6 +247,7 @@ namespace svt { namespace table
     }
     private:
         std::vector<rtl::OUString> aRowHeaderNames;
+        std::vector<std::vector< ::com::sun::star::uno::Any > > m_aCellContent;
     };
 
 
@@ -1040,7 +1041,7 @@ namespace svt { namespace table
             }
             else
             {
-                ::rtl::OUString sContent = impl_convertToString(rCellData);
+                ::rtl::OUString sContent = convertToString(rCellData);
                 pRenderer->PaintCellString( aCell.getColumn(), isSelectedRow || isSelectedColumn, isActiveRow,
                         *m_pDataWindow, aCell.getRect(), rStyle, sContent );
             }
@@ -1806,28 +1807,19 @@ namespace svt { namespace table
     return m_pDataWindow;
     }
     //-------------------------------------------------------------------------------
-    BOOL TableControl_Impl::isRowSelected(::std::vector<RowPos> selectedRows, RowPos current)
+    BOOL TableControl_Impl::isRowSelected(const ::std::vector<RowPos>& selectedRows, RowPos current)
     {
-        for(::std::vector<RowPos>::iterator it=selectedRows.begin();
-                it!=selectedRows.end();++it)
-        {
-            if(*it == current)
-                return TRUE;
-        }
-        return FALSE;
+        return ::std::find(selectedRows.begin(),selectedRows.end(),current) != selectedRows.end();
     }
     //-------------------------------------------------------------------------------
-    int TableControl_Impl::getRowSelectedNumber(::std::vector<RowPos> selectedRows, RowPos current)
+    int TableControl_Impl::getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current)
     {
-        int pos = -1;
-        int i = 0;
-        for(std::vector<RowPos>::iterator it=selectedRows.begin();it!=selectedRows.end();++it)
+        std::vector<RowPos>::const_iterator it = ::std::find(selectedRows.begin(),selectedRows.end(),current);
+        if ( it != selectedRows.end() )
         {
-            if(*it == current)
-                return pos = i;
-            ++i;
+            return it - selectedRows.begin();
         }
-        return pos;
+        return -1;
     }
     //-------------------------------------------------------------------------------
     void TableControl_Impl::setTooltip(const Point& rPoint )
@@ -1843,21 +1835,13 @@ namespace svt { namespace table
                 if(i==0)
                 {
                     ::com::sun::star::uno::Any content = m_pModel->getCellContent()[current][cols[i]];
-                    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >xGraphic;
-                    if(content>>=xGraphic)
-                        aTooltipText=::rtl::OUString::createFromAscii("");
-                    else
-                        aTooltipText = impl_convertToString(content);
+                    aTooltipText = convertToString(content);
                 }
                 else
                 {
                     aTooltipText+= ::rtl::OUString::createFromAscii("\n");
                     ::com::sun::star::uno::Any content = m_pModel->getCellContent()[current][cols[i]];
-                    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >xGraphic;
-                    if(content>>=xGraphic)
-                        aTooltipText += ::rtl::OUString::createFromAscii("");
-                    else
-                        aTooltipText += impl_convertToString(content);
+                    aTooltipText += convertToString(content);
                 }
             }
         }
@@ -1887,11 +1871,7 @@ namespace svt { namespace table
                 if(i==0)
                 {
                     ::com::sun::star::uno::Any content = m_pModel->getCellContent()[current][cols[i]];
-                    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >xGraphic;
-                    if(content>>=xGraphic)
-                        aTooltipText = ::rtl::OUString::createFromAscii("");
-                    else
-                        aTooltipText = text[i] + impl_convertToString(content);
+                    aTooltipText = text[i] + convertToString(content);
                 }
                 else
                 {
@@ -1901,10 +1881,7 @@ namespace svt { namespace table
                     {
                         ::com::sun::star::uno::Any content = m_pModel->getCellContent()[current][cols[i]];
                         ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >xGraphic;
-                        if(content>>=xGraphic)
-                            aTooltipText +=::rtl::OUString::createFromAscii("");
-                        else
-                            aTooltipText += impl_convertToString(content);
+                        aTooltipText += convertToString(content);
                     }
                 }
             }
@@ -2073,7 +2050,7 @@ namespace svt { namespace table
             m_nLeftColumn--;
     }
     //--------------------------------------------------------------------
-    rtl::OUString TableControl_Impl::impl_convertToString(::com::sun::star::uno::Any value)
+    rtl::OUString TableControl_Impl::convertToString(const ::com::sun::star::uno::Any& value)
     {
         sal_Int32 nInt = 0;
         sal_Bool bBool = false;
@@ -2089,6 +2066,24 @@ namespace svt { namespace table
         else if(value >>= fDouble)
             sNewString = sConvertString.valueOf(fDouble);
         return sNewString;
+    }
+    Rectangle TableControl_Impl::calcHeaderRect(bool bColHeader)
+    {
+        Rectangle aRectTable, aRectTableWithHeaders;
+        impl_getAllVisibleDataCellArea(aRectTable);
+        impl_getAllVisibleCellsArea(aRectTableWithHeaders);
+        Size aSizeTable(aRectTable.GetSize());
+        Size aSizeTableWithHeaders(aRectTableWithHeaders.GetSize());
+        if(bColHeader)
+            return Rectangle(aRectTableWithHeaders.TopLeft(),Size(aSizeTableWithHeaders.Width()-aSizeTable.Width(), aSizeTableWithHeaders.Height()));
+        else
+            return Rectangle(aRectTableWithHeaders.TopLeft(),Size(aSizeTableWithHeaders.Width(), aSizeTableWithHeaders.Height()-aSizeTable.Height()));
+    }
+    Rectangle TableControl_Impl::calcTableRect()
+    {
+        Rectangle aRect;
+        impl_getAllVisibleDataCellArea(aRect);
+        return aRect;
     }
     //--------------------------------------------------------------------
     IMPL_LINK( TableControl_Impl, OnScroll, ScrollBar*, _pScrollbar )

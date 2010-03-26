@@ -372,7 +372,6 @@ Any SVTXGridControl::getProperty( const ::rtl::OUString& PropertyName ) throw(Ru
                 return Any ( m_xDataModel );
             case BASEPROPERTY_GRID_COLUMNMODEL:
                 return Any ( m_xColumnModel);
-            case BASEPROPERTY_TABSTOP:
             case BASEPROPERTY_HSCROLL:
                 return Any ( m_bHScroll);
             case BASEPROPERTY_VSCROLL:
@@ -463,6 +462,8 @@ void SAL_CALL SVTXGridControl::rowRemoved(const ::com::sun::star::awt::grid::Gri
     TableControl* pTable = (TableControl*)GetWindow();
     if(Event.index == -1)
     {
+        if(!isSelectionEmpty())
+            deselectAllRows();
         if(m_pTableModel->hasRowHeaders())
             m_pTableModel->getRowHeaderName().clear();
         m_pTableModel->getCellContent().clear();
@@ -475,8 +476,12 @@ void SAL_CALL SVTXGridControl::rowRemoved(const ::com::sun::star::awt::grid::Gri
     }
     else if(Event.index >= 0 && Event.index < m_pTableModel->getRowCount())
     {
-        pTable->RemoveSelectedRow(Event.index);
-
+        if(isSelectedIndex(Event.index))
+        {
+            Sequence<sal_Int32> selected(1);
+            selected[0]=Event.index;
+            deselectRows(selected);
+        }
         if(m_pTableModel->hasRowHeaders())
             m_pTableModel->getRowHeaderName().erase(m_pTableModel->getRowHeaderName().begin()+Event.index);
         std::vector<std::vector<Any> >::iterator rowPos =m_pTableModel->getCellContent().begin() + Event.index;

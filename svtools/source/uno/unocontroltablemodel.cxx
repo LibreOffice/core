@@ -169,7 +169,7 @@ using namespace ::com::sun::star::uno;
     //====================================================================
     struct UnoControlTableModel_Impl
     {
-        ::std::vector< PColumnModel >&  aColumns;
+        ::std::vector< PColumnModel >  aColumns;
         TableSize                       nRowCount;
         bool                            bHasColumnHeaders;
         bool                            bHasRowHeaders;
@@ -180,8 +180,8 @@ using namespace ::com::sun::star::uno;
         TableMetrics                    nRowHeight;
         TableMetrics                    nColumnHeaderHeight;
         TableMetrics                    nRowHeaderWidth;
-    std::vector<rtl::OUString>&     aRowHeadersTitle;
-    std::vector<std::vector< Any > >&   aCellContent;
+    std::vector<rtl::OUString>      aRowHeadersTitle;
+    std::vector<std::vector< Any > >    aCellContent;
     ::com::sun::star::util::Color m_xLineColor;
     ::com::sun::star::util::Color m_xHeaderColor;
     ::com::sun::star::util::Color m_xTextColor;
@@ -190,7 +190,7 @@ using namespace ::com::sun::star::uno;
     ::com::sun::star::style::VerticalAlignment m_xVerticalAlign;
 
         UnoControlTableModel_Impl()
-            :aColumns       ( *(new std::vector< PColumnModel> (0)))
+            :aColumns       ( )
         ,nRowCount          ( 0         )
             ,bHasColumnHeaders  ( false     )
             ,bHasRowHeaders     ( false     )
@@ -201,8 +201,8 @@ using namespace ::com::sun::star::uno;
             ,nRowHeight         ( 0 )
             ,nColumnHeaderHeight( 0 )
             ,nRowHeaderWidth    ( 10 )
-        ,aRowHeadersTitle   ( *(new std::vector<rtl::OUString>(0)))
-        ,aCellContent   ( *(new std::vector<std::vector< Any > >(0))    )
+        ,aRowHeadersTitle   ( )
+        ,aCellContent   ( )
         ,m_xLineColor   ( 0xFFFFFF )
         ,m_xHeaderColor ( 0xFFFFFF )
         ,m_xTextColor   ( 0 )//black as default
