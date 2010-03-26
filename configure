@@ -15016,7 +15016,8 @@ if test "$_os" = "Darwin" && test "$with_system_python" != "no"; then
 echo "${ECHO_T}compiling against MacOSX10.4u.sdk (python version 2.3)" >&6; }
    PYTHON_CFLAGS="-I/Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/Python.framework/Versions/2.3/include/python2.3"
    PYTHON_LIBS="-framework Python"
-elif test "$with_system_python" != "no" -o -n "$with_system_libs"; then
+elif test -n "$with_system_python" -o -n "$with_system_libs" && \
+	test "$with_system_python" != "no"; then
    with_system_python=yes
    { echo "$as_me:$LINENO: result: external" >&5
 echo "${ECHO_T}external" >&6; }
