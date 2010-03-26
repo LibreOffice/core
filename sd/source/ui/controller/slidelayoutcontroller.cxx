@@ -161,6 +161,8 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
 , mpLayoutSet1( 0 )
 , mpLayoutSet2( 0 )
 {
+    const sal_Int32 LAYOUT_BORDER_PIX = 7;
+
     String aTitle1( SdResId( STR_GLUE_ESCDIR_HORZ ) );
     String aTitle2( SdResId( STR_GLUE_ESCDIR_VERT ) );
 
@@ -180,6 +182,12 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
 
     fillLayoutValueSet( mpLayoutSet1, &standard[0], bHighContrast );
 
+    Size aSize( mpLayoutSet1->GetOutputSizePixel() );
+    aSize.Width() += (mpLayoutSet1->GetColCount() + 1) * LAYOUT_BORDER_PIX;
+    aSize.Height() += (mpLayoutSet1->GetLineCount() +1) * LAYOUT_BORDER_PIX;
+    mpLayoutSet1->SetOutputSizePixel( aSize );
+
+
     if( bVerticalEnabled )
         appendEntry( -1, aTitle1 );
     appendEntry( 0, mpLayoutSet1 );
@@ -195,6 +203,11 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
         mpLayoutSet2->SetColor( GetControlBackground() );
 
         fillLayoutValueSet( mpLayoutSet2, &v_standard[0], bHighContrast );
+
+        aSize = mpLayoutSet2->GetOutputSizePixel();
+        aSize.Width() += (mpLayoutSet2->GetColCount() + 1) * LAYOUT_BORDER_PIX;
+        aSize.Height() += (mpLayoutSet2->GetLineCount() + 1) * LAYOUT_BORDER_PIX;
+        mpLayoutSet2->SetOutputSizePixel( aSize );
 
         appendEntry( -1, aTitle2 );
         appendEntry( 1, mpLayoutSet2 );
@@ -228,24 +241,6 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
 LayoutToolbarMenu::~LayoutToolbarMenu()
 {
 }
-
-
-// -----------------------------------------------------------------------
-
-
-/*
-void LayoutToolbarMenu::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    SfxDockingWindow::DataChanged( rDCEvt );
-
-    if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
-    {
-        // const bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-
-        // todo switch images
-    }
-}
-*/
 
 // -----------------------------------------------------------------------
 
