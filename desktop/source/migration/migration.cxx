@@ -92,7 +92,6 @@ static void releaseImpl()
     }
 }
 
-
 // static main entry point for the migration process
 void Migration::doMigration()
 {
