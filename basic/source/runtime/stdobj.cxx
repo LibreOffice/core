@@ -33,6 +33,7 @@
 #include <basic/sbstdobj.hxx>
 #include "rtlproto.hxx"
 #include "sbintern.hxx"
+#include "errobject.hxx"
 
 // Das nArgs-Feld eines Tabelleneintrags ist wie folgt verschluesselt:
 // Zur Zeit wird davon ausgegangen, dass Properties keine Parameter
@@ -652,6 +653,11 @@ SbiStdObject::~SbiStdObject()
 
 SbxVariable* SbiStdObject::Find( const String& rName, SbxClassType t )
 {
+    // #TODO #FIXME hack for substituting ooo-basic Err with vba-ish
+    // ErrObject object
+    static String sErr( RTL_CONSTASCII_USTRINGPARAM("Err") );
+    if (  rName.EqualsIgnoreCaseAscii( sErr ) )
+        return SbxErrObject::getErrObject();
     // Bereits eingetragen?
     SbxVariable* pVar = SbxObject::Find( rName, t );
     if( !pVar )

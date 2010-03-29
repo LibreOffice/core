@@ -215,6 +215,7 @@ const SFX_VB_ErrorItem __FAR_DATA SFX_VB_ErrorTab[] =
     { 1004, SbERR_METHOD_FAILED },
     { 1005, SbERR_SETPROP_FAILED },
     { 1006, SbERR_GETPROP_FAILED },
+    { 1007, SbERR_BASIC_COMPAT },
     { 0xFFFF, 0xFFFFFFFFL }     // End mark
 };
 

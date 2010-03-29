@@ -43,6 +43,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include "sbunoobj.hxx"
+#include "errobject.hxx"
 
 bool SbiRuntime::isVBAEnabled()
 {
@@ -794,7 +795,38 @@ BOOL SbiRuntime::Step()
 void SbiRuntime::Error( SbError n )
 {
     if( n )
+    {
         nError = n;
+        if ( isVBAEnabled() )
+        {
+            String aMsg = pInst->GetErrorMsg();
+            // If a message is defined use that ( in preference to
+            // the defined one for the error ) NB #TODO
+            // if there is an error defined it more than likely
+            // is not the one you want ( some are the same though )
+            // we really need a new vba compatible error list
+            if ( !aMsg.Len() )
+            {
+                StarBASIC::MakeErrorText( n, aMsg );
+                aMsg =  StarBASIC::GetErrorText();
+                if ( !aMsg.Len() ) // no message for err no.
+                    // need localized resource here
+                    aMsg = String( RTL_CONSTASCII_USTRINGPARAM("Internal Object Error:") );
+            }
+            // no num? most likely then it *is* really a vba err
+            SbxErrObject::getUnoErrObject()->setNumber( ( StarBASIC::GetVBErrorCode( n ) == 0 ) ? n : StarBASIC::GetVBErrorCode( n ) );
+            SbxErrObject::getUnoErrObject()->setDescription( aMsg );
+
+            // prepend an error number to the message.
+            String aTmp = '\'';
+                        aTmp += String::CreateFromInt32( SbxErrObject::getUnoErrObject()->getNumber() );
+                        aTmp += String( RTL_CONSTASCII_USTRINGPARAM("\'\n") );
+                        aTmp += aMsg;
+
+            pInst->aErrorMsg = aTmp;
+            nError = SbERR_BASIC_COMPAT;
+        }
+    }
 }
 
 void SbiRuntime::Error( SbError _errCode, const String& _details )
