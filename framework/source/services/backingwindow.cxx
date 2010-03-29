@@ -508,6 +508,8 @@ void BackingWindow::initControls()
         maBackgroundMiddle = BitmapEx();
 
     Resize();
+
+    maWriterButton.GrabFocus();
 }
 
 void BackingWindow::loadImage( const ResId& i_rId, ImageButton& i_rButton )
