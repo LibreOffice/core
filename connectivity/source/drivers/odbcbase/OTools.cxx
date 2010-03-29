@@ -394,6 +394,7 @@ void OTools::bindValue( OConnection* _pConnection,
                 case SQL_TIMESTAMP:
                     *pLen = sizeof(TIMESTAMP_STRUCT);
                     *((TIMESTAMP_STRUCT*)_pData) = *(TIMESTAMP_STRUCT*)_pValue;
+                    break;
             }
         }
         catch ( ... )
