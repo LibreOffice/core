@@ -28,7 +28,7 @@
 PRJ=..
 PRJNAME=reportbuilder
 TARGET=rpt
-EXTENSION_VERSION_BASE=1.2.0
+EXTENSION_VERSION_BASE=1.2.1
 
 .IF "$(CWS_WORK_STAMP)" == ""
     EXTENSION_VERSION=$(EXTENSION_VERSION_BASE)
@@ -41,8 +41,8 @@ EXTENSION_VERSION_BASE=1.2.0
 .IF "$(L10N_framework)"==""
 # ------------------------------------------------------------------
 # calready set in util$/makefile.pmk
-# EXTENSIONNAME:=sun-report-builder
-EXTENSION_ZIPNAME:=sun-report-builder
+# EXTENSIONNAME:=oracle-report-builder
+EXTENSION_ZIPNAME:=oracle-report-builder
 
 # create Extension -----------------------------
 

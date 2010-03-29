@@ -3,11 +3,11 @@
     xmlns:d="http://openoffice.org/extensions/description/2006"
     xmlns:xlink="http://www.w3.org/1999/xlink">
   <display-name>
-    <name lang="en-US">Sun Report Builder</name>
+    <name lang="en-US">Oracle Report Builder</name>
     <!-- <name lang="en-US">Sun(TM) Report Builder</name> -->
   </display-name>
   <registration>
-    <simple-license accept-by="admin" default-license-id="lic-en-US" >
+    <simple-license accept-by="admin" default-license-id="lic-en-US" suppress-if-required="true" >
             <license-text xlink:href="licensefile" lang="isocode" license-id="lic-isocode"/>
     </simple-license>
   </registration>
@@ -17,11 +17,14 @@
     <OpenOffice.org-minimal-version value="3.2" d:name="OpenOffice.org 3.2"/>
   </dependencies>
   <publisher>
-    <name xlink:href="http://www.sun.com/software/star/staroffice/extensions.jsp?cid=925095" lang="en">Sun Microsystems, Inc.</name>
+    <name xlink:href="http://www.sun.com/software/star/staroffice/extensions.jsp?cid=925095" lang="en">Oracle, Inc.</name>
   </publisher>
   <icon>
     <default xlink:href="images/em42.png" />
     <high-contrast xlink:href="images/em42_hc.png" />
   </icon>
+  <extension-description>
+    <src xlink:href="help/component.txt" lang="en" />
+  </extension-description>
 </description>
 

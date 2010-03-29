@@ -27,7 +27,7 @@
 
 PRJ=..$/..
 PRJNAME=sdext
-TARGET=SunPresentationMinimizer
+TARGET=PresentationMinimizer
 GEN_HID=FALSE
 ENABLE_EXCEPTIONS=TRUE
 
@@ -38,8 +38,8 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # set in minimizer.pmk
-#EXTENSIONNAME:=SunPresentationMinimizer
-EXTENSION_ZIPNAME:=sun-presentation-minimizer
+#EXTENSIONNAME:=PresentationMinimizer
+EXTENSION_ZIPNAME:=presentation-minimizer
 
 .IF "$(ENABLE_MINIMIZER)" != "YES"
 @all:
@@ -106,6 +106,10 @@ COMPONENT_BITMAPS= \
     $(EXTENSIONDIR)$/bitmaps$/minimizepresi_80.png \
     $(EXTENSIONDIR)$/bitmaps$/minimizepresi_80_h.png
 
+COMPONENT_IMAGES=\
+    $(EXTENSIONDIR)$/bitmaps$/em42.png \
+    $(EXTENSIONDIR)$/bitmaps$/em42_hc.png
+
 # rather freestyle or common to all?
 COMPONENT_HELP= \
     $(EXTENSIONDIR)$/help$/help_de.odt \
@@ -113,7 +117,7 @@ COMPONENT_HELP= \
     $(EXTENSIONDIR)$/help$/component.txt
 
 # make sure to add your custom files here
-EXTENSION_PACKDEPS=$(COMPONENT_BITMAPS) $(COMPONENT_HELP)
+EXTENSION_PACKDEPS=$(COMPONENT_BITMAPS) $(COMPONENT_IMAGES) $(COMPONENT_HELP)
 
 # --- Targets ----------------------------------
 
@@ -126,6 +130,10 @@ EXTENSION_PACKDEPS=$(COMPONENT_BITMAPS) $(COMPONENT_HELP)
 .INCLUDE : extension_post.mk
 
 $(COMPONENT_BITMAPS) : $(SOLARSRC)$/$(RSCDEFIMG)$/minimizer$/$$(@:f)
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+
+$(COMPONENT_IMAGES) : images$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 

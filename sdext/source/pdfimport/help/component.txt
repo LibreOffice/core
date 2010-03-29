@@ -1,3 +1,1 @@
-PDF documents are imported in Draw and Impress to preserve the layout and to
-allow basic editing. It is the perfect solution for changing dates, numbers
-or small portions of text.
+PDF documents are imported in Draw and Impress to preserve the layout and to allow basic editing. It is the perfect solution for changing dates, numbers or small portions of text.
