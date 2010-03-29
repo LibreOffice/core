@@ -27,7 +27,7 @@
 
 PRJ=..$/..
 PRJNAME=sdext
-TARGET=PresentationMinimizer
+TARGET=SunPresentationMinimizer
 GEN_HID=FALSE
 ENABLE_EXCEPTIONS=TRUE
 
@@ -107,8 +107,8 @@ COMPONENT_BITMAPS= \
     $(EXTENSIONDIR)$/bitmaps$/minimizepresi_80_h.png
 
 COMPONENT_IMAGES=\
-    $(EXTENSIONDIR)$/bitmaps$/em42.png \
-    $(EXTENSIONDIR)$/bitmaps$/em42_hc.png
+    $(EXTENSIONDIR)$/bitmaps$/em47.png \
+    $(EXTENSIONDIR)$/bitmaps$/em47_hc.png
 
 # rather freestyle or common to all?
 COMPONENT_HELP= \
