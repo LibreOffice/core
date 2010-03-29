@@ -48,6 +48,8 @@ MODULEFILES= \
     Inet-macosx.xcu \
     Inet-unixdesktop.xcu \
     Inet-wnt.xcu \
+    Setup-all.xcu \
+    Setup-macosx.xcu \
     Setup-brand.xcu \
     Setup-writer.xcu   \
     Setup-calc.xcu   \

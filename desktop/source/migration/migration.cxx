@@ -388,7 +388,7 @@ install_info MigrationImpl::findInstallation(const strings_v& rVersions)
             osl::Security().getConfigDir( aUserInst );
             if ( aUserInst.getLength() && aUserInst[ aUserInst.getLength()-1 ] != '/' )
                 aUserInst += ::rtl::OUString::createFromAscii("/");
-#ifdef UNX
+#if defined UNX && ! defined MACOSX
             // tribute to whoever had the "great" idea to use different names on Windows and Unix
             aUserInst += ::rtl::OUString::createFromAscii(".");
 #endif
@@ -403,7 +403,7 @@ install_info MigrationImpl::findInstallation(const strings_v& rVersions)
             }
             catch( uno::Exception& ){}
         }
-        i_ver++;
+        ++i_ver;
     }
 
     return aInfo;
@@ -425,6 +425,7 @@ sal_Int32 MigrationImpl::findPreferedMigrationProcess(const migrations_available
             break;
         }
         ++i;
+        ++rIter;
     }
 
     return nIndex;

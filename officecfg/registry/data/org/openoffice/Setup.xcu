@@ -757,7 +757,8 @@
           <value>100</value>
         </prop>
         <prop oor:name="VersionIdentifiers">
-          <value oor:separator=",">StarOffice 9=staroffice/9,StarSuite 9=starsuite/9</value>
+          <value oor:separator="," install:module="all">StarOffice 9=staroffice/9,StarSuite 9=starsuite/9</value>
+          <value oor:separator="," install:module="macosx">StarOffice 9=StarOffice/9,StarSuite 9=StarSuite/9</value>
         </prop>
         <node oor:name="MigrationSteps">
           <node oor:name="Common" oor:op="replace">
@@ -807,7 +808,8 @@
           <value>90</value>
         </prop>
         <prop oor:name="VersionIdentifiers">
-          <value oor:separator=",">OpenOffice.org 3=openoffice.org/3</value>
+          <value oor:separator=","  install:module="all">OpenOffice.org 3=openoffice.org/3</value>
+          <value oor:separator="," install:module="macosx">OpenOffice.org 3=OpenOffice.org/3</value>
         </prop>
         <node oor:name="MigrationSteps">
           <node oor:name="Common" oor:op="replace">
