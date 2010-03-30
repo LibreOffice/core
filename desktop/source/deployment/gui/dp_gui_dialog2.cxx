@@ -90,7 +90,7 @@ using ::rtl::OUString;
 
 namespace dp_gui {
 
-#define TOP_OFFSET           3
+#define TOP_OFFSET           5
 #define LINE_SIZE            4
 #define PROGRESS_WIDTH      60
 #define PROGRESS_HEIGHT     14
