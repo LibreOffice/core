@@ -58,7 +58,7 @@ namespace svt
 {
     struct PopupMenuControllerBaseDispatchInfo;
 
-    typedef public ::cppu::WeakComponentImplHelper7<
+    typedef ::cppu::WeakComponentImplHelper7<
                         com::sun::star::lang::XServiceInfo            ,
                         com::sun::star::frame::XPopupMenuController ,
                         com::sun::star::lang::XInitialization         ,

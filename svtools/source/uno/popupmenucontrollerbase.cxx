@@ -122,7 +122,6 @@ void PopupMenuControllerBase::resetPopupMenu( com::sun::star::uno::Reference< co
 }
 
 void SAL_CALL PopupMenuControllerBase::disposing()
-throw (::com::sun::star::uno::RuntimeException)
 {
     // Reset our members and set disposed flag
     osl::MutexGuard aLock( m_aMutex );

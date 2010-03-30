@@ -268,7 +268,7 @@ sal_Int32 ToolbarMenu_Impl::getAccessibleChildCount() throw (RuntimeException)
     for( int nEntry = 0; nEntry < nEntryCount; nEntry++ )
     {
         ToolbarMenuEntry* pEntry = maEntryVector[nEntry];
-        if( pEntry );
+        if( pEntry )
         {
             if( pEntry->mpControl )
             {
