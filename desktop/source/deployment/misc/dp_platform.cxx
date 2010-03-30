@@ -47,6 +47,7 @@
 #define PLATFORM_LINUX_MIPS_EL      "linux_mips_el"
 #define PLATFORM_LINUX_MIPS_EB      "linux_mips_eb"
 #define PLATFORM_LINUX_IA64         "linux_ia64"
+#define PLATFORM_LINUX_M68K         "linux_m68k"
 #define PLATFORM_LINUX_S390         "linux_s390"
 #define PLATFORM_LINUX_S390x        "linux_s390x"
 #define PLATFORM_LINUX_HPPA         "linux_hppa"
@@ -144,6 +145,8 @@ namespace
             ret = checkOSandCPU(OUSTR("Linux"), OUSTR("MIPS_EB"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_IA64)))
             ret = checkOSandCPU(OUSTR("Linux"), OUSTR("IA64"));
+        else if (token.equals(OUSTR(PLATFORM_LINUX_M68K)))
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("M68K"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_S390)))
             ret = checkOSandCPU(OUSTR("Linux"), OUSTR("S390"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_S390x)))
