@@ -33,6 +33,9 @@ namespace svt
 {
 //........................................................................
 
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::accessibility::XAccessible;
+
     //====================================================================
     //= DummyPanel
     //====================================================================
@@ -84,6 +87,13 @@ namespace svt
     //--------------------------------------------------------------------
     void DummyPanel::Dispose()
     {
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XAccessible > DummyPanel::CreatePanelAccessible( const Reference< XAccessible >& i_rParentAccessible )
+    {
+        (void)i_rParentAccessible;
+        return NULL;
     }
 
 //........................................................................

@@ -56,6 +56,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::uno::XComponentContext;
+using ::com::sun::star::accessibility::XAccessible;
 
 //=============================================================================
 //= PanelDemo
@@ -149,6 +150,7 @@ public:
     virtual void SetSizePixel( const Size& i_rPanelWindowSize );
     virtual void GrabFocus();
     virtual void Dispose();
+    virtual Reference< XAccessible > CreatePanelAccessible( const Reference< XAccessible >& i_rParentAccessible );
 
     // IReference
     virtual oslInterlockedCount SAL_CALL acquire();
@@ -246,6 +248,13 @@ void ColoredPanel::Dispose()
 {
     ENSURE_OR_RETURN_VOID( m_pWindow.get(), "disposed!" );
     m_pWindow.reset();
+}
+
+//-----------------------------------------------------------------------------
+Reference< XAccessible > ColoredPanel::CreatePanelAccessible( const Reference< XAccessible >& i_rParentAccessible )
+{
+    ENSURE_OR_RETURN( m_pWindow.get(), "disposed!", NULL );
+    return m_pWindow->GetAccessible();
 }
 
 //-----------------------------------------------------------------------------

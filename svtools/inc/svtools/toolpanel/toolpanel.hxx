@@ -37,6 +37,9 @@
 
 class Rectangle;
 class Window;
+namespace com { namespace sun { namespace star { namespace accessibility {
+    class XAccessible;
+} } } }
 
 //........................................................................
 namespace svt
@@ -94,6 +97,16 @@ namespace svt
             window. No subsequent calls to any other method will happen after Destroy has been called.
         */
         virtual void Dispose() = 0;
+
+        /** creates an XAccessible for the tool panel
+
+            Implementations are allowed to create a new instance each time this method is called, the caller
+            is responsible for caching the XAccessible implementation, if this is desired.
+        */
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+                    CreatePanelAccessible(
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rParentAccessible
+                    ) = 0;
 
         virtual ~IToolPanel()
         {
