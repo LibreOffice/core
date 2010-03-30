@@ -756,6 +756,7 @@
 //BFS01#define SIP_SDRATTRSET_GRAF                  (SIP_Begin + 258)
 
 #define SIP_SA_MARKERS                      (SIP_Begin + 258)
+#define SIP_SA_PAGESHADOW35X35              (SIP_Begin + 259)
 #define SIP_SA_FINE_MARKERS                 (SIP_Begin + 260)
 
 // #100499#
