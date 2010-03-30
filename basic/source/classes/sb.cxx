@@ -81,7 +81,16 @@ SbxObject* StarBASIC::getVBAGlobals( )
         {
             Reference< XMultiServiceFactory > xDocFac( aThisDoc, UNO_QUERY );
                         if ( xDocFac.is() )
-                            xDocFac->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
+            {
+                try
+                {
+                    xDocFac->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
+                }
+                catch( Exception& )
+                {
+                    // Ignore
+                }
+            }
         }
         pVBAGlobals = (SbUnoObject*)Find( aVBAHook , SbxCLASS_DONTCARE );
     }
