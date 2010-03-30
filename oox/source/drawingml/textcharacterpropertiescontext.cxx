@@ -56,13 +56,20 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
 , mrTextCharacterProperties( rTextCharacterProperties )
 {
     AttributeList aAttribs( rXAttributes );
-    mrTextCharacterProperties.moLang        = aAttribs.getString( XML_lang );
-    mrTextCharacterProperties.moHeight      = aAttribs.getInteger( XML_sz );
-    mrTextCharacterProperties.moUnderline   = aAttribs.getToken( XML_u );
-    mrTextCharacterProperties.moStrikeout   = aAttribs.getToken( XML_strike );
-//    mrTextCharacterProperties.moCaseMap     = aAttribs.getToken( XML_cap );
-    mrTextCharacterProperties.moBold        = aAttribs.getBool( XML_b );
-    mrTextCharacterProperties.moItalic      = aAttribs.getBool( XML_i );
+    if ( aAttribs.hasAttribute( XML_lang ) )
+        mrTextCharacterProperties.moLang = aAttribs.getString( XML_lang );
+    if ( aAttribs.hasAttribute( XML_sz ) )
+        mrTextCharacterProperties.moHeight = aAttribs.getInteger( XML_sz );
+    if ( aAttribs.hasAttribute( XML_u ) )
+        mrTextCharacterProperties.moUnderline = aAttribs.getToken( XML_u );
+    if ( aAttribs.hasAttribute( XML_strike ) )
+        mrTextCharacterProperties.moStrikeout = aAttribs.getToken( XML_strike );
+
+//  mrTextCharacterProperties.moCaseMap     = aAttribs.getToken( XML_cap );
+    if ( aAttribs.hasAttribute( XML_b ) )
+        mrTextCharacterProperties.moBold = aAttribs.getBool( XML_b );
+    if ( aAttribs.hasAttribute( XML_i ) )
+        mrTextCharacterProperties.moItalic = aAttribs.getBool( XML_i );
 
 // TODO
 /*   todo: we need to be able to iterate over the XFastAttributes
