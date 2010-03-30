@@ -83,6 +83,13 @@ namespace svt
         virtual Rectangle   Layout( const Rectangle& i_rDeckPlayground );
         virtual void        Destroy();
         virtual void        SetFocusToPanelSelector();
+        virtual ::boost::optional< size_t >
+                            GetPanelItemFromScreenPos( const ::Point& i_rScreenPos );
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+                            GetPanelItemAccessible(
+                                const size_t i_nItemPos,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rParentAccessible
+                            );
 
         // IReference
         DECLARE_IREFERENCE()

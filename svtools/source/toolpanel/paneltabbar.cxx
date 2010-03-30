@@ -366,6 +366,7 @@ namespace svt
         }
 
         virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
+        virtual void LayouterChanged( const PDeckLayouter& i_rNewLayouter );
         virtual void Dying();
 
         void    UpdateScrollButtons()
@@ -924,6 +925,13 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    void PanelTabBar_Impl::LayouterChanged( const PDeckLayouter& i_rNewLayouter )
+    {
+        // not interested in
+        (void)i_rNewLayouter;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void PanelTabBar_Impl::Dying()
     {
         // not interested in - the notifier is a member of this instance here, so we're dying ourself at the moment
@@ -1242,6 +1250,12 @@ namespace svt
         {
             Invalidate();
         }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::boost::optional< size_t > PanelTabBar::FindItemForPoint( const Point& i_rPoint ) const
+    {
+        return m_pImpl->FindItemForPoint( i_rPoint );
     }
 
 //........................................................................

@@ -58,6 +58,9 @@ namespace svt
         TabItemContent  GetTabItemContent() const;
         void            SetTabItemContent( const TabItemContent& i_eItemContent );
 
+        // operations
+        ::boost::optional< size_t > FindItemForPoint( const Point& i_rPoint ) const;
+
         // Window overridables
         virtual Size    GetOptimalSize( WindowSizeType i_eType ) const;
         virtual void    Paint( const Rectangle& i_rRect );

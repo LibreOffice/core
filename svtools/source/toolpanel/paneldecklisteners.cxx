@@ -84,10 +84,23 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    void PanelDeckListeners::Dying()
+    void PanelDeckListeners::LayouterChanged( const PDeckLayouter& i_rNewLayouter )
     {
         for (   ::std::vector< IToolPanelDeckListener* >::const_iterator loop = m_aListeners.begin();
                 loop != m_aListeners.end();
+                ++loop
+            )
+        {
+            (*loop)->LayouterChanged( i_rNewLayouter );
+        }
+    }
+
+    //--------------------------------------------------------------------
+    void PanelDeckListeners::Dying()
+    {
+        ::std::vector< IToolPanelDeckListener* > aListeners( m_aListeners );
+        for (   ::std::vector< IToolPanelDeckListener* >::const_iterator loop = aListeners.begin();
+                loop != aListeners.end();
                 ++loop
             )
         {

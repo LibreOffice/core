@@ -62,6 +62,13 @@ namespace svt
         */
         virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive ) = 0;
 
+        /** called when a new layouter has been set at a tool panel deck.
+
+            The method is called after the old layouter has been disposed (i.e. its Destroy method has been
+            invoked), and after the complete deck has been re-layouter.
+        */
+        virtual void LayouterChanged( const PDeckLayouter& i_rNewLayouter ) = 0;
+
         /** called when the tool panel deck which the listener registered at is dying. The listener is required to
             release all references to the deck then.
         */
@@ -144,6 +151,13 @@ namespace svt
         */
         Window&             GetPanelWindowAnchor();
 
+        /** sets the window which should act as parent in the A11Y object hierarchy.
+
+            Calling this method has no effect if CreateAccessible had always been called.
+        */
+        void                SetAccessibleParentWindow( Window* i_pAccessibleParent );
+        Window*             GetAccessibleParentWindow() const;
+
         // IToolPanelDeck
         virtual size_t      GetPanelCount() const;
         virtual PToolPanel  GetPanel( const size_t i_nPos ) const;
@@ -161,8 +175,13 @@ namespace svt
         virtual long Notify( NotifyEvent& i_rNotifyEvent );
         virtual void GetFocus();
 
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > GetComponentInterface( BOOL i_bCreate );
+
     private:
         ::std::auto_ptr< ToolPanelDeck_Impl >   m_pImpl;
+
+    private:
+        using Window::GetAccessibleParentWindow;
     };
 
 //........................................................................

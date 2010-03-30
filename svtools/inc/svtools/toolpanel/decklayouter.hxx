@@ -27,9 +27,17 @@
 #ifndef SVT_DECKLAYOUTER_HXX
 #define SVT_DECKLAYOUTER_HXX
 
+#include <com/sun/star/uno/Reference.hxx>
+
 #include <rtl/ref.hxx>
 
+#include <boost/optional.hpp>
+
+namespace com { namespace sun { namespace star { namespace accessibility {
+    class XAccessible;
+} } } }
 class Rectangle;
+class Point;
 
 //........................................................................
 namespace svt
@@ -50,7 +58,7 @@ namespace svt
             @return
                 the content area for a single tool panel
         */
-        virtual Rectangle   Layout( const Rectangle& i_rDeckPlayground ) = 0;
+        virtual ::Rectangle Layout( const ::Rectangle& i_rDeckPlayground ) = 0;
 
         /** destroys the instance
 
@@ -65,6 +73,22 @@ namespace svt
             requests to set the focus to this control.
         */
         virtual void        SetFocusToPanelSelector() = 0;
+
+        /** assuming that tools panels, no matter whether currently active or inactive, are visually represented
+            by some item, this method is to retrieve the position of an item for a given screen location.
+        */
+        virtual ::boost::optional< size_t >
+                            GetPanelItemFromScreenPos( const ::Point& i_rScreenPos ) = 0;
+
+        /** assuming that tools panels, no matter whether currently active or inactive, are visually represented
+            by some item, this method is to retrieve the XAccessible implementation for such an item, given
+            by panel position.
+        */
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+                            GetPanelItemAccessible(
+                                const size_t i_nItemPos,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rParentAccessible
+                            ) = 0;
 
         virtual ~IDeckLayouter()
         {

@@ -280,6 +280,7 @@ public:
     virtual void PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition );
     virtual void PanelRemoved( const size_t i_nPosition );
     virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
+    virtual void LayouterChanged( const PDeckLayouter& i_rNewLayouter );
     virtual void Dying();
 
 private:
@@ -606,6 +607,12 @@ void OptionsWindow::ActivePanelChanged( const ::boost::optional< size_t >& i_rOl
         m_aPanelList.SetNoSelection();
     else
         m_aPanelList.SelectEntryPos( USHORT( *i_rNewActive ) );
+}
+
+//-----------------------------------------------------------------------------
+void OptionsWindow::LayouterChanged( const PDeckLayouter& i_rNewLayouter )
+{
+    // not interested in
 }
 
 //-----------------------------------------------------------------------------

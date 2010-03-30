@@ -27,7 +27,7 @@
 #ifndef PANELDECKLISTENERS_HXX
 #define PANELDECKLISTENERS_HXX
 
-#include "svtools/toolpanel/toolpanel.hxx"
+#include "svtools/toolpanel/toolpaneldeck.hxx"
 
 #include <boost/optional.hpp>
 #include <vector>
@@ -54,6 +54,7 @@ namespace svt
         void    PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition );
         void    PanelRemoved( const size_t i_nPosition );
         void    ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
+        void    LayouterChanged( const PDeckLayouter& i_rNewLayouter );
         void    Dying();
 
         // listener maintainance

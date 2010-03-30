@@ -29,6 +29,7 @@
 #include "svtools/toolpanel/tablayouter.hxx"
 #include "svtools/toolpanel/toolpaneldeck.hxx"
 #include "paneltabbar.hxx"
+#include "svtaccessiblefactory.hxx"
 
 #include <tools/gen.hxx>
 
@@ -37,15 +38,18 @@ namespace svt
 {
 //........................................................................
 
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::accessibility::XAccessible;
+
     //====================================================================
     //= TabDeckLayouter_Data
     //====================================================================
     struct TabDeckLayouter_Data
     {
-        TabAlignment        eAlignment;
-        IToolPanelDeck&     rPanels;
-        ::std::auto_ptr< PanelTabBar >
-                            pTabBar;
+        TabAlignment                    eAlignment;
+        IToolPanelDeck&                 rPanels;
+        ::std::auto_ptr< PanelTabBar >  pTabBar;
+        AccessibleFactoryAccess         aAccessibleFactory;
 
         TabDeckLayouter_Data( Window& i_rParent, IToolPanelDeck& i_rPanels,
                 const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
@@ -187,12 +191,26 @@ namespace svt
     //--------------------------------------------------------------------
     void TabDeckLayouter::SetFocusToPanelSelector()
     {
-        if ( !m_pData->pTabBar.get() )
-        {
-            OSL_ENSURE( false, "TabDeckLayouter::SetFocusToPanelSelector: already disposed!" );
+        if ( lcl_checkDisposed( * m_pData ) )
             return;
-        }
         m_pData->pTabBar->GrabFocus();
+    }
+
+    //--------------------------------------------------------------------
+    ::boost::optional< size_t > TabDeckLayouter::GetPanelItemFromScreenPos( const ::Point& i_rScreenPos )
+    {
+        if ( lcl_checkDisposed( *m_pData ) )
+            return ::boost::optional< size_t >();
+        const Point aOutputPos( m_pData->pTabBar->ScreenToOutputPixel( i_rScreenPos ) );
+        return m_pData->pTabBar->FindItemForPoint( aOutputPos );
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XAccessible > TabDeckLayouter::GetPanelItemAccessible( const size_t i_nItemPos, const Reference< XAccessible >& i_rParentAccessible )
+    {
+        if ( lcl_checkDisposed( *m_pData ) )
+            return NULL;
+        return m_pData->aAccessibleFactory.getFactory().createAccessibleToolPanelDeckTabBarItem( i_rParentAccessible, m_pData->rPanels, i_nItemPos );
     }
 
 //........................................................................

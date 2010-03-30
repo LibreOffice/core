@@ -29,9 +29,14 @@
 #include "dummypanel.hxx"
 #include "toolpanelcollection.hxx"
 #include "paneldecklisteners.hxx"
-
+#include "toolpaneldeckpeer.hxx"
 #include "svtools/toolpanel/toolpaneldeck.hxx"
 #include "svtools/toolpanel/tablayouter.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
+/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 
@@ -41,6 +46,14 @@
 namespace svt
 {
 //........................................................................
+
+    /** === begin UNO using === **/
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::accessibility::XAccessible;
+    using ::com::sun::star::awt::XWindowPeer;
+    using ::com::sun::star::uno::UNO_SET_THROW;
+    /** === end UNO using === **/
+    namespace AccessibleRole = ::com::sun::star::accessibility::AccessibleRole;
 
     enum DeckAction
     {
@@ -69,9 +82,11 @@ namespace svt
             ,m_aPanels()
             ,m_pDummyPanel( new DummyPanel )
             ,m_pLayouter()
+            ,m_pAccessibleParent( NULL )
         {
             m_aPanels.AddListener( *this );
             m_aPanelAnchor.Show();
+            m_aPanelAnchor.SetAccessibleRole( AccessibleRole::PANEL );
         }
 
         ~ToolPanelDeck_Impl()
@@ -103,11 +118,15 @@ namespace svt
 
         void                FocusActivePanel();
 
+        void                SetAccessibleParentWindow( Window* i_pAccessibleParent );
+        Window*             GetAccessibleParentWindow() const { return m_pAccessibleParent ? m_pAccessibleParent : m_rDeck.GetAccessibleParentWindow(); }
+
     protected:
         // IToolPanelDeckListener
         virtual void        PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition );
         virtual void        PanelRemoved( const size_t i_nPosition );
         virtual void        ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
+        virtual void        LayouterChanged( const PDeckLayouter& i_rNewLayouter );
         virtual void        Dying();
 
     private:
@@ -122,6 +141,8 @@ namespace svt
         PanelDeckListeners  m_aListeners;
 
         PDeckLayouter       m_pLayouter;
+
+        Window*             m_pAccessibleParent;
     };
 
     //--------------------------------------------------------------------
@@ -144,6 +165,8 @@ namespace svt
         m_pLayouter = i_pNewLayouter;
 
         ImplDoLayout();
+
+        m_aListeners.LayouterChanged( m_pLayouter );
     }
 
     //--------------------------------------------------------------------
@@ -302,10 +325,23 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
+    void ToolPanelDeck_Impl::LayouterChanged( const PDeckLayouter& i_rNewLayouter )
+    {
+        // not interested in
+        (void)i_rNewLayouter;
+    }
+
+    //--------------------------------------------------------------------
     void ToolPanelDeck_Impl::Dying()
     {
         // not interested in. Since the ToolPanelCollection is our member, this just means we ourself
         // are dying, and we already sent this notification in our dtor.
+    }
+
+    //--------------------------------------------------------------------
+    void ToolPanelDeck_Impl::SetAccessibleParentWindow( Window* i_pAccessibleParent )
+    {
+        m_pAccessibleParent = i_pAccessibleParent;
     }
 
     //====================================================================
@@ -457,6 +493,30 @@ namespace svt
     {
         Control::GetFocus();
         m_pImpl->FocusActivePanel();
+    }
+
+    //--------------------------------------------------------------------
+    void ToolPanelDeck::SetAccessibleParentWindow( Window* i_pAccessibleParent )
+    {
+        m_pImpl->SetAccessibleParentWindow( i_pAccessibleParent );
+    }
+
+    //--------------------------------------------------------------------
+    Window* ToolPanelDeck::GetAccessibleParentWindow() const
+    {
+        return m_pImpl->GetAccessibleParentWindow();
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XWindowPeer > ToolPanelDeck::GetComponentInterface( BOOL i_bCreate )
+    {
+        Reference< XWindowPeer > xWindowPeer( Control::GetComponentInterface( FALSE ) );
+        if ( !xWindowPeer.is() && i_bCreate )
+        {
+            xWindowPeer.set( new ToolPanelDeckPeer( *this ) );
+            SetComponentInterface( xWindowPeer );
+        }
+        return xWindowPeer;
     }
 
 //........................................................................
