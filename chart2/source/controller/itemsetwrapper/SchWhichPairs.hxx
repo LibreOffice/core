@@ -99,8 +99,6 @@ const USHORT nLegendWhichPairs[] =
 
 const USHORT nDiagramWhichPairs[] =
 {
-    XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
-    XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1000 -  1016  svx/xdef.hxx
     SCHATTR_DIAGRAM_START, SCHATTR_DIAGRAM_END,
     SID_ATTR_TRANSFORM_POS_Y, SID_ATTR_TRANSFORM_POS_Y,
     SID_ATTR_TRANSFORM_WIDTH, SID_ATTR_TRANSFORM_HEIGHT,

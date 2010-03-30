@@ -30,13 +30,13 @@
 #include "tp_DiagramPosition.hxx"
 #include "tp_DiagramPosition.hrc"
 
+#include "ConfigurationAccess.hxx"
 #include "DiagramHelper.hxx"
 #include "ResId.hxx"
 #include "chartview/ChartSfxItemIds.hxx"
 
 #include <svx/svxids.hrc>
 #include <svx/svdview.hxx>
-//GetModuleFieldUnit
 #include <svx/dlgutil.hxx>
 #include <svl/rectitem.hxx>
 #include <svl/aeitem.hxx>
@@ -129,7 +129,7 @@ DiagramPositionTabPage::DiagramPositionTabPage( Window* pParent, const SfxItemSe
 void DiagramPositionTabPage::Construct()
 {
     // get range and work area
-    meDlgUnit = GetModuleFieldUnit( GetItemSet() );
+    meDlgUnit = ConfigurationAccess::getFieldUnit();
     SetFieldUnit( maMtrPosX, meDlgUnit, TRUE );
     SetFieldUnit( maMtrPosY, meDlgUnit, TRUE );
     SetFieldUnit( maMtrWidth, meDlgUnit, TRUE );
