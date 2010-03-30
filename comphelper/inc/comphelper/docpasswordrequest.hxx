@@ -58,12 +58,17 @@ public:
     explicit            DocPasswordRequest(
                             DocPasswordRequestType eType,
                             ::com::sun::star::task::PasswordRequestMode eMode,
-                            const ::rtl::OUString& rDocumentName );
+                            const ::rtl::OUString& rDocumentName,
+                            sal_Bool bPasswordToModify = sal_False );
     virtual             ~DocPasswordRequest();
 
-    bool                isAbort() const;
-    bool                isPassword() const;
+    sal_Bool            isAbort() const;
+    sal_Bool            isPassword() const;
+
     ::rtl::OUString     getPassword() const;
+
+    ::rtl::OUString     getPasswordToModify() const;
+    sal_Bool            getRecommendReadOnly() const;
 
 private:
     virtual ::com::sun::star::uno::Any SAL_CALL
@@ -78,6 +83,8 @@ private:
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > maContinuations;
     AbortContinuation*  mpAbort;
     PasswordContinuation* mpPassword;
+
+    sal_Bool mbPasswordToModify;
 };
 
 // ============================================================================

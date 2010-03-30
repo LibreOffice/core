@@ -33,6 +33,7 @@
 #include "comphelper/mediadescriptor.hxx"
 
 using ::rtl::OUString;
+using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_SET_THROW;
@@ -48,6 +49,44 @@ namespace comphelper {
 
 IDocPasswordVerifier::~IDocPasswordVerifier()
 {
+}
+
+// ============================================================================
+sal_uInt16 DocPasswordHelper::GetXLHashAsUINT16(
+                const ::rtl::OUString& aUString,
+                rtl_TextEncoding nEnc )
+{
+    sal_uInt16 nResult = 0;
+
+    ::rtl::OString aString = ::rtl::OUStringToOString( aUString, nEnc );
+
+    if ( aString.getLength() && aString.getLength() <= SAL_MAX_UINT16 )
+    {
+        for ( sal_Int32 nInd = aString.getLength() - 1; nInd >= 0; nInd-- )
+        {
+            nResult = ( ( nResult >> 14 ) & 0x01 ) | ( ( nResult << 1 ) & 0x7FFF );
+            nResult ^= aString.getStr()[nInd];
+        }
+
+        nResult = ( ( nResult >> 14 ) & 0x01 ) | ( ( nResult << 1 ) & 0x7FFF );
+        nResult ^= ( 0x8000 | ( 'N' << 8 ) | 'K' );
+        nResult ^= aString.getLength();
+    }
+
+    return nResult;
+}
+
+// ============================================================================
+Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
+                const ::rtl::OUString& aUString,
+                rtl_TextEncoding nEnc )
+{
+    sal_uInt16 nHash = GetXLHashAsUINT16( aUString, nEnc );
+    Sequence< sal_Int8 > aResult( 2 );
+    aResult[0] = ( nHash >> 8 );
+    aResult[1] = ( nHash & 0xFF );
+
+    return aResult;
 }
 
 // ============================================================================
