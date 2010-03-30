@@ -83,11 +83,7 @@ DEF1NAME=		$(SHL1TARGET)
 
 COMPONENT_MERGED_XCU= \
     $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/Addons.xcu \
-    $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/extension$/SunPresentationMinimizer.xcu \
-    $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/UI$/ImpressWindowState.xcu
-
-COMPONENT_XCU= \
-    $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/ProtocolHandler.xcu
+    $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/extension$/SunPresentationMinimizer.xcu
 
 COMPONENT_FILES= \
     $(EXTENSIONDIR)$/registry$/schema$/org$/openoffice$/Office$/extension$/SunPresentationMinimizer.xcs
@@ -98,7 +94,6 @@ COMPONENT_LIBRARIES= \
 
 # rather freestyle or common to all?
 COMPONENT_BITMAPS= \
-    $(EXTENSIONDIR)$/bitmaps$/aboutlogo.png \
     $(EXTENSIONDIR)$/bitmaps$/opt_16.png \
     $(EXTENSIONDIR)$/bitmaps$/opt_26.png \
     $(EXTENSIONDIR)$/bitmaps$/opt_16_h.png \
