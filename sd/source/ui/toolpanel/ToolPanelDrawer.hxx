@@ -65,11 +65,19 @@ namespace sd { namespace toolpanel
         virtual Rectangle   Layout( const Rectangle& i_rDeckPlayground );
         virtual void        Destroy();
         virtual void        SetFocusToPanelSelector();
+        ::boost::optional< size_t >
+                            GetPanelItemFromScreenPos( const ::Point& i_rScreenPos );
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+                            GetPanelItemAccessible(
+                                const size_t i_nItemPos,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rParentAccessible
+                            );
 
         // IToolPanelDeckListener
         virtual void PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition );
         virtual void PanelRemoved( const size_t i_nPosition );
         virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
+        virtual void LayouterChanged( const ::svt::PDeckLayouter& i_rNewLayouter );
         virtual void Dying();
 
     private:

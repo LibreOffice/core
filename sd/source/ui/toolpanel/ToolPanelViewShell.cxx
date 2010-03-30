@@ -261,11 +261,15 @@ public:
     */
     void    DeactivatePanelDirectly( const PanelId i_nPanelId );
 
+    Reference< XAccessible >
+            CreateAccessible( ::sd::Window& i_rWindow );
+
 protected:
     // IToolPanelDeckListener overridables
     virtual void PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition );
     virtual void PanelRemoved( const size_t i_nPosition );
     virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
+    virtual void LayouterChanged( const ::svt::PDeckLayouter& i_rNewLayouter );
     virtual void Dying();
 
 private:
@@ -994,24 +998,10 @@ DockingWindow* ToolPanelViewShell::GetDockingWindow()
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-Reference< XAccessible > ToolPanelViewShell::CreateAccessibleDocumentView( ::sd::Window* pWindow )
+Reference< XAccessible > ToolPanelViewShell::CreateAccessibleDocumentView( ::sd::Window* i_pWindow )
 {
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible> xAccessible;
-
-    OSL_ENSURE( false, "ToolPanelViewShell::CreateAccessibleDocumentView: missing implementation!" );
-//    if (mpTaskPane.get()!=NULL && pWindow!=NULL)
-//    {
-//        // We have to call CreateAccessible directly so that we can specify
-//        // the correct accessible parent.
-//        ::Window* pParentWindow = pWindow->GetAccessibleParentWindow();
-//        if (pParentWindow != NULL)
-//            xAccessible = mpTaskPane->CreateAccessibleObject(
-//                pParentWindow->GetAccessible());
-//    }
-    (void)pWindow;
-
-    return xAccessible;
+    ENSURE_OR_RETURN( i_pWindow, "ToolPanelViewShell::CreateAccessibleDocumentView: illegal window!", NULL );
+    return mpImpl->CreateAccessible( *i_pWindow );
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -1226,8 +1216,23 @@ void ToolPanelViewShell_Impl::ActivePanelChanged( const ::boost::optional< size_
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
+void ToolPanelViewShell_Impl::LayouterChanged( const ::svt::PDeckLayouter& i_rNewLayouter )
+{
+    // not interested in
+    (void)i_rNewLayouter;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
 void ToolPanelViewShell_Impl::Dying()
 {
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+Reference< XAccessible > ToolPanelViewShell_Impl::CreateAccessible( ::sd::Window& i_rWindow )
+{
+    ::Window* pAccessibleParent = i_rWindow.GetAccessibleParentWindow();
+    m_pPanelDeck->SetAccessibleParentWindow( pAccessibleParent );
+    return m_pPanelDeck->GetAccessible();
 }
 
 // ---------------------------------------------------------------------------------------------------------------------

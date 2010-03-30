@@ -36,6 +36,11 @@ namespace sd { namespace toolpanel
 {
 //......................................................................................................................
 
+    /** === begin UNO using === **/
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::accessibility::XAccessible;
+    /** === end UNO using === **/
+
     //==================================================================================================================
     //= ToolPanelDrawer
     //==================================================================================================================
@@ -127,6 +132,42 @@ namespace sd { namespace toolpanel
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    ::boost::optional< size_t > ToolPanelDrawer::GetPanelItemFromScreenPos( const ::Point& i_rScreenPos )
+    {
+        for (   ::std::vector< PTitleBar >::const_iterator drawer = m_aDrawers.begin();
+                drawer != m_aDrawers.end();
+                ++drawer
+            )
+        {
+            const Rectangle aDrawerBounds(
+                m_rParentWindow.OutputToScreenPixel( (*drawer)->GetWindow()->GetPosPixel() ),
+                (*drawer)->GetWindow()->GetSizePixel()
+            );
+            if ( aDrawerBounds.IsInside( i_rScreenPos ) )
+                return ::boost::optional< size_t >( drawer - m_aDrawers.begin() );
+        }
+        return ::boost::optional< size_t >();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Reference< XAccessible > ToolPanelDrawer::GetPanelItemAccessible( const size_t i_nItemPos, const Reference< XAccessible >& i_rParentAccessible )
+    {
+        ENSURE_OR_RETURN( i_nItemPos < m_aDrawers.size(), "illegal index", NULL );
+
+        const PTitleBar pTitleBar( m_aDrawers[ i_nItemPos ] );
+        Window* pItemWindow( pTitleBar->GetWindow() );
+
+        Reference< XAccessible > xItemAccessible( pItemWindow->GetAccessible( FALSE ) );
+        if ( !xItemAccessible.is() )
+        {
+            xItemAccessible = pTitleBar->CreateAccessibleObject( i_rParentAccessible );
+            pItemWindow->SetAccessible( xItemAccessible );
+        }
+
+        return xItemAccessible;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void ToolPanelDrawer::PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition )
     {
         OSL_PRECOND( i_nPosition <= m_aDrawers.size(), "ToolPanelDrawer::PanelInserted: inconsistency!" );
@@ -169,6 +210,13 @@ namespace sd { namespace toolpanel
         }
 
         impl_triggerRearrange();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void ToolPanelDrawer::LayouterChanged( const ::svt::PDeckLayouter& i_rNewLayouter )
+    {
+        // not interested in
+        (void)i_rNewLayouter;
     }
 
     //------------------------------------------------------------------------------------------------------------------

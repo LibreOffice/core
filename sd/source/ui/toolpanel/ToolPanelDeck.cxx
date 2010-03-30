@@ -32,6 +32,8 @@
 #include "taskpane/ControlContainer.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include "TaskPaneToolPanel.hxx"
+#include "strings.hrc"
+#include "sdresid.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
@@ -71,6 +73,10 @@ namespace sd { namespace toolpanel
         ,m_rViewShell( i_rViewShell )
     {
         SetDrawersLayout();
+
+        const String sPaneTitle( SdResId( STR_RIGHT_PANE_TITLE ) );
+        SetAccessibleName( sPaneTitle );
+        SetAccessibleDescription( sPaneTitle );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -140,7 +146,7 @@ namespace sd { namespace toolpanel
             // this is a de-activate request. Quite improbable that this really happens: We're within the overloaded
             // version of IToolPanelDeck::ActivatePanel. The only instance which has access to this IToolPanel
             // interface is the panel layouter, which is not expected to call us with a NULL panel position.
-            // All other instances should now have access to this method, as it is protected in this class here.
+            // All other instances should not have access to this method, as it is protected in this class here.
             OSL_ENSURE( false, "ToolPanelDeck::ActivatePanel: is this legitimate?" );
             // well, handle it nonetheless.
             ActivatePanelDirectly( i_rPanel );

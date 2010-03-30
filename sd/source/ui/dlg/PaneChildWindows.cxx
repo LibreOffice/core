@@ -147,7 +147,7 @@ LeftPaneDrawChildWindow::LeftPaneDrawChildWindow (
 ToolPanelChildWindow::ToolPanelChildWindow( ::Window* i_pParentWindow, USHORT i_nId, SfxBindings* i_pBindings,
         SfxChildWinInfo* i_pChildWindowInfo )
     :PaneChildWindow( i_pParentWindow, i_nId, i_pBindings, i_pChildWindowInfo,
-        FLT_TOOL_PANEL_DOCKING_WINDOW, STR_RIGHT_PANE_TITLE, SFX_ALIGN_NOALIGNMENT )
+        FLT_TOOL_PANEL_DOCKING_WINDOW, STR_RIGHT_PANE_TITLE, SFX_ALIGN_RIGHT )
 {
 }
 
