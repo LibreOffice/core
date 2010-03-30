@@ -88,6 +88,7 @@ const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_LOADREADONLY), 0,  &getBooleanCppuType(),              0, 0},
         // <--
         {MAP_CHAR_LEN(SC_UNO_SHAREDOC),     0,  &getBooleanCppuType(),              0, 0},
+        {MAP_CHAR_LEN(SC_UNO_MODIFYPASSWORDHASH), 0,  &getCppuType((sal_Int32*)0),  0, 0},
         {0,0,0,0,0,0}
     };
     return aConfigPropertyMap_Impl;
@@ -274,6 +275,20 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                     pDocShell->SetSharedXMLFlag( bDocShared );
                 }
             }
+            else if ( aPropertyName.compareToAscii( SC_UNO_MODIFYPASSWORDHASH ) == 0 )
+            {
+                sal_Int32 nHash = 0;
+                if ( !( aValue >>= nHash ) || nHash < 0 || nHash > SAL_MAX_UINT16 )
+                    throw lang::IllegalArgumentException(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Value of type INT32, representing UINT16 expected!" ) ),
+                        uno::Reference< uno::XInterface >(),
+                        2 );
+
+                if ( !pDocShell->SetModifyPasswordHash( static_cast< sal_uInt16 >( nHash ) ) )
+                    throw beans::PropertyVetoException(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The hash is not allowed to be changed now!" ) ),
+                        uno::Reference< uno::XInterface >() );
+            }
             else
             {
                 ScGridOptions aGridOpt(aViewOpt.GetGridOptions());
@@ -407,6 +422,8 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
             {
                 ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->HasSharedXMLFlagSet() );
             }
+            else if ( aPropertyName.compareToAscii( SC_UNO_MODIFYPASSWORDHASH ) == 0 )
+                aRet <<= static_cast< sal_Int32 >( pDocShell->GetModifyPasswordHash() );
             else
             {
                 const ScGridOptions& aGridOpt = aViewOpt.GetGridOptions();
