@@ -86,14 +86,14 @@ namespace framework
         Size                            maWelcomeSize;
         FixedText                       maProduct;
         Size                            maProductSize;
-        FixedText                       maCreateText;
-        Size                            maCreateSize;
         FixedText                       maWriterText;
         ImageButton                     maWriterButton;
         FixedText                       maCalcText;
         ImageButton                     maCalcButton;
         FixedText                       maImpressText;
         ImageButton                     maImpressButton;
+        FixedText                       maOpenText;
+        ImageButton                     maOpenButton;
         FixedText                       maDrawText;
         ImageButton                     maDrawButton;
         FixedText                       maDBText;
@@ -102,8 +102,6 @@ namespace framework
         ImageButton                     maMathButton;
         FixedText                       maTemplateText;
         ImageButton                     maTemplateButton;
-        FixedText                       maOpenText;
-        ImageButton                     maOpenButton;
 
         DecoToolBox                     maToolbox;
 
