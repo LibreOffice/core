@@ -161,6 +161,7 @@ namespace sd { namespace toolpanel
         if ( !xItemAccessible.is() )
         {
             xItemAccessible = pTitleBar->CreateAccessibleObject( i_rParentAccessible );
+            OSL_ENSURE( xItemAccessible.is(), "ToolPanelDrawer::GetPanelItemAccessible: invalid XAccessible returned by CreateAccessibleObject!" );
             pItemWindow->SetAccessible( xItemAccessible );
         }
 

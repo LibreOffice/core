@@ -32,6 +32,7 @@
 /** === begin UNO includes === **/
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/drawing/framework/XPane2.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/processfactory.hxx>
@@ -64,6 +65,8 @@ namespace sd { namespace toolpanel
     using ::com::sun::star::drawing::framework::ResourceId;
     using ::com::sun::star::drawing::framework::XResource;
     using ::com::sun::star::awt::XWindow;
+    using ::com::sun::star::accessibility::XAccessible;
+    using ::com::sun::star::drawing::framework::XPane2;
     /** === end UNO using === **/
     namespace PosSize = ::com::sun::star::awt::PosSize;
 
@@ -205,6 +208,38 @@ namespace sd { namespace toolpanel
         // nothing to do here. Lifetime handling of the XResource which this panel represents is done by
         // the drawing framework, we ourself do not have resources to release.
         TaskPaneToolPanel::Dispose();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Reference< XAccessible > CustomToolPanel::CreatePanelAccessible( const Reference< XAccessible >& i_rParentAccessible )
+    {
+        ENSURE_OR_RETURN( !isDisposed(), "CustomToolPanel::CreatePanelAccessible: already disposed!", NULL );
+
+        // an XResource might also be an XPane2, which can provide an XAccessible. Check this first.
+        const Reference< XPane2 > xPane( m_xResource, UNO_QUERY );
+        if ( xPane.is() )
+        {
+            const Reference< XAccessible > xPaneAccessible( xPane->getAccessible() );
+            if ( xPaneAccessible.is() )
+                return xPaneAccessible;
+        }
+
+        // if we have an XToolPanel, ask it for its XWindow, and query it
+        impl_ensurePanel();
+        if ( !m_xToolPanel.is() )
+            return NULL;
+
+        const Reference< XAccessible > xPanelWindowAccessible( m_xToolPanel->getWindow(), UNO_QUERY );
+        if ( xPanelWindowAccessible.is() )
+            return xPanelWindowAccessible;
+
+        // maybe the XToolPanel itself can provide an XAccessible?
+        const Reference< XAccessible > xPanelAccessible( m_xToolPanel, UNO_QUERY );
+        if ( xPanelAccessible.is() )
+            return xPanelAccessible;
+
+        OSL_ENSURE( false, "CustomToolPanel::CreatePanelAccessible: no XAccessible for the custom panel!" );
+        return NULL;
     }
 
     //------------------------------------------------------------------------------------------------------------------

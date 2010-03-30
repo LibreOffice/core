@@ -78,6 +78,10 @@ namespace sd { namespace toolpanel
         virtual void SetSizePixel( const Size& i_rPanelWindowSize );
         virtual void GrabFocus();
         virtual void Dispose();
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+                    CreatePanelAccessible(
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rParentAccessible
+                    );
 
         /** locks (aka prevents) the access to the associated XResource object
         */

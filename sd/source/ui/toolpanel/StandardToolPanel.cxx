@@ -53,6 +53,7 @@ namespace sd { namespace toolpanel
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::drawing::framework::XResourceId;
+    using ::com::sun::star::accessibility::XAccessible;
     /** === end UNO using === **/
 
     //==================================================================================================================
@@ -113,6 +114,23 @@ namespace sd { namespace toolpanel
     {
         m_pControl.reset();
         TaskPaneToolPanel::Dispose();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Reference< XAccessible > StandardToolPanel::CreatePanelAccessible( const Reference< XAccessible >& i_rParentAccessible )
+    {
+        ENSURE_OR_RETURN( !isDisposed(), "already disposed!", NULL );
+
+        Window* pControlWindow( m_pControl->GetWindow() );
+
+        Reference< XAccessible > xControlAccessible( pControlWindow->GetAccessible( FALSE ) );
+        if ( !xControlAccessible.is() )
+        {
+            xControlAccessible = m_pControl->CreateAccessibleObject( i_rParentAccessible );
+            OSL_ENSURE( xControlAccessible.is(), "StandardToolPanel::CreatePanelAccessible: invalid XAccessible returned by CreateAccessibleObject!" );
+            pControlWindow->SetAccessible( xControlAccessible );
+        }
+        return xControlAccessible;
     }
 
     //------------------------------------------------------------------------------------------------------------------

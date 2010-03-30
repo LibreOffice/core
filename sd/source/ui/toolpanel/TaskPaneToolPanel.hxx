@@ -71,6 +71,10 @@ namespace sd { namespace toolpanel
         virtual void Deactivate() = 0;
         virtual void SetSizePixel( const Size& i_rPanelWindowSize ) = 0;
         virtual void GrabFocus() = 0;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+                    CreatePanelAccessible(
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rParentAccessible
+                    ) = 0;
 
         // own overridables
         virtual const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >& getResourceId() const = 0;
