@@ -172,13 +172,9 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
 
     SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectHdl ) );
 
-    mpLayoutSet1 = new ValueSet( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
-//  mpLayoutSet1->SetHelpId( HID_VALUESET_EXTRUSION_LIGHTING );
-
+    mpLayoutSet1 = createEmptyValueSetControl();
     mpLayoutSet1->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectHdl ) );
     mpLayoutSet1->SetColCount( 4 );
-    mpLayoutSet1->EnableFullItemMode( FALSE );
-    mpLayoutSet1->SetColor( GetControlBackground() );
 
     fillLayoutValueSet( mpLayoutSet1, &standard[0], bHighContrast );
 
