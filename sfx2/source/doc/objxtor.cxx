@@ -262,6 +262,7 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,m_xDocInfoListener()
     ,m_bIsInit( sal_False )
     ,m_bIncomplEncrWarnShown( sal_False )
+    ,m_nModifyPasswordHash( 0 )
 {
 }
 

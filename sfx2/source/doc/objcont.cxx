@@ -1479,3 +1479,20 @@ void SfxObjectShell::SetSaveVersionOnClose( sal_Bool bNew )
     pImp->bSaveVersionOnClose = bNew;
 }
 
+sal_uInt16 SfxObjectShell::GetModifyPasswordHash() const
+{
+    return pImp->m_nModifyPasswordHash;
+}
+
+sal_Bool SfxObjectShell::SetModifyPasswordHash( sal_uInt16 nHash )
+{
+    if ( !IsReadOnly() && !IsReadOnlyUI() )
+    {
+        // the hash can be changed only in editable documents,
+        pImp->m_nModifyPasswordHash = nHash;
+        return sal_True;
+    }
+
+    return sal_False;
+}
+

@@ -444,6 +444,9 @@ public:
     void                                            SetSaveVersionOnClose( sal_Bool bSet );
     void                                              ResetFromTemplate( const String& rTemplateName, const String& rFileName );
 
+    sal_uInt16                  GetModifyPasswordHash() const;
+    sal_Bool                    SetModifyPasswordHash( sal_uInt16 nHash );
+
     static sal_uInt32           HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc );
 
     virtual void                ViewAssigned();

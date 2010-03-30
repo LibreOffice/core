@@ -1635,7 +1635,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
         // set the filter
         getRealFilter( rFilter );
 
-        SfxFilter* pCurrentFilter = getCurentSfxFilter();
+        const SfxFilter* pCurrentFilter = getCurentSfxFilter();
 
         // fill the rpURLList
         implGetAndCacheFiles( mxFileDlg, rpURLList, pCurrentFilter );
@@ -1658,31 +1658,31 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                     {
                         // TODO: need a save way to distinguish MS filters from other filters
                         // for now MS-filters are the only alien filters that support encryption
-                        sal_Bool bMSType = !pCurrentFilter->isOwn();
+                        sal_Bool bMSType = !pCurrentFilter->IsOwnFormat();
                         ::comphelper::DocPasswordRequestType eType = bMSType ?
                             ::comphelper::DocPasswordRequestType_MS :
                             ::comphelper::DocPasswordRequestType_STANDARD;
 
                         ::rtl::Reference< ::comphelper::DocPasswordRequest > pPasswordRequest( new ::comphelper::DocPasswordRequest( eType, ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)), lclCheckPasswordToModifyCapability( pCurrentFilter ) ) );
 
-                        uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest );
+                        uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest.get() );
                         xInteractionHandler->handle( rRequest );
-                        if ( pPasswordRequest->isSelected() )
+                        if ( pPasswordRequest->isPassword() )
                         {
-                            if ( pPasswordRequest->isPassword() )
+                            if ( pPasswordRequest->getPassword().getLength() )
                                 rpSet->Put( SfxStringItem( SID_PASSWORD, pPasswordRequest->getPassword() ) );
 
-                            if ( pPasswordRequest->isRecommendReadOnly() )
+                            if ( pPasswordRequest->getRecommendReadOnly() )
                                 rpSet->Put( SfxBoolItem( SID_RECOMMENDREADONLY, sal_True ) );
 
                             if ( pPasswordRequest->getPasswordToModify().getLength() )
                             {
-                                rtl_TextEncoding nEncoding = RTL_TEXTENCOFING_UTF8;
+                                rtl_TextEncoding nEncoding = RTL_TEXTENCODING_UTF8;
                                 if ( bMSType )
                                 {
                                     // if the MS-filter should be used
                                     // use the inconsistent algorithm to find the encoding specified by MS
-                                    nEncoding = rtl_getThreadTextEncoding();
+                                    nEncoding = osl_getThreadTextEncoding();
                                     switch( nEncoding )
                                     {
                                         case RTL_TEXTENCODING_ISO_8859_15:
