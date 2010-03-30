@@ -322,8 +322,6 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
 {
     if( mxPlaceholderObj.is() )
     {
-        const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
-
         SdrObject* pPlaceholder = mxPlaceholderObj.get();
         SmartTagReference xThis( this );
         const Rectangle& rSnapRect = pPlaceholder->GetSnapRect();
