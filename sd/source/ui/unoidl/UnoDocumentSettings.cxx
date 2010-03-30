@@ -152,7 +152,7 @@ enum SdDocumentSettingsPropertyHandles
     // --> PB 2004-08-23 #i33095#
     ,HANDLE_LOAD_READONLY, HANDLE_SAVE_VERSION
     // <--
-    ,HANDLE_SLIDESPERHANDOUT, HANDLE_HANDOUTHORIZONTAL
+    ,HANDLE_SLIDESPERHANDOUT, HANDLE_HANDOUTHORIZONTAL, HANDLE_MODIFYPASSWORDHASH
 };
 
 #define MID_PRINTER 1
@@ -216,6 +216,7 @@ enum SdDocumentSettingsPropertyHandles
             { MAP_LEN("LoadReadonly"),          HANDLE_LOAD_READONLY,       &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("SaveVersionOnClose"),    HANDLE_SAVE_VERSION,        &::getBooleanCppuType(),                0,  0 },
             // <--
+            { MAP_LEN("ModifyPasswordHash"),    HANDLE_MODIFYPASSWORDHASH,  &getCppuType((sal_Int32*)0),            0,  0 },
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
@@ -863,6 +864,25 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             }
             break;
 
+            case HANDLE_MODIFYPASSWORDHASH:
+            {
+                sal_Int32 nHash = 0;
+                if ( ( *pValues >>= nHash ) && nHash >= 0 && nHash <= SAL_MAX_UINT16 )
+                {
+                    bChanged = ( pDocSh->GetModifyPasswordHash() != nHash );
+                    if ( bChanged )
+                    {
+                        if ( !pDocSh->SetModifyPasswordHash( static_cast< sal_uInt16 >( nHash ) ) )
+                            throw beans::PropertyVetoException(
+                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The hash is not allowed to be changed now!" ) ),
+                                uno::Reference< uno::XInterface >() );
+                    }
+
+                    bOk = sal_True;
+                }
+            }
+            break;
+
             default:
                 throw UnknownPropertyException();
         }
@@ -1119,6 +1139,12 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
             case HANDLE_SAVE_VERSION:
             {
                 *pValue <<= pDocSh->IsSaveVersionOnClose();
+            }
+            break;
+
+            case HANDLE_MODIFYPASSWORDHASH:
+            {
+                *pValue <<= static_cast< sal_Int32 >( pDocSh->GetModifyPasswordHash() );
             }
             break;
 
