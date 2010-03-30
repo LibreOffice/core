@@ -255,7 +255,6 @@ SHL4OBJS=       \
                 $(SLO)$/droptargetlistener.obj      \
                 $(SLO)$/edittoolbarcontroller.obj   \
                 $(SLO)$/factoryconfiguration.obj    \
-                $(SLO)$/filter.obj                  \
                 $(SLO)$/framecontainer.obj          \
                 $(SLO)$/frameloader.obj             \
                 $(SLO)$/frame.obj                   \
