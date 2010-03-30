@@ -145,7 +145,9 @@ void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
  */
 
 Writer::Writer()
-    : pImpl(0), pStrm(0), pOrigPam(0), pOrigFileName(0), pDoc(0), pCurPam(0)
+    : pImpl(0)
+    , m_pStream(0)
+    , pOrigPam(0), pOrigFileName(0), pDoc(0), pCurPam(0)
 {
     bWriteAll = bShowProgress = bUCS2_WithStartChar = true;
     bASCII_NoLastLineEnd = bASCII_ParaAsBlanc = bASCII_ParaAsCR =
@@ -181,7 +183,7 @@ void Writer::ResetWriter()
     pCurPam = 0;
     pOrigFileName = 0;
     pDoc = 0;
-    pStrm = 0;
+    m_pStream = 0;
 
     bShowProgress = bUCS2_WithStartChar = TRUE;
     bASCII_NoLastLineEnd = bASCII_ParaAsBlanc = bASCII_ParaAsCR =
@@ -253,8 +255,8 @@ SwPaM* Writer::NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
 #ifdef DBG_UTIL
 SvStream& Writer::Strm()
 {
-    ASSERT( pStrm, "Oh-oh. Dies ist ein Storage-Writer. Gleich knallts!" );
-    return *pStrm;
+    ASSERT( m_pStream, "Oh-oh. Writer with no Stream!" );
+    return *m_pStream;
 }
 #endif
 
@@ -318,7 +320,7 @@ ULONG Writer::Write( SwPaM& rPaM, SvStream& rStrm, const String* pFName )
         return nResult;
     }
 
-    pStrm = &rStrm;
+    m_pStream = &rStrm;
     pDoc = rPaM.GetDoc();
     pOrigFileName = pFName;
     pImpl = new Writer_Impl( *pDoc );
@@ -590,7 +592,7 @@ ULONG StgWriter::WriteStream()
 
 ULONG StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
 {
-    pStrm = 0;
+    SetStream(0);
     pStg = &rStg;
     pDoc = rPaM.GetDoc();
     pOrigFileName = pFName;
@@ -611,7 +613,7 @@ ULONG StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
 
 ULONG StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage >& rStg, const String* pFName, SfxMedium* pMedium )
 {
-    pStrm = 0;
+    SetStream(0);
     pStg = 0;
     xStg = rStg;
     pDoc = rPaM.GetDoc();

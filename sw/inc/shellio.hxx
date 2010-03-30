@@ -439,13 +439,14 @@ class SW_DLLPUBLIC Writer : public SvRefBase
     SwAsciiOptions aAscOpts;
     String          sBaseURL;
 
+    SvStream * m_pStream;
+
     void _AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont );
     void _AddFontItems( SfxItemPool& rPool, USHORT nWhichId );
 
 protected:
     Writer_Impl* pImpl;
 
-    SvStream* pStrm;
     SwPaM* pOrigPam;            // der letze zu bearbeitende Pam
     const String* pOrigFileName;
 
@@ -537,9 +538,9 @@ public:
     inline SvStream& OutLong( long nVal )       { return OutLong( Strm(), nVal ); }
     inline SvStream& OutULong( ULONG nVal )     { return OutULong( Strm(), nVal ); }
 
-    void SetStrm( SvStream& rStrm ) { pStrm = &rStrm; }
+    void SetStream(SvStream *const pStream) { m_pStream = pStream; }
 #ifndef DBG_UTIL
-    SvStream& Strm() { return *pStrm; }
+    SvStream& Strm() { return *m_pStream; }
 #else
     SvStream& Strm();
 #endif
