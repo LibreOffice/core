@@ -122,8 +122,9 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_PROTECT_FORM,
     HANDLE_TABS_RELATIVE_TO_INDENT,
     // --> OD 2008-06-05 #i89181#
-    HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST
+    HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST,
     // <--
+    HANDLE_MODIFYPASSWORDHASH
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -177,6 +178,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("ProtectForm"), HANDLE_PROTECT_FORM, CPPUTYPE_BOOLEAN, 0, 0},
         // --> OD 2008-06-05 #i89181#
         { RTL_CONSTASCII_STRINGPARAM("TabAtLeftIndentForParagraphsInList"), HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST, CPPUTYPE_BOOLEAN, 0, 0},
+        { RTL_CONSTASCII_STRINGPARAM("ModifyPasswordHash"),               HANDLE_MODIFYPASSWORDHASH,                   CPPUTYPE_INT32,           0,   0},
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -671,6 +673,21 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         }
         break;
         // <--
+        case HANDLE_MODIFYPASSWORDHASH:
+        {
+            sal_Int32 nHash = 0;
+            if ( !( rValue >>= nHash ) || nHash < 0 || nHash > SAL_MAX_UINT16 )
+                throw lang::IllegalArgumentException(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Value of type INT32, representing UINT16 expected!" ) ),
+                    uno::Reference< uno::XInterface >(),
+                    2 );
+
+            if ( !mpDocSh->SetModifyPasswordHash( static_cast< sal_uInt16 >( nHash ) ) )
+                throw beans::PropertyVetoException(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The hash is not allowed to be changed now!" ) ),
+                    uno::Reference< uno::XInterface >() );
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -998,6 +1015,11 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         }
         break;
         // <--
+        case HANDLE_MODIFYPASSWORDHASH:
+        {
+            rValue <<= static_cast< sal_Int32 >( mpDocSh->GetModifyPasswordHash() );
+        }
+        break;
 
         default:
             throw UnknownPropertyException();
