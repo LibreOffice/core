@@ -37,16 +37,10 @@ sub main
     
     dim iApplication as integer
     
-    const MIN_BUILD_ID = 9196
-
     call hStatusIn( "framework" , "f_security_incorrect_password.bas" )
     
     for iApplication =  1 to 5 step 2
 
-        printlog( "" )
-        printlog( hNumericDocType( iApplication ) & " - Format: " & 645 )
-        call tIncorrectPassword( "645" )
-        
         printlog( "" )
         printlog( hNumericDocType( iApplication + 1 ) & " - Format: " & 680 )
         call tIncorrectPassword( "current" )
