@@ -438,7 +438,8 @@ void MSWordStyles::WriteProperties( const SwFmt* pFmt, bool bParProp, USHORT nPo
 
     m_rExport.OutputFormat( *pFmt, bParProp, !bParProp );
 
-    ASSERT( m_rExport.pCurrentStyle != pFmt, "current style was changed" ); // reset current style...
+    ASSERT( m_rExport.pCurrentStyle == pFmt, "current style was changed" );
+    // reset current style...
     m_rExport.pCurrentStyle = NULL;
 
     if ( bInsDefCharSiz  )                   // nicht abgeleitet v. anderem Style
