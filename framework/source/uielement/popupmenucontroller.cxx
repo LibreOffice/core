@@ -237,7 +237,7 @@ Reference< awt::XWindow > SAL_CALL PopupMenuController::createPopupWindow() thro
 
 // --------------------------------------------------------------------
 
-Reference< awt::XWindow > SAL_CALL PopupMenuController::createItemWindow( const Reference< awt::XWindow >& Parent )  throw (RuntimeException)
+Reference< awt::XWindow > SAL_CALL PopupMenuController::createItemWindow( const Reference< awt::XWindow >& /*Parent*/ )  throw (RuntimeException)
 {
     return Reference< awt::XWindow >();
 }
