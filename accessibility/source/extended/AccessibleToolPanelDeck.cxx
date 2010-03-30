@@ -103,6 +103,7 @@ namespace accessibility
 
         Reference< XAccessible >    getOwnAccessible() const;
         Reference< XAccessible >    getPanelItemAccessible( const size_t i_nPosition, const bool i_bCreate );
+        Reference< XAccessible >    getActivePanelAccessible();
 
     protected:
         // IToolPanelDeckListener
@@ -119,6 +120,7 @@ namespace accessibility
 
         typedef ::std::vector< Reference< XAccessible > > AccessibleChildren;
         AccessibleChildren              m_aPanelItemCache;
+        Reference< XAccessible >        m_xActivePanelAccessible;
     };
 
     //==================================================================================================================
@@ -154,6 +156,7 @@ namespace accessibility
         :m_rAntiImpl( i_rAntiImpl )
         ,m_xAccessibleParent( i_rAccessibleParent )
         ,m_pPanelDeck( &i_rPanelDeck )
+        ,m_xActivePanelAccessible()
     {
         m_pPanelDeck->AddListener( *this );
         m_aPanelItemCache.resize( m_pPanelDeck->GetPanelCount() );
@@ -212,6 +215,23 @@ namespace accessibility
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    Reference< XAccessible > AccessibleToolPanelDeck_Impl::getActivePanelAccessible()
+    {
+        ENSURE_OR_RETURN( !isDisposed(), "AccessibleToolPanelDeck_Impl::getActivePanelAccessible: already disposed!", NULL );
+
+        if ( !m_xActivePanelAccessible.is() )
+        {
+            ::boost::optional< size_t > aActivePanel( m_pPanelDeck->GetActivePanel() );
+            ENSURE_OR_RETURN( !!aActivePanel, "AccessibleToolPanelDeck_Impl::getActivePanelAccessible: this should not be called without an active panel!", NULL );
+            ::svt::PToolPanel pActivePanel( m_pPanelDeck->GetPanel( *aActivePanel ) );
+            ENSURE_OR_RETURN( pActivePanel.get() != NULL, "AccessibleToolPanelDeck_Impl::getActivePanelAccessible: no active panel!", NULL );
+            m_xActivePanelAccessible = pActivePanel->CreatePanelAccessible( getOwnAccessible() );
+        }
+
+        return m_xActivePanelAccessible;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeck_Impl::PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition )
     {
         (void)i_pPanel;
@@ -257,9 +277,26 @@ namespace accessibility
     //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeck_Impl::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
     {
-        // TODO
-        (void)i_rOldActive;
-        (void)i_rNewActive;
+        if ( !!i_rOldActive )
+        {
+            if ( !m_xActivePanelAccessible.is() )
+            {
+                // again, this might in theory happen if the XAccessible for the active panel has never before been requested.
+                // In this case, just say that all our children are invalid, so they all must be re-requested.
+                m_rAntiImpl.NotifyAccessibleEvent( AccessibleEventId::INVALIDATE_ALL_CHILDREN, Any(), Any() );
+            }
+            else
+            {
+                m_rAntiImpl.NotifyAccessibleEvent( AccessibleEventId::CHILD, makeAny( m_xActivePanelAccessible ), Any() );
+            }
+        }
+
+        m_xActivePanelAccessible.clear();
+
+        if ( !!i_rNewActive )
+        {
+            m_rAntiImpl.NotifyAccessibleEvent( AccessibleEventId::CHILD, Any(), makeAny( getActivePanelAccessible() ) );
+        }
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -298,8 +335,12 @@ namespace accessibility
     {
         MethodGuard aGuard( *m_pImpl );
 
-        return sal_Int32( m_pImpl->m_pPanelDeck->GetPanelCount() );
-        // TODO: this should probably be +1 - the active panel itself should also be a child ...
+        const sal_Int32 nPanelCount( m_pImpl->m_pPanelDeck->GetPanelCount() );
+        ::boost::optional< size_t > aActivePanel( m_pImpl->m_pPanelDeck->GetActivePanel() );
+        if ( !aActivePanel )
+            return nPanelCount;
+
+        return nPanelCount + 1;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -307,10 +348,13 @@ namespace accessibility
     {
         MethodGuard aGuard( *m_pImpl );
 
-        if ( ( i_nIndex < 0 ) || ( i_nIndex >= m_pImpl->m_pPanelDeck->GetPanelCount() ) )
+        if ( ( i_nIndex < 0 ) || ( i_nIndex > m_pImpl->m_pPanelDeck->GetPanelCount() ) )
             throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
 
-        return m_pImpl->getPanelItemAccessible( i_nIndex, true );
+        if ( i_nIndex < m_pImpl->m_pPanelDeck->GetPanelCount() )
+            return m_pImpl->getPanelItemAccessible( i_nIndex, true );
+
+        return m_pImpl->getActivePanelAccessible();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -340,11 +384,18 @@ namespace accessibility
         const ::Point aRequestedScreenLocation( i_rPoint.X + aLocation.X, i_rPoint.Y + aLocation.Y );
 
         ::boost::optional< size_t > aPanelItemPos( pLayouter->GetPanelItemFromScreenPos( aRequestedScreenLocation ) );
-        if ( !aPanelItemPos )
-            // TODO: check the panel window itself
-            return NULL;
+        if ( !!aPanelItemPos )
+            return getAccessibleChild( *aPanelItemPos );
 
-        return getAccessibleChild( *aPanelItemPos );
+        // check the panel window itself
+        const ::Window& rActivePanelAnchor( m_pImpl->m_pPanelDeck->GetPanelWindowAnchor() );
+        const Rectangle aPanelAnchorArea( rActivePanelAnchor.GetPosPixel(), rActivePanelAnchor.GetOutputSizePixel() );
+        if ( aPanelAnchorArea.IsInside( VCLUnoHelper::ConvertToVCLPoint( i_rPoint ) ) )
+            // note that this assumes that the Window which actually implements the concrete panel covers
+            // the complete area of its "anchor" Window. But this is ensured by the ToolPanelDeck implementation.
+            return m_pImpl->getActivePanelAccessible();
+
+        return NULL;
     }
 
     //------------------------------------------------------------------------------------------------------------------
