@@ -80,6 +80,7 @@
 #include <svtools/helpid.hrc>
 #include <svl/pickerhelper.hxx>
 #include <comphelper/docpasswordrequest.hxx>
+#include <comphelper/docpasswordhelper.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -1543,7 +1544,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
             mbPwdCheckBoxState = ( pPassItem != NULL );
 
             // in case the document has password to modify, the dialog should be shown
-            SFX_ITEMSET_ARG( rpSet, pPassToModifyItem, SfxStringItem, SID_PASSWORDTOMODIFY, FALSE );
+            SFX_ITEMSET_ARG( rpSet, pPassToModifyItem, SfxUInt16Item, SID_PASSWORDTOMODIFYHASH, FALSE );
             mbPwdCheckBoxState |= ( pPassToModifyItem && pPassToModifyItem->GetValue() );
         }
 
@@ -1556,7 +1557,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
         // the password will be set in case user decide so
         rpSet->ClearItem( SID_PASSWORD );
         rpSet->ClearItem( SID_RECOMMENDREADONLY );
-        rpSet->ClearItem( SID_PASSWORDTOMODIFY );
+        rpSet->ClearItem( SID_PASSWORDTOMODIFYHASH );
 
     }
 
@@ -1634,8 +1635,10 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
         // set the filter
         getRealFilter( rFilter );
 
+        SfxFilter* pCurrentFilter = getCurentSfxFilter();
+
         // fill the rpURLList
-        implGetAndCacheFiles(mxFileDlg, rpURLList, getCurentSfxFilter());
+        implGetAndCacheFiles( mxFileDlg, rpURLList, pCurrentFilter );
         if ( rpURLList == NULL || rpURLList->GetObject(0) == NULL )
             return ERRCODE_ABORT;
 
@@ -1654,12 +1657,13 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                     if( xInteractionHandler.is() )
                     {
                         // TODO: need a save way to distinguish MS filters from other filters
-                        sal_Bool bMSType = CheckMSPasswordCapabilityForExport( rFilter );
+                        // for now MS-filters are the only alien filters that support encryption
+                        sal_Bool bMSType = !pCurrentFilter->isOwn();
                         ::comphelper::DocPasswordRequestType eType = bMSType ?
                             ::comphelper::DocPasswordRequestType_MS :
                             ::comphelper::DocPasswordRequestType_STANDARD;
 
-                        ::rtl::Reference< ::comphelper::DocPasswordRequest > pPasswordRequest( new ::comphelper::DocPasswordRequest( eType, ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)), lclCheckPasswordToModifyCapability( getCurentSfxFilter() ) ) );
+                        ::rtl::Reference< ::comphelper::DocPasswordRequest > pPasswordRequest( new ::comphelper::DocPasswordRequest( eType, ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)), lclCheckPasswordToModifyCapability( pCurrentFilter ) ) );
 
                         uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest );
                         xInteractionHandler->handle( rRequest );
@@ -1672,7 +1676,42 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                                 rpSet->Put( SfxBoolItem( SID_RECOMMENDREADONLY, sal_True ) );
 
                             if ( pPasswordRequest->getPasswordToModify().getLength() )
-                                rpSet->Put( SfxStringItem( SID_PASSWORDTOMODIFY, pPasswordRequest->getPasswordToModify() ) );
+                            {
+                                rtl_TextEncoding nEncoding = RTL_TEXTENCOFING_UTF8;
+                                if ( bMSType )
+                                {
+                                    // if the MS-filter should be used
+                                    // use the inconsistent algorithm to find the encoding specified by MS
+                                    nEncoding = rtl_getThreadTextEncoding();
+                                    switch( nEncoding )
+                                    {
+                                        case RTL_TEXTENCODING_ISO_8859_15:
+                                        case RTL_TEXTENCODING_MS_874:
+                                        case RTL_TEXTENCODING_MS_1250:
+                                        case RTL_TEXTENCODING_MS_1251:
+                                        case RTL_TEXTENCODING_MS_1252:
+                                        case RTL_TEXTENCODING_MS_1253:
+                                        case RTL_TEXTENCODING_MS_1254:
+                                        case RTL_TEXTENCODING_MS_1255:
+                                        case RTL_TEXTENCODING_MS_1256:
+                                        case RTL_TEXTENCODING_MS_1257:
+                                        case RTL_TEXTENCODING_MS_1258:
+                                        case RTL_TEXTENCODING_SHIFT_JIS:
+                                        case RTL_TEXTENCODING_GB_2312:
+                                        case RTL_TEXTENCODING_BIG5:
+                                            // in case the system uses an encoding from the list above, it should be used
+                                            break;
+
+                                        default:
+                                            // in case other encoding is used, use one of the encodings from the list
+                                            nEncoding = RTL_TEXTENCODING_MS_1250;
+                                            break;
+                                    }
+                                }
+
+                                sal_uInt16 nHash = ::comphelper::DocPasswordHelper::GetXLHashAsUINT16( pPasswordRequest->getPasswordToModify(), nEncoding );
+                                rpSet->Put( SfxUInt16Item( SID_PASSWORDTOMODIFYHASH, nHash ) );
+                            }
                         }
                         else
                             return ERRCODE_ABORT;
