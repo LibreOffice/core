@@ -232,8 +232,6 @@ namespace drawinglayer
             if(bNeedToReduce)
             {
                 // paint in target size
-                const double fFactor(1.0 / fReduceFactor);
-
                 if(bRecordToMetaFile)
                 {
                     rOutDev.DrawBitmapEx(
