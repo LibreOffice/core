@@ -931,7 +931,7 @@ IMPL_LINK(ToolPanelViewShell, MenuSelectHandler, Menu*, pMenu)
     pMenu->InsertSeparator();
 
 #if OSL_DEBUG_LEVEL > 0
-    pMenu->InsertItem( MID_LAYOUT_TABS, String::CreateFromAscii( "Tab-Layout" ), MIB_CHECKABLE );
+    pMenu->InsertItem( MID_LAYOUT_TABS, String::CreateFromAscii( "Tab-Layout (exp.)" ), MIB_CHECKABLE );
     pMenu->CheckItem( MID_LAYOUT_TABS, mpImpl->GetLayout() != LAYOUT_DRAWERS );
     pMenu->InsertItem( MID_LAYOUT_DRAWERS, String::CreateFromAscii( "Drawer-Layout" ), MIB_CHECKABLE );
     pMenu->CheckItem( MID_LAYOUT_DRAWERS, mpImpl->GetLayout() == LAYOUT_DRAWERS );
