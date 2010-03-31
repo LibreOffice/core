@@ -78,6 +78,7 @@ BEGIN
         "dgo",
         "kok",
         "mni",
+        "qcv-ES",
         "sat",
         "ug",
         "om",
