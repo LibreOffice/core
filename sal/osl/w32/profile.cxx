@@ -1,35 +1,34 @@
 /*************************************************************************
- *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * Copyright 2008 by Sun Microsystems, Inc.
- *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: profile.c,v $
- * $Revision: 1.17 $
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+*
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2000, 2010 Oracle and/or its affiliates.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+*
+************************************************************************/
 
 #include "system.h"
+
+#include "file_url.h"
+#include "path_helper.hxx"
 
 #include <osl/diagnose.h>
 #include <osl/profile.h>
@@ -502,10 +501,10 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
     }
     else
     {
-        CHAR szFileName[MAX_PATH];
+        ::osl::LongPathBuffer< sal_Char > aFileName( MAX_LONG_PATH );
 
-        WideCharToMultiByte(CP_ACP,0, pProfile->m_strFileName->buffer, -1, szFileName, MAX_PATH, NULL, NULL);
-        GetPrivateProfileString(pszSection, pszEntry, pszDefault, pszString, MaxLen, szFileName);
+        WideCharToMultiByte(CP_ACP,0, pProfile->m_strFileName->buffer, -1, aFileName, aFileName.getBufSizeInSymbols(), NULL, NULL);
+        GetPrivateProfileString(pszSection, pszEntry, pszDefault, pszString, MaxLen, aFileName);
     }
 
     releaseProfile(pProfile);
@@ -683,10 +682,10 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
     }
     else
     {
-        CHAR szFileName[MAX_PATH];
+        ::osl::LongPathBuffer< sal_Char > aFileName( MAX_LONG_PATH );
 
-        WideCharToMultiByte(CP_ACP,0, pProfile->m_strFileName->buffer, -1, szFileName, MAX_PATH, NULL, NULL);
-        WritePrivateProfileString(pszSection, pszEntry, pszString, szFileName);
+        WideCharToMultiByte(CP_ACP,0, pProfile->m_strFileName->buffer, -1, aFileName, aFileName.getBufSizeInSymbols(), NULL, NULL);
+        WritePrivateProfileString(pszSection, pszEntry, pszString, aFileName);
     }
 
     bRet = releaseProfile(pProfile);
@@ -794,10 +793,10 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
     }
     else
     {
-        CHAR szFileName[MAX_PATH];
+        ::osl::LongPathBuffer< sal_Char > aFileName( MAX_LONG_PATH );
 
-        WideCharToMultiByte(CP_ACP,0, pProfile->m_strFileName->buffer, -1, szFileName, MAX_PATH, NULL, NULL);
-        WritePrivateProfileString(pszSection, pszEntry, NULL, szFileName);
+        WideCharToMultiByte(CP_ACP,0, pProfile->m_strFileName->buffer, -1, aFileName, aFileName.getBufSizeInSymbols(), NULL, NULL);
+        WritePrivateProfileString(pszSection, pszEntry, NULL, aFileName);
     }
 
     bRet = releaseProfile(pProfile);
@@ -868,10 +867,10 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile, const sal_C
     }
     else
     {
-        CHAR szFileName[MAX_PATH];
+        ::osl::LongPathBuffer< sal_Char > aFileName( MAX_LONG_PATH );
 
-        WideCharToMultiByte(CP_ACP,0, pProfile->m_strFileName->buffer, -1, szFileName, MAX_PATH, NULL, NULL);
-        n = GetPrivateProfileString(pszSection, NULL, NULL, pszBuffer, MaxLen, szFileName);
+        WideCharToMultiByte(CP_ACP,0, pProfile->m_strFileName->buffer, -1, aFileName, aFileName.getBufSizeInSymbols(), NULL, NULL);
+        n = GetPrivateProfileString(pszSection, NULL, NULL, pszBuffer, MaxLen, aFileName);
     }
 
     releaseProfile(pProfile);
@@ -887,9 +886,9 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile, const sal_C
 sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName, rtl_uString** strProfileName)
 {
     sal_Bool bFailed;
-    sal_Unicode wcsFile[MAX_PATH];
-    sal_Unicode wcsPath[MAX_PATH];
-    sal_uInt32  nFileLen;
+    ::osl::LongPathBuffer< sal_Unicode > aFile( MAX_LONG_PATH );
+    ::osl::LongPathBuffer< sal_Unicode > aPath( MAX_LONG_PATH );
+    sal_uInt32  nFileLen = 0;
     sal_uInt32  nPathLen = 0;
 
     rtl_uString * strTmp = NULL;
@@ -898,19 +897,19 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
     /* build file name */
     if (strName && strName->length)
     {
-        if(strName->length >= MAX_PATH)
+        if( ::sal::static_int_cast< sal_uInt32 >( strName->length ) >= aFile.getBufSizeInSymbols() )
             return sal_False;
 
-        wcscpy(wcsFile, strName->buffer);
+        wcscpy( aFile, strName->buffer);
         nFileLen = strName->length;
 
-        if (rtl_ustr_indexOfChar( wcsFile, L'.' ) == -1)
+        if (rtl_ustr_indexOfChar( aFile, L'.' ) == -1)
         {
-            if (nFileLen + wcslen(STR_INI_EXTENSION) >= MAX_PATH)
+            if (nFileLen + wcslen(STR_INI_EXTENSION) >= aFile.getBufSizeInSymbols())
                 return sal_False;
 
             /* add default extension */
-            wcscpy(wcsFile + nFileLen, STR_INI_EXTENSION);
+            wcscpy( aFile + nFileLen, STR_INI_EXTENSION);
             nFileLen += wcslen(STR_INI_EXTENSION);
         }
     }
@@ -937,22 +936,22 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
         if ((nPos = rtl_ustr_lastIndexOfChar( pProgName, L'.' )) != -1 )
             nLen -= 4;
 
-        if ((nFileLen = nLen - nOffset) >= MAX_PATH)
+        if ((nFileLen = nLen - nOffset) >= aFile.getBufSizeInSymbols())
             return sal_False;
 
-        wcsncpy(wcsFile, pProgName + nOffset, nFileLen);
+        wcsncpy(aFile, pProgName + nOffset, nFileLen);
 
-        if (nFileLen + wcslen(STR_INI_EXTENSION) >= MAX_PATH)
+        if (nFileLen + wcslen(STR_INI_EXTENSION) >= aFile.getBufSizeInSymbols())
             return sal_False;
 
         /* add default extension */
-        wcscpy(wcsFile + nFileLen, STR_INI_EXTENSION);
+        wcscpy(aFile + nFileLen, STR_INI_EXTENSION);
         nFileLen += wcslen(STR_INI_EXTENSION);
 
         rtl_uString_release( strProgName );
     }
 
-    if (wcsFile[0] == 0)
+    if (aFile[0] == 0)
         return sal_False;
 
     /* build directory path */
@@ -972,10 +971,10 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
 
             if (bFailed) return (sal_False);
 
-            if (strHome->length >= MAX_PATH)
+            if ( ::sal::static_int_cast< sal_uInt32 >( strHome->length ) >= aPath.getBufSizeInSymbols())
                 return sal_False;
 
-            wcscpy( wcsPath, strHome->buffer);
+            wcscpy( aPath, strHome->buffer);
             nPathLen = strHome->length;
 
             if (nLen > RTL_CONSTASCII_LENGTH(STR_INI_METAHOME))
@@ -983,10 +982,10 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
                 pPath += RTL_CONSTASCII_LENGTH(STR_INI_METAHOME);
                 nLen -= RTL_CONSTASCII_LENGTH(STR_INI_METAHOME);
 
-                if (nLen + nPathLen >= MAX_PATH)
+                if (nLen + nPathLen >= aPath.getBufSizeInSymbols())
                     return sal_False;
 
-                wcscpy(wcsPath + nPathLen, pPath);
+                wcscpy(aPath + nPathLen, pPath);
                 nPathLen += nLen;
             }
 
@@ -1004,10 +1003,10 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
 
             if (bFailed) return (sal_False);
 
-            if (strConfig->length >= MAX_PATH)
+            if ( ::sal::static_int_cast< sal_uInt32 >( strConfig->length ) >= aPath.getBufSizeInSymbols())
                 return sal_False;
 
-            wcscpy( wcsPath, strConfig->buffer);
+            wcscpy( aPath, strConfig->buffer);
             nPathLen = strConfig->length;
 
             if (nLen > RTL_CONSTASCII_LENGTH(STR_INI_METACFG))
@@ -1015,10 +1014,10 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
                 pPath += RTL_CONSTASCII_LENGTH(STR_INI_METACFG);
                 nLen -= RTL_CONSTASCII_LENGTH(STR_INI_METACFG);
 
-                if (nLen + nPathLen >= MAX_PATH)
+                if (nLen + nPathLen >= aPath.getBufSizeInSymbols())
                     return sal_False;
 
-                wcscpy(wcsPath + nPathLen, pPath);
+                wcscpy(aPath + nPathLen, pPath);
                 nPathLen += nLen;
             }
 
@@ -1028,7 +1027,7 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
         else if ((rtl_ustr_ascii_compare_WithLength(pPath, RTL_CONSTASCII_LENGTH(STR_INI_METASYS), STR_INI_METASYS) == 0) &&
             ((nLen == RTL_CONSTASCII_LENGTH(STR_INI_METASYS)) || (pPath[RTL_CONSTASCII_LENGTH(STR_INI_METASYS)] == '/')))
         {
-            if (((nPathLen = GetWindowsDirectoryW(wcsPath, MAX_PATH)) == 0) || (nPathLen >= MAX_PATH))
+            if (((nPathLen = GetWindowsDirectoryW(aPath, aPath.getBufSizeInSymbols())) == 0) || (nPathLen >= aPath.getBufSizeInSymbols()))
                 return (sal_False);
 
             if (nLen > RTL_CONSTASCII_LENGTH(STR_INI_METASYS))
@@ -1036,10 +1035,10 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
                 pPath += RTL_CONSTASCII_LENGTH(STR_INI_METASYS);
                 nLen -= RTL_CONSTASCII_LENGTH(STR_INI_METASYS);
 
-                if (nLen + nPathLen >= MAX_PATH)
+                if (nLen + nPathLen >= aPath.getBufSizeInSymbols())
                     return sal_False;
 
-                wcscpy(wcsPath + nPathLen, pPath);
+                wcscpy(aPath + nPathLen, pPath);
                 nPathLen += nLen;
             }
         }
@@ -1048,16 +1047,16 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
             ((nLen == RTL_CONSTASCII_LENGTH(STR_INI_METAINS)) || (pPath[RTL_CONSTASCII_LENGTH(STR_INI_METAINS)] == '/') ||
                 (pPath[RTL_CONSTASCII_LENGTH(STR_INI_METAINS)] == '"') ) )
         {
-            if (! lookupProfile(pPath + RTL_CONSTASCII_LENGTH(STR_INI_METAINS), wcsFile, wcsPath))
+            if (! lookupProfile(pPath + RTL_CONSTASCII_LENGTH(STR_INI_METAINS), aFile, aPath))
                 return (sal_False);
 
-            nPathLen = wcslen(wcsPath);
+            nPathLen = wcslen(aPath);
         }
 
-        else if(nLen < MAX_PATH)
+        else if( ::sal::static_int_cast< sal_uInt32 >( nLen ) < aPath.getBufSizeInSymbols())
         {
-            wcscpy(wcsPath, pPath);
-            nPathLen = wcslen(wcsPath);
+            wcscpy(aPath, pPath);
+            nPathLen = wcslen(aPath);
         }
         else
             return sal_False;
@@ -1071,28 +1070,28 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
         osl_freeSecurityHandle(security);
 
         if (bFailed) return (sal_False);
-        if (strConfigDir->length >= MAX_PATH)
+        if ( ::sal::static_int_cast< sal_uInt32 >( strConfigDir->length ) >= aPath.getBufSizeInSymbols() )
             return sal_False;
 
-        wcscpy(wcsPath, strConfigDir->buffer);
+        wcscpy(aPath, strConfigDir->buffer);
         nPathLen = strConfigDir->length;
     }
 
-    if (nPathLen && (wcsPath[nPathLen - 1] != L'/') && (wcsPath[nPathLen - 1] != L'\\'))
+    if (nPathLen && (aPath[nPathLen - 1] != L'/') && (aPath[nPathLen - 1] != L'\\'))
     {
-        wcsPath[nPathLen++] = L'\\';
-        wcsPath[nPathLen] = 0;
+        aPath[nPathLen++] = L'\\';
+        aPath[nPathLen] = 0;
     }
 
-    if (nPathLen + nFileLen >= MAX_PATH)
+    if (nPathLen + nFileLen >= aPath.getBufSizeInSymbols())
         return sal_False;
 
     /* append file name */
-    wcscpy(wcsPath + nPathLen, wcsFile);
+    wcscpy(aPath + nPathLen, aFile);
     nPathLen += nFileLen;
 
     /* copy filename */
-    rtl_uString_newFromStr_WithLength(&strTmp, wcsPath, nPathLen);
+    rtl_uString_newFromStr_WithLength(&strTmp, aPath, nPathLen);
     nError = osl_getFileURLFromSystemPath(strTmp, strProfileName);
     rtl_uString_release(strTmp);
 
@@ -1140,45 +1139,16 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile, sal_Char* pszBuff
     }
     else
     {
-        CHAR szFileName[MAX_PATH];
+        ::osl::LongPathBuffer< sal_Char > aFileName( MAX_LONG_PATH );
 
-        WideCharToMultiByte(CP_ACP,0, pProfile->m_strFileName->buffer, -1, szFileName, MAX_PATH, NULL, NULL);
-        n = GetPrivateProfileSectionNames(pszBuffer, MaxLen, szFileName);
+        WideCharToMultiByte(CP_ACP,0, pProfile->m_strFileName->buffer, -1, aFileName, aFileName.getBufSizeInSymbols(), NULL, NULL);
+        n = GetPrivateProfileSectionNames(pszBuffer, MaxLen, aFileName);
     }
 
     releaseProfile(pProfile);
 
     return (n);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1287,7 +1257,7 @@ static sal_Bool lockFile(const osl_TFile* pFile, osl_TLockMode eMode)
 
 static osl_TFile* openFileImpl(rtl_uString * strFileName, oslProfileOption ProfileFlags )
 {
-    osl_TFile* pFile = calloc(1, sizeof(osl_TFile));
+    osl_TFile* pFile = reinterpret_cast< osl_TFile*>( calloc( 1, sizeof(osl_TFile) ) );
     sal_Bool bWriteable = sal_False;
 
 /*    if ( ProfileFlags & ( osl_Profile_WRITELOCK | osl_Profile_FLUSHWRITE | osl_Profile_READWRITE ) )*/
@@ -2226,7 +2196,7 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, sal_Bool bWriteable)
 
 
 
-        if ((pProfile = osl_openProfile(NULL, PFlags)) != NULL )
+        if ( ( pProfile = (osl_TProfileImpl*)osl_openProfile( NULL, PFlags ) ) != NULL )
         {
             pProfile->m_Flags |= FLG_AUTOOPEN;
         }
@@ -2333,7 +2303,8 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
     sal_Char Buffer[4096] = "";
     sal_Char Product[132] = "";
 
-    WCHAR wcsPath[MAX_PATH] = L"";
+    ::osl::LongPathBuffer< sal_Unicode > aPath( MAX_LONG_PATH );
+    aPath[0] = 0;
     DWORD dwPathLen = 0;
 
     if (*strPath == L'"')
@@ -2367,7 +2338,7 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
             rtl_uString * strSVFallback = NULL;
             rtl_uString * strSVLocation = NULL;
             rtl_uString * strSVName     = NULL;
-            sal_Char Dir[MAX_PATH];
+            ::osl::LongPathBuffer< sal_Char > aDir( MAX_LONG_PATH );
             oslProfile hProfile;
 
             rtl_uString_newFromAscii(&strSVFallback, SVERSION_FALLBACK);
@@ -2393,11 +2364,11 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
                             && (stricmp(Product, pChr) < 0))
                         {
                             osl_readProfileString(
-                                hProfile, SVERSION_SECTION, pChr, Dir,
-                                sizeof(Dir), "");
+                                hProfile, SVERSION_SECTION, pChr, aDir,
+                                aDir.getBufSizeInSymbols(), "");
 
                             /* check for existence of path */
-                            if (access(Dir, 0) >= 0)
+                            if (access(aDir, 0) >= 0)
                                 strcpy(Product, pChr);
                         }
                     }
@@ -2428,11 +2399,11 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
                             && (stricmp(Product, pChr) < 0))
                         {
                             osl_readProfileString(
-                                hProfile, SVERSION_SECTION, pChr, Dir,
-                                sizeof(Dir), "");
+                                hProfile, SVERSION_SECTION, pChr, aDir,
+                                aDir.getBufSizeInSymbols(), "");
 
                             /* check for existence of path */
-                            if (access(Dir, 0) >= 0)
+                            if (access(aDir, 0) >= 0)
                                 strcpy(Product, pChr);
                         }
                     }
@@ -2472,31 +2443,31 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
                     ((nEnd = rtl_ustr_indexOfChar(pCommandArg + nStart + 1, L']')) != -1))
                 {
                     dwPathLen = nEnd;
-                    wcsncpy(wcsPath, pCommandArg + nStart + 1, dwPathLen );
-                    wcsPath[dwPathLen] = 0;
+                    wcsncpy(aPath, pCommandArg + nStart + 1, dwPathLen );
+                    aPath[dwPathLen] = 0;
 
                     /* build full path */
-                    if ((wcsPath[dwPathLen - 1] != L'/') && (wcsPath[dwPathLen - 1] != L'\\'))
+                    if ((aPath[dwPathLen - 1] != L'/') && (aPath[dwPathLen - 1] != L'\\'))
                     {
-                        wcscpy(wcsPath + dwPathLen++, L"/");
+                        wcscpy(aPath + dwPathLen++, L"/");
                     }
 
                     if (*strPath)
                     {
-                        wcscpy(wcsPath + dwPathLen, strPath);
+                        wcscpy(aPath + dwPathLen, strPath);
                         dwPathLen += wcslen(strPath);
                     }
                     else
                     {
-                        CHAR szPath[MAX_PATH];
+                        ::osl::LongPathBuffer< sal_Char > aTmpPath( MAX_LONG_PATH );
                         int n;
 
-                        if ((n = WideCharToMultiByte(CP_ACP,0, wcsPath, -1, szPath, MAX_PATH, NULL, NULL)) > 0)
+                        if ((n = WideCharToMultiByte(CP_ACP,0, aPath, -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), NULL, NULL)) > 0)
                         {
-                            strcpy(szPath + n, SVERSION_USER);
-                            if (access(szPath, 0) >= 0)
+                            strcpy(aTmpPath + n, SVERSION_USER);
+                            if (access(aTmpPath, 0) >= 0)
                             {
-                                dwPathLen += MultiByteToWideChar( CP_ACP, 0, SVERSION_USER, -1, wcsPath + dwPathLen, MAX_PATH - dwPathLen );
+                                dwPathLen += MultiByteToWideChar( CP_ACP, 0, SVERSION_USER, -1, aPath + dwPathLen, aPath.getBufSizeInSymbols() - dwPathLen );
                             }
                         }
                     }
@@ -2536,16 +2507,16 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
             }
             else
             {
-                wcsncpy(wcsPath, strExecutable->buffer, nPos );
-                wcsPath[nPos] = 0;
+                wcsncpy(aPath, strExecutable->buffer, nPos );
+                aPath[nPos] = 0;
                 dwPathLen = nPos;
             }
         }
         else
         {
-            wcsncpy(wcsPath, strExecutable->buffer, nPos );
+            wcsncpy(aPath, strExecutable->buffer, nPos );
             dwPathLen = nPos;
-            wcsPath[dwPathLen] = 0;
+            aPath[dwPathLen] = 0;
         }
 
         /* if we have no product identification use the executable file name */
@@ -2561,30 +2532,30 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
         rtl_uString_release(strExecutable);
 
         /* remember last subdir */
-        nPos = rtl_ustr_lastIndexOfChar(wcsPath, L'\\');
+        nPos = rtl_ustr_lastIndexOfChar(aPath, L'\\');
 
-        wcscpy(wcsPath + dwPathLen++, L"\\");
+        wcscpy(aPath + dwPathLen++, L"\\");
 
         if (*strPath)
         {
-            wcscpy(wcsPath + dwPathLen, strPath);
+            wcscpy(aPath + dwPathLen, strPath);
             dwPathLen += wcslen(strPath);
         }
 
         {
-            CHAR szPath[MAX_PATH];
+            ::osl::LongPathBuffer< sal_Char > aTmpPath( MAX_LONG_PATH );
 
-            WideCharToMultiByte(CP_ACP,0, wcsPath, -1, szPath, MAX_PATH, NULL, NULL);
+            WideCharToMultiByte(CP_ACP,0, aPath, -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), NULL, NULL);
 
             /* if file not exists, remove any specified subdirectories
                like "bin" or "program" */
 
-            if (((access(szPath, 0) < 0) && (nPos != -1)) || (*strPath == 0))
+            if (((access(aTmpPath, 0) < 0) && (nPos != -1)) || (*strPath == 0))
             {
                 static sal_Char *SubDirs[] = SVERSION_DIRS;
 
                 int i = 0;
-                pStr = szPath + nPos;
+                pStr = aTmpPath + nPos;
 
                 for (i = 0; i < (sizeof(SubDirs) / sizeof(SubDirs[0])); i++)
                     if (strnicmp(pStr + 1, SubDirs[i], strlen(SubDirs[i])) == 0)
@@ -2592,18 +2563,18 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
                         if ( *strPath == 0)
                         {
                             strcpy(pStr + 1,SVERSION_USER);
-                            if ( access(szPath, 0) < 0 )
+                            if ( access(aTmpPath, 0) < 0 )
                             {
                                 *(pStr+1)='\0';
                             }
                             else
                             {
-                                dwPathLen = nPos + MultiByteToWideChar( CP_ACP, 0, SVERSION_USER, -1, wcsPath + nPos + 1, MAX_PATH - (nPos + 1) );
+                                dwPathLen = nPos + MultiByteToWideChar( CP_ACP, 0, SVERSION_USER, -1, aPath + nPos + 1, aPath.getBufSizeInSymbols() - (nPos + 1) );
                             }
                         }
                         else
                         {
-                            wcscpy(wcsPath + nPos + 1, strPath);
+                            wcscpy(aPath + nPos + 1, strPath);
                             dwPathLen = nPos + 1 + wcslen(strPath);
                         }
 
@@ -2612,20 +2583,20 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
             }
         }
 
-        if ((wcsPath[dwPathLen - 1] != L'/') && (wcsPath[dwPathLen - 1] != L'\\'))
+        if ((aPath[dwPathLen - 1] != L'/') && (aPath[dwPathLen - 1] != L'\\'))
         {
-            wcsPath[dwPathLen++] = L'\\';
-            wcsPath[dwPathLen] = 0;
+            aPath[dwPathLen++] = L'\\';
+            aPath[dwPathLen] = 0;
         }
 
-        wcscpy(wcsPath + dwPathLen, strFile);
+        wcscpy(aPath + dwPathLen, strFile);
 
         {
-            CHAR szPath[MAX_PATH];
+            ::osl::LongPathBuffer< sal_Char > aTmpPath( MAX_LONG_PATH );
 
-            WideCharToMultiByte(CP_ACP,0, wcsPath, -1, szPath, MAX_PATH, NULL, NULL);
+            WideCharToMultiByte(CP_ACP,0, aPath, -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), NULL, NULL);
 
-            if ((access(szPath, 0) < 0) && (strlen(Product) > 0))
+            if ((access(aTmpPath, 0) < 0) && (strlen(Product) > 0))
             {
                 rtl_uString * strSVFallback = NULL;
                 rtl_uString * strSVProfile  = NULL;
@@ -2674,38 +2645,38 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
                         if (strlen(Buffer) > 0)
                         {
                             dwPathLen = MultiByteToWideChar(
-                                CP_ACP, 0, Buffer, -1, wcsPath, MAX_PATH );
+                                CP_ACP, 0, Buffer, -1, aPath, aPath.getBufSizeInSymbols() );
                             dwPathLen -=1;
 
                             /* build full path */
-                            if ((wcsPath[dwPathLen - 1] != L'/')
-                                && (wcsPath[dwPathLen - 1] != L'\\'))
+                            if ((aPath[dwPathLen - 1] != L'/')
+                                && (aPath[dwPathLen - 1] != L'\\'))
                             {
-                                wcscpy(wcsPath + dwPathLen++, L"\\");
+                                wcscpy(aPath + dwPathLen++, L"\\");
                             }
 
                             if (*strPath)
                             {
-                                wcscpy(wcsPath + dwPathLen, strPath);
+                                wcscpy(aPath + dwPathLen, strPath);
                                 dwPathLen += wcslen(strPath);
                             }
                             else
                             {
-                                CHAR szPath[MAX_PATH];
+                                ::osl::LongPathBuffer< sal_Char > aTmpPath( MAX_LONG_PATH );
                                 int n;
 
                                 if ((n = WideCharToMultiByte(
-                                         CP_ACP,0, wcsPath, -1, szPath,
-                                         MAX_PATH, NULL, NULL))
+                                         CP_ACP,0, aPath, -1, aTmpPath,
+                                         aTmpPath.getBufSizeInSymbols(), NULL, NULL))
                                     > 0)
                                 {
-                                    strcpy(szPath + n, SVERSION_USER);
-                                    if (access(szPath, 0) >= 0)
+                                    strcpy(aTmpPath + n, SVERSION_USER);
+                                    if (access(aTmpPath, 0) >= 0)
                                     {
                                         dwPathLen += MultiByteToWideChar(
                                             CP_ACP, 0, SVERSION_USER, -1,
-                                            wcsPath + dwPathLen,
-                                            MAX_PATH - dwPathLen );
+                                            aPath + dwPathLen,
+                                            aPath.getBufSizeInSymbols() - dwPathLen );
                                     }
                                 }
                             }
@@ -2721,11 +2692,11 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
             }
         }
 
-        wcsPath[dwPathLen] = 0;
+        aPath[dwPathLen] = 0;
     }
 
     /* copy filename */
-    wcscpy(strProfile, wcsPath);
+    wcscpy(strProfile, aPath);
 
     return sal_True;
 }

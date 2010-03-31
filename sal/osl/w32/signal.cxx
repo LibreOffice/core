@@ -1,36 +1,36 @@
 /*************************************************************************
- *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * Copyright 2008 by Sun Microsystems, Inc.
- *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: signal.c,v $
- * $Revision: 1.12 $
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+*
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2000, 2010 Oracle and/or its affiliates.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+*
+************************************************************************/
 
 /* system headers */
 #include "system.h"
 #include <tchar.h>
+
+#include "file_url.h"
+#include "path_helper.hxx"
 
 #include <osl/diagnose.h>
 #include <osl/mutex.h>
@@ -115,7 +115,7 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
     BOOL    fSuccess = FALSE;
     BOOL    fAutoReport = FALSE;
     TCHAR   szBuffer[1024];
-    TCHAR   szPath[MAX_PATH];
+    ::osl::LongPathBuffer< sal_Char > aPath( MAX_LONG_PATH );
     LPTSTR  lpFilePart;
     PROCESS_INFORMATION ProcessInfo;
     STARTUPINFO StartupInfo;
@@ -167,11 +167,11 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
                         value_len = quote - value;
                 }
 
-                lpVariable = _alloca( variable_len + 1 );
+                lpVariable = reinterpret_cast< CHAR* >( _alloca( variable_len + 1 ) );
                 memcpy( lpVariable, variable, variable_len );
                 lpVariable[variable_len] = 0;
 
-                lpValue = _alloca( value_len + 1);
+                lpValue = reinterpret_cast< CHAR* >( _alloca( value_len + 1) );
                 memcpy( lpValue, value, value_len );
                 lpValue[value_len] = 0;
 
@@ -180,7 +180,7 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
         }
     }
 
-    if ( SearchPath( NULL, TEXT("crashrep.exe"), NULL, MAX_PATH, szPath, &lpFilePart ) )
+    if ( SearchPath( NULL, TEXT( "crashrep.exe" ), NULL, aPath.getBufSizeInSymbols(), aPath, &lpFilePart ) )
     {
         ZeroMemory( &StartupInfo, sizeof(StartupInfo) );
         StartupInfo.cb = sizeof(StartupInfo.cb);
@@ -188,7 +188,7 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
 
         sntprintf( szBuffer, elementsof(szBuffer),
             _T("%s -p %u -excp 0x%p -t %u%s"),
-            szPath,
+            aPath,
             GetCurrentProcessId(),
             lpEP,
             GetCurrentThreadId(),
@@ -317,6 +317,8 @@ static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
             SetErrorMode(SEM_NOGPFAULTERRORBOX);
             exit(255);
             break;
+        default:
+            break;
     }
 
     return (EXCEPTION_CONTINUE_EXECUTION);
@@ -334,7 +336,7 @@ oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction Handler,
     if (! bInitSignal)
         bInitSignal = InitSignal();
 
-    pHandler = calloc(1, sizeof(oslSignalHandlerImpl));
+    pHandler = reinterpret_cast< oslSignalHandlerImpl* >( calloc( 1, sizeof(oslSignalHandlerImpl) ) );
 
     if (pHandler != NULL)
     {
