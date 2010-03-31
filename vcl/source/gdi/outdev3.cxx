@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -67,6 +67,9 @@
 #endif
 #ifdef ENABLE_GRAPHITE
 #include <vcl/graphite_features.hxx>
+#endif
+#ifdef USE_BUILTIN_RASTERIZER
+#include <vcl/glyphcache.hxx>
 #endif
 
 #include <vcl/unohelp.hxx>
@@ -995,21 +998,28 @@ ImplFontEntry::~ImplFontEntry()
 
 // -----------------------------------------------------------------------
 
-inline void ImplFontEntry::AddFallbackForUnicode( sal_UCS4 cChar, const String& rFontName )
+size_t ImplFontEntry::GFBCacheKey_Hash::operator()( const GFBCacheKey& rData ) const
+{
+    std::hash<sal_UCS4> a;
+    std::hash<int > b;
+    return a(rData.first) ^ b(rData.second);
+}
+
+inline void ImplFontEntry::AddFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, const String& rFontName )
 {
     if( !mpUnicodeFallbackList )
         mpUnicodeFallbackList = new UnicodeFallbackList;
-    (*mpUnicodeFallbackList)[cChar] = rFontName;
+    (*mpUnicodeFallbackList)[ GFBCacheKey(cChar,eWeight) ] = rFontName;
 }
 
 // -----------------------------------------------------------------------
 
-inline bool ImplFontEntry::GetFallbackForUnicode( sal_UCS4 cChar, String* pFontName ) const
+inline bool ImplFontEntry::GetFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, String* pFontName ) const
 {
     if( !mpUnicodeFallbackList )
         return false;
 
-    UnicodeFallbackList::const_iterator it = mpUnicodeFallbackList->find( cChar );
+    UnicodeFallbackList::const_iterator it = mpUnicodeFallbackList->find( GFBCacheKey(cChar,eWeight) );
     if( it == mpUnicodeFallbackList->end() )
         return false;
 
@@ -1019,10 +1029,10 @@ inline bool ImplFontEntry::GetFallbackForUnicode( sal_UCS4 cChar, String* pFontN
 
 // -----------------------------------------------------------------------
 
-inline void ImplFontEntry::IgnoreFallbackForUnicode( sal_UCS4 cChar, const String& rFontName )
+inline void ImplFontEntry::IgnoreFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, const String& rFontName )
 {
 //  DBG_ASSERT( mpUnicodeFallbackList, "ImplFontEntry::IgnoreFallbackForUnicode no list" );
-    UnicodeFallbackList::iterator it = mpUnicodeFallbackList->find( cChar );
+    UnicodeFallbackList::iterator it = mpUnicodeFallbackList->find( GFBCacheKey(cChar,eWeight) );
 //  DBG_ASSERT( it != mpUnicodeFallbackList->end(), "ImplFontEntry::IgnoreFallbackForUnicode no match" );
     if( it == mpUnicodeFallbackList->end() )
         return;
@@ -1417,7 +1427,7 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( ImplFontSelectData& 
         while( nStrIndex < rMissingCodes.getLength() )
         {
             cChar = rMissingCodes.iterateCodePoints( &nStrIndex );
-            bCached = rFontSelData.mpFontEntry->GetFallbackForUnicode( cChar, &rFontSelData.maSearchName );
+            bCached = rFontSelData.mpFontEntry->GetFallbackForUnicode( cChar, rFontSelData.GetWeight(), &rFontSelData.maSearchName );
             // ignore entries which don't have a fallback
             if( !bCached || (rFontSelData.maSearchName.Len() != 0) )
                 break;
@@ -1433,7 +1443,7 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( ImplFontSelectData& 
             while( nStrIndex < rMissingCodes.getLength() )
             {
                 cChar = rMissingCodes.iterateCodePoints( &nStrIndex );
-                bCached = rFontSelData.mpFontEntry->GetFallbackForUnicode( cChar, &aFontName );
+                bCached = rFontSelData.mpFontEntry->GetFallbackForUnicode( cChar, rFontSelData.GetWeight(), &aFontName );
                 if( !bCached || (rFontSelData.maSearchName != aFontName) )
                     pRemainingCodes[ nRemainingLength++ ] = cChar;
             }
@@ -1452,8 +1462,8 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( ImplFontSelectData& 
             // cache the result even if there was no match
             for(;;)
             {
-                 if( !rFontSelData.mpFontEntry->GetFallbackForUnicode( cChar, &rFontSelData.maSearchName ) )
-                     rFontSelData.mpFontEntry->AddFallbackForUnicode( cChar, rFontSelData.maSearchName );
+                 if( !rFontSelData.mpFontEntry->GetFallbackForUnicode( cChar, rFontSelData.GetWeight(), &rFontSelData.maSearchName ) )
+                     rFontSelData.mpFontEntry->AddFallbackForUnicode( cChar, rFontSelData.GetWeight(), rFontSelData.maSearchName );
                  if( nStrIndex >= aOldMissingCodes.getLength() )
                      break;
                  cChar = aOldMissingCodes.iterateCodePoints( &nStrIndex );
@@ -1464,7 +1474,7 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( ImplFontSelectData& 
                 for( nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
                 {
                     cChar = rMissingCodes.iterateCodePoints( &nStrIndex );
-                    rFontSelData.mpFontEntry->IgnoreFallbackForUnicode( cChar, rFontSelData.maSearchName );
+                    rFontSelData.mpFontEntry->IgnoreFallbackForUnicode( cChar, rFontSelData.GetWeight(), rFontSelData.maSearchName );
                 }
             }
         }
@@ -2780,6 +2790,11 @@ void ImplFontCache::Invalidate()
     maFontInstanceList.clear();
 
     DBG_ASSERT( (mnRef0Count==0), "ImplFontCache::Invalidate() - mnRef0Count non-zero" );
+
+#ifdef USE_BUILTIN_RASTERIZER
+    // TODO: eventually move into SalGraphics layer
+    GlyphCache::GetInstance().InvalidateAllGlyphs();
+#endif
 }
 
 // =======================================================================
