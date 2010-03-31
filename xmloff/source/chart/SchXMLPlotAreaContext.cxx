@@ -693,10 +693,21 @@ void SchXMLPlotAreaContext::EndElement()
     uno::Reference< chart::XDiagramPositioning > xDiaPos( mxDiagram, uno::UNO_QUERY );
     if( xDiaPos.is())
     {
+        bool bOuterSize = m_aOuterPositioning.hasPosSize() && !m_aOuterPositioning.isAutomatic();
         if( m_aInnerPositioning.hasPosSize() )
-            xDiaPos->setDiagramPositionExcludingAxes( m_aInnerPositioning.getRectangle() );
-        else if( m_aOuterPositioning.hasPosSize() )
-            xDiaPos->setDiagramPositionIncludingAxesAndAxesTitles( m_aOuterPositioning.getRectangle() );
+        {
+            if( !m_aInnerPositioning.isAutomatic() )
+                xDiaPos->setDiagramPositionExcludingAxes( m_aInnerPositioning.getRectangle() );
+            else if( bOuterSize )
+                xDiaPos->setDiagramPositionIncludingAxes( m_aOuterPositioning.getRectangle() );
+        }
+        else if( bOuterSize )
+        {
+            if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan3_4( GetImport().GetModel() ) ) //old version of OOo did write a wrong rectangle for the diagram size
+                xDiaPos->setDiagramPositionIncludingAxesAndAxesTitles( m_aOuterPositioning.getRectangle() );
+            else
+                xDiaPos->setDiagramPositionIncludingAxes( m_aOuterPositioning.getRectangle() );
+        }
     }
 
     CorrectAxisPositions();
@@ -1675,15 +1686,19 @@ SchXMLPositonAttributesHelper::~SchXMLPositonAttributesHelper()
 
 bool SchXMLPositonAttributesHelper::hasSize() const
 {
-    return m_bHasSizeWidth && m_bHasSizeHeight && !m_bAutoSize;
+    return m_bHasSizeWidth && m_bHasSizeHeight;
 }
 bool SchXMLPositonAttributesHelper::hasPosition() const
 {
-    return m_bHasPositionX && m_bHasPositionY && !m_bAutoPosition;
+    return m_bHasPositionX && m_bHasPositionY;
 }
 bool SchXMLPositonAttributesHelper::hasPosSize() const
 {
     return hasPosition() && hasSize();
+}
+bool SchXMLPositonAttributesHelper::isAutomatic() const
+{
+    return m_bAutoSize || m_bAutoPosition;
 }
 awt::Point SchXMLPositonAttributesHelper::getPosition() const
 {

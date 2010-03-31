@@ -78,6 +78,7 @@ public:
     void readAutomaticPositioningProperties( XMLPropStyleContext* pPropStyleContext, const SvXMLStylesContext* pStylesCtxt );
 
     bool hasPosSize() const;
+    bool isAutomatic() const;
     ::com::sun::star::awt::Rectangle getRectangle() const;
 
 
