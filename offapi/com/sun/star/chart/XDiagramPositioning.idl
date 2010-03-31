@@ -87,6 +87,7 @@ interface XDiagramPositioning : com::sun::star::uno::XInterface
     com::sun::star::awt::Rectangle calculateDiagramPositionIncludingAxes();
 
     /** place the diagram including the axes, axes labels and axes titles.
+        For the placement the current axis titles are taken into account, so the titles must be initialized properly before this method is called.
         @param PositionRect
             specifies the position and size in 100/th mm
     */
