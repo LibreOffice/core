@@ -93,6 +93,7 @@ pt    1252  2070
 pt-BR 1252  1046
 pt-PT 1252  2070
 ps       0  2171
+qcv   1252  32771  # Catalan Valencian
 rm       0  1047   # Raeto-Romance
 ro    1250  1048   # Romanian
 ru    1251  1049
