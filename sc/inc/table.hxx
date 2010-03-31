@@ -422,11 +422,11 @@ public:
     void        UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                    ScDocument* pUndoDoc = NULL, BOOL bIncludeDraw = TRUE );
+                                    ScDocument* pUndoDoc = NULL, BOOL bIncludeDraw = TRUE, bool bUpdateNoteCaptionPos = true );
 
     void        UpdateDrawRef( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz, bool bUpdateNoteCaptionPos = true );
 
     void        UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
                                     ScDocument* pUndoDoc );
@@ -660,8 +660,8 @@ public:
 
     void        FindConditionalFormat( ULONG nKey, ScRangeList& rRanges );
 
-    void        IncRecalcLevel()        { ++nRecalcLvl; }
-    void        DecRecalcLevel()        { if (!--nRecalcLvl) SetDrawPageSize(); }
+    void        IncRecalcLevel() { ++nRecalcLvl; }
+    void        DecRecalcLevel( bool bUpdateNoteCaptionPos = true ) { if (!--nRecalcLvl) SetDrawPageSize(true, bUpdateNoteCaptionPos); }
 
     BOOL        IsSortCollatorGlobal() const;
     void        InitSortCollator( const ScSortParam& rPar );
@@ -735,7 +735,7 @@ private:
     BOOL        GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, BOOL bInSel,
                                     const ScMarkData& rMark) const;
     BOOL        GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark );
-    void        SetDrawPageSize(bool bResetStreamValid = true);
+    void        SetDrawPageSize(bool bResetStreamValid, bool bUpdateNoteCaptionPos);
     BOOL        TestTabRefAbs(SCTAB nTable);
     void        CompileDBFormula();
     void        CompileDBFormula( BOOL bCreateFormulaString );

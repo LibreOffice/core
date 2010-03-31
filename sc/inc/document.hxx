@@ -1095,7 +1095,8 @@ public:
     void            UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                      SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                      SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                     ScDocument* pUndoDoc = NULL, BOOL bIncludeDraw = TRUE );
+                                     ScDocument* pUndoDoc = NULL, BOOL bIncludeDraw = TRUE,
+                                     bool bUpdateNoteCaptionPos = true );
 
     SC_DLLPUBLIC void           UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDoc,
                                         const ScMarkData& rMark, ScDocument* pUndoDoc = NULL );
@@ -1651,7 +1652,7 @@ public:
     BOOL                IsExpandRefs() { return bExpandRefs; }
 
     SC_DLLPUBLIC void               IncSizeRecalcLevel( SCTAB nTab );
-    SC_DLLPUBLIC void               DecSizeRecalcLevel( SCTAB nTab );
+    SC_DLLPUBLIC void               DecSizeRecalcLevel( SCTAB nTab, bool bUpdateNoteCaptionPos = true );
 
     ULONG               GetXMLImportedFormulaCount() const { return nXMLImportedFormulaCount; }
     void                IncXMLImportedFormulaCount( ULONG nVal )

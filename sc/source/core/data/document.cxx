@@ -589,7 +589,7 @@ void ScDocument::SetLayoutRTL( SCTAB nTab, BOOL bRTL )
         }
 
         pTab[nTab]->SetLayoutRTL( bRTL );       // only sets the flag
-        pTab[nTab]->SetDrawPageSize();
+        pTab[nTab]->SetDrawPageSize(true,true);
 
         //  mirror existing objects:
 
@@ -953,7 +953,7 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
         {
             UpdateReference( URM_INSDEL, nStartCol, nStartRow+nSize, nTabRangeStart,
                              nEndCol, MAXROW, nTabRangeEnd,
-                             0, -(static_cast<SCsROW>(nSize)), 0, pRefUndoDoc );
+                             0, -(static_cast<SCsROW>(nSize)), 0, pRefUndoDoc, TRUE, false );
         }
         while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark ) );
     }
@@ -1054,7 +1054,7 @@ BOOL ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
         {
             UpdateReference( URM_INSDEL, nStartCol, nStartRow, nTabRangeStart,
                              MAXCOL, nEndRow, nTabRangeEnd,
-                             static_cast<SCsCOL>(nSize), 0, 0, pRefUndoDoc );
+                             static_cast<SCsCOL>(nSize), 0, 0, pRefUndoDoc, TRUE, false );
         }
         while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark ) );
 
@@ -1143,7 +1143,7 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
         {
             UpdateReference( URM_INSDEL, sal::static_int_cast<SCCOL>(nStartCol+nSize), nStartRow, nTabRangeStart,
                              MAXCOL, nEndRow, nTabRangeEnd,
-                             -static_cast<SCsCOL>(nSize), 0, 0, pRefUndoDoc );
+                             -static_cast<SCsCOL>(nSize), 0, 0, pRefUndoDoc, TRUE, false );
         }
         while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark ) );
     }
