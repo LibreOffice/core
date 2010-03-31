@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tpaction.cxx,v $
- * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #undef SD_DLLIMPLEMENTATION
 #endif
 
-
+#include <svx/svxids.hrc>
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
@@ -58,7 +55,7 @@
 #include <svx/svdpagv.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <svl/aeitem.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/svdoole2.hxx>
 #include <sfx2/docfile.hxx>
 #include <sot/storage.hxx>
