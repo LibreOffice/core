@@ -589,7 +589,7 @@ void ScDocument::SetLayoutRTL( SCTAB nTab, BOOL bRTL )
         }
 
         pTab[nTab]->SetLayoutRTL( bRTL );       // only sets the flag
-        pTab[nTab]->SetDrawPageSize(true,true);
+        pTab[nTab]->SetDrawPageSize();
 
         //  mirror existing objects:
 
