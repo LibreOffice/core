@@ -704,7 +704,7 @@ void SchXMLPlotAreaContext::EndElement()
         else if( bOuterSize )
         {
             if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan3_4( GetImport().GetModel() ) ) //old version of OOo did write a wrong rectangle for the diagram size
-                xDiaPos->setDiagramPositionIncludingAxesAndAxesTitles( m_aOuterPositioning.getRectangle() );
+                xDiaPos->setDiagramPositionIncludingAxesAndAxisTitles( m_aOuterPositioning.getRectangle() );
             else
                 xDiaPos->setDiagramPositionIncludingAxes( m_aOuterPositioning.getRectangle() );
         }
