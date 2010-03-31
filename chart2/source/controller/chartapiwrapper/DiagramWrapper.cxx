@@ -868,12 +868,12 @@ awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxes(  
 {
     return m_spChart2ModelContact->GetDiagramRectangleIncludingAxes();
 }
-void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxesAndAxesTitles( const awt::Rectangle& rPositionRect ) throw (uno::RuntimeException)
+void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxesAndAxisTitles( const awt::Rectangle& rPositionRect ) throw (uno::RuntimeException)
 {
     awt::Rectangle aRect( m_spChart2ModelContact->SubstractAxisTitleSizes(rPositionRect) );
     DiagramWrapper::setDiagramPositionIncludingAxes( aRect );
 }
-::com::sun::star::awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxesAndAxesTitles(  ) throw (::com::sun::star::uno::RuntimeException)
+::com::sun::star::awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxesAndAxisTitles(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     return m_spChart2ModelContact->GetDiagramRectangleIncludingTitle();
 }
