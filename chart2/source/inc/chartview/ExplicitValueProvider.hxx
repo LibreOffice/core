@@ -79,12 +79,20 @@ public:
     static ExplicitValueProvider* getExplicitValueProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xChartView );
 
     static ::com::sun::star::awt::Rectangle
-        calculateDiagramPositionAndSizeIncludingTitle(
+        addAxisTitleSizes(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::frame::XModel >& xChartModel
             , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XInterface >& xChartView
             , const ::com::sun::star::awt::Rectangle& rExcludingPositionAndSize );
+
+    static ::com::sun::star::awt::Rectangle
+        substractAxisTitleSizes(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::frame::XModel >& xChartModel
+            , const ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::XInterface >& xChartView
+            , const ::com::sun::star::awt::Rectangle& rPositionAndSizeIncludingTitles );
 
     static sal_Int32 getExplicitNumberFormatKeyForAxis(
               const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis

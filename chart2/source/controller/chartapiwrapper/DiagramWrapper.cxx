@@ -59,6 +59,7 @@
 #include "DisposeHelper.hxx"
 #include <comphelper/InlineContainer.hxx>
 #include "WrappedAutomaticPositionProperties.hxx"
+#include "CommonConverters.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
@@ -737,7 +738,7 @@ Reference<
 awt::Point SAL_CALL DiagramWrapper::getPosition()
     throw (uno::RuntimeException)
 {
-    awt::Point aPosition = m_spChart2ModelContact->GetDiagramPositionIncludingTitle();
+    awt::Point aPosition = ToPoint( m_spChart2ModelContact->GetDiagramRectangleIncludingAxes() );
     return aPosition;
 }
 
@@ -747,17 +748,12 @@ void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
     Reference< beans::XPropertySet > xProp( this->getInnerPropertySet() );
     if( xProp.is() )
     {
-        if( aPosition.X < 0 || aPosition.Y < 0 )
+        if( aPosition.X < 0 || aPosition.Y < 0 || aPosition.X > 1 || aPosition.Y > 1 )
         {
-            if( !TitleHelper::getTitle( TitleHelper::X_AXIS_TITLE, m_spChart2ModelContact->getChartModel() ).is() &&
-                !TitleHelper::getTitle( TitleHelper::Y_AXIS_TITLE, m_spChart2ModelContact->getChartModel() ).is() )
-            {
-                DBG_ERROR("DiagramWrapper::setPosition called with negative position -> automatic values are taken instead" );
-                uno::Any aEmpty;
-                xProp->setPropertyValue( C2U( "RelativePosition" ), aEmpty );
-                return;
-            }
-            //else: The saved didagram size does include the axis title sizes thus the position and size could be negative
+            DBG_ERROR("DiagramWrapper::setPosition called with a position out of range -> automatic values are taken instead" );
+            uno::Any aEmpty;
+            xProp->setPropertyValue( C2U( "RelativePosition" ), aEmpty );
+            return;
         }
 
         awt::Size aPageSize( m_spChart2ModelContact->GetPageSize() );
@@ -774,7 +770,7 @@ void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
 awt::Size SAL_CALL DiagramWrapper::getSize()
     throw (uno::RuntimeException)
 {
-    awt::Size aSize = m_spChart2ModelContact->GetDiagramSizeIncludingTitle();
+    awt::Size aSize = ToSize( m_spChart2ModelContact->GetDiagramRectangleIncludingAxes() );
     return aSize;
 }
 
@@ -793,15 +789,10 @@ void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
 
         if( aRelativeSize.Primary > 1 || aRelativeSize.Secondary > 1 )
         {
-            if( !TitleHelper::getTitle( TitleHelper::X_AXIS_TITLE, m_spChart2ModelContact->getChartModel() ).is() &&
-                !TitleHelper::getTitle( TitleHelper::Y_AXIS_TITLE, m_spChart2ModelContact->getChartModel() ).is() )
-            {
-                DBG_ERROR("DiagramWrapper::setSize called with sizes bigger than page -> automatic values are taken instead" );
-                uno::Any aEmpty;
-                xProp->setPropertyValue( C2U( "RelativeSize" ), aEmpty );
-                return;
-            }
-            //else: The saved didagram size does include the axis title sizes thus the position and size could be out of range
+            DBG_ERROR("DiagramWrapper::setSize called with sizes bigger than page -> automatic values are taken instead" );
+            uno::Any aEmpty;
+            xProp->setPropertyValue( C2U( "RelativeSize" ), aEmpty );
+            return;
         }
 
         xProp->setPropertyValue( C2U( "RelativeSize" ), uno::makeAny(aRelativeSize) );
@@ -879,9 +870,8 @@ awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxes(  
 }
 void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxesAndAxesTitles( const awt::Rectangle& rPositionRect ) throw (uno::RuntimeException)
 {
-    setPosition( awt::Point(rPositionRect.X,rPositionRect.Y) );
-    setSize( awt::Size(rPositionRect.Width,rPositionRect.Height) );
-
+    awt::Rectangle aRect( m_spChart2ModelContact->SubstractAxisTitleSizes(rPositionRect) );
+    DiagramWrapper::setDiagramPositionIncludingAxes( aRect );
 }
 ::com::sun::star::awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxesAndAxesTitles(  ) throw (::com::sun::star::uno::RuntimeException)
 {

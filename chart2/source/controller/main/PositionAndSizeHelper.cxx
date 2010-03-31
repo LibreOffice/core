@@ -183,13 +183,6 @@ bool PositionAndSizeHelper::moveObject( const rtl::OUString& rObjectCID
         xObjectProp = uno::Reference< beans::XPropertySet >( ObjectIdentifier::getDiagramForCID( rObjectCID, xChartModel ), uno::UNO_QUERY );
         if(!xObjectProp.is())
             return false;
-
-        //add axis title sizes to the diagram size
-        bool bPosSizeExcludeAxes = false;
-        xObjectProp->getPropertyValue( C2U( "PosSizeExcludeAxes" ) ) >>= bPosSizeExcludeAxes;
-        if( !bPosSizeExcludeAxes )
-            aNewPositionAndSize = ExplicitValueProvider::calculateDiagramPositionAndSizeIncludingTitle(
-                xChartModel, xChartView, rNewPositionAndSize );
     }
     return moveObject( eObjectType, xObjectProp, aNewPositionAndSize, rPageRectangle );
 }

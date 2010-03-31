@@ -93,15 +93,9 @@ public:
      */
     ::com::sun::star::awt::Size GetPageSize() const;
 
-    /** Returns the size of the diagram object in logic coordinates including
-        the space reserved for axis titles.
+    /** calculates the current axes title sizes and substract that space them from the given recangle
      */
-    ::com::sun::star::awt::Size GetDiagramSizeIncludingTitle() const;
-
-    /** Returns the position of the diagram in logic coordinates including
-        the space reserved for axis titles.
-     */
-    ::com::sun::star::awt::Point GetDiagramPositionIncludingTitle() const;
+    ::com::sun::star::awt::Rectangle SubstractAxisTitleSizes( const ::com::sun::star::awt::Rectangle& rPositionRect );
 
     /** Returns the position and size of the diagram in logic coordinates (100th mm) including
         the space used for axes including axes titles.
@@ -149,6 +143,8 @@ public:
 
 private: //methods
     ExplicitValueProvider* getExplicitValueProvider() const;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::lang::XUnoTunnel > getChartView() const;
 
 public: //member
     ::com::sun::star::uno::Reference<

@@ -119,7 +119,7 @@ Reference< chart2::XDiagram > Chart2ModelContact::getChart2Diagram() const
     return ChartModelHelper::findDiagram( this->getChartModel() );
 }
 
-ExplicitValueProvider* Chart2ModelContact::getExplicitValueProvider() const
+uno::Reference< lang::XUnoTunnel > Chart2ModelContact::getChartView() const
 {
     if(!m_xChartView.is())
     {
@@ -129,7 +129,12 @@ ExplicitValueProvider* Chart2ModelContact::getExplicitValueProvider() const
         if( xFact.is() )
             m_xChartView = Reference< lang::XUnoTunnel >( xFact->createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
     }
+    return m_xChartView;
+}
 
+ExplicitValueProvider* Chart2ModelContact::getExplicitValueProvider() const
+{
+    getChartView();
     if(!m_xChartView.is())
         return 0;
 
@@ -193,13 +198,20 @@ awt::Size Chart2ModelContact::GetPageSize() const
     return ChartModelHelper::getPageSize(m_xChartModel);
 }
 
+awt::Rectangle Chart2ModelContact::SubstractAxisTitleSizes( const awt::Rectangle& rPositionRect )
+{
+    awt::Rectangle aRect = ExplicitValueProvider::substractAxisTitleSizes(
+        m_xChartModel, getChartView(), rPositionRect );
+    return aRect;
+}
+
 awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingTitle() const
 {
     awt::Rectangle aRect( GetDiagramRectangleIncludingAxes() );
 
     //add axis title sizes to the diagram size
-    aRect = ExplicitValueProvider::calculateDiagramPositionAndSizeIncludingTitle(
-        m_xChartModel, m_xChartView, aRect );
+    aRect = ExplicitValueProvider::addAxisTitleSizes(
+        m_xChartModel, getChartView(), aRect );
 
     return aRect;
 }
@@ -227,16 +239,6 @@ awt::Rectangle Chart2ModelContact::GetDiagramRectangleExcludingAxes() const
     if( pProvider )
         aRect = pProvider->getDiagramRectangleExcludingAxes();
     return aRect;
-}
-
-awt::Size Chart2ModelContact::GetDiagramSizeIncludingTitle() const
-{
-    return ToSize( this->GetDiagramRectangleIncludingTitle() );
-}
-
-awt::Point Chart2ModelContact::GetDiagramPositionIncludingTitle() const
-{
-    return ToPoint( this->GetDiagramRectangleIncludingTitle() );
 }
 
 awt::Size Chart2ModelContact::GetLegendSize() const
