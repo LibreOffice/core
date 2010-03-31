@@ -138,7 +138,7 @@ DOCUFILES= \
     $(DESTDIRDOCUIMAGES)/bluball.gif \
     $(DESTDIRDOCUIMAGES)/orc-main-app_32.png \
     $(DESTDIRDOCUIMAGES)/ooo-main-app_32.png \
-    $(DESTDIRDOCUIMAGES)/odk-footer-logo.png \
+    $(DESTDIRDOCUIMAGES)/odk-footer-logo.gif \
     $(DESTDIRDOCUIMAGES)/arrow-1.gif \
     $(DESTDIRDOCUIMAGES)/arrow-3.gif \
     $(DESTDIRDOCUIMAGES)/bg_table.png \

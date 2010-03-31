@@ -84,7 +84,7 @@ if (-d "$StartDir") {
     my @filelist = ( "install.html",
              "notsupported.html","sdk_styles.css","tools.html",
              "images/arrow-1.gif", "images/arrow-3.gif",
-             "odk-footer-logo.png",
+             "images/odk-footer-logo.gif",
              "images/bg_table.png","images/bg_table2.png",
              "images/bg_table3.png", "images/nav_down.png",
              "images/nav_home.png","images/nav_left.png",
