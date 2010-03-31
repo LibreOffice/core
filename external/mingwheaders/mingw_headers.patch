@@ -207,59 +207,6 @@
  # define BEGIN_INTERFACE
  # define END_INTERFACE
  
---- include/oaidl.h.orig	2008-12-06 11:32:03.000000000 +0900
-+++ include/oaidl.h	2009-08-21 09:21:56.000000000 +0900
-@@ -65,8 +65,11 @@
- 
- typedef _COM_interface ITypeLib *LPTYPELIB;
- typedef _COM_interface ITypeLib2 *LPTYPELIB2;
-+typedef _COM_interface ICreateTypeInfo ICreateTypeInfo;
- typedef _COM_interface ICreateTypeInfo *LPCREATETYPEINFO;
- typedef _COM_interface ICreateTypeInfo2 *LPCREATETYPEINFO2;
-+typedef _COM_interface ICreateTypeLib ICreateTypeLib;
-+typedef _COM_interface ICreateTypeLib2 ICreateTypeLib2;
- typedef _COM_interface ICreateTypeLib *LPCREATETYPELIB;
- typedef _COM_interface ICreateTypeLib2 *LPCREATETYPELIB2;
- typedef _COM_interface ITypeComp *LPTYPECOMP;
-@@ -78,6 +81,8 @@
- typedef _COM_interface ICreateErrorInfo *LPCREATEERRORINFO;
- typedef _COM_interface ISupportErrorInfo *LPSUPPORTERRORINFO;
- typedef _COM_interface IRecordInfo *LPRECORDINFO;
-+typedef _COM_interface IErrorLog *LPERRORLOG;
-+typedef _COM_interface IPropertyBag *LPPROPERTYBAG;
- 
- extern const IID IID_ITypeLib;
- extern const IID IID_ITypeLib2;
-@@ -772,6 +777,29 @@
- };
- #undef INTERFACE
- 
-+EXTERN_C const IID IID_IErrorLog;
-+#define INTERFACE IErrorLog
-+DECLARE_INTERFACE_(IErrorLog,IUnknown)
-+{
-+	STDMETHOD(QueryInterface)(THIS_ REFIID,PVOID*) PURE;
-+	STDMETHOD_(ULONG,AddRef)(THIS) PURE;
-+	STDMETHOD_(ULONG,Release)(THIS) PURE;
-+	STDMETHOD(AddError)(THIS_ LPCOLESTR,LPEXCEPINFO) PURE;
-+};
-+#undef INTERFACE
-+
-+EXTERN_C const IID IID_IPropertyBag;
-+#define INTERFACE IPropertyBag
-+DECLARE_INTERFACE_(IPropertyBag,IUnknown)
-+{
-+	STDMETHOD(QueryInterface)(THIS_ REFIID,PVOID*) PURE;
-+	STDMETHOD_(ULONG,AddRef)(THIS) PURE;
-+	STDMETHOD_(ULONG,Release)(THIS) PURE;
-+	STDMETHOD(Read)(THIS_ LPCOLESTR,LPVARIANT,LPERRORLOG) PURE;
-+	STDMETHOD(Write)(THIS_ LPCOLESTR,LPVARIANT) PURE;
-+};
-+#undef INTERFACE
-+
- #ifdef __cplusplus
- }
- #endif
 --- include/objidl.h.orig	2008-12-06 11:32:04.000000000 +0900
 +++ include/objidl.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
@@ -1238,6 +1185,24 @@
  #endif // __NTQUERY_H__
  
  
+--- include/oaidl.h.orig	2008-12-06 11:32:03.000000000 +0900
++++ include/oaidl.h	2010-02-27 13:28:29.448250000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ 
+ /* this ALWAYS GENERATED file contains the definitions for the interfaces */
+@@ -442,7 +445,7 @@
+                 FLOAT fltVal;
+                 DOUBLE dblVal;
+                 VARIANT_BOOL boolVal;
+-                _VARIANT_BOOL bool;
++//                _VARIANT_BOOL bool;
+                 SCODE scode;
+                 CY cyVal;
+                 DATE date;
 --- include/ocidl.h.orig	2008-01-18 22:17:32.000000000 +0900
 +++ include/ocidl.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
@@ -1404,8 +1369,15 @@
  
  
 --- include/propidl.h.orig	2008-01-18 22:17:32.000000000 +0900
-+++ include/propidl.h	2009-08-21 09:21:56.000000000 +0900
-@@ -76,6 +76,14 @@
++++ include/propidl.h	2010-02-27 14:11:52.213875000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ 
+ /* this ALWAYS GENERATED file contains the definitions for the interfaces */
+@@ -76,6 +79,14 @@
  #include "objidl.h"
  #include "oaidl.h"
  
@@ -1420,7 +1392,7 @@
  #ifdef __cplusplus
  extern "C"{
  #endif 
-@@ -143,6 +151,7 @@
+@@ -143,6 +154,7 @@
      CHAR *pElems;
      } 	CAC;
  
@@ -1428,15 +1400,25 @@
  typedef struct tagCAUB
      {
      ULONG cElems;
-@@ -268,6 +277,7 @@
+@@ -268,7 +280,9 @@
      ULONG cElems;
      CLSID *pElems;
      } 	CACLSID;
 +#endif
  
++#if 0
  #ifdef MIDL_PASS
  // This is the PROPVARIANT padding layout for marshaling.
-@@ -509,6 +519,7 @@
+ typedef BYTE PROPVAR_PAD1;
+@@ -385,6 +399,7 @@
+ #endif
+ 
+ #endif /* _MSC_EXTENSIONS */
++#endif
+ 
+ #ifdef MIDL_PASS
+ // This is the LPPROPVARIANT definition for marshaling.
+@@ -509,6 +524,7 @@
  
  #define	PRSPEC_PROPID	( 1 )
  
@@ -1444,7 +1426,7 @@
  typedef struct tagPROPSPEC
      {
      ULONG ulKind;
-@@ -526,12 +537,14 @@
+@@ -526,12 +542,14 @@
      PROPID propid;
      VARTYPE vt;
      } 	STATPROPSTG;
@@ -1459,7 +1441,7 @@
  typedef struct tagSTATPROPSETSTG
      {
      FMTID fmtid;
-@@ -542,12 +555,14 @@
+@@ -542,12 +560,14 @@
      FILETIME atime;
      DWORD dwOSVersion;
      } 	STATPROPSETSTG;
@@ -1474,7 +1456,15 @@
  #ifndef __IPropertyStorage_INTERFACE_DEFINED__
  #define __IPropertyStorage_INTERFACE_DEFINED__
  
-@@ -1136,6 +1151,7 @@
+@@ -1119,7 +1139,6 @@
+ #endif 	/* C style interface */
+ 
+ 
+-
+ /* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumSTATPROPSETSTG_RemoteNext_Proxy( 
+     IEnumSTATPROPSETSTG * This,
+     /* [in] */ ULONG celt,
+@@ -1136,6 +1155,7 @@
  
  
  #endif 	/* __IEnumSTATPROPSETSTG_INTERFACE_DEFINED__ */
@@ -1482,7 +1472,7 @@
  
  
  /* interface __MIDL_itf_propidl_0000_0004 */
-@@ -1268,6 +1284,10 @@
+@@ -1268,6 +1287,10 @@
  }
  #endif
  
@@ -1534,6 +1524,23 @@
  #endif
  
  
+--- include/propvarutil.h.orig	2008-01-18 22:17:34.000000000 +0900
++++ include/propvarutil.h	2010-02-26 19:34:40.863625000 +0900
+@@ -14,6 +14,14 @@
+ #include <shtypes.h>
+ #include <shlwapi.h>
+ 
++#define __in
++#define __out
++#ifdef __cplusplus
++#define __inline inline
++#else
++#define __inline static __inline__
++#endif
++
+ #ifndef PSSTDAPI
+ #if defined(_PROPSYS_)
+ #define PSSTDAPI          STDAPI
 --- include/shlobj.h.orig	2008-01-18 22:17:36.000000000 +0900
 +++ include/shlobj.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
