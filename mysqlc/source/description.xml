@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <identifier value="UPDATED_IDENTIFIER"/>
+    <version value="#VERSION#" />
+    <platform value="UPDATED_SUPPORTED_PLATFORM" />
+    <registration>
+        <simple-license accept-by="admin" default-license-id="lic-en-US" >
+            <license-text xlink:href="licensefile" lang="isocode" license-id="lic-isocode"/>
+        </simple-license>
+    </registration>
+    <display-name>
+        <name lang="en-US">#TITLE#</name>
+    </display-name>
+    <dependencies>
+         <OpenOffice.org-minimal-version value="3.1" d:name="OpenOffice.org 3.1"/>
+    </dependencies>
+    <publisher>
+        <name xlink:href="http://www.sun.com/software/star/staroffice/extensions.jsp?cid=925095" lang="en">Sun Microsystems</name>
+    </publisher>
+    <icon>
+        <default xlink:href="images/sun_extension.png" />
+        <high-contrast xlink:href="images/sun_extension_hc.png" />
+    </icon>
+    <extension-description>
+        <src lang="#LANG#" xlink:href="description/description_#LANG#.txt"/>
+    </extension-description>
+</description>
