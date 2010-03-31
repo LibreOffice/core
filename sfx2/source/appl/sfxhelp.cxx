@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sfxhelp.cxx,v $
- * $Revision: 1.82.78.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,9 +35,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
@@ -60,13 +55,11 @@
 #include <tools/urlobj.hxx>
 #include <unotools/configmgr.hxx>
 #include <ucbhelper/content.hxx>
-
 #include <unotools/pathoptions.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
 #include <unotools/bootstrap.hxx>
-
 #include <rtl/uri.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/ehdl.hxx>
@@ -76,16 +69,13 @@
 #define _SVSTDARR_ULONGSSORT
 #include <svl/svstdarr.hxx>
 
-#include <sfx2/sfxsids.hrc>
-#include <sfx2/app.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/msgpool.hxx>
 #include "newhelp.hxx"
-#include <sfx2/objsh.hxx>
-#include <sfx2/docfac.hxx>
 #include "sfxresid.hxx"
 #include "helper.hxx"
 #include "app.hrc"
+#include <sfx2/sfxuno.hxx>
+#include <vcl/svapp.hxx>
+#include <sfx2/frame.hxx>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -132,7 +122,8 @@ rtl::OUString HelpLocaleString()
         Any aLocale =
             ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty(
                ::utl::ConfigManager::LOCALE );
-        bool bOk = (aLocale >>= aLocaleStr);
+        aLocale >>= aLocaleStr;
+        bool bOk = aLocaleStr.getLength() != 0;
         if ( bOk )
         {
             rtl::OUString aBaseInstallPath;
@@ -967,26 +958,39 @@ String SfxHelp::CreateHelpURL( const String& aCommandURL, const String& rModuleN
     return aURL;
 }
 
-void SfxHelp::OpenHelpAgent( SfxFrame *pFrame, ULONG nHelpId )
+void SfxHelp::OpenHelpAgent( SfxFrame*, ULONG nHelpId )
+{
+        SfxHelp* pHelp = SAL_STATIC_CAST( SfxHelp*, Application::GetHelp() );
+        if ( pHelp )
+            pHelp->OpenHelpAgent( nHelpId );
+}
+
+void SfxHelp::OpenHelpAgent( ULONG nHelpId )
 {
     if ( SvtHelpOptions().IsHelpAgentAutoStartMode() )
     {
-        SfxHelp* pHelp = SAL_STATIC_CAST( SfxHelp*, Application::GetHelp() );
-        if ( pHelp )
-        {
-            SfxHelpOptions_Impl *pOpt = pHelp->pImp->GetOptions();
+//      SfxHelp* pHelp = SAL_STATIC_CAST( SfxHelp*, Application::GetHelp() );
+//      if ( pHelp )
+//      {
+            SfxHelpOptions_Impl *pOpt = pImp->GetOptions();
             if ( !pOpt->HasId( nHelpId ) )
                 return;
 
             try
             {
                 URL aURL;
-                aURL.Complete = pHelp->CreateHelpURL_Impl( nHelpId, pHelp->GetHelpModuleName_Impl() );
+                aURL.Complete = CreateHelpURL_Impl( nHelpId, GetHelpModuleName_Impl() );
                 Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
                     ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" ) ), UNO_QUERY );
                 xTrans->parseStrict(aURL);
 
-                Reference< XDispatchProvider > xDispProv( pFrame->GetTopFrame()->GetFrameInterface(), UNO_QUERY );
+                Reference < XFrame > xCurrentFrame;
+                Reference < XDesktop > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
+                    DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+                if ( xDesktop.is() )
+                    xCurrentFrame = xDesktop->getCurrentFrame();
+
+                Reference< XDispatchProvider > xDispProv( xCurrentFrame, UNO_QUERY );
                 Reference< XDispatch > xHelpDispatch;
                 if ( xDispProv.is() )
                     xHelpDispatch = xDispProv->queryDispatch(
@@ -1001,7 +1005,7 @@ void SfxHelp::OpenHelpAgent( SfxFrame *pFrame, ULONG nHelpId )
             {
                 DBG_ERRORFILE( "OpenHelpAgent: caught an exception while executing the dispatch!" );
             }
-        }
+//      }
     }
 }
 

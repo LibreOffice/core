@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -91,13 +87,14 @@ EXCEPTIONSFILES += \
 SHL1OBJS= $(SLOFILES)
 
 SHL1STDLIBS=\
+    $(UNOTOOLSLIB)\
     $(SALLIB)\
     $(VOSLIB)\
     $(CPPULIB)\
     $(CPPUHELPERLIB)\
     $(COMPHELPERLIB)\
-    $(TOOLSLIB)\
-    $(SVTOOLLIB)
+    $(TOOLSLIB)
+    
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -107,7 +104,6 @@ EMBOBJLIB=iembobj.lib
 .ENDIF
 
 SHL1STDLIBS+=\
-    $(VCLLIB)\
     $(EMBOBJLIB)\
     $(OLE32LIB)\
     $(GDI32LIB)\
@@ -118,7 +114,6 @@ DEF1EXPORTFILE=	exports.dxp
 .ELIF "$(GUI)"=="OS2"
 
 SHL1STDLIBS+=\
-    $(VCLLIB)\
     iembobj.lib
 
 DEF1EXPORTFILE=	exports.dxp

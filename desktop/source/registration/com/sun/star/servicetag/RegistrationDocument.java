@@ -116,13 +116,13 @@ class RegistrationDocument {
 
     static RegistrationData load(InputStream in) throws IOException {
         Document document = initializeDocument(in);
-        
+
         // Gets the registration URN
         Element root = getRegistrationDataRoot(document);
         Element registryRoot =
                 getSingletonElementFromRoot(root, ST_NODE_REGISTRY);
         String urn = registryRoot.getAttribute(ST_ATTR_REGISTRY_URN);
-        
+
         // Construct a new RegistrationData object from the DOM tree
         // Initialize the environment map and service tags
         RegistrationData regData = new RegistrationData(urn);
@@ -136,7 +136,7 @@ class RegistrationDocument {
         return regData;
     }
 
-    static void store(OutputStream os, RegistrationData registration) 
+    static void store(OutputStream os, RegistrationData registration)
             throws IOException {
         // create a new document with the root node
         Document document = initializeDocument();
@@ -146,13 +146,13 @@ class RegistrationDocument {
         addEnvironmentNodes(document,
                             registration.getEnvironmentMap(),
                             registration.getCpuInfoMap());
-        addServiceTagRegistry(document, 
+        addServiceTagRegistry(document,
                               registration.getRegistrationURN(),
                               registration.getServiceTags());
         transform(document, os);
     }
 
-    // initialize a document from an input stream 
+    // initialize a document from an input stream
     private static Document initializeDocument(InputStream in) throws IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         SchemaFactory sf = null;
@@ -184,17 +184,17 @@ class RegistrationDocument {
             }
         catch (NullPointerException nex) {
         }
-            
+
             Validator validator = null;
             if (schema != null)
                 validator = schema.newValidator();
 
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(new InputSource(in));
-            
+
             if (validator != null)
                 validator.validate(new DOMSource(doc));
-            
+
             return doc;
         } catch (SAXException sxe) {
             IllegalArgumentException e = new IllegalArgumentException("Error generated in parsing");
@@ -265,24 +265,24 @@ class RegistrationDocument {
         }
     }
 
-    private static void addServiceTagRegistry(Document document, 
+    private static void addServiceTagRegistry(Document document,
                                               String registryURN,
                                               Set<ServiceTag> svcTags) {
         // add service tag registry node and its attributes
         Element reg = document.createElement(ST_NODE_REGISTRY);
         reg.setAttribute(ST_ATTR_REGISTRY_URN, registryURN);
         reg.setAttribute(ST_ATTR_REGISTRY_VERSION, SERVICE_TAG_VERSION);
-        
+
         Element root = getRegistrationDataRoot(document);
         root.appendChild(reg);
-        
+
         // adds the elements for the service tags
         for (ServiceTag st : svcTags) {
             addServiceTagElement(document, reg, st);
         }
     }
 
-    private static void addServiceTagElement(Document document, 
+    private static void addServiceTagElement(Document document,
                                              Element registryRoot,
                                              ServiceTag st) {
         Element svcTag = document.createElement(ST_NODE_SERVICE_TAG);
@@ -337,7 +337,7 @@ class RegistrationDocument {
     }
 
     // build environment map from the document
-    private static void buildEnvironmentMap(Element envRoot, 
+    private static void buildEnvironmentMap(Element envRoot,
                                          RegistrationData registration) {
         registration.setEnvironment(ST_NODE_HOSTNAME, getTextValue(envRoot, ST_NODE_HOSTNAME));
         registration.setEnvironment(ST_NODE_HOST_ID, getTextValue(envRoot, ST_NODE_HOST_ID));
@@ -351,7 +351,7 @@ class RegistrationDocument {
         registration.setEnvironment(ST_NODE_PHYS_MEM, getTextValue(envRoot, ST_NODE_PHYS_MEM));
     }
 
-    private static void buildCpuInfoMap(Element cpuInfoRoot, 
+    private static void buildCpuInfoMap(Element cpuInfoRoot,
                                          RegistrationData registration) {
         registration.setCpuInfo(ST_NODE_SOCKETS, getTextValue(cpuInfoRoot, ST_NODE_SOCKETS));
         registration.setCpuInfo(ST_NODE_CORES, getTextValue(cpuInfoRoot, ST_NODE_CORES));
@@ -384,7 +384,7 @@ class RegistrationDocument {
     private static Element getRegistrationDataRoot(Document doc) {
         Element root = doc.getDocumentElement();
         if (!root.getNodeName().equals(ST_NODE_REGISTRATION_DATA)) {
-            throw new IllegalArgumentException("Not a " + 
+            throw new IllegalArgumentException("Not a " +
                     ST_NODE_REGISTRATION_DATA +
                     " node \"" + root.getNodeName() + "\"");
         }
@@ -419,7 +419,7 @@ class RegistrationDocument {
             getTextValue(svcTagElement, ST_NODE_PRODUCT_VENDOR),
             getTextValue(svcTagElement, ST_NODE_PLATFORM_ARCH),
             getTextValue(svcTagElement, ST_NODE_CONTAINER),
-            getTextValue(svcTagElement, ST_NODE_SOURCE),   
+            getTextValue(svcTagElement, ST_NODE_SOURCE),
             Util.getIntValue(getTextValue(svcTagElement, ST_NODE_INSTALLER_UID)),
             Util.parseTimestamp(getTextValue(svcTagElement, ST_NODE_TIMESTAMP))
         );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: setup.cpp,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1981,7 +1978,30 @@ boolean SetupAppX::InstallRuntimes()
     TCHAR *sRuntimePath = 0;
     SYSTEM_INFO siSysInfo;
 
-    GetNativeSystemInfo(&siSysInfo);
+    HMODULE hKernel32 = ::LoadLibrary(_T("Kernel32.dll"));
+    if ( hKernel32 != NULL )
+    {
+        typedef void (CALLBACK* pfnGetNativeSystemInfo_t)(LPSYSTEM_INFO);
+        pfnGetNativeSystemInfo_t pfnGetNativeSystemInfo;
+        pfnGetNativeSystemInfo = (pfnGetNativeSystemInfo_t)::GetProcAddress(hKernel32, "GetNativeSystemInfo");
+        if ( pfnGetNativeSystemInfo != NULL )
+        {
+            pfnGetNativeSystemInfo(&siSysInfo);
+        }
+        else
+        {
+            // GetNativeSystemInfo does not exist. Maybe the code is running under Windows 2000.
+            // Use GetSystemInfo instead.
+            GetSystemInfo(&siSysInfo);
+        }
+        FreeLibrary(hKernel32);
+    }
+    else
+    {
+        // Failed to check Kernel32.dll. There may be something wrong.
+        // Use GetSystemInfo instead anyway.
+        GetSystemInfo(&siSysInfo);
+    }
 
     OutputDebugStringFormat( TEXT( "found architecture<%d>\r\n" ), siSysInfo.wProcessorArchitecture );
 

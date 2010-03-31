@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoshap3.cxx,v $
- * $Revision: 1.32.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,13 +36,14 @@
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
+#include <comphelper/serviceinfohelper.hxx>
 
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
-
+#include <svx/svdpool.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unopage.hxx>
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <svx/polysc3d.hxx>
 #include "globl3d.hxx"
 #include <svx/cube3d.hxx>
@@ -81,7 +79,7 @@ using namespace ::com::sun::star::container;
 
 //----------------------------------------------------------------------
 Svx3DSceneObject::Svx3DSceneObject( SdrObject* pObj, SvxDrawPage* pDrawPage ) throw()
-:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DSCENEOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_3DSCENEOBJECT) )
+:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DSCENEOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_3DSCENEOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
 ,   mxPage( pDrawPage )
 {
 }
@@ -494,7 +492,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DSceneObject::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.Shape3DScene" );
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.Shape3DScene" );
     return aSeq;
 }
 
@@ -504,7 +502,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DSceneObject::getSupportedServiceNames()
 
 //----------------------------------------------------------------------
 Svx3DCubeObject::Svx3DCubeObject( SdrObject* pObj ) throw()
-:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DCUBEOBJEKT), aSvxMapProvider.GetPropertySet(SVXMAP_3DCUBEOBJEKT) )
+:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DCUBEOBJEKT), aSvxMapProvider.GetPropertySet(SVXMAP_3DCUBEOBJEKT, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
@@ -624,7 +622,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DCubeObject::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    SvxServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
                             "com.sun.star.drawing.Shape3DCube");
     return aSeq;
 }
@@ -635,7 +633,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DCubeObject::getSupportedServiceNames()
 
 //----------------------------------------------------------------------
 Svx3DSphereObject::Svx3DSphereObject( SdrObject* pObj ) throw()
-:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DSPHEREOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_3DSPHEREOBJECT) )
+:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DSPHEREOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_3DSPHEREOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
@@ -740,7 +738,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DSphereObject::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    SvxServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
                             "com.sun.star.drawing.Shape3DSphere");
     return aSeq;
 }
@@ -751,7 +749,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DSphereObject::getSupportedServiceNames()
 
 //----------------------------------------------------------------------
 Svx3DLatheObject::Svx3DLatheObject( SdrObject* pObj ) throw()
-:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DLATHEOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_3DLATHEOBJECT) )
+:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DLATHEOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_3DLATHEOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
@@ -948,7 +946,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DLatheObject::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    SvxServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
                             "com.sun.star.drawing.Shape3DLathe");
     return aSeq;
 }
@@ -958,7 +956,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DLatheObject::getSupportedServiceNames()
 ***********************************************************************/
 
 Svx3DExtrudeObject::Svx3DExtrudeObject( SdrObject* pObj ) throw()
-:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DEXTRUDEOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_3DEXTRUDEOBJECT) )
+:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DEXTRUDEOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_3DEXTRUDEOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
@@ -1059,7 +1057,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DExtrudeObject::getSupportedServiceNames(
     throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    SvxServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
                             "com.sun.star.drawing.Shape3DExtrude");
     return aSeq;
 }
@@ -1070,7 +1068,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DExtrudeObject::getSupportedServiceNames(
 
 //----------------------------------------------------------------------
 Svx3DPolygonObject::Svx3DPolygonObject( SdrObject* pObj ) throw()
-:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DPOLYGONOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_3DPOLYGONOBJECT) )
+:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DPOLYGONOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_3DPOLYGONOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
@@ -1204,7 +1202,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DPolygonObject::getSupportedServiceNames(
     throw(uno::RuntimeException)
 {
     Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    SvxServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
                             "com.sun.star.drawing.Shape3DPolygon");
     return aSeq;
 }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DAVResourceAccess.hxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -212,12 +209,14 @@ public:
               com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw( DAVException );
 
+#if 0 // currently not used, but please don't remove code
     // refresh existing lock.
     sal_Int64
     LOCK( sal_Int64 nTimeout,
           const com::sun::star::uno::Reference<
               com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw ( DAVException );
+#endif
 
     void
     UNLOCK( const com::sun::star::uno::Reference<

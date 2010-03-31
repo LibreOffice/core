@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleTextEventQueue.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,16 +29,16 @@
 #include "precompiled_svx.hxx"
 #include "AccessibleTextEventQueue.hxx"
 #include <svx/unoshape.hxx>
-#include "unolingu.hxx"
-#include <svx/unotext.hxx>
+#include "editeng/unolingu.hxx"
+#include <editeng/unotext.hxx>
 
-#include "unoedhlp.hxx"
-#include "unopracc.hxx"
+#include "editeng/unoedhlp.hxx"
+#include "editeng/unopracc.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdpntv.hxx>
-#include <svx/editdata.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editview.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
 
 namespace accessibility
 {

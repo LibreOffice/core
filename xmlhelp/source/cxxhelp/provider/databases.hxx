@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: databases.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -192,9 +189,6 @@ namespace chelp {
                  const com::sun::star::uno::Sequence< rtl::OUString >& imagesZipPaths,
                  const rtl::OUString& productName,
                  const rtl::OUString& productVersion,
-                 const rtl::OUString& vendorName,
-                 const rtl::OUString& vendorVersion,
-                 const rtl::OUString& vendorShort,
                  const rtl::OUString& styleSheet,
                  com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext );
 
@@ -294,9 +288,6 @@ namespace chelp {
 
         rtl::OUString getProductName() const { return m_vReplacement[0]; }
         rtl::OUString getProductVersion() const { return m_vReplacement[1]; }
-        rtl::OUString getVendorName() const { return m_vReplacement[2]; }
-        rtl::OUString getVendorVersion() const { return m_vReplacement[3]; }
-        rtl::OUString getVendorShort() const { return m_vReplacement[4]; }
 
         rtl::OUString expandURL( const rtl::OUString& aURL );
 

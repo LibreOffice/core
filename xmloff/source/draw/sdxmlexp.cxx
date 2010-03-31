@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdxmlexp.cxx,v $
- * $Revision: 1.119 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1287,19 +1284,19 @@ void SdXMLExport::ImpWriteAutoLayoutInfos()
                     {
                         Rectangle aTopLeft(pInfo->GetPresRectangle());
                         aTopLeft.setHeight(long(aTopLeft.GetHeight() * 0.477));
-                        aTopLeft.setWidth(long(aTopLeft.GetWidth() * 0.322));   
+                        aTopLeft.setWidth(long(aTopLeft.GetWidth() * 0.322));
                         Rectangle aTopCenter(aTopLeft);
                         aTopCenter.Left() = long(aTopCenter.Left() + aTopCenter.GetWidth() * 1.05);
                         Rectangle aTopRight(aTopLeft);
                         aTopRight.Left() = long(aTopRight.Left() + aTopRight.GetWidth() * 2 * 1.05);
-                    
+
                         Rectangle aBottomLeft(aTopLeft);
                         aBottomLeft.Top() = long(aBottomLeft.Top() + aBottomLeft.GetHeight() * 1.095);
                         Rectangle aBottomCenter(aTopCenter);
                         aBottomCenter.Top() = long(aBottomCenter.Top() + aBottomCenter.GetHeight() * 1.095);
                         Rectangle aBottomRight(aTopRight);
                         aBottomRight.Top() = long(aBottomRight.Top() + aBottomRight.GetHeight() * 1.095);
-                                                
+
                         ImpWriteAutoLayoutPlaceholder(XmlPlaceholderTitle, pInfo->GetTitleRectangle());
                         ImpWriteAutoLayoutPlaceholder(XmlPlaceholderGraphic, aTopLeft);
                         ImpWriteAutoLayoutPlaceholder(XmlPlaceholderGraphic, aTopCenter);

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: databases.cxx,v $
- * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -137,26 +134,11 @@ rtl::OUString Databases::expandURL( const rtl::OUString& aURL, Reference< uno::X
     return aRetURL;
 }
 
-
-// Hold Packages to improve performance (#i106100)
-// The PackageManager implementation seems to completely throw away all cached data
-// as soon as the last reference to a XPackage dies. Maybe this should be changed.
-struct ImplPackageSequenceHolder
-{
-    Sequence< Reference< deployment::XPackage > >   m_aUserPackagesSeq;
-    Sequence< Reference< deployment::XPackage > >   m_aSharedPackagesSeq;
-};
-
-static ImplPackageSequenceHolder* GpPackageSequenceHolder = NULL;
-
 Databases::Databases( sal_Bool showBasic,
                       const rtl::OUString& instPath,
                       const com::sun::star::uno::Sequence< rtl::OUString >& imagesZipPaths,
                       const rtl::OUString& productName,
                       const rtl::OUString& productVersion,
-                      const rtl::OUString& vendorName,
-                      const rtl::OUString& vendorVersion,
-                      const rtl::OUString& vendorShort,
                       const rtl::OUString& styleSheet,
                       Reference< uno::XComponentContext > xContext )
     : m_xContext( xContext ),
@@ -188,9 +170,7 @@ Databases::Databases( sal_Bool showBasic,
 
     m_vReplacement[0] = productName;
     m_vReplacement[1] = productVersion;
-    m_vReplacement[2] = vendorName;
-    m_vReplacement[3] = vendorVersion;
-    m_vReplacement[4] = vendorShort;
+    // m_vReplacement[2...4] (vendorName/-Version/-Short) are empty strings
     m_vReplacement[5] = productName;
     m_vReplacement[6] = productVersion;
 
@@ -199,7 +179,6 @@ Databases::Databases( sal_Bool showBasic,
     m_xSFA = Reference< ucb::XSimpleFileAccess >(
         m_xSMgr->createInstanceWithContext( rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ),
         m_xContext ), UNO_QUERY_THROW );
-    GpPackageSequenceHolder = new ImplPackageSequenceHolder();
 }
 
 Databases::~Databases()
@@ -247,8 +226,6 @@ Databases::~Databases()
             ++it;
         }
     }
-
-    delete GpPackageSequenceHolder;
 }
 
 static bool impl_getZipFile(
@@ -1570,9 +1547,6 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPack
             thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString::createFromAscii("user") );
         m_aUserPackagesSeq = xUserManager->getDeployedPackages
             ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
-        if( GpPackageSequenceHolder != NULL )
-            GpPackageSequenceHolder->m_aUserPackagesSeq = m_aUserPackagesSeq;
-
         m_bUserPackagesLoaded = true;
     }
 
@@ -1602,9 +1576,6 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPa
             thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString::createFromAscii("shared") );
         m_aSharedPackagesSeq = xSharedManager->getDeployedPackages
             ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
-        if( GpPackageSequenceHolder != NULL )
-            GpPackageSequenceHolder->m_aSharedPackagesSeq = m_aSharedPackagesSeq;
-
         m_bSharedPackagesLoaded = true;
     }
 
