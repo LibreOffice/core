@@ -59,7 +59,7 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
 
     // ST_TextWrappingType
     sal_Int32 nWrappingType = aAttribs.getToken( XML_wrap, XML_square );
-    mrTextBodyProp.maPropertyMap[ PROP_TextWordWrap ] <<= (nWrappingType == XML_square);
+    mrTextBodyProp.maPropertyMap[ PROP_TextWordWrap ] <<= static_cast< sal_Bool >( nWrappingType == XML_square );
 
     // ST_Coordinate
     OUString sValue;
