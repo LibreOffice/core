@@ -91,13 +91,13 @@ interface XDiagramPositioning : com::sun::star::uno::XInterface
         @param PositionRect
             specifies the position and size in 100/th mm
     */
-    void setDiagramPositionIncludingAxesAndAxesTitles( [in] com::sun::star::awt::Rectangle PositionRect );
+    void setDiagramPositionIncludingAxesAndAxisTitles( [in] com::sun::star::awt::Rectangle PositionRect );
 
     /** @returns the position rectangle of the diagram including the axes, axes labels and axes titles.
         Position and size are given in 100/th mm.
         It might be necessary to calculate the positioning so this method can be expensive and the result may depend on different other settings.
     */
-    com::sun::star::awt::Rectangle calculateDiagramPositionIncludingAxesAndAxesTitles();
+    com::sun::star::awt::Rectangle calculateDiagramPositionIncludingAxesAndAxisTitles();
 };
 
 //=============================================================================
