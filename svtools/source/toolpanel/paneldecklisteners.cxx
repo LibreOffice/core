@@ -98,13 +98,11 @@ namespace svt
     //--------------------------------------------------------------------
     void PanelDeckListeners::Dying()
     {
-        ::std::vector< IToolPanelDeckListener* > aListeners( m_aListeners );
-        for (   ::std::vector< IToolPanelDeckListener* >::const_iterator loop = aListeners.begin();
-                loop != aListeners.end();
-                ++loop
-            )
+        while ( !m_aListeners.empty() )
         {
-            (*loop)->Dying();
+            IToolPanelDeckListener* pListener( *m_aListeners.begin() );
+            m_aListeners.erase( m_aListeners.begin() );
+            pListener->Dying();
         }
     }
 
