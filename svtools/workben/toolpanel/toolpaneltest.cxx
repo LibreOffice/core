@@ -612,6 +612,7 @@ void OptionsWindow::ActivePanelChanged( const ::boost::optional< size_t >& i_rOl
 //-----------------------------------------------------------------------------
 void OptionsWindow::LayouterChanged( const PDeckLayouter& i_rNewLayouter )
 {
+    (void)i_rNewLayouter;
     // not interested in
 }
 
