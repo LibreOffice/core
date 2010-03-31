@@ -136,21 +136,21 @@ DOCUFILES= \
     $(DESTDIRDOCUIMAGES)/nada.gif \
     $(DESTDIRDOCUIMAGES)/arrow-2.gif \
     $(DESTDIRDOCUIMAGES)/bluball.gif \
-    $(DESTDIRDOCUIMAGES)/so-main-app_32.png \
+    $(DESTDIRDOCUIMAGES)/orc-main-app_32.png \
     $(DESTDIRDOCUIMAGES)/ooo-main-app_32.png \
+    $(DESTDIRDOCUIMAGES)/odk-footer-logo.png \
     $(DESTDIRDOCUIMAGES)/arrow-1.gif \
     $(DESTDIRDOCUIMAGES)/arrow-3.gif \
-    $(DESTDIRDOCUIMAGES)/bg_table.gif \
-    $(DESTDIRDOCUIMAGES)/bg_table2.gif \
-    $(DESTDIRDOCUIMAGES)/bg_table3.gif \
+    $(DESTDIRDOCUIMAGES)/bg_table.png \
+    $(DESTDIRDOCUIMAGES)/bg_table2.png \
+    $(DESTDIRDOCUIMAGES)/bg_table3.png \
     $(DESTDIRDOCUIMAGES)/nav_down.png \
     $(DESTDIRDOCUIMAGES)/nav_home.png \
     $(DESTDIRDOCUIMAGES)/nav_left.png \
     $(DESTDIRDOCUIMAGES)/nav_right.png \
     $(DESTDIRDOCUIMAGES)/nav_up.png \
-    $(DESTDIRDOCUIMAGES)/sdk_head-1.gif \
-    $(DESTDIRDOCUIMAGES)/sdk_head-2.gif \
-    $(DESTDIRDOCUIMAGES)/sdk_head-3.gif \
+    $(DESTDIRDOCUIMAGES)/sdk_head-1.png \
+    $(DESTDIRDOCUIMAGES)/sdk_head-2.png \
     $(DESTDIRDOCUIMAGES)/sdk_line-1.gif \
     $(DESTDIRDOCUIMAGES)/sdk_line-2.gif
 
