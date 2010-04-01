@@ -254,6 +254,7 @@ void ColoredPanel::Dispose()
 Reference< XAccessible > ColoredPanel::CreatePanelAccessible( const Reference< XAccessible >& i_rParentAccessible )
 {
     ENSURE_OR_RETURN( m_pWindow.get(), "disposed!", NULL );
+    (void)i_rParentAccessible;
     return m_pWindow->GetAccessible();
 }
 
