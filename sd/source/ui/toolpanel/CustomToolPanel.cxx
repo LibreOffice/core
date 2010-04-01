@@ -214,6 +214,7 @@ namespace sd { namespace toolpanel
     Reference< XAccessible > CustomToolPanel::CreatePanelAccessible( const Reference< XAccessible >& i_rParentAccessible )
     {
         ENSURE_OR_RETURN( !isDisposed(), "CustomToolPanel::CreatePanelAccessible: already disposed!", NULL );
+        (void)i_rParentAccessible;
 
         // an XResource might also be an XPane2, which can provide an XAccessible. Check this first.
         const Reference< XPane2 > xPane( m_xResource, UNO_QUERY );
