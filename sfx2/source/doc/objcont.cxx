@@ -1486,13 +1486,16 @@ sal_uInt16 SfxObjectShell::GetModifyPasswordHash() const
 
 sal_Bool SfxObjectShell::SetModifyPasswordHash( sal_uInt16 nHash )
 {
-    if ( !IsReadOnly() && !IsReadOnlyUI() )
-    {
-        // the hash can be changed only in editable documents,
+// Commented out before the solution for Saving process is found
+//    if ( ( !IsReadOnly() && !IsReadOnlyUI() )
+//      || !(pImp->nFlagsInProgress & SFX_LOADED_MAINDOCUMENT ) )
+//    {
+//        // the hash can be changed only in editable documents,
+//        // or during loading of document
         pImp->m_nModifyPasswordHash = nHash;
         return sal_True;
-    }
-
-    return sal_False;
+//    }
+//
+//    return sal_False;
 }
 
