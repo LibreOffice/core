@@ -65,19 +65,19 @@ TabPage TP_DIAGRAM_POSITION
         TabStop = TRUE ;
         Text [ en-US ] = "Automatic" ;
     };
-    RadioButton RB_POSITIONING_MODE_INCLUDING
+    RadioButton RB_POSITIONING_MODE_EXCLUDING
     {
         Pos = MAP_APPFONT ( X2 , Y_MODE_2 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Include labels" ;
+        Text [ en-US ] = "Exclude labels" ;
     };
-    RadioButton RB_POSITIONING_MODE_EXCLUDING
+    RadioButton RB_POSITIONING_MODE_INCLUDING
     {
         Pos = MAP_APPFONT ( X2 , Y_MODE_3 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Exclude labels" ;
+        Text [ en-US ] = "Include labels" ;
     };
 
     FixedLine FL_POSITION

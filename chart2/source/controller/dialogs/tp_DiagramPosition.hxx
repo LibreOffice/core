@@ -92,8 +92,8 @@ private:
     FixedLine           m_aFlPosMode;
 
     RadioButton         m_aRbPosMode_Auto;
-    RadioButton         m_aRbPosMode_Including;
     RadioButton         m_aRbPosMode_Excluding;
+    RadioButton         m_aRbPosMode_Including;
 
     // position
     FixedLine           maFlPosition;

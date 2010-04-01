@@ -74,8 +74,8 @@ DiagramPositionTabPage::DiagramPositionTabPage( Window* pParent, const SfxItemSe
     m_aFlPosMode( this, SchResId( FL_POSITIONING_MODE ) ),
 
     m_aRbPosMode_Auto( this, SchResId( RB_POSITIONING_MODE_AUTOMATIC ) ),
-    m_aRbPosMode_Including( this, SchResId( RB_POSITIONING_MODE_INCLUDING ) ),
     m_aRbPosMode_Excluding( this, SchResId( RB_POSITIONING_MODE_EXCLUDING ) ),
+    m_aRbPosMode_Including( this, SchResId( RB_POSITIONING_MODE_INCLUDING ) ),
 
     maFlPosition        ( this, SchResId( FL_POSITION ) ),
     maFtPosX            ( this, SchResId( FT_POS_X ) ),
@@ -113,8 +113,8 @@ DiagramPositionTabPage::DiagramPositionTabPage( Window* pParent, const SfxItemSe
     Construct();
 
     m_aRbPosMode_Auto.SetClickHdl( LINK( this, DiagramPositionTabPage, ChangeModeHdl ) );
-    m_aRbPosMode_Including.SetClickHdl( LINK( this, DiagramPositionTabPage, ChangeModeHdl ) );
     m_aRbPosMode_Excluding.SetClickHdl( LINK( this, DiagramPositionTabPage, ChangeModeHdl ) );
+    m_aRbPosMode_Including.SetClickHdl( LINK( this, DiagramPositionTabPage, ChangeModeHdl ) );
 
     maMtrPosX.SetModifyHdl( LINK( this, DiagramPositionTabPage, ChangePosXHdl ) );
     maMtrPosY.SetModifyHdl( LINK( this, DiagramPositionTabPage, ChangePosYHdl ) );
@@ -155,10 +155,10 @@ void DiagramPositionTabPage::Reset( const SfxItemSet& rInAttrs )
         ePos = DiagramPositioningMode(((const SfxInt32Item*)pItem)->GetValue());
     if( ePos == DiagramPositioningMode_AUTO )
         m_aRbPosMode_Auto.Check();
-    else if( ePos == DiagramPositioningMode_INCLUDING )
-        m_aRbPosMode_Including.Check();
     else if( ePos == DiagramPositioningMode_EXCLUDING )
         m_aRbPosMode_Excluding.Check();
+    else if( ePos == DiagramPositioningMode_INCLUDING )
+        m_aRbPosMode_Including.Check();
 
     ReleaseBorders();
     maCtlPos.Reset();
@@ -217,10 +217,11 @@ BOOL DiagramPositionTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 
     //positioning mode
     sal_Int32 nMode = 0;
-    if( m_aRbPosMode_Including.IsChecked() )
+    if( m_aRbPosMode_Excluding.IsChecked() )
         nMode = 1;
-    else if( m_aRbPosMode_Excluding.IsChecked() )
+    else if( m_aRbPosMode_Including.IsChecked() )
         nMode = 2;
+
     rOutAttrs.Put( SfxInt32Item( SCHATTR_DIAGRAM_POS_MODE, nMode ) );
 
     rOutAttrs.Put( SfxRectangleItem( SCHATTR_DIAGRAM_RECT_TO_USE, GetRectIn100thmm() ) );
@@ -444,8 +445,8 @@ void DiagramPositionTabPage::UpdateControlStates()
     bool bEnable = true;
 
     m_aRbPosMode_Auto.Enable( bEnable );
-    m_aRbPosMode_Including.Enable( bEnable );
     m_aRbPosMode_Excluding.Enable( bEnable );
+    m_aRbPosMode_Including.Enable( bEnable );
 
     if( m_aRbPosMode_Auto.IsChecked() )
         bEnable = false;
@@ -670,15 +671,15 @@ void DiagramPositionTabPage::PointChanged( Window* pWindow, RECT_POINT /*eRP*/ )
 IMPL_LINK( DiagramPositionTabPage, ChangeModeHdl, RadioButton*, pButton )
 {
     UpdateControlStates();
-    if( pButton == &m_aRbPosMode_Including )
-    {
-        if( !m_bRectChangedByUser )
-            SetRectIn100thmm( m_aIncludingRect );
-    }
-    else if( pButton == &m_aRbPosMode_Excluding )
+    if( pButton == &m_aRbPosMode_Excluding )
     {
         if( !m_bRectChangedByUser )
             SetRectIn100thmm( m_aExcludingRect );
+    }
+    else if( pButton == &m_aRbPosMode_Including )
+    {
+        if( !m_bRectChangedByUser )
+            SetRectIn100thmm( m_aIncludingRect );
     }
 
     return( 0L );

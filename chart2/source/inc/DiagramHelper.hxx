@@ -49,8 +49,8 @@ namespace chart
 enum DiagramPositioningMode
 {
     DiagramPositioningMode_AUTO,
-    DiagramPositioningMode_INCLUDING,
-    DiagramPositioningMode_EXCLUDING
+    DiagramPositioningMode_EXCLUDING,
+    DiagramPositioningMode_INCLUDING
 };
 
 class OOO_DLLPUBLIC_CHARTTOOLS DiagramHelper

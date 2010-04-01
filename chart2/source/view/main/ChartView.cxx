@@ -1612,7 +1612,11 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
     {
         awt::Point aPos(rAvailablePos);
         awt::Size  aSize(rAvailableSize);
-        if( bUseFixedInnerSize )
+        bool bPosSizeExcludeAxesProperty = true;
+        uno::Reference< beans::XPropertySet > xDiaProps( xDiagram, uno::UNO_QUERY_THROW );
+        if( xDiaProps.is() )
+            xDiaProps->getPropertyValue(C2U("PosSizeExcludeAxes")) >>= bPosSizeExcludeAxesProperty;
+        if( bUseFixedInnerSize || bPosSizeExcludeAxesProperty )
         {
             aPos = awt::Point( m_aResultingDiagramRectangleExcludingAxes.X, m_aResultingDiagramRectangleExcludingAxes.Y );
             aSize = awt::Size( m_aResultingDiagramRectangleExcludingAxes.Width, m_aResultingDiagramRectangleExcludingAxes.Height );
