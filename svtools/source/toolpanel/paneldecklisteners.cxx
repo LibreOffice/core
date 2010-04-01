@@ -50,8 +50,9 @@ namespace svt
     //--------------------------------------------------------------------
     void PanelDeckListeners::PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition )
     {
-        for (   ::std::vector< IToolPanelDeckListener* >::const_iterator loop = m_aListeners.begin();
-                loop != m_aListeners.end();
+        ::std::vector< IToolPanelDeckListener* > aListeners( m_aListeners );
+        for (   ::std::vector< IToolPanelDeckListener* >::const_iterator loop = aListeners.begin();
+                loop != aListeners.end();
                 ++loop
             )
         {
@@ -62,8 +63,9 @@ namespace svt
     //--------------------------------------------------------------------
     void PanelDeckListeners::PanelRemoved( const size_t i_nPosition )
     {
-        for (   ::std::vector< IToolPanelDeckListener* >::const_iterator loop = m_aListeners.begin();
-                loop != m_aListeners.end();
+        ::std::vector< IToolPanelDeckListener* > aListeners( m_aListeners );
+        for (   ::std::vector< IToolPanelDeckListener* >::const_iterator loop = aListeners.begin();
+                loop != aListeners.end();
                 ++loop
             )
         {
@@ -74,8 +76,9 @@ namespace svt
     //--------------------------------------------------------------------
     void PanelDeckListeners::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
     {
-        for (   ::std::vector< IToolPanelDeckListener* >::const_iterator loop = m_aListeners.begin();
-                loop != m_aListeners.end();
+        ::std::vector< IToolPanelDeckListener* > aListeners( m_aListeners );
+        for (   ::std::vector< IToolPanelDeckListener* >::const_iterator loop = aListeners.begin();
+                loop != aListeners.end();
                 ++loop
             )
         {
@@ -86,8 +89,9 @@ namespace svt
     //--------------------------------------------------------------------
     void PanelDeckListeners::LayouterChanged( const PDeckLayouter& i_rNewLayouter )
     {
-        for (   ::std::vector< IToolPanelDeckListener* >::const_iterator loop = m_aListeners.begin();
-                loop != m_aListeners.end();
+        ::std::vector< IToolPanelDeckListener* > aListeners( m_aListeners );
+        for (   ::std::vector< IToolPanelDeckListener* >::const_iterator loop = aListeners.begin();
+                loop != aListeners.end();
                 ++loop
             )
         {
