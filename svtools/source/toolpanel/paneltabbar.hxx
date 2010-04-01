@@ -60,6 +60,9 @@ namespace svt
 
         // operations
         ::boost::optional< size_t > FindItemForPoint( const Point& i_rPoint ) const;
+        ::boost::optional< size_t > GetFocusedPanelItem() const;
+        void                        FocusPanelItem( const size_t i_nItemPos );
+        Rectangle                   GetItemScreenRect( const size_t i_nItemPos ) const;
 
         // Window overridables
         virtual Size    GetOptimalSize( WindowSizeType i_eType ) const;

@@ -34,6 +34,7 @@
 #include <vcl/button.hxx>
 #include <vcl/help.hxx>
 #include <vcl/virdev.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <boost/optional.hpp>
 #include <vector>
@@ -382,6 +383,7 @@ namespace svt
         void                        InvalidateItem( const size_t i_nItemIndex, const ItemFlags i_nAdditionalItemFlags = 0 ) const;
         void                        CopyFromRenderDevice( const Rectangle& i_rLogicalRect ) const;
         Rectangle                   GetActualLogicalItemRect( const Rectangle& i_rLogicalItemRect ) const;
+        Rectangle                   GetItemScreenRect( const size_t i_nItemPos ) const;
 
         inline bool                 IsVertical() const
         {
@@ -870,6 +872,23 @@ namespace svt
         }
         return ::boost::optional< size_t >();
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Rectangle PanelTabBar_Impl::GetItemScreenRect( const size_t i_nItemPos ) const
+    {
+        ENSURE_OR_RETURN( i_nItemPos < m_aItems.size(), "PanelTabBar_Impl::GetItemScreenRect: invalid item pos!", Rectangle() );
+        const ItemDescriptor& rItem( m_aItems[ i_nItemPos ] );
+        const Rectangle aItemRect( m_aNormalizer.getTransformed(
+            GetActualLogicalItemRect( rItem.GetCurrentRect() ),
+            m_eTabAlignment ) );
+
+        const Rectangle aTabBarRect( m_rTabBar.GetWindowExtentsRelative( NULL ) );
+        return Rectangle(
+            Point( aTabBarRect.Left() + aItemRect.Left(), aTabBarRect.Top() + aItemRect.Top() ),
+            aItemRect.GetSize()
+        );
+    }
+
     //------------------------------------------------------------------------------------------------------------------
     IMPL_LINK( PanelTabBar_Impl, OnScroll, const PushButton*, i_pButton )
     {
@@ -1256,6 +1275,32 @@ namespace svt
     ::boost::optional< size_t > PanelTabBar::FindItemForPoint( const Point& i_rPoint ) const
     {
         return m_pImpl->FindItemForPoint( i_rPoint );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::boost::optional< size_t > PanelTabBar::GetFocusedPanelItem() const
+    {
+        return m_pImpl->m_aFocusedItem;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void PanelTabBar::FocusPanelItem( const size_t i_nItemPos )
+    {
+        ENSURE_OR_RETURN_VOID( i_nItemPos < m_pImpl->m_rPanelDeck.GetPanelCount(), "PanelTabBar::FocusPanelItem: illegal item pos!" );
+
+        if ( !HasChildPathFocus() )
+            GrabFocus();
+
+        OSL_ENSURE( !!m_pImpl->m_aFocusedItem, "PanelTabBar::FocusPanelItem: have the focus, but not focused item?" );
+        if ( !!m_pImpl->m_aFocusedItem )
+            m_pImpl->InvalidateItem( *m_pImpl->m_aFocusedItem );
+        m_pImpl->m_aFocusedItem.reset( i_nItemPos );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Rectangle PanelTabBar::GetItemScreenRect( const size_t i_nItemPos ) const
+    {
+        return m_pImpl->GetItemScreenRect( i_nItemPos );
     }
 
 //........................................................................

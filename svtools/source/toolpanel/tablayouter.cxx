@@ -32,6 +32,7 @@
 #include "svtaccessiblefactory.hxx"
 
 #include <tools/gen.hxx>
+#include <tools/diagnose_ex.h>
 
 //........................................................................
 namespace svt
@@ -126,6 +127,53 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
+    IToolPanelDeck& TabDeckLayouter::GetPanelDeck() const
+    {
+        lcl_checkDisposed( *m_pData );
+        return m_pData->rPanels;
+    }
+
+    //--------------------------------------------------------------------
+    ::boost::optional< size_t > TabDeckLayouter::GetFocusedPanelItem() const
+    {
+        if ( lcl_checkDisposed( *m_pData ) )
+            return ::boost::optional< size_t >();
+        return m_pData->pTabBar->GetFocusedPanelItem();
+    }
+
+    //--------------------------------------------------------------------
+    void TabDeckLayouter::FocusPanelItem( const size_t i_nItemPos )
+    {
+        if ( lcl_checkDisposed( *m_pData ) )
+            return;
+        m_pData->pTabBar->FocusPanelItem( i_nItemPos );
+    }
+
+    //--------------------------------------------------------------------
+    bool TabDeckLayouter::IsPanelSelectorEnabled() const
+    {
+        if ( lcl_checkDisposed( *m_pData ) )
+            return false;
+        return m_pData->pTabBar->IsEnabled();
+    }
+
+    //--------------------------------------------------------------------
+    bool TabDeckLayouter::IsPanelSelectorVisible() const
+    {
+        if ( lcl_checkDisposed( *m_pData ) )
+            return false;
+        return m_pData->pTabBar->IsVisible();
+    }
+
+    //--------------------------------------------------------------------
+    Rectangle TabDeckLayouter::GetItemScreenRect( const size_t i_nItemPos ) const
+    {
+        if ( lcl_checkDisposed( *m_pData ) )
+            return Rectangle();
+        return m_pData->pTabBar->GetItemScreenRect( i_nItemPos );
+    }
+
+    //--------------------------------------------------------------------
     Rectangle TabDeckLayouter::Layout( const Rectangle& i_rDeckPlayground )
     {
         if ( lcl_checkDisposed( *m_pData ) )
@@ -210,7 +258,7 @@ namespace svt
     {
         if ( lcl_checkDisposed( *m_pData ) )
             return NULL;
-        return m_pData->aAccessibleFactory.getFactory().createAccessibleToolPanelDeckTabBarItem( i_rParentAccessible, m_pData->rPanels, i_nItemPos );
+        return m_pData->aAccessibleFactory.getFactory().createAccessibleToolPanelDeckTabBarItem( i_rParentAccessible, this, i_nItemPos );
     }
 
 //........................................................................
