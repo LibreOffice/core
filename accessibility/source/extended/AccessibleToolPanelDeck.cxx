@@ -304,6 +304,7 @@ namespace accessibility
     {
         MethodGuard aGuard( *this );
 
+        (void)i_rNewLayouter;
         m_rAntiImpl.NotifyAccessibleEvent( AccessibleEventId::INVALIDATE_ALL_CHILDREN, Any(), Any() );
     }
 
@@ -348,10 +349,10 @@ namespace accessibility
     {
         MethodGuard aGuard( *m_pImpl );
 
-        if ( ( i_nIndex < 0 ) || ( i_nIndex > m_pImpl->m_pPanelDeck->GetPanelCount() ) )
+        if ( ( i_nIndex < 0 ) || ( size_t( i_nIndex ) > m_pImpl->m_pPanelDeck->GetPanelCount() ) )
             throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
 
-        if ( i_nIndex < m_pImpl->m_pPanelDeck->GetPanelCount() )
+        if ( size_t( i_nIndex ) < m_pImpl->m_pPanelDeck->GetPanelCount() )
             return m_pImpl->getPanelItemAccessible( i_nIndex, true );
 
         return m_pImpl->getActivePanelAccessible();
@@ -417,6 +418,7 @@ namespace accessibility
     {
         // don't let the base class generate any A11Y events from VclWindowEvent, we completely manage those
         // A11Y events ourself
+        (void)i_rVclWindowEvent;
         return NULL;
     }
 
