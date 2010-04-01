@@ -869,8 +869,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                         bool bChanged = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID()
                                         , m_aModel->getModel()
                                         , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
-                                        , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight())
-                                        , m_xChartView );
+                                        , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight()) );
                         if( bChanged )
                         {
                             bDraggingDone = true;

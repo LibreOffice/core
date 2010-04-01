@@ -141,8 +141,6 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
     {
         //@todo decide wether x is primary or secondary
 
-        //xChartView
-
         //set position:
         chart2::RelativePosition aRelativePosition;
         aRelativePosition.Anchor = drawing::Alignment_CENTER;
@@ -169,7 +167,6 @@ bool PositionAndSizeHelper::moveObject( const rtl::OUString& rObjectCID
                 , const uno::Reference< frame::XModel >& xChartModel
                 , const awt::Rectangle& rNewPositionAndSize
                 , const awt::Rectangle& rPageRectangle
-                , uno::Reference< uno::XInterface > xChartView
                 )
 {
     ControllerLockGuard aLockedControllers( xChartModel );

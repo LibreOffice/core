@@ -2144,8 +2144,6 @@ bool getAvailablePosAndSizeForDiagram(
     , const awt::Rectangle& rSpaceLeft
     , const awt::Size & rPageSize
     , const uno::Reference< XDiagram > & xDiagram
-    , VTitle* pXTitle, VTitle* pYTitle
-    , VTitle* pSecondXTitle, VTitle* pSecondYTitle
     , bool& bUseFixedInnerSize )
 {
     bUseFixedInnerSize = false;
@@ -2669,8 +2667,8 @@ void ChartView::createShapes()
         awt::Point aAvailablePosDia;
         awt::Size  aAvailableSizeForDiagram;
         bool bUseFixedInnerSize = false;
-        if( getAvailablePosAndSizeForDiagram( aAvailablePosDia, aAvailableSizeForDiagram, aRemainingSpace, aPageSize, ChartModelHelper::findDiagram( m_xChartModel )
-                , apVTitle_X.get(), apVTitle_Y.get(), apVTitle_SecondX.get(), apVTitle_SecondY.get(), bUseFixedInnerSize ) )
+        if( getAvailablePosAndSizeForDiagram( aAvailablePosDia, aAvailableSizeForDiagram, aRemainingSpace, aPageSize
+            , ChartModelHelper::findDiagram( m_xChartModel ), bUseFixedInnerSize ) )
         {
             awt::Rectangle aUsedOuterRect = impl_createDiagramAndContent( aSeriesPlotterContainer
                         , xDiagramPlusAxes_Shapes

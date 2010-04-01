@@ -51,8 +51,7 @@ public:
     static bool moveObject( const rtl::OUString& rObjectCID
             , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel
             , const ::com::sun::star::awt::Rectangle& rNewPositionAndSize
-            , const ::com::sun::star::awt::Rectangle& rPageRectangle
-            , ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xChartView );
+            , const ::com::sun::star::awt::Rectangle& rPageRectangle );
 };
 
 //.............................................................................
