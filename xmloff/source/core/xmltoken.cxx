@@ -3096,6 +3096,8 @@ namespace xmloff { namespace token {
         TOKEN( "ends-with",             XML_ENDS_WITH ),
         TOKEN( "does-not-end-with",     XML_DOES_NOT_END_WITH ),
 
+        TOKEN( "chartooo", XML_NP_CHART_EXT ),
+        TOKEN( "http://openoffice.org/2010/chart", XML_N_CHART_EXT ),
         TOKEN( "excluding-position",    XML_EXCLUDING_POSITION ),
         TOKEN( "prefer-excluding-position",    XML_PREFER_EXCLUDING_POSITION ),
 

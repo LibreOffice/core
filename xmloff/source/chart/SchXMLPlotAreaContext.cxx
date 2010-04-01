@@ -520,6 +520,7 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
 
     switch( rTokenMap.Get( nPrefix, rLocalName ))
     {
+        case XML_TOK_PA_EXCLUDING_POSITION_EXT:
         case XML_TOK_PA_EXCLUDING_POSITION:
         {
             pContext = new SchXMLExcludingPositionContext( GetImport(), nPrefix, rLocalName, m_aInnerPositioning );
@@ -703,7 +704,7 @@ void SchXMLPlotAreaContext::EndElement()
         }
         else if( bOuterSize )
         {
-            if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan3_4( GetImport().GetModel() ) ) //old version of OOo did write a wrong rectangle for the diagram size
+            if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan3_3( GetImport().GetModel() ) ) //old version of OOo did write a wrong rectangle for the diagram size
                 xDiaPos->setDiagramPositionIncludingAxesAndAxisTitles( m_aOuterPositioning.getRectangle() );
             else
                 xDiaPos->setDiagramPositionIncludingAxes( m_aOuterPositioning.getRectangle() );
@@ -1743,18 +1744,11 @@ bool SchXMLPositonAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefix
         else
             bReturn = false;
     }
-    else if( XML_NAMESPACE_CHART == nPrefix )
+    else if( IsXMLToken( rLocalName, XML_PREFER_EXCLUDING_POSITION ) )
     {
-        //Attribute( XML_NAMESPACE_CHART, XML_PREFER_EXCLUDING_POSITION
-
         sal_Bool bPreferExcludingPosition = false;
-        if( IsXMLToken( rLocalName, XML_PREFER_EXCLUDING_POSITION ) )
-        {
-            m_rImport.GetMM100UnitConverter().convertBool( bPreferExcludingPosition, rValue );
-            m_bAutoPosition = m_bAutoSize = !bPreferExcludingPosition;
-        }
-        else
-            bReturn = false;
+        m_rImport.GetMM100UnitConverter().convertBool( bPreferExcludingPosition, rValue );
+        m_bAutoPosition = m_bAutoSize = !bPreferExcludingPosition;
     }
     else
         bReturn = false;

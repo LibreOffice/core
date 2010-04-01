@@ -3096,6 +3096,8 @@ namespace xmloff { namespace token {
         XML_DOES_NOT_END_WITH,
 
         //chart
+        XML_NP_CHART_EXT,
+        XML_N_CHART_EXT,
         XML_EXCLUDING_POSITION,
         XML_PREFER_EXCLUDING_POSITION,
 

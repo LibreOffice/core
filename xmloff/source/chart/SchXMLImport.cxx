@@ -281,6 +281,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetPlotAreaElemTokenMap()
     {
         static __FAR_DATA SvXMLTokenMapEntry aPlotAreaElemTokenMap[] =
 {
+    { XML_NAMESPACE_CHART_EXT,  XML_EXCLUDING_POSITION,     XML_TOK_PA_EXCLUDING_POSITION_EXT },
     { XML_NAMESPACE_CHART,  XML_EXCLUDING_POSITION,     XML_TOK_PA_EXCLUDING_POSITION },
     { XML_NAMESPACE_CHART,  XML_AXIS,                   XML_TOK_PA_AXIS             },
     { XML_NAMESPACE_CHART,  XML_SERIES,                 XML_TOK_PA_SERIES           },
@@ -658,6 +659,7 @@ SchXMLImport::SchXMLImport(
         SvXMLImport( xServiceFactory, nImportFlags )
 {
     GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
+    GetNamespaceMap().Add( GetXMLToken(XML_NP_CHART_EXT), GetXMLToken(XML_N_CHART_EXT), XML_NAMESPACE_CHART_EXT);
 
     mbIsGraphicLoadOnDemandSupported = false;
 }
@@ -671,6 +673,7 @@ SchXMLImport::SchXMLImport(
 :   SvXMLImport( xServiceFactory, xModel, rGrfContainer )
 {
     GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
+    GetNamespaceMap().Add( GetXMLToken(XML_NP_CHART_EXT), GetXMLToken(XML_N_CHART_EXT), XML_NAMESPACE_CHART_EXT);
 
     // get status indicator (if requested)
     if( bShowProgress )

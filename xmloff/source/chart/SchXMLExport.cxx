@@ -2085,6 +2085,12 @@ void SchXMLExportHelper_Impl::exportPlotArea(
 
 void SchXMLExportHelper_Impl::exportExcludingPosition( const uno::Reference< chart::XDiagram >& xDiagram )
 {
+    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
+    if( nCurrentODFVersion <= SvtSaveOptions::ODFVER_012 )//do not export to ODF 1.2 or older
+        return;
+    if( nCurrentODFVersion != SvtSaveOptions::ODFVER_LATEST )//export only if extensions are enabled //todo: change this dependent on fileformat evolution
+        return;
+
     Reference< chart::XDiagramPositioning > xDiaPos( xDiagram, uno::UNO_QUERY );
     DBG_ASSERT( xDiaPos.is(), "Invalid xDiaPos as parameter" );
     if( !xDiaPos.is() )
@@ -2098,9 +2104,9 @@ void SchXMLExportHelper_Impl::exportExcludingPosition( const uno::Reference< cha
     rtl::OUStringBuffer sStringBuffer;
     SvXMLUnitConverter::convertBool( sStringBuffer, bPreferExcludingPositioning );
     String aString( sStringBuffer.makeStringAndClear() );
-    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_PREFER_EXCLUDING_POSITION, aString );
+    mrExport.AddAttribute( XML_NAMESPACE_CHART_EXT, XML_PREFER_EXCLUDING_POSITION, aString );//todo: change to chart namespace in future - dependent on fileformat
 
-    SvXMLElementExport aExcludingPosition( mrExport, XML_NAMESPACE_CHART, XML_EXCLUDING_POSITION, sal_True, sal_True );
+    SvXMLElementExport aExcludingPosition( mrExport, XML_NAMESPACE_CHART_EXT, XML_EXCLUDING_POSITION, sal_True, sal_True );//todo: change to chart namespace in future - dependent on fileformat
 }
 
 void SchXMLExportHelper_Impl::exportAxes(
@@ -3646,6 +3652,8 @@ SchXMLExport::SchXMLExport(
     maAutoStylePool( *this ),
     maExportHelper( *this, maAutoStylePool )
 {
+    if( getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST )
+        _GetNamespaceMap().Add( GetXMLToken(XML_NP_CHART_EXT), GetXMLToken(XML_N_CHART_EXT), XML_NAMESPACE_CHART_EXT);
 }
 
 

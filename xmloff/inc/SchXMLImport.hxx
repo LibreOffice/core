@@ -69,6 +69,7 @@ enum SchXMLChartElemTokenMap
 
 enum SchXMLPlotAreaElemTokenMap
 {
+    XML_TOK_PA_EXCLUDING_POSITION_EXT,
     XML_TOK_PA_EXCLUDING_POSITION,
     XML_TOK_PA_AXIS,
     XML_TOK_PA_SERIES,

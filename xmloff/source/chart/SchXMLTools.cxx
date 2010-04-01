@@ -705,7 +705,7 @@ void setBuildIDAtImportInfo( uno::Reference< frame::XModel > xModel, Reference< 
         SvXMLMetaDocumentContext::setBuildId( aGenerator, xImportInfo );
 }
 
-bool isDocumentGeneratedWithOpenOfficeOlderThan3_4( const uno::Reference< frame::XModel >& xChartModel )
+bool isDocumentGeneratedWithOpenOfficeOlderThan3_3( const uno::Reference< frame::XModel >& xChartModel )
 {
     bool bResult = isDocumentGeneratedWithOpenOfficeOlderThan3_0( xChartModel );
     if( !bResult )
@@ -718,8 +718,6 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan3_4( const uno::Reference< frame:
             else if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/310m") ) ) != -1 )
                 bResult= true;
             else if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/320m") ) ) != -1 )
-                bResult= true;
-            else if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/330m") ) ) != -1 )
                 bResult= true;
         }
     }
