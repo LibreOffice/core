@@ -27,8 +27,9 @@
 #include "precompiled_svtools.hxx"
 
 #include "svtools/toolpanel/paneltabbar.hxx"
-
 #include "svtools/toolpanel/toolpaneldeck.hxx"
+#include "svtools/svtdata.hxx"
+
 #include "tabitemdescriptor.hxx"
 #include "paneltabbarpeer.hxx"
 #include "tabbargeometry.hxx"
@@ -37,6 +38,7 @@
 #include <vcl/help.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/diagnose_ex.h>
+#include <svl/svtools.hrc>
 
 #include <boost/optional.hpp>
 #include <vector>
@@ -526,10 +528,14 @@ namespace svt
         m_aScrollBack.SetSymbol( IsVertical() ? SYMBOL_ARROW_UP : SYMBOL_ARROW_LEFT );
         m_aScrollBack.Show();
         m_aScrollBack.SetClickHdl( LINK( this, PanelTabBar_Impl, OnScroll ) );
+        m_aScrollBack.SetAccessibleDescription( String( SvtResId( STR_SVT_ACC_BEGIN + 0 ) ) );
+        m_aScrollBack.SetAccessibleName( m_aScrollBack.GetAccessibleDescription() );
 
         m_aScrollForward.SetSymbol( IsVertical() ? SYMBOL_ARROW_DOWN : SYMBOL_ARROW_RIGHT );
         m_aScrollForward.Show();
         m_aScrollForward.SetClickHdl( LINK( this, PanelTabBar_Impl, OnScroll ) );
+        m_aScrollForward.SetAccessibleDescription( String( SvtResId( STR_SVT_ACC_BEGIN + 1 ) ) );
+        m_aScrollForward.SetAccessibleName( m_aScrollForward.GetAccessibleDescription() );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1301,6 +1307,12 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    PushButton& PanelTabBar::GetScrollButton( const bool i_bForward )
+    {
+        return i_bForward ? m_pImpl->m_aScrollForward : m_pImpl->m_aScrollBack;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     ::boost::optional< size_t > PanelTabBar::GetFocusedPanelItem() const
     {
         return m_pImpl->m_aFocusedItem;
@@ -1315,7 +1327,7 @@ namespace svt
             GrabFocus();
 
         m_pImpl->FocusItem( i_nItemPos );
-        OSL_POSTCOND( !!m_pImpl->m_aFocusedItem, "PanelTabBar::FocusPanelItem: have the focus, but not focused item?" );
+        OSL_POSTCOND( !!m_pImpl->m_aFocusedItem, "PanelTabBar::FocusPanelItem: have the focus, but no focused item?" );
         if ( !!m_pImpl->m_aFocusedItem )
             m_pImpl->InvalidateItem( *m_pImpl->m_aFocusedItem );
         m_pImpl->m_aFocusedItem.reset( i_nItemPos );

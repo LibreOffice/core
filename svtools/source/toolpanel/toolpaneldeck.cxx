@@ -91,14 +91,19 @@ namespace svt
 
         ~ToolPanelDeck_Impl()
         {
-            m_aPanels.RemoveListener( *this );
-            m_aListeners.Dying();
         }
 
         PDeckLayouter       GetLayouter() const { return m_pLayouter; }
         void                SetLayouter( const PDeckLayouter& i_pNewLayouter );
 
         Window&             GetPanelWindowAnchor() { return m_aPanelAnchor; }
+
+        /// notifies our listeners that we're going to die. Only to be called from with our anti-impl's destructor
+        void                NotifyDying()
+        {
+            m_aPanels.RemoveListener( *this );
+            m_aListeners.Dying();
+        }
 
         // IToolPanelDeck equivalents
         size_t              GetPanelCount() const;
@@ -359,6 +364,7 @@ namespace svt
     //--------------------------------------------------------------------
     ToolPanelDeck::~ToolPanelDeck()
     {
+        m_pImpl->NotifyDying();
         GetLayouter()->Destroy();
 
         Hide();

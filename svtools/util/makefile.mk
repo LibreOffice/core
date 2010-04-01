@@ -89,6 +89,7 @@ RESLIB1SRSFILES= \
         $(SRS)$/plugapp.srs     \
         $(SRS)$/svcontnr.srs    \
         $(SRS)$/browse.srs		\
+        $(SRS)$/toolpanel.srs		\
         $(SRS)$/javaerror.srs
 
 RESLIB3NAME= $(RESTARGETPATCH)

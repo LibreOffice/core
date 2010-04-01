@@ -36,6 +36,8 @@
 #include <memory>
 #include <boost/optional.hpp>
 
+class PushButton;
+
 //........................................................................
 namespace svt
 {
@@ -62,17 +64,18 @@ namespace svt
         TabItemContent  GetTabItemContent() const;
         void            SetTabItemContent( const TabItemContent& i_eItemContent );
 
-        bool            IsVertical() const;
-
-        IToolPanelDeck& GetPanelDeck() const;
-
-        // operations
         ::boost::optional< size_t > GetFocusedPanelItem() const;
         void                        FocusPanelItem( const size_t i_nItemPos );
         Rectangle                   GetItemScreenRect( const size_t i_nItemPos ) const;
+        bool                        IsVertical() const;
+        IToolPanelDeck&             GetPanelDeck() const;
+        PushButton&                 GetScrollButton( const bool i_bForward );
 
         // Window overridables
         virtual Size    GetOptimalSize( WindowSizeType i_eType ) const;
+
+    protected:
+        // Window overridables
         virtual void    Paint( const Rectangle& i_rRect );
         virtual void    Resize();
         virtual void    MouseMove( const MouseEvent& i_rMouseEvent );

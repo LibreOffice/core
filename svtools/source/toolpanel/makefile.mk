@@ -43,6 +43,10 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
+SRS1NAME=$(TARGET)
+SRC1FILES=\
+        toolpanel.src
+
 SLOFILES=\
         $(SLO)$/dummypanel.obj \
         $(SLO)$/paneldecklisteners.obj \
