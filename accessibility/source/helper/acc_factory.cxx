@@ -65,6 +65,7 @@
 #include <accessibility/extended/AccessibleBrowseBoxCheckBoxCell.hxx>
 #include <accessibility/extended/accessibleeditbrowseboxcell.hxx>
 #include <accessibility/extended/AccessibleToolPanelDeck.hxx>
+#include <accessibility/extended/AccessibleToolPanelDeckTabBar.hxx>
 #include <accessibility/extended/AccessibleToolPanelDeckTabBarItem.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
@@ -95,28 +96,6 @@ inline bool hasFloatingChild(Window *pWindow)
     using namespace ::com::sun::star::accessibility;
     using namespace ::svt;
     using namespace ::svt::table;
-
-    //================================================================
-    //= AccessibleWrapper
-    //================================================================
-    typedef ::cppu::WeakImplHelper1< XAccessible > AccessibleWrapper_Base;
-    class AccessibleWrapper : public AccessibleWrapper_Base
-    {
-    public:
-        AccessibleWrapper( const Reference< XAccessibleContext >& i_rContext )
-            :m_xContext( i_rContext )
-        {
-        }
-
-        // XAccessible
-        virtual Reference< XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (RuntimeException)
-        {
-            return m_xContext;
-        }
-
-    private:
-        const Reference< XAccessibleContext >   m_xContext;
-    };
 
     //================================================================
     //= IAccessibleFactory
@@ -254,11 +233,11 @@ inline bool hasFloatingChild(Window *pWindow)
                 const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rAccessibleParent,
                 ::svt::ToolPanelDeck& i_rPanelDeck
             );
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-            createAccessibleToolPanelDeckTabBarItem(
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+            createAccessibleToolPanelTabBar(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rAccessibleParent,
-                const ::rtl::Reference< ::svt::TabDeckLayouter >& i_pLayouter,
-                const size_t i_nItemPos
+                ::svt::IToolPanelDeck& i_rPanelDeck,
+                ::svt::PanelTabBar& i_rTabBar
             );
 
     protected:
@@ -550,14 +529,10 @@ inline bool hasFloatingChild(Window *pWindow)
     }
 
     //--------------------------------------------------------------------
-    Reference< XAccessible > AccessibleFactory::createAccessibleToolPanelDeckTabBarItem(
-        const Reference< XAccessible >& i_rAccessibleParent, const ::rtl::Reference< ::svt::TabDeckLayouter >& i_pLayouter, const size_t i_nItemPos )
+    Reference< XAccessibleContext > AccessibleFactory::createAccessibleToolPanelTabBar(
+        const Reference< XAccessible >& i_rAccessibleParent, ::svt::IToolPanelDeck& i_rPanelDeck, ::svt::PanelTabBar& i_rTabBar )
     {
-        ::rtl::Reference< AccessibleToolPanelDeckTabBarItem > pItemContext( new AccessibleToolPanelDeckTabBarItem(
-            i_rAccessibleParent, i_pLayouter, i_nItemPos ) );
-        Reference< XAccessible > xItemAccessible( new AccessibleWrapper( pItemContext.get() ) );
-        pItemContext->lateInit( xItemAccessible );
-        return xItemAccessible;
+        return new AccessibleToolPanelTabBar( i_rAccessibleParent, i_rPanelDeck, i_rTabBar );
     }
 
 //........................................................................

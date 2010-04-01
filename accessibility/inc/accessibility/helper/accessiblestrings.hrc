@@ -48,7 +48,8 @@
 #define RID_STR_ACC_ACTION_DECBLOCK         ( RID_TK_ACC_START +    6 )
 
 
-#define RID_STR_ACC_NAME_BROWSEBUTTON       ( RID_TK_ACC_START + 1000 )
+#define RID_STR_ACC_NAME_BROWSEBUTTON       ( RID_TK_ACC_START + 100 )
+#define RID_STR_ACC_DESC_PANELDECL_TABBAR   ( RID_TK_ACC_START + 101 )
 
 // -----------------------------------------------------------------------------
 

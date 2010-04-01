@@ -36,10 +36,8 @@
 /** === end UNO includes === **/
 
 #include <svtools/toolpanel/toolpaneldeck.hxx>
-#include <comphelper/sharedmutex.hxx>
-#include <toolkit/helper/externallock.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
@@ -102,7 +100,6 @@ namespace accessibility
         ~AccessibleToolPanelDeck_Impl();
 
         Reference< XAccessible >    getOwnAccessible() const;
-        Reference< XAccessible >    getPanelItemAccessible( const size_t i_nPosition, const bool i_bCreate );
         Reference< XAccessible >    getActivePanelAccessible();
 
     protected:
@@ -114,38 +111,40 @@ namespace accessibility
         virtual void Dying();
 
     public:
-        AccessibleToolPanelDeck&        m_rAntiImpl;
-        const Reference< XAccessible >  m_xAccessibleParent;
-        ::svt::ToolPanelDeck*           m_pPanelDeck;
+        AccessibleToolPanelDeck&    m_rAntiImpl;
+        Reference< XAccessible >    m_xAccessibleParent;
+        ::svt::ToolPanelDeck*       m_pPanelDeck;
 
         typedef ::std::vector< Reference< XAccessible > > AccessibleChildren;
-        AccessibleChildren              m_aPanelItemCache;
         Reference< XAccessible >        m_xActivePanelAccessible;
     };
 
     //==================================================================================================================
     //= MethodGuard
     //==================================================================================================================
-    class MethodGuard
+    namespace
     {
-    public:
-        MethodGuard( AccessibleToolPanelDeck_Impl& i_rImpl )
-            :m_aGuard( Application::GetSolarMutex() )
+        class MethodGuard
         {
-            i_rImpl.checkDisposed();
-        }
-        ~MethodGuard()
-        {
-        }
+        public:
+            MethodGuard( AccessibleToolPanelDeck_Impl& i_rImpl )
+                :m_aGuard( Application::GetSolarMutex() )
+            {
+                i_rImpl.checkDisposed();
+            }
+            ~MethodGuard()
+            {
+            }
 
-        void clear()
-        {
-            m_aGuard.clear();
-        }
+            void clear()
+            {
+                m_aGuard.clear();
+            }
 
-    private:
-        ::vos::OClearableGuard  m_aGuard;
-    };
+        private:
+            ::vos::OClearableGuard  m_aGuard;
+        };
+    }
 
     //==================================================================================================================
     //= AccessibleToolPanelDeck_Impl - implementation
@@ -159,7 +158,6 @@ namespace accessibility
         ,m_xActivePanelAccessible()
     {
         m_pPanelDeck->AddListener( *this );
-        m_aPanelItemCache.resize( m_pPanelDeck->GetPanelCount() );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -175,6 +173,7 @@ namespace accessibility
         ENSURE_OR_RETURN_VOID( !isDisposed(), "disposed twice" );
         m_pPanelDeck->RemoveListener( *this );
         m_pPanelDeck = NULL;
+        m_xAccessibleParent.clear();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -191,27 +190,6 @@ namespace accessibility
         OSL_ENSURE( xOwnAccessible->getAccessibleContext() == Reference< XAccessibleContext >( &m_rAntiImpl ),
             "AccessibleToolPanelDeck_Impl::getOwnAccessible: could not retrieve proper XAccessible for /myself!" );
         return xOwnAccessible;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    Reference< XAccessible > AccessibleToolPanelDeck_Impl::getPanelItemAccessible( const size_t i_nPosition, const bool i_bCreate )
-    {
-        ENSURE_OR_RETURN( !isDisposed(), "AccessibleToolPanelDeck_Impl::getPanelItemAccessible: already disposed!", NULL );
-        ENSURE_OR_RETURN( i_nPosition < m_pPanelDeck->GetPanelCount(), "AccessibleToolPanelDeck_Impl::getPanelItemAccessible: invalid position!", NULL );
-        ENSURE_OR_RETURN( i_nPosition < m_aPanelItemCache.size(), "AccessibleToolPanelDeck_Impl::getPanelItemAccessible: invalid cache!", NULL );
-
-        Reference< XAccessible >& rxChildAccessible( m_aPanelItemCache[ i_nPosition ] );
-        if ( !rxChildAccessible.is() && i_bCreate )
-        {
-            ::svt::PDeckLayouter pLayouter( m_pPanelDeck->GetLayouter() );
-            ENSURE_OR_THROW( pLayouter.get() != NULL, "unexpected NULL layouter for the panel deck" );
-
-            rxChildAccessible.set(
-                pLayouter->GetPanelItemAccessible( i_nPosition, getOwnAccessible() )
-            );
-            OSL_ENSURE( rxChildAccessible.is(), "AccessibleToolPanelDeck_Impl::getPanelItemAccessible: illegal accessible returned by the deck layouter!" );
-        }
-        return rxChildAccessible;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -235,43 +213,13 @@ namespace accessibility
     void AccessibleToolPanelDeck_Impl::PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition )
     {
         (void)i_pPanel;
-
-        MethodGuard aGuard( *this );
-
-        // reserve some space in our cache
-        m_aPanelItemCache.insert( m_aPanelItemCache.begin() + i_nPosition, NULL );
-        const Reference< XAccessible > xNewPanelItemChild( getPanelItemAccessible( i_nPosition, true ) );
-
-        aGuard.clear();
-        m_rAntiImpl.NotifyAccessibleEvent( AccessibleEventId::CHILD, Any(), makeAny( xNewPanelItemChild ) );
+        (void)i_nPosition;
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeck_Impl::PanelRemoved( const size_t i_nPosition )
     {
-        MethodGuard aGuard( *this );
-
-        ENSURE_OR_RETURN_VOID( i_nPosition < m_aPanelItemCache.size(), "AccessibleToolPanelDeck_Impl::PanelRemoved: invalid cache!" );
-
-        // *first* obtain the cached XAccessible of the child
-        const Reference< XAccessible > xOldPanelItemChild( getPanelItemAccessible( i_nPosition, false ) );
-        // *then* update the cache
-        m_aPanelItemCache.erase( m_aPanelItemCache.begin() + i_nPosition );
-
-        // finally notify
-        aGuard.clear();
-
-        OSL_ENSURE( xOldPanelItemChild.is(), "AccessibleToolPanelDeck_Impl::PanelRemoved: hmmm ..." );
-        if ( !xOldPanelItemChild.is() )
-        {
-            // this might, in theory, happen when the respective child has never been accessed before. Since we do
-            // not have *any* chance of retrieving the child, we broadcast a ... more generic event
-            m_rAntiImpl.NotifyAccessibleEvent( AccessibleEventId::INVALIDATE_ALL_CHILDREN, Any(), Any() );
-        }
-        else
-        {
-            m_rAntiImpl.NotifyAccessibleEvent( AccessibleEventId::CHILD, makeAny( xOldPanelItemChild ), Any() );
-        }
+        (void)i_nPosition;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -336,12 +284,13 @@ namespace accessibility
     {
         MethodGuard aGuard( *m_pImpl );
 
-        const sal_Int32 nPanelCount( m_pImpl->m_pPanelDeck->GetPanelCount() );
-        ::boost::optional< size_t > aActivePanel( m_pImpl->m_pPanelDeck->GetActivePanel() );
-        if ( !aActivePanel )
-            return nPanelCount;
+        sal_Int32 nChildCount( m_pImpl->m_pPanelDeck->GetLayouter()->GetAccessibleChildCount() );
 
-        return nPanelCount + 1;
+        ::boost::optional< size_t > aActivePanel( m_pImpl->m_pPanelDeck->GetActivePanel() );
+        if ( !!aActivePanel )
+            return ++nChildCount;
+
+        return nChildCount;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -349,12 +298,19 @@ namespace accessibility
     {
         MethodGuard aGuard( *m_pImpl );
 
-        if ( ( i_nIndex < 0 ) || ( size_t( i_nIndex ) > m_pImpl->m_pPanelDeck->GetPanelCount() ) )
+        const sal_Int32 nChildCount( getAccessibleChildCount() );
+        if ( ( i_nIndex < 0 ) || ( i_nIndex >= nChildCount ) )
             throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
 
-        if ( size_t( i_nIndex ) < m_pImpl->m_pPanelDeck->GetPanelCount() )
-            return m_pImpl->getPanelItemAccessible( i_nIndex, true );
+        // first "n" children are provided by the layouter
+        const size_t nLayouterCount( m_pImpl->m_pPanelDeck->GetLayouter()->GetAccessibleChildCount() );
+        if ( size_t( i_nIndex ) < nLayouterCount )
+            return m_pImpl->m_pPanelDeck->GetLayouter()->GetAccessibleChild(
+                size_t( i_nIndex ),
+                m_pImpl->getOwnAccessible()
+            );
 
+        // the last child is the XAccessible of the active panel
         return m_pImpl->getActivePanelAccessible();
     }
 
@@ -377,24 +333,35 @@ namespace accessibility
     {
         MethodGuard aGuard( *m_pImpl );
 
-        // check whether the given point contains a panel item
-        ::svt::PDeckLayouter pLayouter( m_pImpl->m_pPanelDeck->GetLayouter() );
-        ENSURE_OR_THROW( pLayouter.get() != NULL, "unexpected NULL layouter for the panel deck" );
-
-        const UnoPoint aLocation( getLocationOnScreen() );
-        const ::Point aRequestedScreenLocation( i_rPoint.X + aLocation.X, i_rPoint.Y + aLocation.Y );
-
-        ::boost::optional< size_t > aPanelItemPos( pLayouter->GetPanelItemFromScreenPos( aRequestedScreenLocation ) );
-        if ( !!aPanelItemPos )
-            return getAccessibleChild( *aPanelItemPos );
-
+        const ::Point aRequestedPoint( VCLUnoHelper::ConvertToVCLPoint( i_rPoint ) );
         // check the panel window itself
         const ::Window& rActivePanelAnchor( m_pImpl->m_pPanelDeck->GetPanelWindowAnchor() );
         const Rectangle aPanelAnchorArea( rActivePanelAnchor.GetPosPixel(), rActivePanelAnchor.GetOutputSizePixel() );
-        if ( aPanelAnchorArea.IsInside( VCLUnoHelper::ConvertToVCLPoint( i_rPoint ) ) )
+        if ( aPanelAnchorArea.IsInside( aRequestedPoint ) )
             // note that this assumes that the Window which actually implements the concrete panel covers
             // the complete area of its "anchor" Window. But this is ensured by the ToolPanelDeck implementation.
             return m_pImpl->getActivePanelAccessible();
+
+        // check the XAccessible instances provided by the layouter
+        try
+        {
+            const ::svt::PDeckLayouter pLayouter( m_pImpl->m_pPanelDeck->GetLayouter() );
+            ENSURE_OR_THROW( pLayouter.get() != NULL, "invalid layouter" );
+
+            const size_t nLayouterChildren = pLayouter->GetAccessibleChildCount();
+            for ( size_t i=0; i<nLayouterChildren; ++i )
+            {
+                const Reference< XAccessible > xLayoutItemAccessible( pLayouter->GetAccessibleChild( i, m_pImpl->getOwnAccessible() ), UNO_SET_THROW );
+                const Reference< XAccessibleComponent > xLayoutItemComponent( xLayoutItemAccessible->getAccessibleContext(), UNO_QUERY_THROW );
+                const ::Rectangle aLayoutItemBounds( VCLUnoHelper::ConvertToVCLRect( xLayoutItemComponent->getBounds() ) );
+                if ( aLayoutItemBounds.IsInside( aRequestedPoint ) )
+                    return xLayoutItemAccessible;
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
 
         return NULL;
     }

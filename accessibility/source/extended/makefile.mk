@@ -73,6 +73,7 @@ SLOFILES=\
     $(SLO)$/AccessibleGridControlHeaderCell.obj	\
     $(SLO)$/AccessibleGridControlTable.obj  \
     $(SLO)$/AccessibleToolPanelDeck.obj \
+    $(SLO)$/AccessibleToolPanelDeckTabBar.obj \
     $(SLO)$/AccessibleToolPanelDeckTabBarItem.obj
 
 # --- Targets -------------------------------------------------------

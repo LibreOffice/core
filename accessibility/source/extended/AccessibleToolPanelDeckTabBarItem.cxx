@@ -36,7 +36,7 @@
 /** === end UNO includes === **/
 
 #include <svtools/toolpanel/toolpaneldeck.hxx>
-#include <svtools/toolpanel/tablayouter.hxx>
+#include <svtools/toolpanel/paneltabbar.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <tools/diagnose_ex.h>
@@ -72,6 +72,7 @@ namespace accessibility
     using ::com::sun::star::accessibility::XAccessibleExtendedComponent;
     using ::com::sun::star::awt::XFont;
     /** === end UNO using === **/
+
     namespace AccessibleRole = ::com::sun::star::accessibility::AccessibleRole;
     namespace AccessibleStateType = ::com::sun::star::accessibility::AccessibleStateType;
     namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
@@ -85,10 +86,13 @@ namespace accessibility
         AccessibleToolPanelDeckTabBarItem_Impl(
             AccessibleToolPanelDeckTabBarItem& i_rAntiImpl,
             const Reference< XAccessible >& i_rAccessibleParent,
-            const ::rtl::Reference< ::svt::TabDeckLayouter >& i_pLayouter,
+            ::svt::IToolPanelDeck& i_rPanelDeck,
+            ::svt::PanelTabBar& i_rTabBar,
             const size_t i_nItemPos
         );
         ~AccessibleToolPanelDeckTabBarItem_Impl();
+
+        ::svt::PanelTabBar* getTabBar() const { return m_pTabBar; }
 
         // IToolPanelDeckListener
         virtual void PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition );
@@ -98,30 +102,28 @@ namespace accessibility
         virtual void Dying();
 
     public:
-        bool    isDisposed() const { return m_pLayouter == NULL; }
+        bool    isDisposed() const { return m_pPanelDeck == NULL; }
         void    checkDisposed() const;
         void    dispose();
 
         const Reference< XAccessible >&
                 getAccessibleParent() const { return m_xAccessibleParent; }
-        const ::rtl::Reference< ::svt::TabDeckLayouter >&
-                getLayouter() const { return m_pLayouter; }
         size_t  getItemPos() const { return m_nItemPos; }
 
-        Reference< XAccessibleComponent >
-                getParentAccessibleComponent() const;
-        ::rtl::OUString
-                getPanelDisplayName();
+        Reference< XAccessibleComponent >   getParentAccessibleComponent() const;
+        ::svt::IToolPanelDeck*              getPanelDeck() const { return m_pPanelDeck; }
+        ::rtl::OUString                     getPanelDisplayName();
 
     private:
         void impl_notifyBoundRectChanges();
         void impl_notifyStateChange( const sal_Int16 i_nLostState, const sal_Int16 i_nGainedState );
 
     private:
-        AccessibleToolPanelDeckTabBarItem&          m_rAntiImpl;
-        const Reference< XAccessible >              m_xAccessibleParent;
-        ::rtl::Reference< ::svt::TabDeckLayouter >  m_pLayouter;
-        size_t                                      m_nItemPos;
+        AccessibleToolPanelDeckTabBarItem&  m_rAntiImpl;
+        Reference< XAccessible >            m_xAccessibleParent;
+        ::svt::IToolPanelDeck*              m_pPanelDeck;
+        ::svt::PanelTabBar*                 m_pTabBar;
+        size_t                              m_nItemPos;
     };
 
     //==================================================================================================================
@@ -129,17 +131,15 @@ namespace accessibility
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
     AccessibleToolPanelDeckTabBarItem_Impl::AccessibleToolPanelDeckTabBarItem_Impl( AccessibleToolPanelDeckTabBarItem& i_rAntiImpl,
-            const Reference< XAccessible >& i_rAccessibleParent, const ::rtl::Reference< ::svt::TabDeckLayouter >& i_pLayouter,
+            const Reference< XAccessible >& i_rAccessibleParent, ::svt::IToolPanelDeck& i_rPanelDeck, ::svt::PanelTabBar& i_rTabBar,
             const size_t i_nItemPos )
         :m_rAntiImpl( i_rAntiImpl )
         ,m_xAccessibleParent( i_rAccessibleParent )
-        ,m_pLayouter( i_pLayouter )
+        ,m_pPanelDeck( &i_rPanelDeck )
+        ,m_pTabBar( &i_rTabBar )
         ,m_nItemPos( i_nItemPos )
     {
-        ENSURE_OR_THROW( m_pLayouter.get() != NULL, "illegal layouter!" );
-
-        ::svt::IToolPanelDeck& rPanels( m_pLayouter->GetPanelDeck() );
-        rPanels.AddListener( *this );
+        m_pPanelDeck->AddListener( *this );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -159,10 +159,10 @@ namespace accessibility
     {
         ENSURE_OR_RETURN_VOID( !isDisposed(), "AccessibleToolPanelDeckTabBarItem_Impl::dispose: disposed twice!" );
 
-        ::svt::IToolPanelDeck& rPanels( m_pLayouter->GetPanelDeck() );
-        rPanels.RemoveListener( *this );
-
-        m_pLayouter = NULL;
+        m_xAccessibleParent.clear();
+        m_pPanelDeck->RemoveListener( *this );
+        m_pPanelDeck = NULL;
+        m_pTabBar = NULL;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -175,9 +175,7 @@ namespace accessibility
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString AccessibleToolPanelDeckTabBarItem_Impl::getPanelDisplayName()
     {
-        const ::rtl::Reference< ::svt::TabDeckLayouter > pLayouter( getLayouter() );
-        const ::svt::IToolPanelDeck& rPanels( pLayouter->GetPanelDeck() );
-        const ::svt::PToolPanel pPanel( rPanels.GetPanel( getItemPos() ) );
+        const ::svt::PToolPanel pPanel( m_pPanelDeck->GetPanel( getItemPos() ) );
         if ( pPanel.get() == NULL )
             throw DisposedException();
         return pPanel->GetDisplayName();
@@ -279,8 +277,8 @@ namespace accessibility
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
     AccessibleToolPanelDeckTabBarItem::AccessibleToolPanelDeckTabBarItem( const Reference< XAccessible >& i_rAccessibleParent,
-            const ::rtl::Reference< ::svt::TabDeckLayouter >& i_pLayouter, const size_t i_nItemPos )
-        :m_pImpl( new AccessibleToolPanelDeckTabBarItem_Impl( *this, i_rAccessibleParent, i_pLayouter, i_nItemPos ) )
+            ::svt::IToolPanelDeck& i_rPanelDeck, ::svt::PanelTabBar& i_rTabBar, const size_t i_nItemPos )
+        :m_pImpl( new AccessibleToolPanelDeckTabBarItem_Impl( *this, i_rAccessibleParent, i_rPanelDeck, i_rTabBar, i_nItemPos ) )
     {
     }
 
@@ -311,7 +309,7 @@ namespace accessibility
     //--------------------------------------------------------------------
     sal_Int16 SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleRole(  ) throw (RuntimeException)
     {
-        return AccessibleRole::LIST_ITEM;
+        return AccessibleRole::PAGE_TAB;
     }
 
     //--------------------------------------------------------------------
@@ -341,27 +339,24 @@ namespace accessibility
     {
         ItemMethodGuard aGuard( *m_pImpl );
 
-        const ::rtl::Reference< ::svt::TabDeckLayouter > pLayouter( m_pImpl->getLayouter() );
-        const ::svt::IToolPanelDeck& rPanels( pLayouter->GetPanelDeck() );
-
         ::utl::AccessibleStateSetHelper* pStateSet( new ::utl::AccessibleStateSetHelper );
         pStateSet->AddState( AccessibleStateType::FOCUSABLE );
         pStateSet->AddState( AccessibleStateType::SELECTABLE );
         pStateSet->AddState( AccessibleStateType::ICONIFIED );
 
-        if ( m_pImpl->getItemPos() == rPanels.GetActivePanel() )
+        if ( m_pImpl->getItemPos() == m_pImpl->getPanelDeck()->GetActivePanel() )
         {
             pStateSet->AddState( AccessibleStateType::ACTIVE );
             pStateSet->AddState( AccessibleStateType::SELECTED );
         }
 
-        if ( m_pImpl->getItemPos() == pLayouter->GetFocusedPanelItem() )
+        if ( m_pImpl->getItemPos() == m_pImpl->getTabBar()->GetFocusedPanelItem() )
             pStateSet->AddState( AccessibleStateType::FOCUSED );
 
-        if ( pLayouter->IsPanelSelectorEnabled() )
+        if ( m_pImpl->getTabBar()->IsEnabled() )
             pStateSet->AddState( AccessibleStateType::ENABLED );
 
-        if ( pLayouter->IsPanelSelectorVisible() )
+        if ( m_pImpl->getTabBar()->IsVisible() )
         {
             pStateSet->AddState( AccessibleStateType::SHOWING );
             pStateSet->AddState( AccessibleStateType::VISIBLE );
@@ -383,7 +378,7 @@ namespace accessibility
     void SAL_CALL AccessibleToolPanelDeckTabBarItem::grabFocus(  ) throw (RuntimeException)
     {
         ItemMethodGuard aGuard( *m_pImpl );
-        m_pImpl->getLayouter()->FocusPanelItem( m_pImpl->getItemPos() );
+        m_pImpl->getTabBar()->FocusPanelItem( m_pImpl->getItemPos() );
     }
 
     //--------------------------------------------------------------------
@@ -431,9 +426,8 @@ namespace accessibility
     UnoRectangle SAL_CALL AccessibleToolPanelDeckTabBarItem::implGetBounds() throw (RuntimeException)
     {
         ItemMethodGuard aGuard( *m_pImpl );
-        ::rtl::Reference< ::svt::TabDeckLayouter > pLayouter( m_pImpl->getLayouter() );
 
-        const ::Rectangle aItemScreenRect( pLayouter->GetItemScreenRect( m_pImpl->getItemPos() ) );
+        const ::Rectangle aItemScreenRect( m_pImpl->getTabBar()->GetItemScreenRect( m_pImpl->getItemPos() ) );
 
         Reference< XAccessibleComponent > xParentComponent( m_pImpl->getParentAccessibleComponent(), UNO_SET_THROW );
         const UnoPoint aParentLocation( xParentComponent->getLocationOnScreen() );
@@ -443,6 +437,7 @@ namespace accessibility
             aItemScreenRect.GetWidth(),
             aItemScreenRect.GetHeight()
         );
+        return UnoRectangle();
     }
 
     //--------------------------------------------------------------------

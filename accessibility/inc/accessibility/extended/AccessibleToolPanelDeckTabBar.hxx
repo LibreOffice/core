@@ -24,14 +24,14 @@
  *
  ************************************************************************/
 
-#ifndef ACC_ACCESSIBLETOOLPANELDECKTABBARITEM_HXX
-#define ACC_ACCESSIBLETOOLPANELDECKTABBARITEM_HXX
+#ifndef ACC_ACCESSIBLETOOLPANELTABBAR_HXX
+#define ACC_ACCESSIBLETOOLPANELTABBAR_HXX
 
 /** === begin UNO includes === **/
 /** === end UNO includes === **/
 
-#include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -47,61 +47,46 @@ namespace accessibility
 //......................................................................................................................
 
     //==================================================================================================================
-    //= AccessibleToolPanelDeckTabBarItem
+    //= AccessibleToolPanelTabBar
     //==================================================================================================================
-    class AccessibleToolPanelDeckTabBarItem_Impl;
-    typedef ::comphelper::OAccessibleExtendedComponentHelper AccessibleToolPanelDeckTabBarItem_Base;
-    class AccessibleToolPanelDeckTabBarItem : public AccessibleToolPanelDeckTabBarItem_Base
+    class AccessibleToolPanelTabBar_Impl;
+    typedef VCLXAccessibleComponent   AccessibleToolPanelTabBar_Base;
+    class AccessibleToolPanelTabBar : public AccessibleToolPanelTabBar_Base
     {
     public:
-        AccessibleToolPanelDeckTabBarItem(
+        AccessibleToolPanelTabBar(
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rAccessibleParent,
             ::svt::IToolPanelDeck& i_rPanelDeck,
-            ::svt::PanelTabBar& i_rTabBar,
-            const size_t i_nItemPos
+            ::svt::PanelTabBar& i_rTabBar
         );
 
-        using AccessibleToolPanelDeckTabBarItem_Base::NotifyAccessibleEvent;
-        using AccessibleToolPanelDeckTabBarItem_Base::lateInit;
+        using AccessibleToolPanelTabBar_Base::NotifyAccessibleEvent;
 
     protected:
-        virtual ~AccessibleToolPanelDeckTabBarItem();
+        virtual ~AccessibleToolPanelTabBar();
 
-    public:
         // XAccessibleContext
         virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getAccessibleDescription(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getAccessibleName(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XAccessibleComponent
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL grabFocus(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::sal_Int32 SAL_CALL getForeground(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
-
-        // XAccessibleExtendedComponent
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getTitledBorderText(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getToolTipText(  ) throw (::com::sun::star::uno::RuntimeException);
-
-    protected:
-        // OCommonAccessibleComponent
-        virtual ::com::sun::star::awt::Rectangle SAL_CALL implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // OComponentHelper
         virtual void SAL_CALL disposing();
 
-    protected:
-        ::boost::scoped_ptr< AccessibleToolPanelDeckTabBarItem_Impl >   m_pImpl;
+        // VCLXAccessibleComponent
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetChildAccessible( const VclWindowEvent& i_rVclWindowEvent );
+        virtual void FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& i_rStateSet );
+
+    private:
+        ::boost::scoped_ptr< AccessibleToolPanelTabBar_Impl > m_pImpl;
     };
 
 //......................................................................................................................
 } // namespace accessibility
 //......................................................................................................................
 
-#endif // ACC_ACCESSIBLETOOLPANELDECKTABBARITEM_HXX
+#endif // ACC_ACCESSIBLETOOLPANELTABBAR_HXX
