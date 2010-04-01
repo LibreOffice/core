@@ -551,7 +551,7 @@ public:
     SAL_DLLPRIVATE ::std::vector<Window *>& ImplGetOwnerDrawList();
     SAL_DLLPRIVATE Window*     ImplGetTopmostFrameWindow();
 
-    SAL_DLLPRIVATE Rectangle   ImplGetWindowExtentsRelative( Window *pRelativeWindow, BOOL bClientOnly );
+    SAL_DLLPRIVATE Rectangle   ImplGetWindowExtentsRelative( Window *pRelativeWindow, BOOL bClientOnly ) const;
     SAL_DLLPRIVATE void        ImplNotifyIconifiedState( BOOL bIconified );
     SAL_DLLPRIVATE bool        ImplStopDnd();
     SAL_DLLPRIVATE void        ImplStartDnd();
@@ -857,9 +857,9 @@ public:
     Point               AbsoluteScreenToOutputPixel( const Point& rPos ) const;
     Rectangle           GetDesktopRectPixel() const;
     //  window extents including border and decoratrion
-    Rectangle           GetWindowExtentsRelative( Window *pRelativeWindow );
+    Rectangle           GetWindowExtentsRelative( Window *pRelativeWindow ) const;
     // window extents of the client window, coordinates to be used in SetPosPixel
-    Rectangle           GetClientWindowExtentsRelative( Window *pRelativeWindow );
+    Rectangle           GetClientWindowExtentsRelative( Window *pRelativeWindow ) const;
 
     virtual BOOL        IsScrollable() const;
     virtual void        Scroll( long nHorzScroll, long nVertScroll,

@@ -7449,13 +7449,13 @@ Rectangle Window::ImplOutputToUnmirroredAbsoluteScreenPixel( const Rectangle &rR
 
 // -----------------------------------------------------------------------
 
-Rectangle Window::GetWindowExtentsRelative( Window *pRelativeWindow )
+Rectangle Window::GetWindowExtentsRelative( Window *pRelativeWindow ) const
 {
     // with decoration
     return ImplGetWindowExtentsRelative( pRelativeWindow, FALSE );
 }
 
-Rectangle Window::GetClientWindowExtentsRelative( Window *pRelativeWindow )
+Rectangle Window::GetClientWindowExtentsRelative( Window *pRelativeWindow ) const
 {
     // without decoration
     return ImplGetWindowExtentsRelative( pRelativeWindow, TRUE );
@@ -7463,12 +7463,12 @@ Rectangle Window::GetClientWindowExtentsRelative( Window *pRelativeWindow )
 
 // -----------------------------------------------------------------------
 
-Rectangle Window::ImplGetWindowExtentsRelative( Window *pRelativeWindow, BOOL bClientOnly )
+Rectangle Window::ImplGetWindowExtentsRelative( Window *pRelativeWindow, BOOL bClientOnly ) const
 {
     SalFrameGeometry g = mpWindowImpl->mpFrame->GetGeometry();
     // make sure we use the extent of our border window,
     // otherwise we miss a few pixels
-    Window *pWin = (!bClientOnly && mpWindowImpl->mpBorderWindow) ? mpWindowImpl->mpBorderWindow : this;
+    const Window *pWin = (!bClientOnly && mpWindowImpl->mpBorderWindow) ? mpWindowImpl->mpBorderWindow : this;
 
     Point aPos( pWin->OutputToScreenPixel( Point(0,0) ) );
     aPos.X() += g.nX;
