@@ -290,7 +290,7 @@ namespace svt
 
         Point aButtonForwardPos( i_rActualOutputSize.Width(), OUTER_SPACE_TOP );
         m_aButtonForwardRect = Rectangle( aButtonForwardPos, Size( 1, 1 ) );
-        m_aButtonBackRect.SetEmpty();
+        m_aButtonForwardRect.SetEmpty();
 
         Point aItemsPos( OUTER_SPACE_LEFT, 0 );
         Size aItemsSize( i_rActualOutputSize.Width() - OUTER_SPACE_LEFT - OUTER_SPACE_RIGHT, i_rActualOutputSize.Height() );
