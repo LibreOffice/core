@@ -273,7 +273,7 @@ static HMENU createSystrayMenu( )
     addMenuItem( hMenu, IDM_TEMPLATE, ICON_TEMPLATE,
         pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), pos, true, aEmpty);
     addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, aEmpty );
-    addMenuItem( hMenu, IDM_OPEN,   ICON_OPEN, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), pos, true, OUString::createFromAscii( "shell32" ));
+    addMenuItem( hMenu, IDM_OPEN,   ICON_OPEN, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), pos, true, OUString::createFromAscii( "SHELL32" ));
     addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, aEmpty );
 #endif
     addMenuItem( hMenu, IDM_INSTALL,0, pShutdownIcon->GetResString( STR_QUICKSTART_PRELAUNCH ), pos, false, aEmpty );
@@ -742,28 +742,25 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
     x = aRect.left;
     y = aRect.top;
 
-    int cx = GetSystemMetrics( SM_CXSMICON );
-    int cy = GetSystemMetrics( SM_CYSMICON );
-    HICON hIcon( 0 );
+    int     cx = GetSystemMetrics( SM_CXSMICON );
+    int     cy = GetSystemMetrics( SM_CYSMICON );
+    HICON   hIcon( 0 );
+    HMODULE hModule( GetModuleHandle( NULL ) );
 
     if ( pMyItem->module.getLength() > 0 )
     {
         LPCWSTR pModuleName = reinterpret_cast<LPCWSTR>( pMyItem->module.getStr() );
-        HMODULE hModule = GetModuleHandleW( pModuleName );
+        hModule = GetModuleHandleW( pModuleName );
         if ( hModule == NULL )
         {
             LoadLibraryW( pModuleName );
             hModule = GetModuleHandleW( pModuleName );
         }
-        hIcon = (HICON) LoadImageA( hModule,
-                                    MAKEINTRESOURCE( pMyItem->iconId ),
-                                    IMAGE_ICON, cx, cy,
-                                    LR_DEFAULTCOLOR | LR_SHARED );
     }
-    else
-        hIcon = (HICON) LoadImageA( GetModuleHandle( NULL ), MAKEINTRESOURCE( pMyItem->iconId ),
-                                    IMAGE_ICON, cx, cy,
-                                    LR_DEFAULTCOLOR | LR_SHARED );
+
+    hIcon = (HICON) LoadImageA( hModule, MAKEINTRESOURCE( pMyItem->iconId ),
+                                IMAGE_ICON, cx, cy,
+                                LR_DEFAULTCOLOR | LR_SHARED );
 
     // DrawIconEx( lpdis->hDC, x, y+(height-cy)/2, hIcon, cx, cy, 0, NULL, DI_NORMAL );
 
