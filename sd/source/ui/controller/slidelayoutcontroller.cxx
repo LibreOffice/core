@@ -33,6 +33,8 @@
 #include <com/sun/star/frame/status/FontHeight.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/DrawViewMode.hpp>
 
 #include <memory>
 #include <boost/scoped_ptr.hpp>
@@ -68,6 +70,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 
 namespace sd
@@ -104,6 +107,31 @@ struct snewfoil_value_info
     WritingMode meWritingMode;
     AutoLayout maAutoLayout;
 };
+
+static snewfoil_value_info notes[] =
+{
+    {BMP_FOILN_01, BMP_FOILN_01_H, STR_AUTOLAYOUT_NOTES, WritingMode_LR_TB,
+     AUTOLAYOUT_NOTES},
+    {0, 0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
+};
+
+static snewfoil_value_info handout[] =
+{
+    {BMP_FOILH_01, BMP_FOILH_01_H, STR_AUTOLAYOUT_HANDOUT1, WritingMode_LR_TB,
+     AUTOLAYOUT_HANDOUT1},
+    {BMP_FOILH_02, BMP_FOILH_02_H, STR_AUTOLAYOUT_HANDOUT2, WritingMode_LR_TB,
+     AUTOLAYOUT_HANDOUT2},
+    {BMP_FOILH_03, BMP_FOILH_03_H, STR_AUTOLAYOUT_HANDOUT3, WritingMode_LR_TB,
+     AUTOLAYOUT_HANDOUT3},
+    {BMP_FOILH_04, BMP_FOILH_04_H, STR_AUTOLAYOUT_HANDOUT4, WritingMode_LR_TB,
+     AUTOLAYOUT_HANDOUT4},
+    {BMP_FOILH_06, BMP_FOILH_06_H, STR_AUTOLAYOUT_HANDOUT6, WritingMode_LR_TB,
+     AUTOLAYOUT_HANDOUT6},
+    {BMP_FOILH_09, BMP_FOILH_09_H, STR_AUTOLAYOUT_HANDOUT9, WritingMode_LR_TB,
+     AUTOLAYOUT_HANDOUT9},
+    {0, 0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
+};
+
 static snewfoil_value_info standard[] =
 {
     {BMP_LAYOUT_EMPTY, BMP_LAYOUT_EMPTY_H, STR_AUTOLAYOUT_NONE, WritingMode_LR_TB,        AUTOLAYOUT_NONE},
@@ -161,6 +189,20 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
 , mpLayoutSet1( 0 )
 , mpLayoutSet2( 0 )
 {
+    DrawViewMode eMode = DrawViewMode_DRAW;
+
+    // find out which view is running
+    if( xFrame.is() ) try
+    {
+        Reference< XPropertySet > xControllerSet( xFrame->getController(), UNO_QUERY_THROW );
+        xControllerSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DrawViewMode" ) ) ) >>= eMode;
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        OSL_ASSERT(false);
+    }
+
     const sal_Int32 LAYOUT_BORDER_PIX = 7;
 
     String aTitle1( SdResId( STR_GLUE_ESCDIR_HORZ ) );
@@ -174,21 +216,30 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
 
     mpLayoutSet1 = createEmptyValueSetControl();
     mpLayoutSet1->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectHdl ) );
-    mpLayoutSet1->SetColCount( 4 );
 
-    fillLayoutValueSet( mpLayoutSet1, &standard[0], bHighContrast );
+    snewfoil_value_info* pInfo = 0;
+    sal_Int16 nColCount = 4;
+    switch( eMode )
+    {
+    case DrawViewMode_DRAW: pInfo = &standard[0]; break;
+    case DrawViewMode_HANDOUT: pInfo = &handout[0]; nColCount = 2; break;
+    case DrawViewMode_NOTES: pInfo = &notes[0]; nColCount = 1; break;
+    }
+
+    mpLayoutSet1->SetColCount( nColCount );
+
+    fillLayoutValueSet( mpLayoutSet1, pInfo, bHighContrast );
 
     Size aSize( mpLayoutSet1->GetOutputSizePixel() );
     aSize.Width() += (mpLayoutSet1->GetColCount() + 1) * LAYOUT_BORDER_PIX;
     aSize.Height() += (mpLayoutSet1->GetLineCount() +1) * LAYOUT_BORDER_PIX;
     mpLayoutSet1->SetOutputSizePixel( aSize );
 
-
-    if( bVerticalEnabled )
+    if( bVerticalEnabled && (eMode == DrawViewMode_DRAW) )
         appendEntry( -1, aTitle1 );
     appendEntry( 0, mpLayoutSet1 );
 
-    if( bVerticalEnabled )
+    if( bVerticalEnabled && (eMode == DrawViewMode_DRAW) )
     {
         mpLayoutSet2 = new ValueSet( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
     //  mpLayoutSet2->SetHelpId( HID_VALUESET_EXTRUSION_LIGHTING );
@@ -209,24 +260,27 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
         appendEntry( 1, mpLayoutSet2 );
     }
 
-    appendSeparator();
-
-    OUString sSlotStr;
-    Image aSlotImage;
-    if( mxFrame.is() )
+    if( eMode == DrawViewMode_DRAW )
     {
-        if( bInsertPage )
-            sSlotStr = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DuplicatePage" ) );
-        else
-            sSlotStr = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Undo" ) );
-        aSlotImage = ::GetImage( mxFrame, sSlotStr, FALSE, FALSE );
+        appendSeparator();
 
-        String sSlotTitle;
-        if( bInsertPage )
-            sSlotTitle = ImplRetrieveLabelFromCommand( mxFrame, sSlotStr );
-        else
-            sSlotTitle = String( SdResId( STR_RESET_LAYOUT ) );
-        appendEntry( 2, sSlotTitle, aSlotImage);
+        OUString sSlotStr;
+        Image aSlotImage;
+        if( mxFrame.is() )
+        {
+            if( bInsertPage )
+                sSlotStr = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DuplicatePage" ) );
+            else
+                sSlotStr = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Undo" ) );
+            aSlotImage = ::GetImage( mxFrame, sSlotStr, FALSE, FALSE );
+
+            String sSlotTitle;
+            if( bInsertPage )
+                sSlotTitle = ImplRetrieveLabelFromCommand( mxFrame, sSlotStr );
+            else
+                sSlotTitle = String( SdResId( STR_RESET_LAYOUT ) );
+            appendEntry( 2, sSlotTitle, aSlotImage);
+        }
     }
 
     SetOutputSizePixel( getMenuSize() );

@@ -324,12 +324,14 @@ void ViewShell::Implementation::AssignLayout ( SfxRequest& rRequest, PageKind eP
     const SfxUInt32Item* pWhatPage = static_cast< const SfxUInt32Item*  > ( rRequest.GetArg( ID_VAL_WHATPAGE, FALSE, TYPE(SfxUInt32Item) ) );
     const SfxUInt32Item* pWhatLayout = static_cast< const SfxUInt32Item*  > ( rRequest.GetArg( ID_VAL_WHATLAYOUT, FALSE, TYPE(SfxUInt32Item) ) );
 
+    SdDrawDocument* pDocument = mrViewShell.GetDoc();
+    if( !pDocument )
+        return;
+
     SdPage* pPage = 0;
     if( pWhatPage )
     {
-        SdDrawDocument* pDocument = mrViewShell.GetDoc();
-        if( pDocument )
-            pPage = pDocument->GetSdPage(static_cast<USHORT>(pWhatPage->GetValue()), ePageKind);
+        pPage = pDocument->GetSdPage(static_cast<USHORT>(pWhatPage->GetValue()), ePageKind);
     }
 
     if( pPage == 0 )
@@ -347,7 +349,14 @@ void ViewShell::Implementation::AssignLayout ( SfxRequest& rRequest, PageKind eP
         SdrLayerAdmin& rLayerAdmin (mrViewShell.GetViewShellBase().GetDocument()->GetLayerAdmin());
         BYTE aBackground (rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE));
         BYTE aBackgroundObject (rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE));
-        SetOfByte aVisibleLayers (pPage->TRG_GetMasterPageVisibleLayers());
+
+        SetOfByte aVisibleLayers;
+
+        if( pPage->GetPageKind() == PK_HANDOUT )
+            aVisibleLayers.SetAll();
+        else
+            pPage->TRG_GetMasterPageVisibleLayers();
+
         SfxRequest aRequest (mrViewShell.GetViewShellBase().GetViewFrame(), SID_MODIFYPAGE);
         aRequest.AppendItem(SfxStringItem (ID_VAL_PAGENAME, pPage->GetName()));
         aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, eLayout));

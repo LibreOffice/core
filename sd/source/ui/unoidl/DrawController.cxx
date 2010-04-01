@@ -699,6 +699,11 @@ void DrawController::FillPropertyTable (
             PROPERTY_VIEWOFFSET,
             ::getCppuType((const ::com::sun::star::awt::Point*)0),
             beans::PropertyAttribute::BOUND ));
+    rProperties.push_back(
+        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("DrawViewMode") ),
+            PROPERTY_DRAWVIEWMODE,
+            ::getCppuType((const ::com::sun::star::awt::Point*)0),
+            beans::PropertyAttribute::BOUND|beans::PropertyAttribute::READONLY|beans::PropertyAttribute::MAYBEVOID ));
 }
 
 
@@ -927,4 +932,5 @@ void DrawController::ThrowIfDisposed (void) const
 
 
 } // end of namespace sd
+
 
