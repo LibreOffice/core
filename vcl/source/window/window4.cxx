@@ -29,9 +29,15 @@
 
 #include "vcl/window.hxx"
 #include "vcl/window.h"
+#include "vcl/svdata.hxx"
 #include "vcl/arrange.hxx"
 
+#include "com/sun/star/beans/PropertyValue.hpp"
+
 #include <map>
+#include <vector>
+
+using namespace com::sun::star;
 
 namespace vcl
 {
@@ -45,60 +51,8 @@ namespace vcl
 
         boost::shared_ptr< WindowArranger >      mxLayout;
         bool                                     mbOwnedByParent;
-        rtl::OUString                            maName;
-        std::map< rtl::OUString, Window* >       maNameToWindow;
-        std::map< Window*, rtl::OUString >       maWindowToName;
-
-        void insertName( const rtl::OUString& i_rName, Window* i_pWin );
-        void removeWindow( Window* );
-        Window* findName( const rtl::OUString& ) const;
+        rtl::OUString                            maIdentifier;
     };
-
-    void ExtWindowImpl::insertName( const rtl::OUString& i_rName, Window* i_pWin )
-    {
-        OSL_ENSURE( maNameToWindow.find( i_rName ) == maNameToWindow.end(), "duplicate named window inserted" );
-        maNameToWindow[ i_rName ] = i_pWin;
-        maWindowToName[ i_pWin ] = i_rName;
-    }
-
-    void ExtWindowImpl::removeWindow( Window* i_pWin )
-    {
-        std::map< Window*, rtl::OUString >::iterator it = maWindowToName.find( i_pWin );
-        if( it != maWindowToName.end() )
-        {
-            maNameToWindow.erase( it->second );
-            maWindowToName.erase( it );
-        }
-    }
-
-    Window* ExtWindowImpl::findName( const rtl::OUString& i_rName ) const
-    {
-        std::map< rtl::OUString, Window* >::const_iterator it = maNameToWindow.find( i_rName );
-        return it != maNameToWindow.end() ? it->second : NULL;
-    }
-}
-
-static rtl::OUString getLastNameToken( const rtl::OUString& i_rName )
-{
-    sal_Int32 nIndex = i_rName.lastIndexOf( sal_Unicode('/') );
-    if( nIndex != -1 )
-    {
-        // if this is not an empty token, that is the name
-        if( nIndex < i_rName.getLength()-1 )
-            return i_rName.copy( nIndex+1 );
-        // we need to search backward
-        const sal_Unicode* pStr = i_rName.getStr();
-        while( nIndex >= 0 && pStr[nIndex] == '/' )
-            nIndex--;
-        if( nIndex < 0 ) // give up
-            return rtl::OUString();
-        // search backward to next '/' or beginning
-        sal_Int32 nBeginIndex = nIndex-1;
-        while( nBeginIndex >= 0 && pStr[nBeginIndex] != '/' )
-            nBeginIndex--;
-        return i_rName.copy( nBeginIndex+1, nIndex-nBeginIndex );
-    }
-    return rtl::OUString( i_rName );
 }
 
 void Window::ImplDeleteOwnedChildren()
@@ -163,7 +117,7 @@ boost::shared_ptr< vcl::WindowArranger > Window::getLayout()
     return xRet;
 }
 
-void Window::addWindow( Window* i_pWin, const rtl::OUString& i_rName, bool i_bTakeOwnership )
+void Window::addWindow( Window* i_pWin, bool i_bTakeOwnership )
 {
     vcl::ExtWindowImpl* pImpl = ImplGetExtWindowImpl();
     if( pImpl && i_pWin )
@@ -173,11 +127,6 @@ void Window::addWindow( Window* i_pWin, const rtl::OUString& i_rName, bool i_bTa
         {
             i_pWin->SetParent( this );
             pChildImpl->mbOwnedByParent = i_bTakeOwnership;
-            rtl::OUString aName( getLastNameToken( i_rName ) );
-            if( aName.getLength() )
-            {
-                pImpl->insertName( aName, i_pWin );
-            }
         }
     }
 }
@@ -195,7 +144,6 @@ Window* Window::removeWindow( Window* i_pWin, Window* i_pNewParent )
             {
                 if( ! i_pNewParent )
                    pChildImpl->mbOwnedByParent = false;
-               pImpl->removeWindow( i_pWin );
                i_pWin->SetParent( i_pNewParent );
                pRet = i_pWin;
             }
@@ -204,43 +152,73 @@ Window* Window::removeWindow( Window* i_pWin, Window* i_pNewParent )
     return pRet;
 }
 
-Window* Window::removeWindow( const rtl::OUString& i_rName, Window* i_pNewParent )
+Window* Window::findWindow( const rtl::OUString& i_rIdentifier ) const
 {
-    Window* pRet = NULL;
-    vcl::ExtWindowImpl* pImpl = ImplGetExtWindowImpl();
-    if( pImpl )
+    if( getIdentifier() == i_rIdentifier )
+        return const_cast<Window*>(this);
+
+    Window* pChild = mpWindowImpl->mpFirstChild;
+    while ( pChild )
     {
-        rtl::OUString aName( getLastNameToken( i_rName ) );
-        pRet = pImpl->findName( aName );
-        pRet = removeWindow( pRet, i_pNewParent );
+        Window* pResult = pChild->findWindow( i_rIdentifier );
+        if( pResult )
+            return pResult;
+        pChild = pChild->mpWindowImpl->mpNext;
     }
-    return pRet;
+
+    return NULL;
 }
 
-Window* Window::findWindow( const rtl::OUString& i_rName ) const
+const rtl::OUString& Window::getIdentifier() const
+{
+    static rtl::OUString aEmptyStr;
+
+    return (mpWindowImpl && mpWindowImpl->mpExtImpl) ? mpWindowImpl->mpExtImpl->maIdentifier : aEmptyStr;
+}
+
+void Window::setIdentifier( const rtl::OUString& i_rIdentifier )
 {
     vcl::ExtWindowImpl* pImpl = ImplGetExtWindowImpl();
-    Window* pSearch = const_cast<Window*>(this);
     if( pImpl )
+        pImpl->maIdentifier = i_rIdentifier;
+}
+
+void Window::setProperties( const uno::Sequence< beans::PropertyValue >& i_rProps )
+{
+    const beans::PropertyValue* pVals = i_rProps.getConstArray();
+    for( sal_Int32 i = 0; i < i_rProps.getLength(); i++ )
     {
-        sal_Int32 nIndex = 0;
-        while( nIndex && pSearch )
+        if( pVals[i].Name.equalsAscii( "Enabled" ) )
         {
-            rtl::OUString aName( i_rName.getToken( 0, '/', nIndex ) );
-            if( aName.getLength() )
-            {
-                pSearch = pImpl->findName( aName );
-                if( pSearch )
-                {
-                    pImpl = pSearch->ImplGetExtWindowImpl();
-                    if( ! pImpl )
-                        pSearch = NULL;
-                }
-            }
+            sal_Bool bVal = sal_True;
+            if( pVals[i].Value >>= bVal )
+                Enable( bVal );
+        }
+        else if( pVals[i].Name.equalsAscii( "Visible" ) )
+        {
+            sal_Bool bVal = sal_True;
+            if( pVals[i].Value >>= bVal )
+                Show( bVal );
+        }
+        else if( pVals[i].Name.equalsAscii( "Text" ) )
+        {
+            rtl::OUString aText;
+            if( pVals[i].Value >>= aText )
+                SetText( aText );
         }
     }
-    else
-        pSearch = NULL;
-    return pSearch != this ? pSearch : NULL;
+}
+
+uno::Sequence< beans::PropertyValue > Window::getProperties() const
+{
+    uno::Sequence< beans::PropertyValue > aProps( 3 );
+    aProps[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enabled" ) );
+    aProps[0].Value = uno::makeAny( sal_Bool( IsEnabled() ) );
+    aProps[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Visible" ) );
+    aProps[1].Value = uno::makeAny( sal_Bool( IsVisible() ) );
+    aProps[2].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
+    aProps[2].Value = uno::makeAny( rtl::OUString( GetText() ) );
+
+    return aProps;
 }
 

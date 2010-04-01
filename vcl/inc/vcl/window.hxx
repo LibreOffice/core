@@ -99,6 +99,13 @@ namespace accessibility {
 namespace com {
 namespace sun {
 namespace star {
+namespace beans {
+    class PropertyValue;
+}}}}
+
+namespace com {
+namespace sun {
+namespace star {
 namespace rendering {
     class XCanvas;
     class XSpriteCanvas;
@@ -1156,15 +1163,11 @@ public:
     // ExtImpl
 
     // layouting
-    boost::shared_ptr< vcl::WindowArranger >    getLayout();
+    boost::shared_ptr< vcl::WindowArranger > getLayout();
 
     /* add a child Window
        addWindow will do the following things
        - insert the passed window into the child list (equivalent to i_pWin->SetParent( this ))
-       - assign a name to the passed window for identification purposes
-         the name is basically free style, only the '/' character must not be used as it is
-         used for concatenation to form hierarchical names
-         caution: the last non empty token repsctive to '/' will be the actual name used
        - mark the window as "owned", meaning that the added Window will be destroyed by
          the parent's desctructor.
          This means: do not pass in member windows or stack objects here. Do not cause
@@ -1172,7 +1175,7 @@ public:
 
          to avoid ownership pass i_bTakeOwnership as "false"
     */
-    void addWindow( Window* i_pWin, const rtl::OUString& i_rName, bool i_bTakeOwnership = true );
+    void addWindow( Window* i_pWin, bool i_bTakeOwnership = true );
 
     /* remove a child Window
        the remove window functions will
@@ -1181,20 +1184,31 @@ public:
        caution: ownership passes to the new parent or the caller, if the new parent was NULL
     */
     Window* removeWindow( Window* i_pWin, Window* i_pNewParent = NULL );
-    /* removeWindow by name will only work for direct children. if i_rName
-       is a hierachical name, the last non empty token will be used to get the child window
-    */
-    Window* removeWindow( const rtl::OUString& i_rName, Window* i_pNewParent = NULL );
 
-    /* find a child window by name
-       the name passed here can be hierarchical to find descendants in any depth
-       path delimiter is '/'
+    /* return the identifier of this window
     */
-    Window* findWindow( const rtl::OUString& i_rName ) const;
+    const rtl::OUString& getIdentifier() const;
+    /* set an identifier
+       identifiers have only loosely defined rules per se
+       in context of Window they must be unique over the window
+       hierarchy you'd like to find them again using the findWindow method
+    */
+    void setIdentifier( const rtl::OUString& );
 
-    /* return the name of this window
+    /* returns the first found descendant that matches
+       the passed identifier or NULL
     */
-    const rtl::OUString& getName() const;
+    Window* findWindow( const rtl::OUString& ) const;
+
+    /* get/set properties
+       this will contain window properties (like visible, enabled)
+       as well as properties of derived classes (e.g. text of Edit fields)
+    */
+    virtual com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getProperties() const;
+    /*
+    */
+    virtual void setProperties( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& );
+
 };
 
 

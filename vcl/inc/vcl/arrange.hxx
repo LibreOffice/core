@@ -104,6 +104,8 @@ namespace vcl
         Rectangle                   m_aManagedArea;
         long                        m_nOuterBorder;
 
+        rtl::OUString               m_aIdentifier;
+
         virtual Element* getElement( size_t i_nIndex ) = 0;
         const Element* getConstElement( size_t i_nIndex ) const
         { return const_cast<WindowArranger*>(this)->getElement( i_nIndex ); }
@@ -148,6 +150,9 @@ namespace vcl
         }
 
         virtual bool isVisible() const; // true if any element is visible
+
+        virtual com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getProperties() const;
+        virtual void setProperties( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& );
 
         sal_Int32 getExpandPriority( size_t i_nIndex ) const
         {
@@ -195,6 +200,12 @@ namespace vcl
             m_nOuterBorder = i_nBorder;
             resize();
         }
+
+        const rtl::OUString getIdentifier() const
+        { return m_aIdentifier; }
+
+        void setIdentifier( const rtl::OUString& i_rId )
+        { m_aIdentifier = i_rId; }
     };
 
     class VCL_DLLPUBLIC RowOrColumn : public WindowArranger

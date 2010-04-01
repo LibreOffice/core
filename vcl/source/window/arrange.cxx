@@ -35,9 +35,13 @@
 #include "vcl/svdata.hxx"
 #include "vcl/svapp.hxx"
 
+#include "com/sun/star/beans/PropertyValue.hpp"
+#include "com/sun/star/awt/Rectangle.hpp"
+
 #include "osl/diagnose.h"
 
 using namespace vcl;
+using namespace com::sun::star;
 
 // ----------------------------------------
 // vcl::WindowArranger
@@ -205,6 +209,64 @@ void WindowArranger::Element::setPosSize( const Point& i_rPos, const Size& i_rSi
     else if( m_pChild )
         m_pChild->setManagedArea( Rectangle( aPoint, aSize ) );
 }
+
+uno::Sequence< beans::PropertyValue > WindowArranger::getProperties() const
+{
+    uno::Sequence< beans::PropertyValue > aRet( 3 );
+    aRet[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OuterBorder" ) );
+    aRet[0].Value = uno::makeAny( sal_Int32( getBorderValue( m_nOuterBorder ) ) );
+    aRet[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ManagedArea" ) );
+    awt::Rectangle aArea( m_aManagedArea.getX(), m_aManagedArea.getY(), m_aManagedArea.getWidth(), m_aManagedArea.getHeight() );
+    aRet[1].Value = uno::makeAny( aArea );
+    aRet[2].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Visible" ) );
+    aRet[2].Value = uno::makeAny( sal_Bool( isVisible() ) );
+    return aRet;
+}
+
+void WindowArranger::setProperties( const uno::Sequence< beans::PropertyValue >& i_rProps )
+{
+    const beans::PropertyValue* pProps = i_rProps.getConstArray();
+    bool bResize = false;
+    for( sal_Int32 i = 0; i < i_rProps.getLength(); i++ )
+    {
+        if( pProps[i].Name.equalsAscii( "OuterBorder" ) )
+        {
+            sal_Int32 nVal = 0;
+            if( pProps[i].Value >>= nVal )
+            {
+                if( getBorderValue( m_nOuterBorder ) != nVal )
+                {
+                    m_nOuterBorder = nVal;
+                    bResize = true;
+                }
+            }
+        }
+        else if( pProps[i].Name.equalsAscii( "ManagedArea" ) )
+        {
+            awt::Rectangle aArea( 0, 0, 0, 0 );
+            if( pProps[i].Value >>= aArea )
+            {
+                m_aManagedArea.setX( aArea.X );
+                m_aManagedArea.setY( aArea.Y );
+                m_aManagedArea.setWidth( aArea.Width );
+                m_aManagedArea.setHeight( aArea.Height );
+                bResize = true;
+            }
+        }
+        else if( pProps[i].Name.equalsAscii( "Visible" ) )
+        {
+            sal_Bool bVal = sal_False;
+            if( pProps[i].Value >>= bVal )
+            {
+                show( bVal, false );
+                bResize = true;
+            }
+        }
+    }
+    if( bResize )
+        resize();
+}
+
 
 // ----------------------------------------
 // vcl::RowOrColumn
