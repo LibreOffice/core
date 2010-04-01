@@ -42,7 +42,9 @@
 #include <svtools/toolpanel/paneltabbar.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/button.hxx>
 #include <vos/mutex.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -126,12 +128,15 @@ namespace accessibility
         Reference< XAccessible >        getAccessibleChild( size_t i_nPosition );
         Reference< XAccessible >        getOwnAccessible() const;
 
+    protected:
         // IToolPanelDeckListener
         virtual void PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition );
         virtual void PanelRemoved( const size_t i_nPosition );
         virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
         virtual void LayouterChanged( const ::svt::PDeckLayouter& i_rNewLayouter );
         virtual void Dying();
+
+        DECL_LINK( OnWindowEvent, const VclSimpleEvent* );
 
     private:
         AccessibleToolPanelTabBar&                  m_rAntiImpl;
@@ -156,6 +161,9 @@ namespace accessibility
         const String sAccessibleDescription( TK_RES_STRING( RID_STR_ACC_DESC_PANELDECL_TABBAR ) );
         i_rTabBar.SetAccessibleName( sAccessibleDescription );
         i_rTabBar.SetAccessibleDescription( sAccessibleDescription );
+
+        i_rTabBar.GetScrollButton( true ).AddEventListener( LINK( this, AccessibleToolPanelTabBar_Impl, OnWindowEvent ) );
+        i_rTabBar.GetScrollButton( false ).AddEventListener( LINK( this, AccessibleToolPanelTabBar_Impl, OnWindowEvent ) );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -178,6 +186,11 @@ namespace accessibility
         ENSURE_OR_RETURN_VOID( !isDisposed(), "disposed twice" );
         m_pPanelDeck->RemoveListener( *this );
         m_pPanelDeck = NULL;
+
+        m_pTabBar->GetScrollButton( true ).RemoveEventListener( LINK( this, AccessibleToolPanelTabBar_Impl, OnWindowEvent ) );
+        m_pTabBar->GetScrollButton( false ).RemoveEventListener( LINK( this, AccessibleToolPanelTabBar_Impl, OnWindowEvent ) );
+        m_pTabBar = NULL;
+
         m_xAccessibleParent.clear();
     }
 
@@ -244,6 +257,33 @@ namespace accessibility
         m_rAntiImpl.dispose();
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    IMPL_LINK( AccessibleToolPanelTabBar_Impl, OnWindowEvent, const VclSimpleEvent*, i_pEvent )
+    {
+        ENSURE_OR_RETURN( !isDisposed(), "AccessibleToolPanelTabBar_Impl::OnWindowEvent: already disposed!", 0L );
+
+        const VclWindowEvent* pWindowEvent( dynamic_cast< const VclWindowEvent* >( i_pEvent ) );
+        if ( !pWindowEvent )
+            return 0L;
+
+        const bool bForwardButton = ( pWindowEvent->GetWindow() == &m_pTabBar->GetScrollButton( true ) );
+        const bool bBackwardButton = ( pWindowEvent->GetWindow() == &m_pTabBar->GetScrollButton( false ) );
+        ENSURE_OR_RETURN( bForwardButton || bBackwardButton, "AccessibleToolPanelTabBar_Impl::OnWindowEvent: where does this come from?", 0L );
+
+        const bool bShow = ( i_pEvent->GetId() == VCLEVENT_WINDOW_SHOW );
+        const bool bHide = ( i_pEvent->GetId() == VCLEVENT_WINDOW_HIDE );
+        if ( !bShow && !bHide )
+            // not interested in events other than visibility changes
+            return 0L;
+
+        const Reference< XAccessible > xButtonAccessible( m_pTabBar->GetScrollButton( bForwardButton ).GetAccessible() );
+        const Any aOldChild( bHide ? xButtonAccessible : Reference< XAccessible >() );
+        const Any aNewChild( bShow ? xButtonAccessible : Reference< XAccessible >() );
+        m_rAntiImpl.NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldChild, aNewChild );
+
+        return 1L;
+    }
+
     //==================================================================================================================
     //= MethodGuard
     //==================================================================================================================
@@ -291,14 +331,41 @@ namespace accessibility
     sal_Int32 SAL_CALL AccessibleToolPanelTabBar::getAccessibleChildCount(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *m_pImpl );
-        return m_pImpl->getPanelDeck()->GetPanelCount();
+
+        const bool bHasScrollBack = m_pImpl->getTabBar()->GetScrollButton( false ).IsVisible();
+        const bool bHasScrollForward = m_pImpl->getTabBar()->GetScrollButton( true ).IsVisible();
+
+        return  m_pImpl->getPanelDeck()->GetPanelCount()
+            +   ( bHasScrollBack ? 1 : 0 )
+            +   ( bHasScrollForward ? 1 : 0 );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessible > SAL_CALL AccessibleToolPanelTabBar::getAccessibleChild( sal_Int32 i_nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         MethodGuard aGuard( *m_pImpl );
-        return m_pImpl->getAccessibleChild( i_nIndex );
+
+        const bool bHasScrollBack = m_pImpl->getTabBar()->GetScrollButton( false ).IsVisible();
+        const bool bHasScrollForward = m_pImpl->getTabBar()->GetScrollButton( true ).IsVisible();
+
+        const bool bScrollBackRequested = ( bHasScrollBack && ( i_nIndex == 0 ) );
+        const bool bScrollForwardRequested = ( bHasScrollForward && ( i_nIndex == getAccessibleChildCount() - 1 ) );
+        OSL_ENSURE( !( bScrollBackRequested && bScrollForwardRequested ), "AccessibleToolPanelTabBar::getAccessibleChild: ouch!" );
+
+        if ( bScrollBackRequested || bScrollForwardRequested )
+        {
+            Reference< XAccessible > xScrollButtonAccessible( m_pImpl->getTabBar()->GetScrollButton( bScrollForwardRequested ).GetAccessible() );
+            ENSURE_OR_RETURN( xScrollButtonAccessible.is(), "AccessibleToolPanelTabBar::getAccessibleChild: invalid button accessible!", NULL );
+        #if OSL_DEBUG_LEVEL > 0
+            Reference< XAccessibleContext > xScrollButtonContext( xScrollButtonAccessible->getAccessibleContext() );
+            ENSURE_OR_RETURN( xScrollButtonContext.is(), "AccessibleToolPanelTabBar::getAccessibleChild: invalid button accessible context!", xScrollButtonAccessible );
+            OSL_ENSURE( xScrollButtonContext->getAccessibleParent() == m_pImpl->getOwnAccessible(),
+                "AccessibleToolPanelTabBar::getAccessibleChild: wrong parent at the button's accesible!" );
+        #endif
+            return xScrollButtonAccessible;
+        }
+
+        return m_pImpl->getAccessibleChild( i_nIndex - ( bHasScrollBack ? 1 : 0 ) );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -316,22 +383,43 @@ namespace accessibility
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    namespace
+    {
+        bool lcl_covers( const ::Window& i_rWindow, const ::Point& i_rPoint )
+        {
+            const Rectangle aWindowBounds( i_rWindow.GetWindowExtentsRelative( i_rWindow.GetParent() ) );
+            return aWindowBounds.IsInside( i_rPoint );
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessible > SAL_CALL AccessibleToolPanelTabBar::getAccessibleAtPoint( const UnoPoint& i_rPoint ) throw (RuntimeException)
     {
         MethodGuard aGuard( *m_pImpl );
 
+        // check the tab items
         const UnoPoint aOwnScreenPos( getLocationOnScreen() );
-        const ::Point aRequestedPoint( i_rPoint.X + aOwnScreenPos.X, i_rPoint.Y + aOwnScreenPos.Y );
-
+        const ::Point aRequestedScreenPoint( i_rPoint.X + aOwnScreenPos.X, i_rPoint.Y + aOwnScreenPos.Y );
 
         for ( size_t i=0; i<m_pImpl->getPanelDeck()->GetPanelCount(); ++i )
         {
             const ::Rectangle aItemScreenRect( m_pImpl->getTabBar()->GetItemScreenRect(i) );
-            if ( aItemScreenRect.IsInside( aRequestedPoint ) )
+            if ( aItemScreenRect.IsInside( aRequestedScreenPoint ) )
                 return m_pImpl->getAccessibleChild(i);
         }
 
-        // TODO: the buttons
+        // check the scroll buttons
+        const ::Point aRequestedClientPoint( VCLUnoHelper::ConvertToVCLPoint( i_rPoint ) );
+
+        const bool bHasScrollBack = m_pImpl->getTabBar()->GetScrollButton( false ).IsVisible();
+        if ( bHasScrollBack && lcl_covers( m_pImpl->getTabBar()->GetScrollButton( false ), aRequestedClientPoint ) )
+            return m_pImpl->getTabBar()->GetScrollButton( false ).GetAccessible();
+
+        const bool bHasScrollForward = m_pImpl->getTabBar()->GetScrollButton( true ).IsVisible();
+        if ( bHasScrollForward && lcl_covers( m_pImpl->getTabBar()->GetScrollButton( true ), aRequestedClientPoint ) )
+            return m_pImpl->getTabBar()->GetScrollButton( true ).GetAccessible();
+
+        // no hit
         return NULL;
     }
 
