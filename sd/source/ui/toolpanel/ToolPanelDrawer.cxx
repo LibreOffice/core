@@ -132,36 +132,24 @@ namespace sd { namespace toolpanel
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::boost::optional< size_t > ToolPanelDrawer::GetPanelItemFromScreenPos( const ::Point& i_rScreenPos )
+    size_t ToolPanelDrawer::GetAccessibleChildCount() const
     {
-        for (   ::std::vector< PTitleBar >::const_iterator drawer = m_aDrawers.begin();
-                drawer != m_aDrawers.end();
-                ++drawer
-            )
-        {
-            const Rectangle aDrawerBounds(
-                m_rParentWindow.OutputToScreenPixel( (*drawer)->GetWindow()->GetPosPixel() ),
-                (*drawer)->GetWindow()->GetSizePixel()
-            );
-            if ( aDrawerBounds.IsInside( i_rScreenPos ) )
-                return ::boost::optional< size_t >( drawer - m_aDrawers.begin() );
-        }
-        return ::boost::optional< size_t >();
+        return m_aDrawers.size();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XAccessible > ToolPanelDrawer::GetPanelItemAccessible( const size_t i_nItemPos, const Reference< XAccessible >& i_rParentAccessible )
+    Reference< XAccessible > ToolPanelDrawer::GetAccessibleChild( const size_t i_nChildIndex, const Reference< XAccessible >& i_rParentAccessible )
     {
-        ENSURE_OR_RETURN( i_nItemPos < m_aDrawers.size(), "illegal index", NULL );
+        ENSURE_OR_RETURN( i_nChildIndex < m_aDrawers.size(), "illegal index", NULL );
 
-        const PTitleBar pTitleBar( m_aDrawers[ i_nItemPos ] );
+        const PTitleBar pTitleBar( m_aDrawers[ i_nChildIndex ] );
         Window* pItemWindow( pTitleBar->GetWindow() );
 
         Reference< XAccessible > xItemAccessible( pItemWindow->GetAccessible( FALSE ) );
         if ( !xItemAccessible.is() )
         {
             xItemAccessible = pTitleBar->CreateAccessibleObject( i_rParentAccessible );
-            OSL_ENSURE( xItemAccessible.is(), "ToolPanelDrawer::GetPanelItemAccessible: invalid XAccessible returned by CreateAccessibleObject!" );
+            OSL_ENSURE( xItemAccessible.is(), "ToolPanelDrawer::GetAccessibleChild: invalid XAccessible returned by CreateAccessibleObject!" );
             pItemWindow->SetAccessible( xItemAccessible );
         }
 
