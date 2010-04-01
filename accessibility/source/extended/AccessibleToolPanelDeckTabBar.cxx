@@ -125,7 +125,7 @@ namespace accessibility
         ::svt::IToolPanelDeck*          getPanelDeck() const { return m_pPanelDeck; }
         ::svt::PanelTabBar*             getTabBar() const { return m_pTabBar; }
         const Reference< XAccessible >& getAccessibleParent() const { return m_xAccessibleParent; }
-        Reference< XAccessible >        getAccessibleChild( size_t i_nPosition );
+        Reference< XAccessible >        getAccessiblePanelItem( size_t i_nPosition );
         Reference< XAccessible >        getOwnAccessible() const;
 
     protected:
@@ -195,10 +195,10 @@ namespace accessibility
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XAccessible > AccessibleToolPanelTabBar_Impl::getAccessibleChild( size_t i_nPosition )
+    Reference< XAccessible > AccessibleToolPanelTabBar_Impl::getAccessiblePanelItem( size_t i_nPosition )
     {
-        ENSURE_OR_RETURN( !isDisposed(), "AccessibleToolPanelTabBar_Impl::getAccessibleChild: already disposed!", NULL );
-        ENSURE_OR_RETURN( i_nPosition < m_aChildren.size(), "AccessibleToolPanelTabBar_Impl::getAccessibleChild: invalid index!", NULL );
+        ENSURE_OR_RETURN( !isDisposed(), "AccessibleToolPanelTabBar_Impl::getAccessiblePanelItem: already disposed!", NULL );
+        ENSURE_OR_RETURN( i_nPosition < m_aChildren.size(), "AccessibleToolPanelTabBar_Impl::getAccessiblePanelItem: invalid index!", NULL );
 
         Reference< XAccessible >& rAccessibleChild( m_aChildren[ i_nPosition ] );
         if ( !rAccessibleChild.is() )
@@ -225,22 +225,22 @@ namespace accessibility
     {
         ENSURE_OR_RETURN_VOID( i_nPosition <= m_aChildren.size(), "AccessibleToolPanelTabBar_Impl::PanelInserted: illegal position (or invalid cache!)" );
         m_aChildren.insert( m_aChildren.begin() + i_nPosition, NULL );
-        // TODO: notify the event
+        m_rAntiImpl.NotifyAccessibleEvent( AccessibleEventId::CHILD, Any(), makeAny( getAccessiblePanelItem( i_nPosition ) ) );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelTabBar_Impl::PanelRemoved( const size_t i_nPosition )
     {
         ENSURE_OR_RETURN_VOID( i_nPosition < m_aChildren.size(), "AccessibleToolPanelTabBar_Impl::PanelInserted: illegal position (or invalid cache!)" );
+
+        const Reference< XAccessible > xOldChild( getAccessiblePanelItem( i_nPosition ) );
         m_aChildren.erase( m_aChildren.begin() + i_nPosition );
-        // TODO: notify the event
+        m_rAntiImpl.NotifyAccessibleEvent( AccessibleEventId::CHILD, makeAny( xOldChild ), Any() );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelTabBar_Impl::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
     {
-        // TODO: state changes for the active descendant?
-        // TODO: state changes for the items themself (assuming that they don't do this on their own)
         (void)i_rOldActive;
         (void)i_rNewActive;
     }
@@ -365,7 +365,7 @@ namespace accessibility
             return xScrollButtonAccessible;
         }
 
-        return m_pImpl->getAccessibleChild( i_nIndex - ( bHasScrollBack ? 1 : 0 ) );
+        return m_pImpl->getAccessiblePanelItem( i_nIndex - ( bHasScrollBack ? 1 : 0 ) );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -405,7 +405,7 @@ namespace accessibility
         {
             const ::Rectangle aItemScreenRect( m_pImpl->getTabBar()->GetItemScreenRect(i) );
             if ( aItemScreenRect.IsInside( aRequestedScreenPoint ) )
-                return m_pImpl->getAccessibleChild(i);
+                return m_pImpl->getAccessiblePanelItem(i);
         }
 
         // check the scroll buttons
