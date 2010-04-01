@@ -747,10 +747,19 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
     HICON hIcon( 0 );
 
     if ( pMyItem->module.getLength() > 0 )
-        hIcon = (HICON) LoadImageA( GetModuleHandleW( reinterpret_cast<LPCWSTR>( pMyItem->module.getStr() )),
+    {
+        LPCWSTR pModuleName = reinterpret_cast<LPCWSTR>( pMyItem->module.getStr() );
+        HMODULE hModule = GetModuleHandleW( pModuleName );
+        if ( hModule == NULL )
+        {
+            LoadLibraryW( pModuleName );
+            hModule = GetModuleHandleW( pModuleName );
+        }
+        hIcon = (HICON) LoadImageA( hModule,
                                     MAKEINTRESOURCE( pMyItem->iconId ),
                                     IMAGE_ICON, cx, cy,
                                     LR_DEFAULTCOLOR | LR_SHARED );
+    }
     else
         hIcon = (HICON) LoadImageA( GetModuleHandle( NULL ), MAKEINTRESOURCE( pMyItem->iconId ),
                                     IMAGE_ICON, cx, cy,
