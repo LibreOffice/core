@@ -26,9 +26,11 @@
 
 #include "precompiled_svtools.hxx"
 
+#include "svtools/toolpanel/paneltabbar.hxx"
+
 #include "svtools/toolpanel/toolpaneldeck.hxx"
 #include "tabitemdescriptor.hxx"
-#include "paneltabbar.hxx"
+#include "paneltabbarpeer.hxx"
 #include "tabbargeometry.hxx"
 
 #include <vcl/button.hxx>
@@ -50,6 +52,9 @@
 namespace svt
 {
 //........................................................................
+
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::awt::XWindowPeer;
 
     typedef sal_uInt16  ItemFlags;
 
@@ -385,6 +390,8 @@ namespace svt
         Rectangle                   GetActualLogicalItemRect( const Rectangle& i_rLogicalItemRect ) const;
         Rectangle                   GetItemScreenRect( const size_t i_nItemPos ) const;
 
+        void                        FocusItem( const ::boost::optional< size_t >& i_rItemPos );
+
         inline bool                 IsVertical() const
         {
             return  (   ( m_eTabAlignment == TABS_LEFT )
@@ -546,9 +553,9 @@ namespace svt
 
             Rectangle aContentArea;
 
-            Size aCompleteSize( impl_calculateItemContentSize( pPanel, TABITEM_IMAGE_AND_TEXT ) );
-            Size aIconOnlySize( impl_calculateItemContentSize( pPanel, TABITEM_IMAGE_ONLY ) );
-            Size aTextOnlySize( impl_calculateItemContentSize( pPanel, TABITEM_TEXT_ONLY ) );
+            const Size aCompleteSize( impl_calculateItemContentSize( pPanel, TABITEM_IMAGE_AND_TEXT ) );
+            const Size aIconOnlySize( impl_calculateItemContentSize( pPanel, TABITEM_IMAGE_ONLY ) );
+            const Size aTextOnlySize( impl_calculateItemContentSize( pPanel, TABITEM_TEXT_ONLY ) );
 
             // TODO: have one method calculating all sizes?
 
@@ -602,7 +609,7 @@ namespace svt
         {
             // have a minimal size - this is pure heuristics, but if it doesn't suit your needs, then give your panels
             // a name and or image! :)
-            aItemContentSize = Size( 14, 14 );
+            aItemContentSize = Size( 16, 16 );
         }
 
         aItemContentSize.Width() += 2 * ITEM_OUTER_SPACE;
@@ -890,6 +897,22 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    void PanelTabBar_Impl::FocusItem( const ::boost::optional< size_t >& i_rItemPos )
+    {
+        // reset old focus item
+        if ( !!m_aFocusedItem )
+            InvalidateItem( *m_aFocusedItem );
+        m_aFocusedItem.reset();
+
+        // mark the active icon as focused
+        if ( !!i_rItemPos )
+        {
+            m_aFocusedItem = i_rItemPos;
+            InvalidateItem( *m_aFocusedItem );
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     IMPL_LINK( PanelTabBar_Impl, OnScroll, const PushButton*, i_pButton )
     {
         if ( i_pButton == &m_aScrollBack )
@@ -984,6 +1007,13 @@ namespace svt
         m_pImpl->m_aGeometry.setItemContent( i_eItemContent );
         m_pImpl->Relayout();
         Invalidate();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    IToolPanelDeck& PanelTabBar::GetPanelDeck() const
+    {
+        DBG_CHECK( *m_pImpl );
+        return m_pImpl->m_rPanelDeck;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1145,15 +1175,8 @@ namespace svt
     void PanelTabBar::GetFocus()
     {
         Control::GetFocus();
-        if ( m_pImpl->m_rPanelDeck.GetPanelCount() )
-        {
-            ::boost::optional< size_t > aActivePanel( m_pImpl->m_rPanelDeck.GetActivePanel() );
-            if ( !!aActivePanel )
-            {
-                m_pImpl->m_aFocusedItem = aActivePanel;
-                m_pImpl->InvalidateItem( *m_pImpl->m_aFocusedItem );
-            }
-        }
+        if ( !m_pImpl->m_aFocusedItem )
+            m_pImpl->FocusItem( m_pImpl->m_rPanelDeck.GetActivePanel() );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1272,9 +1295,9 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::boost::optional< size_t > PanelTabBar::FindItemForPoint( const Point& i_rPoint ) const
+    bool PanelTabBar::IsVertical() const
     {
-        return m_pImpl->FindItemForPoint( i_rPoint );
+        return m_pImpl->IsVertical();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1291,7 +1314,8 @@ namespace svt
         if ( !HasChildPathFocus() )
             GrabFocus();
 
-        OSL_ENSURE( !!m_pImpl->m_aFocusedItem, "PanelTabBar::FocusPanelItem: have the focus, but not focused item?" );
+        m_pImpl->FocusItem( i_nItemPos );
+        OSL_POSTCOND( !!m_pImpl->m_aFocusedItem, "PanelTabBar::FocusPanelItem: have the focus, but not focused item?" );
         if ( !!m_pImpl->m_aFocusedItem )
             m_pImpl->InvalidateItem( *m_pImpl->m_aFocusedItem );
         m_pImpl->m_aFocusedItem.reset( i_nItemPos );
@@ -1301,6 +1325,18 @@ namespace svt
     Rectangle PanelTabBar::GetItemScreenRect( const size_t i_nItemPos ) const
     {
         return m_pImpl->GetItemScreenRect( i_nItemPos );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Reference< XWindowPeer > PanelTabBar::GetComponentInterface( BOOL i_bCreate )
+    {
+        Reference< XWindowPeer > xWindowPeer( Control::GetComponentInterface( FALSE ) );
+        if ( !xWindowPeer.is() && i_bCreate )
+        {
+            xWindowPeer.set( new PanelTabBarPeer( *this ) );
+            SetComponentInterface( xWindowPeer );
+        }
+        return xWindowPeer;
     }
 
 //........................................................................

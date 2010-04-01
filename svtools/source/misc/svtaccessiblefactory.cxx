@@ -221,11 +221,11 @@ namespace svt
             {
                 return NULL;
             }
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-                createAccessibleToolPanelDeckTabBarItem(
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+                createAccessibleToolPanelTabBar(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& /*i_rAccessibleParent*/,
-                    const ::rtl::Reference< ::svt::TabDeckLayouter >& /*i_pLayouter*/,
-                    const size_t /*i_nItemPos*/
+                    ::svt::IToolPanelDeck& /*i_rPanelDeck*/,
+                    ::svt::PanelTabBar& /*i_rTabBar*/
                 )
             {
                 return NULL;

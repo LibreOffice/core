@@ -47,6 +47,7 @@ SLOFILES=\
         $(SLO)$/dummypanel.obj \
         $(SLO)$/paneldecklisteners.obj \
         $(SLO)$/paneltabbar.obj \
+        $(SLO)$/paneltabbarpeer.obj \
         $(SLO)$/refbase.obj \
         $(SLO)$/tabbargeometry.obj \
         $(SLO)$/tablayouter.obj \

@@ -65,7 +65,8 @@ namespace svt
 //........................................................................
 
     class ToolPanelDeck;
-    class TabDeckLayouter;
+    class IToolPanelDeck;
+    class PanelTabBar;
 
     /** a function which is able to create a factory for the standard Accessible/Context
         components needed for standard toolkit controls
@@ -174,11 +175,11 @@ namespace svt
                 const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rAccessibleParent,
                 ::svt::ToolPanelDeck& i_rPanelDeck
             ) = 0;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-            createAccessibleToolPanelDeckTabBarItem(
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+            createAccessibleToolPanelTabBar(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rAccessibleParent,
-                const ::rtl::Reference< ::svt::TabDeckLayouter >& i_pLayouter,
-                const size_t i_nItemPos
+                ::svt::IToolPanelDeck& i_rPanelDeck,
+                ::svt::PanelTabBar& i_rTabBar
             ) = 0;
     };
 

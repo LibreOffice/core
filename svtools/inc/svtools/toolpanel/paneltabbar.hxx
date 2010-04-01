@@ -23,15 +23,18 @@
  * for a copy of the LGPLv3 License.
  *
 ************************************************************************/
-#ifndef PANELTABBAR_HXX
-#define PANELTABBAR_HXX
 
+#ifndef SVT_PANELTABBAR_HXX
+#define SVT_PANELTABBAR_HXX
+
+#include "svtools/svtdllapi.h"
 #include "svtools/toolpanel/tabalignment.hxx"
 #include "svtools/toolpanel/tabitemcontent.hxx"
 
 #include <vcl/ctrl.hxx>
 
 #include <memory>
+#include <boost/optional.hpp>
 
 //........................................................................
 namespace svt
@@ -39,6 +42,7 @@ namespace svt
 //........................................................................
 
     class PanelTabBar_Impl;
+    class IToolPanelDeck;
 
     //====================================================================
     //= PanelTabBar
@@ -48,7 +52,7 @@ namespace svt
         At the moment, this control aligns the tabs vertically, this might be extended to also support a horizontal
         layout in the future.
     */
-    class PanelTabBar : public Control
+    class SVT_DLLPUBLIC PanelTabBar : public Control
     {
     public:
         PanelTabBar( Window& i_rParentWindow, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent );
@@ -58,8 +62,11 @@ namespace svt
         TabItemContent  GetTabItemContent() const;
         void            SetTabItemContent( const TabItemContent& i_eItemContent );
 
+        bool            IsVertical() const;
+
+        IToolPanelDeck& GetPanelDeck() const;
+
         // operations
-        ::boost::optional< size_t > FindItemForPoint( const Point& i_rPoint ) const;
         ::boost::optional< size_t > GetFocusedPanelItem() const;
         void                        FocusPanelItem( const size_t i_nItemPos );
         Rectangle                   GetItemScreenRect( const size_t i_nItemPos ) const;
@@ -77,6 +84,9 @@ namespace svt
         virtual void    KeyInput( const KeyEvent& i_rKeyEvent );
         virtual void    DataChanged( const DataChangedEvent& i_rDataChanedEvent );
 
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
+                        GetComponentInterface( BOOL i_bCreate );
+
     private:
         ::std::auto_ptr< PanelTabBar_Impl > m_pImpl;
     };
@@ -85,5 +95,5 @@ namespace svt
 } // namespace svt
 //........................................................................
 
-#endif // PANELTABBAR_HXX
+#endif // SVT_PANELTABBAR_HXX
 

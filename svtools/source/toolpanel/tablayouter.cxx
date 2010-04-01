@@ -28,7 +28,7 @@
 
 #include "svtools/toolpanel/tablayouter.hxx"
 #include "svtools/toolpanel/toolpaneldeck.hxx"
-#include "paneltabbar.hxx"
+#include "svtools/toolpanel/paneltabbar.hxx"
 #include "svtaccessiblefactory.hxx"
 
 #include <tools/gen.hxx>
@@ -124,13 +124,6 @@ namespace svt
         if ( lcl_checkDisposed( *m_pData ) )
             return TABS_RIGHT;
         return m_pData->eAlignment;
-    }
-
-    //--------------------------------------------------------------------
-    IToolPanelDeck& TabDeckLayouter::GetPanelDeck() const
-    {
-        lcl_checkDisposed( *m_pData );
-        return m_pData->rPanels;
     }
 
     //--------------------------------------------------------------------
@@ -239,26 +232,27 @@ namespace svt
     //--------------------------------------------------------------------
     void TabDeckLayouter::SetFocusToPanelSelector()
     {
-        if ( lcl_checkDisposed( * m_pData ) )
+        if ( lcl_checkDisposed( *m_pData ) )
             return;
         m_pData->pTabBar->GrabFocus();
     }
 
     //--------------------------------------------------------------------
-    ::boost::optional< size_t > TabDeckLayouter::GetPanelItemFromScreenPos( const ::Point& i_rScreenPos )
+    size_t TabDeckLayouter::GetAccessibleChildCount() const
     {
         if ( lcl_checkDisposed( *m_pData ) )
-            return ::boost::optional< size_t >();
-        const Point aOutputPos( m_pData->pTabBar->ScreenToOutputPixel( i_rScreenPos ) );
-        return m_pData->pTabBar->FindItemForPoint( aOutputPos );
+            return 0;
+
+        return 1;
     }
 
     //--------------------------------------------------------------------
-    Reference< XAccessible > TabDeckLayouter::GetPanelItemAccessible( const size_t i_nItemPos, const Reference< XAccessible >& i_rParentAccessible )
+    Reference< XAccessible > TabDeckLayouter::GetAccessibleChild( const size_t i_nChildIndex, const Reference< XAccessible >& i_rParentAccessible )
     {
         if ( lcl_checkDisposed( *m_pData ) )
             return NULL;
-        return m_pData->aAccessibleFactory.getFactory().createAccessibleToolPanelDeckTabBarItem( i_rParentAccessible, this, i_nItemPos );
+
+        return m_pData->pTabBar->GetAccessible( TRUE );
     }
 
 //........................................................................

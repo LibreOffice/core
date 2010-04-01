@@ -74,19 +74,19 @@ namespace svt
         */
         virtual void        SetFocusToPanelSelector() = 0;
 
-        /** assuming that tools panels, no matter whether currently active or inactive, are visually represented
-            by some item, this method is to retrieve the position of an item for a given screen location.
-        */
-        virtual ::boost::optional< size_t >
-                            GetPanelItemFromScreenPos( const ::Point& i_rScreenPos ) = 0;
+        /** returns the number of components in the XAccessible hierarchy which are needed to represent all elements
+            the layouter is responsible form.
 
-        /** assuming that tools panels, no matter whether currently active or inactive, are visually represented
-            by some item, this method is to retrieve the XAccessible implementation for such an item, given
-            by panel position.
+            Note that the implementation must guarantee that the count is fixed over the life time of the layouter.
+        */
+        virtual size_t      GetAccessibleChildCount() const = 0;
+
+        /** retrieves the XAccessible implementation for the <code>i_nChildIndex</code>'th child in the XAccessible
+            hierarchy.
         */
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-                            GetPanelItemAccessible(
-                                const size_t i_nItemPos,
+                            GetAccessibleChild(
+                                const size_t i_nChildIndex,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rParentAccessible
                             ) = 0;
 

@@ -175,7 +175,8 @@ namespace svt
         virtual long Notify( NotifyEvent& i_rNotifyEvent );
         virtual void GetFocus();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > GetComponentInterface( BOOL i_bCreate );
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
+                     GetComponentInterface( BOOL i_bCreate );
 
     private:
         ::std::auto_ptr< ToolPanelDeck_Impl >   m_pImpl;
