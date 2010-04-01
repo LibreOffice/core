@@ -88,7 +88,6 @@ RESLIB1SRSFILES= \
         $(SRS)$/dialogs.srs     \
         $(SRS)$/plugapp.srs     \
         $(SRS)$/svcontnr.srs    \
-        $(SRS)$/uno.srs         \
         $(SRS)$/browse.srs		\
         $(SRS)$/javaerror.srs
 
