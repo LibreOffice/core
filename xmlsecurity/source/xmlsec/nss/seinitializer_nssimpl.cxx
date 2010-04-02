@@ -61,6 +61,7 @@
 #include <rtl/logfile.hxx>
 
 #include "seinitializer_nssimpl.hxx"
+#include "../diagnose.hxx"
 
 #include "securityenvironment_nssimpl.hxx"
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
@@ -76,6 +77,7 @@ namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
 
+using namespace xmlsecurity;
 using namespace com::sun::star;
 using ::rtl::OUString;
 using ::rtl::OString;
@@ -109,7 +111,7 @@ struct InitNSSInitialize
             bInitialized = nsscrypto_initialize(m_sProfile.getStr(), bNSSInit);
             if (bNSSInit)
                 atexit(nsscrypto_finalize );
-            return & bInitialized;
+             return & bInitialized;
 
         }
 };
@@ -139,7 +141,7 @@ void deleteRootsModule()
             {
                 if (PK11_HasRootCerts(slot))
                 {
-                    OSL_TRACE("[xmlsecurity] The root certifificates module \"%s"
+                    xmlsec_trace("The root certifificates module \"%s"
                               "\" is already loaded: \n%s",
                               module->commonName,  module->dllName);
 
@@ -157,11 +159,11 @@ void deleteRootsModule()
         PRInt32 modType;
         if (SECSuccess == SECMOD_DeleteModule(RootsModule->commonName, &modType))
         {
-            OSL_TRACE("[xmlsecurity] Deleted module \"%s\".", RootsModule->commonName);
+            xmlsec_trace("Deleted module \"%s\".", RootsModule->commonName);
         }
         else
         {
-            OSL_TRACE("[xmlsecurity] Failed to delete \"%s\" : \n%s",
+            xmlsec_trace("Failed to delete \"%s\" : \n%s",
                       RootsModule->commonName, RootsModule->dllName);
         }
         SECMOD_DestroyModule(RootsModule);
@@ -194,18 +196,36 @@ bool nsscrypto_initialize( const char* token, bool & out_nss_init )
 {
     bool return_value = true;
 
-    OSL_TRACE("[xmlsecurity] Using profile: %s", token);
+    xmlsec_trace("Using profile: %s", token);
 
     PR_Init( PR_USER_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
 
-    if( NSS_InitReadWrite( token ) != SECSuccess )
+    //token may be an empty string
+    if (token != NULL && strlen(token) > 0)
     {
-        char * error = NULL;
+        if( NSS_InitReadWrite( token ) != SECSuccess )
+        {
+            xmlsec_trace("Initializing NSS with profile failed.");
+            char * error = NULL;
 
-        PR_GetErrorText(error);
-        if (error)
-            printf("%s",error);
-        return false ;
+            PR_GetErrorText(error);
+            if (error)
+                xmlsec_trace("%s",error);
+            return false ;
+        }
+    }
+    else
+    {
+        xmlsec_trace("Initializing NSS without profile.");
+        if ( NSS_NoDB_Init(NULL) != SECSuccess )
+        {
+            xmlsec_trace("Initializing NSS without profile failed.");
+            char * error = NULL;
+            PR_GetErrorText(error);
+            if (error)
+                xmlsec_trace("%s",error);
+            return false ;
+        }
     }
     out_nss_init = true;
 
@@ -247,18 +267,18 @@ bool nsscrypto_initialize( const char* token, bool & out_nss_init )
                 SECMOD_DestroyModule(RootsModule);
                 RootsModule = 0;
                 if (found)
-                    OSL_TRACE("[xmlsecurity] Added new root certificate module "
+                    xmlsec_trace("Added new root certificate module "
                               "\""ROOT_CERTS"\" contained in \n%s", ospath.getStr());
                 else
                 {
-                    OSL_TRACE("[xmlsecurity] FAILED to load the new root certificate module "
+                    xmlsec_trace("FAILED to load the new root certificate module "
                               "\""ROOT_CERTS"\" contained in \n%s", ospath.getStr());
                     return_value = false;
                 }
             }
             else
             {
-                OSL_TRACE("[xmlsecurity] FAILED to add new root certifice module: "
+                xmlsec_trace("FAILED to add new root certifice module: "
                           "\""ROOT_CERTS"\" contained in \n%s", ospath.getStr());
                 return_value = false;
 
@@ -266,7 +286,7 @@ bool nsscrypto_initialize( const char* token, bool & out_nss_init )
         }
         else
         {
-            OSL_TRACE("[xmlsecurity] Adding new root certificate module failed.");
+            xmlsec_trace("Adding new root certificate module failed.");
             return_value = false;
         }
 #if SYSTEM_MOZILLA
@@ -287,17 +307,17 @@ extern "C" void nsscrypto_finalize()
 
         if (SECSuccess == SECMOD_UnloadUserModule(RootsModule))
         {
-            OSL_TRACE("[xmlsecurity] Unloaded module \""ROOT_CERTS"\".");
+            xmlsec_trace("Unloaded module \""ROOT_CERTS"\".");
         }
         else
         {
-            OSL_TRACE("[xmlsecurity] Failed unloadeding module \""ROOT_CERTS"\".");
+            xmlsec_trace("Failed unloadeding module \""ROOT_CERTS"\".");
         }
         SECMOD_DestroyModule(RootsModule);
     }
     else
     {
-        OSL_TRACE("[xmlsecurity] Unloading module \""ROOT_CERTS
+        xmlsec_trace("Unloading module \""ROOT_CERTS
                   "\" failed because it was not found.");
     }
     PK11_LogoutAll();
@@ -312,17 +332,16 @@ bool getMozillaCurrentProfile(
     /*
      * first, try to get the profile from "MOZILLA_CERTIFICATE_FOLDER"
      */
-        char * env = getenv("MOZILLA_CERTIFICATE_FOLDER");
-        if (env)
-        {
-            profilePath = rtl::OUString::createFromAscii( env );
-            RTL_LOGFILE_PRODUCT_TRACE1( "XMLSEC: Using env MOZILLA_CERTIFICATE_FOLDER: %s", rtl::OUStringToOString( profilePath, RTL_TEXTENCODING_ASCII_US ).getStr() );
-            return true;
-        }
-        else
-        {
-            RTL_LOGFILE_TRACE( "getMozillaCurrentProfile: Using MozillaBootstrap..." );
-            mozilla::MozillaProductType productTypes[4] = {
+    char * env = getenv("MOZILLA_CERTIFICATE_FOLDER");
+    if (env)
+    {
+        profilePath = rtl::OUString::createFromAscii( env );
+        RTL_LOGFILE_PRODUCT_TRACE1( "XMLSEC: Using env MOZILLA_CERTIFICATE_FOLDER: %s", rtl::OUStringToOString( profilePath, RTL_TEXTENCODING_ASCII_US ).getStr() );
+        return true;
+    }
+    else
+    {
+        mozilla::MozillaProductType productTypes[4] = {
             mozilla::MozillaProductType_Thunderbird,
             mozilla::MozillaProductType_Mozilla,
             mozilla::MozillaProductType_Firefox,
@@ -342,8 +361,6 @@ bool getMozillaCurrentProfile(
             for (int i=0; i<nProduct; i++)
             {
                 ::rtl::OUString profile = xMozillaBootstrap->getDefaultProfile(productTypes[i]);
-
-                RTL_LOGFILE_TRACE2( "getMozillaCurrentProfile: getDefaultProfile [%i] returns %s", i, rtl::OUStringToOString( profile, RTL_TEXTENCODING_ASCII_US ).getStr() );
 
                 if (profile != NULL && profile.getLength()>0)
                 {
@@ -401,36 +418,9 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
 
     }
 
-    if( !sCertDir.getLength() )
-    {
-        RTL_LOGFILE_TRACE( "XMLSEC: Error - No certificate directory!" );
-        // return NULL;
-    }
-
-
-    /* Initialize NSPR and NSS */
-    /* Replaced with new methods by AF. ----
-    //PR_Init( PR_SYSTEM_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
-    PR_Init( PR_USER_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
-
-    if (NSS_Init(sCertDir.getStr()) != SECSuccess )
-    {
-        PK11_LogoutAll();
-        return NULL;
-    }
-    ----*/
     if( ! *initNSS( sCertDir.getStr() ) )
     {
-        RTL_LOGFILE_TRACE( "XMLSEC: Error - nsscrypto_initialize() failed." );
-        if ( NSS_NoDB_Init(NULL) != SECSuccess )
-        {
-            RTL_LOGFILE_TRACE( "XMLSEC: NSS_NoDB_Init also failed, NSS Security not available!" );
-            return NULL;
-        }
-        else
-        {
-            RTL_LOGFILE_TRACE( "XMLSEC: NSS_NoDB_Init works, enough for verifying signatures..." );
-        }
+        return NULL;
     }
 
     pCertHandle = CERT_GetDefaultCertDB() ;
