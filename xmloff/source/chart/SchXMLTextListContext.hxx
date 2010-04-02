@@ -24,23 +24,35 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef _SCH_XMLTEXTLISTCONTEXT_HXX_
+#define _SCH_XMLTEXTLISTCONTEXT_HXX_
 
-#define __RSC
+#include <xmloff/xmlictxt.hxx>
+#include "rtl/ustring.hxx"
+#include <vector>
 
-#ifndef UUI_IDS_HRC
-#include <ids.hrc>
-#endif
+namespace com { namespace sun { namespace star { namespace xml { namespace sax {
+        class XAttributeList;
+}}}}}
 
-String STR_LOCKFAILED_TITLE
+class SchXMLTextListContext : public SvXMLImportContext
 {
-    Text = "Document Could Not Be Locked";
-};
-String STR_LOCKFAILED_MSG
-{
-    Text [ en-US ] = "The file could not be locked for exclusive access by %PRODUCTNAME, due to missing permission to create a lock file on that file location.";
-};
-String STR_LOCKFAILED_DONTSHOWAGAIN
-{
-    Text = "~Do not show this message again";
+public:
+    SchXMLTextListContext( SvXMLImport& rImport,
+                            const ::rtl::OUString& rLocalName,
+                            ::com::sun::star::uno::Sequence< ::rtl::OUString>& rTextList );
+    virtual ~SchXMLTextListContext();
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void EndElement();
+
+    virtual SvXMLImportContext* CreateChildContext(
+        USHORT nPrefix,
+        const ::rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
+
+private:
+    ::com::sun::star::uno::Sequence< ::rtl::OUString>& m_rTextList;
+    std::vector< ::rtl::OUString> m_aTextVector;
 };
 
+#endif  // _SCH_XMLTEXTLISTCONTEXT_HXX_

@@ -47,6 +47,7 @@ SLOFILES =	$(SLO)$/ColorPropertySet.obj \
             $(SLO)$/SchXMLChartContext.obj \
             $(SLO)$/SchXMLPlotAreaContext.obj \
             $(SLO)$/SchXMLParagraphContext.obj \
+            $(SLO)$/SchXMLTextListContext.obj \
             $(SLO)$/SchXMLSeriesHelper.obj \
             $(SLO)$/SchXMLSeries2Context.obj \
             $(SLO)$/PropertyMaps.obj \
