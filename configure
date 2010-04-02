@@ -15695,12 +15695,17 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 
+import net.sf.saxon.FeatureKeys;
+
 class saxontest {
     public static void main(String[] args) {
       System.setProperty("javax.xml.transform.TransformerFactory",
         "net.sf.saxon.TransformerFactoryImpl");
       try {
         TransformerFactory tfactory = TransformerFactory.newInstance();
+	// some external saxons (Debian, Ubuntu, ...) have this disabled
+	// per default
+	tfactory.setAttribute(FeatureKeys.ALLOW_EXTERNAL_FUNCTIONS, new Boolean(true));
         System.out.println("TransformerFactory is" +
           tfactory.getClass().getName());
         Transformer transformer = tfactory.newTransformer(
@@ -15723,7 +15728,7 @@ _ACEOF
 </xsl:stylesheet>
 
 _ACEOF
-        javac_cmd="$JAVACOMPILER saxontest.java 1>&2"
+        javac_cmd="$JAVACOMPILER -cp $SAXON_JAR saxontest.java 1>&2"
         { (eval echo "$as_me:$LINENO: \"$javac_cmd\"") >&5
   (eval $javac_cmd) 2>&5
   ac_status=$?
