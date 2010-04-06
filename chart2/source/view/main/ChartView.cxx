@@ -1605,7 +1605,13 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
     }
     else
     {
-        m_aResultingDiagramRectangleExcludingAxes = awt::Rectangle( rAvailablePos.X, rAvailablePos.Y, rAvailableSize.Width, rAvailableSize.Height );
+        if( bUseFixedInnerSize )
+            m_aResultingDiagramRectangleExcludingAxes = awt::Rectangle( rAvailablePos.X, rAvailablePos.Y, rAvailableSize.Width, rAvailableSize.Height );
+        else
+        {
+            ::basegfx::B2IRectangle aConsumedInnerRect = aVDiagram.getCurrentRectangle();
+            m_aResultingDiagramRectangleExcludingAxes = awt::Rectangle( aConsumedInnerRect.getMinX(), aConsumedInnerRect.getMinY(), aConsumedInnerRect.getWidth(), aConsumedInnerRect.getHeight() );
+        }
     }
 
     if( xDiagram_MarkHandles.is() )
