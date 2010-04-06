@@ -53,6 +53,10 @@
 #include <vcl/image.h>
 #include <vcl/image.hxx>
 
+#if OSL_DEBUG_LEVEL > 0
+#include <rtl/strbuf.hxx>
+#endif
+
 DBG_NAME( Image )
 DBG_NAME( ImageList )
 
@@ -546,11 +550,19 @@ void ImageAryData::Load(const rtl::OUString &rPrefix)
 
     rtl::OUString aFileName = rPrefix;
     aFileName += maName;
-#ifdef DBG_UTIL
-    bool bSuccess = aImageTree->loadImage( aFileName, aSymbolsStyle, maBitmapEx, true );
-    DBG_ASSERT (bSuccess, "ImageAryData::Failed to load image");
-#else
-    aImageTree->loadImage( aFileName, aSymbolsStyle, maBitmapEx, true );
+#if OSL_DEBUG_LEVEL > 0
+    bool bSuccess =
+#endif
+        aImageTree->loadImage( aFileName, aSymbolsStyle, maBitmapEx, true );
+#if OSL_DEBUG_LEVEL > 0
+    if ( !bSuccess )
+    {
+        ::rtl::OStringBuffer aMessage;
+        aMessage.append( "ImageAryData::Load: failed to load image '" );
+        aMessage.append( ::rtl::OUStringToOString( aFileName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        aMessage.append( "'" );
+        OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+    }
 #endif
 }
 
