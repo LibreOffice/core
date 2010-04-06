@@ -35,6 +35,7 @@
 #include "rtl/string.hxx"
 #include <vector>
 #include <list>
+#include "boost/optional.hpp"
 #include "dp_backenddb.hxx"
 
 namespace css = ::com::sun::star;
@@ -87,7 +88,7 @@ public:
 
     void addEntry(::rtl::OUString const & url, Data const & data);
     void removeEntry(::rtl::OUString const & url);
-    Data getEntry(::rtl::OUString const & url);
+    ::boost::optional<Data> getEntry(::rtl::OUString const & url);
     ::std::list< ::rtl::OUString> getAllDataUrls();
 
 };

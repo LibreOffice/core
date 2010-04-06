@@ -143,7 +143,8 @@ void HelpBackendDb::removeEntry(::rtl::OUString const & url)
     removeElement(sExpression);
 }
 
-HelpBackendDb::Data HelpBackendDb::getEntry(::rtl::OUString const & url)
+::boost::optional<HelpBackendDb::Data>
+HelpBackendDb::getEntry(::rtl::OUString const & url)
 {
     try
     {
@@ -174,8 +175,13 @@ HelpBackendDb::Data HelpBackendDb::getEntry(::rtl::OUString const & url)
 //                 readVectorOfPair(
 //                     aNode, OUSTR("reg:singletons"), OUSTR("item"), OUSTR("key"),
 //                     OUSTR("value"));
+
         }
-        return retData;
+        else
+        {
+            return ::boost::optional<Data>();
+        }
+        return ::boost::optional<Data>(retData);
     }
     catch(css::uno::Exception &)
     {

@@ -716,6 +716,15 @@ OUString Package::getRepositoryName()
     return backEnd->getContext();
 }
 
+beans::Optional< OUString > Package::getRegistrationDataURL()
+        throw (deployment::ExtensionRemovedException,
+               css::uno::RuntimeException)
+{
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
+    return beans::Optional<OUString>();
+}
+
 sal_Bool Package::isRemoved()
     throw (RuntimeException)
 {

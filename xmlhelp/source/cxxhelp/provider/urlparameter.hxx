@@ -150,6 +150,8 @@ namespace chelp {
 
         rtl::OUString get_jar()      { return get_the_jar(); }      // BerkeleyDb
 
+        rtl::OUString get_ExtensionRegistryPath()    { return m_aExtensionRegistryPath; }
+
         rtl::OUString get_module()   { return m_aModule; }
 
         rtl::OUString get_dbpar()    {
@@ -203,6 +205,7 @@ namespace chelp {
         rtl::OUString  m_aModule;
         rtl::OUString  m_aTitle;
         rtl::OUString  m_aJar;
+        rtl::OUString  m_aExtensionRegistryPath;
         rtl::OUString  m_aEid;
         rtl::OUString  m_aDbPar;
 

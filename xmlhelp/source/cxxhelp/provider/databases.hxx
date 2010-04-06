@@ -267,7 +267,8 @@ namespace chelp {
 
         com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >
         findJarFileForPath( const rtl::OUString& jar, const rtl::OUString& Language,
-            const rtl::OUString& path, rtl::OUString* o_pExtensionPath = NULL );
+            const rtl::OUString& path, rtl::OUString* o_pExtensionPath = NULL,
+            rtl::OUString* o_pExtensionRegistryPath = NULL );
 
         /**
          *  Maps a given language-locale combination to language.
@@ -398,6 +399,7 @@ namespace chelp {
         //SHARED_MODULE,        // Later, avoids redundancies in help compiling
         USER_EXTENSIONS,
         SHARED_EXTENSIONS,
+        BUNDLED_EXTENSIONS,
         END_REACHED
     };
 
@@ -433,6 +435,8 @@ namespace chelp {
             ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
         com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetNextSharedHelpPackage
             ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
+        com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetNextBundledHelpPackage
+        ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
         rtl::OUString implGetFileFromPackage( const rtl::OUString& rFileExtension,
             com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
         void implGetLanguageVectorFromPackage( ::std::vector< ::rtl::OUString > &rv,
@@ -456,8 +460,13 @@ namespace chelp {
             < com::sun::star::deployment::XPackage > >                              m_aSharedPackagesSeq;
         bool                                                                        m_bSharedPackagesLoaded;
 
+        com::sun::star::uno::Sequence< com::sun::star::uno::Reference
+            < com::sun::star::deployment::XPackage > >                              m_aBundledPackagesSeq;
+        bool                                                                        m_bBundledPackagesLoaded;
+
         int                                                                         m_iUserPackage;
         int                                                                         m_iSharedPackage;
+        int                                                                         m_iBundledPackage;
 
     }; // end class ExtensionIteratorBase
 
@@ -477,13 +486,13 @@ namespace chelp {
                 , m_bHelpText( bHelpText )
         {}
 
-        berkeleydbproxy::Db* nextDb( rtl::OUString* o_pExtensionPath = NULL );
+        berkeleydbproxy::Db* nextDb( rtl::OUString* o_pExtensionPath = NULL, rtl::OUString* o_pExtensionRegistryPath = NULL );
 
 
     private:
         berkeleydbproxy::Db* implGetDbFromPackage(
             com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage,
-            rtl::OUString* o_pExtensionPath );
+            rtl::OUString* o_pExtensionPath, rtl::OUString* o_pExtensionRegistryPath );
 
         bool                                                                        m_bHelpText;
 
@@ -517,12 +526,12 @@ namespace chelp {
 
         com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >
             nextJarFile( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle,
-                            rtl::OUString* o_pExtensionPath = NULL );
+                            rtl::OUString* o_pExtensionPath = NULL, rtl::OUString* o_pExtensionRegistryPath = NULL );
 
     private:
         com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >
             implGetJarFromPackage(com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage,
-                rtl::OUString* o_pExtensionPath = NULL );
+                rtl::OUString* o_pExtensionPath = NULL, rtl::OUString* o_pExtensionRegistryPath = NULL );
 
     }; // end class JarFileIterator
 

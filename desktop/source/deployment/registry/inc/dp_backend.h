@@ -257,6 +257,9 @@ public:
                css::ucb::CommandAbortedException, css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getRepositoryName()
         throw (css::uno::RuntimeException);
+    virtual css::beans::Optional< ::rtl::OUString > SAL_CALL getRegistrationDataURL()
+        throw (css::deployment::ExtensionRemovedException,
+               css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isRemoved()
         throw (css::uno::RuntimeException);
 
