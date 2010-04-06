@@ -226,7 +226,7 @@ namespace svt
 
         // position the active panel
         const PToolPanel pActive( GetActiveOrDummyPanel_Impl() );
-        pActive->SetSizePixel( m_aPanelAnchor.GetSizePixel() );
+        pActive->SetSizePixel( m_aPanelAnchor.GetOutputSizePixel() );
     }
 
     //--------------------------------------------------------------------
@@ -324,6 +324,9 @@ namespace svt
         const PToolPanel pNewActive( !i_rNewActive ? m_pDummyPanel : m_aPanels.GetPanel( *i_rNewActive ) );
         pNewActive->Activate( m_aPanelAnchor );
         pNewActive->GrabFocus();
+
+        // resize the panel (cannot guarantee it has ever been resized before
+        pNewActive->SetSizePixel( m_aPanelAnchor.GetOutputSizePixel() );
 
         // multiplex to our own listeners
         m_aListeners.ActivePanelChanged( i_rOldActive, i_rNewActive );
