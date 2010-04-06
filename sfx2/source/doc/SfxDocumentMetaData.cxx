@@ -38,7 +38,6 @@
 #include "com/sun/star/util/XModifiable.hpp"
 #include "com/sun/star/xml/sax/XSAXSerializable.hpp"
 
-#include "com/sun/star/lang/NullPointerException.hpp"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/lang/EventObject.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
@@ -248,25 +247,21 @@ public:
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
         throw (css::uno::RuntimeException, css::lang::IllegalArgumentException,
                css::io::WrongFormatException,
-               css::lang::WrappedTargetException, css::io::IOException,
-               css::uno::Exception);
+               css::lang::WrappedTargetException, css::io::IOException);
     virtual void SAL_CALL loadFromMedium(const ::rtl::OUString & URL,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
         throw (css::uno::RuntimeException,
                css::io::WrongFormatException,
-               css::lang::WrappedTargetException, css::io::IOException,
-               css::uno::Exception);
+               css::lang::WrappedTargetException, css::io::IOException);
     virtual void SAL_CALL storeToStorage(
         const css::uno::Reference< css::embed::XStorage > & Storage,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
         throw (css::uno::RuntimeException, css::lang::IllegalArgumentException,
-               css::lang::WrappedTargetException, css::io::IOException,
-               css::uno::Exception);
+               css::lang::WrappedTargetException, css::io::IOException);
     virtual void SAL_CALL storeToMedium(const ::rtl::OUString & URL,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
         throw (css::uno::RuntimeException,
-               css::lang::WrappedTargetException, css::io::IOException,
-               css::uno::Exception);
+               css::lang::WrappedTargetException, css::io::IOException);
 
     // ::com::sun::star::lang::XInitialization:
     virtual void SAL_CALL initialize(
@@ -1862,8 +1857,7 @@ SfxDocumentMetaData::loadFromStorage(
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
     throw (css::uno::RuntimeException, css::lang::IllegalArgumentException,
            css::io::WrongFormatException,
-           css::lang::WrappedTargetException, css::io::IOException,
-           css::uno::Exception)
+           css::lang::WrappedTargetException, css::io::IOException)
 {
     if (!xStorage.is()) throw css::lang::IllegalArgumentException(
         ::rtl::OUString::createFromAscii("SfxDocumentMetaData::loadFromStorage:"
@@ -1875,10 +1869,10 @@ SfxDocumentMetaData::loadFromStorage(
         xStorage->openStreamElement(
             ::rtl::OUString::createFromAscii(s_metaXml),
             css::embed::ElementModes::READ) );
-    if (!xStream.is()) throw css::lang::NullPointerException();
+    if (!xStream.is()) throw css::uno::RuntimeException();
     css::uno::Reference<css::io::XInputStream> xInStream =
         xStream->getInputStream();
-    if (!xInStream.is()) throw css::lang::NullPointerException();
+    if (!xInStream.is()) throw css::uno::RuntimeException();
 
     // create DOM parser service
     css::uno::Reference<css::lang::XMultiComponentFactory> xMsf (
@@ -1942,8 +1936,7 @@ SfxDocumentMetaData::storeToStorage(
         const css::uno::Reference< css::embed::XStorage > & xStorage,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
     throw (css::uno::RuntimeException, css::lang::IllegalArgumentException,
-           css::lang::WrappedTargetException, css::io::IOException,
-           css::uno::Exception)
+           css::lang::WrappedTargetException, css::io::IOException)
 {
     if (!xStorage.is()) throw css::lang::IllegalArgumentException(
         ::rtl::OUString::createFromAscii("SfxDocumentMetaData::storeToStorage:"
@@ -1959,7 +1952,7 @@ SfxDocumentMetaData::storeToStorage(
         xStorage->openStreamElement(::rtl::OUString::createFromAscii(s_metaXml),
             css::embed::ElementModes::WRITE
             | css::embed::ElementModes::TRUNCATE);
-    if (!xStream.is()) throw css::lang::NullPointerException();
+    if (!xStream.is()) throw css::uno::RuntimeException();
     css::uno::Reference< css::beans::XPropertySet > xStreamProps(xStream,
         css::uno::UNO_QUERY_THROW);
     xStreamProps->setPropertyValue(
@@ -1973,7 +1966,7 @@ SfxDocumentMetaData::storeToStorage(
         css::uno::makeAny(static_cast<sal_Bool> (sal_False)));
     css::uno::Reference<css::io::XOutputStream> xOutStream =
         xStream->getOutputStream();
-    if (!xOutStream.is()) throw css::lang::NullPointerException();
+    if (!xOutStream.is()) throw css::uno::RuntimeException();
     css::uno::Reference<css::lang::XMultiComponentFactory> xMsf (
         m_xContext->getServiceManager());
     css::uno::Reference<css::io::XActiveDataSource> xSaxWriter(
@@ -2021,8 +2014,7 @@ void SAL_CALL
 SfxDocumentMetaData::loadFromMedium(const ::rtl::OUString & URL,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
     throw (css::uno::RuntimeException, css::io::WrongFormatException,
-           css::lang::WrappedTargetException, css::io::IOException,
-           css::uno::Exception)
+           css::lang::WrappedTargetException, css::io::IOException)
 {
     css::uno::Reference<css::io::XInputStream> xIn;
     ::comphelper::MediaDescriptor md(Medium);
@@ -2056,7 +2048,7 @@ SfxDocumentMetaData::loadFromMedium(const ::rtl::OUString & URL,
                 css::uno::makeAny(e));
     }
     if (!xStorage.is()) {
-        throw css::lang::NullPointerException(::rtl::OUString::createFromAscii(
+        throw css::uno::RuntimeException(::rtl::OUString::createFromAscii(
                 "SfxDocumentMetaData::loadFromMedium: cannot get Storage"),
                 *this);
     }
@@ -2067,8 +2059,7 @@ void SAL_CALL
 SfxDocumentMetaData::storeToMedium(const ::rtl::OUString & URL,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
     throw (css::uno::RuntimeException,
-           css::lang::WrappedTargetException, css::io::IOException,
-           css::uno::Exception)
+           css::lang::WrappedTargetException, css::io::IOException)
 {
     ::comphelper::MediaDescriptor md(Medium);
     if (!URL.equalsAscii("")) {
@@ -2080,7 +2071,7 @@ SfxDocumentMetaData::storeToMedium(const ::rtl::OUString & URL,
 
 
     if (!xStorage.is()) {
-        throw css::lang::NullPointerException(::rtl::OUString::createFromAscii(
+        throw css::uno::RuntimeException(::rtl::OUString::createFromAscii(
                 "SfxDocumentMetaData::storeToMedium: cannot get Storage"),
                 *this);
     }
