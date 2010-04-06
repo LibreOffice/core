@@ -224,6 +224,7 @@ namespace accessibility
     void AccessibleToolPanelTabBar_Impl::PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition )
     {
         ENSURE_OR_RETURN_VOID( i_nPosition <= m_aChildren.size(), "AccessibleToolPanelTabBar_Impl::PanelInserted: illegal position (or invalid cache!)" );
+        (void)i_pPanel;
         m_aChildren.insert( m_aChildren.begin() + i_nPosition, NULL );
         m_rAntiImpl.NotifyAccessibleEvent( AccessibleEventId::CHILD, Any(), makeAny( getAccessiblePanelItem( i_nPosition ) ) );
     }
@@ -248,6 +249,7 @@ namespace accessibility
     //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelTabBar_Impl::LayouterChanged( const ::svt::PDeckLayouter& i_rNewLayouter )
     {
+        (void)i_rNewLayouter;
         m_rAntiImpl.dispose();
     }
 
@@ -435,6 +437,7 @@ namespace accessibility
     {
         // don't let the base class generate any A11Y events from VclWindowEvent, we completely manage those
         // A11Y events ourself
+        (void)i_rVclWindowEvent;
         return NULL;
     }
 
