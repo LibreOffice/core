@@ -84,14 +84,13 @@ public:
     virtual void SAL_CALL setPasswordToModify( const OUString& rPass ) throw( RuntimeException ) { maModifyPassword = rPass; }
     virtual OUString SAL_CALL getPasswordToModify() throw( RuntimeException ) { return maModifyPassword; }
 
-    virtual void SAL_CALL setRecommendReadOnly( const sal_Bool bReadOnly ) throw( RuntimeException ) { mbReadOnly = bReadOnly; }
+    virtual void SAL_CALL setRecommendReadOnly( sal_Bool bReadOnly ) throw( RuntimeException ) { mbReadOnly = bReadOnly; }
     virtual sal_Bool SAL_CALL getRecommendReadOnly() throw( RuntimeException ) { return mbReadOnly; }
 
 private:
     OUString            maPassword;
     OUString            maModifyPassword;
     sal_Bool            mbReadOnly;
-
     sal_Bool            mbSelected;
 };
 
