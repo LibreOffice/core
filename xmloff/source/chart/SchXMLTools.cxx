@@ -714,7 +714,11 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan3_3( const uno::Reference< frame:
         if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/3") ) ) != -1 )
         {
             if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/300m") ) ) != -1 )
-                bResult= true;
+            {
+                sal_Int32 nBuilId = lcl_getBuildIDFromGenerator( lcl_getGeneratorFromModel(xChartModel) );
+                if( nBuilId>0 && nBuilId<9488 ) //9488 is build id of dev300m75
+                    bResult= true;
+            }
             else if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/310m") ) ) != -1 )
                 bResult= true;
             else if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/320m") ) ) != -1 )
