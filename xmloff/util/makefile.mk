@@ -54,7 +54,7 @@ LIB1FILES=	\
 # --- Shared-Library -----------------------------------------------
 
 SHL1TARGET= xo$(DLLPOSTFIX)
-SHL1IMPLIB= i$(SHL1TARGET)
+SHL1IMPLIB= i$(TARGET)
 SHL1USE_EXPORTS=name
 
 SHL1STDLIBS= \
