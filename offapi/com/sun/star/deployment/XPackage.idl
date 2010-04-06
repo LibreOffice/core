@@ -324,6 +324,23 @@ interface XPackage
      */
     string getRepositoryName();
 
+    /** return a URL to a directory which contains the registration data.
+
+        This data may be created when calling
+        <member>XPackage::registerPackage</member>.  If this is the case is
+        indicated by <member
+        scope="com::sun::star::beans">Optional::IsPresent</member> of the return
+        value.
+        If registration data are created during registration, but the package is
+        currently not registered, for example after calling
+        <member>XPackage::revokePackage</member>, then <member
+        scope="com::sun::star::beans">Optional::IsPresent</member> is true and
+        the <member scope="com::sun::star::beans">Optional::Value</member> may
+        be an empty string.
+    */
+    com::sun::star::beans::Optional<string> getRegistrationDataURL()
+        raises (ExtensionRemovedException);
+
     /** indicates if this object represents a removed extension or extension
         item. This is the case when it was created by providing
         <code>true</code> for the <code>removed</code> parameter in the function
