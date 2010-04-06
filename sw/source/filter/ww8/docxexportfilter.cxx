@@ -47,7 +47,7 @@ DocxExportFilter::DocxExportFilter( const uno::Reference< lang::XMultiServiceFac
 
 bool DocxExportFilter::exportDocument()
 {
-    fprintf( stderr, "DocxExportFilter::exportDocument()\n" ); // DEBUG remove me
+    OSL_TRACE(, "DocxExportFilter::exportDocument()\n" ); // DEBUG remove me
 
     // get SwDoc*
     uno::Reference< uno::XInterface > xIfc( getModel(), uno::UNO_QUERY );
