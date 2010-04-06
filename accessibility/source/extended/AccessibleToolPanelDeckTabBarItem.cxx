@@ -199,6 +199,7 @@ namespace accessibility
     //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeckTabBarItem_Impl::PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition )
     {
+        (void)i_pPanel;
         if ( i_nPosition <= m_nItemPos )
             ++m_nItemPos;
         impl_notifyBoundRectChanges();
@@ -236,6 +237,7 @@ namespace accessibility
     //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeckTabBarItem_Impl::LayouterChanged( const ::svt::PDeckLayouter& i_rNewLayouter )
     {
+        (void)i_rNewLayouter;
         // if the tool panel deck has a new layouter, then the old layouter, and thus all items it was
         // responsible for, died. So do we.
         dispose();
@@ -296,6 +298,7 @@ namespace accessibility
     //--------------------------------------------------------------------
     Reference< XAccessible > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
     {
+        (void)i;
         throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
     }
 
@@ -371,6 +374,7 @@ namespace accessibility
     {
         ItemMethodGuard aGuard( *m_pImpl );
         // we do not have children ...
+        (void)i_rLocation;
         return NULL;
     }
 
