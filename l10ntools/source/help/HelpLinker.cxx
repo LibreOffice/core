@@ -245,7 +245,11 @@ class HelpLinker
 {
 public:
     void main(std::vector<std::string> &args,
-        std::string* pExtensionPath = NULL, const rtl::OUString* pOfficeHelpPath = NULL )
+//      std::string* pExtensionPath = NULL, const rtl::OUString* pOfficeHelpPath = NULL )
+              std::string* pExtensionPath = NULL,
+              std::string* pDestination = NULL,
+              const rtl::OUString* pOfficeHelpPath = NULL )
+
             throw( HelpProcessingException );
 
     HelpLinker()
@@ -269,6 +273,7 @@ private:
     std::string lang;
     std::string hid;
     std::string extensionPath;
+    std::string extensionDestination;
     bool bExtensionMode;
     fs::path indexDirName;
     Stringtable hidlistTranslation;
@@ -752,8 +757,9 @@ void HelpLinker::link() throw( HelpProcessingException )
 
 
 void HelpLinker::main( std::vector<std::string> &args,
-    std::string* pExtensionPath, const rtl::OUString* pOfficeHelpPath )
-        throw( HelpProcessingException )
+                       std::string* pExtensionPath, std::string* pDestination,
+                       const rtl::OUString* pOfficeHelpPath )
+    throw( HelpProcessingException )
 {
     rtl::OUString aOfficeHelpPath;
 
@@ -764,7 +770,7 @@ void HelpLinker::main( std::vector<std::string> &args,
         bExtensionMode = true;
         extensionPath = *pExtensionPath;
         sourceRoot = fs::path(extensionPath);
-
+        extensionDestination = *pDestination;
         aOfficeHelpPath = *pOfficeHelpPath;
     }
     if (args.size() > 0 && args[0][0] == '@')
@@ -1069,6 +1075,7 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
     const rtl::OUString& aExtensionName,
     const rtl::OUString& aExtensionLanguageRoot,
     sal_Int32 nXhpFileCount, const rtl::OUString* pXhpFiles,
+    const rtl::OUString& aDestination,
     HelpProcessingErrorInfo& o_rHelpProcessingErrorInfo
 )
 {
@@ -1102,13 +1109,16 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
     rtl::OString aOExtensionLanguageRoot = rtl::OUStringToOString( aExtensionLanguageRoot, fs::getThreadTextEncoding() );
     const char* pExtensionPath = aOExtensionLanguageRoot.getStr();
     std::string aStdStrExtensionPath = pExtensionPath;
+    rtl::OString aODestination = rtl::OUStringToOString(aDestination, fs::getThreadTextEncoding());
+    const char* pDestination = aODestination.getStr();
+    std::string aStdStrDestination = pDestination;
 
     // Set error handler
     xmlSetStructuredErrorFunc( NULL, (xmlStructuredErrorFunc)StructuredXMLErrorFunction );
     try
     {
         HelpLinker* pHelpLinker = new HelpLinker();
-        pHelpLinker->main( args, &aStdStrExtensionPath, &aOfficeHelpPath );
+        pHelpLinker->main( args, &aStdStrExtensionPath, &aStdStrDestination, &aOfficeHelpPath );
         delete pHelpLinker;
     }
     catch( const HelpProcessingException& e )
