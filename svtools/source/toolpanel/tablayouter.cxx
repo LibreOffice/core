@@ -249,6 +249,8 @@ namespace svt
     //--------------------------------------------------------------------
     Reference< XAccessible > TabDeckLayouter::GetAccessibleChild( const size_t i_nChildIndex, const Reference< XAccessible >& i_rParentAccessible )
     {
+        (void)i_nChildIndex;
+        (void)i_rParentAccessible;
         if ( lcl_checkDisposed( *m_pData ) )
             return NULL;
 
