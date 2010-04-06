@@ -3758,6 +3758,8 @@ void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc,
                 const XclImpChTypeGroup* pFirstTypeGroup = mxPrimAxesSet->GetFirstTypeGroup().get();
                 if( pFirstTypeGroup && (pFirstTypeGroup->GetTypeInfo().meTypeCateg == EXC_CHTYPECATEG_PIE) )
                     xPositioning->setDiagramPositionExcludingAxes( aDiagramRect );
+                else if( pFirstTypeGroup && pFirstTypeGroup->Is3dChart() )
+                    xPositioning->setDiagramPositionIncludingAxesAndAxisTitles( aDiagramRect );
                 else
                     xPositioning->setDiagramPositionIncludingAxes( aDiagramRect );
             }
