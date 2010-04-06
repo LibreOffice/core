@@ -299,6 +299,8 @@ public:
     inline ::rtl::OUString const & getCachePath() const { return m_cachePath; }
     inline bool transientMode() const { return m_cachePath.getLength() == 0; }
 
+    inline ::rtl::OUString getContext() const {return m_context; }
+
     // XEventListener
     virtual void SAL_CALL disposing( css::lang::EventObject const & evt )
         throw (css::uno::RuntimeException);

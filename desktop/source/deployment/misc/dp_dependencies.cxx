@@ -69,6 +69,37 @@ bool satisfiesMinimalVersion(::rtl::OUString const & version) {
     return compareWithVersion(version) != ::dp_misc::LESS;
 }
 
+bool contains(::rtl::OUString const & list, ::rtl::OUString const & element) {
+    for (::sal_Int32 i = 0;;) {
+        ::sal_Int32 n = i;
+        i = list.indexOf(',', i);
+        if (i == -1) {
+            i = list.getLength();
+        }
+        if (list.copy(n, i) == element) {
+            return true;
+        }
+        if (i == list.getLength()) {
+            return false;
+        }
+        ++i;
+    }
+}
+
+bool checkDeploymentRepositories(
+    css::uno::Reference< css::xml::dom::XElement > const & dependency,
+    ::rtl::OUString const & repository)
+{
+    css::uno::Reference< css::xml::dom::XAttr > sup(
+        dependency->getAttributeNode(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("supported"))));
+    css::uno::Reference< css::xml::dom::XAttr > notSup(
+        dependency->getAttributeNode(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("not-supported"))));
+    return (!sup.is() || contains(sup->getValue(), repository)) &&
+        !(notSup.is() && contains(notSup->getValue(), repository));
+}
+
 }
 
 namespace dp_misc {
@@ -76,7 +107,10 @@ namespace dp_misc {
 namespace Dependencies {
 
 css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
-check(::dp_misc::DescriptionInfoset const & infoset) {
+check(
+    ::dp_misc::DescriptionInfoset const & infoset,
+    ::rtl::OUString const & repository)
+{
     css::uno::Reference< css::xml::dom::XNodeList > deps(
         infoset.getDependencies());
     ::sal_Int32 n = deps->getLength();
@@ -107,6 +141,12 @@ check(::dp_misc::DescriptionInfoset const & infoset) {
                     e->getAttribute(
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))))
                 != ::dp_misc::GREATER;
+        } else if (e->getNamespaceURI().equalsAsciiL(
+                       RTL_CONSTASCII_STRINGPARAM(xmlNamespace))
+                   && e->getTagName().equalsAsciiL(
+                       RTL_CONSTASCII_STRINGPARAM("deployment-repositories")))
+        {
+            sat = checkDeploymentRepositories(e, repository);
         } else if (e->hasAttributeNS(
                        ::rtl::OUString(
                            RTL_CONSTASCII_USTRINGPARAM(xmlNamespace)),
@@ -144,6 +184,52 @@ check(::dp_misc::DescriptionInfoset const & infoset) {
     {
         sValue = dependency->getAttribute( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value") ) );
         sReason = ::rtl::OUString( ::String(::dp_misc::getResId(RID_DEPLYOMENT_DEPENDENCIES_MAX)) );
+    }
+    else if (dependency->getNamespaceURI().equalsAsciiL(
+                 RTL_CONSTASCII_STRINGPARAM(xmlNamespace)) &&
+             dependency->getTagName().equalsAsciiL(
+                 RTL_CONSTASCII_STRINGPARAM("deployment-repositories")))
+    {
+        css::uno::Reference< css::xml::dom::XAttr > sup(
+            dependency->getAttributeNode(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("supported"))));
+        css::uno::Reference< css::xml::dom::XAttr > notSup(
+            dependency->getAttributeNode(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("not-supported"))));
+        sValue = ::String(
+            ::dp_misc::getResId(
+                sup.is()
+                ? (notSup.is()
+                   ? RID_DEPLOYMENT_DEPENDENCIES_REPO_BOTH
+                   : RID_DEPLOYMENT_DEPENDENCIES_REPO_POS)
+                : (notSup.is()
+                   ? RID_DEPLOYMENT_DEPENDENCIES_REPO_NEG
+                   : RID_DEPLYOMENT_DEPENDENCIES_UNKNOWN)));
+        ::rtl::OUStringBuffer buf;
+        for (::sal_Int32 i = 0;;) {
+            ::sal_Int32 j = sValue.indexOf('%', i);
+            if (j == -1) {
+                buf.append(sValue.copy(i));
+                break;
+            }
+            if (sup.is() &&
+                sValue.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("POS"), j + 1))
+            {
+                buf.append(sValue.copy(i, j - i));
+                buf.append(sup->getValue());
+                i = j + RTL_CONSTASCII_LENGTH("%POS");
+            } else if (notSup.is() &&
+                       sValue.matchAsciiL(
+                           RTL_CONSTASCII_STRINGPARAM("NEG"), j + 1))
+            {
+                buf.append(sValue.copy(i, j - i));
+                buf.append(notSup->getValue());
+                i = j + RTL_CONSTASCII_LENGTH("%NEG");
+            } else {
+                i = j + 1;
+            }
+        }
+        return buf.makeStringAndClear();
     }
     else if ( dependency->hasAttributeNS( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( xmlNamespace ) ),
                                           ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenOffice.org-minimal-version" ))))
