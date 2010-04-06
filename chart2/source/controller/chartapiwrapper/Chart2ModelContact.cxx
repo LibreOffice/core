@@ -234,10 +234,17 @@ awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingAxes() const
 
 awt::Rectangle Chart2ModelContact::GetDiagramRectangleExcludingAxes() const
 {
-    awt::Rectangle aRect;
-    ExplicitValueProvider* pProvider( getExplicitValueProvider() );
-    if( pProvider )
-        aRect = pProvider->getDiagramRectangleExcludingAxes();
+    awt::Rectangle aRect(0,0,0,0);
+    uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartModel ) );
+
+    if( DiagramPositioningMode_EXCLUDING == DiagramHelper::getDiagramPositioningMode( xDiagram ) )
+        aRect = DiagramHelper::getDiagramRectangleFromModel(m_xChartModel);
+    else
+    {
+        ExplicitValueProvider* pProvider( getExplicitValueProvider() );
+        if( pProvider )
+            aRect = pProvider->getDiagramRectangleExcludingAxes();
+    }
     return aRect;
 }
 
