@@ -132,10 +132,16 @@ ScVbaApplication::getActiveWorkbook() throw (uno::RuntimeException)
 {
     return new ActiveWorkbook( this, mxContext );
 }
+
 uno::Reference< excel::XWorkbook > SAL_CALL
 ScVbaApplication::getThisWorkbook() throw (uno::RuntimeException)
 {
-    return getActiveWorkbook();
+    uno::Reference< frame::XModel > xModel = getThisExcelDoc(mxContext);
+    if( !xModel.is() )
+        return uno::Reference< excel::XWorkbook >();
+
+    ScVbaWorkbook *pWb = new ScVbaWorkbook( this, mxContext, xModel );
+    return uno::Reference< excel::XWorkbook > (pWb);
 }
 
 uno::Reference< XAssistant > SAL_CALL
