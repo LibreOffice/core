@@ -283,6 +283,14 @@ namespace utl
             const bool i_bUpdatable
         );
 
+        /** creates a configuration tree for the given path in the given mode
+        */
+        OConfigurationTreeRoot(
+            const ::comphelper::ComponentContext& i_rContext,
+            const ::rtl::OUString& i_rNodePath,
+            const bool i_bUpdatable
+        );
+
         /// copy ctor
         OConfigurationTreeRoot(const OConfigurationTreeRoot& _rSource)
             :OConfigurationNode(_rSource), m_xCommitter(_rSource.m_xCommitter) { }

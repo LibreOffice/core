@@ -571,6 +571,19 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
+    OConfigurationTreeRoot::OConfigurationTreeRoot( const ::comphelper::ComponentContext& i_rContext, const ::rtl::OUString& i_rNodePath, const bool i_bUpdatable )
+        :OConfigurationNode( lcl_createConfigurationRoot( lcl_getConfigProvider( i_rContext.getLegacyServiceFactory() ),
+            i_rNodePath, i_bUpdatable, -1, false ).get() )
+        ,m_xCommitter()
+    {
+        if ( i_bUpdatable )
+        {
+            m_xCommitter.set( getUNONode(), UNO_QUERY );
+            OSL_ENSURE( m_xCommitter.is(), "OConfigurationTreeRoot::OConfigurationTreeRoot: could not create an updatable node!" );
+        }
+    }
+
+    //------------------------------------------------------------------------
     void OConfigurationTreeRoot::clear() throw()
     {
         OConfigurationNode::clear();
