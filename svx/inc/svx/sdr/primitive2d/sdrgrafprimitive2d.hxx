@@ -30,9 +30,8 @@
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <drawinglayer/attribute/sdrattribute.hxx>
-#include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <svtools/grfmgr.hxx>
+#include <svx/sdr/attribute/sdrlinefillshadowtextattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines

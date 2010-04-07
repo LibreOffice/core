@@ -74,19 +74,6 @@ public:
     virtual void            StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
 };
 
-class SfxCancelToolBoxControl_Impl : public SfxToolBoxControl
-{
-public:
-
-                            SFX_DECL_TOOLBOX_CONTROL();
-
-                            SfxCancelToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox );
-
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
-};
-
 #endif
 
 #endif
