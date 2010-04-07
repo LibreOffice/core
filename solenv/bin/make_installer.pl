@@ -1345,6 +1345,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 installer::packagelist::resolve_packagevariables(\$packagename, $allvariableshashref, 0);
             }
 
+            # Debian allows no underline in package name
+            if ( $installer::globals::debian ) { $packagename =~ s/_/-/g; }
+
             my $linkaddon = "";
             my $linkpackage = 0;
             $installer::globals::add_required_package = "";
