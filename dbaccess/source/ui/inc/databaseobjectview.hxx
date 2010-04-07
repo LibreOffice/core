@@ -64,6 +64,7 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+#include <comphelper/namedvaluecollection.hxx>
 
 #include <boost/shared_ptr.hpp>
 
@@ -90,10 +91,11 @@ namespace dbaui
                         m_xApplication;
         ::rtl::OUString m_sComponentURL;
 
+
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
                 doDispatch(
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rDispatchArguments
+                    const ::comphelper::NamedValueCollection& i_rDispatchArgs
                 );
 
     protected:
@@ -113,11 +115,11 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > doCreateView(
             const ::com::sun::star::uno::Any& _rDataSource,
             const ::rtl::OUString& _rObjectName,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rCreationArgs
+            const ::comphelper::NamedValueCollection& i_rCreationArgs
         );
 
         virtual void fillDispatchArgs(
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rDispatchArguments,
+                          ::comphelper::NamedValueCollection& i_rDispatchArgs,
                     const ::com::sun::star::uno::Any& _rDataSource,
                     const ::rtl::OUString& _rObjectName
                 );
@@ -155,7 +157,8 @@ namespace dbaui
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
             createNew(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource >& _xDataSource
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource >& _xDataSource,
+                const ::comphelper::NamedValueCollection& i_rDispatchArgs = ::comphelper::NamedValueCollection()
             );
 
         /** opens a view for an existent object
@@ -173,7 +176,7 @@ namespace dbaui
             openExisting(
                 const ::com::sun::star::uno::Any& _aDataSource,
                 const ::rtl::OUString& _rName,
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArgs
+                const ::comphelper::NamedValueCollection& i_rDispatchArgs
             );
     };
 
@@ -183,12 +186,11 @@ namespace dbaui
     class QueryDesigner : public DatabaseObjectView
     {
     protected:
-        sal_Int32   m_nCommandType;
-        sal_Bool    m_bPreferSQLView;
+        sal_Int32                           m_nCommandType;
 
     protected:
         virtual void fillDispatchArgs(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rDispatchArguments,
+                  ::comphelper::NamedValueCollection& i_rDispatchArgs,
             const ::com::sun::star::uno::Any& _aDataSource,
             const ::rtl::OUString& _rObjectName
         );
@@ -198,8 +200,7 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame,
-            bool _bCreateView,
-            sal_Bool _bPreferSQLView
+            bool _bCreateView
         );
     };
 
@@ -210,7 +211,7 @@ namespace dbaui
     {
     protected:
         virtual void fillDispatchArgs(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rDispatchArguments,
+                  ::comphelper::NamedValueCollection& i_rDispatchArgs,
             const ::com::sun::star::uno::Any& _aDataSource,
             const ::rtl::OUString& _rObjectName
         );
@@ -218,7 +219,7 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > doCreateView(
             const ::com::sun::star::uno::Any& _rDataSource,
             const ::rtl::OUString& _rObjectName,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rCreationArgs
+            const ::comphelper::NamedValueCollection& i_rCreationArgs
         );
 
     public:
@@ -251,7 +252,7 @@ namespace dbaui
 
     protected:
         virtual void fillDispatchArgs(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rDispatchArguments,
+                  ::comphelper::NamedValueCollection& i_rDispatchArgs,
             const ::com::sun::star::uno::Any& _aDataSource,
             const ::rtl::OUString& _rQualifiedName
         );
