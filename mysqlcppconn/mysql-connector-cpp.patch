@@ -196,6 +196,8 @@
  {
  	MethodNotImplementedException(const MethodNotImplementedException& e) : SQLException(e.what(), e.sql_state, e.errNo) { }
  	MethodNotImplementedException(const std::string& reason) : SQLException(reason, "", 0) {}
+@@ -87,7 +87,7 @@
+ 	virtual SQLException* copy() { return new MethodNotImplementedException(*this); }
  };
  
 -struct CPPCONN_PUBLIC_FUNC InvalidArgumentException : public SQLException
@@ -203,6 +205,8 @@
  {
  	InvalidArgumentException(const InvalidArgumentException& e) : SQLException(e.what(), e.sql_state, e.errNo) { }
  	InvalidArgumentException(const std::string& reason) : SQLException(reason, "", 0) {}
+@@ -96,7 +96,7 @@
+ 	virtual SQLException* copy() { return new InvalidArgumentException(*this); }
  };
  
 -struct CPPCONN_PUBLIC_FUNC InvalidInstanceException : public SQLException
