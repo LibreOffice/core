@@ -1227,12 +1227,9 @@ endcase
 ' *******************************************************************
 
 testcase tToolsThesaurus
+
     Dim sWordInitial as string
-    Dim sLanguageToBeSelected as integer
     Dim sWordToBeFound as string
-    Dim sWordReplacedWith as string
-    Dim i as integer
-    Dim j as integer
     Dim TheFile as String
 
     PrintLog "- Tools / Thesaurus"
@@ -1379,3 +1376,89 @@ testcase tToolsThesaurus
     '/// Close thesaurus and writerdocument ///
     Call hCloseDocument
 endcase
+
+' *******************************************************************
+
+testcase tToolsThesaurusSynonyms
+
+    Dim sWordInitial as string
+    Dim sNumberOfSuggestions as string
+    Dim sReplaceWithWord as string
+    Dim TheFile as String
+
+    PrintLog "- Tools / Thesaurus"
+
+    printlog " Open document where the formatting is set to the language we wish to test."
+    TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
+    if hFileExists ( TheFile ) <> TRUE then
+       Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
+       exit sub
+    end if
+
+    select case iSprache
+        case 01 : sWordInitial = "Morning"
+        case 03 : sWordInitial = "Confirmam"
+        case 07 : Printlog "- No Thesaurus in Russian!"
+                  goto endsub
+        case 31 : sWordInitial = "Hulp"
+        case 33 : sWordInitial = "Payer"
+        case 34 : sWordInitial = "Suficiente"
+        case 36 : Printlog "- No Thesaurus in Hungarian!"
+                  goto endsub
+        case 39 : sWordInitial = "Lingua"
+        case 45 : sWordInitial = "Først"
+        case 46 : sWordInitial = "Däng"
+        case 48 : sWordInitial = "wypowiedź"
+        case 49 : sWordInitial = "Mann"
+        case 55 : Printlog "- No Thesaurus in Portuguese (Brazil) !"
+        		  goto endsub
+        case 81 : Printlog "- No Thesaurus in Japanese!"
+                  goto endsub
+        case 82 : Printlog "- No Thesaurus in Korean!"
+                  goto endsub
+        case 86 : Printlog "- No Thesaurus in Chinese (simplified)!"
+                  goto endsub
+        case 88 : Printlog "- No Thesaurus in Chinese (traditional)!"
+                  goto endsub
+        case 30, 35, 36, 37, 42, 47, 48, 51, 90
+                  Printlog "- No Thesaurus available !"
+                  goto endsub
+        case else : QAErrorlog "The language " + iSprache + " has no defined errortext. No Test!"
+                    goto endsub
+    end select
+
+    printlog "Open new preformatted-writerdocument"
+    call hFileOpen (TheFile,false)
+    Call sMakeReadOnlyDocumentEditable
+    Call wTypeKeys sWordInitial
+    Call wTypeKeys "<Shift Home>"
+
+    printlog "Open contextmenu in wrong word"
+    Call wTypeKeys "<Shift F10>"
+    printlog "Select 'Synonyms' in context menu"
+    Call hMenuSelectNr (13)
+    sNumberOfSuggestions=MenuGetItemCount - 2
+    '/// Check if there is a suggestion and replace word ///
+    if sNumberOfSuggestions <=0 then
+        Warnlog "- No synonyms in Context menu for the first wrong word!"
+    else
+        printlog "- Context menu has " + sNumberOfSuggestions + " synonyms for the 1. wrong word!"
+        sReplaceWithWord=hMenuItemGetText (1)
+        Call hMenuSelectNr (1)
+        Call wTypeKeys "<Shift Mod1 Left>"
+        try
+            EditCopy
+            if GetClipboardtext<> sReplaceWithWord then
+                Warnlog "- 1. wrong Word has not been replaced with " + sReplaceWithWord + " but "+ GetClipBoardtext
+            else
+                printlog "- 1. wrong word has been replaced with the 1. entry in context menu!"
+            end if
+        catch
+        endcatch
+    end if
+    Call hCloseDocument
+
+endcase
+
+
+
