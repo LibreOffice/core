@@ -60,7 +60,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/uri.h>
+#include <rtl/uri.hxx>
 
 #include <algorithm>
 
@@ -311,18 +311,14 @@ namespace ucb { namespace ucp { namespace ext
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString Content::encodeIdentifier( const ::rtl::OUString& i_rIdentifier )
     {
-        ::rtl::OUString sEncoded;
-        rtl_uriEncode( i_rIdentifier.pData, rtl_getUriCharClass( rtl_UriCharClassUricNoSlash ),
-            rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8, &sEncoded.pData );
-        return sEncoded;
+        return ::rtl::Uri::encode( i_rIdentifier, rtl_UriCharClassRegName, rtl_UriEncodeIgnoreEscapes,
+            RTL_TEXTENCODING_UTF8 );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString Content::decodeIdentifier( const ::rtl::OUString& i_rIdentifier )
     {
-        ::rtl::OUString sDecoded;
-        rtl_uriDecode( i_rIdentifier.pData, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8, &sDecoded.pData );
-        return sDecoded;
+        return ::rtl::Uri::decode( i_rIdentifier, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
     }
 
     //------------------------------------------------------------------------------------------------------------------
