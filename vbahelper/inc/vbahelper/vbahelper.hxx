@@ -64,6 +64,8 @@ namespace ooo
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::uno::XInterface > createVBAUnoAPIService( SfxObjectShell* pShell,  const sal_Char* _pAsciiName ) throw (css::uno::RuntimeException);
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::uno::XInterface > createVBAUnoAPIServiceWithArgs( SfxObjectShell* pShell,  const sal_Char* _pAsciiName, const css::uno::Sequence< css::uno::Any >& aArgs ) throw (css::uno::RuntimeException);
         css::uno::Reference< css::frame::XModel > getCurrentDoc( const rtl::OUString& sKey ) throw (css::uno::RuntimeException);
+        VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getThisExcelDoc( const css::uno::Reference< css::uno::XComponentContext >& xContext ) throw (css::uno::RuntimeException);
+        VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getThisWordDoc( const css::uno::Reference< css::uno::XComponentContext >& xContext ) throw (css::uno::RuntimeException);
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getCurrentExcelDoc( const css::uno::Reference< css::uno::XComponentContext >& xContext ) throw (css::uno::RuntimeException);
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getCurrentWordDoc( const css::uno::Reference< css::uno::XComponentContext >& xContext ) throw (css::uno::RuntimeException);
 
