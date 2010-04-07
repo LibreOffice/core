@@ -240,7 +240,7 @@ oslFileError SAL_CALL osl_createTempFile(
 oslFileError SAL_CALL osl_getTempDirURL(rtl_uString** pustrTempDir)
 {
     ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
-    LPWSTR  lpBuffer = aBuffer;
+    LPWSTR  lpBuffer = ::osl::mingw_reinterpret_cast<LPWSTR>(aBuffer);
     DWORD   nBufferLength = aBuffer.getBufSizeInSymbols() - 1;
 
     DWORD           nLength;
