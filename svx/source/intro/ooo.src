@@ -1,4 +1,4 @@
-/*************************************************************************
+﻿/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -65,7 +65,7 @@ String RID_BUILDVERSION
 ModalDialog RID_DEFAULTABOUT
 {
     OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 245 , 200 ) ;
+    Size = MAP_APPFONT ( 245 , 260 ) ;
     Moveable = TRUE ;
     SVLook = TRUE ;
     TEXT_DEFAULTABOUT
@@ -81,13 +81,19 @@ ModalDialog RID_DEFAULTABOUT
         Size = MAP_APPFONT ( 118 , 16 ) ;
         WordBreak = TRUE ;
         Text = "%PRODUCTNAME %ABOUTBOXPRODUCTVERSION %PRODUCTEXTENSION" ;
-       };
-    FixedText ABOUT_FTXT_COPYRIGHT
+    };
+    MultiLineEdit ABOUT_FTXT_COPYRIGHT
     {
+        Border = TRUE ;
         Pos = MAP_APPFONT ( 54 , 25 ) ;
         Size = MAP_APPFONT ( 168 , 51 ) ;
-        Text[ en-US ] ="Copyright 2000-2009 Sun Microsystems Inc.\nThis product was created by " OOO_VENDOR ", based on OpenOffice.org.\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
-        WordBreak = TRUE ;
+        IgnoreTab = TRUE ;
+        ReadOnly = TRUE ;
+        AutoVScroll = TRUE ;
+    };
+    String ABOUT_STR_COPYRIGHT
+    {
+        Text[ en-US ] = "Copyright © 2000, 2010 Oracle and/or its affiliates. All rights reserved.\nThis product was created by " OOO_VENDOR ", based on OpenOffice.org.\nOpenOffice.org acknowledges all community members, especially those mentioned at\n http://www.openoffice.org/welcome/credits.html.";
     };
     StringArray ABOUT_STR_DEVELOPER_ARY
     {

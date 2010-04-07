@@ -178,7 +178,6 @@ static char const sMacroExecMode[] = "MacroExecutionMode";
 static char const sUpdateDocMode[] = "UpdateDocMode";
 static char const sMinimized[] = "Minimized";
 static char const sInteractionHdl[] = "InteractionHandler";
-static char const sWindowState[] = "WindowState";
 static char const sUCBContent[] = "UCBContent";
 static char const sRepairPackage[] = "RepairPackage";
 static char const sDocumentTitle[] = "DocumentTitle";
@@ -468,7 +467,11 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
                 rtl::OUString aName = rProp.Name;
                 if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sFrame)) )
-                    rSet.Put( SfxUnoAnyItem( SID_FILLFRAME, rProp.Value ) );
+                {
+                    Reference< XFrame > xFrame;
+                    OSL_VERIFY( rProp.Value >>= xFrame );
+                    rSet.Put( SfxUnoFrameItem( SID_FILLFRAME, xFrame ) );
+                }
                 else
                 if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sHidden)) )
                 {
@@ -560,11 +563,11 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 }
                 else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sFrame)) )
                 {
-                    Reference< XFrame > xVal;
-                    sal_Bool bOK = (rProp.Value >>= xVal);
+                    Reference< XFrame > xFrame;
+                    sal_Bool bOK = (rProp.Value >>= xFrame);
                     DBG_ASSERT( bOK, "invalid type for Frame" );
                     if (bOK)
-                        rSet.Put( SfxUnoAnyItem( SID_FILLFRAME, rProp.Value ) );
+                        rSet.Put( SfxUnoFrameItem( SID_FILLFRAME, xFrame ) );
                 }
                 else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sAsTemplate)) )
                 {
@@ -737,14 +740,6 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     DBG_ASSERT( bOK, "invalid type or value for MediaType" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_CONTENTTYPE, sVal ) );
-                }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sWindowState)) )
-                {
-                    ::rtl::OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for WindowState" );
-                    if (bOK)
-                        rSet.Put( SfxStringItem( SID_WIN_POSSIZE, sVal ) );
                 }
                 else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sTemplateName)) )
                 {
@@ -1015,10 +1010,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_CONTENTTYPE ) == SFX_ITEM_SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_WIN_POSSIZE ) == SFX_ITEM_SET )
-                nAdditional++;
-    //        if ( rSet.GetItemState( SID_VIEW_POS_SIZE ) == SFX_ITEM_SET )
-    //            nAdditional++;
             if ( rSet.GetItemState( SID_POSTDATA ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_FILLFRAME ) == SFX_ITEM_SET )
@@ -1173,8 +1164,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_BLACK_LIST )
                         continue;
                     if ( nId == SID_CONTENTTYPE )
-                        continue;
-                    if ( nId == SID_WIN_POSSIZE )
                         continue;
                     if ( nId == SID_TEMPLATE_NAME )
                         continue;
@@ -1392,7 +1381,15 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_FILLFRAME, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sFrame));
-                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+                if ( pItem->ISA( SfxUsrAnyItem ) )
+                {
+                    OSL_ENSURE( false, "TransformItems: transporting an XFrame via an SfxUsrAnyItem is not deprecated!" );
+                    pValue[nActProp++].Value = static_cast< const SfxUsrAnyItem* >( pItem )->GetValue();
+                }
+                else if ( pItem->ISA( SfxUnoFrameItem ) )
+                    pValue[nActProp++].Value <<= static_cast< const SfxUnoFrameItem* >( pItem )->GetFrame();
+                else
+                    OSL_ENSURE( false, "TransformItems: invalid item type for SID_FILLFRAME!" );
             }
             if ( rSet.GetItemState( SID_TEMPLATE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
@@ -1497,11 +1494,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sMediaType));
                 pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
             }
-            if ( rSet.GetItemState( SID_WIN_POSSIZE, sal_False, &pItem ) == SFX_ITEM_SET )
-            {
-                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sWindowState));
-                pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
-            }
             if ( rSet.GetItemState( SID_TEMPLATE_NAME, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sTemplateName));
@@ -1516,12 +1508,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             {
                 pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sJumpMark));
                 pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
-            }
-
-            SFX_ITEMSET_ARG( &rSet, pRectItem, SfxRectangleItem, SID_VIEW_POS_SIZE, sal_False );
-            if ( pRectItem )
-            {
-                DBG_ERROR("PosSizeItem not supported yet!");
             }
 
             if ( rSet.GetItemState( SID_CHARSET, sal_False, &pItem ) == SFX_ITEM_SET )

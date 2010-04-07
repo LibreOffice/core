@@ -29,8 +29,8 @@
 #define INCLUDED_SDR_PRIMITIVE2D_SDCUSTOMSHAPEPRIMITIVE2D_HXX
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <svx/sdr/attribute/sdrshadowtextattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines

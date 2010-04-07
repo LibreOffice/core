@@ -492,7 +492,6 @@
 #include "svl/aeitem.hxx"
 #include "svtools/asynclink.hxx"
 #include "svl/brdcst.hxx"
-#include "svl/cancel.hxx"
 #include "svl/cntwids.hrc"
 #include "svtools/controldims.hrc"
 #include "svl/ctypeitm.hxx"
