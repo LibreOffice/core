@@ -72,7 +72,8 @@ SLOFILES =\
         $(SLO)$/tabdlg.obj			\
         $(SLO)$/tplcitem.obj		\
         $(SLO)$/tplpitem.obj		\
-        $(SLO)$/versdlg.obj
+        $(SLO)$/versdlg.obj         \
+        $(SLO)$/taskpane.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\

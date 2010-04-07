@@ -45,6 +45,7 @@
 #include "inettbc.hxx"
 #include "stbitem.hxx"
 #include <sfx2/navigat.hxx>
+#include <sfx2/taskpane.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/topfrm.hxx>
 #include "partwnd.hxx"
@@ -69,6 +70,7 @@ void SfxApplication::Registrations_Impl()
     // ChildWindows
     SfxRecordingFloatWrapper_Impl::RegisterChildWindow();
     SfxNavigatorWrapper::RegisterChildWindow( FALSE, NULL, SFX_CHILDWIN_NEVERHIDE );
+    ::sfx2::TaskPaneWrapper::RegisterChildWindow( TRUE );
     SfxPartChildWnd_Impl::RegisterChildWindow();
     SfxTemplateDialogWrapper::RegisterChildWindow(TRUE);
     SfxDockingWrapper::RegisterChildWindow();
