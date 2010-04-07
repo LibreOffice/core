@@ -164,8 +164,7 @@ namespace svt
     {
         OSL_PRECOND( i_nPosition <= m_aDrawers.size(), "DrawerDeckLayouter::PanelInserted: inconsistency!" );
 
-        PToolPanelDrawer pDrawer( new ToolPanelDrawer( m_rParentWindow ) );
-        pDrawer->SetText( i_pPanel->GetDisplayName() );
+        PToolPanelDrawer pDrawer( new ToolPanelDrawer( m_rParentWindow, i_pPanel->GetDisplayName() ) );
         pDrawer->Show();
         pDrawer->AddEventListener( LINK( this, DrawerDeckLayouter, OnWindowEvent ) );
         m_aDrawers.insert( m_aDrawers.begin() + i_nPosition, pDrawer );

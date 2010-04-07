@@ -24,10 +24,10 @@
  *
  ************************************************************************/
 
-#include "precompiled_svtools.hxx"
+#ifndef SVT_TOOLPANELDRAWERPEER_HXX
+#define SVT_TOOLPANELDRAWERPEER_HXX
 
-#include <vcl/window.hxx>
-#include <vcl/virdev.hxx>
+#include <toolkit/awt/vclxwindow.hxx>
 
 //......................................................................................................................
 namespace svt
@@ -35,47 +35,22 @@ namespace svt
 //......................................................................................................................
 
     //==================================================================================================================
-    //= ToolPanelDrawer
+    //= ToolPanelDrawerPeer
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
-    class ToolPanelDrawer : public Window
+    class ToolPanelDrawerPeer : public VCLXWindow
     {
     public:
-        ToolPanelDrawer( Window& i_rParent, const ::rtl::OUString& i_rTitle );
-        ~ToolPanelDrawer();
-
-        long    GetPreferredHeightPixel() const;
-        void    SetExpanded( const bool i_bExpanded );
-        bool    IsExpanded() const { return m_bExpanded; }
+        ToolPanelDrawerPeer();
 
     protected:
-        // Window overridables
-        virtual void Paint( const Rectangle& i_rBoundingBox );
-        virtual void GetFocus();
-        virtual void LoseFocus();
-        virtual void DataChanged( const DataChangedEvent& i_rEvent );
+        ~ToolPanelDrawerPeer();
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-                     GetComponentInterface( BOOL i_bCreate );
-
-    private:
-        Rectangle   impl_calcTextBoundingBox() const;
-        Rectangle   impl_calcTitleBarBox( const Rectangle& i_rTextBox ) const;
-        void        impl_paintBackground( const Rectangle& i_rTitleBarBox );
-        USHORT      impl_getTextStyle() const;
-        void        impl_paintFocusIndicator( const Rectangle& i_rTextBox );
-        Rectangle   impl_paintExpansionIndicator( const Rectangle& i_rTextBox );
-        Image       impl_getExpansionIndicator() const;
-
-        // don't expose SetText. Our text is used as AccessibleName/Desc, and those are not expected to change.
-        using Window::SetText;
-
-    private:
-        ::std::auto_ptr< VirtualDevice >    m_pPaintDevice;
-        bool                                m_bFocused;
-        bool                                m_bExpanded;
+        // VCLXWindow overridables
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
     };
 
 //......................................................................................................................
 } // namespace svt
 //......................................................................................................................
+
+#endif // SVT_TOOLPANELDRAWERPEER_HXX

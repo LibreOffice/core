@@ -27,6 +27,7 @@
 #include "precompiled_svtools.hxx"
 
 #include "toolpaneldrawer.hxx"
+#include "toolpaneldrawerpeer.hxx"
 #include "svtools/svtdata.hxx"
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -35,12 +36,15 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclevent.hxx>
 
 //......................................................................................................................
 namespace svt
 {
 //......................................................................................................................
 
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::awt::XWindowPeer;
     namespace AccessibleRole = ::com::sun::star::accessibility::AccessibleRole;
 
     static const int s_nIndentationWidth = 16;
@@ -49,7 +53,7 @@ namespace svt
     //= ToolPanelDrawer
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    ToolPanelDrawer::ToolPanelDrawer( Window& i_rParent )
+    ToolPanelDrawer::ToolPanelDrawer( Window& i_rParent, const ::rtl::OUString& i_rTitle )
         :Window( &i_rParent, 0 )
         ,m_pPaintDevice( new VirtualDevice( *this ) )
         ,m_bFocused( false )
@@ -60,6 +64,10 @@ namespace svt
         SetPointer( POINTER_REFHAND );
 
         SetAccessibleRole( AccessibleRole::LABEL );
+
+        SetText( i_rTitle );
+        SetAccessibleName( i_rTitle );
+        SetAccessibleDescription( i_rTitle );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -68,7 +76,7 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    long ToolPanelDrawer::GetPreferredHeightPixel()
+    long ToolPanelDrawer::GetPreferredHeightPixel() const
     {
         Rectangle aTitleBarBox( impl_calcTitleBarBox( impl_calcTextBoundingBox() ) );
         return aTitleBarBox.GetHeight();
@@ -143,7 +151,7 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    USHORT ToolPanelDrawer::impl_getTextStyle()
+    USHORT ToolPanelDrawer::impl_getTextStyle() const
     {
         const USHORT nBasicStyle =  TEXT_DRAW_LEFT
                                 |   TEXT_DRAW_TOP
@@ -257,15 +265,19 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void ToolPanelDrawer::SetText( const String& i_rText )
+    Reference< XWindowPeer > ToolPanelDrawer::GetComponentInterface( BOOL i_bCreate )
     {
-        Window::SetText( i_rText );
-        SetAccessibleName( i_rText );
-        SetAccessibleDescription( i_rText );
+        Reference< XWindowPeer > xWindowPeer( Window::GetComponentInterface( FALSE ) );
+        if ( !xWindowPeer.is() && i_bCreate )
+        {
+            xWindowPeer.set( new ToolPanelDrawerPeer() );
+            SetComponentInterface( xWindowPeer );
+        }
+        return xWindowPeer;
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Rectangle ToolPanelDrawer::impl_calcTextBoundingBox()
+    Rectangle ToolPanelDrawer::impl_calcTextBoundingBox() const
     {
         Font aFont( GetFont() );
         if ( m_bExpanded )
@@ -290,7 +302,7 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Rectangle ToolPanelDrawer::impl_calcTitleBarBox( const Rectangle& i_rTextBox )
+    Rectangle ToolPanelDrawer::impl_calcTitleBarBox( const Rectangle& i_rTextBox ) const
     {
         Rectangle aTitleBarBox( i_rTextBox );
         aTitleBarBox.Bottom() += aTitleBarBox.Top();
@@ -310,6 +322,7 @@ namespace svt
         if ( m_bExpanded != i_bExpanded )
         {
             m_bExpanded = i_bExpanded;
+            CallEventListeners( m_bExpanded ? VCLEVENT_LISTBOX_ENTRY_EXPANDED : VCLEVENT_LISTBOX_ENTRY_COLLAPSED );
             Invalidate();
         }
     }

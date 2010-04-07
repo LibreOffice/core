@@ -59,6 +59,7 @@ SLOFILES=\
         $(SLO)$/toolpanel.obj \
         $(SLO)$/toolpanelcollection.obj \
         $(SLO)$/toolpaneldrawer.obj \
+        $(SLO)$/toolpaneldrawerpeer.obj \
         $(SLO)$/toolpaneldeck.obj \
         $(SLO)$/toolpaneldeckpeer.obj \
 
