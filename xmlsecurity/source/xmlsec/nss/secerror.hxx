@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: securityenvironment_nssimpl.hxx,v $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -24,4 +27,14 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+#ifndef _XSECERROR_HXX_
+#define _XSECERROR_HXX_
+
+const char *
+getCertError(PRErrorCode errNum);
+
+void
+printChainFailure(CERTVerifyLog *log);
+#endif  // _XSECERROR_HXX_
 

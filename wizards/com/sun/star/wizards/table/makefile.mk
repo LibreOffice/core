@@ -57,7 +57,6 @@ JAVAFILES=	\
         PrimaryKeyHandler.java	\
         ScenarioSelector.java	\
         TableWizard.java	\
-        XCallTableWizard.java
 
 JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 

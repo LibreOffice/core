@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: xmlstreamio.hxx,v $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -24,14 +27,51 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package com.sun.star.wizards.form;
 
-public interface XCallFormWizard extends com.sun.star.uno.XInterface
+#include "diagnose.hxx"
+#include <stdio.h>
+#include <stdarg.h>
+#include "rtl/instance.hxx"
+#include "rtl/bootstrap.hxx"
+
+namespace xmlsecurity {
+
+struct UseDiagnose : public rtl::StaticWithInit<
+    const bool, UseDiagnose>
 {
-    // Methods
-    public void CallFormDialog();    // static Member
-    public static final com.sun.star.lib.uno.typeinfo.TypeInfo UNOTYPEINFO[] =
+    const bool operator () ()
     {
-        new com.sun.star.lib.uno.typeinfo.MethodTypeInfo("CallFormDialog", 0, 0)
-    };
+        ::rtl::OUString value;
+        sal_Bool res = rtl::Bootstrap::get(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("XMLSECURITY_TRACE")), value);
+        return res == sal_True ? true : false;
+    }
+};
+
+/* the function will print the string when
+   - build with debug
+   - the bootstrap variable XMLSECURITY_TRACE is set.
+ */
+void xmlsec_trace(const char* pszFormat, ...)
+{
+    bool bDebug = false;
+
+#if OSL_DEBUG_LEVEL > 1
+    bDebug = true;
+#endif
+    if (bDebug || UseDiagnose::get())
+    {
+        va_list args;
+        fprintf(stderr, "[xmlsecurity] ");
+        va_start(args, pszFormat);
+        vfprintf(stderr, pszFormat, args);
+        va_end(args);
+
+        fprintf(stderr,"\n");
+        fflush(stderr);
+    }
+}
+
+
+
 }
