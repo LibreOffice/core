@@ -172,7 +172,8 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram >& xDiagram,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
+            ::com::sun::star::uno::XComponentContext > & xContext,
+        bool bAdaptAxes=true );
 
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XAxis > getAttachedAxis(
@@ -223,18 +224,14 @@ public:
                 ::com::sun::star::chart2::XDiagram > & xDiagram );
 
     static ::com::sun::star::uno::Sequence< rtl::OUString >
-        generateAutomaticCategories(
+        getExplicitSimpleCategories(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartDocument > & xChartDoc );
 
     SAL_DLLPRIVATE static ::com::sun::star::uno::Sequence< rtl::OUString >
-        generateAutomaticCategories(
+        generateAutomaticCategoriesFromCooSys(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XCoordinateSystem > & xCooSys );
-
-    SAL_DLLPRIVATE static void generateAutomaticCategoriesFromChartType(
-            ::com::sun::star::uno::Sequence< rtl::OUString >& rRet,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
 
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartType >

@@ -165,6 +165,14 @@ uno::Any* PropertyMapper::getValuePointer( tAnySequence& rPropValues
     return NULL;
 }
 
+uno::Any* PropertyMapper::getValuePointerForLimitedSpace( tAnySequence& rPropValues
+                         , const tNameSequence& rPropNames
+                         , bool bLimitedHeight)
+{
+    return PropertyMapper::getValuePointer( rPropValues, rPropNames
+        , bLimitedHeight ? C2U("TextMaximumFrameHeight") : C2U("TextMaximumFrameWidth") );
+}
+
 /*
 //set some properties from service style::CharacterProperties:
 //-------- tabpage: Zeichen -----------
@@ -521,7 +529,7 @@ void PropertyMapper::getPreparedTextShapePropertyLists(
 
     // use a line-joint showing the border of thick lines like two rectangles
     // filled in between.
-    aValueMap[C2U("LineJoint")] <<= drawing::LineJoint_MITER;
+    aValueMap[C2U("LineJoint")] <<= drawing::LineJoint_ROUND;
 
     PropertyMapper::getMultiPropertyListsFromValueMap( rPropNames, rPropValues, aValueMap );
 }
