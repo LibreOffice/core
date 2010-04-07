@@ -67,7 +67,6 @@ EditPaste SID_PASTE
 EditDelete SID_DELETE
 EditSelectAll SID_SELECTALL
 EditSearchAndReplace SID_SEARCH_DLG
-EditFrameSet SID_EDIT_FRAMESET
 EditPlugIn SID_PLUGINS_ACTIVE
 EditImageMap SID_IMAP
 EditObjectEdit .uno:ObjectMenue?VerbID:short=0
