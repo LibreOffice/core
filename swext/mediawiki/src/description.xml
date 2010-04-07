@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <version value="1.1"/>
+    <version value="1.1.1"/>
     <identifier value="@WIKIEXTENSIONID@"/>
     <display-name>
         <name lang="en-US">@WIKIEXTENSIONPRODUCTNAME@</name>
@@ -14,6 +14,6 @@
         <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0 or StarOffice 9"/>
     </dependencies>
     <publisher>
-        <name xlink:href="http://www.sun.com/software/star/staroffice/extensions.jsp?cid=925095" lang="en">Sun Microsystems</name>
+        <name xlink:href="http://www.sun.com/software/star/staroffice/extensions.jsp?cid=925095" lang="en">Oracle</name>
     </publisher>
 </description>
