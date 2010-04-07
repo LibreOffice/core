@@ -50,6 +50,8 @@ IDLFILES=\
     ModuleSizeExceededRequest.idl\
     XVBACompat.idl\
         XVBAModuleInfo.idl\
+    ModuleInfo.idl\
+    ModuleType.idl\
 
 # ------------------------------------------------------------------
 
