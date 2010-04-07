@@ -153,12 +153,6 @@ private:
     void* mpUserData;
     ::std::auto_ptr<ClickHandler> mpClickHandler;
 
-    /** Remember whether to toggle (true) the expansion state when the title
-        bar is clicked on.  When set to false then the control is always
-        expanded.
-    */
-    bool mbExpansionModeIsToggle;
-
     /// Do not use! Assignment operator is not supported.
     const TitledControl& operator= (
         const TitledControl& aDescriptor);

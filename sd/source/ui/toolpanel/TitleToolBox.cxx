@@ -45,58 +45,9 @@ namespace sd { namespace toolpanel {
 TitleToolBox::TitleToolBox (::Window* pParent, WinBits nStyle )
     : ToolBox( pParent, nStyle )
 {
-    lastSize = -1;
-
-    Bitmap aBitmap (SdResId (BMP_CLOSE_DOC));
-    Bitmap aBitmapHC (SdResId (BMP_CLOSE_DOC_H));
-    Bitmap aTriangleRight (SdResId (BMP_TRIANGLE_RIGHT));
-    Bitmap aTriangleDown (SdResId (BMP_TRIANGLE_DOWN));
-
-    maImage = Image (aBitmap, Color (COL_LIGHTMAGENTA));
-    maImageHC = Image (aBitmapHC, Color (BMP_COLOR_HIGHCONTRAST));
-    maTriangleRight = Image (aTriangleRight, Color (COL_LIGHTMAGENTA));
-    maTriangleDown = Image (aTriangleDown, Color (COL_LIGHTMAGENTA));
-
     SetOutStyle (TOOLBOX_STYLE_FLAT);
     SetBackground (Wallpaper (
         GetSettings().GetStyleSettings().GetDialogColor()));
-}
-
-
-
-
-void TitleToolBox::AddItem (ToolBoxId aId)
-{
-    switch (aId)
-    {
-        case TBID_PANEL_MENU:
-            InsertItem (TBID_PANEL_MENU,
-                String::CreateFromAscii ("Panel"),
-                TIB_DROPDOWN);
-            break;
-
-        case TBID_DOCUMENT_CLOSE:
-            InsertItem (TBID_DOCUMENT_CLOSE,
-                GetSettings().GetStyleSettings().GetHighContrastMode()
-                ? maImageHC : maImage, 0 );
-            break;
-
-        case TBID_TRIANGLE_RIGHT:
-            InsertItem (TBID_TRIANGLE_RIGHT,
-                maTriangleRight, 0);
-            break;
-
-        case TBID_TRIANGLE_DOWN:
-            InsertItem (TBID_TRIANGLE_DOWN,
-                maTriangleDown, 0);
-            break;
-
-        case TBID_TEST:
-            InsertItem (TBID_TEST,
-                String::CreateFromAscii ("Test"),
-                TIB_DROPDOWN);
-            break;
-    }
 }
 
 

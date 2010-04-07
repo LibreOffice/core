@@ -44,12 +44,7 @@ class VirtualDevice;
 namespace sd { namespace toolpanel {
 
 
-/** The title bar above a control in a tool panel or sub tool panel.
-    The way the title bar is displayed depends on the TitleBarType
-    given to the constructor.  TBT_CONTROL_TITLE and
-    TBT_SUB_CONTROL_HEADLINE both show a expansion indicator in front of
-    the title string that shows whether the associated control is
-    visible (expanded) or not.
+/** The title bar above a control in a sub tool panel.
 
     <p>The title bar shows two kinds of indicators: 1) Expansion is
     displayed by two sets of two bitmaps, a triangle pointing to the right
@@ -63,9 +58,8 @@ class TitleBar
 {
 public:
     enum TitleBarType {
-        TBT_CONTROL_TITLE,
         TBT_SUB_CONTROL_HEADLINE
-        };
+    };
 
     /** Create a new title bar whose content, the given title string,
         will be formatted according to the given type.
@@ -113,16 +107,9 @@ private:
     String msTitle;
     bool mbExpanded;
     bool mbFocused;
-    bool mbMouseOver;
     // Size of the bounding box that encloses the title string.
-    Size maStringBox;
     ::std::auto_ptr<VirtualDevice> mpDevice;
     bool mbIsExpandable;
-
-    /** Set the mbMouseOver flag to the given value and paint the
-        title bar accordingly.
-    */
-    void SetMouseOver (bool bFlag);
 
     /** Return whether this TitleBar object has an expansion indicator
         bitmap.  It is safe to call GetExpansionIndicator() when this method
@@ -157,19 +144,12 @@ private:
         const Rectangle& rTextBox,
         int nTitleBarWidth);
 
-    void PaintPanelControlTitle (void);
     void PaintSubPanelHeadLineBar (void);
 
     void PaintBackground (const Rectangle& rTextBox);
 
     /// Paint a focus indicator that encloses the given rectangle.
     void PaintFocusIndicator (const Rectangle& rIndicatorBox);
-
-    /** Paint a mouse over indicator.  If the mouse is over the title
-        bar than the text enclosed by the given rectangle is
-        underlined.
-    */
-    void PaintMouseOverIndicator (const Rectangle& rIndicatorBox);
 
     Rectangle PaintExpansionIndicator (const Rectangle& rTextBox);
 

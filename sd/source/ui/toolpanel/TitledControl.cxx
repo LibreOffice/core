@@ -55,8 +55,7 @@ TitledControl::TitledControl (
       msTitle(rTitle),
       mbVisible(true),
       mpUserData(NULL),
-      mpClickHandler(new ClickHandler(rClickHandler)),
-      mbExpansionModeIsToggle(eType!=TitleBar::TBT_CONTROL_TITLE)
+      mpClickHandler(new ClickHandler(rClickHandler))
 {
     if (pControl.get() != NULL)
     {

@@ -530,22 +530,6 @@ Bitmap BMP_CLOSE_DOC_H
 {
     File = "closedochc.bmp";
 };
-Bitmap BMP_TRIANGLE_RIGHT
-{
-    File = "triangle_right.bmp";
-};
-Bitmap BMP_TRIANGLE_RIGHT_H
-{
-    File = "triangle_right_hc.bmp";
-};
-Bitmap BMP_TRIANGLE_DOWN
-{
-    File = "triangle_down.bmp";
-};
-Bitmap BMP_TRIANGLE_DOWN_H
-{
-    File = "triangle_down_hc.bmp";
-};
 Bitmap BMP_FADE_EFFECT_INDICATOR
 {
     File = "fade_effect_indicator.bmp";

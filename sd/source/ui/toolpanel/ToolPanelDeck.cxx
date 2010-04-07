@@ -28,7 +28,6 @@
 
 #include "ToolPanelDeck.hxx"
 #include "taskpane/ToolPanelViewShell.hxx"
-#include "ToolPanelDrawer.hxx"
 #include "taskpane/ControlContainer.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include "TaskPaneToolPanel.hxx"
@@ -40,6 +39,7 @@
 /** === end UNO includes === **/
 
 #include <svtools/toolpanel/tablayouter.hxx>
+#include <svtools/toolpanel/drawerlayouter.hxx>
 #include <tools/diagnose_ex.h>
 
 //......................................................................................................................
@@ -88,11 +88,11 @@ namespace sd { namespace toolpanel
     void ToolPanelDeck::SetDrawersLayout()
     {
         const ::svt::PDeckLayouter pLayouter( GetLayouter() );
-        const ToolPanelDrawer* pDrawerLayouter = dynamic_cast< const ToolPanelDrawer* >( pLayouter.get() );
+        const ::svt::DrawerDeckLayouter* pDrawerLayouter = dynamic_cast< const ::svt::DrawerDeckLayouter* >( pLayouter.get() );
         if ( pDrawerLayouter != NULL )
             // already have the proper layout
             return;
-        SetLayouter( new ToolPanelDrawer( *this, *this ) );
+        SetLayouter( new ::svt::DrawerDeckLayouter( *this, *this ) );
     }
 
     //------------------------------------------------------------------------------------------------------------------
