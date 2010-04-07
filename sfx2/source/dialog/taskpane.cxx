@@ -34,6 +34,11 @@
 #include <tools/diagnose_ex.h>
 #include <svtools/toolpanel/toolpaneldeck.hxx>
 
+#if OSL_DEBUG_LEVEL > 0
+#include <com/sun/star/accessibility/XAccessible.hpp>
+#include <comphelper/accimplaccess.hxx>
+#endif
+
 #include <boost/noncopyable.hpp>
 
 //......................................................................................................................
@@ -42,6 +47,7 @@ namespace sfx2
 //......................................................................................................................
 
 #define USE_DUMMY_PANEL
+
 #if OSL_DEBUG_LEVEL > 0
     //==================================================================================================================
     //= DummyPanel - declaration
@@ -149,8 +155,14 @@ namespace sfx2
     using ::com::sun::star::accessibility::XAccessible;
     Reference< XAccessible > DummyPanel::CreatePanelAccessible( const Reference< XAccessible >& i_rParentAccessible )
     {
-        (void)i_rParentAccessible;
-        return NULL;
+        Reference< XAccessible > xPanelAccessible( m_pWindow->GetAccessible( FALSE ) );
+        if ( !xPanelAccessible.is() )
+        {
+            xPanelAccessible = m_pWindow->GetAccessible( TRUE );
+            ::comphelper::OAccessibleImplementationAccess::setAccessibleParent( xPanelAccessible->getAccessibleContext(),
+                i_rParentAccessible );
+        }
+        return xPanelAccessible;
     }
 
 #endif
