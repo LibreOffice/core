@@ -54,7 +54,7 @@ namespace svt
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
     ToolPanelDrawer::ToolPanelDrawer( Window& i_rParent, const ::rtl::OUString& i_rTitle )
-        :Window( &i_rParent, 0 )
+        :Window( &i_rParent, WB_TABSTOP )
         ,m_pPaintDevice( new VirtualDevice( *this ) )
         ,m_bFocused( false )
         ,m_bExpanded( false )
