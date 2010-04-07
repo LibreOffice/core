@@ -98,6 +98,12 @@
                     <desc>Specifies the user interface element name. It is used for floating user interface elements to set the title and for the bubble help.</desc>
                 </info>
             </prop>
+            <prop oor:name="ImageURL" oor:type="xs:string">
+              <info>
+                <desc>Specifies the URL of an image to associate with the user interface element. Any URL scheme supported by the com.sun.star.graphic.GraphicProvider service
+                is suitable here.</desc>
+              </info>
+            </prop>
             <prop oor:name="InternalState" oor:type="xs:int">
                 <info>
                     <desc>Specifies an internal state for the user interface element. Please don't change this value it describes an internal value.</desc>

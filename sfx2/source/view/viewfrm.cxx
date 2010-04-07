@@ -46,6 +46,7 @@
 #endif
 #include <unotools/moduleoptions.hxx>
 #include <svl/intitem.hxx>
+#include <svl/visitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/slstitm.hxx>
@@ -92,6 +93,8 @@
 #include <svtools/asynclink.hxx>
 #include <svl/sharecontrolfile.hxx>
 
+#include <boost/optional.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
@@ -104,6 +107,7 @@ namespace css = ::com::sun::star;
 
 // wg. ViewFrame::Current
 #include "appdata.hxx"
+#include <sfx2/taskpane.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include "openflag.hxx"
@@ -195,6 +199,8 @@ struct SfxViewFrame_Impl
     sal_Bool            bEnabled:1;
     sal_Bool            bEventFlag:1;
     sal_Bool            bWindowWasEnabled:1;
+    ::boost::optional< bool >
+                        aHasToolPanels;
 
                         SfxViewFrame_Impl()
                         : pReloader(0 )
@@ -209,6 +215,19 @@ struct SfxViewFrame_Impl
                         }
 };
 
+//-------------------------------------------------------------------------
+namespace
+{
+    bool moduleHasToolPanels( SfxViewFrame_Impl& i_rViewFrameImpl )
+    {
+        if ( !i_rViewFrameImpl.aHasToolPanels )
+        {
+            i_rViewFrameImpl.aHasToolPanels.reset( ::sfx2::ModuleTaskPane::ModuleHasToolPanels(
+                i_rViewFrameImpl.pFrame->GetTopFrame()->GetFrameInterface() ) );
+        }
+        return *i_rViewFrameImpl.aHasToolPanels;
+    }
+}
 //-------------------------------------------------------------------------
 void SfxViewFrame::SetDowning_Impl()
 {
@@ -3749,6 +3768,21 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
                 rState.DisableItem( nSID );
             else if ( KnowsChildWindow(nSID) )
                 rState.Put( SfxBoolItem( nSID, HasChildWindow(nSID) ) );
+        }
+        else if ( nSID == SID_TASKPANE )
+        {
+            if  ( !KnowsChildWindow( nSID ) )
+            {
+                rState.DisableItem( nSID );
+            }
+            else if ( !moduleHasToolPanels( *pImp ) )
+            {
+                rState.Put( SfxVisibilityItem( nSID, sal_False ) );
+            }
+            else
+            {
+                rState.Put( SfxBoolItem( nSID, HasChildWindow( nSID ) ) );
+            }
         }
         else if ( KnowsChildWindow(nSID) )
             rState.Put( SfxBoolItem( nSID, HasChildWindow(nSID) ) );

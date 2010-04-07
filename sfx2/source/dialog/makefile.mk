@@ -49,7 +49,8 @@ EXCEPTIONSFILES=\
         $(SLO)$/recfloat.obj        \
         $(SLO)$/templdlg.obj        \
         $(SLO)$/dinfdlg.obj         \
-        $(SLO)$/dockwin.obj
+        $(SLO)$/dockwin.obj         \
+        $(SLO)$/taskpane.obj
 
 SLOFILES =\
         $(EXCEPTIONSFILES)			\
@@ -72,8 +73,7 @@ SLOFILES =\
         $(SLO)$/tabdlg.obj			\
         $(SLO)$/tplcitem.obj		\
         $(SLO)$/tplpitem.obj		\
-        $(SLO)$/versdlg.obj         \
-        $(SLO)$/taskpane.obj
+        $(SLO)$/versdlg.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\

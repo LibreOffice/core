@@ -56,22 +56,53 @@ namespace sfx2
     //==================================================================================================================
     //= TaskPane
     //==================================================================================================================
-    class TaskPane_Impl;
-    class TaskPane : public SfxDockingWindow
+    class ModuleTaskPane_Impl;
+    /** SFX-less version of a module dependent task pane, filled with tool panels as specified in the respective
+        module's configuration
+    */
+    class ModuleTaskPane : public Window
     {
     public:
-                            TaskPane(
-                                SfxBindings* i_pBindings,
-                                TaskPaneWrapper& i_rWrapper,
-                                Window* i_pParent,
-                                WinBits i_nBits
-                            );
+        /** creates a new instance
+            @param i_rParentWindow
+                the parent window
+            @param i_rModuleIdentifier
+                a string describing the module which the task pane should act for. The tool panels registered
+                for this module will be displayed in the task pane.
+        */
+        ModuleTaskPane( Window& i_rParentWindow, const ::rtl::OUString& i_rModuleIdentifier );
+        ~ModuleTaskPane();
+
+        /** determines whether a given module has any registered tool panels
+        */
+        static bool ModuleHasToolPanels( const ::rtl::OUString& i_rModuleIdentifier );
+        /** determines whether a given module has any registered tool panels
+        */
+        static bool ModuleHasToolPanels( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rDocumentFrame );
+
+        // Window overridables
+        virtual void Resize();
+        virtual void GetFocus();
+
+    private:
+        ::boost::scoped_ptr< ModuleTaskPane_Impl >  m_pImpl;
+    };
+
+    //==================================================================================================================
+    //= TaskPaneDockingWindow
+    //==================================================================================================================
+    class TaskPaneDockingWindow : public SfxDockingWindow
+    {
+    public:
+        TaskPaneDockingWindow( SfxBindings* i_pBindings, TaskPaneWrapper& i_rWrapper,
+            Window* i_pParent, WinBits i_nBits );
 
         virtual void        GetFocus();
         virtual void        Resize();
+        virtual long        Notify( NotifyEvent& i_rNotifyEvent );
 
     private:
-        ::boost::scoped_ptr< TaskPane_Impl >    m_pImpl;
+        ModuleTaskPane  m_aTaskPane;
     };
 
 //......................................................................................................................
