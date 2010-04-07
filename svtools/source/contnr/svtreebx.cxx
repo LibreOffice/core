@@ -1044,7 +1044,7 @@ BOOL SvTreeListBox::Expand( SvLBoxEntry* pParent )
     // --> OD 2009-04-01 #i92103#
     if ( bExpanded )
     {
-        pImp->CallEventListeners( VCLEVENT_LISTBOX_ENTRY_EXPANDED, pParent );
+        pImp->CallEventListeners( VCLEVENT_ITEM_EXPANDED, pParent );
     }
     // <--
 
@@ -1071,7 +1071,7 @@ BOOL SvTreeListBox::Collapse( SvLBoxEntry* pParent )
     // --> OD 2009-04-01 #i92103#
     if ( bCollapsed )
     {
-        pImp->CallEventListeners( VCLEVENT_LISTBOX_ENTRY_COLLAPSED, pParent );
+        pImp->CallEventListeners( VCLEVENT_ITEM_COLLAPSED, pParent );
     }
     // <--
 

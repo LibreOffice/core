@@ -322,7 +322,7 @@ namespace svt
         if ( m_bExpanded != i_bExpanded )
         {
             m_bExpanded = i_bExpanded;
-            CallEventListeners( m_bExpanded ? VCLEVENT_LISTBOX_ENTRY_EXPANDED : VCLEVENT_LISTBOX_ENTRY_COLLAPSED );
+            CallEventListeners( m_bExpanded ? VCLEVENT_ITEM_EXPANDED : VCLEVENT_ITEM_COLLAPSED );
             Invalidate();
         }
     }

@@ -88,10 +88,10 @@ namespace svt
 
         switch ( i_rVclWindowEvent.GetId() )
         {
-        case VCLEVENT_LISTBOX_ENTRY_EXPANDED:
+        case VCLEVENT_ITEM_EXPANDED:
             NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, Any(), makeAny( AccessibleStateType::EXPANDED ) );
             break;
-        case VCLEVENT_LISTBOX_ENTRY_COLLAPSED:
+        case VCLEVENT_ITEM_COLLAPSED:
             NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, makeAny( AccessibleStateType::EXPANDED ), Any() );
             break;
         }
