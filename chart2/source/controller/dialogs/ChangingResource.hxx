@@ -42,6 +42,7 @@ class ResourceChangeListener
 {
 public:
     virtual void stateChanged( ChangingResource* pResource ) = 0;
+    virtual ~ResourceChangeListener();
 };
 
 class ChangingResource

@@ -279,6 +279,7 @@ void SAL_CALL BarChartTypeTemplate::applyStyle(
     throw (uno::RuntimeException)
 {
     ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
+    DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "BorderStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
     if( getDimension() == 3 )
     {
         try
@@ -300,24 +301,22 @@ void SAL_CALL BarChartTypeTemplate::resetStyles(
     throw (uno::RuntimeException)
 {
     ChartTypeTemplate::resetStyles( xDiagram );
-    if( getDimension() == 3 )
+    ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
+        DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+    uno::Any aLineStyleAny( uno::makeAny( drawing::LineStyle_NONE ));
+    for( ::std::vector< Reference< chart2::XDataSeries > >::iterator aIt( aSeriesVec.begin());
+         aIt != aSeriesVec.end(); ++aIt )
     {
-        ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
-            DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
-        uno::Any aLineStyleAny( uno::makeAny( drawing::LineStyle_NONE ));
-        for( ::std::vector< Reference< chart2::XDataSeries > >::iterator aIt( aSeriesVec.begin());
-             aIt != aSeriesVec.end(); ++aIt )
+        Reference< beans::XPropertyState > xState( *aIt, uno::UNO_QUERY );
+        if( xState.is())
         {
-            Reference< beans::XPropertyState > xState( *aIt, uno::UNO_QUERY );
-            if( xState.is())
-            {
+            if( getDimension() == 3 )
                 xState->setPropertyToDefault( C2U("Geometry3D"));
-                Reference< beans::XPropertySet > xProp( xState, uno::UNO_QUERY );
-                if( xProp.is() &&
-                    xProp->getPropertyValue( C2U("BorderStyle")) == aLineStyleAny )
-                {
-                    xState->setPropertyToDefault( C2U("BorderStyle"));
-                }
+            Reference< beans::XPropertySet > xProp( xState, uno::UNO_QUERY );
+            if( xProp.is() &&
+                xProp->getPropertyValue( C2U("BorderStyle")) == aLineStyleAny )
+            {
+                xState->setPropertyToDefault( C2U("BorderStyle"));
             }
         }
     }

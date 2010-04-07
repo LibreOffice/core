@@ -284,6 +284,26 @@ void AxisHelper::makeAxisInvisible( const Reference< XAxis >& xAxis )
     }
 }
 
+//static
+void AxisHelper::hideAxisIfNoDataIsAttached( const Reference< XAxis >& xAxis, const Reference< XDiagram >& xDiagram )
+{
+    //axis is hidden if no data is attached anymore but data is available
+    bool bOtherSeriesAttachedToThisAxis = false;
+    ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+    ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt = aSeriesVector.begin();
+    for( ; aIt != aSeriesVector.end(); ++aIt)
+    {
+        uno::Reference< chart2::XAxis > xCurrentAxis( DiagramHelper::getAttachedAxis( *aIt, xDiagram ), uno::UNO_QUERY );
+        if( xCurrentAxis==xAxis )
+        {
+            bOtherSeriesAttachedToThisAxis = true;
+            break;
+        }
+    }
+    if(!bOtherSeriesAttachedToThisAxis && !aSeriesVector.empty() )
+        AxisHelper::makeAxisInvisible( xAxis );
+}
+
 void AxisHelper::hideGrid( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid
                 , const Reference< XDiagram >& xDiagram )
 {

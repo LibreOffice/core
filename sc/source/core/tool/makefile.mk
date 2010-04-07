@@ -105,6 +105,7 @@ SLOFILES =  \
         $(SLO)$/refupdat.obj \
         $(SLO)$/scmatrix.obj \
         $(SLO)$/sctictac.obj \
+        $(SLO)$/stringutil.obj \
         $(SLO)$/subtotal.obj \
         $(SLO)$/token.obj \
         $(SLO)$/unitconv.obj \
@@ -115,6 +116,7 @@ SLOFILES =  \
 EXCEPTIONSFILES= \
         $(SLO)$/addincol.obj \
         $(SLO)$/cellkeytranslator.obj \
+        $(SLO)$/charthelper.obj \
         $(SLO)$/chartarr.obj \
         $(SLO)$/chartlis.obj \
         $(SLO)$/chartlock.obj \
@@ -131,6 +133,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/prnsave.obj \
         $(SLO)$/queryparam.obj \
         $(SLO)$/reftokenhelper.obj \
+        $(SLO)$/stringutil.obj \
         $(SLO)$/token.obj
 
 # [kh] POWERPC compiler problem

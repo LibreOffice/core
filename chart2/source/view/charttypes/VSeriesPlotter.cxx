@@ -560,11 +560,17 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             sal_Int32 nYDiff = aTextSize.Height/nLineCountForSymbolsize;
             sal_Int32 nXDiff = aSymbolSize.Width * nYDiff/aSymbolSize.Height;
 
+            // #i109336# Improve auto positioning in chart
+            nXDiff = nXDiff * 80 / 100;
+            nYDiff = nYDiff * 80 / 100;
+
             aSymbolSize.Width =  nXDiff * 75/100;
             aSymbolSize.Height = nYDiff * 75/100;
 
             awt::Point aSymbolPosition( aUnrotatedTextPos );
-            aSymbolPosition.Y += (nYDiff * 25/200);
+
+            // #i109336# Improve auto positioning in chart
+            aSymbolPosition.Y += ( nYDiff / 4 );
 
             if(LABEL_ALIGN_LEFT==eAlignment
                 || LABEL_ALIGN_LEFT_TOP==eAlignment
