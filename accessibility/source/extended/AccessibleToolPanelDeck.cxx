@@ -204,6 +204,7 @@ namespace accessibility
             ::svt::PToolPanel pActivePanel( m_pPanelDeck->GetPanel( *aActivePanel ) );
             ENSURE_OR_RETURN( pActivePanel.get() != NULL, "AccessibleToolPanelDeck_Impl::getActivePanelAccessible: no active panel!", NULL );
             m_xActivePanelAccessible = pActivePanel->CreatePanelAccessible( getOwnAccessible() );
+            OSL_ENSURE( m_xActivePanelAccessible.is(), "AccessibleToolPanelDeck_Impl::getActivePanelAccessible: illegal accessible returned by the panel!" );
         }
 
         return m_xActivePanelAccessible;
