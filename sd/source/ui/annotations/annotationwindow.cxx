@@ -780,6 +780,8 @@ void AnnotationWindow::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
+        if( mpMeta->IsVisible() &&(mpMeta->GetPosPixel().Y() < rCEvt.GetMousePosPixel().Y()) )
+            return;
         mrManager.ExecuteAnnotationContextMenu( mxAnnotation, this, Rectangle(rCEvt.GetMousePosPixel(),Size(1,1)) );
     }
     else
