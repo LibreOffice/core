@@ -471,6 +471,11 @@
 #define RID_IMG_BITMAPFONT_HC           (RID_SVTOOLS_START + 16)
 #define RID_IMG_SCALABLEFONT_HC         (RID_SVTOOLS_START + 17)
 
+#define IMG_TRIANGLE_RIGHT              (RID_SVTOOLS_START + 18)
+#define IMG_TRIANGLE_RIGHT_HC           (RID_SVTOOLS_START + 19)
+#define IMG_TRIANGLE_DOWN               (RID_SVTOOLS_START + 20)
+#define IMG_TRIANGLE_DOWN_HC            (RID_SVTOOLS_START + 21)
+
 #define IMG_SVT_FOLDER                  (RID_SVTOOLS_START + 40)
 
 #define IMG_SVT_NEWDOC                  (RID_SVTOOLS_START + 52)

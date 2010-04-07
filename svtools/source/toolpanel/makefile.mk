@@ -48,6 +48,7 @@ SRC1FILES=\
         toolpanel.src
 
 SLOFILES=\
+        $(SLO)$/drawerlayouter.obj \
         $(SLO)$/dummypanel.obj \
         $(SLO)$/paneldecklisteners.obj \
         $(SLO)$/paneltabbar.obj \
@@ -57,6 +58,7 @@ SLOFILES=\
         $(SLO)$/tablayouter.obj \
         $(SLO)$/toolpanel.obj \
         $(SLO)$/toolpanelcollection.obj \
+        $(SLO)$/toolpaneldrawer.obj \
         $(SLO)$/toolpaneldeck.obj \
         $(SLO)$/toolpaneldeckpeer.obj \
 

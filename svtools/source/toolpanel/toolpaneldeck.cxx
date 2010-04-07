@@ -125,7 +125,7 @@ namespace svt
         bool                FocusActivePanel();
 
         void                SetAccessibleParentWindow( Window* i_pAccessibleParent );
-        Window*             GetAccessibleParentWindow() const { return m_pAccessibleParent ? m_pAccessibleParent : m_rDeck.GetAccessibleParentWindow(); }
+        Window*             GetAccessibleParentWindow() const { return m_pAccessibleParent; }
 
     protected:
         // IToolPanelDeckListener
@@ -525,7 +525,10 @@ namespace svt
     //--------------------------------------------------------------------
     Window* ToolPanelDeck::GetAccessibleParentWindow() const
     {
-        return m_pImpl->GetAccessibleParentWindow();
+        Window* pAccessibleParent( m_pImpl->GetAccessibleParentWindow() );
+        if ( !pAccessibleParent )
+            pAccessibleParent = Window::GetAccessibleParentWindow();
+        return pAccessibleParent;
     }
 
     //--------------------------------------------------------------------
