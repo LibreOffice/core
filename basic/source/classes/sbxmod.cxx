@@ -1539,7 +1539,7 @@ SbObjModule::Find( const XubString& rName, SbxClassType t )
 {
     //OSL_TRACE("SbObjectModule find for %s", rtl::OUStringToOString(  rName, RTL_TEXTENCODING_UTF8 ).getStr() );
     SbxVariable* pVar = NULL;
-    if ( !pVar && pDocObject)
+    if ( pDocObject)
         pVar = pDocObject->Find( rName, t );
     if ( !pVar )
         pVar = SbModule::Find( rName, t );

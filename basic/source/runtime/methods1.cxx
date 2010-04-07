@@ -2601,6 +2601,8 @@ RTLFUNC(Me)
         SbObjModule* pMod = PTR_CAST(SbObjModule,pActiveModule);
         if ( pMod )
             refVar->PutObject( pMod );
+        else
+            StarBASIC::Error( SbERR_INVALID_USAGE_OBJECT );
     }
     else
         refVar->PutObject( pClassModuleObject );
