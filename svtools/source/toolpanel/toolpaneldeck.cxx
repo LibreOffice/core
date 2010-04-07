@@ -32,6 +32,7 @@
 #include "toolpaneldeckpeer.hxx"
 #include "svtools/toolpanel/toolpaneldeck.hxx"
 #include "svtools/toolpanel/tablayouter.hxx"
+#include "svtools/toolpanel/drawerlayouter.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -121,7 +122,7 @@ namespace svt
 
         void                DoAction( const DeckAction i_eAction );
 
-        void                FocusActivePanel();
+        bool                FocusActivePanel();
 
         void                SetAccessibleParentWindow( Window* i_pAccessibleParent );
         Window*             GetAccessibleParentWindow() const { return m_pAccessibleParent ? m_pAccessibleParent : m_rDeck.GetAccessibleParentWindow(); }
@@ -290,10 +291,15 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    void ToolPanelDeck_Impl::FocusActivePanel()
+    bool ToolPanelDeck_Impl::FocusActivePanel()
     {
-        PToolPanel pActivePanel( GetActiveOrDummyPanel_Impl() );
+        ::boost::optional< size_t > aActivePanel( m_aPanels.GetActivePanel() );
+        if ( !aActivePanel )
+            return false;
+
+        PToolPanel pActivePanel( m_aPanels.GetPanel( *aActivePanel ) );
         pActivePanel->GrabFocus();
+        return true;
     }
 
     //--------------------------------------------------------------------
@@ -361,7 +367,8 @@ namespace svt
         ,m_pImpl( new ToolPanelDeck_Impl( *this ) )
     {
         // use a default layouter
-        SetLayouter( PDeckLayouter( new TabDeckLayouter( *this, *this, TABS_RIGHT, TABITEM_IMAGE_AND_TEXT ) ) );
+//        SetLayouter( PDeckLayouter( new TabDeckLayouter( *this, *this, TABS_RIGHT, TABITEM_IMAGE_AND_TEXT ) ) );
+        SetLayouter( PDeckLayouter( new DrawerDeckLayouter( *this, *this ) ) );
     }
 
     //--------------------------------------------------------------------
@@ -501,7 +508,12 @@ namespace svt
     void ToolPanelDeck::GetFocus()
     {
         Control::GetFocus();
-        m_pImpl->FocusActivePanel();
+        if ( !m_pImpl->FocusActivePanel() )
+        {
+            PDeckLayouter pLayouter( GetLayouter() );
+            ENSURE_OR_RETURN_VOID( pLayouter.get(), "ToolPanelDeck::GetFocus: no layouter?!" );
+            pLayouter->SetFocusToPanelSelector();
+        }
     }
 
     //--------------------------------------------------------------------
