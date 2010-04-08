@@ -587,7 +587,7 @@ namespace sfx2
         ModuleTaskPane_Impl( ModuleTaskPane& i_rAntiImpl, const ::rtl::OUString& i_rModuleIdentifier )
             :m_rAntiImpl( i_rAntiImpl )
             ,m_sModuleIdentifier( i_rModuleIdentifier )
-            ,m_aPanels( i_rAntiImpl, 0 )
+            ,m_aPanels( i_rAntiImpl )
         {
             m_aPanels.Show();
         #if ( OSL_DEBUG_LEVEL > 0 ) && defined ( USE_DUMMY_PANEL )
