@@ -101,7 +101,7 @@ namespace drawinglayer
             SdrLathePrimitive3D(
                 const basegfx::B3DHomMatrix& rTransform,
                 const basegfx::B2DVector& rTextureSize,
-                const attribute::SdrLineFillShadowAttribute& rSdrLFSAttribute,
+                const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,
                 const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute,
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
                 sal_uInt32 nHorizontalSegments,

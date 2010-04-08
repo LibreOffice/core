@@ -94,7 +94,6 @@ protected:
     void SetWidth( sal_Int32 nWidth );
     void SetHeight( sal_Int32 nHeight );
 
-    sal_Bool mbHasBackgroundObject;
     bool     mbIsImpressDocument;
 
     virtual void disposing() throw();

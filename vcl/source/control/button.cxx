@@ -1191,7 +1191,10 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
     else
     {
         Rectangle aSymbolRect;
-        ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, 1, nDrawFlags,
+        ULONG nImageSep = 1 + (pDev->GetTextHeight()-10)/2;
+        if( nImageSep < 1 )
+            nImageSep = 1;
+        ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, nImageSep, nDrawFlags,
                               nTextStyle, IsSymbol() ? &aSymbolRect : NULL );
 
         if ( IsSymbol() && ! bLayout )
@@ -1320,6 +1323,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
     if( bNativeOK )
         return;
 
+    bool bRollOver = (IsMouseOver() && aInRect.IsInside( GetPointerPosPixel() ));
     if ( (bNativeOK=IsNativeControlSupported(CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL)) == TRUE )
     {
         PushButtonValue aPBVal;
@@ -1334,7 +1338,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         if ( ImplGetButtonState() & BUTTON_DRAW_DEFAULT )   nState |= CTRL_STATE_DEFAULT;
         if ( Window::IsEnabled() )              nState |= CTRL_STATE_ENABLED;
 
-        if ( IsMouseOver() && aInRect.IsInside( GetPointerPosPixel() ) )
+        if ( bRollOver )
             nState |= CTRL_STATE_ROLLOVER;
 
         if( GetStyle() & WB_BEVELBUTTON )
@@ -1359,8 +1363,15 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         Size aInRectSize( LogicToPixel( Size( aInRect.GetWidth(), aInRect.GetHeight() ) ) );
         aPBVal.mbSingleLine = (aInRectSize.Height() < 2 * aFontSize.Height() );
 
-        bNativeOK = DrawNativeControl( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
-                         aControlValue, rtl::OUString()/*PushButton::GetText()*/ );
+        if( ((nState & CTRL_STATE_ROLLOVER) || HasFocus()) || ! (GetStyle() & WB_FLATBUTTON) )
+        {
+            bNativeOK = DrawNativeControl( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
+                            aControlValue, rtl::OUString()/*PushButton::GetText()*/ );
+        }
+        else
+        {
+            bNativeOK = true;
+        }
 
         // draw content using the same aInRect as non-native VCL would do
         ImplDrawPushButtonContent( this,
@@ -1374,8 +1385,21 @@ void PushButton::ImplDrawPushButton( bool bLayout )
     if ( bNativeOK == FALSE )
     {
         // draw PushButtonFrame, aInRect has content size afterwards
-        if( ! bLayout )
-            ImplDrawPushButtonFrame( this, aInRect, nButtonStyle );
+        if( (GetStyle() & WB_FLATBUTTON) )
+        {
+            Rectangle aTempRect( aInRect );
+            if( ! bLayout && (bRollOver || HasFocus()) )
+                ImplDrawPushButtonFrame( this, aTempRect, nButtonStyle );
+            aInRect.Left()   += 2;
+            aInRect.Top()    += 2;
+            aInRect.Right()  -= 2;
+            aInRect.Bottom() -= 2;
+        }
+        else
+        {
+            if( ! bLayout )
+                ImplDrawPushButtonFrame( this, aInRect, nButtonStyle );
+        }
 
         // draw content
         ImplDrawPushButtonContent( this, 0, aInRect, bLayout );

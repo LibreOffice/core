@@ -142,7 +142,7 @@ public:
 
 //UNUSED2009-05 BOOL        HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
 //UNUSED2009-05             BOOL bLeft, BOOL bRight ) const;
-    BOOL        HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const;
+    bool        HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const;
     BOOL        HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const;
     BOOL        ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rPaintCol, SCROW& rPaintRow,
@@ -235,7 +235,9 @@ public:
 
                 //  TRUE = Zahlformat gesetzt
     BOOL        SetString( SCROW nRow, SCTAB nTab, const String& rString,
-                           formula::FormulaGrammar::AddressConvention conv = formula::FormulaGrammar::CONV_OOO );
+                           formula::FormulaGrammar::AddressConvention conv = formula::FormulaGrammar::CONV_OOO,
+                           SvNumberFormatter* pFormatter = NULL,
+                           bool bDetectNumberFormat = true );
     void        SetValue( SCROW nRow, const double& rVal);
     void        SetError( SCROW nRow, const USHORT nError);
 

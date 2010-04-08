@@ -78,6 +78,7 @@ JAVAFILES=							\
     common$/DebugHelper.java					\
     common$/PropertySetHelper.java					\
     common$/NumericalHelper.java					\
+    common$/NamedValueCollection.java       \
     db$/DBMetaData.java					\
     db$/CommandMetaData.java				\
     db$/QueryMetaData.java					\
@@ -90,6 +91,7 @@ JAVAFILES=							\
     db$/RelationController.java				\
     db$/TableDescriptor.java				\
     db$/SQLQueryComposer.java				\
+    db$/DatabaseObjectWizard.java					\
     ui$/event$/AbstractListener.java			\
     ui$/event$/CommonListener.java				\
     ui$/event$/DataAware.java				\

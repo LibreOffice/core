@@ -64,9 +64,10 @@
    Language Identifier Constants and Strings
    http://msdn2.microsoft.com/en-us/library/ms776294.aspx
 
-   Lists for 2003, XP and Vista, overview with URLs pointing to regional settings:
-   NLS information page
-   http://www.microsoft.com/globaldev/nlsweb/default.mspx
+   Hey, yet another list, maybe this one will not move around? It seems to be
+   quite complete..
+   Language Identifier Constants and Strings (Windows)
+   http://msdn.microsoft.com/en-us/library/dd318693(VS.85).aspx
 
    List of supported locale identifiers in Word
    http://support.microsoft.com/default.aspx?scid=KB;en-us;q221435
@@ -500,5 +501,16 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_ARABIC_SUDAN          0xA001  /* makeLangID( 0x28, getPrimaryLanguage( LANGUAGE_ARABIC_SAUDI_ARABIA)) */
 #define LANGUAGE_USER_ANCIENT_GREEK         0x0649
 #define LANGUAGE_USER_ASTURIAN              0x064A
+#define LANGUAGE_USER_LATGALIAN             0x064B
+#define LANGUAGE_USER_MAORE                 0x064C
+#define LANGUAGE_USER_BUSHI                 0x064D
+#define LANGUAGE_USER_TAHITIAN              0x064E
+#define LANGUAGE_USER_MALAGASY_PLATEAU      0x064F
+#define LANGUAGE_USER_PAPIAMENTU_ARUBA      0x8079  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_PAPIAMENTU)) */
+#define LANGUAGE_USER_SARDINIAN_CAMPIDANESE 0x0650
+#define LANGUAGE_USER_SARDINIAN_GALLURESE   0x0651
+#define LANGUAGE_USER_SARDINIAN_LOGUDORESE  0x0652
+#define LANGUAGE_USER_SARDINIAN_SASSARESE   0x0653
+#define LANGUAGE_USER_BAFIA                 0x0654
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */

@@ -68,12 +68,12 @@ class SvxPathTabPage;
 class SvxPathTabPage : public SfxTabPage
 {
 private:
+    FixedLine           aStdBox;
     FixedText           aTypeText;
     FixedText           aPathText;
     SvxControlFocusHelper aPathCtrl;
     PushButton          aStandardBtn;
     PushButton          aPathBtn;
-    FixedLine           aStdBox;
 
     HeaderBar*                  pHeaderBar;
     ::svx::OptHeaderTabListBox* pPathBox;

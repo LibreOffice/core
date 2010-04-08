@@ -39,7 +39,10 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES=\
-        $(SLO)$/sdrallattribute.obj					\
+        $(SLO)$/sdrfilltextattribute.obj			\
+        $(SLO)$/sdrlinefillshadowtextattribute.obj	\
+        $(SLO)$/sdrlineshadowtextattribute.obj		\
+        $(SLO)$/sdrshadowtextattribute.obj			\
         $(SLO)$/sdrtextattribute.obj				\
         $(SLO)$/sdrformtextattribute.obj			\
         $(SLO)$/sdrformtextoutlineattribute.obj

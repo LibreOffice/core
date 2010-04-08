@@ -31,7 +31,7 @@
 #include "ViewShellBase.hxx"
 #include <cppcanvas/vclfactory.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/topfrm.hxx>
+#include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/dialog.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

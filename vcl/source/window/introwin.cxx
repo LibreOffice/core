@@ -77,3 +77,12 @@ void IntroWindow::SetBackgroundBitmap( const Bitmap& rBitmap )
         ImplGetFrame()->SetBackgroundBitmap( pBmp );
     }
 }
+
+void IntroWindow::SetBackgroundBitmap( const BitmapEx& rBitmapEx )
+{
+    if( ! rBitmapEx.IsEmpty() )
+    {
+        SalBitmap* pBmp = rBitmapEx.ImplGetBitmapImpBitmap()->ImplGetSalBitmap();
+        ImplGetFrame()->SetBackgroundBitmap( pBmp );
+    }
+}

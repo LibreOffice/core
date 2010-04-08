@@ -1788,7 +1788,7 @@ long SfxTabDialog::Notify( NotifyEvent& rNEvt )
             }
 
             if ( nHelpId )
-                SfxHelp::OpenHelpAgent( pViewFrame->GetFrame(), nHelpId );
+                SfxHelp::OpenHelpAgent( &pViewFrame->GetFrame(), nHelpId );
         }
     }
 

@@ -51,19 +51,14 @@ namespace sdr { namespace properties {
 class SVX_DLLPUBLIC SdrRectObj : public SdrTextObj
 {
 private:
-    // BaseProperties section
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
     // to allow sdr::properties::RectangleProperties access to SetXPolyDirty()
     friend class sdr::properties::RectangleProperties;
-
-    // DrawContact section
-private:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
     friend class                SdrTextObj; // wg SetXPolyDirty bei GrowAdjust
 
 protected:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+
     XPolygon*                   mpXPoly;
 
 protected:

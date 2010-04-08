@@ -37,6 +37,7 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#include <comphelper/namedvaluecollection.hxx>
 #ifndef _SFXAPP_HXX //autogen wg. SFX_APP
 #include <sfx2/app.hxx>
 #endif
@@ -58,6 +59,7 @@
 #ifndef _SVTOOLS_IMGDEF_HXX
 #include <svtools/imgdef.hxx>
 #endif
+#include <tools/diagnose_ex.h>
 
 //.........................................................................
 namespace dbaui
@@ -217,6 +219,27 @@ namespace dbaui
         {
             // Check if we need to get new images for normal/high contrast mode
             m_rController.notifyHiContrastChanged();
+        }
+
+        if ( nType == STATE_CHANGE_INITSHOW )
+        {
+            // now that there's a view which is finally visible, remove the "Hidden" value from the
+            // model's arguments.
+            try
+            {
+                Reference< XController > xController( m_rController.getXController(), UNO_SET_THROW );
+                Reference< XModel > xModel( xController->getModel(), UNO_QUERY );
+                if ( xModel.is() )
+                {
+                    ::comphelper::NamedValueCollection aArgs( xModel->getArgs() );
+                    aArgs.remove( "Hidden" );
+                    xModel->attachResource( xModel->getURL(), aArgs.getPropertyValues() );
+                }
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
         }
     }
     // -----------------------------------------------------------------------------

@@ -72,7 +72,6 @@ SLOFILES=	\
         $(SLO)$/WColumnSelect.obj			\
         $(SLO)$/WExtendPages.obj			\
         $(SLO)$/WNameMatch.obj				\
-        $(SLO)$/documentcontroller.obj      \
         $(SLO)$/ToolBoxHelper.obj			\
         $(SLO)$/stringlistitem.obj			\
         $(SLO)$/charsets.obj				\

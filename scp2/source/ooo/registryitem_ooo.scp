@@ -140,13 +140,6 @@ RegistryItem gid_Regitem_Soffice_Starconfigfile_6
     REG_VALUE_LNG(SO60_CONFIGFILE)
 End
 
-RegistryItem gid_Regitem_Soffice_Starconfigfile_6_Defaulticon
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Root;
-    Subkey = "soffice.StarConfigFile.6\DefaultIcon";
-    Value = "<progpath>\program\soffice.exe,17";
-End
-
 RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Soffice_Exe
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     Subkey = "Software\Microsoft\Windows\CurrentVersion\App Paths\soffice.exe";

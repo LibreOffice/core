@@ -942,8 +942,15 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     {
         ::rtl::OUString sEmbeddedURL = m_pCollection->getEmbeddedDatabase();
         ::connectivity::DriversConfig aDriverConfig(getORB());
-        if ( !aDriverConfig.getDriverFactoryName(sEmbeddedURL).getLength() )
+        try
+        {
+        if ( !aDriverConfig.getDriverFactoryName(sEmbeddedURL).getLength() || !m_pImpl->getDriver(sEmbeddedURL).is() )
             sEmbeddedURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:dbase:"));
+        }
+        catch(const Exception&)
+        {
+            sEmbeddedURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:dbase:"));
+        }
 
         return sEmbeddedURL;
     }
@@ -1118,7 +1125,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
                 m_xFrameLoader.set( m_xDesktop, UNO_QUERY_THROW );
                 m_xInteractionHandler.set(
                     _rxORB->createInstance(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.InteractionHandler" ) )
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" ) )
                     ),
                     UNO_QUERY_THROW );
             }

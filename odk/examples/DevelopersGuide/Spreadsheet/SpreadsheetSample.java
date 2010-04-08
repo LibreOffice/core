@@ -1100,7 +1100,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
                 (com.sun.star.task.XInteractionHandler)UnoRuntime.queryInterface(
                     com.sun.star.task.XInteractionHandler.class,
                     xServiceManager.createInstanceWithContext(
-                        "com.sun.star.sdb.InteractionHandler", getContext()) );
+                        "com.sun.star.task.InteractionHandler", getContext()) );
             com.sun.star.sdbcx.XTablesSupplier xSupplier =
                 (com.sun.star.sdbcx.XTablesSupplier)UnoRuntime.queryInterface(
                     com.sun.star.sdbcx.XTablesSupplier.class,

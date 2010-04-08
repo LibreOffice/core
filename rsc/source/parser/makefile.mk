@@ -45,17 +45,6 @@ ENABLE_EXCEPTIONS=true
 YACCTARGET= $(INCCOM)$/yyrscyacc.cxx
 YACCFILES=  rscyacc.y
 
-CXXFILES=   rscpar.cxx          \
-            rscyacc.cxx         \
-            rsclex.cxx          \
-            erscerr.cxx         \
-            rsckey.cxx          \
-            rscinit.cxx         \
-            rscibas.cxx         \
-            rscdb.cxx           \
-            rscicpx.cxx         \
-            parser.cxx
-
 OBJFILES=   $(OBJ)$/rscpar.obj   \
             $(OBJ)$/rscyacc.obj  \
             $(OBJ)$/rsclex.obj   \

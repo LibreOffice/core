@@ -33,7 +33,7 @@
 
 sub misc_Macros
 
-	printlog "------------------- misc_Macros.inc ------------------------"
+    printlog "------------------- misc_Macros.inc ------------------------"
        
     call tMacros
     
@@ -80,11 +80,11 @@ testcase tMacros
     endif
 
     NextButton.click
+
+    BackupLocation.settext sFileName + "backup.odb"
     
-    DatabaseFile.settext sFileName + "backup.odb"
-    
-	NextButton.click
-	sleep(20)
+    NextButton.click
+    sleep(20)
     MacroMigration.OK
     
     call fCloseDatabase
@@ -105,7 +105,7 @@ testcase tMacros
     if (MessageBox.exists(1)) then
         warnlog "MessageBox about macros appear. Should not after migration."
     else
-		'nothing
+        'nothing
     endif
     
     call fCloseDatabase

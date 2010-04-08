@@ -54,7 +54,7 @@ public class FormatValueUtility
     private static final String BOOLEAN_VALUE = "boolean-value";
     private static final String STRING_VALUE = "string-value";
     public static final String VALUE_TYPE = "value-type";
-    private static final String VALUE = "value";
+    public static final String VALUE = "value";
     private static SimpleDateFormat dateFormat;
     private static SimpleDateFormat timeFormat;
 

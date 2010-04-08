@@ -644,7 +644,8 @@ sub set_manufacturer
     my ($allvariables) = @_;
 
     my $openofficeproductname = "OpenOffice.org";
-    my $sunname = "Sun Microsystems";
+    my $sunname = "";
+
 
     if ( $allvariables->{'OPENSOURCE'} && $allvariables->{'OPENSOURCE'} == 1 )
     {
@@ -655,6 +656,8 @@ sub set_manufacturer
     else
     {
         $installer::globals::isopensourceproduct = 0;
+        if (( $allvariables->{'DEFINEDMANUFACTURER'} ) && ( $allvariables->{'DEFINEDMANUFACTURER'} ne "" )) { $sunname = $allvariables->{'DEFINEDMANUFACTURER'}; }
+        else { installer::exiter::exit_program("ERROR: Property DEFINEDMANUFACTURER has to be set for this product!", "set_manufacturer"); }
         $installer::globals::manufacturer = $sunname;
         $installer::globals::longmanufacturer = $sunname . ", Inc.";
     }

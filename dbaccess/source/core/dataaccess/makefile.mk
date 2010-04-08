@@ -61,7 +61,7 @@ SLOFILES=	\
         $(SLO)$/ModelImpl.obj           \
         $(SLO)$/documentevents.obj      \
         $(SLO)$/documenteventexecutor.obj \
-        $(SLO)$/documenteventnotifier.obj
+        $(SLO)$/documenteventnotifier.obj \
 
 # --- Targets ----------------------------------
 

@@ -31,12 +31,18 @@
 #include <saldisp.hxx>
 #include <salgdi.h>
 
+#define Region QtXRegion
+#include <QImage>
+#undef Region
+
 /** handles graphics drawings requests and performs the needed drawing operations */
 class KDESalGraphics : public X11SalGraphics
 {
+    QImage* m_image;
+
     public:
-        KDESalGraphics() {}
-        virtual ~KDESalGraphics() {}
+        KDESalGraphics();
+        virtual ~KDESalGraphics();
 
         /**
             What widgets can be drawn the native way.

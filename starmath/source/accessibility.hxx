@@ -236,6 +236,7 @@ public:
     virtual SfxItemPool* GetPool() const;
 
     virtual XubString    CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor );
+    virtual void        FieldClicked(const SvxFieldItem&, USHORT, USHORT);
     virtual BOOL         IsValid() const;
 
     virtual LanguageType    GetLanguage( USHORT, USHORT ) const;

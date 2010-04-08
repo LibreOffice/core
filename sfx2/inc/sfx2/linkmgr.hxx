@@ -131,8 +131,6 @@ public:
     // (ist zur Zeit nur fuer die FileLinks interressant!)
     void CancelTransfers();
 
-    static void SetTransferPriority( sfx2::SvBaseLink& rLink, USHORT nPrio );
-
     // um Status Informationen aus dem FileObject an den BaseLink zu
     // senden, gibt es eine eigene ClipBoardId. Das SvData-Object hat
     // dann die entsprechenden Informationen als String.

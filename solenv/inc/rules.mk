@@ -220,7 +220,7 @@ $(SLO)/%.obj : %.cpp
 .ENDIF			# "$(nodep)"==""
 
 $(SLO)/%.obj : $(MISC)/%.cxx
-    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(OUTPATH)/misc/$(COMPILE_ECHO_FILE)
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(INPATH)/misc/$(COMPILE_ECHO_FILE)
 .IF "$(GUI)"=="UNX"
 .IF "$(TEST)"!=""
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) -E  $(CFLAGSINCXX)$(MISC)/$*.cxx
@@ -245,7 +245,7 @@ $(SLO)/%.obj : $(MISC)/%.cxx
 .ENDIF			# "$(nodep)"==""
 
 $(SLO)/%.obj : $(MISC)/%.cc
-    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(OUTPATH)/misc/$(COMPILE_ECHO_FILE)
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(INPATH)/misc/$(COMPILE_ECHO_FILE)
 .IF "$(GUI)"=="UNX"
 .IF "$(TEST)"!=""
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) -E  $(CFLAGSINCXX)$(MISC)/$*.cc
@@ -411,7 +411,7 @@ $(OBJ)/%.obj : $(MISC)/%.m
 
 # Objective-C files
 $(SLO)/%.obj : $(MISC)/%.m
-    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(OUTPATH)/misc/$(COMPILE_ECHO_FILE)
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(INPATH)/misc/$(COMPILE_ECHO_FILE)
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(objc) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(OBJCFLAGS) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)/$*.o $(MISC)/$*.m
@@ -472,7 +472,7 @@ $(OBJ)/%.obj : $(MISC)/%.mm
 
 # Objective-C++ files
 $(SLO)/%.obj : $(MISC)/%.mm
-    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(OUTPATH)/misc/$(COMPILE_ECHO_FILE)
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(INPATH)/misc/$(COMPILE_ECHO_FILE)
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(objcpp) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(OBJCXXFLAGS) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)/$*.o $(MISC)/$*.mm

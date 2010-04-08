@@ -542,7 +542,7 @@ namespace abp
 
         // ................................................................
         // create the interaction handler (needed for authentication and error handling)
-        static ::rtl::OUString s_sInteractionHandlerServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.InteractionHandler");
+        static ::rtl::OUString s_sInteractionHandlerServiceName = ::rtl::OUString::createFromAscii("com.sun.star.task.InteractionHandler");
         Reference< XInteractionHandler > xInteractions;
         try
         {

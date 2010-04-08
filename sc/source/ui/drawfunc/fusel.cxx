@@ -390,7 +390,7 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
     BOOL bReturn = FuDraw::MouseButtonUp(rMEvt);
 //  BOOL bOle    = pViewShell->GetViewData()->IsOle();
-    BOOL bOle = pViewShell->GetViewFrame()->GetFrame()->IsInPlace();
+    BOOL bOle = pViewShell->GetViewFrame()->GetFrame().IsInPlace();
 
     if (aDragTimer.IsActive() )
     {

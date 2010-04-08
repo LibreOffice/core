@@ -33,10 +33,12 @@
 #include <svx/obj3d.hxx>
 #include <drawinglayer/primitive2d/embedded3dprimitive2d.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
-#include <drawinglayer/attribute/sdrattribute.hxx>
-#include <drawinglayer/attribute/sdrattribute3d.hxx>
 #include <svx/scene3d.hxx>
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
+#include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
+#include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
+#include <drawinglayer/attribute/sdrlightattribute3d.hxx>
+#include <drawinglayer/attribute/sdrlineattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -124,13 +126,14 @@ namespace sdr
 
                     // create embedded 2d primitive and add. LightNormal and ShadowSlant are needed for evtl.
                     // 3D shadow extraction for correct B2DRange calculation (shadow is part of the object)
-                    const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::Embedded3DPrimitive2D(
-                        rxContent3D,
-                        pVCOfE3DScene->getObjectTransformation(),
-                        aViewInformation3D,
-                        aLightNormal,
-                        fShadowSlant,
-                        rAllContentRange));
+                    const drawinglayer::primitive2d::Primitive2DReference xReference(
+                        new drawinglayer::primitive2d::Embedded3DPrimitive2D(
+                            rxContent3D,
+                            pVCOfE3DScene->getObjectTransformation(),
+                            aViewInformation3D,
+                            aLightNormal,
+                            fShadowSlant,
+                            rAllContentRange));
 
                     xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                 }
@@ -175,9 +178,12 @@ namespace sdr
 
                 if(!rObjectTransform.isIdentity())
                 {
-                    const drawinglayer::primitive3d::Primitive3DReference xReference(new drawinglayer::primitive3d::TransformPrimitive3D(
-                        rObjectTransform, xRetval));
-                    return drawinglayer::primitive3d::Primitive3DSequence(&xReference, 1);
+                    const drawinglayer::primitive3d::Primitive3DReference xReference(
+                        new drawinglayer::primitive3d::TransformPrimitive3D(
+                            rObjectTransform,
+                            xRetval));
+
+                    xRetval = drawinglayer::primitive3d::Primitive3DSequence(&xReference, 1);
                 }
             }
 

@@ -31,6 +31,7 @@ PRJNAME=desktop
 TARGET = migrationoo2.uno
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST = migrationoo2
+LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 .INCLUDE : ..$/..$/deployment/inc/dp_misc.mk
@@ -50,7 +51,18 @@ SLOFILES= \
         $(SLO)$/cexports.obj \
         $(SLO)$/basicmigration.obj \
         $(SLO)$/wordbookmigration.obj \
-        $(SLO)$/extensionmigration.obj
+        $(SLO)$/extensionmigration.obj \
+        $(SLO)$/autocorrmigration.obj \
+        $(SLO)$/oo3extensionmigration.obj \
+        $(SLO)$/cexportsoo3.obj
+
+SHL1OBJS= \
+        $(SLO)$/jvmfwk.obj \
+        $(SLO)$/cexports.obj \
+        $(SLO)$/basicmigration.obj \
+        $(SLO)$/wordbookmigration.obj \
+        $(SLO)$/extensionmigration.obj \
+        $(SLO)$/autocorrmigration.obj
 
 SHL1TARGET=$(TARGET)
 SHL1VERSIONMAP = migrationoo2.map
@@ -67,15 +79,41 @@ SHL1STDLIBS= \
     $(JVMFWKLIB) \
     $(XMLSCRIPTLIB) \
     $(BERKELEYLIB)
-    
-    
 
 SHL1DEPN=
-SHL1IMPLIB=i$(TARGET)
-SHL1LIBS=$(SLB)$/$(TARGET).lib
+SHL1IMPLIB=imigrationoo2
+#SHL1LIBS=$(SLB)$/$(TARGET).lib
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=$(SHL1TARGET)
+
+COMP2TYPELIST = migrationoo3
+SHL2TARGET=migrationoo3.uno
+SHL2VERSIONMAP = migrationoo3.map
+
+SHL2OBJS= \
+        $(SLO)$/cexportsoo3.obj \
+        $(SLO)$/oo3extensionmigration.obj
+
+SHL2STDLIBS= \
+    $(DEPLOYMENTMISCLIB) \
+    $(CPPULIB)		\
+    $(CPPUHELPERLIB)	\
+    $(SALLIB) \
+    $(UCBHELPERLIB)	\
+    $(UNOTOOLSLIB) \
+    $(TOOLSLIB)	\
+    $(I18NISOLANGLIB) \
+    $(JVMFWKLIB) \
+    $(XMLSCRIPTLIB) \
+    $(BERKELEYLIB)
+
+SHL2DEPN=
+SHL2IMPLIB=imigrationoo3
+#SHL2LIBS=$(SLB)$/$(SHL2TARGET).lib
+SHL2DEF=$(MISC)$/$(SHL2TARGET).def
+
+DEF2NAME=$(SHL2TARGET)
 
 # --- Targets ------------------------------------------------------
 

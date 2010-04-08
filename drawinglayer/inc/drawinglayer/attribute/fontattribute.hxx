@@ -28,9 +28,16 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FONTATTRIBUTE_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_FONTATTRIBUTE_HXX
 
-#include <sal/config.h>
 #include <sal/types.h>
-#include <tools/string.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+// predefines
+
+class String;
+
+namespace drawinglayer { namespace attribute {
+    class ImpFontAttribute;
+}}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -46,22 +53,11 @@ namespace drawinglayer
         class FontAttribute
         {
         private:
-            /// core data
-            String                                      maFamilyName;       // Font Family Name
-            String                                      maStyleName;        // Font Style Name
-            sal_uInt16                                  mnWeight;           // Font weight
-
-            /// bitfield
-            unsigned                                    mbSymbol : 1;       // Symbol Font Flag
-            unsigned                                    mbVertical : 1;     // Vertical Text Flag
-            unsigned                                    mbItalic : 1;       // Italic Flag
-            unsigned                                    mbOutline : 1;      // Outline Flag
-            unsigned                                    mbRTL : 1;          // RTL Flag
-            unsigned                                    mbBiDiStrong : 1;   // BiDi Flag
-            // TODO: pair kerning and CJK kerning
+            ImpFontAttribute*               mpFontAttribute;
 
         public:
-            /// constructor
+            /// constructors/assignmentoperator/destructor
+            /// TODO: pair kerning and CJK kerning
             FontAttribute(
                 const String& rFamilyName,
                 const String& rStyleName,
@@ -71,45 +67,28 @@ namespace drawinglayer
                 bool bItalic = false,
                 bool bOutline = false,
                 bool bRTL = false,
-                bool bBiDiStrong = false)
-            :   maFamilyName(rFamilyName),
-                maStyleName(rStyleName),
-                mnWeight(nWeight),
-                mbSymbol(bSymbol),
-                mbVertical(bVertical),
-                mbItalic(bItalic),
-                mbOutline(bOutline),
-                mbRTL(bRTL),
-                mbBiDiStrong(bBiDiStrong)
-            {
-            }
+                bool bBiDiStrong = false);
+            FontAttribute();
+            FontAttribute(const FontAttribute& rCandidate);
+            FontAttribute& operator=(const FontAttribute& rCandidate);
+            ~FontAttribute();
 
-            FontAttribute()
-            :   maFamilyName(),
-                maStyleName(),
-                mnWeight(0),
-                mbSymbol(false),
-                mbVertical(false),
-                mbItalic(false),
-                mbOutline(false),
-                mbRTL(false),
-                mbBiDiStrong(false)
-            {
-            }
+            // checks if the incarnation is default constructed
+            bool isDefault() const;
 
-            /// compare operator
-            bool operator==(const FontAttribute& rCompare) const;
+            // compare operator
+            bool operator==(const FontAttribute& rCandidate) const;
 
             /// data read access
-            const String& getFamilyName() const { return maFamilyName; }
-            const String& getStyleName() const { return maStyleName; }
-            sal_uInt16 getWeight() const { return mnWeight; }
-            bool getSymbol() const { return mbSymbol; }
-            bool getVertical() const { return mbVertical; }
-            bool getItalic() const { return mbItalic; }
-            bool getOutline() const { return mbOutline; }
-            bool getRTL() const { return mbRTL; }
-            bool getBiDiStrong() const { return mbBiDiStrong; }
+            const String& getFamilyName() const;
+            const String& getStyleName() const;
+            sal_uInt16 getWeight() const;
+            bool getSymbol() const;
+            bool getVertical() const;
+            bool getItalic() const;
+            bool getOutline() const;
+            bool getRTL() const;
+            bool getBiDiStrong() const;
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer

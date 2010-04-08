@@ -75,10 +75,6 @@ interface BaseTextDocument
         ExecMethod = Execute ;
     ]
 
-    SID_MAIL_PREPAREEXPORT
-    [
-        ExecMethod = Execute ;
-    ]
     SID_MAIL_EXPORT_FINISHED
     [
         ExecMethod = Execute;

@@ -53,7 +53,6 @@ JAVAFILES=	\
         Finalizer.java \
         QueryWizard.java \
         QuerySummary.java\
-        XCallQueryWizard.java
 
 JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 

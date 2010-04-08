@@ -316,50 +316,67 @@ void SdrRectObj::NbcSetLogicRect(const Rectangle& rRect)
 
 sal_uInt32 SdrRectObj::GetHdlCount() const
 {
-    return 9L;
+    return IsTextFrame() ? 10 : 9;
 }
 
 SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
 {
-    SdrHdl* pH=NULL;
+    SdrHdl* pH = NULL;
     Point aPnt;
-    SdrHdlKind eKind=HDL_MOVE;
-    if( IsTextFrame() && !nHdlNum )
+    SdrHdlKind eKind = HDL_MOVE;
+
+    if(!IsTextFrame())
     {
-        pH=new ImpTextframeHdl(aRect);
-        pH->SetObj((SdrObject*)this);
-        pH->SetDrehWink(aGeo.nDrehWink);
-        return pH;
+        nHdlNum++;
     }
-    else
+
+    switch(nHdlNum)
     {
-        switch (nHdlNum) {
-            case 0: {
-                long a=GetEckenradius();
-                long b=Max(aRect.GetWidth(),aRect.GetHeight())/2; // Wird aufgerundet, da GetWidth() eins draufaddiert
-                if (a>b) a=b;
-                if (a<0) a=0;
-                aPnt=aRect.TopLeft();
-                aPnt.X()+=a;
-                eKind=HDL_CIRC;
-            } break; // Eckenradius
-            case 1: aPnt=aRect.TopLeft();      eKind=HDL_UPLFT; break; // Oben links
-            case 2: aPnt=aRect.TopCenter();    eKind=HDL_UPPER; break; // Oben
-            case 3: aPnt=aRect.TopRight();     eKind=HDL_UPRGT; break; // Oben rechts
-            case 4: aPnt=aRect.LeftCenter();   eKind=HDL_LEFT ; break; // Links
-            case 5: aPnt=aRect.RightCenter();  eKind=HDL_RIGHT; break; // Rechts
-            case 6: aPnt=aRect.BottomLeft();   eKind=HDL_LWLFT; break; // Unten links
-            case 7: aPnt=aRect.BottomCenter(); eKind=HDL_LOWER; break; // Unten
-            case 8: aPnt=aRect.BottomRight();  eKind=HDL_LWRGT; break; // Unten rechts
+        case 0:
+        {
+            pH = new ImpTextframeHdl(aRect);
+            pH->SetObj((SdrObject*)this);
+            pH->SetDrehWink(aGeo.nDrehWink);
+            break;
         }
+        case 1:
+        {
+            long a = GetEckenradius();
+            long b = Max(aRect.GetWidth(),aRect.GetHeight())/2; // Wird aufgerundet, da GetWidth() eins draufaddiert
+            if (a>b) a=b;
+            if (a<0) a=0;
+            aPnt=aRect.TopLeft();
+            aPnt.X()+=a;
+            eKind = HDL_CIRC;
+            break;
+        }
+        case 2: aPnt=aRect.TopLeft();      eKind = HDL_UPLFT; break; // Oben links
+        case 3: aPnt=aRect.TopCenter();    eKind = HDL_UPPER; break; // Oben
+        case 4: aPnt=aRect.TopRight();     eKind = HDL_UPRGT; break; // Oben rechts
+        case 5: aPnt=aRect.LeftCenter();   eKind = HDL_LEFT ; break; // Links
+        case 6: aPnt=aRect.RightCenter();  eKind = HDL_RIGHT; break; // Rechts
+        case 7: aPnt=aRect.BottomLeft();   eKind = HDL_LWLFT; break; // Unten links
+        case 8: aPnt=aRect.BottomCenter(); eKind = HDL_LOWER; break; // Unten
+        case 9: aPnt=aRect.BottomRight();  eKind = HDL_LWRGT; break; // Unten rechts
     }
-    if (aGeo.nShearWink!=0) ShearPoint(aPnt,aRect.TopLeft(),aGeo.nTan);
-    if (aGeo.nDrehWink!=0) RotatePoint(aPnt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-    if (eKind!=HDL_MOVE) {
-        pH=new SdrHdl(aPnt,eKind);
+
+    if(!pH)
+    {
+        if(aGeo.nShearWink)
+        {
+            ShearPoint(aPnt,aRect.TopLeft(),aGeo.nTan);
+        }
+
+        if(aGeo.nDrehWink)
+        {
+            RotatePoint(aPnt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+        }
+
+        pH = new SdrHdl(aPnt,eKind);
         pH->SetObj((SdrObject*)this);
         pH->SetDrehWink(aGeo.nDrehWink);
     }
+
     return pH;
 }
 

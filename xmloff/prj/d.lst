@@ -88,6 +88,7 @@ mkdir: %_DEST%\inc%_EXT%\xmloff
 ..\inc\HatchStyle.hxx %_DEST%\inc%_EXT%\xmloff\HatchStyle.hxx
 ..\inc\ImageStyle.hxx %_DEST%\inc%_EXT%\xmloff\ImageStyle.hxx
 ..\inc\xmloff\SettingsExportHelper.hxx %_DEST%\inc%_EXT%\xmloff\SettingsExportHelper.hxx
+..\inc\xmloff\XMLSettingsExportContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLSettingsExportContext.hxx
 ..\inc\xmloff\DocumentSettingsContext.hxx %_DEST%\inc%_EXT%\xmloff\DocumentSettingsContext.hxx
 ..\inc\xmloff\XMLGraphicsDefaultStyle.hxx %_DEST%\inc%_EXT%\xmloff\XMLGraphicsDefaultStyle.hxx
 ..\inc\XMLEmbeddedObjectExportFilter.hxx %_DEST%\inc%_EXT%\xmloff\XMLEmbeddedObjectExportFilter.hxx

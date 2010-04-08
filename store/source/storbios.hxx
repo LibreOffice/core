@@ -26,7 +26,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORBIOS_HXX_
-#define _STORE_STORBIOS_HXX_ "$Revision: 1.1.2.3 $"
+#define _STORE_STORBIOS_HXX_
 
 #include "sal/types.h"
 #include "rtl/ref.hxx"
@@ -46,7 +46,7 @@
 namespace store
 {
 
-struct OStoreSuperBlockPage;
+struct SuperBlockPage;
 
 class OStorePageBIOS : public store::OStoreObject
 {
@@ -75,16 +75,6 @@ public:
         return m_xAllocator;
     }
 
-    /** acquireLock.
-     */
-    storeError acquireLock (
-        sal_uInt32 nAddr, sal_uInt32 nSize);
-
-    /** releaseLock.
-     */
-    storeError releaseLock (
-        sal_uInt32 nAddr, sal_uInt32 nSize);
-
     /** read.
      */
     storeError read (
@@ -94,10 +84,6 @@ public:
      */
     storeError write (
         sal_uInt32 nAddr, const void *pData, sal_uInt32 nSize);
-
-    /** isModified.
-     */
-    inline bool isModified (void) const;
 
     /** isWriteable.
      */
@@ -129,8 +115,7 @@ public:
     storeError allocate (
         OStorePageObject& rPage, Allocation eAllocation = ALLOCATE_FIRST);
 
-    storeError free (
-        OStorePageData & /* rData */, sal_uInt32 nAddr);
+    storeError free (sal_uInt32 nAddr);
 
     /** Page I/O.
      */
@@ -196,10 +181,8 @@ private:
     rtl::Reference<ILockBytes>    m_xLockBytes;
     osl::Mutex                    m_aMutex;
 
-    typedef OStoreSuperBlockPage  SuperPage;
-    SuperPage                    *m_pSuper;
+    SuperBlockPage *              m_pSuper;
 
-    bool                          m_bModified;
     bool                          m_bWriteable;
 
     rtl::Reference< PageData::Allocator > m_xAllocator;
@@ -230,22 +213,16 @@ private:
 
     class AceCache;
 
-    /** create (SuperBlock).
+    /** Initialization.
      */
-    storeError create (sal_uInt16 nPageSize);
-
-    /** SuperBlock verification and repair.
-     */
-    storeError verify (SuperPage *&rpSuper);
-    storeError repair (SuperPage *&rpSuper);
+    storeError initialize_Impl (
+        ILockBytes *    pLockBytes,
+        storeAccessMode eAccessMode,
+        sal_uInt16 &    rnPageSize);
+    void cleanup_Impl();
 
     /** Page Maintenance.
      */
-    storeError peek (
-        OStorePageData &rData);
-    storeError poke (
-        OStorePageData &rData);
-
     storeError loadObjectAt_Impl (
         OStorePageObject & rPage, sal_uInt32 nAddr);
     storeError saveObjectAt_Impl (
@@ -260,10 +237,6 @@ private:
 inline OStorePageBIOS::operator osl::Mutex& (void) const
 {
     return (osl::Mutex&)m_aMutex;
-}
-inline bool OStorePageBIOS::isModified (void) const
-{
-    return m_bModified;
 }
 inline bool OStorePageBIOS::isWriteable (void) const
 {

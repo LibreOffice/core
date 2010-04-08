@@ -709,7 +709,7 @@ namespace
 
                     // if we have a none numeric field, the table alias could be in the name
                     // otherwise we are not allowed to do this (e.g. 0.1 * PRICE )
-                    if  ( !pEntryField->isNumeric() )
+                    if  ( !pEntryField->isOtherFunction() )
                     {
                         // we have to look if we have alias.* here but before we have to check if the column doesn't already exist
                         String sTemp = rFieldName;
@@ -1223,7 +1223,7 @@ namespace
                         if (pParseNode.get())
                         {
                             ::rtl::OUString sGroupBy;
-                            pParseNode->parseNodeToStr( sGroupBy,
+                            pParseNode->getChild(0)->parseNodeToStr(    sGroupBy,
                                                         xConnection,
                                                         &rController.getParser().getContext(),
                                                         sal_False,
@@ -1989,6 +1989,7 @@ namespace
                 (*aIter) = NULL;
         OTableFields().swap( rUnUsedFields );
     }
+
     //------------------------------------------------------------------------------
     SqlParseError InitFromParseNodeImpl(OQueryDesignView* _pView,OSelectionBrowseBox* _pSelectionBrw)
     {
@@ -2232,11 +2233,17 @@ namespace
                             SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct))
                     {
                         ::rtl::OUString aColumns;
-                        pColumnRef->parseNodeToStr( aColumns,
-                                                    xConnection,
-                                                    &rController.getParser().getContext(),
-                                                    sal_True,
-                                                    sal_True); // quote is to true because we need quoted elements inside the function
+                        pColumnRef->parseNodeToPredicateStr(aColumns,
+                                                            xConnection,
+                                                            rController.getNumberFormatter(),
+                                                            _pView->getLocale(),
+                                                            static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
+                                                            &rController.getParser().getContext());
+                        //pColumnRef->parseNodeToStr(   aColumns,
+                        //                          xConnection,
+                        //                          &rController.getParser().getContext(),
+                        //                          sal_True,
+                        //                          sal_True); // quote is to true because we need quoted elements inside the function
 
                         sal_Int32 nFunctionType = FKT_NONE;
                         ::connectivity::OSQLParseNode* pParamRef = NULL;
@@ -2596,7 +2603,7 @@ IMPL_LINK( OQueryDesignView, SplitHdl, void*, /*p*/ )
         m_bInSplitHandler = sal_True;
         m_aSplitter.SetPosPixel( Point( m_aSplitter.GetPosPixel().X(),m_aSplitter.GetSplitPosPixel() ) );
         static_cast<OQueryController&>(getController()).setSplitPos(m_aSplitter.GetSplitPosPixel());
-        static_cast<OQueryController&>(getController()).setModified();
+        static_cast<OQueryController&>(getController()).setModified( sal_True );
         Resize();
         m_bInSplitHandler = sal_True;
     }
@@ -3171,6 +3178,30 @@ void OQueryDesignView::setNoneVisbleRow(sal_Int32 _nRows)
 {
     m_pSelectionBox->SetNoneVisbleRow(_nRows);
 }
+
+// -----------------------------------------------------------------------------
+void OQueryDesignView::initByFieldDescriptions( const Sequence< PropertyValue >& i_rFieldDescriptions )
+{
+    OQueryController& rController = static_cast< OQueryController& >( getController() );
+
+    m_pSelectionBox->PreFill();
+    m_pSelectionBox->SetReadOnly( rController.isReadOnly() );
+    m_pSelectionBox->Fill();
+
+    for (   const PropertyValue* field = i_rFieldDescriptions.getConstArray();
+            field != i_rFieldDescriptions.getConstArray() + i_rFieldDescriptions.getLength();
+            ++field
+        )
+    {
+        ::vos::ORef< OTableFieldDesc > pField( new OTableFieldDesc() );
+        pField->Load( *field, true );
+        InsertField( pField, sal_True, sal_False );
+    }
+
+    rController.getUndoMgr()->Clear();
+    m_pSelectionBox->Invalidate();
+}
+
 // -----------------------------------------------------------------------------
 bool OQueryDesignView::initByParseIterator( ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {

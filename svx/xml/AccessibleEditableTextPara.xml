@@ -28,6 +28,7 @@ title="Link to a general description of UNO accessibility"/>
 <type>com.sun.star.accessibility.XAccessibleEventBroadcaster</type>
 <type>com.sun.star.accessibility.XAccessibleComponent</type>
 <type>com.sun.star.accessibility.XAccessibleEditableText</type>
+<type>com.sun.star.accessibility.XAccessibleHyperext</type>
 <type>com.sun.star.accessibility.XAccessibleTextAttributes</type>
 <type>com.sun.star.lang.XTypeProvider</type>
 <type>com.sun.star.lang.XServiceInfo</type>

@@ -104,6 +104,12 @@ void Window::ImplMoveControlValue( ControlType nType, const ImplControlValue& aV
     {
         switch( nType )
         {
+            case CTRL_SLIDER:
+            {
+                SliderValue* pSlVal = reinterpret_cast<SliderValue*>(aValue.getOptionalVal());
+                pSlVal->maThumbRect.Move( rDelta.X(), rDelta.Y() );
+            }
+            break;
             case CTRL_SCROLLBAR:
             {
                 ScrollbarValue* pScVal = reinterpret_cast<ScrollbarValue*>(aValue.getOptionalVal());

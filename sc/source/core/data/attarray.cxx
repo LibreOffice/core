@@ -1228,13 +1228,13 @@ BOOL ScAttrArray::HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
 
 //  Testen, ob Bereich bestimmtes Attribut enthaelt
 
-BOOL ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
+bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
 {
     SCSIZE nStartIndex;
     SCSIZE nEndIndex;
     Search( nRow1, nStartIndex );
     Search( nRow2, nEndIndex );
-    BOOL bFound = FALSE;
+    bool bFound = false;
 
     for (SCSIZE i=nStartIndex; i<=nEndIndex && !bFound; i++)
     {
@@ -1244,46 +1244,46 @@ BOOL ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
             const ScMergeAttr* pMerge =
                     (const ScMergeAttr*) &pPattern->GetItem( ATTR_MERGE );
             if ( pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1 )
-                bFound = TRUE;
+                bFound = true;
         }
         if ( nMask & ( HASATTR_OVERLAPPED | HASATTR_NOTOVERLAPPED | HASATTR_AUTOFILTER ) )
         {
             const ScMergeFlagAttr* pMergeFlag =
                     (const ScMergeFlagAttr*) &pPattern->GetItem( ATTR_MERGE_FLAG );
             if ( (nMask & HASATTR_OVERLAPPED) && pMergeFlag->IsOverlapped() )
-                bFound = TRUE;
+                bFound = true;
             if ( (nMask & HASATTR_NOTOVERLAPPED) && !pMergeFlag->IsOverlapped() )
-                bFound = TRUE;
+                bFound = true;
             if ( (nMask & HASATTR_AUTOFILTER) && pMergeFlag->HasAutoFilter() )
-                bFound = TRUE;
+                bFound = true;
         }
         if ( nMask & HASATTR_LINES )
         {
             const SvxBoxItem* pBox =
                     (const SvxBoxItem*) &pPattern->GetItem( ATTR_BORDER );
             if ( pBox->GetLeft() || pBox->GetRight() || pBox->GetTop() || pBox->GetBottom() )
-                bFound = TRUE;
+                bFound = true;
         }
         if ( nMask & HASATTR_SHADOW )
         {
             const SvxShadowItem* pShadow =
                     (const SvxShadowItem*) &pPattern->GetItem( ATTR_SHADOW );
             if ( pShadow->GetLocation() != SVX_SHADOW_NONE )
-                bFound = TRUE;
+                bFound = true;
         }
         if ( nMask & HASATTR_CONDITIONAL )
         {
             const SfxUInt32Item* pConditional =
                     (const SfxUInt32Item*) &pPattern->GetItem( ATTR_CONDITIONAL );
             if ( pConditional->GetValue() != 0 )
-                bFound = TRUE;
+                bFound = true;
         }
         if ( nMask & HASATTR_PROTECTED )
         {
             const ScProtectionAttr* pProtect =
                     (const ScProtectionAttr*) &pPattern->GetItem( ATTR_PROTECTION );
             if ( pProtect->GetProtection() || pProtect->GetHideCell() )
-                bFound = TRUE;
+                bFound = true;
         }
         if ( nMask & HASATTR_ROTATE )
         {
@@ -1293,21 +1293,21 @@ BOOL ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
             // (see ScPatternAttr::GetCellOrientation)
             INT32 nAngle = pRotate->GetValue();
             if ( nAngle != 0 && nAngle != 9000 && nAngle != 27000 )
-                bFound = TRUE;
+                bFound = true;
         }
         if ( nMask & HASATTR_NEEDHEIGHT )
         {
             if (pPattern->GetCellOrientation() != SVX_ORIENTATION_STANDARD)
-                bFound = TRUE;
+                bFound = true;
             else if (((const SfxBoolItem&)pPattern->GetItem( ATTR_LINEBREAK )).GetValue())
-                bFound = TRUE;
+                bFound = true;
             else if ((SvxCellHorJustify)((const SvxHorJustifyItem&)pPattern->
                         GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SVX_HOR_JUSTIFY_BLOCK)
-                bFound = TRUE;
+                bFound = true;
             else if (((const SfxUInt32Item&)pPattern->GetItem( ATTR_CONDITIONAL )).GetValue())
-                bFound = TRUE;
+                bFound = true;
             else if (((const SfxInt32Item&)pPattern->GetItem( ATTR_ROTATE_VALUE )).GetValue())
-                bFound = TRUE;
+                bFound = true;
         }
         if ( nMask & ( HASATTR_SHADOW_RIGHT | HASATTR_SHADOW_DOWN ) )
         {
@@ -1316,17 +1316,17 @@ BOOL ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
             SvxShadowLocation eLoc = pShadow->GetLocation();
             if ( nMask & HASATTR_SHADOW_RIGHT )
                 if ( eLoc == SVX_SHADOW_TOPRIGHT || eLoc == SVX_SHADOW_BOTTOMRIGHT )
-                    bFound = TRUE;
+                    bFound = true;
             if ( nMask & HASATTR_SHADOW_DOWN )
                 if ( eLoc == SVX_SHADOW_BOTTOMLEFT || eLoc == SVX_SHADOW_BOTTOMRIGHT )
-                    bFound = TRUE;
+                    bFound = true;
         }
         if ( nMask & HASATTR_RTL )
         {
             const SvxFrameDirectionItem& rDirection =
                     (const SvxFrameDirectionItem&) pPattern->GetItem( ATTR_WRITINGDIR );
             if ( rDirection.GetValue() == FRMDIR_HORI_RIGHT_TOP )
-                bFound = TRUE;
+                bFound = true;
         }
         if ( nMask & HASATTR_RIGHTORCENTER )
         {
@@ -1334,7 +1334,7 @@ BOOL ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
             SvxCellHorJustify eHorJust = (SvxCellHorJustify)
                     ((const SvxHorJustifyItem&) pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
             if ( eHorJust == SVX_HOR_JUSTIFY_RIGHT || eHorJust == SVX_HOR_JUSTIFY_CENTER )
-                bFound = TRUE;
+                bFound = true;
         }
     }
 

@@ -180,7 +180,7 @@ BEGIN
     $installertypedir = "";
     $controlledmakecabversion = "5";
     $saved_packages_path = "";
-    $max_lang_length = 50;
+    $max_lang_length = 65;
     $globalblock = "Globals";
     $rootmodulegid = "";
     %alllangmodules = ();
@@ -268,7 +268,7 @@ BEGIN
     $isopensourceproduct = 1;
     $manufacturer = "";
     $longmanufacturer = "";
-    $sundirname = "Sun";
+    $sundirname = "";
     $codefilename = "codes.txt";
     $componentfilename = "components.txt";
     $productcode = "";

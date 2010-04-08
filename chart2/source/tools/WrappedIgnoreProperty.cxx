@@ -101,7 +101,7 @@ void WrappedIgnoreProperties::addIgnoreLineProperties( std::vector< WrappedPrope
     rList.push_back( new WrappedIgnoreProperty( C2U( "LineColor" ), uno::makeAny( sal_Int32(0) ) ) );
     rList.push_back( new WrappedIgnoreProperty( C2U( "LineTransparence" ), uno::makeAny( sal_Int16(0) ) ) );
     rList.push_back( new WrappedIgnoreProperty( C2U( "LineWidth" ), uno::makeAny( sal_Int32(0) ) ) );
-    rList.push_back( new WrappedIgnoreProperty( C2U( "LineJoint" ), uno::makeAny( drawing::LineJoint_NONE ) ) );
+    rList.push_back( new WrappedIgnoreProperty( C2U( "LineJoint" ), uno::makeAny( drawing::LineJoint_ROUND ) ) );
 }
 
 //static

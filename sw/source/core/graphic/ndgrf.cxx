@@ -670,15 +670,6 @@ void SwGrfNode::SetTwipSize( const Size& rSz )
     }
 }
 
-        // Prioritaet beim Laden der Grafik setzen. Geht nur, wenn der Link
-        // ein FileObject gesetzt hat
-void SwGrfNode::SetTransferPriority( USHORT nPrio )
-{
-    if( refLink.Is() && refLink->GetObj() )
-        sfx2::LinkManager::SetTransferPriority( *refLink, nPrio );
-}
-
-
 void SwGrfNode::ScaleImageMap()
 {
     if( !nGrfSize.Width() || !nGrfSize.Height() )

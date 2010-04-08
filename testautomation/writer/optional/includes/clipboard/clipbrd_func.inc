@@ -415,7 +415,7 @@ function wChangeHTMLCompatibilityExport ( optional wExport as integer ) as integ
     Dim CurrentExportSet as String
     Dim RecentExportSet as integer
     Dim ExportFound as boolean
-    printlog " This function sets the export in options to 'StarOffice Writer' "
+    printlog " This function sets the export in options to 'Oracle Open Office Writer' "
     printlog " Giving a parameter a special export will be chosen "
     
     ExportFound = False
@@ -426,7 +426,7 @@ function wChangeHTMLCompatibilityExport ( optional wExport as integer ) as integ
         For i = 1 to Export.GetItemCount
             Export.Select i
             CurrentExportset = Export.GetSelText
-            if Instr(Ucase(CurrentExportset), "STAROFFICE WRITER") then
+            if Instr(Ucase(CurrentExportset), "Oracle Open Office Writer") then
                 i = Export.GetItemCount + 1
                 ExportFound = True
             end if
@@ -439,7 +439,7 @@ function wChangeHTMLCompatibilityExport ( optional wExport as integer ) as integ
     if ExportFound = True then
         printlog "Export has been changed!"
     else
-        Warnlog "Couldn't set Export to StarOffice Writer!"
+        Warnlog "Couldn't set Export to Oracle Open Office Writer!"
     end if
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK

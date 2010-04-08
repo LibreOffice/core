@@ -53,8 +53,11 @@ ScAsciiOptions::ScAsciiOptions() :
     bFixedLen       ( FALSE ),
     aFieldSeps      ( ';' ),
     bMergeFieldSeps ( FALSE ),
+    bQuotedFieldAsText(false),
+    bDetectSpecialNumber(false),
     cTextSep        ( cDefaultTextSep ),
     eCharSet        ( gsl_getSystemTextEncoding() ),
+    eLang           ( LANGUAGE_SYSTEM ),
     bCharSetSystem  ( FALSE ),
     nStartRow       ( 1 ),
     nInfoCount      ( 0 ),
@@ -68,8 +71,11 @@ ScAsciiOptions::ScAsciiOptions(const ScAsciiOptions& rOpt) :
     bFixedLen       ( rOpt.bFixedLen ),
     aFieldSeps      ( rOpt.aFieldSeps ),
     bMergeFieldSeps ( rOpt.bMergeFieldSeps ),
+    bQuotedFieldAsText(rOpt.bQuotedFieldAsText),
+    bDetectSpecialNumber(rOpt.bDetectSpecialNumber),
     cTextSep        ( rOpt.cTextSep ),
     eCharSet        ( rOpt.eCharSet ),
+    eLang           ( rOpt.eLang ),
     bCharSetSystem  ( rOpt.bCharSetSystem ),
     nStartRow       ( rOpt.nStartRow ),
     nInfoCount      ( rOpt.nInfoCount )
@@ -152,6 +158,7 @@ ScAsciiOptions& ScAsciiOptions::operator=( const ScAsciiOptions& rCpy )
     bFixedLen       = rCpy.bFixedLen;
     aFieldSeps      = rCpy.aFieldSeps;
     bMergeFieldSeps = rCpy.bMergeFieldSeps;
+    bQuotedFieldAsText = rCpy.bQuotedFieldAsText;
     cTextSep        = rCpy.cTextSep;
     eCharSet        = rCpy.eCharSet;
     bCharSetSystem  = rCpy.bCharSetSystem;
@@ -166,6 +173,7 @@ BOOL ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
     if ( bFixedLen       == rCmp.bFixedLen &&
          aFieldSeps      == rCmp.aFieldSeps &&
          bMergeFieldSeps == rCmp.bMergeFieldSeps &&
+         bQuotedFieldAsText == rCmp.bQuotedFieldAsText &&
          cTextSep        == rCmp.cTextSep &&
          eCharSet        == rCmp.eCharSet &&
          bCharSetSystem  == rCmp.bCharSetSystem &&
@@ -245,13 +253,20 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         eCharSet = ScGlobal::GetCharsetValue( aToken );
     }
 
+    // Language
+    if (nCount >= 4)
+    {
+        aToken = rString.GetToken(3, ',');
+        eLang = static_cast<LanguageType>(aToken.ToInt32());
+    }
+
         //
         //  Startzeile
         //
 
-    if ( nCount >= 4 )
+    if ( nCount >= 5 )
     {
-        aToken = rString.GetToken(3,',');
+        aToken = rString.GetToken(4,',');
         nStartRow = aToken.ToInt32();
     }
 
@@ -259,12 +274,12 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         //  Spalten-Infos
         //
 
-    if ( nCount >= 5 )
+    if ( nCount >= 6 )
     {
         delete[] pColStart;
         delete[] pColFormat;
 
-        aToken = rString.GetToken(4,',');
+        aToken = rString.GetToken(5,',');
         nSub = aToken.GetTokenCount('/');
         nInfoCount = nSub / 2;
         if (nInfoCount)
@@ -282,6 +297,20 @@ void ScAsciiOptions::ReadFromString( const String& rString )
             pColStart = NULL;
             pColFormat = NULL;
         }
+    }
+
+    // Import quoted field as text.
+    if (nCount >= 7)
+    {
+        aToken = rString.GetToken(6, ',');
+        bQuotedFieldAsText = aToken.EqualsAscii("true") ? true : false;
+    }
+
+    // Detect special nubmers.
+    if (nCount >= 8)
+    {
+        aToken = rString.GetToken(7, ',');
+        bDetectSpecialNumber = aToken.EqualsAscii("true") ? true : false;
     }
 }
 
@@ -333,6 +362,10 @@ String ScAsciiOptions::WriteToString() const
         aOutStr += ScGlobal::GetCharsetString( eCharSet );
     aOutStr += ',';                 // Token-Ende
 
+    // Language
+    aOutStr += String::CreateFromInt32(eLang);
+    aOutStr += ',';
+
         //
         //  Startzeile
         //
@@ -353,6 +386,15 @@ String ScAsciiOptions::WriteToString() const
         aOutStr += '/';
         aOutStr += String::CreateFromInt32(pColFormat[nInfo]);
     }
+
+    aOutStr += ',';
+
+    // Import quoted field as text.
+    aOutStr += String::CreateFromAscii(bQuotedFieldAsText ? "true" : "false");
+    aOutStr += ',';
+
+    // Detect special nubmers.
+    aOutStr += String::CreateFromAscii(bDetectSpecialNumber ? "true" : "false");
 
     return aOutStr;
 }

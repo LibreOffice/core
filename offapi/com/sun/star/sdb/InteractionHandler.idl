@@ -34,56 +34,11 @@ module com { module sun { module star { module task {
 module com {  module sun {  module star {  module sdb {
 
 /** is a service for user interaction for databases.
-    <p>
-    interaction requests that the handler can provide are:
-    <ul>
-        <li><b>database related errors</b><br/>
-            The general structure to transport such errors is the
-            <type scope="com::sun::star::sdbc">SQLException</type>
-            , and if your
-            <type scope="com::sun::star::task">XInteractionRequest</type>
-            supplies such a
-            <type scope="com::sun::star::sdbc">SQLException</type>
-            (or an instance of any derived class),
-            the handler will display a generic error dialog, which is able
-            to travel the object chain which may be contained in the exception.
-        </li>
-        <li><b>authentication</b><br/>
-            If your
-            <type scope="com::sun::star::task">XInteractionRequest</type>
-            (see
-            <member scope="com::sun::star::task">XInteractionHandler::handle()</member>
-            ) supplies a
-            <type scope="com::sun::star::ucb">AuthenticationRequest</type>
-            , the handler will open a standard login
-            dialog to allow user authentication.
-            <br/>
-            Besides the using the members of the AuthenticationRequest in the usual manner, the member <em>Server</em>
-            (if not empty) is interpreted as datasource name, thus leading to a slightly different message when
-            requesting the user to enter it's login data.
-            <br/>
-            In the case you want to use this authentication feature, you should supply a special authentication
-            continuation (
-            <type scope="com::sun::star::ucb">XInteractionSupplyAuthentication</type>
-            ) as well, so the
-            handler can return to you, the entered information.
-        </li>
-        <li><b>parameter requests</b><br/>
-            If your
-            <type scope="com::sun::star::task">XInteractionRequest</type>
-            supplies an
-            <type scope="com::sun::star::sdb">ParametersRequest</type>
-            , the handler will open a standard dialog asking
-            the user to fill in parameter values.
-            <br/>
-            In the case you want to use this feature of the handler, you should supply a special continuation
-            (
-            <type scope="com::sun::star::sdb">XInteractionSupplyParameters</type>
-            ) as well, so the
-            handler can return to you, the entered information.
-        </li>
-    </ul>
-    </p>
+    @deprecated
+        Do not use this service anymore. Instead, create a generic <type scope="com::sun::star::task">InteractionHandler</type>
+        instance, and pass it your request. It will determine, based on configuration data, which concrete interaction
+        handler implementation to use for a specific request. In particular, requests formerly server by this service here
+        are by default passed to a <type>DatabaseInteractionHandler</type>.
 */
 published service InteractionHandler: com::sun::star::task::XInteractionHandler;
 

@@ -1,8 +1,0 @@
-StarOffice Chart
-StarOffice Basic
-StarOffice Calc
-StarOffice Base
-StarOffice Draw
-StarOffice Writer
-StarOffice Math
-StarOffice Impress

@@ -520,10 +520,10 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     else
         aImage = isHCMode() ? pEntry->m_aIconHC : pEntry->m_aIcon;
     Size aImageSize = aImage.GetSizePixel();
-    if ( ( aImageSize.Width() <= ICON_HEIGHT ) && ( aImageSize.Height() <= ICON_HEIGHT ) )
-        DrawImage( Point( aPos.X()+((ICON_HEIGHT-aImageSize.Width())/2), aPos.Y()+((ICON_HEIGHT-aImageSize.Height())/2) ), aImage );
+    if ( ( aImageSize.Width() <= ICON_WIDTH ) && ( aImageSize.Height() <= ICON_HEIGHT ) )
+        DrawImage( Point( aPos.X()+((ICON_WIDTH-aImageSize.Width())/2), aPos.Y()+((ICON_HEIGHT-aImageSize.Height())/2) ), aImage );
     else
-        DrawImage( aPos, Size( ICON_HEIGHT, ICON_HEIGHT ), aImage );
+        DrawImage( aPos, Size( ICON_WIDTH, ICON_HEIGHT ), aImage );
 
     // Setup fonts
     Font aStdFont( GetFont() );

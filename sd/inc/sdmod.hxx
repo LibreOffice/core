@@ -69,6 +69,11 @@ class DrawDocShell;
 class SdGlobalResourceContainer;
 }
 
+namespace com { namespace sun { namespace star { namespace frame {
+    class XFrame;
+} } } }
+
+
 // ----------------------
 // - SdOptionStreamMode -
 // ----------------------
@@ -165,8 +170,8 @@ private:
     SfxFrame* ExecuteNewDocument( SfxRequest& rReq );
 
     static void ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewFrame, const sal_Int32 eMedium );
-    static SfxFrame* CreateEmptyDocument( DocumentType eDocType, SfxFrame* pTargetFrame = 0  );
-    static SfxFrame* CreateFromTemplate( const String& rTemplatePath, SfxFrame* pTargetFrame = 0 );
+    static SfxFrame* CreateEmptyDocument( DocumentType eDocType, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame );
+    static SfxFrame* CreateFromTemplate( const String& rTemplatePath, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame );
 
     /** The resource container controls the lifetime of some singletons.
     */

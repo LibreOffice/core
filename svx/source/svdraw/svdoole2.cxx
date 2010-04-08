@@ -85,6 +85,7 @@
 #include <svtools/chartprettypainter.hxx>
 #include <svx/sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/sdr/properties/oleproperties.hxx>
 
 // #i100710#
 #include <svx/xlnclit.hxx>
@@ -729,6 +730,14 @@ static bool ImplIsMathObj( const uno::Reference < embed::XEmbeddedObject >& rObj
     {
         return false;
     }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// BaseProperties section
+
+sdr::properties::BaseProperties* SdrOle2Obj::CreateObjectSpecificProperties()
+{
+    return new sdr::properties::OleProperties(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////////

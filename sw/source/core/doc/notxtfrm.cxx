@@ -295,14 +295,6 @@ void SwNoTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/
     // <--
         StopAnimation();
 
-    if ( pSh->Imp()->IsPaintInScroll() && pSh->GetWin() && rRect != Frm() &&
-         HasAnimation() )
-    {
-        pSh->GetWin()->Invalidate( Frm().SVRect() );
-        return;
-    }
-
-
     SfxProgress::EnterLock(); //Keine Progress-Reschedules im Paint (SwapIn)
 
     OutputDevice *pOut = pSh->GetOut();
@@ -799,6 +791,7 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 
 void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInArea, OutputDevice* pOut )
 {
+
     if(!pOut)
         return;
     Rectangle aPxRect = pOut->LogicToPixel( rInArea.SVRect() );
@@ -865,7 +858,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         //this might be a good idea for all other OLE objects also,
         //but as I cannot oversee the consequences I fix it only for charts for now
         lcl_correctlyAlignRect( aAlignedGrfArea, rGrfArea, pOut );
-     }
+    }
 
     if( pGrfNd )
     {
@@ -913,8 +906,9 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             else if( rGrfObj.IsCached( pOut, aAlignedGrfArea.Pos(),
                                     aAlignedGrfArea.SSize(), &aGrfAttr ))
             {
-                rGrfObj.Draw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
-                                &aGrfAttr );
+                rGrfObj.DrawWithPDFHandling( *pOut,
+                                             aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
+                                             &aGrfAttr );
                 bContinue = FALSE;
             }
         }
@@ -953,8 +947,9 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                                         0, GRFMGR_DRAW_STANDARD, pVout );
                 }
                 else
-                    rGrfObj.Draw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
-                                    &aGrfAttr );
+                    rGrfObj.DrawWithPDFHandling( *pOut,
+                                                 aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
+                                                 &aGrfAttr );
             }
             else
             {

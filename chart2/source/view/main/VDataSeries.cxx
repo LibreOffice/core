@@ -734,10 +734,10 @@ double VDataSeries::getYMeanValue() const
     {
         if( xProp->getPropertyValue( C2U( "Symbol" ) ) >>= *apSymbolProps )
         {
-            // border of symbols always black
-            apSymbolProps->BorderColor = 0x000000;
             //use main color to fill symbols
             xProp->getPropertyValue( C2U( "Color" ) ) >>= apSymbolProps->FillColor;
+            // border of symbols always same as fill color
+            apSymbolProps->BorderColor = apSymbolProps->FillColor;
         }
         else
             apSymbolProps.reset();

@@ -38,6 +38,8 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/task/XInteractionRequestStringResolver.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
 /** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
@@ -55,10 +57,12 @@ namespace dbaccess
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
+    using namespace ::com::sun::star::io;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::task;
+    using namespace ::com::sun::star::embed;
     using namespace ::com::sun::star::container;
 
     // =========================================================================
@@ -86,39 +90,6 @@ namespace dbaccess
             xParent.set(xChild.is() ? xChild->getParent() : Reference< XInterface >(),UNO_QUERY);
         }
         return xReturn;
-    }
-
-    // -------------------------------------------------------------------------
-    bool getDataSourceSetting( const Reference< XInterface >& _rxDataSource, const sal_Char* _pAsciiSettingsName,
-        Any& /* [out] */ _rSettingsValue )
-    {
-        bool bIsPresent = false;
-        try
-        {
-            Reference< XPropertySet > xDataSource( _rxDataSource, UNO_QUERY );
-            OSL_ENSURE( xDataSource.is(), "getDataSourceSetting: invalid data source object!" );
-            if ( !xDataSource.is() )
-                return false;
-
-            Sequence< PropertyValue > aSettings;
-            OSL_VERIFY( xDataSource->getPropertyValue( PROPERTY_INFO ) >>= aSettings );
-            const PropertyValue* pSetting = aSettings.getConstArray();
-            const PropertyValue* pSettingEnd = aSettings.getConstArray() + aSettings.getLength();
-            for ( ; pSetting != pSettingEnd; ++pSetting )
-            {
-                if ( pSetting->Name.equalsAscii( _pAsciiSettingsName ) )
-                {
-                    _rSettingsValue = pSetting->Value;
-                    bIsPresent = true;
-                    break;
-                }
-            }
-        }
-        catch( const Exception& )
-        {
-            OSL_ENSURE( sal_False, "getDataSourceSetting: caught an exception!" );
-        }
-        return bIsPresent;
     }
 
 // -----------------------------------------------------------------------------
@@ -160,7 +131,44 @@ namespace dbaccess
         return sDisplayMessage;
     }
 
-// -----------------------------------------------------------------------------
+    namespace tools { namespace stor {
+
+    // -----------------------------------------------------------------------------
+    bool storageIsWritable_nothrow( const Reference< XStorage >& _rxStorage )
+    {
+        if ( !_rxStorage.is() )
+            return false;
+
+        sal_Int32 nMode = ElementModes::READ;
+        try
+        {
+            Reference< XPropertySet > xStorageProps( _rxStorage, UNO_QUERY_THROW );
+            xStorageProps->getPropertyValue(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenMode" ) ) ) >>= nMode;
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return ( nMode & ElementModes::WRITE ) != 0;
+    }
+
+    // -----------------------------------------------------------------------------
+    bool commitStorageIfWriteable( const Reference< XStorage >& _rxStorage ) SAL_THROW(( IOException, WrappedTargetException, RuntimeException ))
+    {
+        bool bSuccess = false;
+        Reference< XTransactedObject > xTrans( _rxStorage, UNO_QUERY );
+        if ( xTrans.is() )
+        {
+            if ( storageIsWritable_nothrow( _rxStorage ) )
+                xTrans->commit();
+            bSuccess = true;
+        }
+        return bSuccess;
+    }
+
+    } } // tools::stor
+
 //.........................................................................
 }   // namespace dbaccess
 //.........................................................................

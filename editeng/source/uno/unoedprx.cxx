@@ -687,6 +687,33 @@ XubString SvxAccessibleTextAdapter::CalcFieldValue( const SvxFieldItem& rField, 
     return mrTextForwarder->CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
 }
 
+void SvxAccessibleTextAdapter::FieldClicked( const SvxFieldItem& rField, USHORT nPara, xub_StrLen nPos )
+{
+    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+
+    mrTextForwarder->FieldClicked( rField, nPara, nPos );
+}
+
+sal_Int32 SvxAccessibleTextAdapter::CalcLogicalIndex( USHORT nPara, USHORT nEEIndex )
+{
+    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+
+    SvxAccessibleTextIndex aIndex;
+    aIndex.SetEEIndex(nPara, nEEIndex, *mrTextForwarder);
+    return aIndex.GetIndex();
+}
+
+USHORT SvxAccessibleTextAdapter::CalcEditEngineIndex( USHORT nPara, sal_Int32 nLogicalIndex )
+{
+    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+
+    SvxAccessibleTextIndex aIndex;
+    aIndex.SetIndex(nPara, nLogicalIndex, *mrTextForwarder);
+    return aIndex.GetEEIndex();
+}
+
+
+
 BOOL SvxAccessibleTextAdapter::IsValid() const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");

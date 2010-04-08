@@ -854,7 +854,7 @@ void AssignmentPersistentData::Commit()
         m_aDatasource.SaveValue();
 
         // create an interaction handler (may be needed for connecting)
-        const String sInteractionHandlerServiceName = String::CreateFromAscii("com.sun.star.sdb.InteractionHandler");
+        const String sInteractionHandlerServiceName = String::CreateFromAscii("com.sun.star.task.InteractionHandler");
         Reference< XInteractionHandler > xHandler;
         try
         {

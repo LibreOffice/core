@@ -68,7 +68,7 @@ done
 echo
 
 for i in $FILELIST; do
-    COMMAND="$UNOPKG add --shared $i"
+    COMMAND="$UNOPKG add --shared --suppress-license $i"
     echo $COMMAND
     $COMMAND
 done

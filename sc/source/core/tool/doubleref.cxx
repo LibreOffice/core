@@ -337,7 +337,9 @@ OUString ScDBInternalRange::getString(SCCOL nCol, SCROW nRow) const
 {
     String aStr;
     const ScAddress& s = maRange.aStart;
-    getDoc()->GetString(s.Col() + nCol, s.Row() + nRow, maRange.aStart.Tab(), aStr);
+    // #i109200# this is used in formula calculation, use GetInputString, not GetString
+    // (consistent with ScDBInternalRange::getCellString)
+    getDoc()->GetInputString(s.Col() + nCol, s.Row() + nRow, maRange.aStart.Tab(), aStr);
     return aStr;
 }
 

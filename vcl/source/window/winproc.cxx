@@ -295,7 +295,7 @@ static BOOL ImplCallCommand( Window* pChild, USHORT nEvt, void* pData = NULL,
         else
         {
             // simulate mouseposition at center of window
-            Size aSize = pChild->GetOutputSize();
+            Size aSize( pChild->GetOutputSizePixel() );
             aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
         }
     }

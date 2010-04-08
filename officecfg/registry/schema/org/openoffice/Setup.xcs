@@ -34,61 +34,86 @@
 	<templates>
 		<group oor:name="InstalledLocale">
 			<info>
-                <author>JB</author>
+        <author>JB</author>
 				<desc>Describes a language pack that is installed to provide a localized office UI.</desc>
 			</info>
 			<prop oor:name="Origin" oor:type="xs:string">
-                <info>
-                    <author>JB</author>
-                    <desc>Identifies the organization, group or person that provided this language pack.</desc>
-                </info>
+        <info>
+          <author>JB</author>
+          <desc>Identifies the organization, group or person that provided this language pack.</desc>
+        </info>
 			</prop>
 		</group>
-		<group oor:name="MigrationStep">
+    <group oor:name="MigrationStep">
+      <info>
+        <desc>Describes one step of migration</desc>
+      </info>
+      <prop oor:name="MigrationService" oor:type="xs:string">
+        <info>
+          <desc>an optional uno service that is called after files and nodes have been copied in order to perform custom migration actions. The service needs to support XInitializable and XJob interfaces according do http://specs.openoffice.org/appwide/migration/spec_migration.sxw</desc>
+        </info>
+      </prop>
+      <prop oor:name="ServiceConfigComponents" oor:type="oor:string-list">
+        <info>
+          <desc>a list of config components that are to be passed to service</desc>
+        </info>
+      </prop>
+      <prop oor:name="IncludedFiles" oor:type="oor:string-list">
+        <info>
+          <desc>a list of wildcards relative to the old userdata origin that are to be copied</desc>
+        </info>
+      </prop>
+      <prop oor:name="ExcludedFiles" oor:type="oor:string-list">
+        <info>
+          <desc>a list of wildcards relative to the old userdata origin that are to be copied</desc>
+        </info>
+      </prop>
+      <prop oor:name="IncludedNodes" oor:type="oor:string-list">
+        <info>
+          <desc>a list of configuration node paths that are to be moved from the old user layer to the new user layer</desc>
+        </info>
+      </prop>
+      <prop oor:name="ExcludedNodes" oor:type="oor:string-list">
+        <info>
+          <desc>a list of configuration node paths that are not to be moved from the old user layer to the new user layer</desc>
+        </info>
+      </prop>
+      <prop oor:name="IncludedExtensions" oor:type="oor:string-list">
+        <info>
+          <desc>a list of extension identifiers that are to be copied from the old user layer to the new user layer</desc>
+        </info>
+      </prop>
+      <prop oor:name="ExcludedExtensions" oor:type="oor:string-list">
+        <info>
+          <desc>a list of extension identifiers that are not to be copied from the old user layer to the new user layer</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="MigrateVersion">
+      <info>
+        <desc>Describes migration steps specific for certain version(s)</desc>
+      </info>
+      <prop oor:name="VersionIdentifiers" oor:type="oor:string-list">
+        <info>
+          <desc>version identifiers, that are supported for migration</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="Priority" oor:type="xs:int">
+        <info>
+          <desc>Contains the priority value to specify which migration should be prefered. Higher values are prefered.</desc>
+        </info>
+        <value/>
+      </prop>
+      <set oor:name="MigrationSteps" oor:node-type="MigrationStep">
+        <info>
+          <desc>Contains necessary migration steps for specific versions</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="Factory">
 			<info>
-				<author>LO</author>
-				<desc>Describes one step of migration</desc>
-			</info>
-			<prop oor:name="MigrationService" oor:type="xs:string">
-				<info>
-					<author>LO</author>
-					<desc>an optional uno service that is called after files and nodes have been copied in order to perform custom migration actions. The service needs to support XInitializable and XJob interfaces according do http://specs.openoffice.org/appwide/migration/spec_migration.sxw</desc>
-				</info>
-			</prop>
-			<prop oor:name="ServiceConfigComponents" oor:type="oor:string-list">
-				<info>
-					<author>LO</author>
-					<desc>a list of config components that are to be passed to service</desc>
-				</info>
-			</prop>
-			<prop oor:name="IncludedFiles" oor:type="oor:string-list">
-				<info>
-					<author>LO</author>
-					<desc>a list of wildcards relative to the old userdata origin that are to be copied</desc>
-				</info>
-			</prop>
-			<prop oor:name="ExcludedFiles" oor:type="oor:string-list">
-				<info>
-					<author>LO</author>
-					<desc>a list of wildcards relative to the old userdata origin that are to be copied</desc>
-				</info>
-			</prop>
-			<prop oor:name="IncludedNodes" oor:type="oor:string-list">
-				<info>
-					<author>LO</author>
-					<desc>a list of configuration node paths that are to be moved from the old user layer to the new user layer</desc>
-				</info>
-			</prop>
-			<prop oor:name="ExcludedNodes" oor:type="oor:string-list">
-				<info>
-					<author>LO</author>
-					<desc>a list of configuration node paths that are not to be moved from the old user layer to the new user layer</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="Factory">
-			<info>
-                <author>AS</author>
+        <author>AS</author>
 				<desc>Describes an application module (a document factory, such as Writer).</desc>
 			</info>
 			<prop oor:name="ooSetupFactoryActualFilter" oor:type="xs:string">
@@ -416,30 +441,21 @@
 			</info>
 			<prop oor:name="TransferUserSettingsOnce" oor:type="xs:boolean" oor:nillable="false">
 				<info>
-                    <deprecated>This feature is not supported any more since OOo 2.0</deprecated>
+          <deprecated>This feature is not supported any more since OOo 2.0</deprecated>
 					<author>JB</author>
-                    <desc>Deprecated</desc>
+          <desc>Deprecated</desc>
 				</info>
 			</prop>
 		</group>
-		<group oor:name="Migration">
-			<info>
-				<author>LO</author>
-				<desc>Contains settings that control configuration data access.</desc>
-			</info>
-			<set oor:name="MigrationSteps" oor:node-type="MigrationStep">
-				<info>
-					<author>LO</author>
-					<desc>The enumeration of migration steps that are to be applied on first start</desc>
-				</info>
-			</set>
-			<prop oor:name="SupportedVersions" oor:type="oor:string-list">
-				<info>
-					<author>LO</author>
-					<desc>version identifiers, that are supported for migration</desc>
-				</info>
-                <value/>
-			</prop>
-		</group>
-	</component>
+    <group oor:name="Migration">
+      <info>
+        <desc>Contains settings that control the migration process for certain versions.</desc>
+      </info>
+      <set oor:name="SupportedVersions" oor:node-type="MigrateVersion">
+        <info>
+          <desc>Define migration steps for supported versions</desc>
+        </info>
+      </set>
+    </group>
+  </component>
 </oor:component-schema>

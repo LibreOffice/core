@@ -1158,6 +1158,10 @@ XubString SmTextForwarder::CalcFieldValue( const SvxFieldItem& rField, USHORT nP
     return aTxt;
 }
 
+void SmTextForwarder::FieldClicked(const SvxFieldItem&, USHORT, USHORT)
+{
+}
+
 USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, USHORT nWhich )
 {
     EECharAttribArray aAttribs;

@@ -231,7 +231,9 @@ COMPONENT_BITMAPS=												\
                                                                 \
     $(ZIP1DIR)$/bitmaps$/LabelMouseOverLeft.png					\
     $(ZIP1DIR)$/bitmaps$/LabelMouseOverCenter.png				\
-    $(ZIP1DIR)$/bitmaps$/LabelMouseOverRight.png
+    $(ZIP1DIR)$/bitmaps$/LabelMouseOverRight.png                \
+    $(ZIP1DIR)$/bitmaps$/em47.png                               \
+    $(ZIP1DIR)$/bitmaps$/em47_hc.png
 
 COMPONENT_MANIFEST= 							\
     $(ZIP1DIR)$/META-INF$/manifest.xml

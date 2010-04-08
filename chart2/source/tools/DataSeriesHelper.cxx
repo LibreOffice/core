@@ -595,7 +595,7 @@ void makeLinesThickOrThin( const Reference< beans::XPropertySet > & xSeriesPrope
     if( !xSeriesProperties.is() )
         return;
 
-    sal_Int32 nNewValue = bThick ? 88 : 0;
+    sal_Int32 nNewValue = bThick ? 80 : 0;
     sal_Int32 nOldValue = 0;
     if( (xSeriesProperties->getPropertyValue( C2U( "LineWidth" )) >>= nOldValue ) &&
         nOldValue != nNewValue )

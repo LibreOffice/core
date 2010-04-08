@@ -689,8 +689,41 @@ void ScDBFunc::DeletePivotTable()
     else
         ErrorMessage(STR_PIVOT_NOTFOUND);
 }
+ULONG RefreshDPObject( ScDPObject *pDPObj, ScDocument *pDoc, ScDocShell *pDocSh, BOOL bRecord, BOOL bApi )
+{
+    if( !pDPObj )
+        return STR_PIVOT_NOTFOUND;
 
-void ScDBFunc::RecalcPivotTable()
+    if( !pDoc  )
+        return static_cast<ULONG>(-1);
+
+    if( !pDocSh && ( pDocSh = PTR_CAST( ScDocShell, pDoc->GetDocumentShell() ) ) == NULL )
+        return static_cast<ULONG>(-1);
+
+    if( ULONG nErrId = pDPObj->RefreshCache() )
+        return nErrId;
+    else if ( nErrId == 0 )
+    {
+        //Refresh all dpobjects
+        ScDPCollection* pDPCollection = pDoc->GetDPCollection();
+        USHORT nCount = pDPCollection->GetCount();
+        for (USHORT i=0; i<nCount; i++)
+        {
+            if ( (*pDPCollection)[i]->GetCacheId() == pDPObj->GetCacheId()  )
+            {
+                ScDBDocFunc aFunc( * pDocSh );
+                if ( !aFunc.DataPilotUpdate( (*pDPCollection)[i], (*pDPCollection)[i], bRecord, bApi ) )
+                    break;
+            }
+        }
+
+        return nErrId;
+    }
+
+    return 0U;
+}
+
+ULONG  ScDBFunc::RecalcPivotTable()
 {
     ScDocShell* pDocSh  = GetViewData()->GetDocShell();
     ScDocument* pDoc    = GetViewData()->GetDocument();
@@ -702,12 +735,26 @@ void ScDBFunc::RecalcPivotTable()
                                                   GetViewData()->GetTabNo() );
     if ( pDPObj )
     {
-        ScDBDocFunc aFunc( *pDocSh );
-        aFunc.DataPilotUpdate( pDPObj, pDPObj, TRUE, FALSE );
-        CursorPosChanged();     // shells may be switched
+        // Wang Xu Ming -- 2009-6-17
+        // DataPilot Migration
+        //ScDBDocFunc aFunc( *pDocSh );
+        //aFunc.DataPilotUpdate( pDPObj, pDPObj, TRUE, FALSE );
+        //CursorPosChanged();      // shells may be switched
+        ULONG nErrId = RefreshDPObject( pDPObj, pDoc, pDocSh, TRUE, FALSE );//pDPObj->RefreshCache();
+        if ( nErrId == 0 )
+        {
+            // There is no undo for the refresh of the cache table, but the undo history for cell changes
+            // remains valid and should be preserved, so the history isn't cleared here.
+            //GetViewData()->GetDocShell()->GetUndoManager()->Clear();
+        }
+        else if (nErrId <= USHRT_MAX)
+            ErrorMessage(static_cast<USHORT>(nErrId));
+      return nErrId;
+      // End Comments
     }
     else
         ErrorMessage(STR_PIVOT_NOTFOUND);
+    return STR_PIVOT_NOTFOUND;
 }
 
 void ScDBFunc::GetSelectedMemberList( ScStrCollection& rEntries, long& rDimension )

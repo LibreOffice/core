@@ -73,6 +73,7 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\polygon
 ..\inc\basegfx\polygon\b2dpolygontriangulator.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolygontriangulator.hxx
 ..\inc\basegfx\polygon\b2dpolygoncutandtouch.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolygoncutandtouch.hxx
 ..\inc\basegfx\polygon\b2dpolypolygoncutter.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolypolygoncutter.hxx
+..\inc\basegfx\polygon\b2dtrapezoid.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dtrapezoid.hxx
 ..\inc\basegfx\polygon\b3dpolygon.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolygon.hxx
 ..\inc\basegfx\polygon\b3dpolypolygon.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolypolygon.hxx
 ..\inc\basegfx\polygon\b3dpolygontools.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolygontools.hxx

@@ -51,6 +51,7 @@ SLOFILES= \
         $(SLO)$/b2dpolygonclipper.obj				\
         $(SLO)$/b2dpolygontriangulator.obj			\
         $(SLO)$/b2dpolygoncutandtouch.obj			\
+        $(SLO)$/b2dtrapezoid.obj					\
         $(SLO)$/b3dpolygon.obj						\
         $(SLO)$/b3dpolygontools.obj					\
         $(SLO)$/b3dpolypolygon.obj					\

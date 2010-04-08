@@ -665,39 +665,24 @@ sub create_shortcut_table
             }
         }
 
-        # if it is part of the product, the soffice.exe has to be included into the icon table
+        # The soffice.ico has to be included into the icon table
         # as icon for the ARP applet
 
-        my $sofficefile = "soffice.exe";
-        my $onefile = get_file_by_name($filesref, $sofficefile);
+        my $onefile = "";
+        my $sofficefile = "soffice.ico";
 
-        if ( $onefile ne "" )
+        my $sourcepathref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$sofficefile, $includepatharrayref, 0);
+
+        if ($$sourcepathref eq "") { installer::exiter::exit_program("ERROR: Could not find $sofficefile as icon!", "create_shortcut_table"); }
+
+        if (! installer::existence::exists_in_array($$sourcepathref, $iconfilecollector))
         {
-            my $sourcepath = $onefile->{'sourcepath'};
-            if (! installer::existence::exists_in_array($sourcepath, $iconfilecollector))
-            {
-                unshift(@{$iconfilecollector}, $sourcepath);
-                $installer::globals::sofficeiconadded = 1;
-            }
+            unshift(@{$iconfilecollector}, $$sourcepathref);
+            $installer::globals::sofficeiconadded = 1;
         }
 
-        # For language packs and patches the soffice.exe has to be included, even if it is not part of the product.
-        # Also as part of the ARP applet (no substitution needed for ProductName, because the file is not installed!)
-
-        if (( $onefile eq "" ) && (( $installer::globals::languagepack ) || ( $installer::globals::patch )))
-        {
-            my $sourcepathref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$sofficefile, $includepatharrayref, 1);
-            if ($$sourcepathref eq "") { installer::exiter::exit_program("ERROR: Could not find $sofficefile as icon in language pack!", "create_shortcut_table"); }
-
-            if (! installer::existence::exists_in_array($$sourcepathref, $iconfilecollector))
-            {
-                unshift(@{$iconfilecollector}, $$sourcepathref);
-                $installer::globals::sofficeiconadded = 1;
-            }
-
-            my $localinfoline = "Added icon file $$sourcepathref for language pack into icon file collector.\n";
-            push(@installer::globals::logfileinfo, $localinfoline);
-        }
+        my $localinfoline = "Added icon file $$sourcepathref for language pack into icon file collector.\n";
+        push(@installer::globals::logfileinfo, $localinfoline);
 
         # Saving the file
 

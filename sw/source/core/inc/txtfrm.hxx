@@ -46,7 +46,6 @@ class SwBorderAttrs;
 class SwFrmFmt;
 class OutputDevice;
 class SwTestFormat;
-class SwStripes;
 struct SwCrsrMoveState;
 struct SwFillData;
 class SwPortionHandler;
@@ -543,8 +542,6 @@ public:
 
     // Stoppt Animationen innerhalb von Numerierungen
     void StopAnimation( OutputDevice *pOut );
-
-    void CriticalLines(const OutputDevice& rOut,SwStripes &rStripes,long nOffs);
 
     // visit all portions for Accessibility
     void VisitPortions( SwPortionHandler& rPH ) const;

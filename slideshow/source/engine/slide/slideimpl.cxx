@@ -822,9 +822,9 @@ bool SlideImpl::implPrefetchShow()
     if( mbShowLoaded )
         return true;
 
-    ENSURE_OR_RETURN( mxDrawPage.is(),
+    ENSURE_OR_RETURN_FALSE( mxDrawPage.is(),
                        "SlideImpl::implPrefetchShow(): Invalid draw page" );
-    ENSURE_OR_RETURN( mpLayerManager,
+    ENSURE_OR_RETURN_FALSE( mpLayerManager,
                        "SlideImpl::implPrefetchShow(): Invalid layer manager" );
 
     // fetch desired page content
@@ -968,7 +968,7 @@ bool SlideImpl::applyInitialShapeAttributes(
 
     try
     {
-        ENSURE_OR_RETURN( maContext.mxComponentContext.is(),
+        ENSURE_OR_RETURN_FALSE( maContext.mxComponentContext.is(),
                            "SlideImpl::applyInitialShapeAttributes(): Invalid component context" );
 
         uno::Reference<lang::XMultiComponentFactory> xFac(
@@ -996,7 +996,7 @@ bool SlideImpl::applyInitialShapeAttributes(
         // could not determine initial shape attributes - this
         // is an error, as some effects might then be plainly
         // invisible
-        ENSURE_OR_RETURN( false,
+        ENSURE_OR_RETURN_FALSE( false,
                            "SlideImpl::applyInitialShapeAttributes(): "
                            "couldn't create TargetPropertiesCreator." );
     }
@@ -1101,9 +1101,9 @@ bool SlideImpl::loadShapes()
     if( mbShapesLoaded )
         return true;
 
-    ENSURE_OR_RETURN( mxDrawPage.is(),
+    ENSURE_OR_RETURN_FALSE( mxDrawPage.is(),
                        "SlideImpl::loadShapes(): Invalid draw page" );
-    ENSURE_OR_RETURN( mpLayerManager,
+    ENSURE_OR_RETURN_FALSE( mpLayerManager,
                        "SlideImpl::loadShapes(): Invalid layer manager" );
 
     // fetch desired page content

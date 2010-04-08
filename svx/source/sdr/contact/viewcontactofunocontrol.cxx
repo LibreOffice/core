@@ -47,6 +47,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
+#include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
 //........................................................................
 namespace sdr { namespace contact {
@@ -135,35 +136,43 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     drawinglayer::primitive2d::Primitive2DSequence ViewContactOfUnoControl::createViewIndependentPrimitive2DSequence() const
     {
+        // create range. Use model data directly, not getBoundRect()/getSnapRect; these will use
+        // the primitive data themselves in the long run. Use SdrUnoObj's (which is a SdrRectObj)
+        // call to GetGeoRect() to access SdrTextObj::aRect directly and without executing anything
+        const Rectangle& rRectangle(GetSdrUnoObj().GetGeoRect());
+        const basegfx::B2DRange aRange(
+            rRectangle.Left(), rRectangle.Top(),
+            rRectangle.Right(), rRectangle.Bottom());
+
+        // create object transform
+        basegfx::B2DHomMatrix aTransform;
+
+        aTransform.set(0, 0, aRange.getWidth());
+        aTransform.set(1, 1, aRange.getHeight());
+        aTransform.set(0, 2, aRange.getMinX());
+        aTransform.set(1, 2, aRange.getMinY());
+
         Reference< XControlModel > xControlModel = GetSdrUnoObj().GetUnoControlModel();
 
         if(xControlModel.is())
         {
-            // create range. Use model data directly, not getBoundRect()/getSnapRect; these will use
-            // the primitive data themselves in the long run. Use SdrUnoObj's (which is a SdrRectObj)
-            // call to GetGeoRect() to access SdrTextObj::aRect directly and without executing anything
-            const Rectangle& rRectangle(GetSdrUnoObj().GetGeoRect());
-            const basegfx::B2DRange aRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
-
-            // create object transform
-            basegfx::B2DHomMatrix aTransform;
-            aTransform.set(0, 0, aRange.getWidth());
-            aTransform.set(1, 1, aRange.getHeight());
-            aTransform.set(0, 2, aRange.getMinX());
-            aTransform.set(1, 2, aRange.getMinY());
-
             // create control primitive WITHOUT possibly existing XControl; this would be done in
             // the VOC in createPrimitive2DSequence()
-            const drawinglayer::primitive2d::Primitive2DReference xRetval(new drawinglayer::primitive2d::ControlPrimitive2D(
-                aTransform, xControlModel));
+            const drawinglayer::primitive2d::Primitive2DReference xRetval(
+                new drawinglayer::primitive2d::ControlPrimitive2D(
+                    aTransform,
+                    xControlModel));
 
             return drawinglayer::primitive2d::Primitive2DSequence(&xRetval, 1);
         }
         else
         {
-            // #i93161# This UnoControl does not yet have a xControlModel (can happen
-            // during diverse creations). Without a model, create no visualisation.
-            return drawinglayer::primitive2d::Primitive2DSequence();
+            // always append an invisible outline for the cases where no visible content exists
+            const drawinglayer::primitive2d::Primitive2DReference xRetval(
+                drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
+                    false, aTransform));
+
+            return drawinglayer::primitive2d::Primitive2DSequence(&xRetval, 1);
         }
     }
 

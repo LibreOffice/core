@@ -44,7 +44,6 @@
 #include <svx/svdpool.hxx>
 #include <svl/itemprop.hxx>
 
-#include <sfx2/topfrm.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <toolkit/unohlp.hxx>
@@ -704,9 +703,9 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
         {
             PresentationViewShell* pShell = dynamic_cast<PresentationViewShell*>(pFullScreenViewShellBase->GetMainViewShell().get());
 
-            if( pShell && pShell->GetViewFrame() &&  pShell->GetViewFrame()->GetTopFrame() )
+            if( pShell && pShell->GetViewFrame() )
             {
-                WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetTopFrame()->GetWindow().GetParent());
+                WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetTopFrame().GetWindow().GetParent());
                 if( pWorkWindow )
                 {
                     pWorkWindow->StartPresentationMode( FALSE, isAlwaysOnTop() );
@@ -1200,7 +1199,7 @@ void SlideShow::StartFullscreenPresentation( )
         // The new frame is created hidden.  To make it visible and activate the
         // new view shell--a prerequisite to process slot calls and initialize
         // its panes--a GrabFocus() has to be called later on.
-        SfxTopFrame* pNewFrame = SfxTopFrame::Create( mpDoc->GetDocSh(), pWorkWindow, PRESENTATION_FACTORY_ID, TRUE);
+        SfxFrame* pNewFrame = SfxFrame::Create( *mpDoc->GetDocSh(), *pWorkWindow, PRESENTATION_FACTORY_ID, true );
         pNewFrame->SetPresentationMode(TRUE);
 
         mpFullScreenViewShellBase = static_cast<ViewShellBase*>(pNewFrame->GetCurrentViewFrame()->GetViewShell());

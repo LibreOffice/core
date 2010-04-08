@@ -1084,7 +1084,7 @@ public class SpreadsheetSample : SpreadsheetDocHelper
         unoidl.com.sun.star.task.XInteractionHandler xHandler =
             (unoidl.com.sun.star.task.XInteractionHandler)
               xServiceManager.createInstance(
-                  "com.sun.star.sdb.InteractionHandler" );
+                  "com.sun.star.task.InteractionHandler" );
          unoidl.com.sun.star.sdbcx.XTablesSupplier xSupplier =
             (unoidl.com.sun.star.sdbcx.XTablesSupplier)
               xSource.connectWithCompletion( xHandler );

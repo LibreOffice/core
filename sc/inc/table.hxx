@@ -265,7 +265,8 @@ public:
     void        PutCell( SCCOL nCol, SCROW nRow, ScBaseCell* pCell );
     void        PutCell(SCCOL nCol, SCROW nRow, ULONG nFormatIndex, ScBaseCell* pCell);
                 //  TRUE = Zahlformat gesetzt
-    BOOL        SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString );
+    BOOL        SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
+                           SvNumberFormatter* pFormatter = NULL, bool bDetectNumberFormat = true );
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
     void        SetError( SCCOL nCol, SCROW nRow, USHORT nError);
 
@@ -468,7 +469,7 @@ public:
                                 const SvxBorderLine** ppRight, const SvxBorderLine** ppBottom ) const;
 
 //UNUSED2009-05 BOOL        HasLines( const ScRange& rRange, Rectangle& rSizes ) const;
-    BOOL        HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nMask ) const;
+    bool        HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nMask ) const;
     BOOL        HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const;
     BOOL        ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow,

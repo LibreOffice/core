@@ -395,7 +395,7 @@ inline bool hasFloatingChild(Window *pWindow)
                 else
                     xContext = new FloatingWindowAccessible( _pXWindow );
             }
-            else if ( nType == WINDOW_HELPTEXTWINDOW )
+            else if ( ( nType == WINDOW_HELPTEXTWINDOW ) || ( nType == WINDOW_FIXEDLINE ) )
             {
                xContext = (accessibility::XAccessibleContext*) new VCLXAccessibleFixedText( _pXWindow );
             }

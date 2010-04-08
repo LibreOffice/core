@@ -2594,6 +2594,28 @@ void SalDisplay::PrintInfo() const
              sal::static_int_cast< unsigned int >(GetVisual(m_nDefaultScreen).GetVisualId()) );
 }
 
+void SalDisplay::addXineramaScreenUnique( long i_nX, long i_nY, long i_nWidth, long i_nHeight )
+{
+    // see if any frame buffers are at the same coordinates
+    // this can happen with weird configuration e.g. on
+    // XFree86 and Clone displays
+    const size_t nScreens = m_aXineramaScreens.size();
+    for( size_t n = 0; n < nScreens; n++ )
+    {
+        if( m_aXineramaScreens[n].Left() == i_nX &&
+            m_aXineramaScreens[n].Top() == i_nY )
+        {
+            if( m_aXineramaScreens[n].GetWidth() < i_nWidth ||
+                m_aXineramaScreens[n].GetHeight() < i_nHeight )
+            {
+                m_aXineramaScreens[n].SetSize( Size( i_nWidth, i_nHeight ) );
+            }
+            return;
+        }
+    }
+    m_aXineramaScreens.push_back( Rectangle( Point( i_nX, i_nY ), Size( i_nWidth, i_nHeight ) ) );
+}
+
 void SalDisplay::InitXinerama()
 {
     if( m_aScreens.size() > 1 )
@@ -2618,10 +2640,10 @@ void SalDisplay::InitXinerama()
             m_bXinerama = true;
             m_aXineramaScreens = std::vector<Rectangle>( nFramebuffers );
             for( int i = 0; i < nFramebuffers; i++ )
-                m_aXineramaScreens[i] = Rectangle( Point( pFramebuffers[i].x,
-                                                   pFramebuffers[i].y ),
-                                            Size( pFramebuffers[i].width,
-                                                  pFramebuffers[i].height ) );
+                addXineramaScreenUnique( pFramebuffers[i].x,
+                                         pFramebuffers[i].y,
+                                         pFramebuffers[i].width,
+                                         pFramebuffers[i].height );
         }
     }
 #elif defined(USE_XINERAMA_XORG)
@@ -2637,30 +2659,10 @@ if( XineramaIsActive( pDisp_ ) )
             m_aXineramaScreens = std::vector<Rectangle>();
             for( int i = 0; i < nFramebuffers; i++ )
             {
-                // see if any frame buffers are at the same coordinates
-                // this can happen with weird configuration e.g. on
-                // XFree86 and Clone displays
-                bool bDuplicate = false;
-                for( int n = 0; n < i; n++ )
-                {
-                    if( m_aXineramaScreens[n].Left() == pScreens[i].x_org &&
-                        m_aXineramaScreens[n].Top() == pScreens[i].y_org )
-                    {
-                        bDuplicate = true;
-                        if( m_aXineramaScreens[n].GetWidth() < pScreens[i].width ||
-                            m_aXineramaScreens[n].GetHeight() < pScreens[i].height )
-                        {
-                            m_aXineramaScreens[n].SetSize( Size( pScreens[i].width,
-                                                                 pScreens[i].height ) );
-                        }
-                        break;
-                    }
-                }
-                if( ! bDuplicate )
-                    m_aXineramaScreens.push_back( Rectangle( Point( pScreens[i].x_org,
-                                                                    pScreens[i].y_org ),
-                                                             Size( pScreens[i].width,
-                                                                   pScreens[i].height ) ) );
+                addXineramaScreenUnique( pScreens[i].x_org,
+                                         pScreens[i].y_org,
+                                         pScreens[i].width,
+                                         pScreens[i].height );
             }
             m_bXinerama = m_aXineramaScreens.size() > 1;
         }

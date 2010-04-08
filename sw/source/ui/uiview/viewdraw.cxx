@@ -171,7 +171,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
 
                     // TODO: unmark all other
                     pWrtShell->EnterStdMode();
-                    pWrtShell->SwFEShell::Insert( *pObj, 0, 0, &aStartPos );
+                    pWrtShell->SwFEShell::InsertDrawObj( *pObj, aStartPos );
                 }
             }
         }
@@ -218,7 +218,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
                     aSize = Size( 2835, 2835 );
 
                 pWrtShell->EnterStdMode();
-                pWrtShell->SwFEShell::Insert( *pObj, 0, 0, &aPos );
+                pWrtShell->SwFEShell::InsertDrawObj( *pObj, aPos );
                 rReq.Ignore ();
             }
         }

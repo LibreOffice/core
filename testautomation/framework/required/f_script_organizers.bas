@@ -48,6 +48,7 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
 
+    use "global\tools\includes\optional\t_docfuncs.inc"
     use "global\tools\includes\optional\t_treelist_tools.inc"
 
     gApplication = "WRITER"

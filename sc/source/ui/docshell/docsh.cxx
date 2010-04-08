@@ -57,7 +57,6 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/sfx.hrc>
-#include <sfx2/topfrm.hxx>
 #include <sfx2/objface.hxx>
 #include <svl/srchitem.hxx>
 #include <unotools/fltrcfg.hxx>
@@ -127,6 +126,8 @@
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
 using namespace com::sun::star;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -817,6 +818,34 @@ BOOL __EXPORT ScDocShell::LoadFrom( SfxMedium& rMedium )
     return bRet;
 }
 
+static void lcl_parseHtmlFilterOption(const OUString& rOption, LanguageType& rLang, bool& rDateConvert)
+{
+    OUStringBuffer aBuf;
+    OUString aTokens[2];
+    sal_Int32 n = rOption.getLength();
+    const sal_Unicode* p = rOption.getStr();
+    sal_Int32 nTokenId = 0;
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        const sal_Unicode c = p[i];
+        if (c == sal_Unicode(' '))
+        {
+            if (aBuf.getLength())
+                aTokens[nTokenId++] = aBuf.makeStringAndClear();
+        }
+        else
+            aBuf.append(c);
+
+        if (nTokenId >= 2)
+            break;
+    }
+
+    if (aBuf.getLength())
+        aTokens[nTokenId] = aBuf.makeStringAndClear();
+
+    rLang = static_cast<LanguageType>(aTokens[0].toInt32());
+    rDateConvert = static_cast<bool>(aTokens[1].toInt32());
+}
 
 BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
 {
@@ -1190,12 +1219,24 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 SvStream* pInStream = rMedium.GetInStream();
                 if (pInStream)
                 {
+                    LanguageType eLang = LANGUAGE_SYSTEM;
+                    bool bDateConvert = false;
+                    SfxItemSet*  pSet = rMedium.GetItemSet();
+                    const SfxPoolItem* pItem;
+                    if ( pSet && SFX_ITEM_SET ==
+                         pSet->GetItemState( SID_FILE_FILTEROPTIONS, TRUE, &pItem ) )
+                    {
+                        String aFilterOption = (static_cast<const SfxStringItem*>(pItem))->GetValue();
+                        lcl_parseHtmlFilterOption(aFilterOption, eLang, bDateConvert);
+                    }
+
                     pInStream->Seek( 0 );
                     ScRange aRange;
                     // HTML macht eigenes ColWidth/RowHeight
                     CalcOutputFactor();
+                    SvNumberFormatter aNumFormatter(aDocument.GetServiceManager(), eLang);
                     eError = ScFormatFilter::Get().ScImportHTML( *pInStream, rMedium.GetBaseURL(), &aDocument, aRange,
-                                            GetOutputFactor(), !bWebQuery );
+                                            GetOutputFactor(), !bWebQuery, &aNumFormatter, bDateConvert );
                     if (eError != eERR_OK)
                     {
                         if (!GetError())
@@ -2114,7 +2155,7 @@ USHORT __EXPORT ScDocShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 {
     if(SC_MOD()->GetCurRefDlgId()>0)
     {
-        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this, TYPE(SfxTopViewFrame) );
+        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
         if( pFrame )
         {
             SfxViewShell* p = pFrame->GetViewShell();
@@ -2160,6 +2201,11 @@ void ScDocShell::PrepareReload()
 String ScDocShell::GetOwnFilterName()           // static
 {
     return String::CreateFromAscii(pFilterSc50);
+}
+
+String ScDocShell::GetHtmlFilterName()
+{
+    return String::CreateFromAscii(pFilterHtml);
 }
 
 String ScDocShell::GetWebQueryFilterName()      // static
@@ -2261,21 +2307,18 @@ ScDocShell::ScDocShell( const ScDocShell& rShell )
 
 //------------------------------------------------------------------
 
-ScDocShell::ScDocShell( SfxObjectCreateMode eMode, const bool _bScriptSupport )
-    :   SfxObjectShell( eMode ),
-        __SCDOCSHELL_INIT
+ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags )
+    :   SfxObjectShell( i_nSfxCreationFlags )
+    ,   __SCDOCSHELL_INIT
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ScDocShell" );
 
     SetPool( &SC_MOD()->GetPool() );
 
-    bIsInplace = (eMode == SFX_CREATE_MODE_EMBEDDED);
+    bIsInplace = (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED);
     //  wird zurueckgesetzt, wenn nicht inplace
 
     pDocFunc = new ScDocFunc(*this);
-
-    if ( !_bScriptSupport )
-        SetHasNoBasic();
 
     //  SetBaseModel needs exception handling
     ScModelObj::CreateAndSet( this );

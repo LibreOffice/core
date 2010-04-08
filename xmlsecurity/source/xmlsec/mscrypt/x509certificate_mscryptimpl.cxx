@@ -292,7 +292,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
                 throw RuntimeException() ;
             }
 
-            OUString xSubject(subject);
+            OUString xSubject(reinterpret_cast<const sal_Unicode*>(subject));
             delete [] subject ;
 
             return replaceTagSWithTagST(xSubject);

@@ -638,8 +638,17 @@ bool PDFObject::getDeflatedStream( char** ppStream, unsigned int* pBytes, const 
             m_pStream->m_pDict->m_aMap.find( "Filter" );
         if( it != m_pStream->m_pDict->m_aMap.end() )
         {
-            // is the (first) filter FlateDecode ?
             PDFName* pFilter = dynamic_cast<PDFName*>(it->second);
+            if( ! pFilter )
+            {
+                PDFArray* pArray = dynamic_cast<PDFArray*>(it->second);
+                if( pArray && ! pArray->m_aSubElements.empty() )
+                {
+                    pFilter = dynamic_cast<PDFName*>(pArray->m_aSubElements.front());
+                }
+            }
+
+            // is the (first) filter FlateDecode ?
             if( pFilter && pFilter->m_aName.equals( "FlateDecode" ) )
             {
                 bIsDeflated = true;
@@ -669,8 +678,6 @@ bool PDFObject::getDeflatedStream( char** ppStream, unsigned int* pBytes, const 
     }
     else
         *ppStream = NULL, *pBytes = 0;
-    // FIXME: one could also deflate if FlateDecode ws the
-    // first filter in an array
     return bIsDeflated;
 }
 
@@ -1196,7 +1203,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                     #if OSL_DEBUG_LEVEL > 1
                     fprintf( stderr, "DocId is <" );
                     for( int i = 0; i < m_pData->m_aDocID.getLength(); i++ )
-                        fprintf( stderr, "%.2x", sal_uInt32(sal_uInt8(m_pData->m_aDocID.getStr()[i])) );
+                        fprintf( stderr, "%.2x", (unsigned int)sal_uInt8(m_pData->m_aDocID.getStr()[i]) );
                     fprintf( stderr, ">\n" );
                     #endif
                 }
@@ -1258,9 +1265,9 @@ PDFFileImplData* PDFFile::impl_getData() const
                                 #if OSL_DEBUG_LEVEL > 1
                                 else
                                 {
-                                    fprintf( stderr, "O entry has length %d, should be 32 <", aEnt.getLength() );
+                                    fprintf( stderr, "O entry has length %d, should be 32 <", (int)aEnt.getLength() );
                                     for( int i = 0; i < aEnt.getLength(); i++ )
-                                        fprintf( stderr, " %.2X", sal_uInt32(sal_uInt8(aEnt.getStr()[i])) );
+                                        fprintf( stderr, " %.2X", (unsigned int)sal_uInt8(aEnt.getStr()[i]) );
                                     fprintf( stderr, ">\n" );
                                 }
                                 #endif
@@ -1277,9 +1284,9 @@ PDFFileImplData* PDFFile::impl_getData() const
                                 #if OSL_DEBUG_LEVEL > 1
                                 else
                                 {
-                                    fprintf( stderr, "U entry has length %d, should be 32 <", aEnt.getLength() );
+                                    fprintf( stderr, "U entry has length %d, should be 32 <", (int)aEnt.getLength() );
                                     for( int i = 0; i < aEnt.getLength(); i++ )
-                                        fprintf( stderr, " %.2X", sal_uInt32(sal_uInt8(aEnt.getStr()[i])) );
+                                        fprintf( stderr, " %.2X", (unsigned int)sal_uInt8(aEnt.getStr()[i]) );
                                     fprintf( stderr, ">\n" );
                                 }
                                 #endif
@@ -1297,13 +1304,13 @@ PDFFileImplData* PDFFile::impl_getData() const
                             if( pNum )
                                 m_pData->m_nPEntry = static_cast<sal_uInt32>(static_cast<sal_Int32>(pNum->m_fValue));
                             #if OSL_DEBUG_LEVEL > 1
-                            fprintf( stderr, "p entry is 0x%x\n", m_pData->m_nPEntry );
+                            fprintf( stderr, "p entry is %p\n", m_pData->m_nPEntry );
                             #endif
                         }
                         #if OSL_DEBUG_LEVEL > 1
                         fprintf( stderr, "Encryption dict: sec handler: %s, version = %d, revision = %d, key length = %d\n",
                                  pFilter ? OUStringToOString( pFilter->getFilteredName(), RTL_TEXTENCODING_UTF8 ).getStr() : "<unknown>",
-                                 m_pData->m_nAlgoVersion, m_pData->m_nStandardRevision, m_pData->m_nKeyLength );
+                                 (int)m_pData->m_nAlgoVersion, (int)m_pData->m_nStandardRevision, m_pData->m_nKeyLength );
                         #endif
                         break;
                     }

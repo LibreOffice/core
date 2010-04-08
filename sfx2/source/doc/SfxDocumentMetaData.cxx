@@ -585,7 +585,9 @@ sal_Int32 textToDuration(::rtl::OUString const& i_rText) throw ()
 {
     css::util::Duration d;
     if (textToDuration(d, i_rText)) {
-        return (d.Days * (24*3600))
+        // #i107372#: approximate years/months
+        const sal_Int32 days( (d.Years * 365) + (d.Months * 30) + d.Days );
+        return  (days * (24*3600))
                 + (d.Hours * 3600) + (d.Minutes * 60) + d.Seconds;
     } else {
         return 0; // default
@@ -608,7 +610,7 @@ sal_Int32 textToDuration(::rtl::OUString const& i_rText) throw ()
     ud.Hours   = static_cast<sal_Int16>((i_value % (24 * 3600)) / 3600);
     ud.Minutes = static_cast<sal_Int16>((i_value % 3600) / 60);
     ud.Seconds = static_cast<sal_Int16>(i_value % 60);
-    ud.HundredthSeconds = 0;
+    ud.MilliSeconds = 0;
     return durationToText(ud);
 }
 
@@ -925,8 +927,13 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
             values.push_back(s);
 // #i90847# OOo 2.x does stupid things if value-type="string";
 // fortunately string is default anyway, so we can just omit it
-//            as.push_back(std::make_pair(vt,
-//                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("string"))));
+// #i107502#: however, OOo 2.x only reads 4 user-defined without @value-type
+// => best backward compatibility: first 4 without @value-type, rest with
+            if (4 <= i)
+            {
+                as.push_back(std::make_pair(vt,
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("string"))));
+            }
         } else if (type == ::cppu::UnoType<css::util::DateTime>::get()) {
             css::util::DateTime dt;
             any >>= dt;
@@ -948,7 +955,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
             ud.Hours   = ut.Hours;
             ud.Minutes = ut.Minutes;
             ud.Seconds = ut.Seconds;
-            ud.HundredthSeconds = ut.HundredthSeconds;
+            ud.MilliSeconds = 10 * ut.HundredthSeconds;
             values.push_back(durationToText(ud));
             as.push_back(std::make_pair(vt,
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("time"))));

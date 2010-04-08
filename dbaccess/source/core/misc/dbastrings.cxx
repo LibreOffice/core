@@ -43,6 +43,7 @@ namespace dbaccess
     //============================================================
     //= Properties
     //============================================================
-    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_APPLYFORMDESIGNMODE, "ApplyFormDesignMode");
-
+    IMPLEMENT_CONSTASCII_USTRING( PROPERTY_APPLYFORMDESIGNMODE, "ApplyFormDesignMode"   );
+    IMPLEMENT_CONSTASCII_USTRING( PROPERTY_IS_FORM,             "IsForm"                );
+    IMPLEMENT_CONSTASCII_USTRING( PROPERTY_PERSISTENT_PATH,     "PersistentPath"        );
 }

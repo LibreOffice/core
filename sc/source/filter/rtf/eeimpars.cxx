@@ -126,7 +126,7 @@ ULONG ScEEImport::Read( SvStream& rStream, const String& rBaseURL )
 }
 
 
-void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
+void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNumberFormatter* pFormatter, bool bConvertDate )
 {
     ScProgress* pProgress = new ScProgress( mpDoc->GetDocumentShell(),
         ScGlobal::GetRscString( STR_LOAD_DOC ), mpParser->Count() );
@@ -147,10 +147,12 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
     nLastMergedRow = SCROW_MAX;
     BOOL bHasGraphics = FALSE;
     ScEEParseEntry* pE;
-    SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
-    bool bNumbersEnglishUS = (pFormatter->GetLanguage() != LANGUAGE_ENGLISH_US);
-    if (bNumbersEnglishUS)
+    if (!pFormatter)
+        pFormatter = mpDoc->GetFormatTable();
+    bool bNumbersEnglishUS = false;
+    if (pFormatter->GetLanguage() == LANGUAGE_SYSTEM)
     {
+        // Automatic language option selected.  Check for the global 'use US English' option.
         SvxHtmlOptions aOpt;
         bNumbersEnglishUS = aOpt.IsNumbersEnglishUS();
     }
@@ -332,7 +334,7 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
                 else if ( !pE->aSel.HasRange() )
                 {
                     // maybe ALT text of IMG or similar
-                    mpDoc->SetString( nCol, nRow, nTab, pE->aAltText );
+                    mpDoc->SetString( nCol, nRow, nTab, pE->aAltText, pFormatter );
                     // wenn SelRange komplett leer kann nachfolgender Text im gleichen Absatz liegen!
                 }
                 else
@@ -377,7 +379,7 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
                     if (bNumbersEnglishUS && !bEnUsRecognized)
                         mpDoc->PutCell( nCol, nRow, nTab, new ScStringCell( aStr));
                     else
-                        mpDoc->SetString( nCol, nRow, nTab, aStr );
+                        mpDoc->SetString( nCol, nRow, nTab, aStr, pFormatter, bConvertDate );
                 }
             }
             else

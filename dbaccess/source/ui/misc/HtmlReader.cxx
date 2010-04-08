@@ -506,6 +506,8 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
                     else if ( m_sCurrent.Len() )
                         aColumnName = m_sCurrent;
 
+                    aColumnName.EraseLeadingChars();
+                    aColumnName.EraseTrailingChars();
                     CreateDefaultColumn(aColumnName);
                     aColumnName.Erase();
                     m_sCurrent.Erase();
@@ -550,6 +552,8 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
 
     if ( m_sCurrent.Len() )
         aColumnName = m_sCurrent;
+    aColumnName.EraseLeadingChars();
+    aColumnName.EraseTrailingChars();
     if(aColumnName.Len())
         CreateDefaultColumn(aColumnName);
 

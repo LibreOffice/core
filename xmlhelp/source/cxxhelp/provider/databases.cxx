@@ -57,6 +57,12 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <comphelper/locale.hxx>
 
+#include <com/sun/star/awt/XToolkit.hpp>
+#include <com/sun/star/awt/XExtendedToolkit.hpp>
+#include <com/sun/star/awt/XWindowPeer.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <com/sun/star/awt/XTopWindow.hpp>
+
 #include <l10ntools/compilehelp.hxx>
 #include <comphelper/storagehelper.hxx>
 
@@ -1271,19 +1277,47 @@ void Databases::cascadingStylesheet( const rtl::OUString& Language,
         bool error = true;
         rtl::OUString fileURL;
 
+        sal_Bool bHighContrastMode = sal_False;
+        rtl::OUString aCSS( m_aCSS );
+        if ( aCSS.compareToAscii( "default" ) == 0 )
+        {
+            // #i50760: "default" needs to adapt HC mode
+            uno::Reference< awt::XToolkit > xToolkit = uno::Reference< awt::XToolkit >(
+                    ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.Toolkit" ) ) ), uno::UNO_QUERY );
+            if ( xToolkit.is() )
+            {
+                uno::Reference< awt::XExtendedToolkit > xExtToolkit( xToolkit, uno::UNO_QUERY );
+                if ( xExtToolkit.is() )
+                {
+                    uno::Reference< awt::XTopWindow > xTopWindow = xExtToolkit->getActiveTopWindow();
+                    if ( xTopWindow.is() )
+                    {
+                        uno::Reference< awt::XVclWindowPeer > xVclWindowPeer( xTopWindow, uno::UNO_QUERY );
+                        if ( xVclWindowPeer.is() )
+                        {
+                            uno::Any aHCMode = xVclWindowPeer->getProperty( rtl::OUString::createFromAscii( "HighContrastMode" ) );
+                            if ( ( aHCMode >>= bHighContrastMode ) && bHighContrastMode )
+                                aCSS = rtl::OUString::createFromAscii( "highcontrastblack" );
+                        }
+                    }
+                }
+            }
+        }
+
         while( error && retry )
         {
+
             if( retry == 2 )
                 fileURL =
                     getInstallPathAsURL()  +
                     processLang( Language )       +
                     rtl::OUString::createFromAscii( "/" ) +
-                    m_aCSS +
+                    aCSS +
                     rtl::OUString::createFromAscii( ".css" );
             else if( retry == 1 )
                 fileURL =
                     getInstallPathAsURL()  +
-                    m_aCSS +
+                    aCSS +
                     rtl::OUString::createFromAscii( ".css" );
 
             osl::DirectoryItem aDirItem;
@@ -1304,6 +1338,13 @@ void Databases::cascadingStylesheet( const rtl::OUString& Language,
             }
 
             --retry;
+            if ( !retry && error && bHighContrastMode )
+            {
+                // fall back to default css
+                aCSS = rtl::OUString::createFromAscii( "default" );
+                retry = 2;
+                bHighContrastMode = sal_False;
+            }
         }
 
         if( error )

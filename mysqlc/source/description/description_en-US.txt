@@ -1,1 +1,1 @@
-Connects OpenOffice.org directly with MySQL Servers
+The MySQL Connector for Oracle Open Office (formerly StarOffice) and OpenOffice.org installs a native MySQL database driver. It is faster, seamless integrated, easier to administrate and there is no need to install and setup a JDBC or ODBC driver separately. It was never easier to use MySQL databases in OpenOffice.org Base.

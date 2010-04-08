@@ -77,7 +77,6 @@
 
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/topfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>
@@ -498,14 +497,7 @@ void SlotManager::GetCtrlState (SfxItemSet& rSet)
             SfxViewFrame* pSlideViewFrame = pShell->GetViewFrame();
             DBG_ASSERT(pSlideViewFrame!=NULL,
                 "SlideSorterController::GetCtrlState: ViewFrame not found");
-            if (pSlideViewFrame->ISA(SfxTopViewFrame))
-            {
-                pSlideViewFrame->GetSlotState (SID_RELOAD, NULL, &rSet);
-            }
-            else        // MI sagt: kein MDIFrame --> disablen
-            {
-                rSet.DisableItem(SID_RELOAD);
-            }
+            pSlideViewFrame->GetSlotState (SID_RELOAD, NULL, &rSet);
         }
     }
 

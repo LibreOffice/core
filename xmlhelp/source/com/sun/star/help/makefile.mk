@@ -28,41 +28,17 @@
 PRJ		= ..$/..$/..$/..$/..
 PRJNAME = xmlhelp
 TARGET  = HelpLinker
-LIBBASENAME = helplinker
 PACKAGE = com$/sun$/star$/help
-TARGETTYPE=CUI
 
 .IF "$(SOLAR_JAVA)"!=""
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
-.INCLUDE : helplinker.pmk
  
-.IF "$(SYSTEM_LIBXSLT)" == "YES"
-CFLAGS+= $(LIBXSLT_CFLAGS)
-.ELSE
-LIBXSLTINCDIR=external$/libxslt
-CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXSLTINCDIR)
-.ENDIF
-
-.IF "$(SYSTEM_DB)" == "YES"
-CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
-.ENDIF
-
-.IF "$(SYSTEM_EXPAT)" == "YES"
-CFLAGS+=-DSYSTEM_EXPAT
-.ENDIF
-
-
 JAVACLASSFILES = \
     $(CLASSDIR)$/$(PACKAGE)$/HelpSearch.class			        \
     $(CLASSDIR)$/$(PACKAGE)$/HelpComponent.class			        \
     $(CLASSDIR)$/$(PACKAGE)$/HelpIndexer.class			        
-
-JAVAFILES = \
-    HelpSearch.java 							\
-    HelpComponent.java							\
-    HelpIndexer.java
 
 TRANSEX3FILES = \
         $(SOLARBINDIR)$/help$/$(PACKAGE)$/HelpIndexerTool.class		\
@@ -87,14 +63,12 @@ CUSTOMMANIFESTFILE = MANIFEST.MF
 
 .INCLUDE :  target.mk
 
-ALLTAR : $(ADDFILES)
-
 .IF "$(JARTARGETN)"!=""
 $(JAVATARGET) : $(ADDFILES)
 $(JARTARGETN) : $(ADDFILES)
 .ENDIF
 
-$(CLASSDIR)$/$(PACKAGE)$/%.class : $(SOLARBINDIR)$/help$/$(PACKAGE)$/%.class 
+$(ADDFILES) : $(SOLARBINDIR)$/help$/$(PACKAGE)$/$$(@:f)
     $(MKDIRHIER) $(@:d)	
     $(COPY) $< $@
 

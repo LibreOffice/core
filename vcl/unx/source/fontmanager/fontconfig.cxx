@@ -643,7 +643,7 @@ namespace
     }
 }
 
-int PrintFontManager::countFontconfigFonts()
+int PrintFontManager::countFontconfigFonts( std::hash_map<rtl::OString, int, rtl::OStringHash>& o_rVisitedPaths )
 {
     int nFonts = 0;
 
@@ -704,6 +704,9 @@ int PrintFontManager::countFontconfigFonts()
             std::list< PrintFont* > aFonts;
             OString aDir, aBase, aOrgPath( (sal_Char*)file );
             splitPath( aOrgPath, aDir, aBase );
+
+            o_rVisitedPaths[aDir] = 1;
+
             int nDirID = getDirectoryAtom( aDir, true );
             if( ! m_pFontCache->getFontCacheFile( nDirID, aBase, aFonts ) )
             {
@@ -1183,7 +1186,7 @@ bool PrintFontManager::initFontconfig()
     return false;
 }
 
-int PrintFontManager::countFontconfigFonts()
+int PrintFontManager::countFontconfigFonts( std::hash_map<rtl::OString, int, rtl::OStringHash>& )
 {
     return 0;
 }

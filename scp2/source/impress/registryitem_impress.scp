@@ -347,7 +347,7 @@ RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = "soffice.StarImpressDocument.6\shell\open\command";
-    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
+    Value = "\"<progpath>\program\simpress.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell_Print_Command
@@ -424,7 +424,7 @@ RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "soffice.StarImpressTemplate.6\shell\open\command";
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
+    Value = "\"<progpath>\program\simpress.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_Shell_Print_Command
@@ -731,13 +731,6 @@ RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_New_Command
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
-// RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_Open_Command
-//     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-//     ModuleID = gid_Module_Prg_Impress_Bin;
-//     Subkey = "opendocument.ImpressDocument.1\shell\open\command";
-//     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
-// End
-
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
@@ -866,7 +859,7 @@ RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "opendocument.ImpressTemplate.1\shell\open\command";
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
+    Value = "\"<progpath>\program\simpress.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Shell_Print_Command
@@ -908,7 +901,7 @@ RegistryItem gid_Regitem_OpenOffice_SXI_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sxi\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Name = "opendocument.ImpressDocument.1";
+    Name = "soffice.StarImpressDocument.6";
     Value = " ";
 End
 
@@ -917,7 +910,7 @@ RegistryItem gid_Regitem_OpenOffice_STI_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sti\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Name = "opendocument.ImpressDocument.1";
+    Name = "soffice.StarImpressDocument.6";
     Value = " ";
 End
 
@@ -926,7 +919,7 @@ RegistryItem gid_Regitem_OpenOffice_SXD_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sxd\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Name = "opendocument.ImpressDocument.1";
+    Name = "soffice.StarImpressDocument.6";
     Value = " ";
 End
 
@@ -954,7 +947,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = ".sti";
-    Value = "opendocument.ImpressDocument.1";
+    Value = "soffice.StarImpressDocument.6";
     Styles = ();
 End
 
@@ -982,10 +975,10 @@ REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( sti )
 
 // registering the mso file types
 
-CONDITIONAL_REGISTER_DOC_EXTENSION( Ppt,  gid_Module_Prg_Impress_Bin, ppt,  PPT,  MS_POWERPOINT_PRESENTATION_OLD, 7, simpress.exe, open, Impress )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Pps,  gid_Module_Prg_Impress_Bin, pps,  PPS,  MS_POWERPOINT_SHOW, 7, simpress.exe, open, Impress )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Pptx, gid_Module_Prg_Impress_Bin, pptx, PPTX, MS_POWERPOINT_PRESENTATION, 7, simpress.exe, open, Impress )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Pptm, gid_Module_Prg_Impress_Bin, pptm, PPTM, MS_POWERPOINT_PRESENTATION, 7, simpress.exe, open, Impress )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Pot,  gid_Module_Prg_Impress_Bin, pot,  POT,  MS_POWERPOINT_TEMPLATE_OLD, 8, simpress.exe, new, Impress )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Potx, gid_Module_Prg_Impress_Bin, potx, POTX, MS_POWERPOINT_TEMPLATE, 8, simpress.exe, new, Impress )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Potm, gid_Module_Prg_Impress_Bin, potm, POTM, MS_POWERPOINT_TEMPLATE, 8, simpress.exe, new, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Ppt,  gid_Module_Prg_Impress_Bin, ppt,  PPT,  MS_POWERPOINT_PRESENTATION_OLD, 33, simpress.exe, open, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Pps,  gid_Module_Prg_Impress_Bin, pps,  PPS,  MS_POWERPOINT_SHOW, 33, simpress.exe, open, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Pptx, gid_Module_Prg_Impress_Bin, pptx, PPTX, MS_POWERPOINT_PRESENTATION, 33, simpress.exe, open, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Pptm, gid_Module_Prg_Impress_Bin, pptm, PPTM, MS_POWERPOINT_PRESENTATION, 33, simpress.exe, open, Impress )
+CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Pot,  gid_Module_Prg_Impress_Bin, pot,  POT,  MS_POWERPOINT_TEMPLATE_OLD, 34, simpress.exe, new, Impress )
+CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Potx, gid_Module_Prg_Impress_Bin, potx, POTX, MS_POWERPOINT_TEMPLATE, 34, simpress.exe, new, Impress )
+CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Potm, gid_Module_Prg_Impress_Bin, potm, POTM, MS_POWERPOINT_TEMPLATE, 34, simpress.exe, new, Impress )

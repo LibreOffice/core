@@ -49,65 +49,73 @@ namespace drawinglayer
     {
         Primitive2DSequence FillHatchPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            // create hatch
-            const basegfx::BColor aHatchColor(maFillHatch.getColor());
-            const double fAngle(-maFillHatch.getAngle());
-            ::std::vector< basegfx::B2DHomMatrix > aMatrices;
+            Primitive2DSequence aRetval;
 
-            // get hatch transformations
-            switch(maFillHatch.getStyle())
+            if(!getFillHatch().isDefault())
             {
-                case attribute::HATCHSTYLE_TRIPLE:
+                // create hatch
+                const basegfx::BColor aHatchColor(getFillHatch().getColor());
+                const double fAngle(-getFillHatch().getAngle());
+                ::std::vector< basegfx::B2DHomMatrix > aMatrices;
+
+                // get hatch transformations
+                switch(getFillHatch().getStyle())
                 {
-                    // rotated 45 degrees
-                    texture::GeoTexSvxHatch aHatch(getObjectRange(), maFillHatch.getDistance(), fAngle + F_PI4);
-                    aHatch.appendTransformations(aMatrices);
+                    case attribute::HATCHSTYLE_TRIPLE:
+                    {
+                        // rotated 45 degrees
+                        texture::GeoTexSvxHatch aHatch(getObjectRange(), getFillHatch().getDistance(), fAngle + F_PI4);
+                        aHatch.appendTransformations(aMatrices);
 
-                    // fall-through by purpose
+                        // fall-through by purpose
+                    }
+                    case attribute::HATCHSTYLE_DOUBLE:
+                    {
+                        // rotated 90 degrees
+                        texture::GeoTexSvxHatch aHatch(getObjectRange(), getFillHatch().getDistance(), fAngle + F_PI2);
+                        aHatch.appendTransformations(aMatrices);
+
+                        // fall-through by purpose
+                    }
+                    case attribute::HATCHSTYLE_SINGLE:
+                    {
+                        // angle as given
+                        texture::GeoTexSvxHatch aHatch(getObjectRange(), getFillHatch().getDistance(), fAngle);
+                        aHatch.appendTransformations(aMatrices);
+                    }
                 }
-                case attribute::HATCHSTYLE_DOUBLE:
+
+                // prepare return value
+                const bool bFillBackground(getFillHatch().isFillBackground());
+                aRetval.realloc(bFillBackground ? aMatrices.size() + 1L : aMatrices.size());
+
+                // evtl. create filled background
+                if(bFillBackground)
                 {
-                    // rotated 90 degrees
-                    texture::GeoTexSvxHatch aHatch(getObjectRange(), maFillHatch.getDistance(), fAngle + F_PI2);
-                    aHatch.appendTransformations(aMatrices);
-
-                    // fall-through by purpose
+                    // create primitive for background
+                    const Primitive2DReference xRef(
+                        new PolyPolygonColorPrimitive2D(
+                            basegfx::B2DPolyPolygon(
+                                basegfx::tools::createPolygonFromRect(getObjectRange())), getBColor()));
+                    aRetval[0] = xRef;
                 }
-                case attribute::HATCHSTYLE_SINGLE:
+
+                // create primitives
+                const basegfx::B2DPoint aStart(0.0, 0.0);
+                const basegfx::B2DPoint aEnd(1.0, 0.0);
+
+                for(sal_uInt32 a(0L); a < aMatrices.size(); a++)
                 {
-                    // angle as given
-                    texture::GeoTexSvxHatch aHatch(getObjectRange(), maFillHatch.getDistance(), fAngle);
-                    aHatch.appendTransformations(aMatrices);
+                    const basegfx::B2DHomMatrix& rMatrix = aMatrices[a];
+                    basegfx::B2DPolygon aNewLine;
+
+                    aNewLine.append(rMatrix * aStart);
+                    aNewLine.append(rMatrix * aEnd);
+
+                    // create hairline
+                    const Primitive2DReference xRef(new PolygonHairlinePrimitive2D(aNewLine, aHatchColor));
+                    aRetval[bFillBackground ? (a + 1) : a] = xRef;
                 }
-            }
-
-            // prepare return value
-            const bool bFillBackground(maFillHatch.isFillBackground());
-            Primitive2DSequence aRetval(bFillBackground ? aMatrices.size() + 1L : aMatrices.size());
-
-            // evtl. create filled background
-            if(bFillBackground)
-            {
-                // create primitive for background
-                const Primitive2DReference xRef(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(getObjectRange())), maBColor));
-                aRetval[0L] = xRef;
-            }
-
-            // create primitives
-            const basegfx::B2DPoint aStart(0.0, 0.0);
-            const basegfx::B2DPoint aEnd(1.0, 0.0);
-
-            for(sal_uInt32 a(0L); a < aMatrices.size(); a++)
-            {
-                const basegfx::B2DHomMatrix& rMatrix = aMatrices[a];
-                basegfx::B2DPolygon aNewLine;
-
-                aNewLine.append(rMatrix * aStart);
-                aNewLine.append(rMatrix * aEnd);
-
-                // create hairline
-                const Primitive2DReference xRef(new PolygonHairlinePrimitive2D(aNewLine, aHatchColor));
-                aRetval[bFillBackground ? (a + 1L) : a] = xRef;
             }
 
             return aRetval;
@@ -131,8 +139,8 @@ namespace drawinglayer
                 const FillHatchPrimitive2D& rCompare = (FillHatchPrimitive2D&)rPrimitive;
 
                 return (getObjectRange() == rCompare.getObjectRange()
-                    && maFillHatch == rCompare.maFillHatch
-                    && maBColor == rCompare.maBColor);
+                    && getFillHatch() == rCompare.getFillHatch()
+                    && getBColor() == rCompare.getBColor());
             }
 
             return false;

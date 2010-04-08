@@ -320,6 +320,7 @@ sub add_root_directories
 
         if ( $allvariableshashref->{'SUNDIR'} )
         {
+            if ( $allvariableshashref->{'SUNDIRNAME'} ) { $installer::globals::sundirname = $allvariableshashref->{'SUNDIRNAME'}; }
             $oneline = "sundirectory\t$installer::globals::programfilesfolder\t$installer::globals::sundirname$sourcediraddon\n";
             push(@{$directorytableref}, $oneline);
 

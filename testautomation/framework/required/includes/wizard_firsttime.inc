@@ -135,14 +135,18 @@ testcase tUpdtWizardFirsttime
         warnlog( "Could not access TabFirstStartUser" )
     endif
     
-    kontext "TabFirstStartOnlineUpdate"
-    if ( TabFirstStartOnlineUpdate.exists( 2 ) ) then
-        call dialogtest( TabFirstStartOnlineUpdate )
-        CheckForUpdates.unCheck()
-        kontext "WelcomeDialog"
-        NextBtn.click()
+    if (gAutoUpdate) then
+        kontext "TabFirstStartOnlineUpdate"
+        if ( TabFirstStartOnlineUpdate.exists( 2 ) ) then
+            call dialogtest( TabFirstStartOnlineUpdate )
+            CheckForUpdates.unCheck()
+            kontext "WelcomeDialog"
+            NextBtn.click()
+        else
+            warnlog( "Online Update Page is missing" )
+        endif
     else
-        warnlog( "Online Update Page is missing" )
+            qaErrorlog( "Online Update Page is missing" )
     endif
         
     

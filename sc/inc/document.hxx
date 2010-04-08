@@ -45,6 +45,13 @@
 #include <memory>
 #include <map>
 
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+#include <list>
+#include "dpobject.hxx"
+#include "dptabdat.hxx"
+// End Comments
+
 class KeyEvent;
 class OutputDevice;
 class SdrObject;
@@ -256,6 +263,11 @@ private:
     ScRangeName*        pRangeName;
     ScDBCollection*     pDBCollection;
     ScDPCollection*     pDPCollection;
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    std::list<ScDPObject>        m_listDPObjectsInClip;
+    std::list<ScDPTableDataCache*>   m_listDPObjectsCaches;
+    // End Comments
     ScChartCollection*  pChartCollection;
     std::auto_ptr< ScTemporaryChartLock > apTemporaryChartLock;
     ScPatternAttr*      pSelectionAttr;                 // Attribute eines Blocks
@@ -492,6 +504,17 @@ public:
     SC_DLLPUBLIC ScDPCollection*        GetDPCollection();
     ScDPObject*         GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
     ScDPObject*         GetDPAtBlock( const ScRange& rBlock ) const;
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    SC_DLLPUBLIC ScDPTableDataCache*    GetDPObjectCache( long nID );
+    SC_DLLPUBLIC ScDPTableDataCache*    GetUsedDPObjectCache ( ScRange rRange );
+    SC_DLLPUBLIC long                                 AddDPObjectCache( ScDPTableDataCache* pData );
+    SC_DLLPUBLIC void                                 RemoveDPObjectCache( long nID );
+    SC_DLLPUBLIC void                                 RemoveUnusedDPObjectCaches();
+    SC_DLLPUBLIC void                                 GetUsedDPObjectCache( std::list<ScDPTableDataCache*>& usedlist );
+    SC_DLLPUBLIC long                                 GetNewDPObjectCacheId ();
+    // End Comments
+
     SC_DLLPUBLIC ScChartCollection* GetChartCollection() const;
 
     void                StopTemporaryChartLock();
@@ -727,7 +750,9 @@ public:
     SC_DLLPUBLIC void           PutCell(SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell,
                             ULONG nFormatIndex, BOOL bForceTab = FALSE);
                     //  return TRUE = Zahlformat gesetzt
-    SC_DLLPUBLIC BOOL           SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString );
+    SC_DLLPUBLIC BOOL           SetString(
+        SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
+        SvNumberFormatter* pFormatter = NULL, bool bDetectNumberFormat = true );
     SC_DLLPUBLIC void           SetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rVal );
     void            SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const USHORT nError);
 
@@ -822,9 +847,9 @@ public:
     BOOL            IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     BOOL            IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
-    SC_DLLPUBLIC BOOL           HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-                            SCCOL nCol2, SCROW nRow2, SCTAB nTab2, USHORT nMask );
-    SC_DLLPUBLIC BOOL           HasAttrib( const ScRange& rRange, USHORT nMask );
+    SC_DLLPUBLIC bool           HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                                           SCCOL nCol2, SCROW nRow2, SCTAB nTab2, USHORT nMask );
+    SC_DLLPUBLIC bool           HasAttrib( const ScRange& rRange, USHORT nMask );
 
     void            GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                     const SvxBorderLine** ppLeft,

@@ -240,7 +240,7 @@ SwView* lcl_LoadDoc(SwView* pView, const String& rURL)
                 if( pViewShell->ISA(SwView) )
                 {
                     pNewView = PTR_CAST(SwView,pViewShell);
-                    pNewView->GetViewFrame()->GetFrame()->Appear();
+                    pNewView->GetViewFrame()->GetFrame().Appear();
                 }
                 else
                 {
@@ -474,7 +474,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, EM
         {
             SwView* pTargetView = m_pMMConfig->GetTargetView();
             uno::Reference< frame::XFrame > xFrame =
-                m_pView->GetViewFrame()->GetFrame()->GetFrameInterface();
+                m_pView->GetViewFrame()->GetFrame().GetFrameInterface();
             xFrame->getContainerWindow()->setVisible(sal_False);
             DBG_ASSERT(pTargetView, "No target view has been created");
             if(pTargetView)
@@ -520,7 +520,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, EM
             {
                 m_pView2Close = pTargetView;
                 pTargetView->GetViewFrame()->GetTopViewFrame()->GetWindow().Hide();
-                pSourceView->GetViewFrame()->GetFrame()->AppearWithUpdate();
+                pSourceView->GetViewFrame()->GetFrame().AppearWithUpdate();
                 // the current view has be be set when the target is destroyed
                 m_pView = pSourceView;
                 m_pMMConfig->SetTargetView(0);
@@ -559,7 +559,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, EM
                 if(pDocShell->HasName() && !pDocShell->IsModified())
                     m_pMMConfig->GetSourceView()->GetViewFrame()->DoClose();
                 else
-                    m_pMMConfig->GetSourceView()->GetViewFrame()->GetFrame()->Appear();
+                    m_pMMConfig->GetSourceView()->GetViewFrame()->GetFrame().Appear();
             }
             ExecutionFinished( true );
             break;
@@ -593,7 +593,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, CancelHdl, AbstractMailMergeWizard*, EMPTY
         m_pMMConfig->SetTargetView(0);
     }
     if(m_pMMConfig->GetSourceView())
-        m_pMMConfig->GetSourceView()->GetViewFrame()->GetFrame()->AppearWithUpdate();
+        m_pMMConfig->GetSourceView()->GetViewFrame()->GetFrame().AppearWithUpdate();
 
     m_pMMConfig->Commit();
     delete m_pMMConfig;
@@ -959,21 +959,8 @@ void NewXForms( SfxRequest& rReq )
     // initialize XForms
     static_cast<SwDocShell*>( &xDocSh )->GetDoc()->initXForms( true );
 
-    // put document into frame
-    const SfxItemSet* pArgs = rReq.GetArgs();
-    DBG_ASSERT( pArgs, "no arguments in SfxRequest");
-    if( pArgs != NULL )
-    {
-        const SfxPoolItem* pFrameItem = NULL;
-        pArgs->GetItemState( SID_DOCFRAME, FALSE, &pFrameItem );
-        if( pFrameItem != NULL )
-        {
-            SfxFrame* pFrame =
-                static_cast<const SfxFrameItem*>( pFrameItem )->GetFrame();
-            DBG_ASSERT( pFrame != NULL, "no frame?" );
-            pFrame->InsertDocument( xDocSh );
-        }
-    }
+    // load document into frame
+    SfxViewFrame::DisplayNewDocument( *xDocSh, rReq );
 
     // set return value
     rReq.SetReturnValue( SfxVoidItem( rReq.GetSlot() ) );

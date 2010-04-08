@@ -30,7 +30,8 @@
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
-#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
+#include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -59,7 +60,13 @@ namespace drawinglayer
             {
                 const SdrOle2Primitive2D& rCompare = (SdrOle2Primitive2D&)rPrimitive;
 
-                if(getOLEContent() == rCompare.getOLEContent()
+                // #i108636# The standard operator== on two UNO sequences did not work as i
+                // would have expected; it just checks the .is() states and the data type
+                // of the sequence. What i need here is detection of equality of the whole
+                // sequence content, thus i need to use the arePrimitive2DSequencesEqual helper
+                // here instead of the operator== which lead to always returning false and thus
+                // always re-decompositions of the subcontent.
+                if(arePrimitive2DSequencesEqual(getOLEContent(), rCompare.getOLEContent())
                     && getTransform() == rCompare.getTransform()
                     && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute())
                 {
@@ -80,23 +87,29 @@ namespace drawinglayer
             Primitive2DSequence  aRetval;
 
             // create unit outline polygon
-            basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+            const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createUnitPolygon());
 
             // add fill
-            if(!bBehaveCompatibleToPaintVersion && getSdrLFSTAttribute().getFill())
+            if(!bBehaveCompatibleToPaintVersion
+                && !getSdrLFSTAttribute().getFill().isDefault())
             {
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
-                    createPolyPolygonFillPrimitive(basegfx::B2DPolyPolygon(aUnitOutline), getTransform(), *getSdrLFSTAttribute().getFill(), getSdrLFSTAttribute().getFillFloatTransGradient()));
+                    createPolyPolygonFillPrimitive(
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform(),
+                        getSdrLFSTAttribute().getFill(),
+                        getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
 
             // add line
             // #i97981# condition was inverse to purpose. When being compatible to paint version,
             // border needs to be suppressed
-            if(!bBehaveCompatibleToPaintVersion && getSdrLFSTAttribute().getLine())
+            if(!bBehaveCompatibleToPaintVersion
+                && !getSdrLFSTAttribute().getLine().isDefault())
             {
                 // if line width is given, polygon needs to be grown by half of it to make the
                 // outline to be outside of the bitmap
-                if(0.0 != getSdrLFSTAttribute().getLine()->getWidth())
+                if(0.0 != getSdrLFSTAttribute().getLine().getWidth())
                 {
                     // decompose to get scale
                     basegfx::B2DVector aScale, aTranslate;
@@ -104,27 +117,37 @@ namespace drawinglayer
                     getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
 
                     // create expanded range (add relative half line width to unit rectangle)
-                    double fHalfLineWidth(getSdrLFSTAttribute().getLine()->getWidth() * 0.5);
+                    double fHalfLineWidth(getSdrLFSTAttribute().getLine().getWidth() * 0.5);
                     double fScaleX(0.0 != aScale.getX() ? fHalfLineWidth / fabs(aScale.getX()) : 1.0);
                     double fScaleY(0.0 != aScale.getY() ? fHalfLineWidth / fabs(aScale.getY()) : 1.0);
                     const basegfx::B2DRange aExpandedRange(-fScaleX, -fScaleY, 1.0 + fScaleX, 1.0 + fScaleY);
                     basegfx::B2DPolygon aExpandedUnitOutline(basegfx::tools::createPolygonFromRect(aExpandedRange));
 
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(aExpandedUnitOutline, getTransform(), *getSdrLFSTAttribute().getLine()));
+                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                        createPolygonLinePrimitive(
+                            aExpandedUnitOutline,
+                            getTransform(),
+                            getSdrLFSTAttribute().getLine(),
+                            attribute::SdrLineStartEndAttribute()));
                 }
                 else
                 {
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(aUnitOutline, getTransform(), *getSdrLFSTAttribute().getLine()));
+                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                        createPolygonLinePrimitive(
+                            aUnitOutline,
+                            getTransform(),
+                            getSdrLFSTAttribute().getLine(),
+                            attribute::SdrLineStartEndAttribute()));
                 }
             }
             else
             {
                 // if initially no line is defined, create one for HitTest and BoundRect
-                const attribute::SdrLineAttribute aBlackHairline(basegfx::BColor(0.0, 0.0, 0.0));
-                const Primitive2DReference xHiddenLineReference(createPolygonLinePrimitive(aUnitOutline, getTransform(), aBlackHairline));
-                const Primitive2DSequence xHiddenLineSequence(&xHiddenLineReference, 1);
-
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, Primitive2DReference(new HitTestPrimitive2D(xHiddenLineSequence)));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createHiddenGeometryPrimitives2D(
+                        false,
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform()));
             }
 
             // add graphic content
@@ -132,15 +155,26 @@ namespace drawinglayer
 
             // add text, no need to supress to stay compatible since text was
             // always supported by the old paints, too
-            if(getSdrLFSTAttribute().getText())
+            if(!getSdrLFSTAttribute().getText().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(basegfx::B2DPolyPolygon(aUnitOutline), getTransform(), *getSdrLFSTAttribute().getText(), getSdrLFSTAttribute().getLine(), false, false, false));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createTextPrimitive(
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform(),
+                        getSdrLFSTAttribute().getText(),
+                        getSdrLFSTAttribute().getLine(),
+                        false,
+                        false,
+                        false));
             }
 
             // add shadow
-            if(!bBehaveCompatibleToPaintVersion && getSdrLFSTAttribute().getShadow())
+            if(!bBehaveCompatibleToPaintVersion
+                && !getSdrLFSTAttribute().getShadow().isDefault())
             {
-                aRetval = createEmbeddedShadowPrimitive(aRetval, *getSdrLFSTAttribute().getShadow());
+                aRetval = createEmbeddedShadowPrimitive(
+                    aRetval,
+                    getSdrLFSTAttribute().getShadow());
             }
 
             return aRetval;

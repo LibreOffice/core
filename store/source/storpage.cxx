@@ -117,11 +117,6 @@ storeError OStorePageManager::initialize (
 
         // Save RootNode.
         eErrCode = base::saveObjectAt (m_aRoot, rnPageSize);
-        if (eErrCode != store_E_None)
-            return eErrCode;
-
-        // Flush for robustness.
-        (void) base::flush();
     }
 
     // Done.
@@ -857,8 +852,7 @@ storeError OStorePageManager::remove (const OStorePageKey &rKey)
         eErrCode = base::releasePage (aDescr, store_AccessReadWrite);
 
         // Release and free directory page.
-        OStorePageData aPageHead;
-        eErrCode = base::free (aPageHead, aPage.location());
+        eErrCode = base::free (aPage.location());
     }
 
     // Remove entry.

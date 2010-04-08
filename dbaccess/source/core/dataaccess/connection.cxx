@@ -39,6 +39,7 @@
 #include "ContainerMediator.hxx"
 #include "SingleSelectQueryComposer.hxx"
 #include "querycomposer.hxx"
+#include "sdbcoretools.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -73,6 +74,10 @@ using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
 using namespace ::dbtools;
+
+using ::com::sun::star::sdb::tools::XTableName;
+using ::com::sun::star::sdb::tools::XObjectNames;
+using ::com::sun::star::sdb::tools::XDataSourceMetaData;
 
 //........................................................................
 namespace dbaccess
@@ -614,7 +619,7 @@ void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::refresh" );
     if ( _rToBeRefreshed == Reference< XNameAccess >(m_pTables) )
     {
-        if (!m_pTables->isInitialized())
+        if (m_pTables && !m_pTables->isInitialized())
         {
             impl_fillTableFilter();
             // check if our "master connection" can supply tables
@@ -632,7 +637,7 @@ void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
     }
     else if ( _rToBeRefreshed == Reference< XNameAccess >(m_pViews) )
     {
-        if (!m_pViews->isInitialized())
+        if (m_pViews && !m_pViews->isInitialized())
         {
             impl_fillTableFilter();
             // check if our "master connection" can supply tables
@@ -726,6 +731,21 @@ Reference< XInterface > SAL_CALL OConnection::createInstance( const ::rtl::OUStr
         xRet = new OSingleSelectQueryComposer( getTables(),this, m_aContext );
         m_aComposers.push_back(WeakReferenceHelper(xRet));
     }
+    else
+    {
+        if ( _sServiceSpecifier.getLength() )
+        {
+            TSupportServices::iterator aFind = m_aSupportServices.find(_sServiceSpecifier);
+            if ( aFind == m_aSupportServices.end() )
+            {
+                Sequence<Any> aArgs(1);
+                Reference<XConnection> xMy(this);
+                aArgs[0] <<= NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection")),makeAny(xMy));
+                aFind = m_aSupportServices.insert(TSupportServices::value_type(_sServiceSpecifier,m_aContext.createComponentWithArguments(_sServiceSpecifier,aArgs))).first;
+            }
+            return aFind->second;
+        }
+    }
     return Reference< XInterface >(xRet,UNO_QUERY);
 }
 // -----------------------------------------------------------------------------
@@ -795,7 +815,7 @@ void OConnection::impl_loadConnectionTools_throw()
 }
 
 // -----------------------------------------------------------------------------
-Reference< tools::XTableName > SAL_CALL OConnection::createTableName(  ) throw (RuntimeException)
+Reference< XTableName > SAL_CALL OConnection::createTableName(  ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::createTableName" );
     MutexGuard aGuard(m_aMutex);
@@ -806,7 +826,7 @@ Reference< tools::XTableName > SAL_CALL OConnection::createTableName(  ) throw (
 }
 
 // -----------------------------------------------------------------------------
-Reference< tools::XObjectNames > SAL_CALL OConnection::getObjectNames(  ) throw (RuntimeException)
+Reference< XObjectNames > SAL_CALL OConnection::getObjectNames(  ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getObjectNames" );
     MutexGuard aGuard(m_aMutex);
@@ -817,7 +837,7 @@ Reference< tools::XObjectNames > SAL_CALL OConnection::getObjectNames(  ) throw 
 }
 
 // -----------------------------------------------------------------------------
-Reference< tools::XDataSourceMetaData > SAL_CALL OConnection::getDataSourceMetaData(  ) throw (RuntimeException)
+Reference< XDataSourceMetaData > SAL_CALL OConnection::getDataSourceMetaData(  ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getDataSourceMetaData" );
     MutexGuard aGuard(m_aMutex);

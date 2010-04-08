@@ -26,39 +26,28 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="InteractionHandler" oor:package="org.openoffice.ucb" xml:lang="en-US"> <info>
-		<author>TKR</author>
-		<desc >Contains components and templates used for InteractionHandler configuration related data. </desc>
-	</info>
-	<templates>
-		<group oor:name="InteractionHandlerData">
-			<info>
-				<desc>Contains the Service name of the custom InteractionHandler. The listed InteractionHandlers will be called after the "build-in" InteractionHandler sequently.</desc>
-			</info>
-			<prop oor:name="ServiceName" oor:type="xs:string">
-				<info>
-					<desc>Specifies the name of the UNO service to be used to instantiate the InteractionHandler. The type should be com.sun.star.task.XInteractionHandler.</desc>
-				</info>
-			</prop>
-		</group>
-	</templates>
-	<component>
-		<set oor:name="InteractionHandlers" oor:node-type="InteractionHandlerData">
-			<info>
-				<desc>Contains a root entry for InteractionHandler configurations.</desc>
-			</info>
-		</set>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="InteractionHandler" oor:package="org.openoffice.ucb" xml:lang="en-US">
+  <info>
+    <author>TKR</author>
+    <desc>Deprecated. Use org.openoffice.Interaction instead.</desc>
+  </info>
+  <templates>
+    <group oor:name="InteractionHandlerData">
+      <info>
+        <desc>Deprecated. Use org.openoffice.Interaction instead.</desc>
+      </info>
+      <prop oor:name="ServiceName" oor:type="xs:string">
+        <info>
+          <desc>Deprecated. Use org.openoffice.Interaction instead.</desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="InteractionHandlers" oor:node-type="InteractionHandlerData">
+      <info>
+        <desc>Deprecated. Use org.openoffice.Interaction instead.</desc>
+      </info>
+    </set>
+  </component>
 </oor:component-schema>
-
-
-
-
-
-
-
-
-
-
-
-

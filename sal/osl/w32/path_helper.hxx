@@ -108,7 +108,10 @@ public:
     {
         return m_pBuffer;
     }
+
 };
+
+    template< class U, class T > U mingw_reinterpret_cast(LongPathBuffer<T>& a) { return reinterpret_cast<U>(static_cast<T*>(a)); }
 
 } // end namespace osl
 

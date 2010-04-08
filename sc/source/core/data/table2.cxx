@@ -853,10 +853,12 @@ void ScTable::PutCell( const ScAddress& rPos, ScBaseCell* pCell )
 //UNUSED2009-05 }
 
 
-BOOL ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTabP, const String& rString )
+BOOL ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTabP, const String& rString,
+                         SvNumberFormatter* pFormatter, bool bDetectNumberFormat )
 {
     if (ValidColRow(nCol,nRow))
-        return aCol[nCol].SetString( nRow, nTabP, rString );
+        return aCol[nCol].SetString(
+            nRow, nTabP, rString, pDocument->GetAddressConvention(), pFormatter, bDetectNumberFormat );
     else
         return FALSE;
 }
@@ -1188,9 +1190,9 @@ const ScPatternAttr* ScTable::GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, S
 }
 
 
-BOOL ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nMask ) const
+bool ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nMask ) const
 {
-    BOOL bFound=FALSE;
+    bool bFound = false;
     for (SCCOL i=nCol1; i<=nCol2 && !bFound; i++)
         bFound |= aCol[i].HasAttrib( nRow1, nRow2, nMask );
     return bFound;

@@ -73,7 +73,6 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bAutoSavePrompt,
                                         bDocInfSave,
                                         bSaveWorkingSet,
-                                        bSaveDocWins,
                                         bSaveDocView,
                                         bSaveRelINet,
                                         bSaveRelFSys,
@@ -89,7 +88,6 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bROAutoSavePrompt,
                                         bRODocInfSave,
                                         bROSaveWorkingSet,
-                                        bROSaveDocWins,
                                         bROSaveDocView,
                                         bROSaveRelINet,
                                         bROSaveRelFSys,
@@ -115,7 +113,6 @@ public:
     BOOL                    IsAutoSavePrompt() const            { return bAutoSavePrompt; }
     BOOL                    IsDocInfoSave() const               { return bDocInfSave; }
     BOOL                    IsSaveWorkingSet() const            { return bSaveWorkingSet;         }
-    BOOL                    IsSaveDocWins() const               { return bSaveDocWins; }
     BOOL                    IsSaveDocView() const               { return bSaveDocView; }
     BOOL                    IsSaveRelINet() const               { return bSaveRelINet; }
     BOOL                    IsSaveRelFSys() const               { return bSaveRelFSys; }
@@ -133,7 +130,6 @@ public:
     void                    SetAutoSavePrompt( BOOL b );
     void                    SetDocInfoSave( BOOL b );
     void                    SetSaveWorkingSet( BOOL b );
-    void                    SetSaveDocWins( BOOL b );
     void                    SetSaveDocView( BOOL b );
     void                    SetSaveRelINet( BOOL b );
     void                    SetSaveRelFSys( BOOL b );
@@ -207,15 +203,6 @@ void SvtSaveOptions_Impl::SetSaveWorkingSet( BOOL b )
     if (!bROSaveWorkingSet && bSaveWorkingSet!=b)
     {
         bSaveWorkingSet = b;
-        SetModified();
-    }
-}
-
-void SvtSaveOptions_Impl::SetSaveDocWins( BOOL b )
-{
-    if (!bROSaveDocWins && bSaveDocWins!=b)
-    {
-        bSaveDocWins = b;
         SetModified();
     }
 }
@@ -318,9 +305,6 @@ sal_Bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) cons
         case SvtSaveOptions::E_SAVEWORKINGSET :
             bReadOnly = bROSaveWorkingSet;
             break;
-        case SvtSaveOptions::E_SAVEDOCWINS :
-            bReadOnly = bROSaveDocWins;
-            break;
         case SvtSaveOptions::E_SAVEDOCVIEW :
             bReadOnly = bROSaveDocView;
             break;
@@ -356,16 +340,15 @@ sal_Bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) cons
 #define AUTOSAVE            4
 #define PROMPT              5
 #define EDITPROPERTY        6
-#define SAVEDOCWINS         7
-#define SAVEVIEWINFO        8
-#define UNPACKED            9
-#define PRETTYPRINTING      10
-#define WARNALIENFORMAT     11
-#define LOADDOCPRINTER      12
-#define FILESYSTEM          13
-#define INTERNET            14
-#define SAVEWORKINGSET      15
-#define ODFDEFAULTVERSION   16
+#define SAVEVIEWINFO        7
+#define UNPACKED            8
+#define PRETTYPRINTING      9
+#define WARNALIENFORMAT     10
+#define LOADDOCPRINTER      11
+#define FILESYSTEM          12
+#define INTERNET            13
+#define SAVEWORKINGSET      14
+#define ODFDEFAULTVERSION   15
 
 Sequence< OUString > GetPropertyNames()
 {
@@ -378,7 +361,6 @@ Sequence< OUString > GetPropertyNames()
         "Document/AutoSave",
         "Document/AutoSavePrompt",
         "Document/EditProperty",
-        "Document/DocumentWindows",
         "Document/ViewInfo",
         "Document/Unpacked",
         "Document/PrettyPrinting",
@@ -410,7 +392,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bAutoSavePrompt( sal_False )
     , bDocInfSave( sal_False )
     , bSaveWorkingSet( sal_False )
-    , bSaveDocWins( sal_False )
     , bSaveDocView( sal_False )
     , bSaveRelINet( sal_False )
     , bSaveRelFSys( sal_False )
@@ -425,7 +406,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bROAutoSavePrompt( CFG_READONLY_DEFAULT )
     , bRODocInfSave( CFG_READONLY_DEFAULT )
     , bROSaveWorkingSet( CFG_READONLY_DEFAULT )
-    , bROSaveDocWins( CFG_READONLY_DEFAULT )
     , bROSaveDocView( CFG_READONLY_DEFAULT )
     , bROSaveRelINet( CFG_READONLY_DEFAULT )
     , bROSaveRelFSys( CFG_READONLY_DEFAULT )
@@ -514,10 +494,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                                 case SAVEWORKINGSET :
                                     bSaveWorkingSet = bTemp;
                                     bROSaveWorkingSet = pROStates[nProp];
-                                    break;
-                                case SAVEDOCWINS :
-                                    bSaveDocWins = bTemp;
-                                    bROSaveDocWins = pROStates[nProp];
                                     break;
                                 case SAVEVIEWINFO :
                                     bSaveDocView = bTemp;
@@ -660,14 +636,6 @@ void SvtSaveOptions_Impl::Commit()
                 if (!bROSaveWorkingSet)
                 {
                     pValues[nRealCount] <<= bSaveWorkingSet;
-                    pNames[nRealCount] = pOrgNames[i];
-                    ++nRealCount;
-                }
-                break;
-            case SAVEDOCWINS :
-                if (!bROSaveDocWins)
-                {
-                    pValues[nRealCount] <<= bSaveDocWins;
                     pNames[nRealCount] = pOrgNames[i];
                     ++nRealCount;
                 }
@@ -935,16 +903,6 @@ void SvtSaveOptions::SetSaveWorkingSet( sal_Bool b )
 sal_Bool SvtSaveOptions::IsSaveWorkingSet() const
 {
     return pImp->pSaveOpt->IsSaveWorkingSet();
-}
-
-void SvtSaveOptions::SetSaveDocWins( sal_Bool b )
-{
-    pImp->pSaveOpt->SetSaveDocWins( b );
-}
-
-sal_Bool SvtSaveOptions::IsSaveDocWins() const
-{
-    return pImp->pSaveOpt->IsSaveDocWins();
 }
 
 void SvtSaveOptions::SetSaveDocView( sal_Bool b )

@@ -318,16 +318,20 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL$(TNR)ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --input-def $(SHL$(TNR)DEF) \
-        --dllname $(SHL$(TNR)TARGET)$(DLLPOST) \
+    @echo dlltool --dllname $(SHL$(TNR)TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
     @noop $(assign ALL$(TNR)OBJLIST:=$(STDOBJ) $(SHL$(TNR)OBJS) $(SHL$(TNR)LINKRESO) $(shell $(TYPE) /dev/null $(SHL$(TNR)LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB$(TNR)NAME)"!=""	# do not have to include objs
     @noop $(assign DEF$(TNR)OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF$(TNR)OBJLIST) $(assign ALL$(TNR)OBJLIST:=$(ALL$(TNR)OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB$(TNR)NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(ALL$(TNR)OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+.IF "$(SHL$(TNR)DEF)"!=""
+    @echo	--input-def $(SHL$(TNR)DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+.ELSE
+    @echo	$(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+.ENDIF
+    @echo	$(ALL$(TNR)OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) $(SHL$(TNR)OBJS) $(SHL$(TNR)LINKRESO) \
         `$(TYPE) /dev/null $(SHL$(TNR)LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \

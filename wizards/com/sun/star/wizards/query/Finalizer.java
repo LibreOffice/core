@@ -35,19 +35,18 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.uno.*;
 import com.sun.star.wizards.ui.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Finalizer
 {
-
-    private QueryWizard CurUnoDialog;
+    private QueryWizard m_queryWizard;
     private String resQuery;
-    private Object m_aTxtSummary;
     private XTextComponent m_aTxtTitle;
     private XRadioButton xRadioDisplayQuery;
-    private XRadioButton xRadioModifyQuery;
     private QuerySummary CurDBMetaData;
 
-    public Finalizer(QueryWizard _CurUnoDialog, QuerySummary _CurDBMetaData)
+    public Finalizer( QueryWizard i_queryWizard, QuerySummary _CurDBMetaData )
     {
         short curtabindex = (short) (100 * QueryWizard.SOSUMMARY_PAGE);
         String reslblQueryTitle;
@@ -55,17 +54,17 @@ public class Finalizer
         String resoptModifyQuery;
         String resflnSummary;
         String reslblHowGoOn;
-        this.CurUnoDialog = _CurUnoDialog;
+        this.m_queryWizard = i_queryWizard;
         this.CurDBMetaData = _CurDBMetaData;
-        reslblQueryTitle = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 5);
-        resoptDisplayQuery = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 6);
-        resoptModifyQuery = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 7);
-        resflnSummary = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 87);
-        reslblHowGoOn = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 8);
-        resQuery = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 1);
+        reslblQueryTitle = m_queryWizard.m_oResource.getResText(UIConsts.RID_QUERY + 5);
+        resoptDisplayQuery = m_queryWizard.m_oResource.getResText(UIConsts.RID_QUERY + 6);
+        resoptModifyQuery = m_queryWizard.m_oResource.getResText(UIConsts.RID_QUERY + 7);
+        resflnSummary = m_queryWizard.m_oResource.getResText(UIConsts.RID_QUERY + 87);
+        reslblHowGoOn = m_queryWizard.m_oResource.getResText(UIConsts.RID_QUERY + 8);
+        resQuery = m_queryWizard.m_oResource.getResText(UIConsts.RID_QUERY + 1);
         int curHelpIndex = 40955;
 
-        CurUnoDialog.insertLabel("lblQueryTitle", new String[]
+        m_queryWizard.insertLabel("lblQueryTitle", new String[]
                 {
                     "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                 },
@@ -73,7 +72,7 @@ public class Finalizer
                 {
                     new Integer(8), reslblQueryTitle, new Integer(95), new Integer(27), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(52)
                 });
-        m_aTxtTitle = CurUnoDialog.insertTextField("txtQueryTitle", "changeTitle", this, new String[]
+        m_aTxtTitle = m_queryWizard.insertTextField("txtQueryTitle", "changeTitle", this, new String[]
                 {
                     "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                 },
@@ -81,7 +80,7 @@ public class Finalizer
                 {
                     new Integer(12), "HID:" + curHelpIndex++, new Integer(95), new Integer(37), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(90)
                 });
-        CurUnoDialog.insertLabel("lblHowGoOn", new String[]
+        m_queryWizard.insertLabel("lblHowGoOn", new String[]
                 {
                     "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                 },
@@ -89,7 +88,7 @@ public class Finalizer
                 {
                     new Integer(16), reslblHowGoOn, Boolean.TRUE, new Integer(192), new Integer(27), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(112)
                 });
-        this.xRadioDisplayQuery = CurUnoDialog.insertRadioButton("optDisplayQuery",
+        this.xRadioDisplayQuery = m_queryWizard.insertRadioButton("optDisplayQuery",
                 new String[]
                 {
                     "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
@@ -99,7 +98,7 @@ public class Finalizer
                     new Integer(9), "HID:" + curHelpIndex++, resoptDisplayQuery, new Integer(192), new Integer(46), new Short((short) 1), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(118)
                 });
 
-        this.xRadioModifyQuery = CurUnoDialog.insertRadioButton("optModifyQuery",
+        m_queryWizard.insertRadioButton("optModifyQuery",
                 new String[]
                 {
                     "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
@@ -108,7 +107,7 @@ public class Finalizer
                 {
                     new Integer(10), "HID:" + curHelpIndex++, resoptModifyQuery, new Integer(192), new Integer(56), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(118)
                 });
-        CurUnoDialog.insertFixedLine("flnSummary", new String[]
+        m_queryWizard.insertFixedLine("flnSummary", new String[]
                 {
                     "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                 },
@@ -116,7 +115,7 @@ public class Finalizer
                 {
                     new Integer(10), resflnSummary, new Integer(95), new Integer(68), new Integer(8), new Short(curtabindex++), new Integer(209)
                 });
-        m_aTxtSummary = CurUnoDialog.insertTextField("txtSummary", 0, null, new String[]
+        m_queryWizard.insertTextField("txtSummary", 0, null, new String[]
                 {
                     "Height", "HelpURL", "MultiLine", "PositionX", "PositionY", "ReadOnly", "Step", "VScroll", "Width"
                 },
@@ -129,8 +128,9 @@ public class Finalizer
     public void changeTitle()
     {
         final String TitleName = m_aTxtTitle.getText();
-        CurUnoDialog.enableFinishButton(!"".equals(TitleName));
+        m_queryWizard.enableFinishButton( TitleName.length() > 0 );
     }
+
     /* TODO: The title textbox always has to be updated when
     a new Table has been selected if it is clear that the user has not made any input meanwhile
      */
@@ -151,7 +151,7 @@ public class Finalizer
             }
 
             CurDBMetaData.setSummaryString();
-            CurUnoDialog.setControlProperty("txtSummary", "Text", CurDBMetaData.getSummaryString());
+            m_queryWizard.setControlProperty("txtSummary", "Text", CurDBMetaData.getSummaryString());
             return sCurQueryName;
         }
         catch (com.sun.star.uno.Exception exception)
@@ -167,43 +167,30 @@ public class Finalizer
         return sTitle;
     }
 
-    public XComponent[] finish()
+    public String finish()
     {
-        XComponent[] ret = null;
+        CurDBMetaData.oSQLQueryComposer = new SQLQueryComposer(CurDBMetaData);
+        String queryName = getTitle();
+        if  (   CurDBMetaData.oSQLQueryComposer.setQueryCommand( m_queryWizard.xWindow, true, true )
+            &&  CurDBMetaData.createQuery( CurDBMetaData.oSQLQueryComposer, queryName )
+            )
+            return queryName;
+
+        return "";
+    }
+
+    public final boolean displayQueryDesign()
+    {
         try
         {
-            CurDBMetaData.oSQLQueryComposer = new SQLQueryComposer(CurDBMetaData);
-            String queryname = getTitle();
-            boolean bsuccess = CurDBMetaData.oSQLQueryComposer.setQueryCommand(queryname, CurUnoDialog.xWindow, true, true);
-            if (bsuccess)
-            {
-                bsuccess = CurDBMetaData.createQuery(CurDBMetaData.oSQLQueryComposer, queryname);
-                if (bsuccess)
-                {
-                    short igoon = AnyConverter.toShort(Helper.getUnoPropertyValue(UnoDialog.getModel(xRadioDisplayQuery), "State"));
-                    if (igoon == (short) 1)
-                    {
-                        ret = CurDBMetaData.switchtoDataViewmode(queryname,
-                                CommandType.QUERY,
-                                CurUnoDialog.getCurFrame());
-                    }
-                    else
-                    {
-                        ret = CurDBMetaData.switchtoDesignmode(queryname,
-                                CommandType.QUERY,
-                                CurUnoDialog.getCurFrame());
-                    }
-                    CurUnoDialog.xDialog.endExecute();
-                    CurDBMetaData.oSQLQueryComposer = null;
-                    CurDBMetaData = null;
-                    CurUnoDialog = null;
-                }
-            }
+            final short state = AnyConverter.toShort( Helper.getUnoPropertyValue( UnoDialog.getModel( xRadioDisplayQuery ), "State" ) );
+            final boolean viewMode = state == (short)1;
+            return !viewMode;
         }
-        catch (IllegalArgumentException e)
+        catch ( IllegalArgumentException ex )
         {
-            e.printStackTrace();
+            Logger.getLogger( Finalizer.class.getName() ).log( Level.SEVERE, null, ex );
         }
-        return ret;
+        return false;
     }
 }

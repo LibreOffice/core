@@ -44,7 +44,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/topfrm.hxx>
 #include <svtools/printdlg.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
@@ -151,7 +150,7 @@ void ScPreviewShell::Construct( Window* pParent )
 
 ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
                                 SfxViewShell* pOldSh ) :
-    SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
+    SfxViewShell( pViewFrame, SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
     pDocShell( (ScDocShell*)pViewFrame->GetObjectShell() ),
     nSourceDesignMode( SC_FORCEMODE_NONE ),
     pAccessibilityBroadcaster( NULL )

@@ -2790,9 +2790,6 @@ void SwTabFrm::MakeAll()
                         }
                         else if ( GetFollow() == GetNext() )
                             ((SwTabFrm*)GetFollow())->MoveFwd( TRUE, FALSE );
-                        ViewShell *pSh;
-                        if ( 0 != (pSh = GetShell()) )
-                            pSh->Imp()->ResetScroll();
                     }
                     continue;
                 }

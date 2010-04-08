@@ -70,8 +70,12 @@ public:
     DrawDocShell (
         SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
         BOOL bSdDataObj=FALSE,
-        DocumentType=DOCUMENT_TYPE_IMPRESS,
-        BOOL bScriptSupport=TRUE);
+        DocumentType=DOCUMENT_TYPE_IMPRESS);
+
+    DrawDocShell (
+        const sal_uInt64 nModelCreationFlags,
+        BOOL bSdDataObj=FALSE,
+        DocumentType=DOCUMENT_TYPE_IMPRESS);
 
     DrawDocShell (
         SdDrawDocument* pDoc,

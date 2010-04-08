@@ -38,12 +38,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile2.pmk
 
 # --- #105371#
-.IF "$(COM)"=="GCC"
-CFLAGS += -D_WIN32_WINNT=0x0501
-.ELSE
-CFLAGS += -DWINVER=0x0400 -D_WIN32_WINNT=0x0501
-
-.ENDIF
+CDEFS +=-U_WIN32_WINNT -D_WIN32_WINNT=0x0501
 
 # --- Files --------------------------------------------------------
 

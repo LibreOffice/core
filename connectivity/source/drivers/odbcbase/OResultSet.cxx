@@ -466,11 +466,9 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
         return nRet;
     }
 
-    ::std::map<sal_Int32,SWORD>::iterator aFind = m_aODBCColumnTypes.find(columnIndex);
-    if ( aFind == m_aODBCColumnTypes.end() )
-        aFind = m_aODBCColumnTypes.insert(::std::map<sal_Int32,SWORD>::value_type(columnIndex,OResultSetMetaData::getColumnODBCType(m_pStatement->getOwnConnection(),m_aStatementHandle,*this,columnIndex))).first;
+    const SWORD nColumnType = impl_getColumnType_nothrow(columnIndex);
 
-    switch(aFind->second)
+    switch(nColumnType)
     {
         case SQL_WVARCHAR:
         case SQL_WCHAR:
@@ -479,7 +477,7 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
         case SQL_CHAR:
         case SQL_LONGVARCHAR:
         {
-            ::rtl::OUString aRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,aFind->second,m_bWasNull,**this,m_nTextEncoding);
+            ::rtl::OUString aRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,nColumnType,m_bWasNull,**this,m_nTextEncoding);
             return Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aRet.getStr()),sizeof(sal_Unicode)*aRet.getLength());
         }
         default:
@@ -624,10 +622,8 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
     else
     {
         checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-        ::std::map<sal_Int32,SWORD>::iterator aFind = m_aODBCColumnTypes.find(columnIndex);
-        if ( aFind == m_aODBCColumnTypes.end() )
-            aFind = m_aODBCColumnTypes.insert(::std::map<sal_Int32,SWORD>::value_type(columnIndex,OResultSetMetaData::getColumnODBCType(m_pStatement->getOwnConnection(),m_aStatementHandle,*this,columnIndex))).first;
-        nRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,aFind->second,m_bWasNull,**this,m_nTextEncoding);
+        const SWORD nColumnType = impl_getColumnType_nothrow(columnIndex);
+        nRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,nColumnType,m_bWasNull,**this,m_nTextEncoding);
     }
     return nRet;
 }
@@ -1502,10 +1498,8 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
             case DataType::LONGVARCHAR:
             case DataType::CLOB:
                 {
-                    ::std::map<sal_Int32,SWORD>::iterator aFind = m_aODBCColumnTypes.find(nColumn);
-                    if ( aFind == m_aODBCColumnTypes.end() )
-                        aFind = m_aODBCColumnTypes.insert(::std::map<sal_Int32,SWORD>::value_type(nColumn,OResultSetMetaData::getColumnODBCType(m_pStatement->getOwnConnection(),m_aStatementHandle,*this,nColumn))).first;
-                    *pColumn = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,nColumn,aFind->second,m_bWasNull,**this,m_nTextEncoding);
+                    const SWORD nColumnType = impl_getColumnType_nothrow(nColumn);
+                    *pColumn = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,nColumn,nColumnType,m_bWasNull,**this,m_nTextEncoding);
                 }
                 break;
             case DataType::BIGINT:
@@ -1749,5 +1743,13 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
         }
         while (nRet == SQL_NEED_DATA);
     }
+}
+// -----------------------------------------------------------------------------
+SWORD OResultSet::impl_getColumnType_nothrow(sal_Int32 columnIndex)
+{
+    ::std::map<sal_Int32,SWORD>::iterator aFind = m_aODBCColumnTypes.find(columnIndex);
+    if ( aFind == m_aODBCColumnTypes.end() )
+        aFind = m_aODBCColumnTypes.insert(::std::map<sal_Int32,SWORD>::value_type(columnIndex,OResultSetMetaData::getColumnODBCType(m_pStatement->getOwnConnection(),m_aStatementHandle,*this,columnIndex))).first;
+    return aFind->second;
 }
 

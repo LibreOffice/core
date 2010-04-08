@@ -540,7 +540,7 @@ sub set_languages_in_property_table
 
     if ($installer::globals::sofficeiconadded)  # set in shortcut.pm
     {
-        $onepropertyline =  "ARPPRODUCTICON" . "\t" . "soffice.exe" . "\n";
+        $onepropertyline =  "ARPPRODUCTICON" . "\t" . "soffice.ico" . "\n";
         push(@{$propertyfile}, $onepropertyline);
     }
 

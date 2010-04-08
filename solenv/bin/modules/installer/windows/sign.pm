@@ -929,7 +929,7 @@ sub get_ddf_file_header
     push(@{$ddffileref} ,$oneline);
     $oneline = ".Set ReservePerCabinetSize=128\n";  # This reserves space for a digital signature.
     push(@{$ddffileref} ,$oneline);
-    $oneline = ".Set MaxDiskSize=CDROM\n";          # This allows the .cab file to be as large as needed.
+    $oneline = ".Set MaxDiskSize=2147483648\n";     # This allows the .cab file to get a size of 2 GB.
     push(@{$ddffileref} ,$oneline);
     $oneline = ".Set CompressionType=LZX\n";
     push(@{$ddffileref} ,$oneline);

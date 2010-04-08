@@ -326,7 +326,8 @@ sdr::properties::BaseProperties& SdrObject::GetProperties() const
 {
     if(!mpProperties)
     {
-        ((SdrObject*)this)->mpProperties = ((SdrObject*)this)->CreateObjectSpecificProperties();
+        const_cast< SdrObject* >(this)->mpProperties =
+            const_cast< SdrObject* >(this)->CreateObjectSpecificProperties();
     }
 
     return *mpProperties;
@@ -361,7 +362,8 @@ sdr::contact::ViewContact& SdrObject::GetViewContact() const
 {
     if(!mpViewContact)
     {
-        ((SdrObject*)this)->mpViewContact = ((SdrObject*)this)->CreateObjectSpecificViewContact();
+        const_cast< SdrObject* >(this)->mpViewContact =
+            const_cast< SdrObject* >(this)->CreateObjectSpecificViewContact();
     }
 
     return *mpViewContact;
@@ -370,51 +372,6 @@ sdr::contact::ViewContact& SdrObject::GetViewContact() const
 // DrawContact support: Methods for handling Object changes
 void SdrObject::ActionChanged() const
 {
-    // Forward change call to MasterPageDescriptor if BackgroundObject was changed
-    const SdrPage* pObjectsPage = GetPage();
-
-    if(pObjectsPage)
-    {
-        // do the necessary ActionChange() forwards when a MasterPageBackgroundObject
-        // gets changed. This can be removed as soon as the MasterPageBackgroundObject
-        // handling is replaced with the proper ItemSet handling at the SdrPages. The
-        // needed ActionChanged calls will then be triggered by changing those ItemSets.
-        if(pObjectsPage->IsMasterPage())
-        {
-            if(IsMasterPageBackgroundObject())
-            {
-                SdrModel* pObjectsModel = GetModel();
-
-                if(pObjectsModel)
-                {
-                    const sal_uInt16 nCount(pObjectsModel->GetPageCount());
-
-                    for(sal_uInt16 a(0); a < nCount; a++)
-                    {
-                        const SdrPage* pUserPage = pObjectsModel->GetPage(a);
-
-                        if(pUserPage && pUserPage->TRG_HasMasterPage())
-                        {
-                            SdrPage& rUsedMasterPage = pUserPage->TRG_GetMasterPage();
-
-                            if(&rUsedMasterPage == pObjectsPage)
-                            {
-                                pUserPage->TRG_GetMasterPageDescriptorViewContact().ActionChanged();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        else
-        {
-            if(pObjectsPage->TRG_HasMasterPage() && pObjectsPage->GetBackgroundObj() == this)
-            {
-                pObjectsPage->TRG_GetMasterPageDescriptorViewContact().ActionChanged();
-            }
-        }
-    }
-
     // Do necessary ViewContact actions
     GetViewContact().ActionChanged();
 }
@@ -3110,26 +3067,6 @@ void SdrObject::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const ba
 
     // set BaseRect
     SetSnapRect(aBaseRect);
-}
-
-// #111111#
-// Needed again and again i will now add a test for finding out if
-// this object is the BackgroundObject of the page.
-sal_Bool SdrObject::IsMasterPageBackgroundObject() const
-{
-    if(pObjList
-        && pObjList == pPage
-        && pPage->IsMasterPage()
-        && pObjList->GetObj(0) == this
-        && 1L == (pPage->GetPageNum() % 2))
-    {
-        // 0'th object, directly on page, page is MasterPage,
-        // MasterPagePageNum is 1,3,5,...
-        // --> It's the background object (!)
-        return sal_True;
-    }
-
-    return sal_False;
 }
 
 // #116168#

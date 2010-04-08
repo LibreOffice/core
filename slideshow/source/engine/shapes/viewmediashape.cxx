@@ -272,7 +272,7 @@ namespace slideshow
         {
             if( !mxPlayer.is() && mxShape.is() )
             {
-                ENSURE_OR_RETURN( mpViewLayer->getCanvas(),
+                ENSURE_OR_RETURN_FALSE( mpViewLayer->getCanvas(),
                                    "ViewMediaShape::update(): Invalid layer canvas" );
 
                 uno::Reference< rendering::XCanvas > xCanvas( mpViewLayer->getCanvas()->getUNOCanvas() );

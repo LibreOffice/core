@@ -209,7 +209,7 @@ OutlineView::OutlineView( DrawDocShell* pDocSh, ::Window* pWindow, OutlineViewSh
     maBulletFont.SetShadow(FALSE);
 
 
-    Reference<XFrame> xFrame (mpOutlineViewShell->GetViewShellBase().GetFrame()->GetTopFrame()->GetFrameInterface(), UNO_QUERY);
+    Reference<XFrame> xFrame (mpOutlineViewShell->GetViewShellBase().GetFrame()->GetTopFrame().GetFrameInterface(), UNO_QUERY);
 
     const OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( ".uno:ShowSlide" ));
     maSlideImage = GetImage( xFrame, aSlotURL, true, false /* todo, hc mode */ );

@@ -68,6 +68,7 @@ namespace com
 #include <svl/brdcst.hxx>
 #include <tools/list.hxx>
 #include <svl/poolitem.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 
 class SvBorder;
 class SfxWorkWindow;
@@ -83,31 +84,18 @@ class SfxMedium;
 class SfxFrameHistory_Impl;
 class SfxDispatcher;
 class SfxMedium;
-class SfxCancellable;
 class Rectangle;
 class SfxRequest;
 class SfxUnoControllerItem;
 class SvCompatWeakHdl;
+class SystemWindow;
 
 typedef SfxFrame* SfxFramePtr;
 class SfxFrameArr_Impl;
 
 DECLARE_LIST( TargetList, String* )
 
-#define SFXFRAME_INTERNAL     0x0001
-#define SFXFRAME_EXTERNAL     0x0002
-#define SFXFRAME_OWNSDOCUMENT 0x0004
-#define SFXFRAME_PLUGIN       0x0008
-#define SFXFRAME_HASTITLE     0x0010
-#define SFXFRAME_SERVER       0x0020 // Is es ein Frame, der in einem Container steckt ?
-#define SFXFRAME_FRAMESET     0x0040
-
-#define BROWSE_NORMAL         0
-#define BROWSE_FORWARD        1
-#define BROWSE_BACKWARD       2
-#define NO_BROWSE             3
-#define BROWSE_FRAME          4
-#define BROWSE_MAX_MODE       10
+#define SFXFRAME_HASTITLE     0x0001
 
 //==========================================================================
 // Ein SfxFrame ist eine Verwaltungsklasse f"ur Fenster und deren Inhalte.
@@ -123,82 +111,63 @@ DECLARE_LIST( TargetList, String* )
 //==========================================================================
 
 class SfxFrameArr_Impl;
-class SfxCancelManager;
 struct SfxFramePickEntry_Impl;
-class SfxUnoFrame;
 class SFX2_DLLPUBLIC SfxFrame
 {
     friend class SfxFrameIterator;
-    friend struct SfxFramePickEntry_Impl;
-    friend class SfxUnoFrame;
-    friend class SfxViewFrame; /*HACK!*/
+    friend class SfxFrameWindow_Impl;
 
 private:
-    String              aName;
     SfxFrame*           pParentFrame;
     SfxFrameArr_Impl*   pChildArr;
     SfxFrame_Impl*      pImp;
-    SfxUnoFrame*        pUnoImp;
-
-    SAL_DLLPRIVATE void UpdateUndoHistory_Impl(
-                            SfxObjectShell *pDocSh, const String* pNew, const String *pTitle = 0  );
-    SAL_DLLPRIVATE void UpdateCurrentHistory_Impl(
-                            SfxObjectShell *pDocSh, const String* pNew  );
+    Window*             pWindow;
 
 protected:
-    virtual sal_Bool    Close() = 0;
+    sal_Bool            Close();
     virtual             ~SfxFrame();
 
-//#if 0 // _SOLAR__PRIVATE
-    SAL_DLLPRIVATE void SetCurrentDocument_Impl( SfxObjectShell* );
-    SAL_DLLPRIVATE void InsertChildFrame_Impl( SfxFrame*, sal_uInt16 nPos = 0 );
-    SAL_DLLPRIVATE void RemoveChildFrame_Impl( sal_uInt16 nPos );
     SAL_DLLPRIVATE void RemoveChildFrame_Impl( SfxFrame* );
-    SAL_DLLPRIVATE void SetIsTop_Impl( sal_Bool bIsTop = sal_True );
-//#endif
+
+                        SfxFrame( );    // not implemented
+    SAL_DLLPRIVATE      SfxFrame( Window& i_rContainerWindow, bool bHidden );
 
 public:
                         TYPEINFO();
-                        SfxFrame(SfxFrame* pParent = 0);
+
+    static SfxFrame*    Create( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+                        CreateBlankFrame();
+    static SfxFrame*    Create( SfxObjectShell& rDoc, Window& rWindow, USHORT nViewId, bool bHidden );
 
     SvCompatWeakHdl*    GetHdl();
-    virtual Window&     GetWindow() const = 0;
+    Window&             GetWindow() const;
     void                CancelTransfers( sal_Bool bCancelLoadEnv = sal_True );
     sal_Bool            DoClose();
     sal_uInt16          GetChildFrameCount() const;
     SfxFrame*           GetChildFrame( sal_uInt16 nPos ) const;
-    void                SetFrameName( const String& rName );
-    const String&       GetFrameName() const
-                        { return aName; }
     SfxFrame*           GetParentFrame() const
                         { return pParentFrame; }
-    String              GetContent() const;
+
+    void                SetPresentationMode( BOOL bSet );
+    SystemWindow*       GetSystemWindow() const;
 
     static SfxFrame*    GetFirst();
     static SfxFrame*    GetNext( SfxFrame& );
 
-    virtual sal_Bool    InsertDocument( SfxObjectShell *pDoc );
-    const SfxPoolItem*  LoadDocumentSynchron( SfxItemSet& aSet );
-    void                DocumentInserted( SfxObjectShell* pDoc );
+    static const SfxPoolItem*
+                        OpenDocumentSynchron( SfxItemSet& aSet, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rTargetFrame );
 
     SfxBroadcaster&     GetBroadcaster() const;
     SfxObjectShell*     GetCurrentDocument() const;
     SfxViewFrame*       GetCurrentViewFrame() const;
-    SfxFrame*           GetTopFrame() const;
+    SfxFrame&           GetTopFrame() const;
     sal_Bool            IsParent( SfxFrame* ) const;
 
-    SfxFrame*           findFrame( const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags);
-    SfxFrame*           SearchFrame( const String&, SfxMedium* pMedium = 0 );
     sal_uInt32          GetFrameType() const;
     void                GetTargetList( TargetList& ) const;
-    void                ClearHistory();
     SAL_DLLPRIVATE SfxFrame* GetContainingDocFrame_Impl( SfxFrame* pSelf );
     sal_Bool            IsTop() const;
-    sal_Bool            CloseChildFrames();
-    void                UpdatePickEntries();
-    void                UpdatePickEntries( const ::com::sun::star::uno::Any& rValue );
-    void                UpdateHistory( const ::rtl::OUString& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs, const ::rtl::OUString& rTitle );
-    void                UpdateHistory(SfxObjectShell*, const String*pNew = 0 );
     void                UpdateDescriptor( SfxObjectShell *pDoc );
     void                Resize();
     sal_Bool            HasComponent() const;
@@ -212,68 +181,30 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
                             GetController() const;
 
-    static sal_Bool     LoadSfxComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > &,
-                            const ::rtl::OUString&,
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&,
-                            const SfxObjectFactory* );
-
     sal_Bool            IsInPlace() const;
 
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE sal_Bool DoClose_Impl();
-    SAL_DLLPRIVATE void SetFrameInterface_Impl( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+    SAL_DLLPRIVATE void SetFrameInterface_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
     SAL_DLLPRIVATE void ReleasingComponent_Impl( sal_Bool bSet );
-    SAL_DLLPRIVATE const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >
-                            GetInterceptor_Impl();
-    SAL_DLLPRIVATE void Clear_Impl();
-    SAL_DLLPRIVATE sal_uInt16 LoadComponent_Impl( const ::rtl::OUString& rURL,
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrameLoader > & rLoader,
-                            SfxItemSet* pSet=0, sal_Bool bDontClose=sal_False );
-    SAL_DLLPRIVATE void LoadFinished_Impl();
-    DECL_DLLPRIVATE_STATIC_LINK(   SfxFrame, BindingHasNewPart_Impl, void* );
-    SAL_DLLPRIVATE SfxCancelManager* GetCancelManager() const;
     SAL_DLLPRIVATE void GetViewData_Impl();
-    SAL_DLLPRIVATE sal_Bool CheckContentForLoad_Impl();
-    SAL_DLLPRIVATE sal_Bool ExecuteHistoryMenu_Impl( sal_uInt16 nWnich, const Rectangle& rRect, sal_uInt16 nFlags=0 );
-    SAL_DLLPRIVATE void ActivatePickEntry_Impl( SfxFramePickEntry_Impl*, sal_uInt16 nMode, SfxFrameDescriptor *pD = NULL );
-    SAL_DLLPRIVATE void CopyHistory_Impl( SfxFrame *pFrame ) const;
-    SAL_DLLPRIVATE SfxFrame* SearchChildrenForName_Impl( const String&, sal_Bool bDeep = sal_True ) const;
     SAL_DLLPRIVATE void SetFrameType_Impl( sal_uInt32 );
-    SAL_DLLPRIVATE void Activate_Impl( sal_Bool bBeamerOn );
-    SAL_DLLPRIVATE void Deactivate_Impl();
     SAL_DLLPRIVATE sal_uInt16 PrepareClose_Impl( sal_Bool bUI, sal_Bool bForBrowsing=sal_False );
     SAL_DLLPRIVATE sal_Bool DocIsModified_Impl();
     SAL_DLLPRIVATE void SetCurrentViewFrame_Impl( SfxViewFrame* );
-    SAL_DLLPRIVATE SfxFrame* SearchFrame_Impl( sal_uInt16, sal_Bool bDeep=sal_False );
-    SAL_DLLPRIVATE SfxFrame* SearchFrame_Impl( const String&, sal_Bool bDeep=sal_False );
-    SAL_DLLPRIVATE void SetFrameId_Impl( sal_uInt16 );
-    SAL_DLLPRIVATE sal_uInt16 GetFrameId_Impl() const;
-    SAL_DLLPRIVATE void SetFrameIdName_Impl( const String& );
     SAL_DLLPRIVATE sal_Bool IsClosing_Impl() const;
     SAL_DLLPRIVATE void SetIsClosing_Impl();
-    SAL_DLLPRIVATE sal_Bool BrowseInFrame( int nDelta );
-    SAL_DLLPRIVATE sal_Bool Browse( sal_Bool bForward, sal_uInt16 nDelta = 1, sal_Bool bNewFrame=sal_False );
-    SAL_DLLPRIVATE sal_Bool CanBrowseForward() const;
-    SAL_DLLPRIVATE sal_Bool CanBrowseBackward() const;
 
                         // Methoden f"ur den Zugriff auf das aktuelle Set
     SAL_DLLPRIVATE void SetDescriptor( SfxFrameDescriptor* );
     SAL_DLLPRIVATE SfxFrameDescriptor* GetDescriptor() const;
 
     SAL_DLLPRIVATE void Lock_Impl( sal_Bool bLock );
-    SAL_DLLPRIVATE sal_uInt16 GetLockCount_Impl() const;
-    //sal_Bool            IsLocked_Impl() const
-    //                  { return GetLockCount_Impl() > 0; }
-    SAL_DLLPRIVATE void CloseOnUnlock_Impl();
-    SAL_DLLPRIVATE SfxViewFrame* ActivateChildFrame_Impl();
     SAL_DLLPRIVATE SfxDispatcher* GetDispatcher_Impl() const;
     SAL_DLLPRIVATE sal_Bool IsAutoLoadLocked_Impl() const;
 
     SAL_DLLPRIVATE static void InsertTopFrame_Impl( SfxFrame* pFrame );
     SAL_DLLPRIVATE static void RemoveTopFrame_Impl( SfxFrame* pFrame );
-    SAL_DLLPRIVATE void SetItemSet_Impl( const SfxItemSet* pSet );
-    SAL_DLLPRIVATE const SfxItemSet* GetItemSet_Impl();
     SAL_DLLPRIVATE void SetOwnsBindings_Impl( sal_Bool bSet );
     SAL_DLLPRIVATE sal_Bool OwnsBindings_Impl() const;
     SAL_DLLPRIVATE void InvalidateUnoControllers_Impl();
@@ -284,15 +215,19 @@ public:
     SAL_DLLPRIVATE Rectangle GetTopOuterRectPixel_Impl() const;
     SAL_DLLPRIVATE void CreateWorkWindow_Impl();
     SAL_DLLPRIVATE void SetWorkWindow_Impl( SfxWorkWindow* pWorkwin );
-    SAL_DLLPRIVATE const SvBorder& GetBorder_Impl() const;
     SAL_DLLPRIVATE void GrabFocusOnComponent_Impl();
-    SAL_DLLPRIVATE void ReFill_Impl( const SfxFrameSetDescriptor* pSet );
-    SAL_DLLPRIVATE void LockFocus_Impl( sal_Bool bLock );
-    SAL_DLLPRIVATE sal_Bool IsFocusLocked_Impl() const;
-    SAL_DLLPRIVATE void CloseDocument_Impl();
     SAL_DLLPRIVATE void SetInPlace_Impl( sal_Bool );
-//  sal_Bool            IsPlugin_Impl() const;
+
+    SAL_DLLPRIVATE void PrepareForDoc_Impl( SfxObjectShell& i_rDoc );
+    SAL_DLLPRIVATE void LockResize_Impl( BOOL bLock );
+    SAL_DLLPRIVATE void SetMenuBarOn_Impl( BOOL bOn );
+    SAL_DLLPRIVATE BOOL IsMenuBarOn_Impl() const;
+    SAL_DLLPRIVATE SystemWindow* GetTopWindow_Impl() const;
+    SAL_DLLPRIVATE void PositionWindow_Impl( const Rectangle& rWinArea ) const;
+    SAL_DLLPRIVATE bool IsMarkedHidden_Impl() const;
 //#endif
+private:
+    SAL_DLLPRIVATE void Construct_Impl();
 };
 
 SV_DECL_COMPAT_WEAK( SfxFrame )
@@ -350,7 +285,24 @@ public:
     ::com::sun::star::uno::Any  GetValue() const
                                 { return aValue; }
     virtual int                 operator==( const SfxPoolItem& ) const;
-    virtual String              GetValueText() const;
+    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
+    virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+};
+
+class SFX2_DLLPUBLIC SfxUnoFrameItem : public SfxPoolItem
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+                                m_xFrame;
+
+public:
+                                TYPEINFO();
+                                SfxUnoFrameItem();
+                                SfxUnoFrameItem( sal_uInt16 nWhich, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame );
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&
+                                GetFrame() const
+                                { return m_xFrame; }
+    virtual int                 operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
     virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );

@@ -47,6 +47,14 @@ exception LicenseException : com::sun::star::uno::Exception
     /** contains the text of the license.
     */
     string Text;
+
+    /** indicates if the user can prevent to show the license
+
+    Represents the attribute value
+    /description/registration/simple-license/@suppress-if-required
+    from the description.xml
+    */
+    boolean SuppressIfRequired;
 };
 
 }; }; }; };

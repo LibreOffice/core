@@ -123,6 +123,12 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------------
+    void OQueryContainerWindow::forceInitialView()
+    {
+        return m_pViewSwitch->forceInitialView();
+    }
+
+    // -----------------------------------------------------------------------------
     void OQueryContainerWindow::resizeAll( const Rectangle& _rPlayground )
     {
         Rectangle aPlayground( _rPlayground );

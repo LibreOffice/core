@@ -48,6 +48,7 @@
 
 #include "global.hxx"
 #include "address.hxx"
+#include "dpglobal.hxx"
 
 #include <vector>
 #include <boost/shared_ptr.hpp>

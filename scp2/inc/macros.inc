@@ -501,7 +501,17 @@ End
         ModuleID = modid; \
         Subkey = STRING(Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations); \
         Name = STRING(CONCAT2(.,key)); \
-        Value = STRING(CONCAT3(opendocument.,doc_type,Document.1)); \
+        Value = STRING(CONCAT3(soffice.Star,doc_type,Document.6)); \
+        Styles = (); \
+    End
+
+#define REGISTRY_ENTRY_TEMPLATE_CAPABILITIES(name,modid,key,doc_type) \
+    RegistryItem CONCAT2(gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_,name) \
+        ParentID = PREDEFINED_HKEY_LOCAL_MACHINE; \
+        ModuleID = modid; \
+        Subkey = STRING(Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations); \
+        Name = STRING(CONCAT2(.,key)); \
+        Value = STRING(CONCAT3(soffice.Star,doc_type,Template.6)); \
         Styles = (); \
     End
 
@@ -517,6 +527,19 @@ End
     REGISTRY_ENTRY_PRINT_CMD(name,modid,app) \
     REGISTRY_ENTRY_PRINTTO_CMD(name,modid,app) \
     REGISTRY_ENTRY_CAPABILITIES(name,modid,key,doc_type) \
+
+#define CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION(name,modid,key,cond,disp_name,icon_id,app,default,doc_type) \
+    CONDITIONAL_MODULE_ENTRY(name,modid) \
+    REGISTRY_ENTRY_OPEN_WITH(name,cond,doc_type,modid,key) \
+    CONDITIONAL_REGISTRY_ENTRY_EXT(name,cond,key) \
+    REGISTRY_ENTRY_DOC(name,modid,disp_name) \
+    REGISTRY_ENTRY_ICON(name,modid,icon_id) \
+    REGISTRY_ENTRY_SHELL(name,default,modid) \
+    REGISTRY_ENTRY_NEW_CMD(name,modid,app) \
+    REGISTRY_ENTRY_OPEN_CMD(name,modid,app) \
+    REGISTRY_ENTRY_PRINT_CMD(name,modid,app) \
+    REGISTRY_ENTRY_PRINTTO_CMD(name,modid,app) \
+    REGISTRY_ENTRY_TEMPLATE_CAPABILITIES(name,modid,key,doc_type) \
 
 // ---------------------------------------
 

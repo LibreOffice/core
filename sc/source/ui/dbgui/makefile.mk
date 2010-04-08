@@ -49,6 +49,7 @@ SLOFILES =	\
     $(SLO)$/pfiltdlg.obj	\
     $(SLO)$/dbnamdlg.obj	\
     $(SLO)$/expftext.obj	\
+    $(SLO)$/textimportoptions.obj \
     $(SLO)$/subtdlg.obj		\
     $(SLO)$/tpsubt.obj		\
     $(SLO)$/fieldwnd.obj	\
@@ -83,6 +84,7 @@ EXCEPTIONSFILES= \
 
 SRS1NAME=$(TARGET)
 SRC1FILES =  \
+    textimportoptions.src		\
         pivot.src		\
         pvfundlg.src	\
         dpgroupdlg.src	\

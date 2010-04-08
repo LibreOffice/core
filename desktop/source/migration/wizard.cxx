@@ -61,11 +61,14 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
+#include <com/sun/star/awt/WindowDescriptor.hpp>
+#include <com/sun/star/awt/WindowAttribute.hpp>
 
 using namespace svt;
 using namespace rtl;
 using namespace osl;
 using namespace utl;
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -77,12 +80,37 @@ using namespace com::sun::star::container;
 namespace desktop
 {
 
-const FirstStartWizard::WizardState FirstStartWizard::STATE_WELCOME = 0;
-const FirstStartWizard::WizardState FirstStartWizard::STATE_LICENSE = 1;
-const FirstStartWizard::WizardState FirstStartWizard::STATE_MIGRATION = 2;
-const FirstStartWizard::WizardState FirstStartWizard::STATE_USER = 3;
+const FirstStartWizard::WizardState FirstStartWizard::STATE_WELCOME      = 0;
+const FirstStartWizard::WizardState FirstStartWizard::STATE_LICENSE      = 1;
+const FirstStartWizard::WizardState FirstStartWizard::STATE_MIGRATION    = 2;
+const FirstStartWizard::WizardState FirstStartWizard::STATE_USER         = 3;
 const FirstStartWizard::WizardState FirstStartWizard::STATE_UPDATE_CHECK = 4;
 const FirstStartWizard::WizardState FirstStartWizard::STATE_REGISTRATION = 5;
+
+static uno::Reference< uno::XComponentContext > getComponentContext( const uno::Reference< lang::XMultiServiceFactory >& rFactory )
+{
+    uno::Reference< uno::XComponentContext > rContext;
+    uno::Reference< beans::XPropertySet > rPropSet( rFactory, uno::UNO_QUERY );
+    uno::Any a = rPropSet->getPropertyValue(
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) );
+    a >>= rContext;
+    return rContext;
+}
+
+static sal_Int32 getBuildId()
+{
+    ::rtl::OUString aDefault;
+    ::rtl::OUString aBuildIdData = utl::Bootstrap::getBuildIdData( aDefault );
+    sal_Int32 nBuildId( 0 );
+    sal_Int32 nIndex1 = aBuildIdData.indexOf(':');
+    sal_Int32 nIndex2 = aBuildIdData.indexOf(')');
+    if (( nIndex1 > 0 ) && ( nIndex2 > 0 ) && ( nIndex2-1 > nIndex1+1 ))
+    {
+        ::rtl::OUString aBuildId = aBuildIdData.copy( nIndex1+1, nIndex2-nIndex1-1 );
+        nBuildId = aBuildId.toInt32();
+    }
+    return nBuildId;
+}
 
 WizardResId::WizardResId( USHORT nId ) :
     ResId( nId, *FirstStartWizard::GetResManager() )
@@ -118,7 +146,47 @@ FirstStartWizard::FirstStartWizard( Window* pParent, sal_Bool bLicenseNeedsAccep
 //  enableState(STATE_USER, sal_False);
 //  enableState(STATE_REGISTRATION, sal_False);
 
-    ShowButtonFixedLine(sal_True);
+    try
+    {
+        Point pos(5, 210 );
+        Size size(11, 11 );
+
+        pos  = LogicToPixel( pos, MAP_APPFONT );
+        size = LogicToPixel( size, MAP_APPFONT );
+
+        uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+        uno::Reference< awt::XToolkit > xToolkit(
+            uno::Reference< lang::XMultiComponentFactory >(
+                xFactory, uno::UNO_QUERY_THROW)->
+                    createInstanceWithContext(
+                        rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit")),
+                        getComponentContext(xFactory)),
+                        uno::UNO_QUERY_THROW);
+
+        m_xThrobber = uno::Reference< awt::XThrobber >(
+            xToolkit->createWindow(
+                awt::WindowDescriptor(
+                    awt::WindowClass_SIMPLE,
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Throbber")),
+                    GetComponentInterface(), 0,
+                    awt::Rectangle(
+                        pos.X(), pos.Y(), size.Width(), size.Height()),
+                        awt::WindowAttribute::SHOW)),
+                    uno::UNO_QUERY_THROW);
+    }
+    catch (uno::RuntimeException &)
+    {
+        throw;
+    }
+    catch (Exception& )
+    {
+    }
+
+    uno::Reference< awt::XWindow > xThrobberWin( m_xThrobber, uno::UNO_QUERY );
+    if ( xThrobberWin.is() )
+        xThrobberWin->setVisible( false );
+
     Size aTPSize(TP_WIDTH, TP_HEIGHT);
     SetPageSizePixel(LogicToPixel(aTPSize, MAP_APPFONT));
 
@@ -149,6 +217,16 @@ FirstStartWizard::FirstStartWizard( Window* pParent, sal_Bool bLicenseNeedsAccep
     // disable "finish button"
     enableButtons(WZB_FINISH, sal_False);
     defaultButton(WZB_NEXT);
+}
+
+void FirstStartWizard::EnableButtonsWhileMigration()
+{
+    enableButtons(0xff, sal_True);
+}
+
+void FirstStartWizard::DisableButtonsWhileMigration()
+{
+    enableButtons(0xff, sal_False);
 }
 
 ::svt::RoadmapWizardTypes::PathId FirstStartWizard::defineWizardPagesDependingFromContext()
@@ -280,7 +358,7 @@ TabPage* FirstStartWizard::createPage(WizardState _nState)
         pTabPage = new LicensePage(this, WizardResId(TP_LICENSE), m_aLicensePath);
         break;
     case STATE_MIGRATION:
-        pTabPage = new MigrationPage(this, WizardResId(TP_MIGRATION));
+        pTabPage = new MigrationPage(this, WizardResId(TP_MIGRATION), m_xThrobber );
         break;
     case STATE_USER:
         pTabPage = new UserPage(this, WizardResId(TP_USER));
@@ -350,6 +428,14 @@ sal_Bool FirstStartWizard::prepareLeaveCurrentState( CommitPageReason _eReason )
 
 sal_Bool FirstStartWizard::leaveState(WizardState)
 {
+    if (( getCurrentState() == STATE_MIGRATION ) && m_bLicenseWasAccepted )
+    {
+        // Store accept date and patch level now as it has been
+        // overwritten by the migration process!
+        storeAcceptDate();
+        setPatchLevel();
+    }
+
     return sal_True;
 }
 
@@ -434,6 +520,30 @@ void FirstStartWizard::storeAcceptDate()
     {
     }
 
+}
+
+void FirstStartWizard::setPatchLevel()
+{
+    try {
+        Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+        // get configuration provider
+        Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
+        xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
+        Sequence< Any > theArgs(1);
+        NamedValue v(OUString::createFromAscii("NodePath"),
+            makeAny(OUString::createFromAscii("org.openoffice.Office.Common/Help/Registration")));
+        theArgs[0] <<= v;
+        Reference< XPropertySet > pset = Reference< XPropertySet >(
+            theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
+        Any result = pset->getPropertyValue(OUString::createFromAscii("ReminderDate"));
+
+        OUString aPatchLevel( RTL_CONSTASCII_USTRINGPARAM( "Patch" ));
+        aPatchLevel += OUString::valueOf( getBuildId(), 10 );
+        pset->setPropertyValue(OUString::createFromAscii("ReminderDate"), makeAny(aPatchLevel));
+        Reference< XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
+    } catch (const Exception&)
+    {
+    }
 }
 
 #ifdef WNT
