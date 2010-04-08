@@ -159,7 +159,6 @@ public:
     bool                IsDocumentEncrypted() const;
 
     String              GetPassword() const;
-    sal_uInt16          GetWriteProtPassword() const;
 
 private:
 

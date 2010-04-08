@@ -180,10 +180,14 @@ void ImportExcel::ReadFileSharing()
     if( (nRecommendReadOnly != 0) || (nPasswordHash != 0) )
     {
         if( SfxItemSet* pItemSet = GetMedium().GetItemSet() )
-        {
             pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, TRUE ) );
+
+        if( SfxObjectShell* pShell = GetDocShell() )
+        {
+            if( nRecommendReadOnly != 0 )
+                pShell->SetLoadReadonly( sal_True );
             if( nPasswordHash != 0 )
-                pItemSet->Put( SfxInt32Item( SID_MODIFYPASSWORDHASH, nPasswordHash ) );
+                pShell->SetModifyPasswordHash( nPasswordHash );
         }
     }
 }

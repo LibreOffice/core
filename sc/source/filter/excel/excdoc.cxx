@@ -200,8 +200,11 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     UINT16  nExcTabCount    = rTabInfo.GetXclTabCount();
     UINT16  nCodenames      = static_cast< UINT16 >( GetExtDocOptions().GetCodeNameCount() );
 
-    sal_uInt16 nWriteProtHash = GetWriteProtPassword();
-    if( nWriteProtHash > 0 )
+    SfxObjectShell* pShell = GetDocShell();
+    sal_uInt16 nWriteProtHash = pShell ? pShell->GetModifyPasswordHash() : 0;
+    bool bRecommendReadOnly = pShell && pShell->IsLoadReadonly();
+
+    if( (nWriteProtHash > 0) || bRecommendReadOnly )
         Add( new XclExpEmptyRecord( EXC_ID_WRITEPROT ) );
 
     // TODO: correct codepage for BIFF5?
@@ -226,7 +229,7 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
         Add( new XclExpWriteAccess );
     }
 
-    Add( new XclExpFileSharing( GetRoot(), nWriteProtHash ) );
+    Add( new XclExpFileSharing( GetRoot(), nWriteProtHash, bRecommendReadOnly ) );
     Add( new XclExpUInt16Record( EXC_ID_CODEPAGE, nCodePage ) );
 
     if( GetBiff() == EXC_BIFF8 )

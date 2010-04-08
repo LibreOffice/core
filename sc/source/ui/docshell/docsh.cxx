@@ -1876,7 +1876,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
             /*  #115980# #i104990# If the imported document contains a medium
                 password, determine if we can save it, otherwise ask the users
                 whether they want to save without it. */
-            if( !::sfx2::CheckMSPasswordCapabilityForExport( aFltName ) )
+            if( (rMed.GetFilter()->GetFilterFlags() & SFX_FILTER_ENCRYPTION) == 0 )
             {
                 SfxItemSet* pItemSet = rMed.GetItemSet();
                 const SfxPoolItem* pItem = 0;

@@ -260,18 +260,6 @@ String XclExpRoot::GetPassword() const
     return String::EmptyString();
 }
 
-sal_uInt16 XclExpRoot::GetWriteProtPassword() const
-{
-    if( SfxItemSet* pItemSet = GetMedium().GetItemSet() )
-    {
-        const SfxPoolItem* pItem = 0;
-        if( pItemSet->GetItemState( SID_MODIFYPASSWORDHASH, TRUE, &pItem ) == SFX_ITEM_SET )
-            if( const SfxInt32Item* pIntItem = dynamic_cast< const SfxInt32Item* >( pItem ) )
-                return static_cast< sal_uInt16 >( pIntItem->GetValue() );
-    }
-    return 0;
-}
-
 XclExpRootData::XclExpLinkMgrRef XclExpRoot::GetLocalLinkMgrRef() const
 {
     return IsInGlobals() ? mrExpData.mxGlobLinkMgr : mrExpData.mxLocLinkMgr;
