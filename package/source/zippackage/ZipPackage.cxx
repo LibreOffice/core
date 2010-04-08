@@ -514,7 +514,7 @@ void ZipPackage::getZipFileContents()
         {
             // the PKZIP Application note version 6.2 does not allows to use '\' as separator
             // unfortunately it is used by some implementations, so we have to support it in recovery mode
-            rName.replace( '\\', '/' );
+            rName = rName.replace( '\\', '/' );
         }
 
         nStreamIndex = rName.lastIndexOf ( '/' );
