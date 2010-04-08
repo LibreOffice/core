@@ -79,6 +79,7 @@ COMPONENT_CONFIGDEST=.
 
 COMPONENT_XCU = \
     $(EXTENSIONDIR)/WriterWindowState.xcu \
+    $(EXTENSIONDIR)/CalcWindowState.xcu \
     $(EXTENSIONDIR)/Factories.xcu
 
 COMPONENT_LIBRARIES = \
@@ -102,3 +103,8 @@ $(EXTENSIONDIR)/%.png : ./%.png
 $(EXTENSIONDIR)/WriterWindowState.xcu: ./WriterWindowState.xcu
     @@-$(MKDIRHIER) $(@:d)
     $(COMMAND_ECHO)$(TYPE) ./WriterWindowState.xcu | sed s/UPDATED_IDENTIFIER/$(IMPLEMENTATION_IDENTIFIER)/ > $(EXTENSIONDIR)/WriterWindowState.xcu
+
+$(EXTENSIONDIR)/CalcWindowState.xcu: ./CalcWindowState.xcu
+    @@-$(MKDIRHIER) $(@:d)
+    $(COMMAND_ECHO)$(TYPE) ./CalcWindowState.xcu | sed s/UPDATED_IDENTIFIER/$(IMPLEMENTATION_IDENTIFIER)/ > $(EXTENSIONDIR)/CalcWindowState.xcu
+

@@ -7,7 +7,7 @@
           <value>toolpanel</value>
         </prop>
         <prop oor:name="Name">
-          <value>org.openoffice.example.custompanel</value>
+          <value>org.openoffice.example.colorpanel</value>
         </prop>
         <prop oor:name="Module">
           <value/>
