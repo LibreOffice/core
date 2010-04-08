@@ -213,6 +213,7 @@ namespace sfx2
     //==================================================================================================================
     namespace
     {
+        //--------------------------------------------------------------------------------------------------------------
         ::rtl::OUString lcl_identifyModule( const Reference< XFrame >& i_rDocumentFrame )
         {
             ::rtl::OUString sModuleName;
@@ -229,6 +230,7 @@ namespace sfx2
             return sModuleName;
         }
 
+        //--------------------------------------------------------------------------------------------------------------
         ::rtl::OUString lcl_identifyModule( const SfxBindings* i_pBindings )
         {
             const SfxViewFrame* pViewFrame = i_pBindings->GetDispatcher()->GetFrame();
@@ -236,6 +238,8 @@ namespace sfx2
             const Reference< XFrame > xFrame( pFrame->GetFrameInterface() );
             return lcl_identifyModule( xFrame );
         }
+
+        //--------------------------------------------------------------------------------------------------------------
     }
 
     //==================================================================================================================
@@ -361,9 +365,10 @@ namespace sfx2
 
     private:
         const ::rtl::OUString   m_sUIName;
+        const Image             m_aPanelImage;
         const ::rtl::OUString   m_sResourceURL;
         CustomPanelUIElement    m_aCustomPanel;
-       bool                     m_bAttemptedCreation;
+        bool                    m_bAttemptedCreation;
     };
 
     //------------------------------------------------------------------------------------------------------------------
@@ -485,9 +490,18 @@ namespace sfx2
     //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessible > CustomToolPanel::CreatePanelAccessible( const Reference< XAccessible >& i_rParentAccessible )
     {
-        // TODO
-        (void)i_rParentAccessible;
-        return NULL;
+        ENSURE_OR_RETURN( m_aCustomPanel.is(), "no panel to ask!", NULL );
+
+        Reference< XAccessible > xPanelAccessible;
+        try
+        {
+            xPanelAccessible.set( m_aCustomPanel.getToolPanel()->createAccessible( i_rParentAccessible ), UNO_SET_THROW );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return xPanelAccessible;
     }
 
     //==================================================================================================================
