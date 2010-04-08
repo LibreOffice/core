@@ -32,7 +32,6 @@
 #include "SlideSorter.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageSelector.hxx"
-#include "controller/SlsSelectionManager.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
@@ -99,7 +98,6 @@ sal_Bool SAL_CALL SdUnoSlideView::select (const Any& aSelection)
             }
         }
     }
-    rSlideSorterController.GetSelectionManager()->MakeSelectionVisible();
 
     return bOk;
 }

@@ -58,8 +58,10 @@ SLOFILES =      							\
     $(SLO)$/SlsSelectionCommand.obj	    	\
     $(SLO)$/SlsSelectionFunction.obj		\
     $(SLO)$/SlsSelectionManager.obj	    	\
+    $(SLO)$/SlsSelectionObserver.obj	   	\
     $(SLO)$/SlsSlotManager.obj				\
-    $(SLO)$/SlsTransferable.obj
+    $(SLO)$/SlsTransferable.obj				\
+    $(SLO)$/SlsVisibleAreaManager.obj
 
 # --- Tagets -------------------------------------------------------
 

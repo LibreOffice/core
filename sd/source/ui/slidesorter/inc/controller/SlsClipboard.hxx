@@ -24,6 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef SD_SLIDESORTER_CLIPBOARD
 #define SD_SLIDESORTER_CLIPBOARD
 
@@ -126,6 +127,12 @@ private:
         selection has to be updated or can stay as it is (FALSE).
     */
     bool mbUpdateSelectionPending;
+
+    /** Used when a drop is executed to combine all undo actions into one.
+        Typically created in ExecuteDrop() and released in DragFinish().
+    */
+    class UndoContext;
+    ::boost::scoped_ptr<UndoContext> mpUndoContext;
 
     void CreateSlideTransferable (
         ::Window* pWindow,

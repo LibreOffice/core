@@ -78,11 +78,17 @@ public:
 
     ::boost::shared_ptr<PageObjectLayouter> mpPageObjectLayouter;
 
+    /** Specify how the gap between two page objects is associated with the
+      page objects.
+    */
     enum GapMembership {
-        GM_NONE,
-        GM_PREVIOUS,
-        GM_BOTH,
-        GM_NEXT,
+        GM_NONE,       // Gap is not associated with any page object.
+        GM_PREVIOUS,   // The whole gap is associated with the previous page
+                       // object (left or above the gap.)
+        GM_BOTH,       // Half of the gap is associated with previous, half
+                       // with the next page object.
+        GM_NEXT,       // The whole gap is associated with the next page
+                       // object (right or below the gap.)
         GM_PAGE_BORDER
     };
 
@@ -125,12 +131,7 @@ public:
             When this flag is <TRUE/> then the area of borders and gaps are
             interpreted as belonging to one of the columns.
         @param eGapMembership
-            Specifies to what column the gap areas belong.  Here GM_NONE
-            corresponds to bIncludeBordersAndGaps being <FALSE/>.  When
-            GM_BOTH is given then the left half is associated with the
-            column at the left and the right half with the column to the
-            right.  Values of GM_PREVIOUS and GM_NEXT associate the whole
-            gap area with the column to the left or right respectively.
+            Specifies to what column the gap areas belong.
     */
     sal_Int32 GetColumnAtPosition (
         sal_Int32 nXPosition,
@@ -192,7 +193,10 @@ public:
     Range GetValidHorizontalSizeRange (void) const;
     Range GetValidVerticalSizeRange (void) const;
 
-    Rectangle GetPageObjectBox (
+    Range GetRangeOfVisiblePageObjects (const Rectangle& aVisibleArea) const;
+    sal_Int32 GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) const;
+
+        Rectangle GetPageObjectBox (
         const sal_Int32 nIndex,
         const bool bIncludeBorderAndGap = false) const;
 
@@ -448,9 +452,7 @@ sal_Int32 Layouter::GetColumn (const sal_Int32 nIndex) const
 
 sal_Int32 Layouter::GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) const
 {
-    const sal_Int32 nIndex (nRow * mpImplementation->mnColumnCount + nColumn);
-    OSL_ASSERT(nIndex>=0);
-    return ::std::min(nIndex, mpImplementation->mnPageCount-1);
+    return mpImplementation->GetIndex(nRow,nColumn);
 }
 
 
@@ -528,17 +530,7 @@ Range Layouter::GetValidVerticalSizeRange (void) const
 
 Range Layouter::GetRangeOfVisiblePageObjects (const Rectangle& aVisibleArea) const
 {
-    const sal_Int32 nRow0 (mpImplementation->GetRowAtPosition (
-        aVisibleArea.Top(),
-        true,
-        Implementation::GM_BOTH));
-    const sal_Int32 nRow1 (mpImplementation->GetRowAtPosition (
-        aVisibleArea.Bottom(),
-        true,
-        Implementation::GM_BOTH));
-    return Range(
-        ::std::min(nRow0*mpImplementation->mnColumnCount, mpImplementation->mnPageCount-1),
-        ::std::min((nRow1+1)*mpImplementation->mnColumnCount-1, mpImplementation->mnPageCount-1));
+    return mpImplementation->GetRangeOfVisiblePageObjects(aVisibleArea);
 }
 
 
@@ -559,10 +551,7 @@ sal_Int32 Layouter::GetIndexAtPoint (
             bIncludePageBorders,
             bIncludePageBorders ? Implementation::GM_PAGE_BORDER : Implementation::GM_NONE));
 
-    if (nRow >= 0 && nColumn >= 0)
-        return nRow * mpImplementation->mnColumnCount + nColumn;
-    else
-        return -1;
+    return mpImplementation->GetIndex(nRow,nColumn);
 }
 
 
@@ -1006,6 +995,21 @@ Range Layouter::Implementation::GetValidVerticalSizeRange (void) const
 
 
 
+Range Layouter::Implementation::GetRangeOfVisiblePageObjects (const Rectangle& aVisibleArea) const
+{
+    const sal_Int32 nRow0 (GetRowAtPosition(aVisibleArea.Top(), true, GM_NEXT));
+    const sal_Int32 nCol0 (GetColumnAtPosition(aVisibleArea.Left(),true, GM_NEXT));
+    const sal_Int32 nRow1 (GetRowAtPosition(aVisibleArea.Bottom(), true, GM_PREVIOUS));
+    const sal_Int32 nCol1 (GetColumnAtPosition(aVisibleArea.Right(), true, GM_PREVIOUS));
+
+    // When start and end lie in different rows then the range may include
+    // slides outside (left or right of) the given area.
+    return Range(GetIndex(nRow0,nCol0), GetIndex(nRow1,nCol1));
+}
+
+
+
+
 Size Layouter::Implementation::GetTargetSize (
     const Size& rWindowSize,
     const Size& rPreviewModelSize,
@@ -1051,6 +1055,20 @@ Size Layouter::Implementation::GetTargetSize (
     }
 
     return aTargetSize;
+}
+
+
+
+
+sal_Int32 Layouter::Implementation::GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) const
+{
+    if (nRow >= 0 && nColumn >= 0)
+    {
+        const sal_Int32 nIndex (nRow * mnColumnCount + nColumn);
+        return ::std::min(nIndex, mnPageCount-1);
+    }
+    else
+        return -1;
 }
 
 

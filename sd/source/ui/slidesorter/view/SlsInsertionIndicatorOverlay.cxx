@@ -79,7 +79,6 @@ namespace sd { namespace slidesorter { namespace view {
 
 const static sal_Int32 gnShadowBorder = 3;
 const static sal_Int32 gnSuperScaleFactor = 1;
-const static sal_Int32 gnAngle  = 0; // measured in 10th of degrees
 
 InsertionIndicatorOverlay::InsertionIndicatorOverlay (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
@@ -89,7 +88,8 @@ InsertionIndicatorOverlay::InsertionIndicatorOverlay (SlideSorter& rSlideSorter)
       maLocation(),
       maIcon(),
       maIconOffset(),
-      mpShadowPainter(new FramePainter(mrSlideSorter.GetTheme()->GetIcon(Theme::RawInsertShadow)))
+      mpShadowPainter(
+          new FramePainter(mrSlideSorter.GetTheme()->GetIcon(Theme::Icon_RawInsertShadow)))
 {
 }
 
@@ -160,16 +160,6 @@ void InsertionIndicatorOverlay::Create (
         *mrSlideSorter.GetContentWindow(),
         0,
         0);
-    if (gnAngle != 0)
-    {
-        aIconSize = Size(
-            RoundToInt(
-                cos(gnAngle/1800.0*M_PI) * aIconSize.Width()
-                    + sin(gnAngle/1800.0*M_PI) * aIconSize.Height()),
-            RoundToInt(
-                sin(gnAngle/1800.0*M_PI) * aIconSize.Width()
-                    + cos(gnAngle/1800.0*M_PI) * aIconSize.Height()));
-    }
     aContent.SetOutputSizePixel(aIconSize);
 
     aContent.SetFillColor();
@@ -241,16 +231,7 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
         const Size aSuperSampleSize(
             aPreviewSize.Width()*gnSuperScaleFactor,
             aPreviewSize.Height()*gnSuperScaleFactor);
-        if (gnAngle != 0)
-        {
-            aPreview.Scale(aSuperSampleSize, BMP_SCALE_INTERPOLATE);
-            aPreview.Rotate(gnAngle, Color(128,0,0,255));
-            aPreview.Scale(1.0/gnSuperScaleFactor,1.0/gnSuperScaleFactor, BMP_SCALE_INTERPOLATE);
-        }
-        else
-        {
-            aPreview.Scale(aPreviewSize, BMP_SCALE_INTERPOLATE);
-        }
+        aPreview.Scale(aPreviewSize, BMP_SCALE_INTERPOLATE);
         rContent.DrawBitmapEx(aPageOffset, aPreview);
 
         // Tone down the bitmap.  The further back the darker it becomes.

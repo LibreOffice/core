@@ -77,7 +77,7 @@ public:
     void UpdateOffsets(
         const InsertPosition& rInsertPosition,
         const view::Layouter& GetLayouter);
-    void ResetOffsets (void);
+    void ResetOffsets (const controller::Animator::AnimationMode eMode);
 
     /// Index of the row or column that this run represents.
     sal_Int32 mnRunIndex;
@@ -134,9 +134,9 @@ public:
     Implementation (SlideSorter& rSlideSorter);
     virtual ~Implementation (void);
 
-    void SetInsertPosition (const InsertPosition& rInsertPosition);
-
-    void Reset (void);
+    void SetInsertPosition (
+        const InsertPosition& rInsertPosition,
+        const controller::Animator::AnimationMode eAnimationMode);
 
     virtual void RemoveRun (PageObjectRun* pRun);
 
@@ -176,15 +176,15 @@ InsertAnimator::InsertAnimator (SlideSorter& rSlideSorter)
 
 void InsertAnimator::SetInsertPosition (const InsertPosition& rInsertPosition)
 {
-    mpImplementation->SetInsertPosition(rInsertPosition);
+    mpImplementation->SetInsertPosition(rInsertPosition, controller::Animator::AM_Animated);
 }
 
 
 
 
-void InsertAnimator::Reset (void)
+void InsertAnimator::Reset (const controller::Animator::AnimationMode eMode)
 {
-    mpImplementation->Reset();
+    mpImplementation->SetInsertPosition(InsertPosition(), eMode);
 }
 
 
@@ -206,13 +206,15 @@ InsertAnimator::Implementation::Implementation (SlideSorter& rSlideSorter)
 
 InsertAnimator::Implementation::~Implementation (void)
 {
-    Reset();
+    SetInsertPosition(InsertPosition(), controller::Animator::AM_Immediate);
 }
 
 
 
 
-void InsertAnimator::Implementation::SetInsertPosition (const InsertPosition& rInsertPosition)
+void InsertAnimator::Implementation::SetInsertPosition (
+    const InsertPosition& rInsertPosition,
+    const controller::Animator::AnimationMode eMode)
 {
     if (maInsertPosition == rInsertPosition)
         return;
@@ -227,7 +229,7 @@ void InsertAnimator::Implementation::SetInsertPosition (const InsertPosition& rI
     {
         if (pOldRun)
         {
-            pOldRun->ResetOffsets();
+            pOldRun->ResetOffsets(eMode);
             maRuns.insert(pOldRun);
         }
     }
@@ -237,14 +239,6 @@ void InsertAnimator::Implementation::SetInsertPosition (const InsertPosition& rI
         pCurrentRun->UpdateOffsets(rInsertPosition, mrView.GetLayouter());
         maRuns.insert(pCurrentRun);
     }
-}
-
-
-
-
-void InsertAnimator::Implementation::Reset (void)
-{
-    SetInsertPosition(InsertPosition());
 }
 
 
@@ -425,7 +419,7 @@ void PageObjectRun::UpdateOffsets(
 
 
 
-void PageObjectRun::ResetOffsets (void)
+void PageObjectRun::ResetOffsets (const controller::Animator::AnimationMode eMode)
 {
     mnLocalInsertIndex = -1;
     const sal_Int32 nRunLength (mnEndIndex - mnStartIndex + 1);
@@ -434,10 +428,14 @@ void PageObjectRun::ResetOffsets (void)
     {
         model::SharedPageDescriptor pDescriptor(rModel.GetPageDescriptor(nIndex+mnStartIndex));
         if (pDescriptor)
-            maStartOffset[nIndex] = pDescriptor->GetVisualState().GetLocationOffset();
+            if (eMode == controller::Animator::AM_Animated)
+                maStartOffset[nIndex] = pDescriptor->GetVisualState().GetLocationOffset();
+            else
+                pDescriptor->GetVisualState().SetLocationOffset(Point(0,0));
         maEndOffset[nIndex] = Point(0,0);
     }
-    RestartAnimation();
+    if (eMode == controller::Animator::AM_Animated)
+        RestartAnimation();
 }
 
 

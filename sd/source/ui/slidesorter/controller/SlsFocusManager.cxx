@@ -31,8 +31,8 @@
 #include "SlideSorter.hxx"
 #include "PaneDockingWindow.hxx"
 #include "controller/SlideSorterController.hxx"
-#include "controller/SlsSelectionManager.hxx"
 #include "controller/SlsCurrentSlideManager.hxx"
+#include "controller/SlsVisibleAreaManager.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlideSorterView.hxx"
@@ -298,11 +298,8 @@ void FocusManager::ShowFocusIndicator (
         {
             // Scroll the focused page object into the visible area and repaint
             // it, so that the focus indicator becomes visible.
-            mrSlideSorter.GetController().GetSelectionManager()->MakeRectangleVisible (
-                mrSlideSorter.GetView().GetLayouter().GetPageObjectBox(
-                    rpDescriptor->GetPageIndex(), true));
+            mrSlideSorter.GetController().GetVisibleAreaManager().RequestVisible(rpDescriptor);
         }
-
         mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
 
         NotifyFocusChangeListeners();

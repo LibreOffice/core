@@ -81,10 +81,17 @@ public:
     */
     void SetCoreSelection (void);
 
+    /** Select the specified descriptor.  The selection state of the other
+        descriptors is not affected.
+    */
     void SelectPage (int nPageIndex);
-    /** Select the descriptor that is associated with the given page.
+    /** Select the descriptor that is associated with the given page.  The
+        selection state of the other descriptors is not affected.
     */
     void SelectPage (const SdPage* pPage);
+    /** Select the specified descriptor.  The selection state of the other
+        descriptors is not affected.
+    */
     void SelectPage (const model::SharedPageDescriptor& rpDescriptor);
 
     /** Return whether the specified page is selected.  This convenience
@@ -107,26 +114,6 @@ public:
     */
     int GetPageCount (void) const;
     int GetSelectedPageCount (void) const;
-
-    void PrepareModelChange (void);
-    void HandleModelChange (void);
-
-    /** Return the descriptor of the most recently selected page.  This
-        works only when the page has not been de-selected in the mean time.
-        This method helps the view when it scrolls the selection into the
-        visible area.
-        @return
-            When the selection is empty or when the most recently selected
-            page has been deselected already (but other pages are still
-            selected) then NULL is returned, even when a selection did exist
-            but has been cleared.
-    */
-    model::SharedPageDescriptor GetMostRecentlySelectedPage (void) const;
-
-    /** Mark the given page as the most recently selected.  Use this method
-        when the selection does not really change but the focus does.
-    */
-    void SetMostRecentlySelectedPage (const model::SharedPageDescriptor& rpDescriptor);
 
     /** Return the anchor for a range selection.  This usually is the first
         selected page after all pages have been deselected.
@@ -185,10 +172,8 @@ public:
         BroadcastLock (SlideSorter& rSlideSorter);
         BroadcastLock (PageSelector& rPageSelector);
         ~BroadcastLock (void);
-        void RequestMakeSelectionVisible (void);
     private:
         PageSelector& mrSelector;
-        bool mbIsMakeSelectionVisiblePending;
     };
 
 private:
@@ -204,6 +189,7 @@ private:
     model::SharedPageDescriptor mpCurrentPage;
     sal_Int32 mnUpdateLockCount;
     bool mbIsUpdateCurrentPagePending;
+    bool mbIsMakeVisibleDisabled;
 
     /** Enable the broadcasting of selection change events.  This calls the
         SlideSorterController::SelectionHasChanged() method to do the actual
@@ -211,7 +197,7 @@ private:
         DisableBroadcasting() was called before and the selection has been
         changed in the mean time, this change will be broadcasted.
     */
-    void EnableBroadcasting (bool bMakeSelectionVisible = true);
+    void EnableBroadcasting (void);
 
     /** Disable the broadcasting o selectio change events.  Subsequent
         changes of the selection will set a flag that triggers the sending

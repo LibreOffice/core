@@ -356,6 +356,7 @@ void SelectionFunction::NotifyDragFinished (void)
 
 BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
 {
+    view::SlideSorterView::DrawLock aDrawLock (mrSlideSorter);
     PageSelector::UpdateLock aLock (mrSlideSorter);
     FocusManager& rFocusManager (mrController.GetFocusManager());
     BOOL bResult = FALSE;
@@ -559,10 +560,6 @@ void SelectionFunction::MoveFocus (
         rSelector.DeselectAllPages();
         mrController.GetPageSelector().SelectPage(pFocusedDescriptor);
     }
-
-    // Mark the currently focused page as last selected so that it is made
-    // visible on the next paint.
-    mrController.GetPageSelector().SetMostRecentlySelectedPage(pFocusedDescriptor);
 }
 
 
@@ -961,9 +958,6 @@ bool SelectionFunction::ProcessEvent (EventDescriptor& rDescriptor)
             }
     }
 
-    if (rDescriptor.mbMakeSelectionVisible)
-        aBroadcastLock.RequestMakeSelectionVisible();
-
     return bResult;
 }
 
@@ -1181,7 +1175,7 @@ void SelectionFunction::PostProcessEvent (const EventDescriptor& rDescriptor)
 
         // Now turn them off.
         if ( ! mrController.IsContextMenuOpen())
-            mrController.GetInsertionIndicatorHandler()->End();
+            mrController.GetInsertionIndicatorHandler()->End(Animator::AM_Animated);
 
         mnButtonDownPageIndex = -1;
         mnButtonDownButtonIndex = -1;
@@ -1293,7 +1287,7 @@ void SelectionFunction::StopDragAndDrop (void)
         mpDragAndDropContext.reset();
         UpdateMouseOverIndicationPermission();
     }
-    mrController.GetInsertionIndicatorHandler()->End();
+    mrController.GetInsertionIndicatorHandler()->End(Animator::AM_Animated);
 }
 
 
@@ -1561,9 +1555,6 @@ void SelectionFunction::MouseMultiSelector::UpdateSelection (void)
 
             UpdateSelectionState(pDescriptor, aRange.IsInside(nIndex));
         }
-
-        // Rely on auto scrolling to make page objects visible.
-        mrSlideSorter.GetController().GetSelectionManager()->ResetMakeSelectionVisiblePending();
     }
 }
 

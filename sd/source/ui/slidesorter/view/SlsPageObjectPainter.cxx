@@ -42,7 +42,6 @@
 #include "view/SlsPageObjectLayouter.hxx"
 #include "view/SlsLayouter.hxx"
 #include "view/SlsTheme.hxx"
-#include "SlsIcons.hxx"
 #include "SlsFramePainter.hxx"
 #include "cache/SlsPageCache.hxx"
 #include "controller/SlsProperties.hxx"
@@ -142,24 +141,16 @@ PageObjectPainter::PageObjectPainter (
       mpProperties(rSlideSorter.GetProperties()),
       mpTheme(rSlideSorter.GetTheme()),
       mpPageNumberFont(Theme::GetFont(Theme::PageNumberFont, *rSlideSorter.GetContentWindow())),
-      maStartPresentationIcon(),
-      maShowSlideIcon(),
-      maNewSlideIcon(),
-      mpShadowPainter(),
+      maStartPresentationIcon(mpTheme->GetIcon(Theme::Icon_StartPresentation)),
+      maShowSlideIcon(mpTheme->GetIcon(Theme::Icon_ShowSlide)),
+      maNewSlideIcon(mpTheme->GetIcon(Theme::Icon_DuplicateSlide)),
+      mpShadowPainter(new FramePainter(mpTheme->GetIcon(Theme::Icon_RawShadow))),
       maNormalBackground(),
       maSelectionBackground(),
       maFocusedSelectionBackground(),
       maMouseOverBackground(),
-      msUnhideString()
+      msUnhideString(mpTheme->GetString(Theme::String_Unhide))
 {
-    LocalResource aResource (IMG_ICONS);
-
-    maStartPresentationIcon = Image(SdResId(IMAGE_PRESENTATION)).GetBitmapEx();
-    maShowSlideIcon = Image(SdResId(IMAGE_SHOW_SLIDE)).GetBitmapEx();
-    maNewSlideIcon = Image(SdResId(IMAGE_NEW_SLIDE)).GetBitmapEx();
-    msUnhideString = String(SdResId(STRING_UNHIDE));
-
-    mpShadowPainter.reset(new FramePainter(mpTheme->GetIcon(Theme::RawShadow)));
 }
 
 
@@ -296,7 +287,7 @@ void PageObjectPainter::PaintPreview (
     if (rpDescriptor->GetVisualState().GetCurrentVisualState()
         == model::VisualState::VS_Excluded)
     {
-        const BitmapEx aOverlay (mpTheme->GetIcon(Theme::HideSlideOverlay));
+        const BitmapEx aOverlay (mpTheme->GetIcon(Theme::Icon_HideSlideOverlay));
         const sal_Int32 nIconWidth (aOverlay.GetSizePixel().Width());
         const sal_Int32 nIconHeight (aOverlay.GetSizePixel().Height());
         if (nIconWidth>0 && nIconHeight>0)

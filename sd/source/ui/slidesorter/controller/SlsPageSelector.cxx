@@ -35,6 +35,7 @@
 #include "controller/SlsSelectionManager.hxx"
 #include "controller/SlsAnimator.hxx"
 #include "controller/SlsCurrentSlideManager.hxx"
+#include "controller/SlsVisibleAreaManager.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "model/SlideSorterModel.hxx"
@@ -54,6 +55,23 @@ using namespace ::com::sun::star::uno;
 using namespace ::sd::slidesorter::model;
 using namespace ::sd::slidesorter::view;
 
+namespace
+{
+class BoolContext
+{
+public:
+    BoolContext (bool& rValue, bool bContextValue) : mrValue(rValue),mbSavedValue(mrValue)
+    { mrValue = bContextValue; }
+    ~BoolContext (void)
+    { mrValue = mbSavedValue; }
+private:
+    bool& mrValue;
+    const bool mbSavedValue;
+};
+
+} // end of anonymous namespace
+
+
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -68,7 +86,8 @@ PageSelector::PageSelector (SlideSorter& rSlideSorter)
       mpSelectionAnchor(),
       mpCurrentPage(),
       mnUpdateLockCount(0),
-      mbIsUpdateCurrentPagePending(false)
+      mbIsUpdateCurrentPagePending(false),
+      mbIsMakeVisibleDisabled(false)
 {
     CountSelectedPages ();
 }
@@ -79,10 +98,11 @@ PageSelector::PageSelector (SlideSorter& rSlideSorter)
 void PageSelector::SelectAllPages (void)
 {
     PageSelector::UpdateLock aLock (*this);
+    BoolContext aContext (mbIsMakeVisibleDisabled, true);
 
     int nPageCount = mrModel.GetPageCount();
     for (int nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
-        SelectPage (nPageIndex);
+        SelectPage(nPageIndex);
 }
 
 
@@ -91,14 +111,15 @@ void PageSelector::SelectAllPages (void)
 void PageSelector::DeselectAllPages (void)
 {
     PageSelector::UpdateLock aLock (*this);
+    BoolContext aContext (mbIsMakeVisibleDisabled, true);
 
     int nPageCount = mrModel.GetPageCount();
     for (int nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
-        DeselectPage (nPageIndex);
+        DeselectPage(nPageIndex);
+
     DBG_ASSERT (mnSelectedPageCount==0,
         "PageSelector::DeselectAllPages: the selected pages counter is not 0");
     mnSelectedPageCount = 0;
-    mpMostRecentlySelectedPage.reset();
     mpSelectionAnchor.reset();
 }
 
@@ -118,6 +139,7 @@ void PageSelector::GetCoreSelection (void)
         model::SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
         if (pDescriptor->GetCoreSelection())
         {
+            mrSlideSorter.GetController().GetVisibleAreaManager().RequestVisible(pDescriptor);
             mrSlideSorter.GetView().RequestRepaint(pDescriptor);
             bSelectionHasChanged = true;
         }
@@ -164,7 +186,7 @@ void PageSelector::SelectPage (int nPageIndex)
 
 void PageSelector::SelectPage (const SdPage* pPage)
 {
-    int nPageIndex = (pPage->GetPageNum()-1) / 2;
+    const sal_Int32 nPageIndex (mrModel.GetIndex(pPage));
     SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
     if (pDescriptor.get()!=NULL && pDescriptor->GetPage()==pPage)
         SelectPage(pDescriptor);
@@ -179,6 +201,8 @@ void PageSelector::SelectPage (const SharedPageDescriptor& rpDescriptor)
         && mrSlideSorter.GetView().SetState(rpDescriptor, PageDescriptor::ST_Selected, true))
     {
         mnSelectedPageCount ++;
+        if ( ! mbIsMakeVisibleDisabled)
+            mrSlideSorter.GetController().GetVisibleAreaManager().RequestVisible(rpDescriptor);
         mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
 
         mpMostRecentlySelectedPage = rpDescriptor;
@@ -208,7 +232,7 @@ void PageSelector::DeselectPage (int nPageIndex)
 
 void PageSelector::DeselectPage (const SdPage* pPage)
 {
-    int nPageIndex = (pPage->GetPageNum()-1) / 2;
+    const sal_Int32 nPageIndex (mrModel.GetIndex(pPage));
     SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
     if (pDescriptor.get()!=NULL && pDescriptor->GetPage()==pPage)
         DeselectPage(pDescriptor);
@@ -223,6 +247,8 @@ void PageSelector::DeselectPage (const SharedPageDescriptor& rpDescriptor)
         && mrSlideSorter.GetView().SetState(rpDescriptor, PageDescriptor::ST_Selected, false))
     {
         mnSelectedPageCount --;
+        if ( ! mbIsMakeVisibleDisabled)
+            mrSlideSorter.GetController().GetVisibleAreaManager().RequestVisible(rpDescriptor);
         mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
         if (mpMostRecentlySelectedPage == rpDescriptor)
             mpMostRecentlySelectedPage.reset();
@@ -265,38 +291,6 @@ int PageSelector::GetSelectedPageCount (void) const
 
 
 
-void PageSelector::PrepareModelChange (void)
-{
-    DeselectAllPages ();
-}
-
-
-
-
-void PageSelector::HandleModelChange (void)
-{
-    GetCoreSelection();
-}
-
-
-
-
-SharedPageDescriptor PageSelector::GetMostRecentlySelectedPage (void) const
-{
-    return mpMostRecentlySelectedPage;
-}
-
-
-
-
-void PageSelector::SetMostRecentlySelectedPage (const model::SharedPageDescriptor& rpDescriptor)
-{
-    mpMostRecentlySelectedPage = rpDescriptor;
-}
-
-
-
-
 SharedPageDescriptor PageSelector::GetSelectionAnchor (void) const
 {
     return mpSelectionAnchor;
@@ -320,13 +314,13 @@ void PageSelector::CountSelectedPages (void)
 
 
 
-void PageSelector::EnableBroadcasting (bool bMakeSelectionVisible)
+void PageSelector::EnableBroadcasting (void)
 {
     if (mnBroadcastDisableLevel > 0)
         mnBroadcastDisableLevel --;
     if (mnBroadcastDisableLevel==0 && mbSelectionChangeBroadcastPending)
     {
-        mrController.GetSelectionManager()->SelectionHasChanged(bMakeSelectionVisible);
+        mrController.GetSelectionManager()->SelectionHasChanged();
         mbSelectionChangeBroadcastPending = false;
     }
 }
@@ -396,19 +390,15 @@ void PageSelector::UpdateCurrentPage (const bool bUpdateOnlyWhenPending)
         if (pDescriptor && pDescriptor->HasState(PageDescriptor::ST_Selected))
         {
             // Switching the current slide normally sets also the selection
-            // to just the new current slide.  To prevent that here we store
-            // and at the end of this scope restore the current selection.
+            // to just the new current slide.  To prevent that, we store
+            // (and at the end of this scope restore) the current selection.
             ::boost::shared_ptr<PageSelection> pSelection (GetPageSelection());
-            SharedPageDescriptor pRecentSelection (GetMostRecentlySelectedPage());
 
             mrController.GetCurrentSlideManager()->SwitchCurrentSlide(pDescriptor);
 
             // Restore the selection and prevent a recursive call to
             // UpdateCurrentPage().
             SetPageSelection(pSelection, false);
-            // Restore the most recently selected page.  Important for
-            // making the right part of the selection visible.
-            mpMostRecentlySelectedPage = pRecentSelection;
             return;
         }
     }
@@ -453,8 +443,7 @@ PageSelector::UpdateLock::~UpdateLock (void)
 //===== PageSelector::BroadcastLock ==============================================
 
 PageSelector::BroadcastLock::BroadcastLock (SlideSorter& rSlideSorter)
-    : mrSelector(rSlideSorter.GetController().GetPageSelector()),
-      mbIsMakeSelectionVisiblePending(false)
+    : mrSelector(rSlideSorter.GetController().GetPageSelector())
 {
     mrSelector.DisableBroadcasting();
 }
@@ -473,17 +462,7 @@ PageSelector::BroadcastLock::BroadcastLock (PageSelector& rSelector)
 
 PageSelector::BroadcastLock::~BroadcastLock (void)
 {
-    mrSelector.EnableBroadcasting(mbIsMakeSelectionVisiblePending);
+    mrSelector.EnableBroadcasting();
 }
-
-
-
-
-void PageSelector::BroadcastLock::RequestMakeSelectionVisible (void)
-{
-    mbIsMakeSelectionVisiblePending = true;
-}
-
-
 
 } } } // end of namespace ::sd::slidesorter::controller

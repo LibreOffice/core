@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-#include "SlsIcons.hrc"
+#include "view/SlsResource.hrc"
 
 Resource IMG_ICONS
 {
@@ -65,5 +65,15 @@ Resource IMG_ICONS
     String STRING_UNHIDE
     {
         Text [ en-US ] = "unhide" ;
+    };
+
+    String STRING_DRAG_AND_DROP_PAGES
+    {
+        Text [ en-US ] = "Drag and Drop Pages" ;
+    };
+
+    String STRING_DRAG_AND_DROP_SLIDES
+    {
+        Text [ en-US ] = "Drag and Drop Slides" ;
     };
 };

@@ -30,7 +30,7 @@
  ************************************************************************/
 
 #include "view/SlsTheme.hxx"
-#include "SlsIcons.hxx"
+#include "SlsResource.hxx"
 #include "controller/SlsProperties.hxx"
 #include "sdresid.hxx"
 #include <tools/color.hxx>
@@ -92,16 +92,30 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
       maMouseOverGradient(),
       maRawShadow(),
       maRawInsertShadow(),
+      maHideSlideOverlay(),
+      maStartPresentationIcon(),
+      maShowSlideIcon(),
+      maDuplicateSlideIcon(),
       maColor(PreviewBorder+1),
       mnButtonCornerRadius(3),
       mnButtonMaxAlpha(255 * 20/100),
-      mnButtonPaintType(0)
+      mnButtonPaintType(0),
+      msUnhide(),
+      msDragAndDropPages(),
+      msDragAndDropSlides()
+
 {
     LocalResource aResource (IMG_ICONS);
 
     maRawShadow = Image(SdResId(IMAGE_SHADOW)).GetBitmapEx();
     maRawInsertShadow = Image(SdResId(IMAGE_INSERT_SHADOW)).GetBitmapEx();
     maHideSlideOverlay  = Image(SdResId(IMAGE_HIDE_SLIDE_OVERLAY)).GetBitmapEx();
+    maStartPresentationIcon = Image(SdResId(IMAGE_PRESENTATION)).GetBitmapEx();
+    maShowSlideIcon = Image(SdResId(IMAGE_SHOW_SLIDE)).GetBitmapEx();
+    maDuplicateSlideIcon = Image(SdResId(IMAGE_NEW_SLIDE)).GetBitmapEx();
+    msUnhide = String(SdResId(STRING_UNHIDE));
+    msDragAndDropPages = String(SdResId(STRING_DRAG_AND_DROP_PAGES));
+    msDragAndDropSlides = String(SdResId(STRING_DRAG_AND_DROP_SLIDES));
 
     maColor.resize(PreviewBorder+1);
     maColor[Background] = maBackgroundColor;
@@ -301,14 +315,23 @@ BitmapEx Theme::GetIcon (const IconType eType)
 {
     switch (eType)
     {
-        case RawShadow:
+        case Icon_RawShadow:
             return maRawShadow;
 
-        case RawInsertShadow:
+        case Icon_RawInsertShadow:
             return maRawInsertShadow;
 
-        case HideSlideOverlay:
+        case Icon_HideSlideOverlay:
             return maHideSlideOverlay;
+
+        case Icon_StartPresentation:
+            return maStartPresentationIcon;
+
+        case Icon_ShowSlide:
+            return maShowSlideIcon;
+
+        case Icon_DuplicateSlide:
+            return maDuplicateSlideIcon;
 
         default:
             return BitmapEx();
@@ -357,6 +380,20 @@ void Theme::SetIntegerValue (const IntegerValueType eType, const sal_Int32 nValu
 
         default:
             break;
+    }
+}
+
+
+
+
+::rtl::OUString Theme::GetString (const StringType eType) const
+{
+    switch (eType)
+    {
+        case String_Unhide: return msUnhide;
+        case String_DragAndDropPages: return msDragAndDropPages;
+        case String_DragAndDropSlides: return msDragAndDropSlides;
+        default: return ::rtl::OUString();
     }
 }
 

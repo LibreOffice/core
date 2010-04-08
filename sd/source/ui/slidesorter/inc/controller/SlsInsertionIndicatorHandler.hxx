@@ -68,7 +68,7 @@ public:
 
     /** Deactivate the insertion marker.
     */
-    void End (void);
+    void End (const controller::Animator::AnimationMode eMode);
 
     class ForceShowContext
     {

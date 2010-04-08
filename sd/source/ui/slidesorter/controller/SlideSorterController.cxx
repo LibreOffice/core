@@ -44,6 +44,7 @@
 #include "controller/SlsSelectionManager.hxx"
 #include "controller/SlsSlotManager.hxx"
 #include "controller/SlsTransferable.hxx"
+#include "controller/SlsVisibleAreaManager.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "model/SlsPageDescriptor.hxx"
@@ -119,6 +120,7 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
       mpSelectionManager(),
       mpInsertionIndicatorHandler(new InsertionIndicatorHandler(rSlideSorter)),
       mpAnimator(new Animator(rSlideSorter)),
+      mpVisibleAreaManager(new VisibleAreaManager(rSlideSorter)),
       mpListener(),
       mnModelChangeLockCount(0),
       mbPreModelChangeDone(false),
@@ -205,7 +207,7 @@ SlideSorterController::~SlideSorterController (void)
 
 void SlideSorterController::Dispose (void)
 {
-    mpInsertionIndicatorHandler->End();
+    mpInsertionIndicatorHandler->End(Animator::AM_Immediate);
     mpSelectionManager.reset();
     mpAnimator->Dispose();
 }
@@ -345,9 +347,6 @@ void SlideSorterController::Paint (
 
         try
         {
-            if (GetSelectionManager()->IsMakeSelectionVisiblePending())
-                GetSelectionManager()->MakeSelectionVisible();
-
             mrView.CompleteRedraw(pWindow, Region(rBBox), 0);
         }
         catch (const Exception&)
@@ -546,7 +545,6 @@ void SlideSorterController::PreModelChange (void)
         mrSlideSorter.GetViewShell()->Broadcast(
             ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START));
 
-    mpPageSelector->PrepareModelChange();
     GetCurrentSlideManager()->PrepareModelChange();
 
     if (mrSlideSorter.GetContentWindow())
@@ -578,8 +576,6 @@ void SlideSorterController::PostModelChange (void)
         // that.
         Rearrange();
     }
-
-    mpPageSelector->HandleModelChange ();
 
     if (mrSlideSorter.GetViewShell() != NULL)
         mrSlideSorter.GetViewShell()->Broadcast(
@@ -825,8 +821,8 @@ Rectangle  SlideSorterController::Rearrange (bool bForce)
         // window and the arrangement of the page objects.
         GetScrollBarManager().UpdateScrollBars(false, !bForce);
 
-        // When there is a selection then keep it in the visible area.
-        GetSelectionManager()->MakeSelectionVisible();
+        // Keep the current slide in the visible area.
+        GetVisibleAreaManager().RequestVisible(GetCurrentSlideManager()->GetCurrentSlide());
     }
 
     return aNewContentArea;
@@ -1052,6 +1048,11 @@ void SlideSorterController::SetDocumentSlides (const Reference<container::XIndex
 
         mrModel.SetDocumentSlides(rxSlides);
         mrView.Layout();
+
+        // Select just the current slide.
+        PageSelector::BroadcastLock aBroadcastLock (*mpPageSelector);
+        mpPageSelector->DeselectAllPages();
+        mpPageSelector->SelectPage(mpCurrentSlideManager->GetCurrentSlide());
     }
 }
 
@@ -1061,6 +1062,15 @@ void SlideSorterController::SetDocumentSlides (const Reference<container::XIndex
 ::boost::shared_ptr<Animator> SlideSorterController::GetAnimator (void) const
 {
     return mpAnimator;
+}
+
+
+
+
+VisibleAreaManager& SlideSorterController::GetVisibleAreaManager (void) const
+{
+    OSL_ASSERT(mpVisibleAreaManager);
+    return *mpVisibleAreaManager;
 }
 
 

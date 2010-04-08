@@ -192,7 +192,8 @@ void DragAndDropContext::SetTargetSlideSorter (
     if (mpTargetSlideSorter != NULL)
     {
         mpTargetSlideSorter->GetController().GetScrollBarManager().StopAutoScroll();
-        mpTargetSlideSorter->GetController().GetInsertionIndicatorHandler()->End();
+        mpTargetSlideSorter->GetController().GetInsertionIndicatorHandler()->End(
+            Animator::AM_Animated);
     }
 
     mpTargetSlideSorter = pSlideSorter;

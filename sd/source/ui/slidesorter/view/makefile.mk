@@ -46,7 +46,7 @@ IMGLST_SRS=$(SRS)$/$(TARGET).srs
 
 SRS1NAME=$(TARGET)
 SRC1FILES =	\
-    SlsIcons.src
+    SlsResource.src
 
 SLOFILES =      							\
     $(SLO)$/SlideSorterView.obj				\

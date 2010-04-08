@@ -30,15 +30,17 @@
 #include "controller/SlsSelectionManager.hxx"
 
 #include "SlideSorter.hxx"
-#include "SlsSelectionCommand.hxx"
+#include "SlsCommand.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsAnimator.hxx"
 #include "controller/SlsAnimationFunction.hxx"
 #include "controller/SlsCurrentSlideManager.hxx"
 #include "controller/SlsFocusManager.hxx"
+#include "controller/SlsPageSelector.hxx"
 #include "controller/SlsProperties.hxx"
 #include "controller/SlsScrollBarManager.hxx"
 #include "controller/SlsSlotManager.hxx"
+#include "controller/SlsSelectionObserver.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "model/SlsPageDescriptor.hxx"
@@ -67,24 +69,12 @@ using namespace ::sd::slidesorter::controller;
 namespace sd { namespace slidesorter { namespace controller {
 
 
-namespace {
-    class VisibleAreaScroller
-    {
-    public:
-        VisibleAreaScroller (
-            SlideSorter& rSlideSorter,
-            const Point aStart,
-            const Point aEnd);
-        void operator() (const double nValue);
-    private:
-        SlideSorter& mrSlideSorter;
-        Point maStart;
-        const Point maEnd;
-        const ::boost::function<double(double)> maAccelerationFunction;
-    };
-}
+class SelectionManager::PageInsertionListener
+    : public SfxListener
+{
+public:
 
-
+};
 
 
 SelectionManager::SelectionManager (SlideSorter& rSlideSorter)
@@ -94,7 +84,9 @@ SelectionManager::SelectionManager (SlideSorter& rSlideSorter)
       mbIsMakeSelectionVisiblePending(true),
       mnInsertionPosition(-1),
       mnAnimationId(Animator::NotAnAnimationId),
-      maRequestedTopLeft()
+      maRequestedTopLeft(),
+      mpPageInsertionListener(),
+      mpSelectionObserver(new SelectionObserver(rSlideSorter))
 {
 }
 
@@ -196,7 +188,7 @@ void SelectionManager::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& 
             if (xPages->getCount() <= 1)
                 break;
 
-            USHORT nPage = ((*aI)->GetPageNum()-1) / 2;
+            const USHORT nPage (model::FromCoreIndex((*aI)->GetPageNum()));
 
             Reference< XDrawPage > xPage( xPages->getByIndex( nPage ), UNO_QUERY_THROW );
             xPages->remove(xPage);
@@ -232,7 +224,7 @@ void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& 
             if (xPages->getCount() <= 1)
                 break;
 
-            USHORT nPage = ((*aI)->GetPageNum()-1) / 2;
+            const USHORT nPage (model::FromCoreIndex((*aI)->GetPageNum()));
 
             Reference< XDrawPage > xPage( xPages->getByIndex( nPage ), UNO_QUERY_THROW );
             xPages->remove(xPage);
@@ -242,58 +234,6 @@ void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& 
     {
         DBG_ERROR("SelectionManager::DeleteSelectedMasterPages(), exception caught!");
     }
-}
-
-
-
-
-bool SelectionManager::MoveSelectedPages (const sal_Int32 nTargetPageIndex)
-{
-    bool bMoved (false);
-    PageSelector& rSelector (mrController.GetPageSelector());
-
-    view::SlideSorterView::DrawLock aDrawLock (mrSlideSorter);
-    SlideSorterController::ModelChangeLock aLock (mrController);
-
-    // Transfer selection of the slide sorter to the document.
-    mrSlideSorter.GetModel().SynchronizeDocumentSelection ();
-
-    // Detect how many pages lie between document start and insertion
-    // position.
-    sal_Int32 nPageCountBeforeTarget (0);
-    ::boost::shared_ptr<PageSelector::PageSelection> pSelection (rSelector.GetPageSelection());
-    PageSelector::PageSelection::const_iterator iSelectedPage (pSelection->begin());
-    PageSelector::PageSelection::const_iterator iSelectionEnd (pSelection->end());
-    for ( ; iSelectedPage!=iSelectionEnd; ++iSelectedPage)
-    {
-        if (*iSelectedPage==NULL)
-            continue;
-        if (((*iSelectedPage)->GetPageNum()-1)/2 <= nTargetPageIndex)
-            ++nPageCountBeforeTarget;
-        else
-            break;
-    }
-
-    // Prepare to select the moved pages.
-    SelectionCommand* pCommand = new SelectionCommand(
-        rSelector,mrController.GetCurrentSlideManager(),mrSlideSorter.GetModel());
-    sal_Int32 nSelectedPageCount (rSelector.GetSelectedPageCount());
-    for (sal_Int32 nOffset=0; nOffset<nSelectedPageCount; ++nOffset)
-        pCommand->AddSlide(sal::static_int_cast<USHORT>(
-            nTargetPageIndex + nOffset - nPageCountBeforeTarget + 1));
-
-    // At the moment we can not move master pages.
-    if (nTargetPageIndex>=0)
-    {
-        if (mrSlideSorter.GetModel().GetEditMode() == EM_PAGE)
-            bMoved = mrSlideSorter.GetModel().GetDocument()->MovePages(
-                sal::static_int_cast<sal_uInt16>(nTargetPageIndex));
-    }
-    if (bMoved)
-        mrController.GetSlotManager()->ExecuteCommandAsynchronously(
-            ::std::auto_ptr<controller::Command>(pCommand));
-
-    return bMoved;
 }
 
 
@@ -340,173 +280,6 @@ void SelectionManager::SelectionHasChanged (const bool bMakeSelectionVisible)
 
 
 
-bool SelectionManager::IsMakeSelectionVisiblePending (void) const
-{
-    return mbIsMakeSelectionVisiblePending;
-}
-
-
-
-
-void SelectionManager::ResetMakeSelectionVisiblePending (void)
-{
-    mbIsMakeSelectionVisiblePending = false;
-}
-
-
-
-
-/** We have to distinguish three cases: 1) the selection is empty, 2) the
-    selection fits completely into the visible area, 3) it does not.
-    1) The visible area is not modified.
-    2) When the selection fits completely into the visible area we have to
-    decide how to align it.  It is done by scrolling it there and thus when
-    we scoll up the (towards the end of the document) the bottom of the
-    selection is aligned with the bottom of the window.  When we scroll
-    down (towards the beginning of the document) the top of the selection is
-    aligned with the top of the window.
-    3) We have to decide what part of the selection to make visible.  Here
-    we use the eSelectionHint and concentrate on either the first, the last,
-    or the most recently selected page.  We then again apply the algorithm
-    of a).
-
-*/
-Size SelectionManager::MakeSelectionVisible (const SelectionHint eSelectionHint)
-{
-    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
-    if (pWindow == NULL)
-        return Size(0,0);
-
-    mbIsMakeSelectionVisiblePending = false;
-
-    // Determine the descriptors of the first and last selected page and the
-    // bounding box that encloses their page objects.
-    model::SharedPageDescriptor pFirst;
-    model::SharedPageDescriptor pLast;
-    Rectangle aSelectionBox;
-    const view::Layouter& rLayouter (mrSlideSorter.GetView().GetLayouter());
-    model::PageEnumeration aSelectedPages (
-        PageEnumerationProvider::CreateSelectedPagesEnumeration(mrSlideSorter.GetModel()));
-    while (aSelectedPages.HasMoreElements())
-    {
-        model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
-
-        if (pFirst.get() == NULL)
-            pFirst = pDescriptor;
-        pLast = pDescriptor;
-
-        aSelectionBox.Union(rLayouter.GetPageObjectBox(pDescriptor->GetPageIndex(), true));
-    }
-
-    if (pFirst != NULL)
-    {
-        // Determine scroll direction and the position in model coordinates
-        // that will be aligned with the top/left or bottom/right window
-        // border.
-        if (DoesSelectionExceedVisibleArea(aSelectionBox))
-        {
-            // We can show only a part of the selection.
-            aSelectionBox = ResolveLargeSelection(pFirst,pLast, eSelectionHint);
-        }
-
-        return MakeRectangleVisible(aSelectionBox);
-    }
-
-    return Size(0,0);
-}
-
-
-
-
-Size SelectionManager::MakeRectangleVisible (const Rectangle& rBox)
-{
-    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
-    if (pWindow == NULL)
-        return Size(0,0);
-
-    Rectangle aVisibleArea (pWindow->PixelToLogic(
-        Rectangle(
-            Point(0,0),
-            pWindow->GetOutputSizePixel())));
-
-    sal_Int32 nNewTop (aVisibleArea.Top());
-    sal_Int32 nNewLeft (aVisibleArea.Left());
-
-    if (mrSlideSorter.GetView().GetOrientation() != Layouter::HORIZONTAL)
-    {
-        // Scroll the visible area to make aSelectionBox visible.
-        if (mrSlideSorter.GetProperties()->IsCenterSelection())
-        {
-            nNewTop = rBox.Top() - (aVisibleArea.GetHeight() - rBox.GetHeight()) / 2;
-        }
-        else
-        {
-            if (rBox.Top() < aVisibleArea.Top())
-                nNewTop = rBox.Top();
-            else if (rBox.Bottom() > aVisibleArea.Bottom())
-                nNewTop = rBox.Bottom() - aVisibleArea.GetHeight();
-            // otherwise we do not modify the visible area.
-        }
-
-        // Make some corrections of the new visible area.
-        Rectangle aModelArea (mrSlideSorter.GetView().GetModelArea());
-        if (nNewTop + aVisibleArea.GetHeight() > aModelArea.Bottom())
-            nNewTop = aModelArea.GetHeight() - aVisibleArea.GetHeight();
-        if (nNewTop < aModelArea.Top())
-            nNewTop = aModelArea.Top();
-
-    }
-
-    if (mrSlideSorter.GetView().GetOrientation() != Layouter::VERTICAL)
-    {
-        // Scroll the visible area to make aSelectionBox visible.
-        if (mrSlideSorter.GetProperties()->IsCenterSelection())
-        {
-            nNewLeft = rBox.Left() - (aVisibleArea.GetWidth() - rBox.GetWidth()) / 2;
-        }
-        else
-        {
-            if (rBox.Left() < aVisibleArea.Left())
-                nNewLeft = rBox.Left();
-            else if (rBox.Right() > aVisibleArea.Right())
-                nNewLeft = rBox.Right() - aVisibleArea.GetWidth();
-            // otherwise we do not modify the visible area.
-        }
-
-        // Make some corrections of the new visible area.
-        Rectangle aModelArea (mrSlideSorter.GetView().GetModelArea());
-        if (nNewLeft + aVisibleArea.GetWidth() > aModelArea.Right())
-            nNewLeft = aModelArea.GetWidth() - aVisibleArea.GetWidth();
-        if (nNewLeft < aModelArea.Left())
-            nNewLeft = aModelArea.Left();
-    }
-
-    // Scroll when the visible area is not already at the requested location
-    // and there is no active animation to scroll to it.
-    if ((nNewTop != aVisibleArea.Top() || nNewLeft != aVisibleArea.Left())
-        && (mnAnimationId==Animator::NotAnAnimationId
-            || maRequestedTopLeft != Point(nNewLeft,nNewTop)))
-    {
-        if (mnAnimationId != Animator::NotAnAnimationId)
-            mrController.GetAnimator()->RemoveAnimation(mnAnimationId);
-
-        maRequestedTopLeft = Point(nNewLeft, nNewTop);
-        VisibleAreaScroller aAnimation(
-            mrSlideSorter,
-            aVisibleArea.TopLeft(),
-            maRequestedTopLeft);
-        if (mrSlideSorter.GetProperties()->IsSmoothSelectionScrolling())
-            mnAnimationId = mrController.GetAnimator()->AddAnimation(aAnimation, 0, 300);
-        else
-            aAnimation(1.0);
-    }
-
-    return Size(aVisibleArea.Left() - nNewLeft, aVisibleArea.Top() - nNewTop);
-}
-
-
-
-
 void SelectionManager::AddSelectionChangeListener (const Link& rListener)
 {
     if (::std::find (
@@ -531,7 +304,7 @@ void SelectionManager::RemoveSelectionChangeListener(const Link&rListener)
 }
 
 
-
+/*
 
 bool SelectionManager::DoesSelectionExceedVisibleArea (const Rectangle& rSelectionBox) const
 {
@@ -593,7 +366,7 @@ Rectangle SelectionManager::ResolveLargeSelection (
         true);
 }
 
-
+*/
 
 
 sal_Int32 SelectionManager::GetInsertionPosition (void) const
@@ -612,7 +385,7 @@ sal_Int32 SelectionManager::GetInsertionPosition (void) const
             const sal_Int32 nPosition (aSelectedPages.GetNextElement()->GetPage()->GetPageNum());
             // Convert *2+1 index to straight index (n-1)/2 after the page
             // (+1).
-            nInsertionPosition = (nPosition-1)/2 + 1;
+            nInsertionPosition = model::FromCoreIndex(nPosition) + 1;
         }
 
     }
@@ -639,50 +412,9 @@ void SelectionManager::SetInsertionPosition (const sal_Int32 nInsertionPosition)
 
 
 
-//===== VerticalVisibleAreaScroller ===========================================
-
-namespace {
-
-const static sal_Int32 gnMaxScrollDistance = 300;
-
-VisibleAreaScroller::VisibleAreaScroller (
-    SlideSorter& rSlideSorter,
-    const Point aStart,
-    const Point aEnd)
-    : mrSlideSorter(rSlideSorter),
-      maStart(aStart),
-      maEnd(aEnd),
-      maAccelerationFunction(
-          controller::AnimationParametricFunction(
-              controller::AnimationBezierFunction (0.1,0.6)))
+::boost::shared_ptr<SelectionObserver> SelectionManager::GetSelectionObserver (void) const
 {
-    // When the distance to scroll is larger than a threshold then first
-    // jump to within this distance of the final value and start the
-    // animation from there.
-    if (abs(aStart.X()-aEnd.X()) > gnMaxScrollDistance)
-        if (aStart.X() < aEnd.X())
-            maStart.X() = aEnd.X()-gnMaxScrollDistance;
-        else
-            maStart.X() = aEnd.X()+gnMaxScrollDistance;
-    if (abs(aStart.Y()-aEnd.Y()) > gnMaxScrollDistance)
-        if (aStart.Y() < aEnd.Y())
-            maStart.Y() = aEnd.Y()-gnMaxScrollDistance;
-        else
-            maStart.Y() = aEnd.Y()+gnMaxScrollDistance;
+    return mpSelectionObserver;
 }
-
-
-
-
-void VisibleAreaScroller::operator() (const double nTime)
-{
-    const double nLocalTime (maAccelerationFunction(nTime));
-    mrSlideSorter.GetController().GetScrollBarManager().SetTopLeft(
-        Point(
-            sal_Int32(0.5 + maStart.X() * (1.0 - nLocalTime) + maEnd.X() * nLocalTime),
-            sal_Int32 (0.5 + maStart.Y() * (1.0 - nLocalTime) + maEnd.Y() * nLocalTime)));
-}
-
-} // end of anonymous namespace
 
 } } } // end of namespace ::sd::slidesorter

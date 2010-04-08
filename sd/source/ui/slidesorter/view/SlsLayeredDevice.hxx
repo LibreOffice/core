@@ -79,6 +79,7 @@ public:
 
     bool HasPainter (const sal_Int32 nLayer);
 
+    bool HandleMapModeChange (void);
     void Repaint (const Region& rRepaintRegion);
 
     void Resize (void);
@@ -93,7 +94,6 @@ private:
     MapMode maSavedMapMode;
 
     void RepaintRectangle (const Rectangle& rRepaintRectangle);
-    void HandleMapModeChange (void);
 };
 
 

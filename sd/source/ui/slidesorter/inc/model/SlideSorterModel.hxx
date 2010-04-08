@@ -45,6 +45,7 @@ class SdDrawDocument;
 namespace css = ::com::sun::star;
 
 class SdrPage;
+class SdPage;
 
 namespace sd { namespace slidesorter {
 class SlideSorter;
@@ -57,6 +58,9 @@ class PageObjectFactory;
 namespace sd { namespace slidesorter { namespace model {
 
 class DocumentPageContainer;
+
+inline sal_Int32 FromCoreIndex (const USHORT nCoreIndex) { return (nCoreIndex-1)/2; }
+inline USHORT ToCoreIndex (const sal_Int32 nIndex) { return nIndex*2+1; }
 
 /** The model of the slide sorter gives access to the slides that are to be
     displayed in the slide sorter view.  Via the SetDocumentSlides() method
@@ -146,6 +150,13 @@ public:
     */
     sal_Int32 GetIndex (const SdrPage* pPage) const;
 
+    /** Return an index for accessing an SdrModel that corresponds to the
+        given SlideSorterModel index.  In many cases we just have to apply
+        the n*2+1 magic.  Only when a special model is set, like a custom
+        slide show, then the returned value is different.
+    */
+    USHORT GetCoreIndex (const sal_Int32 nIndex) const;
+
     /** Call this method after the document has changed its structure.  This
         will get the model in sync with the SdDrawDocument.  This method
         tries not to throw away to much information already gathered.  This
@@ -207,6 +218,14 @@ public:
     */
     Region RestoreSelection (void);
 
+    /** Typically called from controller::Listener this method handles the
+        insertion and deletion of single pages.
+        @return
+            Returns <TRUE/> when the given page is relevant for the current
+            page kind and edit mode.
+    */
+    bool NotifyPageEvent (const SdrPage* pPage);
+
 private:
     mutable ::osl::Mutex maMutex;
     SlideSorter& mrSlideSorter;
@@ -221,6 +240,10 @@ private:
     */
     void AdaptSize (void);
 
+    SdPage* GetPage (const sal_Int32 nCoreIndex) const;
+    void InsertSlide (SdPage* pPage);
+    void DeleteSlide (const SdPage* pPage);
+    void UpdateIndices (const sal_Int32 nFirstIndex);
 };
 
 } } } // end of namespace ::sd::slidesorter::model

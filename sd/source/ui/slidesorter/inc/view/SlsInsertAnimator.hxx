@@ -55,7 +55,14 @@ public:
     */
     void SetInsertPosition (const InsertPosition& rInsertPosition);
 
-    void Reset (void);
+    enum ResetMode { RM_Normal, RM_AbortAnimations };
+    /** Restore the normal position of all page objects.
+        @param eMode
+            This flag controls wether to start an animation that ends in the
+            normal positions of all slides (AM_Animated) or to restore the
+            normal positions immediately (AM_Immediate).
+    */
+    void Reset (const controller::Animator::AnimationMode eMode);
 
 private:
     class Implementation;

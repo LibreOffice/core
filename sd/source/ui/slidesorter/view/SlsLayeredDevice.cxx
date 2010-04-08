@@ -138,8 +138,8 @@ typedef ::boost::shared_ptr<Layer> SharedLayer;
 class LayeredDevice::LayerContainer : public ::std::vector<SharedLayer>
 {
 public:
-    LayerContainer (void) { OSL_TRACE("created layer container at %x", this); }
-    ~LayerContainer (void) { OSL_TRACE("destroyed layer container at %x", this); }
+    LayerContainer (void) {}
+    ~LayerContainer (void) {}
 };
 
 
@@ -153,7 +153,6 @@ LayeredDevice::LayeredDevice (const SharedSdWindow& rpTargetWindow)
       mpBackBuffer(new VirtualDevice(*mpTargetWindow)),
       maSavedMapMode(rpTargetWindow->GetMapMode())
 {
-    OSL_TRACE("layered device created at %x", this);
     mpBackBuffer->SetOutputSizePixel(mpTargetWindow->GetSizePixel());
 }
 
@@ -162,7 +161,6 @@ LayeredDevice::LayeredDevice (const SharedSdWindow& rpTargetWindow)
 
 LayeredDevice::~LayeredDevice (void)
 {
-    OSL_TRACE("layered device destroyed at %x", this);
 }
 
 
@@ -279,8 +277,6 @@ bool LayeredDevice::HasPainter (const sal_Int32 nLayer)
 
 void LayeredDevice::Repaint (const Region& rRepaintRegion)
 {
-    HandleMapModeChange();
-
     // Validate the contents of all layers (that have their own devices.)
     ::std::for_each(
         mpLayers->begin(),
@@ -339,11 +335,11 @@ void LayeredDevice::Dispose (void)
 
 
 
-void LayeredDevice::HandleMapModeChange (void)
+bool LayeredDevice::HandleMapModeChange (void)
 {
     const MapMode& rMapMode (mpTargetWindow->GetMapMode());
     if (maSavedMapMode == rMapMode)
-        return;
+        return false;
 
     const Rectangle aLogicWindowBox (
         mpTargetWindow->PixelToLogic(Rectangle(Point(0,0), mpTargetWindow->GetSizePixel())));
@@ -352,10 +348,7 @@ void LayeredDevice::HandleMapModeChange (void)
         || maSavedMapMode.GetMapUnit() != rMapMode.GetMapUnit())
     {
         // When the scale has changed then we have to paint everything.
-        ::std::for_each(
-            mpLayers->begin(),
-            mpLayers->end(),
-            ::boost::bind(&Layer::InvalidateRectangle, _1, ::boost::cref(aLogicWindowBox)));
+        InvalidateAllLayers(aLogicWindowBox);
     }
     else if (maSavedMapMode.GetOrigin() != rMapMode.GetOrigin())
     {
@@ -366,18 +359,34 @@ void LayeredDevice::HandleMapModeChange (void)
             aLogicWindowBox.TopLeft(),
             mpTargetWindow->PixelToLogic(Point(0,0), maSavedMapMode),
             aLogicWindowBox.GetSize());
-        InvalidateAllLayers(aLogicWindowBox);
+        OSL_TRACE("scrolling %d %d", aDelta.X(), aDelta.Y());
 
-        /*
+        // Invalidate the area(s) that have been exposed.
         const Rectangle aWindowBox (Point(0,0), mpTargetWindow->GetSizePixel());
-        if (aDelta.X < 0)
-            Invalidate(
-                mpTargetWindow->PixelToLogic(
-                    aWindowBox.TopRight(),
-                    Point(mpTargetWindow->GetSizePixel().Right()X+aDelta.X,0)),
-                mpTargetWindow->PixelToLogic(
-                    Point(mpTargetWindow->GetSizePixel().X+aDelta.X,0)),
-        */
+        if (aDelta.Y() < 0)
+            InvalidateAllLayers(mpTargetWindow->PixelToLogic(Rectangle(
+                aWindowBox.Left(),
+                aWindowBox.Bottom()+aDelta.Y(),
+                aWindowBox.Right(),
+                aWindowBox.Bottom())));
+        else if (aDelta.Y() > 0)
+            InvalidateAllLayers(mpTargetWindow->PixelToLogic(Rectangle(
+                aWindowBox.Left(),
+                aWindowBox.Top(),
+                aWindowBox.Right(),
+                aWindowBox.Top()+aDelta.Y())));
+        if (aDelta.X() < 0)
+            InvalidateAllLayers(mpTargetWindow->PixelToLogic(Rectangle(
+                aWindowBox.Right()+aDelta.X(),
+                aWindowBox.Top(),
+                aWindowBox.Right(),
+                aWindowBox.Bottom())));
+        else if (aDelta.X() > 0)
+            InvalidateAllLayers(mpTargetWindow->PixelToLogic(Rectangle(
+                aWindowBox.Left(),
+                aWindowBox.Top(),
+                aWindowBox.Left()+aDelta.X(),
+                aWindowBox.Bottom())));
     }
     else
     {
@@ -386,6 +395,8 @@ void LayeredDevice::HandleMapModeChange (void)
     }
 
     maSavedMapMode = rMapMode;
+
+    return true;
 }
 
 
@@ -412,11 +423,15 @@ Layer::~Layer (void)
 
 void Layer::Initialize (const SharedSdWindow& rpTargetWindow)
 {
+#if 0
+    (void)rpTargetWindow;
+#else
     if ( ! mpLayerDevice)
     {
         mpLayerDevice.reset(new VirtualDevice(*rpTargetWindow));
         mpLayerDevice->SetOutputSizePixel(rpTargetWindow->GetSizePixel());
     }
+#endif
 }
 
 
@@ -424,6 +439,13 @@ void Layer::Initialize (const SharedSdWindow& rpTargetWindow)
 
 void Layer::InvalidateRectangle (const Rectangle& rInvalidationBox)
 {
+  /*
+    OSL_TRACE("invalidating layer %x  %d %d %d %d", this,
+        rInvalidationBox.Left(),
+        rInvalidationBox.Top(),
+        rInvalidationBox.GetWidth(),
+        rInvalidationBox.GetHeight());
+  */
     maInvalidationRegion.Union(rInvalidationBox);
 }
 
@@ -442,16 +464,14 @@ void Layer::Validate (const MapMode& rMapMode)
 {
     if (mpLayerDevice && ! maInvalidationRegion.IsEmpty())
     {
-        mpLayerDevice->SetMapMode(rMapMode);
+        Region aRegion (maInvalidationRegion);
+        maInvalidationRegion.SetEmpty();
 
+        mpLayerDevice->SetMapMode(rMapMode);
         ForAllRectangles(
-            maInvalidationRegion,
+            aRegion,
             ::boost::bind(&Layer::ValidateRectangle, this, _1));
     }
-    // else nothing to do now.  The painting is done in Repaint() directly
-    // into the back buffer.
-
-    maInvalidationRegion.SetEmpty();
 }
 
 
@@ -461,9 +481,15 @@ void Layer::ValidateRectangle (const Rectangle& rBox)
 {
     if ( ! mpLayerDevice)
         return;
-
+    /*
+    OSL_TRACE("validating layer %x  %d %d %d %d", this,
+        rBox.Left(),
+        rBox.Top(),
+        rBox.GetWidth(),
+        rBox.GetHeight());
+    */
     const Region aSavedClipRegion (mpLayerDevice->GetClipRegion());
-    mpLayerDevice->SetClipRegion(Region(rBox));
+    mpLayerDevice->IntersectClipRegion(rBox);
 
     for (::std::vector<SharedILayerPainter>::const_iterator
              iPainter(maPainters.begin()),
@@ -508,7 +534,7 @@ void Layer::Resize (const Size& rSize)
     if (mpLayerDevice)
     {
         mpLayerDevice->SetOutputSizePixel(rSize);
-        maInvalidationRegion.Union(Rectangle(Point(0,0), rSize));
+        maInvalidationRegion = Rectangle(Point(0,0), rSize);
     }
 }
 

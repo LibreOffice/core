@@ -96,6 +96,7 @@ public:
         access the model filters them out.
     */
     sal_Int32 GetPageIndex (void) const;
+    void SetPageIndex (const sal_Int32 nIndex);
 
     bool UpdateMasterPage (void);
 
@@ -136,7 +137,10 @@ private:
     /** This index is displayed as page number in the view.  It may or may
         not be the actual page index.
     */
-    const sal_Int32 mnIndex;
+    sal_Int32 mnIndex;
+
+    Rectangle maBoundingBox;
+    VisualState maVisualState;
 
     bool mbIsSelected : 1;
     bool mbWasSelected : 1;
@@ -145,9 +149,6 @@ private:
     bool mbIsCurrent : 1;
     bool mbIsMouseOver : 1;
 
-    Rectangle maBoundingBox;
-
-    VisualState maVisualState;
 
     // Do not use the copy constructor operator.  It is not implemented.
     PageDescriptor (const PageDescriptor& rDescriptor);

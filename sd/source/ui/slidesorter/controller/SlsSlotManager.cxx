@@ -40,6 +40,7 @@
 #include "controller/SlsPageSelector.hxx"
 #include "controller/SlsSelectionFunction.hxx"
 #include "controller/SlsSelectionManager.hxx"
+#include "controller/SlsSelectionObserver.hxx"
 #include "SlsCommand.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
@@ -184,7 +185,6 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
 
         case SID_SELECTALL:
             mrSlideSorter.GetController().GetPageSelector().SelectAllPages();
-            mrSlideSorter.GetController().GetSelectionManager()->ResetMakeSelectionVisiblePending();
             rRequest.Done();
             break;
 
@@ -399,7 +399,10 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
             SlideSorterViewShell* pViewShell
                 = dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell());
             if (pViewShell != NULL)
+            {
+                SelectionObserver::Context aContext (mrSlideSorter);
                 pViewShell->ImpSidUndo (FALSE, rRequest);
+            }
             break;
         }
 
@@ -408,7 +411,10 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
             SlideSorterViewShell* pViewShell
                 = dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell());
             if (pViewShell != NULL)
+            {
+                SelectionObserver::Context aContext (mrSlideSorter);
                 pViewShell->ImpSidRedo (FALSE, rRequest);
+            }
             break;
         }
 

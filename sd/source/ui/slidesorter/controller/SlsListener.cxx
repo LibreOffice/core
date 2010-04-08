@@ -35,6 +35,8 @@
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageSelector.hxx"
 #include "controller/SlsCurrentSlideManager.hxx"
+#include "controller/SlsSelectionManager.hxx"
+#include "controller/SlsSelectionObserver.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "view/SlideSorterView.hxx"
@@ -315,13 +317,23 @@ void Listener::Notify (
         switch (rSdrHint.GetKind())
         {
             case HINT_PAGEORDERCHG:
-                if (rBroadcaster.ISA(SdDrawDocument))
+                if (&rBroadcaster == mrSlideSorter.GetModel().GetDocument())
                 {
-                    SdDrawDocument& rDocument (static_cast<SdDrawDocument&>(rBroadcaster));
-                    if (rDocument.GetMasterSdPageCount(PK_STANDARD)
-                        == rDocument.GetMasterSdPageCount(PK_NOTES))
+                    // Notify model and selection observer about the page.
+                    // The return value of the model call acts as filter as
+                    // to which events to pass to the selection observer.
+                    if (mrSlideSorter.GetModel().NotifyPageEvent(rSdrHint.GetPage()))
+                        mrController.GetSelectionManager()
+                            ->GetSelectionObserver()->NotifyPageEvent(rSdrHint.GetPage());
+
+                    if (rBroadcaster.ISA(SdDrawDocument))
                     {
-                        mrController.HandleModelChange();
+                        SdDrawDocument& rDocument (static_cast<SdDrawDocument&>(rBroadcaster));
+                        if (rDocument.GetMasterSdPageCount(PK_STANDARD)
+                            == rDocument.GetMasterSdPageCount(PK_NOTES))
+                        {
+                            mrController.HandleModelChange();
+                        }
                     }
                 }
                 break;

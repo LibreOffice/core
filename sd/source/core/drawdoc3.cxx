@@ -57,6 +57,7 @@
 #include <sot/formats.hxx>
 
 #include <set>
+#include <boost/bind.hpp>
 
 #include "glob.hrc"
 #include "drawdoc.hxx"
@@ -410,6 +411,20 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
         delete pLayout;
 }
 
+/** Just add one page to the container given to the constructor.
+*/
+class InsertBookmarkAsPage_AddBookmarkedPages
+    : public SdDrawDocument::InsertBookmarkAsPage_PageFunctorBase
+{
+public:
+    InsertBookmarkAsPage_AddBookmarkedPages(::std::vector<SdPage*>& rContainer)
+        : mrContainer(rContainer) {}
+    ~InsertBookmarkAsPage_AddBookmarkedPages(void) {}
+    void operator() (SdDrawDocument&, SdPage* pPage) { mrContainer.push_back(pPage); }
+private:
+    ::std::vector<SdPage*>& mrContainer;
+};
+
 
 BOOL SdDrawDocument::InsertBookmarkAsPage(
     List* pBookmarkList,
@@ -668,23 +683,24 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
 
         USHORT nActualInsertPos = nInsertPos;
 
+        // Collect the bookmarked pages.
+        ::std::vector<SdPage*> aBookmarkedPages (pBookmarkList->Count(), NULL);
         for (USHORT nPos = 0; nPos < pBookmarkList->Count(); nPos++)
         {
-            /**************************************************************
-            * Namen der Bookmark-Seiten aus Liste holen
-            **************************************************************/
             String  aPgName(*(String*) pBookmarkList->GetObject(nPos));
             BOOL    bIsMasterPage;
             USHORT  nBMPage = pBookmarkDoc->GetPageByName( aPgName, bIsMasterPage );
 
             if (nBMPage != SDRPAGE_NOTFOUND)
             {
-                pBMPage = (SdPage*) pBookmarkDoc->GetPage(nBMPage);
+                aBookmarkedPages[nPos] =  dynamic_cast<SdPage*>(pBookmarkDoc->GetPage(nBMPage));
             }
-            else
-            {
-                pBMPage = NULL;
-            }
+        }
+
+        for (USHORT nPos = 0; nPos < pBookmarkList->Count(); nPos++)
+        {
+            pBMPage = aBookmarkedPages[nPos];
+            USHORT nBMPage = pBMPage!=NULL ? pBMPage->GetPageNum() : SDRPAGE_NOTFOUND;
 
             if (pBMPage && pBMPage->GetPageKind()==PK_STANDARD && !pBMPage->IsMasterPage())
             {
@@ -696,6 +712,8 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                 // #95991# delay renaming *after* pages are copied (might destroy source otherwise)
                 // #67905# don't change name if source and dest model are the same!
                 // #96029# avoid renaming if replacing the same page
+                String  aPgName(*(String*) pBookmarkList->GetObject(nPos));
+                BOOL    bIsMasterPage;
                 USHORT nPageSameName = GetPageByName(aPgName, bIsMasterPage);
                 if( pBookmarkDoc != this &&
                     nPageSameName != SDRPAGE_NOTFOUND &&
@@ -705,7 +723,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                     bMustRename = sal_True;
                 }
 
-                SdPage* pBookmarkPage = dynamic_cast< SdPage* >( pBookmarkDoc->GetPage(nBMPage) );
+                SdPage* pBookmarkPage = pBMPage;
                 if (bReplace )
                 {
                     ReplacePageInCustomShows( dynamic_cast< SdPage* >( GetPage( nActualInsertPos ) ), pBookmarkPage );

@@ -65,6 +65,39 @@ namespace {
     private:
         Reference<drawing::XDrawPage> mxSlide;
     };
+
+    bool CheckModel (const SlideSorterModel& rModel)
+    {
+        for (sal_Int32 nIndex=0,nCount=rModel.GetPageCount(); nIndex<nCount; ++nIndex)
+        {
+            SharedPageDescriptor pDescriptor (rModel.GetPageDescriptor(nIndex));
+            OSL_TRACE("%d %d %d %d %x",
+                nIndex,
+                pDescriptor->GetPageIndex(),
+                pDescriptor->GetVisualState().mnPageId,
+                FromCoreIndex(pDescriptor->GetPage()->GetPageNum()),
+                pDescriptor->GetPage());
+            if (nIndex != pDescriptor->GetPageIndex())
+            {
+                OSL_ASSERT(nIndex == pDescriptor->GetPageIndex());
+                return false;
+            }
+            if (nIndex != pDescriptor->GetVisualState().mnPageId)
+            {
+                OSL_ASSERT(nIndex == pDescriptor->GetVisualState().mnPageId);
+                return false;
+            }
+            /*
+            if (nIndex != FromCoreIndex(pDescriptor->GetPage()->GetPageNum()))
+            {
+                OSL_ASSERT(nIndex != FromCoreIndex(pDescriptor->GetPage()->GetPageNum()));
+                return false;
+            }
+            */
+        }
+
+        return true;
+    }
 }
 
 
@@ -194,15 +227,7 @@ SharedPageDescriptor SlideSorterModel::GetPageDescriptor (
         pDescriptor = maPageDescriptors[nPageIndex];
         if (pDescriptor == NULL && bCreate && mxSlides.is())
         {
-            SdDrawDocument* pModel = const_cast<SlideSorterModel*>(this)->GetDocument();
-            SdPage* pPage = NULL;
-            if (pModel != NULL)
-            {
-                if (meEditMode == EM_PAGE)
-                    pPage = pModel->GetSdPage ((USHORT)nPageIndex, mePageKind);
-                else
-                    pPage = pModel->GetMasterSdPage ((USHORT)nPageIndex, mePageKind);
-            }
+            SdPage* pPage = GetPage(nPageIndex);
             pDescriptor.reset(new PageDescriptor (
                 Reference<drawing::XDrawPage>(mxSlides->getByIndex(nPageIndex),UNO_QUERY),
                 pPage,
@@ -314,6 +339,18 @@ sal_Int32 SlideSorterModel::GetIndex (const SdrPage* pPage) const
 
 
 
+USHORT SlideSorterModel::GetCoreIndex (const sal_Int32 nIndex) const
+{
+    SharedPageDescriptor pDescriptor (GetPageDescriptor(nIndex));
+    if (pDescriptor)
+        return pDescriptor->GetPage()->GetPageNum();
+    else
+        return mxSlides->getCount()*2+1;
+}
+
+
+
+
 /** For now this method uses a trivial algorithm: throw away all descriptors
     and create them anew (on demand).  The main problem that we are facing
     when designing a better algorithm is that we can not compare pointers to
@@ -324,8 +361,37 @@ sal_Int32 SlideSorterModel::GetIndex (const SdrPage* pPage) const
 void SlideSorterModel::Resync (void)
 {
     ::osl::MutexGuard aGuard (maMutex);
-    ClearDescriptorList ();
-    AdaptSize();
+
+    // Check if document and this model really differ.
+    bool bIsUpToDate (true);
+    SdDrawDocument* pDocument = GetDocument();
+    if (pDocument!=NULL && maPageDescriptors.size()==pDocument->GetSdPageCount(mePageKind))
+    {
+        for (sal_Int32 nIndex=0,nCount=maPageDescriptors.size(); nIndex<nCount; ++nIndex)
+        {
+            if (maPageDescriptors[nIndex]
+                && maPageDescriptors[nIndex]->GetPage()
+                != GetPage(nIndex))
+            {
+                OSL_TRACE("page %d differs\n", nIndex);
+                bIsUpToDate = false;
+                break;
+            }
+        }
+    }
+    else
+    {
+        bIsUpToDate = false;
+        OSL_TRACE("models differ");
+    }
+
+    if ( ! bIsUpToDate)
+    {
+        SynchronizeDocumentSelection(); // Try to make the current selection persistent.
+        ClearDescriptorList ();
+        AdaptSize();
+    }
+    CheckModel(*this);
 }
 
 
@@ -333,21 +399,26 @@ void SlideSorterModel::Resync (void)
 
 void SlideSorterModel::ClearDescriptorList (void)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    DescriptorContainer aDescriptors;
 
-    // Clear the cache of page descriptors.
-    DescriptorContainer::iterator I;
-    for (I=maPageDescriptors.begin(); I!=maPageDescriptors.end(); I++)
     {
-        if (I->get() != NULL)
+        ::osl::MutexGuard aGuard (maMutex);
+        aDescriptors.swap(maPageDescriptors);
+    }
+
+    for (DescriptorContainer::iterator iDescriptor=aDescriptors.begin(), iEnd=aDescriptors.end();
+         iDescriptor!=iEnd;
+         ++iDescriptor)
+    {
+        if (iDescriptor->get() != NULL)
         {
-            if ( ! I->unique())
+            if ( ! iDescriptor->unique())
             {
-                OSL_TRACE("SlideSorterModel::ClearDescriptorList: trying to delete page descriptor  that is still used with count %d", I->use_count());
+                OSL_TRACE("SlideSorterModel::ClearDescriptorList: trying to delete page descriptor  that is still used with count %d", iDescriptor->use_count());
                 // No assertion here because that can hang the office when
                 // opening a dialog from here.
             }
-            I->reset();
+            iDescriptor->reset();
         }
     }
 }
@@ -544,6 +615,125 @@ Region SlideSorterModel::RestoreSelection (void)
         }
     }
     return aRepaintRegion;
+}
+
+
+
+
+bool SlideSorterModel::NotifyPageEvent (const SdrPage* pSdrPage)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+
+    SdPage* pPage = const_cast<SdPage*>(dynamic_cast<const SdPage*>(pSdrPage));
+    OSL_ASSERT(pPage!=NULL);
+    if (pPage == NULL)
+        return false;
+
+    // We are only interested in pages that are currently served by this
+    // model.
+    if (pPage->GetPageKind() != mePageKind)
+        return false;
+    if (pPage->IsMasterPage() != (meEditMode==EM_MASTERPAGE))
+        return false;
+
+    if (pPage->IsInserted())
+        InsertSlide(pPage);
+    else
+        DeleteSlide(pPage);
+    CheckModel(*this);
+
+    return true;
+}
+
+
+
+
+void SlideSorterModel::InsertSlide (SdPage* pPage)
+{
+    // Find the index at which to insert the given page.
+    USHORT nCoreIndex (pPage->GetPageNum());
+    sal_Int32 nIndex (FromCoreIndex(nCoreIndex));
+    if (pPage != GetPage(nIndex))
+        return;
+
+    // Check that the pages in the document before and after the given page
+    // are present in this model.
+    if (nIndex>0)
+        if (GetPage(nIndex-1) != GetPageDescriptor(nIndex-1)->GetPage())
+            return;
+    if (nIndex<maPageDescriptors.size()-1)
+        if (GetPage(nIndex+1) != GetPageDescriptor(nIndex)->GetPage())
+            return;
+
+    // Insert the given page at index nIndex
+    maPageDescriptors.insert(
+        maPageDescriptors.begin()+nIndex,
+        SharedPageDescriptor(
+            new PageDescriptor (
+                Reference<drawing::XDrawPage>(mxSlides->getByIndex(nIndex),UNO_QUERY),
+                pPage,
+                nIndex)));
+
+    // Update page indices.
+    UpdateIndices(nIndex+1);
+    OSL_TRACE("page inserted");
+}
+
+
+
+
+void SlideSorterModel::DeleteSlide (const SdPage* pPage)
+{
+    const sal_Int32 nIndex (GetIndex(pPage));
+    if (maPageDescriptors[nIndex])
+        if (maPageDescriptors[nIndex]->GetPage() != pPage)
+            return;
+
+    maPageDescriptors.erase(maPageDescriptors.begin()+nIndex);
+    UpdateIndices(nIndex);
+    OSL_TRACE("page removed");
+}
+
+
+
+
+void SlideSorterModel::UpdateIndices (const sal_Int32 nFirstIndex)
+{
+    for (sal_Int32 nDescriptorIndex=0,nCount=maPageDescriptors.size();
+         nDescriptorIndex<nCount;
+         ++nDescriptorIndex)
+    {
+        SharedPageDescriptor& rpDescriptor (maPageDescriptors[nDescriptorIndex]);
+        if (rpDescriptor)
+            if (nDescriptorIndex < nFirstIndex)
+            {
+                if (rpDescriptor->GetPageIndex()!=nDescriptorIndex)
+                {
+                    OSL_ASSERT(rpDescriptor->GetPageIndex()==nDescriptorIndex);
+                }
+            }
+            else
+            {
+                rpDescriptor->SetPageIndex(nDescriptorIndex);
+            }
+    }
+}
+
+
+
+
+SdPage* SlideSorterModel::GetPage (const sal_Int32 nSdIndex) const
+{
+    SdDrawDocument* pModel = const_cast<SlideSorterModel*>(this)->GetDocument();
+    if (pModel != NULL)
+    {
+        if (meEditMode == EM_PAGE)
+            return pModel->GetSdPage ((USHORT)nSdIndex, mePageKind);
+        else
+            return pModel->GetMasterSdPage ((USHORT)nSdIndex, mePageKind);
+    }
+    else
+        return NULL;
 }
 
 

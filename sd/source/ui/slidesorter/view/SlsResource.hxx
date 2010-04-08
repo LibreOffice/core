@@ -6,8 +6,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: CondFormat.hrc,v $
- * $Revision: 1.4 $
+ * $RCSfile: SlsViewCacheContext.hxx,v $
+ *
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,21 +29,23 @@
  *
  ************************************************************************/
 
-#ifndef SD_SLIDESORTER_ICONS_HRC
-#define SD_SLIDESORTER_ICONS_HRC
+#ifndef SD_SLIDESORTER_RESOURCE_HXX
+#define SD_SLIDESORTER_RESOURCE_HXX
 
-#include "glob.hrc"
+#include "view/SlsResource.hrc"
+#include "sdresid.hxx"
+#include <tools/rc.hxx>
 
-#define IMG_ICONS RID_SLIDESORTER_ICONS
+namespace sd { namespace slidesorter { namespace view {
 
-#define IMAGE_PRESENTATION 1
-#define IMAGE_SHOW_SLIDE 2
-#define IMAGE_NEW_SLIDE 3
+class LocalResource : public Resource
+{
+public:
+    LocalResource (const sal_uInt16 nResourceId) : Resource(SdResId(nResourceId)){}
+    ~LocalResource (void) { FreeResource(); }
+};
 
-#define IMAGE_SHADOW 10
-#define IMAGE_INSERT_SHADOW 11
-#define IMAGE_HIDE_SLIDE_OVERLAY 12
 
-#define STRING_UNHIDE 13
+} } } // end of namespace ::sd::slidesorter::view
 
 #endif

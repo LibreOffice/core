@@ -48,6 +48,12 @@ class Animator
     : private ::boost::noncopyable
 {
 public:
+    /** In some circumstances we have to avoid animation and jump to the
+        final animation state immediately.  Use this enum instead of a bool
+        to be more expressive.
+    */
+    enum AnimationMode { AM_Animated, AM_Immediate };
+
     Animator (SlideSorter& rSlideSorter);
     ~Animator (void);
 

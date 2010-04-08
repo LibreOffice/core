@@ -175,17 +175,21 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     SetPageVisible (FALSE);
 
 
-    // Register the background painter on level 0
-    mpLayeredDevice->RegisterPainter(mpBackgroundPainter, 0);
+    // Register the background painter on level 1 to avoid the creation of a
+    // background buffer.
+    mpLayeredDevice->RegisterPainter(mpBackgroundPainter, 1);
 
-    // Wrap a shared_ptr held wrapper around this view and register it as
+    // Wrap a shared_ptr-held-wrapper around this view and register it as
     // painter at the layered device.  There is no explicit destruction: in
     // the SlideSorterView destructor the layered device is destroyed and
     // with it the only reference to the wrapper which therefore is also
     // destroyed.
-    // The painter is placed on level 0, like the background painter, so
-    // that it is buffered.
-    mpLayeredDevice->RegisterPainter(SharedILayerPainter(new Painter(*this)), 0);
+    SharedILayerPainter pPainter (new Painter(*this));
+
+    // The painter is placed on level 1 to avoid buffering.  This should be
+    // a little faster during animations because the previews are painted
+    // directly into the window, not via the buffer.
+    mpLayeredDevice->RegisterPainter(pPainter, 1);
 }
 
 
@@ -370,6 +374,7 @@ void SlideSorterView::Resize (void)
         if (bRearrangeSuccess)
         {
             Layout();
+            UpdatePageUnderMouse(false);
             RequestRepaint();
         }
     }
@@ -438,7 +443,9 @@ void SlideSorterView::UpdateOrientation (void)
         }
         else
         {
-            OSL_ASSERT(pDockingWindow!=NULL);
+            // We are not placed in a docking window.  One possible reason
+            // is that the slide sorter is temporarily into a cache and was
+            // reparented to a non-docking window.
             SetOrientation(Layouter::GRID);
         }
     }
@@ -472,12 +479,20 @@ void SlideSorterView::Layout ()
 
         // Iterate over all page objects and place them relative to the
         // containing page.
+        sal_Int32 nIndex (0);
         model::PageEnumeration aPageEnumeration (
             model::PageEnumerationProvider::CreateAllPagesEnumeration(mrModel));
         while (aPageEnumeration.HasMoreElements())
         {
             model::SharedPageDescriptor pDescriptor (aPageEnumeration.GetNextElement());
             pDescriptor->SetBoundingBox(mpLayouter->GetPageObjectBox(pDescriptor->GetPageIndex()));
+            OSL_TRACE("%d %d(%d) : %d %d %d %d",
+                pDescriptor->GetPageIndex(), pDescriptor->GetVisualState().mnPageId, nIndex,
+                pDescriptor->GetBoundingBox().Left(),
+                pDescriptor->GetBoundingBox().Top(),
+                pDescriptor->GetBoundingBox().GetWidth(),
+                pDescriptor->GetBoundingBox().GetHeight());
+            ++nIndex;
         }
 
         GetPageObjectPainter()->NotifyResize();
@@ -599,11 +614,11 @@ void SlideSorterView::RequestRepaint (void)
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow)
     {
-        pWindow->Invalidate();
         mpLayeredDevice->InvalidateAllLayers(
             Rectangle(
                 pWindow->PixelToLogic(Point(0,0)),
                 pWindow->PixelToLogic(pWindow->GetSizePixel())));
+        pWindow->Invalidate();
     }
 }
 
@@ -623,8 +638,8 @@ void SlideSorterView::RequestRepaint (const Rectangle& rRepaintBox)
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow)
     {
-        pWindow->Invalidate(rRepaintBox);
         mpLayeredDevice->InvalidateAllLayers(rRepaintBox);
+        pWindow->Invalidate(rRepaintBox);
     }
 }
 
@@ -635,8 +650,8 @@ void SlideSorterView::RequestRepaint (const Region& rRepaintRegion)
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow)
     {
-        pWindow->Invalidate(rRepaintRegion);
         mpLayeredDevice->InvalidateAllLayers(rRepaintRegion);
+        pWindow->Invalidate(rRepaintRegion);
     }
 }
 
@@ -684,6 +699,8 @@ void SlideSorterView::CompleteRedraw (
     if (mnLockRedrawSmph == 0)
     {
         mrSlideSorter.GetContentWindow()->IncrementLockCount();
+        if (mpLayeredDevice->HandleMapModeChange())
+            DeterminePageObjectVisibilities();
         mpLayeredDevice->Repaint(rPaintArea);
         mrSlideSorter.GetContentWindow()->DecrementLockCount();
     }
@@ -756,6 +773,8 @@ void SlideSorterView::ConfigurationChanged (
     cache::PageCacheManager::Instance()->InvalidateAllCaches();
 
     ::sd::View::ConfigurationChanged(pBroadcaster, nHint);
+    RequestRepaint();
+
 }
 
 
@@ -819,10 +838,14 @@ void SlideSorterView::UpdatePageUnderMouse (bool bAnimate)
     if (pWindow && ! pWindow->IsMouseCaptured())
     {
         const Window::PointerState aPointerState (pWindow->GetPointerState());
-        UpdatePageUnderMouse (
-            aPointerState.maPos,
-            (aPointerState.mnState & MOUSE_LEFT)!=0,
-            bAnimate);
+        const Rectangle aWindowBox (pWindow->GetPosPixel(), pWindow->GetSizePixel());
+        if (aWindowBox.IsInside(aPointerState.maPos))
+            UpdatePageUnderMouse (
+                aPointerState.maPos,
+                (aPointerState.mnState & MOUSE_LEFT)!=0,
+                bAnimate);
+        else
+            SetPageUnderMouse(SharedPageDescriptor(),false);
     }
 }
 
@@ -951,21 +974,15 @@ bool SlideSorterView::SetState (
     if ( ! bModified)
         return false;
 
-    switch(eState)
-    {
-        case PageDescriptor::ST_Visible:
-        case PageDescriptor::ST_Selected:
-        case PageDescriptor::ST_Focused:
-        case PageDescriptor::ST_MouseOver:
-        case PageDescriptor::ST_Current:
-        case PageDescriptor::ST_Excluded:
-            RequestRepaint(pDescriptor);
-            break;
+    // When the page object is not visible (i.e. not on the screen then
+    // nothing has to be painted.
+    if ( ! pDescriptor->HasState(PageDescriptor::ST_Visible))
+        return true;
 
-        case PageDescriptor::ST_WasSelected:
-            // Ignore.
-            break;
-    }
+    // For most states a change of that state leads to visible difference
+    // and we have to request a repaint.
+    if (eState != PageDescriptor::ST_WasSelected)
+        RequestRepaint(pDescriptor);
 
     // Fade in or out the buttons.
     if (eState == PageDescriptor::ST_MouseOver)
@@ -1083,11 +1100,6 @@ SlideSorterView::DrawLock::~DrawLock (void)
             mpWindow->Invalidate(mrView.maRedrawRegion);
             mpWindow->Update();
         }
-    /*
-            mrView.CompleteRedraw(
-                mpWindow.get(),
-                mrView.maRedrawRegion);
-    */
 }
 
 

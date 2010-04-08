@@ -37,7 +37,6 @@
 #include <sfx2/viewfac.hxx>
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
-#include <memory>
 #include <comphelper/implementationreference.hxx>
 
 namespace sd { namespace slidesorter {
@@ -67,7 +66,9 @@ class PageSelector;
 class ScrollBarManager;
 class SelectionFunction;
 class SelectionManager;
+class SelectionObserver;
 class SlotManager;
+class VisibleAreaManager;
 
 class SlideSorterController
 {
@@ -249,21 +250,24 @@ public:
     */
     ::boost::shared_ptr<Animator> GetAnimator (void) const;
 
+    VisibleAreaManager& GetVisibleAreaManager (void) const;
+
     void CheckForMasterPageAssignment (void);
 
 private:
     SlideSorter& mrSlideSorter;
     model::SlideSorterModel& mrModel;
     view::SlideSorterView& mrView;
-    ::std::auto_ptr<PageSelector> mpPageSelector;
-    ::std::auto_ptr<FocusManager> mpFocusManager;
+    ::boost::scoped_ptr<PageSelector> mpPageSelector;
+    ::boost::scoped_ptr<FocusManager> mpFocusManager;
     ::boost::shared_ptr<SlotManager> mpSlotManager;
-    ::std::auto_ptr<controller::Clipboard> mpClipboard;
-    ::std::auto_ptr<ScrollBarManager> mpScrollBarManager;
+    ::boost::scoped_ptr<controller::Clipboard> mpClipboard;
+    ::boost::scoped_ptr<ScrollBarManager> mpScrollBarManager;
     mutable ::boost::shared_ptr<CurrentSlideManager> mpCurrentSlideManager;
     ::boost::shared_ptr<SelectionManager> mpSelectionManager;
     ::boost::shared_ptr<InsertionIndicatorHandler> mpInsertionIndicatorHandler;
     ::boost::shared_ptr<Animator> mpAnimator;
+    ::boost::scoped_ptr<VisibleAreaManager> mpVisibleAreaManager;
 
     // The listener listens to UNO events and thus is a UNO object.
     // For proper life time management and at the same time free access to

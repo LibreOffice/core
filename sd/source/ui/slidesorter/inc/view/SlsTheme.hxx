@@ -117,9 +117,12 @@ public:
 
     enum IconType
     {
-        RawShadow,
-        RawInsertShadow,
-        HideSlideOverlay
+        Icon_RawShadow,
+        Icon_RawInsertShadow,
+        Icon_HideSlideOverlay,
+        Icon_StartPresentation,
+        Icon_ShowSlide,
+        Icon_DuplicateSlide
     };
     BitmapEx GetIcon (const IconType eType);
 
@@ -131,6 +134,14 @@ public:
     };
     sal_Int32 GetIntegerValue (const IntegerValueType eType) const;
     void SetIntegerValue (const IntegerValueType eType, const sal_Int32 nValue);
+
+    enum StringType
+    {
+        String_Unhide,
+        String_DragAndDropPages,
+        String_DragAndDropSlides
+    };
+    ::rtl::OUString GetString (const StringType eType) const;
 
 private:
     class GradientDescriptor
@@ -157,10 +168,16 @@ private:
     BitmapEx maRawShadow;
     BitmapEx maRawInsertShadow;
     BitmapEx maHideSlideOverlay;
+    BitmapEx maStartPresentationIcon;
+    BitmapEx maShowSlideIcon;
+    BitmapEx maDuplicateSlideIcon;
     ::std::vector<ColorData> maColor;
     sal_Int32 mnButtonCornerRadius;
     sal_Int32 mnButtonMaxAlpha;
     sal_Int32 mnButtonPaintType;
+    ::rtl::OUString msUnhide;
+    ::rtl::OUString msDragAndDropPages;
+    ::rtl::OUString msDragAndDropSlides;
 
     GradientDescriptor& GetGradient (const GradientColorType eType);
 };

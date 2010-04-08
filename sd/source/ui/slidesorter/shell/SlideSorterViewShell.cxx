@@ -40,6 +40,7 @@
 #include "controller/SlsCurrentSlideManager.hxx"
 #include "controller/SlsSelectionManager.hxx"
 #include "controller/SlsSelectionFunction.hxx"
+#include "controller/SlsProperties.hxx"
 #include "view/SlideSorterView.hxx"
 #include "view/SlsLayouter.hxx"
 #include "model/SlideSorterModel.hxx"
@@ -303,12 +304,16 @@ SlideSorter& SlideSorterViewShell::GetSlideSorter (void) const
 
 bool SlideSorterViewShell::RelocateToParentWindow (::Window* pParentWindow)
 {
-    OSL_ASSERT(mpSlideSorter.get()!=NULL);
+    OSL_ASSERT(mpSlideSorter);
+    if ( ! mpSlideSorter)
+        return false;
+
     if (pParentWindow == NULL)
         WriteFrameViewData();
     const bool bSuccess (mpSlideSorter->RelocateToWindow(pParentWindow));
     if (pParentWindow != NULL)
         ReadFrameViewData(mpFrameView);
+
     return bSuccess;
 }
 

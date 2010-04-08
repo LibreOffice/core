@@ -88,15 +88,15 @@ void InsertionIndicatorHandler::Start (const bool bIsOverSourceView)
 
 
 
-void InsertionIndicatorHandler::End (void)
+void InsertionIndicatorHandler::End (const controller::Animator::AnimationMode eMode)
 {
     if (mbIsForcedShow ||  ! mbIsActive || mbIsReadOnly)
         return;
 
-    GetInsertAnimator()->Reset();
+    GetInsertAnimator()->Reset(eMode);
 
     mbIsActive = false;
-    maInsertPosition = view::InsertPosition();
+    //    maInsertPosition = view::InsertPosition();
     meMode = UnknownMode;
 
     mpInsertionIndicatorOverlay->Hide();
@@ -116,7 +116,7 @@ void InsertionIndicatorHandler::ForceShow (void)
 void InsertionIndicatorHandler::ForceEnd (void)
 {
     mbIsForcedShow = false;
-    End();
+    End(Animator::AM_Immediate);
 }
 
 
@@ -219,7 +219,7 @@ void InsertionIndicatorHandler::SetPosition (
         }
         else
         {
-            GetInsertAnimator()->Reset();
+            GetInsertAnimator()->Reset(Animator::AM_Animated);
             mpInsertionIndicatorOverlay->Hide();
         }
     }

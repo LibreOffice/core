@@ -84,7 +84,7 @@ public:
     void SetActiveButtonState (const sal_Int32 nIndex, const ButtonState eState);
     ButtonState GetButtonState (const sal_Int32 nIndex);
 
-    const sal_Int32 mnPageId; // For debugging
+    sal_Int32 mnPageId; // For debugging
 
 private:
     State meCurrentVisualState;
