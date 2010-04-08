@@ -8,6 +8,8 @@
   <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-data"
                        manifest:full-path="CalcWindowState.xcu"/>
   <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-data"
+                       manifest:full-path="DrawWindowState.xcu"/>
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-data"
                        manifest:full-path="Factories.xcu"/>
   <!-- <manifest:file-entry manifest:media-type="image/png"
                        manifest:full-path="panel.png"/>-->
