@@ -82,13 +82,23 @@ COMPONENT_XCU = \
     $(EXTENSIONDIR)/Factories.xcu
 
 COMPONENT_LIBRARIES = \
-        $(EXTENSIONDIR)$/$(SHL1TARGET)$(DLLPOST)
+        $(EXTENSIONDIR)/$(SHL1TARGET)$(DLLPOST)
+
+COMPONENT_IMAGES= \
+    $(EXTENSIONDIR)/panel.png
 
 # ........ dependencies for packaging the extension ........
-EXTENSION_PACKDEPS=makefile.mk
+EXTENSION_PACKDEPS=makefile.mk $(COMPONENT_IMAGES)
 
 # --- Targets ------------------------------------------------------
 .INCLUDE : extension_pre.mk
 .INCLUDE : target.mk
 .INCLUDE : extension_post.mk
 
+$(EXTENSIONDIR)/%.png : ./%.png
+    @@-$(MKDIRHIER) $(@:d)
+    @$(COPY) $< $@ > $(NULLDEV)
+
+$(EXTENSIONDIR)/WriterWindowState.xcu: ./WriterWindowState.xcu
+    @@-$(MKDIRHIER) $(@:d)
+    $(COMMAND_ECHO)$(TYPE) ./WriterWindowState.xcu | sed s/UPDATED_IDENTIFIER/$(IMPLEMENTATION_IDENTIFIER)/ > $(EXTENSIONDIR)/WriterWindowState.xcu

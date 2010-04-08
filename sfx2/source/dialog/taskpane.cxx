@@ -41,6 +41,7 @@
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
@@ -84,6 +85,8 @@ namespace sfx2
     using ::com::sun::star::frame::XModuleManager;
     using ::com::sun::star::frame::XFrame;
     using ::com::sun::star::lang::XComponent;
+    using ::com::sun::star::graphic::XGraphicProvider;
+    using ::com::sun::star::graphic::XGraphic;
     /** === end UNO using === **/
     namespace PosSize = ::com::sun::star::awt::PosSize;
 
@@ -240,6 +243,29 @@ namespace sfx2
         }
 
         //--------------------------------------------------------------------------------------------------------------
+        Image lcl_getPanelImage( const ::utl::OConfigurationNode& i_rPanelConfigNode )
+        {
+            const ::rtl::OUString sImageURL( ::comphelper::getString( i_rPanelConfigNode.getNodeValue( "ImageURL" ) ) );
+            if ( sImageURL.getLength() )
+            {
+                try
+                {
+                    const ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+                    const Reference< XGraphicProvider > xGraphicProvider( aContext.createComponent( "com.sun.star.graphic.GraphicProvider" ), UNO_QUERY_THROW );
+
+                    ::comphelper::NamedValueCollection aMediaProperties;
+                    aMediaProperties.put( "URL", sImageURL );
+
+                    const Reference< XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties.getPropertyValues() ), UNO_SET_THROW );
+                    return Image( xGraphic );
+                }
+                catch( const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                }
+            }
+            return Image();
+        }
     }
 
     //==================================================================================================================
@@ -374,6 +400,7 @@ namespace sfx2
     //------------------------------------------------------------------------------------------------------------------
     CustomToolPanel::CustomToolPanel( const ::utl::OConfigurationNode& i_rPanelWindowState )
         :m_sUIName( ::comphelper::getString( i_rPanelWindowState.getNodeValue( "UIName" ) ) )
+        ,m_aPanelImage( lcl_getPanelImage( i_rPanelWindowState ) )
         ,m_sResourceURL( i_rPanelWindowState.getLocalName() )
         ,m_aCustomPanel()
         ,m_bAttemptedCreation( false )
@@ -422,8 +449,7 @@ namespace sfx2
     //------------------------------------------------------------------------------------------------------------------
     Image CustomToolPanel::GetImage() const
     {
-        // TODO: read from configuration
-        return Image();
+        return m_aPanelImage;
     }
 
     //------------------------------------------------------------------------------------------------------------------

@@ -9,6 +9,9 @@
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>true</value>
         </prop>
+        <prop oor:name="ImageURL" oor:type="xs:string">
+          <value>vnd.sun.star.extension://UPDATED_IDENTIFIER/panel.png</value>
+        </prop>
       </node>
     </node>
   </node>
