@@ -42,6 +42,12 @@
 #include <toolkit/unohlp.hxx>
 #endif
 #include <vcl/toolbox.hxx>
+//shizhobo
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+const int TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE  = 1;
+const int TOOLBARCONTROLLER_PROPCOUNT               = 1;
+const rtl::OUString TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIABLE( RTL_CONSTASCII_USTRINGPARAM( "SupportsVisiable" ));
+//end
 
 using namespace ::cppu;
 using namespace ::com::sun::star::awt;
@@ -61,10 +67,12 @@ struct ToolboxController_Impl
 };
 
 ToolboxController::ToolboxController(
+
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >& xFrame,
     const ::rtl::OUString& aCommandURL ) :
     OWeakObject()
+    ,OPropertyContainer(GetBroadcastHelper())//shizhoubo
     ,   m_bInitialized( sal_False )
     ,   m_bDisposed( sal_False )
     ,   m_xFrame(xFrame)
@@ -72,6 +80,10 @@ ToolboxController::ToolboxController(
     ,   m_aCommandURL( aCommandURL )
     ,   m_aListenerContainer( m_aMutex )
 {
+    //registger Propertyh by shizhoubo
+    registerProperty(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIABLE, TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE, com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY,
+        &m_bSupportVisiable, getCppuType(&m_bSupportVisiable));
+
     m_pImpl = new ToolboxController_Impl;
 
     try
@@ -87,10 +99,15 @@ ToolboxController::ToolboxController(
 
 ToolboxController::ToolboxController() :
     OWeakObject()
+    ,OPropertyContainer(GetBroadcastHelper())//shizhoubo
     ,   m_bInitialized( sal_False )
     ,   m_bDisposed( sal_False )
     ,   m_aListenerContainer( m_aMutex )
 {
+    //registger Propertyh by shizhoubo
+    registerProperty(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIABLE, TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE, com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY,
+        &m_bSupportVisiable, getCppuType(&m_bSupportVisiable));
+
     m_pImpl = new ToolboxController_Impl;
 }
 
@@ -146,11 +163,16 @@ throw ( RuntimeException )
                 static_cast< XInitialization* >( this ),
                 static_cast< XComponent* >( this ),
                 static_cast< XUpdatable* >( this ));
-
-    if ( a.hasValue() )
-        return a;
-
-    return OWeakObject::queryInterface( rType );
+    if ( !a.hasValue())
+    {
+        a = ::cppu::queryInterface(rType
+            ,static_cast<XPropertySet*>(this)
+            ,static_cast<XMultiPropertySet*>(this)
+            ,static_cast<XFastPropertySet*>(this));
+        if (!a.hasValue())
+            return OWeakObject::queryInterface( rType );
+    }
+    return a;
 }
 
 void SAL_CALL ToolboxController::acquire() throw ()
@@ -186,7 +208,8 @@ throw ( Exception, RuntimeException )
     {
         vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
         m_bInitialized = sal_True;
-
+        //shizhoubo add
+        m_bSupportVisiable = sal_False;
         PropertyValue aPropValue;
         for ( int i = 0; i < aArguments.getLength(); i++ )
         {
@@ -704,4 +727,70 @@ Reference< ::com::sun::star::awt::XWindow > ToolboxController::getParent() const
 {
     return m_pImpl->m_xParentWindow;
 }
+//
+//-------------------------------------------------------------------------
+// XPropertySet by shizhoubo
+com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >  SAL_CALL ToolboxController::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException)
+{
+    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+//-------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper& ToolboxController::getInfoHelper()
+{
+        return *const_cast<ToolboxController*>(this)->getArrayHelper();
+}
+//OPropertyArrayUsageHelper by shizhoubo
+//------------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper* ToolboxController::createArrayHelper( ) const
+{
+        com::sun::star::uno::Sequence< Property > aProps;
+        describeProperties(aProps);
+        return new ::cppu::OPropertyArrayHelper(aProps);
+}
+//shizhoubo for supportsvisiable
+void ToolboxController::setSupportVisiableProperty(sal_Bool bValue)
+{
+    m_bSupportVisiable = bValue;
+}
+//OPropertySetHelper by shizhoubo
+sal_Bool SAL_CALL ToolboxController::convertFastPropertyValue( com::sun::star::uno::Any&    aConvertedValue ,
+                                             com::sun::star::uno::Any&        aOldValue       ,
+                                             sal_Int32                        nHandle         ,
+                                             const com::sun::star::uno::Any&  aValue          ) throw( com::sun::star::lang::IllegalArgumentException )
+{
+
+    switch (nHandle)
+    {
+        case TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE:
+        {
+            sal_Bool aNewValue;
+            aValue >>= aNewValue;
+            if (aNewValue != m_bSupportVisiable)
+            {
+                aConvertedValue <<= aNewValue;
+                aOldValue <<= m_bSupportVisiable;
+                return sal_True;
+            }
+            return sal_False;
+        }
+    }
+    return OPropertyContainer::convertFastPropertyValue(aConvertedValue, aOldValue, nHandle, aValue);
+
+
+}
+void SAL_CALL ToolboxController::setFastPropertyValue_NoBroadcast(sal_Int32  nHandle,
+                                                         const com::sun::star::uno::Any&  aValue ) throw( com::sun::star::uno::Exception)
+{
+    OPropertyContainer::setFastPropertyValue_NoBroadcast(nHandle, aValue);
+    if (TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE == nHandle)
+    {   sal_Bool rValue;
+        aValue >>= rValue;
+        if (m_bInitialized)
+            this->setSupportVisiableProperty(rValue);
+    }
+
+}
+//end
+
 } // svt
