@@ -44,7 +44,9 @@ SLOFILES=	$(SLO)$/AccessibleChartView.obj		\
             $(SLO)$/ChartElementFactory.obj		\
             $(SLO)$/AccessibleBase.obj	\
             $(SLO)$/AccessibleChartElement.obj \
-            $(SLO)$/AccessibleTextHelper.obj
+            $(SLO)$/AccessibleChartShape.obj \
+            $(SLO)$/AccessibleTextHelper.obj \
+            $(SLO)$/AccessibleViewForwarder.obj
 
 # --- Targets -----------------------------------------------------------------
 

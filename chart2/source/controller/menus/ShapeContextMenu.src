@@ -1,0 +1,124 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "MenuResIds.hrc"
+#include "ShapeController.hrc"
+
+
+Menu RID_CONTEXTMENU_SHAPE
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = COMMAND_ID_FORMAT_LINE;
+            Command = ".uno:FormatLine";
+        };
+        MenuItem
+        {
+            Identifier = COMMAND_ID_FORMAT_AREA;
+            Command = ".uno:FormatArea";
+        };
+        MenuItem
+        {
+            Identifier = COMMAND_ID_TEXT_ATTRIBUTES;
+            Command = ".uno:TextAttributes";
+        };
+        MenuItem
+        {
+            Identifier = COMMAND_ID_TRANSFORM_DIALOG;
+            Command = ".uno:TransformDialog";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = COMMAND_ID_OBJECT_TITLE_DESCRIPTION;
+            Command = ".uno:ObjectTitleDescription";
+        };
+        MenuItem
+        {
+            Identifier = COMMAND_ID_RENAME_OBJECT;
+            Command = ".uno:RenameObject";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = COMMAND_ID_ARRANGE_ROW;
+            Command = ".uno:ArrangeRow";
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = COMMAND_ID_BRING_TO_FRONT;
+                        Command = ".uno:BringToFront";
+                    };
+                    MenuItem
+                    {
+                        Identifier = COMMAND_ID_FORWARD;
+                        Command = ".uno:Forward";
+                    };
+                    MenuItem
+                    {
+                        Identifier = COMMAND_ID_BACKWARD;
+                        Command = ".uno:Backward";
+                    };
+                    MenuItem
+                    {
+                        Identifier = COMMAND_ID_SEND_TO_BACK;
+                        Command = ".uno:SendToBack";
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = COMMAND_ID_CUT;
+            Command = ".uno:Cut";
+        };
+        MenuItem
+        {
+            Identifier = COMMAND_ID_COPY;
+            Command = ".uno:Copy";
+        };
+        MenuItem
+        {
+            Identifier = COMMAND_ID_PASTE;
+            Command = ".uno:Paste";
+        };
+    };
+};
