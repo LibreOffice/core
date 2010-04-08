@@ -29,9 +29,9 @@ PRJ = ..
 PRJNAME = postprocess
 TARGET = packregistry
 
-MY_XCS = $(SOLARXMLDIR)/registry/schema/org/openoffice
-MY_XCU = $(SOLARXMLDIR)/registry/data/org/openoffice
-MY_MOD = $(SOLARXMLDIR)/registry/spool
+MY_XCS = registry/schema/org/openoffice
+MY_XCU = registry/data/org/openoffice
+MY_MOD = registry/spool
 
 MY_XCDS = \
     $(MISC)/base.xcd \
@@ -477,25 +477,26 @@ ALLTAR : \
     $(MISC)/lang/fcfg_langpack_{$(alllangiso)}.xcd \
     $(MISC)/lang/registry_{$(alllangiso)}.xcd
 
-{$(MY_XCDS)} : $$(MY_FILES_$$(@:b))
+{$(MY_XCDS)} : $$(MY_FILES_$$(@:b):^"$(SOLARXMLDIR)/")
 
 $(MISC)/%.xcd .ERRREMOVE : $(MISC)/%.list
-    $(XSLTPROC) --nonet -o $@ $(SOLARENV)/bin/packregistry.xslt $<
+    $(XSLTPROC) --nonet --stringparam prefix $(SOLARXMLDIR)/ -o $@ \
+        $(SOLARENV)/bin/packregistry.xslt $<
 
 $(MISC)/%.list : makefile.mk
     - $(RM) $@
     echo '<list>' $(foreach,i,$(MY_DEPS_$(@:b)) '<dependency file="$i"/>') \
         $(foreach,i,$(MY_FILES_$(@:b)) '<filename>$i</filename>') '</list>' > $@
 
-$(MISC)/lang/Langpack-{$(alllangiso)}.xcd : $(MY_MOD)/$$(@:b).xcu
+$(MISC)/lang/Langpack-{$(alllangiso)}.xcd : $(SOLARXMLDIR)/$(MY_MOD)/$$(@:b).xcu
 
 $(MISC)/lang/Langpack-%.xcd .ERRREMOVE :
     $(MKDIRHIER) $(@:d)
     - $(RM) $(MISC)/$(@:b).list
-    echo '<list><dependency file="main"/>\
-        <filename>$(MY_MOD)/$(@:b).xcu</filename></list>' > $(MISC)/$(@:b).list
-    $(XSLTPROC) --nonet -o $@ $(SOLARENV)/bin/packregistry.xslt \
-        $(MISC)/$(@:b).list
+    echo '<list><dependency file="main"/>' \
+        '<filename>$(MY_MOD)/$(@:b).xcu</filename></list>' > $(MISC)/$(@:b).list
+    $(XSLTPROC) --nonet --stringparam prefix $(SOLARXMLDIR)/ -o $@ \
+        $(SOLARENV)/bin/packregistry.xslt $(MISC)/$(@:b).list
 
 $(MISC)/lang/fcfg_langpack_{$(alllangiso)}.xcd : $(SOLARPCKDIR)/$$(@:b).zip
 
@@ -511,8 +512,8 @@ $(MISC)/lang/fcfg_langpack_%.xcd .ERRREMOVE :
     echo '<list>' $(foreach,i,$(shell cd $(MISC) && \
         find $(@:b).unzip -name \*.xcu -size +0c -print) \
         '<filename>$i</filename>') '</list>' > $(MISC)/$(@:b).list
-    $(XSLTPROC) --nonet -o $@ $(SOLARENV)/bin/packregistry.xslt \
-        $(MISC)/$(@:b).list
+    $(XSLTPROC) --nonet --stringparam prefix $(PWD)/$(MISC)/ -o $@ \
+        $(SOLARENV)/bin/packregistry.xslt $(MISC)/$(@:b).list
 
 $(MISC)/lang/registry_{$(alllangiso)}.xcd : $(SOLARPCKDIR)/$$(@:b).zip \
         $(SOLARPCKDIR)/fcfg_drivers_$$(@:b:s/registry_//).zip
@@ -530,5 +531,5 @@ $(MISC)/lang/registry_%.xcd .ERRREMOVE :
     echo '<list>' $(foreach,i,$(shell cd $(MISC) && \
         find $(@:b).unzip fcfg_drivers_$*.unzip -name \*.xcu -print) \
         '<filename>$i</filename>') '</list>' > $(MISC)/$(@:b).list
-    $(XSLTPROC) --nonet -o $@ $(SOLARENV)/bin/packregistry.xslt \
-        $(MISC)/$(@:b).list
+    $(XSLTPROC) --nonet --stringparam prefix $(PWD)/$(MISC)/ -o $@ \
+        $(SOLARENV)/bin/packregistry.xslt $(MISC)/$(@:b).list
