@@ -32,7 +32,7 @@
 
 ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
 {
-    Size = MAP_APPFONT( 171, 151 );
+    Size = MAP_APPFONT( 171, 150 );
     Text [ en-US ] = "Set Password";
 //    HelpId = HID_DLG_PASSWORD_TO_OPEN_MODIFY;
     Border = TRUE ;
@@ -105,7 +105,8 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
     {
         Pos = MAP_APPFONT( 6 , 130 ) ;
         Size = MAP_APPFONT( 50 , 14 ) ;
-        Delta = 146 ;
+        Delta = 92 ;
+        MapUnit = MAP_APPFONT ;
         State = FALSE ;
     };
 
