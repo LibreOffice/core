@@ -58,7 +58,8 @@ namespace sd { namespace colortoolpanel
     public:
         SingleColorPanel(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& i_rParentWindow
+            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& i_rParentWindow,
+            const ::sal_Int32 i_nPanelColor
         );
 
         // XToolPanel
@@ -79,6 +80,7 @@ namespace sd { namespace colortoolpanel
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  m_xWindow;
+        const sal_Int32                                                     m_nPanelColor;
     };
 
     //==================================================================================================================
@@ -93,7 +95,8 @@ namespace sd { namespace colortoolpanel
         PanelUIElement(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& i_rParentWindow,
-            const ::rtl::OUString& i_rResourceURL
+            const ::rtl::OUString& i_rResourceURL,
+            const ::sal_Int32 i_nPanelColor
         );
 
         // XUIElement

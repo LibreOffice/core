@@ -97,6 +97,7 @@ namespace sfx2
         TaskPaneDockingWindow( SfxBindings* i_pBindings, TaskPaneWrapper& i_rWrapper,
             Window* i_pParent, WinBits i_nBits );
 
+        // Window overridables
         virtual void        GetFocus();
         virtual void        Resize();
         virtual long        Notify( NotifyEvent& i_rNotifyEvent );

@@ -113,9 +113,10 @@ namespace sd { namespace colortoolpanel
     //= class SingleColorPanel
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    SingleColorPanel::SingleColorPanel( const Reference< XComponentContext >& i_rContext, const Reference< XWindow >& i_rParentWindow )
+    SingleColorPanel::SingleColorPanel( const Reference< XComponentContext >& i_rContext, const Reference< XWindow >& i_rParentWindow, const ::sal_Int32 i_nPanelColor )
         :SingleColorPanel_Base( m_aMutex )
         ,m_xWindow()
+        ,m_nPanelColor( i_nPanelColor )
     {
         // retrieve the parent window for our to-be-created pane window
         Reference< XWindowPeer > xParentPeer( i_rParentWindow, UNO_QUERY );
@@ -169,8 +170,8 @@ namespace sd { namespace colortoolpanel
         {
             const Reference< XDevice > xDevice( i_rEvent.Source, UNO_QUERY_THROW );
             const Reference< XGraphics > xGraphics( xDevice->createGraphics(), UNO_SET_THROW );
-            xGraphics->setFillColor( 0x80 << 8 );
-            xGraphics->setLineColor( 0x80 << 16 );
+            xGraphics->setFillColor( m_nPanelColor );
+            xGraphics->setLineColor( 0x00FFFFFF );
 
             const Reference< XWindow > xWindow( i_rEvent.Source, UNO_QUERY_THROW );
             const Rectangle aWindowRect( xWindow->getPosSize() );
@@ -213,10 +214,10 @@ namespace sd { namespace colortoolpanel
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
     PanelUIElement::PanelUIElement( const Reference< XComponentContext >& i_rContext, const Reference< XWindow >& i_rParentWindow,
-            const ::rtl::OUString& i_rResourceURL )
+        const ::rtl::OUString& i_rResourceURL, const ::sal_Int32 i_nPanelColor )
         :PanelUIElement_Base( m_aMutex )
         ,m_sResourceURL( i_rResourceURL )
-        ,m_xToolPanel( new SingleColorPanel( i_rContext, i_rParentWindow ) )
+        ,m_xToolPanel( new SingleColorPanel( i_rContext, i_rParentWindow, i_nPanelColor ) )
     {
     }
 

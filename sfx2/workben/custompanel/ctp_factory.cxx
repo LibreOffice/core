@@ -82,7 +82,13 @@ namespace sd { namespace colortoolpanel
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        if ( !i_rResourceURL.equalsAscii( "private:resource/toolpanel/org.openoffice.example.custompanel" ) )
+        if ( !i_rResourceURL.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:resource/toolpanel/org.openoffice.example.custompanel/" ) ) )
+            throw NoSuchElementException( i_rResourceURL, *this );
+
+        const ::rtl::OUString sColor( i_rResourceURL.copy( i_rResourceURL.lastIndexOf( '/' ) + 1 ) );
+        const bool bRed = sColor.equalsAscii( "red" );
+        const bool bGreen = sColor.equalsAscii( "green" );
+        if ( !bRed && !bGreen )
             throw NoSuchElementException( i_rResourceURL, *this );
 
         // retrieve the parent window
@@ -108,7 +114,7 @@ namespace sd { namespace colortoolpanel
         }
 
         /// create the panel
-        Reference< XUIElement > xUIElement( new PanelUIElement( m_xContext, xParentWindow, i_rResourceURL ) );
+        Reference< XUIElement > xUIElement( new PanelUIElement( m_xContext, xParentWindow, i_rResourceURL, bGreen ? 0x80 << 8 : 0x80 << 16 ) );
         return xUIElement;
     }
 

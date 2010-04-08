@@ -217,6 +217,35 @@ namespace sfx2
     namespace
     {
         //--------------------------------------------------------------------------------------------------------------
+        ::utl::OConfigurationTreeRoot lcl_getModuleUIElementStatesConfig( const ::rtl::OUString& i_rModuleIdentifier,
+            const ::rtl::OUString& i_rResourceURL = ::rtl::OUString() )
+        {
+            const ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+            ::rtl::OUStringBuffer aPathComposer;
+            try
+            {
+                const Reference< XNameAccess > xModuleAccess( aContext.createComponent( "com.sun.star.frame.ModuleManager" ), UNO_QUERY_THROW );
+                const ::comphelper::NamedValueCollection aModuleProps( xModuleAccess->getByName( i_rModuleIdentifier ) );
+
+                const ::rtl::OUString sWindowStateRef( aModuleProps.getOrDefault( "ooSetupFactoryWindowStateConfigRef", ::rtl::OUString() ) );
+
+                aPathComposer.appendAscii( "org.openoffice.Office.UI." );
+                aPathComposer.append( sWindowStateRef );
+                aPathComposer.appendAscii( "/UIElements/States" );
+                if ( i_rResourceURL.getLength() )
+                {
+                    aPathComposer.appendAscii( "/" );
+                    aPathComposer.append( i_rResourceURL );
+                }
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+            return ::utl::OConfigurationTreeRoot( aContext, aPathComposer.makeStringAndClear(), false );
+        }
+
+        //--------------------------------------------------------------------------------------------------------------
         ::rtl::OUString lcl_identifyModule( const Reference< XFrame >& i_rDocumentFrame )
         {
             ::rtl::OUString sModuleName;
@@ -388,11 +417,13 @@ namespace sfx2
 
     private:
         bool    impl_ensureToolPanelWindow( Window& i_rPanelParentWindow );
+        void    impl_updatePanelConfig( const bool i_bVisible ) const;
 
     private:
         const ::rtl::OUString   m_sUIName;
         const Image             m_aPanelImage;
         const ::rtl::OUString   m_sResourceURL;
+        const ::rtl::OUString   m_sPanelConfigPath;
         CustomPanelUIElement    m_aCustomPanel;
         bool                    m_bAttemptedCreation;
     };
@@ -402,6 +433,7 @@ namespace sfx2
         :m_sUIName( ::comphelper::getString( i_rPanelWindowState.getNodeValue( "UIName" ) ) )
         ,m_aPanelImage( lcl_getPanelImage( i_rPanelWindowState ) )
         ,m_sResourceURL( i_rPanelWindowState.getLocalName() )
+        ,m_sPanelConfigPath( i_rPanelWindowState.getNodePath() )
         ,m_aCustomPanel()
         ,m_bAttemptedCreation( false )
     {
@@ -441,6 +473,16 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    void CustomToolPanel::impl_updatePanelConfig( const bool i_bVisible ) const
+    {
+        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+        ::utl::OConfigurationTreeRoot aConfig( aContext, m_sPanelConfigPath, true );
+
+        aConfig.setNodeValue( "Visible", makeAny( i_bVisible ) );
+        aConfig.commit();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString CustomToolPanel::GetDisplayName() const
     {
         return m_sUIName;
@@ -460,6 +502,9 @@ namespace sfx2
         // TODO: we might need a mechanism to decide whether the panel should be destroyed/re-created, or (as it is
         // done now) hidden/shown
         m_aCustomPanel.getPanelWindow()->setVisible( sal_True );
+
+        // update the panel's configuration
+        impl_updatePanelConfig( true );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -468,6 +513,9 @@ namespace sfx2
         ENSURE_OR_RETURN_VOID( m_aCustomPanel.is(), "no panel to deactivate!" );
 
         m_aCustomPanel.getPanelWindow()->setVisible( sal_False );
+
+        // update the panel's configuration
+        impl_updatePanelConfig( false );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -561,8 +609,6 @@ namespace sfx2
     private:
         void    impl_initFromConfiguration();
 
-        static ::utl::OConfigurationTreeRoot
-                impl_getModuleUIElementStatesConfig( const ::rtl::OUString& i_rModuleIdentifier );
         static bool
                 impl_isToolPanelResource( const ::rtl::OUString& i_rResourceURL );
 
@@ -585,30 +631,6 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::utl::OConfigurationTreeRoot ModuleTaskPane_Impl::impl_getModuleUIElementStatesConfig( const ::rtl::OUString& i_rModuleIdentifier )
-    {
-        const ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-        ::rtl::OUStringBuffer aPathComposer;
-        try
-        {
-            const Reference< XNameAccess > xModuleAccess( aContext.createComponent( "com.sun.star.frame.ModuleManager" ), UNO_QUERY_THROW );
-            const ::comphelper::NamedValueCollection aModuleProps( xModuleAccess->getByName( i_rModuleIdentifier ) );
-
-            const ::rtl::OUString sWindowStateRef( aModuleProps.getOrDefault( "ooSetupFactoryWindowStateConfigRef", ::rtl::OUString() ) );
-
-            aPathComposer.appendAscii( "org.openoffice.Office.UI." );
-            aPathComposer.append( sWindowStateRef );
-            aPathComposer.appendAscii( "/UIElements/States" );
-
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-        return ::utl::OConfigurationTreeRoot( aContext, aPathComposer.makeStringAndClear(), false );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
     bool ModuleTaskPane_Impl::impl_isToolPanelResource( const ::rtl::OUString& i_rResourceURL )
     {
         return i_rResourceURL.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:resource/toolpanel/" ) );
@@ -617,9 +639,11 @@ namespace sfx2
     //------------------------------------------------------------------------------------------------------------------
     void ModuleTaskPane_Impl::impl_initFromConfiguration()
     {
-        const ::utl::OConfigurationTreeRoot aWindowStateConfig( impl_getModuleUIElementStatesConfig( m_sModuleIdentifier ) );
+        const ::utl::OConfigurationTreeRoot aWindowStateConfig( lcl_getModuleUIElementStatesConfig( m_sModuleIdentifier ) );
         if ( !aWindowStateConfig.isValid() )
             return;
+
+        size_t nFirstVisiblePanel = size_t( -1 );
 
         const Sequence< ::rtl::OUString > aUIElements( aWindowStateConfig.getNodeNames() );
         for (   const ::rtl::OUString* resource = aUIElements.getConstArray();
@@ -632,14 +656,22 @@ namespace sfx2
 
             ::utl::OConfigurationNode aResourceNode( aWindowStateConfig.openNode( *resource ) );
             ::svt::PToolPanel pCustomPanel( new CustomToolPanel( aResourceNode ) );
-            m_aPanels.InsertPanel( pCustomPanel, m_aPanels.GetPanelCount() );
+            size_t nPanelPos = m_aPanels.InsertPanel( pCustomPanel, m_aPanels.GetPanelCount() );
+
+            if ( ::comphelper::getBOOL( aResourceNode.getNodeValue( "Visible" ) ) )
+                nFirstVisiblePanel = nPanelPos;
+        }
+
+        if ( nFirstVisiblePanel != size_t( -1 ) )
+        {
+            m_aPanels.ActivatePanel( nFirstVisiblePanel );
         }
     }
 
     //------------------------------------------------------------------------------------------------------------------
     bool ModuleTaskPane_Impl::ModuleHasToolPanels( const ::rtl::OUString& i_rModuleIdentifier )
     {
-        const ::utl::OConfigurationTreeRoot aWindowStateConfig( impl_getModuleUIElementStatesConfig( i_rModuleIdentifier ) );
+        const ::utl::OConfigurationTreeRoot aWindowStateConfig( lcl_getModuleUIElementStatesConfig( i_rModuleIdentifier ) );
         if ( !aWindowStateConfig.isValid() )
             return false;
 
