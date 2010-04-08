@@ -28,6 +28,7 @@
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
    xmlns:oor="http://openoffice.org/2001/registry">
+  <xsl:param name="prefix"/>
   <xsl:strip-space elements="*"/>
   <xsl:preserve-space elements="value"/>
   <xsl:template match="/">
@@ -44,12 +45,13 @@
       (e.g., xcs files preceeding xcu files).
 -->
       <xsl:for-each select="list/filename">
+        <xsl:variable name="doc" select="document(concat($prefix, .))"/>
         <xsl:choose>
-          <xsl:when test="count(document(.)/oor:component-schema) = 1">
-            <xsl:apply-templates select="document(.)/oor:component-schema"/>
+          <xsl:when test="count($doc/oor:component-schema) = 1">
+            <xsl:apply-templates select="$doc/oor:component-schema"/>
           </xsl:when>
-          <xsl:when test="count(document(.)/oor:component-data) = 1">
-            <xsl:apply-templates select="document(.)/oor:component-data"/>
+          <xsl:when test="count($doc/oor:component-data) = 1">
+            <xsl:apply-templates select="$doc/oor:component-data"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:message terminate="yes">
