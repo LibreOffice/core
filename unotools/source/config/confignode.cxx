@@ -155,6 +155,22 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
+    ::rtl::OUString OConfigurationNode::getNodePath() const
+    {
+        ::rtl::OUString sNodePath;
+        try
+        {
+            Reference< XHierarchicalName > xNamed( m_xDirectAccess, UNO_QUERY_THROW );
+            sNodePath = xNamed->getHierarchicalName();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return sNodePath;
+    }
+
+    //------------------------------------------------------------------------
     ::rtl::OUString OConfigurationNode::normalizeName(const ::rtl::OUString& _rName, NAMEORIGIN _eOrigin) const
     {
         ::rtl::OUString sName(_rName);
