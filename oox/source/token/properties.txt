@@ -231,6 +231,7 @@ LineStyle
 LineTransparence
 LineWidth
 LinkURL
+LoadReadonly
 LookUpLabels
 MajorTickmarks
 MarkPosition
@@ -240,6 +241,7 @@ MediaType
 MinorTickmarks
 MissingValueTreatment
 Model
+ModifyPasswordHash
 MultiLine
 MultiSelection
 Name
