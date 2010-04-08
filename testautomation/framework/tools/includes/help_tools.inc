@@ -1,28 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
- * Copyright 2000, 2010 Oracle and/or its affiliates.
- *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/******************************************************************************
 '*
 '* owner : joerg.skottke@sun.com
@@ -50,51 +50,25 @@ function hOpenHelp() as boolean
     
     '///<u>Description</u>:
     '///<ul>
+   
     const CFN = "hOpenHelp::"
 
-    dim iTry as integer
-    dim brc as boolean
-        brc = false
-        
-    printlog( CFN & "Enter" )
+    HelpContents
     
-    '///+<li>Open the help Browser using the slot</li>
-    try
-        HelpContents
-    catch
-        printlog( CFN & "Failed to open help, slot failed" )
-        hOpenHelp() = false
-        exit function
-    endcatch
-
-    '///+<li>Verify that the help is indeed open (max 10 sec.)</li>
-    Kontext "StarOfficeHelp"
-    for iTry = 1 to 10
-
-        if ( StarOfficeHelp.exists() ) then
-            brc = true
-            exit for
-        endif
-
-        sleep( 1 )
-
-    next iTry
-
-    '///+<li>Print a status to the log, return TRUE or FALSE</li>
-    if ( brc ) then
-        printlog( CFN & "Exit: Help is open" )
+    if ( WaitSlot( 3000 ) <> WSFinished ) then
+        printlog( CFN & "Failed to open help" )
+        hOpenHelp() = FALSE
     else
-        printlog( CFN & "Exit: Help is not open" )
-        kontext "Active"
-        if ( Active.exists( 2 ) ) then
-            printlog( "Msgbox: " & Active.getText()
-            Active.ok()
+        kontext "StarOfficeHelp"
+        if ( StarOfficeHelp.exists() ) then
+            printlog( CFN & "Help was opened" )
+            hOpenHelp() = TRUE
+        else
+            printlog( CFN & "Help was not opened" )
+            hOpenHelp() = FALSE
         endif
     endif
-
-    '///</ul>
-    hOpenHelp() = brc
-
+    
 end function
 
 '*******************************************************************************
@@ -116,37 +90,25 @@ function hCloseHelp() as boolean
     '///</ul>
     '///</ol>
     
-    '///<u>Description</u>:
-    '///<ul>
     const CFN = "hCloseHelp::"
-    dim brc as boolean
-    
-    printlog( CFN & "Enter" )
 
-    '///+<li>Verify that the Help Browser is Open</li>
-    kontext "StarOfficeHelp"
-    if ( not StarOfficeHelp.exists() ) then
-        printlog( CFN & "Help is not open" )
-        hCloseHelp() = false 
-        exit function
-    endif
-
-    '///+<li>Close the Help Browser by typing CTRL+F4</li>
-    StarOfficeHelp.typeKeys( "<MOD1 F4>" )
-
-    '///+<li>Verify that the Help Browser is not open (anymore)</li>
     kontext "StarOfficeHelp"
     if ( StarOfficeHelp.exists() ) then
-        printlog( CFN & "Exit: Help is still open" )
-        brc = false
+        
+        hUseAsyncSlot( "FileClose")
+        StarOfficeHelp.notExists( 3 )
+        
+        if ( StarOfficeHelp.Exists() ) then
+            printlog( CFN & "Help was not closed")
+            hCloseHelp() = FALSE
+        else
+            printlog( CFN & "Help was closed")
+            hCloseHelp() = TRUE
+        endif
     else
-        printlog( CFN & "Exit: Help has been closed" )
-        brc = true
+        printlog( CFN & "Help is not open, no action taken")
+        hCloseHelp() = TRUE
     endif
-
-    '///+<li>Return TRUE or FALSE</li>
-    '///</ul>
-    hCloseHelp() = brc
 
 end function
 

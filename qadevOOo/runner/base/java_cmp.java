@@ -28,11 +28,6 @@
 package base;
 
 
-import com.sun.star.uno.UnoRuntime;
-
-import helper.APIDescGetter;
-import helper.AppProvider;
-import base.TestBase;
 
 
 /**

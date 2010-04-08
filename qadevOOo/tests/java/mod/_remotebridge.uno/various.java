@@ -160,7 +160,7 @@ public class various extends TestCase {
         public void run() {
             try {
                 acceptedCall = acc.accept(connectString) ;
-                XBridge xBridge = xBrdgFctr.createBridge("MyBridge", "urp",
+                xBrdgFctr.createBridge("MyBridge", "urp",
                                             acceptedCall, xInstProv);
             } catch (com.sun.star.lang.IllegalArgumentException e) {
                 ex = e ;
