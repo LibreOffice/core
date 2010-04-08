@@ -508,7 +508,14 @@ void ZipPackage::getZipFileContents()
         nIndex = nOldIndex = 0;
         pCurrent = m_pRootFolder;
         const ZipEntry & rEntry = *pEnum->nextElement();
-        const OUString & rName = rEntry.sPath;
+        OUString rName = rEntry.sPath;
+
+        if ( m_bForceRecovery )
+        {
+            // the PKZIP Application note version 6.2 does not allows to use '\' as separator
+            // unfortunately it is used by some implementations, so we have to support it in recovery mode
+            rName.replace( '\\', '/' );
+        }
 
         nStreamIndex = rName.lastIndexOf ( '/' );
         if ( nStreamIndex != -1 )
