@@ -87,10 +87,6 @@ interface XDiagram : ::com::sun::star::uno::XInterface
         colors for data series (or data points) in the diagram.
      */
     void setDefaultColorScheme( [in] XColorScheme xColorScheme );
-
-    void setUnusedData( [in] sequence< data::XLabeledDataSequence > aUnusedData );
-
-    sequence< data::XLabeledDataSequence > getUnusedData();
 };
 
 } ; // chart2
