@@ -137,7 +137,7 @@ namespace svt
                                         ,public IToolPanelDeck
     {
     public:
-        ToolPanelDeck( Window& i_rParent, const WinBits i_nStyle );
+        ToolPanelDeck( Window& i_rParent, const WinBits i_nStyle = WB_DIALOGCONTROL );
         ~ToolPanelDeck();
 
         // attributes
