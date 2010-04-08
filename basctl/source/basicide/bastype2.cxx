@@ -395,14 +395,15 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const
 
 void BasicTreeListBox::ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const String& rLibName )
 {
-    ::std::map< BasicEntryType, ::rtl::OUString > aEntryMap;
-    aEntryMap.insert( ::std::make_pair( OBJ_TYPE_DOCUMENT_OBJECTS, String( IDEResId( RID_STR_DOCUMENT_OBJECTS ) ) ) );
-    aEntryMap.insert( ::std::make_pair( OBJ_TYPE_USERFORMS,  String( IDEResId( RID_STR_USERFORMS ) ) ) );
-    aEntryMap.insert( ::std::make_pair( OBJ_TYPE_NORMAL_MODULES, String( IDEResId( RID_STR_NORMAL_MODULES ) ) ) );
-    aEntryMap.insert( ::std::make_pair( OBJ_TYPE_CLASS_MODULES,  String( IDEResId( RID_STR_CLASS_MODULES ) ) ) );
 
-    ::std::map< BasicEntryType, ::rtl::OUString >::iterator iter;
-    for( iter = aEntryMap.begin(); iter != aEntryMap.end(); ++iter )
+    ::std::vector< std::pair< BasicEntryType, ::rtl::OUString > > aEntries;
+    aEntries.push_back( ::std::make_pair( OBJ_TYPE_DOCUMENT_OBJECTS, String( IDEResId( RID_STR_DOCUMENT_OBJECTS ) ) ) );
+    aEntries.push_back( ::std::make_pair( OBJ_TYPE_USERFORMS,  String( IDEResId( RID_STR_USERFORMS ) ) ) );
+    aEntries.push_back( ::std::make_pair( OBJ_TYPE_NORMAL_MODULES, String( IDEResId( RID_STR_NORMAL_MODULES ) ) ) );
+    aEntries.push_back( ::std::make_pair( OBJ_TYPE_CLASS_MODULES,  String( IDEResId( RID_STR_CLASS_MODULES ) ) ) );
+
+    ::std::vector< std::pair< BasicEntryType, ::rtl::OUString > >::iterator iter;
+    for( iter = aEntries.begin(); iter != aEntries.end(); ++iter )
     {
         BasicEntryType eType = iter->first;
         ::rtl::OUString aEntryName = iter->second;

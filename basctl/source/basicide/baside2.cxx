@@ -210,6 +210,14 @@ ModulWindow::ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDoc
 
 SbModuleRef ModulWindow::XModule()
 {
+    // ModuleWindows can now be created as a result of the
+    // modules getting created via the api. This is a result of an
+    // elementInserted event from the BasicLibrary container.
+    // However the SbModule is also created from a different listener to
+    // the same event ( in basmgr ) Therefore it is possible when we look
+    // for xModule it may not yet be available, here we keep tring to access
+    // the module until such time as it exists
+
     if ( !xModule.Is() )
     {
         BasicManager* pBasMgr = GetDocument().getBasicManager();

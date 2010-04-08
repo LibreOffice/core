@@ -1201,7 +1201,9 @@ IDEBaseWindow* BasicIDEShell::FindWindow( const ScriptDocument& rDocument, const
             else if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName && pWin->GetName() == rName &&
                       ( ( pWin->IsA( TYPE( ModulWindow ) )  && nType == BASICIDE_TYPE_MODULE ) ||
                         ( pWin->IsA( TYPE( DialogWindow ) ) && nType == BASICIDE_TYPE_DIALOG ) ) )
+            {
                 return pWin;
+            }
         }
         pWin = aIDEWindowTable.Next();
     }

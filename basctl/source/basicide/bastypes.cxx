@@ -585,24 +585,26 @@ void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
                 aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, FALSE );
                 aPopup.RemoveDisabledEntries();
             }
-
-            // disable to delete or remove object modules in IDE
-            BasicManager* pBasMgr = aDocument.getBasicManager();
-            if ( pBasMgr )
+             if ( aDocument.isInVBAMode() )
             {
-                StarBASIC* pBasic = pBasMgr->GetLib( aOULibName );
-                if( pBasic )
+                // disable to delete or remove object modules in IDE
+                BasicManager* pBasMgr = aDocument.getBasicManager();
+                if ( pBasMgr )
                 {
-                    IDEWindowTable& aIDEWindowTable = pIDEShell->GetIDEWindowTable();
-                    IDEBaseWindow* pWin = aIDEWindowTable.Get( GetCurPageId() );
-                    if( pWin && pWin->ISA( ModulWindow ) )
+                    StarBASIC* pBasic = pBasMgr->GetLib( aOULibName );
+                    if( pBasic )
                     {
-                        SbModule* pActiveModule = (SbModule*)pBasic->FindModule( pWin->GetName() );
-                        if( pActiveModule && ( pActiveModule->GetModuleType() == script::ModuleType::Document ) )
+                        IDEWindowTable& aIDEWindowTable = pIDEShell->GetIDEWindowTable();
+                        IDEBaseWindow* pWin = aIDEWindowTable.Get( GetCurPageId() );
+                        if( pWin && pWin->ISA( ModulWindow ) )
                         {
-                            aPopup.EnableItem( SID_BASICIDE_DELETECURRENT, FALSE );
-                            aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, FALSE );
-        }
+                            SbModule* pActiveModule = (SbModule*)pBasic->FindModule( pWin->GetName() );
+                            if( pActiveModule && ( pActiveModule->GetModuleType() == script::ModuleType::Document ) )
+                            {
+                                aPopup.EnableItem( SID_BASICIDE_DELETECURRENT, FALSE );
+                                aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, FALSE );
+                            }
+                        }
                     }
                 }
             }

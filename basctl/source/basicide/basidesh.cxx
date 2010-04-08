@@ -282,7 +282,7 @@ __EXPORT BasicIDEShell::~BasicIDEShell()
     delete pObjectCatalog;
     DestroyModulWindowLayout();
 
-        ContainerListenerImpl* pListener = dynamic_cast< ContainerListenerImpl* >( m_xLibListener.get() );
+        ContainerListenerImpl* pListener = static_cast< ContainerListenerImpl* >( m_xLibListener.get() );
         // Destroy all ContainerListeners for Basic Container.
         if ( pListener )
             pListener->removeContainerListener( m_aCurDocument, m_aCurLibName );
