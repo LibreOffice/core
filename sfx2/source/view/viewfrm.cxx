@@ -3773,6 +3773,7 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
         {
             if  ( !KnowsChildWindow( nSID ) )
             {
+                OSL_ENSURE( false, "SID_TASKPANE state requested, but no task pane child window exists for this ID!" );
                 rState.DisableItem( nSID );
             }
             else if ( !moduleHasToolPanels( *pImp ) )
