@@ -59,6 +59,9 @@
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
+//shizhoubo
+#include <com/sun/star/frame/XToolbarController.hpp>
+//end
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
@@ -181,6 +184,9 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         rtl::OUString RetrieveLabelFromCommand( const rtl::OUString& aCmdURL );
         void CreateControllers();
         void UpdateControllers();
+        //for update controller via Support Visiable by shizhoubo
+        void UpdateController( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XToolbarController > xController);
+        //end
         void AddFrameActionListener();
         void AddImageOrientationListener();
         void UpdateImageOrientation();

@@ -510,7 +510,47 @@ void ToolBarManager::UpdateControllers()
     }
     m_bUpdateControllers = sal_False;
 }
+//for update toolbar controller via Support Visible by shizhoubo
+void ToolBarManager::UpdateController( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XToolbarController > xController)
+{
+    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::UpdateControllers" );
 
+    if ( !m_bUpdateControllers )
+    {
+        m_bUpdateControllers = sal_True;
+        try
+        {   if(xController.is())
+            {
+                Reference< XUpdatable > xUpdatable( xController, UNO_QUERY );
+                if ( xUpdatable.is() )
+                    xUpdatable->update();
+            }
+         }
+         catch ( Exception& )
+         {
+         }
+
+       /* m_bUpdateControllers = sal_True;
+        ToolBarControllerMap::iterator pIter = m_aControllerMap.begin();
+
+        while ( pIter != m_aControllerMap.end() )
+        {
+            try
+            {
+                Reference< XUpdatable > xUpdatable( pIter->second, UNO_QUERY );
+                if ( xUpdatable.is() )
+                    xUpdatable->update();
+            }
+            catch ( Exception& )
+            {
+            }
+            ++pIter;
+        }*/
+
+    }
+    m_bUpdateControllers = sal_False;
+}
+//end
 void ToolBarManager::frameAction( const FrameActionEvent& Action )
 throw ( RuntimeException )
 {
@@ -1037,6 +1077,19 @@ void ToolBarManager::CreateControllers()
 
                 Sequence< Any > aArgs( comphelper::containerToSequence( aPropertyVector ));
                 xInit->initialize( aArgs );
+                //for Support Visiblitly by shizhoubo
+                if (pController)
+                {
+                //  rtl::OUString aCommandURL = pController->m_aCommandURL;
+                    if(aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SwitchXFormsDesignMode" )) ||
+                       aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ViewDataSourceBrowser" )) ||
+                       aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ParaLeftToRight" )) ||
+                       aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ParaRightToLeft" ))
+                       )
+                        pController->setFastPropertyValue_NoBroadcast(1,makeAny(sal_True));
+                }
+
+                //end
             }
 
             // Request a item window from the toolbar controller and set it at the VCL toolbar
@@ -1057,6 +1110,31 @@ void ToolBarManager::CreateControllers()
                 }
             }
         }
+        //for update Controller via support visiable state by shizhoubo
+        Reference< XPropertySet > xPropSet( xController, UNO_QUERY );
+        if ( xPropSet.is() )
+        {
+            try
+            {
+                sal_Bool bSupportVisiable = sal_True;
+                Any a( xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SupportsVisiable" ))) );
+                a >>= bSupportVisiable;
+                if ( bSupportVisiable )
+                {
+                    Reference< XToolbarController > xTbxController( xController, UNO_QUERY );
+                    UpdateController(xTbxController);
+                }
+            }
+            catch ( RuntimeException& )
+            {
+                throw;
+            }
+            catch ( Exception& )
+            {
+            }
+        }
+        //end
+
     }
 
     AddFrameActionListener();
