@@ -671,15 +671,7 @@ sal_uInt32 OcxPropertyObjectBase::dumpColorProperty( sal_uInt32 nDefault )
     {
         MultiItemsGuard aMultiGuard( out() );
         alignInput< sal_uInt32 >();
-        sal_uInt32 nColor = dumpHex< sal_uInt32 >( getPropertyName(), "OCX-COLOR" );
-        switch( extractValue< sal_uInt8 >( nColor, 24, 8 ) )
-        {
-            case 0x00:  writeColorABGRItem( "rgb", extractValue< sal_Int32 >( nColor, 0, 24 ) );                        break;
-            case 0x01:  writeDecItem( "palette-index", extractValue< sal_uInt16 >( nColor, 0, 16 ) );                   break;
-            case 0x02:  writeColorABGRItem( "rgb", extractValue< sal_Int32 >( nColor, 0, 24 ) );                        break;
-            case 0x80:  writeDecItem( "sys-color", extractValue< sal_uInt16 >( nColor, 0, 16 ), "OCX-SYSTEMCOLOR" );    break;
-        }
-        return nColor;
+        return dumpHex< sal_uInt32 >( getPropertyName(), "OCX-COLOR" );
     }
     return nDefault;
 }

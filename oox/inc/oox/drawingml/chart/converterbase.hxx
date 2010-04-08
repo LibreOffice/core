@@ -32,6 +32,7 @@
 #include "oox/drawingml/chart/objectformatter.hxx"
 
 namespace com { namespace sun { namespace star {
+    namespace awt { struct Size; }
     namespace lang { class XMultiServiceFactory; }
     namespace chart2 { class XChartDocument; }
 } } }
@@ -57,8 +58,9 @@ public:
     explicit            ConverterRoot(
                             ::oox::core::XmlFilterBase& rFilter,
                             ChartConverter& rChartConverter,
+                            const ChartSpaceModel& rChartModel,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc,
-                            const ChartSpaceModel& rChartSpace );
+                            const ::com::sun::star::awt::Size& rChartSize );
     virtual             ~ConverterRoot();
 
     /** Creates an instance for the passed service name, using the passed service factory. */
@@ -79,6 +81,8 @@ protected:
     /** Returns the API chart document model. */
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
                         getChartDocument() const;
+    /** Returns the position and size of the chart shape in 1/100 mm. */
+    const ::com::sun::star::awt::Size& getChartSize() const;
     /** Returns the object formatter. */
     ObjectFormatter&    getFormatter() const;
 
