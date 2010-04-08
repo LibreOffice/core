@@ -597,6 +597,7 @@ Menu MN_TAB_POPUPMENU
                 MN_EDIT_CONTOUR\
                 MenuItem\
                 {\
+                    Checkable = TRUE ; \
                     Identifier = FN_WRAP_ANCHOR_ONLY ; \
                     HelpID = FN_WRAP_ANCHOR_ONLY ; \
                     Text [ en-US ] = "~First Paragraph" ; \
@@ -661,6 +662,7 @@ String MN_DRAW_POPUPMENU
                 MN_WRAP_CONTOUR_1\
                 MenuItem\
                 {\
+                    Checkable = TRUE ; \
                     Identifier = FN_WRAP_ANCHOR_ONLY ; \
                     HelpID = FN_WRAP_ANCHOR_ONLY ; \
                     Text [ en-US ] = "~First Paragraph" ; \
