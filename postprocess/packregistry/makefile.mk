@@ -316,7 +316,6 @@ MY_FILES_main += \
     $(MY_MOD)/org/openoffice/Inet-wnt.xcu \
     $(MY_MOD)/org/openoffice/Office/Accelerators-unxwnt.xcu \
     $(MY_MOD)/org/openoffice/Office/Common-wnt.xcu \
-    $(MY_MOD)/org/openoffice/Office/Linguistic-ForceDefaultLanguage.xcu \
     $(MY_MOD)/org/openoffice/Office/Paths-unxwnt.xcu
         # Inet-wnt.xcu must come after Inet.xcu
 .ELSE
@@ -468,6 +467,13 @@ MY_XCDS += $(MISC)/ogltrans.xcd
 MY_DEPS_ogltrans = main
 MY_FILES_ogltrans = \
     $(MY_MOD)/org/openoffice/Office/Impress-ogltrans.xcu
+.END
+
+.IF "$(GUIBASE)" == "WIN"
+MX_XCDS += $(MISC)/forcedefaultlanguage.xcd
+MY_DEPS_forcedefaultlanguage = main
+MY_FILES_forcedefaultlanguage = \
+    $(MY_MOD)/org/openoffice/Office/Linguistic-ForceDefaultLanguage.xcu
 .END
 
 .INCLUDE : settings.mk
