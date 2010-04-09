@@ -52,7 +52,6 @@ TitledControl::TitledControl (
       msTitle(rTitle),
       mbVisible(true),
       mpUserData(NULL),
-      mpControlFactory(NULL),
       mpClickHandler(new ClickHandler(rClickHandler)),
       mbExpansionModeIsToggle(eType!=TitleBar::TBT_CONTROL_TITLE)
 {
@@ -79,39 +78,6 @@ TitledControl::TitledControl (
 
 
 
-TitledControl::TitledControl (
-    TreeNode* pParent,
-    ::std::auto_ptr<ControlFactory> pControlFactory,
-    const String& rTitle,
-    const ClickHandler& rClickHandler,
-    TitleBar::TitleBarType eType)
-    : ::Window (pParent->GetWindow(), WB_TABSTOP),
-      TreeNode(pParent),
-      msTitle (rTitle),
-      mbVisible (true),
-      mpUserData (NULL),
-      mpControlFactory(pControlFactory),
-      mpClickHandler(new ClickHandler(rClickHandler)),
-      mbExpansionModeIsToggle(eType!=TitleBar::TBT_CONTROL_TITLE)
-{
-    mpControlContainer->AddControl (::std::auto_ptr<TreeNode> (
-        new TitleBar (this, rTitle, eType, true)));
-
-    // The second control is created on demand, i.e. when GetControl(true)
-    // is called the first time.
-
-    SetBackground (Wallpaper());
-
-    GetTitleBar()->GetWindow()->Show ();
-    GetTitleBar()->GetWindow()->AddEventListener (
-        LINK(this,TitledControl,WindowEventListener));
-
-    UpdateStates ();
-}
-
-
-
-
 TitledControl::~TitledControl (void)
 {
     GetTitleBar()->GetWindow()->RemoveEventListener (
@@ -124,7 +90,7 @@ TitledControl::~TitledControl (void)
 Size TitledControl::GetPreferredSize (void)
 {
     Size aPreferredSize;
-    if (GetControl(false) != NULL)
+    if (GetControl() != NULL)
     {
         aPreferredSize = GetControl()->GetPreferredSize();
         if ( ! IsExpanded())
@@ -146,7 +112,7 @@ Size TitledControl::GetPreferredSize (void)
 sal_Int32 TitledControl::GetPreferredWidth (sal_Int32 nHeight)
 {
     int nPreferredWidth = 0;
-    if (GetControl(false) != NULL)
+    if (GetControl() != NULL)
         nPreferredWidth = GetControl()->GetPreferredWidth(
             nHeight - GetTitleBar()->GetWindow()->GetSizePixel().Height());
     else
@@ -163,7 +129,7 @@ sal_Int32 TitledControl::GetPreferredWidth (sal_Int32 nHeight)
 sal_Int32 TitledControl::GetPreferredHeight (sal_Int32 nWidth)
 {
     int nPreferredHeight = 0;
-    if (IsExpanded() && GetControl(false)!=NULL)
+    if (IsExpanded() && GetControl()!=NULL)
         nPreferredHeight = GetControl()->GetPreferredHeight(nWidth);
     nPreferredHeight += GetTitleBar()->GetPreferredHeight(nWidth);
 
@@ -201,7 +167,7 @@ void TitledControl::Resize (void)
         Size (aWindowSize.Width(), nTitleBarHeight));
 
 
-    TreeNode* pControl = GetControl(false);
+    TreeNode* pControl = GetControl();
     if (pControl != NULL
         && pControl->GetWindow() != NULL
         && pControl->GetWindow()->IsVisible())
@@ -219,17 +185,7 @@ void TitledControl::GetFocus (void)
 {
     ::Window::GetFocus();
     if (GetTitleBar() != NULL)
-        GetTitleBar()->SetFocus (true);
-}
-
-
-
-
-void TitledControl::LoseFocus (void)
-{
-    ::Window::LoseFocus();
-    if (GetTitleBar() != NULL)
-        GetTitleBar()->SetFocus (false);
+        GetTitleBar()->GrabFocus();
 }
 
 
@@ -258,7 +214,7 @@ void TitledControl::KeyInput (const KeyEvent& rEvent)
         if ( ! FocusManager::Instance().TransferFocus(this,nCode))
         {
             // When already expanded then put focus on first child.
-            TreeNode* pControl = GetControl(false);
+            TreeNode* pControl = GetControl();
             if (pControl!=NULL && IsExpanded())
                 if (pControl->GetWindow() != NULL)
                     pControl->GetWindow()->GrabFocus();
@@ -296,7 +252,7 @@ bool TitledControl::Expand (bool bExpanded)
         // Get the control.  Use the bExpanded parameter as argument to
         // indicate that a control is created via its factory only when it
         // is to be expanded.  When it is collapsed this is not necessary.
-        TreeNode* pControl = GetControl(bExpanded);
+        TreeNode* pControl = GetControl();
         if (pControl != NULL
             && GetControl()->IsExpanded() != bExpanded)
         {
@@ -314,7 +270,7 @@ bool TitledControl::Expand (bool bExpanded)
 
 bool TitledControl::IsExpandable (void) const
 {
-    const TreeNode* pControl = GetConstControl(false);
+    const TreeNode* pControl = GetConstControl();
     if (pControl != NULL)
         return pControl->IsExpandable();
     else
@@ -328,7 +284,7 @@ bool TitledControl::IsExpandable (void) const
 
 bool TitledControl::IsExpanded (void) const
 {
-    const TreeNode* pControl = GetConstControl(false);
+    const TreeNode* pControl = GetConstControl();
     if (pControl != NULL)
         return pControl->IsExpanded();
     else
@@ -402,7 +358,7 @@ void TitledControl::UpdateStates (void)
     else
         GetWindow()->Hide();
 
-    TreeNode* pControl = GetControl(false);
+    TreeNode* pControl = GetControl();
     if (pControl!=NULL  &&  pControl->GetWindow() != NULL)
     {
         if (IsVisible() && IsExpanded())
@@ -435,33 +391,17 @@ IMPL_LINK(TitledControl, WindowEventListener,
 
 
 
-TreeNode* TitledControl::GetControl (bool bCreate)
+TreeNode* TitledControl::GetControl (void)
 {
-    TreeNode* pNode = mpControlContainer->GetControl(1);
-    if (pNode==NULL && mpControlFactory.get()!=NULL && bCreate)
-    {
-        // We have to create the control with the factory object.
-        ::std::auto_ptr<TreeNode> pControl (mpControlFactory->CreateControl(this));//GetParentNode()));
-        if (pControl.get() != NULL)
-        {
-            pControl->SetParentNode(this);
-            mpControlContainer->AddControl(pControl);
-
-            pNode = mpControlContainer->GetControl(1);
-            FocusManager::Instance().RegisterDownLink(this, pNode->GetWindow());
-            FocusManager::Instance().RegisterUpLink(pNode->GetWindow(), this);
-        }
-    }
-
-    return pNode;
+    return mpControlContainer->GetControl(1);
 }
 
 
 
 
-const TreeNode* TitledControl::GetConstControl (bool bCreate) const
+const TreeNode* TitledControl::GetConstControl () const
 {
-    return const_cast<TitledControl*>(this)->GetControl(bCreate);
+    return const_cast<TitledControl*>(this)->GetControl();
 }
 
 

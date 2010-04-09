@@ -65,7 +65,6 @@
 #include "ViewShellBase.hxx"
 #include "ViewShellImplementation.hxx"
 #include "sdattr.hxx"
-#include "TaskPaneViewShell.hxx"
 #include "FrameView.hxx"
 #include "zoomlist.hxx"
 #include "sdpage.hxx"

@@ -80,13 +80,6 @@ public:
         const ClickHandler& rClickHandler,
         TitleBar::TitleBarType eType);
 
-    TitledControl (
-        TreeNode* pParent,
-        ::std::auto_ptr<ControlFactory> pControlFactory,
-        const String& rTitle,
-        const ClickHandler& rClickHandler,
-        TitleBar::TitleBarType eType);
-
     virtual ~TitledControl (void);
 
 
@@ -98,7 +91,6 @@ public:
 
     virtual void Resize (void);
     virtual void GetFocus (void);
-    virtual void LoseFocus (void);
     virtual void KeyInput (const KeyEvent& rEvent);
 
     //    void Select (bool bExpansionState);
@@ -108,8 +100,8 @@ public:
         the control has not yet been created and the given flag is <TRUE/>
         then the control is created.
     */
-    TreeNode* GetControl (bool bCreate=true);
-    const TreeNode* GetConstControl (bool bCreate=true) const;
+    TreeNode* GetControl (void);
+    const TreeNode* GetConstControl () const;
 
     const String& GetTitle (void) const;
 
@@ -156,7 +148,6 @@ private:
     String msTitle;
     bool mbVisible;
     void* mpUserData;
-    ::std::auto_ptr<ControlFactory> mpControlFactory;
     ::std::auto_ptr<ClickHandler> mpClickHandler;
 
     /** Remember whether to toggle (true) the expansion state when the title

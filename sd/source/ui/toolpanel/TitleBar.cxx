@@ -60,7 +60,7 @@ namespace sd { namespace toolpanel {
 const int TitleBar::snIndentationWidth = 16;
 
 TitleBar::TitleBar ( ::Window* pParent, const String& rsTitle, TitleBarType eType, bool bIsExpandable)
-: ::Window (pParent)
+: ::Window (pParent, WB_TABSTOP)
 , TreeNode(this)
 , meType(eType)
 , msTitle(rsTitle)
@@ -77,9 +77,6 @@ TitleBar::TitleBar ( ::Window* pParent, const String& rsTitle, TitleBarType eTyp
     // Change the mouse pointer shape so that it acts as a mouse over effect.
     switch (meType)
     {
-        case TBT_WINDOW_TITLE:
-            break;
-
         case TBT_CONTROL_TITLE:
         case TBT_SUB_CONTROL_HEADLINE:
             if (mbIsExpandable)
@@ -170,10 +167,6 @@ void TitleBar::Paint (const Rectangle& rBoundingBox)
 
     switch (meType)
     {
-        case TBT_WINDOW_TITLE:
-            PaintWindowTitleBar ();
-            break;
-
         case TBT_CONTROL_TITLE:
             PaintPanelControlTitle ();
             break;
@@ -223,10 +216,21 @@ void TitleBar::SetEnabledState(bool bFlag)
 }
 
 
-void TitleBar::SetFocus (bool bFlag)
+
+
+void TitleBar::GetFocus()
 {
-    mbFocused = bFlag;
-    Invalidate ();
+    mbFocused = true;
+    Invalidate();
+}
+
+
+
+
+void TitleBar::LoseFocus()
+{
+    mbFocused = false;
+    Invalidate();
 }
 
 
@@ -254,11 +258,6 @@ bool TitleBar::HasExpansionIndicator (void) const
             case TBT_CONTROL_TITLE:
             case TBT_SUB_CONTROL_HEADLINE:
                 bHasExpansionIndicator = true;
-                break;
-
-            default:
-            case TBT_WINDOW_TITLE:
-                // bHasExpansionIndicator remains false
                 break;
         }
     }
@@ -306,11 +305,6 @@ Image TitleBar::GetExpansionIndicator (void) const
 
                 aIndicator = IconCache::Instance().GetIcon(nResourceId);
                 break;
-
-            default:
-            case TBT_WINDOW_TITLE:
-                // aIndicator remains empty Image.
-                break;
         }
     }
 
@@ -331,19 +325,6 @@ void TitleBar::PaintPanelControlTitle (void)
     aFocusBox.Left() += 2;
     PaintFocusIndicator (aFocusBox);
     PaintMouseOverIndicator (aTextBox);
-}
-
-
-
-
-void TitleBar::PaintWindowTitleBar (void)
-{
-    Rectangle aTextBox (CalculateTextBoundingBox (
-        GetOutputSizePixel().Width(),
-        true));
-
-    PaintText (aTextBox);
-    PaintFocusIndicator (aTextBox);
 }
 
 
@@ -534,10 +515,6 @@ void TitleBar::PaintBackground (const Rectangle& rTitleBarBox)
                 Point(rTitleBarBox.Right(), rTitleBarBox.Bottom()));
         }
         break;
-
-        default:
-        case TBT_WINDOW_TITLE:
-            break;
     }
 }
 
@@ -588,11 +565,6 @@ Rectangle TitleBar::CalculateTitleBarBox (
 
    switch (meType)
    {
-       case TBT_WINDOW_TITLE:
-           aTitleBarBox.Bottom() += aTitleBarBox.Top();
-           aTitleBarBox.Top() = 0;
-           break;
-
         case TBT_CONTROL_TITLE:
            aTitleBarBox.Bottom() += aTitleBarBox.Top();
            aTitleBarBox.Top() = 0;

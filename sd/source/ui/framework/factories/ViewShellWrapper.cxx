@@ -29,22 +29,32 @@
 
 #include "framework/ViewShellWrapper.hxx"
 #include "framework/Pane.hxx"
+#include "taskpane/ToolPanelViewShell.hxx"
 #include "ViewShell.hxx"
 #include "Window.hxx"
 
 #include <com/sun/star/drawing/framework/XPane.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 
 #include <rtl/uuid.h>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <comphelper/sequence.hxx>
+#include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
+#include <tools/diagnose_ex.h>
 
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
+using ::com::sun::star::awt::XWindow;
+using ::com::sun::star::rendering::XCanvas;
+using ::com::sun::star::lang::DisposedException;
+
 using ::rtl::OUString;
+using ::sd::toolpanel::ToolPanelViewShell;
 
 namespace sd { namespace framework {
 
@@ -55,7 +65,8 @@ ViewShellWrapper::ViewShellWrapper (
     : ViewShellWrapperInterfaceBase(MutexOwner::maMutex),
       mpViewShell(pViewShell),
       mxViewId(rxViewId),
-      mxWindow(rxWindow)
+      mxWindow(rxWindow),
+      mbIsPane( pViewShell == NULL ? false : ( pViewShell->GetShellType() == ViewShell::ST_TASK_PANE ) )
 {
     if (rxWindow.is())
     {
@@ -79,6 +90,8 @@ ViewShellWrapper::~ViewShellWrapper (void)
 
 void SAL_CALL ViewShellWrapper::disposing (void)
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     OSL_TRACE("disposing ViewShellWrapper %x", this);
     Reference<awt::XWindow> xWindow (mxWindow);
     if (xWindow.is())
@@ -101,13 +114,92 @@ void SAL_CALL ViewShellWrapper::disposing (void)
 
 
 
-bool ViewShellWrapper::IsUnique (void)
+//----- XInterface ------------------------------------------------------------
+
+Any SAL_CALL ViewShellWrapper::queryInterface( const Type& i_rType ) throw (RuntimeException)
 {
-    return m_refCount==1;
+    Any aInterface( ViewShellWrapperInterfaceBase::queryInterface( i_rType ) );
+    if ( !aInterface.hasValue() )
+    {
+        if ( mbIsPane )
+            aInterface = ViewShellWrapper_PaneBase::queryInterface( i_rType );
+        else
+            aInterface = ViewShellWrapper_ViewBase::queryInterface( i_rType );
+    }
+    return aInterface;
 }
 
+void SAL_CALL ViewShellWrapper::acquire() throw ()
+{
+    ViewShellWrapperInterfaceBase::acquire();
+}
 
+void SAL_CALL ViewShellWrapper::release() throw ()
+{
+    ViewShellWrapperInterfaceBase::release();
+}
 
+//----- XTypeProvider ---------------------------------------------------------
+
+Sequence< Type > SAL_CALL ViewShellWrapper::getTypes(  ) throw (RuntimeException)
+{
+    const Sequence< Type > aCommonTypes( ViewShellWrapperInterfaceBase::getTypes() );
+    const Sequence< Type > aSpecialTypes(
+            mbIsPane
+        ?   ViewShellWrapper_PaneBase::getTypes()
+        :   ViewShellWrapper_ViewBase::getTypes()
+    );
+    return ::comphelper::concatSequences( aCommonTypes, aSpecialTypes );
+}
+
+Sequence< ::sal_Int8 > SAL_CALL ViewShellWrapper::getImplementationId(  ) throw (RuntimeException)
+{
+    static ::cppu::OImplementationId* pViewId = NULL;
+    static ::cppu::OImplementationId* pPaneId = NULL;
+    if ( !pViewId )
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if ( !pViewId )
+        {
+            static ::cppu::OImplementationId aViewId;
+            static ::cppu::OImplementationId aPaneId;
+            pViewId = &aViewId;
+            pPaneId = &aPaneId;
+        }
+    }
+
+    return ( mbIsPane ? pPaneId : pViewId )->getImplementationId();
+}
+
+//----- XPane -----------------------------------------------------------------
+
+Reference< XInterface > ViewShellWrapper::impl_getPaneWindowOrCanvas( const bool i_bWindow )
+{
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard( maMutex );
+    if ( !mpViewShell.get() )
+        throw DisposedException( ::rtl::OUString(), *this );
+
+    ToolPanelViewShell* pToolPanelShell = dynamic_cast< ToolPanelViewShell* >( mpViewShell.get() );
+    ENSURE_OR_RETURN( pToolPanelShell != NULL, "XPane should be accessible for a ToolPanelViewShell only", NULL );
+
+    ::Window* pPaneWindow = pToolPanelShell->GetToolPanelParentWindow();
+    ENSURE_OR_RETURN( pPaneWindow, "shell is not able to provide a panel parent", NULL );
+
+    if ( i_bWindow )
+        return VCLUnoHelper::GetInterface( pPaneWindow );
+    return pPaneWindow->GetCanvas();
+}
+
+Reference< XWindow > SAL_CALL ViewShellWrapper::getWindow() throw (RuntimeException)
+{
+    return Reference< XWindow >( impl_getPaneWindowOrCanvas( true ), UNO_QUERY );
+}
+
+Reference< XCanvas > SAL_CALL ViewShellWrapper::getCanvas() throw (RuntimeException)
+{
+    return Reference< XCanvas >( impl_getPaneWindowOrCanvas( false ), UNO_QUERY );
+}
 
 //----- XResource -------------------------------------------------------------
 
@@ -177,7 +269,7 @@ const Sequence<sal_Int8>& ViewShellWrapper::getUnoTunnelId (void)
     static Sequence<sal_Int8>* pSequence = NULL;
     if (pSequence == NULL)
     {
-        const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+        const ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if (pSequence == NULL)
         {
             static ::com::sun::star::uno::Sequence<sal_Int8> aSequence (16);

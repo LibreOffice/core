@@ -74,3 +74,19 @@ DockingWindow FLT_RIGHT_PANE_DOCKING_WINDOW
     Size = MAP_APPFONT (100,200) ;
     Text [ en-US ] = "Task Pane" ;
 };
+
+DockingWindow FLT_TOOL_PANEL_DOCKING_WINDOW
+{
+    //  HelpID = SID_EFFECT_WIN ;
+    Border = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Sizeable = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Dockable = TRUE ;
+    EnableResizing = TRUE ;
+    Size = MAP_APPFONT (100,200) ;
+    Text [ en-US ] = "Task Pane" ;
+};

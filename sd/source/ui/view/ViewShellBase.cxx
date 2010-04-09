@@ -64,9 +64,9 @@
 #include "OutlineViewShell.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "PresentationViewShell.hxx"
-#include "TaskPaneViewShell.hxx"
 #include "FormShellManager.hxx"
 #include "ToolBarManager.hxx"
+#include "taskpane/PanelId.hxx"
 #include "Window.hxx"
 #include "framework/ConfigurationController.hxx"
 #include "DocumentRenderer.hxx"
@@ -91,6 +91,7 @@
 #include <svl/whiter.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/msgbox.hxx>
+#include <tools/diagnose_ex.h>
 
 #include "fubullet.hxx"
 
@@ -1487,9 +1488,9 @@ void ViewShellBase::Implementation::SetPaneVisibility (
             xConfigurationController->requestResourceDeactivation(
                 xPaneId);
     }
-    catch (RuntimeException&)
+    catch (const Exception &)
     {
-        DBG_ASSERT(false, "ViewShellBase::Implementation::SetPaneVisibility(): caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -1625,7 +1626,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
     }
     catch (RuntimeException&)
     {
-        DBG_ASSERT(false, "ViewShellBase::Implementation::GetSlotState(): caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
 }
@@ -1638,8 +1639,8 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
     // Set the visibility state of the toolpanel and one of its top
     // level panels.
     BOOL bShowToolPanel = TRUE;
-    toolpanel::TaskPaneViewShell::PanelId nPanelId (
-        toolpanel::TaskPaneViewShell::PID_UNKNOWN);
+    toolpanel::PanelId nPanelId (
+        toolpanel::PID_UNKNOWN);
     bool bPanelIdGiven = false;
 
     // Extract the given arguments.
@@ -1660,7 +1661,7 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
             if (pPanelId != NULL)
             {
                 nPanelId = static_cast<
-                    toolpanel::TaskPaneViewShell::PanelId>(
+                    toolpanel::PanelId>(
                         pPanelId->GetValue());
                 bPanelIdGiven = true;
             }
@@ -1670,7 +1671,7 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
     // Ignore the request for some combinations of panels and view
     // shell types.
     if (bPanelIdGiven
-        && ! (nPanelId==toolpanel::TaskPaneViewShell::PID_LAYOUT
+        && ! (nPanelId==toolpanel::PID_LAYOUT
             && mrBase.GetMainViewShell()!=NULL
             && mrBase.GetMainViewShell()->GetShellType()==ViewShell::ST_OUTLINE))
     {

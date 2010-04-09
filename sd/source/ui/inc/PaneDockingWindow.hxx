@@ -65,7 +65,6 @@ public:
         SfxChildWindow *pChildWindow,
         ::Window* pParent,
         const ResId& rResId,
-        const ::rtl::OUString& rsPaneURL,
         const ::rtl::OUString& rsTitle);
 
     virtual ~PaneDockingWindow (void);
@@ -76,6 +75,8 @@ public:
     virtual long Notify( NotifyEvent& rNEvt );
     virtual void StateChanged( StateChangedType nType );
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
+
+    virtual void EndDocking( const Rectangle& rRect, BOOL bFloatMode );
 
     /** Initializing the title tool box either creates a new title tool box
         or clears all items from an existing one.  A closer is added as only
@@ -93,6 +94,9 @@ public:
     */
     USHORT AddMenu (const String& rsMenuName, ULONG nHelpId, const Link& rCallback);
 
+    void        SetEndDockingHdl( const Link& i_rEndDockingHdl ) { maEndDockingHdl = i_rEndDockingHdl; }
+    const Link& GetEndDockingHdl() const { return maEndDockingHdl; }
+
     /** Set the title of the docking window to the given string.  Use this
         method when the title is not yet known at the time of construction
         or can not be passed to the constructor.
@@ -104,10 +108,6 @@ public:
     ::boost::shared_ptr<ToolBox> GetTitleToolBox (void) const;
 
 private:
-    /** The pane which is represented by the docking window.
-    */
-    ::rtl::OUString msPaneURL;
-
     /** Title that is shown at the top of the docking window.
     */
     ::rtl::OUString msTitle;
@@ -126,6 +126,8 @@ private:
     sal_uInt16 mnChildWindowId;
 
     ::boost::scoped_ptr< ::Window> mpContentWindow;
+
+    Link maEndDockingHdl;
 
     /** Remember that a layout is pending, i.e. Resize() has been called
         since the last Paint().

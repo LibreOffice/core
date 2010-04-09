@@ -71,8 +71,6 @@ public:
     virtual void Paint (const Rectangle& rBoundingBox);
     virtual void Resize (void);
 
-    static std::auto_ptr<ControlFactory> CreateControlFactory (const SdDrawDocument* pDocument);
-
     static SlideSorterCacheDisplay* Instance (const SdDrawDocument* pDocument);
 
     void SetPageCount (sal_Int32 nPageCount);

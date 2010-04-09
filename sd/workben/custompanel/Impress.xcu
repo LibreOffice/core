@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
+<oor:component-data oor:name="Impress" oor:package="org.openoffice.Office" xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <node oor:name="MultiPaneGUI">
+    <node oor:name="ToolPanel">
+      <node oor:name="CustomPanels">
+        <node oor:name="org.openoffice.example.colorpanel.SingleColorPanel" oor:op="replace">
+          <prop oor:name="ResourceURL" oor:type="xs:string">
+            <value>private:resource/toolpanel/SingleColorView</value>
+          </prop>
+          <prop oor:name="DisplayTitle" oor:type="xs:string">
+            <value>Single Color Panel</value>
+          </prop>
+        </node>
+      </node>
+    </node>
+    <node oor:name="Framework">
+      <node oor:name="ResourceFactories">
+        <node oor:name="org.openoffice.example.colorpanel.1" oor:op="replace">
+          <prop oor:name="ServiceName">
+            <value>org.openoffice.example.colorpanel.ResourceFactory</value>
+          </prop>
+          <node oor:name="ResourceList">
+            <node oor:name="SingleColorView" oor:op="replace">
+              <prop oor:name="URL">
+                <value>private:resource/toolpanel/SingleColorView</value>
+              </prop>
+            </node>
+          </node>
+        </node>
+      </node>
+    </node>
+  </node>
+</oor:component-data>
