@@ -1587,6 +1587,9 @@ void SvtFileDialog::UpdateControls( const String& rURL )
                 sText = sURL;
         }
 
+        if ( !sText.Len() && rURL.Len() )
+            // happens, for instance, for URLs which the INetURLObject does not know to belong to a hierarchical scheme
+            sText = rURL;
         _pImp->_pFtCurrentPath->SetText( sText );
     }
 
