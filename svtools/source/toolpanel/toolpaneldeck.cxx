@@ -83,6 +83,7 @@ namespace svt
             ,m_aPanels()
             ,m_pDummyPanel( new DummyPanel )
             ,m_pLayouter()
+            ,m_bInDtor( false )
             ,m_pAccessibleParent( NULL )
         {
             m_aPanels.AddListener( *this );
@@ -92,12 +93,15 @@ namespace svt
 
         ~ToolPanelDeck_Impl()
         {
+            m_bInDtor = true;
         }
 
         PDeckLayouter       GetLayouter() const { return m_pLayouter; }
         void                SetLayouter( const PDeckLayouter& i_pNewLayouter );
 
         Window&             GetPanelWindowAnchor() { return m_aPanelAnchor; }
+
+        bool                IsDead() const { return m_bInDtor; }
 
         /// notifies our listeners that we're going to die. Only to be called from with our anti-impl's destructor
         void                NotifyDying()
@@ -145,9 +149,8 @@ namespace svt
         ToolPanelCollection m_aPanels;
         PToolPanel          m_pDummyPanel;
         PanelDeckListeners  m_aListeners;
-
         PDeckLayouter       m_pLayouter;
-
+        bool                m_bInDtor;
         Window*             m_pAccessibleParent;
     };
 
@@ -508,6 +511,8 @@ namespace svt
     void ToolPanelDeck::GetFocus()
     {
         Control::GetFocus();
+        if ( m_pImpl->IsDead() )
+            return;
         if ( !m_pImpl->FocusActivePanel() )
         {
             PDeckLayouter pLayouter( GetLayouter() );
