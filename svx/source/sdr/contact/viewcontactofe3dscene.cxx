@@ -38,11 +38,11 @@
 #include <svx/sdr/contact/viewobjectcontactofe3dscene.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b3drange.hxx>
-#include <drawinglayer/attribute/sdrattribute3d.hxx>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #include <svx/sdr/contact/viewcontactofe3d.hxx>
 #include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
+#include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -164,19 +164,11 @@ namespace sdr
 
         ViewContactOfE3dScene::ViewContactOfE3dScene(E3dScene& rScene)
         :   ViewContactOfSdrObj(rScene),
-            mpViewInformation3D(0),
-            mpObjectTransformation(0),
-            mpSdrSceneAttribute(0),
-            mpSdrLightingAttribute(0)
+            maViewInformation3D(),
+            maObjectTransformation(),
+            maSdrSceneAttribute(),
+            maSdrLightingAttribute()
         {
-        }
-
-        ViewContactOfE3dScene::~ViewContactOfE3dScene()
-        {
-            delete mpViewInformation3D;
-            delete mpObjectTransformation;
-            delete mpSdrSceneAttribute;
-            delete mpSdrLightingAttribute;
         }
 
         void ViewContactOfE3dScene::createViewInformation3D(const basegfx::B3DRange& rContentRange)
@@ -262,34 +254,36 @@ namespace sdr
             }
 
             const uno::Sequence< beans::PropertyValue > aEmptyProperties;
-            mpViewInformation3D = new drawinglayer::geometry::ViewInformation3D(aTransformation, aOrientation, aProjection, aDeviceToView, 0.0, aEmptyProperties);
+            maViewInformation3D = drawinglayer::geometry::ViewInformation3D(
+                aTransformation, aOrientation, aProjection,
+                aDeviceToView, 0.0, aEmptyProperties);
         }
 
         void ViewContactOfE3dScene::createObjectTransformation()
         {
             // create 2d Object Transformation from relative point in 2d scene to world
-            mpObjectTransformation = new basegfx::B2DHomMatrix;
             const Rectangle& rRectangle = GetE3dScene().GetSnapRect();
 
-            mpObjectTransformation->set(0, 0, rRectangle.getWidth());
-            mpObjectTransformation->set(1, 1, rRectangle.getHeight());
-            mpObjectTransformation->set(0, 2, rRectangle.Left());
-            mpObjectTransformation->set(1, 2, rRectangle.Top());
+            maObjectTransformation.set(0, 0, rRectangle.getWidth());
+            maObjectTransformation.set(1, 1, rRectangle.getHeight());
+            maObjectTransformation.set(0, 2, rRectangle.Left());
+            maObjectTransformation.set(1, 2, rRectangle.Top());
         }
 
         void ViewContactOfE3dScene::createSdrSceneAttribute()
         {
             const SfxItemSet& rItemSet = GetE3dScene().GetMergedItemSet();
-            mpSdrSceneAttribute = drawinglayer::primitive2d::createNewSdrSceneAttribute(rItemSet);
+            maSdrSceneAttribute = drawinglayer::primitive2d::createNewSdrSceneAttribute(rItemSet);
         }
 
         void ViewContactOfE3dScene::createSdrLightingAttribute()
         {
             const SfxItemSet& rItemSet = GetE3dScene().GetMergedItemSet();
-            mpSdrLightingAttribute = drawinglayer::primitive2d::createNewSdrLightingAttribute(rItemSet);
+            maSdrLightingAttribute = drawinglayer::primitive2d::createNewSdrLightingAttribute(rItemSet);
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfE3dScene::createScenePrimitive2DSequence(const SetOfByte* pLayerVisibility) const
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfE3dScene::createScenePrimitive2DSequence(
+            const SetOfByte* pLayerVisibility) const
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
             const sal_uInt32 nChildrenCount(GetObjectCount());
@@ -329,18 +323,26 @@ namespace sdr
                     // on identity and the time on 0.0.
                     const uno::Sequence< beans::PropertyValue > aEmptyProperties;
                     const drawinglayer::geometry::ViewInformation3D aNeutralViewInformation3D(aEmptyProperties);
-                    const basegfx::B3DRange aContentRange(drawinglayer::primitive3d::getB3DRangeFromPrimitive3DSequence(aAllSequence, aNeutralViewInformation3D));
+                    const basegfx::B3DRange aContentRange(
+                        drawinglayer::primitive3d::getB3DRangeFromPrimitive3DSequence(aAllSequence, aNeutralViewInformation3D));
 
                     // create 2d primitive 3dscene with generated sub-list from collector
-                    const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::ScenePrimitive2D(
-                        bTestVisibility ? aVisibleSequence : aAllSequence,
-                        getSdrSceneAttribute(),
-                        getSdrLightingAttribute(),
-                        getObjectTransformation(),
-                        getViewInformation3D(aContentRange)));
+                    const drawinglayer::primitive2d::Primitive2DReference xReference(
+                        new drawinglayer::primitive2d::ScenePrimitive2D(
+                            bTestVisibility ? aVisibleSequence : aAllSequence,
+                            getSdrSceneAttribute(),
+                            getSdrLightingAttribute(),
+                            getObjectTransformation(),
+                            getViewInformation3D(aContentRange)));
+
                     xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                 }
             }
+
+            // always append an invisible outline for the cases where no visible content exists
+            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
+                drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
+                    false, getObjectTransformation()));
 
             return xRetval;
         }
@@ -355,27 +357,7 @@ namespace sdr
                 xRetval = createScenePrimitive2DSequence(0);
             }
 
-            if(xRetval.hasElements())
-            {
-                return xRetval;
-            }
-            else
-            {
-                // create a gray placeholder hairline polygon in object size as empty 3D scene marker. Use object size
-                // model information directly, NOT getBoundRect()/getSnapRect() since these will
-                // be using the geometry data we get just asked for. AFAIK for empty 3D Scenes, the model data
-                // is SdrObject::aOutRect which i can access directly using GetLastBoundRect() here
-                const Rectangle aEmptySceneGeometry(GetE3dScene().GetLastBoundRect());
-                const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(
-                    aEmptySceneGeometry.Left(), aEmptySceneGeometry.Top(),
-                    aEmptySceneGeometry.Right(), aEmptySceneGeometry.Bottom())));
-                const double fGrayTone(0xc0 / 255.0);
-                const basegfx::BColor aGrayTone(fGrayTone, fGrayTone, fGrayTone);
-                const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aGrayTone));
-
-                // The replacement object may also get a text like 'empty 3D Scene' here later
-                return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-            }
+            return xRetval;
         }
 
         void ViewContactOfE3dScene::ActionChanged()
@@ -384,22 +366,15 @@ namespace sdr
             ViewContactOfSdrObj::ActionChanged();
 
             // mark locally cached values as invalid
-            delete mpViewInformation3D;
-            mpViewInformation3D = 0;
-
-            delete mpObjectTransformation;
-            mpObjectTransformation = 0;
-
-            delete mpSdrSceneAttribute;
-            mpSdrSceneAttribute = 0;
-
-            delete mpSdrLightingAttribute;
-            mpSdrLightingAttribute = 0;
+            maViewInformation3D = drawinglayer::geometry::ViewInformation3D();
+            maObjectTransformation.identity();
+            maSdrSceneAttribute = drawinglayer::attribute::SdrSceneAttribute();
+            maSdrLightingAttribute = drawinglayer::attribute::SdrLightingAttribute();
         }
 
         const drawinglayer::geometry::ViewInformation3D& ViewContactOfE3dScene::getViewInformation3D() const
         {
-            if(!mpViewInformation3D)
+            if(maViewInformation3D.isDefault())
             {
                 // this version will create the content range on demand locally and thus is less
                 // performant than the other one. Since the information is buffered the planned
@@ -418,47 +393,47 @@ namespace sdr
                 const_cast < ViewContactOfE3dScene* >(this)->createViewInformation3D(aContentRange);
             }
 
-            return *mpViewInformation3D;
+            return maViewInformation3D;
         }
 
         const drawinglayer::geometry::ViewInformation3D& ViewContactOfE3dScene::getViewInformation3D(const basegfx::B3DRange& rContentRange) const
         {
-            if(!mpViewInformation3D)
+            if(maViewInformation3D.isDefault())
             {
                 const_cast < ViewContactOfE3dScene* >(this)->createViewInformation3D(rContentRange);
             }
 
-            return *mpViewInformation3D;
+            return maViewInformation3D;
         }
 
         const basegfx::B2DHomMatrix& ViewContactOfE3dScene::getObjectTransformation() const
         {
-            if(!mpObjectTransformation)
+            if(maObjectTransformation.isIdentity())
             {
                 const_cast < ViewContactOfE3dScene* >(this)->createObjectTransformation();
             }
 
-            return *mpObjectTransformation;
+            return maObjectTransformation;
         }
 
         const drawinglayer::attribute::SdrSceneAttribute& ViewContactOfE3dScene::getSdrSceneAttribute() const
         {
-            if(!mpSdrSceneAttribute)
+            if(maSdrSceneAttribute.isDefault())
             {
                 const_cast < ViewContactOfE3dScene* >(this)->createSdrSceneAttribute();
             }
 
-            return *mpSdrSceneAttribute;
+            return maSdrSceneAttribute;
         }
 
         const drawinglayer::attribute::SdrLightingAttribute& ViewContactOfE3dScene::getSdrLightingAttribute() const
         {
-            if(!mpSdrLightingAttribute)
+            if(maSdrLightingAttribute.isDefault())
             {
                 const_cast < ViewContactOfE3dScene* >(this)->createSdrLightingAttribute();
             }
 
-            return *mpSdrLightingAttribute;
+            return maSdrLightingAttribute;
         }
 
         drawinglayer::primitive3d::Primitive3DSequence ViewContactOfE3dScene::getAllPrimitive3DSequence() const

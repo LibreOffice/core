@@ -63,7 +63,7 @@ namespace drawinglayer
 
             Current Basic 2D StatePrimitives are:
 
-            - AlphaPrimitive2D (objects with freely defined transparence)
+            - TransparencePrimitive2D (objects with freely defined transparence)
             - InvertPrimitive2D (for XOR)
             - MaskPrimitive2D (for masking)
             - ModifiedColorPrimitive2D (for a stack of color modifications)

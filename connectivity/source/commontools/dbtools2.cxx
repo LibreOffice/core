@@ -593,7 +593,39 @@ bool getBooleanDataSourceSetting( const Reference< XConnection >& _rxConnection,
     }
     return bValue;
 }
+// -------------------------------------------------------------------------
+bool getDataSourceSetting( const Reference< XInterface >& _xChild, const ::rtl::OUString& _sAsciiSettingsName,
+    Any& /* [out] */ _rSettingsValue )
+{
+    bool bIsPresent = false;
+    try
+    {
+        const Reference< XPropertySet> xDataSourceProperties( findDataSource( _xChild ), UNO_QUERY );
+        OSL_ENSURE( xDataSourceProperties.is(), "getDataSourceSetting: invalid data source object!" );
+        if ( !xDataSourceProperties.is() )
+            return false;
 
+        const Reference< XPropertySet > xSettings(
+                xDataSourceProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Settings") ) ),
+                UNO_QUERY_THROW
+            );
+
+        _rSettingsValue = xSettings->getPropertyValue( _sAsciiSettingsName );
+        bIsPresent = true;
+    }
+    catch( const Exception& )
+    {
+        bIsPresent = false;
+    }
+    return bIsPresent;
+}
+// -------------------------------------------------------------------------
+bool getDataSourceSetting( const Reference< XInterface >& _rxDataSource, const sal_Char* _pAsciiSettingsName,
+    Any& /* [out] */ _rSettingsValue )
+{
+    ::rtl::OUString sAsciiSettingsName = ::rtl::OUString::createFromAscii(_pAsciiSettingsName);
+    return getDataSourceSetting( _rxDataSource, sAsciiSettingsName,_rSettingsValue );
+}
 // -----------------------------------------------------------------------------
 sal_Bool isDataSourcePropertyEnabled(const Reference<XInterface>& _xProp,const ::rtl::OUString& _sProperty,sal_Bool _bDefault)
 {
