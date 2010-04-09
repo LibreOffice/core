@@ -1018,8 +1018,8 @@ void ToolPanelViewShell::ConnectToDockingWindow()
     PaneDockingWindow* pDockingWindow = dynamic_cast<PaneDockingWindow*>(GetDockingWindow());
     if (pDockingWindow != NULL)
     {
-        pDockingWindow->InitializeTitleToolBox();
-        mnMenuId = pDockingWindow->AddMenu (
+        pDockingWindow->ResetToolBox();
+        mnMenuId = pDockingWindow->AddDropDownToolBoxItem (
             String(SdResId(STR_TASKPANEL_MASTER_PAGE_MENU_TITLE)),
             HID_SD_TASK_PANE_VIEW_MENU,
             LINK(this, ToolPanelViewShell, ToolboxClickHandler));

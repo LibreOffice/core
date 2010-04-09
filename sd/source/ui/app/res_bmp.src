@@ -522,14 +522,6 @@ Bitmap BMP_WAIT_ICON
 
 // ----------------------------------------
 
-Bitmap BMP_CLOSE_DOC
-{
-    File = "closedoc.bmp";
-};
-Bitmap BMP_CLOSE_DOC_H
-{
-    File = "closedochc.bmp";
-};
 Bitmap BMP_FADE_EFFECT_INDICATOR
 {
     File = "fade_effect_indicator.bmp";
