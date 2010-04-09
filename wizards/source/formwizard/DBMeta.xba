@@ -86,7 +86,7 @@ Dim Nulllist()
 		oDBConnection = oDBContext.GetByName(sDBName).GetConnection(&quot;&quot;,&quot;&quot;)
 		GetConnection() = True
 	Else
-		oInteractionHandler = createUnoService(&quot;com.sun.star.sdb.InteractionHandler&quot;)
+		oInteractionHandler = createUnoService(&quot;com.sun.star.task.InteractionHandler&quot;)
 		oDataSource = oDBContext.GetByName(sDBName)
 		On Local Error Goto NOCONNECTION
 		Do
