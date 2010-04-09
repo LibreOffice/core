@@ -50,7 +50,8 @@
 module com { module sun { module star { module text { module textfield {
 
 //=============================================================================
-/** is a <type>TextField</type> whose content is specified by RDF metadata.
+/** is a <type scope="com::sun::star::text">TextField</type> whose content
+    is specified by RDF metadata.
 
     @since OOo 3.2
 
@@ -59,8 +60,8 @@ module com { module sun { module star { module text { module textfield {
 service MetadataField
 {
     //-------------------------------------------------------------------------
-    /** None of the properties of <type>TextContent</type> are
-        supported. */
+    /** None of the properties of
+        <type scope="com::sun::star::text">TextContent</type> are supported. */
     service  com::sun::star::text::TextField;
 
     //-------------------------------------------------------------------------
@@ -73,8 +74,8 @@ service MetadataField
     interface com::sun::star::text::XText;
 
     //-------------------------------------------------------------------------
-    /** The <type>TextContent</type>s that are contained in the
-        <type>MetadataField</type> can be enumerated. */
+    /** The <type scope="com::sun::star::text">TextContent</type>s that are
+        contained in the <type>MetadataField</type> can be enumerated. */
     interface com::sun::star::container::XEnumerationAccess;
 
     //-------------------------------------------------------------------------
