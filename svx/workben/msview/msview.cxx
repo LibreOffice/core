@@ -37,7 +37,7 @@
 #include <boost/shared_ptr.hpp>
 #include <sot/storage.hxx>
 #ifndef _SVTOOLS_HRC
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #endif
 
 #include <sal/main.h>

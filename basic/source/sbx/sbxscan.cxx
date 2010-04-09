@@ -50,7 +50,7 @@
 #include "sbxres.hxx"
 #include <basic/sbxbase.hxx>
 #include <basic/sbxform.hxx>
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 
 #include "basrid.hxx"
 #include "runtime.hxx"
