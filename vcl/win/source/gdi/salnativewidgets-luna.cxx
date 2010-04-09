@@ -315,7 +315,6 @@ BOOL WinSalGraphics::hitTestNativeControl( ControlType,
                               ControlPart,
                               const Region&,
                               const Point&,
-                              SalControlHandle&,
                               BOOL& )
 {
     return FALSE;
@@ -421,7 +420,6 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                             ControlPart nPart,
                             ControlState nState,
                             const ImplControlValue& aValue,
-                            SalControlHandle&,
                             OUString aCaption )
 {
     // a listbox dropdown is actually a combobox dropdown
@@ -936,7 +934,6 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
  *
  *  rControlRegion: The bounding region of the complete control in VCL frame coordinates.
  *  aValue:         An optional value (tristate/numerical/string)
- *  rControlHandle: Carries platform dependent data and is maintained by the WinSalGraphics implementation.
  *  aCaption:   A caption or title string (like button text etc)
  */
 BOOL WinSalGraphics::drawNativeControl( ControlType nType,
@@ -944,7 +941,6 @@ BOOL WinSalGraphics::drawNativeControl( ControlType nType,
                             const Region& rControlRegion,
                             ControlState nState,
                             const ImplControlValue& aValue,
-                            SalControlHandle& rControlHandle,
                             const OUString& aCaption )
 {
     BOOL bOk = false;
@@ -1031,7 +1027,7 @@ BOOL WinSalGraphics::drawNativeControl( ControlType nType,
     OUString aCaptionStr( aCaption.replace('~', '&') ); // translate mnemonics
     bOk = ImplDrawNativeControl(mhDC, hTheme, rc,
                             nType, nPart, nState, aValue,
-                            rControlHandle, aCaptionStr );
+                            aCaptionStr );
 
     // restore alignment
     SetTextAlign( mhDC, ta );
@@ -1051,7 +1047,6 @@ BOOL WinSalGraphics::drawNativeControl( ControlType nType,
  *
  *  rControlRegion: The bounding region of the complete control in VCL frame coordinates.
  *  aValue:         An optional value (tristate/numerical/string)
- *  rControlHandle: Carries platform dependent data and is maintained by the WinSalGraphics implementation.
  *  aCaption:   A caption or title string (like button text etc)
  */
 BOOL WinSalGraphics::drawNativeControlText( ControlType,
@@ -1059,7 +1054,6 @@ BOOL WinSalGraphics::drawNativeControlText( ControlType,
                                 const Region&,
                                 ControlState,
                                 const ImplControlValue&,
-                                SalControlHandle&,
                                 const OUString& )
 {
     return( false );
@@ -1077,15 +1071,13 @@ BOOL WinSalGraphics::drawNativeControlText( ControlType,
  *
  *  rControlRegion: The bounding region of the control in VCL frame coordinates.
  *  aValue:     An optional value (tristate/numerical/string)
- *  rControlHandle: Carries platform dependent data and is maintained by the WinSalGraphics implementation.
  *  aCaption:       A caption or title string (like button text etc)
  */
 BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
                                 ControlPart nPart,
                                 const Region& rControlRegion,
-                                ControlState,
-                                const ImplControlValue&,
-                                SalControlHandle&,
+                                ControlState nState,
+                                const ImplControlValue& rControlValue,
                                 const OUString&,
                                 Region &rNativeBoundingRegion,
                                 Region &rNativeContentRegion )
@@ -1201,6 +1193,7 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
             }
         }
     }
+
     if( nType == CTRL_SLIDER && ( (nPart == PART_THUMB_HORZ) || (nPart == PART_THUMB_VERT) ) )
     {
         HTHEME hTheme = getThemeHandle( mhWnd, L"Trackbar");
@@ -1227,6 +1220,37 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
             }
             bRet = TRUE;
         }
+    }
+
+    if ( ( nType == CTRL_TAB_ITEM ) && ( nPart == PART_ENTIRE_CONTROL ) )
+    {
+        Rectangle aControlRect( rControlRegion.GetBoundRect() );
+        rNativeContentRegion = aControlRect;
+
+        --aControlRect.Bottom();
+
+        TabitemValue *pValue = static_cast< TabitemValue* >( rControlValue.getOptionalVal() );
+        if ( pValue )
+        {
+            if ( pValue->isBothAligned() )
+                --aControlRect.Right();
+        }
+
+        if ( nState & CTRL_STATE_SELECTED )
+        {
+            aControlRect.Left() -= 2;
+            if ( pValue && !pValue->isBothAligned() )
+            {
+                if ( pValue->isLeftAligned() || pValue->isNotAligned() )
+                    aControlRect.Right() += 2;
+                if ( pValue->isRightAligned() )
+                    aControlRect.Right() += 1;
+            }
+            aControlRect.Top() -= 2;
+            aControlRect.Bottom() += 2;
+        }
+        rNativeBoundingRegion = aControlRect;
+        bRet = TRUE;
     }
 
     ReleaseDC( mhWnd, hDC );

@@ -1232,7 +1232,7 @@ BOOL SvHeaderTabListBox::GetGlyphBoundRects( const Point& rOrigin, const String&
     return Control::GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, nBase, rVector );
 }
 // -----------------------------------------------------------------------
-Rectangle SvHeaderTabListBox::GetWindowExtentsRelative( Window *pRelativeWindow )
+Rectangle SvHeaderTabListBox::GetWindowExtentsRelative( Window *pRelativeWindow ) const
 {
     return Control::GetWindowExtentsRelative( pRelativeWindow );
 }

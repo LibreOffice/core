@@ -38,9 +38,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-SRS1NAME=	uno
-SRC1FILES=  unoifac2.src
-
 SLOFILES= \
             $(SLO)$/addrtempuno.obj \
             $(SLO)$/contextmenuhelper.obj \
