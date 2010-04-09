@@ -179,7 +179,8 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram >& xDiagram,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
+            ::com::sun::star::uno::XComponentContext > & xContext,
+        bool bAdaptAxes=true );
 
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XAxis > getAttachedAxis(

@@ -49,6 +49,7 @@
 #include "AxisHelper.hxx"
 #include "RegressionCurveHelper.hxx"
 #include "ShapeController.hxx"
+#include "DiagramHelper.hxx"
 
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -115,7 +116,14 @@ bool lcl_deleteDataSeries(
                 ActionDescriptionProvider::createDescription(
                     ActionDescriptionProvider::DELETE, ::rtl::OUString( String( ::chart::SchResId( STR_OBJECT_DATASERIES )))),
                 xUndoManager, xModel );
+
+            Reference< chart2::XDiagram > xDiagram( ::chart::ChartModelHelper::findDiagram( xModel ) );
+            uno::Reference< chart2::XAxis > xAxis( ::chart::DiagramHelper::getAttachedAxis( xSeries, xDiagram ) );
+
             ::chart::DataSeriesHelper::deleteSeries( xSeries, xChartType );
+
+            ::chart::AxisHelper::hideAxisIfNoDataIsAttached( xAxis, xDiagram );
+
             bResult = true;
             aUndoGuard.commitAction();
         }
@@ -576,8 +584,7 @@ bool ChartController::isObjectDeleteable( const uno::Any& rSelection )
     {
         OUString aSelObjCID( aSelOID.getObjectCID() );
         ObjectType aObjectType(ObjectIdentifier::getObjectType( aSelObjCID ));
-        if( (OBJECTTYPE_TITLE == aObjectType) || (OBJECTTYPE_LEGEND == aObjectType)
-                || (OBJECTTYPE_DATA_SERIES == aObjectType) )
+        if( (OBJECTTYPE_TITLE == aObjectType) || (OBJECTTYPE_LEGEND == aObjectType) )
             return true;
         if( (OBJECTTYPE_DATA_SERIES == aObjectType) || (OBJECTTYPE_LEGEND_ENTRY == aObjectType) )
             return true;
@@ -585,6 +592,8 @@ bool ChartController::isObjectDeleteable( const uno::Any& rSelection )
             (OBJECTTYPE_DATA_AVERAGE_LINE == aObjectType) || (OBJECTTYPE_DATA_ERRORS == aObjectType))
             return true;
         if( (OBJECTTYPE_DATA_LABELS == aObjectType) || (OBJECTTYPE_DATA_LABEL == aObjectType) )
+            return true;
+        if( (OBJECTTYPE_AXIS == aObjectType) || (OBJECTTYPE_GRID == aObjectType) || (OBJECTTYPE_SUBGRID == aObjectType) )
             return true;
     }
     else if ( aSelOID.isAdditionalShape() )
@@ -629,8 +638,6 @@ bool ChartController::executeDispatch_Delete()
             return false;
 
         //remove chart object
-        impl_ClearSelection();
-
         uno::Reference< chart2::XChartDocument > xChartDoc( m_aModel->getModel(), uno::UNO_QUERY );
         if( !xChartDoc.is() )
             return false;
@@ -785,6 +792,24 @@ bool ChartController::executeDispatch_Delete()
                     bReturn = true;
                     aUndoGuard.commitAction();
                 }
+                break;
+            }
+            case OBJECTTYPE_AXIS:
+            {
+                executeDispatch_DeleteAxis();
+                bReturn = true;
+                break;
+            }
+            case OBJECTTYPE_GRID:
+            {
+                executeDispatch_DeleteMajorGrid();
+                bReturn = true;
+                break;
+            }
+            case OBJECTTYPE_SUBGRID:
+            {
+                executeDispatch_DeleteMinorGrid();
+                bReturn = true;
                 break;
             }
 

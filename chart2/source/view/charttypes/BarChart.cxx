@@ -110,9 +110,16 @@ drawing::Direction3D BarChart::getPreferredDiagramAspectRatio() const
     if( m_nDimension == 3 )
     {
         aRet = drawing::Direction3D(1.0,-1.0,1.0);
-        drawing::Direction3D aScale( this->getPlottingPositionHelper(MAIN_AXIS_INDEX).getScaledLogicWidth() );
+                BarPositionHelper* pPosHelper = dynamic_cast<BarPositionHelper*>(&( this->getPlottingPositionHelper( MAIN_AXIS_INDEX) ) );
+        drawing::Direction3D aScale( pPosHelper->getScaledLogicWidth() );
         if(aScale.DirectionX!=0.0)
-            aRet.DirectionZ = aScale.DirectionZ/aScale.DirectionX;
+        {
+            double fXSlotCount = 1.0;
+            if(!m_aZSlots.empty())
+                fXSlotCount = m_aZSlots.begin()->size();
+
+            aRet.DirectionZ = aScale.DirectionZ/(aScale.DirectionX + aScale.DirectionX*(fXSlotCount-1.0)*pPosHelper->getSlotWidth());
+        }
         else
             return VSeriesPlotter::getPreferredDiagramAspectRatio();
         if(aRet.DirectionZ<0.05)
@@ -357,7 +364,8 @@ uno::Reference< drawing::XShape > BarChart::createDataPoint3D_Bar(
             xShape = m_pShapeFactory->createCone( xTarget, rPosition, rSize, fTopHeight, nRotateZAngleHundredthDegree );
             break;
         case DataPointGeometry3D::PYRAMID:
-            xShape = m_pShapeFactory->createPyramid( xTarget, rPosition, rSize, fTopHeight, nRotateZAngleHundredthDegree );
+            xShape = m_pShapeFactory->createPyramid( xTarget, rPosition, rSize, fTopHeight, nRotateZAngleHundredthDegree>0
+                , xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
             break;
         case DataPointGeometry3D::CUBOID:
         default:
@@ -366,7 +374,8 @@ uno::Reference< drawing::XShape > BarChart::createDataPoint3D_Bar(
                     , PropertyMapper::getPropertyNameMapForFilledSeriesProperties(), bRoundedEdges );
             return xShape;
     }
-    this->setMappedProperties( xShape, xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
+    if( nGeometry3D != DataPointGeometry3D::PYRAMID )
+        this->setMappedProperties( xShape, xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
     return xShape;
 }
 
@@ -734,6 +743,7 @@ void BarChart::createShapes()
                         double fMiddleHeight = fUpperYValue-fLowerYValue;
                         if(!bPositive)
                             fMiddleHeight*=-1.0;
+                        double fLogicBarDepth = 0.5;
                         if(m_nDimension==3)
                         {
                             if( lcl_hasGeometry3DVariableWidth(nGeometry3D) && fCompleteHeight!=0.0 )
@@ -744,9 +754,11 @@ void BarChart::createShapes()
                                 fLogicBarWidth = fLogicBaseWidth*fHeight/(fCompleteHeight);
                                 if(fLogicBarWidth<=0.0)
                                     fLogicBarWidth=fLogicBaseWidth;
+                                fLogicBarDepth = fLogicBarDepth*fHeight/(fCompleteHeight);
+                                if(fLogicBarDepth<=0.0)
+                                    fLogicBarDepth*=-1.0;
                             }
                         }
-                        double fLogicBarDepth = fLogicBarWidth;
 
                         //better performance for big data
                         FormerBarPoint aFormerPoint( aSeriesFormerPointMap[pSeries] );
