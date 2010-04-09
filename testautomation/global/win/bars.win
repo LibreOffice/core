@@ -1049,7 +1049,6 @@ SortAscending .uno:SortAscending
 SortDescending .uno:SortDescending
 Speichern .uno:Save
 SpeichernAls .uno:SaveAs
-StopBrowse SID_BROWSE_STOP
 URLEingabe .uno:OpenUrl
 Undo .uno:Undo
 DocumentAsEMail .uno:SendMail
