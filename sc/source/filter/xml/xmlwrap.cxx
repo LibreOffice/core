@@ -764,7 +764,10 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
             pExport->SetSourceStream( uno::Reference<io::XInputStream>() );
 
             // If there was an error, reset all stream flags, so the next save attempt will use normal saving.
-            if (!bRet)
+            // #i110692# For embedded objects, the stream may be unavailable for one save operation (m_pAntiImpl)
+            // and become available again later. But after saving normally once, the stream positions aren't
+            // valid anymore, so the flags also have to be reset if the stream wasn't available.
+            if ( !bRet || !xSrcInput.is() )
             {
                 SCTAB nTabCount = rDoc.GetTableCount();
                 for (SCTAB nTab=0; nTab<nTabCount; nTab++)
