@@ -27,8 +27,8 @@
 #ifndef SFX_TASKPANE_HXX
 #define SFX_TASKPANE_HXX
 
-#include <sfx2/childwin.hxx>
-#include <sfx2/dockwin.hxx>
+#include "sfx2/childwin.hxx"
+#include "sfx2/titledockwin.hxx"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -91,16 +91,19 @@ namespace sfx2
     //==================================================================================================================
     //= TaskPaneDockingWindow
     //==================================================================================================================
-    class TaskPaneDockingWindow : public SfxDockingWindow
+    class TaskPaneDockingWindow : public TitledDockingWindow
     {
     public:
         TaskPaneDockingWindow( SfxBindings* i_pBindings, TaskPaneWrapper& i_rWrapper,
             Window* i_pParent, WinBits i_nBits );
 
+    protected:
         // Window overridables
         virtual void        GetFocus();
-        virtual void        Resize();
         virtual long        Notify( NotifyEvent& i_rNotifyEvent );
+
+        // TitledDockingWindow overridables
+        virtual void onLayoutDone();
 
     private:
         ModuleTaskPane  m_aTaskPane;

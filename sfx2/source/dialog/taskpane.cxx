@@ -302,8 +302,8 @@ namespace sfx2
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
     TaskPaneDockingWindow::TaskPaneDockingWindow( SfxBindings* i_pBindings, TaskPaneWrapper& i_rWrapper, Window* i_pParent, WinBits i_nBits )
-        :SfxDockingWindow( i_pBindings, &i_rWrapper, i_pParent, i_nBits )
-        ,m_aTaskPane( *this, lcl_identifyModule( i_pBindings ) )
+        :TitledDockingWindow( i_pBindings, &i_rWrapper, i_pParent, i_nBits )
+        ,m_aTaskPane( GetContentWindow(), lcl_identifyModule( i_pBindings ) )
     {
         m_aTaskPane.Show();
         SetText( String( SfxResId( SID_TASKPANE ) ) );
@@ -312,15 +312,14 @@ namespace sfx2
     //------------------------------------------------------------------------------------------------------------------
     void TaskPaneDockingWindow::GetFocus()
     {
-        SfxDockingWindow::GetFocus();
+        TitledDockingWindow::GetFocus();
         m_aTaskPane.GrabFocus();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TaskPaneDockingWindow::Resize()
+    void TaskPaneDockingWindow::onLayoutDone()
     {
-        SfxDockingWindow::Resize();
-        m_aTaskPane.SetPosSizePixel( Point(), GetOutputSizePixel() );
+        m_aTaskPane.SetPosSizePixel( Point(), GetContentWindow().GetOutputSizePixel() );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -337,7 +336,7 @@ namespace sfx2
                     return TRUE;
             }
         }
-        return SfxDockingWindow::Notify( i_rNotifyEvent );
+        return TitledDockingWindow::Notify( i_rNotifyEvent );
     }
 
     //==================================================================================================================

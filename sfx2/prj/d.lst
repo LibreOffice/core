@@ -41,6 +41,7 @@ mkdir: %_DEST%\inc%_EXT%\sfx2
 ..\inc\sfx2\docfile.hxx %_DEST%\inc%_EXT%\sfx2\docfile.hxx
 ..\inc\sfx2\docfilt.hxx %_DEST%\inc%_EXT%\sfx2\docfilt.hxx
 ..\inc\sfx2\dockwin.hxx %_DEST%\inc%_EXT%\sfx2\dockwin.hxx
+..\inc\sfx2\titledockwin.hxx %_DEST%\inc%_EXT%\sfx2\titledockwin.hxx
 ..\inc\sfx2\doctempl.hxx %_DEST%\inc%_EXT%\sfx2\doctempl.hxx
 ..\inc\sfx2\doctdlg.hxx %_DEST%\inc%_EXT%\sfx2\doctdlg.hxx
 ..\inc\sfx2\event.hxx %_DEST%\inc%_EXT%\sfx2\event.hxx

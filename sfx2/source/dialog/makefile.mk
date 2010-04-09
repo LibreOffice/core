@@ -73,7 +73,8 @@ SLOFILES =\
         $(SLO)$/tabdlg.obj			\
         $(SLO)$/tplcitem.obj		\
         $(SLO)$/tplpitem.obj		\
-        $(SLO)$/versdlg.obj
+        $(SLO)$/versdlg.obj         \
+        $(SLO)$/titledockwin.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\
@@ -90,7 +91,8 @@ SRC1FILES =\
         templdlg.src		\
         versdlg.src			\
         printopt.src        \
-        srchdlg.src
+        srchdlg.src         \
+        titledockwin.src
 
 .IF "$(BUILD_VER_STRING)"!=""
 .IF "$(GUI)"=="UNX"
@@ -107,9 +109,9 @@ CFLAGS+=-DBUILD_VER_STRING="$(subst,",\" "$(BUILD_VER_STRING)")"
 $(INCCOM)$/cuilib.hxx: makefile.mk
 .IF "$(GUI)"=="UNX"
     $(RM) $@
-    echo \#define DLL_NAME \"libcui$(DLLPOSTFIX)$(DLLPOST)\" >$@
+    @echo \#define DLL_NAME \"libcui$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE
-    echo $(EMQ)#define DLL_NAME $(EMQ)"cui$(DLLPOSTFIX)$(DLLPOST)$(EMQ)" >$@
+    @echo $(EMQ)#define DLL_NAME $(EMQ)"cui$(DLLPOSTFIX)$(DLLPOST)$(EMQ)" >$@
 .ENDIF
 
 $(SLO)$/sfxdlg.obj : $(INCCOM)$/cuilib.hxx
