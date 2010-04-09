@@ -37,6 +37,7 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XGraphics.hpp>
+#include <com/sun/star/ui/UIElementType.hpp>
 /** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
@@ -72,9 +73,11 @@ namespace sd { namespace colortoolpanel
     using ::com::sun::star::awt::XDevice;
     using ::com::sun::star::awt::XGraphics;
     using ::com::sun::star::accessibility::XAccessible;
+    using ::com::sun::star::frame::XFrame;
     /** === end UNO using === **/
     namespace WindowAttribute = ::com::sun::star::awt::WindowAttribute;
     namespace PosSize = ::com::sun::star::awt::PosSize;
+    namespace UIElementType = ::com::sun::star::ui::UIElementType;
 
     //==================================================================================================================
     //= helpers
@@ -226,7 +229,26 @@ namespace sd { namespace colortoolpanel
     {
     }
 
+     //------------------------------------------------------------------------------------------------------------------
+    Reference< XFrame > SAL_CALL PanelUIElement::getFrame() throw (RuntimeException)
+    {
+        // TODO
+        return NULL;
+    }
+
     //------------------------------------------------------------------------------------------------------------------
+    ::rtl::OUString SAL_CALL PanelUIElement::getResourceURL() throw (RuntimeException)
+    {
+        return m_sResourceURL;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::sal_Int16 SAL_CALL PanelUIElement::getType() throw (RuntimeException)
+    {
+        return UIElementType::TOOLPANEL;
+    }
+
+     //------------------------------------------------------------------------------------------------------------------
     Reference< XInterface > SAL_CALL PanelUIElement::getRealInterface(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );

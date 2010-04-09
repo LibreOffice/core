@@ -553,4 +553,23 @@ Reference< XIndexAccess > SAL_CALL UIConfigElementWrapperBase::getSettings( sal_
     return m_xConfigData;
 }
 
+Reference< XFrame > SAL_CALL UIConfigElementWrapperBase::getFrame() throw (RuntimeException)
+{
+    ResetableGuard aLock( m_aLock );
+    Reference< XFrame > xFrame( m_xWeakFrame );
+    return xFrame;
+}
+
+::rtl::OUString SAL_CALL UIConfigElementWrapperBase::getResourceURL() throw (RuntimeException)
+{
+    ResetableGuard aLock( m_aLock );
+    return m_aResourceURL;
+}
+
+::sal_Int16 SAL_CALL UIConfigElementWrapperBase::getType() throw (RuntimeException)
+{
+    ResetableGuard aLock( m_aLock );
+    return m_nType;
+}
+
 }

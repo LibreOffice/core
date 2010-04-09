@@ -154,6 +154,23 @@ throw ( Exception, RuntimeException )
     }
 }
 
+// XUIElement
+::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SAL_CALL UIElementWrapperBase::getFrame() throw (::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( m_xWeakFrame );
+    return xFrame;
+}
+
+::rtl::OUString SAL_CALL UIElementWrapperBase::getResourceURL() throw (::com::sun::star::uno::RuntimeException)
+{
+    return m_aResourceURL;
+}
+
+::sal_Int16 SAL_CALL UIElementWrapperBase::getType() throw (::com::sun::star::uno::RuntimeException)
+{
+    return m_nType;
+}
+
 // XUpdatable
 void SAL_CALL UIElementWrapperBase::update() throw (::com::sun::star::uno::RuntimeException)
 {
