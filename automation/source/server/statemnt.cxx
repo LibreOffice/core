@@ -82,6 +82,7 @@
 #include <vcl/wintypes.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/roadmap.hxx>
+#include <svtools/table/tablecontrol.hxx>
 #include <svl/poolitem.hxx>
 #include <svtools/extensionlistbox.hxx>
 // Hat keinen Includeschutz
@@ -128,9 +129,10 @@
 
 using namespace com::sun::star::frame;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::util;
+//using namespace com::sun::star::util; geht wegen Color nicht
 using namespace com::sun::star::beans;
 using namespace svt;
+//using namespace svt::table;
 
 
 #ifndef SBX_VALUE_DECL_DEFINED
@@ -618,7 +620,7 @@ BOOL StatementSlot::Execute()
             AddReferer();
             if ( !aUnoUrl.Len() )
                 aUnoUrl = CUniString("slot:").Append( String::CreateFromInt32( nFunctionId ) );
-            URL aTargetURL;
+            ::com::sun::star::util::URL aTargetURL;
             aTargetURL.Complete = aUnoUrl;
             Reference < XFramesSupplier > xDesktop = Reference < XFramesSupplier >( ::comphelper::getProcessServiceFactory()->createInstance( CUniString("com.sun.star.frame.Desktop") ), UNO_QUERY );
             Reference < XFrame > xFrame;
@@ -664,7 +666,7 @@ BOOL StatementSlot::Execute()
                 ReportError( GEN_RES_STR1( S_UNO_URL_EXECUTE_FAILED_NO_FRAME, aTargetURL.Complete ) );
             else
             {
-                Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( CUniString("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+                Reference < ::com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( CUniString("com.sun.star.util.URLTransformer" )), UNO_QUERY );
                 xTrans->parseStrict( aTargetURL );
 
                 Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
@@ -865,6 +867,13 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
     if ( bFirst )
         pRet->GenReturn ( RET_WinInfo, SmartId(), (comm_ULONG)nConf | DH_MODE_DATA_VALID, UniString(), TRUE );
 
+    if ( bFirst )
+    {
+        if ( pBase->GetType() == WINDOW_WINDOW && pBase->GetParent() && pBase->GetParent()->GetType() == WINDOW_CONTROL &&
+             dynamic_cast< svt::table::TableControl* > ( pBase->GetParent() ) )
+            pBase = pBase->GetParent();
+    }
+
     {   // Klammerung, so daﬂ der String nicht w‰hrend der Rekursion bestehen bleibt
         String aName;
         BOOL bSkip = FALSE;
@@ -958,6 +967,8 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
                     aTypeSuffix.AppendAscii( "/RoadMap", 8 );
                 else if ( dynamic_cast< IExtensionListBox* >(pBase) )
                     aTypeSuffix.AppendAscii( "/ExtensionListBox" );
+                else if ( dynamic_cast< svt::table::TableControl* >(pBase) )
+                    aTypeSuffix.AppendAscii( "/TableControl" );
                 else
                     aTypeSuffix.AppendAscii( "/Unknown", 8 );
             }
@@ -3388,17 +3399,17 @@ BOOL StatementCommand::Execute()
             {
                 if( (nParams & PARAM_USHORT_1) )
                 {
-                    Reference < XCancellable > xPicker;
+                    Reference < ::com::sun::star::util::XCancellable > xPicker;
                     switch( nNr1 )
                     {
                         case CONST_FilePicker:
                             {
-                                xPicker.set( Reference < XCancellable >( svt::GetTopMostFilePicker(), UNO_QUERY ) );
+                                xPicker.set( Reference < ::com::sun::star::util::XCancellable >( svt::GetTopMostFilePicker(), UNO_QUERY ) );
                             }
                             break;
                         case CONST_FolderPicker:
                             {
-                                xPicker.set( Reference < XCancellable >( svt::GetTopMostFolderPicker(), UNO_QUERY ) );
+                                xPicker.set( Reference < ::com::sun::star::util::XCancellable >( svt::GetTopMostFolderPicker(), UNO_QUERY ) );
                             }
                             break;
                         default:
@@ -5807,6 +5818,8 @@ BOOL StatementControl::Execute()
                         nRealControlType = CONST_CTORoadmap;
                     else if ( dynamic_cast< IExtensionListBox* >(pControl) )
                         nRealControlType = CONST_CTIExtensionListBox;
+                    else if ( dynamic_cast< ::svt::table::TableControl* >(pControl) )
+                        nRealControlType = CONST_CTTableControl;
                     else
                         nRealControlType = CONST_CTUnknown;
 
@@ -6148,6 +6161,130 @@ protected:
                                         }
                                     }
                                     break;
+
+                                case CONST_CTTableControl:
+                                    {
+                                        ::svt::table::TableControl *pTC = dynamic_cast< ::svt::table::TableControl* >(pControl);
+                                        switch ( nMethodId )
+                                        {
+                                           case M_GetItemType :
+                                                {
+                                                    if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pTC->GetColumnCount() ) &&
+                                                         ValueOK( aUId, MethodString( nMethodId ), nNr2, pTC->GetRowCount() ))
+                                                    {
+                                                        ::svt::table::PTableModel pModel = pTC->GetModel();
+                                                        Any aCell = pModel->getCellContent()[nNr1-1][nNr2-1];
+                                                        pRet->GenReturn ( RET_Value, aUId, String( aCell.getValueTypeName() ));
+                                                    }
+                                                }
+                                                break;
+                                           case M_GetItemText :
+                                                {
+                                                    if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pTC->GetColumnCount() ) &&
+                                                         ValueOK( aUId, MethodString( nMethodId ), nNr2, pTC->GetRowCount() ))
+                                                    {
+                                                        ::svt::table::PTableModel pModel = pTC->GetModel();
+                                                        Any aCell = pModel->getCellContent()[nNr1-1][nNr2-1];
+                                                        ::rtl::OUString aContent;
+                                                        aCell >>= aContent;
+                                                        pRet->GenReturn ( RET_Value, aUId, aContent );
+                                                    }
+                                                }
+                                                break;
+                                            case M_GetColumnCount :
+                                                {
+                                                    pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pTC->GetColumnCount() );
+                                                }
+                                                break;
+                                            case M_GetRowCount :
+                                                {
+                                                    pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pTC->GetRowCount() );
+                                                }
+                                                break;
+/*                                          case M_IsEditing :
+                                                {
+                                                    CellControllerRef aControler;
+                                                    aControler = pEBBox->Controller();
+                                                    pRet->GenReturn ( RET_Value, aUId, (comm_BOOL)aControler.Is() );
+                                                }
+                                                break;
+                                            case M_Select :
+                                                {
+                                                    if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,pEBBox->GetRowCount() ) )
+                                                    {
+                                                        USHORT nColCount = pEBBox->GetColumnCount();
+                                                        comm_USHORT nUnfrozenColCount = 0;
+                                                        USHORT i;
+                                                        for ( i=0 ; i < nColCount ; i++ )
+                                                        {
+                                                            if ( !pEBBox->IsFrozen( pEBBox->GetColumnId( i ) ) )
+                                                                nUnfrozenColCount++;
+                                                        }
+                                                        if ( ValueOK(aUId, MethodString( nMethodId ),nNr2,nUnfrozenColCount ) )
+                                                            pEBBox->GoToRowColumnId( nNr1-1, pEBBox->GetColumnId( nNr2 ) );
+                                                    }
+                                                }
+                                                break;
+
+
+
+
+                                            case M_GetSelCount :
+                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((SvLBox*)pControl)->GetSelectionCount()));
+                                                break;
+                                            case M_GetSelIndex :
+                                                if ( ! (nParams & PARAM_USHORT_1) )
+                                                    nNr1 = 1;
+                                                if ( ValueOK(aUId, CUniString("GetSelIndex"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
+                                                {
+                                                    nNr1--;
+                                                    COUNT_LBOX( FirstSelected, NextSelected, nNr1);
+                                                    pRet->GenReturn ( RET_Value, aUId, comm_ULONG( ((SvTreeListBox*)pControl)->GetVisiblePos( pThisEntry )) +1 );
+                                                }
+                                                break;
+                                            case M_GetSelText :
+                                                if ( ! (nParams & PARAM_USHORT_1) )
+                                                    nNr1 = 1;
+                                                if ( ValueOK(aUId, CUniString("GetSelText"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
+                                                {
+                                                    nNr1--;
+                                                    COUNT_LBOX( FirstSelected, NextSelected, nNr1);
+                                                    GetFirstValidTextItem( pThisEntry );
+                                                    pRet->GenReturn ( RET_Value, aUId, pItem->GetText() );
+                                                }
+                                                break;
+                                            case M_Select :
+                                                if ( ! (nParams & PARAM_BOOL_1) )
+                                                    bBool1 = TRUE;
+                                                if( nParams & PARAM_STR_1 )
+                                                {
+                / *                                 ListBox *pLB = ((ListBox*)pControl);
+                                                    if ( pLB->GetEntryPos( aString1 ) == LISTBOX_ENTRY_NOTFOUND )
+                                                        ReportError( aUId, GEN_RES_STR2( S_ENTRY_NOT_FOUND, MethodString( nMethodId ), aString1 ) );
+                                                    else
+                                                    {
+                                                        pLB->SelectEntry( aString1, bBool1 );
+                                                        if ( pLB->IsEntrySelected( aString1 ) ? !bBool1 : bBool1 )  // XOR rein mit BOOL
+                                                            ReportError( aUId, GEN_RES_STR2( S_METHOD_FAILED, MethodString( nMethodId ), aString1 ) );
+                                                    }
+                * /                                 ReportError( aUId, GEN_RES_STR1( S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED, MethodString( nMethodId ) ) );
+                                                }
+                                                else
+                                                {
+                                                    if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,((SvLBox*)pControl)->GetVisibleCount()) )
+                                                    {
+                                                        SvLBoxEntry *pEntry = (SvLBoxEntry*)((SvTreeListBox*)pControl)->GetEntryAtVisPos( nNr1-1 );
+                                                        ((SvTreeListBox*)pControl)->Select ( pEntry, bBool1 );
+                                                    }
+                                                }
+                                                break;*/
+                                        default:
+                                            ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "RoadMap" ) );
+                                            break;
+                                        }
+                                    }
+                                    break;
+
                                 case CONST_CTUnknown:
                                     ReportError( aUId, GEN_RES_STR2( S_UNKNOWN_TYPE, UniString::CreateFromInt32( nRT ), MethodString(nMethodId) ) );
                                     break;
