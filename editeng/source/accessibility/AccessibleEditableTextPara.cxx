@@ -40,6 +40,7 @@
 #include <vos/mutex.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
+#include <editeng/flditem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/awt/Point.hpp>
@@ -52,11 +53,8 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
-
-// --> OD 2006-01-11 #i27138#
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
-// <--
 #include <vcl/unohelp.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/unoprnms.hxx>
@@ -70,9 +68,16 @@
 //------------------------------------------------------------------------
 
 #include <com/sun/star/beans/PropertyState.hpp>
+
+//!!!#include <svx/unoshape.hxx>
+//!!!#include <svx/dialmgr.hxx>
+//!!!#include "accessibility.hrc"
+
 #include <editeng/unolingu.hxx>
 #include <editeng/unopracc.hxx>
 #include "editeng/AccessibleEditableTextPara.hxx"
+#include "AccessibleHyperlink.hxx"
+
 #include <svtools/colorcfg.hxx>
 
 
@@ -525,7 +530,9 @@ namespace accessibility
             {
                 uno::Reference< XAccessible > xPara = xParentContext->getAccessibleChild( nIndex );
                 if( xPara.is() )
+                {
                     return uno::Reference< XAccessibleText > ( xPara, uno::UNO_QUERY );
+                }
             }
         }
 
@@ -810,6 +817,11 @@ namespace accessibility
         {
             uno::Reference< XAccessibleEditableText > aAccEditText = this;
             aRet <<= aAccEditText;
+        }
+        else if ( rType == ::getCppuType((uno::Reference< XAccessibleHypertext > *)0) )
+        {
+            uno::Reference< XAccessibleHypertext > aAccHyperText = this;
+            aRet <<= aAccHyperText;
         }
         else
         {
@@ -2061,6 +2073,84 @@ namespace accessibility
         aOutSequence.realloc( nOutLen );
 
         return aOutSequence;
+    }
+
+    // XAccessibleHypertext
+    ::sal_Int32 SAL_CALL AccessibleEditableTextPara::getHyperLinkCount(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        SvxAccessibleTextAdapter& rT = GetTextForwarder();
+        const sal_Int32 nPara = GetParagraphIndex();
+
+        USHORT nHyperLinks = 0;
+        USHORT nFields = rT.GetFieldCount( nPara );
+        for ( USHORT n = 0; n < nFields; n++ )
+        {
+            EFieldInfo aField = rT.GetFieldInfo( nPara, n );
+            if ( aField.pFieldItem->GetField()->ISA( SvxURLField ) )
+                nHyperLinks++;
+        }
+        return nHyperLinks;
+    }
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleHyperlink > SAL_CALL AccessibleEditableTextPara::getHyperLink( ::sal_Int32 nLinkIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleHyperlink > xRef;
+
+        SvxAccessibleTextAdapter& rT = GetTextForwarder();
+        const sal_Int32 nPara = GetParagraphIndex();
+
+        USHORT nHyperLink = 0;
+        USHORT nFields = rT.GetFieldCount( nPara );
+        for ( USHORT n = 0; n < nFields; n++ )
+        {
+            EFieldInfo aField = rT.GetFieldInfo( nPara, n );
+            if ( aField.pFieldItem->GetField()->ISA( SvxURLField ) )
+            {
+                if ( nHyperLink == nLinkIndex )
+                {
+                    USHORT nEEStart = aField.aPosition.nIndex;
+
+                    // Translate EE Index to accessible index
+                    USHORT nStart = rT.CalcEditEngineIndex( nPara, nEEStart );
+                    USHORT nEnd = nStart + aField.aCurrentText.Len();
+                    xRef = new AccessibleHyperlink( rT, new SvxFieldItem( *aField.pFieldItem ), nPara, nEEStart, nStart, nEnd, aField.aCurrentText );
+                    break;
+                }
+                nHyperLink++;
+            }
+        }
+
+        return xRef;
+    }
+
+    ::sal_Int32 SAL_CALL AccessibleEditableTextPara::getHyperLinkIndex( ::sal_Int32 nCharIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+    {
+        const sal_Int32 nPara = GetParagraphIndex();
+        SvxAccessibleTextAdapter& rT = GetTextForwarder();
+
+//        SvxAccessibleTextIndex aIndex;
+//        aIndex.SetIndex(nPara, nCharIndex, rT);
+//        const USHORT nEEIndex = aIndex.GetEEIndex();
+
+        const USHORT nEEIndex = rT.CalcEditEngineIndex( nPara, nCharIndex );
+        sal_Int32 nHLIndex = 0;
+        USHORT nHyperLink = 0;
+        USHORT nFields = rT.GetFieldCount( nPara );
+        for ( USHORT n = 0; n < nFields; n++ )
+        {
+            EFieldInfo aField = rT.GetFieldInfo( nPara, n );
+            if ( aField.pFieldItem->GetField()->ISA( SvxURLField ) )
+            {
+                if ( aField.aPosition.nIndex == nEEIndex )
+                {
+                    nHLIndex = nHyperLink;
+                    break;
+                }
+                nHyperLink++;
+            }
+        }
+
+        return nHLIndex;
     }
 
     // XAccessibleMultiLineText
