@@ -82,18 +82,15 @@ sal_Int32 IdleDetection::CheckSlideShowRunning (void)
         // Ignore the current frame when it does not exist, is not valid, or
         // is not active.
         bool bIgnoreFrame (true);
-        if (pViewFrame->GetFrame() != NULL)
+        uno::Reference<frame::XFrame> xFrame (pViewFrame->GetFrame().GetFrameInterface());
+        try
         {
-            uno::Reference<frame::XFrame> xFrame (pViewFrame->GetFrame()->GetFrameInterface());
-            try
-            {
-                if (xFrame.is() && xFrame->isActive())
-                    bIgnoreFrame = false;
-            }
-            catch (uno::RuntimeException e)
-            {
-                (void) e;
-            }
+            if (xFrame.is() && xFrame->isActive())
+                bIgnoreFrame = false;
+        }
+        catch (uno::RuntimeException e)
+        {
+            (void) e;
         }
         if (bIgnoreFrame)
             continue;

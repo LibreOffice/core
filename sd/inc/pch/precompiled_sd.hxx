@@ -477,7 +477,6 @@
 #include "sfx2/tabdlg.hxx"
 #include "sfx2/tbxctrl.hxx"
 #include "sfx2/templdlg.hxx"
-#include "sfx2/topfrm.hxx"
 #include "sfx2/tplpitem.hxx"
 #include "sfx2/viewfac.hxx"
 #include "sfx2/viewfrm.hxx"
