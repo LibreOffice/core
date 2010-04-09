@@ -263,12 +263,12 @@ namespace sfx2
         }
 
         //--------------------------------------------------------------------------------------------------------------
-        ::rtl::OUString lcl_identifyModule( const SfxBindings* i_pBindings )
+        Reference< XFrame > lcl_getFrame( const SfxBindings* i_pBindings )
         {
             const SfxViewFrame* pViewFrame = i_pBindings->GetDispatcher()->GetFrame();
             const SfxFrame* pFrame = pViewFrame->GetFrame();
             const Reference< XFrame > xFrame( pFrame->GetFrameInterface() );
-            return lcl_identifyModule( xFrame );
+            return xFrame;
         }
 
         //--------------------------------------------------------------------------------------------------------------
@@ -303,7 +303,7 @@ namespace sfx2
     //------------------------------------------------------------------------------------------------------------------
     TaskPaneDockingWindow::TaskPaneDockingWindow( SfxBindings* i_pBindings, TaskPaneWrapper& i_rWrapper, Window* i_pParent, WinBits i_nBits )
         :TitledDockingWindow( i_pBindings, &i_rWrapper, i_pParent, i_nBits )
-        ,m_aTaskPane( GetContentWindow(), lcl_identifyModule( i_pBindings ) )
+        ,m_aTaskPane( GetContentWindow(), lcl_getFrame( i_pBindings ) )
     {
         m_aTaskPane.Show();
         SetText( String( SfxResId( SID_TASKPANE ) ) );
@@ -399,7 +399,7 @@ namespace sfx2
     class CustomToolPanel : public ::svt::ToolPanelBase
     {
     public:
-        CustomToolPanel( const ::utl::OConfigurationNode& i_rPanelWindowState );
+        CustomToolPanel( const ::utl::OConfigurationNode& i_rPanelWindowState, const Reference< XFrame >& i_rFrame );
 
         virtual ::rtl::OUString GetDisplayName() const;
         virtual Image GetImage() const;
@@ -423,16 +423,18 @@ namespace sfx2
         const Image             m_aPanelImage;
         const ::rtl::OUString   m_sResourceURL;
         const ::rtl::OUString   m_sPanelConfigPath;
+        Reference< XFrame >     m_xFrame;
         CustomPanelUIElement    m_aCustomPanel;
         bool                    m_bAttemptedCreation;
     };
 
     //------------------------------------------------------------------------------------------------------------------
-    CustomToolPanel::CustomToolPanel( const ::utl::OConfigurationNode& i_rPanelWindowState )
+    CustomToolPanel::CustomToolPanel( const ::utl::OConfigurationNode& i_rPanelWindowState, const Reference< XFrame >& i_rFrame )
         :m_sUIName( ::comphelper::getString( i_rPanelWindowState.getNodeValue( "UIName" ) ) )
         ,m_aPanelImage( lcl_getPanelImage( i_rPanelWindowState ) )
         ,m_sResourceURL( i_rPanelWindowState.getLocalName() )
         ,m_sPanelConfigPath( i_rPanelWindowState.getNodePath() )
+        ,m_xFrame( i_rFrame )
         ,m_aCustomPanel()
         ,m_bAttemptedCreation( false )
     {
@@ -456,6 +458,7 @@ namespace sfx2
             const Reference< XUIElementFactory > xFactory( aContext.createComponent( "com.sun.star.ui.UIElementFactoryManager" ), UNO_QUERY_THROW );
 
             ::comphelper::NamedValueCollection aCreationArgs;
+            aCreationArgs.put( "Frame", makeAny( m_xFrame ) );
             aCreationArgs.put( "ParentWindow", makeAny( i_rPanelParentWindow.GetComponentInterface() ) );
 
             const Reference< XUIElement > xElement(
@@ -583,9 +586,10 @@ namespace sfx2
     class ModuleTaskPane_Impl : public ::boost::noncopyable
     {
     public:
-        ModuleTaskPane_Impl( ModuleTaskPane& i_rAntiImpl, const ::rtl::OUString& i_rModuleIdentifier )
+        ModuleTaskPane_Impl( ModuleTaskPane& i_rAntiImpl, const Reference< XFrame >& i_rDocumentFrame )
             :m_rAntiImpl( i_rAntiImpl )
-            ,m_sModuleIdentifier( i_rModuleIdentifier )
+            ,m_sModuleIdentifier( lcl_identifyModule( i_rDocumentFrame ) )
+            ,m_xFrame( i_rDocumentFrame )
             ,m_aPanels( i_rAntiImpl )
         {
             m_aPanels.Show();
@@ -612,9 +616,10 @@ namespace sfx2
                 impl_isToolPanelResource( const ::rtl::OUString& i_rResourceURL );
 
     private:
-        ModuleTaskPane&         m_rAntiImpl;
-        ::rtl::OUString         m_sModuleIdentifier;
-        ::svt::ToolPanelDeck    m_aPanels;
+        ModuleTaskPane&             m_rAntiImpl;
+        const ::rtl::OUString       m_sModuleIdentifier;
+        const Reference< XFrame >   m_xFrame;
+        ::svt::ToolPanelDeck        m_aPanels;
     };
 
     //------------------------------------------------------------------------------------------------------------------
@@ -654,7 +659,7 @@ namespace sfx2
                 continue;
 
             ::utl::OConfigurationNode aResourceNode( aWindowStateConfig.openNode( *resource ) );
-            ::svt::PToolPanel pCustomPanel( new CustomToolPanel( aResourceNode ) );
+            ::svt::PToolPanel pCustomPanel( new CustomToolPanel( aResourceNode, m_xFrame ) );
             size_t nPanelPos = m_aPanels.InsertPanel( pCustomPanel, m_aPanels.GetPanelCount() );
 
             if ( ::comphelper::getBOOL( aResourceNode.getNodeValue( "Visible" ) ) )
@@ -690,9 +695,9 @@ namespace sfx2
     //= ModuleTaskPane
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    ModuleTaskPane::ModuleTaskPane( Window& i_rParentWindow, const ::rtl::OUString& i_rModuleIdentifier )
+    ModuleTaskPane::ModuleTaskPane( Window& i_rParentWindow, const Reference< XFrame >& i_rDocumentFrame )
         :Window( &i_rParentWindow, 0 )
-        ,m_pImpl( new ModuleTaskPane_Impl( *this, i_rModuleIdentifier ) )
+        ,m_pImpl( new ModuleTaskPane_Impl( *this, i_rDocumentFrame ) )
     {
     }
 

@@ -66,11 +66,15 @@ namespace sfx2
         /** creates a new instance
             @param i_rParentWindow
                 the parent window
-            @param i_rModuleIdentifier
-                a string describing the module which the task pane should act for. The tool panels registered
-                for this module will be displayed in the task pane.
+            @param i_rDocumentFrame
+                the frame to which the task pane belongs. Will be passed to any custom tool panels created
+                via an XUIElementFactory. Also, it is used to determine the module which the task pane is
+                responsible for, which controls which tool panels are actually available.
         */
-        ModuleTaskPane( Window& i_rParentWindow, const ::rtl::OUString& i_rModuleIdentifier );
+        ModuleTaskPane(
+            Window& i_rParentWindow,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rDocumentFrame
+        );
         ~ModuleTaskPane();
 
         /** determines whether a given module has any registered tool panels
