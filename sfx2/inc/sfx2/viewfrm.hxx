@@ -42,6 +42,8 @@
 #include <com/sun/star/frame/status/Verb.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
+#include <tools/svborder.hxx>
+
 class SfxMacro;
 class SvBorder;
 class SfxDispatcher;
@@ -69,67 +71,6 @@ SV_DECL_REF(SfxObjectShell)
 #endif
 
 //========================================================================
-#include <tools/gen.hxx>
-class SvBorder
-{
-    long nTop, nRight, nBottom, nLeft;
-public:
-    SvBorder()
-    { nTop = nRight = nBottom = nLeft = 0; }
-    SvBorder( const Size & rSz )
-    { nTop = nBottom = rSz.Height(); nRight = nLeft = rSz.Width(); }
-    SvBorder( const Rectangle & rOuter, const Rectangle & rInner );
-    SvBorder( long nLeftP, long nTopP, long nRightP, long nBottomP )
-    { nLeft = nLeftP; nTop = nTopP; nRight = nRightP; nBottom = nBottomP; }
-    BOOL    operator == ( const SvBorder & rObj ) const
-            {
-                return nTop == rObj.nTop && nRight == rObj.nRight &&
-                       nBottom == rObj.nBottom && nLeft == rObj.nLeft;
-            }
-    BOOL    operator != ( const SvBorder & rObj ) const
-            { return !(*this == rObj); }
-    SvBorder & operator = ( const SvBorder & rBorder )
-            {
-                Left()   = rBorder.Left();
-                Top()    = rBorder.Top();
-                Right()  = rBorder.Right();
-                Bottom() = rBorder.Bottom();
-                return *this;
-            }
-    SvBorder & operator += ( const SvBorder & rBorder )
-            {
-                Left()   += rBorder.Left();
-                Top()    += rBorder.Top();
-                Right()  += rBorder.Right();
-                Bottom() += rBorder.Bottom();
-                return *this;
-            }
-    SvBorder & operator -= ( const SvBorder & rBorder )
-            {
-                Left()   -= rBorder.Left();
-                Top()    -= rBorder.Top();
-                Right()  -= rBorder.Right();
-                Bottom() -= rBorder.Bottom();
-                return *this;
-            }
-    BOOL    IsInside( const SvBorder & rInside )
-            {
-                return nTop >= rInside.nTop && nRight >= rInside.nRight &&
-                       nBottom >= rInside.nBottom && nLeft >= rInside.nLeft;
-            }
-    long &  Top()    { return nTop; }
-    long &  Right()  { return nRight; }
-    long &  Bottom() { return nBottom; }
-    long &  Left()   { return nLeft; }
-    long    Top()    const { return nTop; }
-    long    Right()  const { return nRight; }
-    long    Bottom() const { return nBottom; }
-    long    Left()   const { return nLeft; }
-};
-Rectangle & operator += ( Rectangle & rRect, const SvBorder & rBorder );
-Rectangle & operator -= ( Rectangle & rRect, const SvBorder & rBorder );
-
-
 class SFX2_DLLPUBLIC SfxViewFrame: public SfxShell, public SfxListener
 {
     struct SfxViewFrame_Impl*   pImp;
