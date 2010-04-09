@@ -37,6 +37,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <tools/zcodec.hxx>
@@ -115,7 +117,7 @@ void doTestCode()
     aDocInfo.Title = OUString( RTL_CONSTASCII_USTRINGPARAM( "PDF export test document" ) );
     aDocInfo.Producer = OUString( RTL_CONSTASCII_USTRINGPARAM( "VCL" ) );
     aWriter.SetDocInfo( aDocInfo );
-    aWriter.NewPage();
+    aWriter.NewPage( 595, 842 );
     aWriter.BeginStructureElement( PDFWriter::Document );
     // set duration of 3 sec for first page
     aWriter.SetAutoAdvanceTime( 3 );
@@ -166,7 +168,7 @@ void doTestCode()
                       TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK
                       );
 
-    aWriter.NewPage();
+    aWriter.NewPage( 595, 842 );
     // test AddStream interface
     aWriter.AddStream( String( RTL_CONSTASCII_USTRINGPARAM( "text/plain" ) ), new PDFTestOutputStream(), true );
     // set transitional mode
@@ -208,7 +210,25 @@ void doTestCode()
     aWriter.BeginStructureElement( PDFWriter::Caption );
     aWriter.DrawText( Point( 4500, 9000 ), String( RTL_CONSTASCII_USTRINGPARAM( "Some drawing stuff inside the structure" ) ) );
     aWriter.EndStructureElement();
+
+    // test clipping
+    basegfx::B2DPolyPolygon aClip;
+    basegfx::B2DPolygon aClipPoly;
+    aClipPoly.append( basegfx::B2DPoint( 8250, 9600 ) );
+    aClipPoly.append( basegfx::B2DPoint( 16500, 11100 ) );
+    aClipPoly.append( basegfx::B2DPoint( 8250, 12600 ) );
+    aClipPoly.append( basegfx::B2DPoint( 4500, 11100 ) );
+    aClipPoly.setClosed( true );
+    //aClipPoly.flip();
+    aClip.append( aClipPoly );
+
+    aWriter.Push( PUSH_CLIPREGION | PUSH_FILLCOLOR );
+    aWriter.SetClipRegion( aClip );
     aWriter.DrawEllipse( Rectangle( Point( 4500, 9600 ), Size( 12000, 3000 ) ) );
+    aWriter.MoveClipRegion( 1000, 500 );
+    aWriter.SetFillColor( Color( COL_RED ) );
+    aWriter.DrawEllipse( Rectangle( Point( 4500, 9600 ), Size( 12000, 3000 ) ) );
+    aWriter.Pop();
     // test transparency
     // draw background
     Rectangle aTranspRect( Point( 7500, 13500 ), Size( 9000, 6000 ) );
@@ -288,7 +308,7 @@ void doTestCode()
     aLIPoly.Move( 1000, 1000 );
     aWriter.DrawPolyLine( aLIPoly, aLI );
 
-    aWriter.NewPage();
+    aWriter.NewPage( 595, 842 );
     aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
     Wallpaper aWall( aTransMask );
     aWall.SetStyle( WALLPAPER_TILE );
@@ -312,7 +332,7 @@ void doTestCode()
     aWriter.SetLineColor( Color( COL_LIGHTBLUE ) );
     aWriter.DrawRect( aPolyRect );
 
-    aWriter.NewPage();
+    aWriter.NewPage( 595, 842 );
     aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
     aWriter.SetFont( Font( String( RTL_CONSTASCII_USTRINGPARAM( "Times" ) ), Size( 0, 500 ) ) );
     aWriter.SetTextColor( Color( COL_BLACK ) );
@@ -632,30 +652,25 @@ static void appendUnicodeTextString( const rtl::OUString& rString, OStringBuffer
     }
 }
 
-OString PDFWriterImpl::convertWidgetFieldName( const rtl::OUString& rString )
+void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWriter::AnyWidget& i_rControl )
 {
-    OStringBuffer aBuffer( rString.getLength()+64 );
-
     /* #i80258# previously we use appendName here
        however we need a slightly different coding scheme than the normal
        name encoding for field names
-
-       also replace all '.' by '_' as '.' indicates a hierarchy level which
-       we do not have here
     */
-
-    OString aStr( OUStringToOString( rString, RTL_TEXTENCODING_UTF8 ) );
+    const OUString& rName = (m_aContext.Version > PDFWriter::PDF_1_2) ? i_rControl.Name : i_rControl.Text;
+    OString aStr( OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ) );
     const sal_Char* pStr = aStr.getStr();
     int nLen = aStr.getLength();
+
+    OStringBuffer aBuffer( rName.getLength()+64 );
     for( int i = 0; i < nLen; i++ )
     {
         /*  #i16920# PDF recommendation: output UTF8, any byte
-         *  outside the interval [33(=ASCII'!');126(=ASCII'~')]
+         *  outside the interval [32(=ASCII' ');126(=ASCII'~')]
          *  should be escaped hexadecimal
          */
-        if( pStr[i] == '.' )
-            aBuffer.append( '_' );
-        else if( (pStr[i] >= 33 && pStr[i] <= 126 ) )
+        if( (pStr[i] >= 32 && pStr[i] <= 126 ) )
             aBuffer.append( pStr[i] );
         else
         {
@@ -664,31 +679,135 @@ OString PDFWriterImpl::convertWidgetFieldName( const rtl::OUString& rString )
         }
     }
 
-    OString aRet = aBuffer.makeStringAndClear();
+    OString aFullName( aBuffer.makeStringAndClear() );
+
+    /* #i82785# create hierarchical fields down to the for each dot in i_rName */
+    sal_Int32 nTokenIndex = 0, nLastTokenIndex = 0;
+    OString aPartialName;
+    OString aDomain;
+    do
+    {
+        nLastTokenIndex = nTokenIndex;
+        aPartialName = aFullName.getToken( 0, '.', nTokenIndex );
+        if( nTokenIndex != -1 )
+        {
+            // find or create a hierarchical field
+            // first find the fully qualified name up to this field
+            aDomain = aFullName.copy( 0, nTokenIndex-1 );
+            std::hash_map< rtl::OString, sal_Int32, rtl::OStringHash >::const_iterator it = m_aFieldNameMap.find( aDomain );
+            if( it == m_aFieldNameMap.end() )
+            {
+                 // create new hierarchy field
+                sal_Int32 nNewWidget = m_aWidgets.size();
+                m_aWidgets.push_back( PDFWidget() );
+                m_aWidgets[nNewWidget].m_nObject = createObject();
+                m_aWidgets[nNewWidget].m_eType = PDFWriter::Hierarchy;
+                m_aWidgets[nNewWidget].m_aName = aPartialName;
+                m_aWidgets[i_nWidgetIndex].m_nParent = m_aWidgets[nNewWidget].m_nObject;
+                m_aFieldNameMap[aDomain] = nNewWidget;
+                m_aWidgets[i_nWidgetIndex].m_nParent = m_aWidgets[nNewWidget].m_nObject;
+                if( nLastTokenIndex > 0 )
+                {
+                    // this field is not a root field and
+                    // needs to be inserted to its parent
+                    OString aParentDomain( aDomain.copy( 0, nLastTokenIndex-1 ) );
+                    it = m_aFieldNameMap.find( aParentDomain );
+                    OSL_ENSURE( it != m_aFieldNameMap.end(), "field name not found" );
+                    if( it != m_aFieldNameMap.end()  )
+                    {
+                        OSL_ENSURE( it->second < sal_Int32(m_aWidgets.size()), "invalid field number entry" );
+                        if( it->second < sal_Int32(m_aWidgets.size()) )
+                        {
+                            PDFWidget& rParentField( m_aWidgets[it->second] );
+                            rParentField.m_aKids.push_back( m_aWidgets[nNewWidget].m_nObject );
+                            rParentField.m_aKidsIndex.push_back( nNewWidget );
+                            m_aWidgets[nNewWidget].m_nParent = rParentField.m_nObject;
+                        }
+                    }
+                }
+            }
+            else if( m_aWidgets[it->second].m_eType != PDFWriter::Hierarchy )
+            {
+                // this is invalid, someone tries to have a terminal field as parent
+                // example: a button with the name foo.bar exists and
+                // another button is named foo.bar.no
+                // workaround: put the second terminal field as much up in the hierarchy as
+                // necessary to have a non-terminal field as parent (or none at all)
+                // since it->second already is terminal, we just need to use its parent
+                aDomain = OString();
+                aPartialName = aFullName.copy( aFullName.lastIndexOf( '.' )+1 );
+                if( nLastTokenIndex > 0 )
+                {
+                    aDomain = aFullName.copy( 0, nLastTokenIndex-1 );
+                    OStringBuffer aBuf( aDomain.getLength() + 1 + aPartialName.getLength() );
+                    aBuf.append( aDomain );
+                    aBuf.append( '.' );
+                    aBuf.append( aPartialName );
+                    aFullName = aBuf.makeStringAndClear();
+                }
+                else
+                    aFullName = aPartialName;
+                break;
+            }
+        }
+    } while( nTokenIndex != -1 );
+
+    // insert widget into its hierarchy field
+    if( aDomain.getLength() )
+    {
+        std::hash_map< rtl::OString, sal_Int32, rtl::OStringHash >::const_iterator it = m_aFieldNameMap.find( aDomain );
+        if( it != m_aFieldNameMap.end() )
+        {
+            OSL_ENSURE( it->second >= 0 && it->second < sal_Int32( m_aWidgets.size() ), "invalid field index" );
+            if( it->second >= 0 && it->second < sal_Int32(m_aWidgets.size()) )
+            {
+                m_aWidgets[i_nWidgetIndex].m_nParent = m_aWidgets[it->second].m_nObject;
+                m_aWidgets[it->second].m_aKids.push_back( m_aWidgets[i_nWidgetIndex].m_nObject);
+                m_aWidgets[it->second].m_aKidsIndex.push_back( i_nWidgetIndex );
+            }
+        }
+    }
+
+    if( aPartialName.getLength() == 0 )
+    {
+        // how funny, an empty field name
+        if( i_rControl.getType() == PDFWriter::RadioButton )
+        {
+            aPartialName  = "RadioGroup";
+            aPartialName += OString::valueOf( static_cast<const PDFWriter::RadioButtonWidget&>(i_rControl).RadioGroup );
+        }
+        else
+            aPartialName = OString( "Widget" );
+    }
+
     if( ! m_aContext.AllowDuplicateFieldNames )
     {
-        std::hash_map<OString, sal_Int32, OStringHash>::iterator it = m_aFieldNameMap.find( aRet );
+        std::hash_map<OString, sal_Int32, OStringHash>::iterator it = m_aFieldNameMap.find( aFullName );
 
         if( it != m_aFieldNameMap.end() ) // not unique
         {
             std::hash_map< OString, sal_Int32, OStringHash >::const_iterator check_it;
             OString aTry;
+            sal_Int32 nTry = 2;
             do
             {
-                OStringBuffer aUnique( aRet.getLength() + 16 );
-                aUnique.append( aRet );
+                OStringBuffer aUnique( aFullName.getLength() + 16 );
+                aUnique.append( aFullName );
                 aUnique.append( '_' );
-                aUnique.append( it->second );
-                it->second++;
+                aUnique.append( nTry++ );
                 aTry = aUnique.makeStringAndClear();
                 check_it = m_aFieldNameMap.find( aTry );
             } while( check_it != m_aFieldNameMap.end() );
-            aRet = aTry;
+            aFullName = aTry;
+            m_aFieldNameMap[ aFullName ] = i_nWidgetIndex;
+            aPartialName = aFullName.copy( aFullName.lastIndexOf( '.' )+1 );
         }
         else
-            m_aFieldNameMap[ aRet ] = 2;
+            m_aFieldNameMap[ aFullName ] = i_nWidgetIndex;
     }
-    return aRet;
+
+    // finally
+    m_aWidgets[i_nWidgetIndex].m_aName = aPartialName;
 }
 
 static void appendFixedInt( sal_Int32 nValue, OStringBuffer& rBuffer, sal_Int32 nPrecision = nLog10Divisor )
@@ -720,7 +839,7 @@ static void appendFixedInt( sal_Int32 nValue, OStringBuffer& rBuffer, sal_Int32 
 
 
 // appends a double. PDF does not accept exponential format, only fixed point
-static void appendDouble( double fValue, OStringBuffer& rBuffer, int nPrecision = 5 )
+static void appendDouble( double fValue, OStringBuffer& rBuffer, sal_Int32 nPrecision = 5 )
 {
     bool bNeg = false;
     if( fValue < 0.0 )
@@ -1273,6 +1392,19 @@ void PDFWriterImpl::PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rB
     appendFixedInt( nValue, rBuffer );
 }
 
+void PDFWriterImpl::PDFPage::appendPixelPoint( const basegfx::B2DPoint& rPoint, OStringBuffer& rBuffer ) const
+{
+    double fValue   = pixelToPoint(rPoint.getX());
+
+    appendDouble( fValue, rBuffer, nLog10Divisor );
+
+    rBuffer.append( ' ' );
+
+    fValue      = double(getHeight()) - pixelToPoint(rPoint.getY());
+
+    appendDouble( fValue, rBuffer, nLog10Divisor );
+}
+
 void PDFWriterImpl::PDFPage::appendRect( const Rectangle& rRect, OStringBuffer& rBuffer ) const
 {
     appendPoint( rRect.BottomLeft() + Point( 0, 1 ), rBuffer );
@@ -1345,11 +1477,94 @@ void PDFWriterImpl::PDFPage::appendPolygon( const Polygon& rPoly, OStringBuffer&
     }
 }
 
+void PDFWriterImpl::PDFPage::appendPolygon( const basegfx::B2DPolygon& rPoly, OStringBuffer& rBuffer, bool bClose ) const
+{
+    basegfx::B2DPolygon aPoly( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
+                                            m_pWriter->m_aMapMode,
+                                            m_pWriter->getReferenceDevice(),
+                                            rPoly ) );
+
+    if( basegfx::tools::isRectangle( aPoly ) )
+    {
+        basegfx::B2DRange aRange( aPoly.getB2DRange() );
+        basegfx::B2DPoint aBL( aRange.getMinX(), aRange.getMaxY() );
+        appendPixelPoint( aBL, rBuffer );
+        rBuffer.append( ' ' );
+        appendMappedLength( aRange.getWidth(), rBuffer, false, NULL, nLog10Divisor );
+        rBuffer.append( ' ' );
+        appendMappedLength( aRange.getHeight(), rBuffer, true, NULL, nLog10Divisor );
+        rBuffer.append( " re\n" );
+        return;
+    }
+    sal_uInt32 nPoints = aPoly.count();
+    if( nPoints > 0 )
+    {
+        sal_uInt32 nBufLen = rBuffer.getLength();
+        basegfx::B2DPoint aLastPoint( aPoly.getB2DPoint( 0 ) );
+        appendPixelPoint( aLastPoint, rBuffer );
+        rBuffer.append( " m\n" );
+        for( sal_uInt32 i = 1; i <= nPoints; i++ )
+        {
+            if( i != nPoints || aPoly.isClosed() )
+            {
+                sal_uInt32 nCurPoint  = i % nPoints;
+                sal_uInt32 nLastPoint = i-1;
+                basegfx::B2DPoint aPoint( aPoly.getB2DPoint( nCurPoint ) );
+                if( aPoly.isNextControlPointUsed( nLastPoint ) &&
+                    aPoly.isPrevControlPointUsed( nCurPoint ) )
+                {
+                    appendPixelPoint( aPoly.getNextControlPoint( nLastPoint ), rBuffer );
+                    rBuffer.append( ' ' );
+                    appendPixelPoint( aPoly.getPrevControlPoint( nCurPoint ), rBuffer );
+                    rBuffer.append( ' ' );
+                    appendPixelPoint( aPoint, rBuffer );
+                    rBuffer.append( " c" );
+                }
+                else if( aPoly.isNextControlPointUsed( nLastPoint ) )
+                {
+                    appendPixelPoint( aPoly.getNextControlPoint( nLastPoint ), rBuffer );
+                    rBuffer.append( ' ' );
+                    appendPixelPoint( aPoint, rBuffer );
+                    rBuffer.append( " y" );
+                }
+                else if( aPoly.isPrevControlPointUsed( nCurPoint ) )
+                {
+                    appendPixelPoint( aPoly.getPrevControlPoint( nCurPoint ), rBuffer );
+                    rBuffer.append( ' ' );
+                    appendPixelPoint( aPoint, rBuffer );
+                    rBuffer.append( " v" );
+                }
+                else
+                {
+                    appendPixelPoint( aPoint, rBuffer );
+                    rBuffer.append( " l" );
+                }
+                if( (rBuffer.getLength() - nBufLen) > 65 )
+                {
+                    rBuffer.append( "\n" );
+                    nBufLen = rBuffer.getLength();
+                }
+                else
+                    rBuffer.append( " " );
+            }
+        }
+        if( bClose )
+            rBuffer.append( "h\n" );
+    }
+}
+
 void PDFWriterImpl::PDFPage::appendPolyPolygon( const PolyPolygon& rPolyPoly, OStringBuffer& rBuffer, bool bClose ) const
 {
     USHORT nPolygons = rPolyPoly.Count();
     for( USHORT n = 0; n < nPolygons; n++ )
         appendPolygon( rPolyPoly[n], rBuffer, bClose );
+}
+
+void PDFWriterImpl::PDFPage::appendPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly, OStringBuffer& rBuffer, bool bClose ) const
+{
+    sal_uInt32 nPolygons = rPolyPoly.count();
+    for( sal_uInt32 n = 0; n < nPolygons; n++ )
+        appendPolygon( rPolyPoly.getB2DPolygon( n ), rBuffer, bClose );
 }
 
 void PDFWriterImpl::PDFPage::appendMappedLength( sal_Int32 nLength, OStringBuffer& rBuffer, bool bVertical, sal_Int32* pOutLength ) const
@@ -1371,7 +1586,7 @@ void PDFWriterImpl::PDFPage::appendMappedLength( sal_Int32 nLength, OStringBuffe
     appendFixedInt( nValue, rBuffer, 1 );
 }
 
-void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical, sal_Int32* pOutLength ) const
+void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical, sal_Int32* pOutLength, sal_Int32 nPrecision ) const
 {
     Size aSize( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
                              m_pWriter->m_aMapMode,
@@ -1380,7 +1595,7 @@ void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& 
     if( pOutLength )
         *pOutLength = (sal_Int32)(fLength*(double)(bVertical ? aSize.Height() : aSize.Width())/1000.0);
     fLength *= pixelToPoint((double)(bVertical ? aSize.Height() : aSize.Width()) / 1000.0);
-    appendDouble( fLength, rBuffer );
+    appendDouble( fLength, rBuffer, nPrecision );
 }
 
 bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffer& rBuffer ) const
@@ -5189,78 +5404,82 @@ bool PDFWriterImpl::emitWidgetAnnotations()
         aLine.append( rWidget.m_nObject );
         aLine.append( " 0 obj\n"
                       "<<" );
-        // emit widget annotation only for terminal fields
-        if( rWidget.m_aKids.empty() )
+        if( rWidget.m_eType != PDFWriter::Hierarchy )
         {
-            aLine.append( "/Type/Annot/Subtype/Widget/F 4\n"
-                          "/Rect[" );
-            appendFixedInt( rWidget.m_aRect.Left()-1, aLine );
-            aLine.append( ' ' );
-            appendFixedInt( rWidget.m_aRect.Top()+1, aLine );
-            aLine.append( ' ' );
-            appendFixedInt( rWidget.m_aRect.Right()+1, aLine );
-            aLine.append( ' ' );
-            appendFixedInt( rWidget.m_aRect.Bottom()-1, aLine );
-            aLine.append( "]\n" );
-        }
-        aLine.append( "/FT/" );
-        switch( rWidget.m_eType )
-        {
-            case PDFWriter::RadioButton:
-            case PDFWriter::CheckBox:
-                // for radio buttons only the RadioButton field, not the
-                // CheckBox children should have a value, else acrobat reader
-                // does not always check the right button
-                // of course real check boxes (not belonging to a readio group)
-                // need their values, too
-                if( rWidget.m_eType == PDFWriter::RadioButton || rWidget.m_nRadioGroup < 0 )
-                {
-                    aValue.append( "/" );
-                    // check for radio group with all buttons unpressed
-                    if( rWidget.m_aValue.getLength() == 0 )
-                        aValue.append( "Off" );
-                    else
-                        appendName( rWidget.m_aValue, aValue );
-                }
-            case PDFWriter::PushButton:
-                aLine.append( "Btn" );
-                break;
-            case PDFWriter::ListBox:
-                if( rWidget.m_nFlags & 0x200000 ) // multiselect
-                {
-                    aValue.append( "[" );
-                    for( unsigned int i = 0; i < rWidget.m_aSelectedEntries.size(); i++ )
+            // emit widget annotation only for terminal fields
+            if( rWidget.m_aKids.empty() )
+            {
+                aLine.append( "/Type/Annot/Subtype/Widget/F 4\n"
+                              "/Rect[" );
+                appendFixedInt( rWidget.m_aRect.Left()-1, aLine );
+                aLine.append( ' ' );
+                appendFixedInt( rWidget.m_aRect.Top()+1, aLine );
+                aLine.append( ' ' );
+                appendFixedInt( rWidget.m_aRect.Right()+1, aLine );
+                aLine.append( ' ' );
+                appendFixedInt( rWidget.m_aRect.Bottom()-1, aLine );
+                aLine.append( "]\n" );
+            }
+            aLine.append( "/FT/" );
+            switch( rWidget.m_eType )
+            {
+                case PDFWriter::RadioButton:
+                case PDFWriter::CheckBox:
+                    // for radio buttons only the RadioButton field, not the
+                    // CheckBox children should have a value, else acrobat reader
+                    // does not always check the right button
+                    // of course real check boxes (not belonging to a readio group)
+                    // need their values, too
+                    if( rWidget.m_eType == PDFWriter::RadioButton || rWidget.m_nRadioGroup < 0 )
                     {
-                        sal_Int32 nEntry = rWidget.m_aSelectedEntries[i];
-                        if( nEntry >= 0 && nEntry < sal_Int32(rWidget.m_aListEntries.size()) )
-                            appendUnicodeTextStringEncrypt( rWidget.m_aListEntries[ nEntry ], rWidget.m_nObject, aValue );
+                        aValue.append( "/" );
+                        // check for radio group with all buttons unpressed
+                        if( rWidget.m_aValue.getLength() == 0 )
+                            aValue.append( "Off" );
+                        else
+                            appendName( rWidget.m_aValue, aValue );
                     }
-                    aValue.append( "]" );
-                }
-                else if( rWidget.m_aSelectedEntries.size() > 0 &&
-                         rWidget.m_aSelectedEntries[0] >= 0 &&
-                         rWidget.m_aSelectedEntries[0] < sal_Int32(rWidget.m_aListEntries.size()) )
-                {
-                    appendUnicodeTextStringEncrypt( rWidget.m_aListEntries[ rWidget.m_aSelectedEntries[0] ], rWidget.m_nObject, aValue );
-                }
-                else
-                    appendUnicodeTextStringEncrypt( rtl::OUString(), rWidget.m_nObject, aValue );
-                aLine.append( "Ch" );
-                break;
-            case PDFWriter::ComboBox:
-                appendUnicodeTextStringEncrypt( rWidget.m_aValue, rWidget.m_nObject, aValue );
-                aLine.append( "Ch" );
-                break;
-            case PDFWriter::Edit:
-                aLine.append( "Tx" );
-                appendUnicodeTextStringEncrypt( rWidget.m_aValue, rWidget.m_nObject, aValue );
-                break;
+                case PDFWriter::PushButton:
+                    aLine.append( "Btn" );
+                    break;
+                case PDFWriter::ListBox:
+                    if( rWidget.m_nFlags & 0x200000 ) // multiselect
+                    {
+                        aValue.append( "[" );
+                        for( unsigned int i = 0; i < rWidget.m_aSelectedEntries.size(); i++ )
+                        {
+                            sal_Int32 nEntry = rWidget.m_aSelectedEntries[i];
+                            if( nEntry >= 0 && nEntry < sal_Int32(rWidget.m_aListEntries.size()) )
+                                appendUnicodeTextStringEncrypt( rWidget.m_aListEntries[ nEntry ], rWidget.m_nObject, aValue );
+                        }
+                        aValue.append( "]" );
+                    }
+                    else if( rWidget.m_aSelectedEntries.size() > 0 &&
+                             rWidget.m_aSelectedEntries[0] >= 0 &&
+                             rWidget.m_aSelectedEntries[0] < sal_Int32(rWidget.m_aListEntries.size()) )
+                    {
+                        appendUnicodeTextStringEncrypt( rWidget.m_aListEntries[ rWidget.m_aSelectedEntries[0] ], rWidget.m_nObject, aValue );
+                    }
+                    else
+                        appendUnicodeTextStringEncrypt( rtl::OUString(), rWidget.m_nObject, aValue );
+                    aLine.append( "Ch" );
+                    break;
+                case PDFWriter::ComboBox:
+                    appendUnicodeTextStringEncrypt( rWidget.m_aValue, rWidget.m_nObject, aValue );
+                    aLine.append( "Ch" );
+                    break;
+                case PDFWriter::Edit:
+                    aLine.append( "Tx" );
+                    appendUnicodeTextStringEncrypt( rWidget.m_aValue, rWidget.m_nObject, aValue );
+                    break;
+                case PDFWriter::Hierarchy: // make the compiler happy
+                    break;
+            }
+            aLine.append( "\n" );
+            aLine.append( "/P " );
+            aLine.append( m_aPages[ rWidget.m_nPage ].m_nPageObject );
+            aLine.append( " 0 R\n" );
         }
-        aLine.append( "\n" );
-        aLine.append( "/P " );
-        aLine.append( m_aPages[ rWidget.m_nPage ].m_nPageObject );
-        aLine.append( " 0 R\n" );
-
         if( rWidget.m_nParent )
         {
             aLine.append( "/Parent " );
@@ -5284,7 +5503,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             appendLiteralStringEncrypt( rWidget.m_aName, rWidget.m_nObject, aLine );
             aLine.append( "\n" );
         }
-        if( m_aContext.Version > PDFWriter::PDF_1_2 )
+        if( m_aContext.Version > PDFWriter::PDF_1_2 && rWidget.m_aDescription.getLength() )
         {
             // the alternate field name should be unicode able since it is
             // supposed to be used in UI
@@ -5346,7 +5565,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             if(!m_bIsPDF_A1)
             {
                 OStringBuffer aDest;
-                if( appendDest( rWidget.m_nDest, aDest ) )
+                if( rWidget.m_nDest != -1 && appendDest( rWidget.m_nDest, aDest ) )
                 {
                     aLine.append( "/AA<</D<</Type/Action/S/GoTo/D " );
                     aLine.append( aDest.makeStringAndClear() );
@@ -6379,16 +6598,19 @@ void PDFWriterImpl::sortWidgets()
     for( int nW = 0; nW < nWidgets; nW++ )
     {
         const PDFWidget& rWidget = m_aWidgets[nW];
-        AnnotSortContainer& rCont = sorted[ rWidget.m_nPage ];
-        // optimize vector allocation
-        if( rCont.aSortedAnnots.empty() )
-            rCont.aSortedAnnots.reserve( m_aPages[ rWidget.m_nPage ].m_aAnnotations.size() );
-        // insert widget to tab sorter
-        // RadioButtons are not page annotations, only their individual check boxes are
-        if( rWidget.m_eType != PDFWriter::RadioButton )
+        if( rWidget.m_nPage >= 0 )
         {
-            rCont.aObjects.insert( rWidget.m_nObject );
-            rCont.aSortedAnnots.push_back( AnnotationSortEntry( rWidget.m_nTabOrder, rWidget.m_nObject, nW ) );
+            AnnotSortContainer& rCont = sorted[ rWidget.m_nPage ];
+            // optimize vector allocation
+            if( rCont.aSortedAnnots.empty() )
+                rCont.aSortedAnnots.reserve( m_aPages[ rWidget.m_nPage ].m_aAnnotations.size() );
+            // insert widget to tab sorter
+            // RadioButtons are not page annotations, only their individual check boxes are
+            if( rWidget.m_eType != PDFWriter::RadioButton )
+            {
+                rCont.aObjects.insert( rWidget.m_nObject );
+                rCont.aSortedAnnots.push_back( AnnotationSortEntry( rWidget.m_nTabOrder, rWidget.m_nObject, nW ) );
+            }
         }
     }
     for( std::hash_map< sal_Int32, AnnotSortContainer >::iterator it = sorted.begin(); it != sorted.end(); ++it )
@@ -8278,7 +8500,7 @@ void PDFWriterImpl::beginRedirect( SvStream* pStream, const Rectangle& rTargetRe
 {
     push( PUSH_ALL );
 
-    setClipRegion( Region() );
+    clearClipRegion();
     updateGraphicsState();
 
     m_aOutputStreams.push_front( StreamRedirect() );
@@ -10214,25 +10436,17 @@ void PDFWriterImpl::updateGraphicsState()
     {
         rNewState.m_nUpdateFlags &= ~GraphicsState::updateClipRegion;
 
-        Region& rNewClip = rNewState.m_aClipRegion;
-
-        /*  #103137# equality operator is not implemented
-        *  const as API promises but may change Region
-        *  from Polygon to rectangles. Arrrgghh !!!!
-        */
-        Region aLeft = m_aCurrentPDFState.m_aClipRegion;
-        Region aRight = rNewClip;
-        if( aLeft != aRight )
+        if( m_aCurrentPDFState.m_bClipRegion != rNewState.m_bClipRegion ||
+            ( rNewState.m_bClipRegion && m_aCurrentPDFState.m_aClipRegion != rNewState.m_aClipRegion ) )
         {
-            if( ! m_aCurrentPDFState.m_aClipRegion.IsEmpty() &&
-                ! m_aCurrentPDFState.m_aClipRegion.IsNull() )
+            if( m_aCurrentPDFState.m_bClipRegion && m_aCurrentPDFState.m_aClipRegion.count() )
             {
                 aLine.append( "Q " );
                 // invalidate everything but the clip region
                 m_aCurrentPDFState = GraphicsState();
                 rNewState.m_nUpdateFlags = sal::static_int_cast<sal_uInt16>(~GraphicsState::updateClipRegion);
             }
-            if( ! rNewClip.IsEmpty() && ! rNewClip.IsNull() )
+            if( rNewState.m_bClipRegion && rNewState.m_aClipRegion.count() )
             {
                 // clip region is always stored in private PDF mapmode
                 MapMode aNewMapMode = rNewState.m_aMapMode;
@@ -10241,32 +10455,8 @@ void PDFWriterImpl::updateGraphicsState()
                 m_aCurrentPDFState.m_aMapMode = rNewState.m_aMapMode;
 
                 aLine.append( "q " );
-                if( rNewClip.HasPolyPolygon() )
-                {
-                    m_aPages.back().appendPolyPolygon( rNewClip.GetPolyPolygon(), aLine );
-                    aLine.append( "W* n\n" );
-                }
-                else
-                {
-                    // need to clip all rectangles
-                    RegionHandle aHandle = rNewClip.BeginEnumRects();
-                    Rectangle aRect;
-                    while( rNewClip.GetNextEnumRect( aHandle, aRect ) )
-                    {
-                        m_aPages.back().appendRect( aRect, aLine );
-                        if( aLine.getLength() > 80 )
-                        {
-                            aLine.append( "\n" );
-                            writeBuffer( aLine.getStr(), aLine.getLength() );
-                            aLine.setLength( 0 );
-                        }
-                        else
-                            aLine.append( ' ' );
-                    }
-                    rNewClip.EndEnumRects( aHandle );
-                    aLine.append( "W* n\n" );
-                }
-
+                m_aPages.back().appendPolyPolygon( rNewState.m_aClipRegion, aLine );
+                aLine.append( "W* n\n" );
                 rNewState.m_aMapMode = aNewMapMode;
                 getReferenceDevice()->SetMapMode( rNewState.m_aMapMode );
                 m_aCurrentPDFState.m_aMapMode = rNewState.m_aMapMode;
@@ -10380,9 +10570,12 @@ void PDFWriterImpl::pop()
     if( ! (aState.m_nFlags & PUSH_MAPMODE) )
         setMapMode( aState.m_aMapMode );
     if( ! (aState.m_nFlags & PUSH_CLIPREGION) )
+    {
         // do not use setClipRegion here
         // it would convert again assuming the current mapmode
         rOld.m_aClipRegion = aState.m_aClipRegion;
+        rOld.m_bClipRegion = aState.m_bClipRegion;
+    }
     if( ! (aState.m_nFlags & PUSH_TEXTLINECOLOR ) )
         setTextLineColor( aState.m_aTextLineColor );
     if( ! (aState.m_nFlags & PUSH_OVERLINECOLOR ) )
@@ -10406,45 +10599,59 @@ void PDFWriterImpl::setMapMode( const MapMode& rMapMode )
     m_aCurrentPDFState.m_aMapMode = rMapMode;
 }
 
-void PDFWriterImpl::setClipRegion( const Region& rRegion )
+void PDFWriterImpl::setClipRegion( const basegfx::B2DPolyPolygon& rRegion )
 {
-    Region aRegion = getReferenceDevice()->LogicToPixel( rRegion, m_aGraphicsStack.front().m_aMapMode );
+    basegfx::B2DPolyPolygon aRegion = getReferenceDevice()->LogicToPixel( rRegion, m_aGraphicsStack.front().m_aMapMode );
     aRegion = getReferenceDevice()->PixelToLogic( aRegion, m_aMapMode );
     m_aGraphicsStack.front().m_aClipRegion = aRegion;
+    m_aGraphicsStack.front().m_bClipRegion = true;
     m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateClipRegion;
 }
 
 void PDFWriterImpl::moveClipRegion( sal_Int32 nX, sal_Int32 nY )
 {
-    Point aPoint( lcl_convert( m_aGraphicsStack.front().m_aMapMode,
+    if( m_aGraphicsStack.front().m_bClipRegion && m_aGraphicsStack.front().m_aClipRegion.count() )
+    {
+        Point aPoint( lcl_convert( m_aGraphicsStack.front().m_aMapMode,
+                                   m_aMapMode,
+                                   getReferenceDevice(),
+                                   Point( nX, nY ) ) );
+        aPoint -= lcl_convert( m_aGraphicsStack.front().m_aMapMode,
                                m_aMapMode,
                                getReferenceDevice(),
-                               Point( nX, nY ) ) );
-    aPoint -= lcl_convert( m_aGraphicsStack.front().m_aMapMode,
-                           m_aMapMode,
-                           getReferenceDevice(),
-                           Point() );
-    m_aGraphicsStack.front().m_aClipRegion.Move( aPoint.X(), aPoint.Y() );
-    m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateClipRegion;
+                               Point() );
+        basegfx::B2DHomMatrix aMat;
+        aMat.translate( aPoint.X(), aPoint.Y() );
+        m_aGraphicsStack.front().m_aClipRegion.transform( aMat );
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateClipRegion;
+    }
 }
 
 bool PDFWriterImpl::intersectClipRegion( const Rectangle& rRect )
 {
-    Rectangle aRect( lcl_convert( m_aGraphicsStack.front().m_aMapMode,
-                                  m_aMapMode,
-                                  getReferenceDevice(),
-                                  rRect ) );
-    m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateClipRegion;
-    return m_aGraphicsStack.front().m_aClipRegion.Intersect( aRect );
+    basegfx::B2DPolyPolygon aRect( basegfx::tools::createPolygonFromRect(
+        basegfx::B2DRectangle( rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() ) ) );
+    return intersectClipRegion( aRect );
 }
 
 
-bool PDFWriterImpl::intersectClipRegion( const Region& rRegion )
+bool PDFWriterImpl::intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion )
 {
-    Region aRegion = getReferenceDevice()->LogicToPixel( rRegion, m_aGraphicsStack.front().m_aMapMode );
+    basegfx::B2DPolyPolygon aRegion( getReferenceDevice()->LogicToPixel( rRegion, m_aGraphicsStack.front().m_aMapMode ) );
     aRegion = getReferenceDevice()->PixelToLogic( aRegion, m_aMapMode );
     m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateClipRegion;
-    return m_aGraphicsStack.front().m_aClipRegion.Intersect( aRegion );
+    if( m_aGraphicsStack.front().m_bClipRegion )
+    {
+        basegfx::B2DPolyPolygon aOld( basegfx::tools::prepareForPolygonOperation( m_aGraphicsStack.front().m_aClipRegion ) );
+        aRegion = basegfx::tools::prepareForPolygonOperation( aRegion );
+        m_aGraphicsStack.front().m_aClipRegion = basegfx::tools::solvePolygonOperationAnd( aOld, aRegion );
+    }
+    else
+    {
+        m_aGraphicsStack.front().m_aClipRegion = aRegion;
+        m_aGraphicsStack.front().m_bClipRegion = true;
+    }
+    return true;
 }
 
 void PDFWriterImpl::createNote( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr )
@@ -11528,18 +11735,7 @@ sal_Int32 PDFWriterImpl::findRadioGroupWidget( const PDFWriter::RadioButtonWidge
         m_aWidgets.back().m_nRadioGroup = rBtn.RadioGroup;
         m_aWidgets.back().m_nFlags |= 0x00008000;
 
-        // create radio button field name
-        const rtl::OUString& rName = (m_aContext.Version > PDFWriter::PDF_1_2) ?
-                                     rBtn.Name : rBtn.Text;
-        if( rName.getLength() )
-        {
-            m_aWidgets.back().m_aName   = convertWidgetFieldName( rName );
-        }
-        else
-        {
-            m_aWidgets.back().m_aName   = "RadioGroup";
-            m_aWidgets.back().m_aName  += OString::valueOf( rBtn.RadioGroup );
-        }
+        createWidgetFieldName( sal_Int32(m_aWidgets.size()-1), rBtn );
     }
     else
         nRadioGroupWidget = it->second;
@@ -11555,44 +11751,27 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     if( nPageNr < 0 || nPageNr >= (sal_Int32)m_aPages.size() )
         return -1;
 
+    sal_Int32 nNewWidget = m_aWidgets.size();
     m_aWidgets.push_back( PDFWidget() );
-    sal_Int32 nNewWidget = m_aWidgets.size()-1;
 
-    // create eventual radio button before getting any references
-    // from m_aWidgets as the push_back operation potentially assigns new
-    // memory to the vector and thereby invalidates the reference
-    int nRadioGroupWidget = -1;
-    if( rControl.getType() == PDFWriter::RadioButton )
-        nRadioGroupWidget = findRadioGroupWidget( static_cast<const PDFWriter::RadioButtonWidget&>(rControl) );
+    m_aWidgets.back().m_nObject         = createObject();
+    m_aWidgets.back().m_aRect               = rControl.Location;
+    m_aWidgets.back().m_nPage               = nPageNr;
+    m_aWidgets.back().m_eType               = rControl.getType();
 
-    PDFWidget& rNewWidget           = m_aWidgets[nNewWidget];
-    rNewWidget.m_nObject            = createObject();
-    rNewWidget.m_aRect              = rControl.Location;
-    rNewWidget.m_nPage              = nPageNr;
-    rNewWidget.m_eType              = rControl.getType();
-
+    sal_Int32 nRadioGroupWidget = -1;
     // for unknown reasons the radio buttons of a radio group must not have a
     // field name, else the buttons are in fact check boxes -
     // that is multiple buttons of the radio group can be selected
-    if( rControl.getType() != PDFWriter::RadioButton )
+    if( rControl.getType() == PDFWriter::RadioButton )
+        nRadioGroupWidget = findRadioGroupWidget( static_cast<const PDFWriter::RadioButtonWidget&>(rControl) );
+    else
     {
-        // acrobat reader since 3.0 does not support unicode text
-        // strings for the field name; so we need to encode unicodes
-        // larger than 255
-
-        rNewWidget.m_aName          =
-            convertWidgetFieldName( (m_aContext.Version > PDFWriter::PDF_1_2) ?
-                                    rControl.Name : rControl.Text );
-        // #i88040# acrobat reader crashes on empty field names,
-        // so always create one
-        if( rNewWidget.m_aName.getLength() == 0 )
-        {
-            OUStringBuffer aBuf( 32 );
-            aBuf.appendAscii( "Widget" );
-            aBuf.append( nNewWidget );
-            rNewWidget.m_aName = convertWidgetFieldName( aBuf.makeStringAndClear() );
-        }
+        createWidgetFieldName( nNewWidget, rControl );
     }
+
+    // caution: m_aWidgets must not be changed after here or rNewWidget may be invalid
+    PDFWidget& rNewWidget           = m_aWidgets[nNewWidget];
     rNewWidget.m_aDescription       = rControl.Description;
     rNewWidget.m_aText              = rControl.Text;
     rNewWidget.m_nTextStyle         = rControl.TextStyle &
@@ -11823,6 +12002,7 @@ bool PDFWriterImpl::endControlAppearance( PDFWriter::WidgetState eState )
                 break;
             case PDFWriter::ListBox:
             case PDFWriter::ComboBox:
+            case PDFWriter::Hierarchy:
                 break;
         }
         if( aState.getLength() && aStyle.getLength() )
