@@ -131,6 +131,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
         mpAccess        ( NULL ),
         mpMaskAccess    ( NULL ),
         mpZCodec        ( new ZCodec( DEFAULT_IN_BUFSIZE, DEFAULT_OUT_BUFSIZE, MAX_MEM_USAGE ) ),
+        mnCRC(0UL),
         mnLastPercent   ( 0UL )
 {
     if ( !rBmpEx.IsEmpty() )

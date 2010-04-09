@@ -346,7 +346,7 @@ void PDFWriter::SetClipRegion()
     ((PDFWriterImpl*)pImplementation)->clearClipRegion();
 }
 
-void PDFWriter::SetClipRegion( const Region& rRegion )
+void PDFWriter::SetClipRegion( const basegfx::B2DPolyPolygon& rRegion )
 {
     ((PDFWriterImpl*)pImplementation)->setClipRegion( rRegion );
 }
@@ -356,7 +356,7 @@ void PDFWriter::MoveClipRegion( long nHorzMove, long nVertMove )
     ((PDFWriterImpl*)pImplementation)->moveClipRegion( nHorzMove, nVertMove );
 }
 
-void PDFWriter::IntersectClipRegion( const Region& rRegion )
+void PDFWriter::IntersectClipRegion( const basegfx::B2DPolyPolygon& rRegion )
 {
     ((PDFWriterImpl*)pImplementation)->intersectClipRegion( rRegion );
 }
