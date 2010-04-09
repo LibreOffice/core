@@ -24,15 +24,15 @@
  *
 ************************************************************************/
 
-#ifndef __com_sun_star_view_XToolPanel_idl__
-#define __com_sun_star_view_XToolPanel_idl__
+#ifndef __com_sun_star_ui_XToolPanel_idl__
+#define __com_sun_star_ui_XToolPanel_idl__
 
 #include <com/sun/star/awt/XWindow.idl>
 #include <com/sun/star/accessibility/XAccessible.idl>
 
 //=============================================================================
 
-module com { module sun { module star { module view {
+module com { module sun { module star { module ui {
 
 //=============================================================================
 
