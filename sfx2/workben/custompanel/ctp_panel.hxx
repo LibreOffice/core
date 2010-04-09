@@ -28,7 +28,7 @@
 #define SD_WORKBENCH_CTP_PANEL_HXX
 
 /** === begin UNO includes === **/
-#include <com/sun/star/view/XToolPanel.hpp>
+#include <com/sun/star/ui/XToolPanel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -49,7 +49,7 @@ namespace sd { namespace colortoolpanel
     //==================================================================================================================
     //= SingleColorPanel
     //==================================================================================================================
-    typedef ::cppu::WeakComponentImplHelper2    <   ::com::sun::star::view::XToolPanel
+    typedef ::cppu::WeakComponentImplHelper2    <   ::com::sun::star::ui::XToolPanel
                                                 ,   ::com::sun::star::awt::XPaintListener
                                                 >   SingleColorPanel_Base;
     class SingleColorPanel  :public ::cppu::BaseMutex
@@ -113,7 +113,7 @@ namespace sd { namespace colortoolpanel
 
     private:
         const ::rtl::OUString   m_sResourceURL;
-        ::com::sun::star::uno::Reference< ::com::sun::star::view::XToolPanel >
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XToolPanel >
                                 m_xToolPanel;
     };
 

@@ -36,7 +36,7 @@
 /** === begin UNO includes === **/
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/view/XToolPanel.hpp>
+#include <com/sun/star/ui/XToolPanel.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
@@ -78,7 +78,7 @@ namespace sfx2
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::frame::XModuleManager;
     using ::com::sun::star::container::XNameAccess;
-    using ::com::sun::star::view::XToolPanel;
+    using ::com::sun::star::ui::XToolPanel;
     using ::com::sun::star::ui::XUIElementFactory;
     using ::com::sun::star::ui::XUIElement;
     using ::com::sun::star::awt::XWindow;
