@@ -2407,24 +2407,20 @@ long ScGridWindow::PreNotify( NotifyEvent& rNEvt )
             SfxViewFrame* pViewFrame = pViewData->GetViewShell()->GetViewFrame();
             if (pViewFrame)
             {
-                SfxFrame* pFrame = pViewFrame->GetFrame();
-                if (pFrame)
+                com::sun::star::uno::Reference<com::sun::star::frame::XController> xController = pViewFrame->GetFrame().GetController();
+                if (xController.is())
                 {
-                    com::sun::star::uno::Reference<com::sun::star::frame::XController> xController = pFrame->GetController();
-                    if (xController.is())
+                    ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
+                    if (pImp && pImp->IsMouseListening())
                     {
-                        ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
-                        if (pImp && pImp->IsMouseListening())
-                        {
-                            ::com::sun::star::awt::MouseEvent aEvent;
-                            lcl_InitMouseEvent( aEvent, *rNEvt.GetMouseEvent() );
-                            if ( rNEvt.GetWindow() )
-                                aEvent.Source = rNEvt.GetWindow()->GetComponentInterface();
-                            if ( nType == EVENT_MOUSEBUTTONDOWN)
-                                pImp->MousePressed( aEvent );
-                            else
-                                pImp->MouseReleased( aEvent );
-                        }
+                        ::com::sun::star::awt::MouseEvent aEvent;
+                        lcl_InitMouseEvent( aEvent, *rNEvt.GetMouseEvent() );
+                        if ( rNEvt.GetWindow() )
+                            aEvent.Source = rNEvt.GetWindow()->GetComponentInterface();
+                        if ( nType == EVENT_MOUSEBUTTONDOWN)
+                            pImp->MousePressed( aEvent );
+                        else
+                            pImp->MouseReleased( aEvent );
                     }
                 }
             }
@@ -2689,9 +2685,32 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
 
         if ( bMouse )
         {
+            SCsCOL nCellX = -1;
+            SCsROW nCellY = -1;
+            pViewData->GetPosFromPixel(aPosPixel.X(), aPosPixel.Y(), eWhich, nCellX, nCellY);
+            ScDocument* pDoc = pViewData->GetDocument();
+            SCTAB nTab = pViewData->GetTabNo();
+            const ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+            bool bSelectAllowed = true;
+            if ( pProtect && pProtect->isProtected() )
+            {
+                // This sheet is protected.  Check if a context menu is allowed on this cell.
+                bool bCellProtected = pDoc->HasAttrib(nCellX, nCellY, nTab, nCellX, nCellY, nTab, HASATTR_PROTECTED);
+                bool bSelProtected   = pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+                bool bSelUnprotected = pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+
+                if (bCellProtected)
+                    bSelectAllowed = bSelProtected;
+                else
+                    bSelectAllowed = bSelUnprotected;
+            }
+            if (!bSelectAllowed)
+                // Selecting this cell is not allowed, neither is context menu.
+                return;
+
             //  #i18735# First select the item under the mouse pointer.
             //  This can change the selection, and the view state (edit mode, etc).
-            SelectForContextMenu( aPosPixel );
+            SelectForContextMenu( aPosPixel, nCellX, nCellY );
         }
 
         BOOL bDone = FALSE;
@@ -2786,15 +2805,12 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
     }
 }
 
-void ScGridWindow::SelectForContextMenu( const Point& rPosPixel )
+void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCsCOL nCellX, SCsROW nCellY )
 {
     //  #i18735# if the click was outside of the current selection,
     //  the cursor is moved or an object at the click position selected.
     //  (see SwEditWin::SelectMenuPosition in Writer)
 
-    SCsCOL nCellX;
-    SCsROW nCellY;
-    pViewData->GetPosFromPixel( rPosPixel.X(), rPosPixel.Y(), eWhich, nCellX, nCellY );
     ScTabView* pView = pViewData->GetView();
     ScDrawView* pDrawView = pView->GetScDrawView();
 
