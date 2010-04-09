@@ -182,7 +182,7 @@ void ClippingAnimation::end_()
 
 bool ClippingAnimation::operator()( double nValue )
 {
-    ENSURE_OR_RETURN(
+    ENSURE_OR_RETURN_FALSE(
         mpAttrLayer && mpShape,
         "ClippingAnimation::operator(): Invalid ShapeAttributeLayer" );
 
