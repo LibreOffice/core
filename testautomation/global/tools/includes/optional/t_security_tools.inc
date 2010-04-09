@@ -469,8 +469,7 @@ function hSecurityEnterPasswordOnSave( cPassword as string ) as boolean
 
     const CFN = "hSecurityEnterPasswordOnSave::"
     printlog( CFN & "Enter" )
-    dim brc as boolean 'a multi purpose boolean returnvalue
-        brc = true
+    dim brc as boolean : brc = true
 
     '///<u>Description:</u>
     '///<ul>
@@ -496,6 +495,7 @@ function hSecurityEnterPasswordOnSave( cPassword as string ) as boolean
             
             '///+<li>Close messagebox with OK</li>
             Active.OK()
+            Active.notExists( 2 )
         else
             qaerrorlog( CFN & "Warning about faulty password confirmation is missing" )
             brc = false
@@ -503,7 +503,7 @@ function hSecurityEnterPasswordOnSave( cPassword as string ) as boolean
         
         '///+<li>We should now be back on the password dialog</li>
         kontext "PasswordFileSave"
-        if ( PasswordFileSave.exists( 2 ) ) then
+        if ( PasswordFileSave.exists() ) then
         
             printlog( CFN & "Password dialog is displayed" )
     
@@ -529,7 +529,7 @@ function hSecurityEnterPasswordOnSave( cPassword as string ) as boolean
         brc = false
         
     endif
-    
+   
     '///+<li>Verify that the &quot;File Save&quot; dialog is closed after saving</li>
     kontext "SpeichernDlg"
     if ( SpeichernDlg.exists() ) then

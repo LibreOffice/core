@@ -40,6 +40,9 @@
 ' #1 tools_dbtools_fgetMySQLDatabaseProperties
 '*
 '\***********************************************************************************
+
+private const VERBOSE = true
+
 '--------------------------------------------------------------------
 function fSelectDatasourceInBeamer(sDSName1)
 	'/// select a datasource in the beamer with the given name
@@ -90,10 +93,10 @@ function fConnectToDatasourceInBeamer(sDSName , sPWD, optional bNewDoc)
         DatabaseSelection.TypeKeys "<DOWN>"
         DatabaseSelection.TypeKeys "<ADD>"                
         Kontext "LoginDialog"
-            if LoginDialog.Exists(3) then
-                Password.SetText sPWD
-                LoginDialog.OK                
-            end if
+        if LoginDialog.Exists(3) then
+            LoginPassword.SetText sPWD
+            LoginDialog.OK
+        end if
         bConnect = true    
     else
         warnlog "Could not found the datasource " + sDSName
@@ -163,13 +166,20 @@ function fOpenDataBase ( sFileName , optional sPassword)
     
     Dim DieDatei as String
     DieDatei = ConvertPath ( sFileName )
+
+    if(VERBOSE) then
+        printlog "Filename : " + sFileName
+        if(NOT isMissing(sPassword)) then
+            printlog "Password : " + sPassword
+        endif
+    endif
+
     '/// open the File Open dialog
     printlog "open the File Open dialog"
     FileOpen
     sleep (1)
     Kontext "OeffnenDlg"
-    '/// open the given file
-    printlog "open the given file: " + sFileName
+    '/// open the given file    
     Dateiname.SetText DieDatei
     sleep (3)
     Oeffnen.Click
@@ -189,7 +199,7 @@ function fOpenDataBase ( sFileName , optional sPassword)
         printlog "set password : " + sPassword
         Kontext "LoginDialog"
         if LoginDialog.Exists then
-         	Password.setText sPassword
+         	LoginPassword.setText sPassword
          	LoginDialog.OK
             sleep(1)
         endif
@@ -264,7 +274,7 @@ sub sCloseAllToolbars
 
 end sub
 '-------------------------------------------------------------------------
-function tools_dbtools_fgetMySQLJDBCDatabaseProperties()
+function tools_dbtools_fgetMySQLJDBCDatabaseProperties(sDBConfigFileName as string)
     '/// return the databaseserver properties from the environment directory
 	'/// <u>parameter:</u>
 	'/// <br>
@@ -275,21 +285,10 @@ function tools_dbtools_fgetMySQLJDBCDatabaseProperties()
     '/// entry 3 database name
     '/// entry 4 database port
     '/// entry 5 database user name
-    '/// entry 6 database user password        
+    '/// entry 6 database user password
+    '/// entry 7 jdbc driver file path
 
-    dim i as integer
-    dim b(10000) as String
-    dim c
-    c = hGetDataFileSection( gTesttoolPath + gPrivateEnvironmentLocation + "input/base.txt", b(), "mysql_jdbc" , "" , "" )
-    
-    ' split the string at = and return the right part 
-    for i = 1 to 6
-        'printlog b(i)
-        b(i) = Right(b(i),len(b(i))-Instr(b(i),"="))    
-        'printlog b(i)        
-    next
-    
-    tools_dbtools_fgetMySQLJDBCDatabaseProperties = b() 
+    tools_dbtools_fgetMySQLJDBCDatabaseProperties = fgetGenericDatabaseProperties( sDBConfigFileName, "mysql_jdbc" )
 
 end function
 '-------------------------------------------------------------------------
@@ -345,5 +344,30 @@ function tools_dbtools_fgetAdabasDatabaseProperties()
     next
     
     tools_dbtools_fgetAdabasDatabaseProperties = b() 
+
+end function
+'-------------------------------------------------------------------------------
+function fgetGenericDatabaseProperties(sDBConfigFileName as string, sType as String)
+
+    dim i as integer
+    dim b(10000) as String
+    dim c
+    c = hGetDataFileSection( sDBConfigFileName, b(), sType , "" , "" )
+
+    ' split the string at = and return the right part
+    for i = 1 to 7
+        if(VERBOSE) then
+            printlog "orig. string : " + b(i)
+        endif
+        b(i) = Right(b(i),len(b(i))-Instr(b(i),"="))
+        if(VERBOSE) then
+            printlog "string after the '=' : " + b(i)
+        endif
+    next
+
+
+
+
+    fgetGenericDatabaseProperties = b()
 
 end function
