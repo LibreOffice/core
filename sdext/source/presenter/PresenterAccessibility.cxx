@@ -47,7 +47,6 @@
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
-#include <vcl/svapp.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/compbase5.hxx>
 #include <cppuhelper/implbase1.hxx>
