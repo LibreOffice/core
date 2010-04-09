@@ -29,7 +29,7 @@
 
 /** === begin UNO includes === **/
 #include <com/sun/star/drawing/framework/XView.hpp>
-#include <com/sun/star/view/XToolPanel.hpp>
+#include <com/sun/star/ui/XToolPanel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
@@ -50,7 +50,7 @@ namespace sd { namespace colortoolpanel
     //= class SingleColorPanel
     //==================================================================================================================
     typedef ::cppu::WeakComponentImplHelper3    <   ::com::sun::star::drawing::framework::XView
-                                                ,   ::com::sun::star::view::XToolPanel
+                                                ,   ::com::sun::star::ui::XToolPanel
                                                 ,   ::com::sun::star::awt::XPaintListener
                                                 >   SingleColorPanel_Base;
     class SingleColorPanel  :public ::cppu::BaseMutex

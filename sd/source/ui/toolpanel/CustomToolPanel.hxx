@@ -33,7 +33,7 @@
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/drawing/framework/XResource.hpp>
-#include <com/sun/star/view/XToolPanel.hpp>
+#include <com/sun/star/ui/XToolPanel.hpp>
 /** === end UNO includes === **/
 
 #include <boost/shared_ptr.hpp>
@@ -101,7 +101,7 @@ namespace sd { namespace toolpanel
         ::boost::shared_ptr< framework::FrameworkHelper >                                       m_pFrameworkHelper;
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >   m_xPanelResourceId;
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResource >     m_xResource;
-        ::com::sun::star::uno::Reference< ::com::sun::star::view::XToolPanel >                  m_xToolPanel;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XToolPanel >                    m_xToolPanel;
         bool                                                                                    m_bAttemptedPanelCreation;
         sal_uInt32                                                                              m_nResourceAccessLock;
     };
