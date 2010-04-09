@@ -38,6 +38,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <xmloff/odffields.hxx>
 #include "xmlnmspe.hxx"
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
@@ -135,6 +136,33 @@ static SvXMLEnumMapEntry __READONLY_DATA lcl_aMarkTypeMap[] =
     { XML_TOKEN_INVALID,            0 },
 };
 
+
+static const char *lcl_getFormFieldmarkName(rtl::OUString &name)
+{
+    static const char sCheckbox[]=ODF_FORMCHECKBOX;
+    static const char sFormDropDown[]=ODF_FORMDROPDOWN;
+    if (name.compareToAscii("msoffice.field.FORMCHECKBOX")==0)
+        return sCheckbox;
+    else if (name.compareToAscii(ODF_FORMCHECKBOX)==0)
+        return sCheckbox;
+    if (name.compareToAscii(ODF_FORMDROPDOWN)==0)
+        return sFormDropDown;
+    else
+        return NULL;
+}
+
+static rtl::OUString lcl_getFieldmarkName(rtl::OUString &name)
+{
+    static const char sFormtext[]=ODF_FORMTEXT;
+    if (name.compareToAscii("msoffice.field.FORMTEXT")==0)
+        return rtl::OUString::createFromAscii(sFormtext);
+    else if (name.compareToAscii(ODF_FORMTEXT)==0)
+        return rtl::OUString::createFromAscii(sFormtext);
+    else
+        return name;
+}
+
+
 void XMLTextMarkImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
@@ -191,7 +219,8 @@ void XMLTextMarkImportContext::EndElement()
                 case TypeFieldmark:
                 case TypeBookmark:
                     {
-                        bool bImportAsField=((lcl_MarkType)nTmp==TypeFieldmark && m_sFieldName.compareToAscii("msoffice.field.FORMCHECKBOX")==0); // for now only import FORMCHECKBOX boxes
+                        const char *formFieldmarkName=lcl_getFormFieldmarkName(m_sFieldName);
+                        bool bImportAsField=((lcl_MarkType)nTmp==TypeFieldmark && formFieldmarkName!=NULL); //@TODO handle abbreviation cases..
                         // export point bookmark
                         const Reference<XInterface> xContent(
                             CreateAndInsertMark(GetImport(),
@@ -210,10 +239,8 @@ void XMLTextMarkImportContext::EndElement()
                             if (xContent.is() && bImportAsField) {
                                 // setup fieldmark...
                                 Reference< ::com::sun::star::text::XFormField> xFormField(xContent, UNO_QUERY);
-                                xFormField->setType(1); // Checkbox...
+                                xFormField->setFieldType(rtl::OUString::createFromAscii(formFieldmarkName));
                                 if (xFormField.is() && m_rHelper.hasCurrentFieldCtx()) {
-//                                  xFormField->setDescription(::rtl::OUString::createFromAscii("HELLO CHECKBOX"));
-//                                  xFormField->setRes(1);
                                     m_rHelper.setCurrentFieldParamsTo(xFormField);
                                 }
                             }
@@ -260,11 +287,6 @@ void XMLTextMarkImportContext::EndElement()
                                 xInsertionCursor, UNO_QUERY);
 
                             bool bImportAsField=((lcl_MarkType)nTmp==TypeFieldmarkEnd && m_rHelper.hasCurrentFieldCtx());
-                            if (bImportAsField) {
-                                ::rtl::OUString currentFieldType =
-                                    m_rHelper.getCurrentFieldType();
-                                bImportAsField=currentFieldType.compareToAscii("msoffice.field.FORMTEXT")==0; // for now only import FORMTEXT boxes
-                            }
 
                             // insert reference
                             const Reference<XInterface> xContent(
@@ -285,10 +307,12 @@ void XMLTextMarkImportContext::EndElement()
                                 if (xContent.is() && bImportAsField) {
                                     // setup fieldmark...
                                     Reference< ::com::sun::star::text::XFormField> xFormField(xContent, UNO_QUERY);
-                                    xFormField->setType(0); // Text
                                     if (xFormField.is() && m_rHelper.hasCurrentFieldCtx()) {
+                                        rtl::OUString givenTypeName=m_rHelper.getCurrentFieldType();
+                                        rtl::OUString fieldmarkTypeName=lcl_getFieldmarkName(givenTypeName);
+
+                                        xFormField->setFieldType(fieldmarkTypeName);
                                         m_rHelper.setCurrentFieldParamsTo(xFormField);
-//                                  xFormField->setDescription(::rtl::OUString::createFromAscii("HELLO"));
                                     }
                                 }
                                 m_rHelper.popFieldCtx();

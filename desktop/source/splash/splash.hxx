@@ -34,7 +34,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <vcl/introwin.hxx>
-#include <vcl/bitmap.hxx>
+#include <vcl/bitmapex.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/virdev.hxx>
@@ -86,9 +86,10 @@ private:
     Reference< XMultiServiceFactory > _rFactory;
 
     VirtualDevice   _vdev;
-    Bitmap          _aIntroBmp;
+    BitmapEx        _aIntroBmp;
     Color           _cProgressFrameColor;
     Color           _cProgressBarColor;
+    bool            _bNativeProgress;
     OUString        _sAppName;
     std::vector< FullScreenProgressRatioValue > _sFullScreenProgressRatioValues;
 

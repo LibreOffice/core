@@ -208,31 +208,6 @@ sal_Bool GetPasswd_Impl( const SfxItemSet* pSet, ::rtl::OUString& rPasswd )
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SfxObjectShell::NoDependencyFromManifest_Impl( const uno::Reference< embed::XStorage >& xStorage )
-{
-    uno::Sequence< ::rtl::OUString > aElements = xStorage->getElementNames();
-    for ( sal_Int32 nInd = 0; nInd < aElements.getLength(); nInd++ )
-    {
-        if ( xStorage->isStorageElement( aElements[nInd] ) )
-        {
-            // if there are other standard elements that do not need manifest.xml the following
-            // list can be extended
-            if ( !aElements[nInd].equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Pictures" ) ) )
-              && !aElements[nInd].equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Configurations" ) ) )
-              && !aElements[nInd].equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ) ) )
-              && !aElements[nInd].equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Thumbnails" ) ) )
-              && !aElements[nInd].equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Basic" ) ) ) )
-            {
-                // the substorage is not know as one that does not need manifest.xml
-                return sal_False;
-            }
-        }
-    }
-
-    return sal_True;
-}
-
-//-------------------------------------------------------------------------
 sal_Bool SfxObjectShell::PutURLContentsToVersionStream_Impl(
                                             ::rtl::OUString aURL,
                                             const uno::Reference< embed::XStorage >& xDocStorage,
@@ -444,23 +419,6 @@ sal_Bool SfxObjectShell::Load( SfxMedium& rMedium )
     return GeneralInit_Impl( rMedium.GetStorage(), sal_True );
 }
 
-//-------------------------------------------------------------------------
-sal_Bool SfxObjectShell::DoInitNew_Impl( const ::rtl::OUString& rName )
-
-/*  [Beschreibung]
-*/
-
-{
-    if ( rName.getLength() )
-    {
-        DBG_ERROR( "This code is intended to be removed, the caller part must be checked!\n" );
-        return DoInitNew(0);
-    }
-    else
-        return DoInitNew(0);
-}
-
-
 sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
 /*  [Beschreibung]
 
@@ -515,9 +473,7 @@ sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
             impl_addToModelCollection(xModel);
         }
 
-        pImp->bInitialized = sal_True;
-        SetActivateEvent_Impl( SFX_EVENT_CREATEDOC );
-        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_DOCCREATED, GlobalEventConfig::GetEventName(STR_EVENT_DOCCREATED), this ) );
+        SetInitialized_Impl( true );
         return sal_True;
     }
 
@@ -2815,7 +2771,6 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
             pSet->ClearItem( SID_OPTIONS );
             //pSet->ClearItem( SID_FILE_FILTEROPTIONS );
             pSet->ClearItem( SID_VERSION );
-            //pSet->ClearItem( SID_USE_FILTEROPTIONS );
             pSet->ClearItem( SID_EDITDOC );
             pSet->ClearItem( SID_OVERWRITE );
             pSet->ClearItem( SID_DEFAULTFILEPATH );
