@@ -39,7 +39,7 @@
 #include "addresstemplate.hrc"
 #endif
 #ifndef _SVTOOLS_HRC
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #endif
 #ifndef _SVT_HELPID_HRC
 #include <svtools/helpid.hrc>

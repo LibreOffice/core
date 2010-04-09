@@ -105,8 +105,8 @@
 #define RID_OFA_START               (RID_LIB_START+6500)
 #define RID_OFA_END                 (RID_LIB_START+6999)
 
-#define RID_CHANNEL_START           (RID_LIB_START+7000)
-#define RID_CHANNEL_END             (RID_LIB_START+7499)
+#define RID_SVL_START               (RID_LIB_START+7000)
+#define RID_SVL_END                 (RID_LIB_START+7499)
 
 #define RID_CHAOS_START             (RID_LIB_START+7500)
 #define RID_CHAOS_END               (RID_LIB_START+7999)

@@ -43,7 +43,7 @@
 #include <unotools/charclass.hxx>
 
 #include <svtools/svtdata.hxx>
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #include <ctrlbox.hxx>
 #include <ctrltool.hxx>
 

@@ -34,7 +34,7 @@
 #include <svtools/headbar.hxx>
 #include <svtools/svtdata.hxx>
 #ifndef _SVTOOLS_HRC
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #endif
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>

@@ -29,10 +29,10 @@
 #include "toolpaneldrawer.hxx"
 #include "toolpaneldrawerpeer.hxx"
 #include "svtools/svtdata.hxx"
+#include "svtools/svtools.hrc"
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
-#include <svl/svtools.hrc>
 #include <vcl/lineinfo.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>

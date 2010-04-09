@@ -24,16 +24,14 @@
  *
  ************************************************************************/
 
-#include <svl/svtools.hrc>
+#include "svtools/svtools.hrc"
 
-// the following string ID is a hack, until MBA's promised patch appears, which splits svl/svtools.hrc
-// into two files, one for svl, one or svtools
-String STR_SVT_ACC_BEGIN + 0
+String STR_SVT_TOOL_PANEL_BUTTON_FWD
 {
     Text [ en-US ] = "Tab Panel Scroll Button, backward";
 };
 
-String STR_SVT_ACC_BEGIN + 1
+String STR_SVT_TOOL_PANEL_BUTTON_BACK
 {
     Text [ en-US ] = "Tab Panel Scroll Button, forward";
 };

@@ -29,6 +29,7 @@
 #include "svtools/toolpanel/paneltabbar.hxx"
 #include "svtools/toolpanel/toolpaneldeck.hxx"
 #include "svtools/svtdata.hxx"
+#include "svtools/svtools.hrc"
 
 #include "tabitemdescriptor.hxx"
 #include "paneltabbarpeer.hxx"
@@ -38,7 +39,6 @@
 #include <vcl/help.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/diagnose_ex.h>
-#include <svl/svtools.hrc>
 
 #include <boost/optional.hpp>
 #include <vector>
@@ -528,13 +528,13 @@ namespace svt
         m_aScrollBack.SetSymbol( IsVertical() ? SYMBOL_ARROW_UP : SYMBOL_ARROW_LEFT );
         m_aScrollBack.Show();
         m_aScrollBack.SetClickHdl( LINK( this, PanelTabBar_Impl, OnScroll ) );
-        m_aScrollBack.SetAccessibleDescription( String( SvtResId( STR_SVT_ACC_BEGIN + 0 ) ) );
+        m_aScrollBack.SetAccessibleDescription( String( SvtResId( STR_SVT_TOOL_PANEL_BUTTON_FWD ) ) );
         m_aScrollBack.SetAccessibleName( m_aScrollBack.GetAccessibleDescription() );
 
         m_aScrollForward.SetSymbol( IsVertical() ? SYMBOL_ARROW_DOWN : SYMBOL_ARROW_RIGHT );
         m_aScrollForward.Show();
         m_aScrollForward.SetClickHdl( LINK( this, PanelTabBar_Impl, OnScroll ) );
-        m_aScrollForward.SetAccessibleDescription( String( SvtResId( STR_SVT_ACC_BEGIN + 1 ) ) );
+        m_aScrollForward.SetAccessibleDescription( String( SvtResId( STR_SVT_TOOL_PANEL_BUTTON_BACK ) ) );
         m_aScrollForward.SetAccessibleName( m_aScrollForward.GetAccessibleDescription() );
     }
 
