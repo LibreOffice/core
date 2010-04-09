@@ -27,6 +27,7 @@
 #ifndef SVTOOLS_INC_TABLE_TABLEMODEL_HXX
 #define SVTOOLS_INC_TABLE_TABLEMODEL_HXX
 
+#include "svtools/svtdllapi.h"
 #include <svtools/table/tabletypes.hxx>
 #include <svtools/table/tablerenderer.hxx>
 #include <svtools/table/tableinputhandler.hxx>
@@ -310,7 +311,7 @@ namespace svt { namespace table
     //====================================================================
     /** declares the interface to implement by an abtract table model
     */
-    class SAL_NO_VTABLE ITableModel
+    class SAL_NO_VTABLE SVT_DLLPUBLIC ITableModel
     {
     public:
         /** returns the number of columns in the table
@@ -321,8 +322,8 @@ namespace svt { namespace table
         */
         virtual TableSize   getRowCount() const = 0;
 
-        virtual void        setColumnCount(TableSize _nColCount) = 0;
-        virtual void        setRowCount(TableSize _nRowCount) = 0;
+        SVT_DLLPRIVATE virtual void     setColumnCount(TableSize _nColCount) = 0;
+        SVT_DLLPRIVATE virtual void     setRowCount(TableSize _nRowCount) = 0;
 
         /** determines whether the table has column headers
 
@@ -335,12 +336,12 @@ namespace svt { namespace table
         /** sets whether the table should have row headers
             @see IColumnRenderer
         */
-        virtual void        setRowHeaders( bool rowHeaders) = 0;
+        SVT_DLLPRIVATE virtual void     setRowHeaders( bool rowHeaders) = 0;
 
         /** sets whether the table should have column headers
             @see IColumnRenderer
         */
-        virtual void        setColumnHeaders( bool columnHeaders) = 0;
+        SVT_DLLPRIVATE virtual void     setColumnHeaders( bool columnHeaders) = 0;
 
         /** determines whether the table has row headers
 
@@ -360,11 +361,11 @@ namespace svt { namespace table
 
         /** adds the given listener to the list of ->ITableModelListener's
         */
-        virtual void        addTableModelListener( const PTableModelListener& listener ) = 0;
+        SVT_DLLPRIVATE virtual void        addTableModelListener( const PTableModelListener& listener ) = 0;
 
         /** revokes the given listener from the list of ->ITableModelListener's
         */
-        virtual void        removeTableModelListener( const PTableModelListener& listener ) = 0;
+        SVT_DLLPRIVATE virtual void        removeTableModelListener( const PTableModelListener& listener ) = 0;
 
         /** returns a model for a certain column
 
@@ -394,7 +395,7 @@ namespace svt { namespace table
 
             @return the renderer to use. Must not be <NULL/>
         */
-        virtual PTableRenderer  getRenderer() const = 0;
+        SVT_DLLPRIVATE virtual PTableRenderer  getRenderer() const = 0;
 
         /** returns the component handling input in a view associated with the model
         */
@@ -406,9 +407,9 @@ namespace svt { namespace table
                 the logical height of rows in the table, in 1/100 millimeters. The height must be
                 greater 0.
         */
-        virtual TableMetrics    getRowHeight() const = 0;
+        SVT_DLLPRIVATE virtual TableMetrics    getRowHeight() const = 0;
 
-        virtual void            setRowHeight(TableMetrics _nRowHeight) = 0;
+        SVT_DLLPRIVATE virtual void         setRowHeight(TableMetrics _nRowHeight) = 0;
 
         /** determines the height of the column header row
 
@@ -419,7 +420,7 @@ namespace svt { namespace table
                 the logical height of the column header row, in 1/100 millimeters.
                 Must be greater than 0.
         */
-        virtual TableMetrics    getColumnHeaderHeight() const = 0;
+        SVT_DLLPRIVATE virtual TableMetrics    getColumnHeaderHeight() const = 0;
 
         /** determines the width of the row header column
 
@@ -430,7 +431,7 @@ namespace svt { namespace table
                 the logical width of the row header column, in 1/100 millimeters.
                 Must be greater than 0.
         */
-        virtual TableMetrics    getRowHeaderWidth() const = 0;
+        SVT_DLLPRIVATE virtual TableMetrics    getRowHeaderWidth() const = 0;
 
         /** determines the visibility of the vertical scrollbar of the table control
             @param overAllHeight the height of the table with all rows
@@ -454,22 +455,22 @@ namespace svt { namespace table
     virtual std::vector< std::vector< ::com::sun::star::uno::Any > >&   getCellContent() = 0;
     /**sets title of header rows
     */
-    virtual void setRowHeaderName(const std::vector<rtl::OUString>& cellColumnContent)=0;
+    SVT_DLLPRIVATE virtual void setRowHeaderName(const std::vector<rtl::OUString>& cellColumnContent)=0;
     /** gets title of header rows
     */
     virtual std::vector<rtl::OUString>&   getRowHeaderName() = 0;
-    virtual ::com::sun::star::util::Color getLineColor() = 0;
-    virtual void setLineColor(::com::sun::star::util::Color _rColor) = 0;
-    virtual ::com::sun::star::util::Color getHeaderBackgroundColor() = 0;
-    virtual void setHeaderBackgroundColor(::com::sun::star::util::Color _rColor) = 0;
-    virtual ::com::sun::star::util::Color getTextColor() = 0;
-    virtual void setTextColor(::com::sun::star::util::Color _rColor) = 0;
-    virtual ::com::sun::star::util::Color getOddRowBackgroundColor() = 0;
-    virtual void setOddRowBackgroundColor(::com::sun::star::util::Color _rColor) = 0;
-    virtual ::com::sun::star::util::Color getEvenRowBackgroundColor() = 0;
-    virtual void setEvenRowBackgroundColor(::com::sun::star::util::Color _rColor) = 0;
-    virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign() = 0;
-    virtual void setVerticalAlign(::com::sun::star::style::VerticalAlignment _xAlign) = 0;
+    SVT_DLLPRIVATE virtual ::com::sun::star::util::Color getLineColor() = 0;
+    SVT_DLLPRIVATE virtual void setLineColor(::com::sun::star::util::Color _rColor) = 0;
+    SVT_DLLPRIVATE virtual ::com::sun::star::util::Color getHeaderBackgroundColor() = 0;
+    SVT_DLLPRIVATE virtual void setHeaderBackgroundColor(::com::sun::star::util::Color _rColor) = 0;
+    SVT_DLLPRIVATE virtual ::com::sun::star::util::Color getTextColor() = 0;
+    SVT_DLLPRIVATE virtual void setTextColor(::com::sun::star::util::Color _rColor) = 0;
+    SVT_DLLPRIVATE virtual ::com::sun::star::util::Color getOddRowBackgroundColor() = 0;
+    SVT_DLLPRIVATE virtual void setOddRowBackgroundColor(::com::sun::star::util::Color _rColor) = 0;
+    SVT_DLLPRIVATE virtual ::com::sun::star::util::Color getEvenRowBackgroundColor() = 0;
+    SVT_DLLPRIVATE virtual void setEvenRowBackgroundColor(::com::sun::star::util::Color _rColor) = 0;
+    SVT_DLLPRIVATE virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign() = 0;
+    SVT_DLLPRIVATE virtual void setVerticalAlign(::com::sun::star::style::VerticalAlignment _xAlign) = 0;
 
         /// destroys the table model instance
         virtual ~ITableModel() { }

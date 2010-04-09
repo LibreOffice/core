@@ -30,6 +30,7 @@
 #include "svtools/table/tablecontrol.hxx"
 #include "tablegeometry.hxx"
 #include "tablecontrol_impl.hxx"
+#include "accessibletableimp.hxx"
 #include "svtools/table/tabledatawindow.hxx"
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

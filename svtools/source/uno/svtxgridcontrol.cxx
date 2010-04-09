@@ -28,6 +28,7 @@
 #include "precompiled_svtools.hxx"
 
 #include "svtxgridcontrol.hxx"
+#include "accessibletableimp.hxx"
 #include <com/sun/star/view/SelectionType.hpp>
 #include "svtools/table/gridtablerenderer.hxx"
 #include "svtools/table/defaultinputhandler.hxx"

@@ -27,13 +27,14 @@
 #ifndef SVTOOLS_INC_TABLE_TABLECONTROL_HXX
 #define SVTOOLS_INC_TABLE_TABLECONTROL_HXX
 
+#include "svtools/svtdllapi.h"
 #include <svtools/table/tablemodel.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/seleng.hxx>
 #include <svtools/table/tabledatawindow.hxx>
 #include <svtools/accessibletable.hxx>
-#include "svtaccessiblefactory.hxx"
 #include <com/sun/star/util/Color.hpp>
+#include <svtools/accessiblefactory.hxx>
 //........................................................................
 
 namespace svt { namespace table
@@ -65,24 +66,24 @@ namespace svt { namespace table
 
         // TODO: scrolling?
     */
-    class TableControl : public Control, public IAccessibleTable
+    class SVT_DLLPUBLIC TableControl : public Control, public IAccessibleTable
     {
     private:
-    DECL_DLLPRIVATE_LINK( ImplSelectHdl, void* );
+        DECL_DLLPRIVATE_LINK( ImplSelectHdl, void* );
 
         TableControl_Impl*  m_pImpl;
-    ::com::sun::star::uno::Sequence< sal_Int32 > m_nCols;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aText;
-    Link m_aSelectHdl;
-    bool m_bSelectionChanged;
+        ::com::sun::star::uno::Sequence< sal_Int32 > m_nCols;
+        ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aText;
+        Link m_aSelectHdl;
+        bool m_bSelectionChanged;
     public:
-    ::std::auto_ptr< AccessibleTableControl_Impl > m_pAccessTable;
+        ::std::auto_ptr< AccessibleTableControl_Impl > m_pAccessTable;
 
         TableControl( Window* _pParent, WinBits _nStyle );
         ~TableControl();
 
         /// sets a new table model
-        void        SetModel( PTableModel _pModel );
+        SVT_DLLPRIVATE void        SetModel( PTableModel _pModel );
         /// retrieves the current table model
         PTableModel GetModel() const;
 
@@ -152,9 +153,9 @@ namespace svt { namespace table
         {
             return GoTo( GetCurrentColumn(), _nRow );
         }
-    virtual void    Resize();
+    SVT_DLLPRIVATE virtual void Resize();
     virtual void    Select();
-    void        SetSelectHdl( const Link& rLink )   { m_aSelectHdl = rLink; }
+    SVT_DLLPRIVATE void     SetSelectHdl( const Link& rLink )   { m_aSelectHdl = rLink; }
     const Link&     GetSelectHdl() const            { return m_aSelectHdl; }
 
     /**invalidates the table if table has been changed e.g. new row added
@@ -176,11 +177,11 @@ namespace svt { namespace table
     //virtual long      Notify(NotifyEvent& rNEvt);
 
     /** Creates and returns the accessible object of the whole GridControl. */
-    virtual XACC CreateAccessible();
-    virtual XACC CreateAccessibleControl( sal_Int32 _nIndex );
-    virtual ::rtl::OUString GetAccessibleObjectName(AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const;
-    virtual sal_Bool GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow );
-    virtual ::rtl::OUString GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType, sal_Int32 _nPosition = -1) const;
+    SVT_DLLPRIVATE virtual XACC CreateAccessible();
+    SVT_DLLPRIVATE virtual XACC CreateAccessibleControl( sal_Int32 _nIndex );
+    SVT_DLLPRIVATE virtual ::rtl::OUString GetAccessibleObjectName(AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const;
+    SVT_DLLPRIVATE virtual sal_Bool GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow );
+    SVT_DLLPRIVATE virtual ::rtl::OUString GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType, sal_Int32 _nPosition = -1) const;
     virtual void FillAccessibleStateSet(
         ::utl::AccessibleStateSetHelper& rStateSet,
     AccessibleTableControlObjType eObjType ) const;
@@ -228,27 +229,6 @@ namespace svt { namespace table
         TableControl();                                 // never implemented
         TableControl( const TableControl& );            // never implemented
         TableControl& operator=( const TableControl& ); // never implemented
-    };
-
-    class AccessibleTableControl_Impl
-    {
-        public:
-            AccessibleFactoryAccess m_aFactoryAccess;
-            IAccessibleTableControl*   m_pAccessible;
-
-        public:
-            AccessibleTableControl_Impl() : m_pAccessible(NULL)
-            {
-            }
-
-
-            /// @see AccessibleTableControl::getTableRowHeader
-            ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-                getAccessibleTableHeader( AccessibleTableControlObjType _eObjType );
-            /// @see AccessibleTableControl::getTable
-            ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-                getAccessibleTable( );
-
     };
 
 //........................................................................
