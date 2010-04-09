@@ -11,7 +11,7 @@
     </dependencies>
 
     <registration>
-        <simple-license accept-by="admin" default-license-id="lic-en-US">
+        <simple-license accept-by="admin" default-license-id="lic-en-US" suppress-if-required="true" >
         <license-text xlink:href="licensefile" lang="isocode" license-id="lic-isocode"/>
         </simple-license>
     </registration>
@@ -21,11 +21,11 @@
     <platform value="UPDATED_SUPPORTED_PLATFORM" />
 
     <publisher>
-        <name xlink:href="http://www.sun.com/software/star/staroffice/extensions.jsp?cid=925095" lang="en">Sun Microsystems</name>
+        <name xlink:href="http://www.sun.com/software/star/staroffice/extensions.jsp?cid=925095" lang="en">Oracle</name>
     </publisher>
 
     <display-name>
-        <name lang="en-US">PDF Import Extension</name>
+        <name lang="en-US">PDF Import</name>
     </display-name>
 
     <icon>
