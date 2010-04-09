@@ -87,9 +87,9 @@ struct Duration
     unsigned short Seconds;
 
     //--------------------------------------------------------------------
-    /** contains the hundredth seconds.
+    /** contains the milliseconds.
      */
-    unsigned short HundredthSeconds;
+    unsigned short MilliSeconds;
 
 };
 

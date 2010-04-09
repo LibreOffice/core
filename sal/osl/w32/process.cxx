@@ -227,7 +227,7 @@ extern "C" oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
     ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
     DWORD buflen = 0;
 
-    if ((buflen = GetModuleFileNameW (0, aBuffer, aBuffer.getBufSizeInSymbols())) > 0)
+    if ((buflen = GetModuleFileNameW (0, ::osl::mingw_reinterpret_cast<LPWSTR>(aBuffer), aBuffer.getBufSizeInSymbols())) > 0)
     {
         rtl_uString * pAbsPath = 0;
         rtl_uString_newFromStr_WithLength (&(pAbsPath), aBuffer, buflen);
@@ -279,7 +279,7 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char ** argv)
         for (i = 0; i < nArgs; i++)
         {
             /* Convert to unicode */
-            rtl_uString_newFromStr( &(ppArgs[i]), wargv[i] );
+            rtl_uString_newFromStr( &(ppArgs[i]), reinterpret_cast<const sal_Unicode*>(wargv[i]) );
         }
         if (ppArgs[0] != 0)
         {
@@ -288,7 +288,7 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char ** argv)
             DWORD dwResult = 0;
 
             dwResult = SearchPath (
-                0, ppArgs[0]->buffer, L".exe", aBuffer.getBufSizeInSymbols(), aBuffer, 0);
+                0, reinterpret_cast<LPCWSTR>(ppArgs[0]->buffer), L".exe", aBuffer.getBufSizeInSymbols(), ::osl::mingw_reinterpret_cast<LPWSTR>(aBuffer), 0);
             if ((0 < dwResult) && (dwResult < aBuffer.getBufSizeInSymbols()))
             {
                 /* Replace argv[0] with it's absolute path */
@@ -401,9 +401,9 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **
 {
     WCHAR buff[ENV_BUFFER_SIZE];
 
-    if (GetEnvironmentVariableW(ustrVar->buffer, buff, ENV_BUFFER_SIZE) > 0)
+    if (GetEnvironmentVariableW(reinterpret_cast<LPCWSTR>(ustrVar->buffer), buff, ENV_BUFFER_SIZE) > 0)
     {
-        rtl_uString_newFromStr(ustrValue, buff);
+        rtl_uString_newFromStr(ustrValue, reinterpret_cast<const sal_Unicode*>(buff));
         return osl_Process_E_None;
     }
     return osl_Process_E_Unknown;
@@ -422,7 +422,7 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir
 
 
     osl_acquireMutex( g_CurrentDirectoryMutex );
-    dwLen = GetCurrentDirectory( aBuffer.getBufSizeInSymbols(), aBuffer );
+    dwLen = GetCurrentDirectory( aBuffer.getBufSizeInSymbols(), ::osl::mingw_reinterpret_cast<LPWSTR>(aBuffer) );
     osl_releaseMutex( g_CurrentDirectoryMutex );
 
     if ( dwLen && dwLen < aBuffer.getBufSizeInSymbols() )
