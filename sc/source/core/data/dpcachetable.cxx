@@ -214,7 +214,7 @@ void ScDPCacheTable::fillTable(  const ScQueryParam& rQuery, BOOL* pSpecial,
     // during this call, for this method may be called from the interpretation
     // of GETPIVOTDATA, which disables nested formula interpretation without
     // increasing the macro level.
-    MacroInterpretIncrementer aMacroInc(pDoc);
+    MacroInterpretIncrementer aMacroInc(GetCache()->GetDoc());
 
     if ( mpCache == NULL )
         InitNoneCache( NULL );

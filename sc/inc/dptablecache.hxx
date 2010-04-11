@@ -47,6 +47,8 @@
 
 class ScDPTableDataCache;
 class TypedStrData;
+struct ScQueryParam;
+
 // --------------------------------------------------------------------
 //
 //  base class ScDPTableData to allow implementation with tabular data

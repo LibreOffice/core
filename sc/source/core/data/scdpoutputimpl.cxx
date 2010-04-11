@@ -34,7 +34,7 @@
 // INCLUDE ---------------------------------------------------------------
 #include "scdpoutputimpl.hxx"
 #include "scitems.hxx"
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 // -----------------------------------------------------------------------
 
 namespace

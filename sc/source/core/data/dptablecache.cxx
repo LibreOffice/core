@@ -37,6 +37,7 @@
 #include "globstr.hrc"
 
 #include <rtl/math.hxx>
+#include "queryparam.hxx"
 #include "dpglobal.hxx"
 
 #include "docoptio.hxx" //for ValidQuery
