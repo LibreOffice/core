@@ -30,15 +30,14 @@
 
 #include "app.hxx"
 #include "langselect.hxx"
+#include "cmdlineargs.hxx"
 #include <stdio.h>
 
-#ifndef _RTL_STRING_HXX
 #include <rtl/string.hxx>
-#endif
-#ifndef _SVTOOLS_PATHOPTIONS_HXX
+#include <rtl/bootstrap.hxx>
 #include <unotools/pathoptions.hxx>
-#endif
 #include <tools/resid.hxx>
+#include <tools/config.hxx>
 #include <i18npool/mslangid.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -224,10 +223,10 @@ bool LanguageSelection::prepareLanguage()
                 flush();
             theConfigProvider->setLocale(loc);
 
+            Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.Setup/L10N/", sal_True), UNO_QUERY_THROW);
             if ( !bCmdLanguage )
             {
                 // Store language only
-                Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.Setup/L10N/", sal_True), UNO_QUERY_THROW);
                 xProp->setPropertyValue(OUString::createFromAscii("ooLocale"), makeAny(aLocaleString));
                 Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
             }
@@ -235,9 +234,9 @@ bool LanguageSelection::prepareLanguage()
             if ( bIniLanguage )
             {
                 // Store language only
-                Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.Office.Linguistic/General/", sal_True), UNO_QUERY_THROW);
-                xProp->setPropertyValue(OUString::createFromAscii("UILocale"), makeAny(aLocaleString));
-                Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
+                Reference< XPropertySet > xProp2(getConfigAccess("org.openoffice.Office.Linguistic/General/", sal_True), UNO_QUERY_THROW);
+                xProp2->setPropertyValue(OUString::createFromAscii("UILocale"), makeAny(aLocaleString));
+                Reference< XChangesBatch >(xProp2, UNO_QUERY_THROW)->commitChanges();
             }
 
             MsLangId::setConfiguredSystemUILanguage( MsLangId::convertLocaleToLanguage(loc) );
