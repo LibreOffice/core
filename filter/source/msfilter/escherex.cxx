@@ -1101,6 +1101,32 @@ void EscherPropertyContainer::ImplCreateGraphicAttributes( const ::com::sun::sta
     }
 }
 
+sal_Bool EscherPropertyContainer::CreateShapeProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape )
+{
+    uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
+    if ( aXPropSet.is() )
+    {
+        sal_Bool bVal;
+        ::com::sun::star::uno::Any aAny;
+        sal_uInt32 nShapeAttr = 0;
+        EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Visible" ) ), sal_True );
+        if ( aAny >>= bVal )
+        {
+            if ( !bVal )
+                nShapeAttr |= 0x20002;  // set fHidden = true
+        }
+        EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Printable" ) ), sal_True );
+        if ( aAny >>= bVal )
+        {
+            if ( !bVal )
+                nShapeAttr |= 0x10000;  // set fPrint = false;
+        }
+        if ( nShapeAttr )
+            AddOpt( ESCHER_Prop_fPrint, nShapeAttr );
+    }
+    return sal_True;
+}
+
 sal_Bool EscherPropertyContainer::CreateOLEGraphicProperties(
     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape )
 {
