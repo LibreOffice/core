@@ -658,7 +658,7 @@ endcase
 '---------------------------------------------------
 
 testcase tEditAutotext
-    Dim k as integer
+    Dim j as integer
     Dim i as integer
     Dim CurrentEntryNr as integer
     Dim unxAutotextCategorie as integer
@@ -880,8 +880,7 @@ testcase tEditAutotext
         if GetDocumentCount = 1 then
             Warnlog "The autotext has been edited in current document!"
         else
-            hUseAsyncSlot( "FileClose" )
-            
+            hUseAsyncSlot( "FileClose" )            
             Kontext "Active"
             PrintLog "A message that module has been changed should come up"
             if Active.Exists then
@@ -890,11 +889,6 @@ testcase tEditAutotext
                 Warnlog "Though changing the text module the document could be closed without a query!"
             end if
         end if
-        if wDeleteAutotext("DummyAutotext") = false then
-            Warnlog "Unable to delete created autotext"
-        end if
-        Kontext "Autotext"
-        if Autotext.Exists then Autotext.Close
     catch
         Warnlog "Menu Autotext->'Edit' disabled !"
         Kontext "Active"
@@ -908,15 +902,16 @@ testcase tEditAutotext
                 endcatch
             end if
         end if
-        Kontext "Autotext"
-        PrintLog "Close 'Autotext' dialog"
-        Autotext.Close
-        if wDeleteAutotext("DummyAutotext") = false then
-            Warnlog "Unable to delete created autotext"
-        end if
-        Kontext "Autotext"
-        if Autotext.Exists then Autotext.Close
     endcatch
+
+    Kontext "Autotext"
+    PrintLog "Close 'Autotext' dialog"
+    Autotext.Close
+    if wDeleteAutotext("DummyAutotext") = false then
+        Warnlog "Unable to delete created autotext"
+    end if
+    Kontext "Autotext"
+    if Autotext.Exists then Autotext.Close
 
     PrintLog "Close active document"
     Call hCloseDocument
