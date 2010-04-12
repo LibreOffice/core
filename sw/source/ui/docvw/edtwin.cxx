@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: edtwin.cxx,v $
- * $Revision: 1.164 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,25 +58,25 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/ptitem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/editeng.hxx>
-#include <svx/svxacorr.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/flditem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/svxacorr.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/protitem.hxx>
 #include <unotools/charclass.hxx>
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <edtwin.hxx>
 #include <view.hxx>
@@ -140,6 +137,7 @@
 
 #include <IMark.hxx>
 #include <doc.hxx>
+#include <xmloff/odffields.hxx>
 
 #include "PostItMgr.hxx"
 #include "postit.hxx"
@@ -149,6 +147,7 @@
 //#define TEST_FOR_BUG91313
 #endif
 
+using namespace sw::mark;
 using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
@@ -2278,7 +2277,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 else if( !aKeyEvent.GetRepeat() && pACorr && bIsAutoCorrectChar &&
                         pACfg->IsAutoFmtByInput() &&
                     pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
-                                            ChgFractionSymbol | ChgOrdinalNumber |
+                                            ChgOrdinalNumber |
                                             ChgToEnEmDash | SetINetAttr |
                                             Autocorrect ) &&
                     '\"' != aCh && '\'' != aCh && '*' != aCh && '_' != aCh &&
@@ -2310,10 +2309,16 @@ KEYINPUT_CHECKTABLE_INSDEL:
         {
             if( pACorr && pACfg->IsAutoFmtByInput() &&
                 pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
-                                        ChgFractionSymbol | ChgOrdinalNumber |
+                                        ChgOrdinalNumber |
                                         ChgToEnEmDash | SetINetAttr |
                                         Autocorrect ) &&
                 !rSh.HasReadonlySel() )
+        /*  {
+                pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
+                                        ChgFractionSymbol | ChgOrdinalNumber |
+                                        ChgToEnEmDash | SetINetAttr |
+                                        Autocorrect ) &&
+                !rSh.HasReadonlySel() ) */
             {
                 FlushInBuffer();
                 rSh.AutoCorrect( *pACorr, static_cast< sal_Unicode >('\0') );
@@ -3359,11 +3364,16 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                     bNoInterrupt = bTmpNoInterrupt;
                 }
-                if( !bOverURLGrf && !bOnlyText )
+                if ( !bOverURLGrf && !bOnlyText )
                 {
                     const int nSelType = rSh.GetSelectionType();
-                    if( nSelType == nsSelectionType::SEL_OLE ||
-                        nSelType == nsSelectionType::SEL_GRF )
+                    // --> OD 2009-12-30 #i89920#
+                    // Check in general, if an object is selectable at given position.
+                    // Thus, also text fly frames in background become selectable via Ctrl-Click.
+                    if ( nSelType & nsSelectionType::SEL_OLE ||
+                         nSelType & nsSelectionType::SEL_GRF ||
+                         rSh.IsObjSelectable( aDocPos ) )
+                    // <--
                     {
                         MV_KONTEXT( &rSh );
                         if( !rSh.IsFrmSelected() )
@@ -3611,10 +3621,10 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     pAnchorMarker->ChgHdl( pHdl );
                     if( aNew.X() || aNew.Y() )
                     {
-                         pAnchorMarker->SetPos( aNew );
-                         pAnchorMarker->SetLastPos( aDocPt );
-                         //OLMpSdrView->RefreshAllIAOManagers();
-                     }
+                        pAnchorMarker->SetPos( aNew );
+                        pAnchorMarker->SetLastPos( aDocPt );
+                        //OLMpSdrView->RefreshAllIAOManagers();
+                    }
                 }
                 else
                 {
@@ -4180,7 +4190,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
                         SwContentAtPos aCntntAtPos( SwContentAtPos::SW_CLICKFIELD |
                                                     SwContentAtPos::SW_INETATTR |
-                                                    SwContentAtPos::SW_SMARTTAG );
+                                                    SwContentAtPos::SW_SMARTTAG  | SwContentAtPos::SW_FORMCTRL);
 
                         if( rSh.GetContentAtPos( aDocPt, aCntntAtPos, TRUE ) )
                         {
@@ -4200,6 +4210,29 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     // execute smarttag menu
                                     if ( bExecSmarttags && SwSmartTagMgr::Get().IsSmartTagsEnabled() )
                                         rView.ExecSmartTagPopup( aDocPt );
+                            }
+                            else if ( SwContentAtPos::SW_FORMCTRL == aCntntAtPos.eCntntAtPos )
+                            {
+                                ASSERT( aCntntAtPos.aFnd.pFldmark != NULL, "where is my field ptr???");
+                                if ( aCntntAtPos.aFnd.pFldmark != NULL)
+                                {
+                                    IFieldmark *fieldBM = const_cast< IFieldmark* > ( aCntntAtPos.aFnd.pFldmark );
+                                    //SwDocShell* pDocSh = rView.GetDocShell();
+                                    //SwDoc *pDoc=pDocSh->GetDoc();
+                                    if (fieldBM->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX ) )
+                                    {
+                                        ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(fieldBM);
+                                        pCheckboxFm->SetChecked(!pCheckboxFm->IsChecked());
+                                        pCheckboxFm->Invalidate();
+                                        rSh.InvalidateWindows( rView.GetVisArea() );
+                                    } else if (fieldBM->GetFieldname().equalsAscii( ODF_FORMDROPDOWN) ) {
+                                        rView.ExecFieldPopup( aDocPt, fieldBM );
+                                        fieldBM->Invalidate();
+                                        rSh.InvalidateWindows( rView.GetVisArea() );
+                                    } else {
+                                        // unknown type..
+                                    }
+                                }
                             }
                             else // if ( SwContentAtPos::SW_INETATTR == aCntntAtPos.eCntntAtPos )
                             {
@@ -4703,7 +4736,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 {
     SwWrtShell &rSh = rView.GetWrtShell();
 
-    if ( !rView.GetViewFrame() || !rView.GetViewFrame()->GetFrame() )
+    if ( !rView.GetViewFrame() )
     {
         //Wenn der ViewFrame in Kuerze stirbt kein Popup mehr!
         Window::Command(rCEvt);

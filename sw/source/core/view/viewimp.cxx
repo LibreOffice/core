@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewimp.cxx,v $
- * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,6 @@
 #include "precompiled_sw.hxx"
 
 
-#include "scrrect.hxx"
 #include "crsrsh.hxx"
 #include "rootfrm.hxx"
 #include "pagefrm.hxx"
@@ -129,8 +125,6 @@ SwViewImp::SwViewImp( ViewShell *pParent ) :
     pSdrPageView( 0 ),
     pFirstVisPage( 0 ),
     pRegion( 0 ),
-    pScrollRects( 0 ),
-    pScrolledArea( 0 ),
     pLayAct( 0 ),
     pIdleAct( 0 ),
     pAccMap( 0 ),
@@ -141,13 +135,9 @@ SwViewImp::SwViewImp( ViewShell *pParent ) :
 {
     //bResetXorVisibility =
     //HMHbShowHdlPaint =
-    bResetHdlHiddenPaint = bScrolled =
-    bPaintInScroll = bSmoothUpdate = bStopSmooth = bStopPrt = FALSE;
-    bFirstPageInvalid = bScroll = bNextScroll = TRUE;
-
-    aScrollTimer.SetTimeout( 1500 );
-    aScrollTimer.SetTimeoutHdl( LINK( this, SwViewImp, RefreshScrolledHdl));
-    aScrollTimer.Stop();
+    bResetHdlHiddenPaint =
+    bSmoothUpdate = bStopSmooth = bStopPrt = FALSE;
+    bFirstPageInvalid = TRUE;
 }
 
 /******************************************************************************
@@ -172,8 +162,7 @@ SwViewImp::~SwViewImp()
 
     delete pDrawView;
 
-    DelRegions();
-    delete pScrolledArea;
+    DelRegion();
 
     ASSERT( !pLayAct, "Have action for the rest of your life." );
     ASSERT( !pIdleAct,"Be idle for the rest of your life." );
@@ -188,10 +177,9 @@ SwViewImp::~SwViewImp()
 |*
 ******************************************************************************/
 
-void SwViewImp::DelRegions()
+void SwViewImp::DelRegion()
 {
     DELETEZ(pRegion);
-    DELETEZ(pScrollRects);
 }
 
 /******************************************************************************

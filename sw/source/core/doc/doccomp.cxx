@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: doccomp.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,10 +32,10 @@
 #include <hintids.hxx>
 #include <tools/list.hxx>
 #include <vcl/vclenum.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/udlnitem.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
@@ -969,6 +966,29 @@ BOOL SwCompareLine::Compare( const CompareLine& rLine ) const
     return CompareNode( rNode, ((SwCompareLine&)rLine).rNode );
 }
 
+namespace
+{
+    static String SimpleTableToText(const SwNode &rNode)
+    {
+        String sRet;
+        const SwNode* pEndNd = rNode.EndOfSectionNode();
+        SwNodeIndex aIdx( rNode );
+        while (&aIdx.GetNode() != pEndNd)
+        {
+            if (aIdx.GetNode().IsTxtNode())
+            {
+                if (sRet.Len())
+                {
+                    sRet.Append( '\n' );
+                }
+                sRet.Append( aIdx.GetNode().GetTxtNode()->GetExpandTxt() );
+            }
+            aIdx++;
+        }
+        return sRet;
+    }
+}
+
 BOOL SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
 {
     if( rSrcNd.GetNodeType() != rDstNd.GetNodeType() )
@@ -989,6 +1009,13 @@ BOOL SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
 
             bRet = ( rTSrcNd.EndOfSectionIndex() - rTSrcNd.GetIndex() ) ==
                    ( rTDstNd.EndOfSectionIndex() - rTDstNd.GetIndex() );
+
+            // --> #i107826#: compare actual table content
+            if (bRet)
+            {
+                bRet = (SimpleTableToText(rSrcNd) == SimpleTableToText(rDstNd));
+            }
+            // <--
         }
         break;
 
@@ -1043,6 +1070,15 @@ BOOL SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
     case ND_ENDNODE:
         bRet = rSrcNd.StartOfSectionNode()->GetNodeType() ==
                rDstNd.StartOfSectionNode()->GetNodeType();
+
+        // --> #i107826#: compare actual table content
+        if (bRet && rSrcNd.StartOfSectionNode()->GetNodeType() == ND_TABLENODE)
+        {
+            bRet = CompareNode(
+                *rSrcNd.StartOfSectionNode(), *rDstNd.StartOfSectionNode());
+        }
+        // <--
+
         break;
     }
     return bRet;
@@ -1059,18 +1095,7 @@ String SwCompareLine::GetText() const
 
     case ND_TABLENODE:
         {
-            const SwNode* pEndNd = rNode.EndOfSectionNode();
-            SwNodeIndex aIdx( rNode );
-            while( &aIdx.GetNode() != pEndNd )
-            {
-                if( aIdx.GetNode().IsTxtNode() )
-                {
-                    if( sRet.Len() )
-                        sRet.Append( '\n' );
-                    sRet.Append( ((SwTxtNode&)rNode).GetExpandTxt() );
-                }
-                aIdx++;
-            }
+            sRet = SimpleTableToText(rNode);
             sRet.InsertAscii( "Tabelle: ", 0 );
         }
         break;

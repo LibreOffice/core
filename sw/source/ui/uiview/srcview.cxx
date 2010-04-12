@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: srcview.cxx,v $
- * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,8 +49,8 @@
 #include <svl/whiter.hxx>
 #include <unotools/saveopt.hxx>
 #include <svtools/transfer.hxx>
-
-#include <svx/htmlcfg.hxx>
+#include <svx/svxids.hrc>
+#include <svtools/htmlcfg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -63,12 +60,12 @@
 #include <sfx2/request.hxx>
 #include <sfx2/prnmon.hxx>
 #include <sfx2/docfile.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svx/srchdlg.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/flstitem.hxx>
-#include "svx/unolingu.hxx"
+#include <svl/srchitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/flstitem.hxx>
+#include "editeng/unolingu.hxx"
 #include <sfx2/sfxhtml.hxx>
 #include <swtypes.hxx>
 #include <swmodule.hxx>
@@ -114,9 +111,7 @@ using ::rtl::OUString;
 using ::com::sun::star::util::SearchOptions;
 
 
-#define SWSRCVIEWFLAGS ( SFX_VIEW_MAXIMIZE_FIRST|           \
-                      SFX_VIEW_OBJECTSIZE_EMBEDDED|     \
-                      SFX_VIEW_CAN_PRINT|\
+#define SWSRCVIEWFLAGS ( SFX_VIEW_CAN_PRINT|\
                       SFX_VIEW_NO_NEWWINDOW )
 
 #define SRC_SEARCHOPTIONS (0xFFFF & ~(SEARCH_OPTIONS_FORMAT|SEARCH_OPTIONS_FAMILIES|SEARCH_OPTIONS_SEARCH_ALL))

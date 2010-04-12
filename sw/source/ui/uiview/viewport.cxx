@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewport.cxx,v $
- * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,8 +32,8 @@
 #include "hintids.hxx"
 #include <vcl/help.hxx>
 #include <svx/ruler.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/lrspitem.hxx>
 #include <sfx2/bindings.hxx>
 #ifndef _VIEW_HXX
 #include <view.hxx>
@@ -224,7 +221,7 @@ aDocSz = rSz;
         SetVisArea( aNewVisArea, FALSE );
 
     if ( UpdateScrollbars() && !bInOuterResizePixel && !bInInnerResizePixel &&
-            !GetViewFrame()->GetFrame()->IsInPlace())
+            !GetViewFrame()->GetFrame().IsInPlace())
         OuterResizePixel( Point(),
                           GetViewFrame()->GetWindow().GetOutputSizePixel() );
 }
@@ -358,7 +355,7 @@ void SwView::SetVisArea( const Point &rPt, BOOL bUpdateScrollbar )
 void SwView::CheckVisArea()
 {
     pHScrollbar->SetAuto( pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
-                              !GetViewFrame()->GetFrame()->IsInPlace() );
+                              !GetViewFrame()->GetFrame().IsInPlace() );
     if ( IsDocumentBorder() )
     {
         if ( aVisArea.Left() != DOCUMENTBORDER ||
@@ -735,7 +732,7 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
         {
             // JP 21.07.00: the end scrollhandler invalidate the FN_STAT_PAGE,
             //              so we dont must do it agin.
-//          if(!GetViewFrame()->GetFrame()->IsInPlace())
+//          if(!GetViewFrame()->GetFrame().IsInPlace())
 //              S F X_BINDINGS().Update(FN_STAT_PAGE);
 
             //QuickHelp:
@@ -1056,7 +1053,7 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize )
         Size aSz( rSize );
         SvBorder aBorder;
         CalcAndSetBorderPixel( aBorder, TRUE );
-        if ( GetViewFrame()->GetFrame()->IsInPlace() )
+        if ( GetViewFrame()->GetFrame().IsInPlace() )
         {
             Size aViewSize( aSz );
             Point aViewPos( rOfst );

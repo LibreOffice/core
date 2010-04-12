@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dflyobj.cxx,v $
- * $Revision: 1.27.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,8 +29,8 @@
 #include "precompiled_sw.hxx"
 #include "hintids.hxx"
 #include <svx/svdtrans.hxx>
-#include <svx/protitem.hxx>
-#include <svx/opaqitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/opaqitem.hxx>
 #include <svx/svdpage.hxx>
 
 
@@ -71,10 +68,8 @@ using namespace ::com::sun::star;
 // AW: For VCOfDrawVirtObj and stuff
 #include <svx/sdr/contact/viewcontactofvirtobj.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <sw_primitivetypes2d.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
+#include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
 using namespace ::com::sun::star;
 
@@ -246,20 +241,15 @@ namespace drawinglayer
             if(!getOuterRange().isEmpty())
             {
                 // currently this SW object has no primitive representation. As long as this is the case,
-                // create an invisible HitTestPrimitive to allow hitting the object. Use a filled primitive
-                // to get a HitTest which uses 'inside' as default object hit. The special cases from
+                // create invisible geometry to allow corfect HitTest and BoundRect calculations for the
+                // object. Use a filled primitive to get 'inside' as default object hit. The special cases from
                 // the old SwVirtFlyDrawObj::CheckHit implementation are handled now in SwDrawView::PickObj;
-                // this removed the 'hack' to get a view from inside model data or to react on noll-tolerance
+                // this removed the 'hack' to get a view from inside model data or to react on null-tolerance
                 // as it was done in the old implementation
-                const basegfx::B2DPolygon aOuterRangePolygon(basegfx::tools::createPolygonFromRect(getOuterRange()));
-                const basegfx::BColor aColor(0.0, 0.0, 0.0);
-                const Primitive2DReference aContentReference(
-                    new PolyPolygonColorPrimitive2D(
-                        basegfx::B2DPolyPolygon(aOuterRangePolygon),
-                        aColor));
                 const Primitive2DReference aHitTestReference(
-                    new HitTestPrimitive2D(
-                        Primitive2DSequence(&aContentReference, 1)));
+                    createHiddenGeometryPrimitives2D(
+                        true,
+                        getOuterRange()));
 
                 aRetval = Primitive2DSequence(&aHitTestReference, 1);
             }
@@ -564,6 +554,11 @@ const Rectangle& __EXPORT SwVirtFlyDrawObj::GetCurrentBoundRect() const
 {
     SetRect();
     return aOutRect;
+}
+
+const Rectangle& __EXPORT SwVirtFlyDrawObj::GetLastBoundRect() const
+{
+    return GetCurrentBoundRect();
 }
 
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dcontact.hxx,v $
- * $Revision: 1.26.210.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -305,7 +302,7 @@ class SwDrawVirtObj : public SdrVirtObj
 
         using SdrVirtObj::GetPlusHdl;
 
-   private:
+   protected:
         // AW: Need own sdr::contact::ViewContact since AnchorPos from parent is
         // not used but something own (top left of new SnapRect minus top left
         // of original SnapRect)

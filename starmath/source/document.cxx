@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: document.cxx,v $
- * $Revision: 1.94.26.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,17 +68,17 @@
 #include <svl/undo.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/whiter.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editstat.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/unolingu.hxx>
 #include <ucbhelper/content.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/mapunit.hxx>
 #include <vcl/msgbox.hxx>
-
+#include <sfx2/sfx.hrc>
 #include <document.hxx>
 #include <action.hxx>
 #include <config.hxx>
@@ -97,8 +94,8 @@
 #include "mathtype.hxx"
 #include "mathmlimport.hxx"
 #include "mathmlexport.hxx"
-
-
+#include <sfx2/sfxsids.hrc>
+#include <svx/svxids.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -679,8 +676,8 @@ void SmDocShell::Repaint()
 }
 
 
-SmDocShell::SmDocShell(SfxObjectCreateMode eMode,const sal_Bool _bScriptSupport) :
-    SfxObjectShell(eMode),
+SmDocShell::SmDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
+    SfxObjectShell( i_nSfxCreationFlags ),
     pTree               ( 0 ),
     pEditEngineItemPool ( 0 ),
     pEditEngine         ( 0 ),
@@ -699,12 +696,7 @@ SmDocShell::SmDocShell(SfxObjectCreateMode eMode,const sal_Bool _bScriptSupport)
     StartListening(aFormat);
     StartListening(*pp->GetConfig());
 
-    if ( !_bScriptSupport )
-        SetHasNoBasic();
-
-    SetModel( new SmModel(this) );  //! das hier mit new erzeugte Model brauch
-                                    //! im Destruktor nicht explizit geloescht werden.
-                                    //! Dies erledigt das Sfx.
+    SetBaseModel( new SmModel(this) );
 }
 
 

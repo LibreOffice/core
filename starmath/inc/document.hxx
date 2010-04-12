@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: document.hxx,v $
- * $Revision: 1.35.26.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -171,7 +168,7 @@ public:
     using SotObject::GetInterface;
     SFX_DECL_OBJECTFACTORY();
 
-                SmDocShell(SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED, const sal_Bool _bScriptSupport = sal_True);
+                SmDocShell( const sal_uInt64 i_nSfxCreationFlags );
     virtual     ~SmDocShell();
 
     void        LoadSymbols();

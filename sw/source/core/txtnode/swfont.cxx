@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swfont.cxx,v $
- * $Revision: 1.59.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,36 +38,36 @@
 #include <vcl/outdev.hxx>
 #endif
 #include <unotools/localedatawrapper.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/blnkitem.hxx>
-#include <svx/nhypitem.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/akrnitem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/charreliefitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/blnkitem.hxx>
+#include <editeng/nhypitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/akrnitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/charreliefitem.hxx>
 #ifndef _SVX_CNTRITEM_HXX //autogen
-#include <svx/cntritem.hxx>
+#include <editeng/cntritem.hxx>
 #endif
-#include <svx/colritem.hxx>
-#include <svx/cscoitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/cscoitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
 #ifndef _SVX_EMPHITEM_HXX //autogen
-#include <svx/emphitem.hxx>
+#include <editeng/emphitem.hxx>
 #endif
-#include <svx/charscaleitem.hxx>
-#include <svx/charrotateitem.hxx>
-#include <svx/twolinesitem.hxx>
-#include <svx/charhiddenitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/charrotateitem.hxx>
+#include <editeng/twolinesitem.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <vcl/window.hxx>
 #include <charatr.hxx>

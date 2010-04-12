@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rtffly.cxx,v $
- * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,13 +33,13 @@
 #include <tools/cachestr.hxx>
 #include <svtools/rtftoken.h>
 #include <svl/itemiter.hxx>
-#include <svx/prntitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/prntitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <fmtfsize.hxx>
 #include <fmtanchr.hxx>
 #include <fmtpdsc.hxx>
@@ -70,7 +67,7 @@
 // --> OD 2004-06-30 #i27767#
 #include <fmtwrapinfluenceonobjpos.hxx>
 // <--
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <fmtfollowtextflow.hxx>
 // --> OD, FLR 2006-02-16 #131205#
 #include "dcontact.hxx"

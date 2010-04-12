@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: crstrvl.cxx,v $
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +31,9 @@
 
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/brkitem.hxx>
 #ifndef _SVX_SVDOBJ_HXX
 #include <svx/svdobj.hxx>
 #endif
@@ -1008,9 +1005,9 @@ BOOL SwCrsrShell::IsPageAtPos( const Point &rPt ) const
 }
 
 BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
-                                        SwContentAtPos& rCntntAtPos,
-                                        BOOL bSetCrsr,
-                                        SwRect* pFldRect )
+                                   SwContentAtPos& rCntntAtPos,
+                                   BOOL bSetCrsr,
+                                   SwRect* pFldRect )
 {
     SET_CURR_SHELL( this );
     BOOL bRet = FALSE;
@@ -1174,6 +1171,17 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                         bRet = TRUE;
                     }
                 }
+
+        if( !bRet && SwContentAtPos::SW_FORMCTRL & rCntntAtPos.eCntntAtPos )
+        {
+            IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess( );
+            sw::mark::IFieldmark* pFldBookmark = pMarksAccess->getFieldmarkFor( aPos );
+            if( bCrsrFoundExact && pTxtNd && pFldBookmark) {
+                rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_FORMCTRL;
+                rCntntAtPos.aFnd.pFldmark = pFldBookmark;
+                bRet=TRUE;
+            }
+        }
 
                 if( !bRet && SwContentAtPos::SW_FTN & rCntntAtPos.eCntntAtPos )
                 {
