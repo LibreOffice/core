@@ -1165,7 +1165,7 @@ function hCloseDialog( oDialog as object, sUserFlags as string ) as boolean
     endif
 
     ' Find out whether the dialog must exist (default) or is just closed as a precaution ("optional")
-    if ( instr( sFlags, "optional") > 0 ) then bDialogMustExist = FALSE
+    if ( instr( sFlags, "optional") ) then bDialogMustExist = FALSE
 
     if ( GVERBOSE ) then
         printlog( "Closing dialog <" & oDialog.name() & "> using the flags <" & sFlags & ">.")
@@ -1180,7 +1180,7 @@ function hCloseDialog( oDialog as object, sUserFlags as string ) as boolean
         case METHOD_YES    : oDialog.yes()
         case METHOD_NO     : oDialog.no()
         case else :
-            warnlog( CFN & " Script error: Allowed closing methods are <cancel>, <close> and <ok>." )
+            warnlog( CFN & " Script error: Allowed closing methods are cancel, close, ok, yes, no and 202" )
         end select
     else
         if ( bDialogMustExist ) then

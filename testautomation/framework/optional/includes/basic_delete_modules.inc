@@ -35,6 +35,8 @@ testcase tDeleteModulesAtRunningBasic
 
     printlog( "Delete BASIC module while BASIC is running" )
 
+    const RAISE_MESSAGEBOX = 1
+
     dim brc as boolean
     const MAX_WAIT = 3000
     dim iMenuItemCount as integer
@@ -54,7 +56,7 @@ testcase tDeleteModulesAtRunningBasic
     endif
 
     printlog( "Insert a short script (1. page)" )
-    brc = hInsertMacro( 1 )
+    brc = hInsertMacro( RAISE_MESSAGEBOX )
     if ( not brc ) then
         warnlog( "Unable to create a basic module for the document" )
         goto endsub

@@ -35,6 +35,7 @@ testcase tBasicIdeModuleHide
 
     
     const CFN = "tBasicIdeModuleHide::"
+    const RAISE_MESSAGEBOX = 1
 
     dim rc as integer
     dim brc as boolean
@@ -46,7 +47,7 @@ testcase tBasicIdeModuleHide
     ToolsMacro_uno
     hCreateModuleForDoc()
     
-    brc = hInsertMacro( 1 )
+    brc = hInsertMacro( RAISE_MESSAGEBOX )
     if ( brc ) then
        printlog( CFN & "Macro has been written successfully" )
     else
@@ -60,7 +61,7 @@ testcase tBasicIdeModuleHide
 
     try
         ' hTestMacro is expected to fail, so we jump to the catch statement
-        rc = hTestMacro( 1 )
+        rc = hTestMacro( RAISE_MESSAGEBOX )
         if ( rc = 0 ) then
             warnlog( "For some reason the original module is still visible" )
         else
@@ -80,7 +81,7 @@ testcase tBasicIdeModuleHide
         endcatch
         
          
-        rc = hTestMacro( 1 )
+        rc = hTestMacro( RAISE_MESSAGEBOX )
         if ( rc = 1 ) then
             printlog( " * the correct macro-module is open. Good." )
         else
