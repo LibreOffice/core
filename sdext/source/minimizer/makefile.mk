@@ -38,8 +38,8 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # set in minimizer.pmk
-#EXTENSIONNAME:=SunPresentationMinimizer
-EXTENSION_ZIPNAME:=sun-presentation-minimizer
+#EXTENSIONNAME:=PresentationMinimizer
+EXTENSION_ZIPNAME:=presentation-minimizer
 
 .IF "$(ENABLE_MINIMIZER)" != "YES"
 @all:
@@ -83,11 +83,8 @@ DEF1NAME=		$(SHL1TARGET)
 
 COMPONENT_MERGED_XCU= \
     $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/Addons.xcu \
-    $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/extension$/SunPresentationMinimizer.xcu \
-    $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/UI$/ImpressWindowState.xcu
-
-COMPONENT_XCU= \
-    $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/ProtocolHandler.xcu
+    $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/ProtocolHandler.xcu \
+    $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/extension$/SunPresentationMinimizer.xcu
 
 COMPONENT_FILES= \
     $(EXTENSIONDIR)$/registry$/schema$/org$/openoffice$/Office$/extension$/SunPresentationMinimizer.xcs
@@ -98,13 +95,16 @@ COMPONENT_LIBRARIES= \
 
 # rather freestyle or common to all?
 COMPONENT_BITMAPS= \
-    $(EXTENSIONDIR)$/bitmaps$/aboutlogo.png \
     $(EXTENSIONDIR)$/bitmaps$/opt_16.png \
     $(EXTENSIONDIR)$/bitmaps$/opt_26.png \
     $(EXTENSIONDIR)$/bitmaps$/opt_16_h.png \
     $(EXTENSIONDIR)$/bitmaps$/opt_26_h.png \
     $(EXTENSIONDIR)$/bitmaps$/minimizepresi_80.png \
     $(EXTENSIONDIR)$/bitmaps$/minimizepresi_80_h.png
+
+COMPONENT_IMAGES=\
+    $(EXTENSIONDIR)$/bitmaps$/em47.png \
+    $(EXTENSIONDIR)$/bitmaps$/em47_hc.png
 
 # rather freestyle or common to all?
 COMPONENT_HELP= \
@@ -113,7 +113,7 @@ COMPONENT_HELP= \
     $(EXTENSIONDIR)$/help$/component.txt
 
 # make sure to add your custom files here
-EXTENSION_PACKDEPS=$(COMPONENT_BITMAPS) $(COMPONENT_HELP)
+EXTENSION_PACKDEPS=$(COMPONENT_BITMAPS) $(COMPONENT_IMAGES) $(COMPONENT_HELP)
 
 # --- Targets ----------------------------------
 
@@ -126,6 +126,10 @@ EXTENSION_PACKDEPS=$(COMPONENT_BITMAPS) $(COMPONENT_HELP)
 .INCLUDE : extension_post.mk
 
 $(COMPONENT_BITMAPS) : $(SOLARSRC)$/$(RSCDEFIMG)$/minimizer$/$$(@:f)
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+
+$(COMPONENT_IMAGES) : images$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
