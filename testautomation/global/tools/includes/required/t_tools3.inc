@@ -1073,6 +1073,8 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "toolsupdatelinks"               : ToolsUpdateLinks
             case "toolslanguagehangulhanjaconversion" : ToolsLanguageHangulHanjaConversion
 
+            case "viewzoom"                       : ViewZoom
+
             case else : warnlog( "Unknown slot called: " & cSlot )
             end select
 

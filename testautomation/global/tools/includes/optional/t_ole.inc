@@ -33,22 +33,24 @@
 
 function hGetOfficeVersion() as string
 
-    dim cPath as string
-    dim aItemList( 20 ) as string
-    
     const CFN = "global::tools::includes::optional::t_ole.inc::hGetOfficeVersion(): "
+    const DATAFILE = "global/input/officeinfo.txt"
+    const MAX_LINES_IN_DATAFILE = 20
 
+    dim cPath as string
+    dim aItemList( MAX_LINES_IN_DATAFILE ) as string
+    
     ' Path to info file
-    cPath = convertpath( gTesttoolPath & "global/input/officeinfo.txt" )
+    cPath = convertpath( gTesttoolPath & DATAFILE )
     if ( GVERBOSE ) then printlog( CFN & "Reading: " & cPath )
     
-    ' Read the file
+    ' Read the file, store the list of known office versions
     hGetDatafileSection( cPath, aItemList(), "", "", "" )
     
-    ' Set global variable
+    ' Search for the version number matching the product name, store value in global variable
     gOfficeVersion = hGetValueForKeyAsString( aItemList(), gProductName )
     
-    ' Set returnvalue
+    ' Return content of the global variable as well
     hGetOfficeVersion() = gOfficeVersion
     
 end function
@@ -68,7 +70,8 @@ function hGetOleObjectName( cApplication as string ) as string
     dim cString as string
 
     const CFN = "global::tools::includes::optional::t_ole.inc::hGetOleObjectName(): "
-    
+
+    ' The application names for the API are case sensitive so we cannot use gApplication
     select case ( cApplication )
     case "WRITER" : Application_API_Name = "Writer
     case "CALC"   : Application_API_Name = "Calc"
