@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: datanavi.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1611,7 +1608,7 @@ namespace svxform
         DBG_ASSERT( pBindings != NULL,
                     "DataNavigatorWindow::LoadModels(): no SfxBindings; can't get frame" );
         m_xFrame = Reference<XFrame>(
-            pBindings->GetDispatcher()->GetFrame()->GetFrame()->GetFrameInterface(),
+            pBindings->GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface(),
             UNO_QUERY );
         DBG_ASSERT( m_xFrame.is(), "DataNavigatorWindow::LoadModels(): no frame" );
         // add frameaction listener

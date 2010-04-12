@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: contourextractor2d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.6 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -43,13 +35,14 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
-#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <drawinglayer/processor3d/cutfindprocessor3d.hxx>
+#include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
+#include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -66,7 +59,7 @@ namespace drawinglayer
             mfDiscreteHitTolerance(0.0),
             mbHit(false),
             mbHitToleranceUsed(false),
-            mbUseHitTestPrimitiveContent(true),
+            mbUseInvisiblePrimitiveContent(true),
             mbHitTextOnly(bHitTextOnly)
         {
             // init hit tolerance
@@ -247,7 +240,7 @@ namespace drawinglayer
                 if(!getHit())
                 {
                     // empty 3D scene; Check for border hit
-                    basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                    basegfx::B2DPolygon aOutline(basegfx::tools::createUnitPolygon());
                     aOutline.transform(rCandidate.getObjectTransformation());
 
                     mbHit = checkHairlineHitWithTolerance(aOutline, getDiscreteHitTolerance());
@@ -420,10 +413,10 @@ namespace drawinglayer
 
                     break;
                 }
-                case PRIMITIVE2D_ID_ALPHAPRIMITIVE2D :
+                case PRIMITIVE2D_ID_TRANSPARENCEPRIMITIVE2D :
                 {
                     // sub-transparence group
-                    const primitive2d::AlphaPrimitive2D& rTransCandidate(static_cast< const primitive2d::AlphaPrimitive2D& >(rCandidate));
+                    const primitive2d::TransparencePrimitive2D& rTransCandidate(static_cast< const primitive2d::TransparencePrimitive2D& >(rCandidate));
 
                     // Currently the transparence content is not taken into account; only
                     // the children are recursively checked for hit. This may be refined for
@@ -487,6 +480,49 @@ namespace drawinglayer
                     break;
                 }
                 case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
+                {
+                    if(!getHitTextOnly())
+                    {
+                        // The recently added BitmapEx::GetTransparency() makes it easy to extend
+                        // the BitmapPrimitive2D HitTest to take the contained BotmapEx and it's
+                        // transparency into account
+                        const basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
+
+                        if(!aRange.isEmpty())
+                        {
+                            const primitive2d::BitmapPrimitive2D& rBitmapCandidate(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
+                            const BitmapEx& rBitmapEx = rBitmapCandidate.getBitmapEx();
+                            const Size& rSizePixel(rBitmapEx.GetSizePixel());
+
+                            if(rSizePixel.Width() && rSizePixel.Height())
+                            {
+                                basegfx::B2DHomMatrix aBackTransform(
+                                    getViewInformation2D().getObjectToViewTransformation() *
+                                    rBitmapCandidate.getTransform());
+                                aBackTransform.invert();
+
+                                const basegfx::B2DPoint aRelativePoint(aBackTransform * getDiscreteHitPosition());
+                                const basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
+
+                                if(aUnitRange.isInside(aRelativePoint))
+                                {
+                                    const sal_Int32 nX(basegfx::fround(aRelativePoint.getX() * rSizePixel.Width()));
+                                    const sal_Int32 nY(basegfx::fround(aRelativePoint.getY() * rSizePixel.Height()));
+
+                                    mbHit = (0xff != rBitmapEx.GetTransparency(nX, nY));
+                                }
+                            }
+                            else
+                            {
+                                // fallback to standard HitTest
+                                const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+                                mbHit = checkFillHitWithTolerance(basegfx::B2DPolyPolygon(aOutline), getDiscreteHitTolerance());
+                            }
+                        }
+                    }
+
+                    break;
+                }
                 case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
                 case PRIMITIVE2D_ID_CONTROLPRIMITIVE2D :
                 case PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D :
@@ -499,7 +535,7 @@ namespace drawinglayer
                         // will be used for HitTest currently.
                         //
                         // This may be refined in the future, e.g:
-                        // - For Bitamps, the mask and/or alpha information may be used
+                        // - For Bitamps, the mask and/or transparence information may be used
                         // - For MetaFiles, the MetaFile content may be used
                         const basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
 
@@ -512,15 +548,20 @@ namespace drawinglayer
 
                     break;
                 }
-                case PRIMITIVE2D_ID_HITTESTPRIMITIVE2D :
+                case PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D :
                 {
-                    // HitTest primitive; the default decomposition would return an empty seqence,
+                    // HiddenGeometryPrimitive2D; the default decomposition would return an empty seqence,
                     // so force this primitive to process it's children directly if the switch is set
                     // (which is the default). Else, ignore invisible content
-                    if(getUseHitTestPrimitiveContent())
+                    const primitive2d::HiddenGeometryPrimitive2D& rHiddenGeometry(static_cast< const primitive2d::HiddenGeometryPrimitive2D& >(rCandidate));
+                       const primitive2d::Primitive2DSequence& rChildren = rHiddenGeometry.getChildren();
+
+                    if(rChildren.hasElements())
                     {
-                        const primitive2d::HitTestPrimitive2D& rHitTestCandidate(static_cast< const primitive2d::HitTestPrimitive2D& >(rCandidate));
-                        process(rHitTestCandidate.getChildren());
+                        if(getUseInvisiblePrimitiveContent())
+                        {
+                            process(rChildren);
+                        }
                     }
 
                     break;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdoedge.hxx,v $
- * $Revision: 1.5.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,19 +157,16 @@ public:
 class SVX_DLLPUBLIC SdrEdgeObj : public SdrTextObj
 {
 private:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
     // to allow sdr::properties::ConnectorProperties access to ImpSetAttrToEdgeInfo()
     friend class sdr::properties::ConnectorProperties;
 
     friend class                SdrCreateView;
     friend class                ImpEdgeHdl;
 
-    // DrawContact section
-private:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
 protected:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+
     SdrObjConnection            aCon1;  // Verbindungszustand des Linienanfangs
     SdrObjConnection            aCon2;  // Verbindungszustand des Linienendes
 

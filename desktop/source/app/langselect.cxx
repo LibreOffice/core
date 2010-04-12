@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: langselect.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,15 +30,14 @@
 
 #include "app.hxx"
 #include "langselect.hxx"
+#include "cmdlineargs.hxx"
 #include <stdio.h>
 
-#ifndef _RTL_STRING_HXX
 #include <rtl/string.hxx>
-#endif
-#ifndef _SVTOOLS_PATHOPTIONS_HXX
+#include <rtl/bootstrap.hxx>
 #include <unotools/pathoptions.hxx>
-#endif
 #include <tools/resid.hxx>
+#include <tools/config.hxx>
 #include <i18npool/mslangid.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -55,6 +51,7 @@
 #include <rtl/locale.hxx>
 #include <rtl/instance.hxx>
 #include <osl/process.h>
+#include <osl/file.hxx>
 
 using namespace rtl;
 using namespace com::sun::star::uno;
@@ -65,9 +62,53 @@ using namespace com::sun::star::util;
 
 namespace desktop {
 
+static char const SOFFICE_BOOTSTRAP[] = "Bootstrap";
+static char const SOFFICE_STARTLANG[] = "STARTLANG";
 sal_Bool LanguageSelection::bFoundLanguage = sal_False;
 OUString LanguageSelection::aFoundLanguage;
 const OUString LanguageSelection::usFallbackLanguage = OUString::createFromAscii("en-US");
+
+
+static sal_Bool existsURL( OUString const& sURL )
+{
+    using namespace osl;
+    DirectoryItem aDirItem;
+
+    if (sURL.getLength() != 0)
+        return ( DirectoryItem::get( sURL, aDirItem ) == DirectoryItem::E_None );
+
+    return sal_False;
+}
+
+// locate soffice.ini/.rc file
+static OUString locateSofficeIniFile()
+{
+    OUString aUserDataPath;
+    OUString aSofficeIniFileURL;
+
+    // Retrieve the default file URL for the soffice.ini/rc
+    rtl::Bootstrap().getIniName( aSofficeIniFileURL );
+
+    if ( utl::Bootstrap::locateUserData( aUserDataPath ) == utl::Bootstrap::PATH_EXISTS )
+    {
+        const char CONFIG_DIR[] = "/config";
+
+        sal_Int32 nIndex = aSofficeIniFileURL.lastIndexOf( '/');
+        if ( nIndex > 0 )
+        {
+            OUString        aUserSofficeIniFileURL;
+            OUStringBuffer  aBuffer( aUserDataPath );
+            aBuffer.appendAscii( CONFIG_DIR );
+            aBuffer.append( aSofficeIniFileURL.copy( nIndex ));
+            aUserSofficeIniFileURL = aBuffer.makeStringAndClear();
+
+            if ( existsURL( aUserSofficeIniFileURL ))
+                return aUserSofficeIniFileURL;
+        }
+    }
+    // Fallback try to use the soffice.ini/rc from program folder
+    return aSofficeIniFileURL;
+}
 
 Locale LanguageSelection::IsoStringToLocale(const OUString& str)
 {
@@ -122,8 +163,51 @@ bool LanguageSelection::prepareLanguage()
     catch (Exception&)
     {
     }
+
     // get the selected UI language as string
-    OUString aLocaleString = getLanguageString();
+    bool     bCmdLanguage( false );
+    bool     bIniLanguage( false );
+    OUString aEmpty;
+    OUString aLocaleString = getUserUILanguage();
+
+    if ( aLocaleString.getLength() == 0 )
+    {
+        CommandLineArgs* pCmdLineArgs = Desktop::GetCommandLineArgs();
+        if ( pCmdLineArgs )
+        {
+            pCmdLineArgs->GetLanguage(aLocaleString);
+            if (isInstalledLanguage(aLocaleString, sal_False))
+            {
+                bCmdLanguage   = true;
+                bFoundLanguage = true;
+                aFoundLanguage = aLocaleString;
+            }
+            else
+                aLocaleString = aEmpty;
+        }
+
+        if ( !bCmdLanguage )
+        {
+            OUString aSOfficeIniURL = locateSofficeIniFile();
+            Config aConfig(aSOfficeIniURL);
+            aConfig.SetGroup( SOFFICE_BOOTSTRAP );
+            OString sLang = aConfig.ReadKey( SOFFICE_STARTLANG );
+            aLocaleString = OUString( sLang.getStr(), sLang.getLength(), RTL_TEXTENCODING_ASCII_US );
+            if (isInstalledLanguage(aLocaleString, sal_False))
+            {
+                bIniLanguage   = true;
+                bFoundLanguage = true;
+                aFoundLanguage = aLocaleString;
+            }
+            else
+                aLocaleString = aEmpty;
+        }
+    }
+
+    // user further fallbacks for the UI language
+    if ( aLocaleString.getLength() == 0 )
+        aLocaleString = getLanguageString();
+
     if ( aLocaleString.getLength() > 0 )
     {
         try
@@ -140,8 +224,20 @@ bool LanguageSelection::prepareLanguage()
             theConfigProvider->setLocale(loc);
 
             Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.Setup/L10N/", sal_True), UNO_QUERY_THROW);
-            xProp->setPropertyValue(OUString::createFromAscii("ooLocale"), makeAny(aLocaleString));
-            Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
+            if ( !bCmdLanguage )
+            {
+                // Store language only
+                xProp->setPropertyValue(OUString::createFromAscii("ooLocale"), makeAny(aLocaleString));
+                Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
+            }
+
+            if ( bIniLanguage )
+            {
+                // Store language only
+                Reference< XPropertySet > xProp2(getConfigAccess("org.openoffice.Office.Linguistic/General/", sal_True), UNO_QUERY_THROW);
+                xProp2->setPropertyValue(OUString::createFromAscii("UILocale"), makeAny(aLocaleString));
+                Reference< XChangesBatch >(xProp2, UNO_QUERY_THROW)->commitChanges();
+            }
 
             MsLangId::setConfiguredSystemUILanguage( MsLangId::convertLocaleToLanguage(loc) );
 
@@ -149,7 +245,7 @@ bool LanguageSelection::prepareLanguage()
             xProp->getPropertyValue(OUString::createFromAscii("ooSetupSystemLocale")) >>= sLocale;
             if ( sLocale.getLength() )
             {
-                loc = LanguageSelection::IsoStringToLocale(aLocaleString);
+                loc = LanguageSelection::IsoStringToLocale(sLocale);
                 MsLangId::setConfiguredSystemLanguage( MsLangId::convertLocaleToLanguage(loc) );
             }
             else
@@ -200,11 +296,8 @@ void LanguageSelection::setDefaultLanguage(const OUString& sLocale)
     }
 }
 
-OUString LanguageSelection::getLanguageString()
+OUString LanguageSelection::getUserUILanguage()
 {
-    // did we already find a language?
-    if (bFoundLanguage)
-        return aFoundLanguage;
     // check whether the user has selected a specific language
     OUString aUserLanguage = getUserLanguage();
     if (aUserLanguage.getLength() > 0 )
@@ -222,6 +315,21 @@ OUString LanguageSelection::getLanguageString()
             resetUserLanguage();
         }
     }
+
+    return aUserLanguage;
+}
+
+OUString LanguageSelection::getLanguageString()
+{
+    // did we already find a language?
+    if (bFoundLanguage)
+        return aFoundLanguage;
+
+    // check whether the user has selected a specific language
+    OUString aUserLanguage = getUserUILanguage();
+    if (aUserLanguage.getLength() > 0 )
+        return aUserLanguage ;
+
     // try to use system default
     aUserLanguage = getSystemLanguage();
     if (aUserLanguage.getLength() > 0 )

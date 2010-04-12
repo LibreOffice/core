@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: checkediterator.hxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -141,7 +138,7 @@ class CheckedIterator
 
             if( m_eEndState == E_UNKNOWN )
             {
-                // Set new container and actualize other member.
+                // Set new container and update other member.
                 m_pContainer = &rContainer          ;
                 m_eEndState  = E_BEFOREEND          ;
                 m_pPosition  = m_pContainer->begin();

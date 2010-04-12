@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: zbufferprocessor3d.hxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.4 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:30:18 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -58,6 +50,7 @@ namespace drawinglayer {
 }
 
 class ZBufferRasterConverter3D;
+class RasterPrimitive3D;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -65,36 +58,39 @@ namespace drawinglayer
 {
     namespace processor3d
     {
+        /** ZBufferProcessor3D class
+
+            This 3D renderer derived from DefaultProcessor3D renders all feeded primitives to a 2D
+            raster bitmap using a Z-Buffer based approach. It is able to supersample and to handle
+            transparent content.
+         */
         class ZBufferProcessor3D : public DefaultProcessor3D
         {
         private:
-            // the raster target, a Z-Buffer
+            /// the raster target, a Z-Buffer
             basegfx::BZPixelRaster*                             mpBZPixelRaster;
 
-            // inverse of EyeToView for rasterconversion with evtl. Phong shading
+            /// inverse of EyeToView for rasterconversion with evtl. Phong shading
             basegfx::B3DHomMatrix                               maInvEyeToView;
 
-            // The raster converter for Z-Buffer
+            /// The raster converter for Z-Buffer
             ZBufferRasterConverter3D*                           mpZBufferRasterConverter3D;
 
-            // AA value. Defines how many oversámples will be used in X and Y. Values 0, 1
-            // will switch it off while e.g. 2 will use 2x2 pixels for each pixel to create
+            /*  AA value. Defines how many oversámples will be used in X and Y. Values 0, 1
+                will switch it off while e.g. 2 will use 2x2 pixels for each pixel to create
+              */
             sal_uInt16                                          mnAntiAlialize;
 
-            // bitfield
-            // a combination of bools to allow two-pass rendering to render
-            // the transparent parts in the 2nd run (if any) as needed for Z-Buffer
-            unsigned                                            mbProcessTransparent : 1;
-            unsigned                                            mbContainsTransparent : 1;
-
+            /*  remembered RasterPrimitive3D's which need to be painted back to front
+                for transparent 3D parts
+             */
+            std::vector< RasterPrimitive3D >*                   mpRasterPrimitive3Ds;
 
             //////////////////////////////////////////////////////////////////////////////
             // rasterconversions for filled and non-filled polygons
+
             virtual void rasterconvertB3DPolygon(const attribute::MaterialAttribute3D& rMaterial, const basegfx::B3DPolygon& rHairline) const;
             virtual void rasterconvertB3DPolyPolygon(const attribute::MaterialAttribute3D& rMaterial, const basegfx::B3DPolyPolygon& rFill) const;
-
-            // the processing method for a single, known primitive
-            virtual void processBasePrimitive3D(const primitive3d::BasePrimitive3D& rBasePrimitive);
 
         public:
             ZBufferProcessor3D(
@@ -108,14 +104,9 @@ namespace drawinglayer
                 sal_uInt16 nAntiAlialize);
             virtual ~ZBufferProcessor3D();
 
-            // helpers for drawing transparent parts in 2nd run. To use this
-            // processor, call processNonTransparent and then processTransparent
-            // with the same primitives. The 2nd call will only do something,
-            // when transparent parts are contained
-            void processNonTransparent(const primitive3d::Primitive3DSequence& rSource);
-            void processTransparent(const primitive3d::Primitive3DSequence& rSource);
+            void finish();
 
-            // get the result as bitmapEx
+            /// get the result as bitmapEx
             BitmapEx getBitmapEx() const;
         };
     } // end of namespace processor3d

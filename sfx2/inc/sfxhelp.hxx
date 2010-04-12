@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sfxhelp.hxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +47,7 @@ class SFX2_DLLPUBLIC SfxHelp : public Help
 private:
     SAL_DLLPRIVATE virtual BOOL Start( ULONG nHelpId, const Window* pWindow );
     SAL_DLLPRIVATE virtual BOOL Start( const String& rURL, const Window* pWindow );
+    SAL_DLLPRIVATE virtual void OpenHelpAgent( ULONG nHelpId );
 
     SAL_DLLPRIVATE String GetHelpModuleName_Impl();
     SAL_DLLPRIVATE String CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName );

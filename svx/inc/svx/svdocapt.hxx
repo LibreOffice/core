@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdocapt.hxx,v $
- * $Revision: 1.4.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,19 +60,16 @@ public:
 
 class SVX_DLLPUBLIC SdrCaptionObj : public SdrRectObj
 {
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 private:
-
     // to allow sdr::properties::CaptionProperties access to ImpRecalcTail()
     friend class sdr::properties::CaptionProperties;
-
     friend class                SdrTextObj; // fuer ImpRecalcTail() bei AutoGrow
 
 protected:
-    // DrawContact section
-private:
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
+private:
     Polygon                     aTailPoly;  // das ganze Polygon des Schwanzes
     sal_Bool                    mbSpecialTextBoxShadow; // for calc special shadow, default FALSE
     sal_Bool                    mbFixedTail; // for calc note box fixed tail, default FALSE

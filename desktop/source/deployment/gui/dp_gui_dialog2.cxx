@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dp_gui_dialog2.cxx,v $
- *
- * $Revision: 1.8.4.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,8 +90,7 @@ using ::rtl::OUString;
 
 namespace dp_gui {
 
-#define ICON_OFFSET         50
-#define TOP_OFFSET           3
+#define TOP_OFFSET           5
 #define LINE_SIZE            4
 #define PROGRESS_WIDTH      60
 #define PROGRESS_HEIGHT     14
@@ -766,12 +761,6 @@ ExtMgrDialog::~ExtMgrDialog()
 {
     m_aTimeoutTimer.Stop();
     delete m_pExtensionBox;
-}
-
-//------------------------------------------------------------------------------
-void ExtMgrDialog::selectEntry( long nPos )
-{
-    m_pExtensionBox->selectEntry( nPos );
 }
 
 //------------------------------------------------------------------------------

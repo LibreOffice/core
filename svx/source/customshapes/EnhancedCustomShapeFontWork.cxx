@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: EnhancedCustomShapeFontWork.cxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,19 +40,19 @@
 #include <vcl/virdev.hxx>
 #include <svditer.hxx>
 #include <vcl/metric.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <fontitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/charscaleitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/charscaleitem.hxx>
 #include "EnhancedCustomShapeTypeNames.hxx"
 #include <svx/svdorect.hxx>
 #include <svx/svdoashp.hxx>
-#include <svx/outliner.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/svdmodel.hxx>
 #include <vector>
 #include <numeric>

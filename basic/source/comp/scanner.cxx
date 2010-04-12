@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scanner.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -479,15 +476,15 @@ PrevLineCommentLbl:
 eoln:
     if( nCol && *--pLine == '_' )
     {
-        pLine = NULL; 
+        pLine = NULL;
         bool bRes = NextSym();
         if( bVBASupportOn && aSym.GetBuffer()[0] == '.' )
         {
             // object _
             //    .Method
             // ^^^  <- spaces is legal in MSO VBA
-            OSL_TRACE("*** resetting bSpaces***"); 
-            bSpaces = FALSE; 
+            OSL_TRACE("*** resetting bSpaces***");
+            bSpaces = FALSE;
         }
         return bRes;
     }

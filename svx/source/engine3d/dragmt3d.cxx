@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dragmt3d.cxx,v $
- * $Revision: 1.12.18.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,8 +67,33 @@ E3dDragMethod::E3dDragMethod (
     // eine Unit anlegen
     const long nCnt(rMark.GetMarkCount());
     static bool bDoInvalidate(false);
+    long nObjs(0);
 
-    for(long nObjs = 0;nObjs < nCnt;nObjs++)
+    if(mbMoveFull)
+    {
+        // for non-visible 3D objects fallback to wireframe interaction
+        bool bInvisibleObjects(false);
+
+        for(nObjs = 0;!bInvisibleObjects && nObjs < nCnt;nObjs++)
+        {
+            E3dObject* pE3dObj = dynamic_cast< E3dObject* >(rMark.GetMark(nObjs)->GetMarkedSdrObj());
+
+            if(pE3dObj)
+            {
+                if(!pE3dObj->HasFillStyle() && !pE3dObj->HasLineStyle())
+                {
+                    bInvisibleObjects = true;
+                }
+            }
+        }
+
+        if(bInvisibleObjects)
+        {
+            mbMoveFull = false;
+        }
+    }
+
+    for(nObjs = 0;nObjs < nCnt;nObjs++)
     {
         E3dObject* pE3dObj = dynamic_cast< E3dObject* >(rMark.GetMark(nObjs)->GetMarkedSdrObj());
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdograf.hxx,v $
- * $Revision: 1.5.18.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <vcl/graph.hxx>
 #include <svx/svdorect.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include "svx/svxdllapi.h"
 
 //////////////////////////////////////////////////////////////////////////////
@@ -88,22 +85,16 @@ class SdrGraphicLink;
 class SVX_DLLPUBLIC SdrGrafObj : public SdrRectObj
 {
 private:
-    // BaseProperties section
-    SVX_DLLPRIVATE virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
-    // DrawContact section
-private:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
     // to allow sdr::properties::GraphicProperties access to SetXPolyDirty()
     friend class sdr::properties::GraphicProperties;
 
     // to allow sdr::contact::ViewObjectContactOfGraphic access to ImpUpdateGraphicLink()
     friend class sdr::contact::ViewObjectContactOfGraphic;
-
     friend class SdrGraphicLink;
 
 protected:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
     void                    ImpSetAttrToGrafInfo(); // Werte vom Pool kopieren
     void                    ImpSetGrafInfoToAttr(); // Werte in den Pool kopieren

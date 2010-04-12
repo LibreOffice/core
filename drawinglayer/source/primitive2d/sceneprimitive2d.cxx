@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: sceneprimitive2d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.16 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -156,8 +148,10 @@ namespace drawinglayer
             if(impGetShadow3D(rViewInformation))
             {
                 // test visibility
-                const basegfx::B2DRange aShadow2DRange(getB2DRangeFromPrimitive2DSequence(maShadowPrimitives, rViewInformation));
-                const basegfx::B2DRange aViewRange(rViewInformation.getViewport());
+                const basegfx::B2DRange aShadow2DRange(
+                    getB2DRangeFromPrimitive2DSequence(maShadowPrimitives, rViewInformation));
+                const basegfx::B2DRange aViewRange(
+                    rViewInformation.getViewport());
 
                 if(aViewRange.isEmpty() || aShadow2DRange.overlaps(aViewRange))
                 {
@@ -170,6 +164,7 @@ namespace drawinglayer
             basegfx::B2DRange aDiscreteRange;
             basegfx::B2DRange aVisibleDiscreteRange;
             basegfx::B2DRange aUnitVisibleRange;
+
             calculateDiscreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
 
             if(!aVisibleDiscreteRange.isEmpty())
@@ -235,8 +230,9 @@ namespace drawinglayer
                     aUnitVisibleRange,
                     nOversampleValue);
 
-                aZBufferProcessor3D.processNonTransparent(getChildren3D());
-                aZBufferProcessor3D.processTransparent(getChildren3D());
+                aZBufferProcessor3D.process(getChildren3D());
+                aZBufferProcessor3D.finish();
+
                 const_cast< ScenePrimitive2D* >(this)->maOldRenderedBitmap = aZBufferProcessor3D.getBitmapEx();
                 const Size aBitmapSizePixel(maOldRenderedBitmap.GetSizePixel());
 
@@ -262,7 +258,7 @@ namespace drawinglayer
 
                     if(bAddOutlineToCreated3DSceneRepresentation)
                     {
-                        basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                        basegfx::B2DPolygon aOutline(basegfx::tools::createUnitPolygon());
                         aOutline.transform(aNew2DTransform);
                         const Primitive2DReference xRef2(new PolygonHairlinePrimitive2D(aOutline, basegfx::BColor(1.0, 0.0, 0.0)));
                         appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, xRef2);
