@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WCopyTable.cxx,v $
- * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -709,7 +706,7 @@ OCopyTableWizard::OCopyTableWizard( Window* pParent, const ::rtl::OUString& _rDe
     ::dbaui::fillTypeInfo( _xConnection, m_sTypeNames, m_aTypeInfo, m_aTypeInfoIndex );
     ::dbaui::fillTypeInfo( _xConnection, m_sTypeNames, m_aDestTypeInfo, m_aDestTypeInfoIndex );
 
-    m_xInteractionHandler.set( m_xFactory->createInstance( SERVICE_SDB_INTERACTION_HANDLER ), UNO_QUERY);
+    m_xInteractionHandler.set( m_xFactory->createInstance( SERVICE_TASK_INTERACTION_HANDLER ), UNO_QUERY);
 
     OCopyTable* pPage1( new OCopyTable( this ) );
     pPage1->disallowViews();

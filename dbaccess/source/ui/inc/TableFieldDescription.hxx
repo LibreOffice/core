@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TableFieldDescription.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,13 +44,19 @@
 #include <vos/ref.hxx>
 #endif
 
+namespace comphelper
+{
+    class NamedValueCollection;
+}
+
 class Window;
 namespace dbaui
 {
     class OTableFieldDesc : public ::vos::OReference
     {
     private:
-        ::std::vector< ::rtl::OUString> m_vecCriteria;
+       ::std::vector< ::rtl::OUString >
+                                    m_aCriteria;
 
         ::rtl::OUString             m_aTableName;
         ::rtl::OUString             m_aAliasName;       // table range
@@ -131,18 +134,18 @@ namespace dbaui
 
         sal_Bool                HasCriteria()       const
         {
-            ::std::vector< ::rtl::OUString>::const_iterator aIter = m_vecCriteria.begin();
-            ::std::vector< ::rtl::OUString>::const_iterator aEnd = m_vecCriteria.end();
+            ::std::vector< ::rtl::OUString>::const_iterator aIter = m_aCriteria.begin();
+            ::std::vector< ::rtl::OUString>::const_iterator aEnd = m_aCriteria.end();
             for(;aIter != aEnd;++aIter)
                 if(aIter->getLength())
                     break;
             return aIter != aEnd;
         }
 
-        const ::std::vector< ::rtl::OUString>&  GetCriteria() const { return m_vecCriteria;}
+        const ::std::vector< ::rtl::OUString>&  GetCriteria() const { return m_aCriteria; }
 
-        void Load(const ::com::sun::star::beans::PropertyValue& _rProperty);
-        void Save(::com::sun::star::beans::PropertyValue& _rProperty);
+        void Load( const ::com::sun::star::beans::PropertyValue& i_rSettings, const bool i_bIncludingCriteria );
+        void Save( ::comphelper::NamedValueCollection& o_rSettings, const bool i_bIncludingCriteria );
     };
 
     //------------------------------------------------------------------

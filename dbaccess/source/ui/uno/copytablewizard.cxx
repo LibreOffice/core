@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: copytablewizard.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1521,7 +1518,7 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments ) 
                 );
         }
         if ( !m_xInteractionHandler.is() )
-            m_xInteractionHandler.set( m_aContext.createComponent( "com.sun.star.sdb.InteractionHandler" ), UNO_QUERY_THROW );
+            m_xInteractionHandler.set( m_aContext.createComponent( "com.sun.star.task.InteractionHandler" ), UNO_QUERY_THROW );
 
         InteractionHandler xSourceDocHandler;
         Reference< XPropertySet > xSourceDescriptor( impl_ensureDataAccessDescriptor_throw( _rArguments, 0, m_xSourceConnection, xSourceDocHandler ) );

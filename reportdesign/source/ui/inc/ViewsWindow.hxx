@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ViewsWindow.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -226,7 +223,7 @@ namespace rptui
         *
         * \return <TRUE/> if paste is allowed
         */
-        BOOL IsPasteAllowed();
+        BOOL IsPasteAllowed() const;
 
         /** paste a new control in this section
         */
@@ -243,7 +240,7 @@ namespace rptui
 
         /** returns <TRUE/> when a object is marked
         */
-        BOOL HasSelection();
+        BOOL HasSelection() const;
 
         /** unmark all objects on the views without the given one.
         *

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DbAdminImpl.hxx,v $
- * $Revision: 1.10.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -140,6 +137,7 @@ namespace dbaui
         /** return the corresponding driver for the selected URL
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >         getDriver();
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >         getDriver(const ::rtl::OUString& _sURL);
 
         /** returns the data source the dialog is currently working with
         */

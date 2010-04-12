@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: JoinController.hxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,6 +49,11 @@
 #endif
 #include <boost/shared_ptr.hpp>
 
+namespace comphelper
+{
+    class NamedValueCollection;
+}
+
 class VCLXWindow;
 namespace dbaui
 {
@@ -82,22 +84,22 @@ namespace dbaui
         virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
         /** loads the information for the windows.
-            @param  _aViewProps
+            @param  i_rViewSettings
                 The properties which comes from the layout information.
         */
-        void loadTableWindows(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _aViewProps);
+        void loadTableWindows( const ::comphelper::NamedValueCollection& i_rViewSettings );
 
         /** loads the information for one window.
             @param  _rTable
                 The properties which comes from the layout information.
         */
-        void loadTableWindow(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rTable);
+        void loadTableWindow( const ::comphelper::NamedValueCollection& i_rTableWindowSettings );
 
         /** saves the TableWindows structure in a sequence of property values
             @param  _rViewProps
                 Contains the new sequence.
         */
-        void saveTableWindows(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rViewProps);
+        void saveTableWindows( ::comphelper::NamedValueCollection& o_rViewSettings ) const;
 
         virtual ~OJoinController();
     public:
@@ -112,7 +114,7 @@ namespace dbaui
         // ---------------------------------------------------------------
         // OSingleDocumentController overridables
         virtual void        reconnect( sal_Bool _bUI );
-        virtual void        setModified( sal_Bool _bModified = sal_True );
+        virtual void        impl_onModifyChanged();
 
         // ---------------------------------------------------------------
         // own overridables

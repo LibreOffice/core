@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: genericcontroller.cxx,v $
- * $Revision: 1.94.24.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -251,6 +248,7 @@ DBG_NAME(OGenericUnoController)
 // -------------------------------------------------------------------------
 OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFactory >& _rM)
     :OGenericUnoController_Base( getMutex() )
+    ,m_pView(NULL)
 #ifdef DBG_UTIL
     ,m_bDescribingSupportedFeatures( false )
 #endif
@@ -258,7 +256,6 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
     ,m_aAsyncCloseTask(LINK(this, OGenericUnoController, OnAsyncCloseTask))
     ,m_xServiceFactory(_rM)
     ,m_aCurrentFrame( *this )
-    ,m_pView(NULL)
     ,m_bPreview(sal_False)
     ,m_bReadOnly(sal_False)
     ,m_bCurrentlyModified(sal_False)
@@ -286,13 +283,13 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
 // -----------------------------------------------------------------------------
 OGenericUnoController::OGenericUnoController()
     :OGenericUnoController_Base( getMutex() )
+    ,m_pView(NULL)
 #ifdef DBG_UTIL
     ,m_bDescribingSupportedFeatures( false )
 #endif
     ,m_aAsyncInvalidateAll(LINK(this, OGenericUnoController, OnAsyncInvalidateAll))
     ,m_aAsyncCloseTask(LINK(this, OGenericUnoController, OnAsyncCloseTask))
     ,m_aCurrentFrame( *this )
-    ,m_pView(NULL)
     ,m_bPreview(sal_False)
     ,m_bReadOnly(sal_False)
     ,m_bCurrentlyModified(sal_False)
@@ -415,7 +412,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
         // no one clears my view if I won't
         ::std::auto_ptr<Window> aTemp(m_pView);
         m_pView = NULL;
-        throw e;
+        throw;
     }
 }
 
@@ -477,6 +474,14 @@ Reference< XWindow > SAL_CALL OGenericUnoController::getComponentWindow() throw 
 ::rtl::OUString SAL_CALL OGenericUnoController::getViewControllerName() throw (::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Default" ) );
+}
+
+// -----------------------------------------------------------------------
+Sequence< PropertyValue > SAL_CALL OGenericUnoController::getCreationArguments() throw (RuntimeException)
+{
+    // currently we do not support any creation args, so anything passed to XModel2::createViewController would be
+    // lost, so we can equally return an empty sequence here
+    return Sequence< PropertyValue >();
 }
 
 // -----------------------------------------------------------------------

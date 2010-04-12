@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DesignView.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,7 +142,7 @@ namespace rptui
         *
         * \return <TRUE/> if paste is allowed
         */
-        BOOL IsPasteAllowed();
+        BOOL IsPasteAllowed() const;
 
         /** paste a new control in this section
         */
@@ -171,7 +168,7 @@ namespace rptui
         void            SelectAll(const sal_uInt16 _nObjectType);
 
         /// checks if a selection exists
-        BOOL            HasSelection();
+        BOOL            HasSelection() const;
 
         void            UpdatePropertyBrowserDelayed(OSectionView& _rView);
 

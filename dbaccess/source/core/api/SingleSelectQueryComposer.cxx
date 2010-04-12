@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SingleSelectQueryComposer.cxx,v $
- * $Revision: 1.28.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +34,7 @@
 #include "dbastrings.hrc"
 #include "HelperCollections.hxx"
 #include "SingleSelectQueryComposer.hxx"
+#include "sdbcoretools.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -228,24 +226,11 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
     OSL_ENSURE(m_sDecimalSep.getLength() == 1,"OSingleSelectQueryComposer::OSingleSelectQueryComposer decimal separator is not 1 length");
     try
     {
-        Reference< XChild> xChild(_xConnection, UNO_QUERY);
-        if(xChild.is())
+        Any aValue;
+        Reference<XInterface> xDs = dbaccess::getDataSource(_xConnection);
+        if ( dbtools::getDataSourceSetting(xDs,static_cast <rtl::OUString> (PROPERTY_BOOLEANCOMPARISONMODE),aValue) )
         {
-            Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
-            if ( xProp.is() )
-            {
-                Sequence< PropertyValue > aInfo;
-                xProp->getPropertyValue(PROPERTY_INFO) >>= aInfo;
-                const PropertyValue* pBegin = aInfo.getConstArray();
-                const PropertyValue* pEnd = pBegin + aInfo.getLength();
-                for (; pBegin != pEnd; ++pBegin)
-                {
-                    if ( pBegin->Name == static_cast <rtl::OUString> (PROPERTY_BOOLEANCOMPARISONMODE) )
-                    {
-                        OSL_VERIFY( pBegin->Value >>= m_nBoolCompareMode );
-                    }
-                }
-            }
+            OSL_VERIFY( aValue >>= m_nBoolCompareMode );
         }
     }
     catch(Exception&)

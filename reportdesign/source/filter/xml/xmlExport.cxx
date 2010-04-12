@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlExport.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1117,6 +1114,13 @@ sal_Bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDef
                     ::rtl::OUString sExpression = xGroup->getExpression();
                     if ( sExpression.getLength() )
                     {
+                        static ::rtl::OUString s_sQuote(RTL_CONSTASCII_USTRINGPARAM("\"\""));
+                        sal_Int32 nIndex = sExpression.indexOf('"');
+                        while ( nIndex > -1 )
+                        {
+                            sExpression = sExpression.replaceAt(nIndex,1,s_sQuote);
+                            nIndex = sExpression.indexOf('"',nIndex+2);
+                        }
                         ::rtl::OUString sFormula(RTL_CONSTASCII_USTRINGPARAM("rpt:HASCHANGED(\""));
 
                         TGroupFunctionMap::iterator aGroupFind = m_aGroupFunctionMap.find(xGroup);

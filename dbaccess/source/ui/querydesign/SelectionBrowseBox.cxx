@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SelectionBrowseBox.cxx,v $
- * $Revision: 1.83 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -757,11 +754,22 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
         bool bInternational = ( nPass % 2 ) == 0;
 
         ::rtl::OUString sSql;
-        sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT "));
         if ( bQuote )
             sSql += ::dbtools::quoteName( xMetaData->getIdentifierQuoteString(), _sFieldName );
         else
             sSql += _sFieldName;
+
+        if  ( _pEntry->isAggreateFunction() )
+        {
+            DBG_ASSERT(_pEntry->GetFunction().getLength(),"Functionname darf hier nicht leer sein! ;-(");
+            ::rtl::OUStringBuffer aTmpStr2( _pEntry->GetFunction());
+            aTmpStr2.appendAscii("(");
+            aTmpStr2.append(sSql);
+            aTmpStr2.appendAscii(")");
+            sSql = aTmpStr2.makeStringAndClear();
+        }
+
+        sSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT ")) + sSql;
         if ( sFieldAlias.getLength() )
         { // always quote the alias name there canbe no function in it
             sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
@@ -1360,7 +1368,7 @@ void OSelectionBrowseBox::RemoveColumn(USHORT _nColumnId)
 
     ActivateCell( nCurrentRow, nCurCol );
 
-    rController.setModified();
+    rController.setModified( sal_True );
 
     invalidateUndoRedo();
 }
@@ -1647,7 +1655,7 @@ void OSelectionBrowseBox::InsertColumn(OTableFieldDescRef pEntry, USHORT& _nColu
     Invalidate( aInvalidRect );
 
     ActivateCell( nCurrentRow, nCurCol );
-    static_cast<OQueryController&>(getDesignView()->getController()).setModified();
+    static_cast<OQueryController&>(getDesignView()->getController()).setModified( sal_True );
 
     invalidateUndoRedo();
 }
@@ -2025,7 +2033,7 @@ void OSelectionBrowseBox::CellModified()
             }
             break;
     }
-    static_cast<OQueryController&>(getDesignView()->getController()).setModified();
+    static_cast<OQueryController&>(getDesignView()->getController()).setModified( sal_True );
 }
 
 //------------------------------------------------------------------------------
@@ -2130,12 +2138,12 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
                             break;
                         case ID_QUERY_DISTINCT:
                             static_cast<OQueryController&>(getDesignView()->getController()).setDistinct(!static_cast<OQueryController&>(getDesignView()->getController()).isDistinct());
-                            static_cast<OQueryController&>(getDesignView()->getController()).setModified();
+                            static_cast<OQueryController&>(getDesignView()->getController()).setModified( sal_True );
                             static_cast<OQueryController&>(getDesignView()->getController()).InvalidateFeature( SID_QUERY_DISTINCT_VALUES );
                             break;
                     }
 
-                    static_cast<OQueryController&>(getDesignView()->getController()).setModified();
+                    static_cast<OQueryController&>(getDesignView()->getController()).setModified( sal_True );
                 }
             }
             else
@@ -2468,7 +2476,7 @@ void OSelectionBrowseBox::SetCellContents(sal_Int32 nRow, USHORT nColId, const S
     if (bWasEditing)
         ActivateCell(nCellIndex, nColId);
 
-    static_cast<OQueryController&>(getDesignView()->getController()).setModified();
+    static_cast<OQueryController&>(getDesignView()->getController()).setModified( sal_True );
 }
 //------------------------------------------------------------------------------
 sal_uInt32 OSelectionBrowseBox::GetTotalCellWidth(long nRow, sal_uInt16 nColId) const
@@ -2496,7 +2504,7 @@ void OSelectionBrowseBox::ColumnResized(sal_uInt16 nColId)
     DBG_ASSERT(nPos <= getFields().size(),"ColumnResized:: nColId sollte nicht groesser als List::count sein!");
     OTableFieldDescRef pEntry = getEntry(nPos-1);
     DBG_ASSERT(pEntry.isValid(), "OSelectionBrowseBox::ColumnResized : keine FieldDescription !");
-    static_cast<OQueryController&>(getDesignView()->getController()).setModified();
+    static_cast<OQueryController&>(getDesignView()->getController()).setModified( sal_True );
     EditBrowseBox::ColumnResized(nColId);
 
     if ( pEntry.isValid())

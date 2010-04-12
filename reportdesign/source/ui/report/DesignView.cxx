@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DesignView.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -404,13 +401,13 @@ void ODesignView::Delete()
     m_aScrollWindow.Delete();
 }
 //----------------------------------------------------------------------------
-BOOL ODesignView::HasSelection()
+BOOL ODesignView::HasSelection() const
 {
     return m_aScrollWindow.HasSelection();
 }
 //----------------------------------------------------------------------------
 
-BOOL ODesignView::IsPasteAllowed()
+BOOL ODesignView::IsPasteAllowed() const
 {
     return m_aScrollWindow.IsPasteAllowed();
 }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbloader2.cxx,v $
- * $Revision: 1.32.28.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -448,7 +445,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     if ( !aMediaDesc.has( "InteractionHandler" ) )
     {
         Reference< XInteractionHandler > xHandler;
-        if ( m_aContext.createComponent( "com.sun.star.sdb.InteractionHandler", xHandler ) )
+        if ( m_aContext.createComponent( "com.sun.star.task.InteractionHandler", xHandler ) )
             aMediaDesc.put( "InteractionHandler", xHandler );
     }
 
@@ -547,22 +544,20 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         }
     }
 
-    Reference< XController2 > xController;
     if ( bSuccess )
     {
         try
         {
             Reference< XModel2 > xModel2( xModel, UNO_QUERY_THROW );
-            xController = xModel2->createViewController( sViewName, Sequence< PropertyValue >(), rFrame );
+            Reference< XController2 > xController( xModel2->createViewController( sViewName, Sequence< PropertyValue >(), rFrame ), UNO_QUERY_THROW );
 
-            bSuccess = xController.is();
-            if ( bSuccess )
-            {
-                xController->attachModel( xModel );
-                rFrame->setComponent( xController->getComponentWindow(), xController.get() );
-                xController->attachFrame( rFrame );
-                xModel->setCurrentController( xController.get() );
-            }
+            xController->attachModel( xModel );
+            xModel->connectController( xController.get() );
+            rFrame->setComponent( xController->getComponentWindow(), xController.get() );
+            xController->attachFrame( rFrame );
+            xModel->setCurrentController( xController.get() );
+
+            bSuccess = sal_True;
         }
         catch( const Exception& )
         {

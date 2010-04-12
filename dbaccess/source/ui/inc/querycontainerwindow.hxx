@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: querycontainerwindow.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -118,6 +115,7 @@ namespace dbaui
         bool    reset( ::dbtools::SQLExceptionInfo* _pErrorInfo )           { return m_pViewSwitch->reset( _pErrorInfo ); }
 
         bool    switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo );
+        void    forceInitialView();
 
         virtual void GetFocus();
 

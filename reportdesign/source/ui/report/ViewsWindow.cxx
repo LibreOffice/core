@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ViewsWindow.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -385,10 +382,10 @@ void OViewsWindow::SetMode( DlgEdMode eNewMode )
         ::std::compose1(::boost::bind(&OReportSection::SetMode,_1,eNewMode),TReportPairHelper()));
 }
 //----------------------------------------------------------------------------
-BOOL OViewsWindow::HasSelection()
+BOOL OViewsWindow::HasSelection() const
 {
-    TSectionsMap::iterator aIter = m_aSections.begin();
-    TSectionsMap::iterator aEnd = m_aSections.end();
+    TSectionsMap::const_iterator aIter = m_aSections.begin();
+    TSectionsMap::const_iterator aEnd = m_aSections.end();
     for (;aIter != aEnd && !(*aIter)->getReportSection().getSectionView().AreObjectsMarked(); ++aIter)
         ;
     return aIter != aEnd;
@@ -515,9 +512,9 @@ void OViewsWindow::markSection(const sal_uInt16 _nPos)
         m_pParent->setMarked(m_aSections[_nPos]->getReportSection().getSection(),sal_True);
 }
 //----------------------------------------------------------------------------
-BOOL OViewsWindow::IsPasteAllowed()
+BOOL OViewsWindow::IsPasteAllowed() const
 {
-    TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(this));
+    TransferableDataHelper aTransferData( TransferableDataHelper::CreateFromSystemClipboard( const_cast< OViewsWindow* >( this ) ) );
     return aTransferData.HasFormat(OReportExchange::getDescriptorFormatId());
 }
 //-----------------------------------------------------------------------------
