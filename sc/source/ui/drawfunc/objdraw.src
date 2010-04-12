@@ -339,7 +339,6 @@
             {\
                 MenuItem\
                 {\
-                    RadioCheck = TRUE ; \
                     Identifier = SID_ANCHOR_PAGE ; \
                     HelpId = SID_ANCHOR_PAGE ; \
                     Text [ en-US ] = "To P~age" ; \
@@ -347,7 +346,6 @@
                 };\
                 MenuItem\
                 {\
-                    RadioCheck = TRUE ; \
                     Identifier = SID_ANCHOR_CELL ; \
                     HelpId = SID_ANCHOR_CELL ; \
                     Text [ en-US ] = "To ~Cell" ; \
