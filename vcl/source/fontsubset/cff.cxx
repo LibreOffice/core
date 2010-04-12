@@ -2027,6 +2027,15 @@ void Type1Emitter::emitAllCrypted( void)
 
 // --------------------------------------------------------------------
 
+// #i110387# double->ascii conversion
+// sprintf/ecvt/etc. cannot be used here because of LC_NUMERIC
+// also strip off trailing zeros while we are at it
+int dbl2str( char* pOut, double fVal, int /*nPrecision*/=6)
+{
+    int nLen = sprintf( pOut, "%g", fVal);
+    return nLen;
+}
+
 void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
     const ValVector& rVector)
 {
@@ -2042,10 +2051,11 @@ void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
         aVal = *it;
         if( ++it == rVector.end() )
             break;
-        mpPtr += sprintf( mpPtr, "%g ", aVal);
+        mpPtr += dbl2str( mpPtr, aVal);
+        *(mpPtr++) = ' ';
     }
     // emit the last value
-    mpPtr += sprintf( mpPtr, "%g", aVal);
+    mpPtr += dbl2str( mpPtr, aVal);
     // emit the line tail
     mpPtr += sprintf( mpPtr, pLineTail);
 }
@@ -2202,18 +2212,33 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     rEmitter.emitValVector( "/FamilyBlues [", "]ND\n", mpCffLocal->maFamilyBlues);
     rEmitter.emitValVector( "/FamilyOtherBlues [", "]ND\n", mpCffLocal->maFamilyOtherBlues);
 
-    if( mpCffLocal->mfBlueScale)
-        pOut += sprintf( pOut, "/BlueScale %.6f def\n", mpCffLocal->mfBlueScale);
-    if( mpCffLocal->mfBlueShift)    // default BlueShift==7
-        pOut += sprintf( pOut, "/BlueShift %.1f def\n", mpCffLocal->mfBlueShift);
-    if( mpCffLocal->mfBlueFuzz)     // default BlueFuzz==1
-        pOut += sprintf( pOut, "/BlueFuzz %.1f def\n", mpCffLocal->mfBlueFuzz);
+    if( mpCffLocal->mfBlueScale) {
+        pOut += sprintf( pOut, "/BlueScale ");
+        pOut += dbl2str( pOut, mpCffLocal->mfBlueScale, 6);
+        pOut += sprintf( pOut, " def\n");
+    }
+    if( mpCffLocal->mfBlueShift) {  // default BlueShift==7
+        pOut += sprintf( pOut, "/BlueShift ");
+        pOut += dbl2str( pOut, mpCffLocal->mfBlueShift);
+        pOut += sprintf( pOut, " def\n");
+    }
+    if( mpCffLocal->mfBlueFuzz) {       // default BlueFuzz==1
+        pOut += sprintf( pOut, "/BlueFuzz ");
+        pOut += dbl2str( pOut, mpCffLocal->mfBlueFuzz);
+        pOut += sprintf( pOut, " def\n");
+    }
 
     // emit stem hint related privdict entries
-    if( mpCffLocal->maStemStdHW)
-        pOut += sprintf( pOut, "/StdHW [%g] def\n", mpCffLocal->maStemStdHW);
-    if( mpCffLocal->maStemStdVW)
-        pOut += sprintf( pOut, "/StdVW [%g] def\n", mpCffLocal->maStemStdVW);
+    if( mpCffLocal->maStemStdHW) {
+        pOut += sprintf( pOut, "/StdHW [");
+        pOut += dbl2str( pOut, mpCffLocal->maStemStdHW);
+        pOut += sprintf( pOut, "] def\n");
+    }
+    if( mpCffLocal->maStemStdVW) {
+        pOut += sprintf( pOut, "/StdVW [");
+        pOut += dbl2str( pOut, mpCffLocal->maStemStdVW);
+        pOut += sprintf( pOut, "] def\n");
+    }
     rEmitter.emitValVector( "/StemSnapH [", "]ND\n", mpCffLocal->maStemSnapH);
     rEmitter.emitValVector( "/StemSnapV [", "]ND\n", mpCffLocal->maStemSnapV);
 
@@ -2224,8 +2249,11 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         pOut += sprintf( pOut, "/LanguageGroup %d def\n", mpCffLocal->mnLangGroup);
     if( mpCffLocal->mnLangGroup == 1) // compatibility with ancient printers
         pOut += sprintf( pOut, "/RndStemUp false def\n");
-    if( mpCffLocal->mfExpFactor)
-        pOut += sprintf( pOut, "/ExpansionFactor %.2f def\n", mpCffLocal->mfExpFactor);
+    if( mpCffLocal->mfExpFactor) {
+        pOut += sprintf( pOut, "/ExpansionFactor ");
+        pOut += dbl2str( pOut, mpCffLocal->mfExpFactor);
+        pOut += sprintf( pOut, " def\n");
+    }
 #endif // IGNORE_HINTS
 
     // emit remaining privdict entries
