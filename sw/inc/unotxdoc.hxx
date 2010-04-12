@@ -607,6 +607,9 @@ public:
     ~SwViewOptionAdjust_Impl();
 
     void AdjustViewOptions( const SwPrtOptions *pPrtOptions );
+
+    bool checkShell( const SwWrtShell& rCompare ) const
+    { return &rCompare == &m_rShell; }
 };
 
 
