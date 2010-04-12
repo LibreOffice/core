@@ -678,6 +678,7 @@ testcase tEditAutotext
     end if
 
     PrintLog "Click Categories"
+    Kontext "Autotext"
     Bereiche.Click
     Sleep 1    
     Kontext "BereicheBearbeitenAutoText"
@@ -904,9 +905,9 @@ testcase tEditAutotext
         end if
     endcatch
 
-    Kontext "Autotext"
     PrintLog "Close 'Autotext' dialog"
-    Autotext.Close
+    Kontext "Autotext"
+    if Autotext.Exists then Autotext.Close
     if wDeleteAutotext("DummyAutotext") = false then
         Warnlog "Unable to delete created autotext"
     end if
