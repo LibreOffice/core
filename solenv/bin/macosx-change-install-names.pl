@@ -42,7 +42,9 @@ sub action($$$)
          'shl/URELIB/URELIB' => '@loader_path',
          'shl/OOO/URELIB' => '@loader_path/../ure-link/lib',
          'shl/OOO/OOO' => '@loader_path',
-         'shl/OXT/URELIB' => '@executable_path/urelibs');
+         'shl/OXT/URELIB' => '@executable_path/urelibs',
+         'shl/BOXT/URELIB' => '@executable_path/urelibs',
+         'shl/BOXT/OOO' => '@loader_path/../../../../../../basis-link/program');
     my ($type, $loc1, $loc2) = @_;
     my $act = $action{"$type/$loc1/$loc2"};
     die "illegal combination $type/$loc/$2" unless defined $act;
@@ -50,7 +52,7 @@ sub action($$$)
 }
 
 @ARGV == 3 || @ARGV >= 2 && $ARGV[0] eq "extshl" or die
-    'Usage: app|shl|extshl UREBIN|URELIB|OOO|SDK|BRAND|OXT|NONE <filepath>*';
+  'Usage: app|shl|extshl UREBIN|URELIB|OOO|SDK|BRAND|OXT|BOXT|NONE <filepath>*';
 $type = shift @ARGV;
 $loc = shift @ARGV;
 if ($type eq "extshl")
