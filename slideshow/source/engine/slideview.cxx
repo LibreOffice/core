@@ -83,9 +83,7 @@ struct StaticUnitRectPoly : public rtl::StaticWithInit<basegfx::B2DPolygon, Stat
 {
     basegfx::B2DPolygon operator()()
     {
-        return basegfx::tools::createPolygonFromRect(
-            basegfx::B2DRectangle( 0.0, 0.0,
-                                   1.0, 1.0 ) );
+        return basegfx::tools::createUnitPolygon();
     }
 };
 
@@ -852,7 +850,7 @@ bool SlideView::updateScreen() const
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    ENSURE_OR_RETURN( mpCanvas.get(),
+    ENSURE_OR_RETURN_FALSE( mpCanvas.get(),
                        "SlideView::updateScreen(): Disposed" );
 
     return mpCanvas->updateScreen( false );
@@ -862,7 +860,7 @@ bool SlideView::paintScreen() const
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    ENSURE_OR_RETURN( mpCanvas.get(),
+    ENSURE_OR_RETURN_FALSE( mpCanvas.get(),
                        "SlideView::paintScreen(): Disposed" );
 
     return mpCanvas->updateScreen( true );
