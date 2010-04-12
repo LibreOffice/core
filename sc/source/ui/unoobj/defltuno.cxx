@@ -49,6 +49,8 @@
 #include "unonames.hxx"
 #include "docoptio.hxx"
 
+#include <limits>
+
 using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------
@@ -253,7 +255,12 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const rtl::OUString& aProp
             if (pDoc)
             {
                 const ScDocOptions& aDocOpt = pDoc->GetDocOptions();
-                aRet <<= static_cast<sal_Int16> (aDocOpt.GetStdPrecision());
+                sal_uInt16 nPrec = aDocOpt.GetStdPrecision();
+                // the max value of unsigned 16-bit integer is used as the flag
+                // value for unlimited precision, c.f.
+                // SvNumberFormatter::UNLIMITED_PRECISION.
+                if (nPrec <= ::std::numeric_limits<sal_Int16>::max())
+                    aRet <<= static_cast<sal_Int16> (nPrec);
             }
             else
                 throw uno::RuntimeException();
