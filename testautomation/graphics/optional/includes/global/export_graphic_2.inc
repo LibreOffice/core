@@ -481,28 +481,34 @@ testcase tPDF_Creator
     dim sExtension() as String
 
     sTemp = ConvertPath ( gTesttoolPath + "graphics\required\input\export_graphic3." + ExtensionString )
+    printlog "sTemp=" & sTemp
+    printlog "File load"
     hFileOpen (sTemp)
     sleep (30)
     sPath = OutputGrafikTBO
     sTemp = sPath
     sPath = sPath + "L.pdf"
+    printlog "sPath : " & sPath
     sleep(1)
+    printlog "Exporting File as pdf but with txt ending.."
     hExportAsPDFmulti (1, TRUE, sPath, TRUE, FALSE, 1, 1)
     name sPath as sTemp+"L.txt"
     sleep (30)
     iFileSize(3) = app.FileLen(sTemp+"L.txt")
     iCreatorOffset = 0
     sleep 5
-    '/// load file in writer as text ///'
-
+    printlog "load file in writer as text"
+    printlog "Load File.."
     hFileOpen(sTemp+"L.txt")
 
-    '/// if dialog 'AsciiFilterOptionen' comes up, say OK ///'
+    printlog "If dialog 'AsciiFilterOptionen' comes up, say OK"
+    printlog "Checking for FilterDialog.."
     Kontext "AsciiFilterOptionen"
     If AsciiFilterOptionen.Exists(3) then
         AsciiFilterOptionen.OK
     endif
 
+    printlog "Selecting Filter.."
     Kontext "Filterauswahl"
     If Filterauswahl.Exists then
         Filter.Select ( hGetUIFiltername("Text" ))
@@ -511,45 +517,58 @@ testcase tPDF_Creator
 
     sApp = gApplication
     gApplication = "WRITER"
-    sleep 5 ' wait for document to be loaded
-    ' /Creator
+    sleep 5 
+    printlog "Search in Doc for <</Creator<"
     bTemp = hFindeImDokument ("<</Creator<",true,true)
     if (bTemp = TRUE) then
-        Printlog "OK"
+        Printlog "OK, found."
     else
         warnlog " /Creator not found in pdf file :-("
     endif
+    printlog "getting Clipboard Text.."
     hTypeKeys("<left><right><shift end>")
     editcopy
     sTemp = getClipboardText()
+    printlog "sTemp from clipboard: " & sTemp
     sTemp = left(sTemp, inStr(sTemp, ">")-1)
+    printlog "shortened sTemp: " & sTemp
     sTemp2 = ""
     for i = 0 to (len(sTemp)/4)-1
         sTemp2 = sTemp2 + chr("&H"+mid(sTemp,(i*4)+1, 4))
     next i
+    printlog "sTemp2: " & sTemp2
     printlog sTemp + " -- " + len(sTemp) + " ::: '" + sTemp2 + "'"
     if (lCase(sapp) <> lCase(right(sTemp2, len(stemp2)-1))) then
         warnlog "Application is different from Creator; is: '" + lCase(sTemp2) + "' should: '" + lCase(sapp) + "'"
     endif
+    printlog "iCreatorOffset: " & iCreatorOffset
     iCreatorOffset = iCreatorOffset + len(sTemp)
-    ' /Producer
+    printlog "iCreatorOffset + len(sTemp): " & iCreatorOffset
+    printlog "Search for Producer.."
     bTemp = hFindeImDokument ("/Producer<")
     if (bTemp = TRUE) then
-        Printlog "OK"
+        Printlog "OK, found."
     else
         warnlog " /Producer not found in pdf file :-("
     endif
+    printlog "getting clipboard content.."
     hTypeKeys("<left><right><shift end><shift down>")
     editcopy
     sTemp = getClipboardText()
+    printlog "sTemp from clipboard: " & sTemp
     sTemp = left(sTemp, inStr(sTemp, ">")-1)
+    printlog "shortened sTemp: " & sTemp
+
     sTemp2 = ""
+    printlog "len(sTemp): " & ((len(sTemp)/4)-1)
     for i = 0 to (len(sTemp)/4)-1
         sTemp2 = sTemp2 + chr("&H"+mid(sTemp,(i*4)+1, 4))
+        printlog "sTemp2: " & sTemp2
     next i
     printlog sTemp + " -- " + len(sTemp) + " ::: '" + sTemp2 + "'"
     if gOOO then
         iCreatorOffset = iCreatorOffset + len(sTemp)
+        printlog "In case of OOO iCreatorOffset is: " & iCreatorOffset
     else
         if bAsianLan then
             iCreatorOffset = iCreatorOffset + 48
@@ -557,9 +576,11 @@ testcase tPDF_Creator
                 warnlog "Producer is different from 'StarSuite 8'; is: '" + sTemp2 + "'"
             endif
         else
+    printlog "iCreatorOffset:" & iCreatorOffset
             iCreatorOffset = iCreatorOffset + 52
-            if (len(sTemp) <> 52) then
-                warnlog "Producer is different from 'StarOffice 8'; is: '" + sTemp2 + "'"
+            printlog "iCreatorOffset + 52:" & iCreatorOffset
+            if (len(sTemp) <> 92) then
+                warnlog "Producer is different from ''; is: '" + sTemp2 + "'"
             endif
         endif
     endif

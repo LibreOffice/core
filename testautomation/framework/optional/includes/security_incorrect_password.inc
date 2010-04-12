@@ -60,69 +60,76 @@ testcase tIncorrectPassword( filetypeID as string )
     hUseAsyncSlot( "FileSave" )
 
     Kontext "SpeichernDlg"
-    printlog( "Check the password checkbox" )
-    Passwort.check()
-    
-    printlog( "Name the file as " & filepath )
-    Dateiname.settext( filepath )
-    
-    if ( filetypeID <> "current" ) then
-        for iCurrentFilter = 1 to DateiTyp.getItemCount()
-        
-            DateiTyp.select( iCurrentFilter )
-            cCurrentFilter = DateiTyp.getSelText()
-            if ( instr( cCurrentFilter , suffix ) > 0 ) then
-                printlog( "Using custom filter: " & cCurrentFilter )
-                exit for
-            endif
-        next iCurrentFilter
-    else
-        printlog( "Using default filter: " & DateiTyp.getSelText() )
-    endif
-    
-    printlog( "Click on the Save-Button" )
-    Speichern.click()
+    if ( SpeichernDlg.exists( 1 ) ) then
+        printlog( "Automatic filename extension" )
+        AutomatischeDateinamenserweiterung.check()
 
-    brc = hSecurityEnterPasswordOnSave( PASSWORD_VALID )
+        printlog( "Check the password checkbox" )
+        Passwort.check()
 
-    if ( brc ) then
+        printlog( "Name the file as " & workpath & WORKFILE )
+        Dateiname.settext( workpath & WORKFILE )
 
-        kontext "AlienWarning"
-        if ( AlienWarning.exists( 3 ) ) then
-            AlienWarning.ok()
-            if ( filetypeID <> "current" ) then
-                printlog( "Accepted to save in alien format" )
-            else
-                warnlog( "Alien warning not expected for default file format" )
-            endif
+        if ( filetypeID <> "current" ) then
+            for iCurrentFilter = 1 to DateiTyp.getItemCount()
+
+                DateiTyp.select( iCurrentFilter )
+                cCurrentFilter = DateiTyp.getSelText()
+                if ( instr( cCurrentFilter , suffix ) > 0 ) then
+                    printlog( "Using custom filter: " & cCurrentFilter )
+                    exit for
+                endif
+            next iCurrentFilter
+        else
+            printlog( "Using default filter: " & DateiTyp.getSelText() )
         endif
 
-        printlog( "Close the document" )
-        brc = hDestroyDocument()
+        printlog( "Click on the Save-Button" )
+        Speichern.click()
+
+        brc = hSecurityEnterPasswordOnSave( PASSWORD_VALID )
+
+        if ( brc ) then
+
+            kontext "AlienWarning"
+            if ( AlienWarning.exists( 3 ) ) then
+                AlienWarning.ok()
+                if ( filetypeID <> "current" ) then
+                    printlog( "Accepted to save in alien format" )
+                else
+                    warnlog( "Alien warning not expected for default file format" )
+                endif
+            endif
+
+            printlog( "Close the document" )
+            brc = hDestroyDocument()
+            if ( not brc ) then
+                warnlog( "Something went wrong while closing the document. please check" )
+            endif
+
+        else
+            warnlog( "Something went wrong setting the password for the docuemnt" )
+        endif
+
+        printlog( "Load the file again" )
+        hFileOpen( workpath & WORKFILE & suffix )
+        brc = hSecurityEnterPasswordOnLoad( PASSWORD_FALSE , false )
         if ( not brc ) then
-            warnlog( "Something went wrong while closing the document. please check" )
+            warnlog( "Something went wrong while using the password dialog" )
         endif
-        
+
+        hDestroyDocument()
+
+        printlog( "Verify that we have no open documents" )
+        if ( getDocumentCount <> 0 ) then
+            warnlog( "No documents should be open at this point" )
+        endif
+
+        printlog( "Delete the workfile" )
+        hDeleteFile( workpath & WORKFILE & suffix )
     else
-        warnlog( "Something went wrong setting the password for the docuemnt" )
+        warnlog( "Unable to open file save dialog" )
     endif
-
-    printlog( "Load the file again" )
-    hFileOpen( filepath )
-
-    printlog( "Enter incorrect password" )
-    brc = hSecurityEnterPasswordOnLoad( PASSWORD_FALSE , false )
-    if ( not brc ) then warnlog( "Something went wrong while using the password dialog" )
-
-    printlog( "Close the document" )
-    hDestroyDocument()
-
-    printlog( "Verify that we have no open documents" )
-    if ( getDocumentCount > 0 ) then warnlog( "No documents should be open at this point" )
-
-    printlog( "Delete the workfile" )
-    hDeleteFile( filepath )
-
 
 endcase
 

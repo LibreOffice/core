@@ -645,7 +645,6 @@ end function
 function hOpenContextMenu()
 
     '/// very global function: depends on 'gApplication' just opens the Context Menu ///'
-
     Select Case ( gApplication )
     Case "WRITER"
 
@@ -709,72 +708,63 @@ function hGetWindowCaption(sApplication as string, optional bAll as boolean)
     endif
     for i=0 to iTimes
         Select Case Ucase(sApplication)
-        Case "SWRITER"
-
-            Kontext "DocumentWriter"
-            try
-                sTemp = DocumentWriter.caption
-            catch
-            endcatch
-        Case "SGLOBAL"
-
-            Kontext "DocumentMasterDoc"
-            try
-                sTemp = DocumentMasterDoc.caption
-            catch
-            endcatch
-        Case "SWEB"
-
-            Kontext "DocumentWriterWeb"
-            try
-                sTemp = DocumentWriterWeb.caption
-            catch
-            endcatch
-        case "SCALC"
-
-            Kontext "DocumentCalc"
-            try
-                sTemp = DocumentCalc.caption
-            catch
-            endcatch
-        case "SDRAW"
-
-            Kontext "DocumentDraw"
-            try
-                sTemp = DocumentDraw.caption
-            catch
-            endcatch
-        case "SIMPRESS"
-
-            Kontext "DocumentImpress"
-            try
-                sTemp = DocumentImpress.caption
-            catch
-            endcatch
-        case "SMATH"
-
-            Kontext "DocumentMath"
-            try
-                sTemp = DocumentMath.caption
-            catch
-            endcatch
-        Case "BASIC"
-
-            Kontext "BasicIDE"
-            try
-                sTemp = BasicIDE.caption
-            catch
-            endcatch
-        Case "BACK"
-
-            Kontext "DocumentBackground"
-            try
-                sTemp = DocumentBackground.caption
-            catch
-            endcatch
-        case else
-            qaErrorLog "sApplication not defined: '" + sApplication + "'"
-            sTemp = ""
+            Case "SWRITER"
+                Kontext "DocumentWriter"
+                try
+                    sTemp = DocumentWriter.caption
+                catch
+                endcatch
+            Case "SGLOBAL"
+                Kontext "DocumentMasterDoc"
+                try
+                    sTemp = DocumentMasterDoc.caption
+                catch
+                endcatch
+            Case "SWEB"
+                Kontext "DocumentWriterWeb"
+                try
+                    sTemp = DocumentWriterWeb.caption
+                catch
+                endcatch
+            case "SCALC"
+                Kontext "DocumentCalc"
+                try
+                    sTemp = DocumentCalc.caption
+                catch
+                endcatch
+            case "SDRAW"
+                Kontext "DocumentDraw"
+                try
+                    sTemp = DocumentDraw.caption
+                catch
+                endcatch
+            case "SIMPRESS"
+                Kontext "DocumentImpress"
+                try
+                    sTemp = DocumentImpress.caption
+                catch
+                endcatch
+            case "SMATH"
+                Kontext "DocumentMath"
+                try
+                    sTemp = DocumentMath.caption
+                catch
+                endcatch
+            Case "BASIC"
+                Kontext "BasicIDE"
+                try
+                    sTemp = BasicIDE.caption
+                catch
+                endcatch
+            Case "BACK"
+                Kontext "DocumentBackground"
+                try
+                    sTemp = DocumentBackground.caption
+                catch
+                endcatch
+            case else
+                qaErrorLog "sApplication not defined: '" + sApplication + "'"
+                sTemp = ""
         end select
         aTemp(i) = sTemp
         try
@@ -794,8 +784,9 @@ end function
 
 function fSplitWindowTitle(sInString as string)
 
-    dim a, b, x, i as integer
+    dim a, b, x, i, iProductname as integer
     dim sTemp() as string
+    dim sProductname() as string
     dim sTempReturn(2) as string
     dim sTempReturn2(3) as string
     dim bTestToolCommunication as boolean
@@ -827,9 +818,12 @@ function fSplitWindowTitle(sInString as string)
         ' seperate second string by spaces
         sTemp() = split(right(sInString, len(sInString)-(a+2)), " ") ' Parts are now separated by spaces
         x = uBound(sTemp())
+        sProductname() = split(gProductname, " ")
+        iProductname = uBound(sProductname())
+        x = x - iProductname
 
-        sTempReturn(1) = sTemp(1)                                        ' (1) Application
-        sTempReturn(2) = sTemp(0)                                        ' (2) Vendor
+        sTempReturn(1) = sTemp(uBound(sTemp()))                        ' (1) Application
+        sTempReturn(2) = gProductname 'sTemp(0)                                        ' (2) Vendor
 
         ' if ']' at end... (b,c,d)
         if (right(sInString,1) = "]") then
@@ -876,10 +870,8 @@ function fSplitWindowTitle(sInString as string)
             bError = TRUE
         end select
 
-        if bError then
-            printlog sInString
-        endif
-
+        if bError then printlog sInString
+        
         if (x > 1) then ' there is more to evaluate
             ' save the current computed values
             for i=0 to 2
