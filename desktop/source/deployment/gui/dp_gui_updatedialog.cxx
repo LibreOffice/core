@@ -521,7 +521,7 @@ bool UpdateDialog::Thread::update(
     dp_misc::DescriptionInfoset infoset(m_context, updateInfo);
     OSL_ASSERT(infoset.getVersion().getLength() != 0);
     css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > > ds(
-        dp_misc::Dependencies::check(infoset));
+        dp_misc::Dependencies::check(infoset, packageManager->getContext()));
 
     UpdateDialog::DisabledUpdate du;
     du.aUpdateInfo = updateInfo;
