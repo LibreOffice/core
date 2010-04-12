@@ -6,10 +6,6 @@
     </prop>
 
     <prop oor:name="HelpFile" oor:type="xs:string">
-        <info>
-            <desc>Specifies the filename of the help document after installation,
-            the help can be found in sdext/source/minimizer/help</desc>
-        </info>
         <value xml:lang="en-US">%origin%/../../../../../../help/help_en-US.odt</value>
     </prop>
 

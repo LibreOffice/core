@@ -12,21 +12,26 @@
     </dependencies>
 
     <registration>
-        <simple-license accept-by="admin" default-license-id="lic-en-US">
+        <simple-license accept-by="admin" default-license-id="lic-en-US" suppress-if-required="true" >
             <license-text xlink:href="licensefile" lang="isocode" license-id="lic-isocode"/>
         </simple-license>
     </registration>
 
-    <version value="1.0"/>
+    <version value="1.0.2"/>
 
     <platform value="UPDATED_SUPPORTED_PLATFORM"/>
 
     <publisher>
-        <name xlink:href="http://www.sun.com/software/star/staroffice/extensions.jsp?cid=925095" lang="en">Sun Microsystems</name>
+        <name xlink:href="http://www.sun.com/software/star/staroffice/extensions.jsp?cid=925095" lang="en">Oracle</name>
     </publisher>
 
     <display-name>
         <name lang="en-US">Presentation Minimizer</name>
     </display-name>
+
+    <icon>
+      <default xlink:href="bitmaps/em47.png" />
+      <high-contrast xlink:href="bitmaps/em47_hc.png" />
+    </icon>
 
 </description>

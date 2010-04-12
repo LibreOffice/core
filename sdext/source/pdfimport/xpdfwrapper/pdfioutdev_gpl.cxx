@@ -2,12 +2,6 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: pdfioutdev_gpl.cxx,v $
- *
- *  $Revision: 1.1.2.1 $
- *
- *  last change: $Author: cmc $ $Date: 2008/08/25 16:17:55 $
- *
  *  The Contents of this file are made available subject to
  *  the terms of GNU General Public License Version 2.
  *
@@ -42,6 +36,8 @@
 #include <assert.h>
 #include <math.h>
 #include <vector>
+
+#include <boost/shared_array.hpp>
 
 #if defined __SUNPRO_CC
 #pragma disable_warn
@@ -84,10 +80,44 @@ inline double normalize( double val )
     return fabs(val) < 0.0000001 ? 0.0 : val;
 }
 
-const char* escapeLineFeed( const char* pStr )
+namespace
 {
-    // TODO(Q3): Escape linefeeds
-    return pStr;
+
+/** Escapes line-ending characters (\n and \r) in input string.
+  */
+boost::shared_array<char> lcl_escapeLineFeeds(const char* const i_pStr)
+{
+    size_t nLength(strlen(i_pStr));
+    char* pBuffer = new char[2*nLength+1];
+
+    const char* pRead = i_pStr;
+    char* pWrite = pBuffer;
+    while( nLength-- )
+    {
+        if( *pRead == '\r' )
+        {
+            *pWrite++ = '\\';
+            *pWrite++ = 'r';
+        }
+        else if( *pRead == '\n' )
+        {
+            *pWrite++ = '\\';
+            *pWrite++ = 'n';
+        }
+        else if( *pRead == '\\' )
+        {
+            *pWrite++ = '\\';
+            *pWrite++ = '\\';
+        }
+        else
+            *pWrite++ = *pRead;
+        pRead++;
+    }
+    *pWrite++ = 0;
+
+    return boost::shared_array<char>(pBuffer);
+}
+
 }
 
 /// for the temp char buffer the header gets snprintfed in
@@ -470,12 +500,14 @@ void PDFOutDev::processLink(Link* link, Catalog*)
     {
         const char* pURI = static_cast<LinkURI*>(pAction)->getURI()->getCString();
 
+        boost::shared_array<char> pEsc( lcl_escapeLineFeeds(pURI) );
+
         printf( "drawLink %f %f %f %f %s\n",
                 normalize(x1),
                 normalize(y1),
                 normalize(x2),
                 normalize(y2),
-                escapeLineFeed(pURI) );
+                pEsc.get() );
     }
 }
 
@@ -640,6 +672,8 @@ void PDFOutDev::updateFont(GfxState *state)
             printf( " %lld", fontID );
 
             aFont = it->second;
+
+            boost::shared_array<char> pEsc( lcl_escapeLineFeeds(aFont.familyName.getCString()) );
             printf( " %d %d %d %d %f %d %s",
                     aFont.isEmbedded,
                     aFont.isBold,
@@ -647,7 +681,7 @@ void PDFOutDev::updateFont(GfxState *state)
                     aFont.isUnderline,
                     normalize(state->getTransformedFontSize()),
                     nEmbedSize,
-                    escapeLineFeed(aFont.familyName.getCString()) );
+                    pEsc.get() );
         }
         printf( "\n" );
 
@@ -771,7 +805,8 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
     for( int i=0; i<uLen; ++i )
     {
         buf[ m_pUtf8Map->mapUnicode(u[i], buf, sizeof(buf)-1) ] = 0;
-        printf( "%s", escapeLineFeed(buf) );
+        boost::shared_array<char> pEsc( lcl_escapeLineFeeds(buf) );
+        printf( "%s", pEsc.get() );
     }
 
     printf( "\n" );

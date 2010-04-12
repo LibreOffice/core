@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FormatValueUtility.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,7 +54,7 @@ public class FormatValueUtility
     private static final String BOOLEAN_VALUE = "boolean-value";
     private static final String STRING_VALUE = "string-value";
     public static final String VALUE_TYPE = "value-type";
-    private static final String VALUE = "value";
+    public static final String VALUE = "value";
     private static SimpleDateFormat dateFormat;
     private static SimpleDateFormat timeFormat;
 
