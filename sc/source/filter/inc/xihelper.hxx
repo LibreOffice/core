@@ -320,13 +320,15 @@ public:
     /** Returns the type of the cached value (EXC_CACHEDVAL_*). */
     inline sal_uInt8    GetType() const     { return mnType; }
     /** Returns the cached string value, if this value is a string, else an empty string. */
-    inline const String& GetString() const   { return mxStr.get() ? *mxStr : EMPTY_STRING; }
+    inline const String& GetString() const  { return mxStr.get() ? *mxStr : EMPTY_STRING; }
     /** Returns the cached number, if this value has number type, else 0.0. */
     inline double       GetValue() const    { return mfValue; }
     /** Returns the cached Boolean value, if this value has Boolean type, else false. */
     inline bool         GetBool() const     { return (mnType == EXC_CACHEDVAL_BOOL) && (mnBoolErr != 0); }
     /** Returns the cached Calc error code, if this value has Error type, else 0. */
-    USHORT              GetError() const;
+    inline sal_uInt8    GetXclError() const { return (mnType == EXC_CACHEDVAL_ERROR) ? mnBoolErr : EXC_ERR_NA; }
+    /** Returns the cached Calc error code, if this value has Error type, else 0. */
+    USHORT              GetScError() const;
     /** Returns the token array if this is a Boolean value or error value, else 0. */
     inline const ScTokenArray* GetBoolErrFmla() const { return mxTokArr.get(); }
 
