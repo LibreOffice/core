@@ -76,12 +76,12 @@
     </menu:menu>
     <menu:menu menu:id=".uno:ViewMenu">
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:NormalMultiPaneGUI" menu:style="radio"/>
-            <menu:menuitem menu:id=".uno:OutlineMode" menu:style="radio"/>
-            <menu:menuitem menu:id=".uno:DiaMode" menu:style="radio"/>
+            <menu:menuitem menu:id=".uno:NormalMultiPaneGUI"/>
+            <menu:menuitem menu:id=".uno:OutlineMode"/>
+            <menu:menuitem menu:id=".uno:DiaMode"/>
             <menu:menuitem menu:id=".uno:Presentation"/>
-            <menu:menuitem menu:id=".uno:NotesMode" menu:style="radio"/>
-            <menu:menuitem menu:id=".uno:HandoutMode" menu:style="radio"/>
+            <menu:menuitem menu:id=".uno:NotesMode"/>
+            <menu:menuitem menu:id=".uno:HandoutMode"/>
                <menu:menuseparator/>
             <menu:menu menu:id=".uno:MasterPageMenu">
                 <menu:menupopup>
@@ -93,9 +93,9 @@
             </menu:menu>
             <menu:menu menu:id=".uno:DisplayQualityMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:OutputQualityColor" menu:style="radio"/>
-                    <menu:menuitem menu:id=".uno:OutputQualityGrayscale" menu:style="radio"/>
-                    <menu:menuitem menu:id=".uno:OutputQualityBlackWhite" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:OutputQualityColor"/>
+                    <menu:menuitem menu:id=".uno:OutputQualityGrayscale"/>
+                    <menu:menuitem menu:id=".uno:OutputQualityBlackWhite"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
