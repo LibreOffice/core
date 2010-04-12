@@ -2149,10 +2149,14 @@ void PrintFontManager::initialize()
         } while( nIndex >= 0 );
     }
 
+    // protect against duplicate paths
+    std::hash_map< OString, int, OStringHash > visited_dirs;
+
     // now that all global and local font dirs are known to fontconfig
     // check that there are fonts actually managed by fontconfig
+    // also don't search directories that fontconfig already did
     if( m_bFontconfigSuccess )
-        m_bFontconfigSuccess = (countFontconfigFonts() > 0);
+        m_bFontconfigSuccess = (countFontconfigFonts( visited_dirs ) > 0);
 
     // don't search through many directories fontconfig already told us about
     if( ! m_bFontconfigSuccess )
@@ -2163,8 +2167,6 @@ void PrintFontManager::initialize()
 
     // search for font files in each path
     std::list< OString >::iterator dir_it;
-    // protect against duplicate paths
-    std::hash_map< OString, int, OStringHash > visited_dirs;
     for( dir_it = m_aFontDirectories.begin(); dir_it != m_aFontDirectories.end(); ++dir_it )
     {
         OString aPath( *dir_it );
