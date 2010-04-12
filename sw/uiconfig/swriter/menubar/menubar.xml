@@ -69,8 +69,8 @@
             <menu:menuitem menu:id=".uno:SelectTextMode"/>
                         <menu:menu menu:id=".uno:SelectionModeMenu">
                                 <menu:menupopup>
-                                        <menu:menuitem menu:id=".uno:SelectionModeDefault" menu:style="radio"/>
-                                        <menu:menuitem menu:id=".uno:SelectionModeBlock" menu:style="radio"/>
+                                        <menu:menuitem menu:id=".uno:SelectionModeDefault"/>
+                                        <menu:menuitem menu:id=".uno:SelectionModeBlock"/>
                                 </menu:menupopup>
                         </menu:menu>
                         <menu:menuitem menu:id=".uno:SelectAll"/>
@@ -106,8 +106,8 @@
     </menu:menu>
     <menu:menu menu:id=".uno:ViewMenu">
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:PrintLayout" menu:style="radio"/>
-            <menu:menuitem menu:id=".uno:BrowseView" menu:style="radio"/>
+            <menu:menuitem menu:id=".uno:PrintLayout"/>
+            <menu:menuitem menu:id=".uno:BrowseView"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AvailableToolbars"/>
             <menu:menuitem menu:id=".uno:StatusBarVisible"/>
@@ -243,11 +243,11 @@
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:AnchorMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:SetAnchorToPage" menu:style="radio"/>
-                    <menu:menuitem menu:id=".uno:SetAnchorToPara" menu:style="radio"/>
-                    <menu:menuitem menu:id=".uno:SetAnchorAtChar" menu:style="radio"/>
-                    <menu:menuitem menu:id=".uno:SetAnchorToChar" menu:style="radio"/>
-                    <menu:menuitem menu:id=".uno:SetAnchorToFrame" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:SetAnchorToPage"/>
+                    <menu:menuitem menu:id=".uno:SetAnchorToPara"/>
+                    <menu:menuitem menu:id=".uno:SetAnchorAtChar"/>
+                    <menu:menuitem menu:id=".uno:SetAnchorToChar"/>
+                    <menu:menuitem menu:id=".uno:SetAnchorToFrame"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menu menu:id=".uno:WrapMenu">
@@ -267,10 +267,10 @@
             </menu:menu>
             <menu:menu menu:id=".uno:ObjectAlign">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:CommonAlignLeft" menu:style="radio"/>
-                    <menu:menuitem menu:id=".uno:CommonAlignHorizontalCenter" menu:style="radio"/>
-                    <menu:menuitem menu:id=".uno:CommonAlignRight" menu:style="radio"/>
-                    <menu:menuitem menu:id=".uno:CommonAlignJustified" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:CommonAlignLeft"/>
+                    <menu:menuitem menu:id=".uno:CommonAlignHorizontalCenter"/>
+                    <menu:menuitem menu:id=".uno:CommonAlignRight"/>
+                    <menu:menuitem menu:id=".uno:CommonAlignJustified"/>
                     <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:CommonAlignTop"/>
                     <menu:menuitem menu:id=".uno:CommonAlignVerticalCenter"/>
