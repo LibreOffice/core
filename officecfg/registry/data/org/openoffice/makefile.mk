@@ -41,7 +41,8 @@ XCUFILES= \
     System.xcu \
     VCL.xcu \
     FirstStartWizard.xcu \
-    UserProfile.xcu
+    UserProfile.xcu \
+    Interaction.xcu
 
 MODULEFILES= \
     Inet-macosx.xcu \

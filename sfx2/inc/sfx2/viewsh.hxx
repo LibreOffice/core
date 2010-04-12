@@ -96,24 +96,12 @@ enum SfxScrollingMode
 
 //  @[SfxViewShell-Flags]
 
-#define SFX_VIEW_MAXIMIZE_FIRST      0x0001 /*  die erste View wird maximiert
-                                                dargestellt */
-#define SFX_VIEW_OPTIMIZE_EACH       0x0002 /*  jede View wird in optimaler
-                                                Gr"o\se dargestellt */
-#define SFX_VIEW_DISABLE_ACCELS      0x0004 /*  die Acceleratoren werden
-                                                disabled, solange diese
-                                                View den Focus hat */
-#define SFX_VIEW_OBJECTSIZE_EMBEDDED 0x0008 /*  Views von embedded Objekten
-                                                werden in optimaler Gr"o\se
-                                                dargestellt */
 #define SFX_VIEW_HAS_PRINTOPTIONS    0x0010 /*  Options-Button und Options-
                                                 Dialog im PrintDialog */
 #define SFX_VIEW_CAN_PRINT           0x0020 /*  enabled Printing ohne Printer
                                                 erzeugen zu m"ussen */
 #define SFX_VIEW_NO_SHOW             0x0040 /*  Window der ViewShell darf nicht
                                                 automatisch geshowed werden */
-#define SFX_VIEW_IMPLEMENTED_AS_FRAMESET 0x0080 /*  Das Dokument ist als
-                                                    Frameset implementiert*/
 #define SFX_VIEW_NO_NEWWINDOW       0x0100      /* keine weitere View erlauben */
 
 /*  [Beschreibung]
@@ -159,11 +147,7 @@ class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener
 {
 #ifdef _SFXVIEWSH_HXX
 friend class SfxViewFrame;
-friend class SfxTopViewFrame;
 friend class SfxPlugInFrame;
-friend class SfxInternalFrame;
-friend class SfxExternalTopViewFrame_Impl;
-friend class SfxOfficeDocController;
 friend class SfxBaseController;
 #endif
 
@@ -172,8 +156,6 @@ friend class SfxBaseController;
     SfxViewFrame*               pFrame;
     SfxShell*                   pSubShell;
     Window*                     pWindow;
-    BOOL                        bMaximizeFirst;
-    BOOL                        bOptimizeEach;
     BOOL                        bNoNewWindow;
 
 protected:
@@ -196,6 +178,8 @@ public:
     static SfxViewShell*        GetNext( const SfxViewShell& rPrev,
                                          const TypeId* pType = 0, BOOL bOnlyVisible = TRUE );
     static SfxViewShell*        Current();
+
+    static SfxViewShell*        Get( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>& i_rController );
 
     // Ctoren/Dtoren Initialisierung
                                 TYPEINFO();
@@ -224,9 +208,6 @@ public:
     void                        VisAreaChanged(const Rectangle& rRect);
 
     // Verhaltens-Flags
-    BOOL                        IsMaximizeFirst() const { return bMaximizeFirst; }
-    BOOL                        IsOptimizeEach() const { return bOptimizeEach; }
-    HACK(inline) BOOL           UseObjectSize() const;
     SfxScrollingMode            GetScrollingMode() const;
     void                        SetScrollingMode( SfxScrollingMode eMode );
 
@@ -319,7 +300,6 @@ public:
     SAL_DLLPRIVATE void AddContextMenuInterceptor_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::ui::XContextMenuInterceptor >& xInterceptor );
     SAL_DLLPRIVATE void RemoveContextMenuInterceptor_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::ui::XContextMenuInterceptor >& xInterceptor );
     SAL_DLLPRIVATE FASTBOOL GlobalKeyInput_Impl( const KeyEvent &rKeyEvent );
-    SAL_DLLPRIVATE BOOL IsImplementedAsFrameset_Impl() const;
 
     SAL_DLLPRIVATE void NewIPClient_Impl( SfxInPlaceClient *pIPClient )
                                 { GetIPClientList_Impl(TRUE)->Insert(pIPClient); }
@@ -337,6 +317,8 @@ public:
     SAL_DLLPRIVATE BOOL HasKeyListeners_Impl();
     SAL_DLLPRIVATE BOOL HasMouseClickListeners_Impl();
 
+    SAL_DLLPRIVATE SfxBaseController*   GetBaseController_Impl() const;
+
     // Shell Interface
     SAL_DLLPRIVATE void ExecPrint_Impl(SfxRequest &);
     SAL_DLLPRIVATE void ExecMisc_Impl(SfxRequest &);
@@ -345,11 +327,11 @@ public:
     SAL_DLLPRIVATE void SetFrameSet_Impl(SfxFrameSetDescriptor*);
     SAL_DLLPRIVATE void CheckIPClient_Impl( SfxInPlaceClient*, const Rectangle& );
     SAL_DLLPRIVATE void PushSubShells_Impl( BOOL bPush=TRUE );
+    SAL_DLLPRIVATE void PopSubShells_Impl() { PushSubShells_Impl( FALSE ); }
     SAL_DLLPRIVATE void TakeOwnerShip_Impl();
     SAL_DLLPRIVATE void CheckOwnerShip_Impl();
     SAL_DLLPRIVATE void TakeFrameOwnerShip_Impl();
     SAL_DLLPRIVATE BOOL ExecKey_Impl(const KeyEvent& aKey);
-
 #endif
 };
 
