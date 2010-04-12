@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: ziplist.pm,v $
-#
-# $Revision: 1.22 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -648,7 +644,8 @@ sub set_manufacturer
     my ($allvariables) = @_;
 
     my $openofficeproductname = "OpenOffice.org";
-    my $sunname = "Sun Microsystems";
+    my $sunname = "";
+
 
     if ( $allvariables->{'OPENSOURCE'} && $allvariables->{'OPENSOURCE'} == 1 )
     {
@@ -659,6 +656,8 @@ sub set_manufacturer
     else
     {
         $installer::globals::isopensourceproduct = 0;
+        if (( $allvariables->{'DEFINEDMANUFACTURER'} ) && ( $allvariables->{'DEFINEDMANUFACTURER'} ne "" )) { $sunname = $allvariables->{'DEFINEDMANUFACTURER'}; }
+        else { installer::exiter::exit_program("ERROR: Property DEFINEDMANUFACTURER has to be set for this product!", "set_manufacturer"); }
         $installer::globals::manufacturer = $sunname;
         $installer::globals::longmanufacturer = $sunname . ", Inc.";
     }

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: wntgcci6.mk,v $
-#
-# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -81,7 +77,7 @@ CFLAGSNOOPT=-O0
 # Compiler flags for describing the output path
 CFLAGSOUTOBJ=-o
 #plattform hart setzen
-CDEFS+=-DWIN32 -DWINVER=0x500 -D_WIN32_IE=0x500 -D_M_IX86 -DSTLPORT_VERSION=450 -D_NATIVE_WCHAR_T_DEFINED
+CDEFS+=-DWIN32 -DWINVER=0x500 -D_WIN32_WINNT=0x500 -D_WIN32_IE=0x500 -D_M_IX86 -DSTLPORT_VERSION=450 -D_NATIVE_WCHAR_T_DEFINED -D_MSC_EXTENSIONS -D_FORCENAMELESSUNION
 .IF  "$(DYNAMIC_CRT)"!=""
 CDEFS+=-D_DLL
 .ENDIF
@@ -218,3 +214,4 @@ UNICOWSLIB=$(PSDK_HOME)$/lib$/unicows.lib
 WININETLIB=-lwininet
 OLDNAMESLIB=-lmoldname
 MSIMG32LIB=$(PSDK_HOME)$/lib$/msimg32.lib
+PROPSYSLIB=-lpropsys

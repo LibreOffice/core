@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: antsettings.mk,v $
-#
-# $Revision: 1.7.166.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -32,10 +28,6 @@
 
 .IF "$(SOLAR_JAVA)"!=""
 
-.IF "$(ANT_HOME)" == ""
-ANT_HOME*:=$(COMMON_BUILD_TOOLS)/apache-ant-1.7.0
-.EXPORT : ANT_HOME
-.ENDIF
 ANT_LIB*:=$(ANT_HOME)/lib
 
 ANT_CLASSPATH:=$(ANT_LIB)/xercesImpl.jar$(PATH_SEPERATOR)$(ANT_LIB)/xml-apis.jar$(PATH_SEPERATOR)$(ANT_LIB)/ant.jar

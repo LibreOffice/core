@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: settings.mk,v $
-#
-# $Revision: 1.214.30.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -947,7 +943,7 @@ MKDEPFLAGS+=$(MKDEPSOLVER)
 MKDEPFLAGS+=$(MKDEPLOCAL)
 #.ENDIF
 
-BISON=bison
+BISON*=bison
 YACCFLAGS*=-d 
 
 SVIDL=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/svidl

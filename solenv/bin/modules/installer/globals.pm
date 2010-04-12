@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: globals.pm,v $
-#
-# $Revision: 1.103.16.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -184,7 +180,7 @@ BEGIN
     $installertypedir = "";
     $controlledmakecabversion = "5";
     $saved_packages_path = "";
-    $max_lang_length = 50;
+    $max_lang_length = 65;
     $globalblock = "Globals";
     $rootmodulegid = "";
     %alllangmodules = ();
@@ -272,7 +268,7 @@ BEGIN
     $isopensourceproduct = 1;
     $manufacturer = "";
     $longmanufacturer = "";
-    $sundirname = "Sun";
+    $sundirname = "";
     $codefilename = "codes.txt";
     $componentfilename = "components.txt";
     $productcode = "";
