@@ -11,7 +11,8 @@
 
 import sys, string, os.path
 
-CFGFILE = "../../../../transex3/source/filter/merge/FCFGMerge.cfg"
+# This is ugly, please take the file from solver output tree
+CFGFILE = "../../../../l10ntools/source/filter/merge/FCFGMerge.cfg"
 
 PROP_XMLVERSION      = "xmlversion"               # // <= global cfg file
 PROP_XMLENCODING     = "xmlencoding"              # // <= global cfg file
