@@ -344,9 +344,6 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     std::map< sal_Int16, ::rtl::OUString > LangTable;
 
     const ::rtl::OUString sAsterix(RTL_CONSTASCII_USTRINGPARAM("*"));
-    bool bMultipleLanguages = (eMode != MODE_SetLanguageSelectionMenu) || m_aCurLang.compareToAscii( "*" ) == 0;
-    bool bNothingSelected = true;
-    MenuItemBits nItemBits = !bMultipleLanguages ? MIB_RADIOCHECK : 0;
     for(std::map< ::rtl::OUString, ::rtl::OUString >::const_iterator it = LangItems.begin(); it != LangItems.end(); ++it)
     {
         if(it->first != ::rtl::OUString( aLangTable.GetString( LANGUAGE_NONE ) )&&
@@ -354,13 +351,12 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
            it->first.getLength())
         {
             ++nItemId;
-            pPopupMenu->InsertItem( nItemId,it->first,nItemBits );
+            pPopupMenu->InsertItem( nItemId,it->first);
             LangTable[nItemId] = it->first;
             if(it->first == m_aCurLang && eMode == MODE_SetLanguageSelectionMenu )
             {
                 //make a sign for the current language
                 pPopupMenu->CheckItem(nItemId,TRUE);
-                bNothingSelected = false;
             }
             aCmd=aCmd_Language;
             aCmd+=(String)it->first;
@@ -370,9 +366,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
 
     //7--none
     nItemId++;
-    pPopupMenu->InsertItem( nItemId, String(FwlResId( STR_LANGSTATUS_NONE )), nItemBits );
-    if (bNothingSelected && !bMultipleLanguages)
-        pPopupMenu->CheckItem(nItemId,TRUE);
+    pPopupMenu->InsertItem( nItemId, String(FwlResId( STR_LANGSTATUS_NONE )) );
     aCmd=aCmd_Language;
     aCmd+=String::CreateFromAscii("LANGUAGE_NONE");
     pPopupMenu->SetItemCommand(nItemId,aCmd);

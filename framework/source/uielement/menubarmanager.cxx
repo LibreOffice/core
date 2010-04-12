@@ -548,14 +548,11 @@ throw ( RuntimeException )
 
                 if ( Event.State >>= bCheckmark )
                 {
-                    // Checkmark or RadioButton
+                    // Checkmark
                     m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId, TRUE );
                     m_pVCLMenu->CheckItem( pMenuItemHandler->nItemId, bCheckmark );
-
-                    MenuItemBits nBits = m_pVCLMenu->GetItemBits( pMenuItemHandler->nItemId );
-                    //If not already designated RadioButton set as CheckMark
-                    if (!(nBits & MIB_RADIOCHECK))
-                        m_pVCLMenu->SetItemBits( pMenuItemHandler->nItemId, nBits | MIB_CHECKABLE );
+                    m_pVCLMenu->SetItemBits( pMenuItemHandler->nItemId,
+                                             m_pVCLMenu->GetItemBits( pMenuItemHandler->nItemId ) | MIB_CHECKABLE );
                 }
                 else if ( Event.State >>= aItemText )
                 {
@@ -1808,8 +1805,6 @@ void MenuBarManager::FillMenu(
                            nBits |= MIB_ICON;
                         if ( nStyle & ::com::sun::star::ui::ItemStyle::TEXT )
                            nBits |= MIB_TEXT;
-                        if ( nStyle & ::com::sun::star::ui::ItemStyle::RADIO_CHECK )
-                           nBits |= MIB_RADIOCHECK;
                         pMenu->SetItemBits( nId, nBits );
                     }
                     if ( xIndexContainer.is() )

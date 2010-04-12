@@ -94,7 +94,6 @@
 
 #define ATTRIBUTE_ITEMSTYLE_TEXT    "text"
 #define ATTRIBUTE_ITEMSTYLE_IMAGE    "image"
-#define ATTRIBUTE_ITEMSTYLE_RADIO    "radio"
 
 // Property names of a menu/menu item ItemDescriptor
 static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
@@ -135,7 +134,6 @@ struct MenuStyleItem
 MenuStyleItem MenuItemStyles[ ] = {
     { ::com::sun::star::ui::ItemStyle::ICON, ATTRIBUTE_ITEMSTYLE_IMAGE },
     { ::com::sun::star::ui::ItemStyle::TEXT, ATTRIBUTE_ITEMSTYLE_TEXT },
-    { ::com::sun::star::ui::ItemStyle::RADIO_CHECK, ATTRIBUTE_ITEMSTYLE_RADIO }
 };
 
 
@@ -439,10 +437,8 @@ throw( SAXException, RuntimeException )
                         {
                             if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_TEXT ) ) )
                                 nItemBits |= ::com::sun::star::ui::ItemStyle::TEXT;
-                            else if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_IMAGE ) ) )
+                            if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_IMAGE ) ) )
                                 nItemBits |= ::com::sun::star::ui::ItemStyle::ICON;
-                            else if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_RADIO ) ) )
-                                nItemBits |= ::com::sun::star::ui::ItemStyle::RADIO_CHECK;
                         }
                     }
                     while ( nIndex >= 0 );
@@ -674,10 +670,8 @@ throw( SAXException, RuntimeException )
                     {
                         if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_TEXT ) ) )
                             nItemBits |= ::com::sun::star::ui::ItemStyle::TEXT;
-                        else if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_IMAGE ) ) )
+                        if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_IMAGE ) ) )
                             nItemBits |= ::com::sun::star::ui::ItemStyle::ICON;
-                        else if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_RADIO ) ) )
-                            nItemBits |= ::com::sun::star::ui::ItemStyle::RADIO_CHECK;
                     }
                 }
                 while ( nIndex >= 0 );
@@ -731,10 +725,8 @@ throw( SAXException, RuntimeException )
                     {
                         if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_TEXT ) ) )
                             nItemBits |= ::com::sun::star::ui::ItemStyle::TEXT;
-                        else if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_IMAGE ) ) )
+                        if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_IMAGE ) ) )
                             nItemBits |= ::com::sun::star::ui::ItemStyle::ICON;
-                        else if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_RADIO ) ) )
-                            nItemBits |= ::com::sun::star::ui::ItemStyle::RADIO_CHECK;
                     }
                 }
                 while ( nIndex >= 0 );
