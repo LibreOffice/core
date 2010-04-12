@@ -731,6 +731,10 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         if( bClipboard )
             pNotesMPage->SetLayoutName( pPage->GetLayoutName() );
 
+
+        if( !pRefPage && (meDocType != DOCUMENT_TYPE_DRAW) )
+            pPage->SetAutoLayout( AUTOLAYOUT_TITLE, TRUE, TRUE );
+
         mpWorkStartupTimer = new Timer();
         mpWorkStartupTimer->SetTimeoutHdl( LINK(this, SdDrawDocument, WorkStartupHdl) );
         mpWorkStartupTimer->SetTimeout(2000);

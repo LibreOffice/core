@@ -2,9 +2,13 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
+#
+# $RCSfile: makefile.mk,v $
+#
+# $Revision: 1.21 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -31,11 +35,9 @@ PRJ=..$/..$/..
 PROJECTPCH=sd
 PROJECTPCHSOURCE=$(PRJ)$/util$/sd
 PRJNAME=sd
-TARGET=unoidl
+TARGET=controller
 ENABLE_EXCEPTIONS=TRUE
 AUTOSEG=true
-LIBTARGET = NO
-PRJINC=..$/slidesorter
 
 # --- Settings -----------------------------------------------------
 
@@ -44,48 +46,9 @@ PRJINC=..$/slidesorter
 
 # --- Files --------------------------------------------------------
 
-.IF "$(COM)"=="GCC"
-NOOPTFILES= $(SLO)$/unowcntr.obj
-.ENDIF
-
-SLO1FILES =      \
-        $(SLO)$/DrawController.obj \
-        $(SLO)$/SdUnoSlideView.obj\
-        $(SLO)$/SdUnoOutlineView.obj\
-        $(SLO)$/SdUnoDrawView.obj \
-        $(SLO)$/unopool.obj \
-        $(SLO)$/UnoDocumentSettings.obj \
-        $(SLO)$/facreg.obj \
-        $(SLO)$/unomodel.obj    \
-        $(SLO)$/unopage.obj     \
-        $(SLO)$/unolayer.obj    \
-        $(SLO)$/unocpres.obj    \
-        $(SLO)$/unoobj.obj		\
-        $(SLO)$/unosrch.obj		\
-        $(SLO)$/unowcntr.obj	\
-        $(SLO)$/unokywds.obj	\
-        $(SLO)$/unopback.obj	\
-        $(SLO)$/unovwcrs.obj	\
-        $(SLO)$/unodoc.obj      \
-        $(SLO)$/unomodule.obj	\
-        $(SLO)$/randomnode.obj
-
-SLO2FILES = \
-    $(SLO)$/sddetect.obj		\
-    $(SLO)$/detreg.obj
-
 SLOFILES = \
-    $(SLO1FILES) \
-    $(SLO2FILES)
-
-LIB1TARGET = \
-    $(SLB)$/$(TARGET).lib
-
-LIB1OBJFILES = \
-    $(SLO1FILES)
-
+        $(SLO)$/slidelayoutcontroller.obj
 
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
-

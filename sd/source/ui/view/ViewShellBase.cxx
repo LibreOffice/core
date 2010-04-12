@@ -1257,7 +1257,7 @@ CustomHandleManager& ViewShellBase::getCustomHandleManager() const
     return *mpImpl->mpCustomHandleManager.get();
 }
 
-::rtl::OUString ViewShellBase::RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL ) const
+::rtl::OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const ::rtl::OUString& aCmdURL )
 {
     ::rtl::OUString aLabel;
 
@@ -1266,7 +1266,7 @@ CustomHandleManager& ViewShellBase::getCustomHandleManager() const
         Reference< XMultiServiceFactory > xServiceManager( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
 
         Reference< XModuleManager > xModuleManager( xServiceManager->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager") ) ), UNO_QUERY_THROW );
-        Reference< XInterface > xIfac( GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface(), UNO_QUERY_THROW );
+        Reference< XInterface > xIfac( xFrame, UNO_QUERY_THROW );
 
         ::rtl::OUString aModuleIdentifier( xModuleManager->identify( xIfac ) );
 
@@ -1296,6 +1296,12 @@ CustomHandleManager& ViewShellBase::getCustomHandleManager() const
     }
 
     return aLabel;
+}
+
+::rtl::OUString ViewShellBase::RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL ) const
+{
+    Reference< XFrame > xFrame( GetMainViewShell()->GetViewFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY );
+    return ImplRetrieveLabelFromCommand( xFrame, aCmdURL );
 }
 
 
