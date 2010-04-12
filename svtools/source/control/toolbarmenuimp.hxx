@@ -26,17 +26,14 @@
  ************************************************************************/
 
 #include <vos/mutex.hxx>
-#include <tools/list.hxx>
-#include <tools/color.hxx>
-#include <tools/string.hxx>
-#ifndef _IMAGE_HXX
 #include <vcl/image.hxx>
-#endif
-#include <rtl/uuid.h>
-#include <cppuhelper/implbase5.hxx>
-#include <cppuhelper/compbase6.hxx>
+#include <vcl/menu.hxx>
+
+#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase5.hxx>
 #include <comphelper/broadcasthelper.hxx>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
+
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
@@ -44,116 +41,107 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
-#include <memory>
+#include <rtl/ref.hxx>
+
 #include <vector>
 
-// -----------
-// - Defines -
-// -----------
+#include "framestatuslistener.hxx"
 
-#define ITEM_OFFSET                 4
-#define ITEM_OFFSET_DOUBLE          6
-#define NAME_LINE_OFF_X             2
-#define NAME_LINE_OFF_Y             2
-#define NAME_LINE_HEIGHT            2
-#define NAME_OFFSET                 2
-#define SCRBAR_OFFSET               1
-#define VALUESET_ITEM_NONEITEM      0xFFFE
-#define VALUESET_SCROLL_OFFSET      4
+#include "svtools/valueset.hxx"
+
+namespace svtools {
+
+struct ToolbarMenu_Impl;
+class ToolbarMenu;
+class ToolbarMenuEntry;
+
+typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener > > EventListenerVector;
+typedef std::vector< ToolbarMenuEntry * > ToolbarMenuEntryVector;
+
+const int EXTRAITEMHEIGHT = 0; // 4;
+const int SEPARATOR_HEIGHT = 4;
+const int TITLE_ID = -1;
+const int BORDER_X = 0;
+const int BORDER_Y = 0;
 
 // --------------------
-// - ValueSetItemType -
+// - ToolbarMenuEntry -
 // --------------------
 
-enum ValueSetItemType
+class ToolbarMenuEntry
 {
-    VALUESETITEM_NONE,
-    VALUESETITEM_IMAGE,
-    VALUESETITEM_COLOR,
-    VALUESETITEM_USERDRAW,
-    VALUESETITEM_SPACE
-};
+public:
+    ToolbarMenu& mrMenu;
 
-// ----------------
-// - ValueSetItem -
-// ----------------
+    int mnEntryId;
+    MenuItemBits mnBits;
+    Size maSize;
 
-class ValueSet;
+    bool mbHasText;
+    bool mbHasImage;
+    bool mbChecked;
+    bool mbEnabled;
 
-struct ValueSetItem
-{
-    ValueSet&           mrParent;
-    USHORT              mnId;
-    USHORT              mnBits;
-    ValueSetItemType    meType;
-    Image               maImage;
-    Color               maColor;
-    XubString           maText;
-    void*               mpData;
-    Rectangle           maRect;
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >* mpxAcc;
+    String maText;
+    Image maImage;
+    Control* mpControl;
+    Rectangle maRect;
 
-    ValueSetItem( ValueSet& rParent );
-    ~ValueSetItem();
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > mxAccContext;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-                        GetAccessible( bool bIsTransientChildrenDisabled );
-     void               ClearAccessible();
-};
+public:
+    ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const String& rText, MenuItemBits nBits );
+    ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const Image& rImage, MenuItemBits nBits );
+    ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const Image& rImage, const String& rText, MenuItemBits nBits );
+    ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, Control* pControl, MenuItemBits nBits );
+    ~ToolbarMenuEntry();
 
-// -----------------------------------------------------------------------------
+    void init( int nEntryId, MenuItemBits nBits );
 
-DECLARE_LIST( ValueItemList, ValueSetItem* )
+    const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& GetAccessible( bool bCreate = false );
 
-// -----------------------------------------------------------------------------
+    sal_Int32 getAccessibleChildCount() throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > getAccessibleChild( sal_Int32 index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    void selectAccessibleChild( sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
-struct ValueSet_Impl
-{
-    ::std::auto_ptr< ValueItemList >    mpItemList;
-    bool                                mbIsTransientChildrenDisabled;
-    Link                                maHighlightHdl;
-
-    ValueSet_Impl() :   mpItemList( ::std::auto_ptr< ValueItemList >( new ValueItemList() ) ),
-                        mbIsTransientChildrenDisabled( false )
+    bool HasCheck() const
     {
+        return mbChecked || ( mnBits & ( MIB_RADIOCHECK | MIB_CHECKABLE | MIB_AUTOCHECK ) );
     }
 };
 
 // ---------------
-// - ValueSetAcc -
+// - ToolbarMenuAcc -
 // ---------------
 
-typedef ::cppu::WeakComponentImplHelper6<
+typedef ::cppu::WeakComponentImplHelper5<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
     ::com::sun::star::accessibility::XAccessibleContext,
     ::com::sun::star::accessibility::XAccessibleComponent,
-    ::com::sun::star::accessibility::XAccessibleSelection,
-    ::com::sun::star::lang::XUnoTunnel >
-    ValueSetAccComponentBase;
+    ::com::sun::star::accessibility::XAccessibleSelection >
+    ToolbarMenuAccComponentBase;
 
-class ValueSetAcc :
+class ToolbarMenuAcc :
     public ::comphelper::OBaseMutex,
-    public ValueSetAccComponentBase
+    public ToolbarMenuAccComponentBase
 {
 public:
 
-    ValueSetAcc( ValueSet* pParent, bool bIsTransientChildrenDisabled );
-    ~ValueSetAcc();
+    ToolbarMenuAcc( ToolbarMenu_Impl& rParent );
+    ~ToolbarMenuAcc();
 
     void                FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
-    BOOL                HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
-
-    static ValueSetAcc* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
+    bool                HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
 
 public:
 
-    /** Called by the corresponding ValueSet when it gets the focus.
+    /** Called by the corresponding ToolbarMenu when it gets the focus.
         Stores the new focus state and broadcasts a state change event.
     */
     void GetFocus (void);
 
-    /** Called by the corresponding ValueSet when it loses the focus.
+    /** Called by the corresponding ToolbarMenu when it loses the focus.
         Stores the new focus state and broadcasts a state change event.
     */
     void LoseFocus (void);
@@ -163,9 +151,9 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleEventBroadcaster
-    using cppu::WeakComponentImplHelper6<com::sun::star::accessibility::XAccessible, com::sun::star::accessibility::XAccessibleEventBroadcaster, com::sun::star::accessibility::XAccessibleContext, com::sun::star::accessibility::XAccessibleComponent, com::sun::star::accessibility::XAccessibleSelection, com::sun::star::lang::XUnoTunnel>::addEventListener;
+    using cppu::WeakComponentImplHelper5<com::sun::star::accessibility::XAccessible, com::sun::star::accessibility::XAccessibleEventBroadcaster, com::sun::star::accessibility::XAccessibleContext, com::sun::star::accessibility::XAccessibleComponent, com::sun::star::accessibility::XAccessibleSelection>::addEventListener;
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    using cppu::WeakComponentImplHelper6<com::sun::star::accessibility::XAccessible, com::sun::star::accessibility::XAccessibleEventBroadcaster, com::sun::star::accessibility::XAccessibleContext, com::sun::star::accessibility::XAccessibleComponent, com::sun::star::accessibility::XAccessibleSelection, com::sun::star::lang::XUnoTunnel>::removeEventListener;
+    using cppu::WeakComponentImplHelper5<com::sun::star::accessibility::XAccessible, com::sun::star::accessibility::XAccessibleEventBroadcaster, com::sun::star::accessibility::XAccessibleContext, com::sun::star::accessibility::XAccessibleComponent, com::sun::star::accessibility::XAccessibleSelection>::removeEventListener;
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleContext
@@ -201,104 +189,51 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
-
 private:
-    //    ::vos::OMutex                                                                                                           maMutex;
-    ::std::vector< ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleEventListener > >   mxEventListeners;
-    ValueSet*                                                           mpParent;
-    bool                                                                mbIsTransientChildrenDisabled;
+    EventListenerVector mxEventListeners;
+    ToolbarMenu_Impl* mpParent;
     /// The current FOCUSED state.
     bool mbIsFocused;
-
-    static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
     /** Tell all listeners that the object is dying.  This callback is
         usually called from the WeakComponentImplHelper class.
     */
     virtual void SAL_CALL disposing (void);
 
-    /** Return the number of items.  This takes the None-Item into account.
-    */
-    USHORT getItemCount (void) const;
-
-    /** Return the item associated with the given index.  The None-Item is
-        taken into account which, when present, is taken to be the first
-        (with index 0) item.
-        @param nIndex
-            Index of the item to return.  The index 0 denotes the None-Item
-            when present.
-        @return
-            Returns NULL when the given index is out of range.
-    */
-    ValueSetItem* getItem (USHORT nIndex) const;
-
     /** Check whether or not the object has been disposed (or is in the
         state of beeing disposed).  If that is the case then
         DisposedException is thrown to inform the (indirect) caller of the
         foul deed.
     */
-    void ThrowIfDisposed (void)
-        throw (::com::sun::star::lang::DisposedException);
-
-    /** Check whether or not the object has been disposed (or is in the
-        state of beeing disposed).
-
-        @return sal_True, if the object is disposed or in the course
-        of being disposed. Otherwise, sal_False is returned.
-    */
-    sal_Bool IsDisposed (void);
-
-    /** Check whether the value set has a 'none' field, i.e. a field (button)
-        that deselects any items (selects none of them).
-        @return
-            Returns <true/> if there is a 'none' field and <false/> it it is
-            missing.
-    */
-    bool HasNoneField (void) const;
+    void ThrowIfDisposed (void) throw (::com::sun::star::lang::DisposedException);
 };
 
-// ----------------
-// - ValueItemAcc -
-// ----------------
+// -----------------------
+// - ToolbarMenuEntryAcc -
+// -----------------------
 
-class ValueItemAcc : public ::cppu::WeakImplHelper5< ::com::sun::star::accessibility::XAccessible,
+typedef ::cppu::WeakComponentImplHelper4< ::com::sun::star::accessibility::XAccessible,
                                                      ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
                                                      ::com::sun::star::accessibility::XAccessibleContext,
-                                                     ::com::sun::star::accessibility::XAccessibleComponent,
-                                                     ::com::sun::star::lang::XUnoTunnel >
+                                                     ::com::sun::star::accessibility::XAccessibleComponent > ToolbarMenuEntryAccBase;
+
+class ToolbarMenuEntryAcc : public ::comphelper::OBaseMutex,
+                            public ToolbarMenuEntryAccBase
 {
-private:
-
-    ::std::vector< ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleEventListener > >   mxEventListeners;
-    ::vos::OMutex                                                       maMutex;
-    ValueSetItem*                                                       mpParent;
-    bool                                                                mbIsTransientChildrenDisabled;
-
-    static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-
 public:
-
-    ValueItemAcc( ValueSetItem* pParent, bool bIsTransientChildrenDisabled );
-    ~ValueItemAcc();
-
-    void    ParentDestroyed();
+    ToolbarMenuEntryAcc( ToolbarMenuEntry* pParent );
+    ~ToolbarMenuEntryAcc();
 
     void    FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
-    BOOL    HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
-
-    static ValueItemAcc* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
-
-public:
+    bool    HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
 
     // XAccessible
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleEventBroadcaster
+    using ToolbarMenuEntryAccBase::addEventListener;
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    using ToolbarMenuEntryAccBase::removeEventListener;
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleContext
@@ -325,6 +260,54 @@ public:
     virtual sal_Int32 SAL_CALL getForeground(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
+private:
+    EventListenerVector    mxEventListeners;
+    ::vos::OMutex          maMutex;
+    ToolbarMenuEntry*      mpParent;
+
+    /** Tell all listeners that the object is dying.  This callback is
+        usually called from the WeakComponentImplHelper class.
+    */
+    virtual void SAL_CALL disposing (void);
 };
+
+// -----------------------------------------------------------------------------
+
+struct ToolbarMenu_Impl
+{
+    ToolbarMenu& mrMenu;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              mxFrame;
+    rtl::Reference< svt::FrameStatusListener >                                       mxStatusListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceManager;
+    rtl::Reference< ToolbarMenuAcc >                                                 mxAccessible;
+    ToolbarMenuEntryVector  maEntryVector;
+
+    int mnCheckPos;
+    int mnImagePos;
+    int mnTextPos;
+
+    int mnHighlightedEntry;
+    int mnSelectedEntry;
+    int mnLastColumn;
+
+    Size maSize;
+
+    Link            maSelectHdl;
+
+    ToolbarMenu_Impl( ToolbarMenu& rMenu, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
+    ~ToolbarMenu_Impl();
+
+    void setAccessible( ToolbarMenuAcc* pAccessible );
+
+    void fireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
+    bool hasAccessibleListeners();
+
+    sal_Int32 getAccessibleChildCount() throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > getAccessibleChild( sal_Int32 index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    void selectAccessibleChild( sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    sal_Bool isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    void clearAccessibleSelection();
+};
+
+}

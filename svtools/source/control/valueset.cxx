@@ -1418,7 +1418,7 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
 {
     USHORT nLastItem = (USHORT)mpImpl->mpItemList->Count();
     USHORT nItemPos = VALUESET_ITEM_NOTFOUND;
-    USHORT nCurPos;
+    USHORT nCurPos = VALUESET_ITEM_NONEITEM;
     USHORT nCalcPos;
 
     if ( !nLastItem || !ImplGetFirstItem() )
@@ -1431,8 +1431,6 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
 
     if ( mnSelItemId )
         nCurPos = GetItemPos( mnSelItemId );
-    else
-        nCurPos = VALUESET_ITEM_NONEITEM;
     nCalcPos = nCurPos;
 
     //switch off selection mode if key travelling is used
@@ -1528,6 +1526,7 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                             nCalcPos - ( nLineCount * mnCols ));
                     else
                     {
+#if 0
                         if( (KEY_UP == rKEvt.GetKeyCode().GetCode() ) && (GetStyle() & WB_MENUSTYLEVALUESET) )
                         {
                             Window* pParent = GetParent();
@@ -1536,6 +1535,7 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                             break;
                         }
                         else
+#endif
                         {
                             if ( mpNoneItem )
                             {
@@ -1580,6 +1580,7 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                             nCalcPos + ( nLineCount * mnCols ));
                     else
                     {
+#if 0
                         if( (KEY_DOWN == rKEvt.GetKeyCode().GetCode() ) && (GetStyle() & WB_MENUSTYLEVALUESET) )
                         {
                             Window* pParent = GetParent();
@@ -1588,6 +1589,7 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                             break;
                         }
                         else
+#endif
                         {
                             if ( mpNoneItem )
                             {
@@ -1620,7 +1622,6 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
             bDefault = TRUE;
             break;
     }
-
     if(!bDefault)
         EndSelection();
     if ( nItemPos != VALUESET_ITEM_NOTFOUND )
@@ -1630,6 +1631,7 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
             nItemId = GetItemId( nItemPos );
         else
             nItemId = 0;
+
         if ( nItemId != mnSelItemId )
         {
             SelectItem( nItemId );
@@ -2277,6 +2279,8 @@ void ValueSet::SelectItem( USHORT nItemId )
             // selection event
             ::com::sun::star::uno::Any aOldAny, aNewAny;
             ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::SELECTION_CHANGED, aOldAny, aNewAny );
+
+            mpImpl->maHighlightHdl.Call(this);
         }
     }
 }
@@ -2748,4 +2752,20 @@ bool ValueSet::IsRTLActive (void)
 {
     return Application::GetSettings().GetLayoutRTL() && IsRTLEnabled();
 }
+
+// -----------------------------------------------------------------------
+
+void ValueSet::SetHighlightHdl( const Link& rLink )
+{
+    mpImpl->maHighlightHdl = rLink;
+}
+
+// -----------------------------------------------------------------------
+
+const Link& ValueSet::GetHighlightHdl() const
+{
+    return mpImpl->maHighlightHdl;
+}
+
+// -----------------------------------------------------------------------
 
