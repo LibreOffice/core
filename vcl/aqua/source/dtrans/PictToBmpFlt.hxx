@@ -3,6 +3,10 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <premac.h>
+#include <Cocoa/Cocoa.h>
+#include <postmac.h>
+
 /* Transform PICT into the a Window BMP.
 
    Returns true if the conversion was successful false
@@ -18,5 +22,16 @@ bool PICTtoBMP(com::sun::star::uno::Sequence<sal_Int8>& aPict,
  */
 bool BMPtoPICT(com::sun::star::uno::Sequence<sal_Int8>& aBmp,
                com::sun::star::uno::Sequence<sal_Int8>& aPict);
+
+#define PICTImageFileType ((NSBitmapImageFileType)~0)
+
+bool ImageToBMP( com::sun::star::uno::Sequence<sal_Int8>& aPict,
+                 com::sun::star::uno::Sequence<sal_Int8>& aBmp,
+                 NSBitmapImageFileType eInFormat);
+
+bool BMPToImage( com::sun::star::uno::Sequence<sal_Int8>& aBmp,
+                 com::sun::star::uno::Sequence<sal_Int8>& aPict,
+                 NSBitmapImageFileType eOutFormat
+                );
 
 #endif
