@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: window.cxx,v $
- * $Revision: 1.285.38.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -504,6 +501,13 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
                 rSettings.SetStyleSettings( aStyleSettings );
             }
         }
+    }
+
+    static const char* pEnvHC = getenv( "SAL_FORCE_HC" );
+    if( pEnvHC && *pEnvHC )
+    {
+        aStyleSettings.SetHighContrastMode( TRUE );
+        rSettings.SetStyleSettings( aStyleSettings );
     }
 
 #ifdef DBG_UTIL

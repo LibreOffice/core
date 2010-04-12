@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: localedata.cxx,v $
- * $Revision: 1.59.24.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -170,6 +167,8 @@ static const struct {
     { "mt_MT",  lcl_DATA_EURO },
     { "sc_IT",  lcl_DATA_EURO },
     { "ast_ES", lcl_DATA_EURO },
+    { "ltg_LV", lcl_DATA_EURO },
+    { "hsb_DE", lcl_DATA_EURO },
 
     { "ja_JP",  lcl_DATA_OTHERS },
     { "ko_KR",  lcl_DATA_OTHERS },
@@ -248,6 +247,7 @@ static const struct {
     { "ar_OM",  lcl_DATA_OTHERS },
     { "ug_CN",  lcl_DATA_OTHERS },
     { "om_ET",  lcl_DATA_OTHERS },
+    { "plt_MG", lcl_DATA_OTHERS },
 };
 
 static const sal_Unicode under = sal_Unicode('_');

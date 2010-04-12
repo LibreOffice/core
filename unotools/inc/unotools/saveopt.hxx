@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: saveopt.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +46,6 @@ public:
         E_AUTOSAVEPROMPT,
         E_DOCINFSAVE,
         E_SAVEWORKINGSET,
-        E_SAVEDOCWINS,
         E_SAVEDOCVIEW,
         E_SAVERELINET,
         E_SAVERELFSYS,
@@ -95,9 +91,6 @@ public:
 
     void                    SetSaveWorkingSet( sal_Bool b );
     sal_Bool                IsSaveWorkingSet() const;
-
-    void                    SetSaveDocWins( sal_Bool b );
-    sal_Bool                IsSaveDocWins() const;
 
     void                    SetSaveDocView( sal_Bool b );
     sal_Bool                IsSaveDocView() const;

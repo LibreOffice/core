@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: outdev.hxx,v $
- * $Revision: 1.7.20.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,6 +78,7 @@ class AlphaMask;
 class FontCharMap;
 class SalLayout;
 class ImplLayoutArgs;
+class ImplFontAttributes;
 class VirtualDevice;
 
 namespace com {
@@ -545,7 +543,6 @@ public:
     SAL_DLLPRIVATE static FontEmphasisMark ImplGetEmphasisMarkStyle( const Font& rFont );
     SAL_DLLPRIVATE static BOOL ImplIsUnderlineAbove( const Font& );
 
-
     // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
     SAL_DLLPRIVATE bool ImplIsAntiparallel() const ;
 
@@ -935,6 +932,10 @@ public:
     basegfx::B2DHomMatrix GetViewTransformation() const;
     basegfx::B2DHomMatrix GetInverseViewTransformation() const;
 
+    basegfx::B2DHomMatrix GetViewTransformation( const MapMode& rMapMode ) const;
+    basegfx::B2DHomMatrix GetInverseViewTransformation( const MapMode& rMapMode ) const;
+
+
     /** Set an offset in pixel
 
         This method offsets every drawing operation that converts its
@@ -971,7 +972,9 @@ public:
     Size                LogicToPixel( const Size& rLogicSize ) const;
     Rectangle           LogicToPixel( const Rectangle& rLogicRect ) const;
     Polygon             LogicToPixel( const Polygon& rLogicPoly ) const;
+    basegfx::B2DPolygon LogicToPixel( const basegfx::B2DPolygon& rLogicPolyPoly ) const;
     PolyPolygon         LogicToPixel( const PolyPolygon& rLogicPolyPoly ) const;
+    basegfx::B2DPolyPolygon LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly ) const;
     Region              LogicToPixel( const Region& rLogicRegion )const;
     Point               LogicToPixel( const Point& rLogicPt,
                                       const MapMode& rMapMode ) const;
@@ -981,15 +984,21 @@ public:
                                       const MapMode& rMapMode ) const;
     Polygon             LogicToPixel( const Polygon& rLogicPoly,
                                       const MapMode& rMapMode ) const;
+    basegfx::B2DPolygon LogicToPixel( const basegfx::B2DPolygon& rLogicPoly,
+                                          const MapMode& rMapMode ) const;
     PolyPolygon         LogicToPixel( const PolyPolygon& rLogicPolyPoly,
                                       const MapMode& rMapMode ) const;
+    basegfx::B2DPolyPolygon LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly,
+                                          const MapMode& rMapMode ) const;
     Region              LogicToPixel( const Region& rLogicRegion,
                                       const MapMode& rMapMode ) const;
     Point               PixelToLogic( const Point& rDevicePt ) const;
     Size                PixelToLogic( const Size& rDeviceSize ) const;
     Rectangle           PixelToLogic( const Rectangle& rDeviceRect ) const;
     Polygon             PixelToLogic( const Polygon& rDevicePoly ) const;
+    basegfx::B2DPolygon PixelToLogic( const basegfx::B2DPolygon& rDevicePoly ) const;
     PolyPolygon         PixelToLogic( const PolyPolygon& rDevicePolyPoly ) const;
+    basegfx::B2DPolyPolygon PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly ) const;
     Region              PixelToLogic( const Region& rDeviceRegion ) const;
     Point               PixelToLogic( const Point& rDevicePt,
                                       const MapMode& rMapMode ) const;
@@ -999,8 +1008,12 @@ public:
                                       const MapMode& rMapMode ) const;
     Polygon             PixelToLogic( const Polygon& rDevicePoly,
                                       const MapMode& rMapMode ) const;
+    basegfx::B2DPolygon PixelToLogic( const basegfx::B2DPolygon& rDevicePoly,
+                                      const MapMode& rMapMode ) const;
     PolyPolygon         PixelToLogic( const PolyPolygon& rDevicePolyPoly,
                                       const MapMode& rMapMode ) const;
+    basegfx::B2DPolyPolygon PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly,
+                                          const MapMode& rMapMode ) const;
     Region              PixelToLogic( const Region& rDeviceRegion,
                                       const MapMode& rMapMode ) const;
 
@@ -1029,6 +1042,13 @@ public:
     static long         LogicToLogic( long              nLongSource,
                                       MapUnit           eUnitSource,
                                       MapUnit           eUnitDest );
+
+    static basegfx::B2DPolygon LogicToLogic( const basegfx::B2DPolygon& rPoly,
+                                             const MapMode&    rMapModeSource,
+                                             const MapMode&    rMapModeDest );
+    static basegfx::B2DPolyPolygon LogicToLogic( const basegfx::B2DPolyPolygon& rPolyPoly,
+                                                 const MapMode&    rMapModeSource,
+                                                 const MapMode&    rMapModeDest );
 
     Size                GetOutputSizePixel() const
                             { return Size( mnOutWidth, mnOutHeight ); }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gtkframe.cxx,v $
- * $Revision: 1.84.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -809,8 +806,15 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     /* #i100116# metacity has a peculiar behavior regarding WM_HINT accept focus and _NET_WM_USER_TIME
         at some point that may be fixed in metacity and we will have to revisit this
     */
-    bool bMetaCityToolWindowHack = getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") &&
-                                   (nStyle & SAL_FRAME_STYLE_TOOLWINDOW );
+
+    // MT/PL 2010/02: #i102694# and #i102803# have been introduced by this hack
+    // Nowadays the original issue referenced above doesn't seem to exist anymore, tested different szenarious described in the issues
+    // If some older versions of MetaCity are still in use somewhere, they need to be updated, instead of using strange hacks in OOo.
+    // As a work around for such old systems, people might consider to not use the GTK plugin.
+
+    bool bMetaCityToolWindowHack = false;
+    // bMetaCityToolWindowHack = getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") && (nStyle & SAL_FRAME_STYLE_TOOLWINDOW );
+
     if( bDecoHandling )
     {
         bool bNoDecor = ! (nStyle & (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE ) );
@@ -2084,7 +2088,14 @@ void GtkSalFrame::ToTop( USHORT nFlags )
              *  is set to false.
              */
             if( (m_nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_FLOAT_FOCUSABLE)) )
+            {
+                // sad but true: this can cause an XError, we need to catch that
+                // to do this we need to synchronize with the XServer
+                getDisplay()->GetXLib()->PushXErrorLevel( true );
                 XSetInputFocus( getDisplay()->GetDisplay(), GDK_WINDOW_XWINDOW( m_pWindow->window ), RevertToParent, CurrentTime );
+                XSync( getDisplay()->GetDisplay(), False );
+                getDisplay()->GetXLib()->PopXErrorLevel();
+            }
         }
         else
         {
@@ -3127,10 +3138,13 @@ void GtkSalFrame::signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer fram
     // redraw itself to adjust to the new style
     // where there IS no new style resulting in tremendous unnecessary flickering
     if( pPrevious != NULL )
+    {
         // signalStyleSet does NOT usually have the gdk lock
         // so post user event to safely dispatch the SALEVENT_SETTINGSCHANGED
         // note: settings changed for multiple frames is avoided in winproc.cxx ImplHandleSettings
         pThis->getDisplay()->SendInternalEvent( pThis, NULL, SALEVENT_SETTINGSCHANGED );
+        pThis->getDisplay()->SendInternalEvent( pThis, NULL, SALEVENT_FONTCHANGED );
+    }
 
     /* #i64117# gtk sets a nice background pixmap
     *  but we actually don't really want that, so save

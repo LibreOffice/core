@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salgdilayout.cxx,v $
- * $Revision: 1.31.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -692,6 +689,12 @@ void SalGraphics::mirror( ControlType nType, const ImplControlValue& rVal, const
     {
         switch( nType )
         {
+            case CTRL_SLIDER:
+            {
+                SliderValue* pSlVal = reinterpret_cast<SliderValue*>(rVal.getOptionalVal());
+                mirror(pSlVal->maThumbRect,pOutDev,bBack);
+            }
+            break;
             case CTRL_SCROLLBAR:
             {
                 ScrollbarValue* pScVal = reinterpret_cast<ScrollbarValue*>(rVal.getOptionalVal());
