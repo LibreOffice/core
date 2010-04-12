@@ -47,8 +47,8 @@ namespace drawinglayer { namespace primitive2d {
     class PolyPolygonColorPrimitive2D;
     class MetafilePrimitive2D;
     class MaskPrimitive2D;
-    class UnifiedAlphaPrimitive2D;
-    class AlphaPrimitive2D;
+    class UnifiedTransparencePrimitive2D;
+    class TransparencePrimitive2D;
     class TransformPrimitive2D;
     class MarkerArrayPrimitive2D;
     class PointArrayPrimitive2D;
@@ -65,6 +65,11 @@ namespace drawinglayer
 {
     namespace processor2d
     {
+        /** VclProcessor2D class
+
+            This processor is the base class for VCL-Based processors. It has no
+            processBasePrimitive2D implementation and thus is not usable directly.
+         */
         class VclProcessor2D : public BaseProcessor2D
         {
         protected:
@@ -99,8 +104,8 @@ namespace drawinglayer
             void RenderMetafilePrimitive2D(const primitive2d::MetafilePrimitive2D& rPolygonCandidate);
             void RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive2D& rMaskCandidate);
             void RenderModifiedColorPrimitive2D(const primitive2d::ModifiedColorPrimitive2D& rModifiedCandidate);
-            void RenderUnifiedAlphaPrimitive2D(const primitive2d::UnifiedAlphaPrimitive2D& rTransCandidate);
-            void RenderAlphaPrimitive2D(const primitive2d::AlphaPrimitive2D& rTransCandidate);
+            void RenderUnifiedTransparencePrimitive2D(const primitive2d::UnifiedTransparencePrimitive2D& rTransCandidate);
+            void RenderTransparencePrimitive2D(const primitive2d::TransparencePrimitive2D& rTransCandidate);
             void RenderTransformPrimitive2D(const primitive2d::TransformPrimitive2D& rTransformCandidate);
             void RenderPagePreviewPrimitive2D(const primitive2d::PagePreviewPrimitive2D& rPagePreviewCandidate);
             void RenderMarkerArrayPrimitive2D(const primitive2d::MarkerArrayPrimitive2D& rMarkerArrayCandidate);
