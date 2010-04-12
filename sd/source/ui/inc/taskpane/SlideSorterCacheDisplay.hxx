@@ -57,7 +57,6 @@ class Window;
 
 namespace sd { namespace toolpanel {
 
-class ControlFactory;
 class TreeNode;
 
 /** This panel demonstrates how to create a panel for the task pane.
