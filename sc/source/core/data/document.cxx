@@ -2644,10 +2644,11 @@ void ScDocument::PutCell( const ScAddress& rPos, ScBaseCell* pCell, BOOL bForceT
 }
 
 
-BOOL ScDocument::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString )
+BOOL ScDocument::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
+                            SvNumberFormatter* pFormatter, bool bDetectNumberFormat )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
-        return pTab[nTab]->SetString( nCol, nRow, nTab, rString );
+        return pTab[nTab]->SetString( nCol, nRow, nTab, rString, pFormatter, bDetectNumberFormat );
     else
         return FALSE;
 }
@@ -3906,7 +3907,7 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
 }
 
 
-BOOL ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2, USHORT nMask )
 {
     if ( nMask & HASATTR_ROTATE )
@@ -3960,16 +3961,16 @@ BOOL ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
     }
 
     if (!nMask)
-        return FALSE;
+        return false;
 
-    BOOL bFound = FALSE;
+    bool bFound = false;
     for (SCTAB i=nTab1; i<=nTab2 && !bFound; i++)
         if (pTab[i])
         {
             if ( nMask & HASATTR_RTL )
             {
                 if ( GetEditTextDirection(i) == EE_HTEXTDIR_R2L )       // sheet default
-                    bFound = TRUE;
+                    bFound = true;
             }
             if ( nMask & HASATTR_RIGHTORCENTER )
             {
@@ -3978,7 +3979,7 @@ BOOL ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                 //  That way, ScAttrArray::HasAttrib doesn't have to handle RTL sheets.
 
                 if ( IsLayoutRTL(i) )
-                    bFound = TRUE;
+                    bFound = true;
             }
 
             if ( !bFound )
@@ -3988,7 +3989,7 @@ BOOL ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
     return bFound;
 }
 
-BOOL ScDocument::HasAttrib( const ScRange& rRange, USHORT nMask )
+bool ScDocument::HasAttrib( const ScRange& rRange, USHORT nMask )
 {
     return HasAttrib( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
                       rRange.aEnd.Col(),   rRange.aEnd.Row(),   rRange.aEnd.Tab(),

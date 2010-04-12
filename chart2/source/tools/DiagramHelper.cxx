@@ -599,7 +599,7 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
                         , const uno::Reference< chart2::XDataSeries >& xDataSeries
                         , const uno::Reference< chart2::XDiagram >& xDiagram
                         , const uno::Reference< uno::XComponentContext > & xContext
-                        )
+                        , bool bAdaptAxes )
 {
     bool bChanged = false;
 
@@ -610,6 +610,7 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
 
     sal_Int32 nNewAxisIndex = bAttachToMainAxis ? 0 : 1;
     sal_Int32 nOldAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
+    uno::Reference< chart2::XAxis > xOldAxis( DiagramHelper::getAttachedAxis( xDataSeries, xDiagram ) );
 
     if( nOldAxisIndex != nNewAxisIndex )
     {
@@ -629,6 +630,11 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
         uno::Reference< XAxis > xAxis( AxisHelper::getAxis( 1, bAttachToMainAxis, xDiagram ) );
         if(!xAxis.is()) //create an axis if necessary
             xAxis = AxisHelper::createAxis( 1, bAttachToMainAxis, xDiagram, xContext );
+        if( bAdaptAxes )
+        {
+            AxisHelper::makeAxisVisible( xAxis );
+            AxisHelper::hideAxisIfNoDataIsAttached( xOldAxis, xDiagram );
+        }
     }
 
     return bChanged;
