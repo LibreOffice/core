@@ -850,7 +850,7 @@ bool SlideView::updateScreen() const
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    ENSURE_OR_RETURN( mpCanvas.get(),
+    ENSURE_OR_RETURN_FALSE( mpCanvas.get(),
                        "SlideView::updateScreen(): Disposed" );
 
     return mpCanvas->updateScreen( false );
@@ -860,7 +860,7 @@ bool SlideView::paintScreen() const
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    ENSURE_OR_RETURN( mpCanvas.get(),
+    ENSURE_OR_RETURN_FALSE( mpCanvas.get(),
                        "SlideView::paintScreen(): Disposed" );
 
     return mpCanvas->updateScreen( true );
