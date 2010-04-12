@@ -1879,7 +1879,8 @@ long PushButton::PreNotify( NotifyEvent& rNEvt )
                     pBorder->Update();
                 }
             }
-            else if( IsNativeControlSupported(CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL) )
+            else if( (GetStyle() & WB_FLATBUTTON) ||
+                     IsNativeControlSupported(CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL) )
             {
                 Invalidate();
             }
