@@ -27,40 +27,53 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <com/sun/star/text/WritingMode.hpp>
-#include <sfx2/app.hxx>
-#include <svl/itempool.hxx>
-#include <svx/fmmodel.hxx>
-#include <sfx2/dispatch.hxx>
-#include <dlgutil.hxx>
 
+#include <com/sun/star/text/WritingMode.hpp>
+
+#include <vcl/toolbox.hxx>
+
+#include <svl/itempool.hxx>
+
+#include <svtools/toolbarmenu.hxx>
+#include <svtools/popupwindowcontroller.hxx>
+#include <svtools/popupmenucontrollerbase.hxx>
+
+#include <sfx2/app.hxx>
+#include <sfx2/dispatch.hxx>
+
+#include <editeng/eeitem.hxx>
+#include <editeng/frmdiritem.hxx>
+
+#include <svx/fmmodel.hxx>
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
-#include "gallery.hxx"
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
-#include <editeng/eeitem.hxx>
-#include <editeng/frmdiritem.hxx>
-#include "toolbarmenu.hxx"
+
+#include "gallery.hxx"
+#include <dlgutil.hxx>
 
 #include "fontworkgallery.hxx"
 #include "fontworkgallery.hrc"
 
 #include <algorithm>
 
-#ifndef _TOOLBOX_HXX //autogen
-#include <vcl/toolbox.hxx>
-#endif
-#ifndef _SVX_HELPID_HRC
 #include "helpid.hrc"
-#endif
-using namespace svx;
+
+using ::rtl::OUString;
+using ::svtools::ToolbarMenu;
+
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
+
+namespace svx
+{
 
 const int nColCount = 4;
 const int nLineCount = 4;
@@ -291,7 +304,7 @@ IMPL_LINK( FontWorkGalleryDialog, DoubleClickFavoriteHdl, void*, EMPTYARG )
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+//------------------------------------------------------------------------
 
 SFX_IMPL_TOOLBOX_CONTROL( FontWorkShapeTypeControl, SfxStringItem );
 FontWorkShapeTypeControl::FontWorkShapeTypeControl( USHORT nSlotId, USHORT nId, ToolBox &rTbx )
@@ -325,143 +338,104 @@ SfxPopupWindow* FontWorkShapeTypeControl::CreatePopupWindow()
 
 // -----------------------------------------------------------------------
 
-void FontWorkShapeTypeControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
-{
-    SfxToolBoxControl::StateChanged( nSID, eState, pState );
-}
-
-// -----------------------------------------------------------------------
-
 void FontWorkShapeTypeControl::Select( BOOL )
 {
 
 }
 
-// ####################################################################
+// ========================================================================
+// FontWorkAlignmentWindow
+// ========================================================================
 
-SFX_IMPL_TOOLBOX_CONTROL( FontWorkAlignmentControl, SfxBoolItem );
-
-FontWorkAlignmentWindow::FontWorkAlignmentWindow(
-    USHORT nId,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame ) :
-
-    SfxPopupWindow( nId,
-                    rFrame,
-                    SVX_RES( RID_SVXFLOAT_FONTWORK_ALIGNMENT )),
-    maImgAlgin1( SVX_RES( IMG_FONTWORK_ALIGN_LEFT_16 ) ),
-    maImgAlgin2( SVX_RES( IMG_FONTWORK_ALIGN_CENTER_16 ) ),
-    maImgAlgin3( SVX_RES( IMG_FONTWORK_ALIGN_RIGHT_16 ) ),
-    maImgAlgin4( SVX_RES( IMG_FONTWORK_ALIGN_WORD_16 ) ),
-    maImgAlgin5( SVX_RES( IMG_FONTWORK_ALIGN_STRETCH_16 ) ),
-    maImgAlgin1h( SVX_RES( IMG_FONTWORK_ALIGN_LEFT_16_H ) ),
-    maImgAlgin2h( SVX_RES( IMG_FONTWORK_ALIGN_CENTER_16_H ) ),
-    maImgAlgin3h( SVX_RES( IMG_FONTWORK_ALIGN_RIGHT_16_H ) ),
-    maImgAlgin4h( SVX_RES( IMG_FONTWORK_ALIGN_WORD_16_H ) ),
-    maImgAlgin5h( SVX_RES( IMG_FONTWORK_ALIGN_STRETCH_16_H ) ),
-    mxFrame( rFrame ),
-    mbPopupMode( true )
+class FontWorkAlignmentWindow : public ToolbarMenu
 {
-    SetHelpId( HID_WIN_FONTWORK_ALIGN );
-    implInit();
-}
+public:
+    FontWorkAlignmentWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, Window* pParentWindow );
 
-FontWorkAlignmentWindow::FontWorkAlignmentWindow(
-    USHORT nId,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    Window* /*pParentWindow*/ ) :
+    virtual void SAL_CALL statusChanged( const frame::FeatureStateEvent& Event ) throw ( RuntimeException );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
-    SfxPopupWindow( nId,
-                    rFrame,
-                    SVX_RES( RID_SVXFLOAT_FONTWORK_ALIGNMENT )),
-    maImgAlgin1( SVX_RES( IMG_FONTWORK_ALIGN_LEFT_16 ) ),
-    maImgAlgin2( SVX_RES( IMG_FONTWORK_ALIGN_CENTER_16 ) ),
-    maImgAlgin3( SVX_RES( IMG_FONTWORK_ALIGN_RIGHT_16 ) ),
-    maImgAlgin4( SVX_RES( IMG_FONTWORK_ALIGN_WORD_16 ) ),
-    maImgAlgin5( SVX_RES( IMG_FONTWORK_ALIGN_STRETCH_16 ) ),
-    maImgAlgin1h( SVX_RES( IMG_FONTWORK_ALIGN_LEFT_16_H ) ),
-    maImgAlgin2h( SVX_RES( IMG_FONTWORK_ALIGN_CENTER_16_H ) ),
-    maImgAlgin3h( SVX_RES( IMG_FONTWORK_ALIGN_RIGHT_16_H ) ),
-    maImgAlgin4h( SVX_RES( IMG_FONTWORK_ALIGN_WORD_16_H ) ),
-    maImgAlgin5h( SVX_RES( IMG_FONTWORK_ALIGN_STRETCH_16_H ) ),
-    mxFrame( rFrame ),
-    mbPopupMode( true )
+private:
+    svt::ToolboxController& mrController;
+
+    Image maImgAlgin1;
+    Image maImgAlgin2;
+    Image maImgAlgin3;
+    Image maImgAlgin4;
+    Image maImgAlgin5;
+    Image maImgAlgin1h;
+    Image maImgAlgin2h;
+    Image maImgAlgin3h;
+    Image maImgAlgin4h;
+    Image maImgAlgin5h;
+
+    const rtl::OUString msFontworkAlignment;
+
+    DECL_LINK( SelectHdl, void * );
+
+    void    implSetAlignment( int nAlignmentMode, bool bEnabled );
+};
+
+FontWorkAlignmentWindow::FontWorkAlignmentWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, Window* pParentWindow )
+: ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_FONTWORK_ALIGNMENT ))
+, mrController( rController )
+, maImgAlgin1( SVX_RES( IMG_FONTWORK_ALIGN_LEFT_16 ) )
+, maImgAlgin2( SVX_RES( IMG_FONTWORK_ALIGN_CENTER_16 ) )
+, maImgAlgin3( SVX_RES( IMG_FONTWORK_ALIGN_RIGHT_16 ) )
+, maImgAlgin4( SVX_RES( IMG_FONTWORK_ALIGN_WORD_16 ) )
+, maImgAlgin5( SVX_RES( IMG_FONTWORK_ALIGN_STRETCH_16 ) )
+, maImgAlgin1h( SVX_RES( IMG_FONTWORK_ALIGN_LEFT_16_H ) )
+, maImgAlgin2h( SVX_RES( IMG_FONTWORK_ALIGN_CENTER_16_H ) )
+, maImgAlgin3h( SVX_RES( IMG_FONTWORK_ALIGN_RIGHT_16_H ) )
+, maImgAlgin4h( SVX_RES( IMG_FONTWORK_ALIGN_WORD_16_H ) )
+, maImgAlgin5h( SVX_RES( IMG_FONTWORK_ALIGN_STRETCH_16_H ) )
+, msFontworkAlignment( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkAlignment" ) )
 {
-    SetHelpId( HID_WIN_FONTWORK_ALIGN );
-    implInit();
-}
-
-void FontWorkAlignmentWindow::implInit()
-{
-    SetHelpId( HID_POPUP_FONTWORK_ALIGN );
-
     bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
-    mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
-    mpMenu->SetHelpId( HID_POPUP_FONTWORK_ALIGN );
-    mpMenu->SetSelectHdl( LINK( this, FontWorkAlignmentWindow, SelectHdl ) );
+    SetHelpId( HID_POPUP_FONTWORK_ALIGN );
+    SetSelectHdl( LINK( this, FontWorkAlignmentWindow, SelectHdl ) );
 
-    mpMenu->appendEntry( 0, String( SVX_RES( STR_ALIGN_LEFT ) ), bHighContrast ? maImgAlgin1h : maImgAlgin1 );
-    mpMenu->appendEntry( 1, String( SVX_RES( STR_ALIGN_CENTER ) ), bHighContrast ? maImgAlgin2h : maImgAlgin2 );
-    mpMenu->appendEntry( 2, String( SVX_RES( STR_ALIGN_RIGHT ) ), bHighContrast ? maImgAlgin3h : maImgAlgin3 );
-    mpMenu->appendEntry( 3, String( SVX_RES( STR_ALIGN_WORD ) ), bHighContrast ? maImgAlgin4h : maImgAlgin4 );
-    mpMenu->appendEntry( 4, String( SVX_RES( STR_ALIGN_STRETCH ) ), bHighContrast ? maImgAlgin5h : maImgAlgin5 );
+    appendEntry( 0, String( SVX_RES( STR_ALIGN_LEFT ) ), bHighContrast ? maImgAlgin1h : maImgAlgin1 );
+    appendEntry( 1, String( SVX_RES( STR_ALIGN_CENTER ) ), bHighContrast ? maImgAlgin2h : maImgAlgin2 );
+    appendEntry( 2, String( SVX_RES( STR_ALIGN_RIGHT ) ), bHighContrast ? maImgAlgin3h : maImgAlgin3 );
+    appendEntry( 3, String( SVX_RES( STR_ALIGN_WORD ) ), bHighContrast ? maImgAlgin4h : maImgAlgin4 );
+    appendEntry( 4, String( SVX_RES( STR_ALIGN_STRETCH ) ), bHighContrast ? maImgAlgin5h : maImgAlgin5 );
 
-    SetOutputSizePixel( mpMenu->getMenuSize() );
-    mpMenu->SetOutputSizePixel( GetOutputSizePixel() );
-
-    mpMenu->Show();
+    SetOutputSizePixel( getMenuSize() );
 
     FreeResource();
 
-    AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkAlignment" )));
-}
-
-SfxPopupWindow* FontWorkAlignmentWindow::Clone() const
-{
-    return new FontWorkAlignmentWindow( GetId(), mxFrame );
-}
-
-// -----------------------------------------------------------------------
-
-FontWorkAlignmentWindow::~FontWorkAlignmentWindow()
-{
-    delete mpMenu;
+    AddStatusListener( msFontworkAlignment );
 }
 
 // -----------------------------------------------------------------------
 
 void FontWorkAlignmentWindow::implSetAlignment( int nSurface, bool bEnabled )
 {
-    if( mpMenu )
+    int i;
+    for( i = 0; i < 5; i++ )
     {
-        int i;
-        for( i = 0; i < 5; i++ )
-        {
-            mpMenu->checkEntry( i, (i == nSurface) && bEnabled );
-            mpMenu->enableEntry( i, bEnabled );
-        }
+        checkEntry( i, (i == nSurface) && bEnabled );
+        enableEntry( i, bEnabled );
     }
 }
 
 // -----------------------------------------------------------------------
 
-void FontWorkAlignmentWindow::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SAL_CALL FontWorkAlignmentWindow::statusChanged( const frame::FeatureStateEvent& Event ) throw ( RuntimeException )
 {
-    switch( nSID )
+    if( Event.FeatureURL.Main.equals( msFontworkAlignment ) )
     {
-        case SID_FONTWORK_ALIGNMENT:
+        if( !Event.IsEnabled )
         {
-            if( eState == SFX_ITEM_DISABLED )
-            {
-                implSetAlignment( 0, false );
-            }
-            else
-            {
-                const SfxInt32Item* pStateItem = PTR_CAST( SfxInt32Item, pState );
-                if( pStateItem )
-                    implSetAlignment( pStateItem->GetValue(), true );
-            }
-            break;
+            implSetAlignment( 0, false );
+        }
+        else
+        {
+            sal_Int32 nValue = 0;
+            if( Event.State >>= nValue )
+                implSetAlignment( nValue, true );
         }
     }
 }
@@ -470,17 +444,17 @@ void FontWorkAlignmentWindow::StateChanged( USHORT nSID, SfxItemState eState, co
 
 void FontWorkAlignmentWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    SfxPopupWindow::DataChanged( rDCEvt );
+    ToolbarMenu::DataChanged( rDCEvt );
 
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
         bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
-        mpMenu->appendEntry( 0, String( SVX_RES( STR_ALIGN_LEFT ) ), bHighContrast ? maImgAlgin1h : maImgAlgin1 );
-        mpMenu->appendEntry( 1, String( SVX_RES( STR_ALIGN_CENTER ) ), bHighContrast ? maImgAlgin2h : maImgAlgin2 );
-        mpMenu->appendEntry( 2, String( SVX_RES( STR_ALIGN_RIGHT ) ), bHighContrast ? maImgAlgin3h : maImgAlgin3 );
-        mpMenu->appendEntry( 3, String( SVX_RES( STR_ALIGN_WORD ) ), bHighContrast ? maImgAlgin4h : maImgAlgin4 );
-        mpMenu->appendEntry( 4, String( SVX_RES( STR_ALIGN_STRETCH ) ), bHighContrast ? maImgAlgin5h : maImgAlgin5 );
+        appendEntry( 0, String( SVX_RES( STR_ALIGN_LEFT ) ), bHighContrast ? maImgAlgin1h : maImgAlgin1 );
+        appendEntry( 1, String( SVX_RES( STR_ALIGN_CENTER ) ), bHighContrast ? maImgAlgin2h : maImgAlgin2 );
+        appendEntry( 2, String( SVX_RES( STR_ALIGN_RIGHT ) ), bHighContrast ? maImgAlgin3h : maImgAlgin3 );
+        appendEntry( 3, String( SVX_RES( STR_ALIGN_WORD ) ), bHighContrast ? maImgAlgin4h : maImgAlgin4 );
+        appendEntry( 4, String( SVX_RES( STR_ALIGN_STRETCH ) ), bHighContrast ? maImgAlgin5h : maImgAlgin5 );
     }
 }
 
@@ -491,25 +465,14 @@ IMPL_LINK( FontWorkAlignmentWindow, SelectHdl, void *, EMPTYARG )
     if ( IsInPopupMode() )
         EndPopupMode();
 
-//  SfxDispatcher* pDisp = GetBindings().GetDispatcher();
-
-    sal_Int32 nAlignment = mpMenu->getSelectedEntryId();
+    sal_Int32 nAlignment = getSelectedEntryId();
     if( nAlignment >= 0 )
     {
-        SfxInt32Item    aItem( SID_FONTWORK_ALIGNMENT, nAlignment );
-        rtl::OUString   aCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkAlignment" ));
-
-        Any a;
-        INetURLObject aObj( aCommand );
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = aObj.GetURLPath();
-        aItem.QueryValue( a );
-        aArgs[0].Value = a;
+        aArgs[0].Name = msFontworkAlignment.copy(5);
+        aArgs[0].Value <<= (sal_Int32)nAlignment;
 
-        SfxToolBoxControl::Dispatch( Reference< ::com::sun::star::frame::XDispatchProvider >(
-                                     mxFrame->getController(), UNO_QUERY ),
-                                     aCommand,
-                                     aArgs );
+        mrController.dispatchCommand( msFontworkAlignment, aArgs );
 
         implSetAlignment( nAlignment, true );
     }
@@ -517,250 +480,189 @@ IMPL_LINK( FontWorkAlignmentWindow, SelectHdl, void *, EMPTYARG )
     return 0;
 }
 
-// -----------------------------------------------------------------------
-
-void FontWorkAlignmentWindow::StartSelection()
-{
-}
-
-// -----------------------------------------------------------------------
-
-BOOL FontWorkAlignmentWindow::Close()
-{
-    return SfxPopupWindow::Close();
-}
-
-// -----------------------------------------------------------------------
-
-void FontWorkAlignmentWindow::PopupModeEnd()
-{
-    if ( IsVisible() )
-    {
-        mbPopupMode = FALSE;
-    }
-    SfxPopupWindow::PopupModeEnd();
-}
-
-// -----------------------------------------------------------------------
-
-void FontWorkAlignmentWindow::GetFocus (void)
-{
-    SfxPopupWindow::GetFocus();
-    // Grab the focus to the line ends value set so that it can be controlled
-    // with the keyboard.
-    if( mpMenu )
-        mpMenu->GrabFocus();
-}
-
+// ========================================================================
+// FontWorkAlignmentControl
 // ========================================================================
 
-FontWorkAlignmentControl::FontWorkAlignmentControl(
-    USHORT nSlotId, USHORT nId, ToolBox &rTbx )
-: SfxToolBoxControl( nSlotId, nId, rTbx )
+class FontWorkAlignmentControl : public svt::PopupWindowController
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
+public:
+    FontWorkAlignmentControl( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
+
+    virtual ::Window* createPopupWindow( ::Window* pParent );
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
+};
+
+
+// -----------------------------------------------------------------------
+
+FontWorkAlignmentControl::FontWorkAlignmentControl( const Reference< lang::XMultiServiceFactory >& rServiceManager )
+: svt::PopupWindowController( rServiceManager, Reference< frame::XFrame >(), OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkAlignment" ) ) )
+{
 }
 
 // -----------------------------------------------------------------------
 
-FontWorkAlignmentControl::~FontWorkAlignmentControl()
+::Window* FontWorkAlignmentControl::createPopupWindow( ::Window* pParent )
 {
+    return new FontWorkAlignmentWindow( *this, m_xFrame, pParent );
 }
 
 // -----------------------------------------------------------------------
-
-SfxPopupWindowType FontWorkAlignmentControl::GetPopupWindowType() const
-{
-    return SFX_POPUPWINDOW_ONCLICK;
-}
-
+// XServiceInfo
 // -----------------------------------------------------------------------
 
-SfxPopupWindow* FontWorkAlignmentControl::CreatePopupWindow()
+OUString SAL_CALL FontWorkAlignmentControl_getImplementationName()
 {
-    FontWorkAlignmentWindow* pWin = new FontWorkAlignmentWindow( GetId(), m_xFrame, &GetToolBox() );
-    pWin->StartPopupMode( &GetToolBox(), TRUE );
-    pWin->StartSelection();
-    SetPopupWindow( pWin );
-    return pWin;
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svx.FontWorkAlignmentController" ));
 }
 
-// -----------------------------------------------------------------------
+// --------------------------------------------------------------------
 
-void FontWorkAlignmentControl::StateChanged( USHORT /*nSID*/, SfxItemState eState, const SfxPoolItem* /*pState*/ )
+Sequence< OUString > SAL_CALL FontWorkAlignmentControl_getSupportedServiceNames() throw( RuntimeException )
 {
-    USHORT nId = GetId();
-    ToolBox& rTbx = GetToolBox();
-
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
+    Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ));
+    return aSNS;
 }
+
+// --------------------------------------------------------------------
+
+Reference< XInterface > SAL_CALL SAL_CALL FontWorkAlignmentControl_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
+{
+    return *new FontWorkAlignmentControl( rSMgr );
+}
+
+// --------------------------------------------------------------------
+
+OUString SAL_CALL FontWorkAlignmentControl::getImplementationName(  ) throw (RuntimeException)
+{
+    return FontWorkAlignmentControl_getImplementationName();
+}
+
+// --------------------------------------------------------------------
+
+Sequence< OUString > SAL_CALL FontWorkAlignmentControl::getSupportedServiceNames(  ) throw (RuntimeException)
+{
+    return FontWorkAlignmentControl_getSupportedServiceNames();
+}
+
 
 // ####################################################################
 
-SFX_IMPL_TOOLBOX_CONTROL( FontWorkCharacterSpacingControl, SfxBoolItem );
-
-FontWorkCharacterSpacingWindow::FontWorkCharacterSpacingWindow(
-    USHORT nId,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame ) :
-
-    SfxPopupWindow( nId,
-                    rFrame,
-                    SVX_RES( RID_SVXFLOAT_FONTWORK_CHARSPACING )),
-    mxFrame( rFrame ),
-    mbPopupMode( true )
+class FontWorkCharacterSpacingWindow : public ToolbarMenu
 {
-    SetHelpId( HID_WIN_FONTWORK_CHARSPACE );
-    implInit();
-}
+public:
+    FontWorkCharacterSpacingWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, Window* pParentWindow );
 
-FontWorkCharacterSpacingWindow::FontWorkCharacterSpacingWindow(
-    USHORT nId,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    Window* pParentWindow ) :
+    virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
+private:
+    svt::ToolboxController& mrController;
 
-    SfxPopupWindow( nId,
-                    rFrame,
-                    pParentWindow,
-                    SVX_RES( RID_SVXFLOAT_FONTWORK_CHARSPACING )),
-    mxFrame( rFrame ),
-    mbPopupMode( true )
-{
-    SetHelpId( HID_WIN_FONTWORK_CHARSPACE );
-    implInit();
-}
+    const rtl::OUString msFontworkCharacterSpacing;
+    const rtl::OUString msFontworkKernCharacterPairs;
 
-void FontWorkCharacterSpacingWindow::implInit()
-{
-    SetHelpId( HID_POPUP_FONTWORK_CHARSPACE );
+    DECL_LINK( SelectHdl, void * );
 
-//  bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
+    void    implSetCharacterSpacing( sal_Int32 nCharacterSpacing, bool bEnabled );
+    void    implSetKernCharacterPairs( sal_Bool bKernOnOff, bool bEnabled );
 
-    mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
-    mpMenu->SetHelpId( HID_POPUP_FONTWORK_CHARSPACE );
-    mpMenu->SetSelectHdl( LINK( this, FontWorkCharacterSpacingWindow, SelectHdl ) );
-
-    mpMenu->appendEntry( 0, String( SVX_RES( STR_CHARS_SPACING_VERY_TIGHT ) ), MIB_RADIOCHECK );
-    mpMenu->appendEntry( 1, String( SVX_RES( STR_CHARS_SPACING_TIGHT ) ), MIB_RADIOCHECK );
-    mpMenu->appendEntry( 2, String( SVX_RES( STR_CHARS_SPACING_NORMAL ) ), MIB_RADIOCHECK );
-    mpMenu->appendEntry( 3, String( SVX_RES( STR_CHARS_SPACING_LOOSE ) ), MIB_RADIOCHECK );
-    mpMenu->appendEntry( 4, String( SVX_RES( STR_CHARS_SPACING_VERY_LOOSE ) ), MIB_RADIOCHECK );
-    mpMenu->appendEntry( 5, String( SVX_RES( STR_CHARS_SPACING_CUSTOM ) ), MIB_RADIOCHECK );
-    mpMenu->appendSeparator();
-    mpMenu->appendEntry( 6, String( SVX_RES( STR_CHARS_SPACING_KERN_PAIRS ) ), MIB_CHECKABLE );
-
-    SetOutputSizePixel( mpMenu->getMenuSize() );
-    mpMenu->SetOutputSizePixel( GetOutputSizePixel() );
-
-    mpMenu->Show();
-
-    FreeResource();
-
-    AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkCharacterSpacing" )));
-}
-
-SfxPopupWindow* FontWorkCharacterSpacingWindow::Clone() const
-{
-    return new FontWorkCharacterSpacingWindow( GetId(), mxFrame );
-}
+};
 
 // -----------------------------------------------------------------------
 
-FontWorkCharacterSpacingWindow::~FontWorkCharacterSpacingWindow()
+FontWorkCharacterSpacingWindow::FontWorkCharacterSpacingWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, Window* pParentWindow )
+: ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_FONTWORK_CHARSPACING ))
+, mrController( rController )
+, msFontworkCharacterSpacing( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkCharacterSpacing" ) )
+, msFontworkKernCharacterPairs( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkKernCharacterPairs" ) )
 {
-    delete mpMenu;
+    SetHelpId( HID_POPUP_FONTWORK_CHARSPACE );
+    SetSelectHdl( LINK( this, FontWorkCharacterSpacingWindow, SelectHdl ) );
+
+    appendEntry( 0, String( SVX_RES( STR_CHARS_SPACING_VERY_TIGHT ) ), MIB_RADIOCHECK );
+    appendEntry( 1, String( SVX_RES( STR_CHARS_SPACING_TIGHT ) ), MIB_RADIOCHECK );
+    appendEntry( 2, String( SVX_RES( STR_CHARS_SPACING_NORMAL ) ), MIB_RADIOCHECK );
+    appendEntry( 3, String( SVX_RES( STR_CHARS_SPACING_LOOSE ) ), MIB_RADIOCHECK );
+    appendEntry( 4, String( SVX_RES( STR_CHARS_SPACING_VERY_LOOSE ) ), MIB_RADIOCHECK );
+    appendEntry( 5, String( SVX_RES( STR_CHARS_SPACING_CUSTOM ) ), MIB_RADIOCHECK );
+    appendSeparator();
+    appendEntry( 6, String( SVX_RES( STR_CHARS_SPACING_KERN_PAIRS ) ), MIB_CHECKABLE );
+
+    SetOutputSizePixel( getMenuSize() );
+
+    FreeResource();
+
+    AddStatusListener( msFontworkCharacterSpacing );
+    AddStatusListener( msFontworkKernCharacterPairs );
 }
 
 // -----------------------------------------------------------------------
 
 void FontWorkCharacterSpacingWindow::implSetCharacterSpacing( sal_Int32 nCharacterSpacing, bool bEnabled )
 {
-    if( mpMenu )
+    sal_Int32 i;
+    for ( i = 0; i < 6; i++ )
     {
-        sal_Int32 i;
-        for ( i = 0; i < 6; i++ )
+        checkEntry( i, sal_False );
+        enableEntry( i, bEnabled );
+    }
+    if ( nCharacterSpacing != -1 )
+    {
+        sal_Int32 nEntry;
+        switch( nCharacterSpacing )
         {
-            mpMenu->checkEntry( i, sal_False );
-            mpMenu->enableEntry( i, bEnabled );
+            case 80 : nEntry = 0; break;
+            case 90 : nEntry = 1; break;
+            case 100 : nEntry = 2; break;
+            case 120 : nEntry = 3; break;
+            case 150 : nEntry = 4; break;
+            default : nEntry = 5; break;
         }
-        if ( nCharacterSpacing != -1 )
-        {
-            sal_Int32 nEntry;
-            switch( nCharacterSpacing )
-            {
-                case 80 : nEntry = 0; break;
-                case 90 : nEntry = 1; break;
-                case 100 : nEntry = 2; break;
-                case 120 : nEntry = 3; break;
-                case 150 : nEntry = 4; break;
-                default : nEntry = 5; break;
-            }
-            mpMenu->checkEntry( nEntry, bEnabled );
-        }
+        checkEntry( nEntry, bEnabled );
     }
 }
+
+// -----------------------------------------------------------------------
 
 void FontWorkCharacterSpacingWindow::implSetKernCharacterPairs( sal_Bool, bool bEnabled )
 {
-    if( mpMenu )
-    {
-        mpMenu->enableEntry( 6, bEnabled );
-        mpMenu->checkEntry( 6, bEnabled );
-    }
+    enableEntry( 6, bEnabled );
+    checkEntry( 6, bEnabled );
 }
 
 // -----------------------------------------------------------------------
 
-void FontWorkCharacterSpacingWindow::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SAL_CALL FontWorkCharacterSpacingWindow::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException )
 {
-    switch( nSID )
+    if( Event.FeatureURL.Main.equals( msFontworkCharacterSpacing ) )
     {
-        case SID_FONTWORK_CHARACTER_SPACING:
+        if( !Event.IsEnabled )
         {
-            if( eState == SFX_ITEM_DISABLED )
-                implSetCharacterSpacing( 0, false );
-            else
-            {
-                const SfxInt32Item* pStateItem = PTR_CAST( SfxInt32Item, pState );
-                if( pStateItem )
-                    implSetCharacterSpacing( pStateItem->GetValue(), true );
-            }
+            implSetCharacterSpacing( 0, false );
         }
-        break;
-
-        case SID_FONTWORK_KERN_CHARACTER_PAIRS :
+        else
         {
-            if( eState == SFX_ITEM_DISABLED )
-                implSetKernCharacterPairs( 0, false );
-            else
-            {
-                const SfxBoolItem* pStateItem = PTR_CAST( SfxBoolItem, pState );
-                if( pStateItem )
-                    implSetKernCharacterPairs( pStateItem->GetValue(), true );
-            }
+            sal_Int32 nValue = 0;
+            if( Event.State >>= nValue )
+                implSetCharacterSpacing( nValue, true );
         }
-        break;
     }
-}
-
-// -----------------------------------------------------------------------
-
-void FontWorkCharacterSpacingWindow::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    SfxPopupWindow::DataChanged( rDCEvt );
-
-    if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    else if( Event.FeatureURL.Main.equals( msFontworkKernCharacterPairs ) )
     {
-//      bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-
-        mpMenu->appendEntry( 0, String( SVX_RES( STR_CHARS_SPACING_VERY_TIGHT ) ), MIB_CHECKABLE );
-        mpMenu->appendEntry( 1, String( SVX_RES( STR_CHARS_SPACING_TIGHT ) ), MIB_CHECKABLE );
-        mpMenu->appendEntry( 2, String( SVX_RES( STR_CHARS_SPACING_NORMAL ) ), MIB_CHECKABLE );
-        mpMenu->appendEntry( 3, String( SVX_RES( STR_CHARS_SPACING_LOOSE ) ),  MIB_CHECKABLE );
-        mpMenu->appendEntry( 4, String( SVX_RES( STR_CHARS_SPACING_VERY_LOOSE ) ), MIB_CHECKABLE );
-        mpMenu->appendEntry( 5, String( SVX_RES( STR_CHARS_SPACING_CUSTOM ) ), MIB_CHECKABLE );
-        mpMenu->appendSeparator();
-        mpMenu->appendEntry( 6, String( SVX_RES( STR_CHARS_SPACING_KERN_PAIRS ) ), MIB_CHECKABLE );
+        if( !Event.IsEnabled )
+        {
+            implSetKernCharacterPairs( 0, false );
+        }
+        else
+        {
+            sal_Bool bValue = sal_False;
+            if( Event.State >>= bValue )
+                implSetKernCharacterPairs( bValue, true );
+        }
     }
 }
 
@@ -771,7 +673,7 @@ IMPL_LINK( FontWorkCharacterSpacingWindow, SelectHdl, void *, EMPTYARG )
     if ( IsInPopupMode() )
         EndPopupMode();
 
-    sal_Int32 nSelection = mpMenu->getSelectedEntryId();
+    sal_Int32 nSelection = getSelectedEntryId();
     sal_Int32 nCharacterSpacing;
     switch( nSelection )
     {
@@ -784,53 +686,31 @@ IMPL_LINK( FontWorkCharacterSpacingWindow, SelectHdl, void *, EMPTYARG )
     }
     if ( nSelection == 5 )  // custom spacing
     {
-        SfxInt32Item    aItem( SID_FONTWORK_CHARACTER_SPACING, nCharacterSpacing );
-        rtl::OUString   aCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkCharacterSpacingDialog" ));
-
-        Any a;
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FontworkCharacterSpacing" ));
-        aItem.QueryValue( a );
-        aArgs[0].Value = a;
-        SfxToolBoxControl::Dispatch( Reference< ::com::sun::star::frame::XDispatchProvider >(
-                                        mxFrame->getController(), UNO_QUERY ),
-                                        aCommand,
-                                        aArgs );
+        aArgs[0].Name = msFontworkCharacterSpacing.copy(5);
+        aArgs[0].Value <<= (sal_Int32)nCharacterSpacing;
+
+        mrController.dispatchCommand( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkCharacterSpacingDialog" )), aArgs );
     }
     else if ( nSelection == 6 ) // KernCharacterPairs
     {
-        sal_Bool bOnOff = sal_True;
-        SfxBoolItem    aItem( SID_FONTWORK_KERN_CHARACTER_PAIRS, bOnOff );
         rtl::OUString   aCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkKernCharacterPairs" ));
 
-        Any a;
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FontworkKernCharacterPairs" ));
-        aItem.QueryValue( a );
-        aArgs[0].Value = a;
-        SfxToolBoxControl::Dispatch( Reference< ::com::sun::star::frame::XDispatchProvider >(
-                                        mxFrame->getController(), UNO_QUERY ),
-                                        aCommand,
-                                        aArgs );
+        aArgs[0].Name = msFontworkKernCharacterPairs.copy(5);
+        aArgs[0].Value <<= (sal_Bool) sal_True;
 
-        implSetKernCharacterPairs( bOnOff, true );
+        mrController.dispatchCommand( msFontworkKernCharacterPairs, aArgs );
+
+        implSetKernCharacterPairs( sal_True, true );
     }
     else if( nSelection >= 0 )
     {
-        SfxInt32Item    aItem( SID_FONTWORK_CHARACTER_SPACING, nCharacterSpacing );
-        rtl::OUString   aCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkCharacterSpacing" ));
-
-        Any a;
-        INetURLObject aObj( aCommand );
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = aObj.GetURLPath();
-        aItem.QueryValue( a );
-        aArgs[0].Value = a;
+        aArgs[0].Name = msFontworkCharacterSpacing.copy(5);
+        aArgs[0].Value <<=( sal_Int32)nCharacterSpacing;
 
-        SfxToolBoxControl::Dispatch( Reference< ::com::sun::star::frame::XDispatchProvider >(
-                                     mxFrame->getController(), UNO_QUERY ),
-                                     aCommand,
-                                     aArgs );
+        mrController.dispatchCommand( msFontworkCharacterSpacing,  aArgs );
 
         implSetCharacterSpacing( nCharacterSpacing, true );
     }
@@ -838,86 +718,77 @@ IMPL_LINK( FontWorkCharacterSpacingWindow, SelectHdl, void *, EMPTYARG )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+// ========================================================================
+// FontWorkCharacterSpacingControl
+// ========================================================================
 
-void FontWorkCharacterSpacingWindow::StartSelection()
+class FontWorkCharacterSpacingControl : public svt::PopupWindowController
+{
+public:
+    FontWorkCharacterSpacingControl( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
+
+    virtual ::Window* createPopupWindow( ::Window* pParent );
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
+};
+
+
+FontWorkCharacterSpacingControl::FontWorkCharacterSpacingControl( const Reference< lang::XMultiServiceFactory >& rServiceManager )
+: svt::PopupWindowController( rServiceManager, Reference< frame::XFrame >(), OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkCharacterSpacingFloater" ) ) )
 {
 }
 
 // -----------------------------------------------------------------------
 
-BOOL FontWorkCharacterSpacingWindow::Close()
+::Window* FontWorkCharacterSpacingControl::createPopupWindow( ::Window* pParent )
 {
-    return SfxPopupWindow::Close();
+    return new FontWorkCharacterSpacingWindow( *this, m_xFrame, pParent );
 }
 
 // -----------------------------------------------------------------------
-
-void FontWorkCharacterSpacingWindow::PopupModeEnd()
-{
-    if ( IsVisible() )
-    {
-        mbPopupMode = FALSE;
-    }
-    SfxPopupWindow::PopupModeEnd();
-}
-
+// XServiceInfo
 // -----------------------------------------------------------------------
 
-void FontWorkCharacterSpacingWindow::GetFocus (void)
+OUString SAL_CALL FontWorkCharacterSpacingControl_getImplementationName()
 {
-    SfxPopupWindow::GetFocus();
-    // Grab the focus to the line ends value set so that it can be controlled
-    // with the keyboard.
-    if( mpMenu )
-        mpMenu->GrabFocus();
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svx.FontWorkCharacterSpacingController" ));
+}
+
+// --------------------------------------------------------------------
+
+Sequence< OUString > SAL_CALL FontWorkCharacterSpacingControl_getSupportedServiceNames() throw( RuntimeException )
+{
+    Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ));
+    return aSNS;
+}
+
+// --------------------------------------------------------------------
+
+Reference< XInterface > SAL_CALL SAL_CALL FontWorkCharacterSpacingControl_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
+{
+    return *new FontWorkCharacterSpacingControl( rSMgr );
+}
+
+// --------------------------------------------------------------------
+
+OUString SAL_CALL FontWorkCharacterSpacingControl::getImplementationName(  ) throw (RuntimeException)
+{
+    return FontWorkCharacterSpacingControl_getImplementationName();
+}
+
+// --------------------------------------------------------------------
+
+Sequence< OUString > SAL_CALL FontWorkCharacterSpacingControl::getSupportedServiceNames(  ) throw (RuntimeException)
+{
+    return FontWorkCharacterSpacingControl_getSupportedServiceNames();
 }
 
 // ========================================================================
-
-FontWorkCharacterSpacingControl::FontWorkCharacterSpacingControl(
-    USHORT nSlotId, USHORT nId, ToolBox &rTbx )
-: SfxToolBoxControl( nSlotId, nId, rTbx )
-{
-    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
-}
-
-// -----------------------------------------------------------------------
-
-FontWorkCharacterSpacingControl::~FontWorkCharacterSpacingControl()
-{
-}
-
-// -----------------------------------------------------------------------
-
-SfxPopupWindowType FontWorkCharacterSpacingControl::GetPopupWindowType() const
-{
-    return SFX_POPUPWINDOW_ONCLICK;
-}
-
-// -----------------------------------------------------------------------
-
-SfxPopupWindow* FontWorkCharacterSpacingControl::CreatePopupWindow()
-{
-    FontWorkCharacterSpacingWindow* pWin = new FontWorkCharacterSpacingWindow( GetId(), m_xFrame, &GetToolBox() );
-    pWin->StartPopupMode( &GetToolBox(), TRUE );
-    pWin->StartSelection();
-    SetPopupWindow( pWin );
-    return pWin;
-}
-
-// -----------------------------------------------------------------------
-
-void FontWorkCharacterSpacingControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* )
-{
-    USHORT nId = GetId();
-    ToolBox& rTbx = GetToolBox();
-
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
-}
-
-// -----------------------------------------------------------------------
+// FontworkCharacterSpacingDialog
+// ========================================================================
 
 FontworkCharacterSpacingDialog::FontworkCharacterSpacingDialog( Window* pParent, sal_Int32 nScale )
 :   ModalDialog( pParent, SVX_RES( RID_SVX_MDLG_FONTWORK_CHARSPACING ) ),
@@ -938,4 +809,6 @@ FontworkCharacterSpacingDialog::~FontworkCharacterSpacingDialog()
 sal_Int32 FontworkCharacterSpacingDialog::getScale() const
 {
     return (sal_Int32)maMtrScale.GetValue();
+}
+
 }

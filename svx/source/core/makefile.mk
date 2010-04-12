@@ -28,8 +28,7 @@
 PRJ=..$/..
 
 PRJNAME=svx
-TARGET=tbxctrls
-LIBTARGET=NO
+TARGET=core
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -39,42 +38,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
-LIB1OBJFILES= \
-        $(SLO)$/fontworkgallery.obj\
-        $(SLO)$/extrusioncontrols.obj \
-        $(SLO)$/tbcontrl.obj	\
-        $(SLO)$/tbxcolorupdate.obj
-
-LIB2TARGET= $(SLB)$/$(TARGET).lib
-LIB2OBJFILES= \
-        $(SLO)$/formatpaintbrushctrl.obj\
-        $(SLO)$/colrctrl.obj	\
-        $(SLO)$/fillctrl.obj	\
-        $(SLO)$/grafctrl.obj	\
-        $(SLO)$/itemwin.obj		\
-        $(SLO)$/layctrl.obj		\
-        $(SLO)$/lboxctrl.obj	\
-        $(SLO)$/linectrl.obj	\
-        $(SLO)$/tbxalign.obj	\
-        $(SLO)$/tbxdrctl.obj    \
-        $(SLO)$/verttexttbxctrl.obj \
-        $(SLO)$/subtoolboxcontrol.obj \
-        $(SLO)$/tbxcolor.obj \
-        $(SLO)$/tbunocontroller.obj
-
-SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
-
-SRS1NAME=$(TARGET)
-SRC1FILES = \
-        fontworkgallery.src		\
-        extrusioncontrols.src		\
-        colrctrl.src			\
-        lboxctrl.src			\
-        linectrl.src			\
-        tbcontrl.src			\
-        tbxdraw.src				\
-        grafctrl.src
+SLOFILES = \
+        $(SLO)$/coreservices.obj
 
 # --- Targets -------------------------------------------------------
 

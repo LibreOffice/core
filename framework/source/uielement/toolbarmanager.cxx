@@ -75,6 +75,7 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/frame/status/Visibility.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -1028,6 +1029,10 @@ void ToolBarManager::CreateControllers()
                 aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
                 aPropValue.Value <<= xToolbarWindow;
                 aPropertyVector.push_back( makeAny( aPropValue ));
+                aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
+                aPropValue.Value <<= m_aModuleIdentifier;
+                aPropertyVector.push_back( makeAny( aPropValue ));
+
                 if ( nWidth > 0 )
                 {
                     aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ));
