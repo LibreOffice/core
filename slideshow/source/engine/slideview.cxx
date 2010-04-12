@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: slideview.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,9 +83,7 @@ struct StaticUnitRectPoly : public rtl::StaticWithInit<basegfx::B2DPolygon, Stat
 {
     basegfx::B2DPolygon operator()()
     {
-        return basegfx::tools::createPolygonFromRect(
-            basegfx::B2DRectangle( 0.0, 0.0,
-                                   1.0, 1.0 ) );
+        return basegfx::tools::createUnitPolygon();
     }
 };
 

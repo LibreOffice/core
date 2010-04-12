@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tpoption.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -299,7 +296,7 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
         eFUnit = (FieldUnit)rItem.GetValue();
     }
     else
-        eFUnit = GetModuleFieldUnit();
+        eFUnit = SfxModule::GetCurrentFieldUnit();
 
     SetFieldUnit( aMtrFldTabstop, eFUnit );
 

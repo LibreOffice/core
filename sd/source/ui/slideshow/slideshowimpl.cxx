@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: slideshowimpl.cxx,v $
- * $Revision: 1.57.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2221,9 +2218,9 @@ IMPL_LINK( SlideshowImpl, ContextMenuHdl, void*, EMPTYARG )
     PopupMenu* pPageMenu = pMenu->GetPopupMenu( CM_GOTO );
 
     SfxViewFrame* pViewFrame = getViewFrame();
-    if( pViewFrame && pViewFrame->GetFrame() )
+    if( pViewFrame )
     {
-        Reference< ::com::sun::star::frame::XFrame > xFrame( pViewFrame->GetFrame()->GetFrameInterface() );
+        Reference< ::com::sun::star::frame::XFrame > xFrame( pViewFrame->GetFrame().GetFrameInterface() );
         if( xFrame.is() )
         {
             pMenu->SetItemImage( CM_NEXT_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10617") ), FALSE, FALSE ) );
@@ -2846,12 +2843,12 @@ void SlideshowImpl::setActiveXToolbarsVisible( sal_Bool bVisible )
             // this is a plugin/activex mode, no toolbars should be visible during slide show
             // after the end of slide show they should be visible again
             SfxViewFrame* pViewFrame = getViewFrame();
-            if( pViewFrame && pViewFrame->GetFrame() && pViewFrame->GetFrame()->GetTopFrame() )
+            if( pViewFrame )
             {
                 try
                 {
                     Reference< frame::XLayoutManager > xLayoutManager;
-                    Reference< beans::XPropertySet > xFrameProps( pViewFrame->GetFrame()->GetTopFrame()->GetFrameInterface(), UNO_QUERY_THROW );
+                    Reference< beans::XPropertySet > xFrameProps( pViewFrame->GetFrame().GetTopFrame().GetFrameInterface(), UNO_QUERY_THROW );
                     if ( ( xFrameProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) )
                                 >>= xLayoutManager )
                       && xLayoutManager.is() )

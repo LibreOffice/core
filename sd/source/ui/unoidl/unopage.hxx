@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unopage.hxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,7 +94,6 @@ protected:
     void SetWidth( sal_Int32 nWidth );
     void SetHeight( sal_Int32 nHeight );
 
-    sal_Bool mbHasBackgroundObject;
     bool     mbIsImpressDocument;
 
     virtual void disposing() throw();

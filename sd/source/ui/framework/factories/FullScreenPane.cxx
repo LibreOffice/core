@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FullScreenPane.cxx,v $
- *
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +31,7 @@
 #include "ViewShellBase.hxx"
 #include <cppcanvas/vclfactory.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/topfrm.hxx>
+#include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/dialog.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

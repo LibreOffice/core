@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DocumentHelper.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +43,7 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include "stlpool.hxx"
+#include <svx/xfillit0.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -448,9 +446,10 @@ void DocumentHelper::AssignMasterPageToPage (
         // not override the new master page) and assign the master page to
         // the regular slide.
         pDocument->GetDocSh()->GetUndoManager()->AddUndoAction(
-            new SdBackgroundObjUndoAction(*pDocument, *pPage, pPage->GetBackgroundObj()),
-                TRUE);
-        pPage->SetBackgroundObj(NULL);
+            new SdBackgroundObjUndoAction(
+                *pDocument, *pPage, pPage->getSdrPageProperties().GetItemSet()),
+            TRUE);
+        pPage->getSdrPageProperties().PutItem(XFillStyleItem(XFILL_NONE));
 
         pDocument->SetMasterPage (
             (pPage->GetPageNum()-1)/2,

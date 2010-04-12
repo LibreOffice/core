@@ -502,7 +502,7 @@ ToolPanelViewShell_Impl::PanelActivation ToolPanelViewShell_Impl::SetupDefaultPa
     }
 
     // create the panels
-    Reference< XFrame > xFrame( m_rPanelViewShell.GetViewShellBase().GetViewFrame()->GetFrame()->GetFrameInterface() );
+    Reference< XFrame > xFrame( m_rPanelViewShell.GetViewShellBase().GetViewFrame()->GetFrame().GetFrameInterface() );
     const BOOL bHiContrast( m_pPanelDeck->GetSettings().GetStyleSettings().GetHighContrastMode() );
     for ( size_t i=0; i < sizeof( aPanels ) / sizeof( aPanels[0] ); ++i )
     {

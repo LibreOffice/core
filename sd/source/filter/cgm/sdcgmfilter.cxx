@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdcgmfilter.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,16 +111,14 @@ sal_Bool SdCGMFilter::Import()
             if( ( nRetValue &~0xff000000 ) != 0xffffff )    // maybe the backgroundcolor is already white
             {                                               // so we must not set a master page
                 mrDocument.StopWorkStartupDelay();
-                SdrObject* pObj = mrDocument.GetMasterSdPage(0, PK_STANDARD)->GetPresObj(PRESOBJ_BACKGROUND);
+                SdPage* pSdPage = mrDocument.GetMasterSdPage(0, PK_STANDARD);
 
-                if( pObj )
+                if(pSdPage)
                 {
-                    SfxItemSet  aSet( mrDocument.GetPool() );
-                    Color       aColor( (BYTE)( nRetValue >> 16 ), (BYTE)( nRetValue >> 8 ), (BYTE)( nRetValue >> 16 ) );
-
-                    aSet.Put( XFillColorItem( String(), aColor ) );
-                    aSet.Put( XFillStyleItem( XFILL_SOLID ) );
-                    pObj->SetMergedItemSetAndBroadcast( aSet );
+                    // set PageFill to given color
+                    const Color aColor((BYTE)(nRetValue >> 16), (BYTE)(nRetValue >> 8), (BYTE)(nRetValue >> 16));
+                    pSdPage->getSdrPageProperties().PutItem(XFillColorItem(String(), aColor));
+                    pSdPage->getSdrPageProperties().PutItem(XFillStyleItem(XFILL_SOLID));
                 }
             }
         }
