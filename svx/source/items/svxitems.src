@@ -26,8 +26,8 @@
  ************************************************************************/
  // include ------------------------------------------------------------------
 
-#include <svx/svxitems.hrc>
-#include <svx/svxids.hrc>
+#include "svx/svxitems.hrc"
+#include "svx/svxids.hrc"
 #include <editeng/editids.hrc>
 
 StringArray RID_ATTR_NAMES

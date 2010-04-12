@@ -77,41 +77,21 @@ Window DLG_BACKING
     {
         File = "odf_32.png";
     };
-    Bitmap BMP_BACKING_OPENFILE
+    Bitmap BMP_BACKING_FOLDER
     {
-        File = "open_32.png";
-    };
-    Bitmap BMP_BACKING_OPENTEMPLATE
-    {
-        File = "template_32.png";
-    };
-    Bitmap BMP_BACKING_EXT
-    {
-        File = "extension_plus_26.png";
+        File = "folder_32.png";
     };
     String STR_BACKING_EXTHELP
     {
         Text [ en-US ] = "Add new features to %PRODUCTNAME";
     };
-    Bitmap BMP_BACKING_REG
-    {
-        File = "register_32.png";
-    };
     String STR_BACKING_REGHELP
     {
         Text [ en-US ] = "Register your %PRODUCTNAME";
     };
-    Bitmap BMP_BACKING_INFO
-    {
-        File = "info_26.png";
-    };
     String STR_BACKING_INFOHELP
     {
         Text [ en-US ] = "Get more information about %PRODUCTNAME";
-    };
-    Bitmap BMP_BACKING_TPLREP
-    {
-        File = "addtemplate_32.png";
     };
     String STR_BACKING_TPLREP
     {
@@ -141,6 +121,22 @@ Resource RES_BACKING_IMAGES
     {
         File = "backing_rtl_right.png";
     };
+    Bitmap BMP_BACKING_EXT
+    {
+        File = "extension.png";
+    };
+    Bitmap BMP_BACKING_REG
+    {
+        File = "register_32.png";
+    };
+    Bitmap BMP_BACKING_INFO
+    {
+        File = "info_26.png";
+    };
+    Bitmap BMP_BACKING_TPLREP
+    {
+        File = "addtemplate_32.png";
+    };
 };
 
 Resource RES_BACKING_IMAGES_HC
@@ -164,6 +160,22 @@ Resource RES_BACKING_IMAGES_HC
     Bitmap BMP_BACKING_BACKGROUND_RTL_RIGHT
     {
         File = "backing_rtl_right_hc.png";
+    };
+    Bitmap BMP_BACKING_EXT
+    {
+        File = "extension_hc.png";
+    };
+    Bitmap BMP_BACKING_REG
+    {
+        File = "register_hc.png";
+    };
+    Bitmap BMP_BACKING_INFO
+    {
+        File = "info_hc.png";
+    };
+    Bitmap BMP_BACKING_TPLREP
+    {
+        File = "template_hc.png";
     };
 };
 

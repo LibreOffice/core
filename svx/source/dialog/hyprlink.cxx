@@ -482,7 +482,7 @@ void SvxHyperlinkDlg::TargetMenu(const String& rSelEntry, BOOL bExecute)
     if (pVwFrm) // Alle moeglichen Target Frames zusammensammeln und anzeigen
     {
         TargetList aList;
-        pVwFrm->GetTopFrame()->GetTargetList(aList);
+        pVwFrm->GetTopFrame().GetTargetList(aList);
 
         USHORT nCount = (USHORT)aList.Count();
         if( nCount )
@@ -960,7 +960,7 @@ void SvxHyperlinkDlg::OpenDoc( const String& rURL, SfxViewFrame* pViewFrame )
 
     if ( pViewFrame )
     {
-        SfxFrameItem aView( SID_DOCFRAME, pViewFrame ? pViewFrame->GetFrame() : NULL );
+        SfxFrameItem aView( SID_DOCFRAME, pViewFrame ? &pViewFrame->GetFrame() : NULL );
         if ( pDisp )
             pDisp->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                             &aName, &aView, &aNewView, &aSilent, &aReadOnly, &aReferer, &aExternal, 0L );

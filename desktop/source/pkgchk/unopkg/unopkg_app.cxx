@@ -82,6 +82,8 @@ const char s_usingText [] =
 " -V, --version           version information\n"
 " -v, --verbose           verbose output to stdout\n"
 " -f, --force             force overwriting existing extensions\n"
+" -s, --suppress-license  prevents showing the license provided that\n"
+"                         the extension allows it\n"
 " --log-file <file>       custom log file; default: <cache-dir>/log.txt\n"
 " --shared                expert feature: operate on shared installation\n"
 "                                         deployment context;\n"
@@ -103,6 +105,7 @@ const OptionInfo s_option_infos [] = {
     { RTL_CONSTASCII_STRINGPARAM("shared"), '\0', false },
     { RTL_CONSTASCII_STRINGPARAM("deployment-context"), '\0', true },
     { RTL_CONSTASCII_STRINGPARAM("bundled"), '\0', false},
+    { RTL_CONSTASCII_STRINGPARAM("suppress-license"), 's', false},
 
     { 0, 0, '\0', false }
 };
@@ -207,6 +210,7 @@ extern "C" int unopkg_main()
     bool option_force = false;
     bool option_verbose = false;
     bool option_bundled = false;
+    bool option_suppressLicense = false;
     bool subcmd_add = false;
     bool subcmd_gui = false;
     OUString logFile;
@@ -230,6 +234,9 @@ extern "C" int unopkg_main()
         s_option_infos, OUSTR("version") );
     OptionInfo const * info_bundled = getOptionInfo(
         s_option_infos, OUSTR("bundled") );
+    OptionInfo const * info_suppressLicense = getOptionInfo(
+        s_option_infos, OUSTR("suppress-license") );
+
 
     Reference<XComponentContext> xComponentContext;
     Reference<XComponentContext> xLocalComponentContext;
@@ -271,6 +278,7 @@ extern "C" int unopkg_main()
                      !readOption( &option_shared, info_shared, &nPos ) &&
                      !readOption( &option_force, info_force, &nPos ) &&
                      !readOption( &option_bundled, info_bundled, &nPos ) &&
+                     !readOption( &option_suppressLicense, info_suppressLicense, &nPos ) &&
                      !readArgument( &deploymentContext, info_context, &nPos ) &&
                      !isBootstrapVariable(&nPos))
             {
@@ -342,7 +350,8 @@ extern "C" int unopkg_main()
 
         Reference< ::com::sun::star::ucb::XCommandEnvironment > xCmdEnv(
             createCmdEnv( xComponentContext, logFile,
-                          option_force, option_verbose, option_bundled) );
+                          option_force, option_verbose, option_bundled,
+                          option_suppressLicense) );
 
         if (subcmd_add ||
             subCommand.equalsAsciiL(

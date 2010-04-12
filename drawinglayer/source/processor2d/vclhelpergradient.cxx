@@ -221,7 +221,7 @@ namespace drawinglayer
                 texture::GeoTexSvxGradientLinear aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fAngle);
                 aGradient.appendTransformations(aMatrices);
                 aGradient.appendColors(aColors);
-                aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0, 0, 1, 1));
+                aUnitPolygon = basegfx::tools::createUnitPolygon();
                 break;
             }
             case attribute::GRADIENTSTYLE_AXIAL:

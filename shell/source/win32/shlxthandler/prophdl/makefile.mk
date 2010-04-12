@@ -73,11 +73,15 @@ SHL1STDLIBS+=\
     $(GDI32LIB)\
     $(GDIPLUSLIB)\
     $(SHLWAPILIB)\
-    $(PROPSYSLIB) \
+    $(PROPSYSLIB)
+
+.IF "$(COM)"!="GCC"
+SHL1STDLIBS+=\
     msvcprt.lib
 
 .IF "$(PRODUCT)"!="full"
 SHL1STDLIBS+=msvcrt.lib
+.ENDIF
 .ENDIF
 
 SHL1LIBS+=$(SLB)$/util.lib\

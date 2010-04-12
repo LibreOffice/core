@@ -37,6 +37,13 @@ namespace drawinglayer
 {
     namespace processor3d
     {
+        /** BaseProcessor3D class
+
+            Baseclass for all C++ implementations of instances which process
+            primitives.
+
+            Please have a look at baseprocessor2d.hxx for more comments.
+         */
         class BaseProcessor3D
         {
         private:
@@ -48,9 +55,10 @@ namespace drawinglayer
                 maViewInformation3D = rViewInformation3D;
             }
 
-            // as tooling, the process() implementation takes over API handling and calls this
-            // virtual render method when the primitive implementation is BasePrimitive3D-based.
-            // Default implementation does nothing
+            /*  as tooling, the process() implementation takes over API handling and calls this
+                virtual render method when the primitive implementation is BasePrimitive3D-based.
+                Default implementation does nothing
+             */
             virtual void processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate);
 
         public:
@@ -72,6 +80,13 @@ namespace drawinglayer
 {
     namespace processor3d
     {
+        /** CollectingProcessor3D class
+
+            A processor which just collects all primitives given to it in
+            process(..) calls to maPrimitive3DSequence. This can e.g. be used to
+            hand around as instance over various methods where every called
+            method can add graphic content to it.
+         */
         class CollectingProcessor3D : public BaseProcessor3D
         {
         private:
@@ -81,16 +96,16 @@ namespace drawinglayer
             CollectingProcessor3D(const geometry::ViewInformation3D& rViewInformation);
             virtual ~CollectingProcessor3D();
 
-            // the central processing method
+            /// the central processing method
             virtual void process(const primitive3d::Primitive3DSequence& rSource);
 
-            // helpers for adding to local sequence
+            /// helpers for adding to local sequence
             void appendPrimitive3DReference(const primitive3d::Primitive3DReference& rSource)
             {
                 primitive3d::appendPrimitive3DReferenceToPrimitive3DSequence(maPrimitive3DSequence, rSource);
             }
 
-            // data access and reset
+            /// data access and reset
             const primitive3d::Primitive3DSequence& getPrimitive3DSequence() const { return maPrimitive3DSequence; }
             void reset() { maPrimitive3DSequence = primitive3d::Primitive3DSequence(); }
         };

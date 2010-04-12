@@ -53,6 +53,15 @@ namespace rtl { class OUString; }
 
 namespace dp_misc {
 
+struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC SimpleLicenseAttributes
+{
+    ::rtl::OUString acceptBy;
+    //Attribute suppress-on-update. Default is false.
+    bool suppressOnUpdate;
+    //Attribute suppress-if-required. Default is false.
+    bool suppressIfRequired;
+};
+
 /**
    Access to the content of an XML <code>description</code> element.
 
@@ -131,6 +140,13 @@ public:
         In case there is no simple-license element then an empty string is returned.
     */
     ::rtl::OUString getLocalizedLicenseURL() const;
+
+    /** returns the attributes of the simple-license element
+
+        As long as there is a simple-license element, the function will return
+        the structure. If it does not exist, then the optional object is uninitialized.
+    */
+    ::boost::optional<SimpleLicenseAttributes> getSimpleLicenseAttributes() const;
 
     /** returns the localized display name of the extensions.
 

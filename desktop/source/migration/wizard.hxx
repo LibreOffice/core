@@ -32,6 +32,7 @@
 #include <svtools/roadmapwizard.hxx>
 #include <vcl/window.hxx>
 #include <tools/resid.hxx>
+#include <com/sun/star/awt/XThrobber.hpp>
 
 namespace desktop
 {
@@ -61,6 +62,9 @@ public:
     virtual short Execute();
     virtual long PreNotify( NotifyEvent& rNEvt );
 
+    void EnableButtonsWhileMigration();
+    void DisableButtonsWhileMigration();
+
 private:
     sal_Bool m_bOverride;
     WizardState _currentState;
@@ -73,10 +77,12 @@ private:
     sal_Bool m_bLicenseWasAccepted;
     sal_Bool m_bAutomaticUpdChk;
     Link m_lnkCancel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XThrobber > m_xThrobber;
 
     rtl::OUString m_aLicensePath;
 
     void storeAcceptDate();
+    void setPatchLevel();
     void disableWizard();
     void enableQuickstart();
 

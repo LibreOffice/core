@@ -5,6 +5,7 @@ import sys
 import os
 import imp
 import time
+import compiler
 
 class LogLevel:
     NONE = 0
@@ -340,6 +341,32 @@ class ProviderContext:
             ret = url[0:pos]+ package.transientPathElement + "/" + url[pos:len(url)]
         log.isDebugLevel() and log.debug( "getStorageUrlFromPersistentUrl " + url + " -> "+ ret)
         return ret
+
+    def getFuncsByUrl( self, url ):
+        src = readTextFromStream( self.sfa.openFileRead( url ) )
+        checkForPythonPathBesideScript( url[0:url.rfind('/')] )
+        src = ensureSourceState( src )
+
+        code = compiler.parse( src )
+
+        allFuncs = []
+
+        if code == None:
+            return allFuncs
+        
+        g_exportedScripts = []
+        for node in code.node.nodes:
+            if node.__class__.__name__ == 'Function':
+                allFuncs.append(node.name)
+            elif node.__class__.__name__ == 'Assign':
+                for assignee in node.nodes:
+                    if assignee.name == 'g_exportedScripts':
+                        for item in node.expr:
+                            if item.__class__.__name__ == 'Name':
+                                g_exportedScripts.append(item.name)
+                        return g_exportedScripts
+
+        return allFuncs
     
     def getModuleByUrl( self, url ):
         entry =  self.modules.get(url)
@@ -382,11 +409,10 @@ def isScript( candidate ):
     
 #-------------------------------------------------------
 class ScriptBrowseNode( unohelper.Base, XBrowseNode , XPropertySet, XInvocation, XActionListener ):
-    def __init__( self, provCtx, uri, fileName, funcName, func ):
+    def __init__( self, provCtx, uri, fileName, funcName ):
         self.fileName = fileName
         self.funcName = funcName
         self.provCtx = provCtx
-        self.func = func
         self.uri = uri
         
     def getName( self ):
@@ -407,8 +433,6 @@ class ScriptBrowseNode( unohelper.Base, XBrowseNode , XPropertySet, XInvocation,
             if name == "URI":
                 ret = self.provCtx.uriHelper.getScriptURI(
                     self.provCtx.getPersistentUrlFromStorageUrl( self.uri + "$" + self.funcName ) )
-            elif name == "Description":
-                ret = getattr( self.func, "__doc__", None )
             elif name == "Editable" and ENABLE_EDIT_DIALOG:
                 ret = not self.provCtx.sfa.isReadOnly( self.uri )
         
@@ -506,7 +530,7 @@ class FileBrowseNode( unohelper.Base, XBrowseNode ):
         self.provCtx = provCtx
         self.uri = uri
         self.name = name
-        self.module = None
+        self.funcnames = None
         
     def getName( self ):
         return self.name
@@ -514,21 +538,14 @@ class FileBrowseNode( unohelper.Base, XBrowseNode ):
     def getChildNodes(self):
         ret = ()
         try:
-            self.module = self.provCtx.getModuleByUrl( self.uri )
-            values = self.module.__dict__.get( CALLABLE_CONTAINER_NAME , None )
+            self.funcnames = self.provCtx.getFuncsByUrl( self.uri )
             
-            # no g_exportedScripts, export every function
-            if not isinstance(values, type(())):
-                values = self.module.__dict__.values()
-                    
             scriptNodeList = []
-            for i in values:
-                if isScript( i ):
-                    scriptNodeList.append(
-                        ScriptBrowseNode(
-                        self.provCtx, self.uri, self.name, i.__name__, i  ))
+            for i in self.funcnames:
+                scriptNodeList.append(
+                    ScriptBrowseNode(
+                    self.provCtx, self.uri, self.name, i ))
             ret = tuple( scriptNodeList )
-            # must compile  !
             log.isDebugLevel() and log.debug( "returning " +str(len(ret)) + " ScriptChildNodes on " + self.uri )
         except Exception, e:
             text = lastException2String()

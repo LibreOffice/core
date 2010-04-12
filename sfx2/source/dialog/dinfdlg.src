@@ -877,14 +877,14 @@ ModalDialog RID_EDIT_DURATIONS
         SpinSize = 1 ;
         Value = 0 ;
     };
-    FixedText FT_HSECOND
+    FixedText FT_MSECOND
     {
         Pos = MAP_APPFONT ( 6 , 122 ) ;
         Size = MAP_APPFONT ( 60 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
-        Text [ en-US ] = "1/100 se~conds" ;
+        Text [ en-US ] = "Millise~conds" ;
     };
-    NumericField ED_HSECOND
+    NumericField ED_MSECOND
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 120 ) ;
@@ -893,7 +893,7 @@ ModalDialog RID_EDIT_DURATIONS
         Spin = TRUE ;
         Minimum = 0 ;
         First = 1 ;
-        Last = 100 ;
+        Last = 1000 ;
         SpinSize = 1 ;
         Value = 0 ;
     };

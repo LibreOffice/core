@@ -54,10 +54,10 @@ namespace drawinglayer
             rColors.clear();
 
             // make sure steps is not too high/low
-            const basegfx::BColor aStart(maFillGradient.getStartColor());
-            const basegfx::BColor aEnd(maFillGradient.getEndColor());
+            const basegfx::BColor aStart(getFillGradient().getStartColor());
+            const basegfx::BColor aEnd(getFillGradient().getEndColor());
             const sal_uInt32 nMaxSteps(sal_uInt32((aStart.getMaximumDistance(aEnd) * 127.5) + 0.5));
-            sal_uInt32 nSteps(maFillGradient.getSteps());
+            sal_uInt32 nSteps(getFillGradient().getSteps());
 
             if(nSteps == 0)
             {
@@ -74,46 +74,46 @@ namespace drawinglayer
                 nSteps = nMaxSteps;
             }
 
-            switch(maFillGradient.getStyle())
+            switch(getFillGradient().getStyle())
             {
                 case attribute::GRADIENTSTYLE_LINEAR:
                 {
-                    texture::GeoTexSvxGradientLinear aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), maFillGradient.getAngle());
+                    texture::GeoTexSvxGradientLinear aGradient(getObjectRange(), aStart, aEnd, nSteps, getFillGradient().getBorder(), getFillGradient().getAngle());
                     aGradient.appendTransformations(rMatrices);
                     aGradient.appendColors(rColors);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_AXIAL:
                 {
-                    texture::GeoTexSvxGradientAxial aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), maFillGradient.getAngle());
+                    texture::GeoTexSvxGradientAxial aGradient(getObjectRange(), aStart, aEnd, nSteps, getFillGradient().getBorder(), getFillGradient().getAngle());
                     aGradient.appendTransformations(rMatrices);
                     aGradient.appendColors(rColors);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_RADIAL:
                 {
-                    texture::GeoTexSvxGradientRadial aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), maFillGradient.getOffsetX(), maFillGradient.getOffsetY());
+                    texture::GeoTexSvxGradientRadial aGradient(getObjectRange(), aStart, aEnd, nSteps, getFillGradient().getBorder(), getFillGradient().getOffsetX(), getFillGradient().getOffsetY());
                     aGradient.appendTransformations(rMatrices);
                     aGradient.appendColors(rColors);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_ELLIPTICAL:
                 {
-                    texture::GeoTexSvxGradientElliptical aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), maFillGradient.getOffsetX(), maFillGradient.getOffsetY(), maFillGradient.getAngle());
+                    texture::GeoTexSvxGradientElliptical aGradient(getObjectRange(), aStart, aEnd, nSteps, getFillGradient().getBorder(), getFillGradient().getOffsetX(), getFillGradient().getOffsetY(), getFillGradient().getAngle());
                     aGradient.appendTransformations(rMatrices);
                     aGradient.appendColors(rColors);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_SQUARE:
                 {
-                    texture::GeoTexSvxGradientSquare aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), maFillGradient.getOffsetX(), maFillGradient.getOffsetY(), maFillGradient.getAngle());
+                    texture::GeoTexSvxGradientSquare aGradient(getObjectRange(), aStart, aEnd, nSteps, getFillGradient().getBorder(), getFillGradient().getOffsetX(), getFillGradient().getOffsetY(), getFillGradient().getAngle());
                     aGradient.appendTransformations(rMatrices);
                     aGradient.appendColors(rColors);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_RECT:
                 {
-                    texture::GeoTexSvxGradientRect aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), maFillGradient.getOffsetX(), maFillGradient.getOffsetY(), maFillGradient.getAngle());
+                    texture::GeoTexSvxGradientRect aGradient(getObjectRange(), aStart, aEnd, nSteps, getFillGradient().getBorder(), getFillGradient().getOffsetX(), getFillGradient().getOffsetY(), getFillGradient().getAngle());
                     aGradient.appendTransformations(rMatrices);
                     aGradient.appendColors(rColors);
                     break;
@@ -210,8 +210,8 @@ namespace drawinglayer
             // prepare shape of the Unit Polygon
             basegfx::B2DPolygon aUnitPolygon;
 
-            if(attribute::GRADIENTSTYLE_RADIAL == maFillGradient.getStyle()
-                || attribute::GRADIENTSTYLE_ELLIPTICAL == maFillGradient.getStyle())
+            if(attribute::GRADIENTSTYLE_RADIAL == getFillGradient().getStyle()
+                || attribute::GRADIENTSTYLE_ELLIPTICAL == getFillGradient().getStyle())
             {
                 aUnitPolygon = basegfx::tools::createPolygonFromCircle(
                     basegfx::B2DPoint(0,0), 1);
@@ -249,7 +249,15 @@ namespace drawinglayer
             // that the rings will not overlap. This is useful fir the old XOR-paint
             // 'trick' of VCL which is recorded in Metafiles; so this version may be
             // used from the MetafilePrimitive2D in it's decomposition.
-            return createFill(true);
+
+            if(!getFillGradient().isDefault())
+            {
+                return createFill(true);
+            }
+            else
+            {
+                return Primitive2DSequence();
+            }
         }
 
         FillGradientPrimitive2D::FillGradientPrimitive2D(
@@ -268,7 +276,7 @@ namespace drawinglayer
                 const FillGradientPrimitive2D& rCompare = (FillGradientPrimitive2D&)rPrimitive;
 
                 return (getObjectRange() == rCompare.getObjectRange()
-                    && maFillGradient == rCompare.maFillGradient);
+                    && getFillGradient() == rCompare.getFillGradient());
             }
 
             return false;

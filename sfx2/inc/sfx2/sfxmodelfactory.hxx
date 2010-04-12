@@ -40,8 +40,10 @@ namespace sfx2
 {
 //........................................................................
 
+    #define SFXMODEL_STANDARD                   (sal_uInt64)(0x0000)
     #define SFXMODEL_EMBEDDED_OBJECT            (sal_uInt64)(0x0001)
     #define SFXMODEL_DISABLE_EMBEDDED_SCRIPTS   (sal_uInt64)(0x0002)
+    #define SFXMODEL_DISABLE_DOCUMENT_RECOVERY  (sal_uInt64)(0x0004)
 
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ( SAL_CALL * SfxModelFactoryFunc ) (
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,

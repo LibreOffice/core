@@ -30,7 +30,6 @@
 #include <svx/sdr/contact/viewcontactofgraphic.hxx>
 #include <svx/sdr/contact/viewobjectcontactofgraphic.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <svl/itemset.hxx>
 
@@ -39,7 +38,6 @@
 #endif
 
 #include <svx/sdgcpitm.hxx>
-#include <drawinglayer/attribute/sdrattribute.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
@@ -59,6 +57,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/colritem.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -148,10 +147,9 @@ namespace sdr
                     * aSmallerMatrix;
 
                 const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject(false);
-                const drawinglayer::attribute::SdrLineFillShadowTextAttribute aEmptyAttributes(0, 0, 0, 0, 0, 0);
                 const drawinglayer::primitive2d::Primitive2DReference xReferenceB(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
                     aSmallerMatrix,
-                    aEmptyAttributes,
+                    drawinglayer::attribute::SdrLineFillShadowTextAttribute(),
                     rGraphicObject,
                     rLocalGrafInfo));
 
@@ -177,14 +175,12 @@ namespace sdr
                 aEmptyGraphicAttr));
             xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReferenceA, 1);
 
-            if(!rAttribute.getLine())
+            if(rAttribute.getLine().isDefault())
             {
                 // create a surrounding frame when no linestyle given
                 const Color aColor(Application::GetSettings().GetStyleSettings().GetShadowColor());
                 const basegfx::BColor aBColor(aColor.getBColor());
-                const basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
-
-                basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aUnitRange));
+                basegfx::B2DPolygon aOutline(basegfx::tools::createUnitPolygon());
                 aOutline.transform(rObjectMatrix);
 
                 drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
@@ -314,127 +310,123 @@ namespace sdr
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfGraphic::createViewIndependentPrimitive2DSequence() const
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
-            SdrText* pSdrText = GetGrafObject().getText(0);
+            const SfxItemSet& rItemSet = GetGrafObject().GetMergedItemSet();
+            drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
+                drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
+                    rItemSet,
+                    GetGrafObject().getText(0)));
 
-            if(pSdrText)
+            // create and fill GraphicAttr
+            GraphicAttr aLocalGrafInfo;
+            const sal_uInt16 nTrans(((SdrGrafTransparenceItem&)rItemSet.Get(SDRATTR_GRAFTRANSPARENCE)).GetValue());
+            const SdrGrafCropItem& rCrop((const SdrGrafCropItem&)rItemSet.Get(SDRATTR_GRAFCROP));
+            aLocalGrafInfo.SetLuminance(((SdrGrafLuminanceItem&)rItemSet.Get(SDRATTR_GRAFLUMINANCE)).GetValue());
+            aLocalGrafInfo.SetContrast(((SdrGrafContrastItem&)rItemSet.Get(SDRATTR_GRAFCONTRAST)).GetValue());
+            aLocalGrafInfo.SetChannelR(((SdrGrafRedItem&)rItemSet.Get(SDRATTR_GRAFRED)).GetValue());
+            aLocalGrafInfo.SetChannelG(((SdrGrafGreenItem&)rItemSet.Get(SDRATTR_GRAFGREEN)).GetValue());
+            aLocalGrafInfo.SetChannelB(((SdrGrafBlueItem&)rItemSet.Get(SDRATTR_GRAFBLUE)).GetValue());
+            aLocalGrafInfo.SetGamma(((SdrGrafGamma100Item&)rItemSet.Get(SDRATTR_GRAFGAMMA)).GetValue() * 0.01);
+            aLocalGrafInfo.SetTransparency((BYTE)::basegfx::fround(Min(nTrans, (USHORT)100) * 2.55));
+            aLocalGrafInfo.SetInvert(((SdrGrafInvertItem&)rItemSet.Get(SDRATTR_GRAFINVERT)).GetValue());
+            aLocalGrafInfo.SetDrawMode(((SdrGrafModeItem&)rItemSet.Get(SDRATTR_GRAFMODE)).GetValue());
+            aLocalGrafInfo.SetCrop(rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom());
+
+            if(aAttribute.isDefault() && 255L != aLocalGrafInfo.GetTransparency())
             {
-                const SfxItemSet& rItemSet = GetGrafObject().GetMergedItemSet();
-                drawinglayer::attribute::SdrLineFillShadowTextAttribute* pAttribute =
-                    drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(rItemSet, *pSdrText);
-                bool bVisible(pAttribute && pAttribute->isVisible());
+                // no fill, no line, no text (invisible), but the graphic content is visible.
+                // Create evtl. shadow for content which was not created by createNewSdrLineFillShadowTextAttribute yet
+                const drawinglayer::attribute::SdrShadowAttribute aShadow(
+                    drawinglayer::primitive2d::createNewSdrShadowAttribute(rItemSet));
 
-                // create and fill GraphicAttr
-                GraphicAttr aLocalGrafInfo;
-                const sal_uInt16 nTrans(((SdrGrafTransparenceItem&)rItemSet.Get(SDRATTR_GRAFTRANSPARENCE)).GetValue());
-                const SdrGrafCropItem& rCrop((const SdrGrafCropItem&)rItemSet.Get(SDRATTR_GRAFCROP));
-                aLocalGrafInfo.SetLuminance(((SdrGrafLuminanceItem&)rItemSet.Get(SDRATTR_GRAFLUMINANCE)).GetValue());
-                aLocalGrafInfo.SetContrast(((SdrGrafContrastItem&)rItemSet.Get(SDRATTR_GRAFCONTRAST)).GetValue());
-                aLocalGrafInfo.SetChannelR(((SdrGrafRedItem&)rItemSet.Get(SDRATTR_GRAFRED)).GetValue());
-                aLocalGrafInfo.SetChannelG(((SdrGrafGreenItem&)rItemSet.Get(SDRATTR_GRAFGREEN)).GetValue());
-                aLocalGrafInfo.SetChannelB(((SdrGrafBlueItem&)rItemSet.Get(SDRATTR_GRAFBLUE)).GetValue());
-                aLocalGrafInfo.SetGamma(((SdrGrafGamma100Item&)rItemSet.Get(SDRATTR_GRAFGAMMA)).GetValue() * 0.01);
-                aLocalGrafInfo.SetTransparency((BYTE)::basegfx::fround(Min(nTrans, (USHORT)100) * 2.55));
-                aLocalGrafInfo.SetInvert(((SdrGrafInvertItem&)rItemSet.Get(SDRATTR_GRAFINVERT)).GetValue());
-                aLocalGrafInfo.SetDrawMode(((SdrGrafModeItem&)rItemSet.Get(SDRATTR_GRAFMODE)).GetValue());
-                aLocalGrafInfo.SetCrop(rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom());
-
-                if(!bVisible && 255L != aLocalGrafInfo.GetTransparency())
+                if(!aShadow.isDefault())
                 {
-                    // content is visible, so force some fill stuff
-                    delete pAttribute;
-                    bVisible = true;
-
-                    // check shadow
-                    drawinglayer::attribute::SdrShadowAttribute* pShadow = drawinglayer::primitive2d::createNewSdrShadowAttribute(rItemSet);
-
-                    if(pShadow && !pShadow->isVisible())
-                    {
-                        delete pShadow;
-                        pShadow = 0L;
-                    }
-
-                    // create new attribute set
-                    pAttribute = new drawinglayer::attribute::SdrLineFillShadowTextAttribute(0L, 0L, 0L, pShadow, 0L, 0L);
-                }
-
-                if(pAttribute)
-                {
-                    if(pAttribute->isVisible() || bVisible)
-                    {
-                        // take unrotated snap rect for position and size. Directly use model data, not getBoundRect() or getSnapRect()
-                        // which will use the primitive data we just create in the near future
-                        const Rectangle& rRectangle = GetGrafObject().GetGeoRect();
-                        const ::basegfx::B2DRange aObjectRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
-
-                        // look for mirroring
-                        const GeoStat& rGeoStat(GetGrafObject().GetGeoStat());
-                        const sal_Int32 nDrehWink(rGeoStat.nDrehWink);
-                        const bool bRota180(18000 == nDrehWink);
-                        const bool bMirrored(GetGrafObject().IsMirrored());
-                        const sal_uInt16 nMirrorCase(bRota180 ? (bMirrored ? 3 : 4) : (bMirrored ? 2 : 1));
-                        bool bHMirr((2 == nMirrorCase ) || (4 == nMirrorCase));
-                        bool bVMirr((3 == nMirrorCase ) || (4 == nMirrorCase));
-
-                        // set mirror flags at LocalGrafInfo. Take into account that the geometry in
-                        // aObjectRange is already changed and rotated when bRota180 is used. To rebuild
-                        // that old behaviour (as long as part of the model data), correct the H/V flags
-                        // accordingly. The created bitmapPrimitive WILL use the rotation, too.
-                        if(bRota180)
-                        {
-                            // if bRota180 which is used for vertical mirroring, the graphic will already be rotated
-                            // by 180 degrees. To correct, switch off VMirror and invert HMirroring.
-                            bHMirr = !bHMirr;
-                            bVMirr = false;
-                        }
-
-                        if(bHMirr || bVMirr)
-                        {
-                            aLocalGrafInfo.SetMirrorFlags((bHMirr ? BMP_MIRROR_HORZ : 0)|(bVMirr ? BMP_MIRROR_VERT : 0));
-                        }
-
-                        // fill object matrix
-                        const double fShearX(rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0);
-                        const double fRotate(nDrehWink ? (36000 - nDrehWink) * F_PI18000 : 0.0);
-                        const basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                            aObjectRange.getWidth(), aObjectRange.getHeight(),
-                            fShearX, fRotate,
-                            aObjectRange.getMinX(), aObjectRange.getMinY()));
-
-                        // get the current, unchenged graphic obect from SdrGrafObj
-                        const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject(false);
-
-                        if(visualisationUsesPresObj())
-                        {
-                            // it's an EmptyPresObj, create the SdrGrafPrimitive2D without content and another scaled one
-                            // with the content which is the placeholder graphic
-                            xRetval = createVIP2DSForPresObj(aObjectMatrix, *pAttribute, aLocalGrafInfo);
-                        }
-                        else if(visualisationUsesDraft())
-                        {
-                            // #i102380# The graphic is swapped out. To not force a swap-in here, there is a mechanism
-                            // which shows a swapped-out-visualisation (which gets created here now) and an asynchronious
-                            // visual update mechanism for swapped-out grapgics when they were loaded (see AsynchGraphicLoadingEvent
-                            // and ViewObjectContactOfGraphic implementation). Not forcing the swap-in here allows faster
-                            // (non-blocking) processing here and thus in the effect e.g. fast scrolling through pages
-                            xRetval = createVIP2DSForDraft(aObjectMatrix, *pAttribute);
-                        }
-                        else
-                        {
-                            // create primitive. Info: Calling the copy-constructor of GraphicObject in this
-                            // SdrGrafPrimitive2D constructor will force a full swap-in of the graphic
-                            const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
-                                aObjectMatrix,
-                                *pAttribute,
-                                rGraphicObject,
-                                aLocalGrafInfo));
-
-                            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-                        }
-                    }
-
-                    delete pAttribute;
+                    // create new attribute set if indeed shadow is used
+                    aAttribute = drawinglayer::attribute::SdrLineFillShadowTextAttribute(
+                        aAttribute.getLine(),
+                        aAttribute.getFill(),
+                        aAttribute.getLineStartEnd(),
+                        aShadow,
+                        aAttribute.getFillFloatTransGradient(),
+                        aAttribute.getText());
                 }
             }
+
+            // take unrotated snap rect for position and size. Directly use model data, not getBoundRect() or getSnapRect()
+            // which will use the primitive data we just create in the near future
+            const Rectangle& rRectangle = GetGrafObject().GetGeoRect();
+            const ::basegfx::B2DRange aObjectRange(
+                rRectangle.Left(), rRectangle.Top(),
+                rRectangle.Right(), rRectangle.Bottom());
+
+            // look for mirroring
+            const GeoStat& rGeoStat(GetGrafObject().GetGeoStat());
+            const sal_Int32 nDrehWink(rGeoStat.nDrehWink);
+            const bool bRota180(18000 == nDrehWink);
+            const bool bMirrored(GetGrafObject().IsMirrored());
+            const sal_uInt16 nMirrorCase(bRota180 ? (bMirrored ? 3 : 4) : (bMirrored ? 2 : 1));
+            bool bHMirr((2 == nMirrorCase ) || (4 == nMirrorCase));
+            bool bVMirr((3 == nMirrorCase ) || (4 == nMirrorCase));
+
+            // set mirror flags at LocalGrafInfo. Take into account that the geometry in
+            // aObjectRange is already changed and rotated when bRota180 is used. To rebuild
+            // that old behaviour (as long as part of the model data), correct the H/V flags
+            // accordingly. The created bitmapPrimitive WILL use the rotation, too.
+            if(bRota180)
+            {
+                // if bRota180 which is used for vertical mirroring, the graphic will already be rotated
+                // by 180 degrees. To correct, switch off VMirror and invert HMirroring.
+                bHMirr = !bHMirr;
+                bVMirr = false;
+            }
+
+            if(bHMirr || bVMirr)
+            {
+                aLocalGrafInfo.SetMirrorFlags((bHMirr ? BMP_MIRROR_HORZ : 0)|(bVMirr ? BMP_MIRROR_VERT : 0));
+            }
+
+            // fill object matrix
+            const double fShearX(rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0);
+            const double fRotate(nDrehWink ? (36000 - nDrehWink) * F_PI18000 : 0.0);
+            const basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                aObjectRange.getWidth(), aObjectRange.getHeight(),
+                fShearX, fRotate,
+                aObjectRange.getMinX(), aObjectRange.getMinY()));
+
+            // get the current, unchenged graphic obect from SdrGrafObj
+            const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject(false);
+
+            if(visualisationUsesPresObj())
+            {
+                // it's an EmptyPresObj, create the SdrGrafPrimitive2D without content and another scaled one
+                // with the content which is the placeholder graphic
+                xRetval = createVIP2DSForPresObj(aObjectMatrix, aAttribute, aLocalGrafInfo);
+            }
+            else if(visualisationUsesDraft())
+            {
+                // #i102380# The graphic is swapped out. To not force a swap-in here, there is a mechanism
+                // which shows a swapped-out-visualisation (which gets created here now) and an asynchronious
+                // visual update mechanism for swapped-out grapgics when they were loaded (see AsynchGraphicLoadingEvent
+                // and ViewObjectContactOfGraphic implementation). Not forcing the swap-in here allows faster
+                // (non-blocking) processing here and thus in the effect e.g. fast scrolling through pages
+                xRetval = createVIP2DSForDraft(aObjectMatrix, aAttribute);
+            }
+            else
+            {
+                // create primitive. Info: Calling the copy-constructor of GraphicObject in this
+                // SdrGrafPrimitive2D constructor will force a full swap-in of the graphic
+                const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
+                    aObjectMatrix,
+                    aAttribute,
+                    rGraphicObject,
+                    aLocalGrafInfo));
+
+                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            }
+
+            // always append an invisible outline for the cases where no visible content exists
+            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
+                drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
+                    false, aObjectMatrix));
 
             return xRetval;
         }

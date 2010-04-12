@@ -119,11 +119,17 @@ namespace drawinglayer
             */
             ViewInformation3D(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters);
 
+            /// default (empty) constructor
+            ViewInformation3D();
+
             /// copy constructor
             ViewInformation3D(const ViewInformation3D& rCandidate);
 
             /// destructor
             ~ViewInformation3D();
+
+            // checks if the incarnation is default constructed
+            bool isDefault() const;
 
             /// assignment operator
             ViewInformation3D& operator=(const ViewInformation3D& rCandidate);

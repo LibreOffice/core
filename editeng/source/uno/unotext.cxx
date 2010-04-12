@@ -2588,6 +2588,10 @@ XubString SvxDummyTextSource::CalcFieldValue( const SvxFieldItem&, sal_uInt16, s
     return XubString();
 }
 
+void SvxDummyTextSource::FieldClicked( const SvxFieldItem&, USHORT, xub_StrLen )
+{
+}
+
 sal_Bool SvxDummyTextSource::IsValid() const
 {
     return sal_False;

@@ -31,10 +31,10 @@ LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-ICON_ACTIVE             ICON    DISCARDABLE     "../../desktop/icons/ooo-main-app.ico"
-IDI_QUICKSTART          ICON    DISCARDABLE     "../../desktop/icons/ooo-main-app.ico"
-IDI_SMALL               ICON    DISCARDABLE     "../../desktop/icons/ooo-main-app.ico"
-ICON_INACTIVE           ICON    DISCARDABLE     "../../desktop/icons/ooo-main-app.ico"
+ICON_ACTIVE             ICON    DISCARDABLE     "../../desktop/icons/ooo3_main_app.ico"
+IDI_QUICKSTART          ICON    DISCARDABLE     "../../desktop/icons/ooo3_main_app.ico"
+IDI_SMALL               ICON    DISCARDABLE     "../../desktop/icons/ooo3_main_app.ico"
+ICON_INACTIVE           ICON    DISCARDABLE     "../../desktop/icons/ooo3_main_app.ico"
 
 
 /////////////////////////////////////////////////////////////////////////////

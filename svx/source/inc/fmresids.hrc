@@ -183,7 +183,7 @@
 #define RID_STR_FILTER_FILTER_OR                    (RID_FORMS_START +  80)
 #define RID_STR_PROPTITLE_FORMATTED                 (RID_FORMS_START +  81)
 #define RID_STR_SYNTAXERROR                         (RID_FORMS_START +  82)
-#define RID_STR_MOVING_CURSOR                       (RID_FORMS_START +  83)
+    // FREE
 #define RID_STR_NOCONTROLS_FOR_EXTERNALDISPLAY      (RID_FORMS_START +  84)
 #define RID_STR_AUTOFIELD                           (RID_FORMS_START +  89)
 #define RID_STR_SVT_SQL_SYNTAX_ERROR                (RID_FORMS_START +  90)

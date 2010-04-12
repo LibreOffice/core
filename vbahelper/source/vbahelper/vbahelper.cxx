@@ -608,7 +608,7 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
         {
             if ( bPreview )
             {
-                if ( !pViewFrame->GetFrame()->IsInPlace() )
+                if ( !pViewFrame->GetFrame().IsInPlace() )
                 {
                     // #TODO is this necessary ( calc specific )
 //                  SC_MOD()->InputEnterHandler();

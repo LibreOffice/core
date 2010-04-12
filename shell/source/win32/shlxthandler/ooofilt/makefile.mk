@@ -73,11 +73,14 @@ SHL1STDLIBS+=$(OLE32LIB)\
      $(UUIDLIB)\
      $(SHELL32LIB)\
      $(KERNEL32LIB)\
-     $(OLDNAMESLIB)\
-     msvcprt.lib
+     $(OLDNAMESLIB)
+
+.IF "$(COM)"!="GCC"
+SHL1STDLIBS+=msvcprt.lib
 
 .IF "$(PRODUCT)"!="full"
 SHL1STDLIBS+=msvcrt.lib
+.ENDIF
 .ENDIF
 
      

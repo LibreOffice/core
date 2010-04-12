@@ -227,7 +227,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bViewEvent      = sal_False;
                         bStartEvent     = sal_False;
                         bDisplaySpec    = sal_False;
-                 }
+                     }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-view" ))
                     {
                         // open in viewmode
@@ -239,31 +239,43 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bViewEvent      = sal_True;
                         bStartEvent     = sal_False;
                         bDisplaySpec    = sal_False;
-                 }
+                     }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-show" ))
                     {
-                            // open in viewmode
-                            bOpenEvent      = sal_False;
-                            bViewEvent      = sal_False;
-                            bStartEvent     = sal_True;
-                            bPrintEvent     = sal_False;
-                            bPrintToEvent   = sal_False;
-                            bForceNewEvent  = sal_False;
-                            bForceOpenEvent = sal_False;
-                            bDisplaySpec    = sal_False;
+                        // open in viewmode
+                        bOpenEvent      = sal_False;
+                        bViewEvent      = sal_False;
+                        bStartEvent     = sal_True;
+                        bPrintEvent     = sal_False;
+                        bPrintToEvent   = sal_False;
+                        bForceNewEvent  = sal_False;
+                        bForceOpenEvent = sal_False;
+                        bDisplaySpec    = sal_False;
                     }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-display" ))
                     {
-                            // open in viewmode
-                            bOpenEvent      = sal_False;
-                               bPrintEvent     = sal_False;
-                            bForceOpenEvent = sal_False;
-                            bPrintToEvent   = sal_False;
-                            bForceNewEvent  = sal_False;
-                            bViewEvent      = sal_False;
-                            bStartEvent     = sal_False;
-                            bDisplaySpec    = sal_True;
+                        // set display
+                        bOpenEvent      = sal_False;
+                           bPrintEvent     = sal_False;
+                        bForceOpenEvent = sal_False;
+                        bPrintToEvent   = sal_False;
+                        bForceNewEvent  = sal_False;
+                        bViewEvent      = sal_False;
+                        bStartEvent     = sal_False;
+                        bDisplaySpec    = sal_True;
                     }
+                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-language" ))
+                    {
+                        bOpenEvent      = sal_False;
+                           bPrintEvent     = sal_False;
+                        bForceOpenEvent = sal_False;
+                        bPrintToEvent   = sal_False;
+                        bForceNewEvent  = sal_False;
+                        bViewEvent      = sal_False;
+                        bStartEvent     = sal_False;
+                        bDisplaySpec    = sal_False;
+                    }
+
                     #ifdef MACOSX
                     /* #i84053# ignore -psn on Mac
                        Platform dependent #ifdef here is ugly, however this is currently
@@ -272,15 +284,15 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     */
                     else if ( aArgStr.CompareToAscii( "-psn", 4 ) == COMPARE_EQUAL )
                     {
-                            // finder argument from MacOSX
-                            bOpenEvent      = sal_False;
-                               bPrintEvent     = sal_False;
-                            bForceOpenEvent = sal_False;
-                            bPrintToEvent   = sal_False;
-                            bForceNewEvent  = sal_False;
-                            bViewEvent      = sal_False;
-                            bStartEvent     = sal_False;
-                            bDisplaySpec    = sal_False;
+                        // finder argument from MacOSX
+                        bOpenEvent      = sal_False;
+                           bPrintEvent     = sal_False;
+                        bForceOpenEvent = sal_False;
+                        bPrintToEvent   = sal_False;
+                        bForceNewEvent  = sal_False;
+                        bViewEvent      = sal_False;
+                        bStartEvent     = sal_False;
+                        bDisplaySpec    = sal_False;
                     }
                     #endif
                 }
@@ -502,7 +514,12 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     }
     else if ( aArgStr.Copy(0, 9).EqualsIgnoreCaseAscii( "-version=" ))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_VERSION, aArgStr.Copy( 15 ) );
+        AddStringListParam_Impl( CMD_STRINGPARAM_VERSION, aArgStr.Copy( 9 ) );
+        return sal_True;
+    }
+    else if ( aArgStr.Copy(0, 10).EqualsIgnoreCaseAscii( "-language=" ))
+    {
+        AddStringListParam_Impl( CMD_STRINGPARAM_LANGUAGE, aArgStr.Copy( 10 ) );
         return sal_True;
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-writer" )) == sal_True )
@@ -843,6 +860,13 @@ sal_Bool CommandLineArgs::GetPrinterName( ::rtl::OUString& rPara ) const
     osl::MutexGuard  aMutexGuard( m_aMutex );
     rPara = m_aStrParams[ CMD_STRINGPARAM_PRINTERNAME ];
     return m_aStrSetParams[ CMD_STRINGPARAM_PRINTERNAME ];
+}
+
+sal_Bool CommandLineArgs::GetLanguage( ::rtl::OUString& rPara ) const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    rPara = m_aStrParams[ CMD_STRINGPARAM_LANGUAGE ];
+    return m_aStrSetParams[ CMD_STRINGPARAM_LANGUAGE ];
 }
 
 sal_Bool CommandLineArgs::IsEmpty() const

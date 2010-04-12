@@ -32,6 +32,7 @@
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
+#include <drawinglayer/attribute/sdrlineattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -48,21 +49,23 @@ namespace drawinglayer
             Primitive2DSequence aRetval(getSubPrimitives());
 
             // add text
-            if(getSdrSTAttribute().getText())
+            if(!getSdrSTAttribute().getText().isDefault())
             {
-                const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(
-                    basegfx::B2DPolyPolygon(aUnitOutline),
-                    getTextBox(),
-                    *getSdrSTAttribute().getText(),
-                    0,
-                    false,
-                    getWordWrap(),
-                    isForceTextClipToTextRange()));
+                const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createUnitPolygon());
+
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createTextPrimitive(
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTextBox(),
+                        getSdrSTAttribute().getText(),
+                        attribute::SdrLineAttribute(),
+                        false,
+                        getWordWrap(),
+                        isForceTextClipToTextRange()));
             }
 
             // add shadow
-            if(aRetval.hasElements() && getSdrSTAttribute().getShadow())
+            if(aRetval.hasElements() && !getSdrSTAttribute().getShadow().isDefault())
             {
                 // #i105323# add generic shadow only for 2D shapes. For
                 // 3D shapes shadow will be set at the individual created
@@ -76,7 +79,7 @@ namespace drawinglayer
                 // shadow will be correct (using ColorModifierStack), but expensive.
                 if(!get3DShape())
                 {
-                    aRetval = createEmbeddedShadowPrimitive(aRetval, *getSdrSTAttribute().getShadow());
+                    aRetval = createEmbeddedShadowPrimitive(aRetval, getSdrSTAttribute().getShadow());
                 }
             }
 

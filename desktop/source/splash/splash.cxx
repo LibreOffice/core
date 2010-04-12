@@ -44,6 +44,8 @@
 #include <rtl/logfile.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
+#include <vcl/graph.hxx>
+#include <svtools/filter.hxx>
 
 #define NOT_LOADED  ((long)-1)
 
@@ -58,6 +60,7 @@ SplashScreen::SplashScreen(const Reference< XMultiServiceFactory >& rSMgr)
     , _vdev(*((IntroWindow*)this))
     , _cProgressFrameColor(sal::static_int_cast< ColorData >(NOT_LOADED))
     , _cProgressBarColor(sal::static_int_cast< ColorData >(NOT_LOADED))
+    , _bNativeProgress(true)
     , _iMax(100)
     , _iProgress(0)
     , _eBitmapMode(BM_DEFAULTMODE)
@@ -295,6 +298,9 @@ void SplashScreen::loadConfig()
         OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressPosition" ) ) );
     OUString sFullScreenSplash = implReadBootstrapKey(
         OUString( RTL_CONSTASCII_USTRINGPARAM( "FullScreenSplash" ) ) );
+    OUString sNativeProgress = implReadBootstrapKey(
+        OUString( RTL_CONSTASCII_USTRINGPARAM( "NativeProgress" ) ) );
+
 
     // Determine full screen splash mode
     _bFullScreenSplash = (( sFullScreenSplash.getLength() > 0 ) &&
@@ -343,6 +349,11 @@ void SplashScreen::loadConfig()
             nBlue = static_cast< UINT8 >( sProgressBarColor.getToken( 0, ',', idx ).toInt32() );
             _cProgressBarColor = Color( nRed, nGreen, nBlue );
         }
+    }
+
+    if( sNativeProgress.getLength() )
+    {
+        _bNativeProgress = sNativeProgress.toBoolean();
     }
 
     if ( sSize.getLength() )
@@ -418,9 +429,15 @@ bool SplashScreen::loadBitmap(
     SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
     if ( !aStrm.GetError() )
     {
+        // Use graphic class to also support more graphic formats (bmp,png,...)
+        Graphic aGraphic;
+
+        GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
+        pGF->ImportGraphic( aGraphic, String(), aStrm, GRFILTER_FORMAT_DONTKNOW );
+
         // Default case, we load the intro bitmap from a seperate file
         // (e.g. staroffice_intro.bmp or starsuite_intro.bmp)
-        aStrm >> _aIntroBmp;
+        _aIntroBmp = aGraphic.GetBitmapEx();
         return true;
     }
 
@@ -438,8 +455,14 @@ bool SplashScreen::findBitmap(rtl::OUString const & path) {
             haveBitmap = findAppBitmap(path);
     }
     if ( !haveBitmap )
+    {
         haveBitmap = loadBitmap(
-            path, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("intro.bmp")));
+            path, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("intro.png")));
+        if ( !haveBitmap )
+            haveBitmap = loadBitmap(
+                path, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("intro.bmp")));
+    }
+
     return haveBitmap;
 }
 
@@ -469,10 +492,17 @@ bool SplashScreen::findScreenBitmap(rtl::OUString const & path)
     aStrBuf.append( OUString::valueOf( nWidth ));
     aStrBuf.appendAscii( "x" );
     aStrBuf.append( OUString::valueOf( nHeight ));
-    aStrBuf.appendAscii( ".bmp" );
-    OUString aBmpFileName = aStrBuf.makeStringAndClear();
+
+    OUString aRootIntroFileName = aStrBuf.makeStringAndClear();
+    OUString aBmpFileName       = aRootIntroFileName + OUString::createFromAscii(".png");
 
     bool haveBitmap = loadBitmap( path, aBmpFileName );
+    if ( !haveBitmap )
+    {
+        aBmpFileName = aRootIntroFileName + OUString::createFromAscii(".bmp");
+        haveBitmap   = loadBitmap( path, aBmpFileName );
+    }
+
     if ( !haveBitmap )
     {
         aStrBuf.appendAscii( "intro_" );
@@ -480,10 +510,16 @@ bool SplashScreen::findScreenBitmap(rtl::OUString const & path)
         aStrBuf.append( OUString::valueOf( nWidth ));
         aStrBuf.appendAscii( "x" );
         aStrBuf.append( OUString::valueOf( nHeight ));
-        aStrBuf.appendAscii( ".bmp" );
-        aBmpFileName = aStrBuf.makeStringAndClear();
+
+        aRootIntroFileName = aStrBuf.makeStringAndClear();
+        aBmpFileName = aRootIntroFileName + OUString::createFromAscii(".png");
 
         haveBitmap = loadBitmap( path, aBmpFileName );
+        if ( !haveBitmap )
+        {
+            aBmpFileName = aRootIntroFileName + OUString::createFromAscii(".bmp");
+            haveBitmap   = loadBitmap( path, aBmpFileName );
+        }
     }
     return haveBitmap;
 }
@@ -498,9 +534,16 @@ bool SplashScreen::findAppBitmap(rtl::OUString const & path)
         aStrBuf.appendAscii( "intro_" );
         aStrBuf.appendAscii( "_" );
         aStrBuf.append( _sAppName );
-        aStrBuf.appendAscii( ".bmp" );
-        OUString aBmpFileName = aStrBuf.makeStringAndClear();
+
+        OUString aRootIntroFileName = aStrBuf.makeStringAndClear();
+
+        OUString aBmpFileName = aRootIntroFileName + OUString::createFromAscii( ".png" );
         haveBitmap = loadBitmap( path, aBmpFileName );
+        if ( !haveBitmap )
+        {
+            aBmpFileName = aRootIntroFileName + OUString::createFromAscii( ".bmp" );
+            haveBitmap = loadBitmap( path, aBmpFileName );
+        }
     }
     return haveBitmap;
 }
@@ -584,9 +627,9 @@ void SplashScreen::Paint( const Rectangle&)
     BOOL bNativeOK = FALSE;
 
     // in case of native controls we need to draw directly to the window
-    if( IsNativeControlSupported( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL ) )
+    if( _bNativeProgress && IsNativeControlSupported( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL ) )
     {
-        DrawBitmap( Point(), _aIntroBmp );
+        DrawBitmapEx( Point(), _aIntroBmp );
 
         ImplControlValue aValue( _iProgress * _barwidth / _iMax);
         Rectangle aDrawRect( Point(_tlx, _tly), Size( _barwidth, _barheight ) );
@@ -612,7 +655,7 @@ void SplashScreen::Paint( const Rectangle&)
     //non native drawing
     // draw bitmap
     if (_bPaintBitmap)
-        _vdev.DrawBitmap( Point(), _aIntroBmp );
+        _vdev.DrawBitmapEx( Point(), _aIntroBmp );
 
     if (_bPaintProgress) {
         // draw progress...

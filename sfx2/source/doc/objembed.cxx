@@ -305,7 +305,7 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
 comphelper::EmbeddedObjectContainer& SfxObjectShell::GetEmbeddedObjectContainer() const
 {
     if ( !pImp->mpObjectContainer )
-        pImp->mpObjectContainer = new comphelper::EmbeddedObjectContainer( ((SfxObjectShell*)this)->GetStorage(), pImp->xModel );
+        pImp->mpObjectContainer = new comphelper::EmbeddedObjectContainer( ((SfxObjectShell*)this)->GetStorage(), GetModel() );
     return *pImp->mpObjectContainer;
 }
 
