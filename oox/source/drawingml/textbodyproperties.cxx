@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: textbodyproperties.cxx,v $
+ * $Revision: 1.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -25,32 +28,31 @@
  *
  ************************************************************************/
 
-#ifndef OOX_DRAWINGML_TEXTBODYPROPERTIES_HXX
-#define OOX_DRAWINGML_TEXTBODYPROPERTIES_HXX
-
-#include "oox/helper/helper.hxx"
-#include "oox/helper/propertymap.hxx"
+#include "oox/drawingml/textbodyproperties.hxx"
+#include <com/sun/star/text/WritingMode.hpp>
+#include "properties.hxx"
+#include "tokens.hxx"
 
 namespace oox {
 namespace drawingml {
 
 // ============================================================================
 
-struct TextBodyProperties
+TextBodyProperties::TextBodyProperties()
 {
-    PropertyMap         maPropertyMap;
-    OptValue< sal_Int32 > moRotation;
-    OptValue< sal_Int32 > moVert;
+}
 
-    explicit            TextBodyProperties();
+void TextBodyProperties::pushToPropMap( PropertyMap& rPropMap ) const
+{
+    rPropMap.insert( maPropertyMap.begin(), maPropertyMap.end() );
 
-    void                pushToPropMap( PropertyMap& rPropMap ) const;
-};
+    // #160799# fake different vertical text modes by top-bottom writing mode
+    if( moVert.get( XML_horz ) != XML_horz )
+        rPropMap[ PROP_TextWritingMode ] <<= ::com::sun::star::text::WritingMode_TB_RL;
+}
 
 // ============================================================================
 
 } // namespace drawingml
 } // namespace oox
-
-#endif
 

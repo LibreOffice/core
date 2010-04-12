@@ -415,7 +415,7 @@ Reference< XShape > Shape::createAndInsert(
 
         // add properties from textbody to shape properties
         if( mpTextBody.get() )
-            aShapeProperties.insert( mpTextBody->getTextProperties().maPropertyMap.begin(), mpTextBody->getTextProperties().maPropertyMap.end() );
+            mpTextBody->getTextProperties().pushToPropMap( aShapeProperties );
 
         // applying properties
         PropertySet aPropSet( xSet );
