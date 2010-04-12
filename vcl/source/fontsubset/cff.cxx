@@ -33,6 +33,7 @@
 #include <assert.h>
 
 #include <vcl/fontsubset.hxx>
+#include <vcl/strhelper.hxx>
 
 //#define IGNORE_HINTS
 
@@ -2030,28 +2031,9 @@ void Type1Emitter::emitAllCrypted( void)
 // #i110387# quick-and-dirty double->ascii conversion
 // needed because sprintf/ecvt/etc. alone are too localized (LC_NUMERIC)
 // also strip off trailing zeros in fraction while we are at it
-int dbl2str( char* pOut, double fVal, int nPrecision=6)
+inline int dbl2str( char* pOut, double fVal, int nPrecision=6)
 {
-    char* pBuf = pOut;
-    // TODO: avoid LC_NUMERIC based API
-    pOut += sprintf( pOut, "%.*g", nPrecision, fVal);
-    // ignore the number sign if any
-    char* p = pBuf;
-    if( (*p == '-') || (*p == '+'))
-        ++p;
-    for(; p < pOut; ++p) {
-        if( (*p >= '0') || (*p <= '9'))
-            continue;
-        // fixup fractional char
-        *(p++) = '.';
-        break;
-    }
-    // ignore trailing zeros in fractional part
-    for( char* pEnd = pOut; p < pEnd; ++p)
-        if( *p != '0')
-            pOut = p;
-    // calculate the length of the number string
-    const int nLen = pOut - pBuf;
+    const int nLen = psp::getValueOfDouble( pOut, fVal, nPrecision);
     return nLen;
 }
 
