@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scmatrix.cxx,v $
- * $Revision: 1.17.136.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,10 +62,15 @@ void ScMatrix::CreateMatrix(SCSIZE nC, SCSIZE nR)       // nur fuer ctor
     mnNonValue = 0;
 }
 
-ScMatrix::~ScMatrix()
+void ScMatrix::Clear()
 {
     DeleteIsString();
     delete [] pMat;
+}
+
+ScMatrix::~ScMatrix()
+{
+    Clear();
 }
 
 ScMatrix* ScMatrix::Clone() const
@@ -77,6 +79,12 @@ ScMatrix* ScMatrix::Clone() const
     MatCopy(*pScMat);
     pScMat->SetErrorInterpreter( pErrorInterpreter);    // TODO: really?
     return pScMat;
+}
+
+void ScMatrix::Resize( SCSIZE nC, SCSIZE nR)
+{
+    Clear();
+    CreateMatrix(nC, nR);
 }
 
 ScMatrix* ScMatrix::CloneAndExtend( SCSIZE nNewCols, SCSIZE nNewRows ) const

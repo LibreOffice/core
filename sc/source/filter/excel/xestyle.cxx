@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xestyle.cxx,v $
- * $Revision: 1.33.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,14 +39,14 @@
 #include <sfx2/printer.hxx>
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/bolnitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/bolnitem.hxx>
 #include <svx/rotmodit.hxx>
-#include <svx/colritem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/escpitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/escpitem.hxx>
 #include "document.hxx"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: VDataSeries.cxx,v $
- * $Revision: 1.32.8.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -737,10 +734,10 @@ double VDataSeries::getYMeanValue() const
     {
         if( xProp->getPropertyValue( C2U( "Symbol" ) ) >>= *apSymbolProps )
         {
-            // border of symbols always black
-            apSymbolProps->BorderColor = 0x000000;
             //use main color to fill symbols
             xProp->getPropertyValue( C2U( "Color" ) ) >>= apSymbolProps->FillColor;
+            // border of symbols always same as fill color
+            apSymbolProps->BorderColor = apSymbolProps->FillColor;
         }
         else
             apSymbolProps.reset();

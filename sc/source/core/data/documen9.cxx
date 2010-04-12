@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: documen9.cxx,v $
- * $Revision: 1.43.52.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,20 +28,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/embed/XClassifiedObject.hpp>
-#include <com/sun/star/chart2/data/XDataReceiver.hpp>
-
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sot/exchange.hxx>
-#include <svx/akrnitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/forbiddencharacterstable.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/akrnitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdocapt.hxx>
@@ -68,10 +61,10 @@
 #include "rechead.hxx"
 #include "poolhelp.hxx"
 #include "docpool.hxx"
-#include "chartarr.hxx"
 #include "detfunc.hxx"      // for UpdateAllComments
 #include "editutil.hxx"
 #include "postit.hxx"
+#include "charthelper.hxx"
 
 using namespace ::com::sun::star;
 
@@ -105,37 +98,6 @@ XColorTable* ScDocument::GetColorTable()
     }
 }
 
-BOOL lcl_AdjustRanges( ScRangeList& rRanges, SCTAB nSource, SCTAB nDest, SCTAB nTabCount )
-{
-    //! if multiple sheets are copied, update references into the other copied sheets?
-
-    BOOL bChanged = FALSE;
-
-    ULONG nCount = rRanges.Count();
-    for (ULONG i=0; i<nCount; i++)
-    {
-        ScRange* pRange = rRanges.GetObject(i);
-        if ( pRange->aStart.Tab() == nSource && pRange->aEnd.Tab() == nSource )
-        {
-            pRange->aStart.SetTab( nDest );
-            pRange->aEnd.SetTab( nDest );
-            bChanged = TRUE;
-        }
-        if ( pRange->aStart.Tab() >= nTabCount )
-        {
-            pRange->aStart.SetTab( nTabCount > 0 ? ( nTabCount - 1 ) : 0 );
-            bChanged = TRUE;
-        }
-        if ( pRange->aEnd.Tab() >= nTabCount )
-        {
-            pRange->aEnd.SetTab( nTabCount > 0 ? ( nTabCount - 1 ) : 0 );
-            bChanged = TRUE;
-        }
-    }
-
-    return bChanged;
-}
-
 void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDestPos)
 {
     if (pDrawLayer && pSrcDoc->pDrawLayer)
@@ -161,53 +123,14 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDes
                 if (pDrawLayer->IsRecording())
                     pDrawLayer->AddCalcUndo( new SdrUndoInsertObj( *pNewObject ) );
 
-                //  #71726# if it's a chart, make sure the data references are valid
-                //  (this must be after InsertObject!)
-
-                if ( pNewObject->GetObjIdentifier() == OBJ_OLE2 )
-                {
-                    uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pNewObject)->GetObjRef();
-                    uno::Reference< embed::XClassifiedObject > xClassified( xIPObj, uno::UNO_QUERY );
-                    SvGlobalName aObjectClassName;
-                    if ( xClassified.is() )
-                    {
-                        try {
-                            aObjectClassName = SvGlobalName( xClassified->getClassID() );
-                        } catch( uno::Exception& )
-                        {
-                            // TODO: handle error?
-                        }
-                    }
-
-                    if ( xIPObj.is() && SotExchange::IsChart( aObjectClassName ) )
-                    {
-                        String aChartName = ((SdrOle2Obj*)pNewObject)->GetPersistName();
-
-                        uno::Reference< chart2::XChartDocument > xChartDoc( GetChartByName( aChartName ) );
-                        uno::Reference< chart2::data::XDataReceiver > xReceiver( xChartDoc, uno::UNO_QUERY );
-                        if( xChartDoc.is() && xReceiver.is() )
-                        {
-                            if( !xChartDoc->hasInternalDataProvider() )
-                            {
-                                ::std::vector< ScRangeList > aRangesVector;
-                                GetChartRanges( aChartName, aRangesVector, pSrcDoc );
-
-                                ::std::vector< ScRangeList >::iterator aIt( aRangesVector.begin() );
-                                for( ; aIt!=aRangesVector.end(); aIt++ )
-                                {
-                                    ScRangeList& rScRangeList( *aIt );
-                                    lcl_AdjustRanges( rScRangeList, nSrcPos, nDestPos, GetTableCount() );
-                                }
-                                SetChartRanges( aChartName, aRangesVector );
-                            }
-                        }
-                    }
-                }
-
                 pOldObject = aIter.Next();
             }
         }
     }
+
+    //  #71726# make sure the data references of charts are adapted
+    //  (this must be after InsertObject!)
+    ScChartHelper::AdjustRangesOfChartsOnDestinationPage( pSrcDoc, this, nSrcPos, nDestPos );
 }
 
 void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )

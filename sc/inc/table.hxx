@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: table.hxx,v $
- * $Revision: 1.35.126.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,6 +86,7 @@ private:
     ScColumn        aCol[MAXCOLCOUNT];
 
     String          aName;
+    String          aCodeName;
     String          aComment;
     BOOL            bScenario;
     BOOL            bLayoutRTL;
@@ -161,7 +159,7 @@ private:
 friend class ScDocument;                    // fuer FillInfo
 friend class ScDocumentIterator;
 friend class ScValueIterator;
-friend class ScQueryValueIterator;
+friend class ScDBQueryDataIterator;
 friend class ScCellIterator;
 friend class ScQueryCellIterator;
 friend class ScHorizontalCellIterator;
@@ -177,6 +175,7 @@ public:
 
     ScOutlineTable* GetOutlineTable()               { return pOutlineTable; }
 
+    SCSIZE      GetCellCount(SCCOL nCol) const;
     ULONG       GetCellCount() const;
     ULONG       GetWeightedCount() const;
     ULONG       GetCodeCount() const;       // RPN-Code in Formeln
@@ -229,6 +228,9 @@ public:
     void        GetName( String& rName ) const;
     void        SetName( const String& rNewName );
 
+    void        GetCodeName( String& rName ) const {  rName = aCodeName; }
+    void        SetCodeName( const String& rNewName ) { aCodeName = rNewName; }
+
     const String&   GetUpperName() const;
 
     const String&   GetPageStyle() const                    { return aPageStyle; }
@@ -263,7 +265,8 @@ public:
     void        PutCell( SCCOL nCol, SCROW nRow, ScBaseCell* pCell );
     void        PutCell(SCCOL nCol, SCROW nRow, ULONG nFormatIndex, ScBaseCell* pCell);
                 //  TRUE = Zahlformat gesetzt
-    BOOL        SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString );
+    BOOL        SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
+                           SvNumberFormatter* pFormatter = NULL, bool bDetectNumberFormat = true );
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
     void        SetError( SCCOL nCol, SCROW nRow, USHORT nError);
 
@@ -466,7 +469,7 @@ public:
                                 const SvxBorderLine** ppRight, const SvxBorderLine** ppBottom ) const;
 
 //UNUSED2009-05 BOOL        HasLines( const ScRange& rRange, Rectangle& rSizes ) const;
-    BOOL        HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nMask ) const;
+    bool        HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nMask ) const;
     BOOL        HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const;
     BOOL        ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow,

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tp_ChartType.cxx,v $
- * $Revision: 1.8.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -990,8 +987,8 @@ IMPL_LINK( ChartTypeTabPage, SelectMainTypeHdl, void *, EMPTYARG )
             commitToModel( aParameter );
         //detect the new ThreeDLookScheme
         aParameter.eThreeDLookScheme = ThreeDHelper::detectScheme( ChartModelHelper::findDiagram( m_xChartModel ) );
-        if(!aParameter.b3DLook && aParameter.eThreeDLookScheme!=ThreeDLookScheme_Simple )
-            aParameter.eThreeDLookScheme=ThreeDLookScheme_Simple;
+        if(!aParameter.b3DLook && aParameter.eThreeDLookScheme!=ThreeDLookScheme_Realistic )
+            aParameter.eThreeDLookScheme=ThreeDLookScheme_Realistic;
 
         aParameter.bSortByXValues = lcl_getSortByXValues( m_xChartModel );
         this->fillAllControls( aParameter );
@@ -1112,8 +1109,8 @@ void ChartTypeTabPage::initializePage()
 
             //set ThreeDLookScheme
             aParameter.eThreeDLookScheme = ThreeDHelper::detectScheme( xDiagram );
-            if(!aParameter.b3DLook && aParameter.eThreeDLookScheme!=ThreeDLookScheme_Simple )
-                aParameter.eThreeDLookScheme=ThreeDLookScheme_Simple;
+            if(!aParameter.b3DLook && aParameter.eThreeDLookScheme!=ThreeDLookScheme_Realistic )
+                aParameter.eThreeDLookScheme=ThreeDLookScheme_Realistic;
 
             aParameter.bSortByXValues = lcl_getSortByXValues( m_xChartModel );
 

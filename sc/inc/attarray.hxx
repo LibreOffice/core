@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: attarray.hxx,v $
- * $Revision: 1.9.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -151,7 +148,7 @@ public:
 
     BOOL    HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
                         BOOL bLeft, BOOL bRight ) const;
-    BOOL    HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const;
+    bool    HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const;
     BOOL    ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rPaintCol, SCROW& rPaintRow,
                                 BOOL bRefresh, BOOL bAttrs );

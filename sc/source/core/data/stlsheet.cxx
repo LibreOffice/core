@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: stlsheet.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,14 +36,14 @@
 #include "stlpool.hxx"
 
 #include "scitems.hxx"
-#include <svx/boxitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/pbinitem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/pbinitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <sfx2/printer.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>

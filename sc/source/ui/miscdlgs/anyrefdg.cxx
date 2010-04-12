@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: anyrefdg.cxx,v $
- * $Revision: 1.21.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +39,6 @@
 #include <vcl/mnemonic.hxx>
 #include <tools/shl.hxx>
 #include <svtools/taskbar.hxx>
-#include <sfx2/topfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 
@@ -106,7 +102,7 @@ void ScFormulaReferenceHelper::enableInput( BOOL bEnable )
         while( pFrame )
         {
             //  #71577# enable everything except InPlace, including bean frames
-            if ( !pFrame->GetFrame()->IsInPlace() )
+            if ( !pFrame->GetFrame().IsInPlace() )
             {
                 SfxViewShell* p = pFrame->GetViewShell();
                 ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);
@@ -605,7 +601,7 @@ void ScFormulaReferenceHelper::EnableSpreadsheets(BOOL bFlag, BOOL bChilds)
         while( pFrame )
         {
             //  #71577# enable everything except InPlace, including bean frames
-            if ( !pFrame->GetFrame()->IsInPlace() )
+            if ( !pFrame->GetFrame().IsInPlace() )
             {
                 SfxViewShell* p = pFrame->GetViewShell();
                 ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);
@@ -645,7 +641,7 @@ void lcl_InvalidateWindows()
         while( pFrame )
         {
             //  #71577# enable everything except InPlace, including bean frames
-            if ( !pFrame->GetFrame()->IsInPlace() )
+            if ( !pFrame->GetFrame().IsInPlace() )
             {
                 SfxViewShell* p = pFrame->GetViewShell();
                 ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);

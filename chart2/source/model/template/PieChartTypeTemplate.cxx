@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PieChartTypeTemplate.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -557,12 +554,7 @@ void SAL_CALL PieChartTypeTemplate::applyStyle(
         }
 
         // line style
-        drawing::LineStyle eStyle = (getDimension() == 2)
-            ? drawing::LineStyle_SOLID
-            : drawing::LineStyle_NONE;
-
-        xProp->setPropertyValue( C2U("BorderStyle"),
-                                 uno::makeAny( eStyle ));
+        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "BorderStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
 
         // vary colors by point
         xProp->setPropertyValue( C2U("VaryColorsByPoint"), uno::makeAny( true ));
@@ -619,10 +611,7 @@ void SAL_CALL PieChartTypeTemplate::resetStyles( const Reference< chart2::XDiagr
     // line style
     ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
         DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
-    drawing::LineStyle eStyle = (getDimension() == 2)
-        ? drawing::LineStyle_SOLID
-        : drawing::LineStyle_NONE;
-    uno::Any aLineStyleAny( uno::makeAny( eStyle ));
+    uno::Any aLineStyleAny( uno::makeAny( drawing::LineStyle_NONE ));
     for( ::std::vector< Reference< chart2::XDataSeries > >::iterator aIt( aSeriesVec.begin());
          aIt != aSeriesVec.end(); ++aIt )
     {

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -160,6 +156,9 @@ EXCEPTIONSFILES= \
     $(SLO)$/scextopt.obj \
     $(SLO)$/tabvwshb.obj \
     $(SLO)$/viewdata.obj \
+    $(SLO)$/viewfunc.obj \
+    $(SLO)$/viewfun2.obj \
+    $(SLO)$/viewfun3.obj \
     $(SLO)$/viewfun5.obj \
     $(SLO)$/viewfun7.obj \
     $(SLO)$/reffact.obj

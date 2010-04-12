@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewfun2.cxx,v $
- * $Revision: 1.41.100.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,15 +33,15 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
 #define _SVSTDARR_STRINGS
-#include <svx/boxitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/linkmgr.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <svl/srchitem.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
@@ -88,6 +85,7 @@
 #include "inputwin.hxx"
 #include "funcdesc.hxx"
 #include "docuno.hxx"
+#include "charthelper.hxx"
 
 
 // STATIC DATA ---------------------------------------------------------------
@@ -2408,7 +2406,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
 
     if (bLink)
     {
-        SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+        sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
 
         SfxMedium* pMed = pSrcShell->GetMedium();
         String aFileName = pMed->GetName();
@@ -2803,6 +2801,10 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
             nNewTab--;
 
         SetTabNo( nNewTab, TRUE );
+
+        //#i29848# adjust references to data on the copied sheet
+        if( bCopy )
+            ScChartHelper::AdjustRangesOfChartsOnDestinationPage( pDoc, pDestDoc, nTab, nNewTab );
     }
 }
 

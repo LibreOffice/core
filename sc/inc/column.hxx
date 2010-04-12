@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: column.hxx,v $
- * $Revision: 1.21.128.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,7 +111,7 @@ private:
 friend class ScDocument;                    // fuer FillInfo
 friend class ScDocumentIterator;
 friend class ScValueIterator;
-friend class ScQueryValueIterator;
+friend class ScDBQueryDataIterator;
 friend class ScColumnIterator;
 friend class ScQueryCellIterator;
 friend class ScMarkedDataIter;
@@ -145,7 +142,7 @@ public:
 
 //UNUSED2009-05 BOOL        HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
 //UNUSED2009-05             BOOL bLeft, BOOL bRight ) const;
-    BOOL        HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const;
+    bool        HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const;
     BOOL        HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const;
     BOOL        ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rPaintCol, SCROW& rPaintRow,
@@ -238,7 +235,9 @@ public:
 
                 //  TRUE = Zahlformat gesetzt
     BOOL        SetString( SCROW nRow, SCTAB nTab, const String& rString,
-                           formula::FormulaGrammar::AddressConvention conv = formula::FormulaGrammar::CONV_OOO );
+                           formula::FormulaGrammar::AddressConvention conv = formula::FormulaGrammar::CONV_OOO,
+                           SvNumberFormatter* pFormatter = NULL,
+                           bool bDetectNumberFormat = true );
     void        SetValue( SCROW nRow, const double& rVal);
     void        SetError( SCROW nRow, const USHORT nError);
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gridwin.cxx,v $
- * $Revision: 1.96.50.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,14 +31,14 @@
 #include "scitems.hxx"
 
 #include <memory> //auto_ptr
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/dbexch.hrc>
-#include <svx/editview.hxx>
-#include <svx/editstat.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/editobj.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
@@ -58,7 +55,7 @@
 #include <sot/clsids.hxx>
 
 #include <svx/svdview.hxx>      // fuer Command-Handler (COMMAND_INSERTTEXT)
-#include <svx/outliner.hxx>     // fuer Command-Handler (COMMAND_INSERTTEXT)
+#include <editeng/outliner.hxx>     // fuer Command-Handler (COMMAND_INSERTTEXT)
 #include <svx/svditer.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
@@ -2410,24 +2407,20 @@ long ScGridWindow::PreNotify( NotifyEvent& rNEvt )
             SfxViewFrame* pViewFrame = pViewData->GetViewShell()->GetViewFrame();
             if (pViewFrame)
             {
-                SfxFrame* pFrame = pViewFrame->GetFrame();
-                if (pFrame)
+                com::sun::star::uno::Reference<com::sun::star::frame::XController> xController = pViewFrame->GetFrame().GetController();
+                if (xController.is())
                 {
-                    com::sun::star::uno::Reference<com::sun::star::frame::XController> xController = pFrame->GetController();
-                    if (xController.is())
+                    ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
+                    if (pImp && pImp->IsMouseListening())
                     {
-                        ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
-                        if (pImp && pImp->IsMouseListening())
-                        {
-                            ::com::sun::star::awt::MouseEvent aEvent;
-                            lcl_InitMouseEvent( aEvent, *rNEvt.GetMouseEvent() );
-                            if ( rNEvt.GetWindow() )
-                                aEvent.Source = rNEvt.GetWindow()->GetComponentInterface();
-                            if ( nType == EVENT_MOUSEBUTTONDOWN)
-                                pImp->MousePressed( aEvent );
-                            else
-                                pImp->MouseReleased( aEvent );
-                        }
+                        ::com::sun::star::awt::MouseEvent aEvent;
+                        lcl_InitMouseEvent( aEvent, *rNEvt.GetMouseEvent() );
+                        if ( rNEvt.GetWindow() )
+                            aEvent.Source = rNEvt.GetWindow()->GetComponentInterface();
+                        if ( nType == EVENT_MOUSEBUTTONDOWN)
+                            pImp->MousePressed( aEvent );
+                        else
+                            pImp->MouseReleased( aEvent );
                     }
                 }
             }
@@ -2692,9 +2685,32 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
 
         if ( bMouse )
         {
+            SCsCOL nCellX = -1;
+            SCsROW nCellY = -1;
+            pViewData->GetPosFromPixel(aPosPixel.X(), aPosPixel.Y(), eWhich, nCellX, nCellY);
+            ScDocument* pDoc = pViewData->GetDocument();
+            SCTAB nTab = pViewData->GetTabNo();
+            const ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+            bool bSelectAllowed = true;
+            if ( pProtect && pProtect->isProtected() )
+            {
+                // This sheet is protected.  Check if a context menu is allowed on this cell.
+                bool bCellProtected = pDoc->HasAttrib(nCellX, nCellY, nTab, nCellX, nCellY, nTab, HASATTR_PROTECTED);
+                bool bSelProtected   = pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+                bool bSelUnprotected = pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+
+                if (bCellProtected)
+                    bSelectAllowed = bSelProtected;
+                else
+                    bSelectAllowed = bSelUnprotected;
+            }
+            if (!bSelectAllowed)
+                // Selecting this cell is not allowed, neither is context menu.
+                return;
+
             //  #i18735# First select the item under the mouse pointer.
             //  This can change the selection, and the view state (edit mode, etc).
-            SelectForContextMenu( aPosPixel );
+            SelectForContextMenu( aPosPixel, nCellX, nCellY );
         }
 
         BOOL bDone = FALSE;
@@ -2789,15 +2805,12 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
     }
 }
 
-void ScGridWindow::SelectForContextMenu( const Point& rPosPixel )
+void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCsCOL nCellX, SCsROW nCellY )
 {
     //  #i18735# if the click was outside of the current selection,
     //  the cursor is moved or an object at the click position selected.
     //  (see SwEditWin::SelectMenuPosition in Writer)
 
-    SCsCOL nCellX;
-    SCsROW nCellY;
-    pViewData->GetPosFromPixel( rPosPixel.X(), rPosPixel.Y(), eWhich, nCellX, nCellY );
     ScTabView* pView = pViewData->GetView();
     ScDrawView* pDrawView = pView->GetScDrawView();
 
