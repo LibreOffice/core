@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: registerextensions.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -354,7 +351,7 @@ extern "C" UINT __stdcall RegisterExtensions(MSIHANDLE handle)
             {
                 const std::_tstring sTempFolder(createTempFolder());
                 std::_tstring sOxtFile = sShareInstallDir + aFindFileData.cFileName;
-                std::_tstring sCommandPart1 = sUnoPkgFile + " add --shared --bundled " + "\"" + sOxtFile + "\"";
+                std::_tstring sCommandPart1 = sUnoPkgFile + " add --shared --suppress-license --bundled " + "\"" + sOxtFile + "\"";
                 std::_tstring sCommand = sCommandPart1
                     + TEXT(" -env:UNO_JAVA_JFW_INSTALL_DATA=$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml")
                     + TEXT(" -env:UserInstallation=") + sTempFolder;

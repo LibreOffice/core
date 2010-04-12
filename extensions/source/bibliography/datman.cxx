@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: datman.cxx,v $
- * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -151,7 +148,7 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
         try
         {
 
-            Reference<XInterface> xHdl = xMgr->createInstance(C2U("com.sun.star.sdb.InteractionHandler"));
+            Reference<XInterface> xHdl = xMgr->createInstance(C2U("com.sun.star.task.InteractionHandler"));
             Reference<task::XInteractionHandler> xIHdl(xHdl, UNO_QUERY);
             xConn = xComplConn->connectWithCompletion(xIHdl);
 //          xConn = xDataSource->getConnection(sUser, sPwd);

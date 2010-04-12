@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optpath.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -220,13 +217,12 @@ SvxPathTabPage::SvxPathTabPage( Window* pParent, const SfxItemSet& rSet ) :
 
     SfxTabPage( pParent, CUI_RES( RID_SFXPAGE_PATH ), rSet ),
 
+    aStdBox         ( this, CUI_RES( GB_STD ) ),
     aTypeText       ( this, CUI_RES( FT_TYPE ) ),
     aPathText       ( this, CUI_RES( FT_PATH ) ),
     aPathCtrl       ( this, CUI_RES( LB_PATH ) ),
     aStandardBtn    ( this, CUI_RES( BTN_STANDARD ) ),
     aPathBtn        ( this, CUI_RES( BTN_PATH ) ),
-    aStdBox         ( this, CUI_RES( GB_STD ) ),
-
     pHeaderBar      ( NULL ),
     pPathBox        ( NULL ),
     pImpl           ( new OptPath_Impl( CUI_RES(IMG_LOCK), CUI_RES(IMG_LOCK_HC) ) ),
@@ -256,7 +252,7 @@ SvxPathTabPage::SvxPathTabPage( Window* pParent, const SfxItemSet& rSet ) :
     Size aHeadSize = pHeaderBar->GetSizePixel();
 
     WinBits nBits = WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP;
-    pPathBox = new OptHeaderTabListBox( &aPathCtrl, nBits );
+    pPathBox = new svx::OptHeaderTabListBox( &aPathCtrl, nBits );
     aPathCtrl.SetFocusControl( pPathBox );
     pPathBox->SetWindowBits( nBits );
     pPathBox->SetDoubleClickHdl( aLink );
@@ -409,7 +405,7 @@ void SvxPathTabPage::FillUserData()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxPathTabPage, PathSelect_Impl, OptHeaderTabListBox *, EMPTYARG )
+IMPL_LINK( SvxPathTabPage, PathSelect_Impl, svx::OptHeaderTabListBox *, EMPTYARG )
 
 /*  [Beschreibung]
 

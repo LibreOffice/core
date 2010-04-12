@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WizardDialog.java,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -685,7 +682,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
     }
 
-    public abstract void finishWizard();
+    public abstract boolean finishWizard();
 
     /**
      * This function will call if the finish button is pressed on the UI.
@@ -693,8 +690,18 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     public void finishWizard_1()
     {
         enableFinishButton(false);
-        finishWizard();
-        removeTerminateListener();
+        boolean success = false;
+        try
+        {
+            success = finishWizard();
+        }
+        finally
+        {
+            if ( !success )
+                enableFinishButton( true );
+        }
+        if ( success )
+            removeTerminateListener();
     }
 
     public int getMaximalStep()

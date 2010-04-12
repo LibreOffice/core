@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: acc_factory.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -408,7 +405,7 @@ inline bool hasFloatingChild(Window *pWindow)
                 else
                     xContext = new FloatingWindowAccessible( _pXWindow );
             }
-            else if ( nType == WINDOW_HELPTEXTWINDOW )
+            else if ( ( nType == WINDOW_HELPTEXTWINDOW ) || ( nType == WINDOW_FIXEDLINE ) )
             {
                xContext = (accessibility::XAccessibleContext*) new VCLXAccessibleFixedText( _pXWindow );
             }
