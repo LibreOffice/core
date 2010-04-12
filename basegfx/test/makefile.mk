@@ -39,10 +39,14 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Common ----------------------------------------------------------
 
 SHL1OBJS=  \
-    $(SLO)$/basegfx1d.obj \
-    $(SLO)$/basegfx2d.obj \
-    $(SLO)$/basegfx3d.obj \
-    $(SLO)$/testtools.obj
+    $(SLO)$/basegfx1d.obj      \
+    $(SLO)$/basegfx2d.obj      \
+    $(SLO)$/basegfx3d.obj      \
+    $(SLO)$/boxclipper.obj     \
+    $(SLO)$/basegfxtools.obj   \
+    $(SLO)$/clipstate.obj      \
+    $(SLO)$/genericclipper.obj \
+    $(SLO)$/testtools.obj	
 
 # linking statically against basegfx parts
 SHL1LIBS=\
@@ -61,8 +65,8 @@ SHL1TARGET= basegfx_tests
 SHL1STDLIBS= \
                 $(SALLIB)        \
                 $(CPPUHELPERLIB) \
-                        $(CPPULIB)       \
-                                $(TESTSHL2LIB) \
+                $(CPPULIB)       \
+                $(TESTSHL2LIB) \
                 $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
@@ -80,6 +84,10 @@ SLOFILES=$(SHL1OBJS)
 
 .INCLUDE : target.mk
 .INCLUDE : _cppunit.mk
+
+.IF "$(verbose)"!="" || "$(VERBOSE)"!=""
+CDEFS+= -DVERBOSE
+.ENDIF
 
 # --- Enable testshl2 execution in normal build ------------------------
 

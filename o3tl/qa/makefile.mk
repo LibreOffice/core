@@ -42,6 +42,7 @@ ENABLE_EXCEPTIONS=TRUE
 SHL1OBJS=  \
     $(SLO)$/cow_wrapper_clients.obj     \
     $(SLO)$/test-cow_wrapper.obj	    \
+    $(SLO)$/test-vector_pool.obj	\
     $(SLO)$/test-heap_ptr.obj           \
     $(SLO)$/test-range.obj
 

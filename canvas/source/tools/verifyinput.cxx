@@ -426,7 +426,7 @@ namespace canvas
 #endif
             }
 
-            if( texture.RepeatModeX < rendering::TexturingMode::CLAMP ||
+            if( texture.RepeatModeX < rendering::TexturingMode::NONE ||
                 texture.RepeatModeX > rendering::TexturingMode::REPEAT )
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -442,7 +442,7 @@ namespace canvas
 #endif
             }
 
-            if( texture.RepeatModeY < rendering::TexturingMode::CLAMP ||
+            if( texture.RepeatModeY < rendering::TexturingMode::NONE ||
                 texture.RepeatModeY > rendering::TexturingMode::REPEAT )
             {
 #if OSL_DEBUG_LEVEL > 0

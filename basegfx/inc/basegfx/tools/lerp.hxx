@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: lerp.hxx,v $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -25,31 +28,33 @@
  *
  ************************************************************************/
 
-#include <osl/diagnose.h>
-#include <basegfx/polygon/b3dgeometry.hxx>
+#ifndef _BGFX_TOOLS_LERP_HXX
+#define _BGFX_TOOLS_LERP_HXX
 
-//////////////////////////////////////////////////////////////////////////////
+#include <sal/types.h>
 
 namespace basegfx
 {
-    B3DGeometry::B3DGeometry()
-    :   mbUnifiedVectorValid(false)
+    namespace tools
     {
+        /** Generic linear interpolator
+
+            @tpl ValueType
+            Must have operator+ and operator* defined, and should
+            have value semantics.
+
+            @param t
+            As usual, t must be in the [0,1] range
+        */
+        template< typename ValueType > ValueType lerp( const ValueType&     rFrom,
+                                                       const ValueType&     rTo,
+                                                       double               t )
+        {
+            // This is only to suppress a double->int warning. All other
+            // types should be okay here.
+            return static_cast<ValueType>( (1.0-t)*rFrom + t*rTo );
+        }
     }
+}
 
-    B3DGeometry::~B3DGeometry()
-    {
-    }
-
-    bool B3DGeometry::operator==(const B3DGeometry& rGeometry) const
-    {
-        return (maPolyPolygon == maPolyPolygon
-            && maPolygonTo3D == maPolygonTo3D
-            && maPolyNormal == maPolyNormal
-            && maPolyTexture == maPolyTexture
-    }
-
-} // end of namespace basegfx
-
-//////////////////////////////////////////////////////////////////////////////
-// eof
+#endif /* _BGFX_TOOLS_LERP_HXX */
