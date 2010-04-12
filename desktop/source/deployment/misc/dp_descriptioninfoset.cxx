@@ -370,6 +370,50 @@ css::uno::Sequence< ::rtl::OUString > DescriptionInfoset::getUrls(
 
 }
 
+::boost::optional<SimpleLicenseAttributes>
+DescriptionInfoset::getSimpleLicenseAttributes() const
+{
+    //Check if the node exist
+    css::uno::Reference< css::xml::dom::XNode > n;
+    if (m_element.is()) {
+        try {
+            n = m_xpath->selectSingleNode(m_element,
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "/desc:description/desc:registration/desc:simple-license/@accept-by")));
+        } catch (css::xml::xpath::XPathException &) {
+            // ignore
+        }
+        if (n.is())
+        {
+            SimpleLicenseAttributes attributes;
+            attributes.acceptBy =
+                getNodeValueFromExpression(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "/desc:description/desc:registration/desc:simple-license/@accept-by")));
+
+            ::boost::optional< ::rtl::OUString > suppressOnUpdate = getOptionalValue(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "/desc:description/desc:registration/desc:simple-license/@suppress-on-update")));
+            if (suppressOnUpdate)
+                attributes.suppressOnUpdate = (*suppressOnUpdate).trim().equalsIgnoreAsciiCase(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true")));
+            else
+                attributes.suppressOnUpdate = false;
+
+            ::boost::optional< ::rtl::OUString > suppressIfRequired = getOptionalValue(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "/desc:description/desc:registration/desc:simple-license/@suppress-if-required")));
+            if (suppressIfRequired)
+                attributes.suppressIfRequired = (*suppressIfRequired).trim().equalsIgnoreAsciiCase(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true")));
+            else
+                attributes.suppressIfRequired = false;
+
+            return ::boost::optional<SimpleLicenseAttributes>(attributes);
+        }
+    }
+    return ::boost::optional<SimpleLicenseAttributes>();
+}
+
 ::rtl::OUString DescriptionInfoset::getLocalizedDescriptionURL() const
 {
     return getLocalizedHREFAttrFromChild(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(

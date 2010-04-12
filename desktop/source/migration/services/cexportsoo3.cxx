@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: cexports.cxx,v $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -26,30 +29,43 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sfx2.hxx"
+#include "precompiled_desktop.hxx"
 
-#ifndef GCC
-#endif
+#include "cppuhelper/implementationentry.hxx"
+#include "oo3extensionmigration.hxx"
 
-#include "impframe.hxx"
-
-#include <svl/smplhint.hxx>
-
-#include <sfx2/frame.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/viewfrm.hxx>
-
-void SfxFrame_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
+extern "C"
 {
-    SfxSimpleHint* pHint = PTR_CAST( SfxSimpleHint, &rHint );
-    if( pHint && pHint->GetId() == SFX_HINT_CANCELLABLE && pCurrentViewFrame )
+
+::cppu::ImplementationEntry entries [] =
+{
     {
-        // vom Cancel-Manager
-        SfxBindings &rBind = pCurrentViewFrame->GetBindings();
-        rBind.Invalidate( SID_BROWSE_STOP );
-        if ( !rBind.IsInRegistrations() )
-            rBind.Update( SID_BROWSE_STOP );
-        rBind.Invalidate( SID_BROWSE_STOP );
-    }
+        migration::OO3ExtensionMigration_create, migration::OO3ExtensionMigration_getImplementationName,
+        migration::OO3ExtensionMigration_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
+        0, 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
+
+
+void SAL_CALL component_getImplementationEnvironment(
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
+{
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
+sal_Bool SAL_CALL component_writeInfo(
+    void * pServiceManager, void * pRegistryKey )
+{
+    return ::cppu::component_writeInfoHelper(
+        pServiceManager, pRegistryKey, entries );
+}
+
+void * SAL_CALL component_getFactory(
+    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+{
+    return ::cppu::component_getFactoryHelper(
+        pImplName, pServiceManager, pRegistryKey, entries );
+}
+
+}

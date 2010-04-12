@@ -294,6 +294,9 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut)
 SdrPaintView::~SdrPaintView()
 {
     DBG_DTOR(SdrPaintView,NULL);
+    if (pDefaultStyleSheet)
+        EndListening(*pDefaultStyleSheet);
+
     maColorConfig.RemoveListener(this);
     ClearPageView();
 
@@ -317,8 +320,16 @@ SdrPaintView::~SdrPaintView()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void __EXPORT SdrPaintView::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
+void __EXPORT SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
+    //If the stylesheet has been destroyed
+    if (&rBC == pDefaultStyleSheet)
+    {
+        if (rHint.ISA(SfxSimpleHint) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING)
+            pDefaultStyleSheet = NULL;
+        return;
+    }
+
     BOOL bObjChg=!bSomeObjChgdFlag; // TRUE= auswerten fuer ComeBack-Timer
     if (bObjChg) {
         SdrHint* pSdrHint=PTR_CAST(SdrHint,&rHint);
@@ -1238,7 +1249,12 @@ void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, BOOL bReplaceAll)
 
 void SdrPaintView::SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr)
 {
+    if (pDefaultStyleSheet)
+        EndListening(*pDefaultStyleSheet);
     pDefaultStyleSheet=pStyleSheet;
+    if (pDefaultStyleSheet)
+        StartListening(*pDefaultStyleSheet);
+
     if (pStyleSheet!=NULL && !bDontRemoveHardAttr) {
         SfxWhichIter aIter(pStyleSheet->GetItemSet());
         USHORT nWhich=aIter.FirstWhich();

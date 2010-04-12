@@ -38,7 +38,6 @@ namespace com { namespace sun { namespace star {
     namespace chart {
         class XDiagram;
         class XChartDocument;
-        class XChartDataArray;
         struct ChartSeriesAddress;
     }
     namespace drawing {
