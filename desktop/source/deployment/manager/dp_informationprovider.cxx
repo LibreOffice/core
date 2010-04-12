@@ -387,7 +387,7 @@ uno::Sequence< uno::Sequence< rtl::OUString > >
                 if (*id2 == id)
                 {
                     // check, if there are unsatisfied dependencies and ignore those updates
-                    uno::Sequence< uno::Reference< xml::dom::XElement > > ds( dp_misc::Dependencies::check( infoset ) );
+                    uno::Sequence< uno::Reference< xml::dom::XElement > > ds( dp_misc::Dependencies::check( infoset, _xManager->getContext() ) );
                     if ( ds.getLength() )
                         continue;
 
