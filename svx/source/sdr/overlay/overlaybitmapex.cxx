@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <svx/sdr/overlay/overlaybitmapex.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
@@ -53,7 +53,7 @@ namespace sdr
             {
                 const drawinglayer::primitive2d::Primitive2DSequence aNewTransPrimitiveVector(&aReference, 1L);
                 aReference = drawinglayer::primitive2d::Primitive2DReference(
-                                new drawinglayer::primitive2d::UnifiedAlphaPrimitive2D(aNewTransPrimitiveVector, mfAlpha));
+                                new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(aNewTransPrimitiveVector, mfAlpha));
             }
 
             return drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
