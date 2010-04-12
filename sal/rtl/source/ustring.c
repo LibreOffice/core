@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ustring.c,v $
- * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -558,7 +555,12 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
                "rtl_string2UString_status() - Wrong TextEncoding" );
 
     if ( !nLen )
+    {
         rtl_uString_new( ppThis );
+        if (pInfo != NULL) {
+            *pInfo = 0;
+        }
+    }
     else
     {
         if ( *ppThis )
@@ -589,6 +591,9 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
                 nLen--;
             }
             while ( nLen );
+            if (pInfo != NULL) {
+                *pInfo = 0;
+            }
         }
         else
         {
@@ -756,8 +761,6 @@ getInternMutex()
     return pPoolGuard;
 }
 
-static StringHashTable *pInternPool = NULL;
-
 /* returns true if we found a dup in the pool */
 static void rtl_ustring_intern_internal( rtl_uString ** newStr,
                                          rtl_uString  * str,
@@ -769,9 +772,7 @@ static void rtl_ustring_intern_internal( rtl_uString ** newStr,
 
     osl_acquireMutex( pPoolMutex );
 
-    if (!pInternPool)
-        pInternPool = rtl_str_hash_new (1024);
-    *newStr = rtl_str_hash_intern (pInternPool, str, can_return);
+    *newStr = rtl_str_hash_intern (str, can_return);
 
     osl_releaseMutex( pPoolMutex );
 
@@ -859,7 +860,7 @@ internRelease (rtl_uString *pThis)
         pPoolMutex = getInternMutex();
         osl_acquireMutex( pPoolMutex );
 
-        rtl_str_hash_remove (pInternPool, pThis);
+        rtl_str_hash_remove (pThis);
 
         /* May have been separately acquired */
         if ( SAL_STRING_REFCOUNT(

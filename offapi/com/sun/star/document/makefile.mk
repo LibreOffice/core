@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.46.12.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -87,6 +83,7 @@ IDLFILES=\
     XDocumentInsertable.idl\
     XDocumentProperties.idl\
     XDocumentPropertiesSupplier.idl\
+    XDocumentRecovery.idl\
     XDocumentSubStorageSupplier.idl\
     XEmbeddedObjectResolver.idl\
     XEmbeddedObjectSupplier.idl\
@@ -116,7 +113,9 @@ IDLFILES=\
     LinkUpdateModes.idl\
     XDocumentRevisionListPersistence.idl\
     DocumentRevisionListPersistence.idl \
-    XDocumentLanguages.idl
+    XDocumentLanguages.idl \
+    XCodeNameQuery.idl
+
 
 # ------------------------------------------------------------------
 

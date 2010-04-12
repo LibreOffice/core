@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: t_base.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -365,18 +362,7 @@ int SAL_CALL main (int argc, char **argv)
     rtl_zeroMemory (pBuffer, sizeof (pBuffer));
     rtl_copyMemory (pBuffer, argv[0], rtl_str_getLength(argv[0]) + 1);
 
-    eErrCode = xBIOS->acquireLock (TEST_PAGESIZE, sizeof(pBuffer));
-    if (eErrCode != store_E_None)
-        return eErrCode;
-
     eErrCode = xBIOS->write (TEST_PAGESIZE, pBuffer, sizeof (pBuffer));
-    if (eErrCode != store_E_None)
-    {
-        xBIOS->releaseLock (TEST_PAGESIZE, sizeof(pBuffer));
-        return eErrCode;
-    }
-
-    eErrCode = xBIOS->releaseLock (TEST_PAGESIZE, sizeof(pBuffer));
     if (eErrCode != store_E_None)
         return eErrCode;
 
