@@ -72,7 +72,7 @@ ButtonsImpl::ButtonsImpl( const OUString& rURL )
 {
     try
     {
-        mxStorage = comphelper::OStorageHelper::GetStorageFromURL( rURL, ElementModes::READ );
+        mxStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL( ZIP_STORAGE_FORMAT_STRING, rURL, ElementModes::READ );
     }
     catch( Exception& )
     {
