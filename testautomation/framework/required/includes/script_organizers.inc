@@ -40,19 +40,18 @@ testcase tUpdtScriptCount
         aScriptCount( 1 ) = 10
         aScriptCount( 2 ) = 14
         aScriptCount( 3 ) = 10 
+    if ( gOOo ) then
         aScriptCount( 4 ) = 585
         aScriptCount( 5 ) = 601 
-                
+    else            
+        aScriptCount( 4 ) = 586
+        aScriptCount( 5 ) = 602 
+    endif
+
     dim iCurrentDialog as integer
     dim iCurrentScriptCount as integer
     
-    
-    
-    do while ( getDocumentCount > 0 ) 
-        hDestroyDocument()
-    loop
-        
-    hNewDocument()
+    hInitSingleDoc()       
 
     for iCurrentDialog = 1 to SCRIPTING_DIALOGS
 
