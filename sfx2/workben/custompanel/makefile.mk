@@ -81,6 +81,7 @@ COMPONENT_XCU = \
     $(EXTENSIONDIR)/WriterWindowState.xcu \
     $(EXTENSIONDIR)/CalcWindowState.xcu \
     $(EXTENSIONDIR)/DrawWindowState.xcu \
+    $(EXTENSIONDIR)/ImpressWindowState.xcu \
     $(EXTENSIONDIR)/Factories.xcu
 
 COMPONENT_LIBRARIES = \
@@ -112,4 +113,8 @@ $(EXTENSIONDIR)/CalcWindowState.xcu: ./CalcWindowState.xcu
 $(EXTENSIONDIR)/DrawWindowState.xcu: ./DrawWindowState.xcu
     @@-$(MKDIRHIER) $(@:d)
     $(COMMAND_ECHO)$(TYPE) ./DrawWindowState.xcu | sed s/UPDATED_IDENTIFIER/$(IMPLEMENTATION_IDENTIFIER)/ > $(EXTENSIONDIR)/DrawWindowState.xcu
+
+$(EXTENSIONDIR)/ImpressWindowState.xcu: ./ImpressWindowState.xcu
+    @@-$(MKDIRHIER) $(@:d)
+    $(COMMAND_ECHO)$(TYPE) ./ImpressWindowState.xcu | sed s/UPDATED_IDENTIFIER/$(IMPLEMENTATION_IDENTIFIER)/ > $(EXTENSIONDIR)/ImpressWindowState.xcu
 
