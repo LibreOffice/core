@@ -483,6 +483,12 @@ Gruppenliste HID_TEMPLATE_FILTER
 Interlace filter:CheckBox:DLG_EXPORT_GIF:CBX_INTERLACED
 TransparentSpeichern filter:CheckBox:DLG_EXPORT_GIF:CBX_TRANSLUCENT
 
+*GridControlDialogStarter ACTIVE
+ShowGridcontrol sym:showGridcontrol
+
+*GridControlDialog sym:gridcontroldialog
+gridcontrolcontrol sym:gridcontrolself
+
 *GroupingDlg HID_SC_DPDATEGROUP
 AutoStart sc:RadioButton:RID_SCDLG_DPNUMGROUP:RB_AUTOSTART
 ManualStart sc:RadioButton:RID_SCDLG_DPNUMGROUP:RB_MANSTART
