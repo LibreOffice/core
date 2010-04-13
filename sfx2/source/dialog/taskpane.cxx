@@ -50,6 +50,8 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
 #include <svtools/toolpanel/toolpaneldeck.hxx>
+#include <svtools/toolpanel/tablayouter.hxx>
+#include <svtools/toolpanel/drawerlayouter.hxx>
 #include <unotools/confignode.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
@@ -89,127 +91,6 @@ namespace sfx2
     using ::com::sun::star::graphic::XGraphic;
     /** === end UNO using === **/
     namespace PosSize = ::com::sun::star::awt::PosSize;
-
-//#define USE_DUMMY_PANEL
-
-#if OSL_DEBUG_LEVEL > 0
-    //==================================================================================================================
-    //= DummyPanel - declaration
-    //==================================================================================================================
-    class DummyPanel : public ::svt::ToolPanelBase
-    {
-    public:
-        DummyPanel( Window& i_rParent );
-        virtual ~DummyPanel();
-
-        // IToolPanel
-        virtual ::rtl::OUString GetDisplayName() const;
-        virtual Image GetImage() const;
-        virtual void Activate( Window& i_rParentWindow );
-        virtual void Deactivate();
-        virtual void SetSizePixel( const Size& i_rPanelWindowSize );
-        virtual void GrabFocus();
-        virtual void Dispose();
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-                    CreatePanelAccessible(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rParentAccessible
-                    );
-
-        class GreenWindow : public Window
-        {
-        public:
-            GreenWindow( Window& i_rParent )
-                :Window( &i_rParent, 0 )
-            {
-                SetLineColor();
-                SetFillColor( COL_GREEN );
-            }
-            virtual void Paint( const Rectangle& i_rRect )
-            {
-                DrawRect( i_rRect );
-            }
-        };
-
-    private:
-        ::boost::scoped_ptr< Window >  m_pWindow;
-    };
-
-    //==================================================================================================================
-    //= DummyPanel - implementation
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
-    DummyPanel::DummyPanel( Window& i_rParent )
-        :m_pWindow( new GreenWindow( i_rParent ) )
-    {
-        m_pWindow->SetPosSizePixel( Point(), i_rParent.GetOutputSizePixel() );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    DummyPanel::~DummyPanel()
-    {
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString DummyPanel::GetDisplayName() const
-    {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Soylent Green" ) );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    Image DummyPanel::GetImage() const
-    {
-        return Image();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void DummyPanel::Activate( Window& i_rParentWindow )
-    {
-        OSL_ENSURE( &i_rParentWindow == m_pWindow->GetParent(), "DummyPanel::Activate: reparenting not supported (and not expected to be needed)!" );
-        (void)i_rParentWindow;
-
-        m_pWindow->Show();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void DummyPanel::Deactivate()
-    {
-        m_pWindow->Hide();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void DummyPanel::SetSizePixel( const Size& i_rPanelWindowSize )
-    {
-        m_pWindow->SetPosSizePixel( Point(), i_rPanelWindowSize );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void DummyPanel::GrabFocus()
-    {
-        m_pWindow->GrabFocus();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void DummyPanel::Dispose()
-    {
-        m_pWindow.reset();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::accessibility::XAccessible;
-    Reference< XAccessible > DummyPanel::CreatePanelAccessible( const Reference< XAccessible >& i_rParentAccessible )
-    {
-        Reference< XAccessible > xPanelAccessible( m_pWindow->GetAccessible( FALSE ) );
-        if ( !xPanelAccessible.is() )
-        {
-            xPanelAccessible = m_pWindow->GetAccessible( TRUE );
-            ::comphelper::OAccessibleImplementationAccess::setAccessibleParent( xPanelAccessible->getAccessibleContext(),
-                i_rParentAccessible );
-        }
-        return xPanelAccessible;
-    }
-
-#endif
 
     //==================================================================================================================
     //= helpers
@@ -411,6 +292,9 @@ namespace sfx2
         virtual Reference< XAccessible >
                     CreatePanelAccessible( const Reference< XAccessible >& i_rParentAccessible );
 
+        const ::rtl::OUString&
+                    GetResourceURL() const { return m_sResourceURL; }
+
     protected:
         ~CustomToolPanel();
 
@@ -593,9 +477,6 @@ namespace sfx2
             ,m_aPanels( i_rAntiImpl )
         {
             m_aPanels.Show();
-        #if ( OSL_DEBUG_LEVEL > 0 ) && defined ( USE_DUMMY_PANEL )
-            m_aPanels.InsertPanel( ::svt::PToolPanel( new DummyPanel( m_aPanels.GetPanelWindowAnchor() ) ), m_aPanels.GetPanelCount() );
-        #endif
             OnResize();
             impl_initFromConfiguration();
         }
@@ -609,11 +490,22 @@ namespace sfx2
 
         static bool ModuleHasToolPanels( const ::rtl::OUString& i_rModuleIdentifier );
 
+              ::svt::ToolPanelDeck& GetPanelDeck()          { return m_aPanels; }
+        const ::svt::ToolPanelDeck& GetPanelDeck() const    { return m_aPanels; }
+
+        ::boost::optional< size_t >
+                    GetPanelPos( const ::rtl::OUString& i_rResourceURL );
+
+        void        SetDrawersLayout();
+        void        SetTabsLayout( const ::svt::TabAlignment i_eTabAlignment, const ::svt::TabItemContent i_eTabContent );
+
     private:
         void    impl_initFromConfiguration();
 
         static bool
                 impl_isToolPanelResource( const ::rtl::OUString& i_rResourceURL );
+
+        DECL_LINK( OnActivatePanel, void* );
 
     private:
         ModuleTaskPane&             m_rAntiImpl;
@@ -632,6 +524,13 @@ namespace sfx2
     void ModuleTaskPane_Impl::OnGetFocus()
     {
         m_aPanels.GrabFocus();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    IMPL_LINK( ModuleTaskPane_Impl, OnActivatePanel, void*, i_pArg )
+    {
+        m_aPanels.ActivatePanel( reinterpret_cast< size_t >( i_pArg ) );
+        return 1L;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -668,7 +567,7 @@ namespace sfx2
 
         if ( nFirstVisiblePanel != size_t( -1 ) )
         {
-            m_aPanels.ActivatePanel( nFirstVisiblePanel );
+            m_rAntiImpl.PostUserEvent( LINK( this, ModuleTaskPane_Impl, OnActivatePanel ), reinterpret_cast< void* >( nFirstVisiblePanel ) );
         }
     }
 
@@ -689,6 +588,57 @@ namespace sfx2
                 return true;
         }
         return false;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::boost::optional< size_t > ModuleTaskPane_Impl::GetPanelPos( const ::rtl::OUString& i_rResourceURL )
+    {
+        ::boost::optional< size_t > aPanelPos;
+        for ( size_t i = 0; i < m_aPanels.GetPanelCount(); ++i )
+        {
+            const ::svt::PToolPanel pPanel( m_aPanels.GetPanel( i ) );
+            const CustomToolPanel* pCustomPanel = dynamic_cast< const CustomToolPanel* >( pPanel.get() );
+            ENSURE_OR_CONTINUE( pCustomPanel != NULL, "ModuleTaskPane_Impl::GetPanelPos: illegal panel implementation!" );
+            if ( pCustomPanel->GetResourceURL() == i_rResourceURL )
+            {
+                aPanelPos = i;
+                break;
+            }
+        }
+        return aPanelPos;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void ModuleTaskPane_Impl::SetDrawersLayout()
+    {
+        const ::svt::PDeckLayouter pLayouter( m_aPanels.GetLayouter() );
+        const ::svt::DrawerDeckLayouter* pDrawerLayouter = dynamic_cast< const ::svt::DrawerDeckLayouter* >( pLayouter.get() );
+        if ( pDrawerLayouter != NULL )
+            // already have the proper layout
+            return;
+        m_aPanels.SetLayouter( new ::svt::DrawerDeckLayouter( m_aPanels, m_aPanels ) );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void ModuleTaskPane_Impl::SetTabsLayout( const ::svt::TabAlignment i_eTabAlignment, const ::svt::TabItemContent i_eTabContent )
+    {
+        ::svt::PDeckLayouter pLayouter( m_aPanels.GetLayouter() );
+        ::svt::TabDeckLayouter* pTabLayouter = dynamic_cast< ::svt::TabDeckLayouter* >( pLayouter.get() );
+        if  (   ( pTabLayouter != NULL )
+            &&  ( pTabLayouter->GetTabAlignment() == i_eTabAlignment )
+            &&  ( pTabLayouter->GetTabItemContent() == i_eTabContent )
+            )
+            // already have the requested layout
+            return;
+
+        if ( pTabLayouter && ( pTabLayouter->GetTabAlignment() == i_eTabAlignment ) )
+        {
+            // changing only the item content does not require a new layouter instance
+            pTabLayouter->SetTabItemContent( i_eTabContent );
+            return;
+        }
+
+        m_aPanels.SetLayouter( new ::svt::TabDeckLayouter( m_aPanels, m_aPanels, i_eTabAlignment, i_eTabContent ) );
     }
 
     //==================================================================================================================
@@ -730,6 +680,36 @@ namespace sfx2
     {
         Window::GetFocus();
         m_pImpl->OnGetFocus();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::svt::ToolPanelDeck& ModuleTaskPane::GetPanelDeck()
+    {
+        return m_pImpl->GetPanelDeck();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    const ::svt::ToolPanelDeck& ModuleTaskPane::GetPanelDeck() const
+    {
+        return m_pImpl->GetPanelDeck();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::boost::optional< size_t > ModuleTaskPane::GetPanelPos( const ::rtl::OUString& i_rResourceURL )
+    {
+        return m_pImpl->GetPanelPos( i_rResourceURL );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void ModuleTaskPane::SetDrawersLayout()
+    {
+        m_pImpl->SetDrawersLayout();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void ModuleTaskPane::SetTabsLayout( const ::svt::TabAlignment i_eTabAlignment, const ::svt::TabItemContent i_eTabContent )
+    {
+        m_pImpl->SetTabsLayout( i_eTabAlignment, i_eTabContent );
     }
 
 //......................................................................................................................

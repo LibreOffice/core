@@ -48,44 +48,58 @@
       </node>
       <node oor:name="generic_toolbar_factory" oor:op="replace">
         <prop oor:name="Type">
-            <value>toolbar</value>
+          <value>toolbar</value>
         </prop>
         <prop oor:name="Name">
-            <value/>
+          <value/>
         </prop>
         <prop oor:name="Module">
-            <value/>
+          <value/>
         </prop>
         <prop oor:name="FactoryImplementation">
-            <value>com.sun.star.comp.framework.ToolBarFactory</value>
+          <value>com.sun.star.comp.framework.ToolBarFactory</value>
         </prop>
       </node>
       <node oor:name="addons_toolbar_factory" oor:op="replace">
         <prop oor:name="Type">
-            <value>toolbar</value>
+          <value>toolbar</value>
         </prop>
         <prop oor:name="Name">
-            <value>addon_</value>
+          <value>addon_</value>
         </prop>
         <prop oor:name="Module">
-            <value/>
+          <value/>
         </prop>
         <prop oor:name="FactoryImplementation">
-            <value>com.sun.star.comp.framework.AddonsToolBarFactory</value>
+          <value>com.sun.star.comp.framework.AddonsToolBarFactory</value>
         </prop>
       </node>
       <node oor:name="statusbar_factory" oor:op="replace">
         <prop oor:name="Type">
-            <value>statusbar</value>
+          <value>statusbar</value>
         </prop>
         <prop oor:name="Name">
-            <value/>
+          <value/>
         </prop>
         <prop oor:name="Module">
-            <value/>
+          <value/>
         </prop>
         <prop oor:name="FactoryImplementation">
-            <value>com.sun.star.comp.framework.StatusBarFactory</value>
+          <value>com.sun.star.comp.framework.StatusBarFactory</value>
+        </prop>
+      </node>
+      <node oor:name="org.openoffice.Office.Impress.ImpressToolPanelFactory" oor:op="replace">
+        <prop oor:name="Type">
+          <value>toolpanel</value>
+        </prop>
+        <prop oor:name="Name">
+          <value>DrawingFramework</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.presentation.PresentationDocument</value>
+        </prop>
+        <prop oor:name="FactoryImplementation">
+          <value>com.sun.star.drawing.DefaultToolPanelFactory</value>
         </prop>
       </node>
     </node>

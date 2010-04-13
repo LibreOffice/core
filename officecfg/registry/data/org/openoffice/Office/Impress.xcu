@@ -126,27 +126,27 @@
           <node oor:name="ResourceList">
             <node oor:name="R0" oor:op="replace">
               <prop oor:name="URL">
-                <value>private:resource/toolpanel/MasterPages</value>
+                <value>private:resource/toolpanel/DrawingFramework/MasterPages</value>
               </prop>
             </node>
             <node oor:name="R1" oor:op="replace">
               <prop oor:name="URL">
-                <value>private:resource/toolpanel/Layouts</value>
+                <value>private:resource/toolpanel/DrawingFramework/Layouts</value>
               </prop>
             </node>
             <node oor:name="R2" oor:op="replace">
               <prop oor:name="URL">
-                <value>private:resource/toolpanel/TableDesign</value>
+                <value>private:resource/toolpanel/DrawingFramework/TableDesign</value>
               </prop>
             </node>
             <node oor:name="R3" oor:op="replace">
               <prop oor:name="URL">
-                <value>private:resource/toolpanel/CustomAnimations</value>
+                <value>private:resource/toolpanel/DrawingFramework/CustomAnimations</value>
               </prop>
             </node>
             <node oor:name="R4" oor:op="replace">
               <prop oor:name="URL">
-                <value>private:resource/toolpanel/SlideTransitions</value>
+                <value>private:resource/toolpanel/DrawingFramework/SlideTransitions</value>
               </prop>
             </node>
           </node>

@@ -27,10 +27,20 @@
 #ifndef SFX_TASKPANE_HXX
 #define SFX_TASKPANE_HXX
 
+#include "sfx2/dllapi.h"
 #include "sfx2/childwin.hxx"
 #include "sfx2/titledockwin.hxx"
 
+#include <svtools/toolpanel/tabalignment.hxx>
+#include <svtools/toolpanel/tabitemcontent.hxx>
+
 #include <boost/scoped_ptr.hpp>
+#include <boost/optional.hpp>
+
+namespace svt
+{
+    class ToolPanelDeck;
+}
 
 //......................................................................................................................
 namespace sfx2
@@ -60,7 +70,7 @@ namespace sfx2
     /** SFX-less version of a module dependent task pane, filled with tool panels as specified in the respective
         module's configuration
     */
-    class ModuleTaskPane : public Window
+    class SFX2_DLLPUBLIC ModuleTaskPane : public Window
     {
     public:
         /** creates a new instance
@@ -69,7 +79,7 @@ namespace sfx2
             @param i_rDocumentFrame
                 the frame to which the task pane belongs. Will be passed to any custom tool panels created
                 via an XUIElementFactory. Also, it is used to determine the module which the task pane is
-                responsible for, which controls which tool panels are actually available.
+                responsible for, thus controlling which tool panels are actually available.
         */
         ModuleTaskPane(
             Window& i_rParentWindow,
@@ -84,6 +94,22 @@ namespace sfx2
         */
         static bool ModuleHasToolPanels( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rDocumentFrame );
 
+        /** provides access to the Window aspect of the PanelDeck
+        */
+              ::svt::ToolPanelDeck& GetPanelDeck();
+        const ::svt::ToolPanelDeck& GetPanelDeck() const;
+
+        /** returns the position of the panel with the given resource URL
+        */
+        ::boost::optional< size_t >
+                    GetPanelPos( const ::rtl::OUString& i_rResourceURL );
+
+        /// sets the "classical" layout of the tool panel deck, using drawers
+        void    SetDrawersLayout();
+        /// sets the new layout of the tool panel deck, using tabs
+        void    SetTabsLayout( const ::svt::TabAlignment i_eTabAlignment, const ::svt::TabItemContent i_eTabContent );
+
+    protected:
         // Window overridables
         virtual void Resize();
         virtual void GetFocus();
