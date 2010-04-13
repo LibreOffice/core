@@ -76,6 +76,7 @@ namespace sd { namespace colortoolpanel
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::awt::XDevice;
     using ::com::sun::star::awt::XGraphics;
+    using ::com::sun::star::accessibility::XAccessible;
     /** === end UNO using === **/
     namespace WindowAttribute = ::com::sun::star::awt::WindowAttribute;
     namespace PosSize = ::com::sun::star::awt::PosSize;
@@ -168,6 +169,15 @@ namespace sd { namespace colortoolpanel
         if ( !m_xWindow.get() )
             throw DisposedException( ::rtl::OUString(), *this );
         return m_xWindow;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Reference< XAccessible > SAL_CALL SingleColorPanel::createAccessible( const Reference< XAccessible >& i_rParentAccessible ) throw (RuntimeException)
+    {
+        (void)i_rParentAccessible;
+        return Reference< XAccessible >( m_xWindow, UNO_QUERY );
+        // TODO: this is, strictly, not correct, as we ignore i_ParentAccessible here. If you are not doing a sample
+        // extension only, you'll want to do this correctly ....
     }
 
     //------------------------------------------------------------------------------------------------------------------
