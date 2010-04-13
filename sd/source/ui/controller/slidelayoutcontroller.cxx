@@ -224,6 +224,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
     case DrawViewMode_DRAW: pInfo = &standard[0]; break;
     case DrawViewMode_HANDOUT: pInfo = &handout[0]; nColCount = 2; break;
     case DrawViewMode_NOTES: pInfo = &notes[0]; nColCount = 1; break;
+    default: break;
     }
 
     mpLayoutSet1->SetColCount( nColCount );

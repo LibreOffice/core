@@ -1300,7 +1300,7 @@ CustomHandleManager& ViewShellBase::getCustomHandleManager() const
 
 ::rtl::OUString ViewShellBase::RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL ) const
 {
-    Reference< XFrame > xFrame( GetMainViewShell()->GetViewFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY );
+    Reference< XFrame > xFrame( GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface(), UNO_QUERY );
     return ImplRetrieveLabelFromCommand( xFrame, aCmdURL );
 }
 

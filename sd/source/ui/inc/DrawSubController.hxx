@@ -32,7 +32,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/compbase2.hxx>
 
-namespace {
+namespace sd {
 
     class DrawSubControllerInterfaceBase : public ::cppu::WeakComponentImplHelper2<
                     ::com::sun::star::drawing::XDrawSubController,
