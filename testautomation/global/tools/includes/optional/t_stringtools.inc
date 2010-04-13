@@ -321,7 +321,7 @@ end function
 
 '*******************************************************************************
 
-function hStringReplace( myString as string, search_string as string, replace_with as string ) as string
+function hStringReplace( cString as string, search_string as string, replace_with as string ) as string
 
     const CFN = "hStringReplace(): "
 
@@ -329,6 +329,7 @@ function hStringReplace( myString as string, search_string as string, replace_wi
     dim search_string_found as boolean   : search_string_found = true
     dim len_search_string as integer     : len_search_string = len( search_string )
     dim len_replace_with  as integer     : len_replace_with  = len( replace_with  )
+    dim myString as string               : myString = cString
 
     if ( GVERBOSE ) then printlog( CFN & "Replace all <" & search_string & "> with <" & replace_with & "> in <" & myString & ">" )
 
