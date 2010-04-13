@@ -120,12 +120,14 @@ sub GetIniInformation
    gOOoStartupTimeOut = fgetOOoStartupTimeOut()
    gOOoShutdownTimeOut = fgetOOoShutdownTimeOut()
    call sCheckValgrindStatus()
+    ' set a global path for custom scripts, like basepath, but outside of current environment
    gPrivateEnvironmentLocation = getIniValue(gTesttoolIni, "PrivateEnvironment", "Current")
-   sTemp = ConvertPath (gTestToolPath + gPrivateEnvironmentLocation + "inc/privateenvironment.inc")
-   if fileExists(sTemp) then
-       use sTemp
-       call getUseFilesPrivateEnvironment
-   else
+    if (gPrivateEnvironmentLocation <> "" AND gPrivateEnvironmentLocation <> ".") then
+        if NOT fileExists(gPrivateEnvironmentLocation) then
+            qaErrorLog "[PrivateEnvironment] defined in: '"+gTesttoolIni+"', but the path '"+gPrivateEnvironmentLocation+"'does not exist!"
+        else
+            gPrivateEnvironmentLocation = ""
+        end if
        gPrivateEnvironmentLocation = ""
    end if
 end sub
