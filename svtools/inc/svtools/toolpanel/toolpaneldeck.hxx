@@ -149,14 +149,15 @@ namespace svt
             This is a single dedicated window, which is passed to the IToolPanel::ActivatePanel method
             whenever a panel is activated, to act as parent window for the panel's VCL-Window.
         */
-        Window&             GetPanelWindowAnchor();
+        ::Window&           GetPanelWindowAnchor();
+        const ::Window&     GetPanelWindowAnchor() const;
 
         /** sets the window which should act as parent in the A11Y object hierarchy.
 
             Calling this method has no effect if CreateAccessible had always been called.
         */
-        void                SetAccessibleParentWindow( Window* i_pAccessibleParent );
-        Window*             GetAccessibleParentWindow() const;
+        void                SetAccessibleParentWindow( ::Window* i_pAccessibleParent );
+        ::Window*           GetAccessibleParentWindow() const;
 
         // IToolPanelDeck
         virtual size_t      GetPanelCount() const;

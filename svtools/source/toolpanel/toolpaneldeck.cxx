@@ -99,7 +99,8 @@ namespace svt
         PDeckLayouter       GetLayouter() const { return m_pLayouter; }
         void                SetLayouter( const PDeckLayouter& i_pNewLayouter );
 
-        Window&             GetPanelWindowAnchor() { return m_aPanelAnchor; }
+        Window&             GetPanelWindowAnchor()       { return m_aPanelAnchor; }
+        const Window&       GetPanelWindowAnchor() const { return m_aPanelAnchor; }
 
         bool                IsDead() const { return m_bInDtor; }
 
@@ -450,6 +451,12 @@ namespace svt
 
     //--------------------------------------------------------------------
     Window& ToolPanelDeck::GetPanelWindowAnchor()
+    {
+        return m_pImpl->GetPanelWindowAnchor();
+    }
+
+    //--------------------------------------------------------------------
+    const Window& ToolPanelDeck::GetPanelWindowAnchor() const
     {
         return m_pImpl->GetPanelWindowAnchor();
     }
