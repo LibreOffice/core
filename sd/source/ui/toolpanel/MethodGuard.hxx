@@ -22,15 +22,12 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
-************************************************************************/
+ ************************************************************************/
 
-#ifndef SD_UI_TASKPANE_PANELID_HXX
-#define SD_UI_TASKPANE_PANELID_HXX
+#ifndef SD_METHODGUARD_HXX
+#define SD_METHODGUARD_HXX
 
-namespace rtl
-{
-    class OUString;
-}
+#include <osl/mutex.hxx>
 
 //......................................................................................................................
 namespace sd { namespace toolpanel
@@ -38,26 +35,33 @@ namespace sd { namespace toolpanel
 //......................................................................................................................
 
     //==================================================================================================================
-    //= PanelId
+    //= MethodGuard
     //==================================================================================================================
-    /** List of top level panels that can be shown in the task pane.
-    */
-    enum PanelId
+    template < class COMPONENT >
+    class MethodGuard
     {
-        PID_UNKNOWN             = 0,
-        PID_MASTER_PAGES        = 1,
-        PID_LAYOUT              = 2,
-        PID_TABLE_DESIGN        = 3,
-        PID_CUSTOM_ANIMATION    = 4,
-        PID_SLIDE_TRANSITION    = 5,
+    public:
+        MethodGuard( COMPONENT& i_rComponent )
+            :m_aGuard( i_rComponent.getMutex() )
+        {
+            i_rComponent.checkDisposed();
+        }
 
-        PID_FIRST_CUSTOM_PANEL  = 6
+        ~MethodGuard()
+        {
+        }
+
+        inline void clear()
+        {
+            m_aGuard.clear();
+        }
+
+    private:
+        ::osl::ClearableMutexGuard  m_aGuard;
     };
-
-    PanelId GetStandardPanelId( const ::rtl::OUString& i_rTaskPanelResourceURL );
 
 //......................................................................................................................
 } } // namespace sd::toolpanel
 //......................................................................................................................
 
-#endif // SD_UI_TASKPANE_PANELID_HXX
+#endif // SD_METHODGUARD_HXX

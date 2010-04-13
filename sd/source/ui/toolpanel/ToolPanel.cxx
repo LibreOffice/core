@@ -22,14 +22,18 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
-************************************************************************/
+ ************************************************************************/
 
 #include "precompiled_sd.hxx"
 
-#include "TaskPaneToolPanel.hxx"
-#include "ToolPanelDeck.hxx"
+#include "ToolPanel.hxx"
+#include "MethodGuard.hxx"
+#include <taskpane/TaskPaneTreeNode.hxx>
 
-#include <tools/diagnose_ex.h>
+/** === begin UNO includes === **/
+#include <com/sun/star/lang/DisposedException.hpp>
+/** === end UNO includes === **/
+
 #include <vcl/window.hxx>
 
 //......................................................................................................................
@@ -49,51 +53,59 @@ namespace sd { namespace toolpanel
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
-    using ::com::sun::star::drawing::framework::XResourceId;
+    using ::com::sun::star::lang::DisposedException;
+    using ::com::sun::star::awt::XWindow;
+    using ::com::sun::star::accessibility::XAccessible;
     /** === end UNO using === **/
 
+    typedef MethodGuard< ToolPanel > ToolPanelGuard;
+
     //==================================================================================================================
-    //= TaskPaneToolPanel
+    //= ToolPanel
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    TaskPaneToolPanel::TaskPaneToolPanel( ToolPanelDeck& i_rPanelDeck, const String& i_rPanelName, const Image& i_rImage,
-            const SmartId& i_rHelpId )
-        :m_pPanelDeck( &i_rPanelDeck )
-        ,m_aPanelImage( i_rImage )
-        ,m_sPanelName( i_rPanelName )
-        ,m_aHelpId( i_rHelpId )
+    ToolPanel::ToolPanel( ::std::auto_ptr< TreeNode >& i_rControl )
+        :ToolPanel_Base( m_aMutex )
+        ,m_pControl( i_rControl )
     {
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    TaskPaneToolPanel::~TaskPaneToolPanel()
+    ToolPanel::~ToolPanel()
     {
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Window& TaskPaneToolPanel::getPanelWindowAnchor()
+    void ToolPanel::checkDisposed()
     {
-        OSL_ENSURE( !isDisposed(), "already disposed!" );
-        return m_pPanelDeck->GetPanelWindowAnchor();
+        if ( m_pControl.get() == NULL )
+            throw DisposedException( ::rtl::OUString(), *this );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString TaskPaneToolPanel::GetDisplayName() const
+    Reference< XWindow > SAL_CALL ToolPanel::getWindow() throw (RuntimeException)
     {
-        return m_sPanelName;
+        ToolPanelGuard aGuard( *this );
+        return Reference< XWindow >( m_pControl->GetWindow()->GetComponentInterface(), UNO_QUERY_THROW );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Image TaskPaneToolPanel::GetImage() const
+    Reference< XAccessible > SAL_CALL ToolPanel::createAccessible( const Reference< XAccessible >& i_rParentAccessible ) throw (RuntimeException)
     {
-        return m_aPanelImage;
+        ToolPanelGuard aGuard( *this );
+        Reference< XAccessible > xAccessible( m_pControl->GetWindow()->GetAccessible( FALSE ) );
+        if ( !xAccessible.is() )
+        {
+            xAccessible.set( m_pControl->CreateAccessibleObject( i_rParentAccessible ) );
+            m_pControl->GetWindow()->SetAccessible( xAccessible );
+        }
+        return xAccessible;
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TaskPaneToolPanel::Dispose()
+    void SAL_CALL ToolPanel::disposing()
     {
-        ENSURE_OR_RETURN_VOID( m_pPanelDeck, "disposed twice" );
-        m_pPanelDeck = NULL;
+        m_pControl.reset();
     }
 
 //......................................................................................................................

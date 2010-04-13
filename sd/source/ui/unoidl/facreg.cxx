@@ -145,6 +145,17 @@ extern uno::Sequence<OUString> SAL_CALL PresentationFactoryProvider_getSupported
 } }
 
 
+namespace sd { namespace toolpanel {
+
+extern uno::Reference<uno::XInterface> SAL_CALL ToolPanelFactory_createInstance(
+    const uno::Reference<uno::XComponentContext>& rxContext)
+    throw(uno::Exception);
+extern OUString ToolPanelFactory_getImplementationName(void) throw (uno::RuntimeException);
+extern uno::Sequence<OUString> SAL_CALL ToolPanelFactory_getSupportedServiceNames (void)
+    throw (uno::RuntimeException);
+
+} }
+
 namespace sd { namespace presenter {
 extern uno::Reference<uno::XInterface> SAL_CALL SlideRenderer_createInstance(
     const uno::Reference<uno::XComponentContext>& rxContext)
@@ -202,6 +213,7 @@ using namespace ::sd;
 using namespace ::sd::framework;
 using namespace ::sd::presenter;
 using namespace ::sd::slidesorter;
+using namespace ::sd::toolpanel;
 
 
 
@@ -225,6 +237,7 @@ enum FactoryId
     BasicToolBarFactoryFactoryId,
     BasicViewFactoryFactoryId,
     TaskPanelFactoryFactoryId,
+    ToolPanelFactoryFactoryId,
     ResourceIdFactoryId,
     PresentationFactoryProviderFactoryId,
     SlideRendererFactoryId,
@@ -256,6 +269,7 @@ static ::boost::shared_ptr<FactoryMap> spFactoryMap;
         (*spFactoryMap)[BasicToolBarFactory_getImplementationName()] = BasicToolBarFactoryFactoryId;
         (*spFactoryMap)[BasicViewFactory_getImplementationName()] = BasicViewFactoryFactoryId;
         (*spFactoryMap)[TaskPanelFactory_getImplementationName()] = TaskPanelFactoryFactoryId;
+        (*spFactoryMap)[ToolPanelFactory_getImplementationName()] = ToolPanelFactoryFactoryId;
         (*spFactoryMap)[ResourceId_getImplementationName()] = ResourceIdFactoryId;
         (*spFactoryMap)[PresentationFactoryProvider_getImplementationName()] = PresentationFactoryProviderFactoryId;
         (*spFactoryMap)[SlideRenderer_getImplementationName()] = SlideRendererFactoryId;
@@ -336,6 +350,10 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
                 pKey,
                 sd::framework::TaskPanelFactory_getImplementationName(),
                 sd::framework::TaskPanelFactory_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::toolpanel::ToolPanelFactory_getImplementationName(),
+                sd::toolpanel::ToolPanelFactory_getSupportedServiceNames());
             writeInfo(
                 pKey,
                 sd::framework::ResourceId_getImplementationName(),
@@ -485,6 +503,13 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                         sd::framework::TaskPanelFactory_createInstance,
                         sd::framework::TaskPanelFactory_getImplementationName(),
                         sd::framework::TaskPanelFactory_getSupportedServiceNames());
+                    break;
+
+                case ToolPanelFactoryFactoryId:
+                    xComponentFactory = ::cppu::createSingleComponentFactory(
+                        sd::toolpanel::ToolPanelFactory_createInstance,
+                        sd::toolpanel::ToolPanelFactory_getImplementationName(),
+                        sd::toolpanel::ToolPanelFactory_getSupportedServiceNames());
                     break;
 
                 case ResourceIdFactoryId:

@@ -45,6 +45,10 @@
 
 class PopupMenu;
 
+namespace com { namespace sun { namespace star { namespace ui {
+    class XUIElement;
+} } } }
+
 namespace sd {
 class PaneDockingWindow;
 
@@ -53,7 +57,6 @@ class TaskPaneShellManager;
 class TitleToolBox;
 class TitleBar;
 class TitledControl;
-class ToolPanelDeck;
 class ToolPanelViewShell_Impl;
 /** The tool panel is a view shell for some very specific reasons:
     - It fits better into the concept of panes being docking windows whose
@@ -99,17 +102,9 @@ public:
 
     TaskPaneShellManager& GetSubShellManager (void) const;
 
-    /** returns the window which should be used as parent for tool panel windows
-    */
-    ::Window*   GetToolPanelParentWindow();
-
-    /** activates the given panel, bypassing the configuration controller, deactivates the previously active one.
-    */
-    void    ActivatePanel( const PanelId i_ePanelId );
-
     /** deactivates the given panel, bypassing the configuration controller
     */
-    void    DeactivatePanel( const PanelId i_ePanelId );
+    void    DeactivatePanel( const ::rtl::OUString& i_rPanelResourceURL );
 
     /** Return a pointer to the docking window that is the parent or a
         predecessor of the content window.
@@ -136,6 +131,17 @@ public:
     /** Relocate all toplevel controls to the given parent window.
     */
     virtual bool RelocateToParentWindow (::Window* pParentWindow);
+
+    /// returns <TRUE/> if and only if the given window is the panel anchor window of our ToolPanelDeck
+    bool    IsPanelAnchorWindow( const ::Window& i_rWindow ) const;
+
+    /** creates an XUIElement for the given standard panel
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >
+            CreatePanelUIElement(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rDocFrame,
+                const ::rtl::OUString& i_rPanelResourceURL
+            );
 
 private:
     ::boost::scoped_ptr< ToolPanelViewShell_Impl >   mpImpl;
