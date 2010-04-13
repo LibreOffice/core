@@ -28,6 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_package.hxx"
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
+#include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>

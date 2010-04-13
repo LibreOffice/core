@@ -34,6 +34,7 @@
 #include <PackageConstants.hxx>
 #include <ZipPackageFolderEnumeration.hxx>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
+#include <com/sun/star/embed/StorageFormats.hpp>
 #include <vos/diagnose.hxx>
 #include <osl/time.h>
 #include <rtl/digest.h>
