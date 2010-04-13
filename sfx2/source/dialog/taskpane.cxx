@@ -89,6 +89,7 @@ namespace sfx2
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::graphic::XGraphicProvider;
     using ::com::sun::star::graphic::XGraphic;
+    using ::com::sun::star::accessibility::XAccessible;
     /** === end UNO using === **/
     namespace PosSize = ::com::sun::star::awt::PosSize;
 
