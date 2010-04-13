@@ -78,6 +78,8 @@
 #include "globstr.hrc"
 #include "scerrors.hxx"
 #include "XMLExportSharedData.hxx"
+#include "docuno.hxx"
+#include "sheetdata.hxx"
 
 #define MAP_LEN(x) x, sizeof(x) - 1
 
@@ -738,16 +740,23 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
             uno::Reference<embed::XStorage> xTmpStorage = rDoc.GetDocumentShell()->GetStorage();
             uno::Reference<io::XStream> xSrcStream;
             uno::Reference<io::XInputStream> xSrcInput;
-            try
+
+            // #i108978# If an embedded object is saved and no events are notified, don't use the stream
+            // because without the ...DONE events, stream positions aren't updated.
+            ScSheetSaveData* pSheetData = ScModelObj::getImplementation(xModel)->GetSheetSaveData();
+            if (pSheetData && pSheetData->IsInSupportedSave())
             {
-                if (xTmpStorage.is())
-                    xSrcStream = xTmpStorage->openStreamElement( sName, embed::ElementModes::READ );
-                if (xSrcStream.is())
-                    xSrcInput = xSrcStream->getInputStream();
-            }
-            catch (uno::Exception&)
-            {
-                // stream not available (for example, password protected) - save normally (xSrcInput is null)
+                try
+                {
+                    if (xTmpStorage.is())
+                        xSrcStream = xTmpStorage->openStreamElement( sName, embed::ElementModes::READ );
+                    if (xSrcStream.is())
+                        xSrcInput = xSrcStream->getInputStream();
+                }
+                catch (uno::Exception&)
+                {
+                    // stream not available (for example, password protected) - save normally (xSrcInput is null)
+                }
             }
 
             pExport->SetSourceStream( xSrcInput );

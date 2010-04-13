@@ -767,7 +767,17 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         if ( !bSuccess )
                             SetError( ERRCODE_IO_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) ); // this error code will produce no error message, but will break the further saving process
                     }
+                    if (pSheetSaveData)
+                        pSheetSaveData->SetInSupportedSave(true);
                 }
+                break;
+            case SFX_EVENT_SAVEASDOC:
+            case SFX_EVENT_SAVETODOC:
+                // #i108978# If no event is sent before saving, there will also be no "...DONE" event,
+                // and SAVE/SAVEAS can't be distinguished from SAVETO. So stream copying is only enabled
+                // if there is a SAVE/SAVEAS/SAVETO event first.
+                if (pSheetSaveData)
+                    pSheetSaveData->SetInSupportedSave(true);
                 break;
             case SFX_EVENT_SAVEDOCDONE:
                 {
@@ -775,11 +785,20 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     {
                     }
                     UseSheetSaveEntries();      // use positions from saved file for next saving
+                    if (pSheetSaveData)
+                        pSheetSaveData->SetInSupportedSave(false);
                 }
                 break;
             case SFX_EVENT_SAVEASDOCDONE:
                 // new positions are used after "save" and "save as", but not "save to"
                 UseSheetSaveEntries();      // use positions from saved file for next saving
+                if (pSheetSaveData)
+                    pSheetSaveData->SetInSupportedSave(false);
+                break;
+            case SFX_EVENT_SAVETODOCDONE:
+                // only reset the flag, don't use the new positions
+                if (pSheetSaveData)
+                    pSheetSaveData->SetInSupportedSave(false);
                 break;
             default:
                 {
