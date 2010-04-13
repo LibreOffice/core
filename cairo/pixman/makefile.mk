@@ -50,7 +50,9 @@ all:
 PIXMANVERSION=0.12.0
 
 TARFILE_NAME=pixman-$(PIXMANVERSION)
-PATCH_FILE_NAME=..$/$(TARFILE_NAME).patch
+TARFILE_MD5=09357cc74975b01714e00c5899ea1881
+
+PATCH_FILES=..$/$(TARFILE_NAME).patch
 
 # Note: we are building static pixman library to avoid linking problems.
 # However, for Unix dynamic library must be used (especially due to 64bit issues)

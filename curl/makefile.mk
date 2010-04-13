@@ -42,6 +42,7 @@ all:
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=curl-7.19.7
+TARFILE_MD5=ecb2e37e45c9933e2a963cabe03670ab
 PATCH_FILES=curl-7.19.7.patch
 
 .IF "$(GUI)"=="WNT"
