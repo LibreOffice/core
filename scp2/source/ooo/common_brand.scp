@@ -119,7 +119,6 @@ Module gid_Module_Langpack_Brand_Template
             gid_Brand_Dir_Share_Readme);
     Files = (gid_Brand_File_Res_Iso,
              gid_Brand_File_Res_Ooo,
-             gid_Brand_File_Entitlement,
              gid_Brand_File_Help_C05_Sdatabase_Zip,
              gid_Brand_File_Help_C05_Scalc_Zip,
              gid_Brand_File_Help_C05_Sdraw_Zip,
@@ -128,7 +127,6 @@ Module gid_Module_Langpack_Brand_Template
              gid_Brand_File_License_License_Small,
              gid_Brand_File_License_License_Html,
              gid_Brand_File_License_License_Html_Small,
-             gid_Brand_File_License_License_Pdf,
              gid_Brand_File_Readme_Readme,
              gid_Brand_File_Readme_Readme_Html,
              gid_Brand_File_Share_Registry_Cjk_Xcd,
@@ -137,7 +135,6 @@ Module gid_Module_Langpack_Brand_Template
              gid_Brand_File_Txt_License_Small,
              gid_Brand_File_Txt_License_Html,
              gid_Brand_File_Txt_License_Html_Small,
-             gid_Brand_File_Txt_License_Pdf,
              gid_Brand_File_Txt_Readme,
              gid_Brand_File_Txt_Readme_Html);
 End
