@@ -90,7 +90,6 @@ namespace svt
         m_pPaintDevice->SetSettings( GetSettings() );
         m_pPaintDevice->SetDrawMode( GetDrawMode() );
 
-        const int nWidth( GetOutputSizePixel().Width() );
         const Rectangle aTextBox( impl_calcTextBoundingBox() );
         impl_paintBackground( impl_calcTitleBarBox( aTextBox ) );
 
