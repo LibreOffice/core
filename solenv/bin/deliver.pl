@@ -1293,7 +1293,7 @@ sub fix_broken_cygwin_created_zips
     foreach $member ( $zip->members() ) {
         my $attributes = $member->unixFileAttributes();
         $attributes &= ~0xFE00;
-        print $member->fileName($name) . ": " . sprintf("%lo", $attributes) if $is_debug;
+        print $member->fileName() . ": " . sprintf("%lo", $attributes) if $is_debug;
         $attributes |= 0x10; # add group write permission
         print "-> " . sprintf("%lo", $attributes) . "\n" if $is_debug;
         $member->unixFileAttributes($attributes);
