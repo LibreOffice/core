@@ -31,6 +31,7 @@
 #ifdef UNIX
 #include <sys/types.h>
 #include <strings.h>
+#include <dlfcn.h>
 #include <stdarg.h>
 // For vsnprintf()
 #define NSP_vsnprintf vsnprintf
@@ -119,6 +120,114 @@ restoreUTF8(char *pPath)
     return 0;
 }
 
+#ifdef UNIX
+extern int nspluginOOoModuleHook (void** aResult);
+int nspluginOOoModuleHook (void** aResult)
+{
+    void *dl_handle;
+    void *thisp;
+
+    dl_handle = dlopen(NULL, RTLD_NOW);
+    if (!dl_handle)
+    {
+        fprintf (stderr, "Can't open myself '%s'\n", dlerror());
+        return 1;
+    }
+
+    Dl_info dl_info = { 0, };
+    if(!dladdr((void *)nspluginOOoModuleHook, &dl_info))
+    {
+        fprintf (stderr, "Can't find my own address '%s'\n", dlerror());
+        return 1;
+    }
+
+    if (!dl_info.dli_fname)
+    {
+        fprintf (stderr, "Can't find my own file name\n");
+        return 1;
+    }
+
+    char cwdstr[NPP_PATH_MAX];
+    if (!getcwd (cwdstr, sizeof(cwdstr)))
+    {
+        fprintf (stderr, "Can't get cwd\n");
+        return 1;
+    }
+
+    char libFileName[NPP_PATH_MAX];
+
+    if (dl_info.dli_fname[0] != '/')
+    {
+        if ((strlen(cwdstr) + 1 + strlen(dl_info.dli_fname)) >= NPP_PATH_MAX)
+        {
+            fprintf (stderr, "Plugin path too long\n");
+            return 1;
+        }
+        strcpy (libFileName, cwdstr);
+        strcat (libFileName, "/");
+        strcat (libFileName, dl_info.dli_fname);
+    }
+    else
+    {
+        if (strlen(dl_info.dli_fname) >= NPP_PATH_MAX)
+        {
+            fprintf (stderr, "Plugin path too long\n");
+            return 1;
+        }
+        strcpy (libFileName, dl_info.dli_fname);
+    }
+
+    char *clobber;
+    static char realFileName[NPP_PATH_MAX] = {0};
+#   define SEARCH_SUFFIX "/program/libnpsoplug"
+
+    if (!(clobber = strstr (libFileName, SEARCH_SUFFIX)))
+    {
+        ssize_t len = readlink(libFileName, realFileName, NPP_PATH_MAX-1);
+        if (len == -1)
+        {
+            fprintf (stderr, "Couldn't read link '%s'\n", libFileName);
+            return 1;
+        }
+        realFileName[len] = '\0';
+        if (!(clobber = strstr (realFileName, SEARCH_SUFFIX)))
+        {
+                fprintf (stderr, "Couldn't find suffix in '%s'\n", realFileName);
+            return 1;
+        }
+        *clobber = '\0';
+    }
+    else
+    {
+        *clobber = '\0';
+        strcpy (realFileName, libFileName);
+    }
+
+    fprintf (stderr, "OpenOffice path before fixup is '%s'\n", realFileName);
+
+    if (realFileName[0] != '/') {
+        /* a relative sym-link and we need to get an absolute path */
+        char scratch[NPP_PATH_MAX] = {0};
+        if (strlen (realFileName) + strlen (libFileName) + 2 >= NPP_PATH_MAX - 1)
+        {
+            fprintf (stderr, "Paths too long to fix up.\n");
+            return 1;
+        }
+        strcpy (scratch, libFileName);
+        if (strrchr (scratch, '/')) /* remove the last element */
+            *(strrchr (scratch, '/') + 1) = '\0';
+        strcat (scratch, realFileName);
+        strcpy (realFileName, scratch);
+    }
+
+    *aResult = realFileName;
+
+    fprintf (stderr, "OpenOffice path is '%s'\n", realFileName);
+
+    return 0;
+}
+#endif
+
 // *aResult points the static string holding "/opt/staroffice8"
 int findReadSversion(void** aResult, int /*bWnt*/, const char* /*tag*/, const char* /*entry*/)
 {
@@ -131,9 +240,22 @@ int findReadSversion(void** aResult, int /*bWnt*/, const char* /*tag*/, const ch
     // Filename of lnk file, eg. "soffice"
     char lnkFileName[NPP_PATH_MAX] = {0};
     char* pTempZero = NULL;
+
+    /* try to fetch a 'self' pointer */
+    if (!nspluginOOoModuleHook (aResult))
+      return 0;
+
+    /* .. now in $HOME */
     sprintf(lnkFileName, "%s/.mozilla/plugins/libnpsoplugin%s", getenv("HOME"), SAL_DLLEXTENSION);
-    if ((0 > readlink(lnkFileName, realFileName, NPP_PATH_MAX)) ||
-       (NULL == (pTempZero = strstr(realFileName, "/program/libnpsoplugin" SAL_DLLEXTENSION))))
+    ssize_t len = readlink(lnkFileName, realFileName, NPP_PATH_MAX-1);
+    if (-1 == len)
+    {
+        *realFileName = 0;
+        return -1;
+    }
+    realFileName[len] = '\0';
+
+    if (NULL == (pTempZero = strstr(realFileName, "/program/libnpsoplugin" SAL_DLLEXTENSION)))
     {
         *realFileName = 0;
         return -1;
