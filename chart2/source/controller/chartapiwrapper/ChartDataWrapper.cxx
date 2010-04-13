@@ -552,6 +552,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     if( !bHasCategories && rDataOperator.setsCategories( bUseColumns ) )
         bHasCategories = true;
 
+    aRangeString = C2U("all");
     uno::Sequence< beans::PropertyValue > aArguments( DataSourceHelper::createArguments(
             aRangeString, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories ) );
 
