@@ -33,46 +33,11 @@
 
 function hRemoveLineBreaks( cString as string ) as string
 
-    '///<h3>Remove linebreaks and tabs from a string</h3>
-    '///<i>Used to &quot;beautify&quot; content of messageboxes when printed to the log</i><br><br>
-    '///<u>Parameter(s):</u>
-    '///<ol>
-    '///+<li>Content of a messagebox as captured with .getText() (string)</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>A string without tabs, linebreaks and linefeed (string)</li>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    '///+<li>Walk through the string, replace linebreaks, tabs etc. with spaces</li>
-
-    ' Function (undocumented) to remove LF and CR from strings.
-    ' When a messagebox appears with multiple lines of text this usually
-    ' breaks the output of the printlog into multiple lines making it
-    ' hard to read. So this function puts the entire text in one line.
-
-    dim iCharPos as integer
-    dim cCurrentChar as string
-    dim cNewString as string
-
-    ' walk through the string character by character and replace those
-    ' characters that break the line. Tabs and linebreaks become spaces
-    for iCharPos = 1 to len( cString ) 
-
-        cCurrentChar = mid( cString , iCharPos , 1 )
-
-        select case cCurrentChar
-        case CHR$(13) : cNewString = cNewString & " " ' replace linebreak
-        case CHR$(10) : ' Simply ignore linefeed
-        case CHR$(09) : cNewString = cNewString & " " ' replace tab with space
-        case else     : cNewString = cNewString & cCurrentChar ' append char
-        end select
-        
-     next iCharPos
-
-     hRemoveLineBreaks() = cNewString
-     '///</ul>
+    dim myString as string : myString = cString
+    myString = hStringReplaceChar( myString, CHR$(09), " " )
+    myString = hStringReplaceChar( myString, CHR$(13), " " )
+    myString = hStringReplaceChar( myString, CHR$(10), ""  )
+    hRemoveLineBreaks() = myString
 
 end function
 
@@ -351,5 +316,39 @@ function hConvertStringToLong( cValue as string ) as long
     '///+<li>Convert string to long integer and return to calling function</li>
     hConvertStringToLong() = val( cStringValue )
     '///</ul>
+
+end function
+
+'*******************************************************************************
+
+function hStringReplace( myString as string, search_string as string, replace_with as string ) as string
+
+    const CFN = "hStringReplace(): "
+
+    dim search_string_position as string
+    dim search_string_found as boolean   : search_string_found = true
+    dim len_search_string as integer     : len_search_string = len( search_string )
+    dim len_replace_with  as integer     : len_replace_with  = len( replace_with  )
+
+    if ( GVERBOSE ) then printlog( CFN & "Replace all <" & search_string & "> with <" & replace_with & "> in <" & myString & ">" )
+
+    if ( not instr( replace_with, search_string ) and len_search_string >= len_replace_with ) then
+        do while( search_string_found )
+            search_string_position = instr( myString, search_string )
+            if ( search_string_position > 0 ) then
+                mid( myString, search_string_position, len( search_string ), replace_with )
+            else
+                search_string_found = false
+            endif
+        loop
+    else
+        warnlog( CFN & "Function used incorrectly" )
+        warnlog( CFN & "Replace all <" & search_string & "> with <" & replace_with & "> in <" & myString & ">" )
+        warnlog( CFN & "The new string must be of equal length or shorter than the string to be replaced" )
+        warnlog( CFN & "The new string may not contain the string to be replaced (e.g. replace 'a' with 'ha' is not allowed)" )
+    endif
+
+    if ( GVERBOSE ) then printlog( CFN & "Return string is <" & myString & ">" )
+    hStringReplace() = myString
 
 end function

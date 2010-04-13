@@ -245,55 +245,31 @@ end function
 
 '-------------------------------------------------------------------------
 
-function ConvertPath ( sDatei$, optional sPlatform as string ) as String
-    '/// Path conversion
-    '/// <u>Input</u>: path as string; OPTIONAL: string of class gPlatform
-    '/// <u>Output</u>: converted path respected to gPlatform; if optional paramter: to that Platform
-    '/// Convert the <i>pathsigne</i> '\' to '/' when a test runs under UNIX
-    Dim iW32 as Integer : Dim iUNX as Integer
-    Dim i as Integer : Dim Ende as Integer
-    Dim s1$ : Dim s2$ : Dim s3$
-    dim sLocalPlatGroup as string
-    dim sLocalPathSigne as string
+function ConvertPath ( sPath as string ) as String
 
-    if (isMissing(sPlatform)) then
-        sLocalPlatGroup = gPlatGroup
-        sLocalPathSigne = gPathSigne
+    if ( getPathSeparator = "/" ) then
+    	sPath = hStringReplace( sPath, "\", "/" )
     else
-        sLocalPlatGroup = hPlatformToGroup(sPlatform)
-        sLocalPathSigne = hGetPathSigne(sPlatform)
-    end if
+        sPath = hStringReplace( sPath, "/", "\" )
+    endif
 
-    s3$ = "" : iW32 = 0 : iUNX = 0
-    s1$ = sDatei$
-    Ende = len ( s1$ )
+    convertpath() = sPath
 
-    '   convert all / to \ if WIN
-    if sLocalPlatGroup <> "unx" then
-        do
-            i = InStr( s1$, "/" )
-            if i = 0 then exit do
-            s2$ = Left( s1$ , i-1 )
-            s1$ = Mid( s1$ , i+1 )
-            s3$ = s3$ + s2$ + "\"
-        loop until s1$=""
-        s1$ = s3$ + s1$
-        s3$ = "" : s2$ = ""
-    end if
-
-    ' convert all \ to gPathSigne => WIN -> XXX
-    do
-        i = InStr( s1$, "\" )
-        if i = 0 then exit do
-        s2$ = Left( s1$ , i-1 )
-        s1$ = Mid( s1$ , i+1 )
-        s3$ = s3$ + s2$ + sLocalPathSigne
-    loop until s1$=""
-
-    ConvertPath = s3$ + s1$
 end function
 
-'-------------------------------------------------------------------------
+'-------------------------------------------------------------------------------
+
+function hStringReplaceChar( myString as string, old_char as string, new_char as string ) as string
+
+    dim iChar as integer
+    for iChar = 1 to len( myString )
+        if ( mid( myString, iChar, 1 ) = old_char ) then mid( myString, iChar, 1, new_char )
+    next iChar
+    hStringReplaceChar() = myString
+
+end function
+
+'-------------------------------------------------------------------------------
 
 sub GetLanguageInformation
     '/// Extracts the language information from <i>Setup.xcu</i>.
