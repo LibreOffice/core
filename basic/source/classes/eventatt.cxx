@@ -613,7 +613,10 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
        Reference< XScriptListener > xScriptListener = new BasicScriptListener_Impl( pINST->GetBasic(), xModel );
 
     Sequence< Any > aArgs( 4 );
-    aArgs[ 0 ] <<= bDocDialog ? xModel : uno::Reference< uno::XInterface >();
+    if( bDocDialog )
+       aArgs[ 0 ] <<= xModel;
+    else
+       aArgs[ 0 ] <<= uno::Reference< uno::XInterface >();
     aArgs[ 1 ] <<= xInput;
     aArgs[ 2 ] = aDlgLibAny;
     aArgs[ 3 ] <<= xScriptListener;
