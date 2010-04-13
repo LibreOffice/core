@@ -93,7 +93,7 @@ protected:
     sal_Bool         m_bForceRecovery;
 
     sal_Bool        m_bMediaTypeFallbackUsed;
-    sal_Int16       m_nFormat;
+    sal_Int32       m_nFormat;
     sal_Bool        m_bAllowRemoveOnInsert;
 
     InitialisationMode m_eMode;

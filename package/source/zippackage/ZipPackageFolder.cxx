@@ -317,7 +317,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
     sal_Bool bHaveEncryptionKey = rEncryptionKey.getLength() ? sal_True : sal_False;
 
-    if ( maContents.begin() == maContents.end() && rPath.getLength() && m_nFormat != OFOPXML_FORMAT )
+    if ( maContents.begin() == maContents.end() && rPath.getLength() && m_nFormat != embed::StorageFormats::OFOPXML )
     {
         // it is an empty subfolder, use workaround to store it
         ZipEntry* pTempEntry = new ZipEntry();
@@ -689,7 +689,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
         }
 
         // folder can have a mediatype only in package format
-        if ( m_nFormat == PACKAGE_FORMAT || ( m_nFormat == OFOPXML_FORMAT && !rInfo.bFolder ) )
+        if ( m_nFormat == embed::StorageFormats::PACKAGE || ( m_nFormat == embed::StorageFormats::OFOPXML && !rInfo.bFolder ) )
             rManList.push_back( aPropSet );
     }
 
@@ -741,7 +741,7 @@ void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName,
     if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaType")))
     {
         // TODO/LATER: activate when zip ucp is ready
-        // if ( m_nFormat != PACKAGE_FORMAT )
+        // if ( m_nFormat != embed::StorageFormats::PACKAGE )
         //  throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         aValue >>= sMediaType;
@@ -759,7 +759,7 @@ Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyName )
     if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
     {
         // TODO/LATER: activate when zip ucp is ready
-        // if ( m_nFormat != PACKAGE_FORMAT )
+        // if ( m_nFormat != embed::StorageFormats::PACKAGE )
         //  throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         return makeAny ( sMediaType );
