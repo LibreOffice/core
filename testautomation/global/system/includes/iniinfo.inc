@@ -245,13 +245,13 @@ end function
 
 '-------------------------------------------------------------------------
 
-sub ConvertPath( sPath as string )
+function ConvertPath( sPath as string ) as string
     if ( getPathSeparator = "/" ) then
-    	sPath = hStringReplaceChar( sPath, "\", "/" )
+    	ConvertPath() = hStringReplaceChar( sPath, "\", "/" )
     else
-        sPath = hStringReplaceChar( sPath, "/", "\" )
+        ConvertPath() = hStringReplaceChar( sPath, "/", "\" )
     endif
-end sub
+end function
 
 '-------------------------------------------------------------------------------
 
