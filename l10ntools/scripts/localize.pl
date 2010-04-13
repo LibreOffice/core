@@ -392,11 +392,9 @@ sub merge_gsicheck{
     my ( $TMPHANDLE , $tmpfile ) = File::Temp::tempfile();
     close ( $TMPHANDLE );
 
-    if( $ENV{WRAPCMD} ){
-        $command = "$ENV{WRAPCMD} gsicheck";
-    }else{
-        $command = "gsicheck";
-    }
+    $command = "$ENV{WRAPCMD} " if( $ENV{WRAPCMD} );
+    $command .= fix_cygwin_path("$ENV{SOLARVER}/$ENV{INPATH}/bin/gsicheck");
+
     my $errfile = $sdffile.".err";
     $command .= " -k -c -wcf $tmpfile -wef $errfile -l \"\" $sdffile";
     #my $rc = system( $command );
