@@ -6173,7 +6173,7 @@ protected:
                                                          ValueOK( aUId, MethodString( nMethodId ), nNr2, pTC->GetRowCount() ))
                                                     {
                                                         ::svt::table::PTableModel pModel = pTC->GetModel();
-                                                        Any aCell = pModel->getCellContent()[nNr1-1][nNr2-1];
+                                                        Any aCell = pModel->getCellContent()[nNr2-1][nNr1-1];
                                                         pRet->GenReturn ( RET_Value, aUId, String( aCell.getValueTypeName() ));
                                                     }
                                                 }
@@ -6184,7 +6184,7 @@ protected:
                                                          ValueOK( aUId, MethodString( nMethodId ), nNr2, pTC->GetRowCount() ))
                                                     {
                                                         ::svt::table::PTableModel pModel = pTC->GetModel();
-                                                        Any aCell = pModel->getCellContent()[nNr1-1][nNr2-1];
+                                                        Any aCell = pModel->getCellContent()[nNr2-1][nNr1-1];
                                                         ::rtl::OUString aContent;
                                                         aCell >>= aContent;
                                                         pRet->GenReturn ( RET_Value, aUId, aContent );
@@ -6207,21 +6207,16 @@ protected:
                                                     aControler = pEBBox->Controller();
                                                     pRet->GenReturn ( RET_Value, aUId, (comm_BOOL)aControler.Is() );
                                                 }
-                                                break;
+                                                break;*/
                                             case M_Select :
                                                 {
-                                                    if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,pEBBox->GetRowCount() ) )
+                                                    if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pTC->GetColumnCount() ) &&
+                                                         ValueOK( aUId, MethodString( nMethodId ), nNr2, pTC->GetRowCount() ))
                                                     {
-                                                        USHORT nColCount = pEBBox->GetColumnCount();
-                                                        comm_USHORT nUnfrozenColCount = 0;
-                                                        USHORT i;
-                                                        for ( i=0 ; i < nColCount ; i++ )
-                                                        {
-                                                            if ( !pEBBox->IsFrozen( pEBBox->GetColumnId( i ) ) )
-                                                                nUnfrozenColCount++;
-                                                        }
-                                                        if ( ValueOK(aUId, MethodString( nMethodId ),nNr2,nUnfrozenColCount ) )
-                                                            pEBBox->GoToRowColumnId( nNr1-1, pEBBox->GetColumnId( nNr2 ) );
+                                                        if ( pTC->GoTo( ::svt::table::ColPos( nNr1 ), ::svt::table::RowPos( nNr2 ) ) )
+                                                            pTC->Select();
+                                                        else
+                                                            ReportError( aUId, GEN_RES_STR2c2( S_METHOD_FAILED, MethodString( nMethodId ), "GoTo" ) );
                                                     }
                                                 }
                                                 break;
@@ -6229,7 +6224,7 @@ protected:
 
 
 
-                                            case M_GetSelCount :
+/*                                          case M_GetSelCount :
                                                 pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((SvLBox*)pControl)->GetSelectionCount()));
                                                 break;
                                             case M_GetSelIndex :
@@ -6279,7 +6274,7 @@ protected:
                                                 }
                                                 break;*/
                                         default:
-                                            ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "RoadMap" ) );
+                                            ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "TableControl" ) );
                                             break;
                                         }
                                     }
