@@ -31,6 +31,8 @@
 #include <svtools/asynclink.hxx>
 #include <vcl/window.hxx>
 
+#include <boost/optional.hpp>
+
 struct SfxViewFrame_Impl
 {
     SvBorder            aBorder;

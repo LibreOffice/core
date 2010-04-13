@@ -266,8 +266,8 @@ namespace sfx2
         Reference< XFrame > lcl_getFrame( const SfxBindings* i_pBindings )
         {
             const SfxViewFrame* pViewFrame = i_pBindings->GetDispatcher()->GetFrame();
-            const SfxFrame* pFrame = pViewFrame->GetFrame();
-            const Reference< XFrame > xFrame( pFrame->GetFrameInterface() );
+            const SfxFrame& rFrame = pViewFrame->GetFrame();
+            const Reference< XFrame > xFrame( rFrame.GetFrameInterface() );
             return xFrame;
         }
 

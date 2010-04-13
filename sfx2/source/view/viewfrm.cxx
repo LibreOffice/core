@@ -180,7 +180,7 @@ namespace
         if ( !i_rViewFrameImpl.aHasToolPanels )
         {
             i_rViewFrameImpl.aHasToolPanels.reset( ::sfx2::ModuleTaskPane::ModuleHasToolPanels(
-                i_rViewFrameImpl.pFrame->GetTopFrame()->GetFrameInterface() ) );
+                i_rViewFrameImpl.rFrame.GetFrameInterface() ) );
         }
         return *i_rViewFrameImpl.aHasToolPanels;
     }
