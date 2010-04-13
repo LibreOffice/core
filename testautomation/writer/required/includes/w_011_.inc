@@ -453,7 +453,8 @@ testcase tZORest
     printlog "Insert a draw object ( rectangle )"
     Call wZeichenobjektEinfuegen ( "Rechteck", 30, 30, 50, 60 )
     ' Set focus to document
-    Call wTypeKeys ( "<Mod1 F6>" )
+    Call gMouseMove2 ( 50, 25 )
+    Call gMouseClick ( 50, 25 )
     printlog "Select drawing object with shortcut 'Shift F4'"
     Call wTypeKeys ( "<Shift F4>" )
 
