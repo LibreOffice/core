@@ -125,7 +125,6 @@ extern int nspluginOOoModuleHook (void** aResult);
 int nspluginOOoModuleHook (void** aResult)
 {
     void *dl_handle;
-    void *thisp;
 
     dl_handle = dlopen(NULL, RTLD_NOW);
     if (!dl_handle)
