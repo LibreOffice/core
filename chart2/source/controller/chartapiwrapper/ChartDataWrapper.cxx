@@ -303,7 +303,9 @@ ChartDataWrapper::ChartDataWrapper( ::boost::shared_ptr< Chart2ModelContact > sp
         m_spChart2ModelContact( spChart2ModelContact ),
         m_aEventListenerContainer( m_aMutex )
 {
+    osl_incrementInterlockedCount( &m_refCount );
     initDataAccess();
+    osl_decrementInterlockedCount( &m_refCount );
 }
 
 ChartDataWrapper::ChartDataWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
@@ -311,8 +313,10 @@ ChartDataWrapper::ChartDataWrapper( ::boost::shared_ptr< Chart2ModelContact > sp
         m_spChart2ModelContact( spChart2ModelContact ),
         m_aEventListenerContainer( m_aMutex )
 {
+    osl_incrementInterlockedCount( &m_refCount );
     lcl_AllOperator aOperator( xNewData );
     applyData( aOperator );
+    osl_decrementInterlockedCount( &m_refCount );
 }
 
 ChartDataWrapper::~ChartDataWrapper()
