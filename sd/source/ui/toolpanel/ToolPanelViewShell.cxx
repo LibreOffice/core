@@ -178,7 +178,8 @@ private:
 // =====================================================================================================================
 /** Inner implementation class of ToolPanelViewShell.
 */
-class ToolPanelViewShell_Impl : public ::boost::noncopyable
+class ToolPanelViewShell_Impl   :public ::boost::noncopyable
+                                ,public ::svt::IToolPanelDeckListener
 {
 public:
     static const size_t mnInvalidId = static_cast< size_t >( -1 );
@@ -218,6 +219,14 @@ public:
             CreateAccessible( ::sd::Window& i_rWindow );
 
     void    ConnectToDockingWindow();
+
+private:
+    // IToolPanelDeckListener overridables
+    virtual void PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition );
+    virtual void PanelRemoved( const size_t i_nPosition );
+    virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
+    virtual void LayouterChanged( const ::svt::PDeckLayouter& i_rNewLayouter );
+    virtual void Dying();
 
 private:
     struct InitialPanel
@@ -372,10 +381,7 @@ void ToolPanelViewShell_Impl::Setup()
         else
         {
             ::boost::shared_ptr< FrameworkHelper > pFrameworkHelper( FrameworkHelper::Instance( GetAntiImpl().GetViewShellBase() ) );
-            const Reference< XResourceId > xToolPanelId( pFrameworkHelper->CreateResourceId(
-                FrameworkHelper::msTaskPaneURL, FrameworkHelper::msRightPaneURL, aInitialPanel.sPanelResourceURL ) );
-            pFrameworkHelper->GetConfigurationController()->requestResourceActivation(
-                xToolPanelId, ResourceActivationMode_REPLACE );
+            pFrameworkHelper->RequestTaskPanel( aInitialPanel.sPanelResourceURL );
         }
     }
 
@@ -393,6 +399,7 @@ void ToolPanelViewShell_Impl::Cleanup()
         if ( m_pConfigListener.is() )
             m_pConfigListener->dispose();
     }
+    GetToolPanelDeck().RemoveListener( *this );
     m_pTaskPaneController.reset();
     m_pTaskPane.reset();
 }
@@ -722,11 +729,62 @@ ToolPanelViewShell_Impl::ToolPanelViewShell_Impl( ToolPanelViewShell& i_rPanelVi
     const String sPaneTitle( SdResId( STR_RIGHT_PANE_TITLE ) );
     GetToolPanelDeck().SetAccessibleName( sPaneTitle );
     GetToolPanelDeck().SetAccessibleDescription( sPaneTitle );
+
+    GetToolPanelDeck().AddListener( *this );
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 ToolPanelViewShell_Impl::~ToolPanelViewShell_Impl()
 {
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void ToolPanelViewShell_Impl::PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition )
+{
+    // not interested in
+    (void)i_pPanel;
+    (void)i_nPosition;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void ToolPanelViewShell_Impl::PanelRemoved( const size_t i_nPosition )
+{
+    // not interested in
+    (void)i_nPosition;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void ToolPanelViewShell_Impl::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
+{
+    (void)i_rOldActive;
+
+    ::rtl::OUString sPanelURL;
+    if ( !!i_rNewActive )
+    {
+        sPanelURL = GetTaskPane().GetPanelResourceURL( *i_rNewActive );
+        const PanelId ePanelId( GetStandardPanelId( sPanelURL ) );
+        if ( ePanelId == PID_UNKNOWN )
+            sPanelURL = ::rtl::OUString();
+    }
+
+    if ( sPanelURL.getLength() )
+    {
+        ::boost::shared_ptr< FrameworkHelper > pFrameworkHelper( FrameworkHelper::Instance( GetAntiImpl().GetViewShellBase() ) );
+        pFrameworkHelper->RequestTaskPanel( sPanelURL );
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void ToolPanelViewShell_Impl::LayouterChanged( const ::svt::PDeckLayouter& i_rNewLayouter )
+{
+    // not interested in
+    (void)i_rNewLayouter;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void ToolPanelViewShell_Impl::Dying()
+{
+    // not interested in
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
