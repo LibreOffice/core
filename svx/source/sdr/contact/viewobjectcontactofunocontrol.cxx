@@ -237,8 +237,6 @@ namespace sdr { namespace contact {
 
                void     invalidate() const;
 
-               void     invalidate() const;
-
     public:
         inline  const Reference< XControl >&    getControl() const  { return m_xControl; }
     };
@@ -296,15 +294,6 @@ namespace sdr { namespace contact {
     {
         // no check whether we're valid, this is the responsibility of the caller
         m_xControlView->setZoom( (float)_rScale.getX(), (float)_rScale.getY() );
-    }
-
-    //--------------------------------------------------------------------
-    void ControlHolder::invalidate() const
-    {
-        Window* pWindow = VCLUnoHelper::GetWindow( m_xControl->getPeer() );
-        OSL_ENSURE( pWindow, "ControlHolder::invalidate: no implementation access!" );
-        if ( pWindow )
-            pWindow->Invalidate();
     }
 
     //--------------------------------------------------------------------
