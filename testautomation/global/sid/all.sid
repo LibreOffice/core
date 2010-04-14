@@ -87,8 +87,6 @@ BearbeitenAllesAuswaehlen SID_SELECTALL
 BearbeitenSuchenErsetzen SID_SEARCH_DLG
 BearbeitenNavigator SID_NAVIGATOR
 BearbeitenAutoText FN_GLOSSARY_DLG
-BearbeitenRahmendokument SID_EDIT_FRAMESET
-BearbeitenFrameSet SID_EDIT_FRAMESET
 BearbeitenPlugIn SID_PLUGINS_ACTIVE
 BearbeitenImageMap SID_IMAP
 BearbeitenLiteraturdatenbank SID_COMP_BIBLIOGRAPHY

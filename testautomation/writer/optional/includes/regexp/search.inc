@@ -1612,7 +1612,7 @@ sub Meldungs_Test
     if gOOO = true then
         sProduct = "OpenOffice.org"
     else
-        sProduct = "StarOffice"
+        sProduct = "Oracle Open Office"
     end if
     
     select case iSprache
