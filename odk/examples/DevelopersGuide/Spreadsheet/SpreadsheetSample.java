@@ -1,15 +1,9 @@
 /*************************************************************************
  *
- *  $RCSfile: SpreadsheetSample.java,v $
- *
- *  $Revision: 1.5 $
- *
- *  last change: $Author: rt $ $Date: 2005-01-31 16:55:25 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
  *
- *  Copyright (c) 2003 by Sun Microsystems, Inc.
+ *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -1106,7 +1100,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
                 (com.sun.star.task.XInteractionHandler)UnoRuntime.queryInterface(
                     com.sun.star.task.XInteractionHandler.class,
                     xServiceManager.createInstanceWithContext(
-                        "com.sun.star.sdb.InteractionHandler", getContext()) );
+                        "com.sun.star.task.InteractionHandler", getContext()) );
             com.sun.star.sdbcx.XTablesSupplier xSupplier =
                 (com.sun.star.sdbcx.XTablesSupplier)UnoRuntime.queryInterface(
                     com.sun.star.sdbcx.XTablesSupplier.class,
