@@ -190,7 +190,7 @@ protected:
     MSWordSections& operator=( const MSWordSections& );
 public:
     MSWordSections( MSWordExportBase& rExport );
-    ~MSWordSections();
+    virtual ~MSWordSections();
 
     void AppendSep( const SwPageDesc* pPd,
                     const SwSectionFmt* pSectionFmt = 0,
