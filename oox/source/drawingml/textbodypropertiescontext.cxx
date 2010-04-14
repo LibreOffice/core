@@ -118,13 +118,15 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
     bool bRtl = aAttribs.getBool( XML_rtl, false );
     sal_Int32 tVert = mrTextBodyProp.moVert.get( XML_horz );
     if( tVert == XML_vert || tVert == XML_eaVert || tVert == XML_vert270 || tVert == XML_mongolianVert ) {
-    mrTextBodyProp.maPropertyMap[ PROP_TextWritingMode ]
-        <<= ( bRtl ? WritingMode_RL_TB : WritingMode_LR_TB );
-    // workaround for TB_LR as using WritingMode2 doesn't work
-    if( !bAnchorCenter )
-        mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
-        TextHorizontalAdjust_LEFT;
-    }
+      mrTextBodyProp.maPropertyMap[ PROP_TextWritingMode ]
+    <<= WritingMode_TB_RL;
+      // workaround for TB_LR as using WritingMode2 doesn't work
+        if( !bAnchorCenter )
+            mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
+            TextHorizontalAdjust_LEFT;
+    } else
+      mrTextBodyProp.maPropertyMap[ PROP_TextWritingMode ]
+    <<= ( bRtl ? WritingMode_RL_TB : WritingMode_LR_TB );
 }
 
 // --------------------------------------------------------------------
