@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: basides1.cxx,v $
- * $Revision: 1.56 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -302,10 +299,10 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                     {
                         // get statusindicator
                         SfxViewFrame *pFrame_ = GetFrame();
-                        if ( pFrame_ && pFrame_->GetFrame() )
+                        if ( pFrame_ )
                         {
                             uno::Reference< task::XStatusIndicatorFactory > xStatFactory(
-                                                                        pFrame_->GetFrame()->GetFrameInterface(),
+                                                                        pFrame_->GetFrame().GetFrameInterface(),
                                                                         uno::UNO_QUERY );
                             if( xStatFactory.is() )
                                 xStatusIndicator = xStatFactory->createStatusIndicator();
@@ -1156,7 +1153,7 @@ void BasicIDEShell::ManageToolbars()
         return;
 
     Reference< beans::XPropertySet > xFrameProps
-        ( GetViewFrame()->GetFrame()->GetFrameInterface(), uno::UNO_QUERY );
+        ( GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
     if ( xFrameProps.is() )
     {
         Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;

@@ -2,12 +2,9 @@
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AgendaWizardDialogImpl.java,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -459,7 +456,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
         running = false;
     }
 
-    public void finishWizard() {
+    public boolean finishWizard() {
         boolean bSaveSuccess = false; // pesimistic :(
         XTextDocument xTextDocument;
 
@@ -480,7 +477,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
                     int answer = SystemDialog.showMessageBox(xMSF, xControl.getPeer(), "MessBox", VclWindowPeerAttribute.YES_NO + VclWindowPeerAttribute.DEF_NO, resources.resFileExists);
                     if (answer == 3) // user said: no, do not overwrite....
-                        return;
+                        return false;
                 }
 
             agendaTemplate.xTextDocument.lockControllers();
@@ -550,10 +547,11 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             }
         } else {
             agendaTemplate.xTextDocument.unlockControllers();
-            return;
+            return false;
         }
         xDialog.endExecute();
         running = false;
+        return true;
     }
 
     private void closeDocument() {

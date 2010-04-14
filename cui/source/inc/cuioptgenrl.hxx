@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cuioptgenrl.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,6 +67,7 @@ class SvxGeneralTabPage : public SfxTabPage
 {
     using TabPage::DeactivatePage;
 private:
+    FixedLine           aAddrFrm;
     FixedText           aCompanyLbl;
     SvxUserEdit         aCompanyEdit;
     FixedText           aNameLbl;
@@ -100,11 +98,9 @@ private:
     FixedText           aFaxMailLbl;
     SvxUserEdit         aFaxEdit;
     SvxUserEdit         aEmailEdit;
-    FixedLine           aAddrFrm;
     CheckBox            aUseDataCB;
 
     GeneralTabPage_Impl*    pImpl;
-
 
 #ifdef _SVX_OPTGENRL_CXX
     DECL_LINK( ModifyHdl_Impl, Edit * );

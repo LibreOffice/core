@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleGridControlTableBase.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -197,14 +194,6 @@ protected:
     /** @attention  This method requires locked mutex's and a living object.
         @return  The child index of the specified cell address. */
     sal_Int32 implGetChildIndex( sal_Int32 nRow, sal_Int32 nColumn ) const;
-
-    /** @attention  This method requires locked mutex's and a living object.
-        @return  <TRUE/>, if the specified row is selected. */
-    sal_Bool implIsRowSelected( sal_Int32 nRow ) const;
-
-    /** @attention  This method requires locked mutex's and a living object.
-        @return  The count of selected rows. */
-    sal_Int32 implGetSelectedRowCount() const;
 
     /** Fills a sequence with sorted indexes of completely selected rows.
         @attention  This method requires locked mutex's and a living object.

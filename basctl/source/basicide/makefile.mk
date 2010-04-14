@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.29 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -70,6 +66,7 @@ EXCEPTIONSFILES=$(SLO)$/basicrenderable.obj  \
                 $(SLO)$/moduldl2.obj	\
                 $(SLO)$/unomodel.obj	\
                 $(SLO)$/register.obj	\
+                $(SLO)$/basdoc.obj	    \
                 $(SLO)$/tbxctl.obj		\
                 $(SLO)$/basidectrlr.obj	\
                 $(SLO)$/localizationmgr.obj \
@@ -78,7 +75,6 @@ EXCEPTIONSFILES=$(SLO)$/basicrenderable.obj  \
                 $(SLO)$/documentenumeration.obj
 
 SLOFILES =  $(EXCEPTIONSFILES) \
-            $(SLO)$/basdoc.obj	\
             $(SLO)$/basicbox.obj	\
             $(SLO)$/baside2b.obj	\
             $(SLO)$/brkdlg.obj	\

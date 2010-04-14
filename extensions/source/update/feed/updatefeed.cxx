@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: updatefeed.cxx,v $
- * $Revision: 1.11.52.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_extensions.hxx"
 
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -44,26 +41,16 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/task/XPasswordContainer.hpp>
-#include "com/sun/star/task/NoMasterException.hpp"
-#include "com/sun/star/ucb/AuthenticationRequest.hpp"
-#ifndef _COM_SUN_STAR_UCB_XCOMMMANDENVIRONMENT_HPP_
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XWEBDAVCOMMMANDENVIRONMENT_HPP_
 #include <com/sun/star/ucb/XWebDAVCommandEnvironment.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCOMMMANDPROCESSOR2_HPP_
 #include <com/sun/star/ucb/XCommandProcessor2.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENTIDNETIFIERFACTORY_HPP_
 #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
-#endif
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include "com/sun/star/ucb/XInteractionSupplyAuthentication.hpp"
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/task/PasswordContainerInteractionHandler.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/xpath/XXPathAPI.hpp>
 
@@ -73,14 +60,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/process.h>
 #include <osl/conditn.hxx>
-
-#ifndef _ZLIB_H
-#ifdef SYSTEM_ZLIB
-#include "zlib.h"
-#else
-#include "zlib/zlib.h"
-#endif
-#endif
 
 namespace beans = com::sun::star::beans ;
 namespace container = com::sun::star::container ;
@@ -161,154 +140,11 @@ public:
 
 //------------------------------------------------------------------------------
 
-class InflateInputStream : public ::cppu::WeakImplHelper1< io::XInputStream >
-{
-    uno::Reference< io::XInputStream > m_xStream;
-
-    uno::Sequence < sal_Int8 > m_aBuffer;
-    sal_Int32 m_nOffset;
-    bool m_bRead;
-
-    rtl::OUString m_aContentEncoding;
-
-    void readIntoMemory();
-
-public:
-    InflateInputStream(const uno::Reference< io::XInputStream >& rxStream,const rtl::OUString& rContentEncoding) :
-        m_xStream(rxStream), m_nOffset(0), m_bRead(false), m_aContentEncoding(rContentEncoding) {};
-
-    virtual sal_Int32 SAL_CALL readBytes(uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
-        throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL readSomeBytes(uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
-        throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
-        { readIntoMemory(); return readBytes(aData, nMaxBytesToRead ); };
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
-        throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
-        {
-            readIntoMemory();
-            if( m_nOffset + nBytesToSkip < m_aBuffer.getLength() )
-                m_nOffset += nBytesToSkip;
-            else
-                m_nOffset = m_aBuffer.getLength();
-        };
-    virtual sal_Int32 SAL_CALL available()
-        throw (io::NotConnectedException, io::IOException, uno::RuntimeException)
-        {   readIntoMemory(); return m_aBuffer.getLength() - m_nOffset; };
-    virtual void SAL_CALL closeInput( )
-        throw (io::NotConnectedException, io::IOException, uno::RuntimeException)
-        { m_xStream->closeInput(); };
-};
-
-
-sal_Int32 SAL_CALL
-InflateInputStream::readBytes(uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
-    throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
-{
-    readIntoMemory();
-    sal_Int32 nAvailable = available();
-    sal_Int32 nBytesToCopy =  nAvailable < nBytesToRead ? nAvailable : nBytesToRead;
-    if( nBytesToCopy > 0 )
-    {
-        aData.realloc(nBytesToCopy);
-        rtl_copyMemory(aData.getArray(), m_aBuffer.getConstArray() + m_nOffset, nBytesToCopy);
-        m_nOffset += nBytesToCopy;
-    }
-
-    return nBytesToCopy;
-};
-
-void InflateInputStream::readIntoMemory()
-{
-    if( !m_bRead && m_xStream.is() )
-    {
-        const sal_Int32 nBytesRequested = 4096;
-
-        uno::Sequence < sal_Int8 > aTempBuffer(nBytesRequested);
-        uno::Sequence < sal_Int8 > aCompressedBuffer;
-        sal_Int32 nBytesRead;
-
-        m_bRead = true;
-
-        do
-        {
-            nBytesRead = m_xStream->readBytes(aTempBuffer, nBytesRequested);
-
-            if( nBytesRead > 0 )
-            {
-                sal_Int32 nOffset = aCompressedBuffer.getLength();
-                aCompressedBuffer.realloc( nOffset + nBytesRead );
-
-                rtl_copyMemory(aCompressedBuffer.getArray() + nOffset, aTempBuffer.getConstArray(), nBytesRead);
-            }
-        }
-        while( nBytesRead == nBytesRequested );
-
-        z_stream *pStream = new z_stream;
-        /* memset to 0 to set zalloc/opaque etc */
-        rtl_zeroMemory (pStream, sizeof(*pStream));
-
-        int windowSize = 15;
-        int headerOffset = 0;
-
-        if( m_aContentEncoding.equalsAscii("gzip") )
-        {
-            sal_uInt8 magic[2];
-            magic[0] = *((sal_uInt8 *) aCompressedBuffer.getConstArray());
-            magic[1] = *((sal_uInt8 *) aCompressedBuffer.getConstArray() + 1);
-
-            if( (magic[0] == 0x1f) && (magic[1] == 0x8b) )
-            {
-                windowSize = -14;
-                headerOffset = 10;
-            }
-        }
-
-        pStream->next_in = (unsigned char *) aCompressedBuffer.getConstArray();
-        pStream->avail_in = aCompressedBuffer.getLength();
-
-        pStream->next_in += headerOffset;
-        pStream->avail_in -= headerOffset;
-
-        if( Z_OK == inflateInit2(pStream, windowSize) )
-        {
-            int result;
-
-            do
-            {
-                sal_Int32 nOffset = m_aBuffer.getLength();
-                m_aBuffer.realloc(nOffset + 4096);
-
-                pStream->next_out  = reinterpret_cast < unsigned char* > ( m_aBuffer.getArray() + nOffset );
-                pStream->avail_out = 4096;
-
-                result = ::inflate(pStream, Z_FINISH);
-
-                if( result ==  Z_STREAM_END )
-                    break;
-
-            } while( result ==  Z_BUF_ERROR );
-
-            inflateEnd(pStream);
-            m_aBuffer.realloc(pStream->total_out);
-
-        }
-
-        if (pStream != NULL)
-        {
-            delete pStream;
-            pStream = NULL;
-        }
-    }
-}
-
-//------------------------------------------------------------------------------
-
 class UpdateInformationProvider :
-    public ::cppu::WeakImplHelper5< deployment::XUpdateInformationProvider,
+    public ::cppu::WeakImplHelper4< deployment::XUpdateInformationProvider,
                                     ucb::XCommandEnvironment,
                                     ucb::XWebDAVCommandEnvironment,
-                                    lang::XServiceInfo,
-                                    task::XInteractionHandler >
+                                    lang::XServiceInfo >
 {
 public:
     static uno::Reference< uno::XInterface > createInstance(const uno::Reference<uno::XComponentContext>& xContext);
@@ -360,10 +196,6 @@ public:
     virtual uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
         throw (uno::RuntimeException);
 
-    // XInteractionHandler
-    virtual void SAL_CALL handle( const uno::Reference< task::XInteractionRequest >& rRequest )
-        throw( uno::RuntimeException );
-
 protected:
 
     virtual ~UpdateInformationProvider();
@@ -374,8 +206,6 @@ private:
 
     void storeCommandInfo( sal_Int32 nCommandId,
         uno::Reference< ucb::XCommandProcessor > const & rxCommandProcessor);
-
-    bool initPasswordContainer( uno::Reference< task::XPasswordContainer > * pContainer );
 
     UpdateInformationProvider(const uno::Reference<uno::XComponentContext>& xContext,
                               const uno::Reference< ucb::XContentIdentifierFactory >& xContentIdFactory,
@@ -394,6 +224,7 @@ private:
 
     uno::Reference< ucb::XCommandProcessor > m_xCommandProcessor;
     uno::Reference< task::XInteractionHandler > m_xInteractionHandler;
+    uno::Reference< task::XInteractionHandler > m_xPwContainerInteractionHandler;
 
     osl::Mutex m_aMutex;
     osl::Condition m_bCancelled;
@@ -504,7 +335,7 @@ UpdateInformationProvider::UpdateInformationProvider(
     const uno::Reference< xml::xpath::XXPathAPI >& xXPathAPI
 ) : m_xContext(xContext), m_xContentIdFactory(xContentIdFactory),
     m_xContentProvider(xContentProvider), m_xDocumentBuilder(xDocumentBuilder),
-    m_xXPathAPI(xXPathAPI), m_aRequestHeaderList(2)
+    m_xXPathAPI(xXPathAPI), m_aRequestHeaderList(1)
 {
     uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
     if( !xServiceManager.is() )
@@ -581,14 +412,11 @@ UpdateInformationProvider::UpdateInformationProvider(
 
     m_aRequestHeaderList[0].Name = UNISTRING("Accept-Language");
     m_aRequestHeaderList[0].Value = getConfigurationItem( xConfigurationProvider, UNISTRING("org.openoffice.Setup/L10N"), UNISTRING("ooLocale") );
-    m_aRequestHeaderList[1].Name = UNISTRING("Accept-Encoding");
-    m_aRequestHeaderList[1].Value = uno::makeAny( UNISTRING("gzip,deflate") );
-
     if( aUserAgent.getLength() > 0 )
     {
-        m_aRequestHeaderList.realloc(3);
-        m_aRequestHeaderList[2].Name = UNISTRING("User-Agent");
-        m_aRequestHeaderList[2].Value = uno::makeAny(aUserAgent);
+        m_aRequestHeaderList.realloc(2);
+        m_aRequestHeaderList[1].Name = UNISTRING("User-Agent");
+        m_aRequestHeaderList[1].Value = uno::makeAny(aUserAgent);
     }
 }
 
@@ -663,33 +491,6 @@ UpdateInformationProvider::storeCommandInfo(
 
 //------------------------------------------------------------------------------
 
-bool UpdateInformationProvider::initPasswordContainer( uno::Reference< task::XPasswordContainer > * pContainer )
-{
-    OSL_ENSURE( pContainer, "specification violation" );
-
-    if ( !pContainer->is() )
-    {
-        uno::Reference<uno::XComponentContext> xContext(m_xContext);
-
-        if( !xContext.is() )
-            throw uno::RuntimeException( UNISTRING( "UpdateInformationProvider: empty component context" ), *this );
-
-        uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
-
-        if( !xServiceManager.is() )
-            throw uno::RuntimeException( UNISTRING( "UpdateInformationProvider: unable to obtain service manager from component context" ), *this );
-
-        *pContainer = uno::Reference< task::XPasswordContainer >(
-            xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.task.PasswordContainer" ), xContext ),
-            uno::UNO_QUERY);
-    }
-
-    OSL_ENSURE(pContainer->is(), "unexpected situation");
-    return pContainer->is();
-}
-
-//------------------------------------------------------------------------------
-
 uno::Reference< io::XInputStream >
 UpdateInformationProvider::load(const rtl::OUString& rURL)
 {
@@ -729,43 +530,13 @@ UpdateInformationProvider::load(const rtl::OUString& rURL)
 
         throw;
     }
-
-    uno::Sequence< beans::Property > aProps( 1 );
-    aProps[0].Name = UNISTRING( "Content-Encoding" );
-
-    aCommand.Name = UNISTRING("getPropertyValues");
-    aCommand.Argument = uno::makeAny( aProps );
-
-    sal_Bool bCompressed = sal_False;
-    rtl::OUString aContentEncoding;
-
-    try
-    {
-        uno::Any aResult = xCommandProcessor->execute(aCommand, 0,
-            static_cast < XCommandEnvironment *> (this));
-        uno::Reference< sdbc::XRow > xPropList( aResult, uno::UNO_QUERY );
-        if ( xPropList.is() ) {
-            aContentEncoding = xPropList->getString(1);
-            if( aContentEncoding.equalsAscii("gzip") ||  aContentEncoding.equalsAscii("deflate"))
-                bCompressed = sal_True;
-        }
-    }
-    catch( const uno::Exception &e )
-    {
-        OSL_TRACE( "Caught exception: %s\n",
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );
-    }
-
     storeCommandInfo(0, uno::Reference< ucb::XCommandProcessor > ());
 
     uno::Reference< ucb::XCommandProcessor2 > xCommandProcessor2(xCommandProcessor, uno::UNO_QUERY);
     if( xCommandProcessor2.is() )
         xCommandProcessor2->releaseCommandIdentifier(nCommandId);
 
-    if ( bCompressed )
-        return INPUT_STREAM( new InflateInputStream( aSink->getInputStream(), aContentEncoding ) );
-    else
-        return INPUT_STREAM(aSink->getInputStream());
+    return INPUT_STREAM(aSink->getInputStream());
 }
 
 //------------------------------------------------------------------------------
@@ -976,7 +747,26 @@ UpdateInformationProvider::getInteractionHandler()
     if ( m_xInteractionHandler.is() )
         return m_xInteractionHandler;
     else
-        return this;
+    {
+        try
+        {
+            // Supply an interaction handler that uses the password container
+            // service to obtain credentials without displaying a password gui.
+
+            if ( !m_xPwContainerInteractionHandler.is() )
+                m_xPwContainerInteractionHandler
+                    = task::PasswordContainerInteractionHandler::create(
+                        m_xContext );
+        }
+        catch ( uno::RuntimeException const & )
+        {
+            throw;
+        }
+        catch ( uno::Exception const & )
+        {
+        }
+        return m_xPwContainerInteractionHandler;
+    }
 }
 //------------------------------------------------------------------------------
 
@@ -1024,101 +814,6 @@ UpdateInformationProvider::supportsService( rtl::OUString const & serviceName ) 
             return sal_True;
 
     return sal_False;
-}
-
-//------------------------------------------------------------------------------
-
-void SAL_CALL UpdateInformationProvider::handle( uno::Reference< task::XInteractionRequest > const & rRequest)
-    throw (uno::RuntimeException)
-{
-    uno::Any aAnyRequest( rRequest->getRequest() );
-    ucb::AuthenticationRequest aAuthenticationRequest;
-
-    if ( aAnyRequest >>= aAuthenticationRequest )
-    {
-        uno::Sequence< uno::Reference< task::XInteractionContinuation > > xContinuations = rRequest->getContinuations();
-        uno::Reference< task::XInteractionHandler > xIH;
-        uno::Reference< ucb::XInteractionSupplyAuthentication > xSupplyAuthentication;
-        uno::Reference< task::XPasswordContainer > xContainer;
-
-        for ( sal_Int32 i = 0; i < xContinuations.getLength(); ++i )
-        {
-            xSupplyAuthentication = uno::Reference< ucb::XInteractionSupplyAuthentication >(
-                                                            xContinuations[i], uno::UNO_QUERY );
-            if ( xSupplyAuthentication.is() )
-                break;
-        }
-
-        // xContainer works with userName passwdSequences pairs:
-        if ( xSupplyAuthentication.is() &&
-             aAuthenticationRequest.HasUserName &&
-             aAuthenticationRequest.HasPassword &&
-             initPasswordContainer( &xContainer ) )
-        {
-            xIH = getInteractionHandler();
-            try
-            {
-                if ( aAuthenticationRequest.UserName.getLength() == 0 )
-                {
-                    task::UrlRecord aRec( xContainer->find( aAuthenticationRequest.ServerName, xIH ) );
-                    if ( aRec.UserList.getLength() != 0 )
-                    {
-                        if ( xSupplyAuthentication->canSetUserName() )
-                            xSupplyAuthentication->setUserName( aRec.UserList[0].UserName.getStr() );
-                        if ( xSupplyAuthentication->canSetPassword() )
-                        {
-                            OSL_ENSURE( aRec.UserList[0].Passwords.getLength() != 0, "empty password list" );
-                            xSupplyAuthentication->setPassword( aRec.UserList[0].Passwords[0].getStr() );
-                        }
-                        if ( aRec.UserList[0].Passwords.getLength() > 1 )
-                        {
-                            if ( aAuthenticationRequest.HasRealm )
-                            {
-                                if ( xSupplyAuthentication->canSetRealm() )
-                                    xSupplyAuthentication->setRealm( aRec.UserList[0].Passwords[1].getStr() );
-                            }
-                            else if ( xSupplyAuthentication->canSetAccount() )
-                                xSupplyAuthentication->setAccount( aRec.UserList[0].Passwords[1].getStr() );
-                        }
-                        xSupplyAuthentication->select();
-                        return;
-                    }
-                }
-                else
-                {
-                    task::UrlRecord aRec(xContainer->findForName( aAuthenticationRequest.ServerName,
-                                                                  aAuthenticationRequest.UserName,
-                                                                  xIH));
-                    if ( aRec.UserList.getLength() != 0 )
-                    {
-                        OSL_ENSURE( aRec.UserList[0].Passwords.getLength() != 0, "empty password list" );
-                        if ( !aAuthenticationRequest.HasPassword ||
-                             ( aAuthenticationRequest.Password != aRec.UserList[0].Passwords[0] ) )
-                        {
-                            if ( xSupplyAuthentication->canSetUserName() )
-                                xSupplyAuthentication->setUserName( aRec.UserList[0].UserName.getStr() );
-                            if ( xSupplyAuthentication->canSetPassword() )
-                                xSupplyAuthentication->setPassword(aRec.UserList[0].Passwords[0].getStr());
-                            if ( aRec.UserList[0].Passwords.getLength() > 1 )
-                            {
-                                if ( aAuthenticationRequest.HasRealm )
-                                {
-                                    if ( xSupplyAuthentication->canSetRealm() )
-                                        xSupplyAuthentication->setRealm(aRec.UserList[0].Passwords[1].getStr());
-                                }
-                                else if ( xSupplyAuthentication->canSetAccount() )
-                                    xSupplyAuthentication->setAccount(aRec.UserList[0].Passwords[1].getStr());
-                            }
-                            xSupplyAuthentication->select();
-                            return;
-                        }
-                    }
-                }
-            }
-            catch (task::NoMasterException const &)
-            {} // user did not enter master password
-        }
-    }
 }
 
 } // anonymous namespace

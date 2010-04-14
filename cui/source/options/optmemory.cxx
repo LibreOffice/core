@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optmemory.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_cui.hxx"
 #include <svtools/langtab.hxx>
 #include <svl/zforlist.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <svl/flagitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <unotools/lingucfg.hxx>
@@ -55,8 +52,8 @@
 #include <unotools/configitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <comphelper/types.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/langitem.hxx>
 #include "cuioptgenrl.hxx"
 #include "optpath.hxx"
 #include "optsave.hxx"

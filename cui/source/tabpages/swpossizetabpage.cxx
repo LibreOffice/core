@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swpossizetabpage.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -589,7 +586,7 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage( Window* pParent, const SfxItemSet& rIn
     m_bIsInRightToLeft(false)
 {
     FreeResource();
-    FieldUnit eDlgUnit = GetModuleFieldUnit( &rInAttrs );
+    FieldUnit eDlgUnit = GetModuleFieldUnit( rInAttrs );
     SetFieldUnit( m_aHoriByMF, eDlgUnit, TRUE );
     SetFieldUnit( m_aVertByMF, eDlgUnit, TRUE );
     SetFieldUnit( m_aWidthMF , eDlgUnit, TRUE );

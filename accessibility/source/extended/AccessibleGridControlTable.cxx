@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleGridControlTable.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -297,7 +294,6 @@ sal_Int32 SAL_CALL AccessibleGridControlTable::getSelectedAccessibleChildCount()
     TCSolarGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
-   // return isRowBar() ? implGetSelectedRowCount() : implGetSelectedColumnCount();
     return 0;
 }
 //To Do - not implemented yet
@@ -309,9 +305,6 @@ AccessibleGridControlTable::getSelectedAccessibleChild( sal_Int32 nSelectedChild
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     (void)nSelectedChildIndex;
-    // method may throw lang::IndexOutOfBoundsException
-    //sal_Int32 nIndex = implGetChildIndexFromSelectedIndex( nSelectedChildIndex );
-    //return implGetChild( nIndex, implToVCLColumnPos( nIndex ) );
     return NULL;
 }
 //To Do - not implemented yet
@@ -371,14 +364,6 @@ Rectangle AccessibleGridControlTable::implGetBoundingBoxOnScreen()
     return m_aTable.calcTableRect();
 }
 // internal helper methods ----------------------------------------------------
-
-Reference< XAccessible > AccessibleGridControlTable::implGetChild(
-        sal_Int32 nRow, sal_uInt16 nColumnPos )
-{
-    (void)nRow;
-    (void)nColumnPos;
-    return NULL;
-}
 //To Do - not implemented yet
 //sal_Int32 AccessibleGridControlTable::implGetChildIndexFromSelectedIndex(
 //        sal_Int32 nSelectedChildIndex )
