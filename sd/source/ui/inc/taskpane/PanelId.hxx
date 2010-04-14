@@ -49,9 +49,7 @@ namespace sd { namespace toolpanel
         PID_LAYOUT              = 2,
         PID_TABLE_DESIGN        = 3,
         PID_CUSTOM_ANIMATION    = 4,
-        PID_SLIDE_TRANSITION    = 5,
-
-        PID_FIRST_CUSTOM_PANEL  = 6
+        PID_SLIDE_TRANSITION    = 5
     };
 
     PanelId GetStandardPanelId( const ::rtl::OUString& i_rTaskPanelResourceURL );
