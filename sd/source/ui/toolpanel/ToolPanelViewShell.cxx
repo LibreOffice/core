@@ -739,7 +739,7 @@ void ToolPanelViewShell::DeactivatePanel( const ::rtl::OUString& i_rPanelResourc
 // ---------------------------------------------------------------------------------------------------------------------
 ToolPanelViewShell_Impl::ToolPanelViewShell_Impl( ToolPanelViewShell& i_rPanelViewShell, ::Window& i_rPanelDeckParent )
     :m_rPanelViewShell( i_rPanelViewShell )
-    ,m_pTaskPane( new ::sfx2::ModuleTaskPane( i_rPanelDeckParent, i_rPanelViewShell.GetViewShellBase().GetViewFrame()->GetFrame()->GetFrameInterface(), *this ) )
+    ,m_pTaskPane( new ::sfx2::ModuleTaskPane( i_rPanelDeckParent, i_rPanelViewShell.GetViewShellBase().GetViewFrame()->GetFrame().GetFrameInterface(), *this ) )
     ,m_bInitialized( false )
 {
     const String sPaneTitle( SdResId( STR_RIGHT_PANE_TITLE ) );
