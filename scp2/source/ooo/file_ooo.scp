@@ -1157,6 +1157,17 @@ File gid_File_Share_Registry_Main_Xcd
     Name = "main.xcd";
 End
 
+#ifdef WNT
+
+File gid_File_Share_Registry_Forcedefault_Xcd
+    TXT_FILE_BODY;
+    Styles = (PACKED, SCPZIP_REPLACE, SET_OFFICE_LANGUAGE);
+    Dir = gid_Dir_Share_Registry;
+    Name = "forcedefault.xcd";
+End
+
+#endif
+
 File gid_File_Oo_Ldap_Xcd_Sample
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -2104,7 +2115,7 @@ End
 File gid_File_Extension_Dictionary_Sr
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-sr.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
