@@ -62,7 +62,7 @@ using vos::ORef;
 Sequence < sal_Int8 > ZipPackageFolder::aImplementationId = Sequence < sal_Int8 > ();
 
 ZipPackageFolder::ZipPackageFolder ( const Reference< XMultiServiceFactory >& xFactory,
-                                     sal_Int16 nFormat,
+                                     sal_Int32 nFormat,
                                      sal_Bool bAllowRemoveOnInsert )
 : m_xFactory( xFactory )
 , m_nFormat( nFormat )
