@@ -89,6 +89,10 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         makePropertySet() const;
 
+#if OSL_DEBUG_LEVEL > 0
+  void dump();
+#endif
+
 private:
     const PropertyList* mpPropNames;
 };

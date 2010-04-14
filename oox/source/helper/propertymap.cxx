@@ -50,6 +50,19 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
 using ::com::sun::star::beans::XVetoableChangeListener;
 
+#if OSL_DEBUG_LEVEL > 0
+#include <cstdio>
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/LineSpacingMode.hpp>
+#include <com/sun/star/text/WritingMode.hpp>
+#define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using ::rtl::OString;
+using ::com::sun::star::style::LineSpacing;
+using ::com::sun::star::text::WritingMode;
+#endif
+
 namespace oox {
 
 // ============================================================================
@@ -227,6 +240,61 @@ Reference< XPropertySet > PropertyMap::makePropertySet() const
 {
     return new GenericPropertySet( *this );
 }
+
+#if OSL_DEBUG_LEVEL > 0
+void PropertyMap::dump()
+{
+  Reference< XPropertySet > rXPropSet( makePropertySet(), UNO_QUERY );
+
+    Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
+    Sequence< beans::Property > props = info->getProperties ();
+
+    for (int i=0; i < props.getLength (); i++) {
+        OString name = OUStringToOString( props [i].Name, RTL_TEXTENCODING_UTF8);
+        fprintf (stderr,"%30s = ", name.getStr() );
+
+    try {
+        Any value = rXPropSet->getPropertyValue( props [i].Name );
+
+        OUString strValue;
+        sal_Int32 intValue;
+        sal_uInt32 uintValue;
+        sal_Int16 int16Value;
+        sal_uInt16 uint16Value;
+        bool boolValue;
+    LineSpacing spacing;
+//         RectanglePoint pointValue;
+    WritingMode aWritingMode;
+
+        if( value >>= strValue )
+            fprintf (stderr,"\"%s\"\n", USS( strValue ) );
+        else if( value >>= intValue )
+            fprintf (stderr,"%d            (hex: %x)\n", intValue, intValue);
+        else if( value >>= uintValue )
+            fprintf (stderr,"%d            (hex: %x)\n", uintValue, uintValue);
+        else if( value >>= int16Value )
+            fprintf (stderr,"%d            (hex: %x)\n", int16Value, int16Value);
+        else if( value >>= uint16Value )
+            fprintf (stderr,"%d            (hex: %x)\n", uint16Value, uint16Value);
+        else if( value >>= boolValue )
+            fprintf (stderr,"%d            (bool)\n", boolValue);
+    else if( value >>= aWritingMode )
+        fprintf (stderr, "%d writing mode\n", aWritingMode);
+    else if( value >>= spacing ) {
+        fprintf (stderr, "mode: %d value: %d\n", spacing.Mode, spacing.Height);
+    } else if( value.isExtractableTo(::getCppuType((const sal_Int32*)0))) {
+        fprintf (stderr,"is extractable to int32\n");
+    }
+//         else if( value >>= pointValue )
+//             fprintf (stderr,"%d            (RectanglePoint)\n", pointValue);
+        else
+      fprintf (stderr,"???           <unhandled type %s>\n", USS(value.getValueTypeName()));
+    } catch(Exception e) {
+        fprintf (stderr,"unable to get '%s' value\n", USS(props [i].Name));
+    }
+    }
+}
+#endif
 
 // ============================================================================
 
