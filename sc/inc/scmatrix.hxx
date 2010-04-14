@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scmatrix.hxx,v $
- * $Revision: 1.11.148.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,6 +103,7 @@ class SC_DLLPUBLIC ScMatrix
     void ResetIsString();
     void DeleteIsString();
     void CreateMatrix( SCSIZE nC, SCSIZE nR);
+    void Clear();
 
     // pStr may be NULL, bFlag MUST NOT be 0
     void PutStringEntry( const String* pStr, BYTE bFlag, SCSIZE nIndex );
@@ -177,6 +175,12 @@ public:
 
     /** Clone the matrix. */
     ScMatrix* Clone() const;
+
+    /**
+     * Resize the matrix to specified new dimension.  Note that this operation
+     * clears all stored values.
+     */
+    void Resize( SCSIZE nC, SCSIZE nR);
 
     /** Clone the matrix and extend it to the new size. nNewCols and nNewRows
         MUST be at least of the size of the original matrix. */

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,21 +41,29 @@ LIBTARGET=NO
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES= \
-    $(SLO)$/tbzoomsliderctrl.obj
+    $(SLO)$/tbzoomsliderctrl.obj \
+    $(SLO)$/dpcontrol.obj
 
 SLOFILES =	\
         $(SLO)$/popmenu.obj		\
         $(SLO)$/tbinsert.obj	\
         $(SLO)$/cbuttonw.obj	\
+        $(SLO)$/dpcontrol.obj	\
         $(SLO)$/editfield.obj	\
         $(EXCEPTIONSFILES)
+
+SRS1NAME=$(TARGET)
+SRC1FILES = \
+    dpcontrol.src
 
 LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1OBJFILES= \
         $(SLO)$/popmenu.obj		\
         $(SLO)$/tbinsert.obj	\
         $(SLO)$/cbuttonw.obj	\
+        $(SLO)$/dpcontrol.obj	\
         $(SLO)$/tbzoomsliderctrl.obj
+
 
 # --- Tagets -------------------------------------------------------
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: globstr.src,v $
- * $Revision: 1.74.96.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1724,6 +1721,18 @@ Resource RID_GLOBSTR
     String STR_STYLE_FAMILY_PAGE
     {
         Text [ en-US ] = "Page Styles";
+    };
+    String STR_ERR_DATAPILOTSOURCE
+    {
+        Text [ en-US ] = "DataPilot source data is invalid.";
+    };
+    String STR_PIVOT_FIRSTROWEMPTYERR
+    {
+        Text [ en-US ] = "The field name cannot be empty. Check the first row of data source to make sure there are no empty cells." ;
+    };
+    String STR_PIVOT_ONLYONEROWERR
+    {
+        Text [ en-US ] = "DataPilot table needs at least two rows of data to create or refresh." ;
     };
 };
 

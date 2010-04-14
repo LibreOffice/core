@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuins2.cxx,v $
- * $Revision: 1.31.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -529,7 +526,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
             ScRangeList aRanges;
             aMultiMark.FillRangeListWithMarks( &aRanges, FALSE );
             String aStr;
-            aRanges.Format( aStr, SCR_ABS_3D, pViewSh->GetViewData()->GetDocument() );
+            ScDocument* pDocument = pViewSh->GetViewData()->GetDocument();
+            aRanges.Format( aStr, SCR_ABS_3D, pDocument, pDocument->GetAddressConvention() );
             aRangeString = aStr;
 
             // get "total" range for positioning

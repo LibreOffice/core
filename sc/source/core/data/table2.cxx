@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: table2.cxx,v $
- * $Revision: 1.40.124.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/poolcach.hxx>
 #include <unotools/charclass.hxx>
@@ -856,10 +853,12 @@ void ScTable::PutCell( const ScAddress& rPos, ScBaseCell* pCell )
 //UNUSED2009-05 }
 
 
-BOOL ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTabP, const String& rString )
+BOOL ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTabP, const String& rString,
+                         SvNumberFormatter* pFormatter, bool bDetectNumberFormat )
 {
     if (ValidColRow(nCol,nRow))
-        return aCol[nCol].SetString( nRow, nTabP, rString );
+        return aCol[nCol].SetString(
+            nRow, nTabP, rString, pDocument->GetAddressConvention(), pFormatter, bDetectNumberFormat );
     else
         return FALSE;
 }
@@ -972,6 +971,14 @@ ScBaseCell* ScTable::GetCell( SCCOL nCol, SCROW nRow ) const
     return NULL;
 }
 
+void ScTable::GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const
+{
+    rCol = 0;
+    rRow = 0;
+    while (aCol[rCol].IsEmptyData() && rCol < MAXCOL)
+        ++rCol;
+    rRow = aCol[rCol].GetFirstDataPos();
+}
 
 void ScTable::GetLastDataPos(SCCOL& rCol, SCROW& rRow) const
 {
@@ -1183,9 +1190,9 @@ const ScPatternAttr* ScTable::GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, S
 }
 
 
-BOOL ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nMask ) const
+bool ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nMask ) const
 {
-    BOOL bFound=FALSE;
+    bool bFound = false;
     for (SCCOL i=nCol1; i<=nCol2 && !bFound; i++)
         bFound |= aCol[i].HasAttrib( nRow1, nRow2, nMask );
     return bFound;

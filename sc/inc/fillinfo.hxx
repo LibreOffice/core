@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fillinfo.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,6 +96,8 @@ struct CellInfo
     BOOL                        bVOverlapped : 1;
     BOOL                        bAutoFilter : 1;
     BOOL                        bPushButton : 1;
+    bool                        bPopupButton: 1;
+    bool                        bFilterActive:1;
 
     BOOL                        bPrinted : 1;               // bei Bedarf (Pagebreak-Modus)
 

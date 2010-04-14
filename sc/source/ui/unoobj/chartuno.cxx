@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: chartuno.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -483,20 +480,15 @@ void ScChartObj::GetData_Impl( ScRangeListRef& rRanges, bool& rColHeaders, bool&
 {
     bool bFound = false;
     ScDocument* pDoc = (pDocShell? pDocShell->GetDocument(): 0);
-    uno::Reference< embed::XEmbeddedObject > xIPObj;
-    if( pDoc )
-        xIPObj.set( pDoc->FindOleObjectByName( aChartName ), uno::UNO_QUERY );
-    if( xIPObj.is())
-    {
-        //make sure that the chart is loaded
-        svt::EmbeddedObjectRef::TryRunningState( xIPObj );
 
-        uno::Reference< chart2::XChartDocument > xChartDoc( xIPObj->getComponent(), uno::UNO_QUERY );
-        uno::Reference< chart2::data::XDataReceiver > xReceiver( xChartDoc, uno::UNO_QUERY );
-        if( xReceiver.is() )
+    if( pDoc )
+    {
+        uno::Reference< chart2::XChartDocument > xChartDoc( pDoc->GetChartByName( aChartName ) );
+        if( xChartDoc.is() )
         {
+            uno::Reference< chart2::data::XDataReceiver > xReceiver( xChartDoc, uno::UNO_QUERY );
             uno::Reference< chart2::data::XDataProvider > xProvider = xChartDoc->getDataProvider();
-            if( xProvider.is() )
+            if( xReceiver.is() && xProvider.is() )
             {
                 uno::Sequence< beans::PropertyValue > aArgs( xProvider->detectArguments( xReceiver->getUsedData() ) );
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartController_Window.cxx,v $
- * $Revision: 1.31.24.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +55,8 @@
 #include "AxisHelper.hxx"
 #include "LegendHelper.hxx"
 #include "servicenames_charttypes.hxx"
+#include "MenuResIds.hrc"
+#include "DrawCommandDispatch.hxx"
 
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
@@ -626,7 +625,10 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
 
     if( pDrawViewWrapper->IsTextEdit() )
     {
-        if( pDrawViewWrapper->IsTextEditHit( aMPos, HITPIX) )
+        SdrViewEvent aVEvt;
+        if ( pDrawViewWrapper->IsTextEditHit( aMPos, HITPIX ) ||
+             // #i12587# support for shapes in chart
+             ( rMEvt.IsRight() && pDrawViewWrapper->PickAnything( rMEvt, SDRMOUSEBUTTONDOWN, aVEvt ) == SDRHIT_MARKEDOBJECT ) )
         {
             pDrawViewWrapper->MouseButtonDown(rMEvt,m_pChartWindow);
             return;
@@ -655,6 +657,39 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
     //only change selection if no selection handles are hit
     if( !pHitSelectionHdl )
     {
+        // #i12587# support for shapes in chart
+        if ( m_eDrawMode == CHARTDRAW_INSERT &&
+             ( !pDrawViewWrapper->IsMarkedHit( aMPos ) || !m_aSelection.isDragableObjectSelected() ) )
+        {
+            if ( m_aSelection.hasSelection() )
+            {
+                m_aSelection.clearSelection();
+            }
+            if ( !pDrawViewWrapper->IsAction() )
+            {
+                if ( pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_CAPTION )
+                {
+                    Size aCaptionSize( 2268, 1134 );
+                    pDrawViewWrapper->BegCreateCaptionObj( aMPos, aCaptionSize );
+                }
+                else
+                {
+                    pDrawViewWrapper->BegCreateObj( aMPos);
+                }
+                SdrObject* pObj = pDrawViewWrapper->GetCreateObj();
+                DrawCommandDispatch* pDrawCommandDispatch = m_aDispatchContainer.getDrawCommandDispatch();
+                if ( pObj && m_pDrawModelWrapper && pDrawCommandDispatch )
+                {
+                    SfxItemSet aSet( m_pDrawModelWrapper->GetItemPool() );
+                    pDrawCommandDispatch->setAttributes( pObj );
+                    pDrawCommandDispatch->setLineEnds( aSet );
+                    pObj->SetMergedItemSet( aSet );
+                }
+            }
+            impl_SetMousePointer( rMEvt );
+            return;
+        }
+
         m_aSelection.adaptSelectionToNewPos( aMPos, pDrawViewWrapper
             , rMEvt.IsRight(), m_bWaitingForDoubleClick );
 
@@ -757,7 +792,38 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                 return;
         }
 
-        if(pDrawViewWrapper->IsDragObj())
+        // #i12587# support for shapes in chart
+        if ( m_eDrawMode == CHARTDRAW_INSERT && pDrawViewWrapper->IsCreateObj() )
+        {
+            pDrawViewWrapper->EndCreateObj( SDRCREATE_FORCEEND );
+            if ( pDrawViewWrapper->AreObjectsMarked() )
+            {
+                if ( pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_TEXT )
+                {
+                    executeDispatch_EditText();
+                }
+                else
+                {
+                    SdrObject* pObj = pDrawViewWrapper->getSelectedObject();
+                    if ( pObj )
+                    {
+                        uno::Reference< drawing::XShape > xShape( pObj->getUnoShape(), uno::UNO_QUERY );
+                        if ( xShape.is() )
+                        {
+                            m_aSelection.setSelection( xShape );
+                            m_aSelection.applySelection( pDrawViewWrapper );
+                        }
+                    }
+                }
+            }
+            else
+            {
+                m_aSelection.adaptSelectionToNewPos( aMPos, pDrawViewWrapper, rMEvt.IsRight(), m_bWaitingForDoubleClick );
+                m_aSelection.applySelection( pDrawViewWrapper );
+                setDrawMode( CHARTDRAW_SELECT );
+            }
+        }
+        else if ( pDrawViewWrapper->IsDragObj() )
         {
             bool bDraggingDone = false;
             SdrDragMethod* pDragMethod = pDrawViewWrapper->SdrView::GetDragMethod();
@@ -842,7 +908,11 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                 m_aSelection.resetPossibleSelectionAfterSingleClickWasEnsured();
         }
         else if( isDoubleClick(rMEvt) )
-            execute_DoubleClick();
+        {
+            // #i12587# support for shapes in chart
+            Point aMousePixel = rMEvt.GetPosPixel();
+            execute_DoubleClick( &aMousePixel );
+        }
 
         //@todo ForcePointer(&rMEvt);
         pWindow->ReleaseMouse();
@@ -857,13 +927,39 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
         impl_notifySelectionChangeListeners();
 }
 
-void ChartController::execute_DoubleClick()
+void ChartController::execute_DoubleClick( const Point* pMousePixel )
 {
-    ObjectType eObjectType = ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() );
-    if( OBJECTTYPE_TITLE==eObjectType )
-        executeDispatch_EditText();
+    bool bEditText = false;
+    if ( m_aSelection.hasSelection() )
+    {
+        ::rtl::OUString aCID( m_aSelection.getSelectedCID() );
+        if ( aCID.getLength() )
+        {
+            ObjectType eObjectType = ObjectIdentifier::getObjectType( aCID );
+            if ( OBJECTTYPE_TITLE == eObjectType )
+            {
+                bEditText = true;
+            }
+        }
+        else
+        {
+            // #i12587# support for shapes in chart
+            SdrObject* pObj = DrawViewWrapper::getSdrObject( m_aSelection.getSelectedAdditionalShape() );
+            if ( pObj && pObj->ISA( SdrTextObj ) )
+            {
+                bEditText = true;
+            }
+        }
+    }
+
+    if ( bEditText )
+    {
+        executeDispatch_EditText( pMousePixel );
+    }
     else
+    {
         executeDispatch_ObjectProperties();
+    }
 }
 
 void ChartController::execute_Resize()
@@ -910,272 +1006,288 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
         if( m_aSelection.isSelectionDifferentFromBeforeMouseDown() )
             impl_notifySelectionChangeListeners();
 
-        // todo: the context menu should be specified by an xml file in uiconfig
-        uno::Reference< awt::XPopupMenu > xPopupMenu(
-            m_xCC->getServiceManager()->createInstanceWithContext(
-                C2U("com.sun.star.awt.PopupMenu"), m_xCC ), uno::UNO_QUERY );
-        uno::Reference< awt::XMenuExtended > xMenuEx( xPopupMenu, uno::UNO_QUERY );
-        if( xPopupMenu.is() && xMenuEx.is())
+        if ( isShapeContext() )
         {
-            sal_Int16 nUniqueId = 1;
-            ObjectType eObjectType = ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() );
-            Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( m_aModel->getModel() );
-
-            OUString aFormatCommand( lcl_getFormatCommandForObjectCID( m_aSelection.getSelectedCID() ) );
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, aFormatCommand );
-
-            //some commands for dataseries and points:
-            //-----
-            if( OBJECTTYPE_DATA_SERIES == eObjectType || OBJECTTYPE_DATA_POINT == eObjectType )
-            {
-                bool bIsPoint = ( OBJECTTYPE_DATA_POINT == eObjectType );
-                uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel() );
-                uno::Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
-                Reference< chart2::XRegressionCurve > xTrendline( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xCurveCnt ) );
-                bool bHasEquation = RegressionCurveHelper::hasEquation( xTrendline );
-                Reference< chart2::XRegressionCurve > xMeanValue( RegressionCurveHelper::getMeanValueLine( xCurveCnt ) );
-                bool bHasYErrorBars = StatisticsHelper::hasErrorBars( xSeries, true );
-                bool bHasDataLabelsAtSeries = DataSeriesHelper::hasDataLabelsAtSeries( xSeries );
-                bool bHasDataLabelsAtPoints = DataSeriesHelper::hasDataLabelsAtPoints( xSeries );
-                bool bHasDataLabelAtPoint = false;
-                sal_Int32 nPointIndex = -1;
-                if( bIsPoint )
-                {
-                    nPointIndex = ObjectIdentifier::getIndexFromParticleOrCID( m_aSelection.getSelectedCID() );
-                    bHasDataLabelAtPoint = DataSeriesHelper::hasDataLabelAtPoint( xSeries, nPointIndex );
-                }
-                bool bSelectedPointIsFormatted = false;
-                bool bHasFormattedDataPointsOtherThanSelected = false;
-
-                Reference< beans::XPropertySet > xSeriesProperties( xSeries, uno::UNO_QUERY );
-                if( xSeriesProperties.is() )
-                {
-                    uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-                    if( xSeriesProperties->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList )
-                    {
-                        if( aAttributedDataPointIndexList.hasElements() )
-                        {
-                            if( bIsPoint )
-                            {
-                                ::std::vector< sal_Int32 > aIndices( ContainerHelper::SequenceToVector( aAttributedDataPointIndexList ) );
-                                ::std::vector< sal_Int32 >::iterator aIt = ::std::find( aIndices.begin(), aIndices.end(), nPointIndex );
-                                if( aIt != aIndices.end())
-                                    bSelectedPointIsFormatted = true;
-                                else
-                                    bHasFormattedDataPointsOtherThanSelected = true;
-                            }
-                            else
-                                bHasFormattedDataPointsOtherThanSelected = true;
-                        }
-                    }
-                }
-
-                //const sal_Int32 nIdBeforeFormat = nUniqueId;
-                if( bIsPoint )
-                {
-                    if( bHasDataLabelAtPoint )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatDataLabel") );
-                    if( !bHasDataLabelAtPoint )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertDataLabel") );
-                    else
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteDataLabel") );
-                    if( bSelectedPointIsFormatted )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:ResetDataPoint"));
-
-                    xPopupMenu->insertSeparator( -1 );
-
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatDataSeries") );
-                }
-
-                Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ) );
-                if( xChartType->getChartType().equals(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
-                {
-                    try
-                    {
-                        Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY );
-                        if( xChartTypeProp.is() )
-                        {
-                            bool bJapaneseStyle = false;
-                            xChartTypeProp->getPropertyValue( C2U( "Japanese" ) ) >>= bJapaneseStyle;
-
-                            if( bJapaneseStyle )
-                            {
-                                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatStockLoss") );
-                                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatStockGain") );
-                            }
-                        }
-                    }
-                    catch( const uno::Exception & ex )
-                    {
-                        ASSERT_EXCEPTION( ex );
-                    }
-                }
-
-                if( bHasDataLabelsAtSeries )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatDataLabels") );
-                if( xTrendline.is() )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatTrendline") );
-                if( bHasEquation )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatTrendlineEquation") );
-                if( xMeanValue.is() )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatMeanValue") );
-                if( bHasYErrorBars )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatYErrorBars") );
-
-                //if( nIdBeforeFormat != nUniqueId )
-                    xPopupMenu->insertSeparator( -1 );
-
-                //const sal_Int32 nIdBeforeInsert = nUniqueId;
-
-                if( !bHasDataLabelsAtSeries )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertDataLabels") );
-                if( !xTrendline.is() )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTrendline") );
-                else if( !bHasEquation )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTrendlineEquation") );
-                if( !xMeanValue.is() )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertMeanValue") );
-                if( !bHasYErrorBars )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertYErrorBars") );
-
-                //if( nIdBeforeInsert != nUniqueId )
-                //    xPopupMenu->insertSeparator( -1 );
-
-                //const sal_Int32 nIdBeforeDelete = nUniqueId;
-
-                if( bHasDataLabelsAtSeries || ( bHasDataLabelsAtPoints && bHasFormattedDataPointsOtherThanSelected ) )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteDataLabels") );
-                if( xTrendline.is() )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteTrendline") );
-                if( bHasEquation )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteTrendlineEquation") );
-                if( xMeanValue.is() )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteMeanValue") );
-                if( bHasYErrorBars )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteYErrorBars") );
-
-                if( bHasFormattedDataPointsOtherThanSelected )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:ResetAllDataPoints"));
-
-                //if( nIdBeforeDelete != nUniqueId )
-                    xPopupMenu->insertSeparator( -1 );
-
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId, C2U(".uno:ArrangeRow"));
-                uno::Reference< awt::XPopupMenu > xArrangePopupMenu(
-                    m_xCC->getServiceManager()->createInstanceWithContext(
-                        C2U("com.sun.star.awt.PopupMenu"), m_xCC ), uno::UNO_QUERY );
-                uno::Reference< awt::XMenuExtended > xArrangeMenuEx( xArrangePopupMenu, uno::UNO_QUERY );
-                if( xArrangePopupMenu.is() && xArrangeMenuEx.is())
-                {
-                    sal_Int16 nSubId = nUniqueId + 1;
-                    lcl_insertMenuCommand( xArrangePopupMenu, xArrangeMenuEx, nSubId++, C2U(".uno:Forward") );
-                    lcl_insertMenuCommand( xArrangePopupMenu, xArrangeMenuEx, nSubId, C2U(".uno:Backward") );
-                    xPopupMenu->setPopupMenu( nUniqueId, xArrangePopupMenu );
-                    nUniqueId = nSubId;
-                }
-                ++nUniqueId;
-            }
-            else if( OBJECTTYPE_DATA_CURVE == eObjectType )
-            {
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatTrendlineEquation") );
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTrendlineEquation") );
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTrendlineEquationAndR2") );
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertR2Value") );
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteTrendlineEquation") );
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteR2Value") );
-            }
-            else if( OBJECTTYPE_DATA_CURVE_EQUATION == eObjectType )
-            {
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertR2Value") );
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteR2Value") );
-            }
-
-            //some commands for axes: and grids
-            //-----
-            else if( OBJECTTYPE_AXIS  == eObjectType || OBJECTTYPE_GRID == eObjectType || OBJECTTYPE_SUBGRID == eObjectType )
-            {
-                Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), m_aModel->getModel() );
-                if( xAxis.is() && xDiagram.is() )
-                {
-                    sal_Int32 nDimensionIndex = -1;
-                    sal_Int32 nCooSysIndex = -1;
-                    sal_Int32 nAxisIndex = -1;
-                    AxisHelper::getIndicesForAxis( xAxis, xDiagram, nCooSysIndex, nDimensionIndex, nAxisIndex );
-                    bool bIsSecondaryAxis = nAxisIndex!=0;
-                    bool bIsAxisVisible = AxisHelper::isAxisVisible( xAxis );
-                    bool bIsMajorGridVisible = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, true /*bMainGrid*/, xDiagram );
-                    bool bIsMinorGridVisible = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, false /*bMainGrid*/, xDiagram );
-                    bool bHasTitle = false;
-                    uno::Reference< XTitled > xTitled( xAxis, uno::UNO_QUERY );
-                    if( xTitled.is())
-                        bHasTitle = TitleHelper::getCompleteString( xTitled->getTitleObject() ).getLength()>0;
-
-                    if( OBJECTTYPE_AXIS  != eObjectType && bIsAxisVisible )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatAxis") );
-                    if( OBJECTTYPE_GRID != eObjectType && bIsMajorGridVisible && !bIsSecondaryAxis )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatMajorGrid") );
-                    if( OBJECTTYPE_SUBGRID != eObjectType && bIsMinorGridVisible && !bIsSecondaryAxis )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatMinorGrid") );
-
-                    xPopupMenu->insertSeparator( -1 );
-
-                    if( OBJECTTYPE_AXIS  != eObjectType && !bIsAxisVisible )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertAxis") );
-                    if( OBJECTTYPE_GRID != eObjectType && !bIsMajorGridVisible && !bIsSecondaryAxis )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertMajorGrid") );
-                    if( OBJECTTYPE_SUBGRID != eObjectType && !bIsMinorGridVisible && !bIsSecondaryAxis )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertMinorGrid") );
-                    if( !bHasTitle )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertAxisTitle") );
-
-                    if( bIsAxisVisible )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteAxis") );
-                    if( bIsMajorGridVisible && !bIsSecondaryAxis )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteMajorGrid") );
-                    if( bIsMinorGridVisible && !bIsSecondaryAxis )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteMinorGrid") );
-                }
-            }
-
-            if( OBJECTTYPE_DATA_STOCK_LOSS == eObjectType )
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatStockGain") );
-            else if( OBJECTTYPE_DATA_STOCK_GAIN == eObjectType )
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatStockLoss") );
-
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:TransformDialog"));
-
-            if( OBJECTTYPE_PAGE == eObjectType || OBJECTTYPE_DIAGRAM == eObjectType
-                || OBJECTTYPE_DIAGRAM_WALL == eObjectType
-                || OBJECTTYPE_DIAGRAM_FLOOR == eObjectType
-                || OBJECTTYPE_UNKNOWN == eObjectType )
-            {
-                if( OBJECTTYPE_UNKNOWN != eObjectType )
-                    xPopupMenu->insertSeparator( -1 );
-                bool bHasLegend = LegendHelper::hasLegend( xDiagram );
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTitles") );
-                if( !bHasLegend )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertLegend") );
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertRemoveAxes") );
-                if( bHasLegend )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteLegend") );
-            }
-            //-----
-
-            xPopupMenu->insertSeparator( -1 );
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DiagramType"));
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DataRanges"));
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DiagramData"));
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:View3D"));
-            xPopupMenu->insertSeparator( -1 );
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:Cut"));
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:Copy"));
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:Paste"));
-
+            // #i12587# support for shapes in chart
+            PopupMenu aContextMenu( SchResId( m_pDrawViewWrapper->IsTextEdit() ?
+                RID_CONTEXTMENU_SHAPEEDIT : RID_CONTEXTMENU_SHAPE ) );
             ::svt::ContextMenuHelper aContextMenuHelper( m_xFrame );
             Point aPos( rCEvt.GetMousePosPixel() );
             if( !rCEvt.IsMouseEvent() )
+            {
                 aPos = m_pChartWindow->GetPointerState().maPos;
-            aContextMenuHelper.completeAndExecute( aPos, xPopupMenu );
+            }
+            aContextMenuHelper.completeAndExecute( aPos, aContextMenu );
+        }
+        else
+        {
+            // todo: the context menu should be specified by an xml file in uiconfig
+            uno::Reference< awt::XPopupMenu > xPopupMenu(
+                m_xCC->getServiceManager()->createInstanceWithContext(
+                    C2U("com.sun.star.awt.PopupMenu"), m_xCC ), uno::UNO_QUERY );
+            uno::Reference< awt::XMenuExtended > xMenuEx( xPopupMenu, uno::UNO_QUERY );
+            if( xPopupMenu.is() && xMenuEx.is())
+            {
+                sal_Int16 nUniqueId = 1;
+                ObjectType eObjectType = ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() );
+                Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( m_aModel->getModel() );
+
+                OUString aFormatCommand( lcl_getFormatCommandForObjectCID( m_aSelection.getSelectedCID() ) );
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, aFormatCommand );
+
+                //some commands for dataseries and points:
+                //-----
+                if( OBJECTTYPE_DATA_SERIES == eObjectType || OBJECTTYPE_DATA_POINT == eObjectType )
+                {
+                    bool bIsPoint = ( OBJECTTYPE_DATA_POINT == eObjectType );
+                    uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel() );
+                    uno::Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
+                    Reference< chart2::XRegressionCurve > xTrendline( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xCurveCnt ) );
+                    bool bHasEquation = RegressionCurveHelper::hasEquation( xTrendline );
+                    Reference< chart2::XRegressionCurve > xMeanValue( RegressionCurveHelper::getMeanValueLine( xCurveCnt ) );
+                    bool bHasYErrorBars = StatisticsHelper::hasErrorBars( xSeries, true );
+                    bool bHasDataLabelsAtSeries = DataSeriesHelper::hasDataLabelsAtSeries( xSeries );
+                    bool bHasDataLabelsAtPoints = DataSeriesHelper::hasDataLabelsAtPoints( xSeries );
+                    bool bHasDataLabelAtPoint = false;
+                    sal_Int32 nPointIndex = -1;
+                    if( bIsPoint )
+                    {
+                        nPointIndex = ObjectIdentifier::getIndexFromParticleOrCID( m_aSelection.getSelectedCID() );
+                        bHasDataLabelAtPoint = DataSeriesHelper::hasDataLabelAtPoint( xSeries, nPointIndex );
+                    }
+                    bool bSelectedPointIsFormatted = false;
+                    bool bHasFormattedDataPointsOtherThanSelected = false;
+
+                    Reference< beans::XPropertySet > xSeriesProperties( xSeries, uno::UNO_QUERY );
+                    if( xSeriesProperties.is() )
+                    {
+                        uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
+                        if( xSeriesProperties->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList )
+                        {
+                            if( aAttributedDataPointIndexList.hasElements() )
+                            {
+                                if( bIsPoint )
+                                {
+                                    ::std::vector< sal_Int32 > aIndices( ContainerHelper::SequenceToVector( aAttributedDataPointIndexList ) );
+                                    ::std::vector< sal_Int32 >::iterator aIt = ::std::find( aIndices.begin(), aIndices.end(), nPointIndex );
+                                    if( aIt != aIndices.end())
+                                        bSelectedPointIsFormatted = true;
+                                    else
+                                        bHasFormattedDataPointsOtherThanSelected = true;
+                                }
+                                else
+                                    bHasFormattedDataPointsOtherThanSelected = true;
+                            }
+                        }
+                    }
+
+                    //const sal_Int32 nIdBeforeFormat = nUniqueId;
+                    if( bIsPoint )
+                    {
+                        if( bHasDataLabelAtPoint )
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatDataLabel") );
+                        if( !bHasDataLabelAtPoint )
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertDataLabel") );
+                        else
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteDataLabel") );
+                        if( bSelectedPointIsFormatted )
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:ResetDataPoint"));
+
+                        xPopupMenu->insertSeparator( -1 );
+
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatDataSeries") );
+                    }
+
+                    Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ) );
+                    if( xChartType->getChartType().equals(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
+                    {
+                        try
+                        {
+                            Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY );
+                            if( xChartTypeProp.is() )
+                            {
+                                bool bJapaneseStyle = false;
+                                xChartTypeProp->getPropertyValue( C2U( "Japanese" ) ) >>= bJapaneseStyle;
+
+                                if( bJapaneseStyle )
+                                {
+                                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatStockLoss") );
+                                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatStockGain") );
+                                }
+                            }
+                        }
+                        catch( const uno::Exception & ex )
+                        {
+                            ASSERT_EXCEPTION( ex );
+                        }
+                    }
+
+                    if( bHasDataLabelsAtSeries )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatDataLabels") );
+                    if( xTrendline.is() )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatTrendline") );
+                    if( bHasEquation )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatTrendlineEquation") );
+                    if( xMeanValue.is() )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatMeanValue") );
+                    if( bHasYErrorBars )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatYErrorBars") );
+
+                    //if( nIdBeforeFormat != nUniqueId )
+                        xPopupMenu->insertSeparator( -1 );
+
+                    //const sal_Int32 nIdBeforeInsert = nUniqueId;
+
+                    if( !bHasDataLabelsAtSeries )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertDataLabels") );
+                    if( !xTrendline.is() )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTrendline") );
+                    else if( !bHasEquation )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTrendlineEquation") );
+                    if( !xMeanValue.is() )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertMeanValue") );
+                    if( !bHasYErrorBars )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertYErrorBars") );
+
+                    //if( nIdBeforeInsert != nUniqueId )
+                    //    xPopupMenu->insertSeparator( -1 );
+
+                    //const sal_Int32 nIdBeforeDelete = nUniqueId;
+
+                    if( bHasDataLabelsAtSeries || ( bHasDataLabelsAtPoints && bHasFormattedDataPointsOtherThanSelected ) )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteDataLabels") );
+                    if( xTrendline.is() )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteTrendline") );
+                    if( bHasEquation )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteTrendlineEquation") );
+                    if( xMeanValue.is() )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteMeanValue") );
+                    if( bHasYErrorBars )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteYErrorBars") );
+
+                    if( bHasFormattedDataPointsOtherThanSelected )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:ResetAllDataPoints"));
+
+                    //if( nIdBeforeDelete != nUniqueId )
+                        xPopupMenu->insertSeparator( -1 );
+
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId, C2U(".uno:ArrangeRow"));
+                    uno::Reference< awt::XPopupMenu > xArrangePopupMenu(
+                        m_xCC->getServiceManager()->createInstanceWithContext(
+                            C2U("com.sun.star.awt.PopupMenu"), m_xCC ), uno::UNO_QUERY );
+                    uno::Reference< awt::XMenuExtended > xArrangeMenuEx( xArrangePopupMenu, uno::UNO_QUERY );
+                    if( xArrangePopupMenu.is() && xArrangeMenuEx.is())
+                    {
+                        sal_Int16 nSubId = nUniqueId + 1;
+                        lcl_insertMenuCommand( xArrangePopupMenu, xArrangeMenuEx, nSubId++, C2U(".uno:Forward") );
+                        lcl_insertMenuCommand( xArrangePopupMenu, xArrangeMenuEx, nSubId, C2U(".uno:Backward") );
+                        xPopupMenu->setPopupMenu( nUniqueId, xArrangePopupMenu );
+                        nUniqueId = nSubId;
+                    }
+                    ++nUniqueId;
+                }
+                else if( OBJECTTYPE_DATA_CURVE == eObjectType )
+                {
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatTrendlineEquation") );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTrendlineEquation") );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTrendlineEquationAndR2") );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertR2Value") );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteTrendlineEquation") );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteR2Value") );
+                }
+                else if( OBJECTTYPE_DATA_CURVE_EQUATION == eObjectType )
+                {
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertR2Value") );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteR2Value") );
+                }
+
+                //some commands for axes: and grids
+                //-----
+                else if( OBJECTTYPE_AXIS  == eObjectType || OBJECTTYPE_GRID == eObjectType || OBJECTTYPE_SUBGRID == eObjectType )
+                {
+                    Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), m_aModel->getModel() );
+                    if( xAxis.is() && xDiagram.is() )
+                    {
+                        sal_Int32 nDimensionIndex = -1;
+                        sal_Int32 nCooSysIndex = -1;
+                        sal_Int32 nAxisIndex = -1;
+                        AxisHelper::getIndicesForAxis( xAxis, xDiagram, nCooSysIndex, nDimensionIndex, nAxisIndex );
+                        bool bIsSecondaryAxis = nAxisIndex!=0;
+                        bool bIsAxisVisible = AxisHelper::isAxisVisible( xAxis );
+                        bool bIsMajorGridVisible = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, true /*bMainGrid*/, xDiagram );
+                        bool bIsMinorGridVisible = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, false /*bMainGrid*/, xDiagram );
+                        bool bHasTitle = false;
+                        uno::Reference< XTitled > xTitled( xAxis, uno::UNO_QUERY );
+                        if( xTitled.is())
+                            bHasTitle = TitleHelper::getCompleteString( xTitled->getTitleObject() ).getLength()>0;
+
+                        if( OBJECTTYPE_AXIS  != eObjectType && bIsAxisVisible )
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatAxis") );
+                        if( OBJECTTYPE_GRID != eObjectType && bIsMajorGridVisible && !bIsSecondaryAxis )
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatMajorGrid") );
+                        if( OBJECTTYPE_SUBGRID != eObjectType && bIsMinorGridVisible && !bIsSecondaryAxis )
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatMinorGrid") );
+
+                        xPopupMenu->insertSeparator( -1 );
+
+                        if( OBJECTTYPE_AXIS  != eObjectType && !bIsAxisVisible )
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertAxis") );
+                        if( OBJECTTYPE_GRID != eObjectType && !bIsMajorGridVisible && !bIsSecondaryAxis )
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertMajorGrid") );
+                        if( OBJECTTYPE_SUBGRID != eObjectType && !bIsMinorGridVisible && !bIsSecondaryAxis )
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertMinorGrid") );
+                        if( !bHasTitle )
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertAxisTitle") );
+
+                        if( bIsAxisVisible )
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteAxis") );
+                        if( bIsMajorGridVisible && !bIsSecondaryAxis )
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteMajorGrid") );
+                        if( bIsMinorGridVisible && !bIsSecondaryAxis )
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteMinorGrid") );
+                    }
+                }
+
+                if( OBJECTTYPE_DATA_STOCK_LOSS == eObjectType )
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatStockGain") );
+                else if( OBJECTTYPE_DATA_STOCK_GAIN == eObjectType )
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatStockLoss") );
+
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:TransformDialog"));
+
+                if( OBJECTTYPE_PAGE == eObjectType || OBJECTTYPE_DIAGRAM == eObjectType
+                    || OBJECTTYPE_DIAGRAM_WALL == eObjectType
+                    || OBJECTTYPE_DIAGRAM_FLOOR == eObjectType
+                    || OBJECTTYPE_UNKNOWN == eObjectType )
+                {
+                    if( OBJECTTYPE_UNKNOWN != eObjectType )
+                        xPopupMenu->insertSeparator( -1 );
+                    bool bHasLegend = LegendHelper::hasLegend( xDiagram );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTitles") );
+                    if( !bHasLegend )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertLegend") );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertRemoveAxes") );
+                    if( bHasLegend )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteLegend") );
+                }
+                //-----
+
+                xPopupMenu->insertSeparator( -1 );
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DiagramType"));
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DataRanges"));
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DiagramData"));
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:View3D"));
+                xPopupMenu->insertSeparator( -1 );
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:Cut"));
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:Copy"));
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:Paste"));
+
+                ::svt::ContextMenuHelper aContextMenuHelper( m_xFrame );
+                Point aPos( rCEvt.GetMousePosPixel() );
+                if( !rCEvt.IsMouseEvent() )
+                    aPos = m_pChartWindow->GetPointerState().maPos;
+                aContextMenuHelper.completeAndExecute( aPos, xPopupMenu );
+            }
         }
     }
     else if( ( rCEvt.GetCommand() == COMMAND_STARTEXTTEXTINPUT ) ||
@@ -1238,17 +1350,21 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
     {
         // Natvigation (Tab/F3/Home/End)
         uno::Reference< XChartDocument > xChartDoc( m_aModel->getModel(), uno::UNO_QUERY );
-        ObjectKeyNavigation aObjNav( m_aSelection.getSelectedCID(), xChartDoc, ExplicitValueProvider::getExplicitValueProvider( m_xChartView ));
+        ObjectKeyNavigation aObjNav( m_aSelection.getSelectedOID(), xChartDoc, ExplicitValueProvider::getExplicitValueProvider( m_xChartView ));
         awt::KeyEvent aKeyEvent( ::svt::AcceleratorExecute::st_VCLKey2AWTKey( aKeyCode ));
         bReturn = aObjNav.handleKeyEvent( aKeyEvent );
         if( bReturn )
         {
-            ::rtl::OUString aNewCID = aObjNav.getCurrentSelection();
+            ObjectIdentifier aNewOID = aObjNav.getCurrentSelection();
             uno::Any aNewSelection;
-            if( aNewCID.getLength()>0 && !ObjectHierarchy::isRootNode( aNewCID ))
-                aNewSelection <<= aNewCID;
-            if( m_eDragMode == SDRDRAG_ROTATE && !SelectionHelper::isRotateableObject( aNewCID, m_aModel->getModel() ) )
+            if ( aNewOID.isValid() && !ObjectHierarchy::isRootNode( aNewOID ) )
+            {
+                aNewSelection = aNewOID.getAny();
+            }
+            if ( m_eDragMode == SDRDRAG_ROTATE && !SelectionHelper::isRotateableObject( aNewOID.getObjectCID(), m_aModel->getModel() ) )
+            {
                 m_eDragMode = SDRDRAG_MOVE;
+            }
             bReturn = select( aNewSelection );
         }
     }
@@ -1501,24 +1617,64 @@ bool ChartController::requestQuickHelp(
 ::select( const uno::Any& rSelection )
         throw( lang::IllegalArgumentException )
 {
-    rtl::OUString aNewCID;
-    if( rSelection.hasValue() &&
-        ! (rSelection >>= aNewCID))
-        return sal_False;
+    bool bSuccess = false;
 
+    if ( rSelection.hasValue() )
+    {
+        const uno::Type& rType = rSelection.getValueType();
+        if ( rType == ::getCppuType( static_cast< const ::rtl::OUString* >( 0 ) ) )
+        {
+            ::rtl::OUString aNewCID;
+            if ( ( rSelection >>= aNewCID ) && m_aSelection.setSelection( aNewCID ) )
+            {
+                bSuccess = true;
+            }
+        }
+        else if ( rType == ::getCppuType( static_cast< const uno::Reference< drawing::XShape >* >( 0 ) ) )
+        {
+            uno::Reference< drawing::XShape > xShape;
+            if ( ( rSelection >>= xShape ) && m_aSelection.setSelection( xShape ) )
+            {
+                bSuccess = true;
+            }
+        }
+    }
+    else
+    {
+        if ( m_aSelection.hasSelection() )
+        {
+            m_aSelection.clearSelection();
+            bSuccess = true;
+        }
+    }
 
-    if( m_aSelection.setSelection( aNewCID ) )
+    if ( bSuccess )
     {
         this->impl_selectObjectAndNotiy();
         return sal_True;
     }
+
     return sal_False;
 }
 
         uno::Any SAL_CALL ChartController
 ::getSelection() throw(uno::RuntimeException)
 {
-    return uno::makeAny(m_aSelection.getSelectedCID());
+    uno::Any aReturn;
+    if ( m_aSelection.hasSelection() )
+    {
+        ::rtl::OUString aCID( m_aSelection.getSelectedCID() );
+        if ( aCID.getLength() )
+        {
+            aReturn = uno::makeAny( aCID );
+        }
+        else
+        {
+            // #i12587# support for shapes in chart
+            aReturn = uno::makeAny( m_aSelection.getSelectedAdditionalShape() );
+        }
+    }
+    return aReturn;
 }
 
         void SAL_CALL ChartController
@@ -1704,7 +1860,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
         sal_uInt16 nModifier = rEvent.GetModifier();
         BOOL bLeftDown = rEvent.IsLeft();
 
-        if( m_pDrawViewWrapper->IsTextEdit() )
+        if ( m_pDrawViewWrapper->IsTextEdit() )
         {
             if( m_pDrawViewWrapper->IsTextEditHit( aMousePos, HITPIX) )
             {
@@ -1729,7 +1885,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
                 aMousePos, pWindow, nModifier, bLeftDown );
             bool bForceArrowPointer = false;
 
-            ::rtl::OUString aObjectCID = m_aSelection.getSelectedCID();
+            ObjectIdentifier aOID( m_aSelection.getSelectedOID() );
 
             switch( aPointer.GetStyle())
             {
@@ -1745,7 +1901,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
                         bForceArrowPointer = true;
                     break;
                 case POINTER_MOVE:
-                    if( ! ObjectIdentifier::isDragableObject( aObjectCID ))
+                    if ( !aOID.isDragableObject() )
                         bForceArrowPointer = true;
                     break;
                 case POINTER_MOVEPOINT:
@@ -1765,6 +1921,55 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
         }
         else
         {
+            // #i12587# support for shapes in chart
+            if ( m_eDrawMode == CHARTDRAW_INSERT &&
+                 ( !m_pDrawViewWrapper->IsMarkedHit( aMousePos ) || !m_aSelection.isDragableObjectSelected() ) )
+            {
+                PointerStyle ePointerStyle = POINTER_DRAW_RECT;
+                SdrObjKind eKind = static_cast< SdrObjKind >( m_pDrawViewWrapper->GetCurrentObjIdentifier() );
+                switch ( eKind )
+                {
+                    case OBJ_LINE:
+                        {
+                            ePointerStyle = POINTER_DRAW_LINE;
+                        }
+                        break;
+                    case OBJ_RECT:
+                    case OBJ_CUSTOMSHAPE:
+                        {
+                            ePointerStyle = POINTER_DRAW_RECT;
+                        }
+                        break;
+                    case OBJ_CIRC:
+                        {
+                            ePointerStyle = POINTER_DRAW_ELLIPSE;
+                        }
+                        break;
+                    case OBJ_FREELINE:
+                        {
+                            ePointerStyle = POINTER_DRAW_POLYGON;
+                        }
+                        break;
+                    case OBJ_TEXT:
+                        {
+                            ePointerStyle = POINTER_DRAW_TEXT;
+                        }
+                        break;
+                    case OBJ_CAPTION:
+                        {
+                            ePointerStyle = POINTER_DRAW_CAPTION;
+                        }
+                        break;
+                    default:
+                        {
+                            ePointerStyle = POINTER_DRAW_RECT;
+                        }
+                        break;
+                }
+                pWindow->SetPointer( Pointer( ePointerStyle ) );
+                return;
+            }
+
             ::rtl::OUString aHitObjectCID(
                 SelectionHelper::getHitObjectCID(
                     aMousePos, *m_pDrawViewWrapper, true /*bGetDiagramInsteadOf_Wall*/ ));

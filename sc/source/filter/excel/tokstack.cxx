@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tokstack.cxx,v $
- * $Revision: 1.14.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -740,7 +737,7 @@ const TokenId TokenPool::StoreNlf( const ScSingleRefData& rTr )
     return ( const TokenId ) nElementAkt;
 }
 
-const TokenId TokenPool::StoreMatrix( SCSIZE nC, SCSIZE nR )
+const TokenId TokenPool::StoreMatrix()
 {
     ScMatrix* pM;
 
@@ -753,8 +750,7 @@ const TokenId TokenPool::StoreMatrix( SCSIZE nC, SCSIZE nR )
     pElement[ nElementAkt ] = nP_MatrixAkt;
     pType[ nElementAkt ] = T_Matrix;
 
-    pM = new ScMatrix( nC, nR );
-    pM->FillDouble( 0., 0,0, nC-1, nR-1 );
+    pM = new ScMatrix( 0, 0 );
     pM->IncRef( );
     ppP_Matrix[ nP_MatrixAkt ] = pM;
 

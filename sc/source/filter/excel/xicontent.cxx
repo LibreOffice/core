@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xicontent.cxx,v $
- * $Revision: 1.31.88.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,21 +31,21 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editobj.hxx>
-#include <svx/linkmgr.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svl/itemset.hxx>
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
-#include <svx/flditem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/crsditem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/crsditem.hxx>
 #include "document.hxx"
 #include "editutil.hxx"
 #include "cell.hxx"
@@ -713,7 +710,7 @@ void XclImpValidation::ReadDval( XclImpStream& rStrm )
     if( nObjId != EXC_DVAL_NOOBJ )
     {
         DBG_ASSERT( nObjId <= 0xFFFF, "XclImpValidation::ReadDval - invalid object ID" );
-        rRoot.GetObjectManager().SetSkipObj( rRoot.GetCurrScTab(), static_cast< sal_uInt16 >( nObjId ) );
+        rRoot.GetCurrSheetDrawing().SetSkipObj( static_cast< sal_uInt16 >( nObjId ) );
     }
 }
 
@@ -1216,7 +1213,29 @@ void XclImpSheetProtectBuffer::ReadProtect( XclImpStream& rStrm, SCTAB nTab )
 
 void XclImpSheetProtectBuffer::ReadOptions( XclImpStream& rStrm, SCTAB nTab )
 {
-    rStrm.Ignore(19);
+    rStrm.Ignore(12);
+
+    // feature type can be either 2 or 4.  If 2, this record stores flag for
+    // enhanced protection, whereas if 4 it stores flag for smart tag.
+    sal_uInt16 nFeatureType;
+    rStrm >> nFeatureType;
+    if (nFeatureType != 2)
+        // We currently only support import of enhanced protection data.
+        return;
+
+    rStrm.Ignore(1); // always 1
+
+    // The flag size specifies the size of bytes that follows that stores
+    // feature data.  If -1 it depends on the feature type imported earlier.
+    // For enhanced protection data, the size is always 4.  For the most xls
+    // documents out there this value is almost always -1.
+    sal_Int32 nFlagSize;
+    rStrm >> nFlagSize;
+    if (nFlagSize != -1)
+        return;
+
+    // There are actually 4 bytes to read, but the upper 2 bytes currently
+    // don't store any bits.
     sal_uInt16 nOptions;
     rStrm >> nOptions;
 

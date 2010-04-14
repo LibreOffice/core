@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: global.hxx,v $
- * $Revision: 1.53.128.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,8 +83,6 @@ extern "C" {
 #define SC_TRANSLITERATION_CASESENSE 0
 #endif
 
-//------------------------------------------------------------------------
-struct LabelData;
 //------------------------------------------------------------------------
 
 //  die 1000 Namen des Calc...
@@ -763,21 +758,6 @@ enum ScSubTotalFunc
     };
 
 
-#define     PIVOT_MAXFUNC           11
-#define     PIVOT_FUNC_NONE         0x0000
-#define     PIVOT_FUNC_SUM          0x0001
-#define     PIVOT_FUNC_COUNT        0x0002
-#define     PIVOT_FUNC_AVERAGE      0x0004
-#define     PIVOT_FUNC_MAX          0x0008
-#define     PIVOT_FUNC_MIN          0x0010
-#define     PIVOT_FUNC_PRODUCT      0x0020
-#define     PIVOT_FUNC_COUNT_NUM    0x0040
-#define     PIVOT_FUNC_STD_DEV      0x0080
-#define     PIVOT_FUNC_STD_DEVP     0x0100
-#define     PIVOT_FUNC_STD_VAR      0x0200
-#define     PIVOT_FUNC_STD_VARP     0x0400
-#define     PIVOT_FUNC_AUTO         0x1000
-
 // -----------------------------------------------------------------------
 
 /*
@@ -817,47 +797,6 @@ struct ScQueryEntry
     void            Clear();
     ScQueryEntry&   operator=( const ScQueryEntry& r );
     BOOL            operator==( const ScQueryEntry& r ) const;
-};
-
-struct SC_DLLPUBLIC ScQueryParam
-{
-    SCCOL           nCol1;
-    SCROW           nRow1;
-    SCCOL           nCol2;
-    SCROW           nRow2;
-    SCTAB           nTab;
-    BOOL            bHasHeader;
-    BOOL            bByRow;
-    BOOL            bInplace;
-    BOOL            bCaseSens;
-    BOOL            bRegExp;
-    BOOL            bMixedComparison;   // whether numbers are smaller than strings
-    BOOL            bDuplicate;
-    BOOL            bDestPers;          // nicht gespeichert
-    SCTAB           nDestTab;
-    SCCOL           nDestCol;
-    SCROW           nDestRow;
-
-private:
-    SCSIZE          nEntryCount;
-    ScQueryEntry*   pEntries;
-
-public:
-    ScQueryParam();
-    ScQueryParam( const ScQueryParam& r );
-    ~ScQueryParam();
-
-    SCSIZE          GetEntryCount() const           { return nEntryCount; }
-    ScQueryEntry&   GetEntry(SCSIZE n) const        { return pEntries[n]; }
-    void            Resize(SCSIZE nNew);
-
-    ScQueryParam&   operator=   ( const ScQueryParam& r );
-    BOOL            operator==  ( const ScQueryParam& rOther ) const;
-    void            Clear       ();
-    void            DeleteQuery( SCSIZE nPos );
-
-    void            MoveToDest();
-    void            FillInExcelSyntax(String& aCellStr, SCSIZE nIndex);
 };
 
 // -----------------------------------------------------------------------
@@ -919,46 +858,6 @@ struct ScConsolidateParam
     void                Clear           (); // = ClearDataAreas()+Members
     void                ClearDataAreas  ();
     void                SetAreas        ( ScArea* const* ppAreas, USHORT nCount );
-};
-
-// -----------------------------------------------------------------------
-
-class ScSimpleSharedString
-{
-public:
-    static const sal_Int32 EMPTY = 0;
-
-    ScSimpleSharedString();
-    ScSimpleSharedString(const ScSimpleSharedString& r);
-    ~ScSimpleSharedString();
-
-    const String*    getString(sal_Int32 nId);
-    sal_Int32        getStringId(const String& aStr);
-    sal_Int32        insertString(const String& aStr);
-
-private:
-
-    /** internal shared string table implementation */
-    class StringTable
-    {
-    public:
-        sal_Int32 insertString(const String& aStr);
-        sal_Int32 getStringId(const String& aStr);
-        const String* getString(sal_Int32 nId) const;
-
-        StringTable();
-        StringTable(const StringTable& r);
-        ~StringTable();
-
-    private:
-        typedef ::std::hash_map< String, sal_Int32, ScStringHashCode, ::std::equal_to< String > > SharedStrMap;
-
-        ::std::vector<String> maSharedStrings;
-        SharedStrMap maSharedStringIds;
-        sal_Int32 mnStrCount;
-    };
-
-    StringTable maStringTable;
 };
 
 // -----------------------------------------------------------------------

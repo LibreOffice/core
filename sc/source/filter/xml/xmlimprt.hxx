@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlimprt.hxx,v $
- * $Revision: 1.97.52.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -489,6 +486,7 @@ enum ScXMLDataPilotTableElemTokens
 {
     XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_SQL,
     XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_TABLE,
+    XML_TOK_DATA_PILOT_TABLE_ELEM_GRAND_TOTAL,
     XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_QUERY,
     XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_SERVICE,
     XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_CELL_RANGE,
@@ -504,6 +502,14 @@ enum ScXMLDataPilotTableSourceServiceAttrTokens
     XML_TOK_SOURCE_SERVICE_ATTR_PASSWORD
 };
 
+enum ScXMLDataPilotGrandTotalAttrTokens
+{
+    XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY,
+    XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_ORIENTATION,
+    XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY_NAME,
+    XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY_NAME_EXT
+};
+
 enum ScXMLDataPilotTableSourceCellRangeElemTokens
 {
     XML_TOK_SOURCE_CELL_RANGE_ELEM_FILTER
@@ -517,6 +523,8 @@ enum ScXMLDataPilotTableSourceCellRangeAttrTokens
 enum ScXMLDataPilotFieldAttrTokens
 {
     XML_TOK_DATA_PILOT_FIELD_ATTR_SOURCE_FIELD_NAME,
+    XML_TOK_DATA_PILOT_FIELD_ATTR_DISPLAY_NAME,
+    XML_TOK_DATA_PILOT_FIELD_ATTR_DISPLAY_NAME_EXT,
     XML_TOK_DATA_PILOT_FIELD_ATTR_IS_DATA_LAYOUT_FIELD,
     XML_TOK_DATA_PILOT_FIELD_ATTR_FUNCTION,
     XML_TOK_DATA_PILOT_FIELD_ATTR_ORIENTATION,
@@ -552,7 +560,9 @@ enum ScXMLDataPilotSubTotalsElemTokens
 
 enum ScXMLDataPilotSubTotalAttrTokens
 {
-    XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_FUNCTION
+    XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_FUNCTION,
+    XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_DISPLAY_NAME,
+    XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_DISPLAY_NAME_EXT
 };
 
 enum ScXMLDataPilotMembersElemTokens
@@ -563,6 +573,8 @@ enum ScXMLDataPilotMembersElemTokens
 enum ScXMLDataPilotMemberAttrTokens
 {
     XML_TOK_DATA_PILOT_MEMBER_ATTR_NAME,
+    XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_NAME,
+    XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_NAME_EXT,
     XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY,
     XML_TOK_DATA_PILOT_MEMBER_ATTR_SHOW_DETAILS
 };
@@ -723,6 +735,7 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pDataPilotTableAttrTokenMap;
     SvXMLTokenMap           *pDataPilotTableElemTokenMap;
     SvXMLTokenMap           *pDataPilotTableSourceServiceAttrTokenMap;
+    SvXMLTokenMap           *pDataPilotGrandTotalAttrTokenMap;
     SvXMLTokenMap           *pDataPilotTableSourceCellRangeElemTokenMap;
     SvXMLTokenMap           *pDataPilotTableSourceCellRangeAttrTokenMap;
     SvXMLTokenMap           *pDataPilotFieldAttrTokenMap;
@@ -886,6 +899,7 @@ public:
     const SvXMLTokenMap& GetDataPilotTableAttrTokenMap();
     const SvXMLTokenMap& GetDataPilotTableElemTokenMap();
     const SvXMLTokenMap& GetDataPilotTableSourceServiceAttrTokenMap();
+    const SvXMLTokenMap& GetDataPilotGrandTotalAttrTokenMap();
     const SvXMLTokenMap& GetDataPilotTableSourceCellRangeElemTokenMap();
     const SvXMLTokenMap& GetDataPilotTableSourceCellRangeAttrTokenMap();
     const SvXMLTokenMap& GetDataPilotFieldAttrTokenMap();

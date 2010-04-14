@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cellsh3.cxx,v $
- * $Revision: 1.24.90.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +88,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             case SID_OPENDLG_FUNCTION:
                     //  #53318# inplace macht die EditShell Aerger...
                     //! kann nicht immer umgeschaltet werden ????
-                    if (!pTabViewShell->GetViewFrame()->GetFrame()->IsInPlace())
+                    if (!pTabViewShell->GetViewFrame()->GetFrame().IsInPlace())
                         pTabViewShell->SetDontSwitch(TRUE);         // EditShell nicht abschalten
                     // kein break
 

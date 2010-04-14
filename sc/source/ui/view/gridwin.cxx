@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gridwin.cxx,v $
- * $Revision: 1.96.50.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,14 +31,14 @@
 #include "scitems.hxx"
 
 #include <memory> //auto_ptr
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/dbexch.hrc>
-#include <svx/editview.hxx>
-#include <svx/editstat.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/editobj.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
@@ -58,7 +55,7 @@
 #include <sot/clsids.hxx>
 
 #include <svx/svdview.hxx>      // fuer Command-Handler (COMMAND_INSERTTEXT)
-#include <svx/outliner.hxx>     // fuer Command-Handler (COMMAND_INSERTTEXT)
+#include <editeng/outliner.hxx>     // fuer Command-Handler (COMMAND_INSERTTEXT)
 #include <svx/svditer.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
@@ -121,6 +118,7 @@
 #include "validat.hxx"
 #include "tabprotection.hxx"
 #include "postit.hxx"
+#include "dpcontrol.hxx"
 
 #include "drawview.hxx"
 #include <svx/sdrpagewindow.hxx>
@@ -369,6 +367,8 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             pNoteMarker( NULL ),
             pFilterBox( NULL ),
             pFilterFloat( NULL ),
+            mpDPFieldPopup(NULL),
+            mpFilterButton(NULL),
             nCursorHideCount( 0 ),
             bMarking( FALSE ),
             nButtonDown( 0 ),
@@ -445,14 +445,26 @@ void __EXPORT ScGridWindow::Resize( const Size& )
 
 void ScGridWindow::ClickExtern()
 {
-    // #i81298# don't delete the filter box when called from its select handler
-    // (possible through row header size update)
-    // #i84277# when initializing the filter box, a Basic error can deactivate the view
-    if ( pFilterBox && ( pFilterBox->IsInSelect() || pFilterBox->IsInInit() ) )
-        return;
+    do
+    {
+        // #i81298# don't delete the filter box when called from its select handler
+        // (possible through row header size update)
+        // #i84277# when initializing the filter box, a Basic error can deactivate the view
+        if ( pFilterBox && ( pFilterBox->IsInSelect() || pFilterBox->IsInInit() ) )
+        {
+            break;
+        }
 
-    DELETEZ(pFilterBox);
-    DELETEZ(pFilterFloat);
+        DELETEZ(pFilterBox);
+        DELETEZ(pFilterFloat);
+    }
+    while (false);
+
+    if (mpDPFieldPopup.get())
+    {
+        mpDPFieldPopup->close(false);
+        mpDPFieldPopup.reset();
+    }
 }
 
 IMPL_LINK( ScGridWindow, PopupModeEndHdl, FloatingWindow*, EMPTYARG )
@@ -507,7 +519,7 @@ void ScGridWindow::ExecPageFieldSelect( SCCOL nCol, SCROW nRow, BOOL bHasSelecti
     }
 }
 
-void ScGridWindow::DoPageFieldMenue( SCCOL nCol, SCROW nRow )
+void ScGridWindow::LaunchPageFieldMenu( SCCOL nCol, SCROW nRow )
 {
     //! merge position/size handling with DoAutoFilterMenue
 
@@ -656,6 +668,22 @@ void ScGridWindow::DoPageFieldMenue( SCCOL nCol, SCROW nRow )
 
     nMouseStatus = SC_GM_FILTER;
     CaptureMouse();
+}
+
+void ScGridWindow::LaunchDPFieldMenu( SCCOL nCol, SCROW nRow )
+{
+    SCTAB nTab = pViewData->GetTabNo();
+    ScDPObject* pDPObj = pViewData->GetDocument()->GetDPAtCursor(nCol, nRow, nTab);
+    if (!pDPObj)
+        return;
+
+    // Get the geometry of the cell.
+    Point aScrPos = pViewData->GetScrPos(nCol, nRow, eWhich);
+    long nSizeX, nSizeY;
+    pViewData->GetMergeSizePixel(nCol, nRow, nSizeX, nSizeY);
+    Size aScrSize(nSizeX-1, nSizeY-1);
+
+    DPLaunchFieldPopupMenu(OutputToScreenPixel(aScrPos), aScrSize, ScAddress(nCol, nRow, nTab), pDPObj);
 }
 
 void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
@@ -1619,52 +1647,8 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
                                     pDoc->GetAttr( nPosX, nPosY, nTab, ATTR_MERGE_FLAG );
         if (pAttr->HasAutoFilter())
         {
-            Point   aScrPos  = pViewData->GetScrPos(nPosX,nPosY,eWhich);
-            long    nSizeX;
-            long    nSizeY;
-            Point   aDiffPix = aPos;
-
-            aDiffPix -= aScrPos;
-            BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-            if ( bLayoutRTL )
-                aDiffPix.X() = -aDiffPix.X();
-
-            pViewData->GetMergeSizePixel( nPosX, nPosY, nSizeX, nSizeY );
-
-            //  Breite des Buttons ist nicht von der Zellhoehe abhaengig
-            Size aButSize = aComboButton.GetSizePixel();
-            long nButWidth  = Min( aButSize.Width(),  nSizeX );
-            long nButHeight = Min( aButSize.Height(), nSizeY );
-
-            if ( aDiffPix.X() >= nSizeX - nButWidth &&
-                 aDiffPix.Y() >= nSizeY - nButHeight )
-            {
-                if ( DoPageFieldSelection( nPosX, nPosY ) )
-                    return;
-
-                BOOL  bFilterActive = IsAutoFilterActive( nPosX, nPosY,
-                                                          pViewData->GetTabNo() );
-
-                aComboButton.SetOptSizePixel();
-                DrawComboButton( aScrPos, nSizeX, nSizeY, bFilterActive, TRUE );
-
-#if 0
-                if (   bWasFilterBox
-                    && (SCsCOL)nOldColFBox == nPosX
-                    && (SCsROW)nOldRowFBox == nPosY )
-                {
-                    // Verhindern, dass an gleicher Stelle eine
-                    // FilterBox geoeffnet wird, wenn diese gerade
-                    // geloescht wurde
-
-                    nMouseStatus = SC_GM_FILTER; // fuer ButtonDraw im MouseButtonUp();
-                    return;
-                }
-#endif
-                DoAutoFilterMenue( nPosX, nPosY, FALSE );
-
+            if (DoAutoFilterButton(nPosX, nPosY, rMEvt))
                 return;
-            }
         }
         if (pAttr->HasButton())
         {
@@ -1794,11 +1778,17 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     {
         if ( pFilterBox && pFilterBox->GetMode() == SC_FILTERBOX_FILTER )
         {
-            BOOL  bFilterActive = IsAutoFilterActive( pFilterBox->GetCol(), pFilterBox->GetRow(),
-                pViewData->GetTabNo() );
-            HideCursor();
-            aComboButton.Draw( bFilterActive );
-            ShowCursor();
+            if (mpFilterButton.get())
+            {
+                bool bFilterActive = IsAutoFilterActive(
+                    pFilterBox->GetCol(), pFilterBox->GetRow(), pViewData->GetTabNo() );
+
+                mpFilterButton->setHasHiddenMember(bFilterActive);
+                mpFilterButton->setPopupPressed(false);
+                HideCursor();
+                mpFilterButton->draw();
+                ShowCursor();
+            }
         }
         nMouseStatus = SC_GM_NONE;
         ReleaseMouse();
@@ -2218,9 +2208,14 @@ void __EXPORT ScGridWindow::MouseMove( const MouseEvent& rMEvt )
             nMouseStatus = SC_GM_NONE;
             if ( pFilterBox->GetMode() == SC_FILTERBOX_FILTER )
             {
-                HideCursor();
-                aComboButton.Draw( FALSE );
-                ShowCursor();
+                if (mpFilterButton.get())
+                {
+                    mpFilterButton->setHasHiddenMember(false);
+                    mpFilterButton->setPopupPressed(false);
+                    HideCursor();
+                    mpFilterButton->draw();
+                    ShowCursor();
+                }
             }
             ReleaseMouse();
             pFilterBox->MouseButtonDown( MouseEvent( aRelPos, 1, MOUSE_SIMPLECLICK, MOUSE_LEFT ) );
@@ -2412,24 +2407,20 @@ long ScGridWindow::PreNotify( NotifyEvent& rNEvt )
             SfxViewFrame* pViewFrame = pViewData->GetViewShell()->GetViewFrame();
             if (pViewFrame)
             {
-                SfxFrame* pFrame = pViewFrame->GetFrame();
-                if (pFrame)
+                com::sun::star::uno::Reference<com::sun::star::frame::XController> xController = pViewFrame->GetFrame().GetController();
+                if (xController.is())
                 {
-                    com::sun::star::uno::Reference<com::sun::star::frame::XController> xController = pFrame->GetController();
-                    if (xController.is())
+                    ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
+                    if (pImp && pImp->IsMouseListening())
                     {
-                        ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
-                        if (pImp && pImp->IsMouseListening())
-                        {
-                            ::com::sun::star::awt::MouseEvent aEvent;
-                            lcl_InitMouseEvent( aEvent, *rNEvt.GetMouseEvent() );
-                            if ( rNEvt.GetWindow() )
-                                aEvent.Source = rNEvt.GetWindow()->GetComponentInterface();
-                            if ( nType == EVENT_MOUSEBUTTONDOWN)
-                                pImp->MousePressed( aEvent );
-                            else
-                                pImp->MouseReleased( aEvent );
-                        }
+                        ::com::sun::star::awt::MouseEvent aEvent;
+                        lcl_InitMouseEvent( aEvent, *rNEvt.GetMouseEvent() );
+                        if ( rNEvt.GetWindow() )
+                            aEvent.Source = rNEvt.GetWindow()->GetComponentInterface();
+                        if ( nType == EVENT_MOUSEBUTTONDOWN)
+                            pImp->MousePressed( aEvent );
+                        else
+                            pImp->MouseReleased( aEvent );
                     }
                 }
             }
@@ -2694,9 +2685,32 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
 
         if ( bMouse )
         {
+            SCsCOL nCellX = -1;
+            SCsROW nCellY = -1;
+            pViewData->GetPosFromPixel(aPosPixel.X(), aPosPixel.Y(), eWhich, nCellX, nCellY);
+            ScDocument* pDoc = pViewData->GetDocument();
+            SCTAB nTab = pViewData->GetTabNo();
+            const ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+            bool bSelectAllowed = true;
+            if ( pProtect && pProtect->isProtected() )
+            {
+                // This sheet is protected.  Check if a context menu is allowed on this cell.
+                bool bCellProtected = pDoc->HasAttrib(nCellX, nCellY, nTab, nCellX, nCellY, nTab, HASATTR_PROTECTED);
+                bool bSelProtected   = pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+                bool bSelUnprotected = pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+
+                if (bCellProtected)
+                    bSelectAllowed = bSelProtected;
+                else
+                    bSelectAllowed = bSelUnprotected;
+            }
+            if (!bSelectAllowed)
+                // Selecting this cell is not allowed, neither is context menu.
+                return;
+
             //  #i18735# First select the item under the mouse pointer.
             //  This can change the selection, and the view state (edit mode, etc).
-            SelectForContextMenu( aPosPixel );
+            SelectForContextMenu( aPosPixel, nCellX, nCellY );
         }
 
         BOOL bDone = FALSE;
@@ -2791,15 +2805,12 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
     }
 }
 
-void ScGridWindow::SelectForContextMenu( const Point& rPosPixel )
+void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCsCOL nCellX, SCsROW nCellY )
 {
     //  #i18735# if the click was outside of the current selection,
     //  the cursor is moved or an object at the click position selected.
     //  (see SwEditWin::SelectMenuPosition in Writer)
 
-    SCsCOL nCellX;
-    SCsROW nCellY;
-    pViewData->GetPosFromPixel( rPosPixel.X(), rPosPixel.Y(), eWhich, nCellX, nCellY );
     ScTabView* pView = pViewData->GetView();
     ScDrawView* pDrawView = pView->GetScDrawView();
 

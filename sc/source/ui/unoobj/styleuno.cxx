@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: styleuno.cxx,v $
- * $Revision: 1.44.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,14 +31,15 @@
 
 
 #include "scitems.hxx"
+#include <editeng/memberids.hrc>
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/numitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/pbinitem.hxx>
+#include <editeng/pbinitem.hxx>
 #include <svx/unomid.hxx>
-#include <svx/unonrule.hxx>
+#include <editeng/unonrule.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/virdev.hxx>

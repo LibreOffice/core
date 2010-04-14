@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pivot2.cxx,v $
- * $Revision: 1.14.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,8 +37,8 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/boxitem.hxx>
-#include <svx/wghtitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <svx/algitem.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
@@ -61,11 +58,26 @@
 #include "stlsheet.hxx"
 
 using ::com::sun::star::sheet::DataPilotFieldReference;
+using ::rtl::OUString;
 
 // STATIC DATA -----------------------------------------------------------
 // ============================================================================
 
-LabelData::LabelData( const String& rName, short nCol, bool bIsValue ) :
+ScDPLabelData::Member::Member() :
+    mbVisible(true),
+    mbShowDetails(true)
+{
+}
+
+OUString ScDPLabelData::Member::getDisplayName() const
+{
+    if (maLayoutName.getLength())
+        return maLayoutName;
+
+    return maName;
+}
+
+ScDPLabelData::ScDPLabelData( const String& rName, short nCol, bool bIsValue ) :
     maName( rName ),
     mnCol( nCol ),
     mnFuncMask( PIVOT_FUNC_NONE ),
@@ -73,6 +85,14 @@ LabelData::LabelData( const String& rName, short nCol, bool bIsValue ) :
     mbShowAll( false ),
     mbIsValue( bIsValue )
 {
+}
+
+OUString ScDPLabelData::getDisplayName() const
+{
+    if (maLayoutName.getLength())
+        return maLayoutName;
+
+    return maName;
 }
 
 // ============================================================================
