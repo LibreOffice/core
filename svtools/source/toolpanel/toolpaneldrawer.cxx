@@ -227,6 +227,7 @@ namespace svt
     {
         // consume this event, and do not forward to the base class - it would sent a NotifyEvent, which in turn, when
         // we live in a DockingWindow, would start undocking
+        (void)i_rMouseEvent;
     }
 
     //------------------------------------------------------------------------------------------------------------------
