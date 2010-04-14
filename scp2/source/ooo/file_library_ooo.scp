@@ -100,10 +100,10 @@ File gid_File_Lib_Ldapbe2
 End
 #endif
 
-STD_UNO_LIB_FILE(gid_File_Lib_Chartcontroller, chartcontroller)
-STD_UNO_LIB_FILE(gid_File_Lib_Chartmodel, chartmodel)
-STD_UNO_LIB_FILE(gid_File_Lib_Charttools, charttools)
-STD_UNO_LIB_FILE(gid_File_Lib_Chartview, chartview)
+STD_UNO_LIB_FILE_PATCH(gid_File_Lib_Chartcontroller, chartcontroller)
+STD_UNO_LIB_FILE_PATCH(gid_File_Lib_Chartmodel, chartmodel)
+STD_UNO_LIB_FILE_PATCH(gid_File_Lib_Charttools, charttools)
+STD_UNO_LIB_FILE_PATCH(gid_File_Lib_Chartview, chartview)
 
 
 #if defined WNT && defined _MSC
