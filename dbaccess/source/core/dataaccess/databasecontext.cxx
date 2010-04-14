@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: databasecontext.cxx,v $
- * $Revision: 1.43.4.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -388,7 +385,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
         ::comphelper::NamedValueCollection aArgs;
         aArgs.put( "URL", _sURL );
         aArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
-        aArgs.put( "InteractionHandler", m_aContext.createComponent( "com.sun.star.sdb.InteractionHandler" ) );
+        aArgs.put( "InteractionHandler", m_aContext.createComponent( "com.sun.star.task.InteractionHandler" ) );
 
         Sequence< PropertyValue > aResource( aArgs.getPropertyValues() );
         xLoad->load( aResource );
@@ -553,8 +550,6 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
 
     if ( m_aDatabaseObjects.find( _rName ) != m_aDatabaseObjects.end() )
     {
-        OSL_ENSURE( false, "ODatabaseContext::revokeObject: a database document register by name? This shouldn't happen anymore!" );
-            // all the code should have been changed so that registration is by URL only
         m_aDatasourceProperties[ sURL ] = m_aDatasourceProperties[ _rName ];
     }
 

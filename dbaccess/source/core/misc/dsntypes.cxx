@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dsntypes.cxx,v $
- * $Revision: 1.1.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -444,7 +441,6 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const String& _rDsn) const
             return aKnowPrefixes[i].eType;
     }
 
-    DBG_ERROR("ODsnTypeCollection::implDetermineType : unrecognized data source type !");
     return DST_UNKNOWN;
 }
 // -----------------------------------------------------------------------------

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: resultcolumn.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,19 +107,25 @@ void OResultColumn::impl_determineIsRowVersion_nothrow()
         getPropertyValue( PROPERTY_TABLENAME ) >>= sTable;
         getPropertyValue( PROPERTY_NAME ) >>= sColumnName;
 
-        Reference< XResultSet > xVersionColumns = m_xDBMetaData->getVersionColumns(
-            makeAny( sCatalog ), sSchema, sTable );
-        if ( xVersionColumns.is() ) // allowed to be NULL
+        try
         {
-            Reference< XRow > xResultRow( xVersionColumns, UNO_QUERY_THROW );
-            while ( xVersionColumns->next() )
+            Reference< XResultSet > xVersionColumns = m_xDBMetaData->getVersionColumns(
+                makeAny( sCatalog ), sSchema, sTable );
+            if ( xVersionColumns.is() ) // allowed to be NULL
             {
-                if ( xResultRow->getString( 2 ) == sColumnName )
+                Reference< XRow > xResultRow( xVersionColumns, UNO_QUERY_THROW );
+                while ( xVersionColumns->next() )
                 {
-                    m_aIsRowVersion <<= (sal_Bool)(sal_True);
-                    break;
+                    if ( xResultRow->getString( 2 ) == sColumnName )
+                    {
+                        m_aIsRowVersion <<= (sal_Bool)(sal_True);
+                        break;
+                    }
                 }
             }
+        }
+        catch(const SQLException&)
+        {
         }
     }
     catch( const Exception& )

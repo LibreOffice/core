@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RowSetCache.cxx,v $
- * $Revision: 1.100 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -912,7 +909,7 @@ sal_Bool ORowSetCache::moveWindow()
                 {
                     *m_aMatrixIter = new ORowSetValueVector(m_xMetaData->getColumnCount());
                     m_pCacheSet->fillValueRow(*m_aMatrixIter,m_nPosition);
-                    // we have to read one row forward to enshure that we know when we are on last row
+                    // we have to read one row forward to ensure that we know when we are on last row
                     // but only when we don't know it already
                     if ( !m_bRowCountFinal )
                     {
@@ -1283,7 +1280,9 @@ void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow )
     //  *(*m_aMatrixIter) = *(*_rUpdateRow);
     // refetch the whole row
     (*m_aMatrixIter) = NULL;
-    moveToBookmark(aBookmark);
+
+    if ( !moveToBookmark(aBookmark) )
+        m_aMatrixIter = m_pMatrix->end();
 
     //  moveToBookmark((*(*m_aInsertRow))[0].makeAny());
 //  if(m_pCacheSet->rowUpdated())

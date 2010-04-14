@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.38.68.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -50,6 +46,7 @@ LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1FILES=\
         $(SLB)$/api.lib	\
         $(SLB)$/dataaccess.lib	\
+        $(SLB)$/recovery.lib	\
         $(SLB)$/misc.lib	\
         $(SLB)$/core_resource.lib
 
@@ -71,7 +68,8 @@ SHL1STDLIBS= \
         $(SFXLIB) \
         $(BASICLIB) \
         $(FWELIB) \
-        $(SALHELPERLIB)
+        $(SALHELPERLIB) \
+        $(XMLOFFLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=i$(TARGET)
@@ -81,7 +79,6 @@ DEF1NAME=$(SHL1TARGET)
 DEFLIB1NAME=$(TARGET)
 DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt \
             $(SLB)$/$(TARGET).lib
-# SHL1VERSIONMAP=$(TARGET).map
 SHL1USE_EXPORTS=name
 
 .ENDIF
@@ -120,7 +117,6 @@ SHL2STDLIBS= \
         $(FWELIB)				\
         $(TKLIB)				\
         $(VCLLIB)				\
-        $(GOODIESLIB)			\
         $(SVLLIB)				\
         $(SOTLIB)				\
         $(UNOTOOLSLIB)			\
@@ -154,7 +150,6 @@ DEF2NAME=$(SHL2TARGET)
 DEFLIB2NAME=$(TARGET2)
 DEF2DEPN=	$(MISC)$/$(SHL2TARGET).flt \
             $(SLB)$/$(TARGET2).lib
-# SHL2VERSIONMAP=$(TARGET2).map
 SHL2USE_EXPORTS=name
 
 ALL: \
@@ -210,7 +205,7 @@ SHL3STDLIBS= \
 SHL3LIBS=$(LIB3TARGET)
 SHL3DEF=$(MISC)$/$(SHL3TARGET).def
 DEF3NAME=$(SHL3TARGET)
-SHL3VERSIONMAP=$(TARGET3).map
+SHL3VERSIONMAP=$(SOLARENV)/src/component.map
 
 .END
 

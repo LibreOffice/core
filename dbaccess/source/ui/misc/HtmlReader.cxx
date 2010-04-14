@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: HtmlReader.cxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -509,6 +506,8 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
                     else if ( m_sCurrent.Len() )
                         aColumnName = m_sCurrent;
 
+                    aColumnName.EraseLeadingChars();
+                    aColumnName.EraseTrailingChars();
                     CreateDefaultColumn(aColumnName);
                     aColumnName.Erase();
                     m_sCurrent.Erase();
@@ -553,6 +552,8 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
 
     if ( m_sCurrent.Len() )
         aColumnName = m_sCurrent;
+    aColumnName.EraseLeadingChars();
+    aColumnName.EraseTrailingChars();
     if(aColumnName.Len())
         CreateDefaultColumn(aColumnName);
 

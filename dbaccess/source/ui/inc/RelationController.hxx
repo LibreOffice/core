@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RelationController.hxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +57,7 @@ namespace dbaui
         // execute a feature
         virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
-        ORelationDesignView*    getRelationView() { return static_cast<ORelationDesignView*>(m_pView); }
+        ORelationDesignView*    getRelationView() { return static_cast<ORelationDesignView*>( getView() ); }
         void loadData();
         TTableWindowData::value_type existsTable(const ::rtl::OUString& _rComposedTableName,sal_Bool _bCase) const;
 

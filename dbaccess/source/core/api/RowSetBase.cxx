@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RowSetBase.cxx,v $
- * $Revision: 1.95 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,57 +27,25 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBACCESS_CORE_API_ROWSETBASE_HXX
+
 #include "RowSetBase.hxx"
-#endif
-#ifndef DBACCESS_CORE_API_CROWSETDATACOLUMN_HXX
 #include "CRowSetDataColumn.hxx"
-#endif
-#ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
 #include <connectivity/sdbcx/VCollection.hxx>
-#endif
-#ifndef DBACCESS_CORE_API_ROWSETCACHE_HXX
 #include "RowSetCache.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include "core_resource.hrc"
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_COMPAREBOOKMARK_HPP_
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_RESULTSETCONCURRENCY_HPP_
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _COMPHELPER_SEQSTREAM_HXX
 #include <comphelper/seqstream.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
-#ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 #include <rtl/logfile.hxx>
 
 using namespace dbaccess;
@@ -278,8 +243,7 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
     if ( m_bBeforeFirst || m_bAfterLast )
     {
         OSL_ENSURE(0,"ORowSetBase::getValue: Illegal call here (we're before first or after last)!");
-        throwSQLException( "The cursor points to before the first or after the last row.", SQL_INVALID_CURSOR_POSITION, *m_pMySelf );
-            // TODO: resource
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_CURSOR_BEFORE_OR_AFTER ), SQL_INVALID_CURSOR_POSITION, *m_pMySelf );
     }
 
     if ( impl_rowDeleted() )
@@ -421,8 +385,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryS
     if ( m_bBeforeFirst || m_bAfterLast )
     {
         OSL_ENSURE(0,"ORowSetBase::getBinaryStream: Illegal call here (we're before first or after last)!");
-        throwSQLException( "The cursor points to before the first or after the last row.", SQL_INVALID_CURSOR_POSITION, *m_pMySelf );
-            // TODO: resource
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_CURSOR_BEFORE_OR_AFTER ), SQL_INVALID_CURSOR_POSITION, *m_pMySelf );
     }
 
     if ( impl_rowDeleted() )
@@ -498,12 +461,10 @@ Any SAL_CALL ORowSetBase::getBookmark(  ) throw(SQLException, RuntimeException)
     checkCache();
 
     if ( m_bBeforeFirst || m_bAfterLast )
-        throwSQLException( "The rows before the first and after the last row don't have a bookmark.", SQL_INVALID_CURSOR_POSITION, *m_pMySelf );
-            // TODO: resource
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_BOOKMARK_BEFORE_OR_AFTER ), SQL_INVALID_CURSOR_POSITION, *m_pMySelf );
 
     if ( impl_rowDeleted() )
-        throwSQLException( "The current row is deleted, and thus doesn't have a bookmark.", SQL_INVALID_CURSOR_POSITION, *m_pMySelf );
-            // TODO: resource
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_BOOKMARK_DELETED ), SQL_INVALID_CURSOR_POSITION, *m_pMySelf );
 
     OSL_ENSURE( m_aBookmark.hasValue(), "ORowSetBase::getBookmark: bookmark has no value!" );
     return m_aBookmark;

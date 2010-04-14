@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.21.2.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -56,6 +52,7 @@ LIB1FILES=\
 SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
+    $(EDITENGLIB)			\
         $(SVXCORELIB)			\
         $(SVXLIB)				\
         $(FWELIB)				\
@@ -115,6 +112,7 @@ LIB2FILES=\
 SHL2TARGET=$(TARGET2)$(DLLPOSTFIX)
 
 SHL2STDLIBS= \
+    $(EDITENGLIB)			\
         $(SVXCORELIB)			\
         $(SVXLIB)				\
         $(SFXLIB)				\
@@ -166,7 +164,7 @@ SHL2DEPN=$(SHL1TARGETN)
 SHL2LIBS=$(LIB2TARGET)
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=$(SHL2TARGET)
-SHL2VERSIONMAP=$(TARGET2).map
+SHL2VERSIONMAP=$(SOLARENV)/src/component.map
 .ENDIF
 # --- .res file ----------------------------------------------------------
 RES2FILELIST=\
@@ -190,6 +188,7 @@ LIB3FILES=\
 SHL3TARGET=$(TARGET3)$(DLLPOSTFIX)
 
 SHL3STDLIBS=\
+    $(EDITENGLIB)			\
     $(SVXCORELIB)			\
     $(XMLOFFLIB)		\
     $(VCLLIB)			\
@@ -220,7 +219,7 @@ SHL3STDLIBS+= \
 SHL3DEPN=$(SHL1TARGETN)
 SHL3LIBS=$(LIB3TARGET)
 SHL3IMPLIB=	i$(SHL3TARGET)
-SHL3VERSIONMAP=rptui.map
+SHL3VERSIONMAP=$(SOLARENV)/src/component.map
 SHL3DEF=	$(MISC)$/$(SHL3TARGET).def
 
 DEF3NAME=$(SHL3TARGET)

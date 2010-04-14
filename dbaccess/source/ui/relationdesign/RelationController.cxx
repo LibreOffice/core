@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RelationController.cxx,v $
- * $Revision: 1.56.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,7 +157,7 @@ FeatureState ORelationController::GetState(sal_uInt16 _nId) const
             aReturn.bChecked = false;
             break;
         case ID_BROWSER_SAVEDOC:
-            aReturn.bEnabled = haveDataSource() && isModified();
+            aReturn.bEnabled = haveDataSource() && impl_isModified();
             break;
         default:
             aReturn = OJoinController::GetState(_nId);
@@ -189,20 +186,21 @@ void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue
                     {
                         if ( haveDataSource() && getDataSource()->getPropertySetInfo()->hasPropertyByName(PROPERTY_LAYOUTINFORMATION) )
                         {
-                            Sequence<PropertyValue> aWindows;
-                            saveTableWindows(aWindows);
-                            getDataSource()->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aWindows));
+                            ::comphelper::NamedValueCollection aWindowsData;
+                            saveTableWindows( aWindowsData );
+                            getDataSource()->setPropertyValue( PROPERTY_LAYOUTINFORMATION, makeAny( aWindowsData.getPropertyValues() ) );
                             setModified(sal_False);
                         }
                     }
-                    catch(Exception&)
+                    catch ( const Exception& )
                     {
+                        DBG_UNHANDLED_EXCEPTION();
                     }
                 }
             }
             break;
         case SID_RELATION_ADD_RELATION:
-            static_cast<ORelationTableView*>(static_cast<ORelationDesignView*>(m_pView)->getTableView())->AddNewRelation();
+            static_cast<ORelationTableView*>(static_cast<ORelationDesignView*>( getView() )->getTableView())->AddNewRelation();
             break;
         default:
             OJoinController::Execute(_nId,aArgs);
@@ -263,10 +261,8 @@ void ORelationController::impl_initialize()
 // -----------------------------------------------------------------------------
 sal_Bool ORelationController::Construct(Window* pParent)
 {
-    m_pView = new ORelationDesignView( pParent, *this, getORB() );
+    setView( * new ORelationDesignView( pParent, *this, getORB() ) );
     OJoinController::Construct(pParent);
-//  m_pView->Construct();
-//  m_pView->Show();
     return sal_True;
 }
 // -----------------------------------------------------------------------------

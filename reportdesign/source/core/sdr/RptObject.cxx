@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RptObject.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -363,22 +360,6 @@ uno::Reference< beans::XPropertySet> OObjectBase::getAwtComponent()
 {
     return uno::Reference< beans::XPropertySet>();
 }
-// -----------------------------------------------------------------------------
-sal_Bool OObjectBase::IsInside(const Rectangle& _rRect,const Point& rPnt,USHORT nTol) const
-{
-    sal_Bool bRet = sal_False;
-    Rectangle aRect( _rRect );
-    if ( !aRect.IsEmpty() )
-    {
-        aRect.Left() -= nTol;
-        aRect.Top() -= nTol;
-        aRect.Right() = ( aRect.Right() == RECT_EMPTY ? _rRect.Left() + nTol : aRect.Right() + nTol );
-        aRect.Bottom() = ( aRect.Bottom() == RECT_EMPTY ? _rRect.Top() + nTol : aRect.Bottom() + nTol );
-
-        bRet = aRect.IsInside( rPnt );
-    }
-    return bRet;
-}
 //----------------------------------------------------------------------------
 void OObjectBase::StartListening()
 {
@@ -686,6 +667,7 @@ void OUnoObject::impl_initializeModel_nothrow()
             const Reference< XPropertySet > xModelProps( GetUnoControlModel(), UNO_QUERY_THROW );
             const ::rtl::OUString sTreatAsNumberProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TreatAsNumber" ) );
             xModelProps->setPropertyValue( sTreatAsNumberProperty, makeAny( sal_False ) );
+            xModelProps->setPropertyValue( PROPERTY_VERTICALALIGN,m_xReportComponent->getPropertyValue(PROPERTY_VERTICALALIGN));
         }
     }
     catch( const Exception& )

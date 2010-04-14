@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: KeySet.cxx,v $
- * $Revision: 1.73 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -597,6 +594,7 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
         sal_Int32 nPos = aIter->second.nPosition;
         if((_rInsertRow->get())[nPos].isModified())
         {
+            impl_convertValue_throw(_rInsertRow,aIter->second);
             (_rInsertRow->get())[nPos].setSigned((_rOrginalRow->get())[nPos].isSigned());
             setParameter(i++,xParameter,(_rInsertRow->get())[nPos],aIter->second.nType,aIter->second.nScale);
         }
@@ -621,8 +619,6 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     }
 
      m_bUpdated = xPrep->executeUpdate() > 0;
-
-
     if(m_bUpdated)
     {
         m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32((_rInsertRow->get())[0].getAny()));
@@ -681,6 +677,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
                 xParameter->setNull(i++,(_rInsertRow->get())[nPos].getTypeKind());
             else
             {
+                impl_convertValue_throw(_rInsertRow,aIter->second);
                 (_rInsertRow->get())[nPos].setSigned(m_aSignedFlags[nPos-1]);
                 setParameter(i++,xParameter,(_rInsertRow->get())[nPos],aIter->second.nType,aIter->second.nScale);
             }
@@ -1171,8 +1168,9 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
 
     m_xSet = m_xStatement->executeQuery();
     OSL_ENSURE(m_xSet.is(),"No resultset form statement!");
-    sal_Bool bOK = m_xSet->next(); (void)bOK;
-    OSL_ENSURE(bOK,"No rows!");
+    sal_Bool bOK = m_xSet->next();
+    if ( !bOK )
+        m_aKeyIter = m_aKeyMap.end();
     m_xRow.set(m_xSet,UNO_QUERY);
     OSL_ENSURE(m_xRow.is(),"No row form statement!");
 }
@@ -1464,3 +1462,25 @@ namespace dbaccess
         }
     }
 }
+// -----------------------------------------------------------------------------
+void OKeySet::impl_convertValue_throw(const ORowSetRow& _rInsertRow,const SelectColumnDescription& i_aMetaData)
+{
+    ORowSetValue& aValue((_rInsertRow->get())[i_aMetaData.nPosition]);
+    switch(i_aMetaData.nType)
+    {
+        case DataType::DECIMAL:
+        case DataType::NUMERIC:
+            {
+                ::rtl::OUString sValue = aValue.getString();
+                sal_Int32 nIndex = sValue.indexOf('.');
+                if ( nIndex != -1 )
+                {
+                    aValue = sValue.copy(0,nIndex + (i_aMetaData.nScale > 0 ? i_aMetaData.nScale + 1 : 0));
+                }
+            }
+            break;
+        default:
+            break;
+    }
+}
+// -----------------------------------------------------------------------------

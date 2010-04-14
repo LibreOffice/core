@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: column.cxx,v $
- * $Revision: 1.55 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -417,7 +414,16 @@ sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString& _rForName, cons
     else if ( m_pTable && !m_pTable->isNew() )
     {
         if ( m_bAddColumn )
-            xReturn = OColumns_BASE::appendObject( _rForName, descriptor );
+        {
+            Reference< ::com::sun::star::sdb::tools::XTableAlteration> xAlterService = m_pTable->getAlterService();
+            if ( xAlterService.is() )
+            {
+                xAlterService->addColumn(m_pTable,descriptor);
+                xReturn = createObject( _rForName );
+            }
+            else
+                xReturn = OColumns_BASE::appendObject( _rForName, descriptor );
+        }
         else
             ::dbtools::throwGenericSQLException( DBA_RES( RID_STR_NO_COLUMN_ADD ), static_cast<XChild*>(static_cast<TXChild*>(this)) );
     }
@@ -443,7 +449,13 @@ void OColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
     else if ( m_pTable && !m_pTable->isNew() )
     {
         if ( m_bDropColumn )
-            OColumns_BASE::dropObject(_nPos,_sElementName);
+        {
+            Reference< ::com::sun::star::sdb::tools::XTableAlteration> xAlterService = m_pTable->getAlterService();
+            if ( xAlterService.is() )
+                xAlterService->dropColumn(m_pTable,_sElementName);
+            else
+                OColumns_BASE::dropObject(_nPos,_sElementName);
+        }
         else
             ::dbtools::throwGenericSQLException( DBA_RES( RID_STR_NO_COLUMN_DROP ), static_cast<XChild*>(static_cast<TXChild*>(this)) );
     }
