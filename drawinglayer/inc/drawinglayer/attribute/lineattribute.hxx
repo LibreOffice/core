@@ -28,12 +28,18 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINEATTRIBUTE_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINEATTRIBUTE_HXX
 
-#include <basegfx/polygon/b2dlinegeometry.hxx>
-#include <basegfx/color/bcolor.hxx>
-#include <vector>
+#include <basegfx/vector/b2enums.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
+
+namespace basegfx {
+    class BColor;
+}
+
+namespace drawinglayer { namespace attribute {
+    class ImpLineAttribute;
+}}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -44,50 +50,29 @@ namespace drawinglayer
         class LineAttribute
         {
         private:
-            basegfx::BColor                             maColor;                // color
-            double                                      mfWidth;                // absolute line width
-            basegfx::B2DLineJoin                        meLineJoin;             // type of LineJoin
+            ImpLineAttribute*                           mpLineAttribute;
 
         public:
+            /// constructors/assignmentoperator/destructor
             LineAttribute(
                 const basegfx::BColor& rColor,
                 double fWidth = 0.0,
-                basegfx::B2DLineJoin aB2DLineJoin = basegfx::B2DLINEJOIN_ROUND)
-            :   maColor(rColor),
-                mfWidth(fWidth),
-                meLineJoin(aB2DLineJoin)
-            {
-            }
+                basegfx::B2DLineJoin aB2DLineJoin = basegfx::B2DLINEJOIN_ROUND);
+            LineAttribute();
+            LineAttribute(const LineAttribute& rCandidate);
+            LineAttribute& operator=(const LineAttribute& rCandidate);
+            ~LineAttribute();
 
-            LineAttribute(const LineAttribute& rCandidate)
-            {
-                *this = rCandidate;
-            }
-
-            LineAttribute& operator=(const LineAttribute& rCandidate)
-            {
-                maColor = rCandidate.maColor;
-                mfWidth = rCandidate.mfWidth;
-                meLineJoin = rCandidate.meLineJoin;
-                return *this;
-            }
-
-            ~LineAttribute()
-            {
-            }
+            // checks if the incarnation is default constructed
+            bool isDefault() const;
 
             // compare operator
-            bool operator==(const LineAttribute& rCandidate) const
-            {
-                return (maColor == rCandidate.maColor
-                    && mfWidth == rCandidate.mfWidth
-                    && meLineJoin == rCandidate.meLineJoin);
-            }
+            bool operator==(const LineAttribute& rCandidate) const;
 
-            // data access
-            const basegfx::BColor& getColor() const { return maColor; }
-            double getWidth() const { return mfWidth; }
-            basegfx::B2DLineJoin getLineJoin() const { return meLineJoin; }
+            // data read access
+            const basegfx::BColor& getColor() const;
+            double getWidth() const;
+            basegfx::B2DLineJoin getLineJoin() const;
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer

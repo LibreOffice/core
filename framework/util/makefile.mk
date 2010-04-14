@@ -280,7 +280,6 @@ SHL4OBJS=       \
                 $(SLO)$/langselectionstatusbarcontroller.obj \
                 $(SLO)$/layoutmanager.obj           \
                 $(SLO)$/loaddispatcher.obj          \
-                $(SLO)$/loaddispatchlistener.obj    \
                 $(SLO)$/loadenv.obj                 \
                 $(SLO)$/menubarfactory.obj          \
                 $(SLO)$/menubarmanager.obj          \

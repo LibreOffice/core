@@ -68,7 +68,6 @@
 #include "fmsrccfg.hxx"
 #include <osl/mutex.hxx>
 #include <vos/thread.hxx>
-#include <svl/cancel.hxx>
 #include <tools/debug.hxx>
 #include <cppuhelper/component.hxx>
 #include <comphelper/stl_types.hxx>
@@ -117,21 +116,6 @@ public:
 protected:
     virtual sal_Bool ShouldHandleElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rElement);
     virtual sal_Bool ShouldStepInto(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rContainer) const;
-};
-
-//========================================================================
-// I would prefer this to be a struct local to FmXFormShell but unfortunately local structs/classes
-// are somewhat difficult with some of our compilers
-class FmCursorActionThread;
-struct SAL_DLLPRIVATE CursorActionDescription
-{
-    FmCursorActionThread*   pThread;
-    ULONG                       nFinishedEvent;
-        // we want to do the cleanup of the thread in the main thread so we post an event to ourself
-    sal_Bool                    bCanceling;
-        // this thread is being canceled
-
-    CursorActionDescription() : pThread(NULL), nFinishedEvent(0), bCanceling(sal_False) { }
 };
 
 class FmFormPage;
@@ -202,18 +186,6 @@ class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
         // we explicitly switch off the propbrw before leaving the design mode
         // this flag tells us if we have to switch it on again when reentering
 
-    typedef ::std::map<
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >,
-            CursorActionDescription,
-            ::comphelper::OInterfaceCompare< ::com::sun::star::sdbc::XResultSet >
-        >   CursorActions;
-    CursorActions   m_aCursorActions;
-        // all actions on async cursors
-
-    ::std::vector< sal_Bool >
-                    m_aControlLocks;
-        // while doing a async cursor action we have to lock all controls of the active controller.
-        // m_aControlLocks remembers the previous lock states to be restored afterwards.
     ::osl::Mutex    m_aAsyncSafety;
         // secure the access to our thread related members
     ::osl::Mutex    m_aInvalidationSafety;
@@ -559,20 +531,7 @@ private:
     // ---------------------------------------------------
     // asyncronous cursor actions/navigation slot handling
 
-    void setControlLocks();     // lock all controls of the active controller
-    void restoreControlLocks(); // restore the lock state of all controls of the active controller
-
 public:
-    enum CURSOR_ACTION { CA_MOVE_TO_LAST, CA_MOVE_ABSOLUTE };
-    void DoAsyncCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& _xController, CURSOR_ACTION _eWhat);
-    void DoAsyncCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm, CURSOR_ACTION _eWhat);
-
-    sal_Bool HasAnyPendingCursorAction() const;
-    void CancelAnyPendingCursorAction();
-
-    sal_Bool HasPendingCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& _xController) const;
-    sal_Bool HasPendingCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm) const;
-
     /** execute the given form slot
         <p>Warning. Only a small set of slots implemented currently.</p>
         @param _nSlot
@@ -585,9 +544,6 @@ public:
     bool    IsFormSlotEnabled( sal_Int32 _nSlot, ::com::sun::star::form::runtime::FeatureState* _pCompleteState = NULL );
 
 protected:
-    DECL_LINK(OnCursorActionDone, FmCursorActionThread*);
-    DECL_LINK(OnCursorActionDoneMainThread, FmCursorActionThread*);
-
     DECL_LINK( OnLoadForms, FmFormPage* );
 };
 
@@ -641,128 +597,5 @@ public:
 
     SVX_DLLPRIVATE virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState);
 };
-
-//==================================================================
-// FmCursorActionThread
-//==================================================================
-
-class SAL_DLLPRIVATE FmCursorActionThread : public ::vos::OThread
-{
-    Link                    m_aTerminationHandler;      // the handler to be called upon termination
-    ::com::sun::star::sdbc::SQLException            m_aRunException;            // the database exception thrown by RunImpl
-    ::osl::Mutex    m_aAccessSafety;            // for securing the multi-thread access
-    ::osl::Mutex    m_aFinalExitControl;        // see StopItWait
-
-protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           m_xDataSource;              // the cursor which we work with
-
-private:
-
-    UniString                   m_sStopperCaption;          // the caption for the ThreadStopper
-    sal_Bool                    m_bCanceled:1;              // StopIt has been called ?
-    sal_Bool                    m_bDeleteMyself:1;          // delete the thread upon termination (defaults to sal_False) ?
-    sal_Bool                    m_bDisposeCursor:1;         // dispose the cursor upon termination (defaults to sal_False) ?
-    sal_Bool                    m_bTerminated:1;                // onTerminated already called ?
-    sal_Bool                    m_bRunFailed:1;             // a database execption occured in RunImpl ?
-
-    // a ThreadStopper will be instantiated so that the open can be canceled via the UI
-    class ThreadStopper : protected SfxCancellable
-    {
-        FmCursorActionThread*   m_pOwner;
-
-        virtual ~ThreadStopper() { }
-
-    public:
-        ThreadStopper(FmCursorActionThread* pOwner, const UniString& rTitle);
-
-        virtual void    Cancel();
-
-        virtual void OwnerTerminated();
-        // Normally the Owner (a FmCursorActionThread) would delete the stopper when terminated.
-        // Unfortunally the application doesn't remove the 'red light' when a SfxCancellable is deleted
-        // if it (the app) can't acquire the solar mutex. The deletion is IGNORED then. So we have make
-        // sure that a) the stopper is deleted from inside the main thread (where the solar mutex is locked)
-        // and b) that in the time between the termination of the thread and the deletion of the stopper
-        // the latter doesn't access the former.
-        // The OwnerTerminated cares for both aspects.
-        // SO DON'T DELETE THE STOPPER EXPLICITLY !
-
-    protected:
-        // HACK HACK HACK HACK HACK : this should be private, but MSVC doesn't accept the LINK-macro then ....
-        DECL_LINK(OnDeleteInMainThread, ThreadStopper*);
-    };
-    friend class FmCursorActionThread::ThreadStopper;
-
-
-public:
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> getDataSource() const { return m_xDataSource; }
-
-private:
-    sal_Bool Terminated() { ::osl::MutexGuard aGuard(m_aAccessSafety); return m_bTerminated; }
-
-public:
-    FmCursorActionThread(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDataSource, const UniString& _rStopperCaption);
-    virtual ~FmCursorActionThread() {}
-
-    // control of self-deletion
-    sal_Bool                IsSelfDeleteEnabled()               { ::osl::MutexGuard aGuard(m_aAccessSafety); return m_bDeleteMyself; }
-    void                EnableSelfDelete(sal_Bool bEnable)      { ::osl::MutexGuard aGuard(m_aAccessSafety); m_bDeleteMyself = bEnable; }
-
-    // control of cursor-dipose
-    sal_Bool                IsCursorDisposeEnabled()            { ::osl::MutexGuard aGuard(m_aAccessSafety); return m_bDisposeCursor; }
-    void                EnableCursorDispose(sal_Bool bEnable)   { ::osl::MutexGuard aGuard(m_aAccessSafety); m_bDisposeCursor = bEnable; }
-
-    // error-access
-    sal_Bool                RunFailed()                         { ::osl::MutexGuard aGuard(m_aAccessSafety); return m_bRunFailed; }
-    ::com::sun::star::sdbc::SQLException        GetRunException()                   { ::osl::MutexGuard aGuard(m_aAccessSafety); return m_aRunException; }
-
-    /// the excution (within the method "run") was canceled ?
-    sal_Bool                WasCanceled()                       { ::osl::MutexGuard aGuard(m_aAccessSafety); return m_bCanceled; }
-
-    /// the handler will be called synchronously (the parameter is a pointer to the thread)
-    void                SetTerminationHdl(const Link& aTermHdl) { ::osl::MutexGuard aGuard(m_aAccessSafety); m_aTerminationHandler = aTermHdl; }
-
-    /// cancels the process. returns to the caller immediately. to be called from another thread (of course ;)
-    void                StopIt();
-
-    /// cancels the process. does not return to the caller until the thread is terminated.
-    void                StopItWait();
-
-protected:
-    virtual void SAL_CALL run();
-    virtual void SAL_CALL onTerminated();
-
-    /// called from within run. run itself handles (de)initialisation of the cancel handling.
-    virtual void RunImpl() = 0;
-};
-
-//------------------------------------------------------------------------------
-
-#define DECL_CURSOR_ACTION_THREAD(classname)            \
-                                                        \
-class SAL_DLLPRIVATE classname : public FmCursorActionThread    \
-{                                                       \
-public:                                                 \
-    classname(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDataSource); \
-protected:                                              \
-    virtual void RunImpl();                             \
-};                                                      \
-
-
-//------------------------------------------------------------------------------
-
-#define IMPL_CURSOR_ACTION_THREAD(classname, caption, action)   \
-                                                                \
-classname::classname(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDataSource) \
-    :FmCursorActionThread(_xDataSource, caption)                \
-{                                                               \
-}                                                               \
-                                                                \
-void classname::RunImpl()                                       \
-{                                                               \
-    m_xDataSource->action;                                      \
-}                                                               \
-
-
 
 #endif          // _SVX_FMSHIMP_HXX
