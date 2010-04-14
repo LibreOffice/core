@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: inettbc.hxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,19 +72,6 @@ public:
 
     virtual Window*         CreateItemWindow( Window* pParent );
     virtual void            StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
-};
-
-class SfxCancelToolBoxControl_Impl : public SfxToolBoxControl
-{
-public:
-
-                            SFX_DECL_TOOLBOX_CONTROL();
-
-                            SfxCancelToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox );
-
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
 };
 
 #endif

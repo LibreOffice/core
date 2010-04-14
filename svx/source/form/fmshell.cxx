@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fmshell.cxx,v $
- * $Revision: 1.81 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -301,9 +298,6 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
         m_pFormView && m_pFormView->GetActualOutDev() &&
         m_pFormView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
     {
-        if (GetImpl()->HasAnyPendingCursorAction())
-            GetImpl()->CancelAnyPendingCursorAction();
-
         SdrPageView* pCurPageView = m_pFormView->GetSdrPageView();
 
         // sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pFormView->GetActualOutDev()) : SDRPAGEVIEWWIN_NOTFOUND;
@@ -1131,9 +1125,6 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
         ||  m_bDesignMode
         ||  !GetImpl()->getActiveForm().is()
         ||  GetImpl()->isInFilterMode()
-        ||  (   GetImpl()->HasPendingCursorAction(GetImpl()->getNavController())
-            &&  (SID_FM_RECORD_TOTAL != nWhich)
-            )
         )
         rSet.DisableItem(nWhich);
     else
@@ -1419,11 +1410,6 @@ void FmFormShell::SetDesignMode( sal_Bool _bDesignMode )
 {
     if ( _bDesignMode == m_bDesignMode )
         return;
-
-    // if we are moving our data source cursor currently ....
-    if ( GetImpl()->HasAnyPendingCursorAction() )
-        // ... cancel this
-        GetImpl()->CancelAnyPendingCursorAction();
 
     FmFormModel* pModel = GetFormModel();
     if (pModel)

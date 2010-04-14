@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cmdlineargs.hxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,6 +91,7 @@ class CommandLineArgs
             CMD_STRINGPARAM_PRINTTOLIST,
             CMD_STRINGPARAM_PRINTERNAME,
             CMD_STRINGPARAM_DISPLAY,
+            CMD_STRINGPARAM_LANGUAGE,
             CMD_STRINGPARAM_COUNT           // must be last element!
         };
 
@@ -170,6 +168,7 @@ class CommandLineArgs
         sal_Bool                GetPrintList( ::rtl::OUString& rPara) const;
         sal_Bool                GetPrintToList( ::rtl::OUString& rPara ) const;
         sal_Bool                GetPrinterName( ::rtl::OUString& rPara ) const;
+        sal_Bool                GetLanguage( ::rtl::OUString& rPara ) const;
 
         // Special analyzed states (does not match directly to a command line parameter!)
         sal_Bool                IsPrinting() const;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: transporttypes.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,17 +37,37 @@ enum SchXMLCellType
 {
     SCH_CELL_TYPE_UNKNOWN,
     SCH_CELL_TYPE_FLOAT,
-    SCH_CELL_TYPE_STRING
+    SCH_CELL_TYPE_STRING,
+    SCH_CELL_TYPE_COMPLEX_STRING
 };
 
 struct SchXMLCell
 {
     rtl::OUString aString;
+    ::com::sun::star::uno::Sequence< rtl::OUString >* pComplexString;
     double fValue;
     SchXMLCellType eType;
     rtl::OUString aRangeId;
 
-    SchXMLCell() : fValue( 0.0 ), eType( SCH_CELL_TYPE_UNKNOWN ) {}
+    SchXMLCell() : pComplexString(0), fValue( 0.0 ), eType( SCH_CELL_TYPE_UNKNOWN )
+    {}
+
+    SchXMLCell( const SchXMLCell& rOther )
+        : aString( rOther.aString )
+        , pComplexString( rOther.pComplexString ? new ::com::sun::star::uno::Sequence< rtl::OUString >( *rOther.pComplexString ) : 0 )
+        , fValue( rOther.fValue )
+        , eType( rOther.eType )
+        , aRangeId( rOther.aRangeId )
+    {}
+
+    ~SchXMLCell()
+    {
+        if(pComplexString)
+        {
+            delete pComplexString;
+            pComplexString=0;
+        }
+    }
 };
 
 struct SchXMLTable

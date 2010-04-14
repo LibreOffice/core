@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: textlayoutdevice.hxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.8 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:17 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -101,20 +93,20 @@ namespace drawinglayer
 
             double getTextWidth(
                 const String& rText,
-                xub_StrLen nIndex,
-                xub_StrLen nLength) const;
+                sal_uInt32 nIndex,
+                sal_uInt32 nLength) const;
 
             bool getTextOutlines(
                 basegfx::B2DPolyPolygonVector&,
                 const String& rText,
-                xub_StrLen nIndex,
-                xub_StrLen nLength,
-                const ::std::vector< double >& rDXArray);
+                sal_uInt32 nIndex,
+                sal_uInt32 nLength,
+                const ::std::vector< double >& rDXArray) const;
 
             basegfx::B2DRange getTextBoundRect(
                 const String& rText,
-                xub_StrLen nIndex,
-                xub_StrLen nLength) const;
+                sal_uInt32 nIndex,
+                sal_uInt32 nLength) const;
 
             double getFontAscent() const;
             double getFontDescent() const;
@@ -123,7 +115,12 @@ namespace drawinglayer
                 const Rectangle& rRectangle,
                 const String& rText,
                 sal_uInt16 nStyle,
-                GDIMetaFile& rGDIMetaFile);
+                GDIMetaFile& rGDIMetaFile) const;
+
+            ::std::vector< double > getTextArray(
+                const String& rText,
+                sal_uInt32 nIndex,
+                sal_uInt32 nLength) const;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

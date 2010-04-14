@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewobjectcontactofe3dscene.cxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -123,17 +119,6 @@ namespace sdr
                     const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::ModifiedColorPrimitive2D(xRetval, aBColorModifier));
 
                     xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-                }
-            }
-            else
-            {
-                // do neither print nor PDF export the fallback visualisation
-                if(!GetObjectContact().isOutputToPrinter() && !GetObjectContact().isOutputToRecordingMetaFile())
-                {
-                    // empty group, fallback to parent method which will create the default
-                    // grayed frame for empty 3d scenes by using model data and
-                    // createViewIndependentPrimitive2DSequence::ViewContactOfE3dScene
-                    xRetval = ViewObjectContactOfSdrObj::createPrimitive2DSequence(rDisplayInfo);
                 }
             }
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: bindings.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,8 +96,7 @@ class SFX2_DLLPUBLIC SfxBindings: public SfxBroadcaster
     der Klasse SfxBindings. Sie wird von der SfxApplication automatisch
     angelegt und zerst"ort. Instanzen werden aber i.d.R. "uber das
     Makro <SFX_BINDINGS> oder den zugeh"origen <SfxViewFrame> besorgt
-    werden. Bestimmte SfxViewFrame Subklassen (z.B. <SfxInPlaceFrame>)
-    legen ihre eigene Instanz der SfxBindings an.
+    werden.
 
     Die SfxBindings verwalten alle in den an ihr angemeldeten Controllern
     gebundenen Slot-Ids und cachen die jeweiligen <Slot-Server>
