@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: untbl.cxx,v $
- * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 
 #include <hintids.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <fmtornt.hxx>
 #include <fmtpdsc.hxx>
 #include <doc.hxx>
@@ -448,12 +445,12 @@ SwUndoTblToTxt::SwUndoTblToTxt( const SwTable& rTbl, sal_Unicode cCh )
     const SwSpzFrmFmts& rFrmFmtTbl = *pTblNd->GetDoc()->GetSpzFrmFmts();
     for( USHORT n = 0; n < rFrmFmtTbl.Count(); ++n )
     {
-        const SwPosition* pAPos;
         SwFrmFmt* pFmt = rFrmFmtTbl[ n ];
-        const SwFmtAnchor* pAnchor = &pFmt->GetAnchor();
-        if( 0 != ( pAPos = pAnchor->GetCntntAnchor()) &&
-            ( FLY_AUTO_CNTNT == pAnchor->GetAnchorId() ||
-              FLY_AT_CNTNT == pAnchor->GetAnchorId() ) &&
+        SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
+        SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
+        if (pAPos &&
+            ((FLY_AT_CHAR == pAnchor->GetAnchorId()) ||
+             (FLY_AT_PARA == pAnchor->GetAnchorId())) &&
             nTblStt <= pAPos->nNode.GetIndex() &&
             pAPos->nNode.GetIndex() < nTblEnd )
         {

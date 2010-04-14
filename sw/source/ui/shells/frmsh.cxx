@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: frmsh.cxx,v $
- * $Revision: 1.22.190.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,17 +32,17 @@
 #include <hintids.hxx>
 #include <svl/whiter.hxx>
 #include <svtools/imapobj.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svtools/imap.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <basic/sbstar.hxx>
 #include <svl/rectitem.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/bolnitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/bolnitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/protitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
@@ -453,7 +450,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 if(pArgs && pArgs->GetItemState(FN_FORMAT_FRAME_DLG, FALSE, &pItem) == SFX_ITEM_SET)
                     nDefPage = ((SfxUInt16Item *)pItem)->GetValue();
 
-                aSet.Put(SfxFrameItem( SID_DOCFRAME, GetView().GetViewFrame()->GetTopFrame()));
+                aSet.Put(SfxFrameItem( SID_DOCFRAME, &GetView().GetViewFrame()->GetTopFrame()));
                 FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric) ));
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

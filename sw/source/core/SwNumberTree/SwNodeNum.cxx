@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SwNodeNum.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
 #include <ndtxt.hxx>
@@ -39,6 +36,10 @@
 #include <stdio.h>
 // --> OD 2007-10-31 #i83479#
 #include <IDocumentListItems.hxx>
+// <--
+// --> OD 2010-01-13 #b6912256#
+#include <svl/svstdarr.hxx>
+#include <doc.hxx>
 // <--
 
 // --> OD 2008-02-19 #refactorlists#
@@ -492,8 +493,21 @@ void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
         SwTxtNode* pTxtNode( rNodeNum.GetTxtNode() );
         if ( pTxtNode )
         {
-            // --> OD 2008-03-13 #refactorlists#
             pTxtNode->RemoveFromList();
+            // --> OD 2010-01-13 #b6912256#
+            // clear all list attributes and the list style
+            SvUShortsSort aResetAttrsArray;
+            aResetAttrsArray.Insert( RES_PARATR_LIST_ID );
+            aResetAttrsArray.Insert( RES_PARATR_LIST_LEVEL );
+            aResetAttrsArray.Insert( RES_PARATR_LIST_ISRESTART );
+            aResetAttrsArray.Insert( RES_PARATR_LIST_RESTARTVALUE );
+            aResetAttrsArray.Insert( RES_PARATR_LIST_ISCOUNTED );
+            aResetAttrsArray.Insert( RES_PARATR_NUMRULE );
+            SwPaM aPam( *pTxtNode );
+            pTxtNode->GetDoc()->ResetAttrs( aPam, sal_False,
+                                            &aResetAttrsArray,
+                                            false );
+            // <--
         }
     }
 }

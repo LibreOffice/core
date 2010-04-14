@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vdraw.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,9 +43,7 @@
 #include <svx/svdoutl.hxx>
 
 #ifdef DBG_UTIL
-#ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
-#endif
 #endif
 
 #include "fesh.hxx"
@@ -63,9 +58,8 @@
 #include "flyfrm.hxx"
 #include <vcl/svapp.hxx>
 
-#ifndef IDOCUMENTDRAWMODELACCESS_HXX_INCLUDED
 #include <IDocumentDrawModelAccess.hxx>
-#endif
+
 
 /*************************************************************************
 |*
@@ -345,8 +339,10 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
             const SwFrm *pAnchor = ((SwDrawContact*)pCont)->GetAnchorFrm();
             if ( !pAnchor || pAnchor->IsInFly() || !pAnchor->IsValid() ||
                  !pAnchor->GetUpper() || !pAnchor->FindPageFrm() ||
-                 FLY_IN_CNTNT == pCont->GetFmt()->GetAnchor().GetAnchorId() )
+                 (FLY_AS_CHAR == pCont->GetFmt()->GetAnchor().GetAnchorId()) )
+            {
                 continue;
+            }
 
             // OD 19.06.2003 #108784# - no move for drawing objects in header/footer
             if ( pAnchor->FindFooterOrHeader() )

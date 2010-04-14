@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmltexte.cxx,v $
- * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <sot/clsids.hxx>
 #include <com/sun/star/embed/XEmbedObjectCreator.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -44,13 +40,12 @@
 #include <xmloff/families.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-#ifndef _XMLOFF_TXTPRMAP_HXX
 #include <xmloff/txtprmap.hxx>
-#endif
 
 #include <svx/svdobj.hxx>
 #include <doc.hxx>
 #include <ndole.hxx>
+#include <fmtcntnt.hxx>
 #include <unostyle.hxx>
 #include <unoframe.hxx>
 #include <ndgrf.hxx>
@@ -64,6 +59,7 @@
 #include "svl/urihelper.hxx"
 #include <sfx2/frmdescr.hxx>
 #include <SwStyleNameMapper.hxx>
+
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

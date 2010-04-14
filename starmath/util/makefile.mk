@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.20 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -52,11 +48,12 @@ RESLIB1SRSFILES=\
 SHL1TARGET= sm$(DLLPOSTFIX)
 SHL1IMPLIB= smimp
 
-SHL1VERSIONMAP= sm.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=		$(SHL1TARGET)
 
 SHL1STDLIBS= \
+            $(EDITENGLIB) \
             $(SVXCORELIB) \
             $(SVXLIB) \
             $(SFX2LIB) \
@@ -76,7 +73,7 @@ SHL1STDLIBS= \
 
 SHL2TARGET= smd$(DLLPOSTFIX)
 SHL2IMPLIB= smdimp
-SHL2VERSIONMAP= sm.map
+SHL2VERSIONMAP=$(SOLARENV)/src/component.map
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=		$(SHL2TARGET)
 
@@ -93,7 +90,7 @@ SHL2STDLIBS= \
             $(SALLIB)
 
 SHL2DEPN=	makefile.mk
-SHL2VERSIONMAP= smd.map
+SHL2VERSIONMAP=$(SOLARENV)/src/component.map
 SHL2OBJS=   $(SLO)$/smdetect.obj \
             $(SLO)$/detreg.obj \
             $(SLO)$/eqnolefilehdr.obj

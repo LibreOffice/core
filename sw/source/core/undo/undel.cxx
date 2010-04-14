@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: undel.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 
 #include <hintids.hxx>
 #include <unotools/charclass.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <fmtpdsc.hxx>
 #include <frmfmt.hxx>
 #include <fmtanchr.hxx>
@@ -56,9 +53,9 @@
 #include <comcore.hrc> // #111827#
 #include <undo.hrc>
 
-// #include <svx/svxacorr.hxx>
+// #include <editeng/svxacorr.hxx>
 // #include <comphelper/processfactory.hxx>
-// #include <svx/unolingu.hxx>
+// #include <editeng/unolingu.hxx>
 // #include <unotools/localedatawrapper.hxx>
 
 // using namespace comphelper;
@@ -81,7 +78,7 @@ void lcl_MakeAutoFrms( const SwSpzFrmFmts& rSpzArr, ULONG nMovedIndex )
         {
             pFmt = (SwFlyFrmFmt*)rSpzArr[n];
             pAnchor = &pFmt->GetAnchor();
-            if( pAnchor->GetAnchorId() == FLY_AUTO_CNTNT )
+            if (pAnchor->GetAnchorId() == FLY_AT_CHAR)
             {
                 const SwPosition* pAPos = pAnchor->GetCntntAnchor();
                 if( pAPos && nMovedIndex == pAPos->nNode.GetIndex() )
@@ -632,7 +629,7 @@ void lcl_ReAnchorAtCntntFlyFrames( const SwSpzFrmFmts& rSpzArr, SwPosition &rPos
         {
             pFmt = (SwFlyFrmFmt*)rSpzArr[n];
             pAnchor = &pFmt->GetAnchor();
-            if( pAnchor->GetAnchorId() == FLY_AT_CNTNT )
+            if (pAnchor->GetAnchorId() == FLY_AT_PARA)
             {
                 pAPos =  pAnchor->GetCntntAnchor();
                 if( pAPos && nOldIdx == pAPos->nNode.GetIndex() )

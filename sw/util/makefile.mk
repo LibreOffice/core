@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.74 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -99,11 +95,11 @@ LIB1OBJFILES= $(OUT)$/slo$/swmodule.obj \
 SHL1STDLIBS+= \
     $(LNGLIB) \
     $(SVXCORELIB) \
+    $(EDITENGLIB) \
     $(SVXLIB) \
     $(SFXLIB) \
     $(XMLOFFLIB) \
     $(BASICLIB) \
-    $(GOODIESLIB) \
     $(BASEGFXLIB) \
     $(DRAWINGLAYERLIB) \
     $(SVTOOLLIB) \
@@ -138,7 +134,7 @@ DEFLIB1NAME=swall $(SWLIBFILES:b)
 
 SHL2TARGET= swd$(DLLPOSTFIX)
 SHL2IMPLIB= swdimp
-SHL2VERSIONMAP= swd.map
+SHL2VERSIONMAP=$(SOLARENV)/src/component.map
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=       $(SHL2TARGET)
 
@@ -179,6 +175,7 @@ DEF3NAME=       $(SHL3TARGET)
 SHL3STDLIBS= \
         $(ISWLIB) \
             $(SVXCORELIB) \
+            $(EDITENGLIB) \
             $(SVXLIB) \
             $(SFX2LIB) \
             $(SVTOOLLIB) \
@@ -319,9 +316,9 @@ DEF4NAME=$(SHL4TARGET)
 SHL4STDLIBS= \
     $(ISWLIB) \
     $(SVXCORELIB) \
+       $(EDITENGLIB) \
     $(MSFILTERLIB) \
     $(SFXLIB) \
-    $(GOODIESLIB) \
     $(BASEGFXLIB) \
     $(SVTOOLLIB) \
     $(TKLIB) \
@@ -345,7 +342,7 @@ TARGET_VBA=vbaswobj
 SHL5TARGET=$(TARGET_VBA)$(DLLPOSTFIX).uno
 SHL5IMPLIB=     i$(TARGET_VBA)
 
-SHL5VERSIONMAP=$(TARGET_VBA).map
+SHL5VERSIONMAP=$(SOLARENV)/src/component.map
 SHL5DEF=$(MISC)$/$(SHL5TARGET).def
 DEF5NAME=$(SHL5TARGET)
 SHL5STDLIBS= \
@@ -367,8 +364,9 @@ SHL5STDLIBS= \
                 $(VCLLIB) \
                 $(TKLIB) \
                 $(I18NISOLANGLIB) \
+                $(EDITENGLIB) \
                 $(SVXCORELIB) \
-                $(SVXMSFILTERLIB) \
+                $(SVXMSFILTERLIB)
 
 SHL5DEPN=$(SHL1TARGETN)
 SHL5LIBS=$(SLB)$/$(TARGET_VBA).lib

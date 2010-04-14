@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: frmform.cxx,v $
- * $Revision: 1.71 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +30,8 @@
 
 
 #include <hintids.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/hyznitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/hyznitem.hxx>
 #include <pagefrm.hxx>      // ChangeFtnRef
 #include <ndtxt.hxx>        // MakeFrm()
 #include <dcontact.hxx>     // SwDrawContact

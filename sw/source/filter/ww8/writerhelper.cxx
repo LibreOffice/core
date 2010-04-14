@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: writerhelper.cxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,8 +43,8 @@
 #   include <svx/svdobj.hxx>        //SdrObject
 #   include <svx/svdoole2.hxx>      //SdrOle2Obj
 #   include <svx/fmglob.hxx>        //FmFormInventor
-#   include <svx/brkitem.hxx>       //SvxFmtBreakItem
-#   include <svx/tstpitem.hxx>      //SvxTabStopItem
+#   include <editeng/brkitem.hxx>       //SvxFmtBreakItem
+#   include <editeng/tstpitem.hxx>      //SvxTabStopItem
 #   include <ndtxt.hxx>             //SwTxtNode
 #    include <ndnotxt.hxx>          //SwNoTxtNode
 #    include <fmtcntnt.hxx>         //SwFmtCntnt
@@ -190,7 +187,7 @@ namespace sw
           meWriterType(eTxtBox),
           mpStartFrameContent(0),
           // --> OD 2007-04-19 #i43447# - move to initialization list
-          mbIsInline( (rFmt.GetAnchor().GetAnchorId() == FLY_IN_CNTNT) )
+          mbIsInline( (rFmt.GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
           // <--
     {
         switch (rFmt.Which())

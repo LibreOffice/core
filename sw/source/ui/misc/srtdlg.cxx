@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: srtdlg.cxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +40,7 @@
 #include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <unotools/collatorwrapper.hxx>
@@ -396,7 +393,7 @@ IMPL_LINK( SwSortDlg, DelimCharHdl, PushButton*, EMPTYARG )
         SfxAllItemSet aSet( rSh.GetAttrPool() );
         aSet.Put( SfxInt32Item( SID_ATTR_CHAR, GetDelimChar() ) );
         SfxAbstractDialog* pMap = pFact->CreateSfxDialog( &aDelimPB, aSet,
-            rSh.GetView().GetViewFrame()->GetFrame()->GetFrameInterface(), RID_SVXDLG_CHARMAP );
+            rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
         if( RET_OK == pMap->Execute() )
         {
             SFX_ITEMSET_ARG( pMap->GetOutputItemSet(), pItem, SfxInt32Item, SID_ATTR_CHAR, FALSE );

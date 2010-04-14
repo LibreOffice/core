@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: accessibility.cxx,v $
- * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,12 +50,12 @@
 #include <vos/mutex.hxx>
 #include <svl/itemset.hxx>
 
-#include <svx/editobj.hxx>
-#include <svx/editdata.hxx>
-#include <svx/editview.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/outliner.hxx>
-#include <svx/unoedhlp.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/unoedhlp.hxx>
 
 
 #include "accessibility.hxx"
@@ -1159,6 +1156,10 @@ XubString SmTextForwarder::CalcFieldValue( const SvxFieldItem& rField, USHORT nP
     if (pEditEngine)
         aTxt = pEditEngine->CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
     return aTxt;
+}
+
+void SmTextForwarder::FieldClicked(const SvxFieldItem&, USHORT, USHORT)
+{
 }
 
 USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, USHORT nWhich )
