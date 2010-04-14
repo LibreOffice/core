@@ -267,6 +267,11 @@ BOOL AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
                 return true;
             break;
 
+        case CTRL_SLIDER:
+            if( nPart == PART_TRACK_HORZ_AREA || nPart == PART_TRACK_VERT_AREA )
+                return true;
+            break;
+
         case CTRL_EDITBOX:
             if( nPart == PART_ENTIRE_CONTROL ||
                 nPart == HAS_BACKGROUND_TEXTURE )
@@ -561,7 +566,7 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
                 // the Aqua grey theme when the item is selected is drawn here.
                 aMenuItemDrawInfo.itemType = kThemeMenuItemPlain;
 
-                if ((nPart == PART_MENU_ITEM ))
+                if ((nPart == PART_MENU_ITEM ) && (nState & CTRL_STATE_SELECTED))
                 {
                     // the blue theme when the item is selected is drawn here.
                     aMenuItemDrawInfo.state = kThemeMenuSelected;
@@ -782,6 +787,36 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
 
             HIThemeDrawTrack( &aTrackInfo, NULL, mrContext, kHIThemeOrientationNormal );
             bOK = true;
+        }
+        break;
+
+    case CTRL_SLIDER:
+        {
+            SliderValue* pSLVal = (SliderValue*)aValue.getOptionalVal();
+
+            HIThemeTrackDrawInfo aTrackDraw;
+            aTrackDraw.kind = kThemeSliderMedium;
+            if( nPart == PART_TRACK_HORZ_AREA || nPart == PART_TRACK_VERT_AREA )
+            {
+                aTrackDraw.bounds = rc;
+                aTrackDraw.min   = pSLVal->mnMin;
+                aTrackDraw.max   = pSLVal->mnMax;;
+                aTrackDraw.value = pSLVal->mnCur;
+                aTrackDraw.reserved = 0;
+                aTrackDraw.attributes = kThemeTrackShowThumb;
+                if( nPart == PART_TRACK_HORZ_AREA )
+                    aTrackDraw.attributes |= kThemeTrackHorizontal;
+                aTrackDraw.enableState = (nState & CTRL_STATE_ENABLED)
+                                         ? kThemeTrackActive : kThemeTrackInactive;
+
+                SliderTrackInfo aSlideInfo;
+                aSlideInfo.thumbDir = kThemeThumbUpward;
+                aSlideInfo.pressState = 0;
+                aTrackDraw.trackInfo.slider = aSlideInfo;
+
+                HIThemeDrawTrack( &aTrackDraw, NULL, mrContext, kHIThemeOrientationNormal );
+                bOK = true;
+            }
         }
         break;
 
@@ -1223,18 +1258,38 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
 {
     BOOL toReturn = FALSE;
 
-    short x = rControlRegion.GetBoundRect().Left();
-    short y = rControlRegion.GetBoundRect().Top();
+    Rectangle aCtrlBoundRect( rControlRegion.GetBoundRect() );
+    short x = aCtrlBoundRect.Left();
+    short y = aCtrlBoundRect.Top();
     short w, h;
 
     sal_uInt8 nBorderCleanup = 0;
 
     switch (nType)
     {
+        case CTRL_SLIDER:
+            {
+                if( nPart == PART_THUMB_HORZ )
+                {
+                    w = 19; // taken from HIG
+                    h = aCtrlBoundRect.GetHeight();
+                    rNativeBoundingRegion = rNativeContentRegion = Region( Rectangle( Point( x, y ), Size( w, h ) ) );
+                    toReturn = true;
+                }
+                else if( nPart == PART_THUMB_VERT )
+                {
+                    w = aCtrlBoundRect.GetWidth();
+                    h = 18; // taken from HIG
+                    rNativeBoundingRegion = rNativeContentRegion = Region( Rectangle( Point( x, y ), Size( w, h ) ) );
+                    toReturn = true;
+                }
+            }
+            break;
+
         case CTRL_SCROLLBAR:
             {
                 Rectangle aRect;
-                if( AquaGetScrollRect( /* m_nScreen */ nPart, rControlRegion.GetBoundRect(), aRect ) )
+                if( AquaGetScrollRect( /* m_nScreen */ nPart, aCtrlBoundRect, aRect ) )
                 {
                     toReturn = TRUE;
                     rNativeBoundingRegion = aRect;
@@ -1249,8 +1304,8 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
             {
                 if ( nType == CTRL_PUSHBUTTON )
                 {
-                    w = rControlRegion.GetBoundRect().GetWidth();
-                    h = rControlRegion.GetBoundRect().GetHeight();
+                    w = aCtrlBoundRect.GetWidth();
+                    h = aCtrlBoundRect.GetHeight();
                 }
                 else
                 {
@@ -1271,7 +1326,7 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
             break;
         case CTRL_PROGRESS:
             {
-                Rectangle aRect( rControlRegion.GetBoundRect() );
+                Rectangle aRect( aCtrlBoundRect );
                 if( aRect.GetHeight() < 16 )
                     aRect.Bottom() = aRect.Top() + 9; // values taken from HIG for medium progress
                 else
@@ -1284,7 +1339,7 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
 
         case CTRL_INTROPROGRESS:
             {
-                Rectangle aRect( rControlRegion.GetBoundRect() );
+                Rectangle aRect( aCtrlBoundRect );
                 aRect.Bottom() = aRect.Top() + INTRO_PROGRESS_HEIGHT; // values taken from HIG for medium progress
                 rNativeBoundingRegion = aRect;
                 rNativeContentRegion = aRect;
@@ -1294,7 +1349,7 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
 
          case CTRL_TAB_ITEM:
 
-            w = rControlRegion.GetBoundRect().GetWidth() + 2*TAB_TEXT_OFFSET - 2*VCL_TAB_TEXT_OFFSET;
+            w = aCtrlBoundRect.GetWidth() + 2*TAB_TEXT_OFFSET - 2*VCL_TAB_TEXT_OFFSET;
 
 #ifdef OLD_TAB_STYLE
             h = TAB_HEIGHT_NORMAL;
@@ -1310,7 +1365,7 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
 
         case CTRL_EDITBOX:
             {
-                w = rControlRegion.GetBoundRect().GetWidth();
+                w = aCtrlBoundRect.GetWidth();
                 if( w < 3+2*FOCUS_RING_WIDTH )
                     w = 3+2*FOCUS_RING_WIDTH;
                 h = TEXT_EDIT_HEIGHT_NORMAL;
@@ -1326,7 +1381,7 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
             {
                 if( nPart == PART_ENTIRE_CONTROL )
                 {
-                    w = rControlRegion.GetBoundRect().GetWidth();
+                    w = aCtrlBoundRect.GetWidth();
                     h = COMBOBOX_HEIGHT_NORMAL;//listboxes and comboxes have the same height
 
                     rNativeContentRegion = Rectangle( Point( x+FOCUS_RING_WIDTH, y+FOCUS_RING_WIDTH ), Size( w-2*FOCUS_RING_WIDTH, h ) );
@@ -1336,7 +1391,7 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                 }
                 else if( nPart == PART_BUTTON_DOWN )
                 {
-                    w = rControlRegion.GetBoundRect().GetWidth();
+                    w = aCtrlBoundRect.GetWidth();
                 if( w < 3+2*FOCUS_RING_WIDTH )
                     w = 3+2*FOCUS_RING_WIDTH;
                     h = COMBOBOX_HEIGHT_NORMAL;//listboxes and comboxes have the same height
@@ -1352,7 +1407,7 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                 }
                 else if( nPart == PART_SUB_EDIT )
                 {
-                    w = rControlRegion.GetBoundRect().GetWidth();
+                    w = aCtrlBoundRect.GetWidth();
                     h = COMBOBOX_HEIGHT_NORMAL;//listboxes and comboxes have the same height
 
                     x += FOCUS_RING_WIDTH;
@@ -1373,7 +1428,7 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
             break;
         case CTRL_SPINBOX:
                 if( nPart == PART_ENTIRE_CONTROL ) {
-                    w = rControlRegion.GetBoundRect().GetWidth();
+                    w = aCtrlBoundRect.GetWidth();
                     if( w < 3+2*FOCUS_RING_WIDTH+SPIN_BUTTON_SPACE+SPIN_BUTTON_WIDTH )
                         w = 3+2*FOCUS_RING_WIDTH+SPIN_BUTTON_SPACE+SPIN_BUTTON_WIDTH;
                     h = TEXT_EDIT_HEIGHT_NORMAL;
@@ -1384,7 +1439,7 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                     toReturn = TRUE;
                 }
                 else if( nPart == PART_SUB_EDIT ) {
-                    w = rControlRegion.GetBoundRect().GetWidth() - SPIN_BUTTON_SPACE - SPIN_BUTTON_WIDTH;
+                    w = aCtrlBoundRect.GetWidth() - SPIN_BUTTON_SPACE - SPIN_BUTTON_WIDTH;
                     h = TEXT_EDIT_HEIGHT_NORMAL;
                     x += 4; // add an offset for rounded borders
                     y += 2; // don't draw into upper border
@@ -1397,10 +1452,10 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                     toReturn = TRUE;
                 }
                 else if( nPart == PART_BUTTON_UP ) {
-                    //rControlRegion.GetBoundRect().GetWidth() contains the width of the full control
+                    //aCtrlBoundRect.GetWidth() contains the width of the full control
                     //ie the width of the textfield + button
                     //x is the position of the left corner of the full control
-                    x += rControlRegion.GetBoundRect().GetWidth() - SPIN_BUTTON_WIDTH - SPIN_BUTTON_SPACE - CLIP_FUZZ;
+                    x += aCtrlBoundRect.GetWidth() - SPIN_BUTTON_WIDTH - SPIN_BUTTON_SPACE - CLIP_FUZZ;
                     y += FOCUS_RING_WIDTH - CLIP_FUZZ;
                     w = SPIN_BUTTON_WIDTH + 2*CLIP_FUZZ;
                     h = SPIN_UPPER_BUTTON_HEIGHT + 2*CLIP_FUZZ;
@@ -1411,7 +1466,7 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                     toReturn = TRUE;
                 }
                 else if( nPart == PART_BUTTON_DOWN ) {
-                    x += rControlRegion.GetBoundRect().GetWidth() - SPIN_BUTTON_WIDTH - SPIN_BUTTON_SPACE - CLIP_FUZZ;
+                    x += aCtrlBoundRect.GetWidth() - SPIN_BUTTON_WIDTH - SPIN_BUTTON_SPACE - CLIP_FUZZ;
                     y += SPIN_UPPER_BUTTON_HEIGHT + FOCUS_RING_WIDTH - CLIP_FUZZ;
                     w = SPIN_BUTTON_WIDTH + 2*CLIP_FUZZ;
                     h = SPIN_LOWER_BUTTON_HEIGHT + 2*CLIP_FUZZ;
@@ -1428,7 +1483,7 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                 if(  ( nPart == PART_BORDER ) &&
                     !( nStyle & (FRAME_DRAW_MENU | FRAME_DRAW_WINDOWBORDER | FRAME_DRAW_BORDERWINDOWBORDER) ) )
                 {
-                    Rectangle aRect = rControlRegion.GetBoundRect();
+                    Rectangle aRect(aCtrlBoundRect);
                     if( nStyle & FRAME_DRAW_DOUBLEIN )
                     {
                         aRect.Left()    += 1;

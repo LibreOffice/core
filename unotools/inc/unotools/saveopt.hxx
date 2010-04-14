@@ -46,7 +46,6 @@ public:
         E_AUTOSAVEPROMPT,
         E_DOCINFSAVE,
         E_SAVEWORKINGSET,
-        E_SAVEDOCWINS,
         E_SAVEDOCVIEW,
         E_SAVERELINET,
         E_SAVERELFSYS,
@@ -92,9 +91,6 @@ public:
 
     void                    SetSaveWorkingSet( sal_Bool b );
     sal_Bool                IsSaveWorkingSet() const;
-
-    void                    SetSaveDocWins( sal_Bool b );
-    sal_Bool                IsSaveDocWins() const;
 
     void                    SetSaveDocView( sal_Bool b );
     sal_Bool                IsSaveDocView() const;

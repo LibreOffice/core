@@ -1088,7 +1088,7 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
     }
 
     // set font foreground color and opacity
-    XRenderColor aRenderColor = GetXRenderColor( nTextPixel_ );
+    XRenderColor aRenderColor = GetXRenderColor( nTextColor_ );
     rRenderPeer.FillRectangle( PictOpSrc, rEntry.m_aPicture, &aRenderColor, 0, 0, 1, 1 );
 
     // set clipping
