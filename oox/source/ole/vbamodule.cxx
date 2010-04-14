@@ -214,16 +214,6 @@ void VbaModule::importSourceCode( StorageBase& rVbaStrg,
     if( !mbExecutable )
         aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "End Sub\n" ) );
 
-    // insert the module into the passed Basic library
-    try
-    {
-        rxBasicLib->insertByName( maName, Any( aSourceCode.makeStringAndClear() ) );
-    }
-    catch( Exception& )
-    {
-        OSL_ENSURE( false, "VbaModule::importSourceCode - cannot insert module into library" );
-    }
-
     // insert extended module info
     try
     {
@@ -232,6 +222,16 @@ void VbaModule::importSourceCode( StorageBase& rVbaStrg,
     }
     catch( Exception& )
     {
+    }
+
+    // insert the module into the passed Basic library
+    try
+    {
+        rxBasicLib->insertByName( maName, Any( aSourceCode.makeStringAndClear() ) );
+    }
+    catch( Exception& )
+    {
+        OSL_ENSURE( false, "VbaModule::importSourceCode - cannot insert module into library" );
     }
 }
 
