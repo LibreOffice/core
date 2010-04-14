@@ -468,7 +468,7 @@ public: // TODO: is public really needed?
 private:
     // typeop exceution context
     int mnStackIdx;
-    ValType mnValStack[ NMAXSTACK];
+    ValType mnValStack[ NMAXSTACK+4];
     ValType mnTransVals[ NMAXTRANS];
 
     int mnHintSize;
@@ -1241,16 +1241,33 @@ void CffSubsetterContext::convertOneTypeEsc( void)
         break;
         }
     case TYPE2OP::HFLEX1: {
-            assert( mnStackIdx == 9 );
-            writeCurveTo( mnStackIdx, -9, -8, -7, -6, -5, -6 );
-            writeCurveTo( mnStackIdx, -4, -6, -3, -2, -1, -8 );
+            assert( mnStackIdx == 9);
+#if 0 // emulate hflex1 as straight line
+            const ValType* pX = &mnValStack[ mnStackIdx];
+            const ValType fDX = pX[-9] + pX[-7] + pX[-5] + pX[-4] + pX[-3] + pX[-1];
+            writeType1Val( fDX);
+            writeTypeOp( TYPE1OP::HLINETO);
+#else // emulate hflex1 as two curves
+            writeCurveTo( mnStackIdx, -9, -8, -7, -6, -5,  0);
+            writeCurveTo( mnStackIdx, -4,  0, -3, -2, -1,  0);
+        // TODO: emulate hflex1 using othersubr call
+#endif
             mnStackIdx -= 9;
         }
         break;
     case TYPE2OP::HFLEX: {
-            assert( mnStackIdx == 7 );
-            writeCurveTo( mnStackIdx, -7,  0, -6, -5, -4, -5 );
-            writeCurveTo( mnStackIdx, -3, -5, -2,  0, -1,  0 );
+            assert( mnStackIdx == 7);
+            ValType* pX = &mnValStack[ mnStackIdx];
+#if 0 // emulate hflex as straight line
+            const ValType fDX = pX[-7] + pX[-6] + pX[-4] + pX[-3] + pX[-2] + pX[-1];
+            writeType1Val( fDX);
+            writeTypeOp( TYPE1OP::HLINETO);
+#else // emulate hflex as two curves
+            pX[+1] = -pX[-5]; // temp: +dy5==-dy2
+            writeCurveTo( mnStackIdx, -7,  0, -6, -5, -4,  0);
+            writeCurveTo( mnStackIdx, -3,  0, -2, +1, -1,  0);
+        // TODO: emulate hflex using othersubr call
+#endif
             mnStackIdx -= 7;
         }
         break;
