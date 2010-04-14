@@ -69,6 +69,7 @@ testcase tiEditSearchAndReplace
          case 47 :        ' Norwegian
          case 48 : sExpression(1) = "programmu" : sExpression(2) = "programu"    ' Polish
          case 49 : sExpression(1) = "Texxt" : sExpression(2) = "Schrieb"         ' German
+         case 50 : sExpression(1) = "primer" : sExpression(2) = "napakka"        ' Slovenian
          case 55 : sExpression(1) = "esktava" : sExpression(2) = "norte"         ' Portuguese (Brazil)
          case 66 :        ' Thai
 '         case 81 : sExpression(1) = "���" : sExpression(2) = "���"       ' Japanese
