@@ -26,8 +26,8 @@
  ************************************************************************/
 
 #include "oox/xls/biffhelper.hxx"
-#include <algorithm>
 #include <rtl/math.hxx>
+#include <rtl/tencinfo.h>
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/biffoutputstream.hxx"
 #include "oox/xls/worksheethelper.hxx"
@@ -53,69 +53,6 @@ const sal_Int32 BITMAPINFOHEADER_SIZE       = 40;
 const sal_uInt16 BIFF_IMGDATA_WMF           = 2;
 const sal_uInt16 BIFF_IMGDATA_DIB           = 9;
 const sal_uInt16 BIFF_IMGDATA_NATIVE        = 14;
-
-// ----------------------------------------------------------------------------
-
-static const struct CodePageEntry
-{
-    sal_uInt16          mnCodePage;
-    rtl_TextEncoding    meTextEnc;
-}
-spCodePages[] =
-{
-    {     437,  RTL_TEXTENCODING_IBM_437        },  // OEM US
-//  {     720,  RTL_TEXTENCODING_IBM_720        },  // OEM Arabic
-    {     737,  RTL_TEXTENCODING_IBM_737        },  // OEM Greek
-    {     775,  RTL_TEXTENCODING_IBM_775        },  // OEM Baltic
-    {     850,  RTL_TEXTENCODING_IBM_850        },  // OEM Latin I
-    {     852,  RTL_TEXTENCODING_IBM_852        },  // OEM Latin II (Central European)
-    {     855,  RTL_TEXTENCODING_IBM_855        },  // OEM Cyrillic
-    {     857,  RTL_TEXTENCODING_IBM_857        },  // OEM Turkish
-//  {     858,  RTL_TEXTENCODING_IBM_858        },  // OEM Multilingual Latin I with Euro
-    {     860,  RTL_TEXTENCODING_IBM_860        },  // OEM Portugese
-    {     861,  RTL_TEXTENCODING_IBM_861        },  // OEM Icelandic
-    {     862,  RTL_TEXTENCODING_IBM_862        },  // OEM Hebrew
-    {     863,  RTL_TEXTENCODING_IBM_863        },  // OEM Canadian (French)
-    {     864,  RTL_TEXTENCODING_IBM_864        },  // OEM Arabic
-    {     865,  RTL_TEXTENCODING_IBM_865        },  // OEM Nordic
-    {     866,  RTL_TEXTENCODING_IBM_866        },  // OEM Cyrillic (Russian)
-    {     869,  RTL_TEXTENCODING_IBM_869        },  // OEM Greek (Modern)
-    {     874,  RTL_TEXTENCODING_MS_874         },  // MS Windows Thai
-    {     932,  RTL_TEXTENCODING_MS_932         },  // MS Windows Japanese Shift-JIS
-    {     936,  RTL_TEXTENCODING_MS_936         },  // MS Windows Chinese Simplified GBK
-    {     949,  RTL_TEXTENCODING_MS_949         },  // MS Windows Korean (Wansung)
-    {     950,  RTL_TEXTENCODING_MS_950         },  // MS Windows Chinese Traditional BIG5
-    {    1200,  RTL_TEXTENCODING_DONTKNOW       },  // Unicode (BIFF8) - return *_DONTKNOW to preserve old code page
-    {    1250,  RTL_TEXTENCODING_MS_1250        },  // MS Windows Latin II (Central European)
-    {    1251,  RTL_TEXTENCODING_MS_1251        },  // MS Windows Cyrillic
-    {    1252,  RTL_TEXTENCODING_MS_1252        },  // MS Windows Latin I (BIFF4-BIFF8)
-    {    1253,  RTL_TEXTENCODING_MS_1253        },  // MS Windows Greek
-    {    1254,  RTL_TEXTENCODING_MS_1254        },  // MS Windows Turkish
-    {    1255,  RTL_TEXTENCODING_MS_1255        },  // MS Windows Hebrew
-    {    1256,  RTL_TEXTENCODING_MS_1256        },  // MS Windows Arabic
-    {    1257,  RTL_TEXTENCODING_MS_1257        },  // MS Windows Baltic
-    {    1258,  RTL_TEXTENCODING_MS_1258        },  // MS Windows Vietnamese
-    {    1361,  RTL_TEXTENCODING_MS_1361        },  // MS Windows Korean (Johab)
-    {   10000,  RTL_TEXTENCODING_APPLE_ROMAN    },  // Apple Roman
-    {   32768,  RTL_TEXTENCODING_APPLE_ROMAN    },  // Apple Roman
-    {   32769,  RTL_TEXTENCODING_MS_1252        }   // MS Windows Latin I (BIFF2-BIFF3)
-};
-
-/** Predicate to search by given code page. */
-struct CodePageEntry_CPPred
-{
-    inline explicit     CodePageEntry_CPPred( sal_uInt16 nCodePage ) : mnCodePage( nCodePage ) {}
-    inline bool         operator()( const CodePageEntry& rEntry ) const { return rEntry.mnCodePage == mnCodePage; }
-    sal_uInt16          mnCodePage;
-};
-
-/** Predicate to search by given text encoding. */
-struct CodePageEntry_TEPred
-{
-    inline explicit     CodePageEntry_TEPred( rtl_TextEncoding eTextEnc ) : meTextEnc( eTextEnc ) {}
-    inline bool         operator()( const CodePageEntry& rEntry ) const { return rEntry.meTextEnc == meTextEnc; }
-    rtl_TextEncoding    meTextEnc;
-};
 
 // ----------------------------------------------------------------------------
 
@@ -193,7 +130,7 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
         aOutStrm << sal_uInt16( 0x4D42 ) << nBmpSize << sal_Int32( 0 ) << nOffset;
 
         // copy the DIB header
-        aOutStrm.copyStream( rStrm, nDibHdrSize );
+        rStrm.copyToStream( aOutStrm, nDibHdrSize );
         nBytes -= nDibHdrSize;
 
         /*  Excel 3.x and Excel 4.x seem to write broken or out-dated DIB data.
@@ -215,8 +152,8 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
             aOutStrm.seek( nOutStrmPos );
         }
 
-        // copy remaining pixel data top output stream
-        aOutStrm.copyStream( rStrm, nBytes );
+        // copy remaining pixel data to output stream
+        rStrm.copyToStream( aOutStrm, nBytes );
     }
     rStrm.seek( nInStrmPos + nBytes );
 }
@@ -224,8 +161,6 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
 } // namespace
 
 // ============================================================================
-
-// conversion -----------------------------------------------------------------
 
 /*static*/ double BiffHelper::calcDoubleFromRk( sal_Int32 nRkValue )
 {
@@ -284,24 +219,24 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
 
 /*static*/ rtl_TextEncoding BiffHelper::calcTextEncodingFromCodePage( sal_uInt16 nCodePage )
 {
-    const CodePageEntry* pEntry = ::std::find_if( spCodePages, STATIC_ARRAY_END( spCodePages ), CodePageEntry_CPPred( nCodePage ) );
-    if( pEntry == STATIC_ARRAY_END( spCodePages ) )
+    // some specials for BIFF
+    switch( nCodePage )
     {
-        OSL_ENSURE( false, "UnitConverter::calcTextEncodingFromCodePage - unknown code page" );
-        return RTL_TEXTENCODING_DONTKNOW;
+        case 1200:  return RTL_TEXTENCODING_DONTKNOW;       // BIFF8 Unicode
+        case 32768: return RTL_TEXTENCODING_APPLE_ROMAN;
+        case 32769: return RTL_TEXTENCODING_MS_1252;        // BIFF2-BIFF3
     }
-    return pEntry->meTextEnc;
+
+    rtl_TextEncoding eTextEnc = rtl_getTextEncodingFromWindowsCodePage( nCodePage );
+    OSL_ENSURE( eTextEnc != RTL_TEXTENCODING_DONTKNOW, "BiffHelper::calcTextEncodingFromCodePage - unknown code page" );
+    return eTextEnc;
 }
 
 /*static*/ sal_uInt16 BiffHelper::calcCodePageFromTextEncoding( rtl_TextEncoding eTextEnc )
 {
-    const CodePageEntry* pEntry = ::std::find_if( spCodePages, STATIC_ARRAY_END( spCodePages ), CodePageEntry_TEPred( eTextEnc ) );
-    if( pEntry == STATIC_ARRAY_END( spCodePages ) )
-    {
-        OSL_ENSURE( false, "UnitConverter::calcCodePageFromTextEncoding - unsupported text encoding" );
-        return 1252;
-    }
-    return pEntry->mnCodePage;
+    sal_uInt32 nCodePage = rtl_getWindowsCodePageFromTextEncoding( eTextEnc );
+    OSL_ENSURE( (0 < nCodePage) && (nCodePage <= SAL_MAX_UINT16), "BiffHelper::calcCodePageFromTextEncoding - unknown text encoding" );
+    return static_cast< sal_uInt16 >( (nCodePage == 0) ? 1252 : nCodePage );
 }
 
 /*static*/ void BiffHelper::importImgData( StreamDataSequence& orDataSeq, BiffInputStream& rStrm, BiffType eBiff )

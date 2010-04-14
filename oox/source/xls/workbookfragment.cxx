@@ -31,10 +31,13 @@
 #include "oox/helper/progressbar.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
+#include "oox/ole/olestorage.hxx"
+#include "oox/core/filterbase.hxx"
 #include "oox/drawingml/themefragmenthandler.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/chartsheetfragment.hxx"
 #include "oox/xls/connectionsfragment.hxx"
+#include "oox/xls/excelvbaproject.hxx"
 #include "oox/xls/externallinkbuffer.hxx"
 #include "oox/xls/externallinkfragment.hxx"
 #include "oox/xls/pivotcachebuffer.hxx"
@@ -53,6 +56,8 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::UNO_SET_THROW;
+using ::com::sun::star::io::XInputStream;
 using ::com::sun::star::table::CellAddress;
 using ::oox::core::ContextHandlerRef;
 using ::oox::core::FragmentHandlerRef;
@@ -284,11 +289,22 @@ void OoxWorkbookFragment::finalizeImport()
     // load all worksheets
     for( SheetFragmentVector::iterator aIt = aSheetFragments.begin(), aEnd = aSheetFragments.end(); aIt != aEnd; ++aIt )
     {
-        OOX_LOADSAVE_TIMER( IMPORTSHEETFRAGMENT );
         // import the sheet fragment
         importOoxFragment( *aIt );
         // delete fragment object, will free all allocated sheet buffers
         aIt->clear();
+    }
+
+    // import the VBA project (after loading the sheets, as they have imported the code names)
+    OUString aVbaFragmentPath = getFragmentPathFromFirstType( CREATE_MSOFFICE_RELATIONSTYPE( "vbaProject" ) );
+    if( aVbaFragmentPath.getLength() > 0 )
+    {
+        Reference< XInputStream > xInStrm = getBaseFilter().openInputStream( aVbaFragmentPath );
+        if( xInStrm.is() )
+        {
+            ::oox::ole::OleStorage aVbaStrg( getGlobalFactory(), xInStrm, false );
+            getVbaProject().importVbaProject( aVbaStrg, getBaseFilter().getGraphicHelper() );
+        }
     }
 
     // final conversions, e.g. calculation settings and view settings
@@ -344,7 +360,8 @@ void OoxWorkbookFragment::importPivotCacheDefFragment( const OUString& rRelId, s
 // ============================================================================
 
 BiffWorkbookFragment::BiffWorkbookFragment( const WorkbookHelper& rHelper, const OUString& rStrmName ) :
-    BiffWorkbookFragmentBase( rHelper, rStrmName )
+    BiffWorkbookFragmentBase( rHelper, rStrmName ),
+    mbImportVbaProject( false )
 {
 }
 
@@ -371,6 +388,13 @@ bool BiffWorkbookFragment::importFragment()
                 BiffFragmentType eSheetFragment = startFragment( getBiff(), rWorksheets.getBiffRecordHandle( nWorksheet ) );
                 sal_Int16 nCalcSheet = rWorksheets.getCalcSheetIndex( nWorksheet );
                 bNextSheet = importSheetFragment( *xSheetProgress, eSheetFragment, nCalcSheet );
+            }
+            // import the VBA project (after loading the sheets, as they have imported the code names)
+            if( mbImportVbaProject )
+            {
+                StorageRef xVbaStrg = getBaseFilter().openSubStorage( CREATE_OUSTRING( "_VBA_PROJECT_CUR" ), false );
+                if( xVbaStrg.get() )
+                    getVbaProject().importVbaProject( *xVbaStrg, getBaseFilter().getGraphicHelper() );
             }
         }
         break;
@@ -462,6 +486,8 @@ bool BiffWorkbookFragment::importGlobalsFragment( ISegmentProgressBar& rProgress
     StylesBuffer& rStyles = getStyles();
     WorksheetBuffer& rWorksheets = getWorksheets();
     PivotCacheBuffer& rPivotCaches = getPivotCaches();
+    bool bHasVbaProject = false;
+    bool bEmptyVbaProject = false;
 
     // collect records that need to be loaded in a second pass
     typedef ::std::vector< sal_Int64 > RecordHandleVec;
@@ -562,25 +588,27 @@ bool BiffWorkbookFragment::importGlobalsFragment( ISegmentProgressBar& rProgress
 
                 case BIFF8: switch( nRecId )
                 {
-                    case BIFF_ID_BOOKBOOL:      rWorkbookSett.importBookBool( mrStrm );     break;
-                    case BIFF_ID_CODENAME:      rWorkbookSett.importCodeName( mrStrm );     break;
-                    case BIFF_ID_CRN:           bExtLinkRec = true;                         break;
-                    case BIFF5_ID_DEFINEDNAME:  bExtLinkRec = true;                         break;
-                    case BIFF_ID_EXTERNALBOOK:  bExtLinkRec = true;                         break;
-                    case BIFF5_ID_EXTERNALNAME: bExtLinkRec = true;                         break;
-                    case BIFF_ID_EXTERNSHEET:   bExtLinkRec = true;                         break;
-                    case BIFF_ID_FILESHARING:   rWorkbookSett.importFileSharing( mrStrm );  break;
-                    case BIFF5_ID_FONT:         rStyles.importFont( mrStrm );               break;
-                    case BIFF4_ID_FORMAT:       rStyles.importFormat( mrStrm );             break;
-                    case BIFF_ID_HIDEOBJ:       rWorkbookSett.importHideObj( mrStrm );      break;
-                    case BIFF_ID_PALETTE:       rStyles.importPalette( mrStrm );            break;
-                    case BIFF_ID_PIVOTCACHE:    rPivotCaches.importPivotCacheRef( mrStrm ); break;
-                    case BIFF_ID_SHEET:         rWorksheets.importSheet( mrStrm );          break;
-                    case BIFF_ID_SST:           rSharedStrings.importSst( mrStrm );         break;
-                    case BIFF_ID_STYLE:         rStyles.importStyle( mrStrm );              break;
-                    case BIFF_ID_USESELFS:      rWorkbookSett.importUsesElfs( mrStrm );     break;
-                    case BIFF_ID_XCT:           bExtLinkRec = true;                         break;
-                    case BIFF5_ID_XF:           rStyles.importXf( mrStrm );                 break;
+                    case BIFF_ID_BOOKBOOL:          rWorkbookSett.importBookBool( mrStrm );     break;
+                    case BIFF_ID_CODENAME:          rWorkbookSett.importCodeName( mrStrm );     break;
+                    case BIFF_ID_CRN:               bExtLinkRec = true;                         break;
+                    case BIFF5_ID_DEFINEDNAME:      bExtLinkRec = true;                         break;
+                    case BIFF_ID_EXTERNALBOOK:      bExtLinkRec = true;                         break;
+                    case BIFF5_ID_EXTERNALNAME:     bExtLinkRec = true;                         break;
+                    case BIFF_ID_EXTERNSHEET:       bExtLinkRec = true;                         break;
+                    case BIFF_ID_FILESHARING:       rWorkbookSett.importFileSharing( mrStrm );  break;
+                    case BIFF5_ID_FONT:             rStyles.importFont( mrStrm );               break;
+                    case BIFF4_ID_FORMAT:           rStyles.importFormat( mrStrm );             break;
+                    case BIFF_ID_HIDEOBJ:           rWorkbookSett.importHideObj( mrStrm );      break;
+                    case BIFF_ID_VBAPROJECT:        bHasVbaProject = true;                      break;
+                    case BIFF_ID_VBAPROJECTEMPTY:   bEmptyVbaProject = true;                    break;
+                    case BIFF_ID_PALETTE:           rStyles.importPalette( mrStrm );            break;
+                    case BIFF_ID_PIVOTCACHE:        rPivotCaches.importPivotCacheRef( mrStrm ); break;
+                    case BIFF_ID_SHEET:             rWorksheets.importSheet( mrStrm );          break;
+                    case BIFF_ID_SST:               rSharedStrings.importSst( mrStrm );         break;
+                    case BIFF_ID_STYLE:             rStyles.importStyle( mrStrm );              break;
+                    case BIFF_ID_USESELFS:          rWorkbookSett.importUsesElfs( mrStrm );     break;
+                    case BIFF_ID_XCT:               bExtLinkRec = true;                         break;
+                    case BIFF5_ID_XF:               rStyles.importXf( mrStrm );                 break;
                 }
                 break;
 
@@ -617,6 +645,9 @@ bool BiffWorkbookFragment::importGlobalsFragment( ISegmentProgressBar& rProgress
         // seek back to the EOF record of the workbook globals fragment
         bRet = mrStrm.startRecordByHandle( nEofHandle );
     }
+
+    // import the VBA project
+    mbImportVbaProject = bHasVbaProject && !bEmptyVbaProject;
 
     // #i56376# missing EOF - rewind before worksheet BOF record (see above)
     if( bRet && isBofRecord() )

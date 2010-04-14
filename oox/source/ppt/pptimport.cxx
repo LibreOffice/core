@@ -29,6 +29,7 @@
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "oox/dump/pptxdumper.hxx"
 #include "oox/drawingml/table/tablestylelistfragmenthandler.hxx"
+#include "oox/helper/graphichelper.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -148,6 +149,35 @@ const oox::drawingml::table::TableStyleListPtr PowerPointImport::getTableStyles(
 ::oox::drawingml::chart::ChartConverter& PowerPointImport::getChartConverter()
 {
     return *mxChartConv;
+}
+
+namespace {
+
+class PptGraphicHelper : public GraphicHelper
+{
+public:
+    explicit            PptGraphicHelper( const PowerPointImport& rFilter );
+    virtual sal_Int32   getSchemeColor( sal_Int32 nToken ) const;
+private:
+    const PowerPointImport& mrFilter;
+};
+
+PptGraphicHelper::PptGraphicHelper( const PowerPointImport& rFilter ) :
+    GraphicHelper( rFilter.getGlobalFactory() ),
+    mrFilter( rFilter )
+{
+}
+
+sal_Int32 PptGraphicHelper::getSchemeColor( sal_Int32 nToken ) const
+{
+    return mrFilter.getSchemeColor( nToken );
+}
+
+} // namespace
+
+GraphicHelper* PowerPointImport::implCreateGraphicHelper() const
+{
+    return new PptGraphicHelper( *this );
 }
 
 OUString PowerPointImport::implGetImplementationName() const

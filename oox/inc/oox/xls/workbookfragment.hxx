@@ -92,6 +92,9 @@ private:
     bool                importSheetFragment(
                             ISegmentProgressBar& rProgressBar,
                             BiffFragmentType eFragment, sal_Int16 nCalcSheet );
+
+private:
+    bool                mbImportVbaProject; /// True = import VBA project at end of filter.
 };
 
 // ============================================================================

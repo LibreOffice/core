@@ -27,7 +27,9 @@
 
 #include "oox/ole/olehelper.hxx"
 #include <rtl/ustrbuf.hxx>
+#include "tokens.hxx"
 #include "oox/helper/binaryinputstream.hxx"
+#include "oox/helper/graphichelper.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -39,9 +41,24 @@ namespace ole {
 
 namespace {
 
-const sal_Char* const OLE_GUID_STDFONT      = "{0BE35203-8F91-11CE-9DE3-00AA004BB851}";
-const sal_Char* const OLE_GUID_STDPIC       = "{0BE35204-8F91-11CE-9DE3-00AA004BB851}";
-const sal_Char* const OLE_GUID_STDHLINK     = "{79EAC9D0-BAF9-11CE-8C82-00AA004BA90B}";
+const sal_uInt32 OLE_COLORTYPE_MASK         = 0xFF000000;
+const sal_uInt32 OLE_COLORTYPE_CLIENT       = 0x00000000;
+const sal_uInt32 OLE_COLORTYPE_PALETTE      = 0x01000000;
+const sal_uInt32 OLE_COLORTYPE_BGR          = 0x02000000;
+const sal_uInt32 OLE_COLORTYPE_SYSCOLOR     = 0x80000000;
+
+const sal_uInt32 OLE_PALETTECOLOR_MASK      = 0x0000FFFF;
+const sal_uInt32 OLE_BGRCOLOR_MASK          = 0x00FFFFFF;
+const sal_uInt32 OLE_SYSTEMCOLOR_MASK       = 0x0000FFFF;
+
+/** Returns the UNO RGB color from the passed encoded OLE BGR color. */
+inline sal_Int32 lclDecodeBgrColor( sal_uInt32 nOleColor )
+{
+    return static_cast< sal_Int32 >( ((nOleColor & 0x0000FF) << 16) | (nOleColor & 0x00FF00) | ((nOleColor & 0xFF0000) >> 16) );
+}
+
+// ----------------------------------------------------------------------------
+
 const sal_Char* const OLE_GUID_URLMONIKER   = "{79EAC9E0-BAF9-11CE-8C82-00AA004BA90B}";
 const sal_Char* const OLE_GUID_FILEMONIKER  = "{00000303-0000-0000-C000-000000000046}";
 
@@ -69,14 +86,15 @@ void lclAppendHex( OUStringBuffer& orBuffer, Type nValue )
         orBuffer.setCharAt( nCharIdx, spcHexChars[ nValue & 0xF ] );
 }
 
-OUString lclReadStdHlinkString( BinaryInputStream& rInStrm, rtl_TextEncoding eTextEnc, bool bUnicode )
+OUString lclReadStdHlinkString( BinaryInputStream& rInStrm, bool bUnicode )
 {
     OUString aRet;
     sal_Int32 nChars = rInStrm.readInt32();
     if( nChars > 0 )
     {
         sal_Int32 nReadChars = getLimitedValue< sal_Int32, sal_Int32 >( nChars, 0, SAL_MAX_UINT16 );
-        aRet = bUnicode ? rInStrm.readUnicodeArray( nReadChars, true ) : rInStrm.readCharArrayUC( nReadChars, eTextEnc, true );
+        // byte strings are always in ANSI (Windows 1252) encoding
+        aRet = bUnicode ? rInStrm.readUnicodeArray( nReadChars, true ) : rInStrm.readCharArrayUC( nReadChars, RTL_TEXTENCODING_MS_1252, true );
         // strings are NUL terminated, remove trailing NUL and possible other garbage
         sal_Int32 nNulPos = aRet.indexOf( '\0' );
         if( nNulPos >= 0 )
@@ -90,6 +108,59 @@ OUString lclReadStdHlinkString( BinaryInputStream& rInStrm, rtl_TextEncoding eTe
 } // namespace
 
 // ============================================================================
+
+StdFontInfo::StdFontInfo() :
+    mnHeight( 0 ),
+    mnWeight( OLE_STDFONT_NORMAL ),
+    mnCharSet( WINDOWS_CHARSET_ANSI ),
+    mnFlags( 0 )
+{
+}
+
+StdFontInfo::StdFontInfo( const ::rtl::OUString& rName, sal_uInt32 nHeight,
+        sal_uInt16 nWeight, sal_uInt16 nCharSet, sal_uInt8 nFlags ) :
+    maName( rName ),
+    mnHeight( nHeight ),
+    mnWeight( nWeight ),
+    mnCharSet( nCharSet ),
+    mnFlags( nFlags )
+{
+}
+
+// ============================================================================
+
+/*static*/ sal_Int32 OleHelper::decodeOleColor(
+        const GraphicHelper& rGraphicHelper, sal_uInt32 nOleColor, bool bDefaultColorBgr )
+{
+    static const sal_Int32 spnSystemColors[] =
+    {
+        XML_scrollBar,      XML_background,     XML_activeCaption,  XML_inactiveCaption,
+        XML_menu,           XML_window,         XML_windowFrame,    XML_menuText,
+        XML_windowText,     XML_captionText,    XML_activeBorder,   XML_inactiveBorder,
+        XML_appWorkspace,   XML_highlight,      XML_highlightText,  XML_btnFace,
+        XML_btnShadow,      XML_grayText,       XML_btnText,        XML_inactiveCaptionText,
+        XML_btnHighlight,   XML_3dDkShadow,     XML_3dLight,        XML_infoText,
+        XML_infoBk
+    };
+
+    switch( nOleColor & OLE_COLORTYPE_MASK )
+    {
+        case OLE_COLORTYPE_CLIENT:
+            return bDefaultColorBgr ? lclDecodeBgrColor( nOleColor ) : rGraphicHelper.getPaletteColor( nOleColor & OLE_PALETTECOLOR_MASK );
+        break;
+
+        case OLE_COLORTYPE_PALETTE:
+            return rGraphicHelper.getPaletteColor( nOleColor & OLE_PALETTECOLOR_MASK );
+
+        case OLE_COLORTYPE_BGR:
+            return lclDecodeBgrColor( nOleColor );
+
+        case OLE_COLORTYPE_SYSCOLOR:
+            return rGraphicHelper.getSystemColor( STATIC_ARRAY_SELECT( spnSystemColors, nOleColor & OLE_SYSTEMCOLOR_MASK, XML_TOKEN_INVALID ), API_RGB_WHITE );
+    }
+    OSL_ENSURE( false, "OleHelper::decodeOleColor - unknown color type" );
+    return API_RGB_BLACK;
+}
 
 /*static*/ OUString OleHelper::importGuid( BinaryInputStream& rInStrm )
 {
@@ -110,6 +181,24 @@ OUString lclReadStdHlinkString( BinaryInputStream& rInStrm, rtl_TextEncoding eTe
     return aBuffer.makeStringAndClear();
 }
 
+/*static*/ bool OleHelper::importStdFont( StdFontInfo& orFontInfo, BinaryInputStream& rInStrm, bool bWithGuid )
+{
+    if( bWithGuid )
+    {
+        bool bIsStdFont = importGuid( rInStrm ).equalsAscii( OLE_GUID_STDFONT );
+        OSL_ENSURE( bIsStdFont, "OleHelper::importStdFont - unexpected header GUID, expected StdFont" );
+        if( !bIsStdFont )
+            return false;
+    }
+
+    sal_uInt8 nVersion, nNameLen;
+    rInStrm >> nVersion >> orFontInfo.mnCharSet >> orFontInfo.mnFlags >> orFontInfo.mnWeight >> orFontInfo.mnHeight >> nNameLen;
+    // according to spec the name is ASCII
+    orFontInfo.maName = rInStrm.readCharArrayUC( nNameLen, RTL_TEXTENCODING_ASCII_US );
+    OSL_ENSURE( nVersion <= 1, "OleHelper::importStdFont - wrong version" );
+    return !rInStrm.isEof() && (nVersion <= 1);
+}
+
 /*static*/ bool OleHelper::importStdPic( StreamDataSequence& orGraphicData, BinaryInputStream& rInStrm, bool bWithGuid )
 {
     if( bWithGuid )
@@ -127,7 +216,7 @@ OUString lclReadStdHlinkString( BinaryInputStream& rInStrm, rtl_TextEncoding eTe
     return !rInStrm.isEof() && (nStdPicId == OLE_STDPIC_ID) && (nBytes > 0) && (rInStrm.readData( orGraphicData, nBytes ) == nBytes);
 }
 
-/*static*/ bool OleHelper::importStdHlink( StdHlinkInfo& orHlinkInfo, BinaryInputStream& rInStrm, rtl_TextEncoding eTextEnc, bool bWithGuid )
+/*static*/ bool OleHelper::importStdHlink( StdHlinkInfo& orHlinkInfo, BinaryInputStream& rInStrm, bool bWithGuid )
 {
     if( bWithGuid )
     {
@@ -145,10 +234,10 @@ OUString lclReadStdHlinkString( BinaryInputStream& rInStrm, rtl_TextEncoding eTe
 
     // display string
     if( getFlag( nFlags, OLE_STDHLINK_HASDISPLAY ) )
-        orHlinkInfo.maDisplay = lclReadStdHlinkString( rInStrm, eTextEnc, true );
+        orHlinkInfo.maDisplay = lclReadStdHlinkString( rInStrm, true );
     // frame string
     if( getFlag( nFlags, OLE_STDHLINK_HASFRAME ) )
-        orHlinkInfo.maFrame = lclReadStdHlinkString( rInStrm, eTextEnc, true );
+        orHlinkInfo.maFrame = lclReadStdHlinkString( rInStrm, true );
 
     // target
     if( getFlag( nFlags, OLE_STDHLINK_HASTARGET ) )
@@ -156,7 +245,7 @@ OUString lclReadStdHlinkString( BinaryInputStream& rInStrm, rtl_TextEncoding eTe
         if( getFlag( nFlags, OLE_STDHLINK_ASSTRING ) )
         {
             OSL_ENSURE( getFlag( nFlags, OLE_STDHLINK_ABSOLUTE ), "OleHelper::importStdHlink - link not absolute" );
-            orHlinkInfo.maTarget = lclReadStdHlinkString( rInStrm, eTextEnc, true );
+            orHlinkInfo.maTarget = lclReadStdHlinkString( rInStrm, true );
         }
         else // hyperlink moniker
         {
@@ -167,7 +256,7 @@ OUString lclReadStdHlinkString( BinaryInputStream& rInStrm, rtl_TextEncoding eTe
                 sal_Int16 nUpLevels;
                 rInStrm >> nUpLevels;
                 OSL_ENSURE( (nUpLevels == 0) || !getFlag( nFlags, OLE_STDHLINK_ABSOLUTE ), "OleHelper::importStdHlink - absolute filename with upcount" );
-                orHlinkInfo.maTarget = lclReadStdHlinkString( rInStrm, eTextEnc, false );
+                orHlinkInfo.maTarget = lclReadStdHlinkString( rInStrm, false );
                 rInStrm.skip( 24 );
                 sal_Int32 nBytes = rInStrm.readInt32();
                 if( nBytes > 0 )
@@ -200,9 +289,9 @@ OUString lclReadStdHlinkString( BinaryInputStream& rInStrm, rtl_TextEncoding eTe
 
     // target location
     if( getFlag( nFlags, OLE_STDHLINK_HASLOCATION ) )
-        orHlinkInfo.maLocation = lclReadStdHlinkString( rInStrm, eTextEnc, true );
+        orHlinkInfo.maLocation = lclReadStdHlinkString( rInStrm, true );
 
-    return true;
+    return !rInStrm.isEof();
 }
 
 // ============================================================================

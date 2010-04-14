@@ -29,24 +29,30 @@
 #define OOX_HELPER_GRAPHICHELPER_HXX
 
 #include <deque>
+#include <map>
 #include <rtl/ustring.hxx>
+#include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include "oox/helper/binarystreambase.hxx"
 
 namespace com { namespace sun { namespace star {
-    namespace uno { class XComponentContext; }
-    namespace lang { class XMultiServiceFactory; }
+    namespace awt { struct Point; }
+    namespace awt { struct Size; }
+    namespace awt { class XUnitConversion; }
     namespace io { class XInputStream; }
     namespace graphic { class XGraphic; }
     namespace graphic { class XGraphicObject; }
     namespace graphic { class XGraphicProvider; }
+    namespace lang { class XMultiServiceFactory; }
+    namespace uno { class XComponentContext; }
 } } }
 
 namespace oox {
 
 // ============================================================================
 
-/** Provides helper functions for graphics and graphic objects handling.
+/** Provides helper functions for colors, device measurement conversion,
+    graphics, and graphic objects handling.
 
     All createGraphicObject() and importGraphicObject() functions create
     persistent graphic objects internally and store them in an internal
@@ -60,39 +66,83 @@ class GraphicHelper
 {
 public:
     explicit            GraphicHelper(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory );
-                        ~GraphicHelper();
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory );
+    virtual             ~GraphicHelper();
+
+    /** Returns a system color specified by the passed XML token identifier. */
+    sal_Int32           getSystemColor( sal_Int32 nToken, sal_Int32 nDefaultRgb = API_RGB_TRANSPARENT ) const;
+    /** Derived classes may implement to resolve a scheme color from the passed XML token identifier. */
+    virtual sal_Int32   getSchemeColor( sal_Int32 nToken ) const;
+    /** Derived classes may implement to resolve a palette index to an RGB color. */
+    virtual sal_Int32   getPaletteColor( sal_Int32 nPaletteIdx ) const;
+
+    /** Returns information about the output device. */
+    const ::com::sun::star::awt::DeviceInfo& getDeviceInfo() const;
+
+    /** Converts the passed value from horizontal screen pixels to 1/100 mm. */
+    sal_Int32           convertScreenPixelXToHmm( double fPixelX ) const;
+    /** Converts the passed value from vertical screen pixels to 1/100 mm. */
+    sal_Int32           convertScreenPixelYToHmm( double fPixelY ) const;
+    /** Converts the passed point from screen pixels to 1/100 mm. */
+    ::com::sun::star::awt::Point convertScreenPixelToHmm( const ::com::sun::star::awt::Point& rPixel ) const;
+    /** Converts the passed size from screen pixels to 1/100 mm. */
+    ::com::sun::star::awt::Size convertScreenPixelToHmm( const ::com::sun::star::awt::Size& rPixel ) const;
+
+    /** Converts the passed value from 1/100 mm to horizontal screen pixels. */
+    double              convertHmmToScreenPixelX( sal_Int32 nHmmX ) const;
+    /** Converts the passed value from 1/100 mm to vertical screen pixels. */
+    double              convertHmmToScreenPixelY( sal_Int32 nHmmY ) const;
+    /** Converts the passed point from 1/100 mm to screen pixels. */
+    ::com::sun::star::awt::Point convertHmmToScreenPixel( const ::com::sun::star::awt::Point& rHmm ) const;
+    /** Converts the passed size from 1/100 mm to screen pixels. */
+    ::com::sun::star::awt::Size convertHmmToScreenPixel( const ::com::sun::star::awt::Size& rHmm ) const;
+
+    /** Converts the passed point from AppFont units to 1/100 mm. */
+    ::com::sun::star::awt::Point convertAppFontToHmm( const ::com::sun::star::awt::Point& rAppFont ) const;
+    /** Converts the passed point from AppFont units to 1/100 mm. */
+    ::com::sun::star::awt::Size convertAppFontToHmm( const ::com::sun::star::awt::Size& rAppFont ) const;
+
+    /** Converts the passed point from 1/100 mm to AppFont units. */
+    ::com::sun::star::awt::Point convertHmmToAppFont( const ::com::sun::star::awt::Point& rHmm ) const;
+    /** Converts the passed size from 1/100 mm to AppFont units. */
+    ::com::sun::star::awt::Size convertHmmToAppFont( const ::com::sun::star::awt::Size& rHmm ) const;
 
     /** Imports a graphic from the passed input stream. */
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
                         importGraphic(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm ) const;
 
     /** Imports a graphic from the passed binary memory block. */
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
-                        importGraphic( const StreamDataSequence& rGraphicData );
+                        importGraphic( const StreamDataSequence& rGraphicData ) const;
 
     /** Creates a persistent graphic object from the passed graphic.
         @return  The URL of the created and internally cached graphic object. */
     ::rtl::OUString     createGraphicObject(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic ) const;
 
     /** Creates a persistent graphic object from the passed input stream.
         @return  The URL of the created and internally cached graphic object. */
     ::rtl::OUString     importGraphicObject(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm ) const;
 
     /** Creates a persistent graphic object from the passed binary memory block.
         @return  The URL of the created and internally cached graphic object. */
-    ::rtl::OUString     importGraphicObject( const StreamDataSequence& rGraphicData );
+    ::rtl::OUString     importGraphicObject( const StreamDataSequence& rGraphicData ) const;
 
 private:
+    typedef ::std::map< sal_Int32, sal_Int32 > SystemPalette;
     typedef ::std::deque< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject > > GraphicObjectDeque;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxCompContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicProvider > mxGraphicProvider;
-    GraphicObjectDeque  maGraphicObjects;
-    const ::rtl::OUString maGraphicObjScheme;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XUnitConversion > mxUnitConversion;
+    ::com::sun::star::awt::DeviceInfo maDeviceInfo; /// Current output device info.
+    SystemPalette       maSystemPalette;            /// Maps system colors (XML tokens) to RGB color values.
+    mutable GraphicObjectDeque maGraphicObjects;    /// Caches all created graphic objects to keep them alive.
+    const ::rtl::OUString maGraphicObjScheme;       /// The URL scheme name for graphic objects.
+    double              mfPixelPerHmmX;             /// Number of screen pixels per 1/100 mm in X direction.
+    double              mfPixelPerHmmY;             /// Number of screen pixels per 1/100 mm in Y direction.
 };
 
 // ============================================================================
