@@ -682,7 +682,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
     }
 
-    public abstract void finishWizard();
+    public abstract boolean finishWizard();
 
     /**
      * This function will call if the finish button is pressed on the UI.
@@ -690,8 +690,18 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     public void finishWizard_1()
     {
         enableFinishButton(false);
-        finishWizard();
-        removeTerminateListener();
+        boolean success = false;
+        try
+        {
+            success = finishWizard();
+        }
+        finally
+        {
+            if ( !success )
+                enableFinishButton( true );
+        }
+        if ( success )
+            removeTerminateListener();
     }
 
     public int getMaximalStep()
