@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DefaultJobProperties.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.util;
 
 import java.util.HashMap;
@@ -40,44 +35,45 @@ import java.util.Map;
 
 public class DefaultJobProperties implements JobProperties
 {
-  private final ReportEngineMetaData metaData;
-  private final Map properties;
 
-  public DefaultJobProperties (final ReportEngineMetaData metaData)
-  {
-    if (metaData == null)
-    {
-      throw new NullPointerException();
-    }
-    this.properties = new HashMap();
-    this.metaData = metaData;
-  }
+    private final ReportEngineMetaData metaData;
+    private final Map properties;
 
-  public Object getProperty (final String key)
-  {
-    return properties.get(key);
-  }
-
-  public void setProperty (final String key, final Object value)
-          throws JobDefinitionException
-  {
-    final Class type = metaData.getParameterType(key);
-    if (type == null)
+    public DefaultJobProperties(final ReportEngineMetaData metaData)
     {
-      throw new JobDefinitionException("The parameter name is not known: " + key);
-    }
-    if (!type.isInstance(value))
-    {
-      throw new JobDefinitionException("The parameter value is not understood");
+        if (metaData == null)
+        {
+            throw new NullPointerException();
+        }
+        this.properties = new HashMap();
+        this.metaData = metaData;
     }
 
-    this.properties.put(key, value);
-  }
+    public Object getProperty(final String key)
+    {
+        return properties.get(key);
+    }
 
-  public JobProperties copy()
-  {
-    final DefaultJobProperties props = new DefaultJobProperties(metaData);
-    props.properties.putAll(properties);
-    return props;
-  }
+    public void setProperty(final String key, final Object value)
+            throws JobDefinitionException
+    {
+        final Class type = metaData.getParameterType(key);
+        if (type == null)
+        {
+            throw new JobDefinitionException("The parameter name is not known: " + key);
+        }
+        if (!type.isInstance(value))
+        {
+            throw new JobDefinitionException("The parameter value is not understood");
+        }
+
+        this.properties.put(key, value);
+    }
+
+    public JobProperties copy()
+    {
+        final DefaultJobProperties props = new DefaultJobProperties(metaData);
+        props.properties.putAll(properties);
+        return props;
+    }
 }

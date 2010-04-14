@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartRawReportTarget.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -138,21 +135,19 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
             }
             catch (IOException e)
             {
-                throw new ReportProcessingException("Failed", e);
+                throw new ReportProcessingException(OfficeDocumentReportTarget.FAILED, e);
             }
         }
     }
 
     private boolean isFiltered(final String elementType)
     {
-        return OfficeToken.TABLE_HEADER_COLUMNS.equals(elementType) ||
-                OfficeToken.TABLE_HEADER_ROWS.equals(elementType) ||
-                OfficeToken.TABLE_COLUMNS.equals(elementType);
+        return OfficeToken.TABLE_HEADER_COLUMNS.equals(elementType) || OfficeToken.TABLE_HEADER_ROWS.equals(elementType) || OfficeToken.TABLE_COLUMNS.equals(elementType);
     }
 
     protected void endOther(final AttributeMap attrs) throws IOException, DataSourceException, ReportProcessingException
     {
-        if ( tableRowsStarted && getCurrentRole() == ROLE_TEMPLATE)
+        if (tableRowsStarted && getCurrentRole() == ROLE_TEMPLATE)
         {
             return;
         }
@@ -163,8 +158,7 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
             // if this is the report namespace, write out a table definition ..
             if (OfficeNamespaces.TABLE_NS.equals(namespace))
             {
-                if (OfficeToken.TABLE.equals(elementType) ||
-                        OfficeToken.TABLE_ROWS.equals(elementType))
+                if (OfficeToken.TABLE.equals(elementType) || OfficeToken.TABLE_ROWS.equals(elementType))
                 {
                     return;
                 }
@@ -194,7 +188,7 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
     public void processContent(final DataFlags value)
             throws DataSourceException, ReportProcessingException
     {
-        if ( !(tableRowsStarted && getCurrentRole() == ROLE_TEMPLATE))
+        if (!(tableRowsStarted && getCurrentRole() == ROLE_TEMPLATE))
         {
             super.processContent(value);
         }
@@ -203,7 +197,7 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
     private void processElement(final AttributeMap attrs, final String namespace, final String elementType)
             throws IOException, ReportProcessingException
     {
-        if ( tableRowsStarted && getCurrentRole() == ROLE_TEMPLATE)
+        if (tableRowsStarted && getCurrentRole() == ROLE_TEMPLATE)
         {
             return;
         }
@@ -247,9 +241,10 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
         final XmlWriter xmlWriter = getXmlWriter();
         xmlWriter.writeTag(namespace, elementType, attrList, XmlWriter.OPEN);
         ++closeTags;
-    // System.out.println("elementType = " + elementType);
+        // System.out.println("elementType = " + elementType);
     }
     // /////////////////////////////////////////////////////////////////////////
+
     public void processText(final String text) throws DataSourceException, ReportProcessingException
     {
         if (inFilterElements && tableCount > 1)
@@ -258,6 +253,7 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
         }
         super.processText(text);
     }
+
     public void endReport(final ReportStructureRoot report)
             throws DataSourceException, ReportProcessingException
     {
@@ -281,7 +277,7 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
         }
         catch (IOException ioe)
         {
-            throw new ReportProcessingException("Failed to write settings document",ioe);
+            throw new ReportProcessingException("Failed to write settings document", ioe);
         }
     }
 }

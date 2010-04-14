@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FormattedTextElement.java,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import org.jfree.report.expressions.FormulaExpression;
@@ -44,20 +39,20 @@ import org.jfree.report.expressions.FormulaExpression;
  */
 public class FormattedTextElement extends ReportElement
 {
-  private FormulaExpression valueExpression;
 
-  public FormattedTextElement()
-  {
-  }
+    private FormulaExpression valueExpression;
 
+    public FormattedTextElement()
+    {
+    }
 
-  public FormulaExpression getValueExpression()
-  {
-    return valueExpression;
-  }
+    public FormulaExpression getValueExpression()
+    {
+        return valueExpression;
+    }
 
-  public void setValueExpression(final FormulaExpression valueExpression)
-  {
-    this.valueExpression = valueExpression;
-  }
+    public void setValueExpression(final FormulaExpression valueExpression)
+    {
+        this.valueExpression = valueExpression;
+    }
 }

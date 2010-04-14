@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: StyleMapperXmlResourceFactory.java,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.styles;
 
 import org.pentaho.reporting.libraries.xmlns.parser.AbstractXmlResourceFactory;
@@ -43,17 +38,18 @@ import org.pentaho.reporting.libraries.base.config.Configuration;
  */
 public class StyleMapperXmlResourceFactory extends AbstractXmlResourceFactory
 {
-  public StyleMapperXmlResourceFactory()
-  {
-  }
 
-  protected Configuration getConfiguration()
-  {
-    return JFreeReportBoot.getInstance().getGlobalConfig();
-  }
+    public StyleMapperXmlResourceFactory()
+    {
+    }
 
-  public Class getFactoryType()
-  {
-    return StyleMapper.class;
-  }
+    protected Configuration getConfiguration()
+    {
+        return JFreeReportBoot.getInstance().getGlobalConfig();
+    }
+
+    public Class getFactoryType()
+    {
+        return StyleMapper.class;
+    }
 }

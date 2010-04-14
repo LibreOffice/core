@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: StarReportModule.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho;
 
 import org.pentaho.reporting.libraries.base.boot.AbstractModule;
@@ -37,26 +32,25 @@ import org.pentaho.reporting.libraries.base.boot.SubSystem;
 
 public class StarReportModule extends AbstractModule
 {
-  public StarReportModule ()
-          throws ModuleInitializeException
-  {
-    loadModuleInfo();
-  }
 
-  /**
-   * Initializes the module. Use this method to perform all initial setup operations. This
-   * method is called only once in a modules lifetime. If the initializing cannot be
-   * completed, throw a ModuleInitializeException to indicate the error,. The module will
-   * not be available to the system.
-   *
-   * @param subSystem the subSystem.
-   * @throws org.jfree.base.modules.ModuleInitializeException
-   *          if an error ocurred while initializing the module.
-   */
-  public void initialize (final SubSystem subSystem)
-          throws ModuleInitializeException
-  {
+    public StarReportModule()
+            throws ModuleInitializeException
+    {
+        loadModuleInfo();
+    }
 
-
-  }
+    /**
+     * Initializes the module. Use this method to perform all initial setup operations. This
+     * method is called only once in a modules lifetime. If the initializing cannot be
+     * completed, throw a ModuleInitializeException to indicate the error,. The module will
+     * not be available to the system.
+     *
+     * @param subSystem the subSystem.
+     * @throws org.jfree.base.modules.ModuleInitializeException
+     *          if an error ocurred while initializing the module.
+     */
+    public void initialize(final SubSystem subSystem)
+            throws ModuleInitializeException
+    {
+    }
 }

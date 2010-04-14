@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OleProducer.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +46,8 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Ocke Janssen
  */
-public class OleProducer {
+public class OleProducer
+{
 
     private static final Log LOGGER = LogFactory.getLog(OleProducer.class);
     private final InputRepository inputRepository;
@@ -59,13 +57,15 @@ public class OleProducer {
     private final ImageService imageService;
     private final Integer maxRows;
 
-
     public OleProducer(final InputRepository inputRepository,
-            final OutputRepository outputRepository,final ImageService imageService,final DataSourceFactory dataSourceFactory,final Integer maxRows) {
-        if (inputRepository == null) {
+            final OutputRepository outputRepository, final ImageService imageService, final DataSourceFactory dataSourceFactory, final Integer maxRows)
+    {
+        if (inputRepository == null)
+        {
             throw new NullPointerException();
         }
-        if (outputRepository == null) {
+        if (outputRepository == null)
+        {
             throw new NullPointerException();
         }
 
@@ -77,15 +77,18 @@ public class OleProducer {
         this.maxRows = maxRows;
     }
 
-    String produceOle(final String source,final List masterColumns,final List masterValues,final List detailColumns) {
+    String produceOle(final String source, final List masterColumns, final List masterValues, final List detailColumns)
+    {
         InputRepository subInputRepository = null;
         OutputRepository subOutputRepository = null;
         String output = "";
-        try {
+        try
+        {
             subInputRepository = inputRepository.openInputRepository(source);
             output = nameGenerator.generateStorageName("Object", null);
             subOutputRepository = outputRepository.openOutputRepository(output, PentahoReportEngineMetaData.OPENDOCUMENT_CHART);
-            try {
+            try
+            {
 
                 final PentahoReportEngine engine = new PentahoReportEngine();
                 final ReportJobDefinition definition = engine.createJobDefinition();
@@ -104,18 +107,27 @@ public class OleProducer {
                 procParms.setProperty(ReportEngineParameterNames.MAXROWS, maxRows);
 
                 engine.createJob(definition).execute();
-            } catch (ReportExecutionException ex) {
-                LOGGER.error("ReportProcessing failed", ex);
-            } catch (IOException ex) {
+            }
+            catch (ReportExecutionException ex)
+            {
                 LOGGER.error("ReportProcessing failed", ex);
             }
-        } catch (IOException ex) {
+            catch (IOException ex)
+            {
+                LOGGER.error("ReportProcessing failed", ex);
+            }
+        }
+        catch (IOException ex)
+        {
             LOGGER.error("ReportProcessing failed", ex);
-        } finally {
-            if (subInputRepository != null) {
+        } finally
+        {
+            if (subInputRepository != null)
+            {
                 subInputRepository.closeInputRepository();
             }
-            if (subOutputRepository != null) {
+            if (subOutputRepository != null)
+            {
                 subOutputRepository.closeOutputRepository();
             }
         }

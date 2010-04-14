@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: MasterDetailReadHandler.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,7 +68,7 @@ public class MasterDetailReadHandler extends ElementReadHandler
         if (parseMasterDetail)
         {
             final String master = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "master");
-            if (master != null && master.length() > 0 )
+            if (master != null && master.length() > 0)
             {
                 final String detail = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "detail");
                 element.addMasterDetailFields(master, detail);

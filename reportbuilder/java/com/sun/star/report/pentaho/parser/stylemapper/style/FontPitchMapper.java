@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FontPitchMapper.java,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.stylemapper.style;
 
 import com.sun.star.report.pentaho.parser.stylemapper.OneOfConstantsMapper;
@@ -37,10 +32,11 @@ import org.jfree.layouting.input.style.values.CSSConstant;
 
 public class FontPitchMapper extends OneOfConstantsMapper
 {
-  public FontPitchMapper ()
-  {
-    super (FontStyleKeys.FONT_PITCH);
-    addMapping("variable", new CSSConstant("variable"));
-    addMapping("fixed", new CSSConstant("fixed"));
-  }
+
+    public FontPitchMapper()
+    {
+        super(FontStyleKeys.FONT_PITCH);
+        addMapping("variable", new CSSConstant("variable"));
+        addMapping("fixed", new CSSConstant("fixed"));
+    }
 }

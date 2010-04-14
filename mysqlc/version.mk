@@ -6,10 +6,6 @@
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.4 $
-#
 # This file is part of OpenOffice.org.
 #
 # OpenOffice.org is free software: you can redistribute it and/or modify
@@ -28,24 +24,15 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..$/..$/..$/..$/..$/..$/..$/..
 
-PRJNAME=sdext
-TARGET=data_ooOUI
-PACKAGE=org.openoffice.Office.UI
+MYSQLC_VERSION_MAJOR=1
+MYSQLC_VERSION_MINOR=0
+MYSQLC_VERSION_MICRO=1
 
-.INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/source$/minimizer$/minimizer.pmk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+# the title, as displayed in the Extension Manager
+MYSQLC_TITLE=MySQL Connector
 
-# --- Targets ------------------------------------------------------
-
-XCUFILES= \
-    ImpressWindowState.xcu
-
-MODULEFILES=
-
-LOCALIZEDFILES= \
-    ImpressWindowState.xcu
-
-.INCLUDE :  target.mk
+# the status of the extension
+# if this is different from "final", it will be appended to the title displayed in the Extension Manager
+# and also added to the file name of the resulting .oxt file
+MYSQLC_STATUS=Alpha

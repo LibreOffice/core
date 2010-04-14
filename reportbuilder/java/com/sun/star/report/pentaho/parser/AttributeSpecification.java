@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AttributeSpecification.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,35 +24,34 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser;
 
 public final class AttributeSpecification
 {
-  private final String namespaceUrl;
-  private final String attributName;
-  private final String mapperImplementation;
 
-  public AttributeSpecification (String namespaceUrl, String attributName, String mapperImplementation)
-  {
-    this.namespaceUrl = namespaceUrl;
-    this.attributName = attributName;
-    this.mapperImplementation = mapperImplementation;
-  }
+    private final String namespaceUrl;
+    private final String attributName;
+    private final String mapperImplementation;
 
-  public String getAttributName ()
-  {
-    return attributName;
-  }
+    public AttributeSpecification(String namespaceUrl, String attributName, String mapperImplementation)
+    {
+        this.namespaceUrl = namespaceUrl;
+        this.attributName = attributName;
+        this.mapperImplementation = mapperImplementation;
+    }
 
-  public String getMapperImplementation ()
-  {
-    return mapperImplementation;
-  }
+    public String getAttributName()
+    {
+        return attributName;
+    }
 
-  public String getNamespaceUrl ()
-  {
-    return namespaceUrl;
-  }
+    public String getMapperImplementation()
+    {
+        return mapperImplementation;
+    }
+
+    public String getNamespaceUrl()
+    {
+        return namespaceUrl;
+    }
 }

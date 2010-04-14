@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FontFaceDeclsSection.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import java.util.HashMap;
@@ -45,34 +40,33 @@ import org.jfree.report.structure.Element;
  */
 public class FontFaceDeclsSection extends Element
 {
-  private final Map fontFaces;
 
-  public FontFaceDeclsSection()
-  {
-    fontFaces = new HashMap();
-    setType("font-face-decls");
-    setNamespace(OfficeNamespaces.OFFICE_NS);
-  }
+    private final Map fontFaces;
 
-  public void addFontFace(final FontFaceElement style)
-  {
-    fontFaces.put (style.getStyleName(), style);
-  }
+    public FontFaceDeclsSection()
+    {
+        fontFaces = new HashMap();
+        setType("font-face-decls");
+        setNamespace(OfficeNamespaces.OFFICE_NS);
+    }
 
-  public FontFaceElement getFontFace (final String name)
-  {
-    return (FontFaceElement) fontFaces.get(name);
-  }
+    public void addFontFace(final FontFaceElement style)
+    {
+        fontFaces.put(style.getStyleName(), style);
+    }
 
-  public FontFaceElement[] getAllFontFaces()
-  {
-    return (FontFaceElement[]) fontFaces.values().toArray
-        (new FontFaceElement[fontFaces.size()]);
-  }
+    public FontFaceElement getFontFace(final String name)
+    {
+        return (FontFaceElement) fontFaces.get(name);
+    }
 
+    public FontFaceElement[] getAllFontFaces()
+    {
+        return (FontFaceElement[]) fontFaces.values().toArray(new FontFaceElement[fontFaces.size()]);
+    }
 
-  public boolean containsFont(final String fontName)
-  {
-    return fontFaces.containsKey(fontName);
-  }
+    public boolean containsFont(final String fontName)
+    {
+        return fontFaces.containsKey(fontName);
+    }
 }

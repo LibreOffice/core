@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartReadHandler.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +27,7 @@
 package com.sun.star.report.pentaho.parser.chart;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import java.lang.Object;
 import java.util.ArrayList;
 
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
@@ -98,9 +96,9 @@ public class ChartReadHandler extends ElementReadHandler
      */
     protected void doneParsing() throws SAXException
     {
-        for (int i = 0; i < children.size(); i++)
+        for (Object aChildren : children)
         {
-            final ElementReadHandler handler = (ElementReadHandler) children.get(i);
+            final ElementReadHandler handler = (ElementReadHandler) aChildren;
             element.addNode(handler.getElement());
         }
     }

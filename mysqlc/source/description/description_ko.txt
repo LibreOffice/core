@@ -1,0 +1,1 @@
+MySQL 서버를 통해 OpenOffice.org에 직접 연결합니다.

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DefaultNameGenerator.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +62,9 @@ public class DefaultNameGenerator
      *
      * @param namePrefix a user defined name for that resource.
      * @param mimeType   the mime type of the resource to be stored in the repository.
+     * @param isStream
      * @return the generated, fully qualified name.
+     * @throws java.io.IOException
      */
     private String generateName(final String namePrefix, final String mimeType, final boolean isStream)
             throws IOException
@@ -112,7 +111,7 @@ public class DefaultNameGenerator
                 {
                     throw new IOException();
                 }
-                firstFileName.delete(0,firstFileName.length() );
+                firstFileName.delete(0, firstFileName.length());
                 firstFileName.append(name);
                 firstFileName.append(counter);
                 if (suffix != null)

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TextUnderlineWordMode.java,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.stylemapper.style;
 
 import com.sun.star.report.pentaho.parser.stylemapper.OneOfConstantsMapper;
@@ -37,12 +32,11 @@ import org.jfree.layouting.input.style.keys.text.TextStyleKeys;
 
 public class TextUnderlineWordMode extends OneOfConstantsMapper
 {
-  public TextUnderlineWordMode ()
-  {
-    super(TextStyleKeys.TEXT_UNDERLINE_MODE);
-    addMapping("continuous", TextDecorationMode.CONTINUOUS);
-    addMapping("skip-white-space", TextDecorationMode.SKIP_WHITE_SPACE);
-  }
 
-
+    public TextUnderlineWordMode()
+    {
+        super(TextStyleKeys.TEXT_UNDERLINE_MODE);
+        addMapping("continuous", TextDecorationMode.CONTINUOUS);
+        addMapping("skip-white-space", TextDecorationMode.SKIP_WHITE_SPACE);
+    }
 }

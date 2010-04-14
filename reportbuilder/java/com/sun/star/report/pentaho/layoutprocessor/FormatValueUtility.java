@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FormatValueUtility.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,7 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package com.sun.star.report.pentaho.layoutprocessor;
 
 import java.text.SimpleDateFormat;
@@ -54,10 +50,11 @@ import org.pentaho.reporting.libraries.formula.util.HSSFDateUtil;
  */
 public class FormatValueUtility
 {
+
     private static final String BOOLEAN_VALUE = "boolean-value";
     private static final String STRING_VALUE = "string-value";
-
     public static final String VALUE_TYPE = "value-type";
+    public static final String VALUE = "value";
     private static SimpleDateFormat dateFormat;
     private static SimpleDateFormat timeFormat;
 
@@ -74,7 +71,7 @@ public class FormatValueUtility
             ret = formatTime((Time) value);
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "time-value", ret);
         }
-        else if (value instanceof java.sql.Date )
+        else if (value instanceof java.sql.Date)
         {
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "date");
             ret = formatDate((Date) value);
@@ -83,67 +80,67 @@ public class FormatValueUtility
         else if (value instanceof Date)
         {
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "float");
-            ret = HSSFDateUtil.getExcelDate((Date)value,false,2).toString();
-            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "value", ret);
+            ret = HSSFDateUtil.getExcelDate((Date) value, false, 2).toString();
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, ret);
         }
         else if (value instanceof Number)
         {
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "float");
-            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "value", String.valueOf(value));
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, String.valueOf(value));
         }
         else if (value instanceof Boolean)
         {
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "boolean");
             if (Boolean.TRUE.equals(value))
             {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS,BOOLEAN_VALUE, OfficeToken.TRUE);
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, BOOLEAN_VALUE, OfficeToken.TRUE);
             }
             else
             {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS,BOOLEAN_VALUE, OfficeToken.FALSE);
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, BOOLEAN_VALUE, OfficeToken.FALSE);
             }
         }
         else if (value != null)
         {
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "string");
-            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS,STRING_VALUE, String.valueOf(value));
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, STRING_VALUE, String.valueOf(value));
         }
         else
         {
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "string");
-            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS,STRING_VALUE, "");
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, STRING_VALUE, "");
         }
         return ret;
     }
 
-    public static void applyValueForCell(final Object value, final AttributeMap variableSection,final String valueType)
+    public static void applyValueForCell(final Object value, final AttributeMap variableSection, final String valueType)
     {
         if (value instanceof Time)
         {
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "time-value", formatTime((Time) value));
         }
-        else if (value instanceof java.sql.Date )
+        else if (value instanceof java.sql.Date)
         {
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "date-value", formatDate((Date) value));
         }
         else if (value instanceof Date)
         {
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "float");
-            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "value", HSSFDateUtil.getExcelDate((Date)value,false,2).toString());
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, HSSFDateUtil.getExcelDate((Date) value, false, 2).toString());
         }
         else if (value instanceof Number)
         {
-            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "value", String.valueOf(value));
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, String.valueOf(value));
         }
         else if (value instanceof Boolean)
         {
             if (Boolean.TRUE.equals(value))
             {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS,BOOLEAN_VALUE, OfficeToken.TRUE);
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, BOOLEAN_VALUE, OfficeToken.TRUE);
             }
             else
             {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS,BOOLEAN_VALUE, OfficeToken.FALSE);
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, BOOLEAN_VALUE, OfficeToken.FALSE);
             }
         }
         else if (value != null)
@@ -151,25 +148,24 @@ public class FormatValueUtility
             try
             {
                 final Float number = Float.valueOf(String.valueOf(value));
-                applyValueForCell(number,variableSection,valueType);
+                applyValueForCell(number, variableSection, valueType);
                 return;
             }
-            catch(NumberFormatException e)
+            catch (NumberFormatException e)
             {
-
             }
-            if ( !"string".equals(valueType))
+            if (!"string".equals(valueType))
             {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "value", String.valueOf(value));
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, String.valueOf(value));
             }
             else
             {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS,STRING_VALUE, String.valueOf(value));
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, STRING_VALUE, String.valueOf(value));
             }
         }
         else
         {
-            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS,STRING_VALUE, "");
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, STRING_VALUE, "");
         }
     }
 
@@ -181,6 +177,7 @@ public class FormatValueUtility
         }
         return dateFormat.format(date);
     }
+
     private static synchronized String formatTime(final Date date)
     {
         if (timeFormat == null)

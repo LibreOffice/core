@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ObjectOleReadHandler.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,8 +68,10 @@ public class ObjectOleReadHandler extends ElementReadHandler
         String classid = attrs.getValue(OfficeNamespaces.DRAWING_NS, "class-id");
         if (classid != null)
         {
-            if ( classid.equalsIgnoreCase(RPT_CHART_CLASS_ID))
+            if (classid.equalsIgnoreCase(RPT_CHART_CLASS_ID))
+            {
                 classid = OOO_CHART_CLASS_ID;
+            }
             element.setClassId(classid);
         }
     }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: StarXmlFactoryModule.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,8 +47,7 @@ public class StarXmlFactoryModule implements XmlFactoryModule
     public int getDocumentSupport(final XmlDocumentInfo documentInfo)
     {
         final String rootNamespace = documentInfo.getRootElementNameSpace();
-        if (OfficeNamespaces.OFFICE_NS.equals(rootNamespace) &&
-                ("document-content".equals(documentInfo.getRootElement()) || "document".equals(documentInfo.getRootElement())))
+        if (OfficeNamespaces.OFFICE_NS.equals(rootNamespace) && ("document-content".equals(documentInfo.getRootElement()) || "document".equals(documentInfo.getRootElement())))
         {
             return XmlFactoryModule.RECOGNIZED_BY_NAMESPACE;
         }

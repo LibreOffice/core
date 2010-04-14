@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OfficeStylesXmlResourceFactory.java,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser;
 
 import com.sun.star.report.pentaho.model.OfficeStylesCollection;
@@ -46,19 +41,17 @@ import org.pentaho.reporting.libraries.xmlns.parser.AbstractXmlResourceFactory;
 public class OfficeStylesXmlResourceFactory extends AbstractXmlResourceFactory
 {
 
-  public OfficeStylesXmlResourceFactory()
-  {
-  }
+    public OfficeStylesXmlResourceFactory()
+    {
+    }
 
+    protected Configuration getConfiguration()
+    {
+        return JFreeReportBoot.getInstance().getGlobalConfig();
+    }
 
-  protected Configuration getConfiguration()
-  {
-    return JFreeReportBoot.getInstance().getGlobalConfig();
-  }
-
-  public Class getFactoryType()
-  {
-    return OfficeStylesCollection.class;
-  }
-
+    public Class getFactoryType()
+    {
+        return OfficeStylesCollection.class;
+    }
 }

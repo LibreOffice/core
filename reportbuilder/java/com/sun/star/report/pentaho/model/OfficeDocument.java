@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OfficeDocument.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import com.sun.star.report.JobProperties;
@@ -43,32 +38,35 @@ import org.jfree.report.JFreeReport;
  */
 public class OfficeDocument extends JFreeReport
 {
-  private OfficeStylesCollection stylesCollection;
-  private JobProperties jobProperties;
 
-    public JobProperties getJobProperties() {
+    private OfficeStylesCollection stylesCollection;
+    private JobProperties jobProperties;
+
+    public JobProperties getJobProperties()
+    {
         return jobProperties;
     }
 
-    public void setJobProperties(final JobProperties jobProperties) {
+    public void setJobProperties(final JobProperties jobProperties)
+    {
         this.jobProperties = jobProperties;
     }
 
-  public OfficeDocument()
-  {
-  }
-
-  public OfficeStylesCollection getStylesCollection()
-  {
-    return stylesCollection;
-  }
-
-  public void setStylesCollection(final OfficeStylesCollection stylesCollection)
-  {
-    if (stylesCollection == null)
+    public OfficeDocument()
     {
-      throw new NullPointerException();
     }
-    this.stylesCollection = stylesCollection;
-  }
+
+    public OfficeStylesCollection getStylesCollection()
+    {
+        return stylesCollection;
+    }
+
+    public void setStylesCollection(final OfficeStylesCollection stylesCollection)
+    {
+        if (stylesCollection == null)
+        {
+            throw new NullPointerException();
+        }
+        this.stylesCollection = stylesCollection;
+    }
 }

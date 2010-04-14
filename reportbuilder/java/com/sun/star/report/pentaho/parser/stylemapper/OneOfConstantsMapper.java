@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OneOfConstantsMapper.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +46,7 @@ public abstract class OneOfConstantsMapper implements StyleMapper
         this.mappings = new HashMap();
     }
 
-    public void addMapping (final String value, final CSSValue target)
+    public void addMapping(final String value, final CSSValue target)
     {
         mappings.put(value, target);
     }

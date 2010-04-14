@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: StyleMapper.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.styles;
 
 import java.util.HashMap;
@@ -54,53 +49,47 @@ import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
  */
 public class StyleMapper
 {
-  private final Map backend;
 
-  public StyleMapper()
-  {
-    this.backend = new HashMap();
-  }
+    private final Map backend;
 
-  public void addMapping(final StyleMappingRule rule)
-  {
-    backend.put(rule.getKey(), rule);
-  }
-
-  public boolean isListOfStyles(final String elementNamespace,
-                                final String elementTagName,
-                                final String attributeNamespace,
-                                final String attributeName)
-  {
-    final StyleMapperKey key = new StyleMapperKey
-        (elementNamespace, elementTagName, attributeNamespace, attributeName);
-    final StyleMappingRule rule = (StyleMappingRule) backend.get(key);
-    if (rule == null)
+    public StyleMapper()
     {
-      return false;
+        this.backend = new HashMap();
     }
-    return rule.isListOfValues();
-  }
 
-  public String getStyleFamilyFor(final String elementNamespace,
-                                  final String elementTagName,
-                                  final String attributeNamespace,
-                                  final String attributeName)
-  {
-    final StyleMapperKey key = new StyleMapperKey
-        (elementNamespace, elementTagName, attributeNamespace, attributeName);
-    final StyleMappingRule rule = (StyleMappingRule) backend.get(key);
-    if (rule == null)
+    public void addMapping(final StyleMappingRule rule)
     {
-      return null;
+        backend.put(rule.getKey(), rule);
     }
-    return rule.getFamily();
-  }
 
-  public static StyleMapper loadInstance (final ResourceManager resourceManager)
-      throws ResourceException
-  {
-    final Resource resource = resourceManager.createDirectly
-        ("res://com/sun/star/report/pentaho/styles/stylemapper.xml", StyleMapper.class);
-    return (StyleMapper) resource.getResource();
-  }
+    public boolean isListOfStyles(final String elementNamespace,
+            final String elementTagName,
+            final String attributeNamespace,
+            final String attributeName)
+    {
+        final StyleMapperKey key = new StyleMapperKey(elementNamespace, elementTagName, attributeNamespace, attributeName);
+        final StyleMappingRule rule = (StyleMappingRule) backend.get(key);
+        return rule != null && rule.isListOfValues();
+    }
+
+    public String getStyleFamilyFor(final String elementNamespace,
+            final String elementTagName,
+            final String attributeNamespace,
+            final String attributeName)
+    {
+        final StyleMapperKey key = new StyleMapperKey(elementNamespace, elementTagName, attributeNamespace, attributeName);
+        final StyleMappingRule rule = (StyleMappingRule) backend.get(key);
+        if (rule == null)
+        {
+            return null;
+        }
+        return rule.getFamily();
+    }
+
+    public static StyleMapper loadInstance(final ResourceManager resourceManager)
+            throws ResourceException
+    {
+        final Resource resource = resourceManager.createDirectly("res://com/sun/star/report/pentaho/styles/stylemapper.xml", StyleMapper.class);
+        return (StyleMapper) resource.getResource();
+    }
 }

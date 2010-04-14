@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: MasterPageFactory.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -178,13 +175,9 @@ public class MasterPageFactory
             {
                 return false;
             }
-            if (templateName != null ? !templateName.equals(
-                    key.templateName) : key.templateName != null)
-            {
-                return false;
-            }
+            return !(templateName != null ? !templateName.equals(
+                    key.templateName) : key.templateName != null);
 
-            return true;
         }
 
         public int hashCode()
@@ -196,7 +189,6 @@ public class MasterPageFactory
             return result;
         }
     }
-
     // todo: Patch the page-layout ...
     private static final String DEFAULT_PAGE_NAME = "Default";
     private final OfficeMasterStyles predefinedStyles;
@@ -265,7 +257,7 @@ public class MasterPageFactory
             }
             catch (CloneNotSupportedException cne)
             {
-                throw new IllegalStateException("Implementation error: Unable to derive page",cne);
+                throw new IllegalStateException("Implementation error: Unable to derive page", cne);
             }
         }
 
@@ -403,7 +395,7 @@ public class MasterPageFactory
         }
         catch (CloneNotSupportedException e)
         {
-            throw new IllegalStateException("Clone failed.",e);
+            throw new IllegalStateException("Clone failed.", e);
         }
     }
 

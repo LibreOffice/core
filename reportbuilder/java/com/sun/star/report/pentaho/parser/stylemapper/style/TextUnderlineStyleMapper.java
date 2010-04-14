@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TextUnderlineStyleMapper.java,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.stylemapper.style;
 
 import com.sun.star.report.pentaho.parser.stylemapper.OneOfConstantsMapper;
@@ -37,19 +32,17 @@ import org.jfree.layouting.input.style.keys.text.TextDecorationStyle;
 
 public class TextUnderlineStyleMapper extends OneOfConstantsMapper
 {
-  public TextUnderlineStyleMapper ()
-  {
-    super(TextStyleKeys.TEXT_UNDERLINE_STYLE);
-    addMapping("none", TextDecorationStyle.NONE);
-    addMapping("solid", TextDecorationStyle.SOLID);
-    addMapping("dotted", TextDecorationStyle.DOTTED);
-    addMapping("dash", TextDecorationStyle.DASHED);
-    addMapping("long-dash", TextDecorationStyle.LONG_DASH);
-    addMapping("dot-dash", TextDecorationStyle.DOT_DASH);
-    addMapping("dot-dot-dash", TextDecorationStyle.DOT_DOT_DASH);
-    addMapping("wave", TextDecorationStyle.WAVE);
-  }
 
-
-
+    public TextUnderlineStyleMapper()
+    {
+        super(TextStyleKeys.TEXT_UNDERLINE_STYLE);
+        addMapping("none", TextDecorationStyle.NONE);
+        addMapping("solid", TextDecorationStyle.SOLID);
+        addMapping("dotted", TextDecorationStyle.DOTTED);
+        addMapping("dash", TextDecorationStyle.DASHED);
+        addMapping("long-dash", TextDecorationStyle.LONG_DASH);
+        addMapping("dot-dash", TextDecorationStyle.DOT_DASH);
+        addMapping("dot-dot-dash", TextDecorationStyle.DOT_DOT_DASH);
+        addMapping("wave", TextDecorationStyle.WAVE);
+    }
 }

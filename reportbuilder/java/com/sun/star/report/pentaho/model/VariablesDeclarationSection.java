@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: VariablesDeclarationSection.java,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import org.jfree.report.JFreeReportInfo;
@@ -49,9 +44,9 @@ import org.jfree.report.structure.Section;
 public class VariablesDeclarationSection extends Section
 {
 
-  public VariablesDeclarationSection()
-  {
-    setNamespace(JFreeReportInfo.REPORT_NAMESPACE);
-    setType("variables-section");
-  }
+    public VariablesDeclarationSection()
+    {
+        setNamespace(JFreeReportInfo.REPORT_NAMESPACE);
+        setType("variables-section");
+    }
 }

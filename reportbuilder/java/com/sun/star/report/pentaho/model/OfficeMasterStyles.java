@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OfficeMasterStyles.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import java.util.HashMap;
@@ -51,37 +46,37 @@ import org.jfree.report.structure.Section;
  */
 public class OfficeMasterStyles extends Element
 {
-  private final Map masterPages;
-  private final Section otherNodes;
 
-  public OfficeMasterStyles()
-  {
-    masterPages = new HashMap();
-    otherNodes = new Section();
-  }
+    private final Map masterPages;
+    private final Section otherNodes;
 
-  public void addMasterPage (final OfficeMasterPage masterPage)
-  {
-    if (masterPage == null)
+    public OfficeMasterStyles()
     {
-      throw new NullPointerException();
+        masterPages = new HashMap();
+        otherNodes = new Section();
     }
-    this.masterPages.put(masterPage.getStyleName(), masterPage);
-  }
 
-  public OfficeMasterPage getMasterPage (final String name)
-  {
-    return (OfficeMasterPage) masterPages.get (name);
-  }
+    public void addMasterPage(final OfficeMasterPage masterPage)
+    {
+        if (masterPage == null)
+        {
+            throw new NullPointerException();
+        }
+        this.masterPages.put(masterPage.getStyleName(), masterPage);
+    }
 
-  public OfficeMasterPage[] getAllMasterPages()
-  {
-    return (OfficeMasterPage[]) masterPages.values().toArray
-        (new OfficeMasterPage[masterPages.size()]);
-  }
+    public OfficeMasterPage getMasterPage(final String name)
+    {
+        return (OfficeMasterPage) masterPages.get(name);
+    }
 
-  public Section getOtherNodes()
-  {
-    return otherNodes;
-  }
+    public OfficeMasterPage[] getAllMasterPages()
+    {
+        return (OfficeMasterPage[]) masterPages.values().toArray(new OfficeMasterPage[masterPages.size()]);
+    }
+
+    public Section getOtherNodes()
+    {
+        return otherNodes;
+    }
 }

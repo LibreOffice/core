@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DataStyle.java,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import org.jfree.report.structure.Section;
@@ -42,19 +37,18 @@ import com.sun.star.report.pentaho.OfficeNamespaces;
  */
 public class DataStyle extends Section
 {
-  public DataStyle()
-  {
-  }
 
-  public String getStyleName()
-  {
-    return (String) getAttribute(OfficeNamespaces.STYLE_NS, "name");
-  }
+    public DataStyle()
+    {
+    }
 
-  public void setStyleName(final String name)
-  {
-    setAttribute(OfficeNamespaces.STYLE_NS, "name", name);
-  }
+    public String getStyleName()
+    {
+        return (String) getAttribute(OfficeNamespaces.STYLE_NS, "name");
+    }
 
-
+    public void setStyleName(final String name)
+    {
+        setAttribute(OfficeNamespaces.STYLE_NS, "name", name);
+    }
 }

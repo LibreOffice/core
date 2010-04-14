@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DocumentStylesReadHandler.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.office;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
@@ -50,61 +45,59 @@ import org.xml.sax.SAXException;
  */
 public class DocumentStylesReadHandler extends ElementReadHandler
 {
-  private final OfficeStylesCollection officeStylesCollection;
-  private FontFaceDeclsReadHandler fontFaceReadHandler;
 
-  public DocumentStylesReadHandler()
-  {
-    officeStylesCollection = new OfficeStylesCollection();
-  }
+    private final OfficeStylesCollection officeStylesCollection;
+    private FontFaceDeclsReadHandler fontFaceReadHandler;
 
-
-  /**
-   * Returns the handler for a child element.
-   *
-   * @param tagName the tag name.
-   * @param atts    the attributes.
-   * @return the handler or null, if the tagname is invalid.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected XmlReadHandler getHandlerForChild(final String uri,
-                                              final String tagName,
-                                              final Attributes atts)
-      throws SAXException
-  {
-    if (!OfficeNamespaces.OFFICE_NS.equals(uri))
+    public DocumentStylesReadHandler()
     {
-      return null;
+        officeStylesCollection = new OfficeStylesCollection();
     }
 
-    if ("font-face-decls".equals(tagName))
+    /**
+     * Returns the handler for a child element.
+     *
+     * @param tagName the tag name.
+     * @param atts    the attributes.
+     * @return the handler or null, if the tagname is invalid.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected XmlReadHandler getHandlerForChild(final String uri,
+            final String tagName,
+            final Attributes atts)
+            throws SAXException
     {
-      if (fontFaceReadHandler == null)
-      {
-        fontFaceReadHandler = new FontFaceDeclsReadHandler
-            (officeStylesCollection.getFontFaceDecls());
-      }
-      return fontFaceReadHandler;
-    }
-    else if ("automatic-styles".equals(tagName))
-    {
-      return new OfficeStylesReadHandler(officeStylesCollection.getAutomaticStyles());
-    }
-    else if ("styles".equals(tagName))
-    {
-      return new OfficeStylesReadHandler(officeStylesCollection.getCommonStyles());
-    }
-    else if ("master-styles".equals(tagName))
-    {
-      return new MasterStylesReadHandler(officeStylesCollection.getMasterStyles());
-    }
-    return null;
-  }
+        if (!OfficeNamespaces.OFFICE_NS.equals(uri))
+        {
+            return null;
+        }
 
+        if ("font-face-decls".equals(tagName))
+        {
+            if (fontFaceReadHandler == null)
+            {
+                fontFaceReadHandler = new FontFaceDeclsReadHandler(officeStylesCollection.getFontFaceDecls());
+            }
+            return fontFaceReadHandler;
+        }
+        else if ("automatic-styles".equals(tagName))
+        {
+            return new OfficeStylesReadHandler(officeStylesCollection.getAutomaticStyles());
+        }
+        else if ("styles".equals(tagName))
+        {
+            return new OfficeStylesReadHandler(officeStylesCollection.getCommonStyles());
+        }
+        else if ("master-styles".equals(tagName))
+        {
+            return new MasterStylesReadHandler(officeStylesCollection.getMasterStyles());
+        }
+        return null;
+    }
 
-  public Element getElement()
-  {
-    return officeStylesCollection;
-  }
+    public Element getElement()
+    {
+        return officeStylesCollection;
+    }
 }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ImageService.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,23 +37,33 @@ public interface ImageService
 {
 
     /**
+     * @param image
      * @return the mime-type of the image as string.
+     * @throws ReportExecutionException
      */
     String getMimeType(final InputStream image) throws ReportExecutionException;
 
     /**
+     * @param image
      * @return the mime-type of the image as string.
+     * @throws ReportExecutionException
      */
     String getMimeType(final byte[] image) throws ReportExecutionException;
 
     /**
+     * @param image
      * @returns the dimension in 100th mm.
-     **/
+     *
+     * @throws ReportExecutionException
+     * @return*/
     Dimension getImageSize(final InputStream image) throws ReportExecutionException;
 
     /**
+     * @param image
      * @returns the dimension in 100th mm.
-     **/
+     *
+     * @throws ReportExecutionException
+     * @return*/
     Dimension getImageSize(final byte[] image) throws ReportExecutionException;
 }
 

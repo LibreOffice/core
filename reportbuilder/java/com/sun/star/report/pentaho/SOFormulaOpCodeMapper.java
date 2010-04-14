@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- *  $RCSfile: SOFormulaOpCodeMapper.java,v $
- *
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,7 +51,6 @@ public final class SOFormulaOpCodeMapper extends WeakBase
         this.parser = parser;
     }
 
-
     // com.sun.star.sheet.XFormulaOpCodeMapper:
     public int getOpCodeExternal()
     {
@@ -69,13 +64,15 @@ public final class SOFormulaOpCodeMapper extends WeakBase
 
     public com.sun.star.sheet.FormulaToken[] getMappings(String[] Names, int Language) throws com.sun.star.lang.IllegalArgumentException
     {
-        if ( Language != FormulaLanguage.ODFF )
+        if (Language != FormulaLanguage.ODFF)
+        {
             throw new IllegalArgumentException();
+        }
         final ArrayList token = new ArrayList();
         final Map parserNames = parser.getNames();
         for (int i = 0; i < Names.length; i++)
         {
-            if ( parserNames.containsKey(Names[i]) )
+            if (parserNames.containsKey(Names[i]))
             {
                 token.add(((FormulaOpCodeMapEntry) parserNames.get(Names[i])).Token);
             }
@@ -86,36 +83,38 @@ public final class SOFormulaOpCodeMapper extends WeakBase
 
     public com.sun.star.sheet.FormulaOpCodeMapEntry[] getAvailableMappings(int Language, int Groups) throws com.sun.star.lang.IllegalArgumentException
     {
-        if ( Language != FormulaLanguage.ODFF )
+        if (Language != FormulaLanguage.ODFF)
+        {
             throw new IllegalArgumentException();
+        }
         final ArrayList token = new ArrayList();
-        if ( Groups == FormulaMapGroup.SPECIAL )
+        if (Groups == FormulaMapGroup.SPECIAL)
         {
             return (com.sun.star.sheet.FormulaOpCodeMapEntry[]) parser.getSpecialOpCodes().toArray(new FormulaOpCodeMapEntry[parser.getSpecialOpCodes().size()]);
         }
         else
         {
-            if ( (Groups & FormulaMapGroup.ARRAY_SEPARATORS) != 0 )
+            if ((Groups & FormulaMapGroup.ARRAY_SEPARATORS) != 0)
             {
                 token.addAll(parser.getGroup(SOFormulaParser.ARRAY_SEPARATORS).values());
             }
-            if ( (Groups & FormulaMapGroup.SEPARATORS) != 0 )
+            if ((Groups & FormulaMapGroup.SEPARATORS) != 0)
             {
                 token.addAll(parser.getGroup(SOFormulaParser.SEPARATORS).values());
             }
-            if ( (Groups & FormulaMapGroup.ARRAY_SEPARATORS) != 0 )
+            if ((Groups & FormulaMapGroup.ARRAY_SEPARATORS) != 0)
             {
                 token.addAll(parser.getGroup(SOFormulaParser.ARRAY_SEPARATORS).values());
             }
-            if ( (Groups & FormulaMapGroup.UNARY_OPERATORS) != 0 )
+            if ((Groups & FormulaMapGroup.UNARY_OPERATORS) != 0)
             {
                 token.addAll(parser.getGroup(SOFormulaParser.UNARY_OPERATORS).values());
             }
-            if ( (Groups & FormulaMapGroup.BINARY_OPERATORS) != 0 )
+            if ((Groups & FormulaMapGroup.BINARY_OPERATORS) != 0)
             {
                 token.addAll(parser.getGroup(SOFormulaParser.BINARY_OPERATORS).values());
             }
-            if ( (Groups & FormulaMapGroup.FUNCTIONS) != 0 )
+            if ((Groups & FormulaMapGroup.FUNCTIONS) != 0)
             {
                 token.addAll(parser.getGroup(SOFormulaParser.FUNCTIONS).values());
             }
@@ -142,6 +141,7 @@ public final class SOFormulaOpCodeMapper extends WeakBase
     /**
      * This method is a simple helper function to used in the static component initialisation functions as well as
      * in getSupportedServiceNames.
+     * @return
      */
     public static String[] getServiceNames()
     {
