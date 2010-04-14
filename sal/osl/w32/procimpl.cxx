@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: procimpl.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -207,9 +204,9 @@ namespace /* private */
         if (!create_merged_environment(environment_vars, n_environment_vars, &merged_env))
             return false;
 
-        // reserve enough space for the '\0'-separated environment strings and
+        // allocate enough space for the '\0'-separated environment strings and
         // a final '\0'
-        environment.reserve(calc_sum_of_string_lengths(merged_env) + 1);
+        environment.resize(calc_sum_of_string_lengths(merged_env) + 1);
 
         string_container_const_iterator_t iter = merged_env.begin();
         string_container_const_iterator_t iter_end = merged_env.end();

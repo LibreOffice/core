@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: process_impl.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -144,6 +141,7 @@ oslProcessError SAL_CALL osl_getExecutableFile (rtl_uString ** ppustrFile)
     oslProcessError result = osl_Process_E_NotFound;
 
     osl_acquireMutex(g_command_args.m_mutex);
+    OSL_ASSERT(g_command_args.m_nCount > 0);
     if (g_command_args.m_nCount > 0)
     {
         /* CommandArgs set. Obtain argv[0]. */
@@ -163,6 +161,7 @@ sal_uInt32 SAL_CALL osl_getCommandArgCount (void)
     sal_uInt32 result = 0;
 
     osl_acquireMutex(g_command_args.m_mutex);
+    OSL_ASSERT(g_command_args.m_nCount > 0);
     if (g_command_args.m_nCount > 0)
         result = g_command_args.m_nCount - 1;
     osl_releaseMutex(g_command_args.m_mutex);
@@ -178,6 +177,7 @@ oslProcessError SAL_CALL osl_getCommandArg (sal_uInt32 nArg, rtl_uString ** strC
     oslProcessError result = osl_Process_E_NotFound;
 
     osl_acquireMutex(g_command_args.m_mutex);
+    OSL_ASSERT(g_command_args.m_nCount > 0);
     if (g_command_args.m_nCount > (nArg + 1))
     {
         rtl_uString_assign (strCommandArg, g_command_args.m_ppArgs[nArg + 1]);
@@ -193,7 +193,7 @@ oslProcessError SAL_CALL osl_getCommandArg (sal_uInt32 nArg, rtl_uString ** strC
  **************************************/
 void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
 {
-
+    OSL_ASSERT(argc > 0);
     osl_acquireMutex(g_command_args.m_mutex);
     OSL_ENSURE (g_command_args.m_nCount == 0, "osl_setCommandArgs(): CommandArgs already set.");
     if (g_command_args.m_nCount == 0)

@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: lockbyte.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.1.2.4 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: mhu $ $Date: 2008/11/25 15:44:56 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -154,40 +146,6 @@ storeError ILockBytes::setSize (sal_uInt32 nSize)
 storeError ILockBytes::flush()
 {
     return flush_Impl();
-}
-
-storeError ILockBytes::lockRange (sal_uInt32 nOffset, sal_uInt32 nBytes)
-{
-    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::ILockBytes::lockRange(): invalid Offset");
-    if (nOffset == STORE_PAGE_NULL)
-        return store_E_CantSeek;
-
-    sal_uInt64 size = nOffset + nBytes;
-    if (size > SAL_MAX_UINT32)
-        return store_E_CantSeek;
-
-#ifdef STORE_FEATURE_LOCKING
-    return lockRange_Impl (nOffset, nBytes);
-#else
-    return store_E_None; // E_Unsupported
-#endif /* STORE_FEATURE_LOCKING */
-}
-
-storeError ILockBytes::unlockRange (sal_uInt32 nOffset, sal_uInt32 nBytes)
-{
-    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::ILockBytes::unlockRange(): invalid Offset");
-    if (nOffset == STORE_PAGE_NULL)
-        return store_E_CantSeek;
-
-    sal_uInt64 size = nOffset + nBytes;
-    if (size > SAL_MAX_UINT32)
-        return store_E_CantSeek;
-
-#ifdef STORE_FEATURE_LOCKING
-    return unlockRange_Impl (nOffset, nBytes);
-#else
-    return store_E_None; // E_Unsupported
-#endif /* STORE_FEATURE_LOCKING */
 }
 
 /*========================================================================

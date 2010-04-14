@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -54,7 +50,7 @@ SLOFILES = $(SLO)$/testequals.obj
 SHL1TARGET = testequals.uno
 SHL1OBJS = $(SLOFILES)
 SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)
-SHL1VERSIONMAP = testequals.map
+SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 SHL1IMPLIB = itestequals
 
 JAVAFILES = TestEquals.java

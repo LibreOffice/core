@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: uno2cpp.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,6 +84,13 @@ void callVirtualMethod(
     void * stackptr;
     asm volatile (
         "mov   %%esp, %6\n\t"
+        // preserve potential 128bit stack alignment
+        "and   $0xfffffff0, %%esp\n\t"
+        "mov   %0, %%eax\n\t"
+        "lea   -4(,%%eax,4), %%eax\n\t"
+        "and   $0xf, %%eax\n\t"
+        "sub   $0xc, %%eax\n\t"
+        "add   %%eax, %%esp\n\t"
         // copy values
         "mov   %0, %%eax\n\t"
         "mov   %%eax, %%edx\n\t"

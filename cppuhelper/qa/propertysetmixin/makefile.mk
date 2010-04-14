@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,23 +47,19 @@ my_file = file://
 
 DLLPRE = # no leading "lib" on .so files
 INCPRE += -I$(MISC)/$(TARGET)/inc
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 SHL1TARGET = $(TARGET)
 SHL1OBJS = $(SLO)/test_propertysetmixin.obj
+SHL1VERSIONMAP = test.map
 SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(CPPUNITLIB) $(SALLIB)
 SHL1IMPLIB = i$(SHL1TARGET)
 SHL1RPATH = NONE
 DEF1NAME = $(SHL1TARGET)
 
-.IF "$(COMNAME)" == "gcc3"
-SHL1VERSIONMAP = test.gcc3.map
-.ELSE
-SHL1VERSIONMAP = test.map
-.ENDIF
-
 SHL2TARGET = $(TARGET).uno
 SHL2OBJS = $(SLO)/comp_propertysetmixin.obj
-SHL2VERSIONMAP = comp.map
+SHL2VERSIONMAP = $(SOLARENV)/src/component.map
 SHL2STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)
 SHL2IMPLIB = i$(SHL2TARGET)
 SH21RPATH = NONE
@@ -118,11 +110,9 @@ $(MISC)/$(TARGET)/javamaker.flag: $(MISC)/$(TARGET)/types.rdb
     $(JAVAMAKER) -O$(CLASSDIR) -BUCR -nD -Gc -X$(SOLARBINDIR)/types.rdb $<
     $(TOUCH) $@
 
-# The following dependency (to execute javac whenever javamaker has run) does
-# not work reliably, see #i28827#:
-$(JAVAFILES) $(JAVACLASSFILES): $(MISC)/$(TARGET)/javamaker.flag
+$(JAVATARGET): $(MISC)/$(TARGET)/javamaker.flag
 
-$(MISC)/$(TARGET)/$(TARGET).uno.jar: $(JAVACLASSFILES) \
+$(MISC)/$(TARGET)/$(TARGET).uno.jar: $(JAVATARGET) \
         $(MISC)/$(TARGET)/javamaker.flag manifest
     jar cfm $@ manifest -C $(CLASSDIR) test/cppuhelper/propertysetmixin
 

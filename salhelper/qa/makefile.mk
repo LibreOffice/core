@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -36,6 +32,8 @@ TARGET := qa
 ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
+
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 SHL1TARGET = $(TARGET)
 SHL1OBJS = $(SLO)$/test_api.obj
