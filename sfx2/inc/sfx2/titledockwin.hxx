@@ -58,6 +58,12 @@ namespace sfx2
         /** sets a title to be displayed in the docking window
         */
         void        SetTitle( const String& i_rTitle );
+        /** returns the current title displayed in the docking window
+
+            Note that if you never called SetTitle before, then this method will not return an empty string,
+            but the window text (Window::GetText), since this is what is displayed as title then.
+        */
+        String      GetTitle() const;
 
         /** adds a drop down item to the toolbox. Usually, this is used to add some kind of menu to the toolbox.
 
@@ -73,6 +79,16 @@ namespace sfx2
         USHORT  AddDropDownToolBoxItem( const String& i_rItemText, ULONG i_nHelpId, const Link& i_rCallback )
         {
             return impl_addDropDownToolBoxItem( i_rItemText, i_nHelpId, i_rCallback );
+        }
+
+        void        SetEndDockingHdl( const Link& i_rEndDockingHdl ) { m_aEndDockingHdl = i_rEndDockingHdl; }
+        const Link& GetEndDockingHdl() const { return m_aEndDockingHdl; }
+
+        /** resets the toolbox. Upon return, the only item in the toolbox is the closer.
+        */
+        void    ResetToolBox()
+        {
+            impl_resetToolBox();
         }
 
         /** returns the content window, which is to be used as parent window for any content to be displayed
@@ -92,11 +108,14 @@ namespace sfx2
         virtual void DataChanged( const DataChangedEvent& i_rDataChangedEvent );
         virtual void SetText( const String& i_rText );
 
+        // DockingWindow overridables
+        void EndDocking( const Rectangle& rRect, BOOL bFloatMode );
+
         // own overridables
         virtual void onLayoutDone();
 
     protected:
-        /** initializes the toolbox. Upon return, the only item in the toolbox is the closer.
+        /** internal version of ResetToolBox
         */
         void    impl_resetToolBox();
 
@@ -121,6 +140,8 @@ namespace sfx2
         String              m_sTitle;
         ToolBox             m_aToolbox;
         Window              m_aContentWindow;
+
+        Link                m_aEndDockingHdl;
 
         /** The border that is painted arround the inner window.  The bevel
             shadow lines are part of the border, so where the border is 0 no

@@ -95,6 +95,11 @@ namespace sfx2
         static bool ModuleHasToolPanels( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rDocumentFrame );
 
         /** provides access to the Window aspect of the PanelDeck
+
+            Be careful with this method. For instance, you're not allowed to insert arbitrary IToolPanel implementations
+            into the deck, as the ModuleTaskPane has certain assumptions about the panel implementations. However,
+            you're allowed to remove and re-insert panels, which have originally been created by the ModuleTaskPane
+            itself.
         */
               ::svt::ToolPanelDeck& GetPanelDeck();
         const ::svt::ToolPanelDeck& GetPanelDeck() const;
@@ -119,6 +124,39 @@ namespace sfx2
     };
 
     //==================================================================================================================
+    //= TaskPaneController
+    //==================================================================================================================
+    class TaskPaneController_Impl;
+    /** is a helper class for connecting a ModuleTaskPane and a TitledDockingWindow, for clients of the ModuleTaskPane
+        which do not use the TaskPaneDockingWindow
+
+        The controller will add a drop down menu to the docking window which contains one item for each panel in the
+        panel deck, and allows toggling their visibility.
+    */
+    class SFX2_DLLPUBLIC TaskPaneController
+    {
+    public:
+        TaskPaneController(
+            ModuleTaskPane& i_rTaskPane,
+            TitledDockingWindow& i_rDockingWindow
+        );
+        ~TaskPaneController();
+
+        /** sets the default title to be used for the TitledDockingWindow
+
+            When the controller switches the docking window to "tabbed" mode, then the title of the docking window
+            will contain the name of the currently active panel (since this name isn't to be seen elsewhere).
+            When the controller switches the docking window to "drawer" mode, then the title of the docking window
+            contains the default title as given here (since in this mode, the names of the panels are shown in
+            the drawers).
+        */
+        void    SetDefaultTitle( const String& i_rTitle );
+
+    private:
+        ::boost::scoped_ptr< TaskPaneController_Impl >  m_pImpl;
+    };
+
+    //==================================================================================================================
     //= TaskPaneDockingWindow
     //==================================================================================================================
     class TaskPaneDockingWindow : public TitledDockingWindow
@@ -130,13 +168,13 @@ namespace sfx2
     protected:
         // Window overridables
         virtual void        GetFocus();
-        virtual long        Notify( NotifyEvent& i_rNotifyEvent );
 
         // TitledDockingWindow overridables
         virtual void onLayoutDone();
 
     private:
-        ModuleTaskPane  m_aTaskPane;
+        ModuleTaskPane      m_aTaskPane;
+        TaskPaneController  m_aPaneController;
     };
 
 //......................................................................................................................

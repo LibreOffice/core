@@ -92,7 +92,8 @@ SRC1FILES =\
         versdlg.src			\
         printopt.src        \
         srchdlg.src         \
-        titledockwin.src
+        titledockwin.src    \
+        taskpane.src
 
 .IF "$(BUILD_VER_STRING)"!=""
 .IF "$(GUI)"=="UNX"
