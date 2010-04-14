@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: introwin.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +31,7 @@
 #include <vcl/sv.h>
 #include <vcl/dllapi.h>
 #include <vcl/wrkwin.hxx>
+#include <vcl/bitmapex.hxx>
 
 // --------------
 // - IntroWindow -
@@ -49,6 +47,7 @@ public:
     ~IntroWindow();
 
     void SetBackgroundBitmap( const Bitmap& rBitmap );
+    void SetBackgroundBitmap( const BitmapEx& rBitmapEx );
 };
 
 #endif // _SV_INTROWIN_HXX

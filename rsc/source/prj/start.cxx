@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: start.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +54,7 @@
 #endif // UNX
 #include <rsctools.hxx>
 #include <rscerror.h>
+#include <sal/main.h>
 #include <tools/fsys.hxx>
 
 /*************** C O D E ************************************************/
@@ -179,7 +177,7 @@ static BOOL CallPrePro( const ByteString& rPrePro,
 #if ((defined OS2 || defined WNT) && (defined TCPP || defined tcpp)) || defined UNX || defined OS2
     nExit = spawnvp( P_WAIT, rPrePro.GetBuffer(), (char* const*)pCmdL->GetBlock() );
 #elif defined CSET
-    nExit = spawnvp( P_WAIT, (char*)rPrePro.GetBuffer(), char **) (const char**)pCmdL->GetBlock() );
+    nExit = spawnvp( P_WAIT, (char*)rPrePro.GetBuffer(), (const char**)pCmdL->GetBlock() );
 #elif defined WTC
     nExit = spawnvp( P_WAIT, (char*)rPrePro.GetBuffer(), (const char* const*)pCmdL->GetBlock() );
 #elif defined MTW
@@ -325,14 +323,8 @@ static BOOL CallRsc2( ByteString aRsc2Name,
 |*    Letzte Aenderung  MM 05.09.91
 |*
 *************************************************************************/
-#if defined UNX || (defined OS2 && (defined CSET || defined GCC )) || defined WTC || defined MTW || defined ICC || defined(__MINGW32__)
-int main ( int argc, char ** argv)
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
-#else
-int cdecl main ( int argc, char ** argv)
-{
-#endif
-
     BOOL            bPrePro  = TRUE;
     BOOL            bResFile = TRUE;
     BOOL            bHelp    = FALSE;

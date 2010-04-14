@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -51,6 +51,8 @@
 #include <map>
 #include <hash_map>
 #include <list>
+
+#include <boost/shared_array.hpp>
 
 class ImplFontSelectData;
 class ImplFontMetricData;
@@ -144,14 +146,20 @@ public:
         // if pOutPoint is set it will be updated to the emitted point
         // (in PDF map mode, that is 10th of point)
         void appendPoint( const Point& rPoint, rtl::OStringBuffer& rBuffer, bool bNeg = false, Point* pOutPoint = NULL ) const;
+        // appends a B2DPoint without further transformation
+        void appendPixelPoint( const basegfx::B2DPoint& rPoint, rtl::OStringBuffer& rBuffer ) const;
         // appends a rectangle
         void appendRect( const Rectangle& rRect, rtl::OStringBuffer& rBuffer ) const;
         // converts a rectangle to 10th points page space
         void convertRect( Rectangle& rRect ) const;
         // appends a polygon optionally closing it
         void appendPolygon( const Polygon& rPoly, rtl::OStringBuffer& rBuffer, bool bClose = true ) const;
+        // appends a polygon optionally closing it
+        void appendPolygon( const basegfx::B2DPolygon& rPoly, rtl::OStringBuffer& rBuffer, bool bClose = true ) const;
         // appends a polypolygon optionally closing the subpaths
         void appendPolyPolygon( const PolyPolygon& rPolyPoly, rtl::OStringBuffer& rBuffer, bool bClose = true ) const;
+        // appends a polypolygon optionally closing the subpaths
+        void appendPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly, rtl::OStringBuffer& rBuffer, bool bClose = true ) const;
         // converts a length (either vertical or horizontal; this
         // can be important if the source MapMode is not
         // symmetrical) to page length and appends it to the buffer
@@ -159,7 +167,7 @@ public:
         // (in PDF map mode, that is 10th of point)
         void appendMappedLength( sal_Int32 nLength, rtl::OStringBuffer& rBuffer, bool bVertical = true, sal_Int32* pOutLength = NULL ) const;
         // the same for double values
-        void appendMappedLength( double fLength, rtl::OStringBuffer& rBuffer, bool bVertical = true, sal_Int32* pOutLength = NULL ) const;
+        void appendMappedLength( double fLength, rtl::OStringBuffer& rBuffer, bool bVertical = true, sal_Int32* pOutLength = NULL, sal_Int32 nPrecision = 5 ) const;
         // appends LineInfo
         // returns false if too many dash array entry were created for
         // the implementation limits of some PDF readers
@@ -270,10 +278,53 @@ public:
     };
 
     // font subsets
-    struct GlyphEmit
+    class GlyphEmit
     {
-        sal_Ucs     m_aUnicode;
-        sal_uInt8   m_nSubsetGlyphID;
+        // performance: actually this should probably a vector;
+        sal_Ucs                         m_aBufferedUnicodes[3];
+        sal_Int32                       m_nUnicodes;
+        sal_Int32                       m_nMaxUnicodes;
+        boost::shared_array<sal_Ucs>    m_pUnicodes;
+        sal_uInt8                       m_nSubsetGlyphID;
+
+    public:
+        GlyphEmit() : m_nUnicodes(0), m_nSubsetGlyphID(0)
+        {
+            rtl_zeroMemory( m_aBufferedUnicodes, sizeof( m_aBufferedUnicodes ) );
+            m_nMaxUnicodes = sizeof(m_aBufferedUnicodes)/sizeof(m_aBufferedUnicodes[0]);
+        }
+        ~GlyphEmit()
+        {
+        }
+
+        void setGlyphId( sal_uInt8 i_nId ) { m_nSubsetGlyphID = i_nId; }
+        sal_uInt8 getGlyphId() const { return m_nSubsetGlyphID; }
+
+        void addCode( sal_Ucs i_cCode )
+        {
+            if( m_nUnicodes == m_nMaxUnicodes )
+            {
+                sal_Ucs* pNew = new sal_Ucs[ 2 * m_nMaxUnicodes];
+                if( m_pUnicodes.get() )
+                    rtl_copyMemory( pNew, m_pUnicodes.get(), m_nMaxUnicodes * sizeof(sal_Ucs) );
+                else
+                    rtl_copyMemory( pNew, m_aBufferedUnicodes, m_nMaxUnicodes * sizeof(sal_Ucs) );
+                m_pUnicodes.reset( pNew );
+                m_nMaxUnicodes *= 2;
+            }
+            if( m_pUnicodes.get() )
+                m_pUnicodes[ m_nUnicodes++ ] = i_cCode;
+            else
+                m_aBufferedUnicodes[ m_nUnicodes++ ] = i_cCode;
+        }
+        sal_Int32 countCodes() const { return m_nUnicodes; }
+        sal_Ucs getCode( sal_Int32 i_nIndex ) const
+        {
+            sal_Ucs nRet = 0;
+            if( i_nIndex < m_nUnicodes )
+                nRet = m_pUnicodes.get() ? m_pUnicodes[ i_nIndex ] : m_aBufferedUnicodes[ i_nIndex ];
+            return nRet;
+        }
     };
     typedef std::map< sal_GlyphId, GlyphEmit > FontEmitMapping;
     struct FontEmit
@@ -650,19 +701,20 @@ private:
     // graphics state
     struct GraphicsState
     {
-        Font            m_aFont;
-        MapMode         m_aMapMode;
-        Color           m_aLineColor;
-        Color           m_aFillColor;
-        Color           m_aTextLineColor;
-        Color           m_aOverlineColor;
-        Region          m_aClipRegion;
-        sal_Int32       m_nAntiAlias;
-        sal_Int32       m_nLayoutMode;
-        LanguageType    m_aDigitLanguage;
-        sal_Int32       m_nTransparentPercent;
-        sal_uInt16      m_nFlags;
-        sal_uInt16      m_nUpdateFlags;
+        Font                             m_aFont;
+        MapMode                          m_aMapMode;
+        Color                            m_aLineColor;
+        Color                            m_aFillColor;
+        Color                            m_aTextLineColor;
+        Color                            m_aOverlineColor;
+        basegfx::B2DPolyPolygon          m_aClipRegion;
+        bool                             m_bClipRegion;
+        sal_Int32                        m_nAntiAlias;
+        sal_Int32                        m_nLayoutMode;
+        LanguageType                     m_aDigitLanguage;
+        sal_Int32                        m_nTransparentPercent;
+        sal_uInt16                       m_nFlags;
+        sal_uInt16                       m_nUpdateFlags;
 
         static const sal_uInt16 updateFont                  = 0x0001;
         static const sal_uInt16 updateMapMode               = 0x0002;
@@ -681,6 +733,7 @@ private:
                 m_aFillColor( COL_TRANSPARENT ),
                 m_aTextLineColor( COL_TRANSPARENT ),
                 m_aOverlineColor( COL_TRANSPARENT ),
+                m_bClipRegion( false ),
                 m_nAntiAlias( 1 ),
                 m_nLayoutMode( 0 ),
                 m_aDigitLanguage( 0 ),
@@ -696,6 +749,7 @@ private:
                 m_aTextLineColor( rState.m_aTextLineColor ),
                 m_aOverlineColor( rState.m_aOverlineColor ),
                 m_aClipRegion( rState.m_aClipRegion ),
+                m_bClipRegion( rState.m_bClipRegion ),
                 m_nAntiAlias( rState.m_nAntiAlias ),
                 m_nLayoutMode( rState.m_nLayoutMode ),
                 m_aDigitLanguage( rState.m_aDigitLanguage ),
@@ -714,6 +768,7 @@ private:
             m_aTextLineColor        = rState.m_aTextLineColor;
             m_aOverlineColor        = rState.m_aOverlineColor;
             m_aClipRegion           = rState.m_aClipRegion;
+            m_bClipRegion           = rState.m_bClipRegion;
             m_nAntiAlias            = rState.m_nAntiAlias;
             m_nLayoutMode           = rState.m_nLayoutMode;
             m_aDigitLanguage        = rState.m_aDigitLanguage;
@@ -860,7 +915,7 @@ i12626
     void appendLiteralStringEncrypt( rtl::OStringBuffer& rInString, const sal_Int32 nInObjectNumber, rtl::OStringBuffer& rOutBuffer );
 
     /* creates fonts and subsets that will be emitted later */
-    void registerGlyphs( int nGlyphs, sal_GlyphId* pGlyphs, sal_Int32* pGlpyhWidths, sal_Ucs* pUnicodes, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects, const ImplFontData* pFallbackFonts[] );
+    void registerGlyphs( int nGlyphs, sal_GlyphId* pGlyphs, sal_Int32* pGlpyhWidths, sal_Ucs* pUnicodes, sal_Int32* pUnicodesPerGlyph, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects, const ImplFontData* pFallbackFonts[] );
 
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
@@ -909,7 +964,7 @@ i12626
     /* writes a font descriptor and returns its object id (or 0) */
     sal_Int32 emitFontDescriptor( const ImplFontData*, FontSubsetInfo&, sal_Int32 nSubsetID, sal_Int32 nStream );
     /* writes a ToUnicode cmap, returns the corresponding stream object */
-    sal_Int32 createToUnicodeCMap( sal_uInt8* pEncoding, sal_Ucs* pUnicodes, int nGlyphs );
+    sal_Int32 createToUnicodeCMap( sal_uInt8* pEncoding, sal_Ucs* pUnicodes, sal_Int32* pUnicodesPerGlyph, sal_Int32* pEncToUnicodeIndex, int nGlyphs );
 
     /* get resource dict object number */
     sal_Int32 getResourceDictObj()
@@ -1004,7 +1059,7 @@ i12626
     void createDefaultListBoxAppearance( PDFWidget&, const PDFWriter::ListBoxWidget& rWidget );
 
     /* ensure proper escapement and uniqueness of field names */
-    rtl::OString convertWidgetFieldName( const rtl::OUString& rString );
+    void createWidgetFieldName( sal_Int32 i_nWidgetsIndex, const PDFWriter::AnyWidget& i_rInWidget );
     /* adds an entry to m_aObjects and returns its index+1,
      * sets the offset to ~0
      */
@@ -1164,17 +1219,18 @@ public:
 
     void clearClipRegion()
     {
-        m_aGraphicsStack.front().m_aClipRegion.SetNull();
+        m_aGraphicsStack.front().m_aClipRegion.clear();
+        m_aGraphicsStack.front().m_bClipRegion = false;
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateClipRegion;
     }
 
-    void setClipRegion( const Region& rRegion );
+    void setClipRegion( const basegfx::B2DPolyPolygon& rRegion );
 
     void moveClipRegion( sal_Int32 nX, sal_Int32 nY );
 
     bool intersectClipRegion( const Rectangle& rRect );
 
-    bool intersectClipRegion( const Region& rRegion );
+    bool intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion );
 
     void setLayoutMode( sal_Int32 nLayoutMode )
     {

@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -2977,6 +2977,11 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         BYTE    nBlue   = (BYTE)(((USHORT)aColor1.GetBlue()  + (USHORT)aColor2.GetBlue())/2);
         aStyleSettings.SetCheckedColor( Color( nRed, nGreen, nBlue ) );
     }
+
+    // caret width
+    DWORD nCaretWidth = 2;
+    if( SystemParametersInfo( SPI_GETCARETWIDTH, 0, &nCaretWidth, 0 ) )
+        aStyleSettings.SetCursorSize( nCaretWidth );
 
     // High contrast
     HIGHCONTRAST hc;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: LocaleNode.cxx,v $
- * $Revision: 1.29.24.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -657,7 +654,9 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                         OUString aPar1( RTL_CONSTASCII_USTRINGPARAM( "0)" ));
                         OUString aPar2( RTL_CONSTASCII_USTRINGPARAM( "-)" ));
                         OUString aPar3( RTL_CONSTASCII_USTRINGPARAM( " )" ));
-                        if (aCode.indexOf( aPar1 ) > 0 || aCode.indexOf( aPar2 ) > 0 || aCode.indexOf( aPar3 ) > 0)
+                        OUString aPar4( RTL_CONSTASCII_USTRINGPARAM( "])" ));
+                        if (aCode.indexOf( aPar1 ) > 0 || aCode.indexOf( aPar2 ) > 0 ||
+                                aCode.indexOf( aPar3 ) > 0 || aCode.indexOf( aPar4 ) > 0)
                             fprintf( stderr, "Warning: FormatCode formatindex=\"%d\" for currency uses parentheses for negative amounts, which probably is not correct for locales not based on en_US.\n", formatindex);
                     }
                     break;

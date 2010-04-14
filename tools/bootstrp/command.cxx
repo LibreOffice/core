@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: command.cxx,v $
- * $Revision: 1.18.40.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -358,7 +355,7 @@ CCommand::CCommand( ByteString &rString )
 {
     rString.SearchAndReplace( '\t', ' ' );
     aCommand = rString.GetToken( 0, ' ' );
-    aCommandLine = Search();
+    aCommandLine = Search( "PATH" );
 #ifndef UNX
     aCommandLine += " /c ";
 #else
@@ -368,7 +365,7 @@ CCommand::CCommand( ByteString &rString )
     ByteString sCmd( rString.GetToken( 0, ' ' ));
     ByteString sParam( rString.Copy( sCmd.Len()));
 
-    aCommandLine += Search( thePath, sCmd );
+    aCommandLine += Search( "PATH", sCmd );
     aCommandLine += sParam;
 
     ImplInit();
@@ -382,7 +379,7 @@ CCommand::CCommand( const char *pChar )
     aString.SearchAndReplace( '\t', ' ' );
     aCommand = aString.GetToken( 0, ' ' );
 
-    aCommandLine = Search();
+    aCommandLine = Search( "PATH" );
 #ifndef UNX
     aCommandLine += " /c ";
 #else
@@ -393,7 +390,7 @@ CCommand::CCommand( const char *pChar )
     ByteString sCmd( rString.GetToken( 0, ' ' ));
     ByteString sParam( rString.Copy( sCmd.Len()));
 
-    aCommandLine += Search( thePath, sCmd );
+    aCommandLine += Search( "PATH", sCmd );
     aCommandLine += sParam;
 
     ImplInit();

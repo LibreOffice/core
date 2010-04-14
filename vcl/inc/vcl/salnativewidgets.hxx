@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salnativewidgets.hxx,v $
- * $Revision: 1.10.108.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,6 +94,8 @@ typedef sal_uInt32      ControlType;
 // Normal scrollbar, including
 // all parts like slider, buttons
 #define CTRL_SCROLLBAR          60
+
+#define CTRL_SLIDER             65
 
 // Border around a group of related
 // items, perhaps also displaying
@@ -290,6 +289,20 @@ class VCL_DLLPUBLIC ScrollbarValue
                     mnThumbState = 0; mnPage1State = 0; mnPage2State = 0;
                 };
         inline ~ScrollbarValue() {};
+};
+
+class VCL_DLLPUBLIC SliderValue
+{
+    public:
+        long            mnMin;
+        long            mnMax;
+        long            mnCur;
+        Rectangle       maThumbRect;
+        ControlState    mnThumbState;
+
+        SliderValue() : mnMin( 0 ), mnMax( 0 ), mnCur( 0 ), mnThumbState( 0 )
+        {}
+        ~SliderValue() {}
 };
 
 /* TabitemValue:

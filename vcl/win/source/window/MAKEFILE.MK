@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: MAKEFILE.MK,v $
-#
-# $Revision: 1.14.94.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,12 +38,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile2.pmk
 
 # --- #105371#
-.IF "$(COM)"=="GCC"
-CFLAGS += -D_WIN32_WINNT=0x0501
-.ELSE
-CFLAGS += -DWINVER=0x0400 -D_WIN32_WINNT=0x0501
-
-.ENDIF
+CDEFS +=-U_WIN32_WINNT -D_WIN32_WINNT=0x0501
 
 # --- Files --------------------------------------------------------
 

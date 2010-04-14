@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlgctrl.cxx,v $
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +33,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
+#include <vcl/tabdlg.hxx>
 #include <vcl/button.hxx>
 #include <vcl/window.h>
 
@@ -1081,10 +1079,15 @@ Window* Window::GetLabelFor() const
         return pWindow;
 
     sal_Unicode nAccel = getAccel( GetText() );
-    if( GetType() == WINDOW_FIXEDTEXT       ||
-        GetType() == WINDOW_FIXEDLINE       ||
-        GetType() == WINDOW_GROUPBOX )
+
+    WindowType nMyType = GetType();
+    if( nMyType == WINDOW_FIXEDTEXT     ||
+        nMyType == WINDOW_FIXEDLINE     ||
+        nMyType == WINDOW_GROUPBOX )
     {
+        // #i100833# MT 2010/02: Group box and fixed lines can also lable a fixed text.
+        // See tools/options/print for example.
+        BOOL bThisIsAGroupControl = (nMyType == WINDOW_GROUPBOX) || (nMyType == WINDOW_FIXEDLINE);
         Window* pSWindow = NULL;
         // get index, form start and form end
         USHORT nIndex=0, nFormStart=0, nFormEnd=0;
@@ -1116,9 +1119,14 @@ Window* Window::GetLabelFor() const
                                                  FALSE );
                 if( pSWindow && pSWindow->IsVisible() && ! (pSWindow->GetStyle() & WB_NOLABEL) )
                 {
-                    if( pSWindow->GetType() != WINDOW_FIXEDTEXT     &&
-                        pSWindow->GetType() != WINDOW_FIXEDLINE     &&
-                        pSWindow->GetType() != WINDOW_GROUPBOX )
+                    WindowType nType = pSWindow->GetType();
+                    if( nType != WINDOW_FIXEDTEXT   &&
+                        nType != WINDOW_FIXEDLINE   &&
+                        nType != WINDOW_GROUPBOX )
+                    {
+                        pWindow = pSWindow;
+                    }
+                    else if( bThisIsAGroupControl && ( nType == WINDOW_FIXEDTEXT ) )
                     {
                         pWindow = pSWindow;
                     }
@@ -1151,9 +1159,13 @@ Window* Window::GetLabeledBy() const
     if( GetType() == WINDOW_CHECKBOX || GetType() == WINDOW_RADIOBUTTON )
         return NULL;
 
-    if( ! ( GetType() == WINDOW_FIXEDTEXT       ||
-            GetType() == WINDOW_FIXEDLINE       ||
-            GetType() == WINDOW_GROUPBOX ) )
+//    if( ! ( GetType() == WINDOW_FIXEDTEXT     ||
+//            GetType() == WINDOW_FIXEDLINE     ||
+//            GetType() == WINDOW_GROUPBOX ) )
+    // #i100833# MT 2010/02: Group box and fixed lines can also lable a fixed text.
+    // See tools/options/print for example.
+    WindowType nMyType = GetType();
+    if ( (nMyType != WINDOW_GROUPBOX) && (nMyType != WINDOW_FIXEDLINE) )
     {
         // search for a control that labels this window
         // a label is considered the last fixed text, fixed line or group box
@@ -1184,14 +1196,18 @@ Window* Window::GetLabeledBy() const
                                                  nSearchIndex,
                                                  nFoundIndex,
                                                  FALSE );
-                if( pSWindow && pSWindow->IsVisible() &&
-                    ! (pSWindow->GetStyle() & WB_NOLABEL) &&
-                    ( pSWindow->GetType() == WINDOW_FIXEDTEXT   ||
-                      pSWindow->GetType() == WINDOW_FIXEDLINE   ||
-                      pSWindow->GetType() == WINDOW_GROUPBOX ) )
+                if( pSWindow && pSWindow->IsVisible() && !(pSWindow->GetStyle() & WB_NOLABEL) )
                 {
-                    pWindow = pSWindow;
-                    break;
+                    WindowType nType = pSWindow->GetType();
+                    if ( ( nType == WINDOW_FIXEDTEXT    ||
+                          nType == WINDOW_FIXEDLINE ||
+                          nType == WINDOW_GROUPBOX ) )
+                    {
+                        // a fixed text can't be labeld by a fixed text.
+                        if ( ( nMyType != WINDOW_FIXEDTEXT ) || ( nType != WINDOW_FIXEDTEXT ) )
+                            pWindow = pSWindow;
+                        break;
+                    }
                 }
                 if( nFoundIndex > nSearchIndex || nSearchIndex == 0 )
                     break;

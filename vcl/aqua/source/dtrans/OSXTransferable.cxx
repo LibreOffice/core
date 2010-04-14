@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OSXTransferable.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +88,10 @@ Any SAL_CALL OSXTransferable::getTransferData( const DataFlavor& aFlavor )
                                        static_cast<XTransferable*>(this));
     }
 
-  NSString* sysFormat = (NSString*)mDataFlavorMapper->openOfficeToSystemFlavor(aFlavor);
+  NSString* sysFormat =
+      (aFlavor.MimeType.compareToAscii( "image/bmp", 9 ) == 0)
+      ? mDataFlavorMapper->openOfficeImageToSystemFlavor( mPasteboard )
+      : mDataFlavorMapper->openOfficeToSystemFlavor(aFlavor);
   DataProviderPtr_t dp;
 
   if ([sysFormat caseInsensitiveCompare: NSFilenamesPboardType] == NSOrderedSame)

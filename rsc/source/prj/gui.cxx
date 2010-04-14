@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gui.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +30,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <sal/main.h>
 #include <rscrsc.hxx>
 #include <rscdb.hxx>
 
@@ -71,15 +69,7 @@ RscVerbosity lcl_determineVerbosity( int argc, char ** argv )
     return RscVerbosityNormal;
 }
 
-#if defined( UNX ) || ( defined( OS2 ) && ( defined( CSET ) || defined ( GCC ))) || defined (WTC) || defined(ICC) || defined(__MINGW32__)
-int main ( int argc, char ** argv) {
-#else
-#if defined( MTW )
-int  main ( int argc, char const ** argv) {
-#else
-int cdecl main ( int argc, char ** argv) {
-#endif
-#endif
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
 #ifndef UNX
 #ifdef CSET
     atexit( ExitProgram );

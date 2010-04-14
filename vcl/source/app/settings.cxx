@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: settings.cxx,v $
- * $Revision: 1.77 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -436,6 +433,7 @@ ImplStyleData::ImplStyleData()
     mnToolbarIconSize           = STYLE_TOOLBAR_ICONSIZE_UNKNOWN;
     mnSymbolsStyle              = STYLE_SYMBOLS_AUTO;
     mnPreferredSymbolsStyle         = STYLE_SYMBOLS_AUTO;
+    mpFontOptions              = NULL;
 
     SetStandardStyles();
 }
@@ -542,6 +540,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnToolbarIconSize           = rData.mnToolbarIconSize;
     mnSymbolsStyle              = rData.mnSymbolsStyle;
     mnPreferredSymbolsStyle         = rData.mnPreferredSymbolsStyle;
+    mpFontOptions               = rData.mpFontOptions;
 }
 
 // -----------------------------------------------------------------------

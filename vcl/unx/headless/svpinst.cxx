@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svpinst.cxx,v $
- * $Revision: 1.5.154.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,6 +53,19 @@ extern "C"
         SetSalData( pSalData );
         return pInstance;
     }
+}
+
+bool SvpSalInstance::isFrameAlive( const SalFrame* pFrame ) const
+{
+    for( std::list< SalFrame* >::const_iterator it = m_aFrames.begin();
+         it != m_aFrames.end(); ++it )
+    {
+        if( *it == pFrame )
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 SvpSalInstance* SvpSalInstance::s_pDefaultInstance = NULL;
@@ -349,12 +359,15 @@ void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
     {
         for( std::list<SalUserEvent>::const_iterator it = aEvents.begin(); it != aEvents.end(); ++it )
         {
-            it->m_pFrame->CallCallback( it->m_nEvent, it->m_pData );
-            if( it->m_nEvent == SALEVENT_RESIZE )
+            if ( isFrameAlive( it->m_pFrame ) )
             {
-                // this would be a good time to post a paint
-                const SvpSalFrame* pSvpFrame = static_cast<const SvpSalFrame*>(it->m_pFrame);
-                pSvpFrame->PostPaint();
+                it->m_pFrame->CallCallback( it->m_nEvent, it->m_pData );
+                if( it->m_nEvent == SALEVENT_RESIZE )
+                {
+                    // this would be a good time to post a paint
+                    const SvpSalFrame* pSvpFrame = static_cast<const SvpSalFrame*>(it->m_pFrame);
+                    pSvpFrame->PostPaint();
+                }
             }
         }
     }

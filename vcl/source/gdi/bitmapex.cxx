@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: bitmapex.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -814,7 +811,7 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
                             }
                             else
                             {
-                                if(0x00 != aBitmapColor.GetIndex())
+                                if(0x00 == aBitmapColor.GetIndex())
                                 {
                                     nTransparency = 0x00;
                                 }
