@@ -769,6 +769,7 @@ const SfxItemPropertySet* lcl_GetSheetPropertySet()
         {MAP_CHAR_LEN(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_CODENAME),        SC_WID_UNO_CODENAME, &getCppuType(static_cast< const rtl::OUString * >(0)),    0, 0},
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aSheetPropertySet( aSheetPropertyMap_Impl );
@@ -8467,6 +8468,15 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                     pDoc->ClearPrintRanges( nTab ); // if this flag is true, there are no PrintRanges, so Clear clears only the flag.
             }
         }
+        else if ( pEntry->nWID == SC_WID_UNO_CODENAME )
+        {
+        rtl::OUString aCodeName;
+        if ( pDocSh && ( aValue >>= aCodeName ) )
+        {
+            String sNewName( aCodeName );
+            pDocSh->GetDocument()->SetCodeName( GetTab_Impl(), sNewName );
+        }
+    }
         else
             ScCellRangeObj::SetOnePropertyValue(pEntry, aValue);        // base class, no Item WID
     }
@@ -8605,6 +8615,13 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
             BOOL bAutoPrint = pDoc->IsPrintEntireSheet( nTab );
             ScUnoHelpFunctions::SetBoolInAny( rAny, bAutoPrint );
         }
+        else if ( pEntry->nWID == SC_WID_UNO_CODENAME )
+        {
+        String aCodeName;
+        if ( pDocSh )
+            pDocSh->GetDocument()->GetCodeName( GetTab_Impl(), aCodeName );
+        rAny <<= rtl::OUString( aCodeName );
+    }
         else
             ScCellRangeObj::GetOnePropertyValue(pEntry, rAny);
     }

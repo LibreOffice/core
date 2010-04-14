@@ -152,6 +152,7 @@ const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_ISCHANGEREADONLYENABLED), 0, &getBooleanCppuType(),                              0, 0},
         {MAP_CHAR_LEN(SC_UNO_REFERENCEDEVICE),   0, &getCppuType((uno::Reference<awt::XDevice>*)0),           beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN("BuildId"),                0, &::getCppuType(static_cast< const rtl::OUString * >(0)), 0, 0},
+        {MAP_CHAR_LEN(SC_UNO_CODENAME),        0, &getCppuType(static_cast< const rtl::OUString * >(0)),    0, 0},
 
         {0,0,0,0,0,0}
     };
@@ -1651,6 +1652,12 @@ void SAL_CALL ScModelObj::setPropertyValue(
                 pDoc->SetLanguage( eLatin, eCjk, eCtl );
             }
         }
+        else if ( aString.EqualsAscii( SC_UNO_CODENAME ) )
+        {
+            rtl::OUString sCodeName;
+            if ( aValue >>= sCodeName )
+                pDoc->SetCodeName( sCodeName );
+        }
         else if ( aString.EqualsAscii( SC_UNO_CJK_CLOCAL ) )
         {
             lang::Locale aLocale;
@@ -1783,6 +1790,12 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
             ScUnoConversion::FillLocale( aLocale, eLatin );
             aRet <<= aLocale;
         }
+        else if ( aString.EqualsAscii( SC_UNO_CODENAME ) )
+        {
+            rtl::OUString sCodeName = pDoc->GetCodeName();
+            aRet <<= sCodeName;
+        }
+
         else if ( aString.EqualsAscii( SC_UNO_CJK_CLOCAL ) )
         {
             LanguageType eLatin, eCjk, eCtl;
