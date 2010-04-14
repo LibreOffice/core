@@ -44,12 +44,13 @@ namespace sd { namespace toolpanel
     */
     enum PanelId
     {
-        PID_UNKNOWN             = 0,
-        PID_MASTER_PAGES        = 1,
-        PID_LAYOUT              = 2,
-        PID_TABLE_DESIGN        = 3,
-        PID_CUSTOM_ANIMATION    = 4,
-        PID_SLIDE_TRANSITION    = 5
+        PID_MASTER_PAGES        = 0,
+        PID_LAYOUT              = 1,
+        PID_TABLE_DESIGN        = 2,
+        PID_CUSTOM_ANIMATION    = 3,
+        PID_SLIDE_TRANSITION    = 4,
+
+        PID_UNKNOWN             = 5
     };
 
     PanelId GetStandardPanelId( const ::rtl::OUString& i_rTaskPanelResourceURL );
