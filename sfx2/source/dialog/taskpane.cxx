@@ -471,7 +471,8 @@ namespace sfx2
     class ModuleTaskPane_Impl : public ::boost::noncopyable
     {
     public:
-        ModuleTaskPane_Impl( ModuleTaskPane& i_rAntiImpl, const Reference< XFrame >& i_rDocumentFrame )
+        ModuleTaskPane_Impl( ModuleTaskPane& i_rAntiImpl, const Reference< XFrame >& i_rDocumentFrame,
+                const IToolPanelCompare* i_pPanelCompare )
             :m_rAntiImpl( i_rAntiImpl )
             ,m_sModuleIdentifier( lcl_identifyModule( i_rDocumentFrame ) )
             ,m_xFrame( i_rDocumentFrame )
@@ -479,7 +480,7 @@ namespace sfx2
         {
             m_aPanelDeck.Show();
             OnResize();
-            impl_initFromConfiguration();
+            impl_initFromConfiguration( i_pPanelCompare );
         }
 
         ~ModuleTaskPane_Impl()
@@ -503,7 +504,7 @@ namespace sfx2
         void        SetTabsLayout( const ::svt::TabAlignment i_eTabAlignment, const ::svt::TabItemContent i_eTabContent );
 
     private:
-        void    impl_initFromConfiguration();
+        void    impl_initFromConfiguration( const IToolPanelCompare* i_pPanelCompare );
 
         static bool
                 impl_isToolPanelResource( const ::rtl::OUString& i_rResourceURL );
@@ -543,7 +544,7 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void ModuleTaskPane_Impl::impl_initFromConfiguration()
+    void ModuleTaskPane_Impl::impl_initFromConfiguration( const IToolPanelCompare* i_pPanelCompare )
     {
         const ::utl::OConfigurationTreeRoot aWindowStateConfig( lcl_getModuleUIElementStatesConfig( m_sModuleIdentifier ) );
         if ( !aWindowStateConfig.isValid() )
@@ -562,7 +563,25 @@ namespace sfx2
 
             ::utl::OConfigurationNode aResourceNode( aWindowStateConfig.openNode( *resource ) );
             ::svt::PToolPanel pCustomPanel( new CustomToolPanel( aResourceNode, m_xFrame ) );
-            size_t nPanelPos = m_aPanelDeck.InsertPanel( pCustomPanel, m_aPanelDeck.GetPanelCount() );
+
+            size_t nPanelPos = m_aPanelDeck.GetPanelCount();
+            if ( i_pPanelCompare )
+            {
+                // assuming that nobody will insert hundreths of panels, a simple O(n) search should suffice here ...
+                while ( nPanelPos > 0 )
+                {
+                    const short nCompare = i_pPanelCompare->compareToolPanelsURLs(
+                        *resource,
+                        GetPanelResourceURL( --nPanelPos )
+                    );
+                    if ( nCompare >= 0 )
+                    {
+                        ++nPanelPos;
+                        break;
+                    }
+                }
+            }
+            nPanelPos = m_aPanelDeck.InsertPanel( pCustomPanel, nPanelPos );
 
             if ( ::comphelper::getBOOL( aResourceNode.getNodeValue( "Visible" ) ) )
                 nFirstVisiblePanel = nPanelPos;
@@ -660,7 +679,15 @@ namespace sfx2
     //------------------------------------------------------------------------------------------------------------------
     ModuleTaskPane::ModuleTaskPane( Window& i_rParentWindow, const Reference< XFrame >& i_rDocumentFrame )
         :Window( &i_rParentWindow, 0 )
-        ,m_pImpl( new ModuleTaskPane_Impl( *this, i_rDocumentFrame ) )
+        ,m_pImpl( new ModuleTaskPane_Impl( *this, i_rDocumentFrame, NULL ) )
+    {
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ModuleTaskPane::ModuleTaskPane( Window& i_rParentWindow, const Reference< XFrame >& i_rDocumentFrame,
+            const IToolPanelCompare& i_rCompare )
+        :Window( &i_rParentWindow, 0 )
+        ,m_pImpl( new ModuleTaskPane_Impl( *this, i_rDocumentFrame, &i_rCompare ) )
     {
     }
 
