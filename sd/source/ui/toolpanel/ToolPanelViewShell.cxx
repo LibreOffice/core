@@ -211,6 +211,7 @@ private:
 */
 class ToolPanelViewShell_Impl   :public ::boost::noncopyable
                                 ,public ::svt::IToolPanelDeckListener
+                                ,public ::sfx2::IToolPanelCompare
 {
 public:
     static const size_t mnInvalidId = static_cast< size_t >( -1 );
@@ -258,6 +259,9 @@ private:
     virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
     virtual void LayouterChanged( const ::svt::PDeckLayouter& i_rNewLayouter );
     virtual void Dying();
+
+    // IToolPanelCompare overridables
+    virtual short compareToolPanelsURLs( const ::rtl::OUString& i_rLHS, const ::rtl::OUString& i_rRHS ) const;
 
 private:
     struct InitialPanel
@@ -735,7 +739,7 @@ void ToolPanelViewShell::DeactivatePanel( const ::rtl::OUString& i_rPanelResourc
 // ---------------------------------------------------------------------------------------------------------------------
 ToolPanelViewShell_Impl::ToolPanelViewShell_Impl( ToolPanelViewShell& i_rPanelViewShell, ::Window& i_rPanelDeckParent )
     :m_rPanelViewShell( i_rPanelViewShell )
-    ,m_pTaskPane( new ::sfx2::ModuleTaskPane( i_rPanelDeckParent, i_rPanelViewShell.GetViewShellBase().GetViewFrame()->GetFrame()->GetFrameInterface() ) )
+    ,m_pTaskPane( new ::sfx2::ModuleTaskPane( i_rPanelDeckParent, i_rPanelViewShell.GetViewShellBase().GetViewFrame()->GetFrame()->GetFrameInterface(), *this ) )
     ,m_bInitialized( false )
 {
     const String sPaneTitle( SdResId( STR_RIGHT_PANE_TITLE ) );
@@ -828,6 +832,18 @@ void ToolPanelViewShell_Impl::LayouterChanged( const ::svt::PDeckLayouter& i_rNe
 void ToolPanelViewShell_Impl::Dying()
 {
     // not interested in
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+short ToolPanelViewShell_Impl::compareToolPanelsURLs( const ::rtl::OUString& i_rLHS, const ::rtl::OUString& i_rRHS ) const
+{
+    const PanelId eLHS( GetStandardPanelId( i_rLHS, true ) );
+    const PanelId eRHS( GetStandardPanelId( i_rRHS, true ) );
+    if ( eLHS < eRHS )
+        return -1;
+    if ( eLHS == eRHS )
+        return 0;
+    return 1;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
