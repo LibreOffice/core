@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleMenuSeparator.java,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,7 @@ import com.sun.star.accessibility.XAccessibleAction;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
+import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
@@ -85,27 +83,12 @@ public class AccessibleMenuSeparator extends TestCase {
      */
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
-        XInterface oObj = null;
-
-        try {
-            oObj = (XInterface) msf.createInstance("com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get toolkit");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e);
-        }
-
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
-                                      XExtendedToolkit.class, oObj);
-
         shortWait();
 
         AccessibilityTools at = new AccessibilityTools();
 
-        Object atw = tk.getActiveTopWindow();
-
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
-                                                              atw);
+        XWindow xWindow = UnoRuntime.queryInterface(XModel.class, xTextDoc).
+            getCurrentController().getFrame().getContainerWindow();
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
@@ -113,6 +96,7 @@ public class AccessibleMenuSeparator extends TestCase {
         XAccessibleContext MenuBar = at.getAccessibleObjectForRole(xRoot,
                                                                    AccessibleRole.MENU_BAR);
         XAccessibleAction act = null;
+        XInterface oObj = null;
 
         try {
             //activate Edit-Menu

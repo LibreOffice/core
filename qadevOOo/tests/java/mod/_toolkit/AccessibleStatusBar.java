@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleStatusBar.java,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,6 @@ import com.sun.star.awt.PosSize;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
-import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
@@ -87,17 +83,7 @@ import util.SOfficeFactory;
  * @see ifc.accessibility.XAccessibleAction
  */
 public class AccessibleStatusBar extends TestCase {
-    private static XDesktop the_Desk;
     private static XTextDocument xTextDoc;
-
-    /**
-     * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
-     */
-    protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
-                                                        DesktopTools.createDesktop(
-                                                                (XMultiServiceFactory) Param.getMSF()));
-    }
 
     /**
      * Disposes the document, if exists, created in
@@ -158,16 +144,13 @@ public class AccessibleStatusBar extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
-                                                           xTextDoc);
-
         XInterface oObj = null;
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentContainerWindow(
-                                  (XMultiServiceFactory) tParam.getMSF(),
-                                  aModel);
+        final XWindow xWindow =
+            UnoRuntime.queryInterface(XModel.class, xTextDoc).
+            getCurrentController().getFrame().getContainerWindow();
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
@@ -183,15 +166,14 @@ public class AccessibleStatusBar extends TestCase {
         tEnv.addObjRelation("EventProducer",
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
-                XWindow xWin = (XWindow) UnoRuntime.queryInterface(
-                                       XWindow.class, tk.getActiveTopWindow());
-                Rectangle newPosSize = xWin.getPosSize();
+                Rectangle newPosSize = xWindow.getPosSize();
                 newPosSize.Width = newPosSize.Width - 20;
                 newPosSize.Height = newPosSize.Height - 20;
                 newPosSize.X = newPosSize.X + 20;
                 newPosSize.Y = newPosSize.Y + 20;
-                xWin.setPosSize(newPosSize.X, newPosSize.Y, newPosSize.Width,
-                                newPosSize.Height, PosSize.POSSIZE);
+                xWindow.setPosSize(
+                    newPosSize.X, newPosSize.Y, newPosSize.Width,
+                    newPosSize.Height, PosSize.POSSIZE);
             }
         });
 

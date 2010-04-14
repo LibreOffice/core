@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.37.18.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -84,11 +80,7 @@ SHL1STDLIBS= \
 SHL1LIBS=	$(LIB1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
-.IF "$(COMNAME)" == "gcc3"
-SHL1VERSIONMAP = component.gcc3.map
-.ELSE
-SHL1VERSIONMAP = component.map
-.ENDIF
+SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 
 # ---- test object ----
 
@@ -107,16 +99,12 @@ SHL2STDLIBS= \
 SHL2LIBS=	$(LIB2TARGET)
 SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=	$(SHL2TARGET)
-.IF "$(COMNAME)" == "gcc3"
-SHL2VERSIONMAP = component.gcc3.map
-.ELSE
-SHL2VERSIONMAP = component.map
-.ENDIF
+SHL2VERSIONMAP = $(SOLARENV)/src/component.map
 
 SHL3TARGET = constructors.uno
 SHL3OBJS = $(SLO)$/constructors.obj
 SHL3STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)
-SHL3VERSIONMAP = component.map
+SHL3VERSIONMAP = $(SOLARENV)/src/component.map
 SHL3IMPLIB = i$(SHL3TARGET)
 DEF3NAME = $(SHL3TARGET)
 

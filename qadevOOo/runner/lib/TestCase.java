@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TestCase.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -143,18 +140,16 @@ public abstract class TestCase {
                 message = e.toString();
             System.out.println("Exception while getting Environment "+message);
             e.printStackTrace();
+            cleanup(tParam, log);
         }
         return tEnv;
     }
 
     /**
      * Disposes the <code>TestEnvironment</code> when it is not needed anymore.
-     * The method calls <code>cleanupTestEnvironment()</code>.
      *
      * @param tEnv the environment to dispose
      * @param tParam test parameters
-     *
-     * @see #cleanupTestEnvironment()
      */
     public synchronized void disposeTestEnvironment( TestEnvironment tEnv,
         TestParameters tParam ) {
@@ -175,22 +170,6 @@ public abstract class TestCase {
      */
     protected abstract TestEnvironment createTestEnvironment(
             TestParameters tParam, PrintWriter log );
-
-    /**
-     * Called while disposing a <code>TestEnvironment</code>. In the
-     * implementation does nothing. Subclasses can override to clean up
-     * the environments created by them.
-     *
-     * @param tParam test parameters
-     * @param tEnv the environment to cleanup
-     * @param log writer to log information while testing
-     *
-     * @see TestEnvironment
-     * @see #disposeTestEnvironment()
-     */
-    protected void cleanupTestEnvironment( TestParameters Param,
-            TestEnvironment tEnv, PrintWriter log ) {
-    }
 
     /**
      * @return the name of the object

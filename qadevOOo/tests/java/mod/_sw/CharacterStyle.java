@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: CharacterStyle.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,15 +55,13 @@ import util.utils;
  * @see com.sun.star.style.CharacterStyle
  */
 public class CharacterStyle extends TestCase {
-
-    XTextDocument xTextDoc;
-    SOfficeFactory SOF = null;
+    private XTextDocument xTextDoc;
 
     /**
     * Creates text document.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
         try {
             log.println( "creating a textdocument" );
             xTextDoc = SOF.createTextDoc( null );

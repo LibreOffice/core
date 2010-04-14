@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ClParser.java,v $
- * $Revision: 1.12.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,6 +26,7 @@
  ************************************************************************/
 package helper;
 
+import java.io.File;
 import java.util.Properties;
 
 import lib.TestParameters;
@@ -97,7 +95,8 @@ public class ClParser
 
                     if (pName.equals("TestDocumentPath"))
                     {
-                        System.setProperty("DOCPTH", pValue);
+                        System.setProperty(
+                            "DOCPTH", new File(pValue).getAbsolutePath());
                     }
                     else if (pName.equals(PropertyName.SRC_ROOT))
                     {

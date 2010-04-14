@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleBrowseBoxHeaderCell.java,v $
- * $Revision: 1.10.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +40,6 @@ import util.SOfficeFactory;
 
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
-import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XController;
@@ -205,21 +201,9 @@ public class AccessibleBrowseBoxHeaderCell extends TestCase {
             throw new StatusException("Could not select Biblio-Database", ex);
         }
 
-
-        try {
-            oObj = (XInterface) ((XMultiServiceFactory)tParam.getMSF()).createInstance
-                ("com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException("Couldn't get toolkit", e );
-        }
-
-        XExtendedToolkit tk = (XExtendedToolkit)
-            UnoRuntime.queryInterface(XExtendedToolkit.class, oObj);
-
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = (XWindow)
-            UnoRuntime.queryInterface(XWindow.class, tk.getActiveTopWindow());
+        XWindow xWindow = secondController.getFrame().getContainerWindow();
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 

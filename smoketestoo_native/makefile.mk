@@ -1,13 +1,9 @@
 #*************************************************************************
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile,v $
-#
-# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -35,76 +31,38 @@ ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
 SLOFILES = $(SHL1OBJS)
 
 SHL1TARGET = smoketest
 SHL1OBJS = $(SLO)/smoketest.obj
 SHL1RPATH = NONE
-SHL1STDLIBS = $(CPPUHELPERLIB) $(CPPULIB) $(CPPUNITLIB) $(SALLIB)
+SHL1STDLIBS = $(CPPUHELPERLIB) $(CPPULIB) $(CPPUNITLIB) $(SALLIB) $(TESTLIB)
 SHL1VERSIONMAP = version.map
 DEF1NAME = $(SHL1TARGET)
 
 .INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
-.IF "$(OS)" == "WNT"
-my_file = file:///
-.ELSE
-my_file = file://
-.END
+ALLTAR : cpptest
 
-.IF "$(OS)" == "MACOSX"
-my_path = $(MISC)/installation/opt/OpenOffice.org.app/Contents/MacOS/soffice
-.ELIF "$(OS)" == "WNT"
-my_path = \
-    `cat $(MISC)/installation.flag`'/opt/OpenOffice.org 3/program/soffice.exe'
-.ELSE
-my_path = $(MISC)/installation/opt/openoffice.org3/program/soffice
-.END
+cpptest : $(SHL1TARGETN) $(BIN)/smoketestdoc.sxw
 
-ALLTAR: smoketest
-
-smoketest .PHONY: $(MISC)/installation.flag $(SHL1TARGETN) \
-        $(MISC)/services.rdb $(BIN)/smoketestdoc.sxw
-    $(RM) -r $(MISC)/user
-    $(MKDIR) $(MISC)/user
-    $(CPPUNITTESTER) $(SHL1TARGETN) \
-        -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/services.rdb \
-        -env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/types.rdb \
-        -env:arg-path=$(my_path) -env:arg-user=$(MISC)/user \
-        -env:arg-doc=$(BIN)/smoketestdoc.sxw \
-        -env:arg-env=$(OOO_LIBRARY_PATH_VAR)"$${{$(OOO_LIBRARY_PATH_VAR)+=$$$(OOO_LIBRARY_PATH_VAR)}}"
-.IF "$(OS)" == "WNT"
-    $(RM) -r $(MISC)/installation.flag `cat $(MISC)/installation.flag`
-.ENDIF
-
-# Work around Windows problems with long pathnames (see issue 50885) by
-# installing into the temp directory instead of the module output tree (in which
-# case installation.flag contains the path to the temp installation, which is
-# removed after smoketest); can be removed once issue 50885 is fixed:
-.IF "$(OS)" == "WNT"
-$(MISC)/installation.flag: $(shell ls \
-        $(SRC_ROOT)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.zip)
-    my_tmp=$$(cygpath -m $$(mktemp -dt ooosmoke.XXXXXX)) && \
-    unzip \
-        $(SRC_ROOT)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.zip \
-        -d "$$my_tmp" && \
-    mv "$$my_tmp"/OOo_*_install "$$my_tmp"/opt && \
-    echo "$$my_tmp" > $@
-.ELSE
-$(MISC)/installation.flag: $(shell ls \
-        $(SRC_ROOT)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.tar.gz)
-    $(RM) -r $(MISC)/installation
-    $(MKDIR) $(MISC)/installation
-    cd $(MISC)/installation && $(GNUTAR) xfz \
-        $(SRC_ROOT)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.tar.gz
-    $(MV) $(MISC)/installation/OOo_*_install $(MISC)/installation/opt
-    $(TOUCH) $@
-.END
-
-$(MISC)/services.rdb:
-    $(RM) $@
-    $(REGCOMP) -register -r $@ -wop -c bridgefac.uno -c connector.uno \
-        -c remotebridge.uno -c uuresolver.uno
+OOO_CPPTEST_ARGS = $(SHL1TARGETN) -env:arg-doc=$(BIN)/smoketestdoc.sxw
 
 $(BIN)/smoketestdoc.sxw: data/smoketestdoc.sxw
     $(COPY) $< $@
+
+.IF "$(OS)" != "WNT"
+$(installationtest_instpath).flag : \
+        $(shell ls $(installationtest_instset)/OOo_*_install.tar.gz)
+    $(RM) -r $(installationtest_instpath)
+    $(MKDIRHIER) $(installationtest_instpath)
+    cd $(installationtest_instpath) && \
+        $(GNUTAR) xfz $(installationtest_instset)/OOo_*_install.tar.gz
+    $(MV) $(installationtest_instpath)/OOo_*_install \
+        $(installationtest_instpath)/opt
+    $(TOUCH) $@
+cpptest : $(installationtest_instpath).flag
+.END

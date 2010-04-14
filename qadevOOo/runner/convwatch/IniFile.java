@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: IniFile.java,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -438,18 +435,18 @@ class IniFile
     /**
      * some tests for this class
      */
-    public static void main(String[] args)
-        {
-            IniFile aIniFile = new IniFile("/tmp/inifile");
-            String sValue = aIniFile.getValue("Section","Key");
-            // insert a new value to a already exist section
-            aIniFile.insertValue("Section","Key2","a new value in a existing section");
-            // replace a value
-            aIniFile.insertValue("Section","Key","replaced value");
-            // create a new value
-            aIniFile.insertValue("New Section", "Key", "a new key value pair");
-
-            String sValue2 = aIniFile.getValue("Section2","Key");
-            aIniFile.store();
-        }
+//    public static void main(String[] args)
+//        {
+//            IniFile aIniFile = new IniFile("/tmp/inifile");
+//            String sValue = aIniFile.getValue("Section","Key");
+//            // insert a new value to a already exist section
+//            aIniFile.insertValue("Section","Key2","a new value in a existing section");
+//            // replace a value
+//            aIniFile.insertValue("Section","Key","replaced value");
+//            // create a new value
+//            aIniFile.insertValue("New Section", "Key", "a new key value pair");
+//
+//            String sValue2 = aIniFile.getValue("Section2","Key");
+//            aIniFile.store();
+//        }
 }

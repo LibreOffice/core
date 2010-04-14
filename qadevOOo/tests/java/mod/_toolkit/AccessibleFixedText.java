@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleFixedText.java,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +34,6 @@ import com.sun.star.awt.PosSize;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlContainer;
 import com.sun.star.awt.XControlModel;
-import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XWindow;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -153,17 +149,11 @@ public class AccessibleFixedText extends TestCase {
             throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
-                                      XExtendedToolkit.class, oObj);
-
         shortWait();
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
-                                                              tk.getActiveTopWindow());
-
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = at.getAccessibleObject(xWinDlg);
 
         at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 

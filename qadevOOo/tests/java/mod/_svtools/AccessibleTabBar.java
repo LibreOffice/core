@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleTabBar.java,v $
- * $Revision: 1.8.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,8 +38,8 @@ import util.SOfficeFactory;
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.awt.PosSize;
-import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
+import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
@@ -111,23 +108,12 @@ public class AccessibleTabBar extends TestCase {
 
         XInterface oObj = null;
 
-        try {
-            oObj = (XInterface) msf.createInstance("com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get toolkit");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e);
-        }
-
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
-                                      XExtendedToolkit.class, oObj);
-
         AccessibilityTools at = new AccessibilityTools();
 
         shortWait();
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
-                                                              tk.getActiveTopWindow());
+        XWindow xWindow = UnoRuntime.queryInterface(XModel.class, xDoc).
+            getCurrentController().getFrame().getContainerWindow();
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
         at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));

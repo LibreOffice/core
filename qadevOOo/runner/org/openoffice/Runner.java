@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Runner.java,v $
- * $Revision: 1.5.8.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -185,9 +182,8 @@ public class Runner
         }
     }
 
-    public static void main(String[] args)
-    {
-        System.out.println("OOoRunner Main() version from 20090825 (yyyymmdd)");
+    public static boolean run(String... args) {
+        System.out.println("OOoRunner Main() version from 20100125 (yyyymmdd)");
 
         setStartTime(getTime());
 
@@ -249,12 +245,16 @@ public class Runner
         if (!worked)
         {
             System.out.println("Job " + param.get("TestJob") + " failed");
-            System.exit(-1);
         }
         else
         {
             System.out.println("Job " + param.get("TestJob") + " done");
-            System.exit(0);
         }
+        return worked;
+    }
+
+    public static void main(String[] args)
+    {
+        System.exit(run(args) ? 0 : -1);
     }
 }

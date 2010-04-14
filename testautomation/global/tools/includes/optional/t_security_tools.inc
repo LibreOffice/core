@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: t_security_tools.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsk $ $Date: 2008-06-20 07:58:56 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '*  owner : joerg.skottke@sun.com
@@ -475,8 +469,7 @@ function hSecurityEnterPasswordOnSave( cPassword as string ) as boolean
 
     const CFN = "hSecurityEnterPasswordOnSave::"
     printlog( CFN & "Enter" )
-    dim brc as boolean 'a multi purpose boolean returnvalue
-        brc = true
+    dim brc as boolean : brc = true
 
     '///<u>Description:</u>
     '///<ul>
@@ -502,6 +495,7 @@ function hSecurityEnterPasswordOnSave( cPassword as string ) as boolean
             
             '///+<li>Close messagebox with OK</li>
             Active.OK()
+            Active.notExists( 2 )
         else
             qaerrorlog( CFN & "Warning about faulty password confirmation is missing" )
             brc = false
@@ -509,7 +503,7 @@ function hSecurityEnterPasswordOnSave( cPassword as string ) as boolean
         
         '///+<li>We should now be back on the password dialog</li>
         kontext "PasswordFileSave"
-        if ( PasswordFileSave.exists( 2 ) ) then
+        if ( PasswordFileSave.exists() ) then
         
             printlog( CFN & "Password dialog is displayed" )
     
@@ -535,7 +529,7 @@ function hSecurityEnterPasswordOnSave( cPassword as string ) as boolean
         brc = false
         
     endif
-    
+   
     '///+<li>Verify that the &quot;File Save&quot; dialog is closed after saving</li>
     kontext "SpeichernDlg"
     if ( SpeichernDlg.exists() ) then
