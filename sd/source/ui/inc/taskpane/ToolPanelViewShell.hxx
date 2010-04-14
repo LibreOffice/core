@@ -114,14 +114,6 @@ public:
     */
     DockingWindow* GetDockingWindow (void);
 
-    /** Called when a mouse button has been pressed but not yet
-        released, this handler is used to show the popup menu of the
-        title bar.
-    */
-    DECL_LINK(ToolboxClickHandler, ToolBox*);
-    DECL_LINK(MenuSelectHandler, Menu*);
-    DECL_LINK(DockingChanged, PaneDockingWindow*);
-
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
         CreateAccessibleDocumentView (::sd::Window* pWindow);
@@ -162,10 +154,6 @@ private:
     */
     ::std::auto_ptr<PopupMenu> CreatePopupMenu (bool bIsDocking);
 
-
-    /** connects to a (new) (Pane)DockingWindow
-    */
-    void    ConnectToDockingWindow();
 
     /** Initialize the task pane view shell if that has not yet been done
         before.  If mbIsInitialized is already set to <TRUE/> then this

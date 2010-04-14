@@ -128,33 +128,6 @@ using ::sd::framework::FrameworkHelper;
 namespace sd { namespace toolpanel {
 
 // =====================================================================================================================
-// = PanelDescriptor
-// =====================================================================================================================
-/** is a helper class for ToolPanelViewShell_Impl, holding the details about a single panel which is not
-    contained in the IToolPanel implementation itself.
-*/
-struct PanelDescriptor
-{
-    PanelId             nId;
-    ::svt::PToolPanel   pPanel;
-    bool                bHidden;
-
-    PanelDescriptor()
-        :nId( PID_UNKNOWN )
-        ,pPanel()
-        ,bHidden( false )
-    {
-    }
-
-    PanelDescriptor( const PanelId i_nPanelId, const ::svt::PToolPanel& i_rPanel )
-        :nId( i_nPanelId )
-        ,pPanel( i_rPanel )
-        ,bHidden( false )
-    {
-    }
-};
-
-// =====================================================================================================================
 // = PanelSelectorLayout
 // =====================================================================================================================
 enum PanelSelectorLayout
@@ -205,7 +178,7 @@ private:
 // =====================================================================================================================
 /** Inner implementation class of ToolPanelViewShell.
 */
-class ToolPanelViewShell_Impl : public ::svt::IToolPanelDeckListener
+class ToolPanelViewShell_Impl : public ::boost::noncopyable
 {
 public:
     static const size_t mnInvalidId = static_cast< size_t >( -1 );
@@ -222,15 +195,6 @@ public:
     /** clean up the instance
     */
     void Cleanup();
-
-    /** sets the given layout for the panel selector
-    */
-    void    SetLayout( const PanelSelectorLayout i_eLayout, const bool i_bForce = false );
-
-    /** returns the current layout
-    */
-    PanelSelectorLayout
-            GetLayout() const { return m_eCurrentLayout; }
 
     /** activates the panel which has the given resource URL
     */
@@ -250,22 +214,12 @@ public:
           ::svt::ToolPanelDeck& GetToolPanelDeck()       { return GetTaskPane().GetPanelDeck(); }
     const ::svt::ToolPanelDeck& GetToolPanelDeck() const { return GetTaskPane().GetPanelDeck(); }
 
-    void    TogglePanelVisibility( const size_t i_nLogicalPanelIndex );
-
     Reference< XAccessible >
             CreateAccessible( ::sd::Window& i_rWindow );
 
-protected:
-    // IToolPanelDeckListener overridables
-    virtual void PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition );
-    virtual void PanelRemoved( const size_t i_nPosition );
-    virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
-    virtual void LayouterChanged( const ::svt::PDeckLayouter& i_rNewLayouter );
-    virtual void Dying();
+    void    ConnectToDockingWindow();
 
 private:
-    void UpdateDockingWindowTitle();
-
     struct InitialPanel
     {
         ::rtl::OUString sPanelResourceURL;
@@ -278,10 +232,9 @@ private:
     };
     InitialPanel DetermineInitialPanel();
 
-    typedef ::std::vector< PanelDescriptor >        PanelDescriptors;
     ToolPanelViewShell&                             m_rPanelViewShell;
     ::boost::scoped_ptr< ::sfx2::ModuleTaskPane >   m_pTaskPane;
-    //::boost::scoped_ptr< ToolPanelDeck >            m_pPanelDeck;
+    ::std::auto_ptr< ::sfx2::TaskPaneController >   m_pTaskPaneController;
     ::rtl::Reference< ConfigurationListener >       m_pConfigListener;
     PanelSelectorLayout                             m_eCurrentLayout;
     bool                                            m_bInitialized;
@@ -355,22 +308,6 @@ void ConfigurationListener::dispose()
 }
 
 // =====================================================================================================================
-// = helpers
-// =====================================================================================================================
-// ---------------------------------------------------------------------------------------------------------------------
-namespace {
-
-enum MenuId {
-    MID_UNLOCK_TASK_PANEL = 1,
-    MID_LOCK_TASK_PANEL = 2,
-    MID_LAYOUT_TABS = 3,
-    MID_LAYOUT_DRAWERS = 4,
-    MID_FIRST_PANEL = 5
-};
-
-} // end of anonymouse namespace
-
-// =====================================================================================================================
 // = ToolPanelViewShell
 // =====================================================================================================================
 // ---------------------------------------------------------------------------------------------------------------------
@@ -442,12 +379,6 @@ void ToolPanelViewShell_Impl::Setup()
         }
     }
 
-//    // add as listener to the panel deck
-//    m_pPanelDeck->AddListener( *this );
-
-    // initialize panel selector
-    SetLayout( LAYOUT_DRAWERS, true );
-
     // listen at the configuration
     m_pConfigListener.set( new ConfigurationListener( *this ) );
 
@@ -455,54 +386,14 @@ void ToolPanelViewShell_Impl::Setup()
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell_Impl::SetLayout( const PanelSelectorLayout i_eLayout, const bool i_bForce )
-{
-    if ( !i_bForce && ( m_eCurrentLayout == i_eLayout ) )
-        return;
-
-//    switch ( i_eLayout )
-//    {
-//    case LAYOUT_DRAWERS:
-//        m_pPanelDeck->SetDrawersLayout();
-//        break;
-//    case LAYOUT_TABS_TOP:
-//        m_pPanelDeck->SetTabsLayout( ::svt::TABS_TOP, ::svt::TABITEM_IMAGE_ONLY );
-//        break;
-//    case LAYOUT_TABS_BOTTOM:
-//        m_pPanelDeck->SetTabsLayout( ::svt::TABS_BOTTOM, ::svt::TABITEM_IMAGE_ONLY );
-//        break;
-//    case LAYOUT_TABS_LEFT:
-//        m_pPanelDeck->SetTabsLayout( ::svt::TABS_LEFT, ::svt::TABITEM_IMAGE_ONLY );
-//        break;
-//    case LAYOUT_TABS_RIGHT:
-//        m_pPanelDeck->SetTabsLayout( ::svt::TABS_RIGHT, ::svt::TABITEM_IMAGE_ONLY );
-//        break;
-//    }
-    m_eCurrentLayout = i_eLayout;
-    UpdateDockingWindowTitle();
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
 void ToolPanelViewShell_Impl::Cleanup()
 {
     if ( m_bInitialized )
     {
-//        m_pPanelDeck->RemoveListener( *this );
-//        // remove the panels which are not under the control of the panel deck currently
-//        for (   PanelDescriptors::iterator panelPos = m_aPanels.begin();
-//                panelPos != m_aPanels.end();
-//                ++panelPos
-//            )
-//        {
-//            if ( panelPos->bHidden )
-//                panelPos->pPanel->Dispose();
-//        }
-//        m_aPanels.clear();
-//
-//        if ( m_pConfigListener.is() )
-//            m_pConfigListener->dispose();
+        if ( m_pConfigListener.is() )
+            m_pConfigListener->dispose();
     }
-//    m_pPanelDeck.reset();
+    m_pTaskPaneController.reset();
     m_pTaskPane.reset();
 }
 
@@ -553,7 +444,7 @@ ToolPanelViewShell::ToolPanelViewShell( SfxViewFrame* pFrame, ViewShellBase& rVi
 
     GetParentWindow()->SetHelpId(HID_SD_TASK_PANE);
 
-    ConnectToDockingWindow();
+    mpImpl->ConnectToDockingWindow();
 
     SetPool( &GetDoc()->GetPool() );
 
@@ -667,138 +558,6 @@ namespace
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-IMPL_LINK( ToolPanelViewShell, DockingChanged, PaneDockingWindow*, i_pDockingWindow )
-{
-    ENSURE_OR_RETURN( i_pDockingWindow == dynamic_cast< PaneDockingWindow* >( GetDockingWindow() ), "unknown source", 0 );
-
-    if ( mpImpl->GetLayout() == LAYOUT_DRAWERS )
-        return 0L;
-
-    mpImpl->SetLayout( lcl_getTabLayoutFromAlignment( i_pDockingWindow->GetAlignment() ) );
-    return 0L;
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-IMPL_LINK(ToolPanelViewShell, ToolboxClickHandler, ToolBox*, pToolBox)
-{
-    if (pToolBox->GetCurItemId() == mnMenuId)
-    {
-        pToolBox->EndSelection();
-
-        DockingWindow* pDockingWindow = GetDockingWindow();
-        ::std::auto_ptr<PopupMenu> pMenu = CreatePopupMenu (
-            pDockingWindow!=NULL && !pDockingWindow->IsFloatingMode());
-        pMenu->SetSelectHdl (
-            LINK(this, ToolPanelViewShell, MenuSelectHandler));
-
-        // pass toolbox button rect so the menu can stay open on button up
-        Rectangle aRect = pToolBox->GetItemRect(mnMenuId);
-        aRect.SetPos(pToolBox->GetPosPixel() );
-        pMenu->Execute (pDockingWindow, aRect, POPUPMENU_EXECUTE_DOWN);
-    }
-
-    return 0;
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-IMPL_LINK(ToolPanelViewShell, MenuSelectHandler, Menu*, pMenu)
-{
-    if (pMenu)
-    {
-        pMenu->Deactivate();
-        switch (pMenu->GetCurItemId())
-        {
-            case MID_UNLOCK_TASK_PANEL:
-            {
-                DockingWindow* pDockingWindow = GetDockingWindow();
-                if (pDockingWindow != NULL)
-                    pDockingWindow->SetFloatingMode (TRUE);
-            }
-            break;
-
-            case MID_LOCK_TASK_PANEL:
-            {
-                DockingWindow* pDockingWindow = GetDockingWindow();
-                if (pDockingWindow != NULL)
-                    pDockingWindow->SetFloatingMode (FALSE);
-            }
-            break;
-
-            case MID_LAYOUT_DRAWERS:
-                mpImpl->SetLayout( LAYOUT_DRAWERS );
-                break;
-
-            case MID_LAYOUT_TABS:
-            {
-                PaneDockingWindow* pDockingWindow = dynamic_cast< PaneDockingWindow* >( GetDockingWindow() );
-                OSL_ENSURE( pDockingWindow != NULL, "ToolPanelViewShell::MenuSelectHandler: unknown docking window type!" );
-                if ( pDockingWindow )
-                    mpImpl->SetLayout( lcl_getTabLayoutFromAlignment( pDockingWindow->GetAlignment() ) );
-            }
-            break;
-
-            default:
-            {
-                size_t nPanelIndex = size_t( pMenu->GetCurItemId() - MID_FIRST_PANEL );
-                mpImpl->TogglePanelVisibility( nPanelIndex );
-            }
-            break;
-        }
-    }
-
-    return 0;
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-::std::auto_ptr<PopupMenu> ToolPanelViewShell::CreatePopupMenu (
-    bool bIsDocking)
-{
-    ::std::auto_ptr<PopupMenu> pMenu (new PopupMenu ());
-    FloatingWindow* pFloat = static_cast<FloatingWindow*>(pMenu->GetWindow());
-    if (pFloat != NULL)
-    {
-        pFloat->SetPopupModeFlags (
-            pFloat->GetPopupModeFlags()
-            | FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE);
-    }
-
-    // Add one entry for every tool panel element to individually make
-    // them visible or hide them.
-    USHORT nIndex = MID_FIRST_PANEL;
-//    for ( size_t i=0; i<mpImpl->GetPanelCount(); ++i, ++nIndex )
-//    {
-//        const PanelDescriptor& rPanelDesc( mpImpl->GetPanel(i) );
-//        pMenu->InsertItem( nIndex, rPanelDesc.pPanel->GetDisplayName(), MIB_CHECKABLE );
-//        pMenu->SetUserValue( nIndex, rPanelDesc.nId );
-//        pMenu->CheckItem( nIndex, !rPanelDesc.bHidden );
-//    }
-//    pMenu->InsertSeparator();
-
-#if OSL_DEBUG_LEVEL > 0
-    pMenu->InsertItem( MID_LAYOUT_TABS, String::CreateFromAscii( "Tab-Layout (exp.)" ), MIB_CHECKABLE );
-    pMenu->CheckItem( MID_LAYOUT_TABS, mpImpl->GetLayout() != LAYOUT_DRAWERS );
-    pMenu->InsertItem( MID_LAYOUT_DRAWERS, String::CreateFromAscii( "Drawer-Layout" ), MIB_CHECKABLE );
-    pMenu->CheckItem( MID_LAYOUT_DRAWERS, mpImpl->GetLayout() == LAYOUT_DRAWERS );
-
-    pMenu->InsertSeparator();
-#endif
-
-    // Add entry for docking or un-docking the tool panel.
-    if (bIsDocking)
-        pMenu->InsertItem (
-            MID_UNLOCK_TASK_PANEL,
-            String(SdResId(STR_TASKPANEL_MASTER_PAGE_MENU_UNLOCK)));
-    else
-        pMenu->InsertItem (
-            MID_LOCK_TASK_PANEL,
-            String(SdResId(STR_TASKPANEL_MASTER_PAGE_MENU_LOCK)));
-
-    pMenu->RemoveDisabledEntries (FALSE, FALSE);
-
-    return pMenu;
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
 SdPage* ToolPanelViewShell::GetActualPage()
 {
     return NULL;
@@ -857,27 +616,6 @@ Reference< XDrawSubController > ToolPanelViewShell::CreateSubController()
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::ConnectToDockingWindow()
-{
-    PaneDockingWindow* pDockingWindow = dynamic_cast<PaneDockingWindow*>(GetDockingWindow());
-    if (pDockingWindow != NULL)
-    {
-        pDockingWindow->ResetToolBox();
-        mnMenuId = pDockingWindow->AddDropDownToolBoxItem (
-            String(SdResId(STR_TASKPANEL_MASTER_PAGE_MENU_TITLE)),
-            HID_SD_TASK_PANE_VIEW_MENU,
-            LINK(this, ToolPanelViewShell, ToolboxClickHandler));
-
-        // be notified when the docking position of the window changes
-        pDockingWindow->SetEndDockingHdl( LINK( this, ToolPanelViewShell, DockingChanged ) );
-    }
-
-    // Tell the focus manager that we want to pass the focus to our
-    // child.
-    FocusManager::Instance().RegisterDownLink( GetParentWindow(), &mpImpl->GetTaskPane() );
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
 bool ToolPanelViewShell::RelocateToParentWindow( ::Window* pParentWindow )
 {
     ::Window* pOldParentWindow = GetParentWindow();
@@ -892,7 +630,7 @@ bool ToolPanelViewShell::RelocateToParentWindow( ::Window* pParentWindow )
 
     ViewShell::RelocateToParentWindow(pParentWindow);
 
-    ConnectToDockingWindow();
+    mpImpl->ConnectToDockingWindow();
 
     Resize();
 
@@ -992,96 +730,21 @@ ToolPanelViewShell_Impl::~ToolPanelViewShell_Impl()
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell_Impl::TogglePanelVisibility( const size_t i_nLogicalPanelIndex )
+void ToolPanelViewShell_Impl::ConnectToDockingWindow()
 {
-    OSL_ENSURE( false, "ToolPanelViewShell_Impl::TogglePanelVisibility: not yet re-implemented!" );
-//    ENSURE_OR_RETURN_VOID( i_nLogicalPanelIndex < m_aPanels.size(), "illegal index" );
-//
-//    // get the actual panel index, within the deck
-//    size_t nActualPanelIndex(0);
-//    for ( size_t i=0; i < i_nLogicalPanelIndex; ++i )
-//    {
-//        if ( !m_aPanels[i].bHidden )
-//            ++nActualPanelIndex;
-//    }
-//    if ( m_aPanels[ i_nLogicalPanelIndex ].bHidden )
-//    {
-//        OSL_VERIFY( m_pPanelDeck->InsertPanel( m_aPanels[ i_nLogicalPanelIndex ].pPanel, nActualPanelIndex ) == nActualPanelIndex );
-//        // if there has not been an active panel before, activate the newly inserted one
-//        ::boost::optional< size_t > aActivePanel( m_pPanelDeck->GetActivePanel() );
-//        if ( !aActivePanel )
-//            m_pPanelDeck->ActivatePanelResource( nActualPanelIndex );
-//    }
-//    else
-//    {
-//        OSL_VERIFY( m_pPanelDeck->RemovePanel( nActualPanelIndex ).get() == m_aPanels[ i_nLogicalPanelIndex ].pPanel.get() );
-//    }
-//    m_aPanels[ i_nLogicalPanelIndex ].bHidden = !m_aPanels[ i_nLogicalPanelIndex ].bHidden;
-    (void)i_nLogicalPanelIndex;
-}
+    m_pTaskPaneController.reset();
+    DockingWindow* pDockingWindow( GetAntiImpl().GetDockingWindow() );
+    if ( pDockingWindow )
+    {
+        PaneDockingWindow* pPaneDockingWindow = dynamic_cast< PaneDockingWindow* >( pDockingWindow );
+        OSL_ENSURE( pPaneDockingWindow, "ToolPanelViewShell_Impl::ConnectToDockingWindow: unsupported docking window type!" );
+        if ( pPaneDockingWindow != NULL )
+            m_pTaskPaneController.reset( new ::sfx2::TaskPaneController( GetTaskPane(), *pPaneDockingWindow ) );
+    }
 
-// ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell_Impl::PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition )
-{
-    (void)i_pPanel;
-    (void)i_nPosition;
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell_Impl::PanelRemoved( const size_t i_nPosition )
-{
-    (void)i_nPosition;
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell_Impl::UpdateDockingWindowTitle()
-{
-//    PaneDockingWindow* pDockingWindow = dynamic_cast< PaneDockingWindow* >( m_rPanelViewShell.GetDockingWindow() );
-//    ENSURE_OR_RETURN_VOID( pDockingWindow, "ToolPanelViewShell_Impl::UpdateDockingWindowTitle: no PaneDockingWindow!?" );
-//
-//    ::boost::optional< size_t > aActivePanel( m_pPanelDeck->GetActivePanel() );
-//    if ( !aActivePanel || ( GetLayout() == LAYOUT_DRAWERS ) )
-//        pDockingWindow->SetTitle( String( SdResId( STR_RIGHT_PANE_TITLE ) ) );
-//    else
-//    {
-//        size_t nNewActive( *aActivePanel );
-//        for ( size_t i=0; i < m_aPanels.size(); ++i )
-//        {
-//            if ( m_aPanels[i].bHidden )
-//                continue;
-//
-//            if ( !nNewActive )
-//            {
-//                pDockingWindow->SetTitle( m_aPanels[i].pPanel->GetDisplayName() );
-//                break;
-//            }
-//            --nNewActive;
-//        }
-//    }
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell_Impl::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
-{
-    if ( GetLayout() == LAYOUT_DRAWERS )
-        // no adjustment of the title when we use the classical "drawers" layout
-        return;
-
-    UpdateDockingWindowTitle( );
-    (void)i_rOldActive;
-    (void)i_rNewActive;
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell_Impl::LayouterChanged( const ::svt::PDeckLayouter& i_rNewLayouter )
-{
-    // not interested in
-    (void)i_rNewLayouter;
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell_Impl::Dying()
-{
+    // Tell the focus manager that we want to pass the focus to our
+    // child.
+    FocusManager::Instance().RegisterDownLink( GetAntiImpl().GetParentWindow(), &GetTaskPane() );
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -1090,6 +753,7 @@ Reference< XAccessible > ToolPanelViewShell_Impl::CreateAccessible( ::sd::Window
 //    ::Window* pAccessibleParent = i_rWindow.GetAccessibleParentWindow();
 //    m_pPanelDeck->SetAccessibleParentWindow( pAccessibleParent );
 //    return m_pPanelDeck->GetAccessible();
+    // TODO: re-implement this
     (void)i_rWindow;
     return Reference< XAccessible >();
 }
