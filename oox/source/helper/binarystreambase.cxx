@@ -67,7 +67,7 @@ sal_Int64 BinaryStreamBase::getRemaining() const
     return ((nPos >= 0) && (nLen >= 0)) ? ::std::max< sal_Int64 >( nLen - nPos, 0 ) : -1;
 }
 
-void BinaryStreamBase::align( sal_Int32 nBlockSize, sal_Int64 nAnchorPos )
+void BinaryStreamBase::alignToBlock( sal_Int32 nBlockSize, sal_Int64 nAnchorPos )
 {
     sal_Int64 nStrmPos = tell();
     // nothing to do, if stream is at anchor position

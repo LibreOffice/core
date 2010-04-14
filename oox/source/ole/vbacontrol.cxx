@@ -525,7 +525,7 @@ bool VbaFormControl::importEmbeddedSiteModels( BinaryInputStream& rInStrm )
         }
     }
     // align the stream to 32bit, relative to start of entire site info
-    rInStrm.align( 4, nAnchorPos );
+    rInStrm.alignToBlock( 4, nAnchorPos );
 
     // import the site models for all embedded controls
     maControls.clear();

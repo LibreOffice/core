@@ -69,7 +69,7 @@ public:
     inline void         seekToEnd() { seek( getLength() ); }
     /** Seeks the stream forward to a position that is a multiple of the passed
         block size, relative to the passed stream position, if stream is seekable. */
-    void                align( sal_Int32 nBlockSize, sal_Int64 nAnchorPos = 0 );
+    void                alignToBlock( sal_Int32 nBlockSize, sal_Int64 nAnchorPos = 0 );
 
 protected:
     inline explicit     BinaryStreamBase() : mbEof( false ) {}

@@ -1098,7 +1098,7 @@ sal_uInt32 AxPropertyObjectBase::dumpFlagsProperty( sal_uInt32 nDefault, const s
     return nDefault;
 }
 
-sal_uInt32 OcxPropertyObjectBase::dumpColorProperty( sal_uInt32 nDefault )
+sal_uInt32 AxPropertyObjectBase::dumpColorProperty( sal_uInt32 nDefault )
 {
     if( startNextProperty() )
     {
@@ -1108,7 +1108,7 @@ sal_uInt32 OcxPropertyObjectBase::dumpColorProperty( sal_uInt32 nDefault )
     return nDefault;
 }
 
-sal_Unicode OcxPropertyObjectBase::dumpUnicodeProperty()
+sal_Unicode AxPropertyObjectBase::dumpUnicodeProperty()
 {
     if( startNextProperty() )
     {
@@ -1783,11 +1783,11 @@ void VbaFormDesignExtObject::implDumpShortProperties()
 
 namespace {
 
-const sal_uInt32 OCX_FORM_HASDESIGNEXTENDER     = 0x00004000;
-const sal_uInt32 OCX_FORM_SKIPCLASSTABLE        = 0x00008000;
+const sal_uInt32 AX_FORM_HASDESIGNEXTENDER      = 0x00004000;
+const sal_uInt32 AX_FORM_SKIPCLASSTABLE         = 0x00008000;
 
-const sal_uInt8 OCX_FORM_SITECOUNTTYPE_COUNT    = 0x80;
-const sal_uInt8 OCX_FORM_SITECOUNTTYPE_MASK     = 0x7F;
+const sal_uInt8 AX_FORM_SITECOUNTTYPE_COUNT     = 0x80;
+const sal_uInt8 AX_FORM_SITECOUNTTYPE_MASK      = 0x7F;
 
 } // namespace
 
@@ -1841,7 +1841,7 @@ void VbaFStreamObject::implDumpExtended()
 
 void VbaFStreamObject::dumpClassInfos()
 {
-    if( ensureValid() && !getFlag( mnFlags, OCX_FORM_SKIPCLASSTABLE ) )
+    if( ensureValid() && !getFlag( mnFlags, AX_FORM_SKIPCLASSTABLE ) )
     {
         mxOut->emptyLine();
         sal_uInt16 nCount = dumpDec< sal_uInt16 >( "class-info-count" );
@@ -1887,10 +1887,10 @@ void VbaFStreamObject::dumpSiteData()
                 IndentGuard aIndGuard( mxOut );
                 dumpDec< sal_uInt8 >( "depth" );
                 sal_uInt8 nTypeCount = dumpHex< sal_uInt8 >( "type-count", "VBA-FORM-SITE-TYPECOUNT" );
-                if( getFlag( nTypeCount, OCX_FORM_SITECOUNTTYPE_COUNT ) )
+                if( getFlag( nTypeCount, AX_FORM_SITECOUNTTYPE_COUNT ) )
                 {
                     dumpDec< sal_uInt8 >( "repeated-type" );
-                    nSiteIdx += (nTypeCount & OCX_FORM_SITECOUNTTYPE_MASK);
+                    nSiteIdx += (nTypeCount & AX_FORM_SITECOUNTTYPE_MASK);
                 }
                 else
                 {
@@ -1906,7 +1906,7 @@ void VbaFStreamObject::dumpSiteData()
 
 void VbaFStreamObject::dumpDesignExtender()
 {
-    if( ensureValid() && getFlag( mnFlags, OCX_FORM_HASDESIGNEXTENDER ) )
+    if( ensureValid() && getFlag( mnFlags, AX_FORM_HASDESIGNEXTENDER ) )
     {
         mxOut->emptyLine();
         writeEmptyItem( "design-extender" );

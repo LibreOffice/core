@@ -138,10 +138,10 @@ void DffStreamObject::implDumpRecordBody()
             dumpDec< sal_uInt32 >( "shape-count" );
             dumpDec< sal_uInt32 >( "drawing-count" );
             mxOut->resetItemIndex( 1 );
-            TableGuard aTabGuard( *mxOut, 15, 16 );
+            TableGuard aTabGuard( mxOut, 15, 16 );
             for( sal_uInt32 nCluster = 1; !mxStrm->isEof() && (nCluster < nClusters); ++nCluster )
             {
-                MultiItemsGuard aMultiGuard( *mxOut );
+                MultiItemsGuard aMultiGuard( mxOut );
                 writeEmptyItem( "#cluster" );
                 dumpDec< sal_uInt32 >( "drawing-id" );
                 dumpHex< sal_uInt32 >( "next-free-id", "CONV-DEC" );
@@ -287,7 +287,7 @@ void DffStreamObject::dumpDffOpt()
         writeEmptyItem( "#complex-data" );
         writeHexItem( "id", aIt->mnId, "DFFOPT-PROPERTY-NAMES" );
         mxOut->endMultiItems();
-        IndentGuard aIndent( *mxOut );
+        IndentGuard aIndent( mxOut );
         switch( aIt->meType )
         {
             case PROPTYPE_BINARY:
