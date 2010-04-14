@@ -152,28 +152,34 @@ function hChangeDoc() as string
       case "WRITER", "HTML", "MASTERDOCUMENT"
                       Kontext "DocumentWriter"
                       DocumentWriter.TypeKeys "<Return>This doc is changed!"
-                      hChangeDoc() = "Changed WRITER/HTML/MASTERDOC" 
+                      hChangeDoc() = "Changed WRITER/HTML/MASTERDOC"
+                      'DocumentWriter.typeKeys( "<MOD2 F6>" )
 
       '///+<li>CALC: Write some text into the current location (usually A1)</li>
       case "CALC"   : Kontext "DocumentCalc"
                       DocumentCalc.TypeKeys "<Down>This doc is changed!<Return>"
-                      hChangeDoc() = "Changed CALC" 
+                      hChangeDoc() = "Changed CALC"
+                      'DocumentWriter.typeKeys( "<MOD2 F6>" )
 
       '///+<li>DRAW: Draw a rectangle</li>
       case "DRAW"   : Kontext "DocumentDraw"
                       hRechteckErstellen ( 20, 20, 25, 25 )
                       gMouseClick ( 1, 1 )
-                      hChangeDoc() = "Changed DRAW" 
+                      hChangeDoc() = "Changed DRAW"
+                      'DocumentWriter.typeKeys( "<MOD2 F6>" )
 
       '///+<li>IMPRESS: Draw a rectangle</li>
       case "IMPRESS": Kontext "DocumentImpress"
                       hRechteckErstellen ( 20, 20, 25, 25 )
                       gMouseClick ( 1, 1 )
-                      hChangeDoc() = "Changed IMPRESS" 
+                      hChangeDoc() = "Changed IMPRESS"
+                      'DocumentWriter.typeKeys( "<MOD2 F6>" )
 
       '///+<li>MATH: Create a simple formaula</li>
       case "MATH"   : SchreibenInMathdok( "b over c" )
-                      hChangeDoc() = "Changed MATH" 
+                      kontext "DocumentMath"
+                      hChangeDoc() = "Changed MATH"
+                      gMouseClick( 50 , 50 )
 
    end select
    '///</ul>
