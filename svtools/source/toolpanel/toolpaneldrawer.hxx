@@ -54,6 +54,7 @@ namespace svt
         virtual void GetFocus();
         virtual void LoseFocus();
         virtual void DataChanged( const DataChangedEvent& i_rEvent );
+        virtual void MouseButtonDown( const MouseEvent& i_rMouseEvent );
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
                      GetComponentInterface( BOOL i_bCreate );

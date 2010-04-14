@@ -224,6 +224,13 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    void ToolPanelDrawer::MouseButtonDown( const MouseEvent& i_rMouseEvent )
+    {
+        // consume this event, and do not forward to the base class - it would sent a NotifyEvent, which in turn, when
+        // we live in a DockingWindow, would start undocking
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void ToolPanelDrawer::DataChanged( const DataChangedEvent& i_rEvent )
     {
         Window::DataChanged( i_rEvent );
