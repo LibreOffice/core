@@ -814,6 +814,9 @@
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Master Pages</value>
         </prop>
+        <prop oor:name="ImageURL" oor:type="xs:string">
+          <value xml:lang="en-US">private:commandimage/PresentationLayout</value>
+        </prop>
       </node>
       <node oor:name="private:resource/toolpanel/DrawingFramework/Layouts" oor:op="replace">
         <prop oor:name="Visible" oor:type="xs:boolean">
@@ -821,6 +824,9 @@
         </prop>
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Layouts</value>
+        </prop>
+        <prop oor:name="ImageURL" oor:type="xs:string">
+          <value xml:lang="en-US">private:commandimage/ModifyPage</value>
         </prop>
       </node>
       <node oor:name="private:resource/toolpanel/DrawingFramework/TableDesign" oor:op="replace">
@@ -830,6 +836,9 @@
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Table Design</value>
         </prop>
+        <prop oor:name="ImageURL" oor:type="xs:string">
+          <value xml:lang="en-US">private:commandimage/InsertTable</value>
+        </prop>
       </node>
       <node oor:name="private:resource/toolpanel/DrawingFramework/CustomAnimations" oor:op="replace">
         <prop oor:name="Visible" oor:type="xs:boolean">
@@ -838,6 +847,9 @@
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Custom Animation</value>
         </prop>
+        <prop oor:name="ImageURL" oor:type="xs:string">
+          <value xml:lang="en-US">private:commandimage/CustomAnimation</value>
+        </prop>
       </node>
       <node oor:name="private:resource/toolpanel/DrawingFramework/SlideTransitions" oor:op="replace">
         <prop oor:name="Visible" oor:type="xs:boolean">
@@ -845,6 +857,9 @@
         </prop>
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Slide Transition</value>
+        </prop>
+        <prop oor:name="ImageURL" oor:type="xs:string">
+          <value xml:lang="en-US">private:commandimage/RehearseTimings</value>
         </prop>
       </node>
     </node>

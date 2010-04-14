@@ -109,6 +109,11 @@ namespace sfx2
         ::boost::optional< size_t >
                     GetPanelPos( const ::rtl::OUString& i_rResourceURL );
 
+        /** returns the resource URL of the panel at the specified position
+        */
+        ::rtl::OUString
+                    GetPanelResourceURL( const size_t i_nPanelPos ) const;
+
         /// sets the "classical" layout of the tool panel deck, using drawers
         void    SetDrawersLayout();
         /// sets the new layout of the tool panel deck, using tabs

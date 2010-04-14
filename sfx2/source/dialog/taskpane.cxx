@@ -27,6 +27,7 @@
 #include "precompiled_sfx2.hxx"
 
 #include "sfx2/taskpane.hxx"
+#include "sfx2/imagemgr.hxx"
 #include "sfx2/sfxsids.hrc"
 #include "sfx2/bindings.hxx"
 #include "sfx2/dispatch.hxx"
@@ -43,6 +44,7 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/accessibility/XAccessible.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
@@ -55,11 +57,7 @@
 #include <svtools/toolpanel/drawerlayouter.hxx>
 #include <unotools/confignode.hxx>
 #include <vcl/menu.hxx>
-
-#if OSL_DEBUG_LEVEL > 0
-#include <com/sun/star/accessibility/XAccessible.hpp>
-#include <comphelper/accimplaccess.hxx>
-#endif
+#include <vcl/svapp.hxx>
 
 #include <boost/noncopyable.hpp>
 
@@ -156,18 +154,34 @@ namespace sfx2
         }
 
         //--------------------------------------------------------------------------------------------------------------
-        Image lcl_getPanelImage( const ::utl::OConfigurationNode& i_rPanelConfigNode )
+        Image lcl_getPanelImage( const Reference< XFrame >& i_rDocFrame, const ::utl::OConfigurationNode& i_rPanelConfigNode )
         {
             const ::rtl::OUString sImageURL( ::comphelper::getString( i_rPanelConfigNode.getNodeValue( "ImageURL" ) ) );
             if ( sImageURL.getLength() )
             {
                 try
                 {
-                    const ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-                    const Reference< XGraphicProvider > xGraphicProvider( aContext.createComponent( "com.sun.star.graphic.GraphicProvider" ), UNO_QUERY_THROW );
-
                     ::comphelper::NamedValueCollection aMediaProperties;
                     aMediaProperties.put( "URL", sImageURL );
+
+                    // special handling: if the ImageURL denotes a CommandName, then retrieve the image for that command
+                    const sal_Char* pCommandImagePrefix = "private:commandimage/";
+                    const sal_Int32 nCommandImagePrefixLen = strlen( pCommandImagePrefix );
+                    if ( sImageURL.compareToAscii( pCommandImagePrefix, nCommandImagePrefixLen ) == 0 )
+                    {
+                        ::rtl::OUStringBuffer aCommandName;
+                        aCommandName.appendAscii( ".uno:" );
+                        aCommandName.append( sImageURL.copy( nCommandImagePrefixLen ) );
+                        const ::rtl::OUString sCommandName( aCommandName.makeStringAndClear() );
+
+                        const BOOL bHiContrast( Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
+                        const Image aPanelImage( GetImage( i_rDocFrame, sCommandName, FALSE, bHiContrast ) );
+                        return aPanelImage.GetXGraphic();
+                    }
+
+                    // otherwise, delegate to the GraphicProvider
+                    const ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+                    const Reference< XGraphicProvider > xGraphicProvider( aContext.createComponent( "com.sun.star.graphic.GraphicProvider" ), UNO_QUERY_THROW );
 
                     const Reference< XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties.getPropertyValues() ), UNO_SET_THROW );
                     return Image( xGraphic );
@@ -302,7 +316,7 @@ namespace sfx2
     //------------------------------------------------------------------------------------------------------------------
     CustomToolPanel::CustomToolPanel( const ::utl::OConfigurationNode& i_rPanelWindowState, const Reference< XFrame >& i_rFrame )
         :m_sUIName( ::comphelper::getString( i_rPanelWindowState.getNodeValue( "UIName" ) ) )
-        ,m_aPanelImage( lcl_getPanelImage( i_rPanelWindowState ) )
+        ,m_aPanelImage( lcl_getPanelImage( i_rFrame, i_rPanelWindowState ) )
         ,m_sResourceURL( i_rPanelWindowState.getLocalName() )
         ,m_sPanelConfigPath( i_rPanelWindowState.getNodePath() )
         ,m_xFrame( i_rFrame )
@@ -482,6 +496,8 @@ namespace sfx2
 
         ::boost::optional< size_t >
                     GetPanelPos( const ::rtl::OUString& i_rResourceURL );
+        ::rtl::OUString
+                    GetPanelResourceURL( const size_t i_nPanelPos ) const;
 
         void        SetDrawersLayout();
         void        SetTabsLayout( const ::svt::TabAlignment i_eTabAlignment, const ::svt::TabItemContent i_eTabContent );
@@ -596,6 +612,16 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    ::rtl::OUString ModuleTaskPane_Impl::GetPanelResourceURL( const size_t i_nPanelPos ) const
+    {
+        ENSURE_OR_RETURN( i_nPanelPos < m_aPanelDeck.GetPanelCount(), "ModuleTaskPane_Impl::GetPanelResourceURL: illegal panel position!", ::rtl::OUString() );
+        const ::svt::PToolPanel pPanel( m_aPanelDeck.GetPanel( i_nPanelPos ) );
+        const CustomToolPanel* pCustomPanel = dynamic_cast< const CustomToolPanel* >( pPanel.get() );
+        ENSURE_OR_RETURN( pCustomPanel != NULL, "ModuleTaskPane_Impl::GetPanelPos: illegal panel implementation!", ::rtl::OUString() );
+        return pCustomPanel->GetResourceURL();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void ModuleTaskPane_Impl::SetDrawersLayout()
     {
         const ::svt::PDeckLayouter pLayouter( m_aPanelDeck.GetLayouter() );
@@ -685,6 +711,12 @@ namespace sfx2
     ::boost::optional< size_t > ModuleTaskPane::GetPanelPos( const ::rtl::OUString& i_rResourceURL )
     {
         return m_pImpl->GetPanelPos( i_rResourceURL );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::rtl::OUString ModuleTaskPane::GetPanelResourceURL( const size_t i_nPanelPos ) const
+    {
+        return m_pImpl->GetPanelResourceURL( i_nPanelPos );
     }
 
     //------------------------------------------------------------------------------------------------------------------
