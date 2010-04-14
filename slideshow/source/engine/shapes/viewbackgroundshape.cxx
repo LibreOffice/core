@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewbackgroundshape.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,7 +68,7 @@ namespace slideshow
                                             const GDIMetaFileSharedPtr&         rMtf ) const
         {
             RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::ViewBackgroundShape::prefetch()" );
-            ENSURE_OR_RETURN( rMtf,
+            ENSURE_OR_RETURN_FALSE( rMtf,
                                "ViewBackgroundShape::prefetch(): no valid metafile!" );
 
             const ::basegfx::B2DHomMatrix& rCanvasTransform(
@@ -131,7 +128,7 @@ namespace slideshow
                         *rMtf.get(),
                         ::cppcanvas::Renderer::Parameters() ) );
 
-                ENSURE_OR_RETURN( pRenderer,
+                ENSURE_OR_RETURN_FALSE( pRenderer,
                                    "ViewBackgroundShape::prefetch(): Could not create Renderer" );
 
                 pRenderer->setTransformation( aShapeTransform );
@@ -172,7 +169,7 @@ namespace slideshow
             if( !prefetch( rDestinationCanvas, rMtf ) )
                 return false;
 
-            ENSURE_OR_RETURN( mxBitmap.is(),
+            ENSURE_OR_RETURN_FALSE( mxBitmap.is(),
                                "ViewBackgroundShape::draw(): Invalid background bitmap" );
 
             ::basegfx::B2DHomMatrix aTransform( mpViewLayer->getTransformation() );

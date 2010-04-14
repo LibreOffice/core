@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: headerfooterdlg.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,12 +35,12 @@
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/langbox.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #ifndef _SD_SDRESID_HXX
@@ -859,8 +856,7 @@ void PresLayoutPreview::Paint( OutputDevice& aOut, SdrTextObj* pObj, bool bVisib
     aObjectTransform.translate(maOutRect.TopLeft().X(), maOutRect.TopLeft().Y());
 
     // create geometry using unit range and object transform
-    const basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
-    basegfx::B2DPolyPolygon aGeometry(basegfx::tools::createPolygonFromRect(aUnitRange));
+    basegfx::B2DPolyPolygon aGeometry(basegfx::tools::createUnitPolygon());
     aGeometry.transform(aObjectTransform);
 
     // apply line pattern if wanted

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: grdocsh.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <svx/svxids.hrc>
 #endif
 #include <sfx2/app.hxx>
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <tools/globname.hxx>
 
 #ifndef _SO_CLSIDS_HXX //autogen
@@ -71,8 +68,16 @@ SFX_IMPL_OBJECTFACTORY( GraphicDocShell, SvGlobalName(SO3_SDRAW_CLASSID_60), SFX
 
 GraphicDocShell::GraphicDocShell(SfxObjectCreateMode eMode,
                                      BOOL bDataObject,
-                                     DocumentType eDocType,BOOL bScriptSupport) :
-    DrawDocShell(eMode, bDataObject, eDocType, bScriptSupport)
+                                     DocumentType eDocType) :
+    DrawDocShell(eMode, bDataObject, eDocType)
+{
+    SetStyleFamily( SD_STYLE_FAMILY_GRAPHICS );
+}
+
+GraphicDocShell::GraphicDocShell(const sal_uInt64 nModelCreationFlags,
+                                     BOOL bDataObject,
+                                     DocumentType eDocType) :
+    DrawDocShell(nModelCreationFlags, bDataObject, eDocType)
 {
     SetStyleFamily( SD_STYLE_FAMILY_GRAPHICS );
 }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ToolBarManager.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -721,8 +718,8 @@ void ToolBarManager::Implementation::SetValid (bool bValid)
         if (mbIsValid)
         {
             Reference<frame::XFrame> xFrame;
-            if (mrBase.GetViewFrame() != NULL && mrBase.GetViewFrame()->GetFrame())
-                xFrame = mrBase.GetViewFrame()->GetFrame()->GetFrameInterface();
+            if (mrBase.GetViewFrame() != NULL)
+                xFrame = mrBase.GetViewFrame()->GetFrame().GetFrameInterface();
             try
             {
                 Reference<beans::XPropertySet> xFrameProperties (xFrame, UNO_QUERY_THROW);

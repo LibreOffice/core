@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docshell.cxx,v $
- * $Revision: 1.48.54.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,9 +38,9 @@
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/srchdlg.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/printer.hxx>
@@ -51,7 +48,7 @@
 #include <sfx2/docfile.hxx>
 #endif
 #include <svx/drawitem.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/srchdlg.hxx>
 #include <sfx2/dispatch.hxx>
@@ -62,7 +59,6 @@
 #ifndef _SO_CLSIDS_HXX
 #include <sot/clsids.hxx>
 #endif
-#include <sfx2/topfrm.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/visitem.hxx>
 
@@ -149,7 +145,7 @@ void DrawDocShell::Construct( bool bClipboard )
     // the document's ref device.
     UpdateRefDevice();
 
-    SetModel( new SdXImpressDocument( this, bClipboard ) );
+    SetBaseModel( new SdXImpressDocument( this, bClipboard ) );
     SetPool( &mpDoc->GetItemPool() );
     mpUndoManager = new sd::UndoManager;
     mpDoc->SetSdrUndoManager( mpUndoManager );
@@ -166,7 +162,7 @@ void DrawDocShell::Construct( bool bClipboard )
 
 DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
                                BOOL bDataObject,
-                               DocumentType eDocumentType,BOOL bScriptSupport) :
+                               DocumentType eDocumentType) :
     SfxObjectShell( eMode == SFX_CREATE_MODE_INTERNAL ?  SFX_CREATE_MODE_EMBEDDED : eMode),
     mpDoc(NULL),
     mpUndoManager(NULL),
@@ -179,14 +175,34 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
     mbOwnPrinter(FALSE),
     mbNewDocument( sal_True )
 {
-    if ( !bScriptSupport )
-        SetHasNoBasic();
     Construct( eMode == SFX_CREATE_MODE_INTERNAL );
 }
 
 /*************************************************************************
 |*
 |* Konstruktor 2
+|*
+\************************************************************************/
+
+DrawDocShell::DrawDocShell( const sal_uInt64 nModelCreationFlags, BOOL bDataObject, DocumentType eDocumentType ) :
+    SfxObjectShell( nModelCreationFlags ),
+    mpDoc(NULL),
+    mpUndoManager(NULL),
+    mpPrinter(NULL),
+    mpViewShell(NULL),
+    mpFontList(NULL),
+    meDocType(eDocumentType),
+    mpFilterSIDs(0),
+    mbSdDataObj(bDataObject),
+    mbOwnPrinter(FALSE),
+    mbNewDocument( sal_True )
+{
+    Construct( FALSE );
+}
+
+/*************************************************************************
+|*
+|* Konstruktor 3
 |*
 \************************************************************************/
 
@@ -365,7 +381,7 @@ void DrawDocShell::InPlaceActivate( BOOL bActive )
 
             ViewShell* pViewSh = NULL;
             SfxViewShell* pSfxViewSh = NULL;
-            SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, 0, false);
+            SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, false);
 
             while (pSfxViewFrame)
             {
@@ -379,7 +395,7 @@ void DrawDocShell::InPlaceActivate( BOOL bActive )
                     pFrameViewList->Insert( new FrameView( mpDoc, pViewSh->GetFrameView() ) );
                 }
 
-                pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, 0, false);
+                pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, false);
             }
         }
     }
@@ -395,7 +411,7 @@ void DrawDocShell::InPlaceActivate( BOOL bActive )
         {
             ViewShell* pViewSh = NULL;
             SfxViewShell* pSfxViewSh = NULL;
-            SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, 0,false);
+            SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, false);
 
             sal_uInt32 i;
             for( i = 0; pSfxViewFrame && (i < pFrameViewList->Count()); i++ )
@@ -409,7 +425,7 @@ void DrawDocShell::InPlaceActivate( BOOL bActive )
                     pViewSh->ReadFrameViewData( (FrameView*)pFrameViewList->GetObject(i) );
                 }
 
-                pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, 0,false);
+                pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, false);
             }
         }
     }
@@ -573,7 +589,7 @@ IMPL_LINK(DrawDocShell, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
 void DrawDocShell::ClearUndoBuffer()
 {
     // clear possible undo buffers of outliners
-    SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, 0, false);
+    SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, false);
     while(pSfxViewFrame)
     {
         ViewShellBase* pViewShellBase = dynamic_cast< ViewShellBase* >( pSfxViewFrame->GetViewShell() );
@@ -596,7 +612,7 @@ void DrawDocShell::ClearUndoBuffer()
                 }
             }
         }
-        pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, 0, false);
+        pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, false);
     }
 
     SfxUndoManager* pUndoManager = GetUndoManager();
