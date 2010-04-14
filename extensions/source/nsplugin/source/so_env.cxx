@@ -31,7 +31,9 @@
 #ifdef UNIX
 #include <sys/types.h>
 #include <strings.h>
+#ifdef LINUX
 #include <dlfcn.h>
+#endif
 #include <stdarg.h>
 // For vsnprintf()
 #define NSP_vsnprintf vsnprintf
@@ -120,7 +122,7 @@ restoreUTF8(char *pPath)
     return 0;
 }
 
-#ifdef UNIX
+#ifdef LINUX
 extern int nspluginOOoModuleHook (void** aResult);
 int nspluginOOoModuleHook (void** aResult)
 {
@@ -240,12 +242,15 @@ int findReadSversion(void** aResult, int /*bWnt*/, const char* /*tag*/, const ch
     char lnkFileName[NPP_PATH_MAX] = {0};
     char* pTempZero = NULL;
 
+#ifdef LINUX
     /* try to fetch a 'self' pointer */
     if (!nspluginOOoModuleHook (aResult))
       return 0;
 
     /* .. now in $HOME */
+#endif
     sprintf(lnkFileName, "%s/.mozilla/plugins/libnpsoplugin%s", getenv("HOME"), SAL_DLLEXTENSION);
+#ifdef LINUX
     ssize_t len = readlink(lnkFileName, realFileName, NPP_PATH_MAX-1);
     if (-1 == len)
     {
@@ -255,6 +260,10 @@ int findReadSversion(void** aResult, int /*bWnt*/, const char* /*tag*/, const ch
     realFileName[len] = '\0';
 
     if (NULL == (pTempZero = strstr(realFileName, "/program/libnpsoplugin" SAL_DLLEXTENSION)))
+#else
+    if ((0 > readlink(lnkFileName, realFileName, NPP_PATH_MAX)) ||
+        (NULL == (pTempZero = strstr(realFileName, "/program/libnpsoplugin" SAL_DLLEXTENSION))))
+#endif
     {
         *realFileName = 0;
         return -1;
