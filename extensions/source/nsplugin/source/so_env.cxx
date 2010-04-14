@@ -133,7 +133,7 @@ int nspluginOOoModuleHook (void** aResult)
         return 1;
     }
 
-    Dl_info dl_info = { 0, };
+    Dl_info dl_info = { 0,0,0,0 };
     if(!dladdr((void *)nspluginOOoModuleHook, &dl_info))
     {
         fprintf (stderr, "Can't find my own address '%s'\n", dlerror());
