@@ -3098,8 +3098,8 @@ namespace xmloff { namespace token {
 
         TOKEN( "chartooo", XML_NP_CHART_EXT ),
         TOKEN( "http://openoffice.org/2010/chart", XML_N_CHART_EXT ),
-        TOKEN( "excluding-position",    XML_EXCLUDING_POSITION ),
-        TOKEN( "prefer-excluding-position",    XML_PREFER_EXCLUDING_POSITION ),
+        TOKEN( "coordinate-region",    XML_COORDINATE_REGION ),
+        TOKEN( "prefer-coordinate-region",    XML_PREFER_COORDINATE_REGION ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }

@@ -3098,8 +3098,8 @@ namespace xmloff { namespace token {
         //chart
         XML_NP_CHART_EXT,
         XML_N_CHART_EXT,
-        XML_EXCLUDING_POSITION,
-        XML_PREFER_EXCLUDING_POSITION,
+        XML_COORDINATE_REGION,
+        XML_PREFER_COORDINATE_REGION,
 
         XML_TOKEN_END
     };

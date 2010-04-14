@@ -2104,9 +2104,9 @@ void SchXMLExportHelper_Impl::exportExcludingPosition( const uno::Reference< cha
     rtl::OUStringBuffer sStringBuffer;
     SvXMLUnitConverter::convertBool( sStringBuffer, bPreferExcludingPositioning );
     String aString( sStringBuffer.makeStringAndClear() );
-    mrExport.AddAttribute( XML_NAMESPACE_CHART_EXT, XML_PREFER_EXCLUDING_POSITION, aString );//todo: change to chart namespace in future - dependent on fileformat
+    mrExport.AddAttribute( XML_NAMESPACE_CHART_EXT, XML_PREFER_COORDINATE_REGION, aString );//todo: change to chart namespace in future - dependent on fileformat
 
-    SvXMLElementExport aExcludingPosition( mrExport, XML_NAMESPACE_CHART_EXT, XML_EXCLUDING_POSITION, sal_True, sal_True );//todo: change to chart namespace in future - dependent on fileformat
+    SvXMLElementExport aExcludingPosition( mrExport, XML_NAMESPACE_CHART_EXT, XML_COORDINATE_REGION, sal_True, sal_True );//todo: change to chart namespace in future - dependent on fileformat
 }
 
 void SchXMLExportHelper_Impl::exportAxes(

@@ -520,8 +520,8 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
 
     switch( rTokenMap.Get( nPrefix, rLocalName ))
     {
-        case XML_TOK_PA_EXCLUDING_POSITION_EXT:
-        case XML_TOK_PA_EXCLUDING_POSITION:
+        case XML_TOK_PA_COORDINATE_REGION_EXT:
+        case XML_TOK_PA_COORDINATE_REGION:
         {
             pContext = new SchXMLExcludingPositionContext( GetImport(), nPrefix, rLocalName, m_aInnerPositioning );
         }
@@ -1744,7 +1744,7 @@ bool SchXMLPositonAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefix
         else
             bReturn = false;
     }
-    else if( IsXMLToken( rLocalName, XML_PREFER_EXCLUDING_POSITION ) )
+    else if( IsXMLToken( rLocalName, XML_PREFER_COORDINATE_REGION ) )
     {
         sal_Bool bPreferExcludingPosition = false;
         m_rImport.GetMM100UnitConverter().convertBool( bPreferExcludingPosition, rValue );
