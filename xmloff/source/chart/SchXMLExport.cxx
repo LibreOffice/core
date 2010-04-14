@@ -649,7 +649,12 @@ lcl_TableData lcl_getDataForLocalTable(
         SchXMLExportHelper::tDataSequenceCont::const_iterator aIt( aBegin );
 
         size_t nMaxSequenceLength( lcl_getMaxSequenceLength( aSequencesToExport ));
-        nMaxSequenceLength = std::max( nMaxSequenceLength, size_t( aSimpleCategories.getLength() ) );
+        size_t nCategoriesLength( aSimpleCategories.getLength() );
+        if( nCategoriesLength > nMaxSequenceLength )
+        {
+            aSimpleCategories.realloc(nMaxSequenceLength);//#i110617#
+            nCategoriesLength = nMaxSequenceLength;
+        }
         size_t nNumColumns( bSeriesFromColumns ? nNumSequences : nMaxSequenceLength );
         size_t nNumRows( bSeriesFromColumns ? nMaxSequenceLength : nNumSequences );
 
