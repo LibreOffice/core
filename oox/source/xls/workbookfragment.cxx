@@ -37,7 +37,6 @@
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/chartsheetfragment.hxx"
 #include "oox/xls/connectionsfragment.hxx"
-#include "oox/xls/excelvbaproject.hxx"
 #include "oox/xls/externallinkbuffer.hxx"
 #include "oox/xls/externallinkfragment.hxx"
 #include "oox/xls/pivotcachebuffer.hxx"
@@ -295,16 +294,13 @@ void OoxWorkbookFragment::finalizeImport()
         aIt->clear();
     }
 
-    // import the VBA project (after loading the sheets, as they have imported the code names)
+    // open the VBA project storage
     OUString aVbaFragmentPath = getFragmentPathFromFirstType( CREATE_MSOFFICE_RELATIONSTYPE( "vbaProject" ) );
     if( aVbaFragmentPath.getLength() > 0 )
     {
         Reference< XInputStream > xInStrm = getBaseFilter().openInputStream( aVbaFragmentPath );
         if( xInStrm.is() )
-        {
-            ::oox::ole::OleStorage aVbaStrg( getGlobalFactory(), xInStrm, false );
-            getVbaProject().importVbaProject( aVbaStrg, getBaseFilter().getGraphicHelper() );
-        }
+            setVbaProjectStorage( StorageRef( new ::oox::ole::OleStorage( getGlobalFactory(), xInStrm, false ) ) );
     }
 
     // final conversions, e.g. calculation settings and view settings
@@ -360,8 +356,7 @@ void OoxWorkbookFragment::importPivotCacheDefFragment( const OUString& rRelId, s
 // ============================================================================
 
 BiffWorkbookFragment::BiffWorkbookFragment( const WorkbookHelper& rHelper, const OUString& rStrmName ) :
-    BiffWorkbookFragmentBase( rHelper, rStrmName ),
-    mbImportVbaProject( false )
+    BiffWorkbookFragmentBase( rHelper, rStrmName )
 {
 }
 
@@ -388,13 +383,6 @@ bool BiffWorkbookFragment::importFragment()
                 BiffFragmentType eSheetFragment = startFragment( getBiff(), rWorksheets.getBiffRecordHandle( nWorksheet ) );
                 sal_Int16 nCalcSheet = rWorksheets.getCalcSheetIndex( nWorksheet );
                 bNextSheet = importSheetFragment( *xSheetProgress, eSheetFragment, nCalcSheet );
-            }
-            // import the VBA project (after loading the sheets, as they have imported the code names)
-            if( mbImportVbaProject )
-            {
-                StorageRef xVbaStrg = getBaseFilter().openSubStorage( CREATE_OUSTRING( "_VBA_PROJECT_CUR" ), false );
-                if( xVbaStrg.get() )
-                    getVbaProject().importVbaProject( *xVbaStrg, getBaseFilter().getGraphicHelper() );
             }
         }
         break;
@@ -646,8 +634,9 @@ bool BiffWorkbookFragment::importGlobalsFragment( ISegmentProgressBar& rProgress
         bRet = mrStrm.startRecordByHandle( nEofHandle );
     }
 
-    // import the VBA project
-    mbImportVbaProject = bHasVbaProject && !bEmptyVbaProject;
+    // open the VBA project storage
+    if( bHasVbaProject && !bEmptyVbaProject )
+        setVbaProjectStorage( getBaseFilter().openSubStorage( CREATE_OUSTRING( "_VBA_PROJECT_CUR" ), false ) );
 
     // #i56376# missing EOF - rewind before worksheet BOF record (see above)
     if( bRet && isBofRecord() )

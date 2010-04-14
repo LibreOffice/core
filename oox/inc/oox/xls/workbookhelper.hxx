@@ -30,7 +30,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <rtl/ref.hxx>
-//#include "oox/helper/storagebase.hxx"
+#include "oox/helper/storagebase.hxx"
 #include "oox/xls/biffhelper.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -113,7 +113,6 @@ class UnitConverter;
 class AddressConverter;
 class ExcelChartConverter;
 class PageSettingsConverter;
-class VbaProject;
 class BiffCodecHelper;
 
 /** Helper class to provice access to global workbook data.
@@ -151,6 +150,8 @@ public:
 
     /** Sets the index of the current sheet in the Calc document. */
     void                setCurrentSheetIndex( sal_Int16 nSheet );
+    /** Sets the VBA project storage. */
+    void                setVbaProjectStorage( const StorageRef& rxVbaPrjStrg );
     /** Final conversion after importing the workbook. */
     void                finalizeWorkbookImport();
 
@@ -255,8 +256,6 @@ public:
     ExcelChartConverter& getChartConverter() const;
     /** Returns the page and print settings converter. */
     PageSettingsConverter& getPageSettingsConverter() const;
-    /** Returns the VBA project used to import/export VBA and attach events. */
-    VbaProject&         getVbaProject() const;
 
     // OOX specific (MUST NOT be called in BIFF filter) -----------------------
 

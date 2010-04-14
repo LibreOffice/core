@@ -136,6 +136,10 @@ public:
     inline sal_Int16    getCurrentSheetIndex() const { return mnCurrSheet; }
     /** Sets the index of the current sheet in the Calc document. */
     inline void         setCurrentSheetIndex( sal_Int16 nSheet ) { mnCurrSheet = nSheet; }
+    /** Returns the VBA project storage. */
+    inline StorageRef   getVbaProjectStorage() const { return mxVbaPrjStrg; }
+    /** Sets the VBA project storage. */
+    inline void         setVbaProjectStorage( const StorageRef& rxVbaPrjStrg ) { mxVbaPrjStrg = rxVbaPrjStrg; }
 
     // document model ---------------------------------------------------------
 
@@ -201,8 +205,6 @@ public:
     inline ExcelChartConverter& getChartConverter() const { return *mxChartConverter; }
     /** Returns the page/print settings converter. */
     inline PageSettingsConverter& getPageSettingsConverter() const { return *mxPageSettConverter; }
-    /** Returns the VBA project used to import/export VBA and attach events. */
-    inline VbaProject&  getVbaProject() const { return *mxVbaProject; }
 
     // OOX specific -----------------------------------------------------------
 
@@ -256,7 +258,6 @@ private:
     typedef ::std::auto_ptr< AddressConverter >         AddressConvPtr;
     typedef ::std::auto_ptr< ExcelChartConverter >      ExcelChartConvPtr;
     typedef ::std::auto_ptr< PageSettingsConverter >    PageSettConvPtr;
-    typedef ::std::auto_ptr< VbaProject >               VbaProjectPtr;
     typedef ::std::auto_ptr< BiffCodecHelper >          BiffCodecHelperPtr;
 
     OUString            maCellStyles;           /// Style family name for cell styles.
@@ -268,6 +269,7 @@ private:
     ExcelFilterBase&    mrExcelBase;            /// Base object for registration of this structure.
     FilterType          meFilterType;           /// File type of the filter.
     ProgressBarPtr      mxProgressBar;          /// The progress bar.
+    StorageRef          mxVbaPrjStrg;           /// Storage containing the VBA project.
     sal_Int16           mnCurrSheet;            /// Current sheet index in Calc dcument.
     bool                mbWorkbook;             /// True = multi-sheet file.
 
@@ -292,7 +294,6 @@ private:
     AddressConvPtr      mxAddrConverter;        /// Cell address and cell range address converter.
     ExcelChartConvPtr   mxChartConverter;       /// Chart object converter.
     PageSettConvPtr     mxPageSettConverter;    /// Page/print settings converter.
-    VbaProjectPtr       mxVbaProject;           /// VBA project.
 
     // OOX specific
     XmlFilterBase*      mpOoxFilter;            /// Base OOX filter object.
@@ -549,7 +550,6 @@ void WorkbookData::initialize( bool bWorkbookFile )
     mxAddrConverter.reset( new AddressConverter( *this ) );
     mxChartConverter.reset( new ExcelChartConverter( *this ) );
     mxPageSettConverter.reset( new PageSettingsConverter( *this ) );
-    mxVbaProject.reset( new VbaProject( mrBaseFilter.getGlobalFactory(), mxDoc ) );
 
     // set some document properties needed during import
     if( mrBaseFilter.isImportFilter() )
@@ -659,6 +659,11 @@ void WorkbookHelper::setCurrentSheetIndex( sal_Int16 nSheet )
     mrBookData.setCurrentSheetIndex( nSheet );
 }
 
+void WorkbookHelper::setVbaProjectStorage( const StorageRef& rxVbaPrjStrg )
+{
+    mrBookData.setVbaProjectStorage( rxVbaPrjStrg );
+}
+
 void WorkbookHelper::finalizeWorkbookImport()
 {
     // workbook settings, document and sheet view settings
@@ -681,8 +686,16 @@ void WorkbookHelper::finalizeWorkbookImport()
     PropertySet aDefPageStyle( getStyleObject( CREATE_OUSTRING( "Default" ), true ) );
     aDefPageStyle.setProperty< sal_Int16 >( PROP_FirstPageNumber, 0 );
 
-    // attach VBA macros to document and sheet events
-    getVbaProject().attachToEvents();
+    /*  Import the VBA project (after finalizing workbook settings which
+        contains the workbook code name), and attach VBA macros to document and
+        sheet events. */
+    StorageRef xVbaPrjStrg = mrBookData.getVbaProjectStorage();
+    if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )
+    {
+        VbaProject aVbaProject( getGlobalFactory(), getDocument() );
+        aVbaProject.importVbaProject( *xVbaPrjStrg, getBaseFilter().getGraphicHelper() );
+        aVbaProject.attachToEvents();
+    }
 }
 
 // document model -------------------------------------------------------------
@@ -890,11 +903,6 @@ ExcelChartConverter& WorkbookHelper::getChartConverter() const
 PageSettingsConverter& WorkbookHelper::getPageSettingsConverter() const
 {
     return mrBookData.getPageSettingsConverter();
-}
-
-VbaProject& WorkbookHelper::getVbaProject() const
-{
-    return mrBookData.getVbaProject();
 }
 
 // OOX specific ---------------------------------------------------------------
