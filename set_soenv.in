@@ -593,7 +593,6 @@ elsif ( $platform =~ m/osf1/ )
 } 
 elsif ( $platform =~ m/cygwin/ ) 
 {
-      $COMPATH        = PathFormat('@COMPATH@');
       $MSPDB_PATH     = PathFormat('@MSPDB_PATH@');
       $MIDL_PATH      = PathFormat('@MIDL_PATH@');
       $CSC_PATH       = PathFormat('@CSC_PATH@');
@@ -618,6 +617,8 @@ elsif ( $platform =~ m/cygwin/ )
       $FLIPCMD        = "slfl.pl";
       $PATH_SEPERATOR = ';';
       $outfile        = "winmingw.set"; 
+      $COMPATH        = PathFormat('@COMPATH@/bin');
+      $COMPATH        =~ s/\/bin$//i;
       $COM            = "GCC";
       $CVER           = "C341";
       $OUTPATH        = "wntgcci";
@@ -626,6 +627,7 @@ elsif ( $platform =~ m/cygwin/ )
   }
   else # The MSVC section starts here
   {   $outfile        = "winenv.set";
+      $COMPATH        = PathFormat('@COMPATH@');
       $COM            = "MSC";
       $OUTPATH        = "wntmsci@COMEX@";
       $INPATH         = $OUTPATH.$PROEXT;
@@ -1572,10 +1574,12 @@ ToFile( "ENABLE_STATIC_GTK", "@ENABLE_STATIC_GTK@", "e" );
 ToFile( "ENABLE_CAIRO",      "@ENABLE_CAIRO@",     "e" );
 ToFile( "ENABLE_OPENGL",     "@ENABLE_OPENGL@",    "e" );
 ToFile( "ENABLE_PDFIMPORT",  "@ENABLE_PDFIMPORT@", "e" );
+ToFile( "ENABLE_PRESENTER_EXTRA_UI","@ENABLE_PRESENTER_EXTRA_UI@","e" );
 ToFile( "ENABLE_MINIMIZER",   "@ENABLE_MINIMIZER@","e" );
 ToFile( "ENABLE_PRESENTER_SCREEN","@ENABLE_PRESENTER_SCREEN@","e" );
 ToFile( "ENABLE_REPORTBUILDER","@ENABLE_REPORTBUILDER@","e" );
 ToFile( "SYSTEM_JFREEREPORT","@SYSTEM_JFREEREPORT@","e" );
+ToFile( "OOO_JUNIT_JAR",     "@OOO_JUNIT_JAR@",    "e" );
 ToFile( "SAC_JAR",           "@SAC_JAR@",          "e" );
 ToFile( "LIBXML_JAR",        "@LIBXML_JAR@",       "e" );
 ToFile( "FLUTE_JAR",         "@FLUTE_JAR@",        "e" );
@@ -1698,6 +1702,7 @@ if ( '@JDK@' ne '' )
    ToFile( "JDK",             "@JDK@",           "e" );
    ToFile( "JAVAFLAGS",             "@JAVAFLAGS@",           "e" );
    ToFile( "JAVAINTERPRETER", PathFormat("@JAVAINTERPRETER@"), "e" );
+   ToFile( "JAVAIFLAGS",      "@JAVAIFLAGS@",    "e" );
    ToFile( "JAVACOMPILER",    PathFormat("@JAVACOMPILER@"), "e" );
    ToFile( "JAVAAOTCOMPILER", PathFormat("@JAVAAOTCOMPILER@"), "e" );
    ToFile( "JAVADOC",         PathFormat("@JAVADOC@"), "e" );
@@ -1804,6 +1809,9 @@ ToFile( "XRANDR_DLOPEN",     "@XRANDR_DLOPEN@",    "e" );
 ToFile( "SYSTEM_LIBWPD",     "@SYSTEM_LIBWPD@",    "e" );
 ToFile( "LIBWPD_CFLAGS",     "@LIBWPD_CFLAGS@",    "e" );
 ToFile( "LIBWPD_LIBS",       "@LIBWPD_LIBS@",      "e" );
+ToFile( "SYSTEM_CPPUNIT",    "@SYSTEM_CPPUNIT@",   "e" );
+ToFile( "CPPUNIT_CFLAGS",    "@CPPUNIT_CFLAGS@",   "e" );
+ToFile( "CPPUNIT_LIBS",      "@CPPUNIT_LIBS@",     "e" );
 ToFile( "SYSTEM_LIBXML",     "@SYSTEM_LIBXML@",    "e" );
 ToFile( "USE_FT_EMBOLDEN",   "@USE_FT_EMBOLDEN@",  "e" );
 ToFile( "LIBXML_CFLAGS",     "@LIBXML_CFLAGS@",    "e" );
@@ -1812,6 +1820,13 @@ ToFile( "SYSTEM_EXPAT",      "@SYSTEM_EXPAT@",     "e" );
 ToFile( "SYSTEM_DB",         "@SYSTEM_DB@",        "e" );
 ToFile( "DB_VERSION",        "@DB_VERSION@",       "e" );
 ToFile( "DB_INCLUDES",       "@DB_INCLUDES@",      "e" );
+ToFile( "ENABLE_MYSQLC",     "@ENABLE_MYSQLC@",    "e" );
+ToFile( "SYSTEM_MYSQL",      "@SYSTEM_MYSQL@",     "e" );
+ToFile( "SYSTEM_MYSQL_CPPCONN","@SYSTEM_MYSQL_CPPCONN@","e" );
+ToFile( "MYSQL_INC",         "@MYSQL_INC@",        "e" );
+ToFile( "MYSQL_LIB",         "@MYSQL_LIB@",        "e" );
+ToFile( "MYSQL_DEFINES",     "@MYSQL_DEFINES@",    "e" );
+ToFile( "LIBMYSQL_PATH",     "@LIBMYSQL_PATH@",    "e" );
 ToFile( "SYSTEM_HSQLDB",     "@SYSTEM_HSQLDB@",    "e" );
 ToFile( "HSQLDB_JAR",        "@HSQLDB_JAR@",       "e" );
 ToFile( "SYSTEM_LUCENE",     "@SYSTEM_LUCENE@",    "e" );
@@ -1960,6 +1975,7 @@ if ($platform =~ m/os2/)
   ToFile( "SWITCHAR",   "-",	"e");
 }
 ToFile( "SAL_ENABLE_FILE_LOCKING",	"1",	"e");
+ToFile( "DBGSV_INIT", "$SOLARENV/bin/dbgsv.ini", "e");
 #
 # Writing unset variables you might not need to file.
 # 

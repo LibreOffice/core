@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: target.mk,v $
-#
-# $Revision: 1.211.4.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -215,9 +211,7 @@ LOCALJARS:=$(foreach,i,$(shell @@-cd $(JARDIR) && ls -1 $(JARFILES) ) $(JARDIR)/
 NEWCLASS:=$(LOCALJARS)
 NEWCLASS+:=$(foreach,i,$(JARFILES) $(eq,$(LOCALJARS),$(subst,$i, $(LOCALJARS)) $(SOLARBINDIR)/$i $(NULL)))
 .ENDIF			# "$(JARFILES)"!=""
-.IF "$(EXTRAJARFILES)"!=""
-NEWCLASS+=$(foreach,i,$(EXTRAJARFILES) $(COMMON_BUILD_TOOLS)/$i)
-.ENDIF			# "$(EXTRAJARFILES)"!=""
+NEWCLASS+=$(EXTRAJARFILES)
 .IF "$(GENJAVACLASSFILES)"!=""
 NEWCLASS+=$(CLASSGENDIR)
 .ENDIF			# "$(GENJAVACLASSFILES)"!=""

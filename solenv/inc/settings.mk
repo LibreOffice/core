@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: settings.mk,v $
-#
-# $Revision: 1.214.30.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -935,7 +931,7 @@ MKDEPFLAGS+=$(MKDEPSOLVER)
 MKDEPFLAGS+=$(MKDEPLOCAL)
 #.ENDIF
 
-BISON=bison
+BISON*=bison
 YACCFLAGS*=-d 
 
 SVIDL=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/svidl
@@ -971,6 +967,8 @@ RSC=$(AUGMENT_LIBRARY_PATH) $(FLIPCMD) $(SOLARBINDIR)/rsc
         ULFEX_VERBOSITY=-QQ
     .ENDIF
 .ENDIF # "$(VERBOSE)" == "TRUE"
+COMPILE_ECHO_SWITCH=
+COMPILE_ECHO_FILE=$(<:f)
 
 #new
 RSCUPDVER=$(RSCREVISION)
@@ -1348,6 +1346,10 @@ $(COMP9TYPELIST)_XML2CMPTYPES:=$(shell @$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/x
 # some place to define these jars for SO environment
 XML_APIS_JAR*=$(SOLARBINDIR)/xml-apis.jar
 XERCES_JAR*=$(SOLARBINDIR)/xercesImpl.jar
+
+.IF "$(SYSTEM_CPPUNIT)" != "YES"
+CPPUNIT_CFLAGS =
+.END
 
 # workaround for strange dmake bug:
 # if the previous block was a rule or a target, "\#" isn't recognized

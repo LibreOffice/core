@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: wntmsci11.mk,v $
-#
-# $Revision: 1.25 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -73,6 +69,11 @@ CXX+= /NMttNoLines
 
 .IF "$(VERBOSE)" != "TRUE"
 NOLOGO*=-nologo
+.ENDIF
+
+.IF "$(VERBOSE)" != "TRUE"
+COMPILE_ECHO_SWITCH=-n
+COMPILE_ECHO_FILE=
 .ENDIF
 
 # Flags for COMEX == 11
@@ -218,12 +219,10 @@ CFLAGSWERRCC=-WX
 MODULES_WITH_WARNINGS := \
     soldep
 
-CDEFS+=-DSTLPORT_VERSION=400 -D_MT
+CDEFS+=-DSTLPORT_VERSION=400 -D_MT -DWINVER=0x0500 -D_WIN32_WINNT=0x0500 -D_WIN32_IE=0x0500
 .IF "$(COMEX)" == "11"
-CDEFS+=-DWINVER=0x0400 -D_WIN32_IE=0x0400
 _VC_MANIFEST_BASENAME=__VC80
 .ELSE
-CDEFS+=-DWINVER=0x0500 -D_WIN32_IE=0x0500
 _VC_MANIFEST_BASENAME=__VC90
 .ENDIF
 
@@ -375,4 +374,5 @@ UNICOWSLIB=unicows.lib
 WININETLIB=wininet.lib
 OLDNAMESLIB=oldnames.lib
 MSIMG32LIB=msimg32.lib
+PROPSYSLIB=propsys.lib
 

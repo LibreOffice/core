@@ -2,11 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: make_installer.pl,v $
 #
 # This file is part of OpenOffice.org.
 #
@@ -396,8 +394,13 @@ if ( $installer::globals::globallogging ) { installer::files::save_hash($logging
 installer::setupscript::add_forced_properties($allvariableshashref);
 if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables5.log", $allvariableshashref); }
 
+# Replacing preset properties, not using the default mechanisms (for example for UNIXPRODUCTNAME)
+installer::setupscript::replace_preset_properties($allvariableshashref);
+if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables6.log", $allvariableshashref); }
+
 installer::scpzipfiles::replace_all_ziplistvariables_in_file($setupscriptref, $allvariableshashref);
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "setupscript3.log" ,$setupscriptref); }
+
 
 installer::logger::log_hashref($allvariableshashref);
 

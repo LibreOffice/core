@@ -465,6 +465,9 @@ int main(argc, argv)
     }
     if (printed)
         printf("\n");
+
+    delete_IncludesCollection(incCollection);
+
     exit(0);
 }
 

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: unxmacx.mk,v $
-#
-# $Revision: 1.34.56.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -210,7 +206,7 @@ LINKFLAGSRUNPATH_OOO=-install_name '@___________________________________________
 LINKFLAGSRUNPATH_SDK=
 LINKFLAGSRUNPATH_BRAND=
 LINKFLAGSRUNPATH_OXT=
-LINKFLAGSRUNPATH_NONE=
+LINKFLAGSRUNPATH_NONE=-install_name '@__________________________________________________NONE/$(@:f)'
 LINKFLAGS=$(LINKFLAGSDEFS)
 
 # [ed] 5/14/02 If we're building for aqua, add in the objc runtime library into our link line
