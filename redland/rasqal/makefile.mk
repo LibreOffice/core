@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.8.2.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -59,8 +55,7 @@ OOO_PATCH_FILES= \
     $(TARFILE_NAME).patch.autotools \
     $(TARFILE_NAME).patch.ooo_build \
     $(TARFILE_NAME).patch.dmake \
-    $(TARFILE_NAME).patch.win32 \
-
+    $(TARFILE_NAME).patch.win32
 
 PATCH_FILES=$(OOO_PATCH_FILES)
 

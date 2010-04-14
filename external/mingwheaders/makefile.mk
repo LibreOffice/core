@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.8.10.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -63,7 +59,6 @@ FILES_TO_COPY_FROM_MINGW= \
 FILES_TO_COPY_FROM_W32API= \
     amvideo.h \
     basetyps.h \
-    oaidl.h \
     objidl.h \
     specstrings.h \
     uxtheme.h \
@@ -106,6 +101,7 @@ FILES_TO_COPY_FROM_PSDK= \
     msiquery.h \
     multimon.h \
     ntquery.h \
+    oaidl.h \
     ocidl.h \
     oleauto.h \
     olectl.h \
@@ -114,6 +110,7 @@ FILES_TO_COPY_FROM_PSDK= \
     propidl.h \
     propkeydef.h \
     propsys.h \
+    propvarutil.h \
     shlobj.h \
     shobjidl.h \
     shtypes.h \
