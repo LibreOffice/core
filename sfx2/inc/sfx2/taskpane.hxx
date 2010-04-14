@@ -64,7 +64,27 @@ namespace sfx2
     };
 
     //==================================================================================================================
-    //= TaskPane
+    //= IToolPanelCompare
+    //==================================================================================================================
+    class SFX2_DLLPUBLIC SAL_NO_VTABLE IToolPanelCompare
+    {
+    public:
+        /** compares to tool panel URLs
+            @return
+                <ul>
+                <li>-1 if the tool panel described by i_rLHS should precede the one described by i_rRHS</li>
+                <li>0 if the two panels have no particular relative order</li>
+                <li>1 if the tool panel described by i_rLHS should succeed the one described by i_rRHS</li>
+
+        */
+        virtual short compareToolPanelsURLs(
+                        const ::rtl::OUString& i_rLHS,
+                        const ::rtl::OUString& i_rRHS
+                    ) const = 0;
+    };
+
+    //==================================================================================================================
+    //= ModuleTaskPane
     //==================================================================================================================
     class ModuleTaskPane_Impl;
     /** SFX-less version of a module dependent task pane, filled with tool panels as specified in the respective
@@ -84,6 +104,22 @@ namespace sfx2
         ModuleTaskPane(
             Window& i_rParentWindow,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rDocumentFrame
+        );
+        /** creates a new instance
+            @param i_rParentWindow
+                the parent window
+            @param i_rDocumentFrame
+                the frame to which the task pane belongs. Will be passed to any custom tool panels created
+                via an XUIElementFactory. Also, it is used to determine the module which the task pane is
+                responsible for, thus controlling which tool panels are actually available.
+            @param i_rCompare
+                a comparator for tool panel URLs, which allows controlling the order in which the panels are
+                added to the tool panel deck.
+        */
+        ModuleTaskPane(
+            Window& i_rParentWindow,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rDocumentFrame,
+            const IToolPanelCompare& i_rCompare
         );
         ~ModuleTaskPane();
 
