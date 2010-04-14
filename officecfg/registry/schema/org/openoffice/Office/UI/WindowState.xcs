@@ -100,6 +100,7 @@
                 <desc>Specifies the URL of an image to associate with the user interface element. Any URL scheme supported by the com.sun.star.graphic.GraphicProvider service
                 is suitable here.</desc>
               </info>
+              <value></value>
             </prop>
             <prop oor:name="InternalState" oor:type="xs:int">
                 <info>

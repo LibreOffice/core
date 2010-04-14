@@ -331,7 +331,7 @@
 
 #define HID_SEARCHDIALOG                            (HID_SFX_START + 311)
 #define HID_TASKPANE_WINDOW                         (HID_SFX_START + 312)
-
+#define HID_TASKPANE_VIEW_MENU                      (HID_SFX_START + 313)
 #define HID_XMLSEC_WARNING_BROKENSIGNATURE          (HID_SFX_START + 314)
 #define HID_XMLSEC_QUERY_LOSINGSIGNATURE            (HID_SFX_START + 315)
 #define HID_XMLSEC_QUERY_SAVEBEFORESIGN             (HID_SFX_START + 316)

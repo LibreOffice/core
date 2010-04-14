@@ -33,23 +33,6 @@
   </info>
   <import oor:component="org.openoffice.Office.Common"/>
   <templates>
-    <group oor:name="CustomToolPanel">
-      <info>
-        <desc>Contains information about a custom tool panel, to be plugged into the Tasks pane.</desc>
-      </info>
-      <prop oor:name="ResourceURL" oor:type="xs:string">
-        <info>
-          <desc>contains the URL of the resource which represents the tool panel. A resource factory must exist and
-          be registered for this resource, and it must be able to provide a resource which implements the
-          css.drawing.framework.XPane2 interface.</desc>
-        </info>
-      </prop>
-      <prop oor:name="DisplayTitle" oor:type="xs:string">
-        <info>
-          <desc>specifies the title of the panel</desc>
-        </info>
-      </prop>
-    </group>
     <group oor:name="MasterPageDescriptor">
       <info>
         <desc>Describes master pages that belong to the list of recently used master pages.</desc>
@@ -1392,12 +1375,6 @@
           <info>
             <desc>List of the URLs of the most recently used master pages.</desc>
             <label>Recently Used Master Pages</label>
-          </info>
-        </set>
-        <set oor:name="CustomPanels" oor:node-type="CustomToolPanel">
-          <info>
-            <desc>contains information about custom (i.e. not pre-installed) tool panels</desc>
-            <label>Custom Tool Panels</label>
           </info>
         </set>
       </group>

@@ -27,13 +27,17 @@
 #include <sfx2/sfx.hrc>
 #include "sfxlocal.hrc"
 
-Image SFX_IMG_CLOSE_DOC
+String STR_SFX_DOCK
 {
-    ImageBitmap = Bitmap { File = "closedoc.png" ; };
+    Text [ en-US ] = "Dock";
 };
 
-Image SFX_IMG_CLOSE_DOC_HC
+String STR_SFX_UNDOCK
 {
-    ImageBitmap = Bitmap { File = "closedochc.png" ; };
+    Text [ en-US ] = "Undock";
 };
 
+String STR_SFX_TASK_PANE_VIEW
+{
+    Text [ en-US ] = "View";
+};

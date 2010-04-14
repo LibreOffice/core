@@ -95,6 +95,12 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    String TitledDockingWindow::GetTitle() const
+    {
+        return impl_getTitle();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void TitledDockingWindow::SetText( const String& i_rText )
     {
         SfxDockingWindow::SetText( i_rText );
@@ -304,6 +310,15 @@ namespace sfx2
                 break;
         }
         SfxDockingWindow::StateChanged( i_nType );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void TitledDockingWindow::EndDocking( const Rectangle& i_rRect, BOOL i_bFloatMode )
+    {
+        SfxDockingWindow::EndDocking( i_rRect, i_bFloatMode );
+
+        if ( m_aEndDockingHdl.IsSet() )
+            m_aEndDockingHdl.Call( this );
     }
 
     //------------------------------------------------------------------------------------------------------------------
