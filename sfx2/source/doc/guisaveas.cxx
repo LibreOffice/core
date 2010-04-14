@@ -1238,6 +1238,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
 
     // parse the slot name
     sal_Int8 nStoreMode = getStoreModeFromSlotName( aSlotName );
+    sal_Int8 nStatusSave = STATUS_NO_ACTION;
 
     // handle the special cases
     if ( nStoreMode & SAVEAS_REQUESTED )
@@ -1259,7 +1260,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
     else if ( nStoreMode & SAVE_REQUESTED )
     {
         // if saving is not acceptable by the configuration the warning must be shown
-        sal_Int8 nStatusSave = aModelData.CheckSaveAcceptable( STATUS_SAVE );
+        nStatusSave = aModelData.CheckSaveAcceptable( STATUS_SAVE );
 
         if ( nStatusSave == STATUS_NO_ACTION )
             throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), ERRCODE_IO_ABORT );
@@ -1273,32 +1274,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
         {
             throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), ERRCODE_IO_ABORT );
         }
-        else if ( nStatusSave == STATUS_SAVE )
-        {
-            // Document properties can contain streams that should be freed before storing
-            aModelData.FreeDocumentProps();
-
-            if ( aModelData.GetStorable2().is() )
-            {
-                try
-                {
-                    aModelData.GetStorable2()->storeSelf( aModelData.GetMediaDescr().getAsConstPropertyValueList() );
-                }
-                catch( lang::IllegalArgumentException& )
-                {
-                    OSL_ENSURE( sal_False, "ModelData didn't handle illegal parameters, all the parameters are ignored!\n" );
-                    aModelData.GetStorable()->store();
-                }
-            }
-            else
-            {
-                OSL_ENSURE( sal_False, "XStorable2 is not supported by the model!\n" );
-                aModelData.GetStorable()->store();
-            }
-
-            return sal_False;
-        }
-        else
+        else if ( nStatusSave != STATUS_SAVE )
         {
             // this should be a usual SaveAs operation
             nStoreMode = SAVEAS_REQUESTED;
@@ -1323,6 +1299,32 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
                                                   ERRCODE_IO_ABORT );
             }
         }
+    }
+
+    if ( nStoreMode & SAVE_REQUESTED && nStatusSave == STATUS_SAVE )
+    {
+        // Document properties can contain streams that should be freed before storing
+        aModelData.FreeDocumentProps();
+
+        if ( aModelData.GetStorable2().is() )
+        {
+            try
+            {
+                aModelData.GetStorable2()->storeSelf( aModelData.GetMediaDescr().getAsConstPropertyValueList() );
+            }
+            catch( lang::IllegalArgumentException& )
+            {
+                OSL_ENSURE( sal_False, "ModelData didn't handle illegal parameters, all the parameters are ignored!\n" );
+                aModelData.GetStorable()->store();
+            }
+        }
+        else
+        {
+            OSL_ENSURE( sal_False, "XStorable2 is not supported by the model!\n" );
+            aModelData.GetStorable()->store();
+        }
+
+        return sal_False;
     }
 
     // preselect a filter for the storing process
@@ -1419,13 +1421,13 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
                 ::rtl::OUString aSelFilterName = aModelData.GetMediaDescr().getUnpackedValueOrDefault(
                                                                                 aFilterNameString,
                                                                                 ::rtl::OUString() );
-                sal_Int8 nStatusSave = aModelData.CheckFilter( aSelFilterName );
-                if ( nStatusSave == STATUS_SAVEAS_STANDARDNAME )
+                sal_Int8 nStatusFilterSave = aModelData.CheckFilter( aSelFilterName );
+                if ( nStatusFilterSave == STATUS_SAVEAS_STANDARDNAME )
                 {
                     // switch to best filter
                     bSetStandardName = sal_True;
                 }
-                else if ( nStatusSave == STATUS_SAVE )
+                else if ( nStatusFilterSave == STATUS_SAVE )
                 {
                     // user confirmed alien filter or "good" filter is used
                     bExit = sal_True;
