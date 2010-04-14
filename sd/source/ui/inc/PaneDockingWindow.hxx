@@ -65,16 +65,6 @@ public:
     virtual ~PaneDockingWindow (void);
 
     virtual void StateChanged( StateChangedType nType );
-
-    virtual void EndDocking( const Rectangle& rRect, BOOL bFloatMode );
-
-    void        SetEndDockingHdl( const Link& i_rEndDockingHdl ) { maEndDockingHdl = i_rEndDockingHdl; }
-    const Link& GetEndDockingHdl() const { return maEndDockingHdl; }
-
-    void        ResetToolBox();
-
-private:
-    Link maEndDockingHdl;
 };
 
 } // end of namespace ::sd

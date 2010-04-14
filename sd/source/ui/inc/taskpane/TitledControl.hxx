@@ -45,7 +45,6 @@ class Window;
 namespace sd { namespace toolpanel {
 
 class ControlContainer;
-class ControlFactory;
 
 /** This wrapper adds a title bar to a control.  Both title bar and
     control are child windows.

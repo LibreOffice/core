@@ -22,21 +22,18 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
-************************************************************************/
+ ************************************************************************/
 
-#ifndef SD_TASKPANETOOLPANEL_HXX
-#define SD_TASKPANETOOLPANEL_HXX
-
-#include "taskpane/TaskPaneControlFactory.hxx"
+#ifndef SD_TOOLPANELUIELEMENT_HXX
+#define SD_TOOLPANELUIELEMENT_HXX
 
 /** === begin UNO includes === **/
-#include <com/sun/star/drawing/framework/XResourceId.hpp>
+#include <com/sun/star/ui/XUIElement.hpp>
+#include <com/sun/star/ui/XToolPanel.hpp>
 /** === end UNO includes === **/
 
-#include <svtools/toolpanel/toolpanel.hxx>
-
-#include <vcl/image.hxx>
-#include <vcl/smartid.hxx>
+#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 #include <memory>
 
@@ -45,53 +42,46 @@ namespace sd { namespace toolpanel
 {
 //......................................................................................................................
 
-    class ToolPanelDeck;
+    class TreeNode;
 
     //==================================================================================================================
-    //= TaskPaneToolPanel
+    //= ToolPanelUIElement
     //==================================================================================================================
-    class TaskPaneToolPanel : public ::svt::ToolPanelBase
+    typedef ::cppu::WeakComponentImplHelper1    <   ::com::sun::star::ui::XUIElement
+                                                >   ToolPanelUIElement_Base;
+    class ToolPanelUIElement    :public ::cppu::BaseMutex
+                                ,public ToolPanelUIElement_Base
     {
-    protected:
-        TaskPaneToolPanel(
-            ToolPanelDeck& i_rPanelDeck,
-            const String& i_rPanelName,
-            const Image& i_rImage,
-            const SmartId& i_rHelpId
-        );
-        ~TaskPaneToolPanel();
-
     public:
-        // IToolPanel overridables
-        virtual ::rtl::OUString GetDisplayName() const;
-        virtual Image GetImage() const;
-        virtual void Dispose();
-        // those are still abstract, and waiting to be overloaded
-        virtual void Activate( ::Window& i_rParentWindow ) = 0;
-        virtual void Deactivate() = 0;
-        virtual void SetSizePixel( const Size& i_rPanelWindowSize ) = 0;
-        virtual void GrabFocus() = 0;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-                    CreatePanelAccessible(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rParentAccessible
-                    ) = 0;
+        ToolPanelUIElement(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame,
+            const ::rtl::OUString& i_rResourceURL,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XToolPanel >& i_rToolPanel
+        );
 
-        // own overridables
-        virtual const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >& getResourceId() const = 0;
+        // XUIElement
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SAL_CALL getFrame() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::rtl::OUString SAL_CALL getResourceURL() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Int16 SAL_CALL getType() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRealInterface(  ) throw (::com::sun::star::uno::RuntimeException);
+
+        void checkDisposed();
+        ::osl::Mutex& getMutex() { return m_aMutex; }
 
     protected:
-        bool            isDisposed() const { return m_pPanelDeck == NULL; }
-        Window&         getPanelWindowAnchor();
+        virtual ~ToolPanelUIElement();
+
+        // OComponentHelper
+        virtual void SAL_CALL disposing();
 
     private:
-        ToolPanelDeck*  m_pPanelDeck;
-        const Image     m_aPanelImage;
-        const String    m_sPanelName;
-        const SmartId   m_aHelpId;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >   m_xFrame;
+        const ::rtl::OUString                                                       m_sResourceURL;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XToolPanel >  m_xToolPanel;
     };
 
 //......................................................................................................................
 } } // namespace sd::toolpanel
 //......................................................................................................................
 
-#endif // SD_TASKPANETOOLPANEL_HXX
+#endif // SD_TOOLPANELUIELEMENT_HXX

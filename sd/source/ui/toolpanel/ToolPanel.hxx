@@ -22,40 +22,59 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
-************************************************************************/
+ ************************************************************************/
 
-#ifndef SD_UI_TASKPANE_PANELID_HXX
-#define SD_UI_TASKPANE_PANELID_HXX
+#ifndef SD_TOOLPANEL_HXX
+#define SD_TOOLPANEL_HXX
 
-namespace rtl
-{
-    class OUString;
-}
+/** === begin UNO includes === **/
+#include <com/sun/star/ui/XToolPanel.hpp>
+/** === end UNO includes === **/
+
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase1.hxx>
+
+#include <memory>
 
 //......................................................................................................................
 namespace sd { namespace toolpanel
 {
 //......................................................................................................................
 
-    //==================================================================================================================
-    //= PanelId
-    //==================================================================================================================
-    /** List of top level panels that can be shown in the task pane.
-    */
-    enum PanelId
-    {
-        PID_UNKNOWN             = 0,
-        PID_MASTER_PAGES        = 1,
-        PID_LAYOUT              = 2,
-        PID_TABLE_DESIGN        = 3,
-        PID_CUSTOM_ANIMATION    = 4,
-        PID_SLIDE_TRANSITION    = 5
-    };
+    class TreeNode;
 
-    PanelId GetStandardPanelId( const ::rtl::OUString& i_rTaskPanelResourceURL );
+    //==================================================================================================================
+    //= ToolPanel
+    //==================================================================================================================
+    typedef ::cppu::WeakComponentImplHelper1    <   ::com::sun::star::ui::XToolPanel
+                                                >   ToolPanel_Base;
+    class ToolPanel :public ::cppu::BaseMutex
+                    ,public ToolPanel_Base
+    {
+    public:
+        ToolPanel(
+            ::std::auto_ptr< TreeNode >& i_rControl
+        );
+
+        // XToolPanel
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getWindow() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL createAccessible( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& ParentAccessible ) throw (::com::sun::star::uno::RuntimeException);
+
+        // OComponentHelper
+        virtual void SAL_CALL disposing();
+
+        ::osl::Mutex& getMutex() { return m_aMutex; }
+        void checkDisposed();
+
+    protected:
+        ~ToolPanel();
+
+    private:
+        ::std::auto_ptr< TreeNode > m_pControl;
+    };
 
 //......................................................................................................................
 } } // namespace sd::toolpanel
 //......................................................................................................................
 
-#endif // SD_UI_TASKPANE_PANELID_HXX
+#endif // SD_TOOLPANEL_HXX

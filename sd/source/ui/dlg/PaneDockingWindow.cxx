@@ -78,17 +78,4 @@ void PaneDockingWindow::StateChanged( StateChangedType nType )
     SfxDockingWindow::StateChanged (nType);
 }
 
-void PaneDockingWindow::EndDocking( const Rectangle& rRect, BOOL bFloatMode )
-{
-    SfxDockingWindow::EndDocking( rRect, bFloatMode );
-
-    if ( maEndDockingHdl.IsSet() )
-        maEndDockingHdl.Call( this );
-}
-
-void PaneDockingWindow::ResetToolBox()
-{
-    impl_resetToolBox();
-}
-
 } // end of namespace ::sd

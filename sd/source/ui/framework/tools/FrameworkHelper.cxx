@@ -219,7 +219,7 @@ const OUString FrameworkHelper::msViewTabBarURL(
 
 // Task panel URLs.
 const ::rtl::OUString FrameworkHelper::msTaskPanelURLPrefix(
-    OUString::createFromAscii("private:resource/toolpanel/"));
+    OUString::createFromAscii("private:resource/toolpanel/DrawingFramework/"));
 const ::rtl::OUString FrameworkHelper::msMasterPagesTaskPanelURL(
     msTaskPanelURLPrefix + OUString::createFromAscii("MasterPages"));
 const ::rtl::OUString FrameworkHelper::msLayoutTaskPanelURL(

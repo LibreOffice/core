@@ -65,8 +65,7 @@ ViewShellWrapper::ViewShellWrapper (
     : ViewShellWrapperInterfaceBase(MutexOwner::maMutex),
       mpViewShell(pViewShell),
       mxViewId(rxViewId),
-      mxWindow(rxWindow),
-      mbIsPane( pViewShell == NULL ? false : ( pViewShell->GetShellType() == ViewShell::ST_TASK_PANE ) )
+      mxWindow(rxWindow)
 {
     if (rxWindow.is())
     {
@@ -113,93 +112,6 @@ void SAL_CALL ViewShellWrapper::disposing (void)
 
 
 
-
-//----- XInterface ------------------------------------------------------------
-
-Any SAL_CALL ViewShellWrapper::queryInterface( const Type& i_rType ) throw (RuntimeException)
-{
-    Any aInterface( ViewShellWrapperInterfaceBase::queryInterface( i_rType ) );
-    if ( !aInterface.hasValue() )
-    {
-        if ( mbIsPane )
-            aInterface = ViewShellWrapper_PaneBase::queryInterface( i_rType );
-        else
-            aInterface = ViewShellWrapper_ViewBase::queryInterface( i_rType );
-    }
-    return aInterface;
-}
-
-void SAL_CALL ViewShellWrapper::acquire() throw ()
-{
-    ViewShellWrapperInterfaceBase::acquire();
-}
-
-void SAL_CALL ViewShellWrapper::release() throw ()
-{
-    ViewShellWrapperInterfaceBase::release();
-}
-
-//----- XTypeProvider ---------------------------------------------------------
-
-Sequence< Type > SAL_CALL ViewShellWrapper::getTypes(  ) throw (RuntimeException)
-{
-    const Sequence< Type > aCommonTypes( ViewShellWrapperInterfaceBase::getTypes() );
-    const Sequence< Type > aSpecialTypes(
-            mbIsPane
-        ?   ViewShellWrapper_PaneBase::getTypes()
-        :   ViewShellWrapper_ViewBase::getTypes()
-    );
-    return ::comphelper::concatSequences( aCommonTypes, aSpecialTypes );
-}
-
-Sequence< ::sal_Int8 > SAL_CALL ViewShellWrapper::getImplementationId(  ) throw (RuntimeException)
-{
-    static ::cppu::OImplementationId* pViewId = NULL;
-    static ::cppu::OImplementationId* pPaneId = NULL;
-    if ( !pViewId )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if ( !pViewId )
-        {
-            static ::cppu::OImplementationId aViewId;
-            static ::cppu::OImplementationId aPaneId;
-            pViewId = &aViewId;
-            pPaneId = &aPaneId;
-        }
-    }
-
-    return ( mbIsPane ? pPaneId : pViewId )->getImplementationId();
-}
-
-//----- XPane -----------------------------------------------------------------
-
-Reference< XInterface > ViewShellWrapper::impl_getPaneWindowOrCanvas( const bool i_bWindow )
-{
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard( maMutex );
-    if ( !mpViewShell.get() )
-        throw DisposedException( ::rtl::OUString(), *this );
-
-    ToolPanelViewShell* pToolPanelShell = dynamic_cast< ToolPanelViewShell* >( mpViewShell.get() );
-    ENSURE_OR_RETURN( pToolPanelShell != NULL, "XPane should be accessible for a ToolPanelViewShell only", NULL );
-
-    ::Window* pPaneWindow = pToolPanelShell->GetToolPanelParentWindow();
-    ENSURE_OR_RETURN( pPaneWindow, "shell is not able to provide a panel parent", NULL );
-
-    if ( i_bWindow )
-        return VCLUnoHelper::GetInterface( pPaneWindow );
-    return pPaneWindow->GetCanvas();
-}
-
-Reference< XWindow > SAL_CALL ViewShellWrapper::getWindow() throw (RuntimeException)
-{
-    return Reference< XWindow >( impl_getPaneWindowOrCanvas( true ), UNO_QUERY );
-}
-
-Reference< XCanvas > SAL_CALL ViewShellWrapper::getCanvas() throw (RuntimeException)
-{
-    return Reference< XCanvas >( impl_getPaneWindowOrCanvas( false ), UNO_QUERY );
-}
 
 //----- XResource -------------------------------------------------------------
 

@@ -259,14 +259,15 @@ void SAL_CALL TaskPanelFactory::releaseResource (
         const ::boost::shared_ptr< ViewShell > pPaneViewShell( pFrameworkHelper->GetViewShell( sPaneURL ) );
         if ( pPaneViewShell != NULL )
         {
-            toolpanel::PanelId ePanelId( toolpanel::GetStandardPanelId( xResourceId->getResourceURL() ) );
+            const ::rtl::OUString sPanelResourceURL( xResourceId->getResourceURL() );
+            const toolpanel::PanelId ePanelId( toolpanel::GetStandardPanelId( sPanelResourceURL ) );
             toolpanel::ToolPanelViewShell* pToolPanel = dynamic_cast< toolpanel::ToolPanelViewShell* >( pPaneViewShell.get() );
 
             if  (   ( ePanelId != toolpanel::PID_UNKNOWN )
                 &&  ( pToolPanel != NULL )
                 )
             {
-                pToolPanel->DeactivatePanel( ePanelId );
+                pToolPanel->DeactivatePanel( sPanelResourceURL );
             }
             else
             {
