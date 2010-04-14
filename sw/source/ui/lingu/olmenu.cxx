@@ -270,7 +270,7 @@ void SwSpellPopup::fillLangPopupMenu(
 
     //6--all languages used in current document
     uno::Reference< com::sun::star::frame::XModel > xModel;
-    uno::Reference< com::sun::star::frame::XController > xController( pWrtSh->GetView().GetViewFrame()->GetFrame()->GetFrameInterface()->getController(), uno::UNO_QUERY );
+    uno::Reference< com::sun::star::frame::XController > xController( pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface()->getController(), uno::UNO_QUERY );
     if ( xController.is() )
         xModel = xController->getModel();
     uno::Reference< document::XDocumentLanguages > xDocumentLanguages( xModel, uno::UNO_QUERY );
@@ -563,7 +563,7 @@ bGrammarResults(false)
     fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_ALL_TEXT_START, aSeq, pWrtSh, aLangTable_Document );
     EnableItem( MN_SET_LANGUAGE_ALL_TEXT, true );
 */
-    uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame()->GetFrameInterface();
+    uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
             OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
@@ -696,7 +696,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
     fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_ALL_TEXT_START, aSeq, pWrtSh, aLangTable_Document );
     EnableItem( MN_SET_LANGUAGE_ALL_TEXT, true );
 */
-    uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame()->GetFrameInterface();
+    uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
             OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
