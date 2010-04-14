@@ -183,7 +183,7 @@ ByteString SimpleConfig::GetCleanedNextLine( BOOL bReadComments )
             if (bReadComments )
                 return aTmpStr;
         }
-        else
+        else if (aTmpStr != ByteString::EmptyString())
             bReadNextLine = sal_False;
     }
 
