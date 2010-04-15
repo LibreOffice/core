@@ -367,7 +367,8 @@ USHORT Button::ImplGetTextStyle( XubString& rText, WinBits nWinStyle,
 void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
                                    Size& rSize, BOOL bLayout,
                                    ULONG nImageSep, ULONG nDrawFlags,
-                                   USHORT nTextStyle, Rectangle *pSymbolRect )
+                                   USHORT nTextStyle, Rectangle *pSymbolRect,
+                                   bool bAddImageSep )
 {
     XubString   aText( GetText() );
     BOOL        bDrawImage = HasImage() && ! ( ImplGetButtonState() & BUTTON_DRAW_NOIMAGE );
@@ -502,6 +503,13 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
 
             if ( aTSSize.Height() < aTextSize.Height() )
                 aTSSize.Height() = aTextSize.Height();
+
+            if( bAddImageSep && bDrawImage )
+            {
+                long nDiff = (aImageSize.Height() - aTextSize.Height()) / 3;
+                if( nDiff > 0 )
+                    nImageSep += nDiff;
+            }
         }
 
         aMax.Width() = aTSSize.Width() > aImageSize.Width() ? aTSSize.Width() : aImageSize.Width();
@@ -1196,8 +1204,10 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
         ULONG nImageSep = 1 + (pDev->GetTextHeight()-10)/2;
         if( nImageSep < 1 )
             nImageSep = 1;
+        // FIXME: (GetStyle() & WB_FLATBUTTON) != 0 is preliminary
+        // in the next major this should be replaced by "true"
         ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, nImageSep, nDrawFlags,
-                              nTextStyle, IsSymbol() ? &aSymbolRect : NULL );
+                              nTextStyle, IsSymbol() ? &aSymbolRect : NULL, (GetStyle() & WB_FLATBUTTON) != 0 );
 
         if ( IsSymbol() && ! bLayout )
         {
