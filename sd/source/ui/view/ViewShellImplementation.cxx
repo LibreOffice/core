@@ -355,7 +355,7 @@ void ViewShell::Implementation::AssignLayout ( SfxRequest& rRequest, PageKind eP
         if( pPage->GetPageKind() == PK_HANDOUT )
             aVisibleLayers.SetAll();
         else
-            pPage->TRG_GetMasterPageVisibleLayers();
+            aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
 
         SfxRequest aRequest (mrViewShell.GetViewShellBase().GetViewFrame(), SID_MODIFYPAGE);
         aRequest.AppendItem(SfxStringItem (ID_VAL_PAGENAME, pPage->GetName()));
