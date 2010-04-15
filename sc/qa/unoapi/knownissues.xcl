@@ -191,3 +191,6 @@ sc.ScAnnotationShapeObj::com::sun::star::text::XTextRange
 sc.ScAnnotationsObj::com::sun::star::container::XElementAccess
 sc.ScCellObj::com::sun::star::sheet::XSheetAnnotationAnchor
 sc.ScDataPilotFieldObj::com::sun::star::sheet::XDataPilotFieldGrouping
+
+### i110862 ###
+sc.ScDataPilotTableObj::com::sun::star::sheet::XDataPilotTable
