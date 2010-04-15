@@ -104,6 +104,13 @@ function hResetStandardBar() as boolean
     '///<ul>
     
     const CFN = "hResetStandardBar::"
+    const MIN_STATIC_DELAY = 1
+    const DEFAULT_DELAY = 2
+    const MENUITEM_RESTORE = 1
+    const MENUITEM_CLOSEMENU = 0
+    const TOOLBAR_MENUITEM_CUSTOMIZE = 2
+    const EXPECTED_RESOURCE_ID = 304
+
     
     printlog( CFN & "Enter" )
 
@@ -116,36 +123,36 @@ function hResetStandardBar() as boolean
     
         '///+<li>Open the context menu on Standardbar</li>
         Standardbar.OpenContextmenu
-        sleep( 1 ) 
+        sleep( MIN_STATIC_DELAY )
         
         '///+<li>Click on 2. entry (Cutomize Toolbar)</li>
-        hMenuselectNr (2)
-        sleep( 1 )
+        hMenuselectNr ( TOOLBAR_MENUITEM_CUSTOMIZE )
+        sleep( MIN_STATIC_DELAY )
         
         kontext
         Active.SetPage TabCustomizeToolbars
-        sleep( 1 )
+        sleep( MIN_STATIC_DELAY )
 
         '///+<li>Toggle to 'Toolbars' tab page.</li>
         kontext "TabCustomizeToolbars"
-        if TabCustomizeToolbars.Exists( 2 ) then
-            sleep( 1 )
+        if TabCustomizeToolbars.Exists( DEFAULT_DELAY ) then
+            sleep( MIN_STATIC_DELAY )
 
             '///+<li>Press in first section '... Toolbars' the 'toolbar'-button</li>
             MenuBtn.Click
-            sleep( 1 )
+            sleep( MIN_STATIC_DELAY )
             
             '///+<li>A drop down menu will be opened.</li>
             '///+<li>Select the first enabled menu entry which should be 'Restore...'</li>
-            hMenuSelectNr(1)
-            sleep( 1 )
+            hMenuSelectNr( MENUITEM_RESTORE )
+            sleep( MIN_STATIC_DELAY )
 
             kontext
-            if ( active.exists( 2 ) ) then
-                if Active.GetRT = 304 then
+            if ( active.exists( DEFAULT_DELAY ) ) then
+                if ( Active.GetRT = EXPECTED_RESOURCE_ID ) then
                 
                     '///+<li>Press Yes button on verification dialog.</li>
-                    Active.Yes
+                    Active.Yes()
                 end if
             else
                 warnlog( "No verification comes up if the RESET button has been pressed!" )
@@ -153,11 +160,11 @@ function hResetStandardBar() as boolean
 
             '///+<li>Close 'Toolbars' tab page and the dialog with OK.</li>
             kontext "tabcustomizetoolbars"
-            TabCustomizeToolbars.OK
+            hCloseDialog( TabCustomizeToolbars, "ok" )
         else
             warnlog( "Cutomuze Toolbar not open (from context menu)" )
             'Closing the Context menu if the dialog does not come up.
-            Menuselect(0)
+            Menuselect( MENUITEM_CLOSEMENU )
         endif
             
     else
@@ -193,8 +200,7 @@ function hStandardbarItemGetCount() as integer
     '///<ul>
     
     dim iToolbarItemsCurrent as integer
-    dim iToolbarItemsExpected as integer
-        iToolbarItemsExpected = 30
+    const EXPECTED_TOOLBAR_ITEMCOUNT = 30
     
     const CFN = "hStandardbarItemGetCount::"
 
@@ -221,10 +227,10 @@ function hStandardbarItemGetCount() as integer
     ' items on the standardbar, OOo and its spinoffs have 30.
     
     
-    if ( iToolbarItemsCurrent = iToolbarItemsExpected ) then
+    if ( iToolbarItemsCurrent = EXPECTED_TOOLBAR_ITEMCOUNT ) then
         printlog( CFN & "Correct number of items on the StandardBar. Good" )
     else
-        warnlog( CFN & "Expected: " & iToolbarItemsExpected & _
+        warnlog( CFN & "Expected: " & EXPECTED_TOOLBAR_ITEMCOUNT & _
                 " entries, found: " & iToolbarItemsCurrent )
     endif
 
@@ -253,7 +259,8 @@ function hToggleToolbarItem( iMenuPos as integer )
     '///<u>Description</u>:
     '///<ul>
     
-    const CFN = "hToggleToolbarItem::"    
+    const CFN = "hToggleToolbarItem::"
+    const INVISIBLE_ITEMS_MODIFIER = 3
     dim iItemsInMenu as integer
     
     printlog( CFN & "Enter with option (Menu position): " & iMenuPos )
@@ -269,7 +276,7 @@ function hToggleToolbarItem( iMenuPos as integer )
     ' (those that are invisible will be listed as context menu entries),
     ' the menuitem (invisible items) is placed at position nItems - 3
     '///+<li>Take the number of items -3, select the entry</li>
-    hMenuselectNr( iItemsInMenu - 3 )
+    hMenuselectNr( iItemsInMenu - INVISIBLE_ITEMS_MODIFIER )
     
     '///+<li>Select the provided menu position</li>
     hMenuselectNr( iMenuPos )        
@@ -301,8 +308,7 @@ function hStandardbarLoadUrl() as boolean
     ' written to and disabled again (no use of reset toolbar here, this is
     ' done in another testcase
     
-    dim iItemMenuPos as integer
-    iItemMenuPos = 1
+    dim iItemMenuPos as integer : iItemMenuPos = 1
     
     const ITEM_MENU_POSITION = 1
     const CFN = "hStandardbarLoadUrl::"
@@ -403,8 +409,8 @@ function hStandardbarNewDialog()
     '///+<li>close the templates and samples dialog</li>
     printlog( CFN & "Close templates and samples (cancel)" )
     Kontext "TemplateAndDocuments"
-    if ( TemplateAndDocuments.Exists( 5 ) ) then
-        TemplateAndDocuments.cancel()
+    if ( TemplateAndDocuments.Exists( 10 ) ) then
+        hCloseDialog( TemplateAndDocuments, "cancel" )
     else
         warnlog( CFN & "The 'Template and Documents'-dialog was not activated" )
     endif
@@ -452,7 +458,7 @@ function hStandardbarSaveAs()
     kontext "SpeichernDlg"
     if ( SpeichernDlg.exists( 1 ) ) then
         warnlog( "#i46363# (?)The 'SaveAs'-button should be invisible." )
-        SpeichernDlg.cancel()
+        hCloseDialog( SpeichernDlg, "cancel" )
     else
         
         '///+<li>Add the control to the standardbar</li>
@@ -468,7 +474,7 @@ function hStandardbarSaveAs()
         printlog( CFN & "Close Save As (cancel)" )
         Kontext "SpeichernDlg"
         if ( SpeichernDlg.Exists( 2 ) ) then
-            SpeichernDlg.cancel()
+            hCloseDialog( SpeichernDlg, "cancel" )
         else
             qaerrorlog( "Retrying" )
             Kontext "Standardbar"
@@ -476,7 +482,7 @@ function hStandardbarSaveAs()
             Kontext "SpeichernDlg"
             if ( SpeichernDlg.exists( 1 ) ) then
                 printlog( "FileSaveAs dialog is open" )
-                SpeichernDlg.cancel()
+                hCloseDialog( SpeichernDlg, "cancel" )
             else
                 warnlog( CFN & "The 'Save As'-dialog was not activated" )
             endif

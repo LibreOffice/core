@@ -1062,6 +1062,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "formatautoformatapply"          : FormatAutoformatApply
 
             case "insertfieldsother"              : InsertFieldsOther
+            case "insertgraphicsfromfile"         : InsertGraphicsFromFile
             case "insertindexesbibliographyentry" : InsertIndexesBibliographyEntry
 
             case "contextpositionandsize"         : ContextPositionAndSize
