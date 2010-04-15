@@ -89,8 +89,6 @@ namespace sdr
         // operators
         sal_Bool operator==(const MasterPageDescriptor& rCandidate) const;
         sal_Bool operator!=(const MasterPageDescriptor& rCandidate) const;
-
-        const SfxItemSet& getCorrectFillAttributes() const;
     };
 } // end of namespace sdr
 
