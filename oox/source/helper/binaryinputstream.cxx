@@ -321,6 +321,7 @@ void RelativeInputStream::skip( sal_Int32 nBytes )
     if( !mbEof )
     {
         sal_Int32 nSkipBytes = getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, mnLength - mnRelPos );
+        mrInStrm.skip( nSkipBytes );
         mnRelPos += nSkipBytes;
         mbEof = nSkipBytes < nBytes;
     }
