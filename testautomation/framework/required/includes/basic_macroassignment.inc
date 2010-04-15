@@ -37,7 +37,7 @@ testcase tUpdtMacroAssignment
     
     const TABPAGE_EVENTS = 2
     const BASIC_MODULE = "tUpdtMacroAssignment"
-    const MAX_DELAY = 1
+    const DEFAULT_DIALOG_TIMEOUT = 1
     const RC_TIMEOUT = -1
 
     printlog( "New document" )
@@ -73,7 +73,7 @@ testcase tUpdtMacroAssignment
 
                             Kontext "AssignMacro"
                             printlog( "Current Dialog: Assign Macro" )
-                            if ( AssignMacro.exists( MAX_DELAY ) ) then
+                            if ( AssignMacro.exists( DEFAULT_DIALOG_TIMEOUT ) ) then
 
                                 call dialogtest( AssignMacro )
 
@@ -81,7 +81,7 @@ testcase tUpdtMacroAssignment
                                 if ( hClickButton( AssignButton ) <> RC_TIMEOUT ) then
 
                                     Kontext "ScriptSelector"
-                                    if ( ScriptSelector.exists( MAX_DELAY ) ) then
+                                    if ( ScriptSelector.exists( DEFAULT_DIALOG_TIMEOUT ) ) then
 
                                         call dialogtest( ScriptSelector )
 
