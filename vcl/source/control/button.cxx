@@ -880,7 +880,9 @@ void PushButton::ImplInitSettings( BOOL bFont,
             EnableChildTransparentMode( TRUE );
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
             SetPaintTransparent( TRUE );
-            mpWindowImpl->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRects;
+            mpWindowImpl->mbUseNativeFocus = (GetStyle() & WB_FLATBUTTON)
+                ? false
+                : ImplGetSVData()->maNWFData.mbNoFocusRects;
         }
         else
         {
@@ -1363,7 +1365,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         Size aInRectSize( LogicToPixel( Size( aInRect.GetWidth(), aInRect.GetHeight() ) ) );
         aPBVal.mbSingleLine = (aInRectSize.Height() < 2 * aFontSize.Height() );
 
-        if( ((nState & CTRL_STATE_ROLLOVER) || HasFocus()) || ! (GetStyle() & WB_FLATBUTTON) )
+        if( ((nState & CTRL_STATE_ROLLOVER)) || ! (GetStyle() & WB_FLATBUTTON) )
         {
             bNativeOK = DrawNativeControl( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
                             aControlValue, rtl::OUString()/*PushButton::GetText()*/ );
@@ -1388,7 +1390,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         if( (GetStyle() & WB_FLATBUTTON) )
         {
             Rectangle aTempRect( aInRect );
-            if( ! bLayout && (bRollOver || HasFocus()) )
+            if( ! bLayout && bRollOver )
                 ImplDrawPushButtonFrame( this, aTempRect, nButtonStyle );
             aInRect.Left()   += 2;
             aInRect.Top()    += 2;
