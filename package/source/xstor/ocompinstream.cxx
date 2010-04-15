@@ -42,7 +42,7 @@ using namespace ::com::sun::star;
 OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
                                     uno::Reference < io::XInputStream > xStream,
                                     const uno::Sequence< beans::PropertyValue >& aProps,
-                                    sal_Int16 nStorageType )
+                                    sal_Int32 nStorageType )
 : m_pImpl( &aImpl )
 , m_rMutexRef( m_pImpl->m_rMutexRef )
 , m_xStream( xStream )
@@ -61,7 +61,7 @@ OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
 //-----------------------------------------------
 OInputCompStream::OInputCompStream( uno::Reference < io::XInputStream > xStream,
                                     const uno::Sequence< beans::PropertyValue >& aProps,
-                                    sal_Int16 nStorageType )
+                                    sal_Int32 nStorageType )
 : m_pImpl( NULL )
 , m_rMutexRef( new SotMutexHolder )
 , m_xStream( xStream )

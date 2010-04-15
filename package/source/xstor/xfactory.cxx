@@ -186,7 +186,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     uno::Sequence< beans::PropertyValue > aDescr;
     uno::Sequence< beans::PropertyValue > aPropsToSet;
 
-    sal_Int16 nStorageType = embed::StorageFormats::PACKAGE;
+    sal_Int32 nStorageType = embed::StorageFormats::PACKAGE;
 
     if ( nArgNum >= 3 )
     {

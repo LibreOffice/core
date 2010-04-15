@@ -172,7 +172,7 @@ struct OStorage_Impl
 
     SwitchablePersistenceStream* m_pSwitchStream;
 
-    sal_Int16 m_nStorageType; // the mode in wich the storage is used
+    sal_Int32 m_nStorageType; // the mode in wich the storage is used
 
     // the _rels substorage that is handled in a special way in embed::StorageFormats::OFOPXML
     SotElement_Impl* m_pRelStorElement;
@@ -188,13 +188,13 @@ struct OStorage_Impl
                     sal_Int32 nMode,
                     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > xProperties,
                     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory,
-                    sal_Int16 nStorageType );
+                    sal_Int32 nStorageType );
 
     OStorage_Impl(  ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xStream,
                     sal_Int32 nMode,
                     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > xProperties,
                     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory,
-                    sal_Int16 nStorageType );
+                    sal_Int32 nStorageType );
 
     // constructor for a substorage
     OStorage_Impl(  OStorage_Impl* pParent,
@@ -202,7 +202,7 @@ struct OStorage_Impl
                     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xPackageFolder,
                     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > xPackage,
                     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory,
-                    sal_Int16 nStorageType );
+                    sal_Int32 nStorageType );
 
     ~OStorage_Impl();
 
@@ -282,7 +282,7 @@ struct OStorage_Impl
     static void completeStorageStreamCopy_Impl(
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xSource,
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xDest,
-        sal_Int16 nStorageType,
+        sal_Int32 nStorageType,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > >& aRelInfo );
 
 };
@@ -325,13 +325,13 @@ public:
                 sal_Int32 nMode,
                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > xProperties,
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory,
-                sal_Int16 nStorageType );
+                sal_Int32 nStorageType );
 
     OStorage(   ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xStream,
                 sal_Int32 nMode,
                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > xProperties,
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory,
-                sal_Int16 nStorageType );
+                sal_Int32 nStorageType );
 
     OStorage(   OStorage_Impl* pImpl, sal_Bool bReadOnlyWrap );
 

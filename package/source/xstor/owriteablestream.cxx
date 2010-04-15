@@ -245,7 +245,7 @@ OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
                                       const uno::Reference< lang::XSingleServiceFactory >& xPackage,
                                       const uno::Reference< lang::XMultiServiceFactory >& xFactory,
                                       sal_Bool bForceEncrypted,
-                                      sal_Int16 nStorageType,
+                                      sal_Int32 nStorageType,
                                       sal_Bool bDefaultCompress,
                                       const uno::Reference< io::XInputStream >& xRelInfoStream )
 : m_pAntiImpl( NULL )

@@ -73,7 +73,7 @@ struct StorInternalData_Impl
     ::cppu::OMultiTypeInterfaceContainerHelper m_aListenersContainer; // list of listeners
     ::cppu::OTypeCollection* m_pTypeCollection;
     sal_Bool m_bIsRoot;
-    sal_Int16 m_nStorageType; // the mode in wich the storage is used
+    sal_Int32 m_nStorageType; // the mode in wich the storage is used
     sal_Bool m_bReadOnlyWrap;
 
     OChildDispListener_Impl* m_pSubElDispListener;
@@ -83,12 +83,12 @@ struct StorInternalData_Impl
     ::rtl::Reference< OHierarchyHolder_Impl > m_rHierarchyHolder;
 
     // the mutex reference MUST NOT be empty
-    StorInternalData_Impl( const SotMutexHolderRef& rMutexRef, sal_Bool bRoot, sal_Int16 nStorType, sal_Bool bReadOnlyWrap )
+    StorInternalData_Impl( const SotMutexHolderRef& rMutexRef, sal_Bool bRoot, sal_Int32 nStorageType, sal_Bool bReadOnlyWrap )
     : m_rSharedMutexRef( rMutexRef )
     , m_aListenersContainer( rMutexRef->GetMutex() )
     , m_pTypeCollection( NULL )
     , m_bIsRoot( bRoot )
-    , m_nStorageType( nStorType )
+    , m_nStorageType( nStorageType )
     , m_bReadOnlyWrap( bReadOnlyWrap )
     , m_pSubElDispListener( NULL )
     {}
@@ -103,7 +103,7 @@ struct StorInternalData_Impl
 void OStorage_Impl::completeStorageStreamCopy_Impl(
                             const uno::Reference< io::XStream >& xSource,
                             const uno::Reference< io::XStream >& xDest,
-                            sal_Int16 nStorageType,
+                            sal_Int32 nStorageType,
                             const uno::Sequence< uno::Sequence< beans::StringPair > >& aRelInfo )
 {
         uno::Reference< beans::XPropertySet > xSourceProps( xSource, uno::UNO_QUERY );
@@ -196,7 +196,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
                                 sal_Int32 nMode,
                                 uno::Sequence< beans::PropertyValue > xProperties,
                                 uno::Reference< lang::XMultiServiceFactory > xFactory,
-                                sal_Int16 nStorageType )
+                                sal_Int32 nStorageType )
 : m_rMutexRef( new SotMutexHolder )
 , m_pAntiImpl( NULL )
 , m_nStorageMode( nMode & ~embed::ElementModes::SEEKABLE )
@@ -236,7 +236,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
                                 sal_Int32 nMode,
                                 uno::Sequence< beans::PropertyValue > xProperties,
                                 uno::Reference< lang::XMultiServiceFactory > xFactory,
-                                sal_Int16 nStorageType )
+                                sal_Int32 nStorageType )
 : m_rMutexRef( new SotMutexHolder )
 , m_pAntiImpl( NULL )
 , m_nStorageMode( nMode & ~embed::ElementModes::SEEKABLE )
@@ -279,7 +279,7 @@ OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
                                 uno::Reference< container::XNameContainer > xPackageFolder,
                                 uno::Reference< lang::XSingleServiceFactory > xPackage,
                                 uno::Reference< lang::XMultiServiceFactory > xFactory,
-                                sal_Int16 nStorageType )
+                                sal_Int32 nStorageType )
 : m_rMutexRef( new SotMutexHolder )
 , m_pAntiImpl( NULL )
 , m_nStorageMode( nMode & ~embed::ElementModes::SEEKABLE )
@@ -1924,7 +1924,7 @@ OStorage::OStorage( uno::Reference< io::XInputStream > xInputStream,
                     sal_Int32 nMode,
                     uno::Sequence< beans::PropertyValue > xProperties,
                     uno::Reference< lang::XMultiServiceFactory > xFactory,
-                    sal_Int16 nStorageType )
+                    sal_Int32 nStorageType )
 : m_pImpl( new OStorage_Impl( xInputStream, nMode, xProperties, xFactory, nStorageType ) )
 {
     m_pImpl->m_pAntiImpl = this;
@@ -1936,7 +1936,7 @@ OStorage::OStorage( uno::Reference< io::XStream > xStream,
                     sal_Int32 nMode,
                     uno::Sequence< beans::PropertyValue > xProperties,
                     uno::Reference< lang::XMultiServiceFactory > xFactory,
-                    sal_Int16 nStorageType )
+                    sal_Int32 nStorageType )
 : m_pImpl( new OStorage_Impl( xStream, nMode, xProperties, xFactory, nStorageType ) )
 {
     m_pImpl->m_pAntiImpl = this;
