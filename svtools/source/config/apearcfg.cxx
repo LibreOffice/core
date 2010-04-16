@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include "apearcfg.hxx"
+#include <svtools/apearcfg.hxx>
 #include "com/sun/star/uno/Any.hxx"
 
 #include "tools/debug.hxx"

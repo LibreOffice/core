@@ -31,12 +31,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include "fileview.hxx"
+#include <svtools/fileview.hxx>
 #include <svtools/svtdata.hxx>
-#include "imagemgr.hxx"
+#include <svtools/imagemgr.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
-
 #include <svl/svtools.hrc>
 #include "fileview.hrc"
 #include "contentenumeration.hxx"
@@ -57,7 +56,6 @@
 #include <vcl/waitobj.hxx>
 #include <com/sun/star/io/XPersist.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-
 #include <algorithm>
 #include <memory>
 #include <tools/urlobj.hxx>
@@ -67,9 +65,7 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef INCLUDED_RTL_MATH_H
 #include <rtl/math.hxx>
-#endif
 #include <tools/config.hxx>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>

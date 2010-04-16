@@ -30,7 +30,7 @@
 
 #define __RSC
 #include <svl/svtools.hrc>
-#include "sfxecode.hxx"
+#include "svtools/sfxecode.hxx"
  // pragma ----------------------------------------------------------------
 Resource RID_ERRCTX
 {

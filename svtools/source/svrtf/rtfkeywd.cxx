@@ -33,8 +33,8 @@
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
-#include "rtfkeywd.hxx"
-#include "rtftoken.h"
+#include <svtools/rtfkeywd.hxx>
+#include <svtools/rtftoken.h>
 #include "tools/string.hxx"
 
 #include <string.h>

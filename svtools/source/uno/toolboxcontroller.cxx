@@ -38,12 +38,9 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <imgdef.hxx>
+#include <svtools/imgdef.hxx>
 #include <svtools/miscopt.hxx>
-
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <vcl/toolbox.hxx>
 
 using namespace ::cppu;

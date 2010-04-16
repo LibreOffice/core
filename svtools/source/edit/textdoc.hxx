@@ -33,7 +33,7 @@
 
 #include <svl/svarray.hxx>
 #include <svtools/textdata.hxx>
-#include <txtattr.hxx>
+#include <svtools/txtattr.hxx>
 
 #include <tools/debug.hxx>
 #include <tools/string.hxx>

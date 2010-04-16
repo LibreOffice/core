@@ -45,10 +45,6 @@ ENABLE_EXCEPTIONS=TRUE
 SRS1NAME= javaerror
 SRC1FILES= javaerror.src
 
-SRS2NAME= patchjavaerror
-SRC2FILES= patchjavaerror.src	
-
-
 SLOFILES= \
     $(SLO)$/javainteractionhandler.obj \
     $(SLO)$/javacontext.obj

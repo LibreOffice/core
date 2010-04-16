@@ -36,7 +36,7 @@
 // include ---------------------------------------------------------------
 
 #include <svtools/insdlg.hxx>
-#include "sores.hxx"
+#include <svtools/sores.hxx>
 #include <svtools/svtdata.hxx>
 
 #include <tools/rc.hxx>

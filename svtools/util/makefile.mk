@@ -34,7 +34,6 @@ PRJ=..
 PRJNAME=svtools
 TARGET=svtool
 RESTARGET=svt
-RESTARGETPATCH=svp
 GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
 ENABLE_EXCEPTIONS=TRUE
@@ -90,10 +89,6 @@ RESLIB1SRSFILES= \
         $(SRS)$/uno.srs         \
         $(SRS)$/browse.srs		\
         $(SRS)$/javaerror.srs
-
-RESLIB3NAME= $(RESTARGETPATCH)
-RESLIB3SRSFILES= \
-        $(SRS)$/patchjavaerror.srs
 
 # build the shared library  --------------------------------------------------
 

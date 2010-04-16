@@ -30,16 +30,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-#include <filedlg.hxx>
+#include <svtools/filedlg.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/logindlg.hxx>
-
-#ifndef _SVTOOLS_LOGINDLG_HRC_
 #include "logindlg.hrc"
-#endif
-#ifndef _SVTOOLS_HRC
 #include <svl/svtools.hrc>
-#endif
 #include <svtools/svtdata.hxx>
 
 #ifdef UNX

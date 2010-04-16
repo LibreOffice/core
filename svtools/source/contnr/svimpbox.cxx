@@ -32,15 +32,10 @@
 #include "precompiled_svtools.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/salnativewidgets.hxx>
-
-#ifndef _HELP_HXX
 #include <vcl/help.hxx>
-#endif
-#include <tabbar.hxx>
+#include <svtools/tabbar.hxx>
 
-#ifndef _STACK_
 #include <stack>
-#endif
 
 #define _SVTREEBX_CXX
 #include <svtools/svtreebx.hxx>
@@ -48,10 +43,7 @@
 #include <svimpbox.hxx>
 #include <rtl/instance.hxx>
 #include <svtools/svtdata.hxx>
-
-#ifndef _SVTOOLS_HRC
 #include <svl/svtools.hrc>
-#endif
 
 // #102891# --------------------
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX

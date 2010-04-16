@@ -35,11 +35,10 @@
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/poly.hxx>
-
 #include <vcl/i18nhelp.hxx>
 
 #define _SV_RULER_CXX
-#include <ruler.hxx>
+#include <svtools/ruler.hxx>
 
 // =======================================================================
 

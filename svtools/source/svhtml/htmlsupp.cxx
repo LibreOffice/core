@@ -40,8 +40,8 @@
 #endif
 
 #include <svtools/parhtml.hxx>
-#include "htmltokn.h"
-#include "htmlkywd.hxx"
+#include <svtools/htmltokn.h>
+#include <svtools/htmlkywd.hxx>
 
 /*  */
 

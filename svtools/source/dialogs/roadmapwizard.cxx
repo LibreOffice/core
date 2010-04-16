@@ -34,7 +34,7 @@
 #include <svtools/roadmapwizard.hxx>
 #include <svl/svtools.hrc>
 #include <svtools/svtdata.hxx>
-#include "roadmap.hxx"
+#include <svtools/roadmap.hxx>
 #include <tools/debug.hxx>
 
 #include <stdarg.h>

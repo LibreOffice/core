@@ -29,7 +29,7 @@
  ************************************************************************/
 
 #include "precompiled_svtools.hxx"
-#include "dialogclosedlistener.hxx"
+#include <svtools/dialogclosedlistener.hxx>
 
 //.........................................................................
 namespace svt

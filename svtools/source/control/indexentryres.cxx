@@ -33,9 +33,7 @@
 #include "precompiled_svtools.hxx"
 #include <svtools/svtdata.hxx>
 #include <svl/svtools.hrc>
-
-
-#include <indexentryres.hxx>
+#include <svtools/indexentryres.hxx>
 
 // -------------------------------------------------------------------------
 //

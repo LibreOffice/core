@@ -52,12 +52,6 @@ SRC2FILES=   testtool.src
 LIB1TARGET= $(SLB)$/plugapp.lib
 LIB1OBJFILES=  $(SLOFILES)
 
-########  Testapplikation  #########
-
-SRC1FILES=	commtest.src
-SRS1NAME=	commtest
-
-########  Ende Testapplikation  #########
 
 # --- Tagets -------------------------------------------------------
 
