@@ -50,8 +50,8 @@ namespace dbaccess
 
 //------------------------------------------------------------------------------
 ORowSetColumn::ORowSetColumn(   const Reference < XResultSetMetaData >& _xMetaData, const Reference < XRow >& _xRow, sal_Int32 _nPos,
-                const Reference< XDatabaseMetaData >& _rxDBMeta, const ::rtl::OUString& _rDescription, ORowSetCacheIterator& _rColumnValue )
-    :ORowSetDataColumn( _xMetaData, _xRow, NULL, _nPos, _rxDBMeta, _rDescription, _rColumnValue )
+                const Reference< XDatabaseMetaData >& _rxDBMeta, const ::rtl::OUString& _rDescription, const ::rtl::OUString& i_sLabel,ORowSetCacheIterator& _rColumnValue )
+    :ORowSetDataColumn( _xMetaData, _xRow, NULL, _nPos, _rxDBMeta, _rDescription, i_sLabel,_rColumnValue )
 {
 }
 
@@ -70,7 +70,7 @@ ORowSetColumn::ORowSetColumn(   const Reference < XResultSetMetaData >& _xMetaDa
     DECL_PROP1_BOOL( ISCURRENCY,                                READONLY );
     DECL_PROP1_BOOL( ISDEFINITELYWRITABLE,                      READONLY );
     DECL_PROP1( ISNULLABLE,                 sal_Int32,          READONLY );
-    DECL_PROP1_BOOL( ISREADONLY,                                READONLY );
+    DECL_PROP1_BOOL( ISREADONLY,                                BOUND );
     DECL_PROP1_BOOL( ISROWVERSION,                              READONLY );
     DECL_PROP1_BOOL( ISSEARCHABLE,                              READONLY );
     DECL_PROP1_BOOL( ISSIGNED,                                  READONLY );
