@@ -36,19 +36,33 @@
 #ifndef __com_sun_star_script_ModuleType_idl__
 #define __com_sun_star_script_ModuleType_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
 //=============================================================================
+
 module com {  module sun {  module star { module script {
+
 published constants ModuleType
 {
-    const long Unknown = 0;
-    const long Normal = 1;
-    const long Class = 2;
-    const long Form = 3;
-    const long Document = 4;
+    // ------------------------------------------------------------------------
+
+    const long UNKNOWN = 0;
+
+    // ------------------------------------------------------------------------
+
+    const long NORMAL = 1;
+
+    // ------------------------------------------------------------------------
+
+    const long CLASS = 2;
+
+    // ------------------------------------------------------------------------
+
+    const long FORM = 3;
+
+    // ------------------------------------------------------------------------
+
+    const long DOCUMENT = 4;
+
+    // ------------------------------------------------------------------------
 };
 
 //=============================================================================
