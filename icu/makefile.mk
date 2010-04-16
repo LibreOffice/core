@@ -87,9 +87,8 @@ icu_CFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
 icu_LDFLAGS+=$(EXTRA_LINKFLAGS)
 icu_CXXFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
 
-BUILD_ACTION_SEP=;
 # remove conversion and transliteration data to reduce binary size.
-CONFIGURE_ACTION=rm data/mappings/ucm*.mk data/translit/trn*.mk $(BUILD_ACTION_SEP)
+CONFIGURE_ACTION=rm data/mappings/ucm*.mk data/translit/trn*.mk ;
 
 # until someone introduces SOLARIS 64-bit builds
 .IF "$(OS)"=="SOLARIS"
@@ -186,11 +185,6 @@ OUT2BIN= \
     $(BUILD_DIR)$/bin$/gencmn.exe
 
 .ELSE
-.IF "$(USE_SHELL)"=="4nt"
-BUILD_ACTION_SEP=^
-.ELSE
-BUILD_ACTION_SEP=;
-.ENDIF			# "$(USE_SHELL)"=="4nt"
 BUILD_DIR=source
 .IF "full_debug" == ""
 
@@ -256,7 +250,7 @@ OUT2BIN= \
 .IF "$(BINARY_PATCH_FILES)"!=""
 
 $(PACKAGE_DIR)$/so_add_binary :  $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
-    cd $(PACKAGE_DIR) && gunzip -c $(BACK_PATH)$(BINARY_PATCH_FILES) | tar $(TAR_EXCLUDE_SWITCH) -xvf -
+    cd $(PACKAGE_DIR) && gunzip -c $(BACK_PATH)$(BINARY_PATCH_FILES) | tar -xvf -
     $(TOUCH) $(PACKAGE_DIR)$/so_add_binary
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_add_binary
