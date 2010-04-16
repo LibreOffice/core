@@ -394,23 +394,23 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
             bExitLoop = (nLineLen >= 2) && (aLine[ 0 ] == '[') && (aLine[ nLineLen - 1 ] == ']');
             if( !bExitLoop && VbaHelper::extractKeyValue( aKey, aValue, aLine ) )
             {
-                sal_Int32 nType = ApiModuleType::Unknown;
+                sal_Int32 nType = ApiModuleType::UNKNOWN;
                 if( aKey.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Document" ) ) )
                 {
-                    nType = ApiModuleType::Document;
+                    nType = ApiModuleType::DOCUMENT;
                     // strip automation server version from module names
                     sal_Int32 nSlashPos = aValue.indexOf( '/' );
                     if( nSlashPos >= 0 )
                         aValue = aValue.copy( 0, nSlashPos );
                 }
                 else if( aKey.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Module" ) ) )
-                    nType = ApiModuleType::Normal;
+                    nType = ApiModuleType::NORMAL;
                 else if( aKey.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Class" ) ) )
-                    nType = ApiModuleType::Class;
+                    nType = ApiModuleType::CLASS;
                 else if( aKey.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "BaseClass" ) ) )
-                    nType = ApiModuleType::Form;
+                    nType = ApiModuleType::FORM;
 
-                if( (nType != ApiModuleType::Unknown) && (aValue.getLength() > 0) )
+                if( (nType != ApiModuleType::UNKNOWN) && (aValue.getLength() > 0) )
                 {
                     OSL_ENSURE( aModules.has( aValue ), "VbaProject::importVba - module not found" );
                     if( VbaModule* pModule = aModules.get( aValue ).get() )
@@ -475,7 +475,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
             {
                 // resolve module name from storage name (which equals the module stream name)
                 VbaModule* pModule = aModulesByStrm.get( *aIt ).get();
-                OSL_ENSURE( pModule && (pModule->getType() == ApiModuleType::Form),
+                OSL_ENSURE( pModule && (pModule->getType() == ApiModuleType::FORM),
                     "VbaProject::importVba - form substorage without form module" );
                 OUString aModuleName;
                 if( pModule )

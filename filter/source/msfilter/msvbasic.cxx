@@ -38,6 +38,8 @@
 #include <rtl/tencinfo.h>   //rtl_getTextEncodingFromWindowsCodePage
 #include "msvbasic.hxx"
 
+#include <com/sun/star/script/ModuleType.hpp>
+
 using namespace ::com::sun::star::script;
 
 /*
@@ -439,7 +441,7 @@ ModType VBA_Impl::GetModuleType( const UniString& rModuleName )
     {
         return iter->second;
     }
-    return ModuleType::Unknown;
+    return ModuleType::UNKNOWN;
 }
 
 bool VBA_Impl::Open( const String &rToplevel, const String &rSublevel )
@@ -482,7 +484,7 @@ bool VBA_Impl::Open( const String &rToplevel, const String &rSublevel )
         static const String sClass(     RTL_CONSTASCII_USTRINGPARAM( "Class" ) );
         static const String sBaseClass( RTL_CONSTASCII_USTRINGPARAM( "BaseClass" ) );
         static const String sDocument(  RTL_CONSTASCII_USTRINGPARAM( "Document" ) );
-        mhModHash[ sThisDoc ] = ModuleType::Class;
+        mhModHash[ sThisDoc ] = ModuleType::CLASS;
         while ( pStp->ReadByteStringLine( tmp, meCharSet ) )
         {
             xub_StrLen index = tmp.Search( '=' );
@@ -492,14 +494,14 @@ bool VBA_Impl::Open( const String &rToplevel, const String &rSublevel )
                 String value = tmp.Copy( index + 1 );
                 if ( key == sClass )
                 {
-                    mhModHash[ value ] = ModuleType::Class;
+                    mhModHash[ value ] = ModuleType::CLASS;
                     OSL_TRACE("Module %s is of type Class",
                         ::rtl::OUStringToOString( value ,
                             RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                 }
                 else if ( key == sBaseClass )
                 {
-                    mhModHash[ value ] = ModuleType::Form;
+                    mhModHash[ value ] = ModuleType::FORM;
                     OSL_TRACE("Module %s is of type Form",
                         ::rtl::OUStringToOString( value ,
                             RTL_TEXTENCODING_ASCII_US ).pData->buffer );
@@ -512,14 +514,14 @@ bool VBA_Impl::Open( const String &rToplevel, const String &rSublevel )
                     // value is of form <name>/&H<identifier>, strip the identifier
                     value.Erase( value.Search( '/' ) );
 
-                    mhModHash[ value ] = ModuleType::Document;
+                    mhModHash[ value ] = ModuleType::DOCUMENT;
                     OSL_TRACE("Module %s is of type Document VBA",
                         ::rtl::OUStringToOString( value ,
                             RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                 }
                 else if ( key == sModule )
                 {
-                    mhModHash[ value ] = ModuleType::Normal;
+                    mhModHash[ value ] = ModuleType::NORMAL;
                     OSL_TRACE("Module %s is of type Normal VBA",
                         ::rtl::OUStringToOString( value ,
                             RTL_TEXTENCODING_ASCII_US ).pData->buffer );

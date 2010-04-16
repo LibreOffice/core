@@ -60,7 +60,7 @@ VbaModule::VbaModule( const Reference< XModel >& rxDocModel, const OUString& rNa
     mxDocModel( rxDocModel ),
     maName( rName ),
     meTextEnc( eTextEnc ),
-    mnType( ApiModuleType::Unknown ),
+    mnType( ApiModuleType::UNKNOWN ),
     mnOffset( SAL_MAX_UINT32 ),
     mbReadOnly( false ),
     mbPrivate( false ),
@@ -107,13 +107,13 @@ void VbaModule::importDirRecords( BinaryInputStream& rDirStrm )
             break;
             case VBA_ID_MODULETYPEPROCEDURAL:
                 OOX_ENSURE_RECORDSIZE( nRecSize == 0 );
-                OSL_ENSURE( mnType == ApiModuleType::Unknown, "VbaModule::importDirRecords - multiple module type records" );
-                mnType = ApiModuleType::Normal;
+                OSL_ENSURE( mnType == ApiModuleType::UNKNOWN, "VbaModule::importDirRecords - multiple module type records" );
+                mnType = ApiModuleType::NORMAL;
             break;
             case VBA_ID_MODULETYPEDOCUMENT:
                 OOX_ENSURE_RECORDSIZE( nRecSize == 0 );
-                OSL_ENSURE( mnType == ApiModuleType::Unknown, "VbaModule::importDirRecords - multiple module type records" );
-                mnType = ApiModuleType::Document;
+                OSL_ENSURE( mnType == ApiModuleType::UNKNOWN, "VbaModule::importDirRecords - multiple module type records" );
+                mnType = ApiModuleType::DOCUMENT;
             break;
             case VBA_ID_MODULEREADONLY:
                 OOX_ENSURE_RECORDSIZE( nRecSize == 0 );
@@ -130,7 +130,7 @@ void VbaModule::importDirRecords( BinaryInputStream& rDirStrm )
     }
     OSL_ENSURE( maName.getLength() > 0, "VbaModule::importDirRecords - missing module name" );
     OSL_ENSURE( maStreamName.getLength() > 0, "VbaModule::importDirRecords - missing module stream name" );
-    OSL_ENSURE( mnType != ApiModuleType::Unknown, "VbaModule::importDirRecords - missing module type" );
+    OSL_ENSURE( mnType != ApiModuleType::UNKNOWN, "VbaModule::importDirRecords - missing module type" );
     OSL_ENSURE( mnOffset < SAL_MAX_UINT32, "VbaModule::importDirRecords - missing module stream offset" );
 }
 
@@ -155,18 +155,18 @@ void VbaModule::importSourceCode( StorageBase& rVbaStrg,
     aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Rem Attribute VBA_ModuleType=" ) );
     switch( mnType )
     {
-        case ApiModuleType::Normal:
+        case ApiModuleType::NORMAL:
             aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "VBAModule" ) );
         break;
-        case ApiModuleType::Class:
+        case ApiModuleType::CLASS:
             aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "VBAClassModule" ) );
         break;
-        case ApiModuleType::Form:
+        case ApiModuleType::FORM:
             aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "VBAFormModule" ) );
             // hack from old filter, document Basic should know the XModel, but it doesn't
             aModuleInfo.ModuleObject.set( mxDocModel, UNO_QUERY );
         break;
-        case ApiModuleType::Document:
+        case ApiModuleType::DOCUMENT:
             aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "VBADocumentModule" ) );
             // get the VBA object associated to the document module
             if( rxDocObjectNA.is() ) try
@@ -184,7 +184,7 @@ void VbaModule::importSourceCode( StorageBase& rVbaStrg,
     if( mbExecutable )
     {
         aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Option VBASupport 1\n" ) );
-        if( mnType == ApiModuleType::Class )
+        if( mnType == ApiModuleType::CLASS )
             aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Option ClassModule\n" ) );
     }
     else

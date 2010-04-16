@@ -30,17 +30,12 @@
 #ifndef _MSVBASIC_HXX
 #define _MSVBASIC_HXX
 
-#ifdef _SOLAR_H
 #include <tools/solar.h>
-#endif
 #include <tools/debug.hxx>
 #include <sot/storage.hxx>
 #include <tools/dynary.hxx>
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
-#include<map>
-#include <com/sun/star/script/ModuleType.hpp>
+#include <map>
 
 /* class VBA:
  * The VBA class provides a set of methods to handle Visual Basic For

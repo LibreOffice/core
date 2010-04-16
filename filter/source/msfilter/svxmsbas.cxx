@@ -51,6 +51,7 @@ using namespace com::sun::star::awt;
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
+#include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/XVBAModuleInfo.hpp>
 #include <com/sun/star/script/XVBACompat.hpp>
 
@@ -332,23 +333,23 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
 
                 switch( mType )
                 {
-                    case ModuleType::Class:
+                    case ModuleType::CLASS:
                         modeTypeComment = sClassRem +
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBAClassModule\n" ) );
                         break;
-                    case ModuleType::Form:
+                    case ModuleType::FORM:
                         modeTypeComment = sClassRem +
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBAFormModule\n" ) );
                         break;
-                    case ModuleType::Document:
+                    case ModuleType::DOCUMENT:
                         modeTypeComment = sClassRem +
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBADocumentModule\n" ) );
                         break;
-                    case ModuleType::Normal:
+                    case ModuleType::NORMAL:
                         modeTypeComment = sClassRem +
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBAModule\n" ) );
                         break;
-                    case ModuleType::Unknown:
+                    case ModuleType::UNKNOWN:
                         modeTypeComment = sClassRem +
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBAUnknown\n" ) );
                         break;
@@ -360,7 +361,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                 if ( !bAsComment )
                 {
                     modeTypeComment = modeTypeComment + sVBAOption;
-                    if ( mType == ModuleType::Class )
+                    if ( mType == ModuleType::CLASS )
                         modeTypeComment = modeTypeComment + sClassOption;
 
                 }
@@ -443,7 +444,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                 for ( std::vector< String >::const_iterator it =  codeNames.begin(); it != codeNames.end(); ++it )
                 {
                     script::ModuleInfo sModuleInfo;
-                    sModuleInfo.ModuleType = ModuleType::Document;
+                    sModuleInfo.ModuleType = ModuleType::DOCUMENT;
                     moduleInfos[ *it ] = sModuleInfo;
                     moduleData[ *it ] = uno::makeAny( sVBAOption );
                 }
@@ -455,13 +456,13 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                 if ( it_info != moduleInfos.end() )
                 {
                     ModuleInfo& sModuleInfo = it_info->second;
-                    if ( sModuleInfo.ModuleType == ModuleType::Form )
+                    if ( sModuleInfo.ModuleType == ModuleType::FORM )
                         // hack, the module ( imo document basic should...
                         // know the XModel... ) but it doesn't
                         sModuleInfo.ModuleObject.set( rDocSh.GetModel(), UNO_QUERY );
                     //  document modules, we should be able to access
                     //  the api objects at this time
-                    else if ( sModuleInfo.ModuleType == ModuleType::Document )
+                    else if ( sModuleInfo.ModuleType == ModuleType::DOCUMENT )
                     {
                         if ( xVBACodeNamedObjectAccess.is() )
                         {
