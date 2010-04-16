@@ -94,8 +94,6 @@ SRSFILELIST=\
                 $(SRS)$/basicide.srs \
                 $(SRS)$/dlged.srs
 
-SRSFILELIST+=   $(SOLARCOMMONRESDIR)$/sfx.srs
-
 RESLIB1NAME=basctl
 RESLIB1IMAGES =$(PRJ)$/res
 RESLIB1SRSFILES= $(SRSFILELIST)

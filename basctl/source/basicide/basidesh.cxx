@@ -90,7 +90,7 @@ using ::rtl::OUString;
 
 TYPEINIT1( BasicIDEShell, SfxViewShell );
 
-SFX_IMPL_VIEWFACTORY( BasicIDEShell, IDEResId( SVX_INTERFACE_BASIDE_VIEWSH ) )
+SFX_IMPL_VIEWFACTORY( BasicIDEShell )
 {
     SFX_VIEW_REGISTRATION( BasicDocShell );
 }

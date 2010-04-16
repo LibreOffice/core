@@ -43,6 +43,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/minfitem.hxx>
+#include <sfx2/sfxresid.hxx>
 #include <svl/stritem.hxx>
 
 #include "cuires.hrc"
@@ -724,7 +725,6 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     , aResetButton            (this   , CUI_RES(BTN_RESET               ))
     , aLoadAccelConfigStr             ( CUI_RES( STR_LOADACCELCONFIG ) )
     , aSaveAccelConfigStr             ( CUI_RES( STR_SAVEACCELCONFIG ) )
-    , aFilterAllStr                   ( CUI_RES( STR_SFX_FILTERNAME_ALL ) )
     , aFilterCfgStr                   ( CUI_RES( STR_FILTERNAME_CFG ) )
     , m_bStylesInfoInitialized(sal_False)
     , m_xGlobal               ()
@@ -732,6 +732,8 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     , m_xAct                  ()
 {
     FreeResource();
+
+    aFilterAllStr = String( SfxResId( STR_SFX_FILTERNAME_ALL ) );
 
 // install handler functions
     aChangeButton.SetClickHdl( LINK( this, SfxAcceleratorConfigPage, ChangeHdl ));
