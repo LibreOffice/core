@@ -121,6 +121,7 @@ namespace svt { namespace table
     virtual void resizeColumn(const Point& rPoint ) = 0;
     virtual bool startResizeColumn(const Point& rPoint) = 0;
     virtual bool endResizeColumn(const Point& rPoint) = 0;
+    virtual bool isRowSelected(RowPos _nRow);
 
         virtual ~IAbstractTableControl() {};
     };

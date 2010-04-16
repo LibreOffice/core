@@ -71,6 +71,8 @@ namespace svt { namespace table
         ,m_pImpl( new TableControl_Impl( *this ) )
         ,m_bSelectionChanged(false)
     {
+        m_pImpl->getDataWindow()->SetMouseButtonDownHdl( LINK( this, TableControl, ImplMouseButtonDownHdl ) );
+        m_pImpl->getDataWindow()->SetMouseButtonUpHdl( LINK( this, TableControl, ImplMouseButtonUpHdl ) );
         m_pImpl->getDataWindow()->SetSelectHdl( LINK( this, TableControl, ImplSelectHdl ) );
         m_pAccessTable.reset(new ::svt::table::AccessibleTableControl_Impl());
     }
@@ -335,7 +337,7 @@ namespace svt { namespace table
 
 ::com::sun::star::uno::Any TableControl::GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const
 {
-    ::com::sun::star::uno::Any cellContent = ::com::sun::star::uno::Any(::rtl::OUString::createFromAscii(""));
+    ::com::sun::star::uno::Any cellContent(::com::sun::star::uno::Any(::rtl::OUString::createFromAscii("")));
     std::vector<std::vector< ::com::sun::star::uno::Any > >& aTableContent = GetModel()->getCellContent();
     if(&aTableContent)
         cellContent = aTableContent[_nRowPos][_nColPos];
@@ -554,6 +556,16 @@ IMPL_LINK( TableControl, ImplSelectHdl, void*, EMPTYARG )
 {
     Select();
     return 1;
+}
+IMPL_LINK( TableControl, ImplMouseButtonDownHdl, MouseEvent*, pData )
+{
+    CallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, pData );
+     return 1;
+}
+IMPL_LINK( TableControl, ImplMouseButtonUpHdl, MouseEvent*, pData )
+{
+     CallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONUP, pData );
+     return 1;
 }
 // -----------------------------------------------------------------------
 void TableControl::Select()

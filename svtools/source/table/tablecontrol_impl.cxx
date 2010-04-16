@@ -580,88 +580,89 @@ namespace svt { namespace table
         m_aColumnWidthsPixel.reserve( colCount );
         m_aAccColumnWidthsPixel.reserve( colCount );
         long accumulatedPixelWidth = 0;
-    double gridWidth = m_rAntiImpl.GetSizePixel().Width()-4;
-    if(m_pModel->hasRowHeaders())
-    {
-        TableMetrics rowHeaderWidth = m_pModel->getRowHeaderWidth();
-        gridWidth-= m_rAntiImpl.LogicToPixel( Size( rowHeaderWidth, 0 ), MAP_APPFONT ).Width();
-    }
-    if(m_pModel->hasVerticalScrollbar())
-    {
-        sal_Int32 scrollbarWidth = m_rAntiImpl.GetSettings().GetStyleSettings().GetScrollBarSize();
-        gridWidth-=scrollbarWidth;
-    }
-    double colWidthsSum = 0.0;
-    double colWithoutFixedWidthsSum = 0.0;
-    double minColWithoutFixedSum = 0.0;
-    for ( ColPos col = 0; col < colCount; ++col )
+        double gridWidth = m_rAntiImpl.GetOutputSizePixel().Width();
+        if(m_pModel->hasRowHeaders())
         {
-        PColumnModel pColumn = m_pModel->getColumnModel( col );
-        DBG_ASSERT( !!pColumn, "TableControl_Impl::impl_ni_updateColumnWidths: invalid column returned by the model!" );
-        if ( !pColumn )
-            continue;
-        TableMetrics colWidth = 0;
-        TableMetrics colPrefWidth = pColumn->getPreferredWidth();
-        bool bResizable = pColumn->isResizable();
-        if(pColumn->getMinWidth() == 0 && bResizable)
-        {
-            pColumn->setMinWidth(1);
-            minColWithoutFixedSum+=m_rAntiImpl.LogicToPixel( Size( 1, 0 ), MAP_APPFONT ).Width();
+            TableMetrics rowHeaderWidth = m_pModel->getRowHeaderWidth();
+            gridWidth-= m_rAntiImpl.LogicToPixel( Size( rowHeaderWidth, 0 ), MAP_APPFONT ).Width();
         }
-        if(pColumn->getMaxWidth() == 0 && bResizable)
-            pColumn->setMaxWidth(m_rAntiImpl.LogicToPixel( Size( (int)gridWidth, 0 ), MAP_APPFONT ).Width());
-        if( colPrefWidth != 0)
+        if(m_pModel->hasVerticalScrollbar())
         {
-            if(m_bResizingGrid)
+            sal_Int32 scrollbarWidth = m_rAntiImpl.GetSettings().GetStyleSettings().GetScrollBarSize();
+            gridWidth-=scrollbarWidth;
+        }
+        double colWidthsSum = 0.0;
+        double colWithoutFixedWidthsSum = 0.0;
+        double minColWithoutFixedSum = 0.0;
+        for ( ColPos col = 0; col < colCount; ++col )
+        {
+            PColumnModel pColumn = m_pModel->getColumnModel( col );
+            DBG_ASSERT( !!pColumn, "TableControl_Impl::impl_ni_updateColumnWidths: invalid column returned by the model!" );
+            if ( !pColumn )
+                continue;
+            TableMetrics colWidth = 0;
+            TableMetrics colPrefWidth = pColumn->getPreferredWidth();
+            bool bResizable = pColumn->isResizable();
+            if(pColumn->getMinWidth() == 0 && bResizable)
             {
-                colWidth = pColumn->getWidth();
-                pColumn->setPreferredWidth(0);
+                pColumn->setMinWidth(1);
+                minColWithoutFixedSum+=m_rAntiImpl.LogicToPixel( Size( 1, 0 ), MAP_APPFONT ).Width();
+            }
+            if(pColumn->getMaxWidth() == 0 && bResizable)
+                pColumn->setMaxWidth(m_rAntiImpl.LogicToPixel( Size( (int)gridWidth, 0 ), MAP_APPFONT ).Width());
+            if( colPrefWidth != 0)
+            {
+                if(m_bResizingGrid)
+                {
+                    colWidth = pColumn->getWidth();
+                    pColumn->setPreferredWidth(0);
+                }
+                else
+                {
+                    colWidth = colPrefWidth;
+                    pColumn->setWidth(colPrefWidth);
+                }
             }
             else
-            {
-                colWidth = colPrefWidth;
-                pColumn->setWidth(colPrefWidth);
-            }
+                colWidth = pColumn->getWidth();
+            long pixelWidth = m_rAntiImpl.LogicToPixel( Size( colWidth, 0 ), MAP_APPFONT ).Width();
+            if(bResizable && colPrefWidth == 0)
+                colWithoutFixedWidthsSum+=pixelWidth;
+            colWidthsSum+=pixelWidth;
         }
-        else
-            colWidth = pColumn->getWidth();
-        long pixelWidth = m_rAntiImpl.LogicToPixel( Size( colWidth, 0 ), MAP_APPFONT ).Width();
-        if(bResizable && colPrefWidth == 0)
-            colWithoutFixedWidthsSum+=pixelWidth;
-        colWidthsSum+=pixelWidth;
-    }
-    gridWidth = gridWidth - colWidthsSum + colWithoutFixedWidthsSum;
-    double scalingFactor = 1.0;
-    if(m_bResizingGrid)
-    {
-        if(gridWidth > (minColWithoutFixedSum+colWidthsSum - colWithoutFixedWidthsSum))
-            scalingFactor = gridWidth/colWithoutFixedWidthsSum;
-    }
-    else
-    {
-        if(colWidthsSum < gridWidth)
+        gridWidth = gridWidth - colWidthsSum + colWithoutFixedWidthsSum;
+        double scalingFactor = 1.0;
+        if(m_bResizingGrid)
         {
-            if(colWithoutFixedWidthsSum>0)
+            if(gridWidth > (minColWithoutFixedSum+colWidthsSum - colWithoutFixedWidthsSum))
                 scalingFactor = gridWidth/colWithoutFixedWidthsSum;
         }
-    }
-    long pixelWidth = 0;
-    for ( ColPos col = 0; col < colCount; ++col )
-    {
-        PColumnModel pColumn = m_pModel->getColumnModel( col );
-        DBG_ASSERT( !!pColumn, "TableControl_Impl::impl_ni_updateColumnWidths: invalid column returned by the model!" );
-        if ( !pColumn )
-            continue;
-        TableMetrics colWidth = pColumn->getWidth();
-        if(pColumn->isResizable() && pColumn->getPreferredWidth() == 0)
+        else
         {
-            colWidth*=scalingFactor;
-            pColumn->setWidth(colWidth);
+            if(colWidthsSum < gridWidth)
+            {
+                if(colWithoutFixedWidthsSum>0)
+                    scalingFactor = gridWidth/colWithoutFixedWidthsSum;
+            }
         }
-        pixelWidth = m_rAntiImpl.LogicToPixel( Size( colWidth, 0 ), MAP_APPFONT ).Width();
-        m_aColumnWidthsPixel.push_back( pixelWidth );
-        m_aAccColumnWidthsPixel.push_back( accumulatedPixelWidth += pixelWidth );
-    }
+        long pixelWidth = 0;
+        for ( ColPos i = 0; i < colCount; ++i )
+        {
+            PColumnModel pColumn = m_pModel->getColumnModel( i );
+            DBG_ASSERT( !!pColumn, "TableControl_Impl::impl_ni_updateColumnWidths: invalid column returned by the model!" );
+            if ( !pColumn )
+                continue;
+            TableMetrics colWidth = pColumn->getWidth();
+            if(pColumn->isResizable() && pColumn->getPreferredWidth() == 0)
+            {
+                colWidth*=scalingFactor;
+                //colWidth+=1;
+                pColumn->setWidth(colWidth);
+            }
+            pixelWidth = m_rAntiImpl.LogicToPixel( Size( colWidth, 0 ), MAP_APPFONT ).Width();
+            m_aColumnWidthsPixel.push_back( pixelWidth );
+            m_aAccColumnWidthsPixel.push_back( accumulatedPixelWidth += pixelWidth );
+        }
     }
 
     //--------------------------------------------------------------------
@@ -882,6 +883,11 @@ namespace svt { namespace table
             m_pScrollCorner->SetPosPixel( Point( aDataCellPlayground.Right() + 1, aDataCellPlayground.Bottom() + 1 ) );
             m_pScrollCorner->Show();
         }
+        else if(bHaveScrollCorner && bNeedScrollCorner)
+        {
+            m_pScrollCorner->SetPosPixel( Point( aDataCellPlayground.Right() + 1, aDataCellPlayground.Bottom() + 1 ) );
+            m_pScrollCorner->Show();
+        }
 
         // resize the data window
         m_pDataWindow->SetSizePixel( Size(
@@ -894,16 +900,22 @@ namespace svt { namespace table
     void TableControl_Impl::onResize()
     {
         DBG_CHECK_ME();
-    if(m_nRowCount != 0)
-    {
-        if(m_nColumnCount != 0)
+        if(m_nRowCount != 0)
         {
-            if(m_bResizingGrid)
-                impl_ni_updateColumnWidths();
-            invalidateRows();
-            m_bResizingGrid = true;
+            if(m_nColumnCount != 0)
+            {
+                if(m_bResizingGrid)
+                    impl_ni_updateColumnWidths();
+                invalidateRows();
+                m_bResizingGrid = true;
+            }
         }
-    }
+        else
+            //In the case that column headers are defined but data hasn't yet been set,
+            //only column headers will be shown
+            if(m_pModel->hasColumnHeaders())
+                if(m_nColHeaderHeightPixel>1)
+                    m_pDataWindow->SetSizePixel( m_rAntiImpl.GetOutputSizePixel());
     }
 
     //--------------------------------------------------------------------
@@ -920,23 +932,28 @@ namespace svt { namespace table
 
         // our current style settings, to be passed to the renderer
         const StyleSettings& rStyle = m_rAntiImpl.GetSettings().GetStyleSettings();
-    m_nRowCount = m_pModel->getRowCount();
-    TableSize nVisibleRows = impl_getVisibleRows(true);
-    TableSize nActualRows = m_nRowCount;
-    if(m_nRowCount>nVisibleRows)
-        nActualRows = nVisibleRows;
+        m_nRowCount = m_pModel->getRowCount();
+        TableSize nVisibleRows = impl_getVisibleRows(true);
+        TableSize nActualRows = m_nRowCount;
+        if(m_nRowCount>nVisibleRows)
+            nActualRows = nVisibleRows;
         // the area occupied by all (at least partially) visible cells, including
         // headers
         Rectangle aAllCellsWithHeaders;
         impl_getAllVisibleCellsArea( aAllCellsWithHeaders );
+
         // ............................
         // draw the header column area
-        if ( getModel()->hasColumnHeaders() )
+        if ( m_pModel->hasColumnHeaders() )
         {
             TableRowGeometry aHeaderRow( *this, Rectangle( Point( 0, 0 ),
                 aAllCellsWithHeaders.BottomRight() ), ROW_COL_HEADERS );
+            Rectangle aColRect(aHeaderRow.getRect());
+            //to avoid double lines when scrolling horizontally
+            if(m_nLeftColumn != 0)
+                --aColRect.Left();
             pRenderer->PaintHeaderArea(
-                *m_pDataWindow, aHeaderRow.getRect(), true, false, rStyle
+                *m_pDataWindow, aColRect, true, false, rStyle
             );
             // Note that strictly, aHeaderRow.getRect() also contains the intersection between column
             // and row header area. However, below we go to paint this intersection, again,
@@ -963,11 +980,14 @@ namespace svt { namespace table
         {
             aRowHeaderArea = aAllCellsWithHeaders;
             aRowHeaderArea.Right() = m_nRowHeaderWidthPixel - 1;
-        if(m_nTopRow+nActualRows>m_nRowCount)
-            aRowHeaderArea.Bottom() = m_nRowHeightPixel * (nActualRows -1)+ m_nColHeaderHeightPixel - 1;
-        else
-            aRowHeaderArea.Bottom() = m_nRowHeightPixel * nActualRows + m_nColHeaderHeightPixel - 1;
-        pRenderer->PaintHeaderArea(*m_pDataWindow, aRowHeaderArea, false, true, rStyle);
+            if(m_nTopRow+nActualRows>m_nRowCount)
+                aRowHeaderArea.Bottom() = m_nRowHeightPixel * (nActualRows -1)+ m_nColHeaderHeightPixel - 1;
+            else
+                aRowHeaderArea.Bottom() = m_nRowHeightPixel * nActualRows + m_nColHeaderHeightPixel - 1;
+            //to avoid double lines when scrolling vertically
+            if(m_nTopRow != 0)
+                --aRowHeaderArea.Top();
+            pRenderer->PaintHeaderArea(*m_pDataWindow, aRowHeaderArea, false, true, rStyle);
             // Note that strictly, aRowHeaderArea also contains the intersection between column
             // and row header area. However, below we go to paint this intersection, again,
             // so this hopefully doesn't hurt if we already paint it here.
@@ -976,8 +996,15 @@ namespace svt { namespace table
             {
                 TableCellGeometry aIntersection( *this, Rectangle( Point( 0, 0 ),
                     aAllCellsWithHeaders.BottomRight() ), COL_ROW_HEADERS, ROW_COL_HEADERS );
+                Rectangle aInters(aIntersection.getRect());
+                //to avoid double line when scrolling vertically
+                if( m_nTopRow != 0 )
+                {
+                    --aInters.Top();
+                    --aInters.Bottom();
+                }
                 pRenderer->PaintHeaderArea(
-                    *m_pDataWindow, aIntersection.getRect(), true, true, rStyle
+                    *m_pDataWindow, aInters, true, true, rStyle
                 );
             }
         }
@@ -990,34 +1017,46 @@ namespace svt { namespace table
         // paint all rows
         Rectangle aAllDataCellsArea;
         impl_getAllVisibleDataCellArea( aAllDataCellsArea );
-    ::std::vector< std::vector< ::com::sun::star::uno::Any > >& aCellContent = m_pModel->getCellContent();
+        ::std::vector< std::vector< ::com::sun::star::uno::Any > >& aCellContent = m_pModel->getCellContent();
         for ( TableRowGeometry aRowIterator( *this, aAllCellsWithHeaders, getTopRow() );
               aRowIterator.isValid();
               aRowIterator.moveDown() )
         {
             if ( _rUpdateRect.GetIntersection( aRowIterator.getRect() ).IsEmpty() )
-            continue;
+                continue;
             bool isActiveRow = ( aRowIterator.getRow() == getCurRow() );
-        bool isSelectedRow = false;
-        if(!m_nRowSelected.empty())
-        {
-            for(std::vector<RowPos>::iterator itSel=m_nRowSelected.begin();
-                itSel!=m_nRowSelected.end();++itSel)
+            bool isSelectedRow = false;
+            if(!m_nRowSelected.empty())
             {
-                if(*itSel == aRowIterator.getRow())
-                    isSelectedRow = true;
+                for(std::vector<RowPos>::iterator itSel=m_nRowSelected.begin();
+                    itSel!=m_nRowSelected.end();++itSel)
+                {
+                    if(*itSel == aRowIterator.getRow())
+                        isSelectedRow = true;
+                }
             }
-        }
+            Rectangle aRect = aRowIterator.getRect().GetIntersection( aAllDataCellsArea );
+            //to avoid double lines
+            if( aRowIterator.getRow() != 0 )
+                --aRect.Top();
+            else
+                if(m_nColHeaderHeightPixel>1)
+                    --aRect.Top();
+            if(m_nLeftColumn != 0)
+                --aRect.Left();
+            else
+                if(m_pModel->hasRowHeaders())
+                    --aRect.Left();
             // give the redenderer a chance to prepare the row
             pRenderer->PrepareRow( aRowIterator.getRow(), isActiveRow, isSelectedRow,
-            *m_pDataWindow, aRowIterator.getRect().GetIntersection( aAllDataCellsArea ), rStyle );
+            *m_pDataWindow, aRect, rStyle );
 
             // paint the row header
             if ( m_pModel->hasRowHeaders() )
             {
-            Rectangle aCurrentRowHeader( aRowHeaderArea.GetIntersection( aRowIterator.getRect() ) );
-            rtl::OUString rowHeaderName = m_pModel->getRowHeaderName()[aRowIterator.getRow()];
-            pRenderer->PaintRowHeader( isActiveRow, isSelectedRow, *m_pDataWindow, aCurrentRowHeader,
+                Rectangle aCurrentRowHeader( aRowHeaderArea.GetIntersection( aRowIterator.getRect() ) );
+                rtl::OUString rowHeaderName = m_pModel->getRowHeaderName()[aRowIterator.getRow()];
+                pRenderer->PaintRowHeader( isActiveRow, isSelectedRow, *m_pDataWindow, aCurrentRowHeader,
                     rStyle, rowHeaderName );
             }
             if ( !colCount )
@@ -1028,24 +1067,24 @@ namespace svt { namespace table
                   aCell.moveRight()
                 )
             {
-            bool isSelectedColumn = false;
-            Size siz = m_rAntiImpl.GetSizePixel();
-            ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >xGraphic;
-            ::com::sun::star::uno::Any rCellData = aCellContent[aRowIterator.getRow()][aCell.getColumn()];
-            if(rCellData>>=xGraphic)
-            {
-                Image* pImage = new Image(xGraphic);
-                if(pImage!=NULL)
-                    pRenderer->PaintCellImage( aCell.getColumn(), isSelectedRow || isSelectedColumn, isActiveRow,
+                bool isSelectedColumn = false;
+            //  Size siz = m_rAntiImpl.GetSizePixel();
+                ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >xGraphic;
+                ::com::sun::star::uno::Any rCellData = aCellContent[aRowIterator.getRow()][aCell.getColumn()];
+                if(rCellData>>=xGraphic)
+                {
+                    Image* pImage = new Image(xGraphic);
+                    if(pImage!=NULL)
+                        pRenderer->PaintCellImage( aCell.getColumn(), isSelectedRow || isSelectedColumn, isActiveRow,
                                 *m_pDataWindow, aCell.getRect(), rStyle, pImage );
-            }
-            else
-            {
-                ::rtl::OUString sContent = convertToString(rCellData);
-                pRenderer->PaintCellString( aCell.getColumn(), isSelectedRow || isSelectedColumn, isActiveRow,
+                }
+                else
+                {
+                    ::rtl::OUString sContent = convertToString(rCellData);
+                    pRenderer->PaintCellString( aCell.getColumn(), isSelectedRow || isSelectedColumn, isActiveRow,
                         *m_pDataWindow, aCell.getRect(), rStyle, sContent );
+                }
             }
-        }
         }
     }
     //--------------------------------------------------------------------
@@ -1454,10 +1493,12 @@ namespace svt { namespace table
         {
             Rectangle aCellRect;
             impl_getCellRect( m_nCurColumn, m_nCurRow, aCellRect );
-        if ( _bShow )
-            pRenderer->ShowCellCursor( *m_pDataWindow, aCellRect);
-        else
-            pRenderer->HideCellCursor( *m_pDataWindow, aCellRect);
+            if(!m_pModel->hasRowHeaders() && m_nCurColumn == 0)
+                aCellRect.Left()++;
+            if ( _bShow )
+                pRenderer->ShowCellCursor( *m_pDataWindow, aCellRect);
+            else
+                pRenderer->HideCellCursor( *m_pDataWindow, aCellRect);
         }
     }
 
@@ -1480,6 +1521,7 @@ namespace svt { namespace table
 
         TableCellGeometry aCell( *this, aAllCells, _nColumn, _nRow );
         _rCellRect = aCell.getRect();
+        _rCellRect.Top()--;_rCellRect.Left()--;
     }
     //-------------------------------------------------------------------------------
     RowPos TableControl_Impl::getCurrentRow(const Point& rPoint)
@@ -1497,9 +1539,7 @@ namespace svt { namespace table
                 {
                     newRowPos = i;
                     newColPos = j;
-                    if(newColPos == -1)
-                        m_nCurColumn = 0;
-                    else
+                    if(newColPos != -1)
                         m_nCurColumn = newColPos;
                     return newRowPos;
                 }
@@ -1617,13 +1657,18 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------
     void TableControl_Impl::invalidateRows()
     {
-    impl_ni_updateScrollbars();
-    TableSize nVisibleRows = impl_getVisibleRows(true);
-    if(m_nTopRow+nVisibleRows>m_nRowCount && m_nRowCount>=nVisibleRows)
-        m_nTopRow--;
-    else
-        m_nTopRow = 0;
-    m_pDataWindow->Invalidate();
+        impl_ni_updateScrollbars();
+        TableSize nVisibleRows = impl_getVisibleRows(true);
+        TableSize nVisibleCols = impl_getVisibleColumns(true);
+        if(m_nTopRow+nVisibleRows>m_nRowCount && m_nRowCount>=nVisibleRows)
+            m_nTopRow--;
+        else
+            m_nTopRow = 0;
+        if(m_nLeftColumn+nVisibleCols>m_nColumnCount && m_nColumnCount>=nVisibleCols)
+            m_nLeftColumn--;
+        else
+            m_nLeftColumn = 0;
+        m_pDataWindow->Invalidate();
     }
 
     //--------------------------------------------------------------------
@@ -1799,17 +1844,22 @@ namespace svt { namespace table
     //-------------------------------------------------------------------------------
     SelectionEngine* TableControl_Impl::getSelEngine()
     {
-    return m_pSelEngine;
+        return m_pSelEngine;
     }
     //-------------------------------------------------------------------------------
     TableDataWindow* TableControl_Impl::getDataWindow()
     {
-    return m_pDataWindow;
+        return m_pDataWindow;
     }
     //-------------------------------------------------------------------------------
     BOOL TableControl_Impl::isRowSelected(const ::std::vector<RowPos>& selectedRows, RowPos current)
     {
         return ::std::find(selectedRows.begin(),selectedRows.end(),current) != selectedRows.end();
+    }
+        //-------------------------------------------------------------------------------
+    bool TableControl_Impl::isRowSelected(RowPos current)
+    {
+        return ::std::find(m_nRowSelected.begin(),m_nRowSelected.end(),current) != m_nRowSelected.end();
     }
     //-------------------------------------------------------------------------------
     int TableControl_Impl::getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current)
@@ -1906,7 +1956,7 @@ namespace svt { namespace table
         //MouseButton was pressed but not yet released, mouse is moving
         if(m_bResizing)
         {
-            if(rPoint.X() > m_pDataWindow->GetSizePixel().Width() || rPoint.X() < m_aVisibleColumnWidthsPixel[resizingColumn]-newColWidth)
+            if(rPoint.X() > m_pDataWindow->GetOutputSizePixel().Width() || rPoint.X() < m_aVisibleColumnWidthsPixel[resizingColumn]-newColWidth)
                 aNewPointer = Pointer( POINTER_NOTALLOWED);
             else
                 aNewPointer = Pointer( POINTER_HSPLIT );
@@ -1915,7 +1965,7 @@ namespace svt { namespace table
             if(m_pModel->hasColumnHeaders())
                 lineHeight+= m_nColHeaderHeightPixel;
             lineHeight+=m_nRowHeightPixel*m_nRowCount;
-            int gridHeight = m_pDataWindow->GetSizePixel().Height();
+            int gridHeight = m_pDataWindow->GetOutputSizePixel().Height();
             if(lineHeight >= gridHeight)
                 lineHeight = gridHeight;
             m_pDataWindow->ShowTracking(Rectangle(Point(rPoint.X(),0), Size(1, lineHeight )),
@@ -2046,7 +2096,7 @@ namespace svt { namespace table
         }
         //when the sum of all visible columns and the next to the left column is smaller than
         //window width, then update m_nLeftColumn
-        if(widthsPixel<m_pDataWindow->GetSizePixel().Width())
+        if(widthsPixel<m_pDataWindow->GetOutputSizePixel().Width())
             m_nLeftColumn--;
     }
     //--------------------------------------------------------------------
@@ -2085,6 +2135,7 @@ namespace svt { namespace table
         impl_getAllVisibleDataCellArea(aRect);
         return aRect;
     }
+
     //--------------------------------------------------------------------
     IMPL_LINK( TableControl_Impl, OnScroll, ScrollBar*, _pScrollbar )
     {

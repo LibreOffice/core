@@ -190,6 +190,8 @@ namespace svt { namespace table
     void setCursorAtCurrentCell(const Point& rPoint);
     /** checks whether the vector with the selected rows contains the current row*/
     BOOL    isRowSelected(const ::std::vector<RowPos>& selectedRows, RowPos current);
+
+    bool    isRowSelected(RowPos current);
     /** returns the position of the current row in the selection vector */
     int getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current);
     /** _rCellRect contains the region, which should be invalidate after some action e.g. selecting row*/
@@ -201,7 +203,6 @@ namespace svt { namespace table
     /** updates the vector, which contains the selected rows after removing the row nRowPos*/
     void    removeSelectedRow(RowPos _nRowPos);
     void    invalidateRows();
-
         // IAbstractTableControl
         virtual void    hideCursor();
         virtual void    showCursor();

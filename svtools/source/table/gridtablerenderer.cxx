@@ -79,34 +79,21 @@ namespace svt { namespace table
         OSL_PRECOND( _bIsColHeaderArea || _bIsRowHeaderArea,
             "GridTableRenderer::PaintHeaderArea: invalid area flags!" );
 
-        // fill the rows with alternating background colors
         _rDevice.Push( PUSH_FILLCOLOR | PUSH_LINECOLOR);
-    Color background = m_pImpl->rModel.getHeaderBackgroundColor();
-    Color line = m_pImpl->rModel.getLineColor();
-    //default background and line color is white
-    //background and lines should have same color, that's means lines aren't visible
-    //in case line color isn't set and background color is set, this should be changed
-    if( background != 0xFFFFFF && line == 0xFFFFFF)
-    {
-        _rDevice.SetLineColor(background);
-        _rDevice.SetFillColor(background);
-    }
-    else
-    {
-        //if Line color is set, then it was user defined and should be visible
-        //if it wasn't set, it'll be the same as the default background color, so lines still won't be visible
-        _rDevice.SetLineColor(line);
-        _rDevice.SetFillColor(background);
-    }
+        Color background = m_pImpl->rModel.getHeaderBackgroundColor();
+        if( background != 0xFFFFFF)
+            _rDevice.SetFillColor(background);
+        else
+            _rDevice.SetFillColor(_rStyle.GetDialogColor());
+        _rDevice.SetLineColor(_rStyle.GetSeparatorColor());
         _rDevice.DrawRect( _rArea );
         // delimiter lines at bottom/right
         _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
         _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight() );
 
         _rDevice.Pop();
-    (void)_rStyle;
-    (void)_bIsColHeaderArea;
-    (void)_bIsRowHeaderArea;
+        (void)_bIsColHeaderArea;
+        (void)_bIsRowHeaderArea;
     }
 
     //--------------------------------------------------------------------
@@ -114,41 +101,30 @@ namespace svt { namespace table
         OutputDevice& _rDevice, const Rectangle& _rArea, const StyleSettings& _rStyle )
     {
         _rDevice.Push( PUSH_LINECOLOR);
-    //default background and line color is white
-    //background and lines should have same color, that's means lines aren't visible
-    //in case line color isn't set and background color is set, this should be changed
-    Color background = m_pImpl->rModel.getHeaderBackgroundColor();
-    Color line = m_pImpl->rModel.getLineColor();
-        if(line == 0xFFFFFF)
-        _rDevice.SetLineColor(_rStyle.GetShadowColor());
-    else
-        //if Line color is set, then it was user defined and should be visible
-        //if it wasn't set, it'll be the same as the default background color, so lines still won't be visible
-        _rDevice.SetLineColor(line);
+        _rDevice.SetLineColor(_rStyle.GetSeparatorColor());
         _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight());
 
         String sHeaderText;
-
         PColumnModel pColumn = m_pImpl->rModel.getColumnModel( _nCol );
         DBG_ASSERT( !!pColumn, "GridTableRenderer::PaintColumnHeader: invalid column model object!" );
         if ( !!pColumn )
             sHeaderText = pColumn->getName();
-    _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
-    ULONG nHorFlag = TEXT_DRAW_LEFT;
-    ULONG nVerFlag = TEXT_DRAW_TOP;
-    if(m_pImpl->rModel.getVerticalAlign() == 1)
-        nVerFlag = TEXT_DRAW_VCENTER;
-    else if(m_pImpl->rModel.getVerticalAlign() == 2)
-        nVerFlag = TEXT_DRAW_BOTTOM;
-    if(m_pImpl->rModel.getColumnModel(_nCol)->getHorizontalAlign() == 1)
-        nHorFlag = TEXT_DRAW_CENTER;
-    else if(m_pImpl->rModel.getColumnModel(_nCol)->getHorizontalAlign() == 2)
-        nHorFlag = TEXT_DRAW_RIGHT;
-    Rectangle aRect(_rArea);
-    aRect.Left()+=4; aRect.Right()-=4;
-    aRect.Top()+=4; aRect.Bottom()-=4;
-        _rDevice.DrawText( aRect, sHeaderText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
-    _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
+        _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
+        ULONG nHorFlag = TEXT_DRAW_LEFT;
+        ULONG nVerFlag = TEXT_DRAW_TOP;
+        if(m_pImpl->rModel.getVerticalAlign() == 1)
+            nVerFlag = TEXT_DRAW_VCENTER;
+        else if(m_pImpl->rModel.getVerticalAlign() == 2)
+            nVerFlag = TEXT_DRAW_BOTTOM;
+        if(m_pImpl->rModel.getColumnModel(_nCol)->getHorizontalAlign() == 1)
+            nHorFlag = TEXT_DRAW_CENTER;
+        else if(m_pImpl->rModel.getColumnModel(_nCol)->getHorizontalAlign() == 2)
+            nHorFlag = TEXT_DRAW_RIGHT;
+        Rectangle aRect(_rArea);
+        aRect.Left()+=4; aRect.Right()-=4;
+        aRect.Top()+=2; aRect.Bottom()-=2;
+            _rDevice.DrawText( aRect, sHeaderText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
+        _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
         _rDevice.Pop();
 
         (void)_bActive;
@@ -168,95 +144,75 @@ namespace svt { namespace table
         _rDevice.Push( PUSH_FILLCOLOR | PUSH_LINECOLOR);
 
         Color aRowBackground = m_pImpl->rModel.getOddRowBackgroundColor();
-    Color line =  m_pImpl->rModel.getLineColor();
-    Color aRowBackground2 = m_pImpl->rModel.getEvenRowBackgroundColor();
-    //if row is selected background color becomes blue, and lines should be also blue
-    //if they aren't user defined
-    if(_bSelected)
-    {
-        Color aSelected(_rStyle.GetHighlightColor());
-        aRowBackground = aSelected;
-        if(line == 0xFFFFFF)
-            _rDevice.SetLineColor(aRowBackground);
-        else
-            _rDevice.SetLineColor(line);
-    }
-    //if row not selected, check the cases whether user defined backgrounds are set
-    //and set line color to be the same
-    else
-    {
-        if(aRowBackground2 != 0xFFFFFF && _nRow%2)
+        Color line =  m_pImpl->rModel.getLineColor();
+        Color aRowBackground2 = m_pImpl->rModel.getEvenRowBackgroundColor();
+        //if row is selected background color becomes blue, and lines should be also blue
+        //if they aren't user defined
+        if(_bSelected)
         {
-            aRowBackground = aRowBackground2;
+            Color aSelected(_rStyle.GetHighlightColor());
+            aRowBackground = aSelected;
             if(line == 0xFFFFFF)
                 _rDevice.SetLineColor(aRowBackground);
             else
                 _rDevice.SetLineColor(line);
         }
-        //fill the rows with alternating background colors if second background color is specified
-        else if(aRowBackground != 0xFFFFFF && line == 0xFFFFFF)
-            _rDevice.SetLineColor(aRowBackground);
+        //if row not selected, check the cases whether user defined backgrounds are set
+        //and set line color to be the same
         else
         {
-            //if Line color is set, then it was user defined and should be visible
-            //if it wasn't set, it'll be the same as the default background color, so lines still won't be visible
-            _rDevice.SetLineColor(line);
+            if(aRowBackground2 != 0xFFFFFF && _nRow%2)
+            {
+                aRowBackground = aRowBackground2;
+                if(line == 0xFFFFFF)
+                    _rDevice.SetLineColor(aRowBackground);
+                else
+                    _rDevice.SetLineColor(line);
+            }
+            //fill the rows with alternating background colors if second background color is specified
+            else if(aRowBackground != 0xFFFFFF && line == 0xFFFFFF)
+                _rDevice.SetLineColor(aRowBackground);
+            else
+            {
+                //if Line color is set, then it was user defined and should be visible
+                //if it wasn't set, it'll be the same as the default background color, so lines still won't be visible
+                _rDevice.SetLineColor(line);
+            }
         }
-    }
-    Rectangle aRect(_rRowArea);
-    if(m_pImpl->rModel.hasColumnHeaders() || _nRow != 0)
-        --aRect.Top();
-    if(m_pImpl->rModel.hasRowHeaders())
-        --aRect.Left();
         _rDevice.SetFillColor( aRowBackground );
-        _rDevice.DrawRect( aRect );
+        _rDevice.DrawRect( _rRowArea );
 
         // TODO: active?
 
         _rDevice.Pop();
-    (void)_bActive;
+        (void)_bActive;
     }
 
     //--------------------------------------------------------------------
     void GridTableRenderer::PaintRowHeader( bool _bActive, bool _bSelected, OutputDevice& _rDevice, const Rectangle& _rArea,
         const StyleSettings& _rStyle, rtl::OUString& _rText )
     {
-        _rDevice.Push( PUSH_FILLCOLOR | PUSH_LINECOLOR);
-    //default background and line color is white
-    //background and lines should have same color, that's means lines aren't visible
-    //in case line color isn't set and background color is set, this should be changed
-    Color background = m_pImpl->rModel.getHeaderBackgroundColor();
-    Color line = m_pImpl->rModel.getLineColor();
-        if(background != 0xFFFFFF && line == 0xFFFFFF)
-    {
-        _rDevice.SetLineColor(background);
-    }
-    else
-    {
-        //if Line color is set, then it was user defined and should be visible
-        //if it wasn't set, it'll be the same as the default background color, so lines still won't be visible
-        _rDevice.SetLineColor(line);
-    }
+        _rDevice.Push( PUSH_LINECOLOR);
+        _rDevice.SetLineColor(_rStyle.GetSeparatorColor());
         _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
-    _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
-    ULONG nHorFlag = TEXT_DRAW_LEFT;
-    ULONG nVerFlag = TEXT_DRAW_TOP;
-    if(m_pImpl->rModel.getVerticalAlign() == 1)
-        nVerFlag = TEXT_DRAW_VCENTER;
-    else if(m_pImpl->rModel.getVerticalAlign() == 2)
-        nVerFlag = TEXT_DRAW_BOTTOM;
-    if(m_pImpl->rModel.getColumnModel(0)->getHorizontalAlign() == 1)
-        nHorFlag = TEXT_DRAW_CENTER;
-    else if(m_pImpl->rModel.getColumnModel(0)->getHorizontalAlign() == 2)
-        nHorFlag = TEXT_DRAW_RIGHT;
-    Rectangle aRect(_rArea);
-    aRect.Left()+=4; aRect.Right()-=4;
-    aRect.Top()+=4; aRect.Bottom()-=4;
+        _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
+        ULONG nHorFlag = TEXT_DRAW_LEFT;
+        ULONG nVerFlag = TEXT_DRAW_TOP;
+        if(m_pImpl->rModel.getVerticalAlign() == 1)
+            nVerFlag = TEXT_DRAW_VCENTER;
+        else if(m_pImpl->rModel.getVerticalAlign() == 2)
+            nVerFlag = TEXT_DRAW_BOTTOM;
+        if(m_pImpl->rModel.getColumnModel(0)->getHorizontalAlign() == 1)
+            nHorFlag = TEXT_DRAW_CENTER;
+        else if(m_pImpl->rModel.getColumnModel(0)->getHorizontalAlign() == 2)
+            nHorFlag = TEXT_DRAW_RIGHT;
+        Rectangle aRect(_rArea);
+        aRect.Left()+=4; aRect.Right()-=4;
+        aRect.Top()+=2; aRect.Bottom()-=2;
         _rDevice.DrawText( aRect, _rText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
         // TODO: active? selected?
         (void)_bActive;
         (void)_bSelected;
-    (void)_rStyle;
         //at the moment no special paint for selected row header
         _rDevice.Pop();
     }
@@ -330,7 +286,6 @@ namespace svt { namespace table
 
         (void)_bActive;
         // no special painting for the active cell at the moment
-    (void)_rStyle;
     }
 
     //--------------------------------------------------------------------
@@ -392,13 +347,12 @@ namespace svt { namespace table
             nHorFlag = TEXT_DRAW_RIGHT;
         Rectangle textRect(_rArea);
         textRect.Left()+=4; textRect.Right()-=4;
-        textRect.Top()+=4; textRect.Bottom()-=4;
+        textRect.Top()+=2; textRect.Bottom()-=2;
             _rDevice.DrawText( textRect, _rText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
         }
         _rDevice.Pop();
         (void)_bActive;
         // no special painting for the active cell at the moment
-    (void)_rStyle;
     }
 
     //--------------------------------------------------------------------

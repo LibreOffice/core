@@ -44,6 +44,7 @@ namespace svt { namespace table
     TableDataWindow::TableDataWindow( TableControl_Impl& _rTableControl )
         :Window( &_rTableControl.getAntiImpl() )
         ,m_rTableControl        ( _rTableControl )
+        ,m_nRowAlreadySelected( -1 )
     {
     }
 
@@ -75,13 +76,24 @@ namespace svt { namespace table
     //--------------------------------------------------------------------
     void TableDataWindow::MouseButtonDown( const MouseEvent& rMEvt )
     {
+        Point aPoint = rMEvt.GetPosPixel();
+        RowPos nCurRow = m_rTableControl.getCurrentRow(aPoint);
         if ( !m_rTableControl.getInputHandler()->MouseButtonDown( m_rTableControl, rMEvt ) )
             Window::MouseButtonDown( rMEvt );
         else
         {
-            Point aPoint = rMEvt.GetPosPixel();
-            if(m_rTableControl.getCurrentRow(aPoint) >= 0)
-                m_aSelectHdl.Call( NULL );
+            if(nCurRow >= 0 && m_rTableControl.getSelEngine()->GetSelectionMode() != NO_SELECTION)
+            {
+                if( m_nRowAlreadySelected != nCurRow )
+                {
+                    m_nRowAlreadySelected = nCurRow;
+                    m_aSelectHdl.Call( NULL );
+                }
+                else
+                    m_aMouseButtonDownHdl.Call((MouseEvent*) &rMEvt);
+            }
+            else
+                m_aMouseButtonDownHdl.Call((MouseEvent*) &rMEvt);
         }
         m_rTableControl.getAntiImpl().LoseFocus();
     }
@@ -90,6 +102,8 @@ namespace svt { namespace table
     {
         if ( !m_rTableControl.getInputHandler()->MouseButtonUp( m_rTableControl, rMEvt ) )
             Window::MouseButtonUp( rMEvt );
+        else
+            m_aMouseButtonUpHdl.Call((MouseEvent*) &rMEvt);
         m_rTableControl.getAntiImpl().GetFocus();
     }
     //--------------------------------------------------------------------

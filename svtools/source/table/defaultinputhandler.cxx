@@ -77,21 +77,26 @@ namespace svt { namespace table
     {
         bool bHandled = false;
         Point aPoint = _rMEvt.GetPosPixel();
-        if(_rControl.getCurrentRow(aPoint) == -1)
+        RowPos nRow = _rControl.getCurrentRow(aPoint);
+        if(nRow == -1)
         {
             m_bResize = _rControl.startResizeColumn(aPoint);
             bHandled = true;
         }
-        else if(_rControl.getCurrentRow(aPoint) >= 0)
+        else if(nRow >= 0)
         {
             if(_rControl.getSelEngine()->GetSelectionMode() == NO_SELECTION)
             {
-                LoseFocus(_rControl);
                 _rControl.setCursorAtCurrentCell(aPoint);
                 bHandled = true;
             }
             else
-                bHandled = _rControl.getSelEngine()->SelMouseButtonDown(_rMEvt);
+            {
+                if(!_rControl.isRowSelected(nRow))
+                    bHandled = _rControl.getSelEngine()->SelMouseButtonDown(_rMEvt);
+                else
+                    bHandled = true;
+            }
         }
         return bHandled;
     }
@@ -109,12 +114,12 @@ namespace svt { namespace table
             }
             else if(_rControl.getSelEngine()->GetSelectionMode() == NO_SELECTION)
             {
-                GetFocus(_rControl);
-                _rControl.setCursorAtCurrentCell(aPoint);
                 bHandled = true;
             }
             else
+            {
                 bHandled = _rControl.getSelEngine()->SelMouseButtonUp(_rMEvt);
+            }
         }
         else
         {
@@ -224,7 +229,6 @@ namespace svt { namespace table
         // TODO
         return false;
     }
-
 //........................................................................
 } } // namespace svt::table
 //........................................................................

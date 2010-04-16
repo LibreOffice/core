@@ -444,7 +444,6 @@ namespace svt { namespace table
             @param actWidth the given width of the table
         */
         virtual ScrollbarVisibility getHorizontalScrollbarVisibility(int overAllWidth, int actWidth) const = 0;
-
     virtual bool hasVerticalScrollbar() =0;
     virtual bool hasHorizontalScrollbar() = 0;
     /** fills cells with content

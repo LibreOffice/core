@@ -69,7 +69,10 @@ namespace svt { namespace table
     class SVT_DLLPUBLIC TableControl : public Control, public IAccessibleTable
     {
     private:
-        DECL_DLLPRIVATE_LINK( ImplSelectHdl, void* );
+    DECL_DLLPRIVATE_LINK( ImplMouseButtonDownHdl, MouseEvent* );
+    DECL_DLLPRIVATE_LINK( ImplMouseButtonUpHdl, MouseEvent* );
+
+    DECL_DLLPRIVATE_LINK( ImplSelectHdl, void* );
 
         TableControl_Impl*  m_pImpl;
         ::com::sun::star::uno::Sequence< sal_Int32 > m_nCols;
@@ -185,7 +188,6 @@ namespace svt { namespace table
     virtual void FillAccessibleStateSet(
         ::utl::AccessibleStateSetHelper& rStateSet,
     AccessibleTableControlObjType eObjType ) const;
-
     //// Window
     virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow );
     virtual void GrabFocus();
@@ -220,6 +222,7 @@ namespace svt { namespace table
     ::com::sun::star::uno::Sequence< ::rtl::OUString >& getTextForTooltip();
     void setTooltip(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aText, const ::com::sun::star::uno::Sequence< sal_Int32 >& nCols);
     void selectionChanged(bool _bChanged);
+
 
     protected:
     /// retrieves the XAccessible implementation associated with the GridControl instance

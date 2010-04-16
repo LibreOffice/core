@@ -127,9 +127,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
     ::vos::OGuard aGuard( GetMutex() );
 
     TableControl* pTable = (TableControl*)GetWindow();
-    const StyleSettings& rStyleSettings = GetWindow()->GetSettings().GetStyleSettings();
-    const com::sun::star::awt::FontDescriptor& aFont = VCLUnoHelper::CreateFontDescriptor( rStyleSettings.GetAppFont() );
-
+    sal_Int32 fontHeight = GetWindow()->GetTextHeight();
     switch( GetPropertyId( PropertyName ) )
     {
         case BASEPROPERTY_GRID_SELECTIONMODE:
@@ -293,7 +291,6 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                 }
                 else
                     throw GridInvalidDataException(rtl::OUString::createFromAscii("The data model isn't set!"), m_xDataModel);
-                sal_Int32 fontHeight = aFont.Height+8;
                 if(m_xDataModel->getRowHeight() == 0)
                     m_pTableModel->setRowHeight(fontHeight);
                 else
@@ -312,7 +309,6 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                     Sequence<Reference< XGridColumn > > columns = m_xColumnModel->getColumns();
                     std::vector<Reference< XGridColumn > > aNewColumns(
                         comphelper::sequenceToContainer<std::vector<Reference< XGridColumn > > >(columns));
-                    sal_Int32 fontHeight = aFont.Height+8;
                     if(m_xColumnModel->getColumnHeaderHeight() == 0)
                         m_pTableModel->setColumnHeaderHeight(fontHeight);
                     else
@@ -671,14 +667,7 @@ void SAL_CALL SVTXGridControl::deselectAllRows() throw (::com::sun::star::uno::R
 {
     TableControl* pTable = (TableControl*)GetWindow();
     std::vector<RowPos>& selectedRows = pTable->GetSelectedRows();
-    ::std::vector<RowPos>::iterator iter = selectedRows.begin();
-    sal_Bool bSelected = sal_False;
-    for(;iter!=selectedRows.end();iter++)
-    {
-        if(*iter == index)
-            bSelected = sal_True;
-    }
-    return bSelected;
+    return std::find(selectedRows.begin(),selectedRows.end(), index) != selectedRows.end();
 }
 
 void SAL_CALL SVTXGridControl::selectRow(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException)
