@@ -66,7 +66,6 @@ void SfxApplication::Registrations_Impl()
     // ChildWindows
     SfxRecordingFloatWrapper_Impl::RegisterChildWindow();
     SfxNavigatorWrapper::RegisterChildWindow( FALSE, NULL, SFX_CHILDWIN_NEVERHIDE );
-    ::sfx2::TaskPaneWrapper::RegisterChildWindow( FALSE );
     SfxPartChildWnd_Impl::RegisterChildWindow();
     SfxTemplateDialogWrapper::RegisterChildWindow(TRUE);
     SfxDockingWrapper::RegisterChildWindow();

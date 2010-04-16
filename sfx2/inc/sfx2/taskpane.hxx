@@ -50,7 +50,7 @@ namespace sfx2
     //==================================================================================================================
     //= TaskPaneWrapper
     //==================================================================================================================
-    class TaskPaneWrapper : public SfxChildWindow
+    class SFX2_DLLPUBLIC TaskPaneWrapper : public SfxChildWindow
     {
     public:
         TaskPaneWrapper(

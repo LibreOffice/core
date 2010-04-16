@@ -3946,7 +3946,7 @@ SfxBoolItem TaskPane SID_TASKPANE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
+    Asynchron;
 
     Readonly = FALSE,
 
