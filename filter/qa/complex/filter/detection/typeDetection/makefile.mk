@@ -81,10 +81,6 @@ CT_APP      = org.openoffice.Runner
         $(CLASSDIR)$/$(PACKAGE)$/files.csv : ALLDEP
 .ENDIF
 
-
-TST:
-    @echo "$(USE_SHELL)"
-
 .INCLUDE :  target.mk
 
 $(CLASSDIR)$/$(PACKAGE)$/preselectedFilter.csv : preselectedFilter.csv
@@ -109,16 +105,9 @@ $(CLASSDIR)$/$(PACKAGE)$/TypeDetection.props : TypeDetection.props
 
 # --- chmod --------------------------------------------------------
 
-.IF "$(USE_SHELL)" != "4nt"
 CHMOD :
     chmod 444 $(CLASSDIR)$/$(PACKAGE)$/*.csv 
     chmod 666 $(CLASSDIR)$/$(PACKAGE)$/*.props 
-.ELSE
-CHMOD :
-    echo erstmanix
-.ENDIF
-
-
 
 RUN: run
 
