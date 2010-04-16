@@ -82,10 +82,15 @@ namespace dbaccess
     void getColumnPositions(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxQueryColumns,
                             const ::com::sun::star::uno::Sequence< ::rtl::OUString>& _aColumnNames,
                             const ::rtl::OUString& _rsUpdateTableName,
-                            SelectColumnsMetaData& _rColumnNames /* out */);
+                            SelectColumnsMetaData& _rColumnAssignments /* out */);
+    void getColumnPositions(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxQueryColumns,
+                            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rColumnNames,
+                            const ::rtl::OUString& _rsUpdateTableName,
+                            SelectColumnsMetaData& _rColumnAssignments /* out */);
 
-    typedef ::std::pair<ORowSetRow,sal_Int32> OKeySetValue;
+    typedef ::std::pair<ORowSetRow,::std::pair<sal_Int32,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow> > > OKeySetValue;
     typedef ::std::map<sal_Int32,OKeySetValue > OKeySetMatrix;
+    typedef ::std::map<sal_Int32,ORowSetValueVector > OUpdatedParameter;
     // is used when the source supports keys
     class OKeySet : public OCacheSet
     {
@@ -94,9 +99,11 @@ namespace dbaccess
 
         ::std::vector< ::rtl::OUString >                        m_aAutoColumns;  // contains all columns which are autoincrement ones
 
+        OUpdatedParameter                                       m_aUpdatedParameter;    // contains all parameter which have been updated and are needed for refetching
         ORowSetValueVector                                      m_aParameterValueForCache;
         SelectColumnsMetaData*                                  m_pKeyColumnNames;      // contains all key column names
         SelectColumnsMetaData*                                  m_pColumnNames;         // contains all column names
+        SelectColumnsMetaData*                                  m_pParameterNames;      // contains all parameter names
         SelectColumnsMetaData*                                  m_pForeignColumnNames;  // contains all column names of the rest
         connectivity::OSQLTable                                 m_xTable; // reference to our table
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>    m_xTableKeys;
@@ -106,6 +113,7 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >   m_xComposer;
         ::rtl::OUString                                                                 m_sUpdateTableName;
         ::rtl::OUString                                                                 m_aSelectComposedTableName;
+        ::std::vector< ::rtl::OUString >                        m_aFilterColumns;
 
         sal_Bool m_bRowCountFinal;
 
@@ -125,8 +133,9 @@ namespace dbaccess
         *
         * \param _rInsertRow the row which was inserted
         * \param _rKeyRow The current key row of the row set.
+        + \param i_nBookmark The bookmark is used to update the parameter
         */
-        void copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow);
+        void copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow,sal_Int32 i_nBookmark);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getKeyColumns() const;
         void fillAllRows();
@@ -143,7 +152,7 @@ namespace dbaccess
                 const ORowSetValueVector& _aParameterValueForCache);
 
         // late ctor which can throw exceptions
-        virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet);
+        virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,const ::rtl::OUString& i_sRowSetFilter);
 
         // ::com::sun::star::sdbc::XRow
         virtual sal_Bool SAL_CALL wasNull(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

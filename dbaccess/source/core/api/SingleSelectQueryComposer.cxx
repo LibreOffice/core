@@ -47,6 +47,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
+#include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 /** === end UNO includes === **/
@@ -708,13 +709,28 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         }
         catch( const Exception& ) { }
 
-        if ( !xResultSetMeta.is() )
+        try
         {
-            xStatement.reset( Reference< XStatement >( m_xConnection->createStatement(), UNO_QUERY_THROW ) );
-            Reference< XPropertySet > xStatementProps( xStatement, UNO_QUERY_THROW );
-            try { xStatementProps->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, makeAny( sal_False ) ); }
-            catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
-            xResMetaDataSup.set( xStatement->executeQuery( sSQL ), UNO_QUERY_THROW );
+            if ( !xResultSetMeta.is() )
+            {
+                xStatement.reset( Reference< XStatement >( m_xConnection->createStatement(), UNO_QUERY_THROW ) );
+                Reference< XPropertySet > xStatementProps( xStatement, UNO_QUERY_THROW );
+                try { xStatementProps->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, makeAny( sal_False ) ); }
+                catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
+                xResMetaDataSup.set( xStatement->executeQuery( sSQL ), UNO_QUERY_THROW );
+                xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_QUERY_THROW );
+            }
+        }
+        catch( const Exception& )
+        {
+            //@see issue http://qa.openoffice.org/issues/show_bug.cgi?id=110111
+            // access returns a different order of column names when executing select * from
+            // and asking the columns from the metadata.
+            Reference< XParameters > xParameters( xPreparedStatement, UNO_QUERY_THROW );
+            Reference< XIndexAccess > xPara = getParameters();
+            for(sal_Int32 i = 1;i <= xPara->getCount();++i)
+                xParameters->setNull(i,DataType::VARCHAR);
+            xResMetaDataSup.set(xPreparedStatement->executeQuery(), UNO_QUERY_THROW );
             xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_QUERY_THROW );
         }
 
