@@ -268,10 +268,10 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
         boolean bQueryCreated = false;
         if (this.CurDBCommandFieldSelection.getSelectedCommandType() == CommandType.TABLE)
         {
-            bQueryCreated = m_reportDocument.getRecordParser().oSQLQueryComposer.setQueryCommand(this.xWindow, false, false);
+            bQueryCreated = m_reportDocument.getRecordParser().getSQLQueryComposer().setQueryCommand(this.xWindow, false, false);
 
             m_reportDocument.setCommandType(CommandType.COMMAND);
-            String sQuery = m_reportDocument.getRecordParser().oSQLQueryComposer.getQuery();
+            String sQuery = m_reportDocument.getRecordParser().getSQLQueryComposer().getQuery();
             m_reportDocument.setCommand(sQuery);
         }
         else
@@ -286,11 +286,11 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
                 {
                     // String sCommand = (String) oCommand.xPropertySet.getPropertyValue("Command");
                     bQueryCreated = (!sCommand.equals(""));
-                    m_reportDocument.getRecordParser().oSQLQueryComposer.m_xQueryAnalyzer.setQuery(sCommand);
-                    m_reportDocument.getRecordParser().oSQLQueryComposer.prependSortingCriteria();
+                    m_reportDocument.getRecordParser().getSQLQueryComposer().m_xQueryAnalyzer.setQuery(sCommand);
+                    m_reportDocument.getRecordParser().getSQLQueryComposer().prependSortingCriteria();
 // TODO: check with query
                     m_reportDocument.setCommandType(CommandType.COMMAND);
-                    m_reportDocument.setCommand(m_reportDocument.getRecordParser().oSQLQueryComposer.getQuery());
+                    m_reportDocument.setCommand(m_reportDocument.getRecordParser().getSQLQueryComposer().getQuery());
                     bQueryCreated = true;
                 }
                 else
@@ -479,7 +479,6 @@ public static XLogger getLogger()
 
             if ( m_reportDocument.getRecordParser().getConnection( m_wizardContext ) )
             {
-                m_reportDocument.getRecordParser().oSQLQueryComposer = new SQLQueryComposer(m_reportDocument.getRecordParser());
                 buildSteps();
 
                 m_reportDocument.checkInvariants();

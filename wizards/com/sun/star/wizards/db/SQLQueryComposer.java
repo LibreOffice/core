@@ -60,7 +60,7 @@ public class SQLQueryComposer
     // String m_sFromClause;
     public XSingleSelectQueryAnalyzer m_xQueryAnalyzer;
     Vector composedCommandNames = new Vector(1);
-    public XSingleSelectQueryComposer m_xQueryComposer;
+    private XSingleSelectQueryComposer m_xQueryComposer;
     XMultiServiceFactory xMSF;
     boolean bincludeGrouping = true;
 
@@ -160,10 +160,8 @@ public class SQLQueryComposer
         {
             for (int i = 0; i < CurDBMetaData.getFilterConditions().length; i++)
             {
-                String sCurFieldName = CurDBMetaData.getFilterConditions()[i][0].Name;
                 m_xQueryComposer.setStructuredFilter(CurDBMetaData.getFilterConditions());
             }
-            String s = m_xQueryAnalyzer.getQuery();
         }
         catch (Exception exception)
         {
@@ -270,9 +268,10 @@ public class SQLQueryComposer
         return m_xQueryAnalyzer.getQuery();
     }
 
-    private String getFromClause()
+    public String getFromClause()
     {
         String sFromClause = "FROM";
+        composedCommandNames.clear();
         String[] sCommandNames = CurDBMetaData.getIncludedCommandNames();
         for (int i = 0; i < sCommandNames.length; i++)
         {
@@ -291,20 +290,27 @@ public class SQLQueryComposer
 
     public boolean setQueryCommand(XWindow _xParentWindow, boolean _bincludeGrouping, boolean _baddAliasFieldNames)
     {
+        return setQueryCommand(_xParentWindow,_bincludeGrouping, _baddAliasFieldNames,true);
+    }
+    public boolean setQueryCommand(XWindow _xParentWindow, boolean _bincludeGrouping, boolean _baddAliasFieldNames, boolean addQuery)
+    {
         try
         {
             String s;
             bincludeGrouping = _bincludeGrouping;
-            String sFromClause = getFromClause();
-            String sSelectClause = getSelectClause(_baddAliasFieldNames);
-            String queryclause = sSelectClause + " " + sFromClause;
-            m_xQueryAnalyzer.setQuery(queryclause);
-            if (CurDBMetaData.getFilterConditions() != null)
+            if ( addQuery )
             {
-                if (CurDBMetaData.getFilterConditions().length > 0)
+                String sFromClause = getFromClause();
+                String sSelectClause = getSelectClause(_baddAliasFieldNames);
+                String queryclause = sSelectClause + " " + sFromClause;
+                m_xQueryAnalyzer.setQuery(queryclause);
+                if (CurDBMetaData.getFilterConditions() != null)
                 {
-                    CurDBMetaData.setFilterConditions(replaceConditionsByAlias(CurDBMetaData.getFilterConditions()));
-                    m_xQueryComposer.setStructuredFilter(CurDBMetaData.getFilterConditions());
+                    if (CurDBMetaData.getFilterConditions().length > 0)
+                    {
+                        CurDBMetaData.setFilterConditions(replaceConditionsByAlias(CurDBMetaData.getFilterConditions()));
+                        m_xQueryComposer.setStructuredFilter(CurDBMetaData.getFilterConditions());
+                    }
                 }
             }
             s = m_xQueryAnalyzer.getQuery();
@@ -333,6 +339,8 @@ public class SQLQueryComposer
     {
         FieldColumn CurFieldColumn = CurDBMetaData.getFieldColumnByDisplayName(_fieldname);
         CommandName curComposedCommandName = getComposedCommandByDisplayName(CurFieldColumn.getCommandName());
+        if ( curComposedCommandName == null )
+            return _fieldname;
         String curAliasName = curComposedCommandName.getAliasName();
         return quoteName(curAliasName) + "." + quoteName(CurFieldColumn.getFieldName());
     }
@@ -417,5 +425,9 @@ public class SQLQueryComposer
         {
             typeexception.printStackTrace(System.out);
         }
+    }
+    public XSingleSelectQueryComposer getQueryComposer()
+    {
+        return m_xQueryComposer;
     }
 }
