@@ -72,7 +72,7 @@ DEF1NAME=       $(SHL1TARGET)
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 SHL1DEPN=
 SHL1IMPLIB=     i$(SHL1TARGET)
-SHL1VERSIONMAP= exports.map
+SHL1VERSIONMAP= $(SOLARENV)/src/component.map
 
 # --- Targets ----------------------------------
 
