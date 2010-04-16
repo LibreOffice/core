@@ -172,7 +172,7 @@ namespace sd { namespace toolpanel
             }
         }
 
-        if ( !pViewFrame || !pViewFrame->HasChildWindow( SID_RIGHT_PANE ) )
+        if ( !pViewFrame || !pViewFrame->HasChildWindow( SID_TASKPANE ) )
             throw IllegalArgumentException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Illegal frame." ) ),
                 *this,
@@ -180,7 +180,7 @@ namespace sd { namespace toolpanel
             );
 
         // retrieve the task pane
-        ToolPanelChildWindow* pToolPanelWindow( dynamic_cast< ToolPanelChildWindow* >( pViewFrame->GetChildWindow( SID_RIGHT_PANE ) ) );
+        ToolPanelChildWindow* pToolPanelWindow( dynamic_cast< ToolPanelChildWindow* >( pViewFrame->GetChildWindow( SID_TASKPANE ) ) );
         if ( !pToolPanelWindow )
             throw IllegalArgumentException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No Impress document, or no Impress Task Pane." ) ),

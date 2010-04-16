@@ -809,7 +809,7 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
                 framework::FrameworkHelper::msSlideSorterURL);
             break;
 
-        case SID_RIGHT_PANE:
+        case SID_TASKPANE:
             mpImpl->SetPaneVisibility(
                 rRequest,
                 framework::FrameworkHelper::msRightPaneURL,
@@ -830,7 +830,7 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
             // The full screen mode is not supported.  Ignore the request.
             break;
 
-        case SID_TASK_PANE:
+        case SID_SHOW_TOOL_PANEL:
             mpImpl->ProcessTaskPaneSlot(rRequest);
             break;
 
@@ -1535,7 +1535,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                             xContext, FrameworkHelper::msLeftDrawPaneURL);
                         break;
 
-                    case SID_RIGHT_PANE:
+                    case SID_TASKPANE:
                         xResourceId = ResourceId::create(
                             xContext, FrameworkHelper::msRightPaneURL);
                         break;

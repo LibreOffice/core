@@ -45,7 +45,7 @@ namespace sd {
 
 SFX_IMPL_DOCKINGWINDOW(LeftPaneImpressChildWindow, SID_LEFT_PANE_IMPRESS)
 SFX_IMPL_DOCKINGWINDOW(LeftPaneDrawChildWindow, SID_LEFT_PANE_DRAW)
-SFX_IMPL_DOCKINGWINDOW( ToolPanelChildWindow, SID_RIGHT_PANE)
+SFX_IMPL_DOCKINGWINDOW( ToolPanelChildWindow, SID_TASKPANE)
 
 //===== PaneChildWindow =======================================================
 

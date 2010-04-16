@@ -99,7 +99,7 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:RightPane"/>
+      <menu:menuitem menu:id=".uno:TaskPane"/>
       <menu:menuitem menu:id=".uno:LeftPaneImpress"/>
             <menu:menuitem menu:id=".uno:AvailableToolbars"/>
             <menu:menuitem menu:id=".uno:StatusBarVisible"/>

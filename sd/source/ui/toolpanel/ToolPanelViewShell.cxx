@@ -34,6 +34,7 @@
 #include "taskpane/TaskPaneControlFactory.hxx"
 #include "controls/MasterPagesPanel.hxx"
 #include "LayoutMenu.hxx"
+#include "DrawDocShell.hxx"
 #include "controls/TableDesignPanel.hxx"
 #include "controls/CustomAnimationPanel.hxx"
 #include "controls/SlideTransitionPanel.hxx"
@@ -366,9 +367,13 @@ TYPEINIT1(ToolPanelViewShell, ViewShell);
 // ---------------------------------------------------------------------------------------------------------------------
 ToolPanelViewShell_Impl::InitialPanel ToolPanelViewShell_Impl::impl_determineInitialPanel()
 {
+    InitialPanel aPanelToActivate;
+    if ( GetAntiImpl().GetViewShellBase().GetDocShell()->GetDocumentType() == DOCUMENT_TYPE_DRAW )
+        // for Draw, rely on SFX's default handling, which is to activate the previously active panel
+        return aPanelToActivate;
+
     // Default to Layout panel, but check whether the requested configuration already contains a tool panel, in this case,
     // use that one.
-    InitialPanel aPanelToActivate;
     aPanelToActivate.sPanelResourceURL = FrameworkHelper::msLayoutTaskPanelURL;
     aPanelToActivate.bActivateDirectly = false;
     try

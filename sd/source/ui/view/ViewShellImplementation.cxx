@@ -200,7 +200,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             if (pFrame!=NULL && pFrame->GetDispatcher()!=NULL)
             {
                 pFrame->GetDispatcher()->Execute (
-                    SID_TASK_PANE,
+                    SID_SHOW_TOOL_PANEL,
                     SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                     &aMakeToolPaneVisible,
                     &aPanelId,
