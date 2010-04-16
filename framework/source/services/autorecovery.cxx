@@ -31,6 +31,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
+
 #include "services/autorecovery.hxx"
 
 //_______________________________________________
@@ -95,6 +96,8 @@
 
 #include <tools/urlobj.hxx>
 
+#include <fwkdllapi.h>
+
 //_______________________________________________
 // namespaces
 
@@ -103,6 +106,7 @@ namespace css = ::com::sun::star;
 #endif
 
 namespace fpf = ::framework::pattern::frame;
+
 
 namespace framework
 {

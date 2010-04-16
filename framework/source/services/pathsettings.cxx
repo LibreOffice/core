@@ -60,6 +60,8 @@
 #include <comphelper/configurationhelper.hxx>
 #include <unotools/configpathes.hxx>
 
+#include <fwkdllapi.h>
+
 // ______________________________________________
 //  non exported const
 

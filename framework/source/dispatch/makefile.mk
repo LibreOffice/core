@@ -50,7 +50,6 @@ SLOFILES=\
     $(SLO)$/dispatchinformationprovider.obj     \
     $(SLO)$/dispatchprovider.obj                \
     $(SLO)$/helpagentdispatcher.obj             \
-    $(SLO)$/interaction.obj                     \
     $(SLO)$/interceptionhelper.obj              \
     $(SLO)$/loaddispatcher.obj                  \
     $(SLO)$/mailtodispatcher.obj                \

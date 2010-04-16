@@ -36,7 +36,7 @@
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/frame/XFrame.hpp>
-
+#include <fwedllapi.h>
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
@@ -53,7 +53,7 @@ namespace framework
 {
 
 class BmkMenu_Impl;
-class BmkMenu : public AddonMenu
+class FWE_DLLPUBLIC BmkMenu : public AddonMenu
 {
     public:
                         enum BmkMenuType

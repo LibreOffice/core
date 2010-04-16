@@ -37,10 +37,11 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <rtl/ustring.hxx>
+#include <fwedllapi.h>
 
 namespace framework
 {
-    class UIConfigurationImporterOOo1x
+    class FWE_DLLPUBLIC UIConfigurationImporterOOo1x
     {
         public:
             static sal_Bool ImportCustomToolbars(

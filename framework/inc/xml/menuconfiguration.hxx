@@ -43,6 +43,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <fwedllapi.h>
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -73,7 +74,7 @@ const USHORT ITEMID_ADDONHELP           = FWK_SID_ADDONHELP;
 namespace framework
 {
 
-class MenuConfiguration
+class FWE_DLLPUBLIC MenuConfiguration
 {
     public:
         struct Attributes

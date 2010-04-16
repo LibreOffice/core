@@ -38,6 +38,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#include <fwedllapi.h>
 
 #define IMPLEMENTATIONNAME_ROOTACTIONTRIGGERCONTAINER   "com.sun.star.comp.ui.RootActionTriggerContainer"
 
@@ -45,7 +46,7 @@
 namespace framework
 {
 
-class RootActionTriggerContainer :  public PropertySetContainer,
+class FWE_DLLPUBLIC RootActionTriggerContainer :  public PropertySetContainer,
                                     public com::sun::star::lang::XMultiServiceFactory,
                                     public com::sun::star::lang::XServiceInfo,
                                     public com::sun::star::lang::XUnoTunnel,

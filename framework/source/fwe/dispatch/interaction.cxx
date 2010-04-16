@@ -51,6 +51,7 @@
 
 namespace framework{
 
+//template class FWE_DLLEXPORT ContinuationBase<typename com::sun::star::task::XInteractionApprove>;
 //_________________________________________________________________________________________________________________
 //  non exported const
 //_________________________________________________________________________________________________________________

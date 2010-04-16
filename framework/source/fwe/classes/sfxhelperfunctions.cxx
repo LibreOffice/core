@@ -31,9 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 
-#ifndef __FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_CXX_
 #include <classes/sfxhelperfunctions.hxx>
-#endif
 
 static pfunc_setToolBoxControllerCreator   pToolBoxControllerCreator   = NULL;
 static pfunc_setStatusBarControllerCreator pStatusBarControllerCreator = NULL;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,6 +37,7 @@
 
 #include <i18npool/lang.h>
 #include <svl/languageoptions.hxx>
+#include <fwidllapi.h>
 
 namespace framework
 {
@@ -46,19 +47,19 @@ inline bool IsScriptTypeMatchingToLanguage( sal_Int16 nScriptType, LanguageType 
     return 0 != (nScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ));
 }
 
-    
-class LanguageGuessingHelper
+
+class FWI_DLLPUBLIC LanguageGuessingHelper
 {
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLanguageGuessing >    m_xLanguageGuesser;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
-    
+
 public:
     LanguageGuessingHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceManager) : m_xServiceManager(_xServiceManager){}
 
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLanguageGuessing >  GetGuesser() const;
 };
 
-::rtl::OUString RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL
+FWI_DLLPUBLIC ::rtl::OUString RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&    _xServiceFactory
             ,::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >&        _xUICommandLabels
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame

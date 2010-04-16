@@ -49,6 +49,7 @@
 //_________________________________________________________________________________________________________________
 #include <osl/mutex.hxx>
 #include <vos/mutex.hxx>
+#include <fwidllapi.h>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -66,7 +67,7 @@ namespace framework{
                     of your implementation - because base classes are initialized by his order and before your
                     member! Thats why ist a good place to declare your thread help member so.
 *//*-*************************************************************************************************************/
-enum ELockType
+enum FWI_DLLPUBLIC ELockType
 {
     E_NOTHING       = 0 ,
     E_OWNMUTEX      = 1 ,
@@ -107,7 +108,7 @@ enum ELockType
 
     @devstatus      draft
 *//*-*************************************************************************************************************/
-class LockHelper : public  IMutex
+class FWI_DLLPUBLIC LockHelper : public  IMutex
                  , public  IRWLock
                  , private INonCopyable
 {

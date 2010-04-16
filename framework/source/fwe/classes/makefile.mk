@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.36.82.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -18,32 +18,45 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
+# version 3 along with OpenOffice.org.	If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..$/..
+PRJ=..$/..$/..
 
 PRJNAME=			framework
-TARGET=				fwk_threadhelp
-USE_DEFFILE=		TRUE
+TARGET=				fwk_fweclasses
 ENABLE_EXCEPTIONS=	TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :			settings.mk
 
+CDEFS+=-DFWE_DLLIMPLEMENTATION
+
 # --- Generate -----------------------------------------------------
 
-SLOFILES=			$(SLO)$/lockhelper.obj				\
-                    $(SLO)$/transactionmanager.obj
+SLOFILES=			\
+                    $(SLO)$/actiontriggercontainer.obj				\
+                    $(SLO)$/actiontriggerpropertyset.obj			\
+                    $(SLO)$/actiontriggerseparatorpropertyset.obj	\
+                    $(SLO)$/addonmenu.obj \
+                    $(SLO)$/addonsoptions.obj \
+                    $(SLO)$/bmkmenu.obj	\
+                    $(SLO)$/fwkresid.obj \
+                    $(SLO)$/imagewrapper.obj \
+                    $(SLO)$/menuextensionsupplier.obj \
+                    $(SLO)$/rootactiontriggercontainer.obj \
+                    $(SLO)$/sfxhelperfunctions.obj \
+                    
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :			target.mk
+

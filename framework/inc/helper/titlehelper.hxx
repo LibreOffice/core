@@ -55,6 +55,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <hash_map>
+#include <fwedllapi.h>
 
 //_______________________________________________
 // namespace
@@ -74,7 +75,7 @@ namespace framework{
 
     @threadsafe
  */
-class TitleHelper : private ::cppu::BaseMutex
+class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
                   , public  ::cppu::WeakImplHelper5< css::frame::XTitle                 ,
                                                      css::frame::XTitleChangeBroadcaster,
                                                      css::frame::XTitleChangeListener   ,

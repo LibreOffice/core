@@ -44,6 +44,8 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::awt;
 
+//struct SAL_DLLPUBLIC_IMPORT ::cppu::OBroadcastHelperVar< OMultiTypeInterfaceContainerHelper, OMultiTypeInterfaceContainerHelper::keyType >;
+
 // Handles for properties
 // (PLEASE SORT THIS FIELD, IF YOU ADD NEW PROPERTIES!)
 // We use an enum to define these handles, to use all numbers from 0 to nn and

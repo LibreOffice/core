@@ -33,7 +33,6 @@ PRJ=..
 PRJNAME=            framework
 TARGET=             framework
 
-USE_DEFFILE=        TRUE
 ENABLE_EXCEPTIONS=  TRUE
 NO_BSYMBOLIC=       TRUE
 GEN_HID=            TRUE
@@ -43,10 +42,17 @@ GEN_HID_OTHER=      TRUE
 
 .INCLUDE :  settings.mk
 
+USE_DEFFILE=
+SHL1USE_EXPORTS=name
+SHL2USE_EXPORTS=name
+SHL3USE_EXPORTS=name
+SHL4USE_EXPORTS=name
+SHL5USE_EXPORTS=name
+
+
 # --- internal import -------------------------------------------------
 
 LIB1TARGET=     $(SLB)$/fwiobj.lib
-
 LIB1OBJFILES=   \
                 $(SLO)$/converter.obj                           \
                 $(SLO)$/lockhelper.obj                          \
@@ -69,13 +75,11 @@ LIB1OBJFILES=   \
 # --- export library for sfx2 -------------------------------------------------
 
 LIB2TARGET=     $(SLB)$/fweobj.lib
-
 LIB2OBJFILES=   \
                 $(SLO)$/bmkmenu.obj                             \
                 $(SLO)$/eventsconfiguration.obj                 \
                 $(SLO)$/eventsdocumenthandler.obj               \
                 $(SLO)$/imageproducer.obj                       \
-                $(SLO)$/lockhelper.obj                          \
                 $(SLO)$/menuconfiguration.obj                   \
                 $(SLO)$/menudocumenthandler.obj                 \
                 $(SLO)$/saxnamespacefilter.obj                  \
@@ -110,11 +114,8 @@ LIB2OBJFILES=   \
 # --- import classes library ---------------------------------------------------
 
 SHL1TARGET=     fwi$(DLLPOSTFIX)
-
 SHL1IMPLIB=     ifwi
-
 SHL1LIBS=       $(LIB1TARGET)
-
 SHL1STDLIBS=    \
                 $(UNOTOOLSLIB)      \
                 $(CPPUHELPERLIB)    \
@@ -133,22 +134,11 @@ SHL1STDLIBS+=\
         $(KERNEL32LIB)
 .ENDIF
 
-SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=       $(SHL1TARGET)
-
-DEFLIB1NAME=    fwiobj
-DEF1DEPN=       $(MISC)$/$(SHL1TARGET).flt
-
-
 # --- export classes library ---------------------------------------------------
 
 SHL2TARGET=     fwe$(DLLPOSTFIX)
-
 SHL2IMPLIB=     ifwe
-
 SHL2LIBS=       $(LIB2TARGET)
-
 SHL2STDLIBS=    \
                 $(FWILIB)                           \
                 $(VCLLIB)                           \
@@ -162,20 +152,10 @@ SHL2STDLIBS=    \
                 $(VOSLIB)                           \
                 $(SALLIB)
 
-SHL2DEF=        $(MISC)$/$(SHL2TARGET).def
-SHL2DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN)
-
-DEF2NAME=       $(SHL2TARGET)
-
-DEFLIB2NAME=    fweobj
-DEF2DEPN=       $(MISC)$/$(SHL2TARGET).flt
-
 # --- light services library ----------------------------------------------------
 
 SHL3TARGET=     fwl$(DLLPOSTFIX)
-
 SHL3IMPLIB=     ifwl
-
 SHL3OBJS=       $(SLO)$/mediatypedetectionhelper.obj\
                 $(SLO)$/registertemp.obj            \
                 $(SLO)$/mailtodispatcher.obj        \
@@ -218,19 +198,10 @@ SHL3STDLIBS=    \
                 $(VCLLIB)                           \
                 $(SALLIB)
 
-SHL3DEF=        $(MISC)$/$(SHL3TARGET).def
-SHL3DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2TARGETN)
-
-DEF3NAME=       $(SHL3TARGET)
-
-SHL3VERSIONMAP= exports.map
-
 # --- services library ----------------------------------------------------
 
 SHL4TARGET=     fwk$(DLLPOSTFIX)
-
 SHL4IMPLIB=     ifwk
-
 SHL4OBJS=       \
                 $(SLO)$/acceleratorcache.obj                \
                 $(SLO)$/acceleratorconfiguration.obj        \
@@ -246,7 +217,6 @@ SHL4OBJS=       \
                 $(SLO)$/closedispatcher.obj         \
                 $(SLO)$/comboboxtoolbarcontroller.obj     \
                 $(SLO)$/complextoolbarcontroller.obj      \
-                $(SLO)$/configaccess.obj            \
                 $(SLO)$/containerquery.obj          \
                 $(SLO)$/contenthandler.obj          \
                 $(SLO)$/controlmenucontroller.obj   \
@@ -360,19 +330,10 @@ SHL4STDLIBS=    \
                 $(UCBHELPERLIB)                     \
                 $(I18NISOLANGLIB)
 
-SHL4DEF=        $(MISC)$/$(SHL4TARGET).def
-SHL4DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2IMPLIBN) $(SHL2TARGETN)
-
-DEF4NAME=       $(SHL4TARGET)
-
-SHL4VERSIONMAP= exports.map
-
 # --- services library ----------------------------------------------------
 
 SHL5TARGET=     fwm$(DLLPOSTFIX)
-
 SHL5IMPLIB=     ifwm
-
 SHL5OBJS=       \
                 $(SLO)$/helponstartup.obj   \
                 $(SLO)$/tabwinfactory.obj   \
@@ -391,40 +352,17 @@ SHL5STDLIBS=    \
                 $(CPPULIB)          \
                 $(SALLIB)
 
-SHL5DEF=        $(MISC)$/$(SHL5TARGET).def
-SHL5DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN)
-
-DEF5NAME=       $(SHL5TARGET)
-
-SHL5VERSIONMAP= exports.map
-
 RESLIB1NAME=        fwe
 RESLIB1IMAGES=      $(PRJ)$/res
 RESLIB1SRSFILES=    $(SRS)$/fwk_classes.srs \
                     $(SRS)$/fwk_services.srs \
 
+SHL2DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN)
+SHL3DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2TARGETN)
+SHL4DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2IMPLIBN) $(SHL2TARGETN)
+SHL5DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN)
+
 # --- Targets -----------------------------------------------------------------
 
 .INCLUDE :  target.mk
 
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo _Impl>$@
-    @echo WEP>>$@
-    @echo m_pLoader>$@
-    @echo _TI2>>$@
-    @echo _TI3>>$@
-    @echo LIBMAIN>>$@
-    @echo LibMain>>$@
-    @echo _STL::pair>>$@
-
-$(MISC)$/$(SHL2TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo _Impl>$@
-    @echo WEP>>$@
-    @echo m_pLoader>$@
-    @echo _TI2>>$@
-    @echo LIBMAIN>>$@
-    @echo LibMain>>$@

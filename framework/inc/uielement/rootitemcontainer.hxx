@@ -60,13 +60,12 @@
 #include <cppuhelper/interfacecontainer.hxx>
 
 #include <vector>
+#include <fwidllapi.h>
 
 namespace framework
 {
-
 class ConstItemContainer;
-class ItemContainer;
-class RootItemContainer :   public ::com::sun::star::lang::XTypeProvider            ,
+class FWI_DLLPUBLIC RootItemContainer : public ::com::sun::star::lang::XTypeProvider            ,
                             public ::com::sun::star::container::XIndexContainer     ,
                             public ::com::sun::star::lang::XSingleComponentFactory  ,
                             public ::com::sun::star::lang::XUnoTunnel               ,

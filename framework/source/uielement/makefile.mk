@@ -47,7 +47,6 @@ SLOFILES=           \
                     $(SLO)$/buttontoolbarcontroller.obj         \
                     $(SLO)$/comboboxtoolbarcontroller.obj       \
                     $(SLO)$/complextoolbarcontroller.obj        \
-                    $(SLO)$/constitemcontainer.obj              \
                     $(SLO)$/controlmenucontroller.obj           \
                     $(SLO)$/dropdownboxtoolbarcontroller.obj    \
                     $(SLO)$/edittoolbarcontroller.obj           \
@@ -57,7 +56,6 @@ SLOFILES=           \
                     $(SLO)$/generictoolbarcontroller.obj        \
                     $(SLO)$/headermenucontroller.obj            \
                     $(SLO)$/imagebuttontoolbarcontroller.obj    \
-                    $(SLO)$/itemcontainer.obj                   \
                     $(SLO)$/langselectionmenucontroller.obj     \
                     $(SLO)$/langselectionstatusbarcontroller.obj \
                     $(SLO)$/logoimagestatusbarcontroller.obj    \
@@ -70,7 +68,6 @@ SLOFILES=           \
                     $(SLO)$/objectmenucontroller.obj            \
                     $(SLO)$/progressbarwrapper.obj              \
                     $(SLO)$/recentfilesmenucontroller.obj       \
-                    $(SLO)$/rootitemcontainer.obj               \
                     $(SLO)$/simpletextstatusbarcontroller.obj   \
                     $(SLO)$/spinfieldtoolbarcontroller.obj      \
                     $(SLO)$/statusbar.obj                       \

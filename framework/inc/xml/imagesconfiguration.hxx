@@ -31,6 +31,7 @@
 #ifndef __FRAMEWORK_XML_IMAGESCONFIGURATION_HXX_
 #define __FRAMEWORK_XML_IMAGESCONFIGURATION_HXX_
 
+#include <fwedllapi.h>
 #include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
@@ -46,13 +47,13 @@
 namespace framework
 {
 
-enum ImageMaskMode
+enum FWE_DLLPUBLIC ImageMaskMode
 {
     ImageMaskMode_Color,
     ImageMaskMode_Bitmap
 };
 
-struct ImageItemDescriptor
+struct FWE_DLLPUBLIC ImageItemDescriptor
 {
     ImageItemDescriptor() : nIndex( -1 ) {}
 
@@ -60,7 +61,7 @@ struct ImageItemDescriptor
     long    nIndex;                     // index of the bitmap inside the bitmaplist
 };
 
-struct ExternalImageItemDescriptor
+struct FWE_DLLPUBLIC ExternalImageItemDescriptor
 {
     String  aCommandURL;                // URL command to dispatch
     String  aURL;                       // a URL to an external bitmap
@@ -72,7 +73,7 @@ SV_DECL_PTRARR_DEL( ImageItemListDescriptor, ImageItemDescriptorPtr, 10, 2)
 typedef ExternalImageItemDescriptor* ExternalImageItemDescriptorPtr;
 SV_DECL_PTRARR_DEL( ExternalImageItemListDescriptor, ExternalImageItemDescriptorPtr, 10, 2)
 
-struct ImageListItemDescriptor
+struct FWE_DLLPUBLIC ImageListItemDescriptor
 {
     ImageListItemDescriptor() : nMaskMode( ImageMaskMode_Color ),
                                 pImageItemList( 0 ) {}
@@ -91,7 +92,7 @@ struct ImageListItemDescriptor
 typedef ImageListItemDescriptor* ImageListItemDescriptorPtr;
 SV_DECL_PTRARR_DEL( ImageListDescriptor, ImageListItemDescriptorPtr, 10, 2)
 
-struct ImageListsDescriptor
+struct FWE_DLLPUBLIC ImageListsDescriptor
 {
     ImageListsDescriptor() : pImageList( 0 ),
                      pExternalImageList( 0 ) {}
@@ -101,7 +102,7 @@ struct ImageListsDescriptor
     ExternalImageItemListDescriptor*    pExternalImageList;
 };
 
-class ImagesConfiguration
+class FWE_DLLPUBLIC ImagesConfiguration
 {
     public:
         // #110897#

@@ -32,8 +32,9 @@
 #define __FRAMEWORK_CLASSES_MENUEXTENSIONSUPPLIER_HXX_
 
 #include <rtl/ustring.hxx>
+#include <fwedllapi.h>
 
-struct MenuExtensionItem
+struct FWE_DLLPUBLIC MenuExtensionItem
 {
     rtl::OUString aLabel;
     rtl::OUString aURL;
@@ -44,9 +45,9 @@ typedef MenuExtensionItem ( *pfunc_setMenuExtensionSupplier)();
 namespace framework
 {
 
-pfunc_setMenuExtensionSupplier SAL_CALL SetMenuExtensionSupplier( pfunc_setMenuExtensionSupplier pSetMenuExtensionSupplier );
+FWE_DLLPUBLIC pfunc_setMenuExtensionSupplier SAL_CALL SetMenuExtensionSupplier( pfunc_setMenuExtensionSupplier pSetMenuExtensionSupplier );
 
-MenuExtensionItem SAL_CALL GetMenuExtension();
+FWE_DLLPUBLIC MenuExtensionItem SAL_CALL GetMenuExtension();
 
 }
 

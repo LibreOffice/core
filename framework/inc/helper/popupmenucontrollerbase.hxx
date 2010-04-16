@@ -63,10 +63,11 @@
 #include <toolkit/awt/vclxmenu.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
+#include <fwidllapi.h>
 
 namespace framework
 {
-    class PopupMenuControllerBase :  public com::sun::star::lang::XTypeProvider           ,
+    class FWI_DLLPUBLIC PopupMenuControllerBase :  public com::sun::star::lang::XTypeProvider             ,
                                      public com::sun::star::lang::XServiceInfo            ,
                                      public ::com::sun::star::frame::XPopupMenuController ,
                                      public com::sun::star::lang::XInitialization         ,

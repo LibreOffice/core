@@ -1,6 +1,7 @@
 #ifndef __FRAMEWORK_CLASSES_STATUSBARCONFIGURATION_HXX_
 #define __FRAMEWORK_CLASSES_STATUSBARCONFIGURATION_HXX_
 
+#include <fwedllapi.h>
 #include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
@@ -14,7 +15,7 @@
 namespace framework
 {
 
-struct StatusBarItemDescriptor
+struct FWE_DLLPUBLIC StatusBarItemDescriptor
 {
     String  aURL;                       // URL command to dispatch
     long    nItemBits;                  // properties for this statusbar item (WinBits)
@@ -31,7 +32,7 @@ struct StatusBarItemDescriptor
 typedef StatusBarItemDescriptor* StatusBarItemDescriptorPtr;
 SV_DECL_PTRARR_DEL( StatusBarDescriptor, StatusBarItemDescriptorPtr, 10, 2)
 
-class StatusBarConfiguration
+class FWE_DLLPUBLIC StatusBarConfiguration
 {
     public:
         static sal_Bool LoadStatusBar(

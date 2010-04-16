@@ -36,11 +36,12 @@
 // #110897#
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/menu.hxx>
+#include <fwedllapi.h>
 
 
 namespace framework
 {
-    class ActionTriggerHelper
+    class FWE_DLLPUBLIC ActionTriggerHelper
     {
         public:
             // Fills the submitted menu with the structure contained in the second

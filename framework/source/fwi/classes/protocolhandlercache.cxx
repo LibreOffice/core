@@ -335,7 +335,7 @@ void HandlerCFGAccess::read( HandlerHash** ppHandler ,
             (**ppPattern)[*pItem] = lNames[nSource];
         }
 
-        // �nsert the handler info into the normal handler cache
+        // ï¿œnsert the handler info into the normal handler cache
         (**ppHandler)[lNames[nSource]] = aHandler;
         ++nSource;
     }

@@ -46,10 +46,8 @@ SLOFILES=           $(SLO)$/jobexecutor.obj     \
                     $(SLO)$/jobdata.obj         \
                     $(SLO)$/jobresult.obj       \
                     $(SLO)$/joburl.obj          \
-                    $(SLO)$/jobconst.obj        \
                     $(SLO)$/helponstartup.obj   \
                     $(SLO)$/shelljob.obj        \
-                    $(SLO)$/configaccess.obj
 
 # --- Targets ------------------------------------------------------
 

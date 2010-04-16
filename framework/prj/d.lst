@@ -27,6 +27,9 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\statusbar
 
 ..\%__SRC%\lib\ifwe.lib %_DEST%\lib%_EXT%\ifwe.lib
 ..\%__SRC%\lib\ifwi.lib %_DEST%\lib%_EXT%\ifwi.lib
+..\inc\fwedllapi.h %_DEST%\inc%_EXT%\fwedllapi.h
+..\inc\fwidllapi.h %_DEST%\inc%_EXT%\fwidllapi.h
+..\inc\fwkdllapi.h %_DEST%\inc%_EXT%\fwkdllapi.h
 ..\inc\helper\imageproducer.hxx %_DEST%\inc%_EXT%\framework\imageproducer.hxx
 ..\inc\helper\acceleratorinfo.hxx %_DEST%\inc%_EXT%\framework\acceleratorinfo.hxx
 ..\inc\helper\actiontriggerhelper.hxx %_DEST%\inc%_EXT%\framework\actiontriggerhelper.hxx

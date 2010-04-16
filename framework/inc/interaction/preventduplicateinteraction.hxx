@@ -31,6 +31,7 @@
 #ifndef __FRAMEWORK_INTERACTION_PREVENTDUPLICATEINTERACTION_HXX_
 #define __FRAMEWORK_INTERACTION_PREVENTDUPLICATEINTERACTION_HXX_
 
+#include <fwedllapi.h>
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
@@ -85,7 +86,7 @@ struct ThreadHelpBase2
         mutable ::osl::Mutex m_aLock;
 };
 
-class PreventDuplicateInteraction : private ThreadHelpBase2
+class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
                                     ,public ::cppu::WeakImplHelper1< css::task::XInteractionHandler >
 {
     //_____________________________________

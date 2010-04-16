@@ -50,6 +50,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <tools/datetime.hxx>
+#include <fwidllapi.h>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -65,7 +66,7 @@ namespace framework{
 //  exported definitions
 //_________________________________________________________________________________________________________________
 
-class Converter
+class FWI_DLLPUBLIC Converter
 {
     public:
         // Seq<Any> <=> Seq<beans.PropertyValue>

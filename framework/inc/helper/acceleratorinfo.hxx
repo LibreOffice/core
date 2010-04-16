@@ -34,6 +34,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <vcl/keycod.hxx>
 #include <rtl/ustring.hxx>
+#include <fwedllapi.h>
 
 namespace framework
 {

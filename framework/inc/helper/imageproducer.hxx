@@ -38,15 +38,16 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <vcl/image.hxx>
 #include <rtl/ustring.hxx>
+#include <fwedllapi.h>
 
 namespace framework
 {
 
 typedef Image ( *pfunc_getImage)( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast );
 
-pfunc_getImage SAL_CALL SetImageProducer( pfunc_getImage pGetImageFunc );
+pfunc_getImage FWE_DLLPUBLIC SAL_CALL SetImageProducer( pfunc_getImage pGetImageFunc );
 
-Image SAL_CALL GetImageFromURL( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast );
+Image FWE_DLLPUBLIC SAL_CALL GetImageFromURL( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast );
 
 }
 

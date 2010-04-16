@@ -41,7 +41,7 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
-
+#include <fwedllapi.h>
 //_________________________________________________________________________________________________________________
 //  types, enums, ...
 //_________________________________________________________________________________________________________________
@@ -84,7 +84,7 @@ namespace framework
 
 typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > MergeMenuDefinition;
 
-struct MergeMenuInstruction
+struct FWE_DLLPUBLIC MergeMenuInstruction
 {
     ::rtl::OUString     aMergePoint;
     ::rtl::OUString     aMergeCommand;
@@ -95,7 +95,7 @@ struct MergeMenuInstruction
 };
 typedef ::std::vector< MergeMenuInstruction > MergeMenuInstructionContainer;
 
-struct MergeToolbarInstruction
+struct FWE_DLLPUBLIC MergeToolbarInstruction
 {
     ::rtl::OUString     aMergeToolbar;
     ::rtl::OUString     aMergePoint;
@@ -135,7 +135,7 @@ class AddonsOptions_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class AddonsOptions
+class FWE_DLLPUBLIC AddonsOptions
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods

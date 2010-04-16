@@ -57,6 +57,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <fwedllapi.h>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -142,6 +143,8 @@ class ContinuationBase : public ::cppu::WeakImplHelper1< TContinuationType >
 
 };  // class ContinuationBase
 
+//template class FWE_DLLEXPORT ContinuationBase<typename com::sun::star::task::XInteractionApprove>;
+
 /*-************************************************************************************************************//**
     @short          declaration of some simple continuations
     @descr          These derived classes implements some simple continuations, which doesnt need and additional
@@ -180,7 +183,7 @@ typedef ContinuationBase< ::com::sun::star::task::XInteractionRetry > Continuati
     @devstatus      ready to use
     @threadsafe     no (used on once position only!)
 *//*-*************************************************************************************************************/
-class ContinuationFilterSelect : public ContinuationBase< ::com::sun::star::document::XInteractionFilterSelect >
+class FWE_DLLPUBLIC ContinuationFilterSelect : public ContinuationBase< ::com::sun::star::document::XInteractionFilterSelect >
 {
     // c++ interface
     public:
@@ -219,7 +222,7 @@ class ContinuationFilterSelect : public ContinuationBase< ::com::sun::star::docu
     @devstatus      ready to use
     @threadsafe     no (used on once position only!)
 *//*-*************************************************************************************************************/
-class RequestFilterSelect : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
+class FWE_DLLPUBLIC RequestFilterSelect : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
 {
     // c++ interface
     public:
@@ -254,7 +257,7 @@ class RequestFilterSelect : public ::cppu::WeakImplHelper1< ::com::sun::star::ta
     @devstatus      ready to use
     @threadsafe     no (used on once position only!)
 *//*-*************************************************************************************************************/
-class RequestAmbigousFilter : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
+class FWE_DLLPUBLIC RequestAmbigousFilter : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
 {
     // c++ interface
     public:
@@ -291,7 +294,7 @@ class RequestAmbigousFilter : public ::cppu::WeakImplHelper1< ::com::sun::star::
     @devstatus      ready to use
     @threadsafe     no (used on once position only!)
 *//*-*************************************************************************************************************/
-class InteractionRequest : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
+class FWE_DLLPUBLIC InteractionRequest : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
 {
     // c++ interface
     public:

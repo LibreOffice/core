@@ -43,6 +43,7 @@
 //_________________________________________________________________________________________________________________
 
 #include <vcl/menu.hxx>
+#include <fwedllapi.h>
 
 #define ADDONMENU_ITEMID_START       2000
 #define ADDONMENU_ITEMID_END         3000
@@ -50,7 +51,7 @@
 namespace framework
 {
 
-class AddonMenu : public PopupMenu
+class FWE_DLLPUBLIC AddonMenu : public PopupMenu
 {
     public:
                         AddonMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
@@ -61,7 +62,7 @@ class AddonMenu : public PopupMenu
 };
 
 class AddonMenuManager;
-class AddonPopupMenu : public AddonMenu
+class FWE_DLLPUBLIC AddonPopupMenu : public AddonMenu
 {
     public:
                                 ~AddonPopupMenu();
@@ -83,7 +84,7 @@ class AddonPopupMenu : public AddonMenu
     friend class AddonMenuManager;
 };
 
-class AddonMenuManager
+class FWE_DLLPUBLIC AddonMenuManager
 {
     public:
         enum MenuType

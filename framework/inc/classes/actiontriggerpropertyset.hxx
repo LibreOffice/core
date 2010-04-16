@@ -44,6 +44,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <fwedllapi.h>
 
 #define SERVICENAME_ACTIONTRIGGER "com.sun.star.ui.ActionTrigger"
 #define IMPLEMENTATIONNAME_ACTIONTRIGGER "com.sun.star.comp.ui.ActionTrigger"
@@ -51,7 +52,7 @@
 namespace framework
 {
 
-class ActionTriggerPropertySet :    public ThreadHelpBase                       ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+class FWE_DLLPUBLIC ActionTriggerPropertySet :  public ThreadHelpBase                       ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                                     public ::com::sun::star::lang::XServiceInfo ,
                                     public ::com::sun::star::lang::XTypeProvider,
                                     public ::cppu::OBroadcastHelper             ,

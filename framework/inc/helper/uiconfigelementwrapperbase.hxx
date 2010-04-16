@@ -61,11 +61,12 @@
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weak.hxx>
+#include <fwedllapi.h>
 
 namespace framework
 {
 
-class UIConfigElementWrapperBase : public ::com::sun::star::lang::XTypeProvider                  ,
+class FWE_DLLPUBLIC UIConfigElementWrapperBase : public ::com::sun::star::lang::XTypeProvider                  ,
                                    public ::com::sun::star::ui::XUIElement               ,
                                    public ::com::sun::star::ui::XUIElementSettings       ,
                                    public ::com::sun::star::lang::XInitialization                ,

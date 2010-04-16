@@ -51,6 +51,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <fwedllapi.h>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -58,7 +59,7 @@
 
 namespace framework{
 
-class ReadMenuDocumentHandlerBase : public ThreadHelpBase,  // Struct for right initalization of mutex member! Must be first of baseclasses.
+class FWE_DLLPUBLIC ReadMenuDocumentHandlerBase : public ThreadHelpBase,    // Struct for right initalization of mutex member! Must be first of baseclasses.
                                     public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
@@ -120,7 +121,7 @@ class ReadMenuDocumentHandlerBase : public ThreadHelpBase,  // Struct for right 
 };
 
 
-class OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBase
+class FWE_DLLPUBLIC OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBase
 {
     public:
         // #110897#
@@ -164,7 +165,7 @@ class OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBase
 };  // OReadMenuDocumentHandler
 
 
-class OReadMenuBarHandler : public ReadMenuDocumentHandlerBase
+class FWE_DLLPUBLIC OReadMenuBarHandler : public ReadMenuDocumentHandlerBase
 {
     public:
         // #110897#
@@ -211,7 +212,7 @@ class OReadMenuBarHandler : public ReadMenuDocumentHandlerBase
 };  // OReadMenuBarHandler
 
 
-class OReadMenuHandler : public ReadMenuDocumentHandlerBase
+class FWE_DLLPUBLIC OReadMenuHandler : public ReadMenuDocumentHandlerBase
 {
     public:
         OReadMenuHandler( const com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rMenuContainer,
@@ -249,7 +250,7 @@ class OReadMenuHandler : public ReadMenuDocumentHandlerBase
 }; // OReadMenuHandler
 
 
-class OReadMenuPopupHandler : public ReadMenuDocumentHandlerBase
+class FWE_DLLPUBLIC OReadMenuPopupHandler : public ReadMenuDocumentHandlerBase
 {
     public:
         OReadMenuPopupHandler( const com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rMenuContainer,
@@ -292,7 +293,7 @@ class OReadMenuPopupHandler : public ReadMenuDocumentHandlerBase
 }; // OReadMenuPopupHandler
 
 
-class OWriteMenuDocumentHandler
+class FWE_DLLPUBLIC OWriteMenuDocumentHandler
 {
     public:
         OWriteMenuDocumentHandler(

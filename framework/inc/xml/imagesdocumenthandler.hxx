@@ -31,6 +31,8 @@
 #ifndef __FRAMEWORK_XML_IMAGEDOCUMENTHANDLER_HXX_
 #define __FRAMEWORK_XML_IMAGEDOCUMENTHANDLER_HXX_
 
+#include <fwedllapi.h>
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -50,6 +52,7 @@
 #include <hash_map>
 #include <stdtypes.h>
 
+
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -59,7 +62,7 @@ namespace framework{
 //*****************************************************************************************************************
 // Hash code function for using in all hash maps of follow implementation.
 
-class OReadImagesDocumentHandler : private ThreadHelpBase,  // Struct for right initalization of lock member! Must be first of baseclasses.
+class FWE_DLLPUBLIC OReadImagesDocumentHandler : private ThreadHelpBase,    // Struct for right initalization of lock member! Must be first of baseclasses.
                                    public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
@@ -160,7 +163,7 @@ class OReadImagesDocumentHandler : private ThreadHelpBase,  // Struct for right 
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >    m_xLocator;
 };
 
-class OWriteImagesDocumentHandler : private ThreadHelpBase // Struct for right initalization of lock member! Must be first of baseclasses.
+class FWE_DLLPUBLIC OWriteImagesDocumentHandler : private ThreadHelpBase // Struct for right initalization of lock member! Must be first of baseclasses.
 {
     public:
         OWriteImagesDocumentHandler(

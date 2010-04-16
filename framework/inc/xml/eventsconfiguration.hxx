@@ -31,6 +31,7 @@
 #ifndef __FRAMEWORK_XML_EVENTSCONFIGURATION_HXX_
 #define __FRAMEWORK_XML_EVENTSCONFIGURATION_HXX_
 
+#include <fwedllapi.h>
 #include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
@@ -43,13 +44,13 @@
 namespace framework
 {
 
-struct EventsConfig
+struct FWE_DLLPUBLIC EventsConfig
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString >              aEventNames;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >   aEventsProperties;
 };
 
-class EventsConfiguration
+class FWE_DLLPUBLIC EventsConfiguration
 {
     public:
         // #110897#
