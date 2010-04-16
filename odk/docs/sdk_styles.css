@@ -1,7 +1,7 @@
 a { text-decoration: none; }
-a:link { color: #C44B01; }
+a:link { color: #0e85cd; }
 a:visited { color: #638093; }
-a:active { color: #9DCA12; }
+a:active { color: #4dadea; }
 
 .sdkbody { background-color: #FFFFFF;
 	   color: #000000;
@@ -109,7 +109,7 @@ a:active { color: #9DCA12; }
          font-weight: bold; }
 
 .thead { font-weight: bold;
-         background-image:url(../docs/images/bg_table.gif);
+         background-image:url(../docs/images/bg_table.png);
 	 backgorund-position: middle; }
 
 .navigate { border: 0; }
@@ -123,5 +123,8 @@ a:active { color: #9DCA12; }
 .content75 { width: 75%; }
 .content80 { width: 80%; }
 .content87 { width: 87%; }
+
+.centertext {align:center; text-align:center; font-size: 12;}
+.oraclelogo {vertical-align:middle;}
 
 
