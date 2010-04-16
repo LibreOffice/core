@@ -465,8 +465,10 @@ testcase tZORest
         wait 500
     catch
         Warnlog "#i56594#Shortcut selecting objects doesn't work"
-        Call hCloseDocument
-        goto endsub
+        Call gMouseClick ( 40, 40 )
+        Kontext "DrawingObjectbar"
+        Drehen.Click
+        wait 500
     endcatch
 
     printlog "  - Change Anchor"
