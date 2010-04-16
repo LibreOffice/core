@@ -40,10 +40,11 @@
 #include <wrtsh.hxx>
 #include <swundo.hxx>                   // fuer Undo-Ids
 #include <swdtflvr.hxx>
-
-#ifndef _WRTSH_HRC
+#include <svl/svtools.hrc>
+#include <svtools/svtdata.hxx>
+#include <svl/svtools.hrc>
+#include <svtools/svtdata.hxx>
 #include <wrtsh.hrc>
-#endif
 #include <sfx2/sfx.hrc>
 
 
@@ -131,7 +132,7 @@ String SwWrtShell::GetDoString( DoType eDoType ) const
     default:;//prevent warning
     }
 
-    aStr.Insert( String(ResId( nResStr, *SFX_APP()->GetSfxResManager())), 0 );
+    aStr.Insert( String( SvtResId( nResStr)), 0 );
     aStr += aUndoStr;
 
     return aStr;
@@ -175,7 +176,7 @@ String SwWrtShell::GetRepeatString() const
 
     if (aUndoStr.Len() > 0)
     {
-        aStr.Insert( ResId( STR_REPEAT, *SFX_APP()->GetSfxResManager()), 0 );
+        aStr.Insert( SvtResId( STR_REPEAT ), 0 );
         aStr += aUndoStr;
     }
 

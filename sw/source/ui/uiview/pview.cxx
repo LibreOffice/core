@@ -111,7 +111,7 @@
 using namespace ::com::sun::star;
 
 
-SFX_IMPL_VIEWFACTORY(SwPagePreView, SW_RES(STR_NONAME))
+SFX_IMPL_VIEWFACTORY(SwPagePreView)
 {
     SFX_VIEW_REGISTRATION(SwDocShell);
     SFX_VIEW_REGISTRATION(SwWebDocShell);

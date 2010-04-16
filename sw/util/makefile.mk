@@ -68,8 +68,7 @@ sw_res_files= \
     $(SRS)$/unocore.srs      \
     $(SRS)$/utlui.srs        \
     $(SRS)$/web.srs          \
-    $(SRS)$/wrtsh.srs        \
-    $(SOLARCOMMONRESDIR)$/sfx.srs
+    $(SRS)$/wrtsh.srs        
 
 RESLIB1NAME=sw
 RESLIB1IMAGES=$(PRJ)$/imglst $(PRJ)$/res
@@ -342,9 +341,9 @@ SHL4STDLIBS= \
 
 #target vba
 TARGET_VBA=vbaswobj
-SHL5TARGET=$(TARGET_VBA)$(DLLPOSTFIX).uno
+SHL5TARGET=$(TARGET_VBA).uno
 SHL5IMPLIB=     i$(TARGET_VBA)
-
+SHL5DLLPRE=
 SHL5VERSIONMAP=$(TARGET_VBA).map
 SHL5DEF=$(MISC)$/$(SHL5TARGET).def
 DEF5NAME=$(SHL5TARGET)

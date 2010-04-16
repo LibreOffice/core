@@ -57,14 +57,14 @@ extern sdecl::ServiceDecl const serviceDecl;
 
 extern "C"
 {
-    void SAL_CALL component_getImplementationEnvironment(
+    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
         const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
     {
         OSL_TRACE("In component_getImplementationEnv");
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    sal_Bool SAL_CALL component_writeInfo(
+    SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
         lang::XMultiServiceFactory * pServiceManager, registry::XRegistryKey * pRegistryKey )
     {
         OSL_TRACE("In component_writeInfo");
@@ -74,7 +74,7 @@ extern "C"
         globals::serviceDecl, document::serviceDecl, wrapformat::serviceDecl  );
     }
 
-    void * SAL_CALL component_getFactory(
+    SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
         const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager,
         registry::XRegistryKey * pRegistryKey )
     {

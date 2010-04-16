@@ -96,7 +96,7 @@
 #include <swslots.hxx>
 
 
-SFX_IMPL_VIEWFACTORY(SwWebView, SW_RES(STR_NONAME))
+SFX_IMPL_VIEWFACTORY(SwWebView)
 {
     SFX_VIEW_REGISTRATION(SwWebDocShell);
 }
