@@ -30,7 +30,7 @@ TARGET = cppunit
 .INCLUDE: settings.mk
 
 TARFILE_NAME = cppunit-1.12.1
-TARFILE_MD5=9f18d97ca99b4f095f5ff18139df59c3
+TARFILE_MD5=bd30e9cf5523cdfc019b94f5e1d7fd19
     # from <https://sourceforge.net/projects/cppunit/files/cppunit/1.12.1/
     #  cppunit-1.12.1.tar.gz/download>
 
