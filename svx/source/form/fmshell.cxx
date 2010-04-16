@@ -323,10 +323,6 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
                     if ( bModified && bUI )
                     {
                         QueryBox aQry(NULL, SVX_RES(RID_QRY_SAVEMODIFIED));
-                        if (bForBrowsing)
-                            aQry.AddButton(SVX_RES(RID_STR_NEW_TASK), RET_NEWTASK,
-                                BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
-
                         switch (aQry.Execute())
                         {
                             case RET_NO:
