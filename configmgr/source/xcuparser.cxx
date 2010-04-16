@@ -387,7 +387,7 @@ void XcuParser::handleItem(XmlReader & reader) {
     int finalizedLayer;
     rtl::Reference< Node > node(
         data_->resolvePathRepresentation(
-            path, &modificationPath_, &finalizedLayer));
+            path, 0, &modificationPath_, &finalizedLayer));
     if (!node.is()) {
         //TODO: Within Components::parseModificationLayer (but only there) it
         // can rightly happen that data is read that does not match a schema
