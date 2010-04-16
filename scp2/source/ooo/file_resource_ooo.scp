@@ -101,7 +101,6 @@ STD_RES_FILE( gid_File_Res_Sb, sb )
 STD_RES_FILE( gid_File_Res_Svl, svl )
 
 STD_RES_FILE( gid_File_Res_Svt, svt )
-STD_RES_FILE_ONLY( gid_File_Res_Svp, svp )
 
 STD_RES_FILE( gid_File_Res_Svx, svx )
 STD_RES_FILE( gid_File_Res_TextConversionDlgs, textconversiondlgs )
