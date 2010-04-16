@@ -47,13 +47,10 @@ ENABLE_EXCEPTIONS := TRUE
 SRS1NAME=misc
 SRC1FILES=\
     ehdl.src \
+    undo.src \
     helpagent.src \
     imagemgr.src      \
     langtab.src 
-
-SRS2NAME=ehdl
-SRC2FILES=\
-    errtxt.src
 
 SLOFILES=\
     $(SLO)$/acceleratorexecute.obj  \
