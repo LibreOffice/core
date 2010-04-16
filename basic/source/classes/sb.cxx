@@ -490,7 +490,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             }
         }
     }
-    SetModuleType( com::sun::star::script::ModuleType::Class );
+    SetModuleType( ModuleType::CLASS );
 }
 
 SbClassModuleObject::~SbClassModuleObject()
@@ -790,7 +790,7 @@ SbModule* StarBASIC::MakeModule( const String& rName, const String& rSrc )
 SbModule* StarBASIC::MakeModule32( const String& rName, const ::rtl::OUString& rSrc )
 {
     ModuleInfo mInfo;
-    mInfo.ModuleType = ModuleType::Normal;
+    mInfo.ModuleType = ModuleType::NORMAL;
     return MakeModule32(  rName, mInfo, rSrc );
 }
 SbModule* StarBASIC::MakeModule32( const String& rName, const ModuleInfo& mInfo, const rtl::OUString& rSrc )
@@ -800,17 +800,17 @@ SbModule* StarBASIC::MakeModule32( const String& rName, const ModuleInfo& mInfo,
     SbModule* p = NULL;
     switch ( mInfo.ModuleType )
     {
-        case ModuleType::Document:
+        case ModuleType::DOCUMENT:
             // In theory we should be able to create Object modules
             // in ordinary basic ( in vba mode thought these are create
             // by the application/basic and not by the user )
             p = new SbObjModule( rName, mInfo, isVBAEnabled() );
             break;
-        case ModuleType::Class:
+        case ModuleType::CLASS:
             p = new SbModule( rName, isVBAEnabled() );
-            p->SetModuleType( com::sun::star::script::ModuleType::Class );
+            p->SetModuleType( ModuleType::CLASS );
         break;
-        case ModuleType::Form:
+        case ModuleType::FORM:
             p = new SbUserFormModule( rName, mInfo, isVBAEnabled() );
         break;
         default:
@@ -995,7 +995,7 @@ SbxVariable* StarBASIC::Find( const String& rName, SbxClassType t )
             // Only variables qualified by the Module Name e.g. Sheet1.foo
             // should work for Documant && Class type Modules
             INT32 nType = p->GetModuleType();
-            if ( nType == com::sun::star::script::ModuleType::Document || nType == com::sun::star::script::ModuleType::Form )
+            if ( nType == ModuleType::DOCUMENT || nType == ModuleType::FORM )
                 continue;
 
             // otherwise check if the element is available

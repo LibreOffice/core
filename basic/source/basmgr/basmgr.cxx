@@ -67,7 +67,6 @@
 #include <com/sun/star/script/XStarBasicLibraryInfo.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
-#include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/XVBAModuleInfo.hpp>
 #include <com/sun/star/script/XVBACompat.hpp>
 

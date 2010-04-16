@@ -54,6 +54,7 @@
 #include <vos/mutex.hxx>
 #include <basic/sbobjmod.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/script/ModuleType.hpp>
 
 
 // for the bsearch
@@ -165,7 +166,7 @@ SbModule::SbModule( const String& rName,  BOOL bVBACompat )
 {
     SetName( rName );
     SetFlag( SBX_EXTSEARCH | SBX_GBLSEARCH );
-    SetModuleType( com::sun::star::script::ModuleType::Normal );
+    SetModuleType( script::ModuleType::NORMAL );
 }
 
 SbModule::~SbModule()
@@ -1503,7 +1504,7 @@ SbObjModule::SbObjModule( const String& rName, const com::sun::star::script::Mod
     : SbModule( rName, bIsVbaCompatible )
 {
     SetModuleType( mInfo.ModuleType );
-    if ( mInfo.ModuleType == script::ModuleType::Form )
+    if ( mInfo.ModuleType == script::ModuleType::FORM )
     {
         SetClassName( rtl::OUString::createFromAscii( "Form" ) );
     }

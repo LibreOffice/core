@@ -29,6 +29,7 @@
 #include "precompiled_basic.hxx"
 #include <basic/sbx.hxx>
 #include "sbcomp.hxx"
+#include <com/sun/star/script/ModuleType.hpp>
 
 struct SbiParseStack {              // "Stack" fuer Statement-Blocks
     SbiParseStack* pNext;           // Chain
@@ -140,7 +141,7 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
     bNewGblDefs =
     bSingleLineIf =
     bExplicit = FALSE;
-    bClassModule = ( pm->GetModuleType() == com::sun::star::script::ModuleType::Class );
+    bClassModule = ( pm->GetModuleType() == com::sun::star::script::ModuleType::CLASS );
     OSL_TRACE("Parser - %s, bClassModule %d", rtl::OUStringToOString( pm->GetName(), RTL_TEXTENCODING_UTF8 ).getStr(), bClassModule );
     pPool    = &aPublics;
     for( short i = 0; i < 26; i++ )
@@ -756,7 +757,7 @@ void SbiParser::Option()
 
         case CLASSMODULE:
             bClassModule = TRUE;
-            aGen.GetModule().SetModuleType( com::sun::star::script::ModuleType::Class );
+            aGen.GetModule().SetModuleType( com::sun::star::script::ModuleType::CLASS );
             break;
         case VBASUPPORT:
             if( Next() == NUMBER )

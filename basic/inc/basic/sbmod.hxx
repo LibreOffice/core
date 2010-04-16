@@ -31,10 +31,7 @@
 #include <basic/sbdef.hxx>
 #include <basic/sbxobj.hxx>
 #include <basic/sbxdef.hxx>
-#ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
-#endif
-#include <com/sun/star/script/ModuleType.hpp>
 
 class SbMethod;
 class SbProperty;

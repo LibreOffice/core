@@ -32,6 +32,7 @@
 #include "sbcomp.hxx"
 #include "image.hxx"
 #include <limits>
+#include <com/sun/star/script/ModuleType.hpp>
 
 // nInc ist die Inkrementgroesse der Puffer
 
@@ -129,7 +130,7 @@ void SbiCodeGen::Save()
         p->SetFlag( SBIMG_EXPLICIT );
 
     int nIfaceCount = 0;
-    if( rMod.mnType == com::sun::star::script::ModuleType::Class )
+    if( rMod.mnType == com::sun::star::script::ModuleType::CLASS )
     {
                 OSL_TRACE("COdeGen::save() classmodule processing");
         rMod.bIsProxyModule = true;
@@ -156,8 +157,8 @@ void SbiCodeGen::Save()
     {
         pCLASSFAC->RemoveClassModule( &rMod );
         // Only a ClassModule can revert to Normal
-                if ( rMod.mnType == com::sun::star::script::ModuleType::Class )
-            rMod.mnType = com::sun::star::script::ModuleType::Normal;
+                if ( rMod.mnType == com::sun::star::script::ModuleType::CLASS )
+            rMod.mnType = com::sun::star::script::ModuleType::NORMAL;
         rMod.bIsProxyModule = false;
     }
     if( pParser->bText )
