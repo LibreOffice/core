@@ -210,11 +210,8 @@ INCLUDEFILELIST=\
     $(INCOUT)/com/sun/star/uno/Type.h \
     $(INCOUT)/com/sun/star/uno/Type.hxx
 
-QOB=\(
-QCB=\)
-
 INCLUDELIST:=\
-    {$(subst,/,/ $(shell @$(FIND) $(INCLUDETOPDIRLIST) -type f ! $(QOB) -name "*~" -o -name "*build.lst" -o -name "*deliver.log" $(QCB) -print))} \
+    {$(shell @$(FIND) $(INCLUDETOPDIRLIST) -type f ! \( -name "*~" -o -name "*build.lst" -o -name "*deliver.log" \) -print)} \
     $(INCLUDEFILELIST)
 
 SDK_CONTENT_CHECK_FILES= \
