@@ -564,7 +564,7 @@ SbxDataType unoToSbxType( const Reference< XIdlClass >& xIdlClass )
     }
     return eRetType;
 }
-void unoToSbxValue( SbxVariable* pVar, const Any& aValue );
+
 static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int32 >& indices, Sequence< sal_Int32 >& sizes, const Any& aValue, sal_Int32& dimension, sal_Bool bIsZeroIndex, Type* pType = NULL )
 {
     Type aType = aValue.getValueType();

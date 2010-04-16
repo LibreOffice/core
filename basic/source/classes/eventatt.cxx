@@ -62,6 +62,7 @@
 #include <sbunoobj.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbmeth.hxx>
+#include <basic/sbuno.hxx>
 #include <runtime.hxx>
 #include <sbintern.hxx>
 
@@ -83,11 +84,6 @@ using namespace ::com::sun::star::io;
 using namespace ::cppu;
 using namespace ::osl;
 
-
-
-//===================================================================
-void unoToSbxValue( SbxVariable* pVar, const Any& aValue );
-Any sbxToUnoValue( SbxVariable* pVar );
 
 
 Reference< frame::XModel >  getModelFromBasic( SbxObject* pBasic )
