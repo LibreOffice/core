@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: xformsexport.hxx,v $
- * $Revision: 1.7 $
+ * $RCSfile: xmloff/HatchStyle.hxx,v $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,37 +27,48 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _XMLOFF_XFORMSEXPORT_HXX
-#define _XMLOFF_XFORMSEXPORT_HXX
 
+#ifndef _XMLOFF_HATCHSTYLE_HXX
+#define _XMLOFF_HATCHSTYLE_HXX
+
+#include "sal/config.h"
 #include "xmloff/dllapi.h"
+#include <sal/types.h>
 
+class SvXMLImport;
 class SvXMLExport;
 namespace com { namespace sun { namespace star {
-    namespace uno { template<typename T> class Reference; }
-    namespace uno { template<typename T> class Sequence; }
-    namespace frame { class XModel; }
-    namespace beans { class XPropertySet; struct PropertyValue; }
-    namespace container { class XNameAccess; }
+    namespace uno { template<class A> class Reference; }
+    namespace xml { namespace sax { class XAttributeList; } }
+    namespace uno { class Any; }
 } } }
 namespace rtl { class OUString; }
 
 
-/** export an XForms model. */
-void SAL_DLLPRIVATE exportXForms( SvXMLExport& );
+class XMLOFF_DLLPUBLIC XMLHatchStyleImport
+{
+    SvXMLImport& rImport;
 
-rtl::OUString SAL_DLLPRIVATE getXFormsBindName( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xBinding );
+public:
+    XMLHatchStyleImport( SvXMLImport& rImport );
+    ~XMLHatchStyleImport();
 
-rtl::OUString SAL_DLLPRIVATE getXFormsListBindName( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xBinding );
+    sal_Bool importXML(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        ::com::sun::star::uno::Any& rValue,
+        ::rtl::OUString& rStrName );
+};
 
-rtl::OUString SAL_DLLPRIVATE getXFormsSubmissionName( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xBinding );
+class XMLOFF_DLLPUBLIC XMLHatchStyleExport
+{
+    SvXMLExport& rExport;
 
+public:
+    XMLHatchStyleExport( SvXMLExport& rExport );
+    ~XMLHatchStyleExport();
 
-/** returns the settings of the given XForms container, to be exported as document specific settings
-*/
-void XMLOFF_DLLPUBLIC getXFormsSettings(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rXForms,
-              ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _out_rSettings
-    );
+    sal_Bool exportXML( const ::rtl::OUString& rStrName, const ::com::sun::star::uno::Any& rValue );
+};
 
-#endif
+#endif // _XMLOFF_HATCHELEMENT_HXX

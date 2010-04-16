@@ -47,7 +47,7 @@
 #ifndef _SVTOOLS_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
 #endif
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/xmlaustp.hxx>

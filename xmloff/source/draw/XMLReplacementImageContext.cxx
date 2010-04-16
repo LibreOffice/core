@@ -35,8 +35,8 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
-#include "xmlkywd.hxx"
+#include "xmloff/xmlnmspe.hxx"
+#include "xmloff/xmlkywd.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include "XMLReplacementImageContext.hxx"

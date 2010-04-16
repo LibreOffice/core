@@ -45,8 +45,8 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
-#include "xmlkywd.hxx"
+#include "xmloff/xmlnmspe.hxx"
+#include "xmloff/xmlkywd.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "XMLAnchorTypePropHdl.hxx"
@@ -54,7 +54,7 @@
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include "XMLReplacementImageContext.hxx"
 #include <xmloff/prstylei.hxx>
-#include "i18nmap.hxx"
+#include "xmloff/i18nmap.hxx"
 #include "xexptran.hxx"
 #include <xmloff/shapeimport.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>

@@ -90,21 +90,6 @@ SHL1STDLIBS+=-licg617mxp
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=   $(LIB1TARGET)
 
-
-SHL5STDLIBS= \
-        $(TOOLSLIB)         \
-        $(SALLIB)           \
-        $(SALHELPERLIB)     \
-        $(CPPULIB)          \
-        $(CPPUHELPERLIB)    \
-        $(COMPHELPERLIB)
-
-.IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
-    SHL5STDLIBS += -lxo$(DLLPOSTFIX)
-.ELSE
-    SHL5STDLIBS += ixo.lib
-.ENDIF
-
 # --- Def-File ---------------------------------------------------------
 
 DEF1NAME    =$(SHL1TARGET)

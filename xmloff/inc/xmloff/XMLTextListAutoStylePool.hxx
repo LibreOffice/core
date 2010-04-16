@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XMLTextListAutoStylePool.hxx,v $
+ * $RCSfile: xmloff/XMLTextListAutoStylePool.hxx,v $
  * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.

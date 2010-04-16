@@ -33,7 +33,7 @@
 
 #ifndef _XMLOFF_XMLKYWD_HXX
 #define XML_DEFINE_KEYWORDS
-#include "xmlkywd.hxx"
+#include "xmloff/xmlkywd.hxx"
 #undef XML_DEFINE_KEYWORDS
 #endif
 

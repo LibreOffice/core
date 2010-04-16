@@ -31,7 +31,7 @@
 #define _PROPERTYMAP_HXX_
 
 #include <xmloff/maptype.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/contextid.hxx>

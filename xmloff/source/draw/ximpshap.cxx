@@ -74,7 +74,7 @@
 #include "PropertySetMerger.hxx"
 #include <xmloff/families.hxx>
 #include "ximpstyl.hxx"
-#include"xmlnmspe.hxx"
+#include"xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "EnhancedCustomShapeToken.hxx"
 #include "XMLReplacementImageContext.hxx"
@@ -85,7 +85,7 @@
 #include "descriptionimp.hxx"
 #include "ximpcustomshape.hxx"
 #include "XMLEmbeddedObjectImportContext.hxx"
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/string.hxx>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>

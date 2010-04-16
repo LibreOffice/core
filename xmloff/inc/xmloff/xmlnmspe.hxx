@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: xmlnmspe.hxx,v $
+ * $RCSfile: xmloff/xmlnmspe.hxx,v $
  * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.

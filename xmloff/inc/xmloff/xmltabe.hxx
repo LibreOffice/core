@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: xmlreg.hxx,v $
- * $Revision: 1.3 $
+ * $RCSfile: xmloff/xmltabe.hxx,v $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,19 +28,36 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_XMLREG_HXX
-#define _XMLOFF_XMLREG_HXX
+#ifndef _XMLOFF_XMLTABE_HXX
+#define _XMLOFF_XMLTABE_HXX
 
-#include <rtl/ref.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+// prevent funny things like "#define sun 1" from the compiler
+#include <sal/config.h>
 
-/**
- *  Register subset of UNO services from XML Office library. This is necessary when
- *  linking against the static "xol.lib".
- *
- *  @return returns sal_False if at least one component could not be registered.
- */
-sal_Bool XMLRegisterServices( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > ); /// [all] ServiceProvider to register in.
+class SvXMLExport;
+namespace com { namespace sun { namespace star {
+    namespace style { struct TabStop; }
+    namespace uno { class Any; }
+} } }
 
-#endif  //  _XMLOFF_XMLREG_HXX
+
+class SvxXMLTabStopExport
+{
+    SvXMLExport& rExport;   // for access to document handler
+
+protected:
+
+    void exportTabStop( const ::com::sun::star::style::TabStop* pTabStop );
+
+public:
+
+    SvxXMLTabStopExport(  SvXMLExport& rExport );
+    virtual ~SvxXMLTabStopExport();
+
+    // core API
+    void Export( const ::com::sun::star::uno::Any& rAny );
+};
+
+
+#endif  //  _XMLOFF_XMLTABE_HXX
 

@@ -35,7 +35,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <xmloff/xmluconv.hxx>
-#include <xmlkywd.hxx>
+#include <xmloff/xmlkywd.hxx>
 #include <xmloff/xmltoken.hxx>
 
 using ::rtl::OUString;

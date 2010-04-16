@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: VisAreaContext.hxx,v $
+ * $RCSfile: xmloff/VisAreaContext.hxx,v $
  * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.

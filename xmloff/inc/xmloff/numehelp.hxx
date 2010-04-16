@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: numehelp.hxx,v $
+ * $RCSfile: xmloff/numehelp.hxx,v $
  * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.

@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: xmlerror.hxx,v $
+ * $RCSfile: xmloff/xmlerror.hxx,v $
  * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.

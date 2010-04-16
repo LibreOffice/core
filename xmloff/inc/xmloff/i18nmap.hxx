@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: VisAreaExport.hxx,v $
- * $Revision: 1.4 $
+ * $RCSfile: xmloff/i18nmap.hxx,v $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,31 +28,45 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_VISAREAEXPORT_HXX
-#define _XMLOFF_VISAREAEXPORT_HXX
+#ifndef _XMLOFF_I18NMAP_HXX
+#define _XMLOFF_I18NMAP_HXX
 
-#include <tools/mapunit.hxx>
-#include <sal/types.h>
+#include "sal/config.h"
+#include "xmloff/dllapi.h"
+#include "sal/types.h"
+#include <tools/solar.h>
 
-class SvXMLExport;
-class Rectangle;
 
-namespace com { namespace sun { namespace star { namespace awt {
-    struct Rectangle;
-} } } }
-
-class XMLVisAreaExport
+namespace rtl
 {
+    class OUString;
+}
+
+class SvI18NMap_Impl;
+class SvI18NMapEntry_Impl;
+
+class XMLOFF_DLLPUBLIC SvI18NMap
+{
+    SvI18NMap_Impl      *pImpl;
+
+    SAL_DLLPRIVATE SvI18NMapEntry_Impl *_Find( USHORT nKind,
+                                const ::rtl::OUString& rName ) const;
+
 public:
-    // the complete export is done in the constructor
-    XMLVisAreaExport(SvXMLExport& rExport, const sal_Char *pName,
-            const Rectangle& aRect, const MapUnit aMapUnit);
 
-    XMLVisAreaExport(SvXMLExport& rExport, const sal_Char *pName,
-                    const com::sun::star::awt::Rectangle& aRect, const sal_Int16 nMeasureUnit );
+    SvI18NMap();
+    ~SvI18NMap();
 
-    ~XMLVisAreaExport();
+    // Add a name mapping
+    void Add( USHORT nKind, const ::rtl::OUString& rName,
+              const ::rtl::OUString& rNewName );
+
+    // Return a mapped name. If the name could not be found, return the
+    // original name.
+    const ::rtl::OUString& Get( USHORT nKind,
+                                const ::rtl::OUString& rName ) const;
 };
 
-#endif
+
+#endif  //  _XMLOFF_I18NMAP_HXX
 

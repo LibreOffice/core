@@ -38,7 +38,7 @@
 
 #include <xmloff/xmlcnimp.hxx>
 
-#include "unoatrcn.hxx"
+#include "xmloff/unoatrcn.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

@@ -37,7 +37,7 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmlnume.hxx>
-#include "XMLTextListAutoStylePool.hxx"
+#include "xmloff/XMLTextListAutoStylePool.hxx"
 #include <xmloff/xmlexp.hxx>
 
 using ::rtl::OUString;

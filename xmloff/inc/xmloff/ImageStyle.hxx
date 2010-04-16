@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: DashStyle.hxx,v $
- * $Revision: 1.6 $
+ * $RCSfile: xmloff/ImageStyle.hxx,v $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,49 +28,36 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_DASHSTYLE_HXX
-#define _XMLOFF_DASHSTYLE_HXX
+#ifndef _XMLOFF_IMAGESTYLE_HXX
+#define _XMLOFF_IMAGESTYLE_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
-#include <sal/types.h>
+#include "sal/types.h"
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
-class SvXMLImport;
+class SvXMLNamespaceMap;
+class SvXMLAttributeList;
+class SvXMLUnitConverter;
 class SvXMLExport;
-namespace com { namespace sun { namespace star {
-    namespace uno { template<class A> class Reference; }
-    namespace xml { namespace sax { class XAttributeList; } }
-    namespace uno { class Any; }
-} } }
-namespace rtl { class OUString; }
+class SvXMLImport;
 
-
-class XMLOFF_DLLPUBLIC XMLDashStyleImport
+class XMLOFF_DLLPUBLIC XMLImageStyle
 {
-    SvXMLImport& rImport;
-
 public:
-    XMLDashStyleImport( SvXMLImport& rImport );
-    ~XMLDashStyleImport();
+    XMLImageStyle();
+    ~XMLImageStyle();
 
-    sal_Bool importXML(
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
-        ::com::sun::star::uno::Any& rValue,
-        ::rtl::OUString& rStrName );
+    sal_Bool exportXML( const ::rtl::OUString& rStrName, const ::com::sun::star::uno::Any& rValue, SvXMLExport& rExport );
+    sal_Bool importXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList, ::com::sun::star::uno::Any& rValue, ::rtl::OUString& rStrName, SvXMLImport& rImport );
+
+private:
+
+    SAL_DLLPRIVATE sal_Bool ImpExportXML( const ::rtl::OUString& rStrName, const ::com::sun::star::uno::Any& rValue,
+                           SvXMLExport& rExport );
+    SAL_DLLPRIVATE sal_Bool ImpImportXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+                           ::com::sun::star::uno::Any& rValue, ::rtl::OUString& rStrName,
+                           SvXMLImport& rImport );
 };
 
-
-class XMLOFF_DLLPUBLIC XMLDashStyleExport
-{
-    SvXMLExport& rExport;
-
-public:
-    XMLDashStyleExport( SvXMLExport& rExport );
-    ~XMLDashStyleExport();
-
-    sal_Bool exportXML( const ::rtl::OUString& rStrName,
-                        const ::com::sun::star::uno::Any& rValue );
-};
-
-#endif // _XMLOFF_DASHSTYLE_HXX
+#endif // _XMLOFF_IMAGESTYLE_HXX

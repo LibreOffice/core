@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: xmltabe.hxx,v $
- * $Revision: 1.6 $
+ * $RCSfile: xmloff/VisAreaExport.hxx,v $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,36 +28,31 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_XMLTABE_HXX
-#define _XMLOFF_XMLTABE_HXX
+#ifndef _XMLOFF_VISAREAEXPORT_HXX
+#define _XMLOFF_VISAREAEXPORT_HXX
 
-// prevent funny things like "#define sun 1" from the compiler
-#include <sal/config.h>
+#include <tools/mapunit.hxx>
+#include <sal/types.h>
 
 class SvXMLExport;
-namespace com { namespace sun { namespace star {
-    namespace style { struct TabStop; }
-    namespace uno { class Any; }
-} } }
+class Rectangle;
 
+namespace com { namespace sun { namespace star { namespace awt {
+    struct Rectangle;
+} } } }
 
-class SvxXMLTabStopExport
+class XMLVisAreaExport
 {
-    SvXMLExport& rExport;   // for access to document handler
-
-protected:
-
-    void exportTabStop( const ::com::sun::star::style::TabStop* pTabStop );
-
 public:
+    // the complete export is done in the constructor
+    XMLVisAreaExport(SvXMLExport& rExport, const sal_Char *pName,
+            const Rectangle& aRect, const MapUnit aMapUnit);
 
-    SvxXMLTabStopExport(  SvXMLExport& rExport );
-    virtual ~SvxXMLTabStopExport();
+    XMLVisAreaExport(SvXMLExport& rExport, const sal_Char *pName,
+                    const com::sun::star::awt::Rectangle& aRect, const sal_Int16 nMeasureUnit );
 
-    // core API
-    void Export( const ::com::sun::star::uno::Any& rAny );
+    ~XMLVisAreaExport();
 };
 
-
-#endif  //  _XMLOFF_XMLTABE_HXX
+#endif
 

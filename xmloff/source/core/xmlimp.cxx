@@ -40,8 +40,8 @@
 #include "unointerfacetouniqueidentifiermapper.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include "xmlnmspe.hxx"
-#include "xmlkywd.hxx"
+#include "xmloff/xmlnmspe.hxx"
+#include "xmloff/xmlkywd.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/xmlictxt.hxx>
@@ -53,7 +53,7 @@
 #include "StyleMap.hxx"
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>

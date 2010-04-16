@@ -52,11 +52,11 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
-#include "xmlkywd.hxx"
+#include "xmloff/xmlnmspe.hxx"
+#include "xmloff/xmlkywd.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/prstylei.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustring.hxx>

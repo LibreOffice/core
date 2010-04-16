@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: TransGradientStyle.hxx,v $
+ * $RCSfile: Transxmloff/GradientStyle.hxx,v $
  * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.

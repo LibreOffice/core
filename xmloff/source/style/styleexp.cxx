@@ -36,13 +36,13 @@
 #include <svl/svstdarr.hxx>
 #endif
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #ifndef _XMLOFF_XMLITMAP_HXX
 //#include "xmlitmap.hxx"
 #endif
 #include <xmloff/xmluconv.hxx>
-#include "xmlkywd.hxx"
+#include "xmloff/xmlkywd.hxx"
 #include <xmloff/attrlist.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlexppr.hxx>

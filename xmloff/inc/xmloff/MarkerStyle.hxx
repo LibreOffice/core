@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: GradientStyle.hxx,v $
+ * $RCSfile: xmloff/MarkerStyle.hxx,v $
  * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_GRADIENTSTYLE_HXX
-#define _XMLOFF_GRADIENTSTYLE_HXX
+#ifndef _XMLOFF_MARKERSTYLE_HXX
+#define _XMLOFF_MARKERSTYLE_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -45,33 +45,32 @@ namespace com { namespace sun { namespace star {
 namespace rtl { class OUString; }
 
 
-class XMLOFF_DLLPUBLIC XMLGradientStyleImport
+class XMLOFF_DLLPUBLIC XMLMarkerStyleImport
 {
     SvXMLImport& rImport;
 
 public:
-    XMLGradientStyleImport( SvXMLImport& rImport );
-    ~XMLGradientStyleImport();
+    XMLMarkerStyleImport( SvXMLImport& rImport );
+    ~XMLMarkerStyleImport();
 
     sal_Bool importXML(
         const ::com::sun::star::uno::Reference<
-           ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+            ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
         ::com::sun::star::uno::Any& rValue,
         ::rtl::OUString& rStrName );
 };
 
-
-class XMLOFF_DLLPUBLIC XMLGradientStyleExport
+class XMLOFF_DLLPUBLIC XMLMarkerStyleExport
 {
     SvXMLExport& rExport;
 
 public:
-    XMLGradientStyleExport( SvXMLExport& rExport );
-    ~XMLGradientStyleExport();
+    XMLMarkerStyleExport( SvXMLExport& rExport );
+    ~XMLMarkerStyleExport();
 
     sal_Bool exportXML(
         const ::rtl::OUString& rStrName,
         const ::com::sun::star::uno::Any& rValue );
 };
 
-#endif // _XMLOFF_GRADIENTSTYLE_HXX
+#endif // _XMLOFF_MARKERSTYLE_HXX

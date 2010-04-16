@@ -39,7 +39,7 @@
 #endif
 #include <xmloff/nmspmap.hxx>
 
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 
 
 using ::rtl::OUString;

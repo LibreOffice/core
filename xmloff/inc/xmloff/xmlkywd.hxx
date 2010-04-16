@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: xmlkywd.hxx,v $
+ * $RCSfile: xmloff/xmlkywd.hxx,v $
  * $Revision: 1.176 $
  *
  * This file is part of OpenOffice.org.

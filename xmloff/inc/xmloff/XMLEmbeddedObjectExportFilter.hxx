@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XMLEmbeddedObjectExportFilter.hxx,v $
+ * $RCSfile: xmloff/XMLEmbeddedObjectExportFilter.hxx,v $
  * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.

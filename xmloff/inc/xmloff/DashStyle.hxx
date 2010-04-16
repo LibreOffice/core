@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: MarkerStyle.hxx,v $
+ * $RCSfile: xmloff/DashStyle.hxx,v $
  * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_MARKERSTYLE_HXX
-#define _XMLOFF_MARKERSTYLE_HXX
+#ifndef _XMLOFF_DASHSTYLE_HXX
+#define _XMLOFF_DASHSTYLE_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -45,32 +45,32 @@ namespace com { namespace sun { namespace star {
 namespace rtl { class OUString; }
 
 
-class XMLOFF_DLLPUBLIC XMLMarkerStyleImport
+class XMLOFF_DLLPUBLIC XMLDashStyleImport
 {
     SvXMLImport& rImport;
 
 public:
-    XMLMarkerStyleImport( SvXMLImport& rImport );
-    ~XMLMarkerStyleImport();
+    XMLDashStyleImport( SvXMLImport& rImport );
+    ~XMLDashStyleImport();
 
     sal_Bool importXML(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+                ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
         ::com::sun::star::uno::Any& rValue,
         ::rtl::OUString& rStrName );
 };
 
-class XMLOFF_DLLPUBLIC XMLMarkerStyleExport
+
+class XMLOFF_DLLPUBLIC XMLDashStyleExport
 {
     SvXMLExport& rExport;
 
 public:
-    XMLMarkerStyleExport( SvXMLExport& rExport );
-    ~XMLMarkerStyleExport();
+    XMLDashStyleExport( SvXMLExport& rExport );
+    ~XMLDashStyleExport();
 
-    sal_Bool exportXML(
-        const ::rtl::OUString& rStrName,
-        const ::com::sun::star::uno::Any& rValue );
+    sal_Bool exportXML( const ::rtl::OUString& rStrName,
+                        const ::com::sun::star::uno::Any& rValue );
 };
 
-#endif // _XMLOFF_MARKERSTYLE_HXX
+#endif // _XMLOFF_DASHSTYLE_HXX

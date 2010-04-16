@@ -42,7 +42,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <xmloff/xmltoken.hxx>
 #include <comphelper/extract.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "ximpshow.hxx"

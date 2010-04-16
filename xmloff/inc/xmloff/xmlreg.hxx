@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XMLTextShapeImportHelper.hxx,v $
- * $Revision: 1.6 $
+ * $RCSfile: xmloff/xmlreg.hxx,v $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,33 +28,19 @@
  *
  ************************************************************************/
 
-#ifndef _XMLTEXTSHAPEIMPORTHELPER_HXX
-#define _XMLTEXTSHAPEIMPORTHELPER_HXX
+#ifndef _XMLOFF_XMLREG_HXX
+#define _XMLOFF_XMLREG_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
-#include <xmloff/shapeimport.hxx>
+#include <rtl/ref.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-class XMLOFF_DLLPUBLIC XMLTextShapeImportHelper : public XMLShapeImportHelper
-{
-    SvXMLImport& rImport;
+/**
+ *  Register subset of UNO services from XML Office library. This is necessary when
+ *  linking against the static "xol.lib".
+ *
+ *  @return returns sal_False if at least one component could not be registered.
+ */
+sal_Bool XMLRegisterServices( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > ); /// [all] ServiceProvider to register in.
 
-    const ::rtl::OUString sAnchorType;
-    const ::rtl::OUString sAnchorPageNo;
-    const ::rtl::OUString sVertOrientPosition;
+#endif  //  _XMLOFF_XMLREG_HXX
 
-public:
-
-    XMLTextShapeImportHelper( SvXMLImport& rImp );
-    ~XMLTextShapeImportHelper();
-
-    virtual void addShape(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShape >& rShape,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShapes >& rShapes );
-};
-
-#endif

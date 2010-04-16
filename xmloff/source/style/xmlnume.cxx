@@ -33,7 +33,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #ifndef _XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
@@ -55,7 +55,7 @@
 // <--
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "XMLTextListAutoStylePool.hxx"
+#include "xmloff/XMLTextListAutoStylePool.hxx"
 #include <xmloff/xmlnume.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <tools/fontenum.hxx>

@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: txtimppr.hxx,v $
+ * $RCSfile: xmloff/txtimppr.hxx,v $
  * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.

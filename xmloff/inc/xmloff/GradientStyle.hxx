@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: ImageStyle.hxx,v $
- * $Revision: 1.5 $
+ * $RCSfile: xmloff/GradientStyle.hxx,v $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,36 +28,50 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_IMAGESTYLE_HXX
-#define _XMLOFF_IMAGESTYLE_HXX
+#ifndef _XMLOFF_GRADIENTSTYLE_HXX
+#define _XMLOFF_GRADIENTSTYLE_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
-#include "sal/types.h"
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <sal/types.h>
 
-class SvXMLNamespaceMap;
-class SvXMLAttributeList;
-class SvXMLUnitConverter;
-class SvXMLExport;
 class SvXMLImport;
+class SvXMLExport;
+namespace com { namespace sun { namespace star {
+    namespace uno { template<class A> class Reference; }
+    namespace xml { namespace sax { class XAttributeList; } }
+    namespace uno { class Any; }
+} } }
+namespace rtl { class OUString; }
 
-class XMLOFF_DLLPUBLIC XMLImageStyle
+
+class XMLOFF_DLLPUBLIC XMLGradientStyleImport
 {
+    SvXMLImport& rImport;
+
 public:
-    XMLImageStyle();
-    ~XMLImageStyle();
+    XMLGradientStyleImport( SvXMLImport& rImport );
+    ~XMLGradientStyleImport();
 
-    sal_Bool exportXML( const ::rtl::OUString& rStrName, const ::com::sun::star::uno::Any& rValue, SvXMLExport& rExport );
-    sal_Bool importXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList, ::com::sun::star::uno::Any& rValue, ::rtl::OUString& rStrName, SvXMLImport& rImport );
-
-private:
-
-    SAL_DLLPRIVATE sal_Bool ImpExportXML( const ::rtl::OUString& rStrName, const ::com::sun::star::uno::Any& rValue,
-                           SvXMLExport& rExport );
-    SAL_DLLPRIVATE sal_Bool ImpImportXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
-                           ::com::sun::star::uno::Any& rValue, ::rtl::OUString& rStrName,
-                           SvXMLImport& rImport );
+    sal_Bool importXML(
+        const ::com::sun::star::uno::Reference<
+           ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+        ::com::sun::star::uno::Any& rValue,
+        ::rtl::OUString& rStrName );
 };
 
-#endif // _XMLOFF_IMAGESTYLE_HXX
+
+class XMLOFF_DLLPUBLIC XMLGradientStyleExport
+{
+    SvXMLExport& rExport;
+
+public:
+    XMLGradientStyleExport( SvXMLExport& rExport );
+    ~XMLGradientStyleExport();
+
+    sal_Bool exportXML(
+        const ::rtl::OUString& rStrName,
+        const ::com::sun::star::uno::Any& rValue );
+};
+
+#endif // _XMLOFF_GRADIENTSTYLE_HXX

@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XMLFilterServiceNames.h,v $
- * $Revision: 1.4 $
+ * $RCSfile: xmloff/XMLTextShapeImportHelper.hxx,v $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,22 +28,33 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_XMLFILTERSERVICENAMES_H
-#define _XMLOFF_XMLFILTERSERVICENAMES_H
+#ifndef _XMLTEXTSHAPEIMPORTHELPER_HXX
+#define _XMLTEXTSHAPEIMPORTHELPER_HXX
 
+#include "sal/config.h"
+#include "xmloff/dllapi.h"
+#include <xmloff/shapeimport.hxx>
 
-#define XML_IMPORT_FILTER_WRITER    "com.sun.star.comp.Writer.XMLOasisImporter"
-#define XML_IMPORT_FILTER_CALC      "com.sun.star.comp.Calc.XMLOasisImporter"
-#define XML_IMPORT_FILTER_DRAW      "com.sun.star.comp.Draw.XMLOasisImporter"
-#define XML_IMPORT_FILTER_IMPRESS   "com.sun.star.comp.Impress.XMLOasisImporter"
-#define XML_IMPORT_FILTER_MATH      "com.sun.star.comp.Math.XMLImporter"
-#define XML_IMPORT_FILTER_CHART     "com.sun.star.comp.Chart.XMLOasisImporter"
+class XMLOFF_DLLPUBLIC XMLTextShapeImportHelper : public XMLShapeImportHelper
+{
+    SvXMLImport& rImport;
 
-#define XML_EXPORT_FILTER_WRITER    "com.sun.star.comp.Writer.XMLOasisExporter"
-#define XML_EXPORT_FILTER_CALC      "com.sun.star.comp.Calc.XMLOasisExporter"
-#define XML_EXPORT_FILTER_DRAW      "com.sun.star.comp.Draw.XMLOasisExporter"
-#define XML_EXPORT_FILTER_IMPRESS   "com.sun.star.comp.Impress.XMLOasisExporter"
-#define XML_EXPORT_FILTER_MATH      "com.sun.star.comp.Math.XMLExporter"
-#define XML_EXPORT_FILTER_CHART     "com.sun.star.comp.Chart.XMLOasisExporter"
+    const ::rtl::OUString sAnchorType;
+    const ::rtl::OUString sAnchorPageNo;
+    const ::rtl::OUString sVertOrientPosition;
+
+public:
+
+    XMLTextShapeImportHelper( SvXMLImport& rImp );
+    ~XMLTextShapeImportHelper();
+
+    virtual void addShape(
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::drawing::XShape >& rShape,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::drawing::XShapes >& rShapes );
+};
 
 #endif

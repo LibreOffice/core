@@ -37,7 +37,7 @@
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -56,7 +56,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <xmloff/xmltoken.hxx>
 
-#include "i18nmap.hxx"
+#include "xmloff/i18nmap.hxx"
 #include <xmloff/xmluconv.hxx>
 #ifndef _XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
 #include "fonthdl.hxx"

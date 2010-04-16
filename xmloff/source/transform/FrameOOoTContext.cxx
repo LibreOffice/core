@@ -33,7 +33,7 @@
 #include "FrameOOoTContext.hxx"
 #include "IgnoreTContext.hxx"
 #include "MutableAttrList.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include "ActionMapTypesOOo.hxx"
 #include "AttrTransformerAction.hxx"

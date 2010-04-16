@@ -32,7 +32,7 @@
 #include "precompiled_xmloff.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/WordWrapPropertyHdl.hxx>
-#include "xmlkywd.hxx"
+#include "xmloff/xmlkywd.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <comphelper/extract.hxx>

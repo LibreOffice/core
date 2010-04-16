@@ -34,7 +34,7 @@
 
 #include "ximpstyl.hxx"
 #include <xmloff/XMLShapeStyleContext.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "ximpnote.hxx"
@@ -58,7 +58,7 @@
 #include "layerimp.hxx"
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
 #include "XMLNumberStylesImport.hxx"
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

@@ -50,7 +50,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 
 #include "xmloff/table/XMLTableExport.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/xmlexp.hxx>

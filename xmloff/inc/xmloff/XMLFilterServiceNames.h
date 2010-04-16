@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: i18nmap.hxx,v $
- * $Revision: 1.5 $
+ * $RCSfile: xmloff/XMLFilterServiceNames.h,v $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,45 +28,22 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_I18NMAP_HXX
-#define _XMLOFF_I18NMAP_HXX
-
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
-#include "sal/types.h"
-#include <tools/solar.h>
+#ifndef _XMLOFF_XMLFILTERSERVICENAMES_H
+#define _XMLOFF_XMLFILTERSERVICENAMES_H
 
 
-namespace rtl
-{
-    class OUString;
-}
+#define XML_IMPORT_FILTER_WRITER    "com.sun.star.comp.Writer.XMLOasisImporter"
+#define XML_IMPORT_FILTER_CALC      "com.sun.star.comp.Calc.XMLOasisImporter"
+#define XML_IMPORT_FILTER_DRAW      "com.sun.star.comp.Draw.XMLOasisImporter"
+#define XML_IMPORT_FILTER_IMPRESS   "com.sun.star.comp.Impress.XMLOasisImporter"
+#define XML_IMPORT_FILTER_MATH      "com.sun.star.comp.Math.XMLImporter"
+#define XML_IMPORT_FILTER_CHART     "com.sun.star.comp.Chart.XMLOasisImporter"
 
-class SvI18NMap_Impl;
-class SvI18NMapEntry_Impl;
+#define XML_EXPORT_FILTER_WRITER    "com.sun.star.comp.Writer.XMLOasisExporter"
+#define XML_EXPORT_FILTER_CALC      "com.sun.star.comp.Calc.XMLOasisExporter"
+#define XML_EXPORT_FILTER_DRAW      "com.sun.star.comp.Draw.XMLOasisExporter"
+#define XML_EXPORT_FILTER_IMPRESS   "com.sun.star.comp.Impress.XMLOasisExporter"
+#define XML_EXPORT_FILTER_MATH      "com.sun.star.comp.Math.XMLExporter"
+#define XML_EXPORT_FILTER_CHART     "com.sun.star.comp.Chart.XMLOasisExporter"
 
-class XMLOFF_DLLPUBLIC SvI18NMap
-{
-    SvI18NMap_Impl      *pImpl;
-
-    SAL_DLLPRIVATE SvI18NMapEntry_Impl *_Find( USHORT nKind,
-                                const ::rtl::OUString& rName ) const;
-
-public:
-
-    SvI18NMap();
-    ~SvI18NMap();
-
-    // Add a name mapping
-    void Add( USHORT nKind, const ::rtl::OUString& rName,
-              const ::rtl::OUString& rNewName );
-
-    // Return a mapped name. If the name could not be found, return the
-    // original name.
-    const ::rtl::OUString& Get( USHORT nKind,
-                                const ::rtl::OUString& rName ) const;
-};
-
-
-#endif  //  _XMLOFF_I18NMAP_HXX
-
+#endif
