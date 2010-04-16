@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -23,36 +23,28 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#*************************************************************************
+#***********************************************************************/
 
-PRJ=.
+PRJ = @BACKPATH@../..
+PRJNAME = cppunit
+TARGET = DllPlugInTester
 
-PRJNAME=afms
-TARGET=afms
+ENABLE_EXCEPTIONS = TRUE
+nodep = TRUE
 
-# --- Settings -----------------------------------------------------
+.INCLUDE: settings.mk
 
-.INCLUDE :	settings.mk
-.IF "$(L10N_framework)"==""
-# --- Files --------------------------------------------------------
+CDEFS += -DCPPUNIT_DLL
+CFLAGSCXX += -I../../include
+UWINAPILIB =
 
-TARFILE_NAME=Adobe-Core35_AFMs-314
-TARFILE_MD5=1756c4fa6c616ae15973c104cd8cb256
-TARFILE_ROOTDIR=Adobe-Core35_AFMs-314
+OBJFILES = $(APP1OBJS)
 
-# --- Targets ------------------------------------------------------
+APP1OBJS = \
+   $(OBJ)/CommandLineParser.obj \
+   $(OBJ)/DllPlugInTester.obj
+APP1RPATH = NONE
+APP1STDLIBS = icppunit_dll.lib
+APP1TARGET = DllPlugInTester_dll
 
-.INCLUDE : set_ext.mk
-
-ZIP1DIR         = $(MISC)$/build$/$(TARFILE_NAME)
-ZIP1TARGET      = fontunxafm
-ZIP1LIST        = *.afm -x "*Helvetica-Narrow*"
-
-.ENDIF # L10N_framework
-.INCLUDE : target.mk
-
-.INCLUDE : tg_ext.mk
-.IF "$(L10N_framework)"==""
-$(ZIP1TARGETN):	$(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
-
-.ENDIF # L10N_framework
+.INCLUDE: target.mk
