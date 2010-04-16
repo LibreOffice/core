@@ -1089,10 +1089,10 @@ BOOL SdrMarkView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
         }
 
         // notify current mouse over handle
-        if( pMouseOverHdl && !pMouseOverHdl->mbMouseOver )
+        if( pMouseOverHdl /* && !pMouseOverHdl->mbMouseOver */ )
         {
             pMouseOverHdl->mbMouseOver = true;
-            pMouseOverHdl->onMouseEnter();
+            pMouseOverHdl->onMouseEnter(rMEvt);
         }
     }
     return SdrSnapView::MouseMove(rMEvt, pWin);

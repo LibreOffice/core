@@ -948,7 +948,7 @@ BOOL SdrHdl::IsFocusHdl() const
     }
 }
 
-void SdrHdl::onMouseEnter()
+void SdrHdl::onMouseEnter(const MouseEvent& /*rMEvt*/)
 {
 }
 
