@@ -76,7 +76,7 @@ inline sal_Int32 lclConvertScreenPixelToHmm( double fPixel, double fPixelPerHmm 
 
 // ============================================================================
 
-GraphicHelper::GraphicHelper( const Reference< XMultiServiceFactory >& rxGlobalFactory ) :
+GraphicHelper::GraphicHelper( const Reference< XMultiServiceFactory >& rxGlobalFactory, const Reference< XFrame >& rxTargetFrame ) :
     mxGraphicProvider( rxGlobalFactory->createInstance( CREATE_OUSTRING( "com.sun.star.graphic.GraphicProvider" ) ), UNO_QUERY ),
     maGraphicObjScheme( CREATE_OUSTRING( "vnd.sun.star.GraphicObject:" ) )
 {
@@ -115,21 +115,34 @@ GraphicHelper::GraphicHelper( const Reference< XMultiServiceFactory >& rxGlobalF
     maSystemPalette[ XML_windowFrame ]              = 0x000000;
     maSystemPalette[ XML_windowText ]               = 0x000000;
 
-    // get the metric of the output device
-    if( rxGlobalFactory.is() ) try
+    // if no target frame has been passed (e.g. OLE objects), try to fallback to the active frame
+    // TODO: we need some mechanism to keep and pass the parent frame
+    Reference< XFrame > xFrame = rxTargetFrame;
+    if( !xFrame.is() && rxGlobalFactory.is() ) try
     {
         Reference< XFramesSupplier > xFramesSupp( rxGlobalFactory->createInstance( CREATE_OUSTRING( "com.sun.star.frame.Desktop" ) ), UNO_QUERY_THROW );
-        Reference< XFrame > xFrame( xFramesSupp->getActiveFrame(), UNO_SET_THROW );
+        xFrame = xFramesSupp->getActiveFrame();
+    }
+    catch( Exception& )
+    {
+    }
+
+    // get the metric of the output device
+    OSL_ENSURE( xFrame.is(), "GraphicHelper::GraphicHelper - cannot get target frame" );
+    maDeviceInfo.PixelPerMeterX = maDeviceInfo.PixelPerMeterY = 3500.0; // some default just in case
+    if( xFrame.is() ) try
+    {
         Reference< XDevice > xDevice( xFrame->getContainerWindow(), UNO_QUERY_THROW );
         mxUnitConversion.set( xDevice, UNO_QUERY );
+        OSL_ENSURE( mxUnitConversion.is(), "GraphicHelper::GraphicHelper - cannot get unit converter" );
         maDeviceInfo = xDevice->getInfo();
-        mfPixelPerHmmX = maDeviceInfo.PixelPerMeterX / 100000.0;
-        mfPixelPerHmmY = maDeviceInfo.PixelPerMeterY / 100000.0;
     }
     catch( Exception& )
     {
         OSL_ENSURE( false, "GraphicHelper::GraphicHelper - cannot get output device info" );
     }
+    mfPixelPerHmmX = maDeviceInfo.PixelPerMeterX / 100000.0;
+    mfPixelPerHmmY = maDeviceInfo.PixelPerMeterY / 100000.0;
 }
 
 GraphicHelper::~GraphicHelper()
@@ -138,8 +151,7 @@ GraphicHelper::~GraphicHelper()
 
 sal_Int32 GraphicHelper::getSystemColor( sal_Int32 nToken, sal_Int32 nDefaultRgb ) const
 {
-    const sal_Int32* pnColor = ContainerHelper::getMapElement( maSystemPalette, nToken );
-    return pnColor ? *pnColor : nDefaultRgb;
+    return ContainerHelper::getMapElement( maSystemPalette, nToken, nDefaultRgb );
 }
 
 sal_Int32 GraphicHelper::getSchemeColor( sal_Int32 /*nToken*/ ) const

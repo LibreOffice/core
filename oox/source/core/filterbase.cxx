@@ -55,6 +55,7 @@ using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::beans::PropertyValue;
+using ::com::sun::star::frame::XFrame;
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::io::XInputStream;
 using ::com::sun::star::io::XOutputStream;
@@ -148,6 +149,7 @@ struct FilterBaseImpl
     Reference< XMultiServiceFactory >   mxGlobalFactory;
     Reference< XModel >                 mxModel;
     Reference< XMultiServiceFactory >   mxModelFactory;
+    Reference< XFrame >                 mxTargetFrame;
     Reference< XInputStream >           mxInStream;
     Reference< XStream >                mxOutStream;
     Reference< XStatusIndicator >       mxStatusIndicator;
@@ -259,6 +261,11 @@ const Reference< XModel >& FilterBase::getModel() const
 const Reference< XMultiServiceFactory >& FilterBase::getModelFactory() const
 {
     return mxImpl->mxModelFactory;
+}
+
+const Reference< XFrame >& FilterBase::getTargetFrame() const
+{
+    return mxImpl->mxTargetFrame;
 }
 
 const Reference< XStatusIndicator >& FilterBase::getStatusIndicator() const
@@ -572,6 +579,7 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
     }
 
     mxImpl->maFileUrl = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), OUString() );
+    mxImpl->mxTargetFrame = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_FRAME(), Reference< XFrame >() );
     mxImpl->mxStatusIndicator = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_STATUSINDICATOR(), Reference< XStatusIndicator >() );
     mxImpl->mxInteractionHandler = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_INTERACTIONHANDLER(), Reference< XInteractionHandler >() );
 }
@@ -579,7 +587,7 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
 GraphicHelper* FilterBase::implCreateGraphicHelper() const
 {
     // default: return base implementation without any special behaviour
-    return new GraphicHelper( mxImpl->mxGlobalFactory );
+    return new GraphicHelper( mxImpl->mxGlobalFactory, mxImpl->mxTargetFrame );
 }
 
 // ============================================================================

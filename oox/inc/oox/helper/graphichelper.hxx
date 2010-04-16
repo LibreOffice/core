@@ -40,6 +40,7 @@ namespace com { namespace sun { namespace star {
     namespace awt { struct Size; }
     namespace awt { class XUnitConversion; }
     namespace io { class XInputStream; }
+    namespace frame { class XFrame; }
     namespace graphic { class XGraphic; }
     namespace graphic { class XGraphicObject; }
     namespace graphic { class XGraphicProvider; }
@@ -66,7 +67,8 @@ class GraphicHelper
 {
 public:
     explicit            GraphicHelper(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxTargetFrame );
     virtual             ~GraphicHelper();
 
     /** Returns a system color specified by the passed XML token identifier. */

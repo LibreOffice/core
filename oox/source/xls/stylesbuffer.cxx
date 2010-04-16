@@ -305,7 +305,7 @@ sal_Int32 lclReadRgbColor( BinaryInputStream& rStrm )
 // ============================================================================
 
 ExcelGraphicHelper::ExcelGraphicHelper( const WorkbookHelper& rHelper ) :
-    GraphicHelper( rHelper.getGlobalFactory() ),
+    GraphicHelper( rHelper.getGlobalFactory(), rHelper.getBaseFilter().getTargetFrame() ),
     WorkbookHelper( rHelper )
 {
 }

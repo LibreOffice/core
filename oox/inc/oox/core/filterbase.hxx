@@ -49,6 +49,7 @@ namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }
     namespace task { class XStatusIndicator; }
     namespace task { class XInteractionHandler; }
+    namespace frame { class XFrame; }
     namespace io { class XInputStream; }
     namespace io { class XOutputStream; }
     namespace io { class XStream; }
@@ -122,6 +123,10 @@ public:
     /** Returns the service factory provided by the document model (always existing). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
                         getModelFactory() const;
+
+    /** Returns the frame that will contain the document model. */
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&
+                        getTargetFrame() const;
 
     /** Returns the status indicator (may be null). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >&
