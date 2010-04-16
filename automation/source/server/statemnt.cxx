@@ -97,6 +97,7 @@
 #include <basic/ttstrhlp.hxx>
 #endif
 #include <basic/dispdefs.hxx>
+#include <basic/sbuno.hxx>
 #include <vos/socket.hxx>
 #include <svl/pickerhistory.hxx>
 #include <com/sun/star/util/XCancellable.hpp>
@@ -6185,9 +6186,65 @@ protected:
                                                     {
                                                         ::svt::table::PTableModel pModel = pTC->GetModel();
                                                         Any aCell = pModel->getCellContent()[nNr2-1][nNr1-1];
-                                                        ::rtl::OUString aContent;
-                                                        aCell >>= aContent;
-                                                        pRet->GenReturn ( RET_Value, aUId, aContent );
+                                                        /* doesn't work ATM since it gets casted to SbxDATE in VCLTestTool unfortunately
+                                                        SbxVariableRef xRes = new SbxVariable( SbxVARIANT );
+                                                        unoToSbxValue( xRes, aCell );
+                                                        pRet->GenReturn ( RET_Value, aUId, *xRes );*/
+
+                                                        Type aType = aCell.getValueType();
+                                                        TypeClass eTypeClass = aType.getTypeClass();
+                                                        switch( eTypeClass )
+                                                        {
+                                                            /*case TypeClass_ENUM:
+                                                                {
+                                                                    sal_Int32 nEnum = 0;
+                                                                    enum2int( nEnum, aValue );
+                                                                    pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)nEnum );
+                                                                }
+                                                                break;*/
+                                                            case TypeClass_BOOLEAN:
+                                                                pRet->GenReturn ( RET_Value, aUId, *(sal_Bool*)aCell.getValue() );
+                                                                break;
+                                                            case TypeClass_CHAR:
+                                                                {
+                                                                    ::rtl::OUString aContent( *(sal_Unicode*)aCell.getValue() );
+                                                                    pRet->GenReturn ( RET_Value, aUId, aContent );
+                                                                }
+                                                                break;
+                                                            case TypeClass_STRING:
+                                                                {
+                                                                    ::rtl::OUString aContent;
+                                                                    aCell >>= aContent;
+                                                                    pRet->GenReturn ( RET_Value, aUId, aContent );
+                                                                }
+                                                                break;
+                                                            //case TypeClass_FLOAT:         break;
+                                                            //case TypeClass_DOUBLE:        break;
+                                                            //case TypeClass_OCTET:         break;
+                                                            case TypeClass_BYTE:
+                                                            case TypeClass_SHORT:
+                                                            case TypeClass_LONG:
+                                                            case TypeClass_HYPER:
+                                                            case TypeClass_UNSIGNED_LONG:
+                                                            case TypeClass_UNSIGNED_HYPER:
+                                                                {
+                                                                    comm_ULONG val = 0;
+                                                                    aCell >>= val;
+                                                                    pRet->GenReturn ( RET_Value, aUId, val );
+                                                                }
+                                                                break;
+                                                            //case TypeClass_UNSIGNED_OCTET:break;
+                                                            case TypeClass_UNSIGNED_SHORT:
+                                                                {
+                                                                    comm_USHORT val = 0;
+                                                                    aCell >>= val;
+                                                                    pRet->GenReturn ( RET_Value, aUId, val );
+                                                                }
+                                                                break;
+                                                            default:
+                                                                pRet->GenReturn ( RET_Value, aUId, comm_USHORT(0) );
+                                                                break;
+                                                        }
                                                     }
                                                 }
                                                 break;
@@ -6201,43 +6258,49 @@ protected:
                                                     pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pTC->GetRowCount() );
                                                 }
                                                 break;
-/*                                          case M_IsEditing :
-                                                {
-                                                    CellControllerRef aControler;
-                                                    aControler = pEBBox->Controller();
-                                                    pRet->GenReturn ( RET_Value, aUId, (comm_BOOL)aControler.Is() );
-                                                }
-                                                break;*/
                                             case M_Select :
                                                 {
-                                                    if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pTC->GetColumnCount() ) &&
-                                                         ValueOK( aUId, MethodString( nMethodId ), nNr2, pTC->GetRowCount() ))
+                                                    if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pTC->GetRowCount() ))
                                                     {
-                                                        if ( pTC->GoTo( ::svt::table::ColPos( nNr1 ), ::svt::table::RowPos( nNr2 ) ) )
-                                                            pTC->Select();
+                                                        if ( pTC->GoToRow( ::svt::table::RowPos( nNr1-1 ) ) )
+                                                        {
+                                                            Size aSize( pTC->GetSizePixel() );
+//                                                            DirectLog( S_QAError, UniString::CreateFromInt32( aSize.Width() ).Append( UniString::CreateFromInt32( aSize.Height() ) ) );
+                                                            Point aPos( aSize.Width() / 2, aSize.Height() / 2 );
+                                                            long nStep = aSize.Height() / 4;
+                                                            ::svt::table::RowPos nLastPos;
+                                                            while ( ( nLastPos = pTC->GetCurrentRow( aPos ) ) != nNr1-1 && nStep > 0 )
+                                                            {
+                                                                if ( nLastPos > nNr1-1 )
+                                                                    aPos.Y() -= nStep;
+                                                                else
+                                                                    aPos.Y() += nStep;
+                                                                nStep /= 2;
+                                                            }
+                                                            if ( pTC->GetCurrentRow( aPos ) == nNr1-1 )
+                                                            {
+                                                                MouseEvent aMEvnt(aPos,1,MOUSE_SIMPLECLICK|MOUSE_SELECT,MOUSE_LEFT,KEY_MOD1);
+                                                                pTC->getSelEngine()->SelMouseButtonDown( aMEvnt );
+                                                                pTC->getSelEngine()->SelMouseButtonUp( aMEvnt );
+                                                            }
+                                                            else
+                                                                ReportError( aUId, GEN_RES_STR2c2( S_METHOD_FAILED, MethodString( nMethodId ), "find pos" ) );
+                                                        }
                                                         else
                                                             ReportError( aUId, GEN_RES_STR2c2( S_METHOD_FAILED, MethodString( nMethodId ), "GoTo" ) );
                                                     }
                                                 }
                                                 break;
-
-
-
-
-/*                                          case M_GetSelCount :
-                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((SvLBox*)pControl)->GetSelectionCount()));
+                                            case M_GetSelCount :
+                                                pRet->GenReturn ( RET_Value, aUId, comm_USHORT( pTC->GetSelectedRows().size() ));
                                                 break;
                                             case M_GetSelIndex :
                                                 if ( ! (nParams & PARAM_USHORT_1) )
                                                     nNr1 = 1;
-                                                if ( ValueOK(aUId, CUniString("GetSelIndex"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
-                                                {
-                                                    nNr1--;
-                                                    COUNT_LBOX( FirstSelected, NextSelected, nNr1);
-                                                    pRet->GenReturn ( RET_Value, aUId, comm_ULONG( ((SvTreeListBox*)pControl)->GetVisiblePos( pThisEntry )) +1 );
-                                                }
+                                                if ( ValueOK( aUId, CUniString("GetSelIndex"), nNr1, pTC->GetSelectedRows().size() ) )
+                                                    pRet->GenReturn ( RET_Value, aUId, comm_USHORT( pTC->GetSelectedRows()[nNr1-1] +1 ) );
                                                 break;
-                                            case M_GetSelText :
+/*                                          case M_GetSelText :
                                                 if ( ! (nParams & PARAM_USHORT_1) )
                                                     nNr1 = 1;
                                                 if ( ValueOK(aUId, CUniString("GetSelText"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
@@ -6248,31 +6311,7 @@ protected:
                                                     pRet->GenReturn ( RET_Value, aUId, pItem->GetText() );
                                                 }
                                                 break;
-                                            case M_Select :
-                                                if ( ! (nParams & PARAM_BOOL_1) )
-                                                    bBool1 = TRUE;
-                                                if( nParams & PARAM_STR_1 )
-                                                {
-                / *                                 ListBox *pLB = ((ListBox*)pControl);
-                                                    if ( pLB->GetEntryPos( aString1 ) == LISTBOX_ENTRY_NOTFOUND )
-                                                        ReportError( aUId, GEN_RES_STR2( S_ENTRY_NOT_FOUND, MethodString( nMethodId ), aString1 ) );
-                                                    else
-                                                    {
-                                                        pLB->SelectEntry( aString1, bBool1 );
-                                                        if ( pLB->IsEntrySelected( aString1 ) ? !bBool1 : bBool1 )  // XOR rein mit BOOL
-                                                            ReportError( aUId, GEN_RES_STR2( S_METHOD_FAILED, MethodString( nMethodId ), aString1 ) );
-                                                    }
-                * /                                 ReportError( aUId, GEN_RES_STR1( S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED, MethodString( nMethodId ) ) );
-                                                }
-                                                else
-                                                {
-                                                    if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,((SvLBox*)pControl)->GetVisibleCount()) )
-                                                    {
-                                                        SvLBoxEntry *pEntry = (SvLBoxEntry*)((SvTreeListBox*)pControl)->GetEntryAtVisPos( nNr1-1 );
-                                                        ((SvTreeListBox*)pControl)->Select ( pEntry, bBool1 );
-                                                    }
-                                                }
-                                                break;*/
+                                                */
                                         default:
                                             ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "TableControl" ) );
                                             break;
