@@ -2,7 +2,7 @@ http://hg.services.openoffice.org/binaries
 05a0ece1372392a2cf310ebb96333025-openssl-0.9.8l.tar.gz
 09357cc74975b01714e00c5899ea1881-pixman-0.12.0.tar.gz
 0b49ede71c21c0599b0cc19b353a6cb3-README_apache-commons.txt
-1177af54a09e320d2c24015f29c3a93e-hunspell-1.2.8.tar.gz
+68dd2e8253d9a7930e9fd50e2d7220d0-hunspell-1.2.9.tar.gz
 128cfc86ed5953e57fe0f5ae98b62c2e-libtextcat-2.2.tar.gz
 17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip
 1756c4fa6c616ae15973c104cd8cb256-Adobe-Core35_AFMs-314.tar.gz
@@ -38,7 +38,7 @@ http://hg.services.openoffice.org/binaries
 ecb2e37e45c9933e2a963cabe03670ab-curl-7.19.7.tar.gz
 8294d6c42e3553229af9934c5c0ed997-stax-api-1.0-2-sources.jar
 8ea307d71d11140574bfb9fcc2487e33-libbase.zip
-9f18d97ca99b4f095f5ff18139df59c3-cppunit-1.8.0.tar.gz
+bd30e9cf5523cdfc019b94f5e1d7fd19-cppunit-1.12.1.tar.gz
 a06a496d7a43cbdc35e69dbe678efadb-libloader.zip
 a169ab152209200a7bad29a275cb0333-seamonkey-1.1.14.source.tar.gz
 a4d9b30810a434a3ed39fc0003bbd637-LICENSE_stax-api-1.0-2-sources.html
