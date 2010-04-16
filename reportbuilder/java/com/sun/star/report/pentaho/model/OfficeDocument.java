@@ -27,6 +27,7 @@
 package com.sun.star.report.pentaho.model;
 
 import com.sun.star.report.JobProperties;
+
 import org.jfree.report.JFreeReport;
 
 /**

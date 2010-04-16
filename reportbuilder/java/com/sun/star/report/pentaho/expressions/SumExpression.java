@@ -26,8 +26,8 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.expressions;
 
-import com.sun.star.report.ReportExpression;
 import com.sun.star.report.DataRow;
+import com.sun.star.report.ReportExpression;
 
 public class SumExpression implements ReportExpression
 {
