@@ -45,6 +45,8 @@
 #include <com/sun/star/form/XBoundComponent.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XStatement.hpp>
@@ -82,6 +84,7 @@ using namespace ::svt;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
@@ -551,6 +554,7 @@ TYPEINIT1( DbFilterField, DbCellControl )
 //------------------------------------------------------------------------------
 DbCellControl::DbCellControl( DbGridColumn& _rColumn, sal_Bool /*_bText*/ )
     :OPropertyChangeListener(m_aMutex)
+    ,m_pFieldChangeBroadcaster(NULL)
     ,m_bTransparent( sal_False )
     ,m_bAlignedController( sal_True )
     ,m_bAccessingValueProperty( sal_False )
@@ -574,6 +578,31 @@ DbCellControl::DbCellControl( DbGridColumn& _rColumn, sal_Bool /*_bText*/ )
         implDoPropertyListening( FM_PROP_STATE, sal_False );
         implDoPropertyListening( FM_PROP_TEXT, sal_False );
         implDoPropertyListening( FM_PROP_EFFECTIVE_VALUE, sal_False );
+
+        // be listener at the bound field as well
+        try
+        {
+            Reference< XPropertySet > xColModelProps( m_rColumn.getModel(), UNO_QUERY );
+            Reference< XPropertySetInfo > xPSI;
+            if ( xColModelProps.is() )
+                xPSI = xColModelProps->getPropertySetInfo();
+
+            if ( xPSI.is() && xPSI->hasPropertyByName( FM_PROP_BOUNDFIELD ) )
+            {
+                Reference< XPropertySet > xField;
+                xColModelProps->getPropertyValue( FM_PROP_BOUNDFIELD ) >>= xField;
+                if ( xField.is() )
+                {
+                    m_pFieldChangeBroadcaster = new ::comphelper::OPropertyChangeMultiplexer(this, xField);
+                    m_pFieldChangeBroadcaster->acquire();
+                    m_pFieldChangeBroadcaster->addProperty( FM_PROP_ISREADONLY );
+                }
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_ERROR( "DbCellControl::doPropertyListening: caught an exception!" );
+        }
     }
 }
 
@@ -605,17 +634,22 @@ void DbCellControl::doPropertyListening( const ::rtl::OUString& _rPropertyName )
 {
     implDoPropertyListening( _rPropertyName );
 }
-
+//------------------------------------------------------------------------------
+void lcl_clearBroadCaster(::comphelper::OPropertyChangeMultiplexer*& _pBroadcaster)
+{
+    if ( _pBroadcaster )
+    {
+        _pBroadcaster->dispose();
+        _pBroadcaster->release();
+        _pBroadcaster = NULL;
+        // no delete, this is done implicitly
+    }
+}
 //------------------------------------------------------------------------------
 DbCellControl::~DbCellControl()
 {
-    if ( m_pModelChangeBroadcaster )
-    {
-        m_pModelChangeBroadcaster->dispose();
-        m_pModelChangeBroadcaster->release();
-        m_pModelChangeBroadcaster = NULL;
-        // no delete, this is done implicitly
-    }
+    lcl_clearBroadCaster(m_pModelChangeBroadcaster);
+    lcl_clearBroadCaster(m_pFieldChangeBroadcaster);
 
     delete m_pWindow;
     delete m_pPainter;
@@ -660,7 +694,14 @@ void DbCellControl::_propertyChanged(const PropertyChangeEvent& _rEvent) throw(R
     }
     else if ( _rEvent.PropertyName.equals( FM_PROP_READONLY ) )
     {
-        implAdjustReadOnly( xSourceProps );
+        implAdjustReadOnly( xSourceProps, true);
+    }
+    else if ( _rEvent.PropertyName.equals( FM_PROP_ISREADONLY ) )
+    {
+        sal_Bool bReadOnly = sal_True;
+        _rEvent.NewValue >>= bReadOnly;
+        m_rColumn.SetReadOnly(bReadOnly);
+        implAdjustReadOnly( xSourceProps, false);
     }
     else if ( _rEvent.PropertyName.equals( FM_PROP_ENABLED ) )
     {
@@ -798,7 +839,7 @@ void DbCellControl::ImplInitWindow( Window& rParent, const InitWindowFacet _eIni
 }
 
 //------------------------------------------------------------------------------
-void DbCellControl::implAdjustReadOnly( const Reference< XPropertySet >& _rxModel )
+void DbCellControl::implAdjustReadOnly( const Reference< XPropertySet >& _rxModel,bool i_bReadOnly )
 {
     DBG_ASSERT( m_pWindow, "DbCellControl::implAdjustReadOnly: not to be called without window!" );
     DBG_ASSERT( _rxModel.is(), "DbCellControl::implAdjustReadOnly: invalid model!" );
@@ -807,9 +848,12 @@ void DbCellControl::implAdjustReadOnly( const Reference< XPropertySet >& _rxMode
         Edit* pEditWindow = dynamic_cast< Edit* >( m_pWindow );
         if ( pEditWindow )
         {
-            sal_Bool bReadOnly = sal_True;
-            _rxModel->getPropertyValue( FM_PROP_READONLY ) >>= bReadOnly;
-            static_cast< Edit* >( m_pWindow )->SetReadOnly( m_rColumn.IsReadOnly() || bReadOnly );
+            sal_Bool bReadOnly = m_rColumn.IsReadOnly();
+            if ( !bReadOnly )
+            {
+                _rxModel->getPropertyValue( i_bReadOnly ? FM_PROP_READONLY : FM_PROP_ISREADONLY) >>= bReadOnly;
+            }
+            static_cast< Edit* >( m_pWindow )->SetReadOnly( bReadOnly );
         }
     }
 }
@@ -846,7 +890,7 @@ void DbCellControl::Init( Window& rParent, const Reference< XRowSet >& _rxCursor
 
             if ( xModelPSI->hasPropertyByName( FM_PROP_READONLY ) )
             {
-                implAdjustReadOnly( xModel );
+                implAdjustReadOnly( xModel,true );
             }
 
             if ( xModelPSI->hasPropertyByName( FM_PROP_ENABLED ) )
@@ -1003,7 +1047,7 @@ double DbCellControl::GetValue(const Reference< ::com::sun::star::sdb::XColumn >
 //------------------------------------------------------------------------------
 void DbCellControl::invalidatedController()
 {
-    m_rColumn.GetParent().refreshController(m_rColumn.GetId(), DbGridControl::GrantCellControlAccess());
+    m_rColumn.GetParent().refreshController(m_rColumn.GetId(), DbGridControl::GrantControlAccess());
 }
 
 /*************************************************************************/
@@ -3039,43 +3083,22 @@ void DbFilterField::Update()
         if (!xForm.is())
             return;
 
+        Reference<XPropertySet> xFormProp(xForm,UNO_QUERY);
+        Reference< XTablesSupplier > xSupTab;
+        xFormProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SingleSelectQueryComposer"))) >>= xSupTab;
+
         Reference< XConnection >  xConnection(getRowSetConnection(xForm));
-        if (!xConnection.is())
-            return;
-
-        Reference< ::com::sun::star::sdb::XSQLQueryComposerFactory >  xFactory(xConnection, UNO_QUERY);
-        if (!xFactory.is())
-        {
-            DBG_ERROR("DbFilterField::Update : used the right place to request the ::com::sun::star::sdb::XSQLQueryComposerFactory interface ?");
-            return;
-        }
-
-        Reference< ::com::sun::star::sdb::XSQLQueryComposer >  xComposer = xFactory->createQueryComposer();
-        try
-        {
-            Reference< ::com::sun::star::beans::XPropertySet >  xFormAsSet(xForm, UNO_QUERY);
-            ::rtl::OUString sStatement;
-            xFormAsSet->getPropertyValue(FM_PROP_ACTIVECOMMAND) >>= sStatement;
-            xComposer->setQuery(sStatement);
-        }
-        catch(const Exception&)
-        {
-            ::comphelper::disposeComponent(xComposer);
-            return;
-        }
-
-        Reference< ::com::sun::star::beans::XPropertySet >  xComposerAsSet(xComposer, UNO_QUERY);
-        if (!xComposerAsSet.is())
+        if (!xSupTab.is())
             return;
 
         // search the field
-        Reference< ::com::sun::star::container::XNameAccess >    xFieldNames;
-        Reference< ::com::sun::star::container::XNameAccess >    xTablesNames;
-        Reference< ::com::sun::star::beans::XPropertySet >       xComposerFieldAsSet;
+        Reference< XColumnsSupplier > xSupCol(xSupTab,UNO_QUERY);
+        Reference< ::com::sun::star::container::XNameAccess >    xFieldNames = xSupCol->getColumns();
+        if (!xFieldNames->hasByName(aName))
+            return;
 
-        ::cppu::extractInterface(xFieldNames, xComposerAsSet->getPropertyValue(FM_PROP_SELECTED_FIELDS));
-        ::cppu::extractInterface(xTablesNames, xComposerAsSet->getPropertyValue(FM_PROP_SELECTED_TABLES));
-        ::cppu::extractInterface(xComposerFieldAsSet, xFieldNames->getByName(aName));
+        Reference< ::com::sun::star::container::XNameAccess >    xTablesNames = xSupTab->getTables();
+        Reference< ::com::sun::star::beans::XPropertySet >       xComposerFieldAsSet(xFieldNames->getByName(aName),UNO_QUERY);
 
         if (xComposerFieldAsSet.is() && ::comphelper::hasProperty(FM_PROP_TABLENAME, xComposerFieldAsSet) &&
             ::comphelper::hasProperty(FM_PROP_FIELDSOURCE, xComposerFieldAsSet))

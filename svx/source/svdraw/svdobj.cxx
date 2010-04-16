@@ -121,6 +121,7 @@
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/svdundo.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <svx/sdrobjectfilter.hxx>
 
 using namespace ::com::sun::star;
 
@@ -3264,6 +3265,13 @@ void SdrObjFactory::RemoveMakeUserDataHdl(const Link& rLink)
 {
     SdrLinkList& rLL=ImpGetUserMakeObjUserDataHdl();
     rLL.RemoveLink(rLink);
+}
+
+namespace svx
+{
+    ISdrObjectFilter::~ISdrObjectFilter()
+    {
+    }
 }
 
 // eof

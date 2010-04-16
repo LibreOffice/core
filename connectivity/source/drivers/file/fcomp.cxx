@@ -288,17 +288,14 @@ OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  th
 //------------------------------------------------------------------
 OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
 {
-    DBG_ASSERT(pPredicateNode->count() >= 4,"OFILECursor: Fehler im Parse Tree");
+    DBG_ASSERT(pPredicateNode->count() == 2,"OFILECursor: Fehler im Parse Tree");
+    const OSQLParseNode* pPart2 = pPredicateNode->getChild(1);
 
-    sal_Int32 ePredicateType;
     sal_Unicode cEscape = L'\0';
-    if (pPredicateNode->count() == 5)
-        ePredicateType = SQLFilterOperator::NOT_LIKE;
-    else
-        ePredicateType = SQLFilterOperator::LIKE;
+    const bool bNotLike = pPart2->getChild(0)->isToken();
 
-    OSQLParseNode* pAtom        = pPredicateNode->getChild(pPredicateNode->count()-2);
-    OSQLParseNode* pOptEscape   = pPredicateNode->getChild(pPredicateNode->count()-1);
+    OSQLParseNode* pAtom        = pPart2->getChild(pPredicateNode->count()-2);
+    OSQLParseNode* pOptEscape   = pPart2->getChild(pPredicateNode->count()-1);
 
     if (!(pAtom->getNodeType() == SQL_NODE_STRING || SQL_ISRULE(pAtom,parameter)))
     {
@@ -322,9 +319,9 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(
     execute(pPredicateNode->getChild(0));
     execute(pAtom);
 
-    OBoolOperator* pOperator = (ePredicateType == SQLFilterOperator::LIKE)
-                                                    ? new OOp_LIKE(cEscape)
-                                                    : new OOp_NOTLIKE(cEscape);
+    OBoolOperator* pOperator = bNotLike
+                                    ? new OOp_NOTLIKE(cEscape)
+                                    : new OOp_LIKE(cEscape);
     m_aCodeList.push_back(pOperator);
 
     return NULL;
@@ -332,11 +329,12 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(
 //------------------------------------------------------------------
 OOperand* OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
 {
-    DBG_ASSERT(pPredicateNode->count() == 6,"OFILECursor: Fehler im Parse Tree");
+    DBG_ASSERT(pPredicateNode->count() == 2,"OFILECursor: Fehler im Parse Tree");
 
     OSQLParseNode* pColumn = pPredicateNode->getChild(0);
-    OSQLParseNode* p1stValue = pPredicateNode->getChild(3);
-    OSQLParseNode* p2ndtValue = pPredicateNode->getChild(5);
+    const OSQLParseNode* pPart2 = pPredicateNode->getChild(1);
+    OSQLParseNode* p1stValue = pPart2->getChild(3);
+    OSQLParseNode* p2ndtValue = pPart2->getChild(5);
 
     if (
             !(p1stValue->getNodeType() == SQL_NODE_STRING || SQL_ISRULE(p1stValue,parameter))
@@ -346,7 +344,7 @@ OOperand* OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) thr
         m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_INVALID_BETWEEN,NULL);
     }
 
-    sal_Bool bNot = SQL_ISTOKEN(pPredicateNode->getChild(1),NOT);
+    sal_Bool bNot = SQL_ISTOKEN(pPart2->getChild(0),NOT);
 
     OOperand* pColumnOp = execute(pColumn);
     OOperand* pOb1 = execute(p1stValue);
@@ -411,11 +409,12 @@ OOperand* OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) thr
 //------------------------------------------------------------------
 OOperand* OPredicateCompiler::execute_ISNULL(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
 {
-    DBG_ASSERT(pPredicateNode->count() >= 3,"OFILECursor: Fehler im Parse Tree");
-    DBG_ASSERT(SQL_ISTOKEN(pPredicateNode->getChild(1),IS),"OFILECursor: Fehler im Parse Tree");
+    DBG_ASSERT(pPredicateNode->count() == 2,"OFILECursor: Fehler im Parse Tree");
+    const OSQLParseNode* pPart2 = pPredicateNode->getChild(1);
+    DBG_ASSERT(SQL_ISTOKEN(pPart2->getChild(0),IS),"OFILECursor: Fehler im Parse Tree");
 
     sal_Int32 ePredicateType;
-    if (SQL_ISTOKEN(pPredicateNode->getChild(2),NOT))
+    if (SQL_ISTOKEN(pPart2->getChild(1),NOT))
         ePredicateType = SQLFilterOperator::NOT_SQLNULL;
     else
         ePredicateType = SQLFilterOperator::SQLNULL;
@@ -635,7 +634,6 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
     switch ( nTokenId )
     {
         case SQL_TOKEN_CHAR_LENGTH:
-        case SQL_TOKEN_CHARACTER_LENGTH:
         case SQL_TOKEN_LENGTH:
         case SQL_TOKEN_OCTET_LENGTH:
         case SQL_TOKEN_ASCII:
@@ -677,7 +675,6 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
             switch( nTokenId )
             {
                 case SQL_TOKEN_CHAR_LENGTH:
-                case SQL_TOKEN_CHARACTER_LENGTH:
                 case SQL_TOKEN_LENGTH:
                 case SQL_TOKEN_OCTET_LENGTH:
                     pOperator = new OOp_CharLength();
