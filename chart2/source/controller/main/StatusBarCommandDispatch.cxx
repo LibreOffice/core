@@ -43,9 +43,6 @@
 // #include <vcl/svapp.hxx>
 // #endif
 
-// for ressource strings STR_UNDO and STR_REDO
-#include <sfx2/sfx.hrc>
-
 #include "ResId.hxx"
 
 using namespace ::com::sun::star;

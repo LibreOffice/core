@@ -53,8 +53,7 @@ RESLIB1LIST=\
     $(SRS)$/styleui.srs	\
     $(SRS)$/formdlgs.srs \
     $(SRS)$/pagedlg.srs	\
-    $(SRS)$/navipi.srs	\
-    $(SOLARCOMMONRESDIR)$/sfx.srs
+    $(SRS)$/navipi.srs	
 
 RESLIB1NAME=sc
 RESLIB1IMAGES=\
