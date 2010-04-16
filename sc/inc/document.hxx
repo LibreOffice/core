@@ -896,10 +896,17 @@ public:
 
     USHORT          GetErrCode( const ScAddress& ) const;
 
-    bool            ShrinkToDataArea(SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow) const;
+                    /** Shrink a range to only include data area.
+                        This is not the actually used area within the
+                        selection, but the bounds of the sheet's data area
+                        instead. */
+    bool            ShrinkToDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow ) const;
+
+                    /** Shrink a range to only include used data area. */
+    bool            ShrinkToUsedDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const;
 
     void            GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
-                                    SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld );
+                                    SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld, bool bOnlyDown );
     SC_DLLPUBLIC BOOL           GetCellArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
     SC_DLLPUBLIC BOOL           GetTableArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
     SC_DLLPUBLIC BOOL           GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
@@ -1095,7 +1102,8 @@ public:
     void            UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                      SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                      SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                     ScDocument* pUndoDoc = NULL, BOOL bIncludeDraw = TRUE );
+                                     ScDocument* pUndoDoc = NULL, BOOL bIncludeDraw = TRUE,
+                                     bool bUpdateNoteCaptionPos = true );
 
     SC_DLLPUBLIC void           UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDoc,
                                         const ScMarkData& rMark, ScDocument* pUndoDoc = NULL );
@@ -1651,7 +1659,7 @@ public:
     BOOL                IsExpandRefs() { return bExpandRefs; }
 
     SC_DLLPUBLIC void               IncSizeRecalcLevel( SCTAB nTab );
-    SC_DLLPUBLIC void               DecSizeRecalcLevel( SCTAB nTab );
+    SC_DLLPUBLIC void               DecSizeRecalcLevel( SCTAB nTab, bool bUpdateNoteCaptionPos = true );
 
     ULONG               GetXMLImportedFormulaCount() const { return nXMLImportedFormulaCount; }
     void                IncXMLImportedFormulaCount( ULONG nVal )
