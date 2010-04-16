@@ -36,17 +36,16 @@ TARGET=hunspell
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=hunspell-1.2.8
-TARFILE_ROOTDIR=hunspell-1.2.8
-
-#ADDITIONAL_FILES += src/hunspell/makefile.mk
+TARFILE_NAME=hunspell-1.2.9
+TARFILE_MD5=68dd2e8253d9a7930e9fd50e2d7220d0
+ADDITIONAL_FILES+=config.h
 
 PATCH_FILES=\
-    hunspell-1.2.8.patch \
-    hunspell-consts-1.2.8.patch # hunspell#2064983
+    hunspell-wntconfig.patch \
+    hunspell-solaris.patch \
+    hunspell-stacksmash.patch
 
 .IF "$(GUI)"=="UNX"
-#CONFIGURE_DIR=$(BUILD_DIR)
 
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) configure
