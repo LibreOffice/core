@@ -1,5 +1,23 @@
 --- misc/libtextcat-2.2/configure	Thu May 22 13:39:55 2003
 +++ misc/build/libtextcat-2.2/configure	Mon Mar 31 11:29:14 2008
+@@ -3451,7 +3451,7 @@
+   ;;
+ 
+ # This must be Linux ELF.
+-linux-gnu*)
++linux-gnu*|k*bsd*-gnu*)
+   case $host_cpu in
+   alpha* | hppa* | i*86 | mips | mipsel | powerpc* | sparc* | ia64*)
+     lt_cv_deplibs_check_method=pass_all ;;
+@@ -6365,7 +6365,7 @@
+   ;;
+ 
+ # This must be Linux ELF.
+-linux-gnu*)
++linux-gnu*|k*bsd*-gnu*)
+   version_type=linux
+   need_lib_prefix=no
+   need_version=no
 @@ -5391,7 +5391,8 @@
  allow_undefined_flag=
  no_undefined_flag=
