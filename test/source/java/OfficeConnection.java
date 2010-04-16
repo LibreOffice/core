@@ -73,7 +73,7 @@ public final class OfficeConnection {
         errForward.start();
         XUnoUrlResolver resolver = UnoUrlResolver.create(
             Bootstrap.createInitialComponentContext(null));
-        for (int i = 0;; ++i) {
+        for (;;) {
             try {
                 factory = UnoRuntime.queryInterface(
                     XMultiServiceFactory.class,
@@ -103,6 +103,8 @@ public final class OfficeConnection {
                 // it appears that DisposedExceptions can already happen while
                 // receiving the response of the terminate call
             desktop = null;
+        } else if (process != null) {
+            process.destroy();
         }
         int code = 0;
         if (process != null) {
