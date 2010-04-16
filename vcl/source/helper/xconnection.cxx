@@ -141,12 +141,16 @@ bool DisplayConnection::dispatchEvent( void* pThis, void* pData, int nBytes )
     SolarMutexReleaser aRel;
 
     DisplayConnection* This = (DisplayConnection*)pThis;
-    MutexGuard aGuard( This->m_aMutex );
 
     Sequence< sal_Int8 > aSeq( (sal_Int8*)pData, nBytes );
     Any aEvent;
     aEvent <<= aSeq;
-    for( ::std::list< Reference< XEventHandler > >::const_iterator it = This->m_aHandlers.begin(); it != This->m_aHandlers.end(); ++it )
+    ::std::list< Reference< XEventHandler > > handlers;
+    {
+        MutexGuard aGuard( This->m_aMutex );
+        handlers = This->m_aHandlers;
+    }
+    for( ::std::list< Reference< XEventHandler > >::const_iterator it = handlers.begin(); it != handlers.end(); ++it )
         if( (*it)->handleEvent( aEvent ) )
             return true;
     return false;
@@ -157,12 +161,16 @@ bool DisplayConnection::dispatchErrorEvent( void* pThis, void* pData, int nBytes
     SolarMutexReleaser aRel;
 
     DisplayConnection* This = (DisplayConnection*)pThis;
-    MutexGuard aGuard( This->m_aMutex );
 
     Sequence< sal_Int8 > aSeq( (sal_Int8*)pData, nBytes );
     Any aEvent;
     aEvent <<= aSeq;
-    for( ::std::list< Reference< XEventHandler > >::const_iterator it = This->m_aErrorHandlers.begin(); it != This->m_aErrorHandlers.end(); ++it )
+    ::std::list< Reference< XEventHandler > > handlers;
+    {
+        MutexGuard aGuard( This->m_aMutex );
+        handlers = This->m_aErrorHandlers;
+    }
+    for( ::std::list< Reference< XEventHandler > >::const_iterator it = handlers.begin(); it != handlers.end(); ++it )
         if( (*it)->handleEvent( aEvent ) )
             return true;
 
