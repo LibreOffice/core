@@ -147,7 +147,6 @@ StdFontInfo::StdFontInfo( const ::rtl::OUString& rName, sal_uInt32 nHeight,
     {
         case OLE_COLORTYPE_CLIENT:
             return bDefaultColorBgr ? lclDecodeBgrColor( nOleColor ) : rGraphicHelper.getPaletteColor( nOleColor & OLE_PALETTECOLOR_MASK );
-        break;
 
         case OLE_COLORTYPE_PALETTE:
             return rGraphicHelper.getPaletteColor( nOleColor & OLE_PALETTECOLOR_MASK );
