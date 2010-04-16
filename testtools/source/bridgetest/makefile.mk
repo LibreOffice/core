@@ -80,11 +80,7 @@ SHL1STDLIBS= \
 SHL1LIBS=	$(LIB1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
-.IF "$(COMNAME)" == "gcc3"
-SHL1VERSIONMAP = component.gcc3.map
-.ELSE
-SHL1VERSIONMAP = component.map
-.ENDIF
+SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 
 # ---- test object ----
 
@@ -103,16 +99,12 @@ SHL2STDLIBS= \
 SHL2LIBS=	$(LIB2TARGET)
 SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=	$(SHL2TARGET)
-.IF "$(COMNAME)" == "gcc3"
-SHL2VERSIONMAP = component.gcc3.map
-.ELSE
-SHL2VERSIONMAP = component.map
-.ENDIF
+SHL2VERSIONMAP = $(SOLARENV)/src/component.map
 
 SHL3TARGET = constructors.uno
 SHL3OBJS = $(SLO)$/constructors.obj
 SHL3STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)
-SHL3VERSIONMAP = component.map
+SHL3VERSIONMAP = $(SOLARENV)/src/component.map
 SHL3IMPLIB = i$(SHL3TARGET)
 DEF3NAME = $(SHL3TARGET)
 
@@ -154,24 +146,16 @@ $(DLLDEST)$/uno_types.rdb : $(SOLARBINDIR)$/udkapi.rdb
     $(REGMERGE) $@ / $(BIN)$/bridgetest.rdb
 
 $(DLLDEST)$/bridgetest_client$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
-.IF "$(USE_SHELL)" == "bash"
     echo '$(AUGMENT_LIBRARY_PATH)' '$(SOLARBINDIR)'/uno -ro uno_services.rdb -ro uno_types.rdb \
         -s com.sun.star.test.bridge.BridgeTest -- \
         -u \''uno:socket,host=127.0.0.1,port=2002;urp;test'\' > $@
-.ELSE
-    echo ERROR: this script can only be created properly for USE_SHELL=bash > $@
-.ENDIF
     $(GIVE_EXEC_RIGHTS) $@
 
 $(DLLDEST)$/bridgetest_server$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
-.IF "$(USE_SHELL)" == "bash"
     echo '$(AUGMENT_LIBRARY_PATH)' '$(SOLARBINDIR)'/uno -ro uno_services.rdb -ro uno_types.rdb \
         -s com.sun.star.test.bridge.CppTestObject \
         -u \''uno:socket,host=127.0.0.1,port=2002;urp;test'\' --singleaccept \
         > $@
-.ELSE
-    echo ERROR: this script can only be created properly for USE_SHELL=bash > $@
-.ENDIF
     $(GIVE_EXEC_RIGHTS) $@
 
 
@@ -191,14 +175,10 @@ $(DLLDEST)$/bridgetest_javaserver$(BATCH_SUFFIX) : makefile.mk
     $(GIVE_EXEC_RIGHTS) $@
 
 $(DLLDEST)$/bridgetest_inprocess_java$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
-.IF "$(USE_SHELL)" == "bash"
     echo '$(AUGMENT_LIBRARY_PATH)' '$(SOLARBINDIR)'/uno -ro uno_services.rdb -ro uno_types.rdb \
         -s com.sun.star.test.bridge.BridgeTest \
         -env:URE_INTERNAL_JAVA_DIR=$(MY_URE_INTERNAL_JAVA_DIR) \
         -- com.sun.star.test.bridge.JavaTestObject noCurrentContext > $@
-.ELSE
-    echo ERROR: this script can only be created properly for USE_SHELL=bash > $@
-.ENDIF
     $(GIVE_EXEC_RIGHTS) $@
 .ENDIF
 
