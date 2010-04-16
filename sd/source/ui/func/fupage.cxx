@@ -360,6 +360,8 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                     ( ( (XFillStyleItem*) aMergedAttr.GetItem( XATTR_FILLSTYLE ) )->GetValue() == XFILL_NONE ) ) )
                 mbPageBckgrdDeleted = TRUE;
 
+            bool bSetToAllPages = false;
+
             // Ask, wether the setting are for the background-page or for the current page
             if( !mbMasterPage && bChanges )
             {
@@ -375,7 +377,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                         aTit,
                         aTxt );
                     aQuestionBox.SetImage( QueryBox::GetStandardImage() );
-                    mbMasterPage = ( RET_YES == aQuestionBox.Execute() );
+                    bSetToAllPages = ( RET_YES == aQuestionBox.Execute() );
                 }
 
                 if( mbPageBckgrdDeleted )
@@ -399,12 +401,13 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
 
             if( mbMasterPage )
             {
-/*
                 StyleSheetUndoAction* pAction = new StyleSheetUndoAction(mpDoc, (SfxStyleSheet*)pStyleSheet, &(*pTempSet.get()));
                 mpDocSh->GetUndoManager()->AddUndoAction(pAction);
                 pStyleSheet->GetItemSet().Put( *(pTempSet.get()) );
                 pStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
-*/
+            }
+            else if( bSetToAllPages )
+            {
                 String aComment(SdResId(STR_UNDO_CHANGE_PAGEFORMAT));
                 SfxUndoManager* pUndoMgr = mpDocSh->GetUndoManager();
                 pUndoMgr->EnterListAction(aComment, aComment);
