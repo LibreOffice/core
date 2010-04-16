@@ -48,11 +48,6 @@ SLOFILES=	\
     $(SLO)$/dynload.obj \
     $(SLO)$/simplereferenceobject.obj
 
-# SCO: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO"
-SLOFILES+=$(SLO)$/staticmb.obj
-.ENDIF
-
 .IF "$(GUI)" == "WNT"
 SHL1TARGET=	$(TARGET)$(UDK_MAJOR)$(COMID)
 .ELIF "$(GUI)" == "OS2"
