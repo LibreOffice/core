@@ -263,7 +263,7 @@ SfxViewShell* __EXPORT ViewShellBase::CreateInstance (
 void ViewShellBase::RegisterFactory( USHORT nPrio )
 {
     pFactory = new SfxViewFactory(
-        &CreateInstance,&InitFactory,nPrio,SdResId(STR_DEFAULTVIEW));
+        &CreateInstance,&InitFactory,nPrio);
     InitFactory();
 }
 void ViewShellBase::InitFactory()

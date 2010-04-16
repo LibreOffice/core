@@ -47,10 +47,10 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dockwin.hxx>
+#include <sfx2/sfxresid.hxx>
 
 #include "pres.hxx"
 #include "navigatr.hxx"
-//#include "navichld.hxx"
 #include "navigatr.hrc"
 #include "pgjump.hxx"
 #include "app.hrc"
@@ -319,7 +319,10 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
                 USHORT nRId = GetDragTypeSdResId( (NavigatorDragType)nID );
                 if( nRId > 0 )
                 {
-                    pMenu->InsertItem( nID, String( SdResId( nRId ) ) );
+                    if (nID==STR_NONE)
+                        pMenu->InsertItem( nID, String( SfxResId( nRId ) ) );
+                    else
+                        pMenu->InsertItem( nID, String( SdResId( nRId ) ) );
                     pMenu->SetHelpId( nID, HID_SD_NAVIGATOR_MENU1 +
                                             nID - NAVIGATOR_DRAGTYPE_URL );
                 }
