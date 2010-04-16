@@ -1410,7 +1410,7 @@ BasicEntryDescriptor ModulWindow::CreateEntryDescriptor()
     {
         switch( xModule->GetModuleType() )
         {
-            case script::ModuleType::Document:
+            case script::ModuleType::DOCUMENT:
             {
                 aLibSubName = String( IDEResId( RID_STR_DOCUMENT_OBJECTS ) );
                 uno::Reference< container::XNameContainer > xLib = aDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
@@ -1425,13 +1425,13 @@ BasicEntryDescriptor ModulWindow::CreateEntryDescriptor()
                 }
                 break;
             }
-            case script::ModuleType::Form:
+            case script::ModuleType::FORM:
                 aLibSubName = String( IDEResId( RID_STR_USERFORMS ) );
                 break;
-            case script::ModuleType::Normal:
+            case script::ModuleType::NORMAL:
                 aLibSubName = String( IDEResId( RID_STR_NORMAL_MODULES ) );
                 break;
-            case script::ModuleType::Class:
+            case script::ModuleType::CLASS:
                 aLibSubName = String( IDEResId( RID_STR_CLASS_MODULES ) );
                 break;
         }

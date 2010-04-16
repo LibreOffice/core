@@ -63,7 +63,7 @@ void lcl_getObjectName( const uno::Reference< container::XNameContainer >& rLib,
 
 sal_Int32 lcl_getModuleType(  const uno::Reference< container::XNameContainer >& rLib, const String& rModName )
 {
-    sal_Int32 nType = com::sun::star::script::ModuleType::Normal;
+    sal_Int32 nType = com::sun::star::script::ModuleType::NORMAL;
     uno::Reference< script::XVBAModuleInfo > xVBAModuleInfo( rLib, uno::UNO_QUERY );
     if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( rModName ) )
     {
@@ -448,16 +448,16 @@ void BasicTreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubR
             BasicEntryType eType = OBJ_TYPE_UNKNOWN;
             switch( lcl_getModuleType( xLib, aModName ) )
             {
-                case script::ModuleType::Document:
+                case script::ModuleType::DOCUMENT:
                     eType = OBJ_TYPE_DOCUMENT_OBJECTS;
                     break;
-                case script::ModuleType::Form:
+                case script::ModuleType::FORM:
                     eType = OBJ_TYPE_USERFORMS;
                     break;
-                case script::ModuleType::Normal:
+                case script::ModuleType::NORMAL:
                     eType = OBJ_TYPE_NORMAL_MODULES;
                     break;
-                case script::ModuleType::Class:
+                case script::ModuleType::CLASS:
                     eType = OBJ_TYPE_CLASS_MODULES;
                     break;
             }

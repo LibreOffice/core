@@ -599,7 +599,7 @@ void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
                         if( pWin && pWin->ISA( ModulWindow ) )
                         {
                             SbModule* pActiveModule = (SbModule*)pBasic->FindModule( pWin->GetName() );
-                            if( pActiveModule && ( pActiveModule->GetModuleType() == script::ModuleType::Document ) )
+                            if( pActiveModule && ( pActiveModule->GetModuleType() == script::ModuleType::DOCUMENT ) )
                             {
                                 aPopup.EnableItem( SID_BASICIDE_DELETECURRENT, FALSE );
                                 aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, FALSE );
