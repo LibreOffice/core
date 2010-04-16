@@ -38,11 +38,6 @@ force_dmake_to_error
 
 # --- common tool makros --------------------------------------
 
-# moved temporary wrapper here as it is used in unitools.mk
-.IF "$(USE_SHELL)"!=""
-use_shell*=$(USE_SHELL)
-.ENDIF
-
 .IF "$(USE_PCH)"!=""
 ENABLE_PCH=TRUE
 .ENDIF			# "$(USE_PCH)"!=""
@@ -54,13 +49,6 @@ NETWORK_BUILD:=TRUE
 .ENDIF			# "$(ENABLE_PCH)"!="" && "$(BUILD_SPECIAL)"!=""
 
 .INCLUDE : unitools.mk
-
-#have SCRIPTEXT already defined in product.mk but available for all
-.IF "$(USE_SHELL)"=="4NT"
-SCRIPTEXT=.bat
-.ELSE           # "$(GUI)"=="WNT"
-SCRIPTEXT=
-.ENDIF          # "$(GUI)"=="WNT"
 
 .INCLUDE : minor.mk
 
@@ -1029,6 +1017,18 @@ LNTFLAGSOUTOBJ=-os
 .INCLUDE : os2.mk
 .ENDIF
 
+.IF "$(OOO_LIBRARY_PATH_VAR)" != ""
+# Add SOLARLIBDIR to the end of a (potentially previously undefined) library
+# path (LD_LIBRARY_PATH, PATH, etc.; there is no real reason to prefer adding at
+# the end over adding at the start); the ": &&" in the bash case enables this to
+# work at the start of a recipe line that is not prefixed by "+" as well as in
+# the middle of an existing && chain:
+AUGMENT_LIBRARY_PATH = : && \
+    $(OOO_LIBRARY_PATH_VAR)=$${{$(OOO_LIBRARY_PATH_VAR)+$${{$(OOO_LIBRARY_PATH_VAR)}}:}}$(normpath, $(SOLARSHAREDBIN))
+AUGMENT_LIBRARY_PATH_LOCAL = : && \
+    $(OOO_LIBRARY_PATH_VAR)=$${{$(OOO_LIBRARY_PATH_VAR)+$${{$(OOO_LIBRARY_PATH_VAR)}}:}}$(normpath, $(PWD)/$(DLLDEST)):$(normpath, $(SOLARSHAREDBIN))
+.END
+
 # remove if .Net 2003 support has expired 
 .IF "$(debug)"!=""
 .IF "$(OS)$(COM)$(CPU)" == "WNTMSCI"
@@ -1054,7 +1054,7 @@ JAVAMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/javamaker
 RDBMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/rdbmaker
 CLIMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/climaker
 
-TESTSHL2=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/testshl2
+CPPUNITTESTER=$(AUGMENT_LIBRARY_PATH_LOCAL) $(SOLARBINDIR)/cppunittester
 HELPEX=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/helpex
 LNGCONVEX=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/lngconvex
 HELPLINKER=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/HelpLinker
@@ -1348,6 +1348,10 @@ $(COMP9TYPELIST)_XML2CMPTYPES:=$(shell @$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/x
 # some place to define these jars for SO environment
 XML_APIS_JAR*=$(SOLARBINDIR)/xml-apis.jar
 XERCES_JAR*=$(SOLARBINDIR)/xercesImpl.jar
+
+.IF "$(SYSTEM_CPPUNIT)" != "YES"
+CPPUNIT_CFLAGS =
+.END
 
 # workaround for strange dmake bug:
 # if the previous block was a rule or a target, "\#" isn't recognized

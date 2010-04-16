@@ -547,6 +547,9 @@ AC_ARG_WITH(system-altlinuxhyph,
 AC_ARG_WITH(system-lpsolve,
 [  --with-system-lpsolve         Use lpsolve already on system
 ],,)
+AC_ARG_WITH(system-cppunit,
+[  --with-system-cppunit         Use cppunit already on system
+],,)
 AC_ARG_WITH(system-mozilla,
 [  --with-system-mozilla   Use mozilla already on system. Note that some
                           components cannot be built against a contemporary
@@ -602,6 +605,13 @@ AC_ARG_WITH(ant-home,
  
                           Usage: --with-ant-home=<absolute path to Ant home>
 ],,)
+AC_ARG_WITH(junit,
+[  --with-junit            Specifies the JUnit 4 jar file to use for JUnit-based
+                          tests.  --without-junit disables those tests.  Not
+                          relevant in the --without-java case.
+
+                          Usage: --with-junit=<absolute path to JUnit 4 jar>
+],,with_junit=yes)
 AC_ARG_WITH(perl-home,
 [  --with-perl-home        If you have installed the Perl 5 Distribution, on your
                           system, please supply the path here.
@@ -779,7 +789,7 @@ AC_ARG_WITH(zip-home,
 ],,)
 AC_ARG_WITH(mingwin,
 [  --with-mingwin          For Windows users, use the mingwin32 compiler within
-                          cygwin environment, this implies --with-use-shell=tcsh
+                          cygwin environment
 
                           Usage: --with-mingwin=yes
 
@@ -789,15 +799,6 @@ AC_ARG_WITH(mingwin,
 
                           Usage: --with-mingwin=i586-mingw32msvc-g++
 ],WITH_MINGWIN=$withval,WITH_MINGWIN=0)
-AC_ARG_WITH(use-shell,
-[  --with-use-shell        Use this option to override the default shell to be
-                          used for the build environment.
-                          Supported options:
-                            tcsh (default)
-                            bash
-
-                          Usage: --with-use-shell=tcsh|bash
-],with_use_shell=$withval,with_use_shell="tcsh")
 AC_ARG_WITH(build-version,
 [  --with-build-version    Allows the builder to add a custom version tag
                           that will appear in the Help/About box for QA
@@ -1325,16 +1326,8 @@ AC_SUBST(DICT_SYSTEM_DIR)
 AC_SUBST(HYPH_SYSTEM_DIR)
 AC_SUBST(THES_SYSTEM_DIR)
 
-dnl ===================================================================
-dnl all O/S use tcsh or bash.
-dnl The following sets the with_use_shell variable.
-dnl ===================================================================
-AC_MSG_CHECKING([which shell to use])
 if test $_os = "WINNT"; then
-   dnl ===================================================================
-   if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash"; then
-      AC_MSG_ERROR([only "tcsh" or "bash" are supported options])
-   fi
+   AC_MSG_CHECKING([Windows build environment sanity])
    dnl ===================================================================
    dnl Sanity check! Native windows programs cannot use cygwin symlinks!
    dnl ===================================================================
@@ -1362,32 +1355,14 @@ link, and copy the program to the name of the link.])
          fi
       fi
    dnl ===================================================================
-   dnl If using Mingwin32 then don't use 4NT
-   dnl ===================================================================
    if test "$WITH_MINGWIN" = "yes" ; then
-      if test "x$with_use_shell" = "x"; then
-         with_use_shell="tcsh"
-      fi
       if test -z "$CC"; then
          CC="gcc -mno-cygwin"
          CXX="g++ -mno-cygwin"
       fi
    fi
-elif test $_os = "OS2"; then
-   if test "$with_use_shell" != "tcsh"; then
-      AC_MSG_ERROR([only "tcsh" is supported options])
-   fi
-else 
-   dnl ===================================================================
-   dnl All other operating systems use tcsh or bash.
-   dnl ===================================================================
-   if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash"; then
-      AC_MSG_ERROR([only "tcsh" or "bash" are supported options])
-   fi
+   AC_MSG_RESULT([ok])
 fi
-USE_SHELL="$with_use_shell"
-AC_MSG_RESULT([$USE_SHELL])
-AC_SUBST(USE_SHELL)
 AC_SUBST(WITH_MINGWIN)
 
 dnl ===================================================================
@@ -1406,25 +1381,13 @@ fi
 
 
 dnl ===================================================================
-dnl Check whether the chosen shell can be used.
+dnl Check whether the bash shell can be used.
 dnl ===================================================================
-if test "$with_use_shell" = "tcsh"; then
-   AC_PATH_PROG(SHELLPATH, tcsh)
-   if test -z "$SHELLPATH"; then
-      AC_MSG_ERROR([tcsh not found in \$PATH])
-   else
-      SHELLPATH=`echo $SHELLPATH | $SED -n "s/\/tcsh$//p"`
-   fi
-elif test "$with_use_shell" = "bash"; then
-   AC_PATH_PROG(SHELLPATH, bash)
-   if test -z "$SHELLPATH"; then
-      AC_MSG_ERROR([bash not found in \$PATH])
-   else
-      SHELLPATH=`echo $SHELLPATH | $SED -n "s/\/bash$//p"`
-   fi
+AC_PATH_PROG(SHELLPATH, bash)
+if test -z "$SHELLPATH"; then
+   AC_MSG_ERROR([bash not found in \$PATH])
 else
-   AC_MSG_WARN([Windows/OS/2 4NT builds don't test for the shell])
-   SHELLPATH="NO_SHELLPATH_NEEDED"
+   SHELLPATH=`echo $SHELLPATH | $SED -n "s/\/bash$//p"`
 fi
 AC_SUBST(SHELLPATH)
 
@@ -2769,6 +2732,17 @@ if test "$SOLAR_JAVA" != ""; then
       fi
       JAVAINTERPRETER=`cygpath -d "$JAVAINTERPRETER"`
       JAVAINTERPRETER=`cygpath -u "$JAVAINTERPRETER"`
+   elif test "$_os" = "Darwin"; then
+      dnl HACK:  There currently is only a 32 bit version of OOo for Mac OS X,
+      dnl and Tiger java complains about -d32 while Snow Leopard java needs it
+      dnl to run in 32 bit mode and be able to load OOo jnilibs:
+      AC_MSG_CHECKING([whether to pass -d32 to Java interpreter])
+      if "$JAVAINTERPRETER" -d32 >&5 2>&5; then
+         AC_MSG_RESULT([yes])
+         JAVAIFLAGS=-d32
+      else
+         AC_MSG_RESULT([no])
+      fi
    fi
 fi
 
@@ -3151,6 +3125,7 @@ AC_SUBST(JAVA_HOME)
 AC_SUBST(JDK)
 AC_SUBST(JAVAFLAGS)
 AC_SUBST(JAVAINTERPRETER)
+AC_SUBST(JAVAIFLAGS)
 AC_SUBST(JAVACOMPILER)
 AC_SUBST(JAVAAOTCOMPILER)
 AC_SUBST(JAVADOC)
@@ -3202,7 +3177,7 @@ fi
 AC_SUBST(BUILD_DMAKE)
 
 AC_MSG_CHECKING([whether to enable EPM for packing])
-if test "$_os" != "WINNT" -a \( "z$enable_epm" = "z" -o "$enable_epm" != "no" \) ; then
+if test "$enable_epm" = "yes"; then
    AC_MSG_RESULT([yes])
    dnl ===================================================================
    dnl Check for epm - not needed for windows
@@ -3253,18 +3228,6 @@ if test "$_os" != "WINNT" -a \( "z$enable_epm" = "z" -o "$enable_epm" != "no" \)
 
    # test which package format to use
    AC_MSG_CHECKING([which package format to use])
-   # epm supports the following formats:
-   # aix - AIX software distribution
-   # bsd - FreeBSD, NetBSD, or OpenBSD software distribution
-   # depot or swinstall - HP-UX software distribution
-   # deb - Debian software distribution
-   # inst or tardist - IRIX software distribution
-   # osx - MacOS X software distribution
-   # pkg - Solaris software distribution
-   # rpm - RedHat software distribution
-   # setld - Tru64 (setld) software distribution
-   # native - "Native" software distribution for the platform
-   # portable - Portable software distribution
 
    # defaults
    case "$_os" in
@@ -3294,6 +3257,9 @@ if test "$_os" != "WINNT" -a \( "z$enable_epm" = "z" -o "$enable_epm" != "no" \)
 	OSF1)
 		PKGFORMAT=setld
 		;;
+    WINNT)
+        PKGFORMAT=msi
+        ;;
 	# we never should get here since we check the arciecture/os at the beginning,
 	# but go sure...
 	*)
@@ -3302,7 +3268,7 @@ if test "$_os" != "WINNT" -a \( "z$enable_epm" = "z" -o "$enable_epm" != "no" \)
    if test -n "$with_package_format"; then
 	for i in $with_package_format; do 
 		case "$i" in
-			aix | bsd | deb | inst | tardist | osx | pkg | rpm | setld | native | portable) 
+			aix | bsd | deb | inst | tardist | osx | pkg | rpm | setld | native | portable | archive | dmg | installed | msi)
 			;;
 		*)
 			AC_MSG_ERROR([unsupported format $i. Supported by EPM are:
@@ -3317,6 +3283,11 @@ rpm - RedHat software distribution
 setld - Tru64 (setld) software distribution
 native - "Native" software distribution for the platform
 portable - Portable software distribution
+OOo additionally supports:
+archive - .tar.gz or .zip
+dmg - Mac OS X .dmg
+installed - installation tree
+msi - Windows .msi
 			]) 
 			;;
 		esac
@@ -3629,6 +3600,33 @@ fi
 AC_SUBST(SYSTEM_LIBWPD)
 AC_SUBST(LIBWPD_CFLAGS)
 AC_SUBST(LIBWPD_LIBS)
+
+dnl ===================================================================
+dnl Check for system cppunit
+dnl ===================================================================
+AC_MSG_CHECKING([which cppunit to use])
+if test -n "$with_system_cppunit" -o -n "$with_system_libs" && \
+        test "$with_system_cppunit" != "no"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_CPPUNIT=YES
+    # might work for earlier, too but go sure. We didn't have
+    # a system-cppunit before the first version using a proper cppunit
+    # (and that being 1.12.1) anyway
+    PKG_CHECK_MODULES( CPPUNIT, cppunit >= 1.12.1 )
+    AC_MSG_CHECKING([STL compatibility])
+    if test "$WITH_STLPORT" != "no"; then
+	AC_MSG_ERROR([to use system cppunit you need to use --without-stlport])
+    else
+	AC_MSG_RESULT([OK])	
+    fi
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_CPPUNIT=NO
+    BUILD_TYPE="$BUILD_TYPE CPPUNIT"
+fi
+AC_SUBST(SYSTEM_CPPUNIT)
+AC_SUBST(CPPUNIT_CFLAGS)
+AC_SUBST(CPPUNIT_LIBS)
 
 dnl ===================================================================
 dnl Check whether freetype is available
@@ -6716,6 +6714,34 @@ EOF
   fi
 fi
 rm -f conftest* core core.* *.core
+
+OOO_JUNIT_JAR=
+if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
+    AC_MSG_CHECKING([for JUnit 4])
+    if test "$with_junit" == "yes"; then
+        if test -e /usr/share/java/junit4.jar; then
+            OOO_JUNIT_JAR=/usr/share/java/junit4.jar
+        else
+            OOO_JUNIT_JAR=/usr/share/java/junit.jar
+        fi
+    else
+        OOO_JUNIT_JAR=$with_junit
+    fi
+    if test "$_os" = "WINNT"; then
+        OOO_JUNIT_JAR=`cygpath -m "$OOO_JUNIT_JAR"`
+    fi
+    "$JAVA_HOME/bin/jar" tf "$OOO_JUNIT_JAR" 2>&5 | \
+        grep org/junit/Before.class > /dev/null 2>&5
+    if test $? -eq 0; then
+        AC_MSG_RESULT([$OOO_JUNIT_JAR])
+    else
+        AC_MSG_RESULT([no])
+        AC_MSG_ERROR([cannot find JUnit 4 jar at $OOO_JUNIT_JAR;
+please install one and/or specify its pathname via --with-junit=...,
+or disable it via --without-junit])
+    fi
+fi
+AC_SUBST(OOO_JUNIT_JAR)
 
 AC_MSG_CHECKING([which languages to be built])
 WITH_LANG="$with_lang"

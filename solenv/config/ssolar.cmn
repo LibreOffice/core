@@ -101,6 +101,7 @@ common
         ENABLE_NAS
 		ENABLE_PCH
 		SYSTEM_CURL
+        SYSTEM_CPPUNIT
         SYSTEM_FREETYPE
         FREETYPE_CFLAGS
         FREETYPE_LIBS
@@ -161,6 +162,8 @@ common
 		ODBCPATH
 		ODBCVER
 		OLD_CHAOS
+        OOO_JUNIT_JAR
+        OOO_SHELL
 		PACKMS
 		PCLEAN_PATH
         PKGCONFIG_ROOT
@@ -243,7 +246,6 @@ common
 		USE_MAPFILES
 		USE_NEW_SDK
         USE_PCH
-		USE_SHELL
         USE_SYSTEM_STL
 		use_cygcp
 		use_shl_versions
@@ -273,6 +275,7 @@ common
         HAVE_LD_HASH_STYLE
         JAVACOMPILER
         JAVADOC
+        JAVAIFLAGS
         JDK
         NO_HIDS
         PAM_LINK
@@ -283,7 +286,6 @@ common
         SOLAR_PLUGIN
         URE_BOOTSTRAP
         USE_FT_EMBOLDEN
-        USE_SHELL
         USE_XINERAMA
         VBA_EXTENSION
         XINERAMA_LINK

@@ -235,7 +235,7 @@ BEGIN
     $mergefiles_added_into_collector = 0;
     $creating_windows_installer_patch = 0;
 
-    $strip = 1;
+    $strip = $ENV{DISABLE_STRIP} eq '';
     $solarjava = 0;
     $jdklib = "";
     $jrepath = "";
@@ -515,13 +515,12 @@ BEGIN
         if ( $plat =~ /darwin/i )
         {
             $libextension = "\.dylib";
-            $archiveformat = ".dmg";
         }
         else
         {
             $libextension = "\.so";
-            $archiveformat = ".tar.gz";
         }
+        $archiveformat = ".tar.gz";
         $quote = "\'";
         $isunix = 1;
         $iswin = 0;
