@@ -55,7 +55,7 @@ function reportError()
         elif [ "$OSTYPE" == "solaris" ]; then
             CWSENV=SolarisX86
         else
-            CWSENV=Unknown
+            CWSENV=linux
         fi
         perl $SOLARENV/bin/cwstestresult.pl -c $CWS_WORK_STAMP -n CWSCheckAPI -p $CWSENV $PT_STATUS
     else

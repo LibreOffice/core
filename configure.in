@@ -937,7 +937,7 @@ case "$build_os" in
       			AC_MSG_ERROR([only sparc and i386 processors are supported])
    		fi
 		;;
-	linux-gnu*)
+	linux-gnu*|k*bsd*-gnu*)
 		test_gtk=yes
 		test_cairo=yes
 		test_kde=yes
