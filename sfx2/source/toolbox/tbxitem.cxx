@@ -95,7 +95,7 @@
 #include "sfxtypes.hxx"
 #include <sfx2/macrconf.hxx>
 #include <sfx2/genlink.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/sfx.hrc>
 #include <sfx2/module.hxx>
 #include <sfx2/docfile.hxx>
@@ -106,11 +106,11 @@
 #include <sfx2/unoctitm.hxx>
 #include "helpid.hrc"
 #include "workwin.hxx"
-#include "imgmgr.hxx"
+#include "sfx2/imgmgr.hxx"
 #include "virtmenu.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/module.hxx>
-#include "imagemgr.hxx"
+#include "sfx2/imagemgr.hxx"
 
 #include <comphelper/uieventslogger.hxx>
 #include <com/sun/star/frame/XModuleManager.hpp>

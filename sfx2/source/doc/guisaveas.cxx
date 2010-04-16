@@ -77,7 +77,7 @@
 
 #include <sfx2/sfxsids.hrc>
 #include <doc.hrc>
-#include <sfxresid.hxx>
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/app.hxx>

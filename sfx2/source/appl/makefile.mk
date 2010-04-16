@@ -60,7 +60,8 @@ CFLAGS+=-DENABLE_QUICKSTART_APPLET
         .INCLUDE: pkg_config.mk
         CFLAGS+=$(PKGCONFIG_CFLAGS)
         CFLAGS+=-DENABLE_QUICKSTART_APPLET
-        CDEFS+=-DPLUGIN_NAME=libqstart_gtk$(DLLPOSTFIX)$(DLLPOST)
+# definition moved to shutdownicon.cxx
+#        CDEFS+=-DPLUGIN_NAME=libqstart_gtk$(DLLPOSTFIX)$(DLLPOST)
 .ENDIF # "$(ENABLE_SYSTRAY_GTK)"=="TRUE"
 .ELSE
         CDEFS+=-DDLL_NAME=sfx$(DLLPOSTFIX)$(DLLPOST)

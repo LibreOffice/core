@@ -96,7 +96,7 @@
 #include <sfx2/macrconf.hxx>
 #include "helper.hxx"   // SfxContentHelper::...
 #include "app.hrc"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "shutdownicon.hxx"
 
 using namespace ::com::sun::star::uno;

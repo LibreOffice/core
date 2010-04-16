@@ -45,7 +45,7 @@
 //#include <soerr.hxx>
 
 #include "app.hrc"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/filedlghelper.hxx>
 
 #include <tools/debug.hxx>

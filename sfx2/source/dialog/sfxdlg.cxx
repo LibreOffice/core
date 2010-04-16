@@ -32,7 +32,9 @@
 #include "precompiled_sfx2.hxx"
 
 #include <sfx2/sfxdlg.hxx>
-#include "cuilib.hxx"
+//#include "cuilib.hxx"
+
+#define DLL_NAME "libcuili.so"
 
 #include <osl/module.hxx>
 #include <tools/string.hxx>

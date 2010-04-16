@@ -114,7 +114,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/request.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/docfile.hxx>
 #include "fltfnc.hxx"
 #include <sfx2/docfilt.hxx>

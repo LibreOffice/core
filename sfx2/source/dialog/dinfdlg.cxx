@@ -62,8 +62,8 @@
 
 #include <vcl/timer.hxx>
 #include <sfx2/dinfdlg.hxx>
-#include "sfxresid.hxx"
-#include "dinfedt.hxx"
+#include "sfx2/sfxresid.hxx"
+#include "sfx2/dinfedt.hxx"
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>

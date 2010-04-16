@@ -53,7 +53,7 @@
 #include "sfxtypes.hxx"
 #include <sfx2/progress.hxx>
 #include <sfx2/bindings.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/event.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/app.hxx>

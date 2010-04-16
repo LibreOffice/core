@@ -73,7 +73,7 @@
 #include "view.hrc"
 #include <sfx2/viewsh.hxx>
 #include "viewimp.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/request.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/printer.hxx>
@@ -85,7 +85,7 @@
 #include "sfxlocal.hrc"
 #include <sfx2/sfxbasecontroller.hxx>
 #include <sfx2/topfrm.hxx>
-#include "mailmodelapi.hxx"
+#include "sfx2/mailmodelapi.hxx"
 #include <sfx2/event.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/ipclient.hxx>

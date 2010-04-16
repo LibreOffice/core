@@ -123,7 +123,7 @@ using namespace ::vos;
 #include <sfx2/progress.hxx>
 #include "openflag.hxx"
 #include "bastyp.hrc"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/doctempl.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/dispatch.hxx>

@@ -147,7 +147,7 @@ using namespace ::com::sun::star::io;
 #include <sfx2/docfac.hxx>       // GetFilterContainer
 #include "doc.hrc"
 #include "openflag.hxx"     // SFX_STREAM_READONLY etc.
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/appuno.hxx>
 
 //#include "xmlversion.hxx"

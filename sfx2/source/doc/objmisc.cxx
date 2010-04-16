@@ -129,7 +129,7 @@ using namespace ::com::sun::star::container;
 #include "appdata.hxx"
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/objsh.hxx>

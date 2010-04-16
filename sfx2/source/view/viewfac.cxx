@@ -32,11 +32,8 @@
 #include "precompiled_sfx2.hxx"
 // INCLUDE ---------------------------------------------------------------
 
-#ifndef GCC
-#endif
-
 #include <sfx2/app.hxx>
-#include "viewfac.hxx"
+#include "sfx2/viewfac.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -56,16 +53,12 @@ void SfxViewFactory::InitFactory()
 
 // CTOR / DTOR -----------------------------------------------------------
 
-SfxViewFactory::SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI,
-                                USHORT nOrdinal, const ResId& aDescrResId ):
+SfxViewFactory::SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI, USHORT nOrdinal ):
     fnCreate(fnC),
     fnInit(fnI),
-    nOrd(nOrdinal),
-    aDescription(aDescrResId.GetId(), *aDescrResId.GetResMgr())
+    nOrd(nOrdinal)
 {
-    aDescription.SetRT(aDescrResId.GetRT());
     DBG_CTOR(SfxViewFactory, 0);
-//  SFX_APP()->RegisterViewFactory_Impl(*this);
 }
 
 SfxViewFactory::~SfxViewFactory()

@@ -43,7 +43,7 @@
 //#include "iface.hxx"
 
 #include "app.hrc"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 
 #define _SVSTDARR_STRINGSDTOR
 

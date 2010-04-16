@@ -42,7 +42,7 @@
 
 #include <sfx2/styledlg.hxx>
 #include <sfx2/mgetempl.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/sfxuno.hxx>
 
 #include "dialog.hrc"

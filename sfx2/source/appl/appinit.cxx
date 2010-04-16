@@ -85,7 +85,7 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/progress.hxx>
 #include "sfxhelp.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "sfxtypes.hxx"
 #include <sfx2/viewsh.hxx>
 #include "nochaos.hxx"

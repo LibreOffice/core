@@ -32,17 +32,8 @@
 #include "precompiled_sfx2.hxx"
 
 // include ---------------------------------------------------------------
-#include <aboutbmpnames.hxx>
-
-#ifndef _SV_APP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef GCC
-#endif
-
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/bootstrap.hxx>
@@ -50,13 +41,11 @@
 #include <unotools/bootstrap.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <unotools/configmgr.hxx>
-
 #include <sfx2/sfxuno.hxx>
 #include "about.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/app.hxx>
-
 #include "dialog.hrc"
 
 // defines ---------------------------------------------------------------
@@ -138,7 +127,13 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     }
 
     // load image from module path
-    rtl::OUString aAbouts( RTL_CONSTASCII_USTRINGPARAM( ABOUT_BITMAP_STRINGLIST ) );
+//    rtl::OUString aAbouts( RTL_CONSTASCII_USTRINGPARAM( ABOUT_BITMAP_STRINGLIST ) );
+#ifdef ABOUTBMPNAMES
+    rtl::OUString aAbouts( RTL_CONSTASCII_USTRINGPARAM( "ABOUTBMPNAMES" ) );
+#else
+    rtl::OUString aAbouts;
+#endif
+
     bool bLoaded = false;
     sal_Int32 nIndex = 0;
     do

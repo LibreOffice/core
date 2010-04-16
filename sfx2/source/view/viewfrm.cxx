@@ -38,12 +38,8 @@
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
-#ifndef _SPLITWIN_HXX //autogen
 #include <vcl/splitwin.hxx>
-#endif
 #include <unotools/moduleoptions.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
@@ -51,9 +47,7 @@
 #include <svl/slstitm.hxx>
 #include <svl/whiter.hxx>
 #include <svl/undo.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -91,6 +85,8 @@
 #include <comphelper/storagehelper.hxx>
 #include <svtools/asynclink.hxx>
 #include <svl/sharecontrolfile.hxx>
+#include <svl/svtools.hrc>
+#include <svtools/svtdata.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -117,10 +113,10 @@ namespace css = ::com::sun::star;
 #include <sfx2/request.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/ipclient.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "appbas.hxx"
 #include <sfx2/objitem.hxx>
-#include "viewfac.hxx"
+#include "sfx2/viewfac.hxx"
 #include <sfx2/event.hxx>
 #include "fltfnc.hxx"
 #include <sfx2/docfile.hxx>
@@ -137,7 +133,7 @@ namespace css = ::com::sun::star;
 #include "workwin.hxx"
 #include "helper.hxx"
 #include "macro.hxx"
-#include "minfitem.hxx"
+#include "sfx2/minfitem.hxx"
 #include "../appl/app.hrc"
 //-------------------------------------------------------------------------
 DBG_NAME(SfxViewFrame)
@@ -1050,7 +1046,7 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
 
     if ( pShUndoMgr && pShUndoMgr->GetUndoActionCount() )
     {
-        String aTmp( SfxResId( STR_UNDO ) );
+        String aTmp( SvtResId( STR_UNDO ) );
         aTmp += pShUndoMgr->GetUndoActionComment(0);
         rSet.Put( SfxStringItem( SID_UNDO, aTmp ) );
     }
@@ -1059,7 +1055,7 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
 
     if ( pShUndoMgr && pShUndoMgr->GetRedoActionCount() )
     {
-        String aTmp( SfxResId(STR_REDO) );
+        String aTmp( SvtResId(STR_REDO) );
         aTmp += pShUndoMgr->GetRedoActionComment(0);
         rSet.Put( SfxStringItem( SID_REDO, aTmp ) );
     }
@@ -1069,7 +1065,7 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
     if ( pShUndoMgr && pTarget && pShUndoMgr->GetRepeatActionCount() &&
          pShUndoMgr->CanRepeat(*pTarget, 0) )
     {
-        String aTmp( SfxResId(STR_REPEAT) );
+        String aTmp( SvtResId(STR_REPEAT) );
         aTmp += pShUndoMgr->GetRepeatActionComment(*pTarget, 0);
         rSet.Put( SfxStringItem( SID_REPEAT, aTmp ) );
     }

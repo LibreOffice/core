@@ -71,7 +71,7 @@
 #include <vector>
 #include <algorithm>
 
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "doc.hrc"
 
 using namespace ::com::sun::star;

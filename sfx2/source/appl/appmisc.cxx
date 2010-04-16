@@ -67,7 +67,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <osl/file.hxx>
 
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/app.hxx>
 #include "appdata.hxx"
 #include "arrdecl.hxx"

@@ -43,8 +43,6 @@ TARGET=ofa
 
 RES1FILELIST=\
     $(SRS)$/app.srs \
-    $(SOLARCOMMONRESDIR)$/svtools.srs \
-    $(SOLARCOMMONRESDIR)$/sfx.srs 	\
     $(SOLARCOMMONRESDIR)$/basic.srs
 
 RESLIB1NAME=$(TARGET)
@@ -55,7 +53,8 @@ RESLIB1SRSFILES=$(RES1FILELIST)
 
 SRS1NAME= app
 SRC1FILES=	\
-    app.src
+    app.src \
+    errtxt.src
 
 .INCLUDE :  target.mk
 

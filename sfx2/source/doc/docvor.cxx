@@ -67,7 +67,7 @@
 #include "sfxtypes.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "doc.hrc"
 #include <sfx2/sfx.hrc>
 #include "docvor.hrc"

@@ -52,7 +52,7 @@
 #include <sfx2/viewsh.hxx>
 #include "sfxhelp.hxx"
 #include "workwin.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "dialog.hrc"
 
 using namespace ::com::sun::star::uno;

@@ -68,7 +68,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/ucbhelper.hxx>
 
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "sfxurlrelocator.hxx"
 #include "doctemplateslocal.hxx"
 #include <sfx2/docfac.hxx>

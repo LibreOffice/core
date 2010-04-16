@@ -103,16 +103,6 @@ CFLAGS+=-DBUILD_VER_STRING="$(subst,",\" "$(BUILD_VER_STRING)")"
 
 .INCLUDE :  target.mk
 
-$(INCCOM)$/cuilib.hxx: makefile.mk
-.IF "$(GUI)"=="UNX"
-    $(RM) $@
-    echo \#define DLL_NAME \"libcui$(DLLPOSTFIX)$(DLLPOST)\" >$@
-.ELSE
-    echo $(EMQ)#define DLL_NAME $(EMQ)"cui$(DLLPOSTFIX)$(DLLPOST)$(EMQ)" >$@
-.ENDIF
-
-$(SLO)$/sfxdlg.obj : $(INCCOM)$/cuilib.hxx
-
 $(SLO)$/about.obj : $(INCCOM)$/aboutbmpnames.hxx
 
 .INCLUDE .IGNORE : $(MISC)$/about_bmp_names.mk

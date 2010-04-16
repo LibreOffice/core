@@ -124,12 +124,12 @@
 #include <sfx2/sfx.hrc>
 #include "app.hrc"
 #include <sfx2/passwd.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "arrdecl.hxx"
 #include <sfx2/childwin.hxx>
 #include "appdata.hxx"
 #include <sfx2/macrconf.hxx>
-#include "minfitem.hxx"
+#include "sfx2/minfitem.hxx"
 #include <sfx2/event.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/topfrm.hxx>

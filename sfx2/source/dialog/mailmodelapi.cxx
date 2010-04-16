@@ -47,9 +47,7 @@
 #include <com/sun/star/system/XSimpleMailClientSupplier.hpp>
 #include <com/sun/star/system/SimpleMailClientFlags.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
-#ifndef _RTL_TEXTENC_H
-#include <rtl/textench.h>
-#endif
+#include <rtl/textenc.h>
 #include <vos/mutex.hxx>
 #include <rtl/uri.h>
 #include <rtl/uri.hxx>
@@ -60,13 +58,13 @@
 #include <vos/thread.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "mailmodelapi.hxx"
+#include "sfx2/mailmodelapi.hxx"
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfac.hxx>
 #include "sfxtypes.hxx"
 
 #include "dialog.hrc"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/fcontnr.hxx>
 #include "guisaveas.hxx"

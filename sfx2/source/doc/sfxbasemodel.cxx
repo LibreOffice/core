@@ -111,7 +111,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/objuno.hxx>
 #include <sfx2/printer.hxx>
-#include <basmgr.hxx>
+#include <sfx2/basmgr.hxx>
 #include <sfx2/event.hxx>
 #include <eventsupplier.hxx>
 #include <sfx2/evntconf.hxx>
@@ -122,12 +122,12 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>
 #include "sfx2/docstoragemodifylistener.hxx"
-#include "brokenpackageint.hxx"
+#include "sfx2/brokenpackageint.hxx"
 #include "graphhelp.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>
 
-#include <sfxresid.hxx>
+#include <sfx2/sfxresid.hxx>
 
 //________________________________________________________________________________________________________
 // const

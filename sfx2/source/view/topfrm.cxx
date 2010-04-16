@@ -72,7 +72,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/bootstrap.hxx>
 
-#include <sfxresid.hxx>
+#include <sfx2/sfxresid.hxx>
 
 // wg. pTopFrames
 #include "appdata.hxx"

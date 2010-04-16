@@ -48,22 +48,17 @@ typedef void (*SfxViewInit)();
 class SFX2_DLLPUBLIC SfxViewFactory
 {
 public:
-    SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI,
-                    USHORT nOrdinal, const ResId& aDescrResId );
+    SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI, USHORT nOrdinal );
     ~SfxViewFactory();
 
     SfxViewShell *CreateInstance(SfxViewFrame *pViewFrame, SfxViewShell *pOldSh);
     void          InitFactory();
-
-    String        GetDescription() const
-                  { return String( aDescription ); }
     USHORT        GetOrdinal() const { return nOrd; }
 
 private:
     SfxViewCtor fnCreate;
     SfxViewInit fnInit;
     USHORT      nOrd;
-    ResId       aDescription;
 };
 
 #endif

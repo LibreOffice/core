@@ -47,7 +47,7 @@
 #include <sfx2/prnmon.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/tabdlg.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "view.hrc"
 
 #ifdef MSC

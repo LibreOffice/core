@@ -64,7 +64,7 @@
 #include <vcl/virdev.hxx>
 
 #include <sfx2/app.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "appdata.hxx"
 #include <sfx2/dinfdlg.hxx>
 #include "fltfnc.hxx"
@@ -77,7 +77,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/topfrm.hxx>
-#include "basmgr.hxx"
+#include "sfx2/basmgr.hxx"
 #include <sfx2/doctempl.hxx>
 #include "doc.hrc"
 #include <sfx2/sfxbasemodel.hxx>

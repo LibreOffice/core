@@ -101,7 +101,7 @@
 #include <sfx2/passwd.hxx>
 #include "referers.hxx"
 #include <sfx2/request.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/viewsh.hxx>
 #include "app.hrc"
 #include <sfx2/topfrm.hxx>

@@ -71,7 +71,7 @@
 #endif
 #include <vcl/timer.hxx>
 
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -89,6 +89,10 @@ using namespace ::sfx2;
 # if !defined(WIN32) && !defined(QUARTZ)
 extern "C" { static void SAL_CALL thisModule() {} }
 # endif
+#endif
+
+#if defined(UNX) && defined(ENABLE_SYSTRAY_GTK)
+#define PLUGIN_NAME "libqstart_gtkli.so"
 #endif
 
 class SfxNotificationListener_Impl : public cppu::WeakImplHelper1< XDispatchResultListener >

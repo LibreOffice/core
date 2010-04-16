@@ -38,7 +38,7 @@
 
 #include <sfx2/passwd.hxx>
 #include "sfxtypes.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 
 #include "dialog.hrc"
 #include "passwd.hrc"

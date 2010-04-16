@@ -49,7 +49,7 @@
 #include <sfx2/mgetempl.hxx>
 #include <sfx2/objsh.hxx>
 #include "sfxtypes.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/module.hxx>
 
 #include <sfx2/sfx.hrc>

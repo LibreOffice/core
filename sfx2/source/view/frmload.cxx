@@ -92,7 +92,7 @@ namespace css = ::com::sun::star;
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#include "brokenpackageint.hxx"
+#include "sfx2/brokenpackageint.hxx"
 #include "objshimp.hxx"
 
 SfxFrameLoader_Impl::SfxFrameLoader_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory >& /*xFactory*/ )

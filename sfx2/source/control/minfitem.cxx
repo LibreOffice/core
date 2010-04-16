@@ -33,10 +33,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#ifndef GCC
-#endif
-
-#include "minfitem.hxx"
+#include "sfx2/minfitem.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 

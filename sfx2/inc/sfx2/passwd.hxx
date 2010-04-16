@@ -31,14 +31,12 @@
 #define _SFX_PASSWD_HXX
 
 #include "sal/config.h"
-#include "sfx2/dllapi.h"
-
-#ifndef _SV_BUTTON_HXX
+#include <sfx2/dllapi.h>
 #include <vcl/button.hxx>
-#endif
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
+#include <sfx2/app.hxx>
 
 // defines ---------------------------------------------------------------
 

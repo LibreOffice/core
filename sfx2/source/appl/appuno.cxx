@@ -55,10 +55,7 @@
 #include <basic/sbxobj.hxx>
 #include <basic/sberrors.hxx>
 #include <basic/basmgr.hxx>
-#ifndef _BASIC_SBUNO_HXX
 #include <basic/sbuno.hxx>
-#endif
-
 #include <basic/sbxcore.hxx>
 #include <svl/ownlist.hxx>
 #include <svl/lckbitem.hxx>
@@ -134,7 +131,7 @@ using namespace ::com::sun::star::io;
 #include "fltoptint.hxx"
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
-#include "brokenpackageint.hxx"
+#include "sfx2/brokenpackageint.hxx"
 #include "eventsupplier.hxx"
 #include "xpackcreator.hxx"
 // #include "applet.hxx"

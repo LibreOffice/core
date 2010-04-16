@@ -31,12 +31,10 @@
 #define _SFX_SFXRESID_HXX
 
 #include <tools/string.hxx>
-
-#ifndef _RESID_HXX //autogen
+#include "sfx2/dllapi.h"
 #include <tools/resid.hxx>
-#endif
 
-class SfxResId: public ResId
+class SFX2_DLLPUBLIC SfxResId: public ResId
 {
 public:
     SfxResId( USHORT nId );
