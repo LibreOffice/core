@@ -405,9 +405,9 @@ File gid_File_Lib_Vbaswobj
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT4(libvbaswobj,DLLPOSTFIX,.uno,UNXSUFFIX));
+    Name = STRING(CONCAT3(vbaswobj,.uno,UNXSUFFIX));
   #else
-    Name = STRING(CONCAT4(vbaswobj,DLLPOSTFIX,.uno,.dll));
+    Name = STRING(CONCAT3(vbaswobj,.uno,.dll));
   #endif
 End
 
