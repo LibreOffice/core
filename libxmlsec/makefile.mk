@@ -61,7 +61,8 @@ PATCH_FILES=\
    xmlsec1-nssdisablecallbacks.patch \
    xmlsec1-noverify.patch \
    xmlsec1-mingw32.patch \
-   xmlsec1-mingw-keymgr-mscrypto.patch
+   xmlsec1-mingw-keymgr-mscrypto.patch \
+   xmlsec1-update-config-sub-and-guess.patch
 
 
 ADDITIONAL_FILES= \
