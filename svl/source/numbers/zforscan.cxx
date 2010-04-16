@@ -48,7 +48,7 @@
 #define _ZFORSCAN_CXX
 #include "zforscan.hxx"
 #undef _ZFORSCAN_CXX
-#include "nfsymbol.hxx"
+#include <svl/nfsymbol.hxx>
 using namespace svt;
 
 const sal_Unicode cNonBreakingSpace = 0xA0;

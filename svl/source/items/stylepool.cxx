@@ -37,7 +37,7 @@
 #include <vector>
 #include <map>
 
-#include "stylepool.hxx"
+#include <svl/stylepool.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/itempool.hxx>
 

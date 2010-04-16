@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
 
-#include "pickerhelper.hxx"
+#include <svl/pickerhelper.hxx>
 #include "rtl/ustring.hxx"
 #include "com/sun/star/ui/dialogs/XFilePicker.hpp"
 #include "com/sun/star/ui/dialogs/XFolderPicker.hpp"

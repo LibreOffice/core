@@ -38,7 +38,7 @@
 
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
-#include "poolcach.hxx"
+#include <svl/poolcach.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 
