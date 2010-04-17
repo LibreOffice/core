@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabview.cxx,v $
- * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -200,6 +197,8 @@
 #include "AccessibilityHints.hxx"
 #include "appoptio.hxx"
 
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+
 #include <string>
 #include <algorithm>
 
@@ -211,6 +210,8 @@
 
 //  fuer Rad-Maus
 #define SC_DELTA_ZOOM   10
+
+using namespace ::com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -1168,7 +1169,7 @@ BOOL ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
     const CommandWheelData* pData = rCEvt.GetWheelData();
     if ( pData && pData->GetMode() == COMMAND_WHEEL_ZOOM )
     {
-        if ( !aViewData.GetViewShell()->GetViewFrame()->GetFrame()->IsInPlace() )
+        if ( !aViewData.GetViewShell()->GetViewFrame()->GetFrame().IsInPlace() )
         {
             //  for ole inplace editing, the scale is defined by the visarea and client size
             //  and can't be changed directly
@@ -1625,7 +1626,7 @@ void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const SCROW* pPosY
         return;
 
     SCROW nEndPos = MAXROW;
-    if ( !aViewData.GetViewShell()->GetViewFrame()->GetFrame()->IsInPlace() )
+    if ( !aViewData.GetViewShell()->GetViewFrame()->GetFrame().IsInPlace() )
     {
         //  fuer OLE Inplace immer MAXROW
 
@@ -2454,16 +2455,13 @@ void ScTabView::SetNewVisArea()
     SfxViewFrame* pViewFrame = aViewData.GetViewShell()->GetViewFrame();
     if (pViewFrame)
     {
-        SfxFrame* pFrame = pViewFrame->GetFrame();
-        if (pFrame)
+        SfxFrame& rFrame = pViewFrame->GetFrame();
+        com::sun::star::uno::Reference<com::sun::star::frame::XController> xController = rFrame.GetController();
+        if (xController.is())
         {
-            com::sun::star::uno::Reference<com::sun::star::frame::XController> xController = pFrame->GetController();
-            if (xController.is())
-            {
-                ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
-                if (pImp)
-                    pImp->VisAreaChanged();
-            }
+            ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
+            if (pImp)
+                pImp->VisAreaChanged();
         }
     }
     if (aViewData.GetViewShell()->HasAccessibilityObjects())
@@ -2476,7 +2474,7 @@ sal_Bool ScTabView::HasPageFieldDataAtCursor() const
     SCCOL nCol = aViewData.GetCurX();
     SCROW nRow = aViewData.GetCurY();
     if (pWin)
-        return pWin->HasPageFieldData( nCol, nRow );
+        return pWin->GetDPFieldOrientation( nCol, nRow ) == sheet::DataPilotFieldOrientation_PAGE;
 
     return sal_False;
 }
@@ -2486,15 +2484,23 @@ void ScTabView::StartDataSelect()
     ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()];
     SCCOL nCol = aViewData.GetCurX();
     SCROW nRow = aViewData.GetCurY();
-    if (pWin)
-    {
-        //  #i36598# If the cursor is on a page field's data cell,
-        //  no meaningful input is possible anyway, so this function
-        //  can be used to select a page field entry.
 
-        if ( pWin->HasPageFieldData( nCol, nRow ) )
-            pWin->DoPageFieldMenue( nCol, nRow );
-        else
+    if (!pWin)
+        return;
+
+    switch (pWin->GetDPFieldOrientation(nCol, nRow))
+    {
+        case sheet::DataPilotFieldOrientation_PAGE:
+            //  #i36598# If the cursor is on a page field's data cell,
+            //  no meaningful input is possible anyway, so this function
+            //  can be used to select a page field entry.
+            pWin->LaunchPageFieldMenu( nCol, nRow );
+        break;
+        case sheet::DataPilotFieldOrientation_COLUMN:
+        case sheet::DataPilotFieldOrientation_ROW:
+            pWin->LaunchDPFieldMenu( nCol, nRow );
+        break;
+        default:
             pWin->DoAutoFilterMenue( nCol, nRow, TRUE );
     }
 }

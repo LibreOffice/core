@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh4.cxx,v $
- * $Revision: 1.61.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +42,7 @@ using namespace ::com::sun::star;
 
 #include "scitems.hxx"
 #include <sfx2/fcontnr.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
@@ -56,7 +53,6 @@ using namespace ::com::sun::star;
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/sfxecode.hxx>
-#include <sfx2/topfrm.hxx>
 #include <svx/ofaitem.hxx>
 #include <sot/formats.hxx>
 #include <svtools/printdlg.hxx>
@@ -2145,15 +2141,20 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
                 }
             }
 
-            if ( n+1 < nCollateCopies && pPrinter->GetDuplexMode() == DUPLEX_ON && ( nPrinted % 2 ) == 1 )
+            if ( n+1 < nCollateCopies &&
+                 (pPrinter->GetDuplexMode() == DUPLEX_SHORTEDGE || pPrinter->GetDuplexMode() == DUPLEX_LONGEDGE) &&
+                 ( nPrinted % 2 ) == 1 )
             {
                 // #105584# when several collated copies are printed in duplex mode, and there is
                 // an odd number of pages, print an empty page between copies, so the first page of
                 // the second copy isn't printed on the back of the last page of the first copy.
                 // (same as in Writer ViewShell::Prt)
 
+                // FIXME: needs to be adapted to XRenderable interface
+                #if 0
                 pPrinter->StartPage();
                 pPrinter->EndPage();
+                #endif
             }
         }
     }
@@ -2559,7 +2560,7 @@ ScTabViewShell* ScDocShell::GetBestViewShell( BOOL bOnlyVisible )
     if( !pViewSh )
     {
         // 1. ViewShell suchen
-        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this, TYPE(SfxTopViewFrame), bOnlyVisible );
+        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this, bOnlyVisible );
         if( pFrame )
         {
             SfxViewShell* p = pFrame->GetViewShell();

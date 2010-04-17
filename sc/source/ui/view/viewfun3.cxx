@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewfun3.cxx,v $
- * $Revision: 1.41.126.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -142,7 +139,7 @@
 
 #define _SVDRAG_HXX
 #define _SVINCVW_HXX
-#define _SV_MULTISEL_HXX
+//#define _SV_MULTISEL_HXX
 #define _SVRTV_HXX
 #define _SVTABBX_HXX
 #define _SVTREEBOX_HXX

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hdrcont.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +44,7 @@
 #include "scmod.hxx"        // Optionen
 #include "inputopt.hxx"     // Optionen
 #include "gridmerg.hxx"
+#include "document.hxx"
 
 // -----------------------------------------------------------------------
 
@@ -123,7 +121,7 @@ void ScHeaderControl::SetWidth( long nNew )
     }
 }
 
-__EXPORT ScHeaderControl::~ScHeaderControl()
+ScHeaderControl::~ScHeaderControl()
 {
 }
 
@@ -265,7 +263,7 @@ void ScHeaderControl::DrawShadedRect( long nStart, long nEnd, const Color& rBase
 //      Paint
 //
 
-void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
+void ScHeaderControl::Paint( const Rectangle& rRect )
 {
     //  fuer VCL ist es wichtig, wenig Aufrufe zu haben, darum werden die aeusseren
     //  Linien zusammengefasst
@@ -655,7 +653,46 @@ SCCOLROW ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, BOOL& rBorder )
     return nHitNo;
 }
 
-void __EXPORT ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
+bool ScHeaderControl::IsSelectionAllowed(SCCOLROW nPos) const
+{
+    ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    if (!pViewSh)
+        return false;
+
+    ScViewData* pViewData = pViewSh->GetViewData();
+    USHORT nTab = pViewData->GetTabNo();
+    ScDocument* pDoc = pViewData->GetDocument();
+    const ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+    bool bSelectAllowed = true;
+    if ( pProtect && pProtect->isProtected() )
+    {
+        // This sheet is protected.  Check if a context menu is allowed on this cell.
+        bool bCellsProtected = false;
+        if (bVertical)
+        {
+            // row header
+            SCROW nRPos = static_cast<SCROW>(nPos);
+            bCellsProtected = pDoc->HasAttrib(0, nRPos, nTab, MAXCOL, nRPos, nTab, HASATTR_PROTECTED);
+        }
+        else
+        {
+            // column header
+            SCCOL nCPos = static_cast<SCCOL>(nPos);
+            bCellsProtected = pDoc->HasAttrib(nCPos, 0, nTab, nCPos, MAXROW, nTab, HASATTR_PROTECTED);
+        }
+
+        bool bSelProtected   = pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+        bool bSelUnprotected = pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+
+        if (bCellsProtected)
+            bSelectAllowed = bSelProtected;
+        else
+            bSelectAllowed = bSelUnprotected;
+    }
+    return bSelectAllowed;
+}
+
+void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (IsDisabled())
         return;
@@ -665,6 +702,8 @@ void __EXPORT ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
 
     BOOL bFound;
     SCCOLROW nHitNo = GetMousePos( rMEvt, bFound );
+    if (!IsSelectionAllowed(nHitNo))
+        return;
 
     if ( bFound && rMEvt.IsLeft() && ResizeAllowed() )
     {
@@ -720,7 +759,7 @@ void __EXPORT ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-void __EXPORT ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
+void ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( IsDisabled() )
         return;
@@ -773,7 +812,7 @@ void __EXPORT ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
     }
 }
 
-void __EXPORT ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
+void ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
 {
     if ( IsDisabled() )
     {
@@ -823,7 +862,7 @@ void ScHeaderControl::Tracking( const TrackingEvent& rTEvt )
         MouseMove( rTEvt.GetMouseEvent() );
 }
 
-void __EXPORT ScHeaderControl::Command( const CommandEvent& rCEvt )
+void ScHeaderControl::Command( const CommandEvent& rCEvt )
 {
     USHORT nCmd = rCEvt.GetCommand();
     if ( nCmd == COMMAND_CONTEXTMENU )
@@ -848,8 +887,11 @@ void __EXPORT ScHeaderControl::Command( const CommandEvent& rCEvt )
                 MouseEvent aMEvt( rCEvt.GetMousePosPixel() );
                 BOOL bBorder;
                 SCCOLROW nPos = GetMousePos( aMEvt, bBorder );
-                USHORT nTab = pViewData->GetTabNo();
+                if (!IsSelectionAllowed(nPos))
+                    // Selecting this cell is not allowed, neither is context menu.
+                    return;
 
+                SCTAB nTab = pViewData->GetTabNo();
                 ScRange aNewRange;
                 if ( bVertical )
                     aNewRange = ScRange( 0, sal::static_int_cast<SCROW>(nPos), nTab,
@@ -938,7 +980,7 @@ void ScHeaderControl::ShowDragHelp()
     }
 }
 
-void __EXPORT ScHeaderControl::RequestHelp( const HelpEvent& rHEvt )
+void ScHeaderControl::RequestHelp( const HelpEvent& rHEvt )
 {
     //  Wenn eigene QuickHelp angezeigt wird, nicht durch RequestHelp
     //  wieder wegnehmen lassen

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dociter.hxx,v $
- * $Revision: 1.9.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,9 @@
 #include <tools/solar.h>
 #include "global.hxx"
 #include "scdllapi.h"
+#include "queryparam.hxx"
+
+#include <memory>
 
 class ScDocument;
 class ScBaseCell;
@@ -127,33 +127,96 @@ public:
                     }
 };
 
-class ScQueryValueIterator            // alle Zahlenwerte in einem Bereich durchgehen
-{
-private:
-    ScQueryParam    aParam;
-    ScDocument*     pDoc;
-    const ScAttrArray*  pAttrArray;
-    ULONG           nNumFormat;     // fuer CalcAsShown
-    ULONG           nNumFmtIndex;
-    SCCOL           nCol;
-    SCROW           nRow;
-    SCSIZE          nColRow;
-    SCROW           nAttrEndRow;
-    SCTAB           nTab;
-    short           nNumFmtType;
-    BOOL            bCalcAsShown;
+// ============================================================================
 
-    BOOL            GetThis(double& rValue, USHORT& rErr);
+class ScDBQueryDataIterator
+{
 public:
-                    ScQueryValueIterator(ScDocument* pDocument, SCTAB nTable,
-                                         const ScQueryParam& aParam);
+    struct Value
+    {
+        ::rtl::OUString maString;
+        double          mfValue;
+        sal_uInt16      mnError;
+        bool            mbIsNumber;
+
+        Value();
+    };
+
+private:
+    static SCROW        GetRowByColEntryIndex(ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCSIZE nColRow);
+    static ScBaseCell*  GetCellByColEntryIndex(ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCSIZE nColRow);
+    static ScAttrArray* GetAttrArrayByCol(ScDocument& rDoc, SCTAB nTab, SCCOL nCol);
+    static bool         IsQueryValid(ScDocument& rDoc, const ScQueryParam& rParam, SCTAB nTab, SCROW nRow, ScBaseCell* pCell);
+    static SCSIZE       SearchColEntryIndex(ScDocument& rDoc, SCTAB nTab, SCROW nRow, SCCOL nCol);
+
+    class DataAccess
+    {
+    public:
+        DataAccess(const ScDBQueryDataIterator* pParent);
+        virtual ~DataAccess() = 0;
+        virtual bool getCurrent(Value& rValue) = 0;
+        virtual bool getFirst(Value& rValue) = 0;
+        virtual bool getNext(Value& rValue) = 0;
+    protected:
+        const ScDBQueryDataIterator* mpParent;
+    };
+
+    class DataAccessInternal : public DataAccess
+    {
+    public:
+        DataAccessInternal(const ScDBQueryDataIterator* pParent, ScDBQueryParamInternal* pParam, ScDocument* pDoc);
+        virtual ~DataAccessInternal();
+        virtual bool getCurrent(Value& rValue);
+        virtual bool getFirst(Value& rValue);
+        virtual bool getNext(Value& rValue);
+
+    private:
+        ScDBQueryParamInternal* mpParam;
+        ScDocument*         mpDoc;
+        const ScAttrArray*  pAttrArray;
+        ULONG               nNumFormat;     // for CalcAsShown
+        ULONG               nNumFmtIndex;
+        SCCOL               nCol;
+        SCROW               nRow;
+        SCSIZE              nColRow;
+        SCROW               nAttrEndRow;
+        SCTAB               nTab;
+        short               nNumFmtType;
+        bool                bCalcAsShown;
+    };
+
+    class DataAccessMatrix : public DataAccess
+    {
+    public:
+        DataAccessMatrix(const ScDBQueryDataIterator* pParent, ScDBQueryParamMatrix* pParam);
+        virtual ~DataAccessMatrix();
+        virtual bool getCurrent(Value& rValue);
+        virtual bool getFirst(Value& rValue);
+        virtual bool getNext(Value& rValue);
+
+    private:
+        bool isValidQuery(SCROW mnRow, const ScMatrix& rMat) const;
+
+        ScDBQueryParamMatrix* mpParam;
+        SCROW mnCurRow;
+        SCROW mnRows;
+        SCCOL mnCols;
+    };
+
+    ::std::auto_ptr<ScDBQueryParamBase> mpParam;
+    ::std::auto_ptr<DataAccess>         mpData;
+
+    bool            GetThis(Value& rValue);
+
+public:
+                    ScDBQueryDataIterator(ScDocument* pDocument, ScDBQueryParamBase* pParam);
     /// Does NOT reset rValue if no value found!
-    BOOL            GetFirst(double& rValue, USHORT& rErr);
+    bool            GetFirst(Value& rValue);
     /// Does NOT reset rValue if no value found!
-    BOOL            GetNext(double& rValue, USHORT& rErr);
-    void            GetCurNumFmtInfo( short& nType, ULONG& nIndex )
-                        { nType = nNumFmtType; nIndex = nNumFmtIndex; }
+    bool            GetNext(Value& rValue);
 };
+
+// ============================================================================
 
 class ScCellIterator            // alle Zellen in einem Bereich durchgehen
 {                               // bei SubTotal aber keine ausgeblendeten und

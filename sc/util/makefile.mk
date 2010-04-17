@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.49 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -53,7 +49,10 @@ RESLIB1LIST=\
     $(SRS)$/styleui.srs	\
     $(SRS)$/formdlgs.srs \
     $(SRS)$/pagedlg.srs	\
-    $(SRS)$/navipi.srs	
+    $(SRS)$/navipi.srs	\
+    $(SRS)$/cctrl.srs	\
+    $(SOLARCOMMONRESDIR)$/sfx.srs
+
 
 RESLIB1NAME=sc
 RESLIB1IMAGES=\
@@ -79,8 +78,8 @@ SHL1STDLIBS=       \
     $(SVTOOLLIB)	\
     $(SVLLIB)		\
     $(SVXCORELIB)		\
+    $(EDITENGLIB)		\
     $(SVXLIB)		\
-    $(GOODIESLIB)	\
     $(BASEGFXLIB) \
     $(DRAWINGLAYERLIB) \
     $(VCLLIB)		\
@@ -185,6 +184,7 @@ SHL6STDLIBS= \
     $(SVTOOLLIB)	\
     $(SVLLIB)		\
     $(SVXCORELIB)		\
+    $(EDITENGLIB)		\
     $(MSFILTERLIB)		\
     $(SVXLIB)		\
     $(BASEGFXLIB) \
@@ -213,6 +213,7 @@ DEF8NAME=$(SHL8TARGET)
 
 SHL8STDLIBS= \
             $(ISCLIB) \
+            $(EDITENGLIB)		\
             $(SVXCORELIB) \
             $(SVXLIB) \
             $(SFX2LIB) \
@@ -277,6 +278,7 @@ LIB8OBJFILES = \
         $(SLO)$/dapidata.obj	\
         $(SLO)$/crdlg.obj			\
         $(SLO)$/scuiasciiopt.obj	\
+        $(SLO)$/textimportoptions.obj	\
         $(SLO)$/scuiautofmt.obj	\
         $(SLO)$/dpgroupdlg.obj	\
         $(SLO)$/editfield.obj
@@ -307,6 +309,7 @@ SHL9STDLIBS= \
         $(SALLIB)\
         $(BASICLIB)	\
         $(SFXLIB)	\
+        $(EDITENGLIB)		\
         $(SVXCORELIB)	\
         $(SVTOOLLIB)    \
         $(SVLLIB) \

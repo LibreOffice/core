@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dptabsrc.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +30,11 @@
 
 #include <vector>
 #include <hash_map>
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+#include <list>
+// End Comments
+#include <memory>
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 #include "global.hxx"       // enum ScSubTotalFunc
@@ -59,7 +61,10 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase6.hxx>
-
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+#include "dpglobal.hxx"
+// End Comments
 #include "dptabdat.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -73,7 +78,10 @@ namespace com { namespace sun { namespace star {
 
 class ScDPResultMember;
 class ScDPResultData;
-struct ScDPItemData;
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+class ScDPItemData;
+// End Comments
 class ScDPTableData;
 
 // ------------------------------------------------------------------------
@@ -108,7 +116,7 @@ class ScDPSource : public cppu::WeakImplHelper6<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    ScDPTableData*          pData;              // data source
+    ScDPTableData*          pData;              // data source (ScDPObject manages its life time)
     ScDPDimensions*         pDimensions;        // api objects
                                                 // settings:
     long                    nColDims[SC_DAPI_MAXFIELDS];
@@ -136,6 +144,8 @@ private:
     List                    aRowLevelList;
     BOOL                    bResultOverflow;
 
+    ::std::auto_ptr<rtl::OUString> mpGrandTotalName;
+
     void                    CreateRes_Impl();
     void                    FillMemberResults();
     void                    FillLevelList( USHORT nOrientation, List& rList );
@@ -162,16 +172,28 @@ public:
     ScDPTableData*          GetData()       { return pData; }
     const ScDPTableData*    GetData() const { return pData; }
 
+    void                    SetGrandTotalName(const ::rtl::OUString& rName);
+    const ::rtl::OUString*  GetGrandTotalName() const;
+
     USHORT                  GetOrientation(long nColumn);
     void                    SetOrientation(long nColumn, USHORT nNew);
     long                    GetPosition(long nColumn);
 
     long                    GetDataDimensionCount();
+    ScDPDimension*          GetDataDimension(long nIndex);
     String                  GetDataDimName(long nIndex);
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    ScDPTableDataCache*         GetCache();
+    const ScDPItemData*            GetItemDataById( long nDim, long nId );
+    long                                       GetDataLayoutDim(){ return pData->GetColumnCount(); }
+    SCROW                                GetMemberId(  long  nDim, const ScDPItemData& rData );
+    // End Comments
     BOOL                    IsDataLayoutDimension(long nDim);
     USHORT                  GetDataLayoutOrientation();
 
     BOOL                    IsDateDimension(long nDim);
+    UINT32                  GetNumberFormat(long nDim);
 
     BOOL                    SubTotalAllowed(long nColumn);      //! move to ScDPResultData
 
@@ -333,12 +355,15 @@ private:
     long                nUsedHier;
     USHORT              nFunction;          // enum GeneralFunction
     String              aName;              // if empty, take from source
+    ::std::auto_ptr<rtl::OUString> mpLayoutName;
+    ::std::auto_ptr<rtl::OUString> mpSubtotalName;
     long                nSourceDim;         // >=0 if dup'ed
     ::com::sun::star::sheet::DataPilotFieldReference
                         aReferenceValue;    // settings for "show data as" / "displayed value"
     BOOL                bHasSelectedPage;
     String              aSelectedPage;
     ScDPItemData*       pSelectedData;      // internal, temporary, created from aSelectedPage
+    sal_Bool            mbHasHiddenMember;
 
 public:
                             ScDPDimension( ScDPSource* pSrc, long nD );
@@ -349,6 +374,9 @@ public:
 
     ScDPDimension*          CreateCloneObject();
     ScDPHierarchies*        GetHierarchiesObject();
+
+    SC_DLLPUBLIC const ::rtl::OUString*  GetLayoutName() const;
+    const ::rtl::OUString*  GetSubtotalName() const;
 
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
@@ -429,6 +457,10 @@ public:
     const ::com::sun::star::sheet::DataPilotFieldReference& GetReferenceValue() const;
 
 //UNUSED2009-05 BOOL                        IsValidPage( const ScDPItemData& rData );
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+    BOOL                      IsVisible( const ScDPItemData& rData );
+// End Comments
 };
 
 class ScDPHierarchies : public cppu::WeakImplHelper2<
@@ -722,6 +754,12 @@ public:
     long                    getMinMembers() const;
 
     sal_Int32               GetIndexFromName( const ::rtl::OUString& rName ) const;     // <0 if not found
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    const std::vector<sal_Int32>&    GetGlobalOrder();
+    const ScDPItemData*               GetSrcItemDataByIndex(  SCROW nIndex);
+    SCROW                                   GetSrcItemsCount();
+    // End Comments
 };
 
 class ScDPMember : public cppu::WeakImplHelper3<
@@ -735,21 +773,37 @@ private:
     long            nHier;
     long            nLev;
 
-    ScDPItemData    maData;
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    SCROW       mnDataId;
+    // End Comments
 //  String          aCaption;           // visible name (changeable by user)
+    ::std::auto_ptr<rtl::OUString> mpLayoutName;
 
     sal_Int32       nPosition;          // manual sorting
     BOOL            bVisible;
     BOOL            bShowDet;
 
 public:
-                            ScDPMember( ScDPSource* pSrc, long nD, long nH, long nL,
-                                            const String& rN, double fV, BOOL bHV );
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    ScDPMember( ScDPSource* pSrc, long nD, long nH, long nL,
+        SCROW nIndex /*const String& rN, double fV, BOOL bHV */);
+    // End Comments
     virtual                 ~ScDPMember();
 
     BOOL                    IsNamedItem( const ScDPItemData& r ) const;
     String                  GetNameStr() const;
     void                    FillItemData( ScDPItemData& rData ) const;
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    //  const ScDPItemData&  GetItemData() const{ return maData; }
+    const ScDPItemData&  GetItemData() const;
+    inline SCROW               GetItemDataId() const { return mnDataId; }
+    BOOL                           IsNamedItem( SCROW    nIndex  ) const;
+    // End Comments
+
+    SC_DLLPUBLIC const ::rtl::OUString*  GetLayoutName() const;
 
     sal_Int32               Compare( const ScDPMember& rOther ) const;      // visible order
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleBase.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,6 +26,8 @@
  ************************************************************************/
 #ifndef _CHART2_ACCESSIBLEBASE_HXX_
 #define _CHART2_ACCESSIBLEBASE_HXX_
+
+#include "ObjectIdentifier.hxx"
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -53,6 +52,12 @@
 
 class SfxItemSet;
 class SdrObject;
+class SdrView;
+
+namespace accessibility
+{
+class IAccessibleViewForwarder;
+}
 
 namespace chart
 {
@@ -60,11 +65,11 @@ namespace chart
 class AccessibleBase;
 class ObjectHierarchy;
 
-typedef rtl::OUString AccessibleUniqueId;
+typedef ObjectIdentifier AccessibleUniqueId;
 
 struct AccessibleElementInfo
 {
-    AccessibleUniqueId m_aCID;
+    AccessibleUniqueId m_aOID;
 
     ::com::sun::star::uno::WeakReference<
             ::com::sun::star::chart2::XChartDocument > m_xChartDocument;
@@ -78,6 +83,8 @@ struct AccessibleElementInfo
     ::boost::shared_ptr< ObjectHierarchy > m_spObjectHierarchy;
 
     AccessibleBase * m_pParent;
+    SdrView* m_pSdrView;
+    ::accessibility::IAccessibleViewForwarder* m_pViewForwarder;
 };
 
 
@@ -176,7 +183,7 @@ protected:
         greater than the index of the removed element get an index one less than
         before.
      */
-    void         RemoveChildById( const ::rtl::OUString & rId );
+    void         RemoveChildByOId( const ObjectIdentifier& rOId );
 
     /** Retrieve the pixel coordinates of logical coordinates (0,0) of the
         current logic coordinate system.  This can be used for
@@ -328,14 +335,14 @@ private:
     /** type of the hash containing a vector index for every AccessibleUniqueId
         of the object in the child list
      */
-    typedef ::std::map< ::rtl::OUString, tAccessible > ChildCIDMap;
+    typedef ::std::map< ObjectIdentifier, tAccessible > ChildOIDMap;
 
     bool                                  m_bIsDisposed;
     const bool                            m_bMayHaveChildren;
     bool                                  m_bChildrenInitialized;
     ChildListVectorType                   m_aChildList;
 
-    ChildCIDMap                           m_aChildCIDMap;
+    ChildOIDMap                           m_aChildOIDMap;
 
     ::comphelper::AccessibleEventNotifier::TClientId      m_nEventNotifierId;
 

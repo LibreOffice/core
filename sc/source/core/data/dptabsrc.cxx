@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dptabsrc.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,6 +82,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::sheet::DataPilotFieldAutoShowInfo;
+using ::rtl::OUString;
 
 // -----------------------------------------------------------------------
 
@@ -141,15 +139,14 @@ ScDPSource::ScDPSource( ScDPTableData* pD ) :
     pRowResRoot( NULL ),
     pColResults( NULL ),
     pRowResults( NULL ),
-    bResultOverflow( FALSE )
+    bResultOverflow( FALSE ),
+    mpGrandTotalName(NULL)
 {
     pData->SetEmptyFlags( bIgnoreEmptyRows, bRepeatIfEmpty );
 }
 
 ScDPSource::~ScDPSource()
 {
-    delete pData;           // ScDPTableData is not ref-counted
-
     if (pDimensions)
         pDimensions->release();     // ref-counted
 
@@ -161,6 +158,16 @@ ScDPSource::~ScDPSource()
     delete pColResRoot;
     delete pRowResRoot;
     delete pResData;
+}
+
+void ScDPSource::SetGrandTotalName(const ::rtl::OUString& rName)
+{
+    mpGrandTotalName.reset(new ::rtl::OUString(rName));
+}
+
+const ::rtl::OUString* ScDPSource::GetGrandTotalName() const
+{
+    return mpGrandTotalName.get();
 }
 
 USHORT ScDPSource::GetOrientation(long nColumn)
@@ -186,16 +193,21 @@ long ScDPSource::GetDataDimensionCount()
     return nDataDimCount;
 }
 
+ScDPDimension* ScDPSource::GetDataDimension(long nIndex)
+{
+    if (nIndex < 0 || nIndex >= nDataDimCount)
+        return NULL;
+
+    long nDimIndex = nDataDims[nIndex];
+    return GetDimensionsObject()->getByIndex(nDimIndex);
+}
+
 String ScDPSource::GetDataDimName( long nIndex )
 {
     String aRet;
-    if ( nIndex >= 0 && nIndex < nDataDimCount )
-    {
-        long nDimIndex = nDataDims[nIndex];
-        ScDPDimension* pDim = GetDimensionsObject()->getByIndex(nDimIndex);
-        if (pDim)
-            aRet = String( pDim->getName() );
-    }
+    ScDPDimension* pDim = GetDataDimension(nIndex);
+    if (pDim)
+        aRet = String(pDim->getName());
     return aRet;
 }
 
@@ -288,10 +300,11 @@ void ScDPSource::SetOrientation(long nColumn, USHORT nNew)
         case sheet::DataPilotFieldOrientation_PAGE:
             nPageDims[nPageDimCount++] = nColumn;
             break;
+            // Wang Xu Ming -- 2009-9-1
+            // DataPilot Migration - Cache&&Performance
         case sheet::DataPilotFieldOrientation_HIDDEN:
-            /*  Do not assert HIDDEN as it occurs e.g. while using the
-                csss.XDataPilotTables.createDataPilotDescriptor() function. */
             break;
+            // End Comments
         default:
             DBG_ERROR( "ScDPSource::SetOrientation: unexpected orientation" );
             break;
@@ -311,6 +324,11 @@ USHORT ScDPSource::GetDataLayoutOrientation()
 BOOL ScDPSource::IsDateDimension(long nDim)
 {
     return pData->IsDateDimension(nDim);
+}
+
+UINT32  ScDPSource::GetNumberFormat(long nDim)
+{
+    return pData->GetNumberFormat( nDim );
 }
 
 ScDPDimensions* ScDPSource::GetDimensionsObject()
@@ -430,7 +448,6 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
     throw (uno::RuntimeException)
 {
     long nColumnCount = GetData()->GetColumnCount();
-    ScSimpleSharedString& rSharedString = GetData()->GetSharedString();
 
     typedef hash_map<String, long, ScStringHashCode> FieldNameMapType;
     FieldNameMapType aFieldNames;
@@ -460,17 +477,16 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
                     ScDPItemData aItem;
                     pMembers->getByIndex(nIndex)->FillItemData( aItem );
                     aFilterCriteria.push_back( ScDPCacheTable::Criterion() );
-                    sal_Int32 nMatchStrId = rSharedString.getStringId(aItem.aString);
                     aFilterCriteria.back().mnFieldIndex = nCol;
                     aFilterCriteria.back().mpFilter.reset(
-                        new ScDPCacheTable::SingleFilter(rSharedString, nMatchStrId, aItem.fValue, aItem.bHasValue) );
+                        new ScDPCacheTable::SingleFilter(aItem.GetString()/*rSharedString, nMatchStrId*/, aItem.GetValue(), aItem.IsValue()) );
                 }
             }
         }
     }
 
     // Take into account the visibilities of field members.
-    ScDPResultVisibilityData aResVisData(rSharedString, this);
+    ScDPResultVisibilityData aResVisData(/*rSharedString, */this);
     pRowResRoot->FillVisibilityData(aResVisData);
     pColResRoot->FillVisibilityData(aResVisData);
     aResVisData.fillFieldFilters(aFilterCriteria);
@@ -488,7 +504,10 @@ String ScDPSource::getDataDescription()
 
     String aRet;
     if ( pResData->GetMeasureCount() == 1 )
-        aRet = pResData->GetMeasureString( 0, TRUE, SUBTOTAL_FUNC_NONE );
+    {
+        bool bTotalResult = false;
+        aRet = pResData->GetMeasureString( 0, TRUE, SUBTOTAL_FUNC_NONE, bTotalResult );
+    }
 
     //  empty for more than one measure
 
@@ -722,7 +741,6 @@ void ScDPSource::GetCategoryDimensionIndices(hash_set<sal_Int32>& rCatDims)
 
 void ScDPSource::FilterCacheTableByPageDimensions()
 {
-    ScSimpleSharedString& rSharedString = GetData()->GetSharedString();
 
     // filter table by page dimensions.
     vector<ScDPCacheTable::Criterion> aCriteria;
@@ -737,7 +755,7 @@ void ScDPSource::FilterCacheTableByPageDimensions()
         long nMemCount = pMems->getCount();
         ScDPCacheTable::Criterion aFilter;
         aFilter.mnFieldIndex = static_cast<sal_Int32>(nField);
-        aFilter.mpFilter.reset(new ScDPCacheTable::GroupFilter(rSharedString));
+        aFilter.mpFilter.reset(new ScDPCacheTable::GroupFilter(/*rSharedString*/));
         ScDPCacheTable::GroupFilter* pGrpFilter =
             static_cast<ScDPCacheTable::GroupFilter*>(aFilter.mpFilter.get());
         for (long j = 0; j < nMemCount; ++j)
@@ -747,7 +765,7 @@ void ScDPSource::FilterCacheTableByPageDimensions()
             {
                 ScDPItemData aData;
                 pMem->FillItemData(aData);
-                pGrpFilter->addMatchItem(aData.aString, aData.fValue, aData.bHasValue);
+                pGrpFilter->addMatchItem(aData.GetString(), aData.GetValue(), aData.IsValue());
             }
         }
         if (pGrpFilter->getMatchItemCount() < static_cast<size_t>(nMemCount))
@@ -761,9 +779,8 @@ void ScDPSource::FilterCacheTableByPageDimensions()
         aCriteria.push_back(ScDPCacheTable::Criterion());
         ScDPCacheTable::Criterion& r = aCriteria.back();
         r.mnFieldIndex = static_cast<sal_Int32>(nField);
-        sal_Int32 nStrId = rSharedString.getStringId(rData.aString);
         r.mpFilter.reset(
-            new ScDPCacheTable::SingleFilter(rSharedString, nStrId, rData.fValue, rData.bHasValue));
+            new ScDPCacheTable::SingleFilter(rData.GetString()/*rSharedString, nStrId*/, rData.GetValue(), rData.IsValue()));
     }
     if (!aCriteria.empty())
     {
@@ -885,11 +902,11 @@ void ScDPSource::CreateRes_Impl()
         {
             ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nPageDims[i] );
             if ( pDim->HasSelectedPage() )
-                aInitState.AddMember( nPageDims[i], pDim->GetSelectedData() );
+                aInitState.AddMember( nPageDims[i], GetMemberId( nPageDims[i],  pDim->GetSelectedData() ) );
         }
 
-        pColResRoot = new ScDPResultMember( pResData, NULL, NULL, NULL, bColumnGrand );
-        pRowResRoot = new ScDPResultMember( pResData, NULL, NULL, NULL, bRowGrand );
+        pColResRoot = new ScDPResultMember( pResData, /*NULL, NULL, NULL, */bColumnGrand );
+        pRowResRoot = new ScDPResultMember( pResData, /*NULL, NULL, NULL, */bRowGrand );
 
         FillCalcInfo(false, aInfo, bHasAutoShow);
         long nColLevelCount = aInfo.aColLevels.size();
@@ -929,7 +946,7 @@ void ScDPSource::CreateRes_Impl()
         long nMinColMembers = lcl_CountMinMembers( aInfo.aColDims, aInfo.aColLevels, nColLevelCount );
         long nMinRowMembers = lcl_CountMinMembers( aInfo.aRowDims, aInfo.aRowLevels, nRowLevelCount );
 
-        if ( nMinColMembers > SC_MINCOUNT_LIMIT || nMinRowMembers > SC_MINCOUNT_LIMIT )
+        if ( nMinColMembers > MAXCOLCOUNT/*SC_MINCOUNT_LIMIT*/ || nMinRowMembers > SC_MINCOUNT_LIMIT )
         {
             //  resulting table is too big -> abort before calculating
             //  (this relies on late init, so no members are allocated in InitFrom above)
@@ -949,6 +966,8 @@ void ScDPSource::CreateRes_Impl()
             aInfo.pRowRoot   = pRowResRoot;
             pData->CalcResults(aInfo, false);
 
+            pColResRoot->CheckShowEmpty();
+            pRowResRoot->CheckShowEmpty();
             // ----------------------------------------------------------------
             //  With all data processed, calculate the final results:
 
@@ -1132,6 +1151,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo(
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    using beans::PropertyAttribute::READONLY;
 
     static SfxItemPropertyMapEntry aDPSourceMap_Impl[] =
     {
@@ -1140,6 +1160,10 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo(
         {MAP_CHAR_LEN(SC_UNO_IGNOREEM), 0,  &getBooleanCppuType(),              0, 0 },     // for sheet data only
         {MAP_CHAR_LEN(SC_UNO_REPEATIF), 0,  &getBooleanCppuType(),              0, 0 },     // for sheet data only
         {MAP_CHAR_LEN(SC_UNO_ROWGRAND), 0,  &getBooleanCppuType(),              0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_ROWFIELDCOUNT),    0, &getCppuType(static_cast<sal_Int32*>(0)), READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_COLUMNFIELDCOUNT), 0, &getCppuType(static_cast<sal_Int32*>(0)), READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DATAFIELDCOUNT),   0, &getCppuType(static_cast<sal_Int32*>(0)), READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_GRANDTOTAL_NAME),  0, &getCppuType(static_cast<OUString*>(0)), 0, 0 },
         {0,0,0,0,0,0}
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
@@ -1161,6 +1185,12 @@ void SAL_CALL ScDPSource::setPropertyValue( const rtl::OUString& aPropertyName, 
         setIgnoreEmptyRows( lcl_GetBoolFromAny( aValue ) );
     else if ( aNameStr.EqualsAscii( SC_UNO_REPEATIF ) )
         setRepeatIfEmpty( lcl_GetBoolFromAny( aValue ) );
+    else if (aNameStr.EqualsAscii(SC_UNO_GRANDTOTAL_NAME))
+    {
+        OUString aName;
+        if (aValue >>= aName)
+            mpGrandTotalName.reset(new OUString(aName));
+    }
     else
     {
         DBG_ERROR("unknown property");
@@ -1190,6 +1220,11 @@ uno::Any SAL_CALL ScDPSource::getPropertyValue( const rtl::OUString& aPropertyNa
         aRet <<= static_cast<sal_Int32>(nColDimCount);
     else if ( aNameStr.EqualsAscii( SC_UNO_DATAFIELDCOUNT ) )       // read-only
         aRet <<= static_cast<sal_Int32>(nDataDimCount);
+    else if (aNameStr.EqualsAscii(SC_UNO_GRANDTOTAL_NAME))
+    {
+        if (mpGrandTotalName.get())
+            aRet <<= *mpGrandTotalName;
+    }
     else
     {
         DBG_ERROR("unknown property");
@@ -1337,9 +1372,12 @@ ScDPDimension::ScDPDimension( ScDPSource* pSrc, long nD ) :
     pHierarchies( NULL ),
     nUsedHier( 0 ),
     nFunction( SUBTOTAL_FUNC_SUM ),     // sum is default
+    mpLayoutName(NULL),
+    mpSubtotalName(NULL),
     nSourceDim( -1 ),
     bHasSelectedPage( FALSE ),
-    pSelectedData( NULL )
+    pSelectedData( NULL ),
+    mbHasHiddenMember(false)
 {
     //! hold pSource
 }
@@ -1362,6 +1400,16 @@ ScDPHierarchies* ScDPDimension::GetHierarchiesObject()
         pHierarchies->acquire();        // ref-counted
     }
     return pHierarchies;
+}
+
+const rtl::OUString* ScDPDimension::GetLayoutName() const
+{
+    return mpLayoutName.get();
+}
+
+const rtl::OUString* ScDPDimension::GetSubtotalName() const
+{
+    return mpSubtotalName.get();
 }
 
 uno::Reference<container::XNameAccess> SAL_CALL ScDPDimension::getHierarchies()
@@ -1505,6 +1553,19 @@ const ScDPItemData& ScDPDimension::GetSelectedData()
 //UNUSED2009-05     return TRUE;        // no selection -> all data
 //UNUSED2009-05 }
 
+BOOL ScDPDimension::IsVisible( const ScDPItemData& rData )
+{
+    if( ScDPMembers* pMembers = this->GetHierarchiesObject()->getByIndex(0)->
+        GetLevelsObject()->getByIndex(0)->GetMembersObject() )
+    {
+        for( long i = pMembers->getCount()-1; i>=0; i-- )
+            if( ScDPMember *pDPMbr = pMembers->getByIndex( i ) )
+                if( rData.IsCaseInsEqual( pDPMbr->GetItemData() ) && !pDPMbr->getIsVisible() )
+                    return FALSE;
+    }
+
+    return TRUE;
+}
 // XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetInfo()
@@ -1523,6 +1584,9 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
         {MAP_CHAR_LEN(SC_UNO_POSITION), 0,  &getCppuType((sal_Int32*)0),                0, 0 },
         {MAP_CHAR_LEN(SC_UNO_REFVALUE), 0,  &getCppuType((sheet::DataPilotFieldReference*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_USEDHIER), 0,  &getCppuType((sal_Int32*)0),                0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_LAYOUTNAME), 0, &getCppuType(static_cast<rtl::OUString*>(0)), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_FIELD_SUBTOTALNAME), 0, &getCppuType(static_cast<rtl::OUString*>(0)), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_HAS_HIDDEN_MEMBER), 0, &getBooleanCppuType(), 0, 0 },
         {0,0,0,0,0,0}
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
@@ -1593,6 +1657,20 @@ void SAL_CALL ScDPDimension::setPropertyValue( const rtl::OUString& aPropertyNam
         }
         DELETEZ( pSelectedData );       // invalid after changing aSelectedPage
     }
+    else if (aNameStr.EqualsAscii(SC_UNO_LAYOUTNAME))
+    {
+        OUString aTmpName;
+        if (aValue >>= aTmpName)
+            mpLayoutName.reset(new OUString(aTmpName));
+    }
+    else if (aNameStr.EqualsAscii(SC_UNO_FIELD_SUBTOTALNAME))
+    {
+        OUString aTmpName;
+        if (aValue >>= aTmpName)
+            mpSubtotalName.reset(new OUString(aTmpName));
+    }
+    else if (aNameStr.EqualsAscii(SC_UNO_HAS_HIDDEN_MEMBER))
+        aValue >>= mbHasHiddenMember;
     else
     {
         DBG_ERROR("unknown property");
@@ -1631,6 +1709,23 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const rtl::OUString& aPropert
         // #i63745# don't use source format for "count"
         if ( eFunc != sheet::GeneralFunction_COUNT && eFunc != sheet::GeneralFunction_COUNTNUMS )
             nFormat = pSource->GetData()->GetNumberFormat( ( nSourceDim >= 0 ) ? nSourceDim : nDim );
+
+        switch ( aReferenceValue.ReferenceType )
+        {
+        case sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE:
+        case sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE:
+        case sheet::DataPilotFieldReferenceType::ROW_PERCENTAGE:
+        case sheet::DataPilotFieldReferenceType::COLUMN_PERCENTAGE:
+        case sheet::DataPilotFieldReferenceType::TOTAL_PERCENTAGE:
+            nFormat = pSource->GetData()->GetNumberFormatByIdx( (NfIndexTableOffset)NF_PERCENT_DEC2 );
+            break;
+        case sheet::DataPilotFieldReferenceType::INDEX:
+            nFormat = pSource->GetData()->GetNumberFormatByIdx( (NfIndexTableOffset)NF_NUMBER_SYSTEM );
+            break;
+        default:
+            break;
+        }
+
         aRet <<= nFormat;
     }
     else if ( aNameStr.EqualsAscii( SC_UNO_ORIGINAL ) )
@@ -1652,6 +1747,12 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const rtl::OUString& aPropert
         else
             aRet <<= uno::Sequence<sheet::TableFilterField>(0);
     }
+    else if (aNameStr.EqualsAscii(SC_UNO_LAYOUTNAME))
+        aRet <<= mpLayoutName.get() ? *mpLayoutName : OUString::createFromAscii("");
+    else if (aNameStr.EqualsAscii(SC_UNO_FIELD_SUBTOTALNAME))
+        aRet <<= mpSubtotalName.get() ? *mpSubtotalName : OUString::createFromAscii("");
+    else if (aNameStr.EqualsAscii(SC_UNO_HAS_HIDDEN_MEMBER))
+        aRet <<= mbHasHiddenMember;
     else
     {
         DBG_ERROR("unknown property");
@@ -2155,7 +2256,11 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::R
             return aRet;
     }
 
-    return pSource->GetData()->getDimensionName( nSrcDim );     // (original) dimension name
+    ScDPDimension* pDim = pSource->GetDimensionsObject()->getByIndex(nSrcDim);
+    if (!pDim)
+        return rtl::OUString();
+
+    return pDim->getName();
 }
 
 void SAL_CALL ScDPLevel::setName( const ::rtl::OUString& /* rNewName */ ) throw(uno::RuntimeException)
@@ -2258,6 +2363,20 @@ uno::Any SAL_CALL ScDPLevel::getPropertyValue( const rtl::OUString& aPropertyNam
         aRet <<= aAutoShowInfo;
     else if ( aNameStr.EqualsAscii( SC_UNO_LAYOUT ) )
         aRet <<= aLayoutInfo;
+    else if (aNameStr.EqualsAscii(SC_UNO_LAYOUTNAME))
+    {
+        // read only property
+        long nSrcDim = pSource->GetSourceDim(nDim);
+        ScDPDimension* pDim = pSource->GetDimensionsObject()->getByIndex(nSrcDim);
+        if (!pDim)
+            return aRet;
+
+        const OUString* pLayoutName = pDim->GetLayoutName();
+        if (!pLayoutName)
+            return aRet;
+
+        aRet <<= *pLayoutName;
+    }
     else
     {
         DBG_ERROR("unknown property");
@@ -2269,15 +2388,6 @@ uno::Any SAL_CALL ScDPLevel::getPropertyValue( const rtl::OUString& aPropertyNam
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDPLevel )
 
 // -----------------------------------------------------------------------
-
-USHORT lcl_GetFirstStringPos( const TypedScStrCollection& rColl )
-{
-    USHORT nPos = 0;
-    USHORT nCount = rColl.GetCount();
-    while ( nPos < nCount && !rColl[nPos]->IsStrData() )
-        ++nPos;
-    return nPos;
-}
 
 ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
     pSource( pSrc ),
@@ -2300,12 +2410,23 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
             {
                 case SC_DAPI_LEVEL_YEAR:
                     {
-                        const TypedScStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
-                        USHORT nFirstString = lcl_GetFirstStringPos( rStrings );
-                        if ( nFirstString > 0 )
+                        // Wang Xu Ming - DataPilot migration
+                        const ScDPItemData* pLastNumData = NULL;
+                        for ( SCROW n = 0 ;n <GetSrcItemsCount() ; n-- )
                         {
-                            double fFirstVal = rStrings[0]->GetValue();
-                            double fLastVal = rStrings[nFirstString-1]->GetValue();
+                            const ScDPItemData* pData  = GetSrcItemDataByIndex( n );
+                            if ( pData && pData->HasStringData() )
+                                break;
+                            else
+                                pLastNumData = pData;
+                        }
+                        // End Comments
+
+                        if ( pLastNumData )
+                        {
+                            const ScDPItemData*  pFirstData = GetSrcItemDataByIndex( 0 );
+                            double fFirstVal = pFirstData->GetValue();
+                            double fLastVal = pLastNumData->GetValue();
 
                             long nFirstYear = pSource->GetData()->GetDatePart(
                                         (long)::rtl::math::approxFloor( fFirstVal ),
@@ -2342,11 +2463,7 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
         }
     }
     else
-    {
-        //  StringCollection is cached at TableData
-        const TypedScStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
-        nMbrCount = rStrings.GetCount();
-    }
+        nMbrCount = pSource->GetData()->GetMembersCount( nSrcDim );
 }
 
 ScDPMembers::~ScDPMembers()
@@ -2482,8 +2599,7 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
             if ( pSource->IsDataLayoutDimension(nSrcDim) )
             {
                 // empty name (never shown, not used for lookup)
-                pNew = new ScDPMember( pSource, nDim, nHier, nLev,
-                                        String(), 0.0, FALSE );
+                pNew = new ScDPMember( pSource, nDim, nHier, nLev, 0 );
             }
             else if ( nHier != SC_DAPI_HIERARCHY_FLAT && pSource->IsDateDimension( nSrcDim ) )
             {
@@ -2494,12 +2610,13 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
                 {
                     //! cache year range here!
 
-                    const TypedScStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
-                    double fFirstVal = rStrings[0]->GetValue();
+                    // Wang Xu Ming - DataPilot migration
+                    double fFirstVal = pSource->GetData()->GetMemberByIndex( nSrcDim, 0 )->GetValue();
                     long nFirstYear = pSource->GetData()->GetDatePart(
                                         (long)::rtl::math::approxFloor( fFirstVal ),
                                         nHier, nLev );
 
+                    // End Comments
                     nVal = nFirstYear + nIndex;
                 }
                 else if ( nHier == SC_DAPI_HIERARCHY_WEEK && nLev == SC_DAPI_LEVEL_WEEKDAY )
@@ -2522,18 +2639,19 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
                 if ( !aName.Len() )
                     aName = String::CreateFromInt32(nVal);
 
-                pNew = new ScDPMember( pSource, nDim, nHier, nLev, aName, nVal, TRUE );
+                            ScDPItemData  rData( aName, nVal, TRUE, 0 ) ;
+                    pNew = new ScDPMember( pSource, nDim, nHier, nLev, pSource->GetCache()->GetAdditionalItemID(rData));
             }
             else
             {
-                const TypedScStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
-                const TypedStrData* pData = rStrings[(USHORT)nIndex];
-                pNew = new ScDPMember( pSource, nDim, nHier, nLev,
-                                        pData->GetString(), pData->GetValue(), !pData->IsStrData() );
+                     const std::vector< SCROW >& memberIndexs = pSource->GetData()->GetColumnEntries( nSrcDim );
+                    pNew = new ScDPMember( pSource, nDim, nHier, nLev, memberIndexs[nIndex]   );
             }
             pNew->acquire();            // ref-counted
             ppMbrs[nIndex] = pNew;
         }
+
+        DBG_ASSERT( ppMbrs[nIndex] ," member is not initialized " );
 
         return ppMbrs[nIndex];
     }
@@ -2544,12 +2662,13 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
 // -----------------------------------------------------------------------
 
 ScDPMember::ScDPMember( ScDPSource* pSrc, long nD, long nH, long nL,
-                        const String& rN, double fV, BOOL bHV ) :
+                        SCROW nIndex /*const String& rN, double fV, BOOL bHV*/ ) :
     pSource( pSrc ),
     nDim( nD ),
     nHier( nH ),
     nLev( nL ),
-    maData( rN, fV, bHV ),
+    mnDataId( nIndex ),
+    mpLayoutName(NULL),
     nPosition( -1 ),
     bVisible( TRUE ),
     bShowDet( TRUE )
@@ -2565,17 +2684,36 @@ ScDPMember::~ScDPMember()
 BOOL ScDPMember::IsNamedItem( const ScDPItemData& r ) const
 {
     long nSrcDim = pSource->GetSourceDim( nDim );
-    if ( nHier != SC_DAPI_HIERARCHY_FLAT && pSource->IsDateDimension( nSrcDim ) && r.bHasValue )
+    if ( nHier != SC_DAPI_HIERARCHY_FLAT && pSource->IsDateDimension( nSrcDim ) && r.IsValue() )
     {
         long nComp = pSource->GetData()->GetDatePart(
-                                        (long)::rtl::math::approxFloor( r.fValue ),
+                                        (long)::rtl::math::approxFloor( r.GetValue() ),
                                         nHier, nLev );
 
         //  fValue is converted from integer, so simple comparison works
-        return nComp == maData.fValue;
+        return nComp == GetItemData().GetValue();
     }
 
-    return r.IsCaseInsEqual( maData );
+    return r.IsCaseInsEqual( GetItemData() );
+}
+
+BOOL ScDPMember::IsNamedItem( SCROW    nIndex ) const
+{
+    long nSrcDim = pSource->GetSourceDim( nDim );
+    if ( nHier != SC_DAPI_HIERARCHY_FLAT && pSource->IsDateDimension( nSrcDim ) )
+    {
+        const ScDPItemData* pData =  pSource->GetCache()->GetItemDataById( (SCCOL) nSrcDim, nIndex );
+        if (  pData->IsValue()  )
+        {
+            long nComp = pSource->GetData()->GetDatePart(
+                (long)::rtl::math::approxFloor( pData->GetValue() ),
+                nHier, nLev );
+            //  fValue is converted from integer, so simple comparison works
+            return nComp == GetItemData().GetValue();
+        }
+    }
+
+    return  nIndex == mnDataId;
 }
 
 sal_Int32 ScDPMember::Compare( const ScDPMember& rOther ) const
@@ -2600,24 +2738,29 @@ sal_Int32 ScDPMember::Compare( const ScDPMember& rOther ) const
     }
 
     // no positions set - compare names
-    return ScDPItemData::Compare( maData, rOther.maData );
+   return pSource->GetData()->Compare( pSource->GetSourceDim(nDim),mnDataId,rOther.GetItemDataId());
 }
 
 void ScDPMember::FillItemData( ScDPItemData& rData ) const
 {
     //! handle date hierarchy...
 
-    rData = maData;
+    rData = GetItemData() ;
+}
+
+const OUString* ScDPMember::GetLayoutName() const
+{
+    return mpLayoutName.get();
 }
 
 String ScDPMember::GetNameStr() const
 {
-    return maData.aString;
+      return GetItemData().GetString();
 }
 
 ::rtl::OUString SAL_CALL ScDPMember::getName() throw(uno::RuntimeException)
 {
-    return maData.aString;
+      return GetItemData().GetString();
 }
 
 void SAL_CALL ScDPMember::setName( const ::rtl::OUString& /* rNewName */ ) throw(uno::RuntimeException)
@@ -2669,6 +2812,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo(
         {MAP_CHAR_LEN(SC_UNO_ISVISIBL), 0,  &getBooleanCppuType(),              0, 0 },
         {MAP_CHAR_LEN(SC_UNO_POSITION), 0,  &getCppuType((sal_Int32*)0),        0, 0 },
         {MAP_CHAR_LEN(SC_UNO_SHOWDETA), 0,  &getBooleanCppuType(),              0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_LAYOUTNAME), 0, &getCppuType(static_cast<rtl::OUString*>(0)), 0, 0 },
         {0,0,0,0,0,0}
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
@@ -2692,6 +2836,12 @@ void SAL_CALL ScDPMember::setPropertyValue( const rtl::OUString& aPropertyName, 
         if (aValue >>= nInt)
             setPosition( nInt );
     }
+    else if (aNameStr.EqualsAscii(SC_UNO_LAYOUTNAME))
+    {
+        rtl::OUString aName;
+        if (aValue >>= aName)
+            mpLayoutName.reset(new rtl::OUString(aName));
+    }
     else
     {
         DBG_ERROR("unknown property");
@@ -2711,6 +2861,8 @@ uno::Any SAL_CALL ScDPMember::getPropertyValue( const rtl::OUString& aPropertyNa
         lcl_SetBoolInAny( aRet, getShowDetails() );
     else if ( aNameStr.EqualsAscii( SC_UNO_POSITION ) )
         aRet <<= (sal_Int32) getPosition();
+    else if (aNameStr.EqualsAscii(SC_UNO_LAYOUTNAME))
+        aRet <<= mpLayoutName.get() ? *mpLayoutName : rtl::OUString();
     else
     {
         DBG_ERROR("unknown property");
@@ -2722,4 +2874,48 @@ uno::Any SAL_CALL ScDPMember::getPropertyValue( const rtl::OUString& aPropertyNa
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDPMember )
 
 
+ScDPTableDataCache* ScDPSource::GetCache()
+{
+    DBG_ASSERT( GetData() , "empty ScDPTableData pointer");
+    return ( GetData()!=NULL) ? GetData()->GetCacheTable().GetCache() : NULL ;
+}
+
+const ScDPItemData& ScDPMember::GetItemData() const
+{
+    return *pSource->GetItemDataById( (SCCOL)nDim, mnDataId );//ms-cache-core
+}
+
+const ScDPItemData* ScDPSource::GetItemDataById(long nDim, long nId)
+{
+    long nSrcDim = GetSourceDim( nDim );
+    const ScDPItemData* pItemData = GetData()->GetMemberById(  nSrcDim,  nId );
+    if ( !pItemData )
+   { //todo:
+           ScDPItemData item;
+           nId = GetCache()->GetAdditionalItemID( item );
+        pItemData = GetData()->GetMemberById(  nSrcDim,  nId );
+    }
+   return pItemData;
+}
+
+SCROW  ScDPSource::GetMemberId(  long  nDim, const ScDPItemData& rData )
+{
+    long nSrcDim = GetSourceDim( nDim );
+       return  GetCache()->GetIdByItemData(  nSrcDim, rData );
+}
+
+const ScDPItemData* ScDPMembers::GetSrcItemDataByIndex( SCROW nIndex)
+{
+    const std::vector< SCROW >& memberIds = pSource->GetData()->GetColumnEntries( nDim );
+    if ( nIndex >= (long )(memberIds.size()) || nIndex < 0 )
+        return NULL;
+    SCROW nId =  memberIds[ nIndex ];
+    return pSource->GetItemDataById( nDim, nId );
+}
+
+ SCROW ScDPMembers::GetSrcItemsCount()
+ {
+    return pSource->GetData()->GetColumnEntries( nDim ).size();
+ }
+// End Comments
 

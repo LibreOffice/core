@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh.hxx,v $
- * $Revision: 1.50.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,10 +31,8 @@
 
 #include <sfx2/objsh.hxx>
 
-//REMOVE    #ifndef _SFX_INTERNO_HXX //autogen
-//REMOVE    #include <sfx2/interno.hxx>
-//REMOVE    #endif
 #include <sfx2/docfac.hxx>
+#include <sfx2/sfxmodelfactory.hxx>
 #include <sfx2/viewsh.hxx>
 
 #include "scdllapi.h"
@@ -182,7 +177,7 @@ public:
                     SFX_DECL_OBJECTFACTORY();
 
                     ScDocShell( const ScDocShell& rDocShell );
-                    ScDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED, const bool _bScriptSupport = true );
+                    ScDocShell( const sal_uInt64 i_nSfxCreationFlags = SFXMODEL_EMBEDDED_OBJECT );
                     ~ScDocShell();
 
     using SotObject::GetInterface;
@@ -402,6 +397,7 @@ public:
 
     static ScDocShell* GetShellByNum( USHORT nDocNo );
     static String   GetOwnFilterName();
+        static String   GetHtmlFilterName();
     static String   GetWebQueryFilterName();
     static String   GetAsciiFilterName();
     static String   GetLotusFilterName();

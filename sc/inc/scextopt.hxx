@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scextopt.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,6 +121,8 @@ public:
     const String&       GetCodeName( size_t nIdx ) const;
     /** Appends a codename for a sheet. */
     void                AppendCodeName( const String& rCodeName );
+    void                SetCodeName( const String& rCodeName, size_t nIdx );
+    void                DeleteCodeName( size_t nIdx );
 
 private:
     ::std::auto_ptr< ScExtDocOptionsImpl > mxImpl;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scabstdlg.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +38,7 @@
 #include "sc.hrc"
 #include "global.hxx"
 #include "pivot.hxx"
+#include "i18npool/lang.h"
 
 class ScAsciiOptions;
 class ScAutoFormat;
@@ -68,6 +66,7 @@ class AbstractScImportAsciiDlg : public VclAbstractDialog  //add for ScImportAsc
 public:
     virtual void                        GetOptions( ScAsciiOptions& rOpt ) = 0;
     virtual void                        SetTextToColumnsMode() = 0;
+    virtual void                        SaveParameters() = 0;
 };
 
 
@@ -238,7 +237,7 @@ class AbstractScDPSubtotalDlg : public VclAbstractDialog  //add for ScDPSubtotal
 {
 public:
     virtual USHORT  GetFuncMask() const = 0;
-    virtual void    FillLabelData( LabelData& rLabelData ) const = 0;
+    virtual void    FillLabelData( ScDPLabelData& rLabelData ) const = 0;
 };
 
 class AbstractScDPNumGroupDlg : public VclAbstractDialog
@@ -292,6 +291,14 @@ class AbstractScImportOptionsDlg : public VclAbstractDialog  //add for ScImportO
 public:
     virtual void GetImportOptions( ScImportOptions& rOptions ) const = 0;
 };
+
+class AbstractScTextImportOptionsDlg : public VclAbstractDialog //add for ScLangChooserDlg
+{
+public:
+    virtual LanguageType GetLanguageType() const = 0;
+    virtual bool IsDateConversionSet() const = 0;
+};
+
 //-------Scabstract fractory ---------------------------
 class ScAbstractDialogFactory
 {
@@ -301,6 +308,8 @@ public:
     virtual     AbstractScImportAsciiDlg * CreateScImportAsciiDlg( Window* pParent, String aDatName, //add for ScImportAsciiDlg
                                                                     SvStream* pInStream, int nId,
                                                                     sal_Unicode cSep = '\t') = 0;
+
+    virtual     AbstractScTextImportOptionsDlg * CreateScTextImportOptionsDlg( Window* pParent, int nId ) = 0;
 
     virtual     AbstractScAutoFormatDlg * CreateScAutoFormatDlg( Window*                    pParent, //add for ScAutoFormatDlg
                                                                 ScAutoFormat*               pAutoFormat,

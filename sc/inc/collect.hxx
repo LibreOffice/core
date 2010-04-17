@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: collect.hxx,v $
- * $Revision: 1.6.32.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -187,20 +184,18 @@ private:
     BOOL    bCaseSensitive;
 
 public:
-            TypedScStrCollection( USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE )
-                : ScSortedCollection( nLim, nDel, bDup ) { bCaseSensitive = FALSE; }
+    TypedScStrCollection( USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE );
 
-            TypedScStrCollection( const TypedScStrCollection& rCpy )
-                : ScSortedCollection( rCpy ) { bCaseSensitive = rCpy.bCaseSensitive; }
-            ~TypedScStrCollection();
+    TypedScStrCollection( const TypedScStrCollection& rCpy )
+        : ScSortedCollection( rCpy ) { bCaseSensitive = rCpy.bCaseSensitive; }
+    ~TypedScStrCollection();
 
     virtual ScDataObject*       Clone() const;
     virtual short           Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) const;
 
-    TypedStrData*   operator[]( const USHORT nIndex) const
-                        { return (TypedStrData*)At(nIndex); }
+    TypedStrData*   operator[]( const USHORT nIndex) const;
 
-    void    SetCaseSensitive( BOOL bSet )       { bCaseSensitive = bSet; }
+    void    SetCaseSensitive( BOOL bSet );
 
     BOOL    FindText( const String& rStart, String& rResult, USHORT& rPos, BOOL bBack ) const;
     BOOL    GetExactMatch( String& rString ) const;

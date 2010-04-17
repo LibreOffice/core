@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleDocument.cxx,v $
- * $Revision: 1.76.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -966,18 +963,14 @@ void ScChildrenShapes::FillSelectionSupplier() const
         SfxViewFrame* pViewFrame = mpViewShell->GetViewFrame();
         if (pViewFrame)
         {
-            SfxFrame* pFrame = pViewFrame->GetFrame();
-            if (pFrame)
+            xSelectionSupplier = uno::Reference<view::XSelectionSupplier>(pViewFrame->GetFrame().GetController(), uno::UNO_QUERY);
+            if (xSelectionSupplier.is())
             {
-                xSelectionSupplier = uno::Reference<view::XSelectionSupplier>(pFrame->GetController(), uno::UNO_QUERY);
-                if (xSelectionSupplier.is())
-                {
-                    if (mpAccessibleDocument)
-                        xSelectionSupplier->addSelectionChangeListener(mpAccessibleDocument);
-                    uno::Reference<drawing::XShapes> xShapes (xSelectionSupplier->getSelection(), uno::UNO_QUERY);
-                    if (xShapes.is())
-                        mnShapesSelected = xShapes->getCount();
-                }
+                if (mpAccessibleDocument)
+                    xSelectionSupplier->addSelectionChangeListener(mpAccessibleDocument);
+                uno::Reference<drawing::XShapes> xShapes (xSelectionSupplier->getSelection(), uno::UNO_QUERY);
+                if (xShapes.is())
+                    mnShapesSelected = xShapes->getCount();
             }
         }
     }

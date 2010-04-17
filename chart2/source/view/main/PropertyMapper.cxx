@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PropertyMapper.cxx,v $
- * $Revision: 1.11.46.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -166,6 +163,14 @@ uno::Any* PropertyMapper::getValuePointer( tAnySequence& rPropValues
             return &rPropValues[nN];
     }
     return NULL;
+}
+
+uno::Any* PropertyMapper::getValuePointerForLimitedSpace( tAnySequence& rPropValues
+                         , const tNameSequence& rPropNames
+                         , bool bLimitedHeight)
+{
+    return PropertyMapper::getValuePointer( rPropValues, rPropNames
+        , bLimitedHeight ? C2U("TextMaximumFrameHeight") : C2U("TextMaximumFrameWidth") );
 }
 
 /*
@@ -524,7 +529,7 @@ void PropertyMapper::getPreparedTextShapePropertyLists(
 
     // use a line-joint showing the border of thick lines like two rectangles
     // filled in between.
-    aValueMap[C2U("LineJoint")] <<= drawing::LineJoint_MITER;
+    aValueMap[C2U("LineJoint")] <<= drawing::LineJoint_ROUND;
 
     PropertyMapper::getMultiPropertyListsFromValueMap( rPropNames, rPropValues, aValueMap );
 }

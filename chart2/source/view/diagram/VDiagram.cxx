@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: VDiagram.cxx,v $
- * $Revision: 1.18.60.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +38,7 @@
 #include "CommonConverters.hxx"
 #include "ChartTypeHelper.hxx"
 #include "ThreeDHelper.hxx"
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -537,6 +534,9 @@ void VDiagram::createShapes_3d()
 
     bool bAddFloorAndWall = DiagramHelper::isSupportingFloorAndWall( m_xDiagram );
 
+    const bool bDoubleSided = false;
+    const bool bFlatNormals = true;
+
     //add walls
     {
         uno::Reference< beans::XPropertySet > xWallProp( NULL );
@@ -547,19 +547,31 @@ void VDiagram::createShapes_3d()
         if( !bAddFloorAndWall )
             aWallCID = rtl::OUString();
         uno::Reference< drawing::XShapes > xWallGroup_Shapes( m_pShapeFactory->createGroup3D( xOuterGroup_Shapes, aWallCID ) );
+
+        CuboidPlanePosition eLeftWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardLeftWall( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
+        CuboidPlanePosition eBackWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBackWall( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
+
         //add left wall
         {
+            short nRotatedTexture = ( CuboidPlanePosition_Front==eBackWallPos ) ? 3 : 1;
             double xPos = 0.0;
-            CuboidPlanePosition eLeftWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardLeftWall( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
             if( CuboidPlanePosition_Right==eLeftWallPos )
                 xPos = FIXED_SIZE_FOR_3D_CHART_VOLUME;
             Stripe aStripe( drawing::Position3D(xPos,FIXED_SIZE_FOR_3D_CHART_VOLUME,0)
-                , drawing::Direction3D(0,-FIXED_SIZE_FOR_3D_CHART_VOLUME,0)
-                , drawing::Direction3D(0,0,FIXED_SIZE_FOR_3D_CHART_VOLUME) );
+                , drawing::Direction3D(0,0,FIXED_SIZE_FOR_3D_CHART_VOLUME)
+                , drawing::Direction3D(0,-FIXED_SIZE_FOR_3D_CHART_VOLUME,0) );
+            if( CuboidPlanePosition_Right==eLeftWallPos )
+            {
+                nRotatedTexture = ( CuboidPlanePosition_Front==eBackWallPos ) ? 2 : 0;
+                aStripe = Stripe( drawing::Position3D(xPos,FIXED_SIZE_FOR_3D_CHART_VOLUME,0)
+                    , drawing::Direction3D(0,-FIXED_SIZE_FOR_3D_CHART_VOLUME,0)
+                    , drawing::Direction3D(0,0,FIXED_SIZE_FOR_3D_CHART_VOLUME) );
+            }
+            aStripe.InvertNormal(true);
 
             uno::Reference< drawing::XShape > xShape =
                 m_pShapeFactory->createStripe( xWallGroup_Shapes, aStripe
-                    , xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), true, true );
+                    , xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided, nRotatedTexture, bFlatNormals );
             if( !bAddFloorAndWall )
             {
                 //we always need this object as dummy object for correct scene dimensions
@@ -569,17 +581,25 @@ void VDiagram::createShapes_3d()
         }
         //add back wall
         {
+            short nRotatedTexture = 0;
             double zPos = 0.0;
-            CuboidPlanePosition eBackWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBackWall( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
             if( CuboidPlanePosition_Front==eBackWallPos )
                     zPos = FIXED_SIZE_FOR_3D_CHART_VOLUME;
             Stripe aStripe( drawing::Position3D(0,FIXED_SIZE_FOR_3D_CHART_VOLUME,zPos)
+                , drawing::Direction3D(0,-FIXED_SIZE_FOR_3D_CHART_VOLUME,0)
+                , drawing::Direction3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,0,0) );
+            if( CuboidPlanePosition_Front==eBackWallPos )
+            {
+                aStripe = Stripe( drawing::Position3D(0,FIXED_SIZE_FOR_3D_CHART_VOLUME,zPos)
                 , drawing::Direction3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,0,0)
                 , drawing::Direction3D(0,-FIXED_SIZE_FOR_3D_CHART_VOLUME,0) );
+                nRotatedTexture = 3;
+            }
+            aStripe.InvertNormal(true);
 
             uno::Reference< drawing::XShape > xShape =
                 m_pShapeFactory->createStripe(xWallGroup_Shapes, aStripe
-                    , xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), true );
+                    , xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided, nRotatedTexture, bFlatNormals );
             if( !bAddFloorAndWall )
             {
                 //we always need this object as dummy object for correct scene dimensions
@@ -646,44 +666,14 @@ void VDiagram::createShapes_3d()
         if( m_xDiagram.is() )
             xFloorProp=uno::Reference< beans::XPropertySet >( m_xDiagram->getFloor());
 
-        uno::Reference< drawing::XShape > xShape(
-                m_xShapeFactory->createInstance( C2U(
-                    "com.sun.star.drawing.Shape3DExtrudeObject") ), uno::UNO_QUERY );
-        xOuterGroup_Shapes->add(xShape);
-        uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
-        if( xShapeProp.is())
-        {
-            //depth
-            xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_EXTRUDE_DEPTH )
-                , uno::makeAny((sal_Int32)FLOOR_THICKNESS) );
-            //PercentDiagonal
-            xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_PERCENT_DIAGONAL )
-                , uno::makeAny( sal_Int32(0) ) );
+        Stripe aStripe( drawing::Position3D(0,0,0)
+            , drawing::Direction3D(0,0,FIXED_SIZE_FOR_3D_CHART_VOLUME)
+            , drawing::Direction3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,0,0) );
+        aStripe.InvertNormal(true);
 
-            drawing::Direction3D aSize(FIXED_SIZE_FOR_3D_CHART_VOLUME,FIXED_SIZE_FOR_3D_CHART_VOLUME,FLOOR_THICKNESS);
-
-            //Polygon
-            drawing::PolyPolygonShape3D aPoly;
-            AddPointToPoly( aPoly, drawing::Position3D(0,0,0) );
-            AddPointToPoly( aPoly, drawing::Position3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,0,0) );
-            AddPointToPoly( aPoly, drawing::Position3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,FIXED_SIZE_FOR_3D_CHART_VOLUME,0) );
-            AddPointToPoly( aPoly, drawing::Position3D(0,FIXED_SIZE_FOR_3D_CHART_VOLUME,0) );
-            AddPointToPoly( aPoly, drawing::Position3D(0,0,0) );
-            xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D ), uno::makeAny( aPoly ) );
-
-            //Matrix for position
-            {
-                ::basegfx::B3DHomMatrix aM;
-                aM.rotate(F_PI/2.0,0.0,0.0);
-                aM.translate(0.0,FLOOR_THICKNESS, 0.0);
-                drawing::HomogenMatrix aHM = B3DHomMatrixToHomogenMatrix(aM);
-                E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene( m_xOuterGroupShape ));
-                xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
-                    , uno::makeAny(aHM) );
-            }
-
-            PropertyMapper::setMappedProperties( xShapeProp, xFloorProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties() );
-        }
+        uno::Reference< drawing::XShape > xShape =
+            m_pShapeFactory->createStripe(xOuterGroup_Shapes, aStripe
+                , xFloorProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided, 0, bFlatNormals );
 
         CuboidPlanePosition eBottomPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
         if( !bAddFloorAndWall || (CuboidPlanePosition_Bottom!=eBottomPos) )
@@ -712,11 +702,11 @@ void VDiagram::createShapes_3d()
             try
             {
                 double fXScale = (FIXED_SIZE_FOR_3D_CHART_VOLUME -GRID_TO_WALL_DISTANCE) /FIXED_SIZE_FOR_3D_CHART_VOLUME;
-                double fYScale = (FIXED_SIZE_FOR_3D_CHART_VOLUME -FLOOR_THICKNESS-GRID_TO_WALL_DISTANCE      ) /FIXED_SIZE_FOR_3D_CHART_VOLUME;
+                double fYScale = (FIXED_SIZE_FOR_3D_CHART_VOLUME -GRID_TO_WALL_DISTANCE) /FIXED_SIZE_FOR_3D_CHART_VOLUME;
                 double fZScale = (FIXED_SIZE_FOR_3D_CHART_VOLUME -GRID_TO_WALL_DISTANCE) /FIXED_SIZE_FOR_3D_CHART_VOLUME;
 
                 ::basegfx::B3DHomMatrix aM;
-                aM.translate(GRID_TO_WALL_DISTANCE/fXScale, (FLOOR_THICKNESS+GRID_TO_WALL_DISTANCE)/fYScale, GRID_TO_WALL_DISTANCE/fZScale);
+                aM.translate(GRID_TO_WALL_DISTANCE/fXScale, GRID_TO_WALL_DISTANCE/fYScale, GRID_TO_WALL_DISTANCE/fZScale);
                 aM.scale( fXScale, fYScale, fZScale );
                 E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene( m_xOuterGroupShape ));
                 xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )

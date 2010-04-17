@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Diagram.cxx,v $
- *
- * $Revision: 1.24.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -371,18 +367,6 @@ void SAL_CALL Diagram::setDefaultColorScheme( const Reference< chart2::XColorSch
 {
     m_xColorScheme.set( xColorScheme );
     fireModifyEvent();
-}
-
-void SAL_CALL Diagram::setUnusedData( const Sequence< Reference< chart2::data::XLabeledDataSequence > >& aUnusedData )
-    throw (uno::RuntimeException)
-{
-    m_aUnusedData = aUnusedData;
-}
-
-Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL Diagram::getUnusedData()
-    throw (uno::RuntimeException)
-{
-    return m_aUnusedData;
 }
 
 // ____ XTitled ____

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: op.cxx,v $
- * $Revision: 1.18.126.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,9 +45,9 @@
 #include "patattr.hxx"
 #include "docpool.hxx"
 #include <svx/algitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
 
 #include "cell.hxx"
 #include "rangenam.hxx"

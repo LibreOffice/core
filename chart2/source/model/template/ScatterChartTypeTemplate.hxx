@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ScatterChartTypeTemplate.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +71,7 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XChartTypeTemplate ____
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableCreationParameterNames()
+    virtual sal_Bool SAL_CALL supportsCategories()
         throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL matchesTemplate(
         const ::com::sun::star::uno::Reference<
@@ -100,8 +97,6 @@ protected:
                 getChartTypeForIndex( sal_Int32 nChartTypeIndex );
     virtual sal_Int32 getDimension() const;
     virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const;
-
-    virtual bool supportsCategories() const;
 
 private:
     bool               m_bHasSymbols;

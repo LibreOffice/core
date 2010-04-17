@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Stripe.hxx,v $
- * $Revision: 1.5.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,16 +53,19 @@ public:
         , const ::com::sun::star::drawing::Position3D& rPoint2
         , double fDepth );
 
-/*
     Stripe( const ::com::sun::star::drawing::Position3D& rPoint1
         , const ::com::sun::star::drawing::Position3D& rPoint2
         , const ::com::sun::star::drawing::Position3D& rPoint3
-        , const ::com::sun::star::drawing::Position3D& rPoint4 );*/
+        , const ::com::sun::star::drawing::Position3D& rPoint4 );
 
+    void SetManualNormal( const ::com::sun::star::drawing::Direction3D& rNormal );
+    ::com::sun::star::drawing::Direction3D getNormal() const;
+
+    void InvertNormal( bool bInvertNormal );
 
     ::com::sun::star::uno::Any      getPolyPolygonShape3D() const;
     ::com::sun::star::uno::Any      getNormalsPolygon() const;
-    ::com::sun::star::uno::Any      getTexturePolygon( bool bRotatedTexture ) const;
+    ::com::sun::star::uno::Any      getTexturePolygon( short nRotatedTexture ) const; //0 to 7 are the different possibilities
 
     ::com::sun::star::drawing::Position3D GetPosition1() const { return m_aPoint1; }
     ::com::sun::star::drawing::Position3D GetPosition2() const { return m_aPoint2; }
@@ -78,8 +78,9 @@ private:
     ::com::sun::star::drawing::Position3D m_aPoint3;
     ::com::sun::star::drawing::Position3D m_aPoint4;
 
-    ::com::sun::star::drawing::Direction3D
-                                    getNormal() const;
+    bool m_bInvertNormal;
+    bool m_bManualNormalSet;
+    ::com::sun::star::drawing::Direction3D m_aManualNormal;
 };
 
 //.............................................................................

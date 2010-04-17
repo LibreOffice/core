@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rangelst.hxx,v $
- * $Revision: 1.9.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,10 +55,10 @@ public:
     USHORT          Parse( const String&, ScDocument* = NULL,
                            USHORT nMask = SCA_VALID,
                            formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
-                           char cDelimiter = 0 );
+                           sal_Unicode cDelimiter = 0 );
     void            Format( String&, USHORT nFlags = 0, ScDocument* = NULL,
                             formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
-                            char cDelimiter = 0 ) const;
+                            sal_Unicode cDelimiter = 0 ) const;
     void            Join( const ScRange&, BOOL bIsInList = FALSE );
     BOOL            UpdateReference( UpdateRefMode, ScDocument*,
                                     const ScRange& rWhere,
