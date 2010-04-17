@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: toolbox.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,6 +121,9 @@ typedef USHORT ToolBoxItemBits;
 #define TIB_DROPDOWN            ((ToolBoxItemBits)0x0020)
 #define TIB_REPEAT              ((ToolBoxItemBits)0x0040)
 #define TIB_DROPDOWNONLY        ((ToolBoxItemBits)0x0080 | TIB_DROPDOWN)    // this button has only drop down functionality
+#define TIB_TEXT_ONLY           ((ToolBoxItemBits)0x0100)
+#define TIB_ICON_ONLY           ((ToolBoxItemBits)0x0200)
+#define TIB_TEXTICON            ((ToolBoxItemBits) TIB_TEXT_ONLY | TIB_ICON_ONLY )
 
 // -----------------
 // - ToolBox-Types -

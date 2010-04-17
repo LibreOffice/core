@@ -72,6 +72,7 @@ $(eval $(call gb_Library_add_linked_system_libs,svl,\
 
 $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/inc/pch/precompiled_svl \
+    svl/source/config/asiancfg \
     svl/source/config/cjkoptions \
     svl/source/config/ctloptions \
     svl/source/config/itemholder2 \
@@ -107,6 +108,7 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/items/sfontitm \
     svl/source/items/sitem \
     svl/source/items/slstitm \
+    svl/source/items/srchitem \
     svl/source/items/stritem \
     svl/source/items/style \
     svl/source/items/stylepool \
@@ -132,7 +134,6 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/misc/urihelper \
     svl/source/notify/brdcst \
     svl/source/notify/broadcast \
-    svl/source/notify/cancel \
     svl/source/notify/hint \
     svl/source/notify/isethint \
     svl/source/notify/listener \

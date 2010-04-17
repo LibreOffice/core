@@ -5,13 +5,9 @@ if 0;
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: langid.pl,v $
-#
-# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -394,7 +390,7 @@ sub main()
                 '^\s*completelangiso\s*[= ](.{2,3}(-..)?)*' . $langcoun . '',
                 "$SRC_ROOT", "solenv", "inc/postset.mk",
                 # needs a duplicated pair of backslashes to produce a literal \\
-                ('^\s*completelangiso\s*=', '^\s+' . $langcoun . '\s*\\\\*$'));
+                ('^\s*completelangiso\s*=', '^\s*' . $langcoun . '\s*\\\\*$'));
         }
     }
     return 0;

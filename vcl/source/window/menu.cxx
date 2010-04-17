@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: menu.cxx,v $
- * $Revision: 1.165 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -5578,6 +5575,17 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
                     n = pMenu->GetItemCount()-1;
             }
 
+            // handling gtk like (aka mbOpenMenuOnF10)
+            // do not highlight an item when opening a sub menu
+            // unless there already was a higlighted sub menu item
+            bool bWasHighlight = false;
+            if( pActivePopup )
+            {
+                MenuFloatingWindow* pSubWindow = dynamic_cast<MenuFloatingWindow*>(pActivePopup->ImplGetWindow());
+                if( pSubWindow )
+                    bWasHighlight = (pSubWindow->GetHighlightedItem() != ITEMPOS_INVALID);
+            }
+
             USHORT nLoop = n;
 
             if( nCode == KEY_HOME )
@@ -5604,7 +5612,10 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
                 MenuItemData* pData = (MenuItemData*)pMenu->GetItemList()->GetDataFromPos( n );
                 if ( ( pData->eType != MENUITEM_SEPARATOR ) && pMenu->ImplIsVisible( n ) )
                 {
-                    ChangeHighlightItem( n, TRUE );
+                    BOOL bDoSelect = TRUE;
+                    if( ImplGetSVData()->maNWFData.mbOpenMenuOnF10 )
+                        bDoSelect = bWasHighlight;
+                    ChangeHighlightItem( n, bDoSelect );
                     break;
                 }
             } while ( n != nLoop );

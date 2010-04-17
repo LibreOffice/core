@@ -103,6 +103,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/config/optionsdrawinglayer \
     svtools/source/config/menuoptions \
     svtools/source/config/helpopt \
+    svtools/source/config/htmlcfg \
     svtools/source/config/accessibilityoptions \
     svtools/source/config/printoptions \
     svtools/source/config/miscopt \
@@ -110,29 +111,30 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/config/colorcfg \
     svtools/source/config/fontsubstconfig \
     svtools/source/config/apearcfg \
-    svtools/source/misc/svtaccessiblefactory \
-    svtools/source/misc/templatefoldercache \
-    svtools/source/misc/imagemgr \
-    svtools/source/misc/imap3 \
     svtools/source/misc/acceleratorexecute \
-    svtools/source/misc/helpagentwindow \
-    svtools/source/misc/imap \
-    svtools/source/misc/wallitem \
-    svtools/source/misc/langtab \
-    svtools/source/misc/dialogclosedlistener \
-    svtools/source/misc/itemdel \
-    svtools/source/misc/dialogcontrolling \
-    svtools/source/misc/svtdata \
-    svtools/source/misc/transfer2 \
     svtools/source/misc/chartprettypainter \
-    svtools/source/misc/imageresourceaccess \
-    svtools/source/misc/imap2 \
-    svtools/source/misc/ehdl \
-    svtools/source/misc/embedtransfer \
-    svtools/source/misc/embedhlp \
     svtools/source/misc/cliplistener \
-    svtools/source/misc/transfer \
+    svtools/source/misc/dialogclosedlistener \
+    svtools/source/misc/dialogcontrolling \
+    svtools/source/misc/ehdl \
+    svtools/source/misc/embedhlp \
+    svtools/source/misc/embedtransfer \
+    svtools/source/misc/helpagentwindow \
+    svtools/source/misc/imagemgr \
+    svtools/source/misc/imageresourceaccess \
+    svtools/source/misc/imap \
+    svtools/source/misc/imap2 \
+    svtools/source/misc/imap3 \
+    svtools/source/misc/itemdel \
+    svtools/source/misc/langtab \
     svtools/source/misc/stringtransfer \
+    svtools/source/misc/svtaccessiblefactory \
+    svtools/source/misc/svtdata \
+    svtools/source/misc/templatefoldercache \
+    svtools/source/misc/transfer2 \
+    svtools/source/misc/transfer \
+    svtools/source/misc/unitconv \
+    svtools/source/misc/wallitem \
     svtools/source/plugapp/ttprops \
     svtools/source/control/ctrlbox \
     svtools/source/control/valueacc \
@@ -250,6 +252,16 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/filter.vcl/ixbm/xbmread \
     svtools/source/filter.vcl/jpeg/jpeg \
     svtools/source/filter.vcl/ixpm/xpmread \
+    svtools/source/graphic/descriptor \
+    svtools/source/graphic/graphic \
+    svtools/source/graphic/graphicunofactory \
+    svtools/source/graphic/grfattr \
+    svtools/source/graphic/grfcache \
+    svtools/source/graphic/grfmgr \
+    svtools/source/graphic/grfmgr2 \
+    svtools/source/graphic/provider \
+    svtools/source/graphic/renderer \
+    svtools/source/graphic/transformer \
 ))
 
 $(eval $(call gb_Library_add_cobjects,svt,\

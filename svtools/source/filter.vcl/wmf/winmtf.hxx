@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: winmtf.hxx,v $
- * $Revision: 1.34.134.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -672,6 +669,7 @@ class WinMtfOutput
         void                MoveClipRegion( const Size& rSize );
         void                SetClipPath( const PolyPolygon& rPolyPoly, sal_Int32 nClippingMode, sal_Bool bIsMapped );
         void                UpdateClipRegion();
+        void                AddFromGDIMetaFile( GDIMetaFile& rGDIMetaFile );
 
                             WinMtfOutput( GDIMetaFile& rGDIMetaFile );
         virtual             ~WinMtfOutput();
@@ -734,6 +732,18 @@ private:
     UINT16          nUnitsPerInch;
     sal_uInt32      nRecSize;
 
+    // embedded EMF data
+    SvMemoryStream* pEMFStream;
+
+    // total number of comment records containing EMF data
+    sal_uInt32      nEMFRecCount;
+
+    // number of EMF records read
+    sal_uInt32      nEMFRec;
+
+    // total size of embedded EMF data
+    sal_uInt32      nEMFSize;
+
     sal_uInt32      nSkipActions;
     sal_uInt32      nCurrentAction;
     sal_uInt32      nUnicodeEscapeAction;
@@ -754,6 +764,8 @@ public:
 
                     WMFReader( SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile, FilterConfigItem* pConfigItem = NULL )
                         : WinMtf( new WinMtfOutput( rGDIMetaFile ), rStreamWMF, pConfigItem ) {};
+
+                    ~WMFReader();
 
     // Liesst aus dem Stream eine WMF-Datei und fuellt das GDIMetaFile
     void            ReadWMF();

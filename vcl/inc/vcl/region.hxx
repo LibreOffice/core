@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: region.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,7 +113,11 @@ public:
 
     BOOL            HasPolyPolygon() const;
     PolyPolygon     GetPolyPolygon() const;
+    // returns an empty polypolygon in case HasPolyPolygon is FALSE
     const basegfx::B2DPolyPolygon GetB2DPolyPolygon() const;
+    // returns a PolyPolygon either copied from the set PolyPolygon region
+    // or created from the constituent rectangles
+    basegfx::B2DPolyPolygon ConvertToB2DPolyPolygon();
 
     ULONG           GetRectCount() const;
     RegionHandle    BeginEnumRects();

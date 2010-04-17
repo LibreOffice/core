@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: memberid.hrc,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +38,31 @@
 #define MID_WIDTH   5
 #define MID_HEIGHT  6
 #define MID_RECT_RIGHT   7
+
+// SvxSizeItem
+#define MID_SIZE_SIZE       0
+#define MID_SIZE_WIDTH      1
+#define MID_SIZE_HEIGHT     2
+
+// SvxSearchItem
+#define MID_SEARCH_STYLEFAMILY          1
+#define MID_SEARCH_CELLTYPE             2
+#define MID_SEARCH_ROWDIRECTION         3
+#define MID_SEARCH_ALLTABLES            4
+#define MID_SEARCH_BACKWARD             5
+#define MID_SEARCH_PATTERN              6
+#define MID_SEARCH_CONTENT              7
+#define MID_SEARCH_ASIANOPTIONS         8
+#define MID_SEARCH_ALGORITHMTYPE        9
+#define MID_SEARCH_FLAGS                10
+#define MID_SEARCH_SEARCHSTRING         11
+#define MID_SEARCH_REPLACESTRING        12
+#define MID_SEARCH_LOCALE               13
+#define MID_SEARCH_CHANGEDCHARS         14
+#define MID_SEARCH_DELETEDCHARS         15
+#define MID_SEARCH_INSERTEDCHARS        16
+#define MID_SEARCH_TRANSLITERATEFLAGS   17
+#define MID_SEARCH_COMMAND              18
 
 
 #endif
