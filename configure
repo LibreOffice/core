@@ -9747,7 +9747,13 @@ $as_echo_n "checking what the default STL should be... " >&6; }
    if test "$_os" = "Linux"; then
      case "$build_cpu" in
        i?86)
-         DEFAULT_TO_STLPORT="yes"
+	 case "$build_os" in k*bsd*-gnu*)
+	 	DEFAULT_TO_STLPORT="no"
+		;;
+	 *)
+         	DEFAULT_TO_STLPORT="yes"
+		;;
+	  esac
          ;;
        *)
          DEFAULT_TO_STLPORT="no"
