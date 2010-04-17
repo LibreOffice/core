@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: appmisc.cxx,v $
- * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +69,7 @@
 #include "appdata.hxx"
 #include "arrdecl.hxx"
 #include <sfx2/tbxctrl.hxx>
-#include "stbitem.hxx"
+#include "sfx2/stbitem.hxx"
 #include <sfx2/mnuitem.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfile.hxx>
@@ -89,7 +86,7 @@
 #include <sfx2/templdlg.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/msgpool.hxx>
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "openflag.hxx"
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objface.hxx>
@@ -327,13 +324,6 @@ ISfxTemplateCommon* SfxApplication::GetCurrentTemplateCommon( SfxBindings& rBind
     if ( pChild )
         return ((SfxTemplateDialog*) pChild->GetWindow())->GetISfxTemplateCommon();
     return 0;
-}
-
-SfxCancelManager* SfxApplication::GetCancelManager() const
-{
-    if ( !pAppData_Impl->pCancelMgr )
-        pAppData_Impl->pCancelMgr = new SfxCancelManager;
-    return pAppData_Impl->pCancelMgr;
 }
 
 SfxResourceManager& SfxApplication::GetResourceManager() const { return *pAppData_Impl->pResMgr; }

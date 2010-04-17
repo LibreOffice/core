@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RowSetEventListener.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,10 +35,10 @@ import com.sun.star.sdb.XDocumentDataSource;
 import com.sun.star.sdb.XOfficeDatabaseDocument;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XCloseable;
-import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XStatement;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.CloseVetoException;
+import connectivity.tools.sdb.Connection;
 import java.io.File;
 
 /**
@@ -60,7 +57,7 @@ public abstract class AbstractDatabase implements DatabaseAccess
     // the data source belonging to the database document
     protected DataSource m_dataSource;
     // the default connection
-    protected XConnection m_connection;
+    protected Connection    m_connection;
 
     public AbstractDatabase(final XMultiServiceFactory orb) throws Exception
     {
@@ -80,12 +77,10 @@ public abstract class AbstractDatabase implements DatabaseAccess
      * the ownership of the connection, so you don't need to (and should not) dispose/close it.
      *
      */
-    public XConnection defaultConnection() throws SQLException
+    public Connection defaultConnection() throws SQLException
     {
-        if (m_connection == null)
-        {
-            m_connection = m_databaseDocument.getDataSource().getConnection("", "");
-        }
+        if ( m_connection == null )
+            m_connection = new Connection( m_databaseDocument.getDataSource().getConnection("", "") );
 
         return m_connection;
     }
@@ -104,8 +99,7 @@ public abstract class AbstractDatabase implements DatabaseAccess
     {
         if (m_databaseDocument != null)
         {
-            final XStorable storeDoc = (XStorable) UnoRuntime.queryInterface(XStorable.class,
-                    m_databaseDocument);
+            final XStorable storeDoc = UnoRuntime.queryInterface(XStorable.class, m_databaseDocument);
             storeDoc.store();
         }
     }
@@ -118,8 +112,8 @@ public abstract class AbstractDatabase implements DatabaseAccess
     public void close()
     {
         // close connection
-        final XCloseable closeConn = (XCloseable) UnoRuntime.queryInterface(XCloseable.class,
-                m_connection);
+        final XCloseable closeConn = UnoRuntime.queryInterface( XCloseable.class,
+            m_connection != null ? m_connection.getXConnection() : null );
         if (closeConn != null)
         {
             try
@@ -133,8 +127,7 @@ public abstract class AbstractDatabase implements DatabaseAccess
         m_connection = null;
 
         // close document
-        final com.sun.star.util.XCloseable closeDoc = (com.sun.star.util.XCloseable) UnoRuntime.queryInterface(
-                com.sun.star.util.XCloseable.class, m_databaseDocument);
+        final com.sun.star.util.XCloseable closeDoc = UnoRuntime.queryInterface( com.sun.star.util.XCloseable.class, m_databaseDocument );
         if (closeDoc != null)
         {
             try
@@ -178,7 +171,7 @@ public abstract class AbstractDatabase implements DatabaseAccess
      */
     public XModel getModel()
     {
-        return (XModel) UnoRuntime.queryInterface(XModel.class, m_databaseDocument);
+        return UnoRuntime.queryInterface( XModel.class, m_databaseDocument );
     }
 
     public XMultiServiceFactory getORB()
@@ -191,10 +184,9 @@ public abstract class AbstractDatabase implements DatabaseAccess
     {
         m_databaseDocumentFile = _docURL;
 
-        final XNameAccess dbContext = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class,
-                m_orb.createInstance("com.sun.star.sdb.DatabaseContext"));
-        final XDocumentDataSource dataSource = (XDocumentDataSource) UnoRuntime.queryInterface(XDocumentDataSource.class,
-                dbContext.getByName(_docURL));
+        final XNameAccess dbContext = UnoRuntime.queryInterface( XNameAccess.class,
+            m_orb.createInstance( "com.sun.star.sdb.DatabaseContext" ) );
+        final XDocumentDataSource dataSource = UnoRuntime.queryInterface( XDocumentDataSource.class, dbContext.getByName( _docURL ) );
 
         m_databaseDocument = dataSource.getDatabaseDocument();
         m_dataSource = new DataSource(m_orb, m_databaseDocument.getDataSource());

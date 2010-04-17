@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dim.cxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -244,7 +241,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
         else if( eCurTok == DECLARE )
         {
             Next();
-            DefDeclare( bPrivate ); 
+            DefDeclare( bPrivate );
             return;
         }
     }
@@ -587,7 +584,7 @@ void SbiParser::DefType( BOOL bPrivate )
                 SbxProperty *pTypeElem = new SbxProperty (pElem->GetName(),pElem->GetType());
                 if( pDim )
                 {
-                    SbxDimArray* pArray = new SbxDimArray( pElem->GetType() );  
+                    SbxDimArray* pArray = new SbxDimArray( pElem->GetType() );
                     if ( pDim->GetSize() )
                     {
                         // Dimension the target array
@@ -608,15 +605,15 @@ void SbiParser::DefType( BOOL bPrivate )
                             }
                             else if ( !bCompatible )
                                 ub += nBase;
-                            pArray->AddDim32( lb, ub );      
+                            pArray->AddDim32( lb, ub );
                         }
                         pArray->setHasFixedSize( true );
                     }
                     else
                         pArray->unoAddDim( 0, -1 ); // variant array
                     USHORT nSavFlags = pTypeElem->GetFlags();
-                    // need to reset the FIXED flag 
-                    // when calling PutObject ( because the type will not match Object )    
+                    // need to reset the FIXED flag
+                    // when calling PutObject ( because the type will not match Object )
                     pTypeElem->ResetFlag( SBX_FIXED );
                     pTypeElem->PutObject( pArray );
                     pTypeElem->SetFlags( nSavFlags );

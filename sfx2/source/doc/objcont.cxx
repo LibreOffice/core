@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: objcont.cxx,v $
- * $Revision: 1.78 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,8 +47,8 @@
 #include <svl/eitem.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/ctloptions.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/processfactory.hxx>
 #include <unotools/securityoptions.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
@@ -62,6 +59,7 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/oldprintadaptor.hxx>
 
 #include <sfx2/app.hxx>
 #include "sfx2/sfxresid.hxx"
@@ -73,11 +71,11 @@
 #include <sfx2/objsh.hxx>
 #include "objshimp.hxx"
 #include <sfx2/evntconf.hxx>
-#include "sfxhelp.hxx"
+#include "sfx2/sfxhelp.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
-#include <sfx2/topfrm.hxx>
 #include "sfx2/basmgr.hxx"
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/doctempl.hxx>
 #include "doc.hrc"
 #include <sfx2/sfxbasemodel.hxx>
@@ -90,9 +88,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 //====================================================================
-
-#define SFX_WINDOWS_STREAM "SfxWindows"
-#define SFX_PREVIEW_STREAM "SfxPreview"
 
 //====================================================================
 
@@ -191,252 +186,6 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHig
     return pFile;
 }
 
-//REMOVE    FASTBOOL SfxObjectShell::SaveWindows_Impl( SvStorage &rStor ) const
-//REMOVE    {
-//REMOVE        SvStorageStreamRef xStream = rStor.OpenStream( DEFINE_CONST_UNICODE( SFX_WINDOWS_STREAM ),
-//REMOVE                                        STREAM_TRUNC | STREAM_STD_READWRITE);
-//REMOVE        if ( !xStream )
-//REMOVE            return FALSE;
-//REMOVE
-//REMOVE        xStream->SetBufferSize(1024);
-//REMOVE        xStream->SetVersion( rStor.GetVersion() );
-//REMOVE
-//REMOVE        // "uber alle Fenster iterieren (aber aktives Window zuletzt)
-//REMOVE        SfxViewFrame *pActFrame = SfxViewFrame::Current();
-//REMOVE        if ( !pActFrame || pActFrame->GetObjectShell() != this )
-//REMOVE            pActFrame = SfxViewFrame::GetFirst(this);
-//REMOVE
-//REMOVE        String aActWinData;
-//REMOVE        for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this, TYPE(SfxTopViewFrame) ); pFrame;
-//REMOVE                pFrame = SfxViewFrame::GetNext(*pFrame, this, TYPE(SfxTopViewFrame) ) )
-//REMOVE        {
-//REMOVE            // Bei Dokumenten, die Outplace aktiv sind, kann beim Speichern auch schon die View weg sein!
-//REMOVE            if ( pFrame->GetViewShell() )
-//REMOVE            {
-//REMOVE                SfxTopFrame* pTop = (SfxTopFrame*) pFrame->GetFrame();
-//REMOVE                pTop->GetTopWindow_Impl();
-//REMOVE
-//REMOVE                char cToken = ',';
-//REMOVE                const BOOL bActWin = pActFrame == pFrame;
-//REMOVE                String aUserData;
-//REMOVE                pFrame->GetViewShell()->WriteUserData(aUserData);
-//REMOVE
-//REMOVE                // assemble ini-data
-//REMOVE                String aWinData;
-//REMOVE                aWinData += String::CreateFromInt32( pFrame->GetCurViewId() );
-//REMOVE                aWinData += cToken;
-//REMOVE    /*
-//REMOVE                if ( !pWin || pWin->IsMaximized() )
-//REMOVE                    aWinData += SFX_WINSIZE_MAX;
-//REMOVE                else if ( pWin->IsMinimized() )
-//REMOVE                    aWinData += SFX_WINSIZE_MIN;
-//REMOVE                else
-//REMOVE    */
-//REMOVE                aWinData += cToken;
-//REMOVE                aWinData += aUserData;
-//REMOVE
-//REMOVE                // aktives kennzeichnen
-//REMOVE                aWinData += cToken;
-//REMOVE                aWinData += bActWin ? '1' : '0';
-//REMOVE
-//REMOVE                // je nachdem merken oder abspeichern
-//REMOVE                if ( bActWin  )
-//REMOVE                    aActWinData = aWinData;
-//REMOVE                else
-//REMOVE                    xStream->WriteByteString( aWinData );
-//REMOVE            }
-//REMOVE        }
-//REMOVE
-//REMOVE        // aktives Window hinterher
-//REMOVE        xStream->WriteByteString( aActWinData );
-//REMOVE        return !xStream->GetError();
-//REMOVE    }
-
-//====================================================================
-
-SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
-{
-    DBG_ASSERT( pPreferedFrame, "Call without preferred Frame is not supported anymore!" );
-    if ( pImp->bLoadingWindows || !pPreferedFrame )
-        return NULL;
-
-    DBG_ASSERT( GetMedium(), "A Medium should exist here!");
-    if( !GetMedium() )
-        return 0;
-
-    // get correct mode
-    SFX_APP();
-    SfxViewFrame *pPrefered = pPreferedFrame ? pPreferedFrame->GetCurrentViewFrame() : 0;
-    SvtSaveOptions aOpt;
-    BOOL bLoadDocWins = aOpt.IsSaveDocWins() && !pPrefered;
-
-    // try to get viewdata information for XML format
-    REFERENCE < XVIEWDATASUPPLIER > xViewDataSupplier( GetModel(), ::com::sun::star::uno::UNO_QUERY );
-    REFERENCE < XINDEXACCESS > xViewData;
-
-    if ( xViewDataSupplier.is() )
-    {
-        xViewData = xViewDataSupplier->getViewData();
-        if ( !xViewData.is() )
-            return NULL;
-    }
-    else
-        return NULL;
-
-    SfxViewFrame *pActiveFrame = 0;
-    String aWinData;
-    SfxItemSet *pSet = GetMedium()->GetItemSet();
-
-    pImp->bLoadingWindows = TRUE;
-    BOOL bLoaded = FALSE;
-    sal_Int32 nView = 0;
-
-    // get saved information for all views
-    while ( TRUE )
-    {
-        USHORT nViewId = 0;
-        FASTBOOL bMaximized=FALSE;
-        String aPosSize;
-        String aUserData;                   // used in the binary format
-        SEQUENCE < PROPERTYVALUE > aSeq;    // used in the XML format
-
-        // XML format
-        // active view is the first view in the container
-        FASTBOOL bActive = ( nView == 0 );
-
-        if ( nView == xViewData->getCount() )
-            // finished
-            break;
-
-        // get viewdata and look for the stored ViewId
-        ::com::sun::star::uno::Any aAny = xViewData->getByIndex( nView++ );
-        if ( aAny >>= aSeq )
-        {
-            for ( sal_Int32 n=0; n<aSeq.getLength(); n++ )
-            {
-                const PROPERTYVALUE& rProp = aSeq[n];
-                if ( rProp.Name.compareToAscii("ViewId") == COMPARE_EQUAL )
-                {
-                    ::rtl::OUString aId;
-                    rProp.Value >>= aId;
-                    String aTmp( aId );
-                    aTmp.Erase( 0, 4 );  // format is like in "view3"
-                    nViewId = (USHORT) aTmp.ToInt32();
-                    break;
-                }
-            }
-        }
-
-        // load only active view, but current item is not the active one ?
-        // in XML format the active view is the first one
-        if ( !bLoadDocWins && !bActive )
-            break;
-
-        // check for minimized/maximized/size
-        if ( aPosSize.EqualsAscii( "max" ) )
-            bMaximized = TRUE;
-        else if ( aPosSize.EqualsAscii( "min" ) )
-        {
-            bMaximized = TRUE;
-            bActive = FALSE;
-        }
-        else
-            bMaximized = FALSE;
-
-        Point aPt;
-        Size aSz;
-
-        pSet->ClearItem( SID_USER_DATA );
-        SfxViewFrame *pFrame = 0;
-        if ( pPrefered )
-        {
-            // use the frame from the arguments, but don't set a window size
-            pFrame = pPrefered;
-            if ( pFrame->GetViewShell() || !pFrame->GetObjectShell() )
-            {
-                pSet->ClearItem( SID_VIEW_POS_SIZE );
-                pSet->ClearItem( SID_WIN_POSSIZE );
-                pSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
-
-                // avoid flickering controllers
-                SfxBindings &rBind = pFrame->GetBindings();
-                rBind.ENTERREGISTRATIONS();
-
-                // set document into frame
-                pPreferedFrame->InsertDocument( this );
-
-                // restart controller updating
-                rBind.LEAVEREGISTRATIONS();
-            }
-            else
-            {
-                // create new view
-                pFrame->CreateView_Impl( nViewId );
-            }
-        }
-        else
-        {
-            if ( bLoadDocWins )
-            {
-                // open in the background
-                pSet->Put( SfxUInt16Item( SID_VIEW_ZOOM_MODE, 0 ) );
-                if ( !bMaximized )
-                    pSet->Put( SfxRectangleItem( SID_VIEW_POS_SIZE, Rectangle( aPt, aSz ) ) );
-            }
-
-            pSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
-
-            if ( pPreferedFrame )
-            {
-                // Frame "ubergeben, allerdings ist der noch leer
-                pPreferedFrame->InsertDocument( this );
-                pFrame = pPreferedFrame->GetCurrentViewFrame();
-            }
-            else
-            {
-                pFrame = SfxTopFrame::Create( this, nViewId, FALSE, pSet )->GetCurrentViewFrame();
-            }
-
-            // only temporary data, don't hold it in the itemset
-            pSet->ClearItem( SID_VIEW_POS_SIZE );
-            pSet->ClearItem( SID_WIN_POSSIZE );
-            pSet->ClearItem( SID_VIEW_ZOOM_MODE );
-        }
-
-        bLoaded = TRUE;
-
-        // UserData hier einlesen, da es ansonsten immer mit bBrowse=TRUE
-        // aufgerufen wird, beim Abspeichern wurde aber bBrowse=FALSE verwendet
-        if ( pFrame && pFrame->GetViewShell() )
-        {
-            if ( aUserData.Len() )
-                pFrame->GetViewShell()->ReadUserData( aUserData, !bLoadDocWins );
-            else if ( aSeq.getLength() )
-                pFrame->GetViewShell()->ReadUserDataSequence( aSeq, !bLoadDocWins );
-        }
-
-        // perhaps there are more windows to load
-        pPreferedFrame = NULL;
-
-        if ( bActive )
-            pActiveFrame = pFrame;
-
-        if( pPrefered || !bLoadDocWins )
-            // load only active window
-            break;
-    }
-
-    if ( pActiveFrame )
-    {
-        if ( !pPrefered )
-            // activate frame
-            pActiveFrame->MakeActive_Impl( TRUE );
-    }
-
-    pImp->bLoadingWindows = FALSE;
-    return pPrefered && bLoaded ? pPrefered : pActiveFrame;
-}
-
 //====================================================================
 
 void SfxObjectShell::UpdateDocInfoForSave()
@@ -481,13 +230,24 @@ void SfxObjectShell::UpdateDocInfoForSave()
 
 //--------------------------------------------------------------------
 
+static void
+lcl_add(util::Duration & rDur, Time const& rTime)
+{
+    // here we don't care about overflow: rDur is converted back to seconds
+    // anyway, and Time cannot store more than ~4000 hours
+    rDur.Hours   += rTime.GetHour();
+    rDur.Minutes += rTime.GetMin();
+    rDur.Seconds += rTime.GetSec();
+}
+
 // Bearbeitungszeit aktualisieren
 void SfxObjectShell::UpdateTime_Impl(
     const uno::Reference<document::XDocumentProperties> & i_xDocProps)
 {
     // Get old time from documentinfo
-    sal_Int32 secs = i_xDocProps->getEditingDuration();
-    Time aOldTime(secs/3600, (secs%3600)/60, secs%60);
+    const sal_Int32 secs = i_xDocProps->getEditingDuration();
+    util::Duration editDuration(sal_False, 0, 0, 0,
+            secs/3600, (secs%3600)/60, secs%60, 0);
 
     // Initialize some local member! Its neccessary for wollow operations!
     DateTime    aNow                    ;   // Date and time at current moment
@@ -524,13 +284,14 @@ void SfxObjectShell::UpdateTime_Impl(
             nAddTime    +=  aNow                    ;
         }
 
-        aOldTime += nAddTime;
+        lcl_add(editDuration, nAddTime);
     }
 
     pImp->nTime = aNow;
     try {
-        i_xDocProps->setEditingDuration(
-            aOldTime.GetHour()*3600+aOldTime.GetMin()*60+aOldTime.GetSec());
+        const sal_Int32 newSecs( (editDuration.Hours*3600)
+            + (editDuration.Minutes*60) + editDuration.Seconds);
+        i_xDocProps->setEditingDuration(newSecs);
         i_xDocProps->setEditingCycles(i_xDocProps->getEditingCycles() + 1);
     }
     catch (lang::IllegalArgumentException &)
@@ -961,11 +722,8 @@ BOOL SfxObjectShell::Remove
         String aName(pMySheet->GetName());
         String aEmpty;
         SfxStyleFamily  eFamily = pMySheet->GetFamily();
-        if (pMySheet)
-        {
-            pMyPool->Remove(pMySheet);
-            bRet = TRUE;
-        }
+        pMyPool->Remove(pMySheet);
+        bRet = TRUE;
 
         SfxStyleSheetBase* pTestSheet = pMyPool->First();
         while (pTestSheet)
@@ -986,20 +744,10 @@ BOOL SfxObjectShell::Remove
 
             pTestSheet = pMyPool->Next();
         }
-        if(bRet)
-            SetModified( TRUE );
+
+        SetModified( TRUE );
     }
-/*
-    else if (nIdx1 == CONTENT_CONFIG)
-    {
-        if (GetConfigManager()->RemoveItem(nIdx2))
-        {
-            SetModified(TRUE);
-            bRet = TRUE;
-            SFX_APP()->GetDispatcher_Impl()->Update_Impl(TRUE);
-        }
-    }
-*/
+
     return bRet;
 }
 
@@ -1031,26 +779,18 @@ BOOL SfxObjectShell::Print
             if ( !pStyle )
                 return TRUE;
 
-            if ( !rPrt.StartJob(String(SfxResId(STR_STYLES))) )
-            {
-                delete pIter;
-                return FALSE;
-            }
-            if ( !rPrt.StartPage() )
-            {
-                delete pIter;
-                return FALSE;
-            }
-            Reference< task::XStatusIndicator > xStatusIndicator;
-            xStatusIndicator = SFX_APP()->GetStatusIndicator();
-            if ( xStatusIndicator.is() )
-                xStatusIndicator->start( String(SfxResId(STR_PRINT_STYLES)), nStyles );
+            // pepare adaptor for old style StartPage/EndPage printing
+            boost::shared_ptr< Printer > pPrinter( new Printer( rPrt.GetJobSetup() ) );
+            vcl::OldStylePrintAdaptor* pAdaptor = new vcl::OldStylePrintAdaptor( pPrinter );
+            boost::shared_ptr< vcl::PrinterController > pController( pAdaptor );
 
-            rPrt.SetMapMode(MapMode(MAP_10TH_MM));
+            pAdaptor->StartPage();
+
+            pPrinter->SetMapMode(MapMode(MAP_10TH_MM));
             Font aFont( DEFINE_CONST_UNICODE( "Arial" ), Size(0, 64));   // 18pt
             aFont.SetWeight(WEIGHT_BOLD);
-            rPrt.SetFont(aFont);
-            const Size aPageSize(rPrt.GetOutputSize());
+            pPrinter->SetFont(aFont);
+            const Size aPageSize(pPrinter->GetOutputSize());
             const USHORT nXIndent = 200;
             USHORT nYIndent = 200;
             Point aOutPos(nXIndent, nYIndent);
@@ -1059,68 +799,66 @@ BOOL SfxObjectShell::Print
                 aHeader += *pObjectName;
             else
                 aHeader += GetTitle();
-            long nTextHeight( rPrt.GetTextHeight() );
-            rPrt.DrawText(aOutPos, aHeader);
+            long nTextHeight( pPrinter->GetTextHeight() );
+            pPrinter->DrawText(aOutPos, aHeader);
             aOutPos.Y() += nTextHeight;
             aOutPos.Y() += nTextHeight/2;
             aFont.SetSize(Size(0, 35)); // 10pt
             nStyles = 1;
             while(pStyle)
             {
-                if ( xStatusIndicator.is() )
-                    xStatusIndicator->setValue( nStyles++ );
-                // Ausgabe des Vorlagennamens
+                // print template name
                 String aStr(pStyle->GetName());
                 aFont.SetWeight(WEIGHT_BOLD);
-                rPrt.SetFont(aFont);
-                nTextHeight = rPrt.GetTextHeight();
-                // Seitenwechsel
+                pPrinter->SetFont(aFont);
+                nTextHeight = pPrinter->GetTextHeight();
+                // check for new page
                 if ( aOutPos.Y() + nTextHeight*2 >
                     aPageSize.Height() - (long) nYIndent )
                 {
-                    rPrt.EndPage();
-                    rPrt.StartPage();
+                    pAdaptor->EndPage();
+                    pAdaptor->StartPage();
                     aOutPos.Y() = nYIndent;
                 }
-                rPrt.DrawText(aOutPos, aStr);
+                pPrinter->DrawText(aOutPos, aStr);
                 aOutPos.Y() += nTextHeight;
 
-                // Ausgabe der Vorlagenbeschreibung
+                // print template description
                 aFont.SetWeight(WEIGHT_NORMAL);
-                rPrt.SetFont(aFont);
+                pPrinter->SetFont(aFont);
                 aStr = pStyle->GetDescription();
                 const char cDelim = ' ';
                 USHORT nStart = 0, nIdx = 0;
 
-                nTextHeight = rPrt.GetTextHeight();
-                // wie viele Worte passen auf eine Zeile
+                nTextHeight = pPrinter->GetTextHeight();
+                // break text into lines
                 while(nIdx < aStr.Len())
                 {
                     USHORT  nOld = nIdx;
                     long nTextWidth;
                     nIdx = aStr.Search(cDelim, nStart);
-                    nTextWidth = rPrt.GetTextWidth(aStr, nStart, nIdx-nStart);
+                    nTextWidth = pPrinter->GetTextWidth(aStr, nStart, nIdx-nStart);
                     while(nIdx != STRING_NOTFOUND &&
                           aOutPos.X() + nTextWidth <
                           aPageSize.Width() - (long) nXIndent)
                     {
                         nOld = nIdx;
                         nIdx = aStr.Search(cDelim, nIdx+1);
-                        nTextWidth = rPrt.GetTextWidth(aStr, nStart, nIdx-nStart);
+                        nTextWidth = pPrinter->GetTextWidth(aStr, nStart, nIdx-nStart);
                     }
                     String aTmp(aStr, nStart, nIdx == STRING_NOTFOUND?
                                 STRING_LEN :
                                 nOld-nStart);
                     if ( aTmp.Len() )
                     {
-                        nStart = nOld+1;    // wegen trailing space
+                        nStart = nOld+1;    // trailing space
                     }
                     else
                     {
                         USHORT nChar = 1;
                         while(
                             nStart + nChar < aStr.Len() &&
-                            aOutPos.X() + rPrt.GetTextWidth(
+                            aOutPos.X() + pPrinter->GetTextWidth(
                                 aStr, nStart, nChar) <
                             aPageSize.Width() - nXIndent)
                             ++nChar;
@@ -1131,19 +869,19 @@ BOOL SfxObjectShell::Print
                     if ( aOutPos.Y() + nTextHeight*2 >
                         aPageSize.Height() - nYIndent )
                     {
-                        rPrt.EndPage();
-                        rPrt.StartPage();
+                        pAdaptor->EndPage();
+                        pAdaptor->StartPage();
                         aOutPos.Y() = nYIndent;
                     }
-                    rPrt.DrawText(aOutPos, aTmp);
-                    aOutPos.Y() += rPrt.GetTextHeight();
+                    pPrinter->DrawText(aOutPos, aTmp);
+                    aOutPos.Y() += pPrinter->GetTextHeight();
                 }
                 pStyle = pIter->Next();
             }
-            rPrt.EndPage();
-            rPrt.EndJob();
-            if ( xStatusIndicator.is() )
-                xStatusIndicator->end();
+            pAdaptor->EndPage();
+
+            Printer::PrintJob( pController, rPrt.GetJobSetup() );
+
             delete pIter;
             break;
         }

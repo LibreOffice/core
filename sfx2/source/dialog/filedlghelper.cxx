@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: filedlghelper.cxx,v $
- * $Revision: 1.144 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -801,7 +798,9 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
 
             aData << aBmp;
 
-            Sequence < sal_Int8 > aBuffer( (sal_Int8*) aData.GetData(), aData.GetSize() );
+            const Sequence < sal_Int8 > aBuffer(
+                static_cast< const sal_Int8* >(aData.GetData()),
+                aData.GetEndOfData() );
 
             aAny <<= aBuffer;
         }

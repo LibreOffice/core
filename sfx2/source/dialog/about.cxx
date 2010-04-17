@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: about.cxx,v $
- * $Revision: 1.41.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +38,8 @@
 #include <unotools/bootstrap.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <unotools/configmgr.hxx>
+#include <vcl/graph.hxx>
+#include <svtools/filter.hxx>
 #include <sfx2/sfxuno.hxx>
 #include "about.hxx"
 #include "sfx2/sfxresid.hxx"
@@ -84,8 +83,15 @@ static bool impl_loadBitmap(
     SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
     if ( !aStrm.GetError() )
     {
-        Bitmap aBmp;
-        aStrm >> aBmp;
+        // Use graphic class to also support more graphic formats (bmp,png,...)
+        Graphic aGraphic;
+
+        GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
+        pGF->ImportGraphic( aGraphic, String(), aStrm, GRFILTER_FORMAT_DONTKNOW );
+
+        // Default case, we load the intro bitmap from a seperate file
+        // (e.g. staroffice_intro.bmp or starsuite_intro.bmp)
+        BitmapEx aBmp = aGraphic.GetBitmapEx();
         rLogo = Image( aBmp );
         return true;
     }
@@ -103,6 +109,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     aDeveloperAry   (           ResId( ABOUT_STR_DEVELOPER_ARY, *rId.GetResMgr() ) ),
     aDevVersionStr  ( rVerStr ),
     aAccelStr       (           ResId( ABOUT_STR_ACCEL, *rId.GetResMgr() ) ),
+    aCopyrightTextStr(          ResId( ABOUT_STR_COPYRIGHT, *rId.GetResMgr() ) ),
     aTimer          (),
     nOff            ( 0 ),
     m_nDeltaWidth   ( 0 ),
@@ -149,14 +156,22 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     {
         bLoaded = impl_loadBitmap(
             rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ),
-            rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
+            rtl::OUString::createFromAscii( "about.png" ), aAppLogo );
+        if ( !bLoaded )
+            bLoaded = impl_loadBitmap(
+                rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ),
+                rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
     }
 
     if ( !bLoaded )
     {
         bLoaded = impl_loadBitmap(
             rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
-            rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
+            rtl::OUString::createFromAscii( "about.png" ), aAppLogo );
+        if ( !bLoaded )
+            bLoaded = impl_loadBitmap(
+                rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
+                rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
     }
 
     // Transparenter Font
@@ -229,46 +244,40 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
 
     // determine size and position of the dialog & elements
     Size aAppLogoSiz = aAppLogo.GetSizePixel();
-    Size aOutSiz = GetOutputSizePixel();
-    aOutSiz.Width() = aAppLogoSiz.Width();
-    // spacing to the margin
-    Size a6Size = aVersionText.LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
-    long nDlgMargin = a6Size.Width() * 4 ;
-    // The URL (if found in copyright text) should not be line-wrapped
-    if ( aCopyrightText.GetText().Search( WELCOME_URL ) != STRING_NOTFOUND )
-    {
-        long nURLWidth = GetTextWidth( WELCOME_URL ) + nDlgMargin + (2*SPACE_OFFSET);
-        if ( nURLWidth > aAppLogoSiz.Width() )
-        {
-            // pb: can be used to align the position of the logo
-            // m_nDeltaWidth = nURLWidth - aOutSiz.Width();
+    Size aOutSiz     = GetOutputSizePixel();
+    aOutSiz.Width()  = aAppLogoSiz.Width();
 
-            aOutSiz.Width() = nURLWidth;
-        }
-    }
+    Size a6Size      = aVersionText.LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
+    long nY          = aAppLogoSiz.Height() + ( a6Size.Height() * 2 );
+    long nDlgMargin  = a6Size.Width() * 4 ;
+    long nCtrlMargin = a6Size.Height() * 2;
+    long nTextWidth  = aOutSiz.Width() - nDlgMargin;
 
-    // layout the text-elements
-    long nTextWidth = aOutSiz.Width() - nDlgMargin;
-    long nY = aAppLogoSiz.Height() + ( a6Size.Height() * 2 );
+    aCopyrightText.SetText( aCopyrightTextStr );
 
     layoutText( aVersionText, nY, nTextWidth, a6Size );
-    nY += ( a6Size.Height() / 3 );
-    layoutText( aCopyrightText, nY, nTextWidth, a6Size );
-    nY += ( a6Size.Height() / 3 );
-    if( aBuildString.Len() > 0 )
-    {
-        layoutText( aBuildData, nY, nTextWidth, a6Size );
-        nY += ( a6Size.Height() / 2 );
-    }
+    nY += nCtrlMargin;
 
     // OK-Button-Position (at the bottom and centered)
     Size aOKSiz = aOKButton.GetSizePixel();
     Point aOKPnt = aOKButton.GetPosPixel();
+
+    // Multiline edit with Copyright-Text
+    Point aCopyPnt = aCopyrightText.GetPosPixel();
+    Size aCopySize = aCopyrightText.GetSizePixel();
+    aCopySize.Width()  = nTextWidth;
+    aCopySize.Height() = aOutSiz.Height() - nY - ( aOKSiz.Height() * 2 ) - nCtrlMargin;
+
+    aCopyPnt.X() = ( aOutSiz.Width() - aCopySize.Width() ) / 2;
+    aCopyPnt.Y() = nY;
+    aCopyrightText.SetPosSizePixel( aCopyPnt, aCopySize );
+
+    nY += aCopySize.Height() + nCtrlMargin;
     aOKPnt.X() = ( aOutSiz.Width() - aOKSiz.Width() ) / 2;
-    aOKPnt.Y() = nY + 8;
+    aOKPnt.Y() = nY;
     aOKButton.SetPosPixel( aOKPnt );
-    nY = aOKPnt.Y() + aOKSiz.Height() + a6Size.Height();
-    aOutSiz.Height() = nY;
+
+    // Change the width of the dialog
     SetOutputSizePixel( aOutSiz );
 
     FreeResource();

@@ -1,51 +1,42 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: sdrallattribute3d.hxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.3 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2007-07-06 13:38:51 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRALLATTRIBUTE3D_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRALLATTRIBUTE3D_HXX
 
+#include <sal/types.h>
+#include <drawinglayer/attribute/sdrlineattribute.hxx>
+#include <drawinglayer/attribute/sdrfillattribute.hxx>
+#include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
+#include <drawinglayer/attribute/sdrshadowattribute.hxx>
+#include <drawinglayer/attribute/fillgradientattribute.hxx>
+
 //////////////////////////////////////////////////////////////////////////////
 // predefines
-
-namespace drawinglayer { namespace attribute {
-    class SdrLineAttribute;
-    class SdrFillAttribute;
-    class SdrLineStartEndAttribute;
-    class SdrShadowAttribute;
-    class FillGradientAttribute;
-}}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -53,40 +44,37 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class SdrLineFillShadowAttribute
+        class SdrLineFillShadowAttribute3D
         {
-            // shadow, line, lineStartEnd, fill, transGradient and compound3D attributes
-            SdrShadowAttribute*                 mpShadow;                   // shadow attributes (if used)
-            SdrLineAttribute*                   mpLine;                     // line attributes (if used)
-            SdrLineStartEndAttribute*           mpLineStartEnd;             // line start end (if used)
-            SdrFillAttribute*                   mpFill;                     // fill attributes (if used)
-            FillGradientAttribute*              mpFillFloatTransGradient;   // fill float transparence gradient (if used)
+        private:
+            const SdrLineAttribute          maLine;
+            const SdrFillAttribute          maFill;
+            const SdrLineStartEndAttribute  maLineStartEnd;
+            const SdrShadowAttribute        maShadow;
+            const FillGradientAttribute     maFillFloatTransGradient;
 
         public:
-            SdrLineFillShadowAttribute(
-                SdrLineAttribute* pLine = 0,
-                SdrFillAttribute* pFill = 0,
-                SdrLineStartEndAttribute* pLineStartEnd = 0,
-                SdrShadowAttribute* pShadow = 0,
-                FillGradientAttribute* pFillFloatTransGradient = 0);
-            ~SdrLineFillShadowAttribute();
+            /// constructors/assignmentoperator/destructor
+            SdrLineFillShadowAttribute3D(
+                const SdrLineAttribute& rLine,
+                const SdrFillAttribute& rFill,
+                const SdrLineStartEndAttribute& rLineStartEnd,
+                const SdrShadowAttribute& rShadow,
+                const FillGradientAttribute& rFillFloatTransGradient);
+            SdrLineFillShadowAttribute3D();
 
-            // copy constructor and assigment operator
-            SdrLineFillShadowAttribute(const SdrLineFillShadowAttribute& rCandidate);
-            SdrLineFillShadowAttribute& operator=(const SdrLineFillShadowAttribute& rCandidate);
+            // checks if the incarnation is default constructed
+            bool isDefault() const;
 
             // compare operator
-            bool operator==(const SdrLineFillShadowAttribute& rCandidate) const;
+            bool operator==(const SdrLineFillShadowAttribute3D& rCandidate) const;
 
-            // bool access
-            bool isVisible() const { return (mpFill || mpLine); }
-
-            // data access
-            const SdrShadowAttribute* getShadow() const { return mpShadow; }
-            const SdrLineAttribute* getLine() const { return mpLine; }
-            const SdrLineStartEndAttribute* getLineStartEnd() const { return mpLineStartEnd; }
-            const SdrFillAttribute* getFill() const { return mpFill; }
-            const FillGradientAttribute* getFillFloatTransGradient() const { return mpFillFloatTransGradient; }
+            // data read access
+            const SdrLineAttribute& getLine() const { return maLine; }
+            const SdrFillAttribute& getFill() const { return maFill; }
+            const SdrLineStartEndAttribute& getLineStartEnd() const { return maLineStartEnd; }
+            const SdrShadowAttribute& getShadow() const { return maShadow; }
+            const FillGradientAttribute& getFillFloatTransGradient() const { return maFillFloatTransGradient; }
         };
     } // end of namespace overlay
 } // end of namespace drawinglayer

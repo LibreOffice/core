@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewfac.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +31,7 @@
 
 #include <sfx2/app.hxx>
 #include "sfx2/viewfac.hxx"
+#include <rtl/ustrbuf.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -49,6 +47,14 @@ void SfxViewFactory::InitFactory()
 {
     DBG_CHKTHIS(SfxViewFactory, 0);
     (*fnInit)();
+}
+
+String SfxViewFactory::GetViewName() const
+{
+    ::rtl::OUStringBuffer aViewName;
+    aViewName.appendAscii( "view" );
+    aViewName.append( sal_Int32( GetOrdinal() ) );
+    return aViewName.makeStringAndClear();
 }
 
 // CTOR / DTOR -----------------------------------------------------------

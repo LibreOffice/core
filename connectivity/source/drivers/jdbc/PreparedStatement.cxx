@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PreparedStatement.cxx,v $
- * $Revision: 1.24.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +42,7 @@
 #include "resource/jdbc_log.hrc"
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
-
+#include "java/LocalRef.hxx"
 #include <string.h>
 
 using namespace connectivity;
@@ -138,10 +135,9 @@ void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, c
         // Java-Call absetzen
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
-        jstring str = convertwchar_tToJavaString(t.pEnv,x);
-        t.pEnv->CallVoidMethod( object, mID, parameterIndex,str);
+        jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,x));
+        t.pEnv->CallVoidMethod( object, mID, parameterIndex,str.get());
         // und aufraeumen
-        t.pEnv->DeleteLocalRef(str);
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     } //t.pEnv
 }

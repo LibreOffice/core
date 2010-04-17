@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: eventsupplier.cxx,v $
- * $Revision: 1.36.12.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -269,7 +266,7 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
                 {
                     xProv = ::com::sun::star::uno::Reference
                         < ::com::sun::star::frame::XDispatchProvider > (
-                            pView->GetFrame()->GetFrameInterface(), UNO_QUERY );
+                            pView->GetFrame().GetFrameInterface(), UNO_QUERY );
                 }
                 else
                 {

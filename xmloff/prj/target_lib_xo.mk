@@ -105,6 +105,7 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/chart/ColorPropertySet \
     xmloff/source/chart/transporttypes \
     xmloff/source/chart/XMLSymbolImageContext \
+    xmloff/source/chart/SchXMLTextListContext \
     xmloff/source/chart/SchXMLTools \
     xmloff/source/chart/XMLLabelSeparatorContext \
     xmloff/source/chart/XMLChartPropertyContext \

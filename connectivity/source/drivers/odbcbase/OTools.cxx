@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OTools.cxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -135,6 +132,7 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
     {
         case SQL_CHAR:
         case SQL_VARCHAR:
+        case SQL_DECIMAL:
             if(_bUseWChar)
             {
                 *pLen = SQL_NTS;
@@ -160,7 +158,7 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
             *pLen = sizeof(sal_Int64);
             _nColumnSize = *pLen;
             break;
-        case SQL_DECIMAL:
+
         case SQL_NUMERIC:
             if(_bUseWChar)
             {
@@ -210,12 +208,9 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
 
                 if(pSeq)
                 {
-                    //  memcpy(_pData,pSeq->getConstArray(),pSeq->getLength());
-                    _pData = (sal_Int8*)((const ::com::sun::star::uno::Sequence< sal_Int8 >  *)_pValue)->getConstArray();
+                    _pData = (sal_Int8*)pSeq->getConstArray();
                     *pLen = pSeq->getLength();
                 }
-                //  _pData = (sal_Int8*)((const ::com::sun::star::uno::Sequence< sal_Int8 >  *)_pValue)->getConstArray();
-                //  *pLen = ((const ::com::sun::star::uno::Sequence< sal_Int8 >  *)_pValue)->getLength();
             }
             break;
         case SQL_LONGVARBINARY:

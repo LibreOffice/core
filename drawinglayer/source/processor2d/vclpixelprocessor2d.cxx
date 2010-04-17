@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: vclpixelprocessor2d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.16 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-26 16:21:48 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -47,14 +39,14 @@
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
-#include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <com/sun/star/awt/XWindow2.hpp>
-#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <drawinglayer/primitive2d/chartprimitive2d.hxx>
 #include <helperchartrenderer.hxx>
@@ -69,6 +61,9 @@
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
+
+#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/window.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -264,50 +259,62 @@ namespace drawinglayer
                     RenderModifiedColorPrimitive2D(static_cast< const primitive2d::ModifiedColorPrimitive2D& >(rCandidate));
                     break;
                 }
-                case PRIMITIVE2D_ID_UNIFIEDALPHAPRIMITIVE2D :
+                case PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D :
                 {
                     // Detect if a single PolyPolygonColorPrimitive2D is contained; in that case,
                     // use the faster OutputDevice::DrawTransparent method
-                    const primitive2d::UnifiedAlphaPrimitive2D& rUniAlphaCandidate = static_cast< const primitive2d::UnifiedAlphaPrimitive2D& >(rCandidate);
-                    const primitive2d::Primitive2DSequence rContent = rUniAlphaCandidate.getChildren();
-                    bool bDrawTransparentUsed(false);
+                    const primitive2d::UnifiedTransparencePrimitive2D& rUniTransparenceCandidate = static_cast< const primitive2d::UnifiedTransparencePrimitive2D& >(rCandidate);
+                    const primitive2d::Primitive2DSequence rContent = rUniTransparenceCandidate.getChildren();
 
-                    // since DEV300 m33 DrawTransparent is supported in VCL (for some targets
-                    // natively), so i am now enabling this shortcut
-                    static bool bAllowUsingDrawTransparent(true);
-
-                    if(bAllowUsingDrawTransparent && rContent.hasElements() && 1 == rContent.getLength())
+                    if(rContent.hasElements())
                     {
-                        const primitive2d::Primitive2DReference xReference(rContent[0]);
-                        const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = dynamic_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(xReference.get());
-
-                        if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitive2DID())
+                        if(0.0 == rUniTransparenceCandidate.getTransparence())
                         {
-                            // single transparent PolyPolygon identified, use directly
-                            const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(pPoPoColor->getBColor()));
-                            mpOutputDevice->SetFillColor(Color(aPolygonColor));
-                            mpOutputDevice->SetLineColor();
-
-                            basegfx::B2DPolyPolygon aLocalPolyPolygon(pPoPoColor->getB2DPolyPolygon());
-                            aLocalPolyPolygon.transform(maCurrentTransformation);
-
-                            mpOutputDevice->DrawTransparent(aLocalPolyPolygon, rUniAlphaCandidate.getAlpha());
-                            bDrawTransparentUsed = true;
+                            // not transparent at all, use content
+                            process(rUniTransparenceCandidate.getChildren());
                         }
-                    }
+                        else if(rUniTransparenceCandidate.getTransparence() > 0.0 && rUniTransparenceCandidate.getTransparence() < 1.0)
+                        {
+                            bool bDrawTransparentUsed(false);
 
-                    if(!bDrawTransparentUsed)
-                    {
-                        // unified sub-transparence. Draw to VDev first.
-                        RenderUnifiedAlphaPrimitive2D(rUniAlphaCandidate);
+                            // since DEV300 m33 DrawTransparent is supported in VCL (for some targets
+                            // natively), so i am now enabling this shortcut
+                            static bool bAllowUsingDrawTransparent(true);
+
+                            if(bAllowUsingDrawTransparent && 1 == rContent.getLength())
+                            {
+                                const primitive2d::Primitive2DReference xReference(rContent[0]);
+                                const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = dynamic_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(xReference.get());
+
+                                if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitive2DID())
+                                {
+                                    // single transparent PolyPolygon identified, use directly
+                                    const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(pPoPoColor->getBColor()));
+                                    mpOutputDevice->SetFillColor(Color(aPolygonColor));
+                                    mpOutputDevice->SetLineColor();
+
+                                    basegfx::B2DPolyPolygon aLocalPolyPolygon(pPoPoColor->getB2DPolyPolygon());
+                                    aLocalPolyPolygon.transform(maCurrentTransformation);
+
+                                    mpOutputDevice->DrawTransparent(aLocalPolyPolygon, rUniTransparenceCandidate.getTransparence());
+                                    bDrawTransparentUsed = true;
+                                }
+                            }
+
+                            if(!bDrawTransparentUsed)
+                            {
+                                // unified sub-transparence. Draw to VDev first.
+                                RenderUnifiedTransparencePrimitive2D(rUniTransparenceCandidate);
+                            }
+                        }
                     }
 
                     break;
                 }
-                case PRIMITIVE2D_ID_ALPHAPRIMITIVE2D :
+                case PRIMITIVE2D_ID_TRANSPARENCEPRIMITIVE2D :
                 {
                     // sub-transparence group. Draw to VDev first.
-                    RenderAlphaPrimitive2D(static_cast< const primitive2d::AlphaPrimitive2D& >(rCandidate));
+                    RenderTransparencePrimitive2D(static_cast< const primitive2d::TransparencePrimitive2D& >(rCandidate));
                     break;
                 }
                 case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D :

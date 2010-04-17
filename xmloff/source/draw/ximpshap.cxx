@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ximpshap.cxx,v $
- * $Revision: 1.128.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2994,7 +2991,18 @@ void SdXMLPluginShapeContext::EndElement()
         else
         {
             // in case we have a media object
-            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaURL" ) ), uno::makeAny( maHref ) );
+
+            OUString sTempRef;
+
+            // check for package URL
+            if( GetImport().IsPackageURL( maHref ) )
+            {
+                sTempRef = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
+            }
+
+            sTempRef += maHref;
+
+            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaURL" ) ), uno::makeAny( sTempRef ) );
 
             for( sal_Int32 nParam = 0; nParam < maParams.getLength(); ++nParam )
             {

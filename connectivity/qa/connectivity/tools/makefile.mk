@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.8.60.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,10 +25,10 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..$/..
+PRJ = ../../..
 TARGET  = ConnectivityTools
 PRJNAME = connectivity
-PACKAGE = connectivity$/tools
+PACKAGE = connectivity/tools
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
@@ -46,14 +42,8 @@ all:
 #----- compile .java files -----------------------------------------
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunnerLight.jar
-# Do not use $/ with the $(FIND) command as for W32-4nt this leads to a backslash
-# in a posix command. In this special case use / instead of $/
-.IF "$(GUI)"=="OS2"
-JAVAFILES       := $(shell @ls ./*.java)
-.ELSE
-JAVAFILES       := $(shell @$(FIND) ./*.java)
-.ENDIF
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
+JAVAFILES       := $(shell @$(FIND) . -name "*.java")
+JAVACLASSFILES	:= $(foreach,i,$(JAVAFILES) $(CLASSDIR)/$(PACKAGE)/$(i:d)$(i:b).class)
 
 #----- make a jar from compiled files ------------------------------
 

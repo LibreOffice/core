@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.12.22.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -39,6 +35,13 @@ ENABLE_EXCEPTIONS = true
 SLOFILES = \
     $(SLO)$/cookiedg.obj \
     $(SLO)$/iahndl.obj \
+    $(SLO)$/iahndl-authentication.obj \
+    $(SLO)$/iahndl-ssl.obj \
+    $(SLO)$/iahndl-cookies.obj \
+    $(SLO)$/iahndl-filter.obj \
+    $(SLO)$/iahndl-locking.obj \
+    $(SLO)$/iahndl-ioexceptions.obj \
+    $(SLO)$/iahndl-errorhandler.obj \
     $(SLO)$/logindlg.obj \
     $(SLO)$/services.obj \
     $(SLO)$/masterpassworddlg.obj \
@@ -46,17 +49,18 @@ SLOFILES = \
     $(SLO)$/openlocked.obj \
     $(SLO)$/passworddlg.obj \
     $(SLO)$/passcrtdlg.obj \
-    $(SLO)$/fltdlg.obj\
-    $(SLO)$/interactionhandler.obj\
-    $(SLO)$/requeststringresolver.obj\
-    $(SLO)$/unknownauthdlg.obj\
-    $(SLO)$/sslwarndlg.obj\
-    $(SLO)$/secmacrowarnings.obj\
-    $(SLO)$/filechanged.obj\
-    $(SLO)$/alreadyopen.obj\
-    $(SLO)$/lockfailed.obj\
-    $(SLO)$/trylater.obj\
-    $(SLO)$/newerverwarn.obj
+    $(SLO)$/fltdlg.obj \
+    $(SLO)$/interactionhandler.obj \
+    $(SLO)$/requeststringresolver.obj \
+    $(SLO)$/unknownauthdlg.obj \
+    $(SLO)$/sslwarndlg.obj \
+    $(SLO)$/secmacrowarnings.obj \
+    $(SLO)$/filechanged.obj \
+    $(SLO)$/alreadyopen.obj \
+    $(SLO)$/lockfailed.obj \
+    $(SLO)$/trylater.obj \
+    $(SLO)$/newerverwarn.obj \
+    $(SLO)$/passwordcontainer.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES = \

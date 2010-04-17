@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: contexts.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,13 +34,6 @@
 #include <xmloff/xmlstyle.hxx>
 #include "SchXMLImport.hxx"
 #include "SchXMLCalculationSettingsContext.hxx"
-
-//  #ifndef _XMLOFF_XMLCHARTSTYLECONTEXT_HXX_
-//  #include "XMLChartStyleContext.hxx"
-//  #endif
-#include <com/sun/star/chart/XChartDocument.hpp>
-#include <com/sun/star/chart/XChartDataArray.hpp>
-#include <com/sun/star/chart/ChartDataRowSource.hpp>
 
 #include "contexts.hxx"
 #include "SchXMLChartContext.hxx"

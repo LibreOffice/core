@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Boolean.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,15 +37,17 @@ jclass java_lang_Boolean::theClass = 0;
 
 java_lang_Boolean::~java_lang_Boolean()
 {}
-
-jclass java_lang_Boolean::getMyClass() const
+jclass java_lang_Boolean::st_getMyClass()
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass )
-    {
         theClass = findMyClass("java/lang/Boolean");
-    }
     return theClass;
+}
+
+jclass java_lang_Boolean::getMyClass() const
+{
+    return st_getMyClass();
 }
 
 java_lang_Boolean::java_lang_Boolean( sal_Bool _par0 ): java_lang_Object( NULL, (jobject)NULL )

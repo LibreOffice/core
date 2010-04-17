@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: CheckTransientDocumentsDocumentContent.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +46,6 @@ import com.sun.star.ucb.OpenMode;
 import com.sun.star.ucb.XCommandProcessor;
 import com.sun.star.ucb.XContent;
 import com.sun.star.ucb.XContentAccess;
-import com.sun.star.ucb.XContentCreator;
 import com.sun.star.ucb.XContentIdentifier;
 import com.sun.star.ucb.XContentIdentifierFactory;
 import com.sun.star.ucb.XContentProvider;
@@ -139,12 +135,16 @@ public class CheckTransientDocumentsDocumentContent extends ComplexTestCase {
                 }
             }
             // create a folder
-            XContent xNewFolder = null;
             log.println("Create new folder "+ folderName);
             ContentInfo contentInfo = new ContentInfo();
             contentInfo.Type = "application/vnd.sun.star.tdoc-folder";
-            XContentCreator xContentCreator = (XContentCreator)UnoRuntime.queryInterface(XContentCreator.class, xContent);
-            xNewFolder = xContentCreator.createNewContent(contentInfo);
+
+            command.Name = "createNewContent";
+            command.Argument = contentInfo;
+
+            result = xCommandProcessor.execute(command, 0, null);
+            XContent xNewFolder = (XContent)UnoRuntime.queryInterface(XContent.class, result);
+
             XCommandProcessor xFolderCommandProcessor = (XCommandProcessor)UnoRuntime.queryInterface(XCommandProcessor.class, xNewFolder);
             log.println("Got the new folder: " + utils.getImplName(xNewFolder));
 

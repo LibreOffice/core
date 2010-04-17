@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: jobdata.cxx,v $
- * $Revision: 1.10.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -305,10 +302,10 @@ void JobData::setJobConfig( const css::uno::Sequence< css::beans::NamedValue >& 
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
 
-    // actualize member
+    // update member
     m_lArguments = lArguments;
 
-    // actualize the configuration ... if possible!
+    // update the configuration ... if possible!
     if (m_eMode==E_ALIAS)
     {
         // It doesn't matter if this config object was already opened before.
@@ -366,7 +363,7 @@ void JobData::setResult( const JobResult& aResult )
     // overwrite the last saved result
     m_aLastExecutionResult = aResult;
 
-    // Don't use his informations to actualize
+    // Don't use his informations to update
     // e.g. the arguments of this job. It must be done
     // from outside! Here we save this information only.
 
@@ -536,7 +533,7 @@ void JobData::disableJob()
     if (m_eMode!=E_EVENT)
         return;
 
-    // actualize the configuration
+    // update the configuration
     // It doesn't matter if this config object was already opened before.
     // It doesn nothing here then ... or it change the mode automaticly, if
     // it was opened using another one before.

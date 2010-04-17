@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: app.src,v $
- * $Revision: 1.122 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -694,11 +691,6 @@ ToolBox RID_ENVTOOLBOX
         };
         ToolBoxItem
         {
-            Identifier = SID_BROWSE_STOP ;
-            Hide = TRUE;
-        };
-        ToolBoxItem
-        {
             Type = TOOLBOXITEM_SEPARATOR ;
         };
         ToolBoxItem
@@ -1100,22 +1092,60 @@ Image IMG_MISSING_4
 {
     ImageBitmap = Bitmap { File = "sn064.bmp" ; };
 };
+
 String STR_STANDARD
 {
     Text [ en-US ] = "Standard" ;
 };
+
+String RID_SVXSTR_FILELINK
+{
+    Text [ en-US ] = "Document" ;
+};
+
 String STR_NONE
 {
     Text [ en-US ] = "- None -" ;
 };
+String RID_SVXSTR_GRAFIKLINK
+{
+    Text [ en-US ] = "Graphic" ;
+};
 String STR_SFX_FILTERNAME_ALL
 {
     Text [ en-US ] = "All files (*.*)" ;
+};
+String RID_SVXSTR_EDITGRFLINK
+{
+    Text [ en-US ] = "Link graphics" ;
 };
 // i66948 used in project scripting
 String STR_ERRUNOEVENTBINDUNG
 {
     Text [ en-US ] = "An appropriate component method %1\ncould not be found.\n\nCheck spelling of method name.";
 };
-
+String RID_SVXSTR_GRFILTER_OPENERROR
+{
+    Text [ en-US ] = "Graphics file cannot be opened" ;
+};
+String RID_SVXSTR_GRFILTER_IOERROR
+{
+    Text [ en-US ] = "Graphics file cannot be read" ;
+};
+String RID_SVXSTR_GRFILTER_FORMATERROR
+{
+    Text [ en-US ] = "Unknown graphics format" ;
+};
+String RID_SVXSTR_GRFILTER_VERSIONERROR
+{
+    Text [ en-US ] = "This version of the graphics file is not supported" ;
+};
+String RID_SVXSTR_GRFILTER_FILTERERROR
+{
+    Text [ en-US ] = "Graphics filter not found" ;
+};
+String RID_SVXSTR_GRFILTER_TOOBIG
+{
+    Text [ en-US ] = "Not enough memory to insert graphic" ;
+};
 

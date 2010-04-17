@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabdlg.cxx,v $
- * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +43,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
 #include "sfx2/sfxresid.hxx"
-#include "sfxhelp.hxx"
+#include "sfx2/sfxhelp.hxx"
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/sfxdlg.hxx>
@@ -1791,7 +1788,7 @@ long SfxTabDialog::Notify( NotifyEvent& rNEvt )
             }
 
             if ( nHelpId )
-                SfxHelp::OpenHelpAgent( pViewFrame->GetFrame(), nHelpId );
+                SfxHelp::OpenHelpAgent( &pViewFrame->GetFrame(), nHelpId );
         }
     }
 

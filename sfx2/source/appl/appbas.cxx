@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: appbas.cxx,v $
- * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,7 +78,7 @@
 #include <sfx2/dinfdlg.hxx>
 #include "appdata.hxx"
 #include "appbas.hxx"
-#include "sfxhelp.hxx"
+#include "sfx2/sfxhelp.hxx"
 #include "sfx2/basmgr.hxx"
 #include "sorgitm.hxx"
 #include "appbaslib.hxx"
@@ -89,7 +86,7 @@
 
 #define ITEMID_SEARCH SID_SEARCH_ITEM
 
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <vos/socket.hxx>
 
 #define SFX_TYPEMAP
@@ -354,7 +351,7 @@ void SfxApplication::EnterBasicCall()
         }
 
         // die SbxObjects der SfxShells auf den Stacks der Frames erzeugen
-        for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst(0,0,sal_False);
+        for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst(0,sal_False);
               pFrame;
               pFrame = SfxViewFrame::GetNext(*pFrame,0,0,sal_False) )
         {
@@ -422,16 +419,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 //(mba)                SbxObject* pObject = pItem->GetObject();
 //(mba)                pObject->ReleaseRef();
             }
-            break;
-        }
-
-        case SID_WIN_POSSIZE:
-        {
-            break;
-        }
-
-        case SID_INTERACTIVEMODE:
-        {
             break;
         }
 

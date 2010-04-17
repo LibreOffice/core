@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fmshell.cxx,v $
- * $Revision: 1.81 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -301,9 +298,6 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
         m_pFormView && m_pFormView->GetActualOutDev() &&
         m_pFormView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
     {
-        if (GetImpl()->HasAnyPendingCursorAction())
-            GetImpl()->CancelAnyPendingCursorAction();
-
         SdrPageView* pCurPageView = m_pFormView->GetSdrPageView();
 
         // sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pFormView->GetActualOutDev()) : SDRPAGEVIEWWIN_NOTFOUND;
@@ -681,7 +675,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_FILTER_NAVIGATOR:
         case SID_FM_SHOW_DATANAVIGATOR :
         {
-            GetViewShell()->GetViewFrame()->ChildWindowExecute(rReq);
+            GetViewShell()->GetViewFrame()->ChildWindowExecute( rReq );
             rReq.Done();
         }   break;
         case SID_FM_SHOW_FMEXPLORER:
@@ -823,7 +817,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                         bReopenNavigator = sal_True;
                     }
 
-                Reference< XFormController >  xController( GetImpl()->getActiveController() );
+                Reference< runtime::XFormController >  xController( GetImpl()->getActiveController() );
 
                 if  (   GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_FILTER_NAVIGATOR )
                         // closing the window was denied, for instance because of a invalid criterion
@@ -853,6 +847,11 @@ void FmFormShell::Execute(SfxRequest &rReq)
         {
             GetImpl()->startFiltering();
             rReq.Done();
+
+            // initially open the filter navigator, the whole form based filter is pretty useless without it
+            SfxBoolItem aIdentifierItem( SID_FM_FILTER_NAVIGATOR, TRUE );
+            GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_FILTER_NAVIGATOR, SFX_CALLMODE_ASYNCHRON,
+                &aIdentifierItem, NULL );
         }   break;
     }
 }
@@ -1122,9 +1121,6 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
         ||  m_bDesignMode
         ||  !GetImpl()->getActiveForm().is()
         ||  GetImpl()->isInFilterMode()
-        ||  (   GetImpl()->HasPendingCursorAction(GetImpl()->getNavController())
-            &&  (SID_FM_RECORD_TOTAL != nWhich)
-            )
         )
         rSet.DisableItem(nWhich);
     else
@@ -1396,7 +1392,7 @@ SdrUnoObj* FmFormShell::GetFormControl( const Reference< XControlModel >& _rxMod
 }
 
 //------------------------------------------------------------------------
-Reference< XFormController > FmFormShell::GetFormController( const Reference< XForm >& _rxForm, const SdrView& _rView, const OutputDevice& _rDevice ) const
+Reference< runtime::XFormController > FmFormShell::GetFormController( const Reference< XForm >& _rxForm, const SdrView& _rView, const OutputDevice& _rDevice ) const
 {
     const FmFormView* pFormView = dynamic_cast< const FmFormView* >( &_rView );
     if ( !pFormView )
@@ -1410,11 +1406,6 @@ void FmFormShell::SetDesignMode( sal_Bool _bDesignMode )
 {
     if ( _bDesignMode == m_bDesignMode )
         return;
-
-    // if we are moving our data source cursor currently ....
-    if ( GetImpl()->HasAnyPendingCursorAction() )
-        // ... cancel this
-        GetImpl()->CancelAnyPendingCursorAction();
 
     FmFormModel* pModel = GetFormModel();
     if (pModel)

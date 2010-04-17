@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: appdata.cxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,7 +98,6 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
         pTopFrames( new SfxFrameArr_Impl ),
         pInitLinkList(0),
         pMatcher( 0 ),
-        pCancelMgr( 0 ),
         pLabelResMgr( 0 ),
         pAppDispatch(NULL),
         pTemplates( 0 ),
@@ -151,7 +147,6 @@ SfxAppData_Impl::~SfxAppData_Impl()
 {
     DeInitDDE();
     delete pTopFrames;
-    delete pCancelMgr;
     delete pSecureURLs;
     delete pBasicManager;
 

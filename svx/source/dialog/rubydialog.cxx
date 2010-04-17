@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rubydialog.cxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -324,7 +321,7 @@ void SvxRubyDialog::Activate()
     aStylistPB.Enable(bEnable);
     //get selection from current view frame
     SfxViewFrame* pCurFrm = SfxViewFrame::Current();
-    Reference< XController > xCtrl = pCurFrm->GetFrame()->GetController();
+    Reference< XController > xCtrl = pCurFrm->GetFrame().GetController();
     pImpl->SetController(xCtrl);
     if(pImpl->HasSelectionChanged())
     {

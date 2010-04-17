@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: styleexp.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -200,13 +197,22 @@ sal_Bool XMLStyleExport::exportStyle(
                 OUStringBuffer sTmp;
                 sTmp.append( static_cast<sal_Int32>(nOutlineLevel));
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                        XML_DEFAULT_OUTLINE_LEVEL,
-                        sTmp.makeStringAndClear() );
+                                          XML_DEFAULT_OUTLINE_LEVEL,
+                                          sTmp.makeStringAndClear() );
             }
             else
             {
-                GetExport().AddAttribute( XML_NAMESPACE_STYLE,  XML_DEFAULT_OUTLINE_LEVEL,
-                                            OUString( RTL_CONSTASCII_USTRINGPARAM( "" )));
+                // --> OD 2009-12-29 #i104889#
+                // empty value for style:default-outline-level does exist
+                // since ODF 1.2. Thus, suppress its export for former versions.
+                if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) != 0 &&
+                     GetExport().getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
+                // <--
+                {
+                    GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                              XML_DEFAULT_OUTLINE_LEVEL,
+                                              OUString( RTL_CONSTASCII_USTRINGPARAM( "" )));
+                }
             }
         }
     }//<-end,zhaojianwei
@@ -311,8 +317,9 @@ sal_Bool XMLStyleExport::exportStyle(
             }
             /////////////////////////////////////////////////
             if ( bNoInheritedListStyle )
-                GetExport().AddAttribute( XML_NAMESPACE_STYLE,  XML_LIST_STYLE_NAME,
-                                                         OUString( RTL_CONSTASCII_USTRINGPARAM( "" )));
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                          XML_LIST_STYLE_NAME,
+                                          OUString( RTL_CONSTASCII_USTRINGPARAM( "" )));
         }
         //<-end,zhaojianwei
     }

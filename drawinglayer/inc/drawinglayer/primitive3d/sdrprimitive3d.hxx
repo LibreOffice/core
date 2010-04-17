@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: sdrprimitive3d.hxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.8 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:21 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -40,8 +32,8 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <drawinglayer/attribute/sdrallattribute3d.hxx>
-#include <drawinglayer/attribute/sdrattribute3d.hxx>
 #include <drawinglayer/primitive3d/sdrextrudelathetools3d.hxx>
+#include <drawinglayer/attribute/sdrobjectattribute3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -61,7 +53,7 @@ namespace drawinglayer
             /// object surface attributes
             basegfx::B3DHomMatrix                       maTransform;
             basegfx::B2DVector                          maTextureSize;
-            attribute::SdrLineFillShadowAttribute       maSdrLFSAttribute;
+            attribute::SdrLineFillShadowAttribute3D     maSdrLFSAttribute;
             attribute::Sdr3DObjectAttribute             maSdr3DObjectAttribute;
 
         protected:
@@ -80,13 +72,13 @@ namespace drawinglayer
             SdrPrimitive3D(
                 const basegfx::B3DHomMatrix& rTransform,
                 const basegfx::B2DVector& rTextureSize,
-                const attribute::SdrLineFillShadowAttribute& rSdrLFSAttribute,
+                const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,
                 const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute);
 
             /// data read access
             const basegfx::B3DHomMatrix& getTransform() const { return maTransform; }
             const basegfx::B2DVector& getTextureSize() const { return maTextureSize; }
-            const attribute::SdrLineFillShadowAttribute& getSdrLFSAttribute() const { return maSdrLFSAttribute; }
+            const attribute::SdrLineFillShadowAttribute3D& getSdrLFSAttribute() const { return maSdrLFSAttribute; }
             const attribute::Sdr3DObjectAttribute getSdr3DObjectAttribute() const { return maSdr3DObjectAttribute; }
 
             /// compare operator
