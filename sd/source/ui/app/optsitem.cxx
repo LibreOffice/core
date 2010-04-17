@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optsitem.cxx,v $
- * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -678,7 +675,8 @@ BOOL SdOptionsMisc::ReadData( const Any* pValues )
     if( pValues[13].hasValue() ) SetDefaultObjectSizeHeight( *(sal_uInt32*) pValues[ 13 ].getValue() );
     if( pValues[14].hasValue() ) SetPrinterIndependentLayout( *(sal_uInt16*) pValues[ 14 ].getValue() );
 
-    if( pValues[15].hasValue() ) SetShowComments(  *(sal_Bool*) pValues[ 11 ].getValue() );
+    if( pValues[15].hasValue() )
+        SetShowComments(  *(sal_Bool*) pValues[ 15 ].getValue() );
 
     // just for Impress
     if( GetConfigId() == SDCFG_IMPRESS )
@@ -790,6 +788,7 @@ SdOptionsMiscItem::SdOptionsMiscItem( USHORT _nWhich, SdOptions* pOpts, ::sd::Fr
         maOptionsMisc.SetPreviewTransitions(pOpts->IsPreviewTransitions());
 
         maOptionsMisc.SetDisplay(pOpts->GetDisplay());
+        maOptionsMisc.SetShowComments( pOpts->IsShowComments() );
     }
 
     if( pView )
@@ -868,6 +867,7 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
         // #90356#
         pOpts->SetShowUndoDeleteWarning( maOptionsMisc.IsShowUndoDeleteWarning() );
         pOpts->SetPrinterIndependentLayout( maOptionsMisc.GetPrinterIndependentLayout() );
+        pOpts->SetShowComments( maOptionsMisc.IsShowComments() );
         // #97016#
         pOpts->SetDefaultObjectSizeWidth( maOptionsMisc.GetDefaultObjectSizeWidth() );
         pOpts->SetDefaultObjectSizeHeight( maOptionsMisc.GetDefaultObjectSizeHeight() );

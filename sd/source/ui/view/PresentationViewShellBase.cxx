@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PresentationViewShellBase.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,10 +83,10 @@ PresentationViewShellBase::PresentationViewShellBase (
     GetUpdateLockManager()->Disable();
 
     // Hide the automatic (non-context sensitive) tool bars.
-    if (_pFrame!=NULL && _pFrame->GetFrame()!=NULL)
+    if (_pFrame!=NULL)
     {
         Reference<beans::XPropertySet> xFrameSet (
-            _pFrame->GetFrame()->GetFrameInterface(),
+            _pFrame->GetFrame().GetFrameInterface(),
             UNO_QUERY);
         if (xFrameSet.is())
         {

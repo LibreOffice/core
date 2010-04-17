@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: eventmultiplexer.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -262,8 +259,7 @@ struct EventMultiplexerImpl
         std::vector<ShapeCursorEventHandlerSharedPtr> >   ImplShapeCursorHandlers;
     typedef ThreadUnsafeListenerContainer<
         PrioritizedHandlerEntry<HyperlinkHandler>,
-        std::vector<
-            PrioritizedHandlerEntry<HyperlinkHandler> > > ImplHyperLinkHandlers;
+        std::vector<PrioritizedHandlerEntry<HyperlinkHandler> > > ImplHyperLinkHandlers;
 
     template <typename XSlideShowViewFunc>
     void forEachView( XSlideShowViewFunc pViewMethod );
@@ -616,7 +612,7 @@ bool EventMultiplexerImpl::notifyMouseHandlers(
     uno::Reference<presentation::XSlideShowView> xView(
         e.Source, uno::UNO_QUERY );
 
-    ENSURE_OR_RETURN( xView.is(), "EventMultiplexer::notifyHandlers(): "
+    ENSURE_OR_RETURN_FALSE( xView.is(), "EventMultiplexer::notifyHandlers(): "
                        "event source is not an XSlideShowView" );
 
     // find corresponding view (to map mouse position into user
@@ -631,7 +627,7 @@ bool EventMultiplexerImpl::notifyMouseHandlers(
                           boost::cref( xView ),
                           boost::bind( &UnoView::getUnoView, _1 ) ) ) ) == aEnd)
     {
-        ENSURE_OR_RETURN(
+        ENSURE_OR_RETURN_FALSE(
             false, "EventMultiplexer::notifyHandlers(): "
             "event source not found under registered views" );
     }
@@ -1078,10 +1074,46 @@ bool EventMultiplexer::notifyUserPaintColor( RGBColor const& rUserColor )
                     boost::cref(rUserColor)));
 }
 
+bool EventMultiplexer::notifyUserPaintStrokeWidth( double rUserStrokeWidth )
+{
+    return mpImpl->maUserPaintEventHandlers.applyAll(
+        boost::bind(&UserPaintEventHandler::widthChanged,
+            _1,
+                    rUserStrokeWidth));
+}
+
 bool EventMultiplexer::notifyUserPaintDisabled()
 {
     return mpImpl->maUserPaintEventHandlers.applyAll(
         boost::mem_fn(&UserPaintEventHandler::disable));
+}
+
+bool EventMultiplexer::notifySwitchPenMode(){
+    return mpImpl->maUserPaintEventHandlers.applyAll(
+        boost::mem_fn(&UserPaintEventHandler::switchPenMode));
+}
+
+bool EventMultiplexer::notifySwitchEraserMode(){
+    return mpImpl->maUserPaintEventHandlers.applyAll(
+        boost::mem_fn(&UserPaintEventHandler::switchEraserMode));
+}
+
+//adding erasing all ink features with UserPaintOverlay
+bool EventMultiplexer::notifyEraseAllInk( bool const& rEraseAllInk )
+{
+    return mpImpl->maUserPaintEventHandlers.applyAll(
+        boost::bind(&UserPaintEventHandler::eraseAllInkChanged,
+                    _1,
+                    boost::cref(rEraseAllInk)));
+}
+
+//adding erasing features with UserPaintOverlay
+bool EventMultiplexer::notifyEraseInkWidth( sal_Int32 rEraseInkSize )
+{
+    return mpImpl->maUserPaintEventHandlers.applyAll(
+        boost::bind(&UserPaintEventHandler::eraseInkWidthChanged,
+                    _1,
+                    boost::cref(rEraseInkSize)));
 }
 
 bool EventMultiplexer::notifyNextEffect()

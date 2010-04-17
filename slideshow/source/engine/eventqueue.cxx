@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: eventqueue.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,7 +109,7 @@ namespace slideshow
                 rEvent.get(),
                 rEvent->getActivationTime(0.0));
 #endif
-            ENSURE_OR_RETURN( rEvent,
+            ENSURE_OR_RETURN_FALSE( rEvent,
                                "EventQueue::addEvent: event ptr NULL" );
 
             // prepare entry
@@ -141,7 +138,7 @@ namespace slideshow
                 rEvent->getActivationTime(0.0));
 #endif
 
-            ENSURE_OR_RETURN( rEvent.get() != NULL,
+            ENSURE_OR_RETURN_FALSE( rEvent.get() != NULL,
                                "EventQueue::addEvent: event ptr NULL" );
             maNextEvents.push_back(
                 EventEntry( rEvent, rEvent->getActivationTime(
@@ -161,7 +158,7 @@ namespace slideshow
                 rpEvent->getActivationTime(0.0));
 #endif
 
-            ENSURE_OR_RETURN(
+            ENSURE_OR_RETURN_FALSE(
                 rpEvent.get() != NULL,
                     "EventQueue::addEvent: event ptr NULL");
 

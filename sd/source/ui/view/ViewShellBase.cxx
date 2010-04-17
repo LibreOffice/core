@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ViewShellBase.cxx,v $
- * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +51,6 @@
 #include "NotesChildWindow.hxx"
 #include "ViewShellManager.hxx"
 #include "DrawController.hxx"
-#include "PrintManager.hxx"
 #include "UpdateLockManager.hxx"
 #include "FrameView.hxx"
 #include "ViewTabBar.hxx"
@@ -62,6 +58,7 @@
 #include "drawdoc.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/printer.hxx>
 #include "DrawViewShell.hxx"
 #include "GraphicViewShell.hxx"
 #include "OutlineViewShell.hxx"
@@ -72,6 +69,7 @@
 #include "ToolBarManager.hxx"
 #include "Window.hxx"
 #include "framework/ConfigurationController.hxx"
+#include "DocumentRenderer.hxx"
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -92,6 +90,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/whiter.hxx>
 #include <comphelper/processfactory.hxx>
+#include <vcl/msgbox.hxx>
 
 #include "fubullet.hxx"
 
@@ -161,9 +160,6 @@ public:
     ::boost::shared_ptr<tools::EventMultiplexer> mpEventMultiplexer;
 
     ::boost::shared_ptr<UpdateLockManager> mpUpdateLockManager;
-
-    /// The print manager is responsible for printing documents.
-    ::boost::shared_ptr<PrintManager> mpPrintManager;
 
     ::boost::shared_ptr<FormShellManager> mpFormShellManager;
 
@@ -284,11 +280,7 @@ ViewShellBase::ViewShellBase (
     SfxViewFrame* _pFrame,
     SfxViewShell*)
     : SfxViewShell (_pFrame,
-        SFX_VIEW_MAXIMIZE_FIRST
-        | SFX_VIEW_OPTIMIZE_EACH
-        | SFX_VIEW_DISABLE_ACCELS
-        | SFX_VIEW_OBJECTSIZE_EMBEDDED
-        | SFX_VIEW_CAN_PRINT
+          SFX_VIEW_CAN_PRINT
         | SFX_VIEW_HAS_PRINTOPTIONS),
       maMutex(),
       mpImpl(),
@@ -299,7 +291,6 @@ ViewShellBase::ViewShellBase (
     mpImpl->mpViewWindow.reset(new FocusForwardingWindow(_pFrame->GetWindow(),*this));
     mpImpl->mpViewWindow->SetBackground(Wallpaper());
     mpImpl->mpUpdateLockManager.reset(new UpdateLockManager(*this));
-    mpImpl->mpPrintManager.reset(new PrintManager(*this));
 
     _pFrame->GetWindow().SetBackground(Wallpaper());
 
@@ -598,12 +589,21 @@ ErrCode ViewShellBase::DoVerb (long nVerb)
 
 
 
+Reference<view::XRenderable> ViewShellBase::GetRenderable (void)
+{
+    // Create a new DocumentRenderer on every call.  It observes the life
+    // time of this ViewShellBase object.
+    return Reference<view::XRenderable>(new DocumentRenderer(*this));
+}
+
+
+
+
 SfxPrinter* ViewShellBase::GetPrinter (BOOL bCreate)
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
-    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
 
-    return mpImpl->mpPrintManager->GetPrinter(bCreate);
+    return GetDocShell()->GetPrinter (bCreate);
 }
 
 
@@ -615,9 +615,48 @@ USHORT ViewShellBase::SetPrinter (
     bool bIsAPI)
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
-    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
 
-    return mpImpl->mpPrintManager->SetPrinter (pNewPrinter, nDiffFlags, bIsAPI);
+    GetDocShell()->SetPrinter(pNewPrinter);
+
+    if ( (nDiffFlags & SFX_PRINTER_CHG_ORIENTATION ||
+          nDiffFlags & SFX_PRINTER_CHG_SIZE) && pNewPrinter  )
+    {
+        MapMode aMap = pNewPrinter->GetMapMode();
+        aMap.SetMapUnit(MAP_100TH_MM);
+        MapMode aOldMap = pNewPrinter->GetMapMode();
+        pNewPrinter->SetMapMode(aMap);
+        Size aNewSize = pNewPrinter->GetOutputSize();
+
+        BOOL bScaleAll = FALSE;
+        if ( bIsAPI )
+        {
+            WarningBox aWarnBox (
+                GetWindow(),
+                (WinBits)(WB_YES_NO | WB_DEF_YES),
+                String(SdResId(STR_SCALE_OBJS_TO_PAGE)));
+            bScaleAll = (aWarnBox.Execute() == RET_YES);
+        }
+
+        ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
+            ::boost::dynamic_pointer_cast<DrawViewShell>(GetMainViewShell()));
+        if (pDrawViewShell)
+        {
+            SdPage* pPage = GetDocument()->GetSdPage(
+                0, PK_STANDARD );
+            pDrawViewShell->SetPageSizeAndBorder (
+                pDrawViewShell->GetPageKind(),
+                aNewSize,
+                -1,-1,-1,-1,
+                bScaleAll,
+                pNewPrinter->GetOrientation(),
+                pPage->GetPaperBin(),
+                pPage->IsBackgroundFullSize());
+        }
+
+        pNewPrinter->SetMapMode(aOldMap);
+    }
+
+    return 0;
 }
 
 
@@ -625,10 +664,9 @@ USHORT ViewShellBase::SetPrinter (
 
 PrintDialog* ViewShellBase::CreatePrintDialog (::Window *pParent)
 {
-    OSL_ASSERT(mpImpl.get()!=NULL);
-    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
-
-    return mpImpl->mpPrintManager->CreatePrintDialog (pParent);
+    (void)pParent;
+    return NULL;
+    //    return mpImpl->mpPrintManager->CreatePrintDialog (pParent);
 }
 
 
@@ -638,21 +676,21 @@ SfxTabPage*  ViewShellBase::CreatePrintOptionsPage(
     ::Window *pParent,
     const SfxItemSet &rOptions)
 {
-    OSL_ASSERT(mpImpl.get()!=NULL);
-    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
-
-    return mpImpl->mpPrintManager->CreatePrintOptionsPage (pParent, rOptions);
+    (void)pParent;
+    (void)rOptions;
+    return NULL;
+    //    return mpImpl->mpPrintManager->CreatePrintOptionsPage (pParent, rOptions);
 }
 
 
 
 
-USHORT  ViewShellBase::Print(SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* pDlg)
+USHORT  ViewShellBase::Print(SfxProgress&, BOOL bIsAPI, PrintDialog* pDlg)
 {
-    OSL_ASSERT(mpImpl.get()!=NULL);
-    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
-
-    return mpImpl->mpPrintManager->Print (rProgress, bIsAPI, pDlg);
+    (void)bIsAPI;
+    (void)pDlg;
+    return 0;
+    //    return mpImpl->mpPrintManager->Print (rProgress, bIsAPI, pDlg);
 }
 
 
@@ -663,10 +701,12 @@ ErrCode ViewShellBase::DoPrint (
     PrintDialog* pPrintDialog,
     BOOL bSilent, BOOL bIsAPI )
 {
-    OSL_ASSERT(mpImpl.get()!=NULL);
-    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
-
-    return mpImpl->mpPrintManager->DoPrint (pPrinter, pPrintDialog, bSilent, bIsAPI );
+    (void)pPrinter;
+    (void)pPrintDialog;
+    (void)bSilent;
+    (void)bIsAPI;
+    return 0;
+    //return mpImpl->mpPrintManager->DoPrint (pPrinter, pPrintDialog, bSilent, bIsAPI );
 }
 
 
@@ -677,13 +717,11 @@ USHORT ViewShellBase::SetPrinterOptDlg (
     USHORT nDiffFlags,
     BOOL bShowDialog)
 {
-    OSL_ASSERT(mpImpl.get()!=NULL);
-    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
-
-    return mpImpl->mpPrintManager->SetPrinterOptDlg (
-       pNewPrinter,
-       nDiffFlags,
-       bShowDialog);
+    (void)pNewPrinter;
+    (void)nDiffFlags;
+    (void)bShowDialog;
+    return 0;
+    //    return mpImpl->mpPrintManager->SetPrinterOptDlg ( pNewPrinter, nDiffFlags, bShowDialog);
 }
 
 
@@ -691,11 +729,8 @@ USHORT ViewShellBase::SetPrinterOptDlg (
 
 void ViewShellBase::PreparePrint (PrintDialog* pPrintDialog)
 {
-    OSL_ASSERT(mpImpl.get()!=NULL);
-    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
-
     SfxViewShell::PreparePrint (pPrintDialog);
-    return mpImpl->mpPrintManager->PreparePrint (pPrintDialog);
+    //mpImpl->mpPrintManager->PreparePrint (pPrintDialog);
 }
 
 
@@ -1015,7 +1050,7 @@ void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
     // calls for the views in side panes but prevents calling an already
     // dying SfxViewShell base class.
     // For issue #140703# we have to check the existence of the window,
-    // too.  The SfxTopViewFrame accesses the window without checking it.
+    // too.  The SfxViewFrame accesses the window without checking it.
     ViewShell* pMainViewShell = GetMainViewShell().get();
     if (pMainViewShell != NULL && GetWindow()!=NULL)
     {
@@ -1231,7 +1266,7 @@ CustomHandleManager& ViewShellBase::getCustomHandleManager() const
         Reference< XMultiServiceFactory > xServiceManager( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
 
         Reference< XModuleManager > xModuleManager( xServiceManager->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager") ) ), UNO_QUERY_THROW );
-        Reference< XInterface > xIfac( GetMainViewShell()->GetViewFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY_THROW );
+        Reference< XInterface > xIfac( GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface(), UNO_QUERY_THROW );
 
         ::rtl::OUString aModuleIdentifier( xModuleManager->identify( xIfac ) );
 
@@ -1277,7 +1312,6 @@ ViewShellBase::Implementation::Implementation (ViewShellBase& rBase)
       mpViewShellManager(),
       mpEventMultiplexer(),
       mpUpdateLockManager(),
-      mpPrintManager(),
       mpFormShellManager(),
       mrBase(rBase),
       mpPageCacheManager(slidesorter::cache::PageCacheManager::Instance())

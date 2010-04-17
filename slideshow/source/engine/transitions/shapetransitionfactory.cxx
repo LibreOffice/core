@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: shapetransitionfactory.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -185,7 +182,7 @@ void ClippingAnimation::end_()
 
 bool ClippingAnimation::operator()( double nValue )
 {
-    ENSURE_OR_RETURN(
+    ENSURE_OR_RETURN_FALSE(
         mpAttrLayer && mpShape,
         "ClippingAnimation::operator(): Invalid ShapeAttributeLayer" );
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdpage.hxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,8 +157,6 @@ protected:
     /** a helper class to manipulate effects inside the main sequence */
     boost::shared_ptr< sd::MainSequence > mpMainSequence;
 
-    void        AdjustBackgroundSize();
-
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
 
     SfxItemSet* mpItems;
@@ -197,11 +192,13 @@ public:
 
     sd::ShapeList&  GetPresentationShapeList() { return maPresentationShapeList; }
 
+    void EnsureMasterPageDefaultBackground();
     SdrObject*      CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rectangle& rRect, BOOL bInsert=FALSE);
     SdrObject*      CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert);
     SdrObject*      GetPresObj(PresObjKind eObjKind, int nIndex = 1 );
     PresObjKind     GetPresObjKind(SdrObject* pObj) const;
     String          GetPresObjText(PresObjKind eObjKind) const;
+    SfxStyleSheet* GetStyleSheetForMasterPageBackground() const;
     SfxStyleSheet*  GetStyleSheetForPresObj(PresObjKind eObjKind) const;
     bool            RestoreDefaultText( SdrObject* pObj );
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: IdleDetection.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,18 +82,15 @@ sal_Int32 IdleDetection::CheckSlideShowRunning (void)
         // Ignore the current frame when it does not exist, is not valid, or
         // is not active.
         bool bIgnoreFrame (true);
-        if (pViewFrame->GetFrame() != NULL)
+        uno::Reference<frame::XFrame> xFrame (pViewFrame->GetFrame().GetFrameInterface());
+        try
         {
-            uno::Reference<frame::XFrame> xFrame (pViewFrame->GetFrame()->GetFrameInterface());
-            try
-            {
-                if (xFrame.is() && xFrame->isActive())
-                    bIgnoreFrame = false;
-            }
-            catch (uno::RuntimeException e)
-            {
-                (void) e;
-            }
+            if (xFrame.is() && xFrame->isActive())
+                bIgnoreFrame = false;
+        }
+        catch (uno::RuntimeException e)
+        {
+            (void) e;
         }
         if (bIgnoreFrame)
             continue;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unopback.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itemset.hxx>
-
+#include <svx/svdpool.hxx>
 #include <comphelper/extract.hxx>
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
@@ -43,6 +40,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unoshape.hxx>
+#include <comphelper/serviceinfohelper.hxx>
 
 #include "unopback.hxx"
 #include "unohelp.hxx"
@@ -61,27 +59,18 @@ const SvxItemPropertySet* ImplGetPageBackgroundPropertySet()
         {0,0,0,0,0,0}
     };
 
-    static SvxItemPropertySet aPageBackgroundPropertySet_Impl( aPageBackgroundPropertyMap_Impl );
+    static SvxItemPropertySet aPageBackgroundPropertySet_Impl( aPageBackgroundPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
     return &aPageBackgroundPropertySet_Impl;
 }
 
 UNO3_GETIMPLEMENTATION_IMPL( SdUnoPageBackground );
 
-SdUnoPageBackground::SdUnoPageBackground( SdDrawDocument* pDoc /* = NULL */, SdrObject* pObj /* = NULL */ ) throw()
-: mpPropSet( ImplGetPageBackgroundPropertySet() ), mpSet( NULL ), mpDoc( pDoc )
-{
-    if( pDoc )
-    {
-        StartListening( *pDoc );
-        mpSet = new SfxItemSet( pDoc->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST );
-
-        if( pObj )
-            mpSet->Put(pObj->GetMergedItemSet());
-    }
-}
-
-SdUnoPageBackground::SdUnoPageBackground( SdDrawDocument* pDoc, const SfxItemSet* pSet ) throw()
-: mpPropSet( ImplGetPageBackgroundPropertySet() ), mpSet( NULL ), mpDoc( pDoc )
+SdUnoPageBackground::SdUnoPageBackground(
+    SdDrawDocument* pDoc /* = NULL */,
+    const SfxItemSet* pSet /* = NULL */) throw()
+:   mpPropSet(ImplGetPageBackgroundPropertySet()),
+    mpSet(NULL),
+    mpDoc(pDoc)
 {
     if( pDoc )
     {
@@ -212,7 +201,7 @@ OUString SAL_CALL SdUnoPageBackground::getImplementationName()
 sal_Bool SAL_CALL SdUnoPageBackground::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 uno::Sequence< OUString > SAL_CALL SdUnoPageBackground::getSupportedServiceNames()
@@ -278,7 +267,7 @@ void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyNa
             }
             else
             {
-                mpPropSet->setPropertyValue( pEntry, aValue, aSet );
+                SvxItemPropertySet_setPropertyValue( *mpPropSet, pEntry, aValue, aSet );
             }
 
             mpSet->Put( aSet );
@@ -332,7 +321,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& Propert
                     aSet.Put( rPool.GetDefaultItem( pEntry->nWID ) );
 
                 // Hole Wert aus ItemSet
-                aAny = mpPropSet->getPropertyValue( pEntry, aSet );
+                aAny = SvxItemPropertySet_getPropertyValue( *mpPropSet, pEntry, aSet );
             }
         }
         else
@@ -460,7 +449,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aProp
             SfxItemSet aSet( rPool, pEntry->nWID, pEntry->nWID);
             aSet.Put( rPool.GetDefaultItem( pEntry->nWID ) );
 
-            aAny = mpPropSet->getPropertyValue( pEntry, aSet );
+            aAny = SvxItemPropertySet_getPropertyValue( *mpPropSet, pEntry, aSet );
         }
     }
     return aAny;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: UpdateLockManager.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -399,11 +396,10 @@ Reference< ::com::sun::star::frame::XLayoutManager>
 
     if (mxLayoutManager.get() == NULL)
     {
-        if (mrBase.GetViewFrame()!=NULL
-            && mrBase.GetViewFrame()->GetFrame()!=NULL)
+        if (mrBase.GetViewFrame()!=NULL)
         {
             Reference<beans::XPropertySet> xFrameProperties (
-                mrBase.GetViewFrame()->GetFrame()->GetFrameInterface(),
+                mrBase.GetViewFrame()->GetFrame().GetFrameInterface(),
                 UNO_QUERY);
             if (xFrameProperties.is())
             {

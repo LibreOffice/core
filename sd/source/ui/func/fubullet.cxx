@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fubullet.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,9 +34,9 @@
 #ifndef _BINDING_HXX //autogen
 #include <sfx2/bindings.hxx>
 #endif
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svl/poolitem.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/fontitem.hxx>
 #include "OutlineViewShell.hxx"
 #include "DrawViewShell.hxx"
 #include "Window.hxx"
@@ -213,7 +210,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         SfxAbstractDialog* pDlg = pFact ? pFact->CreateSfxDialog( &mpView->GetViewShell()->GetViewFrame()->GetWindow(), aSet,
-            mpView->GetViewShell()->GetViewFrame()->GetFrame()->GetFrameInterface(),
+            mpView->GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface(),
             RID_SVXDLG_CHARMAP ) : 0;
         if( !pDlg )
             return;
