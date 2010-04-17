@@ -48,10 +48,10 @@ $(eval $(call gb_Library_set_defs,msword,\
 $(eval $(call gb_Library_add_linked_libs,msword,\
     basegfx \
     comphelper \
-    go \
     i18nisolang1 \
     i18nutil \
     icuuc \
+    editeng \
     msfilter \
     sfx \
     sot \

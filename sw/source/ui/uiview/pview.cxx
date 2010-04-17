@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pview.cxx,v $
- * $Revision: 1.70 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,15 +42,15 @@
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/progress.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/topfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/stddlg.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/srchitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/svdview.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/zoomslideritem.hxx>
@@ -130,8 +127,7 @@ SFX_IMPL_INTERFACE(SwPagePreView, SfxViewShell, SW_RES(RID_PVIEW_TOOLBOX))
 
 TYPEINIT1(SwPagePreView,SfxViewShell)
 
-#define SWVIEWFLAGS ( SFX_VIEW_MAXIMIZE_FIRST|SFX_VIEW_OPTIMIZE_EACH|  \
-                      SFX_VIEW_CAN_PRINT|SFX_VIEW_HAS_PRINTOPTIONS )
+#define SWVIEWFLAGS ( SFX_VIEW_CAN_PRINT|SFX_VIEW_HAS_PRINTOPTIONS )
 
 #define MIN_PREVIEW_ZOOM 25
 #define MAX_PREVIEW_ZOOM 600
@@ -1520,12 +1516,6 @@ MOVEPAGE:
             rReq.SetSlot( FN_PRINT_PAGEPREVIEW );
             return;
         }
-        case FN_PREVIEW_PRINT_OPTIONS :
-        {
-            SwPreviewPrintOptionsDialog aDlg(aViewWin, *this);
-            aDlg.Execute();
-        }
-        break;
         case SID_PRINTDOCDIRECT:
         case SID_PRINTDOC:
             ::SetAppPrintOptions( aViewWin.GetViewShell(), FALSE );
@@ -1574,7 +1564,8 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
     ASSERT(nWhich, leeres Set);
     SwPagePreviewLayout* pPagePrevwLay = GetViewShell()->PagePreviewLayout();
     //#106746# zoom has to be disabled if Accessibility support is switched on
-    BOOL bZoomEnabled = !Application::GetSettings().GetMiscSettings().GetEnableATToolSupport();
+    // MT 2010/01, see #110498#
+    BOOL bZoomEnabled = TRUE; // !Application::GetSettings().GetMiscSettings().GetEnableATToolSupport();
 
     while(nWhich)
     {
@@ -1788,7 +1779,7 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
 
     // OD 09.01.2003 #i6467# - adjust view shell option to the same as for print
     SwPrtOptions aPrintOptions( GetViewFrame()->GetObjectShell()->GetTitle(0) );
-    SwView::MakeOptions( 0, aPrintOptions, 0, 0, false, 0, 0 );
+    aPrintOptions.MakeOptions( false );
     GetViewShell()->AdjustOptionsForPagePreview( aPrintOptions );
 
     IDocumentSettingAccess* pIDSA = pESh->getIDocumentSettingAccess();
@@ -1824,7 +1815,7 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     pPageUpBtn(0),
     pPageDownBtn(0),
     pScrollFill(new ScrollBarBox( &pViewFrame->GetWindow(),
-        pViewFrame->GetFrame()->GetParentFrame() ? 0 : WB_SIZEABLE )),
+        pViewFrame->GetFrame().GetParentFrame() ? 0 : WB_SIZEABLE )),
     mnPageCount( 0 ),
     // OD 09.01.2003 #106334#
     mbResetFormDesignMode( false ),
@@ -1909,15 +1900,13 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     delete pPageDownBtn;
 
 /*    SfxObjectShell* pDocSh = GetDocShell();
-    TypeId aType = TYPE( SfxTopViewFrame );
-
-    for( SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pDocSh, aType );
-        pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pDocSh, aType ) )
+    for( SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pDocSh );
+        pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pDocSh ) )
         if( pFrame != GetViewFrame() )
         {
             // es gibt noch eine weitere Sicht auf unser Dokument, also
             // aktiviere dieses
-            pFrame->GetFrame()->Appear();
+            pFrame->GetFrame().Appear();
             break;
         }
 */}
@@ -2094,8 +2083,11 @@ void  SwPagePreView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 
     //Aufruf der DocSzChgd-Methode der Scrollbars ist noetig, da vom maximalen
     //Scrollrange immer die halbe Hoehe der VisArea abgezogen wird.
-    if ( pVScrollbar )
-        ScrollDocSzChg();
+    if ( pVScrollbar &&
+             aTmpSize.Width() > 0 && aTmpSize.Height() > 0 )
+        {
+            ScrollDocSzChg();
+        }
 }
 
 /*--------------------------------------------------------------------
@@ -2415,72 +2407,6 @@ void SwPagePreView::ScrollDocSzChg()
 
 
 // alles zum Thema Drucken
-
-USHORT  SwPagePreView::Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pDlg )
-{
-    ViewShell* pSh = aViewWin.GetViewShell();
-    SfxPrinter* pPrinter = GetPrinter();
-    if( !pPrinter || !pPrinter->InitJob( &aViewWin,
-                pSh->HasDrawView() && !bIsAPI && pSh->GetDrawView()->GetModel()->HasTransparentObjects() ))
-        return ERRCODE_IO_ABORT;
-
-    SwWait aWait( *GetDocShell(), TRUE );
-
-    USHORT nRowCol = ( aViewWin.GetRow() << 8 ) +
-                        aViewWin.GetCol();  // Zeilen / DoppelSeiten
-
-    {
-        // die Felder aktualisieren
-        // ACHTUNG: hochcasten auf die EditShell, um die SS zu nutzen.
-        //          In den Methoden wird auf die akt. Shell abgefragt!
-        SwEditShell* pESh = (SwEditShell*)pSh;
-        SwDocStat aDocStat;
-        BOOL bIsModified = pESh->IsModified();
-
-        pESh->StartAllAction();
-        pESh->UpdateDocStat( aDocStat );
-        pSh->UpdateFlds();
-        pESh->EndAllAction();
-
-        if( !bIsModified )
-            pESh->ResetModified();
-    }
-
-    // Druckauftrag starten
-    SfxObjectShell *pObjShell = GetViewFrame()->GetObjectShell();
-    SwPrtOptions aOpts( pObjShell->GetTitle(0) );
-
-    BOOL bPrtPros;
-    BOOL bPrtPros_RTL;
-    SwView::MakeOptions( pDlg, aOpts, &bPrtPros, &bPrtPros_RTL, FALSE, GetPrinter(), GetDocShell()->GetDoc()->getPrintData() );
-
-    if( bNormalPrint )
-    {
-        if( bPrtPros )
-            pSh->PrintProspect( aOpts, rProgress, bPrtPros_RTL );
-        else
-            pSh->Prt( aOpts, &rProgress );
-    }
-    else
-    {
-        const SwPagePreViewPrtData* pPPVPD = pSh->GetDoc()->GetPreViewPrtData();
-        if( pPPVPD && pPPVPD->GetCol() && pPPVPD->GetRow() )
-        {
-            // Zeilen / Seiten
-            nRowCol = ( pPPVPD->GetRow() << 8 ) + pPPVPD->GetCol();
-        }
-        else
-            pPPVPD = 0;
-        pSh->PrintPreViewPage( aOpts, nRowCol, rProgress, pPPVPD );
-    }
-
-    return 0; // OK
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 SfxPrinter*  SwPagePreView::GetPrinter( BOOL bCreate )
 {

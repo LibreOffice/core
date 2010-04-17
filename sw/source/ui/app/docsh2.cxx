@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh2.cxx,v $
- * $Revision: 1.103.144.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,30 +27,19 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#ifndef _COM_SUN_STAR_LANG_XMultiServiceFactory_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
-#include <comphelper/processfactory.hxx>
-#endif
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 
+#include <comphelper/processfactory.hxx>
 
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svl/lckbitem.hxx>
 #include <svl/eitem.hxx>
-/*
-#include <svl/macitem.hxx>
-*/
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <unotools/pathoptions.hxx>
@@ -75,11 +61,11 @@
 #include <svx/svxids.hrc>
 #endif
 #include <svx/drawitem.hxx>
-#include <svx/svxacorr.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/svxacorr.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/fmshell.hxx>
 
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <svx/ofaitem.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <sfx2/app.hxx>
@@ -90,51 +76,33 @@
 #include <swunodef.hxx>
 #include <fmtcol.hxx>
 #include <swevent.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>         // fuer die aktuelle Sicht
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>        // Dokumenterzeugung
-#endif
 #include <wrtsh.hxx>
 #include <fldbas.hxx>
 #include <viewopt.hxx>
-#ifndef _GLOBDOC_HXX
 #include <globdoc.hxx>
-#endif
 #include <fldwrap.hxx>
-#ifndef _REDLNDLG_HXX
 #include <redlndlg.hxx>
-#endif
 #include <docstyle.hxx>
 #include <doc.hxx>
 #include <pagedesc.hxx>
 #include <shellio.hxx>
-#ifndef _PVIEW_HXX
 #include <pview.hxx>
-#endif
-#ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
-#endif
 #include <poolfmt.hxx>
 #include <usrpref.hxx>
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
 #include <unotxdoc.hxx>
 #include <acmplwrd.hxx>
 #include <swmodule.hxx>
-#include <unoobj.hxx>
+#include <unobaseclass.hxx>
 #include <swwait.hxx>
 #include <swcli.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <globals.h>
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
 #ifndef _APP_HRC
 #include <app.hrc>
 #endif
@@ -152,7 +120,7 @@
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <SwStyleNameMapper.hxx>
 
 #include <sfx2/fcontnr.hxx>
@@ -708,7 +676,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         bOnly = FALSE;
                     else if( IS_TYPE( SwPagePreView, pTmpFrm->GetViewShell()))
                     {
-                        pTmpFrm->GetFrame()->Appear();
+                        pTmpFrm->GetFrame().Appear();
                         bFound = TRUE;
                     }
                     if( bFound && !bOnly )
@@ -1059,7 +1027,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 else
                 {
                     // Neues Dokument erzeugen.
-                    SfxViewFrame *pFrame = SfxViewFrame::CreateViewFrame( *xDocSh, 0 );
+                    SfxViewFrame *pFrame = SfxViewFrame::LoadDocument( *xDocSh, 0 );
                     SwView      *pCurrView = (SwView*) pFrame->GetViewShell();
 
                     // Dokumenttitel setzen
@@ -1132,7 +1100,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                                         xRef( pClipCntnr );
 
                         pClipCntnr->CopyAnyData( FORMAT_RTF, (sal_Char*)
-                                        pStrm->GetData(), pStrm->GetSize() );
+                                    pStrm->GetData(), pStrm->GetEndOfData() );
                         pClipCntnr->CopyToClipboard(
                             GetView()? (Window*)&GetView()->GetEditWin() : 0 );
                         delete pStrm;
@@ -1201,18 +1169,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
             }
             break;
 
-        case SID_MAIL_PREPAREEXPORT:
-            {
-                //pWrtShell is not set in page preview
-                if(pWrtShell)
-                    pWrtShell->StartAllAction();
-                pDoc->UpdateFlds( NULL, false );
-                pDoc->EmbedAllLinks();
-                pDoc->RemoveInvisibleContent();
-                if(pWrtShell)
-                    pWrtShell->EndAllAction();
-            }
-            break;
         case SID_MAIL_EXPORT_FINISHED:
         {
                 if(pWrtShell)
@@ -1798,15 +1754,15 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* _pView )
 
         // Currently there can be only one view (layout) if the document is viewed in Web layout
         // So if there are more views we are in print layout and for toggling to Web layout all other views must be closed
-        SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, 0, FALSE);
+        SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, FALSE);
         do {
             if( pTmpFrm != pTempView->GetViewFrame() )
             {
                 pTmpFrm->DoClose();
-                pTmpFrm = SfxViewFrame::GetFirst(this, 0, FALSE);
+                pTmpFrm = SfxViewFrame::GetFirst(this, FALSE);
             }
             else
-                pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this, 0, FALSE);
+                pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this, FALSE);
 
         } while ( pTmpFrm );
 

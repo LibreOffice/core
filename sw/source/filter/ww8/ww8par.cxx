@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8par.cxx,v $
- * $Revision: 1.199.12.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,17 +46,16 @@
 #include <comphelper/docpasswordrequest.hxx>
 #include <hintids.hxx>
 
-#include <svx/tstpitem.hxx>
-#include <svx/cscoitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/cscoitem.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/lrspitem.hxx> // SvxLRSpaceItem
-#include <svx/ulspitem.hxx>
-#include <svx/langitem.hxx>
-// --> OD 2005-02-28 #i43427#
-#include <svx/opaqitem.hxx>
-// <--
+#include <editeng/paperinf.hxx>
+#include <editeng/lrspitem.hxx> // SvxLRSpaceItem
+#include <editeng/ulspitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>
@@ -989,7 +985,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetFmtAttr(const SwPosition& rPos,
                 SfxItemState eState = SFX_ITEM_DEFAULT;
                 if (const SfxItemSet *pSet = pNd->GetpSwAttrSet())
                     eState = pSet->GetItemState(RES_LR_SPACE, false);
-                if (eState != SFX_ITEM_SET)
+                if (eState != SFX_ITEM_SET && rReader.pCollA != NULL)
                     pItem = &(rReader.pCollA[rReader.nAktColl].maWordLR);
             }
 
@@ -1512,7 +1508,6 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
     maOldApos.push_back(false);
     maOldApos.swap(pRdr->maApos);
     maOldFieldStack.swap(pRdr->maFieldStack);
-    maFieldCtxStack.swap(pRdr->maNewFieldCtxStack);
 }
 
 void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
@@ -1559,7 +1554,6 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
         pRdr->pPlcxMan->RestoreAllPLCFx(maPLCFxSave);
     pRdr->maApos.swap(maOldApos);
     pRdr->maFieldStack.swap(maOldFieldStack);
-    pRdr->maNewFieldCtxStack.swap(maFieldCtxStack);
 }
 
 void SwWW8ImplReader::Read_HdFtFtnText( const SwNodeIndex* pSttIdx,
@@ -1630,7 +1624,9 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
         sTxt, aDate );
     aPostIt.SetTextObject(pOutliner);
 
+    pCtrlStck->NewAttr(*pPaM->GetPoint(), SvxCharHiddenItem(false, RES_CHRATR_HIDDEN));
     rDoc.InsertPoolItem(*pPaM, SwFmtFld(aPostIt), 0);
+    pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_CHRATR_HIDDEN);
 
     return 0;
 }
@@ -1648,7 +1644,7 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(long nStart, long nLen,
     pPaM->GetPoint()->nNode = pSttIdx->GetIndex() + 1;
     pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
 
-    SwFlyFrmFmt *pFrame = rDoc.MakeFlySection(FLY_AT_CNTNT, pPaM->GetPoint());
+    SwFlyFrmFmt *pFrame = rDoc.MakeFlySection(FLY_AT_PARA, pPaM->GetPoint());
 
     pFrame->SetFmtAttr(SwFmtFrmSize(ATT_MIN_SIZE, nPageWidth, MINLAY));
     pFrame->SetFmtAttr(SwFmtSurround(SURROUND_THROUGHT));
@@ -2163,7 +2159,7 @@ CharSet SwWW8ImplReader::GetCurrentCharSet()
             eSrcCharSet = maFontSrcCharSets.top();
         if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && (nCharFmt != -1))
             eSrcCharSet = pCollA[nCharFmt].GetCharSet();
-        if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
+        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && StyleExists(nAktColl))
             eSrcCharSet = pCollA[nAktColl].GetCharSet();
         if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
         { // patch from cmc for #i52786#
@@ -2221,10 +2217,13 @@ CharSet SwWW8ImplReader::GetCurrentCJKCharSet()
     {
         if (!maFontSrcCJKCharSets.empty())
             eSrcCharSet = maFontSrcCJKCharSets.top();
-        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && (nCharFmt != -1))
-            eSrcCharSet = pCollA[nCharFmt].GetCJKCharSet();
-        if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
-            eSrcCharSet = pCollA[nAktColl].GetCJKCharSet();
+        if (pCollA != NULL)
+        {
+            if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && (nCharFmt != -1))
+                eSrcCharSet = pCollA[nCharFmt].GetCJKCharSet();
+            if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
+                eSrcCharSet = pCollA[nAktColl].GetCJKCharSet();
+        }
         if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
         { // patch from cmc for #i52786#
             /*
@@ -2672,29 +2671,6 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
         case 0x15:
             if( !bSpec )        // Juristenparagraph
                 cInsert = '\xa7';
-            else
-            {
-                // 0x15 is special --> so it's our field end mark...;
-                // hmmm what about field marks not handled by us??, maybe a problem with nested fields;
-                // probably an area of bugs... [well release quick and release often....]
-                if (!maNewFieldCtxStack.empty() && pPaM!=NULL && pPaM->GetPoint()!=NULL)
-                {
-                    ::boost::scoped_ptr<WW8NewFieldCtx> pFieldCtx(maNewFieldCtxStack.back());
-                    maNewFieldCtxStack.pop_back();
-                    SwPosition aEndPos = *pPaM->GetPoint();
-                    SwPaM aFldPam(pFieldCtx->GetPtNode(), pFieldCtx->GetPtCntnt(), aEndPos.nNode, aEndPos.nContent.GetIndex());
-                    IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
-                    ::sw::mark::IFieldmark* pFieldmark =
-                        dynamic_cast< ::sw::mark::IFieldmark*>(pMarkAccess->makeMark(
-                            aFldPam,
-                            pFieldCtx->GetBookmarkName(),
-                            IDocumentMarkAccess::TEXT_FIELDMARK));
-                    OSL_ENSURE(pFieldmark!=NULL,
-                        "hmmm; why was the bookmark not created?");
-                    if (pFieldmark)
-                        pFieldCtx->SetCurrentFieldParamsTo(pFieldmark);
-                }
-            }
             break;
         case 0x9:
             cInsert = '\x9';    // Tab
@@ -3506,7 +3482,14 @@ void wwSectionManager::InsertSegments()
 
         bool bInsertSection = (aIter != aStart) ? (aIter->IsContinous() &&  bThisAndPreviousAreCompatible): false;
         bool bInsertPageDesc = !bInsertSection;
-        bool bProtected = !bUseEnhFields && SectionIsProtected(*aIter); // do we really  need this ?? I guess I have a different logic in editshell which disales this...
+        bool bProtected = SectionIsProtected(*aIter); // do we really  need this ?? I guess I have a different logic in editshell which disales this...
+    if (bUseEnhFields && mrReader.pWDop->fProtEnabled && aIter->IsNotProtected()) {
+        // here we have the special case that the whole document is protected, with the execption of this section.
+        // I want to address this when I do the section rework, so for the moment we disable the overall protection then...
+        mrReader.rDoc.set(IDocumentSettingAccess::PROTECT_FORM, false );
+    }
+
+
         if (bInsertPageDesc)
         {
             /*

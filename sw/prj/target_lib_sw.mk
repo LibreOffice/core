@@ -56,7 +56,7 @@ $(eval $(call gb_Library_add_linked_libs,sw,\
     cppu \
     cppuhelper \
     drawinglayer \
-    go \
+    editeng \
     i18nisolang1 \
     i18nutil \
     icuuc \
@@ -424,7 +424,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/unocore/swunohelper \
     sw/source/core/unocore/unobkm \
     sw/source/core/unocore/unochart \
-    sw/source/core/unocore/unoclbck \
     sw/source/core/unocore/unocoll \
     sw/source/core/unocore/unocrsrhelper \
     sw/source/core/unocore/unodraw \
@@ -453,7 +452,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/unocore/unotext \
     sw/source/core/unocore/unotextmarkup \
     sw/source/core/view/pagepreviewlayout \
-    sw/source/core/view/scrrect \
     sw/source/core/view/vdraw \
     sw/source/core/view/viewimp \
     sw/source/core/view/viewpg \

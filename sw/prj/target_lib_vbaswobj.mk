@@ -55,6 +55,7 @@ $(eval $(call gb_Library_add_linked_libs,vbaswobj,\
     comphelper \
     cppu \
     cppuhelper \
+    editeng \
     i18nisolang1 \
     sal \
     sfx \

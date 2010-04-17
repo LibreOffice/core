@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docst.cxx,v $
- * $Revision: 1.36.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,17 +39,18 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/newstyle.hxx>
+#include <sfx2/printer.hxx>
 #include <svl/macitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/languageoptions.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <swmodule.hxx>
 #include <wdocsh.hxx>
 #include <fmtfsize.hxx>
 #include <fchrfmt.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <undobj.hxx>
 #include <swundo.hxx>
@@ -1019,18 +1017,10 @@ USHORT SwDocShell::UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* 
                 pCurrWrtShell->StartAllAction();
                 pCurrWrtShell->GetFlyFrmAttr( aSet );
 
-                // JP 10.06.98: nur automatische Orientierungen uebernehmen
-/*              #61359# jetzt auch wieder alle Orientierungen
- *              const SfxPoolItem* pItem;
-                if( SFX_ITEM_SET == aSet.GetItemState( RES_VERT_ORIENT,
-                    FALSE, &pItem ) &&
-                    text::VertOrientation::NONE == ((SwFmtVertOrient*)pItem)->GetVertOrient())
-                    aSet.ClearItem( RES_VERT_ORIENT );
-
-                if( SFX_ITEM_SET == aSet.GetItemState( RES_HORI_ORIENT,
-                    FALSE, &pItem ) &&
-                    text::HoriOrientation::NONE == ((SwFmtHoriOrient*)pItem)->GetHoriOrient())
-                    aSet.ClearItem( RES_HORI_ORIENT );*/
+                // --> OD 2009-12-28 #i105535#
+                // no update of anchor attribute
+                aSet.ClearItem( RES_ANCHOR );
+                // <--
 
                 pFrm->SetFmtAttr( aSet );
 

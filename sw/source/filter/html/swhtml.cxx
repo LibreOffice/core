@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swhtml.cxx,v $
- * $Revision: 1.51.98.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,8 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-
+#include <sfx2/sfx.hrc>
+#include <svx/svxids.hrc>
 #ifdef DBG_UTIL
 #include <stdlib.h>
 #endif
@@ -54,25 +52,25 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 
-#include <svx/htmlcfg.hxx>
-#include <svx/linkmgr.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/blnkitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/flstitem.hxx>
+#include <svtools/htmlcfg.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/blnkitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/flstitem.hxx>
 
 
 #include <frmatr.hxx>
@@ -2837,7 +2835,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
         SwFrmFmt *pFrmFmt = aMoveFlyFrms[ --n ];
 
         const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
-        ASSERT( FLY_AT_CNTNT==rAnchor.GetAnchorId(),
+        ASSERT( FLY_AT_PARA == rAnchor.GetAnchorId(),
                 "Nur Auto-Rahmen brauchen eine Spezialbehandlung" );
         const SwPosition *pFlyPos = rAnchor.GetCntntAnchor();
         ULONG nFlyParaIdx = pFlyPos->nNode.GetIndex();
@@ -2862,7 +2860,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
             pAttrPam->GetPoint()->nContent.Assign( pAttrPam->GetCntntNode(),
                                                    aMoveFlyCnts[n] );
             SwFmtAnchor aAnchor( rAnchor );
-            aAnchor.SetType( FLY_AUTO_CNTNT );
+            aAnchor.SetType( FLY_AT_CHAR );
             aAnchor.SetAnchor( pAttrPam->GetPoint() );
             pFrmFmt->SetFmtAttr( aAnchor );
 
@@ -4411,27 +4409,23 @@ BOOL SwHTMLParser::HasCurrentParaFlys( BOOL bNoSurroundOnly,
     // sonst:               Der Absatz enthaelt irgendeinen Rahmen
     SwNodeIndex& rNodeIdx = pPam->GetPoint()->nNode;
 
-    SwFrmFmt* pFmt;
-    const SwFmtAnchor* pAnchor;
-    const SwPosition* pAPos;
     const SwSpzFrmFmts& rFrmFmtTbl = *pDoc->GetSpzFrmFmts();
 
-    USHORT i;
     BOOL bFound = FALSE;
-    for( i=0; i<rFrmFmtTbl.Count(); i++ )
+    for ( USHORT i=0; i<rFrmFmtTbl.Count(); i++ )
     {
-        pFmt = rFrmFmtTbl[i];
-        pAnchor = &pFmt->GetAnchor();
+        SwFrmFmt *const pFmt = rFrmFmtTbl[i];
+        SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
         // Ein Rahmen wurde gefunden, wenn
         // - er absatzgebunden ist, und
         // - im aktuellen Absatz verankert ist, und
         //   - jeder absatzgebunene Rahmen zaehlt, oder
         //   - (nur Rahmen oder umlauf zaehlen und ) der Rahmen keinen
         //     Umlauf besitzt
-
-        if( 0 != ( pAPos = pAnchor->GetCntntAnchor()) &&
-            (FLY_AT_CNTNT == pAnchor->GetAnchorId() ||
-             FLY_AUTO_CNTNT == pAnchor->GetAnchorId()) &&
+        SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
+        if (pAPos &&
+            ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+             (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
             pAPos->nNode == rNodeIdx )
         {
             if( !(bNoSurroundOnly || bSurroundOnly) )
@@ -5073,18 +5067,16 @@ void SwHTMLParser::InsertLineBreak()
         SwTxtNode* pTxtNd = rNodeIdx.GetNode().GetTxtNode();
         if( pTxtNd )
         {
-            SwFrmFmt* pFmt;
-            const SwFmtAnchor* pAnchor;
-            const SwPosition* pAPos;
             const SwSpzFrmFmts& rFrmFmtTbl = *pDoc->GetSpzFrmFmts();
 
             for( USHORT i=0; i<rFrmFmtTbl.Count(); i++ )
             {
-                pFmt = rFrmFmtTbl[i];
-                pAnchor = &pFmt->GetAnchor();
-                if( 0 != ( pAPos = pAnchor->GetCntntAnchor()) &&
-                    (FLY_AT_CNTNT == pAnchor->GetAnchorId() ||
-                     FLY_AUTO_CNTNT == pAnchor->GetAnchorId()) &&
+                SwFrmFmt *const pFmt = rFrmFmtTbl[i];
+                SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
+                SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
+                if (pAPos &&
+                    ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+                     (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                     pAPos->nNode == rNodeIdx &&
                     pFmt->GetSurround().GetSurround() != SURROUND_NONE )
                 {

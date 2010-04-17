@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh.hxx,v $
- * $Revision: 1.48.72.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -154,7 +151,8 @@ public:
     static rtl::OUString GetEventName( sal_Int32 nId );
 
     //Das Doc wird fuer SO-Datenaustausch benoetigt!
-    SwDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED, sal_Bool _bScriptingSupport = sal_True );
+    SwDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED );
+    SwDocShell( const sal_uInt64 i_nSfxCreationFlags );
     SwDocShell( SwDoc *pDoc, SfxObjectCreateMode eMode = SFX_CREATE_MODE_STANDARD );
     ~SwDocShell();
 
@@ -183,6 +181,7 @@ public:
 
     // Doc rausreichen aber VORSICHT
     inline SwDoc*                   GetDoc() { return pDoc; }
+    inline const SwDoc*             GetDoc() const { return pDoc; }
     IDocumentDeviceAccess*          getIDocumentDeviceAccess();
     const IDocumentSettingAccess*   getIDocumentSettingAccess() const;
     IDocumentChartDataProviderAccess*       getIDocumentChartDataProviderAccess();

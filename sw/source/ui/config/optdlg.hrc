@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optdlg.hrc,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,13 +93,13 @@
 #define CB_CHAR_HIDDEN  61
 // Print-Extra-Page
 #define CB_PGRF            61
-#define CB_PTAB            62
-#define CB_PDRAW           63
+//#define CB_PTAB            62 merged with CB_PGRF in printerpullpages
+//#define CB_PDRAW         63   removed in printerpullpages
 #define CB_LEFTP           64
 #define CB_RIGHTP          65
-#define CB_REVERSE         66
+//#define CB_REVERSE         66 removed in printerpullpages
 #define CB_PROSPECT        67
-#define CB_SINGLEJOBS      68
+//#define CB_SINGLEJOBS      68 removed in printerpullpages
 #define CB_CTRLFLD         69
 #define CB_PAPERFROMSETUP  70
 #define FL_1              71

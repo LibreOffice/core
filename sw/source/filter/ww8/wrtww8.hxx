@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrtww8.hxx,v $
- * $Revision: 1.76.172.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,7 +106,7 @@ class WW8_WrPlcFld;
 class WW8_WrMagicTable;
 class WW8_WrPlcFtnEdn;
 class WW8_WrPlcPn;
-class WW8_WrPlcPostIt;
+class WW8_WrPlcAnnotations;
 class MSWordSections;
 class WW8_WrPlcTxtBoxes;
 class WW8_WrPct;            // Verwaltung
@@ -488,7 +485,7 @@ public:
     WW8_WrPlcPn* pChpPlc;
     MSWordAttrIter* pChpIter;
     MSWordStyles* pStyles;
-    WW8_WrPlcPostIt* pAtn;
+    WW8_WrPlcAnnotations* pAtn;
     WW8_WrPlcTxtBoxes *pTxtBxs, *pHFTxtBxs;
 
     const sw::Frame *mpParentFrame; //If set we are exporting content inside
@@ -709,6 +706,7 @@ public:
 
     /// Write the data of the form field
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark ) = 0;
+    virtual void WriteHyperlinkData( const ::sw::mark::IFieldmark& rFieldmark ) = 0;
 
     virtual void DoComboBox(const rtl::OUString &rName,
                     const rtl::OUString &rHelp,
@@ -1076,6 +1074,7 @@ public:
 
     /// Write the data of the form field
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark );
+    virtual void WriteHyperlinkData( const ::sw::mark::IFieldmark& rFieldmark );
 
     /// Fields.
     WW8_WrPlcFld* CurrentFieldPlc() const;
@@ -1149,16 +1148,30 @@ public:
     void Append( WW8_CP nCp, const SwFmtFtn& rFtn );
 };
 
-class WW8_WrPlcPostIt : public WW8_WrPlcSubDoc  // Doppel-Plc fuer PostIts
+struct WW8_Annotation
+{
+    const OutlinerParaObject* mpRichText;
+    String msSimpleText;
+    String msOwner;
+    DateTime maDateTime;
+    WW8_Annotation(const SwPostItField* pPostIt);
+    WW8_Annotation(const SwRedlineData* pRedline);
+};
+
+class WW8_WrPlcAnnotations : public WW8_WrPlcSubDoc  // Doppel-Plc fuer PostIts
 {
 private:
     //No copying
-    WW8_WrPlcPostIt(const WW8_WrPlcPostIt&);
-    WW8_WrPlcPostIt& operator=(WW8_WrPlcPostIt&);
+    WW8_WrPlcAnnotations(const WW8_WrPlcAnnotations&);
+    WW8_WrPlcAnnotations& operator=(WW8_WrPlcAnnotations&);
+    std::set<const SwRedlineData*> maProcessedRedlines;
 public:
-    WW8_WrPlcPostIt() {}
+    WW8_WrPlcAnnotations() {}
+    ~WW8_WrPlcAnnotations();
 
-    void Append( WW8_CP nCp, const SwPostItField& rPostIt );
+    void Append( WW8_CP nCp, const SwPostItField* pPostIt );
+    void Append( WW8_CP nCp, const SwRedlineData* pRedLine );
+    bool IsNewRedlineComment( const SwRedlineData* pRedLine );
     bool WriteTxt( WW8Export& rWrt );
     void WritePlc( WW8Export& rWrt ) const;
 };

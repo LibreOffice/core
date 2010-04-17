@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8par5.cxx,v $
- * $Revision: 1.110.40.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,21 +42,15 @@
 #include <svl/zformat.hxx>
 #include <sfx2/linkmgr.hxx>
 
-#ifndef _UCBHELPER_CONTENT_HXX_
 #include <ucbhelper/content.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENTBROKER_HXX_
 #include <ucbhelper/contentbroker.hxx>
-#endif
 #include <ucbhelper/commandenvironment.hxx>
 
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #include <hintids.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/langitem.hxx>
 #include <fmtfld.hxx>
 #include <fmtanchr.hxx>
 #include <pam.hxx>              // fuer SwPam
@@ -88,15 +79,18 @@
 #include <fmtclds.hxx>
 #include <pagedesc.hxx>
 #include <SwStyleNameMapper.hxx>
-
+#include <IMark.hxx>
 
 #include "ww8scan.hxx"          // WW8FieldDesc
 #include "ww8par.hxx"
 #include "ww8par2.hxx"
 #include "writerhelper.hxx"
 #include "fields.hxx"
+#include <unotools/fltrcfg.hxx>
 
 #include <algorithm> // #i24377#
+
+//#define WW_NATIVE_TOC 0
 
 #define MAX_FIELDLEN 64000
 
@@ -104,6 +98,7 @@
 
 using namespace ::com::sun::star;
 using namespace sw::util;
+using namespace sw::mark;
 using namespace std; // #i24377#
 using namespace nsSwDocInfoSubType;
 
@@ -328,9 +323,11 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
 
     //"_Toc*" and "_Hlt*" are unnecessary
     const String* pName = pB->GetName();
+#if !defined(WW_NATIVE_TOC)
     if(    !pName || pName->EqualsIgnoreCaseAscii( "_Toc", 0, 4 )
         || pName->EqualsIgnoreCaseAscii( "_Hlt", 0, 4 ) )
         return 0;
+#endif
 
     //JP 16.11.98: ToUpper darf auf keinen Fall gemacht werden, weil der
     //Bookmark- name ein Hyperlink-Ziel sein kann!
@@ -672,6 +669,9 @@ sal_uInt16 SwWW8ImplReader::End_Field()
     if (!pF || !pF->EndPosIsFieldEnd())
         return nRet;
 
+    const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
+    sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
+
     ASSERT(!maFieldStack.empty(), "Empty field stack\n");
     if (!maFieldStack.empty())
     {
@@ -683,9 +683,42 @@ sal_uInt16 SwWW8ImplReader::End_Field()
         nRet = maFieldStack.back().mnFieldId;
         switch (nRet)
         {
+        case 70:
+        if (bUseEnhFields && pPaM!=NULL && pPaM->GetPoint()!=NULL) {
+            SwPosition aEndPos = *pPaM->GetPoint();
+            SwPaM aFldPam( maFieldStack.back().GetPtNode(), maFieldStack.back().GetPtCntnt(), aEndPos.nNode, aEndPos.nContent.GetIndex());
+            IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
+            IFieldmark *pFieldmark = dynamic_cast<IFieldmark*>( pMarksAccess->makeFieldBookmark(
+                        aFldPam, maFieldStack.back().GetBookmarkName(), ::rtl::OUString::createFromAscii(ODF_FORMTEXT ) ) );
+            ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
+            if (pFieldmark!=NULL) {
+                const IFieldmark::parameter_map_t& pParametersToAdd = maFieldStack.back().getParameters();
+                pFieldmark->GetParameters()->insert(pParametersToAdd.begin(), pParametersToAdd.end());
+            }
+        }
+        break;
+#if defined(WW_NATIVE_TOC)
+        case 8: // TOX_INDEX
+        case 13: // TOX_CONTENT
+        case 88: // HYPERLINK
+        case 37: // REF
+        if (pPaM!=NULL && pPaM->GetPoint()!=NULL) {
+
+            SwPosition aEndPos = *pPaM->GetPoint();
+            SwPaM aFldPam( maFieldStack.back().GetPtNode(), maFieldStack.back().GetPtCntnt(), aEndPos.nNode, aEndPos.nContent.GetIndex());
+            SwFieldBookmark *pFieldmark=(SwFieldBookmark*)rDoc.makeFieldBookmark(aFldPam, maFieldStack.back().GetBookmarkName(), maFieldStack.back().GetBookmarkType());
+            ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
+            if (pFieldmark!=NULL) {
+                const IFieldmark::parameter_map_t& pParametersToAdd = maFieldStack.back().getParameters();
+                pFieldmark->GetParameters()->insert(pParameters.begin(), pParameters.end());
+            }
+        }
+        break;
+#else
             case 88:
                 pCtrlStck->SetAttr(*pPaM->GetPoint(),RES_TXTATR_INETFMT);
             break;
+#endif
             case 36:
             case 68:
                 //Move outside the section associated with this type of field
@@ -703,6 +736,10 @@ bool AcceptableNestedField(sal_uInt16 nFieldCode)
 {
     switch (nFieldCode)
     {
+#if defined(WW_NATIVE_TOC)
+    case 8:  // allow recursive field in TOC...
+    case 13: // allow recursive field in TOC...
+#endif
         case 36:
         case 68:
         case 79:
@@ -740,6 +777,32 @@ FieldEntry &FieldEntry::operator=(const FieldEntry &rOther) throw()
     Swap(aTemp);
     return *this;
 }
+
+::rtl::OUString FieldEntry::GetBookmarkName()
+{
+    return msBookmarkName;
+}
+
+::rtl::OUString FieldEntry::GetBookmarkType()
+{
+    return msMarkType;
+}
+
+void FieldEntry::SetBookmarkName(::rtl::OUString bookmarkName)
+{
+    msBookmarkName=bookmarkName;
+}
+
+void FieldEntry::SetBookmarkType(::rtl::OUString bookmarkType)
+{
+    msMarkType=bookmarkType;
+}
+
+
+::sw::mark::IFieldmark::parameter_map_t& FieldEntry::getParameters() {
+    return maParams;
+}
+
 
 // Read_Field liest ein Feld ein oder, wenn es nicht gelesen werden kann,
 // wird 0 zurueckgegeben, so dass das Feld vom Aufrufer textuell gelesen wird.
@@ -2070,6 +2133,17 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, String& rStr )
 
     String sName(GetMappedBookmark(sOrigName));
 
+#if defined(WW_NATIVE_TOC)
+    if (1) {
+    ::rtl::OUString aBookmarkName=::rtl::OUString::createFromAscii("_REF");
+    maFieldStack.back().SetBookmarkName(aBookmarkName);
+    maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ODF_PAGEREF));
+    maFieldStack.back().AddParam(rtl::OUString(), sName);
+    return FLD_TEXT;
+    }
+#endif
+
+
     SwGetRefField aFld(
         (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ), sName,
         REF_BOOKMARK, 0, REF_PAGE );
@@ -2216,7 +2290,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, String& rStr )
         */
         SfxItemSet aFlySet( rDoc.GetAttrPool(), RES_FRMATR_BEGIN,
             RES_FRMATR_END-1 );
-        aFlySet.Put( SwFmtAnchor( FLY_IN_CNTNT ) );
+        aFlySet.Put( SwFmtAnchor( FLY_AS_CHAR ) );
         aFlySet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
         pFlyFmtOfJustInsertedGraphic = rDoc.Insert( *pPaM,
                                                     aGrfName,
@@ -2768,6 +2842,16 @@ USHORT lcl_GetMaxValidWordTOCLevel(const SwForm &rForm)
 
 eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
 {
+#if defined(WW_NATIVE_TOC)
+    if (1) {
+    ::rtl::OUString aBookmarkName=::rtl::OUString::createFromAscii("_TOC");
+    maFieldStack.back().SetBookmarkName(aBookmarkName);
+    maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ODF_TOC));
+//     maFieldStack.back().AddParam(::rtl::OUString::createFromAscii("Description"), aFormula.sToolTip);
+    return FLD_TEXT;
+    }
+#endif
+
     if (pF->nLRes < 3)
         return FLD_TEXT;      // ignore (#i25440#)
 
@@ -3286,6 +3370,16 @@ eF_ResT SwWW8ImplReader::Read_F_Shape(WW8FieldDesc* /*pF*/, String& /*rStr*/)
 
 eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
 {
+#if defined(WW_NATIVE_TOC)
+    if (1) {
+    ::rtl::OUString aBookmarkName=::rtl::OUString::createFromAscii("_HYPERLINK");
+    maFieldStack.back().SetBookmarkName(aBookmarkName);
+    maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ODF_HYPERLINK));
+//     maFieldStack.back().AddParam(::rtl::OUString::createFromAscii("Description"), aFormula.sToolTip);
+    return FLD_TEXT;
+    }
+#endif
+
     String sURL, sTarget, sMark;
     bool bDataImport = false;
     //HYPERLINk "filename" [switches]

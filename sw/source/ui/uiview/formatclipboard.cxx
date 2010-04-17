@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: formatclipboard.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,19 +48,19 @@
 // header for class SdrView
 #include <svx/svdview.hxx>
 //SvxBrushItem
-#include <svx/brshitem.hxx>
-#include <svx/shaditem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/shaditem.hxx>
 #include <frmatr.hxx>
 // header for class SvxBoxInfoItem
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 // header for class SvxFmtBreakItem
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 // header for class SwFmtLayoutSplit
 #include <fmtlsplt.hxx>
 // header for class SvxFmtKeepItem
-#include <svx/keepitem.hxx>
+#include <editeng/keepitem.hxx>
 // header for class SvxFrameDirectionItem
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <paratr.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtrowsplt.hxx>
