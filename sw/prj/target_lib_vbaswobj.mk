@@ -1,0 +1,133 @@
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2009 by Sun Microsystems, Inc.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.	If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+
+$(eval $(call gb_Library_Library,vbaswobj))
+
+$(eval $(call gb_Library_set_include,vbaswobj,\
+    $$(INCLUDE) \
+    -I$(WORKDIR)/inc/sw/vbaswobj \
+    -I$(WORKDIR)/inc/sw/ \
+    -I$(SRCDIR)/sw/inc \
+    -I$(SRCDIR)/sw/inc/pch \
+    -I$(SRCDIR)/sw/source/core/inc \
+    -I$(SRCDIR)/sw/source/filter/inc \
+    -I$(SRCDIR)/sw/source/ui/inc \
+    -I$(OUTDIR)/inc/sw \
+    -I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_set_defs,vbaswobj,\
+    $$(DEFS) \
+    -DVBA_OOBUILD_HACK \
+))
+
+$(eval $(call gb_Library_set_ldflags,vbaswobj,\
+    $$(LDFLAGS) \
+    -Wl$(COMMA)-O1 \
+    -Wl$(COMMA)-z$(COMMA)noexecstack \
+))
+
+$(eval $(call gb_Library_add_linked_libs,vbaswobj,\
+    comphelper \
+    cppu \
+    cppuhelper \
+    i18nisolang1 \
+    sal \
+    sfx \
+    svl \
+    svt \
+    svx \
+    svxcore \
+    sw \
+    tk \
+    tl \
+    utl \
+    vbahelper \
+    vcl \
+    stl \
+))
+
+$(eval $(call gb_Library_add_exception_objects,vbaswobj,\
+    sw/source/ui/vba/service \
+    sw/source/ui/vba/vbadocument \
+    sw/source/ui/vba/vbasections \
+    sw/source/ui/vba/vbadialog \
+    sw/source/ui/vba/vbawrapformat \
+    sw/source/ui/vba/vbafont \
+    sw/source/ui/vba/vbaheaderfooterhelper \
+    sw/source/ui/vba/vbarangehelper \
+    sw/source/ui/vba/vbaaddin \
+    sw/source/ui/vba/vbaautotextentry \
+    sw/source/ui/vba/vbarange \
+    sw/source/ui/vba/vbadocumentproperties \
+    sw/source/ui/vba/vbastyle \
+    sw/source/ui/vba/vbapane \
+    sw/source/ui/vba/vbaglobals \
+    sw/source/ui/vba/vbatemplate \
+    sw/source/ui/vba/vbaaddins \
+    sw/source/ui/vba/vbaview \
+    sw/source/ui/vba/vbaheaderfooter \
+    sw/source/ui/vba/vbabookmarks \
+    sw/source/ui/vba/vbaoptions \
+    sw/source/ui/vba/vbadialogs \
+    sw/source/ui/vba/vbapalette \
+    sw/source/ui/vba/vbaparagraph \
+    sw/source/ui/vba/vbafind \
+    sw/source/ui/vba/vbasection \
+    sw/source/ui/vba/vbabookmark \
+    sw/source/ui/vba/vbaapplication \
+    sw/source/ui/vba/vbawindow \
+    sw/source/ui/vba/vbareplacement \
+    sw/source/ui/vba/vbatable \
+    sw/source/ui/vba/vbaselection \
+    sw/source/ui/vba/vbasystem \
+    sw/source/ui/vba/vbainformationhelper \
+    sw/source/ui/vba/vbapagesetup \
+    sw/source/ui/vba/vbafield \
+    sw/source/ui/vba/vbatables \
+    sw/source/ui/vba/vbavariable \
+    sw/source/ui/vba/vbadocuments \
+    sw/source/ui/vba/vbaparagraphformat \
+    sw/source/ui/vba/vbaborders \
+    sw/source/ui/vba/vbavariables \
+    sw/source/ui/vba/vbastyles \
+    sw/source/ui/vba/vbapanes \
+    sw/source/ui/vba/wordvbahelper \
+))
+
+$(call gb_Library_get_headers_target,vbaswobj) : $(WORKDIR)/CppuUnpack/vbaswobj
+$(call gb_Library_get_clean_target,vbaswobj) : $(WORKDIR)/Clean/CppuUnpack/vbaswobj
+
+.PHONY : $(WORKDIR)/Clean/CppuUnpack/vbaswobj
+$(WORKDIR)/Clean/CppuUnpack/vbaswobj :
+    -$(call gb_Helper_abbreviate_dirs,\
+        rm -rf $(WORKDIR)/inc/sw/vbaswobj $(WORKDIR)/CppuUnpack/vbaswobj)
+
+$(WORKDIR)/CppuUnpack/vbaswobj : | $(gb_CppuTarget_CPPUMAKERTARGET)
+    $(call gb_Helper_abbreviate_dirs,\
+        $(gb_CppuTarget_CPPUMAKERCOMMAND) -O$(WORKDIR)/inc/sw/vbaswobj -BUCR $(OUTDIR)/bin/oovbaapi.rdb -X$(OUTDIR)/bin/types.rdb && mkdir -p $(dir $@) && touch $@)
+

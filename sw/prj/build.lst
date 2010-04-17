@@ -3,7 +3,6 @@ sw	sw										usr1	-	all	sw_mkout NULL
 sw	sw\inc									nmake		-	all	sw_inc NULL
 sw	sw\uiconfig\layout									nmake	-	all	sw_layout NULL
 sw	sw\prj									get		-	all	sw_prj NULL
-sw	sw\source\ui\inc						nmake	-	all	sw_uinc NULL
 sw	sw\source\core\inc						get		-	all	sw_cinc NULL
 sw	sw\source\filter\inc					get		-	all	sw_finc NULL
 sw	sw\res									get		-	all	sw_res NULL
@@ -11,7 +10,7 @@ sw	sw\win\res								get		-	all	sw_wres NULL
 sw	sw\win\imglst							get		-	all	sw_wimg NULL
 sw	sw\sdi									nmake	-	all	sw_sdi NULL
 sw  sw\source\core\bastyp                   nmake   -   all sw_bast sw_inc NULL
-sw	sw\source\ui\app						nmake	-	all	sw_app sw_sdi sw_uinc sw_inc NULL
+sw	sw\source\ui\app						nmake	-	all	sw_app sw_sdi sw_inc NULL
 sw	sw\source\ui\cctrl						nmake	-	all	sw_cctrl sw_inc NULL
 sw	sw\source\ui\chrdlg						nmake	-	all	sw_chrdl sw_inc NULL
 sw	sw\source\ui\config						nmake	-	all	sw_conf sw_inc NULL
@@ -23,19 +22,19 @@ sw	sw\source\ui\envelp						nmake	-	all	sw_envlp sw_inc NULL
 sw	sw\source\ui\fldui						nmake	-	all	sw_fldui sw_inc NULL
 sw	sw\source\ui\fmtui						nmake	-	all	sw_fmtui sw_inc NULL
 sw	sw\source\ui\frmdlg						nmake	-	all	sw_frmdl sw_inc NULL
-sw	sw\source\ui\globdoc					nmake	-	all	sw_globd sw_uinc sw_inc NULL
+sw	sw\source\ui\globdoc					nmake	-	all	sw_globd sw_inc NULL
 sw	sw\source\ui\index						nmake	-	all	sw_index sw_inc NULL
 sw	sw\source\ui\lingu						nmake	-	all	sw_ling sw_inc NULL
 sw	sw\source\ui\misc						nmake	-	all	sw_misc sw_sdi sw_inc NULL
 sw	sw\source\ui\ribbar						nmake	-	all	sw_rbbar sw_inc NULL
-sw	sw\source\ui\shells						nmake	-	all	sw_shell sw_uinc sw_sdi sw_inc NULL
+sw	sw\source\ui\shells						nmake	-	all	sw_shell sw_sdi sw_inc NULL
 sw      sw\source\ui\smartmenu                                          nmake   -       all     sw_smartmenu sw_inc NULL
 sw      sw\source\ui\table                                              nmake   -       all     sw_table sw_inc NULL
 sw	sw\source\ui\uiview						nmake	-	all	sw_uivw sw_sdi sw_inc NULL
 sw	sw\source\ui\uno						nmake	-	all	sw_uiuno sw_sdi sw_inc NULL
 sw	sw\source\ui\vba						nmake	-	all	sw_vba sw_inc NULL
 sw	sw\source\ui\utlui						nmake	-	all	sw_utlui sw_inc NULL
-sw	sw\source\ui\web						nmake	-	all	sw_web sw_uinc sw_sdi sw_inc NULL
+sw	sw\source\ui\web						nmake	-	all	sw_web sw_sdi sw_inc NULL
 sw	sw\source\ui\wrtsh						nmake	-	all	sw_wrtsh sw_inc NULL
 sw	sw\source\core\attr						nmake	-	all	sw_attr sw_inc NULL
 sw	sw\source\core\crsr						nmake	-	all	sw_crsr sw_inc NULL
