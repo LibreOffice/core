@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: framectr.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,9 +41,9 @@
 class BibDataManager;
 class BibFrameCtrl_Impl;
 namespace com{namespace sun{namespace star{
-    namespace form{
+    namespace form { namespace runtime {
         class XFormController;
-    }
+    } }
 }}}
 class BibStatusDispatch
 {
@@ -83,7 +80,7 @@ friend class BibFrameCtrl_Impl;
 
     DECL_STATIC_LINK( BibFrameController_Impl, DisposeHdl, void* );
 
-    sal_Bool                    SaveModified(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& xController);
+    sal_Bool                    SaveModified(const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& xController);
 public:
                                 BibFrameController_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > & xComponent,
                                                         BibDataManager* pDatMan);

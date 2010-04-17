@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: richtextmodel.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,12 +37,14 @@
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/style/VerticalAlignment.hpp>
 /** === end UNO includes === **/
+
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/guarding.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 
@@ -67,6 +66,7 @@ namespace frm
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::util;
+    using namespace ::com::sun::star::style;
 
     namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
@@ -120,6 +120,7 @@ namespace frm
         m_aTabStop               = _pOriginal->m_aTabStop;
         m_aBackgroundColor       = _pOriginal->m_aBackgroundColor;
         m_aBorderColor           = _pOriginal->m_aBorderColor;
+        m_aVerticalAlignment     = _pOriginal->m_aVerticalAlignment;
         m_sDefaultControl        = _pOriginal->m_sDefaultControl;
         m_sHelpText              = _pOriginal->m_sHelpText;
         m_sHelpURL               = _pOriginal->m_sHelpURL;
@@ -201,9 +202,10 @@ namespace frm
         REGISTER_PROP_2( RICH_TEXT,             m_bReallyActAsRichText,     BOUND, MAYBEDEFAULT );
         REGISTER_PROP_2( HIDEINACTIVESELECTION, m_bHideInactiveSelection,   BOUND, MAYBEDEFAULT );
 
-        REGISTER_VOID_PROP_2( TABSTOP,          m_aTabStop,         sal_Bool,  BOUND, MAYBEDEFAULT );
-        REGISTER_VOID_PROP_2( BACKGROUNDCOLOR,  m_aBackgroundColor, sal_Int32, BOUND, MAYBEDEFAULT );
-        REGISTER_VOID_PROP_2( BORDERCOLOR,      m_aBorderColor,     sal_Int32, BOUND, MAYBEDEFAULT );
+        REGISTER_VOID_PROP_2( TABSTOP,          m_aTabStop,             sal_Bool,           BOUND, MAYBEDEFAULT );
+        REGISTER_VOID_PROP_2( BACKGROUNDCOLOR,  m_aBackgroundColor,     sal_Int32,          BOUND, MAYBEDEFAULT );
+        REGISTER_VOID_PROP_2( BORDERCOLOR,      m_aBorderColor,         sal_Int32,          BOUND, MAYBEDEFAULT );
+        REGISTER_VOID_PROP_2( VERTICAL_ALIGN,   m_aVerticalAlignment,   VerticalAlignment,  BOUND, MAYBEDEFAULT );
 
         // properties which exist only for compatibility with the css.swt.UnoControlEditModel,
         // since we replace the default implementation for this service
@@ -455,6 +457,7 @@ namespace frm
         case PROPERTY_ID_TABSTOP:
         case PROPERTY_ID_BACKGROUNDCOLOR:
         case PROPERTY_ID_BORDERCOLOR:
+        case PROPERTY_ID_VERTICAL_ALIGN:
             /* void */
             break;
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: baside3.cxx,v $
- * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,7 +61,7 @@
 #include <helpid.hrc>
 #include <bastype2.hxx>
 #include <svx/svdview.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1368,9 +1365,14 @@ void DialogWindow::Deactivating()
         BasicIDE::MarkDocumentModified( GetDocument() );
 }
 
-void DialogWindow::PrintData( Printer* pPrinter )
+sal_Int32 DialogWindow::countPages( Printer* pPrinter )
 {
-    pEditor->PrintData( pPrinter, CreateQualifiedName() );
+    return pEditor->countPages( pPrinter );
+}
+
+void DialogWindow::printPage( sal_Int32 nPage, Printer* pPrinter )
+{
+    pEditor->printPage( nPage, pPrinter, CreateQualifiedName() );
 }
 
 void DialogWindow::DataChanged( const DataChangedEvent& rDCEvt )

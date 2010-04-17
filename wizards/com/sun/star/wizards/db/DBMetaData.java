@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DBMetaData.java,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +29,7 @@ package com.sun.star.wizards.db;
 import com.sun.star.awt.XWindow;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.ui.dialogs.XExecutableDialog;
-import java.util.*;
 
-// import com.sun.star.io.IOException;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -48,7 +43,6 @@ import com.sun.star.container.XHierarchicalNameAccess;
 import com.sun.star.container.XHierarchicalNameContainer;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
-// import com.sun.star.container.XNamed;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
@@ -57,7 +51,6 @@ import com.sun.star.sdbc.DataType;
 import com.sun.star.sdb.XOfficeDatabaseDocument;
 import com.sun.star.sdb.XDocumentDataSource;
 import com.sun.star.sdb.tools.XConnectionTools;
-// import com.sun.star.sdbcx.XAppend;
 import com.sun.star.sdbcx.XColumnsSupplier;
 
 import com.sun.star.ucb.XSimpleFileAccess;
@@ -67,14 +60,10 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.util.XCloseable;
 import com.sun.star.util.XNumberFormatsSupplier;
 
-import com.sun.star.wizards.common.Properties;
-import com.sun.star.wizards.common.*;
-// import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.task.XInteractionHandler;
 import com.sun.star.sdb.XFormDocumentsSupplier;
 import com.sun.star.sdb.XQueryDefinitionsSupplier;
 import com.sun.star.sdb.XReportDocumentsSupplier;
-// import com.sun.star.sdbc.ColumnValue;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XDatabaseMetaData;
 import com.sun.star.sdbc.XDataSource;
@@ -82,17 +71,31 @@ import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XRow;
 import com.sun.star.sdb.XCompletedConnection;
 import com.sun.star.lang.Locale;
-// import com.sun.star.util.XFlushable;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.sdb.XQueriesSupplier;
+import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbcx.XTablesSupplier;
+import com.sun.star.wizards.common.Configuration;
+import com.sun.star.wizards.common.Desktop;
+import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.NamedValueCollection;
+import com.sun.star.wizards.common.NumberFormatter;
+import com.sun.star.wizards.common.Properties;
+import com.sun.star.wizards.common.Resource;
+import com.sun.star.wizards.common.SystemDialog;
+import com.sun.star.uno.Any;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DBMetaData
 {
 
     private XNameAccess xQueryNames;
     public XDatabaseMetaData xDBMetaData;
-    private XDataSource xDataSource;
+    private XDataSource m_dataSource;
+    private XPropertySet m_dataSourceSettings;
     private XOfficeDatabaseDocument xModel;
     private XPropertySet xDataSourcePropertySet;
     public String[] DataSourceNames;
@@ -150,13 +153,10 @@ public class DBMetaData
     private int iMaxColumnNameLength = -1;
     private int iMaxTableNameLength = -1;
     private boolean bPasswordIsRequired;
-    // private boolean bFormatKeysareset = false;
     private final static int NOLIMIT = 9999999;
     protected final static int RID_DB_COMMON = 1000;
     private final static int INVALID = 9999999;
     public TypeInspector oTypeInspector;
-    private PropertyValue[] aInfoPropertyValues = null;
-    private boolean bisSQL92CheckEnabled = false;
     private NumberFormatter oNumberFormatter = null;
     private long lDateCorrection = INVALID;
     private boolean bdisposeConnection = false;
@@ -219,9 +219,9 @@ public class DBMetaData
         {
             this.xMSF = xMSF;
             xDatabaseContext = (XInterface) xMSF.createInstance("com.sun.star.sdb.DatabaseContext");
-            xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xDatabaseContext);
-            XInterface xInteractionHandler = (XInterface) xMSF.createInstance("com.sun.star.sdb.InteractionHandler");
-            oInteractionHandler = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class, xInteractionHandler);
+            xNameAccess = UnoRuntime.queryInterface( XNameAccess.class, xDatabaseContext );
+            XInterface xInteractionHandler = (XInterface) xMSF.createInstance("com.sun.star.task.InteractionHandler");
+            oInteractionHandler = UnoRuntime.queryInterface( XInteractionHandler.class, xInteractionHandler );
             DataSourceNames = xNameAccess.getElementNames();
         }
         catch (Exception exception)
@@ -262,6 +262,7 @@ public class DBMetaData
         return getTableNamesAsNameAccess().hasByName(_stablename);
     }
 
+    @SuppressWarnings("unchecked")
     public void setTableByName(String _tableName)
     {
         CommandObject oTableObject = new CommandObject(_tableName, com.sun.star.sdb.CommandType.TABLE);
@@ -330,10 +331,10 @@ public class DBMetaData
                 {
                     oCommand = getQueryNamesAsNameAccess().getByName(Name);
                 }
-                XColumnsSupplier xCommandCols = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, oCommand);
-                xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oCommand);
+                XColumnsSupplier xCommandCols = UnoRuntime.queryInterface( XColumnsSupplier.class, oCommand );
+                xPropertySet = UnoRuntime.queryInterface( XPropertySet.class, oCommand );
 // TODO: Performance leak getColumns() take very long.
-                xColumns = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xCommandCols.getColumns());
+                xColumns = UnoRuntime.queryInterface( XNameAccess.class, xCommandCols.getColumns() );
             }
             catch (Exception exception)
             {
@@ -378,14 +379,14 @@ public class DBMetaData
 
     public XNameAccess getQueryNamesAsNameAccess()
     {
-        XQueriesSupplier xDBQueries = (XQueriesSupplier) UnoRuntime.queryInterface(XQueriesSupplier.class, DBConnection);
-        xQueryNames = (XNameAccess) xDBQueries.getQueries();
+        XQueriesSupplier xDBQueries = UnoRuntime.queryInterface( XQueriesSupplier.class, DBConnection );
+        xQueryNames = xDBQueries.getQueries();
         return xQueryNames;
     }
 
     public XNameAccess getTableNamesAsNameAccess()
     {
-        XTablesSupplier xDBTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class, DBConnection);
+        XTablesSupplier xDBTables = UnoRuntime.queryInterface( XTablesSupplier.class, DBConnection );
         XNameAccess xTableNames = xDBTables.getTables();
         return xTableNames;
     }
@@ -412,7 +413,7 @@ public class DBMetaData
                 return TableNames;
             }
         }
-        TableNames = (String[]) getTableNamesAsNameAccess().getElementNames();
+        TableNames = getTableNamesAsNameAccess().getElementNames();
         return TableNames;
     }
 
@@ -458,7 +459,7 @@ public class DBMetaData
             int itablecount = xDBMetaData.getMaxTablesInSelect();
             if (itablecount == 0)
             {
-                return this.NOLIMIT;
+                return DBMetaData.NOLIMIT;
             }
             else
             {
@@ -487,7 +488,7 @@ public class DBMetaData
         iMaxColumnsInSelect = xDBMetaData.getMaxColumnsInSelect();
         if (iMaxColumnsInSelect == 0)
         {
-            iMaxColumnsInSelect = this.NOLIMIT;
+            iMaxColumnsInSelect = DBMetaData.NOLIMIT;
         }
     }
 
@@ -496,7 +497,7 @@ public class DBMetaData
         iMaxColumnsInGroupBy = xDBMetaData.getMaxColumnsInGroupBy();
         if (iMaxColumnsInGroupBy == 0)
         {
-            iMaxColumnsInGroupBy = this.NOLIMIT;
+            iMaxColumnsInGroupBy = DBMetaData.NOLIMIT;
         }
     }
 
@@ -505,7 +506,7 @@ public class DBMetaData
         iMaxColumnsInTable = xDBMetaData.getMaxColumnsInTable();
         if (iMaxColumnsInTable == 0)
         {
-            iMaxColumnsInTable = this.NOLIMIT;
+            iMaxColumnsInTable = DBMetaData.NOLIMIT;
         }
         return iMaxColumnsInTable;
     }
@@ -515,8 +516,6 @@ public class DBMetaData
         try
         {
             xDBMetaData = DBConnection.getMetaData();
-            XChild xChild = (XChild) UnoRuntime.queryInterface(XChild.class, DBConnection);
-            Object oDataSource = xChild.getParent();
             getDataSourceInterfaces();
             setMaxColumnsInGroupBy();
             setMaxColumnsInSelect();
@@ -527,24 +526,28 @@ public class DBMetaData
         }
     }
 
+    private void ensureDataSourceSettings() throws UnknownPropertyException, WrappedTargetException
+    {
+        if ( m_dataSourceSettings != null )
+            return;
+
+        XPropertySet dataSourceProperties = UnoRuntime.queryInterface( XPropertySet.class, getDataSource() );
+        m_dataSourceSettings = UnoRuntime.queryInterface( XPropertySet.class, dataSourceProperties.getPropertyValue( "Settings" ) );
+    }
+
     public boolean isSQL92CheckEnabled()
     {
+        boolean isSQL92CheckEnabled = false;
         try
         {
-            if (aInfoPropertyValues == null)
-            {
-                aInfoPropertyValues = (PropertyValue[]) AnyConverter.toArray(this.xDataSourcePropertySet.getPropertyValue("Info"));
-                if (Properties.hasPropertyValue(aInfoPropertyValues, "EnableSQL92Check"))
-                {
-                    bisSQL92CheckEnabled = AnyConverter.toBoolean(Properties.getPropertyValue(aInfoPropertyValues, "EnableSQL92Check"));
-                }
-            }
+            ensureDataSourceSettings();
+            isSQL92CheckEnabled = AnyConverter.toBoolean( m_dataSourceSettings.getPropertyValue( "EnableSQL92Check" ) );
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-        return bisSQL92CheckEnabled;
+        return isSQL92CheckEnabled;
     }
 
     public String verifyName(String _sname, int _maxlen)
@@ -562,12 +565,12 @@ public class DBMetaData
 
     public XDataSource getDataSource()
     {
-        if (xDataSource == null)
+        if (m_dataSource == null)
         {
             try
             {
                     Object oDataSource = xNameAccess.getByName(DataSourceName);
-                    xDataSource = (XDataSource) UnoRuntime.queryInterface(XDataSource.class, oDataSource);
+                    m_dataSource = UnoRuntime.queryInterface( XDataSource.class, oDataSource );
             }
             catch (com.sun.star.container.NoSuchElementException e)
             {
@@ -576,7 +579,7 @@ public class DBMetaData
             {
             }
         }
-        return xDataSource;
+        return m_dataSource;
     }
 
     private void setDataSourceByName(String _DataSourceName, boolean bgetInterfaces)
@@ -585,7 +588,7 @@ public class DBMetaData
         {
             this.DataSourceName = _DataSourceName;
             getDataSourceInterfaces();
-            XDocumentDataSource xDocu = (XDocumentDataSource) UnoRuntime.queryInterface(XDocumentDataSource.class, getDataSource());
+            XDocumentDataSource xDocu = UnoRuntime.queryInterface( XDocumentDataSource.class, getDataSource() );
             if (xDocu != null)
             {
                 xModel = xDocu.getDatabaseDocument();
@@ -599,8 +602,8 @@ public class DBMetaData
 
     public void getDataSourceInterfaces() throws Exception
     {
-        xCompleted = (XCompletedConnection) UnoRuntime.queryInterface(XCompletedConnection.class, getDataSource());
-        xDataSourcePropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, getDataSource());
+        xCompleted = UnoRuntime.queryInterface( XCompletedConnection.class, getDataSource() );
+        xDataSourcePropertySet = UnoRuntime.queryInterface( XPropertySet.class, getDataSource() );
         bPasswordIsRequired = ((Boolean) xDataSourcePropertySet.getPropertyValue("IsPasswordRequired")).booleanValue();
     }
 
@@ -608,22 +611,21 @@ public class DBMetaData
     {
         try
         {
-            com.sun.star.sdbc.XConnection xConnection = null;
+            XConnection xConnection = null;
             if (Properties.hasPropertyValue(curproperties, "ActiveConnection"))
             {
-                xConnection = (com.sun.star.sdbc.XConnection) AnyConverter.toObject(com.sun.star.sdbc.XConnection.class,
-                        Properties.getPropertyValue(curproperties, "ActiveConnection"));
+                xConnection = UnoRuntime.queryInterface( XConnection.class, Properties.getPropertyValue( curproperties, "ActiveConnection" ) );
                 if (xConnection != null)
                 {
-                    com.sun.star.container.XChild child = (com.sun.star.container.XChild) UnoRuntime.queryInterface(com.sun.star.container.XChild.class, xConnection);
+                    com.sun.star.container.XChild child = UnoRuntime.queryInterface( com.sun.star.container.XChild.class, xConnection );
 
-                    xDataSource = (XDataSource) UnoRuntime.queryInterface(XDataSource.class, child.getParent());
-                    XDocumentDataSource xDocu = (XDocumentDataSource) UnoRuntime.queryInterface(XDocumentDataSource.class, this.xDataSource);
+                    m_dataSource = UnoRuntime.queryInterface( XDataSource.class, child.getParent() );
+                    XDocumentDataSource xDocu = UnoRuntime.queryInterface( XDocumentDataSource.class, m_dataSource );
                     if (xDocu != null)
                     {
                         xModel = xDocu.getDatabaseDocument();
                     }
-                    XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xDataSource);
+                    XPropertySet xPSet = UnoRuntime.queryInterface( XPropertySet.class, m_dataSource );
                     if (xPSet != null)
                     {
                         DataSourceName = AnyConverter.toString(xPSet.getPropertyValue("Name"));
@@ -646,13 +648,13 @@ public class DBMetaData
             }
             else if (Properties.hasPropertyValue(curproperties, "DataSource"))
             {
-                xDataSource = (XDataSource) UnoRuntime.queryInterface(XDataSource.class, Properties.getPropertyValue(curproperties, "DataSource"));
-                XDocumentDataSource xDocu = (XDocumentDataSource) UnoRuntime.queryInterface(XDocumentDataSource.class, this.xDataSource);
+                m_dataSource = UnoRuntime.queryInterface( XDataSource.class, Properties.getPropertyValue( curproperties, "DataSource" ) );
+                XDocumentDataSource xDocu = UnoRuntime.queryInterface( XDocumentDataSource.class, this.m_dataSource );
                 if (xDocu != null)
                 {
                     xModel = xDocu.getDatabaseDocument();
                 }
-                return getConnection(xDataSource);
+                return getConnection(m_dataSource);
             }
             if (Properties.hasPropertyValue(curproperties, "DatabaseLocation"))
             {
@@ -692,7 +694,7 @@ public class DBMetaData
         try
         {
             this.DBConnection = _DBConnection;
-            this.ConnectionTools = (XConnectionTools) UnoRuntime.queryInterface(XConnectionTools.class, this.DBConnection);
+            this.ConnectionTools = UnoRuntime.queryInterface( XConnectionTools.class, this.DBConnection );
             getDataSourceObjects();
             return true;
         }
@@ -703,7 +705,7 @@ public class DBMetaData
         }
     }
 
-    private boolean getConnection(XDataSource xDataSource)
+    private boolean getConnection(XDataSource _dataSource)
     {
         Resource oResource = new Resource(xMSF, "Database", "dbw");
         try
@@ -717,20 +719,19 @@ public class DBMetaData
             getDataSourceInterfaces();
             if (bPasswordIsRequired == false)
             {
-                DBConnection = xDataSource.getConnection("", "");
+                DBConnection = _dataSource.getConnection("", "");
                 bgetConnection = true;
             }
             else
             {
-                XInterface xInteractionHandler = (XInterface) xMSF.createInstance("com.sun.star.sdb.InteractionHandler");
-                XInteractionHandler oInteractionHandler2 = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class, xInteractionHandler);
+                XInteractionHandler xInteractionHandler = UnoRuntime.queryInterface( XInteractionHandler.class, xMSF.createInstance("com.sun.star.task.InteractionHandler") );
                 boolean bExitLoop = true;
                 do
                 {
-                    XCompletedConnection xCompleted2 = (XCompletedConnection) UnoRuntime.queryInterface(XCompletedConnection.class, xDataSource);
+                    XCompletedConnection xCompleted2 = UnoRuntime.queryInterface( XCompletedConnection.class, _dataSource );
                     try
                     {
-                        DBConnection = xCompleted2.connectWithCompletion(oInteractionHandler2);
+                        DBConnection = xCompleted2.connectWithCompletion( xInteractionHandler );
                         bgetConnection = DBConnection != null;
                         if (bgetConnection == false)
                         {
@@ -755,8 +756,8 @@ public class DBMetaData
             }
             else
             {
-                xConnectionComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, DBConnection);
-                ConnectionTools = (XConnectionTools) UnoRuntime.queryInterface(XConnectionTools.class, DBConnection);
+                xConnectionComponent = UnoRuntime.queryInterface( XComponent.class, DBConnection );
+                ConnectionTools = UnoRuntime.queryInterface( XConnectionTools.class, DBConnection );
                 getDataSourceObjects();
             }
             return bgetConnection;
@@ -804,6 +805,25 @@ public class DBMetaData
         }
     }
 
+    public boolean supportsPrimaryKeys()
+    {
+        boolean supportsPrimaryKeys = false;
+        try
+        {
+            ensureDataSourceSettings();
+            Any primaryKeySupport = (Any)m_dataSourceSettings.getPropertyValue( "PrimaryKeySupport" );
+            if ( AnyConverter.isVoid( primaryKeySupport ) )
+                supportsPrimaryKeys = supportsCoreSQLGrammar();
+            else
+                supportsPrimaryKeys = AnyConverter.toBoolean( primaryKeySupport );
+        }
+        catch ( Exception ex )
+        {
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, ex );
+        }
+        return supportsPrimaryKeys;
+    }
+
     public boolean supportsCoreSQLGrammar()
     {
         try
@@ -831,17 +851,16 @@ public class DBMetaData
     {
         try
         {
-            XQueryDefinitionsSupplier xQueryDefinitionsSuppl = (XQueryDefinitionsSupplier) UnoRuntime.queryInterface(XQueryDefinitionsSupplier.class, xDataSource);
+            XQueryDefinitionsSupplier xQueryDefinitionsSuppl = UnoRuntime.queryInterface( XQueryDefinitionsSupplier.class, m_dataSource );
             XNameAccess xQueryDefs = xQueryDefinitionsSuppl.getQueryDefinitions();
-            XSingleServiceFactory xSSFQueryDefs = (XSingleServiceFactory) UnoRuntime.queryInterface(XSingleServiceFactory.class, xQueryDefs);
+            XSingleServiceFactory xSSFQueryDefs = UnoRuntime.queryInterface( XSingleServiceFactory.class, xQueryDefs );
             Object oQuery = xSSFQueryDefs.createInstance(); //"com.sun.star.sdb.QueryDefinition"
-            XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oQuery);
+            XPropertySet xPSet = UnoRuntime.queryInterface( XPropertySet.class, oQuery );
 
             String s = _oSQLQueryComposer.m_xQueryAnalyzer.getQuery();
             xPSet.setPropertyValue("Command", s);
 
-            XNameContainer xNameCont = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, xQueryDefs);
-            XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xQueryDefs);
+            XNameContainer xNameCont = UnoRuntime.queryInterface( XNameContainer.class, xQueryDefs );
             ConnectionTools.getObjectNames().checkNameForCreate(com.sun.star.sdb.CommandType.QUERY, _QueryName);
             xNameCont.insertByName(_QueryName, oQuery);
             return true;
@@ -885,23 +904,23 @@ public class DBMetaData
 
     public XHierarchicalNameAccess getReportDocuments()
     {
-        XReportDocumentsSupplier xReportDocumentSuppl = (XReportDocumentsSupplier) UnoRuntime.queryInterface(XReportDocumentsSupplier.class, this.xModel);
+        XReportDocumentsSupplier xReportDocumentSuppl = UnoRuntime.queryInterface( XReportDocumentsSupplier.class, this.xModel );
         xReportDocumentSuppl.getReportDocuments();
-        XHierarchicalNameAccess xReportHier = (XHierarchicalNameAccess) UnoRuntime.queryInterface(XHierarchicalNameAccess.class, xReportDocumentSuppl.getReportDocuments());
+        XHierarchicalNameAccess xReportHier = UnoRuntime.queryInterface( XHierarchicalNameAccess.class, xReportDocumentSuppl.getReportDocuments() );
         return xReportHier;
     }
 
     public XHierarchicalNameAccess getFormDocuments()
     {
-        XFormDocumentsSupplier xFormDocumentSuppl = (XFormDocumentsSupplier) UnoRuntime.queryInterface(XFormDocumentsSupplier.class, xModel);
-        XHierarchicalNameAccess xFormHier = (XHierarchicalNameAccess) UnoRuntime.queryInterface(XHierarchicalNameAccess.class, xFormDocumentSuppl.getFormDocuments());
+        XFormDocumentsSupplier xFormDocumentSuppl = UnoRuntime.queryInterface( XFormDocumentsSupplier.class, xModel );
+        XHierarchicalNameAccess xFormHier = UnoRuntime.queryInterface( XHierarchicalNameAccess.class, xFormDocumentSuppl.getFormDocuments() );
         return xFormHier;
     }
 
     public boolean hasFormDocumentByName(String _sFormName)
     {
-        XFormDocumentsSupplier xFormDocumentSuppl = (XFormDocumentsSupplier) UnoRuntime.queryInterface(XFormDocumentsSupplier.class, xModel);
-        XNameAccess xFormNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xFormDocumentSuppl.getFormDocuments());
+        XFormDocumentsSupplier xFormDocumentSuppl = UnoRuntime.queryInterface( XFormDocumentsSupplier.class, xModel );
+        XNameAccess xFormNameAccess = UnoRuntime.queryInterface( XNameAccess.class, xFormDocumentSuppl.getFormDocuments() );
         return xFormNameAccess.hasByName(_sFormName);
     }
 
@@ -924,83 +943,33 @@ public class DBMetaData
      * @param _xDocNameAccess
      * @param _bcreateTemplate  describes the type of the document: "form" or "report"
      */
-    public void addDatabaseDocument(XComponent _xComponent, XHierarchicalNameAccess _xDocNameAccess, boolean _bcreateTemplate)
+    public void addDatabaseDocument(XComponent _xComponent, XHierarchicalNameAccess _xDocNameAccess, boolean i_createTemplate)
     {
         try
         {
-            PropertyValue[] aDocProperties;
-            XModel xDocumentModel = (XModel) UnoRuntime.queryInterface(XModel.class, _xComponent);
-            String sPath = xDocumentModel.getURL();
-            String basename = FileAccess.getBasename(sPath, "/");
-            XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, _xComponent);
-            _xComponent.dispose();
+            XModel xDocumentModel = UnoRuntime.queryInterface( XModel.class, _xComponent );
+            String documentURL = xDocumentModel.getURL();
+            String basename = FileAccess.getBasename(documentURL, "/");
+            XCloseable xCloseable = UnoRuntime.queryInterface( XCloseable.class, _xComponent );
             xCloseable.close(false);
-            if (_bcreateTemplate)
-            {
-                aDocProperties = new PropertyValue[5];
-            }
-            else
-            {
-                aDocProperties = new PropertyValue[4];
-            }
-            aDocProperties[0] = Properties.createProperty("Name", basename);
-            aDocProperties[1] = Properties.createProperty("Parent", _xDocNameAccess);
-            aDocProperties[2] = Properties.createProperty("URL", sPath);
-            aDocProperties[3] = Properties.createProperty("DocumentTitle", basename);
-            if (_bcreateTemplate)
-            {
-                aDocProperties[4] = Properties.createProperty("AsTemplate", new Boolean(_bcreateTemplate));
-            }
-            XMultiServiceFactory xDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, _xDocNameAccess);
-            Object oDBDocument = xDocMSF.createInstanceWithArguments("com.sun.star.sdb.DocumentDefinition", aDocProperties);
-            XHierarchicalNameContainer xHier = (XHierarchicalNameContainer) UnoRuntime.queryInterface(XHierarchicalNameContainer.class, _xDocNameAccess);
+
+            NamedValueCollection creationArgs = new NamedValueCollection();
+            creationArgs.put( "Name", basename );
+            creationArgs.put( "URL", documentURL );
+            creationArgs.put( "AsTemplate", new Boolean( i_createTemplate ) );
+            XMultiServiceFactory xDocMSF = UnoRuntime.queryInterface( XMultiServiceFactory.class, _xDocNameAccess );
+            Object oDBDocument = xDocMSF.createInstanceWithArguments( "com.sun.star.sdb.DocumentDefinition", creationArgs.getPropertyValues() );
+            XHierarchicalNameContainer xHier = UnoRuntime.queryInterface( XHierarchicalNameContainer.class, _xDocNameAccess );
             String sdocname = Desktop.getUniqueName(_xDocNameAccess, basename);
             xHier.insertByHierarchicalName(sdocname, oDBDocument);
             XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
-            XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class, xInterface);
-            xSimpleFileAccess.kill(sPath);
+            XSimpleFileAccess xSimpleFileAccess = UnoRuntime.queryInterface( XSimpleFileAccess.class, xInterface );
+            xSimpleFileAccess.kill(documentURL);
         }
         catch (Exception e)
         {
             e.printStackTrace(System.out);
         }
-    }
-
-    public XComponent[] openDatabaseDocument(String _docname, boolean _bAsTemplate, boolean _bOpenInDesign, XHierarchicalNameAccess _xDocuments)
-    {
-        XComponent[] xRetComponent = new XComponent[2];
-        try
-        {
-            XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, _xDocuments);
-            PropertyValue[] aPropertyValues = new PropertyValue[4];
-            aPropertyValues[0] = Properties.createProperty("OpenMode", _bOpenInDesign ? "openDesign" : "open");
-            aPropertyValues[1] = Properties.createProperty("ActiveConnection", this.DBConnection);
-            aPropertyValues[2] = Properties.createProperty("DocumentTitle", _docname);
-            aPropertyValues[3] = Properties.createProperty("AsTemplate", new Boolean(_bAsTemplate));
-            XHierarchicalNameContainer xHier = (XHierarchicalNameContainer) UnoRuntime.queryInterface(XHierarchicalNameContainer.class, _xDocuments);
-            if (xHier.hasByHierarchicalName(_docname))
-            {
-                xRetComponent[0] = (XComponent) UnoRuntime.queryInterface(XComponent.class, xHier.getByHierarchicalName(_docname));
-                xRetComponent[1] = xComponentLoader.loadComponentFromURL(_docname, "", 0, aPropertyValues);
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(System.out);
-        }
-        return xRetComponent;
-    }
-
-    public XComponent[] openFormDocument(String _sformname, boolean _bOpenInDesign)
-    {
-        XHierarchicalNameAccess xFormDocuments = getFormDocuments();
-        return openDatabaseDocument(_sformname, false, _bOpenInDesign, xFormDocuments);
-    }
-
-    public XComponent[] openReportDocument(String _sreportname, boolean _bAsTemplate, boolean _bOpenInDesign)
-    {
-        XHierarchicalNameAccess xReportDocuments = getReportDocuments();
-        return openDatabaseDocument(_sreportname, _bAsTemplate, _bOpenInDesign, xReportDocuments);
     }
 
     public void createTypeInspector() throws SQLException
@@ -1018,7 +987,7 @@ public class DBMetaData
         String[] sColValues = null;
         try
         {
-            XRow xRow = (XRow) UnoRuntime.queryInterface(XRow.class, _xResultSet);
+            XRow xRow = UnoRuntime.queryInterface( XRow.class, _xResultSet );
             Vector aColVector = new Vector();
             while (_xResultSet.next())
             {
@@ -1067,9 +1036,9 @@ public class DBMetaData
         try
         {
             XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
-            XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class, xInterface);
+            XSimpleFileAccess xSimpleFileAccess = UnoRuntime.queryInterface( XSimpleFileAccess.class, xInterface );
             String storepath = FileAccess.getOfficePath(xMSF, "Temp", xSimpleFileAccess) + "/" + _storename;
-            XStorable xStoreable = (XStorable) UnoRuntime.queryInterface(XStorable.class, _xcomponent);
+            XStorable xStoreable = UnoRuntime.queryInterface( XStorable.class, _xcomponent );
             PropertyValue[] oStoreProperties = new PropertyValue[1];
             oStoreProperties[0] = Properties.createProperty("FilterName", "writer8");
             storepath += ".odt";
@@ -1118,12 +1087,12 @@ public class DBMetaData
         try
         {
             Object oDialog = xMSF.createInstance("com.sun.star.sdb.ErrorMessageDialog");
-            XInitialization xInitialization = (XInitialization) UnoRuntime.queryInterface(XInitialization.class, oDialog);
+            XInitialization xInitialization = UnoRuntime.queryInterface( XInitialization.class, oDialog );
             PropertyValue[] aPropertyValue = new PropertyValue[2];
             aPropertyValue[0] = Properties.createProperty("SQLException", oSQLException);
             aPropertyValue[1] = Properties.createProperty("ParentWindow", _xWindow);
             xInitialization.initialize(aPropertyValue);
-            XExecutableDialog xExecutableDialog = (XExecutableDialog) UnoRuntime.queryInterface(XExecutableDialog.class, oDialog);
+            XExecutableDialog xExecutableDialog = UnoRuntime.queryInterface( XExecutableDialog.class, oDialog );
             xExecutableDialog.execute();
         }
         catch (com.sun.star.uno.Exception ex)
@@ -1139,7 +1108,7 @@ public class DBMetaData
         xNameAccess = null;
         xDatabaseContext = null;
         xDBMetaData = null;
-        xDataSource = null;
+        m_dataSource = null;
         xModel = null;
         xCompleted = null;
         xDataSourcePropertySet = null;

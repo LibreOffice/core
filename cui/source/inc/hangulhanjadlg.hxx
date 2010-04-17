@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hangulhanjadlg.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,9 +34,9 @@
 #include <vcl/fixed.hxx>
 #include <vcl/scrbar.hxx>
 #include <svx/checklbx.hxx>
-#include <svx/hangulhanja.hxx>
+#include <editeng/hangulhanja.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <com/sun/star/linguistic2/XConversionDictionaryList.hpp>
 #include <svtools/valueset.hxx>
 
@@ -146,7 +143,7 @@ namespace svx
     public:
         HangulHanjaConversionDialog(
                 Window* _pParent,
-                HangulHanjaConversion::ConversionDirection _ePrimaryDirection );
+                editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection );
         ~HangulHanjaConversionDialog( );
 
     public:
@@ -173,20 +170,20 @@ namespace svx
         // retrieves the current suggestion
         String  GetCurrentSuggestion( ) const;
 
-        void        SetConversionFormat( HangulHanjaConversion::ConversionFormat _eType );
-        HangulHanjaConversion::ConversionFormat    GetConversionFormat( ) const;
+        void        SetConversionFormat( editeng::HangulHanjaConversion::ConversionFormat _eType );
+        editeng::HangulHanjaConversion::ConversionFormat    GetConversionFormat( ) const;
 
         void            SetByCharacter( sal_Bool _bByCharacter );
         sal_Bool        GetByCharacter( ) const;
 
-        void            SetConversionDirectionState( sal_Bool _bTryBothDirections, HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection );
+        void            SetConversionDirectionState( sal_Bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection );
 
         // should text which does not match the primary conversion direction be ignored?
         sal_Bool        GetUseBothDirections( ) const;
 
         // get current conversion direction to use
         // (return argument if GetUseBothDirections is true)
-        HangulHanjaConversion::ConversionDirection  GetDirection( HangulHanjaConversion::ConversionDirection eDefaultDirection ) const;
+        editeng::HangulHanjaConversion::ConversionDirection GetDirection( editeng::HangulHanjaConversion::ConversionDirection eDefaultDirection ) const;
 
         // enables or disbales the checkboxes for ruby formatted replacements
         void            EnableRubySupport( sal_Bool bVal );

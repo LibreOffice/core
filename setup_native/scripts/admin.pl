@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: admin.pl,v $
-#
-# $Revision: 1.1.2.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -1075,7 +1071,7 @@ sub register_one_extension
         $executable = "./" . $executable;
     }
 
-    my $systemcall = $executable . " add --shared --verbose " . "\"" . $localextension . "\"" . " -env:UserInstallation=file://" . $temppath . " 2\>\&1 |";
+    my $systemcall = $executable . " add --shared --verbose --suppress-license " . "\"" . $localextension . "\"" . " -env:UserInstallation=file://" . $temppath . " 2\>\&1 |";
 
     print "... $systemcall\n";
 

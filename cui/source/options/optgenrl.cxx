@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optgenrl.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +33,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/saveopt.hxx>
+#include <svl/intitem.hxx>
 
 #define _SVX_OPTGENRL_CXX
 
@@ -96,6 +94,7 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
 
     SfxTabPage( pParent, CUI_RES(RID_SFXPAGE_GENERAL), rCoreSet ),
 
+    aAddrFrm        ( this, CUI_RES( GB_ADDRESS ) ),
     aCompanyLbl     ( this, CUI_RES( FT_COMPANY ), true ),
     aCompanyEdit    ( this, CUI_RES( ED_COMPANY ), INDEX_NOTSET, &aCompanyLbl ),
     aNameLbl        ( this, CUI_RES( FT_NAME ), true ),
@@ -126,9 +125,7 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
     aFaxMailLbl     ( this, CUI_RES( FT_FAXMAIL ), true ),
     aFaxEdit        ( this, CUI_RES( ED_FAX ), 0, &aFaxMailLbl ),
     aEmailEdit      ( this, CUI_RES( ED_EMAIL ), 1, &aFaxMailLbl ),
-    aAddrFrm        ( this, CUI_RES( GB_ADDRESS ) ),
     aUseDataCB      ( this, CUI_RES( CB_USEDATA ) ),
-
     pImpl           ( new GeneralTabPage_Impl )
 
 {

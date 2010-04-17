@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: framectr.cxx,v $
- * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +47,7 @@
 #include "bibliography.hrc"
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/form/XConfirmDeleteListener.hpp>
-#include <com/sun/star/form/XFormController.hpp>
+#include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
@@ -384,7 +381,7 @@ sal_Bool canInsertRecords(const Reference< beans::XPropertySet>& _rxCursorSet)
 /* -----------------------------08.05.2002 08:58------------------------------
 
  ---------------------------------------------------------------------------*/
-sal_Bool BibFrameController_Impl::SaveModified(const Reference< form::XFormController>& xController)
+sal_Bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::XFormController>& xController)
 {
     if (!xController.is())
         return sal_False;
@@ -592,7 +589,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         }
         else if(aCommand.EqualsAscii("Bib/InsertRecord"))
         {
-            Reference<form::XFormController > xFormCtrl = pDatMan->GetFormController();
+            Reference<form::runtime::XFormController > xFormCtrl = pDatMan->GetFormController();
             if(SaveModified(xFormCtrl))
             {
                 try

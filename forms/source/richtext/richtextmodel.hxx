@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: richtextmodel.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,6 +71,7 @@ namespace frm
         ::com::sun::star::uno::Any  m_aTabStop;
         ::com::sun::star::uno::Any  m_aBackgroundColor;
         ::com::sun::star::uno::Any  m_aBorderColor;
+        ::com::sun::star::uno::Any  m_aVerticalAlignment;
         ::rtl::OUString             m_sDefaultControl;
         ::rtl::OUString             m_sHelpText;
         ::rtl::OUString             m_sHelpURL;
@@ -115,7 +113,7 @@ namespace frm
         DECLARE_DEFAULT_LEAF_XTOR( ORichTextModel );
 
         // UNO
-        DECLARE_UNO3_AGG_DEFAULTS( ONavigationBarModel, OControlModel );
+        DECLARE_UNO3_AGG_DEFAULTS( ORichTextModel, OControlModel );
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo

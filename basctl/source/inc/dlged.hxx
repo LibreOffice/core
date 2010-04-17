@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlged.hxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,6 +98,8 @@ class DlgEditor: public SfxBroadcaster
 private:
     DECL_LINK( PaintTimeout, Timer * );
     DECL_LINK( MarkTimeout, Timer * );
+
+    void Print( Printer* pPrinter, const String& rTitle );
 
 protected:
     ScrollBar*          pHScroll;
@@ -199,7 +198,8 @@ public:
     void            ShowProperties();
     void            UpdatePropertyBrowserDelayed();
 
-    void            PrintData( Printer*, const String& rTitle );    // not working yet
+    sal_Int32       countPages( Printer* pPrinter );
+    void            printPage( sal_Int32 nPage, Printer* pPrinter, const String& );
 
     bool            AdjustPageSize();
 

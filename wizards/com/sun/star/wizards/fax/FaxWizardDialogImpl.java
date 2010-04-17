@@ -3,13 +3,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FaxWizardDialogImpl.java,v $
- *
- * $Revision: 1.10.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -212,7 +208,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
         running = false;
     }
 
-    public void finishWizard()
+    public boolean finishWizard()
     {
         switchToStep(getCurrentStep(), getMaxStep());
         myFaxDoc.setWizardTemplateDocInfo(resources.resFaxWizardDialog_title, resources.resTemplateDescription);
@@ -239,7 +235,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
                     int answer = SystemDialog.showMessageBox(xMSF, xControl.getPeer(), "MessBox", VclWindowPeerAttribute.YES_NO + VclWindowPeerAttribute.DEF_NO, resources.resOverwriteWarning);
                     if (answer == 3) // user said: no, do not overwrite....
                     {
-                        return;
+                        return false;
                     }
                 }
             }
@@ -297,7 +293,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
             xDialog.endExecute();
             running = false;
         }
-
+        return true;
     }
 
     public void closeDocument()

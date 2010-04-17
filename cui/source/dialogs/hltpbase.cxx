@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hltpbase.cxx,v $
- * $Revision: 1.37.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +62,7 @@ SvxFramesComboBox::SvxFramesComboBox ( Window* pParent, const ResId& rResId,
 {
     TargetList* pList = new TargetList;
     SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : 0;
-    SfxFrame* pFrame = pViewFrame ? pViewFrame->GetTopFrame() : 0;
+    SfxFrame* pFrame = pViewFrame ? &pViewFrame->GetTopFrame() : 0;
     if ( pFrame )
     {
         pFrame->GetTargetList(*pList);

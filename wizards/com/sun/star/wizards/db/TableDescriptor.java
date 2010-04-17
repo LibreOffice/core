@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TableDescriptor.java,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,6 @@ import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.wizards.common.JavaTools;
-import com.sun.star.wizards.ui.WizardDialog;
 import java.util.Vector;
 
 import com.sun.star.awt.VclWindowPeerAttribute;
@@ -120,13 +116,13 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         {
             // XTablesSupplier xDBTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class, DBConnection);
             // xTableNames = xDBTables.getTables();
-            xTableAppend = (XAppend) UnoRuntime.queryInterface(XAppend.class, getTableNamesAsNameAccess());
-            xTableDrop = (XDrop) UnoRuntime.queryInterface(XDrop.class, getTableNamesAsNameAccess());
-            xTableDataDescriptorFactory = (XDataDescriptorFactory) UnoRuntime.queryInterface(XDataDescriptorFactory.class, getTableNamesAsNameAccess());
+            xTableAppend = UnoRuntime.queryInterface( XAppend.class, getTableNamesAsNameAccess() );
+            xTableDrop = UnoRuntime.queryInterface( XDrop.class, getTableNamesAsNameAccess() );
+            xTableDataDescriptorFactory = UnoRuntime.queryInterface( XDataDescriptorFactory.class, getTableNamesAsNameAccess() );
             xPropTableDataDescriptor = xTableDataDescriptorFactory.createDataDescriptor();
-            XColumnsSupplier xColumnsSupplier = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, xPropTableDataDescriptor);
+            XColumnsSupplier xColumnsSupplier = UnoRuntime.queryInterface( XColumnsSupplier.class, xPropTableDataDescriptor );
             xNameAccessColumns = xColumnsSupplier.getColumns();
-            xColumnDataDescriptorFactory = (XDataDescriptorFactory) UnoRuntime.queryInterface(XDataDescriptorFactory.class, xNameAccessColumns);
+            xColumnDataDescriptorFactory = UnoRuntime.queryInterface( XDataDescriptorFactory.class, xNameAccessColumns );
             try
             {
                 createTypeInspector();

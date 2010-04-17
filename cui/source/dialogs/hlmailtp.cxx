@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hlmailtp.cxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -313,7 +310,7 @@ IMPL_LINK ( SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, void *, EMPTYARG )
     }
 
 
-/*  uno::Reference< frame::XDispatchProvider > xProv( pViewFrame->GetFrame()->GetFrameInterface(), uno::UNO_QUERY );
+/*  uno::Reference< frame::XDispatchProvider > xProv( pViewFrame->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
     if ( xProv.is() )
     {
 !!! (pb) we need a new config item here

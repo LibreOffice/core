@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optpath.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,12 +68,12 @@ class SvxPathTabPage;
 class SvxPathTabPage : public SfxTabPage
 {
 private:
+    FixedLine           aStdBox;
     FixedText           aTypeText;
     FixedText           aPathText;
     SvxControlFocusHelper aPathCtrl;
     PushButton          aStandardBtn;
     PushButton          aPathBtn;
-    FixedLine           aStdBox;
 
     HeaderBar*                  pHeaderBar;
     ::svx::OptHeaderTabListBox* pPathBox;
@@ -91,7 +88,7 @@ private:
     DECL_LINK(  PathHdl_Impl, PushButton * );
     DECL_LINK(  StandardHdl_Impl, PushButton * );
 
-    DECL_LINK(  PathSelect_Impl, OptHeaderTabListBox * );
+    DECL_LINK(  PathSelect_Impl, svx::OptHeaderTabListBox * );
     DECL_LINK(  HeaderSelect_Impl, HeaderBar * );
     DECL_LINK(  HeaderEndDrag_Impl, HeaderBar * );
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: usercontrol.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,6 +87,9 @@ namespace pcr
         * \return current date or time or the value 1234.56789
         */
         static double getPreviewValue(SvNumberFormatter* _pNF,sal_Int32 _nFormatKey);
+
+    private:
+        static double getPreviewValue( const SvNumberformat& i_rEntry );
     };
 
     //========================================================================

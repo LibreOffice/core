@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbregister.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,20 +51,19 @@ namespace svx
     class DbRegistrationOptionsPage : public SfxTabPage
     {
     private:
+        FixedLine           aStdBox;
         FixedText           aTypeText;
         FixedText           aPathText;
         SvxControlFocusHelper   aPathCtrl;
         PushButton          m_aNew;
         PushButton          m_aEdit;
         PushButton          m_aDelete;
-        FixedLine           aStdBox;
 
         HeaderBar*          pHeaderBar;
         ::svx::OptHeaderTabListBox* pPathBox;
         SvLBoxEntry*        m_pCurEntry;
         ULONG               m_nOldCount;
         BOOL                m_bModified;
-
 
 #ifdef SVX_DBREGISTER_HXX
         DECL_LINK( NewHdl, void * );
@@ -87,7 +83,7 @@ namespace svx
             @param  _sLocation
                 The location of the file.
         */
-        void insertNewEntry(const ::rtl::OUString& _sName,const ::rtl::OUString& _sLocation);
+        void insertNewEntry( const ::rtl::OUString& _sName,const ::rtl::OUString& _sLocation, const bool bReadOnly );
 
         /** opens the LinkDialog to create a register pair
             @param  _sOldName

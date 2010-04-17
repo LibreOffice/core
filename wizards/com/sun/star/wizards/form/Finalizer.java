@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Finalizer.java,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,6 @@ package com.sun.star.wizards.form;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.wizards.common.Desktop;
-import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.*;
 
 /**
@@ -45,7 +41,6 @@ public class Finalizer
 {
 
     WizardDialog CurUnoDialog;
-    Desktop.OfficePathRetriever curofficepath;
     short curtabindex;
     XRadioButton optModifyForm;
     XRadioButton optWorkWithForm;
@@ -88,7 +83,7 @@ public class Finalizer
                 {
                     UIConsts.INTEGERS[8], slblProceed, new Integer(97), new Integer(62), UIConsts.INTEGERS[8], new Short(curtabindex++), new Integer(185)
                 });
-        XRadioButton optWorkWithForm = CurUnoDialog.insertRadioButton("optWorkWithForm", null,
+        CurUnoDialog.insertRadioButton("optWorkWithForm", null,
                 new String[]
                 {
                     "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
@@ -130,10 +125,9 @@ public class Finalizer
         return txtFormName.getText();
     }
 
-    public boolean getOpenMode()
+    public boolean getOpenForEditing()
     {
-        boolean bOpenMode = optModifyForm.getState() ? true : false;
-        return bOpenMode;
+        return optModifyForm.getState() ? true : false;
     }
 
     public boolean finish()

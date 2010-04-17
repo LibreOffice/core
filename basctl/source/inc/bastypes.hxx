@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: bastypes.hxx,v $
- * $Revision: 1.10.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -205,8 +202,12 @@ public:
 
     virtual void    StoreData();
     virtual void    UpdateData();
-    virtual void    PrintData( Printer* pPrinter );
     virtual BOOL    CanClose();
+
+    // return number of pages to be printed
+    virtual sal_Int32 countPages( Printer* pPrinter ) = 0;
+    // print page
+    virtual void printPage( sal_Int32 nPage, Printer* pPrinter ) = 0;
 
     virtual String  GetTitle();
     String          CreateQualifiedName();

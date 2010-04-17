@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleGridControl.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,15 +85,6 @@ AccessibleGridControl::AccessibleGridControl(
 {
 //    DBG_CTOR( AccessibleTableControl, NULL );
     m_pImpl.reset( new AccessibleGridControl_Impl() );
-    m_pImpl->m_aCreator = _rxCreator;
-}
-// -----------------------------------------------------------------------------
-void AccessibleGridControl::setCreator( const Reference< XAccessible >& _rxCreator )
-{
-#if OSL_DEBUG_LEVEL > 0
-    Reference< XAccessible > xCreator = (Reference< XAccessible >)m_pImpl->m_aCreator;
-    DBG_ASSERT( !xCreator.is(), "accessibility/extended/AccessibleGridControl::setCreator: creator already set!" );
-#endif
     m_pImpl->m_aCreator = _rxCreator;
 }
 
