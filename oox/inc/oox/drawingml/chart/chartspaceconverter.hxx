@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: chartspaceconverter.hxx,v $
- *
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +30,10 @@
 
 #include "oox/drawingml/chart/converterbase.hxx"
 
+namespace com { namespace sun { namespace star {
+    namespace drawing { class XShapes; }
+} } }
+
 namespace oox {
 namespace drawingml {
 namespace chart {
@@ -49,7 +49,9 @@ public:
     virtual             ~ChartSpaceConverter();
 
     /** Converts the contained OOXML chart model to a chart2 document. */
-    void                convertFromModel();
+    void                convertFromModel(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxExternalPage,
+                            const ::com::sun::star::awt::Point& rChartPos );
 };
 
 // ============================================================================

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pdfexport.cxx,v $
- * $Revision: 1.69.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +50,9 @@
 #include <svtools/filter.hxx>
 #include <svl/solar.hrc>
 #include <comphelper/string.hxx>
+#include "basegfx/polygon/b2dpolygon.hxx"
+#include "basegfx/polygon/b2dpolypolygon.hxx"
+#include "basegfx/polygon/b2dpolygontools.hxx"
 
 #include <unotools/saveopt.hxx> // only for testing of relative saving options in PDF
 
@@ -80,31 +80,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::view;
-
-sal_Bool GetPropertyValue( Any& rAny, const Reference< XPropertySet > & rXPropSet, const sal_Char* pName )
-{
-    sal_Bool bRetValue = sal_True;
-    try
-    {
-        rAny = rXPropSet->getPropertyValue( String::CreateFromAscii( pName ) );
-        if ( !rAny.hasValue() )
-            bRetValue = sal_False;
-    }
-    catch( ::com::sun::star::uno::Exception& )
-    {
-        bRetValue = sal_False;
-    }
-    return bRetValue;
-}
-
-OUString GetProperty( const Reference< XPropertySet > & rXPropSet, const sal_Char* pName )
-{
-    OUString aRetValue;
-    Any aAny;
-    if ( GetPropertyValue( aAny, rXPropSet, pName ) )
-        aAny >>= aRetValue;
-    return aRetValue;
-}
 
 // -------------
 // - PDFExport -
@@ -895,7 +870,10 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     }
                 }
 
-                bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aMultiSelection, aRenderOptions, nPageCount );
+                if( nPageCount > 0 )
+                    bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aMultiSelection, aRenderOptions, nPageCount );
+                else
+                    bRet = FALSE;
 
                 if ( bRet && bSecondPassForImpressNotes )
                 {
@@ -944,14 +922,8 @@ void PDFExport::showErrors( const std::set< PDFWriter::ErrorCode >& rErrors )
 {
     if( ! rErrors.empty() )
     {
-        ByteString aResMgrName( "pdffilter" );
-        ResMgr* pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
-        if ( pResMgr )
-        {
-            ImplErrorDialog aDlg( rErrors, *pResMgr );
-            aDlg.Execute();
-            delete pResMgr;
-        }
+        ImplErrorDialog aDlg( rErrors );
+        aDlg.Execute();
     }
 }
 
@@ -971,7 +943,8 @@ sal_Bool PDFExport::ImplExportPage( PDFWriter& rWriter, PDFExtOutDevData& rPDFEx
     rWriter.NewPage( aSizePDF.Width(), aSizePDF.Height() );
     rWriter.SetMapMode( rMtf.GetPrefMapMode() );
 
-    rWriter.SetClipRegion( aPageRect );
+    basegfx::B2DRectangle aB2DRect( aPageRect.Left(), aPageRect.Top(), aPageRect.Right(), aPageRect.Bottom() );
+    rWriter.SetClipRegion( basegfx::B2DPolyPolygon( basegfx::tools::createPolygonFromRect( aB2DRect ) ) );
     bRet = ImplWriteActions( rWriter, &rPDFExtOutDevData, rMtf, aDummyVDev );
     rPDFExtOutDevData.ResetSyncData();
 
@@ -1674,7 +1647,15 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                     const MetaClipRegionAction* pA = (const MetaClipRegionAction*) pAction;
 
                     if( pA->IsClipping() )
-                        rWriter.SetClipRegion( pA->GetRegion() );
+                    {
+                        if( pA->GetRegion().IsEmpty() )
+                            rWriter.SetClipRegion( basegfx::B2DPolyPolygon() );
+                        else
+                        {
+                            Region aReg( pA->GetRegion() );
+                            rWriter.SetClipRegion( aReg.ConvertToB2DPolyPolygon() );
+                        }
+                    }
                     else
                         rWriter.SetClipRegion();
                 }
@@ -1689,8 +1670,9 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
 
                 case( META_ISECTREGIONCLIPREGION_ACTION ):
                 {
-                const MetaISectRegionClipRegionAction* pA = (const MetaISectRegionClipRegionAction*) pAction;
-                rWriter.IntersectClipRegion( pA->GetRegion() );
+                    const MetaISectRegionClipRegionAction* pA = (const MetaISectRegionClipRegionAction*) pAction;
+                    Region aReg( pA->GetRegion() );
+                    rWriter.IntersectClipRegion( aReg.ConvertToB2DPolyPolygon() );
                 }
                 break;
 
@@ -1860,7 +1842,7 @@ void PDFExport::ImplWriteGradient( PDFWriter& rWriter, const PolyPolygon& rPolyP
     rDummyVDev.AddGradientActions( rPolyPoly.GetBoundRect(), rGradient, aTmpMtf );
 
     rWriter.Push();
-    rWriter.IntersectClipRegion( rPolyPoly );
+    rWriter.IntersectClipRegion( rPolyPoly.getB2DPolyPolygon() );
     ImplWriteActions( rWriter, NULL, aTmpMtf, rDummyVDev );
     rWriter.Pop();
 }
