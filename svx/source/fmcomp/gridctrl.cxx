@@ -113,10 +113,10 @@ public:
     }
 private:
     // XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& /*i_aEvt*/)
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& /*i_aEvt*/) throw ( RuntimeException )
     {
     }
-    virtual void SAL_CALL rowsChanged(const ::com::sun::star::sdb::RowsChangeEvent& i_aEvt)
+    virtual void SAL_CALL rowsChanged(const ::com::sun::star::sdb::RowsChangeEvent& i_aEvt) throw ( RuntimeException )
     {
         if ( i_aEvt.Action == RowChangeAction::UPDATE )
         {

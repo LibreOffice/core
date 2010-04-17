@@ -582,12 +582,8 @@ DbCellControl::DbCellControl( DbGridColumn& _rColumn, sal_Bool /*_bText*/ )
         // be listener at the bound field as well
         try
         {
-            Reference< XPropertySet > xColModelProps( m_rColumn.getModel(), UNO_QUERY );
-            Reference< XPropertySetInfo > xPSI;
-            if ( xColModelProps.is() )
-                xPSI = xColModelProps->getPropertySetInfo();
-
-            if ( xPSI.is() && xPSI->hasPropertyByName( FM_PROP_BOUNDFIELD ) )
+            Reference< XPropertySetInfo > xPSI( xColModelProps->getPropertySetInfo(), UNO_SET_THROW );
+            if ( xPSI->hasPropertyByName( FM_PROP_BOUNDFIELD ) )
             {
                 Reference< XPropertySet > xField;
                 xColModelProps->getPropertyValue( FM_PROP_BOUNDFIELD ) >>= xField;
