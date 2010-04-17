@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: querycontainerwindow.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,6 +123,12 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------------
+    void OQueryContainerWindow::forceInitialView()
+    {
+        return m_pViewSwitch->forceInitialView();
+    }
+
+    // -----------------------------------------------------------------------------
     void OQueryContainerWindow::resizeAll( const Rectangle& _rPlayground )
     {
         Rectangle aPlayground( _rPlayground );
@@ -229,16 +232,17 @@ namespace dbaui
 
             Reference < XFrame > xBeamerFrame( m_pViewSwitch->getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Frame")),UNO_QUERY );
             m_xBeamer.set( xBeamerFrame );
+            OSL_ENSURE(m_xBeamer.is(),"No frame created!");
+            m_xBeamer->initialize( VCLUnoHelper::GetInterface ( m_pBeamer ) );
 
             // notify layout manager to not create internal toolbars
             Reference < XPropertySet > xPropSet( xBeamerFrame, UNO_QUERY );
             try
             {
                 const ::rtl::OUString aLayoutManager( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ));
-                Reference < XPropertySet > xLMPropSet;
+                Reference < XPropertySet > xLMPropSet(xPropSet->getPropertyValue( aLayoutManager ),UNO_QUERY);
 
-                Any a = xPropSet->getPropertyValue( aLayoutManager );
-                if ( a >>= xLMPropSet )
+                if ( xLMPropSet.is() )
                 {
                     const ::rtl::OUString aAutomaticToolbars( RTL_CONSTASCII_USTRINGPARAM( "AutomaticToolbars" ));
                     xLMPropSet->setPropertyValue( aAutomaticToolbars, Any( sal_False ));
@@ -248,8 +252,6 @@ namespace dbaui
             {
             }
 
-            OSL_ENSURE(m_xBeamer.is(),"No frame created!");
-            m_xBeamer->initialize( VCLUnoHelper::GetInterface ( m_pBeamer ) );
             m_xBeamer->setName(FRAME_NAME_QUERY_PREVIEW);
 
             // append our frame

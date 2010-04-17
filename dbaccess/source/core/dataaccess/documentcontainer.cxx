@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: documentcontainer.cxx,v $
- * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,9 +82,11 @@
 #endif
 #include "core_resource.hxx"
 #include "core_resource.hrc"
+#include <comphelper/namedvaluecollection.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -204,6 +203,20 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstance( const ::rtl
 {
     return createInstanceWithArguments( aServiceSpecifier, Sequence< Any >() );
 }
+
+namespace
+{
+    template< class TYPE >
+    void lcl_extractAndRemove( ::comphelper::NamedValueCollection& io_rArguments, const ::rtl::OUString& i_rName, TYPE& o_rValue )
+    {
+        if ( io_rArguments.has( i_rName ) )
+        {
+            io_rArguments.get_ensureType( i_rName, o_rValue );
+            io_rArguments.remove( i_rName );
+        }
+    }
+}
+
 // -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const Sequence< Any >& _aArguments ) throw (Exception, RuntimeException)
 {
@@ -212,65 +225,48 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
     if ( ServiceSpecifier == SERVICE_SDB_DOCUMENTDEFINITION )
     {
         MutexGuard aGuard(m_aMutex);
-        ::rtl::OUString sName,sPersistentName,sURL;
+
+        // extrat known arguments
+        ::rtl::OUString sName, sPersistentName, sURL, sMediaType, sDocServiceName;
         Reference< XCommandProcessor > xCopyFrom;
-        Reference<XConnection> xConnection;
-        Sequence<sal_Int8> aClassID;
-        sal_Bool bAsTemplate = sal_False;
+        Reference< XConnection > xConnection;
+        sal_Bool bAsTemplate( sal_False );
+        Sequence< sal_Int8 > aClassID;
 
-        const Any* pBegin = _aArguments.getConstArray();
-        const Any* pEnd = pBegin + _aArguments.getLength();
-        PropertyValue aValue;
-        for(;pBegin != pEnd;++pBegin)
+        ::comphelper::NamedValueCollection aArgs( _aArguments );
+        lcl_extractAndRemove( aArgs, PROPERTY_NAME, sName );
+        lcl_extractAndRemove( aArgs, PROPERTY_PERSISTENT_NAME, sPersistentName );
+        lcl_extractAndRemove( aArgs, PROPERTY_URL, sURL );
+        lcl_extractAndRemove( aArgs, PROPERTY_EMBEDDEDOBJECT, xCopyFrom );
+        lcl_extractAndRemove( aArgs, PROPERTY_ACTIVE_CONNECTION, xConnection );
+        lcl_extractAndRemove( aArgs, PROPERTY_AS_TEMPLATE, bAsTemplate );
+        lcl_extractAndRemove( aArgs, INFO_MEDIATYPE, sMediaType );
+        lcl_extractAndRemove( aArgs, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentServiceName" ) ), sDocServiceName );
+
+        // ClassID has two allowed types, so a special treatment here
+        Any aClassIDArg = aArgs.get( "ClassID" );
+        if ( aClassIDArg.hasValue() )
         {
-            *pBegin >>= aValue;
-            if ( aValue.Name.equalsAscii(PROPERTY_NAME) )
+            if ( !( aClassIDArg >>= aClassID ) )
             {
-                aValue.Value >>= sName;
-            }
-            else if ( aValue.Name.equalsAscii(PROPERTY_PERSISTENT_NAME) )
-            {
-                aValue.Value >>= sPersistentName;
-            }
-            else if ( aValue.Name.equalsAscii(PROPERTY_EMBEDDEDOBJECT) )
-            {
-                xCopyFrom.set(aValue.Value,UNO_QUERY);
-            }
-            else if ( aValue.Name.equalsAscii(PROPERTY_URL) )
-            {
-                aValue.Value >>= sURL;
-            }
-            else if ( aValue.Name.equalsAscii(PROPERTY_ACTIVE_CONNECTION) )
-            {
-                xConnection.set(aValue.Value,UNO_QUERY);
-            }
-            else if ( aValue.Name.equalsAscii("ClassID") )
-            {
-                if (! ( aValue.Value >>= aClassID ) )
-                {
-                    // Extended for usage also with a string
-                    ::rtl::OUString suValue;
-                    aValue.Value >>= suValue;
-                    aClassID = ::comphelper::MimeConfigurationHelper::GetSequenceClassIDRepresentation( suValue );
+                // Extended for usage also with a string
+                ::rtl::OUString sClassIDString;
+                if ( !( aClassIDArg >>= sClassIDString ) )
+                    throw IllegalArgumentException( ::rtl::OUString(), *this, 2 );
 
-                }
-                rtl::OUString suClassID = ::comphelper::MimeConfigurationHelper::GetStringClassIDRepresentation(aClassID);
-                volatile int dummy = 0;
-                (void)dummy;
-                (void)suClassID;
+                aClassID = ::comphelper::MimeConfigurationHelper::GetSequenceClassIDRepresentation( sClassIDString );
             }
-            else if ( aValue.Name.equalsAscii(PROPERTY_AS_TEMPLATE) )
-            {
-                aValue.Value >>= bAsTemplate;
-            }
-            else
-            {
-                // DBG_ASSERT("unknown property exception");
-            }
+
+#if OSL_DEBUG_LEVEL > 0
+            ::rtl::OUString sClassIDString = ::comphelper::MimeConfigurationHelper::GetStringClassIDRepresentation( aClassID );
+            (void)sClassIDString;
+#endif
+            aArgs.remove( "ClassID" );
         }
+        // Everything which now is still present in the arguments is passed to the embedded object
+        const Sequence< PropertyValue > aCreationArgs( aArgs.getPropertyValues() );
 
         const ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
-
         sal_Bool bNew = ( 0 == sPersistentName.getLength() );
         if ( bNew )
         {
@@ -282,6 +278,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             if ( xElements.is() )
                 sPersistentName = ::dbtools::createUniqueName(xElements,sPersistentName);
 
+            const bool bNeedClassID = ( aClassID.getLength() == 0 ) && ( 0 == sURL.getLength() );
             if ( xCopyFrom.is() )
             {
                 Sequence<Any> aIni(2);
@@ -295,10 +292,26 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
                 Reference<XPropertySet> xProp(xCopyFrom,UNO_QUERY);
                 if ( xProp.is() && xProp->getPropertySetInfo().is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_AS_TEMPLATE) )
                     xProp->getPropertyValue(PROPERTY_AS_TEMPLATE) >>= bAsTemplate;
-            }
 
-            if ( ( aClassID.getLength() == 0 ) && ( 0 == sURL.getLength() ) )
-                ODocumentDefinition::GetDocumentServiceFromMediaType( getContainerStorage(), sPersistentName, m_aContext, aClassID );
+                // if we do not have an own class ID, see if we can determine one from the copy we just created
+                if ( bNeedClassID )
+                    ODocumentDefinition::GetDocumentServiceFromMediaType( getContainerStorage(), sPersistentName, m_aContext, aClassID );
+            }
+            else
+            {
+                if ( bNeedClassID )
+                {
+                    if ( sMediaType.getLength() )
+                        ODocumentDefinition::GetDocumentServiceFromMediaType( sMediaType, m_aContext, aClassID );
+                    else if ( sDocServiceName.getLength() )
+                    {
+                        ::comphelper::MimeConfigurationHelper aConfigHelper( m_aContext.getLegacyServiceFactory() );
+                        const Sequence< NamedValue > aProps( aConfigHelper.GetObjectPropsByDocumentName( sDocServiceName ) );
+                        const ::comphelper::NamedValueCollection aMediaTypeProps( aProps );
+                        aClassID = aMediaTypeProps.getOrDefault( "ClassID", Sequence< sal_Int8 >() );
+                    }
+                }
+            }
         }
 
         ODefinitionContainer_Impl::const_iterator aFind = rDefinitions.find( sName );
@@ -316,7 +329,16 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         else
             pElementImpl = aFind->second;
 
-        xContent = new ODocumentDefinition( *this, m_aContext.getLegacyServiceFactory(), pElementImpl, m_bFormsContainer, aClassID, xConnection );
+        ::rtl::Reference< ODocumentDefinition > pDocDef = new ODocumentDefinition( *this, m_aContext.getLegacyServiceFactory(), pElementImpl, m_bFormsContainer );
+        if ( aClassID.getLength() )
+        {
+            pDocDef->initialLoad( aClassID, aCreationArgs, xConnection );
+        }
+        else
+        {
+            OSL_ENSURE( aCreationArgs.getLength() == 0, "ODocumentContainer::createInstance: additional creation args are lost, if you do not provide a class ID." );
+        }
+        xContent = pDocDef.get();
 
         if ( sURL.getLength() )
         {
@@ -400,9 +422,12 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
 
                     ::rtl::OUString sServiceName;
                     if ( Reference< XNameAccess >( xObjectToCopy, UNO_QUERY ).is() )
+                    {
                         if ( m_bFormsContainer )
                             sServiceName = SERVICE_NAME_FORM_COLLECTION;
-                        else sServiceName = SERVICE_NAME_REPORT_COLLECTION;
+                        else
+                            sServiceName = SERVICE_NAME_REPORT_COLLECTION;
+                    }
                     else
                         sServiceName = SERVICE_SDB_DOCUMENTDEFINITION;
 
@@ -523,7 +548,7 @@ namespace
         if ( bRet )
         {
             _rRet = _xNameContainer->getByName(_sSimpleName = sName);
-            while ( nIndex != -1 )
+            while ( nIndex != -1 && bRet )
             {
                 sName = _sName.getToken(0,'/',nIndex);
                 _xNameContainer.set(_rRet,UNO_QUERY);
@@ -537,8 +562,10 @@ namespace
                 }
             }
         }
-        else if ( nIndex == -1 )
-            _sSimpleName = sName; // a content on the root content
+        if ( nIndex == -1 )
+            _sSimpleName = sName; // a content
+        else
+            _xNameContainer.clear(); // a sub folder doesn't exist
         return bRet;
     }
 }
@@ -560,7 +587,6 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
         if ( !lcl_queryContent(_sURL,xNameContainer,aContent,sName) )
         {
             ::rtl::OUString sMessage( DBA_RES( RID_STR_NAME_NOT_FOUND ) );
-                // TODO: resource
             ::comphelper::string::searchAndReplaceAsciiI( sMessage, "$name$", _sURL );
             throw IllegalArgumentException( sMessage, *this, 1 );
         }
@@ -570,28 +596,15 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
         {
             Command aCommand;
 
-            static const ::rtl::OUString s_sOpenMode = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenMode"));
-            const PropertyValue* pIter = Arguments.getConstArray();
-            const PropertyValue* pEnd     = pIter + Arguments.getLength();
-            for( ; pIter != pEnd ; ++pIter)
-            {
-                if ( pIter->Name == s_sOpenMode )
-                {
-                    pIter->Value >>= aCommand.Name;
-                    break;
-                }
-            }
-            if ( !aCommand.Name.getLength() ) // default mode
-                aCommand.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
+            ::comphelper::NamedValueCollection aArgs( Arguments );
+            aCommand.Name = aArgs.getOrDefault( "OpenMode", ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ) );
+            aArgs.remove( "OpenMode" );
+
             OpenCommandArgument2 aOpenCommand;
             aOpenCommand.Mode = OpenMode::DOCUMENT;
+            aArgs.put( "OpenCommandArgument", aOpenCommand );
 
-            Sequence< PropertyValue > aArguments(Arguments);
-            sal_Int32 nLen = aArguments.getLength();
-            aArguments.realloc(nLen + 1);
-
-            aArguments[nLen].Value <<= aOpenCommand;
-            aCommand.Argument <<= aArguments;
+            aCommand.Argument <<= aArgs.getPropertyValues();
             xComp.set(xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >()),UNO_QUERY);
         }
     }
@@ -630,15 +643,24 @@ sal_Bool SAL_CALL ODocumentContainer::hasByHierarchicalName( const ::rtl::OUStri
 // XHierarchicalNameContainer
 void SAL_CALL ODocumentContainer::insertByHierarchicalName( const ::rtl::OUString& _sName, const Any& _aElement ) throw (IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
+    Reference< XContent > xContent(_aElement,UNO_QUERY);
+    if ( !xContent.is() )
+        throw IllegalArgumentException();
+
     ClearableMutexGuard aGuard(m_aMutex);
     Any aContent;
     Reference< XNameContainer > xNameContainer(this);
     ::rtl::OUString sName;
     if ( lcl_queryContent(_sName,xNameContainer,aContent,sName) )
         throw ElementExistException(_sName,*this);
-    Reference< XContent > xContent(_aElement,UNO_QUERY);
-    if ( !xContent.is() )
-        throw IllegalArgumentException();
+
+    if ( !xNameContainer.is() )
+    {
+        ::rtl::OUString sMessage( DBA_RES( RID_STR_NO_SUB_FOLDER ) );
+        sal_Int32 index = sName.getLength();
+        ::comphelper::string::searchAndReplaceAsciiI( sMessage, "$folder$", _sName.getToken(0,'/',index) );
+        throw IllegalArgumentException( sMessage, *this, 1 );
+    }
 
     xNameContainer->insertByName(sName,_aElement);
 }
@@ -674,6 +696,24 @@ void SAL_CALL ODocumentContainer::replaceByHierarchicalName( const ::rtl::OUStri
 
     xNameContainer->replaceByName(sName,_aElement);
 }
+
+// -----------------------------------------------------------------------------
+::rtl::OUString SAL_CALL ODocumentContainer::getHierarchicalName() throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    return impl_getHierarchicalName( false );
+}
+
+// -----------------------------------------------------------------------------
+::rtl::OUString SAL_CALL ODocumentContainer::composeHierarchicalName( const ::rtl::OUString& i_rRelativeName ) throw (IllegalArgumentException, NoSupportException, RuntimeException)
+{
+    ::rtl::OUStringBuffer aBuffer;
+    aBuffer.append( getHierarchicalName() );
+    aBuffer.append( sal_Unicode( '/' ) );
+    aBuffer.append( i_rRelativeName );
+    return aBuffer.makeStringAndClear();
+}
+
 // -----------------------------------------------------------------------------
 ::rtl::Reference<OContentHelper> ODocumentContainer::getContent(const ::rtl::OUString& _sName) const
 {

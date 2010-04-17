@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RowSetCache.hxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -225,6 +222,7 @@ namespace dbaccess
         void updateCharacterStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length );
         void updateObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x );
         void updateNumericObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x, sal_Int32 scale );
+        void updateNull(sal_Int32 columnIndex);
 
     // ::com::sun::star::sdbc::XResultSet
         sal_Bool next(  );

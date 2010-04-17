@@ -4,6 +4,7 @@
   <accel:item accel:code="KEY_RETURN" accel:mod2="true" xlink:href=".uno:ControlProperties"/>
   <accel:item accel:code="KEY_F4" xlink:href=".uno:ControlProperties"/>
   <accel:item accel:code="KEY_F5" xlink:href=".uno:ReportNavigator"/>
+  <accel:item accel:code="KEY_F8" accel:mod2="true" xlink:href=".uno:AddField"/>
   <accel:item accel:code="KEY_ESCAPE" xlink:href=".uno:Escape"/>
   <accel:item accel:code="KEY_G" accel:mod1="true" xlink:href=".uno:DbSortingAndGrouping"/>
   <accel:item accel:code="KEY_E" accel:mod1="true" xlink:href=".uno:ExecuteReport"/>

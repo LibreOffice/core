@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: copytablewizard.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +55,8 @@
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/sdbc/XBlob.hpp>
+#include <com/sun/star/sdbc/XClob.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
@@ -68,6 +67,7 @@
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/proparrhlp.hxx>
+#include <comphelper/string.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -127,6 +127,8 @@ namespace dbaui
     using ::com::sun::star::sdbc::XParameters;
     using ::com::sun::star::sdbc::XResultSet;
     using ::com::sun::star::sdbc::XRow;
+    using ::com::sun::star::sdbc::XBlob;
+    using ::com::sun::star::sdbc::XClob;
     using ::com::sun::star::sdbcx::XRowLocate;
     using ::com::sun::star::sdbc::XResultSetMetaDataSupplier;
     using ::com::sun::star::sdbc::XResultSetMetaData;
@@ -771,9 +773,8 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
 
     if ( sUnsupportedSetting.getLength() != 0 )
     {
-        ::rtl::OUString sMessage( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unsupported setting in the copy source descriptor: $name$." ) ) );
-            // TODO: resource
-        sMessage = sMessage.replaceAt( sMessage.indexOfAsciiL( "$name$", 6 ), 6, sUnsupportedSetting );
+        ::rtl::OUString sMessage( String(ModuleRes( STR_CTW_ERROR_UNSUPPORTED_SETTING )) );
+        ::comphelper::string::searchAndReplaceAsciiI( sMessage, "$name$", sUnsupportedSetting );
         throw IllegalArgumentException(
             sMessage,
             *const_cast< CopyTableWizard* >( this ),
@@ -845,8 +846,7 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
         if ( _out_rCommandType == CommandType::QUERY )
             // we cannot copy a query if the connection cannot provide it ...
             throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "To copy a query, your connection must be able to provide queries." ) ),
-                // TODO: resource
+                String(ModuleRes( STR_CTW_ERROR_NO_QUERY )),
                 *const_cast< CopyTableWizard* >( this ),
                 1
             );
@@ -1281,6 +1281,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                     case DataType::LONGVARBINARY:
                     case DataType::BINARY:
                     case DataType::VARBINARY:
+                    case DataType::BIT:
                         aTransfer.transferComplexValue( &XRow::getBytes, &XParameters::setBytes );
                         break;
 
@@ -1296,7 +1297,6 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                         aTransfer.transferComplexValue( &XRow::getTimestamp, &XParameters::setTimestamp );
                         break;
 
-                    case DataType::BIT:
                     case DataType::BOOLEAN:
                         aTransfer.transferValue( &XRow::getBoolean, &XParameters::setBoolean );
                         break;
@@ -1311,6 +1311,14 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
 
                     case DataType::INTEGER:
                         aTransfer.transferValue( &XRow::getInt, &XParameters::setInt );
+                        break;
+
+                    case DataType::BLOB:
+                        aTransfer.transferComplexValue( &XRow::getBlob, &XParameters::setBlob );
+                        break;
+
+                    case DataType::CLOB:
+                        aTransfer.transferComplexValue( &XRow::getClob, &XParameters::setClob );
                         break;
 
                     default:
@@ -1504,14 +1512,13 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments ) 
         {   // ->createWithInteractionHandler
             if ( !( _rArguments[2] >>= m_xInteractionHandler ) )
                 throw IllegalArgumentException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The given interaction handler is invalid." ) ),
-                    // TODO: resource
+                    String(ModuleRes( STR_CTW_ERROR_INVALID_INTERACTIONHANDLER )),
                     *this,
                     3
                 );
         }
         if ( !m_xInteractionHandler.is() )
-            m_xInteractionHandler.set( m_aContext.createComponent( "com.sun.star.sdb.InteractionHandler" ), UNO_QUERY_THROW );
+            m_xInteractionHandler.set( m_aContext.createComponent( "com.sun.star.task.InteractionHandler" ), UNO_QUERY_THROW );
 
         InteractionHandler xSourceDocHandler;
         Reference< XPropertySet > xSourceDescriptor( impl_ensureDataAccessDescriptor_throw( _rArguments, 0, m_xSourceConnection, xSourceDocHandler ) );
@@ -1566,7 +1573,8 @@ Dialog* CopyTableWizard::createDialog( Window* _pParent )
         *m_pSourceObject,
         m_xSourceConnection.getTyped(),
         m_xDestConnection.getTyped(),
-        m_aContext.getLegacyServiceFactory()
+        m_aContext.getLegacyServiceFactory(),
+        m_xInteractionHandler
     );
 
     impl_attributesToDialog_nothrow( *pWizard );

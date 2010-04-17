@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: CRowSetDataColumn.hxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,21 +27,13 @@
 #ifndef DBACCESS_CORE_API_CROWSETDATACOLUMN_HXX
 #define DBACCESS_CORE_API_CROWSETDATACOLUMN_HXX
 
-#ifndef _DBACORE_DATACOLUMN_HXX_
 #include "datacolumn.hxx"
-#endif
-#ifndef DBACCESS_CORE_API_ROWSETROW_HXX
 #include "RowSetRow.hxx"
-#endif
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
-#include <connectivity/CommonTools.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
-#include <comphelper/proparrhlp.hxx>
-#endif
-#ifndef DBACCESS_ROWSETCACHEITERATOR_HXX
 #include "RowSetCacheIterator.hxx"
-#endif
+#include "columnsettings.hxx"
+
+#include <connectivity/CommonTools.hxx>
+#include <comphelper/proparrhlp.hxx>
 
 namespace dbaccess
 {

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sbagrid.cxx,v $
- * $Revision: 1.83.6.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -985,7 +982,7 @@ void SbaGridControl::PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu)
         rMenu.SetHelpId(ID_BROWSER_ROWHEIGHT, aNewItems.GetHelpId(ID_BROWSER_ROWHEIGHT));
         rMenu.InsertSeparator(nPos++);
     } // if (!IsReadOnlyDB())
-    
+
     if ( GetSelectRowCount() > 0 )
     {
         rMenu.InsertItem(ID_BROWSER_COPY, aNewItems.GetItemText(SID_COPY), 0, nPos++);

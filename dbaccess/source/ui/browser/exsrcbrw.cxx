@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: exsrcbrw.cxx,v $
- * $Revision: 1.32.6.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,9 +39,6 @@
 #endif
 #ifndef _COM_SUN_STAR_FORM_XGRIDCOLUMNFACTORY_HPP_
 #include <com/sun/star/form/XGridColumnFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
-#include <com/sun/star/form/XFormController.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
 #include <com/sun/star/form/XLoadable.hpp>

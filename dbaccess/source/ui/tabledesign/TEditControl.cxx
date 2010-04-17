@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TEditControl.cxx,v $
- * $Revision: 1.60.26.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1534,19 +1531,8 @@ sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long /*nRow*/ )
         return sal_False;
 
     OTableController& rController = GetView()->getController();
-    try
-    {
-        Reference<XConnection> xCon = rController.getConnection();
-
-        Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
-        if(!xMetaData.is() || !xMetaData->supportsCoreSQLGrammar())
-            return sal_False; // no primary keys allowed
-
-    }
-    catch(SQLException&)
-    {
-        OSL_ASSERT(!"supportsCoreSQLGrammar");
-    }
+    if ( !rController.getSdbMetaData().supportsPrimaryKeys() )
+        return sal_False;
 
     Reference<XPropertySet> xTable = rController.getTable();
     //////////////////////////////////////////////////////////////

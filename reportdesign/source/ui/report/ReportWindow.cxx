@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ReportWindow.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -264,7 +261,7 @@ void OReportWindow::notifySizeChanged()
     m_pParent->setTotalSize(GetTotalWidth(),GetTotalHeight());
 }
 //----------------------------------------------------------------------------
-BOOL OReportWindow::HasSelection()
+BOOL OReportWindow::HasSelection() const
 {
     return m_aViewsWindow.HasSelection();
 }
@@ -287,7 +284,7 @@ void OReportWindow::Paste()
     m_aViewsWindow.Paste();
 }
 //----------------------------------------------------------------------------
-BOOL OReportWindow::IsPasteAllowed()
+BOOL OReportWindow::IsPasteAllowed() const
 {
     return m_aViewsWindow.IsPasteAllowed();
 }
@@ -376,11 +373,6 @@ void OReportWindow::setGridSnap(BOOL bOn)
 void OReportWindow::setDragStripes(BOOL bOn)
 {
     m_aViewsWindow.setDragStripes(bOn);
-}
-// -----------------------------------------------------------------------------
-BOOL OReportWindow::isDragStripes() const
-{
-    return m_aViewsWindow.isDragStripes();
 }
 // -----------------------------------------------------------------------------
 sal_uInt32 OReportWindow::getMarkedObjectCount() const

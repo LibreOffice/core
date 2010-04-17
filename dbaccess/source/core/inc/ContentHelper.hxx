@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ContentHelper.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,10 +107,12 @@ namespace dbaccess
         sal_Bool        bAsTemplate;    // AsTemplate
         ::rtl::OUString sPersistentName;// persistent name of the document
 
-        // @@@ Add other properties supported by your content.
-
         ContentProperties()
-        : bIsDocument( sal_True ), bIsFolder( sal_False ), bAsTemplate( sal_False ) {}
+            :bIsDocument( sal_True )
+            ,bIsFolder( sal_False )
+            ,bAsTemplate( sal_False )
+        {
+        }
     };
 
     class OContentHelper_Impl
@@ -235,6 +234,8 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
             getPropertyValues( const ::com::sun::star::uno::Sequence<
                             ::com::sun::star::beans::Property >& rProperties );
+
+        const ::comphelper::ComponentContext& getContext() const { return m_aContext; }
 
         inline TContentPtr getImpl() const { return m_pImpl; }
 

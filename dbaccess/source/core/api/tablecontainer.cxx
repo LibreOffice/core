@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tablecontainer.cxx,v $
- * $Revision: 1.68 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -364,15 +361,11 @@ ObjectType OTableContainer::appendObject( const ::rtl::OUString& _rForName, cons
                 if ( !xColumnDefinitions->hasByName(*pIter) )
                 {
                     Reference<XPropertySet> xColumn(xNames->getByName(*pIter),UNO_QUERY);
-                    OColumnSettings* pColumnSettings = NULL;
-                    if ( ::comphelper::getImplementation( pColumnSettings, xColumn ) )
+                    if ( !OColumnSettings::hasDefaultSettings( xColumn ) )
                     {
-                        if ( ( pColumnSettings && !pColumnSettings->isDefaulted() ) )
-                        {
-                            ::comphelper::copyProperties(xColumn,xProp);
-                            xAppend->appendByDescriptor(xProp);
-                            bModified = sal_True;
-                        }
+                        ::comphelper::copyProperties( xColumn, xProp );
+                        xAppend->appendByDescriptor( xProp );
+                        bModified = sal_True;
                     }
                 }
             }

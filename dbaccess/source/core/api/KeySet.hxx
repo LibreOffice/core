@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: KeySet.hxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,7 +80,7 @@ namespace dbaccess
 
     // the elements of _rxQueryColumns must have the properties PROPERTY_REALNAME and PROPERTY_TABLENAME
     void getColumnPositions(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxQueryColumns,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxColumns,
+                            const ::com::sun::star::uno::Sequence< ::rtl::OUString>& _aColumnNames,
                             const ::rtl::OUString& _rsUpdateTableName,
                             SelectColumnsMetaData& _rColumnNames /* out */);
 
@@ -134,6 +131,8 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getKeyColumns() const;
         void fillAllRows();
         sal_Bool fetchRow();
+
+        void impl_convertValue_throw(const ORowSetRow& _rInsertRow,const SelectColumnDescription& i_aMetaData);
     protected:
         virtual ~OKeySet();
     public:

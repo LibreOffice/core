@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: QueryDesignView.cxx,v $
- * $Revision: 1.96.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -185,11 +182,6 @@ namespace
                                     const sal_uInt16 nLevel,
                                     sal_Bool bHaving,
                                     bool _bAddOrOnOneLine);
-
-    void fillFunctionInfo(          OQueryDesignView* _pView
-                                    ,const ::connectivity::OSQLParseNode* pNode
-                                    ,const ::rtl::OUString& sFunctionTerm
-                                    ,OTableFieldDescRef& aInfo);
 
     //------------------------------------------------------------------------------
     ::rtl::OUString quoteTableAlias(sal_Bool _bQuote, const ::rtl::OUString& _sAliasName, const ::rtl::OUString& _sQuote)
@@ -717,7 +709,7 @@ namespace
 
                     // if we have a none numeric field, the table alias could be in the name
                     // otherwise we are not allowed to do this (e.g. 0.1 * PRICE )
-                    if  ( !pEntryField->isNumeric() )
+                    if  ( !pEntryField->isOtherFunction() )
                     {
                         // we have to look if we have alias.* here but before we have to check if the column doesn't already exist
                         String sTemp = rFieldName;
@@ -1231,7 +1223,7 @@ namespace
                         if (pParseNode.get())
                         {
                             ::rtl::OUString sGroupBy;
-                            pParseNode->parseNodeToStr( sGroupBy,
+                            pParseNode->getChild(0)->parseNodeToStr(    sGroupBy,
                                                         xConnection,
                                                         &rController.getParser().getContext(),
                                                         sal_False,
@@ -1997,6 +1989,7 @@ namespace
                 (*aIter) = NULL;
         OTableFields().swap( rUnUsedFields );
     }
+
     //------------------------------------------------------------------------------
     SqlParseError InitFromParseNodeImpl(OQueryDesignView* _pView,OSelectionBrowseBox* _pSelectionBrw)
     {
@@ -2180,35 +2173,6 @@ namespace
         return eErrorCode;
     }
     //------------------------------------------------------------------------------
-    void fillFunctionInfo(  OQueryDesignView* _pView
-                            ,const ::connectivity::OSQLParseNode* pNode
-                            ,const ::rtl::OUString& sFunctionTerm
-                            ,OTableFieldDescRef& aInfo)
-    {
-        // get the type out of the funtion name
-        OQueryController& rController = static_cast<OQueryController&>(_pView->getController());
-        sal_Int32 nDataType = DataType::DOUBLE;
-        ::rtl::OUString sFieldName = sFunctionTerm;
-        OSQLParseNode* pFunctionName = pNode->getChild(0);
-        if ( !SQL_ISPUNCTUATION(pFunctionName,"{") )
-        {
-            if ( SQL_ISRULEOR2(pNode,length_exp,char_value_fct) )
-                pFunctionName = pFunctionName->getChild(0);
-
-            ::rtl::OUString sFunctionName = pFunctionName->getTokenValue();
-            if ( !sFunctionName.getLength() )
-                sFunctionName = ::rtl::OStringToOUString(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()),RTL_TEXTENCODING_UTF8);
-
-            nDataType = OSQLParser::getFunctionReturnType(
-                                sFunctionName
-                                ,&rController.getParser().getContext());
-        }
-        aInfo->SetDataType(nDataType);
-        aInfo->SetFieldType(TAB_NORMAL_FIELD);
-        aInfo->SetField(sFieldName);
-        aInfo->SetTabWindow(NULL);
-    }
-    //------------------------------------------------------------------------------
     SqlParseError InstallFields(OQueryDesignView* _pView,
                                 const ::connectivity::OSQLParseNode* pNode,
                                 OJoinTableView::OTableWindowMap* pTabList )
@@ -2216,7 +2180,7 @@ namespace
         if( pNode==0 || !SQL_ISRULE(pNode,select_statement))
             return eNoSelectStatement;
 
-        ::connectivity::OSQLParseNode* pParseTree = pNode->getChild(2);
+        ::connectivity::OSQLParseNode* pParseTree = pNode->getChild(2); // selection
         sal_Bool bFirstField = sal_True;    // bei der Initialisierung muß auf alle Faelle das erste Feld neu aktiviert werden
 
         SqlParseError eErrorCode = eOk;
@@ -2247,9 +2211,6 @@ namespace
 
                 if ( SQL_ISRULE(pColumnRef,derived_column) )
                 {
-                    if ( !xConnection.is() )
-                        break;
-
                     ::rtl::OUString aColumnAlias(rController.getParseIterator().getColumnAlias(pColumnRef)); // kann leer sein
                     pColumnRef = pColumnRef->getChild(0);
                     OTableFieldDescRef aInfo = new OTableFieldDesc();
@@ -2272,11 +2233,17 @@ namespace
                             SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct))
                     {
                         ::rtl::OUString aColumns;
-                        pColumnRef->parseNodeToStr( aColumns,
-                                                    xConnection,
-                                                    &rController.getParser().getContext(),
-                                                    sal_True,
-                                                    sal_True); // quote is to true because we need quoted elements inside the function
+                        pColumnRef->parseNodeToPredicateStr(aColumns,
+                                                            xConnection,
+                                                            rController.getNumberFormatter(),
+                                                            _pView->getLocale(),
+                                                            static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
+                                                            &rController.getParser().getContext());
+                        //pColumnRef->parseNodeToStr(   aColumns,
+                        //                          xConnection,
+                        //                          &rController.getParser().getContext(),
+                        //                          sal_True,
+                        //                          sal_True); // quote is to true because we need quoted elements inside the function
 
                         sal_Int32 nFunctionType = FKT_NONE;
                         ::connectivity::OSQLParseNode* pParamRef = NULL;
@@ -2330,7 +2297,7 @@ namespace
                         }
                         else
                         {
-                            fillFunctionInfo(_pView,pColumnRef,aColumns,aInfo);
+                            _pView->fillFunctionInfo(pColumnRef,aColumns,aInfo);
                             aInfo->SetFieldAlias(aColumnAlias);
                         }
 
@@ -2451,7 +2418,7 @@ namespace
                                                             _pView->getLocale(),
                                                             static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
                                                             &rController.getParser().getContext());
-                        fillFunctionInfo(_pView,pArgument,sCondition,aDragLeft);
+                        _pView->fillFunctionInfo(pArgument,sCondition,aDragLeft);
                         aDragLeft->SetFunctionType(FKT_OTHER);
                         aDragLeft->SetOrderDir(eOrderDir);
                         aDragLeft->SetVisible(sal_False);
@@ -2483,7 +2450,7 @@ namespace
                             const ::connectivity::OSQLParseNode* pSelectRoot )
     {
         SqlParseError eErrorCode = eOk;
-        if (!pSelectRoot->getChild(3)->getChild(2)->isLeaf())
+        if (!pSelectRoot->getChild(3)->getChild(2)->isLeaf()) // opt_group_by_clause
         {
             OQueryController& rController = static_cast<OQueryController&>(_pView->getController());
             ::connectivity::OSQLParseNode* pGroupBy = pSelectRoot->getChild(3)->getChild(2)->getChild(2);
@@ -2518,7 +2485,7 @@ namespace
                                                     &rController.getParser().getContext(),
                                                     sal_True,
                                                     sal_True); // quote is to true because we need quoted elements inside the function
-                        fillFunctionInfo(_pView,pArgument,sGroupByExpression,aDragInfo);
+                        _pView->fillFunctionInfo(pArgument,sGroupByExpression,aDragInfo);
                         aDragInfo->SetFunctionType(FKT_OTHER);
                         aDragInfo->SetGroupBy(sal_True);
                         aDragInfo->SetVisible(sal_False);
@@ -2636,7 +2603,7 @@ IMPL_LINK( OQueryDesignView, SplitHdl, void*, /*p*/ )
         m_bInSplitHandler = sal_True;
         m_aSplitter.SetPosPixel( Point( m_aSplitter.GetPosPixel().X(),m_aSplitter.GetSplitPosPixel() ) );
         static_cast<OQueryController&>(getController()).setSplitPos(m_aSplitter.GetSplitPosPixel());
-        static_cast<OQueryController&>(getController()).setModified();
+        static_cast<OQueryController&>(getController()).setModified( sal_True );
         Resize();
         m_bInSplitHandler = sal_True;
     }
@@ -3211,6 +3178,30 @@ void OQueryDesignView::setNoneVisbleRow(sal_Int32 _nRows)
 {
     m_pSelectionBox->SetNoneVisbleRow(_nRows);
 }
+
+// -----------------------------------------------------------------------------
+void OQueryDesignView::initByFieldDescriptions( const Sequence< PropertyValue >& i_rFieldDescriptions )
+{
+    OQueryController& rController = static_cast< OQueryController& >( getController() );
+
+    m_pSelectionBox->PreFill();
+    m_pSelectionBox->SetReadOnly( rController.isReadOnly() );
+    m_pSelectionBox->Fill();
+
+    for (   const PropertyValue* field = i_rFieldDescriptions.getConstArray();
+            field != i_rFieldDescriptions.getConstArray() + i_rFieldDescriptions.getLength();
+            ++field
+        )
+    {
+        ::vos::ORef< OTableFieldDesc > pField( new OTableFieldDesc() );
+        pField->Load( *field, true );
+        InsertField( pField, sal_True, sal_False );
+    }
+
+    rController.getUndoMgr()->Clear();
+    m_pSelectionBox->Invalidate();
+}
+
 // -----------------------------------------------------------------------------
 bool OQueryDesignView::initByParseIterator( ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
@@ -3241,5 +3232,33 @@ bool OQueryDesignView::initByParseIterator( ::dbtools::SQLExceptionInfo* _pError
         DBG_UNHANDLED_EXCEPTION();
     }
     return eErrorCode == eOk;
+}
+//------------------------------------------------------------------------------
+void OQueryDesignView::fillFunctionInfo(  const ::connectivity::OSQLParseNode* pNode
+                                        ,const ::rtl::OUString& sFunctionTerm
+                                        ,OTableFieldDescRef& aInfo)
+{
+    // get the type out of the funtion name
+    OQueryController& rController = static_cast<OQueryController&>(getController());
+    sal_Int32 nDataType = DataType::DOUBLE;
+    ::rtl::OUString sFieldName = sFunctionTerm;
+    OSQLParseNode* pFunctionName = pNode->getChild(0);
+    if ( !SQL_ISPUNCTUATION(pFunctionName,"{") )
+    {
+        if ( SQL_ISRULEOR2(pNode,length_exp,char_value_fct) )
+            pFunctionName = pFunctionName->getChild(0);
+
+        ::rtl::OUString sFunctionName = pFunctionName->getTokenValue();
+        if ( !sFunctionName.getLength() )
+            sFunctionName = ::rtl::OStringToOUString(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()),RTL_TEXTENCODING_UTF8);
+
+        nDataType = OSQLParser::getFunctionReturnType(
+                            sFunctionName
+                            ,&rController.getParser().getContext());
+    }
+    aInfo->SetDataType(nDataType);
+    aInfo->SetFieldType(TAB_NORMAL_FIELD);
+    aInfo->SetField(sFieldName);
+    aInfo->SetTabWindow(NULL);
 }
 // -----------------------------------------------------------------------------

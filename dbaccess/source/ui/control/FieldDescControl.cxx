@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FieldDescControl.cxx,v $
- * $Revision: 1.49.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1375,6 +1372,14 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
                 ActivateAggregate( tpFormat );
                 break;
             case DataType::BIT:
+                if ( pFieldType->aCreateParams.getLength() )
+                {
+                    DeactivateAggregate( tpFormat );
+                    DeactivateAggregate( tpTextLen );
+                    DeactivateAggregate( tpBoolDefault );
+                    break;
+                }
+                // run through
             case DataType::BOOLEAN:
                 DeactivateAggregate( tpTextLen );
                 DeactivateAggregate( tpFormat );
@@ -1473,7 +1478,9 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     if( pBoolDefault )
     {
         // wenn pRequired auf sal_True gesetzt ist, dann darf das sal_Bool Feld nicht den Eintrag <<keiner>> besitzen
-        String sDef = BoolStringUI(::comphelper::getString(pFieldDescr->GetControlDefault()));
+        ::rtl::OUString sValue;
+        pFieldDescr->GetControlDefault() >>= sValue;
+        String sDef = BoolStringUI(sValue);
 
         // sicher stellen das <<keiner>> nur vorhanden ist, wenn das Feld NULL sein darf
         if ( ( pFieldType.get() && !pFieldType->bNullable ) || !pFieldDescr->IsNullable() )
@@ -1667,8 +1674,7 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
     ::rtl::OUString sDefault;
     if (pDefault)
     {
-        if ( pDefault->GetSavedValue() != pDefault->GetText() )
-            sDefault = pDefault->GetText();
+        sDefault = pDefault->GetText();
     }
     else if (pBoolDefault)
     {

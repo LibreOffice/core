@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RowSetDrop.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -236,6 +233,12 @@ sal_Bool ORowSetImportExport::insertNewRow()
                     case DataType::BINARY:
                     case DataType::VARBINARY:
                         aValue <<= m_xRow->getBytes(*aIter);
+                        break;
+                    case DataType::BLOB:
+                        aValue <<= m_xRow->getBlob(*aIter);
+                        break;
+                    case DataType::CLOB:
+                        aValue <<= m_xRow->getClob(*aIter);
                         break;
                     default:
                         OSL_ENSURE(0,"Unknown type");

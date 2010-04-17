@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: copytablewizard.src,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,4 +65,16 @@ String STR_CTW_ILLEGAL_PARAMETER_COUNT
 String STR_CTW_ERROR_DURING_INITIALIZATION
 {
     Text [ en-US ] = "An error occurred during initialization.";
+};
+String STR_CTW_ERROR_UNSUPPORTED_SETTING
+{
+    Text [ en-US ] = "Unsupported setting in the copy source descriptor: $name$.";
+};
+String STR_CTW_ERROR_NO_QUERY
+{
+    Text [ en-US ] = "To copy a query, your connection must be able to provide queries.";
+};
+String STR_CTW_ERROR_INVALID_INTERACTIONHANDLER
+{
+    Text [ en-US ] = "The given interaction handler is invalid.";
 };

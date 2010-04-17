@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RptObject.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,7 +106,6 @@ protected:
     virtual void SetSnapRectImpl(const Rectangle& _rRect) = 0;
     virtual SdrPage* GetImplPage() const = 0;
     virtual void SetObjectItemHelper(const SfxPoolItem& rItem);
-    sal_Bool IsInside(const Rectangle& _rRect,const Point& rPnt,USHORT nTol) const;
 
     /** called by instances of derived classes to implement their overloading of getUnoShape
     */

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DataSource.java,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +31,7 @@ import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XNamingService;
 import complexlib.ComplexTestCase;
+import connectivity.tools.CRMDatabase;
 import connectivity.tools.HsqlDatabase;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,7 +64,7 @@ public class DataSource extends ComplexTestCase
         {
             if (m_database == null)
             {
-                final CRMDatabase database = new CRMDatabase(getFactory());
+                final CRMDatabase database = new CRMDatabase( getFactory(), false );
                 m_database = database.getDatabase();
                 m_dataSource = m_database.getDataSource();
             }

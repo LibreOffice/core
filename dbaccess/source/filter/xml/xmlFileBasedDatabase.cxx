@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlFileBasedDatabase.cxx,v $
- * $Revision: 1.6.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,7 +99,11 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
                     rtl::OUString sFileName = aPathOptions.SubstituteVariable(sValue);
                     if ( sValue == sFileName )
                     {
-                        sLocation = ::svt::OFileNotation(rImport.GetAbsoluteReference(sValue)).get( ::svt::OFileNotation::N_SYSTEM );
+                        const sal_Int32 nFileNameLength = sFileName.getLength();
+                        if ( ( nFileNameLength > 0 ) && ( sFileName.getStr()[ nFileNameLength - 1 ] == '/' ) )
+                            sFileName = sFileName.copy( 0, nFileNameLength - 1 );
+
+                        sLocation = ::svt::OFileNotation( rImport.GetAbsoluteReference( sFileName ) ).get( ::svt::OFileNotation::N_SYSTEM );
                     }
 
                     if ( sLocation.getLength() == 0 )

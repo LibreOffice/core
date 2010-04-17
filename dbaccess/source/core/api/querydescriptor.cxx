@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: querydescriptor.cxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -242,7 +239,7 @@ Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( ) throw (Ru
         {
             rebuildColumns();
         }
-        catch(...)
+        catch ( const Exception& )
         {
             setColumnsOutOfDate( sal_True );
             throw;
@@ -313,9 +310,10 @@ void OQueryDescriptor_Base::refreshColumns()
 }
 
 //------------------------------------------------------------------------------
-OColumn* OQueryDescriptor_Base::createColumn(const ::rtl::OUString& _rName) const
+OColumn* OQueryDescriptor_Base::createColumn( const ::rtl::OUString& /*_rName*/ ) const
 {
-    return new OTableColumn(_rName);
+    // creating a column/descriptor for a query/descriptor does not make sense at all
+    return NULL;
 }
 // -----------------------------------------------------------------------------
 //........................................................................

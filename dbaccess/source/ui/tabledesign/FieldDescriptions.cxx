@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FieldDescriptions.cxx,v $
- * $Revision: 1.29.50.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -239,8 +236,19 @@ void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,sal_Bool _bF
                 if ( bForce )
                 {
                     sal_Int32 nPrec = DEFAULT_OTHER_PRECSION;
-                    if ( GetPrecision() )
-                        nPrec = GetPrecision();
+                    switch ( _pType->nType )
+                    {
+                        case DataType::BIT:
+                        case DataType::BLOB:
+                        case DataType::CLOB:
+                            nPrec = _pType->nPrecision;
+                            break;
+                        default:
+                            if ( GetPrecision() )
+                                nPrec = GetPrecision();
+                            break;
+                    }
+
                     if ( _pType->nPrecision )
                         SetPrecision(::std::min<sal_Int32>(nPrec ? nPrec : DEFAULT_NUMERIC_PRECSION,_pType->nPrecision));
                     if ( _pType->nMaximumScale )

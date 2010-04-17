@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ModelImpl.hxx,v $
- * $Revision: 1.24.26.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,6 +70,7 @@
 /** === end UNO includes === **/
 
 #include <comphelper/broadcasthelper.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/sharedmutex.hxx>
 #include <connectivity/CommonTools.hxx>
@@ -104,13 +102,32 @@ struct AsciiPropertyValue
     // note: the canonic member order would be AsciiName / DefaultValue, but
     // this crashes on unxlngi6.pro, since there's a bug which somehow results in
     // getDefaultDataSourceSettings returning corrupted Any instances then.
-    ::com::sun::star::uno::Any  DefaultValue;
-    const sal_Char*             AsciiName;
+    ::com::sun::star::uno::Any          DefaultValue;
+    const sal_Char*                     AsciiName;
+    const ::com::sun::star::uno::Type&  ValueType;
+
+    AsciiPropertyValue()
+        :DefaultValue( )
+        ,AsciiName( NULL )
+        ,ValueType( ::cppu::UnoType< ::cppu::UnoVoidType >::get() )
+    {
+    }
 
     AsciiPropertyValue( const sal_Char* _pAsciiName, const ::com::sun::star::uno::Any& _rDefaultValue )
         :DefaultValue( _rDefaultValue )
         ,AsciiName( _pAsciiName )
+        ,ValueType( _rDefaultValue.getValueType() )
     {
+        OSL_ENSURE( ValueType.getTypeClass() != ::com::sun::star::uno::TypeClass_VOID,
+            "AsciiPropertyValue::AsciiPropertyValue: NULL values not allowed here, use the other CTOR for this!" );
+    }
+    AsciiPropertyValue( const sal_Char* _pAsciiName, const ::com::sun::star::uno::Type& _rValeType )
+        :DefaultValue()
+        ,AsciiName( _pAsciiName )
+        ,ValueType( _rValeType )
+    {
+        OSL_ENSURE( ValueType.getTypeClass() != ::com::sun::star::uno::TypeClass_VOID,
+            "AsciiPropertyValue::AsciiPropertyValue: VOID property values not supported!" );
     }
 };
 
@@ -191,7 +208,7 @@ private:
     ODatabaseContext*                                                           m_pDBContext;
     DocumentEventsData                                                          m_aDocumentEvents;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aArgs;
+    ::comphelper::NamedValueCollection                                          m_aMediaDescriptor;
     /// the URL the document was loaded from
     ::rtl::OUString                                                             m_sDocFileLocation;
 
@@ -302,14 +319,18 @@ public:
     DocumentEventsData&
             getDocumentEvents() { return m_aDocumentEvents; }
 
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&
-            getResource() const { return m_aArgs; }
+    const ::comphelper::NamedValueCollection&
+            getMediaDescriptor() const { return m_aMediaDescriptor; }
 
-    void    attachResource(
+    void    setResource(
                 const ::rtl::OUString& _rURL,
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArgs );
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArgs
+            );
+    void    setDocFileLocation(
+                const ::rtl::OUString& i_rLoadedFrom
+            );
 
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+    static ::comphelper::NamedValueCollection
             stripLoadArguments( const ::comphelper::NamedValueCollection& _rArguments );
 
 // other stuff
@@ -324,16 +345,6 @@ public:
 
     /// commits our storage
     void    commitRootStorage();
-
-    /// commits a given storage if it's not readonly
-    static  bool    commitStorageIfWriteable(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage
-            )
-            SAL_THROW((
-                ::com::sun::star::io::IOException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException
-            ));
 
     /// commits a given storage if it's not readonly, ignoring (but asserting) all errors
     static  bool    commitStorageIfWriteable_ignoreErrors(
@@ -472,19 +483,6 @@ public:
                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxNewRootStorage
             );
 
-    /** switches to the given document location/URL
-
-        The document location is the URL of the file from which the document has been loaded.
-        The document URL is the "intended location" of the document. It differs from the location
-        if and only if the document was loaded as part of a document recovery process. In this case,
-        the location points to some temporary file, but the URL is the URL of the file which has been
-        just recovered. The next store operation would operate on the URL, not the location.
-    */
-    void    switchToURL(
-                const ::rtl::OUString& _rDocumentLocation,
-                const ::rtl::OUString& _rDocumentURL
-            );
-
     /** returns the macro mode imposed by an external instance, which passed it to attachResource
     */
     sal_Int16       getImposedMacroExecMode() const
@@ -520,6 +518,14 @@ private:
     void    impl_construct_nothrow();
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
             impl_switchToStorage_throw( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxNewRootStorage );
+
+    /** switches to the given document URL, which denotes the logical URL of the document, not necessariy the
+        URL where the doc was loaded/recovered from
+    */
+    void    impl_switchToLogicalURL(
+                const ::rtl::OUString& i_rDocumentURL
+            );
+
 };
 
 /** a small base class for UNO components whose functionality depends on a ODatabaseModelImpl

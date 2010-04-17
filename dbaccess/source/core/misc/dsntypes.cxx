@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dsntypes.cxx,v $
- * $Revision: 1.1.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -185,7 +182,7 @@ String ODsnTypeCollection::getMediaType(const ::rtl::OUString& _sURL) const
 // -----------------------------------------------------------------------------
 String ODsnTypeCollection::getDatasourcePrefixFromMediaType(const ::rtl::OUString& _sMediaType,const ::rtl::OUString& _sExtension)
 {
-    String sURL;
+    String sURL, sFallbackURL;
     const uno::Sequence< ::rtl::OUString > aURLs = m_aDriverConfig.getURLs();
     const ::rtl::OUString* pIter = aURLs.getConstArray();
     const ::rtl::OUString* pEnd = pIter + aURLs.getLength();
@@ -195,13 +192,19 @@ String ODsnTypeCollection::getDatasourcePrefixFromMediaType(const ::rtl::OUStrin
         if ( aFeatures.getOrDefault("MediaType",::rtl::OUString()) == _sMediaType )
         {
             const ::rtl::OUString sFileExtension = aFeatures.getOrDefault("Extension",::rtl::OUString());
-            if ( (sFileExtension.getLength() && _sExtension == sFileExtension ) || !sFileExtension.getLength() || !_sExtension.getLength() )
+            if ( _sExtension == sFileExtension )
             {
                 sURL = *pIter;
                 break;
             }
+            if ( !sFileExtension.getLength() && _sExtension.getLength() )
+                sFallbackURL = *pIter;
         }
     } // for(;pIter != pEnd;++pIter )
+
+    if ( !sURL.Len() && sFallbackURL.Len() )
+        sURL = sFallbackURL;
+
     sURL.EraseTrailingChars('*');
     return sURL;
 }
@@ -438,7 +441,6 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const String& _rDsn) const
             return aKnowPrefixes[i].eType;
     }
 
-    DBG_ERROR("ODsnTypeCollection::implDetermineType : unrecognized data source type !");
     return DST_UNKNOWN;
 }
 // -----------------------------------------------------------------------------

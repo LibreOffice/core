@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: advancedsettings.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,6 +71,7 @@ namespace dbaui
         CheckBox*           m_pCheckRequiredFields;
         CheckBox*           m_pIgnoreCurrency;
         CheckBox*           m_pEscapeDateTime;
+        CheckBox*           m_pPrimaryKeySupport;
 
         FixedText*          m_pBooleanComparisonModeLabel;
         ListBox*            m_pBooleanComparisonMode;
@@ -83,8 +81,7 @@ namespace dbaui
 
         BooleanSettingDescs m_aBooleanSettings;
 
-        AdvancedSettingsSupport
-                            m_aSupported;
+        bool                m_bHasBooleanComparisonMode;
 
     public:
         virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );

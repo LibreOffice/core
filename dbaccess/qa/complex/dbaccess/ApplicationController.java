@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ApplicationController.java,v $
- * $Revision: 1.1.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,16 +104,16 @@ public class ApplicationController extends TestCase
 
         // load it into a frame
         final Object object = getORB().createInstance("com.sun.star.frame.Desktop");
-        final XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, object);
+        final XComponentLoader xComponentLoader = UnoRuntime.queryInterface(XComponentLoader.class, object);
         final XComponent loadedComponent = xComponentLoader.loadComponentFromURL(m_database.getDocumentURL(), "_blank", FrameSearchFlag.ALL, new PropertyValue[0]);
 
         assure("too many document instances!",
                 UnoRuntime.areSame(loadedComponent, m_databaseDocument));
 
         // get the controller, which provides access to various UI operations
-        final XModel docModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+        final XModel docModel = UnoRuntime.queryInterface(XModel.class,
                 loadedComponent);
-        m_documentUI = (XDatabaseDocumentUI) UnoRuntime.queryInterface(XDatabaseDocumentUI.class,
+        m_documentUI = UnoRuntime.queryInterface(XDatabaseDocumentUI.class,
                 docModel.getCurrentController());
     }
 
@@ -144,11 +141,8 @@ public class ApplicationController extends TestCase
         final String newDocumentURL = createTempFileURL();
 
         // store the doc in a new location
-        final XStorable storeDoc = (XStorable) UnoRuntime.queryInterface(XStorable.class,
-                m_databaseDocument);
-        storeDoc.storeAsURL(newDocumentURL, new PropertyValue[]
-                {
-                });
+        final XStorable storeDoc = UnoRuntime.queryInterface( XStorable.class, m_databaseDocument );
+        storeDoc.storeAsURL( newDocumentURL, new PropertyValue[] { } );
 
         // connect
         m_documentUI.connect();
@@ -166,8 +160,7 @@ public class ApplicationController extends TestCase
         impl_switchToDocument(oldDocumentURL);
         m_documentUI.connect();
         assure("could not connect to " + m_database.getDocumentURL(), m_documentUI.isConnected());
-        XTablesSupplier suppTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class,
-                m_documentUI.getActiveConnection());
+        XTablesSupplier suppTables = UnoRuntime.queryInterface( XTablesSupplier.class, m_documentUI.getActiveConnection() );
         XNameAccess tables = suppTables.getTables();
         assure("the table was created in the wrong database", !tables.hasByName("abc"));
 
@@ -176,8 +169,7 @@ public class ApplicationController extends TestCase
         m_documentUI.connect();
         assure("could not connect to " + m_database.getDocumentURL(), m_documentUI.isConnected());
 
-        suppTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class,
-                m_documentUI.getActiveConnection());
+        suppTables = UnoRuntime.queryInterface( XTablesSupplier.class, m_documentUI.getActiveConnection() );
         tables = suppTables.getTables();
         assure("the newly created table has not been written", tables.hasByName("abc"));
     }
