@@ -37,7 +37,7 @@ gb_Library_OOOLIBS :=\
     fwk \
     fwl \
     fwm \
-    go \
+    editeng \
     lng \
     msfilter \
     msword \

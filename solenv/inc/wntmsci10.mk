@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: wntmsci10.mk,v $
-#
-# $Revision: 1.44 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -213,8 +209,7 @@ MODULES_WITH_WARNINGS := \
     lingucomponent \
     soldep
 
-CDEFS+=-DSTLPORT_VERSION=$(STLPORT_VER) -DWINVER=0x400 -D_WIN32_IE=0x400
-CDEFS+=-D_MT
+CDEFS+=-DSTLPORT_VERSION=$(STLPORT_VER) -D_MT -DWINVER=0x0500 -D_WIN32_WINNT=0x0500 -D_WIN32_IE=0x0500
 
 COMMENTFLAG=/COMMENT:"$(PRJNAME)_$(UPD)_$(VCSID)_"
 

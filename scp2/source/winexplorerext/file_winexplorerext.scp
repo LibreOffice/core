@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: file_winexplorerext.scp,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,13 +39,6 @@ File gid_File_Lib_OOoFilt
     Name = "ooofilt.dll";
 End
 
-File gid_File_Lib_OOoFiltProxy
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Shlxthdl;
-    Name = "ooofiltproxy.dll";
-End
-
 #ifdef BUILD_X64
 
 File gid_File_Lib_OOoFilt64
@@ -56,14 +46,6 @@ File gid_File_Lib_OOoFilt64
     Styles = (PACKED);
     Dir = gid_Dir_Shlxthdl;
     Name = "ooofilt_x64.dll";
-    ComponentCondition = "VersionNT64";
-End
-
-File gid_File_Lib_OOoFiltProxy64
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Shlxthdl;
-    Name = "ooofiltproxy_x64.dll";
     ComponentCondition = "VersionNT64";
 End
 
@@ -87,34 +69,29 @@ End
 
 #endif
 
+File gid_File_Lib_PropertyHdl
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Shlxthdl;
+    Name = "propertyhdl.dll";
+End
+
+#ifdef BUILD_X64
+	File gid_File_Lib_PropertyHdl64
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Shlxthdl;
+    Name = "propertyhdl_x64.dll";
+    ComponentCondition = "VersionNT64";
+End
+
+#endif
+
 #if defined M1310
 File gid_File_Lib_Shlxthdl_Msvcr71
     TXT_FILE_BODY;
     Dir = gid_Dir_Shlxthdl;
     Name = SCP2_URE_DL_NORMAL("msvcr71" SCP2_STDLP_DEBUG);
-    Styles = (PACKED);
-End
-#endif
-
-#if !defined USE_SYSTEM_STL
-File gid_File_Lib_Shlxthdl_Stlport
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Shlxthdl;
-#if defined _gcc3 /* && defined WNT */
-#if defined _STLP_DEBUG
-    Name = SCP2_URE_DL_NORMAL("libstlport_gcc_stldebug");
-#else
-    Name = SCP2_URE_DL_NORMAL("libstlport_gcc");
-#endif
-#elif (defined(M1310) || defined(M1400) || defined(M1500)) /* && defined WNT */
-#if defined _STLP_DEBUG
-    Name = SCP2_URE_DL_NORMAL("stlport_vc71_stldebug45");
-#else
-    Name = SCP2_URE_DL_NORMAL("stlport_vc7145");
-#endif
-#else
-#error "stlport dynamic library: unsupported platform"
-#endif
     Styles = (PACKED);
 End
 #endif
@@ -132,3 +109,4 @@ File gid_File_Lib_Reg64
     Dir = SCP2_OOO_BIN_DIR;
     Name = "reg64msi.dll";
 End
+

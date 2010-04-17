@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: upgrade.pm,v $
-#
-# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,7 +47,7 @@ sub create_upgrade_table
     # fix for problematic OOo 1.9 versions
     my $include_ooo_fix = 0;
     my $ooomaxnew = "";
-    if (($installer::globals::product =~ /OpenOffice/i ) && ( ! ( $installer::globals::product =~ /SDK/i )) && ( ! $installer::globals::languagepack ))
+    if (($installer::globals::product =~ /^\s*OpenOffice/i ) && ( ! ( $installer::globals::product =~ /SDK/i )) && ( ! $installer::globals::languagepack ))
     {
         $include_ooo_fix = 1;
         $ooomaxnew = "34.0.0";
