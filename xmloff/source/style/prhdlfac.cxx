@@ -30,10 +30,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/text/HorizontalAdjust.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+
 #include <tools/debug.hxx>
+
 #include <xmloff/prhdlfac.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -42,9 +45,7 @@
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 #include "cdouthdl.hxx"
 #include "csmaphdl.hxx"
-#ifndef _XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
 #include "fonthdl.hxx"
-#endif
 #include "kernihdl.hxx"
 #include <postuhdl.hxx>
 #include "shadwhdl.hxx"

@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_PROPERTYHANDLER_FONTYPES_HXX
-#define _XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
+#ifndef XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
+#define XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
 
 #include <xmloff/xmlprhdl.hxx>
 
@@ -82,4 +82,4 @@ public:
 };
 
 
-#endif      // _XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
+#endif // XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX

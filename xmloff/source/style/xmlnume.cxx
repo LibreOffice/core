@@ -30,15 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include <rtl/ustrbuf.hxx>
-#include <tools/debug.hxx>
-#include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
-#include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
-#ifndef _XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
-#include "fonthdl.hxx"
-#endif
+
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyle.hpp>
@@ -55,10 +47,21 @@
 // <--
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+
+#include <rtl/ustrbuf.hxx>
+
+#include <tools/debug.hxx>
+
+#include <xmloff/nmspmap.hxx>
+#include "xmlnmspe.hxx"
+#include <xmloff/xmltoken.hxx>
+#include <xmloff/xmluconv.hxx>
+#include "fonthdl.hxx"
 #include "XMLTextListAutoStylePool.hxx"
 #include <xmloff/xmlnume.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <tools/fontenum.hxx>
+
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
