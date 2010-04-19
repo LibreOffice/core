@@ -27,6 +27,8 @@
 
 $(eval $(call gb_AllLangResTarget_AllLangResTarget,sfx))
 
+$(eval $(call gb_AllLangResTarget_set_reslocation,sfx,sfx2))
+
 $(eval $(call gb_AllLangResTarget_add_srs,sfx,\
     sfx/res \
 ))
