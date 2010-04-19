@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
-#include "modsizeexceeded.hxx"
+#include "basic/modsizeexceeded.hxx"
 
 #include <framework/interaction.hxx>
 #include <com/sun/star/script/ModuleSizeExceededRequest.hpp>

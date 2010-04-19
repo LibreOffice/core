@@ -60,7 +60,7 @@
 #include <svtools/ehdl.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
-#include "modsizeexceeded.hxx"
+#include "basic/modsizeexceeded.hxx"
 #include <xmlscript/xmlmod_imexp.hxx>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/util/VetoException.hpp>
