@@ -123,7 +123,7 @@ CONFIGURE_FLAGS = --prefix=$(shell cd $(PACKAGE_DIR) && \
     pwd $(PWDFLAGS))/$(TARFILE_ROOTDIR)/ooo-install \
     --disable-dependency-tracking --disable-static --disable-doxygen \
     --disable-html-docs --disable-latex-docs CC='$(CC)' CXX='$(CXX)' \
-    CXXFLAGS='$(OOO_STLPORT_CXXFLAGS)' \
+    CXXFLAGS='$(EXTRA_CFLAGS) $(OOO_STLPORT_CXXFLAGS)' \
     LDFLAGS='$(LDFLAGS) $(OOO_STLPORT_LDFLAGS)' \
     LIBS='$(OOO_STLPORT_LIBS) $(MY_LIBS)'
 
