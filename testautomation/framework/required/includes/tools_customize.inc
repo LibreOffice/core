@@ -471,7 +471,7 @@ if ( not hClickCommandButton( MENUITEM_MODIFY ) ) then
     waitslot
     printlog( CFN & "Click the Modify-button" )
 
-if ( not hClickCommandButton( 3 ) ) then
+    if ( not hClickCommandButton( 3 ) ) then
         warnlog( CFN & "Something went wrong when accessing the command button" )
         exit function
     endif
