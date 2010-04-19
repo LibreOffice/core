@@ -389,7 +389,7 @@ void TableDesignPane::updateLayout()
                 mxControls[nId]->SetPaintTransparent(TRUE);
                 mxControls[nId]->SetBackground();
             }
-            aValueSetSize = Size( aPaneSize.Width() - 2 * aOffset.X(), nStylesHeight - mxControls[FL_TABLE_STYLES]->GetSizePixel().Height() - mnOrgOffsetY[FL_TABLE_STYLES]  );
+            aValueSetSize = Size( pValueSet->GetSizePixel().Width(), nStylesHeight - mxControls[FL_TABLE_STYLES]->GetSizePixel().Height() - mnOrgOffsetY[FL_TABLE_STYLES]  );
         }
         else
         {
