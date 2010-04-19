@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: java_fat.java,v $
- * $Revision: 1.15.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,43 +59,43 @@ import util.DynamicClassLoader;
 public class java_fat implements TestBase
 {
 
-    private static boolean debug = false;
+    private static boolean m_isDebug = false;
     private static boolean keepdocument = false;
     private static boolean logging = true;
     private static boolean newOffice = false;
-    private DynamicClassLoader dcl = null;
+    private DynamicClassLoader m_aDynamicClassLoader = null;
 
     private lib.TestParameters m_aParams;
     private AppProvider m_aOffice;
 
-    public boolean executeTest(lib.TestParameters param)
+    public boolean executeTest(lib.TestParameters _aParams)
         {
-            m_aParams = param;
+            m_aParams = _aParams;
 
-            dcl = new DynamicClassLoader();
+            m_aDynamicClassLoader = new DynamicClassLoader();
 
             DescGetter dg = new APIDescGetter();
-            String job = (String) param.get("TestJob");
-            String ExclusionFile = (String) param.get("ExclusionList");
+            String job = (String) m_aParams.get("TestJob");
+            String ExclusionFile = (String) m_aParams.get("ExclusionList");
             Vector exclusions = null;
             boolean retValue = true;
-            debug = param.getBool("DebugIsActive");
-            logging = param.getBool("LoggingIsActive");
-            keepdocument = param.getBool("KeepDocument");
-            newOffice = param.getBool(util.PropertyName.NEW_OFFICE_INSTANCE);
+            m_isDebug = m_aParams.getBool("DebugIsActive");
+            logging = m_aParams.getBool("LoggingIsActive");
+            keepdocument = m_aParams.getBool("KeepDocument");
+            newOffice = m_aParams.getBool(util.PropertyName.NEW_OFFICE_INSTANCE);
             if (keepdocument)
             {
                 System.setProperty("KeepDocument", "true");
             }
             if (ExclusionFile != null)
             {
-                exclusions = getExclusionList(ExclusionFile, debug);
+                exclusions = getExclusionList(ExclusionFile, m_isDebug);
             }
             //get Job-Descriptions
-            System.out.println("Getting Descriptions for Job: " + job);
+            // System.out.println("Getting Descriptions for Job: " + job);
 
-            String sDescriptionPath = (String) param.get("DescriptionPath");
-            DescEntry[] entries = dg.getDescriptionFor(job, sDescriptionPath, debug);
+            String sDescriptionPath = (String) m_aParams.get("DescriptionPath");
+            DescEntry[] entries = dg.getDescriptionFor(job, sDescriptionPath, m_isDebug);
 
             // System.out.println();
 
@@ -109,8 +106,8 @@ public class java_fat implements TestBase
                 return false;
             }
 
-//        String officeProviderName = (String) param.get("OfficeProvider");
-//        AppProvider office = (AppProvider) dcl.getInstance(officeProviderName);
+//        String officeProviderName = (String) m_aParams.get("OfficeProvider");
+//        AppProvider office = (AppProvider) m_aDynamicClassLoader.getInstance(officeProviderName);
 //
 //        if (office == null) {
 //            System.out.println("ERROR: Wrong parameter 'OfficeProvider', " +
@@ -118,18 +115,22 @@ public class java_fat implements TestBase
 //            System.exit(-1);
 //        }
 
-            m_aOffice = startOffice(param);
+            m_aOffice = startOffice(m_aParams);
 
             boolean firstRun = true;
 
+            // Run through all entries (e.g. sw.SwXBookmark.*)
+
             for (int l = 0; l < entries.length; l++)
             {
-                if (entries[l] == null)
+                DescEntry entry = entries[l];
+
+                if (entry == null)
                 {
                     continue;
                 }
 
-                if (entries[l].hasErrorMsg)
+                if (entry.hasErrorMsg)
                 {
                     System.out.println(entries[l].ErrorMsg);
                     retValue = false;
@@ -138,145 +139,86 @@ public class java_fat implements TestBase
 
                 if (!firstRun && newOffice)
                 {
-                    if (!m_aOffice.closeExistingOffice(param, true))
+                    if (!m_aOffice.closeExistingOffice(m_aParams, true))
                     {
-                        m_aOffice.disposeManager(param);
+                        m_aOffice.disposeManager(m_aParams);
                     }
-                    startOffice(param);
+                    startOffice(m_aParams);
                 }
                 firstRun = false;
 
-//            XMultiServiceFactory msf = (XMultiServiceFactory) office.getManager(
-//                                               param);
-
-                XMultiServiceFactory msf = (XMultiServiceFactory) param.getMSF();
+                XMultiServiceFactory msf = (XMultiServiceFactory) m_aParams.getMSF();
 
                 if (msf == null)
                 {
                     retValue = false;
-
                     continue;
                 }
-
-//            param.put("ServiceFactory", msf);
-
-                DescEntry entry = entries[l];
 
                 //get some helper classes
                 Summarizer sumIt = new Summarizer();
-
-                TestCase tCase = null;
-
-                try
-                {
-                    tCase = (TestCase) dcl.getInstance("mod._" + entry.entryName);
-                }
-                catch (java.lang.IllegalArgumentException ie)
-                {
-                    entry.ErrorMsg = ie.getMessage();
-                    entry.hasErrorMsg = true;
-                }
-                catch (java.lang.NoClassDefFoundError ie)
-                {
-                    entry.ErrorMsg = ie.getMessage();
-                    entry.hasErrorMsg = true;
-                }
-
+                TestCase tCase = getTestCase(entry);
                 if (tCase == null)
                 {
-                    Summarizer.summarizeDown(entry, entry.ErrorMsg);
-
-                    LogWriter sumObj = OutProducerFactory.createOutProducer(param);
-                    entry.UserDefinedParams = param;
-                    sumObj.initialize(entry, logging);
-                    sumObj.summary(entry);
-
                     continue;
                 }
 
-                if (debug)
-                {
-                    System.out.println("sleeping 5 seconds..");
-                }
-                util.utils.shortWait(5000);
+//                if (m_isDebug)
+//                {
+//                    System.out.println("sleeping 2 seconds..");
+//                }
+                util.utils.shortWait(2000);
 
                 System.out.println("Creating: " + entry.entryName);
 
-                LogWriter log = (LogWriter) dcl.getInstance((String) param.get("LogWriter"));
+                LogWriter log = (LogWriter) m_aDynamicClassLoader.getInstance((String) m_aParams.get("LogWriter"));
                 log.initialize(entry, logging);
-                entry.UserDefinedParams = param;
+                entry.UserDefinedParams = m_aParams;
 
-                TestEnvironment tEnv = null;
+                tCase.setLogWriter((PrintWriter) log);
+                tCase.initializeTestCase(m_aParams);
 
-                try
-                {
-                    tCase.setLogWriter((PrintWriter) log);
-                    tCase.initializeTestCase(param);
-                    tEnv = tCase.getTestEnvironment(param);
-                }
-                catch (Exception e)
-                {
-                    System.out.println("Exception while creating " + tCase.getObjectName());
-                    System.out.println("Message " + e.getMessage());
-                    e.printStackTrace();
-                    tEnv = null;
-                }
-                catch (java.lang.UnsatisfiedLinkError e)
-                {
-                    System.out.println("Exception while creating " + tCase.getObjectName());
-                    System.out.println("Message " + e.getMessage());
-                    tEnv = null;
-                }
-                catch (java.lang.NoClassDefFoundError e)
-                {
-                    System.out.println("Exception while creating " + tCase.getObjectName());
-                    System.out.println("Message " + e.getMessage());
-                    tEnv = null;
-                }
-
+                TestEnvironment tEnv = getTestEnvironment(tCase, entry);
                 if (tEnv == null)
                 {
-                    Summarizer.summarizeDown(entry, "Couldn't create " + tCase.getObjectName());
-
-                    LogWriter sumObj = OutProducerFactory.createOutProducer(param);
-                    entry.UserDefinedParams = param;
-                    sumObj.initialize(entry, logging);
-                    sumObj.summary(entry);
-
                     continue;
                 }
 
-                System.out.println(tCase.getObjectName() + " recreated ");
+                final String sObjectName = tCase.getObjectName();
+                // System.out.println(sObjectName + " recreated ");
 
                 for (int j = 0; j < entry.SubEntryCount; j++)
                 {
                     DescEntry aSubEntry = entry.SubEntries[j];
-                    if (!aSubEntry.isToTest)
+                    final boolean bIsToTest = aSubEntry.isToTest;
+                    if (!bIsToTest)
                     {
                         Summarizer.summarizeDown(aSubEntry, "not part of the job");
-
                         continue;
                     }
 
-                    if ((exclusions != null) && (exclusions.contains(aSubEntry.longName)))
+                    // final String sEntryName = aSubEntry.entryName;
+                    final String sLongEntryName = aSubEntry.longName;
+
+                    if ((exclusions != null) && (exclusions.contains(sLongEntryName)))
                     {
                         Summarizer.summarizeDown(aSubEntry, "known issue");
-
                         continue;
                     }
 
-                    System.out.println("running: '" + aSubEntry.entryName + "'");
+                    // System.out.println("running: '" + sLongEntryName + "' testcode: [" + sEntryName + "]");
+                    // this will shown in test itself
 
-                    LogWriter ifclog = (LogWriter) dcl.getInstance( (String) param.get("LogWriter"));
+                    LogWriter ifclog = (LogWriter) m_aDynamicClassLoader.getInstance( (String) m_aParams.get("LogWriter"));
 
                     ifclog.initialize(aSubEntry, logging);
-                    aSubEntry.UserDefinedParams = param;
+                    aSubEntry.UserDefinedParams = m_aParams;
                     aSubEntry.Logger = ifclog;
 
                     if ((tEnv == null) || tEnv.isDisposed())
                     {
                         closeExistingOffice();
-                        tEnv = getEnv(entry, param);
+                        tEnv = getEnv(entry, m_aParams);
                     }
 
                     // MultiMethodTest ifc = null;
@@ -291,7 +233,7 @@ public class java_fat implements TestBase
                         {
                             countInterfaceTestRun++;
                             finished = true;
-                            res = executeInterfaceTest(aSubEntry, tEnv, param);
+                            res = executeInterfaceTest(aSubEntry, tEnv, m_aParams);
                         }
                         catch (IllegalArgumentException iae)
                         {
@@ -308,7 +250,7 @@ public class java_fat implements TestBase
                         catch (java.lang.RuntimeException e)
                         {
                             closeExistingOffice();
-                            tEnv = getEnv(entry, param);
+                            tEnv = getEnv(entry, m_aParams);
                             if (countInterfaceTestRun < 2)
                             {
                                 finished = false;
@@ -323,8 +265,8 @@ public class java_fat implements TestBase
 
                     sumIt.summarizeUp(aSubEntry);
 
-                    LogWriter sumIfc = OutProducerFactory.createOutProducer(param);
-                    aSubEntry.UserDefinedParams = param;
+                    LogWriter sumIfc = OutProducerFactory.createOutProducer(m_aParams);
+                    aSubEntry.UserDefinedParams = m_aParams;
                     sumIfc.initialize(aSubEntry, logging);
                     sumIfc.summary(aSubEntry);
                 }
@@ -333,7 +275,7 @@ public class java_fat implements TestBase
                 {
                     if (!keepdocument)
                     {
-                        tCase.cleanupTestCase(param);
+                        tCase.cleanupTestCase(m_aParams);
                     }
                 }
                 catch (Exception e)
@@ -347,7 +289,7 @@ public class java_fat implements TestBase
 
                 sumIt.summarizeUp(entry);
 
-                LogWriter sumObj = OutProducerFactory.createOutProducer(param);
+                LogWriter sumObj = OutProducerFactory.createOutProducer(m_aParams);
 
                 sumObj.initialize(entry, logging);
                 sumObj.summary(entry);
@@ -362,7 +304,8 @@ public class java_fat implements TestBase
 
                 for (int i = 0; i < entries.length; i++)
                 {
-                    if (!entries[i].State.endsWith("OK"))
+                    final String sState = entries[i].State;
+                    if (!sState.endsWith("OK"))
                     {
                         System.out.println("\t " + entries[i].longName);
                         counter++;
@@ -375,6 +318,78 @@ public class java_fat implements TestBase
             closeExistingOffice();
             return retValue;
         }
+
+//
+    private TestEnvironment getTestEnvironment(TestCase tCase, DescEntry entry)
+    {
+        TestEnvironment tEnv = null;
+
+        try
+        {
+            tEnv = tCase.getTestEnvironment(m_aParams);
+        }
+        catch (Exception e)
+        {
+            System.out.println("Exception while creating " + tCase.getObjectName());
+            System.out.println("Message " + e.getMessage());
+            e.printStackTrace();
+            tEnv = null;
+        }
+        catch (java.lang.UnsatisfiedLinkError e)
+        {
+            System.out.println("Exception while creating " + tCase.getObjectName());
+            System.out.println("Message " + e.getMessage());
+            tEnv = null;
+        }
+        catch (java.lang.NoClassDefFoundError e)
+        {
+            System.out.println("Exception while creating " + tCase.getObjectName());
+            System.out.println("Message " + e.getMessage());
+            tEnv = null;
+        }
+
+        if (tEnv == null)
+        {
+            Summarizer.summarizeDown(entry, "Couldn't create " + tCase.getObjectName());
+
+            LogWriter sumObj = OutProducerFactory.createOutProducer(m_aParams);
+            entry.UserDefinedParams = m_aParams;
+            sumObj.initialize(entry, logging);
+            sumObj.summary(entry);
+        }
+        return tEnv;
+    }
+    // -------------------------------------------------------------------------
+    private TestCase getTestCase(DescEntry _aEntry)
+    {
+        TestCase tCase = null;
+
+        try
+        {
+            tCase = (TestCase) m_aDynamicClassLoader.getInstance("mod._" + _aEntry.entryName);
+        }
+        catch (java.lang.IllegalArgumentException ie)
+        {
+            _aEntry.ErrorMsg = ie.getMessage();
+            _aEntry.hasErrorMsg = true;
+        }
+        catch (java.lang.NoClassDefFoundError ie)
+        {
+            _aEntry.ErrorMsg = ie.getMessage();
+            _aEntry.hasErrorMsg = true;
+        }
+
+        if (tCase == null)
+        {
+            Summarizer.summarizeDown(_aEntry, _aEntry.ErrorMsg);
+
+            LogWriter sumObj = OutProducerFactory.createOutProducer(m_aParams);
+            _aEntry.UserDefinedParams = m_aParams;
+            sumObj.initialize(_aEntry, logging);
+            sumObj.summary(_aEntry);
+        }
+        return tCase;
+}
 
     private void setState(DescEntry aSubEntry, lib.TestResult res)
     {
@@ -393,10 +408,10 @@ public class java_fat implements TestBase
 
     private TestEnvironment getEnv(DescEntry entry, TestParameters param)
         {
-//        if (dcl == null)
-//            dcl = new DynamicClassLoader();
-//        String officeProviderName = (String) param.get("OfficeProvider");
-//        AppProvider office = (AppProvider) dcl.getInstance(officeProviderName);
+//        if (m_aDynamicClassLoader == null)
+//            m_aDynamicClassLoader = new DynamicClassLoader();
+//        String officeProviderName = (String) m_aParams.get("OfficeProvider");
+//        AppProvider office = (AppProvider) m_aDynamicClassLoader.getInstance(officeProviderName);
 //
 //        if (office == null) {
 //            System.out.println("ERROR: Wrong parameter 'OfficeProvider', " +
@@ -405,21 +420,21 @@ public class java_fat implements TestBase
 //        }
 //
 //        XMultiServiceFactory msf = (XMultiServiceFactory) office.getManager(
-//                                           param);
+//                                           m_aParams);
 //
 //        if (msf == null) {
 //            return null;
 //        }
 //
-//        param.put("ServiceFactory", msf);
+//        m_aParams.put("ServiceFactory", msf);
 
-            // AppProvider office = startOffice(param);
+            // AppProvider office = startOffice(m_aParams);
 
             TestCase tCase = null;
 
             try
             {
-                tCase = (TestCase) dcl.getInstance("mod._" + entry.entryName);
+                tCase = (TestCase) m_aDynamicClassLoader.getInstance("mod._" + entry.entryName);
             }
             catch (java.lang.IllegalArgumentException ie)
             {
@@ -436,7 +451,7 @@ public class java_fat implements TestBase
 
             entry.UserDefinedParams = param;
 
-            LogWriter log = (LogWriter) dcl.getInstance((String) param.get("LogWriter"));
+            LogWriter log = (LogWriter) m_aDynamicClassLoader.getInstance((String) param.get("LogWriter"));
             log.initialize(entry, logging);
             tCase.setLogWriter((PrintWriter) log);
 
@@ -472,21 +487,21 @@ public class java_fat implements TestBase
             if (ph != null)
             {
                 m_aOffice.closeExistingOffice(m_aParams, true);
-                shortWait(5000);
+                util.utils.shortWait(5000);
             }
 
         }
 
-    private void shortWait(int millis)
-        {
-            try
-            {
-                Thread.sleep(millis);
-            }
-            catch (java.lang.InterruptedException ie)
-            {
-            }
-        }
+//    private void shortWait(int millis)
+//        {
+//            try
+//            {
+//                Thread.sleep(millis);
+//            }
+//            catch (java.lang.InterruptedException ie)
+//            {
+//            }
+//        }
 
     private Vector getExclusionList(String url, boolean debug)
         {
@@ -551,20 +566,20 @@ public class java_fat implements TestBase
         DescEntry entry, TestEnvironment tEnv, TestParameters param)
         throws IllegalArgumentException, java.lang.NoClassDefFoundError
         {
-            MultiMethodTest ifc = (MultiMethodTest) dcl.getInstance(entry.entryName);
+            MultiMethodTest ifc = (MultiMethodTest) m_aDynamicClassLoader.getInstance(entry.entryName);
             return ifc.run(entry, tEnv, param);
         }
 
     private AppProvider startOffice(lib.TestParameters param)
         {
 
-            if (dcl == null)
+            if (m_aDynamicClassLoader == null)
             {
-                dcl = new DynamicClassLoader();
+                m_aDynamicClassLoader = new DynamicClassLoader();
             }
 
             String officeProviderName = (String) param.get("OfficeProvider");
-            AppProvider office = (AppProvider) dcl.getInstance(officeProviderName);
+            AppProvider office = (AppProvider) m_aDynamicClassLoader.getInstance(officeProviderName);
 
             if (office == null)
             {

@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '*******************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: t_menu.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-13 10:27:10 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/******************************************************************************
 '*
 '* Owner : thorsten.bosbach@sun.com
@@ -592,56 +586,36 @@ function hUseMenu ()
     '///+ very global function: depends on 'gApplication' just activates the menu-bar ///'
 
     Select Case Ucase(gApplication)
-    Case "WRITER"
-
-        Kontext "DocumentWriter"
-        DocumentWriter.UseMenu
-
-    Case "MASTERDOCUMENT"
-
-        Kontext "DocumentMasterDoc"
-        DocumentMasterDoc.UseMenu
-
-    Case "HTML"
-
-        Kontext "DocumentWriterWeb"
-        DocumentWriterWeb.UseMenu
-
-    case "CALC" ' there are 2 entries over :-( usually only one, html 0 :-((((
-
-        Kontext "DocumentCalc"
-        DocumentCalc.UseMenu
-
-    case "DRAW"
-
-        Kontext "DocumentDraw"
-        DocumentDraw.UseMenu
-
-    case "IMPRESS"
-
-        Kontext "DocumentImpress"
-        DocumentImpress.UseMenu
-
-    case "MATH" :
-
-        Kontext "DocumentMath"
-        DocumentMath.UseMenu
-
-    case "DATABASE" :
-
-        Kontext "DATABASE"
-        Database.UseMenu
-
-    case "BASIC" :
-
-        Kontext "BasicIde"
-        BasicIde.UseMenu
-
-    case "NONE" :
-
-        Kontext "DocumentBackground"
-        DocumentBackground.UseMenu
-
+        Case "WRITER"
+            Kontext "DocumentWriter"
+            DocumentWriter.UseMenu
+        Case "MASTERDOCUMENT"
+            Kontext "DocumentMasterDoc"
+            DocumentMasterDoc.UseMenu
+        Case "HTML"
+            Kontext "DocumentWriterWeb"
+            DocumentWriterWeb.UseMenu
+        case "CALC" ' there are 2 entries over :-( usually only one, html 0 :-((((
+            Kontext "DocumentCalc"
+            DocumentCalc.UseMenu
+        case "DRAW"
+            Kontext "DocumentDraw"
+            DocumentDraw.UseMenu
+        case "IMPRESS"
+            Kontext "DocumentImpress"
+            DocumentImpress.UseMenu
+        case "MATH" :
+            Kontext "DocumentMath"
+            DocumentMath.UseMenu
+        case "DATABASE" :
+            Kontext "DATABASE"
+            Database.UseMenu
+        case "BASIC" :
+            Kontext "BasicIde"
+            BasicIde.UseMenu
+        case "NONE" :
+            Kontext "DocumentBackground"
+            DocumentBackground.UseMenu
     end select
 
 end function
@@ -651,43 +625,28 @@ end function
 function hOpenContextMenu()
 
     '/// very global function: depends on 'gApplication' just opens the Context Menu ///'
-
     Select Case Ucase(gApplication)
-    Case "WRITER"
-
-        Kontext "DocumentWriter"
-        DocumentWriter.openContextMenu
-
-    Case "MASTERDOCUMENT"
-
-        Kontext "DocumentMasterDoc"
-        DocumentMasterDoc.openContextMenu
-
-    Case "HTML"
-
-        Kontext "DocumentWriterWeb"
-        DocumentWriterWeb.openContextMenu
-
-    case "CALC"
-
-        Kontext "DocumentCalc"
-        DocumentCalc.openContextMenu
-
-    case "DRAW"
-
-        Kontext "DocumentDraw"
-        DocumentDraw.openContextMenu
-
-    case "IMPRESS"
-
-        Kontext "DocumentImpress"
-        DocumentImpress.openContextMenu
-
-    case "MATH" :
-
-        Kontext "DocumentMath"
-        DocumentMath.openContextMenu
-
+        Case "WRITER"
+            Kontext "DocumentWriter"
+            DocumentWriter.openContextMenu
+        Case "MASTERDOCUMENT"
+            Kontext "DocumentMasterDoc"
+            DocumentMasterDoc.openContextMenu
+        Case "HTML"
+            Kontext "DocumentWriterWeb"
+            DocumentWriterWeb.openContextMenu
+        case "CALC"
+            Kontext "DocumentCalc"
+            DocumentCalc.openContextMenu
+        case "DRAW"
+            Kontext "DocumentDraw"
+            DocumentDraw.openContextMenu
+        case "IMPRESS"
+            Kontext "DocumentImpress"
+            DocumentImpress.openContextMenu
+        case "MATH" :
+            Kontext "DocumentMath"
+            DocumentMath.openContextMenu
     end select
 
 end function
@@ -715,72 +674,63 @@ function hGetWindowCaption(sApplication as string, optional bAll as boolean)
     endif
     for i=0 to iTimes
         Select Case Ucase(sApplication)
-        Case "SWRITER"
-
-            Kontext "DocumentWriter"
-            try
-                sTemp = DocumentWriter.caption
-            catch
-            endcatch
-        Case "SGLOBAL"
-
-            Kontext "DocumentMasterDoc"
-            try
-                sTemp = DocumentMasterDoc.caption
-            catch
-            endcatch
-        Case "SWEB"
-
-            Kontext "DocumentWriterWeb"
-            try
-                sTemp = DocumentWriterWeb.caption
-            catch
-            endcatch
-        case "SCALC"
-
-            Kontext "DocumentCalc"
-            try
-                sTemp = DocumentCalc.caption
-            catch
-            endcatch
-        case "SDRAW"
-
-            Kontext "DocumentDraw"
-            try
-                sTemp = DocumentDraw.caption
-            catch
-            endcatch
-        case "SIMPRESS"
-
-            Kontext "DocumentImpress"
-            try
-                sTemp = DocumentImpress.caption
-            catch
-            endcatch
-        case "SMATH"
-
-            Kontext "DocumentMath"
-            try
-                sTemp = DocumentMath.caption
-            catch
-            endcatch
-        Case "BASIC"
-
-            Kontext "BasicIDE"
-            try
-                sTemp = BasicIDE.caption
-            catch
-            endcatch
-        Case "BACK"
-
-            Kontext "DocumentBackground"
-            try
-                sTemp = DocumentBackground.caption
-            catch
-            endcatch
-        case else
-            qaErrorLog "sApplication not defined: '" + sApplication + "'"
-            sTemp = ""
+            Case "SWRITER"
+                Kontext "DocumentWriter"
+                try
+                    sTemp = DocumentWriter.caption
+                catch
+                endcatch
+            Case "SGLOBAL"
+                Kontext "DocumentMasterDoc"
+                try
+                    sTemp = DocumentMasterDoc.caption
+                catch
+                endcatch
+            Case "SWEB"
+                Kontext "DocumentWriterWeb"
+                try
+                    sTemp = DocumentWriterWeb.caption
+                catch
+                endcatch
+            case "SCALC"
+                Kontext "DocumentCalc"
+                try
+                    sTemp = DocumentCalc.caption
+                catch
+                endcatch
+            case "SDRAW"
+                Kontext "DocumentDraw"
+                try
+                    sTemp = DocumentDraw.caption
+                catch
+                endcatch
+            case "SIMPRESS"
+                Kontext "DocumentImpress"
+                try
+                    sTemp = DocumentImpress.caption
+                catch
+                endcatch
+            case "SMATH"
+                Kontext "DocumentMath"
+                try
+                    sTemp = DocumentMath.caption
+                catch
+                endcatch
+            Case "BASIC"
+                Kontext "BasicIDE"
+                try
+                    sTemp = BasicIDE.caption
+                catch
+                endcatch
+            Case "BACK"
+                Kontext "DocumentBackground"
+                try
+                    sTemp = DocumentBackground.caption
+                catch
+                endcatch
+            case else
+                qaErrorLog "sApplication not defined: '" + sApplication + "'"
+                sTemp = ""
         end select
         aTemp(i) = sTemp
         try
@@ -800,8 +750,9 @@ end function
 
 function fSplitWindowTitle(sInString as string)
 
-    dim a, b, x, i as integer
+    dim a, b, x, i, iProductname as integer
     dim sTemp() as string
+    dim sProductname() as string
     dim sTempReturn(2) as string
     dim sTempReturn2(3) as string
     dim bTestToolCommunication as boolean
@@ -833,9 +784,12 @@ function fSplitWindowTitle(sInString as string)
         ' seperate second string by spaces
         sTemp() = split(right(sInString, len(sInString)-(a+2)), " ") ' Parts are now separated by spaces
         x = uBound(sTemp())
+        sProductname() = split(gProductname, " ")
+        iProductname = uBound(sProductname())
+        x = x - iProductname
 
-        sTempReturn(1) = sTemp(1)                                        ' (1) Application
-        sTempReturn(2) = sTemp(0)                                        ' (2) Vendor
+        sTempReturn(1) = sTemp(uBound(sTemp()))                        ' (1) Application
+        sTempReturn(2) = gProductname 'sTemp(0)                                        ' (2) Vendor
 
         ' if ']' at end... (b,c,d)
         if (right(sInString,1) = "]") then
@@ -857,34 +811,29 @@ function fSplitWindowTitle(sInString as string)
 
         ' sanity checks, to warn if assumptions are not met!
         select case x
-        case 1:
-            if ((bTestToolCommunication) OR (bDebugVersion)) then
-                qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 1"
+            case 1:
+                if ((bTestToolCommunication) OR (bDebugVersion)) then
+                    qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 1"
+                    bError = TRUE
+                endif
+            case 2:
+                if ((bTestToolCommunication) OR (NOT bDebugVersion)) then
+                    qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 2"
+                    bError = TRUE
+                endif
+            case 3:
+                if ((NOT bTestToolCommunication) OR (bDebugVersion)) then
+                    qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 3"
+                    bError = TRUE
+                endif
+            case 4:
+                if ((NOT bTestToolCommunication) OR (NOT bDebugVersion)) then
+                    qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 4"
+                    bError = TRUE
+                endif
+            case else:
+                qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 0"
                 bError = TRUE
-            endif
-        case 2:
-            if ((bTestToolCommunication) OR (NOT bDebugVersion)) then
-                qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 2"
-                bError = TRUE
-            endif
-        case 3:
-            if ((NOT bTestToolCommunication) OR (bDebugVersion)) then
-                qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 3"
-                bError = TRUE
-            endif
-
-            '***** Warning: Indention error *****
-        case 4:
-            if ((NOT bTestToolCommunication) OR (NOT bDebugVersion)) then
-
-
-                '***** Warning: Indention error *****
-                qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 4"
-                bError = TRUE
-            endif
-        case else:
-            qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 0"
-            bError = TRUE
         end select
 
         if bError then
@@ -894,7 +843,6 @@ function fSplitWindowTitle(sInString as string)
         if (x > 1) then ' there is more to evaluate
             ' save the current computed values
             for i=0 to 2
-                '***** Warning: Indention error *****
                 sTempReturn2(i) = sTempReturn(i)
             next i
             ' make return array bigger
@@ -907,19 +855,15 @@ function fSplitWindowTitle(sInString as string)
             ' set remaining values, if exist
             ' debug version string
             if bDebugVersion then
-                '***** Warning: Indention error *****
                 sTempReturn(3) = mid(sTemp(2),2,len(sTemp(2))-2) ' optional (3) Debug Version
             else
-                '***** Warning: Indention error *****
                 sTempReturn(3) = ""
             endif
             ' TestTool Communication string
             if bTestToolCommunication then
-                '***** Warning: Indention error *****
                 ' if true, then always the two last strings
                 sTempReturn(4) = sTemp(x-1) + " " + sTemp(x)        ' optional (4) TestTool Communication
             else
-                '***** Warning: Indention error *****
                 sTempReturn(4) = ""
             endif
         endif

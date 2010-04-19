@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: c_upd_filemenu.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: rt $ $Date: 2008-07-31 19:05:11 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/***********************************************************************
 '*
 '* owner : oliver.craemer@sun.com
@@ -42,10 +36,11 @@
 ' #1 tFileOpen 
 ' #1 tFileOpenCSV
 ' #1 tFileOpenDBF
+' #1 tFileOpenHTML
 ' #1 tFileRecentDocuments
 ' #1 tFileClose
 ' #1 tFileSave
-' #0 tFileSaveAsDBF
+' #1 tFileSaveAsDBF
 ' #1 tFileVersions
 ' #1 tFilePagePreview
 '*
@@ -60,6 +55,7 @@ sub c_upd_filemenu
     Call tFileOpen
     Call tFileOpenCSV
     Call tFileOpenDBF
+    Call tFileOpenHTML
     Call tFileRecentDocuments
     Call tFileClose
     Call tFileSave
@@ -175,20 +171,15 @@ testcase tFileOpenCSV
     dim sTestFile as string
     
     sTestFile = convertpath(gTesttoolPath & "spreadsheet/required/input/tFileOpen_CSV.csv"
-    '/// Opening new spreadsheet document for getting defined starting environment
     Printlog " Opening new spreadsheet document for getting defined starting environment"
     Call hNewDocument
-    '/// Open File-Open-dialog
     Printlog " Open File-Open-dialog"
     FileOpen
     Kontext "OeffnenDlg"
-    '/// Enter filename  spreadsheet/required/input/tFileOpen_CSV.csv
     Printlog " Enter filename  spreadsheet/required/input/tFileOpen_CSV.csv"
     Dateiname.settext (sTestFile)
-    '/// Click on Open
     Printlog " Click on Open"
     Oeffnen.Click
-    '/// Check existence of CSV import dialog
     Printlog " Check existence of CSV import dialog"
     Kontext "TextImport"
     if Not TextImport.exists(2) then
@@ -219,10 +210,36 @@ testcase tFileOpenCSV
         end if
     end if
     Call Dialogtest (TextImport)
+    Kontext "TextImport"
+    Printlog " Use every control"
+    CharacterSet.GetItemCount
+    Language.GetItemCount
+    FromRow.More
+    FixedWidth.Check
+    Separated.Check
+    Tab.Check
+    Semicolon.Check
+    Comma.Check
+    SpaceCB.Check
+    Other.Check
+    OtherText.SetText "a"
+    MergeDelimiter.Check
+    TextDelimiter.GetItemCount
+    QuotedAsText.Check
+    DetectSpecialNumbers.Check
+    Printlog " Cancel Text Import dialog"
+    TextImport.cancel
+    Printlog " Open File-Open-dialog"
+    FileOpen
+    Kontext "OeffnenDlg"
+    Printlog " Enter filename  spreadsheet/required/input/tFileOpen_CSV.csv"
+    Dateiname.settext (sTestFile)
+    Printlog " Click on Open"
+    Oeffnen.Click
+    Kontext "TextImport"
     TextImport.ok
     Printlog " - CSV import dialog is in function"
     Kontext "DocumentCalc"
-    '/// Close document
     printlog " Close document"
     Call hCloseDocument
         
@@ -275,6 +292,62 @@ testcase tFileOpenDBF
         Call hCloseDocument
     end if
         
+endcase
+
+'-----------------------------------------------------------
+
+testcase tFileOpenHTML
+
+    Dim sTestFile as string
+    Dim sTestFilter1 as string
+    Dim sTestFilter2 as string
+
+    sTestFile = convertpath(gTesttoolPath & "spreadsheet/required/input/HTML_Doc_Numberformats_in_table.html"
+    sTestFilter1 = hGetUIFiltername ("HTML (StarCalc)")
+    sTestFilter2 = hGetUIFiltername ("calc_HTML_WebQuery")
+
+    Printlog " Opening new spreadsheet document for getting defined starting environment"
+    Call hNewDocument
+    Printlog " Open File-Open-dialog"
+    FileOpen
+    Kontext "OeffnenDlg"
+    Printlog " Enter filename  spreadsheet/required/input/HTML_Doc_Numberformats_in_table.html"
+    Dateiname.settext (sTestFile)
+    Printlog " Choose Calc HTML filter"
+    Call hSelectUIFilter (sTestFilter1)
+    Printlog " Click on Open"
+    Oeffnen.Click
+    sleep (1)
+    Kontext "HTMLImportOptions"
+    Printlog " Use every control on dialog Import Options"
+    Custom.Check
+    CustomLanguage.GetItemCount
+    Automatic.Check
+    DetectSpecialNumbers.Check
+    HTMLImportOptions.OK
+    Printlog " Close recent document"
+    Call hCloseDocument
+    Printlog " Retry with Calc Web Querry filter"
+    Printlog " Open File-Open-dialog"
+    FileOpen
+    Kontext "OeffnenDlg"
+    Printlog " Enter filename  spreadsheet/required/input/HTML_Doc_Numberformats_in_table.html"
+    Dateiname.settext (sTestFile)
+    Printlog " Choose Calc Web Query filter"
+    Call hSelectUIFilter (sTestFilter2)
+    Printlog " Click on Open"
+    Oeffnen.Click
+    sleep (1)
+    Kontext "HTMLImportOptions"
+    Printlog " Use every control on dialog Import Options"
+    Custom.Check
+    CustomLanguage.GetItemCount
+    Automatic.Check
+    DetectSpecialNumbers.Check
+    HTMLImportOptions.OK
+    Printlog " Close recent document"
+    Call hCloseDocument
+
 endcase
 
 '-----------------------------------------------------------
@@ -506,7 +579,7 @@ testcase tFileSaveAsDBF
     Kontext
     if Active.exists(2) then
         printlog " "
-        warnlog "The following warning exists. This could be #i87325:"
+        warnlog "#i87325# - Unexpected messagebox"
         Printlog Active.GetText
         Printlog " "
         Active.OK

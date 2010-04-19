@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '*******************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: basic_vba-compat_import_nothing.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:13 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/******************************************************************************
 '*
 '*  owner : joerg.skottke@sun.com
@@ -51,8 +45,9 @@ testcase tBasicVBACompatImportNothing()
     dim cNodeCount as integer
     
     ' Depending on the mode of macro import we have differtent basic libraries listed
-    const NODE_COUNT = 72 ' Do not import Microsoft(R) Excel(R) macros at all
-    const MACRO_LIST = 0  ' The document library should have no scripts listed
+    const NODE_COUNT     = 74 ' Do not import Microsoft(R) Excel(R) macros at all
+    const NODE_COUNT_OOO = 72 
+    const MACRO_LIST     = 0  ' The document library should have no scripts listed
     const DOCUMENT_POSITION_OFFSET = -1
     
     const IMPORT_EXCEL_MACROS = FALSE
@@ -75,8 +70,10 @@ testcase tBasicVBACompatImportNothing()
     cNodeCount = hExpandAllNodes( MakroAus )
     
     printlog( "Verify that we have the correct node count for the current mode" )
-    if ( cNodeCount <> NODE_COUNT ) then
-        warnlog( "The number of nodes is incorrect: " & cNodeCount )
+    if ( gOOo ) then
+        if ( cNodeCount <> NODE_COUNT_OOO ) then warnlog( "The number of nodes is incorrect: " & cNodeCount )
+    else
+        if ( cNodeCount <> NODE_COUNT ) then warnlog( "The number of nodes is incorrect: " & cNodeCount )
     endif
     
     printlog( "Verify position of the document node" )
