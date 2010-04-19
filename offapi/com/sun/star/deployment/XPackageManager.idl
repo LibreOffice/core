@@ -37,6 +37,7 @@
 #include <com/sun/star/deployment/DeploymentException.idl>
 #include <com/sun/star/container/NoSuchElementException.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/beans/NamedValue.idl>
 
 
 module com { module sun { module star { module deployment {
@@ -102,8 +103,15 @@ interface XPackageManager
 
     /** adds an UNO package.
 
+        The properties argument is currently only used to suppress the license information
+        for shared extensions.
+
+
         @param url
                package URL, must be UCB conform
+        @param properties
+               additional properties, for example, that the license is to be
+               suppressed (if supported by the extension)
         @param mediaType
                media-type of package, empty string if to be detected
         @param xAbortChannel
@@ -115,6 +123,7 @@ interface XPackageManager
                <type>XPackage</type> handle
     */
     XPackage addPackage( [in] string url,
+                         [in] sequence<com::sun::star::beans::NamedValue> properties,
                          [in] string mediaType,
                          [in] com::sun::star::task::XAbortChannel xAbortChannel,
                          [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
@@ -252,13 +261,45 @@ interface XPackageManager
        @param
             removed extensions which must be revoked
     */
-    void synchronize([out] sequence<XPackage> xAddedExtensions,
-                     [out] sequence<XPackage> xRemovedExtensions,
-                     [in] com::sun::star::task::XAbortChannel xAbortChannel,
+    void synchronize([in] com::sun::star::task::XAbortChannel xAbortChannel,
                      [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException);
+
+
+    /** returns all extensions which are currently not in use
+        because the user did not accept the license.
+
+        The function will not return any object for the user repository, because
+        a user extension will not be kept in the user repository if its license
+        is declined. Only extensions which are registered at start-up of OOo,
+        that is, shared and bundled extensions, can be returned.
+
+        Extensions which allow the license to be suppressed, that is, it does not
+        need to be displayed, and which are installed with the corresponding option,
+        are also not returned.
+    */
+    sequence<XPackage> getExtensionsWithUnacceptedLicenses(
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException);
+
+    /** checks if the extension can be used.
+
+        The extension must be managed by this package manager, that is, it must
+        be recorded in its database.  The package manager calls
+        XPackage::checkPrerequisites and updates its data base with the
+        result. The result, which is from <type>Prerequisites</type> will be
+        returned.
+     */
+    long checkPrerequisites(
+        [in] XPackage extension,
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
 
 };
 

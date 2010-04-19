@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: KeyUsage.idl,v $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -25,35 +28,21 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_com_sun_star_deployment_LicenseIndividualAgreementException_idl
-#define INCLUDED_com_sun_star_deployment_LicenseIndividualAgreementException_idl
-
-#include <com/sun/star/uno/Exception.idl>
-
+#ifndef __com_sun_star_deployment_prerequisites_idl_
+#define __com_sun_star_deployment_prerequisites_idl_
 
 module com { module sun { module star { module deployment {
 
-/** The exception signals that an extension is about to be installed for more than
-    one user, allthough every user needs to agree to the license.
-
-    @since OOo 2.0.6
- */
-exception LicenseIndividualAgreementException : com::sun::star::uno::Exception
+constants Prerequisites
 {
-    /** name of the extension.
-
-        Contains the file name only.
-     */
-    string ExtensionName;
-    /** indicates if the user can prevent to show the license
-
-    Represents the attribute value
-    /description/registration/simple-license/@suppress-if-required
-    from the description.xml
-    */
-    boolean SuppressIfRequired;
+    const long PLATFORM = 0x1;
+    const long DEPENDENCIES = 0x2;
+    const long LICENSE = 0x04;
 };
 
-}; }; }; };
+
+} ; } ; } ; } ;
+
 
 #endif
+

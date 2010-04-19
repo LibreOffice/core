@@ -54,10 +54,10 @@ IDLFILES = \
         UpdateInformationProvider.idl \
         XPackageInformationProvider.idl \
         PackageInformationProvider.idl \
-        LicenseIndividualAgreementException.idl \
         PlatformException.idl \
         InvalidRemovedParameterException.idl \
-        ExtensionRemovedException.idl
+        ExtensionRemovedException.idl \
+        Prerequisites.idl
 
 .INCLUDE : target.mk
 .INCLUDE : $(PRJ)$/util$/target.pmk

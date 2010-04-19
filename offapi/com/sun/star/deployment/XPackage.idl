@@ -73,29 +73,23 @@ interface XPackage
 
         Only if the return value is true the package is allowed to be installed.
         In case of false or in case of an exception, the package must be removed
-        in completely.
+        completely.
         After return of this function no code from the extension may be used
         anymore, so that the extension can be safely removed from the harddisk.
 
         @param xCmdEnv
                command environment for error handling and other interaction.
-        @installed
-            signalls if an extension with the same identifyer is already installed.
-
-        @aContextName
-            the name of the context of  XPackageManager implementation that is to be used
-            to install the extension. Currently we use the names "user"
-            and "shared".
+        @alreadyInstalled
+            indicates that an extension with the same identifyer is already installed.
 
         @return
-            true - the package can be installed
-            false - the package must not be installed.
+            null - all prerequisites are met. Otherwise, a value from
+            <member>Prerequisites</member> indicating what prerequisites are missing.
      */
-    boolean checkPrerequisites(
+    long checkPrerequisites(
         [in] com::sun::star::task::XAbortChannel xAbortChannel,
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv,
-        [in] boolean installed,
-        [in] string aContextName)
+        [in] boolean alreadyInstalled)
         raises (DeploymentException,
                 ExtensionRemovedException,
                 com::sun::star::ucb::CommandFailedException,
@@ -347,6 +341,7 @@ interface XPackage
         <member>XPackageRegistry::bindPackage</member>.
      */
     boolean isRemoved();
+
 };
 
 }; }; }; };
