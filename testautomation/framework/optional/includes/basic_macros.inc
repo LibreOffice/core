@@ -193,41 +193,34 @@ testcase tMakro_Dialog
         Dateiname.SetText( XLBFILE )
         Oeffnen.Click()
 
-        ' If the .xlb file cannot be found the test cannot continue. Warn and cleanup.
-        kontext "Active"
-        if ( Active.exists( DIALOG_TIMEOUT ) ) then
+        kontext "AppendLibraries"
+        if ( AppendLibraries.exists( DIALOG_TIMEOUT ) ) then
+            printlog( "<Append libraries> dialog is open, good" )
+        else
 
-            try
-                Active.getButtonCount()
+            ' If the .xlb file cannot be found the test cannot continue. Warn and cleanup.
+            kontext "Active"
+            if ( Active.exists() ) then
 
-                warnlog( "Script does not exist warning displayed. Aborting test" )
+                warnlog( "Unexpected messagebox, the script appears to be missing" )
                 printlog( Active.getText() )
-                active.ok()
+
+                kontext "Active"
+                hCloseDialog( Active, "ok" )
 
                 kontext "OeffnenDlg"
-                if ( OeffnenDlg.exists( DIALOG_TIMEOUT ) ) then
-                    printlog( "Closing File Open dialog" )
-                    OeffnenDlg.cancel()
-                endif
+                hCloseDialog( OeffnenDlg, "cancel,optional" )
 
-                kontext "tabbibliotheken"
-                if ( TabBibliotheken.exists( DIALOG_TIMEOUT ) ) then
-                    printlog( "Closing Libaries tab" )
-                    TabBibliotheken.close()
-                endif
+                kontext "TabBibliotheken"
+                hCloseDialog( TabBibliotheken, "close,optional" )
 
                 kontext "Makro"
-                if ( Makro.exists( DIALOG_TIMEOUT ) ) then
-                    printlog( "Closing Macro organizer" )
-                    Makro.close()
-                endif
+                hCloseDialog( Makro, "close,optional" )
 
                 printlog( "Exiting test" )
                 goto endsub
-            catch
-                printlog( "Script found and loaded. Good." )
-            endcatch
 
+            endif
         endif
 
         printlog( "Ensure 'Insert as Reference' is unchecked" )
@@ -335,13 +328,11 @@ testcase tMakro_Dialog
 
             printlog "Click to run macro"
             kontext "makro"
-            try
-                Ausfuehren.Click()
-            catch
-                warnlog( "Unable to run macro" )
+            if ( hClickButton( Ausfuehren ) = RC_TIMEOUT ) then
+                warnlog( "Unable to run macro, button is not enabled" )
                 kontext "Makro"
-                Makro.close()
-            endcatch
+                hCloseDialog( Makro, "close" )
+            endif
 
             kontext "active"
             if ( active.exists() ) then
