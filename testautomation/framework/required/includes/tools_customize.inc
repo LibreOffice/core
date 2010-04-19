@@ -79,7 +79,7 @@ function hUpdtToolsCustomizeMenu()
     printlog( "" )
     printlog( "Menu" )
 
-    brc = hToolsCustomizeSelectTab( "Menu" )
+    hToolsCustomizeSelectTab( "Menu" )
     call DialogTest( TabCustomizeMenu )
     
     printlog( CFN & "Click New..." )
@@ -158,9 +158,7 @@ function hUpdtToolsCustomizeMenu()
     case "BACKGROUND"   :   brc = hToolsCustomizeTestSaveIn( APPLICATION_ONLY )
     case else           :   brc = hToolsCustomizeTestSaveIn( APPLICATION_AND_DOCUMENT )
     end select
-    if ( not brc ) then
-        warnlog( "Incorrect itemcount in listbox, see above" )
-    endif
+    if ( not brc ) then warnlog( "Incorrect itemcount in listbox, see above" )
     
     printlog( CFN & "Down..." )
     BtnDown.click()
@@ -170,8 +168,8 @@ function hUpdtToolsCustomizeMenu()
     
     printlog( CFN & "Click the Modify-Button and select item 1 (Add submenu)" )
     kontext "TabCustomizeMenu"
-    brc = hClickCommandButton( MENUITEM_ADDSUBMENU )
-    if ( not brc ) then
+
+    if ( not hClickCommandButton( MENUITEM_ADDSUBMENU ) ) then
         warnlog( CFN & "Something went wrong when accessing the command button" )
         exit function
     endif
@@ -198,8 +196,8 @@ function hUpdtToolsCustomizeMenu()
     
     printlog( CFN & "Click the Modify-Button and select to rename the item" )
     kontext "TabCustomizeMenu"
-    brc = hClickCommandButton( 3 )
-    if ( not brc ) then
+    
+    if ( not hClickCommandButton( 3 ) ) then
         warnlog( CFN & "Something went wrong when accessing the command button" )
         exit function
     endif
@@ -218,16 +216,16 @@ function hUpdtToolsCustomizeMenu()
     
     printlog( CFN & "Click the Modify-Button and delete the current item" )
     kontext "TabCustomizeMenu"
-    brc = hClickCommandButton( MENUITEM_MODIFY_LARGE_MENU )
-    if ( not brc ) then
+
+    if ( not hClickCommandButton( MENUITEM_MODIFY_LARGE_MENU ) ) then
         warnlog( CFN & "Something went wrong when accessing the command button" )
         exit function
     endif
     
     printlog( CFN & "Click the Modify-Button and create a new group" )
     kontext "TabCustomizeMenu"
-    brc = hClickCommandButton( MENUITEM_MODIFY )
-    if ( not brc ) then
+
+    if ( not hClickCommandButton( MENUITEM_MODIFY ) ) then
         warnlog( CFN & "Something went wrong when accessing the command button" )
         exit function
     endif
@@ -235,8 +233,8 @@ function hUpdtToolsCustomizeMenu()
     ' Note: The current index for the delete-function is at pos 2.
     printlog( CFN & "Click the Modify-Button and delete the new group" )
     kontext "TabCustomizeMenu"
-    brc = hClickCommandButton( MENUITEM_MODIFY )
-    if ( not brc ) then
+
+    if ( not hClickCommandButton( MENUITEM_MODIFY ) ) then
         warnlog( CFN & "Something went wrong when accessing the command button" )
         exit function
     endif
@@ -248,8 +246,17 @@ end function
 function hUpdtToolsCustomizeToolbars()
 
     const CFN = "hUpdtToolsCustomizeToolbars::"
+
+    const DOCUMENT_ONLY = 1
+    const APPLICATION_AND_DOCUMENT = 2
+
+    const MENUITEM_RENAME = 1
+    const MENUITEM_DELETE = 2
+    const MENUITEM_MODIFY = 4
+
+    const DIALOG_DELAY = 3
+
     dim brc as boolean
-    
     dim iCurrentItem as integer
         
     printlog( "" )
@@ -263,17 +270,16 @@ function hUpdtToolsCustomizeToolbars()
     BtnNew.click()
     
     kontext "NewToolbar"
-    if ( NewToolbar.exists( 2 ) ) then
+    if ( NewToolbar.exists( DIALOG_DELAY ) ) then
         printlog( CFN & "NewToolbar" )
         call DialogTest( NewToolbar )
         
         select case gApplication
-        case "BACKGROUND"   :   brc = hToolsCustomizeTestSaveIn( 1 )
-        case else           :   brc = hToolsCustomizeTestSaveIn( 2 )
+        case "BACKGROUND"   :   brc = hToolsCustomizeTestSaveIn( DOCUMENT_ONLY )
+        case else           :   brc = hToolsCustomizeTestSaveIn( APPLICATION_AND_DOCUMENT )
         end select
-        if ( not brc ) then
-            warnlog( "Incorrect itemcount in listbox, see above" )
-        endif
+
+        if ( not brc ) then warnlog( "Incorrect itemcount in listbox, see above" )
         
         printlog( CFN & "Name the new toolbar for further usage" )
         ToolbarName.setText( "tUpdtCustomize" )
@@ -289,11 +295,11 @@ function hUpdtToolsCustomizeToolbars()
     hOpenMenuButton( MenuBtn ) ' MenuBtn.OpenMenu()
     
     printlog( "Select rename" )
-    hMenuSelectNr( 1 )
+    hMenuSelectNr( MENUITEM_RENAME )
     
     printlog( CFN & "Cancel the dialog" )
     kontext "RenameToolbar"
-    if ( RenameToolbar.exists( 2 ) ) then
+    if ( RenameToolbar.exists( DIALOG_DELAY ) ) then
         call dialogtest( RenameToolbar )
         hCloseDialog( RenameToolbar, "Cancel" )
     else
@@ -305,16 +311,17 @@ function hUpdtToolsCustomizeToolbars()
     hOpenMenuButton( MenuBtn ) ' MenuBtn.OpenMenu()
     
     printlog( "Select delete" )
-    hMenuSelectNr( 2 )
+    hMenuSelectNr( MENUITEM_DELETE )
        
     kontext "TabCustomizeToolbars"
     hUpdtToolsCustomizeScriptSelector( 2 )
     
     kontext "TabCustomizeToolbars"
     select case gApplication
-    case "BACKGROUND"   :   brc = hToolsCustomizeTestSaveIn( 1 )
-    case else           :   brc = hToolsCustomizeTestSaveIn( 2 )
+    case "BACKGROUND"   :   brc = hToolsCustomizeTestSaveIn( DOCUMENT_ONLY )
+    case else           :   brc = hToolsCustomizeTestSaveIn( APPLICATION_AND_DOCUMENT )
     end select
+
     if ( not brc ) then warnlog( "Incorrect itemcount in listbox, see above" )
     
     printlog( CFN & "Down..." )
@@ -336,7 +343,7 @@ function hUpdtToolsCustomizeToolbars()
     AddCommands.click()
     
     kontext "ScriptSelector"
-    if ( ScriptSelector.exists( 5 ) ) then
+    if ( ScriptSelector.exists( DIALOG_DELAY ) ) then
     
         call dialogtest( ScriptSelector )
     
@@ -353,7 +360,7 @@ function hUpdtToolsCustomizeToolbars()
         catch
             qaerrorlog( "#i79207# Could not access ok button on ScriptSelector" )
             kontext "ScriptSelector"
-            if ( ScriptSelector.exists( 2 ) ) then printlog( "Scriptselector is open" )
+            if ( ScriptSelector.exists( DIALOG_DELAY ) ) then printlog( "Scriptselector is open" )
         endcatch
         
     else
@@ -374,8 +381,8 @@ function hUpdtToolsCustomizeToolbars()
     
     kontext "TabCustomizeToolbars"
     printlog( CFN & "Click the Modify-button" )
-    brc = hClickCommandButton( 1 )
-    if ( not brc ) then
+
+    if ( not hClickCommandButton( 1 ) ) then
         warnlog( CFN & "Something went wrong when accessing the command button" )
     	exit function
     endif
@@ -383,7 +390,7 @@ function hUpdtToolsCustomizeToolbars()
     printlog( CFN & "Rename the item" )
     UseBindings
     kontext "CustomizeToolbarsRename"
-    if ( CustomizeToolbarsRename.exists( 2 ) ) then
+    if ( CustomizeToolbarsRename.exists( DIALOG_DELAY ) ) then
         call dialogtest( CustomizeToolbarsRename )
         EingabeFeld.setText( "Renamed item" )
     
@@ -394,8 +401,8 @@ function hUpdtToolsCustomizeToolbars()
     endif
     
     kontext "TabCustomizeToolbars"
-    brc = hClickCommandButton( 2 )
-    if ( not brc ) then
+
+    if ( not hClickCommandButton( 2 ) ) then
         warnlog( CFN & "Something went wrong when accessing the command button" )
         exit function
     endif
@@ -406,8 +413,8 @@ function hUpdtToolsCustomizeToolbars()
     printlog( "******************** 1 ********************" )
     hDeselectSeparator()
     printlog( "******************** 2 ********************" )
-    brc = hClickCommandButton( 3 )
-    if ( not brc ) then
+
+    if ( not hClickCommandButton( 3 ) ) then
         warnlog( CFN & "Something went wrong when accessing the command button" )
         exit function
     endif
@@ -415,8 +422,8 @@ function hUpdtToolsCustomizeToolbars()
     kontext "TabCustomizeToolbars"
     waitslot
     printlog( CFN & "Click the Modify-button" )
-    brc = hClickCommandButton( 4 )
-    if ( not brc ) then
+
+if ( not hClickCommandButton( MENUITEM_MODIFY ) ) then
         warnlog( CFN & "Something went wrong when accessing the command button" )
         exit function
     endif
@@ -424,8 +431,8 @@ function hUpdtToolsCustomizeToolbars()
     kontext "TabCustomizeToolbars"
     WaitSlot
     printlog( CFN & "Click the Modify-button" )
-    brc = hClickCommandButton( 1 )
-    if ( not brc ) then
+
+    if ( not hClickCommandButton( 1 ) ) then
         warnlog( CFN & "Something went wrong when accessing the command button" )
         exit function
     endif
@@ -436,15 +443,15 @@ function hUpdtToolsCustomizeToolbars()
     printlog( "******************** 3 ********************" )
     hDeselectSeparator()
     printlog( "******************** 4 ********************" )
-    brc = hClickCommandButton( 5 )
-    if ( not brc ) then
+
+    if ( not hClickCommandButton( 5 ) ) then
         warnlog( CFN & "Something went wrong when accessing the command button" )
         exit function
     endif
     
     printlog( CFN & "On the Change Icon dialog: Click to import an icon" )
     kontext "ChangeIcon"
-    if ( ChangeIcon.exists( 2 ) ) then
+    if ( ChangeIcon.exists( DIALOG_DELAY ) ) then
         call dialogtest( ChangeIcon )
         import.click()
     
@@ -463,8 +470,8 @@ function hUpdtToolsCustomizeToolbars()
     kontext "TabCustomizeToolbars"
     waitslot
     printlog( CFN & "Click the Modify-button" )
-    brc = hClickCommandButton( 3 )
-    if ( not brc ) then
+
+if ( not hClickCommandButton( 3 ) ) then
         warnlog( CFN & "Something went wrong when accessing the command button" )
         exit function
     endif
@@ -498,9 +505,9 @@ function hUpdtToolsCustomizeEvents()
             case "BACKGROUND"   :   brc = hToolsCustomizeTestSaveIn( APPLICATION_ONLY )
             case else           :   brc = hToolsCustomizeTestSaveIn( APPLICATION_AND_DOCUMENT )
             end select
-            if ( not brc ) then
-                warnlog( "Incorrect itemcount in listbox, see above" )
-            endif
+
+            if ( not brc ) then warnlog( "Incorrect itemcount in listbox, see above" )
+
         else
             warnlog( "<TabCustomizeEvents> is not visible" )
         endif
@@ -515,6 +522,7 @@ end function
 function hUpdtToolsCustomizeKeyboard() as boolean
 
     const CFN = "hUpdtToolsCustomizeKeyboard::"
+    const FIRST_CHANGEABLE_ITEM = 2
     
     printlog( "" )
     printlog( "Keyboard" )
@@ -527,13 +535,15 @@ function hUpdtToolsCustomizeKeyboard() as boolean
         endif
     endif
 
+    hToolsCustomizeSelectTab( "keyboard" )
+
     kontext "TabTastatur"
     call DialogTest( TabTastatur )
   
     ' no verification of functionality, this is an update test!
     kontext "TabTastatur"
     StarOffice.check()
-    hSelectNode( Tastatur , 2 )
+    hSelectNode( Tastatur , FIRST_CHANGEABLE_ITEM )
     hSelectTopNode( bereich )
 
     ' Workaround: It might still happen that the currently selected accelerator
@@ -545,7 +555,7 @@ function hUpdtToolsCustomizeKeyboard() as boolean
 
     Aendern.click()
     Zuruecksetzen.click()
-    hSelectNode( Tastatur , 2 )
+    hSelectNode( Tastatur , FIRST_CHANGEABLE_ITEM )
 
     ' Workaround: It might still happen that the currently selected accelerator
     '             is "fixed" so we need to find another one that can be modified.
@@ -579,6 +589,7 @@ function hUpdtToolsCustomizeScriptSelector( iPageButton as integer ) as boolean
     const TAB_EVENTS   = 1
     const TAB_TOOLBARS = 2
     const TAB_MENU     = 3
+    const DIALOG_DELAY = 2
 
     select case iPageButton
     case TAB_EVENTS
@@ -600,7 +611,7 @@ function hUpdtToolsCustomizeScriptSelector( iPageButton as integer ) as boolean
     end select
   
     kontext "ScriptSelector"
-    if ( ScriptSelector.exists( 2 ) ) then
+    if ( ScriptSelector.exists( DIALOG_DELAY ) ) then
         call DialogTest( ScriptSelector )
 
         kontext "ScriptSelector"
@@ -609,7 +620,7 @@ function hUpdtToolsCustomizeScriptSelector( iPageButton as integer ) as boolean
          warnlog( CFN & "Dialog <ScriptSelector> did not open" )
     endif
    
-    select case iBtn
+    select case iPageButton
     case TAB_EVENTS   : kontext "TabCustomizeEvents"
     case TAB_TOOLBARS : kontext "TabCustomizeToolbars"
     case TAB_MENU     : kontext "TabCustomizeMenu"
