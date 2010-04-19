@@ -279,7 +279,15 @@ namespace svt
         if ( bActivatePanel )
         {
             const size_t nPanelPos = impl_getPanelPositionFromWindow( pWindowEvent->GetWindow() );
-            m_rPanelDeck.ActivatePanel( nPanelPos );
+            if ( nPanelPos != m_rPanelDeck.GetActivePanel() )
+            {
+                m_rPanelDeck.ActivatePanel( nPanelPos );
+            }
+            else
+            {
+                PToolPanel pPanel( m_rPanelDeck.GetPanel( nPanelPos ) );
+                pPanel->GrabFocus();
+            }
             return 1L;
         }
         return 0L;
