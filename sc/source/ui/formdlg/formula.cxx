@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: formula.cxx,v $
- * $Revision: 1.18.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +40,6 @@
 #include <svl/stritem.hxx>
 #include <svtools/svtreebx.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/topfrm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <unotools/charclass.hxx>
@@ -311,7 +307,7 @@ ScInputHandler* ScFormulaDlg::GetNextInputHandler(ScDocShell* pDocShell,PtrTabVi
 {
     ScInputHandler* pHdl=NULL;
 
-    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell, TYPE(SfxTopViewFrame) );
+    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell );
     while( pFrame && pHdl==NULL)
     {
         SfxViewShell* p = pFrame->GetViewShell();
@@ -321,7 +317,7 @@ ScInputHandler* ScFormulaDlg::GetNextInputHandler(ScDocShell* pDocShell,PtrTabVi
             pHdl=pViewSh->GetInputHandler();
             if(ppViewSh!=NULL) *ppViewSh=pViewSh;
         }
-        pFrame = SfxViewFrame::GetNext(*pFrame,pDocShell, TYPE(SfxTopViewFrame) );
+        pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell );
     }
 
 

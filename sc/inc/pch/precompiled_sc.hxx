@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: precompiled_sc.hxx,v $
- * $Revision: 1.8.160.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -162,10 +159,10 @@
 #include <unotools/pathoptions.hxx>
 #include <svl/solar.hrc>
 #include <unotools/useroptions.hxx>
-#include <svx/editobj.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/fmglob.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/sdangitm.hxx>
 #include <svx/sderitm.hxx>
 #include <svx/sdmetitm.hxx>

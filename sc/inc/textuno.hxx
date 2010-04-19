@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textuno.hxx,v $
- * $Revision: 1.15.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 #include "global.hxx"           // ScRange, ScAddress
 #include "address.hxx"
-#include <svx/unotext.hxx>
+#include <editeng/unotext.hxx>
 #include <svl/brdcst.hxx>
 #include <svl/lstner.hxx>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>

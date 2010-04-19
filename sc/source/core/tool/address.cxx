@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: address.cxx,v $
- * $Revision: 1.11.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -637,7 +634,9 @@ lcl_ScRange_Parse_XL_R1C1( ScRange& r,
 {
     const sal_Unicode* pTmp = NULL;
     String aExternDocName, aStartTabName, aEndTabName;
-    USHORT nFlags = SCA_VALID | SCA_VALID_TAB, nFlags2 = SCA_VALID_TAB2;
+    USHORT nFlags = SCA_VALID | SCA_VALID_TAB;
+    // Keep in mind that nFlags2 gets left-shifted by 4 bits before being merged.
+    USHORT nFlags2 = SCA_VALID_TAB;
 
 #if 0
     {

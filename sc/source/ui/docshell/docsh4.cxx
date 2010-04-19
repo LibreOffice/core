@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh4.cxx,v $
- * $Revision: 1.61.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +42,7 @@ using namespace ::com::sun::star;
 
 #include "scitems.hxx"
 #include <sfx2/fcontnr.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
@@ -56,7 +53,6 @@ using namespace ::com::sun::star;
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/sfxecode.hxx>
-#include <sfx2/topfrm.hxx>
 #include <svx/ofaitem.hxx>
 #include <sot/formats.hxx>
 #include <svtools/printdlg.hxx>
@@ -2564,7 +2560,7 @@ ScTabViewShell* ScDocShell::GetBestViewShell( BOOL bOnlyVisible )
     if( !pViewSh )
     {
         // 1. ViewShell suchen
-        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this, TYPE(SfxTopViewFrame), bOnlyVisible );
+        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this, bOnlyVisible );
         if( pFrame )
         {
             SfxViewShell* p = pFrame->GetViewShell();

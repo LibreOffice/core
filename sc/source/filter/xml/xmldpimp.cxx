@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmldpimp.cxx,v $
- * $Revision: 1.27.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -431,7 +428,7 @@ void ScXMLDataPilotTableContext::EndElement()
             break;
             case SERVICE :
             {
-                ScDPServiceDesc aServiceDesk(sServiceName, sServiceSourceObject, sServiceSourceName,
+                ScDPServiceDesc aServiceDesk(sServiceName, sServiceSourceName, sServiceSourceObject,
                                     sServiceUsername, sServicePassword);
                 pDPObject->SetServiceData(aServiceDesk);
             }
@@ -1456,6 +1453,7 @@ ScXMLDataPilotSubTotalContext::ScXMLDataPilotSubTotalContext( ScXMLImport& rImpo
                 pDataPilotSubTotals->AddFunction( sal::static_int_cast<sal_Int16>(
                                 ScXMLConverter::GetFunctionFromString( sValue ) ) );
             }
+            break;
             case XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_DISPLAY_NAME:
             case XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_DISPLAY_NAME_EXT:
                 pDataPilotSubTotals->SetDisplayName(sValue);

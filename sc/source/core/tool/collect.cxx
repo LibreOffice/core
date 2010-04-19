@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: collect.cxx,v $
- * $Revision: 1.14.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -355,15 +352,33 @@ ScDataObject*   ScStrCollection::Clone() const
 //UNUSED2008-05      }
 //UNUSED2008-05  }
 
+
 ScDataObject*   TypedStrData::Clone() const
 {
     return new TypedStrData(*this);
 }
+
+TypedScStrCollection::TypedScStrCollection( USHORT nLim , USHORT nDel , BOOL bDup  )
+    : ScSortedCollection( nLim, nDel, bDup )
+{
+    bCaseSensitive = FALSE;
+}
+
 TypedScStrCollection::~TypedScStrCollection()
 {}
 ScDataObject* TypedScStrCollection::Clone() const
 {
     return new TypedScStrCollection(*this);
+}
+
+TypedStrData*    TypedScStrCollection::operator[]( const USHORT nIndex) const
+{
+    return (TypedStrData*)At(nIndex);
+}
+
+void    TypedScStrCollection::SetCaseSensitive( BOOL bSet )
+{
+    bCaseSensitive = bSet;
 }
 
 short TypedScStrCollection::Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) const

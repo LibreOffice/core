@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: root.hxx,v $
- * $Revision: 1.44.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,9 +52,6 @@ class _ScRangeListTabs;
 class XclExpChTrTabId;
 class XclExpUserBViewList;
 
-class XclObjList;
-class XclEscher;
-
 class XclImpRoot;
 class XclExpRoot;
 
@@ -80,10 +74,6 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     // Erweiterungen fuer Export
     XclExpChTrTabId*        pTabId;             // pointer to rec list, do not destroy
     XclExpUserBViewList*    pUserBViewList;     // pointer to rec list, do not destroy
-
-    // Biff8
-    XclObjList*         pObjRecs;
-    XclEscher*          pEscher;
 
     XclImpRoot*         pIR;
     XclExpRoot*         pER;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbdocfun.cxx,v $
- * $Revision: 1.20.128.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,6 +56,7 @@
 #include "attrib.hxx"
 #include "drwlayer.hxx"
 #include "dpshttab.hxx"
+#include "hints.hxx"
 
 // -----------------------------------------------------------------
 
@@ -1406,7 +1404,12 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     delete pUndoDPObj;
 
     if (bDone)
+    {
+        // notify API objects
+        if (pDestObj)
+            pDoc->BroadcastUno( ScDataPilotModifiedHint( pDestObj->GetName() ) );
         aModificator.SetDocumentModified();
+    }
 
     if ( nErrId && !bApi )
         rDocShell.ErrorMessage( nErrId );

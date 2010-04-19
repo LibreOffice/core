@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fieldwnd.hxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +34,6 @@
 #include <vcl/fixed.hxx>
 #include <cppuhelper/weakref.hxx>
 
-#define MAX_LABELS  256
 #define PAGE_SIZE   16      // count of visible fields for scrollbar
 #define LINE_SIZE   8       // count of fields per column for scrollbar
 #define MAX_FIELDS  8       // maximum count of fields for row/col/data area

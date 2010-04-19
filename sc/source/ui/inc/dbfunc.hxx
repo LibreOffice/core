@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbfunc.hxx,v $
- * $Revision: 1.12.100.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +53,7 @@ private:
 public:
                     ScDBFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
 //UNUSED2008-05     ScDBFunc( Window* pParent, const ScDBFunc& rDBFunc, ScTabViewShell* pViewShell );
-                    ~ScDBFunc();
+    virtual         ~ScDBFunc();
 
                     //  nur UISort wiederholt bei Bedarf die Teilergebnisse
 
@@ -89,8 +86,10 @@ public:
     bool            MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, BOOL bNewTable,
                                     const ScDPObject& rSource, BOOL bApi = FALSE );
     void            DeletePivotTable();
-    void            RecalcPivotTable();
-
+    // Wang Xu Ming -- 2009-6-17
+    // DataPilot Migration
+    ULONG   RecalcPivotTable();
+    // End Comments
     BOOL            HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& rParts );
     BOOL            HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo );
     void            GroupDataPilot();

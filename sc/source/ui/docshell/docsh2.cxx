@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh2.cxx,v $
- * $Revision: 1.25.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +37,7 @@
 #include "scitems.hxx"
 #include <tools/gen.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/drawitem.hxx>
 #include <sfx2/printer.hxx>
 #include <svl/smplhint.hxx>
@@ -48,9 +45,9 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/asiancfg.hxx>
-#include <svx/forbiddencharacterstable.hxx>
-#include <svx/unolingu.hxx>
+#include <svl/asiancfg.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
+#include <editeng/unolingu.hxx>
 #include <rtl/logfile.hxx>
 
 #include <comphelper/processfactory.hxx>

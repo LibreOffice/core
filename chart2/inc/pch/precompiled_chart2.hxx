@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: precompiled_chart2.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -225,22 +222,22 @@
 #include "svl/urihelper.hxx"
 #include "svl/whiter.hxx"
 
-#include "svx/brshitem.hxx"
-#include "svx/crsditem.hxx"
-#include "svx/eeitem.hxx"
-#include "svx/fhgtitem.hxx"
+#include "editeng/brshitem.hxx"
+#include "editeng/crsditem.hxx"
+#include "editeng/eeitem.hxx"
+#include "editeng/fhgtitem.hxx"
 #include "svx/flagsdef.hxx"
-#include "svx/flstitem.hxx"
-#include "svx/forbiddencharacterstable.hxx"
+#include "editeng/flstitem.hxx"
+#include "editeng/forbiddencharacterstable.hxx"
 #include "svx/ofaitem.hxx"
-#include "svx/postitem.hxx"
+#include "editeng/postitem.hxx"
 #include "svx/svddef.hxx"
 #include "svx/svditer.hxx"
 #include "svx/svdtypes.hxx"
-#include "svx/udlnitem.hxx"
+#include "editeng/udlnitem.hxx"
 #include "svx/unomodel.hxx"
-#include "svx/unoprnms.hxx"
-#include "svx/wghtitem.hxx"
+#include "editeng/unoprnms.hxx"
+#include "editeng/wghtitem.hxx"
 #include "svx/xdef.hxx"
 #include "svx/xflbmtit.hxx"
 #include "svx/xflbstit.hxx"
@@ -251,7 +248,7 @@
 #include "svx/xgrscit.hxx"
 #include "svx/xlnclit.hxx"
 #include "svx/xlndsit.hxx"
-#include "svx/xmlcnitm.hxx"
+#include "editeng/xmlcnitm.hxx"
 #include "svx/xpoly.hxx"
 
 

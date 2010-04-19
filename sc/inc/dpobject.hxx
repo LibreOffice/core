@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dpobject.hxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -118,8 +115,18 @@ private:
     SC_DLLPRIVATE ScDPTableData*    GetTableData();
     SC_DLLPRIVATE void              CreateObjects();
     SC_DLLPRIVATE void              CreateOutput();
+    BOOL                    bRefresh;
+    long                        mnCacheId;
 
 public:
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    inline void SetRefresh() { bRefresh = TRUE; }
+    const        ScDPTableDataCache* GetCache() const;
+    long          GetCacheId() const;
+    void          SetCacheId( long nCacheId );
+    ULONG RefreshCache();
+    // End Comments
                 ScDPObject( ScDocument* pD );
                 ScDPObject(const ScDPObject& r);
     virtual     ~ScDPObject();
@@ -254,19 +261,6 @@ public:
                             PivotField* pRefPageFields = NULL, SCSIZE nRefPageCount = 0 );
 };
 
-// ============================================================================
-
-struct ScDPCacheCell
-{
-    sal_Int32   mnStrId;
-    sal_uInt8   mnType;
-    double      mfValue;
-    bool        mbNumeric;
-
-    ScDPCacheCell();
-    ScDPCacheCell(const ScDPCacheCell& r);
-    ~ScDPCacheCell();
-};
 
 // ============================================================================
 
@@ -274,20 +268,6 @@ class ScDPCollection : public ScCollection
 {
 private:
     ScDocument* pDoc;
-    ScSimpleSharedString maSharedString;
-
-    struct CacheCellHash
-    {
-        size_t operator()(const ScDPCacheCell* pCell) const;
-    };
-    struct CacheCellEqual
-    {
-        bool operator()(const ScDPCacheCell* p1, const ScDPCacheCell* p2) const;
-    };
-    typedef ::std::hash_set<ScDPCacheCell*, CacheCellHash, CacheCellEqual> CacheCellPoolType;
-
-    CacheCellPoolType maCacheCellPool;
-
 public:
                 ScDPCollection(ScDocument* pDocument);
                 ScDPCollection(const ScDPCollection& r);
@@ -306,15 +286,10 @@ public:
 
     String      CreateNewName( USHORT nMin = 1 ) const;
 
-    ScSimpleSharedString& GetSharedString();
-
     void FreeTable(ScDPObject* pDPObj);
     SC_DLLPUBLIC bool InsertNewTable(ScDPObject* pDPObj);
 
     bool        HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
-
-    ScDPCacheCell* getCacheCellFromPool(const ScDPCacheCell& rCell);
-    void clearCacheCellPool();
 };
 
 

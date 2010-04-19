@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabvwsh3.cxx,v $
- * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
 //CHINA001 #include <svx/zoom.hxx>
@@ -44,7 +41,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/topfrm.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
@@ -485,7 +481,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     if ( pDocSh->GetTitle() == aStrDocName )
                     {
-                        pViewFrame = SfxViewFrame::GetFirst( pDocSh, TYPE(SfxTopViewFrame) );
+                        pViewFrame = SfxViewFrame::GetFirst( pDocSh );
                         bFound = ( NULL != pViewFrame );
                     }
 
@@ -493,8 +489,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 }
 
                 if ( bFound )
-                    if ( pViewFrame->ISA(SfxTopViewFrame) )
-                        pViewFrame->GetFrame()->Appear();
+                    pViewFrame->GetFrame().Appear();
 
                 rReq.Ignore();//XXX wird von SFX erledigt
             }
@@ -505,7 +500,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case SID_PRINTPREVIEW:
             {
-                if ( !pThisFrame->GetFrame()->IsInPlace() )          // nicht bei OLE
+                if ( !pThisFrame->GetFrame().IsInPlace() )          // nicht bei OLE
                 {
                     //  print preview is now always in the same frame as the tab view
                     //  -> always switch this frame back to normal view

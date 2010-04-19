@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xlpage.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,11 +29,11 @@
 #include "precompiled_sc.hxx"
 #include "xlpage.hxx"
 #include <sfx2/printer.hxx>
-#include <svx/svxenum.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/svxenum.hxx>
+#include <editeng/paperinf.hxx>
 #include <vcl/svapp.hxx>
 #include "scitems.hxx"
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include "global.hxx"
 #include "xlconst.hxx"
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hdrcont.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,7 +77,7 @@ private:
 
     long            GetScrPos( SCCOLROW nEntryNo );
     SCCOLROW        GetMousePos( const MouseEvent& rMEvt, BOOL& rBorder );
-
+    bool            IsSelectionAllowed(SCCOLROW nPos) const;
     void            ShowDragHelp();
 
     void            DoPaint( SCCOLROW nStart, SCCOLROW nEnd );

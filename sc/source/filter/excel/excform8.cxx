@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: excform8.cxx,v $
- * $Revision: 1.47.134.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -395,10 +392,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aIn.Ignore( 4 );
                 if( bAllowArrays )
                 {
-                    SCSIZE nC = nByte + 1;
-                    SCSIZE nR = nUINT16 + 1;
-
-                    aStack << aPool.StoreMatrix( nC, nR );
+                    aStack << aPool.StoreMatrix();
                     aExtensions.push_back( EXTENSION_ARRAY );
                 }
                 else

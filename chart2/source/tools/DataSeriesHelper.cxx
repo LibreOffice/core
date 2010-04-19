@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DataSeriesHelper.cxx,v $
- * $Revision: 1.11.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -598,7 +595,7 @@ void makeLinesThickOrThin( const Reference< beans::XPropertySet > & xSeriesPrope
     if( !xSeriesProperties.is() )
         return;
 
-    sal_Int32 nNewValue = bThick ? 88 : 0;
+    sal_Int32 nNewValue = bThick ? 80 : 0;
     sal_Int32 nOldValue = 0;
     if( (xSeriesProperties->getPropertyValue( C2U( "LineWidth" )) >>= nOldValue ) &&
         nOldValue != nNewValue )

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: StockChartTypeTemplate.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -268,10 +265,14 @@ void SAL_CALL StockChartTypeTemplate::applyStyle(
         if( xProp.is() )
             xProp->setPropertyValue( C2U("AttachedAxisIndex"), uno::makeAny( nNewAxisIndex ) );
 
-
-        //ensure that lines are on
-        if( !bHasVolume || nChartTypeIndex==0 )
+        if( bHasVolume && nChartTypeIndex==0 )
         {
+            //switch lines off for volume bars
+            DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "BorderStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
+        }
+        else
+        {
+            //ensure that lines are on
             if( xProp.is() )
             {
                 drawing::LineStyle eStyle = drawing::LineStyle_NONE;
@@ -280,6 +281,7 @@ void SAL_CALL StockChartTypeTemplate::applyStyle(
                     xProp->setPropertyValue( C2U("LineStyle"), uno::makeAny( drawing::LineStyle_SOLID ));
             }
         }
+
     }
     catch( uno::Exception & ex )
     {
