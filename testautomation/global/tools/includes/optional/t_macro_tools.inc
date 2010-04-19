@@ -57,6 +57,7 @@ function hInsertMacroFromFile( cMacroId as string, optional cSource as string ) 
     
     const CFN = "hInsertMacroFromFile::"
     const RETVAL_FAILURE = 0
+    const MAX_LINES_IN_MACRO_FILE = 10000
     
     '///+<li>Find the path to the source file</li>
     dim cFile as string
@@ -66,10 +67,7 @@ function hInsertMacroFromFile( cMacroId as string, optional cSource as string ) 
         cFile = convertpath( cSource )
     endif        
     
-    '///+<li>Determine the required array size</li>
-    dim iArraySize as integer : iArraySize = hListFileGetSize( cFile )
-        
-    dim aInstructionList( iArraySize ) as string
+    dim aInstructionList( MAX_LINES_IN_MACRO_FILE ) as string
         
     dim iInstructionCount as integer
     dim iCurrentInstruction as integer
