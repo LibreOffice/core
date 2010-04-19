@@ -300,9 +300,12 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
     OUStringBuffer sTmp;
     sTmp.append( nLevel + 1 );
     GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_LEVEL, sTmp.makeStringAndClear() );
-    if( sTextStyleName.getLength() > 0 )
+    // #i110694#: no style-name on list-level-style-image
+    if ((sTextStyleName.getLength() > 0) && (NumberingType::BITMAP != eType))
+    {
         GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
                                 GetExport().EncodeStyleName( sTextStyleName ) );
+    }
     if( sPrefix.getLength() > 0 )
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NUM_PREFIX, sPrefix );
     if( sSuffix.getLength() > 0 )
