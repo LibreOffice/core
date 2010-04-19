@@ -377,7 +377,7 @@ void XMLRedlineExport::ExportChangedRegion(
     const Reference<XPropertySet> & rPropSet)
 {
     // Redline-ID
-    rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_ID, GetRedlineID(rPropSet) );
+    rExport.AddAttributeIdLegacy(XML_NAMESPACE_TEXT, GetRedlineID(rPropSet));
 
     // merge-last-paragraph
     Any aAny = rPropSet->getPropertyValue(sMergeLastPara);

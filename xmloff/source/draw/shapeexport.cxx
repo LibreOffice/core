@@ -46,9 +46,7 @@
 #include <xmloff/xmluconv.hxx>
 #include "PropertySetMerger.hxx"
 
-#ifndef _XMLOFF_SHAPEEXPORT_HXX
 #include <xmloff/shapeexport.hxx>
-#endif
 #include "sdpropls.hxx"
 #include "sdxmlexp_impl.hxx"
 #include <xmloff/families.hxx>
@@ -642,7 +640,9 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         uno::Reference< uno::XInterface > xRef( xShape, uno::UNO_QUERY );
         const OUString& rShapeId = mrExport.getInterfaceToIdentifierMapper().getIdentifier( xRef );
         if( rShapeId.getLength() )
-            mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_ID, rShapeId );
+        {
+            mrExport.AddAttributeIdLegacy(XML_NAMESPACE_DRAW, rShapeId);
+        }
     }
 
     // --------------------------

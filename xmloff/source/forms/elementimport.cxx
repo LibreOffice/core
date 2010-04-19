@@ -589,12 +589,21 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OControlImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
-        static const sal_Char* pControlIdAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCA_CONTROL_ID);
         static const sal_Char* pLinkedCellAttributeName = OAttributeMetaData::getBindingAttributeName(BA_LINKED_CELL);
 
-        if ( !m_sControlId.getLength() && _rLocalName.equalsAscii( pControlIdAttributeName ) )
+        if (IsXMLToken(_rLocalName, XML_ID))
         {   // it's the control id
-            m_sControlId = _rValue;
+            if (XML_NAMESPACE_XML == _nNamespaceKey)
+            {
+                m_sControlId = _rValue;
+            }
+            else if (XML_NAMESPACE_FORM == _nNamespaceKey)
+            {
+                if (!m_sControlId.getLength())
+                {
+                    m_sControlId = _rValue;
+                }
+            }
         }
         else if ( _rLocalName.equalsAscii( pLinkedCellAttributeName ) )
         {   // it's the address of a spreadsheet cell

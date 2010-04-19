@@ -50,18 +50,14 @@
 #include <com/sun/star/animations/XAudio.hpp>
 #include <com/sun/star/animations/ValuePair.hpp>
 #include <com/sun/star/animations/AnimationColorSpace.hpp>
-#ifndef _COM_SUN_STAR_PRESENTATION_EffectPresetClass_HPP_
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
-#endif
 #include <com/sun/star/animations/Timing.hpp>
 #include <com/sun/star/animations/Event.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
-#ifndef _COM_SUN_STAR_PRESENTATION_ParagraphTarget_HPP_
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
-#endif
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
@@ -240,7 +236,8 @@ enum AnimationNodeAttributes
     ANA_IterateType,
     ANA_IterateInterval,
     ANA_Formula,
-    ANA_ID,
+    ANA_ANIMID,
+    ANA_XMLID,
     ANA_Group_Id,
     ANA_Command,
     ANA_Volume
@@ -297,8 +294,8 @@ const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeAttributeTokenM
             { XML_NAMESPACE_ANIMATION, XML_ITERATE_TYPE,        (sal_uInt16)ANA_IterateType },
             { XML_NAMESPACE_ANIMATION, XML_ITERATE_INTERVAL,    (sal_uInt16)ANA_IterateInterval },
             { XML_NAMESPACE_ANIMATION, XML_FORMULA,             (sal_uInt16)ANA_Formula },
-            { XML_NAMESPACE_ANIMATION, XML_ID,                  (sal_uInt16)ANA_ID },
-            { XML_NAMESPACE_XML, XML_ID,                        (sal_uInt16)ANA_ID },
+            { XML_NAMESPACE_ANIMATION, XML_ID,                  (sal_uInt16)ANA_ANIMID },
+            { XML_NAMESPACE_XML, XML_ID,                        (sal_uInt16)ANA_XMLID },
             { XML_NAMESPACE_PRESENTATION, XML_GROUP_ID,         (sal_uInt16)ANA_Group_Id },
             { XML_NAMESPACE_ANIMATION, XML_AUDIO_LEVEL,         (sal_uInt16)ANA_Volume },
             { XML_NAMESPACE_ANIMATION, XML_COMMAND,             (sal_uInt16)ANA_Command },
@@ -811,6 +808,8 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
         std::list< NamedValue > aUserData;
         XMLTokenEnum meAttributeName = XML_TOKEN_INVALID;
         OUString aFrom, aBy, aTo, aValues;
+        bool bHaveXmlId( false );
+        OUString sXmlId;
 
         const sal_Int16 nCount = xAttrList.is() ? xAttrList->getLength() : 0;
         sal_uInt16 nEnum;
@@ -1057,13 +1056,15 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
             }
             break;
 
-            case ANA_ID:
+            case ANA_ANIMID:
             {
-                if( rValue.getLength() )
-                {
-                    Reference< XInterface > xRef( mxNode, UNO_QUERY );
-                    GetImport().getInterfaceToIdentifierMapper().registerReference( rValue, xRef );
-                }
+                if (!bHaveXmlId) { sXmlId = rValue; }
+            }
+            break;
+            case ANA_XMLID:
+            {
+                sXmlId = rValue;
+                bHaveXmlId = true;
             }
             break;
 
@@ -1252,6 +1253,13 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
                     aUserData.push_back( NamedValue( aLocalName, makeAny( rValue ) ) );
                 }
             }
+        }
+
+        if (sXmlId.getLength())
+        {
+            Reference< XInterface > const xRef( mxNode, UNO_QUERY );
+            GetImport().getInterfaceToIdentifierMapper().registerReference(
+                sXmlId, xRef );
         }
 
         sal_Int32 nUserDataCount = aUserData.size();

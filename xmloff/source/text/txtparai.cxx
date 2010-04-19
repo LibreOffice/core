@@ -1920,6 +1920,7 @@ XMLParaContext::XMLParaContext(
     const SvXMLTokenMap& rTokenMap =
         GetImport().GetTextImport()->GetTextPAttrTokenMap();
 
+    bool bHaveXmlId( false );
     OUString aCondStyleName, sClassNames;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -1936,6 +1937,7 @@ XMLParaContext::XMLParaContext(
         {
         case XML_TOK_TEXT_P_XMLID:
             m_sXmlId = rValue;
+            bHaveXmlId = true;
             break;
         case XML_TOK_TEXT_P_ABOUT:
             m_sAbout = rValue;
@@ -1949,6 +1951,9 @@ XMLParaContext::XMLParaContext(
             break;
         case XML_TOK_TEXT_P_DATATYPE:
             m_sDatatype = rValue;
+            break;
+        case XML_TOK_TEXT_P_TEXTID:
+            if (!bHaveXmlId) { m_sXmlId = rValue; }
             break;
         case XML_TOK_TEXT_P_STYLE_NAME:
             sStyleName = rValue;
@@ -1981,9 +1986,6 @@ XMLParaContext::XMLParaContext(
                     bIsListHeader = bBool;
                 }
             }
-            break;
-        case XML_TOK_TEXT_P_ID:
-            sId = rValue;
             break;
         case XML_TOK_TEXT_P_RESTART_NUMBERING:
             {
@@ -2023,14 +2025,17 @@ XMLParaContext::~XMLParaContext()
 
     // if we have an id set for this paragraph, get a cursor for this
     // paragraph and register it with the given identifier
-    if( sId.getLength() )
+    // FIXME: this is just temporary, and should be removed when
+    // EditEngine paragraphs implement XMetadatable!
+    if (m_sXmlId.getLength())
     {
         Reference < XTextCursor > xIdCursor( xTxtImport->GetText()->createTextCursorByRange( xStart ) );
         if( xIdCursor.is() )
         {
             xIdCursor->gotoRange( xEnd, sal_True );
             Reference< XInterface > xRef( xIdCursor, UNO_QUERY );
-            GetImport().getInterfaceToIdentifierMapper().registerReference( sId, xRef );
+            GetImport().getInterfaceToIdentifierMapper().registerReference(
+                m_sXmlId, xRef);
         }
     }
 

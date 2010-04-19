@@ -2014,7 +2014,9 @@ void SdXMLExport::_ExportContent()
             // write draw:id
             const OUString aPageId = getInterfaceToIdentifierMapper().getIdentifier( xDrawPage );
             if( aPageId.getLength() != 0 )
-                AddAttribute ( XML_NAMESPACE_DRAW, XML_ID, aPageId );
+            {
+                AddAttributeIdLegacy(XML_NAMESPACE_DRAW, aPageId);
+            }
 
             // write page
             SvXMLElementExport aDPG(*this, XML_NAMESPACE_DRAW, XML_PAGE, sal_True, sal_True);

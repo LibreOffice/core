@@ -316,10 +316,8 @@ namespace xmloff
         if (CCA_CONTROL_ID & m_nIncludeCommon)
         {
             OSL_ENSURE(m_sControlId.getLength(), "OControlExport::exportInnerAttributes: have no control id for the control!");
-            AddAttribute(
-                OAttributeMetaData::getCommonControlAttributeNamespace(CCA_CONTROL_ID),
-                OAttributeMetaData::getCommonControlAttributeName(CCA_CONTROL_ID),
-                m_sControlId);
+            m_rContext.getGlobalContext().AddAttributeIdLegacy(
+                XML_NAMESPACE_FORM, m_sControlId);
         #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
             m_nIncludeCommon = m_nIncludeCommon & ~CCA_CONTROL_ID;

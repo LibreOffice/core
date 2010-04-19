@@ -31,24 +31,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-#ifndef _COM_SUN_STAR_ANIMATIONS_XAnimateColor_HPP_
 #include <com/sun/star/animations/XAnimateColor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XAnimateSet_HPP_
 #include <com/sun/star/animations/XAnimateSet.hpp>
-#endif
 #include <com/sun/star/animations/XCommand.hpp>
 #include <com/sun/star/animations/Timing.hpp>
 #include <com/sun/star/animations/Event.hpp>
-#ifndef _COM_SUN_STAR_ANIMATIONS_XAnimateMotion_HPP_
 #include <com/sun/star/animations/XAnimateMotion.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XAnimateTransform_HPP_
 #include <com/sun/star/animations/XAnimateTransform.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XTransitionFilter_HPP_
 #include <com/sun/star/animations/XTransitionFilter.hpp>
-#endif
 #include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/animations/XAudio.hpp>
 #include <com/sun/star/animations/AnimationColorSpace.hpp>
@@ -67,19 +57,12 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
-#ifndef _COM_SUN_STAR_PRESENTATION_EffectPresetClass_HPP_
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_ParagraphTarget_HPP_
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
-#endif
 #include <com/sun/star/presentation/TextAnimationType.hpp>
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 #include <com/sun/star/presentation/EffectCommands.hpp>
-
-#ifndef _COM_SUN_STAR_DRAWING_XShape_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
-#endif
 
 #include <tools/debug.hxx>
 #include <tools/time.hxx>
@@ -783,7 +766,10 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
 
         const OUString& rExportIdentifier = mrExport.getInterfaceToIdentifierMapper().getIdentifier( xNode );
         if( rExportIdentifier.getLength() )
-            mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_ID, rExportIdentifier );
+        {
+            mrExport.AddAttributeIdLegacy(
+                XML_NAMESPACE_ANIMATION, rExportIdentifier);
+        }
 
         Any aTemp( xNode->getBegin() );
         if( aTemp.hasValue() )
