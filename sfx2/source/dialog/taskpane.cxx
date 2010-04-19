@@ -905,7 +905,7 @@ namespace sfx2
             m_aPanelRepository.push_back( PanelDescriptor( pPanel ) );
         }
 
-        m_sDefaultTitle = String( SfxResId( STR_SFX_TASKS ) );
+        SetDefaultTitle( String( SfxResId( STR_SFX_TASKS ) ) );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -929,6 +929,7 @@ namespace sfx2
     void TaskPaneController_Impl::SetDefaultTitle( const String& i_rTitle )
     {
         m_sDefaultTitle = i_rTitle;
+        impl_updateDockingWindowTitle();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
