@@ -28,6 +28,7 @@
 $(eval $(call gb_Module_Module,sfx2,\
     $(call gb_AllLangResTarget_get_target,sfx) \
     $(call gb_Library_get_target,sfx) \
+    $(call gb_Package_get_target,sfx2_inc) \
 ))
 
 $(eval $(call gb_Module_read_includes,sfx2,\
