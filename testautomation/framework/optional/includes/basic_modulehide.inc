@@ -37,6 +37,11 @@ testcase tBasicIdeModuleHide
     const CFN = "tBasicIdeModuleHide::"
     const RAISE_MESSAGEBOX = 1
 
+    const RC_SUCCESS = 0
+    const RC_TIMEOUT = -1
+
+    const TAB_MODULES = 1
+
     dim rc as integer
     dim brc as boolean
     dim cDefaultTabName as string
@@ -47,57 +52,44 @@ testcase tBasicIdeModuleHide
     ToolsMacro_uno
     hCreateModuleForDoc()
     
-    brc = hInsertMacro( RAISE_MESSAGEBOX )
-    if ( brc ) then
+    if ( hInsertMacro( RAISE_MESSAGEBOX ) ) then
        printlog( CFN & "Macro has been written successfully" )
     else
        warnlog( CFN & "Failed to insert macro" )
     endif
 
-    rc = hHideModule()
-    if ( rc > 0 ) then
+
+    if ( hHideModule() <> RC_SUCCESS ) then
         warnlog( "Some unexpected error occurred while trying to hide the module" )
     endif
 
-    try
-        ' hTestMacro is expected to fail, so we jump to the catch statement
-        rc = hTestMacro( RAISE_MESSAGEBOX )
-        if ( rc = 0 ) then
-            warnlog( "For some reason the original module is still visible" )
-        else
-            warnlog( "There should not be any editingwindow visible" )
-        endif
-    catch
-        printlog( " * unable to locate editwindow -> no module visible." )
-    endcatch
+    ' hTestMacro is expected to fail, so we jump to the catch statement
+    if ( hTestMacro( RAISE_MESSAGEBOX ) = RC_SUCCESS ) then
+        warnlog( "For some reason the original module is still visible" )
+    else
+        warnlog( "There should not be any editingwindow visible" )
+    endif
     
-    if ( hOpenBasicObjectOrganizer( 1 ) ) then
+    if ( hOpenBasicObjectOrganizer( TAB_MODULES ) ) then
     
         modulliste.typekeys( "<END><RIGHT><DOWN><RIGHT><DOWN>" )
-        try
-            bearbeiten.click()
-        catch
+        if ( hClickButton( Bearbeiten ) = RC_TIMEOUT ) then
             warnlog( "#i35097# Crash when editing last module" )
-        endcatch
+            goto endsub
+        endif
         
-         
-        rc = hTestMacro( RAISE_MESSAGEBOX )
-        if ( rc = 1 ) then
+        if ( hTestMacro( RAISE_MESSAGEBOX ) = RAISE_MESSAGEBOX ) then
             printlog( " * the correct macro-module is open. Good." )
         else
             warnlog( "The open macro-module is not the one that was expected" )
         endif
          
         hCloseBasicIDE()
-    
-        call hCloseDocument()      
+        hCloseDocument()      
          
     else
-    
         warnlog( "restarting the office to recover from errors" )
         call exitRestartTheOffice()
-        
     endif
-    
     
 endcase
