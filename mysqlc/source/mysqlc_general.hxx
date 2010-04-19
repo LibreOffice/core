@@ -30,12 +30,12 @@
 #ifndef _MYSQLC_GENERAL_
 #define _MYSQLC_GENERAL_
 
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
+
 #include <tools/preextstl.h>
 #include <cppconn/exception.h>
 #include <tools/postextstl.h>
-
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/sdbc/SQLException.hpp>
 
 namespace mysqlc_sdbc_driver
 {
