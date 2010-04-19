@@ -691,7 +691,7 @@ namespace basctl
             }
 
             // insert element by new name in container
-            if ( _eType == E_SCRIPTS )
+            else if ( _eType == E_SCRIPTS )
             {
                 Reference< XVBAModuleInfo > xVBAModuleInfo( xLib, UNO_QUERY );
                 if ( xVBAModuleInfo->hasModuleInfo( _rOldName ) )
@@ -765,7 +765,7 @@ namespace basctl
             Reference< XNameContainer > xLib( getOrCreateLibrary( E_SCRIPTS, _rLibName ), UNO_QUERY_THROW );
             if ( !xLib->hasByName( _rModName ) )
                 return false;
-            xLib->replaceByName( _rModName,  makeAny( _rModuleCode ) );
+            xLib->replaceByName( _rModName, makeAny( _rModuleCode ) );
             return true;
         }
         catch( const Exception& )

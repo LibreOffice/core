@@ -55,13 +55,36 @@
 #include <com/sun/star/script/XVBAModuleInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/script/XVBAModuleInfo.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-void lcl_getObjectName( const uno::Reference< container::XNameContainer >& rLib, const String& rModName, String& rObjName );
+void ModuleInfoHelper::getObjectName( const uno::Reference< container::XNameContainer >& rLib, const String& rModName, String& rObjName )
+{
+    try
+    {
+                uno::Reference< script::XVBAModuleInfo > xVBAModuleInfo( rLib, uno::UNO_QUERY );
+                if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( rModName ) )
+                {
+            script::ModuleInfo aModuleInfo = xVBAModuleInfo->getModuleInfo( rModName );
+            uno::Any aObject( aModuleInfo.ModuleObject );
+            uno::Reference< lang::XServiceInfo > xServiceInfo( aObject, uno::UNO_QUERY );
+            if( xServiceInfo.is() && xServiceInfo->supportsService( rtl::OUString::createFromAscii( "ooo.vba.excel.Worksheet" ) ) )
+            {
+                uno::Reference< container::XNamed > xNamed( aObject, uno::UNO_QUERY );
+                if( xNamed.is() )
+                    rObjName = xNamed->getName();
+            }
+        }
+    }
+    catch( uno::Exception& )
+    {
+    }
+}
 
-sal_Int32 lcl_getModuleType(  const uno::Reference< container::XNameContainer >& rLib, const String& rModName )
+sal_Int32 ModuleInfoHelper::getModuleType(  const uno::Reference< container::XNameContainer >& rLib, const String& rModName )
 {
     sal_Int32 nType = com::sun::star::script::ModuleType::NORMAL;
     uno::Reference< script::XVBAModuleInfo > xVBAModuleInfo( rLib, uno::UNO_QUERY );
@@ -446,7 +469,7 @@ void BasicTreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubR
         {
             String aModName = pModNames[ i ];
             BasicEntryType eType = OBJ_TYPE_UNKNOWN;
-            switch( lcl_getModuleType( xLib, aModName ) )
+            switch( ModuleInfoHelper::getModuleType( xLib, aModName ) )
             {
                 case script::ModuleType::DOCUMENT:
                     eType = OBJ_TYPE_DOCUMENT_OBJECTS;
@@ -470,7 +493,7 @@ void BasicTreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubR
             if( eType == OBJ_TYPE_DOCUMENT_OBJECTS )
             {
                    String sObjName;
-                lcl_getObjectName( xLib, aModName, sObjName );
+                ModuleInfoHelper::getObjectName( xLib, aModName, sObjName );
                 if( sObjName.Len() )
                    {
                     aEntryName.AppendAscii(" (").Append(sObjName).AppendAscii(")");
