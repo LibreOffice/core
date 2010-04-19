@@ -905,7 +905,7 @@ namespace sfx2
             m_aPanelRepository.push_back( PanelDescriptor( pPanel ) );
         }
 
-        m_sDefaultTitle = m_rDockingWindow.GetTitle();
+        m_sDefaultTitle = String( SfxResId( STR_SFX_TASKS ) );
     }
 
     //------------------------------------------------------------------------------------------------------------------

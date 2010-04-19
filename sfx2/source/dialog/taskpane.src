@@ -41,3 +41,7 @@ String STR_SFX_TASK_PANE_VIEW
 {
     Text [ en-US ] = "View";
 };
+String STR_SFX_TASKS
+{
+    Text [ en-US ] = "Tasks";
+};
