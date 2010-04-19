@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: b2dpolygontools.hxx,v $
- * $Revision: 1.24.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -273,6 +270,10 @@ namespace basegfx
         /** Create a polygon from a rectangle.
          */
         B2DPolygon createPolygonFromRect( const B2DRectangle& rRect );
+
+        /** Create the unit polygon
+         */
+        B2DPolygon createUnitPolygon();
 
         /** Create a circle polygon with given radius.
 

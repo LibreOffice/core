@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: content.cxx,v $
- * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -340,12 +337,14 @@ static Reference< XContent > getContent(
     if ( xProvider.is() )
     {
         Reference< XContent > xContent;
+        rtl::OUString msg;
         try
         {
             xContent = xProvider->queryContent( xId );
         }
-        catch ( IllegalIdentifierException const & )
+        catch ( IllegalIdentifierException const & e )
         {
+            msg = e.Message;
             // handled below.
         }
 
@@ -358,7 +357,7 @@ static Reference< XContent > getContent(
 
             throw ContentCreationException(
                     rtl::OUString::createFromAscii(
-                        "Unable to create Content!" ),
+                        "Unable to create Content! " ) + msg,
                     Reference< XInterface >(),
                     ContentCreationError_CONTENT_CREATION_FAILED );
         }

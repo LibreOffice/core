@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: saxwriter.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -703,6 +700,8 @@ inline void SaxWriterHelper::clearBuffer() throw( SAXException )
         m_Sequence.realloc(nCurrentPos);
         nCurrentPos = writeSequence();
         m_Sequence.realloc(SEQUENCESIZE);
+        // Be sure to update the array pointer after the reallocation.
+        mp_Sequence = m_Sequence.getArray();
     }
 }
 

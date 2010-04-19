@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: templwin.cxx,v $
- * $Revision: 1.82.58.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1843,26 +1840,7 @@ sal_Bool SvtDocumentTemplateDialog::CanEnableEditBtn() const
     if ( pImpl->pWin->IsFileSelected() && aFolderURL.getLength() )
     {
         ::rtl::OUString aFileTargetURL = pImpl->pWin->GetSelectedFile();
-        ::rtl::OUString aFolderTargetURL;
-
-        ::ucbhelper::Content aFolderContent;
-        Reference< XCommandEnvironment > xEnv;
-        if ( ::ucbhelper::Content::create( aFolderURL, xEnv, aFolderContent ) )
-        try
-        {
-            ::rtl::OUString aTmpURL;
-            uno::Any aValue = aFolderContent.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TargetDirURL") ) );
-            aValue >>= aTmpURL;
-
-            uno::Reference< util::XOfficeInstallationDirectories > xOffInstDirs = pImpl->getOfficeInstDirs();
-            if ( xOffInstDirs.is() )
-                aFolderTargetURL = xOffInstDirs->makeAbsoluteURL( aTmpURL );
-        }
-        catch( uno::Exception& )
-        {}
-
-        if ( aFolderTargetURL.getLength() && ::utl::UCBContentHelper::IsSubPath( aFolderTargetURL, aFileTargetURL ) )
-            bEnable = sal_True;
+        bEnable = aFileTargetURL.getLength() > 0;
     }
 
     return bEnable;

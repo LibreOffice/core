@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DataFlavorMapping.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,6 +89,11 @@ public:
   */
   NSString* openOfficeToSystemFlavor(const com::sun::star::datatransfer::DataFlavor& oooDataFlavor) const;
 
+  /* Select the best available image data type
+     If there is no suiteable mapping available NULL will
+     be returned.
+  */
+  NSString* openOfficeImageToSystemFlavor(NSPasteboard* pPasteboard) const;
 
   /* Get a data provider which is able to provide the data 'rTransferable' offers in a format that can
      be put on to the system clipboard.

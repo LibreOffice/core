@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: configitem.cxx,v $
- * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -603,9 +600,9 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
                 else
                     pRet[i] = xHierarchyAccess->getByHierarchicalName(pNames[i]);
             }
-    #ifdef DBG_UTIL
             catch(Exception& rEx)
             {
+#if OSL_DEBUG_LEVEL > 0
                 OString sMsg("XHierarchicalNameAccess: ");
                 sMsg += OString(rEx.Message.getStr(),
                     rEx.Message.getLength(),
@@ -622,10 +619,10 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
                     pNames[i].getLength(),
                      RTL_TEXTENCODING_ASCII_US);
                 OSL_ENSURE(sal_False, sMsg.getStr());
-            }
 #else
-            catch(Exception&){}
+                (void) rEx; // avoid warning
 #endif
+            }
         }
 
         // In special mode "ALL_LOCALES" we must convert localized values to Sequence< PropertyValue >.

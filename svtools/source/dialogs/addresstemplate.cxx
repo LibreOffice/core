@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: addresstemplate.cxx,v $
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -857,7 +854,7 @@ void AssignmentPersistentData::Commit()
         m_aDatasource.SaveValue();
 
         // create an interaction handler (may be needed for connecting)
-        const String sInteractionHandlerServiceName = String::CreateFromAscii("com.sun.star.sdb.InteractionHandler");
+        const String sInteractionHandlerServiceName = String::CreateFromAscii("com.sun.star.task.InteractionHandler");
         Reference< XInteractionHandler > xHandler;
         try
         {

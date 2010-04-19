@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pdfwriter.hxx,v $
- * $Revision: 1.8.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +47,6 @@
 class Font;
 class Point;
 class OutputDevice;
-class Region;
 class MapMode;
 class Polygon;
 class LineInfo;
@@ -202,7 +198,7 @@ public:
 
     enum WidgetType
     {
-        PushButton, RadioButton, CheckBox, Edit, ListBox, ComboBox
+        PushButton, RadioButton, CheckBox, Edit, ListBox, ComboBox, Hierarchy
     };
 
     enum WidgetState
@@ -674,10 +670,10 @@ The following structure describes the permissions used in PDF security
     void                Pop();
 
     void               SetClipRegion();
-    void               SetClipRegion( const Region& rRegion );
+    void               SetClipRegion( const basegfx::B2DPolyPolygon& rRegion );
     void               MoveClipRegion( long nHorzMove, long nVertMove );
     void               IntersectClipRegion( const Rectangle& rRect );
-    void               IntersectClipRegion( const Region& rRegion );
+    void               IntersectClipRegion( const basegfx::B2DPolyPolygon& rRegion );
 
     void               SetAntialiasing( USHORT nMode =  0 );
 
