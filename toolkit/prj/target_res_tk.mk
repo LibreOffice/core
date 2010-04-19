@@ -27,6 +27,8 @@
 
 $(eval $(call gb_AllLangResTarget_AllLangResTarget,tk))
 
+$(eval $(call gb_AllLangResTarget_set_reslocation,tk,toolkit/source/awt))
+
 $(eval $(call gb_AllLangResTarget_add_srs,tk,\
     toolkit/awt \
 ))
