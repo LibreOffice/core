@@ -1215,8 +1215,8 @@ sub zip_files
         if ( $opt_delete ) {
             if ( -e $zip_file ) {
                 unlink $zip_file or die "Error: can't remove file '$zip_file': $!";
-                next;
             }
+            next;
         }
 
         local $work_file = "";
