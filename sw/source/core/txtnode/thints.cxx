@@ -776,7 +776,8 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
 
                     // For each attribute in the automatic style check if it
                     // is also set the the new character style:
-                    SfxItemSet aNewSet( *pOldStyle->GetPool(), RES_CHRATR_BEGIN, RES_CHRATR_END );
+                    SfxItemSet aNewSet( *pOldStyle->GetPool(),
+                        aCharAutoFmtSetRange);
                     SfxItemIter aItemIter( *pOldStyle );
                     const SfxPoolItem* pItem = aItemIter.GetCurItem();
                     while( TRUE )
