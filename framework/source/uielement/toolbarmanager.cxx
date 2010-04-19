@@ -44,13 +44,13 @@
 #include "services.h"
 #include "general.h"
 #include "properties.h"
-#include <helper/imageproducer.hxx>
-#include <classes/sfxhelperfunctions.hxx>
+#include <framework/imageproducer.hxx>
+#include <framework/sfxhelperfunctions.hxx>
 #include <classes/fwkresid.hxx>
 #ifndef __FRAMEWORK_CLASES_RESOURCE_HRC_
 #include <classes/resource.hrc>
 #endif
-#include <classes/addonsoptions.hxx>
+#include <framework/addonsoptions.hxx>
 #include <uielement/toolbarmerger.hxx>
 
 //_________________________________________________________________________________________________________________

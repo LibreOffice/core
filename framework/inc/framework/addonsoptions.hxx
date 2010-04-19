@@ -38,7 +38,7 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 //_________________________________________________________________________________________________________________
 //  types, enums, ...
 //_________________________________________________________________________________________________________________

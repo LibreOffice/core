@@ -33,7 +33,7 @@
 //_________________________________________________________________________________________________________________
 #include <uielement/menubarwrapper.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include <helper/actiontriggerhelper.hxx>
+#include <framework/actiontriggerhelper.hxx>
 #include <services.h>
 
 //_________________________________________________________________________________________________________________

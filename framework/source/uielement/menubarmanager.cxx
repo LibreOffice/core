@@ -33,17 +33,17 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 #include <uielement/menubarmanager.hxx>
-#include <xml/menuconfiguration.hxx>
-#include <classes/bmkmenu.hxx>
-#include <classes/addonmenu.hxx>
-#include <helper/imageproducer.hxx>
+#include <framework/menuconfiguration.hxx>
+#include <framework/bmkmenu.hxx>
+#include <framework/addonmenu.hxx>
+#include <framework/imageproducer.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include "classes/addonsoptions.hxx"
+#include "framework/addonsoptions.hxx"
 #include <classes/fwkresid.hxx>
 #include <classes/menumanager.hxx>
-#include <helper/acceleratorinfo.hxx>
+#include <framework/acceleratorinfo.hxx>
 #include <helper/mischelper.hxx>
-#include <classes/menuextensionsupplier.hxx>
+#include <framework/menuextensionsupplier.hxx>
 #include <classes/resource.hrc>
 #include <services.h>
 
@@ -97,7 +97,7 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <rtl/logfile.hxx>
 #include "svtools/miscopt.hxx"
-#include <classes/addonmenu.hxx>
+#include <framework/addonmenu.hxx>
 #include <uielement/menubarmerger.hxx>
 #include <dispatch/uieventloghelper.hxx>
 

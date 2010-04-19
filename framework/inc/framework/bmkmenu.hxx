@@ -24,36 +24,58 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef __FRAMEWORK_CLASSES_BMKMENU_HXX
+#define __FRAMEWORK_CLASSES_BMKMENU_HXX
 
-#ifndef __FRAMEWORK_XML_TOOLBOXLAYOUTDOCUMENTHANDLER_HXX_
-#define __FRAMEWORK_XML_TOOLBOXLAYOUTDOCUMENTHANDLER_HXX_
-
-#include <framework/toolboxconfiguration.hxx>
-
+#include "framework/addonmenu.hxx"
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
-
+#include <com/sun/star/frame/XFrame.hpp>
+#include <framework/fwedllapi.h>
 //_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
-#include <threadhelp/threadhelpbase.hxx>
-#include <rtl/ustring.hxx>
-#include <cppuhelper/weak.hxx>
-
-#include <hash_map>
-#include <stdtypes.h>
-
-//_________________________________________________________________________________________________________________
-//  namespace
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 
-namespace framework{
+#include <vcl/menu.hxx>
+#include <vcl/image.hxx>
+
+class String;
+class ImageList;
+
+#define BMKMENU_ITEMID_START    20000
+
+namespace framework
+{
+
+class BmkMenu_Impl;
+class FWE_DLLPUBLIC BmkMenu : public AddonMenu
+{
+    public:
+                        enum BmkMenuType
+                        {
+                            BMK_NEWMENU,
+                            BMK_WIZARDMENU
+                        };
+
+                        BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                                 BmkMenuType nType );
+                        ~BmkMenu();
+
+    void                Initialize(); // Synchrones Laden der Eintraege
+
+    protected:
+        BmkMenu::BmkMenuType m_nType;
+        USHORT          CreateMenuId();
+
+    private:
+                        BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                                 BmkMenuType, BmkMenu* pRoot );
+
+        BmkMenu_Impl*   _pImp;
+};
 
 } // namespace framework
 
-#endif
+#endif // #ifndef __FRAMEWORK_CLASSES_BMKMENU_HXX

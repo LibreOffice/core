@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <services/menudocumenthandler.hxx>
 #include <classes/menuconfiguration.hxx>
-#include <classes/addonmenu.hxx>
+#include <framework/addonmenu.hxx>
 
 #ifndef __FRAMEWORK_SERVICES_ATTRIBUTELIST_HXX_
 #include <services/attributelist.hxx>

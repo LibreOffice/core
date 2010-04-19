@@ -28,7 +28,7 @@
 #ifndef __FRAMEWORK_XML_TOOLBOXDOCUMENTHANDLER_HXX_
 #define __FRAMEWORK_XML_TOOLBOXDOCUMENTHANDLER_HXX_
 
-#include <xml/toolboxconfiguration.hxx>
+#include <framework/toolboxconfiguration.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -43,7 +43,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <stdtypes.h>
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 
 //_________________________________________________________________________________________________________________
 //  namespace

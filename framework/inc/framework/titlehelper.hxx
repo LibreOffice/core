@@ -51,7 +51,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <hash_map>
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 
 //_______________________________________________
 // namespace

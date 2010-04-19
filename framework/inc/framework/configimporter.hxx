@@ -25,27 +25,29 @@
  *
  ************************************************************************/
 
-#ifndef __FRAMEWORK_HELPER_IMAGEPRODUCER_HXX_
-#define __FRAMEWORK_HELPER_IMAGEPRODUCER_HXX_
+#ifndef __FRAMEWORK_HELPER_CONFIGIMPORTER_HXX_
+#define __FRAMEWORK_HELPER_CONFIGIMPORTER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
-#include <sal/types.h>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <vcl/image.hxx>
+#include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
 #include <rtl/ustring.hxx>
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 
 namespace framework
 {
+    class FWE_DLLPUBLIC UIConfigurationImporterOOo1x
+    {
+        public:
+            static sal_Bool ImportCustomToolbars(
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >& rContainerFactory,
+                        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > >& rSeqContainer,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rToolbarStorage );
+    };
 
-typedef Image ( *pfunc_getImage)( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast );
+} // namespace framework
 
-pfunc_getImage FWE_DLLPUBLIC SAL_CALL SetImageProducer( pfunc_getImage pGetImageFunc );
-
-Image FWE_DLLPUBLIC SAL_CALL GetImageFromURL( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast );
-
-}
-
-#endif // __FRAMEWORK_HELPER_IMAGEPRODUCER_HXX_
+#endif // __FRAMEWORK_HELPER_CONFIGIMPORTER_HXX_

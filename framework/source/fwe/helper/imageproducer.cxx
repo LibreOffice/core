@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 
-#include <helper/imageproducer.hxx>
+#include <framework/imageproducer.hxx>
 
 namespace framework
 {

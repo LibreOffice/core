@@ -35,7 +35,7 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
-#include <classes/addonsoptions.hxx>
+#include <framework/addonsoptions.hxx>
 #ifndef __FRAMEWORK_TOOLBAR_HXX_
 #include "uielement/toolbar.hxx"
 #endif

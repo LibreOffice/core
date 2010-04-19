@@ -33,12 +33,12 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 #include <classes/menumanager.hxx>
-#include <xml/menuconfiguration.hxx>
-#include <classes/bmkmenu.hxx>
-#include <classes/addonmenu.hxx>
-#include <helper/imageproducer.hxx>
+#include <framework/menuconfiguration.hxx>
+#include <framework/bmkmenu.hxx>
+#include <framework/addonmenu.hxx>
+#include <framework/imageproducer.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include "classes/addonsoptions.hxx"
+#include "framework/addonsoptions.hxx"
 #include <classes/fwkresid.hxx>
 #include <services.h>
 #include "classes/resource.hrc"

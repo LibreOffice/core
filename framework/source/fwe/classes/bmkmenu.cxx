@@ -34,11 +34,11 @@
 
 #include <limits.h>
 
-#include "classes/bmkmenu.hxx"
+#include "framework/bmkmenu.hxx"
 #include <general.h>
 #include <macros/debug/assertion.hxx>
-#include <helper/imageproducer.hxx>
-#include <xml/menuconfiguration.hxx>
+#include <framework/imageproducer.hxx>
+#include <framework/menuconfiguration.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes

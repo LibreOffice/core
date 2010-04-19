@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
-#include <xml/eventsconfiguration.hxx>
+#include <framework/eventsconfiguration.hxx>
 #include <xml/eventsdocumenthandler.hxx>
 #include <services.h>
 

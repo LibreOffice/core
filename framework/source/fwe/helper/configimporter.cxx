@@ -28,8 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 
-#include <helper/configimporter.hxx>
-#include <xml/toolboxconfiguration.hxx>
+#include <framework/configimporter.hxx>
+#include <framework/toolboxconfiguration.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 
 #include <rtl/ustrbuf.hxx>

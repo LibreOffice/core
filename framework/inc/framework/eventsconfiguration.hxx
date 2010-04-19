@@ -28,7 +28,7 @@
 #ifndef __FRAMEWORK_XML_EVENTSCONFIGURATION_HXX_
 #define __FRAMEWORK_XML_EVENTSCONFIGURATION_HXX_
 
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 #include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include <tools/stream.hxx>

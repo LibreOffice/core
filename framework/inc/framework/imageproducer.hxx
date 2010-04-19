@@ -24,58 +24,28 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __FRAMEWORK_CLASSES_BMKMENU_HXX
-#define __FRAMEWORK_CLASSES_BMKMENU_HXX
 
-#include "classes/addonmenu.hxx"
+#ifndef __FRAMEWORK_HELPER_IMAGEPRODUCER_HXX_
+#define __FRAMEWORK_HELPER_IMAGEPRODUCER_HXX_
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-
+#include <sal/types.h>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <fwedllapi.h>
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
-
-#include <vcl/menu.hxx>
 #include <vcl/image.hxx>
-
-class String;
-class ImageList;
-
-#define BMKMENU_ITEMID_START    20000
+#include <rtl/ustring.hxx>
+#include <framework/fwedllapi.h>
 
 namespace framework
 {
 
-class BmkMenu_Impl;
-class FWE_DLLPUBLIC BmkMenu : public AddonMenu
-{
-    public:
-                        enum BmkMenuType
-                        {
-                            BMK_NEWMENU,
-                            BMK_WIZARDMENU
-                        };
+typedef Image ( *pfunc_getImage)( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast );
 
-                        BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                                 BmkMenuType nType );
-                        ~BmkMenu();
+pfunc_getImage FWE_DLLPUBLIC SAL_CALL SetImageProducer( pfunc_getImage pGetImageFunc );
 
-    void                Initialize(); // Synchrones Laden der Eintraege
+Image FWE_DLLPUBLIC SAL_CALL GetImageFromURL( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast );
 
-    protected:
-        BmkMenu::BmkMenuType m_nType;
-        USHORT          CreateMenuId();
+}
 
-    private:
-                        BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                                 BmkMenuType, BmkMenu* pRoot );
-
-        BmkMenu_Impl*   _pImp;
-};
-
-} // namespace framework
-
-#endif // #ifndef __FRAMEWORK_CLASSES_BMKMENU_HXX
+#endif // __FRAMEWORK_HELPER_IMAGEPRODUCER_HXX_

@@ -25,29 +25,26 @@
  *
  ************************************************************************/
 
-#ifndef __FRAMEWORK_HELPER_CONFIGIMPORTER_HXX_
-#define __FRAMEWORK_HELPER_CONFIGIMPORTER_HXX_
+#ifndef __FRAMEWORK_HELPER_ACCELERATORINFO_HXX_
+#define __FRAMEWORK_HELPER_ACCELERATORINFO_HXX_
 
-#include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
+#include <com/sun/star/frame/XFrame.hpp>
+#include <vcl/keycod.hxx>
 #include <rtl/ustring.hxx>
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 
 namespace framework
 {
-    class FWE_DLLPUBLIC UIConfigurationImporterOOo1x
-    {
-        public:
-            static sal_Bool ImportCustomToolbars(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >& rContainerFactory,
-                        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > >& rSeqContainer,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rToolbarStorage );
-    };
 
-} // namespace framework
+typedef ::rtl::OUString ( *pfunc_getCommandURLFromKeyCode)( const KeyCode& );
+typedef KeyCode ( *pfunc_getKeyCodeFromCommandURL )( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL );
 
-#endif // __FRAMEWORK_HELPER_CONFIGIMPORTER_HXX_
+pfunc_getCommandURLFromKeyCode SAL_CALL SetCommandURLFromKeyCode( pfunc_getCommandURLFromKeyCode );
+pfunc_getKeyCodeFromCommandURL SAL_CALL SetKeyCodeFromCommandURL( pfunc_getKeyCodeFromCommandURL );
+
+::rtl::OUString SAL_CALL GetCommandURLFromKeyCode( const KeyCode& aKeyCode );
+KeyCode GetKeyCodeFromCommandURL( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const rtl::OUString& aCommandURL );
+
+}
+
+#endif // __FRAMEWORK_HELPER_ACCELERATORINFO_HXX_

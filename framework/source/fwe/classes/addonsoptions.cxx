@@ -31,7 +31,7 @@
 //_________________________________________________________________________________________________________________
 //  includes
 //_________________________________________________________________________________________________________________
-#include <classes/addonsoptions.hxx>
+#include <framework/addonsoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/ucbstreamhelper.hxx>

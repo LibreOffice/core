@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
-#include <classes/menuextensionsupplier.hxx>
+#include <framework/menuextensionsupplier.hxx>
 #include <osl/mutex.hxx>
 
 static pfunc_setMenuExtensionSupplier pMenuExtensionSupplierFunc = NULL;

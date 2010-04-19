@@ -41,7 +41,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 
 #define SERVICENAME_ACTIONTRIGGER "com.sun.star.ui.ActionTrigger"
 #define IMPLEMENTATIONNAME_ACTIONTRIGGER "com.sun.star.comp.ui.ActionTrigger"

@@ -40,7 +40,7 @@
 //_________________________________________________________________________________________________________________
 
 #include <vcl/menu.hxx>
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 
 #define ADDONMENU_ITEMID_START       2000
 #define ADDONMENU_ITEMID_END         3000

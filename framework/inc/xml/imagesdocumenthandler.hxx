@@ -28,7 +28,7 @@
 #ifndef __FRAMEWORK_XML_IMAGEDOCUMENTHANDLER_HXX_
 #define __FRAMEWORK_XML_IMAGEDOCUMENTHANDLER_HXX_
 
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -41,7 +41,7 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <xml/imagesconfiguration.hxx>
+#include <framework/imagesconfiguration.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>

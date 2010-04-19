@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
-#include <xml/statusbarconfiguration.hxx>
+#include <framework/statusbarconfiguration.hxx>
 #include <xml/statusbardocumenthandler.hxx>
 #include <xml/saxnamespacefilter.hxx>
 #include <services.h>

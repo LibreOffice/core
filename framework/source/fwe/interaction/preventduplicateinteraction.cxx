@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 
-#include "interaction/preventduplicateinteraction.hxx"
+#include "framework/preventduplicateinteraction.hxx"
 
 //_________________________________________________________________________________________________________________
 //  my own includes

@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
-#include <xml/imagesconfiguration.hxx>
+#include <framework/imagesconfiguration.hxx>
 #include <services.h>
 
 #ifndef __FRAMEWORK_CLASSES_IMAGESDOCUMENTHANDLER_HXX_

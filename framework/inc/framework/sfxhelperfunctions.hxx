@@ -28,7 +28,7 @@
 #ifndef __FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_HXX_
 #define __FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_HXX_
 
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <rtl/ustring.hxx>
 #include <vcl/toolbox.hxx>
