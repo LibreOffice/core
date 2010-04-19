@@ -35,7 +35,12 @@ testcase tBasic_IDE_Toolbar_Module
 
     printlog( "BASIC toolbars for modules" )
 
-    dim brc as boolean
+    const DIALOG_DELAY = 2
+    const RC_FAILURE = -1
+
+    dim cTargetFile as string
+        cTargetFile = convertpath( gOfficepath & "user\work\global_test.bas" )
+
     dim cSourceFile as string
         cSourceFile = gTesttoolpath & "framework\optional\input\resetregistration.txt"
         cSourceFile = convertpath( cSourceFile )
@@ -48,37 +53,37 @@ testcase tBasic_IDE_Toolbar_Module
 
         kontext "macrobar"
         printlog "- compile"
-        hClickToolbarButton( Compile )
+        hClickButton( Compile )
 
         printlog "- Run Basic"
-        hClickToolbarButton( BasicRun )
+        hClickButton( BasicRun )
 
         printlog "- Step Procedure"
-        hClickToolbarButton( ProcedureStep )
+        hClickButton( ProcedureStep )
 
         printlog "- Stop Basic"
-        hClickToolbarButton( BasicStop )
+        hClickButton( BasicStop )
 
         printlog "- Single Step"
-        hClickToolbarButton( SingleStep )
+        hClickButton( SingleStep )
 
         printlog "- Step Back"
-        hClickToolbarButton( StepBack )
+        hClickButton( StepBack )
 
         printlog "- Breakpoint => activate"
-        hClickToolbarButton( Breakpoint )
+        hClickButton( Breakpoint )
 
 
         printlog "- Breakpoint => deactivate"
-        hClickToolbarButton( Breakpoint )
+        hClickButton( Breakpoint )
 
         printlog "- Add Watch => deactivate"
-        hClickToolbarButton( AddWatch )
+        hClickButton( AddWatch )
 
         printlog "- Find Paranthese"
 
         kontext "macrobar"
-        hClickToolbarButton( FindParanthese )
+        hClickButton( FindParanthese )
 
         try
             Controls.TearOff()
@@ -90,46 +95,51 @@ testcase tBasic_IDE_Toolbar_Module
             warnlog( "Slot not finished within 1 second" )
         endif
 
+        kontext "MacroBar"
         printlog( "- Insert Source Text (" & cSourceFile & ")" )
+        if ( hClickButton( InsertSourceText ) <> RC_FAILURE ) then
 
+            kontext "oeffnendlg"
+            if ( OeffnenDlg.exists( DIALOG_DELAY ) ) then
+                Dateiname.SetText( cSourceFile )
+                Oeffnen.click()
+                WaitSlot( 5000 )
+            else
+                warnlog( "File Open dialog did not open" )
+            endif
 
-        InsertSourceText.Click()
-        kontext "oeffnendlg"
-        if ( OeffnenDlg.exists( 1 ) ) then
-            Dateiname.SetText( cSourceFile )
-            Oeffnen.click()
+            ' possible 'could not read from file' error-message -> this is a bug
+            kontext "Active"
+            if ( Active.exists( DIALOG_DELAY ) ) then
+                warnlog( "Unexpected active: " & active.gettext() )
+                active.ok()
+            endif
         else
-            warnlog( "File Open dialog did not open" )
-        endif
-
-        ' possible 'could not read from file' error-message -> this is a bug
-        kontext "Active"
-        if ( Active.exists( 1 ) ) then
-            warnlog( "Unexpected active: " & active.gettext() )
-            active.ok()
+            warnlog( "<File Open> dialog is not open, <Insert Source Text> button failed" )
         endif
 
         kontext "macrobar"
-        printlog "- Save Source Test "
+        printlog "- Save Source Text "
+        if ( hClickButton( SaveSourceText ) <> RC_FAILURE ) then
 
-        hClickToolbarButton( SaveSourceTest )
+            kontext "speicherndlg"
+            if ( SpeichernDlg.exists( DIALOG_DELAY ) ) then
+                Dateiname.SetText( cTargetFile )
+                Speichern.click()
+            else
+                warnlog( "File Save dialog is missing" )
+            endif
 
-        kontext "speicherndlg"
-        if ( SpeichernDlg.exists( 1 ) ) then
-            Dateiname.SetText ConvertPath (gOfficepath + "user\work\global_test.bas")
-            Speichern.click()
+            kontext "active"
+            if ( Active.Exists( DIALOG_DELAY ) ) then
+                printlog( "Closing Messagebox with <Yes>")
+                Active.Yes()
+            endif
         else
-            warnlog( "File Save dialog is missing" )
+            warnlog( "<File Save> dialog did not open, slot <SaveSourceText> did not work" )
         endif
 
-        kontext "active"
-        if ( Active.Exists( 1 ) ) then
-            printlog( "Closing Messagebox with <Yes>")
-            Active.Yes()
-        endif
-
-        hCloseBasicIDE()
-        hDestroyDocument()
+        hFileCloseAll()
     else
         warnlog( "Unable to init BASIC IDE" )
     endif
@@ -141,6 +151,11 @@ endcase
 testcase tBasic_IDE_Toolbar_Dialogs
 
     printlog( "BASIC toolbar for Dialogs" )
+
+    const DIALOG_DELAY = 2
+
+    const TABBAR_MENU_NEW = 1
+    const TABBAR_MENU_NEW_DIALOG = 2
 
     dim bIsOpen as boolean
     dim brc as boolean
@@ -161,9 +176,10 @@ testcase tBasic_IDE_Toolbar_Dialogs
 
         kontext "basicide"
         Tabbar.OpenContextMenu
-        hMenuSelectNr ( 1 )
-        hMenuSelectNr ( 2 )
-        if ( DialogWindow.Exists ( 2 ) ) then
+        hMenuSelectNr ( TABBAR_MENU_NEW        )
+        hMenuSelectNr ( TABBAR_MENU_NEW_DIALOG )
+
+        if ( DialogWindow.Exists ( DIALOG_DELAY ) ) then
             printlog( "Dialog Editor window is open. Good." )
         else
             warnlog "No dialog window is shown!"
@@ -251,7 +267,7 @@ testcase tBasic_IDE_Toolbar_Dialogs
             warnlog( """Insert Source Text"" is enabled" )
 
             kontext "oeffnendlg"
-            if ( OeffnenDlg.exists( 2 ) ) then
+            if ( OeffnenDlg.exists( DIALOG_DELAY ) ) then
                 Dateiname.SetText( sBasFile1 )
                 Oeffnen.Click()
             else
@@ -266,11 +282,11 @@ testcase tBasic_IDE_Toolbar_Dialogs
 
         try
             kontext "macrobar"
-            SaveSourceTest.Click()
+            SaveSourceText.Click()
             warnlog( """Save Source Text"" is enabled" )
 
             kontext "speicherndlg"
-            if ( SpeichernDlg.exists( 2 ) ) then
+            if ( SpeichernDlg.exists( DIALOG_DELAY ) ) then
                 Dateiname.SetText( sBasFile2 )
                 Speichern.Click()
             else
@@ -278,7 +294,7 @@ testcase tBasic_IDE_Toolbar_Dialogs
             endif
 
             kontext "active"
-            if ( Active.Exists( 1 ) ) then
+            if ( Active.Exists( DIALOG_DELAY ) ) then
                 Active.Yes()
             endif
         catch
@@ -293,36 +309,3 @@ testcase tBasic_IDE_Toolbar_Dialogs
 
 endcase
 
-'******************************************************************************'
-
-function hClickToolbarButton( oButton as object ) as boolean
-
-    const CFN = "hClickToolbarButton(): "
-
-    dim iTry as integer
-    dim brc as boolean : brc = false
-    
-    printlog( CFN & "Clicking button on toolbar: " & oButton.name() )
-    for iTry = 1 to 5
-    
-        try
-            oButton.click()
-            brc = true
-            exit for
-        catch
-            printlog( CFN & "Retrying..." )
-        endcatch
-        
-        if ( iTry = 5 ) then
-            exit for
-        endif
-        
-        wait( 500 )
-        
-    next iTry
-    
-    if ( WaitSlot( 2000 ) <> WSFinished ) then
-        warnlog( CFN & "Slot not finished within 1 second" )
-    endif
-
-end function
