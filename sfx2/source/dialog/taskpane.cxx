@@ -678,7 +678,7 @@ namespace sfx2
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
     ModuleTaskPane::ModuleTaskPane( Window& i_rParentWindow, const Reference< XFrame >& i_rDocumentFrame )
-        :Window( &i_rParentWindow, 0 )
+        :Window( &i_rParentWindow, WB_DIALOGCONTROL )
         ,m_pImpl( new ModuleTaskPane_Impl( *this, i_rDocumentFrame, NULL ) )
     {
     }
@@ -686,7 +686,7 @@ namespace sfx2
     //------------------------------------------------------------------------------------------------------------------
     ModuleTaskPane::ModuleTaskPane( Window& i_rParentWindow, const Reference< XFrame >& i_rDocumentFrame,
             const IToolPanelCompare& i_rCompare )
-        :Window( &i_rParentWindow, 0 )
+        :Window( &i_rParentWindow, WB_DIALOGCONTROL )
         ,m_pImpl( new ModuleTaskPane_Impl( *this, i_rDocumentFrame, &i_rCompare ) )
     {
     }
