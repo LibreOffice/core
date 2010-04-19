@@ -22,7 +22,6 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\bmpacc.hxx %_DEST%\inc%_EXT%\vcl\bmpacc.hxx
 ..\inc\vcl\btndlg.hxx %_DEST%\inc%_EXT%\vcl\btndlg.hxx
 ..\inc\vcl\button.hxx %_DEST%\inc%_EXT%\vcl\button.hxx
-..\inc\vcl\button.hxx %_DEST%\inc%_EXT%\vcl\imagebtn.hxx
 ..\inc\vcl\cmdevt.h %_DEST%\inc%_EXT%\vcl\cmdevt.h
 ..\inc\vcl\cmdevt.hxx %_DEST%\inc%_EXT%\vcl\cmdevt.hxx
 ..\inc\vcl\combobox.h %_DEST%\inc%_EXT%\vcl\combobox.h

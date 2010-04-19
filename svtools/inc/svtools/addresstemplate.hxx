@@ -33,7 +33,7 @@
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/combobox.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/scrbar.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
