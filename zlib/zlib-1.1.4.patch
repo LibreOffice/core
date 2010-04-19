@@ -1,14 +1,8 @@
 --- misc/zlib-1.1.4/makefile.mk	Fri Mar 14 10:17:06 2008
 +++ misc/build/zlib-1.1.4/makefile.mk	Fri Mar 14 10:16:56 2008
-@@ -1 +1,79 @@
+@@ -1 +1,73 @@
 -dummy
 +#*************************************************************************
-+#
-+#   $RCSfile: makefile.mk,v $
-+#
-+#   $Revision: 1.8 $
-+#
-+#   last change: $Author: mtg $ $Date: 2000/11/09 10:19:32 $
 +#
 +#   Copyright according the GNU Public License.
 +#
@@ -192,7 +186,7 @@
 +  also may be found at:  ftp://ftp.info-zip.org/pub/infozip/license.html
 +*/
 +/*
-+  crypt.c (full version) by Info-ZIP.      Last revised:  [see crypt.h]
++  crypt.c (full version) by Info-ZIP.      Last revised:  [see info_zip_crypt.h]
 +
 +  The encryption/decryption parts of this source code (as opposed to the
 +  non-echoing password parts) were originally written in Europe.  The
@@ -334,7 +328,7 @@
  
  
 +#ifndef NOUNCRYPT
-+#include "crypt.h"
++#include "info_zip_crypt.h"
 +#endif
 +
  /* ===========================================================================
@@ -2855,10 +2849,10 @@
  #ifdef __cplusplus
  }
  #endif 
- --- misc/zlib-1.1.4/contrib/minizip/crypt.h	2009-07-17 11:13:37.281250000 +0200
-+++ misc/build/zlib-1.1.4/contrib/minizip/crypt.h	2009-07-17 10:58:41.843750000 +0200
+--- misc/zlib-1.1.4/contrib/minizip/info_zip_crypt.h	2009-07-17 11:13:37.281250000 +0200
++++ misc/build/zlib-1.1.4/contrib/minizip/info_zip_crypt.h	2009-07-17 10:58:41.843750000 +0200
 @@ -0,0 +1,132 @@
-+/* crypt.h -- base code for crypt/uncrypt ZIPfile
++/* info_zip_crypt.h -- base code for crypt/uncrypt ZIPfile
 +
 +
 +   Version 1.01e, February 12th, 2005
