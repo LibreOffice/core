@@ -1112,8 +1112,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
 
                     case POS_EQUAL:
                     case POS_INSIDE:
-                        // TODO Check if there is any side effect
-                        //delete pNewRedl, pNewRedl = 0;
+                        delete pNewRedl, pNewRedl = 0;
                         break;
 
                     case POS_OUTSIDE:
