@@ -31,30 +31,6 @@
 #include "helpid.hrc"
 #include "sfxlocal.hrc"
 
- // Imageliste fuer die AboutBox
-ImageList LOGO_IMAGELIST
-{
-    Prefix = "an";
-    MaskColor = Color
-    {
-        Red = 0xFFFF ;
-        Green = 0x0000 ;
-        Blue = 0xFFFF ;
-    };
-    IdList =
-    {
-        1 ;
-        2 ;
-        3 ;
-        4 ;
-        5 ;
-        6 ;
-    };
-    IdCount =
-    {
-        6 ;
-    };
-};
 String STR_RESET
 {
     Text [ en-US ] = "~Reset" ;
@@ -62,48 +38,6 @@ String STR_RESET
 String STR_APPLY
 {
     Text [ en-US ] = "Apply";
-};
-String STR_INTERNET
-{
-    Text [ en-US ] = "(Internet)" ;
-};
-String STR_BASEFMT
-{
-    Text [ en-US ] = "Base format" ;
-};
-CheckBox CB_USE_PASSWD
-{
-    HelpId = HID_FILEDLG_USE_PASSWD ;
-    Text [ en-US ] = "~Password" ;
-};
-CheckBox CB_READ_ONLY
-{
-    HelpId = HID_FILEDLG_READ_ONLY ;
-    Text [ en-US ] = "~Read-only" ;
-};
-PushButton CB_FILE
-{
-    HelpId = HID_FILEDLG_FILE ;
-    Text [ en-US ] = "~File System" ;
-};
-PushButton CB_URL
-{
-    HelpId = HID_FILEDLG_URL ;
-    Text [ en-US ] = "Int~ernet" ;
-};
-PushButton BTN_MANAGER
-{
-    HelpId = HID_FILEDLG_MANAGER ;
-    Text [ en-US ] = "~Manager..." ;
-};
-PushButton BTN_STANDARD
-{
-    HelpId = HID_FILEDLG_STANDARD ;
-    Text [ en-US ] = "~Home" ;
-};
-String STR_FILEDLG_INSERT
-{
-    Text [ en-US ] = "Insert File" ;
 };
 String STR_TABPAGE_MANAGESTYLES
 {
@@ -130,12 +64,6 @@ InfoBox MSG_TABPAGE_INVALIDPARENT
 InfoBox MSG_POOL_STYLE_NAME
 {
     Message [ en-US ] = "Name already exists as a default Style.\nPlease choose another name." ;
-};
-QueryBox MSG_OVERWRITE_STYLE
-{
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "Style already exists. Overwrite?" ;
 };
 String STR_DELETE_STYLE
 {
@@ -170,67 +98,7 @@ Menu MN_CONTEXT_TEMPLDLG
     };
 };
 
-InfoBox MSG_LAYOUT_NOT_LOADING
-{
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "Loading document without layout." ;
-};
-Accelerator ACC_LAYOUT_NOT_LOADING
-{
-    ItemList =
-    {
-        AcceleratorItem
-        {
-            Key = KeyCode
-            {
-                Code = KEY_L ;
-                Shift = FALSE ; Modifier1 = TRUE ; Modifier2 = TRUE ;
-            };
-            Identifier = 1 ;
-        };
-    };
-};
  //------------------------------------------------------------------------
-ErrorBox MSG_ERR_CANT_EDIT_OLD_FORMAT
-{
-    Message [ en-US ] = "Cannot edit document info for documents\n in this file format." ;
-};
- //------------------------------------------------------------------------
-ErrorBox MSG_ERR_CANT_EDIT_OPEN_DOCS
-{
-    Message [ en-US ] = "Document info of documents\n being currently edited cannot be modified from within the document manager." ;
-};
-ModalDialog RID_URLOPEN
-{
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 204 , 44 ) ;
-    Moveable = TRUE ;
-    Text [ en-US ] = "Enter URL" ;
-    Moveable = TRUE ;
-    OKButton RID_URLOPEN_OK
-    {
-        Pos = MAP_APPFONT ( 148 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton RID_URLOPEN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 148 , 24 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    Edit RID_URLOPEN_URL
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 16 ) ;
-        Size = MAP_APPFONT ( 138 , 12 ) ;
-        TabStop = TRUE ;
-        Left = TRUE ;
-    };
-};
 String SID_NAVIGATOR
 {
     Text [ en-US ] = "Navigator";
@@ -250,11 +118,6 @@ ErrorBox MSG_ERROR_WRONG_CONFIRM
 String STR_PDF_EXPORT_SEND
 {
   Text [ en-US ] = "Send" ;
-};
-
-String STR_RECHECK_DOCUMENT
-{
-  Text [ en-US ] = "Recheck Document" ;
 };
 
 Image IMG_INFO

@@ -61,7 +61,6 @@ SLOFILES =\
         $(SLO)$/passwd.obj			\
         $(SLO)$/printopt.obj		\
         $(SLO)$/sfxdlg.obj          \
-        $(SLO)$/sfxurl.obj			\
         $(SLO)$/splitwin.obj		\
         $(SLO)$/srchdlg.obj         \
         $(SLO)$/styfitem.obj		\
