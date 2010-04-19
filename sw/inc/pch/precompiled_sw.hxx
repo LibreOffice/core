@@ -920,7 +920,7 @@
 #include "vcl/group.hxx"
 #include "vcl/help.hxx"
 #include "vcl/image.hxx"
-#include "vcl/imagebtn.hxx"
+#include "vcl/button.hxx"
 #include "vcl/imgcons.hxx"
 #include "vcl/inputctx.hxx"
 #include "vcl/jobset.hxx"
