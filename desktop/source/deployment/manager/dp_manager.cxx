@@ -58,6 +58,7 @@
 #include "com/sun/star/ucb/NameClash.hpp"
 #include "com/sun/star/deployment/VersionException.hpp"
 #include "com/sun/star/deployment/InstallException.hpp"
+#include "com/sun/star/deployment/Prerequisites.hpp"
 #include "com/sun/star/task/XInteractionApprove.hpp"
 #include "com/sun/star/ucb/UnsupportedCommandException.hpp"
 #include "boost/bind.hpp"
@@ -67,7 +68,8 @@
 #include <vector>
 #include <list>
 #include "dp_descriptioninfoset.hxx"
-
+#include "dp_commandenvironments.hxx"
+#include "dp_properties.hxx"
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
@@ -97,19 +99,6 @@ struct MatchTempDir
     }
 };
 
-struct MatchExtension
-{
-    const ActivePackages::Data m_data;
-    MatchExtension(ActivePackages::Data const & data ) :  m_data(data) {}
-    bool operator () ( OUString const & temporaryName ) const;
-};
-
-bool MatchExtension::operator () (OUString const & temporaryName) const
-{
-    //case 1: The temporary file and thus the extension folder are already
-    //removed.
-    return m_data.temporaryName.equals(temporaryName);
-}
 
 namespace {
 OUString getExtensionFolder(OUString const &  parentFolder,
@@ -130,23 +119,6 @@ OUString getExtensionFolder(OUString const &  parentFolder,
         break;
     }
     return title;
-}
-/* adds an unencoded segment to the URL.
-
-   Throws an com.sun.star.uno.Exception if this failed.
-*/
-OUString appendURLSegement(OUString const & baseURL, OUString const & segment)
-{
-    OUString url;
-    INetURLObject inet(baseURL);
-    if (inet.insertName(
-            segment, false, INetURLObject::LAST_SEGMENT, true,
-            INetURLObject::ENCODE_ALL))
-        url = inet.GetMainURL(INetURLObject::NO_DECODE);
-    else
-        throw Exception(
-            OUSTR("ExtensionManager: failed to add segment to URL"), 0);
-    return url;
 }
 }
 //______________________________________________________________________________
@@ -193,7 +165,8 @@ void PackageManagerImpl::initActivationLayer(
                 {
                     ActivePackages::Data dbData;
                     insertToActivationLayer(
-                        mediaType, sourceContent, title, &dbData );
+                        Sequence<css::beans::NamedValue>(),mediaType, sourceContent,
+                        title, &dbData );
 
                     insertToActivationLayerDB( title, dbData );
                         //TODO #i73136#: insertToActivationLayerDB needs id not
@@ -293,7 +266,7 @@ void PackageManagerImpl::initActivationLayer(
                             //Make sure only the same user removes the extension, who
                             //previously unregistered it. This is avoid races if multiple instances
                             //of OOo are running which all have write access to the shared installation.
-                            //For example, user a uses extension a, removes the extension, but keeps OOo
+                            //For example, a user removes the extension, but keeps OOo
                             //running. Parts of the extension may still be loaded and used by OOo.
                             //Therefore the extension is only deleted the next time the extension manager is
                             //run after restarting OOo. While OOo is still running, another user starts OOo
@@ -637,6 +610,7 @@ OUString PackageManagerImpl::detectMediaType(
 
 //______________________________________________________________________________
 OUString PackageManagerImpl::insertToActivationLayer(
+    Sequence<beans::NamedValue> const & properties,
     OUString const & mediaType, ::ucbhelper::Content const & sourceContent_,
     OUString const & title, ActivePackages::Data * dbData )
 {
@@ -702,13 +676,17 @@ OUString PackageManagerImpl::insertToActivationLayer(
     //bundled extensions should only be added by the synchronizeAddedExtensions
     //functions. Moreover, there is no "temporary folder" for bundled extensions.
     OSL_ASSERT(!m_context.equals(OUSTR("bundled")));
+    OUString sFolderUrl = makeURLAppendSysPathSegment(destFolderContent.getURL(), title);
     DescriptionInfoset info =
-        dp_misc::getDescriptionInfoset(
-            appendURLSegement(destFolderContent.getURL(), title));
+        dp_misc::getDescriptionInfoset(sFolderUrl);
     dbData->temporaryName = tempEntry;
     dbData->fileName = title;
     dbData->mediaType = mediaType;
     dbData->version = info.getVersion();
+
+    //No write the properties file next to the extension
+    ExtensionProperties props(sFolderUrl, properties, xCmdEnv);
+    props.write();
     return destFolder;
 }
 
@@ -716,6 +694,8 @@ OUString PackageManagerImpl::insertToActivationLayer(
 void PackageManagerImpl::insertToActivationLayerDB(
     OUString const & id, ActivePackages::Data const & dbData )
 {
+    //access to the database must be guarded. See removePackage
+    const ::osl::MutexGuard guard( getMutex() );
     m_activePackagesDB->put( id, dbData );
 }
 
@@ -746,14 +726,17 @@ Reference<deployment::XPackage> PackageManagerImpl::importExtension(
            CommandAbortedException, lang::IllegalArgumentException,
            RuntimeException)
 {
-    return addPackage(extension->getURL(), OUString(), xAbortChannel, xCmdEnv_);
+    return addPackage(extension->getURL(), Sequence<beans::NamedValue>(),
+                      OUString(), xAbortChannel, xCmdEnv_);
 }
 
 /* The function adds an extension but does not register it!!!
     It may not do any user interaction. This is done in XExtensionManager::addExtension
 */
 Reference<deployment::XPackage> PackageManagerImpl::addPackage(
-    OUString const & url, OUString const & mediaType_,
+    OUString const & url,
+    css::uno::Sequence<css::beans::NamedValue> const & properties,
+    OUString const & mediaType_,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv_ )
     throw (deployment::DeploymentException, CommandFailedException,
@@ -826,7 +809,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
         }
         ActivePackages::Data dbData;
         destFolder = insertToActivationLayer(
-            mediaType, sourceContent, title, &dbData );
+            properties, mediaType, sourceContent, title, &dbData );
 
 
         // bind activation package:
@@ -859,10 +842,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
                                   xCmdEnv);
                 }
                 install = true;
-                const ::osl::MutexGuard guard( getMutex() );
-                //access to the database must be guarded. See removePackage_
                 insertToActivationLayerDB(id, dbData);
-
             }
             catch (...)
             {
@@ -1062,8 +1042,13 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
     Reference<deployment::XPackage> xExtension;
     try
     {
-        xExtension = m_xRegistry->bindPackage(
-            getDeployPath( data ), data.mediaType, false, OUString(), xCmdEnv );
+        //Ignore extensions where XPackage::checkPrerequisites failed.
+        //They must not be usable for this user.
+        if (data.failedPrerequisites.equals(OUSTR("0")))
+        {
+            xExtension = m_xRegistry->bindPackage(
+                getDeployPath( data ), data.mediaType, false, OUString(), xCmdEnv );
+        }
     }
     catch (deployment::InvalidRemovedParameterException& e)
     {
@@ -1083,6 +1068,8 @@ PackageManagerImpl::getDeployedPackages_(
     ActivePackages::Entries::const_iterator const iEnd( id2temp.end() );
     for ( ; iPos != iEnd; ++iPos )
     {
+        if (! iPos->second.failedPrerequisites.equals(OUSTR("0")))
+            continue;
         try {
             packages.push_back(
                 getDeployedPackage_(
@@ -1265,8 +1252,7 @@ void PackageManagerImpl::reinstallDeployedPackages(
     return m_readOnly;
 }
 void PackageManagerImpl::synchronizeRemovedExtensions(
-    Sequence<Reference<deployment::XPackage> > & out_removedExtensions,
-        Reference<task::XAbortChannel> const & /*xAbortChannel*/,
+    Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<css::ucb::XCommandEnvironment> const & xCmdEnv)
 {
 
@@ -1275,64 +1261,38 @@ void PackageManagerImpl::synchronizeRemovedExtensions(
     OSL_ASSERT(!m_context.equals(OUSTR("user")));
     ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
 
-    //Iterate over the contents of the extension folder and gather the
-    //temp file names (shared) or the folder names of the bundled extension.
-    ::ucbhelper::ResultSetInclude includeType = ::ucbhelper::INCLUDE_DOCUMENTS_ONLY;
-    if (m_context.equals(OUSTR("bundled")))
-        includeType = ::ucbhelper::INCLUDE_FOLDERS_ONLY;
-    ::ucbhelper::Content tempFolder(
-        m_activePackages_expanded, xCmdEnv );
-    Reference<sdbc::XResultSet> xResultSet(
-        tempFolder.createCursor(
-            Sequence<OUString>( &StrTitle::get(), 1 ), includeType) );
-    // get all temp directories:
-    ::std::vector<OUString> tempEntries;
-    while (xResultSet->next()) {
-        OUString title(
-            Reference<sdbc::XRow>(
-                xResultSet, UNO_QUERY_THROW )->getString(
-                    1 /* Title */ ) );
-        //also add the xxx.tmpremoved files for remove shared extensions
-        //this does not matter
-        tempEntries.push_back( ::rtl::Uri::encode(
-                                   title, rtl_UriCharClassPchar,
-                                   rtl_UriEncodeIgnoreEscapes,
-                                   RTL_TEXTENCODING_UTF8 ) );
-    }
-
     typedef ActivePackages::Entries::const_iterator ITActive;
     bool bShared = m_context.equals(OUSTR("shared"));
-    ::std::vector<Reference<deployment::XPackage> > removedExtensions;
+
     for (ITActive i = id2temp.begin(); i != id2temp.end(); i++)
     {
-        //Get the URL to the extensions folder, first make the url for the
-        //shared repository including the temporary name
-//         OUString url(m_activePackages_expanded + OUSTR("/")
-//                      + i->second.temporaryName);
-//         if (bShared)
-//             url = appendURLSegement(m_activePackages_expanded + OUSTR("/")
-//                                     + i->second.temporaryName + OUSTR("_"),
-//                                     i->second.fileName);
-        OUString url = makeURL(m_activePackages, i->second.temporaryName);
-        if (bShared)
-            url = makeURLAppendSysPathSegment( url + OUSTR("_"), i->second.fileName);
+        try
+        {
+            //Get the URL to the extensions folder, first make the url for the
+            //shared repository including the temporary name
+            OUString url = makeURL(m_activePackages, i->second.temporaryName);
+            if (bShared)
+                url = makeURLAppendSysPathSegment( url + OUSTR("_"), i->second.fileName);
 
-        const MatchExtension  match(i->second);
-        bool bRemoved = false;
-        if (::std::find_if(tempEntries.begin(), tempEntries.end(), match) ==
-            tempEntries.end())
-        {
-            //The the URL from the data base entry does not exist anymore. That is the
-            //folder was removed.
-            bRemoved = true;
-        }
-        else
-        {
+            bool bRemoved = false;
+            //Check if the URL to the extension is still the same
+            ::ucbhelper::Content contentExtension;
+
+            if (!create_ucb_content(
+                    &contentExtension, url,
+                    Reference<XCommandEnvironment>(), false))
+            {
+                bRemoved = true;
+            }
+
             //The folder is in the extension database, but it can still be deleted.
             //look for the xxx.tmpremoved file
-            if (bShared)
+            //There can also be the case that a different extension was installed
+            //in a "temp" folder with name that is already used.
+            if (!bRemoved && bShared)
             {
                 ::ucbhelper::Content contentRemoved;
+
                 if (create_ucb_content(
                         &contentRemoved,
                         m_activePackages_expanded + OUSTR("/") +
@@ -1342,6 +1302,7 @@ void PackageManagerImpl::synchronizeRemovedExtensions(
                     bRemoved = true;
                 }
             }
+
             if (!bRemoved)
             {
                 //There may be another extensions at the same place
@@ -1353,26 +1314,32 @@ void PackageManagerImpl::synchronizeRemovedExtensions(
                 if (infoset.hasDescription() &&
                     infoset.getIdentifier() &&
                     (! i->first.equals(*(infoset.getIdentifier()))
-                   || ! i->second.version.equals(infoset.getVersion())))
+                     || ! i->second.version.equals(infoset.getVersion())))
                 {
                     bRemoved = true;
                 }
+
+            }
+            if (bRemoved)
+            {
+                Reference<deployment::XPackage> xPackage = m_xRegistry->bindPackage(
+                    url, i->second.mediaType, true, i->first, xCmdEnv );
+                OSL_ASSERT(xPackage.is()); //Even if the files are removed, we must get the object.
+                xPackage->revokePackage(xAbortChannel, xCmdEnv);
+                removePackage(xPackage->getIdentifier().Value, xPackage->getName(),
+                              xAbortChannel, xCmdEnv);
             }
         }
-        if (bRemoved)
+        catch( uno::Exception & )
         {
-            Reference<deployment::XPackage> xPackage = m_xRegistry->bindPackage(
-                url, i->second.mediaType, true, i->first, xCmdEnv );
-            OSL_ASSERT(xPackage.is()); //Even if the files are removed, we must get the object.
-            removedExtensions.push_back(xPackage);
+            OSL_ASSERT(0);
         }
     }
-    out_removedExtensions = ::comphelper::containerToSequence(removedExtensions);
 }
 
+
 void PackageManagerImpl::synchronizeAddedExtensions(
-    Sequence<Reference<deployment::XPackage> > & out_addedExtensions,
-        Reference<task::XAbortChannel> const & xAbortChannel,
+    Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<css::ucb::XCommandEnvironment> const & xCmdEnv)
 {
        // clean up activation layer, scan for zombie temp dirs:
@@ -1385,65 +1352,58 @@ void PackageManagerImpl::synchronizeAddedExtensions(
             Sequence<OUString>( &StrTitle::get(), 1 ),
             ::ucbhelper::INCLUDE_FOLDERS_ONLY ) );
 
-
-    ::std::vector<Reference<deployment::XPackage> > addedExtensions;
     while (xResultSet->next())
     {
-        OUString title(
-            Reference<sdbc::XRow>(
-                xResultSet, UNO_QUERY_THROW )->getString(
-                    1 /* Title */ ) );
-        //The temporary folders of user and shared have an '_' at then end.
-        //But the name in ActivePackages.temporaryName is saved without.
-        OUString title2 = title;
-        bool bNotBundled = !m_context.equals(OUSTR("bundled"));
-        if (bNotBundled)
+        try
         {
-            OSL_ASSERT(title2[title2.getLength() -1] == '_');
-            title2 = title2.copy(0, title2.getLength() -1);
-        }
-        OUString titleEncoded =  ::rtl::Uri::encode(
+            OUString title(
+                Reference<sdbc::XRow>(
+                    xResultSet, UNO_QUERY_THROW )->getString(
+                        1 /* Title */ ) );
+            //The temporary folders of user and shared have an '_' at then end.
+            //But the name in ActivePackages.temporaryName is saved without.
+            OUString title2 = title;
+            bool bNotBundled = !m_context.equals(OUSTR("bundled"));
+            if (bNotBundled)
+            {
+                OSL_ASSERT(title2[title2.getLength() -1] == '_');
+                title2 = title2.copy(0, title2.getLength() -1);
+            }
+            OUString titleEncoded =  ::rtl::Uri::encode(
                 title2, rtl_UriCharClassPchar,
                 rtl_UriEncodeIgnoreEscapes,
                 RTL_TEXTENCODING_UTF8);
 
-        const MatchTempDir match(titleEncoded);
-        if (::std::find_if( id2temp.begin(), id2temp.end(), match ) ==
-            id2temp.end())
-        {
+            const MatchTempDir match(titleEncoded);
+            if (::std::find_if( id2temp.begin(), id2temp.end(), match ) ==
+                id2temp.end())
+            {
 
-            // The folder was not found in the data base, so it must be
-            // an added extension
-            OUString url(m_activePackages_expanded + OUSTR("/") + titleEncoded);
-            OUString sExtFolder;
-            if (bNotBundled) //that is, shared
-            {
-                //Check if the extension was not "deleted" already which is indicated
-                //by a xxx.tmpremoved file
-                ::ucbhelper::Content contentRemoved;
-                if (create_ucb_content(&contentRemoved, url + OUSTR("removed"),
-                                       Reference<XCommandEnvironment>(), false))
-                    continue;
-                sExtFolder = getExtensionFolder(
-                    m_activePackages_expanded +
-                        OUString(OUSTR("/")) + titleEncoded + OUSTR("_"), xCmdEnv);
-                url = appendURLSegement(m_activePackages_expanded, title);
-                url = appendURLSegement(url, sExtFolder);
-            }
-            Reference<deployment::XPackage> xPackage = m_xRegistry->bindPackage(
-                url, OUString(), false, OUString(), xCmdEnv );
-            if (xPackage.is())
-            {
-                try
+                // The folder was not found in the data base, so it must be
+                // an added extension
+                OUString url(m_activePackages_expanded + OUSTR("/") + titleEncoded);
+                OUString sExtFolder;
+                if (bNotBundled) //that is, shared
                 {
-                    //ToDo: We need to prevent that removed shared extensions are
-                    //added again. This can happen if there is still the folder of the
-                    //extension. However, there is the "removed" flag file which indicates
-                    //that the extension was removed.
+                    //Check if the extension was not "deleted" already which is indicated
+                    //by a xxx.tmpremoved file
+                    ::ucbhelper::Content contentRemoved;
+                    if (create_ucb_content(&contentRemoved, url + OUSTR("removed"),
+                                           Reference<XCommandEnvironment>(), false))
+                        continue;
+                    sExtFolder = getExtensionFolder(
+                        m_activePackages_expanded +
+                        OUString(OUSTR("/")) + titleEncoded + OUSTR("_"), xCmdEnv);
+                    url = makeURLAppendSysPathSegment(m_activePackages_expanded, title);
+                    url = makeURLAppendSysPathSegment(url, sExtFolder);
+                }
+                Reference<deployment::XPackage> xPackage = m_xRegistry->bindPackage(
+                    url, OUString(), false, OUString(), xCmdEnv );
+                if (xPackage.is())
+                {
                     //Prepare the database entry
                     ActivePackages::Data dbData;
-                    //There is no temporary folder for bundled extensions. It is therefore
-                    //an empty string.
+
                     dbData.temporaryName = titleEncoded;
                     if (bNotBundled)
                         dbData.fileName = sExtFolder;
@@ -1456,35 +1416,45 @@ void PackageManagerImpl::synchronizeAddedExtensions(
                                "an identifier and a version");
 
                     OUString id = dp_misc::getIdentifier( xPackage );
-                    sal_Bool bAlreadyInstalled = sal_False;
-                    if (xPackage->checkPrerequisites(
-                            xAbortChannel, xCmdEnv, bAlreadyInstalled, m_context))
-                    {
-                        const ::osl::MutexGuard guard( getMutex() );
-                        //access to the database must be guarded. See removePackage_
-                        insertToActivationLayerDB(id, dbData);
-                    }
-                    else
-                    {
-                        //ToDo: Remember that this failed. For example, the user
-                        //could have declined the license. Then the next time the
-                        //extension folder is investigated we do not want to
-                        //try to install the extension again.
-                    }
-                    addedExtensions.push_back(xPackage);
-                }
-                catch (...)
-                {
+
+                    //We provide a special command environment that will prevent
+                    //showing a license if simple-licens/@accept-by = "admin"
+                    //It will also prevent showing the license for bundled extensions
+                    //which is not supported.
+                    OSL_ASSERT(!m_context.equals(OUSTR("user")));
+
+                    // shall the license be suppressed?
+                    DescriptionInfoset info =
+                        dp_misc::getDescriptionInfoset(url);
+                    ::boost::optional<dp_misc::SimpleLicenseAttributes>
+                          attr = info.getSimpleLicenseAttributes();
+                    ExtensionProperties props(url,xCmdEnv);
+                    bool bNoLicense = false;
+                    if (attr && attr->suppressIfRequired && props.isSuppressedLicense())
+                        bNoLicense = true;
+
+                    Reference<ucb::XCommandEnvironment> licCmdEnv(
+                        new LicenseCommandEnv(xCmdEnv->getInteractionHandler(),
+                                              bNoLicense, m_context));
+                    sal_Int32 failedPrereq = xPackage->checkPrerequisites(
+                        xAbortChannel, licCmdEnv, false);
+                    //Remember that this failed. For example, the user
+                    //could have declined the license. Then the next time the
+                    //extension folder is investigated we do not want to
+                    //try to install the extension again.
+                    dbData.failedPrerequisites = OUString::valueOf(failedPrereq);
+                    insertToActivationLayerDB(id, dbData);
                 }
             }
         }
+        catch (uno::Exception &)
+        {
+            OSL_ASSERT(0);
+        }
     }
-    out_addedExtensions = ::comphelper::containerToSequence(addedExtensions);
 }
 
 void PackageManagerImpl::synchronize(
-    Sequence<Reference<deployment::XPackage> > & out_addedExtensions,
-    Sequence<Reference<deployment::XPackage> > & out_removedExtensions,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<css::ucb::XCommandEnvironment> const & xCmdEnv)
     throw (css::deployment::DeploymentException,
@@ -1496,12 +1466,129 @@ void PackageManagerImpl::synchronize(
     check();
     if (m_context.equals(OUSTR("user")))
         return;
-    synchronizeRemovedExtensions(
-        out_removedExtensions, xAbortChannel, xCmdEnv);
-    synchronizeAddedExtensions(
-        out_addedExtensions, xAbortChannel, xCmdEnv);
+    synchronizeRemovedExtensions(xAbortChannel, xCmdEnv);
+    synchronizeAddedExtensions(xAbortChannel, xCmdEnv);
 }
 
+Sequence< Reference<deployment::XPackage> > PackageManagerImpl::getExtensionsWithUnacceptedLicenses(
+    Reference<ucb::XCommandEnvironment> const & xCmdEnv)
+    throw (deployment::DeploymentException, RuntimeException)
+{
+    try
+    {
+        const ::osl::MutexGuard guard( getMutex() );
+        // clean up activation layer, scan for zombie temp dirs:
+        ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
+
+        ActivePackages::Entries::const_iterator i = id2temp.begin();
+        bool bShared = m_context.equals(OUSTR("shared"));
+        ::std::vector<Reference<deployment::XPackage> > vec;
+
+
+        for (; i != id2temp.end(); i++ )
+        {
+            //Get the database entry
+            ActivePackages::Data const & dbData = i->second;
+            sal_Int32 failedPrereq = dbData.failedPrerequisites.toInt32();
+            //If the installation failed for other reason then the license then we
+            //ignore it.
+            if (failedPrereq ^= deployment::Prerequisites::LICENSE)
+                continue;
+
+            //Prepare the URL to the extension
+            OUString url = makeURL(m_activePackages, i->second.temporaryName);
+            if (bShared)
+                url = makeURLAppendSysPathSegment( url + OUSTR("_"), i->second.fileName);
+
+            Reference<deployment::XPackage> p = m_xRegistry->bindPackage(
+                url, OUString(), false, OUString(), xCmdEnv );
+
+            if (p.is())
+                vec.push_back(p);
+
+        }
+        return ::comphelper::containerToSequence(vec);
+    }
+    catch (deployment::DeploymentException &)
+    {
+        throw;
+    }
+    catch (RuntimeException&)
+    {
+        throw;
+    }
+    catch (...)
+    {
+        Any exc = ::cppu::getCaughtException();
+        deployment::DeploymentException de(
+            OUSTR("PackageManagerImpl::getExtensionsWithUnacceptedLicenses"),
+            static_cast<OWeakObject*>(this), exc);
+        exc <<= de;
+        ::cppu::throwException(exc);
+    }
+}
+
+sal_Int32 PackageManagerImpl::checkPrerequisites(
+    css::uno::Reference<css::deployment::XPackage> const & extension,
+    css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+    css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
+    throw (css::deployment::DeploymentException,
+           css::ucb::CommandFailedException,
+           css::ucb::CommandAbortedException,
+           css::lang::IllegalArgumentException,
+           css::uno::RuntimeException)
+{
+    try
+    {
+        if (!extension.is())
+            return 0;
+        if (!m_context.equals(extension->getRepositoryName()))
+            throw lang::IllegalArgumentException(
+                OUSTR("PackageManagerImpl::checkPrerequisites: extension is not"
+                      " from this repository."), 0, 0);
+
+        ActivePackages::Data dbData;
+        OUString id = dp_misc::getIdentifier(extension);
+        if (m_activePackagesDB->get( &dbData, id, OUString()))
+        {
+            //If the license was already displayed, then do not show it again
+            Reference<ucb::XCommandEnvironment> _xCmdEnv = xCmdEnv;
+            sal_Int32 prereq = dbData.failedPrerequisites.toInt32();
+            if ( !(prereq & deployment::Prerequisites::LICENSE))
+                _xCmdEnv = new NoLicenseCommandEnv(xCmdEnv->getInteractionHandler());
+
+            sal_Int32 failedPrereq = extension->checkPrerequisites(
+                xAbortChannel, _xCmdEnv, false);
+            dbData.failedPrerequisites = OUString::valueOf(failedPrereq);
+            insertToActivationLayerDB(id, dbData);
+        }
+        else
+        {
+            throw lang::IllegalArgumentException(
+                OUSTR("PackageManagerImpl::checkPrerequisites: unknown extension"),
+                0, 0);
+
+        }
+        return 0;
+    }
+    catch (deployment::DeploymentException& ) {
+        throw;
+    } catch (ucb::CommandFailedException & ) {
+        throw;
+    } catch (ucb::CommandAbortedException & ) {
+        throw;
+    } catch (lang::IllegalArgumentException &) {
+        throw;
+    } catch (uno::RuntimeException &) {
+        throw;
+    } catch (...) {
+        uno::Any excOccurred = ::cppu::getCaughtException();
+        deployment::DeploymentException exc(
+            OUSTR("PackageManagerImpl::checkPrerequisites: exception "),
+            static_cast<OWeakObject*>(this), excOccurred);
+        throw exc;
+    }
+}
 
 //##############################################################################
 

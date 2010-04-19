@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_DP_TMPREPOSITORYCOMMANDENVIRONMENT_HXX
-#define INCLUDED_DP_TMPREPOSITORYCOMMANDENVIRONMENT_HXX
+#if ! defined INCLUDED_DP_COMMANDENVIRONMENTS_HXX
+#define INCLUDED_DP_COMMANDENVIRONMENTS_HXX
 
 
 #include "cppuhelper/compbase3.hxx"
@@ -39,21 +39,27 @@ namespace css = ::com::sun::star;
 
 namespace dp_manager {
 
+
+
 /**
    This command environment is to be used when an extension is temporarily
    stored in the "tmp" repository. It prevents all kind of user interaction.
  */
-class TmpRepositoryCommandEnv
+class BaseCommandEnv
     : public ::cppu::WeakImplHelper3< css::ucb::XCommandEnvironment,
                                       css::task::XInteractionHandler,
                                       css::ucb::XProgressHandler >
 {
+protected:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::task::XInteractionHandler> m_forwardHandler;
+
+    void handle_(bool approve, bool abort,
+                 css::uno::Reference< css::task::XInteractionRequest> const & xRequest );
 public:
-    virtual ~TmpRepositoryCommandEnv();
-    TmpRepositoryCommandEnv();
-    TmpRepositoryCommandEnv(
+    virtual ~BaseCommandEnv();
+    BaseCommandEnv();
+    BaseCommandEnv(
         css::uno::Reference< css::task::XInteractionHandler> const & handler);
 
     // XCommandEnvironment
@@ -73,6 +79,62 @@ public:
     virtual void SAL_CALL update( css::uno::Any const & Status )
         throw (css::uno::RuntimeException);
     virtual void SAL_CALL pop() throw (css::uno::RuntimeException);
+};
+
+class TmpRepositoryCommandEnv : public BaseCommandEnv
+{
+public:
+    TmpRepositoryCommandEnv::TmpRepositoryCommandEnv();
+    TmpRepositoryCommandEnv::TmpRepositoryCommandEnv(
+        css::uno::Reference< css::task::XInteractionHandler> const & handler);
+
+// XInteractionHandler
+    virtual void SAL_CALL handle(
+        css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
+        throw (css::uno::RuntimeException);
+
+};
+
+/** this class is for use in XPackageManager::synchronize.
+
+    It handles particular license cases.
+ */
+class LicenseCommandEnv : public BaseCommandEnv
+{
+private:
+    ::rtl::OUString m_repository;
+    bool m_bSuppressLicense;
+public:
+    LicenseCommandEnv::LicenseCommandEnv(){};
+    LicenseCommandEnv::LicenseCommandEnv(
+        css::uno::Reference< css::task::XInteractionHandler> const & handler,
+        bool bSuppressLicense,
+        ::rtl::OUString const & repository);
+
+// XInteractionHandler
+    virtual void SAL_CALL handle(
+        css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
+        throw (css::uno::RuntimeException);
+
+};
+
+/** this class is for use in XPackageManager::checkPrerequisites
+
+    It always prohibits a license interaction
+ */
+class NoLicenseCommandEnv : public BaseCommandEnv
+{
+
+public:
+    NoLicenseCommandEnv::NoLicenseCommandEnv(){};
+    NoLicenseCommandEnv::NoLicenseCommandEnv(
+        css::uno::Reference< css::task::XInteractionHandler> const & handler);
+
+// XInteractionHandler
+    virtual void SAL_CALL handle(
+        css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
+        throw (css::uno::RuntimeException);
+
 };
 
 }

@@ -29,14 +29,14 @@
 #include "precompiled_desktop.hxx"
 
 #include "com/sun/star/deployment/VersionException.hpp"
-#include "com/sun/star/deployment/LicenseIndividualAgreementException.hpp"
 #include "com/sun/star/deployment/LicenseException.hpp"
 #include "com/sun/star/deployment/InstallException.hpp"
 #include "com/sun/star/task/XInteractionApprove.hpp"
 #include "com/sun/star/task/XInteractionAbort.hpp"
+#include "com/sun/star/task/XInteractionHandler.hpp"
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
-#include "dp_tmprepocmdenv.hxx"
+#include "dp_commandenvironments.hxx"
 
 namespace deployment = com::sun::star::deployment;
 namespace lang  = com::sun::star::lang;
@@ -52,65 +52,50 @@ using ::rtl::OUString;
 
 namespace dp_manager {
 
-TmpRepositoryCommandEnv::TmpRepositoryCommandEnv()
+BaseCommandEnv::BaseCommandEnv()
 {
 }
 
-TmpRepositoryCommandEnv::TmpRepositoryCommandEnv(
-    Reference< css::task::XInteractionHandler> const & handler)
+BaseCommandEnv::BaseCommandEnv(
+    Reference< task::XInteractionHandler> const & handler)
     : m_forwardHandler(handler)
 {
 }
 
-TmpRepositoryCommandEnv::~TmpRepositoryCommandEnv()
+BaseCommandEnv::~BaseCommandEnv()
 {
 }
 // XCommandEnvironment
 //______________________________________________________________________________
-Reference<task::XInteractionHandler> TmpRepositoryCommandEnv::getInteractionHandler()
+Reference<task::XInteractionHandler> BaseCommandEnv::getInteractionHandler()
 throw (uno::RuntimeException)
 {
     return this;
 }
 
 //______________________________________________________________________________
-Reference<ucb::XProgressHandler> TmpRepositoryCommandEnv::getProgressHandler()
+Reference<ucb::XProgressHandler> BaseCommandEnv::getProgressHandler()
 throw (uno::RuntimeException)
 {
     return this;
 }
 
-// XInteractionHandler
-void TmpRepositoryCommandEnv::handle(
-    Reference< task::XInteractionRequest> const & xRequest )
+void BaseCommandEnv::handle(
+    Reference< task::XInteractionRequest> const & /*xRequest*/ )
     throw (uno::RuntimeException)
 {
-    uno::Any request( xRequest->getRequest() );
-    OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
+}
 
-    deployment::VersionException verExc;
-    deployment::LicenseException licExc;
-    deployment::InstallException instExc;
-    deployment::LicenseIndividualAgreementException licAgreementExc;
-
-
-    bool approve = false;
-    bool abort = false;
-
-    if ((request >>= verExc)
-        || (request >>= licExc)
-        || (request >>= instExc)
-        || (request >>= licAgreementExc))
-    {
-        approve = true;
-    }
-
+void BaseCommandEnv::handle_(bool approve, bool abort,
+                             Reference< task::XInteractionRequest> const & xRequest )
+{
     if (approve == false && abort == false)
     {
+        //not handled so far -> forwarding
         if (m_forwardHandler.is())
             m_forwardHandler->handle(xRequest);
         else
-            approve = true;
+            return; //cannot handle
     }
     else
     {
@@ -142,24 +127,128 @@ void TmpRepositoryCommandEnv::handle(
             }
         }
     }
+
 }
 
 // XProgressHandler
-void TmpRepositoryCommandEnv::push( uno::Any const & /*Status*/ )
+void BaseCommandEnv::push( uno::Any const & /*Status*/ )
 throw (uno::RuntimeException)
 {
 }
 
 
-void TmpRepositoryCommandEnv::update( uno::Any const & /*Status */)
+void BaseCommandEnv::update( uno::Any const & /*Status */)
 throw (uno::RuntimeException)
 {
 }
 
-void TmpRepositoryCommandEnv::pop() throw (uno::RuntimeException)
+void BaseCommandEnv::pop() throw (uno::RuntimeException)
+{
+}
+//==============================================================================
+
+TmpRepositoryCommandEnv::TmpRepositoryCommandEnv()
 {
 }
 
+TmpRepositoryCommandEnv::TmpRepositoryCommandEnv(
+    css::uno::Reference< css::task::XInteractionHandler> const & handler):
+    BaseCommandEnv(handler)
+{
+}
+// XInteractionHandler
+void TmpRepositoryCommandEnv::handle(
+    Reference< task::XInteractionRequest> const & xRequest )
+    throw (uno::RuntimeException)
+{
+    uno::Any request( xRequest->getRequest() );
+    OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
+
+    deployment::VersionException verExc;
+    deployment::LicenseException licExc;
+    deployment::InstallException instExc;
+
+    bool approve = false;
+    bool abort = false;
+
+    if ((request >>= verExc)
+        || (request >>= licExc)
+        || (request >>= instExc))
+    {
+        approve = true;
+    }
+
+    handle_(approve, abort, xRequest);
+}
+//================================================================================
+
+LicenseCommandEnv::LicenseCommandEnv(
+    css::uno::Reference< css::task::XInteractionHandler> const & handler,
+    bool bSuppressLicense,
+    OUString const & repository):
+    BaseCommandEnv(handler), m_repository(repository),
+    m_bSuppressLicense(bSuppressLicense)
+{
+}
+// XInteractionHandler
+void LicenseCommandEnv::handle(
+    Reference< task::XInteractionRequest> const & xRequest )
+    throw (uno::RuntimeException)
+{
+    uno::Any request( xRequest->getRequest() );
+    OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
+
+
+    deployment::LicenseException licExc;
+
+    bool approve = false;
+    bool abort = false;
+
+    if (request >>= licExc)
+    {
+        if (m_bSuppressLicense
+            || m_repository.equals(OUSTR("bundled"))
+            || licExc.AcceptBy.equals(OUSTR("admin")))
+        {
+            //always approve in bundled case, because we do not support
+            //showing licenses anyway.
+            //The "admin" already accepted the license when installing the
+            // shared extension
+            approve = true;
+        }
+    }
+
+    handle_(approve, abort, xRequest);
+}
+
+//================================================================================
+//================================================================================
+
+NoLicenseCommandEnv::NoLicenseCommandEnv(
+    css::uno::Reference< css::task::XInteractionHandler> const & handler):
+    BaseCommandEnv(handler)
+{
+}
+// XInteractionHandler
+void NoLicenseCommandEnv::handle(
+    Reference< task::XInteractionRequest> const & xRequest )
+    throw (uno::RuntimeException)
+{
+    uno::Any request( xRequest->getRequest() );
+    OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
+
+
+    deployment::LicenseException licExc;
+
+    bool approve = false;
+    bool abort = false;
+
+    if (request >>= licExc)
+    {
+        approve = true;
+    }
+    handle_(approve, abort, xRequest);
+}
 
 } // namespace dp_manager
 

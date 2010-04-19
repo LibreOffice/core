@@ -36,6 +36,7 @@
 #include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
 #include "com/sun/star/deployment/XPackageRegistry.hpp"
+#include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include "com/sun/star/awt/XWindow.hpp"
 #include "dp_misc_api.hxx"
 
@@ -168,8 +169,12 @@ void TRACE(::rtl::OUString const & sText);
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 void TRACE(::rtl::OString const & sText);
 
+/** registers or revokes shared or bundled extensions which have been
+    recently added or removed.
+*/
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-bool hasExtensionRepositoryChanged(::rtl::OUString const & repository);
+void syncRepositories(::com::sun::star::uno::Reference<
+                      ::com::sun::star::ucb::XCommandEnvironment> const & xCmdEnv);
 
 
 }

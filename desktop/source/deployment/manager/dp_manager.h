@@ -75,6 +75,7 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
     ::rtl::OUString detectMediaType(
         ::ucbhelper::Content const & ucbContent, bool throw_exc = true );
     ::rtl::OUString insertToActivationLayer(
+        css::uno::Sequence<css::beans::NamedValue> const & properties,
         ::rtl::OUString const & mediaType,
         ::ucbhelper::Content const & sourceContent,
         ::rtl::OUString const & title, ActivePackages::Data * dbData );
@@ -89,14 +90,10 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
         css::uno::Reference<css::deployment::XPackage> const & package);
 
     void synchronizeRemovedExtensions(
-        css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > &
-        out_removedExtensions,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
     void synchronizeAddedExtensions(
-        css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > &
-        out_AddedExtensions,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
@@ -177,7 +174,9 @@ public:
     createAbortChannel() throw (css::uno::RuntimeException);
 
     virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL addPackage(
-        ::rtl::OUString const & url, ::rtl::OUString const & mediaType,
+        ::rtl::OUString const & url,
+        css::uno::Sequence<css::beans::NamedValue> const & properties,
+        ::rtl::OUString const & mediaType,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,
@@ -248,8 +247,6 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL synchronize(
-        css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > & out_xAddedExtensions,
-        css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > & out_xRemovedExtensions,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,
@@ -257,7 +254,22 @@ public:
                css::ucb::CommandAbortedException,
                css::uno::RuntimeException);
 
-};
+    virtual css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > SAL_CALL
+    getExtensionsWithUnacceptedLicenses(
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv)
+        throw (css::deployment::DeploymentException,
+               css::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL checkPrerequisites(
+        css::uno::Reference<css::deployment::XPackage> const & extension,
+        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
+        throw (css::deployment::DeploymentException,
+               css::ucb::CommandFailedException,
+               css::ucb::CommandAbortedException,
+               css::lang::IllegalArgumentException,
+               css::uno::RuntimeException);
+        };
 
 //______________________________________________________________________________
 inline void PackageManagerImpl::check()

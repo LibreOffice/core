@@ -52,6 +52,7 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/xml/xpath/XXPathAPI.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -363,7 +364,8 @@ bool OO3ExtensionMigration::migrateExtension( const ::rtl::OUString& sSourceDir 
                 static_cast< cppu::OWeakObject* >( pCmdEnv ), uno::UNO_QUERY );
             uno::Reference< task::XAbortChannel > xAbortChannel;
             uno::Reference< deployment::XPackage > xPackage =
-                m_xPackageManager->addPackage( sSourceDir, ::rtl::OUString(), xAbortChannel, xCmdEnv );
+                m_xPackageManager->addPackage(
+                    sSourceDir, uno::Sequence<beans::NamedValue>(),::rtl::OUString(), xAbortChannel, xCmdEnv );
 
             if ( xPackage.is() )
                 return true;

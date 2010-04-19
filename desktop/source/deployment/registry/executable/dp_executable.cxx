@@ -152,7 +152,8 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.executable"))
             {
                 return new BackendImpl::ExecutablePackageImpl(
-                    this, url, name,  m_xExecutableTypeInfo, bRemoved, identifier);
+                    this, url, name,  m_xExecutableTypeInfo, bRemoved,
+                    identifier);
             }
         }
     }

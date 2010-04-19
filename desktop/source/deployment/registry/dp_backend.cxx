@@ -31,6 +31,7 @@
 #include "dp_backend.h"
 #include "dp_ucb.h"
 #include "rtl/uri.hxx"
+#include "rtl/bootstrap.hxx"
 #include "osl/file.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "comphelper/servicedecl.hxx"
@@ -170,7 +171,8 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
 
     Reference<deployment::XPackage> xNewPackage;
     try {
-        xNewPackage = bindPackage_( url, mediaType, bRemoved, identifier, xCmdEnv );
+        xNewPackage = bindPackage_( url, mediaType, bRemoved,
+            identifier, xCmdEnv );
     }
     catch (RuntimeException &) {
         throw;
@@ -318,6 +320,16 @@ Package::Package( ::rtl::Reference<PackageRegistryBackend> const & myBackend,
       m_bRemoved(bRemoved),
       m_identifier(identifier)
 {
+    if (m_bRemoved)
+    {
+        //We use the last segment of the URL
+        OSL_ASSERT(m_name.getLength() == 0);
+        OUString name = m_url;
+        rtl::Bootstrap::expandMacros(name);
+        sal_Int32 index = name.lastIndexOf('/');
+        if (index != -1 && index < name.getLength())
+            m_name = name.copy(index + 1);
+    }
 }
 
 //______________________________________________________________________________
@@ -407,10 +419,10 @@ sal_Bool Package::isBundle() throw (RuntimeException)
 }
 
 //______________________________________________________________________________
-::sal_Bool Package::checkPrerequisites(
+::sal_Int32 Package::checkPrerequisites(
         const css::uno::Reference< css::task::XAbortChannel >&,
         const css::uno::Reference< css::ucb::XCommandEnvironment >&,
-        sal_Bool, ::rtl::OUString const &)
+        sal_Bool)
         throw (css::deployment::DeploymentException,
                css::deployment::ExtensionRemovedException,
                css::ucb::CommandFailedException,
@@ -419,7 +431,7 @@ sal_Bool Package::isBundle() throw (RuntimeException)
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
-    return true;
+    return 0;
 }
 
 //______________________________________________________________________________

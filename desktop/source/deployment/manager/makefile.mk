@@ -47,7 +47,8 @@ SLOFILES = \
         $(SLO)$/dp_managerfac.obj \
         $(SLO)$/dp_informationprovider.obj \
         $(SLO)$/dp_extensionmanager.obj \
-        $(SLO)$/dp_tmprepocmdenv.obj
+        $(SLO)$/dp_commandenvironments.obj \
+        $(SLO)$/dp_properties.obj
 
 .INCLUDE : ..$/target.pmk
 .INCLUDE : target.mk

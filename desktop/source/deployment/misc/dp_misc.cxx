@@ -44,8 +44,10 @@
 #include "com/sun/star/ucb/CommandAbortedException.hpp"
 #include "com/sun/star/bridge/UnoUrlResolver.hpp"
 #include "com/sun/star/bridge/XUnoUrlResolver.hpp"
+#include "com/sun/star/deployment/ExtensionManager.hpp"
 #include "boost/scoped_array.hpp"
 #include "boost/shared_ptr.hpp"
+#include <comphelper/processfactory.hxx>
 
 #ifdef WNT
 //#include "tools/prewin.h"
@@ -137,6 +139,103 @@ bool existsOfficePipe()
     ::osl::Pipe pipe( pipeId, osl_Pipe_OPEN, sec );
     return pipe.is();
 }
+
+
+//Returns true if the Folder was more recently modified then
+//the lastsynchronized file. That is the repository needs to
+//be synchronized.
+bool compareExtensionFolderWithLastSynchronizedFile(
+    OUString const & folderURL, OUString const & fileURL)
+{
+    bool bNeedsSync = false;
+    ::osl::DirectoryItem itemExtFolder;
+    ::osl::File::RC err1 =
+          ::osl::DirectoryItem::get(folderURL, itemExtFolder);
+    //If it does not exist, then there is nothing to be done
+    if (err1 == ::osl::File::E_NOENT)
+    {
+        return false;
+    }
+    else if (err1 != ::osl::File::E_None)
+    {
+        OSL_ENSURE(0, "Cannot access extension folder");
+        return true; //sync just in case
+    }
+
+    //If last synchronized does not exist, then OOo is started for the first time
+    ::osl::DirectoryItem itemFile;
+    ::osl::File::RC err2 = ::osl::DirectoryItem::get(fileURL, itemFile);
+    if (err2 == ::osl::File::E_NOENT)
+    {
+        return true;
+
+    }
+    else if (err2 != ::osl::File::E_None)
+    {
+        OSL_ENSURE(0, "Cannot access file lastsynchronized");
+        return true; //sync just in case
+    }
+
+    //compare the modification time of the extension folder and the last
+    //modified file
+    ::osl::FileStatus statFolder(FileStatusMask_ModifyTime);
+    ::osl::FileStatus statFile(FileStatusMask_ModifyTime);
+    if (itemExtFolder.getFileStatus(statFolder) == ::osl::File::E_None)
+    {
+        if (itemFile.getFileStatus(statFile) == ::osl::File::E_None)
+        {
+            TimeValue timeFolder = statFolder.getModifyTime();
+            TimeValue timeFile = statFile.getModifyTime();
+
+            if (timeFile.Seconds < timeFolder.Seconds)
+                bNeedsSync = true;
+        }
+        else
+        {
+            OSL_ASSERT(0);
+            bNeedsSync = true;
+        }
+    }
+    else
+    {
+        OSL_ASSERT(0);
+        bNeedsSync = true;
+    }
+    return bNeedsSync;
+}
+
+bool needToSyncRepostitory(OUString const & name)
+{
+    OUString folder;
+    OUString file;
+    if (name.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("bundled"))))
+    {
+        folder = OUString(
+            RTL_CONSTASCII_USTRINGPARAM("$BUNDLED_EXTENSIONS"));
+        file = OUString (
+            RTL_CONSTASCII_USTRINGPARAM(
+                "$BUNDLED_EXTENSIONS_USER/lastsynchronized"));
+    }
+    else if (name.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("shared"))))
+    {
+        folder = OUString(
+            RTL_CONSTASCII_USTRINGPARAM(
+                "$UNO_SHARED_PACKAGES_CACHE/uno_packages"));
+        file = OUString (
+            RTL_CONSTASCII_USTRINGPARAM(
+                "$SHARED_EXTENSIONS_USER/lastsynchronized"));
+    }
+    else
+    {
+        OSL_ASSERT(0);
+        return true;
+    }
+    ::rtl::Bootstrap::expandMacros(folder);
+    ::rtl::Bootstrap::expandMacros(file);
+    return compareExtensionFolderWithLastSynchronizedFile(
+        folder, file);
+}
+
 
 } // anon namespace
 
@@ -480,22 +579,43 @@ void TRACE(::rtl::OString const & sText)
 #endif
 }
 
-bool hasExtensionRepositoryChanged(::rtl::OUString const & repository)
+void syncRepositories(Reference<ucb::XCommandEnvironment> const & xCmdEnv)
 {
-    if (repository.equals(OUSTR("shared")))
+    Reference<deployment::XExtensionManager> xExtensionManager;
+    //synchronize shared before bundled otherewise there are
+    //more revoke and registration calls.
+    OUString sShared(RTL_CONSTASCII_USTRINGPARAM("shared"));
+    if (needToSyncRepostitory(sShared))
     {
-        //get the extensions folder
-        OUString folder(RTL_CONSTASCII_USTRINGPARAM("BUNDLED_EXTENSIONS"));
-        ::rtl::Bootstrap::expandMacros(folder);
-    }
-    else if (repository.equals(OUSTR("bundled")))
-    {
-    }
-    else
-        throw lang::IllegalArgumentException(
-            OUSTR("Invalid repository name."), 0, 0);
+        xExtensionManager =
+            deployment::ExtensionManager::get(
+                comphelper_getProcessComponentContext());
 
-    return false;
+        if (xExtensionManager.is())
+        {
+            xExtensionManager->synchronize(
+                sShared, Reference<task::XAbortChannel>(), xCmdEnv);
+        }
+    }
+
+    OUString sBundled(RTL_CONSTASCII_USTRINGPARAM("bundled"));
+    if (needToSyncRepostitory( sBundled))
+    {
+        if (!xExtensionManager.is())
+        {
+            xExtensionManager =
+                deployment::ExtensionManager::get(
+                    comphelper_getProcessComponentContext());
+        }
+        if (xExtensionManager.is())
+        {
+            xExtensionManager->synchronize(
+                sBundled, Reference<task::XAbortChannel>(), xCmdEnv);
+
+        }
+    }
 }
+
+
 
 }

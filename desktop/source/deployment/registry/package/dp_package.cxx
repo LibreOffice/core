@@ -64,8 +64,8 @@
 #include "com/sun/star/packages/manifest/XManifestWriter.hpp"
 #include "com/sun/star/deployment/DependencyException.hpp"
 #include "com/sun/star/deployment/LicenseException.hpp"
-#include "com/sun/star/deployment/LicenseIndividualAgreementException.hpp"
 #include "com/sun/star/deployment/PlatformException.hpp"
+#include "com/sun/star/deployment/Prerequisites.hpp"
 #include "com/sun/star/xml/dom/XDocumentBuilder.hpp"
 #include "com/sun/star/xml/xpath/XXPathAPI.hpp"
 #include "com/sun/star/deployment/XPackageManager.hpp"
@@ -139,8 +139,7 @@ class BackendImpl : public ImplBaseT
 
         ::sal_Bool checkLicense(
             Reference< ucb::XCommandEnvironment > const & xCmdEnv,
-            DescriptionInfoset const & description, bool bInstalled,
-            OUString const & aContextName )
+            DescriptionInfoset const & description, bool bNoLicenseChecking)
                 throw (deployment::DeploymentException,
                        ucb::CommandFailedException,
                        ucb::CommandAbortedException,
@@ -199,10 +198,10 @@ class BackendImpl : public ImplBaseT
                    ucb::CommandAbortedException,
                    RuntimeException);
 
-        virtual ::sal_Bool SAL_CALL checkPrerequisites(
+        virtual ::sal_Int32 SAL_CALL checkPrerequisites(
             const Reference< task::XAbortChannel >& xAbortChannel,
             const Reference< ucb::XCommandEnvironment >& xCmdEnv,
-            ::sal_Bool bInstalled, OUString const & aContextName)
+            ::sal_Bool noLicenseChecking)
             throw (deployment::ExtensionRemovedException,
                    deployment::DeploymentException,
                    ucb::CommandFailedException,
@@ -423,12 +422,14 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             }
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.package-bundle")) {
                 return new PackageImpl(
-                    this, url, name, m_xBundleTypeInfo, false, bRemoved, identifier);
+                    this, url, name, m_xBundleTypeInfo, false, bRemoved,
+                    identifier);
             }
             else if (subType.EqualsIgnoreCaseAscii(
                          "vnd.sun.star.legacy-package-bundle")) {
                 return new PackageImpl(
-                    this, url, name, m_xLegacyBundleTypeInfo, true, bRemoved, identifier);
+                    this, url, name, m_xLegacyBundleTypeInfo, true, bRemoved,
+                    identifier);
             }
         }
     }
@@ -652,7 +653,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
 
 ::sal_Bool BackendImpl::PackageImpl::checkLicense(
     css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv,
-    DescriptionInfoset const & info, bool bInstalled, OUString const & aContextName)
+    DescriptionInfoset const & info, bool alreadyInstalled)
         throw (css::deployment::DeploymentException,
             css::ucb::CommandFailedException,
             css::ucb::CommandAbortedException,
@@ -679,41 +680,21 @@ bool BackendImpl::PackageImpl::checkDependencies(
             throw css::deployment::DeploymentException(
                 OUSTR("Could not obtain attribute simple-lincense@accept-by or it has no valid value"), 0, Any());
 
-        //If if @accept-by="user" then every user needs to accept the license before it can be installed.
-        //Therefore we must prevent the installation as shared extension unless suppress-if-required="true"
-        OSL_ASSERT(aContextName.getLength());
-        if (simplLicAttr->acceptBy.equals(OUSTR("user")) && aContextName.equals(OUSTR("shared")))
-        {
-            css::deployment::LicenseIndividualAgreementException
-                exc = css::deployment::LicenseIndividualAgreementException(
-                OUString(), 0, m_name, simplLicAttr->suppressIfRequired);
-
-            bool approve = false;
-            bool abort = false;
-            if (! interactContinuation(
-                Any(exc), task::XInteractionApprove::static_type(), xCmdEnv, &approve, &abort ))
-                throw css::deployment::DeploymentException(
-                    OUSTR("Could not interact with user."), 0, Any());
-               if (abort == true)
-                return false;
-
-            //If the unopkg --suppress-license was used and simplLicAttr->suppressIfRequired == true,
-            //then the user implicitely accepts the license
-        }
 
         //Only use interaction if there is no version of this extension already installed
         //and the suppress-on-update flag is not set for the new extension
-        // bInstalled | bSuppressOnUpdate | show license
+        // alreadyInstalled | bSuppressOnUpdate | show license
         //----------------------------------------
         //      0     |      0            |     1
         //      0     |      1            |     1
         //      1     |      0            |     1
         //      1     |      1            |     0
 
-        if ( !(bInstalled && simplLicAttr->suppressOnUpdate))
+        if ( !(alreadyInstalled && simplLicAttr->suppressOnUpdate))
         {
             css::deployment::LicenseException licExc(
-                OUString(), 0, m_name, sLicense, simplLicAttr->suppressIfRequired);
+                OUString(), 0, getDisplayName(), sLicense,
+                simplLicAttr->acceptBy);
             bool approve = false;
             bool abort = false;
             if (! interactContinuation(
@@ -745,10 +726,10 @@ bool BackendImpl::PackageImpl::checkDependencies(
     }
 }
 
-::sal_Bool BackendImpl::PackageImpl::checkPrerequisites(
+::sal_Int32 BackendImpl::PackageImpl::checkPrerequisites(
         const css::uno::Reference< css::task::XAbortChannel >&,
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
-        sal_Bool bInstalled, OUString const & aContextName)
+        sal_Bool alreadyInstalled)
         throw (css::deployment::DeploymentException,
                css::deployment::ExtensionRemovedException,
                css::ucb::CommandFailedException,
@@ -759,11 +740,21 @@ bool BackendImpl::PackageImpl::checkDependencies(
         throw deployment::ExtensionRemovedException();
     DescriptionInfoset info = getDescriptionInfoset();
     if (!info.hasDescription())
-        return sal_True;
+        return 0;
 
-    return checkPlatform(xCmdEnv)
-        && checkDependencies(xCmdEnv, info)
-        && checkLicense(xCmdEnv, info, bInstalled, aContextName);
+    //always return LICENSE as long as the user did not accept the license
+    //so that XExtensonManager::checkPrerequisitesAndEnable will again
+    //check the license
+    if (!checkPlatform(xCmdEnv))
+        return deployment::Prerequisites::PLATFORM |
+            deployment::Prerequisites::LICENSE;
+    else if(!checkDependencies(xCmdEnv, info))
+        return deployment::Prerequisites::DEPENDENCIES |
+            deployment::Prerequisites::LICENSE;
+    else if(!checkLicense(xCmdEnv, info, alreadyInstalled))
+        return deployment::Prerequisites::LICENSE;
+    else
+        return 0;
 }
 
 ::sal_Bool BackendImpl::PackageImpl::checkDependencies(

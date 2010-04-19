@@ -157,7 +157,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
             ::rtl::Reference<PackageRegistryBackend> const & myBackend,
             OUString const & url, OUString const & name,
             Reference<deployment::XPackageTypeInfo> const & xPackageType,
-            OUString const & loader, bool bRemoved, OUString const & identifier);
+            OUString const & loader, bool bRemoved,
+            OUString const & identifier);
     };
     friend class ComponentPackageImpl;
 
@@ -186,7 +187,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
             ::rtl::Reference<PackageRegistryBackend> const & myBackend,
             OUString const & url, OUString const & name,
             Reference<deployment::XPackageTypeInfo> const & xPackageType,
-            bool jarFile, bool bRemoved, OUString const & identifier);
+            bool jarFile, bool bRemoved,
+            OUString const & identifier);
     };
     friend class TypelibraryPackageImpl;
 
@@ -207,7 +209,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
-        sal_Bool bNoFileAccess, OUString const & identifier,
+        sal_Bool bRemoved, OUString const & identifier,
         Reference<XCommandEnvironment> const & xCmdEnv );
 
     virtual void SAL_CALL disposing();
@@ -283,7 +285,8 @@ BackendImpl::ComponentPackageImpl::ComponentPackageImpl(
     ::rtl::Reference<PackageRegistryBackend> const & myBackend,
     OUString const & url, OUString const & name,
     Reference<deployment::XPackageTypeInfo> const & xPackageType,
-    OUString const & loader, bool bRemoved, OUString const & identifier)
+    OUString const & loader, bool bRemoved,
+    OUString const & identifier)
     : Package( myBackend, url, name, name /* display-name */,
                xPackageType, bRemoved, identifier),
       m_loader( loader ),

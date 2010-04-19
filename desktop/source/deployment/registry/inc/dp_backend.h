@@ -175,10 +175,10 @@ public:
                css::ucb::CommandAbortedException,
                css::uno::RuntimeException);
 
-    virtual ::sal_Bool SAL_CALL checkPrerequisites(
+    virtual ::sal_Int32 SAL_CALL checkPrerequisites(
         const css::uno::Reference< css::task::XAbortChannel >& xAbortChannel,
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
-        sal_Bool bInstalled, ::rtl::OUString const & aContextName)
+        sal_Bool noLicenseChecking)
         throw (css::deployment::DeploymentException,
                css::deployment::ExtensionRemovedException,
                css::ucb::CommandFailedException,

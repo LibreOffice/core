@@ -233,9 +233,9 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                         0, dialogURL, xCmdEnv, false /* no throw */ )) {
                     dialogURL = OUString();
                 }
-                return new PackageImpl( this, url, xCmdEnv,
-                                        makeURL( url, OUSTR("script.xlb") ),
-                                        dialogURL, bRemoved, identifier);
+                return new PackageImpl(
+                    this, url, xCmdEnv, makeURL( url, OUSTR("script.xlb") ),
+                    dialogURL, bRemoved, identifier);
             }
             else if (subType.EqualsIgnoreCaseAscii(
                          "vnd.sun.star.dialog-library")) {

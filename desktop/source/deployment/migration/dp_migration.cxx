@@ -136,7 +136,7 @@ Any MigrationImpl::execute( Sequence<beans::NamedValue> const & )
                                       ->queryContentIdentifierString() );
             try {
                 xManager->addPackage(
-                    sourceURL, OUString() /* detect media-type */,
+                    sourceURL, uno::Sequence<beans::NamedValue>(),OUString() /* detect media-type */,
                     Reference<task::XAbortChannel>(), xCmdEnv );
             }
             catch (RuntimeException &) {

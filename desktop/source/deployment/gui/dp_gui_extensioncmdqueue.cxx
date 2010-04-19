@@ -36,10 +36,10 @@
 #include <cstddef>
 
 #include "com/sun/star/beans/PropertyValue.hpp"
+#include "com/sun/star/beans/NamedValue.hpp"
 
 #include "com/sun/star/deployment/DependencyException.hpp"
 #include "com/sun/star/deployment/LicenseException.hpp"
-#include "com/sun/star/deployment/LicenseIndividualAgreementException.hpp"
 #include "com/sun/star/deployment/VersionException.hpp"
 #include "com/sun/star/deployment/InstallException.hpp"
 #include "com/sun/star/deployment/PlatformException.hpp"
@@ -379,7 +379,6 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
     lang::WrappedTargetException wtExc;
     deployment::DependencyException depExc;
     deployment::LicenseException licExc;
-    deployment::LicenseIndividualAgreementException licAgreementExc;
     deployment::VersionException verExc;
     deployment::InstallException instExc;
     deployment::PlatformException platExc;
@@ -441,23 +440,12 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
                 || (n == RET_CANCEL && !Application::IsDialogCancelEnabled());
         }
     }
-    else if (request >>= licAgreementExc)
-    {
-        vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-        ResId warnId(WARNINGBOX_NOSHAREDALLOWED, *DeploymentGuiResMgr::get());
-        WarningBox warn( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, warnId);
-        String msgText = warn.GetMessText();
-        msgText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
-        msgText.SearchAndReplaceAllAscii("%NAME", licAgreementExc.ExtensionName);
-        warn.SetMessText(msgText);
-        warn.Execute();
-          abort = true;
-    }
     else if (request >>= licExc)
     {
         uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
             deployment::ui::LicenseDialog::create(
-            m_xContext, VCLUnoHelper::GetInterface( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL ), licExc.Text ) );
+            m_xContext, VCLUnoHelper::GetInterface( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL ),
+            licExc.ExtensionName, licExc.Text ) );
         sal_Int16 res = xDialog->execute();
         if ( res == ui::dialogs::ExecutableDialogResults::CANCEL )
             abort = true;
@@ -948,8 +936,9 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
     {
         OUString sPackageManager = xPackageManager->getContext();
         uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
-        uno::Reference< deployment::XPackage > xPackage( xExtMgr->addExtension( rPackageURL, sPackageManager,
-                                                                                xAbortChannel, rCmdEnv.get() ) );
+        uno::Reference< deployment::XPackage > xPackage(
+            xExtMgr->addExtension(rPackageURL, uno::Sequence<beans::NamedValue>(),
+                                  sPackageManager, xAbortChannel, rCmdEnv.get() ) );
         OSL_ASSERT( xPackage.is() );
     }
     catch ( ucb::CommandFailedException & )

@@ -41,6 +41,7 @@
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "comphelper/anytostring.hxx"
+#include "comphelper/sequence.hxx"
 #include "com/sun/star/deployment/ExtensionManager.hpp"
 
 #include "com/sun/star/deployment/ui/PackageManagerDialog.hpp"
@@ -60,10 +61,24 @@ using ::rtl::OUString;
 namespace css = ::com::sun::star;
 namespace {
 
+struct ExtensionName
+{
+    OUString m_str;
+    ExtensionName( OUString const & str ) : m_str( str ) {}
+    bool operator () ( Reference<deployment::XPackage> const & e ) const
+    {
+        if (m_str.equals(dp_misc::getIdentifier(e))
+             ||  m_str.equals(e->getName()))
+            return true;
+        return false;
+    }
+};
+
 //------------------------------------------------------------------------------
 const char s_usingText [] =
 "\n"
 "using: " APP_NAME " add <options> extension-path...\n"
+"       " APP_NAME " validate <options> extension-identifier...\n"
 "       " APP_NAME " remove <options> extension-identifier...\n"
 "       " APP_NAME " list <options> extension-identifier...\n"
 "       " APP_NAME " reinstall <options>\n"
@@ -73,6 +88,8 @@ const char s_usingText [] =
 "\n"
 "sub-commands:\n"
 " add                     add extension\n"
+" validate                checks the prerequisites of an installed extension and"
+"                         registers it if possible\n"
 " remove                  remove extensions by identifier\n"
 " reinstall               expert feature: reinstall all deployed extensions\n"
 " list                    list information about deployed extensions\n"
@@ -252,7 +269,7 @@ extern "C" int unopkg_main()
             return 0;
         }
         else if (isOption( info_version, &nPos )) {
-            dp_misc::writeConsole("\n"APP_NAME" Version 3.0\n");
+            dp_misc::writeConsole("\n"APP_NAME" Version 3.3\n");
             return 0;
         }
         //consume all bootstrap variables which may occur before the subcommannd
@@ -314,15 +331,6 @@ extern "C" int unopkg_main()
             }
         }
 
-        //make sure the bundled option was provided together with shared
-//         if (option_bundled && !option_shared)
-//         {
-//             dp_misc::writeConsoleError(
-//                 "\nERROR: option --bundled can only be used together with --shared!");
-//             return 1;
-//         }
-
-
         xComponentContext = getUNO(
             disposeGuard, option_verbose, option_shared, subcmd_gui,
             xLocalComponentContext );
@@ -357,8 +365,11 @@ extern "C" int unopkg_main()
 
         Reference< ::com::sun::star::ucb::XCommandEnvironment > xCmdEnv(
             createCmdEnv( xComponentContext, logFile,
-                          option_force, option_verbose, option_bundled,
-                          option_suppressLicense) );
+                          option_force, option_verbose) );
+
+        //synchronize bundled/shared extensions
+        if (!subcmd_gui && ! dp_misc::office_is_running())
+            dp_misc::syncRepositories(xCmdEnv);
 
         if (subcmd_add ||
             subCommand.equalsAsciiL(
@@ -369,9 +380,12 @@ extern "C" int unopkg_main()
                 OUString const & cmdPackage = cmdPackages[ pos ];
                 if (subcmd_add)
                 {
+                    beans::NamedValue nvSuppress(
+                        OUSTR("SUPPRESS_LICENSE"), option_suppressLicense ?
+                        makeAny(OUSTR("1")):makeAny(OUSTR("0")));
                         xExtensionManager->addExtension(
-                            cmdPackage, repository,
-                            Reference<task::XAbortChannel>(), xCmdEnv);
+                            cmdPackage, Sequence<beans::NamedValue>(&nvSuppress, 1),
+                            repository, Reference<task::XAbortChannel>(), xCmdEnv);
                 }
                 else
                 {
@@ -410,32 +424,131 @@ extern "C" int unopkg_main()
         }
         else if (subCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("list") ))
         {
-            Sequence< Reference<deployment::XPackage> > packages;
+            ::std::vector<Reference<deployment::XPackage> > vecExtUnaccepted;
+            ::comphelper::sequenceToContainer(vecExtUnaccepted,
+                    xExtensionManager->getExtensionsWithUnacceptedLicenses(
+                        repository, xCmdEnv));
+
+            //This vector tells what XPackage  in allExtensions has an
+            //unaccepted license.
+            std::vector<bool> vecUnaccepted;
+            std::vector<Reference<deployment::XPackage> > allExtensions;
             if (cmdPackages.empty())
             {
-                packages = xExtensionManager->getDeployedExtensions(
-                    repository, Reference<task::XAbortChannel>(), xCmdEnv );
+                Sequence< Reference<deployment::XPackage> >
+                    packages = xExtensionManager->getDeployedExtensions(
+                        repository, Reference<task::XAbortChannel>(), xCmdEnv );
+
+                ::std::vector<Reference<deployment::XPackage> > vec_packages;
+                ::comphelper::sequenceToContainer(vec_packages, packages);
+
+                //First copy the extensions with the unaccepted license
+                //to vector allExtensions.
+                allExtensions.resize(vecExtUnaccepted.size() + vec_packages.size());
+
+                ::std::vector<Reference<deployment::XPackage> >::iterator i_all_ext =
+                      ::std::copy(vecExtUnaccepted.begin(), vecExtUnaccepted.end(),
+                                  allExtensions.begin());
+                //Now copy those we got from getDeployedExtensions
+                ::std::copy(vec_packages.begin(), vec_packages.end(), i_all_ext);
+
+                //Now prepare the vector which tells what extension has an
+                //unaccepted license
+                vecUnaccepted.resize(vecExtUnaccepted.size() + vec_packages.size());
+                ::std::vector<bool>::iterator i_unaccepted =
+                      ::std::fill_n(vecUnaccepted.begin(),
+                                    vecExtUnaccepted.size(), true);
+                ::std::fill_n(i_unaccepted, vec_packages.size(), false);
+
                 dp_misc::writeConsole(
-                    OUSTR("all deployed ") + repository + OUSTR(" packages:\n"));
+                    OUSTR("All deployed ") + repository + OUSTR(" extensions:\n\n"));
             }
             else
             {
-                packages.realloc( cmdPackages.size() );
+                //The user provided the names (ids or file names) of the extensions
+                //which shall be listed
                 for ( ::std::size_t pos = 0; pos < cmdPackages.size(); ++pos )
+                {
+                    Reference<deployment::XPackage> extension;
                     try
                     {
-                        packages[ pos ] = xExtensionManager->getDeployedExtension(
+                        extension = xExtensionManager->getDeployedExtension(
                             repository, cmdPackages[ pos ], cmdPackages[ pos ], xCmdEnv );
                     }
                     catch (lang::IllegalArgumentException &)
                     {
-                        packages[ pos ] = findPackage(repository,
+                        extension = findPackage(repository,
                             xExtensionManager, xCmdEnv, cmdPackages[ pos ] );
-                        if ( !packages[ pos ].is() )
-                            throw;
                     }
+
+                    //Now look if the requested extension has an unaccepted license
+                    bool bUnacceptedLic = false;
+                    if (!extension.is())
+                    {
+                        ::std::vector<Reference<deployment::XPackage> >::const_iterator
+                            i = ::std::find_if(
+                                vecExtUnaccepted.begin(),
+                                vecExtUnaccepted.end(), ExtensionName(cmdPackages[pos]));
+                        if (i != vecExtUnaccepted.end())
+                        {
+                            extension = *i;
+                            bUnacceptedLic = true;
+                        }
+                    }
+
+                    if (extension.is())
+                    {
+                        allExtensions.push_back(extension);
+                        vecUnaccepted.push_back(bUnacceptedLic);
+                    }
+
+                    else
+                        throw lang::IllegalArgumentException(
+                            OUSTR("There is no such extension deployed: ") +
+                            cmdPackages[pos],0,-1);
+                }
+
             }
-            printf_packages( packages, xCmdEnv );
+
+            printf_packages(allExtensions, vecUnaccepted, xCmdEnv );
+        }
+        else if (subCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("validate") ))
+        {
+            ::std::vector<Reference<deployment::XPackage> > vecExtUnaccepted;
+            ::comphelper::sequenceToContainer(
+                vecExtUnaccepted, xExtensionManager->getExtensionsWithUnacceptedLicenses(
+                    repository, xCmdEnv));
+
+            for ( ::std::size_t pos = 0; pos < cmdPackages.size(); ++pos )
+            {
+                Reference<deployment::XPackage> extension;
+                try
+                {
+                    extension = xExtensionManager->getDeployedExtension(
+                        repository, cmdPackages[ pos ], cmdPackages[ pos ], xCmdEnv );
+                }
+                catch (lang::IllegalArgumentException &)
+                {
+                    extension = findPackage(
+                        repository, xExtensionManager, xCmdEnv, cmdPackages[ pos ] );
+                }
+
+                if (!extension.is())
+                {
+                    ::std::vector<Reference<deployment::XPackage> >::const_iterator
+                        i = ::std::find_if(
+                            vecExtUnaccepted.begin(),
+                            vecExtUnaccepted.end(), ExtensionName(cmdPackages[pos]));
+                    if (i != vecExtUnaccepted.end())
+                    {
+                        extension = *i;
+                    }
+                }
+
+                if (extension.is())
+                    xExtensionManager->checkPrerequisitesAndEnable(
+                        extension, Reference<task::XAbortChannel>(), xCmdEnv);
+            }
         }
         else if (subCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("gui") ))
         {

@@ -102,10 +102,6 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
             Reference<ucb::XCommandEnvironment> const & xCmdEnv);
     void implCollectXhpFiles( const rtl::OUString& aDir,
         std::vector< rtl::OUString >& o_rXhpFileVector );
-//  rtl::OUString getFlagFileURL( Reference< deployment::XPackage > xPackage, const char* pFlagStr );
-//  rtl::OUString getRegisteredFlagFileURL( Reference< deployment::XPackage > xPackage );
-//  rtl::OUString getCompiledFlagFileURL( Reference< deployment::XPackage > xPackage );
-//  rtl::OUString expandURL( const rtl::OUString& aURL );
 
     void addDataToDb(OUString const & url, HelpBackendDb::Data const & data);
     ::boost::optional<HelpBackendDb::Data> readDataFromDb(OUString const & url);
@@ -195,7 +191,8 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                     "vnd.sun.star.help"))
             {
                 return new PackageImpl(
-                    this, url, name, m_xHelpTypeInfo, bRemoved, identifier);
+                    this, url, name, m_xHelpTypeInfo, bRemoved,
+                    identifier);
             }
         }
     }
@@ -233,7 +230,8 @@ BackendImpl::PackageImpl::PackageImpl(
     OUString const & url, OUString const & name,
     Reference<deployment::XPackageTypeInfo> const & xPackageType,
     bool bRemoved, OUString const & identifier)
-    : Package( myBackend, url, name, name, xPackageType, bRemoved, identifier)
+    : Package( myBackend, url, name, name, xPackageType, bRemoved,
+               identifier)
 {
         if (bRemoved)
         {
@@ -290,13 +288,6 @@ void BackendImpl::PackageImpl::processPackage_(
     BackendImpl* that = getMyBackend();
     Reference< deployment::XPackage > xThisPackage( this );
     that->implProcessHelp( xThisPackage, doRegisterPackage, xCmdEnv);
-
-//         HelpBackendDb::Data data;
-//         getMyBackend()->addDataToDb(getURL(), data);
-
-//     }
-//     else
-//         getMyBackend()->deleteDataFromDb(getURL());
 }
 
 beans::Optional< OUString > BackendImpl::PackageImpl::getRegistrationDataURL()
@@ -373,23 +364,6 @@ void BackendImpl::implProcessHelp
             {
                 std::vector< rtl::OUString > aXhpFileVector;
 
-                // Delete (old) files in any case to allow compiler to be started every time
-//                 rtl::OUString aLangWithPureNameURL( aLangURL );
-//                 aLangWithPureNameURL += aSlash;
-//                 aLangWithPureNameURL += aHelpStr;
-//                 rtl::OUString aDbFile( aLangWithPureNameURL );
-//                 aDbFile += rtl::OUString::createFromAscii( ".db" );
-//                 if( xSFA->exists( aDbFile ) )
-//                     xSFA->kill( aDbFile );
-//                 rtl::OUString aHtFile( aLangWithPureNameURL );
-//                 aHtFile += rtl::OUString::createFromAscii( ".ht" );
-//                 if( xSFA->exists( aHtFile ) )
-//                     xSFA->kill( aHtFile );
-//                 rtl::OUString aKeyFile( aLangWithPureNameURL );
-//                 aKeyFile += rtl::OUString::createFromAscii( ".key" );
-//                 if( xSFA->exists( aKeyFile ) )
-//                     xSFA->kill( aKeyFile );
-
                 // calculate jar file URL
                 sal_Int32 indexStartSegment = aLangURL.lastIndexOf('/');
                 // for example "/en"
@@ -408,12 +382,6 @@ void BackendImpl::implProcessHelp
                 rtl::OUString aJarFile(
                     makeURL(sHelpFolder, langFolderURLSegment + aSlash + aHelpStr +
                             OUSTR(".jar")));
-//                 aJarFile += aSlash;
-//                 aJarFile += aHelpStr;
-//                 aJarFile += rtl::OUString::createFromAscii( ".jar" );
-                // remove in any case to clean up
-//                 if( xSFA->exists( aJarFile ) )
-//                     xSFA->kill( aJarFile );
                 aJarFile = ::dp_misc::expandUnoRcUrl(aJarFile);
 
                 rtl::OUString aEncodedJarFilePath = rtl::Uri::encode(
@@ -443,8 +411,6 @@ void BackendImpl::implProcessHelp
                     aDestPath += aPureFolderName;
                     xSFA->copy( aSubFolderURL, aDestPath );
                 }
-                //Copy help.tree to the temp folder in the help backend folder
-//                xSFA->copy(aLangURL + OUSTR("/help.tree"), langFolderDestExpanded + OUSTR("/help.tree"));
 
                 // Call compiler
                 sal_Int32 nXhpFileCount = aXhpFileVector.size();
@@ -485,7 +451,6 @@ void BackendImpl::implProcessHelp
 
                     aParamsSeq[4] = uno::makeAny( rtl::OUString::createFromAscii( "-zipdir" ) );
                     rtl::OUString aSystemPath;
-//                    osl::FileBase::getSystemPathFromFileURL( aLangURL, aSystemPath );
                     osl::FileBase::getSystemPathFromFileURL(
                         langFolderDestExpanded, aSystemPath );
                     aParamsSeq[5] = uno::makeAny( aSystemPath );
@@ -562,75 +527,6 @@ void BackendImpl::implProcessHelp
     }
 }
 
-// rtl::OUString BackendImpl::getFlagFileURL( Reference< deployment::XPackage > xPackage, const char* pFlagStr )
-// {
-//  rtl::OUString aRetURL;
-//  if( !xPackage.is() )
-//      return aRetURL;
-//  rtl::OUString aHelpURL = xPackage->getURL();
-//  aRetURL = expandURL( aHelpURL );
-//  aRetURL += rtl::OUString::createFromAscii( pFlagStr );
-//  return aRetURL;
-// }
-
-// rtl::OUString BackendImpl::getRegisteredFlagFileURL( Reference< deployment::XPackage > xPackage )
-// {
-//  return getFlagFileURL( xPackage, "/RegisteredFlag" );
-// }
-
-// rtl::OUString BackendImpl::getCompiledFlagFileURL( Reference< deployment::XPackage > xPackage )
-// {
-//  return getFlagFileURL( xPackage, "/CompiledFlag" );
-// }
-
-// rtl::OUString BackendImpl::expandURL( const rtl::OUString& aURL )
-// {
-//  static Reference< util::XMacroExpander > xMacroExpander;
-//  static Reference< uri::XUriReferenceFactory > xFac;
-
-//  if( !xMacroExpander.is() || !xFac.is() )
-//  {
-//      Reference<XComponentContext> const & xContext = getComponentContext();
-//      if( xContext.is() )
-//      {
-//          xFac = Reference< uri::XUriReferenceFactory >(
-//              xContext->getServiceManager()->createInstanceWithContext( rtl::OUString::createFromAscii(
-//              "com.sun.star.uri.UriReferenceFactory"), xContext ) , UNO_QUERY );
-//      }
-//      if( !xFac.is() )
-//      {
-//          throw RuntimeException(
-//              ::rtl::OUString::createFromAscii(
-//              "dp_registry::backend::help::BackendImpl::expandURL(), "
-//              "could not instatiate UriReferenceFactory." ),
-//              Reference< XInterface >() );
-//      }
-
-//      xMacroExpander = Reference< util::XMacroExpander >(
-//          xContext->getValueByName(
-//          ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.util.theMacroExpander" ) ),
-//          UNO_QUERY_THROW );
-//      }
-
-//  rtl::OUString aRetURL = aURL;
-//  if( xMacroExpander.is() )
-//  {
-//      Reference< uri::XUriReference > uriRef;
-//      for (;;)
-//      {
-//          uriRef = Reference< uri::XUriReference >( xFac->parse( aRetURL ), UNO_QUERY );
-//          if ( uriRef.is() )
-//          {
-//              Reference < uri::XVndSunStarExpandUrl > sxUri( uriRef, UNO_QUERY );
-//              if( !sxUri.is() )
-//                  break;
-
-//              aRetURL = sxUri->expand( xMacroExpander );
-//          }
-//      }
-//      }
-//  return aRetURL;
-// }
 
 void BackendImpl::implCollectXhpFiles( const rtl::OUString& aDir,
     std::vector< rtl::OUString >& o_rXhpFileVector )

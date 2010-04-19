@@ -114,7 +114,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType, sal_Bool bRemoved,
-        OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv );
+        OUString const & identifier,
+        Reference<XCommandEnvironment> const & xCmdEnv );
 
     ::std::auto_ptr<PersistentMap> m_registeredPackages;
         // for backwards compatibility

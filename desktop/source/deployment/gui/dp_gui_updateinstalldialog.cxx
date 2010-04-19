@@ -46,6 +46,7 @@
 #include "cppuhelper/implbase3.hxx"
 
 #include "com/sun/star/beans/PropertyValue.hpp"
+#include "com/sun/star/beans/NamedValue.hpp"
 #include "com/sun/star/xml/dom/XElement.hpp"
 #include "com/sun/star/xml/dom/XNode.hpp"
 #include "com/sun/star/xml/dom/XNodeList.hpp"
@@ -504,7 +505,8 @@ void UpdateInstallDialog::Thread::installExtensions()
                 m_abort = xAbortChannel;
             }
             xPackage = curData.aPackageManager->addPackage(
-                curData.sLocalURL, OUString(), xAbortChannel, m_updateCmdEnv.get());
+                curData.sLocalURL, css::uno::Sequence<css::beans::NamedValue>(),
+                OUString(), xAbortChannel, m_updateCmdEnv.get());
         }
         catch (css::deployment::DeploymentException & de)
         {
