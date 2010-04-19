@@ -379,7 +379,6 @@ void SAL_CALL OSingleSelectQueryComposer::setCommand( const ::rtl::OUString& Com
         case CommandType::COMMAND:
             setElementaryQuery(Command);
             return;
-            break;
         case CommandType::TABLE:
             if ( m_xConnectionTables->hasByName(Command) )
             {

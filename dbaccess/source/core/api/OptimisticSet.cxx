@@ -457,14 +457,14 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
                     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(sQuery.makeStringAndClear()));
                     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
                     // and then the values of the where condition
-                    SelectColumnsMetaData::iterator aIter = m_pKeyColumnNames->begin();
-                    SelectColumnsMetaData::iterator aEnd = m_pKeyColumnNames->end();
+                    SelectColumnsMetaData::iterator aKeyCol = m_pKeyColumnNames->begin();
+                    SelectColumnsMetaData::iterator aKeysEnd = m_pKeyColumnNames->end();
                     sal_Int32 i = 1;
-                    for(;aIter != aEnd;++aIter)
+                    for(;aKeyCol != aKeysEnd;++aKeyCol)
                     {
-                        if ( aIter->second.sTableName == aSqlIter->first )
+                        if ( aKeyCol->second.sTableName == aSqlIter->first )
                         {
-                            setParameter(i++,xParameter,(_rInsertRow->get())[aIter->second.nPosition],aIter->second.nType,aIter->second.nScale);
+                            setParameter(i++,xParameter,(_rInsertRow->get())[aKeyCol->second.nPosition],aKeyCol->second.nType,aKeyCol->second.nScale);
                         }
                     }
                     Reference<XResultSet> xRes = xPrep->executeQuery();
@@ -1549,7 +1549,7 @@ bool OptimisticSet::updateColumnValues(const ORowSetValueVector::Vector& io_aCac
                 bRet = true;
                 SelectColumnsMetaData::const_iterator aIter = m_pColumnNames->begin();
                 SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
-                for(sal_Int32 i = 1;aIter != aEnd;++aIter)
+                for ( ;aIter != aEnd;++aIter )
                 {
                     if ( aIter->second.sTableName == sTableName )
                     {
@@ -1587,7 +1587,7 @@ bool OptimisticSet::columnValuesUpdated(ORowSetValueVector::Vector& o_aCachedRow
                 bRet = true;
                 SelectColumnsMetaData::const_iterator aIter2 = m_pColumnNames->begin();
                 SelectColumnsMetaData::const_iterator aEnd2 = m_pColumnNames->end();
-                for(sal_Int32 i = 1;aIter2 != aEnd2;++aIter2)
+                for ( ;aIter2 != aEnd2;++aIter2 )
                 {
                     if ( aIter2->second.sTableName == sTableName )
                     {
