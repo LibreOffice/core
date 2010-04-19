@@ -139,6 +139,7 @@ XmlFilterBase::XmlFilterBase( const Reference< XMultiServiceFactory >& rxGlobalF
         mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/main" ), NMSP_DRAWINGML );
         mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/diagram" ), NMSP_DIAGRAM );
         mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/chart" ), NMSP_CHART );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing" ), NMSP_CDR );
 
         mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:vml" ), NMSP_VML );
         mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:office" ), NMSP_OFFICE );
@@ -222,7 +223,6 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
         // try to open the fragment stream (this may fail - do not assert)
         Reference< XInputStream > xInStrm( rxHandler->openFragmentStream(), UNO_SET_THROW );
 
-        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing" ), NMSP_CDR );
         // create the input source and parse the stream
         InputSource aSource;
         aSource.aInputStream = xInStrm;
