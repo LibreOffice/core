@@ -1434,6 +1434,7 @@ void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition
     {
         OSL_ENSURE(pSearchCondition->count() == 2,"OSQLParseTreeIterator: error in parse tree!");
         const OSQLParseNode* pPart2 = pSearchCondition->getChild(1);
+        (void)pPart2;
         OSL_ENSURE(SQL_ISTOKEN(pPart2->getChild(0),IS),"OSQLParseTreeIterator: error in parse tree!");
 
         ::rtl::OUString aString;
