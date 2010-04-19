@@ -231,22 +231,6 @@ ModalDialog RID_URLOPEN
         Left = TRUE ;
     };
 };
-Menu RID_AUTOHIDE
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = SID_AUTOHIDE ;
-            HelpID = SID_AUTOHIDE ;
-            Text [ en-US ] = "Hide" ;
-        };
-    };
-};
-String RID_AUTOHIDE
-{
-    Text [ en-US ] = "Don't Hide" ;
-};
 String SID_NAVIGATOR
 {
     Text [ en-US ] = "Navigator";
