@@ -865,7 +865,7 @@
 #include "vcl/group.hxx"
 #include "vcl/help.hxx"
 #include "vcl/image.hxx"
-#include "vcl/imagebtn.hxx"
+#include "vcl/button.hxx"
 #include "vcl/jobset.hxx"
 #include "vcl/lineinfo.hxx"
 #include "vcl/lstbox.hxx"
