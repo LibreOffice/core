@@ -253,7 +253,7 @@ String SID_NAVIGATOR
 };
 String SID_TASKPANE
 {
-    Text [ en-US ] = "Tasks";
+    Text [ en-US ] = "Task Pane";
 };
 
 ErrorBox MSG_ERROR_WRONG_CONFIRM

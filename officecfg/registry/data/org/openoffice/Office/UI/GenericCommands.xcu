@@ -3422,7 +3422,7 @@
             </node>
       <node oor:name=".uno:TaskPane" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Tasks</value>
+          <value xml:lang="en-US">Task Pane</value>
         </prop>
       </node>
       <node oor:name=".uno:RestoreEditingView" oor:op="replace">
