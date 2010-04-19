@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdocirc.hxx,v $
- * $Revision: 1.5.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,20 +58,17 @@ public:
 class SVX_DLLPUBLIC SdrCircObj : public SdrRectObj
 {
 private:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
     // to allow sdr::properties::CircleProperties access to ImpSetAttrToCircInfo()
     friend class sdr::properties::CircleProperties;
 
     // only for SdrCircleAttributes
     SdrObjKind GetCircleKind() const { return meCircleKind; }
 
-    // DrawContact section
-private:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
 protected:
-     SdrObjKind                 meCircleKind;
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+
+    SdrObjKind                  meCircleKind;
     long                        nStartWink;
     long                        nEndWink;
 

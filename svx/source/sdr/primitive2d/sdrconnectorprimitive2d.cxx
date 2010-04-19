@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdrconnectorprimitive2d.cxx,v $
- *
- * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +31,8 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
-#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
+#include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -51,34 +48,45 @@ namespace drawinglayer
         {
             Primitive2DSequence aRetval;
 
-            // prepare unit transform
-            ::basegfx::B2DHomMatrix aEmptyMatrix;
-
             // add line
-            if(getSdrLSTAttribute().getLine())
+            if(getSdrLSTAttribute().getLine().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(getUnitPolygon(), aEmptyMatrix, *getSdrLSTAttribute().getLine(), getSdrLSTAttribute().getLineStartEnd()));
+                // create invisible line for HitTest/BoundRect
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createHiddenGeometryPrimitives2D(
+                        false,
+                        basegfx::B2DPolyPolygon(getUnitPolygon())));
             }
             else
             {
-                // if initially no line is defined, create one for HitTest and BoundRect
-                const attribute::SdrLineAttribute aBlackHairline(basegfx::BColor(0.0, 0.0, 0.0));
-                const Primitive2DReference xHiddenLineReference(createPolygonLinePrimitive(getUnitPolygon(), aEmptyMatrix, aBlackHairline));
-                const Primitive2DSequence xHiddenLineSequence(&xHiddenLineReference, 1);
-
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, Primitive2DReference(new HitTestPrimitive2D(xHiddenLineSequence)));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createPolygonLinePrimitive(
+                        getUnitPolygon(),
+                        basegfx::B2DHomMatrix(),
+                        getSdrLSTAttribute().getLine(),
+                        getSdrLSTAttribute().getLineStartEnd()));
             }
 
             // add text
-            if(getSdrLSTAttribute().getText())
+            if(!getSdrLSTAttribute().getText().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(::basegfx::B2DPolyPolygon(getUnitPolygon()), aEmptyMatrix, *getSdrLSTAttribute().getText(), getSdrLSTAttribute().getLine(), false, false, false));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createTextPrimitive(
+                        basegfx::B2DPolyPolygon(getUnitPolygon()),
+                        basegfx::B2DHomMatrix(),
+                        getSdrLSTAttribute().getText(),
+                        getSdrLSTAttribute().getLine(),
+                        false,
+                        false,
+                        false));
             }
 
             // add shadow
-            if(getSdrLSTAttribute().getShadow())
+            if(!getSdrLSTAttribute().getShadow().isDefault())
             {
-                aRetval = createEmbeddedShadowPrimitive(aRetval, *getSdrLSTAttribute().getShadow());
+                aRetval = createEmbeddedShadowPrimitive(
+                    aRetval,
+                    getSdrLSTAttribute().getShadow());
             }
 
             return aRetval;

@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewobjectcontactofmasterpagedescriptor.cxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,15 +94,13 @@ namespace sdr
             rDisplayInfo.SetProcessLayers(aPreprocessedLayers);
             rDisplayInfo.SetSubContentActive(true);
 
-            // check if there is a MasterPageBackgroundObject and if it's visible in the LayerSet
-            const SdrObject* pBackgroundCandidate = rDescriptor.GetBackgroundObject();
-
-            if(pBackgroundCandidate && aPreprocessedLayers.IsSet(pBackgroundCandidate->GetLayer()))
+            // check layer visibility (traditionally was member of layer 1)
+            if(aPreprocessedLayers.IsSet(1))
             {
                 // hide PageBackground for special DrawModes; historical reasons
                 if(!GetObjectContact().isDrawModeGray() && !GetObjectContact().isDrawModeHighContrast())
                 {
-                    // if yes, create the default background primitive sequence
+                    // if visible, create the default background primitive sequence
                     xRetval = static_cast< ViewContactOfMasterPageDescriptor& >(GetViewContact()).getViewIndependentPrimitive2DSequence();
                 }
             }

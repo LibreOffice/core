@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleTextHelper.cxx,v $
- * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,10 +49,6 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <com/sun/star/accessibility/AccessibleTextType.hpp>
-#include <com/sun/star/accessibility/XAccessibleText.hpp>
-#include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
@@ -70,18 +63,18 @@
 #include "AccessibleTextEventQueue.hxx"
 #include <svx/AccessibleTextHelper.hxx>
 #include <svx/unoshape.hxx>
-#include "unolingu.hxx"
-#include <svx/unotext.hxx>
+#include "editeng/unolingu.hxx"
+#include <editeng/unotext.hxx>
 
-#include "unoedhlp.hxx"
-#include "unopracc.hxx"
-#include "AccessibleParaManager.hxx"
-#include "AccessibleEditableTextPara.hxx"
+#include "editeng/unoedhlp.hxx"
+#include "editeng/unopracc.hxx"
+#include "editeng/AccessibleParaManager.hxx"
+#include "editeng/AccessibleEditableTextPara.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdpntv.hxx>
-#include <svx/editdata.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editview.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: jobresult.cxx,v $
- * $Revision: 1.8.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,7 +81,7 @@ JobResult::JobResult()
 /**
     @short      special ctor
     @descr      It initialize this new instance with a pure job execution result
-                and analyze it. Doing so, we actualize our other members.
+                and analyze it. Doing so, we update our other members.
 
                 <p>
                 It's a list of named values, packed inside this any.
@@ -136,7 +133,7 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
     // That can be usefull if something will fail here ...
     m_eParts = E_NOPART;
 
-    // analyze the result and actualize our other members
+    // analyze the result and update our other members
     ::comphelper::SequenceAsHashMap aProtocol(aResult);
     if ( aProtocol.empty() )
         return;

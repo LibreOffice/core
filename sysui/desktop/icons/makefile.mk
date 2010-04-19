@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,6 +37,33 @@ TARGET=icons
 # --- Targets -------------------------------------------------------------
 
 all: \
+    $(MISC)$/oasis-database.ico \
+    $(MISC)$/oasis-drawing-template.ico \
+    $(MISC)$/oasis-drawing.ico \
+    $(MISC)$/oasis-empty-template.ico \
+    $(MISC)$/oasis-empty-document.ico \
+    $(MISC)$/oasis-formula.ico \
+    $(MISC)$/oasis-master-document.ico \
+    $(MISC)$/oasis-presentation-template.ico \
+    $(MISC)$/oasis-presentation.ico \
+    $(MISC)$/oasis-spreadsheet-template.ico \
+    $(MISC)$/oasis-spreadsheet.ico \
+    $(MISC)$/oasis-text-template.ico \
+    $(MISC)$/oasis-text.ico \
+    $(MISC)$/oasis-web-template.ico \
+    $(MISC)$/database.ico \
+    $(MISC)$/drawing-template.ico \
+    $(MISC)$/drawing.ico \
+    $(MISC)$/empty-template.ico \
+    $(MISC)$/empty-document.ico \
+    $(MISC)$/formula.ico \
+    $(MISC)$/master-document.ico \
+    $(MISC)$/presentation-template.ico \
+    $(MISC)$/presentation.ico \
+    $(MISC)$/spreadsheet-template.ico \
+    $(MISC)$/spreadsheet.ico \
+    $(MISC)$/text-template.ico \
+    $(MISC)$/text.ico \
     $(MISC)$/ooo-base-app.ico \
     $(MISC)$/ooo-base-doc.ico \
     $(MISC)$/ooo-calc-app.ico \

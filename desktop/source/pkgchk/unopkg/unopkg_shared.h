@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unopkg_shared.h,v $
- * $Revision: 1.9.8.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -166,7 +163,8 @@ css::uno::Reference<css::ucb::XCommandEnvironment> createCmdEnv(
     ::rtl::OUString const & logFile,
     bool option_force_overwrite,
     bool option_verbose,
-    bool option_bundled);
+    bool option_bundled,
+    bool option_suppressLicense);
 
 //==============================================================================
 void printf_packages(

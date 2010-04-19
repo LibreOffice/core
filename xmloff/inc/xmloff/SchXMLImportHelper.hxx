@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SchXMLImportHelper.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -138,10 +135,6 @@ public:
     const SvXMLTokenMap& GetRegEquationAttrTokenMap();
 
     static sal_uInt16 GetChartFamilyID() { return XML_STYLE_FAMILY_SCH_CHART_ID; }
-
-    sal_Int32   GetNumberOfSeries();
-    sal_Int32   GetLengthOfSeries();
-    void        ResizeChartData( sal_Int32 nSeries, sal_Int32 nDataPoints = -1 );
 
     /** @param bPushLastChartType If </FALSE>, in case a new chart type has to
                be added (because it does not exist yet), it is appended at the

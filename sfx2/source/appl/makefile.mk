@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.56 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -93,6 +89,7 @@ SFX_OBJECTS = \
     $(SLO)$/appuno.obj \
     $(SLO)$/appbaslib.obj \
     $(SLO)$/childwin.obj \
+    $(SLO)$/fileobj.obj			\
     $(SLO)$/helpdispatch.obj \
     $(SLO)$/helpinterceptor.obj \
     $(SLO)$/imagemgr.obj\
@@ -103,6 +100,7 @@ SFX_OBJECTS = \
         $(SLO)$/lnkbase2.obj \
     $(SLO)$/module.obj \
     $(SLO)$/newhelp.obj \
+    $(SLO)$/opengrf.obj			\
     $(SLO)$/sfxdll.obj \
     $(SLO)$/sfxhelp.obj \
     $(SLO)$/sfxpicklist.obj \
@@ -143,8 +141,10 @@ EXCEPTIONSFILES=\
     $(SLO)$/appmisc.obj			\
     $(SLO)$/appinit.obj			\
     $(SLO)$/appcfg.obj			\
+    $(SLO)$/fileobj.obj			\
     $(SLO)$/helpinterceptor.obj	\
     $(SLO)$/newhelp.obj			\
+    $(SLO)$/opengrf.obj			\
     $(SLO)$/sfxhelp.obj			\
     $(SLO)$/shutdownicon.obj	\
     $(SLO)$/shutdowniconw32.obj \

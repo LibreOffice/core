@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdpntv.cxx,v $
- * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include <svx/svdpntv.hxx>
 #include <vcl/msgbox.hxx>
 #include <sdrpaintwindow.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <svx/svdmodel.hxx>
 
 #ifdef DBG_UTIL
@@ -45,7 +42,7 @@
 #include <svl/smplhint.hxx>
 
 #include <svx/svdpntv.hxx>
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <svx/svdmrkv.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
@@ -67,7 +64,7 @@
 #include <svx/svdview.hxx>
 #include <svx/sxlayitm.hxx>
 #include <svl/itemiter.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/style.hxx>
 #include <svx/sdrpagewindow.hxx>
@@ -297,6 +294,9 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut)
 SdrPaintView::~SdrPaintView()
 {
     DBG_DTOR(SdrPaintView,NULL);
+    if (pDefaultStyleSheet)
+        EndListening(*pDefaultStyleSheet);
+
     maColorConfig.RemoveListener(this);
     ClearPageView();
 
@@ -320,8 +320,16 @@ SdrPaintView::~SdrPaintView()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void __EXPORT SdrPaintView::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
+void __EXPORT SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
+    //If the stylesheet has been destroyed
+    if (&rBC == pDefaultStyleSheet)
+    {
+        if (rHint.ISA(SfxSimpleHint) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING)
+            pDefaultStyleSheet = NULL;
+        return;
+    }
+
     BOOL bObjChg=!bSomeObjChgdFlag; // TRUE= auswerten fuer ComeBack-Timer
     if (bObjChg) {
         SdrHint* pSdrHint=PTR_CAST(SdrHint,&rHint);
@@ -336,7 +344,7 @@ void __EXPORT SdrPaintView::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             if (eKind==HINT_PAGEORDERCHG) {
                 const SdrPage* pPg=pSdrHint->GetPage();
 
-                if(!pPg->IsInserted())
+                if(pPg && !pPg->IsInserted())
                 {
                     if(mpPageView && mpPageView->GetPage() == pPg)
                     {
@@ -1241,7 +1249,12 @@ void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, BOOL bReplaceAll)
 
 void SdrPaintView::SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr)
 {
+    if (pDefaultStyleSheet)
+        EndListening(*pDefaultStyleSheet);
     pDefaultStyleSheet=pStyleSheet;
+    if (pDefaultStyleSheet)
+        StartListening(*pDefaultStyleSheet);
+
     if (pStyleSheet!=NULL && !bDontRemoveHardAttr) {
         SfxWhichIter aIter(pStyleSheet->GetItemSet());
         USHORT nWhich=aIter.FirstWhich();

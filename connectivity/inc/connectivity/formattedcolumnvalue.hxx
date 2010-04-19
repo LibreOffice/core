@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: formattedcolumnvalue.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +33,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/sdb/XColumnUpdate.hpp>
+#include <com/sun/star/util/XNumberFormatter.hpp>
 /** === end UNO includes === **/
 
 #include <boost/noncopyable.hpp>
@@ -75,6 +73,19 @@ namespace dbtools
             const ::comphelper::ComponentContext& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxRowSet,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn
+        );
+
+        /** constructs an instance
+
+            The format key for the string value exchange is taken from the given column object.
+            If it has a non-<NULL/> property value <code>FormatKey</code>, this key is taken.
+            Otherwise, a default format matching the column type is determined.
+
+            The locale of this fallback format is the current system locale.
+        */
+        FormattedColumnValue(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& i_rNumberFormatter,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_rColumn
         );
 
         // note that all methods of this class need to be virtual, since it's

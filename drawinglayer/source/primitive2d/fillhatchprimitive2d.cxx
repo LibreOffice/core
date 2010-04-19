@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: fillhatchprimitive2d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.6 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:20 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -57,65 +49,73 @@ namespace drawinglayer
     {
         Primitive2DSequence FillHatchPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            // create hatch
-            const basegfx::BColor aHatchColor(maFillHatch.getColor());
-            const double fAngle(-maFillHatch.getAngle());
-            ::std::vector< basegfx::B2DHomMatrix > aMatrices;
+            Primitive2DSequence aRetval;
 
-            // get hatch transformations
-            switch(maFillHatch.getStyle())
+            if(!getFillHatch().isDefault())
             {
-                case attribute::HATCHSTYLE_TRIPLE:
+                // create hatch
+                const basegfx::BColor aHatchColor(getFillHatch().getColor());
+                const double fAngle(-getFillHatch().getAngle());
+                ::std::vector< basegfx::B2DHomMatrix > aMatrices;
+
+                // get hatch transformations
+                switch(getFillHatch().getStyle())
                 {
-                    // rotated 45 degrees
-                    texture::GeoTexSvxHatch aHatch(getObjectRange(), maFillHatch.getDistance(), fAngle + F_PI4);
-                    aHatch.appendTransformations(aMatrices);
+                    case attribute::HATCHSTYLE_TRIPLE:
+                    {
+                        // rotated 45 degrees
+                        texture::GeoTexSvxHatch aHatch(getObjectRange(), getFillHatch().getDistance(), fAngle + F_PI4);
+                        aHatch.appendTransformations(aMatrices);
 
-                    // fall-through by purpose
+                        // fall-through by purpose
+                    }
+                    case attribute::HATCHSTYLE_DOUBLE:
+                    {
+                        // rotated 90 degrees
+                        texture::GeoTexSvxHatch aHatch(getObjectRange(), getFillHatch().getDistance(), fAngle + F_PI2);
+                        aHatch.appendTransformations(aMatrices);
+
+                        // fall-through by purpose
+                    }
+                    case attribute::HATCHSTYLE_SINGLE:
+                    {
+                        // angle as given
+                        texture::GeoTexSvxHatch aHatch(getObjectRange(), getFillHatch().getDistance(), fAngle);
+                        aHatch.appendTransformations(aMatrices);
+                    }
                 }
-                case attribute::HATCHSTYLE_DOUBLE:
+
+                // prepare return value
+                const bool bFillBackground(getFillHatch().isFillBackground());
+                aRetval.realloc(bFillBackground ? aMatrices.size() + 1L : aMatrices.size());
+
+                // evtl. create filled background
+                if(bFillBackground)
                 {
-                    // rotated 90 degrees
-                    texture::GeoTexSvxHatch aHatch(getObjectRange(), maFillHatch.getDistance(), fAngle + F_PI2);
-                    aHatch.appendTransformations(aMatrices);
-
-                    // fall-through by purpose
+                    // create primitive for background
+                    const Primitive2DReference xRef(
+                        new PolyPolygonColorPrimitive2D(
+                            basegfx::B2DPolyPolygon(
+                                basegfx::tools::createPolygonFromRect(getObjectRange())), getBColor()));
+                    aRetval[0] = xRef;
                 }
-                case attribute::HATCHSTYLE_SINGLE:
+
+                // create primitives
+                const basegfx::B2DPoint aStart(0.0, 0.0);
+                const basegfx::B2DPoint aEnd(1.0, 0.0);
+
+                for(sal_uInt32 a(0L); a < aMatrices.size(); a++)
                 {
-                    // angle as given
-                    texture::GeoTexSvxHatch aHatch(getObjectRange(), maFillHatch.getDistance(), fAngle);
-                    aHatch.appendTransformations(aMatrices);
+                    const basegfx::B2DHomMatrix& rMatrix = aMatrices[a];
+                    basegfx::B2DPolygon aNewLine;
+
+                    aNewLine.append(rMatrix * aStart);
+                    aNewLine.append(rMatrix * aEnd);
+
+                    // create hairline
+                    const Primitive2DReference xRef(new PolygonHairlinePrimitive2D(aNewLine, aHatchColor));
+                    aRetval[bFillBackground ? (a + 1) : a] = xRef;
                 }
-            }
-
-            // prepare return value
-            const bool bFillBackground(maFillHatch.isFillBackground());
-            Primitive2DSequence aRetval(bFillBackground ? aMatrices.size() + 1L : aMatrices.size());
-
-            // evtl. create filled background
-            if(bFillBackground)
-            {
-                // create primitive for background
-                const Primitive2DReference xRef(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(getObjectRange())), maBColor));
-                aRetval[0L] = xRef;
-            }
-
-            // create primitives
-            const basegfx::B2DPoint aStart(0.0, 0.0);
-            const basegfx::B2DPoint aEnd(1.0, 0.0);
-
-            for(sal_uInt32 a(0L); a < aMatrices.size(); a++)
-            {
-                const basegfx::B2DHomMatrix& rMatrix = aMatrices[a];
-                basegfx::B2DPolygon aNewLine;
-
-                aNewLine.append(rMatrix * aStart);
-                aNewLine.append(rMatrix * aEnd);
-
-                // create hairline
-                const Primitive2DReference xRef(new PolygonHairlinePrimitive2D(aNewLine, aHatchColor));
-                aRetval[bFillBackground ? (a + 1L) : a] = xRef;
             }
 
             return aRetval;
@@ -139,8 +139,8 @@ namespace drawinglayer
                 const FillHatchPrimitive2D& rCompare = (FillHatchPrimitive2D&)rPrimitive;
 
                 return (getObjectRange() == rCompare.getObjectRange()
-                    && maFillHatch == rCompare.maFillHatch
-                    && maBColor == rCompare.maBColor);
+                    && getFillHatch() == rCompare.getFillHatch()
+                    && getBColor() == rCompare.getBColor());
             }
 
             return false;

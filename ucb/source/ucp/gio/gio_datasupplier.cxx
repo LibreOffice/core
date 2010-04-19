@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gio_datasupplier.cxx,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -239,11 +236,31 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues( sal_uInt32 nInde
 
     if ( getResult( nIndex ) )
     {
-        uno::Reference< sdbc::XRow > xRow = Content::getPropertyValuesFromGFileInfo(
-            maResults[ nIndex ]->pInfo, m_xSMgr, getResultSet()->getEnvironment(), getResultSet()->getProperties());
-
-        maResults[ nIndex ]->xRow = xRow;
-        return xRow;
+        uno::Reference< ucb::XContent > xContent( queryContent( nIndex ) );
+        if ( xContent.is() )
+        {
+            try
+            {
+                uno::Reference< ucb::XCommandProcessor > xCmdProc(
+                    xContent, uno::UNO_QUERY_THROW );
+                sal_Int32 nCmdId( xCmdProc->createCommandIdentifier() );
+                ucb::Command aCmd;
+                aCmd.Name = rtl::OUString::createFromAscii( "getPropertyValues" );
+                aCmd.Handle = -1;
+                aCmd.Argument <<= getResultSet()->getProperties();
+                uno::Any aResult( xCmdProc->execute(
+                    aCmd, nCmdId, getResultSet()->getEnvironment() ) );
+                uno::Reference< sdbc::XRow > xRow;
+                if ( aResult >>= xRow )
+                {
+                    maResults[ nIndex ]->xRow = xRow;
+                    return xRow;
+                }
+            }
+            catch ( uno::Exception const & )
+            {
+            }
+        }
     }
     return uno::Reference< sdbc::XRow >();
 }

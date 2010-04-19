@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fmstring.src,v $
- * $Revision: 1.76 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -216,10 +213,6 @@ String RID_STR_PROPTITLE_EDIT
 String RID_STR_PROPTITLE_FORMATTED
 {
     Text [ en-US ] = "Formatted Field";
-};
-String RID_STR_MOVING_CURSOR
-{
-    Text [ en-US ] = "align data source";
 };
 String RID_STR_PROPTITLE_LISTBOX
 {

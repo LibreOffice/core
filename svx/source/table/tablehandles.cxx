@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tablehandles.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +47,7 @@
 #include <svx/svdpagv.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <svx/sdr/overlay/overlayhatchrect.hxx>
-#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
+#include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 
 namespace sdr { namespace table {
 
@@ -245,10 +242,11 @@ drawinglayer::primitive2d::Primitive2DSequence OverlayTableEdge::createOverlayOb
         }
         else
         {
-            // embed in HitTest primitive to support HitTest of this overlay object
+            // embed in HiddenGeometryPrimitive2D to support HitTest of this invisible
+            // overlay object
             const drawinglayer::primitive2d::Primitive2DSequence aSequence(&aReference, 1);
             const drawinglayer::primitive2d::Primitive2DReference aNewReference(
-                new drawinglayer::primitive2d::HitTestPrimitive2D(aSequence));
+                new drawinglayer::primitive2d::HiddenGeometryPrimitive2D(aSequence));
             aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aNewReference, 1);
         }
     }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: appdde.cxx,v $
- * $Revision: 1.19.142.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +46,7 @@
 #include "appdata.hxx"
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include "sfxtypes.hxx"
 #include <sfx2/sfxsids.hrc>
@@ -596,17 +593,12 @@ BOOL ImplDdeService::MakeTopic( const String& rNm )
             // dann versuche die Datei zu laden:
             SfxStringItem aName( SID_FILE_NAME, aFile.GetMainURL( INetURLObject::NO_DECODE ) );
             SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, TRUE);
-//          SfxBoolItem aHidden(SID_HIDDEN, TRUE);
-            // minimiert!
-            SfxUInt16Item aViewStat( SID_VIEW_ZOOM_MODE, 0 );
-            SfxRectangleItem aRectItem( SID_VIEW_POS_SIZE, Rectangle() );
 
             SfxBoolItem aSilent(SID_SILENT, TRUE);
             SfxDispatcher* pDispatcher = SFX_APP()->GetDispatcher_Impl();
             const SfxPoolItem* pRet = pDispatcher->Execute( SID_OPENDOC,
                     SFX_CALLMODE_SYNCHRON,
                     &aName, &aNewView,
-                    &aViewStat,&aRectItem/*aHidden*/,
                     &aSilent, 0L );
 
             if( pRet && pRet->ISA( SfxViewFrameItem ) &&
@@ -632,7 +624,7 @@ String ImplDdeService::Topics()
     SfxObjectShell* pShell = SfxObjectShell::GetFirst( &aType );
     while( pShell )
     {
-        if( SfxViewFrame::GetFirst( pShell, TYPE(SfxTopViewFrame) ))
+        if( SfxViewFrame::GetFirst( pShell ) )
         {
             if( sRet.Len() )
                 sRet += '\t';
