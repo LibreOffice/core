@@ -45,9 +45,9 @@ $(eval $(call gb_Module_read_includes,svtools,\
     lib_productregistration \
     lib_svt \
     package_inc \
-))
-    #res_svt \
+    res_svt \
     res_productregistration \
+))
 
 #todo: javapatchres
 #todo: jpeg on mac in svtools/util/makefile.mk

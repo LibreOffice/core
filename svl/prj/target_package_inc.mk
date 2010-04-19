@@ -26,7 +26,6 @@
 #*************************************************************************
 
 $(eval $(call gb_Package_Package,svl_inc,$(SRCDIR)/svl/inc))
-$(eval $(call gb_Package_add_file,svl_inc,inc/svl/cancel.hxx,svl/cancel.hxx))
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/macitem.hxx,svl/macitem.hxx))
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/nfversi.hxx,svl/nfversi.hxx))
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/rectitem.hxx,svl/rectitem.hxx))
