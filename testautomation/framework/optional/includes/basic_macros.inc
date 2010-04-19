@@ -232,8 +232,8 @@ testcase tMakro_Dialog
 
         printlog( "Press 'OK' to append the library" )
         kontext "appendlibraries"
-        if ( hClickButton( AppandLibraries ) = RC_TIMEOUT ) then
-            warnlog( "#i85254# Appending libraries leads to crash" )
+        if ( hClickButton( AppendLibraries ) = RC_TIMEOUT ) then
+            warnlog( "#i85254# Appending libraries failed" )
         endif
 
         printlog( "Check the number of libraries in list (should be two)" )
