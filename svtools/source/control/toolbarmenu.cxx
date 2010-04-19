@@ -1381,6 +1381,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
 
     DecorationView aDecoView( this );
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
+    const bool bUseImages = rSettings.GetUseImagesInMenus();
 
     int nOuterSpace = 0; // ImplGetSVData()->maNWFData.mnMenuFormatExtraBorder;
     Point aTopLeft( nOuterSpace, nOuterSpace ), aTmpPos;
@@ -1513,7 +1514,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                 }
 
                 // Image:
-                if( pEntry->mbHasImage )
+                if( pEntry->mbHasImage && bUseImages )
                 {
                     // Don't render an image for a check thing
                      /* if((nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES) || !pEntry->HasCheck() )*/
