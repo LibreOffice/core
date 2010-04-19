@@ -374,6 +374,10 @@ function hStandardbarNewDialog()
     
     const CFN = "hStandardbarNewDialog::"
     const ITEM_MENU_POSITION = 3
+    const TEMPLATE_DIALOG_MAX_RETRIES = 3
+    const RC_TIMEOUT = -1
+
+    dim iTry as integer
 
     printlog( CFN & "Enter" )
 
@@ -390,31 +394,36 @@ function hStandardbarNewDialog()
     hToggleToolbarItem( ITEM_MENU_POSITION )
 
     '///+<li>click the button</li>
-    Kontext "Standardbar"
-    hClickButton( NeuDialog )
-    
-    '///+<li>handle possible dialogs (there should never be one)</li>
-    kontext "Active"
-    if ( active.exists( 1 ) ) then
-        warnlog( CFN & "Unexpected active" )
-        printlog( CFN & active.gettext() )
-        try
-            printlog( CFN & "Closing dialog" )
-            active.ok()
-        catch
-            warnlog( CFN & "Unknown dialog blocks test, now crashing" )
-        endcatch
-    endif
+    for iTry = 1 to TEMPLATE_DIALOG_MAX_RETRIES
 
-    '///+<li>close the templates and samples dialog</li>
-    printlog( CFN & "Close templates and samples (cancel)" )
-    Kontext "TemplateAndDocuments"
-    if ( TemplateAndDocuments.Exists( 10 ) ) then
-        hCloseDialog( TemplateAndDocuments, "cancel" )
-    else
-        warnlog( CFN & "The 'Template and Documents'-dialog was not activated" )
-    endif
-   
+        Kontext "Standardbar"
+        hClickButton( NeuDialog )
+
+        '///+<li>handle possible dialogs (there should never be one)</li>
+        kontext "Active"
+        if ( active.exists() ) then
+            warnlog( CFN & "Unexpected active" )
+            printlog( CFN & active.gettext() )
+            if ( hCloseDialog( Active, "ok" ) = RC_TIMEOUT ) then
+                warnlog( CFN & "Unknown dialog blocks test, now crashing" )
+            endif
+        endif
+
+        '///+<li>close the templates and samples dialog</li>
+        printlog( CFN & "Close templates and samples (cancel)" )
+        Kontext "TemplateAndDocuments"
+        if ( TemplateAndDocuments.Exists( 5 ) ) then
+            hCloseDialog( TemplateAndDocuments, "cancel" )
+            exit for
+        else
+            if ( iTry = TEMPLATE_DIALOG_MAX_RETRIES ) then
+                warnlog( CFN & "The 'Template and Documents'-dialog was not activated" )
+            endif
+        endif
+
+    next iTry
+
+
     '///+<li>finally remove the button from the toolbar</li>
     printlog( CFN & "Deactivate New from Template button" )
     hToggleToolbarItem( ITEM_MENU_POSITION )
