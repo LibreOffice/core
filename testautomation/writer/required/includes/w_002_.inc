@@ -63,6 +63,9 @@ sub w_002_
     'Writer Master Document
     gApplication = "MASTERDOCUMENT"
     Call tMasterDocEditNavigator
+
+    Call tHtmlDocEditFields
+
     gApplication = "WRITER"
 
 end sub
@@ -984,6 +987,24 @@ endcase
 
 testcase tEditFields
 
+    gApplication = "WRITER"
+    call sEditFields()
+
+endcase
+
+' ----------------------------------------------------------------
+
+testcase tHtmlDocEditFields
+
+    gApplication = "HTML"
+    call sEditFields()
+
+endcase
+
+' ----------------------------------------------------------------
+
+sub sEditfields
+
     PrintLog( "Edit/Fields: Edit Fields dialog: " & gApplication )
     dim iCurrentType as integer
 
@@ -1058,7 +1079,7 @@ testcase tEditFields
     PrintLog( "Close active document" )
     Call hCloseDocument()
 
-endcase
+end sub
 
 '----------------------------------------------------------------
 
