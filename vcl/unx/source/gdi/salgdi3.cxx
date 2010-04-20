@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: salgdi3.cxx,v $
- * $Revision: 1.157.12.2 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -1455,21 +1452,17 @@ void X11SalGraphics::DrawStringUCS2MB( ExtendedFontStruct& rFont,
 ImplFontCharMap* X11SalGraphics::GetImplFontCharMap() const
 {
     // TODO: get ImplFontCharMap directly from fonts
-    int nPairCount = 0;
-    if( mpServerFont[0] )
-        nPairCount = mpServerFont[0]->GetFontCodeRanges( NULL );
-    else if( mXFont[0] )
-        nPairCount = mXFont[0]->GetFontCodeRanges( NULL );
-
-    if( !nPairCount )
+    if( !mpServerFont[0] )
+#if 0 // RIP XLFD fonts
+    if( mXFont[0] )
+        // TODO?: nPairCount = mXFont[0]->GetFontCodeRanges( NULL );
+#endif
         return NULL;
 
-    sal_uInt32* pCodePairs = new sal_uInt32[ 2 * nPairCount ];
-    if( mpServerFont[0] )
-        mpServerFont[0]->GetFontCodeRanges( pCodePairs );
-    else if( mXFont[0] )
-        mXFont[0]->GetFontCodeRanges( pCodePairs );
-    return new ImplFontCharMap( nPairCount, pCodePairs );
+    CmapResult aCmapResult;
+    if( !mpServerFont[0]->GetFontCodeRanges( aCmapResult ) )
+        return NULL;
+    return new ImplFontCharMap( aCmapResult );
 }
 
 // ----------------------------------------------------------------------------
@@ -1750,21 +1743,26 @@ BOOL X11SalGraphics::CreateFontSubset(
                                    sal_Int32* pGlyphIDs,
                                    sal_uInt8* pEncoding,
                                    sal_Int32* pWidths,
-                                   int nGlyphs,
+                                   int nGlyphCount,
                                    FontSubsetInfo& rInfo
                                    )
 {
-#ifndef _USE_PRINT_EXTENSION_
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
     // export has filtered its list of subsettable fonts (for
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the ImplFontData pFont
     psp::fontID aFont = pFont->GetFontId();
-    return PspGraphics::DoCreateFontSubset( rToFile, aFont, pGlyphIDs, pEncoding, pWidths, nGlyphs, rInfo );
-#else
-    return FALSE;
-#endif
+
+    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+    bool bSuccess = rMgr.createFontSubset( rInfo,
+                                 aFont,
+                                 rToFile,
+                                 pGlyphIDs,
+                                 pEncoding,
+                                 pWidths,
+                                 nGlyphCount );
+    return bSuccess;
 }
 
 //--------------------------------------------------------------------------

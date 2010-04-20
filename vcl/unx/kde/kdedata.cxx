@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: kdedata.cxx,v $
- * $Revision: 1.21 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -235,6 +232,16 @@ void KDEData::Init()
 extern "C" {
     VCL_DLLPUBLIC SalInstance* create_SalInstance( oslModule )
     {
+        /* #i92121# workaround deadlocks in the X11 implementation
+        */
+        static const char* pNoXInitThreads = getenv( "SAL_NO_XINITTHREADS" );
+        /* #i90094#
+           from now on we know that an X connection will be
+           established, so protect X against itself
+        */
+        if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
+            XInitThreads();
+
         rtl::OString aVersion( qVersion() );
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "qt version string is \"%s\"\n", aVersion.getStr() );
@@ -248,7 +255,7 @@ extern "C" {
         if( nMajor != 3 || nMinor < 2 || (nMinor == 2 && nMicro < 2) )
         {
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "unsuitable qt version %"SAL_PRIdINT32".%"SAL_PRIdINT32".%"SAL_PRIdINT32"\n", nMajor, nMinor, nMicro );
+            fprintf( stderr, "unsuitable qt version %d.%d.%d\n", (int)nMajor, (int)nMinor, (int)nMicro );
 #endif
             return NULL;
         }

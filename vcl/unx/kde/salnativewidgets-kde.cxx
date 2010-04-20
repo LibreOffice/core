@@ -1996,6 +1996,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         }
 
         aStyleSettings.SetMenuTextColor( aMenuFore );
+        aStyleSettings.SetMenuBarTextColor( aMenuFore );
         aStyleSettings.SetMenuColor( aMenuBack );
         aStyleSettings.SetMenuBarColor( aMenuBack );
 
@@ -2034,13 +2035,6 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 
     // Scroll bar size
     aStyleSettings.SetScrollBarSize( kapp->style().pixelMetric( QStyle::PM_ScrollBarExtent ) );
-
-    /* #i35482# do not override HC mode
-    // #i59364# high contrast mode
-    bool bHC = ( aStyleSettings.GetFaceColor().IsDark() ||
-                 aStyleSettings.GetWindowColor().IsDark() );
-    aStyleSettings.SetHighContrastMode( bHC );
-    */
 
     rSettings.SetStyleSettings( aStyleSettings );
 }

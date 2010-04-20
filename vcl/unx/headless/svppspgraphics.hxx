@@ -72,13 +72,6 @@ public:
     virtual ~PspGraphics();
 
     // helper methods for sharing with X11SalGraphics
-    static bool DoCreateFontSubset( const rtl::OUString& rToFile,
-                                    psp::fontID aFont,
-                                    sal_Int32* pGlyphIDs,
-                                    sal_uInt8* pEncoding,
-                                    sal_Int32* pWidths,
-                                    int nGlyphs,
-                                    FontSubsetInfo& rInfo );
     static const void* DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen );
     static void DoFreeEmbedFontData( const void* pData, long nLen );
     static const Ucs2SIntMap* DoGetFontEncodingVector( psp::fontID aFont, const Ucs2OStrMap** pNonEncoded );

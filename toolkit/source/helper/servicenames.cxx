@@ -101,4 +101,8 @@ const sal_Char __FAR_DATA szServiceName_UnoThrobberControlModel[] = "com.sun.sta
 const sal_Char __FAR_DATA szServiceName_UnoThrobberControl[] = "com.sun.star.awt.UnoThrobberControl", szServiceName2_UnoThrobberControl[] = "com.sun.star.awt.UnoControlThrobber";
 const sal_Char __FAR_DATA szServiceName_UnoControlFixedHyperlink[] = "com.sun.star.awt.UnoControlFixedHyperlink";
 const sal_Char __FAR_DATA szServiceName_UnoControlFixedHyperlinkModel[] = "com.sun.star.awt.UnoControlFixedHyperlinkModel";
-
+const sal_Char __FAR_DATA szServiceName_GridControl[] = "com.sun.star.awt.grid.UnoControlGrid";
+const sal_Char __FAR_DATA szServiceName_GridControlModel[] = "com.sun.star.awt.grid.UnoControlGridModel";
+const sal_Char __FAR_DATA szServiceName_DefaultGridDataModel[] = "com.sun.star.awt.grid.DefaultGridDataModel";
+const sal_Char __FAR_DATA szServiceName_DefaultGridColumnModel[] = "com.sun.star.awt.grid.DefaultGridColumnModel";
+const sal_Char __FAR_DATA szServiceName_GridColumn[] = "com.sun.star.awt.grid.GridColumn";

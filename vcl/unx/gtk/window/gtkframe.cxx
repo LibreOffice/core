@@ -1123,7 +1123,7 @@ void GtkSalFrame::SetIcon( USHORT nIcon )
     USHORT nIndex;
 
     // Use high contrast icons where appropriate
-    if( Application::GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+    if( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         nOffsets[0] = SV_ICON_LARGE_HC_START;
         nOffsets[1] = SV_ICON_SMALL_HC_START;
@@ -1506,7 +1506,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHOR
 
         if( isChild( false, true ) )
             gtk_widget_set_size_request( m_pWindow, nWidth, nHeight );
-        else
+        else if( ! ( m_nState & GDK_WINDOW_STATE_MAXIMIZED ) )
             gtk_window_resize( GTK_WINDOW(m_pWindow), nWidth, nHeight );
         setMinMaxSize();
     }
@@ -1608,6 +1608,7 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
         SAL_FRAMESTATE_MASK_MAXIMIZED_WIDTH | SAL_FRAMESTATE_MASK_MAXIMIZED_HEIGHT;
 
     if( (pState->mnMask & SAL_FRAMESTATE_MASK_STATE) &&
+        ! ( m_nState & GDK_WINDOW_STATE_MAXIMIZED ) &&
         (pState->mnState & SAL_FRAMESTATE_MAXIMIZED) &&
         (pState->mnMask & nMaxGeometryMask) == nMaxGeometryMask )
     {

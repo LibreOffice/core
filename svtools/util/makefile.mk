@@ -84,6 +84,7 @@ LIB7FILES=	\
         $(SLB)$/svhtml.lib     \
         $(SLB)$/svrtf.lib	\
         $(SLB)$/heavyconfig.lib 	\
+        $(SLB)$/table.lib 	\
         $(SLB)$/java.lib	
 
 LIB8TARGET= $(SLB)$/svl.lib

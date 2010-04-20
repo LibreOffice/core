@@ -202,6 +202,12 @@ IMPL_CREATEINSTANCE( UnoThrobberControlModel )
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL TreeControl_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL TreeControlModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL MutableTreeDataModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL GridControl_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL GridControlModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL DefaultGridDataModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL DefaultGridColumnModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL GridColumn_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+
 extern sal_Bool SAL_CALL comp_AsyncCallback_component_writeInfo( void * serviceManager, void * registryKey );
 extern void * SAL_CALL comp_AsyncCallback_component_getFactory( const char * implName, void * serviceManager, void * registryKey );
 
@@ -287,6 +293,11 @@ TOOLKIT_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager,
         registerServices( xRegistryKey, "UnoThrobberControl", szServiceName_UnoThrobberControl, szServiceName2_UnoThrobberControl );
         registerServices( xRegistryKey, "UnoFixedHyperlinkControl", szServiceName_UnoControlFixedHyperlink );
         registerServices( xRegistryKey, "UnoControlFixedHyperlinkModel", szServiceName_UnoControlFixedHyperlinkModel );
+        registerServices( xRegistryKey, "GridControl", szServiceName_GridControl );
+        registerServices( xRegistryKey, "GridControlModel", szServiceName_GridControlModel );
+        registerServices( xRegistryKey, "DefaultGridDataModel", szServiceName_DefaultGridDataModel );
+        registerServices( xRegistryKey, "DefaultGridColumnModel", szServiceName_DefaultGridColumnModel );
+        registerServices( xRegistryKey, "GridColumn", szServiceName_GridColumn );
 
         comp_AsyncCallback_component_writeInfo( _pServiceManager, _pRegistryKey );
         comp_Layout_component_writeInfo( _pServiceManager, _pRegistryKey );
@@ -369,6 +380,12 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL component_getFactory( const sal_Char* sImplemen
         CHECKANDCREATEFACTORY( UnoThrobberControl, szServiceName_UnoThrobberControl, szServiceName2_UnoThrobberControl )
         CHECKANDCREATEFACTORY( UnoFixedHyperlinkControl, szServiceName_UnoControlFixedHyperlink, NULL )
         CHECKANDCREATEFACTORY( UnoControlFixedHyperlinkModel, szServiceName_UnoControlFixedHyperlinkModel, NULL )
+        CHECKANDCREATEFACTORY( GridControl, szServiceName_GridControl, NULL );
+         CHECKANDCREATEFACTORY( GridControlModel, szServiceName_GridControlModel, NULL );
+        CHECKANDCREATEFACTORY( DefaultGridDataModel, szServiceName_DefaultGridDataModel, NULL );
+        CHECKANDCREATEFACTORY( DefaultGridColumnModel, szServiceName_DefaultGridColumnModel, NULL );
+        CHECKANDCREATEFACTORY( GridColumn, szServiceName_GridColumn, NULL );
+
 
         if ( rtl_str_compare( sImplementationName, "com.sun.star.awt.comp.AsyncCallback" ) == 0 )
             return comp_AsyncCallback_component_getFactory( sImplementationName, _pServiceManager, _pRegistryKey );

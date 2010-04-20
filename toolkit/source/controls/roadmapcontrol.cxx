@@ -104,6 +104,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         ImplRegisterProperty( BASEPROPERTY_COMPLETE );
         ImplRegisterProperty( BASEPROPERTY_ACTIVATED );
         ImplRegisterProperty( BASEPROPERTY_CURRENTITEMID );
+        ImplRegisterProperty( BASEPROPERTY_TABSTOP );
         ImplRegisterProperty( BASEPROPERTY_TEXT );
     }
 

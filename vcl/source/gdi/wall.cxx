@@ -469,7 +469,7 @@ Gradient Wallpaper::ImplGetApplicationGradient() const
     g.SetStyle( GRADIENT_LINEAR );
     g.SetStartColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
     // no 'extreme' gradient when high contrast
-    if( Application::GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+    if( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
         g.SetEndColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
     else
         g.SetEndColor( Application::GetSettings().GetStyleSettings().GetFaceGradientColor() );

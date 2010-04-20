@@ -293,8 +293,14 @@ void PPDParser::initPPDFiles()
     }
 }
 
-void PPDParser::getKnownPPDDrivers( std::list< rtl::OUString >& o_rDrivers )
+void PPDParser::getKnownPPDDrivers( std::list< rtl::OUString >& o_rDrivers, bool bRefresh )
 {
+    if( bRefresh )
+    {
+        delete pAllPPDFiles;
+        pAllPPDFiles = NULL;
+    }
+
     initPPDFiles();
     o_rDrivers.clear();
 

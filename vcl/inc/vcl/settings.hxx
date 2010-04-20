@@ -379,6 +379,7 @@ private:
     Color                           maMenuHighlightColor;
     Color                           maMenuHighlightTextColor;
     Color                           maMenuTextColor;
+    Color                           maMenuBarTextColor;
     Color                           maMonoColor;
     Color                           maRadioCheckTextColor;
     Color                           maShadowColor;
@@ -689,6 +690,10 @@ public:
                                         { CopyData(); mpData->maMenuTextColor = rColor; }
     const Color&                    GetMenuTextColor() const
                                         { return mpData->maMenuTextColor; }
+    void                            SetMenuBarTextColor( const Color& rColor )
+                                        { CopyData(); mpData->maMenuBarTextColor = rColor; }
+    const Color&                    GetMenuBarTextColor() const
+                                        { return mpData->maMenuBarTextColor; }
     void                            SetMenuHighlightColor( const Color& rColor )
                                         { CopyData(); mpData->maMenuHighlightColor = rColor; }
     const Color&                    GetMenuHighlightColor() const
