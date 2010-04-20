@@ -243,7 +243,6 @@ bool TheExtensionManager::checkUpdates( bool /* bShowUpdateOnly */, bool /*bPare
             {
                 TUpdateListEntry pEntry( new UpdateListEntry( xPackage, m_sPackageManagers[j] ) );
                 vEntries.push_back( pEntry );
-                break;
             }
         }
     }

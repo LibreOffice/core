@@ -1392,12 +1392,14 @@ void Desktop::Main()
         tools::InitTestToolLib();
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} tools::InitTestToolLib" );
 
+        // Check if bundled or shared extensions were added /removed
+        // and process those extensions (has to be done before checking
+        // the extension dependencies!
+        SynchronizeExtensionRepositories();
+
         bool bAbort = CheckExtensionDependencies();
         if ( bAbort )
             return;
-        //Check if bundled or shared extensions were added /removed
-        //and process those extensions
-        SynchronizeExtensionRepositories();
 
         // First Start Wizard allowed ?
         if ( ! pCmdLineArgs->IsNoFirstStartWizard())
@@ -2916,6 +2918,14 @@ void Desktop::SetSplashScreenProgress(sal_Int32 iProgress)
     if(m_rSplashScreen.is())
     {
         m_rSplashScreen->setValue(iProgress);
+    }
+}
+
+void Desktop::SetSplashScreenText( const ::rtl::OUString& rText )
+{
+    if( m_rSplashScreen.is() )
+    {
+        m_rSplashScreen->setText( rText );
     }
 }
 

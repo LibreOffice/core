@@ -27,11 +27,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
-#include <osl/file.hxx>
+#include "osl/file.hxx"
+#include "osl/mutex.hxx"
+
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/logfile.hxx>
 #include "cppuhelper/compbase3.hxx"
+
+#include "vcl/wrkwin.hxx"
+#include "vcl/timer.hxx"
 
 #include <unotools/configmgr.hxx>
 
@@ -59,7 +64,7 @@ using rtl::OUString;
 using namespace desktop;
 using namespace com::sun::star;
 
-#define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
+#define UNISTRING(s) OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
 namespace
 {
@@ -69,9 +74,13 @@ class SilentCommandEnv
                                       task::XInteractionHandler,
                                       ucb::XProgressHandler >
 {
+    Desktop    *mpDesktop;
+    sal_Int32   mnLevel;
+    sal_Int32   mnProgress;
+
 public:
-    virtual ~SilentCommandEnv(){};
-    SilentCommandEnv(){};
+             SilentCommandEnv( Desktop* pDesktop );
+    virtual ~SilentCommandEnv();
 
     // XCommandEnvironment
     virtual uno::Reference<task::XInteractionHandler > SAL_CALL
@@ -91,21 +100,38 @@ public:
         throw (uno::RuntimeException);
     virtual void SAL_CALL pop() throw (uno::RuntimeException);
 };
+
+//-----------------------------------------------------------------------------
+SilentCommandEnv::SilentCommandEnv( Desktop* pDesktop )
+{
+    mpDesktop = pDesktop;
+    mnLevel = 0;
+    mnProgress = 25;
+}
+
+//-----------------------------------------------------------------------------
+SilentCommandEnv::~SilentCommandEnv()
+{
+    mpDesktop->SetSplashScreenText( OUString() );
+}
+
+//-----------------------------------------------------------------------------
 Reference<task::XInteractionHandler> SilentCommandEnv::getInteractionHandler()
-throw (uno::RuntimeException)
+    throw (uno::RuntimeException)
 {
     return this;
 }
 
+//-----------------------------------------------------------------------------
 Reference<ucb::XProgressHandler> SilentCommandEnv::getProgressHandler()
-throw (uno::RuntimeException)
+    throw (uno::RuntimeException)
 {
     return this;
 }
 
+//-----------------------------------------------------------------------------
 // XInteractionHandler
-void SilentCommandEnv::handle(
-    Reference< task::XInteractionRequest> const & xRequest )
+void SilentCommandEnv::handle( Reference< task::XInteractionRequest> const & xRequest )
     throw (uno::RuntimeException)
 {
     uno::Any request( xRequest->getRequest() );
@@ -127,23 +153,45 @@ void SilentCommandEnv::handle(
     }
 }
 
+//-----------------------------------------------------------------------------
 // XProgressHandler
-void SilentCommandEnv::push( uno::Any const & /*Status*/ )
-throw (uno::RuntimeException)
+void SilentCommandEnv::push( uno::Any const & rStatus )
+    throw (uno::RuntimeException)
 {
+    OUString sText;
+    mnLevel += 1;
+
+    if ( rStatus.hasValue() && ( rStatus >>= sText) )
+    {
+        if ( mnLevel == 1 )
+            mpDesktop->SetSplashScreenText( sText );
+        else
+            mpDesktop->SetSplashScreenProgress( ++mnProgress );
+    }
 }
 
-
-void SilentCommandEnv::update( uno::Any const & /*Status */)
-throw (uno::RuntimeException)
+//-----------------------------------------------------------------------------
+void SilentCommandEnv::update( uno::Any const & rStatus )
+    throw (uno::RuntimeException)
 {
+    OUString sText;
+    if ( rStatus.hasValue() && ( rStatus >>= sText) )
+    {
+        mpDesktop->SetSplashScreenText( sText );
+    }
 }
 
+//-----------------------------------------------------------------------------
 void SilentCommandEnv::pop() throw (uno::RuntimeException)
 {
+    mnLevel -= 1;
 }
 
 } // end namespace
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 static const OUString sConfigSrvc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) );
 static const OUString sAccessSrvc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" ) );
 //------------------------------------------------------------------------------
@@ -169,55 +217,75 @@ static sal_Int16 impl_showExtensionDialog( uno::Reference< uno::XComponentContex
 //------------------------------------------------------------------------------
 // Check dependencies of all packages
 //------------------------------------------------------------------------------
-static bool impl_checkDependencies( const uno::Reference< deployment::XPackageManager > &xPackageManager )
+static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext > &xContext )
 {
-    uno::Sequence< uno::Reference< deployment::XPackage > > packages;
+    uno::Sequence< uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
+    uno::Reference< deployment::XExtensionManager > xExtensionManager = deployment::ExtensionManager::get( xContext );
+
+    if ( !xExtensionManager.is() )
+    {
+        OSL_ENSURE( 0, "Could not get the Extension Manager!" );
+        return true;
+    }
 
     try {
-        packages = xPackageManager->getDeployedPackages( uno::Reference< task::XAbortChannel >(),
-                                                         uno::Reference< ucb::XCommandEnvironment >() );
+        xAllPackages = xExtensionManager->getAllExtensions( uno::Reference< task::XAbortChannel >(),
+                                                            uno::Reference< ucb::XCommandEnvironment >() );
     }
-    catch ( deployment::DeploymentException & ) { /* handleGeneralError(e.Cause);*/ }
-    catch ( ucb::CommandFailedException & ) { /* handleGeneralError(e.Reason);*/ }
-    catch ( ucb::CommandAbortedException & ) {}
+    catch ( deployment::DeploymentException & ) { return true; }
+    catch ( ucb::CommandFailedException & ) { return true; }
+    catch ( ucb::CommandAbortedException & ) { return true; }
     catch ( lang::IllegalArgumentException & e ) {
         throw uno::RuntimeException( e.Message, e.Context );
     }
 
-    for ( sal_Int32 i = 0; i < packages.getLength(); ++i )
-    {
-        bool bRegistered = false;
-        try {
-            beans::Optional< beans::Ambiguous< sal_Bool > > option( packages[i]->isRegistered( uno::Reference< task::XAbortChannel >(),
-                                                                                               uno::Reference< ucb::XCommandEnvironment >() ) );
-            if ( option.IsPresent )
-            {
-                ::beans::Ambiguous< sal_Bool > const & reg = option.Value;
-                if ( reg.IsAmbiguous )
-                    bRegistered = false;
-                else
-                    bRegistered = reg.Value ? true : false;
-            }
-            else
-                bRegistered = false;
-        }
-        catch ( uno::RuntimeException & ) { throw; }
-        catch ( uno::Exception & exc) {
-            (void) exc;
-            OSL_ENSURE( 0, ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
-            bRegistered = false;
-        }
+    sal_Int32 nMax = 2;
+#ifdef DEBUG
+    nMax = 3;
+#endif
 
-        if ( bRegistered )
+    for ( sal_Int32 i = 0; i < xAllPackages.getLength(); ++i )
+    {
+        uno::Sequence< uno::Reference< deployment::XPackage > > xPackageList = xAllPackages[i];
+
+        for ( sal_Int32 j = 0; (j<nMax) && (j < xPackageList.getLength()); ++j )
         {
-            bool bDependenciesValid = false;
-            try {
-                bDependenciesValid = packages[i]->checkDependencies( uno::Reference< ucb::XCommandEnvironment >() );
-            }
-            catch ( deployment::DeploymentException & ) {}
-            if ( ! bDependenciesValid )
+            uno::Reference< deployment::XPackage > xPackage = xPackageList[j];
+            if ( xPackage.is() )
             {
-                return false;
+                bool bRegistered = false;
+                try {
+                    beans::Optional< beans::Ambiguous< sal_Bool > > option( xPackage->isRegistered( uno::Reference< task::XAbortChannel >(),
+                                                                                                    uno::Reference< ucb::XCommandEnvironment >() ) );
+                    if ( option.IsPresent )
+                    {
+                        ::beans::Ambiguous< sal_Bool > const & reg = option.Value;
+                        if ( reg.IsAmbiguous )
+                            bRegistered = false;
+                        else
+                            bRegistered = reg.Value ? true : false;
+                    }
+                    else
+                        bRegistered = false;
+                }
+                catch ( uno::RuntimeException & ) { throw; }
+                catch ( uno::Exception & exc) {
+                    (void) exc;
+                    OSL_ENSURE( 0, ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                }
+
+                if ( bRegistered )
+                {
+                    bool bDependenciesValid = false;
+                    try {
+                        bDependenciesValid = xPackage->checkDependencies( uno::Reference< ucb::XCommandEnvironment >() );
+                    }
+                    catch ( deployment::DeploymentException & ) {}
+                    if ( ! bDependenciesValid )
+                    {
+                        return false;
+                    }
+                }
             }
         }
     }
@@ -254,31 +322,11 @@ static void impl_setNeedsCompatCheck()
 static bool impl_check()
 {
     uno::Reference< uno::XComponentContext > xContext = comphelper_getProcessComponentContext();
-    uno::Reference< deployment::XPackageManager > xManager;
-    bool bDependenciesValid = true;
 
-    try {
-        xManager = deployment::thePackageManagerFactory::get( xContext )->getPackageManager( UNISTRING("user") );
-    }
-    catch ( ucb::CommandFailedException & ){}
-    catch ( uno::RuntimeException & ) {}
-
-    if ( xManager.is() )
-        bDependenciesValid = impl_checkDependencies( xManager );
-
-    if ( bDependenciesValid )
-    {
-        try {
-            xManager = deployment::thePackageManagerFactory::get( xContext )->getPackageManager( UNISTRING("shared") );
-        }
-        catch ( ucb::CommandFailedException & ){}
-        catch ( uno::RuntimeException & ) {}
-
-        if ( xManager.is() )
-            bDependenciesValid = impl_checkDependencies( xManager );
-    }
+    bool bDependenciesValid = impl_checkDependencies( xContext );
 
     short nRet = 0;
+
     if ( !bDependenciesValid )
         nRet = impl_showExtensionDialog( xContext );
 
@@ -292,7 +340,7 @@ static bool impl_check()
 }
 
 //------------------------------------------------------------------------------
-// to check, if we need checking the dependencies of the extensions again, we compare
+// to check if we need checking the dependencies of the extensions again, we compare
 // the build id of the office with the one of the last check
 //------------------------------------------------------------------------------
 static bool impl_needsCompatCheck()
@@ -325,6 +373,9 @@ static bool impl_needsCompatCheck()
             pset->setPropertyValue( OUString::createFromAscii("LastCompatibilityCheckID"), result );
             Reference< util::XChangesBatch >( pset, UNO_QUERY_THROW )->commitChanges();
         }
+#ifdef DEBUG
+        bNeedsCheck = true;
+#endif
     }
     catch (const Exception&) {}
 
@@ -348,11 +399,9 @@ void Desktop::SynchronizeExtensionRepositories()
 {
     RTL_LOGFILE_CONTEXT(aLog,"desktop (jl97489) ::Desktop::SynchronizeExtensionRepositories");
     OUString sDisable;
-    ::rtl::Bootstrap::get(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("DISABLE_SYNC_EXTENSIONS")),
-        sDisable,
-        OUString(RTL_CONSTASCII_USTRINGPARAM("")));
+    ::rtl::Bootstrap::get( UNISTRING( "DISABLE_SYNC_EXTENSIONS" ), sDisable, OUString() );
     if (sDisable.getLength() > 0)
         return;
-    dp_misc::syncRepositories(new SilentCommandEnv());
+
+    dp_misc::syncRepositories( new SilentCommandEnv( this ) );
 }
