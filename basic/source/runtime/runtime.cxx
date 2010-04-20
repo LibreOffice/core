@@ -819,9 +819,7 @@ void SbiRuntime::Error( SbError n )
             }
             // no num? most likely then it *is* really a vba err
             SbxErrObject::getUnoErrObject()->setNumber( ( StarBASIC::GetVBErrorCode( n ) == 0 ) ? n : StarBASIC::GetVBErrorCode( n ) );
-            //SbxErrObject::getUnoErrObject()->setDescription( aMsg );
-            String aTmp = aMsg;
-            pInst->aErrorMsg = aTmp;
+            pInst->aErrorMsg = aMsg;
             nError = SbERR_BASIC_COMPAT;
         }
     }
