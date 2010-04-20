@@ -273,7 +273,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() thro
     while ( pViewFrm && !pPrinter )
     {
         pPrinter = pViewFrm->GetViewShell()->GetActivePrinter();
-        pViewFrm = SfxViewFrame::GetNext( *pViewFrm, m_pData->m_pObjectShell, 0, sal_False );
+        pViewFrm = SfxViewFrame::GetNext( *pViewFrm, m_pData->m_pObjectShell, sal_False );
     }
 
     // if no view is printing currently, use the permanent SfxPrinter instance
