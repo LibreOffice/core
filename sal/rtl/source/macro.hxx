@@ -39,7 +39,11 @@
 #elif defined SOLARIS
 #define THIS_OS "Solaris"
 #elif defined LINUX
+#ifdef __FreeBSD_kernel__
+#define THIS_OS "kFreeBSD"
+#else
 #define THIS_OS "Linux"
+#endif
 #elif defined MACOSX
 #define THIS_OS "MacOSX"
 #elif defined NETBSD
