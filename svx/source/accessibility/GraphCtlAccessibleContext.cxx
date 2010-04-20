@@ -45,7 +45,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <svtools/colorcfg.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 
 //===== local includes ========================================================
 #include <svx/ShapeTypeHandler.hxx>

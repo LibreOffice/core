@@ -36,11 +36,11 @@
 #include <svx/svdopath.hxx>  // fuer CombineObjects
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdograf.hxx>  // fuer Possibilities
 #include <svx/svdoole2.hxx>  // und Mtf-Import
-#include "svdstr.hrc"   // Namen aus der Resource
-#include "svdglob.hxx"  // StringCache
+#include "svx/svdstr.hrc"   // Namen aus der Resource
+#include "svx/svdglob.hxx"  // StringCache
 #include "svdfmtf.hxx"
 #include <svx/svdetc.hxx>
 #include <sfx2/basedlgs.hxx>

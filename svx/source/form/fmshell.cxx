@@ -64,7 +64,7 @@
 #include <sfx2/objsh.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/fmpage.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include "fmobj.hxx"
 
 #ifndef _SVX_SVXIDS_HRC
@@ -72,7 +72,7 @@
 #endif
 
 #ifndef _SVX_FMRESIDS_HRC
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #endif
 #include "fmexch.hxx"
 #include <svx/fmglob.hxx>

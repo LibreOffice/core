@@ -33,9 +33,9 @@
 #include <svx/svdomeas.hxx>
 #include <svx/svdmodel.hxx>
 
-#include "measctrl.hxx"
+#include "svx/measctrl.hxx"
 #include <svx/dialmgr.hxx>
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 
 /*************************************************************************
 |*

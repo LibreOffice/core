@@ -44,7 +44,7 @@
 
 #ifndef SVX_LIGHT
 #ifndef _SVX_FMRESIDS_HRC
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #endif
 #endif
 #include <tools/shl.hxx>
@@ -61,7 +61,7 @@
 #include <sfx2/objsh.hxx>
 #endif
 #endif
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdview.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>

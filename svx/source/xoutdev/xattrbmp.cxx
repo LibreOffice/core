@@ -38,13 +38,13 @@
 #include <editeng/memberids.hrc>
 
 #include <svx/dialogs.hrc>
-#include "xattr.hxx"
+#include "svx/xattr.hxx"
 #include <svx/xtable.hxx>
 #include <svx/xdef.hxx>
 #include <svx/unomid.hxx>
 #include <editeng/unoprnms.hxx>
 
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include <svx/svdmodel.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 

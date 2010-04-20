@@ -30,7 +30,7 @@
 
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
-#include <verttexttbxctrl.hxx>
+#include <svx/verttexttbxctrl.hxx>
 #include <svl/languageoptions.hxx>
 #include <sfx2/app.hxx>
 #include <svl/eitem.hxx>

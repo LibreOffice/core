@@ -49,11 +49,11 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xtable.hxx>
-#include "drawitem.hxx"
+#include "svx/drawitem.hxx"
 #include <svx/dialmgr.hxx>
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 #include <svx/itemwin.hxx>
-#include "linectrl.hxx"
+#include "svx/linectrl.hxx"
 #include <svtools/colorcfg.hxx>
 
 #include "linectrl.hrc"

@@ -32,8 +32,8 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 
-#include "tbxalign.hxx"
-#include "tbxdraw.hxx"
+#include "svx/tbxalign.hxx"
+#include "svx/tbxdraw.hxx"
 #include "tbxdraw.hrc"
 #include <tools/shl.hxx>
 #ifndef _SFX_IMAGEMGR_HXX

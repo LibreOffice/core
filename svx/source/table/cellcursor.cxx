@@ -33,8 +33,8 @@
 #include "tablelayouter.hxx"
 #include "cell.hxx"
 #include "svx/svdmodel.hxx"
-#include "svdstr.hrc"
-#include "svdglob.hxx"
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 
 // -----------------------------------------------------------------------------
 

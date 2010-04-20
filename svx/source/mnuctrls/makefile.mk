@@ -56,7 +56,7 @@ HXX1TARGET=mnuctrls
 HXX1EXT=   hxx
 HXX1EXCL=  -E:*include*
 HXX1DEPN=\
-        $(INC)$/clipboardctl.hxx \
+        $(INC)$/svx/clipboardctl.hxx \
         $(INC)$/fntctl.hxx	\
         $(INC)$/fntszctl.hxx \
         $(INC)$/SmartTagCtl.hxx

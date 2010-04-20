@@ -29,7 +29,7 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _SVX_FMRESIDS_HRC
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #endif
 #ifndef _SVX_FMEXPL_HRC
 #include "fmexpl.hrc"
@@ -54,7 +54,7 @@
 #include "fmprop.hrc"
 #endif
 #include <svx/dialmgr.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdouno.hxx>
 #include <fmundo.hxx>
 #include <svx/svdobj.hxx>

@@ -27,7 +27,7 @@
 
 #include "datanavi.hrc"
 #include "globlmn.hrc"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmhelp.hrc"
 
 #define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };

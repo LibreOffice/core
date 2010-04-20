@@ -44,7 +44,7 @@
 #include <basic/sbxvar.hxx>
 #endif
 
-#include "hlnkitem.hxx"
+#include "svx/hlnkitem.hxx"
 
 // -----------------------------------------------------------------------
 

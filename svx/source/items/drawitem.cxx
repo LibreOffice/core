@@ -33,7 +33,7 @@
 #include <svx/svxids.hrc>
 
 
-#include "drawitem.hxx"
+#include "svx/drawitem.hxx"
 #include <svx/xtable.hxx>
 
 using namespace ::com::sun::star;

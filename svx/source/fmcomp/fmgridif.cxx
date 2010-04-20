@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "fmgridif.hxx"
+#include "svx/fmgridif.hxx"
 #include "fmprop.hrc"
 #include "fmservs.hxx"
 #include "svx/fmtools.hxx"

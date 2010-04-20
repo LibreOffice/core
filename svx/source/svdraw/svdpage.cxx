@@ -49,7 +49,7 @@
 #include <svx/svdograf.hxx> // fuer SwapInAll()
 #include <svx/svdoedge.hxx> // Zum kopieren der Konnektoren
 #include <svx/svdoole2.hxx> // Sonderbehandlung OLE beim SdrExchangeFormat
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdotext.hxx>

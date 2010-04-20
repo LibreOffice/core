@@ -38,10 +38,10 @@
 
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
-#include "optgrid.hxx"
+#include "svx/optgrid.hxx"
 #include <svx/dialogs.hrc>
 #include "optgrid.hrc"
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 
 /* -----------------18.08.98 17:41-------------------
  * local functions

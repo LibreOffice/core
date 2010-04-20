@@ -30,11 +30,11 @@
 
 #include <vector>
 #include <editeng/editeng.hxx>
-#include "xexch.hxx"
+#include "svx/xexch.hxx"
 #include <svx/xflclit.hxx>
 #include <svx/svdxcgv.hxx>
 #include <svx/svdoutl.hxx>
-#include "svditext.hxx"
+#include "svx/svditext.hxx"
 #include <svx/svdetc.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdograf.hxx>
@@ -45,9 +45,9 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdtrans.hxx> // Fuer GetMapFactor zum umskalieren bei PasteModel
-#include "svdstr.hrc"   // Namen aus der Resource
-#include "svdglob.hxx"  // StringCache
-#include "xoutbmp.hxx"
+#include "svx/svdstr.hrc"   // Namen aus der Resource
+#include "svx/svdglob.hxx"  // StringCache
+#include "svx/xoutbmp.hxx"
 #include <vcl/metaact.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/itempool.hxx>

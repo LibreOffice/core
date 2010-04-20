@@ -38,7 +38,7 @@
 #include <svl/solar.hrc>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
-#include "xoutbmp.hxx"
+#include "svx/xoutbmp.hxx"
 #include <svtools/FilterConfigItem.hxx>
 #include <svtools/filter.hxx>
 

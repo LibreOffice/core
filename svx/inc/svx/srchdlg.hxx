@@ -118,7 +118,7 @@ public:
 // class SvxSearchDialog -------------------------------------------------
 
 /*
-    {k:\svx\prototyp\dialog\srchdlg.hxx}
+    {k:\svx\prototyp\dialog\svx/srchdlg.hxx}
 
     [Beschreibung]
     In diesem Modeless-Dialog werden die Attribute einer Suche eingestellt

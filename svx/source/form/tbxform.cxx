@@ -45,11 +45,11 @@
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
-#include "tbxctl.hxx"
-#include "tbxdraw.hxx"
+#include "svx/tbxctl.hxx"
+#include "svx/tbxdraw.hxx"
 #include "tbxform.hxx"
 #ifndef _SVX_FMRESIDS_HRC
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #endif
 #include "fmitems.hxx"
 #ifndef _SVX_FMHELP_HRC

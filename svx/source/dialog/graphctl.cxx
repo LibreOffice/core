@@ -41,12 +41,12 @@
 
 #include <svx/graphctl.hxx>
 #include "GraphCtlAccessibleContext.hxx"
-#include "xoutbmp.hxx"
+#include "svx/xoutbmp.hxx"
 #include <svx/svxids.hrc>
 #include <svx/svdpage.hxx>
 
 // #i72889#
-#include "sdrpaintwindow.hxx"
+#include "svx/sdrpaintwindow.hxx"
 
 /*************************************************************************
 |*

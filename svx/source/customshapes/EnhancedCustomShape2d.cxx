@@ -27,9 +27,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "EnhancedCustomShape2d.hxx"
-#include "EnhancedCustomShapeGeometry.hxx"
-#include "EnhancedCustomShapeTypeNames.hxx"
+#include "svx/EnhancedCustomShape2d.hxx"
+#include "svx/EnhancedCustomShapeGeometry.hxx"
+#include "svx/EnhancedCustomShapeTypeNames.hxx"
 #include <svx/svdoashp.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdocirc.hxx>
