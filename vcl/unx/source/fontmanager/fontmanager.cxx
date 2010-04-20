@@ -3814,8 +3814,8 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
                         if( c == cOld )
                             break;
                         cOld = c;
-#if (sizeof(sal_Unicode) <= 2) // TODO: remove when sal_Unicode covers all of unicode
-                        if( c > 0xFFFF )
+#if 1 // TODO: remove when sal_Unicode covers all of unicode
+                        if( c > (sal_Unicode)~0 )
                             break;
 #endif
                         // get the matching glyph index
