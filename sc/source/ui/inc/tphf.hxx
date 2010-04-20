@@ -29,7 +29,7 @@
 #define SC_TPHF_HXX
 
 
-#include <svx/hdft2.hxx>
+#include <svx/hdft.hxx>
 
 class ScStyleDlg;
 
