@@ -224,6 +224,19 @@ void SaneDlg::InitFields()
                     maReslBox.SetMin( (long)pDouble[0] );
                     maReslBox.SetMax( (long)pDouble[1] );
                     maReslBox.InsertValue( (long)pDouble[0] );
+                    // mh@openoffice.org: issue 68557: Can only select 75 and 2400 dpi in Scanner dialogue
+                    // scanner allows random setting of dpi resolution, a slider might be useful
+                    // support that
+                    // workaround: offer at least some more standard dpi resolution between
+                    // min and max value
+                    int bGot300 = 0;
+                    for ( int nRes = (long) pDouble[0] * 2; nRes < (long) pDouble[1]; nRes = nRes * 2 )
+                    {
+                        if ( !bGot300 && nRes > 300 ) {
+                            nRes = 300; bGot300 = 1;
+                        }
+                        maReslBox.InsertValue(nRes);
+                    }
                     maReslBox.InsertValue( (long)pDouble[1] );
                 }
                 if( pDouble )

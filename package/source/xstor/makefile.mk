@@ -42,6 +42,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
+.IF "$(L10N_framework)"==""
+
 SLOFILES =  \
         $(SLO)$/ohierarchyholder.obj\
         $(SLO)$/ocompinstream.obj\
@@ -67,6 +69,8 @@ SHL1IMPLIB=i$(SHL1TARGET)
 
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=$(SHL1TARGET).dxp
+
+.ENDIF # L10N_framework
 
 # --- Targets -------------------------------------------------------
 

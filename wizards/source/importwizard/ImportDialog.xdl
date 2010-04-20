@@ -89,7 +89,7 @@
   <dlg:fixedline dlg:id="hlnDocuments" dlg:tab-index="42" dlg:left="6" dlg:top="110" dlg:width="258" dlg:height="8" dlg:page="2" dlg:value="hlnDocuments"/>
   <dlg:fixedline dlg:id="FixedLine1" dlg:tab-index="43" dlg:left="6" dlg:top="181" dlg:width="258" dlg:height="6"/>
   <dlg:fixedline dlg:id="hlnProgress" dlg:tab-index="44" dlg:left="6" dlg:top="55" dlg:width="258" dlg:height="8" dlg:page="4" dlg:value="hlnProgress"/>
-  <dlg:button dlg:id="cmdShowLogFile" dlg:tab-index="45" dlg:disabled="true" dlg:left="105" dlg:top="142" dlg:width="60" dlg:height="14" dlg:page="4" dlg:value="cmdShowLogFile">
+  <dlg:button dlg:id="cmdShowLogFile" dlg:tab-index="45" dlg:disabled="true" dlg:left="75" dlg:top="142" dlg:width="120" dlg:height="14" dlg:page="4" dlg:value="cmdShowLogFile">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:ImportWizard.FilesModul.OpenLogDocument?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:button>
  </dlg:bulletinboard>

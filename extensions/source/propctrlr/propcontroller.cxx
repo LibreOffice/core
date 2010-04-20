@@ -114,6 +114,7 @@ namespace pcr
             ,m_bContainerFocusListening( false )
             ,m_bSuspendingPropertyHandlers( false )
             ,m_bConstructed( false )
+            ,m_bBindingIntrospectee( false )
     {
         DBG_CTOR(OPropertyBrowserController,NULL);
     }
@@ -300,7 +301,13 @@ namespace pcr
             // it in order to inspect another object.
             throw VetoException();
         }
+        if ( m_bBindingIntrospectee )
+            throw VetoException();
+
+        m_bBindingIntrospectee = true;
         impl_rebindToInspectee_nothrow( InterfaceArray( _rObjects.getConstArray(), _rObjects.getConstArray() + _rObjects.getLength() ) );
+        m_bBindingIntrospectee = false;
+
     }
 
     //--------------------------------------------------------------------

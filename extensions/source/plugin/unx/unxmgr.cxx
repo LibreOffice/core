@@ -226,7 +226,7 @@ static void CheckPluginRegistryFiles( const rtl::OString& rPath, list< PluginDes
         closedir( pDIR );
 }
 
-Sequence<PluginDescription> XPluginManager_Impl::getPluginDescriptions() throw()
+Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() throw()
 {
     static Sequence<PluginDescription> aDescriptions;
     static BOOL bHavePlugins = FALSE;

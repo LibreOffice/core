@@ -115,7 +115,13 @@ private :
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > impl_createFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) ;
 
-        virtual ::sal_Int32 SAL_CALL verifyCertificate( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& xCert ) throw (::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException) ;
+        virtual ::sal_Int32 SAL_CALL verifyCertificate(
+            const ::com::sun::star::uno::Reference<
+            ::com::sun::star::security::XCertificate >& xCert,
+            const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > > &
+            intermediateCerts)
+            throw (::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException) ;
 
         virtual ::sal_Int32 SAL_CALL getCertificateCharacters( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& xCert ) throw (::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException) ;
 

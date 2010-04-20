@@ -3224,7 +3224,7 @@ sal_Bool SAL_CALL OStorage::isStreamElement( const ::rtl::OUString& aElementName
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
-        throw embed::StorageWrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't detect whether it is a stream!" ) ),
+        throw lang::WrappedTargetRuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't detect whether it is a stream!" ) ),
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
     }
@@ -3293,7 +3293,7 @@ sal_Bool SAL_CALL OStorage::isStorageElement( const ::rtl::OUString& aElementNam
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
-        throw embed::StorageWrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't detect whether it is a storage" ) ),
+        throw lang::WrappedTargetRuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "can't detect whether it is a storage" ) ),
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
     }
@@ -4780,7 +4780,10 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
 
     //TODO: think about interaction handler
 
-    if ( m_pData->m_bReadOnlyWrap )
+    // WORKAROUND:
+    // The old document might have no version in the manifest.xml, so we have to allow to set the version
+    // even for readonly storages, so that the version from content.xml can be used.
+    if ( m_pData->m_bReadOnlyWrap && !aPropertyName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ) ) )
         throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() ); // TODO: Access denied
 
     if ( m_pData->m_nStorageType == ZIP_STORAGE )
@@ -4800,10 +4803,16 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             aValue >>= m_pImpl->m_aVersion;
             m_pImpl->m_bControlVersion = sal_True;
 
-            m_pImpl->m_bBroadcastModified = sal_True;
-            m_pImpl->m_bIsModified = sal_True;
+            // this property can be set even for readonly storage
+            if ( !m_pData->m_bReadOnlyWrap )
+            {
+                m_pImpl->m_bBroadcastModified = sal_True;
+                m_pImpl->m_bIsModified = sal_True;
+            }
         }
         else if ( m_pData->m_bIsRoot && ( aPropertyName.equalsAscii( "HasEncryptedEntries" )
+                                    || aPropertyName.equalsAscii( "HasNonEncryptedEntries" )
+                                    || aPropertyName.equalsAscii( "IsInconsistent" )
                                     || aPropertyName.equalsAscii( "URL" )
                                     || aPropertyName.equalsAscii( "RepairPackage" ) )
            || aPropertyName.equalsAscii( "IsRoot" )
@@ -4937,7 +4946,10 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
 
             return uno::makeAny( sal_False ); // RepairPackage
         }
-        else if ( m_pData->m_nStorageType == PACKAGE_STORAGE && aPropertyName.equalsAscii( "HasEncryptedEntries" ) )
+        else if ( m_pData->m_nStorageType == PACKAGE_STORAGE
+          && ( aPropertyName.equalsAscii( "HasEncryptedEntries" )
+            || aPropertyName.equalsAscii( "HasNonEncryptedEntries" )
+            || aPropertyName.equalsAscii( "IsInconsistent" ) ) )
         {
             try {
                 m_pImpl->ReadContents();

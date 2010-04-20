@@ -40,6 +40,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE : settings.mk
 
 # --- Files --------------------------------------------------------
+.IF "$(L10N_framework)"==""
 #CFLAGS+=/Ob0 /Od
 .IF "$(SYSTEM_ZLIB)" == "YES"
 CFLAGS+=-DSYSTEM_ZLIB
@@ -54,6 +55,8 @@ SLOFILES= \
         $(SLO)$/ZipFile.obj			\
         $(SLO)$/ZipOutputStream.obj	\
         $(SLO)$/XUnbufferedStream.obj
+
+.ENDIF # L10N_framework
 
 # --- Targets ------------------------------------------------------
 

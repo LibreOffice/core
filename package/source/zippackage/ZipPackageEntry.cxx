@@ -65,20 +65,20 @@ ZipPackageEntry::~ZipPackageEntry()
 OUString SAL_CALL ZipPackageEntry::getName(  )
     throw(RuntimeException)
 {
-    return aEntry.sName;
+    return msName;
 }
 void SAL_CALL ZipPackageEntry::setName( const OUString& aName )
     throw(RuntimeException)
 {
-    if ( pParent && pParent->hasByName ( aEntry.sName ) )
-        pParent->removeByName ( aEntry.sName );
+    if ( pParent && msName.getLength() && pParent->hasByName ( msName ) )
+        pParent->removeByName ( msName );
 
     // unfortunately no other exception than RuntimeException can be thrown here
     // usually the package is used through storage implementation, the problem should be detected there
     if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( aName, sal_True ) )
         throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected character is used in file name." ) ), Reference< XInterface >() );
 
-    aEntry.sName = aName;
+    msName = aName;
 
     if ( pParent )
         pParent->doInsertByName ( this, sal_False );
@@ -94,7 +94,7 @@ void ZipPackageEntry::doSetParent ( ZipPackageFolder * pNewParent, sal_Bool bIns
 {
     // xParent = pParent = pNewParent;
     pParent = pNewParent;
-    if ( bInsert && !pNewParent->hasByName ( aEntry.sName ) )
+    if ( bInsert && msName.getLength() && !pNewParent->hasByName ( msName ) )
         pNewParent->doInsertByName ( this, sal_False );
 }
 
@@ -110,8 +110,8 @@ void SAL_CALL ZipPackageEntry::setParent( const Reference< XInterface >& xNewPar
 
     if ( pNewParent != pParent )
     {
-        if ( pParent && pParent->hasByName ( aEntry.sName ) && mbAllowRemoveOnInsert )
-            pParent->removeByName( aEntry.sName );
+        if ( pParent && msName.getLength() && pParent->hasByName ( msName ) && mbAllowRemoveOnInsert )
+            pParent->removeByName( msName );
         doSetParent ( pNewParent, sal_True );
     }
 }

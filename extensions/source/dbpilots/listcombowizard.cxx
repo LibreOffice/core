@@ -223,9 +223,6 @@ namespace dbp
 
             // the bound field
             getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("DataField"), makeAny(::rtl::OUString(getSettings().sLinkedFormField)));
-
-            // by default, create a drop down control
-            getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("Dropdown"), ::cppu::bool2any(sal_True));
         }
         catch(Exception&)
         {

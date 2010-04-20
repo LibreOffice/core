@@ -40,6 +40,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE : settings.mk
 
+.IF "$(L10N_framework)"==""
+
 # --- Files --------------------------------------------------------
 # the following flag un-inlines function calls and disables optimisations
 #CFLAGS+=/Ob0 /Od
@@ -57,6 +59,8 @@ SLOFILES= \
 
 #		$(SLO)$/InteractionRequest.obj  \
 #		$(SLO)$/InteractionContinuation.obj
+
+.ENDIF # L10N_framework
 
 # --- Targets ------------------------------------------------------
 

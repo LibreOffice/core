@@ -403,6 +403,7 @@ public:
 
     BOOL            LoadBasic();
     BOOL            SaveBasicSource();
+    BOOL            ImportDialog();
 
     void            EditMacro( const String& rMacroName );
 

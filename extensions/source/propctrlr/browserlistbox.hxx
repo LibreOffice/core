@@ -149,6 +149,7 @@ namespace pcr
         void                        EnableUpdate();
         void                        DisableUpdate();
         long                        Notify( NotifyEvent& _rNEvt );
+        long                        PreNotify( NotifyEvent& _rNEvt );
 
         void                        SetListener( IPropertyLineListener* _pListener );
         void                        SetObserver( IPropertyControlObserver* _pObserver );

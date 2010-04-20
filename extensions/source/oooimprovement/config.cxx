@@ -222,6 +222,7 @@ namespace oooimprovement
         return result;
     }
 
+#ifdef FUTURE
     sal_Int32 Config::getFailedAttempts() const
     {
         sal_Int32 result = 0;
@@ -231,6 +232,7 @@ namespace oooimprovement
             MyConfigurationHelper::E_READONLY) >>= result;
         return result;
     }
+#endif
 
     sal_Int32 Config::getOfficeStartCounterdown() const
     {

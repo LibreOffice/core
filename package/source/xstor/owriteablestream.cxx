@@ -3171,7 +3171,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
                 m_pImpl->m_aProps[nInd].Value <<= bCompressedValueFromType;
         }
     }
-    else if ( m_pData->m_nStorageType == PACKAGE_STORAGE && aPropertyName.equalsAscii( "Compressed" ) )
+    else if ( aPropertyName.equals( aCompressedString ) )
     {
         // if the "Compressed" property is not set explicitly, the MediaType can change the default value
         m_pImpl->m_bCompressedSetExplicit = sal_True;
@@ -3206,8 +3206,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
         else
             throw lang::IllegalArgumentException(); //TODO
     }
-    else if ( m_pData->m_nStorageType == OFOPXML_STORAGE
-          && ( aPropertyName.equalsAscii( "MediaType" ) || aPropertyName.equalsAscii( "Compressed" ) ) )
+    else if ( m_pData->m_nStorageType == OFOPXML_STORAGE && aPropertyName.equals( aMediaTypeString ) )
     {
         for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
         {
@@ -3282,8 +3281,8 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProp )
     else
         aPropertyName = aProp;
 
-    if ( ( m_pData->m_nStorageType == PACKAGE_STORAGE || m_pData->m_nStorageType == OFOPXML_STORAGE )
-            && aPropertyName.equalsAscii( "MediaType" )
+    if ( ( ( m_pData->m_nStorageType == PACKAGE_STORAGE || m_pData->m_nStorageType == OFOPXML_STORAGE )
+            && aPropertyName.equalsAscii( "MediaType" ) )
       || m_pData->m_nStorageType == PACKAGE_STORAGE && aPropertyName.equalsAscii( "Encrypted" )
       || aPropertyName.equalsAscii( "Compressed" ) )
     {

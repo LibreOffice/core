@@ -37,7 +37,7 @@
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 
-#ifdef UNIX
+#if defined(UNIX) || defined(OS2)
     #include <sys/utsname.h>
 #endif
 #ifdef WIN32
@@ -83,12 +83,14 @@ namespace {
             return "Win32";
         #elif defined UNIX
             return "Unix";
+        #elif defined OS2
+            return "OS/2";
         #else
             return "Unknown";
         #endif
     };
 
-#ifdef UNIX
+#if defined(UNIX) || defined(OS2)
     static const OString getLocale()
     {
         const char * locale = getenv( "LC_ALL" );

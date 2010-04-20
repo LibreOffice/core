@@ -36,9 +36,11 @@
 #include <vcl/button.hxx>
 #include <svtools/stdctrl.hxx>
 #include <svx/simptabl.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <xmlsecurity/documentsignaturehelper.hxx>
 #include <xmlsecurity/xmlsignaturehelper.hxx>
+
 
 #ifndef _STLP_VECTOR
 #include <vector>
@@ -53,6 +55,8 @@ namespace io {
     class XStream; }
 namespace embed {
     class XStorage; }
+namespace xml { namespace dom {
+    class XDocumentBuilder; } }
 }}}
 
 namespace css = com::sun::star;
@@ -68,10 +72,12 @@ private:
 
     css::uno::Reference < css::embed::XStorage > mxStore;
     css::uno::Reference < css::io::XStream > mxSignatureStream;
+    css::uno::Reference < css::io::XStream > mxTempSignatureStream;
     SignatureInformations   maCurrentSignatureInformations;
     bool                    mbVerifySignatures;
     bool                    mbSignaturesChanged;
     DocumentSignatureMode   meSignatureMode;
+    css::uno::Sequence < css::uno::Sequence < css::beans::PropertyValue > > m_manifest;
 
     FixedText           maHintDocFT;
     FixedText           maHintBasicFT;
@@ -83,6 +89,7 @@ private:
     FixedInfo           maSigsInvalidFI;
     FixedImage          maSigsNotvalidatedImg;
     FixedInfo           maSigsNotvalidatedFI;
+    FixedInfo           maSigsOldSignatureFI;
 
     PushButton          maViewBtn;
     PushButton          maAddBtn;
@@ -93,17 +100,24 @@ private:
     CancelButton        maCancelBtn;
     HelpButton          maHelpBtn;
 
+    ::rtl::OUString m_sODFVersion;
+    //Signals if the document contains already a document signature. This is only
+    //importent when we are signing macros and if the value is true.
+    bool m_bHasDocumentSignature;
+    bool m_bWarningShowSignMacro;
+
     DECL_LINK(          ViewButtonHdl, Button* );
     DECL_LINK(          AddButtonHdl, Button* );
     DECL_LINK(          RemoveButtonHdl, Button* );
     DECL_LINK(          SignatureHighlightHdl, void* );
     DECL_LINK(          SignatureSelectHdl, void* );
     DECL_LINK(          StartVerifySignatureHdl, void* );
+    DECL_LINK(          OKButtonHdl, void* );
 
-    void                ImplGetSignatureInformations();
+    void                ImplGetSignatureInformations(bool bUseTempStream);
     void                ImplFillSignaturesBox();
     void                ImplShowSignaturesDetails();
-    SignatureStreamHelper ImplOpenSignatureStream( sal_Int32 eStreamMode );
+    SignatureStreamHelper ImplOpenSignatureStream( sal_Int32 eStreamMode, bool bTempStream );
 
     //Checks if adding is allowed.
     //See the spec at specs/www/appwide/security/Electronic_Signatures_and_Security.sxw
@@ -111,10 +125,15 @@ private:
     bool canAdd();
     bool canRemove();
 
+    //Checks if a particular stream is a valid xml stream. Those are treated differently
+    //when they are signed (c14n transformation)
+    bool isXML(const ::rtl::OUString& rURI );
+    bool canAddRemove();
+
 public:
     DigitalSignaturesDialog( Window* pParent, cssu::Reference<
         cssu::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
-        sal_Bool bReadOnly );
+        sal_Bool bReadOnly, const ::rtl::OUString& sODFVersion, bool bHasDocumentSignature);
     ~DigitalSignaturesDialog();
 
             // Initialize the dialog and the security environment, returns TRUE on success

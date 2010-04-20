@@ -325,7 +325,7 @@ static void add_SO_Plugins( PluginLocationMap & rPlugins )
 }
 
 //__________________________________________________________________________________________________
-Sequence< PluginDescription > XPluginManager_Impl::getPluginDescriptions(void) throw()
+Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(void) throw()
 {
     Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
     static Sequence<PluginDescription > s_aDescriptions( 0 );

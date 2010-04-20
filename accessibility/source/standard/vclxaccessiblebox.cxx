@@ -155,7 +155,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
             // combobox, however, we have to help the list with providing
             // the text of the currently selected item.
             VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
-            if (pList != NULL)
+            if (pList != NULL && m_xText.is())
             {
                 Reference<XAccessibleText> xText (m_xText->getAccessibleContext(), UNO_QUERY);
                 if ( xText.is() )
