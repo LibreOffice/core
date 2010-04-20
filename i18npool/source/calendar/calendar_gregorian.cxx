@@ -148,9 +148,41 @@ void SAL_CALL
 Calendar_gregorian::init(Era *_eraArray)
 {
         cCalendar = "com.sun.star.i18n.Calendar_gregorian";
+
+        // #i102356# With icu::Calendar::createInstance(UErrorCode) in a Thai
+        // th_TH system locale we accidentally used a Buddhist calendar. Though
+        // the ICU documentation says that should be the case only for
+        // th_TH_TRADITIONAL (and ja_JP_TRADITIONAL Gengou), a plain th_TH
+        // already triggers that behavior, ja_JP does not. Strange enough,
+        // passing a th_TH locale to the calendar creation doesn't trigger
+        // this.
+        // See also http://userguide.icu-project.org/datetime/calendar
+
+        // Whatever ICU offers as the default calendar for a locale, ensure we
+        // have a Gregorian calendar as requested.
+
+        /* XXX: with the current implementation the aLocale member variable is
+         * not set prior to loading a calendar from locale data. This
+         * creates an empty (root) locale for ICU, but at least the correct
+         * calendar is used. The language part must not be NULL (respectively
+         * not all, language and country and variant), otherwise the current
+         * default locale would be used again and the calendar keyword ignored.
+         * */
+        icu::Locale aIcuLocale( "", NULL, NULL, "calendar=gregorian");
+
         UErrorCode status;
-        body = icu::Calendar::createInstance(status = U_ZERO_ERROR);
+        body = icu::Calendar::createInstance( aIcuLocale, status = U_ZERO_ERROR);
         if (!body || !U_SUCCESS(status)) throw ERROR;
+
+#if 0
+        {
+            icu::Locale loc;
+            loc = body->getLocale( ULOC_ACTUAL_LOCALE, status = U_ZERO_ERROR);
+            fprintf( stderr, "\nICU calendar actual locale: %s\n", loc.getName());
+            loc = body->getLocale( ULOC_VALID_LOCALE, status = U_ZERO_ERROR);
+            fprintf( stderr,   "ICU calendar valid  locale: %s\n", loc.getName());
+        }
+#endif
 
         eraArray=_eraArray;
 }

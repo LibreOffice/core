@@ -172,8 +172,8 @@ inline void SvAddressParser_Impl::addTokenToRealName()
         if (!m_pRealNameBegin)
             m_pRealNameBegin = m_pRealNameContentBegin = m_pCurTokenBegin;
         else if (m_pRealNameEnd < m_pCurTokenBegin - 1
-                 || m_pRealNameEnd == m_pCurTokenBegin - 1
-                    && *m_pRealNameEnd != ' ')
+                 || (m_pRealNameEnd == m_pCurTokenBegin - 1
+                    && *m_pRealNameEnd != ' '))
             m_bRealNameReparse = true;
         m_pRealNameEnd = m_pRealNameContentEnd = m_pCurTokenEnd;
     }
@@ -634,8 +634,8 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                 else
                 {
                     m_pAddrSpec = m_aInnerAddrSpec.isValid()
-                                  || !m_aOuterAddrSpec.isValid()
-                                         && m_aInnerAddrSpec.isPoorlyValid() ?
+                                  || (!m_aOuterAddrSpec.isValid()
+                                         && m_aInnerAddrSpec.isPoorlyValid()) ?
                                       &m_aInnerAddrSpec :
                                   m_aOuterAddrSpec.isPoorlyValid() ?
                                       &m_aOuterAddrSpec : 0;
@@ -663,11 +663,11 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                         }
                         UniString aTheRealName;
                         if (!m_pRealNameBegin
-                            || m_pAddrSpec == &m_aOuterAddrSpec
+                            || (m_pAddrSpec == &m_aOuterAddrSpec
                                && m_pRealNameBegin
                                       == m_aOuterAddrSpec.m_pBegin
                                && m_pRealNameEnd == m_aOuterAddrSpec.m_pEnd
-                               && m_pFirstCommentBegin)
+                               && m_pFirstCommentBegin))
                             if (!m_pFirstCommentBegin)
                                 aTheRealName = aTheAddrSpec;
                             else if (m_bFirstCommentReparse)
@@ -820,7 +820,7 @@ bool SvAddressParser::createRFC822Mailbox(String const & rPhrase,
                     return false;
                 if (*p == '"')
                     break;
-                if (*p == '\x0D' || *p == '\\' && ++p == pEnd
+                if (*p == '\x0D' || (*p == '\\' && ++p == pEnd)
                     || !INetMIME::isUSASCII(*p))
                     return false;
                 if (INetMIME::needsQuotedStringEscape(*p))
@@ -868,7 +868,7 @@ bool SvAddressParser::createRFC822Mailbox(String const & rPhrase,
                     return false;
                 if (*p == ']')
                     break;
-                if (*p == '\x0D' || *p == '[' || *p == '\\' && ++p == pEnd
+                if (*p == '\x0D' || *p == '[' || (*p == '\\' && ++p == pEnd)
                     || !INetMIME::isUSASCII(*p))
                     return false;
                 if (*p >= '[' && *p <= ']')

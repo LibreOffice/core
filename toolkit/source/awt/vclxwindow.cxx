@@ -2537,7 +2537,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
             vcl::PDFExtOutDevData* pPDFExport   = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
             bool bDrawSimple =    ( pDev->GetOutDevType() == OUTDEV_PRINTER )
                                || ( pDev->GetOutDevViewType() == OUTDEV_VIEWTYPE_PRINTPREVIEW )
-                               || ( pPDFExport && ! pPDFExport->GetIsExportFormFields() );
+                               || ( pPDFExport != NULL );
             if ( bDrawSimple )
             {
                 pWindow->Draw( pDev, aP, aSz, WINDOW_DRAW_NOCONTROLS );

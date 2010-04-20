@@ -142,23 +142,19 @@ void ComboBox::ImplCalcEditHeight()
     if ( !IsDropDownBox() )
         mnDDHeight += 4;
 
-    // FIXME: currently only on aqua; see if we can use this on other platforms
-    if( ImplGetSVData()->maNWFData.mbNoFocusRects )
+    Region aCtrlRegion( Rectangle( (const Point&)Point(), Size( 10, 10 ) ) );
+    Region aBoundRegion, aContentRegion;
+    ImplControlValue aControlValue;
+    ControlType aType = IsDropDownBox() ? CTRL_COMBOBOX : CTRL_EDITBOX;
+    if( GetNativeControlRegion( aType, PART_ENTIRE_CONTROL,
+                                aCtrlRegion,
+                                CTRL_STATE_ENABLED,
+                                aControlValue, rtl::OUString(),
+                                aBoundRegion, aContentRegion ) )
     {
-        Region aCtrlRegion( Rectangle( (const Point&)Point(), Size( 10, 10 ) ) );
-        Region aBoundRegion, aContentRegion;
-        ImplControlValue aControlValue;
-        ControlType aType = IsDropDownBox() ? CTRL_COMBOBOX : CTRL_EDITBOX;
-        if( GetNativeControlRegion( aType, PART_ENTIRE_CONTROL,
-                                    aCtrlRegion,
-                                    CTRL_STATE_ENABLED,
-                                    aControlValue, rtl::OUString(),
-                                    aBoundRegion, aContentRegion ) )
-        {
-            const long nNCHeight = aBoundRegion.GetBoundRect().GetHeight();
-            if( mnDDHeight < nNCHeight )
-                mnDDHeight = sal::static_int_cast<USHORT>( nNCHeight );
-        }
+        const long nNCHeight = aBoundRegion.GetBoundRect().GetHeight();
+        if( mnDDHeight < nNCHeight )
+            mnDDHeight = sal::static_int_cast<USHORT>( nNCHeight );
     }
 }
 

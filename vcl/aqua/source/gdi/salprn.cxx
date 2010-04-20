@@ -310,8 +310,12 @@ BOOL AquaSalInfoPrinter::SetData( ULONG i_nFlags, ImplJobSetup* io_pSetupData )
             double width = 0, height = 0;
             if( io_pSetupData->mePaperFormat == PAPER_USER )
             {
-                width = TenMuToPt( io_pSetupData->mnPaperWidth );
-                height = TenMuToPt( io_pSetupData->mnPaperHeight );
+                // #i101108# sanity check
+                if( io_pSetupData->mnPaperWidth && io_pSetupData->mnPaperHeight )
+                {
+                    width = TenMuToPt( io_pSetupData->mnPaperWidth );
+                    height = TenMuToPt( io_pSetupData->mnPaperHeight );
+                }
             }
             else
                 getPaperSize( width, height, io_pSetupData->mePaperFormat );

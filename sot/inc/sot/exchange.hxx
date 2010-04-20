@@ -196,10 +196,7 @@ public:
     static ULONG    RegisterFormatMimeType( const String& rMimeType );
 
     static ULONG    GetFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    static ULONG    GetStaticNameFormat( const String& rName );
-
     static String   GetFormatName( ULONG nFormat );
-    static String   GetFormatStaticName( ULONG nFormat );
     static sal_Bool GetFormatDataFlavor( ULONG nFormat, ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     static String   GetFormatMimeType( ULONG nFormat );
     static BOOL     IsInternal( const SvGlobalName& );
@@ -215,14 +212,6 @@ public:
         { return SotExchange::RegisterFormatMimeType( rName ); }
     static ULONG RegisterSotFormatName( SotFormatStringId nId )
         { return nId; }
-
-    // Anzahl der bereits registrierten Formate bzw. der hoechsten
-    // registrierten ID abfragen (fuer System-Registrierung)
-    // ACHTUNG: Die Algorithmen zur Registrierung beim System
-    // verlassen sich darauf, dass die hier gelieferte maximale
-    // Format-ID 'klein' ist, so dass eine Schleife ueber alle
-    // Formate laufen kann.
-    static ULONG    GetMaxFormat( void );
 
     // same for XTransferable interface
     static USHORT   GetExchangeAction(
