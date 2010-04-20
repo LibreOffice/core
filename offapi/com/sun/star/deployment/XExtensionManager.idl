@@ -68,12 +68,12 @@ interface XExtensionManager
 {
     /** interface to notify disposing
      */
-//     interface com::sun::star::lang::XComponent;
+    interface com::sun::star::lang::XComponent;
 
-//     /** interface to notify changes of the set of deployed packages of
-//         this manager
-//     */
-//     interface com::sun::star::util::XModifyBroadcaster;
+    /** interface to notify changes of the set of deployed packages of
+        this manager
+    */
+    interface com::sun::star::util::XModifyBroadcaster;
 
 
     /** gets the supported <type>XPackageTypeInfo</type>s.
