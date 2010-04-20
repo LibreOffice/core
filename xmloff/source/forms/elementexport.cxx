@@ -693,7 +693,7 @@ namespace xmloff
 
         if (m_nIncludeCommon & CCA_TARGET_LOCATION)
         {
-            exportTargetLocationAttribute();
+            exportTargetLocationAttribute(false);
         #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
             m_nIncludeCommon = m_nIncludeCommon & ~CCA_TARGET_LOCATION;
@@ -2134,7 +2134,7 @@ namespace xmloff
         // the target frame
         exportTargetFrameAttribute();
         // the target URL
-        exportTargetLocationAttribute();
+        exportTargetLocationAttribute(true);    // #i110911# add type attribute (for form, but not for control)
 
         // master fields
         exportStringSequenceAttribute(
