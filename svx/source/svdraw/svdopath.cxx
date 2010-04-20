@@ -1749,7 +1749,10 @@ void SdrPathObj::ImpForceKind()
         // was called, once here below and once on a 2nd place below.
 
         // #i10659# for SdrTextObj, keep aRect up to date
-        aRect = ImpGetBoundRect(GetPathPoly());
+        if(GetPathPoly().count())
+        {
+            aRect = ImpGetBoundRect(GetPathPoly());
+        }
     }
 
     // #i75974# adapt polygon state to object type. This may include a reinterpretation
@@ -2382,7 +2385,10 @@ void SdrPathObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
 
 void SdrPathObj::RecalcSnapRect()
 {
-    maSnapRect = ImpGetBoundRect(GetPathPoly());
+    if(GetPathPoly().count())
+    {
+        maSnapRect = ImpGetBoundRect(GetPathPoly());
+    }
 }
 
 void SdrPathObj::NbcSetSnapRect(const Rectangle& rRect)
@@ -2472,8 +2478,11 @@ void SdrPathObj::NbcSetPoint(const Point& rPnt, sal_uInt32 nHdlNum)
         }
         else
         {
-            // #i10659# for SdrTextObj, keep aRect up to date
-            aRect = ImpGetBoundRect(GetPathPoly()); // fuer SdrTextObj
+            if(GetPathPoly().count())
+            {
+                // #i10659# for SdrTextObj, keep aRect up to date
+                aRect = ImpGetBoundRect(GetPathPoly()); // fuer SdrTextObj#
+            }
         }
 
         SetRectsDirty();

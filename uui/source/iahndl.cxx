@@ -63,6 +63,7 @@
 #include "com/sun/star/task/XInteractionHandler.hpp"
 #include "com/sun/star/task/XInteractionHandler2.hpp"
 #include "com/sun/star/task/DocumentPasswordRequest.hpp"
+#include "com/sun/star/task/DocumentMSPasswordRequest.hpp"
 #include "com/sun/star/task/ErrorCodeIOException.hpp"
 #include "com/sun/star/task/ErrorCodeRequest.hpp"
 #include "com/sun/star/task/MasterPasswordRequest.hpp"
@@ -1132,6 +1133,15 @@ bool UUIInteractionHelper::handleDialogRequests(
         return true;
     }
 
+    star::task::DocumentMSPasswordRequest aDocumentMSPasswordRequest;
+    if (aAnyRequest >>= aDocumentMSPasswordRequest)
+    {
+        handleMSPasswordRequest(aDocumentMSPasswordRequest.Mode,
+                              rRequest->getContinuations(),
+                              aDocumentMSPasswordRequest.Name);
+        return true;
+    }
+
     star::task::PasswordRequest aPasswordRequest;
     if (aAnyRequest >>= aPasswordRequest)
     {
@@ -1814,6 +1824,48 @@ UUIInteractionHelper::executePasswordDialog(
         std::auto_ptr< PasswordCreateDialog >
         xDialog(new PasswordCreateDialog(
                             getParentProperty(), xManager.get()));
+
+        rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
+                ERRCODE_BUTTON_CANCEL);
+        rInfo.SetPassword( xDialog->GetPassword() );
+    }
+    else
+    {
+        std::auto_ptr< PasswordDialog >
+        xDialog(new PasswordDialog(
+                            getParentProperty(), nMode, xManager.get(), aDocName ));
+
+        rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
+                ERRCODE_BUTTON_CANCEL);
+        rInfo.SetPassword( xDialog->GetPassword() );
+    }
+    }
+    catch (std::bad_alloc const &)
+    {
+        throw star::uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+            star::uno::Reference< star::uno::XInterface>());
+    }
+}
+
+void
+UUIInteractionHelper::executeMSPasswordDialog(
+    LoginErrorInfo & rInfo,
+    star::task::PasswordRequestMode nMode,
+    ::rtl::OUString aDocName)
+       SAL_THROW((star::uno::RuntimeException))
+{
+    try
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+
+        std::auto_ptr< ResMgr >
+            xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+    if( nMode == star::task::PasswordRequestMode_PASSWORD_CREATE )
+    {
+        std::auto_ptr< PasswordCreateDialog >
+        xDialog(new PasswordCreateDialog(
+                            getParentProperty(), xManager.get(), true));
 
         rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
                 ERRCODE_BUTTON_CANCEL);
@@ -2534,6 +2586,47 @@ UUIInteractionHelper::handlePasswordRequest(
     LoginErrorInfo aInfo;
 
     executePasswordDialog(aInfo, nMode, aDocumentName);
+
+    switch (aInfo.GetResult())
+    {
+    case ERRCODE_BUTTON_OK:
+        if (xPassword.is())
+        {
+        xPassword->setPassword(aInfo.GetPassword());
+        xPassword->select();
+        }
+        break;
+
+    case ERRCODE_BUTTON_RETRY:
+        if (xRetry.is())
+        xRetry->select();
+        break;
+
+    default:
+        if (xAbort.is())
+            xAbort->select();
+        break;
+    }
+}
+
+void
+UUIInteractionHelper::handleMSPasswordRequest(
+    star::task::PasswordRequestMode nMode,
+    star::uno::Sequence< star::uno::Reference<
+                             star::task::XInteractionContinuation > > const &
+        rContinuations,
+    ::rtl::OUString aDocumentName )
+    SAL_THROW((star::uno::RuntimeException))
+{
+    star::uno::Reference< star::task::XInteractionRetry > xRetry;
+    star::uno::Reference< star::task::XInteractionAbort > xAbort;
+    star::uno::Reference< star::task::XInteractionPassword >
+        xPassword;
+    getContinuations(
+        rContinuations, 0, 0, &xRetry, &xAbort, 0, &xPassword, 0, 0);
+    LoginErrorInfo aInfo;
+
+    executeMSPasswordDialog(aInfo, nMode, aDocumentName);
 
     switch (aInfo.GetResult())
     {

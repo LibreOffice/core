@@ -66,7 +66,10 @@ namespace dp_gui {
 
 TheExtensionManager::TheExtensionManager( Window *pParent,
                                           const uno::Reference< uno::XComponentContext > &xContext ) :
-    m_xContext( xContext )
+    m_xContext( xContext ),
+    m_pParent( pParent ),
+    m_pExtMgrDialog( NULL ),
+    m_pUpdReqDialog( NULL )
 {
     if ( dp_misc::office_is_running() )
     {
@@ -75,10 +78,6 @@ TheExtensionManager::TheExtensionManager( Window *pParent,
         if ( m_xDesktop.is() )
             m_xDesktop->addTerminateListener( this );
     }
-
-    m_pDialog = new ExtMgrDialog( pParent, this );
-
-    m_pExecuteCmdQueue.reset( new ExtensionCmdQueue( m_pDialog, this, xContext ) );
 
     m_sPackageManagers.realloc(2);
     m_sPackageManagers[0] = deployment::thePackageManagerFactory::get( m_xContext )->getPackageManager( OUSTR("user") );
@@ -110,21 +109,43 @@ TheExtensionManager::TheExtensionManager( Window *pParent,
                                               uno::Sequence< uno::Any >( args, 1 )), uno::UNO_QUERY_THROW);
     try
     {   //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
-        OUString sURL;
         uno::Any value = xNameAccessRepositories->getByName( OUSTR( "WebsiteLink" ) );
-        sURL = value.get< OUString > ();
-        m_pDialog->setGetExtensionsURL( sURL );
+        m_sGetExtensionsURL = value.get< OUString > ();
      }
     catch ( uno::Exception& )
     {}
-
-    createPackageList();
 }
 
 //------------------------------------------------------------------------------
 TheExtensionManager::~TheExtensionManager()
 {
-    delete m_pDialog;
+    if ( m_pUpdReqDialog )
+        delete m_pUpdReqDialog;
+    if ( m_pExtMgrDialog )
+        delete m_pExtMgrDialog;
+}
+
+//------------------------------------------------------------------------------
+void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
+{
+    const ::vos::OGuard guard( Application::GetSolarMutex() );
+
+    if ( bCreateUpdDlg )
+    {
+        if ( !m_pUpdReqDialog )
+        {
+            m_pUpdReqDialog = new UpdateRequiredDialog( NULL, this );
+            m_pExecuteCmdQueue.reset( new ExtensionCmdQueue( (DialogHelper*) m_pUpdReqDialog, this, m_xContext ) );
+            createPackageList();
+        }
+    }
+    else if ( !m_pExtMgrDialog )
+    {
+        m_pExtMgrDialog = new ExtMgrDialog( m_pParent, this );
+        m_pExecuteCmdQueue.reset( new ExtensionCmdQueue( (DialogHelper*) m_pExtMgrDialog, this, m_xContext ) );
+        m_pExtMgrDialog->setGetExtensionsURL( m_sGetExtensionsURL );
+        createPackageList();
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -132,7 +153,7 @@ void TheExtensionManager::Show()
 {
     const ::vos::OGuard guard( Application::GetSolarMutex() );
 
-    m_pDialog->Show();
+    getDialog()->Show();
 }
 
 //------------------------------------------------------------------------------
@@ -140,7 +161,7 @@ void TheExtensionManager::SetText( const ::rtl::OUString &rTitle )
 {
     const ::vos::OGuard guard( Application::GetSolarMutex() );
 
-    m_pDialog->SetText( rTitle );
+    getDialog()->SetText( rTitle );
 }
 
 //------------------------------------------------------------------------------
@@ -148,25 +169,69 @@ void TheExtensionManager::ToTop( USHORT nFlags )
 {
     const ::vos::OGuard guard( Application::GetSolarMutex() );
 
-    m_pDialog->ToTop( nFlags );
+    getDialog()->ToTop( nFlags );
 }
 
 //------------------------------------------------------------------------------
 bool TheExtensionManager::Close()
 {
-    return m_pDialog->Close();
+    if ( m_pExtMgrDialog )
+        return m_pExtMgrDialog->Close();
+    else if ( m_pUpdReqDialog )
+        return m_pUpdReqDialog->Close();
+    else
+        return true;
+}
+
+//------------------------------------------------------------------------------
+sal_Int16 TheExtensionManager::execute()
+{
+    sal_Int16 nRet = 0;
+
+    if ( m_pUpdReqDialog )
+    {
+        nRet = m_pUpdReqDialog->Execute();
+        delete m_pUpdReqDialog;
+        m_pUpdReqDialog = NULL;
+    }
+
+    return nRet;
 }
 
 //------------------------------------------------------------------------------
 bool TheExtensionManager::isVisible()
 {
-    return m_pDialog->IsVisible();
+    return getDialog()->IsVisible();
 }
 
 //------------------------------------------------------------------------------
 bool TheExtensionManager::checkUpdates( bool /* bShowUpdateOnly */, bool /*bParentVisible*/ )
 {
-    m_pExecuteCmdQueue->checkForUpdates( m_sPackageManagers );
+    std::vector< TUpdateListEntry > vEntries;
+
+    for ( sal_Int32 i = 0; i < m_sPackageManagers.getLength(); ++i )
+    {
+        uno::Sequence< uno::Reference< deployment::XPackage > > xPackages;
+        try {
+            xPackages = m_sPackageManagers[i]->getDeployedPackages( uno::Reference< task::XAbortChannel >(),
+                                                                    uno::Reference< ucb::XCommandEnvironment >() );
+            for ( sal_Int32 k = 0; k < xPackages.getLength(); ++k )
+            {
+                TUpdateListEntry pEntry( new UpdateListEntry( xPackages[k], m_sPackageManagers[i] ) );
+                vEntries.push_back( pEntry );
+            }
+        } catch ( deployment::DeploymentException & ) {
+            continue;
+        } catch ( ucb::CommandFailedException & ) {
+            continue;
+        } catch ( ucb::CommandAbortedException & ) {
+            return true;
+        } catch ( lang::IllegalArgumentException & e ) {
+            throw uno::RuntimeException( e.Message, e.Context );
+        }
+    }
+
+    m_pExecuteCmdQueue->checkForUpdates( vEntries );
     return true;
 }
 
@@ -189,10 +254,9 @@ bool TheExtensionManager::removePackage( const uno::Reference< deployment::XPack
 }
 
 //------------------------------------------------------------------------------
-bool TheExtensionManager::updatePackage( const uno::Reference< deployment::XPackageManager > &xPackageManager,
-                                         const uno::Reference< deployment::XPackage > &xPackage )
+bool TheExtensionManager::updatePackages( const std::vector< TUpdateListEntry > &vList )
 {
-    m_pExecuteCmdQueue->checkForUpdate( xPackageManager, xPackage );
+    m_pExecuteCmdQueue->checkForUpdates( vList );
 
     return true;
 }
@@ -203,6 +267,8 @@ bool TheExtensionManager::installPackage( const OUString &rPackageURL, bool bWar
     if ( rPackageURL.getLength() == 0 )
         return false;
 
+    createDialog( false );
+
     uno::Reference< deployment::XPackageManager > xUserPkgMgr = getUserPkgMgr();
     uno::Reference< deployment::XPackageManager > xSharedPkgMgr = getSharedPkgMgr();
 
@@ -210,7 +276,7 @@ bool TheExtensionManager::installPackage( const OUString &rPackageURL, bool bWar
     bool bInstallForAll = false;
 
     if ( !bWarnUser && ! xSharedPkgMgr->isReadOnly() )
-        bInstall = m_pDialog->installForAllUsers( bInstallForAll );
+        bInstall = getDialogHelper()->installForAllUsers( bInstallForAll );
 
     if ( !bInstall )
         return false;
@@ -239,8 +305,10 @@ void TheExtensionManager::terminateDialog()
     if ( ! dp_misc::office_is_running() )
     {
         const ::vos::OGuard guard( Application::GetSolarMutex() );
-        delete m_pDialog;
-        m_pDialog = NULL;
+        delete m_pExtMgrDialog;
+        m_pExtMgrDialog = NULL;
+        delete m_pUpdReqDialog;
+        m_pUpdReqDialog = NULL;
         Application::Quit();
     }
 }
@@ -252,7 +320,7 @@ bool TheExtensionManager::createPackageList( const uno::Reference< deployment::X
 
     try {
         packages = xPackageManager->getDeployedPackages( uno::Reference< task::XAbortChannel >(),
-                                                               uno::Reference< ucb::XCommandEnvironment >() );
+                                                         uno::Reference< ucb::XCommandEnvironment >() );
     } catch ( deployment::DeploymentException & ) {
         //handleGeneralError(e.Cause);
         return true;
@@ -267,7 +335,7 @@ bool TheExtensionManager::createPackageList( const uno::Reference< deployment::X
 
     for ( sal_Int32 j = 0; j < packages.getLength(); ++j )
     {
-        m_pDialog->addPackageToList( packages[j], xPackageManager );
+        getDialogHelper()->addPackageToList( packages[j], xPackageManager );
     }
 
     return true;
@@ -381,8 +449,10 @@ void TheExtensionManager::disposing( lang::EventObject const & rEvt )
         if ( dp_misc::office_is_running() )
         {
             const ::vos::OGuard guard( Application::GetSolarMutex() );
-            delete m_pDialog;
-            m_pDialog = NULL;
+            delete m_pExtMgrDialog;
+            m_pExtMgrDialog = NULL;
+            delete m_pUpdReqDialog;
+            m_pUpdReqDialog = NULL;
         }
         s_ExtMgr.clear();
     }
@@ -393,15 +463,22 @@ void TheExtensionManager::disposing( lang::EventObject const & rEvt )
 void TheExtensionManager::queryTermination( ::lang::EventObject const & )
     throw ( frame::TerminationVetoException, uno::RuntimeException )
 {
-    if ( m_pExecuteCmdQueue->isBusy() || ( m_pDialog && m_pDialog->isBusy() ) )
+    DialogHelper *pDialogHelper = getDialogHelper();
+
+    if ( m_pExecuteCmdQueue->isBusy() || ( pDialogHelper && pDialogHelper->isBusy() ) )
     {
         ToTop( TOTOP_RESTOREWHENMIN );
         throw frame::TerminationVetoException(
             OUSTR("The office cannot be closed while the Extension Manager is running"),
             uno::Reference<XInterface>(static_cast<frame::XTerminateListener*>(this), uno::UNO_QUERY));
     }
-    else if ( m_pDialog )
-        m_pDialog->Close();
+    else
+    {
+        if ( m_pExtMgrDialog )
+            m_pExtMgrDialog->Close();
+        if ( m_pUpdReqDialog )
+            m_pUpdReqDialog->Close();
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -419,9 +496,9 @@ void TheExtensionManager::modified( ::lang::EventObject const & rEvt )
     uno::Reference< deployment::XPackageManager > xPackageManager( rEvt.Source, uno::UNO_QUERY );
     if ( xPackageManager.is() )
     {
-        m_pDialog->prepareChecking( xPackageManager );
+        getDialogHelper()->prepareChecking( xPackageManager );
         createPackageList( xPackageManager );
-        m_pDialog->checkEntries();
+        getDialogHelper()->checkEntries();
     }
 }
 
@@ -433,7 +510,8 @@ void TheExtensionManager::modified( ::lang::EventObject const & rEvt )
     if ( s_ExtMgr.is() )
     {
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-        s_ExtMgr->installPackage( extensionURL, true );
+        if ( extensionURL.getLength() )
+            s_ExtMgr->installPackage( extensionURL, true );
         return s_ExtMgr;
     }
 
@@ -450,7 +528,8 @@ void TheExtensionManager::modified( ::lang::EventObject const & rEvt )
         s_ExtMgr = that;
     }
 
-    s_ExtMgr->installPackage( extensionURL, true );
+    if ( extensionURL.getLength() )
+        s_ExtMgr->installPackage( extensionURL, true );
 
     return s_ExtMgr;
 }

@@ -239,6 +239,28 @@ public:
     bool                CreateSaltDigest(
                             const sal_uInt8 nSaltData[16], sal_uInt8 nSaltDigest[16] );
 
+    /** Encodes a block of memory.
+
+        @see rtl_cipher_encode()
+
+        @precond
+            The codec must be initialized with InitKey() before this function
+            can be used. The destination buffer must be able to take all
+            unencoded data from the source buffer (usually this means it must be
+            as long as or longer than the source buffer).
+
+        @param pData
+            Unencrypted source data block.
+        @param nDatLen
+            Size of the passed source data block.
+        @param pBuffer
+            Destination buffer for the encrypted data.
+        @param nBufLen
+            Size of the destination buffer.
+
+        @return
+            true = Encoding was successful (no error occured).
+    */
     bool                Encode(
                             const void* pData, sal_Size nDatLen,
                             sal_uInt8* pBuffer, sal_Size nBufLen );
@@ -282,6 +304,24 @@ public:
             Number of bytes to be skipped (cipher "seeks" forward).
      */
     bool                Skip( sal_Size nDatLen );
+
+    /** Gets salt data and salt digest.
+
+        @precond
+            The codec must be initialized with InitKey() before this function
+            can be used.
+
+        @param pSalt
+            Salt, a random number.
+        @param pSaltData
+            Salt data block generated from the salt.
+        @param pSaltDigest
+            Salt digest generated from the salt.
+     */
+    void                GetEncryptKey (
+                            const sal_uInt8 pSalt[16],
+                            sal_uInt8 pSaltData[16],
+                            sal_uInt8 pSaltDigest[16]);
 
 private:
     void                GetDigestFromSalt( const sal_uInt8 pSaltData[16], sal_uInt8 pDigest[16] );

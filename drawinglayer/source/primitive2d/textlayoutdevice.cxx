@@ -41,6 +41,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/font.hxx>
 #include <vcl/metric.hxx>
+#include <i18npool/mslangid.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -165,14 +166,14 @@ namespace drawinglayer
             mrDevice.SetFont( rFont );
         }
 
-        void TextLayouterDevice::setFontAttributes(const FontAttributes& rFontAttributes, const basegfx::B2DHomMatrix& rTransform)
+        void TextLayouterDevice::setFontAttributes(const FontAttributes& rFontAttributes, const basegfx::B2DHomMatrix& rTransform, const ::com::sun::star::lang::Locale & rLocale)
         {
-            setFont(getVclFontFromFontAttributes(rFontAttributes, rTransform, mrDevice));
+            setFont(getVclFontFromFontAttributes(rFontAttributes, rTransform, rLocale, mrDevice));
         }
 
-        void TextLayouterDevice::setFontAttributes(const FontAttributes& rFontAttributes, double fFontScaleX, double fFontScaleY)
+        void TextLayouterDevice::setFontAttributes(const FontAttributes& rFontAttributes, double fFontScaleX, double fFontScaleY, const ::com::sun::star::lang::Locale & rLocale)
         {
-            setFont(getVclFontFromFontAttributes(rFontAttributes, fFontScaleX, fFontScaleY, 0.0, mrDevice));
+            setFont(getVclFontFromFontAttributes(rFontAttributes, fFontScaleX, fFontScaleY, 0.0, rLocale, mrDevice));
         }
 
         double TextLayouterDevice::getOverlineOffset() const
@@ -305,6 +306,7 @@ namespace drawinglayer
         Font getVclFontFromFontAttributes(
             const FontAttributes& rFontAttributes,
             const basegfx::B2DHomMatrix& rTransform,
+            const ::com::sun::star::lang::Locale & rLocale,
             const OutputDevice& rOutDev)
         {
             // decompose matrix to have position and size of text
@@ -313,7 +315,7 @@ namespace drawinglayer
 
             rTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
-            return getVclFontFromFontAttributes(rFontAttributes, aScale.getX(), aScale.getY(), fRotate, rOutDev);
+            return getVclFontFromFontAttributes(rFontAttributes, aScale.getX(), aScale.getY(), fRotate, rLocale, rOutDev);
         }
 
         Font getVclFontFromFontAttributes(
@@ -321,6 +323,7 @@ namespace drawinglayer
             double fFontScaleX,
             double fFontScaleY,
             double fFontRotation,
+            const ::com::sun::star::lang::Locale & rLocale,
             const OutputDevice& /*rOutDev*/)
         {
             sal_uInt32 nWidth(basegfx::fround(fabs(fFontScaleX)));
@@ -340,6 +343,7 @@ namespace drawinglayer
             aRetval.SetWeight(static_cast<FontWeight>(rFontAttributes.getWeight()));
             aRetval.SetItalic(rFontAttributes.getItalic() ? ITALIC_NORMAL : ITALIC_NONE);
             aRetval.SetOutline(rFontAttributes.getOutline());
+            aRetval.SetLanguage(MsLangId::convertLocaleToLanguage(rLocale));
 
 #ifdef WIN32
             // #100424# use higher precision

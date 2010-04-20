@@ -305,7 +305,7 @@ namespace drawinglayer
 
                 // TextLayouterDevice is needed to get metrics for text decorations like
                 // underline/strikeout/emphasis marks from it. For setup, the font size is needed
-                aTextLayouter.setFontAttributes(getFontAttributes(), rDecTrans.getScale().getX(), rDecTrans.getScale().getY());
+                aTextLayouter.setFontAttributes(getFontAttributes(), rDecTrans.getScale().getX(), rDecTrans.getScale().getY(), getLocale());
 
                 // get text width
                 double fTextWidth(0.0);
@@ -526,7 +526,7 @@ namespace drawinglayer
                     if(bNoDXArray)
                     {
                         // ..but only completely when no DXArray
-                        aTextLayouter.setFontAttributes(getFontAttributes(), rDecTrans.getScale().getX(), rDecTrans.getScale().getY());
+                        aTextLayouter.setFontAttributes(getFontAttributes(), rDecTrans.getScale().getX(), rDecTrans.getScale().getY(),getLocale());
                     }
 
                     // do iterate over single words

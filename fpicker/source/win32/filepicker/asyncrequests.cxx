@@ -30,6 +30,7 @@
 
 #include "asyncrequests.hxx"
 #include <vcl/svapp.hxx>
+#include <vos/mutex.hxx>
 
 //-----------------------------------------------------------------------------
 // namespace
@@ -68,6 +69,7 @@ void Request::wait(::sal_Int32 nMilliSeconds)
 
 void Request::waitProcessMessages()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     while (!m_aJoiner.check())
         Application::Yield();
 }

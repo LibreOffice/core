@@ -599,7 +599,30 @@ namespace sdr
                                     const SfxItemSet& rCellItemSet = xCurrentCell->GetItemSet();
                                     const sal_uInt32 nTextIndex(nColCount * aCellPos.mnRow + aCellPos.mnCol);
                                     const SdrText* pSdrText = rTableObj.getText(nTextIndex);
-                                    drawinglayer::attribute::SdrFillTextAttribute* pAttribute = drawinglayer::primitive2d::createNewSdrFillTextAttribute(rCellItemSet, pSdrText);
+                                    drawinglayer::attribute::SdrFillTextAttribute* pAttribute = 0;
+
+                                    if(pSdrText)
+                                    {
+                                        // #i101508# take cell's local text frame distances into account
+                                        const sal_Int32 nLeft(xCurrentCell->GetTextLeftDistance());
+                                        const sal_Int32 nRight(xCurrentCell->GetTextRightDistance());
+                                        const sal_Int32 nUpper(xCurrentCell->GetTextUpperDistance());
+                                        const sal_Int32 nLower(xCurrentCell->GetTextLowerDistance());
+
+                                        pAttribute = drawinglayer::primitive2d::createNewSdrFillTextAttribute(
+                                            rCellItemSet,
+                                            pSdrText,
+                                            &nLeft,
+                                            &nUpper,
+                                            &nRight,
+                                            &nLower);
+                                    }
+                                    else
+                                    {
+                                        pAttribute = drawinglayer::primitive2d::createNewSdrFillTextAttribute(
+                                            rCellItemSet,
+                                            pSdrText);
+                                    }
 
                                     if(pAttribute)
                                     {
