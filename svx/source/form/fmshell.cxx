@@ -285,7 +285,7 @@ void FmFormShell::NotifyMarkListChanged(FmFormView* pWhichView)
 }
 
 //------------------------------------------------------------------------
-sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
+sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool /*bForBrowsing*/)
 {
     if ( GetImpl()->didPrepareClose() )
         // we already did a PrepareClose for the current modifications of the current form
