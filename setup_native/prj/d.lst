@@ -1,4 +1,5 @@
 mkdir: %_DEST%\bin%_EXT%\osl
+mkdir: %_DEST%\bin%_EXT%\broffice
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*.exe
 ..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.jar
@@ -32,6 +33,7 @@ mkdir: %_DEST%\bin%_EXT%\osolsmf
 ..\source\mac\*.icns %_DEST%\bin%_EXT%\*.icns
 ..\source\mac\Info.plist.langpack %_DEST%\bin%_EXT%\Info.plist.langpack
 ..\source\java\openofficeorg_setup.gif %_DEST%\bin%_EXT%\osl\Setup.gif
+..\source\java\brofficeorg_setup.gif %_DEST%\bin%_EXT%\broffice\Setup.gif
 ..\source\java\javaversion.dat %_DEST%\bin%_EXT%\javaversion.dat
 ..\source\java\javaversion2.dat %_DEST%\bin%_EXT%\javaversion2.dat
 ..\source\opensolaris\bundledextensions\installed %_DEST%\bin%_EXT%\osolsmf\installed
