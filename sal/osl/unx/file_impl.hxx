@@ -28,21 +28,30 @@
  *
  ************************************************************************/
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-typedef struct
-{
-    rtl_uString* ustrFilePath;       /* holds native file name */
-    unsigned char DType;
-    bool bHasType;
-    sal_uInt32 RefCount;
-} oslDirectoryItemImpl;
+#ifndef INCLUDED_FILE_IMPL_HXX
+#define INCLUDED_FILE_IMPL_HXX
 
-    oslDirectoryItemImpl* oslDirectoryItemImpl_CreateNew( rtl_uString* _ustrFilePath, bool _bHasDType, unsigned char _DType=0 );
-    void oslDirectoryItemImpl_Destroy( oslDirectoryItemImpl* pItem );
-    void oslDirectoryItemImpl_acquire( oslDirectoryItemImpl* pItem );
-    void oslDirectoryItemImpl_release( oslDirectoryItemImpl* pItem );
-#ifdef __cplusplus
-} /* extern "C" */
-#endif
+#include "osl/file.h"
+#include <stddef.h>
+
+struct DirectoryItem_Impl
+{
+    sal_Int32     m_RefCount;
+
+    rtl_uString * m_ustrFilePath;       /* holds native file name */
+    unsigned char m_DType;
+
+    explicit DirectoryItem_Impl(
+        rtl_uString * ustrFilePath, unsigned char DType = 0);
+    ~DirectoryItem_Impl();
+
+    static void * operator new(size_t n);
+    static void operator delete (void * p, size_t);
+
+    void acquire(); /* @see osl_acquireDirectoryItem() */
+    void release(); /* @see osl_releaseDirectoryItem() */
+
+    oslFileType getFileType() const;
+};
+
+#endif /* INCLUDED_FILE_IMPL_HXX */

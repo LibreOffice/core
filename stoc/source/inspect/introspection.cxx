@@ -43,6 +43,7 @@
 #endif
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
+#include <osl/thread.h>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/component.hxx>
@@ -1421,28 +1422,29 @@ Sequence< Reference<XIdlMethod> > ImplIntrospectionAccess::getMethods(sal_Int32 
         if( nConcept & MethodConcepts )
             pDestMethods[ iDest++ ] = pSourceMethods[ i ];
 
-        /*
-        // Methode mit Concepts ausgeben
-        const XIdlMethodRef& rxMethod = pSourceMethods[ i ];
-        OUString aMethName = rxMethod->getName();
-        String aNameStr = OOUStringToString(aMethName, CHARSET_SYSTEM);
-        String ConceptStr;
-        if( nConcept & DANGEROUS )
-            ConceptStr += "DANGEROUS |";
-        if( nConcept & PROPERTY )
-            ConceptStr += "PROPERTY |";
-        if( nConcept & LISTENER )
-            ConceptStr += "LISTENER |";
-        if( nConcept & ENUMERATION )
-            ConceptStr += "ENUMERATION |";
-        if( nConcept & NAMECONTAINER )
-            ConceptStr += "NAMECONTAINER |";
-        if( nConcept & INDEXCONTAINER )
-            ConceptStr += "INDEXCONTAINER |";
-        if( nConcept & NORMAL_IMPL )
-            ConceptStr += "NORMAL_IMPL |";
-        printf( "Method %ld: %s, Concepts = %s\n", i, aNameStr.GetStr(), ConceptStr.GetStr() );
-        */
+    #if OSL_DEBUG_LEVEL > 0
+        static bool debug = false;
+        if ( debug )
+        {
+            // Methode mit Concepts ausgeben
+            const Reference< XIdlMethod >& rxMethod = pSourceMethods[ i ];
+            ::rtl::OString aNameStr = ::rtl::OUStringToOString( rxMethod->getName(), osl_getThreadTextEncoding() );
+            ::rtl::OString ConceptStr;
+            if( nConcept & MethodConcept::DANGEROUS )
+                ConceptStr += "DANGEROUS |";
+            if( nConcept & MethodConcept::PROPERTY )
+                ConceptStr += "PROPERTY |";
+            if( nConcept & MethodConcept::LISTENER )
+                ConceptStr += "LISTENER |";
+            if( nConcept & MethodConcept::ENUMERATION )
+                ConceptStr += "ENUMERATION |";
+            if( nConcept & MethodConcept::NAMECONTAINER )
+                ConceptStr += "NAMECONTAINER |";
+            if( nConcept & MethodConcept::INDEXCONTAINER )
+                ConceptStr += "INDEXCONTAINER |";
+            OSL_TRACE( "Method %ld: %s, Concepts = %s", i, aNameStr.getStr(), ConceptStr.getStr() );
+        }
+    #endif
     }
 
     // Auf die richtige Laenge bringen

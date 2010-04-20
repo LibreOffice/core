@@ -174,7 +174,7 @@ public class FactoryHelper {
         {
             if (xContext != null)
             {
-                return (XMultiServiceFactory)UnoRuntime.queryInterface(
+                return UnoRuntime.queryInterface(
                     XMultiServiceFactory.class, xContext.getServiceManager() );
             }
             else
@@ -302,7 +302,7 @@ public class FactoryHelper {
                 Object instance = _constructor.newInstance( args );
                 if (bInitCall)
                 {
-                    XInitialization xInitialization = (XInitialization)UnoRuntime.queryInterface(
+                    XInitialization xInitialization = UnoRuntime.queryInterface(
                         XInitialization.class, instance );
                     if (xInitialization != null)
                     {

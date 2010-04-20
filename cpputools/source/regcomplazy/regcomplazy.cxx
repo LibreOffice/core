@@ -131,6 +131,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 sBuffer.append(pBuffer, readSize);
             }
         }
+    fclose(fDescr);
+    fDescr = 0; // just to be sure noone tries to use the file ever after
     }
 
     OString sDescr = sBuffer.makeStringAndClear();

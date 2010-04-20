@@ -37,6 +37,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk
+.IF "$(L10N_framework)"==""
 # --- Files --------------------------------------------------------
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
@@ -97,5 +98,6 @@ DEF1EXPORTFILE=	exports.dxp
 
 
 # --- Targets ------------------------------------------------------
+.ENDIF 		# L10N_framework
 
 .INCLUDE :	target.mk

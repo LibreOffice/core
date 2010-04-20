@@ -40,10 +40,6 @@
 #include "jni_bridge.h"
 
 
-#ifdef __MINGW32__
-#define BROKEN_ALLOCA
-#endif
-
 using namespace ::std;
 using namespace ::rtl;
 

@@ -44,10 +44,6 @@
 #include "share.hxx"
 #include "smallstruct.hxx"
 
-#ifdef __MINGW32__
-#define BROKEN_ALLOCA
-#endif
-
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
