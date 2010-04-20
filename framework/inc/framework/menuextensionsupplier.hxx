@@ -29,7 +29,7 @@
 #define __FRAMEWORK_CLASSES_MENUEXTENSIONSUPPLIER_HXX_
 
 #include <rtl/ustring.hxx>
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 
 struct FWE_DLLPUBLIC MenuExtensionItem
 {
