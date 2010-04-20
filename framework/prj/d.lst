@@ -27,8 +27,8 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\statusbar
 
 ..\%__SRC%\lib\ifwe.lib %_DEST%\lib%_EXT%\ifwe.lib
 ..\%__SRC%\lib\ifwi.lib %_DEST%\lib%_EXT%\ifwi.lib
-..\inc\framework/*.h %_DEST%\inc%_EXT%\*.h
-..\inc\framework/*.hxx %_DEST%\inc%_EXT%\*.hxx
+..\inc\framework/*.h %_DEST%\inc%_EXT%\framework\*.h
+..\inc\framework/*.hxx %_DEST%\inc%_EXT%\framework\*.hxx
 
 ..\uiconfig\startmodule\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\menubar\*.xml
 ..\uiconfig\startmodule\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\toolbar\*.xml
