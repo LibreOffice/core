@@ -108,8 +108,6 @@ DBG_NAME( ModulWindow )
 
 TYPEINIT1( ModulWindow , IDEBaseWindow );
 
-void lcl_getObjectName( const uno::Reference< container::XNameContainer >& rLib, const String& rModName, String& rObjName );
-
 void lcl_PrintHeader( Printer* pPrinter, USHORT nPages, USHORT nCurPage, const String& rTitle, bool bOutput )
 {
     short nLeftMargin   = LMARGPRN;
@@ -1417,7 +1415,7 @@ BasicEntryDescriptor ModulWindow::CreateEntryDescriptor()
                 if( xLib.is() )
                 {
                     String sObjName;
-                    lcl_getObjectName( xLib, aModName, sObjName );
+                    ModuleInfoHelper::getObjectName( xLib, aModName, sObjName );
                     if( sObjName.Len() )
                     {
                         aModName.AppendAscii(" (").Append(sObjName).AppendAscii(")");

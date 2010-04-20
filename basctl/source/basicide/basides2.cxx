@@ -60,29 +60,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 namespace css = ::com::sun::star;
 
-void lcl_getObjectName( const uno::Reference< container::XNameContainer >& rLib, const String& rModName, String& rObjName )
-{
-    try
-    {
-                uno::Reference< script::XVBAModuleInfo > xVBAModuleInfo( rLib, uno::UNO_QUERY );
-                if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( rModName ) )
-                {
-            script::ModuleInfo aModuleInfo = xVBAModuleInfo->getModuleInfo( rModName );
-            uno::Any aObject( aModuleInfo.ModuleObject );
-            uno::Reference< lang::XServiceInfo > xServiceInfo( aObject, uno::UNO_QUERY );
-            if( xServiceInfo.is() && xServiceInfo->supportsService( rtl::OUString::createFromAscii( "ooo.vba.excel.Worksheet" ) ) )
-            {
-                uno::Reference< container::XNamed > xNamed( aObject, uno::UNO_QUERY );
-                if( xNamed.is() )
-                    rObjName = xNamed->getName();
-            }
-        }
-    }
-    catch( uno::Exception& )
-    {
-    }
-}
-
 IMPL_LINK_INLINE_START( BasicIDEShell, ObjectDialogCancelHdl, ObjectCatalog *, EMPTYARG )
 {
     ShowObjectDialog( FALSE, TRUE );
@@ -306,7 +283,7 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
         // display a nice friendly name in the ObjectModule tab,
         // combining the objectname and module name, e.g. Sheet1 ( Financials )
         String sObjName;
-        lcl_getObjectName( xLib, rModName, sObjName );
+        ModuleInfoHelper::getObjectName( xLib, rModName, sObjName );
         if( sObjName.Len() )
         {
             aModName.AppendAscii(" (").Append(sObjName).AppendAscii(")");
