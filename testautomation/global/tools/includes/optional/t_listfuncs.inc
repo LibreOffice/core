@@ -160,29 +160,22 @@ function hManageComparisionList( sFileIn as string, sFileOut as string, sListOut
     '///<ul>
 
     const CFN = "hManageComparisionList::"
-    const RC_SUCCESS = 0
-    
-    ' hListFileGetSize will return -1 if the list does not exist or the number
-    ' of lines in the reference file plus additional 10 lines.
-    '///+<li>Verify that the reference file exists and is non-empty</li>
-    dim iFileSize as integer : iFileSize = hListFileGetSize( sFileIn )
-    dim irc as integer : irc = 0
-    
-    '///+<li>Read the reference list and compare</li>
-    if ( iFileSize > -1 ) then
-    
-        dim aReferenceList( iFileSize ) as string
-        printlog( CFN & "Reading: " & sFileIn )
-        ' disabled hGetDataFileSection because some lists contain a #
-        ' (hash) as value which is identified as comment by the function.
-        ' Fixing this for hGetDataFileSection() would break compatibility
-        ' to other functions both in framework and global module
-        'hgetDataFileSection( sFileIn , aReferenceList() , "" , "" , "" )
-        listread( aReferenceList(), sFileIn, "utf8" )
-        irc = hListCompare( sListOut() , aReferenceList() )
+    const FILESIZE = 10000
+    const COMPARE_SUCCESS = 0
+    const ENCODING_UTF8 = "UTF8"
+
+    dim irc as integer
+    dim aReferenceList( FILESIZE ) as string
+
+    if ( GVERBOSE ) then printlog( CFN & "Reading: " & sFileIn )
+    ' disabled hGetDataFileSection because some lists contain a #
+    ' (hash) as value which is identified as comment by the function.
+    ' Fixing this for hGetDataFileSection() would break compatibility
+    ' to other functions both in framework and global module
+    'hgetDataFileSection( sFileIn , aReferenceList() , "" , "" , "" )
+    listread( aReferenceList(), sFileIn, ENCODING_UTF8 )
+    irc = hListCompare( sListOut() , aReferenceList() )
         
-    endif
-    
     ' A this point there are three possible states:
     ' a) the reference list does not exist
     ' b) the comparision failed
@@ -192,16 +185,18 @@ function hManageComparisionList( sFileIn as string, sFileOut as string, sListOut
     ' directly reviewed/compared to the "faulty" list without having to run this
     ' test again (after deleting the ref-file)
     '///+<li>In case the lists are not identical, write the new one to the local work directory</li>
-    if ( irc = 0 ) then
+    if ( irc = COMPARE_SUCCESS ) then
         printlog( CFN & "Comparision succeeded" )
-        hManageComparisionList() = RC_SUCCESS
+        hManageComparisionList() = COMPARE_SUCCESS
     else
-        printlog( CFN & "The two compared lists differ. There are two likely reasons:" )
-        printlog( CFN & "1) The reference file does not exist at all" )
-        printlog( CFN & "2) Reference and actual UI-Content do not match." )
-        printlog( CFN & "Verify and copy the file: " & sFileOut )
-        printlog( CFN & "to this location........: " & sFileIn  )
-        listwrite( sListOut(), sFileOut, "UTF8" )
+        if ( GVERBOSE ) then
+            printlog( CFN & "The two compared lists differ. There are two likely reasons:" )
+            printlog( CFN & "1) The reference file does not exist at all" )
+            printlog( CFN & "2) Reference and actual UI-Content do not match." )
+            printlog( CFN & "Verify and copy the file: " & sFileOut )
+            printlog( CFN & "to this location........: " & sFileIn  )
+        endif
+        listwrite( sListOut(), sFileOut, ENCODING_UTF8 )
         hManageComparisionList() = irc
     endif
     
@@ -248,7 +243,7 @@ function hListCompare( aListOne() as String, aListTwo() as String ) as integer
     ListCopy( aListTwo() , aTwoOnlyList() )
 
     iTwoOnlyListSize = ListCount( aTwoOnlyList() )
-    iListOneSize = ListCount( aListOne() )
+    iListOneSize     = ListCount( aListOne() )
 
     
     '///+<li>Step through each item in list one</li>
