@@ -157,7 +157,7 @@ RDFaExportHelper::AddRDFa(
                     .makeStringAndClear()
             );
 
-        const ::comphelper::StlUnoSequence<rdf::Statement>::iterator iter
+        rdf::Statement* const iter
             ( ::std::partition( ::comphelper::stl_begin(stmts),
                 ::comphelper::stl_end(stmts),
                 ::boost::bind(&::rtl::OUString::equals, m_RDFsLabel,

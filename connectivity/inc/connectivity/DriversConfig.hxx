@@ -58,10 +58,13 @@ namespace connectivity
 
     class DriversConfigImpl
     {
-        ::utl::OConfigurationTreeRoot m_aInstalled;
+        mutable ::utl::OConfigurationTreeRoot   m_aInstalled;
+        mutable TInstalledDrivers       m_aDrivers;
+        void Load(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB) const;
     public:
         DriversConfigImpl();
-        void Load(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,TInstalledDrivers& _rDrivers);
+
+        const TInstalledDrivers& getInstalledDrivers(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB) const { Load(_rxORB); return m_aDrivers; }
     };
     //
     // Allows to access all driver which are located in the configuration
@@ -69,10 +72,14 @@ namespace connectivity
     class OOO_DLLPUBLIC_DBTOOLS DriversConfig
     {
         typedef salhelper::SingletonRef<DriversConfigImpl> OSharedConfigNode;
-        
+
         const ::comphelper::NamedValueCollection& impl_get(const ::rtl::OUString& _sURL,sal_Int32 _nProps) const;
     public:
         DriversConfig(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+        ~DriversConfig();
+
+        DriversConfig( const DriversConfig& );
+        DriversConfig& operator=( const DriversConfig& );
 
         ::rtl::OUString getDriverFactoryName(const ::rtl::OUString& _sUrl) const;
         ::rtl::OUString getDriverTypeDisplayName(const ::rtl::OUString& _sUrl) const;
@@ -81,8 +88,8 @@ namespace connectivity
         const ::comphelper::NamedValueCollection& getMetaData(const ::rtl::OUString& _sURL) const;
         ::com::sun::star::uno::Sequence< ::rtl::OUString > getURLs() const;
     private:
-        TInstalledDrivers   m_aDrivers;
         OSharedConfigNode   m_aNode;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
     };
 }
 #endif // CONNECTIVITY_DRIVERSCONFIG_HXX_INCLUDED

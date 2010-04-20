@@ -50,62 +50,96 @@ namespace drawinglayer
         Primitive2DSequence SdrCaptionPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DSequence aRetval;
+            Primitive2DSequence aHitTestContent;
 
             // create unit outline polygon
-            ::basegfx::B2DPolygon aUnitOutline(::basegfx::tools::createPolygonFromRect(::basegfx::B2DRange(0.0, 0.0, 1.0, 1.0), getCornerRadiusX(), getCornerRadiusY()));
+            const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromRect(
+                basegfx::B2DRange(0.0, 0.0, 1.0, 1.0),
+                getCornerRadiusX(),
+                getCornerRadiusY()));
 
             // add fill
             if(getSdrLFSTAttribute().getFill())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolyPolygonFillPrimitive(::basegfx::B2DPolyPolygon(aUnitOutline), getTransform(), *getSdrLFSTAttribute().getFill(), getSdrLFSTAttribute().getFillFloatTransGradient()));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createPolyPolygonFillPrimitive(
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform(),
+                        *getSdrLFSTAttribute().getFill(),
+                        getSdrLFSTAttribute().getFillFloatTransGradient()));
+            }
+            else
+            {
+                // if no fill, create one for HitTest and BoundRect fallback
+                appendPrimitive2DReferenceToPrimitive2DSequence(aHitTestContent,
+                    createPolyPolygonFillPrimitive(
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform(),
+                        attribute::SdrFillAttribute(0.0, basegfx::BColor(0.0, 0.0, 0.0)),
+                        getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
 
             // add line
             if(getSdrLFSTAttribute().getLine())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(aUnitOutline, getTransform(), *getSdrLFSTAttribute().getLine()));
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(getTail(), getTransform(), *getSdrLFSTAttribute().getLine(), getSdrLFSTAttribute().getLineStartEnd()));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createPolygonLinePrimitive(
+                        aUnitOutline,
+                        getTransform(),
+                        *getSdrLFSTAttribute().getLine()));
+
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createPolygonLinePrimitive(
+                        getTail(),
+                        getTransform(),
+                        *getSdrLFSTAttribute().getLine(),
+                        getSdrLFSTAttribute().getLineStartEnd()));
             }
             else
             {
-                // if initially no line is defined, create one for HitTest and BoundRect
-                Primitive2DSequence aLineSequence(2);
-                const attribute::SdrLineAttribute aBlackHairline(basegfx::BColor(0.0, 0.0, 0.0));
+                // if initially no line is defined, create one for HitTest and BoundRect. It
+                // is sufficient to use the tail; the body is already ensured with fill creation
+                appendPrimitive2DReferenceToPrimitive2DSequence(aHitTestContent,
+                    createPolygonLinePrimitive(
+                        getTail(),
+                        getTransform(),
+                        attribute::SdrLineAttribute(basegfx::BColor(0.0, 0.0, 0.0))));
+            }
 
-                aLineSequence[0] = createPolygonLinePrimitive(aUnitOutline, getTransform(), aBlackHairline);
-                aLineSequence[1] = createPolygonLinePrimitive(getTail(), getTransform(), aBlackHairline);
-
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, Primitive2DReference(new HitTestPrimitive2D(aLineSequence)));
+            // add HitTest and BoundRect helper geometry (if exists)
+            if(aHitTestContent.hasElements())
+            {
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    Primitive2DReference(new HitTestPrimitive2D(aHitTestContent)));
             }
 
             // add text
             if(getSdrLFSTAttribute().getText())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(::basegfx::B2DPolyPolygon(aUnitOutline), getTransform(), *getSdrLFSTAttribute().getText(), getSdrLFSTAttribute().getLine(), false, false));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createTextPrimitive(
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform(),
+                        *getSdrLFSTAttribute().getText(),
+                        getSdrLFSTAttribute().getLine(),
+                        false,
+                        false,
+                        false));
             }
 
             // add shadow
             if(getSdrLFSTAttribute().getShadow())
             {
-                // attention: shadow is added BEFORE object stuff to render it BEHIND object (!)
-                const Primitive2DReference xShadow(createShadowPrimitive(aRetval, *getSdrLFSTAttribute().getShadow()));
-
-                if(xShadow.is())
-                {
-                    Primitive2DSequence aContentWithShadow(2L);
-                    aContentWithShadow[0L] = xShadow;
-                    aContentWithShadow[1L] = Primitive2DReference(new GroupPrimitive2D(aRetval));
-                    aRetval = aContentWithShadow;
-                }
+                aRetval = createEmbeddedShadowPrimitive(aRetval, *getSdrLFSTAttribute().getShadow());
             }
 
             return aRetval;
         }
 
         SdrCaptionPrimitive2D::SdrCaptionPrimitive2D(
-            const ::basegfx::B2DHomMatrix& rTransform,
+            const basegfx::B2DHomMatrix& rTransform,
             const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
-            const ::basegfx::B2DPolygon& rTail,
+            const basegfx::B2DPolygon& rTail,
             double fCornerRadiusX,
             double fCornerRadiusY)
         :   BasePrimitive2D(),
@@ -118,7 +152,7 @@ namespace drawinglayer
             // transform maTail to unit polygon
             if(getTail().count())
             {
-                ::basegfx::B2DHomMatrix aInverse(getTransform());
+                basegfx::B2DHomMatrix aInverse(getTransform());
                 aInverse.invert();
                 maTail.transform(aInverse);
             }

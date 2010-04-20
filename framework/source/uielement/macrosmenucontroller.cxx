@@ -32,6 +32,7 @@
 #include "precompiled_framework.hxx"
 
 #include <uielement/macrosmenucontroller.hxx>
+#include <uielement/menubarmanager.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 #include <classes/resource.hrc>
@@ -42,7 +43,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
@@ -50,6 +50,7 @@
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <dispatch/uieventloghelper.hxx>
+#include "helper/mischelper.hxx"
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -136,60 +137,25 @@ void SAL_CALL MacrosMenuController::statusChanged( const FeatureStateEvent& ) th
 }
 
 // XMenuListener
-void SAL_CALL MacrosMenuController::highlight( const css::awt::MenuEvent& ) throw (RuntimeException)
+void MacrosMenuController::impl_select(const Reference< XDispatch >& /*_xDispatch*/,const ::com::sun::star::util::URL& aTargetURL)
 {
-}
-
-void SAL_CALL MacrosMenuController::select( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
-{
-    Reference< css::awt::XPopupMenu >   xPopupMenu;
-    Reference< XDispatch >              xDispatch;
-    Reference< XMultiServiceFactory >   xServiceManager;
-
-    ResetableGuard aLock( m_aLock );
-    xPopupMenu      = m_xPopupMenu;
-    xDispatch       = m_xDispatch;
-    xServiceManager = m_xServiceManager;
-    aLock.unlock();
-
-    if ( xPopupMenu.is() && xDispatch.is() )
+    // need to requery, since we handle more than one type of Command
+    // if we don't do this only .uno:ScriptOrganizer commands are executed
+    Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
+    Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+    if( xDispatch.is() )
     {
-        VCLXPopupMenu* pVCLPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( xPopupMenu );
-        if ( pVCLPopupMenu )
-        {
-            css::util::URL               aTargetURL;
-            Sequence<PropertyValue>      aArgs;
-            Reference< XURLTransformer > xURLTransformer( xServiceManager->createInstance(
-                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                        UNO_QUERY );
-
-            {
-                vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-                PopupMenu* pPopupMenu = (PopupMenu *)pVCLPopupMenu->GetMenu();
-
-                aTargetURL.Complete = pPopupMenu->GetItemCommand( rEvent.MenuId );
-            }
-
-            xURLTransformer->parseStrict( aTargetURL );
-
-            // need to requery, since we handle more than one type of Command
-            // if we don't do this only .uno:ScriptOrganizer commands are executed
-            xDispatch = m_xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-            if( xDispatch.is() )
-            {
-                ExecuteInfo* pExecuteInfo = new ExecuteInfo;
-                pExecuteInfo->xDispatch     = xDispatch;
-                pExecuteInfo->aTargetURL    = aTargetURL;
-                pExecuteInfo->aArgs         = aArgs;
-                if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-                    UiEventLogHelper(::rtl::OUString::createFromAscii("MacrosMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
+        ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+        pExecuteInfo->xDispatch     = xDispatch;
+        pExecuteInfo->aTargetURL    = aTargetURL;
+        //pExecuteInfo->aArgs         = aArgs;
+        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+            UiEventLogHelper(::rtl::OUString::createFromAscii("MacrosMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, pExecuteInfo->aArgs);
 //                xDispatch->dispatch( aTargetURL, aArgs );
-                Application::PostUserEvent( STATIC_LINK(0, MacrosMenuController , ExecuteHdl_Impl), pExecuteInfo );
-            }
-            else
-            {
-            }
-        }
+        Application::PostUserEvent( STATIC_LINK(0, MacrosMenuController , ExecuteHdl_Impl), pExecuteInfo );
+    }
+    else
+    {
     }
 }
 
@@ -210,105 +176,10 @@ IMPL_STATIC_LINK_NOINSTANCE( MacrosMenuController, ExecuteHdl_Impl, ExecuteInfo*
    return 0;
 }
 
-void SAL_CALL MacrosMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
-{
-}
-
-void SAL_CALL MacrosMenuController::deactivate( const css::awt::MenuEvent& ) throw (RuntimeException)
-{
-}
-
-// XPopupMenuController
-void SAL_CALL MacrosMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu ) throw ( RuntimeException )
-{
-    ResetableGuard aLock( m_aLock );
-
-    if ( m_bDisposed )
-        throw DisposedException();
-
-    if ( m_xFrame.is() && !m_xPopupMenu.is() )
-    {
-        // Create popup menu on demand
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-
-        m_xPopupMenu = xPopupMenu;
-        m_xPopupMenu->addMenuListener( Reference< css::awt::XMenuListener >( (OWeakObject*)this, UNO_QUERY ));
-
-        Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                    UNO_QUERY );
-        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-
-        m_xDispatchProvider = xDispatchProvider;
-        com::sun::star::util::URL aTargetURL;
-        aTargetURL.Complete = m_aCommandURL;
-        xURLTransformer->parseStrict( aTargetURL );
-        m_xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-
-        updatePopupMenu();
-    }
-}
-
-// XInitialization
-void SAL_CALL MacrosMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
-{
-    PopupMenuControllerBase::initialize( aArguments );
-}
-
 String MacrosMenuController::RetrieveLabelFromCommand( const String& aCmdURL )
 {
-    String aLabel;
-
-    // Retrieve popup menu labels
-    if ( !m_aModuleIdentifier.getLength() )
-    {
-        Reference< XModuleManager > xModuleManager( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                        SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
-        Reference< XInterface > xIfac( m_xFrame, UNO_QUERY );
-        m_aModuleIdentifier = xModuleManager->identify( xIfac );
-
-        if ( m_aModuleIdentifier.getLength() > 0 )
-        {
-            Reference< XNameAccess > xNameAccess( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                        SERVICENAME_UICOMMANDDESCRIPTION ), UNO_QUERY );
-            if ( xNameAccess.is() )
-            {
-                Any a = xNameAccess->getByName( m_aModuleIdentifier );
-                Reference< XNameAccess > xUICommands;
-                a >>= m_xUICommandLabels;
-            }
-        }
-    }
-
-    if ( m_xUICommandLabels.is() )
-    {
-        try
-        {
-            if ( aCmdURL.Len() > 0 )
-            {
-                rtl::OUString aStr;
-                Sequence< PropertyValue > aPropSeq;
-                Any a( m_xUICommandLabels->getByName( aCmdURL ));
-                if ( a >>= aPropSeq )
-                {
-                    for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
-                    {
-                        if ( aPropSeq[i].Name.equalsAscii( "Label" ))
-                        {
-                            aPropSeq[i].Value >>= aStr;
-                            break;
-                        }
-                    }
-                }
-                aLabel = aStr;
-            }
-        }
-        catch ( com::sun::star::uno::Exception& )
-        {
-        }
-    }
-
-    return aLabel;
+    sal_Bool bModuleIdentified = m_aModuleIdentifier.getLength() != 0;
+    return framework::RetrieveLabelFromCommand(aCmdURL,m_xServiceManager,m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,bModuleIdentified,"Label");
 }
 
 void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, USHORT startItemId )

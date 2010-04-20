@@ -1358,6 +1358,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
         const sal_Char* pVersion = 0;
         switch( getDefaultVersion() )
         {
+        case SvtSaveOptions::ODFVER_LATEST: pVersion = sXML_1_2; break;
         case SvtSaveOptions::ODFVER_012: pVersion = sXML_1_2; break;
         case SvtSaveOptions::ODFVER_011: pVersion = sXML_1_1; break;
         case SvtSaveOptions::ODFVER_010: break;

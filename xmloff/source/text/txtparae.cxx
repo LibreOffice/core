@@ -1128,7 +1128,11 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     // <--
 
     sActualSize(RTL_CONSTASCII_USTRINGPARAM("ActualSize")),
-    sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText")),
+    // --> OD 2009-07-22 #i73249#
+//    sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText")),
+    sTitle(RTL_CONSTASCII_USTRINGPARAM("Title")),
+    sDescription(RTL_CONSTASCII_USTRINGPARAM("Description")),
+    // <--
     sAnchorCharStyleName(RTL_CONSTASCII_USTRINGPARAM("AnchorCharStyleName")),
     sAnchorPageNo(RTL_CONSTASCII_USTRINGPARAM("AnchorPageNo")),
     sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType")),
@@ -1457,8 +1461,8 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( sal_Bool bIsProgres
         {
             Any aAny = xTextFieldsEnum->nextElement();
             Reference< XTextField > xTextField = *(Reference<XTextField>*)aAny.getValue();
-            exportTextField( xTextField->getAnchor(), bAutoStyles,
-                bIsProgress );
+            exportTextField( xTextField, bAutoStyles, bIsProgress,
+                !xAutoStylesSupp.is() );
             try
             {
                 Reference < XPropertySet > xSet( xTextField, UNO_QUERY );
@@ -1466,8 +1470,11 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( sal_Bool bIsProgres
                 Any a = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("TextRange") );
                 a >>= xText;
                 if ( xText.is() )
+                {
                     exportText( xText, sal_True, bIsProgress, bExportContent );
-                GetExport().GetTextParagraphExport()->collectTextAutoStyles( xText );
+                    GetExport().GetTextParagraphExport()
+                        ->collectTextAutoStyles( xText );
+                }
             }
             catch (Exception&)
             {
@@ -2141,7 +2148,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
         sal_Bool bAutoStyles, sal_Bool bIsProgress,
         sal_Bool bPrvChrIsSpc )
 {
-    static OUString sMeta(RTL_CONSTASCII_USTRINGPARAM("Meta")); // FIXME
+    static OUString sMeta(RTL_CONSTASCII_USTRINGPARAM("InContentMetadata"));
     sal_Bool bPrevCharIsSpace = bPrvChrIsSpc;
 
     while( rTextEnum->hasMoreElements() )
@@ -2301,7 +2308,8 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
         }
     }
 
-    DBG_ASSERT( !bOpenRuby, "Red Alert: Ruby still open!" );
+// now that there are nested enumerations for meta(-field), this may be valid!
+//  DBG_ASSERT( !bOpenRuby, "Red Alert: Ruby still open!" );
 }
 
 void XMLTextParagraphExport::exportTable(
@@ -2322,21 +2330,29 @@ void XMLTextParagraphExport::exportTextField(
         DBG_ASSERT( xTxtFld.is(), "text field missing" );
         if( xTxtFld.is() )
         {
-            if( bAutoStyles )
-            {
-                pFieldExport->ExportFieldAutoStyle( xTxtFld, bIsProgress );
-            }
-            else
-            {
-                pFieldExport->ExportField( xTxtFld, bIsProgress );
-            }
+            exportTextField(xTxtFld, bAutoStyles, bIsProgress, sal_True);
         }
         else
         {
             // write only characters
             GetExport().Characters(rTextRange->getString());
         }
+    }
+}
 
+void XMLTextParagraphExport::exportTextField(
+        const Reference < XTextField > & xTextField,
+        const sal_Bool bAutoStyles, const sal_Bool bIsProgress,
+        const sal_Bool bRecursive )
+{
+    if ( bAutoStyles )
+    {
+        pFieldExport->ExportFieldAutoStyle( xTextField, bIsProgress,
+                bRecursive );
+    }
+    else
+    {
+        pFieldExport->ExportField( xTextField, bIsProgress );
     }
 }
 
@@ -2381,9 +2397,12 @@ void XMLTextParagraphExport::exportTextMark(
             nElement = *(sal_Bool *)rPropSet->getPropertyValue(sIsStart).getValue() ? 1 : 2;
         }
 
-        // bookmark, bookmark-start: xml:id for RDF metadata
+        // bookmark, bookmark-start: xml:id and RDFa for RDF metadata
         if( nElement < 2 ) {
             GetExport().AddAttributeXmlId(xName);
+            const uno::Reference<text::XTextContent> xTextContent(
+                    xName, uno::UNO_QUERY_THROW);
+            GetExport().AddAttributesRDFa(xTextContent);
         }
 
         // export element
@@ -2782,6 +2801,10 @@ void XMLTextParagraphExport::_exportTextFrame(
     // image map
     GetExport().GetImageMapExport().Export( rPropSet );
 
+    // --> OD 2009-07-22 #i73249#
+    // svg:title and svg:desc
+    exportTitleAndDescription( rPropSet, rPropSetInfo );
+    // <--
 }
 
 void XMLTextParagraphExport::exportContour(
@@ -2973,8 +2996,10 @@ void XMLTextParagraphExport::_exportTextGraphic(
     // image map
     GetExport().GetImageMapExport().Export( rPropSet );
 
-    // svg:desc
-    exportAlternativeText( rPropSet, rPropSetInfo );
+    // --> OD 2009-07-22 #i73249#
+    // svg:title and svg:desc
+    exportTitleAndDescription( rPropSet, rPropSetInfo );
+    // <--
 
     // draw:contour
     exportContour( rPropSet, rPropSetInfo );
@@ -3003,23 +3028,39 @@ void XMLTextParagraphExport::exportEvents( const Reference < XPropertySet > & rP
     if (rPropSet->getPropertySetInfo()->hasPropertyByName(sImageMap))
         GetExport().GetImageMapExport().Export( rPropSet );
 }
-void XMLTextParagraphExport::exportAlternativeText(
+
+// --> OD 2009-07-22 #i73249#
+void XMLTextParagraphExport::exportTitleAndDescription(
         const Reference < XPropertySet > & rPropSet,
         const Reference < XPropertySetInfo > & rPropSetInfo )
 {
     // svg:title
-    if( rPropSetInfo->hasPropertyByName( sAlternativeText  ) )
+    if( rPropSetInfo->hasPropertyByName( sTitle ) )
     {
-        OUString sAltText;
-        rPropSet->getPropertyValue( sAlternativeText ) >>= sAltText;
-        if( sAltText.getLength() )
+        OUString sObjTitle;
+        rPropSet->getPropertyValue( sTitle ) >>= sObjTitle;
+        if( sObjTitle.getLength() )
         {
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_SVG,
                                       XML_TITLE, sal_True, sal_False );
-            GetExport().Characters( sAltText );
+            GetExport().Characters( sObjTitle );
+        }
+    }
+
+    // svg:description
+    if( rPropSetInfo->hasPropertyByName( sDescription ) )
+    {
+        OUString sObjDesc;
+        rPropSet->getPropertyValue( sDescription ) >>= sObjDesc;
+        if( sObjDesc.getLength() )
+        {
+            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_SVG,
+                                      XML_DESC, sal_True, sal_False );
+            GetExport().Characters( sObjDesc );
         }
     }
 }
+// <--
 
 void XMLTextParagraphExport::setTextEmbeddedGraphicURL(
     const Reference < XPropertySet >&,
@@ -3638,11 +3679,12 @@ void XMLTextParagraphExport::exportRuby(
     }
 }
 
-// FIXME: this is untested
 void XMLTextParagraphExport::exportMeta(
-    const Reference<XPropertySet> & i_xMeta,
+    const Reference<XPropertySet> & i_xPortion,
     sal_Bool i_bAutoStyles, sal_Bool i_isProgress)
 {
+    static OUString sMeta(RTL_CONSTASCII_USTRINGPARAM("InContentMetadata"));
+
     bool doExport(!i_bAutoStyles); // do not export element if autostyles
     // check version >= 1.2
     switch (GetExport().getDefaultVersion()) {
@@ -3651,13 +3693,14 @@ void XMLTextParagraphExport::exportMeta(
         default: break;
     }
 
-    const Reference < XEnumerationAccess > xEA( i_xMeta, UNO_QUERY_THROW );
-    const Reference < XEnumeration > xTextEnum( xEA->createEnumeration() );
+    const Reference< XTextContent > xTextContent(
+            i_xPortion->getPropertyValue(sMeta), UNO_QUERY_THROW);
+    const Reference< XEnumerationAccess > xEA( xTextContent, UNO_QUERY_THROW );
+    const Reference< XEnumeration > xTextEnum( xEA->createEnumeration() );
 
     if (doExport)
     {
-        const Reference<rdf::XMetadatable> xMeta( i_xMeta, UNO_QUERY_THROW );
-        const Reference<XTextContent> xTextContent( i_xMeta, UNO_QUERY_THROW );
+        const Reference<rdf::XMetadatable> xMeta(xTextContent, UNO_QUERY_THROW);
 
         // text:meta with neither xml:id nor RDFa is invalid
         xMeta->ensureMetadataReference();

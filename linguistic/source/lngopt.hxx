@@ -77,7 +77,7 @@ class LinguOptions
 
     BOOL SetLocale_Impl( INT16 &rLanguage,
             ::com::sun::star::uno::Any &rOld,
-            const ::com::sun::star::uno::Any &rVal);
+            const ::com::sun::star::uno::Any &rVal, sal_Int16 nType );
 
 public:
     LinguOptions();

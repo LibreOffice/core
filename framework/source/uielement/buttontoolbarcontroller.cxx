@@ -285,7 +285,7 @@ throw (::com::sun::star::uno::RuntimeException)
 
             // Provide key modifier information to dispatch function
             aArgs[0].Name   = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
-            aArgs[0].Value  = makeAny( KeyModifier );
+            aArgs[0].Value  <<= KeyModifier;
 
             if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
                 UiEventLogHelper(::rtl::OUString::createFromAscii("ButtonToolbarController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);

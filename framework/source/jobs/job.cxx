@@ -45,6 +45,7 @@
 #include <com/sun/star/task/XAsyncJob.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 
 //________________________________
 //  includes of other projects

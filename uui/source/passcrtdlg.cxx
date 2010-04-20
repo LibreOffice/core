@@ -61,6 +61,7 @@ IMPL_LINK( PasswordCreateDialog, OKHdl_Impl, OKButton *, EMPTYARG )
         String aErrorMsg( ResId( STR_ERROR_PASSWORDS_NOT_IDENTICAL, *pResourceMgr ));
         ErrorBox aErrorBox( this, WB_OK, aErrorMsg );
         aErrorBox.Execute();
+        aEDPasswordCrt.SetText( String() );
         aEDPasswordRepeat.SetText( String() );
         aEDPasswordCrt.GrabFocus();
     }
@@ -81,7 +82,7 @@ PasswordCreateDialog::PasswordCreateDialog( Window* _pParent, ResMgr * pResMgr, 
     ,aCancelBtn   ( this, ResId( BTN_PASSCRT_CANCEL, *pResMgr )    )
     ,aHelpBtn   ( this, ResId( BTN_PASSCRT_HELP, *pResMgr )    )
     ,pResourceMgr           ( pResMgr )
-    ,nMinLen( bMSCryptoMode ? 1 : 5 )
+    ,nMinLen(1) // if it should be changed for ODF, it must stay 1 for bMSCryptoMode
 {
     FreeResource();
 

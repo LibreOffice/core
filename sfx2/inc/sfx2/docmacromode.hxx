@@ -114,10 +114,11 @@ namespace sfx2
         virtual ::rtl::OUString
                     getDocumentLocation() const = 0;
 
-        /** returns the storage to which the document has last been committed to, for read-only
-            access
+        /** returns a zip-storage based on the last commited version of the document,
+            for readonly access
 
-            An implementation is allowed to return <NULL/> here if and only if the document
+            The storage is intended to be used for signing. An implementation is
+            allowed to return <NULL/> here if and only if the document
             does not support signing the script storages.
 
             @todo
@@ -126,7 +127,7 @@ namespace sfx2
                 XStorageBasedDocument.
         */
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
-                    getLastCommitDocumentStorage() = 0;
+                    getZipStorageToSign() = 0;
 
         /** checks whether the document's storage contains sub storages with macros or scripts
 
@@ -161,7 +162,20 @@ namespace sfx2
             @seealso <sfx2/signaturestate.hxx>
         */
         virtual sal_Int16
-                    getScriptingSignatureState() const = 0;
+                    getScriptingSignatureState() = 0;
+
+        /** allows to detect whether there is a trusted scripting signature
+
+            Note: On the medium run, the signature handling of a document should be outsourced
+            into a dedicated class, instead of being hard-wired into the SfxObjectShell. This
+            class could then be used outside the SfxObjectShell (e.g. in Base documents), too.
+            When this happens, this method here should be replaced by a method at this
+            new class.
+
+            @seealso <sfx2/signaturestate.hxx>
+        */
+        virtual sal_Bool
+                    hasTrustedScriptingSignature( sal_Bool bAllowUIToAddAuthor ) = 0;
 
         /** shows a warning that the document's signature is broken
 

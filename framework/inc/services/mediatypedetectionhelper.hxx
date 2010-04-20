@@ -50,8 +50,7 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <cppuhelper/weak.hxx>
-
+#include <cppuhelper/implbase2.hxx>
 //_________________________________________________________________________________________________________________
 //  namespaces
 //_________________________________________________________________________________________________________________
@@ -75,10 +74,7 @@ namespace framework{
     @devstatus      deprecated
 *//*-*************************************************************************************************************/
 
-class MediaTypeDetectionHelper  :   public css::lang::XTypeProvider
-                                ,   public css::lang::XServiceInfo
-                                ,   public css::util::XStringMapping
-                                ,   public ::cppu::OWeakObject
+class MediaTypeDetectionHelper  :   public ::cppu::WeakImplHelper2< ::com::sun::star::util::XStringMapping, css::lang::XServiceInfo>
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -122,8 +118,6 @@ class MediaTypeDetectionHelper  :   public css::lang::XTypeProvider
         //  XInterface, XTypeProvider, XServiceInfo
         //---------------------------------------------------------------------------------------------------------
 
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         //---------------------------------------------------------------------------------------------------------

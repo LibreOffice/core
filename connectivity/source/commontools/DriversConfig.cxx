@@ -112,40 +112,66 @@ DriversConfigImpl::DriversConfigImpl()
 {
 }
 // -----------------------------------------------------------------------------
-void DriversConfigImpl::Load(const uno::Reference< lang::XMultiServiceFactory >& _rxORB,TInstalledDrivers& _rDrivers)
+void DriversConfigImpl::Load(const uno::Reference< lang::XMultiServiceFactory >& _rxORB) const
 {
-    if ( !m_aInstalled.isValid() )
+    if ( m_aDrivers.empty() )
     {
-        static const ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess.Drivers/Installed")); ///Installed
-        m_aInstalled = ::utl::OConfigurationTreeRoot::createWithServiceFactory(_rxORB, s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
-    }
-
-    if ( m_aInstalled.isValid() )
-    {
-        const uno::Sequence< ::rtl::OUString > aURLPatterns = m_aInstalled.getNodeNames();
-        const ::rtl::OUString* pPatternIter = aURLPatterns.getConstArray();
-        const ::rtl::OUString* pPatternEnd  = pPatternIter + aURLPatterns.getLength();
-        for (;pPatternIter != pPatternEnd ; ++pPatternIter)
+        if ( !m_aInstalled.isValid() )
         {
-            TInstalledDriver aInstalledDriver;
-            lcl_readURLPatternNode(m_aInstalled,*pPatternIter,aInstalledDriver);
-            if ( aInstalledDriver.sDriverFactory.getLength() )
-                _rDrivers.insert(TInstalledDrivers::value_type(*pPatternIter,aInstalledDriver));
+            static const ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess.Drivers/Installed")); ///Installed
+            m_aInstalled = ::utl::OConfigurationTreeRoot::createWithServiceFactory(_rxORB, s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
         }
+
+        if ( m_aInstalled.isValid() )
+        {
+            const uno::Sequence< ::rtl::OUString > aURLPatterns = m_aInstalled.getNodeNames();
+            const ::rtl::OUString* pPatternIter = aURLPatterns.getConstArray();
+            const ::rtl::OUString* pPatternEnd  = pPatternIter + aURLPatterns.getLength();
+            for (;pPatternIter != pPatternEnd ; ++pPatternIter)
+            {
+                TInstalledDriver aInstalledDriver;
+                lcl_readURLPatternNode(m_aInstalled,*pPatternIter,aInstalledDriver);
+                if ( aInstalledDriver.sDriverFactory.getLength() )
+                    m_aDrivers.insert(TInstalledDrivers::value_type(*pPatternIter,aInstalledDriver));
+            }
+        } // if ( m_aInstalled.isValid() )
     }
 }
 // -----------------------------------------------------------------------------
 DriversConfig::DriversConfig(const uno::Reference< lang::XMultiServiceFactory >& _rxORB)
+:m_xORB(_rxORB)
 {
-    m_aNode->Load(_rxORB,m_aDrivers);
 }
+
+// -----------------------------------------------------------------------------
+DriversConfig::~DriversConfig()
+{
+}
+
+// -----------------------------------------------------------------------------
+DriversConfig::DriversConfig( const DriversConfig& _rhs )
+{
+    *this = _rhs;
+}
+
+// -----------------------------------------------------------------------------
+DriversConfig& DriversConfig::operator=( const DriversConfig& _rhs )
+{
+    if ( this != &_rhs )
+    {
+        m_aNode = _rhs.m_aNode;
+    }
+    return *this;
+}
+
 // -----------------------------------------------------------------------------
 ::rtl::OUString DriversConfig::getDriverFactoryName(const ::rtl::OUString& _sURL) const
 {
+    const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
     ::rtl::OUString sRet;
     ::rtl::OUString sOldPattern;
-    TInstalledDrivers::const_iterator aIter = m_aDrivers.begin();
-    TInstalledDrivers::const_iterator aEnd = m_aDrivers.end();
+    TInstalledDrivers::const_iterator aIter = rDrivers.begin();
+    TInstalledDrivers::const_iterator aEnd = rDrivers.end();
     for(;aIter != aEnd;++aIter)
     {
         WildCard aWildCard(aIter->first);
@@ -161,10 +187,11 @@ DriversConfig::DriversConfig(const uno::Reference< lang::XMultiServiceFactory >&
 // -----------------------------------------------------------------------------
 ::rtl::OUString DriversConfig::getDriverTypeDisplayName(const ::rtl::OUString& _sURL) const
 {
+    const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
     ::rtl::OUString sRet;
     ::rtl::OUString sOldPattern;
-    TInstalledDrivers::const_iterator aIter = m_aDrivers.begin();
-    TInstalledDrivers::const_iterator aEnd = m_aDrivers.end();
+    TInstalledDrivers::const_iterator aIter = rDrivers.begin();
+    TInstalledDrivers::const_iterator aEnd = rDrivers.end();
     for(;aIter != aEnd;++aIter)
     {
         WildCard aWildCard(aIter->first);
@@ -195,10 +222,11 @@ const ::comphelper::NamedValueCollection& DriversConfig::getMetaData(const ::rtl
 // -----------------------------------------------------------------------------
 const ::comphelper::NamedValueCollection& DriversConfig::impl_get(const ::rtl::OUString& _sURL,sal_Int32 _nProps) const
 {
+    const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
     const ::comphelper::NamedValueCollection* pRet = NULL;
     ::rtl::OUString sOldPattern;
-    TInstalledDrivers::const_iterator aIter = m_aDrivers.begin();
-    TInstalledDrivers::const_iterator aEnd = m_aDrivers.end();
+    TInstalledDrivers::const_iterator aIter = rDrivers.begin();
+    TInstalledDrivers::const_iterator aEnd = rDrivers.end();
     for(;aIter != aEnd;++aIter)
     {
         WildCard aWildCard(aIter->first);
@@ -229,10 +257,11 @@ const ::comphelper::NamedValueCollection& DriversConfig::impl_get(const ::rtl::O
 // -----------------------------------------------------------------------------
 uno::Sequence< ::rtl::OUString > DriversConfig::getURLs() const
 {
-    uno::Sequence< ::rtl::OUString > aRet(m_aDrivers.size());
+    const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
+    uno::Sequence< ::rtl::OUString > aRet(rDrivers.size());
     ::rtl::OUString* pIter = aRet.getArray();
-    TInstalledDrivers::const_iterator aIter = m_aDrivers.begin();
-    TInstalledDrivers::const_iterator aEnd = m_aDrivers.end();
+    TInstalledDrivers::const_iterator aIter = rDrivers.begin();
+    TInstalledDrivers::const_iterator aEnd = rDrivers.end();
     for(;aIter != aEnd;++aIter,++pIter)
     {
         *pIter = aIter->first;

@@ -32,28 +32,28 @@
 
 #include <svx/svddef.hxx>
 
-class SdrTextFixedCellHeightItem : public SfxBoolItem
+class SVX_DLLPUBLIC SdrTextFixedCellHeightItem : public SfxBoolItem
 {
 public:
 
     TYPEINFO();
     SdrTextFixedCellHeightItem( BOOL bUseFixedCellHeight = FALSE );
-    SdrTextFixedCellHeightItem( SvStream & rStream, sal_uInt16 nVersion );
+    SVX_DLLPRIVATE SdrTextFixedCellHeightItem( SvStream & rStream, sal_uInt16 nVersion );
 
-    virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePresentation,
+    SVX_DLLPRIVATE virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePresentation,
                                     SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric,
                                         String &rText, const IntlWrapper * = 0) const;
 
-    virtual SfxPoolItem*        Create( SvStream&, sal_uInt16 nItem ) const;
-    virtual SvStream&           Store( SvStream&, sal_uInt16 nVersion ) const;
-    virtual SfxPoolItem*        Clone( SfxItemPool* pPool = NULL ) const;
-    virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*     Create( SvStream&, sal_uInt16 nItem ) const;
+    SVX_DLLPRIVATE virtual SvStream&            Store( SvStream&, sal_uInt16 nVersion ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*     Clone( SfxItemPool* pPool = NULL ) const;
+    SVX_DLLPRIVATE virtual  sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const;
 
-    virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    SVX_DLLPRIVATE virtual  sal_Bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    SVX_DLLPRIVATE virtual  sal_Bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
 #ifdef SDR_ISPOOLABLE
-    virtual int IsPoolable() const;
+    SVX_DLLPRIVATE virtual int IsPoolable() const;
 #endif
 };
 

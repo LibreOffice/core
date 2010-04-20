@@ -47,6 +47,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/chart2/XDefaultSizeTransmitter.hpp>
 #include <cppuhelper/weak.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -85,6 +86,7 @@ class OCommonEmbeddedObject : public ::com::sun::star::embed::XEmbeddedObject
                             , public ::com::sun::star::embed::XLinkageSupport
                             , public ::com::sun::star::embed::XInplaceObject
                             , public ::com::sun::star::container::XChild
+                            , public ::com::sun::star::chart2::XDefaultSizeTransmitter
                             , public ::cppu::OWeakObject
 {
 protected:
@@ -159,6 +161,7 @@ protected:
     sal_Bool m_bHasClonedSize; // the object has cached size
     ::com::sun::star::awt::Size m_aClonedSize;
     sal_Int32 m_nClonedMapUnit;
+    ::com::sun::star::awt::Size m_aDefaultSizeForChart_In_100TH_MM;//#i103460# charts do not necessaryly have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this member
 
 private:
     void CommonInit_Impl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aObjectProps );
@@ -492,6 +495,10 @@ public:
     // XChild
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+
+    // XDefaultSizeTransmitter
+    //#i103460# charts do not necessaryly have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this method
+    virtual void SAL_CALL setDefaultSize( const ::com::sun::star::awt::Size& rSize_100TH_MM ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 #endif

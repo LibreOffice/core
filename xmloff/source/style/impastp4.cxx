@@ -235,6 +235,47 @@ sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
     return bRet;
 }
 
+sal_Bool SvXMLAutoStylePoolP_Impl::AddNamed(const OUString& rName, sal_Int32 nFamily,
+                const OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties )
+{
+    // get family and parent the same way as in Add()
+    sal_Bool bRet(sal_False);
+    ULONG nPos;
+
+    XMLFamilyData_Impl *pFamily = 0;
+    XMLFamilyData_Impl aTemporary( nFamily );
+    if( maFamilyList.Seek_Entry( &aTemporary, &nPos ) )
+    {
+        pFamily = maFamilyList.GetObject( nPos );
+    }
+
+    DBG_ASSERT( pFamily, "SvXMLAutoStylePool_Impl::Add: unknown family" );
+    if( pFamily )
+    {
+        SvXMLAutoStylePoolParentP_Impl aTmp( rParent );
+        SvXMLAutoStylePoolParentP_Impl *pParent = 0;
+
+        SvXMLAutoStylePoolParentsP_Impl *pParents = pFamily->mpParentList;
+        if( pParents->Seek_Entry( &aTmp, &nPos ) )
+        {
+            pParent = pParents->GetObject( nPos );
+        }
+        else
+        {
+            pParent = new SvXMLAutoStylePoolParentP_Impl( rParent );
+            pParents->Insert( pParent );
+        }
+
+        if( pParent->AddNamed( pFamily, rProperties, rName ) )
+        {
+            pFamily->mnCount++;
+            bRet = sal_True;
+        }
+    }
+
+    return bRet;
+}
+
 OUString SvXMLAutoStylePoolP_Impl::AddToCache( sal_Int32 nFamily,
                                          const OUString& rParent )
 {

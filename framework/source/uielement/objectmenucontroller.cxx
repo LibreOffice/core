@@ -44,7 +44,6 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
 #ifndef _COM_SUN_STAR_EMBED_VERBDATTRIBUTES_HPP_
@@ -156,90 +155,12 @@ void SAL_CALL ObjectMenuController::statusChanged( const FeatureStateEvent& Even
 }
 
 // XMenuListener
-void SAL_CALL ObjectMenuController::highlight( const css::awt::MenuEvent& ) throw (RuntimeException)
+void ObjectMenuController::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aTargetURL)
 {
-}
-
-void SAL_CALL ObjectMenuController::select( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
-{
-    Reference< css::awt::XPopupMenu >   xPopupMenu;
-    Reference< XDispatch >              xDispatch;
-    Reference< XMultiServiceFactory >   xServiceManager;
-
-    ResetableGuard aLock( m_aLock );
-    xPopupMenu      = m_xPopupMenu;
-    xDispatch       = m_xDispatch;
-    xServiceManager = m_xServiceManager;
-    aLock.unlock();
-
-    if ( xPopupMenu.is() && xDispatch.is() )
-    {
-        VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( xPopupMenu );
-        if ( pPopupMenu )
-        {
-            css::util::URL               aTargetURL;
-            Sequence<PropertyValue>      aArgs;
-            Reference< XURLTransformer > xURLTransformer( xServiceManager->createInstance(
-                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                        UNO_QUERY );
-
-            {
-                vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-                PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
-
-                aTargetURL.Complete = pVCLPopupMenu->GetItemCommand( rEvent.MenuId );
-            }
-
-            xURLTransformer->parseStrict( aTargetURL );
-            if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-                UiEventLogHelper(::rtl::OUString::createFromAscii("ObjectMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
-            xDispatch->dispatch( aTargetURL, aArgs );
-        }
-    }
-}
-
-void SAL_CALL ObjectMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
-{
-}
-
-void SAL_CALL ObjectMenuController::deactivate( const css::awt::MenuEvent& ) throw (RuntimeException)
-{
-}
-
-// XPopupMenuController
-void SAL_CALL ObjectMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu ) throw ( RuntimeException )
-{
-    ResetableGuard aLock( m_aLock );
-
-    if ( m_bDisposed )
-        throw DisposedException();
-
-    if ( m_xFrame.is() && !m_xPopupMenu.is() )
-    {
-        // Create popup menu on demand
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-
-        m_xPopupMenu = xPopupMenu;
-        m_xPopupMenu->addMenuListener( Reference< css::awt::XMenuListener >( (OWeakObject*)this, UNO_QUERY ));
-
-        Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                    UNO_QUERY );
-        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-
-        com::sun::star::util::URL aTargetURL;
-        aTargetURL.Complete = m_aCommandURL;
-        xURLTransformer->parseStrict( aTargetURL );
-        m_xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-
-        updatePopupMenu();
-    }
-}
-
-// XInitialization
-void SAL_CALL ObjectMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
-{
-    PopupMenuControllerBase::initialize( aArguments );
+    Sequence<PropertyValue>      aArgs;
+    if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+        UiEventLogHelper(::rtl::OUString::createFromAscii("ObjectMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
+    _xDispatch->dispatch( aTargetURL, aArgs );
 }
 
 }

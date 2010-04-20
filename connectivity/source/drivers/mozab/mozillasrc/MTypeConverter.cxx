@@ -55,14 +55,14 @@ void MTypeConverter::ouStringToNsString(::rtl::OUString const &ous, nsString &ns
 {
     const char* buffer = _source.BeginReading();
     const char* bufferEnd = _source.EndReading();
-    return ::rtl::OUString( buffer, bufferEnd - buffer, RTL_TEXTENCODING_ASCII_US );
+    return ::rtl::OUString( buffer, static_cast<sal_Int32>(bufferEnd - buffer), RTL_TEXTENCODING_ASCII_US );
 }
 // -------------------------------------------------------------------------
 ::rtl::OString MTypeConverter::nsACStringToOString( const nsACString& _source )
 {
     const char* buffer = _source.BeginReading();
     const char* bufferEnd = _source.EndReading();
-    return ::rtl::OString( buffer, bufferEnd - buffer );
+    return ::rtl::OString( buffer, static_cast<sal_Int32>(bufferEnd - buffer) );
 }
 // -------------------------------------------------------------------------
 void MTypeConverter::asciiOUStringToNsACString( const ::rtl::OUString& _asciiString, nsACString& _dest )

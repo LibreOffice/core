@@ -193,7 +193,10 @@ sal_Bool GetHelpAnchor_Impl( const String& _rURL, String& _rAnchor )
     sal_Bool bRet = sal_False;
     ::rtl::OUString sAnchor;
 
-    ULONG nSolarCount = Application::ReleaseSolarMutex();
+    // --> OD 2009-07-01 #159496#
+    // do not release solar mutex due to crash regarding accessibility
+//    ULONG nSolarCount = Application::ReleaseSolarMutex();
+    // <--
     try
     {
         ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::NO_DECODE ),
@@ -215,7 +218,9 @@ sal_Bool GetHelpAnchor_Impl( const String& _rURL, String& _rAnchor )
     catch( ::com::sun::star::uno::Exception& )
     {
     }
-    Application::AcquireSolarMutex( nSolarCount );
+    // --> OD 2009-07-01 #159496#
+//    Application::AcquireSolarMutex( nSolarCount );
+    // <--
 
     return bRet;
 }

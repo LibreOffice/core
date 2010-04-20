@@ -169,6 +169,9 @@ protected:
     // Returns the LocalItem for a given locale, if it exists, otherwise NULL
     // This method performes a closest match search, at least the language must match
     LocaleItem* getClosestMatchItemForLocale( const ::com::sun::star::lang::Locale& locale );
+    void implSetCurrentLocale( const ::com::sun::star::lang::Locale& locale,
+        sal_Bool FindClosestMatch, sal_Bool bUseDefaultIfNoMatch )
+            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     void implModified( void );
     void implNotifyListeners( void );

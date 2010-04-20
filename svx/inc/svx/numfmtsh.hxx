@@ -212,8 +212,8 @@ public:
     short               GetListPos4Entry(sal_uInt32 nIdx);
     short               GetListPos4Entry( const String& rFmtString );
 
-    void                GetCurrencySymbols(SvStringsDtor& rList,const XubString& rStrEurope,USHORT* pPos);
-    void                GetCurrencySymbols(SvStringsDtor& rList,const XubString& rStrEurope, BOOL bFlag);
+    void                GetCurrencySymbols( SvStringsDtor& rList, USHORT* pPos );
+    void                GetCurrencySymbols( SvStringsDtor& rList, BOOL bFlag );
 
     USHORT              FindCurrencyTableEntry( const String& rFmtString, BOOL &bTestBanking );
     BOOL                IsInTable(USHORT nPos,BOOL bTmpBanking,const String &rFmtString);

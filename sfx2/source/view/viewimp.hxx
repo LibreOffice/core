@@ -45,6 +45,10 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <svtools/acceleratorexecute.hxx>
 
+#include <rtl/ref.hxx>
+
+#include <queue>
+
 // forward ---------------------------------------------------------------
 
 class SfxOfficeDispatch;
@@ -54,6 +58,22 @@ typedef SfxShell* SfxShellPtr_Impl;
 SV_DECL_PTRARR( SfxShellArr_Impl, SfxShellPtr_Impl, 4, 4 )
 
 // struct SfxViewShell_Impl ----------------------------------------------
+class SfxAsyncPrintExec_Impl : public SfxListener
+{
+    SfxViewShell*                   pView;
+    ::std::queue < SfxRequest*>     aReqs;
+
+    virtual void                    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+public:
+                                    SfxAsyncPrintExec_Impl( SfxViewShell* pShell)
+                                        : pView( pShell )
+                                    {}
+
+    void                            AddRequest( SfxRequest& rReq );
+};
+
+class SfxClipboardChangeListener;
 
 struct SfxViewShell_Impl
 {
@@ -78,12 +98,11 @@ struct SfxViewShell_Impl
     USHORT                      nFamily;
     SfxBaseController*          pController;
     ::svt::AcceleratorExecute*  pAccExec;
+    SfxAsyncPrintExec_Impl*     pPrinterCommandQueue;
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aPrintOpts;
+    ::rtl::Reference< SfxClipboardChangeListener > xClipboardListener;
 
-                                SfxViewShell_Impl()
-                                  : aInterceptorContainer( aMutex )
-                                  , pAccExec(0)
-                                {}
+    SfxViewShell_Impl();
 };
 
 #endif

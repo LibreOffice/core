@@ -63,6 +63,7 @@
 #define ED_EMAIL        38
 #define GB_ADDRESS      39
 #define CB_USEDATA      40
+#define FT_NAME_EASTERN     41
 
 #define STR_US_STATE    10
 #define STR_QUERY_REG   11

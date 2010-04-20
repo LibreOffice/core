@@ -33,6 +33,7 @@ PRJ=..$/..
 
 PRJNAME=svx
 TARGET=tbxctrls
+LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -42,10 +43,17 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=	\
-        $(SLO)$/formatpaintbrushctrl.obj\
+LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
+LIB1OBJFILES= \
         $(SLO)$/fontworkgallery.obj\
         $(SLO)$/extrusioncontrols.obj \
+        $(SLO)$/tbcontrl.obj	\
+        $(SLO)$/toolbarmenu.obj \
+        $(SLO)$/tbxcolorupdate.obj
+
+LIB2TARGET= $(SLB)$/$(TARGET).lib
+LIB2OBJFILES= \
+        $(SLO)$/formatpaintbrushctrl.obj\
         $(SLO)$/colrctrl.obj	\
         $(SLO)$/fillctrl.obj	\
         $(SLO)$/grafctrl.obj	\
@@ -53,15 +61,14 @@ SLOFILES=	\
         $(SLO)$/layctrl.obj		\
         $(SLO)$/lboxctrl.obj	\
         $(SLO)$/linectrl.obj	\
-        $(SLO)$/tbcontrl.obj	\
         $(SLO)$/tbxalign.obj	\
         $(SLO)$/tbxdrctl.obj    \
         $(SLO)$/verttexttbxctrl.obj \
-        $(SLO)$/toolbarmenu.obj \
         $(SLO)$/subtoolboxcontrol.obj \
         $(SLO)$/tbxcolor.obj \
-        $(SLO)$/tbxcolorupdate.obj \
         $(SLO)$/tbunocontroller.obj
+
+SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
 
 SRS1NAME=$(TARGET)
 SRC1FILES = \

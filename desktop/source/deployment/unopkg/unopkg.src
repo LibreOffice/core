@@ -81,5 +81,12 @@ String RID_STR_UNOPKG_ACCEPT_LIC_N
 
 String RID_STR_CONCURRENTINSTANCE
 {
-    Text [ en-US ] = "You need to close the already opened Extension Manager to continue.";
+    Text [ en-US ] = "unopkg cannot be started. The lock file indicates it as already running. "
+        "If this does not apply, delete the lock file at:";
 };
+
+String RID_STR_UNOPKG_ERROR
+{
+    Text [ en-US ] = "ERROR: ";
+};
+

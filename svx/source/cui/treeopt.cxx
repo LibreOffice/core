@@ -64,6 +64,8 @@
 #include <com/sun/star/awt/XContainerWindowEventHandler.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
+#include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/awt/XTabController.hpp>
 #include <vcl/help.hxx>
 #ifndef _LINGUISTIC_MISC_HHX_
 #include <linguistic/misc.hxx>
@@ -2745,10 +2747,23 @@ void ExtensionsTabPage::CreateDialogWithHandler()
 
         if ( !bWithHandler || m_xEventHdl.is() )
         {
+            SetStyle( GetStyle() | WB_DIALOGCONTROL | WB_CHILDDLGCTRL );
             Reference< awt::XWindowPeer > xParent( VCLUnoHelper::GetInterface( this ), UNO_QUERY );
             m_xPage = Reference < awt::XWindow >(
                 m_xWinProvider->createContainerWindow(
                     m_sPageURL, rtl::OUString(), xParent, m_xEventHdl ), UNO_QUERY );
+
+            Reference< awt::XControl > xPageControl( m_xPage, UNO_QUERY );
+            if ( xPageControl.is() )
+            {
+                Reference< awt::XWindowPeer > xWinPeer( xPageControl->getPeer() );
+                if ( xWinPeer.is() )
+                {
+                    Window* pWindow = VCLUnoHelper::GetWindow( xWinPeer );
+                    if ( pWindow )
+                        pWindow->SetStyle( pWindow->GetStyle() | WB_DIALOGCONTROL | WB_CHILDDLGCTRL );
+                }
+            }
         }
     }
     catch ( ::com::sun::star::lang::IllegalArgumentException& )

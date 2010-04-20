@@ -55,6 +55,7 @@
 #include <vcl/cmdevt.hxx>
 #include <vos/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <rtl/logfile.hxx>
 
 //_______________________________________________
 // namespace

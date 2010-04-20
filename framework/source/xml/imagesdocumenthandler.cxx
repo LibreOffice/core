@@ -134,7 +134,6 @@ ImageXMLEntryProperty ImagesEntries[OReadImagesDocumentHandler::IMG_XML_ENTRY_CO
 
 OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageListsDescriptor& aItems ) :
     ThreadHelpBase( &Application::GetSolarMutex() ),
-    ::cppu::OWeakObject(),
     m_aImageList( aItems ),
     m_pImages( 0 ),
     m_pExternalImages( 0 )
@@ -173,18 +172,6 @@ OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageListsDescriptor& aI
 
 OReadImagesDocumentHandler::~OReadImagesDocumentHandler()
 {
-}
-
-Any SAL_CALL OReadImagesDocumentHandler::queryInterface( const Type & rType )
-throw( RuntimeException )
-{
-    Any a = ::cppu::queryInterface(
-                rType ,
-                SAL_STATIC_CAST( XDocumentHandler*, this ));
-    if ( a.hasValue() )
-        return a;
-
-    return OWeakObject::queryInterface( rType );
 }
 
 // XDocumentHandler

@@ -138,7 +138,7 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
 
     // analyze the result and actualize our other members
     ::comphelper::SequenceAsHashMap aProtocol(aResult);
-    if (aProtocol.size() < 1)
+    if ( aProtocol.empty() )
         return;
 
     ::comphelper::SequenceAsHashMap::const_iterator pIt = aProtocol.end();

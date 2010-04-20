@@ -144,6 +144,7 @@ public:
     SbiExprNode* GetRealNode();     // letzter Knoten in x.y.z
     short GetDepth();               // Tiefe eines Baumes berechnen
     const String& GetString()       { return aStrVal; }
+    short GetNumber()               { return (short)nVal; }
     SbiExprList* GetParameters()    { return aVar.pPar; }
     SbiExprListVector* GetMoreParameters()  { return aVar.pvMorePar; }
 

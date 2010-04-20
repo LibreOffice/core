@@ -82,7 +82,15 @@ XML_NAMESPACE( OF,              34U )       // OpenFormula aka ODFF
 XML_NAMESPACE( XHTML,           35U )
 XML_NAMESPACE( GRDDL,           36U )
 
-#define _XML_OLD_NAMESPACE_BASE 37U
+// namespaces for odf extended formats
+
+#define XML_NAMESPACE_EXT( prefix, key ) \
+const sal_uInt16 XML_NAMESPACE_##prefix##_EXT       = key; \
+const sal_uInt16 XML_NAMESPACE_##prefix##_EXT_IDX   = key;
+
+XML_NAMESPACE_EXT( OFFICE,      37U )
+
+#define _XML_OLD_NAMESPACE_BASE 38U
 
 // namespaces used in the technical preview (SO 5.2)
 XML_OLD_NAMESPACE( FO,      0U )

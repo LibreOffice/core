@@ -73,7 +73,7 @@ public:
     void lock();
     void unlock();
 
-    // the viewforwarder interface
+    // the SvxViewForwarder interface
     virtual BOOL        IsValid() const;
     virtual Rectangle   GetVisArea() const;
     virtual Point       LogicToPixel( const Point&, const MapMode& ) const;

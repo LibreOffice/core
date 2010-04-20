@@ -65,6 +65,8 @@ namespace sdr { namespace contact {
         ::rtl::Reference< ViewObjectContactOfUnoControl_Impl >    m_pImpl;
 
     public:
+        ViewObjectContactOfUnoControl( ObjectContact& _rObjectContact, ViewContactOfUnoControl& _rViewContact );
+
         /// determines whether an XControl already exists, and is currently visible
         bool    isControlVisible() const;
 
@@ -98,7 +100,6 @@ namespace sdr { namespace contact {
         virtual void ActionChanged();
 
     protected:
-        ViewObjectContactOfUnoControl( ObjectContact& _rObjectContact, ViewContactOfUnoControl& _rViewContact );
         ~ViewObjectContactOfUnoControl();
 
         // support for Primitive2D
@@ -108,36 +109,6 @@ namespace sdr { namespace contact {
         ViewObjectContactOfUnoControl();                                                  // never implemented
         ViewObjectContactOfUnoControl( const ViewObjectContactOfUnoControl& );              // never implemented
         ViewObjectContactOfUnoControl& operator=( const ViewObjectContactOfUnoControl& );   // never implemented
-    };
-
-    //====================================================================
-    //= UnoControlDefaultContact
-    //====================================================================
-    class SVX_DLLPRIVATE UnoControlDefaultContact : public ViewObjectContactOfUnoControl
-    {
-    public:
-        UnoControlDefaultContact( ObjectContact& _rObjectContact, ViewContactOfUnoControl& _rViewContact );
-        ~UnoControlDefaultContact();
-
-    private:
-        UnoControlDefaultContact();                                             // never implemented
-        UnoControlDefaultContact( const UnoControlDefaultContact& );            // never implemented
-        UnoControlDefaultContact& operator=( const UnoControlDefaultContact& ); // never implemented
-    };
-
-    //====================================================================
-    //= UnoControlWindowContact
-    //====================================================================
-    class SVX_DLLPRIVATE UnoControlWindowContact : public ViewObjectContactOfUnoControl
-    {
-    public:
-        UnoControlWindowContact( ObjectContactOfPageView& _rObjectContact, ViewContactOfUnoControl& _rViewContact );
-        ~UnoControlWindowContact();
-
-    private:
-        UnoControlWindowContact();                                              // never implemented
-        UnoControlWindowContact( const UnoControlWindowContact& );              // never implemented
-        UnoControlWindowContact& operator=( const UnoControlWindowContact& );   // never implemented
     };
 
     //====================================================================
@@ -155,21 +126,6 @@ namespace sdr { namespace contact {
         UnoControlPrintOrPreviewContact& operator=( const UnoControlPrintOrPreviewContact& ); // never implemented
 
         virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo ) const;
-    };
-
-    //====================================================================
-    //= UnoControlPDFExportContact
-    //====================================================================
-    class SVX_DLLPRIVATE UnoControlPDFExportContact : public ViewObjectContactOfUnoControl
-    {
-    public:
-        UnoControlPDFExportContact( ObjectContactOfPageView& _rObjectContact, ViewContactOfUnoControl& _rViewContact );
-        ~UnoControlPDFExportContact();
-
-    private:
-        UnoControlPDFExportContact();                                               // never implemented
-        UnoControlPDFExportContact( const UnoControlPDFExportContact& );            // never implemented
-        UnoControlPDFExportContact& operator=( const UnoControlPDFExportContact& ); // never implemented
     };
 
 //........................................................................

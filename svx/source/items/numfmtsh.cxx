@@ -45,6 +45,7 @@
 
 #include <svtools/langtab.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <svx/numfmtsh.hxx>
 // class SvxNumberFormatShell --------------------------------------------
@@ -1523,22 +1524,22 @@ String SvxNumberFormatShell::GetStandardName() const
     return pFormatter->GetStandardName( eCurLanguage);
 }
 
-void SvxNumberFormatShell::GetCurrencySymbols(SvStringsDtor& rList,const XubString& rStrEurope, sal_uInt16* pPos)
+void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, sal_uInt16* pPos )
 {
 
     const NfCurrencyEntry* pTmpCurrencyEntry=SvNumberFormatter::MatchSystemCurrency();
 
     sal_Bool bFlag=(pTmpCurrencyEntry==NULL);
 
-    GetCurrencySymbols(rList,rStrEurope, bFlag);
+    GetCurrencySymbols( rList, bFlag);
 
     if(pPos!=NULL)
     {
         const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
-        sal_uInt16 nCount=rCurrencyTable.Count();
+        sal_uInt16 nTableCount=rCurrencyTable.Count();
 
         *pPos=0;
-        nCount=aCurCurrencyList.Count();
+        sal_uInt16 nCount=aCurCurrencyList.Count();
 
         if(bFlag)
         {
@@ -1549,8 +1550,9 @@ void SvxNumberFormatShell::GetCurrencySymbols(SvStringsDtor& rList,const XubStri
         {
             for(sal_uInt16 i=1;i<nCount;i++)
             {
-                if(aCurCurrencyList[i]!=(sal_uInt16)-1 &&
-                    pTmpCurrencyEntry==rCurrencyTable[aCurCurrencyList[i]])
+                const sal_uInt16 j = aCurCurrencyList[i];
+                if (j != (sal_uInt16)-1 && j < nTableCount &&
+                        pTmpCurrencyEntry == rCurrencyTable[j])
                 {
                     *pPos=i;
                     nCurCurrencyEntryPos=i;
@@ -1562,7 +1564,7 @@ void SvxNumberFormatShell::GetCurrencySymbols(SvStringsDtor& rList,const XubStri
 
 }
 
-void SvxNumberFormatShell::GetCurrencySymbols(SvStringsDtor& rList,const XubString& /*rStrEurope*/, sal_Bool bFlag)
+void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, sal_Bool bFlag )
 {
     aCurCurrencyList.Remove(0,aCurCurrencyList.Count());
 
@@ -1574,9 +1576,9 @@ void SvxNumberFormatShell::GetCurrencySymbols(SvStringsDtor& rList,const XubStri
     sal_uInt16 nStart=1;
     sal_uInt16 i,j;
 
-    XubString aString(rCurrencyTable[0]->GetSymbol());
+    XubString aString( ApplyLreOrRleEmbedding( rCurrencyTable[0]->GetSymbol()));
     aString += sal_Unicode(' ');
-    aString += pLanguageTable->GetString(rCurrencyTable[0]->GetLanguage());
+    aString += ApplyLreOrRleEmbedding( pLanguageTable->GetString( rCurrencyTable[0]->GetLanguage()));
 
     WSStringPtr pStr = new XubString(aString);
     rList.Insert( pStr,rList.Count());
@@ -1591,41 +1593,54 @@ void SvxNumberFormatShell::GetCurrencySymbols(SvStringsDtor& rList,const XubStri
         ++nStart;
     }
 
+    CollatorWrapper aCollator( ::comphelper::getProcessServiceFactory());
+    aCollator.loadDefaultCollator( Application::GetSettings().GetLocale(), 0);
+
+    const String aTwoSpace( RTL_CONSTASCII_USTRINGPARAM( "  "));
+
     for(i=1;i<nCount;i++)
     {
-        XubString _aString(rCurrencyTable[i]->GetSymbol());
-        _aString += sal_Unicode(' ');
-        _aString += pLanguageTable->GetString(rCurrencyTable[i]->GetLanguage());
+        XubString aStr( ApplyLreOrRleEmbedding( rCurrencyTable[i]->GetBankSymbol()));
+        aStr += aTwoSpace;
+        aStr += ApplyLreOrRleEmbedding( rCurrencyTable[i]->GetSymbol());
+        aStr += aTwoSpace;
+        aStr += ApplyLreOrRleEmbedding( pLanguageTable->GetString( rCurrencyTable[i]->GetLanguage()));
 
-        pStr = new XubString(_aString);
-
+        pStr = new XubString(aStr);
+#if 0
+        fprintf( stderr, "currency entry: %s\n", ByteString( *pStr, RTL_TEXTENCODING_UTF8).GetBuffer());
+#endif
         for(j=nStart;j<rList.Count();j++)
         {
             const StringPtr pTestStr=rList[j];
-
-            if(*pTestStr>aString) break;
+            if (aCollator.compareString( *pStr, *pTestStr) < 0)
+                break;  // insert before first greater than
         }
         rList.Insert( pStr,j);
         aCurCurrencyList.Insert(i,j);
     }
 
+    // Append ISO codes to symbol list.
+    // XXX If this is to be changed, various other places would had to be
+    // adapted that assume this order!
     sal_uInt16 nCont = rList.Count();
 
     for(i=1;i<nCount;i++)
     {
-        sal_Bool bTest=sal_True;
-        pStr = new XubString(rCurrencyTable[i]->GetBankSymbol());
+        bool bInsert = true;
+        pStr = new XubString( ApplyLreOrRleEmbedding( rCurrencyTable[i]->GetBankSymbol()));
 
-        for(j=nCont;j<rList.Count();j++)
+        for (j = nCont; j < rList.Count() && bInsert; ++j)
         {
             const StringPtr pTestStr=rList[j];
 
             if(*pTestStr==*pStr)
-                bTest=sal_False;
+                bInsert = false;
             else
-                if(*pTestStr>*pStr) break;
+                if (aCollator.compareString( *pStr, *pTestStr) < 0)
+                    break;  // insert before first greater than
         }
-        if(bTest)
+        if(bInsert)
         {
             rList.Insert( pStr,j);
             aCurCurrencyList.Insert(i,j);

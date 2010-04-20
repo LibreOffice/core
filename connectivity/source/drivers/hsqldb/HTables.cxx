@@ -113,7 +113,7 @@ void OTables::impl_refresh(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 void OTables::disposing(void)
 {
-    m_xMetaData = NULL;
+m_xMetaData.clear();
     OCollection::disposing();
 }
 // -------------------------------------------------------------------------

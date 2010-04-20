@@ -42,7 +42,6 @@
 #include <vos/mutex.hxx>
 
 #include <vcl/menu.hxx>
-#include <svtools/loginerr.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/dateitem.hxx>
 #include <vcl/menu.hxx>

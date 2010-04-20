@@ -85,7 +85,6 @@ OComponentEnumeration::OComponentEnumeration( const Sequence< Reference< XCompon
         //      we must garant right initialization and a valid value of this! First initialize
         //      baseclasses and then members. And we need the mutex for other baseclasses !!!
         :   ThreadHelpBase  ( &Application::GetSolarMutex() )
-        ,   OWeakObject     (                               )
         // Init member
         ,   m_nPosition     ( 0                             )   // 0 is the first position for a valid list and the right value for an invalid list to!
         ,   m_seqComponents ( seqComponents                 )
@@ -103,22 +102,6 @@ OComponentEnumeration::~OComponentEnumeration()
     // Reset instance, free memory ....
     impl_resetObject();
 }
-
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider
-//*****************************************************************************************************************
-DEFINE_XINTERFACE_3     (   OComponentEnumeration           ,
-                            OWeakObject                     ,
-                            DIRECT_INTERFACE(XTypeProvider  ),
-                            DIRECT_INTERFACE(XEventListener ),
-                            DIRECT_INTERFACE(XEnumeration   )
-                        )
-
-DEFINE_XTYPEPROVIDER_3  (   OComponentEnumeration           ,
-                            XTypeProvider                   ,
-                            XEventListener                  ,
-                            XEnumeration
-                        )
 
 //*****************************************************************************************************************
 //  XEventListener

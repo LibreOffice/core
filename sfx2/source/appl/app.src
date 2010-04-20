@@ -502,76 +502,6 @@ ToolBox RID_FULLSCREENTOOLBOX
     };
 };
 
-String STR_EVENT_STARTAPP
-{
-    Text [ en-US ] = "Start Application" ;
-};
-
-String STR_EVENT_CLOSEAPP
-{
-    Text [ en-US ] = "Close Application" ;
-};
-
-String STR_EVENT_CREATEDOC
-{
-    Text [ en-US ] = "Create Document" ;
-};
-
-String STR_EVENT_CLOSEDOC
-{
-    Text [ en-US ] = "Document is closing" ;
-};
-
-String STR_EVENT_PREPARECLOSEDOC
-{
-    Text [ en-US ] = "Close Document" ;
-};
-
-String STR_EVENT_OPENDOC
-{
-    Text [ en-US ] = "Open Document" ;
-};
-
-String STR_EVENT_SAVEDOC
-{
-    Text [ en-US ] = "Save Document" ;
-};
-
-String STR_EVENT_SAVEASDOC
-{
-    Text [ en-US ] = "Save Document As" ;
-};
-
-String STR_EVENT_SAVEDOCDONE
-{
-    Text [ en-US ] = "Document has been saved" ;
-};
-
-String STR_EVENT_SAVEASDOCDONE
-{
-    Text [ en-US ] = "Document has been saved as" ;
-};
-
-String STR_EVENT_ACTIVATEDOC
-{
-    Text [ en-US ] = "Activate Document" ;
-};
-
-String STR_EVENT_DEACTIVATEDOC
-{
-    Text [ en-US ] = "Deactivate Document" ;
-};
-
-String STR_EVENT_PRINTDOC
-{
-    Text [ en-US ] = "Print Document" ;
-};
-
-String STR_EVENT_MODIFYCHANGED
-{
-    Text [ en-US ] = "'Modified' status was changed" ;
-};
-
 String STR_ERR_NOTEMPLATE
 {
     Text [ en-US ] = "The selected template has an incorrect format" ;
@@ -581,7 +511,6 @@ String STR_ERR_NOFILE
 {
     Text [ en-US ] = "Can't open file $." ;
 };
-
 
 String STR_QUITAPP
 {

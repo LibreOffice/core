@@ -76,7 +76,7 @@ namespace drawinglayer
             const ::basegfx::B2DPolygon& getTail() const { return maTail; }
             double getCornerRadiusX() const { return mfCornerRadiusX; }
             double getCornerRadiusY() const { return mfCornerRadiusY; }
-            bool hasCornerRadius() const { return (0.0 != mfCornerRadiusX || 0.0 != mfCornerRadiusY); }
+            bool isCornerRadiusUsed() const { return (0.0 != mfCornerRadiusX || 0.0 != mfCornerRadiusY); }
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()

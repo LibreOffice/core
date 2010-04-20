@@ -85,8 +85,8 @@ struct ThreadHelpBase2
         mutable ::osl::Mutex m_aLock;
 };
 
-class PreventDuplicateInteraction : public ::cppu::WeakImplHelper1< css::task::XInteractionHandler >
-                                  , private ThreadHelpBase2
+class PreventDuplicateInteraction : private ThreadHelpBase2
+                                    ,public ::cppu::WeakImplHelper1< css::task::XInteractionHandler >
 {
     //_____________________________________
     // structs, types etcp.

@@ -2647,6 +2647,16 @@ USHORT SvxDummyTextSource::GetLineLen( USHORT, USHORT ) const
     return 0;
 }
 
+void SvxDummyTextSource::GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT /*nParagraph*/, USHORT /*nLine*/ ) const
+{
+    rStart = rEnd = 0;
+}
+
+USHORT SvxDummyTextSource::GetLineNumberAtIndex( USHORT /*nPara*/, USHORT /*nIndex*/ ) const
+{
+    return 0;
+}
+
 sal_Bool SvxDummyTextSource::QuickFormatDoc( BOOL )
 {
     return sal_False;

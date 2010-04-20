@@ -101,7 +101,7 @@ void OEvoabTables::impl_refresh(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 void OEvoabTables::disposing(void)
 {
-    m_xMetaData = NULL;
+m_xMetaData.clear();
     OCollection::disposing();
 }
 // -----------------------------------------------------------------------------

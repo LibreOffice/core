@@ -1867,6 +1867,14 @@ void SdrOle2Obj::NbcSetSnapRect(const Rectangle& rRect)
     SdrRectObj::NbcSetSnapRect(rRect);
     if( pModel && !pModel->isLocked() )
         ImpSetVisAreaSize();
+
+    if ( xObjRef.is() && IsChart() )
+    {
+        //#i103460# charts do not necessaryly have an own size within ODF files,
+        //for this case they need to use the size settings from the surrounding frame,
+        //which is made available with this method as there is no other way
+        xObjRef.SetDefaultSizeForChart( Size( rRect.GetWidth(), rRect.GetHeight() ) );
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -2208,14 +2216,7 @@ sal_Bool SdrOle2Obj::AddOwnLightClient()
 
 //////////////////////////////////////////////////////////////////////////////
 
-bool SdrOle2Obj::executeOldDoPaintPreparations(SdrPageView* /*pPageVew*/) const
-{
-    //#i101925# moved this stuff to method ViewObjectContactOfSdrOle2Obj::createPrimitive2DSequence and reorganized it further to avoid superfluous metafile creation for charts
-    //this method can be removed with the next incompatible build
-    return false;
-}
-
-Bitmap SdrOle2Obj::GetEmtyOLEReplacementBitmap() const
+Bitmap SdrOle2Obj::GetEmtyOLEReplacementBitmap()
 {
     return Bitmap(ResId(BMP_SVXOLEOBJ, *ImpGetResMgr()));
 }

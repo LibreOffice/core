@@ -39,6 +39,8 @@ NO_BSYMBOLIC = TRUE
 .INCLUDE : settings.mk
 DLLPRE =
 
+.IF "$(L10N_framework)"==""
+
 SLOFILES= \
         $(SLO)$/ucpexpand.obj
 
@@ -57,5 +59,7 @@ SHL1LIBS = $(SLB)$/$(TARGET).lib
 SHL1DEF = $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME = $(SHL1TARGET)
+
+.ENDIF # L10N_framework
 
 .INCLUDE : target.mk

@@ -1912,12 +1912,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
             XGradientStyle eGrad = XGRAD_LINEAR;
             sal_Int32 nChgColors = 0;
 
-            if ( !nAngle )
-                nChgColors ^= 1;
-
-            if ( !nFocus )
-                nChgColors ^= 1;
-            else if ( nFocus < 0 )      // Bei negativem Focus sind die Farben zu tauschen
+            if ( nFocus < 0 )       // Bei negativem Focus sind die Farben zu tauschen
             {
                 nFocus =- nFocus;
                 nChgColors ^= 1;
@@ -1925,8 +1920,8 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
             if( nFocus > 40 && nFocus < 60 )
             {
                 eGrad = XGRAD_AXIAL;    // Besser gehts leider nicht
-                nChgColors ^= 1;
             }
+
             USHORT nFocusX = (USHORT)nFocus;
             USHORT nFocusY = (USHORT)nFocus;
 
@@ -3239,6 +3234,8 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, const 
 {
 //  MapUnit eMap( rManager.GetModel()->GetScaleUnit() );
 
+    sal_Bool bHasShadow = sal_False;
+
     for ( void* pDummy = ((DffPropertyReader*)this)->First(); pDummy; pDummy = ((DffPropertyReader*)this)->Next() )
     {
         UINT32 nRecType = GetCurKey();
@@ -3310,8 +3307,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, const 
             break;
             case DFF_Prop_fshadowObscured :
             {
-                sal_Bool bHasShadow = ( nContent & 2 ) != 0;
-                rSet.Put( SdrShadowItem( bHasShadow ) );
+                bHasShadow = ( nContent & 2 ) != 0;
                 if ( bHasShadow )
                 {
                     if ( !IsProperty( DFF_Prop_shadowOffsetX ) )
@@ -3324,6 +3320,44 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, const 
         }
     }
 
+    if ( bHasShadow )
+    {
+        // #160376# sj: activating shadow only if fill and or linestyle is used
+        // this is required because of the latest drawing layer core changes.
+        // Issue i104085 is related to this.
+        UINT32 nLineFlags(GetPropertyValue( DFF_Prop_fNoLineDrawDash ));
+        if(!IsHardAttribute( DFF_Prop_fLine ) && !IsCustomShapeStrokedByDefault( rObjData.eShapeType ))
+            nLineFlags &= ~0x08;
+        UINT32 nFillFlags(GetPropertyValue( DFF_Prop_fNoFillHitTest ));
+        if(!IsHardAttribute( DFF_Prop_fFilled ) && !IsCustomShapeFilledByDefault( rObjData.eShapeType ))
+            nFillFlags &= ~0x10;
+        if ( nFillFlags & 0x10 )
+        {
+            MSO_FillType eMSO_FillType = (MSO_FillType)GetPropertyValue( DFF_Prop_fillType, mso_fillSolid );
+            switch( eMSO_FillType )
+            {
+                case mso_fillSolid :
+                case mso_fillPattern :
+                case mso_fillTexture :
+                case mso_fillPicture :
+                case mso_fillShade :
+                case mso_fillShadeCenter :
+                case mso_fillShadeShape :
+                case mso_fillShadeScale :
+                case mso_fillShadeTitle :
+                break;
+                // case mso_fillBackground :
+                default:
+                    nFillFlags &=~0x10;         // no fillstyle used
+                break;
+            }
+        }
+        if ( ( ( nLineFlags & 0x08 ) == 0 ) && ( ( nFillFlags & 0x10 ) == 0 ) ) // if there is no fillstyle and linestyle
+            bHasShadow = sal_False;                                             // we are turning shadow off.
+
+        if ( bHasShadow )
+            rSet.Put( SdrShadowItem( bHasShadow ) );
+    }
     ApplyLineAttributes( rSet, rObjData.eShapeType ); // #i28269#
     ApplyFillAttributes( rIn, rSet, rObjData );
     if ( rObjData.eShapeType != mso_sptNil )
@@ -3775,16 +3809,43 @@ FASTBOOL SvxMSDffManager::GetColorFromPalette( USHORT /* nNum */, Color& rColor 
     return TRUE;
 }
 
+// sj: the documentation is not complete, especially in ppt the normal rgb for text
+// color is written as 0xfeRRGGBB, this can't be explained by the documentation, nearly
+// every bit in the upper code is set -> so there seems to be a special handling for
+// ppt text colors, i decided not to fix this in MSO_CLR_ToColor because of possible
+// side effects, instead MSO_TEXT_CLR_ToColor is called for PPT text colors, to map
+// the color code to something that behaves like the other standard color codes used by
+// fill and line color
+Color SvxMSDffManager::MSO_TEXT_CLR_ToColor( sal_uInt32 nColorCode ) const
+{
+    // Fuer Textfarben: Header ist 0xfeRRGGBB
+    if ( ( nColorCode & 0xfe000000 ) == 0xfe000000 )
+        nColorCode &= 0x00ffffff;
+    else
+    {
+        // for colorscheme colors the color index are the lower three bits of the upper byte
+        if ( ( nColorCode & 0xf8000000 ) == 0 ) // this must be a colorscheme index
+        {
+            nColorCode >>= 24;
+            nColorCode |= 0x8000000;
+        }
+    }
+    return MSO_CLR_ToColor( nColorCode );
+}
 
 Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nContentProperty ) const
 {
     Color aColor( mnDefaultColor );
 
     // Fuer Textfarben: Header ist 0xfeRRGGBB
-    if ( ( nColorCode & 0xfe000000 ) == 0xfe000000 )
-        nColorCode &= 0x00ffffff;
+    if ( ( nColorCode & 0xfe000000 ) == 0xfe000000 )    // sj: it needs to be checked if 0xfe is used in
+        nColorCode &= 0x00ffffff;                       // other cases than ppt text -> if not this code can be removed
 
     sal_uInt8 nUpper = (sal_uInt8)( nColorCode >> 24 );
+
+    // sj: below change from 0x1b to 0x19 was done because of i84812 (0x02 -> rgb color),
+    // now I have some problems to fix i104685 (there the color value is 0x02000000 whichs requires
+    // a 0x2 scheme color to be displayed properly), the color docu seems to be incomplete
     if( nUpper & 0x19 )      // if( nUpper & 0x1f )
     {
         if( ( nUpper & 0x08 ) || ( ( nUpper & 0x10 ) == 0 ) )
@@ -4952,6 +5013,16 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
             if ( bGraphic )
             {
                 pRet = ImportGraphic( rSt, aSet, aObjData );        // SJ: #68396# is no longer true (fixed in ppt2000)
+                ApplyAttributes( rSt, aSet, aObjData );
+                pRet->SetMergedItemSet(aSet);
+            }
+            else if ( aObjData.eShapeType == mso_sptLine )
+            {
+                basegfx::B2DPolygon aPoly;
+                aPoly.append(basegfx::B2DPoint(aObjData.aBoundRect.Left(), aObjData.aBoundRect.Top()));
+                aPoly.append(basegfx::B2DPoint(aObjData.aBoundRect.Right(), aObjData.aBoundRect.Bottom()));
+                pRet = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPoly));
+                pRet->SetModel( pSdrModel );
                 ApplyAttributes( rSt, aSet, aObjData );
                 pRet->SetMergedItemSet(aSet);
             }

@@ -41,7 +41,7 @@
 #ifndef __FRAMEWORK_CLASSES_RESOURCE_HRC_
 #include <classes/resource.hrc>
 #endif
-#include <classes/fwkresid.hxx>
+#include <classes/fwlresid.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -49,11 +49,11 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -99,8 +99,9 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   HeaderMenuController                
 
 DEFINE_INIT_SERVICE                     (   HeaderMenuController, {} )
 
-HeaderMenuController::HeaderMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
+HeaderMenuController::HeaderMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager,bool _bFooter ) :
     PopupMenuControllerBase( xServiceManager )
+    ,m_bFooter(_bFooter)
 {
 }
 
@@ -125,16 +126,20 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
     {
         Reference< XNameAccess > xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
 
+        rtl::OUString aCmd( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertPageHeader" ));
+        rtl::OUString aHeaderFooterIsOnStr(RTL_CONSTASCII_USTRINGPARAM( "HeaderIsOn" ));
+        if ( m_bFooter )
+        {
+            aCmd = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertPageFooter" ));
+            aHeaderFooterIsOnStr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterIsOn" ));
+        }
+        const rtl::OUString aIsPhysicalStr( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ));
+        const rtl::OUString aDisplayNameStr( RTL_CONSTASCII_USTRINGPARAM( "DisplayName" ));
+
         try
         {
-            const rtl::OUString aCmd( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertPageHeader" ));
-            const rtl::OUString aIsPhysicalStr( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ));
-            const rtl::OUString aDisplayNameStr( RTL_CONSTASCII_USTRINGPARAM( "DisplayName" ));
-            const rtl::OUString aHeaderIsOnStr( RTL_CONSTASCII_USTRINGPARAM( "HeaderIsOn" ));
-
             Reference< XNameContainer > xNameContainer;
-            Any a = xStyleFamilies->getByName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageStyles" )));
-            if ( a >>= xNameContainer )
+            if ( xStyleFamilies->getByName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageStyles" ))) >>= xNameContainer )
             {
                 Sequence< rtl::OUString > aSeqNames = xNameContainer->getElementNames();
 
@@ -151,15 +156,12 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                     if ( xPropSet.is() )
                     {
                         sal_Bool bIsPhysical( sal_False );
-                        a = xPropSet->getPropertyValue( aIsPhysicalStr );
-                        if (( a >>= bIsPhysical ) && bIsPhysical )
+                        if (( xPropSet->getPropertyValue( aIsPhysicalStr ) >>= bIsPhysical ) && bIsPhysical )
                         {
                             rtl::OUString aDisplayName;
                             sal_Bool      bHeaderIsOn( sal_False );
-                            a = xPropSet->getPropertyValue( aDisplayNameStr );
-                            a >>= aDisplayName;
-                            a = xPropSet->getPropertyValue( aHeaderIsOnStr );
-                            a >>= bHeaderIsOn;
+                            xPropSet->getPropertyValue( aDisplayNameStr ) >>= aDisplayName;
+                            xPropSet->getPropertyValue( aHeaderFooterIsOnStr ) >>= bHeaderIsOn;
 
                             rtl::OUStringBuffer aStrBuf( aCmd );
                             aStrBuf.appendAscii( "?PageStyle:string=");
@@ -195,7 +197,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                 if ( bAllOneState && ( nCount > 1 ))
                 {
                     // Insert special item for all command
-                    pVCLPopupMenu->InsertItem( ALL_MENUITEM_ID, String( FwkResId( STR_MENU_HEADFOOTALL )), 0, 0 );
+                    pVCLPopupMenu->InsertItem( ALL_MENUITEM_ID, String( FwlResId( STR_MENU_HEADFOOTALL )), 0, 0 );
 
                     rtl::OUStringBuffer aStrBuf( aCmd );
                     aStrBuf.appendAscii( "?On:bool=" );
@@ -247,84 +249,12 @@ void SAL_CALL HeaderMenuController::statusChanged( const FeatureStateEvent& Even
 }
 
 // XMenuListener
-void SAL_CALL HeaderMenuController::highlight( const css::awt::MenuEvent& ) throw (RuntimeException)
+void HeaderMenuController::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aTargetURL)
 {
-}
-
-void SAL_CALL HeaderMenuController::select( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
-{
-    Reference< css::awt::XPopupMenu >   xPopupMenu;
-    Reference< XDispatch >              xDispatch;
-    Reference< XMultiServiceFactory >   xServiceManager;
-
-    ResetableGuard aLock( m_aLock );
-    xPopupMenu      = m_xPopupMenu;
-    xDispatch       = m_xDispatch;
-    xServiceManager = m_xServiceManager;
-    aLock.unlock();
-
-    if ( xPopupMenu.is() && xDispatch.is() )
-    {
-        VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( xPopupMenu );
-        if ( pPopupMenu )
-        {
-            css::util::URL               aTargetURL;
-            Sequence<PropertyValue>      aArgs( 1 );
-            Reference< XURLTransformer > xURLTransformer( xServiceManager->createInstance(
-                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                        UNO_QUERY );
-
-            {
-                vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-                PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
-
-                aTargetURL.Complete = pVCLPopupMenu->GetItemCommand( rEvent.MenuId );
-            }
-
-            xURLTransformer->parseStrict( aTargetURL );
-            if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-                UiEventLogHelper(::rtl::OUString::createFromAscii("HeaderMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
-            xDispatch->dispatch( aTargetURL, aArgs );
-        }
-    }
-}
-
-void SAL_CALL HeaderMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
-{
-}
-
-void SAL_CALL HeaderMenuController::deactivate( const css::awt::MenuEvent& ) throw (RuntimeException)
-{
-}
-
-// XPopupMenuController
-void SAL_CALL HeaderMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu ) throw ( RuntimeException )
-{
-    ResetableGuard aLock( m_aLock );
-
-    if ( m_bDisposed )
-        throw DisposedException();
-
-    if ( m_xFrame.is() && !m_xPopupMenu.is() )
-    {
-        // Create popup menu on demand
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-
-        m_xPopupMenu = xPopupMenu;
-        m_xPopupMenu->addMenuListener( Reference< css::awt::XMenuListener >( (OWeakObject*)this, UNO_QUERY ));
-
-        Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                    UNO_QUERY );
-        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-
-        com::sun::star::util::URL aTargetURL;
-        aTargetURL.Complete = m_aCommandURL;
-        xURLTransformer->parseStrict( aTargetURL );
-        m_xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-
-        updatePopupMenu();
-    }
+    Sequence<PropertyValue>      aArgs;
+    if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+        UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(m_bFooter ? "FooterMenuController" : "HeaderMenuController"))).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
+    _xDispatch->dispatch( aTargetURL, aArgs );
 }
 
 void SAL_CALL HeaderMenuController::updatePopupMenu() throw (::com::sun::star::uno::RuntimeException)
@@ -343,12 +273,6 @@ void SAL_CALL HeaderMenuController::updatePopupMenu() throw (::com::sun::star::u
     aLock.lock();
     if ( m_xPopupMenu.is() && m_xModel.is() )
         fillPopupMenu( m_xModel, m_xPopupMenu );
-}
-
-// XInitialization
-void SAL_CALL HeaderMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
-{
-    PopupMenuControllerBase::initialize( aArguments );
 }
 
 }

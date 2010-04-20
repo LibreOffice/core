@@ -887,27 +887,27 @@
     </node>
     <node oor:name="pa-IN" oor:op="replace">
       <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
-        <value>Lohit Punjabi;Tahoma;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;clearlyU;Interface User;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Charcoal;Chicago;Helmet;Interface System;Sans Serif</value>
-      </prop>
+        <value>Raavi;Lohit Punjabi;Saab;Tahoma</value>
+     </prop>
       <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
-        <value>Lohit Punjabi;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Raavi;Lohit Punjabi;Saab;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
-        <value>Lohit Punjabi;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Raavi;Lohit Punjabi;Saab;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
-        <value>Lohit Punjabi;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Raavi;Lohit Punjabi;Saab;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
-        <value>Lohit Punjabi;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Raavi;Lohit Punjabi;Saab;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
-        <value>Lohit Punjabi;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Raavi;Lohit Punjabi;Saab;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
     </node>
     <node oor:name="ta-IN" oor:op="replace">
       <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
-        <value>Lohit Tamil;Tahoma;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;clearlyU;Interface User;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Charcoal;Chicago;Helmet;Interface System;Sans Serif</value>
+        <value>Lohit Tamil;Tahoma;Sans Serif</value>
       </prop>
       <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
         <value>Lohit Tamil;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
@@ -1643,6 +1643,21 @@
           <value>Decorative,Special</value>
         </prop>
       </node>
+
+      <node oor:name="calibri" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>hiraginomarugothicpronw3;hiraginomarugothicprow3</value>
+        </prop>
+        <prop oor:name="FontType"><value>Normal,SansSerif</value></prop>
+      </node>
+
+      <node oor:name="cambria" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>applelisung</value>
+        </prop>
+        <prop oor:name="FontType"><value>Normal,Serif</value></prop>
+      </node>
+
       <node oor:name="calisto" oor:op="replace">
         <prop oor:name="SubstFonts">
           <value>thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino</value>
@@ -7708,8 +7723,7 @@
         <prop oor:name="FontType">
           <value>Normal,SansSerif</value>
         </prop>
-       </node>
-
+      </node>
 
       <node oor:name="sansdemi" oor:op="replace">
         <prop oor:name="SubstFonts">

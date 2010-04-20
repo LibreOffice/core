@@ -50,6 +50,7 @@
 #define ED_LOGIN_ACCOUNT        31
 #define CB_LOGIN_SAVEPASSWORD   32
 #define GB_LOGIN_LOGIN          33
+#define CB_LOGIN_USESYSCREDS    34
 
 #define BTN_LOGIN_OK            50
 #define BTN_LOGIN_CANCEL        51

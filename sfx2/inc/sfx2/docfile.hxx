@@ -199,8 +199,6 @@ public:
     void                SetDataAvailableLink( const Link& rLink );
     Link                GetDataAvailableLink( ) const;
 
-    void                SetClassFilter( const SvGlobalName & rFilterClass );
-
     sal_uInt32          GetMIMEAndRedirect( String& );
     sal_uInt32          GetErrorCode() const;
     sal_uInt32          GetError() const
@@ -227,17 +225,14 @@ public:
     SvEaMgr*            GetEaMgr();
 
     sal_Bool            Commit();
-    sal_Bool            TryStorage();
-    SAL_DLLPRIVATE ErrCode Unpack_Impl( const String& );
     sal_Bool            IsStorage();
 
     sal_Int8            ShowLockedDocumentDialog( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aData, sal_Bool bIsLoading, sal_Bool bOwnLock );
     sal_Bool            LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI );
     void                UnlockFile();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetStorage();
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetStorage( sal_Bool bCreateTempIfNo = sal_True );
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetOutputStorage();
-    const SvGlobalName& GetClassFilter();
     void                ResetError();
     sal_Bool            UsesCache() const;
     void                SetUsesCache( sal_Bool );
@@ -253,9 +248,8 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  GetInputStream();
 
-    void                CreateTempFile();
+    void                CreateTempFile( sal_Bool bReplace = sal_True );
     void                CreateTempFileNoCopy();
-    void                TryToSwitchToRepairedTemp();
     ::rtl::OUString     SwitchDocumentToTempFile();
     sal_Bool            SwitchDocumentToFile( ::rtl::OUString aURL );
 
@@ -264,24 +258,19 @@ public:
     ::rtl::OUString     GetBaseURL( bool bForSaving=false );
 
 #if _SOLAR__PRIVATE
-//REMOVE        // the storage will be truncated, if it is still not open then the stream will be truncated
-//REMOVE        ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetOutputStorage_Impl();
-    SAL_DLLPRIVATE ::rtl::OUString GetOutputStorageURL_Impl();
     SAL_DLLPRIVATE BOOL HasStorage_Impl() const;
 
-    SAL_DLLPRIVATE sal_Bool BasedOnOriginalFile_Impl();
     SAL_DLLPRIVATE void StorageBackup_Impl();
     SAL_DLLPRIVATE ::rtl::OUString GetBackup_Impl();
 
-    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetLastCommitReadStorage_Impl();
-    SAL_DLLPRIVATE void CloseReadStorage_Impl();
+    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetZipStorageToSign_Impl( sal_Bool bReadOnly = sal_True );
+    SAL_DLLPRIVATE void CloseZipStorage_Impl();
 
     // the storage that will be returned by the medium on GetStorage request
     SAL_DLLPRIVATE void SetStorage_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xNewStorage );
 
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetInputStream_Impl();
     SAL_DLLPRIVATE void CloseAndReleaseStreams_Impl();
-//REMOVE        SvStorage*          GetStorage_Impl( BOOL bUCBStorage );
     SAL_DLLPRIVATE void RefreshName_Impl();
     SAL_DLLPRIVATE sal_uInt16 AddVersion_Impl( com::sun::star::util::RevisionTag& rVersion );
     SAL_DLLPRIVATE sal_Bool TransferVersionList_Impl( SfxMedium& rMedium );
@@ -320,7 +309,6 @@ public:
     SAL_DLLPRIVATE void DataAvailable_Impl();
     SAL_DLLPRIVATE void Cancel_Impl();
     SAL_DLLPRIVATE void SetPhysicalName_Impl(const String& rName);
-    SAL_DLLPRIVATE void MoveTempTo_Impl( SfxMedium* pMedium );
     SAL_DLLPRIVATE void CanDisposeStorage_Impl( sal_Bool bDisposeStorage );
     SAL_DLLPRIVATE sal_Bool WillDisposeStorageOnClose_Impl();
 
@@ -340,7 +328,7 @@ public:
                              const INetURLObject& aDest,
                              const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& xComEnv );
 
-    SAL_DLLPRIVATE sal_Bool SignContents_Impl( sal_Bool bScriptingContent );
+    SAL_DLLPRIVATE sal_Bool SignContents_Impl( sal_Bool bScriptingContent, const ::rtl::OUString& aODFVersion, sal_Bool bHasValidDocumentSignature );
 
     // the following two methods must be used and make sence only during saving currently
     // TODO/LATER: in future the signature state should be controlled by the medium not by the document
@@ -353,6 +341,9 @@ public:
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     static sal_Bool EqualURLs( const ::rtl::OUString& aFirstURL, const ::rtl::OUString& aSecondURL );
     static ::rtl::OUString CreateTempCopyWithExt( const ::rtl::OUString& aURL );
+    static sal_Bool CallApproveHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler, ::com::sun::star::uno::Any aRequest, sal_Bool bAllowAbort );
+
+    static sal_Bool     SetWritableForUserOnly( const ::rtl::OUString& aURL );
 };
 
 SV_DECL_IMPL_REF( SfxMedium )

@@ -54,9 +54,9 @@ class SdrCustomShapeAdjustmentItem : public SfxPoolItem
     public :
 
             TYPEINFO();
-            SdrCustomShapeAdjustmentItem();
+            SVX_DLLPUBLIC SdrCustomShapeAdjustmentItem();
             SdrCustomShapeAdjustmentItem( SvStream& rIn, sal_uInt16 nVersion );
-            ~SdrCustomShapeAdjustmentItem();
+            SVX_DLLPUBLIC ~SdrCustomShapeAdjustmentItem();
 
             virtual int                 operator==( const SfxPoolItem& ) const;
             virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePresentation,
@@ -76,8 +76,8 @@ class SdrCustomShapeAdjustmentItem : public SfxPoolItem
 #endif
 
             sal_uInt32                          GetCount() const { return aAdjustmentValueList.Count(); };
-            const SdrCustomShapeAdjustmentValue&    GetValue( sal_uInt32 nIndex ) const;
-            void                                SetValue( sal_uInt32 nIndex,
+            SVX_DLLPUBLIC const SdrCustomShapeAdjustmentValue&  GetValue( sal_uInt32 nIndex ) const;
+            SVX_DLLPUBLIC void                              SetValue( sal_uInt32 nIndex,
                                                         const SdrCustomShapeAdjustmentValue& rVal );
 };
 

@@ -191,7 +191,7 @@ public:
     /// to be called for every field during style export.
     void ExportFieldAutoStyle(const ::com::sun::star::uno::Reference <
                         ::com::sun::star::text::XTextField > & rTextField,
-                     sal_Bool bProgress );
+                 const sal_Bool bProgress, const sal_Bool bRecursive );
 
     /// export field declarations.
     /// to be called once at beginning of document body.

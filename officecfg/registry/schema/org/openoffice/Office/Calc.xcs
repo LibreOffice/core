@@ -124,8 +124,8 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
 					<info>
 						<author>NN</author>
-						<desc>Indicates whether notes are marked.</desc>
-						<label>Note tags</label>
+						<desc>Indicates whether comments are marked.</desc>
+						<label>Comment tags</label>
 					</info>
 					<value>true</value>
 				</prop>

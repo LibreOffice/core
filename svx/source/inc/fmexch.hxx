@@ -36,6 +36,8 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <tools/link.hxx>
 
+#include <svx/svxdllapi.h>
+
 class FmFormShell;
 class FmFormPage;
 class SvLBoxEntry;
@@ -63,7 +65,7 @@ namespace svxform
     //====================================================================
     //= OLocalExchange
     //====================================================================
-    class OLocalExchange : public TransferableHelper
+    class SVX_DLLPUBLIC OLocalExchange : public TransferableHelper
     {
     private:
         Link                m_aClipboardListener;
@@ -110,7 +112,7 @@ namespace svxform
     //= OLocalExchangeHelper
     //====================================================================
     /// a helper for navigator windows (SvTreeListBox'es) which allow DnD within themself
-    class OLocalExchangeHelper
+    class SVX_DLLPUBLIC OLocalExchangeHelper
     {
     protected:
         Window*             m_pDragSource;
@@ -130,13 +132,13 @@ namespace svxform
         inline  sal_Bool    isDataExchangeActive( ) const { return isDragSource() || isClipboardOwner(); }
         inline  void        clear() { if ( isDataExchangeActive() ) m_pTransferable->clear(); }
 
-        void        setClipboardListener( const Link& _rListener ) { if ( m_pTransferable ) m_pTransferable->setClipboardListener( _rListener ); }
+        SVX_DLLPRIVATE void     setClipboardListener( const Link& _rListener ) { if ( m_pTransferable ) m_pTransferable->setClipboardListener( _rListener ); }
 
     protected:
-        virtual OLocalExchange* createExchange() const = 0;
+        SVX_DLLPRIVATE virtual OLocalExchange* createExchange() const = 0;
 
     protected:
-        void implReset();
+        SVX_DLLPRIVATE void implReset();
     };
 
     //====================================================================

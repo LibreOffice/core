@@ -143,16 +143,6 @@ void SvxClipBoardControl::StateChanged( USHORT nSID, SfxItemState eState, const 
             GetToolBox().SetItemBits( GetId(), GetToolBox().GetItemBits( GetId() ) & ~TIB_DROPDOWN );
         GetToolBox().Invalidate( GetToolBox().GetItemRect( GetId() ) );
     }
-    #ifdef UNIX
-    // #b6673979# enable some slots hardly, because UNIX clipboard does not notify all changes
-    // Can be removed if follow up task will be fixed directly within applications.
-    else
-    if ( SID_PASTE == nSID )
-    {
-        bDisabled = false;
-        GetToolBox().EnableItem( GetId(), true );
-    }
-    #endif
     else
     {
         // enable the item as a whole

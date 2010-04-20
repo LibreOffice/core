@@ -80,6 +80,7 @@ class XMLOFF_DLLPUBLIC SvXMLImportPropertyMapper : public UniRefBase
 protected:
 
     UniReference< XMLPropertySetMapper > maPropMapper;
+    SvXMLImport& GetImport() const { return rImport;}
 
 public:
 

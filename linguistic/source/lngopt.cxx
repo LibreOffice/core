@@ -46,7 +46,9 @@
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <unotools/processfactory.hxx>
+#include <i18npool/mslangid.hxx>
 
 using namespace utl;
 using namespace osl;
@@ -100,13 +102,13 @@ LinguOptions::~LinguOptions()
 }
 
 
-BOOL LinguOptions::SetLocale_Impl( INT16 &rLanguage, Any &rOld, const Any &rVal)
+BOOL LinguOptions::SetLocale_Impl( INT16 &rLanguage, Any &rOld, const Any &rVal, sal_Int16 nType)
 {
     BOOL bRes = FALSE;
 
     Locale  aNew;
     rVal >>= aNew;
-    INT16 nNew = LocaleToLanguage( aNew );
+        INT16 nNew = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aNew), nType);
     if (nNew != rLanguage)
     {
         Locale  aLocale( CreateLocale( rLanguage ) );
@@ -149,17 +151,17 @@ BOOL LinguOptions::SetValue( Any &rOld, const Any &rVal, INT32 nWID )
         case WID_HYPH_MIN_WORD_LENGTH :     pnVal = &pData->nHyphMinWordLength; break;
         case WID_DEFAULT_LOCALE :
         {
-            bRes = SetLocale_Impl( pData->nDefaultLanguage, rOld, rVal );
+            bRes = SetLocale_Impl( pData->nDefaultLanguage, rOld, rVal, ::com::sun::star::i18n::ScriptType::LATIN );
             break;
         }
         case WID_DEFAULT_LOCALE_CJK :
         {
-            bRes = SetLocale_Impl( pData->nDefaultLanguage_CJK, rOld, rVal );
+            bRes = SetLocale_Impl( pData->nDefaultLanguage_CJK, rOld, rVal, ::com::sun::star::i18n::ScriptType::ASIAN );
             break;
         }
         case WID_DEFAULT_LOCALE_CTL :
         {
-            bRes = SetLocale_Impl( pData->nDefaultLanguage_CTL, rOld, rVal );
+            bRes = SetLocale_Impl( pData->nDefaultLanguage_CTL, rOld, rVal, ::com::sun::star::i18n::ScriptType::COMPLEX );
             break;
         }
         default :
@@ -227,19 +229,19 @@ void LinguOptions::GetValue( Any &rVal, INT32 nWID ) const
         case WID_HYPH_MIN_WORD_LENGTH :     pnVal = &pData->nHyphMinWordLength; break;
         case WID_DEFAULT_LOCALE :
         {
-            Locale aLocale( CreateLocale( pData->nDefaultLanguage ) );
+            Locale aLocale( MsLangId::convertLanguageToLocale( pData->nDefaultLanguage ) );
             rVal.setValue( &aLocale, ::getCppuType((Locale*)0 ));
             break;
         }
         case WID_DEFAULT_LOCALE_CJK :
         {
-            Locale aLocale( CreateLocale( pData->nDefaultLanguage_CJK ) );
+            Locale aLocale( MsLangId::convertLanguageToLocale( pData->nDefaultLanguage_CJK ) );
             rVal.setValue( &aLocale, ::getCppuType((Locale*)0 ));
             break;
         }
         case WID_DEFAULT_LOCALE_CTL :
         {
-            Locale aLocale( CreateLocale( pData->nDefaultLanguage_CTL ) );
+            Locale aLocale( MsLangId::convertLanguageToLocale( pData->nDefaultLanguage_CTL ) );
             rVal.setValue( &aLocale, ::getCppuType((Locale*)0 ));
             break;
         }

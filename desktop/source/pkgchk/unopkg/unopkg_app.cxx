@@ -470,14 +470,23 @@ extern "C" int unopkg_main()
     }
     catch (deployment::DeploymentException & exc)
     {
+        OUString cause;
+        if (option_verbose)
+        {
+            cause = ::comphelper::anyToString(exc.Cause);
+        }
+        else
+        {
+            css::uno::Exception e;
+            if (exc.Cause >>= e)
+                cause = e.Message;
+        }
+
         dp_misc::writeConsoleError(
-            OUSTR("\nERROR: ") +
-            exc.Message + OUSTR("\n") +
-            OUSTR("       Cause: ") +
-            OUString(option_verbose ? ::comphelper::anyToString(exc.Cause):
-                reinterpret_cast< css::uno::Exception const *>(
-                         exc.Cause.getValue())->Message) +
-            OUSTR("\n"));
+            OUSTR("\nERROR: ") + exc.Message + OUSTR("\n"));
+        if (cause.getLength())
+            dp_misc::writeConsoleError(
+                OUSTR("       Cause: ") + cause + OUSTR("\n"));
     }
     catch (LockFileException & e)
     {

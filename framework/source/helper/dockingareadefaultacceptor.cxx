@@ -82,7 +82,6 @@ using namespace ::rtl                           ;
 DockingAreaDefaultAcceptor::DockingAreaDefaultAcceptor( const   Reference< XFrame >&        xOwner  )
         //  Init baseclasses first
         :   ThreadHelpBase  ( &Application::GetSolarMutex() )
-        ,   OWeakObject     (           )
         // Init member
         ,   m_xOwner        ( xOwner    )
 {
@@ -94,18 +93,6 @@ DockingAreaDefaultAcceptor::DockingAreaDefaultAcceptor( const   Reference< XFram
 DockingAreaDefaultAcceptor::~DockingAreaDefaultAcceptor()
 {
 }
-
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider
-//*****************************************************************************************************************
-DEFINE_XINTERFACE_2(    DockingAreaDefaultAcceptor                                              ,
-                        OWeakObject                                                             ,
-                        DIRECT_INTERFACE(XTypeProvider                                      )   ,
-                        DIRECT_INTERFACE(::com::sun::star::ui::XDockingAreaAcceptor )   )
-
-DEFINE_XTYPEPROVIDER_2( DockingAreaDefaultAcceptor                          ,
-                        XTypeProvider                                       ,
-                        ::com::sun::star::ui::XDockingAreaAcceptor  )
 
 //*****************************************************************************************************************
 //  XDockingAreaAcceptor

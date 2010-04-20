@@ -64,15 +64,15 @@ namespace sdr
             ViewContactOfSdrOle2Obj(SdrOle2Obj& rOle2Obj);
             virtual ~ViewContactOfSdrOle2Obj();
 
-            // helper for creating a OLE sequence for this object for a specified Graphic. This is locally
-            // used from createViewIndependentPrimitive2DSequence and also allows the VOC which knows about
-            // HighContrast mode to easily do the same with the HighContrast OLE metafile. It also allows
-            // to give a hint for scaling down the content what is needed for EmptyPresObjs
-            drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceWithGivenGraphic(const Graphic& rOLEGraphic, bool bScaleContent) const;
+            // helper for creating a OLE sequence for this object. It takes care od attributes, needed
+            // scaling (e.g. for EmptyPresObj's), the correct graphic and other stuff. It is used from
+            // createViewIndependentPrimitive2DSequence with false, and with evtl. HighContrast true
+            // from the VOC which knows that
+            drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceWithParameters(bool bHighContrast) const;
 
         protected:
             // This method is responsible for creating the graphical visualisation data
-            // ONLY based on model data
+            // ONLY based on model data, just wraps to call createPrimitive2DSequenceWithParameters(false)
             virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
         };
     } // end of namespace contact

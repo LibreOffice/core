@@ -184,10 +184,8 @@ public:
     sal_Bool CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHeight, Size& aObjAreaSize );
     sal_Bool AddOwnLightClient();
 
-    bool executeOldDoPaintPreparations(SdrPageView* pPageVew) const; //remove me with the next incompatible build
-
     // handy to get the empty replacement bitmap without accessing all the old stuff
-    Bitmap GetEmtyOLEReplacementBitmap() const;
+    static Bitmap GetEmtyOLEReplacementBitmap();
 
     void SetWindow(const com::sun::star::uno::Reference < com::sun::star::awt::XWindow >& _xWindow);
 };

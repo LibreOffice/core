@@ -32,13 +32,21 @@
 #include "precompiled_framework.hxx"
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 #include <helper/mischelper.hxx>
+#include <services.h>
 
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
 
 namespace framework
 {
@@ -49,14 +57,10 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
     {
         try
         {
-            uno::Reference< lang::XMultiServiceFactory > xMgr ( comphelper::getProcessServiceFactory() );
-            if (xMgr.is())
-            {
-                m_xLanguageGuesser = uno::Reference< linguistic2::XLanguageGuessing >(
-                        xMgr->createInstance(
-                            rtl::OUString::createFromAscii( "com.sun.star.linguistic2.LanguageGuessing" ) ),
-                            uno::UNO_QUERY );
-            }
+            m_xLanguageGuesser = uno::Reference< linguistic2::XLanguageGuessing >(
+                    m_xServiceManager->createInstance(
+                        rtl::OUString::createFromAscii( "com.sun.star.linguistic2.LanguageGuessing" ) ),
+                        uno::UNO_QUERY );
         }
         catch (uno::Exception &r)
         {
@@ -65,6 +69,76 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
         }    
     }
     return m_xLanguageGuesser;
+}
+
+::rtl::OUString RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL
+            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&    _xServiceFactory
+            ,::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >&        _xUICommandLabels
+            ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame
+            ,::rtl::OUString& _rModuleIdentifier
+            ,sal_Bool& _rIni
+            ,const sal_Char* _pName)
+{
+    ::rtl::OUString aLabel;
+
+    // Retrieve popup menu labels
+    if ( !_xUICommandLabels.is() )
+    {
+        try
+        {
+            if ( !_rIni )
+            {
+                _rIni = sal_True;
+                Reference< XModuleManager > xModuleManager( _xServiceFactory->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
+
+                try
+                {
+                    _rModuleIdentifier = xModuleManager->identify( _xFrame );
+                }
+                catch( Exception& )
+                {
+                }
+            }
+
+            Reference< XNameAccess > xNameAccess( _xServiceFactory->createInstance( SERVICENAME_UICOMMANDDESCRIPTION ), UNO_QUERY );
+            if ( xNameAccess.is() )
+            {
+                xNameAccess->getByName( _rModuleIdentifier ) >>= _xUICommandLabels;
+            }
+        }
+        catch ( Exception& )
+        {
+        }
+    }
+
+    if ( _xUICommandLabels.is() )
+    {
+        try
+        {
+            if ( aCmdURL.getLength() > 0 )
+            {
+                rtl::OUString aStr;
+                Sequence< PropertyValue > aPropSeq;
+                if ( _xUICommandLabels->getByName( aCmdURL ) >>= aPropSeq )
+                {
+                    for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+                    {
+                        if ( aPropSeq[i].Name.equalsAscii( _pName/*"Label"*/ ))
+                        {
+                            aPropSeq[i].Value >>= aStr;
+                            break;
+                        }
+                    }
+                }
+                aLabel = aStr;
+            }
+        }
+        catch ( com::sun::star::uno::Exception& )
+        {
+        }
+    }
+
+    return aLabel;
 }
     
 } // namespace framework

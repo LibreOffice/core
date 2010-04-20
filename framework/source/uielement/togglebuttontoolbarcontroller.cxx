@@ -117,52 +117,16 @@ throw ( RuntimeException )
 }
 
 // ------------------------------------------------------------------
-
-void SAL_CALL ToggleButtonToolbarController::execute( sal_Int16 KeyModifier )
-throw ( RuntimeException )
+Sequence<PropertyValue> ToggleButtonToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
-    Reference< XDispatch >       xDispatch;
-    Reference< XURLTransformer > xURLTransformer;
-    ::rtl::OUString                     aCommandURL;
-    ::rtl::OUString                     aSelectedText;
-    ::com::sun::star::util::URL  aTargetURL;
+    Sequence<PropertyValue> aArgs( 2 );
 
-    {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-
-        if ( m_bDisposed )
-            throw DisposedException();
-
-        if ( m_bInitialized &&
-             m_xFrame.is() &&
-             m_xServiceManager.is() &&
-             m_aCommandURL.getLength() )
-        {
-            xURLTransformer = m_xURLTransformer;
-            xDispatch = getDispatchFromCommand( m_aCommandURL );
-            aCommandURL = m_aCommandURL;
-            aTargetURL = getInitializedURL();
-            aSelectedText = m_aCurrentSelection;
-        }
-    }
-
-    if ( xDispatch.is() && aTargetURL.Complete.getLength() > 0 )
-    {
-        Sequence<PropertyValue>   aArgs( 2 );
-
-        // Add key modifier to argument list
-        aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
-        aArgs[0].Value <<= KeyModifier;
-        aArgs[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ));
-        aArgs[1].Value <<= aSelectedText;
-
-        // Execute dispatch asynchronously
-        ExecuteInfo* pExecuteInfo = new ExecuteInfo;
-        pExecuteInfo->xDispatch     = xDispatch;
-        pExecuteInfo->aTargetURL    = aTargetURL;
-        pExecuteInfo->aArgs         = aArgs;
-        Application::PostUserEvent( STATIC_LINK(0, ComplexToolbarController , ExecuteHdl_Impl), pExecuteInfo );
-    }
+    // Add key modifier to argument list
+    aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
+    aArgs[0].Value <<= KeyModifier;
+    aArgs[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ));
+    aArgs[1].Value <<= m_aCurrentSelection;
+    return aArgs;
 }
 
 // ------------------------------------------------------------------
@@ -178,8 +142,8 @@ throw (::com::sun::star::uno::RuntimeException)
     {
         // create popup menu
         PopupMenu aPopup;
-
-        for ( sal_uInt32 i = 0; i < m_aDropdownMenuList.size(); i++ )
+        const sal_uInt32 nCount = m_aDropdownMenuList.size();
+        for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
             rtl::OUString aLabel( m_aDropdownMenuList[i] );
             aPopup.InsertItem( sal_uInt16( i+1 ), aLabel );
@@ -246,7 +210,6 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
                            < m_aDropdownMenuList.size() ) )
                     {
                         m_aCurrentSelection = m_aDropdownMenuList[nPos];
-                        m_pToolbar->SetItemText( m_nID, m_aCurrentSelection );
 
                         // send notification
                         uno::Sequence< beans::NamedValue > aInfo( 1 );
@@ -353,7 +316,6 @@ IMPL_LINK( ToggleButtonToolbarController, MenuSelectHdl, Menu *, pMenu )
     if ( nItemId > 0 && nItemId <= m_aDropdownMenuList.size() )
     {
         m_aCurrentSelection = m_aDropdownMenuList[nItemId-1];
-        m_pToolbar->SetItemText( m_nID, m_aCurrentSelection );
 
         execute( 0 );
     }

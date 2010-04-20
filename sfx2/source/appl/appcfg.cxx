@@ -62,7 +62,7 @@
 #include <sot/exchange.hxx>
 
 //#include <svtools/agprop.hxx>
-#include <sj2/sjapplet.hxx>
+//#include <sj2/sjapplet.hxx>
 #include <svtools/isethint.hxx>
 
 #include <unotools/configmgr.hxx>
@@ -160,10 +160,12 @@ IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pAsyncTimer)
     SfxObjectShellRef xRef( aHint.GetObjShell() );
     pAsyncTimer->Stop();
 #ifdef DBG_UTIL
-    ::rtl::OUString aName = SfxEventConfiguration::GetEventName_Impl( aHint.GetEventId() );
-    ByteString aTmp( "SfxEvent: ");
-    aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
-    DBG_TRACE( aTmp.GetBuffer() );
+    if (!xRef.Is())
+    {
+        ByteString aTmp( "SfxEvent: ");
+        aTmp += ByteString( String( aHint.GetEventName() ), RTL_TEXTENCODING_UTF8 );
+        DBG_TRACE( aTmp.GetBuffer() );
+    }
 #endif
     SFX_APP()->Broadcast( aHint );
     if ( xRef.Is() )
@@ -848,6 +850,8 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     // INet Session neu aufsetzen
     if ( bResetSession )
     {
+        // no more sj2
+        #if 0
         try
         {
             SjApplet2::settingsChanged();
@@ -856,6 +860,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         {
             DBG_ERRORFILE( "SjApplet2::settingsChanged() throws an exception" );
         }
+        #endif
     }
 
     // geaenderte Daten speichern
@@ -1037,19 +1042,28 @@ SfxEventConfiguration* SfxApplication::GetEventConfig() const
 //--------------------------------------------------------------------
 void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSynchron )
 {
-    DBG_ASSERT(pAppData_Impl->pEventConfig,"Keine Events angemeldet!");
+    //DBG_ASSERT(pAppData_Impl->pEventConfig,"Keine Events angemeldet!");
 
     SfxObjectShell *pDoc = rEventHint.GetObjShell();
     if ( pDoc && ( pDoc->IsPreview() || !pDoc->Get_Impl()->bInitialized ) )
         return;
 
+#ifdef DBG_UTIL
+    //::rtl::OUString aName = SfxEventConfiguration::GetEventName_Impl( rEventHint.GetEventId() );
+    //ByteString aTmp( "SfxEvent: ");
+    //aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
+    //DBG_TRACE( aTmp.GetBuffer() );
+#endif
+
     if ( bSynchron )
     {
 #ifdef DBG_UTIL
-        ::rtl::OUString aName = SfxEventConfiguration::GetEventName_Impl( rEventHint.GetEventId() );
-        ByteString aTmp( "SfxEvent: ");
-        aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
-        DBG_TRACE( aTmp.GetBuffer() );
+        if (!pDoc)
+        {
+            ByteString aTmp( "SfxEvent: ");
+            aTmp += ByteString( String( rEventHint.GetEventName() ), RTL_TEXTENCODING_UTF8 );
+            DBG_TRACE( aTmp.GetBuffer() );
+        }
 #endif
         Broadcast(rEventHint);
         if ( pDoc )

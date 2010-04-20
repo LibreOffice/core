@@ -55,7 +55,7 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weakref.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -90,10 +90,8 @@ namespace framework{
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class OComponentAccess  :   public css::lang::XTypeProvider             ,
-                            public css::container::XEnumerationAccess   ,   // => XElementAccess
-                            private ThreadHelpBase                      ,   // Must be the first of baseclasses - Is neccessary for right initialization of objects!
-                            public ::cppu::OWeakObject
+class OComponentAccess  :   private ThreadHelpBase                      ,   // Must be the first of baseclasses - Is neccessary for right initialization of objects!
+                            public ::cppu::WeakImplHelper1< ::com::sun::star::container::XEnumerationAccess >
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -121,13 +119,6 @@ class OComponentAccess  :   public css::lang::XTypeProvider             ,
         *//*-*****************************************************************************************************/
 
         OComponentAccess( const css::uno::Reference< css::frame::XDesktop >& xOwner );
-
-        //---------------------------------------------------------------------------------------------------------
-        //  XInterface
-        //---------------------------------------------------------------------------------------------------------
-
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
 
         //---------------------------------------------------------------------------------------------------------
         //  XEnumerationAccess

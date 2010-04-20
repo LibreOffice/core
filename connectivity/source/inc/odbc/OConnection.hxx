@@ -89,11 +89,10 @@ namespace connectivity
             sal_Bool        m_bParameterSubstitution;
             sal_Bool        m_bIgnoreDriverPrivileges;
             sal_Bool        m_bPreventGetVersionColumns;    // #i60273#
+            sal_Bool        m_bReadOnly;
 
 
             SQLRETURN       OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int32 nTimeOut, sal_Bool bSilent);
-
-            void            buildTypeInfo() throw( ::com::sun::star::sdbc::SQLException);
 
             virtual OConnection*    cloneConnection(); // creates a new connection
 
@@ -154,6 +153,9 @@ namespace connectivity
             SQLHANDLE       createStatementHandle();
             // close and free the handle and set it to SQL_NULLHANDLE
             void            freeStatementHandle(SQLHANDLE& _pHandle);
+
+            void                    buildTypeInfo() throw( ::com::sun::star::sdbc::SQLException);
+            const TTypeInfoVector&  getTypeInfo() const { return m_aTypeInfo; }
         };
     }
 }
