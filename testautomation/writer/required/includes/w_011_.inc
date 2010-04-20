@@ -468,7 +468,7 @@ testcase tZORest
         Drehen.Click
         wait 500
     catch
-        Warnlog "#i56594#Shortcut selecting objects doesn't work"
+        Warnlog "Shortcut selecting objects doesn't work"
         Call hCloseDocument
         goto endsub
     endcatch
