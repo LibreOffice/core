@@ -19,6 +19,7 @@ class ErrObject : public ErrObjectImpl_BASE
         rtl::OUString m_sDescription;
     sal_Int32 m_nNumber;
     sal_Int32 m_nHelpContext;
+        bool mbIsInError;
 
 public:
     ErrObject();
@@ -47,7 +48,7 @@ ErrObject::~ErrObject()
 {
 }
 
-ErrObject::ErrObject() : m_nNumber(0), m_nHelpContext(0)
+ErrObject::ErrObject() : m_nNumber(0), m_nHelpContext(0), mbIsInError(false)
 {
 }
 
@@ -60,9 +61,9 @@ ErrObject::getNumber() throw (uno::RuntimeException)
 void SAL_CALL
 ErrObject::setNumber( ::sal_Int32 _number ) throw (uno::RuntimeException)
 {
-    m_nNumber = _number;
-
-
+//  m_nNumber = _number;
+    if ( !mbIsInError )
+        Raise( uno::makeAny( _number ), uno::Any(),  uno::Any(), uno::Any(), uno::Any() );
 }
 
 ::sal_Int32 SAL_CALL
@@ -128,6 +129,8 @@ ErrObject::Raise( const uno::Any& Number, const uno::Any& Source, const uno::Any
 {
     if ( !Number.hasValue() )
         throw uno::RuntimeException( rtl::OUString::createFromAscii("Missing Required Paramater"), uno::Reference< uno::XInterface >() );
+        mbIsInError = true;
+        Clear();
     Description >>= m_sDescription;
     Source >>= m_sSource;
     HelpFile >>= m_sHelpFile;
@@ -140,6 +143,7 @@ ErrObject::Raise( const uno::Any& Number, const uno::Any& Source, const uno::Any
             n = m_nNumber; // force orig number, probably should have a specific table of vb ( localized ) errors
         pINST->Error( n, m_sDescription );
     }
+        mbIsInError = false;
 }
 
 // XDefaultProperty

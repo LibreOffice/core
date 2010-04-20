@@ -807,7 +807,11 @@ void SbiRuntime::Error( SbError n )
             // we really need a new vba compatible error list
             if ( !aMsg.Len() )
             {
-                StarBASIC::MakeErrorText( n, aMsg );
+                                // is the error number vb or ( sb )
+                                SbError nTmp = StarBASIC::GetSfxFromVBError( n );
+                                if ( !nTmp )
+                                    nTmp = n;
+                StarBASIC::MakeErrorText( nTmp, aMsg );
                 aMsg =  StarBASIC::GetErrorText();
                 if ( !aMsg.Len() ) // no message for err no.
                     // need localized resource here
@@ -815,14 +819,8 @@ void SbiRuntime::Error( SbError n )
             }
             // no num? most likely then it *is* really a vba err
             SbxErrObject::getUnoErrObject()->setNumber( ( StarBASIC::GetVBErrorCode( n ) == 0 ) ? n : StarBASIC::GetVBErrorCode( n ) );
-            SbxErrObject::getUnoErrObject()->setDescription( aMsg );
-
-            // prepend an error number to the message.
-            String aTmp = '\'';
-                        aTmp += String::CreateFromInt32( SbxErrObject::getUnoErrObject()->getNumber() );
-                        aTmp += String( RTL_CONSTASCII_USTRINGPARAM("\'\n") );
-                        aTmp += aMsg;
-
+            //SbxErrObject::getUnoErrObject()->setDescription( aMsg );
+            String aTmp = aMsg;
             pInst->aErrorMsg = aTmp;
             nError = SbERR_BASIC_COMPAT;
         }

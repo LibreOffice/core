@@ -61,6 +61,7 @@
 #else
 #include <osl/file.hxx>
 #endif
+#include "errobject.hxx"
 
 #ifdef _USE_UNO
 #include <comphelper/processfactory.hxx>
@@ -256,6 +257,7 @@ RTLFUNC(Error)
     {
         String aErrorMsg;
         SbError nErr = 0L;
+        INT32 nCode = 0;
         if( rPar.Count() == 1 )
         {
             nErr = StarBASIC::GetErrBasic();
@@ -263,14 +265,24 @@ RTLFUNC(Error)
         }
         else
         {
-            INT32 nCode = rPar.Get( 1 )->GetLong();
+            nCode = rPar.Get( 1 )->GetLong();
             if( nCode > 65535L )
                 StarBASIC::Error( SbERR_CONVERSION );
             else
                 nErr = StarBASIC::GetSfxFromVBError( (USHORT)nCode );
         }
         pBasic->MakeErrorText( nErr, aErrorMsg );
-        rPar.Get( 0 )->PutString( pBasic->GetErrorText() );
+                String tmpErrMsg(  pBasic->GetErrorText() );
+                // If this rtlfunc 'Error'  passed a errcode the same as the active Err Objects's
+                // current err then  return the description for the error message if it is set
+                // ( complicated isn't it ? )
+                if ( SbiRuntime::isVBAEnabled() && rPar.Count() > 1 );
+                {
+                    com::sun::star::uno::Reference< ooo::vba::XErrObject > xErrObj( SbxErrObject::getUnoErrObject() );
+                    if ( xErrObj.is() && xErrObj->getNumber() == nCode && xErrObj->getDescription().getLength() )
+                        tmpErrMsg = xErrObj->getDescription();
+                }
+        rPar.Get( 0 )->PutString( tmpErrMsg );
     }
 }
 

@@ -54,6 +54,7 @@
 #include "sb.hrc"
 #include <basrid.hxx>
 #include <vos/mutex.hxx>
+#include "errobject.hxx"
 
 // #pragma SW_SEGMENT_CLASS( SBASIC, SBASIC_CODE )
 
@@ -1330,6 +1331,7 @@ void StarBASIC::MakeErrorText( SbError nId, const String& aMsg )
     }
     else
         GetSbData()->aErrMsg = String::EmptyString();
+
 }
 
 BOOL StarBASIC::CError
@@ -1356,7 +1358,22 @@ BOOL StarBASIC::CError
 
     // Umsetzung des Codes fuer String-Transport in SFX-Error
     if( rMsg.Len() )
+        {
+            // very confusing, even though MakeErrorText sets up the error text
+            // seems that this is not used ( if rMsg already has content )
+            // In the case of VBA MakeErrorText also formats the error to be alittle more
+            // like vba ( adds an error number etc )
+            if ( SbiRuntime::isVBAEnabled() && ( code == SbERR_BASIC_COMPAT ) )
+            {
+                String aTmp = '\'';
+                aTmp += String::CreateFromInt32( SbxErrObject::getUnoErrObject()->getNumber() );
+                aTmp += String( RTL_CONSTASCII_USTRINGPARAM("\'\n") );
+                aTmp +=  GetSbData()->aErrMsg.Len() ? GetSbData()->aErrMsg : rMsg;
+        code = (ULONG)*new StringErrorInfo( code, aTmp );
+            }
+            else
         code = (ULONG)*new StringErrorInfo( code, String(rMsg) );
+        }
 
     SetErrorData( code, l, c1, c2 );
     GetSbData()->bCompiler = TRUE;
@@ -1386,7 +1403,22 @@ BOOL StarBASIC::RTError( SbError code, const String& rMsg, USHORT l, USHORT c1, 
 
     // Umsetzung des Codes fuer String-Transport in SFX-Error
     if( rMsg.Len() )
+        {
+            // very confusing, even though MakeErrorText sets up the error text
+            // seems that this is not used ( if rMsg already has content )
+            // In the case of VBA MakeErrorText also formats the error to be alittle more
+            // like vba ( adds an error number etc )
+            if ( SbiRuntime::isVBAEnabled() && ( code == SbERR_BASIC_COMPAT ) )
+            {
+                String aTmp = '\'';
+                aTmp += String::CreateFromInt32( SbxErrObject::getUnoErrObject()->getNumber() );
+                aTmp += String( RTL_CONSTASCII_USTRINGPARAM("\'\n") );
+                aTmp +=  GetSbData()->aErrMsg.Len() ? GetSbData()->aErrMsg : rMsg;
+        code = (ULONG)*new StringErrorInfo( code, aTmp );
+            }
+            else
         code = (ULONG)*new StringErrorInfo( code, String(rMsg) );
+        }
 
     SetErrorData( code, l, c1, c2 );
     if( GetSbData()->aErrHdl.IsSet() )
