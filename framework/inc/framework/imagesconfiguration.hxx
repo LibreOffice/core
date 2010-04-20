@@ -44,7 +44,7 @@
 namespace framework
 {
 
-enum FWE_DLLPUBLIC ImageMaskMode
+enum ImageMaskMode
 {
     ImageMaskMode_Color,
     ImageMaskMode_Bitmap
