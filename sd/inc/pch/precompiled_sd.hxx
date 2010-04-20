@@ -617,7 +617,6 @@
 #include "svx/galbrws.hxx"
 #include "svx/gallery.hxx"
 #include "svx/globl3d.hxx"
-#include "svx/globlac.hrc"
 #include "svx/globlmn.hrc"
 #include "svx/grafctrl.hxx"
 #include "svx/hlnkitem.hxx"
