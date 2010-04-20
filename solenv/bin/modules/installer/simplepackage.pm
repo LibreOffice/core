@@ -111,7 +111,7 @@ sub register_extensions
         {
             my $oneextension = $extensiondir . $installer::globals::separator . ${$allextensions}[$i];
 
-            # my $systemcall = $unopkgfile . " add --shared " . "\"" . $oneextension . "\"";
+            # my $systemcall = $unopkgfile . " add --shared --suppress-license " . "\"" . $oneextension . "\"";
 
             if ( ! -f $unopkgfile ) { installer::exiter::exit_program("ERROR: $unopkgfile not found!", "register_extensions"); }
             if ( ! -f $oneextension ) { installer::exiter::exit_program("ERROR: $oneextension not found!", "register_extensions"); }
@@ -131,7 +131,7 @@ sub register_extensions
                 $localtemppath =~ s/\\/\//g;
                 $localtemppath = "/".$localtemppath;
             }
-            my $systemcall = $unopkgfile . " add --shared --verbose " . $oneextension . " -env:UserInstallation=file://" . $localtemppath . " 2\>\&1 |";
+            my $systemcall = $unopkgfile . " add --shared --suppress-license --verbose " . $oneextension . " -env:UserInstallation=file://" . $localtemppath . " 2\>\&1 |";
 
             print "... $systemcall ...\n";
 
