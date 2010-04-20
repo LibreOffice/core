@@ -827,13 +827,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
             try
             {
                 OUString const id = dp_misc::getIdentifier( xPackage );
-                //This guard is used to prevent that an extension is
-                //installed twice. Do not use it in other functions.
-                //Imagine addPackage is called two times by different
-                //threads for the same extension quickly after each other.
-                //The second call would calculate "bAlreadyInstalled =
-                //false" if the first thread has not yet reached
-                //insertToActivationLayerDB.
+
                 ::osl::MutexGuard g(m_addMutex);
                 if (isInstalled(xPackage))
                 {

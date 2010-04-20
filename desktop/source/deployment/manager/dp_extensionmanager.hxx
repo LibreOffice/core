@@ -35,11 +35,9 @@
 #include "dp_activepackages.hxx"
 #include "rtl/ref.hxx"
 #include "cppuhelper/compbase1.hxx"
-//#include "cppuhelper/implbase2.hxx"
 #include "ucbhelper/content.hxx"
 #include "com/sun/star/deployment/XPackageRegistry.hpp"
 #include "com/sun/star/deployment/XPackageManager.hpp"
-//#include <memory>
 #include "osl/mutex.hxx"
 #include <list>
 
@@ -53,50 +51,31 @@ typedef ::std::hash_map<
     ::std::vector<css::uno::Reference<css::deployment::XPackage> >,
     ::rtl::OUStringHash > id2extensions;
 
-class ExtensionManager :
-        public ::cppu::WeakImplHelper1< css::deployment::XExtensionManager >
 
+class ExtensionManager : private ::dp_misc::MutexHolder,
+        public ::cppu::WeakComponentImplHelper1< css::deployment::XExtensionManager >
 {
-private:
-    ::osl::Mutex m_mutex;
-
-    public:
+public:
     ExtensionManager( css::uno::Reference< css::uno::XComponentContext >const& xContext);
     virtual     ~ExtensionManager();
 
     static css::uno::Sequence< ::rtl::OUString > getServiceNames();
     static ::rtl::OUString getImplName();
 
-//     // XInteractionHandler
-//  virtual void SAL_CALL handle( const uno::Reference< task::XInteractionRequest >& Request )
-//                              throw( uno::RuntimeException );
-//     // XCommandEnvironment
-//     virtual uno::Reference< task::XInteractionHandler > SAL_CALL getInteractionHandler()
-//         throw ( uno::RuntimeException ) { return static_cast<task::XInteractionHandler*>(this); };
+    void check();
+    void fireModified();
 
-//     virtual uno::Reference< css_ucb::XProgressHandler > SAL_CALL getProgressHandler()
-//         throw ( uno::RuntimeException ) { return uno::Reference< css_ucb::XProgressHandler >(); };
 public:
-        // XComponent
-    //virtual void SAL_CALL dispose() throw (css::uno::RuntimeException);
-    //virtual void SAL_CALL addEventListener(
-    //    css::uno::Reference<css::lang::XEventListener> const & xListener )
-    //    throw (css::uno::RuntimeException);
-    //virtual void SAL_CALL removeEventListener(
-    //    css::uno::Reference<css::lang::XEventListener> const & xListener )
-    //    throw (css::uno::RuntimeException);
-    //
-    //// XModifyBroadcaster
-    //virtual void SAL_CALL addModifyListener(
-    //    css::uno::Reference<css::util::XModifyListener> const & xListener )
-    //    throw (css::uno::RuntimeException);
-    //virtual void SAL_CALL removeModifyListener(
-    //    css::uno::Reference<css::util::XModifyListener> const & xListener )
-    //    throw (css::uno::RuntimeException);
 
-    // XPackageManager
-//     virtual ::rtl::OUString SAL_CALL getContext()
-//         throw (css::uno::RuntimeException);
+//    XModifyBroadcaster
+    virtual void SAL_CALL addModifyListener(
+       css::uno::Reference<css::util::XModifyListener> const & xListener )
+       throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removeModifyListener(
+       css::uno::Reference<css::util::XModifyListener> const & xListener )
+       throw (css::uno::RuntimeException);
+
+//XExtensionManager
     virtual css::uno::Sequence<
         css::uno::Reference<css::deployment::XPackageTypeInfo> > SAL_CALL
         getSupportedPackageTypes(::rtl::OUString const & repository)

@@ -49,6 +49,7 @@
 #include "com/sun/star/beans/Ambiguous.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/io/XInputStream.hpp"
+#include "com/sun/star/util/XModifyBroadcaster.hpp"
 #include "comphelper/sequence.hxx"
 #include "xmlscript/xml_helper.hxx"
 #include "osl/diagnose.h"
@@ -60,6 +61,8 @@
 #include "dp_extensionmanager.hxx"
 #include "dp_commandenvironments.hxx"
 #include "dp_properties.hxx"
+#include "boost/bind.hpp"
+
 #include <list>
 #include <hash_map>
 #include <algorithm>
@@ -71,7 +74,9 @@ namespace task = com::sun::star::task;
 namespace ucb = com::sun::star::ucb;
 namespace uno = com::sun::star::uno;
 namespace beans = com::sun::star::beans;
+namespace util = com::sun::star::util;
 namespace css = com::sun::star;
+
 
 //#define OUSTR(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
@@ -121,6 +126,7 @@ namespace dp_manager {
 
 //ToDo: bundled extension
 ExtensionManager::ExtensionManager( Reference< uno::XComponentContext > const& xContext) :
+    ::cppu::WeakComponentImplHelper1< css::deployment::XExtensionManager >(getMutex()),
     m_xContext( xContext )
 {
     Reference<deploy::XPackageManagerFactory> xPackageManagerFactory(
@@ -433,7 +439,7 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
             OUSTR("No valid repository name provided."),
             static_cast<cppu::OWeakObject*>(this), 0);
 
-    ::osl::MutexGuard guard(m_mutex);
+    ::osl::MutexGuard guard(getMutex());
     Reference<deploy::XPackage> xTmpExtension =
         getTempExtension(url, xAbortChannel, xCmdEnv);
     const OUString sIdentifier = dp_misc::getIdentifier(xTmpExtension);
@@ -529,6 +535,7 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
             activateExtension(
                 dp_misc::getIdentifier(xNewExtension),
                 xNewExtension->getName(), xAbortChannel, xCmdEnv);
+            fireModified();
         }
     }
     catch (deploy::DeploymentException& ) {
@@ -573,6 +580,7 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
             if (xTmpExtension.is() || xExtensionBackup.is())
                 m_tmpRepository->removePackage(
                     sIdentifier, OUString(), xAbortChannel, xCmdEnv);
+            fireModified();
         }
         catch (...)
         {
@@ -616,7 +624,7 @@ void ExtensionManager::removeExtension(
                 OUSTR("No valid repository name provided."),
                 static_cast<cppu::OWeakObject*>(this), 0);
 
-        ::osl::MutexGuard guard(m_mutex);
+        ::osl::MutexGuard guard(getMutex());
         //Backup the extension, in case the user cancels the action
         xExtensionBackup = backupExtension(
             identifier, fileName, xPackageManager, xCmdEnv);
@@ -630,6 +638,7 @@ void ExtensionManager::removeExtension(
         xPackageManager->removePackage(
             identifier, fileName, xAbortChannel, xCmdEnv);
         activateExtension(identifier, fileName, xAbortChannel, xCmdEnv);
+        fireModified();
     }
     catch (deploy::DeploymentException& ) {
         excOccurred1 = ::cppu::getCaughtException();
@@ -670,6 +679,7 @@ void ExtensionManager::removeExtension(
                 m_tmpRepository->removePackage(
                     dp_misc::getIdentifier(xExtensionBackup),
                     xExtensionBackup->getName(), xAbortChannel, xCmdEnv);
+                fireModified();
             }
         }
         catch (...)
@@ -705,7 +715,7 @@ void ExtensionManager::enableExtension(
             throw lang::IllegalArgumentException(
                 OUSTR("No valid repository name provided."),
                 static_cast<cppu::OWeakObject*>(this), 0);
-        ::osl::MutexGuard guard(m_mutex);
+        ::osl::MutexGuard guard(getMutex());
 
         //if it is already registered or if it cannot be registered
         //because it does not contain any files which need to be processed
@@ -790,7 +800,7 @@ long ExtensionManager::checkPrerequisitesAndEnable(
     {
         if (!extension.is())
             return 0;
-        ::osl::MutexGuard guard(m_mutex);
+        ::osl::MutexGuard guard(getMutex());
         sal_Int32 ret = 0;
         Reference<deploy::XPackageManager> mgr =
             getPackageManager(extension->getRepositoryName());
@@ -840,7 +850,7 @@ void ExtensionManager::disableExtension(
         if (!extension.is())
             return;
 
-        ::osl::MutexGuard guard(m_mutex);
+        ::osl::MutexGuard guard(getMutex());
         OUString repository = extension->getRepositoryName();
         if (!repository.equals(OUSTR("user")))
             throw lang::IllegalArgumentException(
@@ -999,7 +1009,7 @@ void ExtensionManager::reinstallDeployedExtensions(
         Reference<deploy::XPackageManager>
             xPackageManager = getPackageManager(repository);
 
-        ::osl::MutexGuard guard(m_mutex);
+        ::osl::MutexGuard guard(getMutex());
         xPackageManager->reinstallDeployedPackages(xAbortChannel, xCmdEnv);
         const uno::Sequence< Reference<deploy::XPackage> > extensions(
             xPackageManager->getDeployedPackages(xAbortChannel, xCmdEnv));
@@ -1072,7 +1082,7 @@ void ExtensionManager::synchronize(
                 OUSTR("No valid repository name provided."),
                 static_cast<cppu::OWeakObject*>(this), 0);
 
-        ::osl::MutexGuard guard(m_mutex);
+        ::osl::MutexGuard guard(getMutex());
 
         dp_misc::ProgressLevel progress(
             xCmdEnv, OUSTR("Synchronizing ") + repository + OUSTR(" repository\n"));
@@ -1235,7 +1245,7 @@ ExtensionManager::getExtensionsWithUnacceptedLicenses(
 {
     Reference<deploy::XPackageManager>
         xPackageManager = getPackageManager(repository);
-    ::osl::MutexGuard guard(m_mutex);
+    ::osl::MutexGuard guard(getMutex());
     return xPackageManager->getExtensionsWithUnacceptedLicenses(xCmdEnv);
 }
 
@@ -1270,6 +1280,46 @@ bool singleton_entries(
         OSL_ENSURE( 0, ::rtl::OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         return false;
+    }
+}
+
+// XModifyBroadcaster
+//______________________________________________________________________________
+void ExtensionManager::addModifyListener(
+    Reference<util::XModifyListener> const & xListener )
+    throw (uno::RuntimeException)
+{
+     check();
+     rBHelper.addListener( ::getCppuType( &xListener ), xListener );
+}
+
+//______________________________________________________________________________
+void ExtensionManager::removeModifyListener(
+    Reference<util::XModifyListener> const & xListener )
+    throw (uno::RuntimeException)
+{
+    check();
+    rBHelper.removeListener( ::getCppuType( &xListener ), xListener );
+}
+
+void ExtensionManager::check()
+{
+    ::osl::MutexGuard guard( getMutex() );
+    if (rBHelper.bInDispose || rBHelper.bDisposed) {
+        throw lang::DisposedException(
+            OUSTR("ExtensionManager instance has already been disposed!"),
+            static_cast<OWeakObject *>(this) );
+    }
+}
+
+void ExtensionManager::fireModified()
+{
+    ::cppu::OInterfaceContainerHelper * pContainer = rBHelper.getContainer(
+        util::XModifyListener::static_type() );
+    if (pContainer != 0) {
+        pContainer->forEach<util::XModifyListener>(
+            boost::bind(&util::XModifyListener::modified, _1,
+                        lang::EventObject(static_cast<OWeakObject *>(this))) );
     }
 }
 
