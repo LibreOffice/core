@@ -28,9 +28,9 @@
 # the major
 NEON_MAJOR=0
 # the minor
-NEON_MINOR=28
+NEON_MINOR=29
 # the micro
-NEON_MICRO=2
+NEON_MICRO=3
 
 # concat
 NEON_VERSION=$(NEON_MAJOR)$(NEON_MINOR)$(NEON_MICRO)
