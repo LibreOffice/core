@@ -549,6 +549,14 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pPa
         pHints->win_gravity = GetDisplay()->getWMAdaptor()->getPositionWinGravity();
         pHints->x           = 0;
         pHints->y           = 0;
+        if( mbFullScreen )
+        {
+            pHints->flags |= PMaxSize | PMinSize;
+            pHints->max_width = w+100;
+            pHints->max_height = h+100;
+            pHints->min_width  = w;
+            pHints->min_height = h;
+        }
         XSetWMNormalHints( GetXDisplay(),
                            GetShellWindow(),
                            pHints );
@@ -605,7 +613,8 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pPa
             eType = WMAdaptor::windowType_Utility;
         if( nStyle_ & SAL_FRAME_STYLE_OWNERDRAWDECORATION )
             eType = WMAdaptor::windowType_Toolbar;
-        if( nStyle_ & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN )
+        if(    (nStyle_ & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN)
+            && GetDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
             eType = WMAdaptor::windowType_Dock;
 
         GetDisplay()->getWMAdaptor()->
@@ -1130,7 +1139,7 @@ void X11SalFrame::Show( BOOL bVisible, BOOL bNoActivate )
     // even though transient frames should be kept above their parent
     // this does not necessarily hold true for DOCK type windows
     // so artificially set ABOVE and remove it again on hide
-    if( mpParent && (mpParent->nStyle_ & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN ) )
+    if( mpParent && (mpParent->nStyle_ & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN ) && pDisplay_->getWMAdaptor()->isLegacyPartialFullscreen())
         pDisplay_->getWMAdaptor()->enableAlwaysOnTop( this, bVisible );
 
     bMapped_   = bVisible;
@@ -1322,11 +1331,6 @@ void X11SalFrame::Show( BOOL bVisible, BOOL bNoActivate )
     }
     else
     {
-#if OSL_DEBUG_LEVEL > 1
-        if( nStyle_ & SAL_FRAME_STYLE_OWNERDRAWDECORATION )
-            fprintf( stderr, "hide on ownerdraw\n" );
-#endif
-
         if( getInputContext() )
             getInputContext()->Unmap( this );
 
@@ -1616,6 +1620,7 @@ void X11SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHOR
     }
     else
         SetPosSize( aPosSize );
+
     bDefaultPosition_ = False;
 }
 
@@ -2042,6 +2047,12 @@ void X11SalFrame::SetPosSize( const Rectangle &rPosSize )
             pHints->y           = values.y;
             pHints->win_gravity = pDisplay_->getWMAdaptor()->getPositionWinGravity();
         }
+        if( mbFullScreen )
+        {
+            pHints->max_width   = 10000;
+            pHints->max_height  = 10000;
+            pHints->flags |= PMaxSize;
+        }
         XSetWMNormalHints( GetXDisplay(),
                            GetShellWindow(),
                            pHints );
@@ -2199,28 +2210,15 @@ void X11SalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nScreen )
             maGeometry.nWidth = aRect.GetWidth();
             maGeometry.nHeight = aRect.GetHeight();
             mbMaximizedHorz = mbMaximizedVert = false;
+            mbFullScreen = true;
             createNewWindow( None, m_nScreen );
-            GetDisplay()->getWMAdaptor()->enableAlwaysOnTop( this, true );
-            #if 0
-            // this would give additional intent to the window
-            // manager to force the positioning of the window;
-            // alas all other windows will be expunged from that
-            // region, leaving us in a pity state afterwards
-            Size aScreenSize = pDisplay_->GetScreenSize( m_nScreen );
-            pDisplay_->getWMAdaptor()->setFrameStruts( this,
-                    aRect.Left(), aRect.Top(),
-                    aScreenSize.Width() - aRect.Right(),
-                    aScreenSize.Height() - aRect.Bottom(),
-                    aRect.Left(), aRect.Right(),
-                    aRect.Top(), aRect.Bottom(),
-                    aRect.Left(), aRect.Right(),
-                    aRect.Top(), aRect.Bottom()
-                    );
-            #endif
-
+            if( GetDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
+                GetDisplay()->getWMAdaptor()->enableAlwaysOnTop( this, true );
+            else
+                GetDisplay()->getWMAdaptor()->showFullScreen( this, true );
             if( bVisible )
                 Show(TRUE);
-            mbFullScreen = true;
+
         }
         else
         {

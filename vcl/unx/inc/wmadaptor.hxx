@@ -160,6 +160,7 @@ protected:
                             m_aWMWorkAreas;
     bool                    m_bTransientBehaviour;
     bool                    m_bEnableAlwaysOnTopWorks;
+    bool                    m_bLegacyPartialFullscreen;
     int                     m_nWinGravity;
     int                     m_nInitWinGravity;
 
@@ -230,6 +231,15 @@ public:
      *  start/stop fullscreen mode on a frame
      */
     virtual void showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const;
+    /*
+     *  tell whether legacy partial full screen handling is necessary
+     *  see #i107249#: NET_WM_STATE_FULLSCREEN is not well defined, but de facto
+     *  modern WM's interpret it the "right" way, namely they make "full screen"
+     *  taking twin view or Xinerama into accound and honor the positioning hints
+     *  to see which screen actually was meant to use for fullscreen.
+     */
+    bool isLegacyPartialFullscreen() const
+    { return m_bLegacyPartialFullscreen; }
     /*
      * set window struts
      */

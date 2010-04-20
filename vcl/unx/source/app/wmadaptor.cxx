@@ -233,6 +233,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
         m_pSalDisplay( pDisplay ),
         m_bTransientBehaviour( true ),
         m_bEnableAlwaysOnTopWorks( false ),
+        m_bLegacyPartialFullscreen( false ),
         m_nWinGravity( StaticGravity ),
         m_nInitWinGravity( StaticGravity )
 {
@@ -908,6 +909,40 @@ bool WMAdaptor::getNetWmName()
                     {
                         XFree( pProperty );
                         pProperty = NULL;
+                    }
+                    // if this is metacity, check for version to enable a legacy workaround
+                    if( m_aWMName.EqualsAscii( "Metacity" ) )
+                    {
+                        int nVersionMajor = 0, nVersionMinor = 0;
+                        Atom nVersionAtom = XInternAtom( m_pDisplay, "_METACITY_VERSION", True );
+                        if( nVersionAtom )
+                        {
+                            if( XGetWindowProperty( m_pDisplay,
+                                                    aWMChild,
+                                                    nVersionAtom,
+                                                    0, 256,
+                                                    False,
+                                                    m_aWMAtoms[ UTF8_STRING ],
+                                                    &aRealType,
+                                                    &nFormat,
+                                                    &nItems,
+                                                    &nBytesLeft,
+                                                    &pProperty ) == 0
+                                && nItems != 0
+                                )
+                            {
+                                String aMetaVersion( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_UTF8 );
+                                nVersionMajor = aMetaVersion.GetToken( 0, '.' ).ToInt32();
+                                nVersionMinor = aMetaVersion.GetToken( 1, '.' ).ToInt32();
+                            }
+                            if( pProperty )
+                            {
+                                XFree( pProperty );
+                                pProperty = NULL;
+                            }
+                        }
+                        if( nVersionMajor < 2 || (nVersionMajor == 2 && nVersionMinor < 12) )
+                            m_bLegacyPartialFullscreen = true;
                     }
                 }
             }
