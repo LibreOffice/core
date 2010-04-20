@@ -115,19 +115,21 @@ sub GetIniInformation
     end if
     '--------
 
-    call GetTheInstallationType            ' gNetzInst and gNetzOfficePath will be set if StarOffice is a Network-Installation
-    gOfficeBasisPath = getOfficeBasisPath()
-    gOOoStartupTimeOut = fgetOOoStartupTimeOut()
-    gOOoShutdownTimeOut = fgetOOoShutdownTimeOut()
-    call sCheckValgrindStatus()
-    gPrivateEnvironmentLocation = getIniValue(gTesttoolIni, "PrivateEnvironment", "Current")
-    sTemp = ConvertPath (gTestToolPath + gPrivateEnvironmentLocation + "inc/privateenvironment.inc")
-    if fileExists(sTemp) then
-        use sTemp
-        call getUseFilesPrivateEnvironment
-    else
-        gPrivateEnvironmentLocation = ""
-    end if
+   call GetTheInstallationType            ' gNetzInst and gNetzOfficePath will be set if StarOffice is a Network-Installation
+   gOfficeBasisPath = getOfficeBasisPath()
+   gOOoStartupTimeOut = fgetOOoStartupTimeOut()
+   gOOoShutdownTimeOut = fgetOOoShutdownTimeOut()
+   call sCheckValgrindStatus()
+    ' set a global path for custom scripts, like basepath, but outside of current environment
+   gPrivateEnvironmentLocation = getIniValue(gTesttoolIni, "PrivateEnvironment", "Current")
+    if (gPrivateEnvironmentLocation <> "" AND gPrivateEnvironmentLocation <> ".") then
+        if NOT fileExists(gPrivateEnvironmentLocation) then
+            qaErrorLog "[PrivateEnvironment] defined in: '"+gTesttoolIni+"', but the path '"+gPrivateEnvironmentLocation+"'does not exist!"
+        else
+            gPrivateEnvironmentLocation = ""
+        end if
+       gPrivateEnvironmentLocation = ""
+   end if
 end sub
 
 '-------------------------------------------------------------------------
@@ -287,6 +289,7 @@ sub GetLanguageInformation
 
     gISOLang = sLanOutIni
 
+<<<<<<< local
     select case lcase ( sLanOutIni )
     case "en_us", "en-us", "en" : iSprache = 01        ' English (USA)
     case "pt_pt", "pt-pt", "pt" : iSprache = 03        ' Portuguese
@@ -334,6 +337,55 @@ sub GetLanguageInformation
         warnlog "- sLanOutIni = " & sLanOutIni & " (fallback mode; unknown language)"
         warnlog "- iSprache has been set 01!"
     end select
+=======
+     select case lcase ( sLanOutIni )
+         case "en_us", "en-us", "en" : iSprache = 01        ' English (USA)
+         case "pt_pt", "pt-pt", "pt" : iSprache = 03        ' Portuguese
+         case "ru_ru", "ru-ru", "ru" : iSprache = 07        ' Russian
+         case "el_gr", "el-gr", "el" : iSprache = 30        ' Greek
+         case "nl_nl", "nl-nl", "nl" : iSprache = 31        ' Dutch
+         case "fr_fr", "fr-fr", "fr" : iSprache = 33        ' French
+         case "es_es", "es-es", "es" : iSprache = 34        ' Spanish
+         case "fi_fi", "fi-fi", "fi" : iSprache = 35        ' Finnish
+         case "hu_hu", "hu-hu", "hu" : iSprache = 36        ' Hungaria
+         case "ca_ad", "ca-ad", "ca" : iSprache = 37        ' Catalan
+         case "it_it", "it-it", "it" : iSprache = 39        ' Italian
+         case "cs_cz", "cs-cz", "cs" : iSprache = 42        ' Czech
+         case "sk_sk", "sk-sk", "sk" : iSprache = 43        ' Slowak
+         case "en_gb", "en-gb"       : iSprache = 44        ' English (GB)
+         case "da_dk", "da-dk", "da" : iSprache = 45        ' Danish
+         case "sv_se", "sv-se", "sv" : iSprache = 46        ' Swedish
+         case "no_no", "no-no", "no" : iSprache = 47        ' Norwegian
+         case "pl_pl", "pl-pl", "pl" : iSprache = 48        ' Polish
+         case "de_de", "de-de", "de" : iSprache = 49        ' German
+         case "sl_si", "sl-si", "sl" : iSprache = 50        ' Slovenian
+		 case "sr_rs", "sr-rs", "sr" : iSprache = 51        ' Serbian (Cyrillic)
+         case "sh_rs", "sh-rs", "sh" : iSprache = 52        ' Serbian (Latin)		 
+         case "pt_br", "pt-br", "br" : iSprache = 55        ' Portuguese (Brazil)
+         case "th_th", "th-th", "th" : iSprache = 66        ' Thai
+         case "ja_jp", "ja-jp", "ja" : iSprache = 81        ' Japanese
+         case "ko_kr", "ko-kr", "ko" : iSprache = 82        ' Korean
+         case "vi_vi", "vi-vi", "vi" : iSprache = 84        ' Vietnamese
+         case "zh_cn", "zh-cn", "zh" : iSprache = 86        ' Chinese (simplified)
+         case "zh_tw", "zh-tw"       : iSprache = 88        ' Chinese (traditional)
+         case "tr_tr", "tr-tr", "tr" : iSprache = 90        ' Turkish
+         case "hi_in", "hi-in", "hi" : iSprache = 91        ' Hindi
+         case "ar_ar", "ar-ar", "ar" : iSprache = 96        ' Arabic
+         case "he_he", "he-he", "he" : iSprache = 97        ' Hebrew
+         case "zz_zz", "zz-zz", "zz" : iSprache = 01        ' unknown
+                                       warnlog "iniinfo.inc::GetLanguageInformation()"
+                                       warnlog "- sLanOutIni = " & sLanOutIni & " (unknown language)"
+                                       warnlog "- iSprache has been set 01!"
+         case ""                     : iSprache = 01        ' empty
+                                       warnlog "iniinfo.inc::GetLanguageInformation()"
+                                       warnlog "- empty sLanOutIni = " & sLanOutIni
+                                       warnlog "- iSprache has been set 01!"
+         case else                   : iSprache = 01
+                                       warnlog "iniinfo.inc::GetLanguageInformation()"
+                                       warnlog "- sLanOutIni = " & sLanOutIni & " (fallback mode; unknown language)"
+                                       warnlog "- iSprache has been set 01!"
+     end select
+>>>>>>> other
 
     if iSprache = 81 OR iSprache = 82 OR iSprache = 86 OR iSprache = 88 then
         bAsianLan = TRUE
@@ -353,6 +405,7 @@ end sub
 function ConvertLanguage ( Sprache as String ) as Integer
     '/// Sets international language code for the whole language name.
 
+<<<<<<< local
     select case lCase ( Sprache )
     case "deutsch", "german"                              : ConvertLanguage = 49
     case "englisch", "english"                            : ConvertLanguage = 01
@@ -383,11 +436,44 @@ function ConvertLanguage ( Sprache as String ) as Integer
     case "catalan", "katalanisch"                         : ConvertLanguage = 99
     case "slovenian", "slovenisch"                        : ConvertLanguage = 386
     end select
+=======
+   select case lCase ( Sprache )
+      case "deutsch", "german"                              : ConvertLanguage = 49
+      case "englisch", "english"                            : ConvertLanguage = 01
+      case "portugisisch", "portugiesisch", "portuguese"    : ConvertLanguage = 03
+      case "russisch", "russian"                            : ConvertLanguage = 07
+      case "czech", "tschechisch"                           : ConvertLanguage = 29
+      case "griechisch", "greek"                            : ConvertLanguage = 30
+      case "niederlaendisch", "hollaendisch", "netherlands" : ConvertLanguage = 31
+      case "franzoesisch", "french"                         : ConvertLanguage = 33
+      case "spanisch", "spanish"                            : ConvertLanguage = 34
+      case "finisch", "finnish"                             : ConvertLanguage = 35
+      case "hungaria", "ungarisch"                          : ConvertLanguage = 36
+      case "italienisch", "italian"                         : ConvertLanguage = 39
+	  case "slowak", "slovakisch"                           : ConvertLanguage = 43	  
+      case "daenisch", "danish"                             : ConvertLanguage = 45
+      case "schwedisch", "swedish"                          : ConvertLanguage = 46
+      case "norwegian", "norwegisch"                        : ConvertLanguage = 47
+      case "polnisch", "polish"                             : ConvertLanguage = 48
+      case "slovenian", "slovenisch"                        : ConvertLanguage = 50
+	  case "serbisch kyrillisch", "serbian cyrillic"        : ConvertLanguage = 51
+	  case "serbisch latein", "serbian latin"               : ConvertLanguage = 52	  
+      case "japanisch", "japanese"                          : ConvertLanguage = 81
+      case "koreanisch", "korean"                           : ConvertLanguage = 82
+      case "vietnamesisch", "vietnamese"                    : ConvertLanguage = 84
+      case "chinesisch", "chinese"                          : ConvertLanguage = 86
+      case "chinesisch trad.", "chinese trad."              : ConvertLanguage = 88
+      case "tuerkisch", "turkish"                           : ConvertLanguage = 90
+      case "arabisch", "arab"                               : ConvertLanguage = 96
+      case "catalan", "katalanisch"                         : ConvertLanguage = 99
+   end select
+>>>>>>> other
 end function
 
 '-------------------------------------------------------------------------
 
 function GetLanguageText ( iLan ) as String
+<<<<<<< local
     '/// Sets the language name for the international language-code.
     select case iLan
     case 01   : GetLanguageText = "English (USA)"
@@ -426,11 +512,52 @@ function GetLanguageText ( iLan ) as String
     case 386  : GetlanguageText = "Slovenian"
     case else : GetLanguageText = "detection failed"
     end select
+=======
+'/// Sets the language name for the international language-code.
+   select case iLan
+      case 01   : GetLanguageText = "English (USA)"
+      case 03   : GetLanguageText = "Portuguese"
+      case 07   : GetLanguageText = "Russian"
+      case 30   : GetLanguageText = "Greek"
+      case 31   : GetLanguageText = "Dutch"
+      case 33   : GetLanguageText = "French"
+      case 34   : GetLanguageText = "Spanish"
+      case 35   : GetLanguageText = "Finnish"
+      case 36   : GetLanguageText = "Hungarian"
+      case 37   : GetLanguageText = "Catalan"
+      case 39   : GetLanguageText = "Italian"
+      case 42   : GetLanguageText = "Czech"
+      case 43   : GetLanguageText = "Slowak"
+      case 44   : GetLanguageText = "English (GB)"
+      case 45   : GetLanguageText = "Danish"
+      case 46   : GetLanguageText = "Swedish"
+      case 47   : GetLanguageText = "Norwegian"
+      case 48   : GetLanguageText = "Polnish"
+      case 49   : GetLanguageText = "German"
+      case 50   : GetlanguageText = "Slovenian"
+      case 51   : GetlanguageText = "Serbian (Cyrillic)"
+      case 52   : GetlanguageText = "Serbian (Latin)"	  
+      case 55   : GetLanguageText = "Portuguese (Brazil)"
+      case 66   : GetLanguageText = "Thai"
+      case 81   : GetLanguageText = "Japanese"
+      case 82   : GetLanguageText = "Korean"
+      case 84   : GetLanguageText = "Vietnamese"
+      case 86   : GetLanguageText = "Chinese (simplified)"
+      case 88   : GetLanguageText = "Chinese (traditional)"
+      case 90   : GetLanguageText = "Turkish"
+      case 91   : GetLanguageText = "Hindi"
+      case 96   : GetLanguageText = "Arabic"
+      case 97   : GetLanguageText = "Hebrew"
+      case 99   : GetLanguageText = "Unknown"
+      case else : GetLanguageText = "detection failed"
+   end select
+>>>>>>> other
 end function
 
 '-------------------------------------------------------------------------
 
 function ConvertLanguage2 ( sSprache as String, optional bExact ) as Integer
+<<<<<<< local
     '/// Sets the international language code for the international language shortcut.
     '/// <i>optional <b>bExact</i></b>: If language not available, 'shut up' and return '0'
     select case lCase ( sSprache )
@@ -481,6 +608,57 @@ function ConvertLanguage2 ( sSprache as String, optional bExact ) as Integer
             end if
         end if
     end select
+=======
+'/// Sets the international language code for the international language shortcut.
+'/// <i>optional <b>bExact</i></b>: If language not available, 'shut up' and return '0'
+   select case lCase ( sSprache )
+         case "en_us", "en-us", "en" : ConvertLanguage2 = 01        ' English (USA)
+         case "pt_pt", "pt-pt", "pt" : ConvertLanguage2 = 03        ' Portuguese
+         case "ru_ru", "ru-ru", "ru" : ConvertLanguage2 = 07        ' Russian
+         case "el_gr", "el-gr", "el" : ConvertLanguage2 = 30        ' Greek
+         case "nl_nl", "nl-nl", "nl" : ConvertLanguage2 = 31        ' Dutch
+         case "fr_fr", "fr-fr", "fr" : ConvertLanguage2 = 33        ' French
+         case "es_es", "es-es", "es" : ConvertLanguage2 = 34        ' Spanish
+         case "fi_fi", "fi-fi", "fi" : ConvertLanguage2 = 35        ' Finnish
+         case "hu_hu", "hu-hu", "hu" : ConvertLanguage2 = 36        ' Hungaria
+         case "ca_ad", "ca-ad", "ca" : ConvertLanguage2 = 37        ' Catalan
+         case "it_it", "it-it", "it" : ConvertLanguage2 = 39        ' Italian
+         case "cs_cz", "cs-cz", "cs" : ConvertLanguage2 = 42        ' Czech
+         case "sk_sk", "sk-sk", "sk" : ConvertLanguage2 = 43        ' Slowak
+         case "en_gb", "en-gb"       : ConvertLanguage2 = 44        ' English (GB)
+         case "da_dk", "da-dk", "da" : ConvertLanguage2 = 45        ' Danish
+         case "sv_se", "sv-se", "sv" : ConvertLanguage2 = 46        ' Swedish
+         case "no_no", "no-no", "no" : ConvertLanguage2 = 47        ' Norwegian
+         case "pl_pl", "pl-pl", "pl" : ConvertLanguage2 = 48        ' Polish
+         case "de_de", "de-de", "de" : ConvertLanguage2 = 49        ' German
+         case "sl_si", "sl-si", "sl" : ConvertLanguage2 = 50        ' Slovenian
+         case "sr_rs", "sr_rs", "sr" : ConvertLanguage2 = 51        ' Serbian (Cyrillic)
+         case "sh_rs", "sh_rs", "sh" : ConvertLanguage2 = 52        ' Serbian (Latin)		 
+         case "pt_br", "pt-br", "br" : ConvertLanguage2 = 55        ' Portuguese (Brazil)
+         case "th_th", "th-th", "th" : ConvertLanguage2 = 66        ' Thai
+         case "ja_jp", "ja-jp", "ja" : ConvertLanguage2 = 81        ' Japanese
+         case "ko_kr", "ko-kr", "ko" : ConvertLanguage2 = 82        ' Korean
+         case "vi_vi", "vi_vi", "vi" : ConvertLanguage2 = 84        ' Vietnamese
+         case "zh_cn", "zh-cn", "zh" : ConvertLanguage2 = 86        ' Chinese (simplified)
+         case "zh_tw", "zh-tw"       : ConvertLanguage2 = 88        ' Chinese (traditional)
+         case "tr_tr", "tr-tr", "tr" : ConvertLanguage2 = 90        ' Turkish
+         case "hi_in", "hi-in", "hi" : ConvertLanguage2 = 91        ' Hindi
+         case "ar_ar", "ar-ar", "ar" : ConvertLanguage2 = 96        ' Arabic
+         case "he_he", "he-he", "he" : ConvertLanguage2 = 97        ' Hebrew
+         case "zz_zz", "zz-zz", "zz" : ConvertLanguage2 = 01        ' unknown
+         case else                   : if isMissing (bExact) then
+                                         printlog "iniinfo.inc::ConvertLanguage2(): Unknown systemlanguage '" & sSprache & "'!"
+                                         printlog "Default will be set to 01!"
+                                         ConvertLanguage2 = 01
+                                        else
+                                         printlog "iniinfo.inc::ConvertLanguage2(): Unknown systemlanguage '" & sSprache & "'!"
+                                         if bExact = TRUE then
+                                           printlog "Default will be set to 00!"
+                                           ConvertLanguage2 = 00
+                                         end if
+                                       end if
+   end select
+>>>>>>> other
 end function
 
 '-------------------------------------------------------------------------
@@ -488,6 +666,7 @@ end function
 function ConvertCodeToLanguage ( sSprache as String ) as Integer
     '/// Converts the old language code to international language code
 
+<<<<<<< local
     select case lCase ( sSprache )
     case "1033" : ConvertCodeToLanguage = 01        ' English (USA)
     case "2070" : ConvertCodeToLanguage = 03        ' Portuguese
@@ -526,6 +705,46 @@ function ConvertCodeToLanguage ( sSprache as String ) as Integer
     case else   : printlog "iniinfo.inc::ConvertCodeToLanguage(): Num. Code could not be detect or is unknown and will be set to 01 (English (USA))!"
         ConvertCodeToLanguage = 01
     end select
+=======
+   select case lCase ( sSprache )
+         case "1033" : ConvertCodeToLanguage = 01        ' English (USA)
+         case "2070" : ConvertCodeToLanguage = 03        ' Portuguese
+         case "1049" : ConvertCodeToLanguage = 07        ' Russian
+         case "1032" : ConvertCodeToLanguage = 30        ' Greek
+         case "1043" : ConvertCodeToLanguage = 31        ' Dutch
+         case "1036" : ConvertCodeToLanguage = 33        ' French
+         case "3082" : ConvertCodeToLanguage = 34        ' Spanish
+         case "1034" : ConvertCodeToLanguage = 34        ' Spanish
+         case "1035" : ConvertCodeToLanguage = 35        ' Finnish
+         case "1038" : ConvertCodeToLanguage = 36        ' Hungaria
+         case "2099" : ConvertCodeToLanguage = 37        ' Catalan
+         case "1040" : ConvertCodeToLanguage = 39        ' Italian
+         case "1029" : ConvertCodeToLanguage = 42        ' Czech
+         case "1051" : ConvertCodeToLanguage = 43        ' Slowak
+         case "2057" : ConvertCodeToLanguage = 44        ' English (GB)
+         case "1030" : ConvertCodeToLanguage = 45        ' Danish
+         case "1053" : ConvertCodeToLanguage = 46        ' Swedish
+         case "2047" : ConvertCodeToLanguage = 47        ' Norwegian
+         case "1045" : ConvertCodeToLanguage = 48        ' Polish
+         case "1031" : ConvertCodeToLanguage = 49        ' German
+         case "1060" : ConvertCodeToLanguage = 50        ' Slovenian
+         case "    " : ConvertCodeToLanguage = 55        ' Portuguese (Brazil)
+         case "3098" : ConvertCodeToLanguage = 51        ' Serbian (Cyriliic)
+         case "2074" : ConvertCodeToLanguage = 52        ' Serbian (Latin)		 
+         case "    " : ConvertCodeToLanguage = 66        ' Thai
+         case "1041" : ConvertCodeToLanguage = 81        ' Japanese
+         case "1042" : ConvertCodeToLanguage = 82        ' Korean
+         case "1066" : ConvertCodeToLanguage = 84        ' Vietnamese
+         case "2052" : ConvertCodeToLanguage = 86        ' Chinese (simplified)
+         case "1028" : ConvertCodeToLanguage = 88        ' Chinese (traditional)
+         case "1055" : ConvertCodeToLanguage = 90        ' Turkish
+'         case "    " : ConvertCodeToLanguage = 91        ' Hindi
+         case "1025" : ConvertCodeToLanguage = 96        ' Arabic
+'         case "    " : ConvertCodeToLanguage = 97        ' Hebrew
+         case else   : printlog "iniinfo.inc::ConvertCodeToLanguage(): Num. Code could not be detect or is unknown and will be set to 01 (English (USA))!"
+                       ConvertCodeToLanguage = 01
+   end select
+>>>>>>> other
 end function
 
 '-------------------------------------------------------------------------

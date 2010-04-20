@@ -341,7 +341,7 @@ testcase tiOpenOLECrash
     FileOpen
     sleep 1
     Kontext "OeffnenDlg"
-    printlog " Use file: graphics\\optional\\input\\generic_de.ppt "
+    printlog " Use file: graphics\optional\input\generic_de.ppt "
     oFile = ConvertPath (gTesttoolPath + "graphics\required\input\generic_de.ppt")
     Printlog "file:    '" + oFile + "'"
     Dateiname.SetText (oFile)
