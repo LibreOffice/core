@@ -748,7 +748,7 @@
 #include "svx/globlmn.hrc"
 #include "svx/grafctrl.hxx"
 #include "editeng/hangulhanja.hxx"
-#include "svx/hdft2.hxx"
+#include "svx/hdft.hxx"
 #include "svtools/htmlcfg.hxx"
 #include "svx/htmlmode.hxx"
 #include "svx/hyperdlg.hxx"
