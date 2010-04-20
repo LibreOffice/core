@@ -248,19 +248,20 @@ end function
 '-------------------------------------------------------------------------
 
 function ConvertPath( sPath as string ) as string
+
     if ( getPathSeparator = "/" ) then
     	ConvertPath() = hStringReplaceChar( sPath, "\", "/" )
     else
         ConvertPath() = hStringReplaceChar( sPath, "/", "\" )
     endif
+    
 end function
 
 '-------------------------------------------------------------------------------
 
-function hStringReplaceChar( cString as string, old_char as string, new_char as string ) as string
+function hStringReplaceChar( byval myString as string, old_char as string, new_char as string ) as string
 
     dim iChar as integer
-    dim myString as string : myString = cString
     for iChar = 1 to len( myString )
         if ( mid( myString, iChar, 1 ) = old_char ) then mid( myString, iChar, 1, new_char )
     next iChar
