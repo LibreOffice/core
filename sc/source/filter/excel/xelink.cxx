@@ -1300,6 +1300,8 @@ void XclExpXct::Save( XclExpStream& rStrm )
                         if( xToken->GetString().Len() > 0 )
                             bValid = aCrnRecs.InsertValue( nScCol, nScRow, Any( OUString( xToken->GetString() ) ) );
                     break;
+                    default:
+                    break;
                 }
             }
         }
