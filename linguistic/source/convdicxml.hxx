@@ -38,7 +38,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <tools/string.hxx>
 #include <rtl/ustring.hxx>
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "defs.hxx"
 
 

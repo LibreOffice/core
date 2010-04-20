@@ -47,7 +47,7 @@
 
 #include "lngsvcmgr.hxx"
 #include "lngopt.hxx"
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "spelldsp.hxx"
 #include "hyphdsp.hxx"
 #include "thesdsp.hxx"
