@@ -60,6 +60,7 @@
 #include "DrawViewShell.hxx"
 #include "DrawController.hxx"
 #include "glob.hrc"
+#include "strings.hrc"
 #include "sdresid.hxx"
 #include "EventMultiplexer.hxx"
 #include "ViewShellManager.hxx"
@@ -83,6 +84,7 @@ BitmapEx ViewOverlayManager::maLargeButtonImages[BMP_PLACEHOLDER_LARGE_END - BMP
 
 static USHORT gButtonSlots[] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
 static const sal_Char* gSlotStr[] = { ".uno:InsertTable", ".uno:InsertObjectChart", ".uno:InsertGraphic", ".uno:InsertVideo" };
+static USHORT gButtonToolTips[] = { STR_RESET_LAYOUT, STR_INSERT_TABLE, STR_INSERT_CHART, STR_INSERT_PICTURE,STR_INSERT_MOVIE };
 
 // --------------------------------------------------------------------
 
@@ -209,8 +211,7 @@ void ImageButtonHdl::onMouseEnter(const MouseEvent& rMEvt)
 
             if( pHdlList )
             {
-                Reference< XFrame > xFrame( static_cast< View* >( pHdlList->GetView() )->GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface() );
-                String aHelpText( ImplRetrieveLabelFromCommand( xFrame, OUString::createFromAscii( gSlotStr[nHighlightId] ) ) );
+                String aHelpText( SdResId( gButtonToolTips[mnHighlightId] ) );
                 Rectangle aScreenRect( pDev->LogicToPixel( GetPos() ), maImageSize );
                 mnTip = Help::ShowTip( static_cast< ::Window* >( pHdlList->GetView()->GetFirstOutputDevice() ), aScreenRect, aHelpText, 0 ) ;
             }

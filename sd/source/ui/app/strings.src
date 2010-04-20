@@ -1235,3 +1235,28 @@ String STR_RESET_LAYOUT
 {
     Text[ en-US ] = "Reset Slide Layout";
 };
+
+String STR_RESET_LAYOUT
+{
+     Text [ en-US ] = "Comments";
+};
+
+String STR_INSERT_TABLE
+{
+     Text [ en-US ] = "Insert Table";
+};
+
+String STR_INSERT_CHART
+{
+     Text [ en-US ] = "Insert Chart";
+};
+
+String STR_INSERT_PICTURE
+{
+     Text [ en-US ] = "Insert Picture";
+};
+
+String STR_INSERT_MOVIE
+{
+     Text [ en-US ] = "Insert Movie";
+};

@@ -503,6 +503,10 @@
 #define STR_NAVIGATOR_SHAPE_BASE_NAME                   (RID_APP_START+720)
 
 #define STR_RESET_LAYOUT                                (RID_APP_START+721)
+#define STR_INSERT_TABLE                                (RID_APP_START+722)
+#define STR_INSERT_CHART                                (RID_APP_START+723)
+#define STR_INSERT_PICTURE                              (RID_APP_START+724)
+#define STR_INSERT_MOVIE                                (RID_APP_START+725)
 
 /******************************************************************************
 * The ids in glob.hrc start at RID_APP_START+750!
