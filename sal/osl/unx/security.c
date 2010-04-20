@@ -801,7 +801,14 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
 
 static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
 {
-    return (osl_psz_getHomeDir(Security, pszDirectory, nMax));
+    sal_Char *pStr = getenv("XDG_CONFIG_HOME");
+
+    if ((pStr == NULL) || (strlen(pStr) == 0) ||
+        (access(pStr, 0) != 0))
+        return (osl_psz_getHomeDir(Security, pszDirectory, nMax));
+
+    strncpy(pszDirectory, pStr, nMax);
+    return sal_True;
 }
 
 #else

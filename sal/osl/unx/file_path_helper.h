@@ -105,23 +105,6 @@
      const rtl_uString* pustrPath);
 
  /******************************************
-    osl_systemPathIsAbsolutePath
-    Returns true if the given path is an
-    absolute path and so starts with a '/'
-
-    @param pustrPath [in] a system path
-           pustrPath must not be NULL
-
-    @returns sal_True if the given path
-             start's with a separator else
-             sal_False will be returned
-
-  *****************************************/
-
- sal_Bool SAL_CALL osl_systemPathIsAbsolutePath(
-     const rtl_uString* pustrPath);
-
- /******************************************
     osl_systemPathMakeAbsolutePath
     Append a relative path to a base path
 

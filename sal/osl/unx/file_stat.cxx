@@ -42,6 +42,11 @@
 #ifndef _UNISTD_H
 #include <unistd.h>
 #endif
+
+#ifndef _DIRENT_H
+#include <dirent.h>
+#endif
+
 #include <osl/file.h>
 
 #ifndef _ERRNO_H
@@ -56,6 +61,9 @@
 #include "file_path_helper.hxx"
 #include "file_error_transl.h"
 
+#ifdef _DIRENT_HAVE_D_TYPE
+#include "file_impl.hxx"
+#endif
 
 namespace /* private */
 {
@@ -223,9 +231,19 @@ namespace /* private */
 
     /* we only need to call stat or lstat if one of the
        following flags is set */
+#ifdef _DIRENT_HAVE_D_TYPE
+    inline bool is_stat_call_necessary(sal_uInt32 field_mask, oslDirectoryItemImpl *pImpl)
+#else
     inline bool is_stat_call_necessary(sal_uInt32 field_mask)
+#endif
     {
-        return ((field_mask & osl_FileStatus_Mask_Type) ||
+        return (
+/* on linux the dirent might have d_type */
+#ifdef _DIRENT_HAVE_D_TYPE
+                ((field_mask & osl_FileStatus_Mask_Type) && (!pImpl->bHasType || pImpl->DType == DT_UNKNOWN)) ||
+#else
+                (field_mask & osl_FileStatus_Mask_Type) ||
+#endif
                 (field_mask & osl_FileStatus_Mask_Attributes) ||
                 (field_mask & osl_FileStatus_Mask_CreationTime) ||
                 (field_mask & osl_FileStatus_Mask_AccessTime) ||
@@ -254,7 +272,11 @@ namespace /* private */
         if ((NULL == Item) || (NULL == pStat))
             return osl_File_E_INVAL;
 
+#ifdef _DIRENT_HAVE_D_TYPE
+        file_path = rtl::OUString(reinterpret_cast<rtl_uString*>(((oslDirectoryItemImpl* ) Item)->ustrFilePath));
+#else
         file_path = rtl::OUString(reinterpret_cast<rtl_uString*>(Item));
+#endif
 
         OSL_ASSERT(file_path.getLength() > 0);
 
@@ -285,10 +307,18 @@ oslFileError SAL_CALL osl_getFileStatus(oslDirectoryItem Item, oslFileStatus* pS
 #else
     struct stat file_stat;
 #endif
-    if (is_stat_call_necessary(uFieldMask) && (0 != osl::lstat(file_path, file_stat)))
+
+#ifdef _DIRENT_HAVE_D_TYPE
+    oslDirectoryItemImpl* pImpl = (oslDirectoryItemImpl*) Item;
+    bool bStatNeeded = is_stat_call_necessary(uFieldMask, pImpl);
+#else
+    bool bStatNeeded = is_stat_call_necessary(uFieldMask);
+#endif
+
+    if (bStatNeeded && (0 != osl::lstat(file_path, file_stat)))
         return oslTranslateFileError(OSL_FET_ERROR, errno);
 
-    if (is_stat_call_necessary(uFieldMask))
+    if (bStatNeeded)
     {
         // we set all these attributes because it's cheap
         set_file_type(file_stat, pStat);
@@ -305,6 +335,40 @@ oslFileError SAL_CALL osl_getFileStatus(oslDirectoryItem Item, oslFileStatus* pS
                 return osl_error;
         }
     }
+#ifdef _DIRENT_HAVE_D_TYPE
+    else if (uFieldMask & osl_FileStatus_Mask_Type)
+    {
+        OSL_ASSERT(pImpl->bHasType);
+
+        switch(pImpl->DType)
+        {
+        case DT_LNK:
+            pStat->eType = osl_File_Type_Link;
+            break;
+        case DT_DIR:
+            pStat->eType = osl_File_Type_Directory;
+            break;
+        case DT_REG:
+            pStat->eType = osl_File_Type_Regular;
+            break;
+        case DT_FIFO:
+            pStat->eType = osl_File_Type_Fifo;
+            break;
+        case DT_SOCK:
+            pStat->eType = osl_File_Type_Socket;
+            break;
+        case DT_CHR:
+        case DT_BLK:
+            pStat->eType = osl_File_Type_Special;
+            break;
+        default:
+            OSL_ASSERT(0);
+            pStat->eType = osl_File_Type_Unknown;
+        }
+
+       pStat->uValidFields |= osl_FileStatus_Mask_Type;
+    }
+#endif
 
     if (uFieldMask & osl_FileStatus_Mask_FileURL)
     {

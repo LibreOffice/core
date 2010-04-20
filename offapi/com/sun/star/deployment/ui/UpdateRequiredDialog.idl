@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2009 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: util.c,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,13 +25,30 @@
  *
  ************************************************************************/
 
-#include "osl/util.h"
+#if ! defined INCLUDED_com_sun_star_deployment_ui_UpdateRequiredDialog_idl
+#define INCLUDED_com_sun_star_deployment_ui_UpdateRequiredDialog_idl
+
+#include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
+#include <com/sun/star/awt/XWindow.idl>
 
 
+module com { module sun { module star { module deployment { module ui {
 
-extern sal_Bool osl_getEthernetAddress( sal_uInt8 * pTargetAddress )
+/** The <type>UpdateRequiredDialog</type> is used to show a list of extensions not compatible with this office version.
+
+    @since OOo 3.2.0
+*/
+service UpdateRequiredDialog : com::sun::star::ui::dialogs::XExecutableDialog
 {
-    return sal_False;
-}
+    /** Create a GUI using the specific parent window and focus on the
+        given context.
 
+        @param xParent
+               parent window
+    */
+    create();
+};
 
+}; }; }; }; };
+
+#endif

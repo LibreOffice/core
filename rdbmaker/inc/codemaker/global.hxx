@@ -75,10 +75,6 @@ typedef ::std::set< ::rtl::OString, LessString >    StringSet;
 ::rtl::OString makeTempName();
 
 const ::rtl::OString inGlobalSet(const ::rtl::OUString & r);
-inline const ::rtl::OString inGlobalSet(sal_Char* p)
-{
-    return inGlobalSet( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(p) ) );
-}
 
 ::rtl::OUString convertToFileUrl(const ::rtl::OString& fileName);
 

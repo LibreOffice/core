@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: util.c,v $
- * $Revision: 1.5 $
+ * $RCSfile: XFilterFormulaParser.idl,v $
+ * $Revision: 1.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,13 +28,35 @@
  *
  ************************************************************************/
 
-#include "osl/util.h"
+#ifndef __com_sun_star_sheet_XFilterFormulaParser_idl__
+#define __com_sun_star_sheet_XFilterFormulaParser_idl__
 
+#include <com/sun/star/sheet/XFormulaParser.idl>
 
+//=============================================================================
 
-extern sal_Bool osl_getEthernetAddress( sal_uInt8 * pTargetAddress )
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** Extends the interface <type>XFormulaParser</type> by an attribute that
+    specifies the namespace URL of the supported formula language.
+ */
+interface XFilterFormulaParser : XFormulaParser
 {
-    return sal_False;
-}
+    //-------------------------------------------------------------------------
 
+    /** Specifies the namespace URL of the formula language supported by this
+        implementation.
+     */
+    [attribute, readonly] string SupportedNamespace;
+
+    //-------------------------------------------------------------------------
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
 

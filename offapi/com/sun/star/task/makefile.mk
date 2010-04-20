@@ -3,6 +3,7 @@
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
 # Copyright 2008 by Sun Microsystems, Inc.
+# Copyright IBM Corporation 2009.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -45,6 +46,7 @@ IDLFILES=\
     ClassifiedInteractionRequest.idl\
     DocumentMacroConfirmationRequest.idl\
     DocumentPasswordRequest.idl\
+    DocumentMSPasswordRequest.idl\
     ErrorCodeRequest.idl\
     ErrorCodeIOException.idl\
     FutureDocumentVersionProductUpdateRequest.idl\

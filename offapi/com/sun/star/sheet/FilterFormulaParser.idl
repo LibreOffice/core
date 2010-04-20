@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: util.c,v $
- * $Revision: 1.5 $
+ * $RCSfile: FilterFormulaParser.idl,v $
+ * $Revision: 1.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,13 +28,28 @@
  *
  ************************************************************************/
 
-#include "osl/util.h"
+#ifndef __com_sun_star_sheet_FilterFormulaParser_idl__
+#define __com_sun_star_sheet_FilterFormulaParser_idl__
 
+#include <com/sun/star/sheet/XFilterFormulaParser.idl>
+#include <com/sun/star/lang/XComponent.idl>
 
+//=============================================================================
 
-extern sal_Bool osl_getEthernetAddress( sal_uInt8 * pTargetAddress )
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** A service used to implement parsing and printing formula strings in a
+    specific formula language.
+ */
+service FilterFormulaParser : XFilterFormulaParser
 {
-    return sal_False;
-}
+};
 
+//=============================================================================
+
+}; }; }; };
+
+#endif
 
