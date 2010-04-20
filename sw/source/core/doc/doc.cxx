@@ -56,7 +56,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/pbinitem.hxx>
+#include <editeng/pbinitem.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/localedatawrapper.hxx>
 
