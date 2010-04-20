@@ -27,6 +27,8 @@
 
 $(eval $(call gb_AllLangResTarget_AllLangResTarget,svt))
 
+$(eval $(call gb_AllLangResTarget_set_reslocation,svt,svtools))
+
 $(eval $(call gb_AllLangResTarget_add_srs,svt,\
     svt/res \
 ))
