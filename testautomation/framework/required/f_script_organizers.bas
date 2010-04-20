@@ -33,10 +33,12 @@
 
 sub main
 
+    use "framework\required\includes\scripting_basics.inc"
     use "framework\required\includes\script_organizers.inc"
 
     call hStatusIn( "framework" , "f_script_organizers.bas" )
-    call tUpdtScriptCount()
+    call tScripting()       ' script organizer nodes if no documents are open
+    call tUpdtScriptCount() ' script organizer nodes with one open document
     call hStatusOut()
 
 end sub

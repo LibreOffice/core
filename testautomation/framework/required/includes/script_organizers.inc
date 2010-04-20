@@ -36,10 +36,12 @@ testcase tUpdtScriptCount
     printlog( "Resource test for macros and scripts / related dialogs" )
 
     const SCRIPTING_DIALOGS = 5
+
     dim aScriptCount( SCRIPTING_DIALOGS )
         aScriptCount( 1 ) = 10
         aScriptCount( 2 ) = 14
-        aScriptCount( 3 ) = 10 
+        aScriptCount( 3 ) = 10
+
     if ( gOOo ) then
         aScriptCount( 4 ) = 585
         aScriptCount( 5 ) = 601 
