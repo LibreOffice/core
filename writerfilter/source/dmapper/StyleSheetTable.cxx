@@ -46,6 +46,11 @@
 #include <stdio.h>
 #include <rtl/ustrbuf.hxx>
 
+#ifdef DEBUG_DOMAINMAPPER
+#include <dmapperLoggers.hxx>
+#include <resourcemodel/QNameToString.hxx>
+#endif
+
 using namespace ::com::sun::star;
 namespace writerfilter {
 namespace dmapper
@@ -66,8 +71,37 @@ StyleSheetEntry::StyleSheetEntry() :
         ,sBaseStyleIdentifier()
         ,sNextStyleIdentifier()
         ,pProperties(new StyleSheetPropertyMap)
-        {
-        }
+{
+#if OSL_DEBUG_LEVEL > 1
+            nStyleTypeCode = STYLE_TYPE_PARA;
+#endif
+}
+
+StyleSheetEntry::~StyleSheetEntry()
+{
+}
+
+#ifdef DEBUG_DOMAINMAPPER
+XMLTag::Pointer_t StyleSheetEntry::toTag()
+{
+    XMLTag::Pointer_t pResult(new XMLTag("StyleSheetEntry"));
+
+    pResult->addAttr("identifierI", sStyleIdentifierI);
+    pResult->addAttr("identifierD", sStyleIdentifierD);
+    pResult->addAttr("default", bIsDefaultStyle ? "true" : "false");
+    pResult->addAttr("invalidHeight", bInvalidHeight ? "true" : "false");
+    pResult->addAttr("hasUPE", bHasUPE ? "true" : "false");
+    pResult->addAttr("styleType", nStyleTypeCode);
+    pResult->addAttr("baseStyle", sBaseStyleIdentifier);
+    pResult->addAttr("nextStyle", sNextStyleIdentifier);
+    pResult->addAttr("styleName", sStyleName);
+    pResult->addAttr("styleName1", sStyleName1);
+    pResult->addAttr("convertedName", sConvertedStyleName);
+    pResult->addTag(pProperties->toTag());
+
+    return pResult;
+}
+#endif
 
 TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry& rEntry, StyleSheetTable* pStyles ):
     StyleSheetEntry( ),
@@ -93,6 +127,13 @@ TableStyleSheetEntry::~TableStyleSheetEntry( )
 
 void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, PropertyMapPtr pProps )
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("AddTblStylePr");
+    dmapper_logger->attribute("type", nType);
+    dmapper_logger->addTag(pProps->toTag());
+    dmapper_logger->endElement("AddTblStylePr");
+#endif
+
     static TblStyleType pTypesToFix[] =
     {
         TBL_STYLE_FIRSTROW,
@@ -157,6 +198,24 @@ PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask )
     return pProps;
 }
 
+#ifdef DEBUG_DOMAINMAPPER
+XMLTag::Pointer_t TableStyleSheetEntry::toTag()
+{
+    XMLTag::Pointer_t pResult(StyleSheetEntry::toTag());
+
+    for (sal_Int32 nBit = 0; nBit < 13; ++nBit)
+    {
+        PropertyMapPtr pMap = GetProperties(1 << nBit);
+
+        XMLTag::Pointer_t pTag = pMap->toTag();
+        pTag->addAttr("kind", nBit);
+        pResult->addTag(pTag);
+    }
+
+    return pResult;
+}
+#endif
+
 void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleType nStyleId )
 {
     static PropertyIds pPropsToCheck[] =
@@ -215,7 +274,8 @@ PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask
         TBL_STYLE_LASTCOL,
         TBL_STYLE_FIRSTCOL,
         TBL_STYLE_LASTROW,
-        TBL_STYLE_FIRSTROW
+        TBL_STYLE_FIRSTROW,
+        TBL_STYLE_UNKNOWN
     };
 
     // Get the properties applying according to the mask
@@ -233,7 +293,7 @@ PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask
 
         nBit++;
     }
-    while ( nBit < 12 );
+    while ( nBit < 13 );
 
     return pProps;
 }
@@ -353,6 +413,11 @@ StyleSheetTable::~StyleSheetTable()
   -----------------------------------------------------------------------*/
 void StyleSheetTable::attribute(Id Name, Value & val)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("StyleSheetTable.attribute");
+    dmapper_logger->attribute("name", (*QNameToString::Instance())(Name));
+#endif
+
     OSL_ENSURE( m_pImpl->m_pCurrentEntry, "current entry has to be set here");
     if(!m_pImpl->m_pCurrentEntry)
         return ;
@@ -363,51 +428,12 @@ void StyleSheetTable::attribute(Id Name, Value & val)
     /* WRITERFILTERSTATUS: table: StyleSheetTable_attributedata */
     switch(Name)
     {
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_ISTD:
+            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->m_pCurrentEntry->sStyleIdentifierD = ::rtl::OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);
         break;
-//        case NS_rtf::LN_ISTARTAT: break;
-//        case NS_rtf::LN_NFC: break;
-//        case NS_rtf::LN_JC: break;
-//        case NS_rtf::LN_FLEGAL: break;
-//        case NS_rtf::LN_FNORESTART: break;
-//        case NS_rtf::LN_FPREV: break;
-//        case NS_rtf::LN_FPREVSPACE: break;
-//        case NS_rtf::LN_FWORD6: break;
-//        case NS_rtf::LN_UNUSED5_7: break;
-//        case NS_rtf::LN_RGBXCHNUMS: break;
-//        case NS_rtf::LN_IXCHFOLLOW: break;
-//        case NS_rtf::LN_DXASPACE: break;
-//        case NS_rtf::LN_DXAINDENT: break;
-//        case NS_rtf::LN_CBGRPPRLCHPX: break;
-//        case NS_rtf::LN_CBGRPPRLPAPX: break;
-//        case NS_rtf::LN_LSID: break;
-//        case NS_rtf::LN_TPLC: break;
-//        case NS_rtf::LN_RGISTD: break;
-//        case NS_rtf::LN_FSIMPLELIST: break;
-//        case NS_rtf::LN_FRESTARTHDN: break;
-//        case NS_rtf::LN_UNSIGNED26_2: break;
-//        case NS_rtf::LN_ILVL: break;
-//        case NS_rtf::LN_FSTARTAT: break;
-//        case NS_rtf::LN_FFORMATTING: break;
-//        case NS_rtf::LN_UNSIGNED4_6: break;
-//        case NS_rtf::LN_UNUSED4: break;
-//        case NS_rtf::LN_UNUSED8: break;
-//        case NS_rtf::LN_CLFOLVL: break;
-//        case NS_rtf::LN_CBFFNM1: break;
-//        case NS_rtf::LN_PRQ: break;
-//        case NS_rtf::LN_FTRUETYPE: break;
-//        case NS_rtf::LN_UNUSED1_3: break;
-//        case NS_rtf::LN_FF: break;
-//        case NS_rtf::LN_UNUSED1_7: break;
-//        case NS_rtf::LN_WWEIGHT: break;
-//        case NS_rtf::LN_CHS: break;
-//        case NS_rtf::LN_IXCHSZALT: break;
-//        case NS_rtf::LN_PANOSE: break;
-//        case NS_rtf::LN_FS: break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_STI:
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         {
             ::rtl::OUString tempStyleIdentifier = GetStyleIdFromIndex(static_cast<sal_uInt32>(nIntValue));
             if (tempStyleIdentifier.getLength())
@@ -416,21 +442,20 @@ void StyleSheetTable::attribute(Id Name, Value & val)
                 m_pImpl->m_pCurrentEntry->bIsDefaultStyle = true;
         }
         break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_SGC:
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->m_pCurrentEntry->nStyleTypeCode = (StyleType)nIntValue;
         break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_ISTDBASE:
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             if (static_cast<sal_uInt32>(nIntValue) != 0xfff)
                 m_pImpl->m_pCurrentEntry->sBaseStyleIdentifier = ::rtl::OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);
         break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_ISTDNEXT:
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             if (static_cast<sal_uInt32>(nIntValue) != 0xfff)
                 m_pImpl->m_pCurrentEntry->sNextStyleIdentifier = ::rtl::OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);
         break;
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FSCRATCH:
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FINVALHEIGHT:
@@ -448,385 +473,27 @@ void StyleSheetTable::attribute(Id Name, Value & val)
         case NS_rtf::LN_FHIDDEN:
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_UNUSED8_3:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             //noone seems to care about it
         break;
-//        case NS_rtf::LN_CSTD: break;
-//        case NS_rtf::LN_CBSTDBASEINFILE: break;
-//        case NS_rtf::LN_FSTDSTYLENAMESWRITTEN: break;
-//        case NS_rtf::LN_UNUSED4_2: break;
-//        case NS_rtf::LN_STIMAXWHENSAVED: break;
-//        case NS_rtf::LN_ISTDMAXFIXEDWHENSAVED: break;
-//        case NS_rtf::LN_NVERBUILTINNAMESWHENSAVED: break;
-//        case NS_rtf::LN_RGFTCSTANDARDCHPSTSH: break;
-//        case NS_rtf::LN_WIDENT: break;
-//        case NS_rtf::LN_NFIB: break;
-//        case NS_rtf::LN_NPRODUCT: break;
-//        case NS_rtf::LN_LID: break;
-//        case NS_rtf::LN_PNNEXT: break;
-//        case NS_rtf::LN_FDOT: break;
-//        case NS_rtf::LN_FGLSY: break;
-//        case NS_rtf::LN_FCOMPLEX: break;
-//        case NS_rtf::LN_FHASPIC: break;
-//        case NS_rtf::LN_CQUICKSAVES: break;
-//        case NS_rtf::LN_FENCRYPTED: break;
-//        case NS_rtf::LN_FWHICHTBLSTM: break;
-//        case NS_rtf::LN_FREADONLYRECOMMENDED: break;
-//        case NS_rtf::LN_FWRITERESERVATION: break;
-//        case NS_rtf::LN_FEXTCHAR: break;
-//        case NS_rtf::LN_FLOADOVERRIDE: break;
-//        case NS_rtf::LN_FFAREAST: break;
-//        case NS_rtf::LN_FCRYPTO: break;
-//        case NS_rtf::LN_NFIBBACK: break;
-//        case NS_rtf::LN_LKEY: break;
-//        case NS_rtf::LN_ENVR: break;
-//        case NS_rtf::LN_FMAC: break;
-//        case NS_rtf::LN_FEMPTYSPECIAL: break;
-//        case NS_rtf::LN_FLOADOVERRIDEPAGE: break;
-//        case NS_rtf::LN_FFUTURESAVEDUNDO: break;
-//        case NS_rtf::LN_FWORD97SAVED: break;
-//        case NS_rtf::LN_FSPARE0: break;
-//        case NS_rtf::LN_CHSTABLES: break;
-//        case NS_rtf::LN_FCMIN: break;
-//        case NS_rtf::LN_FCMAC: break;
-//        case NS_rtf::LN_CSW: break;
-//        case NS_rtf::LN_WMAGICCREATED: break;
-//        case NS_rtf::LN_WMAGICREVISED: break;
-//        case NS_rtf::LN_WMAGICCREATEDPRIVATE: break;
-//        case NS_rtf::LN_WMAGICREVISEDPRIVATE: break;
-//        case NS_rtf::LN_PNFBPCHPFIRST_W6: break;
-//        case NS_rtf::LN_PNCHPFIRST_W6: break;
-//        case NS_rtf::LN_CPNBTECHP_W6: break;
-//        case NS_rtf::LN_PNFBPPAPFIRST_W6: break;
-//        case NS_rtf::LN_PNPAPFIRST_W6: break;
-//        case NS_rtf::LN_CPNBTEPAP_W6: break;
-//        case NS_rtf::LN_PNFBPLVCFIRST_W6: break;
-//        case NS_rtf::LN_PNLVCFIRST_W6: break;
-//        case NS_rtf::LN_CPNBTELVC_W6: break;
-//        case NS_rtf::LN_LIDFE: break;
-//        case NS_rtf::LN_CLW: break;
-//        case NS_rtf::LN_CBMAC: break;
-//        case NS_rtf::LN_LPRODUCTCREATED: break;
-//        case NS_rtf::LN_LPRODUCTREVISED: break;
-//        case NS_rtf::LN_CCPTEXT: break;
-//        case NS_rtf::LN_CCPFTN: break;
-//        case NS_rtf::LN_CCPHDD: break;
-//        case NS_rtf::LN_CCPMCR: break;
-//        case NS_rtf::LN_CCPATN: break;
-//        case NS_rtf::LN_CCPEDN: break;
-//        case NS_rtf::LN_CCPTXBX: break;
-//        case NS_rtf::LN_CCPHDRTXBX: break;
-//        case NS_rtf::LN_PNFBPCHPFIRST: break;
-//        case NS_rtf::LN_PNCHPFIRST: break;
-//        case NS_rtf::LN_CPNBTECHP: break;
-//        case NS_rtf::LN_PNFBPPAPFIRST: break;
-//        case NS_rtf::LN_PNPAPFIRST: break;
-//        case NS_rtf::LN_CPNBTEPAP: break;
-//        case NS_rtf::LN_PNFBPLVCFIRST: break;
-//        case NS_rtf::LN_PNLVCFIRST: break;
-//        case NS_rtf::LN_CPNBTELVC: break;
-//        case NS_rtf::LN_FCISLANDFIRST: break;
-//        case NS_rtf::LN_FCISLANDLIM: break;
-//        case NS_rtf::LN_CFCLCB: break;
-//        case NS_rtf::LN_FCSTSHFORIG: break;
-//        case NS_rtf::LN_LCBSTSHFORIG: break;
-//        case NS_rtf::LN_FCSTSHF: break;
-//        case NS_rtf::LN_LCBSTSHF: break;
-//        case NS_rtf::LN_FCPLCFFNDREF: break;
-//        case NS_rtf::LN_LCBPLCFFNDREF: break;
-//        case NS_rtf::LN_FCPLCFFNDTXT: break;
-//        case NS_rtf::LN_LCBPLCFFNDTXT: break;
-//        case NS_rtf::LN_FCPLCFANDREF: break;
-//        case NS_rtf::LN_LCBPLCFANDREF: break;
-//        case NS_rtf::LN_FCPLCFANDTXT: break;
-//        case NS_rtf::LN_LCBPLCFANDTXT: break;
-//        case NS_rtf::LN_FCPLCFSED: break;
-//        case NS_rtf::LN_LCBPLCFSED: break;
-//        case NS_rtf::LN_FCPLCFPAD: break;
-//        case NS_rtf::LN_LCBPLCFPAD: break;
-//        case NS_rtf::LN_FCPLCFPHE: break;
-//        case NS_rtf::LN_LCBPLCFPHE: break;
-//        case NS_rtf::LN_FCSTTBFGLSY: break;
-//        case NS_rtf::LN_LCBSTTBFGLSY: break;
-//        case NS_rtf::LN_FCPLCFGLSY: break;
-//        case NS_rtf::LN_LCBPLCFGLSY: break;
-//        case NS_rtf::LN_FCPLCFHDD: break;
-//        case NS_rtf::LN_LCBPLCFHDD: break;
-//        case NS_rtf::LN_FCPLCFBTECHPX: break;
-//        case NS_rtf::LN_LCBPLCFBTECHPX: break;
-//        case NS_rtf::LN_FCPLCFBTEPAPX: break;
-//        case NS_rtf::LN_LCBPLCFBTEPAPX: break;
-//        case NS_rtf::LN_FCPLCFSEA: break;
-//        case NS_rtf::LN_LCBPLCFSEA: break;
-//        case NS_rtf::LN_FCSTTBFFFN: break;
-//        case NS_rtf::LN_LCBSTTBFFFN: break;
-//        case NS_rtf::LN_FCPLCFFLDMOM: break;
-//        case NS_rtf::LN_LCBPLCFFLDMOM: break;
-//        case NS_rtf::LN_FCPLCFFLDHDR: break;
-//        case NS_rtf::LN_LCBPLCFFLDHDR: break;
-//        case NS_rtf::LN_FCPLCFFLDFTN: break;
-//        case NS_rtf::LN_LCBPLCFFLDFTN: break;
-//        case NS_rtf::LN_FCPLCFFLDATN: break;
-//        case NS_rtf::LN_LCBPLCFFLDATN: break;
-//        case NS_rtf::LN_FCPLCFFLDMCR: break;
-//        case NS_rtf::LN_LCBPLCFFLDMCR: break;
-//        case NS_rtf::LN_FCSTTBFBKMK: break;
-//        case NS_rtf::LN_LCBSTTBFBKMK: break;
-//        case NS_rtf::LN_FCPLCFBKF: break;
-//        case NS_rtf::LN_LCBPLCFBKF: break;
-//        case NS_rtf::LN_FCPLCFBKL: break;
-//        case NS_rtf::LN_LCBPLCFBKL: break;
-//        case NS_rtf::LN_FCCMDS: break;
-//        case NS_rtf::LN_LCBCMDS: break;
-//        case NS_rtf::LN_FCPLCMCR: break;
-//        case NS_rtf::LN_LCBPLCMCR: break;
-//        case NS_rtf::LN_FCSTTBFMCR: break;
-//        case NS_rtf::LN_LCBSTTBFMCR: break;
-//        case NS_rtf::LN_FCPRDRVR: break;
-//        case NS_rtf::LN_LCBPRDRVR: break;
-//        case NS_rtf::LN_FCPRENVPORT: break;
-//        case NS_rtf::LN_LCBPRENVPORT: break;
-//        case NS_rtf::LN_FCPRENVLAND: break;
-//        case NS_rtf::LN_LCBPRENVLAND: break;
-//        case NS_rtf::LN_FCWSS: break;
-//        case NS_rtf::LN_LCBWSS: break;
-//        case NS_rtf::LN_FCDOP: break;
-//        case NS_rtf::LN_LCBDOP: break;
-//        case NS_rtf::LN_FCSTTBFASSOC: break;
-//        case NS_rtf::LN_LCBSTTBFASSOC: break;
-//        case NS_rtf::LN_FCCLX: break;
-//        case NS_rtf::LN_LCBCLX: break;
-//        case NS_rtf::LN_FCPLCFPGDFTN: break;
-//        case NS_rtf::LN_LCBPLCFPGDFTN: break;
-//        case NS_rtf::LN_FCAUTOSAVESOURCE: break;
-//        case NS_rtf::LN_LCBAUTOSAVESOURCE: break;
-//        case NS_rtf::LN_FCGRPXSTATNOWNERS: break;
-//        case NS_rtf::LN_LCBGRPXSTATNOWNERS: break;
-//        case NS_rtf::LN_FCSTTBFATNBKMK: break;
-//        case NS_rtf::LN_LCBSTTBFATNBKMK: break;
-//        case NS_rtf::LN_FCPLCDOAMOM: break;
-//        case NS_rtf::LN_LCBPLCDOAMOM: break;
-//        case NS_rtf::LN_FCPLCDOAHDR: break;
-//        case NS_rtf::LN_LCBPLCDOAHDR: break;
-//        case NS_rtf::LN_FCPLCSPAMOM: break;
-//        case NS_rtf::LN_LCBPLCSPAMOM: break;
-//        case NS_rtf::LN_FCPLCSPAHDR: break;
-//        case NS_rtf::LN_LCBPLCSPAHDR: break;
-//        case NS_rtf::LN_FCPLCFATNBKF: break;
-//        case NS_rtf::LN_LCBPLCFATNBKF: break;
-//        case NS_rtf::LN_FCPLCFATNBKL: break;
-//        case NS_rtf::LN_LCBPLCFATNBKL: break;
-//        case NS_rtf::LN_FCPMS: break;
-//        case NS_rtf::LN_LCBPMS: break;
-//        case NS_rtf::LN_FCFORMFLDSTTBF: break;
-//        case NS_rtf::LN_LCBFORMFLDSTTBF: break;
-//        case NS_rtf::LN_FCPLCFENDREF: break;
-//        case NS_rtf::LN_LCBPLCFENDREF: break;
-//        case NS_rtf::LN_FCPLCFENDTXT: break;
-//        case NS_rtf::LN_LCBPLCFENDTXT: break;
-//        case NS_rtf::LN_FCPLCFFLDEDN: break;
-//        case NS_rtf::LN_LCBPLCFFLDEDN: break;
-//        case NS_rtf::LN_FCPLCFPGDEDN: break;
-//        case NS_rtf::LN_LCBPLCFPGDEDN: break;
-//        case NS_rtf::LN_FCDGGINFO: break;
-//        case NS_rtf::LN_LCBDGGINFO: break;
-//        case NS_rtf::LN_FCSTTBFRMARK: break;
-//        case NS_rtf::LN_LCBSTTBFRMARK: break;
-//        case NS_rtf::LN_FCSTTBFCAPTION: break;
-//        case NS_rtf::LN_LCBSTTBFCAPTION: break;
-//        case NS_rtf::LN_FCSTTBFAUTOCAPTION: break;
-//        case NS_rtf::LN_LCBSTTBFAUTOCAPTION: break;
-//        case NS_rtf::LN_FCPLCFWKB: break;
-//        case NS_rtf::LN_LCBPLCFWKB: break;
-//        case NS_rtf::LN_FCPLCFSPL: break;
-//        case NS_rtf::LN_LCBPLCFSPL: break;
-//        case NS_rtf::LN_FCPLCFTXBXTXT: break;
-//        case NS_rtf::LN_LCBPLCFTXBXTXT: break;
-//        case NS_rtf::LN_FCPLCFFLDTXBX: break;
-//        case NS_rtf::LN_LCBPLCFFLDTXBX: break;
-//        case NS_rtf::LN_FCPLCFHDRTXBXTXT: break;
-//        case NS_rtf::LN_LCBPLCFHDRTXBXTXT: break;
-//        case NS_rtf::LN_FCPLCFFLDHDRTXBX: break;
-//        case NS_rtf::LN_LCBPLCFFLDHDRTXBX: break;
-//        case NS_rtf::LN_FCSTWUSER: break;
-//        case NS_rtf::LN_LCBSTWUSER: break;
-//        case NS_rtf::LN_FCSTTBTTMBD: break;
-//        case NS_rtf::LN_LCBSTTBTTMBD: break;
-//        case NS_rtf::LN_FCUNUSED: break;
-//        case NS_rtf::LN_LCBUNUSED: break;
-//        case NS_rtf::LN_FCPGDMOTHER: break;
-//        case NS_rtf::LN_LCBPGDMOTHER: break;
-//        case NS_rtf::LN_FCBKDMOTHER: break;
-//        case NS_rtf::LN_LCBBKDMOTHER: break;
-//        case NS_rtf::LN_FCPGDFTN: break;
-//        case NS_rtf::LN_LCBPGDFTN: break;
-//        case NS_rtf::LN_FCBKDFTN: break;
-//        case NS_rtf::LN_LCBBKDFTN: break;
-//        case NS_rtf::LN_FCPGDEDN: break;
-//        case NS_rtf::LN_LCBPGDEDN: break;
-//        case NS_rtf::LN_FCBKDEDN: break;
-//        case NS_rtf::LN_LCBBKDEDN: break;
-//        case NS_rtf::LN_FCSTTBFINTLFLD: break;
-//        case NS_rtf::LN_LCBSTTBFINTLFLD: break;
-//        case NS_rtf::LN_FCROUTESLIP: break;
-//        case NS_rtf::LN_LCBROUTESLIP: break;
-//        case NS_rtf::LN_FCSTTBSAVEDBY: break;
-//        case NS_rtf::LN_LCBSTTBSAVEDBY: break;
-//        case NS_rtf::LN_FCSTTBFNM: break;
-//        case NS_rtf::LN_LCBSTTBFNM: break;
-//        case NS_rtf::LN_FCPLCFLST: break;
-//        case NS_rtf::LN_LCBPLCFLST: break;
-//        case NS_rtf::LN_FCPLFLFO: break;
-//        case NS_rtf::LN_LCBPLFLFO: break;
-//        case NS_rtf::LN_FCPLCFTXBXBKD: break;
-//        case NS_rtf::LN_LCBPLCFTXBXBKD: break;
-//        case NS_rtf::LN_FCPLCFTXBXHDRBKD: break;
-//        case NS_rtf::LN_LCBPLCFTXBXHDRBKD: break;
-//        case NS_rtf::LN_FCDOCUNDO: break;
-//        case NS_rtf::LN_LCBDOCUNDO: break;
-//        case NS_rtf::LN_FCRGBUSE: break;
-//        case NS_rtf::LN_LCBRGBUSE: break;
-//        case NS_rtf::LN_FCUSP: break;
-//        case NS_rtf::LN_LCBUSP: break;
-//        case NS_rtf::LN_FCUSKF: break;
-//        case NS_rtf::LN_LCBUSKF: break;
-//        case NS_rtf::LN_FCPLCUPCRGBUSE: break;
-//        case NS_rtf::LN_LCBPLCUPCRGBUSE: break;
-//        case NS_rtf::LN_FCPLCUPCUSP: break;
-//        case NS_rtf::LN_LCBPLCUPCUSP: break;
-//        case NS_rtf::LN_FCSTTBGLSYSTYLE: break;
-//        case NS_rtf::LN_LCBSTTBGLSYSTYLE: break;
-//        case NS_rtf::LN_FCPLGOSL: break;
-//        case NS_rtf::LN_LCBPLGOSL: break;
-//        case NS_rtf::LN_FCPLCOCX: break;
-//        case NS_rtf::LN_LCBPLCOCX: break;
-//        case NS_rtf::LN_FCPLCFBTELVC: break;
-//        case NS_rtf::LN_LCBPLCFBTELVC: break;
-//        case NS_rtf::LN_DWLOWDATETIME: break;
-//        case NS_rtf::LN_DWHIGHDATETIME: break;
-//        case NS_rtf::LN_FCPLCFLVC: break;
-//        case NS_rtf::LN_LCBPLCFLVC: break;
-//        case NS_rtf::LN_FCPLCASUMY: break;
-//        case NS_rtf::LN_LCBPLCASUMY: break;
-//        case NS_rtf::LN_FCPLCFGRAM: break;
-//        case NS_rtf::LN_LCBPLCFGRAM: break;
-//        case NS_rtf::LN_FCSTTBLISTNAMES: break;
-//        case NS_rtf::LN_LCBSTTBLISTNAMES: break;
-//        case NS_rtf::LN_FCSTTBFUSSR: break;
-//        case NS_rtf::LN_LCBSTTBFUSSR: break;
-//        case NS_rtf::LN_FN: break;
-//        case NS_rtf::LN_FCSEPX: break;
-//        case NS_rtf::LN_FNMPR: break;
-//        case NS_rtf::LN_FCMPR: break;
-//        case NS_rtf::LN_ICOFORE: break;
-//        case NS_rtf::LN_ICOBACK: break;
-//        case NS_rtf::LN_IPAT: break;
-//        case NS_rtf::LN_SHDFORECOLOR: break;
-//        case NS_rtf::LN_SHDBACKCOLOR: break;
-//        case NS_rtf::LN_SHDPATTERN: break;
-//        case NS_rtf::LN_DPTLINEWIDTH: break;
-//        case NS_rtf::LN_BRCTYPE: break;
-//        case NS_rtf::LN_ICO: break;
-//        case NS_rtf::LN_DPTSPACE: break;
-//        case NS_rtf::LN_FSHADOW: break;
-//        case NS_rtf::LN_FFRAME: break;
-//        case NS_rtf::LN_UNUSED2_15: break;
-//        case NS_rtf::LN_FFIRSTMERGED: break;
-//        case NS_rtf::LN_FMERGED: break;
-//        case NS_rtf::LN_FVERTICAL: break;
-//        case NS_rtf::LN_FBACKWARD: break;
-//        case NS_rtf::LN_FROTATEFONT: break;
-//        case NS_rtf::LN_FVERTMERGE: break;
-//        case NS_rtf::LN_FVERTRESTART: break;
-//        case NS_rtf::LN_VERTALIGN: break;
-//        case NS_rtf::LN_FUNUSED: break;
-//        case NS_rtf::LN_WUNUSED: break;
-//        case NS_rtf::LN_BRCTOP: break;
-//        case NS_rtf::LN_BRCLEFT: break;
-//        case NS_rtf::LN_BRCBOTTOM: break;
-//        case NS_rtf::LN_BRCRIGHT: break;
-//        case NS_rtf::LN_IBKL: break;
-//        case NS_rtf::LN_ITCFIRST: break;
-//        case NS_rtf::LN_FPUB: break;
-//        case NS_rtf::LN_ITCLIM: break;
-//        case NS_rtf::LN_FCOL: break;
-//        case NS_rtf::LN_LINECOLOR: break;
-//        case NS_rtf::LN_LINEWIDTH: break;
-//        case NS_rtf::LN_LINETYPE: break;
-//        case NS_rtf::LN_MM: break;
-//        case NS_rtf::LN_XEXT: break;
-//        case NS_rtf::LN_YEXT: break;
-//        case NS_rtf::LN_HMF: break;
-//        case NS_rtf::LN_LCB: break;
-//        case NS_rtf::LN_CBHEADER: break;
-//        case NS_rtf::LN_MFP: break;
-//        case NS_rtf::LN_BM_RCWINMF: break;
-//        case NS_rtf::LN_DXAGOAL: break;
-//        case NS_rtf::LN_DYAGOAL: break;
-//        case NS_rtf::LN_MX: break;
-//        case NS_rtf::LN_MY: break;
-//        case NS_rtf::LN_DXACROPLEFT: break;
-//        case NS_rtf::LN_DYACROPTOP: break;
-//        case NS_rtf::LN_DXACROPRIGHT: break;
-//        case NS_rtf::LN_DYACROPBOTTOM: break;
-//        case NS_rtf::LN_BRCL: break;
-//        case NS_rtf::LN_FFRAMEEMPTY: break;
-//        case NS_rtf::LN_FBITMAP: break;
-//        case NS_rtf::LN_FDRAWHATCH: break;
-//        case NS_rtf::LN_FERROR: break;
-//        case NS_rtf::LN_BPP: break;
-//        case NS_rtf::LN_DXAORIGIN: break;
-//        case NS_rtf::LN_DYAORIGIN: break;
-//        case NS_rtf::LN_CPROPS: break;
-//        case NS_rtf::LN_LINEPROPSTOP: break;
-//        case NS_rtf::LN_LINEPROPSLEFT: break;
-//        case NS_rtf::LN_LINEPROPSBOTTOM: break;
-//        case NS_rtf::LN_LINEPROPSRIGHT: break;
-//        case NS_rtf::LN_LINEPROPSHORIZONTAL: break;
-//        case NS_rtf::LN_LINEPROPSVERTICAL: break;
-//        case NS_rtf::LN_headerr: break;
-//        case NS_rtf::LN_footerr: break;
-//        case NS_rtf::LN_endnote: break;
-//        case NS_rtf::LN_BOOKMARKNAME: break;
-
-//        case NS_rtf::LN_LISTLEVEL: break;
-//        case NS_rtf::LN_LFO: break;
-//        case NS_rtf::LN_F: break;
-//        case NS_rtf::LN_ALTFONTNAME: break;
-//        case NS_rtf::LN_XSZFFN: break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_XSTZNAME:
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->m_pCurrentEntry->sStyleName1 = sValue;
             if (m_pImpl->m_pCurrentEntry->sStyleIdentifierI.getLength())
                 m_pImpl->m_pCurrentEntry->sStyleIdentifierI = sValue;
         break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_XSTZNAME1:
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->m_pCurrentEntry->sStyleName = sValue;
             if (m_pImpl->m_pCurrentEntry->sStyleIdentifierI.getLength())
                 m_pImpl->m_pCurrentEntry->sStyleIdentifierI = sValue;
         break;
-//        case NS_rtf::LN_UPXSTART: break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_UPX:
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             resolveAttributeProperties(val);
         break;
-//        case NS_rtf::LN_sed: break;
-//        case NS_rtf::LN_picf: break;
-
-//        case NS_rtf::LN_rgbrc: break;
-//        case NS_rtf::LN_shd: break;
-//        case NS_rtf::LN_cellShd: break;
-//        case NS_rtf::LN_cellTopColor: break;
-//        case NS_rtf::LN_cellLeftColor: break;
-//        case NS_rtf::LN_cellBottomColor: break;
-//        case NS_rtf::LN_cellRightColor: break;
-
-//        case NS_rtf::LN_LISTTABLE: break;
-//        case NS_rtf::LN_LFOTABLE: break;
-//        case NS_rtf::LN_StyleSheetTable: break;
-//        case NS_rtf::LN_STYLESHEET: break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_type:
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         {
 /*          defaults should be set at the service "com.sun.star.text.Defaults"
              if (nIntValue == 1)
@@ -842,26 +509,26 @@ void StyleSheetTable::attribute(Id Name, Value & val)
             }
             else
                 m_pImpl->m_pCurrentEntry->nStyleTypeCode = (StyleType)nIntValue;
-        break;
         }
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+        break;
         case NS_ooxml::LN_CT_Style_default:
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->m_pCurrentEntry->bIsDefaultStyle = (nIntValue != 0);
         break;
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_customStyle:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_styleId:
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->m_pCurrentEntry->sStyleIdentifierI = sValue;
             m_pImpl->m_pCurrentEntry->sStyleIdentifierD = sValue;
         break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TblWidth_w:
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() )->SetCT_TblWidth_w( nIntValue );
         break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TblWidth_type:
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() )->SetCT_TblWidth_type( nIntValue );
         break;
         default:
@@ -873,12 +540,21 @@ void StyleSheetTable::attribute(Id Name, Value & val)
         }
         break;
     }
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("StyleSheetTable.attribute");
+#endif
 }
 /*-- 19.06.2006 12:04:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void StyleSheetTable::sprm(Sprm & rSprm)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("StyleSheetTable.sprm");
+    dmapper_logger->attribute("sprm", rSprm.toString());
+#endif
+
     sal_uInt32 nSprmId = rSprm.getId();
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue.get() ? pValue->getInt() : 0;
@@ -889,51 +565,44 @@ void StyleSheetTable::sprm(Sprm & rSprm)
     /* WRITERFILTERSTATUS: table: StyleSheetTable_sprm */
     switch(nSprmId)
     {
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_name:
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             //this is only a UI name!
             m_pImpl->m_pCurrentEntry->sStyleName = sStringValue;
             m_pImpl->m_pCurrentEntry->sStyleName1 = sStringValue;
             break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_basedOn:
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->m_pCurrentEntry->sBaseStyleIdentifier = sStringValue;
             break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_next:
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->m_pCurrentEntry->sNextStyleIdentifier = sStringValue;
             break;
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_aliases:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_link:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_autoRedefine:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_hidden:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_uiPriority:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_semiHidden:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_unhideWhenUsed:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_qFormat:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_locked:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_personal:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_personalCompose:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_personalReply:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_rsid:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_trPr:
+        case NS_ooxml::LN_CT_Style_tcPr:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+        case NS_ooxml::LN_CT_Style_tblPr: //contains table properties
         case NS_ooxml::LN_CT_Style_tblStylePr: //contains  to table properties
+        case NS_ooxml::LN_CT_DocDefaults_pPrDefault:
+        case NS_ooxml::LN_CT_DocDefaults_rPrDefault:
+        case NS_ooxml::LN_CT_TblPrBase_tblInd: //table properties - at least width value and type
+        case NS_ooxml::LN_EG_RPrBase_rFonts: //table fonts
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get())
@@ -944,50 +613,46 @@ void StyleSheetTable::sprm(Sprm & rSprm)
                 // Add the properties to the table style
                 TblStyleType nType = pTblStylePrHandler->getType( );
                 PropertyMapPtr pProps = pTblStylePrHandler->getProperties( );
-                StyleSheetEntryPtr pEntry = m_pImpl->m_pCurrentEntry;
-                TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry*>( pEntry.get( ) );
-                pTableEntry->AddTblStylePr( nType, pProps );
+                StyleSheetEntry *  pEntry = m_pImpl->m_pCurrentEntry.get();
+
+                if (nType == TBL_STYLE_UNKNOWN)
+                {
+                    pEntry->pProperties->insert(pProps);
+                }
+                else
+                {
+                    TableStyleSheetEntry * pTableEntry = dynamic_cast<TableStyleSheetEntry*>( pEntry );
+                    if (pTableEntry != NULL)
+                        pTableEntry->AddTblStylePr( nType, pProps );
+                }
             }
             break;
         }
-        case NS_ooxml::LN_CT_Style_tcPr:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-        case NS_ooxml::LN_CT_Style_tblPr: //contains table properties
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-        case NS_ooxml::LN_CT_DocDefaults_pPrDefault:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-        case NS_ooxml::LN_CT_DocDefaults_rPrDefault:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-        case NS_ooxml::LN_CT_TblPrBase_tblInd: //table properties - at least width value and type
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-        case NS_ooxml::LN_EG_RPrBase_rFonts: //table fonts
-            resolveSprmProps(rSprm);
-            break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_PPrDefault_pPr:
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pDefaultParaProps );
             m_pImpl->m_rDMapper.sprm( rSprm );
             m_pImpl->m_rDMapper.PopStyleSheetProperties();
             applyDefaults( true );
         break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_RPrDefault_rPr:
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pDefaultCharProps );
             m_pImpl->m_rDMapper.sprm( rSprm );
             m_pImpl->m_rDMapper.PopStyleSheetProperties();
             applyDefaults( false );
         break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TblPrBase_jc:     //table alignment - row properties!
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
              m_pImpl->m_pCurrentEntry->pProperties->Insert( PROP_HORI_ORIENT, false,
                 uno::makeAny( ConversionHelper::convertTableJustification( nIntValue )));
         break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TrPrBase_jc:     //table alignment - row properties!
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
                 dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() )->SetCT_TrPrBase_jc(nIntValue);
         break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TblPrBase_tblBorders: //table borders, might be defined in table style
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get())
@@ -1011,11 +676,13 @@ void StyleSheetTable::sprm(Sprm & rSprm)
                     pTEntry->m_nColBandSize = nIntValue;
             }
         }
+        case NS_ooxml::LN_CT_TblPrBase_tblCellMar:
+            //no cell margins in styles
         break;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_pPr:
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Style_rPr:
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         default:
             if (!m_pImpl->m_pCurrentEntry)
                 break;
@@ -1028,12 +695,20 @@ void StyleSheetTable::sprm(Sprm & rSprm)
                 m_pImpl->m_rDMapper.PopStyleSheetProperties( );
             }
     }
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("StyleSheetTable.sprm");
+#endif
 }
 /*-- 19.06.2006 12:04:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void StyleSheetTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("StyleSheetTable.entry");
+#endif
+
     //create a new style entry
     // printf("StyleSheetTable::entry(...)\n");
     OSL_ENSURE( !m_pImpl->m_pCurrentEntry, "current entry has to be NULL here");
@@ -1052,8 +727,17 @@ void StyleSheetTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Po
     {
         //TODO: this entry contains the default settings - they have to be added to the settings
     }
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->addTag(m_pImpl->m_pCurrentEntry->toTag());
+#endif
+
     StyleSheetEntryPtr pEmptyEntry;
     m_pImpl->m_pCurrentEntry = pEmptyEntry;
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("StyleSheetTable.entry");
+#endif
 }
 /*-- 21.06.2006 15:34:49---------------------------------------------------
     sorting helper
@@ -1154,7 +838,8 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         {
                             //TODO: Handle cases where a paragraph <> character style relation is needed
                             StyleSheetEntryPtr pParent = FindStyleSheetByISTD( pEntry->sBaseStyleIdentifier );
-                            xStyle->setParentStyle(ConvertStyleName( pParent->sStyleName ));
+                            if (pParent.get() != NULL)
+                                xStyle->setParentStyle(ConvertStyleName( pParent->sStyleName ));
                         }
                         catch( const uno::RuntimeException& )
                         {
@@ -1175,18 +860,18 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
     //                      font size to 240 twip (12 pts) for all if not set
                             pEntry->pProperties->Insert(PROP_CHAR_HEIGHT, true, aTwoHundredFortyTwip, false);
     //                      western font not already set -> apply first font
-                            const FontEntry* pWesternFontEntry = rFontTable->getFontEntry( 0 );
+                            const FontEntry::Pointer_t pWesternFontEntry(rFontTable->getFontEntry( 0 ));
                             rtl::OUString sWesternFontName = pWesternFontEntry->sFontName;
                             pEntry->pProperties->Insert(PROP_CHAR_FONT_NAME, true, uno::makeAny( sWesternFontName ), false);
 
     //                      CJK  ... apply second font
-                            const FontEntry* pCJKFontEntry  = rFontTable->getFontEntry( 2 );
+                            const FontEntry::Pointer_t pCJKFontEntry(rFontTable->getFontEntry( 2 ));
                             pEntry->pProperties->Insert(PROP_CHAR_FONT_NAME_ASIAN, true, uno::makeAny( pCJKFontEntry->sFontName ), false);
                             pEntry->pProperties->Insert(PROP_CHAR_HEIGHT_ASIAN, true, aTwoHundredFortyTwip, false);
     //                      CTL  ... apply third font, if available
                             if( nFontCount > 3 )
                             {
-                                const FontEntry* pCTLFontEntry  = rFontTable->getFontEntry( 3 );
+                                const FontEntry::Pointer_t pCTLFontEntry(rFontTable->getFontEntry( 3 ));
                                 pEntry->pProperties->Insert(PROP_CHAR_FONT_NAME_COMPLEX, true, uno::makeAny( pCTLFontEntry->sFontName ), false);
                                 pEntry->pProperties->Insert(PROP_CHAR_HEIGHT_COMPLEX, true, aTwoHundredFortyTwip, false);
                             }
@@ -1306,14 +991,26 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                             uno::Reference< beans::XMultiPropertySet > xMultiPropertySet( xStyle, uno::UNO_QUERY_THROW);
                             xMultiPropertySet->setPropertyValues( aSortedPropVals.getNames(), aSortedPropVals.getValues() );
                         }
-                        catch( const beans::UnknownPropertyException& rUnknown)
-                        {
-                            (void) rUnknown;
-                            OSL_ENSURE( false, "Some style properties could not be set");
-                        }
                         catch( const lang::WrappedTargetException& rWrapped)
                         {
                             (void) rWrapped;
+                            rtl::OString aMessage("Some style properties could not be set");
+#if OSL_DEBUG_LEVEL > 0
+                            beans::UnknownPropertyException aUnknownPropertyException;
+
+                            if( rWrapped.TargetException >>= aUnknownPropertyException )
+                            {
+                                aMessage += rtl::OString(": " );
+                                ::rtl::OString sTemp;
+                                aUnknownPropertyException.Message.convertToString(&sTemp, RTL_TEXTENCODING_ASCII_US, 0 );
+                                aMessage += sTemp;
+                            }
+#endif
+                            OSL_ENSURE( false, aMessage.getStr());
+                        }
+                        catch( const uno::Exception& rEx)
+                        {
+                            (void) rEx;
                             OSL_ENSURE( false, "Some style properties could not be set");
                         }
                     }
