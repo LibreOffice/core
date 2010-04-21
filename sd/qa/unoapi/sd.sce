@@ -1,11 +1,11 @@
 -o sd.AccessibleDrawDocumentView
 -o sd.AccessibleOutlineView
 #i35935# -o sd.AccessibleSlideView
--o sd.DrawController_DrawView
--o sd.DrawController_HandoutView
--o sd.DrawController_NotesView
+#i111042# -o sd.DrawController_DrawView
+#i111042# -o sd.DrawController_HandoutView
+#i111042# -o sd.DrawController_NotesView
 -o sd.DrawController_OutlineView
--o sd.DrawController_PresentationView
+#i111042# -o sd.DrawController_PresentationView
 -o sd.SdDocLinkTargets
 -o sd.SdDrawPage
 -o sd.SdDrawPagesAccess
