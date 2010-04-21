@@ -8,10 +8,10 @@
 #i86110 -o toolkit.AccessibleList
 #i86110 -o toolkit.AccessibleListBox
 #i86110 -o toolkit.AccessibleListItem
--o toolkit.AccessibleMenu
--o toolkit.AccessibleMenuBar
+#i111047# -o toolkit.AccessibleMenu
+#i111047# -o toolkit.AccessibleMenuBar
 #i86009 -o toolkit.AccessibleMenuItem
--o toolkit.AccessibleMenuSeparator
+#i111047# -o toolkit.AccessibleMenuSeparator
 #i52607 -o toolkit.AccessiblePopupMenu
 #i86107,i86110 -o toolkit.AccessibleRadioButton
 -o toolkit.AccessibleScrollBar
