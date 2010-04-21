@@ -133,7 +133,6 @@ function sMakeReadOnlyDocumentEditable() as boolean
 
     kontext "StandardBar"
     for iTry = 1 to MAX_RETRIES
-        wait( MAX_DELAY )
         try
             if ( Bearbeiten.getState( ITEM_STATE ) = BUTTON_RELEASED ) then 
                 Bearbeiten.click()
@@ -142,6 +141,7 @@ function sMakeReadOnlyDocumentEditable() as boolean
         catch
             printlog( CFN & "Failed to switch to edit mode, retrying..." )
         endcatch
+        wait( MAX_DELAY )
     next iTry
 
     kontext "Active"
