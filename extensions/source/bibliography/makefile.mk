@@ -54,7 +54,6 @@ SRS1NAME=$(TARGET)
 SRC1FILES=			bib.src	 \
                     datman.src \
                     sections.src \
-                    menu.src	 \
                     toolbar.src
 
 RESLIB1NAME=bib
