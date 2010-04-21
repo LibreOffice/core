@@ -27,7 +27,7 @@
 #include "precompiled_sfx2.hxx"
 
 #include "sfx2/taskpane.hxx"
-#include "sfx2/imagemgr.hxx"
+#include "imagemgr.hxx"
 #include "sfx2/sfxsids.hrc"
 #include "sfx2/bindings.hxx"
 #include "sfx2/dispatch.hxx"
