@@ -550,7 +550,7 @@ namespace sfx2
         if ( !aWindowStateConfig.isValid() )
             return;
 
-        size_t nFirstVisiblePanel = size_t( -1 );
+        ::rtl::OUString sFirstVisiblePanelResource;
 
         const Sequence< ::rtl::OUString > aUIElements( aWindowStateConfig.getNodeNames() );
         for (   const ::rtl::OUString* resource = aUIElements.getConstArray();
@@ -584,12 +584,15 @@ namespace sfx2
             nPanelPos = m_aPanelDeck.InsertPanel( pCustomPanel, nPanelPos );
 
             if ( ::comphelper::getBOOL( aResourceNode.getNodeValue( "Visible" ) ) )
-                nFirstVisiblePanel = nPanelPos;
+                sFirstVisiblePanelResource = *resource;
         }
 
-        if ( nFirstVisiblePanel != size_t( -1 ) )
+        if ( sFirstVisiblePanelResource.getLength() )
         {
-            m_rAntiImpl.PostUserEvent( LINK( this, ModuleTaskPane_Impl, OnActivatePanel ), reinterpret_cast< void* >( nFirstVisiblePanel ) );
+            ::boost::optional< size_t > aPanelPos( GetPanelPos( sFirstVisiblePanelResource ) );
+            OSL_ENSURE( !!aPanelPos, "ModuleTaskPane_Impl::impl_isToolPanelResource: just inserted it, and it's not there?!" );
+            if ( !!aPanelPos )
+                m_rAntiImpl.PostUserEvent( LINK( this, ModuleTaskPane_Impl, OnActivatePanel ), reinterpret_cast< void* >( *aPanelPos ) );
         }
     }
 
