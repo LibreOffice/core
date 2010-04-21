@@ -127,7 +127,6 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
     ::vos::OGuard aGuard( GetMutex() );
 
     TableControl* pTable = (TableControl*)GetWindow();
-    sal_Int32 fontHeight = GetWindow()->GetTextHeight();
     switch( GetPropertyId( PropertyName ) )
     {
         case BASEPROPERTY_GRID_SELECTIONMODE:
@@ -291,6 +290,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                 }
                 else
                     throw GridInvalidDataException(rtl::OUString::createFromAscii("The data model isn't set!"), m_xDataModel);
+                sal_Int32 fontHeight = pTable->PixelToLogic( Size( 0, pTable->GetTextHeight() ), MAP_APPFONT ).Height();
                 if(m_xDataModel->getRowHeight() == 0)
                     m_pTableModel->setRowHeight(fontHeight);
                 else
@@ -309,6 +309,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                     Sequence<Reference< XGridColumn > > columns = m_xColumnModel->getColumns();
                     std::vector<Reference< XGridColumn > > aNewColumns(
                         comphelper::sequenceToContainer<std::vector<Reference< XGridColumn > > >(columns));
+                    sal_Int32 fontHeight = pTable->PixelToLogic( Size( 0, pTable->GetTextHeight() ), MAP_APPFONT ).Height();
                     if(m_xColumnModel->getColumnHeaderHeight() == 0)
                         m_pTableModel->setColumnHeaderHeight(fontHeight);
                     else
