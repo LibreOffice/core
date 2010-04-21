@@ -1,4 +1,4 @@
-OOO_1.1 {
+UDK_3_0_0 {
 global:
     GetVersionInfo;
     getDataArea;
