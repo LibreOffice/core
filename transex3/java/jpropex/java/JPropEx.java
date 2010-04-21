@@ -223,7 +223,13 @@ public class JPropEx
                                         .append( "_" ).append( lang.replaceAll("-","_") ).append( ".properties" ).toString();
         }
         else if( outputFileArg != null && outputFileArg.length()>0 )
+        {
             name = outputFileArg;
+            name += new StringBuffer().append( inputFileArg.substring( filenameIdx , filename.lastIndexOf( ".properties" ) ) )
+                                     .append( "_" ).append( lang.replaceAll("-","_") ).append( ".properties" ).toString();
+
+            //name = outputFileArg;
+        }
         else
         {
             System.err.println("ERROR: No outputfile specified .. either -o or -x -y !");
@@ -249,6 +255,7 @@ public class JPropEx
         }
         path += name;
         // Write the properties file
+        System.out.println("DBG: Writing to "+path);
         try{
             BufferedOutputStream out = new BufferedOutputStream( new FileOutputStream( path ) );
             if( prop == null )
