@@ -130,6 +130,8 @@ function sMakeReadOnlyDocumentEditable() as boolean
 
     dim iTry as integer
 
+    WaitSlot( MAX_DELAY * 10 ) ' Let all running slots finish
+
     ' Try to click the Edit-Button on the Standardbar
     kontext "StandardBar"
     for iTry = 1 to MAX_RETRIES
@@ -137,6 +139,8 @@ function sMakeReadOnlyDocumentEditable() as boolean
             if ( Bearbeiten.getState( ITEM_STATE ) = BUTTON_RELEASED ) then 
                 Bearbeiten.click()
                 exit for
+            else
+                printlog( CFN & "Failed to switch to edit mode, button has incorrect state" )
             endif
         catch
             printlog( CFN & "Failed to switch to edit mode, retrying..." )
