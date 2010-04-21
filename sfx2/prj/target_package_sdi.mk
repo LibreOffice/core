@@ -25,28 +25,6 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,sfx2,\
-    $(call gb_AllLangResTarget_get_target,sfx) \
-    $(call gb_Library_get_target,sfx) \
-    $(call gb_Package_get_target,sfx2_inc) \
-    $(call gb_Package_get_target,sfx2_sdi) \
-))
-#	$(call gb_Library_get_target,qstart) \
-
-$(eval $(call gb_Module_read_includes,sfx2,\
-    lib_sfx2 \
-    package_inc \
-    package_sdi \
-    res_sfx2 \
-))
-#   lib_qstart \
-
-#todo: map file?
-#todo: source/appl ohne Optimierung?
-#todo: source/control ohne Optimierung?
-#todo: source/dialog BUILD_VER_STRING
-#todo: source/doc SYSTEM_LIBXML2
-#todo: noopt for acldetect.cxx?
-#todo: ENABLE_LAYOUT
-#todo: quickstarter
-#todo: link against cocoa on Mac
+$(eval $(call gb_Package_Package,sfx2_sdi,$(SRCDIR)/sfx2/sdi))
+$(eval $(call gb_Package_add_file,sfx2_sdi,inc/sfx2/sfx.sdi,sfx.sdi))
+$(eval $(call gb_Package_add_file,sfx2_sdi,inc/sfx2/sfxitems.sdi,sfxitems.sdi))

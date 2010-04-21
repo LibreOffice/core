@@ -126,4 +126,6 @@ $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/SettingsExportHelper.hxx
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/xmlictxt.hxx,xmloff/xmlictxt.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/table/XMLTableExport.hxx,xmloff/table/XMLTableExport.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/table/XMLTableImport.hxx,xmloff/table/XMLTableImport.hxx))
-
+$(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/XMLSettingsExportContext.hxx,xmloff/XMLSettingsExportContext.hxx))
+$(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/XMLTextShapeImportHelper.hxx,xmloff/XMLTextShapeImportHelper.hxx))
+$(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/odffields.hxx,xmloff/odffields.hxx))

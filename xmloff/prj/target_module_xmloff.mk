@@ -28,12 +28,14 @@
 $(eval $(call gb_Module_Module,xmloff,\
     $(call gb_Library_get_target,xo) \
     $(call gb_Library_get_target,xof) \
+    $(call gb_Package_get_target,xmloff_dtd) \
     $(call gb_Package_get_target,xmloff_inc) \
 ))
 
 $(eval $(call gb_Module_read_includes,xmloff,\
     lib_xo \
     lib_xof \
+    package_dtd \
     package_inc \
 ))
 
