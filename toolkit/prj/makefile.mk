@@ -1,2 +1,2 @@
 all:
-    cd .. && make -sj9	
+    cd .. && make -srj9
