@@ -50,12 +50,37 @@ namespace svt
     static const int s_nIndentationWidth = 16;
 
     //==================================================================================================================
+    //= DrawerVisualization
+    //==================================================================================================================
+    //------------------------------------------------------------------------------------------------------------------
+    DrawerVisualization::DrawerVisualization( ToolPanelDrawer& i_rParent )
+        :Window( &i_rParent )
+        ,m_rDrawer( i_rParent )
+    {
+        Show();
+        SetAccessibleRole( AccessibleRole::LABEL );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    DrawerVisualization::~DrawerVisualization()
+    {
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void DrawerVisualization::Paint( const Rectangle& i_rBoundingBox )
+    {
+        Window::Paint( i_rBoundingBox );
+        m_rDrawer.Paint();
+    }
+
+    //==================================================================================================================
     //= ToolPanelDrawer
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
     ToolPanelDrawer::ToolPanelDrawer( Window& i_rParent, const ::rtl::OUString& i_rTitle )
         :Window( &i_rParent, WB_TABSTOP )
         ,m_pPaintDevice( new VirtualDevice( *this ) )
+        ,m_aVisualization( *this )
         ,m_bFocused( false )
         ,m_bExpanded( false )
     {
@@ -63,11 +88,14 @@ namespace svt
         SetBackground( Wallpaper() );
         SetPointer( POINTER_REFHAND );
 
-        SetAccessibleRole( AccessibleRole::LABEL );
+        SetAccessibleRole( AccessibleRole::LIST_ITEM );
 
         SetText( i_rTitle );
         SetAccessibleName( i_rTitle );
         SetAccessibleDescription( i_rTitle );
+
+        m_aVisualization.SetAccessibleName( i_rTitle );
+        m_aVisualization.SetAccessibleDescription( i_rTitle );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -83,7 +111,7 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void ToolPanelDrawer::Paint( const Rectangle& i_rBoundingBox )
+    void ToolPanelDrawer::Paint()
     {
         m_pPaintDevice->SetMapMode( GetMapMode() );
         m_pPaintDevice->SetOutputSize( GetOutputSizePixel() );
@@ -101,13 +129,11 @@ namespace svt
         aFocusBox.Left() += 2;
         impl_paintFocusIndicator( aFocusBox );
 
-        DrawOutDev(
+        m_aVisualization.DrawOutDev(
             Point(), GetOutputSizePixel(),
             Point(), GetOutputSizePixel(),
             *m_pPaintDevice
         );
-
-        ::Window::Paint( i_rBoundingBox );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -220,6 +246,13 @@ namespace svt
     {
         m_bFocused = false;
         Invalidate();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void ToolPanelDrawer::Resize()
+    {
+        Window::Resize();
+        m_aVisualization.SetPosSizePixel( Point(), GetOutputSizePixel() );
     }
 
     //------------------------------------------------------------------------------------------------------------------

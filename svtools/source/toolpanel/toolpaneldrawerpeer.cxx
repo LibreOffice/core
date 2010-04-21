@@ -105,11 +105,15 @@ namespace svt
             return;
 
         i_rStateSet.AddState( AccessibleStateType::EXPANDABLE );
+        i_rStateSet.AddState( AccessibleStateType::FOCUSABLE );
 
         const ToolPanelDrawer* pDrawer( dynamic_cast< const ToolPanelDrawer* > ( GetWindow() ) );
         ENSURE_OR_RETURN_VOID( pDrawer, "ToolPanelDrawerContext::FillAccessibleStateSet: illegal window!" );
         if ( pDrawer->IsExpanded() )
             i_rStateSet.AddState( AccessibleStateType::EXPANDED );
+
+        if ( pDrawer->HasChildPathFocus() )
+            i_rStateSet.AddState( AccessibleStateType::FOCUSED );
     }
 
     //==================================================================================================================

@@ -34,6 +34,33 @@ namespace svt
 {
 //......................................................................................................................
 
+    class ToolPanelDrawer;
+    //==================================================================================================================
+    //= DrawerVisualization
+    //==================================================================================================================
+    /** serves a single purpose - let ZoomText read the drawers ...
+
+        Strange enough, ZoomText does not read the drawers when they get the focus (in none of the combinations
+        of AccessibleRoles I tried), except when it does have an AccessibleChild with the role LABEL. To "inject"
+        such a child into the A11Y hierarchy, we use this window here.
+
+        (We could also inject the A11Y component on the A11Y level only, but this would mean additional code. With
+        this approach here, VCL/toolkit will take care of creating and maintaining the A11Y component for us.)
+    */
+    class DrawerVisualization : public Window
+    {
+    public:
+        DrawerVisualization( ToolPanelDrawer& i_rParent );
+        ~DrawerVisualization();
+
+    protected:
+        // Window overridables
+        virtual void Paint( const Rectangle& i_rBoundingBox );
+
+    private:
+        ToolPanelDrawer&    m_rDrawer;
+    };
+
     //==================================================================================================================
     //= ToolPanelDrawer
     //==================================================================================================================
@@ -48,11 +75,13 @@ namespace svt
         void    SetExpanded( const bool i_bExpanded );
         bool    IsExpanded() const { return m_bExpanded; }
 
+        void    Paint();
+
     protected:
         // Window overridables
-        virtual void Paint( const Rectangle& i_rBoundingBox );
         virtual void GetFocus();
         virtual void LoseFocus();
+        virtual void Resize();
         virtual void DataChanged( const DataChangedEvent& i_rEvent );
         virtual void MouseButtonDown( const MouseEvent& i_rMouseEvent );
 
@@ -73,6 +102,7 @@ namespace svt
 
     private:
         ::std::auto_ptr< VirtualDevice >    m_pPaintDevice;
+        DrawerVisualization                 m_aVisualization;
         bool                                m_bFocused;
         bool                                m_bExpanded;
     };
