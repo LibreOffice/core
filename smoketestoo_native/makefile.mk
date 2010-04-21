@@ -55,13 +55,13 @@ $(BIN)/smoketestdoc.sxw: data/smoketestdoc.sxw
     $(COPY) $< $@
 
 .IF "$(OS)" != "WNT"
-$(installationtest_instpath).flag : \
-        $(shell ls $(installationtest_instset)/OOo_*_install_*.tar.gz)
+$(installationtest_instpath).flag : $(shell \
+        ls $(installationtest_instset)/OOo_*_install_$(defaultlangiso).tar.gz)
     $(RM) -r $(installationtest_instpath)
     $(MKDIRHIER) $(installationtest_instpath)
-    cd $(installationtest_instpath) && \
-        $(GNUTAR) xfz $(installationtest_instset)/OOo_*_install_*.tar.gz
-    $(MV) $(installationtest_instpath)/OOo_*_install_* \
+    cd $(installationtest_instpath) && $(GNUTAR) xfz \
+        $(installationtest_instset)/OOo_*_install_$(defaultlangiso).tar.gz
+    $(MV) $(installationtest_instpath)/OOo_*_install_$(defaultlangiso) \
         $(installationtest_instpath)/opt
     $(TOUCH) $@
 cpptest : $(installationtest_instpath).flag
