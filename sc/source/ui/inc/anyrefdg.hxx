@@ -29,7 +29,7 @@
 #define SC_ANYREFDG_HXX
 
 #ifndef _IMAGEBTN_HXX
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #endif
 #ifndef _EDIT_HXX
 #include <vcl/edit.hxx>

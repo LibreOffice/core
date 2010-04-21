@@ -208,7 +208,7 @@
 #include <svl/stritem.hxx>
 #include <collect.hxx>
 #include <svx/svdsob.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdglue.hxx>
 #include <svx/svdlayer.hxx>
