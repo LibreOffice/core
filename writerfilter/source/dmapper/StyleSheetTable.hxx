@@ -76,7 +76,7 @@ struct StyleSheetEntry
 typedef boost::shared_ptr<StyleSheetEntry> StyleSheetEntryPtr;
 
 class DomainMapper;
-class WRITERFILTER_DLLPRIVATE StyleSheetTable :
+class StyleSheetTable :
         public Properties,
         public Table
 {

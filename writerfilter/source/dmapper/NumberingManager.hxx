@@ -169,7 +169,7 @@ public:
 
 /** This class provides access to the defined numbering styles.
   */
-class WRITERFILTER_DLLPRIVATE ListsManager :
+class ListsManager :
     public Properties,
     public Table
 {
