@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbtools.cxx,v $
- * $Revision: 1.74.46.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -321,8 +318,8 @@ Reference< XConnection > getConnection_allowException(
                 Reference<XCompletedConnection> xConnectionCompletion(xProp, UNO_QUERY);
                 if (xConnectionCompletion.is())
                 {   // instantiate the default SDB interaction handler
-                    Reference< XInteractionHandler > xHandler(_rxFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.InteractionHandler")), UNO_QUERY);
-                    OSL_ENSURE(xHandler.is(), "dbtools::getConnection service com.sun.star.sdb.InteractionHandler not available!");
+                    Reference< XInteractionHandler > xHandler(_rxFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.task.InteractionHandler")), UNO_QUERY);
+                    OSL_ENSURE(xHandler.is(), "dbtools::getConnection service com.sun.star.task.InteractionHandler not available!");
                     if (xHandler.is())
                     {
                         xConnection = xConnectionCompletion->connectWithCompletion(xHandler);

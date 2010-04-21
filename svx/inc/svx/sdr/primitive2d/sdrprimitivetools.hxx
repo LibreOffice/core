@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: primitiveFactory2d.hxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +36,6 @@
 
 namespace basegfx {
     class BColor;
-    class B2DHomMatrix;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -55,10 +50,6 @@ namespace drawinglayer
 
         // create a 7x7 gluepoint symbol in given colors as BitmapEx
         BitmapEx createDefaultGluepoint_7x7(const basegfx::BColor& rBColorA, const basegfx::BColor& rBColorB);
-
-        // #i99123#
-        Primitive2DReference createFallbackHitTestPrimitive(const basegfx::B2DHomMatrix& rMatrix);
-
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 

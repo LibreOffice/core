@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: workwin.cxx,v $
- * $Revision: 1.75 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +38,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
 #include "workwin.hxx"
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "arrdecl.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/module.hxx>
@@ -1434,8 +1431,8 @@ sal_Bool SfxWorkWindow::IsPluginMode( SfxObjectShell* pObjShell )
     if ( pDispatcher )
     {
         SfxViewFrame* pFrame = pDispatcher->GetFrame();
-        if ( pFrame && pFrame->GetFrame() )
-           xFrame = pFrame->GetFrame()->GetFrameInterface();
+        if ( pFrame )
+           xFrame = pFrame->GetFrame().GetFrameInterface();
     }
 
     return xFrame;

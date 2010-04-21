@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fmobj.cxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +35,7 @@
 #include "svx/fmview.hxx"
 #include "svx/fmglob.hxx"
 #include "svx/fmpage.hxx"
-#include "svx/editeng.hxx"
+#include "editeng/editeng.hxx"
 #include "svx/svdovirt.hxx"
 #include "svx/fmmodel.hxx"
 #include "svx/dialmgr.hxx"
@@ -519,7 +516,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
         while (nCurrentSourceIndex <= nIndex)
         {
             sal_Bool bEqualDSS = sal_False;
-            while (!bEqualDSS)  // (we don't have to check nCurrentSourceIndex here : it's bounded by nIndex)
+            while (!bEqualDSS)  // (we don't have to check nCurrentSourceIndex here : it's bound by nIndex)
             {
                 xSourceContainer->getByIndex(nCurrentSourceIndex) >>= xCurrentSourceForm;
                 DBG_ASSERT(xCurrentSourceForm.is(), "FmFormObj::ensureModelEnv : invalid form ancestor (2) !");
@@ -581,12 +578,11 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                 // correct this ...
                 try
                 {
-                    Reference< XPersistObject >  xSourcePersist(xCurrentSourceForm, UNO_QUERY);
-                    DBG_ASSERT(xSourcePersist.is(), "FmFormObj::ensureModelEnv : invalid form (no persist object) !");
-
-                    // create and insert (into the destination) a clone of the form
-                    Reference< XCloneable > xCloneable( xSourcePersist, UNO_QUERY_THROW );
-                    xCurrentDestForm.set( xCloneable->createClone(), UNO_QUERY_THROW );
+                    // create and insert (into the destination) a copy of the form
+                    xCurrentDestForm.set(
+                        ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.form.component.DataForm" ) ),
+                        UNO_QUERY_THROW );
+                    ::comphelper::copyProperties( xCurrentSourceForm, xCurrentDestForm );
 
                     DBG_ASSERT(nCurrentDestIndex == xDestContainer->getCount(), "FmFormObj::ensureModelEnv : something went wrong with the numbers !");
                     xDestContainer->insertByIndex(nCurrentDestIndex, makeAny(xCurrentDestForm));
@@ -604,7 +600,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
             }
         }
 
-        // now xCurrentDestForm is a form aequivalent to xSourceForm (which means they have the same DSS and the same number
+        // now xCurrentDestForm is a form equivalent to xSourceForm (which means they have the same DSS and the same number
         // of left siblings with the same DSS, which counts for all their ancestors, too)
 
         // go down

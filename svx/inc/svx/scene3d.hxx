@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scene3d.hxx,v $
- * $Revision: 1.5.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #define _E3D_SCENE3D_HXX
 
 #include <svx/camera3d.hxx>
-#include <goodies/b3dtrans.hxx>
+#include <tools/b3dtrans.hxx>
 #include <tools/time.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/obj3d.hxx>
@@ -71,17 +68,14 @@ class Imp3DDepthRemapper;
 
 class SVX_DLLPUBLIC E3dScene : public E3dObject
 {
-    // BaseProperties section
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
+private:
     // to allow sdr::properties::E3dSceneProperties access to StructureChanged()
     friend class sdr::properties::E3dSceneProperties;
 
-    // #110094# DrawContact section
-private:
+protected:
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
-protected:
     // Transformationen
     B3dCamera                   aCameraSet;
     Camera3D                    aCamera;
@@ -110,6 +104,8 @@ public:
     E3dScene();
     E3dScene(E3dDefaultAttributes& rDefault);
     virtual ~E3dScene();
+
+    virtual void SetBoundRectDirty();
 
     // access to cleanup of depth mapper
     void Cleanup3DDepthMapper() { ImpCleanup3DDepthMapper(); }

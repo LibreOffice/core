@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewobjectcontactofgroup.hxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,9 +45,6 @@ namespace sdr
             // basic constructor.
             ViewObjectContactOfGroup(ObjectContact& rObjectContact, ViewContact& rViewContact);
             virtual ~ViewObjectContactOfGroup();
-
-            // test this VOC for visibility concerning model-view stuff like e.g. Layer
-            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const;
 
             // This method recursively paints the draw hierarchy.
             virtual drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const;

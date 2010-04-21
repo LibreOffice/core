@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wizard.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,7 @@
 #include <svtools/roadmapwizard.hxx>
 #include <vcl/window.hxx>
 #include <tools/resid.hxx>
+#include <com/sun/star/awt/XThrobber.hpp>
 
 namespace desktop
 {
@@ -64,6 +62,9 @@ public:
     virtual short Execute();
     virtual long PreNotify( NotifyEvent& rNEvt );
 
+    void EnableButtonsWhileMigration();
+    void DisableButtonsWhileMigration();
+
 private:
     sal_Bool m_bOverride;
     WizardState _currentState;
@@ -76,10 +77,12 @@ private:
     sal_Bool m_bLicenseWasAccepted;
     sal_Bool m_bAutomaticUpdChk;
     Link m_lnkCancel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XThrobber > m_xThrobber;
 
     rtl::OUString m_aLicensePath;
 
     void storeAcceptDate();
+    void setPatchLevel();
     void disableWizard();
     void enableQuickstart();
 

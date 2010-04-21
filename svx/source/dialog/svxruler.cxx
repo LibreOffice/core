@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svxruler.cxx,v $
- * $Revision: 1.39.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,9 +49,9 @@
 #include <svx/ruler.hxx>
 #include "rlrcitem.hxx"
 #include "rulritem.hxx"
-#include <svx/tstpitem.hxx>
-#include <svx/lrspitem.hxx>
-#include "protitem.hxx"
+#include <editeng/tstpitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include "editeng/protitem.hxx"
 #ifndef _APP_HXX
 #include <vcl/svapp.hxx>
 #endif

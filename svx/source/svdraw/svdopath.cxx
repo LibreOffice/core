@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdopath.cxx,v $
- * $Revision: 1.51.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,6 +76,7 @@ inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }
 #include <svx/sdr/attribute/sdrtextattribute.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <svx/sdr/attribute/sdrformtextattribute.hxx>
 
 using namespace sdr;
 
@@ -406,7 +404,7 @@ Point ImpPathCreateUser::CalcLine(const Point& aCsr, long nDirX, long nDirY, Sdr
         y2=BigMulDiv(x,nDirY,nDirX);
         long l1=Abs(x1)+Abs(y1);
         long l2=Abs(x2)+Abs(y2);
-        if (l1<=l2 !=(pView!=NULL && pView->IsBigOrtho())) {
+        if ((l1<=l2) != (pView!=NULL && pView->IsBigOrtho())) {
             x=x1; y=y1;
         } else {
             x=x2; y=y2;
@@ -2744,13 +2742,10 @@ SdrObject* SdrPathObj::RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index)
 SdrObject* SdrPathObj::DoConvertToPolyObj(BOOL bBezier) const
 {
     // #i89784# check for FontWork with activated HideContour
-    bool bHideContour(false);
-
-    {
-        drawinglayer::attribute::SdrTextAttribute* pText = drawinglayer::primitive2d::createNewSdrTextAttribute(GetObjectItemSet(), *getText(0));
-        bHideContour = pText && pText->getSdrFormTextAttribute() && pText->isHideContour();
-        delete pText;
-    }
+    const drawinglayer::attribute::SdrTextAttribute aText(
+        drawinglayer::primitive2d::createNewSdrTextAttribute(GetObjectItemSet(), *getText(0)));
+    const bool bHideContour(
+        !aText.isDefault() && !aText.getSdrFormTextAttribute().isDefault() && aText.isHideContour());
 
     SdrObject* pRet = bHideContour ?
         0 :

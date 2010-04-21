@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewobjectcontactofgroup.cxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,20 +53,6 @@ namespace sdr
 
         ViewObjectContactOfGroup::~ViewObjectContactOfGroup()
         {
-        }
-
-        bool ViewObjectContactOfGroup::isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const
-        {
-            const bool bHasChildren(0 != GetViewContact().GetObjectCount());
-
-            if(!bHasChildren && (GetObjectContact().isOutputToPrinter() || GetObjectContact().isOutputToRecordingMetaFile()))
-            {
-                // empty group uses fallback gray empty frame display. Do neither print nor PDF export it
-                return false;
-            }
-
-            // call parent
-            return ViewObjectContactOfSdrObj::isPrimitiveVisible(rDisplayInfo);
         }
 
         drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfGroup::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const

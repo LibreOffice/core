@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: sdrdecompositiontools3d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.7 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:21 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -39,14 +31,11 @@
 #include <drawinglayer/primitive3d/sdrdecompositiontools3d.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
-#include <drawinglayer/attribute/sdrattribute.hxx>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
-#include <drawinglayer/attribute/sdrattribute.hxx>
 #include <vcl/vclenum.hxx>
-#include <drawinglayer/attribute/fillattribute.hxx>
 #include <drawinglayer/attribute/fillbitmapattribute.hxx>
 #include <drawinglayer/attribute/sdrfillbitmapattribute.hxx>
 #include <vcl/bmpacc.hxx>
@@ -55,8 +44,12 @@
 #include <drawinglayer/primitive3d/modifiedcolorprimitive3d.hxx>
 #include <drawinglayer/primitive3d/hatchtextureprimitive3d.hxx>
 #include <drawinglayer/primitive3d/shadowprimitive3d.hxx>
-#include <drawinglayer/attribute/sdrattribute3d.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <drawinglayer/attribute/sdrlineattribute.hxx>
+#include <drawinglayer/attribute/sdrobjectattribute3d.hxx>
+#include <drawinglayer/attribute/sdrfillattribute.hxx>
+#include <drawinglayer/attribute/sdrshadowattribute.hxx>
+#include <drawinglayer/primitive3d/hiddengeometryprimitive3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -175,8 +168,8 @@ namespace drawinglayer
 
             if(0.0 != rLine.getTransparence())
             {
-                // create UnifiedAlphaTexturePrimitive3D, add created primitives and exchange
-                const Primitive3DReference xRef(new UnifiedAlphaTexturePrimitive3D(rLine.getTransparence(), aRetval));
+                // create UnifiedTransparenceTexturePrimitive3D, add created primitives and exchange
+                const Primitive3DReference xRef(new UnifiedTransparenceTexturePrimitive3D(rLine.getTransparence(), aRetval));
                 aRetval = Primitive3DSequence(&xRef, 1L);
             }
 
@@ -189,7 +182,7 @@ namespace drawinglayer
             const basegfx::B2DVector& rTextureSize,
             const attribute::Sdr3DObjectAttribute& aSdr3DObjectAttribute,
             const attribute::SdrFillAttribute& rFill,
-            const attribute::FillGradientAttribute* pFillGradient)
+            const attribute::FillGradientAttribute& rFillGradient)
         {
             Primitive3DSequence aRetval;
 
@@ -217,27 +210,45 @@ namespace drawinglayer
                 }
 
                 // look for and evtl. build texture sub-group primitive
-                if(rFill.isGradient() || rFill.isHatch() || rFill.isBitmap())
+                if(!rFill.getGradient().isDefault()
+                    || !rFill.getHatch().isDefault()
+                    || !rFill.getBitmap().isDefault())
                 {
                     bool bModulate(::com::sun::star::drawing::TextureMode_MODULATE == aSdr3DObjectAttribute.getTextureMode());
                     bool bFilter(aSdr3DObjectAttribute.getTextureFilter());
-                    BasePrimitive3D* pNewTexturePrimitive3D = 0L;
+                    BasePrimitive3D* pNewTexturePrimitive3D = 0;
 
-                    if(rFill.isGradient())
+                    if(!rFill.getGradient().isDefault())
                     {
                         // create gradientTexture3D with sublist, add to local aRetval
-                        pNewTexturePrimitive3D = new GradientTexturePrimitive3D(*rFill.getGradient(), aRetval, rTextureSize, bModulate, bFilter);
+                        pNewTexturePrimitive3D = new GradientTexturePrimitive3D(
+                            rFill.getGradient(),
+                            aRetval,
+                            rTextureSize,
+                            bModulate,
+                            bFilter);
                     }
-                    else if(rFill.isHatch())
+                    else if(!rFill.getHatch().isDefault())
                     {
                         // create hatchTexture3D with sublist, add to local aRetval
-                        pNewTexturePrimitive3D = new HatchTexturePrimitive3D(*rFill.getHatch(), aRetval, rTextureSize, bModulate, bFilter);
+                        pNewTexturePrimitive3D = new HatchTexturePrimitive3D(
+                            rFill.getHatch(),
+                            aRetval,
+                            rTextureSize,
+                            bModulate,
+                            bFilter);
                     }
-                    else // if(rFill.isBitmap())
+                    else // if(!rFill.getBitmap().isDefault())
                     {
                         // create bitmapTexture3D with sublist, add to local aRetval
                         basegfx::B2DRange aTexRange(0.0, 0.0, rTextureSize.getX(), rTextureSize.getY());
-                        pNewTexturePrimitive3D = new BitmapTexturePrimitive3D(rFill.getBitmap()->getFillBitmapAttribute(aTexRange), aRetval, rTextureSize, bModulate, bFilter);
+
+                        pNewTexturePrimitive3D = new BitmapTexturePrimitive3D(
+                            rFill.getBitmap().getFillBitmapAttribute(aTexRange),
+                            aRetval,
+                            rTextureSize,
+                            bModulate,
+                            bFilter);
                     }
 
                     // exchange aRetval content with texture group
@@ -255,14 +266,14 @@ namespace drawinglayer
 
                 if(0.0 != rFill.getTransparence())
                 {
-                    // create UnifiedAlphaTexturePrimitive3D with sublist and exchange
-                    const Primitive3DReference xRef(new UnifiedAlphaTexturePrimitive3D(rFill.getTransparence(), aRetval));
+                    // create UnifiedTransparenceTexturePrimitive3D with sublist and exchange
+                    const Primitive3DReference xRef(new UnifiedTransparenceTexturePrimitive3D(rFill.getTransparence(), aRetval));
                     aRetval = Primitive3DSequence(&xRef, 1L);
                 }
-                else if(pFillGradient)
+                else if(!rFillGradient.isDefault())
                 {
-                    // create AlphaTexturePrimitive3D with sublist and exchange
-                    const Primitive3DReference xRef(new AlphaTexturePrimitive3D(*pFillGradient, aRetval, rTextureSize));
+                    // create TransparenceTexturePrimitive3D with sublist and exchange
+                    const Primitive3DReference xRef(new TransparenceTexturePrimitive3D(rFillGradient, aRetval, rTextureSize));
                     aRetval = Primitive3DSequence(&xRef, 1L);
                 }
             }
@@ -292,6 +303,35 @@ namespace drawinglayer
                 return Primitive3DSequence();
             }
         }
+
+        Primitive3DSequence createHiddenGeometryPrimitives3D(
+            const ::std::vector< basegfx::B3DPolyPolygon >& r3DPolyPolygonVector,
+            const basegfx::B3DHomMatrix& rObjectTransform,
+            const basegfx::B2DVector& rTextureSize,
+            const attribute::Sdr3DObjectAttribute& aSdr3DObjectAttribute)
+        {
+            // create hidden sub-geometry which can be used for HitTest
+            // and BoundRect calculations, but will not be visualized
+            const attribute::SdrFillAttribute aSimplifiedFillAttribute(
+                0.0,
+                basegfx::BColor(),
+                attribute::FillGradientAttribute(),
+                attribute::FillHatchAttribute(),
+                attribute::SdrFillBitmapAttribute());
+
+            const Primitive3DReference aHidden(
+                new HiddenGeometryPrimitive3D(
+                    create3DPolyPolygonFillPrimitives(
+                        r3DPolyPolygonVector,
+                        rObjectTransform,
+                        rTextureSize,
+                        aSdr3DObjectAttribute,
+                        aSimplifiedFillAttribute,
+                        attribute::FillGradientAttribute())));
+
+            return Primitive3DSequence(&aHidden, 1);
+        }
+
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 

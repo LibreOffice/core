@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: zbufferprocessor3d.hxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.4 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:30:18 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -44,26 +36,38 @@ namespace drawinglayer
 {
     namespace processor3d
     {
+        /** CutFindProcessor class
+
+            This processor extracts all cuts of 3D plane geometries in the feeded primitives
+            with the given cut vector, based on the ViewInformation3D given.
+         */
         class CutFindProcessor : public BaseProcessor3D
         {
         private:
-            // the start and stop point for the cut vector
+            /// the start and stop point for the cut vector
             basegfx::B3DPoint                       maFront;
             basegfx::B3DPoint                       maBack;
 
-            // the found cut points
+            /// the found cut points
             ::std::vector< basegfx::B3DPoint >      maResult;
 
-            // #i102956# the transformation change from TransformPrimitive3D processings
-            // needs to be remembered to be able to transform found cuts to the
-            // basic coordinate system the processor starts with
+            /*  #i102956# the transformation change from TransformPrimitive3D processings
+                needs to be remembered to be able to transform found cuts to the
+                basic coordinate system the processor starts with
+             */
             basegfx::B3DHomMatrix                   maCombinedTransform;
 
-            // bitfield
+            /// bitfield
             bool                                    mbAnyHit : 1;
 
-            // as tooling, the process() implementation takes over API handling and calls this
-            // virtual render method when the primitive implementation is BasePrimitive3D-based.
+            /*  this flag decides if primitives which are invisible will be taken into account for
+                HitTesting or not.
+             */
+            bool                                    mbUseInvisiblePrimitiveContent : 1;
+
+            /*  as tooling, the process() implementation takes over API handling and calls this
+                virtual render method when the primitive implementation is BasePrimitive3D-based.
+             */
             virtual void processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate);
 
         public:
@@ -72,9 +76,16 @@ namespace drawinglayer
                 const basegfx::B3DPoint& rBack,
                 bool bAnyHit);
 
-            // data access
+            /// data write access
+            void setUseInvisiblePrimitiveContent(bool bNew)
+            {
+                if((bool)mbUseInvisiblePrimitiveContent != bNew) mbUseInvisiblePrimitiveContent = bNew;
+            }
+
+            /// data read access
             const ::std::vector< basegfx::B3DPoint >& getCutPoints() const { return maResult; }
             bool getAnyHit() const { return mbAnyHit; }
+            bool getUseInvisiblePrimitiveContent() const { return mbUseInvisiblePrimitiveContent;}
         };
     } // end of namespace processor3d
 } // end of namespace drawinglayer

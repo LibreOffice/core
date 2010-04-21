@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: extrud3d.hxx,v $
- * $Revision: 1.4.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,11 +40,6 @@
 class SVX_DLLPUBLIC E3dExtrudeObj : public E3dCompoundObject
 {
 private:
-    // #110094# DrawContact section
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
     // to allow sdr::properties::E3dExtrudeProperties access to SetGeometryValid()
     friend class sdr::properties::E3dExtrudeProperties;
 
@@ -55,6 +47,8 @@ private:
     basegfx::B2DPolyPolygon         maExtrudePolygon;
 
 protected:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
 
 public:

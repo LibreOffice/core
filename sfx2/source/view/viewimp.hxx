@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewimp.hxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,12 +84,10 @@ struct SfxViewShell_Impl
     Size                        aOptimalSize;
     Size                        aMargin;
     USHORT                      nPrinterLocks;
-    BOOL                        bUseObjectSize;
     BOOL                        bCanPrint;
     BOOL                        bHasPrintOptions;
     BOOL                        bPlugInsActive;
     BOOL                        bIsShowView;
-    BOOL                        bFrameSetImpl;
     BOOL                        bOwnsMenu;
     BOOL                        bGotOwnerShip;
     BOOL                        bGotFrameOwnerShip;
