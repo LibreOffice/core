@@ -167,34 +167,53 @@ public class _XAccessibleComponent extends MultiMethodTest {
         boolean locRes = true;
 
         for (int x = -1; x <= bounds.Width; x++) {
-            locRes &= !oObj.containsPoint(new Point(x, -1));
-            locRes &= !oObj.containsPoint(
-                               new Point(x, bounds.Height + bounds.Y));
+            if (oObj.containsPoint(new Point(x, -1))) {
+                log.println(
+                    "Outer upper and lower bounds CONTAIN some component point"
+                    + " (" + x + ", -1) - FAILED");
+                locRes = false;
+                break;
+            }
+            if (oObj.containsPoint(new Point(x, bounds.Height + bounds.Y))) {
+                log.println(
+                    "Outer upper and lower bounds CONTAIN some component point"
+                    + " (" + x + ", " + bounds.Height + bounds.Y
+                    + ") - FAILED");
+                locRes = false;
+                break;
+            }
         }
 
         if (locRes) {
             log.println("Outer upper and lower bounds contain no component " +
                         "points - OK");
         } else {
-            log.println("Outer upper and lower bounds CONTAIN some component " +
-                        "points - FAILED");
             result = false;
         }
 
         locRes = true;
 
         for (int y = -1; y <= bounds.Height; y++) {
-            locRes &= !oObj.containsPoint(new Point(-1, y));
-            locRes &= !oObj.containsPoint(
-                               new Point(bounds.X + bounds.Width, y));
+            if (oObj.containsPoint(new Point(-1, y))) {
+                log.println(
+                    "Outer left and right bounds CONTAIN some component point"
+                    + " (-1, " + y + ") - FAILED");
+                locRes = false;
+                break;
+            }
+            if (oObj.containsPoint(new Point(bounds.X + bounds.Width, y))) {
+                log.println(
+                    "Outer left and right bounds CONTAIN some component point"
+                    + " (" + bounds.X + bounds.Width + ", " + y + ") - FAILED");
+                locRes = false;
+                break;
+            }
         }
 
         if (locRes) {
             log.println("Outer left and right bounds contain no component " +
                         "points - OK");
         } else {
-            log.println("Outer left and right bounds CONTAIN some component " +
-                        "points - FAILED");
             result = false;
         }
 
