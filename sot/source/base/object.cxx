@@ -33,7 +33,7 @@
 #include <tools/debug.hxx>
 #include <sot/object.hxx>
 #include <sot/factory.hxx>
-#include <agg.hxx>
+#include <sot/agg.hxx>
 
 /************** class SvAggregateMemberList *****************************/
 /************************************************************************/

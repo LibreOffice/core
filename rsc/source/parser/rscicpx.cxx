@@ -40,7 +40,7 @@
 #include <rscclass.hxx>
 #include <rsccont.hxx>
 #include <rscdb.hxx>
-#include <rscsfx.hxx>
+#include <rsc/rscsfx.hxx>
 
 #include "rsclex.hxx"
 #include <yyrscyacc.hxx>
