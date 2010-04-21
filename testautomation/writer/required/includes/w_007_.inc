@@ -125,7 +125,7 @@ testcase tToolsSpellcheck
                 if Active.exists then
                     if Active.GetRT = 304 then Active.Ok
                     Warnlog "Dialog 'Spellcheck' not up!"
-                    Call hCloseDocument
+                    hFileCloseAll()
                     goto endsub
                 end if
             catch
@@ -204,9 +204,8 @@ testcase tToolsSpellcheck
     Spellcheck.Close
     wait 500
     PrintLog "Close active documents"
-    Do Until GetDocumentCount = 0
-        Call hCloseDocument
-    Loop
+    hFileCloseAll()
+
 endcase
 
 ' -------------------------------------------
@@ -299,9 +298,8 @@ testcase tToolsThesaurus
     printlog " Close 'Thesaurus' dialog"
     Thesaurus.Cancel
     PrintLog "Close active documents"
-    Do Until GetDocumentCount = 0
-        Call hCloseDocument
-    Loop
+    hFileCloseAll()
+    
 endcase
 
 ' -------------------------------------------
