@@ -394,12 +394,16 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
         }
         // case C1
         // - Footnote portions with fake line start (i.e., not at beginning of line)
-        //   should keep together with the text portion.
+        //   should keep together with the text portion. (Note: no keep together
+        //   with only footnote portions.
         // - TabPortions not at beginning of line should keep together with the
         //   text portion, if they are not followed by a blank
         //   (work around different definition of tab stop character - breaking or
         //   non breaking character - in compatibility mode)
-        else if ( ( IsFtnPortion() && rInf.IsFakeLineStart() ) ||
+        else if ( ( IsFtnPortion() && rInf.IsFakeLineStart() &&
+                    // --> OD 2010-01-29 #b6921213#
+                    rInf.IsOtherThanFtnInside() ) ||
+                    // <--
                   ( rInf.GetLast() &&
                     rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) &&
                     rInf.GetLast()->InTabGrp() &&
