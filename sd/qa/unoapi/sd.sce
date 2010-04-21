@@ -4,7 +4,7 @@
 #i111042# -o sd.DrawController_DrawView
 #i111042# -o sd.DrawController_HandoutView
 #i111042# -o sd.DrawController_NotesView
--o sd.DrawController_OutlineView
+#i111043# -o sd.DrawController_OutlineView
 #i111042# -o sd.DrawController_PresentationView
 -o sd.SdDocLinkTargets
 -o sd.SdDrawPage
