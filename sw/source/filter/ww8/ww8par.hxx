@@ -1112,6 +1112,8 @@ private:
     void Read_HdFtTextAsHackedFrame(long nStart, long nLen,
         SwFrmFmt &rHdFtFmt, sal_uInt16 nPageWidth);
 
+    bool isValid_HdFt_CP(WW8_CP nHeaderCP) const;
+
     bool HasOwnHeaderFooter(BYTE nWhichItems, BYTE grpfIhdt, int nSect);
 
     void HandleLineNumbering(const wwSection &rSection);

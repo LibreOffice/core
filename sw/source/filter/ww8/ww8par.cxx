@@ -1681,6 +1681,13 @@ void SwWW8ImplReader::Read_HdFtText(long nStart, long nLen, SwFrmFmt* pHdFtFmt)
     *pPaM->GetPoint() = aTmpPos;
 }
 
+
+bool SwWW8ImplReader::isValid_HdFt_CP(WW8_CP nHeaderCP) const
+{
+    //each CP of Plcfhdd MUST be less than FibRgLw97.ccpHdd
+    return (nHeaderCP < pWwFib->ccpHdr) ? true : false;
+}
+
 bool SwWW8ImplReader::HasOwnHeaderFooter(BYTE nWhichItems, BYTE grpfIhdt,
     int nSect)
 {
@@ -1700,7 +1707,7 @@ bool SwWW8ImplReader::HasOwnHeaderFooter(BYTE nWhichItems, BYTE grpfIhdt,
                 else
                 {
                     pHdFt->GetTextPosExact( static_cast< short >(nNumber + (nSect+1)*6), start, nLen);
-                    bOk = ( 2 <= nLen );
+                    bOk = ( 2 <= nLen ) && isValid_HdFt_CP(start);
                 }
 
                 if (bOk)
@@ -1752,7 +1759,7 @@ void SwWW8ImplReader::Read_HdFt(bool bIsTitle, int nSect,
                 else
                 {
                     pHdFt->GetTextPosExact( static_cast< short >(nNumber + (nSect+1)*6), start, nLen);
-                    bOk = ( 2 <= nLen );
+                    bOk = ( 2 <= nLen ) && isValid_HdFt_CP(start);
                 }
 
                 bool bUseLeft
