@@ -120,7 +120,7 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/zcodec/zcodec \
 ))
 
-ifeq ($(GUI),unx)
+ifeq ($(GUI),UNX)
 $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/unx/source/dll/toolsdll \
 ))
