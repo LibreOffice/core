@@ -113,7 +113,7 @@ BOOL ScTable::TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCSIZE nSize )
 
 void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize )
 {
-    nRecalcLvl++;
+    IncRecalcLevel();
     InitializeNoteCaptions();
     if (nStartCol==0 && nEndCol==MAXCOL)
     {
@@ -132,15 +132,14 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
 
     for (SCCOL j=nStartCol; j<=nEndCol; j++)
         aCol[j].InsertRow( nStartRow, nSize );
-    if( !--nRecalcLvl )
-        SetDrawPageSize();
+    DecRecalcLevel( false );
 }
 
 
 void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize,
                             BOOL* pUndoOutline )
 {
-    nRecalcLvl++;
+    IncRecalcLevel();
     InitializeNoteCaptions();
     if (nStartCol==0 && nEndCol==MAXCOL)
     {
@@ -160,8 +159,7 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         for (SCCOL j=nStartCol; j<=nEndCol; j++)
             aCol[j].DeleteRow( nStartRow, nSize );
     }
-    if( !--nRecalcLvl )
-        SetDrawPageSize();
+    DecRecalcLevel();
 }
 
 
@@ -184,7 +182,7 @@ BOOL ScTable::TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize )
 
 void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize )
 {
-    nRecalcLvl++;
+    IncRecalcLevel();
     InitializeNoteCaptions();
     if (nStartRow==0 && nEndRow==MAXROW)
     {
@@ -227,15 +225,14 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
             aCol[nStartCol+i].ClearItems( nStartRow, nEndRow, nWhichArray );
         }
     }
-    if( !--nRecalcLvl )
-        SetDrawPageSize();
+    DecRecalcLevel();
 }
 
 
 void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize,
                             BOOL* pUndoOutline )
 {
-    nRecalcLvl++;
+    IncRecalcLevel();
     InitializeNoteCaptions();
     if (nStartRow==0 && nEndRow==MAXROW)
     {
@@ -270,8 +267,7 @@ void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
         for (SCSIZE i=0; static_cast<SCCOL>(i+nSize)+nStartCol <= MAXCOL; i++)
             aCol[nStartCol + nSize + i].MoveTo(nStartRow, nEndRow, aCol[nStartCol + i]);
     }
-    if( !--nRecalcLvl )
-        SetDrawPageSize();
+    DecRecalcLevel();
 }
 
 
@@ -281,7 +277,7 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USH
     if (nRow2 > MAXROW) nRow2 = MAXROW;
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
-//      nRecalcLvl++;
+//      IncRecalcLevel();
 
         {   // scope for bulk broadcast
             ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM());
@@ -300,9 +296,7 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USH
             ApplyPatternArea( nCol1, nRow1, nCol2, nRow2, aPattern );
         }
 
-/*      if( !--nRecalcLvl )
-            SetDrawPageSize();
-*/
+//      DecRecalcLevel();
     }
 }
 
@@ -389,7 +383,7 @@ void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     if (nRow2 > MAXROW) nRow2 = MAXROW;
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
-        nRecalcLvl++;
+        IncRecalcLevel();
         for ( i = nCol1; i <= nCol2; i++)
             aCol[i].CopyFromClip(nRow1, nRow2, nDy, nInsFlag, bAsLink, bSkipAttrForEmpty, pTable->aCol[i - nDx]);
 
@@ -424,8 +418,7 @@ void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 ApplyPatternArea( nCol1, nRow1, nCol2, nRow2, aPattern );
             }
         }
-        if( !--nRecalcLvl )
-            SetDrawPageSize();
+        DecRecalcLevel();
     }
 }
 
@@ -691,7 +684,7 @@ void ScTable::UndoToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         BOOL bHeight = (nCol1==0 && nCol2==MAXCOL && pRowHeight && pDestTab->pRowHeight);
 
         if (bWidth||bHeight)
-            nRecalcLvl++;
+            IncRecalcLevel();
 
         for ( SCCOL i = 0; i <= MAXCOL; i++)
         {
@@ -709,8 +702,7 @@ void ScTable::UndoToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     pDestTab->pColWidth[i] = pColWidth[i];
             if (bHeight)
                 pDestTab->pRowHeight->CopyFrom( *pRowHeight, nRow1, nRow2);
-            if( !--nRecalcLvl )
-                SetDrawPageSize();
+            DecRecalcLevel();
         }
     }
 }
@@ -1960,14 +1952,13 @@ void ScTable::SetColWidth( SCCOL nCol, USHORT nNewWidth )
 
         if ( nNewWidth != pColWidth[nCol] )
         {
-            nRecalcLvl++;
+            IncRecalcLevel();
             InitializeNoteCaptions();
             ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
             if (pDrawLayer)
                 pDrawLayer->WidthChanged( nTab, nCol, ((long) nNewWidth) - (long) pColWidth[nCol] );
             pColWidth[nCol] = nNewWidth;
-            if( !--nRecalcLvl )
-                SetDrawPageSize();
+            DecRecalcLevel();
         }
     }
     else
@@ -1990,14 +1981,13 @@ void ScTable::SetRowHeight( SCROW nRow, USHORT nNewHeight )
         USHORT nOldHeight = pRowHeight->GetValue(nRow);
         if ( nNewHeight != nOldHeight )
         {
-            nRecalcLvl++;
+            IncRecalcLevel();
             InitializeNoteCaptions();
             ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
             if (pDrawLayer)
                 pDrawLayer->HeightChanged( nTab, nRow, ((long) nNewHeight) - (long) nOldHeight );
             pRowHeight->SetValue( nRow, nNewHeight);
-            if( !--nRecalcLvl )
-                SetDrawPageSize();
+            DecRecalcLevel();
         }
     }
     else
@@ -2013,7 +2003,7 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
     BOOL bChanged = FALSE;
     if (VALIDROW(nStartRow) && VALIDROW(nEndRow) && pRowHeight)
     {
-        nRecalcLvl++;
+        IncRecalcLevel();
         InitializeNoteCaptions();
         if (!nNewHeight)
         {
@@ -2096,8 +2086,7 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
             } while (!bChanged && aIter.NextRange());
             pRowHeight->SetValue( nStartRow, nEndRow, nNewHeight);
         }
-        if( !--nRecalcLvl )
-            SetDrawPageSize();
+        DecRecalcLevel();
     }
     else
     {
@@ -2280,7 +2269,7 @@ void ScTable::ShowCol(SCCOL nCol, BOOL bShow)
         BOOL bWasVis = ( pColFlags[nCol] & CR_HIDDEN ) == 0;
         if (bWasVis != bShow)
         {
-            nRecalcLvl++;
+            IncRecalcLevel();
             InitializeNoteCaptions();
             ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
             if (pDrawLayer)
@@ -2295,8 +2284,7 @@ void ScTable::ShowCol(SCCOL nCol, BOOL bShow)
                 pColFlags[nCol] &= ~CR_HIDDEN;
             else
                 pColFlags[nCol] |= CR_HIDDEN;
-            if( !--nRecalcLvl )
-                SetDrawPageSize();
+            DecRecalcLevel();
 
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
             if ( pCharts )
@@ -2318,7 +2306,7 @@ void ScTable::ShowRow(SCROW nRow, BOOL bShow)
         BOOL bWasVis = ( nFlags & CR_HIDDEN ) == 0;
         if (bWasVis != bShow)
         {
-            nRecalcLvl++;
+            IncRecalcLevel();
             InitializeNoteCaptions();
             ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
             if (pDrawLayer)
@@ -2333,8 +2321,7 @@ void ScTable::ShowRow(SCROW nRow, BOOL bShow)
                 pRowFlags->SetValue( nRow, nFlags & ~(CR_HIDDEN | CR_FILTERED));
             else
                 pRowFlags->SetValue( nRow, nFlags | CR_HIDDEN);
-            if( !--nRecalcLvl )
-                SetDrawPageSize();
+            DecRecalcLevel();
 
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
             if ( pCharts )
@@ -2354,7 +2341,7 @@ void ScTable::DBShowRow(SCROW nRow, BOOL bShow)
     {
         BYTE nFlags = pRowFlags->GetValue(nRow);
         BOOL bWasVis = ( nFlags & CR_HIDDEN ) == 0;
-        nRecalcLvl++;
+        IncRecalcLevel();
         InitializeNoteCaptions();
         if (bWasVis != bShow)
         {
@@ -2373,8 +2360,7 @@ void ScTable::DBShowRow(SCROW nRow, BOOL bShow)
             pRowFlags->SetValue( nRow, nFlags & ~(CR_HIDDEN | CR_FILTERED));
         else
             pRowFlags->SetValue( nRow, nFlags | (CR_HIDDEN | CR_FILTERED));
-        if( !--nRecalcLvl )
-            SetDrawPageSize();
+        DecRecalcLevel();
 
         if (bWasVis != bShow)
         {
@@ -2396,7 +2382,7 @@ void ScTable::DBShowRow(SCROW nRow, BOOL bShow)
 void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, BOOL bShow)
 {
     SCROW nStartRow = nRow1;
-    nRecalcLvl++;
+    IncRecalcLevel();
     InitializeNoteCaptions();
     while (nStartRow <= nRow2)
     {
@@ -2441,15 +2427,14 @@ void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, BOOL bShow)
     if (pOutlineTable)
         UpdateOutlineRow( nRow1, nRow2, bShow );
 
-    if( !--nRecalcLvl )
-        SetDrawPageSize();
+    DecRecalcLevel();
 }
 
 
 void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, BOOL bShow)
 {
     SCROW nStartRow = nRow1;
-    nRecalcLvl++;
+    IncRecalcLevel();
     InitializeNoteCaptions();
     while (nStartRow <= nRow2)
     {
@@ -2487,8 +2472,7 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, BOOL bShow)
 
         nStartRow = nEndRow + 1;
     }
-    if( !--nRecalcLvl )
-        SetDrawPageSize();
+    DecRecalcLevel();
 }
 
 
@@ -2854,7 +2838,7 @@ void ScTable::GetUpperCellString(SCCOL nCol, SCROW nRow, String& rStr)
 
 // Berechnen der Groesse der Tabelle und setzen der Groesse an der DrawPage
 
-void ScTable::SetDrawPageSize(bool bResetStreamValid)
+void ScTable::SetDrawPageSize(bool bResetStreamValid, bool bUpdateNoteCaptionPos)
 {
     ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
     if( pDrawLayer )
@@ -2867,7 +2851,7 @@ void ScTable::SetDrawPageSize(bool bResetStreamValid)
         if ( IsLayoutRTL() )        // IsNegativePage
             x = -x;
 
-        pDrawLayer->SetPageSize( static_cast<sal_uInt16>(nTab), Size( x, y ) );
+        pDrawLayer->SetPageSize( static_cast<sal_uInt16>(nTab), Size( x, y ), bUpdateNoteCaptionPos );
     }
 
     // #i102616# actions that modify the draw page size count as sheet modification
