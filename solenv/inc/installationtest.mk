@@ -35,8 +35,8 @@ my_file = file://
 .IF "$(UPDATER)" == "YES" && "$(SHIPDRIVE)" != "" && \
     "$(CWS_WORK_STAMP)" == "" && "$(SOLARENV:s/$(SOL_TMP)//" == "$(SOLARENV)"
 my_instsets = $(shell ls -dt \
-    $(SHIPDRIVE)/$(INPATH)/OpenOffice/archive/$(WORK_STAMP)_$(UPDMINOR)_native_packed-*_$(defaultlangiso).$(BUILD))
-installationtest_instset = $(installationtest_instsets:1)
+    $(SHIPDRIVE)/$(INPATH)/OpenOffice/archive/$(WORK_STAMP)_$(LAST_MINOR)_native_packed-*_$(defaultlangiso).$(BUILD))
+installationtest_instset = $(my_instsets:1)
 .ELSE
 installationtest_instset = \
     $(SOLARSRC)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)
@@ -71,12 +71,13 @@ my_javaenv = \
 # on other platforms, a single installation to solver is created in
 # smoketestoo_native:
 .IF "$(OS)" == "WNT"
-$(MISC)/$(TARGET)/installation.flag : \
-        $(shell ls $(installationtest_instset)/OOo_*_install.zip)
+$(MISC)/$(TARGET)/installation.flag : $(shell \
+        ls $(installationtest_instset)/OOo_*_install_$(defaultlangiso).zip)
     $(MKDIRHIER) $(@:d)
     my_tmp=$$(cygpath -m $$(mktemp -dt ooosmoke.XXXXXX)) && \
-    unzip $(installationtest_instset)/OOo_*_install.zip -d "$$my_tmp" && \
-    mv "$$my_tmp"/OOo_*_install "$$my_tmp"/opt && \
+    unzip $(installationtest_instset)/OOo_*_install_$(defaultlangiso).zip \
+        -d "$$my_tmp" && \
+    mv "$$my_tmp"/OOo_*_install_$(defaultlangiso) "$$my_tmp"/opt && \
     echo "$$my_tmp" > $@
 .END
 

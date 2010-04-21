@@ -136,7 +136,9 @@ BEGIN
     $issolarispkgbuild = 0;
     $issolarissparcbuild = 0;
     $issolarisx86build = 0;
+    $isfreebsdbuild = 0;
     $isfreebsdpkgbuild = 0;
+    $ismacbuild = 0;
     $ismacdmgbuild = 0;
     $unpackpath = "";
     $idttemplatepath = "";
@@ -268,7 +270,7 @@ BEGIN
     $isopensourceproduct = 1;
     $manufacturer = "";
     $longmanufacturer = "";
-    $sundirname = "";
+    $sundirname = "Oracle";
     $codefilename = "codes.txt";
     $componentfilename = "components.txt";
     $productcode = "";
