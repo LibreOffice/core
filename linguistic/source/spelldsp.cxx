@@ -43,9 +43,9 @@
 #include <vector>
 
 #include "spelldsp.hxx"
-#include "spelldta.hxx"
+#include "linguistic/spelldta.hxx"
 #include "lngsvcmgr.hxx"
-#include "lngprops.hxx"
+#include "linguistic/lngprops.hxx"
 
 
 using namespace utl;

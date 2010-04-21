@@ -29,7 +29,7 @@
 #define __FRAMEWORK_CLASSES_FWKRESID_HXX_
 
 #include <tools/resid.hxx>
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 
 namespace framework
 {

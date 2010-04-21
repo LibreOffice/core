@@ -72,7 +72,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/svxitems.hrc>
 #include "helpid.hrc"
-#include "htmlmode.hxx"
+#include "svx/htmlmode.hxx"
 #include <svx/xtable.hxx>
 #include "editeng/fontitem.hxx"
 #include <editeng/fhgtitem.hxx>
@@ -81,9 +81,9 @@
 #include <editeng/colritem.hxx>
 #include "editeng/flstitem.hxx"
 #include "editeng/bolnitem.hxx"
-#include "drawitem.hxx"
+#include "svx/drawitem.hxx"
 #include <svx/tbcontrl.hxx>
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 #include <svx/dialmgr.hxx>
 #include "colorwindow.hxx"
 #include <memory>

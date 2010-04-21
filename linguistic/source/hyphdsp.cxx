@@ -42,8 +42,8 @@
 #include <osl/mutex.hxx>
 
 #include "hyphdsp.hxx"
-#include "hyphdta.hxx"
-#include "lngprops.hxx"
+#include "linguistic/hyphdta.hxx"
+#include "linguistic/lngprops.hxx"
 #include "lngsvcmgr.hxx"
 
 

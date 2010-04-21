@@ -28,9 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "ActionDescriptionProvider.hxx"
-#include "svdglob.hxx"
-#include "svdstr.hrc"
+#include "svx/ActionDescriptionProvider.hxx"
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
 
 ::rtl::OUString ActionDescriptionProvider::createDescription( ActionType eActionType
                         , const ::rtl::OUString& rObjectName )

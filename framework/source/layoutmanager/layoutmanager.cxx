@@ -40,9 +40,9 @@
 #include <threadhelp/resetableguard.hxx>
 #include <services.h>
 
-#include <classes/sfxhelperfunctions.hxx>
+#include <framework/sfxhelperfunctions.hxx>
 #include <uielement/menubarwrapper.hxx>
-#include <classes/addonsoptions.hxx>
+#include <framework/addonsoptions.hxx>
 #include <uiconfiguration/windowstateconfiguration.hxx>
 #include <classes/fwkresid.hxx>
 

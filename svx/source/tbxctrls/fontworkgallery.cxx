@@ -32,12 +32,12 @@
 #include <svl/itempool.hxx>
 #include <svx/fmmodel.hxx>
 #include <sfx2/dispatch.hxx>
-#include <dlgutil.hxx>
+#include <svx/dlgutil.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
-#include "gallery.hxx"
+#include "svx/gallery.hxx"
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
@@ -46,7 +46,7 @@
 #include <editeng/frmdiritem.hxx>
 #include "toolbarmenu.hxx"
 
-#include "fontworkgallery.hxx"
+#include "svx/fontworkgallery.hxx"
 #include "fontworkgallery.hrc"
 
 #include <algorithm>

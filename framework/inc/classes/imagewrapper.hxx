@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <vcl/image.hxx>
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 
 namespace framework
 {

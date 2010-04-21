@@ -42,7 +42,7 @@
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 #include <tools/table.hxx>
 
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "sprophelp.hxx"
 
 using namespace ::rtl;

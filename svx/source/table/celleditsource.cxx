@@ -55,7 +55,7 @@
 #include "svx/svdpage.hxx"
 #include "editeng/editeng.hxx"
 #include "editeng/unotext.hxx"
-#include "sdrpaintwindow.hxx"
+#include "svx/sdrpaintwindow.hxx"
 
 //------------------------------------------------------------------------
 

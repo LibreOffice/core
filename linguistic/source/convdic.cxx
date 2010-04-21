@@ -66,7 +66,7 @@
 
 #include "convdic.hxx"
 #include "convdicxml.hxx"
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "defs.hxx"
 
 using namespace std;

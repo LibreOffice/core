@@ -65,7 +65,7 @@
 #include <svl/svstdarr.hxx>
 #include <sfx2/mnuitem.hxx>
 #include "svx/fmtools.hxx"
-#include "fmsrccfg.hxx"
+#include "svx/fmsrccfg.hxx"
 #include <osl/mutex.hxx>
 #include <vos/thread.hxx>
 #include <tools/debug.hxx>

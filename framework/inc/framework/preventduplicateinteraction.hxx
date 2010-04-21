@@ -28,7 +28,7 @@
 #ifndef __FRAMEWORK_INTERACTION_PREVENTDUPLICATEINTERACTION_HXX_
 #define __FRAMEWORK_INTERACTION_PREVENTDUPLICATEINTERACTION_HXX_
 
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________

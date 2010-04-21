@@ -32,7 +32,7 @@
 #include <svl/whiter.hxx>
 #include <svx/svddef.hxx>
 #include <svx/scene3d.hxx>
-#include <svditer.hxx>
+#include <svx/svditer.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

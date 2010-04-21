@@ -36,7 +36,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xflgrit.hxx>
-#include "unofill.hxx"
+#include "svx/unofill.hxx"
 #include <svx/unomid.hxx>
 
 using namespace ::com::sun::star;

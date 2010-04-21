@@ -27,7 +27,7 @@
 #ifndef __FRAMEWORK_XML_TOOLBOXCONFIGURATION_HXX_
 #define __FRAMEWORK_XML_TOOLBOXCONFIGURATION_HXX_
 
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 #include <svl/svarray.hxx>
 #include <vcl/bitmap.hxx>
 #include <tools/string.hxx>

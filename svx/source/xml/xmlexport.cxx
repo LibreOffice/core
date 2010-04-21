@@ -44,8 +44,8 @@
 #include <unotools/streamwrap.hxx>
 #include <sot/storage.hxx>
 #include <svx/svdmodel.hxx>
-#include <xmleohlp.hxx>
-#include <xmlgrhlp.hxx>
+#include <svx/xmleohlp.hxx>
+#include <svx/xmlgrhlp.hxx>
 
 #include <svx/unomodel.hxx>
 

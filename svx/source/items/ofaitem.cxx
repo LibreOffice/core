@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "ofaitem.hxx"
+#include "svx/ofaitem.hxx"
 
 OfaPtrItem::OfaPtrItem( USHORT _nWhich, void *_pPtr )
     : SfxPoolItem( _nWhich ), pPtr( _pPtr )

@@ -38,9 +38,9 @@
 #include <classes/resource.hrc>
 #endif
 #include <classes/fwkresid.hxx>
-#include <classes/bmkmenu.hxx>
-#include <helper/imageproducer.hxx>
-#include <xml/menuconfiguration.hxx>
+#include <framework/bmkmenu.hxx>
+#include <framework/imageproducer.hxx>
+#include <framework/menuconfiguration.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes

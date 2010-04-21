@@ -46,7 +46,7 @@
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
 #include <svx/dialmgr.hxx>
-#include <lboxctrl.hxx>
+#include <svx/lboxctrl.hxx>
 #ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
 #endif

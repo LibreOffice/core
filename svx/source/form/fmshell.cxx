@@ -64,7 +64,7 @@
 #include <sfx2/objsh.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/fmpage.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include "fmobj.hxx"
 
 #ifndef _SVX_SVXIDS_HRC
@@ -72,7 +72,7 @@
 #endif
 
 #ifndef _SVX_FMRESIDS_HRC
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #endif
 #include "fmexch.hxx"
 #include <svx/fmglob.hxx>
@@ -285,7 +285,7 @@ void FmFormShell::NotifyMarkListChanged(FmFormView* pWhichView)
 }
 
 //------------------------------------------------------------------------
-sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
+sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool /*bForBrowsing*/)
 {
     if ( GetImpl()->didPrepareClose() )
         // we already did a PrepareClose for the current modifications of the current form

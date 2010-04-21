@@ -58,7 +58,7 @@
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weak.hxx>
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 
 namespace framework
 {

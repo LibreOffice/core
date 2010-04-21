@@ -33,7 +33,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/colorcfg.hxx>
-#include <swframeexample.hxx>
+#include <svx/swframeexample.hxx>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>

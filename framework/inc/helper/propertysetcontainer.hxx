@@ -37,7 +37,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <threadhelp/threadhelpbase.hxx>
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 
 namespace framework
 {

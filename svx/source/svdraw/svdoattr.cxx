@@ -30,7 +30,7 @@
 
 #include <svx/svdoattr.hxx>
 #include <svx/xpool.hxx>
-#include "svditext.hxx"
+#include "svx/svditext.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdattr.hxx>

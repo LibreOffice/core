@@ -46,9 +46,9 @@
 #include <svx/hdft.hxx>
 #include <svx/pageitem.hxx>
 //CHINA001 #include "bbdlg.hxx"
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 #include <svx/dialmgr.hxx>
-#include "htmlmode.hxx"
+#include "svx/htmlmode.hxx"
 
 #include <editeng/brshitem.hxx>
 #include <editeng/lrspitem.hxx>

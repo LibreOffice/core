@@ -68,7 +68,7 @@
 #endif
 
 #define _IMAPDLG_PRIVATE
-#include "imapdlg.hxx"
+#include "svx/imapdlg.hxx"
 
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
@@ -76,7 +76,7 @@
 #include "imapdlg.hrc"
 #include "imapwnd.hxx"
 #include "imapimp.hxx"
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 #include <svx/svdtrans.hxx>
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>

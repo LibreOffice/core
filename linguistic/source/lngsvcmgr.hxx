@@ -42,7 +42,7 @@
 
 //#include <vcl/timer.hxx>
 
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "defs.hxx"
 
 class SpellCheckerDispatcher;

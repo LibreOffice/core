@@ -64,7 +64,7 @@ namespace framework{
                     of your implementation - because base classes are initialized by his order and before your
                     member! Thats why ist a good place to declare your thread help member so.
 *//*-*************************************************************************************************************/
-enum FWI_DLLPUBLIC ELockType
+enum ELockType
 {
     E_NOTHING       = 0 ,
     E_OWNMUTEX      = 1 ,

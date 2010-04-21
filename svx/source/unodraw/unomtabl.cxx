@@ -50,9 +50,9 @@
 #include <vcl/svapp.hxx>
 
 
-#include "unofill.hxx"
+#include "svx/unofill.hxx"
 
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;

@@ -45,14 +45,14 @@
 
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdobj.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdattrx.hxx>  // NotPersistItems
 #include <svx/svdoedge.hxx>  // #32383# Die Verbinder nach Move nochmal anbroadcasten
-#include "svdglob.hxx"   // StringCache
-#include "svdstr.hrc"    // Objektname
+#include "svx/svdglob.hxx"   // StringCache
+#include "svx/svdstr.hrc"    // Objektname
 
 #include <svx/svxids.hrc>
 #include <svl/whiter.hxx>

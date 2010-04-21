@@ -42,9 +42,9 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 
-#include "tbxctl.hxx"
-#include "tbxdraw.hxx"
-#include "tbxcolor.hxx"
+#include "svx/tbxctl.hxx"
+#include "svx/tbxdraw.hxx"
+#include "svx/tbxcolor.hxx"
 #include "tbxdraw.hrc"
 #include <com/sun/star/frame/XLayoutManager.hpp>
 

@@ -48,7 +48,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 
 //_________________________________________________________________________________________________________________
 //  namespace

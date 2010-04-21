@@ -46,14 +46,14 @@
 
 #include <sfx2/linkmgr.hxx>
 #include <svx/svdetc.hxx>
-#include "svdglob.hxx"
-#include "svdstr.hrc"
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
 #include <svx/svdpool.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmrkv.hxx>
 #include <svx/svdpagv.hxx>
-#include "svdviter.hxx"
+#include "svx/svdviter.hxx"
 #include <svx/svdview.hxx>
 #include "svtools/filter.hxx"
 #include <svx/svdograf.hxx>

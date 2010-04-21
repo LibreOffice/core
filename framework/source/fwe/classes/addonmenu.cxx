@@ -31,12 +31,12 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
-#include "classes/addonmenu.hxx"
-#include "classes/addonsoptions.hxx"
+#include "framework/addonmenu.hxx"
+#include "framework/addonsoptions.hxx"
 #include <general.h>
 #include <macros/debug/assertion.hxx>
-#include <helper/imageproducer.hxx>
-#include <xml/menuconfiguration.hxx>
+#include <framework/imageproducer.hxx>
+#include <framework/menuconfiguration.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes

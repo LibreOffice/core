@@ -31,7 +31,7 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 
 #include <map>
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 
 namespace framework
 {

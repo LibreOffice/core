@@ -29,7 +29,7 @@
 #define __FRAMEWORK_XML_EVENTSDOCUMENTHANDLER_HXX_
 
 #ifndef __FRAMEWORK_XML_TOOLBOXCONFIGURATION_HXX_
-#include <xml/eventsconfiguration.hxx>
+#include <framework/eventsconfiguration.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -50,7 +50,7 @@
 #include <hash_map>
 #include <stdtypes.h>
 
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________

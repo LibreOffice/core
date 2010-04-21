@@ -49,7 +49,7 @@
 #include <stdtypes.h>
 #include <uielement/menubarmanager.hxx>
 #include <uiconfiguration/windowstateconfiguration.hxx>
-#include <classes/addonsoptions.hxx>
+#include <framework/addonsoptions.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes

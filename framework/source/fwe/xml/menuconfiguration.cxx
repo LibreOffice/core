@@ -31,12 +31,12 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
-#include <xml/menuconfiguration.hxx>
+#include <framework/menuconfiguration.hxx>
 
 #ifndef __FRAMEWORK_CLASSES_BMKMENU_HXX_
-#include <classes/bmkmenu.hxx>
+#include <framework/bmkmenu.hxx>
 #endif
-#include <classes/addonmenu.hxx>
+#include <framework/addonmenu.hxx>
 #include <xml/menudocumenthandler.hxx>
 #include <xml/saxnamespacefilter.hxx>
 #include <services.h>

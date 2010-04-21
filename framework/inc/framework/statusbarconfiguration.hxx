@@ -27,7 +27,7 @@
 #ifndef __FRAMEWORK_CLASSES_STATUSBARCONFIGURATION_HXX_
 #define __FRAMEWORK_CLASSES_STATUSBARCONFIGURATION_HXX_
 
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 #include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include <tools/stream.hxx>

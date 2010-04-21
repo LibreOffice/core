@@ -36,7 +36,7 @@
 #include <cppuhelper/implbase1.hxx>
 
 #include <stack>
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 
 //_________________________________________________________________________________________________________________
 //  namespace

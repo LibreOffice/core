@@ -26,7 +26,7 @@
  ************************************************************************/
 
 #include <svx/svxids.hrc>
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 Menu RID_FM_FILTER_MENU
 {
     ItemList =

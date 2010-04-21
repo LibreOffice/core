@@ -34,8 +34,8 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 #include <xml/menudocumenthandler.hxx>
-#include <xml/menuconfiguration.hxx>
-#include <classes/addonmenu.hxx>
+#include <framework/menuconfiguration.hxx>
+#include <framework/addonmenu.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes

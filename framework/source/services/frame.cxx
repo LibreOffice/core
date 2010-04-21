@@ -42,7 +42,7 @@
 #include <loadenv/loadenv.hxx>
 #include <helper/oframes.hxx>
 #include <helper/statusindicatorfactory.hxx>
-#include <helper/titlehelper.hxx>
+#include <framework/titlehelper.hxx>
 #include <classes/droptargetlistener.hxx>
 #include <classes/taskcreator.hxx>
 #include <loadenv/targethelper.hxx>

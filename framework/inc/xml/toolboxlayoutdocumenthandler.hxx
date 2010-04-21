@@ -28,7 +28,7 @@
 #ifndef __FRAMEWORK_XML_TOOLBOXLAYOUTDOCUMENTHANDLER_HXX_
 #define __FRAMEWORK_XML_TOOLBOXLAYOUTDOCUMENTHANDLER_HXX_
 
-#include <xml/toolboxconfiguration.hxx>
+#include <framework/toolboxconfiguration.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes

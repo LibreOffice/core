@@ -42,7 +42,7 @@
 #include <vcl/settings.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/colritem.hxx>
-#include "chrtitem.hxx"
+#include "svx/chrtitem.hxx"
 #include <tools/urlobj.hxx>
 
 #include <svx/dialogs.hrc>
@@ -50,7 +50,7 @@
 
 #include <svx/svdtrans.hxx>
 #include <svx/dialmgr.hxx>
-#include "extrusioncontrols.hxx"
+#include "svx/extrusioncontrols.hxx"
 #include "extrusioncontrols.hrc"
 #include <svx/sdasitm.hxx>
 #include "toolbarmenu.hxx"

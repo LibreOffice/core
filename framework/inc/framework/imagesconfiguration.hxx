@@ -28,7 +28,7 @@
 #ifndef __FRAMEWORK_XML_IMAGESCONFIGURATION_HXX_
 #define __FRAMEWORK_XML_IMAGESCONFIGURATION_HXX_
 
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 #include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
@@ -44,7 +44,7 @@
 namespace framework
 {
 
-enum FWE_DLLPUBLIC ImageMaskMode
+enum ImageMaskMode
 {
     ImageMaskMode_Color,
     ImageMaskMode_Bitmap

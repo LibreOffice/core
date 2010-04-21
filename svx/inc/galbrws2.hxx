@@ -36,7 +36,7 @@
 #include <svtools/transfer.hxx>
 #include <svl/lstner.hxx>
 #include <svtools/miscopt.hxx>
-#include "galbrws.hxx"
+#include "svx/galbrws.hxx"
 
 // ----------------------
 // - GalleryBrowserMode -

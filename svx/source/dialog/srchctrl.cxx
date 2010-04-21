@@ -40,7 +40,7 @@
 
 
 #include "srchctrl.hxx"
-#include "srchdlg.hxx"
+#include "svx/srchdlg.hxx"
 #include <svl/srchitem.hxx>
 
 // class SvxSearchFamilyControllerItem -----------------------------------

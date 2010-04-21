@@ -64,8 +64,8 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdtrans.hxx>
-#include "grafctrl.hxx"
-#include "tbxcolor.hxx"
+#include "svx/grafctrl.hxx"
+#include "svx/tbxcolor.hxx"
 
 // namespaces
 using ::rtl::OUString;

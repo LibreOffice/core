@@ -65,9 +65,9 @@
 #include <editeng/numitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdograf.hxx>
-#include "xoutbmp.hxx"
+#include "svx/xoutbmp.hxx"
 #include "svtools/filter.hxx"
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/fmview.hxx>

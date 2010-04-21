@@ -32,15 +32,15 @@
 #include "fmobj.hxx"
 #include "fmpgeimp.hxx"
 #include "fmprop.hrc"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmservs.hxx"
 #include "fmshimp.hxx"
 #include "svx/fmtools.hxx"
 #include "fmundo.hxx"
 #include "fmvwimp.hxx"
 #include "formcontrolfactory.hxx"
-#include "sdrpaintwindow.hxx"
-#include "svditer.hxx"
+#include "svx/sdrpaintwindow.hxx"
+#include "svx/svditer.hxx"
 #include "svx/dataaccessdescriptor.hxx"
 #include "svx/dialmgr.hxx"
 #include "svx/fmglob.hxx"
@@ -51,7 +51,7 @@
 #include "svx/sdrpagewindow.hxx"
 #include "svx/svdogrp.hxx"
 #include "svx/svdpagv.hxx"
-#include "xmlexchg.hxx"
+#include "svx/xmlexchg.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>

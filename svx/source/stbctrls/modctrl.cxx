@@ -40,7 +40,7 @@
 
 #include <svx/dialogs.hrc>
 
-#include "modctrl.hxx"
+#include "svx/modctrl.hxx"
 #include <svx/dialmgr.hxx>
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxModifyControl, SfxBoolItem);

@@ -32,7 +32,7 @@
 #include <classes/actiontriggercontainer.hxx>
 #include <classes/actiontriggerpropertyset.hxx>
 #include <classes/actiontriggerseparatorpropertyset.hxx>
-#include <helper/actiontriggerhelper.hxx>
+#include <framework/actiontriggerhelper.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>

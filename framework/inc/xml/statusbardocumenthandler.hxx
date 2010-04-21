@@ -29,7 +29,7 @@
 #define __FRAMEWORK_XML_STATUSBARDOCUMENTHANDLER_HXX_
 
 #ifndef __FRAMEWORK_XML_STATUSBARCONFIGURATION_HXX_
-#include <xml/statusbarconfiguration.hxx>
+#include <framework/statusbarconfiguration.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -49,7 +49,7 @@
 
 #include <hash_map>
 #include <stdtypes.h>
-#include <fwedllapi.h>
+#include <framework/fwedllapi.h>
 
 //_________________________________________________________________________________________________________________
 //  namespace
