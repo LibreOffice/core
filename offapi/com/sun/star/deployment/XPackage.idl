@@ -139,6 +139,10 @@ interface XPackage
 
     /** registers this <type>XPackage</type>, thus activating the package.
 
+        @param startup
+               indicates that registration is adapted to the particular
+               startup scenario. That is, it is set to true, when called
+               from <member>XExtensionManager::synchronize</member>
         @param xAbortChannel
                abort channel to asynchronously abort the registration process,
                or null
@@ -146,6 +150,7 @@ interface XPackage
                command environment for error and progress handling
     */
     void registerPackage(
+        [in] boolean startup,
         [in] com::sun::star::task::XAbortChannel xAbortChannel,
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,

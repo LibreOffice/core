@@ -41,7 +41,7 @@
 
 module com { module sun { module star { module deployment {
 
-/** The <type>XPackageManager</type> interface is used to add or remove
+/** The <type>XExtensionManager</type> interface is used to add or remove
     packages to a specific deployment context.
     Packages are deployable files, e.g. scripts or UNO components.
     <p>
@@ -62,7 +62,7 @@ module com { module sun { module star { module deployment {
     </p>
 
     @see thePackageManagerFactory
-    @since OOo 2.0.0
+    @since OOo 3.3.0
 */
 interface XExtensionManager
 {
