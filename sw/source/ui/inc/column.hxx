@@ -49,7 +49,7 @@
 #endif
 #include <vcl/timer.hxx>
 #ifndef _IMAGEBTN_HXX //autogen
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #endif
 #include <svtools/ctrlbox.hxx>
 #include <svtools/valueset.hxx>

@@ -3478,8 +3478,6 @@ String RID_ERR_RIGHTEXPECTED
     Text [ en-US ] = "'RIGHT' expected" ;
 };
 
-#include "menu.src"
-
 ToolBox RID_MATH_TOOLBOX
 {
     HelpId = RID_MATH_TOOLBOX ;
