@@ -349,6 +349,8 @@ void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
         }
         pLast->Insert( pPor );
 
+        rInf.SetOtherThanFtnInside( rInf.IsOtherThanFtnInside() || !pPor->IsFtnPortion() );
+
         // Maxima anpassen:
         if( pCurr->Height() < pPor->Height() )
             pCurr->Height( pPor->Height() );
@@ -1533,6 +1535,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
     while( bBuild )
     {
         GetInfo().SetFtnInside( sal_False );
+        GetInfo().SetOtherThanFtnInside( sal_False );
 
         // These values must not be reset by FormatReset();
         sal_Bool bOldNumDone = GetInfo().IsNumDone();

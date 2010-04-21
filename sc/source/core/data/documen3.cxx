@@ -785,7 +785,8 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
                                     SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                    ScDocument* pUndoDoc, BOOL bIncludeDraw )
+                                    ScDocument* pUndoDoc, BOOL bIncludeDraw,
+                                    bool bUpdateNoteCaptionPos )
 {
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
@@ -829,7 +830,7 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
             if (pTab[i])
                 pTab[i]->UpdateReference(
                     eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2,
-                    nDx, nDy, nDz, pUndoDoc, bIncludeDraw );
+                    nDx, nDy, nDz, pUndoDoc, bIncludeDraw, bUpdateNoteCaptionPos );
 
         if ( bIsEmbedded )
         {
@@ -1900,10 +1901,10 @@ void ScDocument::IncSizeRecalcLevel( SCTAB nTab )
         pTab[nTab]->IncRecalcLevel();
 }
 
-void ScDocument::DecSizeRecalcLevel( SCTAB nTab )
+void ScDocument::DecSizeRecalcLevel( SCTAB nTab, bool bUpdateNoteCaptionPos )
 {
     if ( ValidTab(nTab)  && pTab[nTab] )
-        pTab[nTab]->DecRecalcLevel();
+        pTab[nTab]->DecRecalcLevel( bUpdateNoteCaptionPos );
 }
 
 // Wang Xu Ming -- 2009-8-17

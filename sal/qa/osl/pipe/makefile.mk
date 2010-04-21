@@ -25,6 +25,10 @@
 #
 #*************************************************************************
 
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
+
 PRJ=..$/..$/..
 
 PRJNAME=sal
@@ -39,20 +43,22 @@ ENABLE_EXCEPTIONS=TRUE
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:Pipe by codegen.pl
 SHL1OBJS=  \
     $(SLO)$/osl_Pipe.obj
 
 SHL1TARGET= osl_Pipe
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
 SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
-# DEF1EXPORTFILE= export.exp
+SHL1RPATH = NONE
 # auto generated Target:Pipe
 # END ------------------------------------------------------------------
 
@@ -60,3 +66,5 @@ SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 
 .INCLUDE :  target.mk
 .INCLUDE : _cppunit.mk
+
+.END

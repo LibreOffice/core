@@ -174,7 +174,9 @@ testcase tChartShapes
 '    	Call hToolbarSelect("Drawing", true)
 '    endif
 
-	    printlog " Insert a shape to the chart by <STRG-RETURN>"
+    printlog " Insert a shape to the chart by <STRG-RETURN>"
+    Kontext "DocumentChart"
+    DocumentChart.TypeKeys "<F6>",4
     Kontext "DrawBar"
     sleep (1)
     DrawBar.typekeys "<TAB>",TRUE

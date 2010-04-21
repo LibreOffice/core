@@ -266,7 +266,7 @@ void Dir::Construct( DirEntryKind nKindFlags )
         strcpy( pBuffer, aTStr.GetBuffer() );
         CharLowerBuff( pBuffer, aTStr.Len() );
         aNameMask = WildCard( String(pBuffer, osl_getThreadTextEncoding()), ';' );
-        delete pBuffer;
+        delete [] pBuffer;
     }
 #else
     aNameMask = WildCard( CutName(), ';' );

@@ -94,14 +94,12 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
-public:
-    // the C-Callbacks for the expat parser
-    void static callbackStartElement(void *userData, const XML_Char *name , const XML_Char **atts);
-    void static callbackEndElement(void *userData, const XML_Char *name);
-    void static callbackCharacters( void *userData , const XML_Char *s , int nLen );
-    int static callbackExternalEntityRef( XML_Parser parser, const XML_Char *openEntityNames, const XML_Char *base, const XML_Char *systemId, const XML_Char *publicId);
+    // called by the C callbacks of the expat parser
+    void callbackStartElement( const XML_Char* name, const XML_Char** atts );
+    void callbackEndElement( const XML_Char* name );
+    void callbackCharacters( const XML_Char* s, int nLen );
+    int callbackExternalEntityRef( XML_Parser parser, const XML_Char *openEntityNames, const XML_Char *base, const XML_Char *systemId, const XML_Char *publicId);
 
-public:
     void pushEntity( const struct Entity &entity ) { vecEntity.push_back( entity ); }
     void popEntity()                               { vecEntity.pop_back( ); }
     struct Entity &getEntity()                     { return vecEntity.back(); }
@@ -139,10 +137,9 @@ private:
     // External entity stack
     std::vector< struct Entity > vecEntity;
 
-    // Exception cannot be thrown through the C-XmlParser (possible resource leaks),
-    // therefor the maSavedException must be saved somewhere.
+    // Exceptions cannot be thrown through the C-XmlParser (possible resource leaks),
+    // therefore the exception must be saved somewhere.
     ::com::sun::star::uno::Any maSavedException;
-    sal_Bool                   mbExceptionWasThrown;
 
     ::com::sun::star::lang::Locale maLocale;
 

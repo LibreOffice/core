@@ -39,7 +39,6 @@ import util.SOfficeFactory;
 
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
-import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XController;
@@ -191,26 +190,9 @@ public class AccessibleBrowseBoxTableCell extends TestCase {
 
         shortWait();
 
-        try {
-            oObj = (XInterface) ((XMultiServiceFactory)tParam.getMSF()).createInstance
-                ("com.sun.star.awt.Toolkit") ;
-            xInit.initialize(params);
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get toolkit");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e );
-        }
-
-        shortWait();
-
-        XExtendedToolkit tk = (XExtendedToolkit)
-                        UnoRuntime.queryInterface(XExtendedToolkit.class,oObj);
-
-
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = (XWindow)
-            UnoRuntime.queryInterface(XWindow.class,tk.getActiveTopWindow());
+        XWindow xWindow = secondController.getFrame().getContainerWindow();
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 

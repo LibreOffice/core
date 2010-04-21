@@ -76,7 +76,7 @@ Reference< XFastContextHandler > PPTShapeGroupContext::createFastChildContext( s
         break;
     case NMSP_PPT|XML_ph:
         mpGroupShapePtr->setSubType( xAttribs->getOptionalValueToken( XML_type, FastToken::DONTKNOW ) );
-        mpGroupShapePtr->setIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
+        mpGroupShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
         break;
     // nvSpPr CT_ShapeNonVisual end
 

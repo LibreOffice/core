@@ -43,6 +43,7 @@ EXT_PROJECT_NAME=mysql-connector-cpp
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=$(EXT_PROJECT_NAME)
+TARFILE_MD5=831126a1ee5af269923cfab6050769fe
 ADDITIONAL_FILES=\
                  driver$/makefile.mk \
                  driver$/nativeapi$/makefile.mk \

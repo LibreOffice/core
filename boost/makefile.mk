@@ -49,6 +49,7 @@ all:
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=boost_1_39_0
+TARFILE_MD5=fcc6df1160753d0b8c835d17fdeeb0a7
 PATCH_FILES=$(TARFILE_NAME).patch
 
 CONFIGURE_DIR=

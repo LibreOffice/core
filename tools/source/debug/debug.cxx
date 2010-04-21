@@ -151,7 +151,6 @@ struct DebugData
     USHORT                  bInit;
     DbgPrintLine            pDbgPrintMsgBox;
     DbgPrintLine            pDbgPrintWindow;
-    DbgPrintLine            pDbgPrintShell;
     DbgPrintLine            pDbgPrintTestTool;
     ::std::vector< DbgPrintLine >
                             aDbgPrintUserChannels;
@@ -166,7 +165,6 @@ struct DebugData
         :bInit( FALSE )
         ,pDbgPrintMsgBox( FALSE )
         ,pDbgPrintWindow( NULL )
-        ,pDbgPrintShell( NULL )
         ,pDbgPrintTestTool( NULL )
         ,pProfList( NULL )
         ,pXtorList( NULL )
@@ -1037,9 +1035,7 @@ static void DebugDeInit()
     pData->aDbgData.nTestFlags &= (DBG_TEST_MEM | DBG_TEST_PROFILING);
     pData->aDbgPrintUserChannels.clear();
     pData->pDbgPrintTestTool    = NULL;
-    pData->pDbgPrintShell       = NULL;
     pData->pDbgPrintWindow      = NULL;
-    pData->pDbgPrintShell       = NULL;
     pData->pOldDebugMessageFunc = NULL;
     ImplDbgDeInitLock();
 }
@@ -1197,10 +1193,6 @@ void* DbgFunc( USHORT nAction, void* pParam )
 
             case DBG_FUNC_SETPRINTWINDOW:
                 pDebugData->pDbgPrintWindow = (DbgPrintLine)(long)pParam;
-                break;
-
-            case DBG_FUNC_SETPRINTSHELL:
-                pDebugData->pDbgPrintShell = (DbgPrintLine)(long)pParam;
                 break;
 
             case DBG_FUNC_SETPRINTTESTTOOL:
@@ -1739,14 +1731,6 @@ void DbgOut( const sal_Char* pMsg, USHORT nDbgOut, const sal_Char* pFile, USHORT
         if ( pData->pDbgPrintMsgBox )
             pData->pDbgPrintMsgBox( aBufOut );
         else
-            nOut = DBG_OUT_SHELL;
-    }
-
-    if ( nOut == DBG_OUT_SHELL )
-    {
-        if ( pData->pDbgPrintShell )
-            pData->pDbgPrintShell( aBufOut );
-        else
             nOut = DBG_OUT_WINDOW;
     }
 
@@ -1758,12 +1742,26 @@ void DbgOut( const sal_Char* pMsg, USHORT nDbgOut, const sal_Char* pFile, USHORT
             nOut = DBG_OUT_FILE;
     }
 
-    if ( nOut == DBG_OUT_FILE )
+    switch ( nOut )
+    {
+    case DBG_OUT_SHELL:
+        DbgPrintShell( aBufOut );
+        break;
+    case DBG_OUT_FILE:
         ImplDbgPrintFile( aBufOut );
+        break;
+    }
 
     ImplDbgUnlock();
 
     bIn = FALSE;
+}
+
+void DbgPrintShell(char const * message) {
+    fprintf(stderr, "%s\n", message);
+#if defined WNT
+    OutputDebugStringA(message);
+#endif
 }
 
 // -----------------------------------------------------------------------

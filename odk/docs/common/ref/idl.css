@@ -6,9 +6,9 @@
 body { background-color:#ffffff; }
 
 #adc-idlref a { text-decoration: none; }
-#adc-idlref a:link { color: #C44B01; }
+#adc-idlref a:link { color: #0e85cd; }
 #adc-idlref a:visited { color: #638093; }
-#adc-idlref a:active { color: #9DCA12; }
+#adc-idlref a:active { color: #4dadea; }
 
 #adc-idlref h3
 	    { font-size:13pt; font-weight:bold;
@@ -26,13 +26,13 @@ body { background-color:#ffffff; }
 #adc-idlref td.title
 	    { font-family: Arial; font-size:19pt; font-weight:bold;
 	      line-height:30pt;
-	      background-image:url(../../images/bg_table.gif);
+	      background-image:url(../../images/bg_table.png);
 	      text-align:center; }
 
 #adc-idlref td.subtitle
 	    { font-family: Arial; font-size:13pt;
 	      line-height:20pt;
-	      background-image:url(../../images/bg_table.gif); }
+	      background-image:url(../../images/bg_table.png); }
 
 #adc-idlref td.crosstitle
 	    { font-size:12pt; font-weight:bold;
@@ -40,15 +40,15 @@ body { background-color:#ffffff; }
 
 #adc-idlref td.imdetail
 	    { width:100%;
-	      background-image:url(../../images/bg_table3.gif); }
+	      background-image:url(../../images/bg_table3.png); }
 
 #adc-idlref td.imsum_left  { width:30%;  }
 #adc-idlref td.imsum_right { width:70%;  }
 
-#adc-idlref table.navimain { background-image:url(../../images/bg_table2.gif); }
+#adc-idlref table.navimain { background-image:url(../../images/bg_table2.png); }
 
 #adc-idlref td.navimain
-	    { background-image:url(../../images/bg_table2.gif);
+	    { background-image:url(../../images/bg_table2.png);
 	      text-align:center;
 	      font-family: Arial; font-size:12pt; font-weight:bold;
 	      padding-left:7pt; padding-right:7pt; }
@@ -79,13 +79,12 @@ body { background-color:#ffffff; }
 
 #adc-idlref a.membertitle  { font-size:12pt; font-weight:bold; line-height:18pt; }
 
-#adc-idlref a:link.navimain, #adc-idlref a:link.navisub  { color:#C44B01; }
+#adc-idlref a:link.navimain, #adc-idlref a:link.navisub  { color:#0e85cd; }
 #adc-idlref a:visited.navimain, #adc-idlref a:visited.navisub { color: #638093; }
-#adc-idlref a:active.navimain, #adc-idlref a:active.navisub { color: #9DCA12; }
+#adc-idlref a:active.navimain, #adc-idlref a:active.navisub { color: #4dadea; }
 
 #adc-idlref .dt            { font-weight:bold; }
-#adc-idlref .namechain     { font-size:13pt; font-weight:bold;
-                 margin-top:3pt; margin-bottom:6pt; }
+#adc-idlref .namechain     { font-size:13pt; font-weight:bold; margin-top:3pt; margin-bottom:6pt; }
 #adc-idlref .title2        { font-size:13pt; font-style:italic; font-weight:bold; text-align:left; }
 
 #adc-idlref table { empty-cells:show; }

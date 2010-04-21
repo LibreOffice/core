@@ -37,26 +37,26 @@ IDLDOCREFNAME="$(OFFICENAME) $(PRODUCT_RELEASE) API"
 PRODUCT_NAME=odkcommon
 PRODUCTZIPFILE=$(PRODUCT_NAME).zip
 
-DESTDIR=$(OUT)$/bin$/$(PRODUCT_NAME)
-DESTDIRBIN=$(DESTDIR)$/bin
-DESTDIRLIB=$(DESTDIR)$/lib
+DESTDIR=$(OUT)/bin/$(PRODUCT_NAME)
+DESTDIRBIN=$(DESTDIR)/bin
+DESTDIRLIB=$(DESTDIR)/lib
 DESTDIRDLL=$(DESTDIRLIB)
-DESTDIRIDL=$(DESTDIR)$/idl
-DESTDIRINC=$(DESTDIR)$/include
-DESTDIRJAR=$(DESTDIR)$/classes
-DESTDIRXML=$(DESTDIR)$/xml
-DESTDIRSETTINGS=$(DESTDIR)$/settings
-DESTDIREXAMPLES=$(DESTDIR)$/examples
-DESTDIRINC=$(DESTDIR)$/include
-DESTDIRCLASSES=$(DESTDIR)$/classes
-DESTDIRDOCU=$(DESTDIR)$/docs
-DESTDIRCOMMONDOCU=$(DESTDIRDOCU)$/common
-DESTDIRGENIDLREF=$(DESTDIRCOMMONDOCU)$/ref
-DESTDIRDOCUIMAGES=$(DESTDIRDOCU)$/images
-DESTDIRCPPDOCU=$(DESTDIRDOCU)$/cpp
-DESTDIRGENCPPREF=$(DESTDIRDOCU)$/cpp$/ref
-DESTDIRJAVADOCU=$(DESTDIRDOCU)$/java
-DESTDIRGENJAVAREF=$(DESTDIRDOCU)$/java$/ref
+DESTDIRIDL=$(DESTDIR)/idl
+DESTDIRINC=$(DESTDIR)/include
+DESTDIRJAR=$(DESTDIR)/classes
+DESTDIRXML=$(DESTDIR)/xml
+DESTDIRSETTINGS=$(DESTDIR)/settings
+DESTDIREXAMPLES=$(DESTDIR)/examples
+DESTDIRINC=$(DESTDIR)/include
+DESTDIRCLASSES=$(DESTDIR)/classes
+DESTDIRDOCU=$(DESTDIR)/docs
+DESTDIRCOMMONDOCU=$(DESTDIRDOCU)/common
+DESTDIRGENIDLREF=$(DESTDIRCOMMONDOCU)/ref
+DESTDIRDOCUIMAGES=$(DESTDIRDOCU)/images
+DESTDIRCPPDOCU=$(DESTDIRDOCU)/cpp
+DESTDIRGENCPPREF=$(DESTDIRDOCU)/cpp/ref
+DESTDIRJAVADOCU=$(DESTDIRDOCU)/java
+DESTDIRGENJAVAREF=$(DESTDIRDOCU)/java/ref
 
 BINOUT=$(SOLARBINDIR)
 INCOUT=$(SOLARINCDIR)
@@ -64,11 +64,11 @@ IDLOUT=$(SOLARIDLDIR)
 XMLOUT=$(SOLARXMLDIR)
 LIBOUT=$(SOLARLIBDIR)
 
-CONVERTTAGSCRIPT=$(SOLARENV)$/bin$/converttags.pl
+CONVERTTAGSCRIPT=$(SOLARENV)/bin/converttags.pl
 CONVERTTAGFLAGNAME=converttags_html_files.flag
-CONVERTTAGFLAG = $(MISC)$/$(CONVERTTAGFLAGNAME)
+CONVERTTAGFLAG = $(MISC)/$(CONVERTTAGFLAGNAME)
 
-MY_AUTODOC=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(SOLARBINDIR)$/autodoc
+MY_AUTODOC=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(SOLARBINDIR)/autodoc
 
 .IF "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD"
 MY_COPY=$(GNUCOPY)
@@ -83,19 +83,22 @@ MY_COPY_RECURSIVE=$(GNUCOPY) -urf
 .ENDIF
 .ENDIF
 
+MY_DELETE_RECURSIVE=rm -rf
+MY_TEXTCOPY=@cp 
+
 .IF "$(GUI)"=="WNT"
 #--------------------
 # WNT ONLY
 #--------------------
-MY_DELETE_RECURSIVE=+del /sxyf
-MY_TEXTCOPY=cat
+#MY_DELETE_RECURSIVE=+del /sxyf
+#MY_TEXTCOPY=cat
 
 MY_DLLPREFIX=
 MY_DLLPOSTFIX=.dll
-MY_DLLOUT=$(OUT)$/bin
+MY_DLLOUT=$(OUT)/bin
 EXEPOSTFIX=.exe
 DLLOUT=$(SOLARBINDIR)
-DESTDIRCPPEXAMPLES=$(DESTDIR)$/examples$/cpp
+DESTDIRCPPEXAMPLES=$(DESTDIR)/examples/cpp
 
 .IF "$(COM)"=="GCC"
 DESTPLATFROM=mingw
@@ -103,15 +106,15 @@ DESTPLATFROM=mingw
 DESTPLATFROM=windows
 .ENDIF
 DESTDIRDLL=$(DESTDIRBIN)
-DESTDIRCLI=$(DESTDIR)$/cli
+DESTDIRCLI=$(DESTDIR)/cli
 
 .ELSE
 #--------------------
-# UNX ONLYDESTDIRCPPEXAMPLES=$(DESTDIR)$/examples$/cpp
+# UNX ONLYDESTDIRCPPEXAMPLES=$(DESTDIR)/examples/cpp
 
 #--------------------
-MY_DELETE_RECURSIVE=rm -rf
-MY_TEXTCOPY= tr -d "\015"
+#MY_DELETE_RECURSIVE=rm -rf
+#MY_TEXTCOPY= tr -d "\015"
 
 MY_DLLPREFIX=lib
 .IF "$(OS)"=="MACOSX"
@@ -119,7 +122,7 @@ MY_DLLPOSTFIX=.dylib
 .ELSE
 MY_DLLPOSTFIX=.so
 .ENDIF
-MY_DLLOUT=$(OUT)$/lib
+MY_DLLOUT=$(OUT)/lib
 DLLOUT=$(SOLARLIBDIR)
 
 .IF "$(OS)$(CPU)"=="SOLARISS"
@@ -165,67 +168,57 @@ DESTPLATFROM=freebsd
 DESTPLATFROM=macosx
 .ENDIF
 
-#DESTDIRBIN=$(DESTDIR)$/$(DESTPLATFROM)$/bin
-#DESTDIRLIB=$(DESTDIR)$/$(DESTPLATFROM)$/lib
+#DESTDIRBIN=$(DESTDIR)/$(DESTPLATFROM)/bin
+#DESTDIRLIB=$(DESTDIR)/$(DESTPLATFROM)/lib
 #DESTDIRDLL=$(DESTDIRLIB)
 
 .ENDIF
 
-MY_TEXTCOPY_SOURCEPRE=<
-MY_TEXTCOPY_TARGETPRE=>
+#MY_TEXTCOPY_SOURCEPRE=<
+#MY_TEXTCOPY_TARGETPRE=>
 
 
 INCLUDETOPDIRLIST= \
-    $(INCOUT)$/sal \
-    $(INCOUT)$/salhelper \
-    $(INCOUT)$/rtl \
-    $(INCOUT)$/osl \
-    $(INCOUT)$/store \
-    $(INCOUT)$/typelib \
-    $(INCOUT)$/uno \
-    $(INCOUT)$/cppu \
-    $(INCOUT)$/cppuhelper \
-    $(INCOUT)$/bridges \
-    $(INCOUT)$/registry \
-    $(INCOUT)$/stl
+    $(INCOUT)/sal \
+    $(INCOUT)/salhelper \
+    $(INCOUT)/rtl \
+    $(INCOUT)/osl \
+    $(INCOUT)/store \
+    $(INCOUT)/typelib \
+    $(INCOUT)/uno \
+    $(INCOUT)/cppu \
+    $(INCOUT)/cppuhelper \
+    $(INCOUT)/bridges \
+    $(INCOUT)/registry \
+    $(INCOUT)/stl
 
 .IF "$(GUI)"=="WNT"
-INCLUDETOPDIRLIST += $(INCOUT)$/systools
+INCLUDETOPDIRLIST += $(INCOUT)/systools
 .ENDIF
 
-INCLUDEDIRLIST:={$(subst,/,$/ $(shell @$(FIND) $(INCLUDETOPDIRLIST) -type d -print))}
+INCLUDEDIRLIST:={$(subst,/,/ $(shell @$(FIND) $(INCLUDETOPDIRLIST) -type d -print))}
 
 INCLUDEFILELIST=\
-    $(INCOUT)$/com$/sun$/star$/uno$/Any.h \
-    $(INCOUT)$/com$/sun$/star$/uno$/Any.hxx \
-    $(INCOUT)$/com$/sun$/star$/uno$/genfunc.h \
-    $(INCOUT)$/com$/sun$/star$/uno$/genfunc.hxx \
-    $(INCOUT)$/com$/sun$/star$/uno$/Reference.h \
-    $(INCOUT)$/com$/sun$/star$/uno$/Reference.hxx \
-    $(INCOUT)$/com$/sun$/star$/uno$/Sequence.h \
-    $(INCOUT)$/com$/sun$/star$/uno$/Sequence.hxx \
-    $(INCOUT)$/com$/sun$/star$/uno$/Type.h \
-    $(INCOUT)$/com$/sun$/star$/uno$/Type.hxx
-
-.IF "$(USE_SHELL)"=="4nt"
-# Quoted Open Bracket -QOB
-# Quoted Close Bracket -QCB
-QOB=(
-QCB=)
-.ELSE
-QOB=\(
-QCB=\)
-.ENDIF
+    $(INCOUT)/com/sun/star/uno/Any.h \
+    $(INCOUT)/com/sun/star/uno/Any.hxx \
+    $(INCOUT)/com/sun/star/uno/genfunc.h \
+    $(INCOUT)/com/sun/star/uno/genfunc.hxx \
+    $(INCOUT)/com/sun/star/uno/Reference.h \
+    $(INCOUT)/com/sun/star/uno/Reference.hxx \
+    $(INCOUT)/com/sun/star/uno/Sequence.h \
+    $(INCOUT)/com/sun/star/uno/Sequence.hxx \
+    $(INCOUT)/com/sun/star/uno/Type.h \
+    $(INCOUT)/com/sun/star/uno/Type.hxx
 
 INCLUDELIST:=\
-    {$(subst,/,$/ $(shell @$(FIND) $(INCLUDETOPDIRLIST) -type f ! $(QOB) -name "*~" -o -name "*build.lst" -o -name "*deliver.log" $(QCB) -print))} \
+    {$(shell @$(FIND) $(INCLUDETOPDIRLIST) -type f ! \( -name "*~" -o -name "*build.lst" -o -name "*deliver.log" \) -print)} \
     $(INCLUDEFILELIST)
 
 SDK_CONTENT_CHECK_FILES= \
-    $(MISC)$/copying_files.txt
+    $(MISC)/copying_files.txt
 
 SDK_CHECK_FLAGS= \
-    $(MISC)$/checkbin.txt \
-    $(MISC)$/checkidl.txt \
-    $(MISC)$/checkinc.txt \
-    $(MISC)$/checkinc2.txt
+    $(MISC)/checkbin.txt \
+    $(MISC)/checkidl.txt \
+    $(MISC)/checkinc.txt \
+    $(MISC)/checkinc2.txt

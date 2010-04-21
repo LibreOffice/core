@@ -219,6 +219,7 @@ public class java_fat implements TestBase
                     {
                         closeExistingOffice();
                         tEnv = getEnv(entry, m_aParams);
+                        tCase = tEnv.getTestCase();
                     }
 
                     // MultiMethodTest ifc = null;
@@ -251,6 +252,7 @@ public class java_fat implements TestBase
                         {
                             closeExistingOffice();
                             tEnv = getEnv(entry, m_aParams);
+                            tCase = tEnv.getTestCase();
                             if (countInterfaceTestRun < 2)
                             {
                                 finished = false;
@@ -313,6 +315,9 @@ public class java_fat implements TestBase
                 }
 
                 System.out.println(counter + " of " + entries.length + " tests failed");
+                if (counter != 0) {
+                    retValue = false;
+                }
             }
 
             closeExistingOffice();
@@ -455,17 +460,16 @@ public class java_fat implements TestBase
             log.initialize(entry, logging);
             tCase.setLogWriter((PrintWriter) log);
 
-            TestEnvironment tEnv = null;
-
             try
             {
                 tCase.initializeTestCase(param);
-                tEnv = tCase.getTestEnvironment(param);
+                return tCase.getTestEnvironment(param);
             }
             catch (com.sun.star.lang.DisposedException de)
             {
                 System.out.println("Office disposed");
                 closeExistingOffice();
+                throw de;
             }
             catch (lib.StatusException e)
             {
@@ -475,9 +479,8 @@ public class java_fat implements TestBase
 
                 entry.ErrorMsg = e.getMessage();
                 entry.hasErrorMsg = true;
+                throw e;
             }
-
-            return tEnv;
         }
 
     private void closeExistingOffice()

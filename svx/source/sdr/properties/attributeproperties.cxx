@@ -281,7 +281,19 @@ namespace sdr
                     // set stylesheet (if used)
                     if(pStySheet)
                     {
-                        ImpAddStyleSheet(pStySheet, sal_True);
+                        // #i109515#
+                        SfxItemPool* pStyleSheetPool = &pStySheet->GetPool().GetPool();
+
+                        if(pStyleSheetPool == pDestPool)
+                        {
+                            // just re-set stylesheet
+                            ImpAddStyleSheet(pStySheet, sal_True);
+                        }
+                        else
+                        {
+                            // StyleSheet is NOT from the correct pool; use default
+                            ImpAddStyleSheet(pNewModel->GetDefaultStyleSheet(), sal_True);
+                        }
                     }
 
                     delete pOldSet;

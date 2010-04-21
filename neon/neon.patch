@@ -1,5 +1,5 @@
---- misc/neon-0.29.3/src/config.h	2010-01-27 12:46:23.000000000 +0100
-+++ misc/build/neon-0.29.3/src/config.h	2010-01-27 12:44:10.000000000 +0100
+--- misc/neon-0.29.3/src/config.h	2010-03-23 14:47:43.000000000 +0100
++++ misc/build/neon-0.29.3/src/config.h	2010-03-23 12:19:50.000000000 +0100
 @@ -1 +1,488 @@
 -dummy
 +
@@ -490,9 +490,9 @@
 +#else
 +#define HAVE_NTLM 1
 +#endif
---- misc/neon-0.29.3/src/makefile.mk	2010-01-27 12:46:23.000000000 +0100
-+++ misc/build/neon-0.29.3/src/makefile.mk	2010-01-27 12:44:10.000000000 +0100
-@@ -1 +1,101 @@
+--- misc/neon-0.29.3/src/makefile.mk	2010-03-23 14:47:43.000000000 +0100
++++ misc/build/neon-0.29.3/src/makefile.mk	2010-03-23 14:45:21.000000000 +0100
+@@ -1 +1,102 @@
 -dummy
 +PRJ=..$/..$/..$/..$/..
 +
@@ -500,6 +500,7 @@
 +TARGET=neon
 +LIBTARGET=NO
 +USE_DEFFILE=TRUE
++NO_DEFAULT_STL=TRUE
 +EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 +UWINAPILIB=
 +
@@ -596,7 +597,7 @@
 +DEF1NAME=$(SHL1TARGET)
 +.INCLUDE :  target.mk
 --- misc/neon-0.29.3/src/ne_auth.c	2009-12-30 22:29:30.000000000 +0100
-+++ misc/build/neon-0.29.3/src/ne_auth.c	2010-01-27 12:45:34.000000000 +0100
++++ misc/build/neon-0.29.3/src/ne_auth.c	2010-03-23 12:19:50.000000000 +0100
 @@ -367,7 +367,7 @@
  static int get_credentials(auth_session *sess, ne_buffer **errmsg, int attempt,
                             struct auth_challenge *chall, char *pwbuf) 
@@ -634,7 +635,7 @@
          return status;
      }
 --- misc/neon-0.29.3/src/ne_auth.h	2009-09-01 22:13:12.000000000 +0200
-+++ misc/build/neon-0.29.3/src/ne_auth.h	2010-01-27 12:44:10.000000000 +0100
++++ misc/build/neon-0.29.3/src/ne_auth.h	2010-03-23 12:19:50.000000000 +0100
 @@ -47,8 +47,8 @@
   * Hint: if you just wish to attempt authentication just once (even if
   * the user gets the username/password wrong), have the callback
@@ -647,7 +648,7 @@
  /* Set callbacks to provide credentials for server and proxy
   * authentication, using the default set of authentication protocols.
 --- misc/neon-0.29.3/src/ne_defs.h	2009-09-02 16:04:43.000000000 +0200
-+++ misc/build/neon-0.29.3/src/ne_defs.h	2010-01-27 12:44:10.000000000 +0100
++++ misc/build/neon-0.29.3/src/ne_defs.h	2010-03-23 12:19:50.000000000 +0100
 @@ -41,7 +41,7 @@
  #endif
  
@@ -658,7 +659,7 @@
  #endif
  
 --- misc/neon-0.29.3/src/ne_locks.c	2007-02-05 11:09:27.000000000 +0100
-+++ misc/build/neon-0.29.3/src/ne_locks.c	2010-01-27 12:44:10.000000000 +0100
++++ misc/build/neon-0.29.3/src/ne_locks.c	2010-03-23 12:19:50.000000000 +0100
 @@ -579,6 +579,23 @@
          const char *token = ne_get_response_header(ctx->req, "Lock-Token");
          /* at the root element; retrieve the Lock-Token header,
@@ -726,7 +727,7 @@
  	}
      }
 --- misc/neon-0.29.3/src/ne_locks.h	2006-01-02 12:43:19.000000000 +0100
-+++ misc/build/neon-0.29.3/src/ne_locks.h	2010-01-27 12:44:10.000000000 +0100
++++ misc/build/neon-0.29.3/src/ne_locks.h	2010-03-23 12:19:50.000000000 +0100
 @@ -22,6 +22,10 @@
  #ifndef NE_LOCKS_H
  #define NE_LOCKS_H
@@ -739,7 +740,7 @@
  #include "ne_uri.h" /* for ne_uri */
  
 --- misc/neon-0.29.3/src/ne_sspi.c	2007-08-10 17:26:08.000000000 +0200
-+++ misc/build/neon-0.29.3/src/ne_sspi.c	2010-01-27 12:44:10.000000000 +0100
++++ misc/build/neon-0.29.3/src/ne_sspi.c	2010-03-23 12:19:50.000000000 +0100
 @@ -206,6 +206,45 @@
  }
  
@@ -826,7 +827,7 @@
          securityStatus =
              initializeSecurityContext(&sspiContext->credentials, NULL,
 --- misc/neon-0.29.3/src/ne_sspi.h	2006-02-12 13:05:14.000000000 +0100
-+++ misc/build/neon-0.29.3/src/ne_sspi.h	2010-01-27 12:44:10.000000000 +0100
++++ misc/build/neon-0.29.3/src/ne_sspi.h	2010-03-23 12:19:50.000000000 +0100
 @@ -41,7 +41,7 @@
  int ne_sspi_clear_context(void *context);
  
@@ -837,7 +838,7 @@
  #endif /* HAVE_SSPI */
  
 --- misc/neon-0.29.3/src/ne_uri.c	2007-12-05 12:04:47.000000000 +0100
-+++ misc/build/neon-0.29.3/src/ne_uri.c	2010-01-27 12:44:10.000000000 +0100
++++ misc/build/neon-0.29.3/src/ne_uri.c	2010-03-23 12:19:50.000000000 +0100
 @@ -42,7 +42,7 @@
  #include "ne_alloc.h"
  #include "ne_uri.h"
@@ -884,7 +885,7 @@
  /*   4x */ AT, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL,
  /*   5x */ AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, GD, OT, GD, OT, US,
 --- misc/neon-0.29.3/src/ne_utils.c	2006-03-07 10:36:43.000000000 +0100
-+++ misc/build/neon-0.29.3/src/ne_utils.c	2010-01-27 12:44:10.000000000 +0100
++++ misc/build/neon-0.29.3/src/ne_utils.c	2010-03-23 12:19:50.000000000 +0100
 @@ -118,6 +118,9 @@
  #ifdef HAVE_GNUTLS
      ", GNU TLS " LIBGNUTLS_VERSION
@@ -915,7 +916,7 @@
  #endif /* NE_HAVE_* */
      default:
 --- misc/neon-0.29.3/src/ne_utils.h	2007-07-16 08:54:57.000000000 +0200
-+++ misc/build/neon-0.29.3/src/ne_utils.h	2010-01-27 12:44:10.000000000 +0100
++++ misc/build/neon-0.29.3/src/ne_utils.h	2010-03-23 12:19:50.000000000 +0100
 @@ -54,6 +54,7 @@
  #define NE_FEATURE_SOCKS (5) /* SOCKSv5 support */
  #define NE_FEATURE_TS_SSL (6) /* Thread-safe SSL/TLS support */

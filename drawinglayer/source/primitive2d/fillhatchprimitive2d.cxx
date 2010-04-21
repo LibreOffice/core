@@ -50,12 +50,11 @@ namespace drawinglayer
         Primitive2DSequence FillHatchPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence aRetval;
-
             if(!getFillHatch().isDefault())
             {
                 // create hatch
                 const basegfx::BColor aHatchColor(getFillHatch().getColor());
-                const double fAngle(-getFillHatch().getAngle());
+                const double fAngle(getFillHatch().getAngle());
                 ::std::vector< basegfx::B2DHomMatrix > aMatrices;
 
                 // get hatch transformations
@@ -64,7 +63,7 @@ namespace drawinglayer
                     case attribute::HATCHSTYLE_TRIPLE:
                     {
                         // rotated 45 degrees
-                        texture::GeoTexSvxHatch aHatch(getObjectRange(), getFillHatch().getDistance(), fAngle + F_PI4);
+                        texture::GeoTexSvxHatch aHatch(getObjectRange(), getFillHatch().getDistance(), fAngle - F_PI4);
                         aHatch.appendTransformations(aMatrices);
 
                         // fall-through by purpose
@@ -72,7 +71,7 @@ namespace drawinglayer
                     case attribute::HATCHSTYLE_DOUBLE:
                     {
                         // rotated 90 degrees
-                        texture::GeoTexSvxHatch aHatch(getObjectRange(), getFillHatch().getDistance(), fAngle + F_PI2);
+                        texture::GeoTexSvxHatch aHatch(getObjectRange(), getFillHatch().getDistance(), fAngle - F_PI2);
                         aHatch.appendTransformations(aMatrices);
 
                         // fall-through by purpose

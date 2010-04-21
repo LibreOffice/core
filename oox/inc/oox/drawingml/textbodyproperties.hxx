@@ -41,6 +41,10 @@ struct TextBodyProperties
     PropertyMap         maPropertyMap;
     OptValue< sal_Int32 > moRotation;
     OptValue< sal_Int32 > moVert;
+
+    explicit            TextBodyProperties();
+
+    void                pushToPropMap( PropertyMap& rPropMap ) const;
 };
 
 // ============================================================================

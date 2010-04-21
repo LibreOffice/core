@@ -52,6 +52,7 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         ::osl::Mutex            m_aMutex;
         bool                    m_bVeto;
         bool                    m_bListenForTermination;
+        bool                    m_bSystemDialogs;
         ResMgr*                 m_pResMgr;
         sfx2::FileDialogHelper* m_pFileDlg;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;

@@ -233,7 +233,7 @@ ModalDialog RID_SCDLG_DELCONT
     {
         Pos = MAP_APPFONT ( 12 , 86 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
-        Text [ en-US ] = "Not~es" ;
+        Text [ en-US ] = "~Comments" ;
         TabStop = TRUE ;
     };
     CheckBox BTN_DELOBJECTS
@@ -326,14 +326,14 @@ ModalDialog RID_SCDLG_INSCONT
     {
         Pos = MAP_APPFONT ( 12 , 114 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
-        Text [ en-US ] = "O~bjects" ;
+        Text [ en-US ] = "~Objects" ;
         TabStop = TRUE ;
     };
     CheckBox BTN_INSNOTES
     {
         Pos = MAP_APPFONT ( 12 , 86 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
-        Text [ en-US ] = "N~otes" ;
+        Text [ en-US ] = "~Comments" ;
         TabStop = TRUE ;
     };
     FixedLine FL_FRAME
@@ -358,7 +358,7 @@ ModalDialog RID_SCDLG_INSCONT
     {
         Pos = MAP_APPFONT ( 111 , 44 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
-        Text [ en-US ] = "S~ubtract" ;
+        Text [ en-US ] = "~Subtract" ;
     };
     RadioButton BTN_OP_MUL
     {

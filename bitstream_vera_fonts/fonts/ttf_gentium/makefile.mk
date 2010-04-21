@@ -37,6 +37,7 @@ TARGET=ttf_gentium
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=gentiumbasic-fonts-1.10
+TARFILE_MD5=35efabc239af896dfb79be7ebdd6e6b9
 TARFILE_ROOTDIR=gentiumbasic-fonts-1.10
 
 PATCH_FILES=

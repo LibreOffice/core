@@ -26,6 +26,7 @@
  ************************************************************************/
 package helper;
 
+import java.io.File;
 import java.util.Properties;
 
 import lib.TestParameters;
@@ -94,7 +95,8 @@ public class ClParser
 
                     if (pName.equals("TestDocumentPath"))
                     {
-                        System.setProperty("DOCPTH", pValue);
+                        System.setProperty(
+                            "DOCPTH", new File(pValue).getAbsolutePath());
                     }
                     else if (pName.equals(PropertyName.SRC_ROOT))
                     {

@@ -1110,11 +1110,11 @@ REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( stc )
 
 // registering the mso file types
 
-CONDITIONAL_REGISTER_DOC_EXTENSION( Xls,  gid_Module_Prg_Calc_Bin, xls,  XLS,  MS_EXCEL_WORKSHEET_OLD, 29, scalc.exe, open, Calc )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsx, gid_Module_Prg_Calc_Bin, xlsx, XLSX, MS_EXCEL_WORKSHEET, 29, scalc.exe, open, Calc )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsm, gid_Module_Prg_Calc_Bin, xlsm, XLSM, MS_EXCEL_WORKSHEET, 29, scalc.exe, open, Calc )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsb, gid_Module_Prg_Calc_Bin, xlsb, XLSB, MS_EXCEL_WORKSHEET, 29, scalc.exe, open, Calc )
-CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xlt,  gid_Module_Prg_Calc_Bin, xlt,  XLT,  MS_EXCEL_TEMPLATE_OLD, 30, scalc.exe, new, Calc )
-CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xltx, gid_Module_Prg_Calc_Bin, xltx, XLTX, MS_EXCEL_TEMPLATE, 30, scalc.exe, new, Calc )
-CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xltm, gid_Module_Prg_Calc_Bin, xltm, XLTM, MS_EXCEL_TEMPLATE, 30, scalc.exe, new, Calc )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Xls,  gid_Module_Prg_Calc_MSO_Reg, xls,  XLS,  MS_EXCEL_WORKSHEET_OLD, 29, scalc.exe, open, Calc )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsx, gid_Module_Prg_Calc_MSO_Reg, xlsx, XLSX, MS_EXCEL_WORKSHEET, 29, scalc.exe, open, Calc )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsm, gid_Module_Prg_Calc_MSO_Reg, xlsm, XLSM, MS_EXCEL_WORKSHEET, 29, scalc.exe, open, Calc )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsb, gid_Module_Prg_Calc_MSO_Reg, xlsb, XLSB, MS_EXCEL_WORKSHEET, 29, scalc.exe, open, Calc )
+CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xlt,  gid_Module_Prg_Calc_MSO_Reg, xlt,  XLT,  MS_EXCEL_TEMPLATE_OLD, 30, scalc.exe, new, Calc )
+CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xltx, gid_Module_Prg_Calc_MSO_Reg, xltx, XLTX, MS_EXCEL_TEMPLATE, 30, scalc.exe, new, Calc )
+CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xltm, gid_Module_Prg_Calc_MSO_Reg, xltm, XLTM, MS_EXCEL_TEMPLATE, 30, scalc.exe, new, Calc )
 

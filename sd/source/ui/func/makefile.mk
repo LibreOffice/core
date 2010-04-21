@@ -61,7 +61,6 @@ SLOFILES = \
         $(SLO)$/fuscale.obj		\
         $(SLO)$/futransf.obj 	\
         $(SLO)$/futext.obj		\
-        $(SLO)$/futext2.obj		\
         $(SLO)$/fuline.obj		\
         $(SLO)$/sdundo.obj		\
         $(SLO)$/sdundogr.obj 	\
@@ -133,7 +132,6 @@ LIB1OBJFILES= \
         $(SLO)$/fuscale.obj		\
         $(SLO)$/futransf.obj 	\
         $(SLO)$/futext.obj		\
-        $(SLO)$/futext2.obj		\
         $(SLO)$/fuline.obj		\
         $(SLO)$/sdundo.obj		\
         $(SLO)$/sdundogr.obj 	\

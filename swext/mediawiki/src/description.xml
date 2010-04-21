@@ -14,6 +14,6 @@
         <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0 or StarOffice 9"/>
     </dependencies>
     <publisher>
-        <name xlink:href="http://www.sun.com/software/star/staroffice/extensions.jsp?cid=925095" lang="en">Oracle</name>
+        <name xlink:href="http://www.oracle.com/us/products/applications/open-office" lang="en">Oracle</name>
     </publisher>
 </description>

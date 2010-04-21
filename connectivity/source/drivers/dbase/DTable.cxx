@@ -1527,6 +1527,7 @@ BOOL ODbaseTable::InsertRow(OValueRefVector& rRow, BOOL bFlush,const Reference<X
     // Buffer mit Leerzeichen fuellen
     AllocBuffer();
     memset(m_pBuffer, 0, m_aHeader.db_slng);
+    m_pBuffer[0] = ' ';
 
     // Gesamte neue Row uebernehmen:
     // ... und am Ende als neuen Record hinzufuegen:

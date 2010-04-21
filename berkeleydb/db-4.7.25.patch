@@ -646,7 +646,7 @@
 +
 --- misc/db-4.7.25.NC/makefile.mk	2009-07-21 11:42:40.000000000 +0200
 +++ misc/build/db-4.7.25.NC/makefile.mk	2009-07-21 11:39:26.000000000 +0200
-@@ -1 +1,81 @@
+@@ -1 +1,76 @@
 -dummy
 +PRJ=..$/..$/..$/..
 +PRJNAME=libdb47
@@ -658,11 +658,6 @@
 +CFLAGS+=-GS -EHsc -Gy
 +
 +#LINKFLAGS!:=$(LINKFLAGS:s/NODEFAULTLIB/NOLOGO/)
-+.IF "$(USE_SHELL)"!="4nt"
-+BUILD_ACTION_SEP=;
-+.ELSE # "$(USE_SHELL)"!="4nt"
-+BUILD_ACTION_SEP=^
-+.ENDIF # "$(USE_SHELL)"!="4nt"
 +
 +CHILDREN= \
 +    btree clib common cxx \
@@ -720,7 +715,7 @@
 +ALLTAR : $(CHILDREN)
 +
 +$(CHILDREN) .PHONY :
-+	cd $@ $(BUILD_ACTION_SEP) $(MAKECMD) subdmake=true $(MFLAGS) $(CALLMACROS)
++	cd $@ ; $(MAKECMD) subdmake=true $(MFLAGS) $(CALLMACROS)
 +
 +.INCLUDE :  target.mk
 +

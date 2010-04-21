@@ -322,6 +322,7 @@ oslProcessError SAL_CALL osl_getExecutableFile( rtl_uString **ppustrFile )
     oslProcessError result = osl_Process_E_NotFound;
 
     osl_acquireMutex (*osl_getGlobalMutex());
+    OSL_ASSERT(g_command_args.m_nCount > 0);
     if (g_command_args.m_nCount > 0)
     {
         /* CommandArgs set. Obtain arv[0]. */
@@ -340,6 +341,7 @@ sal_uInt32 SAL_CALL osl_getCommandArgCount(void)
     sal_uInt32 result = 0;
 
     osl_acquireMutex (*osl_getGlobalMutex());
+    OSL_ASSERT(g_command_args.m_nCount > 0);
     if (g_command_args.m_nCount > 0)
     {
         /* We're not counting argv[0] here. */
@@ -357,6 +359,7 @@ oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCo
     oslProcessError result = osl_Process_E_NotFound;
 
     osl_acquireMutex (*osl_getGlobalMutex());
+    OSL_ASSERT(g_command_args.m_nCount > 0);
     if (g_command_args.m_nCount > (nArg + 1))
     {
         /* We're not counting argv[0] here. */
@@ -372,6 +375,7 @@ oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCo
 
 void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
 {
+    OSL_ASSERT(argc > 0);
     osl_acquireMutex (*osl_getGlobalMutex());
     if (g_command_args.m_nCount == 0)
     {

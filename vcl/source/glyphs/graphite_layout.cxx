@@ -63,13 +63,13 @@
 #include <unicode/uscript.h>
 
 // Graphite Libraries (must be after vcl headers on windows)
-#include "pregraphitestl.h"
+#include <tools/preextstl.h>
 #include <graphite/GrClient.h>
 #include <graphite/Font.h>
 #include <graphite/ITextSource.h>
 #include <graphite/Segment.h>
 #include <graphite/SegmentPainter.h>
-#include "postgraphitestl.h"
+#include <tools/postextstl.h>
 
 #include <vcl/graphite_layout.hxx>
 #include <vcl/graphite_features.hxx>
@@ -104,8 +104,8 @@ FILE * grLog()
 
 namespace
 {
-    typedef sil_std::pair<gr::GlyphIterator, gr::GlyphIterator>       glyph_range_t;
-    typedef sil_std::pair<gr::GlyphSetIterator, gr::GlyphSetIterator> glyph_set_range_t;
+    typedef ext_std::pair<gr::GlyphIterator, gr::GlyphIterator>       glyph_range_t;
+    typedef ext_std::pair<gr::GlyphSetIterator, gr::GlyphSetIterator> glyph_set_range_t;
 
     inline long round(const float n) {
         return long(n + (n < 0 ? -0.5 : 0.5));
@@ -170,7 +170,7 @@ GraphiteLayout::Glyphs::fill_from(gr::Segment & rSegment, ImplLayoutArgs &rArgs,
     bool bRtl, long &rWidth, float fScaling, std::vector<int> & rChar2Base, std::vector<int> & rGlyph2Char, std::vector<int> & rCharDxs)
 {
     // Create a glyph item for each of the glyph and append it to the base class glyph list.
-    typedef sil_std::pair< gr::GlyphSetIterator, gr::GlyphSetIterator > GrGlyphSet;
+    typedef ext_std::pair< gr::GlyphSetIterator, gr::GlyphSetIterator > GrGlyphSet;
     int nChar = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
     glyph_range_t iGlyphs = rSegment.glyphs();
     int nGlyphs = iGlyphs.second - iGlyphs.first;
@@ -585,7 +585,7 @@ public:
     sal_Int32 hashCode(const grutils::GrFeatureParser * mpFeatures)
     {
         // is this sufficient?
-        sil_std::wstring aFace;
+        ext_std::wstring aFace;
         bool bBold;
         bool bItalic;
         UniqueCacheInfo(aFace, bBold, bItalic);

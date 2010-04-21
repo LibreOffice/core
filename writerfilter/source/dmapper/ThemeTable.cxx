@@ -25,9 +25,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_FONTTABLE_HXX
 #include <ThemeTable.hxx>
-#endif
 #ifndef INCLUDED_RESOURCESIDS
 #include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>

@@ -1783,8 +1783,6 @@ void DbgDialogTest( Window* pWindow )
 }
 
 // =======================================================================
-void DbgPrintShell( const char* pLine );
-
 #ifndef WNT
 #define USE_VCL_MSGBOX
 #define COPY_BUTTON_ID 25
@@ -1963,27 +1961,6 @@ void DbgPrintWindow( const char* pLine )
     bIn = FALSE;
 }
 
-// -----------------------------------------------------------------------
-
-void DbgPrintShell( const char* pLine )
-{
-#if defined( WNT )
-    // TODO: Shouldn't this be a IsDebuggerPresent()?
-    if ( GetSystemMetrics( SM_DEBUG ) )
-    {
-        strcpy( aDbgOutBuf, pLine );
-        strcat( aDbgOutBuf, "\r\n" );
-        OutputDebugString( aDbgOutBuf );
-        return;
-    }
-
-    DbgPrintWindow( pLine );
-#endif
-#ifdef UNX
-    fprintf( stderr, "%s\n", pLine );
-#endif
-}
-
 // =======================================================================
 
 #ifdef WNT
@@ -1996,7 +1973,6 @@ void DbgGUIInit()
 {
     DbgSetPrintMsgBox( DbgPrintMsgBox );
     DbgSetPrintWindow( DbgPrintWindow );
-    DbgSetPrintShell( DbgPrintShell );
 #ifdef WNT
     DbgSetTestSolarMutex( ImplDbgTestSolarMutex );
 #endif
@@ -2008,7 +1984,6 @@ void DbgGUIDeInit()
 {
     DbgSetPrintMsgBox( NULL );
     DbgSetPrintWindow( NULL );
-    DbgSetPrintShell( NULL );
 #ifdef WNT
     DbgSetTestSolarMutex( NULL );
 #endif

@@ -38,6 +38,8 @@ Globals
  			PACKAGEMAP package_names.txt,package_names_ext.txt
 			WINDOWSPATCHLEVEL 6
 			OPENSOURCE 1
+			OOODOWNLOADNAME 1
+			STARTCENTER_LAYOUT_STYLE 0
 		}
 	}
 }
@@ -137,6 +139,7 @@ OpenOffice_wJRE
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
 			SERVICESPROJEKT 1
+			WITHJREPRODUCT 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			SPELLCHECKERFILE spellchecker_selection.txt
@@ -353,6 +356,7 @@ OpenOffice_Dev_SDK
             UREPACKAGEPREFIX ooodev
             SOLSUREPACKAGEPREFIX ooodev
             REGISTRYLAYERNAME LayerDev
+			DEVELOPMENTPRODUCT 1
             PACK_INSTALLED 1
             POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
@@ -483,6 +487,7 @@ BrOffice_wJRE
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
 			SERVICESPROJEKT 1
+			WITHJREPRODUCT 1
 			SETSTATICPATH 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles

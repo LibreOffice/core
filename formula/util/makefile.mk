@@ -120,7 +120,6 @@ DEFLIB2NAME=$(TARGET2)
 .ENDIF
 
 SHL2USE_EXPORTS=name
-# SHL2VERSIONMAP=$(TARGET2).map
 
 # --- .res file ----------------------------------------------------------
 

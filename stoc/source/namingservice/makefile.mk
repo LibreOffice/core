@@ -50,7 +50,7 @@ SHL1STDLIBS= \
         $(CPPUHELPERLIB)	\
         $(SALLIB)
 
-SHL1VERSIONMAP = namingservice.map
+SHL1VERSIONMAP = $(SOLARENV)/src/unloadablecomponent.map
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)

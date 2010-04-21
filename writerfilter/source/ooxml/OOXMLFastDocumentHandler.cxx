@@ -27,9 +27,14 @@
 
 #include <iostream>
 #include <boost/shared_ptr.hpp>
+#ifdef DEBUG_ELEMENT
+#include "ooxmlLoggers.hxx"
+#include <resourcemodel/Protocol.hxx>
+#endif
 #include "OOXMLFastDocumentHandler.hxx"
 #include "OOXMLFastContextHandler.hxx"
 #include "OOXMLFastTokens.hxx"
+#include "OOXMLFactory.hxx"
 
 namespace writerfilter {
 namespace ooxml
@@ -135,7 +140,7 @@ OOXMLFastDocumentHandler::getContextHandler() const
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
  OOXMLFastDocumentHandler::createFastChildContext
 (::sal_Int32 Element,
- const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
+ const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
 #ifdef DEBUG_CONTEXT_STACK
@@ -144,7 +149,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
          << endl;
 #endif
 
-    return getContextHandler()->createFromStart(Element, Attribs);
+    return OOXMLFactory::getInstance()->createFastChildContextFromStart(getContextHandler().get(), Element);
 }
 
 OOXMLParserState::Pointer_t OOXMLFastDocumentHandler::getParserState() const
@@ -209,7 +214,12 @@ void SAL_CALL OOXMLFastDocumentHandler::setDocumentLocator
 
 void OOXMLFastDocumentHandler::setStream(Stream * pStream)
 {
+#ifdef DEBUG_PROTOCOL
+    mpTmpStream.reset(new StreamProtocol(pStream, debug_logger));
+    mpStream = mpTmpStream.get();
+#else
     mpStream = pStream;
+#endif
 }
 
 void OOXMLFastDocumentHandler::setDocument(OOXMLDocument * pDocument)

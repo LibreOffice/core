@@ -90,7 +90,7 @@ Reference< XFastContextHandler > ShapeContext::createFastChildContext( sal_Int32
         break;
     case XML_ph:
         mpShapePtr->setSubType( xAttribs->getOptionalValueToken( XML_type, XML_obj ) );
-        mpShapePtr->setIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
+        mpShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
         break;
     // nvSpPr CT_ShapeNonVisual end
 

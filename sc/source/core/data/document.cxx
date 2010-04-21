@@ -696,14 +696,22 @@ bool ScDocument::ShrinkToDataArea(SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow
     return true;  // success!
 }
 
+bool ScDocument::ShrinkToUsedDataArea( SCTAB nTab, SCCOL& rStartCol,
+        SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return false;
+    return pTab[nTab]->ShrinkToUsedDataArea( rStartCol, rStartRow, rEndCol, rEndRow, bColumnsOnly);
+}
+
 //  zusammenhaengender Bereich
 
 void ScDocument::GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
-                                SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld )
+                                SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld, bool bOnlyDown )
 {
     if (VALIDTAB(nTab))
         if (pTab[nTab])
-            pTab[nTab]->GetDataArea( rStartCol, rStartRow, rEndCol, rEndRow, bIncludeOld );
+            pTab[nTab]->GetDataArea( rStartCol, rStartRow, rEndCol, rEndRow, bIncludeOld, bOnlyDown );
 }
 
 
@@ -953,7 +961,7 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
         {
             UpdateReference( URM_INSDEL, nStartCol, nStartRow+nSize, nTabRangeStart,
                              nEndCol, MAXROW, nTabRangeEnd,
-                             0, -(static_cast<SCsROW>(nSize)), 0, pRefUndoDoc );
+                             0, -(static_cast<SCsROW>(nSize)), 0, pRefUndoDoc, TRUE, false );
         }
         while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark ) );
     }
@@ -1054,7 +1062,7 @@ BOOL ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
         {
             UpdateReference( URM_INSDEL, nStartCol, nStartRow, nTabRangeStart,
                              MAXCOL, nEndRow, nTabRangeEnd,
-                             static_cast<SCsCOL>(nSize), 0, 0, pRefUndoDoc );
+                             static_cast<SCsCOL>(nSize), 0, 0, pRefUndoDoc, TRUE, false );
         }
         while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark ) );
 
@@ -1143,7 +1151,7 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
         {
             UpdateReference( URM_INSDEL, sal::static_int_cast<SCCOL>(nStartCol+nSize), nStartRow, nTabRangeStart,
                              MAXCOL, nEndRow, nTabRangeEnd,
-                             -static_cast<SCsCOL>(nSize), 0, 0, pRefUndoDoc );
+                             -static_cast<SCsCOL>(nSize), 0, 0, pRefUndoDoc, TRUE, false );
         }
         while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark ) );
     }

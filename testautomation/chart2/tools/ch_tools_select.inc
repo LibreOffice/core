@@ -127,7 +127,7 @@ function fChartSelectElement ( iObjectPosition as INTEGER ) as boolean
 	fChartSelectElement = FALSE
 	try
 		Kontext "Toolbar"
-		sleep (1)
+		sleep (2)
 		ChartElementSelector.Select (iObjectPosition)
 		fChartSelectElement = TRUE
 	catch

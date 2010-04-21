@@ -113,8 +113,6 @@ LIB1OBJFILES= \
 
 LIB2TARGET= $(SLB)$/$(TARGET).lib
 LIB2OBJFILES= \
-         $(SLO)$/svdoimp.obj         \
-         $(SLO)$/svdscrol.obj        \
          $(SLO)$/ActionDescriptionProvider.obj \
          $(SLO)$/impgrfll.obj
 

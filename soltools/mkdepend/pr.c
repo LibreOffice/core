@@ -44,6 +44,7 @@ void add_include(filep, file, file_red, include, dot, failOK, incCollection, sym
     struct inclist  *file, *file_red;
     char    *include;
     boolean dot;
+    boolean failOK;
     struct IncludesCollection* incCollection;
     struct symhash  *symbols;
 {

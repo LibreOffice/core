@@ -1689,6 +1689,9 @@ namespace sdr { namespace contact {
         if ( !bHadControl && rControl.is() && rControl.isVisible() )
             rControl.invalidate();
 
+        if ( !bHadControl && rControl.is() && rControl.isVisible() )
+            rControl.invalidate();
+
         // check if we already have an XControl.
         if ( !xControlModel.is() || !rControl.is() )
             // use the default mechanism. This will create a ControlPrimitive2D without

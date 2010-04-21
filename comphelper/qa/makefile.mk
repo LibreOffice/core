@@ -33,6 +33,8 @@ ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
 
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
 DLLPRE = # no leading "lib" on .so files
 
 INCPRE += $(MISC)$/$(TARGET)$/inc

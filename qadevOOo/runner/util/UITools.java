@@ -674,26 +674,6 @@ public class UITools {
         }
      }
 
-
-    /**
-     * fetch the active window which is on the top of the X-desktop
-     * @return the active window
-     * @throws java.lang.Exception if something fail
-     */
-    public XWindow getActiveTopWindow() throws java.lang.Exception
-    {
-        XInterface xToolKit = null;
-        try {
-            xToolKit = (XInterface) mMSF.createInstance("com.sun.star.awt.Toolkit") ;
-        } catch (com.sun.star.uno.Exception e) {
-          throw new Exception("Could not toolkit: " + e.toString());
-        }
-        XExtendedToolkit tk = (XExtendedToolkit)
-            UnoRuntime.queryInterface(XExtendedToolkit.class, xToolKit);
-        Object atw = tk.getActiveTopWindow();
-        return (XWindow) UnoRuntime.queryInterface(XWindow.class, atw);
-    }
-
     /**
      * fetch the window which is equal to the given <CODE>WindowName</CODE>
      * @return the named window

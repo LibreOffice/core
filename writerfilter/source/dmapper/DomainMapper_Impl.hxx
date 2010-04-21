@@ -48,6 +48,7 @@
 #include <ListTable.hxx>
 #include <LFOTable.hxx>
 #include <StyleSheetTable.hxx>
+#include <SettingsTable.hxx>
 #include <ThemeTable.hxx>
 #include <SettingsTable.hxx>
 #include <GraphicImport.hxx>
@@ -306,8 +307,9 @@ private:
     LFOTablePtr             m_pLFOTable;
     StyleSheetTablePtr      m_pStyleSheetTable;
     ThemeTablePtr           m_pThemeTable;
-    GraphicImportPtr        m_pGraphicImport;
     SettingsTablePtr        m_pSettingsTable;
+    GraphicImportPtr        m_pGraphicImport;
+
 
     PropertyMapPtr                  m_pTopContext;
 
@@ -433,10 +435,10 @@ public:
         return m_pThemeTable;
     }
 
-    SettingsTablePtr GetSettingsTable( )
+    SettingsTablePtr GetSettingsTable()
     {
-        if ( !m_pSettingsTable )
-            m_pSettingsTable.reset( new SettingsTable );
+        if( !m_pSettingsTable )
+            m_pSettingsTable.reset( new SettingsTable( m_rDMapper, m_xTextFactory ) );
         return m_pSettingsTable;
     }
 
@@ -532,6 +534,8 @@ public:
     void SetCurrentRedlineToken( sal_Int32 nToken );
     void RemoveCurrentRedline( );
     void ResetParaRedline( );
+
+    void ApplySettingsTable();
 
 };
 } //namespace dmapper

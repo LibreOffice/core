@@ -70,18 +70,21 @@ public class ModuleUIConfigurationManager extends TestCase {
      */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
-
-        try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                                XCloseable.class, xTextDoc);
-            closer.close(true);
-        } catch (com.sun.star.util.CloseVetoException e) {
-            log.println("couldn't close document");
-        } catch (com.sun.star.lang.DisposedException e) {
-            log.println("couldn't close document");
+        if (xTextDoc != null) {
+            try {
+                XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                    XCloseable.class, xTextDoc);
+                closer.close(true);
+            } catch (com.sun.star.util.CloseVetoException e) {
+                log.println("couldn't close document");
+            } catch (com.sun.star.lang.DisposedException e) {
+                log.println("couldn't close document");
+            }
         }
         log.println("   disposing storage");
-        xStore.dispose();
+        if (xStore != null) {
+            xStore.dispose();
+        }
     }
 
     /**

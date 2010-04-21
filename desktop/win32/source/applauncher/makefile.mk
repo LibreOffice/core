@@ -129,7 +129,7 @@ APP6PRODUCTDEF+=-DRES_APP_NAME=smath
 APP7TARGET=so$/sweb
 APP7NOSAL=TRUE
 APP7LINKRES=$(MISC)$/$(TARGET)7.res
-APP7ICON=$(SOLARRESDIR)$/icons/so9_html_doc.ico
+APP7ICON=$(SOLARRESDIR)$/icons/so9_writer_app.ico
 APP7OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/sweb.obj

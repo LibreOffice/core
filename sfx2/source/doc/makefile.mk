@@ -75,7 +75,6 @@ SLOFILES =	\
         $(SLO)$/objembed.obj\
         $(SLO)$/graphhelp.obj \
         $(SLO)$/QuerySaveDocument.obj \
-        $(SLO)$/opostponedtruncationstream.obj \
         $(SLO)$/docinsert.obj \
         $(SLO)$/docmacromode.obj \
         $(SLO)$/SfxDocumentMetaData.obj \

@@ -60,8 +60,6 @@
     xmlns:UML = 'org.omg.xmi.namespace.UML' xml:space="default">
   <xsl:output method="xml" />
 
-  <!--<xsl:include href="resourcestools.xsl"/>-->
-
   <xsl:key name="namespace-aliases" match="//namespace-alias" use="@name"/>
 
   <xsl:template match="/">
@@ -100,7 +98,7 @@
     <xsl:value-of select="ancestor::namespace/rng:grammar/@ns"/>
   </xsl:template>
 
-  <xsl:template match="rng:element[@name] | rng:attribute[@name] | element | attribute">
+  <xsl:template match="rng:element[@name|./rng:anyName] | rng:attribute[@name] | element | attribute">
     <xsl:variable name="prefix">
       <xsl:choose>
         <xsl:when test="contains(@name, ':')">
@@ -110,7 +108,7 @@
           </xsl:call-template>
         </xsl:when>
         <xsl:when test="name(.)='attribute'">
-          <xsl:if test="ancestor::rng:grammar/@attributeFormDefault='qualified'">
+          <xsl:if test="ancestor::namespace/rng:grammar/@attributeFormDefault='qualified'">
             <xsl:call-template name="prefixforgrammar"/>
           </xsl:if>
         </xsl:when>
@@ -140,6 +138,9 @@
         <xsl:when test="contains(@name, ':')">
           <xsl:value-of select="substring-after(@name, ':')"/>
         </xsl:when>
+	<xsl:when test="./rng:anyName">
+	  <xsl:text>FAST_TOKENS_END</xsl:text>
+	</xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="@name"/>
         </xsl:otherwise>

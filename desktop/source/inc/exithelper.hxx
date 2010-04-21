@@ -56,12 +56,8 @@ class ExitHelper
             E_SECOND_OFFICE = 1,
             /// an uno exception was catched during startup
             E_FATAL_ERROR = 333,    // Only the low 8 bits are significant 333 % 256 = 77
-            /// crash during runtime
-            E_CRASH = 78,
             /// user force automatic restart after crash
             E_CRASH_WITH_RESTART = 79,
-            /// ???
-            E_LOCKFILE = 80
         };
 };
 

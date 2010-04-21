@@ -489,7 +489,16 @@ static void ChildStatusProc(void *pData)
         {
             int i;
             for (i = 0; data.m_pszEnv[i] != NULL; i++)
-                 putenv(data.m_pszEnv[i]);
+            {
+                if (strchr(data.m_pszEnv[i], '=') == NULL)
+                {
+                    unsetenv(data.m_pszEnv[i]); /*TODO: check error return*/
+                }
+                else
+                {
+                    putenv(data.m_pszEnv[i]); /*TODO: check error return*/
+                }
+            }
 
             OSL_TRACE("ChildStatusProc : starting '%s'",data.m_pszArgs[0]);
 

@@ -35,6 +35,8 @@ import com.sun.star.awt.XDevice;
 import com.sun.star.awt.XRegion;
 import com.sun.star.awt.XToolkit;
 import com.sun.star.awt.XWindowPeer;
+import com.sun.star.lang.XComponent;
+import com.sun.star.uno.UnoRuntime;
 
 /**
 * Testing <code>com.sun.star.awt.XToolkit</code>
@@ -87,6 +89,7 @@ public class _XToolkit extends MultiMethodTest {
             if (cWin == null) {
                 log.println("createWindow() create a NULL Object");
             } else {
+                UnoRuntime.queryInterface(XComponent.class, cWin).dispose();
                 res = true;
             }
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
@@ -111,6 +114,8 @@ public class _XToolkit extends MultiMethodTest {
             if ( (cWins[0] == null) || (cWins[1] == null) ) {
                 log.println("createWindows() creates NULL Windows");
             } else {
+                UnoRuntime.queryInterface(XComponent.class, cWins[0]).dispose();
+                UnoRuntime.queryInterface(XComponent.class, cWins[1]).dispose();
                 res = true;
             }
         } catch (com.sun.star.lang.IllegalArgumentException ex) {

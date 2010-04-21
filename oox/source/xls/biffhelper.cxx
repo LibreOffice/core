@@ -119,24 +119,48 @@ struct CodePageEntry_TEPred
 
 // ----------------------------------------------------------------------------
 
-bool lclCalcRkFromDouble( sal_Int32& ornRkValue, double fValue )
+union DecodedDouble
+{
+    double              mfValue;
+    sal_math_Double     maStruct;
+
+    inline explicit     DecodedDouble() {}
+    inline explicit     DecodedDouble( double fValue ) : mfValue( fValue ) {}
+};
+
+bool lclCalcRkFromDouble( sal_Int32& ornRkValue, const DecodedDouble& rDecDbl )
 {
     // double
-    const sal_math_Double* pValue = reinterpret_cast< const sal_math_Double* >( &fValue );
-    if( (pValue->w32_parts.lsw == 0) && ((pValue->w32_parts.msw & 0x3) == 0) )
+    if( (rDecDbl.maStruct.w32_parts.lsw == 0) && ((rDecDbl.maStruct.w32_parts.msw & 0x3) == 0) )
     {
-        ornRkValue = static_cast< sal_Int32 >( pValue->w32_parts.msw );
+        ornRkValue = static_cast< sal_Int32 >( rDecDbl.maStruct.w32_parts.msw );
         return true;
     }
 
     // integer
     double fInt = 0.0;
-    double fFrac = modf( fValue, &fInt );
+    double fFrac = modf( rDecDbl.mfValue, &fInt );
     if( (fFrac == 0.0) && (-536870912.0 <= fInt) && (fInt <= 536870911.0) ) // 2^29
     {
         ornRkValue = static_cast< sal_Int32 >( fInt );
         ornRkValue <<= 2;
         ornRkValue |= BIFF_RK_INTFLAG;
+        return true;
+    }
+
+    return false;
+}
+
+bool lclCalcRkFromDouble( sal_Int32& ornRkValue, double fValue )
+{
+    DecodedDouble aDecDbl( fValue );
+    if( lclCalcRkFromDouble( ornRkValue, aDecDbl ) )
+        return true;
+
+    aDecDbl.mfValue *= 100.0;
+    if( lclCalcRkFromDouble( ornRkValue, aDecDbl ) )
+    {
+        ornRkValue |= BIFF_RK_100FLAG;
         return true;
     }
 
@@ -229,23 +253,22 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
 
 /*static*/ double BiffHelper::calcDoubleFromRk( sal_Int32 nRkValue )
 {
-    double fValue = 0.0;
+    DecodedDouble aDecDbl( 0.0 );
     if( getFlag( nRkValue, BIFF_RK_INTFLAG ) )
     {
         sal_Int32 nTemp = nRkValue >> 2;
         setFlag< sal_Int32 >( nTemp, 0xE0000000, nRkValue < 0 );
-        fValue = nTemp;
+        aDecDbl.mfValue = nTemp;
     }
     else
     {
-        sal_math_Double* pDouble = reinterpret_cast< sal_math_Double* >( &fValue );
-        pDouble->w32_parts.msw = static_cast< sal_uInt32 >( nRkValue & BIFF_RK_VALUEMASK );
+        aDecDbl.maStruct.w32_parts.msw = static_cast< sal_uInt32 >( nRkValue & BIFF_RK_VALUEMASK );
     }
 
     if( getFlag( nRkValue, BIFF_RK_100FLAG ) )
-        fValue /= 100.0;
+        aDecDbl.mfValue /= 100.0;
 
-    return fValue;
+    return aDecDbl.mfValue;
 }
 
 /*static*/ bool BiffHelper::calcRkFromDouble( sal_Int32& ornRkValue, double fValue )
@@ -276,10 +299,10 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
         case BIFF_ERR_NA:       nApiError = 0x7FFF; break;
         default:    OSL_ENSURE( false, "BiffHelper::calcDoubleFromError - unknown error code" );
     }
-    double fValue;
-    ::rtl::math::setNan( &fValue );
-    reinterpret_cast< sal_math_Double* >( &fValue )->nan_parts.fraction_lo = nApiError;
-    return fValue;
+    DecodedDouble aDecDbl;
+    ::rtl::math::setNan( &aDecDbl.mfValue );
+    aDecDbl.maStruct.nan_parts.fraction_lo = nApiError;
+    return aDecDbl.mfValue;
 }
 
 /*static*/ rtl_TextEncoding BiffHelper::calcTextEncodingFromCodePage( sal_uInt16 nCodePage )
@@ -309,15 +332,14 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
     sal_uInt16 nFormat, nEnv;
     sal_Int32 nBytes;
     rStrm >> nFormat >> nEnv >> nBytes;
-    OSL_ENSURE( (nFormat == BIFF_IMGDATA_WMF) || (nFormat == BIFF_IMGDATA_DIB) || (nFormat == BIFF_IMGDATA_NATIVE), "BiffHelper::importImgData - unknown format" );
     OSL_ENSURE( nBytes > 0, "BiffHelper::importImgData - invalid data size" );
     if( (0 < nBytes) && (nBytes <= rStrm.getRemaining()) )
     {
         switch( nFormat )
         {
-            case BIFF_IMGDATA_WMF:      /* TODO */                                              break;
+//            case BIFF_IMGDATA_WMF:      /* TODO */                                              break;
             case BIFF_IMGDATA_DIB:      lclImportImgDataDib( orDataSeq, rStrm, nBytes, eBiff ); break;
-            case BIFF_IMGDATA_NATIVE:   /* TODO */                                              break;
+//            case BIFF_IMGDATA_NATIVE:   /* TODO */                                              break;
             default:                    OSL_ENSURE( false, "BiffHelper::importImgData - unknown image format" );
         }
     }

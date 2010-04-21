@@ -1265,10 +1265,72 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     return pNdTbl;
 }
 
+SwNodeRange * SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange)
+{
+    SwNodeRange * pResult = NULL;
+    bool bChanged = false;
+
+    SwNodeIndex aNewStart = rRange.aStart;
+    SwNodeIndex aNewEnd = rRange.aEnd;
+
+    SwNodeIndex aEndIndex = rRange.aEnd;
+    SwNodeIndex aIndex = rRange.aStart;
+
+    while (aIndex < aEndIndex)
+    {
+        SwNode& rNode = aIndex.GetNode();
+
+        if (rNode.IsStartNode())
+        {
+            // advance aIndex to the end node of this start node
+            SwNode * pEndNode = rNode.EndOfSectionNode();
+            aIndex = *pEndNode;
+
+            if (aIndex > aNewEnd)
+            {
+                aNewEnd = aIndex;
+                bChanged = true;
+            }
+        }
+        else if (rNode.IsEndNode())
+        {
+            SwNode * pStartNode = rNode.StartOfSectionNode();
+            SwNodeIndex aStartIndex = *pStartNode;
+
+            if (aStartIndex < aNewStart)
+            {
+                aNewStart = aStartIndex;
+                bChanged = true;
+            }
+        }
+
+        if (aIndex < aEndIndex)
+            ++aIndex;
+    }
+
+    SwNode * pNode = &aIndex.GetNode();
+    while (pNode->IsEndNode())
+    {
+        SwNode * pStartNode = pNode->StartOfSectionNode();
+        SwNodeIndex aStartIndex(*pStartNode);
+        aNewStart = aStartIndex;
+        aNewEnd = aIndex;
+        bChanged = true;
+
+        ++aIndex;
+        pNode = &aIndex.GetNode();
+    }
+
+    if (bChanged)
+        pResult = new SwNodeRange(aNewStart, aNewEnd);
+
+    return pResult;
+}
+
 /*-- 18.05.2006 08:23:28---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwTableNode* SwNodes::TextToTable( const std::vector< std::vector<SwNodeRange> >& rTableNodes,
+SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
                                     SwTableFmt* pTblFmt,
                                     SwTableLineFmt* pLineFmt,
                                     SwTableBoxFmt* pBoxFmt,

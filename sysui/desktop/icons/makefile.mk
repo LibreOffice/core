@@ -114,6 +114,7 @@ all: \
     $(MISC)$/ooo3_math_doc.ico \
     $(MISC)$/ooo3_writer_tem.ico \
     $(MISC)$/ooo3_empty_tem.ico \
+    $(MISC)$/ooo3_open.ico \
     $(MISC)$/ooo11-base-doc.ico \
     $(MISC)$/ooo11-calc-doc.ico \
     $(MISC)$/ooo11-calc-tem.ico \
@@ -176,6 +177,7 @@ all: \
     $(MISC)$/so9_chart_doc.ico \
     $(MISC)$/so9_writer_app.ico \
     $(MISC)$/so9_draw_app.ico \
+    $(MISC)$/so9_open.ico \
     $(MISC)$/so7-base-doc.ico \
     $(MISC)$/so7-calc-doc.ico \
     $(MISC)$/so7-calc-tem.ico \

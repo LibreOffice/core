@@ -67,9 +67,11 @@ SlidePersist::SlidePersist( XmlFilterBase& rFilter, sal_Bool bMaster, sal_Bool b
 {
     if ( pDefaultTextStyle )
     {
+    /*
         maTitleTextStylePtr->apply( *pDefaultTextStyle.get() );
         maBodyTextStylePtr->apply( *pDefaultTextStyle.get() );
         maNotesTextStylePtr->apply( *pDefaultTextStyle.get() );
+    */
         maOtherTextStylePtr->apply( *pDefaultTextStyle.get() );
     }
 }

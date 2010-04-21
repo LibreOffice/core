@@ -109,7 +109,7 @@ Reference< XFastContextHandler > TextParagraphContext::createFastChildContext( s
         xRet.set( new TextParagraphPropertiesContext( *this, xAttribs, mrParagraph.getProperties() ) );
         break;
     case NMSP_DRAWINGML|XML_endParaRPr:
-        xRet.set( new TextParagraphPropertiesContext( *this, xAttribs, mrParagraph.getEndProperties() ) );
+        xRet.set( new TextCharacterPropertiesContext( *this, xAttribs, mrParagraph.getEndProperties() ) );
         break;
     }
 

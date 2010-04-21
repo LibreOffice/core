@@ -37,6 +37,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
 # --- Common ----------------------------------------------------------
 
 # BEGIN ----------------------------------------------------------------

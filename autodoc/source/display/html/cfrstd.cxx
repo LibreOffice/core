@@ -338,7 +338,7 @@ MakeCopyRight()
 
     cr  << "Copyright &copy; 1995, "
         << year
-        << ", Oracle and/or its affiliates. All rights reserved.";
+        << ", Oracle and/or its affiliates. All rights reserved. Oracle and Java are registered trademarks of Oracle and/or its affiliates. Other names may be trademarks of their respective owners.";
     return String(cr.c_str());
 
 }

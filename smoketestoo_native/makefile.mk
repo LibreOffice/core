@@ -1,7 +1,6 @@
-#***********************************************************************
-#
+#*************************************************************************
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -22,33 +21,48 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#
-#*************************************************************************
+#***********************************************************************/
 
-PRJ=.
+PRJ = .
+PRJNAME = smoketestoo_native
+TARGET = smoketest
 
-PRJNAME=test10
-TARGET=t1
+ENABLE_EXCEPTIONS = TRUE
 
-.INCLUDE : settings.mk
+.INCLUDE: settings.mk
 
-STAR_REGISTRY=
-.EXPORT : STAR_REGISTRY
-.EXPORT : PERL
-.EXPORT : DMAKE_WORK_DIR
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
-.INCLUDE :      target.mk   
+SLOFILES = $(SHL1OBJS)
 
-ALLTAR : make_test
+SHL1TARGET = smoketest
+SHL1OBJS = $(SLO)/smoketest.obj
+SHL1RPATH = NONE
+SHL1STDLIBS = $(CPPUHELPERLIB) $(CPPULIB) $(CPPUNITLIB) $(SALLIB) $(TESTLIB)
+SHL1VERSIONMAP = version.map
+DEF1NAME = $(SHL1TARGET)
 
+.INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
-make_test:
-.IF $(NOREMOVE)
-    @$(PERL) smoketest.pl -nr $(LAST_MINOR) $(BUILD)
-.ELSE
-    @$(PERL) smoketest.pl $(LAST_MINOR) $(BUILD)
-.ENDIF
+ALLTAR : cpptest
 
-noremove:
-    @$(PERL) smoketest.pl -nr $(LAST_MINOR) $(BUILD)
+cpptest : $(SHL1TARGETN) $(BIN)/smoketestdoc.sxw
 
+OOO_CPPTEST_ARGS = $(SHL1TARGETN) -env:arg-doc=$(BIN)/smoketestdoc.sxw
+
+$(BIN)/smoketestdoc.sxw: data/smoketestdoc.sxw
+    $(COPY) $< $@
+
+.IF "$(OS)" != "WNT"
+$(installationtest_instpath).flag : \
+        $(shell ls $(installationtest_instset)/OOo_*_install_*.tar.gz)
+    $(RM) -r $(installationtest_instpath)
+    $(MKDIRHIER) $(installationtest_instpath)
+    cd $(installationtest_instpath) && \
+        $(GNUTAR) xfz $(installationtest_instset)/OOo_*_install_*.tar.gz
+    $(MV) $(installationtest_instpath)/OOo_*_install_* \
+        $(installationtest_instpath)/opt
+    $(TOUCH) $@
+cpptest : $(installationtest_instpath).flag
+.END

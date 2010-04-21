@@ -314,10 +314,11 @@ MacabAddressBook* MacabConnection::getAddressBook() const
     return m_pAddressBook;
 }
 // -----------------------------------------------------------------------------
-extern "C" void*  SAL_CALL createMacabConnection( void* _pDriver )
+extern "C" SAL_DLLPUBLIC_EXPORT void*  SAL_CALL createMacabConnection( void* _pDriver )
 {
     MacabConnection* pConnection = new MacabConnection( static_cast< MacabDriver* >( _pDriver ) );
     // by definition, the pointer crossing library boundaries as void ptr is acquired once
     pConnection->acquire();
     return pConnection;
 }
+

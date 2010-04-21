@@ -192,7 +192,8 @@ namespace dbaccess
                      const ::rtl::OUString& _rUpdateTableName,
                      sal_Bool&  _bModified,
                      sal_Bool&  _bNew,
-                     const ORowSetValueVector& _aParameterValueForCache);
+                     const ORowSetValueVector& _aParameterValueForCache,
+                     const ::rtl::OUString& i_sRowSetFilter);
         ~ORowSetCache();
 
 

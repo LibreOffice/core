@@ -40,6 +40,7 @@ class SC_DLLPUBLIC ScRangeList : public ScRangeListBase, public SvRefBase
 {
 private:
     using ScRangeListBase::operator==;
+    using ScRangeListBase::operator!=;
 
 public:
                     ScRangeList() {}
@@ -65,6 +66,7 @@ public:
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     ScRange*        Find( const ScAddress& ) const;
     BOOL            operator==( const ScRangeList& ) const;
+    BOOL            operator!=( const ScRangeList& r ) const;
     BOOL            Intersects( const ScRange& ) const;
     BOOL            In( const ScRange& ) const;
     ULONG           GetCellCount() const;

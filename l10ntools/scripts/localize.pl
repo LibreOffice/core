@@ -70,14 +70,12 @@ my $no_gsicheck             = '';
 my $mode                    = '';
 my $bVerbose                = "0";
 my $srcpath                 = '';
-my $WIN;
 my $languages;
 #my %sl_modules;     # Contains all modules where en-US and de is source language
 my $use_default_date = '0';
 my $force_ooo_module = '0';
 my %is_ooo_module;
 my %is_so_module;
-my $DELIMITER;
 
          #         (                           leftpart                                                     )            (           rightpart                    )
          #            prj      file      dummy     type       gid       lid      helpid    pform     width      lang       text    helptext  qhelptext   title    timestamp
@@ -91,23 +89,14 @@ my @sdfparticles;
 parse_options();
 check_modules_scm();
 
-if ( defined $ENV{USE_SHELL} && $ENV{USE_SHELL} eq '4nt' ) {
-   $WIN = 'TRUE';
-   $DELIMITER = "\\";
-}
- else {
-   $WIN = '';
-   $DELIMITER = "/";
-}
-
 my $binpath = '';
 if( defined $ENV{UPDMINOREXT} )
 {
-    $binpath = $ENV{SOLARVER}.$DELIMITER.$ENV{INPATH}.$DELIMITER."bin".$ENV{UPDMINOREXT}.$DELIMITER ;
+    $binpath = $ENV{SOLARVER}."/".$ENV{INPATH}."/bin".$ENV{UPDMINOREXT}."/" ;
 }
 else
 {
-    $binpath = $ENV{SOLARVER}.$DELIMITER.$ENV{INPATH}.$DELIMITER."bin".$DELIMITER ;
+    $binpath = $ENV{SOLARVER}."/".$ENV{INPATH}."/bin/" ;
 }
 
 #%sl_modules = fetch_sourcelanguage_dirlist();
@@ -187,9 +176,8 @@ sub splitfile{
         exit( -1 );
     }
     my $src_root = $ENV{SRC_ROOT};
-    #print $WIN eq "TRUE" ? $src_root."\\l10n_so\n" : $src_root."/l10n_so\n";
-    my $so_l10n_path  = $WIN eq "TRUE" ? $src_root."\\l10n_so\\source" : $src_root."/l10n_so/source";
-    my $ooo_l10n_path = $WIN eq "TRUE" ? $src_root."\\l10n\\source"    : $src_root."/l10n/source";
+    my $so_l10n_path  = $src_root."/l10n_so/source";
+    my $ooo_l10n_path = $src_root."/l10n/source";
 
     #print "$so_l10n_path\n";
     #print "$ooo_l10n_path\n";
@@ -286,7 +274,7 @@ sub write_sdf
         my @sdf_file;
 
         # mkdir!!!!
-        my $current_l10n_file = $WIN eq "TRUE" ? $l10n_file."\\$lang\\localize.sdf" : $l10n_file."/$lang/localize.sdf";
+        my $current_l10n_file = $l10n_file."/$lang/localize.sdf";
         print "Writing '$current_l10n_file'\n";
         if( open DESTFILE , "< $current_l10n_file" ){
 
@@ -430,17 +418,17 @@ sub add_paths
 {
     my $langhash_ref            = shift;
     my $root_dir = $ENV{ SRC_ROOT };
-    my $ooo_l10n_dir = "$root_dir"."$DELIMITER"."l10n"."$DELIMITER"."source";
-    my $so_l10n_dir  = "$root_dir"."$DELIMITER"."l10n_so"."$DELIMITER"."source";
+    my $ooo_l10n_dir = "$root_dir/l10n/source";
+    my $so_l10n_dir  = "$root_dir/l10n_so/source";
 
     if( -e $ooo_l10n_dir )
     {
         foreach my $lang ( keys( %{ $langhash_ref } ) )
         {
-            my $loc_file = "$ooo_l10n_dir"."$DELIMITER"."$lang"."$DELIMITER"."localize.sdf";
+            my $loc_file = "$ooo_l10n_dir/$lang/localize.sdf";
             if( -e $loc_file )
             {
-                push @sdfparticles , "$ooo_l10n_dir"."$DELIMITER"."$lang"."$DELIMITER"."localize.sdf";
+                push @sdfparticles , "$ooo_l10n_dir/$lang/localize.sdf";
             }
             else { print "WARNING: $loc_file not found ....\n"; }
         }
@@ -450,10 +438,10 @@ sub add_paths
     {
         foreach my $lang ( keys( %{ $langhash_ref } ) )
         {
-            my $loc_file = "$so_l10n_dir"."$DELIMITER"."$lang"."$DELIMITER"."localize.sdf";
+            my $loc_file = "$so_l10n_dir/$lang/localize.sdf";
             if( -e $loc_file )
             {
-                push @sdfparticles , "$ooo_l10n_dir"."$DELIMITER"."$lang"."$DELIMITER"."localize.sdf";
+                push @sdfparticles , "$ooo_l10n_dir/$lang/localize.sdf";
             }
             else { #print "WARNING: $loc_file not found ....\n";
             }
@@ -530,10 +518,6 @@ sub collectfiles{
                 } #foreach
               } # if
         } # if
-#        if ( !$bVerbose ){
-#            if ( $WIN eq "TRUE" ) { $args .= " > $my_localize_log";  }
-#            else                  { $args .= " >& $my_localize_log"; }
-#        }
         if ( $bVerbose ) { print STDOUT $command.$args."\n"; }
 
         my $rc = system( $command.$args );

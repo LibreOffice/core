@@ -85,6 +85,7 @@ const sal_Char SwRTFWriter::sNewLine = '\012';
 const sal_Char __FAR_DATA SwRTFWriter::sNewLine[] = "\015\012";
 #endif
 
+static ::rtl::OUString aEmpty;
 
 
 SV_DECL_VARARR( RTFColorTbl, Color, 5, 8 )
@@ -1299,8 +1300,16 @@ void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos)
             Strm() << '}';
         }
         OutComment( *this, OOO_STRING_SVTOOLS_RTF_BKMKEND ) << ' ';
-        RTFOutFuncs::Out_String( Strm(), pAsBookmark->GetName(),
+
+        {
+            ::rtl::OUString & rBookmarkName = aEmpty;
+
+            if (pAsBookmark)
+                rBookmarkName = pAsBookmark->GetName();
+
+            RTFOutFuncs::Out_String( Strm(), rBookmarkName,
                                 eDefaultEncoding, bWriteHelpFmt ) << '}';
+        }
 
         if(++nBkmkTabPos >= pMarkAccess->getMarksCount())
             nBkmkTabPos = -1;

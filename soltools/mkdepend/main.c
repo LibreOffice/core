@@ -70,9 +70,7 @@ typedef _W64 int   ssize_t;
 #endif
 #endif
 
-#if NeedVarargsPrototypes
 #include <stdarg.h>
-#endif
 
 #ifdef MINIX
 #define USE_CHMOD   1
@@ -112,7 +110,6 @@ char    *directives[] = {
 
 /*******   function declarations ********/
 /*******   added by -Wall project *******/
-void freefile(struct filepointer * fp);
 void redirect(char * line, char * makefile );
 
 struct  inclist inclist[ MAXFILES ],
@@ -495,7 +492,7 @@ struct filepointer *getfile(file)
     /* Since off_t is larger than size_t, need to test for
      * truncation.
      */
-    if ( malloc_size != size_backup )
+    if ( (off_t)malloc_size != size_backup )
     {
         close( fd );
         warning("makedepend:  File \"%s\" size larger than can fit in size_t.  Cannot allocate memory for contents.\n", file);
@@ -726,69 +723,38 @@ void redirect(line, makefile)
     fclose(fdin);
 }
 
-#if NeedVarargsPrototypes
-int fatalerr(char *msg, ...)
-#else
-/*VARARGS*/
-int fatalerr(msg,x1,x2,x3,x4,x5,x6,x7,x8,x9)
-    char *msg;
-#endif
+void fatalerr(char *msg, ...)
 {
-#if NeedVarargsPrototypes
     va_list args;
-#endif
     fprintf(stderr, "%s: error:  ", ProgramName);
-#if NeedVarargsPrototypes
     va_start(args, msg);
     vfprintf(stderr, msg, args);
     va_end(args);
-#else
-    fprintf(stderr, msg,x1,x2,x3,x4,x5,x6,x7,x8,x9);
-#endif
     exit (1);
 }
 
-#if NeedVarargsPrototypes
-int warning(char *msg, ...)
-#else
-/*VARARGS0*/
-int warning(msg,x1,x2,x3,x4,x5,x6,x7,x8,x9)
-    char *msg;
-#endif
+void warning(char *msg, ...)
 {
 #ifdef DEBUG_MKDEPEND
-#if NeedVarargsPrototypes
     va_list args;
-#endif
     fprintf(stderr, "%s: warning:  ", ProgramName);
-#if NeedVarargsPrototypes
     va_start(args, msg);
     vfprintf(stderr, msg, args);
     va_end(args);
 #else
-    fprintf(stderr, msg,x1,x2,x3,x4,x5,x6,x7,x8,x9);
-#endif
+    (void)msg;
 #endif /* DEBUG_MKDEPEND */
-    return 0;
 }
 
-#if NeedVarargsPrototypes
 void warning1(char *msg, ...)
-#else
-/*VARARGS0*/
-void warning1(msg,x1,x2,x3,x4,x5,x6,x7,x8,x9)
-    char *msg;
-#endif
 {
 #ifdef DEBUG_MKDEPEND
-#if NeedVarargsPrototypes
     va_list args;
     va_start(args, msg);
     vfprintf(stderr, msg, args);
     va_end(args);
 #else
-    fprintf(stderr, msg,x1,x2,x3,x4,x5,x6,x7,x8,x9);
-#endif
+    (void)msg;
 #endif /* DEBUG_MKDEPEND */
 }
 
@@ -809,13 +775,15 @@ void convert_slashes(path)
             if (*ptr == '\\')
                 *ptr = '/';
     };
+#else
+    (void)path;
 #endif
 }
 
 char* append_slash(path)
     char* path;
 {
-    char *ptr, *new_string;
+    char *new_string;
     if ((path[strlen(path) - 1] == '/') || (path[strlen(path) - 1] == '\\')) {
         new_string = path;
     } else {

@@ -387,7 +387,7 @@ sub create_registry_table
 
         $registrytablename = $basedir . $installer::globals::separator . "Reg64.idt" . "." . $onelanguage;
         installer::files::save_file($registrytablename ,\@reg64table );
-        my $infoline = "Created idt file: $registrytablename\n";
+        $infoline = "Created idt file: $registrytablename\n";
         push(@installer::globals::logfileinfo, $infoline);
     }
 }

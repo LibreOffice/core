@@ -38,7 +38,10 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/tools/tools.hxx>
+#include <basegfx/tools/lerp.hxx>
+#include <basegfx/tools/keystoplerp.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
@@ -49,6 +52,8 @@
 #include "dx_impltools.hxx"
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/bind.hpp>
+#include <boost/tuple/tuple.hpp>
 
 
 using namespace ::com::sun::star;
@@ -59,26 +64,31 @@ namespace dxcanvas
     {
         typedef ::boost::shared_ptr< Gdiplus::PathGradientBrush >   PathGradientBrushSharedPtr;
 
-        bool fillLinearGradient( GraphicsSharedPtr&           rGraphics,
-                                 const Gdiplus::Color&        rColor1,
-                                 const Gdiplus::Color&        rColor2,
-                                 const GraphicsPathSharedPtr& rFillPath,
-                                 const rendering::Texture&    texture )
+        bool fillLinearGradient( GraphicsSharedPtr&                             rGraphics,
+                                 const ::canvas::ParametricPolyPolygon::Values& /*rValues*/,
+                                 const std::vector< Gdiplus::Color >&           rColors,
+                                 const std::vector< Gdiplus::REAL >&            rStops,
+                                 const GraphicsPathSharedPtr&                   rFillPath,
+                                 const rendering::Texture&                      texture )
         {
-            // setup a linear gradient with two colors
-            // ---------------------------------------
+            // setup a linear gradient with given colors
+            // -----------------------------------------
 
             Gdiplus::LinearGradientBrush aBrush(
                 Gdiplus::PointF(0.0f,
                                 0.5f),
                 Gdiplus::PointF(1.0f,
                                 0.5f),
-                rColor1,
-                rColor2 );
+                rColors[0],
+                rColors[1] );
+
+            aBrush.SetInterpolationColors(&rColors[0],
+                                          &rStops[0],
+                                          rColors.size());
 
             // render background color, as LinearGradientBrush does not
             // properly support the WrapModeClamp repeat mode
-            Gdiplus::SolidBrush aBackgroundBrush( rColor1 );
+            Gdiplus::SolidBrush aBackgroundBrush( rColors[0] );
             rGraphics->FillPath( &aBackgroundBrush, rFillPath.get() );
 
             // TODO(F2): This does not yet support other repeat modes
@@ -152,7 +162,7 @@ namespace dxcanvas
                 return false;
             }
 
-            Gdiplus::SolidBrush aBackgroundBrush2( rColor2 );
+            Gdiplus::SolidBrush aBackgroundBrush2( rColors.back() );
             rGraphics->FillPath( &aBackgroundBrush2, &aSolidFillPath );
 
             // generate clip polygon from the extended parallelogram
@@ -188,167 +198,33 @@ namespace dxcanvas
             return true;
         }
 
-        bool fillAxialGradient( GraphicsSharedPtr&           rGraphics,
-                                const Gdiplus::Color&        rColor1,
-                                const Gdiplus::Color&        rColor2,
-                                const GraphicsPathSharedPtr& rFillPath,
-                                const rendering::Texture&    texture )
+        int numColorSteps( const Gdiplus::Color& rColor1, const Gdiplus::Color& rColor2 )
         {
-            // setup a linear gradient with three colors
-            // -----------------------------------------
-
-            Gdiplus::LinearGradientBrush aBrush(
-                Gdiplus::PointF(0.0f,
-                                0.5f),
-                Gdiplus::PointF(1.0f,
-                                0.5f),
-                rColor1,
-                rColor1 );
-
-            Gdiplus::Color aColors[] =
-                {
-                    rColor1,    // at 0.0
-                    rColor2,    // at 0.5
-                    rColor1     // at 1.0
-                };
-
-            Gdiplus::REAL aPositions[] =
-                {
-                    0.0,
-                    0.5,
-                    1.0
-                };
-
-            if( Gdiplus::Ok != aBrush.SetInterpolationColors( aColors,
-                                                              aPositions,
-                                                              sizeof( aPositions ) / sizeof(Gdiplus::REAL) ) )
-            {
-                return false;
-            }
-
-            // render background color, as LinearGradientBrush does not
-            // properly support the WrapModeClamp repeat mode
-            Gdiplus::SolidBrush aBackgroundBrush( rColor1 );
-            rGraphics->FillPath( &aBackgroundBrush, rFillPath.get() );
-
-            // TODO(F2): This does not yet support other repeat modes
-            // except clamp, and probably also no multi-texturing
-
-            // calculate parallelogram of gradient in object space, extend
-            // top and bottom of it such that they cover the whole fill
-            // path bound area
-            ::basegfx::B2DHomMatrix aTextureTransform;
-            ::basegfx::unotools::homMatrixFromAffineMatrix( aTextureTransform,
-                                                            texture.AffineTransform );
-
-            ::basegfx::B2DPoint aLeftTop( 0.0, 0.0 );
-            ::basegfx::B2DPoint aLeftBottom( 0.0, 1.0 );
-            ::basegfx::B2DPoint aRightTop( 1.0, 0.0 );
-            ::basegfx::B2DPoint aRightBottom( 1.0, 1.0 );
-
-            aLeftTop    *= aTextureTransform;
-            aLeftBottom *= aTextureTransform;
-            aRightTop   *= aTextureTransform;
-            aRightBottom*= aTextureTransform;
-
-            Gdiplus::RectF aBounds;
-            rFillPath->GetBounds( &aBounds, NULL, NULL );
-
-            // now, we potentially have to enlarge our gradient area
-            // atop and below the transformed [0,1]x[0,1] unit rect,
-            // for the gradient to fill the complete bound rect.
-            ::basegfx::tools::infiniteLineFromParallelogram( aLeftTop,
-                                                             aLeftBottom,
-                                                             aRightTop,
-                                                             aRightBottom,
-                                                             tools::b2dRangeFromGdiPlusRectF( aBounds ) );
-
-            // generate clip polygon from the extended parallelogram
-            // (exploit the feature that distinct lines in a figure are
-            // automatically closed by a straight line)
-            Gdiplus::GraphicsPath aClipPath;
-            aClipPath.AddLine( static_cast<Gdiplus::REAL>(aLeftTop.getX()),
-                               static_cast<Gdiplus::REAL>(aLeftTop.getY()),
-                               static_cast<Gdiplus::REAL>(aRightTop.getX()),
-                               static_cast<Gdiplus::REAL>(aRightTop.getY()) );
-            aClipPath.AddLine( static_cast<Gdiplus::REAL>(aRightBottom.getX()),
-                               static_cast<Gdiplus::REAL>(aRightBottom.getY()),
-                               static_cast<Gdiplus::REAL>(aLeftBottom.getX()),
-                               static_cast<Gdiplus::REAL>(aLeftBottom.getY()) );
-            aClipPath.CloseFigure();
-
-            // limit output to a _single_ strip of the gradient (have to
-            // clip here, since GDI+ wrapmode clamp does not work here)
-            if( Gdiplus::Ok != rGraphics->SetClip( rFillPath.get(),
-                                                   Gdiplus::CombineModeIntersect ) )
-            {
-                return false;
-            }
-            if( Gdiplus::Ok != rGraphics->SetClip( &aClipPath,
-                                                   Gdiplus::CombineModeIntersect ) )
-            {
-                return false;
-            }
-
-            // now, finally, output the gradient
-            Gdiplus::Matrix aMatrix;
-            tools::gdiPlusMatrixFromAffineMatrix2D( aMatrix,
-                                                    texture.AffineTransform );
-            aBrush.SetTransform( &aMatrix );
-
-            rGraphics->FillRectangle( &aBrush, aBounds );
-
-            return true;
-        }
-
-        PathGradientBrushSharedPtr createPathGradientBrush( const GraphicsPathSharedPtr& rGradientPath,
-                                                            const Gdiplus::Color&        rColor1,
-                                                            const Gdiplus::Color&        rColor2        )
-        {
-            PathGradientBrushSharedPtr pGradientBrush(
-                new Gdiplus::PathGradientBrush( rGradientPath.get() ) );
-
-            Gdiplus::Color aColors[] =
-                {
-                    rColor1
-                };
-
-            INT nCount(1);
-
-            pGradientBrush->SetSurroundColors( aColors,
-                                               &nCount );
-            pGradientBrush->SetCenterColor( rColor2 );
-
-            return pGradientBrush;
+            return ::std::max(
+                labs( rColor1.GetRed() - rColor2.GetRed() ),
+                ::std::max(
+                    labs( rColor1.GetGreen() - rColor2.GetGreen() ),
+                    labs( rColor1.GetBlue()  - rColor2.GetBlue() ) ) );
         }
 
         bool fillPolygonalGradient( const ::canvas::ParametricPolyPolygon::Values& rValues,
+                                    const std::vector< Gdiplus::Color >&           rColors,
+                                    const std::vector< Gdiplus::REAL >&            rStops,
                                     GraphicsSharedPtr&                             rGraphics,
-                                    const Gdiplus::Color&                          rColor1,
-                                    const Gdiplus::Color&                          rColor2,
                                     const GraphicsPathSharedPtr&                   rPath,
+                                    const rendering::ViewState&                    viewState,
+                                    const rendering::RenderState&                  renderState,
                                     const rendering::Texture&                      texture )
         {
-            Gdiplus::Matrix aMatrix;
-            tools::gdiPlusMatrixFromAffineMatrix2D( aMatrix,
-                                                    texture.AffineTransform );
-
             // copy original fill path object, might have to change it
             // below
             GraphicsPathSharedPtr pFillPath( rPath );
-
-            // clone original gradient path object, we need to change it
-            // below
-            GraphicsPathSharedPtr pGradientPath(
-                tools::graphicsPathFromB2DPolygon( rValues.maGradientPoly ) );
-
-            ENSURE_OR_RETURN_FALSE( pGradientPath.get(),
-                               "ParametricPolyPolygon::fillPolygonalGradient(): Could not clone path" );
+            const ::basegfx::B2DPolygon& rGradientPoly( rValues.maGradientPoly );
 
             PathGradientBrushSharedPtr pGradientBrush;
 
             // fill background uniformly with end color
-            Gdiplus::SolidBrush aBackgroundBrush( rColor1 );
+            Gdiplus::SolidBrush aBackgroundBrush( rColors[0] );
             rGraphics->FillPath( &aBackgroundBrush, pFillPath.get() );
 
             // scale focus according to aspect ratio: for wider-than-tall
@@ -377,8 +253,6 @@ namespace dxcanvas
                     return false;
                 }
 
-                rGraphics->MultiplyTransform( &aMatrix );
-
                 // disable anti-aliasing, if any
                 const Gdiplus::SmoothingMode eOldAAMode( rGraphics->GetSmoothingMode() );
                 rGraphics->SetSmoothingMode( Gdiplus::SmoothingModeHighSpeed );
@@ -388,105 +262,107 @@ namespace dxcanvas
                 // --------------------------------
 
                 // TODO(Q2): Unify step calculations with VCL canvas
-                const int nColorSteps(
-                    ::std::max(
-                        labs( rColor1.GetRed() - rColor2.GetRed() ),
-                        ::std::max(
-                            labs( rColor1.GetGreen() - rColor2.GetGreen() ),
-                            labs( rColor1.GetBlue() - rColor2.GetBlue() ) ) ) );
+                int nColorSteps = 0;
+                for( size_t i=0; i<rColors.size()-1; ++i )
+                    nColorSteps += numColorSteps(rColors[i],rColors[i+1]);
+                ::basegfx::B2DHomMatrix aTotalTransform;
+                const int nStepCount=
+                    ::canvas::tools::calcGradientStepCount(aTotalTransform,
+                                                           viewState,
+                                                           renderState,
+                                                           texture,
+                                                           nColorSteps);
 
-                Gdiplus::Matrix aWorldTransformMatrix;
-                rGraphics->GetTransform( &aWorldTransformMatrix );
+                ::basegfx::B2DHomMatrix aTextureTransform;
+                ::basegfx::unotools::homMatrixFromAffineMatrix( aTextureTransform,
+                                                                texture.AffineTransform );
+                // determine overall transformation for inner polygon (might
+                // have to be prefixed by anisotrophic scaling)
+                ::basegfx::B2DHomMatrix aInnerPolygonTransformMatrix;
 
-                Gdiplus::RectF  aBounds;
-                pGradientPath->GetBounds( &aBounds, &aWorldTransformMatrix, NULL );
+                // For performance reasons, we create a temporary VCL polygon
+                // here, keep it all the way and only change the vertex values
+                // in the loop below (as ::Polygon is a pimpl class, creating
+                // one every loop turn would really stress the mem allocator)
+                ::basegfx::B2DPolygon   aOuterPoly( rGradientPoly );
+                ::basegfx::B2DPolygon   aInnerPoly;
 
-                // longest line in gradient bound rect
-                const int nGradientSize(
-                    static_cast<int>( hypot( aBounds.Width, aBounds.Height ) + 1.0 ) );
+                // subdivide polygon _before_ rendering, would otherwise have
+                // to be performed on every loop turn.
+                if( aOuterPoly.areControlPointsUsed() )
+                    aOuterPoly = ::basegfx::tools::adaptiveSubdivideByAngle(aOuterPoly);
 
-                // typical number for pixel of the same color (strip size)
-                const int nStripSize( 2 );
-
-                // use at least three steps, and at utmost the number of
-                // color steps.
-                const int nStepCount(
-                    ::std::max(
-                        3,
-                        ::std::min(
-                            nGradientSize / nStripSize,
-                            nColorSteps ) ) + 1 );
+                aInnerPoly = aOuterPoly;
+                aOuterPoly.transform(aTextureTransform);
 
 
-                Gdiplus::SolidBrush     aFillBrush( rColor1 );
-                Gdiplus::Matrix         aGDIScaleMatrix;
-                ::basegfx::B2DHomMatrix aScaleMatrix;
+                // apply scaling (possibly anisotrophic) to inner polygon
+                // ------------------------------------------------------
 
-                // calc relative size for anisotrophic polygon scaling:
-                // when the aspect ratio is e.g. 2.0, that denotes a
-                // gradient which is twice as wide as high. Then, to
-                // generate a symmetric gradient, the x direction is only
-                // scaled to 0.5 times the gradient width. Similarly, when
-                // the aspect ratio is 4.0, the focus has 3/4 the width of
-                // the overall gradient.
-                const double nRelativeFocusSize( rValues.mnAspectRatio > 1.0 ?
-                                                 1.0 - 1.0/rValues.mnAspectRatio :
-                                                 1.0 - rValues.mnAspectRatio );
+                // scale inner polygon according to aspect ratio: for
+                // wider-than-tall bounds (nAspectRatio > 1.0), the inner
+                // polygon, representing the gradient focus, must have
+                // non-zero width. Specifically, a bound rect twice as wide as
+                // tall has a focus polygon of half it's width.
+                const double nAspectRatio( rValues.mnAspectRatio );
+                if( nAspectRatio > 1.0 )
+                {
+                    // width > height case
+                    aInnerPolygonTransformMatrix.scale( 1.0 - 1.0/nAspectRatio,
+                                                        0.0 );
+                }
+                else if( nAspectRatio < 1.0 )
+                {
+                    // width < height case
+                    aInnerPolygonTransformMatrix.scale( 0.0,
+                                                        1.0 - nAspectRatio );
+                }
+                else
+                {
+                    // isotrophic case
+                    aInnerPolygonTransformMatrix.scale( 0.0, 0.0 );
+                }
 
+                // and finally, add texture transform to it.
+                aInnerPolygonTransformMatrix *= aTextureTransform;
+
+                // apply final matrix to polygon
+                aInnerPoly.transform( aInnerPolygonTransformMatrix );
+
+                Gdiplus::GraphicsPath aCurrPath;
+                Gdiplus::SolidBrush   aFillBrush( rColors[0] );
+                const sal_uInt32      nNumPoints( aOuterPoly.count() );
+                basegfx::tools::KeyStopLerp aLerper(rValues.maStops);
                 for( int i=1; i<nStepCount; ++i )
                 {
-                    // lerp color. Funnily, the straight-forward integer
-                    // lerp ((nStepCount - i)*val + i*val)/nStepCount gets
-                    // fully botched by MSVC, at least for anything that
-                    // really inlines inlines (i.e. every compile without
-                    // debug=t)
-                    const double nFrac( (double)i/nStepCount );
+                    std::ptrdiff_t nIndex;
+                    double fAlpha;
+                    const double fT( i/double(nStepCount) );
+                    boost::tuples::tie(nIndex,fAlpha)=aLerper.lerp(fT);
 
                     const Gdiplus::Color aFillColor(
-                        static_cast<BYTE>( (1.0 - nFrac)*rColor1.GetRed() + nFrac*rColor2.GetRed() ),
-                        static_cast<BYTE>( (1.0 - nFrac)*rColor1.GetGreen() + nFrac*rColor2.GetGreen() ),
-                        static_cast<BYTE>( (1.0 - nFrac)*rColor1.GetBlue() + nFrac*rColor2.GetBlue() ) );
+                        static_cast<BYTE>( basegfx::tools::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha) ),
+                        static_cast<BYTE>( basegfx::tools::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha) ),
+                        static_cast<BYTE>( basegfx::tools::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha) ) );
 
                     aFillBrush.SetColor( aFillColor );
-
-                    const double nCurrScale( (nStepCount-i)/(double)nStepCount );
-                    aScaleMatrix = basegfx::tools::createTranslateB2DHomMatrix(-0.5, -0.5);
-
-                    // handle anisotrophic polygon scaling
-                    if( rValues.mnAspectRatio < 1.0 )
+                    aCurrPath.Reset(); aCurrPath.StartFigure();
+                    for( unsigned int p=1; p<nNumPoints; ++p )
                     {
-                        // height > width case
-                        aScaleMatrix.scale( nCurrScale,
-                                            // lerp with nCurrScale
-                                            // between 1.0 and
-                                            // relative focus height
-                                            nCurrScale + (1.0-nCurrScale)*nRelativeFocusSize );
+                        const ::basegfx::B2DPoint& rOuterPoint1( aOuterPoly.getB2DPoint(p-1) );
+                        const ::basegfx::B2DPoint& rInnerPoint1( aInnerPoly.getB2DPoint(p-1) );
+                        const ::basegfx::B2DPoint& rOuterPoint2( aOuterPoly.getB2DPoint(p) );
+                        const ::basegfx::B2DPoint& rInnerPoint2( aInnerPoly.getB2DPoint(p) );
+
+                        aCurrPath.AddLine(
+                            Gdiplus::REAL(fT*rInnerPoint1.getX() + (1-fT)*rOuterPoint1.getX()),
+                            Gdiplus::REAL(fT*rInnerPoint1.getY() + (1-fT)*rOuterPoint1.getY()),
+                            Gdiplus::REAL(fT*rInnerPoint2.getX() + (1-fT)*rOuterPoint2.getX()),
+                            Gdiplus::REAL(fT*rInnerPoint2.getY() + (1-fT)*rOuterPoint2.getY()));
                     }
-                    else if( rValues.mnAspectRatio > 1.0 )
-                    {
-                        // width > height case
-                        aScaleMatrix.scale( nCurrScale + (1.0-nCurrScale)*nRelativeFocusSize,
-                                            // lerp with nCurrScale
-                                            // between 1.0 and
-                                            // relative focus width
-                                            nCurrScale );
-                    }
-                    else
-                    {
-                        aScaleMatrix.scale( nCurrScale,
-                                            nCurrScale );
-                    }
+                    aCurrPath.CloseFigure();
 
-                    aScaleMatrix.translate( 0.5, 0.5 );
-
-                    tools::gdiPlusMatrixFromB2DHomMatrix( aGDIScaleMatrix,
-                                                          aScaleMatrix );
-
-                    GraphicsPathSharedPtr pScaledGradientPath(
-                        tools::graphicsPathFromB2DPolygon( rValues.maGradientPoly ) );
-                    pScaledGradientPath->Transform( &aGDIScaleMatrix );
-
-                    rGraphics->FillPath( &aFillBrush, pScaledGradientPath.get() );
+                    rGraphics->FillPath( &aFillBrush, &aCurrPath );
                 }
 
                 // reset to old anti-alias mode
@@ -507,18 +383,24 @@ namespace dxcanvas
                 // one sets both, only the translational components of the
                 // texture is respected.
 
+                Gdiplus::Matrix aMatrix;
+                tools::gdiPlusMatrixFromAffineMatrix2D( aMatrix,
+                                                        texture.AffineTransform );
+                GraphicsPathSharedPtr pGradientPath(
+                    tools::graphicsPathFromB2DPolygon( rValues.maGradientPoly ));
                 pGradientPath->Transform( &aMatrix );
 
-                pGradientBrush = createPathGradientBrush(
-                    pGradientPath,
-                    rColor1,
-                    rColor2 );
+                pGradientBrush.reset(
+                    new Gdiplus::PathGradientBrush( pGradientPath.get() ) );
+                pGradientBrush->SetInterpolationColors( &rColors[0],
+                                                        &rStops[0],
+                                                        rStops.size() );
 
                 // explicitely setup center point. Since the center of GDI+
                 // gradients are by default the _centroid_ of the path
                 // (i.e. the weighted sum of edge points), it will not
                 // necessarily coincide with our notion of center.
-                Gdiplus::PointF aCenterPoint(0.5, 0.5);
+                Gdiplus::PointF aCenterPoint(0, 0);
                 aMatrix.TransformPoints( &aCenterPoint );
                 pGradientBrush->SetCenterPoint( aCenterPoint );
 
@@ -554,38 +436,35 @@ namespace dxcanvas
         }
 
         bool fillGradient( const ::canvas::ParametricPolyPolygon::Values& rValues,
-                           const Gdiplus::Color&                          rColor1,
-                           const Gdiplus::Color&                          rColor2,
+                           const std::vector< Gdiplus::Color >&           rColors,
+                           const std::vector< Gdiplus::REAL >&            rStops,
                            GraphicsSharedPtr&                             rGraphics,
                            const GraphicsPathSharedPtr&                   rPath,
+                           const rendering::ViewState&                    viewState,
+                           const rendering::RenderState&                  renderState,
                            const rendering::Texture&                      texture )
         {
             switch( rValues.meType )
             {
                 case ::canvas::ParametricPolyPolygon::GRADIENT_LINEAR:
                     fillLinearGradient( rGraphics,
-                                        rColor1,
-                                        rColor2,
+                                        rValues,
+                                        rColors,
+                                        rStops,
                                         rPath,
                                         texture  );
-                    break;
-
-                case ::canvas::ParametricPolyPolygon::GRADIENT_AXIAL:
-                    fillAxialGradient( rGraphics,
-                                       rColor1,
-                                       rColor2,
-                                       rPath,
-                                       texture );
                     break;
 
                 case ::canvas::ParametricPolyPolygon::GRADIENT_ELLIPTICAL:
                     // FALLTHROUGH intended
                 case ::canvas::ParametricPolyPolygon::GRADIENT_RECTANGULAR:
                     fillPolygonalGradient( rValues,
+                                           rColors,
+                                           rStops,
                                            rGraphics,
-                                           rColor1,
-                                           rColor2,
                                            rPath,
+                                           viewState,
+                                           renderState,
                                            texture );
                     break;
 
@@ -606,13 +485,13 @@ namespace dxcanvas
                         rTexture.RepeatModeY,
                         "CanvasHelper::fillBitmap(): GDI+ cannot handle differing X/Y repeat mode." );
 
-            const bool bClamp( rTexture.RepeatModeX == rendering::TexturingMode::CLAMP &&
-                               rTexture.RepeatModeY == rendering::TexturingMode::CLAMP );
+            const bool bClamp( rTexture.RepeatModeX == rendering::TexturingMode::NONE &&
+                               rTexture.RepeatModeY == rendering::TexturingMode::NONE );
 
             const geometry::IntegerSize2D aBmpSize( xBitmap->getSize() );
             ENSURE_ARG_OR_THROW( aBmpSize.Width != 0 &&
-                             aBmpSize.Height != 0,
-                             "CanvasHelper::fillBitmap(): zero-sized texture bitmap" );
+                                 aBmpSize.Height != 0,
+                                 "CanvasHelper::fillBitmap(): zero-sized texture bitmap" );
 
             // TODO(P3): Detect case that path is rectangle and
             // bitmap is just scaled into that. Then, we can
@@ -624,7 +503,6 @@ namespace dxcanvas
                 tools::bitmapFromXBitmap( xBitmap ) );
 
             TextureBrushSharedPtr pBrush;
-
             if( ::rtl::math::approxEqual( rTexture.Alpha,
                                           1.0 ) )
             {
@@ -662,9 +540,9 @@ namespace dxcanvas
 
             // scale down bitmap to [0,1]x[0,1] rect, as required
             // from the XCanvas interface.
+            pBrush->MultiplyTransform( &aTextureTransform );
             pBrush->ScaleTransform( static_cast< Gdiplus::REAL >(1.0/aBmpSize.Width),
                                     static_cast< Gdiplus::REAL >(1.0/aBmpSize.Height) );
-            pBrush->MultiplyTransform( &aTextureTransform );
 
             // TODO(F1): FillRule
             ENSURE_OR_THROW(
@@ -706,17 +584,29 @@ namespace dxcanvas
                     const ::canvas::ParametricPolyPolygon::Values& rValues(
                         pGradient->getValues() );
 
-                    // TODO: use all the colors and place them on given positions/stops
-                    const Gdiplus::Color aColor1(tools::sequenceToArgb(rValues.maColors[0]));
-                    const Gdiplus::Color aColor2(tools::sequenceToArgb(rValues.maColors[rValues.maColors.getLength () - 1] ));
+                    OSL_ASSERT(rValues.maColors.getLength() == rValues.maStops.getLength()
+                               && rValues.maColors.getLength() > 1);
+
+                    std::vector< Gdiplus::Color > aColors(rValues.maColors.getLength());
+                    std::transform(&rValues.maColors[0],
+                                   &rValues.maColors[0]+rValues.maColors.getLength(),
+                                   aColors.begin(),
+                                   boost::bind(
+                                       (Gdiplus::ARGB (*)( const uno::Sequence< double >& ))(
+                                           &tools::sequenceToArgb),
+                                       _1));
+                    std::vector< Gdiplus::REAL > aStops;
+                    comphelper::sequenceToContainer(aStops,rValues.maStops);
 
                     // TODO(E1): Return value
                     // TODO(F1): FillRule
                     fillGradient( rValues,
-                                  aColor1,
-                                  aColor2,
+                                  aColors,
+                                  aStops,
                                   pGraphics,
                                   tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ),
+                                  viewState,
+                                  renderState,
                                   textures[0] );
                 }
             }
