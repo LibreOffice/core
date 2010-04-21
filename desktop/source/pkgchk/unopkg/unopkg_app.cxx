@@ -400,12 +400,7 @@ extern "C" int unopkg_main()
                         Reference<deployment::XPackage> p(
                              findPackage(repository,
                                 xExtensionManager, xCmdEnv, cmdPackage ) );
-                        //Todo. temporary preventing exception in bundled case.
-                        //In case of a bundled extension, remove would be called as a result of
-                        //uninstalling a rpm. Then we do not want to show an error when the
-                        //extension does not exist, because the package will be uninstalled anyway
-                        //and the error would only confuse people.
-                        if ( !p.is() && !option_bundled)
+                        if ( !p.is())
                             throw;
                         else if (p.is())
                             xExtensionManager->removeExtension(

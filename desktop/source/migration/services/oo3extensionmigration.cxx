@@ -146,7 +146,7 @@ void OO3ExtensionMigration::registerConfigurationPackage( const uno::Reference< 
     if ( (sMediaType.equals(sConfigurationDataType) || sMediaType.equals(sConfigurationSchemaType) ) )
     {
         xPkg->revokePackage(uno::Reference< task::XAbortChannel >(), uno::Reference< ucb::XCommandEnvironment> ());
-        xPkg->registerPackage(uno::Reference< task::XAbortChannel >(), uno::Reference< ucb::XCommandEnvironment> ());
+        xPkg->registerPackage(false, uno::Reference< task::XAbortChannel >(), uno::Reference< ucb::XCommandEnvironment> ());
     }
 }
 

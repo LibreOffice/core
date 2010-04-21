@@ -619,6 +619,7 @@ beans::Optional< beans::Ambiguous<sal_Bool> > Package::isRegistered(
 //______________________________________________________________________________
 void Package::processPackage_impl(
     bool doRegisterPackage,
+    bool startup,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
@@ -646,6 +647,7 @@ void Package::processPackage_impl(
                     + displayName );
                 processPackage_( guard,
                                  doRegisterPackage,
+                                 startup,
                                  AbortChannel::get(xAbortChannel),
                                  xCmdEnv );
             }
@@ -683,6 +685,7 @@ void Package::processPackage_impl(
 
 //______________________________________________________________________________
 void Package::registerPackage(
+    sal_Bool startup,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
     throw (deployment::DeploymentException,
@@ -692,7 +695,7 @@ void Package::registerPackage(
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
-    processPackage_impl( true /* register */, xAbortChannel, xCmdEnv );
+    processPackage_impl( true /* register */, startup, xAbortChannel, xCmdEnv );
 }
 
 //______________________________________________________________________________
@@ -703,7 +706,7 @@ void Package::revokePackage(
            CommandFailedException, CommandAbortedException,
            lang::IllegalArgumentException, RuntimeException)
 {
-    processPackage_impl( false /* revoke */, xAbortChannel, xCmdEnv );
+    processPackage_impl( false /* revoke */, false, xAbortChannel, xCmdEnv );
 
 }
 

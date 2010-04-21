@@ -159,6 +159,7 @@ class BackendImpl : public ImplBaseT
         virtual void processPackage_(
             ::osl::ResettableMutexGuard & guard,
             bool registerPackage,
+            bool startup,
             ::rtl::Reference<AbortChannel> const & abortChannel,
             Reference<ucb::XCommandEnvironment> const & xCmdEnv );
 
@@ -847,6 +848,7 @@ uno::Reference< graphic::XGraphic > BackendImpl::PackageImpl::getIcon( sal_Bool 
 void BackendImpl::PackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
     bool doRegisterPackage,
+    bool startup,
     ::rtl::Reference<AbortChannel> const & abortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
 {
@@ -865,7 +867,7 @@ void BackendImpl::PackageImpl::processPackage_(
                 xPackage->createAbortChannel() );
             AbortChannel::Chain chain( abortChannel, xSubAbortChannel );
             try {
-                xPackage->registerPackage( xSubAbortChannel, xCmdEnv );
+                xPackage->registerPackage( startup, xSubAbortChannel, xCmdEnv );
             }
             catch (RuntimeException &) {
                 throw;

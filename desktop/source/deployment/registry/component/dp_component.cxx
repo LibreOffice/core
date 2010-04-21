@@ -122,7 +122,6 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         BackendImpl * getMyBackend() const;
 
         const OUString m_loader;
-        Reference<XComponentContext> m_xRemoteContext;
         ComponentBackendDb::Data m_registeredComponentsDb;
 
         enum reg {
@@ -143,6 +142,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         virtual void processPackage_(
             ::osl::ResettableMutexGuard & guard,
             bool registerPackage,
+            bool startup,
             ::rtl::Reference<AbortChannel> const & abortChannel,
             Reference<XCommandEnvironment> const & xCmdEnv );
 
@@ -179,6 +179,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         virtual void processPackage_(
             ::osl::ResettableMutexGuard & guard,
             bool registerPackage,
+            bool startup,
             ::rtl::Reference<AbortChannel> const & abortChannel,
             Reference<XCommandEnvironment> const & xCmdEnv );
 
@@ -356,7 +357,7 @@ BackendImpl * BackendImpl::ComponentPackageImpl::getMyBackend() const
 //______________________________________________________________________________
 void BackendImpl::ComponentPackageImpl::disposing()
 {
-    m_xRemoteContext.clear();
+//    m_xRemoteContext.clear();
     Package::disposing();
 }
 
@@ -1224,6 +1225,7 @@ BackendImpl::ComponentPackageImpl::isRegistered_(
 void BackendImpl::ComponentPackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
     bool doRegisterPackage,
+    bool startup,
     ::rtl::Reference<AbortChannel> const & abortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
@@ -1244,11 +1246,14 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
     data.javaTypeLibrary = isJavaTypelib;
     if (doRegisterPackage)
     {
-        if (! m_xRemoteContext.is()) {
-            m_xRemoteContext.set(
+        Reference <uno::XComponentContext> context(that->getComponentContext());
+        if (! startup)
+        {
+            context.set(
                 that->getObject( url ), UNO_QUERY );
-            if (! m_xRemoteContext.is()) {
-                m_xRemoteContext.set(
+
+            if (! context.is()) {
+                context.set(
                     that->insertObject( url, raise_uno_process(
                                             that->getComponentContext(),
                                             abortChannel ) ),
@@ -1258,9 +1263,9 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
 
         const Reference<registry::XSimpleRegistry> xServicesRDB( getRDB() );
         const Reference<registry::XImplementationRegistration> xImplReg(
-            m_xRemoteContext->getServiceManager()->createInstanceWithContext(
+            context->getServiceManager()->createInstanceWithContext(
                 OUSTR("com.sun.star.registry.ImplementationRegistration"),
-                m_xRemoteContext ), UNO_QUERY_THROW );
+                context ), UNO_QUERY_THROW );
 
         xImplReg->registerImplementation( m_loader, url, xServicesRDB );
         //only write to unorc if registration was successful.
@@ -1274,7 +1279,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
         t_stringlist implNames;
         t_stringpairvec singletons;
          const Reference<loader::XImplementationLoader> xLoader(
-            getComponentInfo( &implNames, &singletons, m_xRemoteContext ) );
+            getComponentInfo( &implNames, &singletons, context ) );
         data.implementationNames = implNames;
         data.singletons = singletons;
 
@@ -1348,11 +1353,14 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
         // set to VOID during revocation process:
         m_registered = REG_VOID;
 
-        Reference<XComponentContext> xContext;
-        if (m_xRemoteContext.is()) // has been activated in this process
-            xContext = m_xRemoteContext;
-        else // has been deployed in former times
+        //get the remote context. If it does not exist then use the local one
+        Reference<XComponentContext> xContext(
+            that->getObject( url ), UNO_QUERY );
+        bool bRemoteContext = false;
+        if (!xContext.is())
             xContext = that->getComponentContext();
+        else
+            bRemoteContext = true;
 
         t_stringlist implNames;
         t_stringpairvec singletons;
@@ -1427,10 +1435,8 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
         if (isJavaTypelib)
             that->removeFromUnoRc( java, url, xCmdEnv );
 
-        if (m_xRemoteContext.is()) {
+        if (bRemoteContext)
             that->releaseObject( url );
-            m_xRemoteContext.clear();
-        }
 
         m_registered = REG_NOT_REGISTERED;
         getMyBackend()->deleteDataFromDb(url);
@@ -1483,6 +1489,7 @@ BackendImpl::TypelibraryPackageImpl::isRegistered_(
 void BackendImpl::TypelibraryPackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
     bool doRegisterPackage,
+    bool startup,
     ::rtl::Reference<AbortChannel> const &,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {

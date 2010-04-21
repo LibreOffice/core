@@ -689,6 +689,7 @@ enum IteratorState
 {
     USER_EXTENSIONS,
     SHARED_EXTENSIONS,
+    BUNDLED_EXTENSIONS,
     END_REACHED
 };
 
@@ -708,6 +709,8 @@ protected:
         implGetNextUserScriptPackage( bool& rbPureDialogLib );
     com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >
         implGetNextSharedScriptPackage( bool& rbPureDialogLib );
+    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >
+        implGetNextBundledScriptPackage( bool& rbPureDialogLib );
 
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    m_xContext;
 
@@ -721,8 +724,16 @@ protected:
         < com::sun::star::deployment::XPackage > >                              m_aSharedPackagesSeq;
     bool                                                                        m_bSharedPackagesLoaded;
 
+      com::sun::star::uno::Sequence< com::sun::star::uno::Reference
+        < com::sun::star::deployment::XPackage > >                              m_aBundledPackagesSeq;
+    bool                                                                        m_bBundledPackagesLoaded;
+
+
     int                                                                         m_iUserPackage;
     int                                                                         m_iSharedPackage;
+       int                                                                          m_iBundledPackage;
+
+
 
     ScriptSubPackageIterator*                                                   m_pScriptSubPackageIterator;
 

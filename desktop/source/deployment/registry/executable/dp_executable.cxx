@@ -62,6 +62,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         virtual void processPackage_(
             ::osl::ResettableMutexGuard & guard,
             bool registerPackage,
+            bool startup,
             ::rtl::Reference<dp_misc::AbortChannel> const & abortChannel,
             Reference<XCommandEnvironment> const & xCmdEnv );
 
@@ -202,6 +203,7 @@ BackendImpl::ExecutablePackageImpl::isRegistered_(
 void BackendImpl::ExecutablePackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
     bool doRegisterPackage,
+    bool /*startup*/,
     ::rtl::Reference<dp_misc::AbortChannel> const & abortChannel,
     Reference<XCommandEnvironment> const & /*xCmdEnv*/ )
 {

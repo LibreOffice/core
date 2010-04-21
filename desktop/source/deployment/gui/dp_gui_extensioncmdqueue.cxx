@@ -1048,7 +1048,7 @@ void ExtensionCmdQueue::Thread::_enableExtension( ::rtl::Reference< ProgressCmdE
 
     try
     {
-        xPackage->registerPackage( xAbortChannel, rCmdEnv.get() );
+        xPackage->registerPackage(false, xAbortChannel, rCmdEnv.get() );
         if ( m_pDialogHelper )
             m_pDialogHelper->updatePackageInfo( xPackage );
     }

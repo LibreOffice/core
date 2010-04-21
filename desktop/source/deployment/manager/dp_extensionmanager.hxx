@@ -204,6 +204,9 @@ public:
 
 private:
 
+    struct StrSyncRepository : public ::dp_misc::StaticResourceString<
+        StrSyncRepository, RID_STR_SYNCHRONIZING_REPOSITORY> {};
+
     struct ExtensionInfos
     {
         ::rtl::OUString identifier;
@@ -225,24 +228,24 @@ private:
      */
     ::std::list< ::rtl::OUString > m_repositoryNames;
 
-    css::uno::Reference<css::deployment::XPackage> getExtensionAndStatus(
-        ::rtl::OUString const & identifier,
-        ::rtl::OUString const & fileName,
-        ::rtl::OUString const & repository,
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
-        bool & out_bWasRegistered);
+    bool isUserDisabled(::rtl::OUString const & identifier,
+                        ::rtl::OUString const & filename);
+
+    bool ExtensionManager::isUserDisabled(
+        css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > const & seqExtSameId);
 
     void activateExtension(
         ::rtl::OUString const & identifier,
         ::rtl::OUString const & fileName,
+        bool bUserDisabled, bool bStartup,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
     void activateExtension(
         css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > const & seqExt,
-    css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-    css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
+        bool bUserDisabled, bool bStartup,
+        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
 
 
     ::std::list<css::uno::Reference<css::deployment::XPackage> >

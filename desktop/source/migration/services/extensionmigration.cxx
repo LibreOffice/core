@@ -236,7 +236,7 @@ namespace migration
         if ( (sMediaType.equals(sBasicType) || sMediaType.equals(sDialogType))
             && isBasicPackageEnabled(xPkg))
         {
-            xPkg->registerPackage(uno::Reference< task::XAbortChannel >(),
+            xPkg->registerPackage(false, uno::Reference< task::XAbortChannel >(),
                 uno::Reference< ucb::XCommandEnvironment> ());
         }
     }
@@ -288,7 +288,7 @@ namespace migration
                     if ( bRegistered && !sMediaType.equals(sBasicType) && !sMediaType.equals(sDialogType) )
                     {
                         seqPkg[l]->revokePackage(uno::Reference< task::XAbortChannel >(), uno::Reference< ucb::XCommandEnvironment> ());
-                        seqPkg[l]->registerPackage(uno::Reference< task::XAbortChannel >(), uno::Reference< ucb::XCommandEnvironment> ());
+                        seqPkg[l]->registerPackage(false, uno::Reference< task::XAbortChannel >(), uno::Reference< ucb::XCommandEnvironment> ());
                     }
                 }
             }
@@ -297,7 +297,7 @@ namespace migration
                 registerBasicPackage(aPackage);
                 {
                     aPackage->revokePackage(uno::Reference< task::XAbortChannel >(), uno::Reference< ucb::XCommandEnvironment> ());
-                    aPackage->registerPackage(uno::Reference< task::XAbortChannel >(), uno::Reference< ucb::XCommandEnvironment> ());
+                    aPackage->registerPackage(false, uno::Reference< task::XAbortChannel >(), uno::Reference< ucb::XCommandEnvironment> ());
                 }
             }
         }

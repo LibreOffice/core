@@ -67,6 +67,7 @@ class Package : protected ::dp_misc::MutexHolder, public t_PackageBase
     PackageRegistryBackend * getMyBackend() const;
     void processPackage_impl(
         bool registerPackage,
+        bool startup,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
 
@@ -97,6 +98,7 @@ protected:
     virtual void processPackage_(
         ::osl::ResettableMutexGuard & guard,
         bool registerPackage,
+        bool startup,
         ::rtl::Reference< ::dp_misc::AbortChannel > const & abortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         = 0;
@@ -193,6 +195,7 @@ public:
                css::uno::RuntimeException);
 
     virtual void SAL_CALL registerPackage(
+        sal_Bool startup,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,
