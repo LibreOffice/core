@@ -2036,6 +2036,12 @@ namespace xmloff
                     OAttributeMetaData::getFormAttributeNamespace(eStringPropertyIds[i]),
                     OAttributeMetaData::getFormAttributeName(eStringPropertyIds[i]),
                     aStringPropertyNames[i]);
+
+            // Since as per ODF 1.2, xlink:href and xlink:type need to exist either both or none,
+            // we need to write xlink:type, too, even if it carries no information.
+            // #i111035# / 2010-04-141/ frank.schoenheit@sun.com
+            AddAttributeASCII( XML_NAMESPACE_XLINK, "type", "simple" );
+
             // now export the data source name or databaselocation or connection resource
             ::rtl::OUString sPropValue;
             m_xProps->getPropertyValue( PROPERTY_DATASOURCENAME ) >>= sPropValue;
