@@ -27,6 +27,8 @@
 
 $(eval $(call gb_AllLangResTarget_AllLangResTarget,productregistration))
 
+$(eval $(call gb_AllLangResTarget_set_reslocation,productregistration,svtools))
+
 $(eval $(call gb_AllLangResTarget_add_srs,productregistration,\
     svt/productregistration \
 ))

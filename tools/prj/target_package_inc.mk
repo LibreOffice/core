@@ -118,3 +118,4 @@ $(eval $(call gb_Package_add_file,tools_inc,inc/tools/weakbase.hxx,tools/weakbas
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/wintypes.hxx,tools/wintypes.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/wldcrd.hxx,tools/wldcrd.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/zcodec.hxx,tools/zcodec.hxx))
+$(eval $(call gb_Package_add_file,tools_inc,inc/tools/b3dtrans.hxx,tools/b3dtrans.hxx))

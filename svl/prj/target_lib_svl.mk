@@ -46,20 +46,20 @@ $(eval $(call gb_Library_set_defs,svl,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,svl,\
+    basegfx \
     comphelper \
     cppu \
+    cppuhelper \
     i18nisolang1 \
     i18nutil \
+    jvmfwk \
     sal \
     sot \
+    stl \
     tl \
     ucbhelper \
     utl \
     vos3 \
-    basegfx \
-    cppuhelper \
-    jvmfwk \
-    stl \
 ))
 
 $(eval $(call gb_Library_add_linked_system_libs,svl,\
@@ -77,6 +77,7 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/config/ctloptions \
     svl/source/config/itemholder2 \
     svl/source/config/languageoptions \
+    svl/source/config/srchcfg \
     svl/source/filepicker/pickerhelper \
     svl/source/filepicker/pickerhistory \
     svl/source/filerec/filerec \

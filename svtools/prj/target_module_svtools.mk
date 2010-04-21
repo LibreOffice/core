@@ -26,8 +26,8 @@
 #*************************************************************************
 
 $(eval $(call gb_Module_Module,svtools,\
-    $(call gb_AllLangResTarget_get_target,svt) \
     $(call gb_AllLangResTarget_get_target,productregistration) \
+    $(call gb_AllLangResTarget_get_target,svt) \
     $(call gb_Executable_get_target,bmp) \
     $(call gb_Executable_get_target,bmpsum) \
     $(call gb_Executable_get_target,g2g) \
@@ -45,9 +45,9 @@ $(eval $(call gb_Module_read_includes,svtools,\
     lib_productregistration \
     lib_svt \
     package_inc \
-))
-    #res_svt \
     res_productregistration \
+    res_svt \
+))
 
 #todo: javapatchres
 #todo: jpeg on mac in svtools/util/makefile.mk

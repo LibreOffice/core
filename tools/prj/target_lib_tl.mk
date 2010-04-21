@@ -61,14 +61,27 @@ $(eval $(call gb_Library_add_linked_libs,tl,\
 
 
 $(eval $(call gb_Library_add_exception_objects,tl,\
+    tools/source/communi/geninfo \
     tools/source/communi/parser \
+    tools/source/datetime/datetime \
     tools/source/datetime/tdate \
     tools/source/datetime/ttime \
+    tools/source/debug/debug \
     tools/source/debug/stcktree \
+    tools/source/fsys/comdep \
+    tools/source/fsys/dirent \
+    tools/source/fsys/filecopy \
+    tools/source/fsys/fstat \
     tools/source/fsys/tdir \
     tools/source/fsys/tempfile \
     tools/source/fsys/urlobj \
     tools/source/fsys/wldcrd \
+    tools/source/generic/b3dtrans \
+    tools/source/generic/bigint \
+    tools/source/generic/color \
+    tools/source/generic/config \
+    tools/source/generic/fract \
+    tools/source/generic/gen \
     tools/source/generic/line \
     tools/source/generic/link \
     tools/source/generic/poly \
@@ -78,44 +91,32 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/inet/inetmime \
     tools/source/inet/inetmsg \
     tools/source/inet/inetstrm \
+    tools/source/memtools/contnr \
     tools/source/memtools/mempool \
     tools/source/memtools/multisel \
     tools/source/memtools/table \
     tools/source/memtools/unqidx \
+    tools/source/misc/appendunixshellword \
+    tools/source/misc/extendapplicationenvironment \
+    tools/source/misc/getprocessworkingdir \
     tools/source/misc/solarmutex \
     tools/source/rc/isofallback \
     tools/source/rc/rc \
     tools/source/rc/resary \
     tools/source/rc/resmgr \
+    tools/source/ref/errinf \
     tools/source/ref/globname \
     tools/source/ref/pstm \
     tools/source/ref/ref \
+    tools/source/stream/cachestr \
     tools/source/stream/stream \
     tools/source/stream/strmsys \
     tools/source/stream/vcompat \
+    tools/source/string/debugprint \
     tools/source/string/tenccvt \
     tools/source/string/tstring \
     tools/source/string/tustring \
     tools/source/testtoolloader/testtoolloader \
-    tools/source/communi/geninfo \
-    tools/source/datetime/datetime \
-    tools/source/debug/debug \
-    tools/source/fsys/comdep \
-    tools/source/fsys/dirent \
-    tools/source/fsys/filecopy \
-    tools/source/fsys/fstat \
-    tools/source/generic/bigint \
-    tools/source/generic/color \
-    tools/source/generic/config \
-    tools/source/generic/fract \
-    tools/source/generic/gen \
-    tools/source/memtools/contnr \
-    tools/source/misc/appendunixshellword \
-    tools/source/misc/extendapplicationenvironment \
-    tools/source/misc/getprocessworkingdir \
-    tools/source/ref/errinf \
-    tools/source/stream/cachestr \
-    tools/source/string/debugprint \
     tools/source/zcodec/zcodec \
 ))
 

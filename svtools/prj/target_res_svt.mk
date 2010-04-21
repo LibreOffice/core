@@ -27,6 +27,8 @@
 
 $(eval $(call gb_AllLangResTarget_AllLangResTarget,svt))
 
+$(eval $(call gb_AllLangResTarget_set_reslocation,svt,svtools))
+
 $(eval $(call gb_AllLangResTarget_add_srs,svt,\
     svt/res \
 ))
@@ -43,35 +45,35 @@ $(eval $(call gb_SrsTarget_set_include,svt/res,\
 ))
 
 $(eval $(call gb_SrsTarget_add_files,svt/res,\
-    svtools/source/java/javaerror.src \
-    svtools/source/misc/helpagent.src \
-    svtools/source/misc/langtab.src \
-    svtools/source/misc/ehdl.src \
-    svtools/source/misc/undo.src \
-    svtools/source/misc/imagemgr.src \
-    svtools/source/plugapp/testtool.src \
-    svtools/source/control/filectrl.src \
+    svtools/source/brwbox/editbrowsebox.src \
+    svtools/source/contnr/fileview.src \
+    svtools/source/contnr/svcontnr.src \
+    svtools/source/contnr/templwin.src \
     svtools/source/control/calendar.src \
     svtools/source/control/ctrlbox.src \
     svtools/source/control/ctrltool.src \
-    svtools/source/dialogs/so3res.src \
-    svtools/source/dialogs/prnsetup.src \
-    svtools/source/dialogs/colrdlg.src \
+    svtools/source/control/filectrl.src \
     svtools/source/dialogs/addresstemplate.src \
+    svtools/source/dialogs/colrdlg.src \
     svtools/source/dialogs/filedlg2.src \
-    svtools/source/dialogs/printdlg.src \
     svtools/source/dialogs/formats.src \
     svtools/source/dialogs/logindlg.src \
+    svtools/source/dialogs/printdlg.src \
+    svtools/source/dialogs/prnsetup.src \
+    svtools/source/dialogs/so3res.src \
     svtools/source/dialogs/wizardmachine.src \
-    svtools/source/contnr/templwin.src \
-    svtools/source/contnr/fileview.src \
-    svtools/source/contnr/svcontnr.src \
-    svtools/source/uno/unoifac2.src \
-    svtools/source/brwbox/editbrowsebox.src \
-    svtools/source/filter.vcl/filter/dlgexpor.src \
     svtools/source/filter.vcl/filter/dlgejpg.src \
     svtools/source/filter.vcl/filter/dlgepng.src \
+    svtools/source/filter.vcl/filter/dlgexpor.src \
     svtools/source/filter.vcl/filter/strings.src \
+    svtools/source/java/javaerror.src \
+    svtools/source/misc/ehdl.src \
+    svtools/source/misc/helpagent.src \
+    svtools/source/misc/imagemgr.src \
+    svtools/source/misc/langtab.src \
+    svtools/source/misc/undo.src \
+    svtools/source/plugapp/testtool.src \
+    svtools/source/uno/unoifac2.src \
 ))
 
 
