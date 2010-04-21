@@ -172,6 +172,10 @@ define gb_Library_get_target
 $(patsubst $(1):%,$(gb_Library_OUTDIRLOCATION)/%,$(filter $(filter $(1),$(gb_Library_TARGETS)):%,$(gb_Library_FILENAMES)))
 endef
 
+define gb_Library_get_external_headers_target
+$(patsubst $(1):%,$(WORKDIR)/ExternalHeaders/Library/%,$(filter $(1):%,$(gb_Library_FILENAMES)))
+endef
+
 define gb_Library_get_headers_target
 $(patsubst $(1):%,$(WORKDIR)/Headers/Library/%,$(filter $(1):%,$(gb_Library_FILENAMES)))
 endef
@@ -184,6 +188,10 @@ define gb_StaticLibrary_get_target
 $(patsubst $(1):%,$(gb_StaticLibrary_OUTDIRLOCATION)/%,$(filter $(filter $(1),$(gb_StaticLibrary_TARGETS)):%,$(gb_StaticLibrary_FILENAMES)))
 endef
 
+define gb_StaticLibrary_get_external_headers_target
+$(patsubst $(1):%,$(WORKDIR)/ExternalHeaders/StaticLibrary/%,$(filter $(1):%,$(gb_StaticLibrary_FILENAMES)))
+endef
+
 define gb_StaticLibrary_get_headers_target
 $(patsubst $(1):%,$(WORKDIR)/Headers/StaticLibrary/%,$(filter $(1):%,$(gb_StaticLibrary_FILENAMES)))
 endef
@@ -192,7 +200,7 @@ gb_Executable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
 gb_SdiTarget_get_target = $(WORKDIR)/SdiTarget/$(1)
 gb_SrsPartTarget_get_target = $(WORKDIR)/SrsPartTarget/$(1)
 gb_SrsTarget_get_target = $(WORKDIR)/SrsTarget/$(1).srs
-gb_ResTarget_get_target = $(OUTDIR)/misc/res/$(1)
+gb_ResTarget_get_target = $(OUTDIR)/misc/res/$(1).res
 gb_AllLangResTarget_get_target = $(OUTDIR)/misc/AllLangRes/$(1)
 gb_PackagePart_get_target = $(OUTDIR)/$(1)
 gb_Package_get_target = $(OUTDIR)/misc/Package/$(1)
@@ -222,8 +230,10 @@ $(eval $(call gb_Helper_make_dep_targets,\
     SrsTarget \
 ))
 
+gb_Executable_get_external_headers_target = $(WORKDIR)/ExternalHeaders/Executable/$(1)
 gb_Executable_get_headers_target = $(WORKDIR)/Headers/Executable/$(1)
 gb_Library_get_linktargetname = Library/$(1)
+gb_LinkTarget_get_external_headers_target = $(WORKDIR)/ExternalHeaders/$(1)
 gb_LinkTarget_get_headers_target = $(WORKDIR)/Headers/$(1)
 gb_PackagePart_get_destinations = $(OUTDIR)/xml $(OUTDIR)/inc
 gb_ResTarget_get_imagelist_target = $(OUTDIR)/res/img/$(1).ilst
@@ -329,6 +339,7 @@ $(call gb_LinkTarget_get_clean_target,%) :
             $(call gb_LinkTarget_get_target,$*) \
             $(call gb_LinkTarget_get_dep_target,$*) \
             $(call gb_LinkTarget_get_headers_target,$*) \
+            $(call gb_LinkTarget_get_external_headers_target,$*) \
             $(DLLTARGET) \
             $(AUXTARGETS))
 
@@ -340,14 +351,15 @@ $(call gb_Helper_abbreviate_dirs,\
         $(foreach object,$(3),$(call gb_CObject_get_dep_target,$(object))) \
         $(foreach object,$(4),$(call gb_CxxObject_get_dep_target,$(object))) > $(1))
 endef
-$(call gb_LinkTarget_get_target,%) :$(call gb_LinkTarget_get_headers_target,%) $(call gb_LinkTarget_get_dep_target,%) $(gb_Helper_NULLFILE)
+
+$(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(call gb_LinkTarget_get_dep_target,%) $(gb_Helper_NULLFILE)
     $(call gb_LinkTarget_command_dep,$(call gb_LinkTarget_get_dep_target,$*),$*,$(COBJECTS),$(CXXOBJECTS))
     $(call gb_LinkTarget_command,$@,$*,$(TARGETTYPE_FLAGS) $(LDFLAGS),$(LINKED_LIBS),$(LINKED_STATIC_LIBS),$(CXXOBJECTS),$(COBJECTS))
 
 $(call gb_LinkTarget_get_dep_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(gb_Helper_NULLFILE)
     $(call gb_LinkTarget_command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS))
 
-define gb_LinkTarget_get_headers_check
+define gb_LinkTarget_get_external_headers_check
 ifneq ($$(SELF),$$*)
 $$(info LinkTarget $$* not defined: Assuming headers to be there!)
 endif
@@ -355,9 +367,14 @@ $$@ : COMMAND := $$(call gb_Helper_abbreviate_dirs, mkdir -p $$(dir $$@) && touc
 
 endef
 
-$(call gb_LinkTarget_get_headers_target,%) :
-    $(eval $(gb_LinkTarget_get_headers_check))
+$(call gb_LinkTarget_get_external_headers_target,%) :
+    $(eval $(gb_LinkTarget_get_external_headers_check))
     $(COMMAND)
+
+$(call gb_LinkTarget_get_headers_target,%) : $(call gb_LinkTarget_get_external_headers_target,%)
+    $(call gb_Helper_abbreviate_dirs,\
+        mkdir -p $(dir $@) && touch $@)
+
 
 define gb_LinkTarget_LinkTarget
 $(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS :=
@@ -379,7 +396,7 @@ $(call gb_LinkTarget_get_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
 $(call gb_LinkTarget_get_target,$(1)) : LDFLAGS := $$(gb_LinkTarget_LDFLAGS)
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS := 
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS := 
-$(call gb_LinkTarget_get_headers_target,$(1)) : SELF := $(1)
+$(call gb_LinkTarget_get_external_headers_target,$(1)) : SELF := $(1)
 $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : TARGETTYPE_FLAGS := 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -420,7 +437,7 @@ endif
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $$(foreach lib,$(2),$$(call gb_Library_get_target,$$(lib)))
-$(call gb_LinkTarget_get_headers_target,$(1)) : \
+$(call gb_LinkTarget_get_external_headers_target,$(1)) : \
 $$(foreach lib,$(2),$$(call gb_Library_get_headers_target,$$(lib)))
 
 endef
@@ -433,7 +450,7 @@ endif
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $$(foreach lib,$(2),$$(call gb_StaticLibrary_get_target,$$(lib)))
-$(call gb_LinkTarget_get_headers_target,$(1)) : \
+$(call gb_LinkTarget_get_external_headers_target,$(1)) : \
 $$(foreach lib,$(2),$$(call gb_StaticLibrary_get_headers_target,$$(lib)))
 
 endef
@@ -449,6 +466,7 @@ $(call gb_CObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$
 $(call gb_CObject_get_target,$(2)) : CFLAGS += $(3)
 
 endef
+
 define gb_LinkTarget_add_cxxobject
 $(call gb_LinkTarget_get_target,$(1)) : CXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS += $(2)

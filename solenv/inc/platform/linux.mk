@@ -204,10 +204,10 @@ endif
 
 ifeq ($(CPUNAME),X86_64)
 gb_Library_OOOEXT := lx$(gb_Library_PLAINEXT)
-gb_Library_UNOEXT := lx.uno$(gb_Library_PLAINEXT)
+gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 else
 gb_Library_OOOEXT := li$(gb_Library_PLAINEXT)
-gb_Library_UNOEXT := li.uno$(gb_Library_PLAINEXT)
+gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 endif
 
 gb_Library_PLAINLIBS += \
