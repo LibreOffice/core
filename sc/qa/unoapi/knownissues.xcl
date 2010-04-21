@@ -194,3 +194,6 @@ sc.ScDataPilotFieldObj::com::sun::star::sheet::XDataPilotFieldGrouping
 
 ### i110862 ###
 sc.ScDataPilotTableObj::com::sun::star::sheet::XDataPilotTable
+
+### i111032 ###
+sc.ScAccessibleCell::com::sun::star::accessibility::XAccessibleText
