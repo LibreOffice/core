@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: b2dmultirange.hxx,v $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -25,10 +28,26 @@
  *
  ************************************************************************/
 
-// Canvas
+#ifndef _BGFX_RANGE_B2DRANGECLIPPER_HXX
+#define _BGFX_RANGE_B2DRANGECLIPPER_HXX
 
-public interface SpriteBase
+#include <basegfx/range/b2dpolyrange.hxx>
+#include <vector>
+
+namespace basegfx
 {
-    // to be overridden
-    public SpriteRep getSpriteRep();
+    namespace tools
+    {
+        /** Extract poly-polygon w/o self-intersections from poly-range
+
+            Similar to the solveCrossovers(const B2DPolyPolygon&)
+            method, this one calculates a self-intersection-free
+            poly-polygon with the same topology, and encoding
+            inside/outsidedness via polygon orientation and layering.
+         */
+        B2DPolyPolygon solveCrossovers(const std::vector<B2DRange>& rRanges,
+                                       const std::vector<B2VectorOrientation>& rOrientations);
+    }
 }
+
+#endif /* _BGFX_RANGE_B2DRANGECLIPPER_HXX */

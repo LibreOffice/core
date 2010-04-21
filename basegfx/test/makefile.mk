@@ -41,17 +41,21 @@ CFLAGSCXX += $(CPPUNIT_CFLAGS)
 # --- Common ----------------------------------------------------------
 
 SHL1OBJS=  \
-    $(SLO)$/basegfx1d.obj \
-    $(SLO)$/basegfx2d.obj \
-    $(SLO)$/basegfx3d.obj \
-    $(SLO)$/testtools.obj
+    $(SLO)$/basegfx1d.obj      \
+    $(SLO)$/basegfx2d.obj      \
+    $(SLO)$/basegfx3d.obj      \
+    $(SLO)$/boxclipper.obj     \
+    $(SLO)$/basegfxtools.obj   \
+    $(SLO)$/clipstate.obj      \
+    $(SLO)$/genericclipper.obj \
+    $(SLO)$/testtools.obj	
 
 SHL1TARGET= basegfx_tests
 SHL1STDLIBS= \
                 $(BASEGFXLIB) \
                 $(SALLIB)        \
                 $(CPPUHELPERLIB) \
-                        $(CPPULIB)       \
+                $(CPPULIB)       \
                 $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
@@ -70,3 +74,7 @@ SLOFILES=$(SHL1OBJS)
 
 .INCLUDE : target.mk
 .INCLUDE : _cppunit.mk
+
+.IF "$(verbose)"!="" || "$(VERBOSE)"!=""
+CDEFS+= -DVERBOSE
+.ENDIF
