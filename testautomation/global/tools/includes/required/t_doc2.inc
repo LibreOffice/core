@@ -116,7 +116,6 @@ end sub
 function sMakeReadOnlyDocumentEditable() as boolean
 
     ' Switch a write protected document to edit mode.
-
     const CFN = "sMakeReadOnlyDocumentEditable(): "
 
     ' Timings
@@ -131,6 +130,7 @@ function sMakeReadOnlyDocumentEditable() as boolean
 
     dim iTry as integer
 
+    ' Try to click the Edit-Button on the Standardbar
     kontext "StandardBar"
     for iTry = 1 to MAX_RETRIES
         try
@@ -144,11 +144,12 @@ function sMakeReadOnlyDocumentEditable() as boolean
         wait( MAX_DELAY )
     next iTry
 
+    ' Probe for messageboxes, the "Use copy" message is allowed, all others are not
     kontext "Active"
     if ( Active.exists( MAX_DIALOG_DELAY ) ) then
         kontext "Active"
         if ( hCloseDialog( Active, "yes" ) ) then
-            ' This is the expected "Use copy" message
+            ' This is the expected/allowed "Use copy" message
         else
             ' This is most likely the "Object not found" message (which is a bug)
             printlog( CFN & Active.getText() )
@@ -157,6 +158,9 @@ function sMakeReadOnlyDocumentEditable() as boolean
         endif
     endif
 
+    WaitSlot( MAX_DELAY * 10 ) ' Let the document switch mode
+
+    ' Verify the state of the Edit-Button, it must be either disabled or pressed.
     try
         kontext "StandardBar"
         if ( Bearbeiten.isEnabled() ) then
