@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: localizationmgr.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,7 +77,7 @@ void LocalizationMgr::handleTranslationbar( void )
         ::rtl::OUString::createFromAscii( "private:resource/toolbar/translationbar" );
 
     Reference< beans::XPropertySet > xFrameProps
-        ( m_pIDEShell->GetViewFrame()->GetFrame()->GetFrameInterface(), uno::UNO_QUERY );
+        ( m_pIDEShell->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
     if ( xFrameProps.is() )
     {
         Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;

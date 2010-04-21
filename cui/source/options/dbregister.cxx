@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbregister.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,13 +118,13 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
 
     SfxTabPage( pParent, CUI_RES( RID_SFXPAGE_DBREGISTER), rSet ),
 
+    aStdBox         ( this, CUI_RES( GB_STD ) ),
     aTypeText       ( this, CUI_RES( FT_TYPE ) ),
     aPathText       ( this, CUI_RES( FT_PATH ) ),
     aPathCtrl       ( this, CUI_RES( LB_PATH ) ),
     m_aNew          ( this, CUI_RES( BTN_NEW ) ),
     m_aEdit         ( this, CUI_RES( BTN_EDIT ) ),
     m_aDelete       ( this, CUI_RES( BTN_DELETE ) ),
-    aStdBox         ( this, CUI_RES( GB_STD ) ),
     pHeaderBar      ( NULL ),
     pPathBox        ( NULL ),
     m_pCurEntry     ( NULL ),

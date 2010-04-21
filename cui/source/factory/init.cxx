@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: init.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,7 @@
 // caution: needs C-Linkage since dynamically loaded via symbol name
 extern "C"
 {
-bool GetSpecialCharsForEdit(Window* i_pParent, const Font& i_rFont, String& o_rResult)
+SAL_DLLPUBLIC_EXPORT bool GetSpecialCharsForEdit(Window* i_pParent, const Font& i_rFont, String& o_rResult)
 {
     bool bRet = false;
     SvxCharacterMap* aDlg = new SvxCharacterMap( i_pParent );

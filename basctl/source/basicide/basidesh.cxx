@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: basidesh.cxx,v $
- * $Revision: 1.49.26.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,7 +104,7 @@ SFX_IMPL_INTERFACE( BasicIDEShell, SfxViewShell, IDEResId( RID_STR_IDENAME ) )
 
 
 
-#define IDE_VIEWSHELL_FLAGS     SFX_VIEW_MAXIMIZE_FIRST|SFX_VIEW_CAN_PRINT|SFX_VIEW_NO_NEWWINDOW
+#define IDE_VIEWSHELL_FLAGS     SFX_VIEW_CAN_PRINT|SFX_VIEW_NO_NEWWINDOW
 
 
 // Hack for #101048

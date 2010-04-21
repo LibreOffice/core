@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Configuration.java,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -366,12 +363,6 @@ public abstract class Configuration
             e.printStackTrace(System.out);
             return snames;
         }
-    }
-
-    public static XNameAccess getChildNodebyIndex(Object _oNode, int _index)
-    {
-        XNameAccess xNameAccessNode = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, _oNode);
-        return getChildNodebyIndex(xNameAccessNode, _index);
     }
 
     public static XNameAccess getChildNodebyIndex(XNameAccess _xNameAccess, int _index)

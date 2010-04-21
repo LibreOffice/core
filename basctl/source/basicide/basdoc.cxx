@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: basdoc.cxx,v $
- * $Revision: 1.21.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,11 +30,12 @@
 
 
 #include <ide_pch.hxx>
-
+#include <svx/svxids.hrc>
 
 #define GLOBALOVERFLOW2
 
 #include <sfx2/docfac.hxx>
+#include <sfx2/sfxmodelfactory.hxx>
 #include <vcl/status.hxx>
 
 #include <svx/xmlsecctrl.hxx>
@@ -60,12 +58,12 @@ SFX_IMPL_INTERFACE( BasicDocShell, SfxObjectShell, IDEResId( 0 ) )
     SFX_STATUSBAR_REGISTRATION( IDEResId( SID_BASICIDE_STATUSBAR ) );
 }
 
-BasicDocShell::BasicDocShell( SfxObjectCreateMode eMode ) : SfxObjectShell( eMode )
+BasicDocShell::BasicDocShell()
+    :SfxObjectShell( SFXMODEL_DISABLE_EMBEDDED_SCRIPTS | SFXMODEL_DISABLE_DOCUMENT_RECOVERY )
 {
     pPrinter = 0;
     SetPool( &SFX_APP()->GetPool() );
-    SetHasNoBasic();
-    SetModel( new SIDEModel(this) );
+    SetBaseModel( new SIDEModel(this) );
 }
 
 __EXPORT BasicDocShell::~BasicDocShell()

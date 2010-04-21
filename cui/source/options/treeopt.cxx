@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: treeopt.cxx,v $
- * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,7 +110,7 @@
 #include "treeopt.hxx"
 #include "treeopt.hrc"
 #include "fontsubs.hxx"
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/xtable.hxx>
 #include "connpoolconfig.hxx"
 #include "dbregister.hxx"
@@ -123,11 +120,11 @@
 
 #ifndef _SVX_LANGITEM_HXX
 #define ITEMID_LANGUAGE SID_ATTR_CHAR_LANGUAGE
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #endif
 
 
-#include <svx/optitems.hxx>
+#include <editeng/optitems.hxx>
 
 #include <svx/drawitem.hxx>
 #include <rtl/uri.hxx>

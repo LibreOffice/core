@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -82,6 +78,7 @@ JAVAFILES=							\
     common$/DebugHelper.java					\
     common$/PropertySetHelper.java					\
     common$/NumericalHelper.java					\
+    common$/NamedValueCollection.java       \
     db$/DBMetaData.java					\
     db$/CommandMetaData.java				\
     db$/QueryMetaData.java					\
@@ -94,6 +91,7 @@ JAVAFILES=							\
     db$/RelationController.java				\
     db$/TableDescriptor.java				\
     db$/SQLQueryComposer.java				\
+    db$/DatabaseObjectWizard.java					\
     ui$/event$/AbstractListener.java			\
     ui$/event$/CommonListener.java				\
     ui$/event$/DataAware.java				\

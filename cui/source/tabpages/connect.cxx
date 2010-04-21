@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: connect.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -133,7 +130,7 @@ SvxConnectionPage::SvxConnectionPage( Window* pWindow, const SfxItemSet& rInAttr
 
     FillTypeLB();
 
-    const FieldUnit eFUnit = GetModuleFieldUnit( &rInAttrs );
+    const FieldUnit eFUnit = GetModuleFieldUnit( rInAttrs );
     SetFieldUnit( aMtrFldHorz1, eFUnit );
     SetFieldUnit( aMtrFldHorz2, eFUnit );
     SetFieldUnit( aMtrFldVert1, eFUnit );

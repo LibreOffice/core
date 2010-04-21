@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: controlwizard.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -148,7 +145,7 @@ namespace dbp
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                                         getFormConnection(const OAccessRegulator&) const;
 
-        /** returns the com.sun.star.sdb.InteractionHandler
+        /** returns the com.sun.star.task.InteractionHandler
             @param  _pWindow    The window will be used when an error message has to be shown.
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > getInteractionHandler(Window* _pWindow) const;
