@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: macassgn.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -152,7 +149,7 @@ BOOL SwMacroAssignDlg::INetFmtDlg( Window* pParent, SwWrtShell& rSh,
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     SfxAbstractDialog* pMacroDlg = pFact->CreateSfxDialog( pParent, aSet,
-        rSh.GetView().GetViewFrame()->GetFrame()->GetFrameInterface(),
+        rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(),
         SID_EVENTCONFIG );
     if ( pMacroDlg && pMacroDlg->Execute() == RET_OK )
     {

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fesh.hxx,v $
- * $Revision: 1.63.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -539,10 +536,10 @@ public:
                 const SfxItemSet* pFlyAttrSet = 0,
                 const SfxItemSet* pGrfAttrSet = 0,
                 SwFrmFmt* = 0 );
-    //Einfuegen eines DrawObjectes. Das Object muss bereits im DrawModel
-    // angemeldet sein.
-    void Insert( SdrObject& rDrawObj, const SfxItemSet* pFlyAttrSet = 0,
-                SwFrmFmt* = 0, const Point* = 0 );
+
+    // Insertion of a drawing object which have to be already inserted in the DrawModel
+    void InsertDrawObj( SdrObject& rDrawObj,
+                        const Point& rInsertPosition );
 
     BOOL ReplaceSdrObj( const String& rGrfName, const String& rFltName,
                         const Graphic* pGrf = 0 );

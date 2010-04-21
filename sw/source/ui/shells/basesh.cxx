@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: basesh.cxx,v $
- * $Revision: 1.87 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +35,7 @@
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/imapdlg.hxx>
 #include <sfx2/dispatch.hxx>
@@ -50,27 +47,26 @@
 #include <sfx2/objitem.hxx>
 #include <svtools/filter.hxx>
 #include <svx/gallery.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svx/contdlg.hxx>
 #include <vcl/graph.hxx>
-#include <svx/impgrf.hxx>
 #include <svl/slstitm.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/stritem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <svl/srchitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/flagsdef.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <sfx2/objface.hxx>
 #include <fmturl.hxx>
 #include <fmthdft.hxx>
@@ -190,7 +186,7 @@ void lcl_UpdateIMapDlg( SwWrtShell& rSh )
     void* pEditObj = GRAPHIC_NONE != nGrfType && GRAPHIC_DEFAULT != nGrfType
                         ? rSh.GetIMapInventor() : 0;
     TargetList* pList = new TargetList;
-    rSh.GetView().GetViewFrame()->GetTopFrame()->GetTargetList(*pList);
+    rSh.GetView().GetViewFrame()->GetTopFrame().GetTargetList(*pList);
 
     SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
     rSh.GetFlyFrmAttr( aSet );
@@ -2560,7 +2556,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 SvxBrushItem aBrush(RES_BACKGROUND);
                 rSh.GetBoxBackground( aBrush );
                 pDlg = pFact->CreateSfxDialog( pMDI, aSet,
-                    rView.GetViewFrame()->GetFrame()->GetFrameInterface(),
+                    rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 aSet.Put( aBrush );
@@ -2579,7 +2575,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 rSh.GetFlyFrmAttr( aSet );
 
                 pDlg = pFact->CreateSfxDialog( pMDI, aSet,
-                    rView.GetViewFrame()->GetFrame()->GetFrameInterface(),
+                    rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
@@ -2594,7 +2590,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 rSh.GetCurAttr( aSet );
 
                 pDlg = pFact->CreateSfxDialog( pMDI, aSet,
-                    rView.GetViewFrame()->GetFrame()->GetFrameInterface(),
+                    rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )

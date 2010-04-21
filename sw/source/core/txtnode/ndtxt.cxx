@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ndtxt.cxx,v $
- * $Revision: 1.86.66.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,12 +30,12 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 
-#include <svx/fontitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/lrspitem.hxx>
 // --> OD 2008-01-17 #newlistlevelattrs#
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 // <--
 #include <svl/urihelper.hxx>
 #ifndef _SVSTDARR_HXX
@@ -2888,6 +2885,51 @@ BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
 
     return bRet;
 }
+
+// --> OD 2010-01-05 #b6884103#
+SwTwips SwTxtNode::GetAdditionalIndentForStartingNewList() const
+{
+    SwTwips nAdditionalIndent = 0;
+
+    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    if ( pRule )
+    {
+        const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(GetActualListLevel()));
+        if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+        {
+            nAdditionalIndent = GetSwAttrSet().GetLRSpace().GetLeft();
+
+            if (getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
+            {
+                nAdditionalIndent = nAdditionalIndent -
+                                    GetSwAttrSet().GetLRSpace().GetTxtFirstLineOfst();
+            }
+        }
+        else if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+        {
+            if ( AreListLevelIndentsApplicable() )
+            {
+                nAdditionalIndent = rFmt.GetIndentAt() + rFmt.GetFirstLineIndent();
+            }
+            else
+            {
+                nAdditionalIndent = GetSwAttrSet().GetLRSpace().GetLeft();
+                if (getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
+                {
+                    nAdditionalIndent = nAdditionalIndent -
+                                        GetSwAttrSet().GetLRSpace().GetTxtFirstLineOfst();
+                }
+            }
+        }
+    }
+    else
+    {
+        nAdditionalIndent = GetSwAttrSet().GetLRSpace().GetLeft();
+    }
+
+    return nAdditionalIndent;
+}
+// <--
 
 // --> OD 2008-12-02 #i96772#
 void SwTxtNode::ClearLRSpaceItemDueToListLevelIndents( SvxLRSpaceItem& o_rLRSpaceItem ) const

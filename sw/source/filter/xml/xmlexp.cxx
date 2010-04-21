@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlexp.cxx,v $
- * $Revision: 1.91 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,11 +39,11 @@
 #include <svx/svdpage.hxx>
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/svddef.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <svx/xmlcnitm.hxx>
+#include <editeng/xmlcnitm.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xformsexport.hxx>
@@ -62,8 +59,8 @@
 #include <sfx2/viewsh.hxx>
 #include <comphelper/processfactory.hxx>
 #include <docary.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <ForbiddenCharactersEnum.hxx>
 
 // for locking SolarMutex: svapp + mutex

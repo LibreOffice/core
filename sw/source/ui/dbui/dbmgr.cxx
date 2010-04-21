@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbmgr.cxx,v $
- * $Revision: 1.132.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,7 +74,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/dispatch.hxx>
-#include <goodies/mailenum.hxx>
+#include <svl/mailenum.hxx>
 #include <cmdid.h>
 #include <swmodule.hxx>
 #include <view.hxx>
@@ -116,10 +113,10 @@
 #include <comphelper/property.hxx>
 #include <mailmergehelper.hxx>
 #include <maildispatcher.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <i18npool/mslangid.hxx>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svl/numuno.hxx>
 
 #include <unomailmerge.hxx>
@@ -938,7 +935,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 // create a target docshell to put the merged document into
                 xTargetDocShell = new SwDocShell( SFX_CREATE_MODE_STANDARD );
                 xTargetDocShell->DoInitNew( 0 );
-                SfxViewFrame* pTargetFrame = SfxViewFrame::CreateViewFrame( *xTargetDocShell, 0, TRUE );
+                SfxViewFrame* pTargetFrame = SfxViewFrame::LoadHiddenDocument( *xTargetDocShell, 0 );
 
                 pTargetView = static_cast<SwView*>( pTargetFrame->GetViewShell() );
 
@@ -1058,7 +1055,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         if (xWorkDocSh->DoLoad(pWorkMed))
                         {
                             //create a view frame for the document
-                            SfxViewFrame* pWorkFrame = SfxViewFrame::CreateViewFrame( *xWorkDocSh, 0, TRUE );
+                            SfxViewFrame* pWorkFrame = SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 );
                             //request the layout calculation
                             SwWrtShell& rWorkShell =
                                     static_cast< SwView* >(pWorkFrame->GetViewShell())->GetWrtShell();
@@ -1616,7 +1613,7 @@ uno::Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rData
         {
             rxSource.set(xComplConnection,UNO_QUERY);
             Reference< XInteractionHandler > xHandler(
-                    xMgr->createInstance( C2U( "com.sun.star.sdb.InteractionHandler" )), UNO_QUERY);
+                    xMgr->createInstance( C2U( "com.sun.star.task.InteractionHandler" )), UNO_QUERY);
                 xConnection = xComplConnection->connectWithCompletion( xHandler );
         }
     }
@@ -2559,7 +2556,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                 pWorkMed->SetFilter( pSfxFlt );
                 if( xWorkDocSh->DoLoad(pWorkMed) )
                 {
-                    SfxViewFrame *pFrame = SfxViewFrame::CreateViewFrame( *xWorkDocSh, 0, TRUE );
+                    SfxViewFrame *pFrame = SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 );
                     SwView *pView = (SwView*) pFrame->GetViewShell();
                     pView->AttrChangedNotify( &pView->GetWrtShell() );//Damit SelectShell gerufen wird.
                     //set the current DBMgr
@@ -2768,7 +2765,7 @@ uno::Reference<XResultSet> SwNewDBMgr::createCursor(const ::rtl::OUString& _sDat
 
                 if ( xRowSet.is() )
                 {
-                    uno::Reference< XInteractionHandler > xHandler(xMgr->createInstance(C2U("com.sun.star.sdb.InteractionHandler")), UNO_QUERY);
+                    uno::Reference< XInteractionHandler > xHandler(xMgr->createInstance(C2U("com.sun.star.task.InteractionHandler")), UNO_QUERY);
                     xRowSet->executeWithCompletion(xHandler);
                 }
                 xResultSet = uno::Reference<XResultSet>(xRowSet, UNO_QUERY);
@@ -2851,14 +2848,14 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
         // create a target docshell to put the merged document into
         SfxObjectShellRef xTargetDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
         xTargetDocShell->DoInitNew( 0 );
-        SfxViewFrame* pTargetFrame = SfxViewFrame::CreateViewFrame( *xTargetDocShell, 0, TRUE );
+        SfxViewFrame* pTargetFrame = SfxViewFrame::LoadHiddenDocument( *xTargetDocShell, 0 );
 
         //the created window has to be located at the same position as the source window
-        Window& rTargetWindow = pTargetFrame->GetFrame()->GetWindow();
-        Window& rSourceWindow = rSourceView.GetViewFrame()->GetFrame()->GetWindow();
+        Window& rTargetWindow = pTargetFrame->GetFrame().GetWindow();
+        Window& rSourceWindow = rSourceView.GetViewFrame()->GetFrame().GetWindow();
         rTargetWindow.SetPosPixel(rSourceWindow.GetPosPixel());
 
-//        pTargetFrame->GetFrame()->Appear();
+//        pTargetFrame->GetFrame().Appear();
         SwView* pTargetView = static_cast<SwView*>( pTargetFrame->GetViewShell() );
         rMMConfig.SetTargetView(pTargetView);
         //initiate SelectShell() to create sub shells
@@ -2910,7 +2907,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 xWorkDocSh = rSourceView.GetDocShell()->GetDoc()->CreateCopy(true);
             }
             //create a ViewFrame
-            SwView* pWorkView = static_cast< SwView* >( SfxViewFrame::CreateViewFrame( *xWorkDocSh, 0, sal_True )->GetViewShell() );
+            SwView* pWorkView = static_cast< SwView* >( SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 )->GetViewShell() );
             SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
             pWorkView->AttrChangedNotify( &rWorkShell );//Damit SelectShell gerufen wird.
 
