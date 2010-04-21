@@ -42,6 +42,6 @@ $(eval $(call gb_Package_add_file,framework_inc,inc/framework/preventduplicatein
 $(eval $(call gb_Package_add_file,framework_inc,inc/framework/sfxhelperfunctions.hxx,framework/sfxhelperfunctions.hxx))
 $(eval $(call gb_Package_add_file,framework_inc,inc/framework/titlehelper.hxx,framework/titlehelper.hxx))
 $(eval $(call gb_Package_add_file,framework_inc,inc/framework/toolboxconfiguration.hxx,framework/toolboxconfiguration.hxx))
-$(eval $(call gb_Package_add_file,framework_inc,inc/framework/fwedllapi.h,fwedllapi.h))
+$(eval $(call gb_Package_add_file,framework_inc,inc/framework/fwedllapi.h,framework/fwedllapi.h))
 $(eval $(call gb_Package_add_file,framework_inc,inc/fwkdllapi.h,fwkdllapi.h))
 $(eval $(call gb_Package_add_file,framework_inc,inc/fwidllapi.h,fwidllapi.h))
