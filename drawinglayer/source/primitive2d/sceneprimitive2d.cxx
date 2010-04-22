@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: sceneprimitive2d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.16 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -100,7 +92,7 @@ namespace drawinglayer
             return maShadowPrimitives.hasElements();
         }
 
-        void ScenePrimitive2D::calculateDsicreteSizes(
+        void ScenePrimitive2D::calculateDiscreteSizes(
             const geometry::ViewInformation2D& rViewInformation,
             basegfx::B2DRange& rDiscreteRange,
             basegfx::B2DRange& rVisibleDiscreteRange,
@@ -110,23 +102,12 @@ namespace drawinglayer
             rDiscreteRange = basegfx::B2DRange(0.0, 0.0, 1.0, 1.0);
             rDiscreteRange.transform(rViewInformation.getObjectToViewTransformation() * getObjectTransformation());
 
-            // force to discrete expanded bounds (it grows, so expanding works perfectly well)
-            rDiscreteRange.expand(basegfx::B2DTuple(floor(rDiscreteRange.getMinX()), floor(rDiscreteRange.getMinY())));
-            rDiscreteRange.expand(basegfx::B2DTuple(ceil(rDiscreteRange.getMaxX()), ceil(rDiscreteRange.getMaxY())));
-
             // clip it against discrete Viewport (if set)
             rVisibleDiscreteRange = rDiscreteRange;
 
             if(!rViewInformation.getViewport().isEmpty())
             {
                 rVisibleDiscreteRange.intersect(rViewInformation.getDiscreteViewport());
-
-                if(!rVisibleDiscreteRange.isEmpty())
-                {
-                    // force to discrete expanded bounds, too
-                    rVisibleDiscreteRange.expand(basegfx::B2DTuple(floor(rVisibleDiscreteRange.getMinX()), floor(rVisibleDiscreteRange.getMinY())));
-                    rVisibleDiscreteRange.expand(basegfx::B2DTuple(ceil(rVisibleDiscreteRange.getMaxX()), ceil(rVisibleDiscreteRange.getMaxY())));
-                }
             }
 
             if(rVisibleDiscreteRange.isEmpty())
@@ -158,7 +139,7 @@ namespace drawinglayer
             }
         }
 
-        Primitive2DSequence ScenePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence ScenePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DSequence aRetval;
 
@@ -167,8 +148,10 @@ namespace drawinglayer
             if(impGetShadow3D(rViewInformation))
             {
                 // test visibility
-                const basegfx::B2DRange aShadow2DRange(getB2DRangeFromPrimitive2DSequence(maShadowPrimitives, rViewInformation));
-                const basegfx::B2DRange aViewRange(rViewInformation.getViewport());
+                const basegfx::B2DRange aShadow2DRange(
+                    getB2DRangeFromPrimitive2DSequence(maShadowPrimitives, rViewInformation));
+                const basegfx::B2DRange aViewRange(
+                    rViewInformation.getViewport());
 
                 if(aViewRange.isEmpty() || aShadow2DRange.overlaps(aViewRange))
                 {
@@ -177,11 +160,12 @@ namespace drawinglayer
                 }
             }
 
-            // get the involved ranges (see helper method calculateDsicreteSizes for details)
+            // get the involved ranges (see helper method calculateDiscreteSizes for details)
             basegfx::B2DRange aDiscreteRange;
             basegfx::B2DRange aVisibleDiscreteRange;
             basegfx::B2DRange aUnitVisibleRange;
-            calculateDsicreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
+
+            calculateDiscreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
 
             if(!aVisibleDiscreteRange.isEmpty())
             {
@@ -200,6 +184,31 @@ namespace drawinglayer
                     fViewSizeY *= fReduceFactor;
                 }
 
+                if(rViewInformation.getReducedDisplayQuality())
+                {
+                    // when reducing the visualisation is allowed (e.g. an OverlayObject
+                    // only needed for dragging), reduce resolution extra
+                    // to speed up dragging interactions
+                    const double fArea(fViewSizeX * fViewSizeY);
+                    double fReducedVisualisationFactor(1.0 / (sqrt(fArea) * (1.0 / 170.0)));
+
+                    if(fReducedVisualisationFactor > 1.0)
+                    {
+                        fReducedVisualisationFactor = 1.0;
+                    }
+                    else if(fReducedVisualisationFactor < 0.20)
+                    {
+                        fReducedVisualisationFactor = 0.20;
+                    }
+
+                    if(fReducedVisualisationFactor != 1.0)
+                    {
+                        fReduceFactor *= fReducedVisualisationFactor;
+                        fViewSizeX *= fReducedVisualisationFactor;
+                        fViewSizeY *= fReducedVisualisationFactor;
+                    }
+                }
+
                 // calculate logic render size in world coordinates for usage in renderer
                 basegfx::B2DVector aLogicRenderSize(
                     aDiscreteRange.getWidth() * fReduceFactor,
@@ -207,9 +216,8 @@ namespace drawinglayer
                 aLogicRenderSize *= rViewInformation.getInverseObjectToViewTransformation();
 
                 // determine the oversample value
-                static bool bDoOversample(false);
                 static sal_uInt16 nDefaultOversampleValue(3);
-                const sal_uInt16 nOversampleValue((bDoOversample || aDrawinglayerOpt.IsAntiAliasing()) ? nDefaultOversampleValue : 0);
+                const sal_uInt16 nOversampleValue(aDrawinglayerOpt.IsAntiAliasing() ? nDefaultOversampleValue : 0);
 
                 // use default 3D primitive processor to create BitmapEx for aUnitVisiblePart and process
                 processor3d::ZBufferProcessor3D aZBufferProcessor3D(
@@ -222,20 +230,19 @@ namespace drawinglayer
                     aUnitVisibleRange,
                     nOversampleValue);
 
-                aZBufferProcessor3D.processNonTransparent(getChildren3D());
-                aZBufferProcessor3D.processTransparent(getChildren3D());
-                const BitmapEx aNewBitmap(aZBufferProcessor3D.getBitmapEx());
-                const Size aBitmapSizePixel(aNewBitmap.GetSizePixel());
+                aZBufferProcessor3D.process(getChildren3D());
+                aZBufferProcessor3D.finish();
+
+                const_cast< ScenePrimitive2D* >(this)->maOldRenderedBitmap = aZBufferProcessor3D.getBitmapEx();
+                const Size aBitmapSizePixel(maOldRenderedBitmap.GetSizePixel());
 
                 if(aBitmapSizePixel.getWidth() && aBitmapSizePixel.getHeight())
                 {
                     // create transform for the created bitmap in discrete coordinates first.
-                    // #i97772# Do not forget to apply evtl. render size reduction to scaling
                     basegfx::B2DHomMatrix aNew2DTransform;
-                    const double fSizeReductionFactor(1.0 / fReduceFactor);
 
-                    aNew2DTransform.set(0, 0, (double)(aBitmapSizePixel.getWidth() - 1) * fSizeReductionFactor);
-                    aNew2DTransform.set(1, 1, (double)(aBitmapSizePixel.getHeight() - 1) * fSizeReductionFactor);
+                    aNew2DTransform.set(0, 0, aVisibleDiscreteRange.getWidth());
+                    aNew2DTransform.set(1, 1, aVisibleDiscreteRange.getHeight());
                     aNew2DTransform.set(0, 2, aVisibleDiscreteRange.getMinX());
                     aNew2DTransform.set(1, 2, aVisibleDiscreteRange.getMinY());
 
@@ -243,7 +250,7 @@ namespace drawinglayer
                     aNew2DTransform *= rViewInformation.getInverseObjectToViewTransformation();
 
                     // create bitmap primitive and add
-                    const Primitive2DReference xRef(new BitmapPrimitive2D(aNewBitmap, aNew2DTransform));
+                    const Primitive2DReference xRef(new BitmapPrimitive2D(maOldRenderedBitmap, aNew2DTransform));
                     appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, xRef);
 
                     // test: Allow to add an outline in the debugger when tests are needed
@@ -251,7 +258,7 @@ namespace drawinglayer
 
                     if(bAddOutlineToCreated3DSceneRepresentation)
                     {
-                        basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                        basegfx::B2DPolygon aOutline(basegfx::tools::createUnitPolygon());
                         aOutline.transform(aNew2DTransform);
                         const Primitive2DReference xRef2(new PolygonHairlinePrimitive2D(aOutline, basegfx::BColor(1.0, 0.0, 0.0)));
                         appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, xRef2);
@@ -262,16 +269,9 @@ namespace drawinglayer
             return aRetval;
         }
 
-        Primitive2DSequence ScenePrimitive2D::getGeometry2D(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence ScenePrimitive2D::getGeometry2D() const
         {
             Primitive2DSequence aRetval;
-
-            // create 2D shadows from contained 3D primitives
-            if(impGetShadow3D(rViewInformation))
-            {
-                // add extracted 2d shadows (before 3d scene creations itself)
-                aRetval = maShadowPrimitives;
-            }
 
             // create 2D projected geometry from 3D geometry
             if(getChildren3D().hasElements())
@@ -284,12 +284,66 @@ namespace drawinglayer
                 // process local primitives
                 aGeometryProcessor.process(getChildren3D());
 
-                // fetch result and append
-                Primitive2DSequence a2DExtractedPrimitives(aGeometryProcessor.getPrimitive2DSequence());
-                appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, a2DExtractedPrimitives);
+                // fetch result
+                aRetval = aGeometryProcessor.getPrimitive2DSequence();
             }
 
             return aRetval;
+        }
+
+        Primitive2DSequence ScenePrimitive2D::getShadow2D(const geometry::ViewInformation2D& rViewInformation) const
+        {
+            Primitive2DSequence aRetval;
+
+            // create 2D shadows from contained 3D primitives
+            if(impGetShadow3D(rViewInformation))
+            {
+                // add extracted 2d shadows (before 3d scene creations itself)
+                aRetval = maShadowPrimitives;
+            }
+
+            return aRetval;
+        }
+
+        bool ScenePrimitive2D::tryToCheckLastVisualisationDirectHit(const basegfx::B2DPoint& rLogicHitPoint, bool& o_rResult) const
+        {
+            if(!maOldRenderedBitmap.IsEmpty() && !maOldUnitVisiblePart.isEmpty())
+            {
+                basegfx::B2DHomMatrix aInverseSceneTransform(getObjectTransformation());
+                aInverseSceneTransform.invert();
+                const basegfx::B2DPoint aRelativePoint(aInverseSceneTransform * rLogicHitPoint);
+
+                if(maOldUnitVisiblePart.isInside(aRelativePoint))
+                {
+                    // calculate coordinates relative to visualized part
+                    double fDivisorX(maOldUnitVisiblePart.getWidth());
+                    double fDivisorY(maOldUnitVisiblePart.getHeight());
+
+                    if(basegfx::fTools::equalZero(fDivisorX))
+                    {
+                        fDivisorX = 1.0;
+                    }
+
+                    if(basegfx::fTools::equalZero(fDivisorY))
+                    {
+                        fDivisorY = 1.0;
+                    }
+
+                    const double fRelativeX((aRelativePoint.getX() - maOldUnitVisiblePart.getMinX()) / fDivisorX);
+                    const double fRelativeY((aRelativePoint.getY() - maOldUnitVisiblePart.getMinY()) / fDivisorY);
+
+                    // combine with real BitmapSizePixel to get bitmap coordinates
+                    const Size aBitmapSizePixel(maOldRenderedBitmap.GetSizePixel());
+                    const sal_Int32 nX(basegfx::fround(fRelativeX * aBitmapSizePixel.Width()));
+                    const sal_Int32 nY(basegfx::fround(fRelativeY * aBitmapSizePixel.Height()));
+
+                    // try to get a statement about transparency in that pixel
+                    o_rResult = (0xff != maOldRenderedBitmap.GetTransparency(nX, nY));
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         ScenePrimitive2D::ScenePrimitive2D(
@@ -298,7 +352,7 @@ namespace drawinglayer
             const attribute::SdrLightingAttribute& rSdrLightingAttribute,
             const basegfx::B2DHomMatrix& rObjectTransformation,
             const geometry::ViewInformation3D& rViewInformation3D)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             mxChildren3D(rxChildren3D),
             maSdrSceneAttribute(rSdrSceneAttribute),
             maSdrLightingAttribute(rSdrLightingAttribute),
@@ -308,13 +362,14 @@ namespace drawinglayer
             mbShadow3DChecked(false),
             mfOldDiscreteSizeX(0.0),
             mfOldDiscreteSizeY(0.0),
-            maOldUnitVisiblePart()
+            maOldUnitVisiblePart(),
+            maOldRenderedBitmap()
         {
         }
 
         bool ScenePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const ScenePrimitive2D& rCompare = (ScenePrimitive2D&)rPrimitive;
 
@@ -359,30 +414,31 @@ namespace drawinglayer
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            // get the involved ranges (see helper method calculateDsicreteSizes for details)
+            // get the involved ranges (see helper method calculateDiscreteSizes for details)
             basegfx::B2DRange aDiscreteRange;
             basegfx::B2DRange aUnitVisibleRange;
             bool bNeedNewDecomposition(false);
             bool bDiscreteSizesAreCalculated(false);
 
-            if(getLocalDecomposition().hasElements())
+            if(getBuffered2DDecomposition().hasElements())
             {
                 basegfx::B2DRange aVisibleDiscreteRange;
-                calculateDsicreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
+                calculateDiscreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
                 bDiscreteSizesAreCalculated = true;
 
-                // display has changed and cannot be reused when resolution did change
-                if(!basegfx::fTools::equal(aDiscreteRange.getWidth(), mfOldDiscreteSizeX) ||
-                    !basegfx::fTools::equal(aDiscreteRange.getHeight(), mfOldDiscreteSizeY))
+                // needs to be painted when the new part is not part of the last
+                // decomposition
+                if(!maOldUnitVisiblePart.isInside(aUnitVisibleRange))
                 {
                     bNeedNewDecomposition = true;
                 }
 
+                // display has changed and cannot be reused when resolution got bigger. It
+                // can be reused when resolution got smaller, though.
                 if(!bNeedNewDecomposition)
                 {
-                    // needs to be painted when the new part is not part of the last
-                    // decomposition
-                    if(!maOldUnitVisiblePart.isInside(aUnitVisibleRange))
+                    if(basegfx::fTools::more(aDiscreteRange.getWidth(), mfOldDiscreteSizeX) ||
+                        basegfx::fTools::more(aDiscreteRange.getHeight(), mfOldDiscreteSizeY))
                     {
                         bNeedNewDecomposition = true;
                     }
@@ -392,15 +448,15 @@ namespace drawinglayer
             if(bNeedNewDecomposition)
             {
                 // conditions of last local decomposition have changed, delete
-                const_cast< ScenePrimitive2D* >(this)->setLocalDecomposition(Primitive2DSequence());
+                const_cast< ScenePrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
             }
 
-            if(!getLocalDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().hasElements())
             {
                 if(!bDiscreteSizesAreCalculated)
                 {
                     basegfx::B2DRange aVisibleDiscreteRange;
-                    calculateDsicreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
+                    calculateDiscreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
                 }
 
                 // remember last used NewDiscreteSize and NewUnitVisiblePart
@@ -411,7 +467,7 @@ namespace drawinglayer
             }
 
             // use parent implementation
-            return BasePrimitive2D::get2DDecomposition(rViewInformation);
+            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
         // provide unique ID

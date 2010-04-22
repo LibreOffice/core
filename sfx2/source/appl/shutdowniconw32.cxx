@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: shutdowniconw32.cxx,v $
- * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,9 +42,9 @@
 //
 // the systray icon is only available on windows
 //
-#include <svtools/moduleoptions.hxx>
 
-#include <svtools/dynamicmenuoptions.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <unotools/dynamicmenuoptions.hxx>
 
 #include "shutdownicon.hxx"
 #include "app.hrc"

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XMLEventExport.cxx,v $
- * $Revision: 1.21.86.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -341,6 +338,11 @@ const XMLEventNameTranslation aStandardEventTable[] =
     { "OnSaveToFailed",     XML_NAMESPACE_OFFICE, "save-to-failed" },
     { "OnSubComponentOpened",   XML_NAMESPACE_OFFICE, "subcomponent-opened" },
     { "OnSubComponentClosed",   XML_NAMESPACE_OFFICE, "subcomponent-closed" },
+    { "OnStorageChanged",       XML_NAMESPACE_OFFICE, "storage-changed" },
+    { "OnMailMergeFinished",    XML_NAMESPACE_OFFICE, "mail-merge-finished" },
+    { "OnFieldMerge",           XML_NAMESPACE_OFFICE, "field-merge" },
+    { "OnFieldMergeFinished",   XML_NAMESPACE_OFFICE, "field-merge-finished" },
+    { "OnLayoutFinished",       XML_NAMESPACE_OFFICE, "layout-finished" },
 
     { NULL, 0, 0 }
 };

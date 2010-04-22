@@ -2,11 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.pmk,v $
 #
 # This file is part of OpenOffice.org.
 #
@@ -62,6 +60,7 @@ $(MISC)$/readme_text.xsl : virtual
 .ENDIF			# "$(USE_SHELL)"!="4nt"
 
 $(MISC)$/$(GUI)$/$(eq,$(GUI),WNT readme README)_%.html : 'virtual'
+    @@-$(MKDIRHIER) $(@:d)
     $(XSLTPROC) --nonet -o $@ \
     --stringparam os1 $(OS)	--stringparam gui1 $(GUI)	--stringparam com1  $(COM) \
     --stringparam cp1 $(CPUNAME)	--stringparam type html	--stringparam lang1 $* \
@@ -71,6 +70,7 @@ $(MISC)$/$(GUI)$/$(eq,$(GUI),WNT readme README)_%.html : 'virtual'
 .ENDIF			# "$(GUI)"=="UNX"
 
 $(MISC)$/$(GUI)$/$(eq,$(GUI),OS2 readme README)_%.html : 'virtual'
+    @@-$(MKDIRHIER) $(@:d)
     $(XSLTPROC) --nonet -o $@ \
     --stringparam os1 $(OS)	--stringparam gui1 $(GUI)	--stringparam com1  $(COM) \
     --stringparam cp1 $(CPUNAME)	--stringparam type html	--stringparam lang1 $* \
@@ -78,6 +78,7 @@ $(MISC)$/$(GUI)$/$(eq,$(GUI),OS2 readme README)_%.html : 'virtual'
 
 # no percent-rule to avoid ambiguous inference chains for README_<lang>.html 
 $(SYSTEXTDOCS) : $(MISC)$/readme_text.xsl
+    @@-$(MKDIRHIER) $(@:d)
     $(XSLTPROC) --nonet -o $@ \
     --stringparam os1 $(OS)	--stringparam gui1 $(GUI)	--stringparam com1  $(COM) \
     --stringparam cp1 $(CPUNAME)	--stringparam type text	--stringparam lang1 $(@:b:s/readme_//:s/README_//) \

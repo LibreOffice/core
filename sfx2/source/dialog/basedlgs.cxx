@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: basedlgs.cxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,8 +34,8 @@
 #include <vcl/fixed.hxx>
 #include <vcl/help.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/viewoptions.hxx>
+#include <svl/eitem.hxx>
+#include <unotools/viewoptions.hxx>
 #include <svtools/fixedhyper.hxx>
 #include <svtools/controldims.hrc>
 
@@ -429,7 +426,7 @@ long SfxModelessDialog::Notify( NotifyEvent& rEvt )
         }
 
         if ( nHelpId )
-            SfxHelp::OpenHelpAgent( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), nHelpId );
+            SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), nHelpId );
     }
     else if ( rEvt.GetType() == EVENT_LOSEFOCUS && !HasChildPathFocus() )
     {
@@ -531,7 +528,7 @@ long SfxFloatingWindow::Notify( NotifyEvent& rEvt )
         }
 
         if ( nHelpId )
-            SfxHelp::OpenHelpAgent( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), nHelpId );
+            SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), nHelpId );
     }
     else if ( rEvt.GetType() == EVENT_LOSEFOCUS )
     {

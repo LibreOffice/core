@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdrmeasureprimitive2d.hxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,25 +29,24 @@
 #define INCLUDED_SDR_PRIMITIVE2D_SDRMEASUREPRIMITIVE2D_HXX
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <drawinglayer/attribute/sdrattribute.hxx>
-#include <svx/sdr/attribute/sdrallattribute.hxx>
+#include <svx/sdr/attribute/sdrlineshadowtextattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer { namespace primitive2d {
+    enum MeasureTextPosition
     {
-        enum MeasureTextPosition
-        {
-            MEASURETEXTPOSITION_AUTOMATIC,
-            MEASURETEXTPOSITION_NEGATIVE,
-            MEASURETEXTPOSITION_CENTERED,
-            MEASURETEXTPOSITION_POSITIVE
-        };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+        MEASURETEXTPOSITION_AUTOMATIC,
+        MEASURETEXTPOSITION_NEGATIVE,
+        MEASURETEXTPOSITION_CENTERED,
+        MEASURETEXTPOSITION_POSITIVE
+    };
+}}
+
+namespace drawinglayer { namespace attribute {
+    class SdrLineAttribute;
+}}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -59,7 +54,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrMeasurePrimitive2D : public BasePrimitive2D
+        class SdrMeasurePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             attribute::SdrLineShadowTextAttribute       maSdrLSTAttribute;
@@ -80,6 +75,7 @@ namespace drawinglayer
 
             // internal decomposition helper
             Primitive2DReference impCreatePart(
+                const attribute::SdrLineAttribute& rLineAttribute,
                 const basegfx::B2DHomMatrix& rObjectMatrix,
                 const basegfx::B2DPoint& rStart,
                 const basegfx::B2DPoint& rEnd,
@@ -88,7 +84,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrMeasurePrimitive2D(

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: iodlg.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,9 +43,9 @@
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 #include <unotools/confignode.hxx>
-#include "svtools/inettype.hxx"
-#include "svtools/urlfilter.hxx"
-#include <svtools/restrictedpaths.hxx>
+#include "svl/inettype.hxx"
+#include "svl/urlfilter.hxx"
+#include <svl/restrictedpaths.hxx>
 #include "asyncfilepicker.hxx"
 #include "OfficeControlAccess.hxx"
 #include "fpsmartcontent.hxx"

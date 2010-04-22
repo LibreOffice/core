@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: overlayline.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <drawinglayer/primitive2d/invertprimitive2d.hxx>
-#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 
@@ -113,8 +110,15 @@ namespace sdr
             if(nCount)
             {
                 // create range primitives
-                const basegfx::BColor aRGBColor(getBaseColor().getBColor());
+                const bool bInvert(OVERLAY_INVERT == maLastOverlayType);
+                basegfx::BColor aRGBColor(getBaseColor().getBColor());
                 aRetval.realloc(nCount);
+
+                if(bInvert)
+                {
+                    // force color to white for invert to get a full invert
+                    aRGBColor = basegfx::BColor(1.0, 1.0, 1.0);
+                }
 
                 for(sal_uInt32 a(0);a < nCount; a++)
                 {
@@ -125,7 +129,7 @@ namespace sdr
                             aRGBColor));
                 }
 
-                if(OVERLAY_INVERT == maLastOverlayType)
+                if(bInvert)
                 {
                     // embed all in invert primitive
                     const drawinglayer::primitive2d::Primitive2DReference aInvert(
@@ -137,8 +141,8 @@ namespace sdr
                 {
                     // embed all rectangles in transparent paint
                     const double fTransparence(mnLastTransparence / 100.0);
-                    const drawinglayer::primitive2d::Primitive2DReference aUnifiedAlpha(
-                        new drawinglayer::primitive2d::UnifiedAlphaPrimitive2D(
+                    const drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparence(
+                        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                             aRetval,
                             fTransparence));
 
@@ -152,13 +156,13 @@ namespace sdr
 
                         // add both to result
                         aRetval.realloc(2);
-                        aRetval[0] = aUnifiedAlpha;
+                        aRetval[0] = aUnifiedTransparence;
                         aRetval[1] = aSelectionOutline;
                     }
                     else
                     {
                         // just add transparent part
-                        aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedAlpha, 1);
+                        aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedTransparence, 1);
                     }
                 }
             }

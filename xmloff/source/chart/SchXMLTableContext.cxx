@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SchXMLTableContext.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +30,7 @@
 
 #include "SchXMLTableContext.hxx"
 #include "SchXMLParagraphContext.hxx"
+#include "SchXMLTextListContext.hxx"
 #include "SchXMLImport.hxx"
 #include "SchXMLTools.hxx"
 #include "transporttypes.hxx"
@@ -47,7 +45,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
-#include <com/sun/star/chart/XChartDataArray.hpp>
+#include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/chart/ChartSeriesAddress.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -141,26 +139,10 @@ std::vector< Reference< chart2::XAxis > > lcl_getAxesHoldingCategoriesFromDiagra
     return aRet;
 }
 
-void lcl_ApplyColumnLabels(
-    const ::std::vector< SchXMLCell > & rFirstRow,
-    Sequence< OUString > & rOutColumnLabels,
-    sal_Int32 nOffset )
-{
-    const sal_Int32 nColumnLabelsSize = rOutColumnLabels.getLength();
-    const sal_Int32 nMax = ::std::min< sal_Int32 >( nColumnLabelsSize,
-                                                    static_cast< sal_Int32 >( rFirstRow.size()) - nOffset );
-    OSL_ASSERT( nMax == nColumnLabelsSize );
-    for( sal_Int32 i=0; i<nMax; ++i )
-        if( rFirstRow[i+nOffset].eType == SCH_CELL_TYPE_STRING )
-            rOutColumnLabels[i] = rFirstRow[i+nOffset].aString;
-}
-
 struct lcl_ApplyCellToData : public ::std::unary_function< SchXMLCell, void >
 {
-    lcl_ApplyCellToData( Sequence< double > & rOutData,
-                         Sequence< OUString > & rOutRowLabels ) :
+    lcl_ApplyCellToData( Sequence< double > & rOutData ) :
             m_rData( rOutData ),
-            m_rRowLabels( rOutRowLabels ),
             m_nIndex( 0 ),
             m_nSize( rOutData.getLength())
     {
@@ -181,47 +163,9 @@ struct lcl_ApplyCellToData : public ::std::unary_function< SchXMLCell, void >
 
 private:
     Sequence< double > & m_rData;
-    Sequence< OUString > & m_rRowLabels;
     sal_Int32 m_nIndex;
     sal_Int32 m_nSize;
     double m_fNaN;
-};
-
-struct lcl_ApplyRowsToData : public ::std::unary_function< ::std::vector< SchXMLCell >, void >
-{
-    lcl_ApplyRowsToData( Sequence< Sequence< double > > & rOutData,
-                         Sequence< OUString > & rOutRowLabels,
-                         sal_Int32 nOffset,
-                         bool bHasHeader ) :
-            m_rData( rOutData ),
-            m_rRowLabels( rOutRowLabels ),
-            m_nIndex( 0 ),
-            m_nOuterSize( rOutData.getLength()),
-            m_nOffset( nOffset ),
-            m_bHasHeader( bHasHeader )
-    {}
-    void operator() ( const ::std::vector< SchXMLCell > & rRow )
-    {
-        if( ! rRow.empty())
-        {
-            // label
-            if( m_bHasHeader && m_nIndex < m_rRowLabels.getLength() && rRow.front().eType == SCH_CELL_TYPE_STRING )
-                m_rRowLabels[m_nIndex] = rRow.front().aString;
-
-            // values
-            if( m_nIndex < m_nOuterSize )
-                ::std::for_each( rRow.begin() + m_nOffset, rRow.end(), lcl_ApplyCellToData( m_rData[m_nIndex], m_rRowLabels ));
-        }
-        ++m_nIndex;
-    }
-
-private:
-    Sequence< Sequence< double > > & m_rData;
-    Sequence< OUString > & m_rRowLabels;
-    sal_Int32 m_nIndex;
-    sal_Int32 m_nOuterSize;
-    sal_Int32 m_nOffset;
-    bool      m_bHasHeader;
 };
 
 Sequence< Sequence< double > > lcl_getSwappedArray( const Sequence< Sequence< double > > & rData )
@@ -238,47 +182,6 @@ Sequence< Sequence< double > > lcl_getSwappedArray( const Sequence< Sequence< do
             aResult[nInner][nOuter] = rData[nOuter][nInner];
 
     return aResult;
-}
-
-void lcl_applyXMLTableToInternalDataprovider(
-    const SchXMLTable & rTable,
-    const Reference< chart::XChartDataArray > & xDataArray )
-{
-    sal_Int32 nNumRows( static_cast< sal_Int32 >( rTable.aData.size()));
-    sal_Int32 nRowOffset = 0;
-    if( rTable.bHasHeaderRow )
-    {
-        --nNumRows;
-        nRowOffset = 1;
-    }
-    sal_Int32 nNumColumns( rTable.nMaxColumnIndex + 1 );
-    sal_Int32 nColOffset = 0;
-    if( rTable.bHasHeaderColumn )
-    {
-        --nNumColumns;
-        nColOffset = 1;
-    }
-
-    Sequence< Sequence< double > > aData( nNumRows );
-    Sequence< OUString > aRowLabels( nNumRows );
-    Sequence< OUString > aColumnLabels( nNumColumns );
-    for( sal_Int32 i=0; i<nNumRows; ++i )
-        aData[i].realloc( nNumColumns );
-
-    if( rTable.aData.begin() != rTable.aData.end())
-    {
-        if( rTable.bHasHeaderRow )
-            lcl_ApplyColumnLabels( rTable.aData.front(), aColumnLabels, nColOffset );
-        ::std::for_each( rTable.aData.begin() + nRowOffset, rTable.aData.end(),
-                         lcl_ApplyRowsToData( aData, aRowLabels, nColOffset, rTable.bHasHeaderColumn ));
-    }
-
-    xDataArray->setData( aData );
-
-    if( rTable.bHasHeaderColumn )
-        xDataArray->setRowDescriptions( aRowLabels );
-    if( rTable.bHasHeaderRow )
-        xDataArray->setColumnDescriptions( aColumnLabels );
 }
 
 void lcl_fillRangeMapping(
@@ -833,7 +736,7 @@ void SchXMLTableCellContext::StartElement( const uno::Reference< xml::sax::XAttr
         }
     }
 
-    mbReadPara = sal_True;
+    mbReadText = sal_True;
     SchXMLCell aCell;
     aCell.eType = eValueType;
 
@@ -844,8 +747,8 @@ void SchXMLTableCellContext::StartElement( const uno::Reference< xml::sax::XAttr
         SvXMLUnitConverter::convertDouble( fData, aCellContent );
 
         aCell.fValue = fData;
-        // dont read following <text:p> element
-        mbReadPara = sal_False;
+        // dont read text from following <text:p> or <text:list> element
+        mbReadText = sal_False;
     }
 
     mrTable.aData[ mrTable.nRowIndex ].push_back( aCell );
@@ -861,9 +764,17 @@ SvXMLImportContext* SchXMLTableCellContext::CreateChildContext(
 {
     SvXMLImportContext* pContext = 0;
 
-    // <text:p> element
-    if( nPrefix == XML_NAMESPACE_TEXT &&
-        IsXMLToken( rLocalName, XML_P ) )
+    // <text:list> element
+    if( nPrefix == XML_NAMESPACE_TEXT && IsXMLToken( rLocalName, XML_LIST ) && mbReadText )
+    {
+        SchXMLCell& rCell = mrTable.aData[ mrTable.nRowIndex ][ mrTable.nColumnIndex ];
+        rCell.pComplexString = new Sequence< OUString >();
+        rCell.eType = SCH_CELL_TYPE_COMPLEX_STRING;
+        pContext = new SchXMLTextListContext( GetImport(), rLocalName, *rCell.pComplexString );
+        mbReadText = sal_False;//don't apply text from <text:p>
+    }
+    // <text:p> element - read text and range-id
+    else if( nPrefix == XML_NAMESPACE_TEXT && IsXMLToken( rLocalName, XML_P ) )
     {
         pContext = new SchXMLParagraphContext( GetImport(), rLocalName, maCellContent, &maRangeId );
     }
@@ -877,7 +788,7 @@ SvXMLImportContext* SchXMLTableCellContext::CreateChildContext(
 
 void SchXMLTableCellContext::EndElement()
 {
-    if( mbReadPara && maCellContent.getLength())
+    if( mbReadText && maCellContent.getLength() ) //apply text from <text:p> element
         mrTable.aData[ mrTable.nRowIndex ][ mrTable.nColumnIndex ].aString = maCellContent;
     if( maRangeId.getLength())
         mrTable.aData[ mrTable.nRowIndex ][ mrTable.nColumnIndex ].aRangeId = maRangeId;
@@ -885,133 +796,90 @@ void SchXMLTableCellContext::EndElement()
 
 // ========================================
 
-// just interpret the table in a linear way with no references used
-// (this is just a workaround for clipboard handling in EA2)
-void SchXMLTableHelper::applyTableSimple(
-    const SchXMLTable& rTable,
-    const uno::Reference< chart::XChartDataArray > & xData )
+void lcl_ApplyCellToComplexLabel( const SchXMLCell& rCell, Sequence< OUString >& rComplexLabel )
 {
-    // interpret table like this:
-    //
-    //  series ----+---+
-    //             |   |
-    //  categories |   |
-    //        |    |   |
-    //        V    V   V
-    //        A    B   C  ...
-    //   1         x   x        <--- labels
-    //   2    x    0   0
-    //   3    x    0   0
-    //  ...
-
-    // Standard Role-interpretation:
-
-    // Column 1 contains the Categories
-
-    // Chart Type/Class | Col 2  Col 3  Col 4  Col 5  Col 6 | Series | Domain
-    // -----------------+-----------------------------------+--------+-------
-    // Category Charts  | Y 1    Y 2    Y 3    Y 4     ...  |   Y    |   -
-    // XY Chart         | X all  Y 1    Y 2    Y 3     ...  |   Y    |   X
-    // Stock Chart 1    | Min    Max    Close    -      -   | Close  |   -
-    // Stock Chart 2    | Open   Min    Max    Close    -   | Close  |   -
-    // Stock Chart 3    | Volume Min    Max    Close    -   | Close  |   -
-    // Stock Chart 4    | Volume Open   Min    Max    Close | Close  |   -
-
-    if( xData.is())
+    if( rCell.eType == SCH_CELL_TYPE_STRING )
     {
-        // get NaN
-        double fSolarNaN;
-        ::rtl::math::setNan( &fSolarNaN );
-        double fNaN = fSolarNaN;
-        sal_Bool bConvertNaN = sal_False;
-
-        uno::Reference< chart::XChartData > xChartData( xData, uno::UNO_QUERY );
-        if( xChartData.is())
-        {
-            fNaN = xChartData->getNotANumber();
-            bConvertNaN = ( ! ::rtl::math::isNan( fNaN ));
-        }
-
-        sal_Int32 nRowCount = rTable.aData.size();
-        sal_Int32 nColumnCount = 0;
-        sal_Int32 nCol = 0, nRow = 0;
-        if( nRowCount )
-        {
-            nColumnCount = rTable.aData[ 0 ].size();
-            ::std::vector< ::std::vector< SchXMLCell > >::const_iterator iRow = rTable.aData.begin();
-            while( iRow != rTable.aData.end() )
-            {
-                nColumnCount = ::std::max( nColumnCount, static_cast<sal_Int32>(iRow->size()) );
-                iRow++;
-            }
-        }
-
-        // #i27909# avoid illegal index access for empty tables
-        if( nColumnCount == 0 || nRowCount == 0 )
-            return;
-
-        uno::Sequence< ::rtl::OUString > aCategories( nRowCount - 1 );
-        uno::Sequence< ::rtl::OUString > aLabels( nColumnCount - 1 );
-        uno::Sequence< uno::Sequence< double > > aData( nRowCount - 1 );
-        for( nRow = 0; nRow < nRowCount - 1; nRow++ )
-            aData[ nRow ].realloc( nColumnCount - 1 );
-
-        // set labels
-        ::std::vector< ::std::vector< SchXMLCell > >::const_iterator iRow = rTable.aData.begin();
-        sal_Int32 nColumnCountOnFirstRow = iRow->size();
-        for( nCol = 1; nCol < nColumnCountOnFirstRow; nCol++ )
-        {
-            aLabels[ nCol - 1 ] = (*iRow)[ nCol ].aString;
-        }
-        xData->setColumnDescriptions( aLabels );
-
-        double fVal;
-        const sal_Bool bConstConvertNan = bConvertNaN;
-        for( ++iRow, nRow = 0; iRow != rTable.aData.end(); iRow++, nRow++ )
-        {
-            aCategories[ nRow ] = (*iRow)[ 0 ].aString;
-            sal_Int32 nTableColCount( static_cast< sal_Int32 >((*iRow).size()));
-            for( nCol = 1; nCol < nTableColCount; nCol++ )
-            {
-                fVal = (*iRow)[ nCol ].fValue;
-                if( bConstConvertNan &&
-                    ::rtl::math::isNan( fVal ))
-                    aData[ nRow ][ nCol - 1 ] = fNaN;
-                else
-                    aData[ nRow ][ nCol - 1 ] = fVal;
-            }
-            // set remaining cells to NaN
-            for( ; nCol < nColumnCount; ++nCol )
-                if( bConstConvertNan )
-                    aData[ nRow ][nCol - 1 ] = fNaN;
-                else
-                    ::rtl::math::setNan( &(aData[ nRow ][nCol - 1 ]));
-        }
-        xData->setRowDescriptions( aCategories );
-        xData->setData( aData );
+        rComplexLabel.realloc(1);
+        rComplexLabel[0] = rCell.aString;
     }
+    else if( rCell.pComplexString && rCell.eType == SCH_CELL_TYPE_COMPLEX_STRING )
+        rComplexLabel = *rCell.pComplexString;
 }
-
-// ----------------------------------------
 
 void SchXMLTableHelper::applyTableToInternalDataProvider(
     const SchXMLTable& rTable,
     uno::Reference< chart2::XChartDocument > xChartDoc )
 {
-    if( ! (xChartDoc.is() && xChartDoc->hasInternalDataProvider()))
+    // apply all data read from the local table to the internal data provider
+    if( !xChartDoc.is() || !xChartDoc->hasInternalDataProvider() )
         return;
-    Reference< chart2::data::XDataProvider >  xDataProv( xChartDoc->getDataProvider());
-    Reference< chart::XChartDataArray > xDataArray( xDataProv, uno::UNO_QUERY );
-    if( ! xDataArray.is())
+    Reference< chart2::data::XDataProvider >  xDataProv( xChartDoc->getDataProvider() );
+    if( !xDataProv.is() )
         return;
-    OSL_ASSERT( xDataProv.is());
 
-    // prerequisite for this method: all objects (data series, domains, etc.)
-    // need their own range string.
+    //prepare the read local table data
+    sal_Int32 nNumRows( static_cast< sal_Int32 >( rTable.aData.size()));
+    sal_Int32 nRowOffset = 0;
+    if( rTable.bHasHeaderRow )
+    {
+        --nNumRows;
+        nRowOffset = 1;
+    }
+    sal_Int32 nNumColumns( rTable.nMaxColumnIndex + 1 );
+    sal_Int32 nColOffset = 0;
+    if( rTable.bHasHeaderColumn )
+    {
+        --nNumColumns;
+        nColOffset = 1;
+    }
 
-    // apply all data read in the table to the chart data-array of the internal
-    // data provider
-    lcl_applyXMLTableToInternalDataprovider( rTable, xDataArray );
+    Sequence< Sequence< double > > aDataInRows( nNumRows );
+    Sequence< Sequence< OUString > > aComplexRowDescriptions( nNumRows );
+    Sequence< Sequence< OUString > > aComplexColumnDescriptions( nNumColumns );
+    for( sal_Int32 i=0; i<nNumRows; ++i )
+        aDataInRows[i].realloc( nNumColumns );
+
+    if( rTable.aData.begin() != rTable.aData.end())
+    {
+        //apply column labels
+        if( rTable.bHasHeaderRow )
+        {
+            const ::std::vector< SchXMLCell >& rFirstRow = rTable.aData.front();
+            const sal_Int32 nColumnLabelsSize = aComplexColumnDescriptions.getLength();
+            const sal_Int32 nMax = ::std::min< sal_Int32 >( nColumnLabelsSize, static_cast< sal_Int32 >( rFirstRow.size()) - nColOffset );
+            OSL_ASSERT( nMax == nColumnLabelsSize );
+            for( sal_Int32 i=0; i<nMax; ++i )
+                lcl_ApplyCellToComplexLabel( rFirstRow[i+nColOffset], aComplexColumnDescriptions[i] );
+        }
+
+        std::vector< ::std::vector< SchXMLCell > >::const_iterator aRowIter( rTable.aData.begin() + nRowOffset );
+        std::vector< ::std::vector< SchXMLCell > >::const_iterator aEnd( rTable.aData.end() );
+        for( sal_Int32 nRow = 0; aRowIter != aEnd && nRow < nNumRows; ++aRowIter, ++nRow )
+        {
+            const ::std::vector< SchXMLCell >& rRow = *aRowIter;
+            if( !rRow.empty() )
+            {
+                // row label
+                if( rTable.bHasHeaderColumn )
+                    lcl_ApplyCellToComplexLabel( rRow.front(), aComplexRowDescriptions[nRow] );
+
+                // values
+                ::std::for_each( rRow.begin() + nColOffset, rRow.end(), lcl_ApplyCellToData( aDataInRows[nRow] ));
+            }
+        }
+    }
+
+    //apply the collected data to the chart
+    Reference< chart::XComplexDescriptionAccess > xDataAccess( xDataProv, uno::UNO_QUERY );
+    if( !xDataAccess.is() )
+        return;
+
+    xDataAccess->setData( aDataInRows );
+    if( rTable.bHasHeaderColumn )
+        xDataAccess->setComplexRowDescriptions( aComplexRowDescriptions );
+    if( rTable.bHasHeaderRow )
+        xDataAccess->setComplexColumnDescriptions( aComplexColumnDescriptions );
 }
 
 void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(

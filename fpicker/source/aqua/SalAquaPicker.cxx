@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SalAquaPicker.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -208,7 +205,10 @@ int SalAquaPicker::run()
     }
 
     if (retVal == NSFileHandlingPanelOKButton) {
-        implsetDisplayDirectory([[NSURL fileURLWithPath:[m_pDialog directory]] OUStringForInfo:FULLPATH]);
+        NSString* pDir = [m_pDialog directory];
+        if (pDir) {
+            implsetDisplayDirectory([[NSURL fileURLWithPath:pDir] OUStringForInfo:FULLPATH]);
+        }
     }
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__, retVal);

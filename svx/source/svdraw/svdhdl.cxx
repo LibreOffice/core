@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdhdl.cxx,v $
- * $Revision: 1.34.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -284,13 +281,13 @@ SdrHdlBitmapSet& getSimpleSet()
 
 SdrHdlBitmapSet& getModernSet()
 {
-    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aModernSet(new SdrHdlBitmapSet(SIP_SA_MARKERS));
+    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aModernSet(new SdrHdlBitmapSet(SIP_SA_FINE_MARKERS));
     return *aModernSet.get();
 }
 
 SdrHdlBitmapSet& getHighContrastSet()
 {
-    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aHighContrastSet(new SdrHdlBitmapSet(SIP_SA_MARKERS));
+    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aHighContrastSet(new SdrHdlBitmapSet(SIP_SA_ACCESSIBILITY_MARKERS));
     return *aHighContrastSet.get();
 }
 
@@ -2004,7 +2001,7 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
         }
 
         // #105678# free mem again
-        delete pHdlAndIndex;
+        delete [] pHdlAndIndex;
     }
 }
 

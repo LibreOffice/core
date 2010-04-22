@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: step1.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,7 +157,7 @@ void SbiRuntime::StepPAD( UINT32 nOp1 )
 
 void SbiRuntime::StepJUMP( UINT32 nOp1 )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // #QUESTION shouln't this be
     // if( (BYTE*)( nOp1+pImagGetCode() ) >= pImg->GetCodeSize() )
     if( nOp1 >= pImg->GetCodeSize() )

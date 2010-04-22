@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: titlebarupdate.cxx,v $
- *
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -371,6 +367,12 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
     {
         WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
         pWorkWindow->SetIcon( (sal_uInt16)nIcon );
+
+        css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
+        rtl::OUString aURL;
+        if( xModel.is() )
+            aURL = xModel->getURL();
+        pWorkWindow->SetRepresentedURL( aURL );
     }
 
     aSolarLock.clear();

@@ -3,12 +3,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Writer.xcs,v $
- * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -4392,17 +4389,6 @@
 						</info>
 						<value>true</value>
 					</prop>
-					<prop oor:name="ChangeFraction" oor:type="xs:boolean">
-						<!-- OldPath: Writer/AutoFormat/Options -->
-						<!-- OldLocation: Soffice.cfg -->
-						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace 1/2... -->
-						<info>
-							<author>OS</author>
-							<desc>Specifies if character combinations for fractions are replaced with a corresponding single character.</desc>
-							<label>Replace fractions</label>
-						</info>
-						<value>true</value>
-					</prop>
 					<prop oor:name="ChangeDash" oor:type="xs:boolean">
 						<!-- OldPath: Writer/AutoFormat/Options -->
 						<!-- OldLocation: Soffice.cfg -->
@@ -4411,6 +4397,17 @@
 							<author>OS</author>
 							<desc>Specifies if dashes are replaced automatically.</desc>
 							<label>Replace dashes</label>
+						</info>
+						<value>true</value>
+					</prop>
+					<prop oor:name="AddNonBreakingSpace" oor:type="xs:boolean">
+						<!-- OldPath: Writer/AutoFormat/Options -->
+						<!-- OldLocation: Soffice.cfg -->
+						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Add non-breaking space -->
+						<info>
+							<author>cedricbosdo</author>
+							<desc>Adds a non-breaking space before the characters :!;? in french.</desc>
+							<label>Add non-breaking space</label>
 						</info>
 						<value>true</value>
 					</prop>
@@ -4433,17 +4430,6 @@
 							<author>OS</author>
 							<desc>Specifies if user-defined styles applied in the document are replaced by predefined text document styles.</desc>
 							<label>Replace user-defined styles</label>
-						</info>
-						<value>true</value>
-					</prop>
-					<prop oor:name="ReplaceQuote" oor:type="xs:boolean">
-						<!-- OldPath: Writer/AutoFormat/Options -->
-						<!-- OldLocation: Soffice.cfg -->
-						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace Standard Quotes... -->
-						<info>
-							<author>OS</author>
-							<desc>Specifies if standard quotes are replaced with custom quotes.</desc>
-							<label>Replace standard quotes with custom quotes</label>
 						</info>
 						<value>true</value>
 					</prop>
@@ -4810,22 +4796,22 @@
 						<label>Accept with</label>
 					</info>
 					<constraints>
-						<enumeration oor:value="0x405">
+						<enumeration oor:value="1029"> <!-- 0x405 -->
 							<info>
 								<desc>KeyEnd</desc>
 							</info>
 						</enumeration>
-						<enumeration oor:value="0x500">
+						<enumeration oor:value="1280"> <!-- 0x500 -->
 							<info>
 								<desc>KeyReturn</desc>
 							</info>
 						</enumeration>
-						<enumeration oor:value="0x403">
+						<enumeration oor:value="1027"> <!-- 0x403 -->
 							<info>
 								<desc>KeyRight</desc>
 							</info>
 						</enumeration>
-						<enumeration oor:value="0x504">
+						<enumeration oor:value="1284"> <!-- 0x504 -->
 							<info>
 								<desc>KeySpace</desc>
 							</info>

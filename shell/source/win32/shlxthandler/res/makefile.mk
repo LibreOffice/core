@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -53,9 +49,19 @@ ULFDIR:=$(COMMONMISC)$/$(TARGET)
 .ELSE			# "$(WITH_LANG)"!=""
 ULFDIR:=.
 .ENDIF			# "$(WITH_LANG)"!=""
+
 # --- Targets ------------------------------------------------------
 
+.IF "$(BUILD_X64)"!=""
+$(RES)$/x64$/$(TARGET).res : $(RES)$/$(TARGET).res
+    -$(MKDIR) $(RES)$/x64
+    @@cp $< $@
+.ENDIF # "$(BUILD_X64)"!=""
+
+.INCLUDE :	set_wntx64.mk
 .INCLUDE :	target.mk
+.INCLUDE :	tg_wntx64.mk
+
 
 
 # Generate the native Windows resource file

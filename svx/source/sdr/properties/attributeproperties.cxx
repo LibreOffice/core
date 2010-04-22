@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: attributeproperties.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,10 +30,10 @@
 #include <svx/sdr/properties/attributeproperties.hxx>
 #include <svx/sdr/properties/itemsettools.hxx>
 #include <tools/debug.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/style.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/style.hxx>
+#include <svl/whiter.hxx>
+#include <svl/poolitem.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svddef.hxx>
 #include <svx/xit.hxx>
@@ -54,7 +51,7 @@
 #include <svx/svdpage.hxx>
 
 // #114265#
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -585,22 +582,6 @@ namespace sdr
                 rObj.SendUserCall(SDRUSERCALL_CHGATTR, aBoundRect);
 
                 bHintUsed = sal_True;
-            }
-
-            // #111111#
-            // When it's the BackgroundObject, set the MasterPage to changed to
-            // get a refresh for the evtl. changed BackgroundStyle
-
-            // #114265#
-            // To only invalidate the page when the StyleSheet change happens,
-            // some more rigid testing is necessary.
-            const SfxSimpleHint *pSimpleHint = PTR_CAST(SfxSimpleHint, &rHint);
-
-            if(pSimpleHint
-                && pSimpleHint->GetId() == SFX_HINT_DATACHANGED
-                && GetSdrObject().IsMasterPageBackgroundObject())
-            {
-                GetSdrObject().GetPage()->ActionChanged();
             }
 
             if(!bHintUsed)

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtstyli.cxx,v $
- * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,34 +27,29 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/style/XStyle.hpp>
+
+#include "XMLTextPropertySetContext.hxx"
+#include "xmlnmspe.hxx"
+#include "xmloff/XMLEventsImportContext.hxx"
+#include "xmloff/attrlist.hxx"
+#include "xmloff/families.hxx"
+#include "xmloff/txtprmap.hxx"
+#include "xmloff/txtstyli.hxx"
+#include "xmloff/xmlimp.hxx"
+#include "xmloff/xmltkmap.hxx"
+#include "xmloff/xmltoken.hxx"
+#include "xmloff/xmluconv.hxx"
+
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/document/XEventsSupplier.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
-#include <com/sun/star/document/XEventsSupplier.hpp>
-#endif
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include "xmlnmspe.hxx"
-#include <xmloff/xmltoken.hxx>
-#ifndef _XMLOFF_FAMILIES_HXX
-#include <xmloff/families.hxx>
-#endif
-#include "XMLTextPropertySetContext.hxx"
-#include <xmloff/xmltkmap.hxx>
-#include <xmloff/xmlimp.hxx>
-#include <xmloff/xmluconv.hxx>
+#include <com/sun/star/style/XStyle.hpp>
 
-#ifndef _XMLOFF_TXTPRMAP_HXX
-#include <xmloff/txtprmap.hxx>
-#endif
-#ifndef _XMLOFF_TXTSTYLI_HXX
-#include <xmloff/txtstyli.hxx>
-#endif
-#include <xmloff/attrlist.hxx>
-#include <xmloff/XMLEventsImportContext.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 // STL includes
 #include <algorithm>
@@ -464,6 +456,9 @@ void XMLTextStyleContext::FillPropertySet(
             { -1, -1 }
         };
 
+        // get property set info
+        Reference< XPropertySetInfo > xInfo( rPropSet->getPropertySetInfo(), UNO_SET_THROW );
+
         bool bAutomatic = false;
         if( ((SvXMLStylesContext *)GetStyles())->IsAutomaticStyle() &&
             ( GetFamily() == XML_STYLE_FAMILY_TEXT_TEXT || GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH ) )
@@ -476,11 +471,15 @@ void XMLTextStyleContext::FillPropertySet(
                     OUString( RTL_CONSTASCII_USTRINGPARAM("ParaAutoStyleName") );
                 try
                 {
-                    rPropSet->setPropertyValue( sAutoProp, makeAny(GetAutoName()) );
+                    if ( xInfo->hasPropertyByName( sAutoProp ) )
+                        rPropSet->setPropertyValue( sAutoProp, makeAny(GetAutoName()) );
+                    else
+                        bAutomatic = false;
                 }
                 catch( const RuntimeException& ) { throw; }
                 catch( const Exception& )
                 {
+                    DBG_UNHANDLED_EXCEPTION();
                     bAutomatic = false;
                 }
             }
@@ -498,9 +497,6 @@ void XMLTextStyleContext::FillPropertySet(
             sal_Bool bVal = *(sal_Bool*)rAny.getValue();
             bHasCombinedCharactersLetter = bVal;
         }
-
-        // get property set info
-        Reference< XPropertySetInfo > xInfo;
 
         // keep-together: the application default is different from
         // the file format default. Hence, if we always set this
@@ -533,9 +529,6 @@ void XMLTextStyleContext::FillPropertySet(
 
 
         // check for StarBats and StarMath fonts
-
-        if (!xInfo.is())
-            xInfo.set(rPropSet->getPropertySetInfo());
 
         // iterate over aContextIDs entries 3..6
         for ( sal_Int32 i = 3; i < 7; i++ )
@@ -572,8 +565,6 @@ void XMLTextStyleContext::FillPropertySet(
                         // set property
                         OUString rPropertyName(
                             rPropMapper->GetEntryAPIName(nMapperIndex) );
-                        if( !xInfo.is() )
-                            xInfo = rPropSet->getPropertySetInfo();
                         if ( xInfo->hasPropertyByName( rPropertyName ) )
                         {
                             rPropSet->setPropertyValue( rPropertyName, aAny );

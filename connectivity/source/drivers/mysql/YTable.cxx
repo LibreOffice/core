@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: YTable.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -284,7 +281,7 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
             const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
             sSql += ::dbtools::quoteName(sQuote,colName);
             sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
-            sSql += ::dbtools::createStandardColumnPart(descriptor,getConnection(),getTypeCreatePattern());
+            sSql += OTables::adjustSQL(::dbtools::createStandardColumnPart(descriptor,getConnection(),getTypeCreatePattern()));
             executeStatement(sSql);
         }
         m_pColumns->refresh();
@@ -313,7 +310,7 @@ void OMySQLTable::alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rCo
     ::comphelper::copyProperties(_xDescriptor,xProp);
     xProp->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),makeAny(nNewType));
 
-    sSql += ::dbtools::createStandardColumnPart(xProp,getConnection(),getTypeCreatePattern());
+    sSql += OTables::adjustSQL(::dbtools::createStandardColumnPart(xProp,getConnection(),getTypeCreatePattern()));
     executeStatement(sSql);
 }
 // -----------------------------------------------------------------------------

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.38 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -32,42 +28,17 @@
 PRJ		= ..$/..$/..$/..$/..
 PRJNAME = xmlhelp
 TARGET  = HelpLinker
-LIBBASENAME = helplinker
 PACKAGE = com$/sun$/star$/help
-TARGETTYPE=CUI
 
+.IF "$(SOLAR_JAVA)"!=""
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
-.INCLUDE : helplinker.pmk
  
-.IF "$(SYSTEM_LIBXSLT)" == "YES"
-CFLAGS+= $(LIBXSLT_CFLAGS)
-.ELSE
-LIBXSLTINCDIR=external$/libxslt
-CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXSLTINCDIR)
-.ENDIF
-
-.IF "$(SYSTEM_DB)" == "YES"
-CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
-.ENDIF
-
-.IF "$(SYSTEM_EXPAT)" == "YES"
-CFLAGS+=-DSYSTEM_EXPAT
-.ENDIF
-
-
 JAVACLASSFILES = \
-    $(SOLARBINDIR)$/help$/$(PACKAGE)$/HelpIndexerTool.class			\
-    $(SOLARBINDIR)$/help$/$(PACKAGE)$/HelpFileDocument.class		\
     $(CLASSDIR)$/$(PACKAGE)$/HelpSearch.class			        \
     $(CLASSDIR)$/$(PACKAGE)$/HelpComponent.class			        \
     $(CLASSDIR)$/$(PACKAGE)$/HelpIndexer.class			        
-
-JAVAFILES = \
-    HelpSearch.java 							\
-    HelpComponent.java							\
-    HelpIndexer.java
 
 TRANSEX3FILES = \
         $(SOLARBINDIR)$/help$/$(PACKAGE)$/HelpIndexerTool.class		\
@@ -75,37 +46,37 @@ TRANSEX3FILES = \
 
 ADDFILES = $(subst,$(SOLARBINDIR)$/help,$(CLASSDIR) $(TRANSEX3FILES))
 
-#JAVAFILES = $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
-
-JARFILES  = ridl.jar jurt.jar unoil.jar juh.jar HelpIndexerTool.jar
+JARFILES  = ridl.jar jurt.jar unoil.jar juh.jar 
 .IF "$(SYSTEM_LUCENE)" == "YES"
 XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(LUCENE_CORE_JAR)$(PATH_SEPERATOR)$(LUCENE_ANALYZERS_JAR)
-COMP=fix_system_lucene
+JARCLASSPATH = file://$(LUCENE_CORE_JAR) file://$(LUCENE_ANALYZERS_JAR)
 .ELSE
 JARFILES += lucene-core-2.3.jar lucene-analyzers-2.3.jar
+JARCLASSPATH = lucene-core-2.3.jar lucene-analyzers-2.3.jar
 .ENDIF
   
 JARTARGET	   	   = LuceneHelpWrapper.jar
 JARCOMPRESS        = TRUE 
-CUSTOMMANIFESTFILE = MANIFEST.MF 
+CUSTOMMANIFESTFILE = MANIFEST.MF
  
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
 
-ALLTAR : $(ADDFILES)
-
 .IF "$(JARTARGETN)"!=""
+$(JAVATARGET) : $(ADDFILES)
 $(JARTARGETN) : $(ADDFILES)
-$(JARTARGETN) : $(COMP)
 .ENDIF
 
-$(CLASSDIR)$/$(PACKAGE)$/%.class : $(SOLARBINDIR)$/help$/$(PACKAGE)$/%.class 
+$(ADDFILES) : $(SOLARBINDIR)$/help$/$(PACKAGE)$/$$(@:f)
     $(MKDIRHIER) $(@:d)	
     $(COPY) $< $@
-
 
 fix_system_lucene:
     @echo "Fix Java Class-Path entry for Lucene libraries from system."
     @$(SED) -r -e "s#^(Class-Path:).*#\1 file://$(LUCENE_CORE_JAR) file://$(LUCENE_ANALYZERS_JAR)#" \
     -i ../../../../../$(INPATH)/class/HelpLinker/META-INF/MANIFEST.MF
+.ELSE
+all:
+        @echo java disabled
+.ENDIF

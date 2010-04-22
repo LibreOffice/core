@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svxruler.cxx,v $
- * $Revision: 1.39.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,11 +34,11 @@
 #include <limits.h>
 #include <tools/shl.hxx>
 #include <vcl/image.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/rectitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/rectitem.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 
 
@@ -52,9 +49,9 @@
 #include <svx/ruler.hxx>
 #include "rlrcitem.hxx"
 #include "rulritem.hxx"
-#include <svx/tstpitem.hxx>
-#include <svx/lrspitem.hxx>
-#include "protitem.hxx"
+#include <editeng/tstpitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include "editeng/protitem.hxx"
 #ifndef _APP_HXX
 #include <vcl/svapp.hxx>
 #endif
@@ -2761,8 +2758,9 @@ void SvxRuler::EvalModifier()
      case KEY_MOD1:  {
          const RulerType eType = GetDragType();
          nDragType = DRAG_OBJECT_SIZE_PROPORTIONAL;
-         if(RULER_TYPE_BORDER == eType || RULER_TYPE_TAB == eType||
-            RULER_TYPE_MARGIN1&&pColumnItem)
+         if( RULER_TYPE_TAB == eType ||
+             ( ( RULER_TYPE_BORDER == eType || RULER_TYPE_MARGIN1 == eType ) &&
+               pColumnItem ) )
              PrepareProportional_Impl(eType);
          break;
      }

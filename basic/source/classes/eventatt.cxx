@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: eventatt.cxx,v $
- * $Revision: 1.35.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,53 +92,48 @@ Any sbxToUnoValue( SbxVariable* pVar );
 
 Reference< frame::XModel >  getModelFromBasic( SbxObject* pBasic )
 {
-    Reference< frame::XModel > xModel;
+    OSL_PRECOND( pBasic != NULL, "getModelFromBasic: illegal call!" );
+    if ( !pBasic )
+        return NULL;
 
-    SbxObject* basicChosen = pBasic;
+    // look for the ThisComponent variable, first in the parent (which
+    // might be the document's Basic), then in the parent's parent (which might be
+    // the application Basic)
+    const ::rtl::OUString sThisComponent( RTL_CONSTASCII_USTRINGPARAM( "ThisComponent" ) );
+    SbxVariable* pThisComponent = NULL;
 
-    if ( basicChosen == NULL)
+    SbxObject* pLookup = pBasic->GetParent();
+    while ( pLookup && !pThisComponent )
     {
-        OSL_TRACE("getModelFromBasic() StarBASIC* is NULL" );
-        return xModel;
+        pThisComponent = pLookup->Find( sThisComponent, SbxCLASS_OBJECT );
+        pLookup = pLookup->GetParent();
     }
-    SbxObject* p = pBasic;
-    SbxObject* pParent = p->GetParent();
-    SbxObject* pParentParent = pParent ? pParent->GetParent() : NULL;
-
-    if( pParentParent )
-    {
-        basicChosen = pParentParent;
-    }
-    else if( pParent )
-    {
-        basicChosen = pParent;
-    }
-
-
-    Any aModel;
-    SbxVariable *pCompVar = basicChosen->Find(  UniString(RTL_CONSTASCII_USTRINGPARAM("ThisComponent")), SbxCLASS_OBJECT );
-
-    if ( pCompVar )
-    {
-         aModel = sbxToUnoValue( pCompVar );
-         if ( sal_False == ( aModel >>= xModel ) ||
-              !xModel.is() )
-         {
-             OSL_TRACE("Failed to extract model from thisComponent ");
-             return xModel;
-         }
-         else
-         {
-             OSL_TRACE("Have model ThisComponent points to url %s",
-                 ::rtl::OUStringToOString( xModel->getURL(),
-                     RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-
-         }
-    }
-    else
+    if ( !pThisComponent )
     {
         OSL_TRACE("Failed to get ThisComponent");
+            // the application Basic, at the latest, should have this variable
+        return NULL;
     }
+
+    Any aThisComponent( sbxToUnoValue( pThisComponent ) );
+    Reference< frame::XModel > xModel( aThisComponent, UNO_QUERY );
+    if ( !xModel.is() )
+    {
+        // it's no XModel. Okay, ThisComponent nowadays is allowed to be a controller.
+        Reference< frame::XController > xController( aThisComponent, UNO_QUERY );
+        if ( xController.is() )
+            xModel = xController->getModel();
+    }
+
+    if ( !xModel.is() )
+        return NULL;
+
+#if OSL_DEBUG_LEVEL > 0
+    OSL_TRACE("Have model ThisComponent points to url %s",
+        ::rtl::OUStringToOString( xModel->getURL(),
+            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+#endif
+
     return xModel;
 }
 

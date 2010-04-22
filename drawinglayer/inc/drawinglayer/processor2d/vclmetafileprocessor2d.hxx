@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: vclmetafileprocessor2d.hxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.8 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:30:17 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -47,6 +39,7 @@
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
+
 class GDIMetaFile;
 class Rectangle;
 class Gradient;
@@ -70,10 +63,22 @@ namespace drawinglayer
 {
     namespace processor2d
     {
+        /** VclMetafileProcessor2D class
+
+            This processor derived from VclProcessor2D is the base class for rendering
+            all feeded primitives to a classical VCL-Metafile, including all over the
+            time grown extra data in comments and PDF exception data creations. Also
+            printing needs some exception stuff.
+
+            All in all it is needed to emulate the old ::paint output from the old
+            Drawinglayer as long as exporters and/or filters still use the Metafile
+            and the extra-data added to it (which can be seen mostly as 'extensions'
+            or simply as 'hacks').
+         */
         class VclMetafileProcessor2D : public VclProcessor2D
         {
         private:
-            // local helper(s)
+            /// local helper(s)
             Rectangle impDumpToMetaFile(
                 const primitive2d::Primitive2DSequence& rContent,
                 GDIMetaFile& o_rContentMetafile);
@@ -93,42 +98,47 @@ namespace drawinglayer
             void impStartSvtGraphicStroke(SvtGraphicStroke* pSvtGraphicStroke);
             void impEndSvtGraphicStroke(SvtGraphicStroke* pSvtGraphicStroke);
 
-            // the current clipping PolyPolygon from MaskPrimitive2D
+            /// the current clipping PolyPolygon from MaskPrimitive2D
             basegfx::B2DPolyPolygon             maClipPolyPolygon;
 
-            // the target MetaFile
-            GDIMetaFile&                        mrMetaFile;
+            /// the target MetaFile
+            GDIMetaFile*                        mpMetaFile;
 
-            // do not allow embedding SvtGraphicFills into each other,
-            // use a counter to prevent that
+            /*  do not allow embedding SvtGraphicFills into each other,
+                use a counter to prevent that
+             */
             sal_uInt32                          mnSvtGraphicFillCount;
 
-            // same for SvtGraphicStroke
+            /// same for SvtGraphicStroke
             sal_uInt32                          mnSvtGraphicStrokeCount;
 
-            // hold the last unified transparence value to have it handy
-            // on SvtGraphicStroke creation
+            /*  hold the last unified transparence value to have it handy
+                on SvtGraphicStroke creation
+             */
             double                              mfCurrentUnifiedTransparence;
 
-            // break iterator support
-            // made static so it only needs to be fetched once, even with many single
-            // constructed VclMetafileProcessor2D. It's still incarnated on demand,
-            // but exists for OOo runtime now by purpose.
+            /*  break iterator support
+                made static so it only needs to be fetched once, even with many single
+                constructed VclMetafileProcessor2D. It's still incarnated on demand,
+                but exists for OOo runtime now by purpose.
+             */
             static ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >   mxBreakIterator;
 
-            // vcl::PDFExtOutDevData support
-            // For the first step, some extra actions at vcl::PDFExtOutDevData need to
-            // be emulated with the VclMetafileProcessor2D. These are potentially temporarily
-            // since PDF export may use PrimitiveSequences one day directly.
+            /*  vcl::PDFExtOutDevData support
+                For the first step, some extra actions at vcl::PDFExtOutDevData need to
+                be emulated with the VclMetafileProcessor2D. These are potentially temporarily
+                since PDF export may use PrimitiveSequences one day directly.
+             */
             vcl::PDFExtOutDevData*              mpPDFExtOutDevData;
 
         protected:
-            // the local processor for BasePrinitive2D-Implementation based primitives,
-            // called from the common process()-implementation
+            /*  the local processor for BasePrinitive2D-Implementation based primitives,
+                called from the common process()-implementation
+             */
             virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
 
         public:
-            // constructor/destructor
+            /// constructor/destructor
             VclMetafileProcessor2D(
                 const geometry::ViewInformation2D& rViewInformation,
                 OutputDevice& rOutDev);

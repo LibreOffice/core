@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: sdrextrudeprimitive3d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.15 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-26 16:21:48 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -44,8 +36,9 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
-#include <drawinglayer/primitive3d/hittestprimitive3d.hxx>
-#include <drawinglayer/attribute/sdrattribute.hxx>
+#include <drawinglayer/attribute/sdrfillattribute.hxx>
+#include <drawinglayer/attribute/sdrlineattribute.hxx>
+#include <drawinglayer/attribute/sdrshadowattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -57,7 +50,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence SdrExtrudePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& rViewInformation) const
+        Primitive3DSequence SdrExtrudePrimitive3D::create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
         {
             Primitive3DSequence aRetval;
 
@@ -76,7 +69,7 @@ namespace drawinglayer
                 double fRelativeTextureWidth(1.0);
                 basegfx::B2DHomMatrix aTexTransform;
 
-                if(getSdrLFSAttribute().getFill() && (bCreateTextureCoordiantesX || bCreateTextureCoordiantesY))
+                if(!getSdrLFSAttribute().getFill().isDefault() && (bCreateTextureCoordiantesX || bCreateTextureCoordiantesY))
                 {
                     const basegfx::B2DPolygon aFirstPolygon(maCorrectedPolyPolygon.getB2DPolygon(0L));
                     const double fFrontLength(basegfx::tools::getLength(aFirstPolygon));
@@ -106,7 +99,7 @@ namespace drawinglayer
                 const basegfx::B3DRange aRange(getRangeFrom3DGeometry(aFill));
 
                 // normal creation
-                if(getSdrLFSAttribute().getFill())
+                if(!getSdrLFSAttribute().getFill().isDefault())
                 {
                     if(::com::sun::star::drawing::NormalsKind_SPHERE == eNormalsKind)
                     {
@@ -124,7 +117,7 @@ namespace drawinglayer
                 }
 
                 // texture coordinates
-                if(getSdrLFSAttribute().getFill())
+                if(!getSdrLFSAttribute().getFill().isDefault())
                 {
                     applyTextureTo3DGeometry(
                         getSdr3DObjectAttribute().getTextureProjectionX(),
@@ -134,7 +127,7 @@ namespace drawinglayer
                         getTextureSize());
                 }
 
-                if(getSdrLFSAttribute().getFill())
+                if(!getSdrLFSAttribute().getFill().isDefault())
                 {
                     // add fill
                     aRetval = create3DPolyPolygonFillPrimitives(
@@ -142,29 +135,21 @@ namespace drawinglayer
                         getTransform(),
                         getTextureSize(),
                         getSdr3DObjectAttribute(),
-                        *getSdrLFSAttribute().getFill(),
+                        getSdrLFSAttribute().getFill(),
                         getSdrLFSAttribute().getFillFloatTransGradient());
                 }
                 else
                 {
                     // create simplified 3d hit test geometry
-                    const attribute::SdrFillAttribute aSimplifiedFillAttribute(0.0, basegfx::BColor(), 0, 0, 0);
-
-                    aRetval = create3DPolyPolygonFillPrimitives(
+                    aRetval = createHiddenGeometryPrimitives3D(
                         aFill,
                         getTransform(),
                         getTextureSize(),
-                        getSdr3DObjectAttribute(),
-                        aSimplifiedFillAttribute,
-                        0);
-
-                    // encapsulate in HitTestPrimitive3D and add
-                    const Primitive3DReference xRef(new HitTestPrimitive3D(aRetval));
-                    aRetval = Primitive3DSequence(&xRef, 1L);
+                        getSdr3DObjectAttribute());
                 }
 
                 // add line
-                if(getSdrLFSAttribute().getLine())
+                if(!getSdrLFSAttribute().getLine().isDefault())
                 {
                     if(getSdr3DObjectAttribute().getReducedLineGeometry())
                     {
@@ -349,7 +334,8 @@ namespace drawinglayer
 
                         if(aNewLineGeometry.count())
                         {
-                            const Primitive3DSequence aLines(create3DPolyPolygonLinePrimitives(aNewLineGeometry, getTransform(), *getSdrLFSAttribute().getLine()));
+                            const Primitive3DSequence aLines(create3DPolyPolygonLinePrimitives(
+                                aNewLineGeometry, getTransform(), getSdrLFSAttribute().getLine()));
                             appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aLines);
                         }
                     }
@@ -360,19 +346,22 @@ namespace drawinglayer
                         const basegfx::B3DPolyPolygon aVerLine(extractVerticalLinesFromSlice(rSliceVector));
 
                         // add horizontal lines
-                        const Primitive3DSequence aHorLines(create3DPolyPolygonLinePrimitives(aHorLine, getTransform(), *getSdrLFSAttribute().getLine()));
+                        const Primitive3DSequence aHorLines(create3DPolyPolygonLinePrimitives(
+                            aHorLine, getTransform(), getSdrLFSAttribute().getLine()));
                         appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aHorLines);
 
                         // add vertical lines
-                        const Primitive3DSequence aVerLines(create3DPolyPolygonLinePrimitives(aVerLine, getTransform(), *getSdrLFSAttribute().getLine()));
+                        const Primitive3DSequence aVerLines(create3DPolyPolygonLinePrimitives(
+                            aVerLine, getTransform(), getSdrLFSAttribute().getLine()));
                         appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aVerLines);
                     }
                 }
 
                 // add shadow
-                if(getSdrLFSAttribute().getShadow() && aRetval.hasElements())
+                if(!getSdrLFSAttribute().getShadow().isDefault() && aRetval.hasElements())
                 {
-                    const Primitive3DSequence aShadow(createShadowPrimitive3D(aRetval, *getSdrLFSAttribute().getShadow(), getSdr3DObjectAttribute().getShadow3D()));
+                    const Primitive3DSequence aShadow(createShadowPrimitive3D(
+                        aRetval, getSdrLFSAttribute().getShadow(), getSdr3DObjectAttribute().getShadow3D()));
                     appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aShadow);
                 }
             }
@@ -409,7 +398,7 @@ namespace drawinglayer
         SdrExtrudePrimitive3D::SdrExtrudePrimitive3D(
             const basegfx::B3DHomMatrix& rTransform,
             const basegfx::B2DVector& rTextureSize,
-            const attribute::SdrLineFillShadowAttribute& rSdrLFSAttribute,
+            const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,
             const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute,
             const basegfx::B2DPolyPolygon& rPolyPolygon,
             double fDepth,
@@ -510,14 +499,14 @@ namespace drawinglayer
             if(getSdr3DObjectAttribute().getReducedLineGeometry())
             {
                 if(!mpLastRLGViewInformation ||
-                    (getLocalDecomposition().hasElements()
+                    (getBuffered3DDecomposition().hasElements()
                         && *mpLastRLGViewInformation != rViewInformation))
                 {
                     // conditions of last local decomposition with reduced lines have changed. Remember
                     // new one and clear current decompositiopn
                     ::osl::Mutex m_mutex;
                     SdrExtrudePrimitive3D* pThat = const_cast< SdrExtrudePrimitive3D* >(this);
-                    pThat->setLocalDecomposition(Primitive3DSequence());
+                    pThat->setBuffered3DDecomposition(Primitive3DSequence());
                     delete pThat->mpLastRLGViewInformation;
                     pThat->mpLastRLGViewInformation = new geometry::ViewInformation3D(rViewInformation);
                 }

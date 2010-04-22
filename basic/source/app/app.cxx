@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: app.cxx,v $
- * $Revision: 1.79.14.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,7 +77,7 @@
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 
 #include <ucbhelper/content.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 using namespace comphelper;
 using namespace cppu;
@@ -193,41 +190,6 @@ BOOL IsTTSignatureForUnicodeTextfile( String aLine )
 }
 
 BasicApp aBasicApp; // Application instance
-
-static const char * const components[] =
-{
-    SAL_MODULENAME( "ucb1" )    // KSO, ABI
-    , SAL_MODULENAME( "ucpfile1" )
-    , "configmgr2.uno" SAL_DLLEXTENSION
-    , "sax.uno" SAL_DLLEXTENSION
-    , "stocservices.uno" SAL_DLLEXTENSION
-    , SAL_MODULENAME( "fileacc" )
-    , SAL_MODULENAME( "mcnttype" )          // Clipboard   Ask Oliver Braun
-    , "i18npool.uno" SAL_DLLEXTENSION
-        // Reading of files in specific encodings like UTF-8 using
-        // createUnoService( "com.sun.star.io.TextInputStream" ) and such
-    , "textinstream.uno" SAL_DLLEXTENSION
-    , "textoutstream.uno" SAL_DLLEXTENSION
-    , "introspection.uno" SAL_DLLEXTENSION
-    , "reflection.uno" SAL_DLLEXTENSION
-        // RemoteUno
-    , "connector.uno" SAL_DLLEXTENSION
-    , "bridgefac.uno" SAL_DLLEXTENSION
-    , "remotebridge.uno" SAL_DLLEXTENSION
-#ifdef SAL_UNX
-#ifdef QUARTZ
-    , SVLIBRARY( "dtransaqua" )  // Mac OS X Aqua uses a dedicated libdtransaqua
-#else
-    , SVLIBRARY( "dtransX11" )        // OBR
-#endif
-#endif
-#ifdef SAL_W32
-    , SAL_MODULENAME( "sysdtrans" )
-    , SAL_MODULENAME( "ftransl" )
-    , SAL_MODULENAME( "dnd" )
-#endif
-    , 0
-};
 
 uno::Reference< XContentProviderManager > InitializeUCB( void )
 {
@@ -1401,19 +1363,10 @@ long BasicFrame::Command( short nID, BOOL bChecked )
 //          InitMenu(GetMenuBar()->GetPopupMenu( RID_APPRUN ));
             break;
         case RID_FILEPRINT:
-#ifndef UNX
             if( pWork )
                 pPrn->Print( pWork->GetText(), pWork->pDataEdit->GetText(), this );
-#else
-            InfoBox( this, SttResId( IDS_NOPRINTERERROR ) ).Execute();
-#endif
             break;
         case RID_FILESETUP:
-#ifndef UNX
-            pPrn->Setup();
-#else
-            InfoBox( this, SttResId( IDS_NOPRINTERERROR ) ).Execute();
-#endif
             break;
         case RID_QUIT:
             if( Close() ) aBasicApp.Quit();

@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdrdecompositiontools.hxx,v $
- *
- * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,22 +54,22 @@ namespace drawinglayer
     namespace primitive2d
     {
         Primitive2DReference createPolyPolygonFillPrimitive(
-            const ::basegfx::B2DPolyPolygon& rUnitPolyPolygon,
-            const ::basegfx::B2DHomMatrix& rObjectTransform,
+            const basegfx::B2DPolyPolygon& rUnitPolyPolygon,
+            const basegfx::B2DHomMatrix& rObjectTransform,
             const attribute::SdrFillAttribute& rFill,
-            const attribute::FillGradientAttribute* pFillGradient = 0L);
+            const attribute::FillGradientAttribute& rFillGradient);
 
         Primitive2DReference createPolygonLinePrimitive(
-            const ::basegfx::B2DPolygon& rUnitPolygon,
-            const ::basegfx::B2DHomMatrix& rObjectTransform,
+            const basegfx::B2DPolygon& rUnitPolygon,
+            const basegfx::B2DHomMatrix& rObjectTransform,
             const attribute::SdrLineAttribute& rLine,
-            const attribute::SdrLineStartEndAttribute* pStroke = 0L);
+            const attribute::SdrLineStartEndAttribute& rStroke);
 
         Primitive2DReference createTextPrimitive(
-            const ::basegfx::B2DPolyPolygon& rUnitPolyPolygon,
-            const ::basegfx::B2DHomMatrix& rObjectTransform,
+            const basegfx::B2DPolyPolygon& rUnitPolyPolygon,
+            const basegfx::B2DHomMatrix& rObjectTransform,
             const attribute::SdrTextAttribute& rText,
-            const attribute::SdrLineAttribute* pStroke,
+            const attribute::SdrLineAttribute& rStroke,
             bool bCellText,
             bool bWordWrap,
             bool bClipOnBounds);

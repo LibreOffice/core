@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sbxmod.cxx,v $
- * $Revision: 1.44.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 #include <vos/macros.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 #include <tools/shl.hxx>
 #include <basic/sbx.hxx>
 #include "sb.hxx"
@@ -69,6 +66,11 @@
 #endif
 
 #include <stdio.h>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <comphelper/processfactory.hxx>
+#include <vcl/svapp.hxx>
+ using namespace ::com::sun::star;
 
 
 TYPEINIT1(SbModule,SbxObject)
@@ -84,7 +86,63 @@ SV_IMPL_VARARR(SbiBreakpoints,USHORT)
 
 SV_IMPL_VARARR(HighlightPortions, HighlightPortion)
 
+class AsyncQuitHandler
+{
+    AsyncQuitHandler() {}
+    AsyncQuitHandler( const AsyncQuitHandler&);
+public:
+    static AsyncQuitHandler& instance()
+    {
+        static AsyncQuitHandler dInst;
+        return dInst;
+    }
 
+    void QuitApplication()
+    {
+        uno::Reference< lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+        if ( xFactory.is() )
+    {
+            uno::Reference< frame::XDesktop > xDeskTop( xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop") ) ), uno::UNO_QUERY );
+           if ( xDeskTop.is() )
+               xDeskTop->terminate();
+        }
+    }
+    DECL_LINK( OnAsyncQuit, void* );
+};
+
+IMPL_LINK( AsyncQuitHandler, OnAsyncQuit, void*, /*pNull*/ )
+{
+    QuitApplication();
+    return 0L;
+}
+
+#if 0
+bool UnlockControllerHack( StarBASIC* pBasic )
+{
+    bool bRes = false;
+    if ( pBasic && pBasic->IsDocBasic() )
+    {
+        uno::Any aUnoVar;
+        ::rtl::OUString sVarName( ::rtl::OUString::createFromAscii( "ThisComponent" ) );
+        SbUnoObject* pGlobs = dynamic_cast<SbUnoObject*>( pBasic->Find( sVarName, SbxCLASS_DONTCARE ) );
+        if ( pGlobs )
+            aUnoVar = pGlobs->getUnoAny();
+        uno::Reference< frame::XModel > xModel( aUnoVar, uno::UNO_QUERY);
+        if ( xModel.is() )
+        {
+            try
+            {
+                xModel->unlockControllers();
+                bRes = true;
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
+    }
+    return bRes;
+}
+#endif
 /////////////////////////////////////////////////////////////////////////////
 
 // Ein BASIC-Modul hat EXTSEARCH gesetzt, damit die im Modul enthaltenen
@@ -696,6 +754,13 @@ USHORT SbModule::Run( SbMethod* pMeth )
         pINST->nCallLvl--;          // Call-Level wieder runter
         StarBASIC::FatalError( SbERR_STACK_OVERFLOW );
     }
+
+    // VBA always ensure screenupdating is enabled after completing
+    StarBASIC* pBasic = PTR_CAST(StarBASIC,GetParent());
+#if 0
+    if ( pBasic && pBasic->IsDocBasic() && !pINST )
+        UnlockControllerHack( pBasic );
+#endif
     if( bDelInst )
     {
         // #57841 Uno-Objekte, die in RTL-Funktionen gehalten werden,
@@ -705,6 +770,11 @@ USHORT SbModule::Run( SbMethod* pMeth )
         delete pINST;
         pINST = NULL;
     }
+    if ( pBasic && pBasic->IsDocBasic() && pBasic->IsQuitApplication() && !pINST )
+    {
+        Application::PostUserEvent( LINK( &AsyncQuitHandler::instance(), AsyncQuitHandler, OnAsyncQuit ), NULL );
+    }
+
     return nRes;
 }
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: databases.cxx,v $
- * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +37,6 @@
 #include <rtl/memory.h>
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <svtools/miscopt.hxx>
 #include "inputstream.hxx"
 #include <algorithm>
 #include <string.h>
@@ -52,6 +48,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/beans/Optional.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
@@ -60,7 +57,13 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <comphelper/locale.hxx>
 
-#include <transex3/compilehelp.hxx>
+#include <com/sun/star/awt/XToolkit.hpp>
+#include <com/sun/star/awt/XExtendedToolkit.hpp>
+#include <com/sun/star/awt/XWindowPeer.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <com/sun/star/awt/XTopWindow.hpp>
+
+#include <l10ntools/compilehelp.hxx>
 #include <comphelper/storagehelper.hxx>
 
 #include "databases.hxx"
@@ -142,9 +145,6 @@ Databases::Databases( sal_Bool showBasic,
                       const com::sun::star::uno::Sequence< rtl::OUString >& imagesZipPaths,
                       const rtl::OUString& productName,
                       const rtl::OUString& productVersion,
-                      const rtl::OUString& vendorName,
-                      const rtl::OUString& vendorVersion,
-                      const rtl::OUString& vendorShort,
                       const rtl::OUString& styleSheet,
                       Reference< uno::XComponentContext > xContext )
     : m_xContext( xContext ),
@@ -176,9 +176,7 @@ Databases::Databases( sal_Bool showBasic,
 
     m_vReplacement[0] = productName;
     m_vReplacement[1] = productVersion;
-    m_vReplacement[2] = vendorName;
-    m_vReplacement[3] = vendorVersion;
-    m_vReplacement[4] = vendorShort;
+    // m_vReplacement[2...4] (vendorName/-Version/-Short) are empty strings
     m_vReplacement[5] = productName;
     m_vReplacement[6] = productVersion;
 
@@ -234,7 +232,6 @@ Databases::~Databases()
             ++it;
         }
     }
-
 }
 
 static bool impl_getZipFile(
@@ -265,41 +262,70 @@ static bool impl_getZipFile(
 
 rtl::OString Databases::getImagesZipFileURL()
 {
-    sal_Int16 nSymbolsStyle = SvtMiscOptions().GetCurrentSymbolsStyle();
-    if ( !m_aImagesZipFileURL.getLength() || ( m_nSymbolsStyle != nSymbolsStyle ) )
+    //sal_Int16 nSymbolsStyle = SvtMiscOptions().GetCurrentSymbolsStyle();
+    sal_Int16 nSymbolsStyle = 0;
+    try
     {
-        m_nSymbolsStyle = nSymbolsStyle;
+        uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
+            m_xSMgr ->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider"), m_xContext), uno::UNO_QUERY_THROW);
 
-        rtl::OUString aImageZip;
-        rtl::OUString aSymbolsStyleName = SvtMiscOptions().GetCurrentSymbolsStyleName();
-        bool bFound = false;
+        // set root path
+        uno::Sequence < uno::Any > lParams(1);
+        beans::PropertyValue                       aParam ;
+        aParam.Name    = ::rtl::OUString::createFromAscii("nodepath");
+        aParam.Value <<= ::rtl::OUString::createFromAscii("org.openoffice.Office.Common");
+        lParams[0] = uno::makeAny(aParam);
 
-        if ( aSymbolsStyleName.getLength() != 0 )
+        // open it
+        uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(
+                    ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"),
+                    lParams) );
+
+        bool bChanged = false;
+        uno::Reference< container::XHierarchicalNameAccess > xAccess(xCFG, uno::UNO_QUERY_THROW);
+        uno::Any aResult = xAccess->getByHierarchicalName(::rtl::OUString::createFromAscii("Misc/SymbolSet"));
+        if ( (aResult >>= nSymbolsStyle) && m_nSymbolsStyle != nSymbolsStyle )
         {
-            rtl::OUString aZipName = rtl::OUString::createFromAscii( "images_" );
-            aZipName += aSymbolsStyleName;
-            aZipName += rtl::OUString::createFromAscii( ".zip" );
-
-            bFound = impl_getZipFile( m_aImagesZipPaths, aZipName, aImageZip );
+            m_nSymbolsStyle = nSymbolsStyle;
+            bChanged = true;
         }
 
-        if ( ! bFound )
-            bFound = impl_getZipFile( m_aImagesZipPaths, rtl::OUString::createFromAscii( "images.zip" ), aImageZip );
+        if ( !m_aImagesZipFileURL.getLength() || bChanged )
+        {
+            rtl::OUString aImageZip, aSymbolsStyleName;
+            aResult = xAccess->getByHierarchicalName(::rtl::OUString::createFromAscii("Misc/SymbolStyle"));
+            aResult >>= aSymbolsStyleName;
 
-        if ( ! bFound )
-            aImageZip = rtl::OUString();
+            bool bFound = false;
+            if ( aSymbolsStyleName.getLength() != 0 )
+            {
+                rtl::OUString aZipName = rtl::OUString::createFromAscii( "images_" );
+                aZipName += aSymbolsStyleName;
+                aZipName += rtl::OUString::createFromAscii( ".zip" );
 
-        m_aImagesZipFileURL = rtl::OUStringToOString(
-                    rtl::Uri::encode(
-                        aImageZip,
-                        rtl_UriCharClassPchar,
-                        rtl_UriEncodeIgnoreEscapes,
-                        RTL_TEXTENCODING_UTF8 ), RTL_TEXTENCODING_UTF8 );
+                bFound = impl_getZipFile( m_aImagesZipPaths, aZipName, aImageZip );
+            }
+
+            if ( ! bFound )
+                bFound = impl_getZipFile( m_aImagesZipPaths, rtl::OUString::createFromAscii( "images.zip" ), aImageZip );
+
+            if ( ! bFound )
+                aImageZip = rtl::OUString();
+
+            m_aImagesZipFileURL = rtl::OUStringToOString(
+                        rtl::Uri::encode(
+                            aImageZip,
+                            rtl_UriCharClassPchar,
+                            rtl_UriEncodeIgnoreEscapes,
+                            RTL_TEXTENCODING_UTF8 ), RTL_TEXTENCODING_UTF8 );
+        }
+    }
+    catch ( NoSuchElementException const & )
+    {
     }
 
     return m_aImagesZipFileURL;
 }
-
 
 void Databases::replaceName( rtl::OUString& oustring ) const
 {
@@ -802,10 +828,6 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
 
     for( sal_uInt32 i = 0; i < id.size(); ++i )
     {
-        // the following object must live longer than the
-        // pointer returned by aDBData.getData()
-        DBData aDBData;
-
         listId[i] = id[i];
         listAnchor[i] = anchor[i];
 
@@ -817,6 +839,7 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
             DBHelp* pDBHelp = pDb->getDBHelp();
             if( pDBHelp != NULL )
             {
+                DBData aDBData;
                 bool bSuccess = pDBHelp->getValueForKey( idi, aDBData );
                 if( bSuccess )
                 {
@@ -1254,19 +1277,47 @@ void Databases::cascadingStylesheet( const rtl::OUString& Language,
         bool error = true;
         rtl::OUString fileURL;
 
+        sal_Bool bHighContrastMode = sal_False;
+        rtl::OUString aCSS( m_aCSS );
+        if ( aCSS.compareToAscii( "default" ) == 0 )
+        {
+            // #i50760: "default" needs to adapt HC mode
+            uno::Reference< awt::XToolkit > xToolkit = uno::Reference< awt::XToolkit >(
+                    ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.Toolkit" ) ) ), uno::UNO_QUERY );
+            if ( xToolkit.is() )
+            {
+                uno::Reference< awt::XExtendedToolkit > xExtToolkit( xToolkit, uno::UNO_QUERY );
+                if ( xExtToolkit.is() )
+                {
+                    uno::Reference< awt::XTopWindow > xTopWindow = xExtToolkit->getActiveTopWindow();
+                    if ( xTopWindow.is() )
+                    {
+                        uno::Reference< awt::XVclWindowPeer > xVclWindowPeer( xTopWindow, uno::UNO_QUERY );
+                        if ( xVclWindowPeer.is() )
+                        {
+                            uno::Any aHCMode = xVclWindowPeer->getProperty( rtl::OUString::createFromAscii( "HighContrastMode" ) );
+                            if ( ( aHCMode >>= bHighContrastMode ) && bHighContrastMode )
+                                aCSS = rtl::OUString::createFromAscii( "highcontrastblack" );
+                        }
+                    }
+                }
+            }
+        }
+
         while( error && retry )
         {
+
             if( retry == 2 )
                 fileURL =
                     getInstallPathAsURL()  +
                     processLang( Language )       +
                     rtl::OUString::createFromAscii( "/" ) +
-                    m_aCSS +
+                    aCSS +
                     rtl::OUString::createFromAscii( ".css" );
             else if( retry == 1 )
                 fileURL =
                     getInstallPathAsURL()  +
-                    m_aCSS +
+                    aCSS +
                     rtl::OUString::createFromAscii( ".css" );
 
             osl::DirectoryItem aDirItem;
@@ -1287,6 +1338,13 @@ void Databases::cascadingStylesheet( const rtl::OUString& Language,
             }
 
             --retry;
+            if ( !retry && error && bHighContrastMode )
+            {
+                // fall back to default css
+                aCSS = rtl::OUString::createFromAscii( "default" );
+                retry = 2;
+                bHighContrastMode = sal_False;
+            }
         }
 
         if( error )
@@ -1530,7 +1588,6 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPack
             thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString::createFromAscii("user") );
         m_aUserPackagesSeq = xUserManager->getDeployedPackages
             ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
-
         m_bUserPackagesLoaded = true;
     }
 
@@ -1560,7 +1617,6 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPa
             thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString::createFromAscii("shared") );
         m_aSharedPackagesSeq = xSharedManager->getDeployedPackages
             ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
-
         m_bSharedPackagesLoaded = true;
     }
 

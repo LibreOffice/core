@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tvread.cxx,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,16 +35,10 @@
 #include <vos/diagnose.hxx>
 #endif
 #include "tvread.hxx"
-#ifdef SYSTEM_EXPAT
 #include <expat.h>
-#else
-#include <expat/xmlparse.h>
-#endif
 #include <osl/file.hxx>
-#include <unotools/configmgr.hxx>
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -682,22 +673,6 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     // replace anything like $(instpath);
     subst( xSMgr,instPath );
 
-
-    /**********************************************************************/
-    /*                       reading Webtop.Common                        */
-    /**********************************************************************/
-
-    xHierAccess = getHierAccess( sProvider,
-                                 "org.openoffice.Webtop.Common" );
-    rtl::OUString vendorName( getKey(  xHierAccess,"Product/ooName" ) );
-
-    rtl::OUString setupversion( getKey(  xHierAccess,"Product/ooSetupVersion" ) );
-    rtl::OUString setupextension( getKey(  xHierAccess,"Product/ooSetupExtension") );
-    rtl::OUString vendorVersion( setupversion +
-                                 rtl::OUString::createFromAscii( " " ) +
-                                 setupextension );
-    rtl::OUString vendorShort = vendorName;
-
     /**********************************************************************/
     /*                       reading setup                                */
     /**********************************************************************/
@@ -706,13 +681,34 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
                                  "org.openoffice.Setup" );
 
     rtl::OUString productName( getKey(  xHierAccess,"Product/ooName" ) );
-    setupversion = getKey(  xHierAccess,"Product/ooSetupVersion" );
-    setupextension = rtl::OUString();
-    utl::ConfigManager * mgr = utl::ConfigManager::GetConfigManager();
-    if (mgr != NULL) {
-        mgr->GetDirectConfigProperty(utl::ConfigManager::PRODUCTEXTENSION) >>=
-            setupextension;
+    rtl::OUString setupversion( getKey( xHierAccess,"Product/ooSetupVersion" ) );
+    rtl::OUString setupextension;
+
+    try
+    {
+        uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
+              xSMgr ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")), uno::UNO_QUERY_THROW);
+
+        uno::Sequence < uno::Any > lParams(1);
+        beans::PropertyValue                       aParam ;
+        aParam.Name    = ::rtl::OUString::createFromAscii("nodepath");
+        aParam.Value <<= ::rtl::OUString::createFromAscii("/org.openoffice.Setup/Product");
+        lParams[0] = uno::makeAny(aParam);
+
+        // open it
+        uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(
+                    ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"),
+                    lParams) );
+
+        uno::Reference< container::XNameAccess > xDirectAccess(xCFG, uno::UNO_QUERY);
+        uno::Any aRet = xDirectAccess->getByName(::rtl::OUString::createFromAscii("ooSetupExtension"));
+
+        aRet >>= setupextension;
     }
+    catch ( uno::Exception& )
+    {
+    }
+
     rtl::OUString productVersion( setupversion +
                                   rtl::OUString::createFromAscii( " " ) +
                                   setupextension );
@@ -800,9 +796,7 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     configData.m_vAdd[4] = 12;
     configData.m_vReplacement[0] = productName;
     configData.m_vReplacement[1] = productVersion;
-    configData.m_vReplacement[2] = vendorName;
-    configData.m_vReplacement[3] = vendorVersion;
-    configData.m_vReplacement[4] = vendorShort;
+    // m_vReplacement[2...4] (vendorName/-Version/-Short) are empty strings
 
        configData.system = system;
     configData.locale = locale;
@@ -830,23 +824,13 @@ TVChildTarget::getConfiguration(const Reference< XMultiServiceFactory >& m_xSMgr
     Reference< XMultiServiceFactory > sProvider;
     if( m_xSMgr.is() )
     {
-        Any aAny;
-        aAny <<= rtl::OUString::createFromAscii( "plugin" );
-        PropertyValue aProp( rtl::OUString::createFromAscii( "servertype" ),
-                             -1,
-                             aAny,
-                             PropertyState_DIRECT_VALUE );
-
-        Sequence< Any > seq(1);
-        seq[0] <<= aProp;
-
         try
         {
             rtl::OUString sProviderService =
                 rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" );
             sProvider =
                 Reference< XMultiServiceFactory >(
-                    m_xSMgr->createInstanceWithArguments( sProviderService,seq ),
+                    m_xSMgr->createInstance( sProviderService ),
                     UNO_QUERY );
         }
         catch( const com::sun::star::uno::Exception& )

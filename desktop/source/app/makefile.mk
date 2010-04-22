@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.42.40.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -50,7 +46,6 @@ SHL1OBJS = \
     $(SLO)$/appfirststart.obj \
     $(SLO)$/appinit.obj \
     $(SLO)$/appsys.obj \
-    $(SLO)$/cfgfilter.obj \
     $(SLO)$/checkinstall.obj \
     $(SLO)$/check_ext_deps.obj \
     $(SLO)$/cmdlineargs.obj \
@@ -62,12 +57,12 @@ SHL1OBJS = \
     $(SLO)$/langselect.obj \
     $(SLO)$/lockfile.obj \
     $(SLO)$/lockfile2.obj \
-    $(SLO)$/migration.obj \
     $(SLO)$/officeipcthread.obj \
-    $(SLO)$/pages.obj \
     $(SLO)$/sofficemain.obj \
-    $(SLO)$/userinstall.obj \
-    $(SLO)$/wizard.obj
+    $(SLO)$/userinstall.obj
+
+SHL1LIBS = $(SLB)$/mig.lib
+
 SHL1STDLIBS = \
     $(COMPHELPERLIB) \
     $(CPPUHELPERLIB) \

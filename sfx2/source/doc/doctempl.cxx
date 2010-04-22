@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: doctempl.cxx,v $
- * $Revision: 1.76 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/ehdl.hxx>
@@ -69,7 +66,6 @@
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
-#include <com/sun/star/ucb/XContentCreator.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/ucb/XAnyCompare.hpp>
@@ -794,12 +790,12 @@ String SfxDocumentTemplates::GetDefaultTemplatePath
     INetURLObject aTemplateObj( pImp->GetRootURL() );
 
     aTemplateObj.insertName( aGroupName, false,
-                         INetURLObject::LAST_SEGMENT, true,
-                         INetURLObject::ENCODE_ALL );
+                        INetURLObject::LAST_SEGMENT, true,
+                        INetURLObject::ENCODE_ALL );
 
     aTemplateObj.insertName( aTitle, false,
-                         INetURLObject::LAST_SEGMENT, true,
-                         INetURLObject::ENCODE_ALL );
+                        INetURLObject::LAST_SEGMENT, true,
+                        INetURLObject::ENCODE_ALL );
 
 
     ::rtl::OUString aResult;

@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewcontactofsdrrectobj.cxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,10 +31,11 @@
 #include <svx/sdr/contact/viewcontactofsdrrectobj.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
-#include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <svx/sdr/primitive2d/sdrrectangleprimitive2d.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <svx/svdmodel.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -57,82 +54,48 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrRectObj::createViewIndependentPrimitive2DSequence() const
         {
-            drawinglayer::primitive2d::Primitive2DSequence xRetval;
             const SfxItemSet& rItemSet = GetRectObj().GetMergedItemSet();
-            SdrText* pSdrText = GetRectObj().getText(0);
+            const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
+                drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
+                    rItemSet,
+                    GetRectObj().getText(0)));
 
-            if(pSdrText)
-            {
-                drawinglayer::attribute::SdrLineFillShadowTextAttribute* pAttribute = drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(rItemSet, *pSdrText);
+            // take unrotated snap rect (direct model data) for position and size
+            const Rectangle& rRectangle = GetRectObj().GetGeoRect();
+            const ::basegfx::B2DRange aObjectRange(
+                rRectangle.Left(), rRectangle.Top(),
+                rRectangle.Right(), rRectangle.Bottom());
+            const GeoStat& rGeoStat(GetRectObj().GetGeoStat());
 
-                if(pAttribute)
-                {
-                    if(pAttribute->isVisible())
-                    {
-                        // take unrotated snap rect (direct model data) for position and size
-                        const Rectangle& rRectangle = GetRectObj().GetGeoRect();
-                        const ::basegfx::B2DRange aObjectRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
-                        const GeoStat& rGeoStat(GetRectObj().GetGeoStat());
-                        ::basegfx::B2DHomMatrix aObjectMatrix;
+            // fill object matrix
+            basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                aObjectRange.getWidth(), aObjectRange.getHeight(),
+                rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0,
+                rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0,
+                aObjectRange.getMinX(), aObjectRange.getMinY()));
 
-                        // fill object matrix
-                        if(!::basegfx::fTools::equalZero(aObjectRange.getWidth()))
-                        {
-                            aObjectMatrix.set(0, 0, aObjectRange.getWidth());
-                        }
+            // calculate corner radius
+            sal_uInt32 nCornerRadius(((SdrEckenradiusItem&)(rItemSet.Get(SDRATTR_ECKENRADIUS))).GetValue());
+            double fCornerRadiusX;
+            double fCornerRadiusY;
+            drawinglayer::primitive2d::calculateRelativeCornerRadius(nCornerRadius, aObjectRange, fCornerRadiusX, fCornerRadiusY);
 
-                        if(!::basegfx::fTools::equalZero(aObjectRange.getHeight()))
-                        {
-                            aObjectMatrix.set(1, 1, aObjectRange.getHeight());
-                        }
+            // #i105856# use knowledge about pickthrough from the model
+            const bool bPickThroughTransparentTextFrames(
+                GetRectObj().GetModel() && GetRectObj().GetModel()->IsPickThroughTransparentTextFrames());
 
-                        if(rGeoStat.nShearWink)
-                        {
-                            aObjectMatrix.shearX(tan((36000 - rGeoStat.nShearWink) * F_PI18000));
-                        }
+            // create primitive. Always create primitives to allow the decomposition of
+            // SdrRectanglePrimitive2D to create needed invisible elements for HitTest and/or BoundRect
+            const drawinglayer::primitive2d::Primitive2DReference xReference(
+                new drawinglayer::primitive2d::SdrRectanglePrimitive2D(
+                    aObjectMatrix,
+                    aAttribute,
+                    fCornerRadiusX,
+                    fCornerRadiusY,
+                    // #i105856# use fill for HitTest when TextFrame and not PickThrough
+                    GetRectObj().IsTextFrame() && !bPickThroughTransparentTextFrames));
 
-                        if(rGeoStat.nDrehWink)
-                        {
-                            aObjectMatrix.rotate((36000 - rGeoStat.nDrehWink) * F_PI18000);
-                        }
-
-                        aObjectMatrix.translate(aObjectRange.getMinX(), aObjectRange.getMinY());
-
-                        // calculate corner radius
-                        sal_uInt32 nCornerRadius(((SdrEckenradiusItem&)(rItemSet.Get(SDRATTR_ECKENRADIUS))).GetValue());
-                        double fCornerRadiusX;
-                        double fCornerRadiusY;
-                        drawinglayer::primitive2d::calculateRelativeCornerRadius(nCornerRadius, aObjectRange, fCornerRadiusX, fCornerRadiusY);
-
-                        // create primitive
-                        const drawinglayer::primitive2d::Primitive2DReference xReference(
-                            new drawinglayer::primitive2d::SdrRectanglePrimitive2D(
-                                aObjectMatrix,
-                                *pAttribute,
-                                fCornerRadiusX,
-                                fCornerRadiusY,
-                                GetRectObj().IsTextFrame()));
-
-                        xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-                    }
-
-                    delete pAttribute;
-                }
-
-                if(!xRetval.hasElements())
-                {
-                    // #i99123#
-                    // Object is invisible. Create a fallback primitive for HitTest
-                    basegfx::B2DHomMatrix aObjectMatrix;
-                    basegfx::B2DPolyPolygon aObjectPolyPolygon;
-                    GetRectObj().TRGetBaseGeometry(aObjectMatrix, aObjectPolyPolygon);
-                    const drawinglayer::primitive2d::Primitive2DReference xReference(
-                        drawinglayer::primitive2d::createFallbackHitTestPrimitive(aObjectMatrix));
-                    xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-                }
-            }
-
-            return xRetval;
+            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
         }
     } // end of namespace contact
 } // end of namespace sdr

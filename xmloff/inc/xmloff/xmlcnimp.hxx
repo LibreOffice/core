@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlcnimp.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,11 +32,11 @@
 #include "xmloff/dllapi.h"
 #include "sal/types.h"
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <xmloff/nmspmap.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 namespace rtl { class OUString; }
 

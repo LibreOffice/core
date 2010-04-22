@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pageitem.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,11 +33,13 @@
 
 
 #include <svx/pageitem.hxx>
-#include <svx/itemtype.hxx>
+#include <editeng/itemtype.hxx>
 #include <svx/unomid.hxx>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/BreakType.hpp>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
+#include <svx/svxitems.hrc>
+#include <svx/dialmgr.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: polysc3d.cxx,v $
- * $Revision: 1.18.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,11 +36,11 @@
 #include <vcl/svapp.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpool.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include "globl3d.hxx"
 #include <svx/polysc3d.hxx>
 #include <svx/xlnclit.hxx>
-#include <svtools/metitem.hxx>
+#include <svl/metitem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xlnwtit.hxx>
 

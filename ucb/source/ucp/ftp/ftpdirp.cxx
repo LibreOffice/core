@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ftpdirp.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -971,18 +968,6 @@ sal_Bool FTPDirectoryParser::parseUNIX (
         return sal_True;
     }
     return sal_False;
-}
-
-/*
- * parseUNKNOWN.
- */
-sal_Bool FTPDirectoryParser::parseUNKNOWN (
-    FTPDirentry &rEntry,
-    const sal_Char  *pBuffer,
-    sal_uInt32       nLength)
-{
-    setPath (rEntry.m_aName, pBuffer,sal_Int32 (nLength));
-    return sal_True;
 }
 
 /*

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docfile.hxx,v $
- * $Revision: 1.8.118.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,10 +45,9 @@
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <tools/list.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 
 #include <tools/globname.hxx>
-#include <svtools/cancel.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/content.hxx>
 
@@ -67,16 +63,6 @@ class SfxItemSet;
 class DateTime;
 class SvStringsDtor;
 class SvEaMgr;
-class SfxPoolCancelManager_Impl;
-
-#define SFX_TFPRIO_SYNCHRON                        0
-#define SFX_TFPRIO_DOC                            10
-#define SFX_TFPRIO_VISIBLE_LOWRES_GRAPHIC         20
-#define SFX_TFPRIO_VISIBLE_HIGHRES_GRAPHIC        21
-#define SFX_TFPRIO_PLUGINS                        40
-#define SFX_TFPRIO_INVISIBLE_LOWRES_GRAPHIC       50
-#define SFX_TFPRIO_INVISIBLE_HIGHRES_GRAPHIC      51
-#define SFX_TFPRIO_DOWNLOADS                      60
 
 #define S2BS(s) ByteString( s, RTL_TEXTENCODING_MS_1252 )
 
@@ -160,7 +146,6 @@ public:
 
     void                SetLoadTargetFrame(SfxFrame* pFrame );
     SfxFrame*           GetLoadTargetFrame() const;
-    void                CancelTransfers();
 
     void                SetReferer( const String& rRefer );
     const String&       GetReferer( ) const;
@@ -229,7 +214,7 @@ public:
 
     sal_Int8            ShowLockedDocumentDialog( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aData, sal_Bool bIsLoading, sal_Bool bOwnLock );
     sal_Bool            LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI );
-    void                UnlockFile();
+    void                UnlockFile( sal_Bool bReleaseLockStream );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetStorage( sal_Bool bCreateTempIfNo = sal_True );
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetOutputStorage();
@@ -238,7 +223,6 @@ public:
     void                SetUsesCache( sal_Bool );
     sal_Bool            IsExpired() const;
     void                SetName( const String& rName, sal_Bool bSetOrigURL = sal_False );
-    void                SetDontCreateCancellable();
     sal_Bool            IsAllowedForExternalBrowser() const;
     long                GetFileVersion() const;
 
@@ -276,8 +260,6 @@ public:
     SAL_DLLPRIVATE sal_Bool TransferVersionList_Impl( SfxMedium& rMedium );
     SAL_DLLPRIVATE sal_Bool SaveVersionList_Impl( sal_Bool bUseXML );
     SAL_DLLPRIVATE sal_Bool RemoveVersion_Impl( const ::rtl::OUString& rVersion );
-    SAL_DLLPRIVATE SfxPoolCancelManager_Impl* GetCancelManager_Impl() const;
-    SAL_DLLPRIVATE void SetCancelManager_Impl( SfxPoolCancelManager_Impl* pMgr );
 
     SAL_DLLPRIVATE void SetExpired_Impl( const DateTime& rDateTime );
     SAL_DLLPRIVATE SvKeyValueIterator* GetHeaderAttributes_Impl();
@@ -290,6 +272,7 @@ public:
     SAL_DLLPRIVATE void Init_Impl();
     SAL_DLLPRIVATE void ForceSynchronStream_Impl( sal_Bool bSynchron );
 
+    SAL_DLLPRIVATE void GetLockingStream_Impl();
     SAL_DLLPRIVATE void GetMedium_Impl();
     SAL_DLLPRIVATE sal_Bool TryDirectTransfer( const ::rtl::OUString& aURL, SfxItemSet& aTargetSet );
     SAL_DLLPRIVATE void Transfer_Impl();

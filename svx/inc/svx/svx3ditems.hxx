@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svx3ditems.hxx,v $
- * $Revision: 1.4.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,11 +27,11 @@
 #ifndef _SVX3DITEMS_HXX
 #define _SVX3DITEMS_HXX
 
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 
 
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/e3ditem.hxx>
 #include <svx/viewpt3d.hxx>
 #include <svx/svddef.hxx>

@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -54,7 +54,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/string.hxx>
 #include <tools/diagnose_ex.h>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/intlwrapper.hxx>
 
 #include <cstring>

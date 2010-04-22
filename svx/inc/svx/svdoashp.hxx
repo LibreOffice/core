@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdoashp.hxx,v $
- * $Revision: 1.6.90.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,14 +85,15 @@ struct SdrCustomShapeInteraction
 
 class SVX_DLLPUBLIC SdrObjCustomShape : public SdrTextObj
 {
+private:
     // fObjectRotation is containing the object rotation in degrees.
     double fObjectRotation;
 
-private:
-    // BaseProperties section
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
+protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+
+public:
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
     // to allow sdr::properties::CustomShapeProperties access
     friend class sdr::properties::CustomShapeProperties;
@@ -178,6 +176,8 @@ public:
 
     virtual UINT16 GetObjIdentifier() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
+
+    virtual void SetModel(SdrModel* pNewModel);
 
     virtual void RecalcSnapRect();
 

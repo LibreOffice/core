@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.33 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -86,10 +82,18 @@ SLOFILES =	\
         $(SLO)$/DocumentMetadataAccess.obj \
         $(SLO)$/Metadatable.obj \
         $(SLO)$/sfxmodelfactory.obj \
+        $(SLO)$/sfxacldetect.obj \
         $(SLO)$/docstoragemodifylistener.obj \
         $(SLO)$/querytemplate.obj
 
 #                $(SLO)$/applet.obj \
+
+.IF "$(GUI)" == "WNT"
+
+#HACK TO DISABLE PCH
+NOOPTFILES= \
+        $(SLO)$/sfxacldetect.obj
+.ENDIF        
 
 
 # --- Tagets -------------------------------------------------------

@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: vclpixelprocessor2d.hxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.5 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -40,34 +32,39 @@
 #include <vcl/outdev.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// predefines
-
-//////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
     namespace processor2d
     {
+        /** VclPixelProcessor2D class
+
+            This processor derived from VclProcessor2D is the base class for rendering
+            all feeded primitives to a VCL Window. It is the currently used renderer
+            for all VCL editing output from the DrawingLayer.
+         */
         class VclPixelProcessor2D : public VclProcessor2D
         {
         private:
-            // The Pixel renderer resets the original MapMode from the OutputDevice.
-            // For some situations it is necessary to get it again, so it is rescued here
+            /*  The Pixel renderer resets the original MapMode from the OutputDevice.
+                For some situations it is necessary to get it again, so it is rescued here
+             */
             MapMode                             maOriginalMapMode;
 
         protected:
-            // the local processor for BasePrinitive2D-Implementation based primitives,
-            // called from the common process()-implementation
+            /*  the local processor for BasePrinitive2D-Implementation based primitives,
+                called from the common process()-implementation
+             */
             virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
 
         public:
-            // constructor/destructor
+            /// constructor/destructor
             VclPixelProcessor2D(
                 const geometry::ViewInformation2D& rViewInformation,
                 OutputDevice& rOutDev);
             virtual ~VclPixelProcessor2D();
 
-            // data access
+            /// data read access
             const MapMode& getOriginalMapMode() const { return maOriginalMapMode; }
         };
     } // end of namespace processor2d

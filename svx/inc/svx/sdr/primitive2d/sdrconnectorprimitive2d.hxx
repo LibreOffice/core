@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdrconnectorprimitive2d.hxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +29,8 @@
 #define INCLUDED_SDR_PRIMITIVE2D_SDRCONNECTORPRIMITIVE2D_HXX
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <drawinglayer/attribute/sdrattribute.hxx>
-#include <svx/sdr/attribute/sdrallattribute.hxx>
+#include <svx/sdr/attribute/sdrlineshadowtextattribute.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -45,7 +41,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrConnectorPrimitive2D : public BasePrimitive2D
+        class SdrConnectorPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             attribute::SdrLineShadowTextAttribute       maSdrLSTAttribute;
@@ -53,7 +49,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrConnectorPrimitive2D(

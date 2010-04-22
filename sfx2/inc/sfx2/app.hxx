@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: app.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,8 +31,8 @@
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
 #include <tools/solar.h>
-#include <svtools/smplhint.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/poolitem.hxx>
 #include <tools/ref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
@@ -61,7 +58,6 @@ class AppSettings;
 struct SfxChildWinContextFactory;
 class SfxAppData_Impl;
 class SfxBindings;
-class SfxCancelManager;
 class SfxChildWinFactArr_Impl;
 class SfxChildWindow;
 class SfxDispatcher;
@@ -94,7 +90,6 @@ class SfxModule;
 class SfxModuleArr_Impl;
 class Window;
 class INetURLObject;
-class SfxMiscCfg;
 struct SfxConstant;
 struct SfxChildWinFactory;
 struct SfxMenuCtrlFactory;
@@ -222,14 +217,12 @@ public:
 
     // members
     SfxFilterMatcher&           GetFilterMatcher();
-    SfxCancelManager*           GetCancelManager() const;
     SfxMacroConfig*             GetMacroConfig() const;
     SfxProgress*                GetProgress() const;
     const String&               GetLastSaveDirectory() const;
     USHORT                      GetFreeIndex();
     void                        ReleaseIndex(USHORT i);
     SfxEventConfiguration*      GetEventConfig() const;
-    SfxMiscCfg*                 GetMiscConfig();
 
     // Basic/Scripting
     static sal_Bool             IsXScriptURL( const String& rScriptURL );
@@ -269,7 +262,6 @@ public:
     SAL_DLLPRIVATE SfxDispatcher* GetAppDispatcher_Impl();
     SAL_DLLPRIVATE SfxDispatcher* GetDispatcher_Impl();
 
-    SAL_DLLPRIVATE SfxObjectShellLock NewDoc_Impl( const String& rFactory, const SfxItemSet* pSet = NULL );
     SAL_DLLPRIVATE BOOL         QueryExit_Impl();
     SAL_DLLPRIVATE void         SetOptions_Impl(const SfxItemSet &);
     SAL_DLLPRIVATE FASTBOOL     Initialize_Impl();
@@ -295,7 +287,6 @@ public:
     // TODO/CLEANUP: still needed?
     SAL_DLLPRIVATE void         NewDocDirectExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         NewDocExec_Impl(SfxRequest &);
-    SAL_DLLPRIVATE const SfxPoolItem* NewDocDirectExec_ImplOld(SfxRequest &); // used by FrameLoader to work with the old behaviour ...
     SAL_DLLPRIVATE void         OpenDocExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         MiscExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         MiscState_Impl(SfxItemSet &);

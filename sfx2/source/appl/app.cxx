@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: app.cxx,v $
- * $Revision: 1.112 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,19 +42,19 @@
 #include <tools/config.hxx>
 #include <basic/basrdll.hxx>
 #include <svtools/asynclink.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
 #endif
-#include <svtools/eitem.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/eitem.hxx>
+#include <svl/urlbmk.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 
-#include <svtools/svdde.hxx>
+#include <svl/svdde.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <osl/file.hxx>
@@ -65,7 +62,7 @@
 #endif
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -111,7 +108,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/genlink.hxx>
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "appdata.hxx"
 #include "openflag.hxx"
 #include "app.hrc"
@@ -136,29 +133,28 @@
 #define DDE_AVAILABLE
 #endif
 
-#include <svtools/saveopt.hxx>
-#include <svtools/undoopt.hxx>
+#include <unotools/saveopt.hxx>
+#include <unotools/undoopt.hxx>
 #include <svtools/helpopt.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/viewoptions.hxx>
-#include <svtools/moduleoptions.hxx>
-#include <svtools/historyoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/viewoptions.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <unotools/historyoptions.hxx>
 #include <svtools/menuoptions.hxx>
-#include <svtools/addxmltostorageoptions.hxx>
 #include <svtools/miscopt.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/startoptions.hxx>
-#include <svtools/securityoptions.hxx>
-#include <svtools/localisationoptions.hxx>
-#include <svtools/inetoptions.hxx>
-#include <svtools/fontoptions.hxx>
-#include <svtools/internaloptions.hxx>
-#include <svtools/workingsetoptions.hxx>
-#include <svtools/syslocaleoptions.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/useroptions.hxx>
+#include <unotools/startoptions.hxx>
+#include <unotools/securityoptions.hxx>
+#include <unotools/localisationoptions.hxx>
+#include <unotools/inetoptions.hxx>
+#include <unotools/fontoptions.hxx>
+#include <unotools/internaloptions.hxx>
+#include <unotools/workingsetoptions.hxx>
+#include <unotools/syslocaleoptions.hxx>
+#include <unotools/syslocale.hxx>
 #include <framework/addonsoptions.hxx>
 #include <svtools/ttprops.hxx>
-#include <svtools/extendedsecurityoptions.hxx>
+#include <unotools/extendedsecurityoptions.hxx>
 
 using namespace ::com::sun::star;
 
@@ -359,7 +355,7 @@ SfxApplication::SfxApplication()
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ initialize DDE" );
 
 #ifdef DDE_AVAILABLE
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     InitializeDde();
 #else
     if( !InitializeDde() )
@@ -476,9 +472,6 @@ SfxDispatcher* SfxApplication::GetDispatcher_Impl()
 //--------------------------------------------------------------------
 void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
 {
-    if( pFrame && !pFrame->IsSetViewFrameAllowed_Impl() )
-        return;
-
     if ( pFrame != pAppData_Impl->pViewFrame )
     {
         // get the containerframes ( if one of the frames is an InPlaceFrame )
@@ -495,12 +488,6 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
 //      BOOL bDocWinActivate = pOldContainerFrame && pNewContainerFrame &&
 //                  pOldContainerFrame->GetTopViewFrame() == pNewContainerFrame->GetTopViewFrame();
         BOOL bTaskActivate = pOldContainerFrame != pNewContainerFrame;
-        if ( pAppData_Impl->pViewFrame )
-        {
-            if ( bTaskActivate )
-                // prepare UI for deacivation
-                pAppData_Impl->pViewFrame->GetFrame()->Deactivate_Impl();
-        }
 
         if ( pOldContainerFrame )
         {
@@ -569,11 +556,11 @@ short SfxApplication::QuerySave_Impl( SfxObjectShell& rDoc, sal_Bool /*bAutoSave
     String aMsg( SfxResId( STR_ISMODIFIED ) );
     aMsg.SearchAndReplaceAscii( "%1", rDoc.GetTitle() );
 
-    SfxFrame *pFrame = SfxViewFrame::GetFirst(&rDoc)->GetFrame();
-    pFrame->Appear();
+    SfxFrame& rFrame = SfxViewFrame::GetFirst(&rDoc)->GetFrame();
+    rFrame.Appear();
 
     WinBits nBits = WB_YES_NO_CANCEL | WB_DEF_NO;
-    QueryBox aBox( &pFrame->GetWindow(), nBits, aMsg );
+    QueryBox aBox( &rFrame.GetWindow(), nBits, aMsg );
 
     return aBox.Execute();
 }
@@ -697,7 +684,7 @@ uno::Reference< task::XStatusIndicator > SfxApplication::GetStatusIndicator() co
     while ( pTop->GetParentViewFrame_Impl() )
         pTop = pTop->GetParentViewFrame_Impl();
 
-    return pTop->GetFrame()->GetWorkWindow_Impl()->GetStatusIndicator();
+    return pTop->GetFrame().GetWorkWindow_Impl()->GetStatusIndicator();
 }
 
 SfxTbxCtrlFactArr_Impl&     SfxApplication::GetTbxCtrlFactories_Impl() const
@@ -814,7 +801,7 @@ SfxApplication::ChooseScript()
         OSL_TRACE("create selector dialog");
 
         const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-        const SfxFrame* pFrame = pViewFrame ? pViewFrame->GetFrame() : NULL;
+        const SfxFrame* pFrame = pViewFrame ? &pViewFrame->GetFrame() : NULL;
         uno::Reference< frame::XFrame > xFrame( pFrame ? pFrame->GetFrameInterface() : uno::Reference< frame::XFrame >() );
 
           AbstractScriptSelectorDialog* pDlg =

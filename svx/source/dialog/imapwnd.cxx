@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: imapwnd.cxx,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +35,7 @@
 #include <svtools/imaprect.hxx>
 #include <svtools/imapcirc.hxx>
 #include <svtools/imappoly.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 
 #include <xoutbmp.hxx>
 #include <svx/dialmgr.hxx>
@@ -52,7 +49,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/svdpagv.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/xfillit.hxx>
 #include <svx/xlineit.hxx>
 #include <sfx2/evntconf.hxx>

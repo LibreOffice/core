@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fontworkbar.cxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,9 +45,9 @@
 #include <svx/svdoashp.hxx>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <sfx2/bindings.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/charscaleitem.hxx>
-#include <svx/kernitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/kernitem.hxx>
 #include <sdrpaintwindow.hxx>
 
 #include <svx/svxids.hrc>
@@ -355,7 +352,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
 #include "gallery.hxx"
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 
 void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const rtl::OUString rCustomShape )
 {

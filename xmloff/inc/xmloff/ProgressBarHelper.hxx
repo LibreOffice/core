@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ProgressBarHelper.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +49,7 @@ class XMLOFF_DLLPUBLIC ProgressBarHelper
             // #96469#; if the value goes over the Range the progressbar starts again
             sal_Bool                                                                        bRepeat;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             sal_Bool                                                                        bFailure;
 #endif
 public:

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: toolbarmanager.cxx,v $
- * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,7 +68,6 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/ui/XUIElementSettings.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
@@ -85,13 +81,13 @@
 //_________________________________________________________________________________________________________________
 #include <svtools/imgdef.hxx>
 #include <svtools/toolboxcontroller.hxx>
-#include <svtools/cmdoptions.hxx>
+#include <unotools/cmdoptions.hxx>
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
 #include <comphelper/mediadescriptor.hxx>
 #include <svtools/miscopt.hxx>
-#include <svtools/imageitm.hxx>
+#include <svl/imageitm.hxx>
 #include <svtools/framestatuslistener.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/menu.hxx>
@@ -99,7 +95,7 @@
 #include <vcl/taskpanelist.hxx>
 #include <rtl/logfile.hxx>
 #include <svtools/menuoptions.hxx>
-#include <svtools/cmdoptions.hxx>
+#include <unotools/cmdoptions.hxx>
 #include <boost/bind.hpp>
 
 //_________________________________________________________________________________________________________________
@@ -122,6 +118,7 @@ namespace framework
 
 static const char   ITEM_DESCRIPTOR_COMMANDURL[]    = "CommandURL";
 static const char   ITEM_DESCRIPTOR_HELPURL[]       = "HelpURL";
+static const char   ITEM_DESCRIPTOR_TOOLTIP[]       = "Tooltip";
 static const char   ITEM_DESCRIPTOR_CONTAINER[]     = "ItemDescriptorContainer";
 static const char   ITEM_DESCRIPTOR_LABEL[]         = "Label";
 static const char   ITEM_DESCRIPTOR_TYPE[]          = "Type";
@@ -131,6 +128,7 @@ static const char   ITEM_DESCRIPTOR_STYLE[]         = "Style";
 
 static const sal_Int32 ITEM_DESCRIPTOR_COMMANDURL_LEN  = 10;
 static const sal_Int32 ITEM_DESCRIPTOR_HELPURL_LEN     = 7;
+static const sal_Int32 ITEM_DESCRIPTOR_TOOLTIP_LEN     = 7;
 static const sal_Int32 ITEM_DESCRIPTOR_CONTAINER_LEN   = 23;
 static const sal_Int32 ITEM_DESCRIPTOR_LABEL_LEN       = 5;
 static const sal_Int32 ITEM_DESCRIPTOR_TYPE_LEN        = 4;
@@ -143,6 +141,7 @@ static const char   HELPID_PREFIX_TESTTOOL[]        = ".HelpId:";
 //static sal_Int32    HELPID_PREFIX_LENGTH            = 7;
 static const USHORT STARTID_CUSTOMIZE_POPUPMENU     = 1000;
 
+#define MENUPREFIX "private:resource/menubar/"
 
 class ImageOrientationListener : public svt::FrameStatusListener
 {
@@ -341,9 +340,11 @@ void ToolBarManager::Destroy()
             delete static_cast< AddonsParams* >( m_pToolBar->GetItemData( nItemId ));
     }
 
+    // Hide toolbar as lazy delete can destroy the toolbar much later.
+    m_pToolBar->Hide();
     /* #i99167# removed change for i93173 since there is some weird crash */
         // #i93173# delete toolbar lazily as we can still be in one of its handlers
-        m_pToolBar->doLazyDelete();
+    m_pToolBar->doLazyDelete();
 
     Link aEmpty;
     m_pToolBar->SetSelectHdl( aEmpty );
@@ -966,8 +967,13 @@ void ToolBarManager::CreateControllers()
                 }
                 else
                 {
+                    MenuDescriptionMap::iterator it = m_aMenuMap.find( nId );
+                    if ( it == m_aMenuMap.end() )
                     xController = Reference< XStatusListener >(
                         new GenericToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aCommandURL ));
+                    else
+                        xController = Reference< XStatusListener >(
+                            new MenuToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aCommandURL, m_aModuleIdentifier, m_aMenuMap[ nId ] ));
                 }
             }
             else if ( pController )
@@ -1099,6 +1105,10 @@ sal_uInt16 ToolBarManager::ConvertStyleToToolboxItemBits( sal_Int32 nStyle )
         nItemBits |= TIB_REPEAT;
     if ( nStyle & ::com::sun::star::ui::ItemStyle::DROPDOWN_ONLY )
         nItemBits |= TIB_DROPDOWNONLY;
+    if ( nStyle & ::com::sun::star::ui::ItemStyle::TEXT )
+        nItemBits |= TIB_TEXT_ONLY;
+    if ( nStyle & ::com::sun::star::ui::ItemStyle::ICON )
+        nItemBits |= TIB_ICON_ONLY;
 
     return nItemBits;
 }
@@ -1128,8 +1138,8 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
             Reference< XUIConfigurationManagerSupplier > xSupplier( xModel, UNO_QUERY );
             if ( xSupplier.is() )
             {
-                Reference< XUIConfigurationManager > xDocUICfgMgr( xSupplier->getUIConfigurationManager(), UNO_QUERY );
-                m_xDocImageManager = Reference< XImageManager >( xDocUICfgMgr->getImageManager(), UNO_QUERY );
+                m_xDocUICfgMgr.set( xSupplier->getUIConfigurationManager(), UNO_QUERY );
+                m_xDocImageManager = Reference< XImageManager >( m_xDocUICfgMgr->getImageManager(), UNO_QUERY );
                 m_xDocImageManager->addConfigurationListener(
                                         Reference< XUIConfigurationListener >(
                                             static_cast< OWeakObject* >( this ), UNO_QUERY ));
@@ -1151,8 +1161,8 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier( m_xServiceManager->createInstance(
                                                                                     SERVICENAME_MODULEUICONFIGURATIONMANAGERSUPPLIER ),
                                                                                   UNO_QUERY );
-        Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
-        m_xModuleImageManager = Reference< XImageManager >( xUICfgMgr->getImageManager(), UNO_QUERY );
+        m_xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
+        m_xModuleImageManager = Reference< XImageManager >( m_xUICfgMgr->getImageManager(), UNO_QUERY );
         m_xModuleImageManager->addConfigurationListener( Reference< XUIConfigurationListener >(
                                                             static_cast< OWeakObject* >( this ), UNO_QUERY ));
     }
@@ -1164,6 +1174,8 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     m_aControllerMap.clear();
     m_aCommandMap.clear();
 
+    m_aMenuMap.clear();
+
     CommandInfo aCmdInfo;
     for ( sal_Int32 n = 0; n < rItemContainer->getCount(); n++ )
     {
@@ -1171,11 +1183,13 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         rtl::OUString               aCommandURL;
         rtl::OUString               aLabel;
         rtl::OUString               aHelpURL;
+        rtl::OUString               aTooltip;
         sal_uInt16                  nType( ::com::sun::star::ui::ItemType::DEFAULT );
         sal_uInt16                  nWidth( 0 );
         sal_Bool                    bIsVisible( sal_True );
         sal_uInt32                  nStyle( 0 );
 
+        Reference< XIndexAccess >   aMenuDesc;
         try
         {
             if ( rItemContainer->getByIndex( n ) >>= aProp )
@@ -1183,9 +1197,44 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                 for ( int i = 0; i < aProp.getLength(); i++ )
                 {
                     if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_COMMANDURL, ITEM_DESCRIPTOR_COMMANDURL_LEN ))
+                    {
                         aProp[i].Value >>= aCommandURL;
+                        if ( aCommandURL.compareToAscii(MENUPREFIX, RTL_CONSTASCII_LENGTH(MENUPREFIX) ) == 0  )
+                        {
+                            try
+                            {
+                                Reference< XIndexAccess > xMenuContainer;
+                                if ( m_xDocUICfgMgr.is() )
+                                    xMenuContainer  = m_xDocUICfgMgr->getSettings( aCommandURL, sal_False );
+                                if ( !xMenuContainer.is() && m_xUICfgMgr.is() )
+                                    xMenuContainer = m_xUICfgMgr->getSettings( aCommandURL, sal_False );
+                                if ( xMenuContainer.is() && xMenuContainer->getCount() )
+                                {
+                                    Sequence< PropertyValue > aProps;
+                                    // drop down menu info is currently
+                                    // the first ( and only ) menu
+                                    // in the menusettings container
+                                    xMenuContainer->getByIndex(0) >>= aProps;
+                                    for ( sal_Int32 index=0; index<aProps.getLength(); ++index )
+                                    {
+                                        if ( aProps[ index ].Name.equalsAsciiL( ITEM_DESCRIPTOR_CONTAINER, ITEM_DESCRIPTOR_CONTAINER_LEN ))
+
+                                        {
+                                            aProps[ index ].Value >>= aMenuDesc;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            catch( Exception& )
+                            {
+                            }
+                        }
+                    }
                     else if (  aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_HELPURL, ITEM_DESCRIPTOR_HELPURL_LEN ))
                         aProp[i].Value >>= aHelpURL;
+                    else if (  aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_TOOLTIP, ITEM_DESCRIPTOR_TOOLTIP_LEN ))
+                        aProp[i].Value >>= aTooltip;
                     else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_LABEL, ITEM_DESCRIPTOR_LABEL_LEN ))
                         aProp[i].Value >>= aLabel;
                     else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_TYPE, ITEM_DESCRIPTOR_TYPE_LEN ))
@@ -1203,8 +1252,13 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     ::rtl::OUString aString( RetrieveLabelFromCommand( aCommandURL ));
 
                     sal_uInt16 nItemBits = ConvertStyleToToolboxItemBits( nStyle );
+                    if ( aMenuDesc.is() )
+                        m_aMenuMap[ nId ] = aMenuDesc;
                     m_pToolBar->InsertItem( nId, aString, nItemBits );
                     m_pToolBar->SetItemCommand( nId, aCommandURL );
+                    if ( aTooltip.getLength() )
+                        m_pToolBar->SetQuickHelpText( nId, aTooltip );
+                    else
                     m_pToolBar->SetQuickHelpText( nId, aString );
                     if ( aLabel.getLength() > 0 )
                         m_pToolBar->SetItemText( nId, aLabel );

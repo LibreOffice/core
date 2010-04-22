@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlgctl3d.cxx,v $
- * $Revision: 1.20.226.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/view3d.hxx>
 #include <svx/fmmodel.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/polysc3d.hxx>
 #include <svx/sphere3d.hxx>
@@ -514,8 +511,17 @@ void Svx3DLightControl::TrySelection(Point aPosPixel)
 
         if(aResult.size())
         {
-            // take the frontmost one
-            const E3dCompoundObject* pResult = aResult[0];
+            // exclude expansion object which will be part of
+            // the hits. It's invisible, but for HitTest, it's included
+            const E3dCompoundObject* pResult = 0;
+
+            for(sal_uInt32 b(0); !pResult && b < aResult.size(); b++)
+            {
+                if(aResult[b] && aResult[b] != mpExpansionObject)
+                {
+                    pResult = aResult[b];
+                }
+            }
 
             if(pResult == mp3DObj)
             {
@@ -780,8 +786,8 @@ void Svx3DLightControl::GetPosition(double& rHor, double& rVer)
     }
     if(IsGeometrySelected())
     {
-        rHor = mfRotateY;
-        rVer = mfRotateX;
+        rHor = mfRotateY / F_PI180; // 0..360.0
+        rVer = mfRotateX / F_PI180; // -90.0..90.0
     }
 }
 
@@ -824,8 +830,8 @@ void Svx3DLightControl::SetPosition(double fHor, double fVer)
     {
         if(mfRotateX != fVer || mfRotateY != fHor)
         {
-            mfRotateX = fVer;
-            mfRotateY = fHor;
+            mfRotateX = fVer * F_PI180;
+            mfRotateY = fHor * F_PI180;
 
             if(mp3DObj)
             {

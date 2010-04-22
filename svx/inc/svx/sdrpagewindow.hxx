@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdrpagewindow.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +35,7 @@
 #include <com/sun/star/util/XModeChangeListener.hpp>
 #include <cppuhelper/implbase4.hxx>
 #include <svx/svdtypes.hxx> // fuer SdrLayerID
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tools/contnr.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include "svx/svxdllapi.h"

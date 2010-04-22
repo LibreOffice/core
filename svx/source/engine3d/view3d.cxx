@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: view3d.cxx,v $
- * $Revision: 1.32.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +38,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svxids.hrc>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/svdview.hxx>
 #include <svx/dialogs.hrc>
@@ -74,9 +71,10 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
-#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
@@ -185,9 +183,8 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
             // buld transfoprmation: translate and rotate so that given edge is
             // on x axis, them mirror in y and translate back
             const basegfx::B2DVector aEdge(aMirrorAxisB.X() - aMirrorAxisA.X(), aMirrorAxisB.Y() - aMirrorAxisA.Y());
-            basegfx::B2DHomMatrix aMatrixTransform;
-
-            aMatrixTransform.translate(-aMirrorAxisA.X(), -aMirrorAxisA.Y());
+            basegfx::B2DHomMatrix aMatrixTransform(basegfx::tools::createTranslateB2DHomMatrix(
+                -aMirrorAxisA.X(), -aMirrorAxisA.Y()));
             aMatrixTransform.rotate(-atan2(aEdge.getY(), aEdge.getX()));
             aMatrixTransform.scale(1.0, -1.0);
             aMatrixTransform.rotate(atan2(aEdge.getY(), aEdge.getX()));
@@ -208,8 +205,8 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
 
                     // if we have full overlay from selected objects, embed with 50% transparence, the
                     // transformation is added to the OverlayPrimitive2DSequenceObject
-                    drawinglayer::primitive2d::Primitive2DReference aUnifiedAlphaPrimitive2D(new drawinglayer::primitive2d::UnifiedAlphaPrimitive2D(aContent, 0.5));
-                    aContent = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedAlphaPrimitive2D, 1);
+                    drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparencePrimitive2D(new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(aContent, 0.5));
+                    aContent = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedTransparencePrimitive2D, 1);
 
                     sdr::overlay::OverlayPrimitive2DSequenceObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aContent);
 
@@ -697,7 +694,7 @@ void E3dView::ImpIsConvertTo3DPossible(SdrObject* pObj, BOOL& rAny3D,
 |* 3D-Konvertierung zu Extrude ausfuehren
 |*
 \************************************************************************/
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 void E3dView::ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj)
 {
@@ -932,9 +929,8 @@ void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, basegfx::B2DPoint aPnt1, baseg
 
                 if(fRot3D != 0.0)
                 {
-                    aLatheMat.translate(-aPnt2.getX(), -aPnt2.getY());
-                    aLatheMat.rotate(-fRot3D);
-                    aLatheMat.translate(aPnt2.getX(), aPnt2.getY());
+                    aLatheMat = basegfx::tools::createRotateAroundPoint(aPnt2, -fRot3D)
+                        * aLatheMat;
                 }
             }
 

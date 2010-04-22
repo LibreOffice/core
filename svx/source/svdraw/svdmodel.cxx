@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdmodel.cxx,v $
- * $Revision: 1.82 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +39,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 
 #include <tools/string.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/xit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xlndsit.hxx>
@@ -53,7 +50,7 @@
 #include <svx/xlnstit.hxx>
 
 #include "svditext.hxx"
-#include <svx/editeng.hxx>   // Fuer EditEngine::CreatePool()
+#include <editeng/editeng.hxx>   // Fuer EditEngine::CreatePool()
 
 #include <svx/xtable.hxx>
 
@@ -73,28 +70,28 @@
 #include "svdoutlinercache.hxx"
 
 
-#include "asiancfg.hxx"
-#include "fontitem.hxx"
-#include <svx/colritem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svtools/style.hxx>
+#include <svl/asiancfg.hxx>
+#include "editeng/fontitem.hxx"
+#include <editeng/colritem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <svl/style.hxx>
 #include <tools/bigint.hxx>
-#include <svx/numitem.hxx>
-#include <bulitem.hxx>
-#include <svx/outlobj.hxx>
-#include "forbiddencharacterstable.hxx"
-#include <svtools/zforlist.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/bulitem.hxx>
+#include <editeng/outlobj.hxx>
+#include "editeng/forbiddencharacterstable.hxx"
+#include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
 
 // #90477#
 #include <tools/tenccvt.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 // #95114#
 #include <vcl/svapp.hxx>
 #include <svx/sdr/properties/properties.hxx>
-#include <svx/eeitem.hxx>
-#include <svtools/itemset.hxx>
+#include <editeng/eeitem.hxx>
+#include <svl/itemset.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

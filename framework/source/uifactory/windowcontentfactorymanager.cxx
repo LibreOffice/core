@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: uielementfactorymanager.cxx,v $
- * $Revision: 1.10.12.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -220,6 +217,13 @@ throw (uno::Exception, uno::RuntimeException)
         // module identifier, user interface element type and name
         // SAFE
         ResetableGuard aLock( m_aLock );
+
+        if ( !m_bConfigRead )
+        {
+            m_bConfigRead = sal_True;
+            m_pConfigAccess->readConfigurationData();
+        }
+
         aImplementationName = m_pConfigAccess->getFactorySpecifierFromTypeNameModule( aType, aName, aModuleId );
         if ( aImplementationName.getLength() > 0 )
         {

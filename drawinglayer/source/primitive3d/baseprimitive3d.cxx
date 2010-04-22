@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: baseprimitive3d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.5 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -50,20 +42,18 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence BasePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        BasePrimitive3D::BasePrimitive3D()
+        :   BasePrimitive3DImplBase(m_aMutex)
         {
-            return Primitive3DSequence();
         }
 
-        BasePrimitive3D::BasePrimitive3D()
-        :   BasePrimitive3DImplBase(m_aMutex),
-            maLocalDecomposition()
+        BasePrimitive3D::~BasePrimitive3D()
         {
         }
 
         bool BasePrimitive3D::operator==( const BasePrimitive3D& rPrimitive ) const
         {
-            return (getPrimitiveID() == rPrimitive.getPrimitiveID());
+            return (getPrimitive3DID() == rPrimitive.getPrimitive3DID());
         }
 
         basegfx::B3DRange BasePrimitive3D::getB3DRange(const geometry::ViewInformation3D& rViewInformation) const
@@ -71,17 +61,9 @@ namespace drawinglayer
             return getB3DRangeFromPrimitive3DSequence(get3DDecomposition(rViewInformation), rViewInformation);
         }
 
-        Primitive3DSequence BasePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
+        Primitive3DSequence BasePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
-            ::osl::MutexGuard aGuard( m_aMutex );
-
-            if(!getLocalDecomposition().hasElements())
-            {
-                const Primitive3DSequence aNewSequence(createLocalDecomposition(rViewInformation));
-                const_cast< BasePrimitive3D* >(this)->setLocalDecomposition(aNewSequence);
-            }
-
-            return getLocalDecomposition();
+            return Primitive3DSequence();
         }
 
         Primitive3DSequence SAL_CALL BasePrimitive3D::getDecomposition( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException )
@@ -94,6 +76,38 @@ namespace drawinglayer
         {
             const geometry::ViewInformation3D aViewInformation(rViewParameters);
             return basegfx::unotools::rectangle3DFromB3DRectangle(getB3DRange(aViewInformation));
+        }
+    } // end of namespace primitive3d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace primitive3d
+    {
+        Primitive3DSequence BufferedDecompositionPrimitive3D::create3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        {
+            return Primitive3DSequence();
+        }
+
+        BufferedDecompositionPrimitive3D::BufferedDecompositionPrimitive3D()
+        :   BasePrimitive3D(),
+            maBuffered3DDecomposition()
+        {
+        }
+
+        Primitive3DSequence BufferedDecompositionPrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+
+            if(!getBuffered3DDecomposition().hasElements())
+            {
+                const Primitive3DSequence aNewSequence(create3DDecomposition(rViewInformation));
+                const_cast< BufferedDecompositionPrimitive3D* >(this)->setBuffered3DDecomposition(aNewSequence);
+            }
+
+            return getBuffered3DDecomposition();
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

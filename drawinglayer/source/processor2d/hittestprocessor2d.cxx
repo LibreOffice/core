@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: contourextractor2d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.6 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -43,11 +35,14 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
-#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
+#include <basegfx/matrix/b3dhommatrix.hxx>
+#include <drawinglayer/processor3d/cutfindprocessor3d.hxx>
+#include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
+#include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -64,7 +59,7 @@ namespace drawinglayer
             mfDiscreteHitTolerance(0.0),
             mbHit(false),
             mbHitToleranceUsed(false),
-            mbUseHitTestPrimitiveContent(true),
+            mbUseInvisiblePrimitiveContent(true),
             mbHitTextOnly(bHitTextOnly)
         {
             // init hit tolerance
@@ -164,6 +159,121 @@ namespace drawinglayer
             return bRetval;
         }
 
+        void HitTestProcessor2D::check3DHit(const primitive2d::ScenePrimitive2D& rCandidate)
+        {
+            // calculate relative point in unified 2D scene
+            const basegfx::B2DPoint aLogicHitPosition(getViewInformation2D().getInverseObjectToViewTransformation() * getDiscreteHitPosition());
+
+            // use bitmap check in ScenePrimitive2D
+            bool bTryFastResult(false);
+
+            if(rCandidate.tryToCheckLastVisualisationDirectHit(aLogicHitPosition, bTryFastResult))
+            {
+                mbHit = bTryFastResult;
+            }
+            else
+            {
+                basegfx::B2DHomMatrix aInverseSceneTransform(rCandidate.getObjectTransformation());
+                aInverseSceneTransform.invert();
+                const basegfx::B2DPoint aRelativePoint(aInverseSceneTransform * aLogicHitPosition);
+
+                // check if test point is inside scene's unified area at all
+                if(aRelativePoint.getX() >= 0.0 && aRelativePoint.getX() <= 1.0
+                    && aRelativePoint.getY() >= 0.0 && aRelativePoint.getY() <= 1.0)
+                {
+                    // get 3D view information
+                    const geometry::ViewInformation3D& rObjectViewInformation3D = rCandidate.getViewInformation3D();
+
+                    // create HitPoint Front and Back, transform to object coordinates
+                    basegfx::B3DHomMatrix aViewToObject(rObjectViewInformation3D.getObjectToView());
+                    aViewToObject.invert();
+                    const basegfx::B3DPoint aFront(aViewToObject * basegfx::B3DPoint(aRelativePoint.getX(), aRelativePoint.getY(), 0.0));
+                    const basegfx::B3DPoint aBack(aViewToObject * basegfx::B3DPoint(aRelativePoint.getX(), aRelativePoint.getY(), 1.0));
+
+                    if(!aFront.equal(aBack))
+                    {
+                        const primitive3d::Primitive3DSequence& rPrimitives = rCandidate.getChildren3D();
+
+                        if(rPrimitives.hasElements())
+                        {
+                            // make BoundVolume empty and overlapping test for speedup
+                            const basegfx::B3DRange aObjectRange(
+                                drawinglayer::primitive3d::getB3DRangeFromPrimitive3DSequence(
+                                    rPrimitives, rObjectViewInformation3D));
+
+                            if(!aObjectRange.isEmpty())
+                            {
+                                const basegfx::B3DRange aFrontBackRange(aFront, aBack);
+
+                                if(aObjectRange.overlaps(aFrontBackRange))
+                                {
+                                    // bound volumes hit, geometric cut tests needed
+                                    drawinglayer::processor3d::CutFindProcessor aCutFindProcessor(
+                                        rObjectViewInformation3D,
+                                        aFront,
+                                        aBack,
+                                        true);
+                                    aCutFindProcessor.process(rPrimitives);
+
+                                    mbHit = (0 != aCutFindProcessor.getCutPoints().size());
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // This is needed to check hit with 3D shadows, too. HitTest is without shadow
+                // to keep compatible with previous versions. Keeping here as reference
+                //
+                // if(!getHit())
+                // {
+                //     // if scene has shadow, check hit with shadow, too
+                //     const primitive2d::Primitive2DSequence xExtracted2DSceneShadow(rCandidate.getShadow2D(getViewInformation2D()));
+                //
+                //     if(xExtracted2DSceneShadow.hasElements())
+                //     {
+                //         // proccess extracted 2D content
+                //         process(xExtracted2DSceneShadow);
+                //     }
+                // }
+
+                if(!getHit())
+                {
+                    // empty 3D scene; Check for border hit
+                    basegfx::B2DPolygon aOutline(basegfx::tools::createUnitPolygon());
+                    aOutline.transform(rCandidate.getObjectTransformation());
+
+                    mbHit = checkHairlineHitWithTolerance(aOutline, getDiscreteHitTolerance());
+                }
+
+                // This is what the previous version did. Keeping it here for reference
+                //
+                // // 2D Scene primitive containing 3D stuff; extract 2D contour in world coordinates
+                // // This may be refined later to an own 3D HitTest renderer which processes the 3D
+                // // geometry directly
+                // const primitive2d::ScenePrimitive2D& rScenePrimitive2DCandidate(static_cast< const primitive2d::ScenePrimitive2D& >(rCandidate));
+                // const primitive2d::Primitive2DSequence xExtracted2DSceneGeometry(rScenePrimitive2DCandidate.getGeometry2D());
+                // const primitive2d::Primitive2DSequence xExtracted2DSceneShadow(rScenePrimitive2DCandidate.getShadow2D(getViewInformation2D()));
+                //
+                // if(xExtracted2DSceneGeometry.hasElements() || xExtracted2DSceneShadow.hasElements())
+                // {
+                //     // proccess extracted 2D content
+                //     process(xExtracted2DSceneGeometry);
+                //     process(xExtracted2DSceneShadow);
+                // }
+                // else
+                // {
+                //     // empty 3D scene; Check for border hit
+                //     const basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
+                //     if(!aRange.isEmpty())
+                //     {
+                //          const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+                //          mbHit = checkHairlineHitWithTolerance(aOutline, getDiscreteHitTolerance());
+                //     }
+                // }
+            }
+        }
+
         void HitTestProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
             if(getHit())
@@ -172,7 +282,7 @@ namespace drawinglayer
                 return;
             }
 
-            switch(rCandidate.getPrimitiveID())
+            switch(rCandidate.getPrimitive2DID())
             {
                 case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D :
                 {
@@ -303,10 +413,10 @@ namespace drawinglayer
 
                     break;
                 }
-                case PRIMITIVE2D_ID_ALPHAPRIMITIVE2D :
+                case PRIMITIVE2D_ID_TRANSPARENCEPRIMITIVE2D :
                 {
                     // sub-transparence group
-                    const primitive2d::AlphaPrimitive2D& rTransCandidate(static_cast< const primitive2d::AlphaPrimitive2D& >(rCandidate));
+                    const primitive2d::TransparencePrimitive2D& rTransCandidate(static_cast< const primitive2d::TransparencePrimitive2D& >(rCandidate));
 
                     // Currently the transparence content is not taken into account; only
                     // the children are recursively checked for hit. This may be refined for
@@ -334,25 +444,9 @@ namespace drawinglayer
                 {
                     if(!getHitTextOnly())
                     {
-                        // 2D Scene primitive containing 3D stuff; extract 2D contour in world coordinates
-                        // This may be refined later to an own 3D HitTest renderer which processes the 3D
-                        // geometry directly
-                        const primitive2d::ScenePrimitive2D& rScenePrimitive2DCandidate(static_cast< const primitive2d::ScenePrimitive2D& >(rCandidate));
-                        const primitive2d::Primitive2DSequence xExtracted2DSceneGeometry(rScenePrimitive2DCandidate.getGeometry2D(getViewInformation2D()));
-
-                        if(xExtracted2DSceneGeometry.hasElements())
-                        {
-                            // proccess extracted 2D content
-                            process(xExtracted2DSceneGeometry);
-                        }
-                        else
-                        {
-                            // empty 3D scene; Check for border hit
-                            const basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
-                            basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
-
-                            mbHit = checkHairlineHitWithTolerance(aOutline, getDiscreteHitTolerance());
-                        }
+                        const primitive2d::ScenePrimitive2D& rScenePrimitive2D(
+                            static_cast< const primitive2d::ScenePrimitive2D& >(rCandidate));
+                        check3DHit(rScenePrimitive2D);
                     }
 
                     break;
@@ -365,18 +459,70 @@ namespace drawinglayer
                     // ignorable primitives
                     break;
                 }
+                case PRIMITIVE2D_ID_SHADOWPRIMITIVE2D :
+                {
+                    // Ignore shadows; we do not want to have shadows hittable.
+                    // Remove this one to make shadows hittable on demand.
+                    break;
+                }
                 case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D :
                 case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D :
                 {
                     // for text use the BoundRect of the primitive itself
                     const basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
-                    basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
 
-                    mbHit = checkFillHitWithTolerance(basegfx::B2DPolyPolygon(aOutline), getDiscreteHitTolerance());
+                    if(!aRange.isEmpty())
+                    {
+                        const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+                        mbHit = checkFillHitWithTolerance(basegfx::B2DPolyPolygon(aOutline), getDiscreteHitTolerance());
+                    }
 
                     break;
                 }
                 case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
+                {
+                    if(!getHitTextOnly())
+                    {
+                        // The recently added BitmapEx::GetTransparency() makes it easy to extend
+                        // the BitmapPrimitive2D HitTest to take the contained BotmapEx and it's
+                        // transparency into account
+                        const basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
+
+                        if(!aRange.isEmpty())
+                        {
+                            const primitive2d::BitmapPrimitive2D& rBitmapCandidate(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
+                            const BitmapEx& rBitmapEx = rBitmapCandidate.getBitmapEx();
+                            const Size& rSizePixel(rBitmapEx.GetSizePixel());
+
+                            if(rSizePixel.Width() && rSizePixel.Height())
+                            {
+                                basegfx::B2DHomMatrix aBackTransform(
+                                    getViewInformation2D().getObjectToViewTransformation() *
+                                    rBitmapCandidate.getTransform());
+                                aBackTransform.invert();
+
+                                const basegfx::B2DPoint aRelativePoint(aBackTransform * getDiscreteHitPosition());
+                                const basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
+
+                                if(aUnitRange.isInside(aRelativePoint))
+                                {
+                                    const sal_Int32 nX(basegfx::fround(aRelativePoint.getX() * rSizePixel.Width()));
+                                    const sal_Int32 nY(basegfx::fround(aRelativePoint.getY() * rSizePixel.Height()));
+
+                                    mbHit = (0xff != rBitmapEx.GetTransparency(nX, nY));
+                                }
+                            }
+                            else
+                            {
+                                // fallback to standard HitTest
+                                const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+                                mbHit = checkFillHitWithTolerance(basegfx::B2DPolyPolygon(aOutline), getDiscreteHitTolerance());
+                            }
+                        }
+                    }
+
+                    break;
+                }
                 case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
                 case PRIMITIVE2D_ID_CONTROLPRIMITIVE2D :
                 case PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D :
@@ -389,25 +535,33 @@ namespace drawinglayer
                         // will be used for HitTest currently.
                         //
                         // This may be refined in the future, e.g:
-                        // - For Bitamps, the mask and/or alpha information may be used
+                        // - For Bitamps, the mask and/or transparence information may be used
                         // - For MetaFiles, the MetaFile content may be used
                         const basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
-                        basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
 
-                        mbHit = checkFillHitWithTolerance(basegfx::B2DPolyPolygon(aOutline), getDiscreteHitTolerance());
+                        if(!aRange.isEmpty())
+                        {
+                            const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+                            mbHit = checkFillHitWithTolerance(basegfx::B2DPolyPolygon(aOutline), getDiscreteHitTolerance());
+                        }
                     }
 
                     break;
                 }
-                case PRIMITIVE2D_ID_HITTESTPRIMITIVE2D :
+                case PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D :
                 {
-                    // HitTest primitive; the default decomposition would return an empty seqence,
+                    // HiddenGeometryPrimitive2D; the default decomposition would return an empty seqence,
                     // so force this primitive to process it's children directly if the switch is set
                     // (which is the default). Else, ignore invisible content
-                    if(getUseHitTestPrimitiveContent())
+                    const primitive2d::HiddenGeometryPrimitive2D& rHiddenGeometry(static_cast< const primitive2d::HiddenGeometryPrimitive2D& >(rCandidate));
+                       const primitive2d::Primitive2DSequence& rChildren = rHiddenGeometry.getChildren();
+
+                    if(rChildren.hasElements())
                     {
-                        const primitive2d::HitTestPrimitive2D& rHitTestCandidate(static_cast< const primitive2d::HitTestPrimitive2D& >(rCandidate));
-                        process(rHitTestCandidate.getChildren());
+                        if(getUseInvisiblePrimitiveContent())
+                        {
+                            process(rChildren);
+                        }
                     }
 
                     break;

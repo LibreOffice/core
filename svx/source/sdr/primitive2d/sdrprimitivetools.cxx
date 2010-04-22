@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: primitivefactory2d.cxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,10 +29,6 @@
 #include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
 #include <vcl/bmpacc.hxx>
 #include <osl/mutex.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
-#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
 #include <vcl/lazydelete.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -177,19 +169,6 @@ namespace drawinglayer
             return aRetVal.get() ? *aRetVal.get() : BitmapEx();
         }
 
-        // #i99123#
-        Primitive2DReference createFallbackHitTestPrimitive(const basegfx::B2DHomMatrix& rMatrix)
-        {
-            // create PolygonHairlinePrimitive2D
-            basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
-            aUnitOutline.transform(rMatrix);
-            const basegfx::BColor aBlack(0.0, 0.0, 0.0);
-            const Primitive2DReference xReference(new PolygonHairlinePrimitive2D(aUnitOutline, aBlack));
-
-            // create HitTestPrimitive2D with it
-            const Primitive2DSequence xSequence(&xReference, 1);
-            return Primitive2DReference(new HitTestPrimitive2D(xSequence));
-        }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 

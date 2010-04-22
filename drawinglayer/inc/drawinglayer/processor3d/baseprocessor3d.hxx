@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: baseprocessor3d.hxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.6 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:30:18 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -45,6 +37,13 @@ namespace drawinglayer
 {
     namespace processor3d
     {
+        /** BaseProcessor3D class
+
+            Baseclass for all C++ implementations of instances which process
+            primitives.
+
+            Please have a look at baseprocessor2d.hxx for more comments.
+         */
         class BaseProcessor3D
         {
         private:
@@ -56,9 +55,10 @@ namespace drawinglayer
                 maViewInformation3D = rViewInformation3D;
             }
 
-            // as tooling, the process() implementation takes over API handling and calls this
-            // virtual render method when the primitive implementation is BasePrimitive3D-based.
-            // Default implementation does nothing
+            /*  as tooling, the process() implementation takes over API handling and calls this
+                virtual render method when the primitive implementation is BasePrimitive3D-based.
+                Default implementation does nothing
+             */
             virtual void processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate);
 
         public:
@@ -80,6 +80,13 @@ namespace drawinglayer
 {
     namespace processor3d
     {
+        /** CollectingProcessor3D class
+
+            A processor which just collects all primitives given to it in
+            process(..) calls to maPrimitive3DSequence. This can e.g. be used to
+            hand around as instance over various methods where every called
+            method can add graphic content to it.
+         */
         class CollectingProcessor3D : public BaseProcessor3D
         {
         private:
@@ -89,16 +96,16 @@ namespace drawinglayer
             CollectingProcessor3D(const geometry::ViewInformation3D& rViewInformation);
             virtual ~CollectingProcessor3D();
 
-            // the central processing method
+            /// the central processing method
             virtual void process(const primitive3d::Primitive3DSequence& rSource);
 
-            // helpers for adding to local sequence
+            /// helpers for adding to local sequence
             void appendPrimitive3DReference(const primitive3d::Primitive3DReference& rSource)
             {
                 primitive3d::appendPrimitive3DReferenceToPrimitive3DSequence(maPrimitive3DSequence, rSource);
             }
 
-            // data access and reset
+            /// data access and reset
             const primitive3d::Primitive3DSequence& getPrimitive3DSequence() const { return maPrimitive3DSequence; }
             void reset() { maPrimitive3DSequence = primitive3d::Primitive3DSequence(); }
         };

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docrecovery.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +62,7 @@
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <rtl/bootstrap.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <unotools/localfilehelper.hxx>
 
 #define RET_BACK    100
@@ -917,9 +914,7 @@ void RecovDocListEntry::Paint(const Point&       aPos   ,
     const String*       pTxt  = 0;
           RecovDocList* pList = static_cast< RecovDocList* >(&aDevice);
 
-    Wallpaper aBackground = aDevice.GetBackground();
-    Color     aColor      = aBackground.GetColor();
-    BOOL      bHC         = aColor.IsDark();
+    BOOL      bHC         = aDevice.GetSettings().GetStyleSettings().GetHighContrastMode();
 
     TURLInfo* pInfo  = (TURLInfo*)pEntry->GetUserData();
     switch(pInfo->RecoveryState)

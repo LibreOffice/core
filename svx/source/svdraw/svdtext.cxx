@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdtext.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,12 +32,12 @@
 
 #include "svx/svdotext.hxx"
 #include "svx/svdetc.hxx"
-#include "svx/outlobj.hxx"
+#include "editeng/outlobj.hxx"
 #include "svx/svdoutl.hxx"
 #include "svx/svdmodel.hxx"
-#include "svx/fhgtitem.hxx"
-#include <svx/eeitem.hxx>
-#include <svtools/itemset.hxx>
+#include "editeng/fhgtitem.hxx"
+#include <editeng/eeitem.hxx>
+#include <svl/itemset.hxx>
 
 SdrText::SdrText( SdrTextObj& rObject, OutlinerParaObject* pOutlinerParaObject /* = 0 */ )
 : mpOutlinerParaObject( pOutlinerParaObject )

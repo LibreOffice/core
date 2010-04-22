@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: objmisc.cxx,v $
- * $Revision: 1.102.104.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,12 +29,12 @@
 #include "precompiled_sfx2.hxx"
 
 #ifndef _INETMSG_HXX //autogen
-#include <svtools/inetmsg.hxx>
+#include <svl/inetmsg.hxx>
 #endif
 #include <tools/diagnose_ex.h>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 #include <svtools/svparser.hxx> // SvKeyValue
 #include <vos/mutex.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -80,14 +77,14 @@
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/configurationhelper.hxx>
 
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
-#include <com/sun/star/task/DocumentMacroConfirmationRequest2.hpp>
+#include <com/sun/star/task/DocumentMacroConfirmationRequest.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
@@ -111,12 +108,12 @@ using namespace ::com::sun::star::container;
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <tools/inetmime.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/inettype.hxx>
-#include <svtools/sharecontrolfile.hxx>
+#include <svl/inettype.hxx>
+#include <svl/sharecontrolfile.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <vcl/svapp.hxx>
@@ -408,16 +405,10 @@ void SfxObjectShell::ModifyChanged()
         return;
 
     {DBG_CHKTHIS(SfxObjectShell, 0);}
-    SfxObjectShell *pDoc;
-    for ( pDoc = SfxObjectShell::GetFirst(); pDoc;
-          pDoc = SfxObjectShell::GetNext(*pDoc) )
-        if( pDoc->IsModified() )
-            break;
 
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     if ( pViewFrame )
         pViewFrame->GetBindings().Invalidate( SID_SAVEDOCS );
-
 
     Invalidate( SID_SIGNATURE );
     Invalidate( SID_MACRO_SIGNATURE );
@@ -490,6 +481,13 @@ sal_Bool SfxObjectShell::IsInModalMode() const
 {
     return pImp->bModalMode || pImp->bRunningMacro;
 }
+
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+sal_Bool SfxObjectShell::AcceptStateUpdate() const
+{
+    return !IsInModalMode();
+}
+//-->Added by PengYunQuan for Validity Cell Range Picker
 
 //-------------------------------------------------------------------------
 
@@ -1130,7 +1128,7 @@ void SfxObjectShell::SetProgress_Impl
 void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
 {
     SfxApplication* pSfxApp = SFX_APP();
-    if ( !pSfxApp->IsDowning() && !IsLoading() && pFrame && !pFrame->GetFrame()->IsClosing_Impl() )
+    if ( !pSfxApp->IsDowning() && !IsLoading() && pFrame && !pFrame->GetFrame().IsClosing_Impl() )
     {
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
         if ( !pHiddenItem || !pHiddenItem->GetValue() )
@@ -1161,7 +1159,6 @@ void SfxObjectShell::RegisterTransfer( SfxMedium& rMedium )
     laden, muessen an der zugehoerigen SfxObjectShell angemeldet
     werden. So kann dokumentweise abgebrochen werden.  */
 {
-    rMedium.SetCancelManager_Impl( GetMedium()->GetCancelManager_Impl() );
     rMedium.SetReferer( GetMedium()->GetName() );
 }
 
@@ -1433,8 +1430,7 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
             }
         }
 
-        pImp->bInitialized = sal_True;
-        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_LOADFINISHED, GlobalEventConfig::GetEventName(STR_EVENT_LOADFINISHED), this ) );
+        SetInitialized_Impl( false );
 
         // Title is not available until loading has finished
         Broadcast( SfxSimpleHint( SFX_HINT_TITLECHANGED ) );
@@ -1553,7 +1549,7 @@ void SfxObjectShell::PositionView_Impl()
 
 sal_Bool SfxObjectShell::IsLoading() const
 /*  [Beschreibung ]
-    Wurde bereits FinishedLoading aufgerufeb? */
+    Has FinishedLoading been called? */
 {
     return !( pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT );
 }
@@ -1565,7 +1561,6 @@ void SfxObjectShell::CancelTransfers()
     Hier koennen Transfers gecanceled werden, die nicht mit
     RegisterTransfer registiert wurden */
 {
-    GetMedium()->CancelTransfers();
     if( ( pImp->nLoadedFlags & SFX_LOADED_ALL ) != SFX_LOADED_ALL )
     {
         AbortImport();
@@ -2024,12 +2019,6 @@ void SfxObjectShell::SetHeaderAttributesForSourceViewHack()
         ->SetAttributes();
 }
 
-void SfxObjectShell::StartLoading_Impl()
-{
-    pImp->nLoadedFlags = 0;
-    pImp->bModelInitialized = sal_False;
-}
-
 sal_Bool SfxObjectShell::IsPreview() const
 {
     if ( !pMedium )
@@ -2105,9 +2094,9 @@ void SfxObjectShell::SetWaitCursor( BOOL bSet ) const
     for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this ); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, this ) )
     {
         if ( bSet )
-            pFrame->GetFrame()->GetWindow().EnterWait();
+            pFrame->GetFrame().GetWindow().EnterWait();
         else
-            pFrame->GetFrame()->GetWindow().LeaveWait();
+            pFrame->GetFrame().GetWindow().LeaveWait();
     }
 }
 
@@ -2145,13 +2134,11 @@ Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
 {
     Window* pWindow = 0;
     SfxItemSet* pSet = pLoadingMedium ? pLoadingMedium->GetItemSet() : GetMedium()->GetItemSet();
-    SFX_ITEMSET_ARG( pSet, pUnoItem, SfxUnoAnyItem, SID_FILLFRAME, FALSE );
+    SFX_ITEMSET_ARG( pSet, pUnoItem, SfxUnoFrameItem, SID_FILLFRAME, FALSE );
     if ( pUnoItem )
     {
-        uno::Reference < frame::XFrame > xFrame;
-        pUnoItem->GetValue() >>= xFrame;
-        if ( xFrame.is() )
-            pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+        uno::Reference < frame::XFrame > xFrame( pUnoItem->GetFrame() );
+        pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
     }
 
     if ( !pWindow )
@@ -2169,7 +2156,7 @@ Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
                 // get any visible frame
                 pView = SfxViewFrame::GetFirst(this);
             if ( pView )
-                pFrame = pView->GetFrame();
+                pFrame = &pView->GetFrame();
         }
 
         if ( pFrame )
@@ -2238,7 +2225,7 @@ BOOL SfxObjectShell::IsInPlaceActive()
         return FALSE;
 
     SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
-    return pFrame && pFrame->GetFrame()->IsInPlace();
+    return pFrame && pFrame->GetFrame().IsInPlace();
 }
 
 BOOL SfxObjectShell::IsUIActive()
@@ -2247,7 +2234,7 @@ BOOL SfxObjectShell::IsUIActive()
         return FALSE;
 
     SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
-    return pFrame && pFrame->GetFrame()->IsInPlace() && pFrame->GetFrame()->GetWorkWindow_Impl()->IsVisible_Impl();
+    return pFrame && pFrame->GetFrame().IsInPlace() && pFrame->GetFrame().GetWorkWindow_Impl()->IsVisible_Impl();
 }
 
 void SfxObjectShell::UIActivate( BOOL )
@@ -2451,9 +2438,9 @@ sal_Bool SfxObjectShell_Impl::hasTrustedScriptingSignature( sal_Bool bAllowUIToA
 
                         if ( xInteraction.is() )
                         {
-                            task::DocumentMacroConfirmationRequest2 aRequest;
+                            task::DocumentMacroConfirmationRequest aRequest;
                             aRequest.DocumentURL = getDocumentLocation();
-                            aRequest.DocumentZipStorage = rDocShell.GetMedium()->GetZipStorageToSign_Impl();
+                            aRequest.DocumentStorage = rDocShell.GetMedium()->GetZipStorageToSign_Impl();
                             aRequest.DocumentSignatureInformation = aInfo;
                             aRequest.DocumentVersion = aVersion;
                             aRequest.Classification = task::InteractionClassification_QUERY;
@@ -2531,12 +2518,20 @@ void SfxObjectShell::StoreLog()
 
     if ( pImp->m_xLogRing.is() )
     {
-        ::rtl::OUString aFileURL =
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}" ) );
+#ifdef WNT
+        ::rtl::OUString aFileURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}" ) );
+#else
+        ::rtl::OUString aFileURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}" ) );
+#endif
+
         ::rtl::Bootstrap::expandMacros( aFileURL );
 
-        ::rtl::OUString aBuildID =
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/setup.ini:buildid}" ) );
+#ifdef WNT
+        ::rtl::OUString aBuildID = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/setup.ini:buildid}" ) );
+#else
+        ::rtl::OUString aBuildID = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/setuprc:buildid}" ) );
+#endif
+
         ::rtl::Bootstrap::expandMacros( aBuildID );
 
         if ( aFileURL.getLength() )

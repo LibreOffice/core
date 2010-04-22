@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: textureprimitive3d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.9 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -38,6 +30,7 @@
 
 #include <drawinglayer/primitive3d/textureprimitive3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
+#include <basegfx/color/bcolor.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -81,7 +74,34 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence UnifiedAlphaTexturePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        UnifiedTransparenceTexturePrimitive3D::UnifiedTransparenceTexturePrimitive3D(
+            double fTransparence,
+            const Primitive3DSequence& rChildren)
+        :   TexturePrimitive3D(rChildren, basegfx::B2DVector(), false, false),
+            mfTransparence(fTransparence)
+        {
+        }
+
+        bool UnifiedTransparenceTexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
+        {
+            if(TexturePrimitive3D::operator==(rPrimitive))
+            {
+                const UnifiedTransparenceTexturePrimitive3D& rCompare = (UnifiedTransparenceTexturePrimitive3D&)rPrimitive;
+
+                return (getTransparence() == rCompare.getTransparence());
+            }
+
+            return false;
+        }
+
+        basegfx::B3DRange UnifiedTransparenceTexturePrimitive3D::getB3DRange(const geometry::ViewInformation3D& rViewInformation) const
+        {
+            // do not use the fallback to decomposition here since for a correct BoundRect we also
+            // need invisible (1.0 == getTransparence()) geometry; these would be deleted in the decomposition
+            return getB3DRangeFromPrimitive3DSequence(getChildren(), rViewInformation);
+        }
+
+        Primitive3DSequence UnifiedTransparenceTexturePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             if(0.0 == getTransparence())
             {
@@ -90,10 +110,10 @@ namespace drawinglayer
             }
             else if(getTransparence() > 0.0 && getTransparence() < 1.0)
             {
-                // create AlphaTexturePrimitive3D with fixed transparence as replacement
+                // create TransparenceTexturePrimitive3D with fixed transparence as replacement
                 const basegfx::BColor aGray(getTransparence(), getTransparence(), getTransparence());
                 const attribute::FillGradientAttribute aFillGradient(attribute::GRADIENTSTYLE_LINEAR, 0.0, 0.0, 0.0, 0.0, aGray, aGray, 1);
-                const Primitive3DReference xRef(new AlphaTexturePrimitive3D(aFillGradient, getChildren(), getTextureSize()));
+                const Primitive3DReference xRef(new TransparenceTexturePrimitive3D(aFillGradient, getChildren(), getTextureSize()));
                 return Primitive3DSequence(&xRef, 1L);
             }
             else
@@ -103,28 +123,8 @@ namespace drawinglayer
             }
         }
 
-        UnifiedAlphaTexturePrimitive3D::UnifiedAlphaTexturePrimitive3D(
-            double fTransparence,
-            const Primitive3DSequence& rChildren)
-        :   TexturePrimitive3D(rChildren, basegfx::B2DVector(), false, false),
-            mfTransparence(fTransparence)
-        {
-        }
-
-        bool UnifiedAlphaTexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
-        {
-            if(TexturePrimitive3D::operator==(rPrimitive))
-            {
-                const UnifiedAlphaTexturePrimitive3D& rCompare = (UnifiedAlphaTexturePrimitive3D&)rPrimitive;
-
-                return (getTransparence() == rCompare.getTransparence());
-            }
-
-            return false;
-        }
-
         // provide unique ID
-        ImplPrimitrive3DIDBlock(UnifiedAlphaTexturePrimitive3D, PRIMITIVE3D_ID_UNIFIEDALPHATEXTUREPRIMITIVE3D)
+        ImplPrimitrive3DIDBlock(UnifiedTransparenceTexturePrimitive3D, PRIMITIVE3D_ID_UNIFIEDTRANSPARENCETEXTUREPRIMITIVE3D)
 
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
@@ -135,11 +135,6 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence GradientTexturePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
-        {
-            return getChildren();
-        }
-
         GradientTexturePrimitive3D::GradientTexturePrimitive3D(
             const attribute::FillGradientAttribute& rGradient,
             const Primitive3DSequence& rChildren,
@@ -175,18 +170,13 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence BitmapTexturePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
-        {
-            return getChildren();
-        }
-
         BitmapTexturePrimitive3D::BitmapTexturePrimitive3D(
-            const attribute::FillBitmapAttribute& rBitmap,
+            const attribute::FillBitmapAttribute& rFillBitmapAttribute,
             const Primitive3DSequence& rChildren,
             const basegfx::B2DVector& rTextureSize,
             bool bModulate, bool bFilter)
         :   TexturePrimitive3D(rChildren, rTextureSize, bModulate, bFilter),
-            maBitmap(rBitmap)
+            maFillBitmapAttribute(rFillBitmapAttribute)
         {
         }
 
@@ -196,7 +186,7 @@ namespace drawinglayer
             {
                 const BitmapTexturePrimitive3D& rCompare = (BitmapTexturePrimitive3D&)rPrimitive;
 
-                return (getBitmap() == rCompare.getBitmap());
+                return (getFillBitmapAttribute() == rCompare.getFillBitmapAttribute());
             }
 
             return false;
@@ -214,7 +204,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        AlphaTexturePrimitive3D::AlphaTexturePrimitive3D(
+        TransparenceTexturePrimitive3D::TransparenceTexturePrimitive3D(
             const attribute::FillGradientAttribute& rGradient,
             const Primitive3DSequence& rChildren,
             const basegfx::B2DVector& rTextureSize)
@@ -222,13 +212,13 @@ namespace drawinglayer
         {
         }
 
-        bool AlphaTexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
+        bool TransparenceTexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
             return (GradientTexturePrimitive3D::operator==(rPrimitive));
         }
 
         // provide unique ID
-        ImplPrimitrive3DIDBlock(AlphaTexturePrimitive3D, PRIMITIVE3D_ID_ALPHATEXTUREPRIMITIVE3D)
+        ImplPrimitrive3DIDBlock(TransparenceTexturePrimitive3D, PRIMITIVE3D_ID_TRANSPARENCETEXTUREPRIMITIVE3D)
 
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: adoimp.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -157,8 +154,10 @@ DataTypeEnum ADOS::MapJdbc2ADOType(sal_Int32 _nType,sal_Int32 _nJetEngine)
         case DataType::BIT:             return adBoolean;           break;
         case DataType::BINARY:          return adBinary;            break;
         case DataType::VARCHAR:         return adVarWChar;          break;
+        case DataType::CLOB:
         case DataType::LONGVARCHAR:     return adLongVarWChar;      break;
         case DataType::VARBINARY:       return adVarBinary;         break;
+        case DataType::BLOB:
         case DataType::LONGVARBINARY:   return adLongVarBinary;     break;
         case DataType::CHAR:            return adWChar;             break;
         case DataType::TINYINT:         return isJetEngine(_nJetEngine) ? adUnsignedTinyInt : adTinyInt;break;

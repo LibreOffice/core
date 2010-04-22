@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.21 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -54,6 +50,7 @@ SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 SHL1STDLIBS= \
         $(TOOLSLIB) 			\
         $(SVTOOLLIB)			\
+                $(SVLLIB) \
         $(UNOTOOLSLIB)			\
         $(COMPHELPERLIB) 		\
         $(CPPUHELPERLIB) 		\
@@ -90,6 +87,7 @@ SHL2TARGET=$(TARGET2)$(DLLPOSTFIX)
 SHL2STDLIBS= \
         $(SFXLIB)				\
         $(SVTOOLLIB)			\
+        $(SVLLIB)  \
         $(VCLLIB)				\
         $(UNOTOOLSLIB)			\
         $(TOOLSLIB)				\

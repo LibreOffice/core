@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: setup.cpp,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,6 +73,7 @@
 #define PARAM_PATCH         TEXT( " /update " )
 #define PARAM_REG_ALL_MSO_TYPES TEXT( "REGISTER_ALL_MSO_TYPES=1 " )
 #define PARAM_REG_NO_MSO_TYPES  TEXT( "REGISTER_NO_MSO_TYPES=1 " )
+#define PARAM_SILENTINSTALL     TEXT( " /QB" )
 
 #define PARAM_RUNNING           TEXT( "ignore_running" )
 #define CMDLN_REG_ALL_MSO_TYPES TEXT( "msoreg=1" )
@@ -84,6 +82,11 @@
 #define MSI_DLL             TEXT( "msi.dll" )
 #define ADVAPI32_DLL        TEXT( "advapi32.dll" )
 #define PROFILE_NAME        TEXT( "setup.ini" )
+
+#define RUNTIME_X64_NAME    TEXT( "redist\\vcredist_x64.exe" )
+#define RUNTIME_X86_NAME    TEXT( "redist\\vcredist_x86.exe" )
+#define PRODUCTCODE_X86     TEXT( "{E503B4BF-F7BB-3D5F-8BC8-F694B1CFF942}" )
+#define PRODUCTCODE_X64     TEXT( "{350AA351-21FA-3270-8B7A-835434E766AD}" )
 
 #define MSIAPI_DllGetVersion     "DllGetVersion"
 #define ADVAPI32API_CheckTokenMembership "CheckTokenMembership"
@@ -1894,6 +1897,137 @@ boolean SetupAppX::IsPatchInstalled( TCHAR* pBaseDir, TCHAR* pFileName )
     else return false;
 
     return false;
+}
+
+//--------------------------------------------------------------------------
+boolean SetupAppX::InstallRuntimes( TCHAR *sProductCode, TCHAR *sRuntimePath )
+{
+    INSTALLSTATE  nRet = MsiQueryProductState( sProductCode );
+    OutputDebugStringFormat( TEXT( "MsiQueryProductState returned <%d>\r\n" ), nRet );
+    if ( nRet == INSTALLSTATE_DEFAULT )
+        return true;
+
+    Log( TEXT( " Will install runtime <%s>\r\n" ), sRuntimePath );
+    OutputDebugStringFormat( TEXT( " Will install runtime <%s>\r\n" ), sRuntimePath );
+
+    STARTUPINFO         aSUI;
+    PROCESS_INFORMATION aPI;
+
+    ZeroMemory( (void*)&aPI, sizeof( PROCESS_INFORMATION ) );
+    ZeroMemory( (void*)&aSUI, sizeof( STARTUPINFO ) );
+
+    aSUI.cb          = sizeof(STARTUPINFO);
+    aSUI.dwFlags     = STARTF_USESHOWWINDOW;
+    aSUI.wShowWindow = SW_SHOW;
+
+    DWORD nCmdLineLength = lstrlen( sRuntimePath ) + lstrlen( PARAM_SILENTINSTALL ) + 2;
+    TCHAR *sCmdLine = new TCHAR[ nCmdLineLength ];
+
+    if ( FAILED( StringCchCopy( sCmdLine, nCmdLineLength, sRuntimePath ) ) ||
+         FAILED( StringCchCat(  sCmdLine, nCmdLineLength, PARAM_SILENTINSTALL ) ) )
+    {
+        delete [] sCmdLine;
+        SetError( ERROR_INSTALL_FAILURE );
+        return false;
+    }
+
+    if ( !WIN::CreateProcess( NULL, sCmdLine, NULL, NULL, FALSE,
+                              CREATE_DEFAULT_ERROR_MODE, NULL, NULL,
+                              &aSUI, &aPI ) )
+    {
+        Log( TEXT( "ERROR: Could not create process %s.\r\n" ), sCmdLine );
+        SetError( WIN::GetLastError() );
+        delete [] sCmdLine;
+        return false;
+    }
+
+    DWORD nResult = WaitForProcess( aPI.hProcess );
+    bool bRet = true;
+
+    if( ERROR_SUCCESS != nResult )
+    {
+        Log( TEXT( "ERROR: While waiting for %s.\r\n" ), sCmdLine );
+        SetError( nResult );
+        bRet = false;
+    }
+    else
+    {
+        GetExitCodeProcess( aPI.hProcess, &nResult );
+        SetError( nResult );
+
+        if ( nResult != ERROR_SUCCESS )
+        {
+            TCHAR sBuf[80];
+            StringCchPrintf( sBuf, 80, TEXT("Warning: install runtime returned %u.\r\n"), nResult );
+            Log( sBuf );
+        }
+        else
+            Log( TEXT( " Installation of runtime completed successfully.\r\n" ) );
+    }
+
+    CloseHandle( aPI.hProcess );
+
+    delete [] sCmdLine;
+
+    return bRet;
+}
+
+//--------------------------------------------------------------------------
+boolean SetupAppX::InstallRuntimes()
+{
+    TCHAR *sRuntimePath = 0;
+    SYSTEM_INFO siSysInfo;
+
+    HMODULE hKernel32 = ::LoadLibrary(_T("Kernel32.dll"));
+    if ( hKernel32 != NULL )
+    {
+        typedef void (CALLBACK* pfnGetNativeSystemInfo_t)(LPSYSTEM_INFO);
+        pfnGetNativeSystemInfo_t pfnGetNativeSystemInfo;
+        pfnGetNativeSystemInfo = (pfnGetNativeSystemInfo_t)::GetProcAddress(hKernel32, "GetNativeSystemInfo");
+        if ( pfnGetNativeSystemInfo != NULL )
+        {
+            pfnGetNativeSystemInfo(&siSysInfo);
+        }
+        else
+        {
+            // GetNativeSystemInfo does not exist. Maybe the code is running under Windows 2000.
+            // Use GetSystemInfo instead.
+            GetSystemInfo(&siSysInfo);
+        }
+        FreeLibrary(hKernel32);
+    }
+    else
+    {
+        // Failed to check Kernel32.dll. There may be something wrong.
+        // Use GetSystemInfo instead anyway.
+        GetSystemInfo(&siSysInfo);
+    }
+
+    OutputDebugStringFormat( TEXT( "found architecture<%d>\r\n" ), siSysInfo.wProcessorArchitecture );
+
+    if ( siSysInfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64 )
+    {
+        if ( GetPathToFile( RUNTIME_X64_NAME, &sRuntimePath ) )
+            InstallRuntimes( PRODUCTCODE_X64, sRuntimePath );
+        else
+            Log( TEXT( "ERROR: no installer for x64 runtime libraries found!" ) );
+
+        if ( sRuntimePath )
+        {
+            delete [] sRuntimePath;
+            sRuntimePath = 0;
+        }
+    }
+
+    if ( GetPathToFile( RUNTIME_X86_NAME, &sRuntimePath ) )
+        InstallRuntimes( PRODUCTCODE_X86, sRuntimePath );
+    else
+        Log( TEXT( "ERROR: no installer for x86 runtime libraries found!" ) );
+
+    if ( sRuntimePath )
+        delete [] sRuntimePath;
+
+    return true;
 }
 
 //--------------------------------------------------------------------------

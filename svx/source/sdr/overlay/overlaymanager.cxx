@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: overlaymanager.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +38,10 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <svx/sdr/contact/objectcontacttools.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -140,6 +141,18 @@ namespace sdr
             maViewInformation2D(0),
             mfDiscreteOne(0.0)
         {
+            // set Property 'ReducedDisplayQuality' to true to allow simpler interaction
+            // visualisations
+            static bool bUseReducedDisplayQualityForDrag(true);
+
+            if(bUseReducedDisplayQualityForDrag)
+            {
+                uno::Sequence< beans::PropertyValue > xProperties(1);
+                xProperties[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedDisplayQuality"));
+                xProperties[0].Value <<= true;
+                maViewInformation2D = drawinglayer::geometry::ViewInformation2D(xProperties);
+            }
+
             if(pOldOverlayManager)
             {
                 // take over OverlayObjects from given OverlayManager. Copy

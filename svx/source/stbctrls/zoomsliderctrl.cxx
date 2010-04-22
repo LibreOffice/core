@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: zoomsliderctrl.cxx,v $
- * $Revision: 1.3.138.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -188,10 +185,10 @@ SvxZoomSliderControl::SvxZoomSliderControl( USHORT _nSlotId,  USHORT _nId, Statu
     SfxStatusBarControl( _nSlotId, _nId, _rStb ),
     mpImpl( new SvxZoomSliderControl_Impl )
 {
-    const sal_Bool bIsDark = GetStatusBar().GetBackground().GetColor().IsDark();
-    mpImpl->maSliderButton   = Image( SVX_RES( bIsDark ? RID_SVXBMP_SLIDERBUTTON_HC : RID_SVXBMP_SLIDERBUTTON ) );
-    mpImpl->maIncreaseButton = Image( SVX_RES( bIsDark ? RID_SVXBMP_SLIDERINCREASE_HC : RID_SVXBMP_SLIDERINCREASE ) );
-    mpImpl->maDecreaseButton = Image( SVX_RES( bIsDark ? RID_SVXBMP_SLIDERDECREASE_HC : RID_SVXBMP_SLIDERDECREASE ) );
+    const sal_Bool bHC = GetStatusBar().GetSettings().GetStyleSettings().GetHighContrastMode();
+    mpImpl->maSliderButton   = Image( SVX_RES( bHC ? RID_SVXBMP_SLIDERBUTTON_HC : RID_SVXBMP_SLIDERBUTTON ) );
+    mpImpl->maIncreaseButton = Image( SVX_RES( bHC ? RID_SVXBMP_SLIDERINCREASE_HC : RID_SVXBMP_SLIDERINCREASE ) );
+    mpImpl->maDecreaseButton = Image( SVX_RES( bHC ? RID_SVXBMP_SLIDERDECREASE_HC : RID_SVXBMP_SLIDERDECREASE ) );
 }
 
 // -----------------------------------------------------------------------

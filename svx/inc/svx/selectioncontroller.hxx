@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: selectioncontroller.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +29,8 @@
 #define _SELECTIONCONTROLLER_HXX
 
 #include "svx/svxdllapi.h"
+
+#include <boost/shared_ptr.hpp>
 
 #include <cppuhelper/weak.hxx>
 
@@ -70,6 +69,15 @@ public:
 
     virtual bool GetMarkedObjModel( SdrPage* pNewPage );
     virtual bool PasteObjModel( const SdrModel& rModel );
+
+    /** returns a format paint brush set from the current selection */
+    virtual bool TakeFormatPaintBrush( boost::shared_ptr< SfxItemSet >& rFormatSet  );
+
+    /** applies a format paint brush set from the current selection.
+        if bNoCharacterFormats is true, no character attributes are changed.
+        if bNoParagraphFormats is true, no paragraph attributes are changed.
+    */
+    virtual bool ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats );
 };
 
 }

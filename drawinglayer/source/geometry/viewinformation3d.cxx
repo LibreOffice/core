@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: viewinformation3d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.2 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:31:07 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -395,6 +387,18 @@ namespace drawinglayer
                 impInterpretPropertyValues(rViewParameters);
             }
 
+            ImpViewInformation3D()
+            :   mnRefCount(0),
+                maObjectTransformation(),
+                maOrientation(),
+                maProjection(),
+                maDeviceToView(),
+                mfViewTime(),
+                mxViewInformation(),
+                mxExtendedInformation()
+            {
+            }
+
             const basegfx::B3DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
             const basegfx::B3DHomMatrix& getOrientation() const { return maOrientation; }
             const basegfx::B3DHomMatrix& getProjection() const { return maProjection; }
@@ -440,6 +444,21 @@ namespace drawinglayer
                     && mfViewTime == rCandidate.mfViewTime
                     && mxExtendedInformation == rCandidate.mxExtendedInformation);
             }
+
+            static ImpViewInformation3D* get_global_default()
+            {
+                static ImpViewInformation3D* pDefault = 0;
+
+                if(!pDefault)
+                {
+                    pDefault = new ImpViewInformation3D();
+
+                    // never delete; start with RefCount 1, not 0
+                    pDefault->mnRefCount++;
+                }
+
+                return pDefault;
+            }
         };
     } // end of anonymous namespace
 } // end of namespace drawinglayer
@@ -457,13 +476,21 @@ namespace drawinglayer
             const basegfx::B3DHomMatrix& rDeviceToView,
             double fViewTime,
             const uno::Sequence< beans::PropertyValue >& rExtendedParameters)
-        :   mpViewInformation3D(new ImpViewInformation3D(rObjectObjectTransformation, rOrientation, rProjection, rDeviceToView, fViewTime, rExtendedParameters))
+        :   mpViewInformation3D(new ImpViewInformation3D(
+                rObjectObjectTransformation, rOrientation, rProjection,
+                rDeviceToView, fViewTime, rExtendedParameters))
         {
         }
 
         ViewInformation3D::ViewInformation3D(const uno::Sequence< beans::PropertyValue >& rViewParameters)
         :   mpViewInformation3D(new ImpViewInformation3D(rViewParameters))
         {
+        }
+
+        ViewInformation3D::ViewInformation3D()
+        :   mpViewInformation3D(ImpViewInformation3D::get_global_default())
+        {
+            mpViewInformation3D->mnRefCount++;
         }
 
         ViewInformation3D::ViewInformation3D(const ViewInformation3D& rCandidate)
@@ -485,6 +512,11 @@ namespace drawinglayer
             {
                 delete mpViewInformation3D;
             }
+        }
+
+        bool ViewInformation3D::isDefault() const
+        {
+            return mpViewInformation3D == ImpViewInformation3D::get_global_default();
         }
 
         ViewInformation3D& ViewInformation3D::operator=(const ViewInformation3D& rCandidate)
@@ -511,6 +543,11 @@ namespace drawinglayer
             if(rCandidate.mpViewInformation3D == mpViewInformation3D)
             {
                 return true;
+            }
+
+            if(rCandidate.isDefault() != isDefault())
+            {
+                return false;
             }
 
             return (*rCandidate.mpViewInformation3D == *mpViewInformation3D);

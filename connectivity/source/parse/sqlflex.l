@@ -4,13 +4,9 @@
 //
 // DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 // 
-// Copyright 2008 by Sun Microsystems, Inc.
+// Copyright 2000, 2010 Oracle and/or its affiliates.
 //
 // OpenOffice.org - a multi-platform office productivity suite
-//
-// $RCSfile: sqlflex.l,v $
-//
-// $Revision: 1.35 $
 //
 // This file is part of OpenOffice.org.
 //
@@ -400,7 +396,7 @@ VAR_SAMP                                        {SQL_NEW_KEYWORD(SQL_TOKEN_VAR_S
 <SQL>\"	{ return gatherString('\"',0); }
 <SQL>`	{ return gatherString('`' ,0); }											 
 
-<PREDICATE_GER,PREDICATE_ENG,DATE>"["		{ return gatherString(']' ,0);}
+<PREDICATE_GER,PREDICATE_ENG,DATE,SQL>"["		{ return gatherString(']' ,0);}
 
 \'		{ return gatherString('\'',1); }
 

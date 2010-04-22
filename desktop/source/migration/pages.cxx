@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pages.cxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,8 +40,8 @@
 #include <osl/file.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
-#include <svtools/regoptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/regoptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -58,6 +55,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/file.hxx>
+#include <osl/thread.hxx>
 #include <unotools/bootstrap.hxx>
 #include <tools/config.hxx>
 
@@ -65,6 +63,7 @@ using namespace rtl;
 using namespace osl;
 using namespace utl;
 using namespace svt;
+using namespace com::sun::star;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
@@ -97,27 +96,20 @@ WelcomePage::WelcomePage( svt::OWizardMachine* parent, const ResId& resid, sal_B
     _setBold(m_ftHead);
 
     checkEval();
-    // we need to choose the welcome text that is diplayed
-    // choices are the default text, default text+migradtion,
-    // OEM and extended OEM
-    // No OEM is built, remove the check
-//     switch (checkOEM())
-//     {
-//     case OEM_NONE:
-        // check for migration
-        if (Migration::checkMigration())
-        {
-            String aText(WizardResId(STR_WELCOME_MIGRATION));
-            // replace %OLDPRODUCT with found version name
-            aText.SearchAndReplaceAll( UniString::CreateFromAscii("%OLD_VERSION"), Migration::getOldVersionName());
-            m_ftBody.SetText( aText );
-        }
-        else
-        if ( ! m_bLicenseNeedsAcceptance )
-        {
-            String aText(WizardResId(STR_WELCOME_WITHOUT_LICENSE));
-            m_ftBody.SetText( aText );
-        }
+
+    // check for migration
+    if (Migration::checkMigration())
+    {
+        String aText(WizardResId(STR_WELCOME_MIGRATION));
+        // replace %OLDPRODUCT with found version name
+        aText.SearchAndReplaceAll( UniString::CreateFromAscii("%OLD_VERSION"), Migration::getOldVersionName());
+        m_ftBody.SetText( aText );
+    }
+    else if ( ! m_bLicenseNeedsAcceptance )
+    {
+        String aText(WizardResId(STR_WELCOME_WITHOUT_LICENSE));
+        m_ftBody.SetText( aText );
+    }
 }
 
 
@@ -315,12 +307,46 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // -------------------------------------------------------------------
 
-MigrationPage::MigrationPage( svt::OWizardMachine* parent, const ResId& resid)
+class MigrationThread : public ::osl::Thread
+{
+    public:
+        MigrationThread();
+
+        virtual void SAL_CALL run();
+        virtual void SAL_CALL onTerminated();
+};
+
+MigrationThread::MigrationThread()
+{
+}
+
+void MigrationThread::run()
+{
+    try
+    {
+        Migration::doMigration();
+    }
+    catch ( uno::Exception& )
+    {
+    }
+}
+
+void MigrationThread::onTerminated()
+{
+}
+
+// -------------------------------------------------------------------
+
+MigrationPage::MigrationPage(
+    svt::OWizardMachine* parent,
+    const ResId& resid,
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XThrobber > xThrobber)
     : OWizardPage(parent, resid)
     , m_ftHead(this, WizardResId(FT_MIGRATION_HEADER))
     , m_ftBody(this, WizardResId(FT_MIGRATION_BODY))
     , m_cbMigration(this, WizardResId(CB_MIGRATION))
     , m_bMigrationDone(sal_False)
+    , m_xThrobber(xThrobber)
 {
     FreeResource();
     _setBold(m_ftHead);
@@ -335,9 +361,28 @@ sal_Bool MigrationPage::commitPage( CommitPageReason _eReason )
 {
     if (_eReason == eTravelForward && m_cbMigration.IsChecked() && !m_bMigrationDone)
     {
-        EnterWait();
-        Migration::doMigration();
-        LeaveWait();
+        GetParent()->EnterWait();
+        FirstStartWizard* pWizard = dynamic_cast< FirstStartWizard* >( GetParent() );
+        if ( pWizard )
+            pWizard->DisableButtonsWhileMigration();
+
+        uno::Reference< awt::XWindow > xWin( m_xThrobber, uno::UNO_QUERY );
+        xWin->setVisible( true );
+        m_xThrobber->start();
+        MigrationThread* pMigThread = new MigrationThread();
+        pMigThread->create();
+
+        while ( pMigThread->isRunning() )
+        {
+            Application::Reschedule();
+        }
+
+        m_xThrobber->stop();
+        GetParent()->LeaveWait();
+        // Next state will enable buttons - so no EnableButtons necessary!
+        xWin->setVisible( false );
+        pMigThread->join();
+        delete pMigThread;
         m_bMigrationDone = sal_True;
     }
     else
@@ -373,9 +418,11 @@ UserPage::UserPage( svt::OWizardMachine* parent, const ResId& resid)
     SvtUserOptions aUserOpt;
     m_edFirst.SetText(aUserOpt.GetFirstName());
     m_edLast.SetText(aUserOpt.GetLastName());
+#if 0
     rtl::OUString aUserName;
     vos::OSecurity().getUserName( aUserName );
        aUserOpt.SetID( aUserName );
+#endif
 
     m_edInitials.SetText(aUserOpt.GetID());
     if (m_lang == LANGUAGE_RUSSIAN)
@@ -546,7 +593,7 @@ sal_Bool RegistrationPage::commitPage( CommitPageReason _eReason )
 {
     if ( _eReason == eFinish )
     {
-        ::svt::RegOptions aOptions;
+        ::utl::RegOptions aOptions;
         rtl::OUString aEvent;
 
         if ( m_rbNow.IsChecked())
@@ -603,7 +650,7 @@ void RegistrationPage::prepareSingleMode()
 
 bool RegistrationPage::hasReminderDateCome()
 {
-    return ::svt::RegOptions().hasReminderDateCome();
+    return ::utl::RegOptions().hasReminderDateCome();
 }
 
 void RegistrationPage::executeSingleMode()
@@ -620,87 +667,7 @@ void RegistrationPage::executeSingleMode()
     if ( eMode == RegistrationPage::rmNow || eMode == RegistrationPage::rmLater )
         pPage->commitPage( IWizardPage::eFinish );
     if ( eMode != RegistrationPage::rmLater )
-        ::svt::RegOptions().removeReminder();
-}
-
-// -----------------------------------------------------------------------
-
-static char const OEM_PRELOAD_SECTION[] = "Bootstrap";
-static char const OEM_PRELOAD[]     = "Preload";
-static char const STR_TRUE[]        = "1";
-static char const STR_FALSE[]       = "0";
-
-static sal_Bool existsURL( OUString const& _sURL )
-{
-    using namespace osl;
-    DirectoryItem aDirItem;
-
-    if (_sURL.getLength() != 0)
-        return ( DirectoryItem::get( _sURL, aDirItem ) == DirectoryItem::E_None );
-
-    return sal_False;
-}
-
-
-// locate soffice.ini/.rc file
-static OUString locateIniFile()
-{
-    OUString aUserDataPath;
-    OUString aSofficeIniFileURL;
-
-    // Retrieve the default file URL for the soffice.ini/rc
-    rtl::Bootstrap().getIniName( aSofficeIniFileURL );
-
-    if ( utl::Bootstrap::locateUserData( aUserDataPath ) == utl::Bootstrap::PATH_EXISTS )
-    {
-        const char CONFIG_DIR[] = "/config";
-
-        sal_Int32 nIndex = aSofficeIniFileURL.lastIndexOf( '/');
-        if ( nIndex > 0 )
-        {
-            OUString        aUserSofficeIniFileURL;
-            OUStringBuffer  aBuffer( aUserDataPath );
-            aBuffer.appendAscii( CONFIG_DIR );
-            aBuffer.append( aSofficeIniFileURL.copy( nIndex ));
-            aUserSofficeIniFileURL = aBuffer.makeStringAndClear();
-
-            if ( existsURL( aUserSofficeIniFileURL ))
-                return aUserSofficeIniFileURL;
-        }
-    }
-    // Fallback try to use the soffice.ini/rc from program folder
-    return aSofficeIniFileURL;
-}
-
-// check whether the OEMPreload flag was set in soffice.ini/.rc
-static sal_Int32 checkOEMPreloadFlag()
-{
-    OUString aSofficeIniFileURL;
-    aSofficeIniFileURL = locateIniFile();
-    Config aConfig(aSofficeIniFileURL);
-    aConfig.SetGroup( OEM_PRELOAD_SECTION );
-    ByteString sResult = aConfig.ReadKey( OEM_PRELOAD );
-    return sResult.ToInt32();
-    /*
-    if ( sResult == STR_TRUE )
-        return sal_True;
-    else
-        return sal_False;
-    */
-}
-
-WelcomePage::OEMType WelcomePage::checkOEM()
-{
-  sal_Int32 oemResult = checkOEMPreloadFlag();
-  switch (oemResult) {
-  case 1:
-    return OEM_NORMAL;
-  case 2:
-    return OEM_EXTENDED;
-  default:
-    return OEM_NONE;
-  }
+        ::utl::RegOptions().removeReminder();
 }
 
 } // namespace desktop
-

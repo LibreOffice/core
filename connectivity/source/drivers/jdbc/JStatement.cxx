@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: JStatement.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -712,38 +709,44 @@ void java_sql_Statement_Base::getFastPropertyValue(
                                      ) const
 {
     java_sql_Statement_Base* THIS = const_cast<java_sql_Statement_Base*>(this);
-    switch(nHandle)
+    try
     {
-        case PROPERTY_ID_QUERYTIMEOUT:
-            rValue <<= THIS->getQueryTimeOut();
-            break;
-        case PROPERTY_ID_MAXFIELDSIZE:
-            rValue <<= THIS->getMaxFieldSize();
-            break;
-        case PROPERTY_ID_MAXROWS:
-            rValue <<= THIS->getMaxRows();
-            break;
-        case PROPERTY_ID_CURSORNAME:
-            rValue <<= THIS->getCursorName();
-            break;
-        case PROPERTY_ID_RESULTSETCONCURRENCY:
-            rValue <<= THIS->getResultSetConcurrency();
-            break;
-        case PROPERTY_ID_RESULTSETTYPE:
-            rValue <<= THIS->getResultSetType();
-            break;
-        case PROPERTY_ID_FETCHDIRECTION:
-            rValue <<= THIS->getFetchDirection();
-            break;
-        case PROPERTY_ID_FETCHSIZE:
-            rValue <<= THIS->getFetchSize();
-            break;
-        case PROPERTY_ID_ESCAPEPROCESSING:
-            rValue <<= (sal_Bool)m_bEscapeProcessing;
-            break;
-        case PROPERTY_ID_USEBOOKMARKS:
-        default:
-            ;
+        switch(nHandle)
+        {
+            case PROPERTY_ID_QUERYTIMEOUT:
+                rValue <<= THIS->getQueryTimeOut();
+                break;
+            case PROPERTY_ID_MAXFIELDSIZE:
+                rValue <<= THIS->getMaxFieldSize();
+                break;
+            case PROPERTY_ID_MAXROWS:
+                rValue <<= THIS->getMaxRows();
+                break;
+            case PROPERTY_ID_CURSORNAME:
+                rValue <<= THIS->getCursorName();
+                break;
+            case PROPERTY_ID_RESULTSETCONCURRENCY:
+                rValue <<= THIS->getResultSetConcurrency();
+                break;
+            case PROPERTY_ID_RESULTSETTYPE:
+                rValue <<= THIS->getResultSetType();
+                break;
+            case PROPERTY_ID_FETCHDIRECTION:
+                rValue <<= THIS->getFetchDirection();
+                break;
+            case PROPERTY_ID_FETCHSIZE:
+                rValue <<= THIS->getFetchSize();
+                break;
+            case PROPERTY_ID_ESCAPEPROCESSING:
+                rValue <<= (sal_Bool)m_bEscapeProcessing;
+                break;
+            case PROPERTY_ID_USEBOOKMARKS:
+            default:
+                ;
+        }
+    }
+    catch(const Exception&)
+    {
     }
 }
 // -------------------------------------------------------------------------

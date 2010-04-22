@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdocirc.cxx,v $
- * $Revision: 1.37.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <tools/bigint.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlnedwit.hxx>
@@ -52,7 +49,7 @@
 #include <svx/svdview.hxx>  // Zum Draggen (Ortho)
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include "svdoimp.hxx"
 #include <svx/sdr/properties/circleproperties.hxx>
 #include <svx/sdr/contact/viewcontactofsdrcircobj.hxx>
@@ -61,6 +58,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -225,24 +223,17 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrObjKind eCicrleKind, c
 
     if(OBJ_CIRC == eCicrleKind)
     {
-        // create full circle. Do not use createPolygonFromEllipse, but the single
-        // calls to appendUnitCircleQuadrant() to get the start point to the bottom of the
-        // circle to keep compatible to old geometry creation
-        basegfx::tools::appendUnitCircleQuadrant(aCircPolygon, 1);
-        basegfx::tools::appendUnitCircleQuadrant(aCircPolygon, 2);
-        basegfx::tools::appendUnitCircleQuadrant(aCircPolygon, 3);
-        basegfx::tools::appendUnitCircleQuadrant(aCircPolygon, 0);
-        aCircPolygon.setClosed(true);
+        // create full circle. Do not use createPolygonFromEllipse; it's necessary
+        // to get the start point to the bottom of the circle to keep compatible to
+        // old geometry creation
+        aCircPolygon = basegfx::tools::createPolygonFromUnitCircle(1);
 
-        // remove double points between segments created by segmented creation
-        aCircPolygon.removeDoublePoints();
-
-        // needs own scaling and translation from unit circle to target size
-        basegfx::B2DHomMatrix aMatrix;
+        // needs own scaling and translation from unit circle to target size (same as
+        // would be in createPolygonFromEllipse)
         const basegfx::B2DPoint aCenter(aRange.getCenter());
-
-        aMatrix.scale(aRange.getWidth() / 2.0, aRange.getHeight() / 2.0);
-        aMatrix.translate(aCenter.getX(), aCenter.getY());
+        const basegfx::B2DHomMatrix aMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
+            aRange.getWidth() / 2.0, aRange.getHeight() / 2.0,
+            aCenter.getX(), aCenter.getY()));
         aCircPolygon.transform(aMatrix);
     }
     else
@@ -252,7 +243,9 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrObjKind eCicrleKind, c
         const double fEnd(((36000 - nStart) % 36000) * F_PI18000);
 
         // create circle segment. This is not closed by default
-        aCircPolygon = basegfx::tools::createPolygonFromEllipseSegment(aRange.getCenter(), aRange.getWidth() / 2.0, aRange.getHeight() / 2.0, fStart, fEnd);
+        aCircPolygon = basegfx::tools::createPolygonFromEllipseSegment(
+            aRange.getCenter(), aRange.getWidth() / 2.0, aRange.getHeight() / 2.0,
+            fStart, fEnd);
 
         // check closing states
         const bool bCloseSegment(OBJ_CARC != eCicrleKind);
@@ -277,26 +270,16 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrObjKind eCicrleKind, c
     // #i76950#
     if(aGeo.nShearWink || aGeo.nDrehWink)
     {
-        const basegfx::B2DPoint aTopLeft(aRange.getMinimum());
-        basegfx::B2DHomMatrix aMatrix;
-
         // translate top left to (0,0)
-        aMatrix.translate(-aTopLeft.getX(), -aTopLeft.getY());
+        const basegfx::B2DPoint aTopLeft(aRange.getMinimum());
+        basegfx::B2DHomMatrix aMatrix(basegfx::tools::createTranslateB2DHomMatrix(
+            -aTopLeft.getX(), -aTopLeft.getY()));
 
-        // shear (if needed)
-        if(aGeo.nShearWink)
-        {
-            aMatrix.shearX(tan((36000 - aGeo.nShearWink) * F_PI18000));
-        }
-
-        // rotate (if needed)
-        if(aGeo.nDrehWink)
-        {
-            aMatrix.rotate((36000 - aGeo.nDrehWink) * F_PI18000);
-        }
-
-        // back to top left
-        aMatrix.translate(aTopLeft.getX(), aTopLeft.getY());
+        // shear, rotate and back to top left (if needed)
+        aMatrix = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+            aGeo.nShearWink ? tan((36000 - aGeo.nShearWink) * F_PI18000) : 0.0,
+            aGeo.nDrehWink ? (36000 - aGeo.nDrehWink) * F_PI18000 : 0.0,
+            aTopLeft) * aMatrix;
 
         // apply transformation
         aCircPolygon.transform(aMatrix);

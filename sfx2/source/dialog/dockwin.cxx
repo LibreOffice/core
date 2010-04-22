@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dockwin.cxx,v $
- * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <vcl/decoview.hxx>
 
 #include <vcl/svapp.hxx>
@@ -164,7 +161,7 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
     if (xFactoryMgr.is())
     {
         SfxDispatcher* pDispatcher = pBindings->GetDispatcher();
-        uno::Reference< frame::XFrame > xFrame( pDispatcher->GetFrame()->GetFrame()->GetFrameInterface(), uno::UNO_QUERY );
+        uno::Reference< frame::XFrame > xFrame( pDispatcher->GetFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
         uno::Sequence< uno::Any > aArgs(2);
         beans::PropertyValue      aPropValue;
         aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
@@ -236,7 +233,8 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
         }
 
         Window* pContentWindow = VCLUnoHelper::GetWindow(xWindow);
-        pContentWindow->SetStyle( pContentWindow->GetStyle() | WB_DIALOGCONTROL | WB_CHILDDLGCTRL );
+        if ( pContentWindow )
+            pContentWindow->SetStyle( pContentWindow->GetStyle() | WB_DIALOGCONTROL | WB_CHILDDLGCTRL );
         pTitleDockWindow->SetWrappedWindow(pContentWindow);
     }
 
@@ -1854,7 +1852,7 @@ long SfxDockingWindow::Notify( NotifyEvent& rEvt )
         }
 
         if ( nHelpId )
-            SfxHelp::OpenHelpAgent( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), nHelpId );
+            SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), nHelpId );
 
         // In VCL geht Notify zun"achst an das Fenster selbst,
         // also base class rufen, sonst erf"ahrt der parent nichts

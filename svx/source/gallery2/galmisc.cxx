@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: galmisc.cxx,v $
- * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,15 +34,15 @@
 #include <ucbhelper/content.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/solar.hrc>
-#include <svtools/urihelper.hxx>
+#include <svl/solar.hrc>
+#include <svl/urihelper.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/docfile.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <vcl/svapp.hxx>
 
-#include "impgrf.hxx"
+#include "svtools/filter.hxx"
 #include <svx/svdpage.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/fmmodel.hxx>
@@ -53,9 +50,9 @@
 #include <svx/unomodel.hxx>
 #include "codec.hxx"
 #include "gallery.hrc"
-#include "gallery1.hxx"
+#include "svx/gallery1.hxx"
 #include "galtheme.hxx"
-#include "galmisc.hxx"
+#include "svx/galmisc.hxx"
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
@@ -129,7 +126,7 @@ USHORT GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
 
     if( pIStm )
     {
-        GraphicFilter*      pGraphicFilter = GetGrfFilter();
+        GraphicFilter*      pGraphicFilter = GraphicFilter::GetGraphicFilter();
         GalleryProgress*    pProgress = bShowProgress ? new GalleryProgress( pGraphicFilter ) : NULL;
         USHORT              nFormat;
 

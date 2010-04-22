@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: vclhelperbitmaprender.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.3 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:21 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,12 +29,13 @@
 #include "precompiled_drawinglayer.hxx"
 
 #include <vclhelperbitmaprender.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <vcl/outdev.hxx>
 #include <vclhelperbitmaptransform.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // support for different kinds of bitmap rendering using vcl
@@ -84,10 +77,9 @@ namespace drawinglayer
         else
         {
             // if rotated, create the unrotated output rectangle for the GraphicManager paint
-            basegfx::B2DHomMatrix aSimpleObjectMatrix;
-
-            aSimpleObjectMatrix.scale(fabs(aScale.getX()), fabs(aScale.getY()));
-            aSimpleObjectMatrix.translate(aTranslate.getX(), aTranslate.getY());
+            const basegfx::B2DHomMatrix aSimpleObjectMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
+                fabs(aScale.getX()), fabs(aScale.getY()),
+                aTranslate.getX(), aTranslate.getY()));
 
             aOutlineRange.transform(aSimpleObjectMatrix);
         }
@@ -190,11 +182,11 @@ namespace drawinglayer
             }
 
             // build transform from pixel in aDestination to pixel in rBitmapEx
-            basegfx::B2DHomMatrix aTransform;
-
             // from relative in aCroppedRectPixel to relative in aDestRectPixel
             // No need to take bNeedToReduce into account, TopLeft is unchanged
-            aTransform.translate(aCroppedRectPixel.Left() - aDestRectPixel.Left(), aCroppedRectPixel.Top() - aDestRectPixel.Top());
+            basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
+                aCroppedRectPixel.Left() - aDestRectPixel.Left(),
+                aCroppedRectPixel.Top() - aDestRectPixel.Top()));
 
             // from relative in aDestRectPixel to absolute Logic. Here it
             // is essential to adapt to reduce factor (if used)
@@ -207,8 +199,10 @@ namespace drawinglayer
                 fAdaptedDRPHeight *= fReduceFactor;
             }
 
-            aTransform.scale(aDestRectLogic.getWidth() / fAdaptedDRPWidth, aDestRectLogic.getHeight() / fAdaptedDRPHeight);
-            aTransform.translate(aDestRectLogic.Left(), aDestRectLogic.Top());
+            aTransform = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                aDestRectLogic.getWidth() / fAdaptedDRPWidth, aDestRectLogic.getHeight() / fAdaptedDRPHeight,
+                aDestRectLogic.Left(), aDestRectLogic.Top())
+                * aTransform;
 
             // from absolute in Logic to unified object coordinates (0.0 .. 1.0 in x and y)
             basegfx::B2DHomMatrix aInvBitmapTransform(rTransform);

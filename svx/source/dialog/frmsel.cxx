@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: frmsel.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -328,7 +325,7 @@ void FrameSelectorImpl::InitColors()
 {
     const StyleSettings& rSett = mrFrameSel.GetSettings().GetStyleSettings();
     maBackCol = rSett.GetFieldColor();
-    mbHCMode = maBackCol.IsDark();
+    mbHCMode = rSett.GetHighContrastMode();
     maArrowCol = rSett.GetFieldTextColor();
     maMarkCol.operator=( maBackCol ).Merge( maArrowCol, mbHCMode ? 0x80 : 0xC0 );
     maHCLineCol = rSett.GetLabelTextColor();

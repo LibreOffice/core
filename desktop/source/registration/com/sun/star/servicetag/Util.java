@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Util.java,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +36,7 @@ import java.util.UUID;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-// Utility class for com.sun.star.servicetag package
+// Utility class for com.sun.servicetag package
 class Util {
     private static boolean verbose = (System.getProperty("servicetag.verbose") != null);
     private static String jrepath = null;

@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: fillbitmapprimitive2d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.5 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:20 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -54,48 +46,56 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence FillBitmapPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence FillBitmapPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            const Size aTileSizePixel(getFillBitmap().getBitmap().GetSizePixel());
             Primitive2DSequence aRetval;
 
-            // is there a tile with some size at all?
-            if(aTileSizePixel.getWidth() && aTileSizePixel.getHeight())
+            if(!getFillBitmap().isDefault())
             {
-                if(getFillBitmap().getTiling())
+                const Size aTileSizePixel(getFillBitmap().getBitmapEx().GetSizePixel());
+
+                // is there a tile with some size at all?
+                if(aTileSizePixel.getWidth() && aTileSizePixel.getHeight())
                 {
-                    // get object range and create tiling matrices
-                    ::std::vector< basegfx::B2DHomMatrix > aMatrices;
-                    texture::GeoTexSvxTiled aTiling(getFillBitmap().getTopLeft(), getFillBitmap().getSize());
-                    aTiling.appendTransformations(aMatrices);
-
-                    // resize result
-                    aRetval.realloc(aMatrices.size());
-
-                    // create one primitive for each matrix
-                    for(sal_uInt32 a(0L); a < aMatrices.size(); a++)
+                    if(getFillBitmap().getTiling())
                     {
-                        basegfx::B2DHomMatrix aNewMatrix = aMatrices[a];
-                        aNewMatrix *= getTransformation();
+                        // get object range and create tiling matrices
+                        ::std::vector< basegfx::B2DHomMatrix > aMatrices;
+                        texture::GeoTexSvxTiled aTiling(getFillBitmap().getTopLeft(), getFillBitmap().getSize());
+                        aTiling.appendTransformations(aMatrices);
 
-                        // create bitmap primitive and add to result
-                        const Primitive2DReference xRef(new BitmapPrimitive2D(BitmapEx(getFillBitmap().getBitmap()), aNewMatrix));
-                        aRetval[a] = xRef;
+                        // resize result
+                        aRetval.realloc(aMatrices.size());
+
+                        // create one primitive for each matrix
+                        for(sal_uInt32 a(0L); a < aMatrices.size(); a++)
+                        {
+                            basegfx::B2DHomMatrix aNewMatrix = aMatrices[a];
+                            aNewMatrix *= getTransformation();
+
+                            // create bitmap primitive and add to result
+                            const Primitive2DReference xRef(
+                                new BitmapPrimitive2D(getFillBitmap().getBitmapEx(), aNewMatrix));
+
+                            aRetval[a] = xRef;
+                        }
                     }
-                }
-                else
-                {
-                    // create new object transform
-                    basegfx::B2DHomMatrix aObjectTransform;
-                    aObjectTransform.set(0L, 0L, getFillBitmap().getSize().getX());
-                    aObjectTransform.set(1L, 1L, getFillBitmap().getSize().getY());
-                    aObjectTransform.set(0L, 2L, getFillBitmap().getTopLeft().getX());
-                    aObjectTransform.set(1L, 2L, getFillBitmap().getTopLeft().getY());
-                    aObjectTransform *= getTransformation();
+                    else
+                    {
+                        // create new object transform
+                        basegfx::B2DHomMatrix aObjectTransform;
+                        aObjectTransform.set(0L, 0L, getFillBitmap().getSize().getX());
+                        aObjectTransform.set(1L, 1L, getFillBitmap().getSize().getY());
+                        aObjectTransform.set(0L, 2L, getFillBitmap().getTopLeft().getX());
+                        aObjectTransform.set(1L, 2L, getFillBitmap().getTopLeft().getY());
+                        aObjectTransform *= getTransformation();
 
-                    // create bitmap primitive and add exclusive to decomposition (hand over ownership)
-                    const Primitive2DReference xRef(new BitmapPrimitive2D(BitmapEx(getFillBitmap().getBitmap()), aObjectTransform));
-                    aRetval = Primitive2DSequence(&xRef, 1L);
+                        // create bitmap primitive and add exclusive to decomposition (hand over ownership)
+                        const Primitive2DReference xRef(
+                            new BitmapPrimitive2D(getFillBitmap().getBitmapEx(), aObjectTransform));
+
+                        aRetval = Primitive2DSequence(&xRef, 1L);
+                    }
                 }
             }
 
@@ -105,7 +105,7 @@ namespace drawinglayer
         FillBitmapPrimitive2D::FillBitmapPrimitive2D(
             const basegfx::B2DHomMatrix& rTransformation,
             const attribute::FillBitmapAttribute& rFillBitmap)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransformation(rTransformation),
             maFillBitmap(rFillBitmap)
         {
@@ -113,7 +113,7 @@ namespace drawinglayer
 
         bool FillBitmapPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const FillBitmapPrimitive2D& rCompare = static_cast< const FillBitmapPrimitive2D& >(rPrimitive);
 
@@ -127,7 +127,7 @@ namespace drawinglayer
         basegfx::B2DRange FillBitmapPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // return range of it
-            basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+            basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
             aPolygon.transform(getTransformation());
             return basegfx::tools::getRange(aPolygon);
         }

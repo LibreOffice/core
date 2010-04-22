@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: backingwindow.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +35,7 @@
 #include "vcl/bitmapex.hxx"
 #include "vcl/toolbox.hxx"
 
-#include "svtools/moduleoptions.hxx"
+#include "unotools/moduleoptions.hxx"
 #include "svtools/acceleratorexecute.hxx"
 
 #include "com/sun/star/frame/XDispatchProvider.hpp"
@@ -89,14 +86,14 @@ namespace framework
         Size                            maWelcomeSize;
         FixedText                       maProduct;
         Size                            maProductSize;
-        FixedText                       maCreateText;
-        Size                            maCreateSize;
         FixedText                       maWriterText;
         ImageButton                     maWriterButton;
         FixedText                       maCalcText;
         ImageButton                     maCalcButton;
         FixedText                       maImpressText;
         ImageButton                     maImpressButton;
+        FixedText                       maOpenText;
+        ImageButton                     maOpenButton;
         FixedText                       maDrawText;
         ImageButton                     maDrawButton;
         FixedText                       maDBText;
@@ -105,8 +102,6 @@ namespace framework
         ImageButton                     maMathButton;
         FixedText                       maTemplateText;
         ImageButton                     maTemplateButton;
-        FixedText                       maOpenText;
-        ImageButton                     maOpenButton;
 
         DecoToolBox                     maToolbox;
 
@@ -124,16 +119,17 @@ namespace framework
         Rectangle                       maControlRect;
 
         long                            mnColumnWidth[2];
+        long                            mnTextColumnWidth[2];
         Color                           maLabelTextColor;
         Color                           maWelcomeTextColor;
 
         Size                            maButtonImageSize;
 
         bool                            mbInitControls;
+        sal_Int32                       mnLayoutStyle;
         svt::AcceleratorExecute*        mpAccExec;
+        long                            mnBtnPos;
 
-
-        static const long nBtnPos = 240;
         static const int nItemId_Extensions = 1;
         static const int nItemId_Reg = 2;
         static const int nItemId_Info = 3;
@@ -173,6 +169,7 @@ namespace framework
         virtual void        DataChanged( const DataChangedEvent& rDCEvt );
         virtual Window*     GetParentLabelFor( const Window* pLabel ) const;
         virtual Window*     GetParentLabeledBy( const Window* pLabeled ) const;
+    virtual void        GetFocus();
 
         void setOwningFrame( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame );
     };

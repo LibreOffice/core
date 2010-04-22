@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdotext.cxx,v $
- * $Revision: 1.90.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,38 +39,35 @@
 #include <svx/svdmodel.hxx>  // OutlinerDefaults
 #include "svdglob.hxx"  // Stringcache
 #include "svdstr.hrc"   // Objektname
-#include <svx/writingmodeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 #include <svx/sdtfchim.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svx/eeitem.hxx>
-#include <editstat.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/editobj.hxx>
-#include <svx/outliner.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svtools/itempool.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <svl/itempool.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/xftouit.hxx>
 #include <vcl/salbtype.hxx>     // FRound
 #include <svx/xflgrit.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/xflclit.hxx>
-#include <svtools/style.hxx>
-#include <svx/editeng.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/style.hxx>
+#include <editeng/editeng.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/sdr/properties/textproperties.hxx>
-
-// #110496#
 #include <vcl/metaact.hxx>
-
-// #111111#
 #include <svx/sdr/contact/viewcontactoftextobj.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <vcl/virdev.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -737,9 +731,9 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAncho
 {
     basegfx::B2DPolyPolygon aXorPolyPolygon(TakeXorPoly());
     basegfx::B2DPolyPolygon* pContourPolyPolygon = 0L;
-    basegfx::B2DHomMatrix aMatrix;
+    basegfx::B2DHomMatrix aMatrix(basegfx::tools::createTranslateB2DHomMatrix(
+        -rAnchorRect.Left(), -rAnchorRect.Top()));
 
-    aMatrix.translate(-rAnchorRect.Left(), -rAnchorRect.Top());
     if(aGeo.nDrehWink)
     {
         // Unrotate!
@@ -1735,31 +1729,11 @@ sal_Bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::
     }
 
     // build matrix
-    rMatrix.identity();
-
-    if(!basegfx::fTools::equal(aScale.getX(), 1.0) || !basegfx::fTools::equal(aScale.getY(), 1.0))
-    {
-        rMatrix.scale(aScale.getX(), aScale.getY());
-    }
-
-    if(!basegfx::fTools::equalZero(fShearX))
-    {
-        rMatrix.shearX(tan(fShearX));
-    }
-
-    if(!basegfx::fTools::equalZero(fRotate))
-    {
-        // #i78696#
-        // fRotate is from the old GeoStat and thus mathematically wrong orientated. For
-        // the linear combination of matrices it needed to be fixed in the API, so it needs to
-        // be mirrored here
-        rMatrix.rotate(-fRotate);
-    }
-
-    if(!aTranslate.equalZero())
-    {
-        rMatrix.translate(aTranslate.getX(), aTranslate.getY());
-    }
+    rMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+        aScale,
+        basegfx::fTools::equalZero(fShearX) ? 0.0 : tan(fShearX),
+        basegfx::fTools::equalZero(fRotate) ? 0.0 : -fRotate,
+        aTranslate);
 
     return sal_False;
 }
@@ -1772,7 +1746,8 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     // break up matrix
     basegfx::B2DTuple aScale;
     basegfx::B2DTuple aTranslate;
-    double fRotate, fShearX;
+    double fRotate(0.0);
+    double fShearX(0.0);
     rMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
     // #i75086# Old DrawingLayer (GeoStat and geometry) does not support holding negative scalings

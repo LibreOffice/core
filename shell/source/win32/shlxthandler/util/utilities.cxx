@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: utilities.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,12 +29,9 @@
 #include "precompiled_shell.hxx"
 
 
-#include "internal/utilities.hxx"
 #include "internal/config.hxx"
 #include "internal/dbgmacros.hxx"
-
-
-
+#include "internal/utilities.hxx"
 
 //-----------------------------
 // constants
@@ -87,15 +81,9 @@ std::wstring GetResString(int ResId)
 {
     wchar_t szResStr[MAX_RES_STRING];
 
-    #if OSL_DEBUG_LEVEL > 0
-    int rc =
-    #endif
-    LoadStringW(
-        GetModuleHandleW(MODULE_NAME),
-        ResId,
-        szResStr,
-        sizeof(szResStr));
+    int rc = LoadStringW( GetModuleHandleW(MODULE_NAME), ResId, szResStr, sizeof(szResStr) );
 
+    OutputDebugStringFormat( "GetResString: read %d chars\n", rc );
     ENSURE(rc, "String resource not found");
 
     return std::wstring(szResStr);

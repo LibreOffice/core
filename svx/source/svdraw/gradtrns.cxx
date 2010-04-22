@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gradtrns.cxx,v $
- * $Revision: 1.7.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,7 @@
 #include <svx/svdobj.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/salbtype.hxx>     // FRound
 
 //////////////////////////////////////////////////////////////////////////////
@@ -81,11 +79,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
             if(rG.aGradient.GetAngle())
             {
                 const double fAngle = (double)rG.aGradient.GetAngle() * (F_PI180 / 10.0);
-                basegfx::B2DHomMatrix aTransformation;
-
-                aTransformation.translate(-aCenter.getX(), -aCenter.getY());
-                aTransformation.rotate(-fAngle);
-                aTransformation.translate(aCenter.getX(), aCenter.getY());
+                const basegfx::B2DHomMatrix aTransformation(basegfx::tools::createRotateAroundPoint(aCenter, -fAngle));
 
                 aStartPos *= aTransformation;
                 aEndPos *= aTransformation;
@@ -108,11 +102,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
             if(rG.aGradient.GetAngle())
             {
                 const double fAngle = (double)rG.aGradient.GetAngle() * (F_PI180 / 10.0);
-                basegfx::B2DHomMatrix aTransformation;
-
-                aTransformation.translate(-aCenter.getX(), -aCenter.getY());
-                aTransformation.rotate(-fAngle);
-                aTransformation.translate(aCenter.getX(), aCenter.getY());
+                const basegfx::B2DHomMatrix aTransformation(basegfx::tools::createRotateAroundPoint(aCenter, -fAngle));
 
                 aStartPos *= aTransformation;
                 aEndPos *= aTransformation;
@@ -136,11 +126,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
             if(rG.aGradient.GetAngle())
             {
                 const double fAngle = (double)rG.aGradient.GetAngle() * (F_PI180 / 10.0);
-                basegfx::B2DHomMatrix aTransformation;
-
-                aTransformation.translate(-aEndPos.getX(), -aEndPos.getY());
-                aTransformation.rotate(-fAngle);
-                aTransformation.translate(aEndPos.getX(), aEndPos.getY());
+                const basegfx::B2DHomMatrix aTransformation(basegfx::tools::createRotateAroundPoint(aEndPos, -fAngle));
 
                 aStartPos *= aTransformation;
                 aEndPos *= aTransformation;
@@ -175,11 +161,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
             if(rG.aGradient.GetAngle())
             {
                 const double fAngle = (double)rG.aGradient.GetAngle() * (F_PI180 / 10.0);
-                basegfx::B2DHomMatrix aTransformation;
-
-                aTransformation.translate(-aEndPos.getX(), -aEndPos.getY());
-                aTransformation.rotate(-fAngle);
-                aTransformation.translate(aEndPos.getX(), aEndPos.getY());
+                const basegfx::B2DHomMatrix aTransformation(basegfx::tools::createRotateAroundPoint(aEndPos, -fAngle));
 
                 aStartPos *= aTransformation;
                 aEndPos *= aTransformation;

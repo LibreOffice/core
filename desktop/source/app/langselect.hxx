@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: langselect.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,14 +30,10 @@
 #include <tools/string.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/resid.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 
 namespace desktop
 {
@@ -57,6 +50,7 @@ private:
     static com::sun::star::uno::Sequence< rtl::OUString > getInstalledLanguages();
     static sal_Bool isInstalledLanguage(rtl::OUString& usLocale, sal_Bool bExact=sal_False);
     static rtl::OUString getFirstInstalledLanguage();
+    static rtl::OUString getUserUILanguage();
     static rtl::OUString getUserLanguage();
     static rtl::OUString getSystemLanguage();
     static void resetUserLanguage();

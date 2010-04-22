@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: about.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,15 +29,10 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _RESARY_HXX //autogen
 #include <tools/resary.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _ACCEL_HXX //autogen
 #include <vcl/accel.hxx>
-#endif
+#include <svtools/svmedit.hxx>
 #include <tools/list.hxx>
 #include <svtools/stdctrl.hxx>
 #include <sfx2/basedlgs.hxx>        // SfxModalDialog
@@ -56,13 +48,14 @@ private:
     Image           aAppLogo;
 
     FixedInfo       aVersionText;
-    FixedInfo       aCopyrightText;
+    MultiLineEdit   aCopyrightText;
     FixedInfo       aBuildData;
 
     ResStringArray  aDeveloperAry;
     String          aDevVersionStr;
     String          aAccelStr;
     String          aVersionData;
+    String          aCopyrightTextStr;
 
     AccelList       aAccelList;
 

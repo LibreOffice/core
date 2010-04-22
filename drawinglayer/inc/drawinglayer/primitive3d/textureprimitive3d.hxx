@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: textureprimitive3d.hxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.7 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:21 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,9 +29,10 @@
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TEXTUREPRIMITIVE3D_HXX
 
 #include <drawinglayer/primitive3d/groupprimitive3d.hxx>
-#include <drawinglayer/attribute/fillattribute.hxx>
 #include <drawinglayer/attribute/fillbitmapattribute.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/vector/b2dvector.hxx>
+#include <drawinglayer/attribute/fillgradientattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -47,31 +40,39 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        /** TexturePrimitive3D class
+
+            This 3D grouping primitive is used to define a texture for
+            3d geometry by embedding it. It is used as bae class for
+            extended texture definitions
+         */
         class TexturePrimitive3D : public GroupPrimitive3D
         {
         private:
+            /// texture geometry definition
             basegfx::B2DVector                          maTextureSize;
 
-            // bitfield
-            // flag if texture shall be modulated with white interpolated color
+            /// bitfield
+            /// flag if texture shall be modulated with white interpolated color
             unsigned                                    mbModulate : 1;
 
-            // flag if texture shall be filtered
+            /// flag if texture shall be filtered
             unsigned                                    mbFilter : 1;
 
         public:
+            /// constructor
             TexturePrimitive3D(
                 const Primitive3DSequence& rChildren,
                 const basegfx::B2DVector& rTextureSize,
                 bool bModulate,
                 bool bFilter);
 
-            // get data
+            /// data read access
             const basegfx::B2DVector& getTextureSize() const { return maTextureSize; }
             bool getModulate() const { return mbModulate; }
             bool getFilter() const { return mbFilter; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
         };
     } // end of namespace primitive3d
@@ -83,27 +84,37 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        class UnifiedAlphaTexturePrimitive3D : public TexturePrimitive3D
+        /** UnifiedTransparenceTexturePrimitive3D class
+
+            This 3D primitive expands TexturePrimitive3D to a unified
+            transparence texture definition. All 3D primitives
+            embedded here will be shown with the given transparency.
+         */
+        class UnifiedTransparenceTexturePrimitive3D : public TexturePrimitive3D
         {
         private:
+            /// transparency definition
             double                                      mfTransparence;
 
-        protected:
-            // local decomposition.
-            virtual Primitive3DSequence createLocalDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
-
         public:
-            UnifiedAlphaTexturePrimitive3D(
+            /// constructor
+            UnifiedTransparenceTexturePrimitive3D(
                 double fTransparence,
                 const Primitive3DSequence& rChildren);
 
-            // get data
+            /// data read access
             double getTransparence() const { return mfTransparence; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // provide unique ID
+            /// own getB3DRange implementation to include transparent geometries to BoundRect calculations
+            virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;
+
+            /// local decomposition.
+            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+
+            /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d
@@ -115,16 +126,20 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        /** GradientTexturePrimitive3D class
+
+            This 3D primitive expands TexturePrimitive3D to a gradient texture
+            definition. All 3D primitives embedded here will be shown with the
+            defined gradient.
+         */
         class GradientTexturePrimitive3D : public TexturePrimitive3D
         {
         private:
+            /// the gradient definition
             attribute::FillGradientAttribute        maGradient;
 
-        protected:
-            // local decomposition.
-            virtual Primitive3DSequence createLocalDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
-
         public:
+            /// constructor
             GradientTexturePrimitive3D(
                 const attribute::FillGradientAttribute& rGradient,
                 const Primitive3DSequence& rChildren,
@@ -132,13 +147,13 @@ namespace drawinglayer
                 bool bModulate,
                 bool bFilter);
 
-            // get data
+            /// data read access
             const attribute::FillGradientAttribute& getGradient() const { return maGradient; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d
@@ -150,30 +165,34 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        /** BitmapTexturePrimitive3D class
+
+            This 3D primitive expands TexturePrimitive3D to a bitmap texture
+            definition. All 3D primitives embedded here will be shown with the
+            defined bitmap (maybe tiled if defined).
+         */
         class BitmapTexturePrimitive3D : public TexturePrimitive3D
         {
         private:
-            attribute::FillBitmapAttribute      maBitmap;
-
-        protected:
-            // local decomposition.
-            virtual Primitive3DSequence createLocalDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+            /// bitmap fill attribute
+            attribute::FillBitmapAttribute      maFillBitmapAttribute;
 
         public:
+            /// constructor
             BitmapTexturePrimitive3D(
-                const attribute::FillBitmapAttribute& rBitmap,
+                const attribute::FillBitmapAttribute& rFillBitmapAttribute,
                 const Primitive3DSequence& rChildren,
                 const basegfx::B2DVector& rTextureSize,
                 bool bModulate,
                 bool bFilter);
 
-            // get data
-            const attribute::FillBitmapAttribute& getBitmap() const { return maBitmap; }
+            /// data read access
+            const attribute::FillBitmapAttribute& getFillBitmapAttribute() const { return maFillBitmapAttribute; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d
@@ -185,18 +204,26 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        class AlphaTexturePrimitive3D : public GradientTexturePrimitive3D
+        /** TransparenceTexturePrimitive3D class
+
+            This 3D primitive expands TexturePrimitive3D to a transparence texture
+            definition. For transparence definition, a gradient is used. The values in
+            that gradient will be interpreted as luminance Transparence-Values. All 3D
+            primitives embedded here will be shown with the defined transparence.
+         */
+        class TransparenceTexturePrimitive3D : public GradientTexturePrimitive3D
         {
         public:
-            AlphaTexturePrimitive3D(
+            /// constructor
+            TransparenceTexturePrimitive3D(
                 const attribute::FillGradientAttribute& rGradient,
                 const Primitive3DSequence& rChildren,
                 const basegfx::B2DVector& rTextureSize);
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d

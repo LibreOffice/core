@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sfxhtml.cxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,9 +43,9 @@
 #include <svtools/imaprect.hxx>
 #ifndef _SVSTDARR_ULONGS_DECL
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <rtl/tencinfo.h>
 #include <tools/tenccvt.hxx>
 
@@ -355,40 +352,6 @@ IMPL_STATIC_LINK( SfxHTMLParser, FileDownloadDone, void*, EMPTYARG )
     pThis->CallAsyncCallLink();
 
     return 0;
-}
-
-rtl_TextEncoding SfxHTMLParser::GetEncodingByHttpHeader( SvKeyValueIterator *pHTTPHeader )
-{
-    rtl_TextEncoding eRet = RTL_TEXTENCODING_DONTKNOW;
-    if( pHTTPHeader )
-    {
-        SvKeyValue aKV;
-        for( BOOL bCont = pHTTPHeader->GetFirst( aKV ); bCont;
-             bCont = pHTTPHeader->GetNext( aKV ) )
-        {
-            if( aKV.GetKey().EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_content_type ) )
-            {
-                if( aKV.GetValue().Len() )
-                {
-                    eRet = SfxHTMLParser::GetEncodingByMIME( aKV.GetValue() );
-                }
-            }
-        }
-    }
-    return eRet;
-}
-
-BOOL SfxHTMLParser::SetEncodingByHTTPHeader(
-                                SvKeyValueIterator *pHTTPHeader )
-{
-    BOOL bRet = FALSE;
-    rtl_TextEncoding eEnc = SfxHTMLParser::GetEncodingByHttpHeader( pHTTPHeader );
-    if(RTL_TEXTENCODING_DONTKNOW != eEnc)
-    {
-        SetSrcEncoding( eEnc );
-        bRet = TRUE;
-    }
-    return bRet;
 }
 
 void SfxHTMLParser::GetScriptType_Impl( SvKeyValueIterator *pHTTPHeader )

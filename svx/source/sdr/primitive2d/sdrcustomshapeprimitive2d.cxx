@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdrcustomshapeprimitive2d.cxx,v $
- *
- * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +32,7 @@
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
+#include <drawinglayer/attribute/sdrlineattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -47,28 +44,43 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrCustomShapePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DSequence SdrCustomShapePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DSequence aRetval(getSubPrimitives());
 
             // add text
-            if(getSdrSTAttribute().getText())
+            if(!getSdrSTAttribute().getText().isDefault())
             {
-                const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(
-                    basegfx::B2DPolyPolygon(aUnitOutline),
-                    getTextBox(),
-                    *getSdrSTAttribute().getText(),
-                    0,
-                    false,
-                    getWordWrap(),
-                    isForceTextClipToTextRange()));
+                const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createUnitPolygon());
+
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createTextPrimitive(
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTextBox(),
+                        getSdrSTAttribute().getText(),
+                        attribute::SdrLineAttribute(),
+                        false,
+                        getWordWrap(),
+                        isForceTextClipToTextRange()));
             }
 
             // add shadow
-            if(aRetval.hasElements() && getSdrSTAttribute().getShadow())
+            if(aRetval.hasElements() && !getSdrSTAttribute().getShadow().isDefault())
             {
-                aRetval = createEmbeddedShadowPrimitive(aRetval, *getSdrSTAttribute().getShadow());
+                // #i105323# add generic shadow only for 2D shapes. For
+                // 3D shapes shadow will be set at the individual created
+                // visualisation objects and be visualized by the 3d renderer
+                // as a single shadow.
+                //
+                // The shadow for AutoShapes could be handled uniformely by not setting any
+                // shadow items at the helper model objects and only adding shadow here for
+                // 2D and 3D (and it works, too), but this would lead to two 3D scenes for
+                // the 3D object; one for the shadow aond one for the content. The one for the
+                // shadow will be correct (using ColorModifierStack), but expensive.
+                if(!get3DShape())
+                {
+                    aRetval = createEmbeddedShadowPrimitive(aRetval, getSdrSTAttribute().getShadow());
+                }
             }
 
             return aRetval;
@@ -79,19 +91,21 @@ namespace drawinglayer
             const Primitive2DSequence& rSubPrimitives,
             const basegfx::B2DHomMatrix& rTextBox,
             bool bWordWrap,
+            bool b3DShape,
             bool bForceTextClipToTextRange)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maSdrSTAttribute(rSdrSTAttribute),
             maSubPrimitives(rSubPrimitives),
             maTextBox(rTextBox),
             mbWordWrap(bWordWrap),
+            mb3DShape(b3DShape),
             mbForceTextClipToTextRange(bForceTextClipToTextRange)
         {
         }
 
         bool SdrCustomShapePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrCustomShapePrimitive2D& rCompare = (SdrCustomShapePrimitive2D&)rPrimitive;
 
@@ -99,6 +113,7 @@ namespace drawinglayer
                     && getSubPrimitives() == rCompare.getSubPrimitives()
                     && getTextBox() == rCompare.getTextBox()
                     && getWordWrap() == rCompare.getWordWrap()
+                    && get3DShape() == rCompare.get3DShape()
                     && isForceTextClipToTextRange() == rCompare.isForceTextClipToTextRange());
             }
 
