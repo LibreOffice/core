@@ -65,12 +65,19 @@
      <value xml:lang="en-US">.uno:ViewDataSourceBrowser</value>
     </prop>
    </node>
-   <node oor:name="F5_MOD1" oor:op="replace">
-    <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-     <value xml:lang="en-US">.uno:GrabControlFocus</value>
-    </prop>
-   </node>
-   <node oor:name="F7_SHIFT_MOD1" oor:op="replace">
+    <node oor:name="F5_MOD1" oor:op="replace">
+      <prop oor:name="Command">
+        <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+        <value xml:lang="en-US">.uno:GrabControlFocus</value>
+      </prop>
+    </node>
+    <node oor:name="F5_SHIFT_MOD1" oor:op="replace">
+      <prop oor:name="Command">
+        <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+        <value xml:lang="en-US">.uno:TaskPane</value>
+      </prop>
+    </node>
+    <node oor:name="F7_SHIFT_MOD1" oor:op="replace">
     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
      <value xml:lang="en-US">.uno:HangulHanjaConversion</value>
     </prop>

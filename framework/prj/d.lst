@@ -5,8 +5,6 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\menubar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\toolbar
-mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\accelerator
-mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\accelerator\en-US
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\statusbar
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
@@ -21,14 +19,12 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\statusbar
 ..\dtd\toolbar.dtd %_DEST%\bin%_EXT%\toolbar.dtd
 ..\dtd\statusbar.dtd %_DEST%\bin%_EXT%\statusbar.dtd
 ..\dtd\event.dtd %_DEST%\bin%_EXT%\event.dtd
-..\dtd\accelerator.dtd %_DEST%\bin%_EXT%\accelerator.dtd
 ..\dtd\image.dtd %_DEST%\bin%_EXT%\image.dtd
 ..\dtd\groupuinames.dtd %_DEST%\bin%_EXT%\groupuinames.dtd
 
 ..\%__SRC%\lib\ifwe.lib %_DEST%\lib%_EXT%\ifwe.lib
 ..\%__SRC%\lib\ifwi.lib %_DEST%\lib%_EXT%\ifwi.lib
 ..\inc\helper\imageproducer.hxx %_DEST%\inc%_EXT%\framework\imageproducer.hxx
-..\inc\helper\acceleratorinfo.hxx %_DEST%\inc%_EXT%\framework\acceleratorinfo.hxx
 ..\inc\helper\actiontriggerhelper.hxx %_DEST%\inc%_EXT%\framework\actiontriggerhelper.hxx
 ..\inc\xml\menuconfiguration.hxx %_DEST%\inc%_EXT%\framework\menuconfiguration.hxx
 ..\inc\classes\bmkmenu.hxx %_DEST%\inc%_EXT%\framework\bmkmenu.hxx
@@ -47,7 +43,6 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\statusbar
 
 ..\uiconfig\startmodule\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\menubar\*.xml
 ..\uiconfig\startmodule\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\toolbar\*.xml
-..\uiconfig\startmodule\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\accelerator\en-US\*.xml
 ..\uiconfig\startmodule\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\statusbar\*.xml
 
 ..\source\unotypes\fw?.xml %_DEST%\xml%_EXT%\*.xml

@@ -2,9 +2,6 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %COMMON_DEST%\res%_EXT%
 mkdir: %_DEST%\xml%_EXT%\uiconfig
 mkdir: %_DEST%\xml%_EXT%\uiconfig\global
-mkdir: %_DEST%\xml%_EXT%\uiconfig\global\accelerator
-mkdir: %_DEST%\xml%_EXT%\uiconfig\global\accelerator\en-US
-mkdir: %_DEST%\xml%_EXT%\uiconfig\global\accelerator\es
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
@@ -678,10 +675,6 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\table
 ..\xml\AccessibleOLEShape.xml %_DEST%\xml%_EXT%\AccessibleOLEShape.xml
 ..\xml\AccessibleControlShape.xml %_DEST%\xml%_EXT%\AccessibleControlShape.xml
 ..\xml\AccessibleEditableTextPara.xml %_DEST%\xml%_EXT%\AccessibleEditableTextPara.xml
-
-..\uiconfig\accelerator\*.xml %_DEST%\xml%_EXT%\uiconfig\global\accelerator\*.xml
-..\uiconfig\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\global\accelerator\en-US\*.xml
-..\uiconfig\accelerator\es\*.xml %_DEST%\xml%_EXT%\uiconfig\global\accelerator\es\*.xml
 
 ..\inc\svx\subtoolboxcontrol.hxx %_DEST%\inc%_EXT%\svx\subtoolboxcontrol.hxx
 ..\inc\svx\svdtext.hxx %_DEST%\inc%_EXT%\svx\svdtext.hxx
