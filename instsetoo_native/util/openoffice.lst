@@ -25,10 +25,11 @@ Globals
             POOLPRODUCT 1
             REGISTRATION_HOST https://registration2.services.openoffice.org/RegistrationWeb
 			REGISTRATIONURL http://survey.services.openoffice.org/user/index.php
-			PROGRESSBARCOLOR 4,68,155
-			PROGRESSSIZE 412,7
-			PROGRESSPOSITION 14,230
-			PROGRESSFRAMECOLOR 58,159,232
+			PROGRESSBARCOLOR 14,133,205
+			PROGRESSSIZE 320,7
+			PROGRESSPOSITION 185,206
+			PROGRESSFRAMECOLOR 207,208,211
+			NATIVEPROGRESS true
 			REGISTRYLAYERNAME Layers
             SERVICEPACK 1
             UPDATE_DATABASE 1
@@ -36,6 +37,9 @@ Globals
             UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
  			PACKAGEMAP package_names.txt,package_names_ext.txt
 			WINDOWSPATCHLEVEL 6
+			OPENSOURCE 1
+			OOODOWNLOADNAME 1
+			STARTCENTER_LAYOUT_STYLE 0
 		}
 	}
 }
@@ -92,6 +96,7 @@ OpenOffice
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
 		}
@@ -134,6 +139,7 @@ OpenOffice_wJRE
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
 			SERVICESPROJEKT 1
+			WITHJREPRODUCT 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			SPELLCHECKERFILE spellchecker_selection.txt
@@ -156,6 +162,7 @@ OpenOffice_wJRE
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
 		}
@@ -227,6 +234,7 @@ OpenOffice_Dev
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
 		}
@@ -270,6 +278,7 @@ URE
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_LAYOUT_STYLE 0
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
 			PACKAGEMAP package_names_ext.txt
         }
@@ -315,6 +324,7 @@ OpenOffice_SDK
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_LAYOUT_STYLE 0
         }
         active 1
         compression 5
@@ -346,6 +356,7 @@ OpenOffice_Dev_SDK
             UREPACKAGEPREFIX ooodev
             SOLSUREPACKAGEPREFIX ooodev
             REGISTRYLAYERNAME LayerDev
+			DEVELOPMENTPRODUCT 1
             PACK_INSTALLED 1
             POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
@@ -364,6 +375,7 @@ OpenOffice_Dev_SDK
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_LAYOUT_STYLE 0
         }
         active 1
         compression 5
@@ -392,6 +404,7 @@ BrOffice
 			PROGRESSSIZE 
 			PROGRESSPOSITION 
 			PROGRESSFRAMECOLOR 
+			NATIVEPROGRESS
 			UPDATEURL http://update36.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt
@@ -427,6 +440,7 @@ BrOffice
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/BrOffice/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/BrOffice/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/BrOffice/templates.jsp?cid=926383
+            STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
 		}
@@ -459,6 +473,7 @@ BrOffice_wJRE
 			PROGRESSSIZE 
 			PROGRESSPOSITION 
 			PROGRESSFRAMECOLOR 
+			NATIVEPROGRESS
 			UPDATEURL http://update36.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt
@@ -472,6 +487,7 @@ BrOffice_wJRE
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
 			SERVICESPROJEKT 1
+			WITHJREPRODUCT 1
 			SETSTATICPATH 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
@@ -495,6 +511,7 @@ BrOffice_wJRE
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/BrOffice/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/BrOffice/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/BrOffice/templates.jsp?cid=926383
+            STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
 		}
@@ -529,6 +546,7 @@ BrOffice_Dev
 			PROGRESSSIZE 
 			PROGRESSPOSITION 
 			PROGRESSFRAMECOLOR 
+			NATIVEPROGRESS
 			BASISPACKAGEPREFIX ooobasis-dev
 			UREPACKAGEPREFIX ooodev
 			SOLSUREPACKAGEPREFIX ooodev
@@ -569,6 +587,7 @@ BrOffice_Dev
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/BrOffice/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/BrOffice/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/BrOffice/templates.jsp?cid=926383
+            STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
 		}

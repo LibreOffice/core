@@ -816,7 +816,7 @@ RegistryItem gid_Regitem_OpenOffice_SDW_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sdw\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "opendocument.WriterDocument.1";
+    Name = "soffice.StarWriterDocument.5";
     Value = " ";
 End
 
@@ -825,7 +825,7 @@ RegistryItem gid_Regitem_OpenOffice_VOR_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".vor\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "opendocument.WriterDocument.1";
+    Name = "soffice.StarWriterDocument.5";
     Value = " ";
 End
 
@@ -834,7 +834,7 @@ RegistryItem gid_Regitem_OpenOffice_SGL_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sgl\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "opendocument.WriterDocument.1";
+    Name = "soffice.StarWriterGlobalDocument.5";
     Value = " ";
 End
 
@@ -843,7 +843,7 @@ RegistryItem gid_Regitem_OpenOffice_SDC_OpenWith_Calc
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sdc\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "opendocument.CalcDocument.1";
+    Name = "soffice.StarCalcDocument.5";
     Value = " ";
 End
 
@@ -852,7 +852,7 @@ RegistryItem gid_Regitem_OpenOffice_VOR_OpenWith_Calc
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".vor\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "opendocument.CalcDocument.1";
+    Name = "soffice.StarCalcDocument.5";
     Value = " ";
 End
 
@@ -861,7 +861,7 @@ RegistryItem gid_Regitem_OpenOffice_SDD_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sdd\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "opendocument.ImpressDocument.1";
+    Name = "soffice.StarImpressDocument.5";
     Value = " ";
 End
 
@@ -870,7 +870,7 @@ RegistryItem gid_Regitem_OpenOffice_SDP_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sdp\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "opendocument.ImpressDocument.1";
+    Name = "soffice.StarImpressDocument.5";
     Value = " ";
 End
 
@@ -879,7 +879,7 @@ RegistryItem gid_Regitem_OpenOffice_SDA_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sda\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "opendocument.ImpressDocument.1";
+    Name = "soffice.StarImpressDocument.5";
     Value = " ";
 End
 
@@ -888,7 +888,7 @@ RegistryItem gid_Regitem_OpenOffice_VOR_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".vor\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "opendocument.ImpressDocument.1";
+    Name = "soffice.StarImpressDocument.5";
     Value = " ";
 End
 
@@ -897,7 +897,7 @@ RegistryItem gid_Regitem_OpenOffice_SDA_OpenWith_Draw
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sda\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "opendocument.DrawDocument.1";
+    Name = "soffice.StarDrawDocument.5";
     Value = " ";
 End
 
@@ -906,7 +906,7 @@ RegistryItem gid_Regitem_OpenOffice_SDD_OpenWith_Draw
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sdd\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "opendocument.DrawDocument.1";
+    Name = "soffice.StarDrawDocument.5";
     Value = " ";
 End
 
@@ -915,7 +915,7 @@ RegistryItem gid_Regitem_OpenOffice_VOR_OpenWith_Draw
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".vor\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "opendocument.DrawDocument.1";
+    Name = "soffice.StarDrawDocument.5";
     Value = " ";
 End
 
@@ -924,7 +924,7 @@ RegistryItem gid_Regitem_OpenOffice_SMF_OpenWith_Math
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".smf\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "opendocument.MathDocument.1";
+    Name = "soffice.StarMathDocument.5";
     Value = " ";
 End
 
