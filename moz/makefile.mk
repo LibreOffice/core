@@ -78,6 +78,7 @@ XLDOPTS:= -B$(SYSBASE)/usr/lib -B$(SYSBASE)/usr/lib/system -lmathCommon
 
 MOZILLA_VERSION=1.1.14
 TARFILE_NAME=seamonkey-$(MOZILLA_VERSION).source
+TARFILE_MD5=a169ab152209200a7bad29a275cb0333
 
 TARFILE_ROOTDIR=mozilla
 PATCH_FILES = \
@@ -168,13 +169,7 @@ MOZ_CROSSCOMPILE=CROSS_COMPILE=1 CC="$(CC) -arch $(MOZ_ARCH)" CXX="$(CXX) -arch 
 
 CONFIGURE_ACTION=$(null,$(MOZ_ARCH) $(NULL) $(MOZ_CROSSCOMPILE)) ../configure $(MOZILLA_CONFIGURE_FLAGS)
 
-.IF "$(USE_SHELL)"!="4nt"
 BUILD_ACTION:=$(GNUMAKE) -j$(EXTMAXPROCESS)
-.ELSE
-# This construct is needed because unitools.mk defines GNUMAKE using $ENV_TOOLS.
-# $ENV_TOOLS doesn't exist for OOo builds and the cygwin make is needed.
-BUILD_ACTION:=make
-.ENDIF
 
 .IF "$(GUI)"=="UNX"
 .IF "$(COMNAME)"=="sunpro5"
@@ -244,7 +239,6 @@ MOZTOOLSINST:=$(MISC)$/build$/moztoolsinst
 .ELSE
 MOZTOOLS_EXTRACT:=$(MISC)$/build$/moztools
 .ENDIF
-.IF "$(USE_SHELL)"!="4nt"
 .IF "$(COM)"=="GCC"
 MOZ_TOOLS_DOS:=$(shell @cygpath -ad "$(MISC)")\build\moztoolsinst
 PATH!:=$(PATH):$(shell @cygpath $(MOZ_TOOLS_DOS))/bin:$(shell @cygpath $(MOZ_TOOLS_DOS))/vc71/bin
@@ -253,11 +247,6 @@ SET_MOZ_TOOLS_INSTALL_BAT:=export "MOZ_TOOLS=$(MOZ_TOOLS_DOS)"
 MOZ_TOOLS_DOS:=$(shell @cygpath -ad "$(MISC)")\build\moztools\vc8-moztools
 PATH!:=$(shell @cygpath $(MOZ_TOOLS_DOS))/bin:$(PATH)
 .ENDIF
-.ELSE # "$(USE_SHELL)"!="4nt"
-# MOZ_TOOLS must contain an absolute path
-MOZ_TOOLS_DOS:=$(shell @echo %@SFN[$(MISC)])\build\moztools\vc8-moztools
-PATH!:=$(MOZ_TOOLS_DOS)\bin;$(PATH)
-.ENDIF # "$(USE_SHELL)"!="4nt"
 
 MOZ_TOOLS:=$(subst,\,/ $(MOZ_TOOLS_DOS))
 .IF "$(COM)"=="GCC"
