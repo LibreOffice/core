@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svtaccessiblefactory.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,6 +99,15 @@ namespace svt
                 createAccessibleBrowseBox(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& /*_rxParent*/,
                     IAccessibleTableProvider& /*_rBrowseBox*/
+                ) const
+            {
+                return NULL;
+            }
+
+            virtual table::IAccessibleTableControl*
+                createAccessibleTableControl(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& /*_rxParent*/,
+                    table::IAccessibleTable& /*_rTable*/
                 ) const
             {
                 return NULL;

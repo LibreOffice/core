@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mapunit.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,14 +28,6 @@
 #ifndef _VCL_MAPUNIT_HXX
 #define _VCL_MAPUNIT_HXX
 
-// -----------------
-// - MapMode-Types -
-// -----------------
-
-// By changes you must also change: rsc/vclrsc.hxx
-enum MapUnit { MAP_100TH_MM, MAP_10TH_MM, MAP_MM, MAP_CM,
-               MAP_1000TH_INCH, MAP_100TH_INCH, MAP_10TH_INCH, MAP_INCH,
-               MAP_POINT, MAP_TWIP, MAP_PIXEL, MAP_SYSFONT, MAP_APPFONT,
-               MAP_RELATIVE, MAP_REALAPPFONT, MAP_LASTENUMDUMMY };
+#include <tools/mapunit.hxx>
 
 #endif  // _VCL_MAPUNIT_HXX

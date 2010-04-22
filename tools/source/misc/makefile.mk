@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,9 +38,10 @@ LIB1TARGET = $(SLB)$/$(TARGET).lib
 LIB1OBJFILES = \
     $(SLO)$/appendunixshellword.obj \
     $(SLO)$/extendapplicationenvironment.obj \
+    $(SLO)$/solarmutex.obj \
     $(SLO)$/getprocessworkingdir.obj
 
 OBJFILES = $(OBJ)$/pathutils.obj
-SLOFILES = $(SLO)$/pathutils.obj $(LIB1OBJFILES)
+SLOFILES = $(SLO)$/pathutils.obj $(LIB1OBJFILES) $(SLO)$/solarmutex.obj
 
 .INCLUDE: target.mk

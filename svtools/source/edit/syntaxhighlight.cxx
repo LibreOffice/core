@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: syntaxhighlight.cxx,v $
- * $Revision: 1.1.2.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -682,7 +679,7 @@ String SimpleTokenizer_Impl::getTokStr
     return String( pStartPos, (USHORT)( pEndPos - pStartPos ) );
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 // TEST: Token ausgeben
 String SimpleTokenizer_Impl::getFullTokenStr( /*out*/TokenTypes eType,
     /*out*/const sal_Unicode* pStartPos, /*out*/const sal_Unicode* pEndPos )

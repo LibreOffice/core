@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svlbitm.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -590,8 +587,7 @@ void SvLBoxContextBmp::Paint( const Point& _rPos, SvLBox& _rDev,
     BmpColorMode eMode( BMP_COLOR_NORMAL );
     if ( !!m_pImpl->m_aImage1_hc )
     {   // we really have HC images
-        const Wallpaper& rDeviceBackground = _rDev.GetDisplayBackground();
-        if ( rDeviceBackground.GetColor().IsDark() )
+        if ( _rDev.GetSettings().GetStyleSettings().GetHighContrastMode() )
             eMode = BMP_COLOR_HIGHCONTRAST;
     }
 

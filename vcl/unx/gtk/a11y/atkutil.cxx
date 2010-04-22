@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: atkutil.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -221,7 +218,7 @@ void DocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObj
                 if( accessibility::AccessibleStateType::FOCUSED == nState )
                     atk_wrapper_focus_tracker_notify_when_idle( getAccessible(aEvent) );
             }
-            catch(lang::IndexOutOfBoundsException e)
+            catch(const lang::IndexOutOfBoundsException &e)
             {
                 g_warning("Focused object has invalid index in parent");
             }
@@ -503,6 +500,7 @@ static void handle_toolbox_buttonchange(VclWindowEvent const *pEvent)
 
 /*****************************************************************************/
 
+/* currently not needed anymore...
 static void create_wrapper_for_children(Window *pWindow)
 {
     if( pWindow && pWindow->IsReallyVisible() )
@@ -520,6 +518,7 @@ static void create_wrapper_for_children(Window *pWindow)
         }
     }
 }
+*/
 
 /*****************************************************************************/
 
@@ -577,7 +576,14 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
         if( g_aWindowList.find(pWindow) == g_aWindowList.end() )
         {
             g_aWindowList.insert(pWindow);
-            aDocumentFocusListener->attachRecursive(xAccessible, xContext, xStateSet);
+            try
+            {
+                aDocumentFocusListener->attachRecursive(xAccessible, xContext, xStateSet);
+            }
+            catch( const uno::Exception &e )
+            {
+                g_warning( "Exception caught processing focus events" );
+            }
         }
 #ifdef ENABLE_TRACING
         else
@@ -608,7 +614,7 @@ static void handle_menu_highlighted(::VclMenuEvent const * pEvent)
             }
         }
     }
-    catch( uno::Exception e )
+    catch( const uno::Exception& e )
     {
         g_warning( "Exception caught processing menu highlight events" );
     }
@@ -659,7 +665,16 @@ long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
             static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
  */
     case VCLEVENT_MENU_HIGHLIGHT:
-        handle_menu_highlighted(static_cast< ::VclMenuEvent const * >(pEvent));
+        if (const VclMenuEvent* pMenuEvent = dynamic_cast<const VclMenuEvent*>(pEvent))
+        {
+            handle_menu_highlighted(pMenuEvent);
+        }
+        else if (const VclAccessibleEvent* pAccEvent = dynamic_cast<const VclAccessibleEvent*>(pEvent))
+        {
+            uno::Reference< accessibility::XAccessible > xAccessible = pAccEvent->GetAccessible();
+            if (xAccessible.is())
+                atk_wrapper_focus_tracker_notify_when_idle(xAccessible);
+        }
         break;
 
     case VCLEVENT_TOOLBOX_HIGHLIGHT:
@@ -682,7 +697,11 @@ long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
         break;
 
     case VCLEVENT_COMBOBOX_SETTEXT:
-        create_wrapper_for_children(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
+        // MT 2010/02: This looks quite strange to me. Stumbled over this when fixing #i104290#.
+        // This kicked in when leaving the combobox in the toolbar, after that the events worked.
+        // I guess this was a try to work around missing combobox events, which didn't do the full job, and shouldn't be necessary anymore.
+        // Fix for #i104290# was done in toolkit/source/awt/vclxaccessiblecomponent, FOCUSED state for compound controls in general.
+        // create_wrapper_for_children(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
         break;
 
     default:

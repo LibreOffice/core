@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: transliterationwrapper.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -191,7 +188,7 @@ void TransliterationWrapper::loadModuleImpl() const
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "loadModuleImpl: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -218,7 +215,7 @@ void TransliterationWrapper::loadModuleByImplName(
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "loadModuleByImplName: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -244,7 +241,7 @@ sal_Bool TransliterationWrapper::equals(
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "equals: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -269,7 +266,7 @@ sal_Int32 TransliterationWrapper::compareSubstring(
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "compareSubstring: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -292,7 +289,7 @@ sal_Int32 TransliterationWrapper::compareString( const String& rStr1, const Stri
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "compareString: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );

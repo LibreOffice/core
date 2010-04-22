@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salframe.cxx,v $
- * $Revision: 1.69 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,10 +51,7 @@
 #include "boost/assert.hpp"
 #include "vcl/svapp.hxx"
 #include "rtl/ustrbuf.hxx"
-
-#include <premac.h>
-#include <CoreFoundation/CoreFoundation.h>
-#include <postmac.h>
+#include "osl/file.h"
 
 using namespace std;
 
@@ -329,8 +323,25 @@ void AquaSalFrame::SetTitle(const XubString& rTitle)
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::SetIcon( USHORT nIcon )
+void AquaSalFrame::SetIcon( USHORT )
 {
+}
+
+// -----------------------------------------------------------------------
+
+void AquaSalFrame::SetRepresentedURL( const rtl::OUString& i_rDocURL )
+{
+    if( i_rDocURL.indexOfAsciiL( "file:", 5 ) == 0 )
+    {
+        rtl::OUString aSysPath;
+        osl_getSystemPathFromFileURL( i_rDocURL.pData, &aSysPath.pData );
+        NSString* pStr = CreateNSString( aSysPath );
+        if( pStr )
+        {
+            [pStr autorelease];
+            [mpWindow setRepresentedFilename: pStr];
+        }
+    }
 }
 
 // -----------------------------------------------------------------------

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salgdi3.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1361,10 +1358,8 @@ BOOL Os2SalGraphics::GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& rB
     // rescaling needed for the PolyPolygon conversion
     if( rB2DPolyPoly.count() )
     {
-        ::basegfx::B2DHomMatrix aMatrix;
-        aMatrix.scale( 1.0/256, 1.0/256 );
-        aMatrix.scale( mfFontScale, mfFontScale );
-        rB2DPolyPoly.transform( aMatrix );
+        const double fFactor((1.0/256) * mfFontScale);
+        rB2DPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix(fFactor, fFactor));
     }
 
     return bRet;

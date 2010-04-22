@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salinst.cxx,v $
- * $Revision: 1.8.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,6 +52,7 @@
 #include <salbmp.h>
 #include <vcl/salimestatus.hxx>
 #include <vcl/timer.hxx>
+#include <tools/solarmutex.hxx>
 
 // =======================================================================
 
@@ -501,12 +499,14 @@ Os2SalInstance::Os2SalInstance()
     mpSalWaitMutex          = new vos::OMutex;
     mnYieldWaitCount         = 0;
     mpSalYieldMutex->acquire();
+    ::tools::SolarMutex::SetSolarMutex( mpSalYieldMutex );
 }
 
 // -----------------------------------------------------------------------
 
 Os2SalInstance::~Os2SalInstance()
 {
+    ::tools::SolarMutex::SetSolarMutex( 0 );
     mpSalYieldMutex->release();
     delete mpSalYieldMutex;
     delete mpSalWaitMutex;

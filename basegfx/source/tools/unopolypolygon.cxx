@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unopolypolygon.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,8 +41,8 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-
 #include <basegfx/tools/unopolypolygon.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 
 using namespace ::com::sun::star;
@@ -138,9 +135,7 @@ namespace unotools
 
         if( !aOffset.equalZero() )
         {
-            B2DHomMatrix aTranslate;
-            aTranslate.translate( aOffset.getX(), aOffset.getY() );
-
+            const B2DHomMatrix aTranslate(tools::createTranslateB2DHomMatrix(aOffset));
             aSrcPoly.transform( aTranslate );
         }
 

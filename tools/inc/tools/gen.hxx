@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gen.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +33,37 @@
 #include <limits.h>
 
 class SvStream;
+
+// --------------------
+// - Helper functions -
+// --------------------
+
+inline long MinMax( long nVal, long nMin, long nMax );
+inline long AlignedWidth4Bytes( long nWidthBits );
+inline long FRound( double fVal );
+
+// ---------------
+// - Inlines -
+// ---------------
+
+inline long MinMax( long nVal, long nMin, long nMax )
+{
+    return( nVal >= nMin ? ( nVal <= nMax ? nVal : nMax ) : nMin );
+}
+
+// ------------------------------------------------------------------
+
+inline long AlignedWidth4Bytes( long nWidthBits )
+{
+    return( ( ( nWidthBits + 31 ) >> 5 ) << 2 );
+}
+
+// ------------------------------------------------------------------
+
+inline long FRound( double fVal )
+{
+    return( fVal > 0.0 ? (long) ( fVal + 0.5 ) : -(long) ( -fVal + 0.5 ) );
+}
 
 // --------
 // - Pair -

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: editbrowsebox.cxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +47,7 @@
 #include <svtools/svtdata.hxx>
 
 #ifndef _SVTOOLS_HRC
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 #endif
 
 #include <algorithm>
@@ -70,17 +67,7 @@ namespace svt
         sal_Bool isHiContrast(Window* _pWindow)
         {
             OSL_ENSURE(_pWindow,"Window must be not null!");
-            Window* pIter = _pWindow;
-            //  while( pIter &&  pIter->GetBackground().GetColor().GetColor() == COL_TRANSPARENT )
-            while( pIter )
-            {
-                const Color& aColor = pIter->GetBackground().GetColor();
-                if ( aColor.GetColor() == COL_TRANSPARENT )
-                    pIter = pIter->GetParent();
-                else
-                    break;
-            }
-            return pIter && pIter->GetBackground().GetColor().IsDark();
+            return _pWindow && _pWindow->GetSettings().GetStyleSettings().GetHighContrastMode();
         }
 
         //..............................................................

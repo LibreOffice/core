@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -31,6 +31,7 @@ PRJNAME=vcl
 TARGET=vcl
 TARGETTYPE=GUI
 USE_DEFFILE=TRUE
+GEN_HID_OTHER=TRUE
 
 .IF "$(SNDFILE_LIBS)"!=""
 SNDFILELIB=$(SNDFILE_LIBS)
@@ -73,7 +74,6 @@ HXXDEPNLST= $(INC)$/vcl$/accel.hxx       \
             $(INC)$/vcl$/fixed.hxx       \
             $(INC)$/vcl$/floatwin.hxx    \
             $(INC)$/vcl$/font.hxx        \
-            $(INC)$/vcl$/fontcvt.hxx     \
             $(INC)$/vcl$/floatwin.hxx    \
             $(INC)$/vcl$/graph.hxx       \
             $(INC)$/vcl$/group.hxx       \
@@ -303,6 +303,7 @@ SHL2STDLIBS=\
             $(VOSLIB)           \
             $(BASEGFXLIB)	\
             $(UNOTOOLSLIB) \
+            $(COMPHELPERLIB)	\
             $(CPPUHELPERLIB) \
             $(CPPULIB) \
             $(SALLIB)

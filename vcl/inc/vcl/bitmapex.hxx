@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: bitmapex.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -380,6 +377,19 @@ public:
     BOOL                Filter( BmpFilter eFilter,
                                 const BmpFilterParam* pFilterParam = NULL,
                                 const Link* pProgress = NULL );
+
+    /** Get transparency at given position
+
+        @param nX
+        integer X-Position in Bitmap
+
+        @param nY
+        integer Y-Position in Bitmap
+
+        @return transparency value in the range of [0 .. 255] where
+                0 is not transparent, 255 is fully transparent
+     */
+    sal_uInt8 GetTransparency(sal_Int32 nX, sal_Int32 nY) const;
 
 public:
 

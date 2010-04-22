@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: outdev6.cxx,v $
- * $Revision: 1.33.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -269,6 +266,9 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
     // try hard to draw it directly, because the emulation layers are slower
     if( !pDisableNative
         && mpGraphics->supportsOperation( OutDevSupport_B2DDraw )
+#if defined UNX && ! defined QUARTZ
+            && GetBitCount() > 8
+#endif
 #ifdef WIN32
         // workaround bad dithering on remote displaying when using GDI+ with toolbar buttoin hilighting
         && !rPolyPoly.IsRect()
@@ -1158,9 +1158,11 @@ void OutputDevice::ImplDraw2ColorFrame( const Rectangle& rRect,
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
+bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
                             const GfxLink& rGfxLink, GDIMetaFile* pSubst )
 {
+    bool bDrawn(true);
+
     if ( mpMetaFile )
     {
         GDIMetaFile aSubst;
@@ -1172,20 +1174,20 @@ void OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
     }
 
     if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
-        return;
+        return bDrawn;
 
     if( mbOutputClipped )
-        return;
+        return bDrawn;
 
     Rectangle   aRect( ImplLogicToDevicePixel( Rectangle( rPoint, rSize ) ) );
+
     if( !aRect.IsEmpty() )
     {
         // draw the real EPS graphics
-        bool bDrawn = FALSE;
         if( rGfxLink.GetData() && rGfxLink.GetDataSize() )
         {
             if( !mpGraphics && !ImplGetGraphics() )
-                return;
+                return bDrawn;
 
             if( mbInitClipRegion )
                 ImplInitClipRegion();
@@ -1208,4 +1210,6 @@ void OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawEPS( rPoint, rSize, rGfxLink, pSubst );
+
+    return bDrawn;
 }

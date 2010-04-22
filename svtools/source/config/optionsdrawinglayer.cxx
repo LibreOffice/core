@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optionsdrawinglayer.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,6 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svtools.hxx"
+
 #ifdef _MSC_VER
 #pragma hdrstop
 #endif
@@ -191,6 +191,7 @@ public:
 //---------------------------------------------------------------------------------------------------------
 
     virtual void Commit();
+    virtual void Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
 
 //---------------------------------------------------------------------------------------------------------
 //  public interface
@@ -733,6 +734,10 @@ void SvtOptionsDrawinglayer_Impl::Commit()
     }
 
     PutProperties( aSeqNames, aSeqValues );
+}
+
+void SvtOptionsDrawinglayer_Impl::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& )
+{
 }
 
 //*****************************************************************************************************************

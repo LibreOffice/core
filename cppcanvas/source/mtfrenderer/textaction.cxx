@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textaction.cxx,v $
- * $Revision: 1.22.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +45,7 @@
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <tools/gen.hxx>
 #include <vcl/canvastools.hxx>
@@ -93,9 +91,7 @@ namespace cppcanvas
                                    NULL,
                                    &rState.fontRotation );
 
-                ::basegfx::B2DHomMatrix aLocalTransformation;
-
-                aLocalTransformation.rotate( rState.fontRotation );
+                basegfx::B2DHomMatrix aLocalTransformation(basegfx::tools::createRotateB2DHomMatrix(rState.fontRotation));
                 aLocalTransformation.translate( rStartPoint.getX(),
                                                 rStartPoint.getY() );
                 ::canvas::tools::appendToRenderState( o_rRenderState,

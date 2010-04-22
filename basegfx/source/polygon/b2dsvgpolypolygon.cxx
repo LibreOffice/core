@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: b2dsvgpolypolygon.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +33,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/math.hxx>
 
@@ -705,7 +703,7 @@ namespace basegfx
                                 // |y1'| = |-sin phi  cos phi|  |(y1 - y2)/2|
                                 const B2DPoint p1(nLastX, nLastY);
                                 const B2DPoint p2(nX, nY);
-                                B2DHomMatrix aTransform; aTransform.rotate(-fPhi*M_PI/180);
+                                B2DHomMatrix aTransform(basegfx::tools::createRotateB2DHomMatrix(-fPhi*M_PI/180));
 
                                 const B2DPoint p1_prime( aTransform * B2DPoint(((p1-p2)/2.0)) );
 
@@ -797,8 +795,7 @@ namespace basegfx
                                         fTheta1, fTheta2 ));
 
                                 // transform ellipse by rotation & move to final center
-                                aTransform.identity();
-                                aTransform.scale(fRX,fRY);
+                                aTransform = basegfx::tools::createScaleB2DHomMatrix(fRX, fRY);
                                 aTransform.translate(aCenter_prime.getX(),
                                                      aCenter_prime.getY());
                                 aTransform.rotate(fPhi*M_PI/180);

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: adddlg.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -807,7 +804,7 @@ AddPrinterDialog::~AddPrinterDialog()
 
 void AddPrinterDialog::updateSettings()
 {
-    if( ! GetDisplayBackground().GetColor().IsDark() )
+    if( ! GetSettings().GetStyleSettings().GetHighContrastMode() )
         m_aTitleImage.SetImage( Image( BitmapEx( PaResId( RID_BMP_PRINTER ) ) ) );
     else
         m_aTitleImage.SetImage( Image( BitmapEx( PaResId( RID_BMP_PRINTER_HC ) ) ) );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dx_config.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,6 +74,8 @@ namespace dxcanvas
         bool isBlacklistCurrentDevice() const;
         void blacklistDevice( const DeviceInfo& rDeviceInfo );
         void adaptMaxTextureSize( basegfx::B2IVector& io_maxTextureSize ) const;
+            virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+            virtual void            Commit();
 
     private:
         typedef std::set< DeviceInfo > ValueSet;

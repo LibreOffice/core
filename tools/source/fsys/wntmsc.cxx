@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wntmsc.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +88,7 @@ struct dirent *readdir( DIR *pDir )
             pDir->h = FindFirstFile( pBuf, &pDir->aDirEnt );
             bOk = pDir->h != INVALID_HANDLE_VALUE;
             pDir->p = NULL;
-            delete pBuf;
+            delete [] pBuf;
         }
         else
             pDir->h = INVALID_HANDLE_VALUE;

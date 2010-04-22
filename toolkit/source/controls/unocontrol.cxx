@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unocontrol.cxx,v $
- * $Revision: 1.54.42.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1050,10 +1047,10 @@ void UnoControl::draw( sal_Int32 x, sal_Int32 y ) throw(RuntimeException)
 
     if ( xDrawPeerView.is() )
     {
-    Reference< XVclWindowPeer > xWindowPeer;
-    xWindowPeer.set( xDrawPeer, UNO_QUERY );
-    if ( xWindowPeer.is() )
-        xWindowPeer->setDesignMode( mbDesignMode );
+        Reference< XVclWindowPeer > xWindowPeer;
+        xWindowPeer.set( xDrawPeer, UNO_QUERY );
+        if ( xWindowPeer.is() )
+            xWindowPeer->setDesignMode( mbDesignMode );
         xDrawPeerView->draw( x, y );
     }
 

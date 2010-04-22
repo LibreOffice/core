@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salunx.h,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,12 +35,6 @@
 #include <time.h>
 #include <sys/time.h>
 #include <strings.h>
-#elif defined IRIX
-#ifdef __cplusplus
-#include <ctime>
-#endif
-#include <sys/time.h>
-#include <unistd.h>
 #endif
 #include <svunx.h>
 #include <salstd.hxx>

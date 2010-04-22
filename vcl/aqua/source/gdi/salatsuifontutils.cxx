@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -207,16 +207,20 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
     rDFA.meItalic     = ITALIC_NONE;
     rDFA.mbSymbolFlag = false;
 
+    // ignore bitmap fonts
+    ATSFontRef rATSFontRef = FMGetATSFontRefFromFont( nFontID );
+    ByteCount nHeadLen = 0;
+    OSStatus rc = ATSFontGetTable( rATSFontRef, 0x68656164/*head*/, 0, 0, NULL, &nHeadLen );
+    if( (rc != noErr) || (nHeadLen <= 0) )
+        return false;
+
     // all scalable fonts on this platform are subsettable
     rDFA.mbSubsettable  = true;
     rDFA.mbEmbeddable   = false;
-    // TODO: these members are needed only for our X11 platform targets
-    rDFA.meAntiAlias    = ANTIALIAS_DONTKNOW;
-    rDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
 
     // prepare iterating over all name strings of the font
     ItemCount nFontNameCount = 0;
-    OSStatus rc = ATSUCountFontNames( nFontID, &nFontNameCount );
+    rc = ATSUCountFontNames( nFontID, &nFontNameCount );
     if( rc != noErr )
         return false;
     int nBestNameValue = 0;

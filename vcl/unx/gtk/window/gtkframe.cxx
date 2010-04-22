@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gtkframe.cxx,v $
- * $Revision: 1.84.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,9 +67,9 @@
 #ifdef ENABLE_DBUS
 #include <dbus/dbus-glib.h>
 
-#define GSS_DBUS_SERVICE        "org.gnome.ScreenSaver"
-#define GSS_DBUS_PATH           "/org/gnome/ScreenSaver"
-#define GSS_DBUS_INTERFACE      "org.gnome.ScreenSaver"
+#define GSM_DBUS_SERVICE        "org.gnome.SessionManager"
+#define GSM_DBUS_PATH           "/org/gnome/SessionManager"
+#define GSM_DBUS_INTERFACE      "org.gnome.SessionManager"
 #endif
 
 // make compile on gtk older than 2.10
@@ -565,7 +562,7 @@ void GtkSalFrame::InitCommon()
     m_pIMHandler        = NULL;
     m_hBackgroundPixmap = None;
     m_nSavedScreenSaverTimeout = 0;
-    m_nGSSCookie = 0;
+    m_nGSMCookie = 0;
     m_nExtStyle         = 0;
     m_pRegion           = NULL;
     m_ePointerStyle     = 0xffff;
@@ -772,7 +769,10 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     m_aForeignTopLevelWindow = None;
     m_nStyle = nStyle;
 
-    GtkWindowType eWinType = ((nStyle & SAL_FRAME_STYLE_FLOAT) && ! (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION))
+    GtkWindowType eWinType = (  (nStyle & SAL_FRAME_STYLE_FLOAT) &&
+                              ! (nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|
+                                           SAL_FRAME_STYLE_FLOAT_FOCUSABLE))
+                              )
         ? GTK_WINDOW_POPUP : GTK_WINDOW_TOPLEVEL;
 
     if( nStyle & SAL_FRAME_STYLE_SYSTEMCHILD )
@@ -801,13 +801,20 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     bool bDecoHandling =
         ! isChild() &&
         ( ! (nStyle & SAL_FRAME_STYLE_FLOAT) ||
-          (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) );
+          (nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_FLOAT_FOCUSABLE) ) );
 
     /* #i100116# metacity has a peculiar behavior regarding WM_HINT accept focus and _NET_WM_USER_TIME
         at some point that may be fixed in metacity and we will have to revisit this
     */
-    bool bMetaCityToolWindowHack = getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") &&
-                                   (nStyle & SAL_FRAME_STYLE_TOOLWINDOW );
+
+    // MT/PL 2010/02: #i102694# and #i102803# have been introduced by this hack
+    // Nowadays the original issue referenced above doesn't seem to exist anymore, tested different szenarious described in the issues
+    // If some older versions of MetaCity are still in use somewhere, they need to be updated, instead of using strange hacks in OOo.
+    // As a work around for such old systems, people might consider to not use the GTK plugin.
+
+    bool bMetaCityToolWindowHack = false;
+    // bMetaCityToolWindowHack = getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") && (nStyle & SAL_FRAME_STYLE_TOOLWINDOW );
+
     if( bDecoHandling )
     {
         bool bNoDecor = ! (nStyle & (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE ) );
@@ -832,6 +839,11 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
             lcl_set_accept_focus( GTK_WINDOW(m_pWindow), FALSE, true );
             bNoDecor = true;
         }
+        else if( (nStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE) )
+        {
+            eType = GDK_WINDOW_TYPE_HINT_UTILITY;
+        }
+
         if( (nStyle & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN ) )
         {
             eType = GDK_WINDOW_TYPE_HINT_TOOLBAR;
@@ -869,7 +881,7 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     if( bDecoHandling )
     {
         gtk_window_set_resizable( GTK_WINDOW(m_pWindow), (nStyle & SAL_FRAME_STYLE_SIZEABLE) ? TRUE : FALSE );
-        if( ( (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) || bMetaCityToolWindowHack )
+        if( ( (nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION)) ) || bMetaCityToolWindowHack )
             lcl_set_accept_focus( GTK_WINDOW(m_pWindow), FALSE, false );
     }
 
@@ -1307,7 +1319,7 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             setMinMaxSize();
 
             // #i45160# switch to desktop where a dialog with parent will appear
-            if( m_pParent && m_pParent->m_nWorkArea != m_nWorkArea )
+            if( m_pParent && m_pParent->m_nWorkArea != m_nWorkArea && GTK_WIDGET_MAPPED(m_pParent->m_pWindow) )
                 getDisplay()->getWMAdaptor()->switchToWorkArea( m_pParent->m_nWorkArea );
 
             if( isFloatGrabWindow() &&
@@ -1904,8 +1916,9 @@ void GtkSalFrame::setAutoLock( bool bLock )
 #ifdef ENABLE_DBUS
 /** cookie is returned as an unsigned integer */
 static guint
-dbus_inhibit_gss (const gchar *appname,
-                  const gchar *reason)
+dbus_inhibit_gsm (const gchar *appname,
+                  const gchar *reason,
+                  guint xid)
 {
         gboolean         res;
         guint            cookie;
@@ -1921,20 +1934,22 @@ dbus_inhibit_gss (const gchar *appname,
                 return -1;
         }
 
-        /* get the proxy with gnome-screensaver */
+        /* get the proxy with gnome-session-manager */
         proxy = dbus_g_proxy_new_for_name (session_connection,
-                                           GSS_DBUS_SERVICE,
-                                           GSS_DBUS_PATH,
-                                           GSS_DBUS_INTERFACE);
+                                           GSM_DBUS_SERVICE,
+                                           GSM_DBUS_PATH,
+                                           GSM_DBUS_INTERFACE);
         if (proxy == NULL) {
-                g_warning ("Could not get DBUS proxy: %s", GSS_DBUS_SERVICE);
+                g_warning ("Could not get DBUS proxy: %s", GSM_DBUS_SERVICE);
                 return -1;
         }
 
         res = dbus_g_proxy_call (proxy,
                                  "Inhibit", &error,
                                  G_TYPE_STRING, appname,
+                                 G_TYPE_UINT, xid,
                                  G_TYPE_STRING, reason,
+                                 G_TYPE_UINT, 8, //Inhibit the session being marked as idle
                                  G_TYPE_INVALID,
                                  G_TYPE_UINT, &cookie,
                                  G_TYPE_INVALID);
@@ -1957,15 +1972,14 @@ dbus_inhibit_gss (const gchar *appname,
 }
 
 static void
-dbus_uninhibit_gss (guint cookie)
+dbus_uninhibit_gsm (guint cookie)
 {
         gboolean         res;
         GError          *error = NULL;
         DBusGProxy      *proxy = NULL;
         DBusGConnection *session_connection = NULL;
 
-        /* cookies have to be positive as unsigned */
-        if (cookie < 0) {
+        if (cookie == guint(-1)) {
                 g_warning ("Invalid cookie");
                 return;
         }
@@ -1978,18 +1992,18 @@ dbus_uninhibit_gss (guint cookie)
                 return;
         }
 
-        /* get the proxy with gnome-screensaver */
+        /* get the proxy with gnome-session-manager */
         proxy = dbus_g_proxy_new_for_name (session_connection,
-                                           GSS_DBUS_SERVICE,
-                                           GSS_DBUS_PATH,
-                                           GSS_DBUS_INTERFACE);
+                                           GSM_DBUS_SERVICE,
+                                           GSM_DBUS_PATH,
+                                           GSM_DBUS_INTERFACE);
         if (proxy == NULL) {
-                g_warning ("Could not get DBUS proxy: %s", GSS_DBUS_SERVICE);
+                g_warning ("Could not get DBUS proxy: %s", GSM_DBUS_SERVICE);
                 return;
         }
 
         res = dbus_g_proxy_call (proxy,
-                                 "UnInhibit",
+                                 "Uninhibit",
                                  &error,
                                  G_TYPE_UINT, cookie,
                                  G_TYPE_INVALID,
@@ -1997,12 +2011,12 @@ dbus_uninhibit_gss (guint cookie)
 
         /* check the return value */
         if (! res) {
-                g_warning ("UnInhibit method failed");
+                g_warning ("Uninhibit method failed");
         }
 
         /* check the error value */
         if (error != NULL) {
-                g_warning ("Inhibit problem : %s", error->message);
+                g_warning ("Uninhibit problem : %s", error->message);
                 g_error_free (error);
                 cookie = -1;
         }
@@ -2030,7 +2044,8 @@ void GtkSalFrame::StartPresentation( BOOL bStart )
                              bPreferBlanking, bAllowExposures );
         }
 #ifdef ENABLE_DBUS
-        m_nGSSCookie = dbus_inhibit_gss(g_get_application_name(), "presentation");
+        m_nGSMCookie = dbus_inhibit_gsm(g_get_application_name(), "presentation",
+                    GDK_WINDOW_XID(m_pWindow->window));
 #endif
     }
     else
@@ -2041,7 +2056,7 @@ void GtkSalFrame::StartPresentation( BOOL bStart )
                              bAllowExposures );
         m_nSavedScreenSaverTimeout = 0;
 #ifdef ENABLE_DBUS
-        dbus_uninhibit_gss(m_nGSSCookie);
+        dbus_uninhibit_gsm(m_nGSMCookie);
 #endif
     }
 }
@@ -2072,8 +2087,15 @@ void GtkSalFrame::ToTop( USHORT nFlags )
              *  to our window - which it of course won't since our input hint
              *  is set to false.
              */
-            if( (m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
+            if( (m_nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_FLOAT_FOCUSABLE)) )
+            {
+                // sad but true: this can cause an XError, we need to catch that
+                // to do this we need to synchronize with the XServer
+                getDisplay()->GetXLib()->PushXErrorLevel( true );
                 XSetInputFocus( getDisplay()->GetDisplay(), GDK_WINDOW_XWINDOW( m_pWindow->window ), RevertToParent, CurrentTime );
+                XSync( getDisplay()->GetDisplay(), False );
+                getDisplay()->GetXLib()->PopXErrorLevel();
+            }
         }
         else
         {
@@ -2365,6 +2387,11 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nSc
             }
         }
     }
+
+    // free xrender resources
+    for( unsigned int i = 0; i < sizeof(m_aGraphics)/sizeof(m_aGraphics[0]); i++ )
+        if( m_aGraphics[i].bInUse )
+            m_aGraphics[i].pGraphics->SetDrawable( None, m_nScreen );
 
     // first deinit frame
     if( m_pIMHandler )
@@ -3111,10 +3138,13 @@ void GtkSalFrame::signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer fram
     // redraw itself to adjust to the new style
     // where there IS no new style resulting in tremendous unnecessary flickering
     if( pPrevious != NULL )
+    {
         // signalStyleSet does NOT usually have the gdk lock
         // so post user event to safely dispatch the SALEVENT_SETTINGSCHANGED
         // note: settings changed for multiple frames is avoided in winproc.cxx ImplHandleSettings
         pThis->getDisplay()->SendInternalEvent( pThis, NULL, SALEVENT_SETTINGSCHANGED );
+        pThis->getDisplay()->SendInternalEvent( pThis, NULL, SALEVENT_FONTCHANGED );
+    }
 
     /* #i64117# gtk sets a nice background pixmap
     *  but we actually don't really want that, so save

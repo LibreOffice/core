@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: urlobj.cxx,v $
- * $Revision: 1.63.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1022,16 +1019,14 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                     if (pEnd - pPos >= 2 && pPos[0] == '/' && pPos[1] == '/')
                     {
                         sal_Unicode const * p1 = pPos + 2;
-                        if (
-                             p1 == pEnd || *p1 == nFragmentDelimiter || *p1 == '/' ||
-                             (
-                               (
-                                 scanDomain(p1, pEnd) > 0 ||
-                                 scanIPv6reference(p1, pEnd)
-                               ) &&
-                               (p1 == pEnd || *p1 == nFragmentDelimiter || *p1 == '/')
-                             )
-                           )
+                        while (p1 != pEnd && *p1 != '/' &&
+                               *p1 != nFragmentDelimiter)
+                        {
+                            ++p1;
+                        }
+                        if (parseHostOrNetBiosName(
+                                pPos + 2, p1, bOctets, ENCODE_ALL,
+                                RTL_TEXTENCODING_DONTKNOW, true, NULL))
                         {
                             aSynAbsURIRef.
                                 appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));

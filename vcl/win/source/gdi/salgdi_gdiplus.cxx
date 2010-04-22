@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,9 +59,9 @@
 
 // -----------------------------------------------------------------------
 
-void impAddB2DPolygonToGDIPlusGraphicsPath(Gdiplus::GraphicsPath& rPath, const basegfx::B2DPolygon& rPolygon)
+void impAddB2DPolygonToGDIPlusGraphicsPathReal(Gdiplus::GraphicsPath& rPath, const basegfx::B2DPolygon& rPolygon, bool bNoLineJoin)
 {
-    const sal_uInt32 nCount(rPolygon.count());
+    sal_uInt32 nCount(rPolygon.count());
 
     if(nCount)
     {
@@ -97,8 +94,58 @@ void impAddB2DPolygonToGDIPlusGraphicsPath(Gdiplus::GraphicsPath& rPath, const b
 
             if(a + 1 < nEdgeCount)
             {
-                aCurr = aNext;
                 aFCurr = aFNext;
+
+                if(bNoLineJoin)
+                {
+                    rPath.StartFigure();
+                }
+            }
+        }
+    }
+}
+
+void impAddB2DPolygonToGDIPlusGraphicsPathInteger(Gdiplus::GraphicsPath& rPath, const basegfx::B2DPolygon& rPolygon, bool bNoLineJoin)
+{
+    sal_uInt32 nCount(rPolygon.count());
+
+    if(nCount)
+    {
+        const sal_uInt32 nEdgeCount(rPolygon.isClosed() ? nCount : nCount - 1);
+        const bool bControls(rPolygon.areControlPointsUsed());
+        basegfx::B2DPoint aCurr(rPolygon.getB2DPoint(0));
+        Gdiplus::Point aICurr(INT(aCurr.getX()), INT(aCurr.getY()));
+
+        for(sal_uInt32 a(0); a < nEdgeCount; a++)
+        {
+            const sal_uInt32 nNextIndex((a + 1) % nCount);
+            const basegfx::B2DPoint aNext(rPolygon.getB2DPoint(nNextIndex));
+            const Gdiplus::Point aINext(INT(aNext.getX()), INT(aNext.getY()));
+
+            if(bControls && (rPolygon.isNextControlPointUsed(a) || rPolygon.isPrevControlPointUsed(nNextIndex)))
+            {
+                const basegfx::B2DPoint aCa(rPolygon.getNextControlPoint(a));
+                const basegfx::B2DPoint aCb(rPolygon.getPrevControlPoint(nNextIndex));
+
+                rPath.AddBezier(
+                    aICurr,
+                    Gdiplus::Point(INT(aCa.getX()), INT(aCa.getY())),
+                    Gdiplus::Point(INT(aCb.getX()), INT(aCb.getY())),
+                    aINext);
+            }
+            else
+            {
+                rPath.AddLine(aICurr, aINext);
+            }
+
+            if(a + 1 < nEdgeCount)
+            {
+                aICurr = aINext;
+
+                if(bNoLineJoin)
+                {
+                    rPath.StartFigure();
+                }
             }
         }
     }
@@ -123,7 +170,7 @@ bool WinSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
                 aPath.StartFigure(); // #i101491# not needed for first run
             }
 
-            impAddB2DPolygonToGDIPlusGraphicsPath(aPath, rPolyPolygon.getB2DPolygon(a));
+            impAddB2DPolygonToGDIPlusGraphicsPathReal(aPath, rPolyPolygon.getB2DPolygon(a), false);
             aPath.CloseFigure();
         }
 
@@ -152,11 +199,16 @@ bool WinSalGraphics::drawPolyLine(const basegfx::B2DPolygon& rPolygon, const bas
         Gdiplus::Color aTestColor(255, SALCOLOR_RED(maLineColor), SALCOLOR_GREEN(maLineColor), SALCOLOR_BLUE(maLineColor));
         Gdiplus::Pen aTestPen(aTestColor, Gdiplus::REAL(rLineWidths.getX()));
         Gdiplus::GraphicsPath aPath;
+        bool bNoLineJoin(false);
 
         switch(eLineJoin)
         {
             default : // basegfx::B2DLINEJOIN_NONE :
             {
+                if(basegfx::fTools::more(rLineWidths.getX(), 0.0))
+                {
+                    bNoLineJoin = true;
+                }
                 break;
             }
             case basegfx::B2DLINEJOIN_BEVEL :
@@ -179,9 +231,16 @@ bool WinSalGraphics::drawPolyLine(const basegfx::B2DPolygon& rPolygon, const bas
             }
         }
 
-        impAddB2DPolygonToGDIPlusGraphicsPath(aPath, rPolygon);
+        if(nCount > 250 && basegfx::fTools::more(rLineWidths.getX(), 1.5))
+        {
+            impAddB2DPolygonToGDIPlusGraphicsPathInteger(aPath, rPolygon, bNoLineJoin);
+        }
+        else
+        {
+            impAddB2DPolygonToGDIPlusGraphicsPathReal(aPath, rPolygon, bNoLineJoin);
+        }
 
-        if(rPolygon.isClosed())
+        if(rPolygon.isClosed() && !bNoLineJoin)
         {
             // #i101491# needed to create the correct line joins
             aPath.CloseFigure();

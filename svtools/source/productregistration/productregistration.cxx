@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: productregistration.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,10 +29,10 @@
 #include "precompiled_svtools.hxx"
 
 #include "productregistration.hxx"
-#include "regoptions.hxx"
+#include "unotools/regoptions.hxx"
 #include "registrationdlg.hxx"
 #ifndef _SVTOOLS_HRC
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 #endif
 #include "cppuhelper/factory.hxx"
 #include <cppuhelper/implbase1.hxx>
@@ -308,18 +305,18 @@ namespace svt
             sal_Bool bDeactivateJob = sal_True;
 
             // our config options
-            RegOptions aRegOptions;
+            utl::RegOptions aRegOptions;
             // check them for the permissions for the dialog
-            RegOptions::DialogPermission ePermission( aRegOptions.getDialogPermission() );
+            utl::RegOptions::DialogPermission ePermission( aRegOptions.getDialogPermission() );
 
-            if ( RegOptions::dpDisabled != ePermission )
+            if ( utl::RegOptions::dpDisabled != ePermission )
             {   // the dialog is _not_ disabled
 
                 // for this session, I'm no interested in the dialog registration anymore
                 aRegOptions.markSessionDone( );
 
-                if  (   ( RegOptions::dpNotThisSession == ePermission )     // first trigger session not reached
-                    ||  ( RegOptions::dpRemindLater == ePermission )        // or at a later reminder date
+                if  (   ( utl::RegOptions::dpNotThisSession == ePermission )     // first trigger session not reached
+                    ||  ( utl::RegOptions::dpRemindLater == ePermission )        // or at a later reminder date
                     )
                 {   // the dialog should be executed during one of the next sessions
                     bDeactivateJob = sal_False;
@@ -327,7 +324,7 @@ namespace svt
                 else
                 {
                     // if we're here, the dialog should be executed during this session
-                    OSL_ENSURE( RegOptions::dpThisSession == ePermission, "OProductRegistration::execute: invalid permissions!" );
+                    OSL_ENSURE( utl::RegOptions::dpThisSession == ePermission, "OProductRegistration::execute: invalid permissions!" );
 
                     {
                         // this is some kind of HACK.
@@ -412,7 +409,7 @@ namespace svt
             OSL_ENSURE( xSystemShell.is(), "OProductRegistration::doOnlineRegistration: invalid SystemExecute component!" );
 
             // access the configuration to retrieve the URL we shall use for registration
-            RegOptions aOptions;
+            utl::RegOptions aOptions;
             OUString sRegistrationURL( aOptions.getRegistrationURL( ) );
             OSL_ENSURE( sRegistrationURL.getLength(), "OProductRegistration::doOnlineRegistration: invalid URL found!" );
 
@@ -436,7 +433,7 @@ namespace svt
             aRegistrationError.Execute();
 
             // try again later
-            RegOptions aRegOptions;
+            utl::RegOptions aRegOptions;
             aRegOptions.activateReminder( 7 );
         }
     }

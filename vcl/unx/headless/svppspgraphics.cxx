@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -986,13 +986,6 @@ const void* PspGraphics::DoGetEmbedFontData( fontID aFont, const sal_Ucs* pUnico
         return NULL;
 
     // fill in font info
-    switch( aFontInfo.m_eType )
-    {
-        case psp::fonttype::TrueType: rInfo.m_nFontType = FontSubsetInfo::SFNT_TTF; break;
-        case psp::fonttype::Type1: rInfo.m_nFontType = FontSubsetInfo::ANY_TYPE1; break;
-        default:
-            return NULL;
-    }
     rInfo.m_nAscent     = aFontInfo.m_nAscend;
     rInfo.m_nDescent    = aFontInfo.m_nDescend;
     rInfo.m_aPSName     = rMgr.getPSName( aFont );
@@ -1029,8 +1022,21 @@ const void* PspGraphics::DoGetEmbedFontData( fontID aFont, const sal_Ucs* pUnico
     rInfo.m_nCapHeight  = yMax; // Well ...
 
     for( int i = 0; i < 256; i++ )
-
         pWidths[i] = (aMetrics[i].width > 0 ? aMetrics[i].width : 0);
+
+    switch( aFontInfo.m_eType )
+    {
+        case psp::fonttype::TrueType:
+            rInfo.m_nFontType = FontSubsetInfo::SFNT_TTF;
+            break;
+        case psp::fonttype::Type1: {
+            const bool bPFA = ((*(unsigned char*)pFile) < 0x80);
+            rInfo.m_nFontType = bPFA ? FontSubsetInfo::TYPE1_PFA : FontSubsetInfo::TYPE1_PFB;
+            }
+            break;
+        default:
+            return NULL;
+    }
 
     return pFile;
 }
@@ -1153,32 +1159,6 @@ ImplDevFontAttributes PspGraphics::Info2DevFontAttributes( const psp::FastPrintF
     aDFA.meWidthType    = ToFontWidth (rInfo.m_eWidth);
     aDFA.mePitch        = ToFontPitch (rInfo.m_ePitch);
     aDFA.mbSymbolFlag   = (rInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL);
-
-    switch (rInfo.m_eEmbeddedbitmap)
-    {
-        default:
-            aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
-            break;
-        case psp::fcstatus::istrue:
-            aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_TRUE;
-            break;
-        case psp::fcstatus::isfalse:
-            aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_FALSE;
-            break;
-    }
-
-    switch (rInfo.m_eAntialias)
-    {
-        default:
-            aDFA.meAntiAlias = ANTIALIAS_DONTKNOW;
-            break;
-        case psp::fcstatus::istrue:
-            aDFA.meAntiAlias = ANTIALIAS_TRUE;
-            break;
-        case psp::fcstatus::isfalse:
-            aDFA.meAntiAlias = ANTIALIAS_FALSE;
-            break;
-    }
 
     switch( rInfo.m_eType )
     {

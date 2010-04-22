@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ctrlbox.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +40,7 @@
 #include <unotools/charclass.hxx>
 
 #include <svtools/svtdata.hxx>
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 #include <ctrlbox.hxx>
 #include <ctrltool.hxx>
 
@@ -644,8 +641,7 @@ void FontNameBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 void FontNameBox::InitBitmaps( void )
 {
-    Color   aCol = GetSettings().GetStyleSettings().GetWindowColor();
-    BOOL    bHC = aCol.IsDark();
+    BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     maImagePrinterFont = Image( SvtResId( bHC? RID_IMG_PRINTERFONT_HC : RID_IMG_PRINTERFONT ) );
     maImageBitmapFont = Image( SvtResId( bHC? RID_IMG_BITMAPFONT_HC : RID_IMG_BITMAPFONT ) );
@@ -1153,6 +1149,7 @@ void FontSizeBox::ImplInit()
     SetDecimalDigits( 1 );
     SetMin( 20 );
     SetMax( 9999 );
+    SetProminentEntryType( PROMINENT_MIDDLE );
 }
 
 // -----------------------------------------------------------------------

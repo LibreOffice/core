@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: urltest.cxx,v $
- * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1627,6 +1624,20 @@ main()
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("file://foo_bar/%2520%23")),
             rtl::OUString(urlobj.GetMainURL(INetURLObject::NO_DECODE)));
+    }
+
+    if (true) { // #i53184#
+        rtl::OUString url(RTL_CONSTASCII_USTRINGPARAM("file://comp_name/path"));
+        bSuccess &= assertEqual(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("#i53184# smart INET_PROT_FILE")),
+            INetURLObject(url, INET_PROT_FILE).GetMainURL(
+                INetURLObject::NO_DECODE),
+            url);
+        bSuccess &= assertEqual(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("#i53184# strict")),
+            INetURLObject(url).GetMainURL(INetURLObject::NO_DECODE), url);
     }
 
     if (true) {

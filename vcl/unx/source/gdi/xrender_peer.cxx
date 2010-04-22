@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile$
- * $Revision$
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,6 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_vcl.hxx"
 
 #include <stdio.h>
 #include <rtl/ustring.hxx>
@@ -142,6 +142,10 @@ void XRenderPeer::InitRenderLib()
     mpXRenderCreatePicture = (Picture(*)(Display*,Drawable,const XRenderPictFormat*,
         unsigned long,const XRenderPictureAttributes*))pFunc;
 
+    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderChangePicture" );
+    if( !pFunc ) return;
+    mpXRenderChangePicture = (void(*)(Display*,Picture,unsigned long,const XRenderPictureAttributes*))pFunc;
+
     pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderSetPictureClipRegion" );
     if( !pFunc ) return;
     mpXRenderSetPictureClipRegion = (void(*)(Display*,Picture,XLIB_Region))pFunc;
@@ -171,7 +175,7 @@ void XRenderPeer::InitRenderLib()
 #if 0 // not having trapezoid support is supported
     if( !pFunc ) return;
 #endif
-    mpXRenderAddTraps = (void(*)(Display*,Picture,int,int,const XTrap*,int))pFunc;
+    mpXRenderAddTraps = (void(*)(Display*,Picture,int,int,const _XTrap*,int))pFunc;
 
 #endif // XRENDER_LINK
 
@@ -189,12 +193,16 @@ void XRenderPeer::InitRenderLib()
     (*mpXRenderQueryVersion)( mpDisplay, &nMajor, &nMinor );
 #endif
     mnRenderVersion = 16*nMajor + nMinor;
+
+    // the 8bit alpha mask format must be there
+    XRenderPictFormat aPictFormat={0,0,8,{0,0,0,0,0,0,0,0xFF},0};
+    mpStandardFormatA8 = FindPictureFormat( PictFormatAlphaMask|PictFormatDepth, aPictFormat );
 }
 
 // ---------------------------------------------------------------------------
 
 // return mask of screens capable of XRENDER text
-sal_uInt32 XRenderPeer::InitRenderText( int nMaxDepth )
+sal_uInt32 XRenderPeer::InitRenderText()
 {
     if( mnRenderVersion < 0x01 )
         return 0;
@@ -205,9 +213,6 @@ sal_uInt32 XRenderPeer::InitRenderText( int nMaxDepth )
         if( mnRenderVersion < 0x02 )
             return 0;
 
-    // the 8bit alpha mask format must be there
-    XRenderPictFormat aPictFormat={0,0,8,{0,0,0,0,0,0,0,0xFF},0};
-    mpStandardFormatA8 = FindPictureFormat( PictFormatAlphaMask|PictFormatDepth, aPictFormat );
     if( !mpStandardFormatA8 )
         return 0;
 
@@ -216,18 +221,24 @@ sal_uInt32 XRenderPeer::InitRenderText( int nMaxDepth )
     SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
     const int nScreenCount = pSalDisp->GetScreenCount();
     XRenderPictFormat* pVisualFormat = NULL;
+    int nMaxDepth = 0;
     for( int nScreen = 0; nScreen < nScreenCount; ++nScreen )
     {
         Visual* pXVisual = pSalDisp->GetVisual( nScreen ).GetVisual();
         pVisualFormat = FindVisualFormat( pXVisual );
         if( pVisualFormat != NULL )
+        {
+            int nVDepth = pSalDisp->GetVisual( nScreen ).GetDepth();
+            if( nVDepth > nMaxDepth )
+                nMaxDepth = nVDepth;
             nRetMask |= 1U << nScreen;
+        }
     }
 
     // #97763# disable XRENDER on <15bit displays for XFree<=4.2.0
     if( mnRenderVersion <= 0x02 )
         if( nMaxDepth < 15 )
-            return 0;
+            nRetMask = 0;
 
     return nRetMask;
 }

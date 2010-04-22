@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svtreebx.cxx,v $
- * $Revision: 1.56 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1813,7 +1810,7 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
 
                 const Image* pImg = 0;
                 BmpColorMode eBitmapMode = BMP_COLOR_NORMAL;
-                if ( GetDisplayBackground().GetColor().IsDark() )
+                if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
                     eBitmapMode = BMP_COLOR_HIGHCONTRAST;
 
                 if( IsExpanded(pEntry) )

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: simplecanvasimpl.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +43,7 @@
 #include <comphelper/servicedecl.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include "canvas/canvastools.hxx"
 
@@ -287,10 +285,7 @@ namespace
                                         ::sal_Int8                      nTextDirection ) throw (uno::RuntimeException)
         {
             ::osl::MutexGuard aGuard( m_aMutex );
-
-            basegfx::B2DHomMatrix offsetTransform;
-            offsetTransform.translate(aOutPos.X,aOutPos.Y);
-
+            const basegfx::B2DHomMatrix offsetTransform(basegfx::tools::createTranslateB2DHomMatrix(aOutPos.X,aOutPos.Y));
             rendering::RenderState aRenderState( createStrokingRenderState() );
             tools::appendToRenderState(aRenderState, offsetTransform);
 
@@ -305,10 +300,7 @@ namespace
                                           const geometry::RealPoint2D&                aLeftTop ) throw (uno::RuntimeException)
         {
             ::osl::MutexGuard aGuard( m_aMutex );
-
-            basegfx::B2DHomMatrix offsetTransform;
-            offsetTransform.translate(aLeftTop.X,aLeftTop.Y);
-
+            const basegfx::B2DHomMatrix offsetTransform(basegfx::tools::createTranslateB2DHomMatrix(aLeftTop.X,aLeftTop.Y));
             rendering::RenderState aRenderState( createStrokingRenderState() );
             tools::appendToRenderState(aRenderState, offsetTransform);
 

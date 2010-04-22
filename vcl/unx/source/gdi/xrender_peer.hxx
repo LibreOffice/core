@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile$
- * $Revision$
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +29,7 @@
 #define _SV_XRENDER_PEER_HXX
 
 #include <tools/prex.h>
+struct _XTrap; // on some older systems this is not declared within Xrender.h
 #include <X11/extensions/Xrender.h>
 #include <tools/postx.h>
 
@@ -44,7 +42,7 @@ public:
     static XRenderPeer& GetInstance();
     int                 GetVersion() const;
 
-    sal_uInt32          InitRenderText( int nMaxDepth );
+    sal_uInt32          InitRenderText();
 
 protected:
                         XRenderPeer();
@@ -66,6 +64,8 @@ public:
         const XRenderPictFormat& ) const;
     Picture     CreatePicture( Drawable, const XRenderPictFormat*,
                     unsigned long nDrawable, const XRenderPictureAttributes* ) const;
+    void        ChangePicture( Picture, unsigned long nValueMask,
+                    const XRenderPictureAttributes* ) const;
     void        SetPictureClipRegion( Picture, XLIB_Region ) const;
     void        CompositePicture( int nOp, Picture aSrc, Picture aMask, Picture aDst,
                     int nXSrc, int nYSrc, int nXMask, int nYMask,
@@ -85,7 +85,7 @@ public:
                     const XRenderPictFormat*, int nXSrc, int nYSrc,
                     const XTrapezoid*, int nCount ) const;
     bool        AddTraps( Picture aDst, int nXOfs, int nYOfs,
-                    const XTrap*, int nCount ) const;
+                    const _XTrap*, int nCount ) const;
 
     bool        AreTrapezoidsSupported() const
 #ifdef XRENDER_LINK
@@ -103,6 +103,8 @@ private:
 
     Picture     (*mpXRenderCreatePicture)(Display*,Drawable, const XRenderPictFormat*,
                     unsigned long,const XRenderPictureAttributes*);
+    void        (*mpXRenderChangePicture)(Display*,Picture,
+                    unsigned long,const XRenderPictureAttributes*);
     void        (*mpXRenderSetPictureClipRegion)(Display*,Picture,XLIB_Region);
     void        (*mpXRenderFreePicture)(Display*,Picture);
     void        (*mpXRenderComposite)(Display*,int,Picture,Picture,Picture,
@@ -119,7 +121,7 @@ private:
                     const XRenderColor*,int,int,unsigned int,unsigned int);
     void        (*mpXRenderCompositeTrapezoids)(Display*,int,Picture,Picture,
                     const XRenderPictFormat*,int,int,const XTrapezoid*,int);
-    void        (*mpXRenderAddTraps)(Display*,Picture,int,int,const XTrap*,int);
+    void        (*mpXRenderAddTraps)(Display*,Picture,int,int,const _XTrap*,int);
 #endif // XRENDER_LINK
 };
 
@@ -191,6 +193,16 @@ inline Picture XRenderPeer::CreatePicture( Drawable aDrawable,
 #else
     return (*mpXRenderCreatePicture)( mpDisplay, aDrawable, pVisFormat,
         nValueMask, pRenderAttr );
+#endif
+}
+
+inline void XRenderPeer::ChangePicture( Picture aPicture,
+    unsigned long nValueMask, const XRenderPictureAttributes* pRenderAttr ) const
+{
+#ifdef XRENDER_LINK
+    XRenderChangePicture( mpDisplay, aPicture, nValueMask, pRenderAttr );
+#else
+    (*mpXRenderChangePicture)( mpDisplay, aPicture, nValueMask, pRenderAttr );
 #endif
 }
 
@@ -315,7 +327,7 @@ inline void XRenderPeer::CompositeTrapezoids( int nOp,
 }
 
 inline bool XRenderPeer::AddTraps( Picture aDst, int nXOfs, int nYOfs,
-    const XTrap* pTraps, int nCount ) const
+    const _XTrap* pTraps, int nCount ) const
 {
 #ifdef XRENDER_LINK
     XRenderAddTraps( mpDisplay, aDst, nXOfs, nYOfs, pTraps, nCount );

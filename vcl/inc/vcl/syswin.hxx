@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: syswin.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -201,6 +198,10 @@ public:
 
     void            SetIcon( USHORT nIcon );
     USHORT          GetIcon() const { return mnIcon; }
+    // for systems like MacOSX which can display the URL a document is loaded from
+    // separately from the window title
+    void            SetRepresentedURL( const rtl::OUString& );
+    const rtl::OUString& GetRepresentedURL() const;
 
     void            SetZLevel( BYTE nLevel );
     BYTE            GetZLevel() const;

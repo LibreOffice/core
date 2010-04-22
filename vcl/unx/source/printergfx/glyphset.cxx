@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -46,6 +46,7 @@
 
 #include <set>
 #include <map>
+#include <algorithm>
 
 using namespace vcl;
 using namespace psp;
@@ -785,6 +786,17 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
     return sal_True;
 }
 
+struct EncEntry
+{
+    sal_uChar  aEnc;
+    long       aGID;
+
+    EncEntry() : aEnc( 0 ), aGID( 0 ) {}
+
+    bool operator<( const EncEntry& rRight ) const
+    { return aEnc < rRight.aEnc; }
+};
+
 static void CreatePSUploadableFont( TrueTypeFont* pSrcFont, FILE* pTmpFile,
     const char* pGlyphSetName, int nGlyphCount,
     /*const*/ sal_uInt16* pRequestedGlyphs, /*const*/ sal_uChar* pEncoding,
@@ -796,17 +808,29 @@ static void CreatePSUploadableFont( TrueTypeFont* pSrcFont, FILE* pTmpFile,
     if( bAllowType42 )
         nTargetMask |= FontSubsetInfo::TYPE42_FONT;
 
+    std::vector< EncEntry > aSorted( nGlyphCount, EncEntry() );
+    for( int i = 0; i < nGlyphCount; i++ )
+    {
+        aSorted[i].aEnc = pEncoding[i];
+        aSorted[i].aGID = pRequestedGlyphs[i];
+    }
+
+    std::stable_sort( aSorted.begin(), aSorted.end() );
+
+    std::vector< sal_uChar > aEncoding( nGlyphCount );
+    std::vector< long > aRequestedGlyphs( nGlyphCount );
+
+    for( int i = 0; i < nGlyphCount; i++ )
+    {
+        aEncoding[i]        = aSorted[i].aEnc;
+        aRequestedGlyphs[i] = aSorted[i].aGID;
+    }
+
     FontSubsetInfo aInfo;
     aInfo.LoadFont( pSrcFont );
 
-#if 1 // TODO: remove 16bit->long conversion when input args has been changed
-        long aRequestedGlyphs[256];
-        for( int i = 0; i < nGlyphCount; ++i )
-            aRequestedGlyphs[i] = pRequestedGlyphs[i];
-#endif
-
     aInfo.CreateFontSubset( nTargetMask, pTmpFile, pGlyphSetName,
-        aRequestedGlyphs, pEncoding, nGlyphCount, NULL );
+        &aRequestedGlyphs[0], &aEncoding[0], nGlyphCount, NULL );
 }
 
 sal_Bool

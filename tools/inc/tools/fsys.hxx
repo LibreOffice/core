@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fsys.hxx,v $
- * $Revision: 1.4.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -570,7 +567,7 @@ void FSysEnableSysErrorBox( BOOL bEnable );
 
 //========================================================================
 
-#if defined(DBG_UTIL) && !defined(PRODUCT)
+#if defined(DBG_UTIL)
 void FSysTest();
 #endif
 

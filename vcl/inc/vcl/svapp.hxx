@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svapp.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -287,6 +284,9 @@ public:
     static vos::OThread::TThreadIdentifier  GetMainThreadIdentifier();
     static ULONG                ReleaseSolarMutex();
     static void                 AcquireSolarMutex( ULONG nCount );
+    static void                 EnableNoYieldMode( bool i_bNoYield );
+    static void                 AddPostYieldListener( const Link& i_rListener );
+    static void                 RemovePostYieldListener( const Link& i_rListener );
 
     static BOOL                 IsInMain();
     static BOOL                 IsInExecute();

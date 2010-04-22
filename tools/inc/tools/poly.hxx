@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: poly.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -182,7 +179,6 @@ public:
     void                Clip( const Rectangle& rRect, BOOL bPolygon = TRUE );
     void                Optimize( ULONG nOptimizeFlags, const PolyOptimizeData* pData = NULL );
 
-    void                GetSimple( Polygon& rResult ) const;
     /** Adaptive subdivision of polygons with curves
 
         This method adaptively subdivides bezier arcs within the
@@ -288,7 +284,6 @@ public:
     void                Clip( const Rectangle& rRect );
     void                Optimize( ULONG nOptimizeFlags, const PolyOptimizeData* pData = NULL );
 
-    void                GetSimple( PolyPolygon& rResult ) const;
     /** Adaptive subdivision of polygons with curves
 
         This method adaptively subdivides bezier arcs within the

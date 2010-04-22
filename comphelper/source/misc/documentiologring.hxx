@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: documentiologring.hxx,v $
- * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,17 +57,16 @@ public:
     virtual ~OSimpleLogRing();
 
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
-            impl_staticGetSupportedServiceNames();
+            getSupportedServiceNames_static();
 
-    static ::rtl::OUString SAL_CALL impl_staticGetImplementationName();
+    static ::rtl::OUString SAL_CALL getImplementationName_static();
 
-    static ::rtl::OUString SAL_CALL impl_staticGetSingletonName();
+    static ::rtl::OUString SAL_CALL getSingletonName_static();
 
-    static ::rtl::OUString SAL_CALL impl_staticGetServiceName();
+    static ::rtl::OUString SAL_CALL getServiceName_static();
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-        impl_staticCreateSelfInstance(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+        Create( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
 // XSimpleLogRing
     virtual void SAL_CALL logString( const ::rtl::OUString& aMessage ) throw (::com::sun::star::uno::RuntimeException);

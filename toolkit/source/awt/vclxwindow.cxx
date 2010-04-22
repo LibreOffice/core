@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vclxwindow.cxx,v $
- * $Revision: 1.90 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +61,7 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/button.hxx>
 #include <comphelper/asyncnotification.hxx>
 #include <toolkit/helper/solarrelease.hxx>
 
@@ -76,6 +74,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::lang::EventObject;
 using ::com::sun::star::awt::XWindowListener2;
 using ::com::sun::star::awt::XDockableWindowListener;
+using ::com::sun::star::awt::XDevice;
 using ::com::sun::star::style::VerticalAlignment;
 using ::com::sun::star::style::VerticalAlignment_TOP;
 using ::com::sun::star::style::VerticalAlignment_MIDDLE;
@@ -1585,6 +1584,18 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
     switch ( nPropType )
     {
+        case BASEPROPERTY_REFERENCE_DEVICE:
+        {
+            Control* pControl = dynamic_cast< Control* >( pWindow );
+            OSL_ENSURE( pControl, "VCLXWindow::setProperty( RefDevice ): need a Control for this!" );
+            if ( !pControl )
+                break;
+            Reference< XDevice > xDevice( Value, UNO_QUERY );
+            OutputDevice* pDevice = VCLUnoHelper::GetOutputDevice( xDevice );
+            pControl->SetReferenceDevice( pDevice );
+        }
+        break;
+
         case BASEPROPERTY_CONTEXT_WRITING_MODE:
         {
             OSL_VERIFY( Value >>= mpImpl->mnContextWritingMode );
@@ -2103,6 +2114,19 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_REFERENCE_DEVICE:
+            {
+                Control* pControl = dynamic_cast< Control* >( GetWindow() );
+                OSL_ENSURE( pControl, "VCLXWindow::setProperty( RefDevice ): need a Control for this!" );
+                if ( !pControl )
+                    break;
+
+                VCLXDevice* pDevice = new VCLXDevice;
+                pDevice->SetOutputDevice( pControl->GetReferenceDevice() );
+                aProp <<= Reference< XDevice >( pDevice );
+            }
+            break;
+
             case BASEPROPERTY_CONTEXT_WRITING_MODE:
                 aProp <<= mpImpl->mnContextWritingMode;
                 break;
@@ -2137,6 +2161,10 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
 
             case BASEPROPERTY_ENABLEVISIBLE:
                 aProp <<= (sal_Bool) mpImpl->isEnableVisible();
+                break;
+
+            case BASEPROPERTY_HIGHCONTRASTMODE:
+                aProp <<= (sal_Bool) GetWindow()->GetSettings().GetStyleSettings().GetHighContrastMode();
                 break;
 
             case BASEPROPERTY_TEXT:

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vclevent.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,14 +28,24 @@
 #ifndef _VCL_VCLEVENT_HXX
 #define _VCL_VCLEVENT_HXX
 
-#include <tools/link.hxx>
-#include <tools/rtti.hxx>
-#include <vcl/dllapi.h>
+#include "tools/link.hxx"
+#include "tools/rtti.hxx"
+#include "vcl/dllapi.h"
+#include "vcl/impdel.hxx"
+
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <list>
+#include <vector>
 
 class Window;
 class Menu;
+
+namespace com { namespace sun { namespace star {
+    namespace accessibility {
+        class XAccessible;
+    }
+}}}
 
 #define VCLEVENT_OBJECT_DYING                  1
 
@@ -240,6 +247,17 @@ public:
     USHORT GetItemPos() const { return mnPos; }
 };
 
+class VCL_DLLPUBLIC VclAccessibleEvent: public VclSimpleEvent
+{
+public:
+    VclAccessibleEvent( ULONG n, const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible );
+    virtual ~VclAccessibleEvent();
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetAccessible() const;
+
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxAccessible;
+};
+
 class VCL_DLLPUBLIC VclEventListeners : public std::list<Link>
 {
 public:
@@ -249,6 +267,34 @@ public:
     // and returns TRUE in that case
     // a handler must return TRUE to signal that it has processed the event
     BOOL Process( VclSimpleEvent* pEvent ) const;
+};
+
+class VCL_DLLPUBLIC VclEventListeners2 : public vcl::DeletionNotifier
+{
+    std::list< Link >                               m_aListeners;
+
+    struct ListenerIt
+    {
+        std::list< Link >::iterator     m_aIt;
+        bool                            m_bWasInvalidated;
+
+        ListenerIt(const std::list<Link>::iterator& rIt)
+            : m_aIt(rIt)
+            , m_bWasInvalidated( false )
+        {}
+    };
+
+    std::vector< ListenerIt >      m_aIterators;
+
+
+public:
+    VclEventListeners2();
+    ~VclEventListeners2();
+
+    void addListener( const Link& );
+    void removeListener( const Link& );
+
+    void callListeners( VclSimpleEvent* );
 };
 
 #endif // _VCL_VCLEVENT_HXX

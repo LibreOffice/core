@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -32,9 +32,9 @@
 #include <tools/list.hxx>
 #include <i18npool/lang.h>
 #include <tools/gen.hxx>
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
-
+#include <unotools/fontdefs.hxx>
 #include <vcl/vclenum.hxx>
 
 #include <hash_map>
@@ -48,13 +48,9 @@ class ImplPreMatchFontSubstitution;
 class ImplGlyphFallbackFontSubstitution;
 class ImplFontSelectData;
 class Font;
-class ImplCvtChar;
+class ConvertChar;
 struct FontMatchStatus;
 class OutputDevice;
-
-namespace vcl {
-  struct FontNameAttr;
-}
 
 // ----------------------
 // - ImplFontAttributes -
@@ -98,8 +94,6 @@ public: // TODO: create matching interface class
     bool               IsDeviceFont() const      { return mbDevice; }
     bool               IsEmbeddable() const      { return mbEmbeddable; }
     bool               IsSubsettable() const     { return mbSubsettable; }
-    FontEmbeddedBitmap UseEmbeddedBitmap() const { return meEmbeddedBitmap; }
-    FontAntiAlias      UseAntiAlias() const      { return meAntiAlias; }
 
 public: // TODO: hide members behind accessor methods
     String             maMapNames;       // List of family name aliass separated with ';'
@@ -108,8 +102,6 @@ public: // TODO: hide members behind accessor methods
     bool               mbDevice;         // true: built in font
     bool               mbSubsettable;    // true: a subset of the font can be created
     bool               mbEmbeddable;     // true: the font can be embedded
-    FontEmbeddedBitmap meEmbeddedBitmap; // whether the embedded bitmaps should be used
-    FontAntiAlias      meAntiAlias;      // whether the font should be antialiased
 };
 
 // ----------------
@@ -185,8 +177,6 @@ public: // TODO: change to private
     ImplFontEntry*      mpFontEntry;        // pointer to the resulting FontCache entry
 };
 
-struct FontNameHash { int operator()(const String&) const; };
-
 // -------------------
 // - ImplDevFontList -
 // -------------------
@@ -238,7 +228,7 @@ protected:
 
     ImplDevFontListData*    ImplFindByTokenNames( const String& ) const;
     ImplDevFontListData*    ImplFindByAliasName( const String& rSearchName, const String& rShortName ) const;
-    ImplDevFontListData*    ImplFindBySubstFontAttr( const vcl::FontNameAttr& ) const;
+    ImplDevFontListData*    ImplFindBySubstFontAttr( const utl::FontNameAttr& ) const;
     ImplDevFontListData*    ImplFindByAttributes( ULONG nSearchType, FontWeight, FontWidth,
                                 FontFamily, FontItalic, const String& rSearchFamily ) const;
     ImplDevFontListData*    FindDefaultFont() const;
@@ -337,7 +327,7 @@ public:
 public: // TODO: make data members private
     ImplFontSelectData  maFontSelData;      // FontSelectionData
     ImplFontMetricData  maMetric;           // Font Metric
-    const ImplCvtChar*  mpConversion;       // used e.g. for StarBats->StarSymbol
+    const ConvertChar*  mpConversion;       // used e.g. for StarBats->StarSymbol
     long                mnLineHeight;
     ULONG               mnRefCount;
     USHORT              mnSetFontFlags;     // Flags returned by SalGraphics::SetFont()
@@ -345,15 +335,17 @@ public: // TODO: make data members private
     short               mnOrientation;      // text angle in 3600 system
     bool                mbInit;             // true if maMetric member is valid
 
-    void                AddFallbackForUnicode( sal_UCS4, const String& rFontName );
-    bool                GetFallbackForUnicode( sal_UCS4, String* pFontName ) const;
-    void                IgnoreFallbackForUnicode( sal_UCS4, const String& rFontName );
+    void                AddFallbackForUnicode( sal_UCS4, FontWeight eWeight, const String& rFontName );
+    bool                GetFallbackForUnicode( sal_UCS4, FontWeight eWeight, String* pFontName ) const;
+    void                IgnoreFallbackForUnicode( sal_UCS4, FontWeight eWeight, const String& rFontName );
 
 private:
     // cache of Unicode characters and replacement font names
     // TODO: a fallback map can be shared with many other ImplFontEntries
     // TODO: at least the ones which just differ in orientation, stretching or height
-    typedef ::std::hash_map<sal_UCS4,String> UnicodeFallbackList;
+    typedef ::std::pair<sal_UCS4,FontWeight> GFBCacheKey;
+    struct GFBCacheKey_Hash{ size_t operator()( const GFBCacheKey& ) const; };
+    typedef ::std::hash_map<GFBCacheKey,String,GFBCacheKey_Hash> UnicodeFallbackList;
     UnicodeFallbackList* mpUnicodeFallbackList;
 };
 

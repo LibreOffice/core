@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ilstbox.cxx,v $
- * $Revision: 1.67 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +37,7 @@
 #include <vcl/lstbox.h>
 #include <vcl/ilstbox.hxx>
 #include <vcl/i18nhelp.hxx>
-#include <vcl/controllayout.hxx>
+#include <vcl/controldata.hxx>
 #include <vcl/unohelp.hxx>
 #ifndef _COM_SUN_STAR_UTIL_XCOLLATOR_HPP_
 #include <com/sun/star/i18n/XCollator.hpp>
@@ -565,6 +562,7 @@ ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
     mnCurrentPos            = LISTBOX_ENTRY_NOTFOUND;
     mnTrackingSaveSelection = LISTBOX_ENTRY_NOTFOUND;
     mnSeparatorPos          = LISTBOX_ENTRY_NOTFOUND;
+    meProminentType         = PROMINENT_TOP;
 
     SetLineColor();
     SetTextFillColor();
@@ -647,7 +645,7 @@ void ImplListBoxWindow::Clear()
     mnTop           = 0;
     mnLeft          = 0;
     mbImgsDiffSz    = FALSE;
-    delete mpLayoutData, mpLayoutData = NULL;
+    ImplClearLayoutData();
 
     mnCurrentPos = LISTBOX_ENTRY_NOTFOUND;
 
@@ -656,7 +654,7 @@ void ImplListBoxWindow::Clear()
 
 void ImplListBoxWindow::SetUserItemSize( const Size& rSz )
 {
-    delete mpLayoutData, mpLayoutData = NULL;
+    ImplClearLayoutData();
     maUserItemSize = rSz;
     ImplCalcMetrics();
 }
@@ -778,7 +776,7 @@ void ImplListBoxWindow::ImplCallSelect()
                 nMRUCount--;
             }
 
-            delete mpLayoutData, mpLayoutData = NULL;
+            ImplClearLayoutData();
 
             ImplEntryType* pNewEntry = new ImplEntryType( aSelected );
             pNewEntry->mbIsSelected = bSelectNewEntry;
@@ -798,7 +796,7 @@ void ImplListBoxWindow::ImplCallSelect()
 
 USHORT ImplListBoxWindow::InsertEntry( USHORT nPos, ImplEntryType* pNewEntry )
 {
-    delete mpLayoutData, mpLayoutData = NULL;
+    ImplClearLayoutData();
     USHORT nNewPos = mpEntryList->InsertEntry( nPos, pNewEntry, mbSort );
 
     if( (GetStyle() & WB_WORDBREAK) )
@@ -812,7 +810,7 @@ USHORT ImplListBoxWindow::InsertEntry( USHORT nPos, ImplEntryType* pNewEntry )
 
 void ImplListBoxWindow::RemoveEntry( USHORT nPos )
 {
-    delete mpLayoutData, mpLayoutData = NULL;
+    ImplClearLayoutData();
     mpEntryList->RemoveEntry( nPos );
     if( mnCurrentPos >= mpEntryList->GetEntryCount() )
         mnCurrentPos = LISTBOX_ENTRY_NOTFOUND;
@@ -1062,16 +1060,16 @@ void ImplListBoxWindow::SelectEntry( USHORT nPos, BOOL bSelect )
                 ImplPaint( nPos );
                 if ( !IsVisible( nPos ) )
                 {
-                    delete mpLayoutData, mpLayoutData = NULL;
+                    ImplClearLayoutData();
                     USHORT nVisibleEntries = GetLastVisibleEntry()-mnTop;
                     if ( !nVisibleEntries || !IsReallyVisible() || ( nPos < GetTopEntry() ) )
                     {
                         Resize();
-                        SetTopEntry( nPos );
+                        ShowProminentEntry( nPos );
                     }
                     else
                     {
-                        SetTopEntry( nPos-nVisibleEntries+1 );
+                        ShowProminentEntry( nPos );
                     }
                 }
             }
@@ -1233,7 +1231,7 @@ BOOL ImplListBoxWindow::SelectEntries( USHORT nSelect, LB_EVENT_TYPE eLET, BOOL 
             if( HasFocus() )
                 ImplShowFocusRect();
         }
-        delete mpLayoutData, mpLayoutData = NULL;
+        ImplClearLayoutData();
     }
     return bSelectionChanged;
 }
@@ -1702,11 +1700,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
 
                 if ( nSelect != LISTBOX_ENTRY_NOTFOUND )
                 {
-                    USHORT nCurVis = GetLastVisibleEntry() - mnTop + 1;
-                    if( nSelect < mnTop )
-                        SetTopEntry( nSelect );
-                    else if( nSelect >= (mnTop + nCurVis) )
-                        SetTopEntry( nSelect - nCurVis + 1 );
+                    ShowProminentEntry( nSelect );
 
                     if ( mpEntryList->IsEntryPosSelected( nSelect ) )
                         nSelect = LISTBOX_ENTRY_NOTFOUND;
@@ -1838,8 +1832,8 @@ void ImplListBoxWindow::DrawEntry( USHORT nPos, BOOL bDrawImage, BOOL bDrawText,
 
     if( bDrawText )
     {
-        MetricVector* pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
-        String* pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
+        MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
+        String* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
         XubString aStr( mpEntryList->GetEntryText( nPos ) );
         if ( aStr.Len() )
         {
@@ -1859,7 +1853,7 @@ void ImplListBoxWindow::DrawEntry( USHORT nPos, BOOL bDrawImage, BOOL bDrawText,
             }
 
             if( bLayout )
-                mpLayoutData->m_aLineIndices.push_back( mpLayoutData->m_aDisplayText.Len() );
+                mpControlData->mpLayoutData->m_aLineIndices.push_back( mpControlData->mpLayoutData->m_aDisplayText.Len() );
 
             // pb: #106948# explicit mirroring for calc
             if ( mbMirroring )
@@ -1873,6 +1867,8 @@ void ImplListBoxWindow::DrawEntry( USHORT nPos, BOOL bDrawImage, BOOL bDrawText,
             USHORT nDrawStyle = ImplGetTextStyle();
             if( (pEntry->mnFlags & LISTBOX_ENTRY_FLAG_MULTILINE) )
                 nDrawStyle |= MULTILINE_ENTRY_DRAW_FLAGS;
+            if( (pEntry->mnFlags & LISTBOX_ENTRY_FLAG_DRAW_DISABLED) )
+                nDrawStyle |= TEXT_DRAW_DISABLE;
 
             DrawText( aTextRect, aStr, nDrawStyle, pVector, pDisplayText );
         }
@@ -1900,7 +1896,7 @@ void ImplListBoxWindow::DrawEntry( USHORT nPos, BOOL bDrawImage, BOOL bDrawText,
 
 void ImplListBoxWindow::FillLayoutData() const
 {
-    mpLayoutData = new vcl::ControlLayoutData();
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const_cast<ImplListBoxWindow*>(this)->
         ImplDoPaint( Rectangle( Point( 0, 0 ), GetOutputSize() ), true );
 }
@@ -1978,7 +1974,7 @@ void ImplListBoxWindow::Resize()
     if ( bShowFocusRect )
         ImplShowFocusRect();
 
-    delete mpLayoutData, mpLayoutData = NULL;
+    ImplClearLayoutData();
 }
 
 // -----------------------------------------------------------------------
@@ -2034,7 +2030,7 @@ void ImplListBoxWindow::SetTopEntry( USHORT nTop )
 
     if ( nTop != mnTop )
     {
-        delete mpLayoutData, mpLayoutData = NULL;
+        ImplClearLayoutData();
         long nDiff = mpEntryList->GetAddedHeight( mnTop, nTop, 0 );
         Update();
         ImplHideFocusRect();
@@ -2047,6 +2043,20 @@ void ImplListBoxWindow::SetTopEntry( USHORT nTop )
             ImplShowFocusRect();
         maScrollHdl.Call( this );
     }
+}
+
+// -----------------------------------------------------------------------
+
+void ImplListBoxWindow::ShowProminentEntry( USHORT nEntryPos )
+{
+    if( meProminentType == PROMINENT_MIDDLE )
+    {
+        USHORT nPos = nEntryPos;
+        long nWHeight = PixelToLogic( GetSizePixel() ).Height();
+        while( nEntryPos > 0 && mpEntryList->GetAddedHeight( nPos+1, nEntryPos ) < nWHeight/2 )
+            nEntryPos--;
+    }
+    SetTopEntry( nEntryPos );
 }
 
 // -----------------------------------------------------------------------
@@ -2078,7 +2088,7 @@ void ImplListBoxWindow::ScrollHorz( long n )
 
     if ( nDiff )
     {
-        delete mpLayoutData, mpLayoutData = NULL;
+        ImplClearLayoutData();
         mnLeft = sal::static_int_cast<USHORT>(mnLeft + nDiff);
         Update();
         ImplHideFocusRect();
@@ -2148,7 +2158,7 @@ void ImplListBoxWindow::StateChanged( StateChangedType nType )
         ImplInitSettings( FALSE, FALSE, TRUE );
         Invalidate();
     }
-    delete mpLayoutData, mpLayoutData = NULL;
+    ImplClearLayoutData();
 }
 
 // -----------------------------------------------------------------------
@@ -2162,7 +2172,7 @@ void ImplListBoxWindow::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        delete mpLayoutData, mpLayoutData = NULL;
+        ImplClearLayoutData();
         ImplInitSettings( TRUE, TRUE, TRUE );
         ImplCalcMetrics();
         Invalidate();
@@ -2743,7 +2753,7 @@ void ImplWin::MouseButtonDown( const MouseEvent& )
 
 void ImplWin::FillLayoutData() const
 {
-    mpLayoutData = new vcl::ControlLayoutData();
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const_cast<ImplWin*>(this)->ImplDraw( true );
 }
 
@@ -2936,8 +2946,8 @@ void ImplWin::DrawEntry( BOOL bDrawImage, BOOL bDrawText, BOOL bDrawTextAtImageP
             aTextRect.Left() += nMaxWidth + IMG_TXT_DISTANCE;
         }
 
-        MetricVector* pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
-        String* pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
+        MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
+        String* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
         DrawText( aTextRect, maString, nTextStyle, pVector, pDisplayText );
     }
 
@@ -3204,7 +3214,7 @@ void ImplListBoxFloatingWindow::StartFloat( BOOL bStartTracking )
         StartPopupMode( aRect, FLOATWIN_POPUPMODE_DOWN );
 
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
-            mpImplLB->SetTopEntry( nPos );
+            mpImplLB->ShowProminentEntry( nPos );
 
         if( bStartTracking )
             mpImplLB->GetMainWindow()->EnableMouseMoveSelect( TRUE );

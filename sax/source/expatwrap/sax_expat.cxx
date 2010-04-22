@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sax_expat.cxx,v $
- * $Revision: 1.18.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,11 +43,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-#ifdef SYSTEM_EXPAT
 #include <expat.h>
-#else
-#include "expat/xmlparse.h"
-#endif
 
 using namespace ::rtl;
 using namespace ::std;

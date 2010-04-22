@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: printoptions.cxx,v $
- * $Revision: 1.14.236.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,11 +27,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-
-#ifdef  SVL_DLLIMPLEMENTATION
-#undef  SVL_DLLIMPLEMENTATION
-#endif
-#define SVT_DLLIMPLEMENTATION
 
 //_________________________________________________________________________________________________________________
 //  includes
@@ -73,7 +65,7 @@
 #endif
 
 #ifndef _SVT_LOGHELPER_HXX
-#include <loghelper.hxx>
+#include <unotools/loghelper.hxx>
 #endif
 
 #include <itemholder2.hxx>

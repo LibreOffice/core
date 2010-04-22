@@ -128,7 +128,6 @@
 ../../cppcanvas/inc
 ../../cppcanvas/source/inc
 ../../cppcanvas/unxlngi6.pro/inc
-../../sandbox/unxlngi6.pro/inc
 ../../eventattacher/unxlngi6.pro/inc
 ../../unotools/inc
 ../../unotools/unxlngi6.pro/inc
@@ -224,8 +223,6 @@
 ../../xmlsecurity/inc
 ../../xmlsecurity/unxlngi6.pro/inc
 ../../padmin/unxlngi6.pro/inc
-../../goodies/inc
-../../goodies/unxlngi6.pro/inc
 ../../regexp/inc
 ../../regexp/unxlngi6.pro/inc
 ../../ucbhelper/inc

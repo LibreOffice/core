@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vclxwindows.hxx,v $
- * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +29,7 @@
 #define _TOOLKIT_AWT_VCLXWINDOWS_HXX_
 
 #include <toolkit/dllapi.h>
+
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -88,8 +86,8 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-#include <toolkit/awt/vclxwindow.hxx>
-#include <toolkit/awt/vclxtopwindow.hxx>
+#include "toolkit/awt/vclxwindow.hxx"
+#include "toolkit/awt/vclxtopwindow.hxx"
 #include <cppuhelper/implbase1.hxx>
 
 #include <vcl/pointr.hxx>

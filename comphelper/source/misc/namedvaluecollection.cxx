@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: namedvaluecollection.cxx,v $
- * $Revision: 1.11.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,7 +85,14 @@ namespace comphelper
     NamedValueCollection::NamedValueCollection( const NamedValueCollection& _rCopySource )
         :m_pImpl( new NamedValueCollection_Impl )
     {
-        m_pImpl->aValues = _rCopySource.m_pImpl->aValues;
+        *this = _rCopySource;
+    }
+
+    //--------------------------------------------------------------------
+    NamedValueCollection& NamedValueCollection::operator=( const NamedValueCollection& i_rCopySource )
+    {
+        m_pImpl->aValues = i_rCopySource.m_pImpl->aValues;
+        return *this;
     }
 
     //--------------------------------------------------------------------

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmlout.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include "svtools/svtdllapi.h"
 #include <tools/solar.h>
 #include <rtl/textenc.h>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 
 class Color;
 class ImageMap;

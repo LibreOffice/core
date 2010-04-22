@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salinst.cxx,v $
- * $Revision: 1.42.154.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,6 +52,7 @@
 #include <vcl/salimestatus.hxx>
 #include <vcl/timer.hxx>
 #include <wincomp.hxx>  // CS_DROPSHADOW
+#include <tools/solarmutex.hxx>
 
 #ifndef min
 #define min(a,b)    (((a) < (b)) ? (a) : (b))
@@ -661,12 +659,14 @@ WinSalInstance::WinSalInstance()
     mpSalWaitMutex           = new vos::OMutex;
     mnYieldWaitCount         = 0;
     mpSalYieldMutex->acquire();
+    ::tools::SolarMutex::SetSolarMutex( mpSalYieldMutex );
 }
 
 // -----------------------------------------------------------------------
 
 WinSalInstance::~WinSalInstance()
 {
+    ::tools::SolarMutex::SetSolarMutex( 0 );
     mpSalYieldMutex->release();
     delete mpSalYieldMutex;
     delete mpSalWaitMutex;

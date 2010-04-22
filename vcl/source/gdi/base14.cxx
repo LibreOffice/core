@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: base14.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -601,7 +598,7 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
   "Symbol", // PSName
   1010, -293, // ascend, descend
   FAMILY_DONTKNOW, // family style
-  RTL_TEXTENCODING_SYMBOL, // charset
+  RTL_TEXTENCODING_ADOBE_SYMBOL, // charset
   PITCH_VARIABLE, // pitch
   WIDTH_NORMAL, // width type
   WEIGHT_NORMAL, // weight type

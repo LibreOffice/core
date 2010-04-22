@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: b2dlinegeometry.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +37,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -85,11 +83,9 @@ namespace basegfx
                 // get size of the arrow
                 const B2DRange aArrowSize(getRange(rArrow));
 
-                // build ArrowTransform
-                B2DHomMatrix aArrowTransform;
-
-                // center in X, align with axis in Y
-                aArrowTransform.translate(-aArrowSize.getCenter().getX(), -aArrowSize.getMinimum().getY());
+                // build ArrowTransform; center in X, align with axis in Y
+                B2DHomMatrix aArrowTransform(basegfx::tools::createTranslateB2DHomMatrix(
+                    -aArrowSize.getCenter().getX(), -aArrowSize.getMinimum().getY()));
 
                 // scale to target size
                 const double fArrowScale(fWidth / (aArrowSize.getRange().getX()));

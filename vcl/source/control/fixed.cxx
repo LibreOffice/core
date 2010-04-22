@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fixed.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/controllayout.hxx>
+#include <vcl/controldata.hxx>
 #include <vcl/window.h>
 
 #include <tools/rc.h>
@@ -109,40 +106,25 @@ WinBits FixedText::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
+// -----------------------------------------------------------------
+
+const Font& FixedText::GetCanonicalFont( const StyleSettings& _rStyle ) const
+{
+    return ( GetStyle() & WB_INFO ) ? _rStyle.GetInfoFont() : _rStyle.GetLabelFont();
+}
+
+// -----------------------------------------------------------------
+const Color& FixedText::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
+{
+    return ( GetStyle() & WB_INFO ) ? _rStyle.GetInfoTextColor() : _rStyle.GetLabelTextColor();
+}
+
 // -----------------------------------------------------------------------
 
 void FixedText::ImplInitSettings( BOOL bFont,
                                   BOOL bForeground, BOOL bBackground )
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-    if ( bFont )
-    {
-        Font aFont;
-        if ( GetStyle() & WB_INFO )
-            aFont = rStyleSettings.GetInfoFont();
-        else
-            aFont = rStyleSettings.GetLabelFont();
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
-        SetZoomedPointFont( aFont );
-    }
-
-    if ( bForeground || bFont )
-    {
-        Color aColor;
-        if ( IsControlForeground() )
-            aColor = GetControlForeground();
-        else
-        {
-            if ( GetStyle() & WB_INFO )
-                aColor = rStyleSettings.GetInfoTextColor();
-            else
-                aColor = rStyleSettings.GetLabelTextColor();
-        }
-        SetTextColor( aColor );
-        SetTextFillColor();
-    }
+    Control::ImplInitSettings( bFont, bForeground );
 
     if ( bBackground )
     {
@@ -278,17 +260,13 @@ void FixedText::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
         nTextStyle |= TEXT_DRAW_MONO;
 
     if( bFillLayout )
-    {
-        mpLayoutData->m_aDisplayText = String();
-        pDev->DrawText( Rectangle( aPos, rSize ),
-                        aText,
-                        nTextStyle,
-                        &mpLayoutData->m_aUnicodeBoundRects,
-                        &mpLayoutData->m_aDisplayText
-                        );
-    }
-    else
-        pDev->DrawText( Rectangle( aPos, rSize ), aText, nTextStyle );
+        mpControlData->mpLayoutData->m_aDisplayText = String();
+
+    Rectangle aRect( Rectangle( aPos, rSize ) );
+    DrawControlText( *pDev, aRect, aText, nTextStyle,
+        bFillLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL,
+        bFillLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL
+    );
 }
 
 // -----------------------------------------------------------------------
@@ -446,7 +424,7 @@ Size FixedText::GetOptimalSize(WindowSizeType eType) const
 
 void  FixedText::FillLayoutData() const
 {
-    mpLayoutData = new vcl::ControlLayoutData();
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     ImplDraw( const_cast<FixedText*>(this), 0, Point(), GetOutputSizePixel(), true );
 }
 
@@ -468,31 +446,25 @@ WinBits FixedLine::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
+// -----------------------------------------------------------------
+
+const Font& FixedLine::GetCanonicalFont( const StyleSettings& _rStyle ) const
+{
+    return _rStyle.GetGroupFont();
+}
+
+// -----------------------------------------------------------------
+const Color& FixedLine::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
+{
+    return _rStyle.GetGroupTextColor();
+}
+
 // -----------------------------------------------------------------------
 
 void FixedLine::ImplInitSettings( BOOL bFont,
                                   BOOL bForeground, BOOL bBackground )
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-    if ( bFont )
-    {
-        Font aFont = rStyleSettings.GetGroupFont();
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
-        SetZoomedPointFont( aFont );
-    }
-
-    if ( bForeground || bFont )
-    {
-        Color aColor;
-        if ( IsControlForeground() )
-            aColor = GetControlForeground();
-        else
-            aColor = rStyleSettings.GetGroupTextColor();
-        SetTextColor( aColor );
-        SetTextFillColor();
-    }
+    Control::ImplInitSettings( bFont, bForeground );
 
     if ( bBackground )
     {
@@ -524,16 +496,11 @@ void FixedLine::ImplDraw( bool bLayout )
 {
     Size                    aOutSize = GetOutputSizePixel();
     String                  aText = GetText();
-    const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     WinBits                 nWinStyle = GetStyle();
-    MetricVector*           pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
-    String*                 pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
+    MetricVector*           pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
+    String*                 pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
 
-    if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )
-        SetLineColor( Color( COL_BLACK ) );
-    else
-        SetLineColor( rStyleSettings.GetShadowColor() );
-
+    DecorationView aDecoView( this );
     if ( !aText.Len() || (nWinStyle & WB_VERT) )
     {
         if( !pVector )
@@ -544,21 +511,12 @@ void FixedLine::ImplDraw( bool bLayout )
             if ( nWinStyle & WB_VERT )
             {
                 nX = (aOutSize.Width()-1)/2;
-                DrawLine( Point( nX, 0 ), Point( nX, aOutSize.Height()-1 ) );
+                aDecoView.DrawSeparator( Point( nX, 0 ), Point( nX, aOutSize.Height()-1 ) );
             }
             else
             {
                 nY = (aOutSize.Height()-1)/2;
-                DrawLine( Point( 0, nY ), Point( aOutSize.Width()-1, nY ) );
-            }
-
-            if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
-            {
-                SetLineColor( rStyleSettings.GetLightColor() );
-                if ( nWinStyle & WB_VERT )
-                    DrawLine( Point( nX+1, 0 ), Point( nX+1, aOutSize.Height()-1 ) );
-                else
-                    DrawLine( Point( 0, nY+1 ), Point( aOutSize.Width()-1, nY+1 ) );
+                aDecoView.DrawSeparator( Point( 0, nY ), Point( aOutSize.Width()-1, nY ), false );
             }
         }
     }
@@ -566,6 +524,7 @@ void FixedLine::ImplDraw( bool bLayout )
     {
         USHORT      nStyle = TEXT_DRAW_MNEMONIC | TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER | TEXT_DRAW_ENDELLIPSIS;
         Rectangle   aRect( 0, 0, aOutSize.Width(), aOutSize.Height() );
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
         if ( !IsEnabled() )
             nStyle |= TEXT_DRAW_DISABLE;
@@ -574,18 +533,12 @@ void FixedLine::ImplDraw( bool bLayout )
         if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )
             nStyle |= TEXT_DRAW_MONO;
 
-        aRect = GetTextRect( aRect, aText, nStyle );
-        DrawText( aRect, aText, nStyle, pVector, pDisplayText );
+        DrawControlText( *this, aRect, aText, nStyle, pVector, pDisplayText );
 
         if( !pVector )
         {
             long nTop = aRect.Top() + ((aRect.GetHeight()-1)/2);
-            DrawLine( Point( aRect.Right()+FIXEDLINE_TEXT_BORDER, nTop ), Point( aOutSize.Width()-1, nTop ) );
-            if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
-            {
-                SetLineColor( rStyleSettings.GetLightColor() );
-                DrawLine( Point( aRect.Right()+FIXEDLINE_TEXT_BORDER, nTop+1 ), Point( aOutSize.Width()-1, nTop+1 ) );
-            }
+            aDecoView.DrawSeparator( Point( aRect.Right()+FIXEDLINE_TEXT_BORDER, nTop ), Point( aOutSize.Width()-1, nTop ), false );
         }
     }
 }
@@ -617,7 +570,7 @@ FixedLine::FixedLine( Window* pParent, const ResId& rResId ) :
 
 void  FixedLine::FillLayoutData() const
 {
-    mpLayoutData = new vcl::ControlLayoutData();
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const_cast<FixedLine*>(this)->ImplDraw( true );
 }
 
@@ -1084,6 +1037,14 @@ void FixedImage::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
 void FixedImage::Paint( const Rectangle& )
 {
     ImplDraw( this, 0, Point(), GetOutputSizePixel() );
+}
+
+// -----------------------------------------------------------------------
+
+Size FixedImage::GetOptimalSize( WindowSizeType ) const
+{
+    const Image* pImage = GetSettings().GetStyleSettings().GetHighContrastMode() ? &maImageHC : &maImage;
+    return pImage->GetSizePixel();
 }
 
 // -----------------------------------------------------------------------

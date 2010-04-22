@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optionsdrawinglayer.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 //  includes
 //_________________________________________________________________________________________________________________
 
-#include "svtools/svldllapi.h"
+#include "svtools/svtdllapi.h"
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
@@ -68,7 +65,7 @@ class SvtOptionsDrawinglayer_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class SVL_DLLPUBLIC SvtOptionsDrawinglayer
+class SVT_DLLPUBLIC SvtOptionsDrawinglayer
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -217,7 +214,7 @@ class SVL_DLLPUBLIC SvtOptionsDrawinglayer
 
             @onerror    -
         *//*-*****************************************************************************************************/
-        SVL_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
+        SVT_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
 
     //-------------------------------------------------------------------------------------------------------------
     //  private member

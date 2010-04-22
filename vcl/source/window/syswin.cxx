@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: syswin.cxx,v $
- * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,6 +59,7 @@ public:
 
     TaskPaneList*   mpTaskPaneList;
     Size            maMaxOutSize;
+    rtl::OUString   maRepresentedURL;
 };
 
 SystemWindow::ImplData::ImplData()
@@ -273,6 +271,29 @@ void SystemWindow::SetZLevel( BYTE nLevel )
             pWindow->mpWindowImpl->mpPrev->mpWindowImpl->mpNext = pWindow;
         }
     }
+}
+
+// -----------------------------------------------------------------------
+
+void SystemWindow::SetRepresentedURL( const rtl::OUString& i_rURL )
+{
+    bool bChanged = (i_rURL != mpImplData->maRepresentedURL);
+    mpImplData->maRepresentedURL = i_rURL;
+    if ( !mbSysChild && bChanged )
+    {
+        const Window* pWindow = this;
+        while ( pWindow->mpWindowImpl->mpBorderWindow )
+            pWindow = pWindow->mpWindowImpl->mpBorderWindow;
+
+        if ( pWindow->mpWindowImpl->mbFrame )
+            pWindow->mpWindowImpl->mpFrame->SetRepresentedURL( i_rURL );
+    }
+}
+// -----------------------------------------------------------------------
+
+const rtl::OUString& SystemWindow::GetRepresentedURL() const
+{
+    return mpImplData->maRepresentedURL;
 }
 
 // -----------------------------------------------------------------------

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: menu.cxx,v $
- * $Revision: 1.165 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -5136,15 +5133,23 @@ IMPL_LINK( MenuBarWindow, CloserHdl, PushButton*, EMPTYARG )
         return 0;
 
     if( aCloser.GetCurItemId() == IID_DOCUMENTCLOSE )
-        return ((MenuBar*)pMenu)->GetCloserHdl().Call( pMenu );
-    std::map<USHORT,AddButtonEntry>::iterator it = m_aAddButtons.find( aCloser.GetCurItemId() );
-    if( it != m_aAddButtons.end() )
     {
-        MenuBar::MenuBarButtonCallbackArg aArg;
-        aArg.nId = it->first;
-        aArg.bHighlight = (aCloser.GetHighlightItemId() == it->first);
-        aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu);
-        return it->second.m_aSelectLink.Call( &aArg );
+        // #i106052# call close hdl asynchronously to ease handler implementation
+        // this avoids still being in the handler while the DecoToolBox already
+        // gets destroyed
+        Application::PostUserEvent( ((MenuBar*)pMenu)->GetCloserHdl(), pMenu );
+    }
+    else
+    {
+        std::map<USHORT,AddButtonEntry>::iterator it = m_aAddButtons.find( aCloser.GetCurItemId() );
+        if( it != m_aAddButtons.end() )
+        {
+            MenuBar::MenuBarButtonCallbackArg aArg;
+            aArg.nId = it->first;
+            aArg.bHighlight = (aCloser.GetHighlightItemId() == it->first);
+            aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu);
+            return it->second.m_aSelectLink.Call( &aArg );
+        }
     }
     return 0;
 }
@@ -5570,6 +5575,17 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
                     n = pMenu->GetItemCount()-1;
             }
 
+            // handling gtk like (aka mbOpenMenuOnF10)
+            // do not highlight an item when opening a sub menu
+            // unless there already was a higlighted sub menu item
+            bool bWasHighlight = false;
+            if( pActivePopup )
+            {
+                MenuFloatingWindow* pSubWindow = dynamic_cast<MenuFloatingWindow*>(pActivePopup->ImplGetWindow());
+                if( pSubWindow )
+                    bWasHighlight = (pSubWindow->GetHighlightedItem() != ITEMPOS_INVALID);
+            }
+
             USHORT nLoop = n;
 
             if( nCode == KEY_HOME )
@@ -5596,7 +5612,10 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
                 MenuItemData* pData = (MenuItemData*)pMenu->GetItemList()->GetDataFromPos( n );
                 if ( ( pData->eType != MENUITEM_SEPARATOR ) && pMenu->ImplIsVisible( n ) )
                 {
-                    ChangeHighlightItem( n, TRUE );
+                    BOOL bDoSelect = TRUE;
+                    if( ImplGetSVData()->maNWFData.mbOpenMenuOnF10 )
+                        bDoSelect = bWasHighlight;
+                    ChangeHighlightItem( n, bDoSelect );
                     break;
                 }
             } while ( n != nLoop );

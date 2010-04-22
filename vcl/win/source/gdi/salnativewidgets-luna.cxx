@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salnativewidgets-luna.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +39,7 @@
 #include "osl/module.h"
 
 #include "uxtheme.h"
-#include "tmschema.h"
+#include "vssym32.h"
 
 #include <map>
 #include <string>
@@ -294,6 +291,10 @@ BOOL WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Progress");
             break;
+        case CTRL_SLIDER:
+            if( nPart == PART_TRACK_HORZ_AREA || nPart == PART_TRACK_VERT_AREA )
+                hTheme = getThemeHandle( mhWnd, L"Trackbar" );
+            break;
         default:
             hTheme = NULL;
             break;
@@ -337,7 +338,7 @@ BOOL ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, cons
 }
 
 
-Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState, const Rectangle& aRect )
+Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState, const Rectangle& aRect, THEMESIZE eTS = TS_TRUE )
 {
     SIZE aSz;
     RECT rc;
@@ -345,7 +346,7 @@ Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState, const
     rc.right = aRect.nRight;
     rc.top = aRect.nTop;
     rc.bottom = aRect.nBottom;
-    HRESULT hr = vsAPI.GetThemePartSize( hTheme, hDC, iPart, iState, NULL, TS_TRUE, &aSz ); // TS_TRUE returns optimal size
+    HRESULT hr = vsAPI.GetThemePartSize( hTheme, hDC, iPart, iState, NULL, eTS, &aSz ); // TS_TRUE returns optimal size
     if( hr == S_OK )
         return Rectangle( 0, 0, aSz.cx, aSz.cy );
     else
@@ -893,6 +894,38 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         return ImplDrawTheme( hTheme, hDC, PP_CHUNK, iState, aProgressRect, aCaption );
     }
 
+    if( nType == CTRL_SLIDER )
+    {
+        iPart = (nPart == PART_TRACK_HORZ_AREA) ? TKP_TRACK : TKP_TRACKVERT;
+        iState = (nPart == PART_TRACK_HORZ_AREA) ? TRS_NORMAL : TRVS_NORMAL;
+
+        Rectangle aTrackRect = ImplGetThemeRect( hTheme, hDC, iPart, iState, Rectangle() );
+        RECT aTRect = rc;
+        if( nPart == PART_TRACK_HORZ_AREA )
+        {
+            long nH = aTrackRect.GetHeight();
+            aTRect.top += (rc.bottom - rc.top - nH)/2;
+            aTRect.bottom = aTRect.top + nH;
+        }
+        else
+        {
+            long nW = aTrackRect.GetWidth();
+            aTRect.left += (rc.right - rc.left - nW)/2;
+            aTRect.right = aTRect.left + nW;
+        }
+        ImplDrawTheme( hTheme, hDC, iPart, iState, aTRect, aCaption );
+
+        RECT aThumbRect;
+        SliderValue* pVal = (SliderValue*)aValue.getOptionalVal();
+        aThumbRect.left   = pVal->maThumbRect.Left();
+        aThumbRect.top    = pVal->maThumbRect.Top();
+        aThumbRect.right  = pVal->maThumbRect.Right();
+        aThumbRect.bottom = pVal->maThumbRect.Bottom();
+        iPart = (nPart == PART_TRACK_HORZ_AREA) ? TKP_THUMB : TKP_THUMBVERT;
+        iState = (nState & CTRL_STATE_ENABLED) ? TUS_NORMAL : TUS_DISABLED;
+        return ImplDrawTheme( hTheme, hDC, iPart, iState, aThumbRect, aCaption );
+    }
+
     return false;
 }
 
@@ -972,6 +1005,10 @@ BOOL WinSalGraphics::drawNativeControl( ControlType nType,
         case CTRL_PROGRESS:
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Progress");
+            break;
+        case CTRL_SLIDER:
+            if( nPart == PART_TRACK_HORZ_AREA || nPart == PART_TRACK_VERT_AREA )
+                hTheme = getThemeHandle( mhWnd, L"Trackbar" );
             break;
         default:
             hTheme = NULL;
@@ -1109,6 +1146,89 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
                 bRet = TRUE;
         }
     }
+    if( (nType == CTRL_LISTBOX || nType == CTRL_COMBOBOX ) && nPart == PART_ENTIRE_CONTROL )
+    {
+        HTHEME hTheme = getThemeHandle( mhWnd, L"Combobox");
+        if( hTheme )
+        {
+            Rectangle aBoxRect( rControlRegion.GetBoundRect() );
+            Rectangle aRect( ImplGetThemeRect( hTheme, hDC, CP_DROPDOWNBUTTON,
+                                               CBXS_NORMAL, aBoxRect ) );
+            Rectangle aBrdRect( ImplGetThemeRect( hTheme, hDC, CP_BORDER,
+                                                  CBB_HOT, aBoxRect ) );
+            aRect.Top() -= aBrdRect.GetHeight();
+            if( aRect.GetHeight() > aBoxRect.GetHeight() )
+                aBoxRect.Bottom() = aBoxRect.Top() + aRect.GetHeight();
+            if( aRect.GetWidth() > aBoxRect.GetWidth() )
+                aBoxRect.Right() = aBoxRect.Left() + aRect.GetWidth();
+            rNativeContentRegion = aBoxRect;
+            rNativeBoundingRegion = rNativeContentRegion;
+            if( !aRect.IsEmpty() )
+                bRet = TRUE;
+        }
+    }
+
+    if( (nType == CTRL_EDITBOX || nType == CTRL_SPINBOX) && nPart == PART_ENTIRE_CONTROL )
+    {
+        HTHEME hTheme = getThemeHandle( mhWnd, L"Edit");
+        if( hTheme )
+        {
+            // get borderr size
+            Rectangle aBoxRect( rControlRegion.GetBoundRect() );
+            Rectangle aRect( ImplGetThemeRect( hTheme, hDC, EP_BACKGROUNDWITHBORDER,
+                                               EBWBS_HOT, aBoxRect ) );
+            // ad app font height
+            NONCLIENTMETRICSW aNonClientMetrics;
+            aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
+            if ( SystemParametersInfoW( SPI_GETNONCLIENTMETRICS, sizeof( aNonClientMetrics ), &aNonClientMetrics, 0 ) )
+            {
+                long nFontHeight = aNonClientMetrics.lfMessageFont.lfHeight;
+                if( nFontHeight < 0 )
+                    nFontHeight = -nFontHeight;
+
+                if( aRect.GetHeight() && nFontHeight )
+                {
+                    aRect.Bottom() += aRect.GetHeight();
+                    aRect.Bottom() += nFontHeight;
+                    if( aRect.GetHeight() > aBoxRect.GetHeight() )
+                        aBoxRect.Bottom() = aBoxRect.Top() + aRect.GetHeight();
+                    if( aRect.GetWidth() > aBoxRect.GetWidth() )
+                        aBoxRect.Right() = aBoxRect.Left() + aRect.GetWidth();
+                    rNativeContentRegion = aBoxRect;
+                    rNativeBoundingRegion = rNativeContentRegion;
+                        bRet = TRUE;
+                }
+            }
+        }
+    }
+    if( nType == CTRL_SLIDER && ( (nPart == PART_THUMB_HORZ) || (nPart == PART_THUMB_VERT) ) )
+    {
+        HTHEME hTheme = getThemeHandle( mhWnd, L"Trackbar");
+        if( hTheme )
+        {
+            int iPart = (nPart == PART_THUMB_HORZ) ? TKP_THUMB : TKP_THUMBVERT;
+            int iState = (nPart == PART_THUMB_HORZ) ? TUS_NORMAL : TUVS_NORMAL;
+            Rectangle aThumbRect = ImplGetThemeRect( hTheme, hDC, iPart, iState, Rectangle() );
+            if( nPart == PART_THUMB_HORZ )
+            {
+                long nW = aThumbRect.GetWidth();
+                Rectangle aRect( rControlRegion.GetBoundRect() );
+                aRect.Right() = aRect.Left() + nW - 1;
+                rNativeContentRegion = aRect;
+                rNativeBoundingRegion = rNativeContentRegion;
+            }
+            else
+            {
+                long nH = aThumbRect.GetHeight();
+                Rectangle aRect( rControlRegion.GetBoundRect() );
+                aRect.Bottom() = aRect.Top() + nH - 1;
+                rNativeContentRegion = aRect;
+                rNativeBoundingRegion = rNativeContentRegion;
+            }
+            bRet = TRUE;
+        }
+    }
+
     ReleaseDC( mhWnd, hDC );
     return( bRet );
 }

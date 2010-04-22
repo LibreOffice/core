@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: toolboxcontroller.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -646,7 +643,7 @@ sal_Bool ToolboxController::isHighContrast() const
         vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow )
-            bHighContrast = ( ((ToolBox *)pWindow)->GetBackground().GetColor().IsDark() );
+            bHighContrast = ( ((ToolBox *)pWindow)->GetSettings().GetStyleSettings().GetHighContrastMode() );
     }
 
     return bHighContrast;

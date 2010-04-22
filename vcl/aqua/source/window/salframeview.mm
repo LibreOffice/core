@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salframeview.mm,v $
- * $Revision: 1.12.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -215,6 +212,7 @@ static AquaSalFrame* getMouseContainerFrame()
             AquaSalMenu::enableMainMenu( false );
         #endif
         mpFrame->CallCallback( SALEVENT_GETFOCUS, 0 );
+        mpFrame->SendPaintEvent(); // repaint controls as active
     }
 }
 
@@ -223,7 +221,10 @@ static AquaSalFrame* getMouseContainerFrame()
     YIELD_GUARD;
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
+    {
         mpFrame->CallCallback(SALEVENT_LOSEFOCUS, 0);
+        mpFrame->SendPaintEvent(); // repaint controls as inactive
+    }
 }
 
 -(void)windowDidChangeScreen: (NSNotification*)pNotification
@@ -1061,7 +1062,17 @@ private:
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_LINE character: 0  modifiers: 0];
 }
 
+-(void)moveToRightEndOfLine: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_LINE character: 0  modifiers: 0];
+}
+
 -(void)moveToEndOfLineAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_LINE character: 0  modifiers: 0];
+}
+
+-(void)moveToRightEndOfLineAndModifySelection: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_LINE character: 0  modifiers: 0];
 }
@@ -1071,7 +1082,17 @@ private:
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
 }
 
+-(void)moveToLeftEndOfLine: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
+}
+
 -(void)moveToBeginningOfLineAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
+}
+
+-(void)moveToLeftEndOfLineAndModifySelection: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
 }
@@ -1121,6 +1142,12 @@ private:
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
 }
 
+-(void)scrollToEndOfDocument: (id)aSender
+{
+    // this is not exactly what we should do, but it makes "End" and "Shift-End" behave consistent
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
+}
+
 -(void)moveToEndOfDocumentAndModifySelection: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
@@ -1128,6 +1155,12 @@ private:
 
 -(void)moveToBeginningOfDocument: (id)aSender
 {
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT character: 0  modifiers: 0];
+}
+
+-(void)scrollToBeginningOfDocument: (id)aSender
+{
+    // this is not exactly what we should do, but it makes "Home" and "Shift-Home" behave consistent
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT character: 0  modifiers: 0];
 }
 
@@ -1328,11 +1361,32 @@ private:
     {
         mbNeedSpecialKeyHandle = true;
     }
+
+    // FIXME:
+    // #i106901#
+    // if we come here outside of mbInKeyInput, this is likely to be because
+    // of the keyboard viewer. For unknown reasons having no marked range
+    // in this case causes a crash. So we say we have a marked range anyway
+    // This is a hack, since it is not understood what a) causes that crash
+    // and b) why we should have a marked range at this point.
+    if( ! mbInKeyInput )
+        bHasMarkedText = YES;
+
     return bHasMarkedText;
 }
 
 - (NSRange)markedRange
 {
+    // FIXME:
+    // #i106901#
+    // if we come here outside of mbInKeyInput, this is likely to be because
+    // of the keyboard viewer. For unknown reasons having no marked range
+    // in this case causes a crash. So we say we have a marked range anyway
+    // This is a hack, since it is not understood what a) causes that crash
+    // and b) why we should have a marked range at this point.
+    if( ! mbInKeyInput )
+        return NSMakeRange( 0, 0 );
+    
     return [self hasMarkedText] ? mMarkedRange : NSMakeRange( NSNotFound, 0 );
 }
 
@@ -1437,6 +1491,9 @@ private:
 {
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
+        #if OSL_DEBUG_LEVEL > 1
+        // fprintf( stderr, "SalFrameView: doCommandBySelector %s\n", (char*)aSelector );
+        #endif
         if( (mpFrame->mnICOptions & SAL_INPUTCONTEXT_TEXT) != 0 &&
             aSelector != NULL && [self respondsToSelector: aSelector] )
         {

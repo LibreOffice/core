@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: date.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -115,6 +112,9 @@ public:
     TOOLS_DLLPUBLIC friend Date     operator +( const Date& rDate, long nDays );
     TOOLS_DLLPUBLIC friend Date     operator -( const Date& rDate, long nDays );
     TOOLS_DLLPUBLIC friend long     operator -( const Date& rDate1, const Date& rDate2 );
+
+    static long DateToDays( USHORT nDay, USHORT nMonth, USHORT nYear );
+
 };
 
 #endif // _DATE_HXX

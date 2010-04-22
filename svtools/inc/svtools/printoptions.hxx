@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: printoptions.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
-#include <svtools/options.hxx>
+#include <unotools/options.hxx>
 
 class SvtPrintOptions_Impl;
 
@@ -45,7 +42,7 @@ class SvtPrintOptions_Impl;
 
 class PrinterOptions;
 
-class SVT_DLLPUBLIC SvtBasePrintOptions: public svt::detail::Options
+class SVT_DLLPUBLIC SvtBasePrintOptions: public utl::detail::Options
 {
 protected:
 

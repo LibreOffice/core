@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: decode.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +48,6 @@ GIFLZWDecompressor::GIFLZWDecompressor( BYTE cDataSize ) :
             bEOIFound           ( FALSE ),
             nDataSize           ( cDataSize )
 {
-    pTable = new GIFLZWTableEntry[ 4096 ];
     pOutBuf = new BYTE[ 4096 ];
 
     nClearCode = 1 << nDataSize;
@@ -60,6 +56,8 @@ GIFLZWDecompressor::GIFLZWDecompressor( BYTE cDataSize ) :
     nCodeSize = nDataSize + 1;
     nOldCode = 0xffff;
     pOutBufData = pOutBuf + 4096;
+
+    pTable = new GIFLZWTableEntry[ 4098 ];
 
     for( USHORT i = 0; i < nTableSize; i++ )
     {

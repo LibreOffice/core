@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: region.cxx,v $
- * $Revision: 1.18.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +45,9 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 // =======================================================================
 //
@@ -1303,9 +1302,7 @@ void Region::Move( long nHorzMove, long nVertMove )
         mpImplRegion->mpPolyPoly->Move( nHorzMove, nVertMove );
     else if( mpImplRegion->mpB2DPolyPoly )
     {
-        ::basegfx::B2DHomMatrix aTransform;
-        aTransform.translate( nHorzMove, nVertMove );
-        mpImplRegion->mpB2DPolyPoly->transform( aTransform );
+        mpImplRegion->mpB2DPolyPoly->transform(basegfx::tools::createTranslateB2DHomMatrix(nHorzMove, nVertMove));
     }
     else
     {
@@ -1346,9 +1343,7 @@ void Region::Scale( double fScaleX, double fScaleY )
         mpImplRegion->mpPolyPoly->Scale( fScaleX, fScaleY );
     else if( mpImplRegion->mpB2DPolyPoly )
     {
-        ::basegfx::B2DHomMatrix aTransform;
-        aTransform.scale( fScaleX, fScaleY );
-        mpImplRegion->mpB2DPolyPoly->transform( aTransform );
+        mpImplRegion->mpB2DPolyPoly->transform(basegfx::tools::createScaleB2DHomMatrix(fScaleX, fScaleY));
     }
     else
     {
@@ -2010,6 +2005,32 @@ const basegfx::B2DPolyPolygon Region::GetB2DPolyPolygon() const
 
 // -----------------------------------------------------------------------
 
+basegfx::B2DPolyPolygon Region::ConvertToB2DPolyPolygon()
+{
+    DBG_CHKTHIS( Region, ImplDbgTestRegion );
+
+    basegfx::B2DPolyPolygon aRet;
+
+    if( HasPolyPolygon() )
+        aRet = GetB2DPolyPolygon();
+    else
+    {
+        RegionHandle aHdl = BeginEnumRects();
+        Rectangle aSubRect;
+        while( GetNextEnumRect( aHdl, aSubRect ) )
+        {
+            basegfx::B2DPolygon aPoly( basegfx::tools::createPolygonFromRect(
+                 basegfx::B2DRectangle( aSubRect.Left(), aSubRect.Top(), aSubRect.Right(), aSubRect.Bottom() ) ) );
+            aRet.append( aPoly );
+        }
+        EndEnumRects( aHdl );
+    }
+
+    return aRet;
+}
+
+// -----------------------------------------------------------------------
+
 BOOL Region::ImplGetFirstRect( ImplRegionInfo& rImplRegionInfo,
                                long& rX, long& rY,
                                long& rWidth, long& rHeight ) const
@@ -2459,6 +2480,14 @@ SvStream& operator>>( SvStream& rIStrm, Region& rRegion )
                     }
                 }
 
+                if( rIStrm.IsEof() )
+                {
+                    DBG_ERROR( "premature end of region stream" );
+                    delete rRegion.mpImplRegion;
+                    rRegion.mpImplRegion = (ImplRegion*)&aImplEmptyRegion;
+                    return rIStrm;
+                }
+
                 // get next header
                 rIStrm >> nTmp16;
             }
@@ -2537,7 +2566,13 @@ SvStream& operator<<( SvStream& rOStrm, const Region& rRegion )
         rOStrm << bHasPolyPolygon;
 
         if( bHasPolyPolygon )
-            rOStrm << rRegion.GetPolyPolygon();
+        {
+            // #i105373#
+            PolyPolygon aNoCurvePolyPolygon;
+            rRegion.GetPolyPolygon().AdaptiveSubdivide(aNoCurvePolyPolygon);
+
+            rOStrm << aNoCurvePolyPolygon;
+        }
     }
 
     return rOStrm;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: accessiblefactory.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +37,7 @@
 #endif
 #include "AccessibleBrowseBoxObjType.hxx"
 #include "accessibletableprovider.hxx"
+#include "accessibletable.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace accessibility {
@@ -88,6 +86,11 @@ namespace svt
             createAccessibleBrowseBox(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
                 IAccessibleTableProvider& _rBrowseBox
+            ) const = 0;
+        virtual table::IAccessibleTableControl*
+            createAccessibleTableControl(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
+                table::IAccessibleTable& _rTable
             ) const = 0;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >

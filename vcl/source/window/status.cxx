@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: status.cxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,13 +61,17 @@ public:
     ~ImplData();
 
     VirtualDevice*      mpVirDev;
-    BOOL                mbTopBorder:1;
+    long                mnItemBorderWidth;
+    bool                mbTopBorder:1;
+    bool                mbDrawItemFrames:1;
 };
 
 StatusBar::ImplData::ImplData()
 {
     mpVirDev = NULL;
-    mbTopBorder = FALSE;
+    mbTopBorder = false;
+    mbDrawItemFrames = false;
+    mnItemBorderWidth = 0;
 }
 
 StatusBar::ImplData::~ImplData()
@@ -156,6 +157,7 @@ void StatusBar::ImplInit( Window* pParent, WinBits nStyle )
     mbProgressMode  = FALSE;
     mbInUserDraw    = FALSE;
     mbBottomBorder  = FALSE;
+    mnItemsWidth    = STATUSBAR_OFFSET_X;
     mnDX            = 0;
     mnDY            = 0;
     mnCalcHeight    = 0;
@@ -353,9 +355,7 @@ Rectangle StatusBar::ImplGetItemRectPos( USHORT nPos ) const
 {
     Rectangle       aRect;
     ImplStatusItem* pItem;
-
     pItem = mpItemList->GetObject( nPos );
-
     if ( pItem )
     {
         if ( pItem->mbVisible )
@@ -370,6 +370,25 @@ Rectangle StatusBar::ImplGetItemRectPos( USHORT nPos ) const
     }
 
     return aRect;
+}
+
+// -----------------------------------------------------------------------
+
+USHORT StatusBar::ImplGetFirstVisiblePos() const
+{
+    ImplStatusItem* pItem;
+
+    for( USHORT nPos = 0; nPos < mpItemList->Count(); nPos++ )
+    {
+        pItem = mpItemList->GetObject( nPos );
+        if ( pItem )
+        {
+            if ( pItem->mbVisible )
+                return nPos;
+        }
+    }
+
+    return ~0;
 }
 
 // -----------------------------------------------------------------------
@@ -420,8 +439,9 @@ void StatusBar::ImplDrawItem( BOOL bOffScreen, USHORT nPos, BOOL bDrawText, BOOL
 
     // Ausgabebereich berechnen
     ImplStatusItem*     pItem = mpItemList->GetObject( nPos );
-    Rectangle           aTextRect( aRect.Left()+1, aRect.Top()+1,
-                                   aRect.Right()-1, aRect.Bottom()-1 );
+    long nW = mpImplData->mnItemBorderWidth + 1;
+    Rectangle           aTextRect( aRect.Left()+nW, aRect.Top()+nW,
+                                   aRect.Right()-nW, aRect.Bottom()-nW );
     Size                aTextRectSize( aTextRect.GetSize() );
 
     if ( bOffScreen )
@@ -472,17 +492,36 @@ void StatusBar::ImplDrawItem( BOOL bOffScreen, USHORT nPos, BOOL bDrawText, BOOL
         SetClipRegion();
 
     // Frame ausgeben
-    if ( bDrawFrame && !(pItem->mnBits & SIB_FLAT) )
+    if ( bDrawFrame )
     {
-        USHORT nStyle;
+        if( mpImplData->mbDrawItemFrames )
+        {
+            if( !(pItem->mnBits & SIB_FLAT) )
+            {
+                USHORT nStyle;
 
-        if ( pItem->mnBits & SIB_IN )
-            nStyle = FRAME_DRAW_IN;
-        else
-            nStyle = FRAME_DRAW_OUT;
+                if ( pItem->mnBits & SIB_IN )
+                    nStyle = FRAME_DRAW_IN;
+                else
+                    nStyle = FRAME_DRAW_OUT;
 
-        DecorationView aDecoView( this );
-        aDecoView.DrawFrame( aRect, nStyle );
+                DecorationView aDecoView( this );
+                aDecoView.DrawFrame( aRect, nStyle );
+            }
+        }
+        else if( nPos != ImplGetFirstVisiblePos() )
+        {
+            // draw separator
+            Point aFrom( aRect.TopLeft() );
+            aFrom.X()--;
+            aFrom.Y()++;
+            Point aTo( aRect.BottomLeft() );
+            aTo.X()--;
+            aTo.Y()--;
+
+            DecorationView aDecoView( this );
+            aDecoView.DrawSeparator( aFrom, aTo );
+        }
     }
 
     if ( !ImplIsRecordLayout() )
@@ -690,8 +729,6 @@ void StatusBar::ImplCalcProgressRect()
     }
     if( ! bNativeOK )
         maPrgsTxtPos.Y()    = mnTextY;
-
-
 }
 
 // -----------------------------------------------------------------------
@@ -1229,8 +1266,11 @@ Rectangle StatusBar::GetItemRect( USHORT nItemId ) const
         {
             // Rechteck holen und Rahmen abziehen
             aRect = ImplGetItemRectPos( nPos );
-            aRect.Left()++;
-            aRect.Right()--;
+            long nW = mpImplData->mnItemBorderWidth+1;
+            aRect.Top() += nW-1;
+            aRect.Bottom() -= nW-1;
+            aRect.Left() += nW;
+            aRect.Right() -= nW;
             return aRect;
         }
     }
@@ -1250,8 +1290,9 @@ Point StatusBar::GetItemTextPos( USHORT nItemId ) const
             // Rechteck holen
             ImplStatusItem* pItem = mpItemList->GetObject( nPos );
             Rectangle aRect = ImplGetItemRectPos( nPos );
-            Rectangle aTextRect( aRect.Left()+1, aRect.Top()+1,
-                                 aRect.Right()-1, aRect.Bottom()-1 );
+            long nW = mpImplData->mnItemBorderWidth + 1;
+            Rectangle           aTextRect( aRect.Left()+nW, aRect.Top()+nW,
+                                           aRect.Right()-nW, aRect.Bottom()-nW );
             Point aPos = ImplGetItemTextPos( aTextRect.GetSize(),
                                              Size( GetTextWidth( pItem->maText ), GetTextHeight() ),
                                              pItem->mnBits );
@@ -1320,8 +1361,13 @@ void StatusBar::SetItemText( USHORT nItemId, const XubString& rText )
             // adjust item width - see also DataChanged()
             long nFudge = GetTextHeight()/4;
             long nWidth = GetTextWidth( pItem->maText ) + nFudge;
-            if( nWidth > pItem->mnWidth + STATUSBAR_OFFSET )
+            if( (nWidth > pItem->mnWidth + STATUSBAR_OFFSET) ||
+                ((nWidth < pItem->mnWidth) && (mnDX - STATUSBAR_OFFSET) < mnItemsWidth  ))
+            {
                 pItem->mnWidth = nWidth + STATUSBAR_OFFSET;
+                ImplFormat();
+                Invalidate();
+            }
 
             // Item neu Zeichen, wenn StatusBar sichtbar und
             // UpdateMode gesetzt ist
@@ -1521,9 +1567,9 @@ void StatusBar::SetBottomBorder( BOOL bBottomBorder )
 
 void StatusBar::SetTopBorder( BOOL bTopBorder )
 {
-    if ( mpImplData->mbTopBorder != bTopBorder )
+    if ( mpImplData->mbTopBorder != static_cast<bool>(bTopBorder) )
     {
-        mpImplData->mbTopBorder = bTopBorder;
+        mpImplData->mbTopBorder = static_cast<bool>(bTopBorder);
         ImplCalcBorder();
     }
 }
@@ -1687,7 +1733,22 @@ Size StatusBar::CalcWindowSizePixel() const
         }
     }
 
-    nCalcHeight = nMinHeight+nBarTextOffset;
+    if( mpImplData->mbDrawItemFrames &&
+        pThis->IsNativeControlSupported( CTRL_FRAME, PART_BORDER ) )
+    {
+        ImplControlValue aControlValue( FRAME_DRAW_NODRAW );
+        Region aBound, aContent;
+        Region aNatRgn( Rectangle( Point( 0, 0 ), Size( 150, 50 ) ) );
+        if( pThis->GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
+            aNatRgn, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+        {
+            mpImplData->mnItemBorderWidth =
+                ( aBound.GetBoundRect().GetHeight() -
+                  aContent.GetBoundRect().GetHeight() ) / 2;
+        }
+    }
+
+    nCalcHeight = nMinHeight+nBarTextOffset + 2*mpImplData->mnItemBorderWidth;
     if( nCalcHeight < nProgressHeight+2 )
         nCalcHeight = nProgressHeight+2;
 

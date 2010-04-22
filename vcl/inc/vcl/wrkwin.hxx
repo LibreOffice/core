@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrkwin.hxx,v $
- * $Revision: 1.3.138.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,7 +102,7 @@ public:
     void            Restore();
 
     void            Maximize( BOOL bMaximize = TRUE );
-    BOOL            IsMaximized();
+    BOOL            IsMaximized() const;
 };
 
 #endif // _SV_WRKWIN_HXX
