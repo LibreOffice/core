@@ -116,6 +116,7 @@ private:
                                                USHORT nOldPerc, USHORT nNewPerc );
     SAL_DLLPRIVATE void      ImplCalcProgressRect();
     SAL_DLLPRIVATE Rectangle ImplGetItemRectPos( USHORT nPos ) const;
+    SAL_DLLPRIVATE USHORT    ImplGetFirstVisiblePos() const;
     SAL_DLLPRIVATE void      ImplCalcBorder();
 
 public:
