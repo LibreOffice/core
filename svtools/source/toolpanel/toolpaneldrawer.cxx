@@ -57,6 +57,7 @@ namespace svt
         :Window( &i_rParent )
         ,m_rDrawer( i_rParent )
     {
+        SetMouseTransparent( TRUE );
         Show();
         SetAccessibleRole( AccessibleRole::LABEL );
     }
