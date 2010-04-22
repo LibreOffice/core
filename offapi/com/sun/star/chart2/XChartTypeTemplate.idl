@@ -78,12 +78,10 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
         [in] data::XDataSource xDataSource,
         [in] sequence< com::sun::star::beans::PropertyValue > aArguments );
 
-    /** Return the names of parameters that are interpreted in the
-        <member>createDiagramByDataSource</member> method.
-
-        @see StandardChartTypeTemplateParameters
+    /** @return
+            <TRUE/> if the template does support categories
      */
-    sequence< string > getAvailableCreationParameterNames();
+    boolean supportsCategories();
 
     /** Analyses the given diagram and reinterprets its
         <type>DataSeries</type> and <type>Categories</type> and
