@@ -50,6 +50,8 @@
 #include <svtools/xtextedt.hxx>
 #include <editeng/SpellPortions.hxx>
 
+#include <set>
+
 class ScrollBar;
 class TextEngine;
 class ExtTextView;
@@ -72,11 +74,12 @@ class SentenceEditWindow_Impl : public MultiLineEdit/*, public SfxListener*/
     using MultiLineEdit::SetText;
 
 private:
+    std::set< USHORT >      m_aIgnoreErrorsAt;
     USHORT          m_nErrorStart;
     USHORT          m_nErrorEnd;
     bool            m_bIsUndoEditMode;
 
-    Link                    m_aModifyLink;
+    Link            m_aModifyLink;
 
     void            CallModifyLink() {m_aModifyLink.Call(this);}
 
@@ -93,7 +96,7 @@ public:
     void            SetAttrib( const TextAttrib& rAttr, ULONG nPara, USHORT nStart, USHORT nEnd );
     void            SetText( const String& rStr );
 
-    bool            MarkNextError();
+    bool            MarkNextError( bool bIgnoreCurrentError );
     void            ChangeMarkedWord(const String& rNewWord, LanguageType eLanguage);
     void            MoveErrorMarkTo(USHORT nErrorStart, USHORT nErrorEnd, bool bGrammar);
     String          GetErrorText() const;
@@ -121,6 +124,8 @@ public:
     void            UndoActionEnd( USHORT nId );
 
     void            MoveErrorEnd(long nOffset);
+
+    void            ResetIgnoreErrorsAt()   { m_aIgnoreErrorsAt.clear(); }
 };
 
 
@@ -221,7 +226,7 @@ private:
     void            InitUserDicts();
     void            UpdateBoxes_Impl();
     void            Init_Impl();
-    void            SpellContinue_Impl(bool UseSavedSentence = false);
+    void            SpellContinue_Impl(bool UseSavedSentence = false, bool bIgnoreCurrentError = false );
     void            LockFocusChanges( bool bLock ) {bFocusLocked = bLock;}
     void            Impl_Restore();
 
@@ -230,7 +235,7 @@ private:
 
     /** Retrieves the next sentence.
      */
-    bool            GetNextSentence_Impl(bool bUseSavedSentence);
+    bool            GetNextSentence_Impl(bool bUseSavedSentence, bool bRechek /*for rechecking the curretn sentence*/);
     /** Corrects all errors that have been selected to be changed always
      */
     bool            ApplyChangeAllList_Impl(SpellPortions& rSentence, bool& bHasReplaced);
