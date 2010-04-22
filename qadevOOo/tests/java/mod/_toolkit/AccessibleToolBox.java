@@ -47,8 +47,6 @@ import lib.TestParameters;
 import util.AccessibilityTools;
 import util.DesktopTools;
 import util.SOfficeFactory;
-import util.UITools;
-
 
 /**
  * Test for object that implements the following interfaces :
@@ -141,20 +139,10 @@ public class AccessibleToolBox extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
-                xTextDoc);
-
         XInterface oObj = null;
 
-        UITools oUI = new UITools(msf, aModel);
-
-        XWindow xWindow = null;
-        try {
-            xWindow = oUI.getActiveTopWindow();
-        } catch (Exception ex) {
-            ex.printStackTrace(log);
-            throw new StatusException("Couldn't get active top window", ex);
-        }
+        XWindow xWindow = UnoRuntime.queryInterface(XModel.class, xTextDoc).
+            getCurrentController().getFrame().getContainerWindow();
 
         AccessibilityTools at = new AccessibilityTools();
 
