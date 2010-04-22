@@ -28,6 +28,7 @@
 #ifndef INCLUDED_FONTTABLE_HXX
 #define INCLUDED_FONTTABLE_HXX
 
+#include <boost/shared_ptr.hpp>
 #include <WriterFilterDllApi.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -39,6 +40,8 @@ namespace dmapper
 struct FontTable_Impl;
 struct FontEntry
 {
+    typedef boost::shared_ptr<FontEntry> Pointer_t;
+
     ::rtl::OUString sFontName;
     ::rtl::OUString sFontName1;
     bool            bTrueType;
@@ -97,7 +100,7 @@ public:
     virtual void startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     virtual void endShape( );
 
-    const FontEntry*    getFontEntry(sal_uInt32 nIndex);
+    const FontEntry::Pointer_t  getFontEntry(sal_uInt32 nIndex);
     sal_uInt32          size();
 };
 typedef boost::shared_ptr< FontTable >          FontTablePtr;

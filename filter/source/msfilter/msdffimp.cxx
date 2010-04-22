@@ -5374,6 +5374,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
                         ((SdrEdgeObj*)pRet)->SetEdgeTrackPath( aPoly );
                     }
+                    pRet->SetMergedItemSet( aSet );
                 }
             }
 

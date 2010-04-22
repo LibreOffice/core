@@ -228,6 +228,11 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
         break;
     }
 
+    if (mpFib->get_nFib() >= 0xD9)
+    {
+        mpFibRgFcLcb2000.reset(new WW8FibRgFcLcb2000(*mpFib));
+    }
+
     if (mpTableStream.get() == NULL)
         throw ExceptionNotFound("Table stream not found.");
 
@@ -966,21 +971,45 @@ WW8SED * WW8DocumentImpl::getSED(const CpAndFc & rCpAndFc) const
     return pResult;
 }
 
+writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getListTplcs() const
+{
+    writerfilter::Reference<Table>::Pointer_t pResult;
+
+    if (mpFibRgFcLcb2000.get() != NULL &&
+        mpFibRgFcLcb2000->get_fcSttbRgtplc() != 0 &&
+        mpFibRgFcLcb2000->get_lcbSttbRgtplc() != 0)
+    {
+        WW8SttbRgtplc * pSttbRgtplc =
+        new WW8SttbRgtplc(*mpTableStream,
+                          mpFibRgFcLcb2000->get_fcSttbRgtplc(),
+                          mpFibRgFcLcb2000->get_lcbSttbRgtplc());
+
+        pResult = writerfilter::Reference<Table>::Pointer_t(pSttbRgtplc);
+    }
+
+    return pResult;
+}
+
 writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getListTable() const
 {
     writerfilter::Reference<Table>::Pointer_t pResult;
 
     if (mpFib->get_fcPlcfLst() != 0 && mpFib->get_lcbPlcfLst() > 0)
     {
-        WW8ListTable * pList = new WW8ListTable(*mpTableStream,
-                                                mpFib->get_fcPlcfLst(),
-                                                mpFib->get_fcPlfLfo() -
-                                                mpFib->get_fcPlcfLst());
+        try
+        {
+            WW8ListTable * pList = new WW8ListTable(*mpTableStream,
+                                                    mpFib->get_fcPlcfLst(),
+                                                    mpFib->get_fcPlfLfo() -
+                                                    mpFib->get_fcPlcfLst());
 
-        pList->setPayloadOffset(mpFib->get_lcbPlcfLst());
-        pList->initPayload();
+            pList->setPayloadOffset(mpFib->get_lcbPlcfLst());
+            pList->initPayload();
 
-        pResult = writerfilter::Reference<Table>::Pointer_t(pList);
+            pResult = writerfilter::Reference<Table>::Pointer_t(pList);
+        }
+        catch (ExceptionOutOfBounds aException) {
+        }
     }
 
     return pResult;
@@ -1433,7 +1462,7 @@ void WW8DocumentImpl::utext(Stream & rStream, const sal_uInt8 * data, size_t len
     debug_logger->chars(OUStringToOString(sText, RTL_TEXTENCODING_ASCII_US).getStr());
     debug_logger->endElement("utext");
 #endif
-    rStream.text(data, len);
+    rStream.utext(data, len);
 }
 
 
@@ -1618,6 +1647,13 @@ void WW8DocumentImpl::resolve(Stream & rStream)
             (new WW8Fib(*mpFib));
         rStream.props(pFib);
 
+        if (mpFibRgFcLcb2000.get() != NULL)
+        {
+            writerfilter::Reference<Properties>::Pointer_t pFibRgFcLcb2000
+            (new WW8FibRgFcLcb2000(*mpFibRgFcLcb2000));
+            rStream.props(pFibRgFcLcb2000);
+        }
+
 #if 0
         if (mpTextBoxStories.get() != NULL)
         {
@@ -1684,6 +1720,11 @@ void WW8DocumentImpl::resolve(Stream & rStream)
             }
         }
 #endif
+
+        writerfilter::Reference<Table>::Pointer_t pSttbRgtplc = getListTplcs();
+
+        if (pSttbRgtplc.get() != NULL)
+            rStream.table(NS_rtf::LN_SttbRgtplc, pSttbRgtplc);
 
         writerfilter::Reference<Table>::Pointer_t pFontTable = getFontTable();
 

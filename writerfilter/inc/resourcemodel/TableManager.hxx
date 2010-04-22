@@ -42,6 +42,8 @@
 
 #include <boost/shared_ptr.hpp>
 #include <stack>
+#include "util.hxx"
+#include "TagLogger.hxx"
 
 namespace writerfilter
 {
@@ -100,11 +102,6 @@ public:
         @param rT    end handle of cell
     */
     virtual void endCell(const T & rT) = 0;
-
-    virtual T* getTable( )
-    {
-        return NULL;
-    };
 };
 
 template <typename T, typename PropertiesPointer>
@@ -118,22 +115,289 @@ template <typename T, typename PropertiesPointer>
  */
 class TableManager
 {
-    typedef boost::shared_ptr<T> T_p;
+#ifdef DEBUG_TABLE
+    TagLogger::Pointer_t mpTableLogger;
+#endif
+
+    class TableManagerState
+    {
+        /**
+         properties at the current point in document
+         */
+        PropertiesPointer mpProps;
+
+        /**
+         properties of the current cell
+         */
+        PropertiesPointer mpCellProps;
+
+        /**
+         properties of the current row
+         */
+        PropertiesPointer mpRowProps;
+
+        /**
+         properties of the current table
+         */
+        stack<PropertiesPointer> mTableProps;
+
+        /**
+         true if at the end of a row
+         */
+        bool mbRowEnd;
+
+        /**
+         true when in a cell
+         */
+        bool mbInCell;
+
+        /**
+         true when at the end of a cell
+         */
+        bool mbCellEnd;
+
+    public:
+        /**
+         Constructor
+         */
+        TableManagerState()
+        : mbRowEnd(false), mbInCell(false), mbCellEnd(false)
+        {
+        }
+
+        virtual ~TableManagerState()
+        {
+        }
+
+        void startLevel()
+        {
+            PropertiesPointer pProps;
+            mTableProps.push(pProps);
+        }
+
+        void endLevel()
+        {
+            mTableProps.pop();
+        }
+
+        /**
+         Reset to initial state at beginning of row.
+         */
+        void resetCellSpecifics()
+        {
+            mbRowEnd = false;
+            mbInCell = false;
+            mbCellEnd = false;
+        }
+
+        void resetProps()
+        {
+            mpProps.reset();
+        }
+
+        void setProps(PropertiesPointer pProps)
+        {
+            mpProps = pProps;
+        }
+
+        PropertiesPointer getProps()
+        {
+            return mpProps;
+        }
+
+        void resetCellProps()
+        {
+            mpCellProps.reset();
+        }
+
+        void setCellProps(PropertiesPointer pProps)
+        {
+            mpCellProps = pProps;
+        }
+
+        PropertiesPointer getCellProps()
+        {
+            return mpCellProps;
+        }
+
+        void resetRowProps()
+        {
+            mpCellProps.reset();
+        }
+
+        void setRowProps(PropertiesPointer pProps)
+        {
+            mpRowProps = pProps;
+        }
+
+        PropertiesPointer getRowProps()
+        {
+            return mpRowProps;
+        }
+
+        void resetTableProps()
+        {
+            if (mTableProps.size() > 0)
+                mTableProps.top().reset();
+        }
+
+        void setTableProps(PropertiesPointer pProps)
+        {
+            if (mTableProps.size() > 0)
+                mTableProps.top() = pProps;
+        }
+
+        PropertiesPointer getTableProps()
+        {
+            PropertiesPointer pResult;
+
+            if (mTableProps.size() > 0)
+                pResult = mTableProps.top();
+
+            return pResult;
+        }
+
+        void setInCell(bool bInCell)
+        {
+            mbInCell = bInCell;
+        }
+
+        bool isInCell() const
+        {
+            return mbInCell;
+        }
+
+        void setCellEnd(bool bCellEnd)
+        {
+            mbCellEnd = bCellEnd;
+        }
+
+        bool isCellEnd() const
+        {
+            return mbCellEnd;
+        }
+
+        void setRowEnd(bool bRowEnd)
+        {
+            mbRowEnd = bRowEnd;
+        }
+
+        bool isRowEnd() const
+        {
+            return mbRowEnd;
+        }
+    };
 
     /**
-       true if at the end of a row
+     handle for the current position in document
      */
-    bool mbRowEnd;
+    T mCurHandle;
 
-    /**
-       true when in a cell
-    */
-    bool mbInCell;
+    TableManagerState mState;
 
-    /**
-       true when at the end of a cell
-    */
-    bool mbCellEnd;
+protected:
+    PropertiesPointer getProps()
+    {
+        return mState.getProps();
+    }
+
+    void setProps(PropertiesPointer pProps)
+    {
+        mState.setProps(pProps);
+    }
+
+    void resetProps()
+    {
+        mState.resetProps();
+    }
+
+    PropertiesPointer getCellProps()
+    {
+        return mState.getCellProps();
+    }
+
+    void setCellProps(PropertiesPointer pProps)
+    {
+        mState.setCellProps(pProps);
+    }
+
+    void resetCellProps()
+    {
+        mState.resetCellProps();
+    }
+
+    PropertiesPointer getRowProps()
+    {
+        return mState.getRowProps();
+    }
+
+    void setRowProps(PropertiesPointer pProps)
+    {
+        mState.setRowProps(pProps);
+    }
+
+    void resetRowProps()
+    {
+        mState.resetRowProps();
+    }
+
+    void setInCell(bool bInCell)
+    {
+        mState.setInCell(bInCell);
+    }
+
+    bool isInCell() const
+    {
+        return mState.isInCell();
+    }
+
+    void setCellEnd(bool bCellEnd)
+    {
+        mState.setCellEnd(bCellEnd);
+    }
+
+    bool isCellEnd() const
+    {
+        return mState.isCellEnd();
+    }
+
+    void setRowEnd(bool bRowEnd)
+    {
+        mState.setRowEnd(bRowEnd);
+    }
+
+    bool isRowEnd() const
+    {
+        return mState.isRowEnd();
+    }
+
+    PropertiesPointer getTableProps()
+    {
+        return mState.getTableProps();
+    }
+
+    void setTableProps(PropertiesPointer pProps)
+    {
+        mState.setTableProps(pProps);
+    }
+
+    void resetTableProps()
+    {
+        mState.resetTableProps();
+    }
+
+    T getHandle()
+    {
+        return mCurHandle;
+    }
+
+    void setHandle(const T & rHandle)
+    {
+        mCurHandle = rHandle;
+    }
+
+private:
+    typedef boost::shared_ptr<T> T_p;
 
     /**
        depth of the current cell
@@ -145,32 +409,6 @@ class TableManager
     */
     sal_uInt32 mnTableDepth;
 
-    /**
-       properties at the current point in document
-    */
-    PropertiesPointer mpProps;
-
-    /**
-       properties of the current cell
-    */
-    vector< PropertiesPointer > mpCellProps;
-
-    /**
-        properties of the current row
-    */
-    vector< PropertiesPointer > mpRowProps;
-
-    /**
-        properties of the current table: don't use them directly.
-     */
-    PropertiesPointer mpTableProps;
-
-    /**
-       handle for the current position in document
-    */
-    T mCurHandle;
-
-    T* mpInnerTable;
     /**
        stack of table data
 
@@ -212,6 +450,22 @@ class TableManager
      */
     void resolveCurrentTable();
 
+    /**
+     Open a cell at current level.
+     */
+
+    void openCell(const T & handle, PropertiesPointer pProps);
+
+    /**
+     Close a cell at current level.
+     */
+    void closeCell(const T & handle);
+
+    /**
+     Ensure a cell is open at the current level.
+    */
+    void ensureOpenCell(PropertiesPointer pProps);
+
 protected:
 
     /**
@@ -233,6 +487,7 @@ protected:
     /** let the derived class clear their table related data
      */
     virtual void clearData();
+
 
 public:
     TableManager();
@@ -348,25 +603,48 @@ public:
        only control information, e.g. end of row.
      */
     virtual bool isIgnore() const;
+
+
+#ifdef DEBUG_TABLE
+    void setTagLogger(TagLogger::Pointer_t _tagLogger)
+    {
+        mpTableLogger = _tagLogger;
+    }
+#endif
 };
 
 template <typename T, typename PropertiesPointer>
 TableManager<T, PropertiesPointer>::TableManager()
-: mbRowEnd(false), mbInCell(false), mbCellEnd(false), mnTableDepthNew(0),
-  mnTableDepth(0), mpInnerTable( NULL )
+: mnTableDepthNew(0), mnTableDepth(0)
 {
+    setRowEnd(false);
+    setInCell(false);
+    setCellEnd(false);
 }
 
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::cellDepth(sal_uInt32 nDepth)
 {
+#ifdef DEBUG_TABLE
+    if (mpTableLogger.get() != NULL)
+    {
+        mpTableLogger->startElement("tablemanager.cellDepth");
+        mpTableLogger->attribute("depth", nDepth);
+        mpTableLogger->endElement("tablemanager.cellDepth");
+    }
+#endif
+
     mnTableDepthNew = nDepth;
 }
 
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::inCell()
 {
-    mbInCell = true;
+#ifdef DEBUG_TABLE
+    if (mpTableLogger.get() != NULL)
+        mpTableLogger->element("tablemanager.inCell");
+#endif
+    setInCell(true);
 
     if (mnTableDepthNew < 1)
         mnTableDepthNew = 1;
@@ -375,13 +653,23 @@ void TableManager<T, PropertiesPointer>::inCell()
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::endCell()
 {
-    mbCellEnd = true;
+#ifdef DEBUG_TABLE
+    if (mpTableLogger.get() != NULL)
+        mpTableLogger->element("tablemanager.endCell");
+#endif
+
+    setCellEnd(true);
 }
 
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::endRow()
 {
-    mbRowEnd = true;
+#ifdef DEBUG_TABLE
+    if (mpTableLogger.get() != NULL)
+        mpTableLogger->element("tablemanager.endRow");
+#endif
+
+    setRowEnd(true);
 }
 
 template <typename T, typename PropertiesPointer>
@@ -394,19 +682,45 @@ void TableManager<T, PropertiesPointer>::setHandler
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::handle(const T & rHandle)
 {
-    mCurHandle = rHandle;
+#ifdef DEBUG_TABLE
+    if (mpTableLogger.get())
+    {
+        mpTableLogger->startElement("tablemanager.handle");
+        mpTableLogger->chars(toString(rHandle));
+        mpTableLogger->endElement("tablemanager.handle");
+    }
+#endif
+
+    setHandle(rHandle);
 }
 
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::startLevel()
 {
+#ifdef DEBUG_TABLE
+    if (mpTableLogger.get() != NULL)
+    {
+        typename TableData<T, PropertiesPointer>::Pointer_t pTableData;
+
+        if (mTableDataStack.size() > 0)
+            pTableData = mTableDataStack.top();
+
+        mpTableLogger->startElement("tablemanager.startLevel");
+        mpTableLogger->attribute("level", mTableDataStack.size());
+
+        if (pTableData.get() != NULL)
+            mpTableLogger->attribute("openCell",
+                                     pTableData->isCellOpen() ? "yes" : "no");
+
+        mpTableLogger->endElement("tablemanager.startLevel");
+    }
+#endif
+
     typename TableData<T, PropertiesPointer>::Pointer_t pTableData
         (new TableData<T, PropertiesPointer>(mTableDataStack.size()));
 
     mTableDataStack.push(pTableData);
-
-    PropertiesPointer pEmptyProps;
-    cellProps( pEmptyProps );
+    mState.startLevel();
 }
 
 template <typename T, typename PropertiesPointer>
@@ -414,18 +728,34 @@ void TableManager<T, PropertiesPointer>::endLevel()
 {
     if (mpTableDataHandler.get() != NULL)
         resolveCurrentTable();
+
+    mState.endLevel();
     mTableDataStack.pop();
 
-    if ( mpCellProps.size( ) > 0 )
-        mpCellProps.pop_back( );
+#ifdef DEBUG_TABLE
+    if (mpTableLogger.get() != NULL)
+    {
+        typename TableData<T, PropertiesPointer>::Pointer_t pTableData;
+
+        if (mTableDataStack.size() > 0)
+            pTableData = mTableDataStack.top();
+
+        mpTableLogger->startElement("tablemanager.endLevel");
+        mpTableLogger->attribute("level", mTableDataStack.size());
+
+        if (pTableData.get() != NULL)
+            mpTableLogger->attribute("openCell",
+                                     pTableData->isCellOpen() ? "yes" : "no");
+
+        mpTableLogger->endElement("tablemanager.endLevel");
+    }
+#endif
 }
 
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::startParagraphGroup()
 {
-    mbRowEnd = false;
-    mbInCell = false;
-    mbCellEnd = false;
+    mState.resetCellSpecifics();
     mnTableDepthNew = 0;
 }
 
@@ -433,6 +763,16 @@ template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::endParagraphGroup()
 {
     sal_Int32 nTableDepthDifference = mnTableDepthNew - mnTableDepth;
+
+    PropertiesPointer pEmptyProps;
+
+    while (nTableDepthDifference > 0)
+    {
+        ensureOpenCell(pEmptyProps);
+        startLevel();
+
+        --nTableDepthDifference;
+    }
     while (nTableDepthDifference < 0)
     {
         endLevel();
@@ -442,38 +782,30 @@ void TableManager<T, PropertiesPointer>::endParagraphGroup()
 
     mnTableDepth = mnTableDepthNew;
 
-    typename TableData<T, PropertiesPointer>::Pointer_t pTableData =
+    if (mnTableDepth > 0)
+    {
+        typename TableData<T, PropertiesPointer>::Pointer_t pTableData =
         mTableDataStack.top();
 
-    if (mbRowEnd)
-    {
-        endOfRowAction();
-        pTableData->endRow( mpRowProps.back( ) );
-        mpRowProps.back( ).reset();
-    }
-    else if ( mbInCell )
-    {
-        if (! pTableData->isCellOpen())
+        if (isRowEnd())
         {
-            if ( mpInnerTable )
-            {
-                pTableData->addCell( *mpInnerTable, mpCellProps.back( ) );
-                mpInnerTable = NULL;
-            }
-            else
-            {
-                pTableData->addCell( mCurHandle, mpCellProps.back( ) );
-            }
+            endOfRowAction();
+            pTableData->endRow(getRowProps());
+            resetRowProps();
         }
 
-        if (mbCellEnd)
+        else if (isInCell())
         {
-            endOfCellAction();
-            pTableData->endCell(mCurHandle);
+            ensureOpenCell(getCellProps());
+
+            if (isCellEnd())
+            {
+                endOfCellAction();
+                closeCell(getHandle());
+            }
         }
+        resetCellProps();
     }
-    if ( mpCellProps.size( ) > 0 )
-        mpCellProps.back().reset( );
 }
 
 template <typename T, typename PropertiesPointer>
@@ -507,19 +839,29 @@ bool TableManager<T, PropertiesPointer>::sprm(Sprm & rSprm)
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::props(PropertiesPointer pProps)
 {
-    mpProps = pProps;
+    setProps(pProps);
 }
 
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::handle0x7()
 {
+#ifdef DEBUG_TABLE
+    if (mpTableLogger.get() != NULL)
+        mpTableLogger->startElement("tablemanager.handle0x7");
+#endif
+
     if (mnTableDepthNew < 1)
         mnTableDepthNew = 1;
 
-    if (mbInCell)
+    if (isInCell())
         endCell();
     else
         endRow();
+
+#ifdef DEBUG_TABLE
+    if (mpTableLogger.get() != NULL)
+        mpTableLogger->endElement("tablemanager.handle0x7");
+#endif
 }
 
 template <typename T, typename PropertiesPointer>
@@ -549,50 +891,85 @@ void TableManager<T, PropertiesPointer>::utext(const sal_uInt8 * data, size_t le
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::cellProps(PropertiesPointer pProps)
 {
-    if ( mpCellProps.size( ) == mTableDataStack.size( ) )
-    {
-        if ( mpCellProps.back( ).get( ) )
-            mpCellProps.back()->insert( pProps );
-        else
-            mpCellProps.back( ) = pProps;
-    }
+#ifdef DEBUG_TABLE
+    if (mpTableLogger.get() != NULL)
+        mpTableLogger->startElement("tablemanager.cellProps");
+#endif
+
+    if(getCellProps().get())
+        getCellProps()->insert( pProps );
     else
-        mpCellProps.push_back( pProps );
+        setCellProps(pProps);
+
+#ifdef DEBUG_TABLE
+    if (mpTableLogger.get() != NULL)
+        mpTableLogger->endElement("tablemanager.cellProps");
+#endif
 }
 
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::cellPropsByCell
 (unsigned int i, PropertiesPointer pProps)
 {
+#ifdef DEBUG_TABLE
+    if (mpTableLogger.get() != NULL)
+        mpTableLogger->startElement("tablemanager.cellPropsByCell");
+#endif
+
     mTableDataStack.top()->insertCellProperties(i, pProps);
+
+#ifdef DEBUG_TABLE
+    if (mpTableLogger.get() != NULL)
+        mpTableLogger->endElement("tablemanager.cellPropsByCell");
+#endif
 }
 
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::insertRowProps(PropertiesPointer pProps)
 {
-    if ( mpRowProps.size( ) == ( mTableDataStack.size( ) - 1 ) )
-    {
-        if( mpRowProps.back( ).get( ) )
-            mpRowProps.back( )->insert( pProps );
-        else
-            mpRowProps.back( ) = pProps;
-    }
+#ifdef DEBUG_TABLE
+    if (mpTableLogger.get() != NULL)
+        mpTableLogger->startElement("tablemanager.insertRowProps");
+#endif
+
+    if( getRowProps().get() )
+        getRowProps()->insert( pProps );
     else
-        mpRowProps.push_back( pProps );
+        setRowProps(pProps);
+
+#ifdef DEBUG_TABLE
+    if (mpTableLogger.get() != NULL)
+        mpTableLogger->endElement("tablemanager.insertRowProps");
+#endif
 }
 
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::insertTableProps(PropertiesPointer pProps)
 {
-    typename TableData<T, PropertiesPointer>::Pointer_t
-        pTableData = mTableDataStack.top();
+#ifdef DEBUG_TABLE
+    if (mpTableLogger.get() != NULL)
+        mpTableLogger->startElement("tablemanager.insertTableProps");
+#endif
 
-    pTableData->insertTableProperties( pProps );
+    if( getTableProps().get() )
+        getTableProps()->insert( pProps );
+    else
+        setTableProps(pProps);
+
+#ifdef DEBUG_TABLE
+    if (mpTableLogger.get() != NULL)
+        mpTableLogger->endElement("tablemanager.insertTableProps");
+#endif
 }
 
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::resolveCurrentTable()
 {
+#ifdef DEBUG_TABLE
+    if (mpTableLogger.get() != NULL)
+        mpTableLogger->startElement("tablemanager.resolveCurrentTable");
+#endif
+
     if (mpTableDataHandler.get() != NULL)
     {
         typename TableData<T, PropertiesPointer>::Pointer_t
@@ -600,7 +977,7 @@ void TableManager<T, PropertiesPointer>::resolveCurrentTable()
 
         unsigned int nRows = pTableData->getRowCount();
 
-        mpTableDataHandler->startTable(nRows, pTableData->getDepth(), pTableData->getTableProperties( ) );
+        mpTableDataHandler->startTable(nRows, pTableData->getDepth(), getTableProps());
 
         for (unsigned int nRow = 0; nRow < nRows; ++nRow)
         {
@@ -623,13 +1000,14 @@ void TableManager<T, PropertiesPointer>::resolveCurrentTable()
         }
 
         mpTableDataHandler->endTable();
-
-        // The inner table has to be stored only if there is something in the stack
-        // The 0 depth is the dummy table for the whole stream
-        if ( pTableData->getDepth( ) > 1 )
-            mpInnerTable = mpTableDataHandler->getTable( );
     }
+    resetTableProps();
     clearData();
+
+#ifdef DEBUG_TABLE
+    if (mpTableLogger.get() != NULL)
+        mpTableLogger->endElement("tablemanager.resolveCurrentTable");
+#endif
 }
 
 template <typename T, typename PropertiesPointer>
@@ -645,11 +1023,75 @@ void TableManager<T, PropertiesPointer>::endOfRowAction()
 template <typename T, typename PropertiesPointer>
 bool TableManager<T, PropertiesPointer>::isIgnore() const
 {
-    return mbRowEnd;
+    return isRowEnd();
 }
+
 template <typename T, typename PropertiesPointer>
 void  TableManager<T, PropertiesPointer>::clearData()
 {
+}
+
+template <typename T, typename PropertiesPointer>
+void  TableManager<T, PropertiesPointer>::openCell
+(const T & rHandle, PropertiesPointer pProps)
+{
+#ifdef DEBUG_TABLE
+    mpTableLogger->startElement("tablemanager.openCell");
+    mpTableLogger->chars(toString(rHandle));
+    mpTableLogger->endElement("tablemanager.openCell");
+#endif
+
+    if (mTableDataStack.size() > 0)
+    {
+        typename TableData<T, PropertiesPointer>::Pointer_t
+        pTableData = mTableDataStack.top();
+
+        pTableData->addCell(rHandle, pProps);
+    }
+}
+
+template <typename T, typename PropertiesPointer>
+void  TableManager<T, PropertiesPointer>::closeCell
+(const T & rHandle)
+{
+#ifdef DEBUG_TABLE
+    mpTableLogger->startElement("tablemanager.closeCell");
+    mpTableLogger->chars(toString(rHandle));
+    mpTableLogger->endElement("tablemanager.closeCell");
+#endif
+
+    if (mTableDataStack.size() > 0)
+    {
+        typename TableData<T, PropertiesPointer>::Pointer_t
+        pTableData = mTableDataStack.top();
+
+        pTableData->endCell(rHandle);
+    }
+}
+
+template <typename T, typename PropertiesPointer>
+void  TableManager<T, PropertiesPointer>::ensureOpenCell(PropertiesPointer pProps)
+{
+#ifdef DEBUG_TABLE
+    mpTableLogger->startElement("tablemanager.ensureOpenCell");
+#endif
+
+    if (mTableDataStack.size() > 0)
+    {
+        typename TableData<T, PropertiesPointer>::Pointer_t
+        pTableData = mTableDataStack.top();
+
+        if (pTableData.get() != NULL)
+        {
+            if (!pTableData->isCellOpen())
+                openCell(getHandle(), pProps);
+            else
+                pTableData->insertCellProperties(pProps);
+        }
+    }
+#ifdef DEBUG_TABLE
+    mpTableLogger->endElement("tablemanager.ensureOpenCell");
+#endif
 }
 
 }

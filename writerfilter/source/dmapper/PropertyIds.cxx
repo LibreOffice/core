@@ -312,6 +312,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_STREAM_NAME:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamName")); break;
             case PROP_BITMAP :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Bitmap")); break;
             case PROP_IS_DATE :   sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDate")); break;
+            case PROP_TAB_STOP_DISTANCE :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TabStopDistance")); break;
             case PROP_CNF_STYLE  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CnfStyle")); break;
             case PROP_INDENT_AT :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IndentAt")); break;
             case PROP_FIRST_LINE_INDENT :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstLineIndent")); break;

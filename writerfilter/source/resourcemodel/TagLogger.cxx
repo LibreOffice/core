@@ -42,6 +42,20 @@ namespace writerfilter
         mAttrs.push_back(aAttr);
     }
 
+    void XMLTag::addAttr(string sName, const ::rtl::OUString & sValue)
+    {
+        addAttr(sName,
+                OUStringToOString
+                (sValue, RTL_TEXTENCODING_ASCII_US).getStr());
+    }
+
+    void XMLTag::addAttr(string sName, sal_uInt32 nValue)
+    {
+        char buffer[256];
+        snprintf(buffer, sizeof(buffer), "%" SAL_PRIdINT32, nValue);
+        addAttr(sName, buffer);
+    }
+
     void XMLTag::addTag(XMLTag::Pointer_t pTag)
     {
         if (pTag != XMLTag::Pointer_t())
@@ -188,6 +202,7 @@ namespace writerfilter
     {
         XMLTag::Pointer_t pTag(new XMLTag("root"));
         mTags.push(pTag);
+        mpRoot = pTag;
     }
 
     void TagLogger::element(const string & name)
@@ -210,7 +225,12 @@ namespace writerfilter
 
     void TagLogger::attribute(const string & name, const ::rtl::OUString & value)
     {
-        attribute(name, OUStringToOString(value, RTL_TEXTENCODING_ASCII_US).getStr());
+        currentTag()->addAttr(name, value);
+    }
+
+    void TagLogger::attribute(const string & name, sal_uInt32 value)
+    {
+        currentTag()->addAttr(name, value);
     }
 
     void TagLogger::addTag(XMLTag::Pointer_t pTag)
@@ -230,19 +250,18 @@ namespace writerfilter
 
     void TagLogger::endElement(const string & name)
     {
-        string nameRemoved;
-        bool found = false;
-        do
-        {
-            nameRemoved = currentTag()->getTag();
-            mTags.pop();
+        string nameRemoved = currentTag()->getTag();
 
-            if (name == nameRemoved)
-                found = true;
-            else
-                found = false; // for debugging
+        if (name == nameRemoved)
+            mTags.pop();
+        else {
+            XMLTag::Pointer_t pTag(new XMLTag("end.mismatch"));
+            pTag->addAttr("name", name);
+            pTag->addAttr("top", nameRemoved);
+
+            currentTag()->addTag(pTag);
         }
-        while (! found && ! mTags.empty());
+
     }
 
     void TagLogger::endDocument()
@@ -252,7 +271,7 @@ namespace writerfilter
 
     ostream & TagLogger::output(ostream & o) const
     {
-        return currentTag()->output(o);
+        return mpRoot->output(o);
     }
 
     void TagLogger::dump(const char * name)
