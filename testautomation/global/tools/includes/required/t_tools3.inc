@@ -995,12 +995,15 @@ function hUseAsyncSlot( cSlot as string ) as integer
         try
             select case ( slot )
             case "fileclose"                      : FileClose
+            case "filesave"                       : FileSave
             case "filesaveas"                     : FileSaveAs( "SynchronMode", TRUE )
             case "filesaveall"                    : FileSaveAll( "SynchronMode", TRUE )
             case "fileexport"                     : FileExport
             case "filereload"                     : FileReload( "SynchronMode", TRUE )
             case "fileopen"                       : FileOpen
             case "fileprint"                      : FilePrint
+            case "fileprintersettings"            : FilePrintersettings
+            case "fileproperties"                 : FileProperties
 
             case "editdoc"                        : EditDoc
             case "editcopy"                       : EditCopy
