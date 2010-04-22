@@ -68,8 +68,16 @@ SFX_IMPL_OBJECTFACTORY( GraphicDocShell, SvGlobalName(SO3_SDRAW_CLASSID_60), SFX
 
 GraphicDocShell::GraphicDocShell(SfxObjectCreateMode eMode,
                                      BOOL bDataObject,
-                                     DocumentType eDocType,BOOL bScriptSupport) :
-    DrawDocShell(eMode, bDataObject, eDocType, bScriptSupport)
+                                     DocumentType eDocType) :
+    DrawDocShell(eMode, bDataObject, eDocType)
+{
+    SetStyleFamily( SD_STYLE_FAMILY_GRAPHICS );
+}
+
+GraphicDocShell::GraphicDocShell(const sal_uInt64 nModelCreationFlags,
+                                     BOOL bDataObject,
+                                     DocumentType eDocType) :
+    DrawDocShell(nModelCreationFlags, bDataObject, eDocType)
 {
     SetStyleFamily( SD_STYLE_FAMILY_GRAPHICS );
 }

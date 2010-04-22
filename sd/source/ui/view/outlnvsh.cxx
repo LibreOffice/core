@@ -58,7 +58,6 @@
 #include <sfx2/tplpitem.hxx>
 #include <svx/svdorect.hxx>
 #include <sot/formats.hxx>
-#include <sfx2/topfrm.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hdl>
 #include <editeng/unolingu.hxx>

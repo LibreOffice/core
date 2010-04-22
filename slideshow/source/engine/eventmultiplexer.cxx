@@ -612,7 +612,7 @@ bool EventMultiplexerImpl::notifyMouseHandlers(
     uno::Reference<presentation::XSlideShowView> xView(
         e.Source, uno::UNO_QUERY );
 
-    ENSURE_OR_RETURN( xView.is(), "EventMultiplexer::notifyHandlers(): "
+    ENSURE_OR_RETURN_FALSE( xView.is(), "EventMultiplexer::notifyHandlers(): "
                        "event source is not an XSlideShowView" );
 
     // find corresponding view (to map mouse position into user
@@ -627,7 +627,7 @@ bool EventMultiplexerImpl::notifyMouseHandlers(
                           boost::cref( xView ),
                           boost::bind( &UnoView::getUnoView, _1 ) ) ) ) == aEnd)
     {
-        ENSURE_OR_RETURN(
+        ENSURE_OR_RETURN_FALSE(
             false, "EventMultiplexer::notifyHandlers(): "
             "event source not found under registered views" );
     }
