@@ -59,8 +59,10 @@ end sub
 '-----------------------------------------------------------
 
 testcase t_TB_Insert
-    qaErrorLog "#158646# - Inserting Indexes causes crash."
-    goto endsub
+
+    ' JSK: This issue is solved since OOO300m9, enabling test again
+    'qaErrorLog "#158646# - Inserting Indexes causes crash."
+    'goto endsub
 
     printlog "- Toolbox ( normal ) : All within Insert"
 
@@ -122,7 +124,8 @@ testcase t_TB_Insert
     else
         Call hToolbarSelect("Insert", true)
     endif
-    
+
+    sleep( 2 ) ' Too fast for some machines. Using dirty fix.
     if Tabelle.IsEnabled then
         Tabelle.Click
         Kontext "TabelleEinfuegenWriter"
@@ -658,8 +661,10 @@ endcase
 '-----------------------------------------------------------
 
 testcase tHtmlDoc_TB_Insert
-    qaErrorLog "#158646# - Inserting Indexes causes crash."
-    goto endsub
+
+    ' JSK: This issue is solved since OOO300m9, enabling test again
+    'qaErrorLog "#158646# - Inserting Indexes causes crash."
+    'goto endsub
 
     printlog "- Toolbox ( normal ) : All within Insert"
     gApplication = "HTML"
