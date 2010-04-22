@@ -171,7 +171,7 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     sal_Bool                m_bIncomplEncrWarnShown;
 
     sal_uInt16              m_nModifyPasswordHash;
-
+    sal_Bool                m_bModifyPasswordEntered;
 
     SfxObjectShell_Impl( SfxObjectShell& _rDocShell );
     virtual ~SfxObjectShell_Impl();

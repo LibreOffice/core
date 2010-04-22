@@ -115,6 +115,7 @@ using namespace ::com::sun::star::io;
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/configurationhelper.hxx>
+#include <comphelper/docpasswordhelper.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/inetmime.hxx>
 #include <unotools/ucblockbytes.hxx>
@@ -2671,18 +2672,67 @@ void SfxMedium::SetFilter( const SfxFilter* pFilterP, sal_Bool /*bResetOrig*/ )
     pFilter = pFilterP;
     pImp->nFileVersion = 0;
 }
+
 //----------------------------------------------------------------
 
 const SfxFilter* SfxMedium::GetOrigFilter( sal_Bool bNotCurrent ) const
 {
     return ( pImp->pOrigFilter || bNotCurrent ) ? pImp->pOrigFilter : pFilter;
 }
+
 //----------------------------------------------------------------
 
 void SfxMedium::SetOrigFilter_Impl( const SfxFilter* pOrigFilter )
 {
     pImp->pOrigFilter = pOrigFilter;
 }
+
+//------------------------------------------------------------------
+
+sal_uInt16 SfxMedium::CreatePasswordToModifyHash( const ::rtl::OUString& aPasswd, sal_Bool bMSType )
+{
+    sal_uInt16 nHash = 0;
+
+    if ( aPasswd.getLength() )
+    {
+        rtl_TextEncoding nEncoding = RTL_TEXTENCODING_UTF8;
+        if ( bMSType )
+        {
+            // if the MS-filter should be used
+            // use the inconsistent algorithm to find the encoding specified by MS
+            nEncoding = osl_getThreadTextEncoding();
+            switch( nEncoding )
+            {
+                case RTL_TEXTENCODING_ISO_8859_15:
+                case RTL_TEXTENCODING_MS_874:
+                case RTL_TEXTENCODING_MS_1250:
+                case RTL_TEXTENCODING_MS_1251:
+                case RTL_TEXTENCODING_MS_1252:
+                case RTL_TEXTENCODING_MS_1253:
+                case RTL_TEXTENCODING_MS_1254:
+                case RTL_TEXTENCODING_MS_1255:
+                case RTL_TEXTENCODING_MS_1256:
+                case RTL_TEXTENCODING_MS_1257:
+                case RTL_TEXTENCODING_MS_1258:
+                case RTL_TEXTENCODING_SHIFT_JIS:
+                case RTL_TEXTENCODING_GB_2312:
+                case RTL_TEXTENCODING_BIG5:
+                    // in case the system uses an encoding from the list above, it should be used
+                    break;
+
+                default:
+                    // in case other encoding is used, use one of the encodings from the list
+                    nEncoding = RTL_TEXTENCODING_MS_1250;
+                    break;
+            }
+        }
+
+        nHash = ::comphelper::DocPasswordHelper::GetXLHashAsUINT16( aPasswd, nEncoding );
+    }
+
+    return nHash;
+}
+
 //------------------------------------------------------------------
 
 void SfxMedium::Close()

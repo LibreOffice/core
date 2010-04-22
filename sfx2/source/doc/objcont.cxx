@@ -1499,3 +1499,13 @@ sal_Bool SfxObjectShell::SetModifyPasswordHash( sal_uInt16 nHash )
 //    return sal_False;
 }
 
+void SfxObjectShell::SetModifyPasswordEntered()
+{
+    pImp->m_bModifyPasswordEntered = sal_True;
+}
+
+sal_Bool SfxObjectShell::IsModifyPasswordEntered()
+{
+    return pImp->m_bModifyPasswordEntered;
+}
+

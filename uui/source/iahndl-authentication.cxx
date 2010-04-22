@@ -32,6 +32,7 @@
 #include "com/sun/star/task/MasterPasswordRequest.hpp"
 #include "com/sun/star/task/XInteractionAbort.hpp"
 #include "com/sun/star/task/XInteractionPassword.hpp"
+#include "com/sun/star/task/XInteractionPassword2.hpp"
 #include "com/sun/star/task/XInteractionRetry.hpp"
 #include "com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp"
 #include "com/sun/star/ucb/URLAuthenticationRequest.hpp"
@@ -431,7 +432,7 @@ executePasswordDialog(
                     pFact->CreatePasswordToOpenModifyDialog( pParent, 0, nMaxPasswdLen ) );
 
             rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
-            rInfo.SetPasswordToOpen( pDialog->GetPasswordToOpen() );
+            rInfo.SetPassword( pDialog->GetPasswordToOpen() );
             rInfo.SetPasswordToModify( pDialog->GetPasswordToModify() );
             rInfo.SetRecommendToOpenReadonly( pDialog->IsRecommendToOpenReadonly() );
         }
@@ -441,7 +442,7 @@ executePasswordDialog(
                 new PasswordDialog( pParent, nMode, xManager.get(), aDocName, bIsPasswordToModify ) );
 
             rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
-            rInfo.SetPasswordToOpen( bIsPasswordToModify ? String() : pDialog->GetPassword() );
+            rInfo.SetPassword( bIsPasswordToModify ? String() : pDialog->GetPassword() );
             rInfo.SetPasswordToModify( bIsPasswordToModify ? pDialog->GetPassword() : String() );
         }
     }
@@ -467,7 +468,12 @@ handlePasswordRequest_(
     uno::Reference< task::XInteractionRetry > xRetry;
     uno::Reference< task::XInteractionAbort > xAbort;
     uno::Reference< task::XInteractionPassword > xPassword;
-    getContinuations(rContinuations, &xRetry, &xAbort, &xPassword);
+    uno::Reference< task::XInteractionPassword2 > xPassword2;
+    getContinuations(rContinuations, &xRetry, &xAbort, &xPassword2, &xPassword);
+
+    if ( xPassword2.is() && !xPassword.is() )
+        xPassword.set( xPassword2, uno::UNO_QUERY_THROW );
+
     LoginErrorInfo aInfo;
 
     executePasswordDialog( pParent, aInfo, nMode,
@@ -476,8 +482,15 @@ handlePasswordRequest_(
     switch (aInfo.GetResult())
     {
     case ERRCODE_BUTTON_OK:
+        OSL_ENSURE( !bIsPasswordToModify || xPassword2.is(), "PasswordToModify is requested, but there is no Interaction!" );
         if (xPassword.is())
         {
+            if (xPassword2.is())
+            {
+                xPassword2->setPasswordToModify( aInfo.GetPasswordToModify() );
+                xPassword2->setRecommendReadOnly( aInfo.IsRecommendToOpenReadonly() );
+            }
+
             xPassword->setPassword(aInfo.GetPassword());
             xPassword->select();
         }
@@ -593,7 +606,7 @@ UUIInteractionHelper::handlePasswordRequest(
         nMode               = aDocumentMSPasswordRequest2.Mode;
         aDocumentName       = aDocumentMSPasswordRequest2.Name;
         bMSCryptoMode       = true;
-        bIsPasswordToModify = aDocumentPasswordRequest2.IsRequestPasswordToModify;
+        bIsPasswordToModify = aDocumentMSPasswordRequest2.IsRequestPasswordToModify;
 
         bDoHandleRequest = true;
     }
