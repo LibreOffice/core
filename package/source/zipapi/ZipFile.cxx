@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ZipFile.cxx,v $
- * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -880,8 +877,8 @@ sal_Int32 ZipFile::recover()
                             if ( aEntry.nExtraLen < 0 ) aEntry.nExtraLen = 0x7FFF;
                             // End of quick fix
 
-
-                            sal_Int32 nBlockLength = aEntry.nSize + aEntry.nPathLen + aEntry.nExtraLen + 30 + nDescrLength;
+                            sal_Int32 nDataSize = ( aEntry.nMethod == DEFLATED ) ? aEntry.nCompressedSize : aEntry.nSize;
+                            sal_Int32 nBlockLength = nDataSize + aEntry.nPathLen + aEntry.nExtraLen + 30 + nDescrLength;
                             if ( aEntry.nPathLen <= ZIP_MAXNAMELEN && aEntry.nExtraLen < ZIP_MAXEXTRA
                                 && ( nGenPos + nPos + nBlockLength ) <= nLength )
                             {

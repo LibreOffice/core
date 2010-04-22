@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.19 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -60,15 +56,14 @@ APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJFILES)
 APP1RPATH=BRAND
 
-.IF "$(OS)" != "MACOSX"
-APP1STDLIBS=$(DYNAMIC) -lXext -lX11
-.ENDIF
 .IF "$(OS)" != "FREEBSD" && "$(OS)" != "MACOSX" && "$(OS)"!="NETBSD"
 APP1STDLIBS+=-ldl -lnsl
 .ENDIF
 .IF "$(OS)" == "SOLARIS"
 APP1STDLIBS+=-lsocket
 .ENDIF
+
+UNIXTEXT = $(MISC)/crash_report.sh
 
 .ENDIF #  "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" == ""
 

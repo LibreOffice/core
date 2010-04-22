@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: datman.cxx,v $
- * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include <osl/mutex.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/io/XPersistObject.hpp>
@@ -60,7 +58,7 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <comphelper/container.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
 #include <vcl/dialog.hxx>
@@ -80,20 +78,14 @@
 #include "bibview.hxx"
 // #100312# ---------
 #include "bibbeam.hxx"
-#ifndef _BIB_FMPROP_HRC
 #include "bibprop.hrc"
-#endif
 #include "toolbar.hxx"
 #include "toolbar.hrc"
 #include "bibconfig.hxx"
 #include "bibbeam.hxx"
-#ifndef BIB_HRC
 #include "bib.hrc"
-#endif
 #include "datman.hrc"
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
+#include "bibliography.hrc"
 #include <connectivity/dbtools.hxx>
 
 using namespace ::com::sun::star;
@@ -156,7 +148,7 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
         try
         {
 
-            Reference<XInterface> xHdl = xMgr->createInstance(C2U("com.sun.star.sdb.InteractionHandler"));
+            Reference<XInterface> xHdl = xMgr->createInstance(C2U("com.sun.star.task.InteractionHandler"));
             Reference<task::XInteractionHandler> xIHdl(xHdl, UNO_QUERY);
             xConn = xComplConn->connectWithCompletion(xIHdl);
 //          xConn = xDataSource->getConnection(sUser, sPwd);
@@ -893,12 +885,14 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
                 case DataType::BINARY:
                 case DataType::VARBINARY:
                 case DataType::LONGVARBINARY:
+                case DataType::BLOB:
                     sCurrentModelType = C2U("TextField");
                     break;
 
                 case DataType::VARCHAR:
                 case DataType::LONGVARCHAR:
                 case DataType::CHAR:
+                case DataType::CLOB:
                     bFormattedIsNumeric = sal_False;
                     // _NO_ break !
                 default:
@@ -1091,20 +1085,16 @@ void BibDataManager::setFilter(const ::rtl::OUString& rQuery)
         return;
     try
     {
-        m_xParser->setFilter(rQuery);
-        ::rtl::OUString aQuery=m_xParser->getFilter();
-        Reference< XPropertySet >  aPropertySet( m_xForm, UNO_QUERY );
-        Any aVal; aVal <<= aQuery;
-        aPropertySet->setPropertyValue(C2U("Filter"), aVal);
-        BOOL bVal = sal_True;
-        aVal.setValue(&bVal, ::getBooleanCppuType());
-        aPropertySet->setPropertyValue(C2U("ApplyFilter"), aVal);
+        m_xParser->setFilter( rQuery );
+        ::rtl::OUString aQuery = m_xParser->getFilter();
+        Reference< XPropertySet >  xFormProps( m_xForm, UNO_QUERY_THROW );
+        xFormProps->setPropertyValue( C2U( "Filter" ), makeAny( aQuery ) );
+        xFormProps->setPropertyValue( C2U( "ApplyFilter" ), makeAny( sal_True ) );
         reload();
     }
     catch(Exception& e )
     {
-        (void) e;   // make compiler happy
-        DBG_ERROR("::setFilterOnActiveDataSource: something went wrong !");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
 
@@ -1116,18 +1106,12 @@ void BibDataManager::setFilter(const ::rtl::OUString& rQuery)
     ::rtl::OUString aQueryString;
     try
     {
-        Reference< XPropertySet >  aPropertySet( m_xForm, UNO_QUERY );
-        Any aQuery=aPropertySet->getPropertyValue(C2U("Filter"));
-
-        if(aQuery.getValueType() == ::getCppuType((::rtl::OUString*)0))
-        {
-            aQueryString=*(::rtl::OUString*)aQuery.getValue();
-        }
+        Reference< XPropertySet > xFormProps( m_xForm, UNO_QUERY_THROW );
+        OSL_VERIFY( xFormProps->getPropertyValue( C2U( "Filter" ) ) >>= aQueryString );
     }
-    catch(Exception& e )
+    catch( const Exception& )
     {
-        (void) e;   // make compiler happy
-        DBG_ERROR("::getFilterOnActiveDataSource: something went wrong !");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
 
@@ -1801,13 +1785,13 @@ void BibDataManager::SetToolbar(BibToolBar* pSet)
 /* -----------------------------08.05.2002 09:26------------------------------
 
  ---------------------------------------------------------------------------*/
-uno::Reference< form::XFormController > BibDataManager::GetFormController()
+uno::Reference< form::runtime::XFormController > BibDataManager::GetFormController()
 {
     if(!m_xFormCtrl.is())
     {
         Reference< lang::XMultiServiceFactory > xMgr = comphelper::getProcessServiceFactory();
-        m_xFormCtrl = uno::Reference< form::XFormController > (
-            xMgr->createInstance(C2U("com.sun.star.form.FormController")), UNO_QUERY);
+        m_xFormCtrl = uno::Reference< form::runtime::XFormController > (
+            xMgr->createInstance(C2U("com.sun.star.form.runtime.FormController")), UNO_QUERY);
         m_xFormCtrl->setModel(uno::Reference< awt::XTabControllerModel > (getForm(), UNO_QUERY));
         // #100312# -------------
         m_xFormDispatch = uno::Reference< frame::XDispatch > ( m_xFormCtrl, UNO_QUERY);

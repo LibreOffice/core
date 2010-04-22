@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: so_env.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -310,7 +307,8 @@ char* NSP_getProductName()
     char *pEnd = 0;
     while(!feof(fp))
     {
-        fgets( line, sizeof(line), fp );
+        if (fgets( line, sizeof(line), fp ) == NULL)
+            continue;
         if (NULL == (pStart = strstr( line, "ProductKey=" )))
             continue;
         pStart += strlen("ProductKey=");

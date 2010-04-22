@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: baside2.hxx,v $
- * $Revision: 1.26.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +45,7 @@ class SvxSearchItem;
 #endif
 #include <basic/sbmod.hxx>
 #include <vcl/split.hxx>
-#include "svtools/lstner.hxx"
+#include "svl/lstner.hxx"
 #include <svtools/colorcfg.hxx>
 
 #include <sfx2/progress.hxx>
@@ -58,6 +55,10 @@ DBG_NAMEEX( ModulWindow )
 
 #define MARKER_NOMARKER 0xFFFF
 
+namespace utl
+{
+    class SourceViewConfig;
+}
 
 // #108672 Helper functions to get/set text in TextEngine
 // using the stream interface (get/setText() only supports
@@ -108,13 +109,13 @@ namespace svt {
 class SourceViewConfig;
 }
 
-class EditorWindow : public Window, public SfxListener
+class EditorWindow : public Window, public SfxListener, public utl::ConfigurationListener
 {
 private:
     ExtTextView*    pEditView;
     ExtTextEngine*  pEditEngine;
 
-    svt::SourceViewConfig* pSourceViewConfig;
+    utl::SourceViewConfig* pSourceViewConfig;
 
     long            nCurTextWidth;
 
@@ -151,6 +152,7 @@ protected:
     virtual void    Command( const CommandEvent& rCEvt );
     virtual void    LoseFocus();
     virtual void    RequestHelp( const HelpEvent& rHEvt );
+    virtual void    ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
 
     void            DoSyntaxHighlight( ULONG nPara );
     String          GetWordAtCursor();
@@ -354,6 +356,7 @@ private:
     void                GoOnTop();
     void                AssertValidEditEngine();
 
+    sal_Int32           FormatAndPrint( Printer* pPrinter, sal_Int32 nPage = -1 );
 protected:
     virtual void    Resize();
     virtual void    GetFocus();
@@ -375,7 +378,11 @@ public:
     virtual void    StoreData();
     virtual void    UpdateData();
     virtual BOOL    CanClose();
-    virtual void    PrintData( Printer* pPrinter );
+    // virtual void PrintData( Printer* pPrinter );
+    // return number of pages to be printed
+    virtual sal_Int32 countPages( Printer* pPrinter );
+    // print page
+    virtual void printPage( sal_Int32 nPage, Printer* pPrinter );
     virtual String  GetTitle();
     virtual BasicEntryDescriptor CreateEntryDescriptor();
     virtual BOOL    AllowUndo();
@@ -442,7 +449,7 @@ public:
     void                    SetModule( const ::rtl::OUString& aModule ) { m_aModule = aModule; }
 };
 
-class ModulWindowLayout: public Window, public SfxListener
+class ModulWindowLayout: public Window, public utl::ConfigurationListener
 {
 private:
 
@@ -465,8 +472,7 @@ private:
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt);
 
-    using Window::Notify;
-    virtual void Notify(SfxBroadcaster & rBc, SfxHint const & rHint);
+    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
 
     void updateSyntaxHighlighting();
 

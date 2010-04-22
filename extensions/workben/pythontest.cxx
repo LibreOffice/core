@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pythontest.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,10 +42,6 @@
 #include <usr/weak.hxx>
 #include <tools/string.hxx>
 #include <vos/conditn.hxx>
-#if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
-#endif
-#include <assert.h>
 
 using namespace rtl;
 using namespace vos;
@@ -453,7 +446,7 @@ void CmdDebugger::dumpVarToStream( const char *pc , const UsrAny &aValue, FILE *
 
 void CmdDebugger::detach()
 {
-    assert( m_pDebuggingRef );
+    OSL_ASSERT( m_pDebuggingRef );
 
        m_bIsRunning = FALSE;
        m_pDebuggingRef = 0;

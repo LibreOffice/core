@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: basides2.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,8 +35,7 @@
 
 #include <ide_pch.hxx>
 #include <basic/sbx.hxx>
-
-#define _SOLAR__PRIVATE 1
+#include "basicrenderable.hxx"
 
 #include <com/sun/star/frame/XTitle.hpp>
 
@@ -85,6 +81,12 @@ IMPL_LINK( BasicIDEShell, ObjectDialogInsertHdl, ObjectCatalog *, pObjCat )
 }
 */
 
+Reference< view::XRenderable > BasicIDEShell::GetRenderable()
+{
+    return Reference< view::XRenderable >( new basicide::BasicRenderable( pCurWin ) );
+}
+
+#if 0
 USHORT __EXPORT BasicIDEShell::Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog )
 {
     if ( pCurWin )
@@ -98,6 +100,7 @@ USHORT __EXPORT BasicIDEShell::Print( SfxProgress &rProgress, BOOL bIsAPI, Print
     }
     return 0;
 }
+#endif
 
 BOOL BasicIDEShell::HasSelection( BOOL /* bText */ ) const
 {

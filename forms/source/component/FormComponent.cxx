@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FormComponent.cxx,v $
- * $Revision: 1.62.8.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2216,7 +2213,7 @@ sal_Bool OBoundControlModel::approveDbColumnType(sal_Int32 _nColumnType)
         || (_nColumnType == DataType::LONGVARBINARY) || (_nColumnType == DataType::OTHER)
         || (_nColumnType == DataType::OBJECT) || (_nColumnType == DataType::DISTINCT)
         || (_nColumnType == DataType::STRUCT) || (_nColumnType == DataType::ARRAY)
-        || (_nColumnType == DataType::BLOB) || (_nColumnType == DataType::CLOB)
+        || (_nColumnType == DataType::BLOB) /*|| (_nColumnType == DataType::CLOB)*/
         || (_nColumnType == DataType::REF) || (_nColumnType == DataType::SQLNULL))
         return sal_False;
 
@@ -2265,14 +2262,6 @@ void OBoundControlModel::impl_connectDatabaseColumn_noNotify( bool _bFromReload 
     // let derived classes react on this new connection
     m_bLoaded = sal_True;
     onConnectedDbColumn( xRowSet );
-
-    // Some derived classes decide to cache the "current" (resp. "last known") control value, so operations like
-    // commitControlValueToDbColumn can be made a no-op when nothing actually changed.
-    // Normally, this cache is kept in sync with the column value, but during a reload, this synchronization is
-    // temporarily disable. To allow the derived classes to update their cache from the current column value,
-    // we call translateDbColumnToControlValue.
-    if ( _bFromReload && hasField() )
-        translateDbColumnToControlValue();
 
     // initially transfer the db column value to the control, if we successfully connected to a database column
     if ( hasField() )
@@ -2559,10 +2548,11 @@ void OBoundControlModel::reset() throw (RuntimeException)
                 || ( nFieldType == DataType::VARBINARY     )
                 || ( nFieldType == DataType::LONGVARBINARY )
                 || ( nFieldType == DataType::OBJECT        )
-                || ( nFieldType == DataType::BLOB          )
-                || ( nFieldType == DataType::CLOB          )
+                /*|| ( nFieldType == DataType::CLOB          )*/
                 )
                 m_xColumn->getBinaryStream();
+            else if ( nFieldType == DataType::BLOB          )
+                m_xColumn->getBlob();
             else
                 m_xColumn->getString();
 
@@ -2811,7 +2801,14 @@ void SAL_CALL OBoundControlModel::modified( const EventObject& _rEvent ) throw (
 //--------------------------------------------------------------------
 void OBoundControlModel::transferDbValueToControl( )
 {
-    setControlValue( translateDbColumnToControlValue(), eDbColumnBinding );
+    try
+    {
+        setControlValue( translateDbColumnToControlValue(), eDbColumnBinding );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 //------------------------------------------------------------------------------

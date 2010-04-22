@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: digitalsignaturesdialog.cxx,v $
- * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,6 +85,8 @@ namespace
     {
         sal_Int16 m_nODF;
     public:
+    virtual void Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
         SaveODFItem();
         //See group ODF in Common.xcs
         bool isLessODF1_2()
@@ -95,6 +94,9 @@ namespace
             return m_nODF < 3;
         }
     };
+
+void SaveODFItem::Commit() {}
+void SaveODFItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
     SaveODFItem::SaveODFItem(): utl::ConfigItem(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
         "Office.Common/Save"))), m_nODF(0)
@@ -216,7 +218,7 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
 
     maSigsNotvalidatedFI.SetText( String( XMLSEC_RES( STR_NO_INFO_TO_VERIFY ) ) );
 
-    if ( GetBackground().GetColor().IsDark() )
+    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         // high contrast mode needs other images
         maSigsValidImg.SetImage( Image( XMLSEC_RES( IMG_STATE_VALID_HC ) ) );
@@ -638,15 +640,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                     sal_Int32 certResult = xSecEnv->verifyCertificate(xCert,
                         Sequence<css::uno::Reference<css::security::XCertificate> >());
 
-                    //These errors are alloweds
-                    sal_Int32 validErrors = css::security::CertificateValidity::VALID
-                        | css::security::CertificateValidity::UNKNOWN_REVOKATION;
-
-                    //Build a  mask to filter out the allowed errors
-                    sal_Int32 mask = ~validErrors;
-                    // "subtract" the allowed error flags from the result
-                    sal_Int32 errors = certResult & mask;
-                    bCertValid = errors > 0 ? false : true;
+                    bCertValid = certResult == css::security::CertificateValidity::VALID ? true : false;
                     if ( bCertValid )
                         nValidCerts++;
 

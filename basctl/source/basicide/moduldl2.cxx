@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: moduldl2.cxx,v $
- * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +69,7 @@
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include <com/sun/star/ucb/NameClash.hpp>
 #include "com/sun/star/packages/manifest/XManifestWriter.hpp"
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/util/VetoException.hpp>

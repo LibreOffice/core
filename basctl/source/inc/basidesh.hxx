@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: basidesh.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -199,7 +196,9 @@ public:
 
     SfxUndoManager*     GetUndoManager();
 
-    virtual USHORT          Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog = 0 );
+    virtual com::sun::star::uno::Reference< com::sun::star::view::XRenderable > GetRenderable();
+
+    // virtual USHORT           Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog = 0 );
     virtual SfxPrinter*     GetPrinter( BOOL bCreate );
     virtual USHORT          SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     virtual String          GetSelectionText( BOOL bCompleteWords );

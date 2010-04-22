@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: bibbeam.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,17 +29,13 @@
 #include "precompiled_extensions.hxx"
 #include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
+#include "bibliography.hrc"
 #include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>
 #include <tools/debug.hxx>

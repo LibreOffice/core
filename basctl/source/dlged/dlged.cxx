@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlged.cxx,v $
- * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +43,7 @@
 #include <iderdll.hxx>
 #include <vcl/scrbar.hxx>
 #include <tools/shl.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #ifndef _SVX_SVXIDS_HRC
@@ -1283,7 +1280,20 @@ void lcl_PrintHeader( Printer* pPrinter, const String& rTitle ) // not working y
 
 //----------------------------------------------------------------------------
 
-void DlgEditor::PrintData( Printer* pPrinter, const String& rTitle )    // not working yet
+sal_Int32 DlgEditor::countPages( Printer* )
+{
+    return 1;
+}
+
+void DlgEditor::printPage( sal_Int32 nPage, Printer* pPrinter, const String& rTitle )
+{
+    if( nPage == 0 )
+        Print( pPrinter, rTitle );
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEditor::Print( Printer* pPrinter, const String& rTitle )    // not working yet
 {
     if( pDlgEdView )
     {
@@ -1303,8 +1313,6 @@ void DlgEditor::PrintData( Printer* pPrinter, const String& rTitle )    // not w
         Size aPaperSz = pPrinter->GetOutputSize();
         aPaperSz.Width() -= (LMARGPRN+RMARGPRN);
         aPaperSz.Height() -= (TMARGPRN+BMARGPRN);
-
-        pPrinter->StartPage();
 
         lcl_PrintHeader( pPrinter, rTitle );
 
@@ -1349,8 +1357,6 @@ void DlgEditor::PrintData( Printer* pPrinter, const String& rTitle )    // not w
         aPosOffs.Y() += TMARGPRN;
 
         pPrinter->DrawBitmap( aPosOffs, aOutputSz, aDlg );
-
-        pPrinter->EndPage();
 
         pPrinter->SetMapMode( aOldMap );
         pPrinter->SetFont( aOldFont );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ZipPackage.cxx,v $
- * $Revision: 1.114 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,25 +131,6 @@ sal_Bool isLocalFile_Impl( ::rtl::OUString aURL )
 
     return ( aSystemPath.getLength() != 0 );
 }
-
-class PostinitializationGuard
-{
-    uno::Reference< io::XInputStream > m_xTempStream;
-
-    ZipPackage&                        m_rZipPackage;
-
-public:
-    PostinitializationGuard( const uno::Reference< io::XInputStream >& xTempStream,
-                             ZipPackage& rZipPackage )
-    : m_xTempStream( xTempStream )
-    , m_rZipPackage( rZipPackage )
-    {}
-
-    virtual ~PostinitializationGuard()
-    {
-        m_rZipPackage.ConnectTo( m_xTempStream );
-    }
-};
 
 }
 
@@ -1370,8 +1348,18 @@ void SAL_CALL ZipPackage::commitChanges()
     {
         uno::Reference< io::XSeekable > xTempSeek( xTempInStream, uno::UNO_QUERY_THROW );
 
-        // switch to the new temporary stream only after the transfer
-        PostinitializationGuard aPostInitGuard( xTempInStream, *this );
+        try
+        {
+            xTempSeek->seek( 0 );
+        }
+        catch( uno::Exception& r )
+        {
+            throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "Temporary file should be seekable!" ) ),
+                    static_cast < OWeakObject * > ( this ), makeAny ( r ) );
+        }
+
+        // connect to the temporary stream
+        ConnectTo( xTempInStream );
 
         if ( m_eMode == e_IMode_XStream )
         {
@@ -1381,8 +1369,6 @@ void SAL_CALL ZipPackage::commitChanges()
             // preparation for copy step
             try
             {
-                xTempSeek->seek( 0 );
-
                 xOutputStream = m_xStream->getOutputStream();
                 uno::Reference < XTruncate > xTruncate ( xOutputStream, UNO_QUERY );
                 if ( !xTruncate.is() )

@@ -2,11 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: updatecheck.cxx,v $
  *
  * This file is part of OpenOffice.org.
  *
@@ -264,7 +262,7 @@ protected:
     virtual void SAL_CALL onTerminated();
 
     /* Wrapper around checkForUpdates */
-    bool runCheck();
+    bool runCheck( bool & rbExtensionsChecked );
 
 private:
 
@@ -453,7 +451,7 @@ UpdateCheckThread::cancel()
 //------------------------------------------------------------------------------
 
 bool
-UpdateCheckThread::runCheck()
+UpdateCheckThread::runCheck( bool & rbExtensionsChecked )
 {
     bool ret = false;
     UpdateState eUIState = UPDATESTATE_NO_UPDATE_AVAIL;
@@ -474,12 +472,14 @@ UpdateCheckThread::runCheck()
     // and when there was no office update found
     if ( ( eUIState != UPDATESTATE_UPDATE_AVAIL ) &&
          ( eUIState != UPDATESTATE_UPDATE_NO_DOWNLOAD ) &&
-         !aController->isDialogShowing() )
+         !aController->isDialogShowing() &&
+         !rbExtensionsChecked )
     {
         bool bHasExtensionUpdates = checkForExtensionUpdates( m_xContext );
         aController->setHasExtensionUpdates( bHasExtensionUpdates );
         if ( bHasExtensionUpdates )
             aController->setUIState( UPDATESTATE_EXT_UPD_AVAIL );
+        rbExtensionsChecked = true;
     }
 
     // joining with this thread is safe again
@@ -500,6 +500,11 @@ UpdateCheckThread::onTerminated()
 void SAL_CALL
 UpdateCheckThread::run()
 {
+    bool bExtensionsChecked = false;
+    TimeValue systime;
+    TimeValue nExtCheckTime;
+    osl_getSystemTime( &nExtCheckTime );
+
     osl::Condition::Result aResult = osl::Condition::result_timeout;
     TimeValue tv = { 10, 0 };
 
@@ -547,7 +552,6 @@ UpdateCheckThread::run()
 
             if( ! checkNow )
             {
-                TimeValue systime;
                 osl_getSystemTime(&systime);
 
                 // Go back to sleep until time has elapsed
@@ -563,19 +567,28 @@ UpdateCheckThread::run()
 
             static sal_uInt8 n = 0;
 
-            if( ! hasInternetConnection() || ! runCheck() )
+            if( ! hasInternetConnection() || ! runCheck( bExtensionsChecked ) )
             {
-                // Increase next by 1, 5, 15, 60, .. minutes
-                static const sal_Int16 nRetryInterval[] = { 60, 300, 900, 3600 };
+                // the extension update check should be independent from the office update check
+                //
+                osl_getSystemTime( &systime );
+                if ( nExtCheckTime.Seconds + offset < systime.Seconds )
+                    bExtensionsChecked = false;
 
-                if( n < sizeof(nRetryInterval) / sizeof(sal_Int16) )
+                // Increase next by 15, 60, .. minutes
+                static const sal_Int32 nRetryInterval[] = { 900, 3600, 14400, 86400 };
+
+                if( n < sizeof(nRetryInterval) / sizeof(sal_Int32) )
                     ++n;
 
                 tv.Seconds = nRetryInterval[n-1];
                 aResult = m_aCondition.wait(&tv);
             }
             else // reset retry counter
+            {
                 n = 0;
+                bExtensionsChecked = false;
+            }
         }
     }
 
@@ -591,8 +604,10 @@ UpdateCheckThread::run()
 void SAL_CALL
 ManualUpdateCheckThread::run()
 {
+    bool bExtensionsChecked = false;
+
     try {
-        runCheck();
+        runCheck( bExtensionsChecked );
         m_aCondition.reset();
     }
     catch(const uno::Exception& e) {
@@ -1571,6 +1586,8 @@ void UpdateCheck::showExtensionDialog()
 rtl::Reference<UpdateHandler>
 UpdateCheck::getUpdateHandler()
 {
+    osl::MutexGuard aGuard(m_aMutex);
+
     if( ! m_aUpdateHandler.is() )
         m_aUpdateHandler = new UpdateHandler(m_xContext, this);
 

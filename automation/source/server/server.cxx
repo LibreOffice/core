@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: server.cxx,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,7 +52,7 @@
 #if 1
 #include <svtools/ttprops.hxx>
 #include <basic/ttstrhlp.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <vcl/sound.hxx>
 #include "testtool.hrc"

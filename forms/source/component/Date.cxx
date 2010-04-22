@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Date.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -345,6 +342,13 @@ Any ODateModel::translateDbColumnToControlValue()
 Any ODateModel::getDefaultForReset() const
 {
     return m_aDefault;
+}
+
+//------------------------------------------------------------------------------
+void ODateModel::resetNoBroadcast()
+{
+    OEditBaseModel::resetNoBroadcast();
+    m_aSaveValue.clear();
 }
 
 //------------------------------------------------------------------------------

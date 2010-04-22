@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FormattedField.cxx,v $
- * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,8 +39,8 @@
 #include <comphelper/numbers.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/numuno.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/numuno.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <vcl/wintypes.hxx>
@@ -583,7 +580,7 @@ void OFormattedModel::_propertyChanged( const com::sun::star::beans::PropertyCha
 
                     // as m_aSaveValue (which is used by commitControlValueToDbColumn) is format dependent we have
                     // to recalc it, which is done by translateDbColumnToControlValue
-                    if ( m_xColumn.is() && m_xAggregateFastSet.is() )
+                    if ( m_xColumn.is() && m_xAggregateFastSet.is() && !m_xCursor->isBeforeFirst() && !m_xCursor->isAfterLast())
                     {
                         setControlValue( translateDbColumnToControlValue(), eOther );
                     }
@@ -1246,6 +1243,13 @@ Sequence< Type > OFormattedModel::getSupportedBindingTypes()
 Any OFormattedModel::getDefaultForReset() const
 {
     return m_xAggregateSet->getPropertyValue( PROPERTY_EFFECTIVE_DEFAULT );
+}
+
+//------------------------------------------------------------------------------
+void OFormattedModel::resetNoBroadcast()
+{
+    OEditBaseModel::resetNoBroadcast();
+    m_aSaveValue.clear();
 }
 
 //.........................................................................

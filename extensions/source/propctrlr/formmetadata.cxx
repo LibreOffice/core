@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: formmetadata.cxx,v $
- * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,15 +29,13 @@
 #include "precompiled_extensions.hxx"
 #include "formmetadata.hxx"
 #ifndef _EXTENSIONS_FORMCTRLR_FORMHELPID_HRC_
-#include "formhelpid.hrc"
+#include "propctrlr.hrc"
 #endif
 #include "formstrings.hxx"
 #ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
 #endif
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
+#include "propctrlr.hrc"
 #include <svtools/localresaccess.hxx>
 #include <tools/debug.hxx>
 #include <cppuhelper/extract.hxx>

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: stbcontrl.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,14 +38,14 @@
 #endif
 #include <vcl/image.hxx>
 //#ifndef _SFXITEMPOOL_HXX
-//#include <svtools/itempool.hxx>
+//#include <svl/itempool.hxx>
 //#endif
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 
 #include <xmlsecurity/stbcontrl.hxx>

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: richtextimplcontrol.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,18 +30,18 @@
 #include "richtextimplcontrol.hxx"
 #include "textattributelistener.hxx"
 #include "richtextengine.hxx"
-#include <svx/editeng.hxx>
-#include <svx/editview.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editstat.hxx>
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 
-#include <svx/editobj.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
+#include <editeng/editobj.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/mapunit.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
@@ -605,21 +602,32 @@ namespace frm
         _pDev->SetMapMode( aNormalizedMapMode );
 
         // translate coordinates
-        Point aPos( OutputDevice::LogicToLogic( _rPos, aOriginalMapMode, aNormalizedMapMode ) );
-        Size aSize( OutputDevice::LogicToLogic( _rSize, aOriginalMapMode, aNormalizedMapMode ) );
+        Point aPos( _rPos );
+        Size aSize( _rSize );
+        if ( aOriginalMapMode.GetMapUnit() == MAP_PIXEL )
+        {
+            aPos = _pDev->PixelToLogic( _rPos, aNormalizedMapMode );
+            aSize = _pDev->PixelToLogic( _rSize, aNormalizedMapMode );
+        }
+        else
+        {
+            aPos = OutputDevice::LogicToLogic( _rPos, aOriginalMapMode, aNormalizedMapMode );
+            aSize = OutputDevice::LogicToLogic( _rSize, aOriginalMapMode, aNormalizedMapMode );
+        }
 
         Rectangle aPlayground( aPos, aSize );
         Size aOnePixel( _pDev->PixelToLogic( Size( 1, 1 ) ) );
+        aPlayground.Right() -= aOnePixel.Width();
+        aPlayground.Bottom() -= aOnePixel.Height();
 
         // background
         _pDev->SetLineColor();
-        _pDev->DrawRect( Rectangle( aPlayground.TopLeft(), m_pEngine->GetPaperSize()) );
+        _pDev->DrawRect( aPlayground );
 
-        // possibly with border
+        // do we need to draw a border?
         bool bBorder = ( m_pAntiImpl->GetStyle() & WB_BORDER );
         if ( bBorder )
-            // let's draw a border
-            _pDev->SetLineColor( COL_BLACK );
+            _pDev->SetLineColor( m_pAntiImpl->GetSettings().GetStyleSettings().GetMonoColor() );
         else
             _pDev->SetLineColor();
         _pDev->SetFillColor( m_pAntiImpl->GetBackground().GetColor() );
@@ -632,7 +640,9 @@ namespace frm
         // leave a space of one pixel between the "surroundings" of the control
         // and the content
         lcl_inflate( aPlayground, -aOnePixel.Width(), -aOnePixel.Height() );
+        lcl_inflate( aPlayground, -aOnePixel.Width(), -aOnePixel.Height() );
 
+        // actually draw the content
         m_pEngine->Draw( _pDev, aPlayground, Point(), TRUE );
 
         _pDev->Pop();

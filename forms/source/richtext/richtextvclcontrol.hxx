@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: richtextvclcontrol.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,13 +114,15 @@ namespace frm
         const EditView& getView() const;
               EditView& getView();
 
+        // Window overridables
+        virtual void        Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, ULONG _nFlags );
+
     protected:
         // Window overridables
         virtual void        Resize();
         virtual void        GetFocus();
         virtual void        StateChanged( StateChangedType nStateChange );
         virtual long        PreNotify( NotifyEvent& _rNEvt );
-        virtual void        Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, ULONG _nFlags );
         virtual long        Notify( NotifyEvent& _rNEvt );
 
     private:

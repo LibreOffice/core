@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: browserview.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +29,7 @@
 #include "precompiled_extensions.hxx"
 #include "browserview.hxx"
 #include "propertyeditor.hxx"
-#ifndef _EXTENSIONS_FORMCTRLR_FORMHELPID_HRC_
-#include "formhelpid.hrc"
-#endif
+#include "propctrlr.hrc"
 #include <tools/debug.hxx>
 #include <memory>
 

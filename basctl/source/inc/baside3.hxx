@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: baside3.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 #endif
 
 #include <bastypes.hxx>
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
@@ -110,7 +107,10 @@ public:
     virtual BOOL        IsPasteAllowed();
 
     virtual SfxUndoManager* GetUndoManager();
-    virtual void        PrintData( Printer* pPrinter );
+    // return number of pages to be printed
+    virtual sal_Int32 countPages( Printer* pPrinter );
+    // print page
+    virtual void printPage( sal_Int32 nPage, Printer* pPrinter );
     virtual void        Deactivating();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();

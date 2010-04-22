@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ComboBox.cxx,v $
- * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -745,6 +742,13 @@ void SAL_CALL OComboBoxModel::reloaded( const EventObject& aEvent ) throw(Runtim
     // reload data if we have a list source
     if ( m_aListSource.getLength() && m_xCursor.is() && !hasExternalListSource() )
         loadData( false );
+}
+
+//------------------------------------------------------------------------------
+void OComboBoxModel::resetNoBroadcast()
+{
+    OBoundControlModel::resetNoBroadcast();
+    m_aLastKnownValue.clear();
 }
 
 //-----------------------------------------------------------------------------

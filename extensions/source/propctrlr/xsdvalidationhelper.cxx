@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xsdvalidationhelper.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +39,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/xforms/XDataTypeRepository.hpp>
 /** === end UNO includes === **/
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <tools/diagnose_ex.h>
 
 //........................................................................

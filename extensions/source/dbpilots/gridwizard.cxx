@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gridwizard.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,9 +36,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <tools/debug.hxx>
 #include "dbptools.hxx"
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
+#include "dbpilots.hrc"
 
 #define GW_STATE_DATASOURCE_SELECTION   0
 #define GW_STATE_FIELDSELECTION         1

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: clickableimage.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -435,6 +432,11 @@ namespace frm
             // allowed to leave
             throw;
         }
+        catch( const WrappedTargetException& e )
+        {
+            // allowed to leave
+            throw;
+        }
         catch( const Exception& e )
         {
             OSL_ENSURE( sal_False, "OClickableImageBaseControl::implSubmit: caught an unknown exception!" );
@@ -812,9 +814,6 @@ namespace frm
                     if( sReferer.getLength() )
                         m_pMedium->SetReferer( OUStringToString(sReferer, CHARSET_SYSTEM) );
                 }
-
-                // Keinen Eintrag im Roter Button Menu
-                m_pMedium->SetDontCreateCancellable();
             }
     #else
             if( pObjSh )
@@ -832,9 +831,6 @@ namespace frm
                 if( sReferer.getLength() )
                     m_pMedium->SetReferer( sReferer );
             }
-
-            // Keinen Eintrag im Roter Button Menu
-            m_pMedium->SetDontCreateCancellable();
     #endif
 
             // Downloading-Flag auf sal_True setzen. Es werden dann auch

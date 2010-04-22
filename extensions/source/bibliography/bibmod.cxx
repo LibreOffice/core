@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: bibmod.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 
 #include <tools/resmgr.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/util/XLocalizedAliases.hpp>
 #include <com/sun/star/lang/XLocalizable.hpp>

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: documentdigitalsignatures.cxx,v $
- * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +50,7 @@
 #include <com/sun/star/ucb/Command.hpp>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/security/SerialNumberAdapter.hpp>
 #include <ucbhelper/contentbroker.hxx>

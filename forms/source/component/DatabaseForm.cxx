@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DatabaseForm.cxx,v $
- * $Revision: 1.87 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,8 +78,8 @@
 #include <osl/mutex.hxx>
 #include <rtl/math.hxx>
 #include <rtl/tencinfo.h>
-#include <svtools/inetstrm.hxx>
-#include <svtools/inettype.hxx>
+#include <svl/inetstrm.hxx>
+#include <svl/inettype.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fsys.hxx>
@@ -96,7 +93,6 @@
 
 #include <ctype.h>
 #include <hash_map>
-//#include <stdio.h>
 
 // compatiblity: DatabaseCursorType is dead, but for compatiblity reasons we still have to write it ...
 namespace com {
@@ -152,7 +148,6 @@ public:
     DocumentModifyGuard( const Reference< XInterface >& _rxFormComponent )
         :m_xDocumentModify( getXModel( _rxFormComponent ), UNO_QUERY )
     {
-        OSL_ENSURE( m_xDocumentModify.is(), "DocumentModifyGuard::DocumentModifyGuard: no document, or no XModifiable2!" );
         impl_changeModifiableFlag_nothrow( false );
     }
     ~DocumentModifyGuard()
@@ -2630,16 +2625,15 @@ void ODatabaseForm::impl_createLoadTimer()
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::loaded(const EventObject& /*aEvent*/) throw( RuntimeException )
 {
-    // now start the rowset listening to recover cursor events
-    load_impl(sal_True);
     {
-        ::osl::MutexGuard aGuard(m_aMutex);
-        Reference<XRowSet>  xParentRowSet(m_xParent, UNO_QUERY);
-        if (xParentRowSet.is())
-            xParentRowSet->addRowSetListener(this);
+        ::osl::MutexGuard aGuard( m_aMutex );
+        Reference< XRowSet > xParentRowSet( m_xParent, UNO_QUERY_THROW );
+        xParentRowSet->addRowSetListener( this );
 
         impl_createLoadTimer();
     }
+
+    load_impl( sal_True );
 }
 
 //------------------------------------------------------------------------------
@@ -2647,12 +2641,14 @@ void SAL_CALL ODatabaseForm::unloading(const EventObject& /*aEvent*/) throw( Run
 {
     {
         // now stop the rowset listening if we are a subform
-        ::osl::MutexGuard aGuard(m_aMutex);
-        DELETEZ(m_pLoadTimer);
+        ::osl::MutexGuard aGuard( m_aMutex );
 
-        Reference<XRowSet>  xParentRowSet(m_xParent, UNO_QUERY);
-        if (xParentRowSet.is())
-            xParentRowSet->removeRowSetListener(this);
+        if ( m_pLoadTimer && m_pLoadTimer->IsActive() )
+            m_pLoadTimer->Stop();
+        DELETEZ( m_pLoadTimer );
+
+        Reference< XRowSet > xParentRowSet( m_xParent, UNO_QUERY_THROW );
+        xParentRowSet->removeRowSetListener( this );
     }
 
     unload();
@@ -2880,7 +2876,7 @@ sal_Bool ODatabaseForm::implEnsureConnection()
     }
     catch( Exception )
     {
-        DBG_ERROR( "ODatabaseForm::implEnsureConnection: caught an exception which I cannot handle!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     return sal_False;

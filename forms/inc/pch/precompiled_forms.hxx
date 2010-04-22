@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: precompiled_forms.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -335,29 +332,29 @@
 
 #include "svtools/cliplistener.hxx"
 #include "svtools/imageresourceaccess.hxx"
-#include "svtools/inetstrm.hxx"
-#include "svtools/inettype.hxx"
-#include "svtools/itempool.hxx"
-#include "svtools/itemset.hxx"
-#include "svtools/languageoptions.hxx"
-#include "svtools/lingucfg.hxx"
-#include "svtools/numuno.hxx"
-#include "svtools/poolitem.hxx"
-#include "svtools/solar.hrc"
+#include "svl/inetstrm.hxx"
+#include "svl/inettype.hxx"
+#include "svl/itempool.hxx"
+#include "svl/itemset.hxx"
+#include "svl/languageoptions.hxx"
+#include "unotools/lingucfg.hxx"
+#include "svl/numuno.hxx"
+#include "svl/poolitem.hxx"
+#include "svl/solar.hrc"
 #include "svtools/transfer.hxx"
 
-#include "svx/editdata.hxx"
-#include "svx/editeng.hxx"
-#include "svx/editobj.hxx"
-#include "svx/editstat.hxx"
-#include "svx/editview.hxx"
-#include "svx/eeitem.hxx"
-#include "svx/frmdir.hxx"
-#include "svx/scripttypeitem.hxx"
-#include "svx/svxenum.hxx"
+#include "editeng/editdata.hxx"
+#include "editeng/editeng.hxx"
+#include "editeng/editobj.hxx"
+#include "editeng/editstat.hxx"
+#include "editeng/editview.hxx"
+#include "editeng/eeitem.hxx"
+#include "editeng/frmdir.hxx"
+#include "editeng/scripttypeitem.hxx"
+#include "editeng/svxenum.hxx"
 #include "svx/svxids.hrc"
-#include "svx/unoedsrc.hxx"
-#include "svx/unofored.hxx"
+#include "editeng/unoedsrc.hxx"
+#include "editeng/unofored.hxx"
 
 #include "toolkit/helper/emptyfontdescriptor.hxx"
 

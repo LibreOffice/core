@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TestCase.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,11 +27,9 @@
 
 package integration.forms;
 
-import com.sun.star.uno.*;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.util.XCloseable;
 import com.sun.star.util.XModifiable;
-import integration.forms.DocumentType;
 
 public abstract class TestCase extends complexlib.ComplexTestCase implements com.sun.star.lang.XEventListener
 {
@@ -50,9 +45,20 @@ public abstract class TestCase extends complexlib.ComplexTestCase implements com
     }
 
     /* ------------------------------------------------------------------ */
+    public String getTestObjectName()
+    {
+        return this.getClass().getName();
+    }
+
+    /* ------------------------------------------------------------------ */
     public void before() throws com.sun.star.uno.Exception, java.lang.Exception
     {
         m_orb = (XMultiServiceFactory)param.getMSF();
+    }
+
+    /* ------------------------------------------------------------------ */
+    public void after() throws com.sun.star.uno.Exception, java.lang.Exception
+    {
     }
 
     /* ------------------------------------------------------------------ */

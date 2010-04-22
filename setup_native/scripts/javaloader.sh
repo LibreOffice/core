@@ -242,7 +242,7 @@ install_linux_rpm()
     # start to install jre
     echo "Extracting ..."
     olddir=`pwd`
-    cd $tempdir
+    cd "$tempdir"
     rpm2cpio $tempjrefile | cpio -i --make-directories
     rm -f $tempjrefile # we do not need it anymore, so conserve discspace
 
@@ -330,7 +330,7 @@ install_linux_rpm()
     fi
 
     echo "Done."
-    cd $olddir
+    cd "$olddir"
 }
 
 find_rpm2cpio()

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sspellimp.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,9 +47,9 @@
 #include <linguistic/lngprops.hxx>
 #include <linguistic/spelldta.hxx>
 #include <i18npool/mslangid.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/lingucfg.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/useroptions.hxx>
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -60,7 +57,7 @@
 
 #include <list>
 #include <set>
-
+#include <string.h>
 
 using namespace utl;
 using namespace osl;

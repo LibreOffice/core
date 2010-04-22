@@ -55,7 +55,7 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SOCOMWINDOWPEER)
             /* [in] */ short /*s*/,
             /* [retval][out] */ long __RPC_FAR *ret)
         {
-            *ret = (long) m_hwnd;
+            *ret = HandleToLong( m_hwnd );
             return S_OK;
         }
 
