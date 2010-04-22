@@ -574,7 +574,7 @@ public:
     BOOL            HasDrwObj(SdrObject *pSdrObj) const;
     BOOL            HasOnlyObj(SdrObject *pSdrObj, UINT32 eObjInventor) const;
     BOOL            BeginTextEdit(  SdrObject* pObj, SdrPageView* pPV=NULL,
-                                    Window* pWin=NULL, BOOL bIsNewObj=FALSE);
+                                    Window* pWin=NULL, bool bIsNewObj=false, bool bSetSelectionToStart=false );
 
     void            StateTabWin(SfxItemSet&);
 

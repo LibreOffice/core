@@ -746,6 +746,7 @@ public:
     BOOL GoStartSentence();
     BOOL GoEndSentence();
     BOOL SelectWord( const Point* pPt = 0 );
+    BOOL ExpandToSentenceBorders();
 
     // Position vom akt. Cursor erfragen
     BOOL IsStartWord()const;
