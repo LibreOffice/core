@@ -95,12 +95,15 @@ void PPTShape::addShape(
                         aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getTitleTextStyle() : rSlidePersist.getTitleTextStyle();
                     }
                     break;
-                    case XML_subTitle:
+                    case XML_subTitle :
                     {
                         const rtl::OUString sTitleShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.SubtitleShape" ) );
                         sServiceName = sTitleShapeService;
                         aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getTitleTextStyle() : rSlidePersist.getTitleTextStyle();
+                        if ( ( meShapeLocation == Master ) || ( meShapeLocation == Layout ) )
+                            sServiceName = rtl::OUString();
                     }
+                    break;
                     case XML_obj :
                     {
                         const rtl::OUString sOutlinerShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.OutlinerShape" ) );
@@ -175,50 +178,42 @@ void PPTShape::addShape(
                 }
             }
 
-            // use style from master slide for placeholders only, otherwise use slide's style, which might be the default style from presentation
-            if ( !aMasterTextListStyle.get() )
-                    aMasterTextListStyle = ( mnSubType && rSlidePersist.getMasterPersist().get() ) ? rSlidePersist.getMasterPersist()->getOtherTextStyle() : rSlidePersist.getOtherTextStyle();
 
-            if( aMasterTextListStyle.get() && getTextBody().get() ) {
-                TextListStylePtr aCombinedTextListStyle (new TextListStyle());
-
-                aCombinedTextListStyle->apply( *aMasterTextListStyle.get() );
-
-                if( mpPlaceholder.get() && mpPlaceholder->getTextBody().get() )
-                aCombinedTextListStyle->apply( mpPlaceholder->getTextBody()->getTextListStyle() );
-                 aCombinedTextListStyle->apply( getTextBody()->getTextListStyle() );
-
-                setMasterTextListStyle( aCombinedTextListStyle );
-            } else
+            if ( sServiceName.getLength() )
+            {
+                if ( !aMasterTextListStyle.get() )
+                    aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getOtherTextStyle() : rSlidePersist.getOtherTextStyle();
                 setMasterTextListStyle( aMasterTextListStyle );
 
-            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect, bClearText ) );
-            if ( !rSlidePersist.isMasterPage() && rSlidePersist.getPage().is() && ( (sal_Int32)mnSubType == XML_title ) )
-            {
-                try
-                {
-                    rtl::OUString aTitleText;
-                    Reference< XTextRange > xText( xShape, UNO_QUERY_THROW );
-                    aTitleText = xText->getString();
-                    if ( aTitleText.getLength() && ( aTitleText.getLength() < 64 ) )    // just a magic value, but we don't want to set slide names which are too long
+                Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect, bClearText ) );
+                if ( !rSlidePersist.isMasterPage() && rSlidePersist.getPage().is() && ( (sal_Int32)mnSubType == XML_title ) )
+                 {
+                    try
                     {
-                        Reference< container::XNamed > xName( rSlidePersist.getPage(), UNO_QUERY_THROW );
-                        xName->setName( aTitleText );
+                        rtl::OUString aTitleText;
+                        Reference< XTextRange > xText( xShape, UNO_QUERY_THROW );
+                        aTitleText = xText->getString();
+                        if ( aTitleText.getLength() && ( aTitleText.getLength() < 64 ) )    // just a magic value, but we don't want to set slide names which are too long
+                        {
+                            Reference< container::XNamed > xName( rSlidePersist.getPage(), UNO_QUERY_THROW );
+                            xName->setName( aTitleText );
+                        }
+                    }
+                    catch( uno::Exception& )
+                    {
+
                     }
                 }
-                catch( uno::Exception& )
+                if( pShapeMap && msId.getLength() )
                 {
+                    (*pShapeMap)[ msId ] = shared_from_this();
                 }
-            }
-            if( pShapeMap && msId.getLength() )
-            {
-                (*pShapeMap)[ msId ] = shared_from_this();
-            }
 
-            // if this is a group shape, we have to add also each child shape
-            Reference< XShapes > xShapes( xShape, UNO_QUERY );
-            if ( xShapes.is() )
-                addChildren( rFilterBase, *this, pTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap );
+                // if this is a group shape, we have to add also each child shape
+                Reference< XShapes > xShapes( xShape, UNO_QUERY );
+                if ( xShapes.is() )
+                    addChildren( rFilterBase, *this, pTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap );
+            }
         }
     }
     catch( const Exception&  )
