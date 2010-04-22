@@ -240,3 +240,6 @@ toolkit.AccessibleTabPage::com::sun::star::accessibility::XAccessibleText
 toolkit.AccessibleMenu::com::sun::star::accessibility::XAccessibleValue
 toolkit.AccessibleMenuBar::com::sun::star::accessibility::XAccessibleEventBroadcaster
 toolkit.AccessibleMenuBar::com::sun::star::accessibility::XAccessibleSelection
+
+### i111076 ###
+toolkit.Toolkit::com::sun::star::awt::XDataTransferProviderAccess
