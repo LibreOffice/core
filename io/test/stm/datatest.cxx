@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: datatest.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,10 +52,6 @@
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
 
-#if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
-#endif
-#include <assert.h>
 #include <string.h>
 
 using namespace ::rtl;
@@ -209,13 +202,13 @@ sal_Int32 ODataStreamTest::test(
                     rSource = Reference< XActiveDataSource > ( x, UNO_QUERY );
                 }
 
-                assert( rPipeInput.is() );
-                assert( rPipeOutput.is() );
+                OSL_ASSERT( rPipeInput.is() );
+                OSL_ASSERT( rPipeOutput.is() );
                 rSink->setInputStream( rPipeInput );
                 rSource->setOutputStream( rPipeOutput );
 
-                assert( rSink->getInputStream().is() );
-                assert( rSource->getOutputStream().is() );
+                OSL_ASSERT( rSink->getInputStream().is() );
+                OSL_ASSERT( rSource->getOutputStream().is() );
 
                 if( 1 == hTestHandle ) {
                     testSimple( rInput , rOutput );
@@ -778,10 +771,10 @@ sal_Int32 OObjectStreamTest::test(  const OUString& TestName,
                 Reference <XOutputStream >  markableOutput( x , UNO_QUERY );
                 Reference <XActiveDataSource >  markableSource( x , UNO_QUERY );
 
-                assert( markableInput.is()  );
-                assert( markableOutput.is() );
-                assert( markableSink.is()   );
-                assert( markableSource.is() );
+                OSL_ASSERT( markableInput.is()  );
+                OSL_ASSERT( markableOutput.is() );
+                OSL_ASSERT( markableSink.is()   );
+                OSL_ASSERT( markableSource.is() );
 
                 markableSink->setInputStream( rPipeInput );
                 markableSource->setOutputStream( rPipeOutput );
@@ -799,14 +792,14 @@ sal_Int32 OObjectStreamTest::test(  const OUString& TestName,
                     rSource = Reference <XActiveDataSource>( x, UNO_QUERY );
                 }
 
-                assert( rPipeInput.is() );
-                assert( rPipeOutput.is() );
+                OSL_ASSERT( rPipeInput.is() );
+                OSL_ASSERT( rPipeOutput.is() );
 
                 rSink->setInputStream( markableInput );
                 rSource->setOutputStream( markableOutput );
 
-                assert( rSink->getInputStream().is() );
-                assert( rSource->getOutputStream().is() );
+                OSL_ASSERT( rSink->getInputStream().is() );
+                OSL_ASSERT( rSource->getOutputStream().is() );
 
                 if( 1 + DATASTREAM_TEST_MAX_HANDLE == hTestHandle ) {
                     testObject( rOutput , rInput);
@@ -857,8 +850,8 @@ sal_Bool compareMyPropertySet( Reference< XPropertySet > &r1 , Reference < XProp
     b = b && (  r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("float")) ) ==
                 r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("float")) ) );
     if( ! b ){
-        float f1;
-        float f2;
+        float f1(0.0);
+        float f2(0.0);
         r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("float")) ) >>= f1;
         r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("float")) ) >>= f2;
         fprintf( stderr, "compareMyPropertySet: %f %f 3\n",f1,f2 );
@@ -868,7 +861,7 @@ sal_Bool compareMyPropertySet( Reference< XPropertySet > &r1 , Reference < XProp
                 r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("double" ))) );
     if( ! b ) fprintf( stderr, "compareMyPropertySet: 4\n" );
 
-    sal_Bool b1 ,b2;
+    sal_Bool b1(sal_False), b2(sal_False);
     Any a =r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("bool")) );
     a >>= b1;
     a = r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("bool")) );

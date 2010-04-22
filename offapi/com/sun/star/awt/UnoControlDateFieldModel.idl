@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: UnoControlDateFieldModel.idl,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +39,9 @@
 #include <com/sun/star/util/Color.idl>
 #endif
 
+#ifndef __com_sun_star_style_VerticalAlignment_idl__
+#include <com/sun/star/style/VerticalAlignment.idl>
+#endif
 
 //=============================================================================
 
@@ -274,6 +274,14 @@ published service UnoControlDateFieldModel
         this is possible.</p>
     */
     [optional, property] short MouseWheelBehavior;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the vertical alignment of the text in the control.
+
+        @since OpenOffice.org 3.3
+     */
+    [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
 };
 
 //=============================================================================

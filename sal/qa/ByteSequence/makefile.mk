@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.13 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,17 +43,10 @@ CXXFLAGS+= $(LFS_CFLAGS)
 #----------------------------------- OStringBuffer -----------------------------------
 
 SHL1OBJS= \
-    $(SLO)$/ByteSequence.obj 
+    $(SLO)$/ByteSequence.obj
 
 SHL1TARGET= rtl_ByteSequence
-SHL1STDLIBS=\
-   $(SALLIB) 
-.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
-SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
-.ENDIF
-.IF "$(GUI)" == "UNX"
-SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
-.ENDIF
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
@@ -70,9 +59,7 @@ SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 SHL2OBJS=  \
     $(SLO)$/rtl_old_testbyteseq.obj
 SHL2TARGET= rtl_old_testbyteseq
-SHL2STDLIBS=\
-    $(SALLIB) \
-    $(CPPUNITLIB)
+SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL2IMPLIB= i$(SHL2TARGET)
 

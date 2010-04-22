@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,7 +41,7 @@ CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
 # BEGIN ----------------------------------------------------------------
-# auto generated Target:testjob by codegen.pl 
+# auto generated Target:testjob by codegen.pl
 
 .IF "$(GUI)" == "WNT"
     CFLAGS+=/Ob1
@@ -55,9 +51,7 @@ SHL1OBJS=  \
     $(SLO)$/rtl_doublelocking.obj
 
 SHL1TARGET= rtl_doublelocking
-SHL1STDLIBS=\
-    $(SALLIB) \
-    $(CPPUNITLIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME    =$(SHL1TARGET)

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: except.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -137,8 +134,8 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
     OUString const & unoName = *(OUString const *)&pTypeDescr->aBase.pTypeName;
 
     MutexGuard guard( m_mutex );
-    t_rtti_map::const_iterator iFind( m_rttis.find( unoName ) );
-    if (iFind == m_rttis.end())
+    t_rtti_map::const_iterator iRttiFind( m_rttis.find( unoName ) );
+    if (iRttiFind == m_rttis.end())
     {
         // RTTI symbol
         OStringBuffer buf( 64 );
@@ -202,7 +199,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
     }
     else
     {
-        rtti = iFind->second;
+        rtti = iRttiFind->second;
     }
 
     return rtti;

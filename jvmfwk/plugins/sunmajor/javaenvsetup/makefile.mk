@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.7.26.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -34,9 +30,7 @@ PRJ=..$/..$/..
 PRJNAME=javaldx
 TARGET=javaldx
 TARGETTYPE=CUI
-.IF "$(OS)"!="IRIX"
 NO_DEFAULT_STL=TRUE
-.ENDIF
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=true
 

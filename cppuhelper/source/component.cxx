@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: component.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,6 +87,10 @@ void OComponentHelper::release() throw()
         {
             if (! rBHelper.bDisposed)
             {
+                // *before* again incrementing our ref count, ensure that our weak connection point
+                // will not create references to us anymore (via XAdapter::queryAdapted)
+                disposeWeakConnectionPoint();
+
                 Reference<XInterface > xHoldAlive( *this );
                 // First dispose
                 try

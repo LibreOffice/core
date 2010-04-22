@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: idlcproduce.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -149,11 +146,11 @@ sal_Int32 SAL_CALL produceFile(const OString& regFileName)
         return 1;
     }
 
-    Registry regFile;
-
     removeIfExists(regTmpName);
     OString urlRegTmpName = convertToFileUrl(regTmpName);
-    if ( regFile.create(OStringToOUString(urlRegTmpName, RTL_TEXTENCODING_UTF8)) )
+
+    Registry regFile;
+    if ( regFile.create(OStringToOUString(urlRegTmpName, RTL_TEXTENCODING_UTF8)) != REG_NO_ERROR )
     {
         fprintf(stderr, "%s: could not create registry file '%s'\n",
                 pOptions->getProgramName().getStr(), regTmpName.getStr());
@@ -164,7 +161,7 @@ sal_Int32 SAL_CALL produceFile(const OString& regFileName)
     }
 
     RegistryKey rootKey;
-    if ( regFile.openRootKey(rootKey) )
+    if ( regFile.openRootKey(rootKey) != REG_NO_ERROR )
     {
         fprintf(stderr, "%s: could not open root of registry file '%s'\n",
                 pOptions->getProgramName().getStr(), regFileName.getStr());
@@ -177,7 +174,7 @@ sal_Int32 SAL_CALL produceFile(const OString& regFileName)
     // produce registry file
     if ( !idlc()->getRoot()->dump(rootKey) )
     {
-        rootKey.closeKey();
+        rootKey.releaseKey();
         regFile.close();
         regFile.destroy(OStringToOUString(regFileName, RTL_TEXTENCODING_UTF8));
         removeIfExists(regFileName);
@@ -185,16 +182,8 @@ sal_Int32 SAL_CALL produceFile(const OString& regFileName)
         return 1;
     }
 
-    if ( rootKey.closeKey() )
-    {
-        fprintf(stderr, "%s: could not close root of registry file '%s'\n",
-                pOptions->getProgramName().getStr(), regFileName.getStr());
-        removeIfExists(regTmpName);
-        removeIfExists(regFileName);
-        cleanPath();
-        return 1;
-    }
-    if ( regFile.close() )
+    rootKey.releaseKey();
+    if ( regFile.close() != REG_NO_ERROR )
     {
         fprintf(stderr, "%s: could not close registry file '%s'\n",
                 pOptions->getProgramName().getStr(), regFileName.getStr());

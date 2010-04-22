@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlelem.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,15 +32,6 @@
 // NOT FULLY DEFINED SERVICES
 #include <parse.hxx>
 #include <cr_html.hxx>
-
-#if OSL_DEBUG_LEVEL == 0
-#  ifndef NDEBUG
-#    define NDEBUG
-#  endif
-#endif
-#include <assert.h>
-
-
 
 XmlElement::XmlElement( const char * i_sName )
     : sName(i_sName)
@@ -160,7 +148,6 @@ ListElement::Write2Html( HtmlCreator & io_rHC ) const
 XmlElement *
 ListElement::Create_and_Add_NewElement()
 {
-    assert(fCreateNewElement != 0);
     XmlElement * pNew = (*fCreateNewElement)(Name());
     Children().push_back( pNew );
     return pNew;

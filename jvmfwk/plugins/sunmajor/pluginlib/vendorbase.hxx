@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vendorbase.hxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,9 +67,11 @@ namespace jfw_plugin
 #define JFW_PLUGIN_ARCH "ia64"
 #elif defined M68K
 #define JFW_PLUGIN_ARCH "m68k"
-#else // SPARC, INTEL, POWERPC, MIPS, ARM, IA64, M68K
+#elif defined HPPA
+#define JFW_PLUGIN_ARCH "parisc"
+#else // SPARC, INTEL, POWERPC, MIPS, ARM, IA64, M68K, HPPA
 #error unknown plattform
-#endif // SPARC, INTEL, POWERPC, MIPS, ARM
+#endif // SPARC, INTEL, POWERPC, MIPS, ARM, IA64, M68K, HPPA
 
 
 class MalformedVersionException

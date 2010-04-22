@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,7 +38,7 @@ LINKFLAGSDEFS = # do not fail with missing symbols
 .IF "$(L10N_framework)"==""
 #-------------------------------------------------------------------
 
-.IF "$(OS)$(CPU)$(COMEX)" == "SOLARISS4"
+.IF "$(OS)$(COMEX)" == "SOLARIS4"
 # no -Bdirect for SunWS CC
 DIRECT = $(LINKFLAGSDEFS)
 .ENDIF
