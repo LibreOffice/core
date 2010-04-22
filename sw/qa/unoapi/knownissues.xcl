@@ -151,3 +151,6 @@ sw.SwXTextPortion::com::sun::star::style::CharacterProperties
 
 ### i94977 ###
 sw.SwXTextGraphicObject::com::sun::star::text::BaseFrameProperties
+
+### i109917 ###
+sw.SwXTextDocument::com::sun::star::document::XEventBroadcaster
