@@ -46,6 +46,7 @@ my $err              = 0;
 my $srcrootdir       = '';
 my $solverdir        = '';
 my $platform         = '';
+my $logfile          = '';
 my $milestoneext     = '';
 my $local_env        = 0;
 my $source_config    = SourceConfig -> new($ENV{SOLARSRC});
@@ -57,14 +58,14 @@ my @exceptionmodlist = (
 
 #### main #####
 
-print "checkdeliver.pl - checking delivered binaries\n";
+print_logged("checkdeliver.pl - checking delivered binaries\n");
 
 get_globals();                                  # get global variables
 my $deliverlists_ref = get_deliver_lists();     # get deliver log files
 foreach my $listfile ( @$deliverlists_ref ) {
     $err += check( $listfile );                 # check delivered files
 }
-print "OK\n" if ( ! $err );
+print_logged("OK\n") if ( ! $err );
 exit $err;
 
 #### subroutines ####
@@ -82,6 +83,7 @@ sub get_globals
 
     # override environment with command line options
     GetOptions('help' => \$help,
+               'l=s'  => \$logfile,
                'p=s'  => \$platform
     ) or usage (1);
 
@@ -130,7 +132,8 @@ sub get_deliver_lists
         @files = grep ! /\/$exceptionpattern\//, @files;
     }
     if ( ! @files ) {
-        die "Error: cannot find deliver log files";
+        print_logged( "Error: cannot find deliver log files\n" );
+        exit 1;
     }
     return \@files;
 }
@@ -147,7 +150,7 @@ sub check
     if ( $listname =~ /\/([\w-]+?)\/deliver\.log$/o) {
         $module = $1;
     } else {
-        print "Error: cannot determine module name from \'$listname\'\n";
+        print_logged( "Error: cannot determine module name from \'$listname\'\n" );
         return 1;
     }
     # where do we have to look for modules?
@@ -161,12 +164,11 @@ sub check
         # do not bother about non existing modules in local environment
         # or on childworkspaces
         if (( $local_env ) || ( $ENV{CWS_WORK_STAMP} )) {
-            # print STDERR "Warning: module '$module' not found. Skipping.\n";
             return $error;
         }
         # in a master build it is considered an error to have deliver leftovers
         # from non exising (removed) modules
-        print "Error: module '$module' not found.\n";
+        print_logged( "Error: module '$module' not found.\n" );
         $error++;
         return $error;
     }
@@ -177,7 +179,10 @@ sub check
     }
 
     # read deliver log file
-    open( DELIVERLOG, "< $listname" ) or die( "Error: cannot open file \'$listname\'\n$!");
+    if ( ! open( DELIVERLOG, "< $listname" ) ) {
+        print_logged( "Error: cannot open file \'$listname\'\n$!" );
+        exit 2;
+    }
     foreach ( <DELIVERLOG> ) {
         next if ( /^LINK / );
         # For now we concentrate on binaries, located in 'bin' or 'lib' and 'misc/build/<...>/[bin|lib]'.
@@ -188,7 +193,7 @@ sub check
         if ( /^\w+? (\S+) (\S+)\s*$/o ) {
             $delivered{$1} = $2;
         } else {
-            print "Warning: cannot parse \'$listname\' line\n\'$_\'\n";
+            print_logged( "Warning: cannot parse \'$listname\' line\n\'$_\'\n" );
         }
     }
     close( DELIVERLOG );
@@ -219,38 +224,24 @@ sub check
             # rebasing, but only increase. It must not happen that a file on
             # solver is older than it's source.
             if ( ( $orgfile_stats->mtime - $delivered_stats->mtime ) gt 1 ) {
-                print "Error: ";
-                print "delivered file is older than it's source '$ofile' '$sfile'\n";
+                print_logged( "Error: " );
+                print_logged( "delivered file is older than it's source '$ofile' '$sfile'\n" );
                 $error ++;
             }
         } elsif ( !$orgfile_stats && $delivered_stats ) {
             # This is not an error if we have a solver and did not build the
             # module!
         } elsif ( !$orgfile_stats && !$delivered_stats ) {
-            # This is not an error if we have a solver and did not build the
-            # module!
-            # Instead, this seems to be an error of the deliver.log file, where
-            # even in the master build an allegedly delivered directory is not
-            # present in the solver. Places where this occurred:
-            #
-            # moz_prebuilt/deliver.log:
-            # COPY macromigration/unxlngi6/bin/samples unxlngi6/bin/samples
-            # COPY macromigration/unxlngi6/bin/lib unxlngi6/bin/lib
-            #
-            # macromigration/deliver.log:
-            # COPY moz_prebuilt/unxlngi6/lib/defaults unxlngi6/lib/defaults
-            # COPY moz_prebuilt/unxlngi6/lib/greprefs unxlngi6/lib/greprefs
-            # COPY moz_prebuilt/unxlngi6/lib/components unxlngi6/lib/components
-            #
-            # However release engineers got around that..
+            # This is not necessarily an error.
+            # Instead, this seems to be an error of the deliver.log file.
         } else {
-            print "Error: no such file '$ofile'\n" if ( ! $orgfile_stats );
-            print "Error: no such file '$sfile'\n" if ( ! $delivered_stats );
+            print_logged( "Error: no such file '$ofile'\n" ) if ( ! $orgfile_stats );
+            print_logged( "Error: no such file '$sfile'\n" ) if ( ! $delivered_stats );
             $error ++;
         }
     }
     if ( $error ) {
-        print "$error errors found: Module '$module' not delivered correctly?\n\n";
+        print_logged( "$error errors found: Module '$module' not delivered correctly?\n\n" );
     }
     STDOUT->autoflush(0);
     return $error;
@@ -271,6 +262,21 @@ sub is_moduledirectory
         return 0;
     }
 }
+
+sub print_logged
+# Print routine.
+# If a log file name is specified with '-l' option, print_logged() prints to that file
+# as well as to STDOUT. If '-l' option is not set, print_logged() just writes to STDOUT
+{
+    my $message = shift;
+    print "$message";
+    if ( $logfile ) {
+        open ( LOGFILE, ">> $logfile" ) or die "Can't open logfile '$logfile'\n";
+        print LOGFILE "$message";
+        close ( LOGFILE) ;
+    }
+}
+
 
 sub usage
 # print usage message and exit
