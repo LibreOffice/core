@@ -652,11 +652,12 @@ public:
 
     void        DoColResize( SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd );
 
+
     sal_Int32   GetMaxStringLen( SCCOL nCol,
                                     SCROW nRowStart, SCROW nRowEnd, CharSet eCharSet ) const;
-    xub_StrLen  GetMaxNumberStringLen( USHORT& nPrecision,
-                                    SCCOL nCol,
-                                    SCROW nRowStart, SCROW nRowEnd ) const;
+    xub_StrLen  GetMaxNumberStringLen( sal_uInt16& nPrecision,
+                                       SCCOL nCol,
+                                       SCROW nRowStart, SCROW nRowEnd ) const;
 
     void        FindConditionalFormat( ULONG nKey, ScRangeList& rRanges );
 

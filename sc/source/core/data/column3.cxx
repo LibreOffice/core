@@ -1905,11 +1905,15 @@ sal_Int32 ScColumn::GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, CharSet eCh
 }
 
 
-xub_StrLen ScColumn::GetMaxNumberStringLen( USHORT& nPrecision,
-        SCROW nRowStart, SCROW nRowEnd ) const
+xub_StrLen ScColumn::GetMaxNumberStringLen(
+    sal_uInt16& nPrecision, SCROW nRowStart, SCROW nRowEnd ) const
 {
     xub_StrLen nStringLen = 0;
     nPrecision = pDocument->GetDocOptions().GetStdPrecision();
+    if ( nPrecision == SvNumberFormatter::UNLIMITED_PRECISION )
+        // In case of unlimited precision, use 2 instead.
+        nPrecision = 2;
+
     if ( pItems )
     {
         String aString;
@@ -1932,8 +1936,8 @@ xub_StrLen ScColumn::GetMaxNumberStringLen( USHORT& nPrecision,
                 {
                     if ( nFormat )
                     {   // more decimals than standard?
-                        USHORT nPrec = pNumFmt->GetFormatPrecision( nFormat );
-                        if ( nPrec > nPrecision )
+                        sal_uInt16 nPrec = pNumFmt->GetFormatPrecision( nFormat );
+                        if ( nPrec != SvNumberFormatter::UNLIMITED_PRECISION && nPrec > nPrecision )
                             nPrecision = nPrec;
                     }
                     if ( nPrecision )
