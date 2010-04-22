@@ -28,6 +28,7 @@
 $(eval $(call gb_Library_Library,sw))
 
 $(call gb_Library_get_headers_target,sw) : $(call gb_SdiTarget_get_target,sw/sdi/swslots)
+$(call gb_SdiTarget_get_target,sw/sdi/swslots) :| $(call gb_Library_get_external_headers_target,sw)
 $(call gb_Library_get_clean_target,sw) : $(call gb_SdiTarget_get_clean_target,sw/sdi/swslots)
 
 $(eval $(call gb_Library_set_include,sw,\
@@ -733,6 +734,7 @@ $(eval $(call gb_Library_add_linked_libs,sw,\
 endif
 
 $(eval $(call gb_SdiTarget_SdiTarget,sw/sdi/swslots,sw/sdi/swriter))
+
 
 $(eval $(call gb_SdiTarget_set_include,sw/sdi/swslots,\
     $$(INCLUDE) \
