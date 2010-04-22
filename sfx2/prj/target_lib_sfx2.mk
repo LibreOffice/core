@@ -27,6 +27,8 @@
 
 $(eval $(call gb_Library_Library,sfx))
 
+$(call gb_Library_get_headers_target,sfx) : $(call gb_Package_get_target,sfx2_inc)
+$(call gb_Library_get_headers_target,sfx) : $(call gb_Package_get_target,sfx2_sdi)
 $(call gb_Library_get_headers_target,sfx) : $(call gb_SdiTarget_get_target,sfx2/sdi/sfxslots)
 $(call gb_SdiTarget_get_target,sfx2/sdi/sfxslots) :| $(call gb_Library_get_external_headers_target,sfx)
 $(call gb_Library_get_clean_target,sfx) : $(call gb_SdiTarget_get_clean_target,sfx2/sdi/sfxslots)
