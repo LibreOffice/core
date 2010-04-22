@@ -232,6 +232,7 @@ public:
     ESelection      WordRight( const ESelection& rSelection, USHORT nWordType  ) const;
     ESelection      CursorLeft( const ESelection& rSelection, USHORT nCharacterIteratorMode ) const;
     ESelection      CursorRight( const ESelection& rSelection, USHORT nCharacterIteratorMode ) const;
+    ESelection      SelectSentence( const ESelection& rCurSel ) const;
 
     void            Clear();
     void            SetText( const String& rStr );
@@ -396,7 +397,7 @@ public:
     // put spell position to start of current sentence
     void            PutSpellingToSentenceStart( EditView& rEditView );
     //applies a changed sentence
-    void            ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bIsGrammarChecking );
+    void            ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck );
     //deinitialize sentence spelling
     void            EndSpelling();
 

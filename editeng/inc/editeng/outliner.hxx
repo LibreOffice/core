@@ -1017,7 +1017,7 @@ public:
     // put spell position to start of current sentence
     void            PutSpellingToSentenceStart( EditView& rEditView );
     //applies a changed sentence
-    void            ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bIsGrammarChecking );
+    void            ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck );
     void            EndSpelling();
 
     /** sets a link that is called at the beginning of a drag operation at an edit view */
