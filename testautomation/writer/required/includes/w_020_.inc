@@ -238,7 +238,7 @@ testcase t_TB_InsertFields
     printlog "- Toolbox ( normal ) : Fields"
 
     if gPlatgroup = "unx" then
-        QAErrorlog "Doesn't run on unix"
+        printlog( "Test not suitable for Unix(like) OS" )
         goto endsub
     end if
     printlog " Open new document"
@@ -785,7 +785,7 @@ testcase tHtmlDoc_TB_InsertFields
     gApplication = "HTML"
 
     if gPlatgroup = "unx" then
-        QAErrorlog "Doesn't run on unix"
+        printlog( "Test not suitable for Unix(like) OS" )
         goto endsub
     end if
 
