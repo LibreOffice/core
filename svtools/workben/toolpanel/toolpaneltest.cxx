@@ -26,7 +26,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include "svtools/ctrlbox.hxx"
+#include "ctrlbox.hxx"
 #include "svtools/toolpanel/toolpaneldeck.hxx"
 #include "svtools/toolpanel/tablayouter.hxx"
 
