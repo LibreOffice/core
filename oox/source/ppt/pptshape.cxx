@@ -97,11 +97,13 @@ void PPTShape::addShape(
                     break;
                     case XML_subTitle :
                     {
-                        const rtl::OUString sTitleShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.SubtitleShape" ) );
-                        sServiceName = sTitleShapeService;
-                        aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getTitleTextStyle() : rSlidePersist.getTitleTextStyle();
                         if ( ( meShapeLocation == Master ) || ( meShapeLocation == Layout ) )
                             sServiceName = rtl::OUString();
+                        else {
+                            const rtl::OUString sTitleShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.SubtitleShape" ) );
+                            sServiceName = sTitleShapeService;
+                            aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getTitleTextStyle() : rSlidePersist.getTitleTextStyle();
+                        }
                     }
                     break;
                     case XML_obj :
