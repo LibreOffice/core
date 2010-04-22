@@ -918,8 +918,10 @@ sub mMakeGeneralOptionsAPI
                 ' At this point there is no needed to think about what to do, if it doesn't work.
             end if
             xViewRoot.dispose()
+            gAutoUpdate = TRUE
         catch
             qaErrorLog( sFileFunction & "This build does not support online update." )
+            gAutoUpdate = FALSE
         endcatch
 
         '///+ OOo Improvement - only if BUILD_SPECIAL is set we have this file created.
