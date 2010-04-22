@@ -1005,9 +1005,9 @@ BOOL SwCrsrShell::IsPageAtPos( const Point &rPt ) const
 }
 
 BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
-                                        SwContentAtPos& rCntntAtPos,
-                                        BOOL bSetCrsr,
-                                        SwRect* pFldRect )
+                                   SwContentAtPos& rCntntAtPos,
+                                   BOOL bSetCrsr,
+                                   SwRect* pFldRect )
 {
     SET_CURR_SHELL( this );
     BOOL bRet = FALSE;
@@ -1171,6 +1171,17 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                         bRet = TRUE;
                     }
                 }
+
+        if( !bRet && SwContentAtPos::SW_FORMCTRL & rCntntAtPos.eCntntAtPos )
+        {
+            IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess( );
+            sw::mark::IFieldmark* pFldBookmark = pMarksAccess->getFieldmarkFor( aPos );
+            if( bCrsrFoundExact && pTxtNd && pFldBookmark) {
+                rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_FORMCTRL;
+                rCntntAtPos.aFnd.pFldmark = pFldBookmark;
+                bRet=TRUE;
+            }
+        }
 
                 if( !bRet && SwContentAtPos::SW_FTN & rCntntAtPos.eCntntAtPos )
                 {
