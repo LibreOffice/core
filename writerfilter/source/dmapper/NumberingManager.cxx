@@ -41,7 +41,7 @@ void lcl_printProperties( uno::Sequence< beans::PropertyValue > aProps )
     for ( sal_Int32 i = 0; i < nLen; i++ )
     {
         uno::Any aValue = aProps[i].Value;
-        sal_Int32 nValue;
+        sal_Int32 nValue = 0;
         OUString sValue;
 
         if ( !( aValue >>= sValue ) && ( aValue >>= nValue ) )
