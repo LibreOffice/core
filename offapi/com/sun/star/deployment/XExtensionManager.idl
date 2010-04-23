@@ -325,6 +325,10 @@ interface XExtensionManager
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
 
+    /** determines if the current user has write access to the extensions folder
+        of the repository.
+    */
+    boolean isReadOnlyRepository([in] string repository);
 };
 
 }; }; }; };
