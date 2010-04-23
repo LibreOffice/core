@@ -202,6 +202,8 @@ public:
         throw (css::deployment::DeploymentException,
                css::uno::RuntimeException);
 
+    virtual sal_Bool SAL_CALL isReadOnlyRepository(::rtl::OUString const & repository);
+
 private:
 
     struct StrSyncRepository : public ::dp_misc::StaticResourceString<

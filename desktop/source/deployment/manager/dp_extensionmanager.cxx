@@ -1224,6 +1224,10 @@ ExtensionManager::getExtensionsWithUnacceptedLicenses(
     return xPackageManager->getExtensionsWithUnacceptedLicenses(xCmdEnv);
 }
 
+sal_Bool ExtensionManager::isReadOnlyRepository(::rtl::OUString const & repository)
+{
+    return getPackageManager(repository)->isReadOnly();
+}
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------

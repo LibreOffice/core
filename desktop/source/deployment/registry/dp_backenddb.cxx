@@ -150,7 +150,7 @@ void BackendDb::removeElement(::rtl::OUString const & sXPathExpression)
         //find the extension element that is to be removed
         Reference<css::xml::dom::XNode> aNode =
             xpathApi->selectSingleNode(root, sXPathExpression);
-        OSL_ASSERT(aNode.is());
+
         if (aNode.is())
         {
             root->removeChild(aNode);
@@ -174,6 +174,7 @@ void BackendDb::removeElement(::rtl::OUString const & sXPathExpression)
 
 }
 
+//Only writes the data if there is at least one entry
 void BackendDb::writeVectorOfPair(
     ::std::vector< ::std::pair< ::rtl::OUString, ::rtl::OUString > > const & vecPairs,
     OUString const & sVectorTagName,
@@ -183,6 +184,8 @@ void BackendDb::writeVectorOfPair(
     css::uno::Reference<css::xml::dom::XNode> const & xParent)
 {
     try{
+        if (vecPairs.size() == 0)
+            return;
         const OUString sNameSpace = getDbNSName();
         OSL_ASSERT(sNameSpace.getLength());
         Reference<css::xml::dom::XDocument> doc = getDocument();
@@ -287,6 +290,7 @@ BackendDb::readVectorOfPair(
     }
 }
 
+//Only writes the data if there is at least one entry
 void BackendDb::writeSimpleList(
     ::std::list< ::rtl::OUString> const & list,
     OUString const & sListTagName,
@@ -295,6 +299,8 @@ void BackendDb::writeSimpleList(
 {
     try
     {
+        if (list.size() == 0)
+            return;
         const OUString sNameSpace = getDbNSName();
         Reference<css::xml::dom::XDocument> doc = getDocument();
 

@@ -32,7 +32,7 @@
 #include "cppuhelper/compbase3.hxx"
 //#include "cppuhelper/implbase2.hxx"
 #include "ucbhelper/content.hxx"
-
+#include "com/sun/star/uno/Type.hxx"
 
 
 namespace css = ::com::sun::star;
@@ -136,6 +136,22 @@ public:
         throw (css::uno::RuntimeException);
 
 };
+
+// class NoExceptionCommandEnv : public BaseCommandEnv
+// {
+//     css::uno::Type m_type;
+// public:
+//     NoExceptionCommandEnv::NoExceptionCommandEnv(){};
+//     NoExceptionCommandEnv::NoExceptionCommandEnv(
+//         css::uno::Reference< css::task::XInteractionHandler> const & handler,
+//         css::uno::Type const & type);
+
+// // XInteractionHandler
+//     virtual void SAL_CALL handle(
+//         css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
+//         throw (css::uno::RuntimeException);
+
+// };
 
 }
 

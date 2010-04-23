@@ -1368,6 +1368,9 @@ void PackageManagerImpl::synchronizeAddedExtensions(
                 rtl_UriEncodeIgnoreEscapes,
                 RTL_TEXTENCODING_UTF8);
 
+            //It it sufficient to check for the folder name, because when the administor
+            //installed the extension it was already checked if there is one with the
+            //same identifier.
             const MatchTempDir match(titleEncoded);
             if (::std::find_if( id2temp.begin(), id2temp.end(), match ) ==
                 id2temp.end())

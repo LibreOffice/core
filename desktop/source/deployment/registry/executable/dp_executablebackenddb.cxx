@@ -39,44 +39,44 @@
 #include "com/sun/star/xml/xpath/XXPathAPI.hpp"
 #include "dp_misc.h"
 
-#include "dp_helpbackenddb.hxx"
+#include "dp_executablebackenddb.hxx"
 
 
 namespace css = ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
-#define EXTENSION_REG_NS "http://openoffice.org/extensionmanager/help-registry/2010"
-#define NS_PREFIX "help"
-#define ROOT_ELEMENT_NAME "help-backend-db"
+#define EXTENSION_REG_NS "http://openoffice.org/extensionmanager/executable-registry/2010"
+#define NS_PREFIX "exe"
+#define ROOT_ELEMENT_NAME "executable-backend-db"
 
 namespace dp_registry {
 namespace backend {
-namespace help {
+namespace executable {
 
-HelpBackendDb::HelpBackendDb(
+ExecutableBackendDb::ExecutableBackendDb(
     Reference<XComponentContext> const &  xContext,
     ::rtl::OUString const & url):BackendDb(xContext, url)
 {
 
 }
 
-OUString HelpBackendDb::getDbNSName()
+OUString ExecutableBackendDb::getDbNSName()
 {
     return OUSTR(EXTENSION_REG_NS);
 }
 
-OUString HelpBackendDb::getNSPrefix()
+OUString ExecutableBackendDb::getNSPrefix()
 {
     return OUSTR(NS_PREFIX);
 }
 
-OUString HelpBackendDb::getRootElementName()
+OUString ExecutableBackendDb::getRootElementName()
 {
     return OUSTR(ROOT_ELEMENT_NAME);
 }
 
-void HelpBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
+void ExecutableBackendDb::addEntry(::rtl::OUString const & url)
 {
     try{
 
@@ -88,13 +88,13 @@ void HelpBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
 #if    OSL_DEBUG_LEVEL > 0
         //There must not be yet an entry with the same url
         OUString sExpression(
-            sPrefix + OUSTR(":help[@url = \"") + url + OUSTR("\"]"));
+            sPrefix + OUSTR(":executable[@url = \"") + url + OUSTR("\"]"));
         Reference<css::xml::dom::XNode> _extensionNode =
             getXPathAPI()->selectSingleNode(root, sExpression);
         OSL_ASSERT(! _extensionNode.is());
 #endif
         Reference<css::xml::dom::XElement> helpElement(
-            doc->createElementNS(sNameSpace, sPrefix +  OUSTR(":help")));
+            doc->createElementNS(sNameSpace, sPrefix +  OUSTR(":executable")));
 
         helpElement->setAttribute(OUSTR("url"), url);
 
@@ -102,14 +102,14 @@ void HelpBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
             helpElement, UNO_QUERY_THROW);
         root->appendChild(helpNode);
 
-        Reference<css::xml::dom::XNode> dataNode(
-            doc->createElementNS(sNameSpace, sPrefix + OUSTR(":data-url")),
-            UNO_QUERY_THROW);
-        helpNode->appendChild(dataNode);
+//         Reference<css::xml::dom::XNode> dataNode(
+//             doc->createElementNS(sNameSpace, sPrefix + OUSTR(":data-url")),
+//             UNO_QUERY_THROW);
+//         helpNode->appendChild(dataNode);
 
-        Reference<css::xml::dom::XNode> dataValue(
-            doc->createTextNode(data.dataUrl), UNO_QUERY_THROW);
-        dataNode->appendChild(dataValue);
+//         Reference<css::xml::dom::XNode> dataValue(
+//             doc->createTextNode(data.dataUrl), UNO_QUERY_THROW);
+//         dataNode->appendChild(dataValue);
 
         save();
     }
@@ -122,22 +122,20 @@ void HelpBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
     }
 }
 
-void HelpBackendDb::removeEntry(::rtl::OUString const & url)
+void ExecutableBackendDb::removeEntry(::rtl::OUString const & url)
 {
     OUString sExpression(
-        OUSTR(NS_PREFIX) + OUSTR(":help[@url = \"") + url + OUSTR("\"]"));
+        OUSTR(NS_PREFIX) + OUSTR(":executable[@url = \"") + url + OUSTR("\"]"));
     removeElement(sExpression);
 }
 
-::boost::optional<HelpBackendDb::Data>
-HelpBackendDb::getEntry(::rtl::OUString const & url)
+bool ExecutableBackendDb::getEntry(::rtl::OUString const & url)
 {
     try
     {
         const OUString sPrefix = getNSPrefix();
-        HelpBackendDb::Data retData;
         const OUString sExpression(
-            sPrefix + OUSTR(":help[@url = \"") + url + OUSTR("\"]"));
+            sPrefix + OUSTR(":executable[@url = \"") + url + OUSTR("\"]"));
         Reference<css::xml::dom::XDocument> doc = getDocument();
         Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
@@ -145,50 +143,11 @@ HelpBackendDb::getEntry(::rtl::OUString const & url)
         //find the extension element that is to be removed
         Reference<css::xml::dom::XNode> aNode =
             xpathApi->selectSingleNode(root, sExpression);
-        if (aNode.is())
+        if (!aNode.is())
         {
-            const OUString sExprDataUrl(sPrefix + OUSTR(":data-url/text()"));
-
-            Reference<css::xml::dom::XNode> dataUrlVal =
-                xpathApi->selectSingleNode(aNode, sExprDataUrl);
-            retData.dataUrl = dataUrlVal->getNodeValue();
+            return false;
         }
-        else
-        {
-            return ::boost::optional<Data>();
-        }
-        return ::boost::optional<Data>(retData);
-    }
-    catch(css::uno::Exception &)
-    {
-        Any exc( ::cppu::getCaughtException() );
-        throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to read data entry in backend db: ") +
-            m_urlDb, 0, exc);
-    }
-}
-
-::std::list<OUString> HelpBackendDb::getAllDataUrls()
-{
-    try
-    {
-        ::std::list<OUString> listRet;
-        Reference<css::xml::dom::XDocument> doc = getDocument();
-        Reference<css::xml::dom::XNode> root = doc->getFirstChild();
-
-        Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
-        const OUString sPrefix = getNSPrefix();
-        OUString sExpression(
-            sPrefix + OUSTR(":help/") + sPrefix + OUSTR(":data-url/text()"));
-        Reference<css::xml::dom::XNodeList> nodes =
-            xpathApi->selectNodeList(root, sExpression);
-        if (nodes.is())
-        {
-            sal_Int32 length = nodes->getLength();
-            for (sal_Int32 i = 0; i < length; i++)
-                listRet.push_back(nodes->item(i)->getNodeValue());
-        }
-        return listRet;
+        return true;
     }
     catch(css::uno::Exception &)
     {
@@ -200,7 +159,7 @@ HelpBackendDb::getEntry(::rtl::OUString const & url)
 }
 
 
-} // namespace help
+} // namespace executable
 } // namespace backend
 } // namespace dp_registry
 

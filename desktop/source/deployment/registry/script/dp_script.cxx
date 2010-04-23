@@ -227,15 +227,22 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     {
         if (type.EqualsIgnoreCaseAscii("application"))
         {
+            OUString dialogURL( makeURL( url, OUSTR("dialog.xlb") ) );
+            if (! create_ucb_content(
+                    0, dialogURL, xCmdEnv, false /* no throw */ )) {
+                dialogURL = OUString();
+            }
+
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.basic-library"))
             {
-                OUString dialogURL( makeURL( url, OUSTR("dialog.xlb") ) );
+                OUString scriptURL( makeURL( url, OUSTR("script.xlb")));
                 if (! create_ucb_content(
-                        0, dialogURL, xCmdEnv, false /* no throw */ )) {
-                    dialogURL = OUString();
+                        0, scriptURL, xCmdEnv, false /* no throw */ )) {
+                    scriptURL = OUString();
                 }
+
                 return new PackageImpl(
-                    this, url, xCmdEnv, makeURL( url, OUSTR("script.xlb") ),
+                    this, url, xCmdEnv, scriptURL,
                     dialogURL, bRemoved, identifier);
             }
             else if (subType.EqualsIgnoreCaseAscii(
@@ -243,7 +250,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 return new PackageImpl(
                     this, url, xCmdEnv,
                     OUString() /* no script lib */,
-                    makeURL( url, OUSTR("dialog.xlb") ),
+                    dialogURL,
                     bRemoved, identifier);
             }
         }

@@ -250,6 +250,37 @@ void NoLicenseCommandEnv::handle(
     handle_(approve, abort, xRequest);
 }
 
+
+// NoExceptionCommandEnv::NoExceptionCommandEnv(
+//     css::uno::Reference< css::task::XInteractionHandler> const & handler,
+//     css::uno::Type const & type):
+//     BaseCommandEnv(handler),
+//     m_type(type)
+// {
+// }
+// // XInteractionHandler
+// void NoExceptionCommandEnv::handle(
+//     Reference< task::XInteractionRequest> const & xRequest )
+//     throw (uno::RuntimeException)
+// {
+//     uno::Any request( xRequest->getRequest() );
+//     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
+
+
+//  deployment::LicenseException licExc;
+
+//     bool approve = false;
+//     bool abort = false;
+
+//     if (request.getValueType() == m_type)
+//     {
+//         approve = true;
+//     }
+//     handle_(approve, abort, xRequest);
+// }
+
+
+
 } // namespace dp_manager
 
 
