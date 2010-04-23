@@ -328,14 +328,6 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocument( const ::rtl::OUString& _sAt
         // save the document
         if ( xMod.is() )
         {
-            // save old settings
-/*
-            BOOL bModified = xMod->isModified();
-            // prepare for mail export
- TODO
-            SfxDispatcher* pDisp = pTopViewFrm->GetDispatcher();
-            pDisp->Execute( SID_MAIL_PREPAREEXPORT, SFX_CALLMODE_SYNCHRON );
-*/
             // detect filter
             const SfxFilter* pFilter = SfxFilter::GetDefaultFilter(lcl_getFactoryName(_xModel));
 //          sal_Bool bHasFilter = pFilter != NULL;
@@ -432,14 +424,6 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocAsPDF( const ::rtl::OUString& _sAt
         // save the document
         if ( xMod.is() )
         {
-            /* TODO
-            // save old settings
-            BOOL bModified = xMod->isModified();
-            // prepare for mail export
-            SfxDispatcher* pDisp = pTopViewFrm->GetDispatcher();
-            pDisp->Execute( SID_MAIL_PREPAREEXPORT, SFX_CALLMODE_SYNCHRON );
-            */
-
             // Get PDF Filter from document
             ::rtl::OUString sPDFMediaType(RTL_CONSTASCII_USTRINGPARAM("application/pdf"));
 

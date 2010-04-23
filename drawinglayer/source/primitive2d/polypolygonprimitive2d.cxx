@@ -188,7 +188,9 @@ namespace drawinglayer
 
                 for(sal_uInt32 a(0L); a < nCount; a++)
                 {
-                    aRetval[a] = Primitive2DReference(new PolygonStrokePrimitive2D(aPolyPolygon.getB2DPolygon(a), getLineAttribute(), getStrokeAttribute()));
+                    aRetval[a] = Primitive2DReference(
+                        new PolygonStrokePrimitive2D(
+                            aPolyPolygon.getB2DPolygon(a), getLineAttribute(), getStrokeAttribute()));
                 }
 
                 return aRetval;
@@ -276,11 +278,14 @@ namespace drawinglayer
                     if(aPolygon.isClosed())
                     {
                         // no need for PolygonStrokeArrowPrimitive2D when polygon is closed
-                        aRetval[a] = Primitive2DReference(new PolygonStrokePrimitive2D(aPolygon, getLineAttribute(), getStrokeAttribute()));
+                        aRetval[a] = Primitive2DReference(
+                            new PolygonStrokePrimitive2D(aPolygon, getLineAttribute(), getStrokeAttribute()));
                     }
                     else
                     {
-                        aRetval[a] = Primitive2DReference(new PolygonStrokeArrowPrimitive2D(aPolygon, getLineAttribute(), getStrokeAttribute(), getStart(), getEnd()));
+                        aRetval[a] = Primitive2DReference(
+                            new PolygonStrokeArrowPrimitive2D(aPolygon, getLineAttribute(),
+                                getStrokeAttribute(), getStart(), getEnd()));
                     }
                 }
 
@@ -398,16 +403,24 @@ namespace drawinglayer
     {
         Primitive2DSequence PolyPolygonGradientPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            // create SubSequence with FillGradientPrimitive2D
-            const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
-            FillGradientPrimitive2D* pNewGradient = new FillGradientPrimitive2D(aPolyPolygonRange, getFillGradient());
-            const Primitive2DReference xSubRef(pNewGradient);
-            const Primitive2DSequence aSubSequence(&xSubRef, 1L);
+            if(!getFillGradient().isDefault())
+            {
+                // create SubSequence with FillGradientPrimitive2D
+                const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
+                FillGradientPrimitive2D* pNewGradient = new FillGradientPrimitive2D(aPolyPolygonRange, getFillGradient());
+                const Primitive2DReference xSubRef(pNewGradient);
+                const Primitive2DSequence aSubSequence(&xSubRef, 1L);
 
-            // create mask primitive
-            MaskPrimitive2D* pNewMask = new MaskPrimitive2D(getB2DPolyPolygon(), aSubSequence);
-            const Primitive2DReference xRef(pNewMask);
-            return Primitive2DSequence(&xRef, 1L);
+                // create mask primitive
+                MaskPrimitive2D* pNewMask = new MaskPrimitive2D(getB2DPolyPolygon(), aSubSequence);
+                const Primitive2DReference xRef(pNewMask);
+
+                return Primitive2DSequence(&xRef, 1);
+            }
+            else
+            {
+                return Primitive2DSequence();
+            }
         }
 
         PolyPolygonGradientPrimitive2D::PolyPolygonGradientPrimitive2D(
@@ -445,16 +458,24 @@ namespace drawinglayer
     {
         Primitive2DSequence PolyPolygonHatchPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            // create SubSequence with FillHatchPrimitive2D
-            const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
-            FillHatchPrimitive2D* pNewHatch = new FillHatchPrimitive2D(aPolyPolygonRange, getBackgroundColor(), getFillHatch());
-            const Primitive2DReference xSubRef(pNewHatch);
-            const Primitive2DSequence aSubSequence(&xSubRef, 1L);
+            if(!getFillHatch().isDefault())
+            {
+                // create SubSequence with FillHatchPrimitive2D
+                const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
+                FillHatchPrimitive2D* pNewHatch = new FillHatchPrimitive2D(aPolyPolygonRange, getBackgroundColor(), getFillHatch());
+                const Primitive2DReference xSubRef(pNewHatch);
+                const Primitive2DSequence aSubSequence(&xSubRef, 1L);
 
-            // create mask primitive
-            MaskPrimitive2D* pNewMask = new MaskPrimitive2D(getB2DPolyPolygon(), aSubSequence);
-            const Primitive2DReference xRef(pNewMask);
-            return Primitive2DSequence(&xRef, 1L);
+                // create mask primitive
+                MaskPrimitive2D* pNewMask = new MaskPrimitive2D(getB2DPolyPolygon(), aSubSequence);
+                const Primitive2DReference xRef(pNewMask);
+
+                return Primitive2DSequence(&xRef, 1);
+            }
+            else
+            {
+                return Primitive2DSequence();
+            }
         }
 
         PolyPolygonHatchPrimitive2D::PolyPolygonHatchPrimitive2D(
@@ -495,21 +516,29 @@ namespace drawinglayer
     {
         Primitive2DSequence PolyPolygonBitmapPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            // create SubSequence with FillBitmapPrimitive2D
-            const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
-            basegfx::B2DHomMatrix aNewObjectTransform;
-            aNewObjectTransform.set(0, 0, aPolyPolygonRange.getWidth());
-            aNewObjectTransform.set(1, 1, aPolyPolygonRange.getHeight());
-            aNewObjectTransform.set(0, 2, aPolyPolygonRange.getMinX());
-            aNewObjectTransform.set(1, 2, aPolyPolygonRange.getMinY());
-            FillBitmapPrimitive2D* pNewBitmap = new FillBitmapPrimitive2D(aNewObjectTransform, getFillBitmap());
-            const Primitive2DReference xSubRef(pNewBitmap);
-            const Primitive2DSequence aSubSequence(&xSubRef, 1L);
+            if(!getFillBitmap().isDefault())
+            {
+                // create SubSequence with FillBitmapPrimitive2D
+                const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
+                basegfx::B2DHomMatrix aNewObjectTransform;
+                aNewObjectTransform.set(0, 0, aPolyPolygonRange.getWidth());
+                aNewObjectTransform.set(1, 1, aPolyPolygonRange.getHeight());
+                aNewObjectTransform.set(0, 2, aPolyPolygonRange.getMinX());
+                aNewObjectTransform.set(1, 2, aPolyPolygonRange.getMinY());
+                FillBitmapPrimitive2D* pNewBitmap = new FillBitmapPrimitive2D(aNewObjectTransform, getFillBitmap());
+                const Primitive2DReference xSubRef(pNewBitmap);
+                const Primitive2DSequence aSubSequence(&xSubRef, 1L);
 
-            // create mask primitive
-            MaskPrimitive2D* pNewMask = new MaskPrimitive2D(getB2DPolyPolygon(), aSubSequence);
-            const Primitive2DReference xRef(pNewMask);
-            return Primitive2DSequence(&xRef, 1L);
+                // create mask primitive
+                MaskPrimitive2D* pNewMask = new MaskPrimitive2D(getB2DPolyPolygon(), aSubSequence);
+                const Primitive2DReference xRef(pNewMask);
+
+                return Primitive2DSequence(&xRef, 1);
+            }
+            else
+            {
+                return Primitive2DSequence();
+            }
         }
 
         PolyPolygonBitmapPrimitive2D::PolyPolygonBitmapPrimitive2D(
