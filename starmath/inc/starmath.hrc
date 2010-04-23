@@ -379,6 +379,7 @@
 #define RID_LSUPX                   (RID_APP_START + 1916)
 #define RID_CSUBX                   (RID_APP_START + 1917)
 #define RID_CSUPX                   (RID_APP_START + 1918)
+#define RID_NOSPACE                 (RID_APP_START + 1919)
 
 #define RID_ALEPH                   (RID_APP_START + 2001)
 #define RID_EMPTYSET                (RID_APP_START + 2002)
@@ -694,6 +695,7 @@
 #define HID_SMA_DOTSDOWN            (HID_SMA_START + 240)
 #define HID_SMA_DOTSLOW             (HID_SMA_START + 241)
 #define HID_SMA_DOTSVERT            (HID_SMA_START + 242)
+#define HID_SMA_NOSPACE             (HID_SMA_START + 243)
 
 #define HID_SMA_SETN                (HID_SMA2_START + 1)
 #define HID_SMA_SETZ                (HID_SMA2_START + 2)
