@@ -168,7 +168,7 @@ $(eval $(call gb_Library_add_exception_objects,swui,\
 
 $(WORKDIR)/inc/sw/swuilib.hxx :
     $(call gb_Helper_announce,Creating swuilib.hxx ...)
-    mkdir -p $$(dirname $@) && echo "#define DLL_NAME \"$(notdir $(call gb_Library_get_target,swui))\"" > $@
+    mkdir -p `dirname $@` && echo "#define DLL_NAME \"$(notdir $(call gb_Library_get_target,swui))\"" > $@
 
 .PHONY : $(WORKDIR)/Clean/inc/sw/swuilib.hxx
 $(WORKDIR)/Clean/inc/sw/swuilib.hxx :
