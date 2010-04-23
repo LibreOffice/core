@@ -237,7 +237,7 @@ DictionaryNeo::DictionaryNeo(const OUString &rName,
         if( !bExists )
         {
             // save new dictionaries with in Format 7 (UTF8 plain text)
-            nDicVersion  = 7;
+            nDicVersion  = DIC_VERSION_7;
 
             //! create physical representation of an **empty** dictionary
             //! that could be found by the dictionary-list implementation
