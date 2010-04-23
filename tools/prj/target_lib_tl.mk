@@ -145,6 +145,10 @@ $(eval $(call gb_Library_add_linked_static_libs,tl,\
     zlib \
 ))
 endif
+else
+$(eval $(call gb_Library_add_linked_static_libs,tl,\
+    zlib \
+))
 endif
 
 ifeq ($(OS),WNT)
