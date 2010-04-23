@@ -64,9 +64,8 @@ ViewCacheContext::~ViewCacheContext (void)
 
 void ViewCacheContext::NotifyPreviewCreation (
     cache::CacheKey aKey,
-    const ::boost::shared_ptr<BitmapEx>& rPreview)
+    const cache::PreviewType&)
 {
-    (void)rPreview;
     const model::SharedPageDescriptor pDescriptor (GetDescriptor(aKey));
     if (pDescriptor.get() != NULL)
     {

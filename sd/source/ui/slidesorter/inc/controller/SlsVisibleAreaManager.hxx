@@ -45,14 +45,21 @@ public:
     VisibleAreaManager (SlideSorter& rSlideSorter);
     ~VisibleAreaManager (void);
 
+    void ActivateCurrentSlideTracking (void);
+    void DeactivateCurrentSlideTracking (void);
+
+    /** Request the current slide to be moved into the visible area.
+        This request is only obeyed when the current slide tracking is
+        active.
+        @see ActivateCurrentSlideTracking() and DeactivateCurrentSlideTracking()
+    */
+    void RequestCurrentSlideVisible (void);
+
     /** Request to make the specified page object visible.
-        @param eRequestedAnimationMode
-            This flag specifies wether to smoothly scroll the page object into
-            view (AM_Animated) or do this in one step (AM_Immediate).
     */
     void RequestVisible (
         const model::SharedPageDescriptor& rpDescriptor,
-        const Animator::AnimationMode eRequestedAnimationMode = Animator::AM_Immediate);
+        const bool bForce = false);
 
 private:
     SlideSorter& mrSlideSorter;
@@ -68,8 +75,8 @@ private:
     */
     Animator::AnimationId mnScrollAnimationId;
     Point maRequestedVisibleTopLeft;
-
     Animator::AnimationMode meRequestedAnimationMode;
+    bool mbIsCurrentSlideTrackingActive;
 
     void MakeVisible (void);
     ::boost::optional<Point> GetRequestedTopLeft (void) const;

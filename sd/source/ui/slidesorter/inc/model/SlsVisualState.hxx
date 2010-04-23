@@ -79,11 +79,6 @@ public:
     sal_Int32 GetButtonAlphaAnimationId (void) const;
     void SetButtonAlphaAnimationId (const sal_Int32 nAnimationId);
 
-    enum ButtonState { BS_Normal, BS_MouseOver, BS_Pressed };
-
-    void SetActiveButtonState (const sal_Int32 nIndex, const ButtonState eState);
-    ButtonState GetButtonState (const sal_Int32 nIndex);
-
     sal_Int32 mnPageId; // For debugging
 
 private:
@@ -99,9 +94,6 @@ private:
 
     double mnButtonAlpha;
     sal_Int32 mnButtonAlphaAnimationId;
-
-    sal_Int32 mnActiveButtonIndex;
-    ButtonState meActiveButtonState;
 };
 
 } } } // end of namespace ::sd::slidesorter::model

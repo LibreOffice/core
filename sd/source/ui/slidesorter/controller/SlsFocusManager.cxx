@@ -229,7 +229,7 @@ sal_Int32 FocusManager::GetFocusedPageIndex (void) const
 
 
 
-
+/*
 void FocusManager::FocusPage (sal_Int32 nPageIndex)
 {
     if (nPageIndex != mnPageIndex)
@@ -242,7 +242,7 @@ void FocusManager::FocusPage (sal_Int32 nPageIndex)
     if (HasFocus() && !IsFocusShowing())
         ShowFocus();
 }
-
+*/
 
 
 
@@ -262,6 +262,14 @@ void FocusManager::SetFocusedPage (sal_Int32 nPageIndex)
 {
     FocusHider aFocusHider (*this);
     mnPageIndex = nPageIndex;
+}
+
+
+
+
+void FocusManager::SetFocusedPageToCurrentPage (void)
+{
+    SetFocusedPage(mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide());
 }
 
 
@@ -298,7 +306,7 @@ void FocusManager::ShowFocusIndicator (
         {
             // Scroll the focused page object into the visible area and repaint
             // it, so that the focus indicator becomes visible.
-            mrSlideSorter.GetController().GetVisibleAreaManager().RequestVisible(rpDescriptor);
+            mrSlideSorter.GetController().GetVisibleAreaManager().RequestVisible(rpDescriptor,true);
         }
         mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
 

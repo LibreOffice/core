@@ -29,9 +29,9 @@
 #define SD_SLIDESORTER_PREVIEW_BITMAP_FACTORY_HXX
 
 #include "PreviewRenderer.hxx"
+#include "cache/SlsPreviewType.hxx"
 #include <boost/shared_ptr.hpp>
 
-class BitmapEx;
 class SdPage;
 class Size;
 
@@ -50,7 +50,7 @@ public:
     BitmapFactory (void);
     ~BitmapFactory (void);
 
-    ::boost::shared_ptr<BitmapEx> CreateBitmap (
+    PreviewType CreateBitmap (
         const SdPage& rPage,
         const Size& rPixelSize,
         const bool bDoSuperSampling);

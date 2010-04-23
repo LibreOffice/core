@@ -43,6 +43,8 @@
 #include <vcl/pngwrite.hxx>
 
 const static sal_Int32 gnSuperSampleFactor (2);
+const static bool gbAllowSuperSampling (false);
+
 
 namespace sd { namespace slidesorter { namespace view {
 class SlideSorterView;
@@ -66,59 +68,25 @@ BitmapFactory::~BitmapFactory (void)
 
 
 
-::boost::shared_ptr<BitmapEx> BitmapFactory::CreateBitmap (
+PreviewType BitmapFactory::CreateBitmap (
     const SdPage& rPage,
     const Size& rPixelSize,
     const bool bDoSuperSampling)
 {
-    (void)bDoSuperSampling;
     Size aSize (rPixelSize);
-    bool bDo (false);//bDoSuperSampling);
-    if (bDo)
+    if (bDoSuperSampling && gbAllowSuperSampling)
     {
         aSize.Width() *= gnSuperSampleFactor;
         aSize.Height() *= gnSuperSampleFactor;
     }
 
-    const Image aPreview (maRenderer.RenderPage (&rPage, aSize, String()));
-
-    ::boost::shared_ptr<BitmapEx> pPreview (new BitmapEx(aPreview.GetBitmapEx()));
-    if (bDo)
+    Bitmap aPreview (maRenderer.RenderPage (&rPage, aSize, String()).GetBitmapEx().GetBitmap());
+    if (bDoSuperSampling && gbAllowSuperSampling)
     {
-#if 1
-        const sal_Int32 nSuperSampleCount (gnSuperSampleFactor * gnSuperSampleFactor);
-        BitmapReadAccess* pRA = pPreview->GetBitmap().AcquireReadAccess();
-        Bitmap aBitmap (rPixelSize, pPreview->GetBitCount());
-        BitmapWriteAccess* pWA = aBitmap.AcquireWriteAccess();
-        const sal_Int32 nWidth (pRA->Width());
-        const sal_Int32 nHeight (pRA->Height());
-        for (sal_Int32 nY=0; nY<nHeight; nY+=gnSuperSampleFactor)
-            for (sal_Int32 nX=0; nX<nWidth; nX+=gnSuperSampleFactor)
-            {
-                sal_Int32 nRed (0);
-                sal_Int32 nGreen (0);
-                sal_Int32 nBlue (0);
-                for (sal_Int32 nV=0; nV<gnSuperSampleFactor; ++nV)
-                    for (sal_Int32 nU=0; nU<gnSuperSampleFactor; ++nU)
-                    {
-                        const BitmapColor aColor (pRA->GetColor(nY+nV, nX+nU));
-                        nRed += aColor.GetRed();
-                        nGreen += aColor.GetGreen();
-                        nBlue += aColor.GetBlue();
-                    }
-                pWA->SetPixel(nY/gnSuperSampleFactor, nX/gnSuperSampleFactor,
-                    BitmapColor(
-                        nRed/nSuperSampleCount,
-                        nGreen/nSuperSampleCount,
-                        nBlue/nSuperSampleCount));
-            }
-        pPreview.reset(new BitmapEx(aBitmap));
-#else
-        pPreview->Scale(rPixelSize, BMP_SCALE_INTERPOLATE);
-#endif
+        aPreview.Scale(rPixelSize, BMP_SCALE_INTERPOLATE);
     }
 
-    return pPreview;
+    return PreviewType::Create(aPreview);
 }
 
 

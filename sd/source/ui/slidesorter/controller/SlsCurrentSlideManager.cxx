@@ -92,8 +92,11 @@ void CurrentSlideManager::NotifyCurrentSlideChange (const sal_Int32 nSlideIndex)
 
         // Update the selection.
         mrSlideSorter.GetController().GetPageSelector().DeselectAllPages();
-        if (mpCurrentSlide.get() != NULL)
+        if (mpCurrentSlide)
+        {
             mrSlideSorter.GetController().GetPageSelector().SelectPage(mpCurrentSlide);
+            mrSlideSorter.GetController().GetFocusManager().SetFocusedPage(mpCurrentSlide);
+        }
     }
 }
 

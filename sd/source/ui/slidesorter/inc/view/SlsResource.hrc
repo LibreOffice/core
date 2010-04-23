@@ -33,18 +33,49 @@
 
 #include "glob.hrc"
 
-#define IMG_ICONS RID_SLIDESORTER_ICONS
+#define IMAGE_COMMAND1_REGULAR          1
+#define IMAGE_COMMAND1_HOVER            2
+#define IMAGE_COMMAND1_SMALL            3
+#define IMAGE_COMMAND1_SMALL_HOVER      4
 
-#define IMAGE_PRESENTATION 1
-#define IMAGE_SHOW_SLIDE 2
-#define IMAGE_NEW_SLIDE 3
+#define IMAGE_COMMAND1_REGULAR_HC       5
+#define IMAGE_COMMAND1_HOVER_HC         6
+#define IMAGE_COMMAND1_SMALL_HC         7
+#define IMAGE_COMMAND1_SMALL_HOVER_HC   8
 
-#define IMAGE_SHADOW 10
-#define IMAGE_INSERT_SHADOW 11
-#define IMAGE_HIDE_SLIDE_OVERLAY 12
 
-#define STRING_UNHIDE 13
-#define STRING_DRAG_AND_DROP_PAGES 14
-#define STRING_DRAG_AND_DROP_SLIDES 15
+#define IMAGE_COMMAND2_REGULAR          10
+#define IMAGE_COMMAND2_HOVER            11
+#define IMAGE_COMMAND2_SMALL            12
+#define IMAGE_COMMAND2_SMALL_HOVER      13
+
+#define IMAGE_COMMAND2_REGULAR_HC       14
+#define IMAGE_COMMAND2_HOVER_HC         15
+#define IMAGE_COMMAND2_SMALL_HC         16
+#define IMAGE_COMMAND2_SMALL_HOVER_HC   17
+
+
+#define IMAGE_COMMAND3_REGULAR          20
+#define IMAGE_COMMAND3_HOVER            21
+#define IMAGE_COMMAND3_SMALL            22
+#define IMAGE_COMMAND3_SMALL_HOVER      23
+
+#define IMAGE_COMMAND3_REGULAR_HC       24
+#define IMAGE_COMMAND3_HOVER_HC         25
+#define IMAGE_COMMAND3_SMALL_HC         26
+#define IMAGE_COMMAND3_SMALL_HOVER_HC   27
+
+
+#define IMAGE_SHADOW                    30
+#define IMAGE_INSERT_SHADOW             31
+#define IMAGE_HIDE_SLIDE_OVERLAY        32
+
+#define STRING_UNHIDE                   33
+#define STRING_DRAG_AND_DROP_PAGES      34
+#define STRING_DRAG_AND_DROP_SLIDES     35
+
+#define STRING_COMMAND1                 36
+#define STRING_COMMAND2                 37
+#define STRING_COMMAND3                 38
 
 #endif

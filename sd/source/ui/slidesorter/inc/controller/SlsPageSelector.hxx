@@ -162,8 +162,9 @@ public:
         UpdateLock (SlideSorter& rSlideSorter);
         UpdateLock (PageSelector& rPageSelector);
         ~UpdateLock (void);
+        void Release (void);
     private:
-        PageSelector& mrSelector;
+        PageSelector* mpSelector;
     };
 
     class BroadcastLock

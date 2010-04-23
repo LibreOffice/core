@@ -96,7 +96,6 @@
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::sd::slidesorter::model;
@@ -123,6 +122,7 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
       mpVisibleAreaManager(new VisibleAreaManager(rSlideSorter)),
       mpListener(),
       mnModelChangeLockCount(0),
+      mbIsForcedRearrangePending(false),
       mbPreModelChangeDone(false),
       mbPostModelChangePending(false),
       maSelectionBeforeSwitch(),
@@ -528,7 +528,9 @@ void SlideSorterController::UnlockModelChange (void)
 {
     mnModelChangeLockCount -= 1;
     if (mnModelChangeLockCount==0 && mbPostModelChangePending)
+    {
         PostModelChange();
+    }
 }
 
 
@@ -574,7 +576,7 @@ void SlideSorterController::PostModelChange (void)
         // The visibility of the scroll bars may have to be changed.  Then
         // the size of the view has to change, too.  Let Rearrange() handle
         // that.
-        Rearrange();
+        Rearrange(mbIsForcedRearrangePending);
     }
 
     if (mrSlideSorter.GetViewShell() != NULL)
@@ -790,6 +792,14 @@ Rectangle  SlideSorterController::Rearrange (bool bForce)
     if (aNewContentArea.IsEmpty())
         return aNewContentArea;
 
+    if (mnModelChangeLockCount>0)
+    {
+        mbIsForcedRearrangePending |= bForce;
+        return aNewContentArea;
+    }
+    else
+        mbIsForcedRearrangePending = false;
+
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow)
     {
@@ -822,7 +832,7 @@ Rectangle  SlideSorterController::Rearrange (bool bForce)
         GetScrollBarManager().UpdateScrollBars(false, !bForce);
 
         // Keep the current slide in the visible area.
-        GetVisibleAreaManager().RequestVisible(GetCurrentSlideManager()->GetCurrentSlide());
+        GetVisibleAreaManager().RequestCurrentSlideVisible();
     }
 
     return aNewContentArea;

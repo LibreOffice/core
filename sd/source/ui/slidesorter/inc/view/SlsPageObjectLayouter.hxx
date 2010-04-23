@@ -79,11 +79,7 @@ public:
         Name,
         // Indicator whether or not there is a slide transition associated
         // with this slide.
-        TransitionEffectIndicator,
-        // Wide button placed without border at the bottom of the preview.
-        WideButton,
-        // Individual button.  Specify nIndex when calling GetBoundingBox().
-        Button
+        TransitionEffectIndicator
     };
     /** Two coordinate systems are supported.  They differ only in
         translation not in scale.  Both relate to pixel values in the window.
@@ -94,14 +90,6 @@ public:
     enum CoordinateSystem {
         WindowCoordinateSystem,
         ModelCoordinateSystem
-    };
-
-    enum ButtonIndex {
-        MinButtonIndex = 0,
-        StartShowButtonIndex = MinButtonIndex,
-        ShowHideButtonIndex = 1,
-        DuplicateButtonIndex = 2,
-        MaxButtonIndex = DuplicateButtonIndex
     };
 
     /** Return the bounding box of the page object or one of its graphical
@@ -119,20 +107,15 @@ public:
         @param eCoodinateSystem
             The bounding box can be returned in model and in pixel
             (window) coordinates.
-        @param nIndex
-            Used only for some parts (Button) to distinguish between
-            different parts of the same type.
     */
     Rectangle GetBoundingBox (
         const model::SharedPageDescriptor& rpPageDescriptor,
         const Part ePart,
-        const CoordinateSystem eCoordinateSystem,
-        const sal_Int32 nIndex = 0);
+        const CoordinateSystem eCoordinateSystem);
     Rectangle GetBoundingBox (
         const Point& rPageObjectLocation,
         const Part ePart,
-        const CoordinateSystem eCoordinateSystem,
-        const sal_Int32 nIndex = 0);
+        const CoordinateSystem eCoordinateSystem);
 
     /** Return the size in pixel of the whole page object.
     */
@@ -146,10 +129,6 @@ public:
 
     //    void Update (void);
 
-    sal_Int32 GetButtonIndexAt (
-        const model::SharedPageDescriptor& rpPageDescriptor,
-        const Point& rWindowLocation);
-
 private:
     SharedSdWindow mpWindow;
     Size maPageObjectSize;
@@ -159,7 +138,6 @@ private:
     Rectangle maPageNumberFrameBoundingBox;
     Rectangle maPreviewBoundingBox;
     Rectangle maTransitionEffectBoundingBox;
-    Rectangle maWideButtonBoundingBox;
     const Image maTransitionEffectIcon;
     const ::boost::shared_ptr<Font> mpPageNumberFont;
 

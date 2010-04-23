@@ -30,8 +30,7 @@
 
 #include "SlideSorter.hxx"
 #include "SlsRequestQueue.hxx"
-#include "SlsQueueProcessor.hxx"
-#include <boost/function.hpp>
+#include "cache/SlsPreviewType.hxx"
 #include <boost/scoped_ptr.hpp>
 
 namespace sd { namespace slidesorter { namespace cache {
@@ -87,9 +86,15 @@ public:
             Returns a bitmap that is either empty, contains a scaled (up or
             down) version or is the requested bitmap.
     */
-    BitmapEx GetPreviewBitmap (
+    PreviewType GetPreviewBitmap (
         const CacheKey aKey,
         const bool bResize);
+    PreviewType GetMarkedPreviewBitmap (
+        const CacheKey aKey,
+        const bool bResize);
+    void SetMarkedPreviewBitmap (
+        const CacheKey aKey,
+        const PreviewType& rMarkedBitmap);
 
     /** When the requested preview bitmap does not yet exist or is not
         up-to-date then the rendering of one is scheduled.  Otherwise this
@@ -110,8 +115,10 @@ public:
     /** Tell the cache to replace the bitmap associated with the given
         request data with a new one that reflects recent changes in the
         content of the page object.
+        @return
+            When the key is kown then return <TRUE/>.
     */
-    void InvalidatePreviewBitmap (const CacheKey aKey);
+    bool InvalidatePreviewBitmap (const CacheKey aKey);
 
     /** Call this method when a view-object-contact object is being deleted
         and does not need (a) its current bitmap in the cache and (b) a

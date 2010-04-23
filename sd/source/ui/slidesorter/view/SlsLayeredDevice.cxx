@@ -204,7 +204,8 @@ void LayeredDevice::RegisterPainter (
     const SharedILayerPainter& rpPainter,
     const sal_Int32 nLayer)
 {
-    OSL_TRACE("layered device registering painter at %x", this);
+    OSL_TRACE("layered device at %x registering painter %x at layer %d",
+        this, rpPainter.get(), nLayer);
     OSL_ASSERT(mpLayers);
     if ( ! rpPainter)
     {
@@ -242,6 +243,8 @@ void LayeredDevice::RemovePainter (
     const SharedILayerPainter& rpPainter,
     const sal_Int32 nLayer)
 {
+    OSL_TRACE("layered device at %x removing painter %x from layer %d",
+        this, rpPainter.get(), nLayer);
     if ( ! rpPainter)
     {
         OSL_ASSERT(rpPainter);
@@ -359,7 +362,6 @@ bool LayeredDevice::HandleMapModeChange (void)
             aLogicWindowBox.TopLeft(),
             mpTargetWindow->PixelToLogic(Point(0,0), maSavedMapMode),
             aLogicWindowBox.GetSize());
-        OSL_TRACE("scrolling %d %d", aDelta.X(), aDelta.Y());
 
         // Invalidate the area(s) that have been exposed.
         const Rectangle aWindowBox (Point(0,0), mpTargetWindow->GetSizePixel());

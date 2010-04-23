@@ -42,21 +42,18 @@
 #include "view/SlsPageObjectLayouter.hxx"
 #include "view/SlsLayouter.hxx"
 #include "view/SlsTheme.hxx"
+#include "view/SlsButton.hxx"
 #include "SlsFramePainter.hxx"
 #include "cache/SlsPageCache.hxx"
 #include "controller/SlsProperties.hxx"
 #include "Window.hxx"
 #include "sdpage.hxx"
 #include "sdresid.hxx"
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
-#include <vcl/bmpacc.hxx>
 #include <vcl/virdev.hxx>
 
 using namespace ::drawinglayer::primitive2d;
-using namespace ::basegfx;
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -103,29 +100,6 @@ sal_uInt8 CalculateColorChannel(
 
 
 
-void AdaptTransparency (AlphaMask& rMask, const double nAlpha)
-{
-    BitmapWriteAccess* pBitmap = rMask.AcquireWriteAccess();
-
-    if (pBitmap != NULL)
-    {
-        const sal_Int32 nWidth (pBitmap->Width());
-        const sal_Int32 nHeight (pBitmap->Height());
-
-        const BitmapColor aWhite (255,255,255);
-        for (sal_Int32 nY = 0; nY<nHeight; ++nY)
-            for (sal_Int32 nX = 0; nX<nWidth; ++nX)
-            {
-                const BYTE nValue (255 - pBitmap->GetPixel(nY, nX).GetBlueOrIndex());
-                const BYTE nNewValue (nValue * (1-nAlpha));
-                pBitmap->SetPixel(
-                    nY,
-                    nX,
-                    255-nNewValue);
-            }
-    }
-}
-
 } // end of anonymous namespace
 
 
@@ -141,15 +115,13 @@ PageObjectPainter::PageObjectPainter (
       mpProperties(rSlideSorter.GetProperties()),
       mpTheme(rSlideSorter.GetTheme()),
       mpPageNumberFont(Theme::GetFont(Theme::PageNumberFont, *rSlideSorter.GetContentWindow())),
-      maStartPresentationIcon(mpTheme->GetIcon(Theme::Icon_StartPresentation)),
-      maShowSlideIcon(mpTheme->GetIcon(Theme::Icon_ShowSlide)),
-      maNewSlideIcon(mpTheme->GetIcon(Theme::Icon_DuplicateSlide)),
       mpShadowPainter(new FramePainter(mpTheme->GetIcon(Theme::Icon_RawShadow))),
       maNormalBackground(),
       maSelectionBackground(),
       maFocusedSelectionBackground(),
       maMouseOverBackground(),
-      msUnhideString(mpTheme->GetString(Theme::String_Unhide))
+      msUnhideString(mpTheme->GetString(Theme::String_Unhide)),
+      mrButtonBar(rSlideSorter.GetView().GetButtonBar())
 {
 }
 
@@ -176,8 +148,6 @@ void PageObjectPainter::PaintPageObject (
         return;
     }
 
-    PrepareBackgrounds(rDevice);
-
     // Turn off antialiasing to avoid the bitmaps from being shifted by
     // fractions of a pixel and thus show blurry edges.
     const USHORT nSavedAntialiasingMode (rDevice.GetAntialiasing());
@@ -187,7 +157,7 @@ void PageObjectPainter::PaintPageObject (
     PaintPreview(rDevice, rpDescriptor);
     PaintPageNumber(rDevice, rpDescriptor);
     PaintTransitionEffect(rDevice, rpDescriptor);
-    PaintButtons(rDevice, rpDescriptor);
+    mrButtonBar.Paint(rDevice, rpDescriptor);
 
     rDevice.SetAntialiasing(nSavedAntialiasingMode);
 }
@@ -197,15 +167,13 @@ void PageObjectPainter::PaintPageObject (
 
 void PageObjectPainter::NotifyResize (const bool bForce)
 {
-    if ( ! mpPageObjectLayouter
-        || bForce
-        || mpPageObjectLayouter->GetPageObjectSize() != maNewSlideIcon.GetSizePixel())
-    {
-        maNormalBackground.SetEmpty();
-        maSelectionBackground.SetEmpty();
-        maFocusedSelectionBackground.SetEmpty();
-        maMouseOverBackground.SetEmpty();
-    }
+    (void)bForce;
+    maNormalBackground.SetEmpty();
+    maSelectionBackground.SetEmpty();
+    maFocusedSelectionBackground.SetEmpty();
+    maFocusedBackground.SetEmpty();
+    maMouseOverBackground.SetEmpty();
+    maMouseOverSelectedAndFocusedBackground.SetEmpty();
 }
 
 
@@ -222,38 +190,15 @@ void PageObjectPainter::SetTheme (const ::boost::shared_ptr<view::Theme>& rpThem
 
 void PageObjectPainter::PaintBackground (
     OutputDevice& rDevice,
-    const model::SharedPageDescriptor& rpDescriptor) const
+    const model::SharedPageDescriptor& rpDescriptor)
 {
     const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
         rpDescriptor,
         PageObjectLayouter::PageObject,
         PageObjectLayouter::ModelCoordinateSystem));
 
-    if (rpDescriptor->HasState(model::PageDescriptor::ST_MouseOver))
-    {
-        rDevice.DrawBitmap(
-            aBox.TopLeft(),
-            maMouseOverBackground);
-    }
-    else if (rpDescriptor->HasState(model::PageDescriptor::ST_Selected))
-    {
-        if (rpDescriptor->HasState(model::PageDescriptor::ST_Focused))
-            rDevice.DrawBitmap(
-                aBox.TopLeft(),
-                maFocusedSelectionBackground);
-        else
-            rDevice.DrawBitmap(
-                aBox.TopLeft(),
-                maSelectionBackground);
-    }
-    else
-    {
-        rDevice.DrawBitmap(
-            aBox.TopLeft(),
-            maNormalBackground);
-        if (rpDescriptor->HasState(model::PageDescriptor::ST_Focused))
-            PaintBorder(rDevice, Theme::SelectedPage, aBox);
-    }
+    const Bitmap& rBackground (GetBackgroundForState(rpDescriptor, rDevice));
+    rDevice.DrawBitmap(aBox.TopLeft(), rBackground);
 }
 
 
@@ -268,40 +213,65 @@ void PageObjectPainter::PaintPreview (
         PageObjectLayouter::Preview,
         PageObjectLayouter::ModelCoordinateSystem));
 
+    const bool bIsExcluded (rpDescriptor->GetVisualState().GetCurrentVisualState()
+        == model::VisualState::VS_Excluded);
+    bool bIsOverlayPaintRequested (bIsExcluded);
+
     if (mpCache != NULL)
     {
         const SdrPage* pPage = rpDescriptor->GetPage();
         mpCache->SetPreciousFlag(pPage, true);
 
-        const Bitmap aBitmap (mpCache->GetPreviewBitmap(pPage,false).GetBitmap());
-        if (aBitmap.GetSizePixel() != aBox.GetSize())
+        if (bIsExcluded)
         {
-            rDevice.DrawBitmap(aBox.TopLeft(), aBox.GetSize(), aBitmap);
+            Bitmap aMarkedPreview (mpCache->GetMarkedPreviewBitmap(pPage,false).GetBitmap());
+            if (aMarkedPreview.IsEmpty() || aMarkedPreview.GetSizePixel()!=aBox.GetSize())
+            {
+                aMarkedPreview = CreateMarkedPreview(
+                    aBox.GetSize(),
+                    mpCache->GetPreviewBitmap(pPage,true),
+                    mpTheme->GetIcon(Theme::Icon_HideSlideOverlay),
+                    rDevice);
+                mpCache->SetMarkedPreviewBitmap(pPage, cache::PreviewType::Create(aMarkedPreview));
+            }
+            rDevice.DrawBitmap(aBox.TopLeft(), aMarkedPreview);
         }
         else
         {
-            rDevice.DrawBitmap(aBox.TopLeft(), aBitmap);
+            const Bitmap aPreview (mpCache->GetPreviewBitmap(pPage,false).GetBitmap());
+            if ( ! aPreview.IsEmpty())
+                if (aPreview.GetSizePixel() != aBox.GetSize())
+                    rDevice.DrawBitmap(aBox.TopLeft(), aBox.GetSize(), aPreview);
+                else
+                    rDevice.DrawBitmap(aBox.TopLeft(), aPreview);
         }
     }
+}
 
-    if (rpDescriptor->GetVisualState().GetCurrentVisualState()
-        == model::VisualState::VS_Excluded)
+
+
+
+Bitmap PageObjectPainter::CreateMarkedPreview (
+    const Size& rSize,
+    const cache::PreviewType& rPreview,
+    const BitmapEx& rOverlay,
+    const OutputDevice& rReferenceDevice) const
+{
+    VirtualDevice aDevice (rReferenceDevice);
+    aDevice.SetOutputSizePixel(rSize);
+
+    aDevice.DrawBitmap(Point(0,0), rSize, rPreview.GetBitmap());
+
+    // Paint bitmap tiled over the preview to mark it as excluded.
+    const sal_Int32 nIconWidth (rOverlay.GetSizePixel().Width());
+    const sal_Int32 nIconHeight (rOverlay.GetSizePixel().Height());
+    if (nIconWidth>0 && nIconHeight>0)
     {
-        const BitmapEx aOverlay (mpTheme->GetIcon(Theme::Icon_HideSlideOverlay));
-        const sal_Int32 nIconWidth (aOverlay.GetSizePixel().Width());
-        const sal_Int32 nIconHeight (aOverlay.GetSizePixel().Height());
-        if (nIconWidth>0 && nIconHeight>0)
-        {
-            const Region aSavedClip (rDevice.GetClipRegion());
-            rDevice.IntersectClipRegion(aBox);
-
-            for (sal_Int32 nX=aBox.Left(); nX<aBox.Right(); nX+=nIconWidth)
-                for (sal_Int32 nY=aBox.Top(); nY<aBox.Bottom(); nY+=nIconHeight)
-                    rDevice.DrawBitmapEx(Point(nX,nY), aOverlay);
-
-            rDevice.SetClipRegion(aSavedClip);
-        }
+        for (sal_Int32 nX=0; nX<rSize.Width(); nX+=nIconWidth)
+            for (sal_Int32 nY=0; nY<rSize.Height(); nY+=nIconHeight)
+                aDevice.DrawBitmapEx(Point(nX,nY), rOverlay);
     }
+    return aDevice.GetBitmap(Point(0,0), rSize);
 }
 
 
@@ -323,23 +293,6 @@ void PageObjectPainter::PaintPageNumber (
     rDevice.SetFont(*mpPageNumberFont);
     rDevice.SetTextColor(Color(mpTheme->GetColor(Theme::PageNumberColor)));
     rDevice.DrawText(aBox, sPageNumber, TEXT_DRAW_RIGHT | TEXT_DRAW_VCENTER);
-
-#if 0
-    if (rpDescriptor->GetVisualState().GetCurrentVisualState()
-        == model::VisualState::VS_Excluded)
-    {
-        // Paint border around the number.
-        const Rectangle aFrameBox (mpPageObjectLayouter->GetBoundingBox(
-            rpDescriptor,
-            PageObjectLayouter::PageNumberFrame,
-            PageObjectLayouter::ModelCoordinateSystem));
-        rDevice.SetLineColor(Color(mpTheme->GetColor(Theme::PageNumberBorder)));
-        rDevice.SetFillColor();
-        rDevice.DrawRect(aFrameBox);
-
-        rDevice.DrawLine(aFrameBox.TopLeft(), aBox.BottomRight());
-    }
-#endif
 }
 
 
@@ -366,272 +319,63 @@ void PageObjectPainter::PaintTransitionEffect (
 
 
 
-void PageObjectPainter::PaintButtons (
-    OutputDevice& rDevice,
-    const model::SharedPageDescriptor& rpDescriptor) const
-{
-    if (rpDescriptor->HasState(model::PageDescriptor::ST_Excluded))
-        PaintWideButton(rDevice, rpDescriptor);
-    else
-        if (mpTheme->GetIntegerValue(Theme::ButtonPaintType) == 0)
-            PaintButtonsType0(rDevice, rpDescriptor);
-        else
-            PaintButtonsType1(rDevice, rpDescriptor);
-}
-
-
-
-
-void PageObjectPainter::PaintButtonsType0 (
-    OutputDevice& rDevice,
-    const model::SharedPageDescriptor& rpDescriptor) const
-{
-    if (rpDescriptor->GetVisualState().GetButtonAlpha() >= 1)
-        return;
-
-    const USHORT nSavedAntialiasingMode (rDevice.GetAntialiasing());
-    rDevice.SetAntialiasing(nSavedAntialiasingMode | ANTIALIASING_ENABLE_B2DDRAW);
-
-    rDevice.SetLineColor();
-
-    const double nCornerRadius(mpTheme->GetIntegerValue(Theme::ButtonCornerRadius));
-    for (int nButtonIndex=0; nButtonIndex<3; ++nButtonIndex)
-    {
-        Color aButtonFillColor (mpTheme->GetColor(Theme::ButtonBackground));
-        const Rectangle aBox (
-            mpPageObjectLayouter->GetBoundingBox(
-                rpDescriptor,
-                PageObjectLayouter::Button,
-                PageObjectLayouter::ModelCoordinateSystem,
-                nButtonIndex));
-
-        switch (rpDescriptor->GetVisualState().GetButtonState(nButtonIndex))
-        {
-            case model::VisualState::BS_Normal:
-                break;
-
-            case model::VisualState::BS_MouseOver:
-                aButtonFillColor.IncreaseLuminance(50);
-                break;
-
-            case model::VisualState::BS_Pressed:
-                aButtonFillColor.DecreaseLuminance(50);
-                break;
-        }
-        rDevice.SetFillColor(aButtonFillColor);
-        rDevice.DrawTransparent(
-            ::basegfx::B2DPolyPolygon(
-                ::basegfx::tools::createPolygonFromRect(
-                ::basegfx::B2DRectangle(aBox.Left(), aBox.Top(), aBox.Right(), aBox.Bottom()),
-                nCornerRadius/aBox.GetWidth(),
-                nCornerRadius/aBox.GetHeight())),
-            rpDescriptor->GetVisualState().GetButtonAlpha());
-
-        // Choose icon.
-        const BitmapEx* pImage = NULL;
-        switch (nButtonIndex)
-        {
-            case 0:
-                pImage = &maNewSlideIcon;
-                break;
-            case 1:
-                pImage = &maShowSlideIcon;
-                break;
-            case 2:
-                pImage = &maStartPresentationIcon;
-                break;
-        }
-        // Paint icon over the button background.
-        if (pImage != NULL)
-        {
-            AlphaMask aMask (pImage->GetMask());
-            AdaptTransparency(
-                aMask,
-                rpDescriptor->GetVisualState().GetButtonAlpha());
-            rDevice.DrawImage(
-                Point(
-                    aBox.Left()+(aBox.GetWidth()-pImage->GetSizePixel().Width())/2,
-                    aBox.Top()+(aBox.GetHeight()-pImage->GetSizePixel().Height())/2),
-                BitmapEx(pImage->GetBitmap(), aMask));
-        }
-    }
-
-    rDevice.SetAntialiasing(nSavedAntialiasingMode);
-}
-
-
-
-
-void PageObjectPainter::PaintButtonsType1 (
-    OutputDevice& rDevice,
-    const model::SharedPageDescriptor& rpDescriptor) const
-{
-    if (rpDescriptor->GetVisualState().GetButtonAlpha() >= 1)
-        return;
-
-    const USHORT nSavedAntialiasingMode (rDevice.GetAntialiasing());
-    rDevice.SetAntialiasing(nSavedAntialiasingMode | ANTIALIASING_ENABLE_B2DDRAW);
-
-    rDevice.SetLineColor();
-
-    // Determine state for the background.
-    model::VisualState::ButtonState eState (model::VisualState::BS_Normal);
-    for (int nButtonIndex=0; nButtonIndex<3; ++nButtonIndex)
-    {
-        const model::VisualState::ButtonState eButtonState (
-            rpDescriptor->GetVisualState().GetButtonState(nButtonIndex));
-        if (eButtonState != model::VisualState::BS_Normal)
-        {
-            eState = eButtonState;
-            break;
-        }
-    }
-
-    // Paint the button background with the state of the button under the mouse.
-    PaintWideButtonBackground(rDevice, rpDescriptor, eState);
-
-    // Paint the icons.
-    for (int nButtonIndex=0; nButtonIndex<3; ++nButtonIndex)
-    {
-        const Rectangle aBox (
-            mpPageObjectLayouter->GetBoundingBox(
-                rpDescriptor,
-                PageObjectLayouter::Button,
-                PageObjectLayouter::ModelCoordinateSystem,
-                nButtonIndex));
-
-        // Choose icon.
-        const BitmapEx* pImage = NULL;
-        switch (nButtonIndex)
-        {
-            case 0:
-                pImage = &maNewSlideIcon;
-                break;
-            case 1:
-                pImage = &maShowSlideIcon;
-                break;
-            case 2:
-                pImage = &maStartPresentationIcon;
-                break;
-        }
-
-        // Adjust luminosity of icon to indicate its state.
-        Bitmap aIcon (pImage->GetBitmap());
-        switch (rpDescriptor->GetVisualState().GetButtonState(nButtonIndex))
-        {
-            case model::VisualState::BS_Normal:
-                break;
-
-            case model::VisualState::BS_MouseOver:
-                aIcon.Adjust(+30);
-                break;
-
-            case model::VisualState::BS_Pressed:
-                aIcon.Adjust(-30);
-                break;
-        }
-
-        // Paint icon over the button background.
-        if (pImage != NULL)
-        {
-            AlphaMask aMask (pImage->GetMask());
-            AdaptTransparency(
-                aMask,
-                rpDescriptor->GetVisualState().GetButtonAlpha());
-            rDevice.DrawImage(
-                Point(
-                    aBox.Left()+(aBox.GetWidth()-pImage->GetSizePixel().Width())/2,
-                    aBox.Top()+(aBox.GetHeight()-pImage->GetSizePixel().Height())/2),
-                BitmapEx(aIcon, aMask));
-        }
-    }
-
-    rDevice.SetAntialiasing(nSavedAntialiasingMode);
-}
-
-
-
-
-Rectangle PageObjectPainter::PaintWideButtonBackground (
-    OutputDevice& rDevice,
+Bitmap& PageObjectPainter::GetBackgroundForState (
     const model::SharedPageDescriptor& rpDescriptor,
-    const model::VisualState::ButtonState eState) const
+    const OutputDevice& rReferenceDevice)
 {
-    const Rectangle aBox (
-        mpPageObjectLayouter->GetBoundingBox(
-            rpDescriptor,
-            PageObjectLayouter::WideButton,
-            PageObjectLayouter::ModelCoordinateSystem));
-    if (rpDescriptor->GetVisualState().GetButtonAlpha() < 1)
+    const bool bIsSelected (rpDescriptor->HasState(model::PageDescriptor::ST_Selected));
+    const bool bIsMouseOver (rpDescriptor->HasState(model::PageDescriptor::ST_MouseOver));
+    const bool bIsFocused (rpDescriptor->HasState(model::PageDescriptor::ST_Focused));
+
+    if (bIsMouseOver)
     {
-        const USHORT nSavedAntialiasingMode (rDevice.GetAntialiasing());
-        rDevice.SetAntialiasing(nSavedAntialiasingMode | ANTIALIASING_ENABLE_B2DDRAW);
-
-        // Determine background color.
-        Color aButtonFillColor (mpTheme->GetColor(Theme::ButtonBackground));
-        switch (eState)
-        {
-            case model::VisualState::BS_Normal:
-                break;
-
-            case model::VisualState::BS_MouseOver:
-                aButtonFillColor.IncreaseLuminance(50);
-                break;
-
-            case model::VisualState::BS_Pressed:
-                aButtonFillColor.DecreaseLuminance(50);
-                break;
-        }
-        rDevice.SetFillColor(aButtonFillColor);
-        rDevice.SetLineColor();
-
-        const double nCornerRadius(mpTheme->GetIntegerValue(Theme::ButtonCornerRadius));
-        rDevice.DrawTransparent(
-            ::basegfx::B2DPolyPolygon(
-                ::basegfx::tools::createPolygonFromRect(
-                    ::basegfx::B2DRectangle(aBox.Left(), aBox.Top(), aBox.Right(), aBox.Bottom()),
-                    nCornerRadius/aBox.GetWidth(),
-                    nCornerRadius/aBox.GetHeight())),
-            rpDescriptor->GetVisualState().GetButtonAlpha());
-
-        rDevice.SetAntialiasing(nSavedAntialiasingMode);
+        if (bIsSelected && bIsFocused)
+            return GetBackground(
+                maMouseOverSelectedAndFocusedBackground,
+                Theme::Gradient_MouseOverSelectedAndFocusedPage,
+                rReferenceDevice);
+        else
+            return GetBackground(
+                maMouseOverBackground,
+                Theme::Gradient_MouseOverPage,
+                rReferenceDevice);
     }
-    return aBox;
+    else if (bIsSelected)
+    {
+        if (bIsFocused)
+            return GetBackground(
+                maFocusedSelectionBackground,
+                Theme::Gradient_SelectedAndFocusedPage,
+                rReferenceDevice);
+        else
+            return GetBackground(
+                maSelectionBackground,
+                Theme::Gradient_SelectedPage,
+                rReferenceDevice);
+    }
+    else if (bIsFocused)
+        return GetBackground(
+            maFocusedBackground,
+            Theme::Gradient_FocusedPage,
+            rReferenceDevice);
+    else
+        return GetBackground(
+            maNormalBackground,
+            Theme::Gradient_NormalPage,
+            rReferenceDevice);
 }
 
 
 
 
-void PageObjectPainter::PaintWideButton (
-    OutputDevice& rDevice,
-    const model::SharedPageDescriptor& rpDescriptor) const
+Bitmap& PageObjectPainter::GetBackground(
+    Bitmap& rBackground,
+    Theme::GradientColorType eType,
+    const OutputDevice& rReferenceDevice)
 {
-    const Rectangle aButtonBox (PaintWideButtonBackground(
-        rDevice,
-        rpDescriptor,
-        rpDescriptor->GetVisualState().GetButtonState(PageObjectLayouter::ShowHideButtonIndex)));
-
-    // Paint text over the button background.
-    if (rpDescriptor->GetVisualState().GetButtonAlpha() < 1)
-    {
-        rDevice.SetTextColor(mpTheme->GetColor(Theme::ButtonText));
-        rDevice.DrawText(aButtonBox, msUnhideString, TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER);
-    }
-}
-
-
-
-
-void PageObjectPainter::PrepareBackgrounds (OutputDevice& rDevice)
-{
-    if (maNormalBackground.IsEmpty())
-    {
-        maNormalBackground = CreateBackgroundBitmap(rDevice, Theme::NormalPage);
-        maSelectionBackground = CreateBackgroundBitmap(rDevice, Theme::SelectedPage);
-        maFocusedSelectionBackground = CreateBackgroundBitmap(
-            rDevice, Theme::SelectedAndFocusedPage);
-        maMouseOverBackground = CreateBackgroundBitmap(rDevice, Theme::MouseOverPage);
-    }
+    if (rBackground.IsEmpty())
+        rBackground = CreateBackgroundBitmap(rReferenceDevice, eType);
+    return rBackground;
 }
 
 

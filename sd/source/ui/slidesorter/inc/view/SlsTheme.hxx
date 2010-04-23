@@ -61,9 +61,10 @@ public:
     /** Call this method to update some colors as response to a change of
         a system color change.
     */
-    void Update (const ::boost::shared_ptr<controller::Properties>& rpProperties);
+    void Update (
+        const ::boost::shared_ptr<controller::Properties>& rpProperties);
 
-    BitmapEx GetInsertIndicatorIcon (void) const;
+    //    BitmapEx GetInsertIndicatorIcon (void) const;
 
     enum FontType {
         PageNumberFont,
@@ -83,16 +84,21 @@ public:
         PageNumberBorder,
         PageNumberColor,
         Selection,
-        PreviewBorder
+        PreviewBorder,
+        _ColorType_Size_
     };
     ColorData GetColor (const ColorType eType);
     void SetColor (const ColorType eType, const ColorData aColorData);
 
     enum GradientColorType {
-        NormalPage,
-        SelectedPage,
-        SelectedAndFocusedPage,
-        MouseOverPage
+        Gradient_NormalPage,
+        Gradient_SelectedPage,
+        Gradient_SelectedAndFocusedPage,
+        Gradient_MouseOverPage,
+        Gradient_MouseOverSelectedAndFocusedPage,
+        Gradient_FocusedPage,
+        Gradient_ButtonBackground,
+        _GradientColorType_Size_
     };
     enum GradientColorClass {
         Border1,
@@ -110,27 +116,45 @@ public:
     void SetGradient (
         const GradientColorType eType,
         const ColorData aBaseColor,
+        const sal_Int32 nSaturationOverride,
+        const sal_Int32 nBrightnessOverride,
         const sal_Int32 nFillStartOffset,
         const sal_Int32 nFillEndOffset,
         const sal_Int32 nBorderStartOffset,
         const sal_Int32 nBorderEndOffset);
+    sal_Int32 GetGradientSaturationOverride (const GradientColorType eType);
+    sal_Int32 GetGradientBrightnessOverride (const GradientColorType eType);
+    void SetGradientSaturationOverride (const GradientColorType eType, const sal_Int32 nValue);
+    void SetGradientBrightnessOverride (const GradientColorType eType, const sal_Int32 nValue);
 
     enum IconType
     {
         Icon_RawShadow,
         Icon_RawInsertShadow,
         Icon_HideSlideOverlay,
-        Icon_StartPresentation,
-        Icon_ShowSlide,
-        Icon_DuplicateSlide
+        Icon_Command1Regular,
+        Icon_Command1Hover,
+        Icon_Command1Small,
+        Icon_Command1SmallHover,
+        Icon_Command2Regular,
+        Icon_Command2Hover,
+        Icon_Command2Small,
+        Icon_Command2SmallHover,
+        Icon_Command3Regular,
+        Icon_Command3Hover,
+        Icon_Command3Small,
+        Icon_Command3SmallHover,
+        _IconType_Size_
     };
     BitmapEx GetIcon (const IconType eType);
 
     enum IntegerValueType
     {
-        ButtonCornerRadius,
-        ButtonMaxAlpha,
-        ButtonPaintType
+        Integer_ButtonCornerRadius,
+        Integer_ButtonMaxAlpha,
+        Integer_ButtonPaintType,
+        Integer_ButtonBorder,
+        Integer_ButtonGap
     };
     sal_Int32 GetIntegerValue (const IntegerValueType eType) const;
     void SetIntegerValue (const IntegerValueType eType, const sal_Int32 nValue);
@@ -139,15 +163,23 @@ public:
     {
         String_Unhide,
         String_DragAndDropPages,
-        String_DragAndDropSlides
+        String_DragAndDropSlides,
+        String_Command1,
+        String_Command2,
+        String_Command3,
+        _StringType_Size_
     };
     ::rtl::OUString GetString (const StringType eType) const;
 
 private:
+    bool mbIsHighContrastMode;
     class GradientDescriptor
     {
     public:
         ColorData maBaseColor;
+
+        sal_Int32 mnSaturationOverride;
+        sal_Int32 mnBrightnessOverride;
 
         ColorData maFillColor1;
         ColorData maFillColor2;
@@ -161,25 +193,21 @@ private:
     };
     ColorData maBackgroundColor;
     ColorData maPageBackgroundColor;
-    GradientDescriptor maNormalGradient;
-    GradientDescriptor maSelectedGradient;
-    GradientDescriptor maSelectedAndFocusedGradient;
-    GradientDescriptor maMouseOverGradient;
-    BitmapEx maRawShadow;
-    BitmapEx maRawInsertShadow;
-    BitmapEx maHideSlideOverlay;
-    BitmapEx maStartPresentationIcon;
-    BitmapEx maShowSlideIcon;
-    BitmapEx maDuplicateSlideIcon;
+    ::std::vector<GradientDescriptor> maGradients;
+    ::std::vector<BitmapEx> maIcons;
     ::std::vector<ColorData> maColor;
     sal_Int32 mnButtonCornerRadius;
     sal_Int32 mnButtonMaxAlpha;
     sal_Int32 mnButtonPaintType;
-    ::rtl::OUString msUnhide;
-    ::rtl::OUString msDragAndDropPages;
-    ::rtl::OUString msDragAndDropSlides;
+    sal_Int32 mnButtonBorder;
+    sal_Int32 mnButtonGap;
+    ::std::vector<rtl::OUString> maStrings;
 
     GradientDescriptor& GetGradient (const GradientColorType eType);
+    /** Guarded initialization of the specified icon in the maIcons
+        container.  Call only while a LocalResource object is active.
+    */
+    void InitializeIcon (const IconType eType, USHORT nResourceId);
 };
 
 

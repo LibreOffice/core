@@ -32,6 +32,7 @@
 #include "controller/SlsSelectionManager.hxx"
 #include "controller/SlsSelectionObserver.hxx"
 #include "controller/SlsPageSelector.hxx"
+#include "controller/SlsFocusManager.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include <svx/svdmodel.hxx>
@@ -55,6 +56,18 @@ SelectionObserver::Context::~Context(void)
 {
     if (mpSelectionObserver)
         mpSelectionObserver->EndObservation();
+}
+
+
+
+
+void SelectionObserver::Context::Abort(void)
+{
+    if (mpSelectionObserver)
+    {
+        mpSelectionObserver->AbortObservation();
+        mpSelectionObserver.reset();
+    }
 }
 
 
@@ -116,6 +129,17 @@ void SelectionObserver::StartObservation (void)
 
 
 
+void SelectionObserver::AbortObservation (void)
+{
+    OSL_ASSERT(mbIsOvservationActive);
+    mbIsOvservationActive = false;
+    maInsertedPages.clear();
+    maDeletedPages.clear();
+}
+
+
+
+
 void SelectionObserver::EndObservation (void)
 {
     OSL_ASSERT(mbIsOvservationActive);
@@ -123,6 +147,7 @@ void SelectionObserver::EndObservation (void)
 
     model::SlideSorterModel& rModel (mrSlideSorter.GetModel());
     PageSelector& rSelector (mrSlideSorter.GetController().GetPageSelector());
+    PageSelector::UpdateLock aUpdateLock (mrSlideSorter);
     rSelector.DeselectAllPages();
     if ( ! maInsertedPages.empty())
     {
@@ -134,17 +159,14 @@ void SelectionObserver::EndObservation (void)
              ++iPage)
         {
             rSelector.SelectPage(*iPage);
-            /*
-            const sal_Int32 nIndex (rModel.GetIndex (*iPage));
-            model::SharedPageDescriptor pDescriptor (rModel.GetPageDescriptor(nIndex));
-            if (pDescriptor)
-                pDescriptor->SetState(model::PageDescriptor::ST_Selected,
-                true);
-            */
         }
         maInsertedPages.clear();
     }
     maDeletedPages.clear();
+
+    aUpdateLock.Release();
+    mrSlideSorter.GetController().GetFocusManager().SetFocusedPageToCurrentPage();
+
 }
 
 

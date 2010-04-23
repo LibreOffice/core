@@ -323,8 +323,20 @@ void Listener::Notify (
                     // The return value of the model call acts as filter as
                     // to which events to pass to the selection observer.
                     if (mrSlideSorter.GetModel().NotifyPageEvent(rSdrHint.GetPage()))
+                    {
+                        // The page of the hint belongs (or belonged)
+                        // to the model.
+
+                        // Tell the cache manager that the preview
+                        // bitmaps for a deleted page can be removed
+                        // from all caches.
+                        const SdrPage* pPage = rSdrHint.GetPage();
+                        if (pPage!=NULL && ! pPage->IsInserted())
+                            cache::PageCacheManager::Instance()->ReleasePreviewBitmap(pPage);
+
                         mrController.GetSelectionManager()
                             ->GetSelectionObserver()->NotifyPageEvent(rSdrHint.GetPage());
+                    }
 
                     if (rBroadcaster.ISA(SdDrawDocument))
                     {

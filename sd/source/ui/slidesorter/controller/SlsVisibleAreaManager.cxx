@@ -32,6 +32,7 @@
 #include "controller/SlsProperties.hxx"
 #include "controller/SlsAnimationFunction.hxx"
 #include "controller/SlsScrollBarManager.hxx"
+#include "controller/SlsCurrentSlideManager.hxx"
 
 
 namespace sd { namespace slidesorter { namespace controller {
@@ -61,7 +62,8 @@ VisibleAreaManager::VisibleAreaManager (SlideSorter& rSlideSorter)
       maVisibleRequests(),
       mnScrollAnimationId(Animator::NotAnAnimationId),
       maRequestedVisibleTopLeft(),
-      meRequestedAnimationMode(Animator::AM_Immediate)
+      meRequestedAnimationMode(Animator::AM_Immediate),
+      mbIsCurrentSlideTrackingActive(true)
 {
 }
 
@@ -75,20 +77,51 @@ VisibleAreaManager::~VisibleAreaManager (void)
 
 
 
+void VisibleAreaManager::ActivateCurrentSlideTracking (void)
+{
+    mbIsCurrentSlideTrackingActive = true;
+}
+
+
+
+
+void VisibleAreaManager::DeactivateCurrentSlideTracking (void)
+{
+    mbIsCurrentSlideTrackingActive = false;
+}
+
+
+
+
 void VisibleAreaManager::RequestVisible (
     const model::SharedPageDescriptor& rpDescriptor,
-    const Animator::AnimationMode eRequestedAnimationMode)
+    const bool bForce)
 {
     if (rpDescriptor)
     {
+        const sal_Int32 nIndex (rpDescriptor->GetPageIndex());
+        if (nIndex > 20)
+        {
+            OSL_TRACE("%d", nIndex);
+        }
         maVisibleRequests.push_back(
             mrSlideSorter.GetView().GetLayouter().GetPageObjectBox(
                 rpDescriptor->GetPageIndex(),
                 true));
-        if (eRequestedAnimationMode == Animator::AM_Animated)
-            meRequestedAnimationMode = Animator::AM_Animated;
-    MakeVisible();
+        if (bForce && ! mbIsCurrentSlideTrackingActive)
+            ActivateCurrentSlideTracking();
+        MakeVisible();
     }
+}
+
+
+
+
+void VisibleAreaManager::RequestCurrentSlideVisible (void)
+{
+    if (mbIsCurrentSlideTrackingActive)
+        RequestVisible(
+            mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide());
 }
 
 

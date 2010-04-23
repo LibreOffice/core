@@ -131,32 +131,32 @@ void GenericPageCache::ChangePreviewSize (
 
 
 
-BitmapEx GenericPageCache::GetPreviewBitmap (
+PreviewType GenericPageCache::GetPreviewBitmap (
     const CacheKey aKey,
     const bool bResize)
 {
     OSL_ASSERT(aKey != NULL);
 
-    BitmapEx aPreview;
+    PreviewType aPreview;
     bool bMayBeUpToDate = true;
     ProvideCacheAndProcessor();
     const SdrPage* pPage = mpCacheContext->GetPage(aKey);
     if (mpBitmapCache->HasBitmap(pPage))
     {
-        ::boost::shared_ptr<BitmapEx> pPreview(mpBitmapCache->GetBitmap(pPage));
-        OSL_ASSERT(pPreview.get() != NULL);
-        aPreview = *pPreview;
-        const Size aBitmapSize (aPreview.GetSizePixel());
-        if (bResize && aBitmapSize != maPreviewSize)
+        aPreview = mpBitmapCache->GetBitmap(pPage);
+        const Size aBitmapSize (aPreview.GetBitmap().GetSizePixel());
+        if (aBitmapSize != maPreviewSize)
         {
             // Scale the bitmap to the desired size when that is possible,
             // i.e. the bitmap is not empty.
-            if (aBitmapSize.Width()>0 && aBitmapSize.Height()>0)
+            if (bResize && aBitmapSize.Width()>0 && aBitmapSize.Height()>0)
             {
-                aPreview.Scale(maPreviewSize, BMP_SCALE_FAST);
+                aPreview.GetBitmap().Scale(maPreviewSize, BMP_SCALE_FAST);
             }
+            bMayBeUpToDate = false;
         }
-        bMayBeUpToDate = true;
+        else
+            bMayBeUpToDate = true;
     }
     else
         bMayBeUpToDate = false;
@@ -167,6 +167,46 @@ BitmapEx GenericPageCache::GetPreviewBitmap (
     RequestPreviewBitmap(aKey, bMayBeUpToDate);
 
     return aPreview;
+}
+
+
+
+
+PreviewType GenericPageCache::GetMarkedPreviewBitmap (
+    const CacheKey aKey,
+    const bool bResize)
+{
+    OSL_ASSERT(aKey != NULL);
+
+    ProvideCacheAndProcessor();
+    const SdrPage* pPage = mpCacheContext->GetPage(aKey);
+    PreviewType aMarkedPreview (mpBitmapCache->GetMarkedBitmap(pPage));
+    const Size aBitmapSize (aMarkedPreview.GetBitmap().GetSizePixel());
+    if (bResize && aBitmapSize != maPreviewSize)
+    {
+        // Scale the bitmap to the desired size when that is possible,
+        // i.e. the bitmap is not empty.
+        if (aBitmapSize.Width()>0 && aBitmapSize.Height()>0)
+        {
+            aMarkedPreview.GetBitmap().Scale(maPreviewSize, BMP_SCALE_FAST);
+        }
+    }
+
+    return aMarkedPreview;
+}
+
+
+
+
+void GenericPageCache::SetMarkedPreviewBitmap (
+    const CacheKey aKey,
+    const PreviewType& rMarkedBitmap)
+{
+    OSL_ASSERT(aKey != NULL);
+
+    ProvideCacheAndProcessor();
+    const SdrPage* pPage = mpCacheContext->GetPage(aKey);
+    mpBitmapCache->SetMarkedBitmap(pPage, rMarkedBitmap);
 }
 
 
@@ -188,8 +228,8 @@ void GenericPageCache::RequestPreviewBitmap (
         bIsUpToDate = mpBitmapCache->BitmapIsUpToDate (pPage);
     if (bIsUpToDate)
     {
-        ::boost::shared_ptr<BitmapEx> pPreview (mpBitmapCache->GetBitmap(pPage));
-        if (pPreview.get()==NULL || pPreview->GetSizePixel()!=maPreviewSize)
+        const PreviewType aPreview (mpBitmapCache->GetBitmap(pPage));
+        if (aPreview.IsEmpty() || aPreview.GetBitmap().GetSizePixel()!=maPreviewSize)
               bIsUpToDate = false;
     }
 
@@ -212,10 +252,12 @@ void GenericPageCache::RequestPreviewBitmap (
 
 
 
-void GenericPageCache::InvalidatePreviewBitmap (const CacheKey aKey)
+bool GenericPageCache::InvalidatePreviewBitmap (const CacheKey aKey)
 {
     if (mpBitmapCache.get() != NULL)
-        mpBitmapCache->InvalidateBitmap(mpCacheContext->GetPage(aKey));
+        return mpBitmapCache->InvalidateBitmap(mpCacheContext->GetPage(aKey));
+    else
+        return false;
 }
 
 

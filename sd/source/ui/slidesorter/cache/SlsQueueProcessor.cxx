@@ -213,15 +213,12 @@ void QueueProcessor::ProcessOneRequest (
             const SdPage* pSdPage = dynamic_cast<const SdPage*>(mpCacheContext->GetPage(aKey));
             if (pSdPage != NULL)
             {
-                const ::boost::shared_ptr<BitmapEx> pPreview (
+                const PreviewType aPreview (
                     maBitmapFactory.CreateBitmap(*pSdPage, maPreviewSize, mbDoSuperSampling));
-                mpCache->SetBitmap (
-                    pSdPage,
-                    pPreview,
-                    ePriorityClass!=NOT_VISIBLE);
+                mpCache->SetBitmap (pSdPage, aPreview, ePriorityClass!=NOT_VISIBLE);
 
                 // Initiate a repaint of the new preview.
-                mpCacheContext->NotifyPreviewCreation(aKey, pPreview);
+                mpCacheContext->NotifyPreviewCreation(aKey, aPreview);
             }
         }
     }

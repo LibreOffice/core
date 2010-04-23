@@ -149,6 +149,10 @@ void InsertionIndicatorHandler::UpdatePosition (
     const Point& rMouseModelPosition,
     const Mode eMode)
 {
+    OSL_TRACE("InsertionIndicatorHandler::UpdatePosition %d,%d,  %d",
+        rMouseModelPosition.X(),
+        rMouseModelPosition.Y(),
+        eMode);
     if ( ! mbIsActive)
         return;
 
@@ -201,6 +205,19 @@ void InsertionIndicatorHandler::SetPosition (
         maIconSize,
         mrSlideSorter.GetModel()));
 
+    static sal_Int32 TargetIndex (1);
+    if (aInsertPosition.GetIndex() == TargetIndex)
+    {
+        const view::InsertPosition aPosition (rLayouter.GetInsertPosition(
+            rPoint,
+            maIconSize,
+            mrSlideSorter.GetModel()));
+        const view::InsertPosition aPosition2 (rLayouter.GetInsertPosition(
+            rPoint,
+            maIconSize,
+            mrSlideSorter.GetModel()));
+    }
+
     if (maInsertPosition != aInsertPosition
         || meMode != eMode
         //        || ! mpInsertionIndicatorOverlay->IsVisible()
@@ -209,9 +226,10 @@ void InsertionIndicatorHandler::SetPosition (
         maInsertPosition = aInsertPosition;
         meMode = eMode;
         mbIsInsertionTrivial = IsInsertionTrivial(maInsertPosition.GetIndex(), eMode);
-
         if (maInsertPosition.GetIndex()>=0 && ! mbIsInsertionTrivial)
         {
+            OSL_TRACE("A insertion at %d is %strivial",
+                maInsertPosition.GetIndex(), mbIsInsertionTrivial?"":"not ");
             mpInsertionIndicatorOverlay->SetLocation(maInsertPosition.GetLocation());
 
             GetInsertAnimator()->SetInsertPosition(maInsertPosition);
@@ -219,6 +237,8 @@ void InsertionIndicatorHandler::SetPosition (
         }
         else
         {
+            OSL_TRACE("B insertion at %d is %strivial",
+                maInsertPosition.GetIndex(), mbIsInsertionTrivial?"":"not ");
             GetInsertAnimator()->Reset(Animator::AM_Animated);
             mpInsertionIndicatorOverlay->Hide();
         }
@@ -284,6 +304,14 @@ bool InsertionIndicatorHandler::IsInsertionTrivial (
         return false;
 
     return true;
+}
+
+
+
+
+bool InsertionIndicatorHandler::IsInsertionTrivial (const sal_Int8 nDndAction)
+{
+    return IsInsertionTrivial(GetInsertionPageIndex(), GetModeFromDndAction(nDndAction));
 }
 
 

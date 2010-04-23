@@ -43,6 +43,9 @@
 
 namespace sd { namespace slidesorter { namespace view {
 
+// Grays
+#define Black 0x000000
+
 // Reds
 #define Amber 0xff7e00
 
@@ -80,53 +83,59 @@ ColorData ChangeLuminance (const ColorData aColorData, const int nValue)
     return aColor.GetColor();
 }
 
+ColorData HGBAdapt (
+    const ColorData aColorData,
+    const sal_Int32 nNewSaturation,
+    const sal_Int32 nNewBrightness)
+{
+    USHORT nHue (0);
+    USHORT nSaturation (0);
+    USHORT nBrightness (0);
+    Color(aColorData).RGBtoHSB(nHue, nSaturation, nBrightness);
+    return Color::HSBtoRGB(
+        nHue,
+        nNewSaturation>=0 ? nNewSaturation : nSaturation,
+        nNewBrightness>=0 ? nNewBrightness : nBrightness);
+}
+
 
 
 
 Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
     : maBackgroundColor(rpProperties->GetBackgroundColor().GetColor()),
       maPageBackgroundColor(COL_WHITE),
-      maNormalGradient(),
-      maSelectedGradient(),
-      maSelectedAndFocusedGradient(),
-      maMouseOverGradient(),
-      maRawShadow(),
-      maRawInsertShadow(),
-      maHideSlideOverlay(),
-      maStartPresentationIcon(),
-      maShowSlideIcon(),
-      maDuplicateSlideIcon(),
-      maColor(PreviewBorder+1),
+      maGradients(),
+      maIcons(),
+      maColor(),
       mnButtonCornerRadius(3),
       mnButtonMaxAlpha(255 * 20/100),
-      mnButtonPaintType(0),
-      msUnhide(),
-      msDragAndDropPages(),
-      msDragAndDropSlides()
+      mnButtonPaintType(1),
+      mnButtonBorder(4),
+      mnButtonGap(8)
 
 {
-    LocalResource aResource (IMG_ICONS);
+    {
+        LocalResource aResource (RID_SLIDESORTER_ICONS);
 
-    maRawShadow = Image(SdResId(IMAGE_SHADOW)).GetBitmapEx();
-    maRawInsertShadow = Image(SdResId(IMAGE_INSERT_SHADOW)).GetBitmapEx();
-    maHideSlideOverlay  = Image(SdResId(IMAGE_HIDE_SLIDE_OVERLAY)).GetBitmapEx();
-    maStartPresentationIcon = Image(SdResId(IMAGE_PRESENTATION)).GetBitmapEx();
-    maShowSlideIcon = Image(SdResId(IMAGE_SHOW_SLIDE)).GetBitmapEx();
-    maDuplicateSlideIcon = Image(SdResId(IMAGE_NEW_SLIDE)).GetBitmapEx();
-    msUnhide = String(SdResId(STRING_UNHIDE));
-    msDragAndDropPages = String(SdResId(STRING_DRAG_AND_DROP_PAGES));
-    msDragAndDropSlides = String(SdResId(STRING_DRAG_AND_DROP_SLIDES));
+        maStrings.resize(_StringType_Size_);
+        maStrings[String_Unhide] = String(SdResId(STRING_UNHIDE));
+        maStrings[String_DragAndDropPages] = String(SdResId(STRING_DRAG_AND_DROP_PAGES));
+        maStrings[String_DragAndDropSlides] = String(SdResId(STRING_DRAG_AND_DROP_SLIDES));
+        maStrings[String_Command1] = String(SdResId(STRING_COMMAND1));
+        maStrings[String_Command2] = String(SdResId(STRING_COMMAND2));
+        maStrings[String_Command3] = String(SdResId(STRING_COMMAND3));
 
-    maColor.resize(PreviewBorder+1);
-    maColor[Background] = maBackgroundColor;
-    maColor[PageBackground] = AirForceBlue;
-    maColor[ButtonBackground] = AirForceBlue;
-    maColor[ButtonText] = AntiqueWhite;
-    maColor[MouseOverColor] = gnMouseOverColor;
-    maColor[PageNumberBorder] = Azure;
-    maColor[PageNumberColor] = 0x0848a8f;
-    maColor[Selection] = StellaBlue;
-    maColor[PreviewBorder] = 0x949599;
+        maColor.resize(_ColorType_Size_);
+        maColor[Background] = maBackgroundColor;
+        maColor[PageBackground] = AirForceBlue;
+        maColor[ButtonBackground] = Black;
+        maColor[ButtonText] = AntiqueWhite;
+        maColor[MouseOverColor] = gnMouseOverColor;
+        maColor[PageNumberBorder] = Azure;
+        maColor[PageNumberColor] = 0x0848a8f;
+        maColor[Selection] = StellaBlue;
+        maColor[PreviewBorder] = 0x949599;
+    }
 
     Update(rpProperties);
 }
@@ -141,12 +150,16 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
 
     maColor[Background] = maBackgroundColor;
 
+    maGradients.resize(_GradientColorType_Size_);
+
 #ifdef USE_SYSTEM_SELECTION_COLOR
     const ColorData aSelectionColor (rpProperties->GetSelectionColor().GetColor());
 
-    SetGradient(SelectedPage, aSelectionColor, +50,-10, -10,-30);
-    SetGradient(SelectedAndFocusedPage, aSelectionColor, +30,-30, -30,-50);
-    SetGradient(MouseOverPage, aSelectionColor, +90,+30, +10,+30);
+    SetGradient(Gradient_SelectedPage, aSelectionColor, 50, 50, +100,+100, +50,+25);
+    SetGradient(Gradient_MouseOverPage, aSelectionColor, 75, 75, +100,+100, +50,+25);
+    SetGradient(Gradient_SelectedAndFocusedPage, aSelectionColor, 50, 50, +100,0, -50,-75);
+    SetGradient(Gradient_MouseOverSelectedAndFocusedPage, aSelectionColor, 75, 75, +100,0, -50,-75);
+    SetGradient(Gradient_FocusedPage, aSelectionColor, -1,-1, 0,0, -50,-75);
 
 #else
 
@@ -166,7 +179,64 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
     maMouseOverGradient.maBorderColor2 = 0x0e85cd;
 #endif
 
-    SetGradient(NormalPage, maBackgroundColor, 0,0, 0,0);
+    SetGradient(Gradient_ButtonBackground, 0x000000, -1,-1, 0,0, 0,0);
+    SetGradient(Gradient_NormalPage, maBackgroundColor, -1,-1, 0,0, 0,0);
+
+    // The focused gradient needs special handling because its fill color is
+    // like that of the NormalPage gradient.
+    GetGradient(Gradient_FocusedPage).maFillColor1 = GetGradient(Gradient_NormalPage).maFillColor1;
+    GetGradient(Gradient_FocusedPage).maFillColor2 = GetGradient(Gradient_NormalPage).maFillColor2;
+
+    const bool bSavedHighContrastMode (mbIsHighContrastMode);
+    mbIsHighContrastMode = rpProperties->IsHighContrastModeActive();
+    if (bSavedHighContrastMode != mbIsHighContrastMode)
+    {
+        LocalResource aResource (RID_SLIDESORTER_ICONS);
+
+        maIcons.resize(_IconType_Size_);
+        if (mbIsHighContrastMode)
+        {
+            InitializeIcon(Icon_RawShadow, IMAGE_SHADOW);
+            InitializeIcon(Icon_RawInsertShadow, IMAGE_INSERT_SHADOW);
+            InitializeIcon(Icon_HideSlideOverlay, IMAGE_HIDE_SLIDE_OVERLAY);
+
+            InitializeIcon(Icon_Command1Regular, IMAGE_COMMAND1_REGULAR_HC);
+            InitializeIcon(Icon_Command1Hover, IMAGE_COMMAND1_HOVER_HC);
+            InitializeIcon(Icon_Command1Small, IMAGE_COMMAND1_SMALL_HC);
+            InitializeIcon(Icon_Command1SmallHover, IMAGE_COMMAND1_SMALL_HOVER_HC);
+
+            InitializeIcon(Icon_Command2Regular, IMAGE_COMMAND2_REGULAR_HC);
+            InitializeIcon(Icon_Command2Hover, IMAGE_COMMAND2_HOVER_HC);
+            InitializeIcon(Icon_Command2Small, IMAGE_COMMAND2_SMALL_HC);
+            InitializeIcon(Icon_Command2SmallHover, IMAGE_COMMAND2_SMALL_HOVER_HC);
+
+            InitializeIcon(Icon_Command3Regular, IMAGE_COMMAND3_REGULAR_HC);
+            InitializeIcon(Icon_Command3Hover, IMAGE_COMMAND3_HOVER_HC);
+            InitializeIcon(Icon_Command3Small, IMAGE_COMMAND3_SMALL_HC);
+            InitializeIcon(Icon_Command3SmallHover, IMAGE_COMMAND3_SMALL_HOVER_HC);
+        }
+        else
+        {
+            InitializeIcon(Icon_RawShadow, IMAGE_SHADOW);
+            InitializeIcon(Icon_RawInsertShadow, IMAGE_INSERT_SHADOW);
+            InitializeIcon(Icon_HideSlideOverlay, IMAGE_HIDE_SLIDE_OVERLAY);
+
+            InitializeIcon(Icon_Command1Regular, IMAGE_COMMAND1_REGULAR);
+            InitializeIcon(Icon_Command1Hover, IMAGE_COMMAND1_HOVER);
+            InitializeIcon(Icon_Command1Small, IMAGE_COMMAND1_SMALL);
+            InitializeIcon(Icon_Command1SmallHover, IMAGE_COMMAND1_SMALL_HOVER);
+
+            InitializeIcon(Icon_Command2Regular, IMAGE_COMMAND2_REGULAR);
+            InitializeIcon(Icon_Command2Hover, IMAGE_COMMAND2_HOVER);
+            InitializeIcon(Icon_Command2Small, IMAGE_COMMAND2_SMALL);
+            InitializeIcon(Icon_Command2SmallHover, IMAGE_COMMAND2_SMALL_HOVER);
+
+            InitializeIcon(Icon_Command3Regular, IMAGE_COMMAND3_REGULAR);
+            InitializeIcon(Icon_Command3Hover, IMAGE_COMMAND3_HOVER);
+            InitializeIcon(Icon_Command3Small, IMAGE_COMMAND3_SMALL);
+            InitializeIcon(Icon_Command3SmallHover, IMAGE_COMMAND3_SMALL_HOVER);
+        }
+    }
 }
 
 
@@ -288,6 +358,8 @@ sal_Int32 Theme::GetGradientOffset (
 void Theme::SetGradient (
     const GradientColorType eType,
     const ColorData aBaseColor,
+    const sal_Int32 nSaturationOverride,
+    const sal_Int32 nBrightnessOverride,
     const sal_Int32 nFillStartOffset,
     const sal_Int32 nFillEndOffset,
     const sal_Int32 nBorderStartOffset,
@@ -297,10 +369,14 @@ void Theme::SetGradient (
 
     rGradient.maBaseColor = aBaseColor;
 
-    rGradient.maFillColor1 = ChangeLuminance(aBaseColor, nFillStartOffset);
-    rGradient.maFillColor2 = ChangeLuminance(aBaseColor, nFillEndOffset);
-    rGradient.maBorderColor1 = ChangeLuminance(aBaseColor, nBorderStartOffset);
-    rGradient.maBorderColor2 = ChangeLuminance(aBaseColor, nBorderEndOffset);
+    rGradient.mnSaturationOverride = nSaturationOverride;
+    rGradient.mnBrightnessOverride = nBrightnessOverride;
+    const ColorData aColor (HGBAdapt(aBaseColor, nSaturationOverride, nBrightnessOverride));
+
+    rGradient.maFillColor1 = ChangeLuminance(aColor, nFillStartOffset);
+    rGradient.maFillColor2 = ChangeLuminance(aColor, nFillEndOffset);
+    rGradient.maBorderColor1 = ChangeLuminance(aColor, nBorderStartOffset);
+    rGradient.maBorderColor2 = ChangeLuminance(aColor, nBorderEndOffset);
 
     rGradient.mnFillOffset1 = nFillStartOffset;
     rGradient.mnFillOffset2 = nFillEndOffset;
@@ -309,32 +385,59 @@ void Theme::SetGradient (
 }
 
 
+sal_Int32 Theme::GetGradientSaturationOverride (const GradientColorType eType)
+{
+    GradientDescriptor& rGradient (GetGradient(eType));
+    return rGradient.mnSaturationOverride;
+}
+
+
+sal_Int32 Theme::GetGradientBrightnessOverride (const GradientColorType eType)
+{
+    GradientDescriptor& rGradient (GetGradient(eType));
+    return rGradient.mnBrightnessOverride;
+}
+
+
+void Theme::SetGradientSaturationOverride (const GradientColorType eType, const sal_Int32 nValue)
+{
+    GradientDescriptor& rGradient (GetGradient(eType));
+    SetGradient(
+        eType,
+        rGradient.maBaseColor,
+        nValue,
+        rGradient.mnBrightnessOverride,
+        rGradient.mnFillOffset1,
+        rGradient.mnFillOffset2,
+        rGradient.mnBorderOffset1,
+        rGradient.mnBorderOffset2);
+}
+
+
+void Theme::SetGradientBrightnessOverride (const GradientColorType eType, const sal_Int32 nValue)
+{
+    GradientDescriptor& rGradient (GetGradient(eType));
+    SetGradient(eType,
+        rGradient.maBaseColor,
+        rGradient.mnSaturationOverride,
+        nValue,
+        rGradient.mnFillOffset1,
+        rGradient.mnFillOffset2,
+        rGradient.mnBorderOffset1,
+        rGradient.mnBorderOffset2);
+}
+
+
 
 
 BitmapEx Theme::GetIcon (const IconType eType)
 {
-    switch (eType)
+    if (eType>=0 && eType<maIcons.size())
+        return maIcons[eType];
+    else
     {
-        case Icon_RawShadow:
-            return maRawShadow;
-
-        case Icon_RawInsertShadow:
-            return maRawInsertShadow;
-
-        case Icon_HideSlideOverlay:
-            return maHideSlideOverlay;
-
-        case Icon_StartPresentation:
-            return maStartPresentationIcon;
-
-        case Icon_ShowSlide:
-            return maShowSlideIcon;
-
-        case Icon_DuplicateSlide:
-            return maDuplicateSlideIcon;
-
-        default:
-            return BitmapEx();
+        OSL_ASSERT(eType>=0 && eType<maIcons.size());
+        return BitmapEx();
     }
 }
 
@@ -345,14 +448,20 @@ sal_Int32 Theme::GetIntegerValue (const IntegerValueType eType) const
 {
     switch (eType)
     {
-        case ButtonCornerRadius:
+        case Integer_ButtonCornerRadius:
             return mnButtonCornerRadius;
 
-        case ButtonMaxAlpha:
+        case Integer_ButtonMaxAlpha:
             return mnButtonMaxAlpha;
 
-        case ButtonPaintType:
+        case Integer_ButtonPaintType:
             return mnButtonPaintType;
+
+        case Integer_ButtonBorder:
+            return mnButtonBorder;
+
+        case Integer_ButtonGap:
+            return mnButtonGap;
 
         default:
             return 0;
@@ -366,16 +475,24 @@ void Theme::SetIntegerValue (const IntegerValueType eType, const sal_Int32 nValu
 {
     switch (eType)
     {
-        case ButtonCornerRadius:
+        case Integer_ButtonCornerRadius:
             mnButtonCornerRadius = nValue;
             break;
 
-        case ButtonMaxAlpha:
+        case Integer_ButtonMaxAlpha:
             mnButtonMaxAlpha = nValue;
             break;
 
-        case ButtonPaintType:
+        case Integer_ButtonPaintType:
             mnButtonPaintType = nValue;
+            break;
+
+        case Integer_ButtonBorder:
+            mnButtonBorder = nValue;
+            break;
+
+        case Integer_ButtonGap:
+            mnButtonGap = nValue;
             break;
 
         default:
@@ -388,12 +505,12 @@ void Theme::SetIntegerValue (const IntegerValueType eType, const sal_Int32 nValu
 
 ::rtl::OUString Theme::GetString (const StringType eType) const
 {
-    switch (eType)
+    if (eType>=0 && eType<maStrings.size())
+        return maStrings[eType];
+    else
     {
-        case String_Unhide: return msUnhide;
-        case String_DragAndDropPages: return msDragAndDropPages;
-        case String_DragAndDropSlides: return msDragAndDropSlides;
-        default: return ::rtl::OUString();
+        OSL_ASSERT(eType>=0 && eType<maStrings.size());
+        return ::rtl::OUString();
     }
 }
 
@@ -402,25 +519,28 @@ void Theme::SetIntegerValue (const IntegerValueType eType, const sal_Int32 nValu
 
 Theme::GradientDescriptor& Theme::GetGradient (const GradientColorType eType)
 {
-    switch(eType)
+    if (eType>=0 && eType<maGradients.size())
+        return maGradients[eType];
+    else
     {
-        default:
-            OSL_ASSERT(false);
-            // fall through
-
-        case NormalPage:
-            return maNormalGradient;
-
-        case SelectedPage:
-            return maSelectedGradient;
-
-        case SelectedAndFocusedPage:
-            return maSelectedAndFocusedGradient;
-
-        case MouseOverPage:
-            return maMouseOverGradient;
+        OSL_ASSERT(eType>=0 && eType<maGradients.size());
+        return maGradients[0];
     }
 }
+
+
+
+
+void Theme::InitializeIcon (const IconType eType, USHORT nResourceId)
+{
+    if (eType>=0 && eType<maIcons.size())
+        maIcons[eType] = Image(SdResId(nResourceId)).GetBitmapEx();
+    else
+    {
+        OSL_ASSERT(eType>=0 && eType<maIcons.size());
+    }
+}
+
 
 
 

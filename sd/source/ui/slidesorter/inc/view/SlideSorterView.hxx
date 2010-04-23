@@ -63,6 +63,7 @@ class SlideSorterModel;
 
 namespace sd { namespace slidesorter { namespace view {
 
+class ButtonBar;
 class LayeredDevice;
 class Layouter;
 class PageObjectPainter;
@@ -198,18 +199,19 @@ public:
     /** The page under the mouse is not highlighted in some contexts.  Call
         this method on context changes.
     */
-    void SetIsMouseOverIndicationAllowed (const bool bIsAllowed);
     void UpdatePageUnderMouse (bool bAnimate);
     void UpdatePageUnderMouse (
+        const Point& rMousePosition,
+        const bool bIsMouseButtonDown,
+        const bool bAnimate = true);
+    void UpdatePageUnderMouse (
+        const model::SharedPageDescriptor& rpDescriptor,
         const Point& rMousePosition,
         const bool bIsMouseButtonDown,
         const bool bAnimate = true);
     void SetPageUnderMouse (
         const model::SharedPageDescriptor& rpDescriptor,
         const bool bAnimate = true);
-    void SetButtonUnderMouse (
-        const sal_Int32 nButtonIndex,
-        const bool bForce = false);
 
     bool SetState (
         const model::SharedPageDescriptor& rpDescriptor,
@@ -237,6 +239,8 @@ public:
         SharedSdWindow mpWindow;
     };
 
+    ButtonBar& GetButtonBar (void) const;
+
 protected:
     virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
 
@@ -255,18 +259,20 @@ private:
     Layouter::Orientation meOrientation;
     ::boost::shared_ptr<controller::Properties> mpProperties;
     model::SharedPageDescriptor mpPageUnderMouse;
-    bool mbIsMouseOverIndicationAllowed;
+    ::rtl::OUString msHelpText;
     sal_Int32 mnButtonUnderMouse;
     ::boost::shared_ptr<PageObjectPainter> mpPageObjectPainter;
     ::boost::shared_ptr<SelectionPainter> mpSelectionPainter;
     Region maRedrawRegion;
     SharedILayerPainter mpBackgroundPainter;
+    ::boost::scoped_ptr<ButtonBar> mpButtonBar;
 
     /** Determine the visibility of all page objects.
     */
     void DeterminePageObjectVisibilities (void);
 
     void UpdatePreciousFlags (void);
+    void Rearrange (void);
 };
 
 

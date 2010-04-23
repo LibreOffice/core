@@ -30,22 +30,130 @@
 
 #include "view/SlsResource.hrc"
 
-Resource IMG_ICONS
+Resource RID_SLIDESORTER_ICONS
 {
-    Image IMAGE_PRESENTATION
+    Image IMAGE_COMMAND1_REGULAR
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command1.png" ; };
     };
 
-    Image IMAGE_SHOW_SLIDE
+    Image IMAGE_COMMAND1_HOVER
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command1_hover.png" ; };
+    };
+
+    Image IMAGE_COMMAND1_SMALL
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command1_small.png" ; };
+    };
+
+    Image IMAGE_COMMAND1_SMALL_HOVER
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command1_small_hover.png" ; };
+    };
+
+    Image IMAGE_COMMAND1_REGULAR_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command1_hc.png" ; };
+    };
+
+    Image IMAGE_COMMAND1_HOVER_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command1_hover_hc.png" ; };
+    };
+
+    Image IMAGE_COMMAND1_SMALL_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command1_small_hc.png" ; };
+    };
+
+    Image IMAGE_COMMAND1_SMALL_HOVER_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command1_small_hover_hc.png" ; };
+    };
+
+
+    Image IMAGE_COMMAND2_REGULAR
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command2.png" ; };
     };
 
-    Image IMAGE_NEW_SLIDE
+    Image IMAGE_COMMAND2_HOVER
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2_hover.png" ; };
+    };
+
+    Image IMAGE_COMMAND2_SMALL
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2_small.png" ; };
+    };
+
+    Image IMAGE_COMMAND2_SMALL_HOVER
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2_small_hover.png" ; };
+    };
+
+    Image IMAGE_COMMAND2_REGULAR_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2_hc.png" ; };
+    };
+
+    Image IMAGE_COMMAND2_HOVER_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2_hover_hc.png" ; };
+    };
+
+    Image IMAGE_COMMAND2_SMALL_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2_small_hc.png" ; };
+    };
+
+    Image IMAGE_COMMAND2_SMALL_HOVER_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2_small_hover_hc.png" ; };
+    };
+
+
+    Image IMAGE_COMMAND3_REGULAR
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command3.png" ; };
     };
+
+    Image IMAGE_COMMAND3_HOVER
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command3_hover.png" ; };
+    };
+
+    Image IMAGE_COMMAND3_SMALL
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command3_small.png" ; };
+    };
+
+    Image IMAGE_COMMAND3_SMALL_HOVER
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command3_small_hover.png" ; };
+    };
+
+    Image IMAGE_COMMAND3_REGULAR_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command3_hc.png" ; };
+    };
+
+    Image IMAGE_COMMAND3_HOVER_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command3_hover_hc.png" ; };
+    };
+
+    Image IMAGE_COMMAND3_SMALL_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command3_small_hc.png" ; };
+    };
+
+    Image IMAGE_COMMAND3_SMALL_HOVER_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command3_small_hover_hc.png" ; };
+    };
+
 
     Image IMAGE_SHADOW
     {
@@ -75,5 +183,20 @@ Resource IMG_ICONS
     String STRING_DRAG_AND_DROP_SLIDES
     {
         Text [ en-US ] = "Drag and Drop Slides" ;
+    };
+
+    String STRING_COMMAND1
+    {
+        Text [ en-US ] = "Start Slide Show" ;
+    };
+
+    String STRING_COMMAND2
+    {
+        Text [ en-US ] = "Show/Hide Slide" ;
+    };
+
+    String STRING_COMMAND3
+    {
+        Text [ en-US ] = "Duplicate Slide" ;
     };
 };

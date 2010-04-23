@@ -194,7 +194,10 @@ public:
     Range GetValidVerticalSizeRange (void) const;
 
     Range GetRangeOfVisiblePageObjects (const Rectangle& aVisibleArea) const;
-    sal_Int32 GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) const;
+    sal_Int32 GetIndex (
+        const sal_Int32 nRow,
+        const sal_Int32 nColumn,
+        const bool bClampToValidRange) const;
 
         Rectangle GetPageObjectBox (
         const sal_Int32 nIndex,
@@ -452,7 +455,7 @@ sal_Int32 Layouter::GetColumn (const sal_Int32 nIndex) const
 
 sal_Int32 Layouter::GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) const
 {
-    return mpImplementation->GetIndex(nRow,nColumn);
+    return mpImplementation->GetIndex(nRow,nColumn,true);
 }
 
 
@@ -538,7 +541,8 @@ Range Layouter::GetRangeOfVisiblePageObjects (const Rectangle& aVisibleArea) con
 
 sal_Int32 Layouter::GetIndexAtPoint (
     const Point& rPosition,
-    const bool bIncludePageBorders) const
+    const bool bIncludePageBorders,
+    const bool bClampToValidRange) const
 {
     const sal_Int32 nRow (
         mpImplementation->GetRowAtPosition (
@@ -551,7 +555,7 @@ sal_Int32 Layouter::GetIndexAtPoint (
             bIncludePageBorders,
             bIncludePageBorders ? Implementation::GM_PAGE_BORDER : Implementation::GM_NONE));
 
-    return mpImplementation->GetIndex(nRow,nColumn);
+    return mpImplementation->GetIndex(nRow,nColumn,bClampToValidRange);
 }
 
 
@@ -1004,7 +1008,7 @@ Range Layouter::Implementation::GetRangeOfVisiblePageObjects (const Rectangle& a
 
     // When start and end lie in different rows then the range may include
     // slides outside (left or right of) the given area.
-    return Range(GetIndex(nRow0,nCol0), GetIndex(nRow1,nCol1));
+    return Range(GetIndex(nRow0,nCol0,true), GetIndex(nRow1,nCol1,true));
 }
 
 
@@ -1060,13 +1064,24 @@ Size Layouter::Implementation::GetTargetSize (
 
 
 
-sal_Int32 Layouter::Implementation::GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) const
+sal_Int32 Layouter::Implementation::GetIndex (
+    const sal_Int32 nRow,
+    const sal_Int32 nColumn,
+    const bool bClampToValidRange) const
 {
     if (nRow >= 0 && nColumn >= 0)
     {
         const sal_Int32 nIndex (nRow * mnColumnCount + nColumn);
-        return ::std::min(nIndex, mnPageCount-1);
+        if (nIndex >= mnPageCount)
+            if (bClampToValidRange)
+                return mnPageCount-1;
+            else
+                return -1;
+        else
+            return nIndex;
     }
+    else if (bClampToValidRange)
+        return 0;
     else
         return -1;
 }

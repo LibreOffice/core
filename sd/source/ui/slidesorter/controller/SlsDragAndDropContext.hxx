@@ -71,8 +71,6 @@ public:
         const InsertionIndicatorHandler::Mode eMode,
         const bool bAllowAutoScroll = true);
 
-    void Show (void);
-    void Hide (void);
     void SetTargetSlideSorter (
         SlideSorter* pSlideSorter = NULL,
         const Point aMousePosition = Point(0,0),

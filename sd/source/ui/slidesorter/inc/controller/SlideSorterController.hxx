@@ -275,6 +275,7 @@ private:
     ::rtl::Reference<controller::Listener> mpListener;
 
     int mnModelChangeLockCount;
+    bool mbIsForcedRearrangePending;
 
     bool mbPreModelChangeDone;
     bool mbPostModelChangePending;

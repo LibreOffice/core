@@ -202,7 +202,7 @@ void PageSelector::SelectPage (const SharedPageDescriptor& rpDescriptor)
     {
         mnSelectedPageCount ++;
         if ( ! mbIsMakeVisibleDisabled)
-            mrSlideSorter.GetController().GetVisibleAreaManager().RequestVisible(rpDescriptor);
+            mrSlideSorter.GetController().GetVisibleAreaManager().RequestVisible(rpDescriptor,true);
         mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
 
         mpMostRecentlySelectedPage = rpDescriptor;
@@ -412,18 +412,18 @@ void PageSelector::UpdateCurrentPage (const bool bUpdateOnlyWhenPending)
 //===== PageSelector::UpdateLock ==============================================
 
 PageSelector::UpdateLock::UpdateLock (SlideSorter& rSlideSorter)
-    : mrSelector(rSlideSorter.GetController().GetPageSelector())
+    : mpSelector(&rSlideSorter.GetController().GetPageSelector())
 {
-    ++mrSelector.mnUpdateLockCount;
+    ++mpSelector->mnUpdateLockCount;
 }
 
 
 
 
 PageSelector::UpdateLock::UpdateLock (PageSelector& rSelector)
-    : mrSelector(rSelector)
+    : mpSelector(&rSelector)
 {
-    ++mrSelector.mnUpdateLockCount;
+    ++mpSelector->mnUpdateLockCount;
 }
 
 
@@ -431,10 +431,20 @@ PageSelector::UpdateLock::UpdateLock (PageSelector& rSelector)
 
 PageSelector::UpdateLock::~UpdateLock (void)
 {
-    --mrSelector.mnUpdateLockCount;
-    OSL_ASSERT(mrSelector.mnUpdateLockCount >= 0);
-    if (mrSelector.mnUpdateLockCount == 0)
-        mrSelector.UpdateCurrentPage(true);
+    Release();
+}
+
+void PageSelector::UpdateLock::Release (void)
+{
+    if (mpSelector != NULL)
+    {
+        --mpSelector->mnUpdateLockCount;
+        OSL_ASSERT(mpSelector->mnUpdateLockCount >= 0);
+        if (mpSelector->mnUpdateLockCount == 0)
+            mpSelector->UpdateCurrentPage(true);
+
+        mpSelector = NULL;
+    }
 }
 
 

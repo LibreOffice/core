@@ -113,6 +113,11 @@ public:
     */
     void InvalidateAllCaches (void);
 
+    /** Call this method when a page has been deleted and its preview
+        is not needed anymore.
+    */
+    void ReleasePreviewBitmap (const SdrPage* pPage);
+
 private:
     /** Singleton instance of the cache manager.  Note that this is a weak
         pointer.  The (implementation class of) ViewShellBase holds a

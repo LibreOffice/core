@@ -37,14 +37,16 @@ Properties::Properties (void)
       mbIsShowSelection(true),
       mbIsShowFocus(true),
       mbIsCenterSelection(false),
-      mbIsSmoothSelectionScrolling(true),//false),
+      mbIsSmoothSelectionScrolling(true),
       mbIsSuspendPreviewUpdatesDuringFullScreenPresentation(true),
       maBackgroundColor(Application::GetSettings().GetStyleSettings().GetWindowColor()),
       maTextColor(Application::GetSettings().GetStyleSettings().GetActiveTextColor()),
       maSelectionColor(Application::GetSettings().GetStyleSettings().GetHighlightColor()),
       maHighlightColor(Application::GetSettings().GetStyleSettings().GetMenuHighlightColor()),
       mbIsUIReadOnly(false),
-      mbIsOnlyPreviewTriggersMouseOver(true)
+      mbIsOnlyPreviewTriggersMouseOver(true),
+      mbIsHighContrastModeActive(
+          Application::GetSettings().GetStyleSettings().GetHighContrastMode())
 {
 }
 
@@ -64,6 +66,8 @@ void Properties::HandleDataChangeEvent (void)
     maTextColor = Application::GetSettings().GetStyleSettings().GetActiveTextColor();
     maSelectionColor = Application::GetSettings().GetStyleSettings().GetHighlightColor();
     maHighlightColor = Application::GetSettings().GetStyleSettings().GetMenuHighlightColor();
+    mbIsHighContrastModeActive
+        = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 }
 
 
@@ -255,6 +259,14 @@ bool Properties::IsOnlyPreviewTriggersMouseOver (void) const
 void Properties::SetOnlyPreviewTriggersMouseOver (const bool bFlag)
 {
     mbIsOnlyPreviewTriggersMouseOver = bFlag;
+}
+
+
+
+
+bool Properties::IsHighContrastModeActive (void) const
+{
+    return mbIsHighContrastModeActive;
 }
 
 

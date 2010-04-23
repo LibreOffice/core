@@ -42,10 +42,14 @@
 #include "view/SlsTheme.hxx"
 #include <boost/scoped_ptr.hpp>
 
-namespace sd { namespace slidesorter { namespace cache { class PageCache; } } }
+namespace sd { namespace slidesorter { namespace cache {
+class PageCache;
+class PreviewType;
+} } }
 
 namespace sd { namespace slidesorter { namespace view {
 
+class ButtonBar;
 class Layouter;
 class PageObjectLayouter;
 class FramePainter;
@@ -76,19 +80,19 @@ private:
     ::boost::shared_ptr<controller::Properties> mpProperties;
     ::boost::shared_ptr<view::Theme> mpTheme;
     ::boost::shared_ptr<Font> mpPageNumberFont;
-    BitmapEx maStartPresentationIcon;
-    BitmapEx maShowSlideIcon;
-    BitmapEx maNewSlideIcon;
     ::boost::scoped_ptr<FramePainter> mpShadowPainter;
     Bitmap maNormalBackground;
     Bitmap maSelectionBackground;
     Bitmap maFocusedSelectionBackground;
+    Bitmap maFocusedBackground;
     Bitmap maMouseOverBackground;
+    Bitmap maMouseOverSelectedAndFocusedBackground;
     ::rtl::OUString msUnhideString;
+    ButtonBar& mrButtonBar;
 
     void PaintBackground (
         OutputDevice& rDevice,
-        const model::SharedPageDescriptor& rpDescriptor) const;
+        const model::SharedPageDescriptor& rpDescriptor);
     void PaintPreview (
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor) const;
@@ -98,30 +102,25 @@ private:
     void PaintTransitionEffect (
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor) const;
-    void PaintButtons (
-        OutputDevice& rDevice,
-        const model::SharedPageDescriptor& rpDescriptor) const;
-    void PaintButtonsType0 (
-        OutputDevice& rDevice,
-        const model::SharedPageDescriptor& rpDescriptor) const;
-    void PaintButtonsType1 (
-        OutputDevice& rDevice,
-        const model::SharedPageDescriptor& rpDescriptor) const;
-    void PaintWideButton (
-        OutputDevice& rDevice,
-        const model::SharedPageDescriptor& rpDescriptor) const;
-    Rectangle PaintWideButtonBackground (
-        OutputDevice& rDevice,
-        const model::SharedPageDescriptor& rpDescriptor,
-        const model::VisualState::ButtonState eState) const;
-    void PrepareBackgrounds (OutputDevice& rDevice);
     void PaintBorder (
         OutputDevice& rDevice,
         const Theme::GradientColorType eColorType,
         const Rectangle& rBox) const;
+    Bitmap& GetBackgroundForState (
+        const model::SharedPageDescriptor& rpDescriptor,
+        const OutputDevice& rTemplateDevice);
+    Bitmap& GetBackground(
+        Bitmap& rBackground,
+        Theme::GradientColorType eType,
+        const OutputDevice& rTemplateDevice);
     Bitmap CreateBackgroundBitmap(
         const OutputDevice& rReferenceDevice,
         const Theme::GradientColorType eType) const;
+    Bitmap CreateMarkedPreview(
+        const Size& rSize,
+        const cache::PreviewType& rPreview,
+        const BitmapEx& rOverlay,
+        const OutputDevice& TemplateDevice) const;
 };
 
 } } } // end of namespace sd::slidesorter::view

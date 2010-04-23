@@ -33,12 +33,12 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
-class BitmapEx;
 class SdrPage;
 
 namespace sd { namespace slidesorter { namespace cache {
 
 typedef const SdrPage* CacheKey;
+class PreviewType;
 
 /** This interface allows the individualisation of different instances of
     the PreviewCache.
@@ -55,7 +55,7 @@ public:
     */
     virtual void NotifyPreviewCreation (
         CacheKey aKey,
-        const ::boost::shared_ptr<BitmapEx>& rPreview) = 0;
+        const PreviewType& rPreview) = 0;
 
     /** Called to determine whether the system is idle and a preview can be
         created without annoying the user.

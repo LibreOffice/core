@@ -120,6 +120,8 @@ public:
     bool IsOnlyPreviewTriggersMouseOver (void) const;
     void SetOnlyPreviewTriggersMouseOver (const bool bFlag);
 
+    bool IsHighContrastModeActive (void) const;
+
 private:
     bool mbIsHighlightCurrentSlide;
     bool mbIsShowSelection;
@@ -133,6 +135,7 @@ private:
     Color maHighlightColor;
     bool mbIsUIReadOnly;
     bool mbIsOnlyPreviewTriggersMouseOver;
+    bool mbIsHighContrastModeActive;
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

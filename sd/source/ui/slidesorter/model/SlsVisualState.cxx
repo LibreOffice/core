@@ -217,24 +217,4 @@ void VisualState::SetButtonAlphaAnimationId (const sal_Int32 nAnimationId)
 }
 
 
-
-
-void VisualState::SetActiveButtonState (const sal_Int32 nIndex, const ButtonState eState)
-{
-    mnActiveButtonIndex = nIndex;
-    meActiveButtonState = eState;
-}
-
-
-
-
-VisualState::ButtonState VisualState::GetButtonState (const sal_Int32 nIndex)
-{
-    if (nIndex == mnActiveButtonIndex)
-        return meActiveButtonState;
-    else
-        return BS_Normal;
-}
-
-
 } } } // end of namespace ::sd::slidesorter::model

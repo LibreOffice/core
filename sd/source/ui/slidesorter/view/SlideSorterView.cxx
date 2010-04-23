@@ -39,6 +39,7 @@
 #include "view/SlsPageObjectLayouter.hxx"
 #include "view/SlsPageObjectPainter.hxx"
 #include "view/SlsILayerPainter.hxx"
+#include "view/SlsButton.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsProperties.hxx"
 #include "controller/SlsAnimator.hxx"
@@ -150,26 +151,27 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
         rSlideSorter.GetModel().GetDocument(),
             rSlideSorter.GetContentWindow().get(),
         rSlideSorter.GetViewShell()),
-    mrSlideSorter(rSlideSorter),
-    mrModel(rSlideSorter.GetModel()),
-    mbIsDisposed(false),
-    mpLayouter (new Layouter(rSlideSorter.GetContentWindow())),
-    mbPageObjectVisibilitiesValid (false),
-    mpPreviewCache(),
-    mpLayeredDevice(new LayeredDevice(rSlideSorter.GetContentWindow())),
-    maVisiblePageRange(-1,-1),
-    mbModelChangedWhileModifyEnabled(true),
-    maPreviewSize(0,0),
-    mbPreciousFlagUpdatePending(true),
-    meOrientation(Layouter::GRID),
-    mpProperties(rSlideSorter.GetProperties()),
-    mpPageUnderMouse(),
-    mbIsMouseOverIndicationAllowed(true),
-    mnButtonUnderMouse(-1),
-    mpPageObjectPainter(),
-    mpSelectionPainter(),
-    mpBackgroundPainter(
-        new BackgroundPainter(mrSlideSorter.GetTheme()->GetColor(Theme::Background)))
+      mrSlideSorter(rSlideSorter),
+      mrModel(rSlideSorter.GetModel()),
+      mbIsDisposed(false),
+      mpLayouter (new Layouter(rSlideSorter.GetContentWindow())),
+      mbPageObjectVisibilitiesValid (false),
+      mpPreviewCache(),
+      mpLayeredDevice(new LayeredDevice(rSlideSorter.GetContentWindow())),
+      maVisiblePageRange(-1,-1),
+      mbModelChangedWhileModifyEnabled(true),
+      maPreviewSize(0,0),
+      mbPreciousFlagUpdatePending(true),
+      meOrientation(Layouter::GRID),
+      mpProperties(rSlideSorter.GetProperties()),
+      mpPageUnderMouse(),
+      msHelpText(),
+      mnButtonUnderMouse(-1),
+      mpPageObjectPainter(),
+      mpSelectionPainter(),
+      mpBackgroundPainter(
+          new BackgroundPainter(mrSlideSorter.GetTheme()->GetColor(Theme::Background))),
+      mpButtonBar(new ButtonBar(mrSlideSorter))
 {
     // Hide the page that contains the page objects.
     SetPageVisible (FALSE);
@@ -245,7 +247,7 @@ sal_Int32 SlideSorterView::GetPageIndexAtPoint (const Point& rWindowPosition) co
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow)
     {
-        nIndex = mpLayouter->GetIndexAtPoint(pWindow->PixelToLogic(rWindowPosition));
+        nIndex = mpLayouter->GetIndexAtPoint(pWindow->PixelToLogic(rWindowPosition), false, false);
 
         // Clip the page index against the page count.
         if (nIndex >= mrModel.GetPageCount())
@@ -305,7 +307,7 @@ void SlideSorterView::PostModelChange (void)
         model::PageEnumerationProvider::CreateAllPagesEnumeration(mrModel));
 
     // The new page objects have to be scaled and positioned.
-    Layout();
+    Rearrange();
     RequestRepaint();
 }
 
@@ -361,6 +363,14 @@ void SlideSorterView::Resize (void)
     UpdateOrientation();
 
     mpLayeredDevice->Resize();
+    Rearrange();
+}
+
+
+
+
+void SlideSorterView::Rearrange (void)
+{
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if (mrModel.GetPageCount()>0 && pWindow)
     {
@@ -373,6 +383,7 @@ void SlideSorterView::Resize (void)
 
         if (bRearrangeSuccess)
         {
+            GetButtonBar().SetPageObjectSize(mpLayouter->GetPageObjectSize());
             Layout();
             UpdatePageUnderMouse(false);
             RequestRepaint();
@@ -479,20 +490,12 @@ void SlideSorterView::Layout ()
 
         // Iterate over all page objects and place them relative to the
         // containing page.
-        sal_Int32 nIndex (0);
         model::PageEnumeration aPageEnumeration (
             model::PageEnumerationProvider::CreateAllPagesEnumeration(mrModel));
         while (aPageEnumeration.HasMoreElements())
         {
             model::SharedPageDescriptor pDescriptor (aPageEnumeration.GetNextElement());
             pDescriptor->SetBoundingBox(mpLayouter->GetPageObjectBox(pDescriptor->GetPageIndex()));
-            OSL_TRACE("%d %d(%d) : %d %d %d %d",
-                pDescriptor->GetPageIndex(), pDescriptor->GetVisualState().mnPageId, nIndex,
-                pDescriptor->GetBoundingBox().Left(),
-                pDescriptor->GetBoundingBox().Top(),
-                pDescriptor->GetBoundingBox().GetWidth(),
-                pDescriptor->GetBoundingBox().GetHeight());
-            ++nIndex;
         }
 
         GetPageObjectPainter()->NotifyResize();
@@ -545,7 +548,7 @@ void SlideSorterView::DeterminePageObjectVisibilities (void)
         maVisiblePageRange = aRange;
 
         // Restore the mouse over state.
-        UpdatePageUnderMouse(false);
+        UpdatePageUnderMouse(true);
     }
 }
 
@@ -808,6 +811,15 @@ Pair SlideSorterView::GetVisiblePageRange (void)
 
 
 
+ButtonBar& SlideSorterView::GetButtonBar (void) const
+{
+    OSL_ASSERT(mpButtonBar);
+    return *mpButtonBar;
+}
+
+
+
+
 void SlideSorterView::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint)
 {
     ::sd::DrawDocShell* pDocShell = mrModel.GetDocument()->GetDocSh();
@@ -815,18 +827,6 @@ void SlideSorterView::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint
         mbModelChangedWhileModifyEnabled = true;
 
     ::sd::View::Notify(rBroadcaster, rHint);
-}
-
-
-
-
-void SlideSorterView::SetIsMouseOverIndicationAllowed (const bool bIsAllowed)
-{
-    mbIsMouseOverIndicationAllowed = bIsAllowed;
-    if ( ! mbIsMouseOverIndicationAllowed)
-        SetPageUnderMouse(model::SharedPageDescriptor());
-    else
-        UpdatePageUnderMouse(false);
 }
 
 
@@ -857,34 +857,38 @@ void SlideSorterView::UpdatePageUnderMouse (
     const bool bIsMouseButtonDown,
     const bool bAnimate)
 {
-    if ( ! mbIsMouseOverIndicationAllowed)
-    {
-        SetPageUnderMouse(model::SharedPageDescriptor());
-    }
-    else
-    {
-        // Determine page under mouse and show the mouse over effect.
-        model::SharedPageDescriptor pHitDescriptor (
-            mrSlideSorter.GetController().GetPageAt(rMousePosition));
-        SetPageUnderMouse(pHitDescriptor, bAnimate);
+    UpdatePageUnderMouse(
+        mrSlideSorter.GetController().GetPageAt(rMousePosition),
+        rMousePosition,
+        bIsMouseButtonDown,
+        bAnimate);
+}
 
-        // Handle the mouse being over any buttons.
-        if (pHitDescriptor)
-        {
-            SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
-            const Point aMouseModelPosition (pWindow->PixelToLogic(rMousePosition));
-            const sal_Int32 nButtonIndex (
-                GetLayouter().GetPageObjectLayouter()->GetButtonIndexAt (
-                    pHitDescriptor,
-                    aMouseModelPosition));
-            SetButtonUnderMouse(nButtonIndex);
-            if (bIsMouseButtonDown)
-            {
-                pHitDescriptor->GetVisualState().SetActiveButtonState(
-                    nButtonIndex,
-                    model::VisualState::BS_Pressed);
-            }
-        }
+
+
+
+void SlideSorterView::UpdatePageUnderMouse (
+    const model::SharedPageDescriptor& rpDescriptor,
+    const Point& rMousePosition,
+    const bool bIsMouseButtonDown,
+    const bool bAnimate)
+{
+    // Update the page under the mouse.
+    SetPageUnderMouse(rpDescriptor, bAnimate);
+
+    // Tell the button bar about the new mouse position.
+    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
+    const Point aMouseModelPosition (pWindow->PixelToLogic(rMousePosition));
+
+    const bool bIsMouseOverButtonBar (GetButtonBar().IsMouseOverBar());
+    GetButtonBar().ProcessMouseMotionEvent(rpDescriptor, aMouseModelPosition, bIsMouseButtonDown);
+    // Set the help text of the slide when the mouse was moved from
+    // the button bar back over the preview.
+    if (rpDescriptor
+        && GetButtonBar().IsMouseOverBar() != bIsMouseOverButtonBar
+        && bIsMouseOverButtonBar)
+    {
+        pWindow->SetQuickHelpText(msHelpText);
     }
 }
 
@@ -898,15 +902,9 @@ void SlideSorterView::SetPageUnderMouse (
     if (mpPageUnderMouse != rpDescriptor)
     {
         if (mpPageUnderMouse)
-        {
-            mpPageUnderMouse->GetVisualState().SetActiveButtonState(
-                -1,
-                model::VisualState::BS_Normal);
             SetState(mpPageUnderMouse, PageDescriptor::ST_MouseOver, false, bAnimate);
-        }
 
         mpPageUnderMouse = rpDescriptor;
-        SetButtonUnderMouse(-1);
 
         if (mpPageUnderMouse)
             SetState(mpPageUnderMouse, PageDescriptor::ST_MouseOver, true, bAnimate);
@@ -916,43 +914,23 @@ void SlideSorterView::SetPageUnderMouse (
         SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
         if (pWindow)
         {
-            ::rtl::OUString sText;
+            msHelpText = ::rtl::OUString();
             if (mpPageUnderMouse)
             {
                 SdPage* pPage = mpPageUnderMouse->GetPage();
                 if (pPage != NULL)
-                    sText = pPage->GetName();
+                    msHelpText = pPage->GetName();
                 else
                 {
                     OSL_ASSERT(mpPageUnderMouse->GetPage() != NULL);
                 }
-                if (sText.getLength() == 0)
+                if (msHelpText.getLength() == 0)
                 {
-                    sText = String(SdResId(STR_PAGE));
-                    sText += String::CreateFromInt32(mpPageUnderMouse->GetPageIndex()+1);
+                    msHelpText = String(SdResId(STR_PAGE));
+                    msHelpText += String::CreateFromInt32(mpPageUnderMouse->GetPageIndex()+1);
                 }
             }
-            pWindow->SetQuickHelpText(sText);
-        }
-    }
-}
-
-
-
-
-void SlideSorterView::SetButtonUnderMouse (
-    const sal_Int32 nButtonIndex,
-    const bool bForce)
-{
-    if (mnButtonUnderMouse != nButtonIndex || bForce)
-    {
-        if (mpPageUnderMouse)
-        {
-            mnButtonUnderMouse = nButtonIndex;
-            mpPageUnderMouse->GetVisualState().SetActiveButtonState(
-                mnButtonUnderMouse,
-                model::VisualState::BS_MouseOver);
-            RequestRepaint(mpPageUnderMouse);
+            pWindow->SetQuickHelpText(msHelpText);
         }
     }
 }
@@ -988,7 +966,7 @@ bool SlideSorterView::SetState (
     if (eState == PageDescriptor::ST_MouseOver)
     {
         const double nMinAlpha (
-            mrSlideSorter.GetTheme()->GetIntegerValue(Theme::ButtonMaxAlpha)/255.0);
+            mrSlideSorter.GetTheme()->GetIntegerValue(Theme::Integer_ButtonMaxAlpha)/255.0);
         const static double nMaxAlpha (1.0);
         const double nEndAlpha (bStateValue ? nMinAlpha : nMaxAlpha);
         if (bAnimate)

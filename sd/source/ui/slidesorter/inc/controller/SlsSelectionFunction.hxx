@@ -104,7 +104,22 @@ public:
     */
     void UpdateMouseOverIndicationPermission (void);
 
-    ::boost::shared_ptr<DragAndDropContext> GetDragAndDropContext (void) const;
+    class EventDescriptor;
+    class ModeHandler;
+    friend class ModeHandler;
+    enum Mode
+    {
+        NormalMode,
+        MultiSelectionMode,
+        DragAndDropMode,
+        ButtonMode
+    };
+    void SwitchToNormalMode (void);
+    void SwitchToDragAndDropMode(const Point aMousePosition);
+    void SwitchToMultiSelectionMode (const Point aMousePosition, const sal_uInt32 nEventCode);
+    void SwitchToButtonMode (void);
+
+    void ResetShiftKeySelectionAnchor (void);
 
 protected:
     SlideSorter& mrSlideSorter;
@@ -117,7 +132,6 @@ protected:
     virtual ~SelectionFunction();
 
 private:
-    class EventDescriptor;
 
     /// The rectangle of the mouse drag selection.
     Rectangle maDragSelectionRectangle;
@@ -134,16 +148,6 @@ private:
     */
     bool mbProcessingMouseButtonDown;
 
-    ::boost::shared_ptr<DragAndDropContext> mpDragAndDropContext;
-
-    class MouseMultiSelector;
-    ::boost::scoped_ptr<MouseMultiSelector> mpMouseMultiSelector;
-
-    /** Remember where the left mouse button was pressed.
-    */
-    sal_Int32 mnButtonDownPageIndex;
-    sal_Int32 mnButtonDownButtonIndex;
-
     bool mbIsDeselectionPending;
 
     /** Remember the slide where the shift key was pressed and started a
@@ -151,19 +155,10 @@ private:
     */
     sal_Int32 mnShiftKeySelectionAnchor;
 
-    void StartDrag (
-        const Point& rMousePosition,
-        const InsertionIndicatorHandler::Mode eMode);
-
-    /** Set the selection to exactly the specified page and also set it as
-        the current page.
+    /** The selection function can be in one of several mutually
+        exclusive modes.
     */
-    void SetCurrentPage (const model::SharedPageDescriptor& rpDescriptor);
-
-    /** When the view on which this selection function is working is the
-        main view then the view is switched to the regular editing view.
-    */
-    void SwitchView (const model::SharedPageDescriptor& rpDescriptor);
+    ::boost::shared_ptr<ModeHandler> mpModeHandler;
 
     /** Make the slide nOffset slides away of the current one the new
         current slide.  When the new index is outside the range of valid
@@ -187,45 +182,7 @@ private:
     // What follows are a couple of helper methods that are used by
     // ProcessMouseEvent().
 
-    /// Deselect all pages.
-    void DeselectAllPages (void);
-
-    /** Select all pages between and including the selection anchor and the
-        specified page.
-    */
-    void RangeSelect (const model::SharedPageDescriptor& rpDescriptor);
-
-    /** Compute a numerical code that describes a mouse event and that can
-        be used for fast look up of the appropriate reaction.
-    */
-    sal_uInt32 EncodeMouseEvent (
-        const EventDescriptor& rDescriptor,
-        const MouseEvent& rEvent) const;
-
-    /** Compute a numerical code that describes a key event and that can
-        be used for fast look up of the appropriate reaction.
-    */
-    sal_uInt32 EncodeKeyEvent (
-        const EventDescriptor& rDescriptor,
-        const KeyEvent& rEvent) const;
-
-    /** Compute a numerical code that describes the current state like
-        whether the selection rectangle is visible or whether the page under
-        the mouse or the one that has the focus is selected.
-    */
-    sal_uInt32 EncodeState (const EventDescriptor& rDescriptor) const;
-
-    bool ProcessEvent (EventDescriptor& rEvent);
-    void PostProcessEvent (const EventDescriptor& rEvent);
-    void ProcessEventWhileDragActive (EventDescriptor& rDescriptor);
-    void ProcessEventWhileMultiSelectorActive (EventDescriptor& rDescriptor);
-    void ProcessButtonDownEvent (EventDescriptor& rDescriptor);
-    void ProcessButtonUpEvent (const EventDescriptor& rDescriptor);
-    void ProcessMouseMotionEvent (const EventDescriptor& rDescriptor);
-
-    void ProcessButtonClick (
-        const model::SharedPageDescriptor& rpDescriptor,
-        const sal_Int32 nButtonIndex);
+    void ProcessEvent (EventDescriptor& rEvent);
 
     void MoveFocus (
         const FocusManager::FocusMoveDirection eDirection,
@@ -233,7 +190,8 @@ private:
         const bool bIsControlDown);
 
     void StopDragAndDrop (void);
-    void StopMouseMultiSelection (void);
+
+    void SwitchMode (const ::boost::shared_ptr<ModeHandler>& rpHandler);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

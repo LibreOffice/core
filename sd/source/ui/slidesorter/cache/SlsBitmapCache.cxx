@@ -33,7 +33,6 @@
 #include "SlsBitmapCompressor.hxx"
 #include "SlsCacheConfiguration.hxx"
 
-#include "taskpane/SlideSorterCacheDisplay.hxx"
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
 
@@ -55,8 +54,7 @@ namespace sd { namespace slidesorter { namespace cache {
 class BitmapCache::CacheEntry
 {
 public:
-    CacheEntry(const ::boost::shared_ptr<BitmapEx>& rpBitmap,
-        sal_Int32 nLastAccessTime, bool bIsPrecious);
+    CacheEntry(const PreviewType& rBitmap, sal_Int32 nLastAccessTime, bool bIsPrecious);
     CacheEntry(sal_Int32 nLastAccessTime, bool bIsPrecious);
     ~CacheEntry (void) {};
     inline void Recycle (const CacheEntry& rEntry);
@@ -68,18 +66,26 @@ public:
     void SetUpToDate (bool bIsUpToDate) { mbIsUpToDate = bIsUpToDate; }
     sal_Int32 GetAccessTime (void) const { return mnLastAccessTime; }
     void SetAccessTime (sal_Int32 nAccessTime) { mnLastAccessTime = nAccessTime; }
-    ::boost::shared_ptr<BitmapEx> GetPreview (void) const { return mpPreview; }
-    inline void SetPreview (const ::boost::shared_ptr<BitmapEx>& rpPreview);
+
+    PreviewType GetPreview (void) const { return maPreview; }
+    inline void SetPreview (const PreviewType& rPreview);
     bool HasPreview (void) const;
+
+    PreviewType GetMarkedPreview (void) const { return maMarkedPreview; }
+    inline void SetMarkedPreview (const PreviewType& rMarkePreview);
+    bool HasMarkedPreview (void) const;
+
     bool HasReplacement (void) const { return (mpReplacement.get() != NULL); }
     inline bool HasLosslessReplacement (void) const;
-    void Clear (void) { mpPreview.reset(); mpReplacement.reset(); mpCompressor.reset(); }
+    void Clear (void) { maPreview.GetBitmap().SetEmpty(); maMarkedPreview.GetBitmap().SetEmpty();
+        mpReplacement.reset(); mpCompressor.reset(); }
     void Invalidate (void) { mpReplacement.reset(); mpCompressor.reset(); mbIsUpToDate = false; }
     bool IsPrecious (void) const { return mbIsPrecious; }
     void SetPrecious (bool bIsPrecious) { mbIsPrecious = bIsPrecious; }
 
 private:
-    ::boost::shared_ptr<BitmapEx> mpPreview;
+    PreviewType maPreview;
+    PreviewType maMarkedPreview;
     ::boost::shared_ptr<BitmapReplacement> mpReplacement;
     ::boost::shared_ptr<BitmapCompressor> mpCompressor;
     Size maBitmapSize;
@@ -229,7 +235,7 @@ bool BitmapCache::BitmapIsUpToDate (const CacheKey& rKey)
 
 
 
-::boost::shared_ptr<BitmapEx> BitmapCache::GetBitmap (const CacheKey& rKey)
+PreviewType BitmapCache::GetBitmap (const CacheKey& rKey)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -238,10 +244,9 @@ bool BitmapCache::BitmapIsUpToDate (const CacheKey& rKey)
     {
         // Create an empty bitmap for the given key that acts as placeholder
         // until we are given the real one.  Mark it as not being up to date.
-        SetBitmap (rKey, ::boost::shared_ptr<BitmapEx>(new BitmapEx()), false);
+        SetBitmap(rKey, PreviewType(), false);
         iEntry = mpBitmapContainer->find(rKey);
         iEntry->second.SetUpToDate(false);
-        SSCD_SET_UPTODATE(iEntry->first,false);
     }
     else
     {
@@ -256,6 +261,23 @@ bool BitmapCache::BitmapIsUpToDate (const CacheKey& rKey)
         }
     }
     return iEntry->second.GetPreview();
+}
+
+
+
+
+PreviewType BitmapCache::GetMarkedBitmap (const CacheKey& rKey)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+
+    CacheBitmapContainer::iterator iEntry (mpBitmapContainer->find(rKey));
+    if (iEntry != mpBitmapContainer->end())
+    {
+        iEntry->second.SetAccessTime(mnCurrentAccessTime++);
+        return iEntry->second.GetMarkedPreview();
+    }
+    else
+        return PreviewType();
 }
 
 
@@ -276,7 +298,7 @@ void BitmapCache::ReleaseBitmap (const CacheKey& rKey)
 
 
 
-void BitmapCache::InvalidateBitmap (const CacheKey& rKey)
+bool BitmapCache::InvalidateBitmap (const CacheKey& rKey)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -284,7 +306,6 @@ void BitmapCache::InvalidateBitmap (const CacheKey& rKey)
     if (iEntry != mpBitmapContainer->end())
     {
         iEntry->second.SetUpToDate(false);
-        SSCD_SET_UPTODATE(iEntry->first,false);
 
         // When there is a preview then we release the replacement.  The
         // preview itself is kept until a new one is created.
@@ -292,10 +313,12 @@ void BitmapCache::InvalidateBitmap (const CacheKey& rKey)
         {
             UpdateCacheSize(iEntry->second, REMOVE);
             iEntry->second.Invalidate();
-            SSCD_SET_UPTODATE(iEntry->first,false);
             UpdateCacheSize(iEntry->second, ADD);
         }
+        return true;
     }
+    else
+        return false;
 }
 
 
@@ -309,7 +332,6 @@ void BitmapCache::InvalidateCache (void)
     for (iEntry=mpBitmapContainer->begin(); iEntry!=mpBitmapContainer->end(); ++iEntry)
     {
         iEntry->second.Invalidate();
-        SSCD_SET_UPTODATE(iEntry->first,false);
     }
     ReCalculateTotalCacheSize();
 }
@@ -319,7 +341,7 @@ void BitmapCache::InvalidateCache (void)
 
 void BitmapCache::SetBitmap (
     const CacheKey& rKey,
-    const ::boost::shared_ptr<BitmapEx>& rpPreview,
+    const PreviewType& rPreview,
     bool bIsPrecious)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -328,21 +350,39 @@ void BitmapCache::SetBitmap (
     if (iEntry != mpBitmapContainer->end())
     {
         UpdateCacheSize(iEntry->second, REMOVE);
-        iEntry->second.SetPreview(rpPreview);
+        iEntry->second.SetPreview(rPreview);
         iEntry->second.SetUpToDate(true);
-        SSCD_SET_UPTODATE(iEntry->first,true);
         iEntry->second.SetAccessTime(mnCurrentAccessTime++);
     }
     else
     {
         iEntry = mpBitmapContainer->insert(CacheBitmapContainer::value_type (
             rKey,
-            CacheEntry (rpPreview, mnCurrentAccessTime++, bIsPrecious))
+            CacheEntry(rPreview, mnCurrentAccessTime++, bIsPrecious))
             ).first;
     }
 
     if (iEntry != mpBitmapContainer->end())
         UpdateCacheSize(iEntry->second, ADD);
+}
+
+
+
+
+void BitmapCache::SetMarkedBitmap (
+    const CacheKey& rKey,
+    const PreviewType& rPreview)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+
+    CacheBitmapContainer::iterator iEntry (mpBitmapContainer->find(rKey));
+    if (iEntry != mpBitmapContainer->end())
+    {
+        UpdateCacheSize(iEntry->second, REMOVE);
+        iEntry->second.SetMarkedPreview(rPreview);
+        iEntry->second.SetAccessTime(mnCurrentAccessTime++);
+        UpdateCacheSize(iEntry->second, ADD);
+    }
 }
 
 
@@ -380,9 +420,7 @@ void BitmapCache::SetPrecious (const CacheKey& rKey, bool bIsPrecious)
     {
         iEntry = mpBitmapContainer->insert(CacheBitmapContainer::value_type (
             rKey,
-            CacheEntry (
-                ::boost::shared_ptr<BitmapEx>(),
-                mnCurrentAccessTime++, bIsPrecious))
+            CacheEntry(PreviewType(), mnCurrentAccessTime++, bIsPrecious))
             ).first;
         UpdateCacheSize(iEntry->second, ADD);
     }
@@ -540,7 +578,8 @@ void BitmapCache::UpdateCacheSize (const CacheEntry& rEntry, CacheOperation eOpe
 BitmapCache::CacheEntry::CacheEntry(
     sal_Int32 nLastAccessTime,
     bool bIsPrecious)
-    : mpPreview(),
+    : maPreview(),
+      maMarkedPreview(),
       mbIsUpToDate(true),
       mnLastAccessTime(nLastAccessTime),
       mbIsPrecious(bIsPrecious)
@@ -551,10 +590,11 @@ BitmapCache::CacheEntry::CacheEntry(
 
 
 BitmapCache::CacheEntry::CacheEntry(
-    const ::boost::shared_ptr<BitmapEx>& rpPreview,
+    const PreviewType& rPreview,
     sal_Int32 nLastAccessTime,
     bool bIsPrecious)
-    : mpPreview(rpPreview),
+    : maPreview(rPreview),
+      maMarkedPreview(),
       mbIsUpToDate(true),
       mnLastAccessTime(nLastAccessTime),
       mbIsPrecious(bIsPrecious)
@@ -569,7 +609,8 @@ inline void BitmapCache::CacheEntry::Recycle (const CacheEntry& rEntry)
     if ((rEntry.HasPreview() || rEntry.HasLosslessReplacement())
         && ! (HasPreview() || HasLosslessReplacement()))
     {
-        mpPreview = rEntry.mpPreview;
+        maPreview = rEntry.maPreview;
+        maMarkedPreview = rEntry.maMarkedPreview;
         mpReplacement = rEntry.mpReplacement;
         mpCompressor = rEntry.mpCompressor;
         mnLastAccessTime = rEntry.mnLastAccessTime;
@@ -583,8 +624,8 @@ inline void BitmapCache::CacheEntry::Recycle (const CacheEntry& rEntry)
 inline sal_Int32 BitmapCache::CacheEntry::GetMemorySize (void) const
 {
     sal_Int32 nSize (0);
-    if (mpPreview.get() != NULL)
-        nSize += mpPreview->GetSizeBytes();
+    nSize += maPreview.GetBitmap().GetSizeBytes();
+    nSize += maMarkedPreview.GetBitmap().GetSizeBytes();
     if (mpReplacement.get() != NULL)
         nSize += mpReplacement->GetMemorySize();
     return nSize;
@@ -595,14 +636,14 @@ inline sal_Int32 BitmapCache::CacheEntry::GetMemorySize (void) const
 
 void BitmapCache::CacheEntry::Compress (const ::boost::shared_ptr<BitmapCompressor>& rpCompressor)
 {
-    if (mpPreview.get() != NULL)
+    if ( ! maPreview.IsEmpty())
     {
         if (mpReplacement.get() == NULL)
         {
-            mpReplacement = rpCompressor->Compress(mpPreview);
+            mpReplacement = rpCompressor->Compress(maPreview);
 
 #ifdef VERBOSE
-            sal_uInt32 nOldSize (mpPreview->GetSizeBytes());
+            sal_uInt32 nOldSize (maPreview.GetSizeBytes());
             sal_uInt32 nNewSize (mpReplacement.get()!=NULL ? mpReplacement->GetMemorySize() : 0);
             if (nOldSize == 0)
                 nOldSize = 1;
@@ -617,7 +658,8 @@ void BitmapCache::CacheEntry::Compress (const ::boost::shared_ptr<BitmapCompress
             mpCompressor = rpCompressor;
         }
 
-        mpPreview.reset();
+        maPreview.GetBitmap().SetEmpty();
+        maMarkedPreview.GetBitmap().SetEmpty();
     }
 }
 
@@ -626,9 +668,10 @@ void BitmapCache::CacheEntry::Compress (const ::boost::shared_ptr<BitmapCompress
 
 inline void BitmapCache::CacheEntry::Decompress (void)
 {
-    if (mpReplacement.get()!=NULL && mpCompressor.get()!=NULL && mpPreview.get()==NULL)
+    if (mpReplacement.get()!=NULL && mpCompressor.get()!=NULL && maPreview.IsEmpty())
     {
-        mpPreview = mpCompressor->Decompress(*mpReplacement);
+        maPreview = mpCompressor->Decompress(*mpReplacement);
+    maMarkedPreview.GetBitmap().SetEmpty();
         if ( ! mpCompressor->IsLossless())
             mbIsUpToDate = false;
     }
@@ -636,9 +679,10 @@ inline void BitmapCache::CacheEntry::Decompress (void)
 
 
 
-inline void BitmapCache::CacheEntry::SetPreview (const ::boost::shared_ptr<BitmapEx>& rpPreview)
+inline void BitmapCache::CacheEntry::SetPreview (const PreviewType& rPreview)
 {
-    mpPreview = rpPreview;
+    maPreview = rPreview;
+    maMarkedPreview.GetBitmap().SetEmpty();
     mpReplacement.reset();
     mpCompressor.reset();
 }
@@ -648,10 +692,23 @@ inline void BitmapCache::CacheEntry::SetPreview (const ::boost::shared_ptr<Bitma
 
 bool BitmapCache::CacheEntry::HasPreview (void) const
 {
-    if (mpPreview.get() != NULL)
-        return mpPreview->GetSizePixel().Width()>0 && mpPreview->GetSizePixel().Height()>0;
-    else
-        return false;
+    return ! maPreview.IsEmpty();
+}
+
+
+
+
+inline void BitmapCache::CacheEntry::SetMarkedPreview (const PreviewType& rMarkedPreview)
+{
+    maMarkedPreview = rMarkedPreview;
+}
+
+
+
+
+bool BitmapCache::CacheEntry::HasMarkedPreview (void) const
+{
+    return ! maMarkedPreview.IsEmpty();
 }
 
 

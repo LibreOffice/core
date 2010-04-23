@@ -33,6 +33,7 @@
 #include "view/SlideSorterView.hxx"
 #include "view/SlsTheme.hxx"
 #include "view/SlsPageObjectPainter.hxx"
+#include "view/SlsButtonBar.hxx"
 
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
@@ -52,6 +53,7 @@ class DebugControl
 public:
     DebugControl (void) {};
     virtual ~DebugControl (void) {}
+    virtual sal_Int32 GetHeight (void) = 0;
 };
 
 //===== TextButton ============================================================
@@ -80,6 +82,11 @@ public:
     {
         if (maAction)
             maAction(this);
+    }
+
+    virtual sal_Int32 GetHeight (void)
+    {
+        return GetSizePixel().Height();
     }
 
 private:
@@ -127,15 +134,15 @@ public:
         mpTitle->SetPosSizePixel(nLeft, nTop, nWidth,20);
         mpTitle->Show();
 
-        mpRedSlider->SetPosSizePixel(nLeft, nTop+30, nWidth, 10);
+        mpRedSlider->SetPosSizePixel(nLeft, nTop+25, nWidth, 10);
         mpRedSlider->SetRange(Range(0,255));
         mpRedSlider->Show();
 
-        mpGreenSlider->SetPosSizePixel(nLeft, nTop+40, nWidth, 10);
+        mpGreenSlider->SetPosSizePixel(nLeft, nTop+35, nWidth, 10);
         mpGreenSlider->SetRange(Range(0,255));
         mpGreenSlider->Show();
 
-        mpBlueSlider->SetPosSizePixel(nLeft, nTop+50, nWidth, 10);
+        mpBlueSlider->SetPosSizePixel(nLeft, nTop+45, nWidth, 10);
         mpBlueSlider->SetRange(Range(0,255));
         mpBlueSlider->Show();
 
@@ -146,10 +153,10 @@ public:
         mpBlueSlider->SetSlideHdl(LINK(this, ColorControl, UpdateColor));
 
         mpTextValue->SetText(::rtl::OUString::createFromAscii("x000000"));
-        mpTextValue->SetPosSizePixel(nLeft, nTop+70, 150, 20);
+        mpTextValue->SetPosSizePixel(nLeft, nTop+60, 150, 20);
         mpTextValue->Show();
 
-        mpColorValue->SetPosSizePixel(nLeft + 150, nTop+70, nWidth - 160, 20);
+        mpColorValue->SetPosSizePixel(nLeft + 150, nTop+60, nWidth - 160, 20);
         mpColorValue->SetBackground(Wallpaper(Color(aStartColor)));
         mpColorValue->Show();
 
@@ -186,6 +193,11 @@ public:
             mpBlueSlider->GetThumbPos()).GetColor();
     }
 
+    virtual sal_Int32 GetHeight (void)
+    {
+        return mpContainer->GetSizePixel().Height();
+    }
+
     DECL_LINK(UpdateColor, void*);
 
 private:
@@ -210,9 +222,14 @@ private:
         mpColorValue->SetBackground(Wallpaper(aColor));
         mpColorValue->Invalidate();
 
-        const int nMaxLength(10);
+        const int nMaxLength(30);
         char aBuffer[nMaxLength];
-        snprintf(aBuffer, nMaxLength, "x%02x%02x%02x", nRed,nGreen,nBlue);
+        USHORT nHue (0);
+        USHORT nSaturation (0);
+        USHORT nBrightness (0);
+        aColor.RGBtoHSB(nHue, nSaturation, nBrightness);
+        snprintf(aBuffer, nMaxLength, "r%02Xg%02Xb%02X  h%ds%d%b%d",
+            nRed,nGreen,nBlue, nHue,nSaturation,nBrightness);
         mpTextValue->SetText(::rtl::OUString::createFromAscii(aBuffer));
 
         return aColor;
@@ -245,6 +262,7 @@ public:
 
     GradientControl (
         ::Window* pParent,
+        const char* pTitle,
         const Theme::GradientColorType eType,
         const Rectangle& rBoundingBox,
         SlideSorter& rSlideSorter)
@@ -252,12 +270,17 @@ public:
           mrSlideSorter(rSlideSorter),
           meType(eType),
           mpContainer(new ::Window(pParent, WB_BORDER)),
-          mpColorControl(new ColorControl(mpContainer, "Base Color",
+          mpColorControl(new ColorControl(mpContainer, pTitle,
                   Rectangle(0,0, rBoundingBox.GetWidth()-4, 90),
                   ::boost::bind(&Theme::GetGradientColor, mpTheme,
                       ::boost::bind(&GradientControl::GetType, this), Theme::Base),
                   ::boost::bind(&GradientControl::SetBaseColor, this, _1),
                   ::boost::bind(&GradientControl::Update, this, (void*)0))),
+          mpSaturationSlider(new Slider(mpContainer)),
+          mpSaturationText(new FixedText(mpContainer)),
+          mpBrightnessSlider(new Slider(mpContainer)),
+          mpBrightnessText(new FixedText(mpContainer)),
+          mpHGBColor(new ::Window(mpContainer)),
           mpFillOffset1Slider(new Slider(mpContainer)),
           mpFillOffset1Text(new FixedText(mpContainer)),
           mpFillOffset1Color(new ::Window(mpContainer)),
@@ -277,14 +300,33 @@ public:
         mpContainer->SetPosSizePixel(rBoundingBox.TopLeft(), rBoundingBox.GetSize());
         mpContainer->Show();
 
+        mpSaturationSlider->SetPosSizePixel(10,100,nWidth/2,15);
+        mpSaturationSlider->SetRange(Range(0,+100));
+        mpSaturationSlider->SetThumbPos(mpTheme->GetGradientSaturationOverride(eType));
+        mpSaturationSlider->SetSlideHdl(LINK(this, GradientControl, SaturationSliderUpdate));
+        mpSaturationSlider->Show();
+        mpSaturationText->SetPosSizePixel(nWidth/2+15,100,nWidth/2,15);
+        mpSaturationText->Show();
+
+        mpBrightnessSlider->SetPosSizePixel(10,115,nWidth/2,15);
+        mpBrightnessSlider->SetRange(Range(0,+100));
+        mpBrightnessSlider->SetThumbPos(mpTheme->GetGradientBrightnessOverride(eType));
+        mpBrightnessSlider->SetSlideHdl(LINK(this, GradientControl, BrightnessSliderUpdate));
+        mpBrightnessSlider->Show();
+        mpBrightnessText->SetPosSizePixel(nWidth/2+15,115,nWidth/2,15);
+        mpBrightnessText->Show();
+
+        mpHGBColor->SetPosSizePixel(nWidth*3/4, 105, nWidth/4,20);
+        mpHGBColor->Show();
+
         Initialize(mpFillOffset1Slider, mpFillOffset1Text, mpFillOffset1Color,
-            mpTheme->GetGradientOffset(eType, Theme::Fill1), 100, nWidth);
+            mpTheme->GetGradientOffset(eType, Theme::Fill1), 130, nWidth);
         Initialize(mpFillOffset2Slider, mpFillOffset2Text, mpFillOffset2Color,
-            mpTheme->GetGradientOffset(eType, Theme::Fill2), 120, nWidth);
+            mpTheme->GetGradientOffset(eType, Theme::Fill2), 150, nWidth);
         Initialize(mpBorderOffset1Slider, mpBorderOffset1Text, mpBorderOffset1Color,
-            mpTheme->GetGradientOffset(eType, Theme::Border1), 140, nWidth);
+            mpTheme->GetGradientOffset(eType, Theme::Border1), 170, nWidth);
         Initialize(mpBorderOffset2Slider, mpBorderOffset2Text, mpBorderOffset2Color,
-            mpTheme->GetGradientOffset(eType, Theme::Border2), 160, nWidth);
+            mpTheme->GetGradientOffset(eType, Theme::Border2), 190, nWidth);
 
         Update(0);
     }
@@ -305,6 +347,12 @@ public:
         delete mpBorderOffset2Text;
         delete mpBorderOffset2Color;
 
+        delete mpSaturationSlider;
+        delete mpSaturationText;
+        delete mpBrightnessSlider;
+        delete mpBrightnessText;
+        delete mpHGBColor;
+
         delete mpContainer;
     }
 
@@ -322,7 +370,7 @@ public:
         pSlider->SetThumbPos(nOffset);
         pSlider->SetSlideHdl(LINK(this, GradientControl, Update));
 
-        pText->SetPosSizePixel(nWidth/2+10, nY, nWidth/2-60, 15);
+        pText->SetPosSizePixel(nWidth/2+15, nY, nWidth/2-60, 15);
         pText->Show();
 
         pWindow->SetPosSizePixel(nWidth-40, nY, 40, 15);
@@ -355,12 +403,22 @@ public:
         UpdateDisplay();
     }
 
+    virtual sal_Int32 GetHeight (void)
+    {
+        return mpContainer->GetSizePixel().Height();
+    }
+
 private:
     ::boost::shared_ptr<view::Theme> mpTheme;
     SlideSorter& mrSlideSorter;
     Theme::GradientColorType meType;
     ::Window* mpContainer;
     ColorControl* mpColorControl;
+    Slider* mpSaturationSlider;
+    FixedText* mpSaturationText;
+    Slider* mpBrightnessSlider;
+    FixedText* mpBrightnessText;
+    ::Window* mpHGBColor;
     Slider* mpFillOffset1Slider;
     FixedText* mpFillOffset1Text;
     ::Window* mpFillOffset1Color;
@@ -379,6 +437,8 @@ private:
     sal_Int32 mnBorderOffset2;
 
     DECL_LINK(Update, void*);
+    DECL_LINK(SaturationSliderUpdate, void*);
+    DECL_LINK(BrightnessSliderUpdate, void*);
 
     void UpdateDisplay (void)
     {
@@ -387,10 +447,27 @@ private:
         const sal_Int32 nBorderOffset1 (mpBorderOffset1Slider->GetThumbPos());
         const sal_Int32 nBorderOffset2 (mpBorderOffset2Slider->GetThumbPos());
 
-        mpFillOffset1Text->SetText(::rtl::OUString::valueOf(nFillOffset1));
+        mpSaturationText->SetText(
+            ::rtl::OUString::createFromAscii("S=")
+                +::rtl::OUString::valueOf(mpSaturationSlider->GetThumbPos()));
+        mpBrightnessText->SetText(::rtl::OUString::valueOf(mpBrightnessSlider->GetThumbPos()));
+
+        mpFillOffset1Text->SetText(
+            ::rtl::OUString::createFromAscii("B=")
+                +::rtl::OUString::valueOf(nFillOffset1));
         mpFillOffset1Color->SetBackground(Wallpaper(
             mpTheme->GetGradientColor(meType, Theme::Fill1)));
         mpFillOffset1Color->Invalidate();
+
+        Color aColor (mpTheme->GetGradientColor(meType, Theme::Base));
+        USHORT nHue (0);
+        USHORT nSaturation (0);
+        USHORT nBrightness (0);
+        aColor.RGBtoHSB(nHue,nSaturation,nBrightness);
+        nSaturation = mpTheme->GetGradientSaturationOverride(meType);
+        nBrightness = mpTheme->GetGradientBrightnessOverride(meType);
+        mpHGBColor->SetBackground(Wallpaper(Color(Color::HSBtoRGB(nHue,nSaturation,nBrightness))));
+        mpHGBColor->Invalidate();
 
         mpFillOffset2Text->SetText(::rtl::OUString::valueOf(nFillOffset2));
         mpFillOffset2Color->SetBackground(Wallpaper(
@@ -415,15 +492,36 @@ private:
 
 IMPL_LINK(GradientControl, Update, void*, EMPTYARG)
 {
-    UpdateDisplay();
-
-
     mpTheme->SetGradient(meType,
         mpColorControl->GetColor(),
+        mpSaturationSlider->GetThumbPos(),
+        mpBrightnessSlider->GetThumbPos(),
         mpFillOffset1Slider->GetThumbPos(),
         mpFillOffset2Slider->GetThumbPos(),
         mpBorderOffset1Slider->GetThumbPos(),
         mpBorderOffset2Slider->GetThumbPos());
+    UpdateDisplay();
+
+    return 0;
+}
+
+
+
+IMPL_LINK(GradientControl, SaturationSliderUpdate, void*, EMPTYARG)
+{
+    mpTheme->SetGradientSaturationOverride(meType, mpSaturationSlider->GetThumbPos());
+    UpdateDisplay();
+
+    return 0;
+}
+
+
+
+
+IMPL_LINK(GradientControl, BrightnessSliderUpdate, void*, EMPTYARG)
+{
+    mpTheme->SetGradientBrightnessOverride(meType, mpBrightnessSlider->GetThumbPos());
+    UpdateDisplay();
 
     return 0;
 }
@@ -467,14 +565,14 @@ public:
         mpTitle->SetPosSizePixel(nLeft, nTop, nWidth,20);
         mpTitle->Show();
 
-        mpSlider->SetPosSizePixel(nLeft, nTop+30, nWidth, 10);
+        mpSlider->SetPosSizePixel(nLeft, nTop+25, nWidth, 10);
         mpSlider->SetRange(aRange);
         mpSlider->SetSlideHdl(LINK(this, SliderControl, UpdateValue));
         mpSlider->SetThumbPos(nStartValue);
         mpSlider->Show();
 
         mpTextValue->SetText(::rtl::OUString::valueOf(nStartValue));
-        mpTextValue->SetPosSizePixel(nLeft, nTop+50, 150, 20);
+        mpTextValue->SetPosSizePixel(nLeft, nTop+40, 150, 20);
         mpTextValue->Show();
 
         UpdateValue(0);
@@ -486,6 +584,11 @@ public:
         delete mpSlider;
         delete mpTextValue;
         delete mpContainer;
+    }
+
+    virtual sal_Int32 GetHeight (void)
+    {
+        return mpContainer->GetSizePixel().Height();
     }
 
 private:
@@ -577,6 +680,11 @@ public:
         delete mpContainer;
     }
 
+    virtual sal_Int32 GetHeight (void)
+    {
+        return mpContainer->GetSizePixel().Height();
+    }
+
 private:
     ::std::map<USHORT, int> maValues;
     ValueGetter maGetter;
@@ -648,6 +756,11 @@ public:
         delete mpContainer;
     }
 
+    virtual sal_Int32 GetHeight (void)
+    {
+        return mpContainer->GetSizePixel().Height();
+    }
+
 private:
     ValueGetter maGetter;
     ValueSetter maSetter;
@@ -697,37 +810,55 @@ SlideSorterDebugDialog::SlideSorterDebugDialog (SlideSorter& rSlideSorter)
 {
     ::boost::shared_ptr<view::Theme> pTheme(rSlideSorter.GetTheme());
 
-    mpTopLevelWindow->SetSizePixel(Size(300,510));
+    const sal_Int32 nGap (10);
+    sal_Int32 nY (nGap);
 
-    maControls.push_back(new TextButton(
+    maControls.push_back(new SliderControl(
         mpTopLevelWindow,
-        "Close",
-        Rectangle(195,480,100,25),
-        ::boost::bind(&WorkWindow::Close, mpTopLevelWindow)));
+        "Button Border",
+        Rectangle(10,nY,290,nY+60),
+        Range(0,64),
+        ::boost::bind(&view::Theme::GetIntegerValue, pTheme, view::Theme::Integer_ButtonBorder),
+        ::boost::bind(&view::Theme::SetIntegerValue, pTheme, view::Theme::Integer_ButtonBorder, _1),
+        ::boost::bind(&view::ButtonBar::RequestLayout,
+            ::boost::ref(rSlideSorter.GetView().GetButtonBar()))));
+    nY += maControls.back()->GetHeight() + nGap;
 
-    maControls.push_back(new ColorControl(
+    maControls.push_back(new SliderControl(
         mpTopLevelWindow,
-        "Unhide Button Background",
-        Rectangle(10,10,290,110),
-        ::boost::bind(&view::Theme::GetColor, pTheme, view::Theme::ButtonBackground),
-        ::boost::bind(&view::Theme::SetColor, pTheme, view::Theme::ButtonBackground, _1),
-        ::boost::bind(&view::SlideSorterView::RequestRepaint,
-            ::boost::ref(rSlideSorter.GetView()))));
+        "Button Gap",
+        Rectangle(10,nY,290,nY+60),
+        Range(0,64),
+        ::boost::bind(&view::Theme::GetIntegerValue, pTheme, view::Theme::Integer_ButtonGap),
+        ::boost::bind(&view::Theme::SetIntegerValue, pTheme, view::Theme::Integer_ButtonGap, _1),
+        ::boost::bind(&view::ButtonBar::RequestLayout,
+            ::boost::ref(rSlideSorter.GetView().GetButtonBar()))));
+    nY += maControls.back()->GetHeight() + nGap;
+
+    maControls.push_back(new GradientControl(
+        mpTopLevelWindow,
+        "Button Background",
+        Theme::Gradient_ButtonBackground,
+        Rectangle(10,nY,285,nY+220),
+        rSlideSorter));
+    nY += maControls.back()->GetHeight() + nGap;
 
     maControls.push_back(new SliderControl(
         mpTopLevelWindow,
         "Max Button Alpha",
-        Rectangle(10,120,290,200),
+        Rectangle(10,nY,290,nY+60),
         Range(0,255),
-        ::boost::bind(&view::Theme::GetIntegerValue, pTheme, view::Theme::ButtonMaxAlpha),
-        ::boost::bind(&view::Theme::SetIntegerValue, pTheme, view::Theme::ButtonMaxAlpha, _1),
+        ::boost::bind(&view::Theme::GetIntegerValue, pTheme, view::Theme::Integer_ButtonMaxAlpha),
+        ::boost::bind(&view::Theme::SetIntegerValue, pTheme, view::Theme::Integer_ButtonMaxAlpha, _1),
         ::boost::bind(&view::SlideSorterView::RequestRepaint,
             ::boost::ref(rSlideSorter.GetView()))));
+    nY += maControls.back()->GetHeight() + nGap;
 
     GradientControl* pControl = new GradientControl(
         mpTopLevelWindow,
-        Theme::SelectedPage,
-        Rectangle(10,210,285,450),
+        "Base Color",
+        Theme::Gradient_SelectedPage,
+        Rectangle(10,210,285,500),
         rSlideSorter);
     const char* aValues[] = {
         "Normal",
@@ -737,23 +868,33 @@ SlideSorterDebugDialog::SlideSorterDebugDialog (SlideSorter& rSlideSorter)
     };
     maControls.push_back(new ChoiceControl(
         mpTopLevelWindow,
-        Rectangle(10,210,290,470),
+        Rectangle(10,nY,290,nY+240),
         aValues,
         4,
         pControl,
         ::boost::bind(&GradientControl::GetType, pControl),
         ::boost::bind(&GradientControl::SetType, pControl, _1)));
+    nY += maControls.back()->GetHeight() + nGap;
 
     maControls.push_back(new BoolControl(
         mpTopLevelWindow,
         "Alternative Button Paint Style",
-        Rectangle(10,480,290,500),
+        Rectangle(10,nY,290,nY+20),
         1,0,
-        ::boost::bind(&view::Theme::GetIntegerValue, pTheme, view::Theme::ButtonPaintType),
-        ::boost::bind(&view::Theme::SetIntegerValue, pTheme, view::Theme::ButtonPaintType, _1),
+        ::boost::bind(&view::Theme::GetIntegerValue, pTheme, view::Theme::Integer_ButtonPaintType),
+        ::boost::bind(&view::Theme::SetIntegerValue, pTheme, view::Theme::Integer_ButtonPaintType, _1),
         ::boost::bind(&view::SlideSorterView::RequestRepaint,
             ::boost::ref(rSlideSorter.GetView()))));
+    nY += maControls.back()->GetHeight() + nGap;
 
+    maControls.push_back(new TextButton(
+        mpTopLevelWindow,
+        "Close",
+        Rectangle(195,nY,100,nY+25),
+        ::boost::bind(&WorkWindow::Close, mpTopLevelWindow)));
+    nY += maControls.back()->GetHeight() + nGap;
+
+    mpTopLevelWindow->SetSizePixel(Size(300,nY));
     mpTopLevelWindow->Show(true);
 }
 

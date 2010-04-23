@@ -31,6 +31,7 @@
 
 #include "SlideSorter.hxx"
 #include "controller/SlideSorterController.hxx"
+#include "controller/SlsVisibleAreaManager.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlideSorterView.hxx"
@@ -324,6 +325,7 @@ IMPL_LINK(ScrollBarManager, VerticalScrollBarHandler, ScrollBar*, pScrollBar)
             / double(pScrollBar->GetRange().Len());
         mrSlideSorter.GetView().InvalidatePageObjectVisibilities();
         mrSlideSorter.GetContentWindow()->SetVisibleXY (-1, nRelativePosition);
+        mrSlideSorter.GetController().GetVisibleAreaManager().DeactivateCurrentSlideTracking();
     }
     return TRUE;
 }

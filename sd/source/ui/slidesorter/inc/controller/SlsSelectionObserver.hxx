@@ -30,6 +30,7 @@
 
 #include <tools/gen.hxx>
 #include <vector>
+#include <boost/shared_ptr.hpp>
 
 namespace sd { namespace slidesorter {
 class SlideSorter;
@@ -40,6 +41,10 @@ class SdrPage;
 
 namespace sd { namespace slidesorter { namespace controller {
 
+/** Observe insertions and deletions of pages between calls to
+    StartObservation() and EndObservation().  When the later is called
+    the selection is set to just the newly inserted pages.
+*/
 class SelectionObserver
 {
 public:
@@ -48,6 +53,7 @@ public:
 
     void NotifyPageEvent (const SdrPage* pPage);
     void StartObservation (void);
+    void AbortObservation (void);
     void EndObservation (void);
 
     /** Use this little class instead of calling StartObservation and
@@ -60,6 +66,7 @@ public:
     public:
         Context (SlideSorter& rSlideSorter);
         ~Context(void);
+        void Abort (void);
     private:
         ::boost::shared_ptr<SelectionObserver> mpSelectionObserver;
     };

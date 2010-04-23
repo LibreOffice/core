@@ -168,15 +168,16 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
                 if (pPagesPerRow != NULL)
                 {
                     sal_Int32 nColumnCount = pPagesPerRow->GetValue();
-                    // Force the given number of columns by setting the
-                    // minimal and maximal number of columns to the same
-                    // value.
+                    // Force the given number of columns by setting
+                    // the minimal and maximal number of columns to
+                    // the same value.
                     mrSlideSorter.GetView().GetLayouter().SetColumnCount (
                         nColumnCount, nColumnCount);
                     // Force a repaint and re-layout.
                     pShell->ArrangeGUIElements ();
                     // Rearrange the UI-elements controlled by the
-                    // controller and force a rearrangement of the view.
+                    // controller and force a rearrangement of the
+                    // view.
                     mrSlideSorter.GetController().Rearrange(true);
                 }
             }
@@ -190,11 +191,11 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
 
         case SID_SLIDE_TRANSITIONS_PANEL:
         {
-            // Make the slide transition panel visible (expand it) in the
-            // tool pane.
+            // Make the slide transition panel visible (expand it)
+            // in the tool pane.
             if (mrSlideSorter.GetViewShellBase() != NULL)
-            framework::FrameworkHelper::Instance(*mrSlideSorter.GetViewShellBase())
-                ->RequestTaskPanel(sd::framework::FrameworkHelper::msSlideTransitionTaskPanelURL);
+                framework::FrameworkHelper::Instance(*mrSlideSorter.GetViewShellBase())
+                    ->RequestTaskPanel(sd::framework::FrameworkHelper::msSlideTransitionTaskPanelURL);
             rRequest.Ignore ();
             break;
         }
@@ -215,7 +216,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
                 &mrSlideSorter.GetView(),
                 pDocument,
                 rRequest);
-            break;
+                break;
 
         case SID_EXPAND_PAGE:
             FuExpandPage::Create (
@@ -249,14 +250,14 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_DELETE_PAGE:
         case SID_DELETE_MASTER_PAGE:
         case SID_DELETE: // we need SID_CUT to handle the delete key
-                      // (DEL -> accelerator -> SID_CUT).
-             if (mrSlideSorter.GetModel().GetPageCount() > 1)
-             {
-                 mrSlideSorter.GetController().GetSelectionManager()->DeleteSelectedPages();
-             }
+            // (DEL -> accelerator -> SID_CUT).
+            if (mrSlideSorter.GetModel().GetPageCount() > 1)
+            {
+                mrSlideSorter.GetController().GetSelectionManager()->DeleteSelectedPages();
+            }
 
-             rRequest.Done();
-             break;
+            rRequest.Done();
+            break;
 
         case SID_RENAMEPAGE:
         case SID_RENAME_MASTER_PAGE:
@@ -400,6 +401,9 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
                 = dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell());
             if (pViewShell != NULL)
             {
+                view::SlideSorterView::DrawLock aDrawLock (mrSlideSorter);
+                SlideSorterController::ModelChangeLock aModelLock (mrSlideSorter.GetController());
+                PageSelector::UpdateLock aUpdateLock (mrSlideSorter);
                 SelectionObserver::Context aContext (mrSlideSorter);
                 pViewShell->ImpSidUndo (FALSE, rRequest);
             }
@@ -412,6 +416,9 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
                 = dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell());
             if (pViewShell != NULL)
             {
+                view::SlideSorterView::DrawLock aDrawLock (mrSlideSorter);
+                SlideSorterController::ModelChangeLock aModelLock (mrSlideSorter.GetController());
+                PageSelector::UpdateLock aUpdateLock (mrSlideSorter);
                 SelectionObserver::Context aContext (mrSlideSorter);
                 pViewShell->ImpSidRedo (FALSE, rRequest);
             }
@@ -870,18 +877,22 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
         model::PageEnumeration aSelectedPages (
             model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
                 mrSlideSorter.GetModel()));
-        pPage = aSelectedPages.GetNextElement()->GetPage();
-        nFirstPage = pPage->GetPageNum()/2;
-        pFirstPage = pPage;
+        model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
+        if (pDescriptor)
+        {
+            pPage = pDescriptor->GetPage();
+            nFirstPage = pPage->GetPageNum()/2;
+            pFirstPage = pPage;
 
-        aPageStr += sal_Unicode(' ');
-        aPageStr += String::CreateFromInt32( nFirstPage + 1 );
-        aPageStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " / " ));
-        aPageStr += String::CreateFromInt32(
-            mrSlideSorter.GetModel().GetPageCount());
+            aPageStr += sal_Unicode(' ');
+            aPageStr += String::CreateFromInt32( nFirstPage + 1 );
+            aPageStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " / " ));
+            aPageStr += String::CreateFromInt32(
+                mrSlideSorter.GetModel().GetPageCount());
 
-        aLayoutStr = pFirstPage->GetLayoutName();
-        aLayoutStr.Erase( aLayoutStr.SearchAscii( SD_LT_SEPARATOR ) );
+            aLayoutStr = pFirstPage->GetLayoutName();
+            aLayoutStr.Erase( aLayoutStr.SearchAscii( SD_LT_SEPARATOR ) );
+        }
     }
 
     rSet.Put( SfxStringItem( SID_STATUS_PAGE, aPageStr ) );

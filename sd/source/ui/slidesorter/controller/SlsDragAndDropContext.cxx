@@ -169,20 +169,6 @@ void DragAndDropContext::UpdatePosition (
 
 
 
-void DragAndDropContext::Show (void)
-{
-}
-
-
-
-
-void DragAndDropContext::Hide (void)
-{
-}
-
-
-
-
 void DragAndDropContext::SetTargetSlideSorter (
     SlideSorter* pSlideSorter,
     const Point aMousePosition,

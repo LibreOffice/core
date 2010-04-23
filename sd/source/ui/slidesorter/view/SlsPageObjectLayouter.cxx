@@ -64,7 +64,6 @@ PageObjectLayouter::PageObjectLayouter (
       maPageNumberAreaBoundingBox(),
       maPreviewBoundingBox(),
       maTransitionEffectBoundingBox(),
-      maWideButtonBoundingBox(),
       maTransitionEffectIcon(IconCache::Instance().GetIcon(BMP_FADE_EFFECT_INDICATOR)),
       mpPageNumberFont(Theme::GetFont(Theme::PageNumberFont, *rpWindow))
 {
@@ -99,15 +98,6 @@ PageObjectLayouter::PageObjectLayouter (
             (maPreviewBoundingBox.Left() - aIconSize.Width()) / 2,
             maPreviewBoundingBox.Bottom() - aIconSize.Height()),
         aIconSize);
-
-    // The wide "unhide" button is placed at the lower edge of the preview.
-    // Add 1 pixel at the sides to compensate for the missing border around
-    // the button.
-    maWideButtonBoundingBox = Rectangle(
-        maPreviewBoundingBox.Left() - 1,
-        maPreviewBoundingBox.Bottom() - gaButtonSize.Height() - 1,
-        maPreviewBoundingBox.Right() + 1,
-        maPreviewBoundingBox.Bottom() + 1);
 }
 
 
@@ -183,12 +173,11 @@ Rectangle PageObjectLayouter::CalculatePreviewBoundingBox (
 Rectangle PageObjectLayouter::GetBoundingBox (
     const model::SharedPageDescriptor& rpPageDescriptor,
     const Part ePart,
-    const CoordinateSystem eCoordinateSystem,
-    const sal_Int32 nIndex)
+    const CoordinateSystem eCoordinateSystem)
 {
     OSL_ASSERT(rpPageDescriptor);
     Point aLocation (rpPageDescriptor ? rpPageDescriptor->GetLocation() : Point(0,0));
-    return GetBoundingBox(aLocation, ePart, eCoordinateSystem, nIndex);
+    return GetBoundingBox(aLocation, ePart, eCoordinateSystem);
 }
 
 
@@ -197,8 +186,7 @@ Rectangle PageObjectLayouter::GetBoundingBox (
 Rectangle PageObjectLayouter::GetBoundingBox (
     const Point& rPageObjectLocation,
     const Part ePart,
-    const CoordinateSystem eCoordinateSystem,
-    const sal_Int32 nIndex)
+    const CoordinateSystem eCoordinateSystem)
 {
     Rectangle aBoundingBox;
     switch (ePart)
@@ -226,19 +214,6 @@ Rectangle PageObjectLayouter::GetBoundingBox (
 
         case TransitionEffectIndicator:
             aBoundingBox = maTransitionEffectBoundingBox;
-            break;
-
-        case WideButton:
-            aBoundingBox = maWideButtonBoundingBox;
-            break;
-
-        case Button:
-            aBoundingBox = Rectangle(
-                maPreviewBoundingBox.BottomRight()
-                    - Point(
-                        (nIndex+1)*gaButtonSize.Width() + nIndex*gnButtonGap,
-                        gaButtonSize.Height()),
-                gaButtonSize);
             break;
     }
 
@@ -311,38 +286,5 @@ Image PageObjectLayouter::GetTransitionEffectIcon (void) const
     return maTransitionEffectIcon;
 }
 
-
-
-
-sal_Int32 PageObjectLayouter::GetButtonIndexAt (
-    const model::SharedPageDescriptor& rpPageDescriptor,
-    const Point& rWindowLocation)
-{
-    if ( ! GetBoundingBox(rpPageDescriptor, Preview, ModelCoordinateSystem)
-        .IsInside(rWindowLocation))
-    {
-        return -1;
-    }
-    if (rpPageDescriptor->HasState(model::PageDescriptor::ST_Excluded))
-    {
-        if (GetBoundingBox(rpPageDescriptor, WideButton, ModelCoordinateSystem)
-            .IsInside(rWindowLocation))
-        {
-            return ShowHideButtonIndex;
-        }
-    }
-    else
-    {
-        for (sal_Int32 nIndex=0; nIndex<3; ++nIndex)
-        {
-            if (GetBoundingBox(rpPageDescriptor, Button, ModelCoordinateSystem, nIndex)
-                .IsInside(rWindowLocation))
-            {
-                return nIndex;
-            }
-        }
-    }
-    return -1;
-}
 
 } } } // end of namespace ::sd::slidesorter::view

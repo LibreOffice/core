@@ -87,13 +87,6 @@ namespace {
                 OSL_ASSERT(nIndex == pDescriptor->GetVisualState().mnPageId);
                 return false;
             }
-            /*
-            if (nIndex != FromCoreIndex(pDescriptor->GetPage()->GetPageNum()))
-            {
-                OSL_ASSERT(nIndex != FromCoreIndex(pDescriptor->GetPage()->GetPageNum()));
-                return false;
-            }
-            */
         }
 
         return true;

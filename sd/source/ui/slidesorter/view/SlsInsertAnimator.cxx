@@ -41,7 +41,7 @@
 
 #include <set>
 #include <boost/bind.hpp>
-
+#include <boost/enable_shared_from_this.hpp>
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -52,7 +52,8 @@ class PageObjectRun;
 class AnimatorAccess
 {
 public:
-    virtual void RemoveRun (PageObjectRun* pRun) = 0;
+    virtual void AddRun (const ::boost::shared_ptr<PageObjectRun> pRun) = 0;
+    virtual void RemoveRun (const ::boost::shared_ptr<PageObjectRun> pRun) = 0;
     virtual model::SlideSorterModel& GetModel (void) const = 0;
     virtual view::SlideSorterView& GetView (void) const = 0;
     virtual ::boost::shared_ptr<controller::Animator> GetAnimator (void) = 0;
@@ -62,7 +63,7 @@ public:
 /** Controller of the position offsets of all page objects in one row or one
     column.
 */
-class PageObjectRun
+class PageObjectRun : public ::boost::enable_shared_from_this<PageObjectRun>
 {
 public:
     PageObjectRun (
@@ -138,7 +139,8 @@ public:
         const InsertPosition& rInsertPosition,
         const controller::Animator::AnimationMode eAnimationMode);
 
-    virtual void RemoveRun (PageObjectRun* pRun);
+    virtual void AddRun (const ::boost::shared_ptr<PageObjectRun> pRun);
+    virtual void RemoveRun (const ::boost::shared_ptr<PageObjectRun> pRun);
 
     virtual model::SlideSorterModel& GetModel (void) const { return mrModel; }
     virtual view::SlideSorterView& GetView (void) const { return mrView; }
@@ -228,16 +230,12 @@ void InsertAnimator::Implementation::SetInsertPosition (
     if (pOldRun != pCurrentRun)
     {
         if (pOldRun)
-        {
             pOldRun->ResetOffsets(eMode);
-            maRuns.insert(pOldRun);
-        }
     }
 
     if (pCurrentRun)
     {
         pCurrentRun->UpdateOffsets(rInsertPosition, mrView.GetLayouter());
-        maRuns.insert(pCurrentRun);
     }
 }
 
@@ -309,17 +307,40 @@ InsertAnimator::Implementation::RunContainer::iterator
 
 
 
-void InsertAnimator::Implementation::RemoveRun (PageObjectRun* pRun)
+void InsertAnimator::Implementation::AddRun (const ::boost::shared_ptr<PageObjectRun> pRun)
 {
-    if (pRun != NULL)
+    if (pRun)
     {
-        // Do not remove runs that show the space for the insertion indicator.
-        if (pRun->mnLocalInsertIndex == -1)
-            maRuns.erase(FindRun(pRun->mnRunIndex));
+        maRuns.insert(pRun);
     }
     else
     {
-        OSL_ASSERT(pRun!=NULL);
+        OSL_ASSERT(pRun);
+    }
+}
+
+
+
+
+
+void InsertAnimator::Implementation::RemoveRun (const ::boost::shared_ptr<PageObjectRun> pRun)
+{
+    if (pRun)
+    {
+        // Do not remove runs that show the space for the insertion indicator.
+        if (pRun->mnLocalInsertIndex == -1)
+        {
+            InsertAnimator::Implementation::RunContainer::iterator iRun (FindRun(pRun->mnRunIndex));
+            if (iRun != maRuns.end())
+            {
+                OSL_ASSERT(*iRun == pRun);
+                maRuns.erase(iRun);
+            }
+        }
+    }
+    else
+    {
+        OSL_ASSERT(pRun);
     }
 }
 
@@ -436,6 +457,8 @@ void PageObjectRun::ResetOffsets (const controller::Animator::AnimationMode eMod
     }
     if (eMode == controller::Animator::AM_Animated)
         RestartAnimation();
+    else
+        mrAnimatorAccess.RemoveRun(shared_from_this());
 }
 
 
@@ -450,11 +473,15 @@ void PageObjectRun::RestartAnimation (void)
     }
 
     // Restart the animation.
+    mrAnimatorAccess.AddRun(shared_from_this());
     mnAnimationId = mrAnimatorAccess.GetAnimator()->AddAnimation(
         ::boost::ref(*this),
         0,
         300,
-        ::boost::bind(&AnimatorAccess::RemoveRun, ::boost::ref(mrAnimatorAccess), this));
+        ::boost::bind(
+            &AnimatorAccess::RemoveRun,
+            ::boost::ref(mrAnimatorAccess),
+            shared_from_this()));
 }
 
 
@@ -475,6 +502,8 @@ void PageObjectRun::operator () (const double nGlobalTime)
     for (sal_Int32 nIndex=mnStartIndex; nIndex<=mnEndIndex; ++nIndex)
     {
         model::SharedPageDescriptor pDescriptor (rModel.GetPageDescriptor(nIndex));
+        if ( ! pDescriptor)
+            continue;
         const Rectangle aOldBoundingBox (pDescriptor->GetBoundingBox());
         pDescriptor->GetVisualState().SetLocationOffset(
             Blend(

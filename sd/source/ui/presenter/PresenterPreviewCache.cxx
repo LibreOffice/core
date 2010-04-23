@@ -64,7 +64,7 @@ public:
 
     // CacheContext
     virtual void NotifyPreviewCreation (
-        CacheKey aKey, const ::boost::shared_ptr<BitmapEx>& rPreview);
+        CacheKey aKey, const PreviewType& rPreview);
     virtual bool IsIdle (void);
     virtual bool IsVisible (CacheKey aKey);
     virtual const SdrPage* GetPage (CacheKey aKey);
@@ -209,7 +209,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterPreviewCache::getSlidePreview (
     if (pPage == NULL)
         throw RuntimeException();
 
-    const BitmapEx aPreview (mpCache->GetPreviewBitmap(pPage,true));
+    const BitmapEx aPreview (mpCache->GetPreviewBitmap(pPage,true).GetBitmap());
     if (aPreview.IsEmpty())
         return NULL;
     else
@@ -368,7 +368,7 @@ void PresenterPreviewCache::PresenterCacheContext::RemovePreviewCreationNotifyLi
 
 void PresenterPreviewCache::PresenterCacheContext::NotifyPreviewCreation (
     CacheKey aKey,
-    const ::boost::shared_ptr<BitmapEx>& rPreview)
+    const PreviewType& rPreview)
 {
     (void)rPreview;
 

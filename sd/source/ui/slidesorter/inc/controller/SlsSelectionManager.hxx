@@ -160,31 +160,6 @@ private:
             A list of master pages.  Supplying normal pages is an error.
     */
     void DeleteSelectedMasterPages (const ::std::vector<SdPage*>& rSelectedMasterPages);
-
-    /** Return <TRUE/> when the given rectangle, that typically is the
-        bounding box of all currently selected slides, does not fit entirely
-        into the visible area of the slide sorter view.
-    */
-    //    bool DoesSelectionExceedVisibleArea (const Rectangle& rSelectionBox) const;
-
-    /** When not all currently selected slides fit into the visible area of
-        the slide sorter view, and thus DoesSelectionExceedVisibleArea()
-        would return <TRUE/>, then it is the task of this method to
-        determine which part of the selection to move into the visible area.
-        @param rpFirst
-            The first selected slide.  Must not be an empty pointer.
-        @param rpLast
-            The last selected slide.  Must not be an empty pointer.
-        @param eSelectionHint
-            This hint tells the method on which slide to concentrate,
-            i.e. which slide has to be inside the returned visible area.
-        @return
-            Returns the new visible area.
-    */
-    //    Rectangle ResolveLargeSelection (
-    //        const model::SharedPageDescriptor& rpFirst,
-    //        const model::SharedPageDescriptor& rpLast,
-    //        const SelectionHint eSelectionHint);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

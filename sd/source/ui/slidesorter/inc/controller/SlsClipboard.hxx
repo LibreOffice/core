@@ -29,7 +29,7 @@
 #define SD_SLIDESORTER_CLIPBOARD
 
 #include "ViewClipboard.hxx"
-
+#include "controller/SlsSelectionObserver.hxx"
 #include <sal/types.h>
 #include <tools/solar.h>
 #include <svx/svdpage.hxx>
@@ -97,6 +97,8 @@ public:
         USHORT nPage = SDRPAGE_NOTFOUND,
         USHORT nLayer = SDRPAGE_NOTFOUND);
 
+    void Abort (void);
+
 protected:
     virtual USHORT DetermineInsertPosition (
         const SdTransferable& rTransferable);
@@ -133,6 +135,8 @@ private:
     */
     class UndoContext;
     ::boost::scoped_ptr<UndoContext> mpUndoContext;
+
+    ::boost::scoped_ptr<SelectionObserver::Context> mpSelectionObserverContext;
 
     void CreateSlideTransferable (
         ::Window* pWindow,

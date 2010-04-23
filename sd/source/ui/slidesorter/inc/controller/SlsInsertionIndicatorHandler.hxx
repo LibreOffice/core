@@ -60,7 +60,7 @@ public:
     ~InsertionIndicatorHandler (void);
 
     enum Mode { CopyMode, MoveMode, UnknownMode };
-    static Mode GetModeFromDndAction (const sal_Int8 nMode);
+    static Mode GetModeFromDndAction (const sal_Int8 nDndAction);
 
     /** Activate the insertion marker at the given coordinates.
     */
@@ -102,7 +102,6 @@ public:
     */
     sal_Int32 GetInsertionPageIndex (void) const;
 
-
     /** Determine whether moving the current selection to the current
         position of the insertion marker would alter the document.  This
         would be the case when the selection is not consecutive or would be
@@ -111,6 +110,11 @@ public:
     bool IsInsertionTrivial (
         const sal_Int32 nInsertionIndex,
         const Mode eMode) const;
+    /** This method is like the other variant.  It operates implicitly
+        on the current insertion index as would be returned by
+        GetInsertionPageIndex().
+    */
+    bool IsInsertionTrivial (const sal_Int8 nDndAction);
 
 private:
     SlideSorter& mrSlideSorter;
