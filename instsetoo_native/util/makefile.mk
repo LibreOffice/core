@@ -157,13 +157,16 @@ MSISDKOOTEMPLATEDIR=$(MSISDKOOTEMPLATESOURCE)
 NOLOGOSPLASH:=$(BIN)$/intro.zip
 DEVNOLOGOSPLASH:=$(BIN)$/dev$/intro.zip
 BROFFICENOLOGOSPLASH:=$(BIN)$/broffice$/intro.zip
+BROFFICENOLOGOBRAND:=$(BIN)$/broffice$/images_brand.zip
 BROFFICEDEVNOLOGOSPLASH:=$(BIN)$/broffice_dev$/intro.zip
+BROFFICENDEVOLOGOBRAND:=$(BIN)$/broffice_dev$/images_brand.zip
 MSIOFFICETEMPLATEDIR=$(MISC)$/openoffice$/msi_templates
 MSILANGPACKTEMPLATEDIR=$(MISC)$/ooolangpack$/msi_templates
 MSIURETEMPLATEDIR=$(MISC)$/ure$/msi_templates
 MSISDKOOTEMPLATEDIR=$(MISC)$/sdkoo$/msi_templates
 
-ADDDEPS=$(NOLOGOSPLASH) $(DEVNOLOGOSPLASH) $(BROFFICENOLOGOSPLASH) $(BROFFICEDEVNOLOGOSPLASH)
+ADDDEPS=$(NOLOGOSPLASH) $(DEVNOLOGOSPLASH) $(BROFFICENOLOGOSPLASH) $(BROFFICEDEVNOLOGOSPLASH) \
+    $(BROFFICENOLOGOBRAND) $(BROFFICEDEVNOLOGOBRAND)
 .IF "$(OS)" == "WNT"
 ADDDEPS+=hack_msitemplates
 .ENDIF
@@ -306,6 +309,10 @@ $(BIN)$/broffice_dev$/intro.zip : $(SOLARCOMMONPCKDIR)$/broffice_dev_nologo$/int
     $(COPY) $< $@
 
 $(BIN)$/broffice$/intro.zip : $(SOLARCOMMONPCKDIR)$/broffice_nologo$/intro.zip
+    @-$(MKDIR) $(@:d)
+    $(COPY) $< $@
+
+$(BIN)$/broffice$/images_brand.zip : $(SOLARCOMMONBINDIR)$/broffice_nologo$/images_brand.zip
     @-$(MKDIR) $(@:d)
     $(COPY) $< $@
 
