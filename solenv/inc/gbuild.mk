@@ -98,6 +98,8 @@ gb_StaticLibrary_TARGETS := $(foreach namescheme,$(gb_StaticLibrary_NAMESCHEMES)
 ifeq ($(OS),LINUX)
 include $(SRCDIR)/solenv/inc/platform/linux.mk
 else
+ifeq ($(OS),SOLARIS)
+include $(SRCDIR)/solenv/inc/platform/solaris.mk
 else
 ifeq ($(OS),WNT)
 include $(SRCDIR)/solenv/inc/platform/windows.mk
