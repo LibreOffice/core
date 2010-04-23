@@ -31,6 +31,7 @@
 # GXX_INCLUDE_PATH
 # INPATH
 # JAVA_HOME
+# JDKINCS
 # LIBXML_CFLAGS
 # OS
 # PRODUCT
@@ -50,6 +51,9 @@ SHELL := /bin/sh
 ifeq ($(strip $(SRC_ROOT)),)
 $(error No environment set)
 endif
+
+# extend for JDK include (seems only needed in setsolar env?)
+SOLARINC += $(JDKINCS)
 
 SRCDIR := $(SOLARSRC)
 OUTDIR := $(SOLARVERSION)/$(INPATH)
@@ -94,10 +98,12 @@ gb_StaticLibrary_TARGETS := $(foreach namescheme,$(gb_StaticLibrary_NAMESCHEMES)
 ifeq ($(OS),LINUX)
 include $(SRCDIR)/solenv/inc/platform/linux.mk
 else
+else
 ifeq ($(OS),WNT)
 include $(SRCDIR)/solenv/inc/platform/windows.mk
 else
 $(error unsupported OS: $(OS))
+endif
 endif
 endif
 
@@ -255,6 +261,7 @@ gb_LinkTarget_DEFAULTDEFS := $(gb_GLOBALDEFS)
 #  gb_LinkTarget_CXXFLAGS
 #  gb_LinkTarget_LDFLAGS
 #  gb_LinkTarget_INCLUDE 
+#  gb_LinkTarget_INCLUDE_STL
 
 gb_Library_OUTDIRLOCATION := $(OUTDIR)/lib
 gb_Library_DLLDIR := $(WORKDIR)/LinkTarget/Library
@@ -316,10 +323,10 @@ $(call gb_CObject_get_dep_target,%) :
 # CxxObject class
 
 $(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,%)
-    $(call gb_CxxObject_command,$@,$*,$<,$(DEFS),$(CXXFLAGS),$(INCLUDE))
+    $(call gb_CxxObject_command,$@,$*,$<,$(DEFS),$(CXXFLAGS),$(INCLUDE_STL) $(INCLUDE))
 
 $(call gb_CxxObject_get_dep_target,%) : $(call gb_CxxObject_get_source,%)
-    $(call gb_CxxObject_command_dep,$@,$*,$<,$(DEFS),$(CXXFLAGS),$(INCLUDE))
+    $(call gb_CxxObject_command_dep,$@,$*,$<,$(DEFS),$(CXXFLAGS),$(INCLUDE_STL) $(INCLUDE))
 
 $(call gb_CxxObject_get_dep_target,%) :
     $(error unable to find C++ file $(call gb_CxxObject_get_source,$*))
@@ -352,11 +359,11 @@ $(call gb_Helper_abbreviate_dirs,\
         $(foreach object,$(4),$(call gb_CxxObject_get_dep_target,$(object))) > $(1))
 endef
 
-$(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(call gb_LinkTarget_get_dep_target,%) $(gb_Helper_NULLFILE)
+$(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(call gb_LinkTarget_get_dep_target,%)
     $(call gb_LinkTarget_command_dep,$(call gb_LinkTarget_get_dep_target,$*),$*,$(COBJECTS),$(CXXOBJECTS))
     $(call gb_LinkTarget_command,$@,$*,$(TARGETTYPE_FLAGS) $(LDFLAGS),$(LINKED_LIBS),$(LINKED_STATIC_LIBS),$(CXXOBJECTS),$(COBJECTS))
 
-$(call gb_LinkTarget_get_dep_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(gb_Helper_NULLFILE)
+$(call gb_LinkTarget_get_dep_target,%) : $(call gb_LinkTarget_get_headers_target,%)
     $(call gb_LinkTarget_command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS))
 
 define gb_LinkTarget_get_external_headers_check
@@ -393,6 +400,8 @@ $(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS)
 $(call gb_LinkTarget_get_target,$(1)) : DLLTARGET := 
 $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
+$(call gb_LinkTarget_get_dep_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : INCLUDE_STL := $$(gb_LinkTarget_INCLUDE_STL)
 $(call gb_LinkTarget_get_target,$(1)) : LDFLAGS := $$(gb_LinkTarget_LDFLAGS)
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS := 
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS := 
@@ -750,13 +759,14 @@ $(call gb_SrsPartTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) | $(g
     $(call gb_SrsPartTarget_command_dep,$*,$<,$(INCLUDE),$(DEFS))
     $(call gb_Helper_abbreviate_dirs_native,\
         mkdir -p $(dir $@) && \
-        RESPONSEFILE=$$(mktemp -p $(gb_Helper_MISC)) && \
+        RESPONSEFILE=`mktemp -p $(gb_Helper_MISC)` && \
         echo "-s \
             $(INCLUDE) \
             $(DEFS) \
             -fp=$@ \
             $<" > $${RESPONSEFILE} && \
-        $(gb_SrsPartTarget_RSCCOMMAND) -presponse @$${RESPONSEFILE})
+        $(gb_SrsPartTarget_RSCCOMMAND) -presponse @$${RESPONSEFILE} && \
+        rm -f $${RESPONSEFILE})
 
 $(call gb_SrsPartTarget_get_dep_target,%) : $(SRCDIR)/%
     $(call gb_Helper_abbreviate_dirs,\
@@ -848,8 +858,9 @@ $(call gb_ResTarget_get_clean_target,%) :
 $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCTARGET)
     $(call gb_Helper_announce,Building resource $@ ...)
     $(call gb_Helper_abbreviate_dirs_native,\
-        mkdir -p $(dir $@) $(OUTDIR)/bin && \
-        RESPONSEFILE=$$(mktemp -p $(gb_Helper_MISC)) && \
+        mkdir -p $(dir $@) $(OUTDIR)/bin \
+            $(dir $(call gb_ResTarget_get_imagelist_target,$(1))) && \
+        RESPONSEFILE=`mktemp -p $(gb_Helper_MISC)` && \
         echo "-r -p \
             -lg$(LANGUAGE) \
             -fs=$(OUTDIR)/bin/$(LIBRARY)$(LANGUAGE).res \

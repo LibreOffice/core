@@ -231,8 +231,10 @@ gb_LinkTarget_CFLAGS +=
 endif
 
 gb_LinkTarget_INCLUDE :=\
-    $(subst -I. , ,$(SOLARINC)) \
+    $(filter-out %/stl, $(subst -I. , ,$(SOLARINC))) \
     $(foreach inc,$(subst ;, ,$(JDKINC)),-I$(inc)) \
+
+gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
 define gb_LinkTarget_command
 $(call gb_Helper_announce,Linking $(2) ...)
