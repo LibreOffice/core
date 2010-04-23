@@ -6749,9 +6749,9 @@ if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
         AC_MSG_RESULT([$OOO_JUNIT_JAR])
     else
         AC_MSG_RESULT([no])
-        AC_MSG_ERROR([cannot find JUnit 4 jar at $OOO_JUNIT_JAR;
-please install one and/or specify its pathname via --with-junit=...,
-or disable it via --without-junit])
+        AC_MSG_ERROR([cannot find JUnit 4 jar; please install one in the default
+location (/usr/share/java), specify its pathname via
+--with-junit=..., or disable it via --without-junit])
     fi
 fi
 AC_SUBST(OOO_JUNIT_JAR)

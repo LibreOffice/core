@@ -28842,12 +28842,12 @@ echo "${ECHO_T}$OOO_JUNIT_JAR" >&6
     else
         echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-        { { echo "$as_me:$LINENO: error: cannot find JUnit 4 jar at $OOO_JUNIT_JAR;
-please install one and/or specify its pathname via --with-junit=...,
-or disable it via --without-junit" >&5
-echo "$as_me: error: cannot find JUnit 4 jar at $OOO_JUNIT_JAR;
-please install one and/or specify its pathname via --with-junit=...,
-or disable it via --without-junit" >&2;}
+        { { echo "$as_me:$LINENO: error: cannot find JUnit 4 jar; please install one in the default
+location (/usr/share/java), specify its pathname via
+--with-junit=..., or disable it via --without-junit" >&5
+echo "$as_me: error: cannot find JUnit 4 jar; please install one in the default
+location (/usr/share/java), specify its pathname via
+--with-junit=..., or disable it via --without-junit" >&2;}
    { (exit 1); exit 1; }; }
     fi
 fi
