@@ -115,6 +115,14 @@ STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed_BoldItalic, DejaVuSerifCondense
 
 // Liberation fonts
 
+// Liberation Sans Narrow
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_LibSansNarrow_Regular, LibSansNarrow-Regular.ttf, Liberation Sans Narrow Regular) 
+STD_FONT_FILE( gid_File_Fnt_LibSansNarrow_Bold, LibSansNarrow-Bold.ttf, Liberation Sans Narrow Bold) 
+STD_FONT_FILE( gid_File_Fnt_LibSansNarrow_Italic, LibSansNarrow-Italic.ttf, Liberation Sans Narrow Italic) 
+STD_FONT_FILE( gid_File_Fnt_LibSansNarrow_BoldItalic, LibSansNarrow-BoldItalic.ttf, Liberation Sans Narrow Bold Italic) 
+#endif
+
 // Liberation Mono
 #ifndef WITHOUT_FONTS 
 #ifndef WNT 
