@@ -243,3 +243,7 @@ toolkit.AccessibleMenuBar::com::sun::star::accessibility::XAccessibleSelection
 
 ### i111076 ###
 toolkit.Toolkit::com::sun::star::awt::XDataTransferProviderAccess
+
+### i111113 ###
+toolkit.AccessibleStatusBarItem::com::sun::star::accessibility::XAccessibleComponent
+toolkit.AccessibleStatusBarItem::com::sun::star::accessibility::XAccessibleContext
