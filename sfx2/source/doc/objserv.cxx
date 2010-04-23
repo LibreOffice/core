@@ -85,7 +85,7 @@
 #include "sfxtypes.hxx"
 //#include "interno.hxx"
 #include <sfx2/module.hxx>
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "versdlg.hxx"
 #include "doc.hrc"
 #include <sfx2/docfac.hxx>
@@ -136,8 +136,6 @@ public:
 
 #define SfxObjectShell
 #include "sfxslots.hxx"
-
-svtools::AsynchronLink* pPendingCloser = 0;
 
 //=========================================================================
 
@@ -280,7 +278,7 @@ void SfxObjectShell::PrintExec_Impl(SfxRequest &rReq)
 void SfxObjectShell::PrintState_Impl(SfxItemSet &rSet)
 {
     bool bPrinting = false;
-    SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this, TYPE(SfxTopViewFrame));
+    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
     if ( pFrame )
     {
         SfxPrinter *pPrinter = pFrame->GetViewShell()->GetPrinter();
@@ -388,7 +386,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( !pFrame )
                 return;
 
-            if ( pFrame->GetFrame()->GetParentFrame() )
+            if ( pFrame->GetFrame().GetParentFrame() )
             {
                 pFrame->GetTopViewFrame()->GetObjectShell()->ExecuteSlot( rReq );
                 return;
@@ -427,28 +425,15 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 // collect data for dialog
                 String aURL, aTitle;
-                if ( HasName() && !pImp->aNewName.Len() )
+                if ( HasName() )
                 {
                     aURL = GetMedium()->GetName();
                     aTitle = GetTitle();
                 }
                 else
                 {
-                    if ( !pImp->aNewName.Len() )
-                    {
-                        aURL = DEFINE_CONST_UNICODE( "private:factory/" );
-                        aURL += String::CreateFromAscii( GetFactory().GetShortName() );
-                        // aTitle = String( SfxResId( STR_NONAME ) );
-                    }
-                    else
-                    {
-                        aURL = DEFINE_CONST_UNICODE( "[private:factory/" );
-                        aURL += String::CreateFromAscii( GetFactory().GetShortName() );
-                        aURL += DEFINE_CONST_UNICODE( "]" );
-                        INetURLObject aURLObj( pImp->aNewName );
-                        aURL += String(aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI ));
-                        // aTitle = aURLObj.GetBase();
-                    }
+                    aURL = DEFINE_CONST_UNICODE( "private:factory/" );
+                    aURL += String::CreateFromAscii( GetFactory().GetShortName() );
 
                     aTitle = GetTitle();
                 }
@@ -539,10 +524,10 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     // get statusindicator
                     uno::Reference< task::XStatusIndicator > xStatusIndicator;
                     SfxViewFrame *pFrame = GetFrame();
-                    if ( pFrame && pFrame->GetFrame() )
+                    if ( pFrame )
                     {
                         uno::Reference< task::XStatusIndicatorFactory > xStatFactory(
-                                                                    pFrame->GetFrame()->GetFrameInterface(),
+                                                                    pFrame->GetFrame().GetFrameInterface(),
                                                                     uno::UNO_QUERY );
                         if( xStatFactory.is() )
                             xStatusIndicator = xStatFactory->createStatusIndicator();
@@ -662,9 +647,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     &&  pFilt->GetVersion() >= SOFFICE_FILEFORMAT_60 )
                 {
                     SfxViewFrame* pDocViewFrame = SfxViewFrame::GetFirst( this );
-                    SfxFrame* pDocFrame = pDocViewFrame ? pDocViewFrame->GetFrame() : NULL;
-                    if ( pDocFrame )
-                        SfxHelp::OpenHelpAgent( pDocFrame, HID_DID_SAVE_PACKED_XML );
+                    if ( pDocViewFrame )
+                        SfxHelp::OpenHelpAgent( &pDocViewFrame->GetFrame(), HID_DID_SAVE_PACKED_XML );
                 }
 
                 // the StoreAsURL/StoreToURL method have called this method with false
@@ -728,7 +712,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_CLOSEDOC:
         {
             SfxViewFrame *pFrame = GetFrame();
-            if ( pFrame && pFrame->GetFrame()->GetParentFrame() )
+            if ( pFrame && pFrame->GetFrame().GetParentFrame() )
             {
                 // Wenn SID_CLOSEDOC "uber Menue etc. ausgef"uhrt wird, das
                 // aktuelle Dokument aber in einem Frame liegt, soll eigentlich
@@ -743,7 +727,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             pFrame = SfxViewFrame::GetFirst( this );
             while ( pFrame )
             {
-                if ( pFrame->GetFrame()->GetParentFrame() )
+                if ( pFrame->GetFrame().GetParentFrame() )
                 {
                     // Auf dieses Dokument existiert noch eine Sicht, die
                     // in einem FrameSet liegt; diese darf nat"urlich nicht
@@ -762,8 +746,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 pFrame = SfxViewFrame::GetFirst( this );
                 while ( pFrame )
                 {
-                    if ( !pFrame->GetFrame()->GetParentFrame() )
-                        pFrame->GetFrame()->DoClose();
+                    if ( !pFrame->GetFrame().GetParentFrame() )
+                        pFrame->GetFrame().DoClose();
                     pFrame = SfxViewFrame::GetNext( *pFrame, this );
                 }
             }
@@ -937,7 +921,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                         pFrame = SfxViewFrame::GetFirst( this );
                     if ( pFrame  )
                     {
-                        if ( pFrame->GetFrame()->GetParentFrame() )
+                        if ( pFrame->GetFrame().GetParentFrame() )
                         {
                             pFrame = pFrame->GetTopViewFrame();
                             pDoc = pFrame->GetObjectShell();
@@ -970,7 +954,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             {
                 SfxObjectShell *pDoc = this;
                 SfxViewFrame *pFrame = GetFrame();
-                if ( pFrame && pFrame->GetFrame()->GetParentFrame() )
+                if ( pFrame && pFrame->GetFrame().GetParentFrame() )
                 {
                     // Wenn SID_CLOSEDOC "uber Menue etc. ausgef"uhrt wird, das
                     // aktuelle Dokument aber in einem Frame liegt, soll eigentlich
@@ -1190,7 +1174,7 @@ void SfxObjectShell::StateProps_Impl(SfxItemSet &rSet)
 
             case SID_CLOSING:
             {
-                rSet.Put( SfxBoolItem( SID_CLOSING, Get_Impl()->bInCloseEvent ) );
+                rSet.Put( SfxBoolItem( SID_CLOSING, false ) );
                 break;
             }
 
@@ -1215,10 +1199,9 @@ void SfxObjectShell::ExecView_Impl(SfxRequest &rReq)
     {
         case SID_ACTIVATE:
         {
-            SfxViewFrame *pFrame =
-                    SfxViewFrame::GetFirst( this, TYPE(SfxTopViewFrame), TRUE );
+            SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this, TRUE );
             if ( pFrame )
-                pFrame->GetFrame()->Appear();
+                pFrame->GetFrame().Appear();
             rReq.SetReturnValue( SfxObjectItem( 0, pFrame ) );
             rReq.Done();
             break;

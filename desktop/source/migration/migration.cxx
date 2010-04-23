@@ -34,6 +34,7 @@
 
 #include <unotools/textsearch.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <unotools/bootstrap.hxx>
 #include <rtl/bootstrap.hxx>
 #include <tools/config.hxx>
@@ -91,7 +92,6 @@ static void releaseImpl()
     }
 }
 
-
 // static main entry point for the migration process
 void Migration::doMigration()
 {
@@ -140,11 +140,11 @@ sal_Bool MigrationImpl::checkMigration()
 MigrationImpl::MigrationImpl(const uno::Reference< XMultiServiceFactory >& xFactory)
     : m_vrVersions(new strings_v)
     , m_xFactory(xFactory)
-    , m_vrMigrations(readMigrationSteps())
-    , m_aInfo(findInstallation())
-    , m_vrFileList(compileFileList())
-    , m_vrServiceList(compileServiceList())
 {
+    readAvailableMigrations(m_vMigrationsAvailable);
+    sal_Int32 nIndex = findPreferedMigrationProcess(m_vMigrationsAvailable);
+    if ( nIndex >= 0 )
+        m_vrMigrations = readMigrationSteps(m_vMigrationsAvailable[nIndex].name);
 }
 
 MigrationImpl::~MigrationImpl()
@@ -154,6 +154,10 @@ MigrationImpl::~MigrationImpl()
 
 sal_Bool MigrationImpl::doMigration()
 {
+    // compile file and service list for migration
+    m_vrFileList    = compileFileList();
+    m_vrServiceList = compileServiceList();
+
     sal_Bool result = sal_False;
     try{
         copyFiles();
@@ -218,20 +222,61 @@ sal_Bool MigrationImpl::checkMigrationCompleted()
     return bMigrationCompleted;
 }
 
-
-migrations_vr MigrationImpl::readMigrationSteps()
+static void insertSorted(migrations_available& rAvailableMigrations, supported_migration& aSupportedMigration)
 {
+    bool                           bInserted( false );
+    migrations_available::iterator pIter = rAvailableMigrations.begin();
+    while ( !bInserted && pIter != rAvailableMigrations.end())
+    {
+        if ( pIter->nPriority < aSupportedMigration.nPriority )
+        {
+            rAvailableMigrations.insert(pIter, aSupportedMigration );
+            bInserted = true;
+        }
+        ++pIter;
+    }
+    if ( !bInserted )
+        rAvailableMigrations.push_back( aSupportedMigration );
+}
 
+bool MigrationImpl::readAvailableMigrations(migrations_available& rAvailableMigrations)
+{
     // get supported version names
-    uno::Reference< XNameAccess > aMigrationAccess(getConfigAccess("org.openoffice.Setup/Migration"), uno::UNO_QUERY_THROW);
-    uno::Sequence< OUString > seqVersions;
-    aMigrationAccess->getByName(OUString::createFromAscii("SupportedVersions")) >>= seqVersions;
-    for (sal_Int32 i=0; i<seqVersions.getLength(); i++)
-        m_vrVersions->push_back(seqVersions[i].trim());
+    uno::Reference< XNameAccess > aMigrationAccess(getConfigAccess("org.openoffice.Setup/Migration/SupportedVersions"), uno::UNO_QUERY_THROW);
+    uno::Sequence< OUString > seqSupportedVersions = aMigrationAccess->getElementNames();
+
+    const OUString aVersionIdentifiers( RTL_CONSTASCII_USTRINGPARAM( "VersionIdentifiers" ));
+    const OUString aPriorityIdentifier( RTL_CONSTASCII_USTRINGPARAM( "Priority" ));
+
+    for (sal_Int32 i=0; i<seqSupportedVersions.getLength(); i++)
+    {
+        sal_Int32                 nPriority( 0 );
+        uno::Sequence< OUString > seqVersions;
+        uno::Reference< XNameAccess > xMigrationData( aMigrationAccess->getByName(seqSupportedVersions[i]), uno::UNO_QUERY_THROW );
+        xMigrationData->getByName( aVersionIdentifiers ) >>= seqVersions;
+        xMigrationData->getByName( aPriorityIdentifier ) >>= nPriority;
+
+        supported_migration aSupportedMigration;
+        aSupportedMigration.name      = seqSupportedVersions[i];
+        aSupportedMigration.nPriority = nPriority;
+        for (sal_Int32 j=0; j<seqVersions.getLength(); j++)
+            aSupportedMigration.supported_versions.push_back(seqVersions[j].trim());
+        insertSorted( rAvailableMigrations, aSupportedMigration );
+    }
+
+    return true;
+}
+
+migrations_vr MigrationImpl::readMigrationSteps(const ::rtl::OUString& rMigrationName)
+{
+    // get migration access
+    uno::Reference< XNameAccess > aMigrationAccess(getConfigAccess("org.openoffice.Setup/Migration/SupportedVersions"), uno::UNO_QUERY_THROW);
+    uno::Reference< XNameAccess > xMigrationData( aMigrationAccess->getByName(rMigrationName), uno::UNO_QUERY_THROW );
 
     // get migration description from from org.openoffice.Setup/Migration
     // and build vector of migration steps
-    uno::Reference< XNameAccess > theNameAccess(getConfigAccess("org.openoffice.Setup/Migration/MigrationSteps"), uno::UNO_QUERY_THROW);
+    OUString aMigrationSteps( RTL_CONSTASCII_USTRINGPARAM( "MigrationSteps" ));
+    uno::Reference< XNameAccess > theNameAccess(xMigrationData->getByName(aMigrationSteps), uno::UNO_QUERY_THROW);
     uno::Sequence< OUString > seqMigrations = theNameAccess->getElementNames();
     uno::Reference< XNameAccess > tmpAccess;
     uno::Reference< XNameAccess > tmpAccess2;
@@ -273,13 +318,26 @@ migrations_vr MigrationImpl::readMigrationSteps()
                 tmpStep.excludeConfig.push_back(tmpSeq[j]);
         }
 
+        // included extensions...
+        if (tmpAccess->getByName(OUString::createFromAscii("IncludedExtensions")) >>= tmpSeq)
+        {
+            for (sal_Int32 j=0; j<tmpSeq.getLength(); j++)
+                tmpStep.includeExtensions.push_back(tmpSeq[j]);
+        }
+
+        // excluded extensions...
+        if (tmpAccess->getByName(OUString::createFromAscii("ExcludedExtensions")) >>= tmpSeq)
+        {
+            for (sal_Int32 j=0; j<tmpSeq.getLength(); j++)
+                tmpStep.excludeExtensions.push_back(tmpSeq[j]);
+        }
+
         // config components
         if (tmpAccess->getByName(OUString::createFromAscii("ServiceConfigComponents")) >>= tmpSeq)
         {
             for (sal_Int32 j=0; j<tmpSeq.getLength(); j++)
                 tmpStep.configComponents.push_back(tmpSeq[j]);
         }
-
 
         // generic service
         tmpAccess->getByName(OUString::createFromAscii("MigrationService")) >>= tmpStep.service;
@@ -302,7 +360,7 @@ static FileBase::RC _checkAndCreateDirectory(INetURLObject& dirURL)
         return result;
 }
 
-install_info MigrationImpl::findInstallation()
+install_info MigrationImpl::findInstallation(const strings_v& rVersions)
 {
     rtl::OUString aProductName;
     uno::Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
@@ -310,9 +368,9 @@ install_info MigrationImpl::findInstallation()
     aProductName = aProductName.toAsciiLowerCase();
 
     install_info aInfo;
-    strings_v::const_iterator i_ver = m_vrVersions->begin();
+    strings_v::const_iterator i_ver = rVersions.begin();
     uno::Reference < util::XStringSubstitution > xSubst( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.PathSubstitution")), uno::UNO_QUERY );
-    while (i_ver != m_vrVersions->end())
+    while (i_ver != rVersions.end())
     {
         ::rtl::OUString aVersion, aProfileName;
         sal_Int32 nSeparatorIndex = (*i_ver).indexOf('=');
@@ -330,7 +388,7 @@ install_info MigrationImpl::findInstallation()
             osl::Security().getConfigDir( aUserInst );
             if ( aUserInst.getLength() && aUserInst[ aUserInst.getLength()-1 ] != '/' )
                 aUserInst += ::rtl::OUString::createFromAscii("/");
-#ifdef UNX
+#if defined UNX && ! defined MACOSX
             // tribute to whoever had the "great" idea to use different names on Windows and Unix
             aUserInst += ::rtl::OUString::createFromAscii(".");
 #endif
@@ -345,10 +403,32 @@ install_info MigrationImpl::findInstallation()
             }
             catch( uno::Exception& ){}
         }
-        i_ver++;
+        ++i_ver;
     }
 
     return aInfo;
+}
+
+sal_Int32 MigrationImpl::findPreferedMigrationProcess(const migrations_available& rAvailableMigrations)
+{
+    sal_Int32    nIndex( -1 );
+    sal_Int32    i( 0 );
+
+    migrations_available::const_iterator rIter = rAvailableMigrations.begin();
+    while ( rIter != rAvailableMigrations.end() )
+    {
+        install_info aInstallInfo = findInstallation(rIter->supported_versions);
+        if (aInstallInfo.productname.getLength() > 0 )
+        {
+            m_aInfo = aInstallInfo;
+            nIndex  = i;
+            break;
+        }
+        ++i;
+        ++rIter;
+    }
+
+    return nIndex;
 }
 
 strings_vr MigrationImpl::applyPatterns(const strings_v& vSet, const strings_v& vPatterns) const
@@ -517,8 +597,6 @@ void MigrationImpl::copyConfig()
         aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
         OSL_ENSURE(sal_False, aMsg.getStr());
     }
-
-
 }
 
 // removes elements of vector 2 in vector 1
@@ -626,7 +704,6 @@ void MigrationImpl::copyFiles()
 
 void MigrationImpl::runServices()
 {
-
     //create stratum for old user layer
     OUString aOldLayerURL = m_aInfo.userdata;
     aOldLayerURL += OUString::createFromAscii("/user/registry");
@@ -637,7 +714,7 @@ void MigrationImpl::runServices()
         aStratumSvc, stratumArgs), uno::UNO_QUERY);
 
     // Build argument array
-    uno::Sequence< uno::Any > seqArguments(3);
+    uno::Sequence< uno::Any > seqArguments(4);
     seqArguments[0] = uno::makeAny(NamedValue(
         OUString::createFromAscii("Productname"),
         uno::makeAny(m_aInfo.productname)));
@@ -673,10 +750,21 @@ void MigrationImpl::runServices()
                     i_comp++;
                     i++;
                 }
+
                 // set old config argument
                 seqArguments[2] = uno::makeAny(NamedValue(
                     OUString::createFromAscii("OldConfiguration"),
                     uno::makeAny(seqComponents)));
+
+                // set black list for extension migration
+                uno::Sequence< rtl::OUString > seqExtBlackList;
+                sal_uInt32 nSize = i_mig->excludeExtensions.size();
+                if ( nSize > 0 )
+                    seqExtBlackList = comphelper::arrayToSequence< ::rtl::OUString >(
+                        &i_mig->excludeExtensions[0], nSize );
+                seqArguments[3] = uno::makeAny(NamedValue(
+                    OUString::createFromAscii("ExtensionBlackList"),
+                    uno::makeAny( seqExtBlackList )));
 
                 xMigrationJob = uno::Reference< XJob >(m_xFactory->createInstanceWithArguments(
                     i_mig->service, seqArguments), uno::UNO_QUERY_THROW);

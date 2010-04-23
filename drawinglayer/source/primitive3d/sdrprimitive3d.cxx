@@ -29,9 +29,9 @@
 #include "precompiled_drawinglayer.hxx"
 
 #include <drawinglayer/primitive3d/sdrprimitive3d.hxx>
-#include <drawinglayer/attribute/sdrattribute.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <drawinglayer/primitive3d/sdrdecompositiontools3d.hxx>
+#include <drawinglayer/attribute/sdrlineattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -48,11 +48,11 @@ namespace drawinglayer
             basegfx::B3DRange aUnitRange(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
             aUnitRange.transform(getTransform());
 
-            if(getSdrLFSAttribute().getLine())
+            if(!getSdrLFSAttribute().getLine().isDefault())
             {
-                const attribute::SdrLineAttribute& rLine = *getSdrLFSAttribute().getLine();
+                const attribute::SdrLineAttribute& rLine = getSdrLFSAttribute().getLine();
 
-                if(rLine.isVisible() && !basegfx::fTools::equalZero(rLine.getWidth()))
+                if(!rLine.isDefault() && !basegfx::fTools::equalZero(rLine.getWidth()))
                 {
                     // expand by hald LineWidth as tube radius
                     aUnitRange.grow(rLine.getWidth() / 2.0);
@@ -75,11 +75,11 @@ namespace drawinglayer
 
                 aRetval.transform(getTransform());
 
-                if(getSdrLFSAttribute().getLine())
+                if(!getSdrLFSAttribute().getLine().isDefault())
                 {
-                    const attribute::SdrLineAttribute& rLine = *getSdrLFSAttribute().getLine();
+                    const attribute::SdrLineAttribute& rLine = getSdrLFSAttribute().getLine();
 
-                    if(rLine.isVisible() && !basegfx::fTools::equalZero(rLine.getWidth()))
+                    if(!rLine.isDefault() && !basegfx::fTools::equalZero(rLine.getWidth()))
                     {
                         // expand by half LineWidth as tube radius
                         aRetval.grow(rLine.getWidth() / 2.0);
@@ -93,7 +93,7 @@ namespace drawinglayer
         SdrPrimitive3D::SdrPrimitive3D(
             const basegfx::B3DHomMatrix& rTransform,
             const basegfx::B2DVector& rTextureSize,
-            const attribute::SdrLineFillShadowAttribute& rSdrLFSAttribute,
+            const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,
             const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute)
         :   BufferedDecompositionPrimitive3D(),
             maTransform(rTransform),
