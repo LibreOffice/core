@@ -598,6 +598,7 @@ void StyleSheetTable::sprm(Sprm & rSprm)
         break;
         case NS_ooxml::LN_CT_Style_tblPr: //contains table properties
         case NS_ooxml::LN_CT_Style_tblStylePr: //contains  to table properties
+        case NS_ooxml::LN_CT_DocDefaults_rPrDefault:
         case NS_ooxml::LN_CT_TblPrBase_tblInd: //table properties - at least width value and type
         case NS_ooxml::LN_EG_RPrBase_rFonts: //table fonts
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
@@ -626,13 +627,6 @@ void StyleSheetTable::sprm(Sprm & rSprm)
             }
             break;
         }
-        case NS_ooxml::LN_CT_DocDefaults_pPrDefault:
-        case NS_ooxml::LN_CT_DocDefaults_rPrDefault:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-        {
-            resolveSprmProps(rSprm);
-        }
-            break;
         case NS_ooxml::LN_CT_PPrDefault_pPr:
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pDefaultParaProps );
@@ -843,7 +837,8 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         {
                             //TODO: Handle cases where a paragraph <> character style relation is needed
                             StyleSheetEntryPtr pParent = FindStyleSheetByISTD( pEntry->sBaseStyleIdentifier );
-                            xStyle->setParentStyle(ConvertStyleName( pParent->sStyleName ));
+                            if (pParent.get() != NULL)
+                                xStyle->setParentStyle(ConvertStyleName( pParent->sStyleName ));
                         }
                         catch( const uno::RuntimeException& )
                         {
