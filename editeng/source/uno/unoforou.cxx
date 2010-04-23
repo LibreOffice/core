@@ -241,6 +241,11 @@ XubString SvxOutlinerForwarder::CalcFieldValue( const SvxFieldItem& rField, USHO
     return rOutliner.CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
 }
 
+void SvxOutlinerForwarder::FieldClicked( const SvxFieldItem& rField, USHORT nPara, xub_StrLen nPos )
+{
+    rOutliner.FieldClicked( rField, nPara, nPos );
+}
+
 BOOL SvxOutlinerForwarder::IsValid() const
 {
     // cannot reliably query outliner state

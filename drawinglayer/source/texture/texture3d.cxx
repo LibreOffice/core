@@ -30,7 +30,6 @@
 
 #include <drawinglayer/texture/texture3d.hxx>
 #include <vcl/bmpacc.hxx>
-#include <drawinglayer/attribute/fillattribute.hxx>
 #include <drawinglayer/primitive3d/hatchtextureprimitive3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -190,7 +189,7 @@ namespace drawinglayer
         {
             const attribute::FillHatchAttribute& rHatch(rPrimitive.getHatch());
             const basegfx::B2DRange aOutlineRange(0.0, 0.0, rPrimitive.getTextureSize().getX(), rPrimitive.getTextureSize().getY());
-            const double fAngleA(-rHatch.getAngle());
+            const double fAngleA(rHatch.getAngle());
             maColor = rHatch.getColor();
             mbFillBackground = rHatch.isFillBackground();
             mp0 = new GeoTexSvxHatch(aOutlineRange, rHatch.getDistance(), fAngleA);

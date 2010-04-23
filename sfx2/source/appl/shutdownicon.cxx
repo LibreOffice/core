@@ -33,6 +33,7 @@
 #include <sfx2/app.hxx>
 #include <vos/mutex.hxx>
 #include <svtools/imagemgr.hxx>
+#include <svtools/miscopt.hxx>
 // #include <cmdlineargs.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
@@ -235,6 +236,7 @@ ShutdownIcon::ShutdownIcon( Reference< XMultiServiceFactory > aSMgr ) :
     ShutdownIconServiceBase( m_aMutex ),
     m_bVeto ( false ),
     m_bListenForTermination ( false ),
+    m_bSystemDialogs( false ),
     m_pResMgr( NULL ),
     m_pFileDlg( NULL ),
     m_xServiceManager( aSMgr ),
@@ -243,6 +245,7 @@ ShutdownIcon::ShutdownIcon( Reference< XMultiServiceFactory > aSMgr ) :
     m_pPlugin( 0 ),
     m_bInitialized( false )
 {
+    m_bSystemDialogs = SvtMiscOptions().UseSystemFileDialog();
 }
 
 ShutdownIcon::~ShutdownIcon()
@@ -375,6 +378,16 @@ OUString ShutdownIcon::GetUrlDescription( const OUString& aUrl )
 void ShutdownIcon::StartFileDialog()
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    bool bDirty = ( m_bSystemDialogs != static_cast<bool>(SvtMiscOptions().UseSystemFileDialog()) );
+
+    if ( m_pFileDlg && bDirty )
+    {
+        // Destroy instance as changing the system file dialog setting
+        // forces us to create a new FileDialogHelper instance!
+        delete m_pFileDlg;
+        m_pFileDlg = NULL;
+    }
 
     if ( !m_pFileDlg )
         m_pFileDlg = new FileDialogHelper( WB_OPEN | SFXWB_MULTISELECTION, String() );
@@ -512,8 +525,14 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
 
 #ifdef WNT
     // #103346 Destroy dialog to prevent problems with custom controls
-    delete pThis->m_pFileDlg;
-    pThis->m_pFileDlg = NULL;
+    // This fix is dependent on the dialog settings. Destroying the dialog here will
+    // crash the non-native dialog implementation! Therefore make this dependent on
+    // the settings.
+    if ( SvtMiscOptions().UseSystemFileDialog() )
+    {
+        delete pThis->m_pFileDlg;
+        pThis->m_pFileDlg = NULL;
+    }
 #endif
 
     LeaveModalMode();
