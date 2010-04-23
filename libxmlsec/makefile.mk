@@ -45,6 +45,7 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 XMLSEC1VERSION=1.2.12
 
 TARFILE_NAME=$(PRJNAME)-$(XMLSEC1VERSION)
+TARFILE_MD5=195d042623bcc2e1668ab8370de6dc2a
 
 #xmlsec1-configure.patch: Set up the build. Straightforward
 #configuration
@@ -127,6 +128,7 @@ xmlsec_CFLAGS+=$(C_RESTRICTIONFLAGS)
 .ENDIF			# "$(COMNAME)"=="sunpro5"
 .IF "$(EXTRA_CFLAGS)"!=""
 xmlsec_CFLAGS+=$(EXTRA_CFLAGS)
+xmlsec_CPPFLAGS+=$(EXTRA_CFLAGS)
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
 xmlsec_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 .ELIF "$(OS)"=="MACOSX" # "$(SYSBASE)"!=""

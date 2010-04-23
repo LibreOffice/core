@@ -47,6 +47,7 @@ all:
 RASQALVERSION=0.9.16
 
 TARFILE_NAME=rasqal-$(RASQALVERSION)
+TARFILE_MD5=fca8706f2c4619e2fa3f8f42f8fc1e9d
 
 ADDITIONAL_FILES=src/makefile.mk src/rasqal_config.h
 
@@ -55,8 +56,7 @@ OOO_PATCH_FILES= \
     $(TARFILE_NAME).patch.autotools \
     $(TARFILE_NAME).patch.ooo_build \
     $(TARFILE_NAME).patch.dmake \
-    $(TARFILE_NAME).patch.win32 \
-
+    $(TARFILE_NAME).patch.win32
 
 PATCH_FILES=$(OOO_PATCH_FILES)
 
