@@ -113,18 +113,20 @@ void ListLevel::SetValue( Id nId, sal_Int32 nValue )
         case NS_rtf::LN_FNORESTART:
             m_nFNoRestart = nValue;
         break;
-        case NS_rtf::LN_FPREV:
+        case NS_rtf::LN_FIDENTSAV:
             m_nFPrev = nValue;
         break;
-        case NS_rtf::LN_FPREVSPACE:
+        case NS_rtf::LN_FCONVERTED:
             m_nFPrevSpace = nValue;
         break;
+#if 0
         case NS_rtf::LN_FWORD6:
             m_nFWord6 = nValue;
         break;
+#endif
         case NS_rtf::LN_IXCHFOLLOW:
             m_nXChFollow = nValue;
-        break;
+  break;
         case NS_ooxml::LN_CT_TabStop_pos:
             m_nTabstop = nValue;
         break;
@@ -384,10 +386,10 @@ void AbstractListDef::SetValue( sal_uInt32 nSprmId, sal_Int32 nValue )
         case NS_rtf::LN_FSIMPLELIST:
             m_nSimpleList = nValue;
         break;
-        case NS_rtf::LN_FRESTARTHDN:
+        case NS_rtf::LN_fAutoNum:
             m_nRestart = nValue;
         break;
-        case NS_rtf::LN_UNSIGNED26_2:
+        case NS_rtf::LN_fHybrid:
             m_nUnsigned = nValue;
         break;
         default:
@@ -665,19 +667,17 @@ void ListsManager::attribute( Id nName, Value& rVal )
         /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_FNORESTART:
         /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
-        case NS_rtf::LN_FPREV:
+        case NS_rtf::LN_FIDENTSAV:
         /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
-        case NS_rtf::LN_FPREVSPACE:
+        case NS_rtf::LN_FCONVERTED:
+#if 0
         /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_FWORD6:
+#endif
         /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_IXCHFOLLOW:
             if ( pCurrentLvl.get( ) )
                 pCurrentLvl->SetValue( nName, sal_Int32( nIntValue ) );
-        break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-        case NS_rtf::LN_UNUSED5_7:
-            //unused
         break;
         /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_RGISTD:
@@ -691,8 +691,8 @@ void ListsManager::attribute( Id nName, Value& rVal )
         break;
         case NS_rtf::LN_TPLC:
         case NS_rtf::LN_FSIMPLELIST:
-        case NS_rtf::LN_FRESTARTHDN:
-        case NS_rtf::LN_UNSIGNED26_2:
+        case NS_rtf::LN_fAutoNum:
+        case NS_rtf::LN_fHybrid:
             m_pCurrentDefinition->SetValue( nName, nIntValue );
         break;
         case NS_ooxml::LN_CT_NumLvl_ilvl:
@@ -851,11 +851,13 @@ void ListsManager::sprm( Sprm& rSprm )
             /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             case NS_rtf::LN_FNORESTART:
             /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
-            case NS_rtf::LN_FPREV:
+            case NS_rtf::LN_FIDENTSAV:
             /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
-            case NS_rtf::LN_FPREVSPACE:
+            case NS_rtf::LN_FCONVERTED:
+#if 0
             /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             case NS_rtf::LN_FWORD6:
+#endif
             /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             case NS_rtf::LN_IXCHFOLLOW:
                 m_pCurrentDefinition->GetCurrentLevel( )->SetValue( nSprmId, nIntValue );
