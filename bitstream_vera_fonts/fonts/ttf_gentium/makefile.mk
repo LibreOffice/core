@@ -27,7 +27,7 @@
 
 PRJ=..$/..
 
-PRJNAME=bitstream_vera_fonts
+PRJNAME=more_fonts
 TARGET=ttf_gentium
 
 # --- Settings -----------------------------------------------------
