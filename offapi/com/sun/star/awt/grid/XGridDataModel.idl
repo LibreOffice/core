@@ -89,6 +89,26 @@ interface XGridDataModel: ::com::sun::star::lang::XComponent
     */
     void removeAll();
 
+    /**Updates the content of a given cell.
+        @param row
+            the row index
+        @param column
+            the column index
+        @param value
+            the new value of the cell.
+    */
+    void updateCell([in] long row, [in] long column, [in] any value );
+
+    /**Updates the content of a given row.
+        @param row
+            the row index
+        @param columns
+            column indexes of the cells, which should be updated
+        @param value
+            the new values of the cells.
+    */
+    void updateRow([in] long row, [in] sequence< long > columns, [in] sequence< any > values);
+
     //-------------------------------------------------------------------------
 
     /** Adds a listener for the <type>GridDataEvent</type> posted after the grid changes.
