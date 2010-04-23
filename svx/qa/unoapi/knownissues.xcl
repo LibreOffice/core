@@ -79,3 +79,6 @@ svx.GraphicExporter
 ### i98339 ###
 svx.AccessibleControlShape
 # -> disbaled in svx.sce
+
+### i111114 ###
+svx.AccessiblePresentationOLEShape::com::sun::star::accessibility::XAccessibleComponent
