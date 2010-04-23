@@ -158,7 +158,7 @@ $(eval $(call gb_Library_set_include,tl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,tl,\
-    tools/source/win/source/dll/toolsdll \
+    tools/win/source/dll/toolsdll \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,tl,\
