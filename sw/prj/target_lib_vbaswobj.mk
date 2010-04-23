@@ -45,12 +45,6 @@ $(eval $(call gb_Library_set_defs,vbaswobj,\
     -DVBA_OOBUILD_HACK \
 ))
 
-$(eval $(call gb_Library_set_ldflags,vbaswobj,\
-    $$(LDFLAGS) \
-    -Wl$(COMMA)-O1 \
-    -Wl$(COMMA)-z$(COMMA)noexecstack \
-))
-
 $(eval $(call gb_Library_add_linked_libs,vbaswobj,\
     comphelper \
     cppu \
@@ -120,15 +114,11 @@ $(eval $(call gb_Library_add_exception_objects,vbaswobj,\
     sw/source/ui/vba/wordvbahelper \
 ))
 
-$(call gb_Library_get_headers_target,vbaswobj) : $(WORKDIR)/CppuUnpack/vbaswobj
-$(call gb_Library_get_clean_target,vbaswobj) : $(WORKDIR)/Clean/CppuUnpack/vbaswobj
-
-.PHONY : $(WORKDIR)/Clean/CppuUnpack/vbaswobj
-$(WORKDIR)/Clean/CppuUnpack/vbaswobj :
-    -$(call gb_Helper_abbreviate_dirs,\
-        rm -rf $(WORKDIR)/inc/sw/vbaswobj $(WORKDIR)/CppuUnpack/vbaswobj)
-
-$(WORKDIR)/CppuUnpack/vbaswobj : | $(gb_CppuTarget_CPPUMAKERTARGET)
-    $(call gb_Helper_abbreviate_dirs,\
-        $(gb_CppuTarget_CPPUMAKERCOMMAND) -O$(WORKDIR)/inc/sw/vbaswobj -BUCR $(OUTDIR)/bin/oovbaapi.rdb -X$(OUTDIR)/bin/types.rdb && mkdir -p $(dir $@) && touch $@)
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_set_ldflags,vbaswobj,\
+    $$(LDFLAGS) \
+    -Wl$(COMMA)-O1 \
+    -Wl$(COMMA)-z$(COMMA)noexecstack \
+))
+endif
 
