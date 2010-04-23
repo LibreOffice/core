@@ -221,8 +221,7 @@ void GtkSalDisplay::monitorsChanged( GdkScreen* pScreen )
                 {
                     GdkRectangle dest;
                     gdk_screen_get_monitor_geometry(pScreen, i, &dest);
-                    m_aXineramaScreens.push_back( Rectangle( Point(dest.x,
-                                                                   dest.y ), Size( dest.width, dest.height ) ) );
+                    addXineramaScreenUnique( dest.x, dest.y, dest.width, dest.height );
                 }
                 m_bXinerama = m_aXineramaScreens.size() > 1;
                 if( ! m_aFrames.empty() )
@@ -663,7 +662,8 @@ void GtkXLib::Init()
         if( pScreen )
         {
             g_signal_connect( G_OBJECT(pScreen), "size-changed", G_CALLBACK(signalScreenSizeChanged), m_pGtkSalDisplay );
-            g_signal_connect( G_OBJECT(pScreen), "monitors-changed", G_CALLBACK(signalMonitorsChanged), m_pGtkSalDisplay );
+            if( ! gtk_check_version( 2, 14, 0 ) ) // monitors-changed came in with 2.14, avoid an assertion
+                g_signal_connect( G_OBJECT(pScreen), "monitors-changed", G_CALLBACK(signalMonitorsChanged), m_pGtkSalDisplay );
         }
     }
 }
