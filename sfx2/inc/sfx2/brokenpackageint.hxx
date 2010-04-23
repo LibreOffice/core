@@ -30,58 +30,26 @@
 #include <com/sun/star/document/BrokenPackageRequest.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
-#include <framework/interaction.hxx>
 
-using namespace ::framework;
-typedef ContinuationBase< ::com::sun::star::task::XInteractionApprove > SfxContinuationApprove;
-typedef ContinuationBase< ::com::sun::star::task::XInteractionDisapprove > SfxContinuationDisapprove;
-
-class SFX2_DLLPUBLIC RequestPackageReparation : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
+class RequestPackageReparation_Impl;
+class SFX2_DLLPUBLIC RequestPackageReparation
 {
-    ::com::sun::star::uno::Any m_aRequest;
-
-    ::com::sun::star::uno::Sequence<
-                    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >
-                > m_lContinuations;
-
-    SfxContinuationApprove* m_pApprove;
-    SfxContinuationDisapprove*  m_pDisapprove;
-
+    RequestPackageReparation_Impl* pImp;
 public:
     RequestPackageReparation( ::rtl::OUString aName );
-
-    sal_Bool    isApproved() { return m_pApprove->isSelected(); }
-
-    virtual ::com::sun::star::uno::Any SAL_CALL getRequest()
-        throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >
-            > SAL_CALL getContinuations()
-        throw( ::com::sun::star::uno::RuntimeException );
+    ~RequestPackageReparation();
+    sal_Bool    isApproved();
+    com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest > GetRequest();
 };
 
-class SFX2_DLLPUBLIC NotifyBrokenPackage : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
+class NotifyBrokenPackage_Impl;
+class SFX2_DLLPUBLIC NotifyBrokenPackage
 {
-    ::com::sun::star::uno::Any m_aRequest;
-
-    ::com::sun::star::uno::Sequence<
-                    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >
-                > m_lContinuations;
-
-    ContinuationAbort*  m_pAbort;
-
+    NotifyBrokenPackage_Impl* pImp;
 public:
     NotifyBrokenPackage( ::rtl::OUString aName );
-
-    sal_Bool    isAborted() { return m_pAbort->isSelected(); }
-
-    virtual ::com::sun::star::uno::Any SAL_CALL getRequest()
-        throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >
-            > SAL_CALL getContinuations()
-        throw( ::com::sun::star::uno::RuntimeException );
+    ~NotifyBrokenPackage();
+    sal_Bool    isAborted();
+    com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest > GetRequest();
 };
 

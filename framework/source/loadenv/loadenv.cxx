@@ -39,6 +39,8 @@
 #ifndef __FRAMEWORK_CONSTANT_FILTER_HXX_
 #include <constant/filter.hxx>
 #endif
+
+#include <comphelper/interaction.hxx>
 #include <framework/interaction.hxx>
 
 #ifndef __FRAMEWORK_CONSTANT_FRAMELOADER_HXX_
@@ -1060,8 +1062,8 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
             css::uno::Any                                                                    aInteraction;
             css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations(2);
 
-            ContinuationAbort*   pAbort   = new ContinuationAbort();
-            ContinuationApprove* pApprove = new ContinuationApprove();
+            comphelper::OInteractionAbort*   pAbort   = new comphelper::OInteractionAbort();
+            comphelper::OInteractionApprove* pApprove = new comphelper::OInteractionApprove();
 
             lContinuations[0] = css::uno::Reference< css::task::XInteractionContinuation >(
                                     static_cast< css::task::XInteractionContinuation* >(pAbort),
@@ -1073,13 +1075,7 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
             css::task::ErrorCodeRequest aErrorCode;
             aErrorCode.ErrCode = ERRCODE_SFX_NOMOREDOCUMENTSALLOWED;
             aInteraction <<= aErrorCode;
-
-            InteractionRequest* pRequest = new InteractionRequest(aInteraction, lContinuations);
-            css::uno::Reference< css::task::XInteractionRequest > xRequest(
-                static_cast< css::task::XInteractionRequest* >(pRequest),
-                css::uno::UNO_QUERY_THROW);
-
-            xInteraction->handle(xRequest);
+            xInteraction->handle( InteractionRequest::CreateRequest(aInteraction, lContinuations) );
         }
     }
 

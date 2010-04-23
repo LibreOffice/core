@@ -118,6 +118,7 @@ using namespace ::com::sun::star::container;
 #include <rtl/bootstrap.hxx>
 #include <vcl/svapp.hxx>
 #include <framework/interaction.hxx>
+#include <comphelper/interaction.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/documentconstants.hxx>
 
@@ -2257,8 +2258,8 @@ sal_Bool SfxObjectShell::UseInteractionToHandleError(
         {
             uno::Any aInteraction;
             uno::Sequence< uno::Reference< task::XInteractionContinuation > > lContinuations(2);
-            ::framework::ContinuationAbort* pAbort = new ::framework::ContinuationAbort();
-            ::framework::ContinuationApprove* pApprove = new ::framework::ContinuationApprove();
+            ::comphelper::OInteractionAbort* pAbort = new ::comphelper::OInteractionAbort();
+            ::comphelper::OInteractionApprove* pApprove = new ::comphelper::OInteractionApprove();
             lContinuations[0] = uno::Reference< task::XInteractionContinuation >(
                                  static_cast< task::XInteractionContinuation* >( pAbort ), uno::UNO_QUERY );
             lContinuations[1] = uno::Reference< task::XInteractionContinuation >(
@@ -2267,14 +2268,8 @@ sal_Bool SfxObjectShell::UseInteractionToHandleError(
             task::ErrorCodeRequest aErrorCode;
             aErrorCode.ErrCode = nError;
             aInteraction <<= aErrorCode;
-
-            ::framework::InteractionRequest* pRequest = new ::framework::InteractionRequest(aInteraction,lContinuations);
-            uno::Reference< task::XInteractionRequest > xRequest(
-                             static_cast< task::XInteractionRequest* >( pRequest ),
-                             uno::UNO_QUERY);
-
-            xHandler->handle(xRequest);
-            bResult = pAbort->isSelected();
+            xHandler->handle(::framework::InteractionRequest::CreateRequest (aInteraction,lContinuations));
+            bResult = pAbort->wasSelected();
         }
         catch( uno::Exception& )
         {}
