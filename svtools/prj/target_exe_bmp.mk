@@ -40,6 +40,7 @@ $(eval $(call gb_Executable_set_include,bmp,\
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,bmp,\
+    stl \
     vcl \
     tl \
     vos3 \
@@ -56,7 +57,6 @@ $(eval $(call gb_Executable_add_linked_libs,bmp,\
     kernel32 \
     msvcrt \
     oldnames \
-    stl \
     user32 \
     uwinapi \
 ))
