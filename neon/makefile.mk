@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -46,20 +46,21 @@ TARGET=so_neon
     @echo "neon disabled...."
 .ENDIF
 
-NEON_NAME=neon-0.28.2
+NEON_NAME=neon-0.29.3
 
 TARFILE_NAME=$(NEON_NAME)
+TARFILE_MD5=ba1015b59c112d44d7797b62fe7bee51
 PATCH_FILES=neon.patch
 
-.IF "$(GUI)"=="WNT" 
+.IF "$(GUI)"=="WNT"
     PATCH_FILES+=neon_exports_win.patch
 .ELSE
     PATCH_FILES+=neon_exports_unix.patch
 .ENDIF
 
-ADDITIONAL_FILES=src$/makefile.mk src$/config.h src$/ne_ntlm.h src$/ne_ntlm.c
-BUILD_DIR=src
+ADDITIONAL_FILES=src$/makefile.mk src$/config.h
 
+BUILD_DIR=src
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 
 OUT2INC= \
