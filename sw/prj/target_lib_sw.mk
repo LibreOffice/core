@@ -27,9 +27,7 @@
 
 $(eval $(call gb_Library_Library,sw))
 
-$(call gb_Library_get_headers_target,sw) : $(call gb_SdiTarget_get_target,sw/sdi/swslots)
-$(call gb_SdiTarget_get_target,sw/sdi/swslots) :| $(call gb_Library_get_external_headers_target,sw)
-$(call gb_Library_get_clean_target,sw) : $(call gb_SdiTarget_get_clean_target,sw/sdi/swslots)
+$(eval $(call gb_Library_add_sdi_headers,sw,sw/sdi/swslots))
 
 $(eval $(call gb_Library_set_include,sw,\
     $$(SOLARINC) \
