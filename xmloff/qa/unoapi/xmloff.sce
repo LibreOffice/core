@@ -17,7 +17,7 @@
 -o xmloff.Impress.XMLContentExporter
 -o xmloff.Impress.XMLContentImporter
 -o xmloff.Impress.XMLExporter
--o xmloff.Impress.XMLImporter
+#i111111# -o xmloff.Impress.XMLImporter
 -o xmloff.Impress.XMLMetaExporter
 -o xmloff.Impress.XMLMetaImporter
 -o xmloff.Impress.XMLSettingsExporter
