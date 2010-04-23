@@ -39,13 +39,6 @@ ENABLE_EXCEPTIONS = TRUE
 # for now (see issue 110653):
 my_version = 3.3
 
-.IF "$(OS)" == "LINUX" || "$(OS)" == "MACOSX" || "$(OS)" == "SOLARIS"
-my_dependency = <d:deployment-repositories \
-    d:name="cannot be deployed to repository 'user'" not-supported="user"/>
-.ELSE
-my_dependency =
-.END
-
 DLLPRE =
 
 SLOFILES = $(SHL1OBJS)
@@ -70,8 +63,7 @@ $(MISC)/boxt.oxt .ERRREMOVE : manifest.xml description.xml Addons.xcu \
     $(SED) -e 's|@PATH@|$(SHL1TARGETN:f)|g' < manifest.xml \
         > $(MISC)/$(TARGET).zip/META-INF/manifest.xml
     $(SED) -e 's|@PLATFORM@|$(RTL_OS:l)_$(RTL_ARCH:l)|g' \
-        -e 's|@VERSION@|$(my_version)|g' \
-        -e 's|@DEPENDENCY@|$(my_dependency)|g' < description.xml \
+        -e 's|@VERSION@|$(my_version)|g' < description.xml \
         > $(MISC)/$(TARGET).zip/description.xml
     $(COPY) Addons.xcu ProtocolHandler.xcu $(SHL1TARGETN) $(MISC)/$(TARGET).zip
     cd $(MISC)/$(TARGET).zip && zip ../boxt.oxt META-INF/manifest.xml \

@@ -553,8 +553,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
             dp_misc::Dependencies::check(
                 DescriptionInfoset(
                     getMyBackend()->getComponentContext(),
-                    description.getRootElement()),
-                getMyBackend()->getContext()));
+                    description.getRootElement())));
     if (unsatisfied.getLength() == 0) {
         return true;
     } else {

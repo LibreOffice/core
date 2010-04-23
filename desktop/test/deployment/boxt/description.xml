@@ -35,6 +35,5 @@
         value="@VERSION@"/>
     <d:OpenOffice.org-maximal-version d:name="OpenOffice.org @VERSION@ or older"
         d:OpenOffice.org-minimal-version="2.3" value="@VERSION@"/>
-    @DEPENDENCY@
   </d:dependencies>
 </d:description>
