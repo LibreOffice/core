@@ -122,7 +122,7 @@ namespace svt { namespace table
             nHorFlag = TEXT_DRAW_RIGHT;
         Rectangle aRect(_rArea);
         aRect.Left()+=4; aRect.Right()-=4;
-        aRect.Top()+=2; aRect.Bottom()-=2;
+        aRect.Bottom()-=2;
             _rDevice.DrawText( aRect, sHeaderText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
         _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
         _rDevice.Pop();
@@ -208,7 +208,7 @@ namespace svt { namespace table
             nHorFlag = TEXT_DRAW_RIGHT;
         Rectangle aRect(_rArea);
         aRect.Left()+=4; aRect.Right()-=4;
-        aRect.Top()+=2; aRect.Bottom()-=2;
+        aRect.Bottom()-=2;
         _rDevice.DrawText( aRect, _rText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
         // TODO: active? selected?
         (void)_bActive;
@@ -347,7 +347,7 @@ namespace svt { namespace table
             nHorFlag = TEXT_DRAW_RIGHT;
         Rectangle textRect(_rArea);
         textRect.Left()+=4; textRect.Right()-=4;
-        textRect.Top()+=2; textRect.Bottom()-=2;
+        textRect.Bottom()-=2;
             _rDevice.DrawText( textRect, _rText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
         }
         _rDevice.Pop();

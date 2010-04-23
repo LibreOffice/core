@@ -271,8 +271,9 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                                 }
                                 m_xColumnModel->setDefaultColumns(rawRowData.getLength());
                             }
-                            if((unsigned int)rawRowData.getLength()!=(unsigned)m_pTableModel->getColumnCount())
-                                throw GridInvalidDataException(rtl::OUString::createFromAscii("The column count doesn't match with the length of row data"), m_xDataModel);
+                            else
+                                if((unsigned int)rawRowData.getLength()!=(unsigned)m_pTableModel->getColumnCount())
+                                    throw GridInvalidDataException(rtl::OUString::createFromAscii("The column count doesn't match with the length of row data"), m_xDataModel);
 
                             for ( int k = 0; k < rawRowData.getLength(); k++)
                             {
@@ -290,9 +291,12 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                 }
                 else
                     throw GridInvalidDataException(rtl::OUString::createFromAscii("The data model isn't set!"), m_xDataModel);
-                sal_Int32 fontHeight = pTable->PixelToLogic( Size( 0, pTable->GetTextHeight() ), MAP_APPFONT ).Height();
+                sal_Int32 fontHeight = pTable->PixelToLogic( Size( 0, pTable->GetTextHeight()+3 ), MAP_APPFONT ).Height();
                 if(m_xDataModel->getRowHeight() == 0)
+                {
                     m_pTableModel->setRowHeight(fontHeight);
+                    m_xDataModel->setRowHeight(fontHeight);
+                }
                 else
                     m_pTableModel->setRowHeight(m_xDataModel->getRowHeight());
                 m_pTableModel->setRowHeaderWidth(m_xDataModel->getRowHeaderWidth());
@@ -309,18 +313,28 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                     Sequence<Reference< XGridColumn > > columns = m_xColumnModel->getColumns();
                     std::vector<Reference< XGridColumn > > aNewColumns(
                         comphelper::sequenceToContainer<std::vector<Reference< XGridColumn > > >(columns));
-                    sal_Int32 fontHeight = pTable->PixelToLogic( Size( 0, pTable->GetTextHeight() ), MAP_APPFONT ).Height();
+                    sal_Int32 fontHeight = pTable->PixelToLogic( Size( 0, pTable->GetTextHeight()+3 ), MAP_APPFONT ).Height();
                     if(m_xColumnModel->getColumnHeaderHeight() == 0)
+                    {
                         m_pTableModel->setColumnHeaderHeight(fontHeight);
+                        m_xColumnModel->setColumnHeaderHeight(fontHeight);
+                    }
                     else
                         m_pTableModel->setColumnHeaderHeight(m_xColumnModel->getColumnHeaderHeight());
                     for ( ::svt::table::ColPos col = 0; col < m_xColumnModel->getColumnCount(); ++col )
                     {
                         UnoControlTableColumn* tableColumn = new UnoControlTableColumn(aNewColumns[col]);
+                        Reference< XGridColumn > xGridColumn = m_xColumnModel->getColumn(col);
                         m_pTableModel->getColumnModel().push_back((PColumnModel)tableColumn);
-                        m_pTableModel->getColumnModel()[col]->setHorizontalAlign(m_xColumnModel->getColumn(col)->getHorizontalAlign());
-                        m_pTableModel->getColumnModel()[col]->setWidth(m_xColumnModel->getColumn(col)->getColumnWidth());
-                        m_pTableModel->getColumnModel()[col]->setResizable(m_xColumnModel->getColumn(col)->getResizeable());
+                        tableColumn->setHorizontalAlign(xGridColumn->getHorizontalAlign());
+                        tableColumn->setWidth(xGridColumn->getColumnWidth());
+                        if(xGridColumn->getPreferredWidth() != 0)
+                            tableColumn->setPreferredWidth(xGridColumn->getPreferredWidth());
+                        if(xGridColumn->getMaxWidth() != 0)
+                            tableColumn->setMaxWidth(xGridColumn->getMaxWidth());
+                        if(xGridColumn->getMinWidth() != 0)
+                            tableColumn->setMinWidth(xGridColumn->getMinWidth());
+                        tableColumn->setResizable(xGridColumn->getResizeable());
                     }
                 }
             }
@@ -544,7 +558,53 @@ void SAL_CALL  SVTXGridControl::columnChanged(const ::com::sun::star::awt::grid:
 }
 void SAL_CALL  SVTXGridControl::dataChanged(const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
-    (void) Event;
+    TableControl* pTable = (TableControl*)GetWindow();
+    if(Event.valueName == rtl::OUString::createFromAscii("RowHeight"))
+    {
+        sal_Int32 rowHeight = m_pTableModel->getRowHeight();
+        Event.newValue>>=rowHeight;
+        m_pTableModel->setRowHeight(rowHeight);
+        pTable->Invalidate();
+    }
+    else if(Event.valueName == rtl::OUString::createFromAscii("RowHeaderWidth"))
+    {
+        sal_Int32 rowHeaderWidth = m_pTableModel->getRowHeaderWidth();
+        Event.newValue>>=rowHeaderWidth;
+        m_pTableModel->setRowHeaderWidth(rowHeaderWidth);
+        pTable->Invalidate();
+    }
+    else if(Event.valueName == rtl::OUString::createFromAscii("RowHeaders"))
+    {
+        Sequence< rtl::OUString > headers(0);
+        Event.newValue>>=headers;
+        std::vector< rtl::OUString > headerNames( comphelper::sequenceToContainer <std::vector< rtl::OUString > >(headers) );
+        m_pTableModel->setRowHeaderName(headerNames);
+        pTable->Invalidate();
+    }
+    else if(Event.valueName == rtl::OUString::createFromAscii("CellUpdated"))
+    {
+        std::vector< std::vector< Any > >& rowContent = m_pTableModel->getCellContent();
+        sal_Int32 col = -1;
+        Event.oldValue>>=col;
+        rowContent[Event.index][col] = Event.newValue;
+        pTable->InvalidateDataWindow(Event.index, Event.index, false);
+    }
+    else if(Event.valueName == rtl::OUString::createFromAscii("RowUpdated"))
+    {
+        std::vector<std::vector< Any > >& rowContent = m_pTableModel->getCellContent();
+        Sequence< sal_Int32 > cols(0);
+        Sequence< Any > values(0);
+        Event.oldValue>>=cols;
+        Event.newValue>>=values;
+        for(int i = 0; i< cols.getLength(); i++)
+        {
+            if(cols[i]>=0 && cols[i]<m_pTableModel->getColumnCount())
+                rowContent[Event.index][cols[i]]=values[i];
+            else
+                break;
+        }
+        pTable->InvalidateDataWindow(Event.index, Event.index, false);
+    }
 }
 
 void SAL_CALL SVTXGridControl::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
@@ -583,34 +643,54 @@ void SAL_CALL SVTXGridControl::disposing( const ::com::sun::star::lang::EventObj
 void SAL_CALL SVTXGridControl::selectRows(const ::com::sun::star::uno::Sequence< ::sal_Int32 >& rangeOfRows) throw (::com::sun::star::uno::RuntimeException)
 {
     TableControl* pTable = (TableControl*)GetWindow();
-    std::vector<RowPos>& selectedRows = pTable->GetSelectedRows();
-    if(!selectedRows.empty())
-        selectedRows.clear();
-    sal_Int32 start = rangeOfRows[0];
-    int seqSize = rangeOfRows.getLength();
-    sal_Int32 end = rangeOfRows[seqSize-1];
-    for(int i=0;i<seqSize;i++)
-        selectedRows.push_back(rangeOfRows[i]);
-    pTable->selectionChanged(true);
-    pTable->InvalidateDataWindow(start, end, false);
-    SetSynthesizingVCLEvent( sal_True );
-    pTable->Select();
-    SetSynthesizingVCLEvent( sal_False );
-
+    SelectionMode eSelMode = pTable->getSelEngine()->GetSelectionMode();
+    if(eSelMode != NO_SELECTION)
+    {
+        sal_Int32 start = rangeOfRows[0];
+        int seqSize = rangeOfRows.getLength();
+        sal_Int32 end = rangeOfRows[seqSize-1];
+        if((start >= 0 && start < m_pTableModel->getRowCount()) && (end >= 0 && end < m_pTableModel->getRowCount()))
+        {
+            std::vector<RowPos>& selectedRows = pTable->GetSelectedRows();
+            if(!selectedRows.empty())
+                selectedRows.clear();
+            if(eSelMode == SINGLE_SELECTION)
+            {
+                if(rangeOfRows.getLength() == 1)
+                    selectedRows.push_back(start);
+                else
+                    return;
+            }
+            else
+            {
+                for(int i=0;i<seqSize;i++)
+                    selectedRows.push_back(rangeOfRows[i]);
+            }
+            pTable->selectionChanged(true);
+            pTable->InvalidateDataWindow(start, end, false);
+            SetSynthesizingVCLEvent( sal_True );
+            pTable->Select();
+            SetSynthesizingVCLEvent( sal_False );
+        }
+    }
 }
 
 void SAL_CALL SVTXGridControl::selectAllRows() throw (::com::sun::star::uno::RuntimeException)
 {
     TableControl* pTable = (TableControl*)GetWindow();
-    std::vector<RowPos>& selectedRows = pTable->GetSelectedRows();
-    if(!selectedRows.empty())
-        selectedRows.clear();
-    for(int i=0;i<m_pTableModel->getRowCount();i++)
-        selectedRows.push_back(i);
-    pTable->Invalidate();
-    SetSynthesizingVCLEvent( sal_True );
-    pTable->Select();
-    SetSynthesizingVCLEvent( sal_False );
+    SelectionMode eSelMode = pTable->getSelEngine()->GetSelectionMode();
+    if(eSelMode != NO_SELECTION)
+    {
+        std::vector<RowPos>& selectedRows = pTable->GetSelectedRows();
+        if(!selectedRows.empty())
+            selectedRows.clear();
+        for(int i=0;i<m_pTableModel->getRowCount();i++)
+            selectedRows.push_back(i);
+        pTable->Invalidate();
+        SetSynthesizingVCLEvent( sal_True );
+        pTable->Select();
+        SetSynthesizingVCLEvent( sal_False );
+    }
 }
 void SAL_CALL SVTXGridControl::deselectRows(const ::com::sun::star::uno::Sequence< ::sal_Int32 >& rangeOfRows) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -620,13 +700,16 @@ void SAL_CALL SVTXGridControl::deselectRows(const ::com::sun::star::uno::Sequenc
     std::vector<RowPos>::iterator itEnd = selectedRows.end();
     sal_Int32 start = rangeOfRows[0];
     sal_Int32 end = rangeOfRows[rangeOfRows.getLength()-1];
-    std::vector<RowPos>::iterator iter = std::find(itStart, itEnd, start);
-    selectedRows.erase(iter, iter+(end-start)+1);
-    pTable->selectionChanged(true);
-    pTable->InvalidateDataWindow(start, end, false);
-    SetSynthesizingVCLEvent( sal_True );
-    pTable->Select();
-    SetSynthesizingVCLEvent( sal_False );
+    if((start >= 0 && start < m_pTableModel->getRowCount()) && (end >= 0 && end < m_pTableModel->getRowCount()))
+    {
+        std::vector<RowPos>::iterator iter = std::find(itStart, itEnd, start);
+        selectedRows.erase(iter, iter+(end-start)+1);
+        pTable->selectionChanged(true);
+        pTable->InvalidateDataWindow(start, end, false);
+        SetSynthesizingVCLEvent( sal_True );
+        pTable->Select();
+        SetSynthesizingVCLEvent( sal_False );
+    }
 }
 
 void SAL_CALL SVTXGridControl::deselectAllRows() throw (::com::sun::star::uno::RuntimeException)
@@ -676,14 +759,34 @@ void SAL_CALL SVTXGridControl::selectRow(::sal_Int32 index) throw (::com::sun::s
     if(index<0 || index>=m_pTableModel->getRowCount())
         return;
     TableControl* pTable = (TableControl*)GetWindow();
-    std::vector<RowPos>& selectedRows = pTable->GetSelectedRows();
-    if(!isSelectedIndex(index))
-        selectedRows.push_back(index);
-    pTable->selectionChanged(true);
-    pTable->InvalidateDataWindow(index, index, false);
-    SetSynthesizingVCLEvent( sal_True );
-    pTable->Select();
-    SetSynthesizingVCLEvent( sal_False );
+    SelectionMode eSelMode = pTable->getSelEngine()->GetSelectionMode();
+    if(eSelMode != NO_SELECTION)
+    {
+        std::vector<RowPos>& selectedRows = pTable->GetSelectedRows();
+        if(eSelMode == MULTIPLE_SELECTION)
+        {
+            if(!isSelectedIndex(index))
+                selectedRows.push_back(index);
+            else
+                return;
+        }
+        else if(eSelMode == SINGLE_SELECTION)
+        {
+            if(!selectedRows.empty())
+            {
+                if(!isSelectedIndex(index))
+                    deselectRows(getSelection());
+                else
+                    return;
+            }
+            selectedRows.push_back(index);
+        }
+        pTable->selectionChanged(true);
+        pTable->InvalidateDataWindow(index, index, false);
+        SetSynthesizingVCLEvent( sal_True );
+        pTable->Select();
+        SetSynthesizingVCLEvent( sal_False );
+    }
 }
 
 void SAL_CALL SVTXGridControl::selectColumn(::sal_Int32 x) throw (::com::sun::star::uno::RuntimeException)

@@ -91,8 +91,6 @@ public:
 
     virtual ::sal_Int32 SAL_CALL getItemIndexAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setToolTip(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& text, const ::com::sun::star::uno::Sequence< ::sal_Int32 >& columns) throw (::com::sun::star::uno::RuntimeException);
-    //virtual void SAL_CALL addMouseListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener > & listener) throw (::com::sun::star::uno::RuntimeException);
-    //virtual void SAL_CALL removeMouseListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener > & listener) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::grid::XGridSelection
 

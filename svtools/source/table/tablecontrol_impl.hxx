@@ -208,12 +208,14 @@ namespace svt { namespace table
         virtual void    showCursor();
         virtual bool    dispatchAction( TableControlAction _eAction );
     virtual SelectionEngine* getSelEngine();
-    virtual void setTooltip(const Point& rPoint );
+    virtual rtl::OUString& setTooltip(const Point& rPoint );
     virtual void resizeColumn(const Point& rPoint);
     virtual bool startResizeColumn(const Point& rPoint);
     virtual bool endResizeColumn(const Point& rPoint);
 
     TableDataWindow* getDataWindow();
+    ScrollBar* getHorzScrollbar();
+    ScrollBar* getVertScrollbar();
 
     ::rtl::OUString convertToString(const ::com::sun::star::uno::Any& _value);
     Rectangle calcHeaderRect(bool bColHeader);

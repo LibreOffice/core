@@ -73,7 +73,7 @@ namespace svt { namespace table
         virtual void        SetPointer( const Pointer& rPointer );
         virtual void        CaptureMouse();
         virtual void        ReleaseMouse();
-
+        virtual long        Notify(NotifyEvent& rNEvt);
     };
 //........................................................................
 } } // namespace svt::table

@@ -41,6 +41,9 @@ using namespace ::com::sun::star::lang;
 
 #define ROWHEIGHT ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowHeight" ))
 #define ROWHEADERS ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowHeaders" ))
+#define CELLUPDATED ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CellUpdated" ))
+#define ROWUPDATED ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowUpdated" ))
+#define ROWHEADERWIDTH ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowHeaderWidth" ))
 
 namespace toolkit
 {
@@ -83,11 +86,10 @@ void DefaultGridDataModel::broadcast( broadcast_type eType, const GridDataEvent&
 
 //---------------------------------------------------------------------
 
-void DefaultGridDataModel::broadcast_changed( ::rtl::OUString name, Any oldValue, Any newValue ) throw (::com::sun::star::uno::RuntimeException)
+void DefaultGridDataModel::broadcast_changed( ::rtl::OUString name, sal_Int32 index, Any oldValue, Any newValue) throw (::com::sun::star::uno::RuntimeException)
 {
     Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
-    GridDataEvent aEvent( xSource, name, oldValue, newValue, 0, ::rtl::OUString(),
-        Sequence< Any >() );
+    GridDataEvent aEvent( xSource, name, oldValue, newValue, index, ::rtl::OUString(), Sequence< Any >());
     broadcast( data_changed, aEvent);
 }
 
@@ -128,7 +130,7 @@ void SAL_CALL DefaultGridDataModel::setRowHeight(::sal_Int32 value) throw (::com
     sal_Int32 oldValue = rowHeight;
     rowHeight = value;
 
-    broadcast_changed( ROWHEIGHT, Any(oldValue), Any(value) );
+    broadcast_changed( ROWHEIGHT, 0, Any(oldValue), Any(value));
 }
 
 //---------------------------------------------------------------------
@@ -164,7 +166,7 @@ void SAL_CALL DefaultGridDataModel::setRowHeaders(const ::com::sun::star::uno::S
         i++;
     }
 
-    broadcast_changed( ROWHEADERS, Any(oldValue), Any(comphelper::containerToSequence(rowHeaders)) );
+    broadcast_changed( ROWHEADERS, 0, Any(oldValue), Any(comphelper::containerToSequence(rowHeaders)) );
 }
 
 //---------------------------------------------------------------------
@@ -244,12 +246,41 @@ void SAL_CALL DefaultGridDataModel::removeAll() throw (RuntimeException)
 //---------------------------------------------------------------------
 void SAL_CALL DefaultGridDataModel::setRowHeaderWidth(sal_Int32 _value) throw (::com::sun::star::uno::RuntimeException)
 {
+    sal_Int32 oldValue = m_nRowHeaderWidth;
     m_nRowHeaderWidth = _value;
+    broadcast_changed( ROWHEADERWIDTH, 0, Any(oldValue), Any(_value) );
 }
 //---------------------------------------------------------------------
 sal_Int32 SAL_CALL DefaultGridDataModel::getRowHeaderWidth() throw (::com::sun::star::uno::RuntimeException)
 {
     return m_nRowHeaderWidth;
+}
+//---------------------------------------------------------------------
+void SAL_CALL DefaultGridDataModel::updateCell(::sal_Int32 row, ::sal_Int32 column, const Any& value) throw (::com::sun::star::uno::RuntimeException)
+{
+    if(row >= 0 && row < (signed)data.size())
+    {
+        if(column >= 0 && column < (signed)data[0].size())
+        {
+            data[row][column] = value;
+            Sequence< Any >dataSeq(comphelper::containerToSequence(data[row]));
+            broadcast_changed( CELLUPDATED, row, Any(column), value );
+        }
+    }
+}
+//---------------------------------------------------------------------
+void SAL_CALL DefaultGridDataModel::updateRow(::sal_Int32 row, const ::com::sun::star::uno::Sequence< ::sal_Int32 > & columns, const ::com::sun::star::uno::Sequence< Any > & values) throw (::com::sun::star::uno::RuntimeException)
+{
+    if(row >= 0 && row < (signed)data.size())
+    {
+        if(columns.getLength() == values.getLength())
+        {
+            for(int i = 0; i < columns.getLength(); i++)
+                data[row][i] = values[i];
+            Sequence< Any >dataSeq(comphelper::containerToSequence(data[row]));
+            broadcast_changed( ROWUPDATED, row, Any(columns), Any(values) );
+        }
+    }
 }
 //---------------------------------------------------------------------
 // XComponent

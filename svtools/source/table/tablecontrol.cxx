@@ -71,9 +71,10 @@ namespace svt { namespace table
         ,m_pImpl( new TableControl_Impl( *this ) )
         ,m_bSelectionChanged(false)
     {
-        m_pImpl->getDataWindow()->SetMouseButtonDownHdl( LINK( this, TableControl, ImplMouseButtonDownHdl ) );
-        m_pImpl->getDataWindow()->SetMouseButtonUpHdl( LINK( this, TableControl, ImplMouseButtonUpHdl ) );
-        m_pImpl->getDataWindow()->SetSelectHdl( LINK( this, TableControl, ImplSelectHdl ) );
+        TableDataWindow* aTableData = m_pImpl->getDataWindow();
+        aTableData->SetMouseButtonDownHdl( LINK( this, TableControl, ImplMouseButtonDownHdl ) );
+        aTableData->SetMouseButtonUpHdl( LINK( this, TableControl, ImplMouseButtonUpHdl ) );
+        aTableData->SetSelectHdl( LINK( this, TableControl, ImplSelectHdl ) );
         m_pAccessTable.reset(new ::svt::table::AccessibleTableControl_Impl());
     }
 

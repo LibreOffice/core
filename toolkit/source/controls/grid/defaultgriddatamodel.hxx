@@ -73,6 +73,8 @@ public:
     virtual void SAL_CALL removeAll() throw (RuntimeException);
     virtual void SAL_CALL setRowHeaderWidth(sal_Int32 _value) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getRowHeaderWidth() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateCell( ::sal_Int32 row, ::sal_Int32 column, const ::com::sun::star::uno::Any& value ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateRow( ::sal_Int32 row, const ::com::sun::star::uno::Sequence< ::sal_Int32 >& columns, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& values ) throw (::com::sun::star::uno::RuntimeException);
     // XComponent
     virtual void SAL_CALL dispose(  ) throw (RuntimeException);
     virtual void SAL_CALL addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException);
@@ -86,7 +88,7 @@ public:
 private:
 
     void broadcast( broadcast_type eType, const GridDataEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException);
-    void broadcast_changed( ::rtl::OUString name, Any oldValue, Any newValue ) throw (::com::sun::star::uno::RuntimeException);
+    void broadcast_changed( ::rtl::OUString name, sal_Int32 index, Any oldValue, Any newValue ) throw (::com::sun::star::uno::RuntimeException);
     void broadcast_add( sal_Int32 index, const ::rtl::OUString & headerName,  const ::com::sun::star::uno::Sequence< Any  > rowData ) throw (::com::sun::star::uno::RuntimeException);
     void broadcast_remove( sal_Int32 index, const ::rtl::OUString & headerName, const ::com::sun::star::uno::Sequence< Any  > rowData ) throw (::com::sun::star::uno::RuntimeException);
 

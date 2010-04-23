@@ -30,6 +30,7 @@
 #include "svtools/table/tablecontrol.hxx"
 #include "svtools/table/tabledatawindow.hxx"
 #include "tablecontrol_impl.hxx"
+#include <vcl/help.hxx>
 
 //........................................................................
 namespace svt { namespace table
@@ -59,18 +60,25 @@ namespace svt { namespace table
         Point aPoint = rMEvt.GetPosPixel();
         if ( !m_rTableControl.getInputHandler()->MouseMove( m_rTableControl, rMEvt ) )
         {
-            if(m_rTableControl.getCurrentRow(aPoint)>=0 &&
-                (!m_rTableControl.getAntiImpl().getColumnsForTooltip().getLength()==0 || !m_rTableControl.getAntiImpl().getTextForTooltip().getLength()==0))
+            if(m_rTableControl.getCurrentRow(aPoint)>=0 )
             {
-                m_rTableControl.setTooltip(aPoint);
                 SetPointer(POINTER_ARROW);
+                rtl::OUString& rHelpText = m_rTableControl.setTooltip(aPoint);
+                Help::EnableBalloonHelp();
+                Window::SetHelpText( rHelpText.getStr());
             }
             else if(m_rTableControl.getCurrentRow(aPoint) == -1)
             {
+                if(Help::IsBalloonHelpEnabled())
+                    Help::DisableBalloonHelp();
                 m_rTableControl.resizeColumn(aPoint);
             }
             else
+            {
+                if(Help::IsBalloonHelpEnabled())
+                    Help::DisableBalloonHelp();
                 Window::MouseMove( rMEvt );
+            }
         }
     }
     //--------------------------------------------------------------------
@@ -120,6 +128,24 @@ namespace svt { namespace table
     void TableDataWindow::ReleaseMouse(  )
     {
         Window::ReleaseMouse();
+    }
+    // -----------------------------------------------------------------------
+    long TableDataWindow::Notify(NotifyEvent& rNEvt )
+    {
+        long nDone = 0;
+        if ( rNEvt.GetType() == EVENT_COMMAND )
+        {
+            const CommandEvent& rCEvt = *rNEvt.GetCommandEvent();
+            if ( rCEvt.GetCommand() == COMMAND_WHEEL )
+            {
+                const CommandWheelData* pData = rCEvt.GetWheelData();
+                if( !pData->GetModifier() && ( pData->GetMode() == COMMAND_WHEEL_SCROLL ) )
+                {
+                    nDone = HandleScrollCommand( rCEvt, m_rTableControl.getHorzScrollbar(), m_rTableControl.getVertScrollbar() );
+                }
+            }
+        }
+        return nDone ? nDone : Window::Notify( rNEvt );
     }
 //........................................................................
 } } // namespace svt::table

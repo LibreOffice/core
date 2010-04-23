@@ -38,7 +38,6 @@
 #include <vcl/seleng.hxx>
 #include <rtl/ref.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
-#include <vcl/help.hxx>
 #include <vcl/image.hxx>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
@@ -456,8 +455,8 @@ namespace svt { namespace table
         DELETEZ( m_pVScroll );
         DELETEZ( m_pHScroll );
         DELETEZ( m_pScrollCorner );
-    DELETEZ( m_pTableFunctionSet );
-    DELETEZ( m_pSelEngine );
+        DELETEZ( m_pTableFunctionSet );
+        DELETEZ( m_pSelEngine );
         DELETEZ( m_pDataWindow );
     }
 
@@ -579,7 +578,9 @@ namespace svt { namespace table
 
         m_aColumnWidthsPixel.reserve( colCount );
         m_aAccColumnWidthsPixel.reserve( colCount );
+        std::vector<sal_Int32> aPrePixelWidths(0);
         long accumulatedPixelWidth = 0;
+        int lastResizableCol = -1;
         double gridWidth = m_rAntiImpl.GetOutputSizePixel().Width();
         if(m_pModel->hasRowHeaders())
         {
@@ -627,22 +628,26 @@ namespace svt { namespace table
                 colWidth = pColumn->getWidth();
             long pixelWidth = m_rAntiImpl.LogicToPixel( Size( colWidth, 0 ), MAP_APPFONT ).Width();
             if(bResizable && colPrefWidth == 0)
+            {
                 colWithoutFixedWidthsSum+=pixelWidth;
+                lastResizableCol = col;
+            }
             colWidthsSum+=pixelWidth;
+            aPrePixelWidths.push_back(pixelWidth);
         }
-        gridWidth = gridWidth - colWidthsSum + colWithoutFixedWidthsSum;
+        double gridWidthWithoutFixed = gridWidth - colWidthsSum + colWithoutFixedWidthsSum;
         double scalingFactor = 1.0;
         if(m_bResizingGrid)
         {
-            if(gridWidth > (minColWithoutFixedSum+colWidthsSum - colWithoutFixedWidthsSum))
-                scalingFactor = gridWidth/colWithoutFixedWidthsSum;
+            if(gridWidthWithoutFixed > (minColWithoutFixedSum+colWidthsSum - colWithoutFixedWidthsSum))
+                scalingFactor = gridWidthWithoutFixed/colWithoutFixedWidthsSum;
         }
         else
         {
-            if(colWidthsSum < gridWidth)
+            if(colWidthsSum < gridWidthWithoutFixed)
             {
                 if(colWithoutFixedWidthsSum>0)
-                    scalingFactor = gridWidth/colWithoutFixedWidthsSum;
+                    scalingFactor = gridWidthWithoutFixed/colWithoutFixedWidthsSum;
             }
         }
         long pixelWidth = 0;
@@ -652,16 +657,32 @@ namespace svt { namespace table
             DBG_ASSERT( !!pColumn, "TableControl_Impl::impl_ni_updateColumnWidths: invalid column returned by the model!" );
             if ( !pColumn )
                 continue;
-            TableMetrics colWidth = pColumn->getWidth();
             if(pColumn->isResizable() && pColumn->getPreferredWidth() == 0)
             {
-                colWidth*=scalingFactor;
-                //colWidth+=1;
-                pColumn->setWidth(colWidth);
+                aPrePixelWidths[i]*=scalingFactor;
+                TableMetrics logicColWidth = m_rAntiImpl.PixelToLogic( Size( aPrePixelWidths[i], 0 ), MAP_APPFONT ).Width();
+                pColumn->setWidth(logicColWidth);
             }
-            pixelWidth = m_rAntiImpl.LogicToPixel( Size( colWidth, 0 ), MAP_APPFONT ).Width();
-            m_aColumnWidthsPixel.push_back( pixelWidth );
-            m_aAccColumnWidthsPixel.push_back( accumulatedPixelWidth += pixelWidth );
+            m_aColumnWidthsPixel.push_back( aPrePixelWidths[i] );
+            m_aAccColumnWidthsPixel.push_back( accumulatedPixelWidth += aPrePixelWidths[i] );
+        }
+        if(gridWidth > m_aAccColumnWidthsPixel[colCount-1])
+        {
+            if(lastResizableCol >= 0)
+            {
+                PColumnModel pColumn = m_pModel->getColumnModel(lastResizableCol);
+                m_aColumnWidthsPixel[lastResizableCol]+=gridWidth-m_aAccColumnWidthsPixel[colCount-1];
+                TableMetrics logicColWidth1 = m_rAntiImpl.PixelToLogic( Size( m_aColumnWidthsPixel[lastResizableCol], 0 ), MAP_APPFONT ).Width();
+                pColumn->setWidth(logicColWidth1);
+                while(lastResizableCol < colCount)
+                {
+                    if(lastResizableCol == 0)
+                        m_aAccColumnWidthsPixel[0] = m_aColumnWidthsPixel[lastResizableCol];
+                    else
+                        m_aAccColumnWidthsPixel[lastResizableCol]=m_aAccColumnWidthsPixel[lastResizableCol-1]+m_aColumnWidthsPixel[lastResizableCol];
+                    ++lastResizableCol;
+                }
+            }
         }
     }
 
@@ -1068,7 +1089,6 @@ namespace svt { namespace table
                 )
             {
                 bool isSelectedColumn = false;
-            //  Size siz = m_rAntiImpl.GetSizePixel();
                 ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >xGraphic;
                 ::com::sun::star::uno::Any rCellData = aCellContent[aRowIterator.getRow()][aCell.getColumn()];
                 if(rCellData>>=xGraphic)
@@ -1852,6 +1872,16 @@ namespace svt { namespace table
         return m_pDataWindow;
     }
     //-------------------------------------------------------------------------------
+    ScrollBar* TableControl_Impl::getHorzScrollbar()
+    {
+        return m_pHScroll;
+    }
+    //-------------------------------------------------------------------------------
+    ScrollBar* TableControl_Impl::getVertScrollbar()
+    {
+        return m_pVScroll;
+    }
+    //-------------------------------------------------------------------------------
     BOOL TableControl_Impl::isRowSelected(const ::std::vector<RowPos>& selectedRows, RowPos current)
     {
         return ::std::find(selectedRows.begin(),selectedRows.end(),current) != selectedRows.end();
@@ -1872,13 +1902,18 @@ namespace svt { namespace table
         return -1;
     }
     //-------------------------------------------------------------------------------
-    void TableControl_Impl::setTooltip(const Point& rPoint )
+    ::rtl::OUString& TableControl_Impl::setTooltip(const Point& rPoint )
     {
-        ::rtl::OUString aTooltipText;
+        ::rtl::OUString& aTooltipText(::rtl::OUString::createFromAscii(""));
         RowPos current = getCurrentRow(rPoint);
         com::sun::star::uno::Sequence< sal_Int32 > cols = m_rAntiImpl.getColumnsForTooltip();
         com::sun::star::uno::Sequence< ::rtl::OUString > text = m_rAntiImpl.getTextForTooltip();
-        if(text.getLength() == 0)
+        if(text.getLength()==0 && cols.getLength()==0)
+        {
+            ::com::sun::star::uno::Any content = m_pModel->getCellContent()[current][m_nCurColumn];
+            aTooltipText = convertToString(content);
+        }
+        else if(text.getLength() == 0)
         {
             for(int i=0; i<cols.getLength(); i++)
             {
@@ -1936,7 +1971,7 @@ namespace svt { namespace table
                 }
             }
         }
-        Help::ShowBalloon(m_pDataWindow, rPoint, aTooltipText);
+        return aTooltipText;
     }
     //--------------------------------------------------------------------
     void TableControl_Impl::resizeColumn(const Point& rPoint)
@@ -1947,9 +1982,8 @@ namespace svt { namespace table
             headerRowWidth = m_rAntiImpl.LogicToPixel( Size(m_pModel->getRowHeaderWidth(), 0 ), MAP_APPFONT ).Width();
         int resizingColumn=m_nCurColumn-m_nLeftColumn;
         PColumnModel pColumn = m_pModel->getColumnModel(m_nCurColumn);
-        sal_Int32 colWidth = pColumn->getWidth();
         impl_ni_getAccVisibleColWidths();
-        int newColWidth = m_rAntiImpl.LogicToPixel( Size( colWidth, 0 ), MAP_APPFONT ).Width();
+        int newColWidth = m_aColumnWidthsPixel[m_nCurColumn];
         //subtract 1 from m_aAccColumnWidthPixel because right border should be part of the current cell
         if(m_aVisibleColumnWidthsPixel[resizingColumn]-1 == rPoint.X() && pColumn->isResizable())
             aNewPointer = Pointer( POINTER_HSPLIT );
@@ -2059,9 +2093,9 @@ namespace svt { namespace table
         int col = m_nLeftColumn;
         while(nVisCols)
         {
-            PColumnModel pColumn = m_pModel->getColumnModel(col);
-            pixelWidth = m_rAntiImpl.LogicToPixel( Size( pColumn->getWidth(), 0 ), MAP_APPFONT ).Width();
-            m_aVisibleColumnWidthsPixel.push_back(widthsPixel+=pixelWidth);
+           // PColumnModel pColumn = m_pModel->getColumnModel(col);
+           // pixelWidth = m_rAntiImpl.LogicToPixel( Size( pColumn->getWidth(), 0 ), MAP_APPFONT ).Width();
+            m_aVisibleColumnWidthsPixel.push_back(widthsPixel+=m_aColumnWidthsPixel[col]);
             col++;
             nVisCols--;
         }
