@@ -53,6 +53,9 @@ namespace Dependencies {
        @param infoset
        the infoset containing the dependencies to check
 
+       @param repository
+       the repository into which to deploy
+
        @return
        a list of the unsatisfied dependencies from <code>infoset</code> (in no
        specific order)
@@ -60,7 +63,9 @@ namespace Dependencies {
     DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::dom::XElement > >
-    check(::dp_misc::DescriptionInfoset const & infoset);
+    check(
+        ::dp_misc::DescriptionInfoset const & infoset,
+        ::rtl::OUString const & repository);
 
     /**
        Obtain the (human-readable) error message of a failed dependency.

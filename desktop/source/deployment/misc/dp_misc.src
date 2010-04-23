@@ -38,3 +38,15 @@ String RID_DEPLYOMENT_DEPENDENCIES_MIN {
 String RID_DEPLYOMENT_DEPENDENCIES_MAX {
     Text[en-US] = "Extension doesn't support versions greater than: OpenOffice.org %VERSION";
 };
+
+String RID_DEPLOYMENT_DEPENDENCIES_REPO_POS {
+    Text[en-US] = "Extension can only be deployed to repositories \"%POS\"";
+};
+
+String RID_DEPLOYMENT_DEPENDENCIES_REPO_NEG {
+    Text[en-US] = "Extension can not be deployed to repositories \"%NEG\"";
+};
+
+String RID_DEPLOYMENT_DEPENDENCIES_REPO_BOTH {
+    Text[en-US] = "Extension can be deployed to repositories \"%POS\" but not to \"%NEG\"";
+};
