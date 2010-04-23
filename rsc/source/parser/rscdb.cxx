@@ -125,7 +125,7 @@ static sal_uInt32 getLangIdAndShortenLocale( RscTypCont* pTypCont,
     else
         rLang = rtl::OString();
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, " %s (0x%hx)", aL.getStr(), nRet );
+        fprintf( stderr, " %s (0x%" SAL_PRIxUINT32 ")", aL.getStr(), nRet );
 #endif
     return nRet;
 }
