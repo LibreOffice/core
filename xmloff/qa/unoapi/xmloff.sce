@@ -1,9 +1,9 @@
--o xmloff.Chart.XMLContentExporter
--o xmloff.Chart.XMLContentImporter
--o xmloff.Chart.XMLExporter
--o xmloff.Chart.XMLImporter
--o xmloff.Chart.XMLStylesExporter
--o xmloff.Chart.XMLStylesImporter
+#111102# -o xmloff.Chart.XMLContentExporter
+#111102# -o xmloff.Chart.XMLContentImporter
+#111102# -o xmloff.Chart.XMLExporter
+#111102# -o xmloff.Chart.XMLImporter
+#111102# -o xmloff.Chart.XMLStylesExporter
+#111102# -o xmloff.Chart.XMLStylesImporter
 -o xmloff.Draw.XMLContentExporter
 -o xmloff.Draw.XMLContentImporter
 -o xmloff.Draw.XMLExporter
