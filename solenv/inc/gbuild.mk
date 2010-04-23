@@ -517,6 +517,22 @@ define gb_LinkTarget_set_auxtargets
 $(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS := $(2)
 endef
 
+define gb_LinkTarget__add_internal_headers
+$(call gb_LinkTarget_get_headers_target,$(1)) : $(2)
+$(2) :|	$(call gb_LinkTarget_get_external_headers_target,$(1))
+
+endef
+
+define gb_LinkTarget_add_package_headers
+$(call gb_LinkTarget__add_internal_headers,$(1),$(foreach package,$(2),$(call gb_Package_get_target,$(package))))
+$(call gb_LinkTarget_get_clean_target,$(1)) : $(foreach package,$(2),$(call gb_Package_get_clean_target,$(package)))
+
+endef
+
+define gb_LinkTarget_add_sdi_headers
+$(call gb_LinkTarget__add_internal_headers,$(1),$(foreach sdi,$(2),$(call gb_SdiTarget_get_target,$(sdi))))
+$(call gb_LinkTarget_get_clean_target,$(1)) : $(foreach sdi,$(2),$(call gb_SdiTarget_get_clean_target,$(sdi)))
+endef
 
 # Library class
 
@@ -569,6 +585,8 @@ $(eval $(foreach method,\
     set_library_path_flags \
     add_linked_libs \
     add_linked_static_libs \
+    add_package_headers \
+    add_sdi_headers \
 ,\
     $(call gb_Library_forward_to_Linktarget,$(method))\
 ))
@@ -624,6 +642,8 @@ $(eval $(foreach method,\
     set_library_path_flags \
     add_linked_libs \
     add_linked_static_libs \
+    add_package_headers \
+    add_sdi_headers \
 ,\
     $(call gb_StaticLibrary_forward_to_Linktarget,$(method))\
 ))
@@ -673,6 +693,8 @@ $(eval $(foreach method,\
     set_library_path_flags \
     add_linked_libs \
     add_linked_static_libs \
+    add_package_headers \
+    add_sdi_headers \
 ,\
     $(call gb_Executable_forward_to_Linktarget,$(method))\
 ))
