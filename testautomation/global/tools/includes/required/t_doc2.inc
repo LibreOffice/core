@@ -115,75 +115,96 @@ end sub
 '
 function sMakeReadOnlyDocumentEditable() as boolean
 
-    ' Switch a write protected document to edit mode.
-    const CFN = "sMakeReadOnlyDocumentEditable(): "
+function sMakeReadOnlyDocumentEditable() as boolean
 
-    ' Timings
-    const MAX_RETRIES      = 5
-    const MAX_DELAY        = 500
-    const MAX_DIALOG_DELAY = 2
- 
-    ' States
-    const ITEM_STATE       = 2
-    const BUTTON_RELEASED  = 0
-    const BUTTON_PRESSED   = 1
+    ' Function returns TRUE if document has been made editable and FALSE if
+    ' no action was required (that is: Document was not read-only)
 
     dim iTry as integer
+    dim iWait as integer
+    dim rc as integer
+    const CFN = "sMakeReadOnlyDocumentEditable::"
 
-    WaitSlot( MAX_DELAY * 10 ) ' Let all running slots finish
+    if ( VERBOSE ) then printlog( CFN & "Making document editable (create a copy) if it is readonly" )
 
-    ' Try to click the Edit-Button on the Standardbar
-    kontext "StandardBar"
-    for iTry = 1 to MAX_RETRIES
-        try
-            if ( Bearbeiten.getState( ITEM_STATE ) = BUTTON_RELEASED ) then 
-                Bearbeiten.click()
-                exit for
-            else
-                printlog( CFN & "Failed to switch to edit mode, button has incorrect state" )
-            endif
-        catch
-            printlog( CFN & "Failed to switch to edit mode, retrying..." )
-        endcatch
-        wait( MAX_DELAY )
-    next iTry
+    ' We still run into synchronization problems with the "Make document editable" feature
+    ' because we do not know when this button becomes available and ready for use: The
+    ' document has to be loaded, then we have to wait for the toolbar to get populated.
+    ' One thing appears to work though: Try to execute the slot using hUseAsyncSlot.
+    ' This is a little bit tricky because the state of the document is altered but if
+    ' the slot has been executed once we know for sure that the button on the toolbar is
+    ' available and can check its state and - if need be - chenge the document state back.
 
-    ' Probe for messageboxes, the "Use copy" message is allowed, all others are not
+    ' ========== Workaround begin ==========
+    hUseAsyncSlot( "EditDoc" )
     kontext "Active"
-    if ( Active.exists( MAX_DIALOG_DELAY ) ) then
-        kontext "Active"
-        if ( hCloseDialog( Active, "yes" ) ) then
-            ' This is the expected/allowed "Use copy" message
+    if ( Active.exists() ) then
+        if ( VERBOSE ) then printlog( "Handling create copy message" )
+        Active.yes()
+        wait( 1000 )
+    endif
+    ' ==========  Workaround end  ==========
+    Kontext "Standardbar"
+    iWait = 0
+    Do
+        if ( Bearbeiten.IsEnabled() ) then
+            try
+                if Bearbeiten.getState( 2 ) = 0 then
+                    exit do
+                endif
+            catch
+                if ( VERBOSE ) then printlog "Attempt " & iWait & " to make document readable failed"
+                iWait = iWait + 1
+                wait ( 1000 )
+            endcatch
         else
-            ' This is most likely the "Object not found" message (which is a bug)
-            printlog( CFN & Active.getText() )
-            hCloseDialog( Active, "ok" )
-            warnlog( CFN & "Errormessage closed with <OK>" )
+            if ( VERBOSE ) then printlog "Attempt " & iWait & " to make document readable failed"
+            iWait = iWait + 1
+            wait ( 1000 )
+        end if
+        if iWait >= 5 then exit do
+    Loop
+
+    if ( Bearbeiten.IsEnabled() ) then
+
+        if ( Bearbeiten.getState( 2 ) = 0 ) then
+
+			rc = hUseAsyncSlot("editdoc")
+
+            if ( rc >= 0 ) then
+                for iTry = 1 to 2
+
+
+                    Kontext "Active"
+                    if ( Active.exists( 5 ) ) then
+
+                        printlog( CFN & "Messagebox: " & Active.getText() )
+
+                        try
+                            if ( VERBOSE ) then printlog( CFN & "Document was read-only. A copy will be used." )
+                            Active.Yes()
+                            if ( VERBOSE ) then printlog( CFN & "Closed 'use copy' message" )
+                        catch
+                            if ( VERBOSE ) then printlog( CFN & "Probing for unexpected messagebox..." )
+                            active.ok()
+                            qaerrorlog( "#i100701 - Object not found message" )
+                        endcatch
+                    else
+                        printlog( CFN & "No messagebox informing about a copy being used" )
+                    endif
+                    sMakeReadOnlyDocumentEditable() = TRUE
+                next iTry
+            else
+                printlog( CFN & "Document appears to be editable" )
+            endif
+        else
+            if ( VERBOSE ) then printlog( CFN & "Button <Bearbeiten> is pressed, document is editable" )
+            sMakeReadOnlyDocumentEditable() = FALSE
         endif
+    else
+        if ( VERBOSE ) then printlog( CFN & "Control <Bearbeiten> is not enabled" )
     endif
 
-    WaitSlot( MAX_DELAY * 10 ) ' Let the document switch mode
-
-    ' Verify the state of the Edit-Button, it must be either disabled or pressed.
-    try
-        kontext "StandardBar"
-        if ( Bearbeiten.isEnabled() ) then
-            if ( Bearbeiten.getState( ITEM_STATE ) = BUTTON_PRESSED ) then
-                printlog( "Document already is in edit-mode (Edit button pressed)" )
-                sMakeReadOnlyDocumentEditable() = true
-            else
-                warnlog( CFN & "Document is still in view-mode (Mode switch failed)" )
-                sMakeReadOnlyDocumentEditable() = false
-            endif
-        else
-            printlog( "Document has been switched to edit-mode (Edit button disabled, using copy)" )
-            sMakeReadOnlyDocumentEditable() = true
-        endif
-    catch
-        warnlog( CFN & "Failed to retrieve status for Edit button" )
-        sMakeReadOnlyDocumentEditable() = false
-    endcatch
-    
 end function
 '
 '-------------------------------------------------------------------------------
