@@ -84,7 +84,6 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/confignode.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/accimplaccess.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -872,21 +871,19 @@ void ToolPanelViewShell_Impl::ConnectToDockingWindow()
 // ---------------------------------------------------------------------------------------------------------------------
 Reference< XAccessible > ToolPanelViewShell_Impl::CreateAccessible( ::sd::Window& i_rWindow )
 {
-    Reference< XAccessible > xAccessibleParent;
-    ::Window* pAccessibleParent = i_rWindow.GetAccessibleParentWindow();
-    if ( pAccessibleParent )
-        xAccessibleParent.set( pAccessibleParent->GetAccessible() );
-
     Reference< XAccessible > xAccessible( GetToolPanelDeck().GetAccessible( FALSE ) );
     if ( !xAccessible.is() )
     {
+        // determine the XAccessible which is the parent of the to-be-created object
+        ::Window* pAccessibleParent = i_rWindow.GetAccessibleParentWindow();
+        OSL_ENSURE( pAccessibleParent, "ToolPanelViewShell_Impl::CreateAccessible: illegal accessible parent provided by the sd::Window!" );
+        GetToolPanelDeck().SetAccessibleParentWindow( pAccessibleParent );
+
         xAccessible = GetToolPanelDeck().GetAccessible( TRUE );
         ENSURE_OR_RETURN( xAccessible.is(), "ToolPanelViewShell_Impl::CreateAccessible: illegal ToolPanelDeck accessible!", NULL );
-        if ( xAccessibleParent.is() )
-        {
-            ::comphelper::OAccessibleImplementationAccess::setAccessibleParent(
-                xAccessible->getAccessibleContext(), xAccessibleParent );
-        }
+        OSL_ENSURE( xAccessible->getAccessibleContext().is()
+                &&  xAccessible->getAccessibleContext()->getAccessibleParent() == pAccessibleParent->GetAccessible(),
+                "ToolPanelViewShell_Impl::CreateAccessible: illegal parenthood!" );
     }
     return xAccessible;
 }
