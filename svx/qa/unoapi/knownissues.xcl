@@ -82,3 +82,6 @@ svx.AccessibleControlShape
 
 ### i111114 ###
 svx.AccessiblePresentationOLEShape::com::sun::star::accessibility::XAccessibleComponent
+
+### i111169 ###
+svx.AccessiblePageShape::com::sun::star::accessibility::XAccessibleComponent
