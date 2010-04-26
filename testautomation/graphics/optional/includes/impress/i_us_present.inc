@@ -676,25 +676,23 @@ testcase i_us_presentation7
 
     hTypeKeys "<F5>"
     kontext "DocumentPresentation"
-    sleep (3)
+    sleep (5)
     DocumentPresentation.TypeKeys "<PAGEDOWN>"
-    sleep (2)
+    sleep (5)
     DocumentPresentation.TypeKeys "<PAGEDOWN>"
-    sleep (2)
+    sleep (5)
     DocumentPresentation.TypeKeys "<PAGEDOWN>"
+    sleep (5)
     DocumentPresentation.TypeKeys "<PAGEDOWN>"
+    sleep (5)
     DocumentPresentation.TypeKeys "<PAGEDOWN>"
-    sleep (10)
+    sleep (5)
     DocumentPresentation.TypeKeys "<PAGEDOWN>"
+    sleep (5)
     DocumentPresentation.TypeKeys "<PAGEDOWN>"
-    sleep (2)
+    sleep (5)
     DocumentPresentation.TypeKeys "<PAGEDOWN>"
-    DocumentPresentation.TypeKeys "<PAGEDOWN>"
-    sleep (2)
-    DocumentPresentation.TypeKeys "<PAGEDOWN>"
-    DocumentPresentation.TypeKeys "<PAGEDOWN>"
-    sleep (2)
-    DocumentPresentation.TypeKeys "<ESCAPE>"
+
     if DocumentPresentation.Exists(5) then
         warnlog "   Presentation should have ended. Please inform Automatic Tester."
     end if
