@@ -55,7 +55,10 @@
 #include <basic/sbobjmod.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
+#include <com/sun/star/script/XVBACompat.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
+using namespace com::sun::star;
 
 // for the bsearch
 #ifdef WNT
@@ -97,6 +100,26 @@ SV_IMPL_VARARR(SbiBreakpoints,USHORT)
 
 
 SV_IMPL_VARARR(HighlightPortions, HighlightPortion)
+
+bool getDefaultVBAMode( StarBASIC* pb )
+{
+    bool bResult = false;
+    if ( pb && pb->IsDocBasic() )
+    {
+        uno::Any aDoc;
+    if ( pb->GetUNOConstant( "ThisComponent", aDoc ) )
+        {
+            uno::Reference< beans::XPropertySet > xProp( aDoc, uno::UNO_QUERY );
+            if ( xProp.is() )
+            {
+                uno::Reference< script::XVBACompat > xVBAMode( xProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicLibraries") ) ), uno::UNO_QUERY );
+                if ( xVBAMode.is() )
+                    bResult = ( xVBAMode->getVBACompatModeOn() == sal_True );
+            }
+        }
+    }
+    return bResult;
+}
 
 class AsyncQuitHandler
 {
@@ -443,10 +466,11 @@ void SbModule::SetSource( const String& r )
 
 void SbModule::SetSource32( const ::rtl::OUString& r )
 {
+    // Default basic mode to library container mode, but.. allow Option VBASupport 0/1 override
+        SetVBACompat( getDefaultVBAMode( static_cast< StarBASIC*>( GetParent() ) ) );
     aOUSource = r;
     StartDefinitions();
     SbiTokenizer aTok( r );
-        aTok.SetCompatible( IsVBACompat() );
     while( !aTok.IsEof() )
     {
         SbiToken eEndTok = NIL;
@@ -470,6 +494,18 @@ void SbModule::SetSource32( const ::rtl::OUString& r )
                 if( eCurTok == PROPERTY )
                 {
                     eEndTok = ENDPROPERTY; break;
+                }
+                if( eCurTok == OPTION )
+                {
+                    eCurTok = aTok.Next();
+                    if( eCurTok == COMPATIBLE )
+                        aTok.SetCompatible( true );
+                    else if ( ( eCurTok == VBASUPPORT ) && ( aTok.Next() == NUMBER ) )
+                    {
+                            BOOL bIsVBA = ( aTok.GetDbl()== 1 );
+                            SetVBACompat( bIsVBA );
+                        aTok.SetCompatible( bIsVBA );
+                    }
                 }
             }
             eLastTok = eCurTok;
