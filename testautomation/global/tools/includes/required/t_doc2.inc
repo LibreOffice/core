@@ -115,8 +115,6 @@ end sub
 '
 function sMakeReadOnlyDocumentEditable() as boolean
 
-function sMakeReadOnlyDocumentEditable() as boolean
-
     ' Function returns TRUE if document has been made editable and FALSE if
     ' no action was required (that is: Document was not read-only)
 
