@@ -3475,7 +3475,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetMenuColor( aBackColor );
     aStyleSet.SetMenuTextColor( aTextColor );
 
-    aTextColor = getColor( pMenubarStyle->text[GTK_STATE_NORMAL] );
+    aTextColor = getColor( pMenubarStyle->fg[GTK_STATE_NORMAL] );
     aStyleSet.SetMenuBarTextColor( aTextColor );
 
 #if OSL_DEBUG_LEVEL > 1
