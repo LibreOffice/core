@@ -319,6 +319,9 @@ namespace accessibility
     Reference< XAccessible > SAL_CALL AccessibleToolPanelDeck::getAccessibleParent(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *m_pImpl );
+        const Reference< XAccessible > xParent = implGetForeignControlledParent();
+        if ( xParent.is() )
+            return xParent;
         return m_pImpl->m_xAccessibleParent;
     }
 
