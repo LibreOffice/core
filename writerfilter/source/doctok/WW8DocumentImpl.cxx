@@ -157,6 +157,7 @@ WW8Document::~WW8Document()
 {
 }
 
+#ifdef DEBUG
 class WW8IdToString : public IdToString
 {
 public:
@@ -173,6 +174,7 @@ public:
         return s;
     }
 };
+#endif
 
 WW8DocumentImpl::~WW8DocumentImpl()
 {

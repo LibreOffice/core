@@ -28,6 +28,8 @@
 #ifndef INCLUDED_TAG_LOGGER_HXX
 #define INCLUDED_TAG_LOGGER_HXX
 
+#ifdef DEBUG
+
 #include <rtl/ustring.hxx>
 #include <WriterFilterDllApi.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
@@ -146,4 +148,6 @@ namespace writerfilter
         virtual void sprm(Sprm & sprm);
     };
 }
+
+#endif // DEBUG
 #endif // INCLUDED_TAG_LOGGER_HXX

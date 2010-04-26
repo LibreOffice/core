@@ -25,6 +25,7 @@
  *
  ************************************************************************/
 
+#ifdef DEBUG
 #include <fstream>
 #include <string.h>
 #include <resourcemodel/TagLogger.hxx>
@@ -365,3 +366,4 @@ namespace writerfilter
 
 
 }
+#endif // DEBUG

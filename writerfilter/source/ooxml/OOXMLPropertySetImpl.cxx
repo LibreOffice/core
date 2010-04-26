@@ -198,10 +198,6 @@ OOXMLValue::OOXMLValue()
 {
 }
 
-OOXMLValue::OOXMLValue(const rtl::OUString & /*rValue*/)
-{
-}
-
 OOXMLValue::~OOXMLValue()
 {
 }
@@ -656,24 +652,6 @@ string OOXMLHexValue::toString() const
     snprintf(buffer, sizeof(buffer), "0x%" SAL_PRIxUINT32, mnValue);
 
     return buffer;
-}
-
-/*
-  class OOXMLListValue
-*/
-OOXMLListValue::OOXMLListValue()
-: OOXMLIntegerValue(0)
-{
-}
-
-OOXMLListValue::OOXMLListValue(sal_Int32 nValue)
-: OOXMLIntegerValue(nValue)
-{
-}
-
-
-OOXMLListValue::~OOXMLListValue()
-{
 }
 
 /*
