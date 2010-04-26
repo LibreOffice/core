@@ -595,6 +595,7 @@
 #define SC_UNONAME_PAGESIZE         "PageSize"
 #define SC_UNONAME_RENDERDEV        "RenderDevice"
 #define SC_UNONAME_SOURCERANGE      "SourceRange"
+#define SC_UNONAME_INC_NP_AREA      "PageIncludesNonprintableArea"
 
 // CellValueBinding
 #define SC_UNONAME_BOUNDCELL        "BoundCell"

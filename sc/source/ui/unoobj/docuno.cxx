@@ -1039,18 +1039,21 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     Size aTwips = aFunc.GetPageSize();
     awt::Size aPageSize( TwipsToHMM( aTwips.Width() ), TwipsToHMM( aTwips.Height() ) );
 
-    long nPropCount = bWasCellRange ? 2 : 1;
+    long nPropCount = bWasCellRange ? 3 : 2;
     uno::Sequence<beans::PropertyValue> aSequence(nPropCount);
     beans::PropertyValue* pArray = aSequence.getArray();
     pArray[0].Name = rtl::OUString::createFromAscii( SC_UNONAME_PAGESIZE );
     pArray[0].Value <<= aPageSize;
+    // #i111158# all positions are relative to the whole page, including non-printable area
+    pArray[1].Name = rtl::OUString::createFromAscii( SC_UNONAME_INC_NP_AREA );
+    pArray[1].Value = uno::makeAny( sal_True );
     if ( bWasCellRange )
     {
         table::CellRangeAddress aRangeAddress( nTab,
                         aCellRange.aStart.Col(), aCellRange.aStart.Row(),
                         aCellRange.aEnd.Col(), aCellRange.aEnd.Row() );
-        pArray[1].Name = rtl::OUString::createFromAscii( SC_UNONAME_SOURCERANGE );
-        pArray[1].Value <<= aRangeAddress;
+        pArray[2].Name = rtl::OUString::createFromAscii( SC_UNONAME_SOURCERANGE );
+        pArray[2].Value <<= aRangeAddress;
     }
 
     #if 0
