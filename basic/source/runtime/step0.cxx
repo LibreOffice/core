@@ -1271,6 +1271,9 @@ void SbiRuntime::StepERROR()
     SbxVariableRef refCode = PopVar();
     USHORT n = refCode->GetUShort();
     SbError error = StarBASIC::GetSfxFromVBError( n );
-    pInst->Error( error );
+    if ( bVBAEnabled )
+        pInst->Error( error );
+    else
+        Error( error );
 }
 
