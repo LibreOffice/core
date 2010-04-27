@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.12 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -133,7 +129,7 @@ APP6PRODUCTDEF+=-DRES_APP_NAME=smath
 APP7TARGET=so$/sweb
 APP7NOSAL=TRUE
 APP7LINKRES=$(MISC)$/$(TARGET)7.res
-APP7ICON=$(SOLARRESDIR)$/icons/so9_html_doc.ico
+APP7ICON=$(SOLARRESDIR)$/icons/so9_writer_app.ico
 APP7OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/sweb.obj

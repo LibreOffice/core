@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdopage.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,16 +41,13 @@ public:
     virtual void PageInDestruction(const SdrPage& rPage);
 
 private:
-    // BaseProperties section
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
-    // DrawContact section
-private:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
     // #111111#
     // To make things more safe, remember the page, not a number
     SdrPage*                                mpShownPage;
+
+protected:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
 public:
     TYPEINFO();

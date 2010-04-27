@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DTable.cxx,v $
- * $Revision: 1.107.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1530,6 +1527,7 @@ BOOL ODbaseTable::InsertRow(OValueRefVector& rRow, BOOL bFlush,const Reference<X
     // Buffer mit Leerzeichen fuellen
     AllocBuffer();
     memset(m_pBuffer, 0, m_aHeader.db_slng);
+    m_pBuffer[0] = ' ';
 
     // Gesamte neue Row uebernehmen:
     // ... und am Ende als neuen Record hinzufuegen:

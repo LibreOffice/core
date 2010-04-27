@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fmshimp.cxx,v $
- * $Revision: 1.94 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,6 +88,7 @@
 /** === end UNO includes === **/
 
 #include <comphelper/extract.hxx>
+#include <comphelper/evtmethodhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/stl_types.hxx>
@@ -362,35 +360,6 @@ namespace
     }
 
     //..........................................................................
-    Sequence< ::rtl::OUString> getEventMethods(const Type& type)
-    {
-        typelib_InterfaceTypeDescription *pType=0;
-        type.getDescription( (typelib_TypeDescription**)&pType);
-
-        if(!pType)
-            return Sequence< ::rtl::OUString>();
-
-        Sequence< ::rtl::OUString> aNames(pType->nMembers);
-        ::rtl::OUString* pNames = aNames.getArray();
-        for(sal_Int32 i=0;i<pType->nMembers;i++,++pNames)
-        {
-            // the decription reference
-            typelib_TypeDescriptionReference* pMemberDescriptionReference = pType->ppMembers[i];
-            // the description for the reference
-            typelib_TypeDescription* pMemberDescription = NULL;
-            typelib_typedescriptionreference_getDescription(&pMemberDescription, pMemberDescriptionReference);
-            if (pMemberDescription)
-            {
-                typelib_InterfaceMemberTypeDescription* pRealMemberDescription =
-                    reinterpret_cast<typelib_InterfaceMemberTypeDescription*>(pMemberDescription);
-                *pNames = pRealMemberDescription->pMemberName;
-            }
-        }
-        typelib_typedescription_release( (typelib_TypeDescription *)pType );
-        return aNames;
-    }
-
-    //..........................................................................
     void TransferEventScripts(const Reference< XControlModel>& xModel, const Reference< XControl>& xControl,
         const Sequence< ScriptEventDescriptor>& rTransferIfAvailable)
     {
@@ -463,7 +432,8 @@ namespace
                         continue;
 
                     // now check the methods
-                    Sequence< ::rtl::OUString> aMethodsNames = getEventMethods(*pCurrentListeners);
+                    Sequence< ::rtl::OUString> aMethodsNames = ::comphelper::getEventMethodsForType(*pCurrentListeners);
+
                     const ::rtl::OUString* pMethodsNames = aMethodsNames.getConstArray();
                     for (k=0; k<aMethodsNames.getLength(); ++k, ++pMethodsNames)
                     {
@@ -600,11 +570,6 @@ sal_Bool FmXBoundFormFieldIterator::ShouldHandleElement(const Reference< XInterf
     return aVal.hasValue();
 }
 
-//==============================================================================
-
-DECL_CURSOR_ACTION_THREAD(FmMoveToLastThread)
-IMPL_CURSOR_ACTION_THREAD(FmMoveToLastThread, SVX_RES(RID_STR_MOVING_CURSOR), last());
-
 //------------------------------------------------------------------------------
 sal_Bool isControlList(const SdrMarkList& rMarkList)
 {
@@ -714,9 +679,8 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
     m_aMarkTimer.SetTimeout(100);
     m_aMarkTimer.SetTimeoutHdl(LINK(this,FmXFormShell,OnTimeOut));
 
-    SfxFrame* pFrame = _pViewFrame ? _pViewFrame->GetFrame() : NULL;
-    if ( pFrame )
-        m_xAttachedFrame = pFrame->GetFrameInterface();
+    if ( _pViewFrame )
+        m_xAttachedFrame = _pViewFrame->GetFrame().GetFrameInterface();
 
     // to prevent deletion of this we acquire our refcounter once
     ::comphelper::increment(FmXFormShell_BASE::m_refCount);
@@ -1018,8 +982,6 @@ void FmXFormShell::disposing()
 
     {
         ::osl::ClearableMutexGuard aGuard(m_aAsyncSafety);
-        if (HasAnyPendingCursorAction())
-            CancelAnyPendingCursorAction();
         aGuard.clear();
 
         DBG_ASSERT(!m_nInvalidationEvent, "FmXFormShell::~FmXFormShell : still have an invalidation event !");
@@ -1617,22 +1579,25 @@ void FmXFormShell::ExecuteSearch()
         return;
 
     // filter out the forms which do not contain valid controls at all
-    FmFormArray::reverse_iterator form = m_aSearchForms.rbegin();
-    ::std::vector< String >::reverse_iterator contextName = aContextNames.rbegin();
-    sal_Int32 i = m_aSearchForms.size();
-    for (   ;
-            form != m_aSearchForms.rend();
-            ++form, ++contextName, --i
-        )
     {
-        FmSearchContext aTestContext;
-        aTestContext.nContext = static_cast< sal_Int16 >( i-1 );
-        sal_uInt32 nValidControls = OnSearchContextRequest( &aTestContext );
-        if ( nValidControls == 0 )
+        FmFormArray aValidForms;
+        ::std::vector< String > aValidContexts;
+        FmFormArray::const_iterator form = m_aSearchForms.begin();
+        ::std::vector< String >::const_iterator contextName = aContextNames.begin();
+        for ( ; form != m_aSearchForms.end(); ++form, ++contextName )
         {
-            m_aSearchForms.erase( form.base() - 1 );
-            aContextNames.erase( contextName.base() - 1 );
+            FmSearchContext aTestContext;
+            aTestContext.nContext = static_cast< sal_Int16 >( form - m_aSearchForms.begin() );
+            sal_uInt32 nValidControls = OnSearchContextRequest( &aTestContext );
+            if ( nValidControls > 0 )
+            {
+                aValidForms.push_back( *form );
+                aValidContexts.push_back( *contextName );
+            }
         }
+
+        m_aSearchForms.swap( aValidForms );
+        aContextNames.swap( aValidContexts );
     }
 
     if (m_aSearchForms.size() == 0)
@@ -1644,7 +1609,7 @@ void FmXFormShell::ExecuteSearch()
     // jetzt brauche ich noch einen 'initial context'
     sal_Int16 nInitialContext = 0;
     Reference< XForm> xActiveForm( getActiveForm());
-    for (i=0; i<(sal_Int32)m_aSearchForms.size(); ++i)
+    for ( size_t i=0; i<m_aSearchForms.size(); ++i )
     {
         if (m_aSearchForms.at(i) == xActiveForm)
         {
@@ -2012,10 +1977,6 @@ void FmXFormShell::setActiveController( const Reference< runtime::XFormControlle
 
     if (xController != m_xActiveController)
     {
-        // if there is a async cursor action running we have to restore the locking state of the controls of the old controller
-        if (HasPendingCursorAction(Reference< XResultSet>(m_xActiveForm, UNO_QUERY)))
-            restoreControlLocks();
-
         ::osl::ClearableMutexGuard aGuard(m_aAsyncSafety);
         // switch all nav dispatchers belonging to the form of the current nav controller to 'non active'
         Reference< XResultSet> xNavigationForm;
@@ -2094,10 +2055,6 @@ void FmXFormShell::setActiveController( const Reference< runtime::XFormControlle
         xNavigationForm = NULL;
         if (m_xNavigationController.is())
             xNavigationForm = Reference< XResultSet>(m_xNavigationController->getModel(), UNO_QUERY);
-
-        // if there is a async cursor action running we have to lock the controls of the new controller
-        if (HasPendingCursorAction(Reference< XResultSet>(m_xActiveForm, UNO_QUERY)))
-            setControlLocks();
 
         m_bInActivate = sal_False;
 
@@ -2419,6 +2376,8 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     FmFormObj* pFormObject = FmFormObj::GetFormObject( pObject );
     Reference< XControlModel > xControlModel( pFormObject ? pFormObject->GetUnoControlModel() : Reference< XControlModel >() );
     DBG_ASSERT( xControlModel.is(), "FmXFormShell::OnFoundData: invalid control!" );
+    if ( !xControlModel.is() )
+        return 0;
 
     // disable the permanent cursor for the last grid we found a record
     if (m_xLastGridFound.is() && (m_xLastGridFound != xControlModel))
@@ -2436,7 +2395,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     sal_Int32 nGridColumn = m_arrRelativeGridColumn.GetObject(pfriWhere->nFieldPos);
     if (nGridColumn != -1)
     {   // dummer weise muss ich mir das Control erst wieder besorgen
-        Reference< XControl> xControl( GetControlFromModel(xControlModel));
+        Reference< XControl> xControl( impl_getControl( xControlModel, *pFormObject ) );
         Reference< XGrid> xGrid(xControl, UNO_QUERY);
         DBG_ASSERT(xGrid.is(), "FmXFormShell::OnFoundData : ungueltiges Control !");
         // wenn eine der Asserts anschlaegt, habe ich beim Aufbauen von m_arrSearchedControls wohl was falsch gemacht
@@ -2448,7 +2407,8 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
         xModelSet->setPropertyValue( FM_PROP_CURSORCOLOR, makeAny( sal_Int32( COL_LIGHTRED ) ) );
         m_xLastGridFound = xControlModel;
 
-        xGrid->setCurrentColumnPosition((sal_Int16)nGridColumn);
+        if ( xGrid.is() )
+            xGrid->setCurrentColumnPosition((sal_Int16)nGridColumn);
     }
 
     // als der Cursor neu positioniert wurde, habe ich (in positioned) meine Formularleisten-Slots invalidiert, aber das greift
@@ -2556,7 +2516,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
 
         // ... nach der ControlSource-Eigenschaft fragen
         SearchableControlIterator iter( xCurrentFormComponent );
-        Reference< XControl> xControlBehindModel;
+        Reference< XControl> xControl;
             // das Control, das als Model xControlModel hat
             // (das folgende while kann mehrmals durchlaufen werden, ohne dass das Control sich aendert, dann muss
             // ich nicht jedesmal neu suchen)
@@ -2568,10 +2528,12 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
             if ( sControlSource.getLength() == 0 )
             {   // das aktuelle Element hat keine ControlSource, also ist es ein GridControl (das ist das einzige, was
                 // der SearchableControlIterator noch zulaesst)
-                xControlBehindModel = GetControlFromModel(xControlModel);
-                DBG_ASSERT(xControlBehindModel.is(), "FmXFormShell::OnSearchContextRequest : didn't ::std::find a control with requested model !");
+                xControl = impl_getControl( xControlModel, *pFormObject );
+                DBG_ASSERT(xControl.is(), "FmXFormShell::OnSearchContextRequest : didn't ::std::find a control with requested model !");
 
-                Reference< XGridPeer> xGridPeer(xControlBehindModel->getPeer(), UNO_QUERY);
+                Reference< XGridPeer> xGridPeer;
+                if ( xControl.is() )
+                    xGridPeer.set( xControl->getPeer(), UNO_QUERY );
                 do
                 {
                     if (!xGridPeer.is())
@@ -2625,13 +2587,13 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                 if (sControlSource.getLength() && xValidFormFields->hasByName(sControlSource))
                 {
                     // jetzt brauche ich das Control zum SdrObject
-                    if (!xControlBehindModel.is())
+                    if (!xControl.is())
                     {
-                        xControlBehindModel = GetControlFromModel(xControlModel);
-                        DBG_ASSERT(xControlBehindModel.is(), "FmXFormShell::OnSearchContextRequest : didn't ::std::find a control with requested model !");
+                        xControl = impl_getControl( xControlModel, *pFormObject );
+                        DBG_ASSERT(xControl.is(), "FmXFormShell::OnSearchContextRequest : didn't ::std::find a control with requested model !");
                     }
 
-                    if (IsSearchableControl(xControlBehindModel))
+                    if (IsSearchableControl(xControl))
                     {   // alle Tests ueberstanden -> in die Liste mit aufnehmen
                         strFieldList += sControlSource.getStr();
                         strFieldList += ';';
@@ -2647,7 +2609,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                         m_arrRelativeGridColumn.Insert(-1, m_arrRelativeGridColumn.Count());
 
                         // und fuer die formatierte Suche ...
-                        pfmscContextInfo->arrFields.push_back(Reference< XInterface>(xControlBehindModel, UNO_QUERY));
+                        pfmscContextInfo->arrFields.push_back(Reference< XInterface>(xControl, UNO_QUERY));
                     }
                 }
             }
@@ -3021,24 +2983,48 @@ void FmXFormShell::SetDesignMode(sal_Bool bDesign)
 }
 
 //------------------------------------------------------------------------------
-Reference< XControl> FmXFormShell::GetControlFromModel(const Reference< XControlModel>& xModel)
+Reference< XControl> FmXFormShell::impl_getControl( const Reference< XControlModel >& i_rxModel, const FmFormObj& i_rKnownFormObj )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::GetControlFromModel" );
     if ( impl_checkDisposed() )
         return NULL;
 
-    Reference< XControlContainer> xControlContainer( getControlContainerForView() );
-
-    Sequence< Reference< XControl> > seqControls( xControlContainer->getControls() );
-    Reference< XControl>* pControls = seqControls.getArray();
-    // ... die ich dann durchsuchen kann
-    for (int i=0; i<seqControls.getLength(); ++i)
+    Reference< XControl > xControl;
+    try
     {
-        Reference< XControlModel> xSearchLoopModel( pControls[i]->getModel());
-        if ((XControlModel*)xSearchLoopModel.get() == (XControlModel*)xModel.get())
-            return pControls[i];
+        Reference< XControlContainer> xControlContainer( getControlContainerForView(), UNO_SET_THROW );
+
+        Sequence< Reference< XControl > > seqControls( xControlContainer->getControls() );
+        const Reference< XControl >* pControls = seqControls.getArray();
+        // ... die ich dann durchsuchen kann
+        for (sal_Int32 i=0; i<seqControls.getLength(); ++i)
+        {
+            xControl.set( pControls[i], UNO_SET_THROW );
+            Reference< XControlModel > xCurrentModel( xControl->getModel() );
+            if ( xCurrentModel == i_rxModel )
+                break;
+            xControl.clear();
+        }
+
+        if ( !xControl.is() )
+        {
+            // fallabck (some controls might not have been created, yet, since they were never visible so far)
+            Reference< XControl > xContainerControl( xControlContainer, UNO_QUERY_THROW );
+            const Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerControl->getPeer() );
+            ENSURE_OR_THROW( pContainerWindow, "unexpected control container implementation" );
+
+            const SdrView* pSdrView = m_pShell ? m_pShell->GetFormView() : NULL;
+            ENSURE_OR_THROW( pSdrView, "no current view" );
+
+            xControl.set( i_rKnownFormObj.GetUnoControl( *pSdrView, *pContainerWindow ), UNO_QUERY_THROW );
+        }
     }
-    return Reference< XControl>(NULL);
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    OSL_ENSURE( xControl.is(), "FmXFormShell::impl_getControl: no control found!" );
+    return xControl;
 }
 
 //------------------------------------------------------------------------------
@@ -3340,312 +3326,6 @@ void FmXFormShell::clearFilter()
             ::clearFilter(*j);
         }
     }
-}
-
-//------------------------------------------------------------------------------
-void FmXFormShell::setControlLocks()
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::setControlLocks" );
-    if ( impl_checkDisposed() )
-        return;
-
-    Reference< XTabController> xCtrler(getActiveController(), UNO_QUERY);
-    if (!xCtrler.is())
-        return;
-
-    Reference< XControlContainer> xControls(xCtrler->getContainer(), UNO_QUERY);
-    if (!xControls.is())
-        return;
-
-    DBG_ASSERT( m_aControlLocks.empty(), "FmXFormShell::setControlLocks: locking state array isn't empty (called me twice ?)!" );
-
-    Sequence< Reference< XControl> > aControls = xControls->getControls();
-    const Reference< XControl>* pControls = aControls.getConstArray();
-
-    // iterate through all bound controls, remember the old locking state, set the lock
-    for (sal_Int32 i=0; i<aControls.getLength(); ++i)
-    {
-        Reference< XBoundControl> xCtrl(pControls[i], UNO_QUERY);
-        if (!xCtrl.is())
-        {
-            // it may be a container of controls
-            Reference< XIndexAccess> xContainer(pControls[i], UNO_QUERY);
-            if (xContainer.is())
-            {   // no recursion. we only know top level control containers (e.g. grid controls)
-                for (sal_Int16 j=0; j<xContainer->getCount(); ++j)
-                {
-                    xContainer->getByIndex(j) >>= xCtrl;
-                    if (!xCtrl.is())
-                        continue;
-
-                    m_aControlLocks.push_back( xCtrl->getLock() );
-                    xCtrl->setLock(sal_True);
-                }
-            }
-            continue;
-        }
-
-        m_aControlLocks.push_back( xCtrl->getLock() );
-        xCtrl->setLock(sal_True);
-    }
-}
-
-//------------------------------------------------------------------------------
-void FmXFormShell::restoreControlLocks()
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::restoreControlLocks" );
-    if ( impl_checkDisposed() )
-        return;
-
-    Reference< XTabController> xCtrler(getActiveController(), UNO_QUERY);
-    if (!xCtrler.is())
-        return;
-
-    Reference< XControlContainer> xControls(xCtrler->getContainer(), UNO_QUERY);
-    if (!xControls.is())
-        return;
-
-    Sequence< Reference< XControl> > aControls(xControls->getControls());
-    const Reference< XControl>* pControls = aControls.getConstArray();
-
-    // iterate through all bound controls, restore the old locking state
-    size_t nBoundControl = 0;
-    for (sal_Int32 i=0; i<aControls.getLength(); ++i)
-    {
-        Reference< XBoundControl> xCtrl(pControls[i], UNO_QUERY);
-        if (!xCtrl.is())
-        {
-            // it may be a container of controls
-            Reference< XIndexAccess> xContainer(pControls[i], UNO_QUERY);
-            if (xContainer.is())
-            {   // no recursion. we only know top level control containers (e.g. grid controls)
-                for (sal_Int16 j=0; j<xContainer->getCount(); ++j)
-                {
-                    xContainer->getByIndex(j) >>= xCtrl;
-                    if (!xCtrl.is())
-                        continue;
-
-                    DBG_ASSERT( nBoundControl < m_aControlLocks.size(), "FmXFormShell::restoreControlLocks: m_aControlLocks is invalid!" );
-                    xCtrl->setLock( m_aControlLocks[ nBoundControl ] );
-                    ++nBoundControl;
-                }
-            }
-            continue;
-        }
-
-        DBG_ASSERT( nBoundControl < m_aControlLocks.size(), "FmXFormShell::restoreControlLocks: m_aControlLocks is invalid!" );
-            // a violation of this condition would mean a) setControlLocks hasn't been called or b) the ControlContainer
-            // has changed since the last call to setControlLocks.
-            // a) clearly is a fault of the programmer and b) shouldn't be possible (as we are in alive mode)
-        xCtrl->setLock( m_aControlLocks[ nBoundControl ] );
-        ++nBoundControl;
-    }
-    ::std::vector< sal_Bool > aEmpty;
-    m_aControlLocks.swap( aEmpty );
-}
-
-//------------------------------------------------------------------------------
-void FmXFormShell::DoAsyncCursorAction(const Reference< runtime::XFormController >& _xController, CURSOR_ACTION _eWhat)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::DoAsyncCursorAction" );
-    if ( impl_checkDisposed() )
-        return;
-
-    DBG_ASSERT(_xController.is(), "FmXFormShell::DoAsyncCursorAction : invalid argument !");
-    DoAsyncCursorAction(Reference< XResultSet>(_xController->getModel(), UNO_QUERY), _eWhat);
-}
-
-//------------------------------------------------------------------------------
-void FmXFormShell::DoAsyncCursorAction(const Reference< XResultSet>& _xForm, CURSOR_ACTION _eWhat)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::DoAsyncCursorAction" );
-    if ( impl_checkDisposed() )
-        return;
-
-    ::osl::MutexGuard aGuard(m_aAsyncSafety);
-    DBG_ASSERT(_xForm.is(), "FmXFormShell::DoAsyncCursorAction : invalid argument !");
-
-    // build the access path for the form
-    if (HasPendingCursorAction(_xForm))
-    {
-        DBG_ERROR("FmXFormShell::DoAsyncCursorAction : invalid call !");
-        return;
-    }
-
-    CursorActionDescription& rDesc = m_aCursorActions[ _xForm ];
-        // [] will create a new one if non-existent
-    DBG_ASSERT(rDesc.pThread == NULL, "FmXFormShell::DoAsyncCursorAction : the cursor action thread for this form is still alive !");
-
-    Reference< XResultSet > xCursor( getInternalForm( _xForm ), UNO_QUERY );
-    switch (_eWhat)
-    {
-        case CA_MOVE_TO_LAST :
-            rDesc.pThread = new FmMoveToLastThread( xCursor );
-            break;
-        case CA_MOVE_ABSOLUTE:
-            DBG_ERROR("FmXFormShell::DoAsyncCursorAction : CA_MOVE_ABSOLUTE not supported yet !");
-            return;
-    }
-    rDesc.pThread->SetTerminationHdl(LINK(this, FmXFormShell, OnCursorActionDone));
-    rDesc.pThread->EnableSelfDelete(sal_False);
-
-    rDesc.bCanceling = sal_False;
-
-    // set the control locks before starting the thread
-    DBG_ASSERT(getInternalForm(m_xActiveForm) == m_xActiveForm, "FmXFormShell::DoAsyncCursorAction : the active form should always be a internal one !");
-    if (getInternalForm(_xForm) == m_xActiveForm)
-        setControlLocks();
-
-    // go ...
-    rDesc.pThread->create();
-
-    // set a priority slightly below normal
-    rDesc.pThread->setPriority(::vos::OThread::TPriority_BelowNormal);
-}
-
-//------------------------------------------------------------------------------
-sal_Bool FmXFormShell::HasPendingCursorAction(const Reference< XResultSet>& _xForm) const
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::HasPendingCursorAction" );
-    if ( impl_checkDisposed() )
-        return sal_False;
-
-    if (!_xForm.is())
-        return sal_False;
-
-    // TODO: if we ever re-implement the asynchronous cursor actions, then this will happen
-    // in the controller, and not in the form. In such a case, we here probably need to check
-    // whether the controller for the form has this "pending cursor action"
-
-    return sal_False;
-}
-
-//------------------------------------------------------------------------------
-sal_Bool FmXFormShell::HasPendingCursorAction(const Reference< runtime::XFormController >& xController) const
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::HasPendingCursorAction" );
-    if ( impl_checkDisposed() )
-        return sal_False;
-
-    if (!xController.is())
-        return sal_False;
-
-    return HasPendingCursorAction(Reference< XResultSet>(xController->getModel(), UNO_QUERY));
-}
-
-//------------------------------------------------------------------------------
-sal_Bool FmXFormShell::HasAnyPendingCursorAction() const
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::HasAnyPendingCursorAction" );
-    ::osl::MutexGuard aGuard( const_cast< FmXFormShell* >( this )->m_aAsyncSafety );
-
-    for ( CursorActions::const_iterator aIter = m_aCursorActions.begin(); aIter != m_aCursorActions.end(); ++aIter )
-    {
-        if (((*aIter).second.pThread != NULL) || ((*aIter).second.nFinishedEvent != 0))
-            return sal_True;
-    }
-    return sal_False;
-}
-
-//------------------------------------------------------------------------------
-void FmXFormShell::CancelAnyPendingCursorAction()
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::CancelAnyPendingCursorAction" );
-    if ( impl_checkDisposed() )
-        return;
-
-    ::osl::ResettableMutexGuard aGuard( m_aAsyncSafety );
-
-    CursorActions::iterator aIter;
-    for (aIter = m_aCursorActions.begin(); aIter != m_aCursorActions.end(); ++aIter)
-    {
-        if (!(*aIter).second.nFinishedEvent && (*aIter).second.pThread)
-        {   // the thread is really running
-            (*aIter).second.bCanceling = sal_True;
-
-            aGuard.clear();
-            (*aIter).second.pThread->StopItWait();
-                // StopItWait returns after the termination handler (our OnCursorActionDone) has been called
-            aGuard.reset();
-        }
-    }
-
-    // all threads are finished (means canceled), now do the cleanup
-    for (aIter = m_aCursorActions.begin(); aIter != m_aCursorActions.end(); ++aIter)
-    {
-        if ((*aIter).second.pThread)
-        {
-            LINK(this, FmXFormShell, OnCursorActionDoneMainThread).Call((*aIter).second.pThread);
-            DBG_ASSERT((*aIter).second.pThread == NULL, "FmXFormShell::CancelAnyPendingCursorAction : strange behaviour of OnCursorActionDoneMainThread !");
-        }
-    }
-}
-
-//------------------------------------------------------------------------------
-IMPL_LINK(FmXFormShell, OnCursorActionDone, FmCursorActionThread*, pThread)
-{
-    if ( impl_checkDisposed() )
-        return 0L;
-
-    ::osl::MutexGuard aGuard(m_aAsyncSafety);
-
-    // search the pos of the thread within m_aCursorActions
-    CursorActions::iterator aIter;
-    for (aIter = m_aCursorActions.begin(); aIter != m_aCursorActions.end(); ++aIter)
-    {
-        if ((*aIter).second.pThread == pThread)
-            break;
-    }
-
-    DBG_ASSERT(aIter != m_aCursorActions.end(), "FmXFormShell::OnCursorActionDone : could not ::std::find the thread !");
-    DBG_ASSERT((*aIter).second.nFinishedEvent == 0, "FmXFormShell::OnCursorActionDone : another 'ActionDone' for this thread is pending !");
-        // as we allow only one async action at a time (per form) this shouldn't happen
-
-    if (!(*aIter).second.bCanceling)
-        (*aIter).second.nFinishedEvent = Application::PostUserEvent(LINK(this, FmXFormShell, OnCursorActionDoneMainThread), pThread);
-    // if bCanceling is sal_True an other thread's execution is in CancelAnyPendingCursorAction
-    return 0L;
-}
-
-//------------------------------------------------------------------------------
-IMPL_LINK(FmXFormShell, OnCursorActionDoneMainThread, FmCursorActionThread*, pThread)
-{
-    if ( impl_checkDisposed() )
-        return 0L;
-
-    ::osl::MutexGuard aGuard(m_aAsyncSafety);
-
-    // search the pos of the thread within m_aCursorActions
-    CursorActions::iterator aIter = m_aCursorActions.find( pThread->getDataSource() );
-    DBG_ASSERT(aIter != m_aCursorActions.end(), "FmXFormShell::OnCursorActionDoneMainThread : could not ::std::find the thread data !");
-    DBG_ASSERT((*aIter).second.pThread == pThread, "FmXFormShell::OnCursorActionDoneMainThread : invalid thread data !");
-
-    // remember some thread parameters
-    Reference< XResultSet> xForm(pThread->getDataSource(), UNO_QUERY);
-
-    // throw away the thread
-    delete (*aIter).second.pThread;
-    (*aIter).second.pThread = NULL;
-    (*aIter).second.nFinishedEvent = 0;
-    (*aIter).second.bCanceling = sal_False;
-    // as we allow exactly one thread per form we may remove this ones data from m_aCursorActions
-    m_aCursorActions.erase(aIter);
-
-    DBG_ASSERT(getInternalForm(m_xActiveForm) == m_xActiveForm, "FmXFormShell::DoAsyncCursorAction : the active form should always be a internal one !");
-    DBG_ASSERT(getInternalForm(xForm) == xForm, "FmXFormShell::DoAsyncCursorAction : the thread's form should always be a internal one !");
-        // if one of the two asserts above fails the upcoming comparison is senseless
-    if (xForm == m_xActiveForm)
-    {
-        // the active controller belongs to the form where the action is finished
-        // -> re-enable the controls if they are not locked because of another running thread
-        if (!HasPendingCursorAction(xForm))
-            restoreControlLocks();
-    }
-
-    m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(DatabaseSlotMap);
-        // it may not be neccessary but me thinks it's faster without the check if we really have to do this
-
-    return 0L;
 }
 
 //------------------------------------------------------------------------------
@@ -4632,157 +4312,6 @@ void ControlConversionMenuController::StateChanged(sal_uInt16 nSID, SfxItemState
     {
         DBG_ERROR("ControlConversionMenuController::StateChanged : unknown id !");
     }
-}
-
-//==================================================================
-
-FmCursorActionThread::FmCursorActionThread(const Reference< XResultSet>& _xDataSource, const UniString& _rStopperCaption)
-    :m_xDataSource(_xDataSource)
-    ,m_sStopperCaption(_rStopperCaption)
-    ,m_bCanceled(sal_False)
-    ,m_bDeleteMyself(sal_False)
-    ,m_bDisposeCursor(sal_False)
-    ,m_bTerminated(sal_False)
-    ,m_bRunFailed(sal_False)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmCursorActionThread::FmCursorActionThread" );
-    DBG_ASSERT(m_xDataSource.is() && Reference< XCancellable>(m_xDataSource, UNO_QUERY).is(),
-        "FmCursorActionThread::FmCursorActionThread : invalid cursor !");
-}
-
-//------------------------------------------------------------------------------
-void FmCursorActionThread::run()
-{
-    // On instantiation of a SfxCancellable the application is notified and 'switches on' the red stop button.
-    // Unfortunally this is conditioned with the acquirement of the solar mutex, and the application tries
-    // only once and ignores the notification if it fails.
-    // To prevent that we get the solar mutex and _block_ 'til we got it.
-    // As we are in the 'top level execution' of this thread (with a rather small stack and no other mutexes locked)
-    // we shouldn't experience problems with deadlocks ...
-    ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
-    ThreadStopper* pStopper = new ThreadStopper(this, m_sStopperCaption);
-    aSolarGuard.clear();
-
-    // we're not canceled yet
-    ::osl::ClearableMutexGuard aInitGuard(m_aAccessSafety);
-    m_bCanceled = sal_False;
-    m_bRunFailed = sal_False;
-    aInitGuard.clear();
-
-    // start it
-    try
-    {
-        RunImpl();
-    }
-    catch(SQLException e)
-    {
-        ::osl::MutexGuard aErrorGuard(m_aAccessSafety);
-        m_bRunFailed = sal_True;
-        m_aRunException = e;
-    }
-    catch(Exception&)
-    {
-        DBG_ERROR("FmCursorActionThread::run : catched a non-database exception !");
-    }
-
-
-    sal_Bool bReallyCanceled;
-    ::osl::ClearableMutexGuard aEvalGuard(m_aAccessSafety);
-    bReallyCanceled = m_bCanceled;
-    aEvalGuard.clear();
-
-    pStopper->OwnerTerminated();
-        // this will cause the stopper to delete itself (in the main thread) so we don't have to care of the
-        // solar mutex
-}
-
-//------------------------------------------------------------------------------
-void FmCursorActionThread::onTerminated()
-{
-    ::osl::ClearableMutexGuard aResetGuard(m_aAccessSafety);
-    if (m_aTerminationHandler.IsSet())
-        m_aTerminationHandler.Call(this);
-
-    if (IsCursorDisposeEnabled())
-    {
-        Reference< ::com::sun::star::lang::XComponent> xDataSourceComponent(m_xDataSource, UNO_QUERY);
-        if (xDataSourceComponent.is())
-            xDataSourceComponent->dispose();
-    }
-
-    aResetGuard.clear();
-        // with this StopItWait has a chance to do it's Terminated()
-
-    ::osl::MutexGuard aGuard(m_aFinalExitControl);
-        // Terminated() in StopItWait still returns sal_False
-    m_bTerminated = sal_True;
-        // Terminated() now returns sal_True, but StopItWait can't exit until this method exits (because of the guarded m_aFinalExitControl)
-
-    if (IsSelfDeleteEnabled())
-        delete this;
-}
-
-//------------------------------------------------------------------------------
-void FmCursorActionThread::StopIt()
-{
-    ::osl::MutexGuard aGuard(m_aAccessSafety);
-    m_bCanceled = sal_True;
-
-    Reference< XCancellable> xCancel(m_xDataSource, UNO_QUERY);
-    DBG_ASSERT(xCancel.is(), "FmCursorActionThread::StopIt : invalid cursor !");
-    xCancel->cancel();
-}
-
-//------------------------------------------------------------------------------
-void FmCursorActionThread::StopItWait()
-{
-    StopIt();
-
-    while (!Terminated())
-        ;
-
-    // OnTerminated has been called, but we can't simply exit : Suppose the caller want's to delete the thread object
-    // immediately after returning from StopItWait. With the following guard we ensure that we exit this method
-    // only after onTerminated has exited.
-    ::osl::ClearableMutexGuard aGuard(m_aFinalExitControl);
-
-    // now onTerminated has exited, so we can leave, too
-}
-
-//------------------------------------------------------------------------------
-FmCursorActionThread::ThreadStopper::ThreadStopper(FmCursorActionThread* pOwner, const UniString& rTitle)
-    :SfxCancellable(SFX_APP()->GetCancelManager(), rTitle)
-    ,m_pOwner(pOwner)
-{
-}
-
-//------------------------------------------------------------------------------
-void FmCursorActionThread::ThreadStopper::Cancel()
-{
-    if (!m_pOwner)      // the owner is already terminated and we're waiting for the OnDeleteInMainThread event
-        return;
-
-    ::osl::MutexGuard aGuard(m_pOwner->m_aAccessSafety);
-    if (IsCancelled())
-        // we already did pass this to our owner
-        return;
-
-    SfxCancellable::Cancel();
-    m_pOwner->StopIt();
-}
-
-//------------------------------------------------------------------------------
-void FmCursorActionThread::ThreadStopper::OwnerTerminated()
-{
-    m_pOwner = NULL;
-    Application::PostUserEvent(LINK(this, FmCursorActionThread::ThreadStopper, OnDeleteInMainThread), this);
-}
-
-//------------------------------------------------------------------------------
-IMPL_LINK(FmCursorActionThread::ThreadStopper, OnDeleteInMainThread, FmCursorActionThread::ThreadStopper*, pThis)
-{
-    delete pThis;
-    return 0L;
 }
 
 //==============================================================================

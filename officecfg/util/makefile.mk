@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,9 +41,7 @@ $(MISC)$/$(TARGET)_delzip :
 
 $(BIN)$/registry_{$(alllangiso)}.zip : $(MISC)$/$(TARGET)_delzip
     cd $(MISC)$/registry$/res$/$(@:b:s/registry_//) && zip -ru ..$/..$/..$/..$/bin$/registry_$(@:b:s/registry_//).zip org/*
-.IF "$(USE_SHELL)"!="4nt"
     $(PERL) -w $(SOLARENV)$/bin$/cleanzip.pl $@
-.ENDIF			# "$(USE_SHELL)"!="4nt"
 
 ALLTAR: \
     $(MISC)$/$(TARGET)_delzip \

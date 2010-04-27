@@ -2,11 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: app.cxx,v $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1151,16 +1149,6 @@ USHORT Desktop::Exception(USHORT nError)
 
     switch( nError & EXC_MAJORTYPE )
     {
-/*
-        case EXC_USER:
-            if( nError == EXC_OUTOFMEMORY )
-            {
-                // not possible without a special NewHandler!
-                String aMemExceptionString;
-                Application::Abort( aMemExceptionString );
-            }
-            break;
-*/
         case EXC_RSCNOTLOADED:
         {
             String aResExceptionString;
@@ -1177,23 +1165,14 @@ USHORT Desktop::Exception(USHORT nError)
 
         default:
         {
-            if ( pArgs->IsNoRestore() ) {
-                if (m_pLockfile != NULL) {
-                    m_pLockfile->clean();
-                }
-                _exit( ExitHelper::E_LOCKFILE );
+            if (m_pLockfile != NULL) {
+                m_pLockfile->clean();
             }
-
             if( bRestart )
             {
                 OfficeIPCThread::DisableOfficeIPCThread();
                 if( pSignalHandler )
                     DELETEZ( pSignalHandler );
-
-                if (m_pLockfile != NULL) {
-                    m_pLockfile->clean();
-                }
-
 #ifdef MACOSX
                 DoRestart();
 #endif
@@ -1201,17 +1180,15 @@ USHORT Desktop::Exception(USHORT nError)
             }
             else
             {
-                bInException = sal_False;
-                _exit( ExitHelper::E_CRASH );
+                Application::Abort( String() );
             }
 
             break;
         }
     }
 
+    OSL_ASSERT(false); // unreachable
     return 0;
-
-    // ConfigManager is disposed, so no way to continue
 }
 
 void Desktop::AppEvent( const ApplicationEvent& rAppEvent )
@@ -1581,7 +1558,8 @@ void Desktop::Main()
 
 //    SetSplashScreenProgress(80);
 
-    if ( !bTerminateRequested && !pCmdLineArgs->IsInvisible() )
+    if ( !bTerminateRequested && !pCmdLineArgs->IsInvisible() &&
+         !pCmdLineArgs->IsNoQuickstart() )
         InitializeQuickstartMode( xSMgr );
 
     RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) createInstance com.sun.star.frame.Desktop" );
@@ -1668,7 +1646,11 @@ void Desktop::Main()
     // remove temp directory
     RemoveTemporaryDirectory();
 
+    // The acceptors in the AcceptorMap must be released (in DeregisterServices)
+    // with the solar mutex unlocked, to avoid deadlock:
+    nAcquireCount = Application::ReleaseSolarMutex();
     DeregisterServices();
+    Application::AcquireSolarMutex(nAcquireCount);
 
     tools::DeInitTestToolLib();
 

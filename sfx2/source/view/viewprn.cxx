@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewprn.cxx,v $
- * $Revision: 1.36.84.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -332,6 +329,9 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
 
         if ( m_bNeedsChange )
             mpObjectShell->EnableSetModified( m_bOrigStatus );
+
+        if ( mpViewShell )
+            mpViewShell->pImp->pPrinterController = 0;
     }
 }
 
@@ -642,6 +642,8 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
                                                                                this,
                                                                                rProps
                                                                                ) );
+    pImp->pPrinterController = pController.get();
+
     SfxObjectShell *pObjShell = GetObjectShell();
     pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "JobName" ) ),
                         makeAny( rtl::OUString( pObjShell->GetTitle(0) ) ) );
@@ -654,6 +656,11 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
                             String( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
 
     Printer::PrintJob( pController, aJobSetup );
+}
+
+Printer* SfxViewShell::GetActivePrinter() const
+{
+    return pImp->pPrinterController ? pImp->pPrinterController->getPrinter().get() : 0;
 }
 
 void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )

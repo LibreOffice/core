@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.124.26.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -223,7 +219,7 @@ SHL3DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2TARGETN)
 
 DEF3NAME=       $(SHL3TARGET)
 
-SHL3VERSIONMAP= exports.map
+SHL3VERSIONMAP= $(SOLARENV)/src/component.map
 
 # --- services library ----------------------------------------------------
 
@@ -282,7 +278,6 @@ SHL4OBJS=       \
                 $(SLO)$/langselectionstatusbarcontroller.obj \
                 $(SLO)$/layoutmanager.obj           \
                 $(SLO)$/loaddispatcher.obj          \
-                $(SLO)$/loaddispatchlistener.obj    \
                 $(SLO)$/loadenv.obj                 \
                 $(SLO)$/menubarfactory.obj          \
                 $(SLO)$/menubarmanager.obj          \
@@ -365,7 +360,7 @@ SHL4DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2IMPLIBN) $(SHL2TARGETN)
 
 DEF4NAME=       $(SHL4TARGET)
 
-SHL4VERSIONMAP= exports.map
+SHL4VERSIONMAP= $(SOLARENV)/src/component.map
 
 # --- services library ----------------------------------------------------
 
@@ -396,7 +391,7 @@ SHL5DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN)
 
 DEF5NAME=       $(SHL5TARGET)
 
-SHL5VERSIONMAP= exports.map
+SHL5VERSIONMAP= $(SOLARENV)/src/component.map
 
 RESLIB1NAME=        fwe
 RESLIB1IMAGES=      $(PRJ)$/res

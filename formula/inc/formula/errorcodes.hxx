@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: errorcodes.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,9 +83,13 @@ const USHORT NOTAVAILABLE            = 0x7fff;
     represent an interpreter error code. */
 inline double CreateDoubleError( USHORT nErr )
 {
-    double fVal;
+    union
+    {
+        double fVal;
+        sal_math_Double smVal;
+    };
     ::rtl::math::setNan( &fVal );
-    reinterpret_cast< sal_math_Double * >(&fVal)->nan_parts.fraction_lo = nErr;
+    smVal.nan_parts.fraction_lo = nErr;
     return fVal;
 }
 

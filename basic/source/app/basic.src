@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: basic.src,v $
- * $Revision: 1.67 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,7 +87,7 @@ ModalDialog IDD_ABOUT_DIALOG {
     FixedText  {
             Pos = MAP_APPFONT( 40, 60 );
             Size = MAP_APPFONT( 110, 10 );
-            TEXT = "®1995 Sun Microsystems, Inc.";
+            TEXT = "®1995-2010 Oracle";
             CENTER = TRUE;
         };
     };
@@ -130,7 +127,7 @@ ModalDialog IDD_TT_ABOUT_DIALOG {
             Pos = MAP_APPFONT( 5, 40 );
             Size = MAP_APPFONT( 110, 10 );
             CENTER = TRUE;
-        TEXT[ en-US ] = "Â©1995-2005 Sun Microsystems, Inc.";
+        TEXT[ en-US ] = "Â©1995-2010 Oracle";
     };
     OKButton RID_OK {
             Pos = MAP_APPFONT( 40, 60 );

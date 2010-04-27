@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.18 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -53,7 +49,7 @@ INCPRE += inc
 DLLPRE =
 
 SHL1TARGET = $(TARGET)$(DLLPOSTFIX).uno
-SHL1VERSIONMAP = deployment.map
+SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 
 SHL1LIBS = \
     $(SLB)$/deployment_manager.lib \
@@ -84,7 +80,8 @@ SHL1STDLIBS = \
         $(SVLLIB) \
         $(UNOTOOLSLIB) \
         $(DEPLOYMENTMISCLIB) \
-    $(HELPLINKERLIB)
+    $(HELPLINKERLIB) \
+    $(CONFIGMGRLIB)
 
 SHL1DEPN =
 SHL1IMPLIB = i$(TARGET)

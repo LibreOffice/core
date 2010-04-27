@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TTableHelper.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +33,10 @@
 #include "connectivity/sdbcx/VKey.hxx"
 #include "connectivity/StdTypeDefs.hxx"
 #include <comphelper/stl_types.hxx>
+#include <com/sun/star/sdb/tools/XTableRename.hpp>
+#include <com/sun/star/sdb/tools/XTableAlteration.hpp>
+#include <com/sun/star/sdb/tools/XKeyAlteration.hpp>
+#include <com/sun/star/sdb/tools/XIndexAlteration.hpp>
 
 namespace connectivity
 {
@@ -158,6 +159,11 @@ namespace connectivity
         void addKey(const ::rtl::OUString& _sName,const sdbcx::TKeyProperties& _aKeyProperties);
 
         virtual ::rtl::OUString getTypeCreatePattern() const;
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XTableRename>      getRenameService() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XTableAlteration>  getAlterService() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XKeyAlteration>    getKeyService() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XIndexAlteration>  getIndexService() const;
     };
 }
 #endif // CONNECTIVITY_TABLEHELPER_HXX

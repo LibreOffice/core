@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: MacabServices.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,7 +114,7 @@ struct ProviderRequest
 
 //---------------------------------------------------------------------------------------
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
                 uno_Environment **
             )
@@ -126,7 +123,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
 }
 
 //---------------------------------------------------------------------------------------
-extern "C" sal_Bool SAL_CALL component_writeInfo(
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
                 void*,
                 void* pRegistryKey
             )
@@ -151,7 +148,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 }
 
 //---------------------------------------------------------------------------------------
-extern "C" void* SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
                     void*)

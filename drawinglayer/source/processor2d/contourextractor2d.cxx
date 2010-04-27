@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: contourextractor2d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.6 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -43,7 +35,7 @@
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
-#include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
@@ -103,7 +95,7 @@ namespace drawinglayer
                     // extract BoundRect from bitmaps in world coordinates
                     const primitive2d::BitmapPrimitive2D& rBitmapCandidate(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
                     basegfx::B2DHomMatrix aLocalTransform(getViewInformation2D().getObjectTransformation() * rBitmapCandidate.getTransform());
-                    basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                    basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
                     aPolygon.transform(aLocalTransform);
                     maExtractedContour.push_back(basegfx::B2DPolyPolygon(aPolygon));
                     break;
@@ -113,15 +105,15 @@ namespace drawinglayer
                     // extract BoundRect from MetaFiles in world coordinates
                     const primitive2d::MetafilePrimitive2D& rMetaCandidate(static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate));
                     basegfx::B2DHomMatrix aLocalTransform(getViewInformation2D().getObjectTransformation() * rMetaCandidate.getTransform());
-                    basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                    basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
                     aPolygon.transform(aLocalTransform);
                     maExtractedContour.push_back(basegfx::B2DPolyPolygon(aPolygon));
                     break;
                 }
-                case PRIMITIVE2D_ID_ALPHAPRIMITIVE2D :
+                case PRIMITIVE2D_ID_TRANSPARENCEPRIMITIVE2D :
                 {
                     // sub-transparence group. Look at children
-                    const primitive2d::AlphaPrimitive2D& rTransCandidate(static_cast< const primitive2d::AlphaPrimitive2D& >(rCandidate));
+                    const primitive2d::TransparencePrimitive2D& rTransCandidate(static_cast< const primitive2d::TransparencePrimitive2D& >(rCandidate));
                     process(rTransCandidate.getChildren());
                     break;
                 }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: EnhancedCustomShape2d.cxx,v $
- * $Revision: 1.31.146.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1709,19 +1706,6 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
 
     if(aNewB2DPolyPolygon.count())
     {
-        if( !bLineGeometryNeededOnly )
-        {
-            // hack aNewB2DPolyPolygon to fill logic rect - this is
-            // needed to produce gradient fills that look like mso
-            aNewB2DPolygon.clear();
-            aNewB2DPolygon.append(basegfx::B2DPoint(0,0));
-            aNewB2DPolyPolygon.append(aNewB2DPolygon);
-
-            aNewB2DPolygon.clear();
-            aNewB2DPolygon.append(basegfx::B2DPoint(aLogicRect.GetWidth(),
-                                                    aLogicRect.GetHeight()));
-            aNewB2DPolyPolygon.append(aNewB2DPolygon);
-        }
         // #i37011#
         bool bForceCreateTwoObjects(false);
 

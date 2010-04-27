@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: attributeproperties.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -284,7 +281,19 @@ namespace sdr
                     // set stylesheet (if used)
                     if(pStySheet)
                     {
-                        ImpAddStyleSheet(pStySheet, sal_True);
+                        // #i109515#
+                        SfxItemPool* pStyleSheetPool = &pStySheet->GetPool().GetPool();
+
+                        if(pStyleSheetPool == pDestPool)
+                        {
+                            // just re-set stylesheet
+                            ImpAddStyleSheet(pStySheet, sal_True);
+                        }
+                        else
+                        {
+                            // StyleSheet is NOT from the correct pool; use default
+                            ImpAddStyleSheet(pNewModel->GetDefaultStyleSheet(), sal_True);
+                        }
                     }
 
                     delete pOldSet;
@@ -585,22 +594,6 @@ namespace sdr
                 rObj.SendUserCall(SDRUSERCALL_CHGATTR, aBoundRect);
 
                 bHintUsed = sal_True;
-            }
-
-            // #111111#
-            // When it's the BackgroundObject, set the MasterPage to changed to
-            // get a refresh for the evtl. changed BackgroundStyle
-
-            // #114265#
-            // To only invalidate the page when the StyleSheet change happens,
-            // some more rigid testing is necessary.
-            const SfxSimpleHint *pSimpleHint = PTR_CAST(SfxSimpleHint, &rHint);
-
-            if(pSimpleHint
-                && pSimpleHint->GetId() == SFX_HINT_DATACHANGED
-                && GetSdrObject().IsMasterPageBackgroundObject())
-            {
-                GetSdrObject().GetPage()->ActionChanged();
             }
 
             if(!bHintUsed)

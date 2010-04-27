@@ -1,0 +1,2 @@
+DllGetClassObject PRIVATE 
+DllCanUnloadNow PRIVATE

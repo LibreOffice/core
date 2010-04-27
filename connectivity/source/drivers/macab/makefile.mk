@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.3.56.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -58,8 +54,6 @@ DEPOBJFILES= \
 
 # --- Library -----------------------------------
 
-SHL1VERSIONMAP=$(TARGET).map
-
 SHL1TARGET= $(TARGET)$(MACAB_MAJOR)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
@@ -101,8 +95,6 @@ SLO2FILES=\
 MACAB_LIB=-framework Carbon -framework AddressBook
 
 # --- Library -----------------------------------
-
-SHL2VERSIONMAP=$(TARGET2).map
 
 SHL2TARGET= $(TARGET2)$(MACAB_MAJOR)
 SHL2OBJS=$(SLO2FILES)

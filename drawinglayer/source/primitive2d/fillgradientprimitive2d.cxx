@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: fillgradientprimitive2d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.6 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:20 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -62,10 +54,10 @@ namespace drawinglayer
             rColors.clear();
 
             // make sure steps is not too high/low
-            const basegfx::BColor aStart(maFillGradient.getStartColor());
-            const basegfx::BColor aEnd(maFillGradient.getEndColor());
+            const basegfx::BColor aStart(getFillGradient().getStartColor());
+            const basegfx::BColor aEnd(getFillGradient().getEndColor());
             const sal_uInt32 nMaxSteps(sal_uInt32((aStart.getMaximumDistance(aEnd) * 127.5) + 0.5));
-            sal_uInt32 nSteps(maFillGradient.getSteps());
+            sal_uInt32 nSteps(getFillGradient().getSteps());
 
             if(nSteps == 0)
             {
@@ -82,46 +74,46 @@ namespace drawinglayer
                 nSteps = nMaxSteps;
             }
 
-            switch(maFillGradient.getStyle())
+            switch(getFillGradient().getStyle())
             {
                 case attribute::GRADIENTSTYLE_LINEAR:
                 {
-                    texture::GeoTexSvxGradientLinear aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), -maFillGradient.getAngle());
+                    texture::GeoTexSvxGradientLinear aGradient(getObjectRange(), aStart, aEnd, nSteps, getFillGradient().getBorder(), getFillGradient().getAngle());
                     aGradient.appendTransformations(rMatrices);
                     aGradient.appendColors(rColors);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_AXIAL:
                 {
-                    texture::GeoTexSvxGradientAxial aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), -maFillGradient.getAngle());
+                    texture::GeoTexSvxGradientAxial aGradient(getObjectRange(), aStart, aEnd, nSteps, getFillGradient().getBorder(), getFillGradient().getAngle());
                     aGradient.appendTransformations(rMatrices);
                     aGradient.appendColors(rColors);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_RADIAL:
                 {
-                    texture::GeoTexSvxGradientRadial aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), maFillGradient.getOffsetX(), maFillGradient.getOffsetY());
+                    texture::GeoTexSvxGradientRadial aGradient(getObjectRange(), aStart, aEnd, nSteps, getFillGradient().getBorder(), getFillGradient().getOffsetX(), getFillGradient().getOffsetY());
                     aGradient.appendTransformations(rMatrices);
                     aGradient.appendColors(rColors);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_ELLIPTICAL:
                 {
-                    texture::GeoTexSvxGradientElliptical aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), maFillGradient.getOffsetX(), maFillGradient.getOffsetY(), -maFillGradient.getAngle());
+                    texture::GeoTexSvxGradientElliptical aGradient(getObjectRange(), aStart, aEnd, nSteps, getFillGradient().getBorder(), getFillGradient().getOffsetX(), getFillGradient().getOffsetY(), getFillGradient().getAngle());
                     aGradient.appendTransformations(rMatrices);
                     aGradient.appendColors(rColors);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_SQUARE:
                 {
-                    texture::GeoTexSvxGradientSquare aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), maFillGradient.getOffsetX(), maFillGradient.getOffsetY(), -maFillGradient.getAngle());
+                    texture::GeoTexSvxGradientSquare aGradient(getObjectRange(), aStart, aEnd, nSteps, getFillGradient().getBorder(), getFillGradient().getOffsetX(), getFillGradient().getOffsetY(), getFillGradient().getAngle());
                     aGradient.appendTransformations(rMatrices);
                     aGradient.appendColors(rColors);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_RECT:
                 {
-                    texture::GeoTexSvxGradientRect aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), maFillGradient.getOffsetX(), maFillGradient.getOffsetY(), -maFillGradient.getAngle());
+                    texture::GeoTexSvxGradientRect aGradient(getObjectRange(), aStart, aEnd, nSteps, getFillGradient().getBorder(), getFillGradient().getOffsetX(), getFillGradient().getOffsetY(), getFillGradient().getAngle());
                     aGradient.appendTransformations(rMatrices);
                     aGradient.appendColors(rColors);
                     break;
@@ -218,15 +210,19 @@ namespace drawinglayer
             // prepare shape of the Unit Polygon
             basegfx::B2DPolygon aUnitPolygon;
 
-            if(attribute::GRADIENTSTYLE_RADIAL == maFillGradient.getStyle()
-                || attribute::GRADIENTSTYLE_ELLIPTICAL == maFillGradient.getStyle())
+            if(attribute::GRADIENTSTYLE_RADIAL == getFillGradient().getStyle()
+                || attribute::GRADIENTSTYLE_ELLIPTICAL == getFillGradient().getStyle())
             {
-                const basegfx::B2DPoint aCircleCenter(0.5, 0.5);
-                aUnitPolygon = basegfx::tools::createPolygonFromEllipse(aCircleCenter, 0.5, 0.5);
+                aUnitPolygon = basegfx::tools::createPolygonFromCircle(
+                    basegfx::B2DPoint(0,0), 1);
+            }
+            else if(attribute::GRADIENTSTYLE_LINEAR == maFillGradient.getStyle())
+            {
+                aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0, 0, 1, 1));
             }
             else
             {
-                aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0));
+                aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(-1, -1, 1, 1));
             }
 
             // get the transform matrices and colors (where colors
@@ -253,7 +249,15 @@ namespace drawinglayer
             // that the rings will not overlap. This is useful fir the old XOR-paint
             // 'trick' of VCL which is recorded in Metafiles; so this version may be
             // used from the MetafilePrimitive2D in it's decomposition.
-            return createFill(true);
+
+            if(!getFillGradient().isDefault())
+            {
+                return createFill(true);
+            }
+            else
+            {
+                return Primitive2DSequence();
+            }
         }
 
         FillGradientPrimitive2D::FillGradientPrimitive2D(
@@ -272,7 +276,7 @@ namespace drawinglayer
                 const FillGradientPrimitive2D& rCompare = (FillGradientPrimitive2D&)rPrimitive;
 
                 return (getObjectRange() == rCompare.getObjectRange()
-                    && maFillGradient == rCompare.maFillGradient);
+                    && getFillGradient() == rCompare.getFillGradient());
             }
 
             return false;

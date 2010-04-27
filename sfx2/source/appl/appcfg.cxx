@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: appcfg.cxx,v $
- * $Revision: 1.74 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -268,14 +265,6 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                         bRet = TRUE;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVEWORKINGSET))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_WORKINGSET ), aSaveOptions.IsSaveWorkingSet())))
-                                bRet = FALSE;
-                    }
-                    break;
-                case SID_ATTR_SAVEDOCWINS :
-                    {
-                        bRet = TRUE;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVEDOCWINS))
-                            if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_SAVEDOCWINS ), aSaveOptions.IsSaveDocWins())))
                                 bRet = FALSE;
                     }
                     break;
@@ -628,13 +617,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetSaveWorkingSet(((const SfxBoolItem *)pItem)->GetValue());
-    }
-
-    // offene Fenster speichern
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_SAVEDOCWINS), TRUE, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        aSaveOptions.SetSaveDocWins(((const SfxBoolItem *)pItem)->GetValue());
     }
 
     // Fenster-Einstellung speichern

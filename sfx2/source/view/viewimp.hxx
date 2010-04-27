@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewimp.hxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,20 +30,16 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef __SBX_SBXOBJ_HXX
 #include <basic/sbxobj.hxx>
-#endif
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>                  // SvBorder
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <svtools/acceleratorexecute.hxx>
-
 #include <rtl/ref.hxx>
-
+#include <vcl/print.hxx>
 #include <queue>
 
 // forward ---------------------------------------------------------------
@@ -56,24 +49,6 @@ class SfxBaseController;
 
 typedef SfxShell* SfxShellPtr_Impl;
 SV_DECL_PTRARR( SfxShellArr_Impl, SfxShellPtr_Impl, 4, 4 )
-
-// struct SfxViewShell_Impl ----------------------------------------------
-#if 0
-class SfxAsyncPrintExec_Impl : public SfxListener
-{
-    SfxViewShell*                   pView;
-    ::std::queue < SfxRequest*>     aReqs;
-
-    virtual void                    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-
-public:
-                                    SfxAsyncPrintExec_Impl( SfxViewShell* pShell)
-                                        : pView( pShell )
-                                    {}
-
-    void                            AddRequest( SfxRequest& rReq );
-};
-#endif
 
 class SfxClipboardChangeListener;
 
@@ -87,12 +62,10 @@ struct SfxViewShell_Impl
     Size                        aOptimalSize;
     Size                        aMargin;
     USHORT                      nPrinterLocks;
-    BOOL                        bUseObjectSize;
     BOOL                        bCanPrint;
     BOOL                        bHasPrintOptions;
     BOOL                        bPlugInsActive;
     BOOL                        bIsShowView;
-    BOOL                        bFrameSetImpl;
     BOOL                        bOwnsMenu;
     BOOL                        bGotOwnerShip;
     BOOL                        bGotFrameOwnerShip;
@@ -100,9 +73,9 @@ struct SfxViewShell_Impl
     USHORT                      nFamily;
     SfxBaseController*          pController;
     ::svt::AcceleratorExecute*  pAccExec;
-//  SfxAsyncPrintExec_Impl*     pPrinterCommandQueue;
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aPrintOpts;
     ::rtl::Reference< SfxClipboardChangeListener > xClipboardListener;
+    vcl::PrinterController*     pPrinterController;
 
     SfxViewShell_Impl();
 };

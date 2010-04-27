@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.24 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -60,8 +56,7 @@ SHL1STDLIBS=       \
         $(SVLLIB) \
         $(VCLLIB) \
         $(SVTOOLLIB)    \
-        $(TKLIB) \
-        $(MSFILTERLIB) 
+        $(TKLIB)
 
 SHL1DEPN=
 SHL1IMPLIB= i$(TARGET_HELPER)
@@ -77,7 +72,7 @@ TARGET_MSFORMS=msforms
 SHL2TARGET=$(TARGET_MSFORMS)$(DLLPOSTFIX).uno
 SHL2IMPLIB=     i$(TARGET_MSFORMS)
 
-SHL2VERSIONMAP=$(TARGET_MSFORMS).map
+SHL2VERSIONMAP=$(SOLARENV)/src/component.map
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=$(SHL2TARGET)
 SHL2STDLIBS= \

@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -65,7 +65,7 @@ SLOFILES=\
     $(SLO)$/EApi.obj \
     $(SLO)$/NDebug.obj
 
-SHL1VERSIONMAP=$(TARGET).map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 
 # --- Library -----------------------------------

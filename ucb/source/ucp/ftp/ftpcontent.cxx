@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ftpcontent.cxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -622,9 +619,7 @@ Any SAL_CALL FTPContent::execute(
             else if(e.code() == CURLE_COULDNT_RESOLVE_HOST )
                 action = THROWRESOLVENAME;
             else if(e.code() == CURLE_FTP_USER_PASSWORD_INCORRECT ||
-#if LIBCURL_VERSION_NUM>=0x070d01 /* 7.13.1 */
                     e.code() == CURLE_LOGIN_DENIED ||
-#endif
                     e.code() == CURLE_BAD_PASSWORD_ENTERED ||
                     e.code() == CURLE_FTP_WEIRD_PASS_REPLY)
                 action = THROWAUTHENTICATIONREQUEST;

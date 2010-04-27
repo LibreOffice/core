@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: exithelper.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,12 +56,8 @@ class ExitHelper
             E_SECOND_OFFICE = 1,
             /// an uno exception was catched during startup
             E_FATAL_ERROR = 333,    // Only the low 8 bits are significant 333 % 256 = 77
-            /// crash during runtime
-            E_CRASH = 78,
             /// user force automatic restart after crash
             E_CRASH_WITH_RESTART = 79,
-            /// ???
-            E_LOCKFILE = 80
         };
 };
 

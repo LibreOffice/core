@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdomeas.hxx,v $
- * $Revision: 1.5.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +30,7 @@
 
 #include <svx/svdotext.hxx>
 #include "svx/svxdllapi.h"
+#include <editeng/measfld.hxx>
 
 //************************************************************
 //   Vorausdeklarationen
@@ -68,24 +66,22 @@ public:
 class SVX_DLLPUBLIC SdrMeasureObj : public SdrTextObj
 {
 private:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
     // to allow sdr::properties::MeasureProperties access to SetTextDirty()
     friend class sdr::properties::MeasureProperties;
 
     friend class                SdrMeasureField;
 
-    // DrawContact section
-private:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
 protected:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+
     Point                       aPt1;
     Point                       aPt2;
     FASTBOOL                    bTextDirty;
 
 protected:
     void ImpTakeAttr(ImpMeasureRec& rRec) const;
+    void TakeRepresentation( XubString& rStr, SdrMeasureFieldKind eMeasureFieldKind ) const;
     void ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly& rPol) const;
     basegfx::B2DPolyPolygon ImpCalcXPoly(const ImpMeasurePoly& rPol) const;
     void ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) const;

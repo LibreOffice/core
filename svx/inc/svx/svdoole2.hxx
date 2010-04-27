@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdoole2.hxx,v $
- * $Revision: 1.5.60.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,11 +59,10 @@ private:
     SVX_DLLPRIVATE void GetObjRef_Impl();
     SVX_DLLPRIVATE void SetGraphic_Impl(const Graphic* pGrf);
 
-    // DrawContact section
-private:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
 protected:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+
     svt::EmbeddedObjectRef      xObjRef;
     Graphic*                    pGraphic;
     String                      aProgName;

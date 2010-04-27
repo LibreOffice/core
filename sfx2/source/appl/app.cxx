@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: app.cxx,v $
- * $Revision: 1.112 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,7 +108,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/genlink.hxx>
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "appdata.hxx"
 #include "openflag.hxx"
 #include "app.hrc"
@@ -475,9 +472,6 @@ SfxDispatcher* SfxApplication::GetDispatcher_Impl()
 //--------------------------------------------------------------------
 void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
 {
-    if( pFrame && !pFrame->IsSetViewFrameAllowed_Impl() )
-        return;
-
     if ( pFrame != pAppData_Impl->pViewFrame )
     {
         // get the containerframes ( if one of the frames is an InPlaceFrame )
@@ -494,12 +488,6 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
 //      BOOL bDocWinActivate = pOldContainerFrame && pNewContainerFrame &&
 //                  pOldContainerFrame->GetTopViewFrame() == pNewContainerFrame->GetTopViewFrame();
         BOOL bTaskActivate = pOldContainerFrame != pNewContainerFrame;
-        if ( pAppData_Impl->pViewFrame )
-        {
-            if ( bTaskActivate )
-                // prepare UI for deacivation
-                pAppData_Impl->pViewFrame->GetFrame()->Deactivate_Impl();
-        }
 
         if ( pOldContainerFrame )
         {
@@ -568,11 +556,11 @@ short SfxApplication::QuerySave_Impl( SfxObjectShell& rDoc, sal_Bool /*bAutoSave
     String aMsg( SfxResId( STR_ISMODIFIED ) );
     aMsg.SearchAndReplaceAscii( "%1", rDoc.GetTitle() );
 
-    SfxFrame *pFrame = SfxViewFrame::GetFirst(&rDoc)->GetFrame();
-    pFrame->Appear();
+    SfxFrame& rFrame = SfxViewFrame::GetFirst(&rDoc)->GetFrame();
+    rFrame.Appear();
 
     WinBits nBits = WB_YES_NO_CANCEL | WB_DEF_NO;
-    QueryBox aBox( &pFrame->GetWindow(), nBits, aMsg );
+    QueryBox aBox( &rFrame.GetWindow(), nBits, aMsg );
 
     return aBox.Execute();
 }
@@ -696,7 +684,7 @@ uno::Reference< task::XStatusIndicator > SfxApplication::GetStatusIndicator() co
     while ( pTop->GetParentViewFrame_Impl() )
         pTop = pTop->GetParentViewFrame_Impl();
 
-    return pTop->GetFrame()->GetWorkWindow_Impl()->GetStatusIndicator();
+    return pTop->GetFrame().GetWorkWindow_Impl()->GetStatusIndicator();
 }
 
 SfxTbxCtrlFactArr_Impl&     SfxApplication::GetTbxCtrlFactories_Impl() const
@@ -813,7 +801,7 @@ SfxApplication::ChooseScript()
         OSL_TRACE("create selector dialog");
 
         const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-        const SfxFrame* pFrame = pViewFrame ? pViewFrame->GetFrame() : NULL;
+        const SfxFrame* pFrame = pViewFrame ? &pViewFrame->GetFrame() : NULL;
         uno::Reference< frame::XFrame > xFrame( pFrame ? pFrame->GetFrameInterface() : uno::Reference< frame::XFrame >() );
 
           AbstractScriptSelectorDialog* pDlg =

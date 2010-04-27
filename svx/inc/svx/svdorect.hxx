@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdorect.hxx,v $
- * $Revision: 1.5.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,19 +51,14 @@ namespace sdr { namespace properties {
 class SVX_DLLPUBLIC SdrRectObj : public SdrTextObj
 {
 private:
-    // BaseProperties section
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
     // to allow sdr::properties::RectangleProperties access to SetXPolyDirty()
     friend class sdr::properties::RectangleProperties;
-
-    // DrawContact section
-private:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
     friend class                SdrTextObj; // wg SetXPolyDirty bei GrowAdjust
 
 protected:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+
     XPolygon*                   mpXPoly;
 
 protected:

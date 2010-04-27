@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: shutdowniconw32.cxx,v $
- * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,7 +109,7 @@ using namespace ::osl;
 #define ICON_TEMPLATE                   16
 #define ICON_MACROLIBRARY               17
 #define ICON_CONFIGURATION              18
-#define ICON_OPEN                       19
+#define ICON_OPEN                       5   // See index of open folder icon in shell32.dll
 #define ICON_SETUP                      500
 
 #define SFX_TASKBAR_NOTIFICATION    WM_USER+1
@@ -127,6 +124,7 @@ static void OnDrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdis);
 typedef struct tagMYITEM
 {
     OUString text;
+    OUString module;
     UINT iconId;
 } MYITEM;
 
@@ -155,7 +153,7 @@ static bool isNT()
 
 // -------------------------------
 
-static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text, int& pos, int bOwnerdraw )
+static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text, int& pos, int bOwnerdraw, const OUString& module )
 {
     MENUITEMINFOW mi;
     memset( &mi, 0, sizeof( MENUITEMINFOW ) );
@@ -178,6 +176,7 @@ static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text
             MYITEM *pMyItem = new MYITEM;
             pMyItem->text = text;
             pMyItem->iconId = iconId;
+            pMyItem->module = module;
             mi.dwItemData = (DWORD) pMyItem;
         }
         else
@@ -248,6 +247,8 @@ static HMENU createSystrayMenu( )
         { SvtModuleOptions::E_SMATH,      IDM_MATH,   ICON_MATH_DOCUMENT,         MATH_URL },
     };
 
+    OUString aEmpty;
+
     // insert the menu entries for launching the applications
     for ( size_t i = 0; i < sizeof( aMenuItems ) / sizeof( aMenuItems[0] ); ++i )
     {
@@ -263,19 +264,21 @@ static HMENU createSystrayMenu( )
             continue;
 
         addMenuItem( hMenu, aMenuItems[i].nMenuItemID, aMenuItems[i].nMenuIconID,
-            pShutdownIcon->GetUrlDescription( sURL ), pos, true );
+            pShutdownIcon->GetUrlDescription( sURL ), pos, true, aEmpty );
     }
+
+
 
     // insert the remaining menu entries
     addMenuItem( hMenu, IDM_TEMPLATE, ICON_TEMPLATE,
-        pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), pos, true);
-    addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false );
-    addMenuItem( hMenu, IDM_OPEN,   ICON_OPEN, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), pos, true );
-    addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false );
+        pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), pos, true, aEmpty);
+    addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, aEmpty );
+    addMenuItem( hMenu, IDM_OPEN,   ICON_OPEN, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), pos, true, OUString::createFromAscii( "SHELL32" ));
+    addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, aEmpty );
 #endif
-    addMenuItem( hMenu, IDM_INSTALL,0, pShutdownIcon->GetResString( STR_QUICKSTART_PRELAUNCH ), pos, false );
-    addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false );
-    addMenuItem( hMenu, IDM_EXIT,   0, pShutdownIcon->GetResString( STR_QUICKSTART_EXIT ), pos, false );
+    addMenuItem( hMenu, IDM_INSTALL,0, pShutdownIcon->GetResString( STR_QUICKSTART_PRELAUNCH ), pos, false, aEmpty );
+    addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, aEmpty );
+    addMenuItem( hMenu, IDM_EXIT,   0, pShutdownIcon->GetResString( STR_QUICKSTART_EXIT ), pos, false, aEmpty );
 
     // indicate status of autostart folder
     CheckMenuItem( hMenu, IDM_INSTALL, MF_BYCOMMAND | (ShutdownIcon::GetAutostart() ? MF_CHECKED : MF_UNCHECKED) );
@@ -739,11 +742,25 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
     x = aRect.left;
     y = aRect.top;
 
-    int cx = GetSystemMetrics( SM_CXSMICON );
-    int cy = GetSystemMetrics( SM_CYSMICON );
-    HICON hIcon = (HICON) LoadImageA( GetModuleHandle( NULL ), MAKEINTRESOURCE( pMyItem->iconId ),
-                                      IMAGE_ICON, cx, cy,
-                                      LR_DEFAULTCOLOR | LR_SHARED );
+    int     cx = GetSystemMetrics( SM_CXSMICON );
+    int     cy = GetSystemMetrics( SM_CYSMICON );
+    HICON   hIcon( 0 );
+    HMODULE hModule( GetModuleHandle( NULL ) );
+
+    if ( pMyItem->module.getLength() > 0 )
+    {
+        LPCWSTR pModuleName = reinterpret_cast<LPCWSTR>( pMyItem->module.getStr() );
+        hModule = GetModuleHandleW( pModuleName );
+        if ( hModule == NULL )
+        {
+            LoadLibraryW( pModuleName );
+            hModule = GetModuleHandleW( pModuleName );
+        }
+    }
+
+    hIcon = (HICON) LoadImageA( hModule, MAKEINTRESOURCE( pMyItem->iconId ),
+                                IMAGE_ICON, cx, cy,
+                                LR_DEFAULTCOLOR | LR_SHARED );
 
     // DrawIconEx( lpdis->hDC, x, y+(height-cy)/2, hIcon, cx, cy, 0, NULL, DI_NORMAL );
 

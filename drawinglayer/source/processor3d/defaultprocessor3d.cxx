@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: defaultprocessor3d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.13 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:31:09 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -48,9 +40,11 @@
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <com/sun/star/drawing/ShadeMode.hpp>
-#include <drawinglayer/attribute/sdrattribute3d.hxx>
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
+#include <vcl/bitmapex.hxx>
+#include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
+#include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -71,8 +65,8 @@ namespace drawinglayer
                 // rescue values
                 const bool bOldModulate(getModulate()); mbModulate = rPrimitive.getModulate();
                 const bool bOldFilter(getFilter()); mbFilter = rPrimitive.getFilter();
-                const bool bOldSimpleTextureActive(mbSimpleTextureActive);
-                texture::GeoTexSvx* pOldTex = (bTransparence) ? mpTransparenceGeoTexSvx : mpGeoTexSvx;
+                const bool bOldSimpleTextureActive(getSimpleTextureActive());
+                boost::shared_ptr< texture::GeoTexSvx > pOldTex = (bTransparence) ? mpTransparenceGeoTexSvx : mpGeoTexSvx;
 
                 // create texture
                 const attribute::FillGradientAttribute& rFillGradient = rPrimitive.getGradient();
@@ -82,7 +76,7 @@ namespace drawinglayer
                 const basegfx::BColor aStart(rFillGradient.getStartColor());
                 const basegfx::BColor aEnd(rFillGradient.getEndColor());
                 const sal_uInt32 nMaxSteps(sal_uInt32((aStart.getMaximumDistance(aEnd) * 127.5) + 0.5));
-                texture::GeoTexSvx* pNewTex = 0L;
+                boost::shared_ptr< texture::GeoTexSvx > pNewTex;
 
                 if(nMaxSteps)
                 {
@@ -106,32 +100,32 @@ namespace drawinglayer
                     {
                         case attribute::GRADIENTSTYLE_LINEAR:
                         {
-                            pNewTex = new texture::GeoTexSvxGradientLinear(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), -rFillGradient.getAngle());
+                            pNewTex.reset(new texture::GeoTexSvxGradientLinear(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getAngle()));
                             break;
                         }
                         case attribute::GRADIENTSTYLE_AXIAL:
                         {
-                            pNewTex = new texture::GeoTexSvxGradientAxial(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), -rFillGradient.getAngle());
+                            pNewTex.reset(new texture::GeoTexSvxGradientAxial(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getAngle()));
                             break;
                         }
                         case attribute::GRADIENTSTYLE_RADIAL:
                         {
-                            pNewTex = new texture::GeoTexSvxGradientRadial(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY());
+                            pNewTex.reset(new texture::GeoTexSvxGradientRadial(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY()));
                             break;
                         }
                         case attribute::GRADIENTSTYLE_ELLIPTICAL:
                         {
-                            pNewTex = new texture::GeoTexSvxGradientElliptical(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), -rFillGradient.getAngle());
+                            pNewTex.reset(new texture::GeoTexSvxGradientElliptical(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), rFillGradient.getAngle()));
                             break;
                         }
                         case attribute::GRADIENTSTYLE_SQUARE:
                         {
-                            pNewTex = new texture::GeoTexSvxGradientSquare(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), -rFillGradient.getAngle());
+                            pNewTex.reset(new texture::GeoTexSvxGradientSquare(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), rFillGradient.getAngle()));
                             break;
                         }
                         case attribute::GRADIENTSTYLE_RECT:
                         {
-                            pNewTex = new texture::GeoTexSvxGradientRect(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), -rFillGradient.getAngle());
+                            pNewTex.reset(new texture::GeoTexSvxGradientRect(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), rFillGradient.getAngle()));
                             break;
                         }
                     }
@@ -141,7 +135,7 @@ namespace drawinglayer
                 else
                 {
                     // no color distance -> same color, use simple texture
-                    pNewTex = new texture::GeoTexSvxMono(aStart, 1.0 - aStart.luminance());
+                    pNewTex.reset(new texture::GeoTexSvxMono(aStart, 1.0 - aStart.luminance()));
                     mbSimpleTextureActive = true;
                 }
 
@@ -157,9 +151,6 @@ namespace drawinglayer
 
                 // process sub-list
                 process(rSubSequence);
-
-                // delete texture
-                delete pNewTex;
 
                 // restore values
                 mbModulate = bOldModulate;
@@ -186,7 +177,7 @@ namespace drawinglayer
                 // rescue values
                 const bool bOldModulate(getModulate()); mbModulate = rPrimitive.getModulate();
                 const bool bOldFilter(getFilter()); mbFilter = rPrimitive.getFilter();
-                texture::GeoTexSvx* pOldTex = mpGeoTexSvx;
+                boost::shared_ptr< texture::GeoTexSvx > pOldTex = mpGeoTexSvx;
 
                 // calculate logic pixel size in object coordinates. Create transformation view
                 // to object by inverting ObjectToView
@@ -206,14 +197,10 @@ namespace drawinglayer
                 const double fLogicTexSize(fLogicTexSizeX > fLogicTexSizeY ? fLogicTexSizeX : fLogicTexSizeY);
 
                 // create texture and set
-                texture::GeoTexSvxMultiHatch* pNewTex = new texture::GeoTexSvxMultiHatch(rPrimitive, fLogicTexSize);
-                mpGeoTexSvx = pNewTex;
+                mpGeoTexSvx.reset(new texture::GeoTexSvxMultiHatch(rPrimitive, fLogicTexSize));
 
                 // process sub-list
                 process(rSubSequence);
-
-                // delete texture
-                delete mpGeoTexSvx;
 
                 // restore values
                 mbModulate = bOldModulate;
@@ -231,31 +218,28 @@ namespace drawinglayer
                 // rescue values
                 const bool bOldModulate(getModulate()); mbModulate = rPrimitive.getModulate();
                 const bool bOldFilter(getFilter()); mbFilter = rPrimitive.getFilter();
-                texture::GeoTexSvx* pOldTex = mpGeoTexSvx;
+                boost::shared_ptr< texture::GeoTexSvx > pOldTex = mpGeoTexSvx;
 
                 // create texture
                 const attribute::FillBitmapAttribute& rFillBitmapAttribute = rPrimitive.getFillBitmapAttribute();
 
                 if(rFillBitmapAttribute.getTiling())
                 {
-                    mpGeoTexSvx = new texture::GeoTexSvxBitmapTiled(
+                    mpGeoTexSvx.reset(new texture::GeoTexSvxBitmapTiled(
                         rFillBitmapAttribute.getBitmapEx().GetBitmap(),
                         rFillBitmapAttribute.getTopLeft() * rPrimitive.getTextureSize(),
-                        rFillBitmapAttribute.getSize() * rPrimitive.getTextureSize());
+                        rFillBitmapAttribute.getSize() * rPrimitive.getTextureSize()));
                 }
                 else
                 {
-                    mpGeoTexSvx = new texture::GeoTexSvxBitmap(
+                    mpGeoTexSvx.reset(new texture::GeoTexSvxBitmap(
                         rFillBitmapAttribute.getBitmapEx().GetBitmap(),
                         rFillBitmapAttribute.getTopLeft() * rPrimitive.getTextureSize(),
-                        rFillBitmapAttribute.getSize() * rPrimitive.getTextureSize());
+                        rFillBitmapAttribute.getSize() * rPrimitive.getTextureSize()));
                 }
 
                 // process sub-list
                 process(rSubSequence);
-
-                // delete texture
-                delete mpGeoTexSvx;
 
                 // restore values
                 mbModulate = bOldModulate;
@@ -320,7 +304,7 @@ namespace drawinglayer
             if(bPaintIt)
             {
                 // get rid of texture coordinates if there is no texture
-                if(aFill.areTextureCoordinatesUsed() && !getGeoTexSvx() && !getTransparenceGeoTexSvx())
+                if(aFill.areTextureCoordinatesUsed() && !getGeoTexSvx().get() && !getTransparenceGeoTexSvx().get())
                 {
                     aFill.clearTextureCoordinates();
                 }
@@ -503,11 +487,13 @@ namespace drawinglayer
                     impRenderBitmapTexturePrimitive3D(rPrimitive);
                     break;
                 }
-                case PRIMITIVE3D_ID_ALPHATEXTUREPRIMITIVE3D :
+                case PRIMITIVE3D_ID_TRANSPARENCETEXTUREPRIMITIVE3D :
                 {
-                    // AlphaTexturePrimitive3D
-                    const primitive3d::AlphaTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::AlphaTexturePrimitive3D& >(rBasePrimitive);
+                    // TransparenceTexturePrimitive3D
+                    const primitive3d::TransparenceTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::TransparenceTexturePrimitive3D& >(rBasePrimitive);
+                    mnTransparenceCounter++;
                     impRenderGradientTexturePrimitive3D(rPrimitive, true);
+                    mnTransparenceCounter--;
                     break;
                 }
                 case PRIMITIVE3D_ID_MODIFIEDCOLORPRIMITIVE3D :
@@ -556,8 +542,10 @@ namespace drawinglayer
             mrSdrLightingAttribute(rSdrLightingAttribute),
             maRasterRange(),
             maBColorModifierStack(),
-            mpGeoTexSvx(0),
-            mpTransparenceGeoTexSvx(0),
+            mpGeoTexSvx(),
+            mpTransparenceGeoTexSvx(),
+            maDrawinglayerOpt(),
+            mnTransparenceCounter(0),
             mbModulate(false),
             mbFilter(false),
             mbSimpleTextureActive(false)

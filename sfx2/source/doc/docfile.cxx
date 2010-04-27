@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docfile.cxx,v $
- * $Revision: 1.203.50.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -136,7 +133,6 @@ using namespace ::com::sun::star::io;
 #include <unotools/saveopt.hxx>
 #include <svl/documentlockfile.hxx>
 
-#include "opostponedtruncationstream.hxx"
 #include "helper.hxx"
 #include <sfx2/request.hxx>      // SFX_ITEMSET_SET
 #include <sfx2/app.hxx>          // GetFilterMatcher
@@ -263,79 +259,6 @@ void SAL_CALL SfxMediumHandler_Impl::handle( const com::sun::star::uno::Referenc
 }
 
 //----------------------------------------------------------------
-class SfxPoolCancelManager_Impl  :   public SfxCancelManager ,
-                                     public SfxCancellable   ,
-                                     public SfxListener      ,
-                                     public SvRefBase
-{
-    SfxCancelManagerWeak wParent;
-
-                 ~SfxPoolCancelManager_Impl();
-public:
-                 SfxPoolCancelManager_Impl( SfxCancelManager* pParent, const String& rName );
-
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-    using SfxCancelManager::Cancel;
-    virtual void Cancel();
-};
-
-//----------------------------------------------------------------
-SV_DECL_IMPL_REF( SfxPoolCancelManager_Impl )
-
-
-//----------------------------------------------------------------
-SfxPoolCancelManager_Impl::SfxPoolCancelManager_Impl( SfxCancelManager* pParent, const String& rName )
-    : SfxCancelManager( pParent ),
-      SfxCancellable( pParent ? pParent : this, rName ),
-      wParent( pParent )
-{
-    if( pParent )
-    {
-        StartListening( *this );
-        SetManager( 0 );
-    }
-}
-
-//----------------------------------------------------------------
-SfxPoolCancelManager_Impl::~SfxPoolCancelManager_Impl()
-{
-    for( sal_uInt16 nPos = GetCancellableCount(); nPos--; )
-    {
-        // nicht an Parent uebernehmen!
-        SfxCancellable* pCbl = GetCancellable( nPos );
-        if ( pCbl )
-            pCbl->SetManager( 0 );
-    }
-}
-
-
-//----------------------------------------------------------------
-void SfxPoolCancelManager_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/ )
-{
-    if( !GetCancellableCount() ) SetManager( 0 );
-    else if( !GetManager() )
-    {
-        if( !wParent.Is() ) wParent = SFX_APP()->GetCancelManager();
-        SetManager( wParent );
-    }
-}
-
-//----------------------------------------------------------------
-void SfxPoolCancelManager_Impl::Cancel()
-{
-    SfxPoolCancelManager_ImplRef xThis = this;
-    for( sal_uInt16 nPos = GetCancellableCount(); nPos--; )
-    {
-        SfxCancellable* pCbl = GetCancellable( nPos );
-        // Wenn wir nicht im Button stehen
-        if( pCbl && pCbl != this )
-            pCbl->Cancel();
-        if( GetCancellableCount() < nPos )
-            nPos = GetCancellableCount();
-    }
-}
-
-//----------------------------------------------------------------
 class SfxMedium_Impl : public SvCompatWeakBase
 {
 public:
@@ -343,7 +266,6 @@ public:
     sal_Bool bUpdatePickList : 1;
     sal_Bool bIsTemp        : 1;
     sal_Bool bForceSynchron : 1;
-    sal_Bool bDontCreateCancellable : 1;
     sal_Bool bDownloadDone          : 1;
     sal_Bool bDontCallDoneLinkOnSharingError : 1;
     sal_Bool bIsStorage: 1;
@@ -359,7 +281,6 @@ public:
 
     uno::Reference < embed::XStorage > xStorage;
 
-    SfxPoolCancelManager_ImplRef xCancelManager;
     SfxMedium*       pAntiImpl;
 
     long             nFileVersion;
@@ -402,8 +323,6 @@ public:
 
     uno::Reference< logging::XSimpleLogRing > m_xLogRing;
 
-    SfxPoolCancelManager_Impl* GetCancelManager();
-
     SfxMedium_Impl( SfxMedium* pAntiImplP );
     ~SfxMedium_Impl();
 };
@@ -419,29 +338,12 @@ void SfxMedium::Cancel_Impl()
     SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 }
 
-SfxPoolCancelManager_Impl* SfxMedium_Impl::GetCancelManager()
-{
-    if( !xCancelManager.Is() )
-    {
-        if( !bDontCreateCancellable )
-            xCancelManager = new SfxPoolCancelManager_Impl(
-                wLoadTargetFrame ? wLoadTargetFrame->GetCancelManager() :
-                SFX_APP()->GetCancelManager(),
-                pAntiImpl->GetURLObject().GetURLNoPass() );
-        else
-            xCancelManager = new SfxPoolCancelManager_Impl(
-                0, pAntiImpl->GetURLObject().GetURLNoPass() );
-    }
-    return xCancelManager;
-}
-
 //------------------------------------------------------------------
 SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
  :  SvCompatWeakBase( pAntiImplP ),
     bUpdatePickList(sal_True),
     bIsTemp( sal_False ),
     bForceSynchron( sal_False ),
-    bDontCreateCancellable( sal_False ),
     bDownloadDone( sal_True ),
     bDontCallDoneLinkOnSharingError( sal_False ),
     bIsStorage( sal_False ),
@@ -2442,25 +2344,7 @@ void SfxMedium::GetMedium_Impl()
     }
 }
 
-//------------------------------------------------------------------
-SfxPoolCancelManager_Impl* SfxMedium::GetCancelManager_Impl() const
-{
-    return pImp->GetCancelManager();
-}
-
-//------------------------------------------------------------------
-void SfxMedium::SetCancelManager_Impl( SfxPoolCancelManager_Impl* pMgr )
-{
-    pImp->xCancelManager = pMgr;
-}
-
 //----------------------------------------------------------------
-void SfxMedium::CancelTransfers()
-{
-    if( pImp->xCancelManager.Is() )
-        pImp->xCancelManager->Cancel();
-}
-
 sal_Bool SfxMedium::IsRemote()
 {
     return bRemote;
@@ -3287,13 +3171,6 @@ SvCompatWeakHdl* SfxMedium::GetHdl()
 sal_Bool SfxMedium::IsDownloadDone_Impl()
 {
     return pImp->bDownloadDone;
-}
-
-//----------------------------------------------------------------
-
-void SfxMedium::SetDontCreateCancellable( )
-{
-    pImp->bDontCreateCancellable = sal_True;
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  SfxMedium::GetInputStream()

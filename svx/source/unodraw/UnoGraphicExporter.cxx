@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: UnoGraphicExporter.cxx,v $
- * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,11 +62,11 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/numitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdograf.hxx>
 #include "xoutbmp.hxx"
-#include "svx/impgrf.hxx"
+#include "svtools/filter.hxx"
 #include "unoapi.hxx"
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
@@ -77,9 +74,9 @@
 #include <svx/fmmodel.hxx>
 #include <svx/unopage.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 
 #include "boost/scoped_ptr.hpp"
 
@@ -105,7 +102,7 @@ using namespace ::com::sun::star::task;
 #include <svx/sdr/contact/viewcontact.hxx>
 
 // #i102251#
-#include <editstat.hxx>
+#include <editeng/editstat.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -618,32 +615,17 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
     VirtualDevice       aVDev;
     const MapMode       aMap( mpDoc->GetScaleUnit(), Point(), rSettings.maScaleX, rSettings.maScaleY );
 
-    // create a view
-    SdrView*        pView;
-
-    if( PTR_CAST( FmFormModel, mpDoc ) )
-    {
-        pView = new FmFormView( PTR_CAST( FmFormModel, mpDoc ), &aVDev );
-    }
-    else
-    {
-        pView = new SdrView( mpDoc, &aVDev );
-    }
-
-    pView->SetBordVisible( FALSE );
-    pView->SetPageVisible( FALSE );
-    pView->ShowSdrPage( pPage );
-
     SdrOutliner& rOutl=mpDoc->GetDrawOutliner(NULL);
     maOldCalcFieldValueHdl = rOutl.GetCalcFieldValueHdl();
     rOutl.SetCalcFieldValueHdl( LINK(this, GraphicExporter, CalcFieldValueHdl) );
-    rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor(pView->GetSdrPageView()) );
+    rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor() );
 
     // #i102251#
     const sal_uInt32 nOldCntrl(rOutl.GetControlWord());
     sal_uInt32 nCntrl = nOldCntrl & ~EE_CNTRL_ONLINESPELLING;
     rOutl.SetControlWord(nCntrl);
 
+    SdrObject* pTempBackgroundShape = 0;
     std::vector< SdrObject* > aShapes;
     bool bRet = true;
 
@@ -652,19 +634,10 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
     {
         if( rSettings.mbExportOnlyBackground )
         {
-            SdrObject* pShape = 0;
-            if( pPage->IsMasterPage() )
-            {
-                if( pPage->GetObjCount() > 0 )
-                    pShape = pPage->GetObj(0);
-            }
-            else
-            {
-                pShape = pPage->GetBackgroundObj();
-            }
-
-            if( pShape )
-                aShapes.push_back( pShape );
+            pTempBackgroundShape = new SdrRectObj(Rectangle(Point(0,0), pPage->GetSize()));
+            pTempBackgroundShape->SetMergedItemSet(pPage->getSdrPageProperties().GetItemSet());
+            pTempBackgroundShape->SetMergedItem(XLineStyleItem(XLINE_NONE));
+            aShapes.push_back(pTempBackgroundShape);
         }
         else
         {
@@ -741,8 +714,24 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                     aVDev.SetDrawMode( aVDev.GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
                 aVDev.EnableOutput( FALSE );
                 aMtf.Record( &aVDev );
-
                 Size aNewSize;
+
+                // create a view
+                SdrView*        pView;
+
+                if( PTR_CAST( FmFormModel, mpDoc ) )
+                {
+                    pView = new FmFormView( PTR_CAST( FmFormModel, mpDoc ), &aVDev );
+                }
+                else
+                {
+                    pView = new SdrView( mpDoc, &aVDev );
+                }
+
+                pView->SetBordVisible( FALSE );
+                pView->SetPageVisible( FALSE );
+                pView->ShowSdrPage( pPage );
+
                 if ( pView && pPage )
                 {
                     pView->SetBordVisible( FALSE );
@@ -781,6 +770,12 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                     // just filtering them out is a hack, at least the encapsulated content would need
                     // to be clipped geometrically.
                     aGraphic = Graphic(aMtf);
+                }
+
+                if ( pView )
+                {
+                    pView->HideSdrPage();
+                    delete pView;
                 }
 
                 if( rSettings.mbTranslucent )
@@ -907,15 +902,6 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
             // calculate bound rect for all shapes
             Rectangle aBound;
 
-            if(rSettings.mbExportOnlyBackground)
-            {
-                // shape is MPBGO and if it's not yet set, it's size will
-                // be empty when using GetCurrentBoundRect(). Since anyways
-                // the page size is used by MPBGO and MPBGO is EOLd, get
-                // the wanted size from the page model directly
-                aBound = Rectangle(Point(0,0), pPage->GetSize());
-            }
-            else
             {
                 std::vector< SdrObject* >::iterator aIter = aShapes.begin();
                 const std::vector< SdrObject* >::iterator aEnd = aShapes.end();
@@ -989,10 +975,9 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
         }
     }
 
-    if ( pView )
+    if(pTempBackgroundShape)
     {
-        pView->HideSdrPage();
-        delete pView;
+        SdrObject::Free(pTempBackgroundShape);
     }
 
     rOutl.SetCalcFieldValueHdl( maOldCalcFieldValueHdl );
@@ -1013,7 +998,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     if( NULL == mpUnoPage )
         return sal_False;
 
-    GraphicFilter*              pFilter = GetGrfFilter();
+    GraphicFilter*              pFilter = GraphicFilter::GetGraphicFilter();
 
     if( NULL == pFilter || NULL == mpUnoPage->GetSdrPage() || NULL == mpDoc )
         return sal_False;
@@ -1233,7 +1218,7 @@ sal_Bool SAL_CALL GraphicExporter::supportsMimeType( const OUString& MimeTypeNam
 {
     const String aMimeTypeName( MimeTypeName );
 
-    GraphicFilter*  pFilter = GetGrfFilter();
+    GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nCount = pFilter->GetExportFormatCount();
     sal_uInt16 nFilter;
     for( nFilter = 0; nFilter < nCount; nFilter++ )
@@ -1249,7 +1234,7 @@ sal_Bool SAL_CALL GraphicExporter::supportsMimeType( const OUString& MimeTypeNam
 
 Sequence< OUString > SAL_CALL GraphicExporter::getSupportedMimeTypeNames(  ) throw (RuntimeException)
 {
-    GraphicFilter*  pFilter = GetGrfFilter();
+    GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nCount = pFilter->GetExportFormatCount();
     sal_uInt16 nFilter;
     sal_uInt16 nFound = 0;

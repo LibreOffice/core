@@ -1,31 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: vclprocessor2d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org - a multi-platform office productivity suite
  *
+ * This file is part of OpenOffice.org.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -44,7 +40,6 @@
 #include <vclhelperbitmaprender.hxx>
 #include <drawinglayer/attribute/sdrfillbitmapattribute.hxx>
 #include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
-#include <drawinglayer/attribute/fillattribute.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <vclhelpergradient.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
@@ -52,8 +47,8 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vclhelperbufferdevice.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
-#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
-#include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
@@ -79,6 +74,7 @@
 // for test, can be removed again
 
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <basegfx/polygon/b2dtrapezoid.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -298,17 +294,69 @@ namespace drawinglayer
             basegfx::B2DPolygon aLocalPolygon(rPolygonCandidate.getB2DPolygon());
             aLocalPolygon.transform(maCurrentTransformation);
 
-            if(bPixelBased && getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete())
+            static bool bCheckTrapezoidDecomposition(false);
+            static bool bShowOutlinesThere(false);
+            if(bCheckTrapezoidDecomposition)
             {
-                // #i98289#
-                // when a Hairline is painted and AntiAliasing is on the option SnapHorVerLinesToDiscrete
-                // allows to suppress AntiAliasing for pure horizontal or vertical lines. This is done since
-                // not-AntiAliased such lines look more pleasing to the eye (e.g. 2D chart content). This
-                // NEEDS to be done in discrete coordinates, so only useful for pixel based rendering.
-                aLocalPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aLocalPolygon);
-            }
+                // clip against discrete ViewPort
+                const basegfx::B2DRange& rDiscreteViewport = getViewInformation2D().getDiscreteViewport();
+                basegfx::B2DPolyPolygon aLocalPolyPolygon(basegfx::tools::clipPolygonOnRange(
+                    aLocalPolygon, rDiscreteViewport, true, false));
 
-            mpOutputDevice->DrawPolyLine(aLocalPolygon, 0.0);
+                if(aLocalPolyPolygon.count())
+                {
+                    // subdivide
+                    aLocalPolyPolygon = basegfx::tools::adaptiveSubdivideByDistance(
+                        aLocalPolyPolygon, 0.5);
+
+                    // trapezoidize
+                    static double fLineWidth(2.0);
+                    basegfx::B2DTrapezoidVector aB2DTrapezoidVector;
+                    basegfx::tools::createLineTrapezoidFromB2DPolyPolygon(aB2DTrapezoidVector, aLocalPolyPolygon, fLineWidth);
+
+                    const sal_uInt32 nCount(aB2DTrapezoidVector.size());
+
+                    if(nCount)
+                    {
+                        basegfx::BColor aInvPolygonColor(aHairlineColor);
+                        aInvPolygonColor.invert();
+
+                        for(sal_uInt32 a(0); a < nCount; a++)
+                        {
+                            const basegfx::B2DPolygon aTempPolygon(aB2DTrapezoidVector[a].getB2DPolygon());
+
+                            if(bShowOutlinesThere)
+                            {
+                                mpOutputDevice->SetFillColor(Color(aHairlineColor));
+                                mpOutputDevice->SetLineColor();
+                            }
+
+                            mpOutputDevice->DrawPolygon(aTempPolygon);
+
+                            if(bShowOutlinesThere)
+                            {
+                                mpOutputDevice->SetFillColor();
+                                mpOutputDevice->SetLineColor(Color(aInvPolygonColor));
+                                mpOutputDevice->DrawPolyLine(aTempPolygon, 0.0);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if(bPixelBased && getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete())
+                {
+                    // #i98289#
+                    // when a Hairline is painted and AntiAliasing is on the option SnapHorVerLinesToDiscrete
+                    // allows to suppress AntiAliasing for pure horizontal or vertical lines. This is done since
+                    // not-AntiAliased such lines look more pleasing to the eye (e.g. 2D chart content). This
+                    // NEEDS to be done in discrete coordinates, so only useful for pixel based rendering.
+                    aLocalPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aLocalPolygon);
+                }
+
+                mpOutputDevice->DrawPolyLine(aLocalPolygon, 0.0);
+            }
         }
 
         // direct draw of transformed BitmapEx primitive
@@ -327,7 +375,7 @@ namespace drawinglayer
                 {
                     // color gets completely replaced, get it
                     const basegfx::BColor aModifiedColor(maBColorModifierStack.getModifiedColor(basegfx::BColor()));
-                    basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                    basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
                     aPolygon.transform(aLocalTransform);
 
                     mpOutputDevice->SetFillColor(Color(aModifiedColor));
@@ -401,7 +449,7 @@ namespace drawinglayer
                         {
                             // color gets completely replaced, get it
                             const basegfx::BColor aModifiedColor(maBColorModifierStack.getModifiedColor(basegfx::BColor()));
-                            basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                            basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
                             aPolygon.transform(aLocalTransform);
 
                             mpOutputDevice->SetFillColor(Color(aModifiedColor));
@@ -533,7 +581,7 @@ namespace drawinglayer
                     impDrawGradientToOutDev(
                         *mpOutputDevice, aLocalPolyPolygon, rGradient.getStyle(), rGradient.getSteps(),
                         aStartColor, aEndColor, rGradient.getBorder(),
-                        -rGradient.getAngle(), rGradient.getOffsetX(), rGradient.getOffsetY(), false);
+                        rGradient.getAngle(), rGradient.getOffsetX(), rGradient.getOffsetY(), false);
                 }
             }
         }
@@ -557,7 +605,7 @@ namespace drawinglayer
                 else
                 {
                     // try to catch cases where the bitmap will be color-modified to a single
-                    // color (e.g. shadow). This would NOT be optimizable with an alpha channel
+                    // color (e.g. shadow). This would NOT be optimizable with an transparence channel
                     // at the Bitmap which we do not have here. When this should change, this
                     // optimization has to be reworked accordingly.
                     const sal_uInt32 nBColorModifierStackCount(maBColorModifierStack.count());
@@ -639,53 +687,72 @@ namespace drawinglayer
 
             basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolygonCandidate.getB2DPolyPolygon());
             aLocalPolyPolygon.transform(maCurrentTransformation);
-            mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
 
-            if(mnPolygonStrokePrimitive2D
-                && getOptionsDrawinglayer().IsAntiAliasing()
-                && (mpOutputDevice->GetAntialiasing() & ANTIALIASING_ENABLE_B2DDRAW))
+            static bool bCheckTrapezoidDecomposition(false);
+            static bool bShowOutlinesThere(false);
+            if(bCheckTrapezoidDecomposition)
             {
-                // when AA is on and this filled polygons are the result of stroked line geometry,
-                // draw the geometry once extra as lines to avoid AA 'gaps' between partial polygons
-                mpOutputDevice->SetFillColor();
-                mpOutputDevice->SetLineColor(Color(aPolygonColor));
-                const sal_uInt32 nCount(aLocalPolyPolygon.count());
+                // clip against discrete ViewPort
+                const basegfx::B2DRange& rDiscreteViewport = getViewInformation2D().getDiscreteViewport();
+                aLocalPolyPolygon = basegfx::tools::clipPolyPolygonOnRange(
+                    aLocalPolyPolygon, rDiscreteViewport, true, false);
 
-                for(sal_uInt32 a(0); a < nCount; a++)
+                if(aLocalPolyPolygon.count())
                 {
-                    mpOutputDevice->DrawPolyLine(aLocalPolyPolygon.getB2DPolygon(a), 0.0);
+                    // subdivide
+                    aLocalPolyPolygon = basegfx::tools::adaptiveSubdivideByDistance(
+                        aLocalPolyPolygon, 0.5);
+
+                    // trapezoidize
+                    basegfx::B2DTrapezoidVector aB2DTrapezoidVector;
+                    basegfx::tools::trapezoidSubdivide(aB2DTrapezoidVector, aLocalPolyPolygon);
+
+                    const sal_uInt32 nCount(aB2DTrapezoidVector.size());
+
+                    if(nCount)
+                    {
+                        basegfx::BColor aInvPolygonColor(aPolygonColor);
+                        aInvPolygonColor.invert();
+
+                        for(sal_uInt32 a(0); a < nCount; a++)
+                        {
+                            const basegfx::B2DPolygon aTempPolygon(aB2DTrapezoidVector[a].getB2DPolygon());
+
+                            if(bShowOutlinesThere)
+                            {
+                                mpOutputDevice->SetFillColor(Color(aPolygonColor));
+                                mpOutputDevice->SetLineColor();
+                            }
+
+                            mpOutputDevice->DrawPolygon(aTempPolygon);
+
+                            if(bShowOutlinesThere)
+                            {
+                                mpOutputDevice->SetFillColor();
+                                mpOutputDevice->SetLineColor(Color(aInvPolygonColor));
+                                mpOutputDevice->DrawPolyLine(aTempPolygon, 0.0);
+                            }
+                        }
+                    }
                 }
             }
-
-            static bool bTestPolygonClipping(false);
-            if(bTestPolygonClipping)
+            else
             {
-                static bool bInside(true);
-                static bool bFilled(false);
-                static bool bLine(false);
+                mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
 
-                basegfx::B2DRange aRange(aLocalPolyPolygon.getB2DRange());
-                aRange.grow(aRange.getWidth() * -0.1);
-
-                if(bFilled)
+                if(mnPolygonStrokePrimitive2D
+                    && getOptionsDrawinglayer().IsAntiAliasing()
+                    && (mpOutputDevice->GetAntialiasing() & ANTIALIASING_ENABLE_B2DDRAW))
                 {
-                    basegfx::B2DPolyPolygon aFilledClipped(basegfx::tools::clipPolyPolygonOnRange(aLocalPolyPolygon, aRange, bInside, false));
-                    basegfx::BColor aRand(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0);
-                    mpOutputDevice->SetFillColor(Color(aRand));
-                    mpOutputDevice->SetLineColor();
-                    mpOutputDevice->DrawPolyPolygon(aFilledClipped);
-                }
-
-                if(bLine)
-                {
-                    basegfx::B2DPolyPolygon aLineClipped(basegfx::tools::clipPolyPolygonOnRange(aLocalPolyPolygon, aRange, bInside, true));
-                    basegfx::BColor aRand(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0);
+                    // when AA is on and this filled polygons are the result of stroked line geometry,
+                    // draw the geometry once extra as lines to avoid AA 'gaps' between partial polygons
                     mpOutputDevice->SetFillColor();
-                    mpOutputDevice->SetLineColor(Color(aRand));
+                    mpOutputDevice->SetLineColor(Color(aPolygonColor));
+                    const sal_uInt32 nCount(aLocalPolyPolygon.count());
 
-                    for(sal_uInt32 a(0); a < aLineClipped.count(); a++)
+                    for(sal_uInt32 a(0); a < nCount; a++)
                     {
-                        mpOutputDevice->DrawPolyLine(aLineClipped.getB2DPolygon(a), 0.0);
+                        mpOutputDevice->DrawPolyLine(aLocalPolyPolygon.getB2DPolygon(a), 0.0);
                     }
                 }
             }
@@ -811,10 +878,10 @@ namespace drawinglayer
                         if(getOptionsDrawinglayer().IsAntiAliasing())
                         {
                             // with AA, use 8bit AlphaMask to get nice borders
-                            VirtualDevice& rAlpha = aBufferDevice.getAlpha();
-                            rAlpha.SetLineColor();
-                            rAlpha.SetFillColor(COL_BLACK);
-                            rAlpha.DrawPolyPolygon(aMask);
+                            VirtualDevice& rTransparence = aBufferDevice.getTransparence();
+                            rTransparence.SetLineColor();
+                            rTransparence.SetFillColor(COL_BLACK);
+                            rTransparence.DrawPolyPolygon(aMask);
 
                             // dump buffer to outdev
                             aBufferDevice.paint();
@@ -847,7 +914,7 @@ namespace drawinglayer
         }
 
         // unified sub-transparence. Draw to VDev first.
-        void VclProcessor2D::RenderUnifiedAlphaPrimitive2D(const primitive2d::UnifiedAlphaPrimitive2D& rTransCandidate)
+        void VclProcessor2D::RenderUnifiedTransparencePrimitive2D(const primitive2d::UnifiedTransparencePrimitive2D& rTransCandidate)
         {
             static bool bForceToDecomposition(false);
 
@@ -860,14 +927,14 @@ namespace drawinglayer
                 }
                 else
                 {
-                    if(0.0 == rTransCandidate.getAlpha())
+                    if(0.0 == rTransCandidate.getTransparence())
                     {
                         // no transparence used, so just use the content
                         process(rTransCandidate.getChildren());
                     }
-                    else if(rTransCandidate.getAlpha() > 0.0 && rTransCandidate.getAlpha() < 1.0)
+                    else if(rTransCandidate.getTransparence() > 0.0 && rTransCandidate.getTransparence() < 1.0)
                     {
-                        // alpha is in visible range
+                        // transparence is in visible range
                         basegfx::B2DRange aRange(primitive2d::getB2DRangeFromPrimitive2DSequence(rTransCandidate.getChildren(), getViewInformation2D()));
                         aRange.transform(maCurrentTransformation);
                         impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
@@ -884,8 +951,8 @@ namespace drawinglayer
                             // back to old OutDev
                             mpOutputDevice = pLastOutputDevice;
 
-                            // dump buffer to outdev using given alpha
-                            aBufferDevice.paint(rTransCandidate.getAlpha());
+                            // dump buffer to outdev using given transparence
+                            aBufferDevice.paint(rTransCandidate.getTransparence());
                         }
                     }
                 }
@@ -893,7 +960,7 @@ namespace drawinglayer
         }
 
         // sub-transparence group. Draw to VDev first.
-        void VclProcessor2D::RenderAlphaPrimitive2D(const primitive2d::AlphaPrimitive2D& rTransCandidate)
+        void VclProcessor2D::RenderTransparencePrimitive2D(const primitive2d::TransparencePrimitive2D& rTransCandidate)
         {
             if(rTransCandidate.getChildren().hasElements())
             {
@@ -911,14 +978,14 @@ namespace drawinglayer
                     process(rTransCandidate.getChildren());
 
                     // set to mask
-                    mpOutputDevice = &aBufferDevice.getAlpha();
+                    mpOutputDevice = &aBufferDevice.getTransparence();
 
-                    // when painting alpha masks, reset the color stack
+                    // when painting transparence masks, reset the color stack
                     basegfx::BColorModifierStack aLastBColorModifierStack(maBColorModifierStack);
                     maBColorModifierStack = basegfx::BColorModifierStack();
 
-                    // paint mask to it (always with alpha intensities, evtl. with AA)
-                    process(rTransCandidate.getAlpha());
+                    // paint mask to it (always with transparence intensities, evtl. with AA)
+                    process(rTransCandidate.getTransparence());
 
                     // back to old color stack
                     maBColorModifierStack = aLastBColorModifierStack;

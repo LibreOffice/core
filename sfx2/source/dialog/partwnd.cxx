@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: partwnd.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -181,7 +178,7 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
     if ( pBind->GetDispatcher() )
     {
         ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier >
-                xSupp ( pBind->GetDispatcher()->GetFrame()->GetFrame()->GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
+                xSupp ( pBind->GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
         if ( xSupp.is() )
             xSupp->getFrames()->append( xFrame );
     }

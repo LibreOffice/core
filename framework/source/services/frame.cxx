@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: frame.cxx,v $
- *
- * $Revision: 1.106.80.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2705,21 +2701,7 @@ css::uno::Any SAL_CALL Frame::impl_getPropertyValue(const ::rtl::OUString& /*sPr
                 break;
 
         case FRAME_PROPHANDLE_ISHIDDEN :
-//                aValue <<= m_bIsHidden;
-                {
-                    sal_Bool bLoadedHidden = m_bIsHidden;
-                    css::uno::Reference< css::frame::XModel > xModel;
-                    if (m_xController.is())
-                        xModel = m_xController->getModel();
-                    if (xModel.is())
-                    {
-                        ::comphelper::MediaDescriptor lDesc(xModel->getArgs());
-                        bLoadedHidden = lDesc.getUnpackedValueOrDefault(
-                                                    ::comphelper::MediaDescriptor::PROP_HIDDEN(),
-                                                    (sal_Bool)sal_False);
-                    }
-                    aValue <<= bLoadedHidden;
-                }
+                aValue <<= m_bIsHidden;
                 break;
 
         case FRAME_PROPHANDLE_LAYOUTMANAGER :

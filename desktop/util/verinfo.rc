@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -68,25 +68,25 @@ VS_VERSION_INFO versioninfo
 			block "040704E4"
 			{
 				// German StringTable
-				value "CompanyName",		"Sun Microsystems, Inc.\0"
+				value "CompanyName",		"Oracle, Inc.\0"
 				value "FileDescription", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\0"
 				value "FileVersion",		PPS(VER_LEVEL) "\0"
 				value "ProductVersion",		PPS(VER_LEVEL) "\0"
 				value "OriginalFilename",	"SOFFICE.EXE\0"
 				value "InternalName",		"SOFFICE\0"
-				value "LegalCopyright",		S_CRIGHT " Sun Microsystems, Inc.\0"
+				value "LegalCopyright",		S_CRIGHT " Oracle, Inc.\0"
 			}
 #else
 			block "040904E4"
 			{
 				// International StringTable
-				value "CompanyName", 		"Sun Microsystems, Inc.\0"
+				value "CompanyName", 		"Oracle, Inc.\0"
 				value "FileDescription",	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\0"
 				value "FileVersion",		PPS(VER_LEVEL) "\0"
 				value "ProductVersion",		PPS(VER_LEVEL) "\0"
 				value "OriginalFilename",	"SOFFICE.EXE\0"
 				value "InternalName", 		"SOFFICE\0"
-				value "LegalCopyright", 	S_CRIGHT " Sun Microsystems, Inc.\0"
+				value "LegalCopyright", 	S_CRIGHT " Oracle, Inc.\0"
 			}
 #endif
 		}
@@ -115,10 +115,10 @@ VS_VERSION_INFO versioninfo
 13 ICON "icons\\oasis-empty-document.ico"
 14 ICON "icons\\oasis-database.ico"
 15 ICON "icons\\oasis-formula.ico"
-16 ICON "icons\\empty-template.ico"
+16 ICON "icons\\oasis-web-template.ico"
 17 ICON "icons\\empty-document.ico"
 18 ICON "icons\\so8-configuration.ico"
-19 ICON "icons\\so8-open.ico"
+19 ICON "icons\\so9_open.ico"
 20 ICON "icons\\empty-document.ico"
 21 ICON "icons\\so9_writer_app.ico"
 22 ICON "icons\\so9_calc_app.ico"

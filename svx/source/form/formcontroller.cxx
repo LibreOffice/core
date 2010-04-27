@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -4254,7 +4254,7 @@ bool FormController::ensureInteractionHandler()
         return false;
     m_bAttemptedHandlerCreation = true;
 
-    m_xInteractionHandler.set( m_aContext.createComponent( (::rtl::OUString)SRV_SDB_INTERACTION_HANDLER ), UNO_QUERY );
+    m_xInteractionHandler.set( m_aContext.createComponent( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" ) ) ), UNO_QUERY );
     OSL_ENSURE( m_xInteractionHandler.is(), "FormController::ensureInteractionHandler: could not create an interaction handler!" );
     return m_xInteractionHandler.is();
 }

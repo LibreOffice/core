@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: vclhelpergradient.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.5 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:22 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -218,16 +210,6 @@ namespace drawinglayer
         ::std::vector< basegfx::BColor > aColors;
         basegfx::B2DPolygon aUnitPolygon;
 
-        if(attribute::GRADIENTSTYLE_RADIAL == eGradientStyle || attribute::GRADIENTSTYLE_ELLIPTICAL == eGradientStyle)
-        {
-            const basegfx::B2DPoint aCircleCenter(0.5, 0.5);
-            aUnitPolygon = basegfx::tools::createPolygonFromEllipse(aCircleCenter, 0.5, 0.5);
-        }
-        else
-        {
-            aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0));
-        }
-
         // make sure steps is not too high/low
         nSteps = impCalcGradientSteps(rOutDev, nSteps, aOutlineRange, sal_uInt32((rStart.getMaximumDistance(rEnd) * 127.5) + 0.5));
 
@@ -239,6 +221,7 @@ namespace drawinglayer
                 texture::GeoTexSvxGradientLinear aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fAngle);
                 aGradient.appendTransformations(aMatrices);
                 aGradient.appendColors(aColors);
+                aUnitPolygon = basegfx::tools::createUnitPolygon();
                 break;
             }
             case attribute::GRADIENTSTYLE_AXIAL:
@@ -246,6 +229,7 @@ namespace drawinglayer
                 texture::GeoTexSvxGradientAxial aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fAngle);
                 aGradient.appendTransformations(aMatrices);
                 aGradient.appendColors(aColors);
+                aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(-1, -1, 1, 1));
                 break;
             }
             case attribute::GRADIENTSTYLE_RADIAL:
@@ -253,6 +237,7 @@ namespace drawinglayer
                 texture::GeoTexSvxGradientRadial aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fOffsetX, fOffsetY);
                 aGradient.appendTransformations(aMatrices);
                 aGradient.appendColors(aColors);
+                aUnitPolygon = basegfx::tools::createPolygonFromCircle(basegfx::B2DPoint(0,0), 1);
                 break;
             }
             case attribute::GRADIENTSTYLE_ELLIPTICAL:
@@ -260,6 +245,7 @@ namespace drawinglayer
                 texture::GeoTexSvxGradientElliptical aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fOffsetX, fOffsetX, fAngle);
                 aGradient.appendTransformations(aMatrices);
                 aGradient.appendColors(aColors);
+                aUnitPolygon = basegfx::tools::createPolygonFromCircle(basegfx::B2DPoint(0,0), 1);
                 break;
             }
             case attribute::GRADIENTSTYLE_SQUARE:
@@ -267,6 +253,7 @@ namespace drawinglayer
                 texture::GeoTexSvxGradientSquare aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fOffsetX, fOffsetX, fAngle);
                 aGradient.appendTransformations(aMatrices);
                 aGradient.appendColors(aColors);
+                aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(-1, -1, 1, 1));
                 break;
             }
             case attribute::GRADIENTSTYLE_RECT:
@@ -274,6 +261,7 @@ namespace drawinglayer
                 texture::GeoTexSvxGradientRect aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fOffsetX, fOffsetX, fAngle);
                 aGradient.appendTransformations(aMatrices);
                 aGradient.appendColors(aColors);
+                aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(-1, -1, 1, 1));
                 break;
             }
         }

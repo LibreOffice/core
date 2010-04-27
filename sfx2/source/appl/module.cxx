@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: module.cxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +48,7 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svl/intitem.hxx>
 
 #define SfxModule
 #include "sfxslots.hxx"
@@ -410,4 +408,30 @@ SfxModule* SfxModule::GetActiveModule( SfxViewFrame* pFrame )
     if( pFrame )
         pSh = pFrame->GetObjectShell();
     return pSh ? pSh->GetModule() : 0;
+}
+
+FieldUnit SfxModule::GetCurrentFieldUnit()
+{
+    FieldUnit eUnit = FUNIT_INCH;
+    SfxModule* pModule = GetActiveModule();
+    if ( pModule )
+    {
+        const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
+        DBG_ASSERT( pItem, "GetFieldUnit(): no item" );
+        if ( pItem )
+            eUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
+    }
+    else
+        DBG_ERRORFILE( "GetModuleFieldUnit(): no module found" );
+    return eUnit;
+}
+
+FieldUnit SfxModule::GetFieldUnit() const
+{
+    FieldUnit eUnit = FUNIT_INCH;
+    const SfxPoolItem* pItem = GetItem( SID_ATTR_METRIC );
+    DBG_ASSERT( pItem, "GetFieldUnit(): no item" );
+    if ( pItem )
+        eUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
+    return eUnit;
 }

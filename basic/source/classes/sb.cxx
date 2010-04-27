@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sb.cxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,20 +64,17 @@ TYPEINIT1(StarBASIC,SbxObject)
 #define RTLNAME "@SBRTL"
 //  i#i68894#
 
-const static String aThisComponent( RTL_CONSTASCII_USTRINGPARAM("ThisComponent") );
-const static String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
-
 SbxObject* StarBASIC::getVBAGlobals( )
 {
     if ( !pVBAGlobals )
-        pVBAGlobals = (SbUnoObject*)Find( aVBAHook , SbxCLASS_DONTCARE );
+        pVBAGlobals = (SbUnoObject*)Find( String(RTL_CONSTASCII_USTRINGPARAM("VBAGlobals")), SbxCLASS_DONTCARE );
     return pVBAGlobals;
 }
 
 //  i#i68894#
 SbxVariable* StarBASIC::VBAFind( const String& rName, SbxClassType t )
 {
-    if( rName == aThisComponent )
+    if( rName.EqualsAscii("ThisComponent") )
         return NULL;
     // rename to init globals
     if ( getVBAGlobals( ) )

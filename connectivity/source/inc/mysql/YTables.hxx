@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: YTables.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,6 +71,11 @@ namespace connectivity
                 can contain () which have to filled with values
             */
             static ::rtl::OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColProp);
+
+            /** convert the sql statement to fit MySQL notation
+                @param  _sSql in/out
+            */
+            static ::rtl::OUString adjustSQL(const ::rtl::OUString& _sSql);
         };
     }
 }

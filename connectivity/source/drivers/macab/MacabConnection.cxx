@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: MacabConnection.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -317,10 +314,11 @@ MacabAddressBook* MacabConnection::getAddressBook() const
     return m_pAddressBook;
 }
 // -----------------------------------------------------------------------------
-extern "C" void*  SAL_CALL createMacabConnection( void* _pDriver )
+extern "C" SAL_DLLPUBLIC_EXPORT void*  SAL_CALL createMacabConnection( void* _pDriver )
 {
     MacabConnection* pConnection = new MacabConnection( static_cast< MacabDriver* >( _pDriver ) );
     // by definition, the pointer crossing library boundaries as void ptr is acquired once
     pConnection->acquire();
     return pConnection;
 }
+

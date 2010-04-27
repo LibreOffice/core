@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.15.18.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -68,17 +64,9 @@ LIB1OBJFILES= \
 
 LIB2TARGET= $(SLB)$/$(TARGET).lib
 LIB2OBJFILES= \
-        $(SLO)$/volume3d.obj	\
-        $(SLO)$/viewpt3d.obj	\
         $(SLO)$/float3d.obj
 
 SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
-
-#disable optimizer for MSCompiler and ICC
-.IF "$(COM)"=="ICC" || "$(COM)"=="MSC"
-NOOPTFILES=\
-        $(SLO)$/viewpt3d.obj
-.ENDIF
 
 SRS1NAME=engine3d
 SRC1FILES=\
