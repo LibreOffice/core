@@ -39,7 +39,7 @@
 #include "view/SlsPageObjectLayouter.hxx"
 #include "view/SlsPageObjectPainter.hxx"
 #include "view/SlsILayerPainter.hxx"
-#include "view/SlsButton.hxx"
+#include "view/SlsButtonBar.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsProperties.hxx"
 #include "controller/SlsAnimator.hxx"

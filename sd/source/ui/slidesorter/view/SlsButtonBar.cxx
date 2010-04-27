@@ -48,20 +48,20 @@
 namespace sd { namespace slidesorter { namespace view {
 
 namespace {
-    void AdaptTransparency (AlphaMask& rMask, const double nAlpha)
+    void AdaptTransparency (AlphaMask& rMask, const AlphaMask& rSourceMask, const double nAlpha)
     {
         BitmapWriteAccess* pBitmap = rMask.AcquireWriteAccess();
+        const BitmapReadAccess* pSourceBitmap = const_cast<AlphaMask&>(rSourceMask).AcquireReadAccess();
 
-        if (pBitmap != NULL)
+        if (pBitmap!=NULL && pSourceBitmap!=NULL)
         {
             const sal_Int32 nWidth (pBitmap->Width());
             const sal_Int32 nHeight (pBitmap->Height());
 
-            const BitmapColor aWhite (255,255,255);
             for (sal_Int32 nY = 0; nY<nHeight; ++nY)
                 for (sal_Int32 nX = 0; nX<nWidth; ++nX)
                 {
-                    const BYTE nValue (255 - pBitmap->GetPixel(nY, nX).GetBlueOrIndex());
+                    const BYTE nValue (255 - pSourceBitmap->GetPixel(nY, nX).GetBlueOrIndex());
                     const BYTE nNewValue (nValue * (1-nAlpha));
                     pBitmap->SetPixel(nY, nX, 255-nNewValue);
                 }
@@ -719,10 +719,10 @@ ImageButton::ImageButton (
     : Button(rSlideSorter, rsHelpText),
       maNormalIcon(rRegularIcon),
       maHoverIcon(rHoverIcon.IsEmpty() ? rRegularIcon : rHoverIcon),
-      maDownIcon(rPressedIcon.IsEmpty() ? rHoverIcon : rPressedIcon),
+      maDownIcon(rPressedIcon.IsEmpty() ? rRegularIcon : rPressedIcon),
       maSmallIcon(rSmallIcon),
       maSmallHoverIcon(rSmallHoverIcon.IsEmpty() ? rSmallIcon : rSmallHoverIcon),
-      maSmallDownIcon(rSmallPressedIcon.IsEmpty() ? rSmallHoverIcon : rSmallPressedIcon)
+      maSmallDownIcon(rSmallPressedIcon.IsEmpty() ? rSmallIcon : rSmallPressedIcon)
 {
 }
 
@@ -792,8 +792,8 @@ void ImageButton::Paint (
     // Paint icon.
     if ( ! aIcon.IsEmpty())
     {
-        AlphaMask aMask (aIcon.GetMask());
-        AdaptTransparency(aMask, nAlpha);
+        AlphaMask aMask (aIcon.GetSizePixel());
+        AdaptTransparency(aMask, aIcon.GetAlpha(), nAlpha);
         rDevice.DrawBitmapEx(
             Point(
                 maBoundingBox.Left()
@@ -924,7 +924,7 @@ DuplicateButton::DuplicateButton (SlideSorter& rSlideSorter)
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command3Hover),
         BitmapEx(),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command3Small),
-        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command3Small),
+        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command3SmallHover),
         BitmapEx(),
         rSlideSorter.GetTheme()->GetString(Theme::String_Command3))
 {
@@ -937,6 +937,8 @@ void DuplicateButton::ProcessClick (const model::SharedPageDescriptor& rpDescrip
 {
     if ( ! rpDescriptor)
         return;
+
+    mrSlideSorter.GetView().SetPageUnderMouse(model::SharedPageDescriptor(),false);
 
     // When the page under the button is not selected then set the
     // selection to just this page.
