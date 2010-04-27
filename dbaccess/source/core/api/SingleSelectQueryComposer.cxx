@@ -34,6 +34,7 @@
 #include "dbastrings.hrc"
 #include "HelperCollections.hxx"
 #include "SingleSelectQueryComposer.hxx"
+#include "sdbcoretools.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -46,6 +47,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
+#include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 /** === end UNO includes === **/
@@ -225,24 +227,11 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
     OSL_ENSURE(m_sDecimalSep.getLength() == 1,"OSingleSelectQueryComposer::OSingleSelectQueryComposer decimal separator is not 1 length");
     try
     {
-        Reference< XChild> xChild(_xConnection, UNO_QUERY);
-        if(xChild.is())
+        Any aValue;
+        Reference<XInterface> xDs = dbaccess::getDataSource(_xConnection);
+        if ( dbtools::getDataSourceSetting(xDs,static_cast <rtl::OUString> (PROPERTY_BOOLEANCOMPARISONMODE),aValue) )
         {
-            Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
-            if ( xProp.is() )
-            {
-                Sequence< PropertyValue > aInfo;
-                xProp->getPropertyValue(PROPERTY_INFO) >>= aInfo;
-                const PropertyValue* pBegin = aInfo.getConstArray();
-                const PropertyValue* pEnd = pBegin + aInfo.getLength();
-                for (; pBegin != pEnd; ++pBegin)
-                {
-                    if ( pBegin->Name == static_cast <rtl::OUString> (PROPERTY_BOOLEANCOMPARISONMODE) )
-                    {
-                        OSL_VERIFY( pBegin->Value >>= m_nBoolCompareMode );
-                    }
-                }
-            }
+            OSL_VERIFY( aValue >>= m_nBoolCompareMode );
         }
     }
     catch(Exception&)
@@ -720,13 +709,28 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         }
         catch( const Exception& ) { }
 
-        if ( !xResultSetMeta.is() )
+        try
         {
-            xStatement.reset( Reference< XStatement >( m_xConnection->createStatement(), UNO_QUERY_THROW ) );
-            Reference< XPropertySet > xStatementProps( xStatement, UNO_QUERY_THROW );
-            try { xStatementProps->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, makeAny( sal_False ) ); }
-            catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
-            xResMetaDataSup.set( xStatement->executeQuery( sSQL ), UNO_QUERY_THROW );
+            if ( !xResultSetMeta.is() )
+            {
+                xStatement.reset( Reference< XStatement >( m_xConnection->createStatement(), UNO_QUERY_THROW ) );
+                Reference< XPropertySet > xStatementProps( xStatement, UNO_QUERY_THROW );
+                try { xStatementProps->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, makeAny( sal_False ) ); }
+                catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
+                xResMetaDataSup.set( xStatement->executeQuery( sSQL ), UNO_QUERY_THROW );
+                xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_QUERY_THROW );
+            }
+        }
+        catch( const Exception& )
+        {
+            //@see issue http://qa.openoffice.org/issues/show_bug.cgi?id=110111
+            // access returns a different order of column names when executing select * from
+            // and asking the columns from the metadata.
+            Reference< XParameters > xParameters( xPreparedStatement, UNO_QUERY_THROW );
+            Reference< XIndexAccess > xPara = getParameters();
+            for(sal_Int32 i = 1;i <= xPara->getCount();++i)
+                xParameters->setNull(i,DataType::VARCHAR);
+            xResMetaDataSup.set(xPreparedStatement->executeQuery(), UNO_QUERY_THROW );
             xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_QUERY_THROW );
         }
 

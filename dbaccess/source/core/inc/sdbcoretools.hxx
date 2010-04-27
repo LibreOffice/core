@@ -28,8 +28,14 @@
 #ifndef DBACORE_SDBCORETOOLS_HXX
 #define DBACORE_SDBCORETOOLS_HXX
 
+/** === begin UNO includes === **/
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/lang/WrappedTargetException.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
+/** === end UNO includes === **/
 
 namespace comphelper
 {
@@ -49,32 +55,32 @@ namespace dbaccess
         getDataSource( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDependentObject );
 
     // -----------------------------------------------------------------------------
-    /** retrieves a particular indirect data source setting
-
-        @param _rxDataSource
-            a data source component
-        @param _pAsciiSettingsName
-            the ASCII name of the setting to obtain
-        @param _rSettingsValue
-            the value of the setting, upon successfull return
-
-        @return
-            <FALSE/> if the setting is not present in the <member scope="com::sun::star::sdb">DataSource::Info</member>
-            member of the data source
-            <TRUE/> otherwise
-    */
-    bool    getDataSourceSetting(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDataSource,
-        const sal_Char* _pAsciiSettingsName,
-        ::com::sun::star::uno::Any& /* [out] */ _rSettingsValue
-    );
 
     // -----------------------------------------------------------------------------
     /** retrieves a to-be-displayed string for a given caught exception;
     */
     ::rtl::OUString extractExceptionMessage( const ::comphelper::ComponentContext& _rContext, const ::com::sun::star::uno::Any& _rError );
 
-//.........................................................................
+    namespace tools
+    {
+        namespace stor
+        {
+            bool    storageIsWritable_nothrow(
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage
+                    );
+
+            /// commits a given storage if it's not readonly
+            bool    commitStorageIfWriteable(
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage
+                    )
+                    SAL_THROW((
+                        ::com::sun::star::io::IOException,
+                        ::com::sun::star::lang::WrappedTargetException
+                ));
+        }
+
+    }
+
 }   // namespace dbaccess
 //.........................................................................
 
