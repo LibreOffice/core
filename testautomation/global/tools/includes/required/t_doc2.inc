@@ -123,7 +123,7 @@ function sMakeReadOnlyDocumentEditable() as boolean
     dim rc as integer
     const CFN = "sMakeReadOnlyDocumentEditable::"
 
-    if ( VERBOSE ) then printlog( CFN & "Making document editable (create a copy) if it is readonly" )
+    if ( GVERBOSE ) then printlog( CFN & "Making document editable (create a copy) if it is readonly" )
 
     ' We still run into synchronization problems with the "Make document editable" feature
     ' because we do not know when this button becomes available and ready for use: The
@@ -137,7 +137,7 @@ function sMakeReadOnlyDocumentEditable() as boolean
     hUseAsyncSlot( "EditDoc" )
     kontext "Active"
     if ( Active.exists() ) then
-        if ( VERBOSE ) then printlog( "Handling create copy message" )
+        if ( GVERBOSE ) then printlog( "Handling create copy message" )
         Active.yes()
         wait( 1000 )
     endif
@@ -151,12 +151,12 @@ function sMakeReadOnlyDocumentEditable() as boolean
                     exit do
                 endif
             catch
-                if ( VERBOSE ) then printlog "Attempt " & iWait & " to make document readable failed"
+                if ( GVERBOSE ) then printlog "Attempt " & iWait & " to make document readable failed"
                 iWait = iWait + 1
                 wait ( 1000 )
             endcatch
         else
-            if ( VERBOSE ) then printlog "Attempt " & iWait & " to make document readable failed"
+            if ( GVERBOSE ) then printlog "Attempt " & iWait & " to make document readable failed"
             iWait = iWait + 1
             wait ( 1000 )
         end if
@@ -179,11 +179,11 @@ function sMakeReadOnlyDocumentEditable() as boolean
                         printlog( CFN & "Messagebox: " & Active.getText() )
 
                         try
-                            if ( VERBOSE ) then printlog( CFN & "Document was read-only. A copy will be used." )
+                            if ( GVERBOSE ) then printlog( CFN & "Document was read-only. A copy will be used." )
                             Active.Yes()
-                            if ( VERBOSE ) then printlog( CFN & "Closed 'use copy' message" )
+                            if ( GVERBOSE ) then printlog( CFN & "Closed 'use copy' message" )
                         catch
-                            if ( VERBOSE ) then printlog( CFN & "Probing for unexpected messagebox..." )
+                            if ( GVERBOSE ) then printlog( CFN & "Probing for unexpected messagebox..." )
                             active.ok()
                             qaerrorlog( "#i100701 - Object not found message" )
                         endcatch
@@ -196,11 +196,11 @@ function sMakeReadOnlyDocumentEditable() as boolean
                 printlog( CFN & "Document appears to be editable" )
             endif
         else
-            if ( VERBOSE ) then printlog( CFN & "Button <Bearbeiten> is pressed, document is editable" )
+            if ( GVERBOSE ) then printlog( CFN & "Button <Bearbeiten> is pressed, document is editable" )
             sMakeReadOnlyDocumentEditable() = FALSE
         endif
     else
-        if ( VERBOSE ) then printlog( CFN & "Control <Bearbeiten> is not enabled" )
+        if ( GVERBOSE ) then printlog( CFN & "Control <Bearbeiten> is not enabled" )
     endif
 
 end function
