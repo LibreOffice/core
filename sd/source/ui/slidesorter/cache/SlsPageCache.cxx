@@ -75,7 +75,7 @@ void PageCache::ChangeSize (
 
 
 
-PreviewType PageCache::GetPreviewBitmap (
+Bitmap PageCache::GetPreviewBitmap (
     const CacheKey aKey,
     const bool bResize)
 {
@@ -85,7 +85,7 @@ PreviewType PageCache::GetPreviewBitmap (
 
 
 
-PreviewType PageCache::GetMarkedPreviewBitmap (
+Bitmap PageCache::GetMarkedPreviewBitmap (
     const CacheKey aKey,
     const bool bResize)
 {
@@ -97,7 +97,7 @@ PreviewType PageCache::GetMarkedPreviewBitmap (
 
 void PageCache::SetMarkedPreviewBitmap (
     const CacheKey aKey,
-    const PreviewType& rMarkedBitmap)
+    const Bitmap& rMarkedBitmap)
 {
     mpImplementation->SetMarkedPreviewBitmap(aKey, rMarkedBitmap);
 }

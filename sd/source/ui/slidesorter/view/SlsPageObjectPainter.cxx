@@ -224,7 +224,7 @@ void PageObjectPainter::PaintPreview (
 
         if (bIsExcluded)
         {
-            Bitmap aMarkedPreview (mpCache->GetMarkedPreviewBitmap(pPage,false).GetBitmap());
+            Bitmap aMarkedPreview (mpCache->GetMarkedPreviewBitmap(pPage,false));
             if (aMarkedPreview.IsEmpty() || aMarkedPreview.GetSizePixel()!=aBox.GetSize())
             {
                 aMarkedPreview = CreateMarkedPreview(
@@ -232,13 +232,13 @@ void PageObjectPainter::PaintPreview (
                     mpCache->GetPreviewBitmap(pPage,true),
                     mpTheme->GetIcon(Theme::Icon_HideSlideOverlay),
                     rDevice);
-                mpCache->SetMarkedPreviewBitmap(pPage, cache::PreviewType::Create(aMarkedPreview));
+                mpCache->SetMarkedPreviewBitmap(pPage, aMarkedPreview);
             }
             rDevice.DrawBitmap(aBox.TopLeft(), aMarkedPreview);
         }
         else
         {
-            const Bitmap aPreview (mpCache->GetPreviewBitmap(pPage,false).GetBitmap());
+            const Bitmap aPreview (mpCache->GetPreviewBitmap(pPage,false));
             if ( ! aPreview.IsEmpty())
                 if (aPreview.GetSizePixel() != aBox.GetSize())
                     rDevice.DrawBitmap(aBox.TopLeft(), aBox.GetSize(), aPreview);
@@ -253,14 +253,14 @@ void PageObjectPainter::PaintPreview (
 
 Bitmap PageObjectPainter::CreateMarkedPreview (
     const Size& rSize,
-    const cache::PreviewType& rPreview,
+    const Bitmap& rPreview,
     const BitmapEx& rOverlay,
     const OutputDevice& rReferenceDevice) const
 {
     VirtualDevice aDevice (rReferenceDevice);
     aDevice.SetOutputSizePixel(rSize);
 
-    aDevice.DrawBitmap(Point(0,0), rSize, rPreview.GetBitmap());
+    aDevice.DrawBitmap(Point(0,0), rSize, rPreview);
 
     // Paint bitmap tiled over the preview to mark it as excluded.
     const sal_Int32 nIconWidth (rOverlay.GetSizePixel().Width());

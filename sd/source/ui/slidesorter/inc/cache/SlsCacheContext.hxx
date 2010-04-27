@@ -34,11 +34,11 @@
 #include <vector>
 
 class SdrPage;
+class Bitmap;
 
 namespace sd { namespace slidesorter { namespace cache {
 
 typedef const SdrPage* CacheKey;
-class PreviewType;
 
 /** This interface allows the individualisation of different instances of
     the PreviewCache.
@@ -55,7 +55,7 @@ public:
     */
     virtual void NotifyPreviewCreation (
         CacheKey aKey,
-        const PreviewType& rPreview) = 0;
+        const Bitmap& rPreview) = 0;
 
     /** Called to determine whether the system is idle and a preview can be
         created without annoying the user.

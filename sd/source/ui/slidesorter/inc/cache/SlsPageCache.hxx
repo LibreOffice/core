@@ -29,9 +29,11 @@
 #define SD_SLIDESORTER_PAGE_CACHE_HXX
 
 #include "cache/SlsCacheContext.hxx"
-#include "cache/SlsPreviewType.hxx"
 #include <sal/types.h>
+#include <tools/gen.hxx>
 #include <boost/scoped_ptr.hpp>
+#include <vcl/bitmap.hxx>
+
 
 namespace sd { namespace slidesorter { namespace view {
 class PageObjectViewObjectContact;
@@ -121,16 +123,16 @@ public:
             Returns a bitmap that is either empty, contains a scaled (up or
             down) version or is the requested bitmap.
     */
-    PreviewType GetPreviewBitmap (
+    Bitmap GetPreviewBitmap (
         const CacheKey aKey,
         const bool bResize);
 
-    PreviewType GetMarkedPreviewBitmap (
+    Bitmap GetMarkedPreviewBitmap (
         const CacheKey aKey,
         const bool bResize);
     void SetMarkedPreviewBitmap (
         const CacheKey aKey,
-        const PreviewType& rBitmap);
+        const Bitmap& rBitmap);
 
     /** When the requested preview bitmap does not yet exist or is not
         up-to-date then the rendering of one is scheduled.  Otherwise this

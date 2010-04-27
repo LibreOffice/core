@@ -68,7 +68,7 @@ BitmapFactory::~BitmapFactory (void)
 
 
 
-PreviewType BitmapFactory::CreateBitmap (
+Bitmap BitmapFactory::CreateBitmap (
     const SdPage& rPage,
     const Size& rPixelSize,
     const bool bDoSuperSampling)
@@ -86,7 +86,7 @@ PreviewType BitmapFactory::CreateBitmap (
         aPreview.Scale(rPixelSize, BMP_SCALE_INTERPOLATE);
     }
 
-    return PreviewType::Create(aPreview);
+    return aPreview;
 }
 
 

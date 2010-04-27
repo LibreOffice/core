@@ -44,7 +44,6 @@
 
 namespace sd { namespace slidesorter { namespace cache {
 class PageCache;
-class PreviewType;
 } } }
 
 namespace sd { namespace slidesorter { namespace view {
@@ -118,7 +117,7 @@ private:
         const Theme::GradientColorType eType) const;
     Bitmap CreateMarkedPreview(
         const Size& rSize,
-        const cache::PreviewType& rPreview,
+        const Bitmap& rPreview,
         const BitmapEx& rOverlay,
         const OutputDevice& TemplateDevice) const;
 };

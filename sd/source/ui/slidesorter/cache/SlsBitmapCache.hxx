@@ -30,7 +30,6 @@
 
 class SdrPage;
 
-#include "cache/SlsPreviewType.hxx"
 #include <vcl/bitmapex.hxx>
 #include <osl/mutex.hxx>
 #include <boost/shared_ptr.hpp>
@@ -111,11 +110,11 @@ public:
 
     /** Return the preview bitmap for the given contact object.
     */
-    PreviewType GetBitmap (const CacheKey& rKey);
+    Bitmap GetBitmap (const CacheKey& rKey);
 
     /** Return the marked preview bitmap for the given contact object.
     */
-    PreviewType GetMarkedBitmap (const CacheKey& rKey);
+    Bitmap GetMarkedBitmap (const CacheKey& rKey);
 
     /** Release the reference to the preview bitmap that is associated with
         the given key.
@@ -139,14 +138,14 @@ public:
     */
     void SetBitmap (
         const CacheKey& rKey,
-        const PreviewType& rPreview,
+        const Bitmap& rPreview,
         bool bIsPrecious);
 
     /** Add or replace a marked bitmap for the given key.
     */
     void SetMarkedBitmap (
         const CacheKey& rKey,
-        const PreviewType& rPreview);
+        const Bitmap& rPreview);
 
     /** Return whether the specified preview bitmap has been marked as
         precious.

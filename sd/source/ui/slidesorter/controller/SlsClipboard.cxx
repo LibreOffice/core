@@ -418,8 +418,7 @@ void Clipboard::CreateSlideTransferable (
         model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
         if ( ! pDescriptor || pDescriptor->GetPage()==NULL)
             continue;
-        Bitmap aPreview (
-            pPreviewCache->GetPreviewBitmap(pDescriptor->GetPage(), false).GetBitmap());
+        Bitmap aPreview (pPreviewCache->GetPreviewBitmap(pDescriptor->GetPage(), false));
         aRepresentatives.push_back(aPreview);
         if (aRepresentatives.size() >= 3)
             break;
