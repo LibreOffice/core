@@ -108,13 +108,13 @@ testcase tMainMenu
         end if
         call hMenuClose()
                
-        printlog "check if there are 4 items in the VIEW/TOOLBAR menu."        
+        printlog "check if there are 5 items in the VIEW/TOOLBAR menu."        
         DocumentCalc.UseMenu 
         hMenuSelectNr(3) ' VIEW        
         hMenuSelectNr(1) ' TOOLBAR
         iCount = hMenuItemGetCount()
-        if (iCount <> 4) then
-            warnlog "There should 4 items in the VIEW/TOOLBAR menu but there are " + iCount + " items."
+        if (iCount <> 5) then
+            warnlog "There should 5 items in the VIEW/TOOLBAR menu but there are " + iCount + " items."
         end if
         call hMenuClose()
         

@@ -588,29 +588,29 @@ public class IniFile implements Enumeration
     /**
      * some tests for this class
      */
-    public static void main(String[] args)
-        {
-            String sTempFile = System.getProperty("java.io.tmpdir");
-            sTempFile += "inifile";
-
-
-            IniFile aIniFile = new IniFile(sTempFile);
-            String sValue = aIniFile.getValue("Section", "Key");
-            // insert a new value to a already exist section
-            aIniFile.insertValue("Section", "Key2", "a new value in a existing section");
-            // replace a value
-            aIniFile.insertValue("Section", "Key", "replaced value");
-            // create a new value
-            aIniFile.insertValue("New Section", "Key", "a new key value pair");
-            aIniFile.insertValue("New Section", "Key2", "a new second key value pair");
-
-            String sValue2 = aIniFile.getValue("Section2", "Key");
-
-            aIniFile.removeSection("Section");
-            aIniFile.removeSection("New Section");
-
-            aIniFile.close();
-        }
+//    public static void main(String[] args)
+//        {
+//            String sTempFile = System.getProperty("java.io.tmpdir");
+//            sTempFile += "inifile";
+//
+//
+//            IniFile aIniFile = new IniFile(sTempFile);
+//            String sValue = aIniFile.getValue("Section", "Key");
+//            // insert a new value to a already exist section
+//            aIniFile.insertValue("Section", "Key2", "a new value in a existing section");
+//            // replace a value
+//            aIniFile.insertValue("Section", "Key", "replaced value");
+//            // create a new value
+//            aIniFile.insertValue("New Section", "Key", "a new key value pair");
+//            aIniFile.insertValue("New Section", "Key2", "a new second key value pair");
+//
+//            String sValue2 = aIniFile.getValue("Section2", "Key");
+//
+//            aIniFile.removeSection("Section");
+//            aIniFile.removeSection("New Section");
+//
+//            aIniFile.close();
+//        }
 
     /**
      * Enumeration Interface
