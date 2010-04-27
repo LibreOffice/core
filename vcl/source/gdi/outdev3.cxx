@@ -1337,6 +1337,7 @@ void ImplDevFontList::InitGenericGlyphFallback( void ) const
         "muktinarrow", "",
         "phetsarathot", "",
         "padauk", "pinlonmyanmar", "",
+        "iskoolapota", "lklug", "",
         0
     };
 
@@ -2090,10 +2091,13 @@ ImplDevFontListData* ImplDevFontList::FindDefaultFont() const
 ImplDevFontList* ImplDevFontList::Clone( bool bScalable, bool bEmbeddable ) const
 {
     ImplDevFontList* pClonedList = new ImplDevFontList;
-    pClonedList->mbMatchData    = mbMatchData;
+//  pClonedList->mbMatchData    = mbMatchData;
     pClonedList->mbMapNames     = mbMapNames;
     pClonedList->mpPreMatchHook = mpPreMatchHook;
     pClonedList->mpFallbackHook = mpFallbackHook;
+
+    // TODO: clone the config-font attributes too?
+    pClonedList->mbMatchData    = false;
 
     DevFontList::const_iterator it = maDevFontList.begin();
     for(; it != maDevFontList.end(); ++it )
@@ -5908,14 +5912,15 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         ImplInitFont();
 
     // check string index and length
-    String aStr = rOrigStr;
-    if( (ULONG)nMinIndex + nLen >= aStr.Len() )
+    if( (unsigned)nMinIndex + nLen > rOrigStr.Len() )
     {
-        if( nMinIndex < aStr.Len() )
-            nLen = aStr.Len() - nMinIndex;
-        else
+        const int nNewLen = (int)rOrigStr.Len() - nMinIndex;
+        if( nNewLen <= 0 )
             return NULL;
+        nLen = static_cast<xub_StrLen>(nNewLen);
     }
+
+    String aStr = rOrigStr;
 
     // filter out special markers
     if( bFilter )
