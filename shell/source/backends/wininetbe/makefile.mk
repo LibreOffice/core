@@ -46,9 +46,8 @@ DLLPRE =
 
 SLOFILES=\
     $(SLO)$/wininetbecdef.obj \
-    $(SLO)$/wininetbackend.obj \
-    $(SLO)$/wininetlayer.obj
-        
+    $(SLO)$/wininetbackend.obj
+
 SHL1TARGET=$(TARGET)1.uno   
 SHL1OBJS=$(SLOFILES)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
@@ -59,7 +58,7 @@ SHL1STDLIBS=    \
         $(CPPULIB) \
         $(SALLIB)
 
-SHL1VERSIONMAP=exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 

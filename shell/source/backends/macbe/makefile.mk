@@ -54,8 +54,7 @@ CFLAGSCXX+=$(OBJCXXFLAGS)
 
 SLOFILES= \
     $(SLO)$/macbecdef.obj \
-    $(SLO)$/macbackend.obj \
-    $(SLO)$/macbelayer.obj
+    $(SLO)$/macbackend.obj
 
 SHL1TARGET=$(TARGET)1.uno
 SHL1OBJS=$(SLOFILES)
@@ -68,7 +67,7 @@ SHL1STDLIBS= \
         $(SALLIB) \
     -framework Cocoa -framework SystemConfiguration
 
-SHL1VERSIONMAP=exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
