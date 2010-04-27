@@ -353,9 +353,7 @@ PrintFontManager::PrintFont::PrintFont( fonttype::type eType ) :
         m_nXMax( 0 ),
         m_nYMax( 0 ),
         m_bHaveVerticalSubstitutedGlyphs( false ),
-        m_bUserOverride( false ),
-        m_eEmbeddedbitmap( fcstatus::isunset ),
-        m_eAntialias( fcstatus::isunset )
+        m_bUserOverride( false )
 {
 }
 
@@ -2151,10 +2149,14 @@ void PrintFontManager::initialize()
         } while( nIndex >= 0 );
     }
 
+    // protect against duplicate paths
+    std::hash_map< OString, int, OStringHash > visited_dirs;
+
     // now that all global and local font dirs are known to fontconfig
     // check that there are fonts actually managed by fontconfig
+    // also don't search directories that fontconfig already did
     if( m_bFontconfigSuccess )
-        m_bFontconfigSuccess = (countFontconfigFonts() > 0);
+        m_bFontconfigSuccess = (countFontconfigFonts( visited_dirs ) > 0);
 
     // don't search through many directories fontconfig already told us about
     if( ! m_bFontconfigSuccess )
@@ -2165,8 +2167,6 @@ void PrintFontManager::initialize()
 
     // search for font files in each path
     std::list< OString >::iterator dir_it;
-    // protect against duplicate paths
-    std::hash_map< OString, int, OStringHash > visited_dirs;
     for( dir_it = m_aFontDirectories.begin(); dir_it != m_aFontDirectories.end(); ++dir_it )
     {
         OString aPath( *dir_it );
@@ -2630,8 +2630,6 @@ void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& r
     rInfo.m_eWeight         = pFont->m_eWeight;
     rInfo.m_ePitch          = pFont->m_ePitch;
     rInfo.m_aEncoding       = pFont->m_aEncoding;
-    rInfo.m_eEmbeddedbitmap = pFont->m_eEmbeddedbitmap;
-    rInfo.m_eAntialias      = pFont->m_eAntialias;
 
     rInfo.m_bEmbeddable  = (pFont->m_eType == fonttype::Type1);
     rInfo.m_bSubsettable = (pFont->m_eType == fonttype::TrueType); // TODO: rename to SfntType
@@ -3936,8 +3934,6 @@ bool PrintFontManager::readOverrideMetrics()
         BuiltinFont* pFont = new BuiltinFont();
         pFont->m_nDirectory = 0;
         pFont->m_bUserOverride = false;
-        pFont->m_eEmbeddedbitmap = fcstatus::isunset;
-        pFont->m_eAntialias = fcstatus::isunset;
         pFont->m_pMetrics = new PrintFontMetrics;
         memset( pFont->m_pMetrics->m_aPages, 0xff, sizeof( pFont->m_pMetrics->m_aPages ) );
         pFont->m_pMetrics->m_bKernPairsQueried = true;
