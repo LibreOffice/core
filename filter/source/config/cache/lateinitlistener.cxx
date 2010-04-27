@@ -56,7 +56,7 @@ LateInitListener::LateInitListener(const css::uno::Reference< css::lang::XMultiS
     // important to do so ...
     // Otherwhise the temp. reference to ourselves
     // will kill us at realeasing time!
-    ++m_refCount;
+    osl_incrementInterlockedCount( &m_refCount );
 
     m_xBroadcaster = css::uno::Reference< css::document::XEventBroadcaster >(
         m_xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster")),
@@ -64,7 +64,7 @@ LateInitListener::LateInitListener(const css::uno::Reference< css::lang::XMultiS
 
     m_xBroadcaster->addEventListener(static_cast< css::document::XEventListener* >(this));
 
-    --m_refCount;
+    osl_decrementInterlockedCount( &m_refCount );
 }
 
 /*-----------------------------------------------
@@ -91,6 +91,16 @@ void SAL_CALL LateInitListener::notifyEvent(const css::document::EventObject& aE
 
         // SAFE ->
         ::osl::ResettableMutexGuard aLock(m_aLock);
+
+        if ( !m_xBroadcaster.is() )
+            // the beauty of multi-threading ... OnLoad can be notified synchronously or asynchronously. In particular,
+            // SFX-based documents notify it synchronously, database documents do it asynchronously.
+            // Now if multiple documents are opened "at the same time", it is well possible that we get two events from
+            // different threads, where upon the first event, we already remove ourself from m_xBroadcaster, and start
+            // the thread, nonetheless there's also a second notification "in the queue", which will arrive short
+            // thereafter.
+            // In such a case, simply ignore this second event.
+            return;
 
         m_xBroadcaster->removeEventListener(static_cast< css::document::XEventListener* >(this));
         m_xBroadcaster.clear();
