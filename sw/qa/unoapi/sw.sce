@@ -83,7 +83,7 @@
 -o sw.SwXViewSettings
 -o sw.XMLContentExporter
 #i23394 -o sw.XMLContentImporter
--o sw.XMLExporter
+#i111194-o sw.XMLExporter
 -o sw.XMLImporter
 #i23394 -o sw.XMLMetaExporter
 -o sw.XMLMetaImporter
