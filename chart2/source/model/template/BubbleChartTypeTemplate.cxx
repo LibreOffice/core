@@ -178,12 +178,6 @@ StackMode BubbleChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */
     return StackMode_NONE;
 }
 
-bool BubbleChartTypeTemplate::supportsCategories() const
-{
-    return false;
-}
-
-
 void SAL_CALL BubbleChartTypeTemplate::applyStyle(
     const Reference< chart2::XDataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
@@ -192,6 +186,7 @@ void SAL_CALL BubbleChartTypeTemplate::applyStyle(
     throw (uno::RuntimeException)
 {
     ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
+    DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "BorderStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
 
     try
     {
@@ -203,10 +198,10 @@ void SAL_CALL BubbleChartTypeTemplate::applyStyle(
 }
 
 // ____ XChartTypeTemplate ____
-Sequence< OUString > SAL_CALL BubbleChartTypeTemplate::getAvailableCreationParameterNames()
+sal_Bool SAL_CALL BubbleChartTypeTemplate::supportsCategories()
     throw (uno::RuntimeException)
 {
-    return Sequence< OUString >();
+    return false;
 }
 
 sal_Bool SAL_CALL BubbleChartTypeTemplate::matchesTemplate(

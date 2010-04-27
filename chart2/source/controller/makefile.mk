@@ -100,7 +100,7 @@ SHL1STDLIBS=	$(CHARTTOOLS)		\
 #specifies the exported symbols for Windows only:
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
-SHL1VERSIONMAP = controller.map
+SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 
 #--------definition file
 
@@ -112,6 +112,7 @@ DEF1NAME=		$(SHL1TARGET)
 # sfx.srs is needed for the strings for UNDO and REDO in the UndoCommandDispatch
 RESLIB1LIST=\
     $(SRS)$/chcdialogs.srs \
+    $(SRS)$/chcmenus.srs \
     $(SOLARCOMMONRESDIR)$/sfx.srs
 
 RESLIB1NAME=	$(TARGET)

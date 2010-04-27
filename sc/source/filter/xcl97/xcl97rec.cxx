@@ -49,6 +49,7 @@
 #include "xcl97esc.hxx"
 #include "editutil.hxx"
 #include "xecontent.hxx"
+#include "xeescher.hxx"
 #include "xestyle.hxx"
 #include "xelink.hxx"
 
@@ -86,158 +87,22 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::drawing::XShape;
 
+// ============================================================================
 
-//___________________________________________________________________
-
-// --- class XclMsodrawing_Base --------------------------------------
-
-XclMsodrawing_Base::XclMsodrawing_Base( XclEscher& rEscher, sal_Size nInitialSize )
-        :
-        pEscher( &rEscher ),
-        nStartPos( rEscher.GetEx()->GetLastOffsetMapPos() )
-{
-    // for safety's sake add this now
-    nStopPos = GetEscherEx()->AddCurrentOffsetToMap();
-    (void)nInitialSize; // avoid compiler warning
-    DBG_ASSERT( GetDataLen() == nInitialSize, "XclMsodrawing_Base ctor: do I really own that data?" );
-}
-
-
-XclMsodrawing_Base::~XclMsodrawing_Base()
-{
-}
-
-
-void XclMsodrawing_Base::UpdateStopPos()
-{
-    if ( nStopPos > 0 )
-        GetEscherEx()->ReplaceCurrentOffsetInMap( nStopPos );
-    else
-        nStopPos = GetEscherEx()->AddCurrentOffsetToMap();
-}
-
-
-sal_Size XclMsodrawing_Base::GetDataLen() const
-{
-    if ( nStartPos < nStopPos )
-    {
-        XclEscherEx* pEx = GetEscherEx();
-        return pEx->GetOffsetFromMap( nStopPos ) - pEx->GetOffsetFromMap( nStartPos );
-    }
-    DBG_ERRORFILE( "XclMsodrawing_Base::GetDataLen: position mismatch" );
-    return 0;
-}
-
-
-
-// --- class XclMsodrawinggroup --------------------------------------
-
-XclMsodrawinggroup::XclMsodrawinggroup( RootData& rRoot, UINT16 nEscherType ) :
-    XclMsodrawing_Base( *rRoot.pEscher ),
-    XclExpRecord(0x00EB, 2) // bogus record size since we don't know the actual size yet.
-{
-    if ( nEscherType )
-    {
-        XclEscherEx* pEx = GetEscherEx();
-        SvStream& rOut = pEx->GetStream();
-        switch ( nEscherType )
-        {
-            case ESCHER_DggContainer :
-            {   // per-document data
-                pEx->OpenContainer( nEscherType );
-//2do: stuff it with our own document defaults?
-#if 0
-                pEx->BeginCount();
-                pEx->AddOpt( ... );
-                pEx->EndCount( ESCHER_OPT, 3 );
-#else
-                BYTE pDummyOPT[] = {
-                    0xBF, 0x00, 0x08, 0x00, 0x08, 0x00, 0x81, 0x01,
-                    0x09, 0x00, 0x00, 0x08, 0xC0, 0x01, 0x40, 0x00,
-                    0x00, 0x08
-                };
-                pEx->AddAtom( sizeof(pDummyOPT), ESCHER_OPT, 3, 3 );
-                rOut.Write( pDummyOPT, sizeof(pDummyOPT) );
-#endif
-                BYTE pDummySplitMenuColors[] = {
-                    0x0D, 0x00, 0x00, 0x08, 0x0C, 0x00, 0x00, 0x08,
-                    0x17, 0x00, 0x00, 0x08, 0xF7, 0x00, 0x00, 0x10
-                };
-                pEx->AddAtom( sizeof(pDummySplitMenuColors), ESCHER_SplitMenuColors, 0, 4 );
-                rOut.Write( pDummySplitMenuColors, sizeof(pDummySplitMenuColors) );
-                pEx->CloseContainer();  // ESCHER_DggContainer
-            }
-            break;
-        }
-        UpdateStopPos();
-    }
-}
-
-
-XclMsodrawinggroup::~XclMsodrawinggroup()
-{
-}
-
-
-void XclMsodrawinggroup::WriteBody( XclExpStream& rStrm )
-{
-    DBG_ASSERT( GetEscherEx()->GetStreamPos() == GetEscherEx()->GetOffsetFromMap( nStartPos ),
-        "XclMsodrawinggroup::SaveCont: Escher stream position mismatch" );
-    rStrm.CopyFromStream( pEscher->GetStrm(), GetDataLen() );
-}
-
-
-// --- class XclMsodrawing --------------------------------------
-
-XclMsodrawing::XclMsodrawing( const XclExpRoot& rRoot, UINT16 nEscherType, sal_Size nInitialSize ) :
-    XclMsodrawing_Base( *rRoot.GetOldRoot().pEscher, nInitialSize ),
-    XclExpRecord( 0x00EC, nInitialSize )
-{
-    if ( nEscherType )
-    {
-        XclEscherEx* pEx = GetEscherEx();
-        switch ( nEscherType )
-        {
-            case ESCHER_DgContainer :
-            {   // per-sheet data
-                pEx->OpenContainer( nEscherType );
-                // open group shape container
-                Rectangle aRect( 0, 0, 0, 0 );
-                pEx->EnterGroup( &aRect );
-            }
-            break;
-        }
-        UpdateStopPos();
-    }
-}
-
-
-XclMsodrawing::~XclMsodrawing()
-{
-}
-
-
-void XclMsodrawing::WriteBody( XclExpStream& rStrm )
-{
-    DBG_ASSERT( GetEscherEx()->GetStreamPos() == GetEscherEx()->GetOffsetFromMap( nStartPos ),
-        "XclMsodrawing::SaveCont: Escher stream position mismatch" );
-    rStrm.CopyFromStream( pEscher->GetStrm(), GetDataLen() );
-}
-
-
-
-
-// --- class XclObjList ----------------------------------------------
-
-XclObjList::XclObjList( const XclExpRoot& rRoot ) :
+XclExpObjList::XclExpObjList( const XclExpRoot& rRoot, XclEscherEx& rEscherEx ) :
     XclExpRoot( rRoot ),
-    pMsodrawingPerSheet( new XclMsodrawing( rRoot, ESCHER_DgContainer ) ),
-    pSolverContainer( NULL )
+    mrEscherEx( rEscherEx ),
+    pSolverContainer( 0 )
 {
+    pMsodrawingPerSheet = new XclExpMsoDrawing( rEscherEx );
+    // open the DGCONTAINER and the patriarch group shape
+    mrEscherEx.OpenContainer( ESCHER_DgContainer );
+    Rectangle aRect( 0, 0, 0, 0 );
+    mrEscherEx.EnterGroup( &aRect );
+    mrEscherEx.UpdateDffFragmentEnd();
 }
 
-
-XclObjList::~XclObjList()
+XclExpObjList::~XclExpObjList()
 {
     for ( XclObj* p = First(); p; p = Next() )
         delete p;
@@ -245,10 +110,9 @@ XclObjList::~XclObjList()
     delete pSolverContainer;
 }
 
-
-UINT16 XclObjList::Add( XclObj* pObj )
+UINT16 XclExpObjList::Add( XclObj* pObj )
 {
-    DBG_ASSERT( Count() < 0xFFFF, "XclObjList::Add: too much for Xcl" );
+    DBG_ASSERT( Count() < 0xFFFF, "XclExpObjList::Add: too much for Xcl" );
     if ( Count() < 0xFFFF )
     {
         Insert( pObj, LIST_APPEND );
@@ -263,22 +127,17 @@ UINT16 XclObjList::Add( XclObj* pObj )
     }
 }
 
-
-void XclObjList::EndSheet()
+void XclExpObjList::EndSheet()
 {
-    XclEscherEx* pEx = pMsodrawingPerSheet->GetEscherEx();
-
     // Is there still something in the stream? -> The solver container
-    sal_Size nSolverSize = pEx->GetStreamPos() - pEx->GetOffsetFromMap( pEx->GetLastOffsetMapPos() );
-    if( nSolverSize > 0 )
-        pSolverContainer = new XclMsodrawing( GetRoot(), ESCHER_SolverContainer, nSolverSize );
+    if( mrEscherEx.HasPendingDffData() )
+        pSolverContainer = new XclExpMsoDrawing( mrEscherEx );
 
-    //! close ESCHER_DgContainer created by XclObjList ctor MSODRAWING
-    pEx->CloseContainer();
+    // close the DGCONTAINER created by XclExpObjList ctor MSODRAWING
+    mrEscherEx.CloseContainer();
 }
 
-
-void XclObjList::Save( XclExpStream& rStrm )
+void XclExpObjList::Save( XclExpStream& rStrm )
 {
     //! Escher must be written, even if there are no objects
     pMsodrawingPerSheet->Save( rStrm );
@@ -290,27 +149,25 @@ void XclObjList::Save( XclExpStream& rStrm )
         pSolverContainer->Save( rStrm );
 }
 
-
-
 // --- class XclObj --------------------------------------------------
 
-XclObj::XclObj( const XclExpRoot& rRoot, sal_uInt16 nObjType, bool bOwnEscher ) :
+XclObj::XclObj( XclExpObjectManager& rObjMgr, sal_uInt16 nObjType, bool bOwnEscher ) :
     XclExpRecord( EXC_ID_OBJ, 26 ),
+    mrEscherEx( rObjMgr.GetEscherEx() ),
     pClientTextbox( NULL ),
     pTxo( NULL ),
     mnObjType( nObjType ),
     nObjId(0),
     nGrbit( 0x6011 ),   // AutoLine, AutoFill, Printable, Locked
-    bFirstOnSheet( rRoot.GetOldRoot().pObjRecs->Count() == 0 ),
+    bFirstOnSheet( !rObjMgr.HasObj() ),
     mbOwnEscher( bOwnEscher )
 {
     //! first object continues the first MSODRAWING record
     if ( bFirstOnSheet )
-        pMsodrawing = rRoot.GetOldRoot().pObjRecs->GetMsodrawingPerSheet();
+        pMsodrawing = rObjMgr.GetMsodrawingPerSheet();
     else
-        pMsodrawing = new XclMsodrawing( rRoot );
+        pMsodrawing = new XclExpMsoDrawing( mrEscherEx );
 }
-
 
 XclObj::~XclObj()
 {
@@ -320,6 +177,18 @@ XclObj::~XclObj()
     delete pTxo;
 }
 
+void XclObj::ImplWriteAnchor( const XclExpRoot& /*rRoot*/, const SdrObject* pSdrObj, const Rectangle* pChildAnchor )
+{
+    if( pChildAnchor )
+    {
+        mrEscherEx.AddChildAnchor( *pChildAnchor );
+    }
+    else if( pSdrObj )
+    {
+        ::std::auto_ptr< XclExpDffAnchorBase > xDffAnchor( mrEscherEx.CreateDffAnchor( *pSdrObj ) );
+        xDffAnchor->WriteDffData( mrEscherEx );
+    }
+}
 
 void XclObj::SetEscherShapeType( UINT16 nType )
 {
@@ -350,20 +219,18 @@ void XclObj::SetEscherShapeType( UINT16 nType )
     }
 }
 
-
 void XclObj::SetText( const XclExpRoot& rRoot, const SdrTextObj& rObj )
 {
     DBG_ASSERT( !pClientTextbox, "XclObj::SetText: already set" );
     if ( !pClientTextbox )
     {
-        pMsodrawing->UpdateStopPos();
-        pClientTextbox = new XclMsodrawing( rRoot );
-        pClientTextbox->GetEscherEx()->AddAtom( 0, ESCHER_ClientTextbox );  // TXO record
-        pClientTextbox->UpdateStopPos();
+        mrEscherEx.UpdateDffFragmentEnd();
+        pClientTextbox = new XclExpMsoDrawing( mrEscherEx );
+        mrEscherEx.AddAtom( 0, ESCHER_ClientTextbox );    // TXO record
+        mrEscherEx.UpdateDffFragmentEnd();
         pTxo = new XclTxo( rRoot, rObj );
     }
 }
-
 
 void XclObj::WriteBody( XclExpStream& rStrm )
 {
@@ -392,7 +259,6 @@ void XclObj::WriteBody( XclExpStream& rStrm )
     rStrm.CopyFromStream( aMemStrm );
 }
 
-
 void XclObj::Save( XclExpStream& rStrm )
 {
     // MSODRAWING record (msofbtSpContainer)
@@ -405,7 +271,6 @@ void XclObj::Save( XclExpStream& rStrm )
     // second MSODRAWING record and TXO and CONTINUE records
     SaveTextRecs( rStrm );
 }
-
 
 void XclObj::WriteSubRecs( XclExpStream& /*rStrm*/ )
 {
@@ -421,17 +286,14 @@ void XclObj::SaveTextRecs( XclExpStream& rStrm )
         pTxo->Save( rStrm );
 }
 
-
 // --- class XclObjComment -------------------------------------------
 
-
-XclObjComment::XclObjComment( const XclExpRoot& rRoot, const Rectangle& rRect, const EditTextObject& rEditObj, SdrObject* pCaption, bool bVisible )
-            :
-            XclObj( rRoot, EXC_OBJTYPE_NOTE, true )
+XclObjComment::XclObjComment( XclExpObjectManager& rObjMgr, const Rectangle& rRect, const EditTextObject& rEditObj, SdrObject* pCaption, bool bVisible ) :
+    XclObj( rObjMgr, EXC_OBJTYPE_NOTE, true )
 {
-    ProcessEscherObj(rRoot, rRect, pCaption, bVisible);
+    ProcessEscherObj( rObjMgr.GetRoot(), rRect, pCaption, bVisible);
     // TXO
-    pTxo = new XclTxo( rRoot, rEditObj, pCaption );
+    pTxo = new XclTxo( rObjMgr.GetRoot(), rEditObj, pCaption );
 }
 
 void XclObjComment::ProcessEscherObj( const XclExpRoot& rRoot, const Rectangle& rRect, SdrObject* pCaption, const bool bVisible )
@@ -482,31 +344,29 @@ void XclObjComment::ProcessEscherObj( const XclExpRoot& rRoot, const Rectangle& 
     }
 
     nGrbit = 0;     // all off: AutoLine, AutoFill, Printable, Locked
-    XclEscherEx* pEx = pMsodrawing->GetEscherEx();
-    pEx->OpenContainer( ESCHER_SpContainer );
-    pEx->AddShape( ESCHER_ShpInst_TextBox, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
+    mrEscherEx.OpenContainer( ESCHER_SpContainer );
+    mrEscherEx.AddShape( ESCHER_ShpInst_TextBox, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
     sal_uInt32 nFlags = 0x000A0000;
     ::set_flag( nFlags, sal_uInt32(2), !bVisible );
     aPropOpt.AddOpt( ESCHER_Prop_fPrint, nFlags );                  // bool field
-    aPropOpt.Commit( pEx->GetStream() );
+    aPropOpt.Commit( mrEscherEx.GetStream() );
 
-    XclExpDffNoteAnchor( rRoot, rRect ).WriteData( *pEx);
+    XclExpDffNoteAnchor( rRoot, rRect ).WriteDffData( mrEscherEx );
 
-    pEx->AddAtom( 0, ESCHER_ClientData );                       // OBJ record
-    pMsodrawing->UpdateStopPos();
+    mrEscherEx.AddAtom( 0, ESCHER_ClientData );                        // OBJ record
+    mrEscherEx.UpdateDffFragmentEnd();
+
     //! Be sure to construct the MSODRAWING ClientTextbox record _after_ the
     //! base OBJ's MSODRAWING record Escher data is completed.
-    pClientTextbox = new XclMsodrawing( rRoot );
-    pClientTextbox->GetEscherEx()->AddAtom( 0, ESCHER_ClientTextbox );  // TXO record
-    pClientTextbox->UpdateStopPos();
-    pEx->CloseContainer();  // ESCHER_SpContainer
+    pClientTextbox = new XclExpMsoDrawing( mrEscherEx );
+    mrEscherEx.AddAtom( 0, ESCHER_ClientTextbox );    // TXO record
+    mrEscherEx.UpdateDffFragmentEnd();
+    mrEscherEx.CloseContainer();   // ESCHER_SpContainer
 }
-
 
 XclObjComment::~XclObjComment()
 {
 }
-
 
 void XclObjComment::Save( XclExpStream& rStrm )
 {
@@ -514,34 +374,32 @@ void XclObjComment::Save( XclExpStream& rStrm )
     XclObj::Save( rStrm );
 }
 
-
 // --- class XclObjDropDown ------------------------------------------
 
-XclObjDropDown::XclObjDropDown( const XclExpRoot& rRoot, const ScAddress& rPos, BOOL bFilt ) :
-        XclObj( rRoot, EXC_OBJTYPE_DROPDOWN, true ),
-        bIsFiltered( bFilt )
+XclObjDropDown::XclObjDropDown( XclExpObjectManager& rObjMgr, const ScAddress& rPos, BOOL bFilt ) :
+    XclObj( rObjMgr, EXC_OBJTYPE_DROPDOWN, true ),
+    bIsFiltered( bFilt )
 {
     SetLocked( TRUE );
     SetPrintable( FALSE );
     SetAutoFill( TRUE );
     SetAutoLine( FALSE );
     nGrbit |= 0x0100;   // undocumented
-    XclEscherEx* pEx = pMsodrawing->GetEscherEx();
-    pEx->OpenContainer( ESCHER_SpContainer );
-    pEx->AddShape( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
+    mrEscherEx.OpenContainer( ESCHER_SpContainer );
+    mrEscherEx.AddShape( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
     EscherPropertyContainer aPropOpt;
     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x01040104 ); // bool field
     aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x00080008 );      // bool field
     aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x00010000 );      // bool field
     aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x00080000 );     // bool field
     aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x000A0000 );              // bool field
-    aPropOpt.Commit( pEx->GetStream() );
+    aPropOpt.Commit( mrEscherEx.GetStream() );
 
-    XclExpDffDropDownAnchor( rRoot, rPos ).WriteData( *pEx );
+    XclExpDffDropDownAnchor( rObjMgr.GetRoot(), rPos ).WriteDffData( mrEscherEx );
 
-    pEx->AddAtom( 0, ESCHER_ClientData );                       // OBJ record
-    pMsodrawing->UpdateStopPos();
-    pEx->CloseContainer();  // ESCHER_SpContainer
+    mrEscherEx.AddAtom( 0, ESCHER_ClientData );                        // OBJ record
+    mrEscherEx.UpdateDffFragmentEnd();
+    mrEscherEx.CloseContainer();   // ESCHER_SpContainer
 
     // old size + ftSbs + ftLbsData
     AddRecSize( 24 + 20 );
@@ -567,7 +425,6 @@ void XclObjDropDown::WriteSubRecs( XclExpStream& rStrm )
             << nDropDownFlags << sal_uInt16( 20 ) << sal_uInt16( 130 );
     rStrm.EndRecord();
 }
-
 
 // --- class XclTxo --------------------------------------------------
 
@@ -725,21 +582,18 @@ sal_Size XclTxo::GetLen() const
     return 18;
 }
 
-
 // --- class XclObjOle -------------------------------------------
 
-XclObjOle::XclObjOle( const XclExpRoot& rRoot, const SdrObject& rObj ) :
-    XclObj( rRoot, EXC_OBJTYPE_PICTURE ),
+XclObjOle::XclObjOle( XclExpObjectManager& rObjMgr, const SdrObject& rObj ) :
+    XclObj( rObjMgr, EXC_OBJTYPE_PICTURE ),
     rOleObj( rObj ),
-    pRootStorage( rRoot.GetRootStorage() )
+    pRootStorage( rObjMgr.GetRoot().GetRootStorage() )
 {
 }
-
 
 XclObjOle::~XclObjOle()
 {
 }
-
 
 void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
 {
@@ -810,18 +664,16 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
     }
 }
 
-
 void XclObjOle::Save( XclExpStream& rStrm )
 {
     // content of this record
     XclObj::Save( rStrm );
 }
 
-
 // --- class XclObjAny -------------------------------------------
 
-XclObjAny::XclObjAny( const XclExpRoot& rRoot ) :
-    XclObj( rRoot, EXC_OBJTYPE_UNKNOWN )
+XclObjAny::XclObjAny( XclExpObjectManager& rObjMgr ) :
+    XclObj( rObjMgr, EXC_OBJTYPE_UNKNOWN )
 {
 }
 
@@ -845,7 +697,6 @@ void XclObjAny::Save( XclExpStream& rStrm )
     // content of this record
     XclObj::Save( rStrm );
 }
-
 
 // --- class ExcBof8_Base --------------------------------------------
 

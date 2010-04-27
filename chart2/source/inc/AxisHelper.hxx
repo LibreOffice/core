@@ -101,6 +101,9 @@ public:
     static void makeAxisInvisible( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );
     static void makeGridInvisible( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xGridProperties );
 
+    static void hideAxisIfNoDataIsAttached( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis
+                                          , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram);
+
     SAL_DLLPRIVATE static sal_Bool areAxisLabelsVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAxisProperties );
     static sal_Bool isAxisVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );
     static sal_Bool isGridVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xGridProperties );

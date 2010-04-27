@@ -46,8 +46,6 @@
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
 
-// #include <unotools/syslocale.hxx>
-
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 
@@ -197,7 +195,7 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
 
         replaceParamterInString( aCategory
             , C2U("%CATEGORYVALUE")
-            , ExplicitCategoriesProvider::getCategoryByIndex( xCooSys, nPointIndex )
+            , ExplicitCategoriesProvider::getCategoryByIndex( xCooSys, xChartModel, nPointIndex )
             );
 
         aRet = aCategory;

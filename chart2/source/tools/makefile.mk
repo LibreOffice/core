@@ -64,6 +64,7 @@ SLOFILES=	\
     $(SLO)$/DiagramHelper.obj \
     $(SLO)$/ExponentialRegressionCurveCalculator.obj \
     $(SLO)$/ImplOPropertySet.obj \
+    $(SLO)$/InternalData.obj \
     $(SLO)$/InternalDataProvider.obj \
     $(SLO)$/LabeledDataSequence.obj \
     $(SLO)$/LinearRegressionCurveCalculator.obj \
@@ -101,9 +102,6 @@ SLOFILES=	\
     $(SLO)$/ChartDebugTrace.obj \
     $(SLO)$/_serviceregistration_tools.obj \
     $(SLO)$/UncachedDataSequence.obj \
-    $(SLO)$/UndoManager.obj \
-    $(SLO)$/UndoGuard.obj \
-    $(SLO)$/ImplUndoManager.obj \
     $(SLO)$/XMLRangeHelper.obj \
     $(SLO)$/ModifyListenerHelper.obj \
     $(SLO)$/ModifyListenerCallBack.obj \

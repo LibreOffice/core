@@ -42,6 +42,7 @@
 #include <svx/hlnkitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/childwin.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -518,7 +519,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
     // removed: SID_BORDER_OBJECT (old Basic)
 
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
-//     BOOL bOle = pTabViewShell->GetViewFrame()->GetFrame()->IsInPlace();
+//     BOOL bOle = pTabViewShell->GetViewFrame()->GetFrame().IsInPlace();
 //  BOOL bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScViewData* pData       = GetViewData();
@@ -966,6 +967,29 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     if ( pDocSh && pDocSh->IsDocShared() )
                     {
                         rSet.DisableItem( nWhich );
+                    }
+                }
+                break;
+
+            case SID_SPELL_DIALOG:
+                {
+                    if ( pDoc && pData && pDoc->IsTabProtected( pData->GetTabNo() ) )
+                    {
+                        bool bVisible = false;
+                        SfxViewFrame* pViewFrame = ( pTabViewShell ? pTabViewShell->GetViewFrame() : NULL );
+                        if ( pViewFrame && pViewFrame->HasChildWindow( nWhich ) )
+                        {
+                            SfxChildWindow* pChild = pViewFrame->GetChildWindow( nWhich );
+                            Window* pWin = ( pChild ? pChild->GetWindow() : NULL );
+                            if ( pWin && pWin->IsVisible() )
+                            {
+                                bVisible = true;
+                            }
+                        }
+                        if ( !bVisible )
+                        {
+                            rSet.DisableItem( nWhich );
+                        }
                     }
                 }
                 break;

@@ -219,12 +219,6 @@ StackMode ScatterChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex *
     return StackMode_NONE;
 }
 
-bool ScatterChartTypeTemplate::supportsCategories() const
-{
-    return false;
-}
-
-
 void SAL_CALL ScatterChartTypeTemplate::applyStyle(
     const Reference< chart2::XDataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
@@ -241,6 +235,8 @@ void SAL_CALL ScatterChartTypeTemplate::applyStyle(
         DataSeriesHelper::switchSymbolsOnOrOff( xProp, m_bHasSymbols, nSeriesIndex );
         DataSeriesHelper::switchLinesOnOrOff( xProp, m_bHasLines );
         DataSeriesHelper::makeLinesThickOrThin( xProp, m_nDim==2 );
+        if( m_nDim==3 )
+            DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "BorderStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
     }
     catch( uno::Exception & ex )
     {
@@ -249,10 +245,10 @@ void SAL_CALL ScatterChartTypeTemplate::applyStyle(
 }
 
 // ____ XChartTypeTemplate ____
-Sequence< OUString > SAL_CALL ScatterChartTypeTemplate::getAvailableCreationParameterNames()
+sal_Bool SAL_CALL ScatterChartTypeTemplate::supportsCategories()
     throw (uno::RuntimeException)
 {
-    return Sequence< OUString >();
+    return sal_False;
 }
 
 sal_Bool SAL_CALL ScatterChartTypeTemplate::matchesTemplate(

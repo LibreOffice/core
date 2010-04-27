@@ -71,6 +71,7 @@
 // header for class Application
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
+#include <svx/unofill.hxx>
 
 #include <time.h>
 
@@ -100,6 +101,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <svl/languageoptions.hxx>
 #include <sot/clsids.hxx>
 
@@ -216,13 +218,15 @@ ChartView::~ChartView()
 void ChartView::impl_deleteCoordinateSystems()
 {
     //delete all coordinate systems
-    ::std::vector< VCoordinateSystem* >::const_iterator       aIter = m_aVCooSysList.begin();
-    const ::std::vector< VCoordinateSystem* >::const_iterator aEnd  = m_aVCooSysList.end();
+    ::std::vector< VCoordinateSystem* > aVectorToDeleteObjects;
+    ::std::swap( aVectorToDeleteObjects, m_aVCooSysList );//#i109770#
+    ::std::vector< VCoordinateSystem* >::const_iterator       aIter = aVectorToDeleteObjects.begin();
+    const ::std::vector< VCoordinateSystem* >::const_iterator aEnd  = aVectorToDeleteObjects.end();
     for( ; aIter != aEnd; aIter++ )
     {
         delete *aIter;
     }
-    m_aVCooSysList.clear();
+    aVectorToDeleteObjects.clear();
 }
 
 
@@ -422,6 +426,8 @@ VCoordinateSystem* addCooSysToList( std::vector< VCoordinateSystem* >& rVCooSysL
             rtl::OUString aCooSysParticle( ObjectIdentifier::createParticleForCoordinateSystem( xCooSys, xChartModel ) );
             pVCooSys->setParticle(aCooSysParticle);
 
+            pVCooSys->setExplicitCategoriesProvider( new ExplicitCategoriesProvider(xCooSys,xChartModel) );
+
             rVCooSysList.push_back( pVCooSys );
         }
     }
@@ -572,13 +578,13 @@ private:
     std::vector< VCoordinateSystem* >& m_rVCooSysList;
     ::std::map< uno::Reference< XAxis >, AxisUsage > m_aAxisUsageList;
     sal_Int32 m_nMaxAxisIndex;
-    bool m_bShiftXAxisTicks;
+    bool m_bChartTypeUsesShiftedXAxisTicksPerDefault;
 };
 
 SeriesPlotterContainer::SeriesPlotterContainer( std::vector< VCoordinateSystem* >& rVCooSysList )
         : m_rVCooSysList( rVCooSysList )
         , m_nMaxAxisIndex(0)
-        , m_bShiftXAxisTicks(false)
+        , m_bChartTypeUsesShiftedXAxisTicksPerDefault(false)
 {
 }
 
@@ -673,7 +679,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             uno::Reference< XChartType > xChartType( aChartTypeList[nT] );
 
             if(nT==0)
-                m_bShiftXAxisTicks = ChartTypeHelper::shiftTicksAtXAxisPerDefault( xChartType );
+                m_bChartTypeUsesShiftedXAxisTicksPerDefault = ChartTypeHelper::shiftTicksAtXAxisPerDefault( xChartType );
 
             VSeriesPlotter* pPlotter = VSeriesPlotter::createSeriesPlotter( xChartType, nDimensionCount );
             if( !pPlotter )
@@ -927,7 +933,9 @@ void SeriesPlotterContainer::doAutoScaling( const uno::Reference< frame::XModel 
 
             for( nC=0; nC < aVCooSysList_X.size(); nC++)
             {
-                if( m_bShiftXAxisTicks )
+                ExplicitCategoriesProvider* pExplicitCategoriesProvider = aVCooSysList_X[nC]->getExplicitCategoriesProvider();
+
+                if( m_bChartTypeUsesShiftedXAxisTicksPerDefault || (aExplicitScale.AxisType==AxisType::CATEGORY && pExplicitCategoriesProvider && pExplicitCategoriesProvider->hasComplexCategories() ) )
                     aExplicitIncrement.ShiftedPosition = true;
                 aVCooSysList_X[nC]->setExplicitScaleAndIncrement( 0, nAxisIndex, aExplicitScale, aExplicitIncrement );
             }
@@ -1773,7 +1781,8 @@ sal_Int32 lcl_getExplicitNumberFormatKeyForAxis(
                                 if(!aLabeledSeq[nLSeqIdx].is())
                                     continue;
                                 Reference< data::XDataSequence > xSeq( aLabeledSeq[nLSeqIdx]->getValues());
-                                OSL_ASSERT( xSeq.is());
+                                if(!xSeq.is())
+                                    continue;
                                 Reference< beans::XPropertySet > xSeqProp( xSeq, uno::UNO_QUERY );
                                 ::rtl::OUString aRole;
                                 bool bTakeIntoAccount =
@@ -2148,7 +2157,7 @@ void changePositionOfAxisTitle( VTitle* pVTitle, TitleAlignment eAlignment
     pVTitle->changePosition( aNewPosition );
 }
 
-std::auto_ptr<VTitle> lcl_createTitle( const uno::Reference< XTitle >& xTitle
+std::auto_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
                 , const uno::Reference< drawing::XShapes>& xPageShapes
                 , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
                 , const uno::Reference< frame::XModel >& xChartModel
@@ -2158,10 +2167,32 @@ std::auto_ptr<VTitle> lcl_createTitle( const uno::Reference< XTitle >& xTitle
                 , bool& rbAutoPosition )
 {
     std::auto_ptr<VTitle> apVTitle;
+
+    // #i109336# Improve auto positioning in chart
+    double fPercentage = lcl_getPageLayoutDistancePercentage();
+    sal_Int32 nXDistance = static_cast< sal_Int32 >( rPageSize.Width * fPercentage );
+    sal_Int32 nYDistance = static_cast< sal_Int32 >( rPageSize.Height * fPercentage );
+    if ( eType == TitleHelper::MAIN_TITLE )
+    {
+        sal_Int32 nYOffset = 135;  // 1/100 mm
+        nYDistance += nYOffset;
+    }
+    else if ( eType == TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION )
+    {
+        sal_Int32 nYOffset = 420;  // 1/100 mm
+        nYDistance = nYOffset;
+    }
+    else if ( eType == TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION )
+    {
+        sal_Int32 nXOffset = 450;  // 1/100 mm
+        nXDistance = nXOffset;
+    }
+
+    uno::Reference< XTitle > xTitle( TitleHelper::getTitle( eType, xChartModel ) );
     if(xTitle.is())
     {
         rtl::OUString aCompleteString( TitleHelper::getCompleteString( xTitle ) );
-        if( aCompleteString.getLength()==0 )
+        if ( aCompleteString.getLength() == 0 )
             return apVTitle;//don't create empty titles as the resulting diagram position is wrong then
 
         //create title
@@ -2175,8 +2206,6 @@ std::auto_ptr<VTitle> lcl_createTitle( const uno::Reference< XTitle >& xTitle
         //position
         rbAutoPosition=true;
         awt::Point aNewPosition(0,0);
-        sal_Int32 nYDistance = static_cast<sal_Int32>(rPageSize.Height*lcl_getPageLayoutDistancePercentage());
-        sal_Int32 nXDistance = static_cast<sal_Int32>(rPageSize.Width*lcl_getPageLayoutDistancePercentage());
         chart2::RelativePosition aRelativePosition;
         uno::Reference< beans::XPropertySet > xProp(xTitle, uno::UNO_QUERY);
         if( xProp.is() && (xProp->getPropertyValue( C2U( "RelativePosition" ) )>>=aRelativePosition) )
@@ -2235,6 +2264,37 @@ std::auto_ptr<VTitle> lcl_createTitle( const uno::Reference< XTitle >& xTitle
                 break;
             case ALIGN_RIGHT:
                 rRemainingSpace.Width -= ( aTitleSize.Width + nXDistance );
+                break;
+            default:
+                break;
+        }
+    }
+    else
+    {
+        // #i109336# Improve auto positioning in chart
+        switch ( eAlignment )
+        {
+            case ALIGN_TOP:
+                {
+                    rRemainingSpace.Y += nYDistance;
+                    rRemainingSpace.Height -= nYDistance;
+                }
+                break;
+            case ALIGN_BOTTOM:
+                {
+                    rRemainingSpace.Height -= nYDistance;
+                }
+                break;
+            case ALIGN_LEFT:
+                {
+                    rRemainingSpace.X += nXDistance;
+                    rRemainingSpace.Width -= nXDistance;
+                }
+                break;
+            case ALIGN_RIGHT:
+                {
+                    rRemainingSpace.Width -= nXDistance;
+                }
                 break;
             default:
                 break;
@@ -2423,6 +2483,8 @@ void ChartView::createShapes()
     {
         // /--
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        // #i12587# support for shapes in chart
+        m_pDrawModelWrapper->getSdrModel().EnableUndo( FALSE );
         m_pDrawModelWrapper->clearMainDrawPage();
         // \--
     }
@@ -2467,13 +2529,13 @@ void ChartView::createShapes()
         bool bAutoPositionDummy = true;
 
         //------------ create main title shape
-        lcl_createTitle( TitleHelper::getTitle( TitleHelper::MAIN_TITLE, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
+        lcl_createTitle( TitleHelper::MAIN_TITLE, xPageShapes, m_xShapeFactory, m_xChartModel
                     , aRemainingSpace, aPageSize, ALIGN_TOP, bAutoPositionDummy );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
 
         //------------ create sub title shape
-        lcl_createTitle( TitleHelper::getTitle( TitleHelper::SUB_TITLE, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
+        lcl_createTitle( TitleHelper::SUB_TITLE, xPageShapes, m_xShapeFactory, m_xChartModel
                     , aRemainingSpace, aPageSize, ALIGN_TOP, bAutoPositionDummy );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
@@ -2497,7 +2559,7 @@ void ChartView::createShapes()
         bool bAutoPosition_XTitle = true;
         std::auto_ptr<VTitle> apVTitle_X;
         if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 0 ) )
-            apVTitle_X = lcl_createTitle( TitleHelper::getTitle( TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
+            apVTitle_X = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, xPageShapes, m_xShapeFactory, m_xChartModel
                     , aRemainingSpace, aPageSize, ALIGN_BOTTOM, bAutoPosition_XTitle );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
@@ -2506,7 +2568,7 @@ void ChartView::createShapes()
         bool bAutoPosition_YTitle = true;
         std::auto_ptr<VTitle> apVTitle_Y;
         if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 1 ) )
-            apVTitle_Y = lcl_createTitle( TitleHelper::getTitle( TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
+            apVTitle_Y = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION, xPageShapes, m_xShapeFactory, m_xChartModel
                     , aRemainingSpace, aPageSize, ALIGN_LEFT, bAutoPosition_YTitle );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
@@ -2515,7 +2577,7 @@ void ChartView::createShapes()
         bool bAutoPosition_ZTitle = true;
         std::auto_ptr<VTitle> apVTitle_Z;
         if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 2 ) )
-            apVTitle_Z = lcl_createTitle( TitleHelper::getTitle( TitleHelper::Z_AXIS_TITLE, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
+            apVTitle_Z = lcl_createTitle( TitleHelper::Z_AXIS_TITLE, xPageShapes, m_xShapeFactory, m_xChartModel
                     , aRemainingSpace, aPageSize, ALIGN_RIGHT, bAutoPosition_ZTitle );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
@@ -2527,7 +2589,7 @@ void ChartView::createShapes()
         bool bAutoPosition_SecondXTitle = true;
         std::auto_ptr<VTitle> apVTitle_SecondX;
         if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension, 0 ) )
-            apVTitle_SecondX = lcl_createTitle( TitleHelper::getTitle( TitleHelper::SECONDARY_X_AXIS_TITLE, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
+            apVTitle_SecondX = lcl_createTitle( TitleHelper::SECONDARY_X_AXIS_TITLE, xPageShapes, m_xShapeFactory, m_xChartModel
                     , aRemainingSpace, aPageSize, bIsVertical? ALIGN_RIGHT : ALIGN_TOP, bAutoPosition_SecondXTitle );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
@@ -2536,7 +2598,7 @@ void ChartView::createShapes()
         bool bAutoPosition_SecondYTitle = true;
         std::auto_ptr<VTitle> apVTitle_SecondY;
         if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension, 1 ) )
-            apVTitle_SecondY = lcl_createTitle( TitleHelper::getTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
+            apVTitle_SecondY = lcl_createTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, xPageShapes, m_xShapeFactory, m_xChartModel
                     , aRemainingSpace, aPageSize, bIsVertical? ALIGN_TOP : ALIGN_RIGHT, bAutoPosition_SecondYTitle );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
@@ -2575,6 +2637,13 @@ void ChartView::createShapes()
         lcl_removeEmptyGroupShapes( xPageShapes );
     }
 
+    // #i12587# support for shapes in chart
+    if ( m_pDrawModelWrapper )
+    {
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        m_pDrawModelWrapper->getSdrModel().EnableUndo( TRUE );
+    }
+
 #if OSL_DEBUG_LEVEL > 0
     clock_t nEnd = clock();
     double fDuration =(double(nEnd-nStart)*1000.0)/double(CLOCKS_PER_SEC);
@@ -2597,6 +2666,12 @@ void ChartView::impl_updateView()
     if( !m_xChartModel.is() || !m_pDrawModelWrapper )
         return;
 
+    // #i12587# support for shapes in chart
+    if ( m_bSdrViewIsInEditMode )
+    {
+        return;
+    }
+
     if( m_bViewDirty && !m_bInViewUpdate )
     {
         m_bInViewUpdate = true;
@@ -2611,7 +2686,6 @@ void ChartView::impl_updateView()
                 // /--
                 ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
                 m_pDrawModelWrapper->lockControllers();
-                m_pDrawModelWrapper->updateTablesFromChartModel( m_xChartModel );
                 // \--
             }
 
@@ -2686,8 +2760,22 @@ void ChartView::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     //#i77362 change notification for changes on additional shapes are missing
     if( m_bInViewUpdate )
         return;
-    if( m_bSdrViewIsInEditMode )
-        return;
+
+    // #i12587# support for shapes in chart
+    if ( m_bSdrViewIsInEditMode && m_xChartModel.is() )
+    {
+        uno::Reference< view::XSelectionSupplier > xSelectionSupplier( m_xChartModel->getCurrentController(), uno::UNO_QUERY );
+        if ( xSelectionSupplier.is() )
+        {
+            ::rtl::OUString aSelObjCID;
+            uno::Any aSelObj( xSelectionSupplier->getSelection() );
+            aSelObj >>= aSelObjCID;
+            if ( aSelObjCID.getLength() > 0 )
+            {
+                return;
+            }
+        }
+    }
 
     const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >(&rHint);
     if( !pSdrHint )
@@ -2706,6 +2794,9 @@ void ChartView::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             bShapeChanged = true;
             break;
         case HINT_MODELCLEARED:
+            bShapeChanged = true;
+            break;
+        case HINT_ENDEDIT:
             bShapeChanged = true;
             break;
         default:
@@ -2879,6 +2970,88 @@ void SAL_CALL ChartView::removeVetoableChangeListener( const ::rtl::OUString& /*
     OSL_ENSURE(false,"not implemented");
 }
 
+// ____ XMultiServiceFactory ____
+
+Reference< uno::XInterface > ChartView::createInstance( const ::rtl::OUString& aServiceSpecifier )
+    throw (uno::Exception, uno::RuntimeException)
+{
+    SdrModel* pModel = ( m_pDrawModelWrapper ? &m_pDrawModelWrapper->getSdrModel() : NULL );
+    if ( pModel )
+    {
+        if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DashTable" ) ) == 0 )
+        {
+            if ( !m_xDashTable.is() )
+            {
+                m_xDashTable = SvxUnoDashTable_createInstance( pModel );
+            }
+            return m_xDashTable;
+        }
+        else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.GradientTable" ) ) == 0 )
+        {
+            if ( !m_xGradientTable.is() )
+            {
+                m_xGradientTable = SvxUnoGradientTable_createInstance( pModel );
+            }
+            return m_xGradientTable;
+        }
+        else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.HatchTable" ) ) == 0 )
+        {
+            if ( !m_xHatchTable.is() )
+            {
+                m_xHatchTable = SvxUnoHatchTable_createInstance( pModel );
+            }
+            return m_xHatchTable;
+        }
+        else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.BitmapTable" ) ) == 0 )
+        {
+            if ( !m_xBitmapTable.is() )
+            {
+                m_xBitmapTable = SvxUnoBitmapTable_createInstance( pModel );
+            }
+            return m_xBitmapTable;
+        }
+        else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.TransparencyGradientTable" ) ) == 0 )
+        {
+            if ( !m_xTransGradientTable.is() )
+            {
+                m_xTransGradientTable = SvxUnoTransGradientTable_createInstance( pModel );
+            }
+            return m_xTransGradientTable;
+        }
+        else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.MarkerTable" ) ) == 0 )
+        {
+            if ( !m_xMarkerTable.is() )
+            {
+                m_xMarkerTable = SvxUnoMarkerTable_createInstance( pModel );
+            }
+            return m_xMarkerTable;
+        }
+    }
+
+    return 0;
+}
+
+Reference< uno::XInterface > ChartView::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const uno::Sequence< uno::Any >& Arguments )
+    throw (uno::Exception, uno::RuntimeException)
+{
+    OSL_ENSURE( Arguments.getLength(), "ChartView::createInstanceWithArguments: arguments are ignored" );
+    (void) Arguments; // avoid warning
+    return createInstance( ServiceSpecifier );
+}
+
+uno::Sequence< ::rtl::OUString > ChartView::getAvailableServiceNames() throw (uno::RuntimeException)
+{
+    uno::Sequence< ::rtl::OUString > aServiceNames( 6 );
+
+    aServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DashTable" ) );
+    aServiceNames[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GradientTable" ) );
+    aServiceNames[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.HatchTable" ) );
+    aServiceNames[3] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.BitmapTable" ) );
+    aServiceNames[4] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.TransparencyGradientTable" ) );
+    aServiceNames[5] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.MarkerTable" ) );
+
+    return aServiceNames;
+}
 
 //.............................................................................
 } //namespace chart

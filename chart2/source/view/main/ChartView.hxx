@@ -29,7 +29,7 @@
 
 #include "chartview/ExplicitValueProvider.hxx"
 #include "ServiceMacros.hxx"
-#include <cppuhelper/implbase8.hxx>
+#include <cppuhelper/implbase9.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
 // header for class SfxListener
@@ -69,7 +69,7 @@ The view than changes to state dirty. The view can be updated with call 'update'
 The View is not responsible to handle single user events (that is instead done by the ChartWindow).
 */
 
-class ChartView : public ::cppu::WeakImplHelper8<
+class ChartView : public ::cppu::WeakImplHelper9<
     ::com::sun::star::lang::XInitialization
         , ::com::sun::star::lang::XServiceInfo
         , ::com::sun::star::datatransfer::XTransferable
@@ -82,6 +82,7 @@ class ChartView : public ::cppu::WeakImplHelper8<
         ,::com::sun::star::util::XModeChangeBroadcaster
         ,::com::sun::star::util::XUpdatable
         ,::com::sun::star::beans::XPropertySet
+        ,::com::sun::star::lang::XMultiServiceFactory
         >
         , public ExplicitValueProvider
         , private SfxListener
@@ -163,6 +164,15 @@ public:
     virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
+    //-----------------------------------------------------------------
+    // ::com::sun::star::lang::XMultiServiceFactory
+    //-----------------------------------------------------------------
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( const ::rtl::OUString& aServiceSpecifier )
+        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments(
+        const ::rtl::OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments )
+        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableServiceNames() throw (::com::sun::star::uno::RuntimeException);
 
     // for ExplicitValueProvider
     // ____ XUnoTunnel ___
@@ -205,6 +215,13 @@ private: //member
             m_xShapeFactory;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage>
             m_xDrawPage;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xDashTable;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xGradientTable;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xHatchTable;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xBitmapTable;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xTransGradientTable;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xMarkerTable;
 
     ::boost::shared_ptr< DrawModelWrapper > m_pDrawModelWrapper;
 
