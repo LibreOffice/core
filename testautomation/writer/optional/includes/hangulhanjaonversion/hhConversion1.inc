@@ -75,7 +75,7 @@ testcase tHHNoSelction_1
     Kontext "HangulHanjaConversion"
 
     '/// Press Peplace button
-    if Replace.IsEnabled then
+    if ReplaceBtn.IsEnabled then
         ReplaceBtn.Click
     else
         Warnlog "Replace button is disabled !"
@@ -140,7 +140,7 @@ testcase tHHNoSelction_2
     Kontext "HangulHanjaConversion"
 
     '/// Press Peplace button
-    if Replace.IsEnabled then
+    if ReplaceBtn.IsEnabled then
         ReplaceBtn.Click
     else
         Ignore.Click
@@ -194,7 +194,7 @@ testcase tHHNoSelction_3
     Kontext "HangulHanjaConversion"
     
     '/// Press Peplace button
-    if Replace.IsEnabled then
+    if ReplaceBtn.IsEnabled then
         ReplaceBtn.Click
     else
         Sleep 1
@@ -446,7 +446,7 @@ testcase tHHSingleSelction_1
     '/// + Press Peplace button
     ToolsLanguageHangulHanjaConversion
     Kontext "HangulHanjaConversion"
-    if Replace.IsEnabled then 
+    if ReplaceBtn.IsEnabled then 
         ReplaceBtn.Click
         Sleep 1
         try

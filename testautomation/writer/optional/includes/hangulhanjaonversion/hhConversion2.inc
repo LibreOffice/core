@@ -1328,7 +1328,7 @@ testcase tHHConversion_23
     ToolsLanguageHangulHanjaConversion
     Kontext "HangulHanjaConversion"
 	for i = 1 to 2
-	    if Replace.IsEnabled then    
+	    if ReplaceBtn.IsEnabled then    
 		    try
  	  	 	    Suggestions.Select 1
 		    catch
