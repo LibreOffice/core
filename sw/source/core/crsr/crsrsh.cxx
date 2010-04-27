@@ -392,10 +392,18 @@ BOOL SwCrsrShell::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
     else
     {
         const BOOL bSkipHidden = !GetViewOptions()->IsShowHiddenChar();
-        bRet = SetInFrontOfLabel( FALSE );
+        // --> OD 2009-12-30 #i107447#
+        // To avoid loop the reset of <bInFrontOfLabel> flag is no longer
+        // reflected in the return value <bRet>.
+        const bool bResetOfInFrontOfLabel = SetInFrontOfLabel( FALSE );
         bRet = pShellCrsr->LeftRight( bLeft, nCnt, nMode, bVisualAllowed,
-                                    bSkipHidden,
-                                   !IsOverwriteCrsr() ) || bRet;
+                                      bSkipHidden, !IsOverwriteCrsr() );
+        if ( !bRet && bLeft && bResetOfInFrontOfLabel )
+        {
+            // undo reset of <bInFrontOfLabel> flag
+            SetInFrontOfLabel( TRUE );
+        }
+        // <--
     }
 
     if( bRet )
@@ -1769,13 +1777,6 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
             }
         }
     }
-
-    //Ggf. gescrollten Bereicht korrigieren (Alignment).
-    //Nur wenn gescrollt wurde, und wenn keine Selektion existiert.
-    if( pFrm && Imp()->IsScrolled() &&
-            pShellCrsr->GetNext() == pShellCrsr && !pShellCrsr->HasMark() )
-        Imp()->RefreshScrolledArea( aCharRect );
-
 
     eMvState = MV_NONE;     // Status fuers Crsr-Travelling - GetCrsrOfst
 
