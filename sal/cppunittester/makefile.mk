@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -23,39 +23,23 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#*************************************************************************
+#***********************************************************************/
 
-PRJ=..$/..$/..
+PRJ = ..
+PRJNAME = sal
+TARGET = cppunittester
 
-PRJNAME=sal
-TARGET=qa_osl_semaphore
+ENABLE_EXCEPTIONS = TRUE
 
-ENABLE_EXCEPTIONS=TRUE
+.INCLUDE: settings.mk
 
-# --- Settings -----------------------------------------------------
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
-.INCLUDE :  settings.mk
+OBJFILES = $(APP1OBJS)
 
-CFLAGS+= $(LFS_CFLAGS)
-CXXFLAGS+= $(LFS_CFLAGS)
+APP1OBJS = $(OBJ)/cppunittester.obj
+APP1RPATH = NONE
+APP1STDLIBS = $(CPPUNITLIB) $(SALLIB)
+APP1TARGET = cppunittester
 
-# BEGIN ----------------------------------------------------------------
-# auto generated Target:Semaphore by codegen.pl
-SHL1OBJS=  \
-    $(SLO)$/osl_Semaphore.obj
-
-SHL1TARGET= osl_Semaphore
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
-
-SHL1IMPLIB= i$(SHL1TARGET)
-
-DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
-
-# auto generated Target:Semaphore
-# END ------------------------------------------------------------------
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+.INCLUDE: target.mk
