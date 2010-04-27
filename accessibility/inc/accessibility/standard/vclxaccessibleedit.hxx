@@ -53,12 +53,11 @@ class VCLXAccessibleEdit : public VCLXAccessibleTextComponent,
     friend class VCLXAccessibleBox;
 
 private:
+    sal_Int32   m_nSelectionStart;
     sal_Int32   m_nCaretPosition;
 
 protected:
     virtual ~VCLXAccessibleEdit();
-
-    void                        UpdateCaretPosition();
 
     virtual void                ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     virtual void                FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );

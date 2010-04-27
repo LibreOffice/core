@@ -310,7 +310,7 @@ IMPL_LINK ( SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, void *, EMPTYARG )
     }
 
 
-/*  uno::Reference< frame::XDispatchProvider > xProv( pViewFrame->GetFrame()->GetFrameInterface(), uno::UNO_QUERY );
+/*  uno::Reference< frame::XDispatchProvider > xProv( pViewFrame->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
     if ( xProv.is() )
     {
 !!! (pb) we need a new config item here

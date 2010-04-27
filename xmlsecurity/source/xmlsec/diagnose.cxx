@@ -39,7 +39,7 @@ namespace xmlsecurity {
 struct UseDiagnose : public rtl::StaticWithInit<
     const bool, UseDiagnose>
 {
-    const bool operator () ()
+    bool operator () () const
     {
         ::rtl::OUString value;
         sal_Bool res = rtl::Bootstrap::get(
