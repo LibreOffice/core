@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dflyobj.hxx,v $
- * $Revision: 1.11.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,8 +44,10 @@ const UINT16 SwDrawFirst            = 0x0001;
 
 class SwFlyDrawObj : public SdrObject
 {
+private:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
+protected:
     // #i95264# SwFlyDrawObj needs an own VC since createViewIndependentPrimitive2DSequence()
     // is called when RecalcBoundRect() is used
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
@@ -73,9 +72,10 @@ public:
 
 class SwVirtFlyDrawObj : public SdrVirtObj
 {
+private:
     SwFlyFrm *pFlyFrm;
 
-private:
+protected:
     // AW: Need own sdr::contact::ViewContact since AnchorPos from parent is
     // not used but something own (top left of new SnapRect minus top left
     // of original SnapRect)
@@ -100,6 +100,7 @@ public:
 
     //Wir nehemen die Groessenbehandlung vollstaendig selbst in die Hand.
     virtual const Rectangle& GetCurrentBoundRect() const;
+    virtual const Rectangle& GetLastBoundRect() const;
     virtual       void       RecalcBoundRect();
     virtual       void       RecalcSnapRect();
     virtual const Rectangle& GetSnapRect()  const;

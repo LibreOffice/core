@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewimp.hxx,v $
- * $Revision: 1.36.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +42,6 @@ class ViewShell;
 class SwFlyFrm;
 class SwViewOption;
 class SwRegionRects;
-class SwScrollAreas;
 class SwFrm;
 class SwLayAction;
 class SwLayIdle;
@@ -89,8 +85,6 @@ class SwViewImp
 
     SwPageFrm     *pFirstVisPage;//Zeigt immer auf die erste sichtbare Seite.
     SwRegionRects *pRegion;      //Sammler fuer Paintrects aus der LayAction.
-    SwScrollAreas *pScrollRects; //Sammler fuer Scrollrects aus der LayAction.
-    SwScrollAreas *pScrolledArea;//Sammler der gescrollten Rechtecke.
 
     SwLayAction   *pLayAct;      //Ist gesetzt wenn ein Action-Objekt existiert
                                  //Wird vom SwLayAction-CTor ein- und vom DTor
@@ -102,17 +96,11 @@ class SwViewImp
     mutable const SdrObject * pSdrObjCached;
     mutable String sSdrObjCachedComment;
 
-    AutoTimer     aScrollTimer;  //Fuer das Aufraeumen nach dem Scrollen.
-
     BOOL bFirstPageInvalid  :1; //Pointer auf erste Seite ungueltig?
-    BOOL bNextScroll        :1; //Scroll in der folgenden EndAction erlaubt?
-    BOOL bScroll            :1; //Scroll in der aktuellen EndAction erlaubt?
-    BOOL bScrolled          :1; //Wurde gescrolled? Dann im Idle aufraeumen.
 
     //BOOL bResetXorVisibility:1; //StartAction/EndAction
     //HMHBOOL bShowHdlPaint     :1; //LockPaint/UnlockPaint
     BOOL bResetHdlHiddenPaint:1;//  -- "" --
-    BOOL bPaintInScroll     :1; //Paint (Update() im ScrollHdl der ViewShell
 
     BOOL bSmoothUpdate      :1; //Meber fuer SmoothScroll
     BOOL bStopSmooth        :1;
@@ -146,21 +134,6 @@ class SwViewImp
     void ResetStopPrt() { bStopPrt = FALSE; }
 
     void SetFirstVisPage();     //Neue Ermittlung der ersten sichtbaren Seite
-
-    void ResetNextScroll()    { bNextScroll = FALSE; }
-    void SetNextScroll()      { bNextScroll = TRUE; }
-    void SetScroll()          { bScroll = TRUE; }
-    void ResetScrolled()      { bScrolled = FALSE; }
-    void SetScrolled()        { bScrolled = TRUE; }
-
-    SwScrollAreas *GetScrollRects() { return pScrollRects; }
-    void FlushScrolledArea();
-    BOOL _FlushScrolledArea( SwRect& rRect );
-    BOOL FlushScrolledArea( SwRect& rRect )
-    { if( !pScrolledArea ) return FALSE; return _FlushScrolledArea( rRect ); }
-    void _ScrolledRect( const SwRect& rRect, long nOffs );
-    void ScrolledRect( const SwRect& rRect, long nOffs )
-    { if( pScrolledArea ) _ScrolledRect( rRect, nOffs ); }
 
     void StartAction();         //Henkel Anzeigen und verstecken.
     void EndAction();           //gerufen von ViewShell::ImplXXXAction
@@ -227,32 +200,9 @@ public:
     inline       SwPageFrm *GetFirstVisPage();
     void SetFirstVisPageInvalid() { bFirstPageInvalid = TRUE; }
 
-    //SS'en fuer Paint- und Scrollrects.
     BOOL AddPaintRect( const SwRect &rRect );
-    void AddScrollRect( const SwFrm *pFrm, const SwRect &rRect, long nOffs );
-    void MoveScrollArea();
     SwRegionRects *GetRegion()      { return pRegion; }
-    void DelRegions();                      //Loescht Scroll- und PaintRects
-
-    //Handler fuer das Refresh von gescrollten Bereichen (Korrektur des
-    //Alignments). Ruft das Refresh mit der ScrolledArea.
-    //RefreshScrolledArea kann z.B. beim Setzen des Crsr genutzt werden, es
-    //wird nur der Anteil des Rect refreshed, der mit der ScrolledArea
-    //ueberlappt. Das 'reingereichte Rechteck wird veraendert!
-    void RestartScrollTimer()            { aScrollTimer.Start(); }
-    DECL_LINK( RefreshScrolledHdl, Timer * );
-    void _RefreshScrolledArea( const SwRect &rRect );
-    void RefreshScrolledArea( SwRect &rRect );
-
-    //Wird vom Layout ggf. waehrend einer Action gerufen, wenn der
-    //Verdacht besteht, dass es etwas drunter und drueber geht.
-    void ResetScroll()        { bScroll = FALSE; }
-
-    BOOL IsNextScroll() const { return bNextScroll; }
-    BOOL IsScroll()     const { return bScroll; }
-    BOOL IsScrolled()   const { return bScrolled; }
-
-    BOOL IsPaintInScroll() const { return bPaintInScroll; }
+    void DelRegion();
 
     // neues Interface fuer StarView Drawing
     inline BOOL HasDrawView()       const { return 0 != pDrawView; }
@@ -366,20 +316,6 @@ public:
     // Fire all accessible events that have been collected so far
     void FireAccessibleEvents();
 };
-
-//Kann auf dem Stack angelegt werden, wenn etwas ausgegeben oder
-//gescrolled wird. Handles und sontiges vom Drawing werden im CTor
-//gehidet und im DTor wieder sichtbar gemacht.
-//AW 06-Sep99: Hiding of handles is no longer necessary, removed
-//class SwSaveHdl
-//{
-//  SwViewImp *pImp;
-//  BOOL       bXorVis;
-//public:
-//  SwSaveHdl( SwViewImp *pImp );
-//  ~SwSaveHdl();
-//};
-
 
 inline SwPageFrm *SwViewImp::GetFirstVisPage()
 {

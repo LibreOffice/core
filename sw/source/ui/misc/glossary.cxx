@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: glossary.cxx,v $
- * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +50,7 @@
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <unocrsr.hxx>
 #include <unotools.hxx>
@@ -641,7 +638,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
             const SfxPoolItem* pItem;
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             SfxAbstractDialog* pMacroDlg = pFact->CreateSfxDialog( this, aSet,
-                pSh->GetView().GetViewFrame()->GetFrame()->GetFrameInterface(), SID_EVENTCONFIG );
+                pSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface(), SID_EVENTCONFIG );
             if ( pMacroDlg && pMacroDlg->Execute() == RET_OK &&
                 SFX_ITEM_SET == pMacroDlg->GetOutputItemSet()->GetItemState( RES_FRMMACRO, sal_False, &pItem ) )
             {

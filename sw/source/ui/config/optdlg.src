@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optdlg.src,v $
- * $Revision: 1.106 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -955,11 +952,11 @@ StringArray STR_PRINTOPTUI
         < "Contents"; >;
         < "Page ba~ckground"; >;
         < "Specifies whether to include colors and objects that are inserted to the background of the page (Format - Page - Background) in the printed document."; >;
-        < "~Pictures and objects"; >;
+        < "P~ictures and other graphic objects"; >;
         < "Specifies whether the graphics and drawing or OLE objects of your text document are printed"; >;
         < "Hidden te~xt"; >;
         < "Enable this option to print text that is marked as hidden."; >;
-        < "~Text placeholder"; >;
+        < "~Text placeholders"; >;
         < "Enable this option to print text placeholders. Disable this option to leave the text placeholders blank in the printout."; >;
         < "Form control~s"; >;
         < "Specifies whether the form control fields of the text document are printed"; >;
@@ -988,7 +985,7 @@ StringArray STR_PRINTOPTUI
         < "Select the Brochure option to print the document in brochure format."; >;
         < "Left-to-right script"; >;
         < "Right-to-left script"; >;
-        < "Ranges and copies"; >;
+        < "Range and copies"; >;
         < "~All pages"; >;
         < "Print the whole document."; >;
         < "Pa~ges"; >;

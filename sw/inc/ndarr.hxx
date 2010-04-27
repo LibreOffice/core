@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ndarr.hxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -136,6 +133,9 @@ protected:
 
 public:
     ~SwNodes();
+
+    typedef ::std::vector<SwNodeRange> NodeRanges_t;
+    typedef ::std::vector<NodeRanges_t> TableRanges_t;
 
     SwNodePtr operator[]( ULONG n ) const
         { return (SwNodePtr)BigPtrArray::operator[] ( n ); }
@@ -278,8 +278,11 @@ public:
                                 SwTableBoxFmt* pBoxFmt,
                                 SwTxtFmtColl* pTxtColl,
                                 SwUndoTxtToTbl* pUndo = 0 );
+
+    SwNodeRange * ExpandRangeForTableBox(const SwNodeRange & rRange);
+
     //create a table from a vector of NodeRanges - API support
-    SwTableNode* TextToTable( const std::vector< std::vector<SwNodeRange> >& rTableNodes,
+    SwTableNode* TextToTable( const TableRanges_t& rTableNodes,
                                 SwTableFmt* pTblFmt,
                                 SwTableLineFmt* pLineFmt,
                                 SwTableBoxFmt* pBoxFmt,

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unotxdoc.cxx,v $
- * $Revision: 1.134 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +35,7 @@
 #include <vcl/print.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
+#include <sfx2/docfile.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <cmdid.h>
@@ -97,9 +95,9 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/reflection/XIdlClassProvider.hpp>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svx/unofill.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <sfx2/progress.hxx>
 #include <swmodule.hxx>
 #include <docstat.hxx>
@@ -111,7 +109,7 @@
 #include <SwXDocumentSettings.hxx>
 #include <SwXPrintPreviewSettings.hxx>
 #include <doc.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
 #include <drawdoc.hxx>
 #include <SwStyleNameMapper.hxx>
@@ -125,7 +123,7 @@
 ///////////////////////////Modified on Jun. 14th//////////////////////////
 ///////////////////////for getDocumentLanguages///////////////////////////
 //-->
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <doc.hxx>
 #include <docary.hxx>      //SwCharFmts
 #include <i18npool/mslangid.hxx>
@@ -147,8 +145,8 @@
 #include <set>
 #include <vector>
 
-#include <svx/eeitem.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/svdoutl.hxx>
 #include <svl/languageoptions.hxx>
 #include <svx/svdview.hxx>
@@ -223,7 +221,6 @@ void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell* pDocShell )
 {
     // check if the view frame still exists
     SfxViewFrame* pFound = SfxViewFrame::GetFirst( pDocShell,
-                                0,
                                 FALSE );
     while(pFound)
     {
@@ -234,7 +231,6 @@ void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell* pDocShell )
         }
         pFound = SfxViewFrame::GetNext( *pFound,
                                 pDocShell,
-                                0,
                                 FALSE );
     }
 }
@@ -1226,7 +1222,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(IsValid())
     {
-        SfxViewFrame* pFrame = SfxViewFrame::CreateViewFrame( *pDocShell, 7, sal_True );
+        SfxViewFrame* pFrame = SfxViewFrame::LoadHiddenDocument( *pDocShell, 7 );
         SfxRequest aReq(FN_PRINT_PAGEPREVIEW, SFX_CALLMODE_SYNCHRON,
                                     pDocShell->GetDoc()->GetAttrPool());
             aReq.AppendItem(SfxBoolItem(FN_PRINT_PAGEPREVIEW, sal_True));
@@ -2414,7 +2410,7 @@ void SwXTextDocument::updateLinks(  ) throw(RuntimeException)
     if(!IsValid())
         throw RuntimeException();
     SwDoc* pDoc = pDocShell->GetDoc();
-      SvxLinkManager& rLnkMan = pDoc->GetLinkManager();
+      sfx2::LinkManager& rLnkMan = pDoc->GetLinkManager();
     if( rLnkMan.GetLinks().Count() )
     {
         UnoActionContext aAction(pDoc);
@@ -2701,7 +2697,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             if (!pWrtShell)
             {
                 //create a hidden view to be able to export as PDF also in print preview
-                m_pHiddenViewFrame = SfxViewFrame::CreateViewFrame( *pRenderDocShell, 2, TRUE );
+                m_pHiddenViewFrame = SfxViewFrame::LoadHiddenDocument( *pRenderDocShell, 2 );
                 SwView* pSwView = (SwView*) m_pHiddenViewFrame->GetViewShell();
                 pWrtShell = pSwView->GetWrtShellPtr();
             }
@@ -2714,6 +2710,8 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             const TypeId aSwViewTypeId = TYPE(SwView);
             if (pView->IsA(aSwViewTypeId))
             {
+                if (m_pRenderData && m_pRenderData->NeedNewViewOptionAdjust( *pWrtShell ) )
+                    m_pRenderData->ViewOptionAdjustStop();
                 if (m_pRenderData && !m_pRenderData->IsViewOptionAdjust())
                     m_pRenderData->ViewOptionAdjustStart( *pWrtShell, *pWrtShell->GetViewOptions() );
             }
@@ -2816,6 +2814,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     m_pPrintUIOptions->processProperties( rxOptions );
     const bool bPrintProspect    = m_pPrintUIOptions->getBoolValue( "PrintProspect", false );
     const bool bIsSkipEmptyPages = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
+    const bool bPrintPaperFromSetup = m_pPrintUIOptions->getBoolValue( "PrintPaperFromSetup", false );
 
     SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
     DBG_ASSERT( pDoc && pView, "doc or view shell missing!" );
@@ -2843,7 +2842,21 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     uno::Sequence< beans::PropertyValue > aRenderer;
     if (m_pRenderData)
     {
+        const USHORT nPage = nRenderer + 1;
+
+        // get paper tray to use ...
+        sal_Int32 nPrinterPaperTray = -1;
+        if (! bPrintPaperFromSetup)
+        {
+            // ... from individual page style (see the page tab in Format/Page dialog)
+            const std::map< sal_Int32, sal_Int32 > &rPaperTrays = m_pRenderData->GetPrinterPaperTrays();
+            std::map< sal_Int32, sal_Int32 >::const_iterator aIt( rPaperTrays.find( nPage ) );
+            if (aIt != rPaperTrays.end())
+                nPrinterPaperTray = aIt->second;
+        }
+
         awt::Size aPageSize;
+        awt::Size aPreferredPageSize;
         Size aTmpSize;
         if (bIsSwSrcView || bPrintProspect)
         {
@@ -2861,36 +2874,49 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
             Printer *pPrinter = dynamic_cast< Printer * >(lcl_GetOutputDevice( *m_pPrintUIOptions ));
             if (pPrinter)
             {
+                // HTML source view and prospect adapt to the printer's paper size
+                aTmpSize = pPrinter->GetPaperSize();
+                aTmpSize = pPrinter->LogicToLogic( aTmpSize,
+                            pPrinter->GetMapMode(), MapMode( MAP_100TH_MM ));
+                aPageSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
                 if (bPrintProspect)
                 {
-                    aTmpSize = pDoc->GetPageSize( USHORT(nRenderer + 1), bIsSkipEmptyPages );
                     // we just state what output size we would need
-                    // the rest is nowadays up to vcl
-                    aPageSize = awt::Size ( TWIP_TO_MM100( 2 * aTmpSize.Width() ),
-                                            TWIP_TO_MM100( aTmpSize.Height() ));
-                }
-                else
-                {
-                    // printing HTML source view
-                    aTmpSize = pPrinter->GetPaperSize();
-                    aTmpSize = pPrinter->LogicToLogic( aTmpSize,
-                                pPrinter->GetMapMode(), MapMode( MAP_100TH_MM ));
-                    aPageSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
+                    // which may cause vcl to set that page size on the printer
+                    // (if available and not overriden by the user)
+                    aTmpSize = pDoc->GetPageSize( nPage, bIsSkipEmptyPages );
+                    aPreferredPageSize = awt::Size ( TWIP_TO_MM100( 2 * aTmpSize.Width() ),
+                                                     TWIP_TO_MM100( aTmpSize.Height() ));
                 }
             }
         }
         else
         {
-            aTmpSize = pDoc->GetPageSize( USHORT(nRenderer + 1), bIsSkipEmptyPages );
+            aTmpSize = pDoc->GetPageSize( nPage, bIsSkipEmptyPages );
             aPageSize = awt::Size ( TWIP_TO_MM100( aTmpSize.Width() ),
                                     TWIP_TO_MM100( aTmpSize.Height() ));
         }
 
+        sal_Int32 nLen = 2;
         aRenderer.realloc(2);
         aRenderer[0].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
         aRenderer[0].Value <<= aPageSize;
         aRenderer[1].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageIncludesNonprintableArea" ) );
         aRenderer[1].Value <<= sal_True;
+        if (aPreferredPageSize.Width && aPreferredPageSize.Height)
+        {
+            ++nLen;
+            aRenderer.realloc( nLen );
+            aRenderer[ nLen - 1 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PreferredPageSize" ) );
+            aRenderer[ nLen - 1 ].Value <<= aPreferredPageSize;
+        }
+        if (nPrinterPaperTray >= 0)
+        {
+            ++nLen;
+            aRenderer.realloc( nLen );
+            aRenderer[ nLen - 1 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PrinterPaperTray" ) );
+            aRenderer[ nLen - 1 ].Value <<= nPrinterPaperTray;
+        }
     }
 
     m_pPrintUIOptions->appendPrintUIOptions( aRenderer );
@@ -2911,7 +2937,7 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
     SwView          *pSwView = 0;
     SwPagePreView   *pSwPagePreView = 0;
     SwSrcView       *pSwSrcView = 0;
-    SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( pDocShell, 0, sal_False );
+    SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( pDocShell, sal_False );
 
     // look for the view shell with the same controller in use,
     // otherwise look for a suitable view, preferably a SwView,
@@ -2930,7 +2956,7 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
         }
         else if (pSwView || pSwSrcView)
             break;
-        pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell, 0, sal_False );
+        pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell,  sal_False );
     }
 
     DBG_ASSERT( pSwView || pSwPagePreView || pSwSrcView, "failed to get view shell" );
@@ -3078,6 +3104,12 @@ void SAL_CALL SwXTextDocument::render(
                         {
                             lcl_DisposeView( m_pHiddenViewFrame, pDocShell );
                             m_pHiddenViewFrame = 0;
+
+                            // prevent crash described in #i108805
+                            SwDocShell *pRenderDocShell = pDoc->GetDocShell();
+                            SfxItemSet *pSet = pRenderDocShell->GetMedium()->GetItemSet();
+                            pSet->Put( SfxBoolItem( SID_HIDDEN, sal_False ) );
+
                         }
                     }
                 }

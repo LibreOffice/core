@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh2.cxx,v $
- * $Revision: 1.103.144.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,11 +61,11 @@
 #include <svx/svxids.hrc>
 #endif
 #include <svx/drawitem.hxx>
-#include <svx/svxacorr.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/svxacorr.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/fmshell.hxx>
 
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <svx/ofaitem.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <sfx2/app.hxx>
@@ -123,7 +120,7 @@
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <SwStyleNameMapper.hxx>
 
 #include <sfx2/fcontnr.hxx>
@@ -679,7 +676,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         bOnly = FALSE;
                     else if( IS_TYPE( SwPagePreView, pTmpFrm->GetViewShell()))
                     {
-                        pTmpFrm->GetFrame()->Appear();
+                        pTmpFrm->GetFrame().Appear();
                         bFound = TRUE;
                     }
                     if( bFound && !bOnly )
@@ -1030,7 +1027,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 else
                 {
                     // Neues Dokument erzeugen.
-                    SfxViewFrame *pFrame = SfxViewFrame::CreateViewFrame( *xDocSh, 0 );
+                    SfxViewFrame *pFrame = SfxViewFrame::LoadDocument( *xDocSh, 0 );
                     SwView      *pCurrView = (SwView*) pFrame->GetViewShell();
 
                     // Dokumenttitel setzen
@@ -1172,18 +1169,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
             }
             break;
 
-        case SID_MAIL_PREPAREEXPORT:
-            {
-                //pWrtShell is not set in page preview
-                if(pWrtShell)
-                    pWrtShell->StartAllAction();
-                pDoc->UpdateFlds( NULL, false );
-                pDoc->EmbedAllLinks();
-                pDoc->RemoveInvisibleContent();
-                if(pWrtShell)
-                    pWrtShell->EndAllAction();
-            }
-            break;
         case SID_MAIL_EXPORT_FINISHED:
         {
                 if(pWrtShell)
@@ -1769,15 +1754,15 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* _pView )
 
         // Currently there can be only one view (layout) if the document is viewed in Web layout
         // So if there are more views we are in print layout and for toggling to Web layout all other views must be closed
-        SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, 0, FALSE);
+        SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, FALSE);
         do {
             if( pTmpFrm != pTempView->GetViewFrame() )
             {
                 pTmpFrm->DoClose();
-                pTmpFrm = SfxViewFrame::GetFirst(this, 0, FALSE);
+                pTmpFrm = SfxViewFrame::GetFirst(this, FALSE);
             }
             else
-                pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this, 0, FALSE);
+                pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this, FALSE);
 
         } while ( pTmpFrm );
 

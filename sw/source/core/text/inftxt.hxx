@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: inftxt.hxx,v $
- * $Revision: 1.60 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +42,7 @@
 #include "txtfrm.hxx"
 #include "ndtxt.hxx"
 #include "txttypes.hxx"
-#include <svx/paravertalignitem.hxx>
+#include <editeng/paravertalignitem.hxx>
 
 class Font;
 class OutputDevice;
@@ -211,6 +208,8 @@ protected:
     sal_Bool bURLNotify : 1;
     sal_Bool bStopUnderFlow : 1;// Underflow gestoppt z.B. von einer FlyPortion
     sal_Bool bFtnInside : 1;    // the current line contains a footnote
+    sal_Bool bOtherThanFtnInside : 1; // the current line contains another portion than a footnote portion.
+                                      // needed for checking keep together of footnote portion with previous portion
     sal_Bool bMulti : 1;        // inside a multiportion
     sal_Bool bFirstMulti : 1;   // this flag is used for two purposes:
                                 // - the multiportion is the first lineportion
@@ -254,6 +253,8 @@ public:
     inline void SetStopUnderFlow( const sal_Bool bNew ) { bStopUnderFlow = bNew; }
     inline sal_Bool IsFtnInside() const { return bFtnInside; }
     inline void SetFtnInside( const sal_Bool bNew ) { bFtnInside = bNew; }
+    inline sal_Bool IsOtherThanFtnInside() const { return bOtherThanFtnInside; }
+    inline void SetOtherThanFtnInside( const sal_Bool bNew ) { bOtherThanFtnInside = bNew; }
     inline sal_Bool IsMulti() const { return bMulti; }
     inline void SetMulti( const sal_Bool bNew ) { bMulti = bNew; }
     inline sal_Bool IsFirstMulti() const { return bFirstMulti; }

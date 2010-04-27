@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: layact.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,14 +105,8 @@ class SwLayAction
     // OD 14.04.2003 #106346# - new flag for content formatting on interrupt.
     sal_Bool    mbFormatCntntOnInterrupt;
 
-    // --> OD 2004-06-14 #i28701# - new flag, indicating, if scrolling is
-    // allowed during page format
-    bool mbScrollingAllowed;
-
 #ifdef _LAYACT_CXX
 
-    void _AddScrollRect( const SwCntntFrm *, const SwPageFrm *,
-                         const SwTwips, const SwTwips );
     void PaintCntnt( const SwCntntFrm *, const SwPageFrm *,
                      const SwRect &rOldRect, long nOldBottom );
     BOOL PaintWithoutFlys( const SwRect &, const SwCntntFrm *,

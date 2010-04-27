@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swparrtf.hxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,9 +43,9 @@
 #define _SVSTDARR_BOOLS
 #include <svl/svstdarr.hxx>
 #endif
-#include <svx/svxrtf.hxx>
-#include <svx/numitem.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/svxrtf.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <redline.hxx>
 #ifndef __SGI_STL_ALGORITHM
 #include <algorithm>

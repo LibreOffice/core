@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmlsect.cxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,9 +39,9 @@
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
-#include <svx/adjitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <svtools/htmltokn.h>
 #ifndef _HTMLKYWD_H
 #include <svtools/htmlkywd.hxx>

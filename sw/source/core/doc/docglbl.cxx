@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docglbl.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -322,7 +319,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                         pDoc->GetSpzFrmFmts()->Count() )
                     {
                         /* SfxViewFrame* pFrame = */
-                            SfxViewFrame::CreateViewFrame( *xDocSh, 0, TRUE );
+                            SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
                     }
                     xDocSh->DoSaveAs( *pTmpMed );
                     xDocSh->DoSaveCompleted( pTmpMed );
@@ -669,7 +666,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                         pDoc->GetSpzFrmFmts()->Count() )
                     {
                         /* SfxViewFrame* pFrame = */
-                            SfxViewFrame::CreateViewFrame( *xDocSh, 0, TRUE );
+                            SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
                     }
                     xDocSh->DoSaveAs( *pTmpMed );
                     xDocSh->DoSaveCompleted( pTmpMed );

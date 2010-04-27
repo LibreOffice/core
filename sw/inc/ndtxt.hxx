@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ndtxt.hxx,v $
- * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -492,6 +489,10 @@ public:
        @retval FALSE  else
      */
     BOOL GetFirstLineOfsWithNum( short& rFirstOffset ) const;
+
+    // --> OD 2010-01-05 #b6884103#
+    SwTwips GetAdditionalIndentForStartingNewList() const;
+    // <--
 
     // --> OD 2008-12-02 #i96772#
     void ClearLRSpaceItemDueToListLevelIndents( SvxLRSpaceItem& o_rLRSpaceItem ) const;

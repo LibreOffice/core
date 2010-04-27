@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: numfmtlb.cxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <hintids.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <i18npool/lang.h>
 #ifndef _ZFORMAT_HXX //autogen
@@ -438,7 +435,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
         DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
         SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( this, aCoreSet,
-            GetView()->GetViewFrame()->GetFrame()->GetFrameInterface(),
+            GetView()->GetViewFrame()->GetFrame().GetFrameInterface(),
             RC_DLG_SWNUMFMTDLG );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
 

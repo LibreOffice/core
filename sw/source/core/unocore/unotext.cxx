@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unotext.cxx,v $
- * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1888,6 +1885,26 @@ void SwXText::Impl::ConvertCell(
     {
         throw lang::IllegalArgumentException();
     }
+
+    SwNodeRange aTmpRange(aStartCellPam.Start()->nNode,
+                          aEndCellPam.End()->nNode);
+    SwNodeRange * pCorrectedRange =
+        m_pDoc->GetNodes().ExpandRangeForTableBox(aTmpRange);
+
+    if (pCorrectedRange != NULL)
+    {
+        SwPaM aNewStartPaM(pCorrectedRange->aStart, 0);
+        aStartCellPam = aNewStartPaM;
+
+        xub_StrLen nEndLen = 0;
+        SwTxtNode * pTxtNode = pCorrectedRange->aEnd.GetNode().GetTxtNode();
+        if (pTxtNode != NULL)
+            nEndLen = pTxtNode->Len();
+
+        SwPaM aNewEndPaM(pCorrectedRange->aEnd, nEndLen);
+        aEndCellPam = aNewEndPaM;
+    }
+
     /** check the nodes between start and end
         it is allowed to have pairs of StartNode/EndNodes
      */

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: notxtfrm.cxx,v $
- * $Revision: 1.43.54.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,8 +41,8 @@
 #include <sfx2/progress.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/xoutbmp.hxx>
 #include <vcl/window.hxx>
 #include <fmturl.hxx>
@@ -297,14 +294,6 @@ void SwNoTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/
        !pSh->GetWin() )
     // <--
         StopAnimation();
-
-    if ( pSh->Imp()->IsPaintInScroll() && pSh->GetWin() && rRect != Frm() &&
-         HasAnimation() )
-    {
-        pSh->GetWin()->Invalidate( Frm().SVRect() );
-        return;
-    }
-
 
     SfxProgress::EnterLock(); //Keine Progress-Reschedules im Paint (SwapIn)
 
@@ -802,6 +791,7 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 
 void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInArea, OutputDevice* pOut )
 {
+
     if(!pOut)
         return;
     Rectangle aPxRect = pOut->LogicToPixel( rInArea.SVRect() );
@@ -868,7 +858,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         //this might be a good idea for all other OLE objects also,
         //but as I cannot oversee the consequences I fix it only for charts for now
         lcl_correctlyAlignRect( aAlignedGrfArea, rGrfArea, pOut );
-     }
+    }
 
     if( pGrfNd )
     {
@@ -916,8 +906,9 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             else if( rGrfObj.IsCached( pOut, aAlignedGrfArea.Pos(),
                                     aAlignedGrfArea.SSize(), &aGrfAttr ))
             {
-                rGrfObj.Draw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
-                                &aGrfAttr );
+                rGrfObj.DrawWithPDFHandling( *pOut,
+                                             aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
+                                             &aGrfAttr );
                 bContinue = FALSE;
             }
         }
@@ -956,8 +947,9 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                                         0, GRFMGR_DRAW_STANDARD, pVout );
                 }
                 else
-                    rGrfObj.Draw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
-                                    &aGrfAttr );
+                    rGrfObj.DrawWithPDFHandling( *pOut,
+                                                 aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
+                                                 &aGrfAttr );
             }
             else
             {

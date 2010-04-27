@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtfrm.cxx,v $
- * $Revision: 1.108.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,12 +32,12 @@
 #include <svl/ctloptions.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/sfxuno.hxx>
-#include <svx/langitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/pgrditem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/pgrditem.hxx>
 #include <swmodule.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <doc.hxx>      // GetDoc()
@@ -631,23 +628,34 @@ void SwTxtFrm::HideAndShowObjects()
  *************************************************************************/
 
 xub_StrLen SwTxtFrm::FindBrk( const XubString &rTxt,
-                          const xub_StrLen nStart, const xub_StrLen nEnd ) const
+                              const xub_StrLen nStart,
+                              const xub_StrLen nEnd ) const
 {
-    xub_StrLen nFound = nStart;
+    // --> OD 2009-12-28 #i104291# - applying patch to avoid overflow.
+    unsigned long nFound = nStart;
     const xub_StrLen nEndLine = Min( nEnd, rTxt.Len() );
 
     // Wir ueberlesen erst alle Blanks am Anfang der Zeile (vgl. Bug 2235).
-    while( nFound <= nEndLine && ' ' == rTxt.GetChar( nFound ) )
-         ++nFound;
+    while( nFound <= nEndLine &&
+           ' ' == rTxt.GetChar( static_cast<xub_StrLen>(nFound) ) )
+    {
+         nFound++;
+    }
 
     // Eine knifflige Sache mit den TxtAttr-Dummy-Zeichen (hier "$"):
     // "Dr.$Meyer" am Anfang der zweiten Zeile. Dahinter ein Blank eingegeben
     // und das Wort rutscht nicht in die erste Zeile, obwohl es ginge.
     // Aus diesem Grund nehmen wir das Dummy-Zeichen noch mit.
-    while( nFound <= nEndLine && ' ' != rTxt.GetChar( nFound ) )
-        ++nFound;
+    while( nFound <= nEndLine &&
+           ' ' != rTxt.GetChar( static_cast<xub_StrLen>(nFound) ) )
+    {
+        nFound++;
+    }
 
-    return nFound;
+    return nFound <= STRING_LEN
+           ? static_cast<xub_StrLen>(nFound)
+           : STRING_LEN;
+    // <--
 }
 
 /*************************************************************************

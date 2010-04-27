@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mmoutputpage.cxx,v $
- * $Revision: 1.23.136.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,8 +48,8 @@
 #include <IDocumentDeviceAccess.hxx>
 #endif
 #include <hintids.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/ehdl.hxx>
@@ -90,7 +87,7 @@
 #include <swunohelper.hxx>
 #include <vos/mutex.hxx>
 #include <shellio.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <sfx2/event.hxx>
 #include <swevent.hxx>
 #include <mmoutputpage.hrc>
@@ -695,7 +692,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveStartHdl_Impl, PushButton*, pButton)
     {
         SfxViewFrame* pSourceViewFrm = pSourceView->GetViewFrame();
         uno::Reference< frame::XFrame > xFrame =
-                pSourceViewFrm->GetFrame()->GetFrameInterface();
+                pSourceViewFrm->GetFrame().GetFrameInterface();
         xFrame->getContainerWindow()->setVisible(sal_True);
         pSourceViewFrm->GetDispatcher()->Execute(SID_SAVEDOC, SFX_CALLMODE_SYNCHRON);
         xFrame->getContainerWindow()->setVisible(sal_False);
@@ -858,8 +855,8 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             //now extract a document from the target document
             SfxObjectShellRef xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
             xTempDocShell->DoInitNew( 0 );
-            SfxViewFrame* pTempFrame = SfxViewFrame::CreateViewFrame( *xTempDocShell, 0, TRUE );
-//            pTempFrame->GetFrame()->Appear();
+            SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, 0 );
+//            pTempFrame->GetFrame().Appear();
             SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
             pTargetView->GetWrtShell().StartAction();
             SwgReaderOption aOpt;
@@ -1257,8 +1254,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         //now extract a document from the target document
         SfxObjectShellRef xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
         xTempDocShell->DoInitNew( 0 );
-        SfxViewFrame* pTempFrame = SfxViewFrame::CreateViewFrame( *xTempDocShell, 0, TRUE );
-//        pTempFrame->GetFrame()->Appear();
+        SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, 0 );
+//        pTempFrame->GetFrame().Appear();
         SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
         pTargetView->GetWrtShell().StartAction();
         SwgReaderOption aOpt;
