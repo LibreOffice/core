@@ -18551,6 +18551,7 @@ else
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: internal" >&5
 $as_echo "internal" >&6; }
     SYSTEM_MYTHES=NO
+    BUILD_TYPE="$BUILD_TYPE MYTHES"
 fi
 
 
