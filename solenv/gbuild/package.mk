@@ -25,27 +25,41 @@
 #
 #*************************************************************************
 
-GBUILDDIR := $(SOLARENV)/gbuild
-include $(GBUILDDIR)/gbuild.mk
+
+# PackagePart class
+
+$(foreach destination,$(call gb_PackagePart_get_destinations), $(destination)/%) :
+    mkdir -p $(dir $@) && cp -pf $< $@
+
+define gb_PackagePart_PackagePart
+$(OUTDIR)/$(1) : $(2) 
+endef
 
 
-include $(foreach module,\
-	framework \
-	sfx2 \
-	svl \
-	svtools \
-	xmloff \
-	sw \
-	toolkit \
-	tools \
-,$(SRCDIR)/$(module)/prj/target_module_$(module).mk)
+# Package class
 
-all : $(foreach module,$(gb_Module_ALLMODULES),$(call gb_Module_get_target,$(module)))
-	$(call gb_Helper_announce,Completed all modules.)
+.PHONY : $(call gb_Package_get_clean_target,%)
+$(call gb_Package_get_clean_target,%) :
+    $(call gb_Helper_announce,Cleaning up package $* ...)
+    -$(call gb_Helper_abbreviate_dirs,\
+        rm -f $(FILES))
 
-clean : $(foreach module,$(gb_Module_ALLMODULES),$(call gb_Module_get_clean_target,$(module)))
-	$(call gb_Helper_announce,all modules cleaned.)
+$(call gb_Package_get_target,%) :
+    $(call gb_Helper_announce,Copied all for package $* ...)
+    mkdir -p $(dir $@) && touch $@
 
-.DEFAULT_GOAL := all
+define gb_Package_Package
+gb_TARGET_PACKAGE_$(1)_SOURCEDIR := $(2)
+$(call gb_Package_get_clean_target,$(1)) : FILES := $(call gb_Package_get_target,$(1))
+
+endef
+
+define gb_Package_add_file
+$(call gb_Package_get_target,$(1)) : $(OUTDIR)/$(2)
+$(call gb_Package_get_clean_target,$(1)) : FILES += $(OUTDIR)/$(2)
+$(call gb_PackagePart_PackagePart,$(2),$$(gb_TARGET_PACKAGE_$(1)_SOURCEDIR)/$(3))
+$(OUTDIR)/$(2) : $$(gb_TARGET_PACKAGE_$(1)_SOURCEDIR)/$(3)
+
+endef
 
 # vim: set noet sw=4 ts=4:
