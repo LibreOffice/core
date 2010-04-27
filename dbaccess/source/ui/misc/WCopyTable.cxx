@@ -706,7 +706,7 @@ OCopyTableWizard::OCopyTableWizard( Window* pParent, const ::rtl::OUString& _rDe
     ::dbaui::fillTypeInfo( _xConnection, m_sTypeNames, m_aTypeInfo, m_aTypeInfoIndex );
     ::dbaui::fillTypeInfo( _xConnection, m_sTypeNames, m_aDestTypeInfo, m_aDestTypeInfoIndex );
 
-    m_xInteractionHandler.set( m_xFactory->createInstance( SERVICE_SDB_INTERACTION_HANDLER ), UNO_QUERY);
+    m_xInteractionHandler.set( m_xFactory->createInstance( SERVICE_TASK_INTERACTION_HANDLER ), UNO_QUERY);
 
     OCopyTable* pPage1( new OCopyTable( this ) );
     pPage1->disallowViews();
@@ -1101,6 +1101,7 @@ void OCopyTableWizard::insertColumn(sal_Int32 _nPos,OFieldDescription* _pField)
 
         m_aDestVec.insert(m_aDestVec.begin() + _nPos,
             m_vDestColumns.insert(ODatabaseExport::TColumns::value_type(_pField->GetName(),_pField)).first);
+        m_mNameMapping[_pField->GetName()] = _pField->GetName();
     }
 }
 // -----------------------------------------------------------------------------
@@ -1191,6 +1192,8 @@ void OCopyTableWizard::clearDestColumns()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::clearDestColumns" );
     clearColumns(m_vDestColumns,m_aDestVec);
+    m_bAddPKFirstTime = sal_True;
+    m_mNameMapping.clear();
 }
 
 // -----------------------------------------------------------------------------
