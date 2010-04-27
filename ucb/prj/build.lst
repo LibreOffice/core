@@ -14,3 +14,4 @@ uc	ucb\source\ucp\webdav		nmake	-	all	uc_webdav uc_inc NULL
 uc	ucb\source\ucp\package		nmake	-	all	uc_package uc_inc NULL
 uc	ucb\source\ucp\tdoc			nmake	-	all	uc_tdoc uc_inc NULL
 uc	ucb\source\ucp\expand		nmake	-	all	uc_expand uc_inc NULL
+uc ucb\qa\unoapi nmake - all uc_qa_unoapi NULL
