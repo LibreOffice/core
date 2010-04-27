@@ -70,8 +70,13 @@ DEF1EXPORTFILE = xsec_fw.dxp
 #
 # The 2nd shared library
 #
+
 SHL2NAME=xsec_xmlsec
 SHL2TARGET= $(SHL2NAME)
+
+
+.IF "$(ENABLE_NSS_MODULE)"=="YES" || "$(SYSTEM_MOZILLA)" == "YES"
+
 SHL2LIBS= \
     $(SLB)$/xs_comm.lib
 
@@ -82,6 +87,9 @@ SHL2LIBS += \
 SHL2LIBS += \
     $(SLB)$/xs_nss.lib
 .ENDIF
+
+.ENDIF
+
 
 SHL2STDLIBS +=			\
     $(SALLIB)			\
@@ -150,7 +158,7 @@ SHL4STDLIBS=\
                 $(XMLOFFLIB)		\
                 $(SVXCORELIB)
 
-SHL4VERSIONMAP = xmlsecurity.map
+SHL4VERSIONMAP = $(SOLARENV)/src/component.map
 SHL4DEPN=
 SHL4IMPLIB=i$(TARGET)
 SHL4DEF=$(MISC)$/$(SHL4TARGET).def
