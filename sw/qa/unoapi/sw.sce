@@ -2,7 +2,7 @@
 -o sw.ConditionalParagraphStyle
 -o sw.PageStyle
 -o sw.ParagraphStyle
--o sw.SwAccessibleDocumentPageView
+#i111197 -o sw.SwAccessibleDocumentPageView
 #i86751 -o sw.SwAccessibleDocumentView
 #i111185 -o sw.SwAccessibleEndnoteView
 -o sw.SwAccessibleFooterView
