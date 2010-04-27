@@ -637,6 +637,9 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\overlay
 ..\inc\svx\sdr\overlay\overlayselection.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlayselection.hxx
 ..\inc\svx\sdr\overlay\overlaytools.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaytools.hxx
 
+mkdir: %_DEST%\inc%_EXT%\svx\sdr\primitive2d
+..\inc\svx\sdr\primitive2d\sdrprimitivetools.hxx %_DEST%\inc%_EXT%\svx\sdr\primitive2d\sdrprimitivetools.hxx
+
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\animation
 ..\inc\svx\sdr\animation\ainfographic.hxx %_DEST%\inc%_EXT%\svx\sdr\animation\ainfographic.hxx
 ..\inc\svx\sdr\animation\ainfoscrolltext.hxx %_DEST%\inc%_EXT%\svx\sdr\animation\ainfoscrolltext.hxx

@@ -149,7 +149,8 @@ namespace sfx2
             static bool isSpecialArgumentName( const ::rtl::OUString& _rValueName )
             {
                 return  _rValueName.equalsAscii( "EmbeddedObject" )
-                    ||  _rValueName.equalsAscii( "EmbeddedScriptSupport" );
+                    ||  _rValueName.equalsAscii( "EmbeddedScriptSupport" )
+                    ||  _rValueName.equalsAscii( "DocumentRecoverySupport" );
             }
 
             bool operator()( const Any& _rArgument ) const
@@ -171,15 +172,17 @@ namespace sfx2
         ::comphelper::NamedValueCollection aArgs( _rArguments );
         const sal_Bool bEmbeddedObject = aArgs.getOrDefault( "EmbeddedObject", sal_False );
         const sal_Bool bScriptSupport = aArgs.getOrDefault( "EmbeddedScriptSupport", sal_True );
+        const sal_Bool bDocRecoverySupport = aArgs.getOrDefault( "DocumentRecoverySupport", sal_True );
 
         sal_uInt64 nCreationFlags =
                 ( bEmbeddedObject ? SFXMODEL_EMBEDDED_OBJECT : 0 )
-            |   ( bScriptSupport ? 0 : SFXMODEL_DISABLE_EMBEDDED_SCRIPTS );
+            |   ( bScriptSupport ? 0 : SFXMODEL_DISABLE_EMBEDDED_SCRIPTS )
+            |   ( bDocRecoverySupport ? 0 : SFXMODEL_DISABLE_DOCUMENT_RECOVERY );
 
         Reference< XInterface > xInstance( impl_createInstance( nCreationFlags ) );
 
         // to mimic the bahaviour of the default factory's createInstanceWithArguments, we initialize
-        // the object with the given arguments, stripped by the two special ones
+        // the object with the given arguments, stripped by the three special ones
         Sequence< Any > aStrippedArguments( _rArguments.getLength() );
         Any* pStrippedArgs = aStrippedArguments.getArray();
         Any* pStrippedArgsEnd = ::std::remove_copy_if(

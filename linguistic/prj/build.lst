@@ -3,3 +3,4 @@ lg	linguistic								usr1	-	all	lg_mkout NULL
 lg	linguistic\prj							get		-	all	lg_prj NULL
 lg	linguistic\inc							nmake	-	all	lg_inc NULL
 lg	linguistic\source						nmake	-	all	lg_src lg_inc NULL
+lg linguistic\qa\unoapi nmake - all lg_qa_unoapi NULL
