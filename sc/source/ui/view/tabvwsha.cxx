@@ -174,7 +174,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
     USHORT      nMyId       = 0;
 
     SfxViewFrame* pThisFrame = GetViewFrame();
-    BOOL bOle = GetViewFrame()->GetFrame()->IsInPlace();
+    BOOL bOle = GetViewFrame()->GetFrame().IsInPlace();
 
     SCTAB nTabCount = pDoc->GetTableCount();
     SCTAB nTabSelCount = rMark.GetSelectCount();

@@ -161,7 +161,7 @@ BOOL lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
     SCCOL nStartCol = aExternalRange.aStart.Col();
     SCROW nEndRow   = aExternalRange.aEnd.Row();
     SCCOL nEndCol   = aExternalRange.aEnd.Col();
-    pDoc->GetDataArea( aExternalRange.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow, FALSE );
+    pDoc->GetDataArea( aExternalRange.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow, FALSE, false );
     aExternalRange.aStart.SetRow( nStartRow );
     aExternalRange.aStart.SetCol( nStartCol );
     aExternalRange.aEnd.SetRow( nEndRow );
@@ -242,7 +242,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 SfxViewFrame* pViewFrame = pTabViewShell->GetViewFrame();
                 BOOL bWasOpen = FALSE;
                 {
-                    uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame()->GetFrameInterface();
+                    uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame().GetFrameInterface();
                     uno::Reference<frame::XFrame> xBeamerFrame = xFrame->findFrame(
                                                         rtl::OUString::createFromAscii("_beamer"),
                                                         frame::FrameSearchFlag::CHILDREN);

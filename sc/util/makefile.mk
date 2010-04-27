@@ -139,7 +139,7 @@ LIB4FILES=	\
 
 SHL2TARGET= scd$(DLLPOSTFIX)
 SHL2IMPLIB= scdimp
-SHL2VERSIONMAP= scd.map
+SHL2VERSIONMAP=$(SOLARENV)/src/component.map
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=		$(SHL2TARGET)
 
@@ -277,6 +277,7 @@ LIB8OBJFILES = \
         $(SLO)$/dapidata.obj	\
         $(SLO)$/crdlg.obj			\
         $(SLO)$/scuiasciiopt.obj	\
+        $(SLO)$/textimportoptions.obj	\
         $(SLO)$/scuiautofmt.obj	\
         $(SLO)$/dpgroupdlg.obj	\
         $(SLO)$/editfield.obj
@@ -287,7 +288,7 @@ TARGET_VBA=vbaobj
 SHL9TARGET=$(TARGET_VBA)$(DLLPOSTFIX).uno
 SHL9IMPLIB=	i$(TARGET_VBA)
 
-SHL9VERSIONMAP=$(TARGET_VBA).map
+SHL9VERSIONMAP=$(SOLARENV)/src/component.map
 SHL9DEF=$(MISC)$/$(SHL9TARGET).def
 DEF9NAME=$(SHL9TARGET)
 .IF "$(VBA_EXTENSION)"=="YES"
