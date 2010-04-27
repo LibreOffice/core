@@ -28,6 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_registry.hxx"
 
+#include    "regimpl.hxx"
+
 #include <memory>
 #include    <string.h>
 #include    <stdio.h>
@@ -37,18 +39,6 @@
 #endif
 #ifdef __MINGW32__
 #include    <unistd.h>
-#endif
-
-#ifdef MACOSX
-// Get the store.hxx inlines non-inline, solves crashes in cppumaker
-#define inline
-#endif
-
-#include    "regimpl.hxx"
-
-#ifdef MACOSX
-// Get the store.hxx inlines non-inline, solves crashes in cppumaker
-#undef inline
 #endif
 
 #ifndef __REGISTRY_REFLREAD_HXX__
@@ -64,19 +54,19 @@
 #include "registry/types.h"
 #include "registry/version.h"
 
-#ifndef __REFLCNST_HXX__
 #include    "reflcnst.hxx"
-#endif
 #include    "keyimpl.hxx"
+
 #include    <osl/thread.h>
 #include    <rtl/alloc.h>
 #include    <rtl/memory.h>
 #include    <rtl/ustring.hxx>
 #include    <rtl/ustrbuf.hxx>
-#ifndef _ODL_FILE_HXX_
 #include    <osl/file.hxx>
-#endif
 
+using namespace rtl;
+using namespace osl;
+using namespace store;
 
 #if defined ( GCC ) && ( defined ( SCO ) )
 sal_helper::ORealDynamicLoader* sal_helper::ODynamicLoader<RegistryTypeReader_Api>::m_pLoader = NULL;
@@ -467,11 +457,9 @@ ORegistry::ORegistry()
 //
 ORegistry::~ORegistry()
 {
-    if (m_openKeyTable.count(ROOT) > 0)
-    {
-        m_openKeyTable[ROOT]->release();
-        delete(m_openKeyTable[ROOT]);
-    }
+    ORegKey* pRootKey = m_openKeyTable[ROOT];
+    if (pRootKey != 0)
+        (void) releaseKey(pRootKey);
 
     if (m_file.isValid())
         m_file.close();
@@ -546,8 +534,7 @@ RegError ORegistry::closeRegistry()
 
     if (m_file.isValid())
     {
-        closeKey(m_openKeyTable[ROOT]);
-    m_file.flush();
+        (void) releaseKey(m_openKeyTable[ROOT]);
         m_file.close();
         m_isOpen = sal_False;
         return REG_NO_ERROR;
@@ -595,7 +582,7 @@ RegError ORegistry::destroyRegistry(const OUString& regName)
 
         if (m_file.isValid())
         {
-            closeKey(m_openKeyTable[ROOT]);
+            releaseKey(m_openKeyTable[ROOT]);
             m_file.close();
             m_isOpen = sal_False;
 
@@ -617,6 +604,39 @@ RegError ORegistry::destroyRegistry(const OUString& regName)
         }
     }
 
+    return REG_NO_ERROR;
+}
+
+//*********************************************************************
+//  acquireKey
+//
+RegError ORegistry::acquireKey (RegKeyHandle hKey)
+{
+    ORegKey* pKey = static_cast< ORegKey* >(hKey);
+    if (!pKey)
+        return REG_INVALID_KEY;
+
+    REG_GUARD(m_mutex);
+    pKey->acquire();
+
+    return REG_NO_ERROR;
+}
+
+//*********************************************************************
+//  releaseKey
+//
+RegError ORegistry::releaseKey (RegKeyHandle hKey)
+{
+    ORegKey* pKey = static_cast< ORegKey* >(hKey);
+    if (!pKey)
+        return REG_INVALID_KEY;
+
+    REG_GUARD(m_mutex);
+    if (pKey->release() == 0)
+    {
+        m_openKeyTable.erase(pKey->getName());
+        delete pKey;
+    }
     return REG_NO_ERROR;
 }
 
@@ -718,6 +738,7 @@ RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
         default:
             break;
         }
+
         std::auto_ptr< ORegKey > p(new ORegKey(path, this));
         i = m_openKeyTable.insert(std::make_pair(path, p.get())).first;
         p.release();
@@ -734,56 +755,51 @@ RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
 //
 RegError ORegistry::closeKey(RegKeyHandle hKey)
 {
-    ORegKey* pKey = (ORegKey*)hKey;
+    ORegKey* pKey = static_cast< ORegKey* >(hKey);
 
     REG_GUARD(m_mutex);
 
-    if (m_openKeyTable.count(pKey->getName()) > 0)
-    {
-        if (pKey->getRefCount() == 1)
-        {
-            m_openKeyTable.erase(pKey->getName());
-            delete(pKey);
-            hKey = NULL;
-        } else
-        {
-            pKey->release();
-        }
-
-        return REG_NO_ERROR;
-    } else
-    {
+    OUString const aKeyName (pKey->getName());
+    if (!(m_openKeyTable.count(aKeyName) > 0))
         return REG_KEY_NOT_OPEN;
-    }
-}
 
+    if (pKey->isModified())
+    {
+        ORegKey * pRootKey = getRootKey();
+        if (pKey != pRootKey)
+        {
+            // propagate "modified" state to RootKey.
+            pRootKey->setModified();
+        }
+        else
+        {
+            // closing modified RootKey, flush registry file.
+            OSL_TRACE("registry::ORegistry::closeKey(): flushing modified RootKey");
+            (void) m_file.flush();
+        }
+        pKey->setModified(false);
+        (void) releaseKey(pRootKey);
+    }
+
+    return releaseKey(pKey);
+}
 
 //*********************************************************************
 //  deleteKey
 //
 RegError ORegistry::deleteKey(RegKeyHandle hKey, const OUString& keyName)
 {
-    ORegKey*    pKey;
-    RegError    _ret = REG_NO_ERROR;
-
+    ORegKey* pKey = static_cast< ORegKey* >(hKey);
     if ( !keyName.getLength() )
-    {
         return REG_INVALID_KEYNAME;
-    }
 
     REG_GUARD(m_mutex);
 
-    if (hKey)
-        pKey = (ORegKey*)hKey;
-    else
+    if (!pKey)
         pKey = m_openKeyTable[ROOT];
 
-    OUString sFullKeyName = pKey->getFullPath(keyName);
-
-    pKey = m_openKeyTable[ROOT];
-    _ret = eraseKey(pKey, sFullKeyName);
-
-    return _ret;
+    OUString sFullKeyName(pKey->getFullPath(keyName));
+    return eraseKey(m_openKeyTable[ROOT], sFullKeyName);
 }
 
 RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
@@ -822,17 +838,15 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
             sFullPath += ROOT;
     }
 
-    RegKeyHandle    hOldKey;
-    _ret = pKey->openKey(keyName, &hOldKey);
-    if (_ret)
-    {
+    ORegKey* pOldKey = 0;
+    _ret = pKey->openKey(keyName, (RegKeyHandle*)&pOldKey);
+    if (_ret != REG_NO_ERROR)
         return _ret;
-    }
 
-    _ret = deleteSubkeysAndValues((ORegKey*)hOldKey);
-    if (_ret)
+    _ret = deleteSubkeysAndValues(pOldKey);
+    if (_ret != REG_NO_ERROR)
     {
-        pKey->closeKey(hOldKey);
+        pKey->closeKey(pOldKey);
         return _ret;
     }
 
@@ -840,47 +854,39 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
     tmpName += ROOT;
 
     OStoreFile sFile(pKey->getStoreFile());
-
     if ( sFile.isValid() && sFile.remove(sFullPath, tmpName) )
     {
         return REG_DELETE_KEY_FAILED;
     }
-    //sFile.flush();
+    pOldKey->setModified();
 
     // set flag deleted !!!
-    ((ORegKey*)hOldKey)->setDeleted(sal_True);
+    pOldKey->setDeleted(sal_True);
 
-    _ret = pKey->closeKey(hOldKey);
-    if (_ret)
-    {
-        return _ret;
-    }
-
-    return REG_NO_ERROR;
+    return pKey->closeKey(pOldKey);
 }
 
-
 //*********************************************************************
-//  deleteSubKeys
+//  deleteSubKeysAndValues
 //
 RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey)
 {
     OStoreDirectory::iterator   iter;
-    OUString                    keyName;
     RegError                    _ret = REG_NO_ERROR;
     OStoreDirectory             rStoreDir(pKey->getStoreDir());
     storeError                  _err = rStoreDir.first(iter);
 
     while ( _err == store_E_None )
     {
-        keyName = iter.m_pszName;
+        OUString const keyName = iter.m_pszName;
 
         if (iter.m_nAttrib & STORE_ATTRIB_ISDIR)
         {
             _ret = eraseKey(pKey, keyName);
             if (_ret)
                 return _ret;
-        } else
+        }
+        else
         {
             OUString sFullPath(pKey->getName());
 
@@ -891,7 +897,7 @@ RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey)
             {
                 return REG_DELETE_VALUE_FAILED;
             }
-        //((OStoreFile&)pKey->getStoreFile()).flush();
+            pKey->setModified();
         }
 
         _err = rStoreDir.next(iter);
@@ -907,119 +913,99 @@ RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey)
 RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
                             sal_Bool bWarnings, sal_Bool bReport)
 {
-    RegError        _ret = REG_NO_ERROR;
-    ORegistry*      pReg;
-    ORegKey         *pKey, *pRootKey;
+    RegError _ret = REG_NO_ERROR;
+    ORegKey* pKey = static_cast< ORegKey* >(hKey);
 
-    pReg = new ORegistry();
+    std::auto_ptr< ORegistry > pReg (new ORegistry());
     _ret = pReg->initRegistry(regFileName, REG_READONLY);
-    if (_ret)
-    {
+    if (_ret != REG_NO_ERROR)
         return _ret;
-    }
-
-    pKey = (ORegKey*)hKey;
-    pRootKey = pReg->getRootKey();
+    ORegKey* pRootKey = pReg->getRootKey();
 
     REG_GUARD(m_mutex);
 
     OStoreDirectory::iterator   iter;
-    OUString                    keyName;
     OStoreDirectory             rStoreDir(pRootKey->getStoreDir());
     storeError                  _err = rStoreDir.first(iter);
 
     while ( _err == store_E_None )
     {
-        keyName = iter.m_pszName;
+        OUString const keyName = iter.m_pszName;
 
         if ( iter.m_nAttrib & STORE_ATTRIB_ISDIR )
         {
             _ret = loadAndSaveKeys(pKey, pRootKey, keyName, 0, bWarnings, bReport);
-        } else
+        }
+        else
         {
             _ret = loadAndSaveValue(pKey, pRootKey, keyName, 0, bWarnings, bReport);
         }
 
-        if (_ret == REG_MERGE_ERROR ||
-            (_ret == REG_MERGE_CONFLICT && bWarnings))
-        {
-            rStoreDir = OStoreDirectory();
-            pRootKey->release();
-            delete(pReg);
-            return _ret;
-        }
+        if (_ret == REG_MERGE_ERROR)
+            break;
+        if (_ret == REG_MERGE_CONFLICT && bWarnings)
+            break;
 
         _err = rStoreDir.next(iter);
     }
 
     rStoreDir = OStoreDirectory();
-    pRootKey->release();
-    delete(pReg);
+    (void) pReg->releaseKey(pRootKey);
     return _ret;
 }
 
 
 //*********************************************************************
-//  loadKey
+//  saveKey
 //
 RegError ORegistry::saveKey(RegKeyHandle hKey, const OUString& regFileName,
                             sal_Bool bWarnings, sal_Bool bReport)
 {
-    RegError        _ret = REG_NO_ERROR;
-    ORegistry*      pReg;
-    ORegKey         *pKey, *pRootKey;
+    RegError _ret = REG_NO_ERROR;
+    ORegKey* pKey = static_cast< ORegKey* >(hKey);
 
-    pReg = new ORegistry();
+    std::auto_ptr< ORegistry > pReg (new ORegistry());
     _ret = pReg->initRegistry(regFileName, REG_CREATE);
-    if (_ret)
-    {
+    if (_ret != REG_NO_ERROR)
         return _ret;
-    }
-
-    pKey = (ORegKey*)hKey;
-    pRootKey = pReg->getRootKey();
+    ORegKey* pRootKey = pReg->getRootKey();
 
     REG_GUARD(m_mutex);
 
     OStoreDirectory::iterator   iter;
-    OUString                    keyName;
     OStoreDirectory             rStoreDir(pKey->getStoreDir());
     storeError                  _err = rStoreDir.first(iter);
 
     while ( _err == store_E_None )
     {
-        keyName = iter.m_pszName;
+        OUString const keyName = iter.m_pszName;
 
         if ( iter.m_nAttrib & STORE_ATTRIB_ISDIR )
         {
             _ret = loadAndSaveKeys(pRootKey, pKey, keyName,
                                    pKey->getName().getLength(),
                                    bWarnings, bReport);
-        } else
+        }
+        else
         {
             _ret = loadAndSaveValue(pRootKey, pKey, keyName,
                                     pKey->getName().getLength(),
                                     bWarnings, bReport);
         }
 
-        if (_ret)
-        {
-            pRootKey->release();
-            delete(pReg);
-            return _ret;
-        }
+        if (_ret != REG_NO_ERROR)
+            break;
 
         _err = rStoreDir.next(iter);
     }
 
-    pRootKey->release();
-    delete(pReg);
-    return REG_NO_ERROR;
+    (void) pReg->releaseKey(pRootKey);
+    return _ret;
 }
 
 
 //*********************************************************************
-//  loadValue()
+//  loadAndSaveValue()
 //
 RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
                                      ORegKey* pSourceKey,
@@ -1062,7 +1048,6 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
     {
         return REG_VALUE_NOT_EXISTS;
     }
-    //pSourceKey->getStoreFile().flush();
 
     pBuffer = (sal_uInt8*)rtl_allocateMemory(VALUE_HEADERSIZE);
 
@@ -1134,13 +1119,13 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
         rtl_freeMemory(pBuffer);
         return REG_INVALID_VALUE;
     }
-    //rTargetFile.flush();
 
     if (rwBytes != nSize)
     {
         rtl_freeMemory(pBuffer);
         return REG_INVALID_VALUE;
     }
+    pTargetKey->setModified();
 
     rtl_freeMemory(pBuffer);
     return _ret;
@@ -1354,7 +1339,7 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
 }
 
 //*********************************************************************
-//  loadKeys()
+//  loadAndSaveKeys()
 //
 RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
                                     ORegKey* pSourceKey,
@@ -1363,7 +1348,6 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
                                     sal_Bool bWarnings,
                                     sal_Bool bReport)
 {
-    ORegKey*    pTmpKey;
     RegError    _ret = REG_NO_ERROR;
     OUString    sRelPath(pSourceKey->getName().copy(nCut));
     OUString    sFullPath;
@@ -1374,11 +1358,10 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
     if (sRelPath.getLength() > 1 || sFullPath.getLength() == 0)
         sFullPath += ROOT;
 
-    OUString        sFullKeyName = sFullPath;
-    OStoreDirectory rStoreDir;
-
+    OUString sFullKeyName = sFullPath;
     sFullKeyName += keyName;
 
+    OStoreDirectory rStoreDir;
     if (rStoreDir.create(pTargetKey->getStoreFile(), sFullPath, keyName, KEY_MODE_CREATE))
     {
         return REG_CREATE_KEY_FAILED;
@@ -1389,21 +1372,18 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
         m_openKeyTable[sFullKeyName]->setDeleted(sal_False);
     }
 
-    _ret = pSourceKey->openKey(
-        keyName, (RegKeyHandle*)&pTmpKey);
-    if (_ret)
-    {
+    ORegKey* pTmpKey = 0;
+    _ret = pSourceKey->openKey(keyName, (RegKeyHandle*)&pTmpKey);
+    if (_ret != REG_NO_ERROR)
         return _ret;
-    }
 
     OStoreDirectory::iterator   iter;
-    OUString                    sName;
     OStoreDirectory             rTmpStoreDir(pTmpKey->getStoreDir());
     storeError                  _err = rTmpStoreDir.first(iter);
 
     while ( _err == store_E_None)
     {
-        sName = iter.m_pszName;
+        OUString const sName = iter.m_pszName;
 
         if (iter.m_nAttrib & STORE_ATTRIB_ISDIR)
         {
@@ -1415,17 +1395,15 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
                                     sName, nCut, bWarnings, bReport);
         }
 
-        if (_ret == REG_MERGE_ERROR ||
-            (_ret == REG_MERGE_CONFLICT && bWarnings))
-        {
-            pSourceKey->closeKey(pTmpKey);
-            return _ret;
-        }
+        if (_ret == REG_MERGE_ERROR)
+            break;
+        if (_ret == REG_MERGE_CONFLICT && bWarnings)
+            break;
 
         _err = rTmpStoreDir.next(iter);
     }
 
-    pSourceKey->closeKey(pTmpKey);
+    pSourceKey->releaseKey(pTmpKey);
     return _ret;
 }
 
@@ -1478,21 +1456,6 @@ RegError ORegistry::dumpRegistry(RegKeyHandle hKey) const
 
     return REG_NO_ERROR;
 }
-
-RegError ORegistry::flush()
-{
-    REG_GUARD(m_mutex);
-
-    if (m_file.isValid())
-    {
-        m_file.flush();
-        return REG_NO_ERROR;
-    } else
-    {
-        return REG_REGISTRY_NOT_EXISTS;
-    }
-}
-
 
 //*********************************************************************
 //  dumpValue()

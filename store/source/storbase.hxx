@@ -553,13 +553,6 @@ struct PageData
 
     /** guard (external representation).
      */
-    void guard()
-    {
-        sal_uInt32 nCRC32 = 0;
-        nCRC32 = rtl_crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
-        nCRC32 = rtl_crc32 (nCRC32, &m_aDescr, theSize - sizeof(G));
-        m_aGuard.m_nCRC32 = store::htonl(nCRC32);
-    }
     void guard (sal_uInt32 nAddr)
     {
         sal_uInt32 nCRC32 = 0;
@@ -571,16 +564,6 @@ struct PageData
 
     /** verify (external representation).
      */
-    storeError verify() const
-    {
-        sal_uInt32 nCRC32 = 0;
-        nCRC32 = rtl_crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
-        nCRC32 = rtl_crc32 (nCRC32, &m_aDescr, theSize - sizeof(G));
-        if (m_aGuard.m_nCRC32 != store::htonl(nCRC32))
-            return store_E_InvalidChecksum;
-        else
-            return store_E_None;
-    }
     storeError verify (sal_uInt32 nAddr) const
     {
         sal_uInt32 nCRC32 = 0;
