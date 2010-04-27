@@ -11,7 +11,7 @@
 -o forms.ODateModel
 -o forms.OEditControl
 -o forms.OEditModel
--o forms.OFileControlModel
+#i109939 -o forms.OFileControlModel
 -o forms.OFixedTextModel
 -o forms.OFormattedControl
 -o forms.OFormattedFieldWrapper
