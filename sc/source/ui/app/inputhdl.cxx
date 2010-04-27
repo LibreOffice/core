@@ -919,7 +919,7 @@ void ScInputHandler::ShowTipBelow( const String& rText )
         }
         aPos = pWin->OutputToScreenPixel( aPos );
         Rectangle aRect( aPos, aPos );
-        USHORT nAlign = QUICKHELP_LEFT | QUICKHELP_TOP;
+        USHORT nAlign = QUICKHELP_LEFT | QUICKHELP_TOP | QUICKHELP_NOEVADEPOINTER;
         nTipVisibleSec = Help::ShowTip(pWin, aRect, rText, nAlign);
     }
 }
