@@ -518,7 +518,7 @@ namespace dbp
     //---------------------------------------------------------------------
     Reference< XInteractionHandler > OControlWizard::getInteractionHandler(Window* _pWindow) const
     {
-        const ::rtl::OUString sInteractionHandlerServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.InteractionHandler");
+        const ::rtl::OUString sInteractionHandlerServiceName = ::rtl::OUString::createFromAscii("com.sun.star.task.InteractionHandler");
         Reference< XInteractionHandler > xHandler;
         try
         {
