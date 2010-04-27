@@ -120,6 +120,7 @@ namespace svt { namespace table
     bool            m_bResizing;
     ColPos          m_nResizingColumn;
     bool            m_bResizingGrid;
+    rtl::OUString   m_aTooltipText;
 
 #if DBG_UTIL
     #define INV_SCROLL_POSITION     1

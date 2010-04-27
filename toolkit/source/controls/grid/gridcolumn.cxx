@@ -61,6 +61,8 @@ GridColumn::GridColumn()
 ,index(0)
 ,columnWidth(4)
 ,preferredWidth(0)
+,maxWidth(0)
+,minWidth(0)
 ,bResizeable(true)
 ,horizontalAlign(HorizontalAlignment(0))
 {
