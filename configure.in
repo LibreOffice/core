@@ -5109,6 +5109,7 @@ if test -n "$with_system_mythes" && test "$with_system_mythes" != "no"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_MYTHES=NO
+    BUILD_TYPE="$BUILD_TYPE MYTHES"
 fi
 AC_SUBST(SYSTEM_MYTHES)
 AC_SUBST(MYTHES_CFLAGS)
