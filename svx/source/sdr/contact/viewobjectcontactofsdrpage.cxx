@@ -320,6 +320,12 @@ namespace sdr
                 return false;
             }
 
+            // no page shadow for high contrast mode
+            if(GetObjectContact().isDrawModeHighContrast())
+            {
+                return false;
+            }
+
             return true;
         }
     } // end of namespace contact
