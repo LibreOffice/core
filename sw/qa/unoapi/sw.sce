@@ -12,8 +12,8 @@
 -o sw.SwAccessibleParagraphView
 -o sw.SwAccessibleTableCellView
 #i85634 -o sw.SwAccessibleTableView
--o sw.SwAccessibleTextEmbeddedObject
--o sw.SwAccessibleTextFrameView
+#i111178 -o sw.SwAccessibleTextEmbeddedObject
+#i111178 -o sw.SwAccessibleTextFrameView
 -o sw.SwAccessibleTextGraphicObject
 -o sw.SwXAutoTextContainer
 -o sw.SwXAutoTextEntry
