@@ -94,7 +94,7 @@
 #include <fmtline.hxx>
 #include <fmtfsize.hxx>
 #include <comphelper/extract.hxx>
-
+#include <comphelper/stlunosequence.hxx>
 #include <writerfilter/doctok/sprmids.hxx>
 
 #include "writerhelper.hxx"
@@ -102,6 +102,7 @@
 #include "ww8attributeoutput.hxx"
 
 #include <IDocumentMarkAccess.hxx>
+#include <xmloff/odffields.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -2379,33 +2380,33 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
             m_rWW8Export.pO->Insert( static_cast<BYTE>(nBoxes0 * 10),
                                      m_rWW8Export.pO->Count() );
 
-            for ( sal_uInt8 n = 0; n < nBoxes0; n++ )
-            {
-                const SwTableBox * pBox1 = rTabBoxes[n];
-                const SwFrmFmt * pFrmFmt = pBox1->GetFrmFmt();
-                const SfxPoolItem * pI = NULL;
-                Color aColor;
+        for ( sal_uInt8 n = 0; n < nBoxes0; n++ )
+        {
+            const SwTableBox * pBox1 = rTabBoxes[n];
+            const SwFrmFmt * pFrmFmt = pBox1->GetFrmFmt();
+            const SfxPoolItem * pI = NULL;
+            Color aColor;
 
                 if ( SFX_ITEM_ON ==
                          pFrmFmt->GetAttrSet().
                          GetItemState( RES_BACKGROUND, false, &pI ) )
-                {
-                    aColor = dynamic_cast<const SvxBrushItem *>(pI)->GetColor();
-                }
-                else
-                    aColor = COL_AUTO;
-
-                WW8SHDLong aSHD;
-                aSHD.setCvFore( 0xFF000000 );
-
-                sal_uInt32 nBgColor = aColor.GetColor();
-                if ( nBgColor == COL_AUTO )
-                    aSHD.setCvBack( 0xFF000000 );
-                else
-                    aSHD.setCvBack( wwUtility::RGBToBGR( nBgColor ) );
-
-                aSHD.Write( m_rWW8Export );
+            {
+                aColor = dynamic_cast<const SvxBrushItem *>(pI)->GetColor();
             }
+            else
+                aColor = COL_AUTO;
+
+            WW8SHDLong aSHD;
+            aSHD.setCvFore( 0xFF000000 );
+
+            sal_uInt32 nBgColor = aColor.GetColor();
+            if ( nBgColor == COL_AUTO )
+                aSHD.setCvBack( 0xFF000000 );
+            else
+                aSHD.setCvBack( wwUtility::RGBToBGR( nBgColor ) );
+
+            aSHD.Write( m_rWW8Export );
+        }
         }
     }
 }
@@ -2709,18 +2710,19 @@ void WW8Export::WriteFkpPlcUsw()
         if ( pSttbfAssoc )
         // <--
         {
-            ::std::vector<String> aStrings;
-            ::ww8::StringVector_t & aSttbStrings = pSttbfAssoc->getStrings();
-            ::ww8::StringVector_t::const_iterator aItEnd = aSttbStrings.end();
-            for (::ww8::StringVector_t::const_iterator aIt = aSttbStrings.begin();
-                 aIt != aItEnd; aIt++)
-            {
-                String aStr(aIt->getStr());
-                aStrings.push_back(aStr);
-            }
+        ::std::vector<String> aStrings;
 
-            WriteAsStringTable(aStrings, pFib->fcSttbfAssoc,
-                               pFib->lcbSttbfAssoc);
+        ::ww8::StringVector_t & aSttbStrings = pSttbfAssoc->getStrings();
+        ::ww8::StringVector_t::const_iterator aItEnd = aSttbStrings.end();
+        for (::ww8::StringVector_t::const_iterator aIt = aSttbStrings.begin();
+             aIt != aItEnd; aIt++)
+        {
+            String aStr(aIt->getStr());
+            aStrings.push_back(aStr);
+        }
+
+        WriteAsStringTable(aStrings, pFib->fcSttbfAssoc,
+                           pFib->lcbSttbfAssoc);
         }
     }
     Strm().Seek( 0 );
@@ -2728,18 +2730,17 @@ void WW8Export::WriteFkpPlcUsw()
     // Reclaim stored FIB data from document.
     ::ww8::WW8FibData * pFibData = dynamic_cast<ww8::WW8FibData *>
           (pDoc->getExternalData(::sw::FIB).get());
-    // --> OD 2009-10-19 #i106057#
+
     if ( pFibData )
     // <--
     {
-        pFib->fReadOnlyRecommended =
-            pFibData->getReadOnlyRecommended() ? 1 : 0;
-        pFib->fWriteReservation =
-            pFibData->getWriteReservation() ? 1 : 0;
+    pFib->fReadOnlyRecommended =
+        pFibData->getReadOnlyRecommended() ? 1 : 0;
+    pFib->fWriteReservation =
+        pFibData->getWriteReservation() ? 1 : 0;
     }
 
     pFib->Write( Strm() );  // FIB
-
 }
 
 void WW8Export::StoreDoc1()
@@ -3527,11 +3528,23 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     const ::sw::mark::IFieldmark* pFieldmark = &rFieldmark;
     const ::sw::mark::ICheckboxFieldmark* pAsCheckbox = dynamic_cast< const ::sw::mark::ICheckboxFieldmark* >( pFieldmark );
 
+
+    ASSERT(rFieldmark.GetFieldname().equalsAscii( ODF_FORMTEXT ) || rFieldmark.GetFieldname().equalsAscii( ODF_FORMDROPDOWN ) || rFieldmark.GetFieldname().equalsAscii( ODF_FORMCHECKBOX ), "Unknown field type!!!");
+    if ( ! ( rFieldmark.GetFieldname().equalsAscii( ODF_FORMTEXT ) ||
+                rFieldmark.GetFieldname().equalsAscii( ODF_FORMDROPDOWN ) ||
+                rFieldmark.GetFieldname().equalsAscii( ODF_FORMCHECKBOX ) ) )
+        return;
+
     int type = 0; // TextFieldmark
     if ( pAsCheckbox )
         type = 1;
+    if ( rFieldmark.GetFieldname().equalsAscii( ODF_FORMDROPDOWN ) )
+        type=2;
 
-    const ::rtl::OUString ffname = rFieldmark.GetFieldname();
+    ::sw::mark::IFieldmark::parameter_map_t::const_iterator pNameParameter = rFieldmark.GetParameters()->find(::rtl::OUString::createFromAscii("name"));
+    ::rtl::OUString ffname;
+    if(pNameParameter != rFieldmark.GetParameters()->end())
+        pNameParameter->second >>= ffname;
 
     ULONG nDataStt = pDataStrm->Tell();
     pChpPlc->AppendFkpEntry(Strm().Tell());
@@ -3553,14 +3566,36 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     sal_uInt8 aFldHeader[] =
     {
         0xFF, 0xFF, 0xFF, 0xFF, // Unicode Marker...
-        0, 0, 0, 0//, 0, 0, 0, 0
+        0, 0, 0, 0,// 0, 0, 0, 0
     };
 
     aFldHeader[4] |= (type & 0x03);
-    int ffres = 0; // rFieldmark.GetFFRes();
+    sal_Int32 ffres = 0; // rFieldmark.GetFFRes();
     if ( pAsCheckbox && pAsCheckbox->IsChecked() )
         ffres = 1;
+    else if ( type == 2 )
+    {
+        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pResParameter = rFieldmark.GetParameters()->find(::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN));
+        if(pResParameter != rFieldmark.GetParameters()->end())
+            pResParameter->second >>= ffres;
+        else
+            ffres = 0;
+    }
     aFldHeader[4] |= ( (ffres<<2) & 0x7C );
+
+    std::vector< ::rtl::OUString > aListItems;
+    if (type==2)
+    {
+        aFldHeader[5] |= 0x80; // ffhaslistbox
+        const ::sw::mark::IFieldmark::parameter_map_t* const pParameters = rFieldmark.GetParameters();
+        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_LISTENTRY));
+        if(pListEntries != pParameters->end())
+        {
+            uno::Sequence< ::rtl::OUString > vListEntries;
+            pListEntries->second >>= vListEntries;
+            copy(::comphelper::stl_begin(vListEntries), ::comphelper::stl_end(vListEntries), back_inserter(aListItems));
+        }
+    }
 
     const ::rtl::OUString ffdeftext;
     const ::rtl::OUString ffformat;
@@ -3568,6 +3603,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     const ::rtl::OUString ffstattext;
     const ::rtl::OUString ffentrymcr;
     const ::rtl::OUString ffexitmcr;
+
 
     const sal_uInt8 aFldData[] =
     {
@@ -3578,7 +3614,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |              /16
         0,0,0,0,                            // /               /4
     };
-    sal_uInt32 slen=sizeof(sal_uInt32)
+   sal_uInt32 slen = sizeof(sal_uInt32)
         + sizeof(aFldData)
         + sizeof( aFldHeader )
         + 2*ffname.getLength() + 4
@@ -3588,6 +3624,15 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         + 2*ffstattext.getLength() + 4
         + 2*ffentrymcr.getLength() + 4
         + 2*ffexitmcr.getLength() + 4;
+    if ( type==2 ) {
+        slen += 2; // for 0xFF, 0xFF
+        slen += 4; // for num of list items
+        const int items = aListItems.size();
+        for( int i = 0; i < items; i++ ) {
+            rtl::OUString item = aListItems[i];
+            slen += 2 * item.getLength() + 2;
+        }
+    }
 
     *pDataStrm << slen;
 
@@ -3597,6 +3642,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
 
     len = sizeof( aFldHeader );
     OSL_ENSURE( len == 8, "SwWW8Writer::WriteFormData(..) - wrong aFldHeader length" );
+
     pDataStrm->Write( aFldHeader, len );
 
     SwWW8Writer::WriteString_xstz( *pDataStrm, ffname, true ); // Form field name
@@ -3611,11 +3657,20 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     SwWW8Writer::WriteString_xstz( *pDataStrm, String( ffstattext ), true );
     SwWW8Writer::WriteString_xstz( *pDataStrm, String( ffentrymcr ), true );
     SwWW8Writer::WriteString_xstz( *pDataStrm, String( ffexitmcr ), true );
-//    if (type==2) {
-//        // 0xFF, 0xFF
-//        // sal_uInt32 number of strings
-//        // (sal_uInt16 len; sal_uInt16 unicode char[len])*num of strings
-//    }
+    if (type==2) {
+        *pDataStrm<<(sal_uInt16)0xFFFF;
+        const int items=aListItems.size();
+        *pDataStrm<<(sal_uInt32)items;
+        for(int i=0;i<items;i++) {
+            rtl::OUString item=aListItems[i];
+            SwWW8Writer::WriteString_xstz( *pDataStrm, item, false );
+        }
+    }
+}
+
+void WW8Export::WriteHyperlinkData( const sw::mark::IFieldmark& /*rFieldmark*/ )
+{
+    //@TODO implement me !!!
 }
 
 void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner )
