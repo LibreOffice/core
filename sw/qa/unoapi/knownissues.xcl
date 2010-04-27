@@ -154,3 +154,6 @@ sw.SwXTextGraphicObject::com::sun::star::text::BaseFrameProperties
 
 ### i109917 ###
 sw.SwXTextDocument::com::sun::star::document::XEventBroadcaster
+
+### i111186 ###
+sw.PageStyle::com::sun::star::beans::XPropertySet
