@@ -1,5 +1,5 @@
 -o sd.AccessibleDrawDocumentView
--o sd.AccessibleOutlineView
+#i111199 -o sd.AccessibleOutlineView
 #i35935# -o sd.AccessibleSlideView
 #i111042# -o sd.DrawController_DrawView
 #i111042# -o sd.DrawController_HandoutView
