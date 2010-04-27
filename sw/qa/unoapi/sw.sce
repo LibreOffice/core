@@ -48,7 +48,7 @@
 -o sw.SwXPropertySetInfo
 -o sw.SwXReferenceMark
 -o sw.SwXReferenceMarks
--o sw.SwXShape
+#i111190 -o sw.SwXShape
 -o sw.SwXStyleFamilies
 -o sw.SwXStyleFamily
 #i111185 -o sw.SwXTableCellText
