@@ -36,6 +36,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/image.hxx>
 #include <vcl/taskpanelist.hxx>
+#include <vcl/toolbox.hxx>
 
 #include "svtools/valueset.hxx"
 #include "svtools/toolbarmenu.hxx"

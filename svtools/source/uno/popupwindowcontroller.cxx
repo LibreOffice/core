@@ -50,27 +50,29 @@ public:
     PopupWindowControllerImpl();
     ~PopupWindowControllerImpl();
 
-    void SetPopupWindow( ::Window* pPopupWindow );
+    void SetPopupWindow( ::Window* pPopupWindow, ToolBox* pToolBox );
 
     DECL_LINK( WindowEventListener, VclSimpleEvent* );
     DECL_STATIC_LINK( PopupWindowControllerImpl, AsyncDeleteWindowHdl, Window* );
 
 private:
     ::Window* mpPopupWindow;
+    ToolBox* mpToolBox;
 };
 
 PopupWindowControllerImpl::PopupWindowControllerImpl()
 : mpPopupWindow( 0 )
+, mpToolBox( 0 )
 {
 }
 
 PopupWindowControllerImpl::~PopupWindowControllerImpl()
 {
     if( mpPopupWindow )
-        SetPopupWindow(0);
+        SetPopupWindow(0,0);
 }
 
-void PopupWindowControllerImpl::SetPopupWindow( ::Window* pPopupWindow )
+void PopupWindowControllerImpl::SetPopupWindow( ::Window* pPopupWindow, ToolBox* pToolBox )
 {
     if( mpPopupWindow )
     {
@@ -78,6 +80,8 @@ void PopupWindowControllerImpl::SetPopupWindow( ::Window* pPopupWindow )
         Application::PostUserEvent( STATIC_LINK( this, PopupWindowControllerImpl, AsyncDeleteWindowHdl ), mpPopupWindow );
     }
     mpPopupWindow = pPopupWindow;
+    mpToolBox = pToolBox;
+
     if( mpPopupWindow )
     {
         mpPopupWindow->AddEventListener( LINK( this, PopupWindowControllerImpl, WindowEventListener ));
@@ -93,8 +97,30 @@ IMPL_LINK( PopupWindowControllerImpl, WindowEventListener, VclSimpleEvent*, pEve
         {
         case VCLEVENT_WINDOW_CLOSE:
         case VCLEVENT_WINDOW_ENDPOPUPMODE:
-            SetPopupWindow(0);
+            SetPopupWindow(0,0);
             break;
+
+        case VCLEVENT_WINDOW_SHOW:
+        {
+            if( mpPopupWindow )
+            {
+                if( mpToolBox )
+                    mpToolBox->CallEventListeners( VCLEVENT_DROPDOWN_OPEN, (void*)mpPopupWindow );
+                mpPopupWindow->CallEventListeners( VCLEVENT_WINDOW_GETFOCUS, 0 );
+                break;
+            }
+            break;
+        }
+        case VCLEVENT_WINDOW_HIDE:
+        {
+            if( mpPopupWindow )
+            {
+                mpPopupWindow->CallEventListeners( VCLEVENT_WINDOW_LOSEFOCUS, 0 );
+                if( mpToolBox )
+                    mpToolBox->CallEventListeners( VCLEVENT_DROPDOWN_CLOSE, (void*)mpPopupWindow );
+            }
+            break;
+        }
         }
     }
     return 1;
@@ -209,7 +235,7 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() th
         if( pWin )
         {
                pWin->EnableDocking(true);
-            mpImpl->SetPopupWindow(pWin);
+            mpImpl->SetPopupWindow(pWin,pToolBox);
             ::Window::GetDockingManager()->StartPopupMode( pToolBox, pWin, FLOATWIN_POPUPMODE_NOFOCUSCLOSE|FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE |FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE );
         }
     }
