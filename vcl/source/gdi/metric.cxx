@@ -401,7 +401,7 @@ int ImplFontCharMap::GetGlyphIndex( sal_uInt32 cChar ) const
         nGlyphIndex += nStartIndex;
     } else {
         // the glyphid array has the glyph index
-        nGlyphIndex = mpGlyphIds[ nGlyphIndex - nStartIndex];
+        nGlyphIndex = mpGlyphIds[ (nGlyphIndex - nStartIndex) & 0xFFFF ];
     }
 
     return nGlyphIndex;
