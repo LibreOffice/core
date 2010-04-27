@@ -67,10 +67,12 @@ testcase tBasicVBACompatImportEnabled()
         caNodeData( 5 ) = "Tabelle1"
         caNodeData( 6 ) = "Tabelle2"
         caNodeData( 7 ) = "Tabelle3"
-        
-    dim caScripts( 3 ) as string
-        caScripts( 2 ) = "ConcatFct Ende"
-        caScripts( 3 ) = "WriteIt"
+
+    ' These are the scripts belonging to each node above. If multiple scripts exist
+    ' they are separated by spaces. Example: "Modul1" has "ConcatFct" and "Ende" scripts.
+    dim caScripts( 7 ) as string
+        caScripts( 3 ) = "ConcatFct Ende"
+        caScripts( 4 ) = "WriteIt"
         
     dim iCurrentModule as integer  
     dim iCurrentScript as integer
@@ -81,7 +83,7 @@ testcase tBasicVBACompatImportEnabled()
     printlog( "Set macro security to low" )
     hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_LOW )
     
-    printlog( "Open Tools/Options" )
+    printlog( "Open Tools/Options and set the VBA macro execution mode" )
 
     hSetExcelBasicImportMode( IMPORT_EXCEL_MACROS, EXEC_EXCEL_MACROS )
     
