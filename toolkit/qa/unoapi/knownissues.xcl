@@ -247,3 +247,6 @@ toolkit.Toolkit::com::sun::star::awt::XDataTransferProviderAccess
 ### i111113 ###
 toolkit.AccessibleStatusBarItem::com::sun::star::accessibility::XAccessibleComponent
 toolkit.AccessibleStatusBarItem::com::sun::star::accessibility::XAccessibleContext
+
+### i111195 ###
+toolkit.AccessibleScrollBar::com::sun::star::accessibility::XAccessibleValue
