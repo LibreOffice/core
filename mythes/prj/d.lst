@@ -1,0 +1,4 @@
+..\%__SRC%\slb\mythes.lib     %_DEST%\lib%_EXT%\mythes.lib
+
+..\%__SRC%\inc\mythes.hxx %_DEST%\inc%_EXT%\mythes.hxx
+..\%__SRC%\misc\build\mythes-1.2.0\.libs\libmythes.a %_DEST%\lib%_EXT%\libmythes.a
