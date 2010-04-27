@@ -9,7 +9,7 @@
 -o xmloff.Draw.XMLExporter
 -o xmloff.Draw.XMLImporter
 -o xmloff.Draw.XMLMetaExporter
--o xmloff.Draw.XMLMetaImporter
+#i111200 -o xmloff.Draw.XMLMetaImporter
 -o xmloff.Draw.XMLSettingsExporter
 -o xmloff.Draw.XMLSettingsImporter
 #i87695 -o xmloff.Draw.XMLStylesExporter
