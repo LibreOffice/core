@@ -215,8 +215,6 @@ private:
             com::sun::star::task::XInteractionRequest > const & rRequest)
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
-// @@@ Todo #i29340#: activate!
-#if 0
     void
     handleNameClashResolveRequest(
         com::sun::star::ucb::NameClashResolveRequest const & rRequest,
@@ -261,7 +259,6 @@ private:
         com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionRequest > const & rRequest)
         SAL_THROW((com::sun::star::uno::RuntimeException));
-#endif
 
     void
     handleErrorHandlerRequest(

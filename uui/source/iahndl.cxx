@@ -867,14 +867,13 @@ UUIInteractionHelper::handleRequest_impl(
             if ( handleCertificateValidationRequest( rRequest ) )
                 return true;
 
-// @@@ Todo #i29340#: activate!
-//            ucb::NameClashResolveRequest aNameClashResolveRequest;
-//            if (aAnyRequest >>= aNameClashResolveRequest)
-//            {
-//                handleNameClashResolveRequest(aNameClashResolveRequest,
-//                                              rRequest->getContinuations());
-//                return true;
-//            }
+            ucb::NameClashResolveRequest aNameClashResolveRequest;
+            if (aAnyRequest >>= aNameClashResolveRequest)
+            {
+                handleNameClashResolveRequest(aNameClashResolveRequest,
+                                              rRequest->getContinuations());
+                return true;
+            }
 
             if ( handleMasterPasswordRequest( rRequest ) )
                 return true;
