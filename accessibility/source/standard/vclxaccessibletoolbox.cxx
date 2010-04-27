@@ -441,6 +441,27 @@ void VCLXAccessibleToolBox::UpdateAllItems_Impl()
         }
     }
 }
+
+// -----------------------------------------------------------------------------
+
+void VCLXAccessibleToolBox::UpdateCustomPopupItemp_Impl( Window* pWindow, bool bOpen )
+{
+    if( pWindow )
+    {
+        Reference< XAccessible > xChild( pWindow->GetAccessible() );
+        if( xChild.is() )
+        {
+            Any aOld, aNew;
+            if( bOpen )
+                aNew <<= xChild;
+            else
+                aOld <<= xChild;
+
+            NotifyAccessibleEvent( AccessibleEventId::CHILD, aOld, aNew );
+        }
+    }
+}
+
 // -----------------------------------------------------------------------------
 void VCLXAccessibleToolBox::UpdateItemName_Impl( sal_Int32 _nPos )
 {
@@ -579,6 +600,13 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
         case VCLEVENT_TOOLBOX_ITEMDISABLED :
         {
             UpdateItemEnabled_Impl( (sal_Int32)(sal_IntPtr)rVclWindowEvent.GetData() );
+            break;
+        }
+
+        case VCLEVENT_DROPDOWN_OPEN:
+        case VCLEVENT_DROPDOWN_CLOSE:
+        {
+            UpdateCustomPopupItemp_Impl( static_cast< Window* >( rVclWindowEvent.GetData() ), rVclWindowEvent.GetId() == VCLEVENT_DROPDOWN_OPEN );
             break;
         }
 
