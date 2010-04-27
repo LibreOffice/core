@@ -491,6 +491,12 @@ sub analyze_and_save_logfile
 
     if ( $installer::globals::creating_windows_installer_patch ) { $installer::globals::creating_windows_installer_patch = 0; }
 
+    # Exiting the packaging process, if an error occured.
+    # This is important, to get an error code "-1", if an error was found in the log file,
+    # that did not break the packaging process
+
+    if ( ! $is_success) { installer::exiter::exit_program("ERROR: Found an error in the logfile. Packaging failed.", "analyze_and_save_logfile"); }
+
     return ($is_success, $finalinstalldir);
 }
 
