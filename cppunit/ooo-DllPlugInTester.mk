@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -23,46 +23,28 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#*************************************************************************
+#***********************************************************************/
 
-PRJ=.
+PRJ = @BACKPATH@../..
+PRJNAME = cppunit
+TARGET = DllPlugInTester
 
-PRJNAME=ooo_rhino
-TARGET=ooo_rhino
+ENABLE_EXCEPTIONS = TRUE
+nodep = TRUE
 
-.IF "$(SOLAR_JAVA)"!=""
-# --- Settings -----------------------------------------------------
+.INCLUDE: settings.mk
 
-.INCLUDE :	settings.mk
-.INCLUDE :  antsettings.mk
+CDEFS += -DCPPUNIT_DLL
+CFLAGSCXX += -I../../include
+UWINAPILIB =
 
-# --- Files --------------------------------------------------------
+OBJFILES = $(APP1OBJS)
 
-TARFILE_NAME=rhino1_5R5
-TARFILE_MD5=798b2ffdc8bcfe7bca2cf92b62caf685
-TARFILE_ROOTDIR=rhino1_5R5
+APP1OBJS = \
+   $(OBJ)/CommandLineParser.obj \
+   $(OBJ)/DllPlugInTester.obj
+APP1RPATH = NONE
+APP1STDLIBS = icppunit_dll.lib
+APP1TARGET = DllPlugInTester_dll
 
-ADDITIONAL_FILES= \
-    toolsrc/org/mozilla/javascript/tools/debugger/OfficeScriptInfo.java
-
-PATCH_FILES=rhino1_5R5.patch \
-    rhino1_5R5-find_swing.patch
-
-.IF "$(JAVACISGCJ)"=="yes"
-JAVA_HOME=
-.EXPORT : JAVA_HOME
-BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj jar
-.ELSE
-BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" jar
-.ENDIF
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE : set_ext.mk
-.INCLUDE : target.mk
-.INCLUDE : tg_ext.mk
-
-.ELSE
-all:
-        @echo java disabled
-.ENDIF
+.INCLUDE: target.mk
