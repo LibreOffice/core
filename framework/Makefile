@@ -25,6 +25,12 @@
 #
 #*************************************************************************
 
-include ../solenv/inc/gbuild.mk
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-$(eval $(call gb_Module_make_global_targets,$(notdir $(shell pwd))))
+
+gb_CURRENT_MODULE := $(lastword $(subst /, ,$(dir $(realpath $(firstword $(MAKEFILE_LIST))))))
+
+$(eval $(call gb_Module_make_global_targets,$(gb_CURRENT_MODULE)))
+
+# vim: set noet sw=4 ts=4:
