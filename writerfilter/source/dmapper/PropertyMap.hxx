@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PropertyMap.hxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +38,10 @@
 #include <boost/shared_ptr.hpp>
 #include <map>
 #include <vector>
+
+#ifdef DEBUG_DOMAINMAPPER
+#include <resourcemodel/TagLogger.hxx>
+#endif
 
 namespace com{namespace sun{namespace star{
     namespace beans{
@@ -102,9 +103,16 @@ class PropertyMap : public _PropertyMap
     ::rtl::OUString                                                             m_sFootnoteFontName;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote >       m_xFootnote;
 
-    public:
-        PropertyMap();
-        virtual ~PropertyMap();
+protected:
+    void Invalidate()
+    {
+        if(m_aValues.getLength())
+            m_aValues.realloc( 0 );
+    }
+
+public:
+    PropertyMap();
+    virtual ~PropertyMap();
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetPropertyValues();
     bool hasEmptyPropertyValues() const {return !m_aValues.getLength();}
@@ -113,12 +121,6 @@ class PropertyMap : public _PropertyMap
     void Insert( PropertyIds eId, bool bIsTextProperty, const ::com::sun::star::uno::Any& rAny, bool bOverwrite = true );
     using _PropertyMap::insert;
     void insert(const boost::shared_ptr<PropertyMap> pMap, bool bOverwrite = true);
-
-    void Invalidate()
-        {
-            if(m_aValues.getLength())
-                m_aValues.realloc( 0 );
-        }
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote>&  GetFootnote() const;
     void SetFootnote( ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote> xF ) { m_xFootnote = xF; }
@@ -133,6 +135,10 @@ class PropertyMap : public _PropertyMap
     void                        SetFootnoteFontName( const ::rtl::OUString& rSet ) { m_sFootnoteFontName = rSet;}
 
     virtual void insertTableProperties( const PropertyMap* );
+
+#ifdef DEBUG_DOMAINMAPPER
+    virtual XMLTag::Pointer_t toTag() const;
+#endif
 
 };
 typedef boost::shared_ptr<PropertyMap>  PropertyMapPtr;

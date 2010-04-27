@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DomainMapperTableHandler.hxx,v $
- *
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +54,8 @@ typedef std::vector<PropertyMapPtr>     PropertyMapVector1;
 typedef std::vector<PropertyMapVector1> PropertyMapVector2;
 
 class DomainMapper_Impl;
+class TableStyleSheetEntry;
+struct TableInfo;
 class DomainMapperTableHandler : public TableDataHandler<Handle_t , TablePropertyMapPtr >
 {
     TextReference_t         m_xText;
@@ -75,6 +73,10 @@ class DomainMapperTableHandler : public TableDataHandler<Handle_t , TablePropert
 
     sal_Int32 m_nCellIndex;
     sal_Int32 m_nRowIndex;
+
+    TableStyleSheetEntry * endTableGetTableStyle(TableInfo & rInfo);
+    CellPropertyValuesSeq_t endTableGetCellProperties(TableInfo & rInfo);
+    RowPropertyValuesSeq_t endTableGetRowProperties();
 
 public:
     typedef boost::shared_ptr<DomainMapperTableHandler> Pointer_t;

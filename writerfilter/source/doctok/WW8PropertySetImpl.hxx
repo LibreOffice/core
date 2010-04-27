@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WW8PropertySetImpl.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,12 +104,13 @@ public:
     virtual void resolve(Properties & rHandler);
 
     /**
-       Get and distribute information from sprm that is used
-       internally by the document.
+     Get and distribute information from sprm that is used
+     internally by the document.
 
-       @param rSprm    sprm to process
+     @param rSprm       sprm to process
+     @param rHandler    property handler to resolve huge papx (sprm 0x6646) to
      */
-    virtual void resolveLocal(Sprm & rSprm);
+    virtual void resolveLocal(Sprm & rSprm, Properties & rHandler);
 };
 
 class WW8PropertySetIteratorImpl : public WW8PropertySetIterator

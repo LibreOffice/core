@@ -123,5 +123,4 @@
   (insert-uml-stereotype "ww8sprm")
   (insert-uml-taggedvalue sprmcode "sprmcode")
   (insert-uml-taggedvalue (concat "rtf:" name) "sprmid")
-  (insert-uml-taggedvalue kind "kind")
-  (insert-uml-class-end))
+  (insert-uml-taggedvalue kind "kind"))

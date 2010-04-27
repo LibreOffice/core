@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TagLogger.hxx,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,6 +74,8 @@ namespace writerfilter
         XMLTag(string sTag, eMode mode = COMPLETE) : mTag(sTag), mMode(mode) {}
 
         void addAttr(string name, string value);
+        void addAttr(string name, const ::rtl::OUString & value);
+        void addAttr(string name, sal_uInt32 nValue);
         void addTag(Pointer_t pTag);
         void chars(const string & rChars);
         const string & getTag() const;
@@ -93,6 +92,7 @@ namespace writerfilter
     private:
         stack<XMLTag::Pointer_t> mTags;
         XMLTag::Pointer_t currentTag() const;
+        XMLTag::Pointer_t mpRoot;
 
         TagLogger();
 
@@ -106,6 +106,7 @@ namespace writerfilter
         void startElement(const string & name);
         void attribute(const string & name, const string & value);
         void attribute(const string & name, const ::rtl::OUString & value);
+        void attribute(const string & name, sal_uInt32 value);
         void addTag(XMLTag::Pointer_t pTag);
         void chars(const string & chars);
         void chars(const ::rtl::OUString & chars);

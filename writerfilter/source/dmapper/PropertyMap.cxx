@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PropertyMap.cxx,v $
- *
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +38,8 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include "dmapperLoggers.hxx"
+#include "PropertyMapHelper.hxx"
 
 using namespace ::com::sun::star;
 
@@ -129,6 +127,47 @@ void PropertyMap::Insert( PropertyIds eId, bool bIsTextProperty, const uno::Any&
                            rAny ));
     Invalidate();
 }
+
+#ifdef DEBUG_DOMAINMAPPER
+XMLTag::Pointer_t PropertyMap::toTag() const
+{
+    XMLTag::Pointer_t pResult(new XMLTag("PropertyMap"));
+
+    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+    PropertyMap::const_iterator aMapIter = begin();
+    while (aMapIter != end())
+    {
+        XMLTag::Pointer_t pTag(new XMLTag("property"));
+
+        pTag->addAttr("name", rPropNameSupplier.GetName( aMapIter->first.eId ));
+
+        switch (aMapIter->first.eId)
+        {
+            case PROP_TABLE_COLUMN_SEPARATORS:
+                pTag->addTag(lcl_TableColumnSeparatorsToTag(aMapIter->second));
+                break;
+            default:
+            {
+                try {
+                    sal_Int32 aInt;
+                    aMapIter->second >>= aInt;
+                    pTag->addAttr("value", aInt);
+                }
+                catch (...) {
+                }
+            }
+                break;
+        }
+
+        pResult->addTag(pTag);
+
+        ++aMapIter;
+    }
+
+    return pResult;
+}
+#endif
+
 /*-- 13.12.2006 10:46:42---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -156,6 +195,8 @@ void PropertyMap::insert( const PropertyMapPtr pMap, bool bOverwrite )
             ::std::for_each( pMap->begin(), pMap->end(), removeExistingElements<PropertyMap::value_type>(*this) );
         _PropertyMap::insert(pMap->begin(), pMap->end());
         insertTableProperties(pMap.get());
+
+        Invalidate();
     }
 }
 /*-- 06.06.2007 15:49:09---------------------------------------------------
@@ -170,6 +211,9 @@ const uno::Reference< text::XFootnote>&  PropertyMap::GetFootnote() const
   -----------------------------------------------------------------------*/
 void PropertyMap::insertTableProperties( const PropertyMap* )
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->element("PropertyMap.insertTableProperties");
+#endif
 }
 /*-- 24.07.2006 08:29:01---------------------------------------------------
 
@@ -1047,6 +1091,11 @@ void TablePropertyMap::setValue( TablePropertyMapTarget eWhich, sal_Int32 nSet )
   -----------------------------------------------------------------------*/
 void TablePropertyMap::insertTableProperties( const PropertyMap* pMap )
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("TablePropertyMap.insertTableProperties");
+    dmapper_logger->addTag(pMap->toTag());
+#endif
+
     const TablePropertyMap* pSource = dynamic_cast< const TablePropertyMap* >(pMap);
     if( pSource )
     {
@@ -1060,6 +1109,10 @@ void TablePropertyMap::insertTableProperties( const PropertyMap* pMap )
             }
         }
     }
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->addTag(toTag());
+    dmapper_logger->endElement("TablePropertyMap.insertTableProperties");
+#endif
 }
 
 

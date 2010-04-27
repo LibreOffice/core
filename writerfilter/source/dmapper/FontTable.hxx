@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FontTable.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +28,7 @@
 #ifndef INCLUDED_FONTTABLE_HXX
 #define INCLUDED_FONTTABLE_HXX
 
+#include <boost/shared_ptr.hpp>
 #include <WriterFilterDllApi.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -42,6 +40,8 @@ namespace dmapper
 struct FontTable_Impl;
 struct FontEntry
 {
+    typedef boost::shared_ptr<FontEntry> Pointer_t;
+
     ::rtl::OUString sFontName;
     ::rtl::OUString sFontName1;
     bool            bTrueType;
@@ -100,7 +100,7 @@ public:
     virtual void startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     virtual void endShape( );
 
-    const FontEntry*    getFontEntry(sal_uInt32 nIndex);
+    const FontEntry::Pointer_t  getFontEntry(sal_uInt32 nIndex);
     sal_uInt32          size();
 };
 typedef boost::shared_ptr< FontTable >          FontTablePtr;

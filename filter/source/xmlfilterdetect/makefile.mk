@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -49,7 +45,7 @@ CDEFS+=-DCOMPMOD_NAMESPACE=framework
 SHL1TARGET=		xmlfd$(DLLPOSTFIX)
 SHL1IMPLIB=		i$(SHL1TARGET)
 
-SHL1VERSIONMAP= xmlfd.map
+SHL1VERSIONMAP= $(SOLARENV)/src/component.map
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=		$(SHL1TARGET)
 

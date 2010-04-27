@@ -3,13 +3,9 @@
  *
   DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   
-  Copyright 2008 by Sun Microsystems, Inc.
+  Copyright 2000, 2010 Oracle and/or its affiliates.
  
   OpenOffice.org - a multi-platform office productivity suite
- 
-  $RCSfile: gperffasttokenhandler.xsl,v $
- 
-  $Revision: 1.3 $
  
   This file is part of OpenOffice.org.
  
@@ -27,7 +23,7 @@
   version 3 along with OpenOffice.org.  If not, see
   <http://www.openoffice.org/license.html>
   for a copy of the LGPLv3 License.
- 
+
  ************************************************************************/
 
 -->
@@ -67,7 +63,31 @@
     xml:space="default">
   <xsl:output method="text" />
 
-  <xsl:include href="resourcestools.xsl"/>
+  <xsl:include href="factorytools.xsl"/>
+
+  <!--
+      Generates input for gperf to genreate hash map for OOXMLFastTokenHandler
+  -->
+  <xsl:template name="gperfinputfasttokenhandler">
+    <xsl:text>
+%{
+#include "OOXMLFastTokens.hxx"
+
+namespace writerfilter { namespace ooxml { namespace tokenmap {
+%}
+struct token { const char * name; Token_t nToken; };
+%%</xsl:text>
+    <xsl:for-each select=".//rng:element|.//rng:attribute">
+      <xsl:if test="generate-id(.) = generate-id(key('same-token-name', @localname)[1])">
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:value-of select="@localname"/>
+        <xsl:text>, </xsl:text>
+        <xsl:call-template name="fastlocalname"/>
+      </xsl:if>
+    </xsl:for-each>
+    <xsl:text>
+%%&#xa;</xsl:text>
+}}}&#xa;</xsl:template>
 
   <xsl:template match="/">
     <xsl:call-template name="gperfinputfasttokenhandler"/>

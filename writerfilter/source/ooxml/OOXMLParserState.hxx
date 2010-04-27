@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OOXMLParserState.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +27,7 @@
 #ifndef INCLUDE_OOXML_PARSER_STATE_HXX
 #define INCLUDE_OOXML_PARSER_STATE_HXX
 
+#include <stack>
 #include <ooxml/OOXMLDocument.hxx>
 #include <resourcemodel/TagLogger.hxx>
 #include "OOXMLPropertySetImpl.hxx"
@@ -37,6 +35,8 @@
 namespace writerfilter {
 namespace ooxml
 {
+
+using ::std::stack;
 
 class OOXMLParserState
 {
@@ -51,7 +51,9 @@ class OOXMLParserState
     rtl::OUString msXNoteId;
     rtl::OUString msTarget;
     OOXMLPropertySet::Pointer_t mpCharacterProps;
-    OOXMLPropertySet::Pointer_t mpTableProps;
+    stack<OOXMLPropertySet::Pointer_t> mCellProps;
+    stack<OOXMLPropertySet::Pointer_t> mRowProps;
+    stack<OOXMLPropertySet::Pointer_t> mTableProps;
 
 public:
     typedef boost::shared_ptr<OOXMLParserState> Pointer_t;
@@ -93,8 +95,15 @@ public:
     void resolveCharacterProperties(Stream & rStream);
     OOXMLPropertySet::Pointer_t getCharacterProperties() const;
     void setCharacterProperties(OOXMLPropertySet::Pointer_t pProps);
+    void resolveCellProperties(Stream & rStream);
+    void setCellProperties(OOXMLPropertySet::Pointer_t pProps);
+    void resolveRowProperties(Stream & rStream);
+    void setRowProperties(OOXMLPropertySet::Pointer_t pProps);
     void resolveTableProperties(Stream & rStream);
     void setTableProperties(OOXMLPropertySet::Pointer_t pProps);
+
+    void startTable();
+    void endTable();
 
     string toString() const;
     XMLTag::Pointer_t toTag() const;

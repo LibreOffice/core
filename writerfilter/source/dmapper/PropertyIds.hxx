@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PropertyIds.hxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -278,12 +275,13 @@ enum PropertyIds
 /*239*/ ,PROP_STREAM_NAME
 /*240*/ ,PROP_BITMAP
 /*241*/ ,PROP_IS_DATE
-/*242*/ ,PROP_CNF_STYLE
-/*243*/ ,PROP_INDENT_AT
-/*244*/ ,PROP_FIRST_LINE_INDENT
-/*245*/ ,PROP_NUMBERING_STYLE_NAME
-/*246*/ ,PROP_LISTTAB_STOP_POSITION
-/*247*/ ,PROP_POSITION_AND_SPACE_MODE
+/*242*/ ,PROP_TAB_STOP_DISTANCE
+/*243*/ ,PROP_CNF_STYLE
+/*244*/ ,PROP_INDENT_AT
+/*245*/ ,PROP_FIRST_LINE_INDENT
+/*246*/ ,PROP_NUMBERING_STYLE_NAME
+/*247*/ ,PROP_LISTTAB_STOP_POSITION
+/*248*/ ,PROP_POSITION_AND_SPACE_MODE
 };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier

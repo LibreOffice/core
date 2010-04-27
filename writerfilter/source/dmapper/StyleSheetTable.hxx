@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: StyleSheetTable.hxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +36,10 @@
 #include <FontTable.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
 
+#ifdef DEBUG_DOMAINMAPPER
+#include <resourcemodel/TagLogger.hxx>
+#endif
+
 namespace com{ namespace sun { namespace star { namespace text{
     class XTextDocument;
 }}}}
@@ -59,8 +60,9 @@ enum StyleType
 };
 
 struct StyleSheetTable_Impl;
-struct StyleSheetEntry
+class StyleSheetEntry
 {
+public:
     ::rtl::OUString sStyleIdentifierI;
     ::rtl::OUString sStyleIdentifierD;
     bool            bIsDefaultStyle;
@@ -73,7 +75,13 @@ struct StyleSheetEntry
     ::rtl::OUString sStyleName1;
     PropertyMapPtr  pProperties;
     ::rtl::OUString sConvertedStyleName;
+
+#ifdef DEBUG_DOMAINMAPPER
+    virtual XMLTag::Pointer_t toTag();
+#endif
+
     StyleSheetEntry();
+    virtual ~StyleSheetEntry();
 };
 
 typedef boost::shared_ptr<StyleSheetEntry> StyleSheetEntryPtr;
@@ -140,8 +148,12 @@ public:
     //     + from the parent styles
     PropertyMapPtr GetProperties( sal_Int32 nMask );
 
+#ifdef DEBUG_DOMAINMAPPER
+    virtual XMLTag::Pointer_t toTag();
+#endif
+
     TableStyleSheetEntry( StyleSheetEntry& aEntry, StyleSheetTable* pStyles );
-    ~TableStyleSheetEntry( );
+    virtual ~TableStyleSheetEntry( );
 
 protected:
     PropertyMapPtr GetLocalPropertiesFromMask( sal_Int32 nMask );

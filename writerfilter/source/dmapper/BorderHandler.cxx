@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: BorderHandler.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,12 +26,15 @@
  ************************************************************************/
 #include <BorderHandler.hxx>
 #include <PropertyMap.hxx>
+#include <resourcemodel/QNameToString.hxx>
 #include <doctok/resourceids.hxx>
 #include <ConversionHelper.hxx>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <ooxml/resourceids.hxx>
+#include <dmapperLoggers.hxx>
 
 namespace writerfilter {
+
 namespace dmapper {
 
 using namespace ::com::sun::star;
@@ -63,6 +63,12 @@ BorderHandler::~BorderHandler()
   -----------------------------------------------------------------------*/
 void BorderHandler::attribute(Id rName, Value & rVal)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("BorderHandler.attribute");
+    dmapper_logger->attribute("id", (*QNameToString::Instance())(rName));
+    dmapper_logger->endElement("BorderHandler.attribute");
+#endif
+
     sal_Int32 nIntValue = rVal.getInt();
     /* WRITERFILTERSTATUS: table: BorderHandler_attributedata */
     switch( rName )
@@ -116,6 +122,11 @@ void BorderHandler::attribute(Id rName, Value & rVal)
   -----------------------------------------------------------------------*/
 void BorderHandler::sprm(Sprm & rSprm)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("BorderHandler.sprm");
+    dmapper_logger->attribute("sprm", rSprm.toString());
+#endif
+
     /* WRITERFILTERSTATUS: table: BorderHandler_sprm */
     switch( rSprm.getId())
     {
@@ -143,6 +154,11 @@ void BorderHandler::sprm(Sprm & rSprm)
         break;
         default:;
     }
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("BorderHandler.sprm");
+#endif
+
 }
 /*-- 24.04.2007 09:09:01---------------------------------------------------
 

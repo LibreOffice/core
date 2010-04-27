@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WW8PropertySetImpl.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -150,7 +147,15 @@ sal_uInt32 WW8PropertyImpl::getByteLength() const
 
         break;
     default:
-        nParamSize = getU8(2) + 1;
+        switch (getId())
+        {
+        case 0xd608:
+                nParamSize = getU16(2) + 1;
+                break;
+        default:
+                nParamSize = getU8(2) + 1;
+                break;
+        }
 
         break;
     }
@@ -317,7 +322,7 @@ string WW8PropertySetImpl::getType() const
     return "WW8PropertySetImpl";
 }
 
-void WW8PropertySetImpl::resolveLocal(Sprm & sprm)
+void WW8PropertySetImpl::resolveLocal(Sprm & sprm, Properties & rHandler)
 {
     switch (sprm.getId())
     {
@@ -332,6 +337,27 @@ void WW8PropertySetImpl::resolveLocal(Sprm & sprm)
         {
             getDocument()->setPicIsData(true);
         }
+        break;
+    case 0x6646:
+        {
+            WW8Stream::Pointer_t pStream = getDocument()->getDataStream();
+
+            if (pStream.get() != NULL)
+            {
+                Value::Pointer_t pValue = sprm.getValue();
+                sal_uInt32 nOffset = pValue->getInt();
+                WW8StructBase aStruct(*pStream, nOffset, 2);
+                sal_uInt16 nCount = aStruct.getU16(0);
+
+                {
+                    WW8PropertySetImpl * pPropSet =
+                    new WW8PropertySetImpl(*pStream, nOffset + 2, nCount);
+
+                    pPropSet->resolve(rHandler);
+                }
+            }
+        }
+        break;
     default:
         break;
     }
@@ -356,7 +382,7 @@ void WW8PropertySetImpl::resolve(Properties & rHandler)
 
             rHandler.sprm(aSprm);
 
-            resolveLocal(aSprm);
+            resolveLocal(aSprm, rHandler);
 
             ++(*pIt);
         }

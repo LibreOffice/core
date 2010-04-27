@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: msocximex.cxx,v $
- * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2326,8 +2323,8 @@ sal_Bool OCX_ToggleButton::Import(com::sun::star::uno::Reference<
     if (pValue)
     {
         INT16 nTmp=pValue[0]-0x30;
-        aTmp <<= nTmp;
-        rPropSet->setPropertyValue( WW8_ASCII2STR("State"), aTmp);
+        aTmp <<= nTmp == 1;
+        rPropSet->setPropertyValue( WW8_ASCII2STR("DefaultState"), aTmp);
     }
 
     if (pCaption)
@@ -2447,9 +2444,9 @@ sal_Bool OCX_ToggleButton::WriteContents(SvStorageStreamRef &rContents,
 
     WriteAlign(rContents,4);
     nValueLen = 1|SVX_MSOCX_COMPRESSED;
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("State"));
-    sal_Int16 nDefault = sal_Int16();
-    aTmp >>= nDefault;
+    bool bDefault = false;
+    rPropSet->getPropertyValue(WW8_ASCII2STR("DefaultState")) >>= bDefault;
+    sal_uInt8 nDefault = static_cast< sal_uInt8 >( bDefault ? '1' : '0' );
     *rContents << nValueLen;
     pBlockFlags[2] |= 0x40;
 
@@ -2462,8 +2459,7 @@ sal_Bool OCX_ToggleButton::WriteContents(SvStorageStreamRef &rContents,
     *rContents << rSize.Width;
     *rContents << rSize.Height;
 
-    nDefault += 0x30;
-    *rContents << sal_uInt8(nDefault);
+    *rContents << nDefault;
     *rContents << sal_uInt8(0x00);
 
     aCaption.WriteCharArray( *rContents );
