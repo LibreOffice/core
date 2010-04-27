@@ -39,12 +39,12 @@ import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.awt.PosSize;
 import com.sun.star.awt.Rectangle;
-import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
+import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -347,12 +347,8 @@ public class ConnectionLineAccessibility extends TestCase
 
         util.utils.shortWait(1000);
 
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
-                XExtendedToolkit.class, toolkit);
-
-        Object atw = tk.getActiveTopWindow();
-
-        xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, atw);
+        xWindow = UnoRuntime.queryInterface(XModel.class, QueryComponent).
+            getCurrentController().getFrame().getContainerWindow();
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 

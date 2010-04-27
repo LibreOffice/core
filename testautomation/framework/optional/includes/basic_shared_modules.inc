@@ -37,7 +37,8 @@ testcase tBasicSharedModules
     dim iObjectPosition as integer
     dim iLibraryCount as integer
 
-    const EXPECTED_LIBRARY_COUNT = 12
+    const EXPECTED_LIBRARY_COUNT     = 13 ' prebundled extensions add a library
+    const EXPECTED_LIBRARY_COUNT_OOO = 12
     
     hInitSingleDoc()
     
@@ -72,9 +73,15 @@ testcase tBasicSharedModules
     
     iLibraryCount = Library.getItemCount()
     printlog( "There are " & iLibraryCount & " items in the list" )
-    
-    if ( iLibraryCount <> EXPECTED_LIBRARY_COUNT ) then
-        warnlog( "The number of items in the library-list is incorrect (should be 12): " & iLibraryCount )
+
+    if ( gOOo ) then
+        if ( iLibraryCount <> EXPECTED_LIBRARY_COUNT_OOO ) then
+            warnlog( "Incorrect itemcount in libraries list: " & iLibraryCount )
+        endif
+    else
+        if ( iLibraryCount <> EXPECTED_LIBRARY_COUNT ) then
+            warnlog( "Incorrect itemcount in libraries list: " & iLibraryCount )
+        endif
     endif
     
     Kontext "MacroBar"

@@ -30,8 +30,8 @@ import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleAction;
 import com.sun.star.accessibility.XAccessibleComponent;
-import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
+import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
@@ -83,34 +83,18 @@ public class AccessibleMenuBar extends TestCase {
      */
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
-        XInterface oObj = null;
-
-        try {
-            oObj = (XInterface) ((XMultiServiceFactory) Param.getMSF()).createInstance(
-                           "com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get toolkit");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e);
-        }
-
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
-                                      XExtendedToolkit.class, oObj);
-
         shortWait();
 
         AccessibilityTools at = new AccessibilityTools();
 
-        Object atw = tk.getActiveTopWindow();
-
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
-                                                              atw);
+        XWindow xWindow = UnoRuntime.queryInterface(XModel.class, xTextDoc).
+            getCurrentController().getFrame().getContainerWindow();
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
 
         at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.MENU_BAR);
+        XInterface oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.MENU_BAR);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
