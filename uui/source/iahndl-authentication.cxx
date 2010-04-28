@@ -581,5 +581,17 @@ UUIInteractionHelper::handlePasswordRequest(
                                true /* bool bMSCryptoMode */);
         return true;
     }
+
+    task::PasswordRequest aPasswordRequest;
+    if( aAnyRequest >>= aPasswordRequest )
+    {
+        handlePasswordRequest_(getParentProperty(),
+                               aPasswordRequest.Mode,
+                               rRequest->getContinuations(),
+                               rtl::OUString(),
+                               false /* bool bMSCryptoMode */);
+        return true;
+    }
+
     return false;
 }
