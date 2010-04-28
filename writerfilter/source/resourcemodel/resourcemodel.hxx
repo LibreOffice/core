@@ -76,8 +76,6 @@ public:
 
     void dumpSprm(SprmSharedPointer_t sprm);
     void dumpSprms();
-
-    static bool compare(SprmSharedPointer_t sprm1, SprmSharedPointer_t sprm2);
 };
 
 class WW8BinaryObjHandler : public BinaryObj
