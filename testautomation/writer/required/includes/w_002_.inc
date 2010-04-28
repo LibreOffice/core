@@ -63,6 +63,8 @@ sub w_002_
     'Writer Master Document
     gApplication = "MASTERDOCUMENT"
     Call tMasterDocEditNavigator
+
+    gApplication "HTML"
     Call tEditFields
 
     gApplication = "WRITER"
@@ -981,7 +983,7 @@ endcase
 
 ' ----------------------------------------------------------------
 
-testcase tEditfields
+testcase tEditFields
 
     PrintLog( "Edit/Fields: Edit Fields dialog: " & gApplication )
     dim iCurrentType as integer
