@@ -436,8 +436,6 @@ class SW_DLLPUBLIC Writer : public SvRefBase
     SwAsciiOptions aAscOpts;
     String          sBaseURL;
 
-    SvStream * m_pStream;
-
     void _AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont );
     void _AddFontItems( SfxItemPool& rPool, USHORT nWhichId );
 
@@ -535,12 +533,8 @@ public:
     inline SvStream& OutLong( long nVal )       { return OutLong( Strm(), nVal ); }
     inline SvStream& OutULong( ULONG nVal )     { return OutULong( Strm(), nVal ); }
 
-    void SetStream(SvStream *const pStream) { m_pStream = pStream; }
-#ifndef DBG_UTIL
-    SvStream& Strm() { return *m_pStream; }
-#else
+    void SetStream(SvStream *const pStream);
     SvStream& Strm();
-#endif
 
     void SetOrganizerMode( BOOL bSet ) { bOrganizerMode = bSet; }
 };

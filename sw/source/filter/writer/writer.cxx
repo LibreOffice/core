@@ -58,6 +58,8 @@ DECLARE_TABLE( SwBookmarkNodeTable, SvPtrarr* )
 
 struct Writer_Impl
 {
+    SvStream * m_pStream;
+
     SvStringsSortDtor *pSrcArr, *pDestArr;
     SvPtrarr* pFontRemoveLst, *pBkmkArr;
     SwBookmarkNodeTable* pBkmkNodePos;
@@ -70,7 +72,8 @@ struct Writer_Impl
 };
 
 Writer_Impl::Writer_Impl( const SwDoc& /*rDoc*/ )
-    : pSrcArr( 0 ), pDestArr( 0 ), pFontRemoveLst( 0 ), pBkmkNodePos( 0 )
+    : m_pStream(0)
+    , pSrcArr( 0 ), pDestArr( 0 ), pFontRemoveLst( 0 ), pBkmkNodePos( 0 )
 {
 }
 
@@ -142,7 +145,6 @@ void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
 
 Writer::Writer()
     : pImpl(0)
-    , m_pStream(0)
     , pOrigPam(0), pOrigFileName(0), pDoc(0), pCurPam(0)
 {
     bWriteAll = bShowProgress = bUCS2_WithStartChar = true;
@@ -179,7 +181,6 @@ void Writer::ResetWriter()
     pCurPam = 0;
     pOrigFileName = 0;
     pDoc = 0;
-    m_pStream = 0;
 
     bShowProgress = bUCS2_WithStartChar = TRUE;
     bASCII_NoLastLineEnd = bASCII_ParaAsBlanc = bASCII_ParaAsCR =
@@ -248,13 +249,13 @@ SwPaM* Writer::NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
 /////////////////////////////////////////////////////////////////////////////
 
 // Stream-spezifisches
-#ifdef DBG_UTIL
 SvStream& Writer::Strm()
 {
-    ASSERT( m_pStream, "Oh-oh. Writer with no Stream!" );
-    return *m_pStream;
+    ASSERT( pImpl->m_pStream, "Oh-oh. Writer with no Stream!" );
+    return *pImpl->m_pStream;
 }
-#endif
+
+void Writer::SetStream(SvStream *const pStream) { pImpl->m_pStream = pStream; }
 
 
 SvStream& Writer::OutHex( SvStream& rStrm, ULONG nHex, BYTE nLen )
@@ -316,10 +317,10 @@ ULONG Writer::Write( SwPaM& rPaM, SvStream& rStrm, const String* pFName )
         return nResult;
     }
 
-    m_pStream = &rStrm;
     pDoc = rPaM.GetDoc();
     pOrigFileName = pFName;
     pImpl = new Writer_Impl( *pDoc );
+    pImpl->m_pStream = &rStrm;
 
     // PaM kopieren, damit er veraendert werden kann
     pCurPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
