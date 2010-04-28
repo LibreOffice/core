@@ -53,7 +53,6 @@ SLOFILES =	\
         $(SLO)$/sdview2.obj	\
         $(SLO)$/sdview3.obj	\
         $(SLO)$/sdview4.obj	\
-        $(SLO)$/sdview5.obj	\
         $(SLO)$/viewshel.obj \
         $(SLO)$/viewshe2.obj \
         $(SLO)$/viewshe3.obj \
