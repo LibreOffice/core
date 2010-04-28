@@ -248,7 +248,7 @@ sub get_config_file {
     return '';
 };
 
-sub get_hg_root {
+sub get_repository_root {
     my $self = shift;
     return $self->{USER_SOURCE_ROOT} if (defined $self->{USER_SOURCE_ROOT});
     my $hg_root;
@@ -265,13 +265,14 @@ sub get_hg_root {
             return $hg_root;
         };
     };
-    croak('Cannot open find source_config and/or determine hg root directory for ' . cwd());
+    Carp::cluck('Cannot open/find source_config and/or determine hg root directory for ' . cwd() . ". Taking $ENV{SOLARSRC} as default repository\n\n");
+    return $ENV{SOLARSRC};
 };
 
 sub read_config_file {
     my $self = shift;
     if (!$self->{SOURCE_CONFIG_FILE}) {
-        my $repository_root = get_hg_root($self);
+        my $repository_root = get_repository_root($self);
         ${$self->{REPOSITORIES}}{File::Basename::basename($repository_root)} = $repository_root;
         return;
     };
@@ -324,7 +325,7 @@ sub read_config_file {
         close SOURCE_CONFIG_FILE;
         if (!scalar keys %{$self->{REPOSITORIES}}) {
             # Fallback - default repository is the directory where is our module...
-            my $hg_root = get_hg_root($self);
+            my $hg_root = get_repository_root($self);
             ${$self->{REPOSITORIES}}{File::Basename::basename($hg_root)} = $hg_root;
         };
     } else {
