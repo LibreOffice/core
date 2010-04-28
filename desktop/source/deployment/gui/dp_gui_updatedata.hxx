@@ -35,7 +35,6 @@
 
 
 namespace com { namespace sun { namespace star { namespace deployment {
-        class XPackageManager;
         class XPackage;
 }}}}
 namespace com { namespace sun { namespace star { namespace xml { namespace dom {
@@ -48,10 +47,8 @@ namespace dp_gui {
 struct UpdateListEntry
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> m_xPackage;
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager> m_xPackageManager;
 
-    UpdateListEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
-                     const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager );
+    UpdateListEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
    ~UpdateListEntry();
 };
 
@@ -61,8 +58,6 @@ typedef ::boost::shared_ptr< UpdateListEntry > TUpdateListEntry;
 struct UpdateData
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > aInstalledPackage;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > aPackageManager;
     // The content of the update information
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode > aUpdateInfo;
     //The URL of the locally downloaded extension. It will only be set if there were no errors

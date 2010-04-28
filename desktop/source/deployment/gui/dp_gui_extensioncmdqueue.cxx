@@ -48,7 +48,6 @@
 #include "com/sun/star/deployment/DeploymentException.hpp"
 #include "com/sun/star/deployment/UpdateInformationProvider.hpp"
 #include "com/sun/star/deployment/XPackage.hpp"
-#include "com/sun/star/deployment/XPackageManager.hpp"
 
 #include "com/sun/star/task/XAbortChannel.hpp"
 #include "com/sun/star/task/XInteractionAbort.hpp"
@@ -201,25 +200,18 @@ struct ExtensionCmd
     E_CMD_TYPE  m_eCmdType;
     bool        m_bWarnUser;
     OUString    m_sExtensionURL;
-    uno::Reference< deployment::XPackageManager > m_xPackageManager;
-    uno::Reference< deployment::XPackage >        m_xPackage;
-    std::vector< TUpdateListEntry >               m_vExtensionList;
+    OUString    m_sRepository;
+    uno::Reference< deployment::XPackage > m_xPackage;
+    std::vector< TUpdateListEntry >        m_vExtensionList;
 
     ExtensionCmd( const E_CMD_TYPE eCommand,
-                  const uno::Reference< deployment::XPackageManager > &rPackageManager,
                   const OUString &rExtensionURL,
+                  const OUString &rRepository,
                   const bool bWarnUser )
         : m_eCmdType( eCommand ),
           m_bWarnUser( bWarnUser ),
           m_sExtensionURL( rExtensionURL ),
-          m_xPackageManager( rPackageManager ) {};
-    ExtensionCmd( const E_CMD_TYPE eCommand,
-                  const uno::Reference< deployment::XPackageManager > &rPackageManager,
-                  const uno::Reference< deployment::XPackage > &rPackage )
-        : m_eCmdType( eCommand ),
-          m_bWarnUser( false ),
-          m_xPackageManager( rPackageManager ),
-          m_xPackage( rPackage ) {};
+          m_sRepository( rRepository ) {};
     ExtensionCmd( const E_CMD_TYPE eCommand,
                   const uno::Reference< deployment::XPackage > &rPackage )
         : m_eCmdType( eCommand ),
@@ -242,11 +234,10 @@ public:
             TheExtensionManager *pManager,
             const uno::Reference< uno::XComponentContext > & rContext );
 
-    void addExtension( const uno::Reference< deployment::XPackageManager > &rPackageManager,
-                       const OUString &rExtensionURL,
+    void addExtension( const OUString &rExtensionURL,
+                       const OUString &rRepository,
                        const bool bWarnUser );
-    void removeExtension( const uno::Reference< deployment::XPackageManager > &rPackageManager,
-                          const uno::Reference< deployment::XPackage > &rPackage );
+    void removeExtension( const uno::Reference< deployment::XPackage > &rPackage );
     void enableExtension( const uno::Reference< deployment::XPackage > &rPackage,
                           const bool bEnable );
     void checkForUpdates( const std::vector< TUpdateListEntry > &vExtensionList );
@@ -266,11 +257,10 @@ private:
     virtual void SAL_CALL onTerminated();
 
     void _addExtension( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
-                        const uno::Reference< deployment::XPackageManager > &xPackageManager,
                         const OUString &rPackageURL,
+                        const OUString &rRepository,
                         const bool bWarnUser );
     void _removeExtension( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
-                           const uno::Reference< deployment::XPackageManager > &xPackageManager,
                            const uno::Reference< deployment::XPackage > &xPackage );
     void _enableExtension( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
                            const uno::Reference< deployment::XPackage > &xPackage );
@@ -645,8 +635,8 @@ ExtensionCmdQueue::Thread::Thread( DialogHelper *pDialogHelper,
 }
 
 //------------------------------------------------------------------------------
-void ExtensionCmdQueue::Thread::addExtension( const uno::Reference< deployment::XPackageManager > &rPackageManager,
-                                              const ::rtl::OUString &rExtensionURL,
+void ExtensionCmdQueue::Thread::addExtension( const ::rtl::OUString &rExtensionURL,
+                                              const ::rtl::OUString &rRepository,
                                               const bool bWarnUser )
 {
     ::osl::MutexGuard aGuard( m_mutex );
@@ -657,7 +647,7 @@ void ExtensionCmdQueue::Thread::addExtension( const uno::Reference< deployment::
 
     if ( rExtensionURL.getLength() )
     {
-        TExtensionCmd pEntry( new ExtensionCmd( ExtensionCmd::ADD, rPackageManager, rExtensionURL, bWarnUser ) );
+        TExtensionCmd pEntry( new ExtensionCmd( ExtensionCmd::ADD, rExtensionURL, rRepository, bWarnUser ) );
 
         m_queue.push( pEntry );
         m_eInput = START;
@@ -666,8 +656,7 @@ void ExtensionCmdQueue::Thread::addExtension( const uno::Reference< deployment::
 }
 
 //------------------------------------------------------------------------------
-void ExtensionCmdQueue::Thread::removeExtension( const uno::Reference< deployment::XPackageManager > &rPackageManager,
-                                                 const uno::Reference< deployment::XPackage > &rPackage )
+void ExtensionCmdQueue::Thread::removeExtension( const uno::Reference< deployment::XPackage > &rPackage )
 {
     ::osl::MutexGuard aGuard( m_mutex );
 
@@ -675,9 +664,9 @@ void ExtensionCmdQueue::Thread::removeExtension( const uno::Reference< deploymen
     if ( m_bStopped )
         return;
 
-    if ( rPackageManager.is() && rPackage.is() )
+    if ( rPackage.is() )
     {
-        TExtensionCmd pEntry( new ExtensionCmd( ExtensionCmd::REMOVE, rPackageManager, rPackage ) );
+        TExtensionCmd pEntry( new ExtensionCmd( ExtensionCmd::REMOVE, rPackage ) );
 
         m_queue.push( pEntry );
         m_eInput = START;
@@ -811,10 +800,10 @@ void ExtensionCmdQueue::Thread::execute()
 
                 switch ( pEntry->m_eCmdType ) {
                 case ExtensionCmd::ADD :
-                    _addExtension( currentCmdEnv, pEntry->m_xPackageManager, pEntry->m_sExtensionURL, pEntry->m_bWarnUser );
+                    _addExtension( currentCmdEnv, pEntry->m_sExtensionURL, pEntry->m_sRepository, pEntry->m_bWarnUser );
                     break;
                 case ExtensionCmd::REMOVE :
-                    _removeExtension( currentCmdEnv, pEntry->m_xPackageManager, pEntry->m_xPackage );
+                    _removeExtension( currentCmdEnv, pEntry->m_xPackage );
                     break;
                 case ExtensionCmd::ENABLE :
                     _enableExtension( currentCmdEnv, pEntry->m_xPackage );
@@ -904,8 +893,8 @@ void ExtensionCmdQueue::Thread::execute()
 
 //------------------------------------------------------------------------------
 void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
-                                               const uno::Reference< deployment::XPackageManager > &xPackageManager,
                                                const OUString &rPackageURL,
+                                               const OUString &rRepository,
                                                const bool bWarnUser )
 {
     //check if we have a string in anyTitle. For example "unopkg gui \" caused anyTitle to be void
@@ -928,17 +917,16 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
     }
 
     rCmdEnv->setWarnUser( bWarnUser );
-    uno::Reference< task::XAbortChannel > xAbortChannel( xPackageManager->createAbortChannel() );
+    uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
+    uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
     OUString sTitle = searchAndReplaceAll( m_sAddingPackages, OUSTR("%EXTENSION_NAME"), sName );
     rCmdEnv->progressSection( sTitle, xAbortChannel );
 
     try
     {
-        OUString sPackageManager = xPackageManager->getContext();
-        uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
         uno::Reference< deployment::XPackage > xPackage(
             xExtMgr->addExtension(rPackageURL, uno::Sequence<beans::NamedValue>(),
-                                  sPackageManager, xAbortChannel, rCmdEnv.get() ) );
+                                  rRepository, xAbortChannel, rCmdEnv.get() ) );
         OSL_ASSERT( xPackage.is() );
     }
     catch ( ucb::CommandFailedException & )
@@ -956,19 +944,17 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
 
 //------------------------------------------------------------------------------
 void ExtensionCmdQueue::Thread::_removeExtension( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
-                                                  const uno::Reference< deployment::XPackageManager > &xPackageManager,
                                                   const uno::Reference< deployment::XPackage > &xPackage )
 {
-    uno::Reference< task::XAbortChannel > xAbortChannel( xPackageManager->createAbortChannel() );
+    uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
+    uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
     OUString sTitle = searchAndReplaceAll( m_sRemovingPackages, OUSTR("%EXTENSION_NAME"), xPackage->getDisplayName() );
     rCmdEnv->progressSection( sTitle, xAbortChannel );
 
     OUString id( dp_misc::getIdentifier( xPackage ) );
     try
     {
-        OUString sPackageManager = xPackageManager->getContext();
-        uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
-        xExtMgr->removeExtension( id, xPackage->getName(), sPackageManager, xAbortChannel, rCmdEnv.get() );
+        xExtMgr->removeExtension( id, xPackage->getName(), xPackage->getRepositoryName(), xAbortChannel, rCmdEnv.get() );
     }
     catch ( deployment::DeploymentException & )
     {}
@@ -1120,17 +1106,16 @@ ExtensionCmdQueue::~ExtensionCmdQueue() {
     stop();
 }
 
-void ExtensionCmdQueue::addExtension( const uno::Reference< deployment::XPackageManager > &rPackageManager,
-                                      const ::rtl::OUString & extensionURL,
+void ExtensionCmdQueue::addExtension( const ::rtl::OUString & extensionURL,
+                                      const ::rtl::OUString & repository,
                                       const bool bWarnUser )
 {
-    m_thread->addExtension( rPackageManager, extensionURL, bWarnUser );
+    m_thread->addExtension( extensionURL, repository, bWarnUser );
 }
 
-void ExtensionCmdQueue::removeExtension( const uno::Reference< deployment::XPackageManager > &rPackageManager,
-                                         const uno::Reference< deployment::XPackage > &rPackage )
+void ExtensionCmdQueue::removeExtension( const uno::Reference< deployment::XPackage > &rPackage )
 {
-    m_thread->removeExtension( rPackageManager, rPackage );
+    m_thread->removeExtension( rPackage );
 }
 
 void ExtensionCmdQueue::enableExtension( const uno::Reference< deployment::XPackage > &rPackage,

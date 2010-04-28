@@ -44,6 +44,10 @@
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
+#define USER_PACKAGE_MANAGER    OUSTR("user")
+#define SHARED_PACKAGE_MANAGER  OUSTR("shared")
+#define BUNDLED_PACKAGE_MANAGER OUSTR("bundled")
+
 using namespace ::com::sun::star;
 
 namespace dp_gui {
@@ -52,10 +56,9 @@ namespace dp_gui {
 //                          struct Entry_Impl
 //------------------------------------------------------------------------------
 Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
-                        const uno::Reference< deployment::XPackageManager > &xPackageManager,
-                        PackageState eState ) :
+                        const PackageState eState, const bool bReadOnly ) :
     m_bActive( false ),
-    m_bLocked( false ),
+    m_bLocked( bReadOnly ),
     m_bHasOptions( false ),
     m_bShared( false ),
     m_bUser( false ),
@@ -65,8 +68,7 @@ Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
     m_bHasButtons( false ),
     m_eState( eState ),
     m_pPublisher( NULL ),
-    m_xPackage( xPackage ),
-    m_xPackageManager( xPackageManager )
+    m_xPackage( xPackage )
 {
     m_sTitle = xPackage->getDisplayName();
     m_sVersion = xPackage->getVersion();
@@ -87,8 +89,6 @@ Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
     else
         m_aIconHC = m_aIcon;
 
-    m_bLocked = m_xPackageManager->isReadOnly();
-
     if ( eState == AMBIGUOUS )
         m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_UNKNOWN_STATUS );
     else if ( eState == NOT_REGISTERED )
@@ -108,14 +108,11 @@ StringCompare Entry_Impl::CompareTo( const CollatorWrapper *pCollator, const TEn
         eCompare = m_sVersion.CompareTo( pEntry->m_sVersion );
         if ( eCompare == COMPARE_EQUAL )
         {
-            if ( m_xPackageManager != pEntry->m_xPackageManager )
-            {
-                sal_Int32 nCompare = m_xPackageManager->getContext().compareTo( pEntry->m_xPackageManager->getContext() );
-                if ( nCompare < 0 )
-                    eCompare = COMPARE_LESS;
-                else if ( nCompare > 0 )
-                    eCompare = COMPARE_GREATER;
-            }
+            sal_Int32 nCompare = m_xPackage->getRepositoryName().compareTo( pEntry->m_xPackage->getRepositoryName() );
+            if ( nCompare < 0 )
+                eCompare = COMPARE_LESS;
+            else if ( nCompare > 0 )
+                eCompare = COMPARE_GREATER;
         }
     }
     return eCompare;
@@ -955,13 +952,13 @@ bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl pEntry, const long nStar
 }
 
 //------------------------------------------------------------------------------
-long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &xPackage,
-                                  const uno::Reference< deployment::XPackageManager > &xPackageManager )
+long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &xPackage )
 {
-    long nPos = 0;
+    long         nPos = 0;
     PackageState eState = m_pManager->getPackageState( xPackage );
+    bool         bLocked = m_pManager->isReadOnly( xPackage );
 
-    TEntry_Impl pEntry( new Entry_Impl( xPackage, xPackageManager, eState ) );
+    TEntry_Impl pEntry( new Entry_Impl( xPackage, eState, bLocked ) );
     xPackage->addEventListener( uno::Reference< lang::XEventListener > ( m_xRemoveListener, uno::UNO_QUERY ) );
 
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
@@ -982,8 +979,8 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
     }
 
     pEntry->m_bHasOptions = m_pManager->supportsOptions( xPackage );
-    pEntry->m_bUser       = ( m_pManager->getUserPkgMgr() == xPackageManager );
-    pEntry->m_bShared     = !pEntry->m_bUser && ( m_pManager->getSharedPkgMgr() == xPackageManager );
+    pEntry->m_bUser       = xPackage->getRepositoryName().equals( USER_PACKAGE_MANAGER );
+    pEntry->m_bShared     = xPackage->getRepositoryName().equals( SHARED_PACKAGE_MANAGER );
     pEntry->m_bNew        = m_bInCheckMode;
 
     //access to m_nActive must be guarded

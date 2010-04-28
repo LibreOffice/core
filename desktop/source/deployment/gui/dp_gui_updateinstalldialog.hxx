@@ -41,6 +41,9 @@
 #include "dp_gui_autoscrolledit.hxx"
 /// @HTML
 
+namespace com { namespace sun { namespace star { namespace deployment {
+    class XExtensionManager;
+}}}}
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 }}}}
@@ -102,9 +105,12 @@ private:
     };
     void setError(INSTALL_ERROR err, ::rtl::OUString const & sExtension, ::rtl::OUString const & exceptionMessage);
     void setError(::rtl::OUString const & exceptionMessage);
+    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > getExtensionManager() const
+            { return m_xExtensionManager; }
 
     rtl::Reference< Thread > m_thread;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xComponentContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > m_xExtensionManager;
     //Signals that an error occurred during download and installation
     bool m_bError;
     bool m_bNoEntry;

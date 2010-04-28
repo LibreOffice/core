@@ -35,8 +35,6 @@
 
 #include "toolkit/helper/vclunohelper.hxx"
 #include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/deployment/XPackageManagerFactory.hpp"
-#include "com/sun/star/deployment/thePackageManagerFactory.hpp"
 
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
@@ -74,17 +72,8 @@ TheExtensionManager::TheExtensionManager( Window *pParent,
     m_pExtMgrDialog( NULL ),
     m_pUpdReqDialog( NULL )
 {
-    m_sPackageManagers.realloc(3);
-    m_sPackageManagers[0] = deployment::thePackageManagerFactory::get( m_xContext )->getPackageManager( USER_PACKAGE_MANAGER );
-    m_sPackageManagers[1] = deployment::thePackageManagerFactory::get( m_xContext )->getPackageManager( SHARED_PACKAGE_MANAGER );
-    m_sPackageManagers[2] = deployment::thePackageManagerFactory::get( m_xContext )->getPackageManager( BUNDLED_PACKAGE_MANAGER );
-
-    for ( sal_Int32 i = 0; i < m_sPackageManagers.getLength(); ++i )
-    {
-        m_sPackageManagers[i]->addModifyListener( this );
-    }
-
     m_xExtensionManager = deployment::ExtensionManager::get( xContext );
+    m_xExtensionManager->addModifyListener( this );
 
     uno::Reference< lang::XMultiServiceFactory > xConfig(
         xContext->getServiceManager()->createInstanceWithContext(
@@ -241,7 +230,7 @@ bool TheExtensionManager::checkUpdates( bool /* bShowUpdateOnly */, bool /*bPare
             uno::Reference< deployment::XPackage > xPackage = xPackageList[j];
             if ( xPackage.is() )
             {
-                TUpdateListEntry pEntry( new UpdateListEntry( xPackage, m_sPackageManagers[j] ) );
+                TUpdateListEntry pEntry( new UpdateListEntry( xPackage ) );
                 vEntries.push_back( pEntry );
             }
         }
@@ -261,10 +250,9 @@ bool TheExtensionManager::enablePackage( const uno::Reference< deployment::XPack
 }
 
 //------------------------------------------------------------------------------
-bool TheExtensionManager::removePackage( const uno::Reference< deployment::XPackageManager > &xPackageManager,
-                                         const uno::Reference< deployment::XPackage > &xPackage )
+bool TheExtensionManager::removePackage( const uno::Reference< deployment::XPackage > &xPackage )
 {
-    m_pExecuteCmdQueue->removeExtension( xPackageManager, xPackage );
+    m_pExecuteCmdQueue->removeExtension( xPackage );
 
     return true;
 }
@@ -285,22 +273,20 @@ bool TheExtensionManager::installPackage( const OUString &rPackageURL, bool bWar
 
     createDialog( false );
 
-    uno::Reference< deployment::XPackageManager > xUserPkgMgr = getUserPkgMgr();
-    uno::Reference< deployment::XPackageManager > xSharedPkgMgr = getSharedPkgMgr();
-
     bool bInstall = true;
     bool bInstallForAll = false;
 
-    if ( !bWarnUser && ! xSharedPkgMgr->isReadOnly() )
+    // DV! missing function is read only repository from extension manager
+    if ( !bWarnUser && ! m_xExtensionManager->isReadOnlyRepository( SHARED_PACKAGE_MANAGER ) )
         bInstall = getDialogHelper()->installForAllUsers( bInstallForAll );
 
     if ( !bInstall )
         return false;
 
     if ( bInstallForAll )
-        m_pExecuteCmdQueue->addExtension( xSharedPkgMgr, rPackageURL, false );
+        m_pExecuteCmdQueue->addExtension( rPackageURL, SHARED_PACKAGE_MANAGER, false );
     else
-        m_pExecuteCmdQueue->addExtension( xUserPkgMgr, rPackageURL, bWarnUser );
+        m_pExecuteCmdQueue->addExtension( rPackageURL, USER_PACKAGE_MANAGER, bWarnUser );
 
     return true;
 }
@@ -357,7 +343,7 @@ void TheExtensionManager::createPackageList()
             if ( xPackage.is() )
             {
                 PackageState eState = getPackageState( xPackage );
-                getDialogHelper()->addPackageToList( xPackage, m_sPackageManagers[j] );
+                getDialogHelper()->addPackageToList( xPackage );
                 // When the package is enabled, we can stop here, otherwise we have to look for
                 // another version of this package
                 if ( ( eState == REGISTERED ) || ( eState == NOT_AVAILABLE ) )
@@ -393,6 +379,17 @@ PackageState TheExtensionManager::getPackageState( const uno::Reference< deploym
         OSL_ENSURE( 0, ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         return NOT_AVAILABLE;
     }
+}
+
+//------------------------------------------------------------------------------
+bool TheExtensionManager::isReadOnly( const uno::Reference< deployment::XPackage > &xPackage ) const
+{
+    if ( m_xExtensionManager.is() && xPackage.is() )
+    {
+        return m_xExtensionManager->isReadOnlyRepository( xPackage->getRepositoryName() );
+    }
+    else
+        return true;
 }
 
 //------------------------------------------------------------------------------
@@ -509,13 +506,9 @@ void TheExtensionManager::notifyTermination( ::lang::EventObject const & rEvt )
 void TheExtensionManager::modified( ::lang::EventObject const & rEvt )
     throw ( uno::RuntimeException )
 {
-    uno::Reference< deployment::XPackageManager > xPackageManager( rEvt.Source, uno::UNO_QUERY );
-    if ( xPackageManager.is() )
-    {
-        getDialogHelper()->prepareChecking();
-        createPackageList();
-        getDialogHelper()->checkEntries();
-    }
+    getDialogHelper()->prepareChecking();
+    createPackageList();
+    getDialogHelper()->checkEntries();
 }
 
 //------------------------------------------------------------------------------

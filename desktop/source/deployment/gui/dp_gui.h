@@ -79,21 +79,18 @@ enum PackageState { REGISTERED, NOT_REGISTERED, AMBIGUOUS, NOT_AVAILABLE };
 class SelectedPackage: public salhelper::SimpleReferenceObject {
 public:
     SelectedPackage() {}
-    SelectedPackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> &xPackage,
-                     const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager> &xPackageManager )
-    : m_xPackage( xPackage ),
-      m_xPackageManager( xPackageManager )
+    SelectedPackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> &xPackage)
+    : m_xPackage( xPackage )
     {}
 
     virtual ~SelectedPackage();
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> getPackage() const { return m_xPackage; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager> getPackageManager() const { return m_xPackageManager; }
+
 private:
     SelectedPackage(SelectedPackage &); // not defined
     void operator =(SelectedPackage &); // not defined
 
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> m_xPackage;
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager> m_xPackageManager;
 };
 
 } // namespace dp_gui

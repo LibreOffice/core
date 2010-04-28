@@ -1489,7 +1489,7 @@ BackendImpl::TypelibraryPackageImpl::isRegistered_(
 void BackendImpl::TypelibraryPackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
     bool doRegisterPackage,
-    bool startup,
+    bool /*startup*/,
     ::rtl::Reference<AbortChannel> const &,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {

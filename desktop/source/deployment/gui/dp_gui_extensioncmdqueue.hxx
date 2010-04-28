@@ -40,7 +40,6 @@
 /// @HTML
 
 namespace com { namespace sun { namespace star {
-    namespace deployment { class XPackageManager; }
     namespace task { class XInteractionRequest; }
     namespace uno { class XComponentContext; }
 } } }
@@ -78,11 +77,10 @@ public:
 
     /**
     */
-    void addExtension( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &rPackageManager,
-                       const ::rtl::OUString &rExtensionURL,
+    void addExtension( const ::rtl::OUString &rExtensionURL,
+                       const ::rtl::OUString &rRepository,
                        const bool bWarnUser );
-    void removeExtension( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &rPackageManager,
-                          const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &rPackage );
+    void removeExtension( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &rPackage );
     void enableExtension( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &rPackage,
                           const bool bEnable );
     void checkForUpdates( const std::vector< TUpdateListEntry > &vList );

@@ -33,7 +33,6 @@
 #include "cppuhelper/implbase2.hxx"
 
 #include "com/sun/star/container/XNameAccess.hpp"
-#include "com/sun/star/deployment/XPackageManager.hpp"
 #include "com/sun/star/deployment/XExtensionManager.hpp"
 #include "com/sun/star/deployment/ExtensionManager.hpp"
 #include "com/sun/star/frame/XDesktop.hpp"
@@ -60,7 +59,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop >           m_xDesktop;
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > m_xExtensionManager;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager> > m_sPackageManagers;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xNameAccessNodes;
 
     ::std::auto_ptr< ExtensionCmdQueue > m_pExecuteCmdQueue;
@@ -100,8 +98,7 @@ public:
 
     bool enablePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
                         bool bEnable );
-    bool removePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
+    bool removePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
     bool installPackage( const ::rtl::OUString &rPackageURL, bool bWarnUser = false );
 
     bool queryTermination();
@@ -111,9 +108,8 @@ public:
     bool supportsOptions( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) const;
     PackageState getPackageState( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) const;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getContext() const { return m_xContext; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > getUserPkgMgr() const { return m_sPackageManagers[0]; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > getSharedPkgMgr() const { return m_sPackageManagers[1]; }
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > getExtensionManager() const { return m_xExtensionManager; }
+    bool isReadOnly( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) const;
 
     //-----------------
     static ::rtl::Reference<TheExtensionManager> get(

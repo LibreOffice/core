@@ -38,7 +38,6 @@
 #include "com/sun/star/lang/Locale.hpp"
 #include "com/sun/star/lang/XEventListener.hpp"
 #include "com/sun/star/deployment/XPackage.hpp"
-#include "com/sun/star/deployment/XPackageManager.hpp"
 
 #include <boost/shared_ptr.hpp>
 
@@ -86,11 +85,9 @@ struct Entry_Impl
     svt::FixedHyperlink *m_pPublisher;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> m_xPackage;
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager> m_xPackageManager;
 
     Entry_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager,
-                PackageState eState );
+                const PackageState eState, const bool bReadOnly );
    ~Entry_Impl();
 
     StringCompare CompareTo( const CollatorWrapper *pCollator, const TEntry_Impl pEntry ) const;
@@ -208,8 +205,7 @@ public:
 
     //-----------------
     virtual void    selectEntry( const long nPos );
-    long            addEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
-                              const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager );
+    long            addEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
     void            updateEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
     void            removeEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
 

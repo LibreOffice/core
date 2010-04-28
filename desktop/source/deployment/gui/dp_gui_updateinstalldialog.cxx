@@ -54,7 +54,8 @@
 #include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include "com/sun/star/ucb/XProgressHandler.hpp"
-#include "com/sun/star/deployment/XPackageManager.hpp"
+#include "com/sun/star/deployment/XExtensionManager.hpp"
+#include "com/sun/star/deployment/ExtensionManager.hpp"
 #include "com/sun/star/deployment/XUpdateInformationProvider.hpp"
 #include "com/sun/star/deployment/DependencyException.hpp"
 #include "com/sun/star/deployment/LicenseException.hpp"
@@ -256,6 +257,8 @@ UpdateInstallDialog::UpdateInstallDialog(
         m_cancel(this, DpGuiResId(RID_DLG_UPDATE_INSTALL_ABORT))
 {
     FreeResource();
+
+    m_xExtensionManager = css::deployment::ExtensionManager::get( xCtx );
 
     m_cancel.SetClickHdl(LINK(this, UpdateInstallDialog, cancelHandler));
     m_mle_info.EnableCursor(FALSE);
@@ -496,7 +499,7 @@ void UpdateInstallDialog::Thread::installExtensions()
             if (curData.sLocalURL.getLength() == 0)
                 continue;
             cssu::Reference< css::task::XAbortChannel > xAbortChannel(
-                curData.aPackageManager->createAbortChannel() );
+                curData.aInstalledPackage->createAbortChannel() );
             {
                 vos::OGuard g(Application::GetSolarMutex());
                 if (m_stop) {
@@ -504,9 +507,9 @@ void UpdateInstallDialog::Thread::installExtensions()
                 }
                 m_abort = xAbortChannel;
             }
-            xPackage = curData.aPackageManager->addPackage(
+            xPackage = m_dialog.getExtensionManager()->addExtension(
                 curData.sLocalURL, css::uno::Sequence<css::beans::NamedValue>(),
-                OUString(), xAbortChannel, m_updateCmdEnv.get());
+                curData.aInstalledPackage->getRepositoryName(), xAbortChannel, m_updateCmdEnv.get());
         }
         catch (css::deployment::DeploymentException & de)
         {

@@ -54,7 +54,8 @@
 #include "com/sun/star/deployment/DeploymentException.hpp"
 #include "com/sun/star/deployment/UpdateInformationProvider.hpp"
 #include "com/sun/star/deployment/XPackage.hpp"
-#include "com/sun/star/deployment/XPackageManager.hpp"
+#include "com/sun/star/deployment/XExtensionManager.hpp"
+#include "com/sun/star/deployment/ExtensionManager.hpp"
 #include "com/sun/star/deployment/XUpdateInformationProvider.hpp"
 #include "com/sun/star/frame/XDesktop.hpp"
 #include "com/sun/star/frame/XDispatch.hpp"
@@ -240,12 +241,9 @@ private:
     struct Entry {
         explicit Entry(
             css::uno::Reference< css::deployment::XPackage > const & thePackage,
-            css::uno::Reference< css::deployment::XPackageManager > const &
-                thePackageManager,
             rtl::OUString const & theVersion);
 
         css::uno::Reference< css::deployment::XPackage > package;
-        css::uno::Reference< css::deployment::XPackageManager > packageManager;
         rtl::OUString version;
         css::uno::Reference< css::xml::dom::XNode > info;
     };
@@ -271,14 +269,10 @@ private:
 
     void handle(
         css::uno::Reference< css::deployment::XPackage > const & package,
-        css::uno::Reference< css::deployment::XPackageManager > const &
-            packageManager,
         Map * map);
 
     bool update(
         css::uno::Reference< css::deployment::XPackage > const & package,
-        css::uno::Reference< css::deployment::XPackageManager > const &
-            packageManager,
         css::uno::Reference< css::xml::dom::XNode > const & updateInfo) const;
 
     css::uno::Reference< css::uno::XComponentContext > m_context;
@@ -333,11 +327,8 @@ void UpdateDialog::Thread::stop() {
 
 UpdateDialog::Thread::Entry::Entry(
     css::uno::Reference< css::deployment::XPackage > const & thePackage,
-    css::uno::Reference< css::deployment::XPackageManager > const &
-    thePackageManager,
     rtl::OUString const & theVersion):
     package(thePackage),
-    packageManager(thePackageManager),
     version(theVersion)
 {}
 
@@ -356,7 +347,6 @@ void UpdateDialog::Thread::execute()
     for ( ITER iIndex = m_vExtensionList.begin(); iIndex < m_vExtensionList.end(); ++iIndex )
     {
         css::uno::Reference< css::deployment::XPackage >        p = (*iIndex)->m_xPackage;
-        css::uno::Reference< css::deployment::XPackageManager > m = (*iIndex)->m_xPackageManager;
         if ( p.is() )
         {
             {
@@ -365,7 +355,7 @@ void UpdateDialog::Thread::execute()
                     return;
                 }
             }
-            handle( p, m, &map );
+            handle( p, &map );
         }
     }
 
@@ -399,9 +389,7 @@ void UpdateDialog::Thread::execute()
             }
             for (Map::const_iterator i(map.begin()); i != map.end(); ++i) {
                 if (i->second.info.is() &&
-                    !update(
-                        i->second.package, i->second.packageManager,
-                        i->second.info))
+                    !update( i->second.package, i->second.info ))
                 {
                     break;
                 }
@@ -468,8 +456,6 @@ UpdateDialog::Thread::getUpdateInformation(
 
 void UpdateDialog::Thread::handle(
     css::uno::Reference< css::deployment::XPackage > const & package,
-    css::uno::Reference< css::deployment::XPackageManager > const &
-        packageManager,
     Map * map)
 {
     rtl::OUString id(dp_misc::getIdentifier(package));
@@ -478,7 +464,7 @@ void UpdateDialog::Thread::handle(
     if (urls.getLength() == 0) {
         map->insert(
             Map::value_type(
-                id, Entry(package, packageManager, package->getVersion())));
+                id, Entry(package, package->getVersion())));
     } else {
         css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
             infos(getUpdateInformation(package, urls, id));
@@ -504,18 +490,15 @@ void UpdateDialog::Thread::handle(
             }
         }
         if (latestIndex != -1) {
-            update(
-                package, packageManager,
-                css::uno::Reference< css::xml::dom::XNode >(
-                    infos[latestIndex], css::uno::UNO_QUERY_THROW));
+            update( package,
+                    css::uno::Reference< css::xml::dom::XNode >(
+                        infos[latestIndex], css::uno::UNO_QUERY_THROW));
         }
     }
 }
 
 bool UpdateDialog::Thread::update(
     css::uno::Reference< css::deployment::XPackage > const & package,
-    css::uno::Reference< css::deployment::XPackageManager > const &
-        packageManager,
     css::uno::Reference< css::xml::dom::XNode > const & updateInfo) const
 {
     dp_misc::DescriptionInfoset infoset(m_context, updateInfo);
@@ -529,7 +512,7 @@ bool UpdateDialog::Thread::update(
     for (sal_Int32 i = 0; i < ds.getLength(); ++i) {
         du.unsatisfiedDependencies[i] = dp_misc::Dependencies::getErrorText(ds[i]);
     }
-    du.permission = ! packageManager->isReadOnly();
+    du.permission = ! m_dialog.isReadOnly( package );
     const ::boost::optional< ::rtl::OUString> updateWebsiteURL(infoset.getLocalizedUpdateWebsiteURL());
     rtl::OUStringBuffer b(package->getDisplayName());
     b.append(static_cast< sal_Unicode >(' '));
@@ -559,7 +542,6 @@ bool UpdateDialog::Thread::update(
     {
         dp_gui::UpdateData data;
         data.aInstalledPackage = package;
-        data.aPackageManager = packageManager;
         data.aUpdateInfo = updateInfo;
         if (updateWebsiteURL)
             data.sWebsiteURL = *updateWebsiteURL;
@@ -626,6 +608,9 @@ UpdateDialog::UpdateDialog(
 //    m_extensionManagerDialog(extensionManagerDialog)
 {
     OSL_ASSERT(updateData != NULL);
+
+    m_xExtensionManager = css::deployment::ExtensionManager::get( context );
+
     css::uno::Reference< css::awt::XToolkit > toolkit;
     try {
         toolkit = css::uno::Reference< css::awt::XToolkit >(
@@ -1055,6 +1040,16 @@ bool UpdateDialog::showDescription( const String& rDescription, bool bWithPublis
     return true;
 }
 
+bool UpdateDialog::isReadOnly( const css::uno::Reference< css::deployment::XPackage > &xPackage ) const
+{
+    if ( m_xExtensionManager.is() && xPackage.is() )
+    {
+        return m_xExtensionManager->isReadOnlyRepository( xPackage->getRepositoryName() );
+    }
+    else
+        return true;
+}
+
 IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
 {
     rtl::OUStringBuffer b;
@@ -1233,10 +1228,10 @@ IMPL_LINK(UpdateDialog, okHandler, void *, EMPTYARG)
     typedef ::std::vector<UpdateData>::const_iterator CIT;
     for (CIT i = m_enabledUpdates.begin(); i < m_enabledUpdates.end(); i++)
     {
-        OSL_ASSERT(i->aPackageManager.is());
+        OSL_ASSERT(i->aInstalledPackage.is());
         //If the user has no write access to the shared folder then the update
         //for a shared extension is disable, that is it cannot be in m_enabledUpdates
-        OSL_ASSERT(i->aPackageManager->isReadOnly() == sal_False);
+        OSL_ASSERT(isReadOnly(i->aInstalledPackage) == sal_False);
 #if 0
         // TODO: check!
         OSL_ASSERT(m_extensionManagerDialog.get());

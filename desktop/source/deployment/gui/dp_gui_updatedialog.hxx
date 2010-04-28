@@ -60,7 +60,8 @@ class Window;
 
 namespace com { namespace sun { namespace star {
     namespace awt { class XThrobber; }
-    namespace deployment { class XPackageManager; }
+    namespace deployment { class XExtensionManager;
+                           class XPackage; }
     namespace uno { class XComponentContext; }
 } } }
 
@@ -171,6 +172,7 @@ private:
     bool showDescription( ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::dom::XNode > const & aUpdateInfo);
     bool showDescription( const String& rDescription, bool bWithPublisher );
+    bool isReadOnly( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) const;
 
     DECL_LINK(selectionHandler, void *);
     DECL_LINK(allHandler, void *);
@@ -214,6 +216,7 @@ private:
     std::vector< UpdateDialog::SpecificError > m_specificErrors;
     std::vector< dp_gui::UpdateData > & m_updateData;
     rtl::Reference< UpdateDialog::Thread > m_thread;
+    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > m_xExtensionManager;
 
     Point m_aFirstLinePos;
     Size m_aFirstLineSize;
