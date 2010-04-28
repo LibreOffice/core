@@ -50,7 +50,6 @@
 #include <gloshdl.hxx>
 #include <glosdoc.hxx>
 #include <gloslst.hxx>
-#include <tbxmgr.hxx>
 #include <workctrl.hxx>
 #ifndef _WORKCTRL_HRC
 #include <workctrl.hrc>
