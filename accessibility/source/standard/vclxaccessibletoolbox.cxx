@@ -446,18 +446,17 @@ void VCLXAccessibleToolBox::UpdateAllItems_Impl()
 
 void VCLXAccessibleToolBox::UpdateCustomPopupItemp_Impl( Window* pWindow, bool bOpen )
 {
-    if( pWindow )
+    ToolBox* pToolBox = static_cast< ToolBox* >( GetWindow() );
+    if( pWindow && pToolBox )
     {
         Reference< XAccessible > xChild( pWindow->GetAccessible() );
         if( xChild.is() )
         {
-            Any aOld, aNew;
-            if( bOpen )
-                aNew <<= xChild;
-            else
-                aOld <<= xChild;
+            Reference< XAccessible > xChildItem( getAccessibleChild( static_cast< sal_Int32 >( pToolBox->GetItemPos( pToolBox->GetDownItemId() ) ) ) );
+            VCLXAccessibleToolBoxItem* pItem = static_cast< VCLXAccessibleToolBoxItem* >( xChildItem.get() );
 
-            NotifyAccessibleEvent( AccessibleEventId::CHILD, aOld, aNew );
+            pItem->SetChild( xChild );
+            pItem->NotifyChildEvent( xChild, bOpen );
         }
     }
 }
