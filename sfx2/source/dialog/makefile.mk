@@ -68,7 +68,8 @@ SLOFILES =\
         $(SLO)$/tabdlg.obj			\
         $(SLO)$/tplcitem.obj		\
         $(SLO)$/tplpitem.obj		\
-        $(SLO)$/versdlg.obj
+        $(SLO)$/versdlg.obj         \
+        $(SLO)$/securitypage.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\
@@ -85,7 +86,8 @@ SRC1FILES =\
         templdlg.src		\
         versdlg.src			\
         printopt.src        \
-        srchdlg.src
+        srchdlg.src         \
+        securitypage.src
 
 .IF "$(BUILD_VER_STRING)"!=""
 .IF "$(GUI)"=="UNX"

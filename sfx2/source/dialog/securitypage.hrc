@@ -24,36 +24,29 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef _SECURITYPAGE_HRC_
+#define _SECURITYPAGE_HRC_
 
-#ifndef UUI_LOGINDLG_HRC
-#define UUI_LOGINDLG_HRC
 
+#define PASSWORD_TO_OPEN_FL                 1
+#define PASSWORD_TO_OPEN_FT                 2
+#define PASSWORD_TO_OPEN_ED                 3
+#define CONFIRM_PASSWORD_TO_OPEN_FT         4
+#define CONFIRM_PASSWORD_TO_OPEN_ED         5
+#define PASSWORD_INFO_FT                    6
+#define PASSWORD_TO_MODIFY_FL               7
+#define PASSWORD_TO_MODIFY_FT               8
+#define PASSWORD_TO_MODIFY_ED               9
+#define CONFIRM_PASSWORD_TO_MODIFY_FT       10
+#define CONFIRM_PASSWORD_TO_MODIFY_ED       11
+#define OPTIONS_FL                          12
+#define OPEN_READONLY_CB                    13
+#define REMOVE_INFO_ON_SAVING_CB            14
+#define RECORD_CHANGES_CB                   15
+#define CHANGE_PROTECTION_PB                16
 
-//============================================================================
-#define FT_INFO_LOGIN_ERROR     10
-#define FT_LOGIN_ERROR          11
+#define STR_PROTECT                         101
+#define STR_UNPROTECT                       102
 
-#define FT_INFO_LOGIN_REQUEST   20
-#define FT_LOGIN_PATH           21
-#define ED_LOGIN_PATH           22
-#define BTN_LOGIN_PATH          23
-#define FT_LOGIN_USERNAME       24
-#define ED_LOGIN_USERNAME       25
-#define FT_LOGIN_PASSWORD       26
-#define ED_LOGIN_PASSWORD       27
-#define FT_LOGIN_ACCOUNT        28
-#define ED_LOGIN_ACCOUNT        29
-#define CB_LOGIN_SAVEPASSWORD   30
-#define CB_LOGIN_USESYSCREDS    31
-#define FL_LOGIN_1              32
-#define FL_LOGIN_2              33
-#define FL_BUTTONS              34
-
-#define BTN_LOGIN_OK            50
-#define BTN_LOGIN_CANCEL        51
-#define BTN_LOGIN_HELP          52
-
-#define STR_LOGIN_REALM         60
-
-#endif // UUI_LOGINDLG_HRC
+#endif
 

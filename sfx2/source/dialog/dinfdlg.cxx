@@ -58,7 +58,8 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include <vcl/timer.hxx>
-#include <sfx2/dinfdlg.hxx>
+#include "sfx2/dinfdlg.hxx"
+#include "sfx2/securitypage.hxx"
 #include "sfxresid.hxx"
 #include "dinfedt.hxx"
 #include <sfx2/frame.hxx>
@@ -1554,6 +1555,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
     AddTabPage(TP_DOCINFODOC, SfxDocumentPage::Create, 0);
     AddTabPage(TP_CUSTOMPROPERTIES, SfxCustomPropertiesPage::Create, 0);
     AddTabPage(TP_DOCINFORELOAD, SfxInternetPage::Create, 0);
+    AddTabPage(TP_DOCINFOSECURITY, SfxSecurityPage::Create, 0);
 }
 
 // -----------------------------------------------------------------------

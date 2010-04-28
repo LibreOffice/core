@@ -57,10 +57,10 @@ static void lcl_Move( Window &rWin, long nOffset )
 
 void LoginDialog::HideControls_Impl( USHORT nFlags )
 {
-    FASTBOOL bPathHide = FALSE;
-    FASTBOOL bErrorHide = FALSE;
-    FASTBOOL bAccountHide = FALSE;
-    FASTBOOL bUseSysCredsHide = FALSE;
+    bool bPathHide = FALSE;
+    bool bErrorHide = FALSE;
+    bool bAccountHide = FALSE;
+    bool bUseSysCredsHide = FALSE;
 
     if ( ( nFlags & LF_NO_PATH ) == LF_NO_PATH )
     {
@@ -71,9 +71,8 @@ void LoginDialog::HideControls_Impl( USHORT nFlags )
     }
     else if ( ( nFlags & LF_PATH_READONLY ) == LF_PATH_READONLY )
     {
-        aPathED.Hide();
-        aPathInfo.Show();
-        aPathBtn.Hide();
+        aPathED.Enable( FALSE );
+        aPathBtn.Enable( FALSE );
     }
 
     if ( ( nFlags & LF_NO_USERNAME ) == LF_NO_USERNAME )
@@ -83,8 +82,7 @@ void LoginDialog::HideControls_Impl( USHORT nFlags )
     }
     else if ( ( nFlags & LF_USERNAME_READONLY ) == LF_USERNAME_READONLY )
     {
-        aNameED.Hide();
-        aNameInfo.Show();
+        aNameED.Enable( FALSE );
     }
 
     if ( ( nFlags & LF_NO_PASSWORD ) == LF_NO_PASSWORD )
@@ -125,11 +123,9 @@ void LoginDialog::HideControls_Impl( USHORT nFlags )
         lcl_Move( aLogin2FL, nOffset );
         lcl_Move( aPathFT, nOffset );
         lcl_Move( aPathED, nOffset );
-        lcl_Move( aPathInfo, nOffset );
         lcl_Move( aPathBtn, nOffset );
         lcl_Move( aNameFT, nOffset );
         lcl_Move( aNameED, nOffset );
-        lcl_Move( aNameInfo, nOffset );
         lcl_Move( aPasswordFT, nOffset );
         lcl_Move( aPasswordED, nOffset );
         lcl_Move( aAccountFT, nOffset );
@@ -152,7 +148,6 @@ void LoginDialog::HideControls_Impl( USHORT nFlags )
                        aPathED.GetPosPixel().Y();
         lcl_Move( aNameFT, nOffset );
         lcl_Move( aNameED, nOffset );
-        lcl_Move( aNameInfo, nOffset );
         lcl_Move( aPasswordFT, nOffset );
         lcl_Move( aPasswordED, nOffset );
         lcl_Move( aAccountFT, nOffset );
@@ -208,11 +203,9 @@ void LoginDialog::EnableUseSysCredsControls_Impl( BOOL bUseSysCredsEnabled )
     aRequestInfo.Enable( !bUseSysCredsEnabled );
     aPathFT.Enable( !bUseSysCredsEnabled );
     aPathED.Enable( !bUseSysCredsEnabled );
-    aPathInfo.Enable( !bUseSysCredsEnabled );
     aPathBtn.Enable( !bUseSysCredsEnabled );
     aNameFT.Enable( !bUseSysCredsEnabled );
     aNameED.Enable( !bUseSysCredsEnabled );
-    aNameInfo.Enable( !bUseSysCredsEnabled );
     aPasswordFT.Enable( !bUseSysCredsEnabled );
     aPasswordED.Enable( !bUseSysCredsEnabled );
     aAccountFT.Enable( !bUseSysCredsEnabled );
@@ -274,11 +267,9 @@ LoginDialog::LoginDialog
     aLogin2FL       ( this, ResId( FL_LOGIN_2, *pResMgr ) ),
     aPathFT         ( this, ResId( FT_LOGIN_PATH, *pResMgr ) ),
     aPathED         ( this, ResId( ED_LOGIN_PATH, *pResMgr ) ),
-    aPathInfo       ( this, ResId( FT_INFO_LOGIN_PATH, *pResMgr ) ),
     aPathBtn        ( this, ResId( BTN_LOGIN_PATH, *pResMgr ) ),
     aNameFT         ( this, ResId( FT_LOGIN_USERNAME, *pResMgr ) ),
     aNameED         ( this, ResId( ED_LOGIN_USERNAME, *pResMgr ) ),
-    aNameInfo       ( this, ResId( FT_INFO_LOGIN_USERNAME, *pResMgr ) ),
     aPasswordFT     ( this, ResId( FT_LOGIN_PASSWORD, *pResMgr ) ),
     aPasswordED     ( this, ResId( ED_LOGIN_PASSWORD, *pResMgr ) ),
     aAccountFT      ( this, ResId( FT_LOGIN_ACCOUNT, *pResMgr ) ),
@@ -322,14 +313,6 @@ LoginDialog::LoginDialog
 
 LoginDialog::~LoginDialog()
 {
-}
-
-// -----------------------------------------------------------------------
-
-void LoginDialog::SetName( const String& rNewName )
-{
-    aNameED.SetText( rNewName );
-    aNameInfo.SetText( rNewName );
 }
 
 // -----------------------------------------------------------------------

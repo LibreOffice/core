@@ -55,7 +55,7 @@ ModalDialog DLG_UUI_LOGIN
     FixedText FT_INFO_LOGIN_ERROR
     {
         Pos = MAP_APPFONT( 6 , 14 ) ;
-        Size = MAP_APPFONT( 185 , 3*8 ) ;
+        Size = MAP_APPFONT( 165 , 3*8 ) ;
         WordBreak = TRUE ;
     };
 
@@ -68,7 +68,7 @@ ModalDialog DLG_UUI_LOGIN
     FixedText FT_INFO_LOGIN_REQUEST
     {
         Pos = MAP_APPFONT( 6 , 52 ) ;
-        Size = MAP_APPFONT( 185 , 2*8 ) ;
+        Size = MAP_APPFONT( 165 , 2*8 ) ;
         WordBreak = TRUE ;
         Text [ en-US ] = "Enter user name and password for: \n%1" ;
     };
@@ -97,12 +97,6 @@ ModalDialog DLG_UUI_LOGIN
         Pos = MAP_APPFONT( 6 , 95 ) ;
         Size = MAP_APPFONT( 112 , 12 ) ;
     };
-    FixedText FT_INFO_LOGIN_PATH        // used instead of ED_LOGIN_PATH when LF_PATH_READONLY is set
-    {
-        Hide = TRUE ;
-        Pos = MAP_APPFONT( 6 , 97 ) ;
-        Size = MAP_APPFONT( 112 , 8 ) ;
-    };
     PushButton BTN_LOGIN_PATH
     {
         Pos = MAP_APPFONT( 121 , 94 ) ;
@@ -113,7 +107,7 @@ ModalDialog DLG_UUI_LOGIN
     FixedText FT_LOGIN_USERNAME
     {
         Pos = MAP_APPFONT( 6 , 110 ) ;
-        Size = MAP_APPFONT( 106 , 8 ) ;
+        Size = MAP_APPFONT( 165 , 8 ) ;
         Text [ en-US ] = "~User name" ;
     };
 
@@ -122,12 +116,6 @@ ModalDialog DLG_UUI_LOGIN
         Border = TRUE ;
         Pos = MAP_APPFONT( 6 , 121 ) ;
         Size = MAP_APPFONT( 165 , 12 ) ;
-    };
-    FixedText FT_INFO_LOGIN_USERNAME    // used instead of ED_LOGIN_USERNAME when LF_USERNAME_READONLY is set
-    {
-        Hide = TRUE ;
-        Pos = MAP_APPFONT( 6 , 123 ) ;
-        Size = MAP_APPFONT( 165 , 8 ) ;
     };
 
     FixedText FT_LOGIN_PASSWORD

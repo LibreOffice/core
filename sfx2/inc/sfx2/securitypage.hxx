@@ -24,36 +24,34 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef _SECURITYPAGE_HXX_
+#define _SECURITYPAGE_HXX_
 
-#ifndef UUI_LOGINDLG_HRC
-#define UUI_LOGINDLG_HRC
+#include "sfx2/tabdlg.hxx "
+
+#include <memory>
 
 
-//============================================================================
-#define FT_INFO_LOGIN_ERROR     10
-#define FT_LOGIN_ERROR          11
+//////////////////////////////////////////////////////////////////////
 
-#define FT_INFO_LOGIN_REQUEST   20
-#define FT_LOGIN_PATH           21
-#define ED_LOGIN_PATH           22
-#define BTN_LOGIN_PATH          23
-#define FT_LOGIN_USERNAME       24
-#define ED_LOGIN_USERNAME       25
-#define FT_LOGIN_PASSWORD       26
-#define ED_LOGIN_PASSWORD       27
-#define FT_LOGIN_ACCOUNT        28
-#define ED_LOGIN_ACCOUNT        29
-#define CB_LOGIN_SAVEPASSWORD   30
-#define CB_LOGIN_USESYSCREDS    31
-#define FL_LOGIN_1              32
-#define FL_LOGIN_2              33
-#define FL_BUTTONS              34
+struct SfxSecurityPage_Impl;
 
-#define BTN_LOGIN_OK            50
-#define BTN_LOGIN_CANCEL        51
-#define BTN_LOGIN_HELP          52
+class SfxSecurityPage : public SfxTabPage
+{
+    std::auto_ptr< SfxSecurityPage_Impl > m_pImpl;
 
-#define STR_LOGIN_REALM         60
+protected:
+    SfxSecurityPage( Window* pParent, const SfxItemSet& );
+    virtual ~SfxSecurityPage();
 
-#endif // UUI_LOGINDLG_HRC
+    virtual BOOL            FillItemSet( SfxItemSet& );
+    virtual void            Reset( const SfxItemSet& );
+
+public:
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
+};
+
+//////////////////////////////////////////////////////////////////////
+
+#endif // #ifndef _SECURITYPAGE_HXX_
 
