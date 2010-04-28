@@ -38,6 +38,7 @@
 #include "connection.hxx"
 #include "SharedConnection.hxx"
 #include "databasedocument.hxx"
+#include "OAuthenticationContinuation.hxx"
 
 
 /** === begin UNO includes === **/
@@ -206,40 +207,10 @@ void SAL_CALL FlushNotificationAdapter::disposing( const EventObject& Source ) t
     impl_dispose( false );
 }
 
-//============================================================
-//= OAuthenticationContinuation
-//============================================================
-class OAuthenticationContinuation : public OInteraction< XInteractionSupplyAuthentication >
-{
-    sal_Bool    m_bRemberPassword : 1;      // remember the password for this session ?
-
-    ::rtl::OUString     m_sUser;            // the user
-    ::rtl::OUString     m_sPassword;        // the user's password
-
-public:
-    OAuthenticationContinuation();
-
-    sal_Bool SAL_CALL canSetRealm(  ) throw(RuntimeException);
-    void SAL_CALL setRealm( const ::rtl::OUString& Realm ) throw(RuntimeException);
-    sal_Bool SAL_CALL canSetUserName(  ) throw(RuntimeException);
-    void SAL_CALL setUserName( const ::rtl::OUString& UserName ) throw(RuntimeException);
-    sal_Bool SAL_CALL canSetPassword(  ) throw(RuntimeException);
-    void SAL_CALL setPassword( const ::rtl::OUString& Password ) throw(RuntimeException);
-    Sequence< RememberAuthentication > SAL_CALL getRememberPasswordModes( RememberAuthentication& Default ) throw(RuntimeException);
-    void SAL_CALL setRememberPassword( RememberAuthentication Remember ) throw(RuntimeException);
-    sal_Bool SAL_CALL canSetAccount(  ) throw(RuntimeException);
-    void SAL_CALL setAccount( const ::rtl::OUString& Account ) throw(RuntimeException);
-    Sequence< RememberAuthentication > SAL_CALL getRememberAccountModes( RememberAuthentication& Default ) throw(RuntimeException);
-    void SAL_CALL setRememberAccount( RememberAuthentication Remember ) throw(RuntimeException);
-
-    ::rtl::OUString getUser() const             { return m_sUser; }
-    ::rtl::OUString getPassword() const         { return m_sPassword; }
-    sal_Bool        getRememberPassword() const { return m_bRemberPassword; }
-};
-
 //--------------------------------------------------------------------------
 OAuthenticationContinuation::OAuthenticationContinuation()
-    :m_bRemberPassword(sal_True)    // TODO: a meaningfull default
+    :m_bRemberPassword(sal_True),   // TODO: a meaningfull default
+    m_bCanSetUserName(sal_True)
 {
 }
 
@@ -260,7 +231,7 @@ sal_Bool SAL_CALL OAuthenticationContinuation::canSetUserName(  ) throw(RuntimeE
 {
     // we alwas allow this, even if the database document is read-only. In this case,
     // it's simply that the user cannot store the new user name.
-    return sal_True;
+    return m_bCanSetUserName;
 }
 
 //--------------------------------------------------------------------------
