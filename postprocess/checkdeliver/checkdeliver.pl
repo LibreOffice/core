@@ -48,7 +48,7 @@ my $solverdir        = '';
 my $platform         = '';
 my $milestoneext     = '';
 my $local_env        = 0;
-my $source_config    = SourceConfig -> new();
+my $source_config    = SourceConfig -> new($ENV{SOLARSRC});
 my @exceptionmodlist = (
                         "postprocess",
                         "instset.*native",
@@ -123,12 +123,6 @@ sub get_deliver_lists
     my $pattern = "$solverdir/$platform/inc";
     $pattern .= "$milestoneext" if ( $milestoneext );
     $pattern .= "/*/deliver.log";
-
-    if ( $^O =~ /cygwin/i && $ENV{'USE_SHELL'} eq "4nt" )
-    {   # glob from cygwin's perl needs $pattern to use only slashes.
-        # (DOS style path are OK as long as slashes are used.)
-        $pattern =~ s/\\/\//g;
-    }
 
     @files = glob( $pattern );
     # do not check modules not yet built
