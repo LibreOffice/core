@@ -159,6 +159,7 @@ PanelId GetStandardPanelId( const ::rtl::OUString& i_rTaskPanelResourceURL, cons
     else
     {
         OSL_ENSURE( i_bIgnoreUnknown, "GetStandardPanelId: cannot translate the given resource URL!" );
+        (void)i_bIgnoreUnknown;
     }
 
     return ePanelId;

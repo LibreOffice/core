@@ -228,7 +228,7 @@ private:
     void UpdateSelection (void);
 
     // internal ctor
-    void    ImplConstruct( DrawDocShell& rDocumentShell );
+    void    implConstruct( DrawDocShell& rDocumentShell );
 
     /** When clicked then set the current page of the view in the center pane.
     */
