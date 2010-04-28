@@ -231,7 +231,8 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() th
     ToolBox* pToolBox = dynamic_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );
     if( pToolBox )
     {
-        ::Window* pWin = createPopupWindow(pToolBox);
+        ::Window* pItemWindow = pToolBox->GetItemWindow( pToolBox->GetDownItemId() );
+        ::Window* pWin = createPopupWindow( pItemWindow ? pItemWindow : pToolBox );
         if( pWin )
         {
                pWin->EnableDocking(true);

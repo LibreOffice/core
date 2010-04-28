@@ -1239,7 +1239,7 @@ sal_Int32 SAL_CALL ValueItemAcc::getBackground(  )
     throw (uno::RuntimeException)
 {
     UINT32 nColor;
-    if (mpParent->meType == VALUESETITEM_COLOR)
+    if (mpParent && mpParent->meType == VALUESETITEM_COLOR)
         nColor = mpParent->maColor.GetColor();
     else
         nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
