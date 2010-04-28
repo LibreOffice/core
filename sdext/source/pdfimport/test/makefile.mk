@@ -42,6 +42,8 @@ ENABLE_EXCEPTIONS=TRUE
         @echo "PDF Import extension disabled."
 .ENDIF
 
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
 .IF "$(SYSTEM_ZLIB)" == "YES"
 CFLAGS+=-DSYSTEM_ZLIB
 .ENDIF
