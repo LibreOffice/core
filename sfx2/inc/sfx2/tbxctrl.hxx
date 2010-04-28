@@ -118,7 +118,6 @@ class SfxFrameStatusListener : public svt::FrameStatusListener
 class SFX2_DLLPUBLIC SfxPopupWindow: public FloatingWindow, public SfxStatusListenerInterface
 {
 friend class SfxToolBox_Impl;
-friend struct SfxToolBoxControl_Impl;
     BOOL                                                                             m_bFloating;
     ULONG                                                                            m_nEventId;
     BOOL                                                                             m_bCascading;
@@ -237,11 +236,6 @@ protected:
 
     // Must be called by subclass to set a new popup window instance
     void                       SetPopupWindow( SfxPopupWindow* pWindow );
-
-    /** Uses the given Window as Popup Window and starts Popup using the new DockingManager.
-      * Should be called by subclasses instead of SetPopupWindow
-      */
-    void StartPopupMode( Window* pWindow );
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
