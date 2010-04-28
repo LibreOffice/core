@@ -125,7 +125,7 @@ gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 
 # CObject class
 
-define gb_CObject_command
+define gb_CObject__command
 $(call gb_Helper_announce,Compiling $(2) (plain C) ...)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
@@ -141,7 +141,7 @@ $(call gb_Helper_abbreviate_dirs,\
         $(6))
 endef
 
-define gb_CObject_command_dep
+define gb_CObject__command_dep
 mkdir -p $(dir $(1)) && \
     echo '$(call gb_CObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
 endef
@@ -149,7 +149,7 @@ endef
 
 # CxxObject class
 
-define gb_CxxObject_command
+define gb_CxxObject__command
 $(call gb_Helper_announce,Compiling $(2) ...)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
@@ -164,7 +164,7 @@ $(call gb_Helper_abbreviate_dirs,\
         $(6))
 endef
 
-define gb_CxxObject_command_dep
+define gb_CxxObject__command_dep
 mkdir -p $(dir $(1)) && \
     echo '$(call gb_CxxObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
 endef
@@ -183,15 +183,15 @@ endif
 gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
-define gb_LinkTarget_command
+define gb_LinkTarget__command
 $(call gb_Helper_announce,Linking $(2) ...)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     $(gb_CXX) \
         $(3) \
         $(patsubst lib%.so,-l%,$(foreach lib,$(4),$(call gb_Library_get_filename,$(lib)))) \
-        $(foreach object,$(6),$(call gb_CxxObject_get_target,$(object))) \
-        $(foreach object,$(7),$(call gb_CObject_get_target,$(object))) \
+        $(foreach object,$(6),$(call gb_CObject_get_target,$(object))) \
+        $(foreach object,$(7),$(call gb_CxxObject_get_target,$(object))) \
         $(foreach lib,$(5),$(call gb_StaticLibrary_get_target,$(lib))) \
         -o $(1))
 endef
@@ -250,7 +250,7 @@ gb_Library_FILENAMES := $(patsubst ucbhelper:libucbhelper%,ucbhelper:libucbhelpe
 gb_Library_FILENAMES := $(patsubst jvmfwk:libuno_jvmfwk%,jvmfwk:libjvmfwk%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
 
-gb_Library_Library_platform =
+gb_Library__Library_platform =
 
 
 # StaticLibrary class
@@ -273,7 +273,7 @@ gb_StaticLibrary_FILENAMES := \
 
 gb_Executable_EXT :=
 gb_Executable_TARGETTYPEFLAGS :=
-gb_Executable_Executable_platform =
+gb_Executable__Executable_platform =
 
 
 # SdiTarget class

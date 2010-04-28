@@ -31,10 +31,10 @@
 # defined by platform
 #  gb_SrsPartTarget_RSCTARGET
 #  gb_SrsPartTarget_RSCCOMMAND
-#  gb_SrsPartTarget_command_dep
+#  gb_SrsPartTarget__command_dep
 
 $(call gb_SrsPartTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) | $(gb_SrsPartTarget_RSCTARGET)
-    $(call gb_SrsPartTarget_command_dep,$*,$<,$(INCLUDE),$(DEFS))
+    $(call gb_SrsPartTarget__command_dep,$*,$<,$(INCLUDE),$(DEFS))
     $(call gb_Helper_abbreviate_dirs_native,\
         mkdir -p $(dir $@) && \
         RESPONSEFILE=`mktemp -p $(gb_Helper_MISC)` && \
@@ -72,7 +72,7 @@ $(call gb_SrsTarget_get_clean_target,%) :
             $(foreach part,$(PARTS),$(call gb_SrsPartTarget_get_dep_target,$(part))))
 
 
-define gb_SrsTarget_command_dep
+define gb_SrsTarget__command_dep
 $(call gb_Helper_announce,Collecting dependencies for srs $(2) ...)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
@@ -80,14 +80,14 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 $(call gb_SrsTarget_get_target,%) :
-    $(call gb_SrsTarget_command_dep,$(call gb_SrsTarget_get_dep_target,$*),$*,$(foreach part,$(PARTS),$(call gb_SrsPartTarget_get_dep_target,$(part))))
+    $(call gb_SrsTarget__command_dep,$(call gb_SrsTarget_get_dep_target,$*),$*,$(foreach part,$(PARTS),$(call gb_SrsPartTarget_get_dep_target,$(part))))
     $(call gb_Helper_announce,Processing srs $* ...)
     $(call gb_Helper_abbreviate_dirs,\
         mkdir -p $(dir $@) && \
         cat $^ > $@)
 
 $(call gb_SrsTarget_get_dep_target,%) :
-    $(call gb_SrsTarget_command_dep,$@,$*,$^)
+    $(call gb_SrsTarget__command_dep,$@,$*,$^)
 
 define gb_SrsTarget_SrsTarget
 $(call gb_SrsTarget_get_target,$(1)) : DEFS := $(gb_SrsTarget_DEFAULTDEFS)

@@ -25,6 +25,10 @@
 #
 #*************************************************************************
 
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set)
+endif
+
 GBUILDDIR := $(SOLARENV)/gbuild
 include $(GBUILDDIR)/gbuild.mk
 

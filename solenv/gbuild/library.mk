@@ -54,10 +54,10 @@ ifeq (,$$(findstring $(1),$$(gb_Library_KNOWNLIBS)))
 $$(info currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)))
 $$(error Library $(1) must be registered in $(GBUILDDIR)/inc/libnames.mk)
 endif
-$(call gb_Library_Library__impl,$(1),$(call gb_Library_get_linktargetname,$(call gb_Library_get_filename,$(1))))
+$(call gb_Library__Library_impl,$(1),$(call gb_Library_get_linktargetname,$(call gb_Library_get_filename,$(1))))
 endef
 
-define gb_Library_Library__impl
+define gb_Library__Library_impl
 $(call gb_LinkTarget_LinkTarget,$(2))
 $(call gb_LinkTarget_set_targettype_flags,$(2),$(gb_Library_TARGETTYPEFLAGS))
 $(call gb_LinkTarget_set_defs,$(2),\
@@ -69,7 +69,7 @@ $(call gb_Library_Library_platform,$(1),$(2),$(gb_Library_DLLDIR)/$(call gb_Libr
 
 endef
 
-define gb_Library_forward_to_Linktarget
+define gb_Library__forward_to_Linktarget
 gb_Library_$(1) = $$(call gb_LinkTarget_$(1),$(call gb_Library_get_linktargetname,$$(call gb_Library_get_filename,$$(1))),$$(2))
 
 endef
@@ -91,7 +91,7 @@ $(eval $(foreach method,\
     add_package_headers \
     add_sdi_headers \
 ,\
-    $(call gb_Library_forward_to_Linktarget,$(method))\
+    $(call gb_Library__forward_to_Linktarget,$(method))\
 ))
 
 # vim: set noet sw=4 ts=4:

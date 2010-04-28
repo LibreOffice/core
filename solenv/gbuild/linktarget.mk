@@ -30,34 +30,38 @@
 
 gb_CObject_get_source = $(SRCDIR)/$(1).c
 # defined by platform
-#  gb_CObject_command
-#  gb_CObject_command_dep
+#  gb_CObject__command
+#  gb_CObject__command_dep
 
 $(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,%)
-    $(call gb_CObject_command,$@,$*,$<,$(DEFS),$(CFLAGS),$(INCLUDE))
+    $(call gb_CObject__command,$@,$*,$<,$(DEFS),$(CFLAGS),$(INCLUDE))
 
 $(call gb_CObject_get_dep_target,%) : $(call gb_CObject_get_source,%)
-    $(call gb_CObject_command_dep,$@,$*,$<,$(DEFS),$(CFLAGS),$(INCLUDE))
+    $(call gb_CObject__command_dep,$@,$*,$<,$(DEFS),$(CFLAGS),$(INCLUDE))
 
 $(call gb_CObject_get_dep_target,%) :
     $(error unable to find plain C file $(call gb_CObject_get_source,$*))
+
+gb_CObject_CObject =
 
 
 # CxxObject class
 
 gb_CxxObject_get_source = $(SRCDIR)/$(1).cxx
 # defined by platform
-#  gb_CxxObject_command
-#  gb_CxxObject_command_dep
+#  gb_CxxObject__command
+#  gb_CxxObject__command_dep
 
 $(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,%)
-    $(call gb_CxxObject_command,$@,$*,$<,$(DEFS),$(CXXFLAGS),$(INCLUDE_STL) $(INCLUDE))
+    $(call gb_CxxObject__command,$@,$*,$<,$(DEFS),$(CXXFLAGS),$(INCLUDE_STL) $(INCLUDE))
 
 $(call gb_CxxObject_get_dep_target,%) : $(call gb_CxxObject_get_source,%)
-    $(call gb_CxxObject_command_dep,$@,$*,$<,$(DEFS),$(CXXFLAGS),$(INCLUDE_STL) $(INCLUDE))
+    $(call gb_CxxObject__command_dep,$@,$*,$<,$(DEFS),$(CXXFLAGS),$(INCLUDE_STL) $(INCLUDE))
 
 $(call gb_CxxObject_get_dep_target,%) :
     $(error unable to find C++ file $(call gb_CxxObject_get_source,$*))
+
+gb_CxxObject_CxxObject =
 
 
 # LinkTarget class
@@ -85,7 +89,7 @@ $(call gb_LinkTarget_get_clean_target,%) :
             $(DLLTARGET) \
             $(AUXTARGETS))
 
-define gb_LinkTarget_command_dep
+define gb_LinkTarget__command_dep
 $(call gb_Helper_announce,Collecting dependencies for link $(2) ...)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
@@ -95,13 +99,13 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(call gb_LinkTarget_get_dep_target,%)
-    $(call gb_LinkTarget_command_dep,$(call gb_LinkTarget_get_dep_target,$*),$*,$(COBJECTS),$(CXXOBJECTS))
-    $(call gb_LinkTarget_command,$@,$*,$(TARGETTYPE_FLAGS) $(LDFLAGS),$(LINKED_LIBS),$(LINKED_STATIC_LIBS),$(CXXOBJECTS),$(COBJECTS))
+    $(call gb_LinkTarget__command_dep,$(call gb_LinkTarget_get_dep_target,$*),$*,$(COBJECTS),$(CXXOBJECTS))
+    $(call gb_LinkTarget__command,$@,$*,$(TARGETTYPE_FLAGS) $(LDFLAGS),$(LINKED_LIBS),$(LINKED_STATIC_LIBS),$(COBJECTS),$(CXXOBJECTS))
 
 $(call gb_LinkTarget_get_dep_target,%) : $(call gb_LinkTarget_get_headers_target,%)
-    $(call gb_LinkTarget_command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS))
+    $(call gb_LinkTarget__command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS))
 
-define gb_LinkTarget_get_external_headers_check
+define gb_LinkTarget__get_external_headers_check
 ifneq ($$(SELF),$$*)
 $$(info LinkTarget $$* not defined: Assuming headers to be there!)
 endif
@@ -110,7 +114,7 @@ $$@ : COMMAND := $$(call gb_Helper_abbreviate_dirs, mkdir -p $$(dir $$@) && touc
 endef
 
 $(call gb_LinkTarget_get_external_headers_target,%) :
-    $(eval $(gb_LinkTarget_get_external_headers_check))
+    $(eval $(gb_LinkTarget__get_external_headers_check))
     $(COMMAND)
 
 $(call gb_LinkTarget_get_headers_target,%) : $(call gb_LinkTarget_get_external_headers_target,%)
@@ -167,6 +171,11 @@ endef
 define gb_LinkTarget_set_include
 $(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE := $(2)
+endef
+
+define gb_LinkTarget_set_include_stl
+$(call gb_LinkTarget_get_target,$(1)) \
+$(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE_STL := $(2)
 endef
 
 define gb_LinkTarget_set_ldflags

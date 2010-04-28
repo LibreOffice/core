@@ -181,7 +181,7 @@ endef
 
 # CObject class
 
-define gb_CObject_command
+define gb_CObject__command
 $(call gb_Helper_announce,Compiling $(2) (plain C) ...)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
@@ -193,7 +193,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -Fo$(1)" && E=$$($$C) || (echo $$C && echo $$E 1>&2 && false))
 endef
 
-define gb_CObject_command_dep
+define gb_CObject__command_dep
 mkdir -p $(dir $(1)) && \
     echo '$(call gb_CObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
 endef
@@ -201,7 +201,7 @@ endef
 
 # CxxObject class
 
-define gb_CxxObject_command
+define gb_CxxObject__command
 $(call gb_Helper_announce,Compiling $(2) ...)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
@@ -213,7 +213,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -Fo$(1)" && E=$$($$C) || (echo $$C && echo $$E 1>&2 && false))
 endef
 
-define gb_CxxObject_command_dep
+define gb_CxxObject__command_dep
 mkdir -p $(dir $(1)) && \
     echo '$(call gb_CObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
 endef
@@ -236,7 +236,7 @@ gb_LinkTarget_INCLUDE :=\
 
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
-define gb_LinkTarget_command
+define gb_LinkTarget__command
 $(call gb_Helper_announce,Linking $(2) ...)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
@@ -395,7 +395,7 @@ gb_SdiTarget_SVIDLPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
 gb_SrsPartTarget_RSCTARGET := $(OUTDIR)/bin/rsc.exe
 gb_SrsPartTarget_RSCCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_SrsPartTarget_RSCTARGET)
 
-define gb_SrsPartTarget_command_dep
+define gb_SrsPartTarget__command_dep
 mkdir -p $(dir $(1)) && \
     echo '$(call gb_SrsPartTarget_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
 endef

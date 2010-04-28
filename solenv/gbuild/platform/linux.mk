@@ -117,7 +117,7 @@ gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 
 # CObject class
 
-define gb_CObject_command
+define gb_CObject__command
 $(call gb_Helper_announce,Compiling $(2) (plain C) ...)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
@@ -132,7 +132,7 @@ $(call gb_Helper_abbreviate_dirs,\
         $(6))
 endef
 
-define gb_CObject_command_dep
+define gb_CObject__command_dep
 mkdir -p $(dir $(1)) && \
     echo '$(call gb_CObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
 endef
@@ -140,7 +140,7 @@ endef
 
 # CxxObject class
 
-define gb_CxxObject_command
+define gb_CxxObject__command
 $(call gb_Helper_announce,Compiling $(2) ...)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
@@ -155,7 +155,7 @@ $(call gb_Helper_abbreviate_dirs,\
         $(6))
 endef
 
-define gb_CxxObject_command_dep
+define gb_CxxObject__command_dep
 mkdir -p $(dir $(1)) && \
     echo '$(call gb_CxxObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
 endef
@@ -175,15 +175,15 @@ endif
 gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
-define gb_LinkTarget_command
+define gb_LinkTarget__command
 $(call gb_Helper_announce,Linking $(2) ...)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     $(gb_CXX) \
         $(3) \
         $(patsubst lib%.so,-l%,$(foreach lib,$(4),$(call gb_Library_get_filename,$(lib)))) \
-        $(foreach object,$(6),$(call gb_CxxObject_get_target,$(object))) \
-        $(foreach object,$(7),$(call gb_CObject_get_target,$(object))) \
+        $(foreach object,$(6),$(call gb_CObject_get_target,$(object))) \
+        $(foreach object,$(7),$(call gb_CxxObject_get_target,$(object))) \
         -Wl$(COMMA)--start-group $(foreach lib,$(5),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group \
         -o $(1))
 endef
@@ -273,7 +273,7 @@ gb_SdiTarget_SVIDLPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
 gb_SrsPartTarget_RSCTARGET := $(OUTDIR)/bin/rsc
 gb_SrsPartTarget_RSCCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_SrsPartTarget_RSCTARGET)
 
-define gb_SrsPartTarget_command_dep
+define gb_SrsPartTarget__command_dep
 $(call gb_Helper_abbreviate_dirs,\
     $(gb_GCCP) \
         -MM -MT $(call gb_SrsPartTarget_get_target,$(1)) \
