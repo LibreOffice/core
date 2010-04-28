@@ -14,7 +14,7 @@
 -o xmloff.Draw.XMLSettingsImporter
 #i87695 -o xmloff.Draw.XMLStylesExporter
 -o xmloff.Draw.XMLStylesImporter
--o xmloff.Impress.XMLContentExporter
+#i111224 -o xmloff.Impress.XMLContentExporter
 -o xmloff.Impress.XMLContentImporter
 -o xmloff.Impress.XMLExporter
 #i111111# -o xmloff.Impress.XMLImporter
