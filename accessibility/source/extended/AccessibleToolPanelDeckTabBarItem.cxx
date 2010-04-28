@@ -441,7 +441,6 @@ namespace accessibility
             aItemScreenRect.GetWidth(),
             aItemScreenRect.GetHeight()
         );
-        return UnoRectangle();
     }
 
     //--------------------------------------------------------------------
