@@ -927,10 +927,6 @@ Resource RID_GLOBSTR
 
     /* END error constants and error strings. */
 
-    String STR_ODER_SO
-    {
-        Text [ en-US ] = "%s or similar" ;
-    };
     String STR_GRIDCOLOR
     {
         Text [ en-US ] = "Grid color" ;
