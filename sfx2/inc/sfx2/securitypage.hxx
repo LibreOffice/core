@@ -27,7 +27,7 @@
 #ifndef _SECURITYPAGE_HXX_
 #define _SECURITYPAGE_HXX_
 
-#include "sfx2/tabdlg.hxx "
+#include "sfx2/tabdlg.hxx"
 
 #include <memory>
 
