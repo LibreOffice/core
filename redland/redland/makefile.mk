@@ -47,6 +47,7 @@ all:
 REDLANDVERSION=1.0.8
 
 TARFILE_NAME=redland-$(REDLANDVERSION)
+TARFILE_MD5=ca66e26082cab8bb817185a116db809b
 
 ADDITIONAL_FILES=librdf/makefile.mk librdf/rdf_config.h
 
@@ -54,8 +55,8 @@ OOO_PATCH_FILES= \
     $(TARFILE_NAME).patch.legal \
     $(TARFILE_NAME).patch.autotools \
     $(TARFILE_NAME).patch.dmake \
-    $(TARFILE_NAME).patch.win32 \
-
+    $(TARFILE_NAME).patch.ooo_build \
+    $(TARFILE_NAME).patch.win32
 
 PATCH_FILES=$(OOO_PATCH_FILES) \
 
