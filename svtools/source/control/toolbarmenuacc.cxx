@@ -58,12 +58,81 @@ ToolbarMenuAcc::ToolbarMenuAcc( ToolbarMenu_Impl& rParent )
 , mpParent( &rParent )
 , mbIsFocused(false)
 {
+    mpParent->mrMenu.AddEventListener( LINK( this, ToolbarMenuAcc, WindowEventListener ) );
 }
 
 // -----------------------------------------------------------------------------
 
 ToolbarMenuAcc::~ToolbarMenuAcc()
 {
+    if( mpParent )
+        mpParent->mrMenu.RemoveEventListener( LINK( this, ToolbarMenuAcc, WindowEventListener ) );
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( ToolbarMenuAcc, WindowEventListener, VclSimpleEvent*, pEvent )
+{
+    DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
+
+    /* Ignore VCLEVENT_WINDOW_ENDPOPUPMODE, because the UNO accessibility wrapper
+     * might have been destroyed by the previous VCLEventListener (if no AT tool
+     * is running), e.g. sub-toolbars in impress.
+     */
+    if ( mpParent && pEvent && pEvent->ISA( VclWindowEvent ) && (pEvent->GetId() != VCLEVENT_WINDOW_ENDPOPUPMODE) )
+    {
+        DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow(), "Window???" );
+        if( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() || ( pEvent->GetId() == VCLEVENT_OBJECT_DYING ) )
+        {
+            ProcessWindowEvent( *(VclWindowEvent*)pEvent );
+        }
+    }
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+void ToolbarMenuAcc::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
+{
+    Any aOldValue, aNewValue;
+
+    Window* pAccWindow = rVclWindowEvent.GetWindow();
+    DBG_ASSERT( pAccWindow, "VCLXAccessibleComponent::ProcessWindowEvent - Window?" );
+
+    switch ( rVclWindowEvent.GetId() )
+    {
+        case VCLEVENT_OBJECT_DYING:
+        {
+            mpParent->mrMenu.RemoveEventListener( LINK( this, ToolbarMenuAcc, WindowEventListener ) );
+            mpParent = 0;
+        }
+        break;
+
+        case VCLEVENT_WINDOW_GETFOCUS:
+        {
+            if( !mbIsFocused )
+            {
+                aNewValue <<= accessibility::AccessibleStateType::FOCUSED;
+                FireAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
+                mbIsFocused = true;
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_LOSEFOCUS:
+        {
+            if( mbIsFocused )
+            {
+                aOldValue <<= accessibility::AccessibleStateType::FOCUSED;
+                FireAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
+                mbIsFocused = false;
+            }
+        }
+        break;
+        default:
+        {
+        }
+        break;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -94,22 +163,6 @@ void ToolbarMenuAcc::FireAccessibleEvent( short nEventId, const Any& rOldValue, 
             aIter++;
         }
     }
-}
-
-// -----------------------------------------------------------------------------
-
-void ToolbarMenuAcc::GetFocus (void)
-{
-    mbIsFocused = true;
-    FireAccessibleEvent( AccessibleEventId::STATE_CHANGED, Any(), Any( AccessibleStateType::FOCUSED ) );
-}
-
-// -----------------------------------------------------------------------------
-
-void ToolbarMenuAcc::LoseFocus (void)
-{
-    mbIsFocused = false;
-    FireAccessibleEvent( AccessibleEventId::STATE_CHANGED, Any( AccessibleStateType::FOCUSED ), Any() );
 }
 
 // -----------------------------------------------------------------------------
@@ -560,7 +613,7 @@ void SAL_CALL ToolbarMenuAcc::disposing (void)
 
 void ToolbarMenuAcc::ThrowIfDisposed (void) throw (DisposedException)
 {
-    if(rBHelper.bDisposed || rBHelper.bInDispose)
+    if(rBHelper.bDisposed || rBHelper.bInDispose || !mpParent)
     {
         throw DisposedException ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("object has been already disposed")), static_cast<XWeak*>(this));
     }

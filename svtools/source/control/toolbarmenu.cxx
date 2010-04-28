@@ -704,10 +704,6 @@ void ToolbarMenu::GetFocus()
         implChangeHighlightEntry( 0 );
 
     DockingWindow::GetFocus();
-
-    // Tell the accessible object that we got the focus.
-    if( mpImpl->mxAccessible.is() )
-        mpImpl->mxAccessible->GetFocus();
 }
 
 // --------------------------------------------------------------------
@@ -718,10 +714,6 @@ void ToolbarMenu::LoseFocus()
         implChangeHighlightEntry( -1 );
 
     DockingWindow::LoseFocus();
-
-    // Tell the accessible object that we lost the focus.
-    if( mpImpl->mxAccessible.is() )
-        mpImpl->mxAccessible->LoseFocus();
 }
 
 // --------------------------------------------------------------------

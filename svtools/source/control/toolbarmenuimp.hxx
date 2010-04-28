@@ -135,18 +135,6 @@ public:
     bool                HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
 
 public:
-
-    /** Called by the corresponding ToolbarMenu when it gets the focus.
-        Stores the new focus state and broadcasts a state change event.
-    */
-    void GetFocus (void);
-
-    /** Called by the corresponding ToolbarMenu when it loses the focus.
-        Stores the new focus state and broadcasts a state change event.
-    */
-    void LoseFocus (void);
-
-
     // XAccessible
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -189,11 +177,15 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
+    DECL_LINK( WindowEventListener, VclSimpleEvent* );
+
 private:
     EventListenerVector mxEventListeners;
     ToolbarMenu_Impl* mpParent;
     /// The current FOCUSED state.
     bool mbIsFocused;
+
+    void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
 
     /** Tell all listeners that the object is dying.  This callback is
         usually called from the WeakComponentImplHelper class.
