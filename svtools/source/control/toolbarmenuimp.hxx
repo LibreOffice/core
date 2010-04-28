@@ -273,6 +273,8 @@ struct ToolbarMenu_Impl
     rtl::Reference< svt::FrameStatusListener >                                       mxStatusListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceManager;
     rtl::Reference< ToolbarMenuAcc >                                                 mxAccessible;
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxOldSelection;
+
     ToolbarMenuEntryVector  maEntryVector;
 
     int mnCheckPos;
@@ -297,9 +299,16 @@ struct ToolbarMenu_Impl
 
     sal_Int32 getAccessibleChildCount() throw (::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > getAccessibleChild( sal_Int32 index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > getAccessibleChild( Control* pControl, sal_Int32 childIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
     void selectAccessibleChild( sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     sal_Bool isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     void clearAccessibleSelection();
+
+    ToolbarMenuEntry* implGetEntry( int nEntry ) const;
+    void notifyHighlightedEntry();
+
+    void implHighlightControl( USHORT nCode, Control* pControl );
 };
 
 }

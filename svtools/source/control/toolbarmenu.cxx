@@ -307,6 +307,25 @@ Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( sal_Int32 index )
     throw IndexOutOfBoundsException();
 }
 
+// --------------------------------------------------------------------
+
+Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( Control* pControl, sal_Int32 childIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+{
+    const int nEntryCount = maEntryVector.size();
+    for( int nEntry = 0; nEntry < nEntryCount; nEntry++ )
+    {
+        ToolbarMenuEntry* pEntry = maEntryVector[nEntry];
+        if( pEntry && (pEntry->mpControl == pControl) )
+        {
+            return pEntry->getAccessibleChild( childIndex );
+        }
+    }
+
+    throw IndexOutOfBoundsException();
+}
+
+// --------------------------------------------------------------------
+
 void ToolbarMenu_Impl::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     const int nEntryCount = maEntryVector.size();
@@ -381,13 +400,60 @@ void ToolbarMenu_Impl::clearAccessibleSelection()
     }
 }
 
+
+// --------------------------------------------------------------------
+
+void ToolbarMenu_Impl::notifyHighlightedEntry()
+{
+    if( hasAccessibleListeners() )
+    {
+        ToolbarMenuEntry* pEntry = implGetEntry( mnHighlightedEntry );
+        if( pEntry && pEntry->mbEnabled && (pEntry->mnEntryId != TITLE_ID) )
+        {
+            Any aNew;
+            Any aOld( mxOldSelection );
+            if( pEntry->mpControl )
+            {
+                sal_Int32 nChildIndex = 0;
+                // todo: if other controls than ValueSet are allowed, addapt this code
+                ValueSet* pValueSet = dynamic_cast< ValueSet* >( pEntry->mpControl );
+                if( pValueSet )
+                    nChildIndex = static_cast< sal_Int32 >( pValueSet->GetItemPos( pValueSet->GetSelectItemId() ) );
+
+                if( nChildIndex >= pEntry->getAccessibleChildCount() )
+                    return;
+
+                aNew <<= getAccessibleChild( pEntry->mpControl, nChildIndex );
+            }
+            else
+            {
+                aNew <<= pEntry->GetAccessible(true);
+            }
+
+            fireAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOld, aNew );
+            fireAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, aOld, aNew );
+            aNew >>= mxOldSelection;
+        }
+    }
+}
+
+// --------------------------------------------------------------------
+
+ToolbarMenuEntry* ToolbarMenu_Impl::implGetEntry( int nEntry ) const
+{
+    if( (nEntry < 0) || (nEntry >= (int)maEntryVector.size() ) )
+        return NULL;
+
+    return maEntryVector[nEntry];
+}
+
+
 // --------------------------------------------------------------------
 
 IMPL_LINK( ToolbarMenu, HighlightHdl, Control *, pControl )
 {
     (void)pControl;
-    if( mpImpl->hasAccessibleListeners() )
-        mpImpl->fireAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
+    mpImpl->notifyHighlightedEntry();
     return 0;
 }
 
@@ -723,77 +789,6 @@ void ToolbarMenu::appendEntry( int nEntryId, const String& rStr, MenuItemBits nI
     appendEntry( new ToolbarMenuEntry( *this, nEntryId, rStr, nItemBits ) );
 }
 
-
-#if 0
-todo acc selectentry?
-        if( ImplHasAccessibleListeners() )
-        {
-            // focus event (deselect)
-            if( nOldItem )
-            {
-                const USHORT nPos = GetItemPos( nItemId );
-
-                if( nPos != VALUESET_ITEM_NOTFOUND )
-                {
-                    ValueItemAcc* pItemAcc = ValueItemAcc::getImplementation(
-                        mpImpl->mpItemList->GetObject( nPos )->GetAccessible( mpImpl->mbIsTransientChildrenDisabled ) );
-
-                    if( pItemAcc )
-                    {
-                        ::com::sun::star::uno::Any aOldAny, aNewAny;
-                        if( !mpImpl->mbIsTransientChildrenDisabled)
-                        {
-                            aOldAny <<= ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(
-                                static_cast< ::cppu::OWeakObject* >( pItemAcc ));
-                            ImplFireAccessibleEvent (::com::sun::star::accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
-                        }
-                        else
-                        {
-                            aOldAny <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
-                            pItemAcc->FireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
-                        }
-                    }
-                }
-            }
-
-            // focus event (select)
-            const USHORT nPos = GetItemPos( mnSelItemId );
-
-            ValueSetItem* pItem;
-            if( nPos != VALUESET_ITEM_NOTFOUND )
-                pItem = mpImpl->mpItemList->GetObject(nPos);
-            else
-                pItem = mpNoneItem;
-
-            ValueItemAcc* pItemAcc = NULL;
-            if (pItem != NULL)
-                pItemAcc = ValueItemAcc::getImplementation(pItem->GetAccessible( mpImpl->mbIsTransientChildrenDisabled ) );
-
-            if( pItemAcc )
-            {
-                ::com::sun::star::uno::Any aOldAny, aNewAny;
-                if( !mpImpl->mbIsTransientChildrenDisabled)
-                {
-                    aNewAny <<= ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(
-                        static_cast< ::cppu::OWeakObject* >( pItemAcc ));
-                    ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
-                }
-                else
-                {
-                    aNewAny <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
-                    pItemAcc->FireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
-                }
-            }
-
-            // selection event
-            ::com::sun::star::uno::Any aOldAny, aNewAny;
-            ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::SELECTION_CHANGED, aOldAny, aNewAny );
-        }
-    }
-}
-
-#endif
-
 // --------------------------------------------------------------------
 
 void ToolbarMenu::appendEntry( int nEntryId, const Image& rImage, MenuItemBits nItemBits )
@@ -848,10 +843,7 @@ ValueSet* ToolbarMenu::createEmptyValueSetControl()
 
 ToolbarMenuEntry* ToolbarMenu::implGetEntry( int nEntry ) const
 {
-    if( (nEntry < 0) || (nEntry >= (int)mpImpl->maEntryVector.size() ) )
-        return NULL;
-
-    return mpImpl->maEntryVector[nEntry];
+    return mpImpl->implGetEntry( nEntry );
 }
 
 // --------------------------------------------------------------------
@@ -888,7 +880,17 @@ void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
         {
             // no highlights for controls only items
             if( pEntry->mpControl )
+            {
+                if( !bHighlight )
+                {
+                    ValueSet* pValueSet = dynamic_cast< ValueSet* >( pEntry->mpControl );
+                    if( pValueSet )
+                    {
+                        pValueSet->SetNoSelection();
+                    }
+                }
                 break;
+            }
 
             bool bRestoreLineColor = false;
             Color oldLineColor;
@@ -1070,8 +1072,7 @@ void ToolbarMenu::implChangeHighlightEntry( int nEntry )
         implHighlightEntry( mpImpl->mnHighlightedEntry, true );
     }
 
-    if( mpImpl->hasAccessibleListeners() )
-        mpImpl->fireAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
+    mpImpl->notifyHighlightedEntry();
 }
 
 // --------------------------------------------------------------------
@@ -1184,7 +1185,7 @@ ToolbarMenuEntry* ToolbarMenu::implCursorUpDown( bool bUp, bool bHomeEnd )
 
 // --------------------------------------------------------------------
 
-static void implHighlightControl( USHORT nCode, Control* pControl, int nLastColumn )
+void ToolbarMenu_Impl::implHighlightControl( USHORT nCode, Control* pControl )
 {
     ValueSet* pValueSet = dynamic_cast< ValueSet* >( pControl );
     if( pValueSet )
@@ -1197,11 +1198,11 @@ static void implHighlightControl( USHORT nCode, Control* pControl, int nLastColu
         {
             const USHORT nColCount = pValueSet->GetColCount();
             const USHORT nLastLine = nItemCount / nColCount;
-            nItemPos = std::min( ((nLastLine-1) * nColCount) + nLastColumn, nItemCount-1 );
+            nItemPos = std::min( ((nLastLine-1) * nColCount) + mnLastColumn, nItemCount-1 );
             break;
         }
         case KEY_DOWN:
-            nItemPos = std::min( nLastColumn, nItemCount-1 );
+            nItemPos = std::min( mnLastColumn, nItemCount-1 );
             break;
         case KEY_END:
             nItemPos = nItemCount -1;
@@ -1211,6 +1212,7 @@ static void implHighlightControl( USHORT nCode, Control* pControl, int nLastColu
             break;
         }
         pValueSet->SelectItem( pValueSet->GetItemId( nItemPos ) );
+        notifyHighlightedEntry();
     }
 }
 
@@ -1231,7 +1233,7 @@ void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
             {
                 if( nOldEntry != mpImpl->mnHighlightedEntry )
                 {
-                    implHighlightControl( nCode, p->mpControl, mpImpl->mnLastColumn );
+                    mpImpl->implHighlightControl( nCode, p->mpControl );
                 }
                 else
                 {
@@ -1247,7 +1249,7 @@ void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
             ToolbarMenuEntry* p = implCursorUpDown( nCode == KEY_END, true );
             if( p && p->mpControl )
             {
-                implHighlightControl( nCode, p->mpControl, mpImpl->mnLastColumn );
+                mpImpl->implHighlightControl( nCode, p->mpControl );
             }
         }
         break;

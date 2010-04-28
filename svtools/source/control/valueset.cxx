@@ -1526,32 +1526,20 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                             nCalcPos - ( nLineCount * mnCols ));
                     else
                     {
-#if 0
-                        if( (KEY_UP == rKEvt.GetKeyCode().GetCode() ) && (GetStyle() & WB_MENUSTYLEVALUESET) )
+                        if ( mpNoneItem )
                         {
-                            Window* pParent = GetParent();
-                            pParent->GrabFocus();
-                            pParent->KeyInput( rKEvt );
-                            break;
+                            mnCurCol  = nCalcPos%mnCols;
+                            nItemPos = VALUESET_ITEM_NONEITEM;
                         }
                         else
-#endif
                         {
-                            if ( mpNoneItem )
-                            {
-                                mnCurCol  = nCalcPos%mnCols;
-                                nItemPos = VALUESET_ITEM_NONEITEM;
-                            }
+                            if ( nLastItem+1 <= mnCols )
+                                nItemPos = nCalcPos;
                             else
                             {
-                                if ( nLastItem+1 <= mnCols )
-                                    nItemPos = nCalcPos;
-                                else
-                                {
-                                    nItemPos = ((((nLastItem+1)/mnCols)-1)*mnCols)+(nCalcPos%mnCols);
-                                    if ( nItemPos+mnCols <= nLastItem )
-                                        nItemPos = nItemPos + mnCols;
-                                }
+                                nItemPos = ((((nLastItem+1)/mnCols)-1)*mnCols)+(nCalcPos%mnCols);
+                                if ( nItemPos+mnCols <= nLastItem )
+                                    nItemPos = nItemPos + mnCols;
                             }
                         }
                     }
@@ -2279,9 +2267,8 @@ void ValueSet::SelectItem( USHORT nItemId )
             // selection event
             ::com::sun::star::uno::Any aOldAny, aNewAny;
             ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::SELECTION_CHANGED, aOldAny, aNewAny );
-
-            mpImpl->maHighlightHdl.Call(this);
         }
+        mpImpl->maHighlightHdl.Call(this);
     }
 }
 

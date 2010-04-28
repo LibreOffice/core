@@ -96,9 +96,6 @@ void ToolbarMenuAcc::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     Any aOldValue, aNewValue;
 
-    Window* pAccWindow = rVclWindowEvent.GetWindow();
-    DBG_ASSERT( pAccWindow, "VCLXAccessibleComponent::ProcessWindowEvent - Window?" );
-
     switch ( rVclWindowEvent.GetId() )
     {
         case VCLEVENT_OBJECT_DYING:
@@ -112,8 +109,7 @@ void ToolbarMenuAcc::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if( !mbIsFocused )
             {
-                aNewValue <<= accessibility::AccessibleStateType::FOCUSED;
-                FireAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
+                mpParent->notifyHighlightedEntry();
                 mbIsFocused = true;
             }
         }
@@ -122,8 +118,6 @@ void ToolbarMenuAcc::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if( mbIsFocused )
             {
-                aOldValue <<= accessibility::AccessibleStateType::FOCUSED;
-                FireAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
                 mbIsFocused = false;
             }
         }
