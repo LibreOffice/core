@@ -72,13 +72,16 @@ namespace pdfi
     class PDFIProcessor : public ContentSink
     {
     public:
+        com::sun::star::uno::Reference<
+            com::sun::star::uno::XComponentContext >  m_xContext;
         double fYPrevTextPosition;
         double fPrevTextHeight;
         double fXPrevTextPosition;
         double fPrevTextWidth;
         enum DocumentTextDirecion { LrTb, RlTb, TbLr };
 
-        explicit PDFIProcessor( const com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator >& );
+        explicit PDFIProcessor( const com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator >& xStat,
+            com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext) ;
 
         /// TEMP - enable writer-like text:p on doc level
         void enableToplevelText();
