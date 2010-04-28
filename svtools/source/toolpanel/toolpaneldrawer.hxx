@@ -99,6 +99,7 @@ namespace svt
 
         // don't expose SetText. Our text is used as AccessibleName/Desc, and those are not expected to change.
         using Window::SetText;
+        using Window::Paint;
 
     private:
         ::std::auto_ptr< VirtualDevice >    m_pPaintDevice;
