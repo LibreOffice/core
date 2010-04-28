@@ -46,8 +46,8 @@ XWindowItem::XWindowItem() :
 }
 
 
-XWindowItem::XWindowItem( USHORT nWhich, Window * pWin ) :
-    SfxPoolItem( nWhich )
+XWindowItem::XWindowItem( USHORT nWhichId, Window * pWin ) :
+    SfxPoolItem( nWhichId )
 {
     if (pWin)
     {
@@ -58,8 +58,8 @@ XWindowItem::XWindowItem( USHORT nWhich, Window * pWin ) :
 }
 
 
-XWindowItem::XWindowItem( USHORT nWhich, uno::Reference< awt::XWindow > & rxWin ) :
-    SfxPoolItem( nWhich ),
+XWindowItem::XWindowItem( USHORT nWhichId, uno::Reference< awt::XWindow > & rxWin ) :
+    SfxPoolItem( nWhichId ),
     m_xWin( rxWin )
 {
 }
