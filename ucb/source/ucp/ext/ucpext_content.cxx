@@ -381,7 +381,6 @@ namespace ucb { namespace ucp { namespace ext
             aComposer.append( sRelativeURL );
             return aComposer.makeStringAndClear();
         }
-        break;
 
         default:
             OSL_ENSURE( false, "Content::getParentURL: unhandled case!" );
@@ -511,9 +510,10 @@ namespace ucb { namespace ucp { namespace ext
             }
             return xValueRow.get();
         }
-        break;
+
         default:
             OSL_ENSURE( false, "Content::getPropertyValues: unhandled case!" );
+            break;
         }
 
         OSL_ENSURE( false, "Content::getPropertyValues: unreachable!" );
