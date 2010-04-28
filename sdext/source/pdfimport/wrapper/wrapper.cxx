@@ -875,7 +875,8 @@ oslFileError readLine( oslFileHandle pFile, ::rtl::OStringBuffer& line )
 static bool checkEncryption( const rtl::OUString&                               i_rPath,
                              const uno::Reference< task::XInteractionHandler >& i_xIHdl,
                              rtl::OUString&                                     io_rPwd,
-                             bool&                                              o_rIsEncrypted
+                             bool&                                              o_rIsEncrypted,
+                             const rtl::OUString&                               i_rDocName
                              )
 {
     bool bSuccess = false;
@@ -908,7 +909,7 @@ static bool checkEncryption( const rtl::OUString&                               
                         bool bEntered = false;
                         do
                         {
-                            bEntered = getPassword( i_xIHdl, io_rPwd, ! bEntered );
+                            bEntered = getPassword( i_xIHdl, io_rPwd, ! bEntered, i_rDocName );
                             rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
                                                                            RTL_TEXTENCODING_ISO_8859_1 );
                             bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
@@ -937,11 +938,12 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                             rUR
     ::rtl::OUString aSysUPath;
     if( osl_getSystemPathFromFileURL( rURL.pData, &aSysUPath.pData ) != osl_File_E_None )
         return false;
+    rtl::OUString aDocName( rURL.copy( rURL.lastIndexOf( sal_Unicode('/') )+1 ) );
 
     // check for encryption, if necessary get password
     rtl::OUString aPwd( rPwd );
     bool bIsEncrypted = false;
-    if( checkEncryption( aSysUPath, xIHdl, aPwd, bIsEncrypted ) == false )
+    if( checkEncryption( aSysUPath, xIHdl, aPwd, bIsEncrypted, aDocName ) == false )
         return false;
 
     rtl::OUStringBuffer converterURL = rtl::OUString::createFromAscii("xpdfimport");
