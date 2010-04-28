@@ -126,7 +126,7 @@ OCacheSet::OCacheSet()
     return sQuote;
 }
 // -------------------------------------------------------------------------
-void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet)
+void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet,const ::rtl::OUString& /*i_sRowSetFilter*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::construct" );
     OSL_ENSURE(_xDriverSet.is(),"Invalid resultSet");
