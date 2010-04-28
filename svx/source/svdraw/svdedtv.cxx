@@ -805,16 +805,101 @@ void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
 
 void SdrEditView::DeleteMarkedObj()
 {
-    if (GetMarkedObjectCount()) {
-        BrkAction();
-        //HMHHideMarkHdl();
-        BegUndo(ImpGetResStr(STR_EditDelete),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_DELETE);
+    // moved breaking action and undo start outside loop
+    BrkAction();
+    BegUndo(ImpGetResStr(STR_EditDelete),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_DELETE);
+
+    // remove as long as something is selected. This allows to schedule objects for
+    // removal for a next run as needed
+    while(GetMarkedObjectCount())
+    {
+        // vector to remember the parents which may be empty after object removal
+        std::vector< SdrObject* > aParents;
+
+        {
+            const SdrMarkList& rMarkList = GetMarkedObjectList();
+            const sal_uInt32 nCount(rMarkList.GetMarkCount());
+            sal_uInt32 a(0);
+
+            for(a = 0; a < nCount; a++)
+            {
+                // in the first run, add all found parents, but only once
+                SdrMark* pMark = rMarkList.GetMark(a);
+                SdrObject* pObject = pMark->GetMarkedSdrObj();
+                SdrObject* pParent = pObject->GetObjList()->GetOwnerObj();
+
+                if(pParent)
+                {
+                    if(aParents.size())
+                    {
+                        std::vector< SdrObject* >::iterator aFindResult =
+                            std::find(aParents.begin(), aParents.end(), pParent);
+
+                        if(aFindResult == aParents.end())
+                        {
+                            aParents.push_back(pParent);
+                        }
+                    }
+                    else
+                    {
+                        aParents.push_back(pParent);
+                    }
+                }
+            }
+
+            if(aParents.size())
+            {
+                // in a 2nd run, remove all objects which may already be scheduled for
+                // removal. I am not sure if this can happen, but theoretically
+                // a to-be-removed object may already be the group/3DScene itself
+                for(a = 0; a < nCount; a++)
+                {
+                    SdrMark* pMark = rMarkList.GetMark(a);
+                    SdrObject* pObject = pMark->GetMarkedSdrObj();
+
+                    std::vector< SdrObject* >::iterator aFindResult =
+                        std::find(aParents.begin(), aParents.end(), pObject);
+
+                    if(aFindResult != aParents.end())
+                    {
+                        aParents.erase(aFindResult);
+                    }
+                }
+            }
+        }
+
+        // original stuff: remove selected objects. Handle clear will
+        // do something only once
         DeleteMarkedList(GetMarkedObjectList());
         GetMarkedObjectListWriteAccess().Clear();
         aHdl.Clear();
-        EndUndo();
-        MarkListHasChanged();
+
+        while(aParents.size() && !GetMarkedObjectCount())
+        {
+            // iterate over remembered parents
+            SdrObject* pParent = aParents.back();
+            aParents.pop_back();
+
+            if(pParent->GetSubList() && 0 == pParent->GetSubList()->GetObjCount())
+            {
+                // we detected an empty parent, a candidate to leave group/3DScene
+                // if entered
+                if(GetSdrPageView()->GetAktGroup()
+                    && GetSdrPageView()->GetAktGroup() == pParent)
+                {
+                    GetSdrPageView()->LeaveOneGroup();
+                }
+
+                // schedule empty parent for removal
+                GetMarkedObjectListWriteAccess().InsertEntry(
+                    SdrMark(pParent, GetSdrPageView()));
+            }
+        }
     }
+
+    // end undo and change messaging moved at the end
+    EndUndo();
+    MarkListHasChanged();
 }
 
 void SdrEditView::CopyMarkedObj()

@@ -48,6 +48,7 @@ class CommandLineArgs
             CMD_BOOLPARAM_SERVER,
             CMD_BOOLPARAM_HEADLESS,
             CMD_BOOLPARAM_QUICKSTART,
+            CMD_BOOLPARAM_NOQUICKSTART,
             CMD_BOOLPARAM_TERMINATEAFTERINIT,
             CMD_BOOLPARAM_NOFIRSTSTARTWIZARD,
             CMD_BOOLPARAM_NOLOGO,
@@ -90,6 +91,7 @@ class CommandLineArgs
             CMD_STRINGPARAM_PRINTTOLIST,
             CMD_STRINGPARAM_PRINTERNAME,
             CMD_STRINGPARAM_DISPLAY,
+            CMD_STRINGPARAM_LANGUAGE,
             CMD_STRINGPARAM_COUNT           // must be last element!
         };
 
@@ -131,6 +133,7 @@ class CommandLineArgs
         sal_Bool                IsServer() const;
         sal_Bool                IsHeadless() const;
         sal_Bool                IsQuickstart() const;
+        sal_Bool                IsNoQuickstart() const;
         sal_Bool                IsTerminateAfterInit() const;
         sal_Bool                IsNoFirstStartWizard() const;
         sal_Bool                IsNoLogo() const;
@@ -165,6 +168,7 @@ class CommandLineArgs
         sal_Bool                GetPrintList( ::rtl::OUString& rPara) const;
         sal_Bool                GetPrintToList( ::rtl::OUString& rPara ) const;
         sal_Bool                GetPrinterName( ::rtl::OUString& rPara ) const;
+        sal_Bool                GetLanguage( ::rtl::OUString& rPara ) const;
 
         // Special analyzed states (does not match directly to a command line parameter!)
         sal_Bool                IsPrinting() const;
