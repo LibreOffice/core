@@ -218,6 +218,39 @@
           <value>com.sun.star.svx.FontHeightToolBoxController</value>
         </prop>
       </node>
+      <node oor:name="14" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FindText</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.svx.FindTextToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="c15" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DownSearch</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.svx.DownSearchToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="c16" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:UpSearch</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.svx.UpSearchToolboxController</value>
+        </prop>
+      </node>
       <node oor:name="c3" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:ChartElementSelector</value>
