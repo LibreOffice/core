@@ -64,14 +64,14 @@ struct Writer_Impl
     SvPtrarr* pFontRemoveLst, *pBkmkArr;
     SwBookmarkNodeTable* pBkmkNodePos;
 
-    Writer_Impl( const SwDoc& rDoc );
+    Writer_Impl();
     ~Writer_Impl();
 
     void RemoveFontList( SwDoc& rDoc );
     void InsertBkmk( const ::sw::mark::IMark& rBkmk );
 };
 
-Writer_Impl::Writer_Impl( const SwDoc& /*rDoc*/ )
+Writer_Impl::Writer_Impl()
     : m_pStream(0)
     , pSrcArr( 0 ), pDestArr( 0 ), pFontRemoveLst( 0 ), pBkmkNodePos( 0 )
 {
@@ -144,7 +144,7 @@ void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
  */
 
 Writer::Writer()
-    : pImpl(0)
+    : m_pImpl(new Writer_Impl)
     , pOrigPam(0), pOrigFileName(0), pDoc(0), pCurPam(0)
 {
     bWriteAll = bShowProgress = bUCS2_WithStartChar = true;
@@ -168,9 +168,11 @@ const IDocumentStylePoolAccess* Writer::getIDocumentStylePoolAccess() const { re
 
 void Writer::ResetWriter()
 {
-    if( pImpl && pImpl->pFontRemoveLst )
-        pImpl->RemoveFontList( *pDoc );
-    delete pImpl, pImpl = 0;
+    if (m_pImpl->pFontRemoveLst)
+    {
+        m_pImpl->RemoveFontList( *pDoc );
+    }
+    m_pImpl.reset(new Writer_Impl);
 
     if( pCurPam )
     {
@@ -251,11 +253,12 @@ SwPaM* Writer::NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
 // Stream-spezifisches
 SvStream& Writer::Strm()
 {
-    ASSERT( pImpl->m_pStream, "Oh-oh. Writer with no Stream!" );
-    return *pImpl->m_pStream;
+    ASSERT( m_pImpl->m_pStream, "Oh-oh. Writer with no Stream!" );
+    return *m_pImpl->m_pStream;
 }
 
-void Writer::SetStream(SvStream *const pStream) { pImpl->m_pStream = pStream; }
+void Writer::SetStream(SvStream *const pStream)
+{ m_pImpl->m_pStream = pStream; }
 
 
 SvStream& Writer::OutHex( SvStream& rStrm, ULONG nHex, BYTE nLen )
@@ -319,8 +322,7 @@ ULONG Writer::Write( SwPaM& rPaM, SvStream& rStrm, const String* pFName )
 
     pDoc = rPaM.GetDoc();
     pOrigFileName = pFName;
-    pImpl = new Writer_Impl( *pDoc );
-    pImpl->m_pStream = &rStrm;
+    m_pImpl->m_pStream = &rStrm;
 
     // PaM kopieren, damit er veraendert werden kann
     pCurPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
@@ -371,20 +373,20 @@ BOOL Writer::CopyLocalFileToINet( String& rFileNm )
             INET_PROT_NEWS >= aTargetUrl.GetProtocol() ) )
         return bRet;
 
-    if( pImpl->pSrcArr )
+    if (m_pImpl->pSrcArr)
     {
         // wurde die Datei schon verschoben
         USHORT nPos;
-        if( pImpl->pSrcArr->Seek_Entry( &rFileNm, &nPos ))
+        if (m_pImpl->pSrcArr->Seek_Entry( &rFileNm, &nPos ))
         {
-            rFileNm = *(*pImpl->pDestArr)[ nPos ];
+            rFileNm = *(*m_pImpl->pDestArr)[ nPos ];
             return TRUE;
         }
     }
     else
     {
-        pImpl->pSrcArr = new SvStringsSortDtor( 4, 4 );
-        pImpl->pDestArr = new SvStringsSortDtor( 4, 4 );
+        m_pImpl->pSrcArr = new SvStringsSortDtor( 4, 4 );
+        m_pImpl->pDestArr = new SvStringsSortDtor( 4, 4 );
     }
 
     String *pSrc = new String( rFileNm );
@@ -403,8 +405,8 @@ BOOL Writer::CopyLocalFileToINet( String& rFileNm )
 
     if( bRet )
     {
-        pImpl->pSrcArr->Insert( pSrc );
-        pImpl->pDestArr->Insert( pDest );
+        m_pImpl->pSrcArr->Insert( pSrc );
+        m_pImpl->pDestArr->Insert( pDest );
         rFileNm = *pDest;
     }
     else
@@ -418,9 +420,6 @@ BOOL Writer::CopyLocalFileToINet( String& rFileNm )
 
 void Writer::PutNumFmtFontsInAttrPool()
 {
-    if( !pImpl )
-        pImpl = new Writer_Impl( *pDoc );
-
     // dann gibt es noch in den NumRules ein paar Fonts
     // Diese in den Pool putten. Haben sie danach einen RefCount > 1
     // kann es wieder entfernt werden - ist schon im Pool
@@ -460,9 +459,6 @@ void Writer::PutNumFmtFontsInAttrPool()
 
 void Writer::PutEditEngFontsInAttrPool( BOOL bIncl_CJK_CTL )
 {
-    if( !pImpl )
-        pImpl = new Writer_Impl( *pDoc );
-
     SfxItemPool& rPool = pDoc->GetAttrPool();
     if( rPool.GetSecondaryPool() )
     {
@@ -477,9 +473,6 @@ void Writer::PutEditEngFontsInAttrPool( BOOL bIncl_CJK_CTL )
 
 void Writer::PutCJKandCTLFontsInAttrPool()
 {
-    if( !pImpl )
-        pImpl = new Writer_Impl( *pDoc );
-
     SfxItemPool& rPool = pDoc->GetAttrPool();
     _AddFontItems( rPool, RES_CHRATR_CJK_FONT );
     _AddFontItems( rPool, RES_CHRATR_CTL_FONT );
@@ -516,11 +509,13 @@ void Writer::_AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont )
         rPool.Remove( *pItem );
     else
     {
-        if( !pImpl->pFontRemoveLst )
-            pImpl->pFontRemoveLst = new SvPtrarr( 0, 10 );
+        if (!m_pImpl->pFontRemoveLst)
+        {
+            m_pImpl->pFontRemoveLst = new SvPtrarr( 0, 10 );
+        }
 
         void* p = (void*)pItem;
-        pImpl->pFontRemoveLst->Insert( p, pImpl->pFontRemoveLst->Count() );
+        m_pImpl->pFontRemoveLst->Insert( p, m_pImpl->pFontRemoveLst->Count() );
     }
 }
 
@@ -532,7 +527,9 @@ void Writer::CreateBookmarkTbl()
     for(IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->getBookmarksBegin();
         ppBkmk != pMarkAccess->getBookmarksEnd();
         ++ppBkmk)
-            pImpl->InsertBkmk(**ppBkmk);
+    {
+        m_pImpl->InsertBkmk(**ppBkmk);
+    }
 }
 
 
@@ -543,7 +540,8 @@ USHORT Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
     ASSERT( !rArr.Count(), "es sind noch Eintraege vorhanden" );
 
     ULONG nNd = rNd.GetIndex();
-    SvPtrarr* pArr = pImpl->pBkmkNodePos ? pImpl->pBkmkNodePos->Get( nNd ) : 0;
+    SvPtrarr* pArr = (m_pImpl->pBkmkNodePos) ?
+        m_pImpl->pBkmkNodePos->Get( nNd ) : 0;
     if( pArr )
     {
         // there exist some bookmarks, search now all which is in the range
@@ -593,7 +591,6 @@ ULONG StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
     pStg = &rStg;
     pDoc = rPaM.GetDoc();
     pOrigFileName = pFName;
-    pImpl = new Writer_Impl( *pDoc );
 
     // PaM kopieren, damit er veraendert werden kann
     pCurPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
@@ -615,7 +612,6 @@ ULONG StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage >& r
     xStg = rStg;
     pDoc = rPaM.GetDoc();
     pOrigFileName = pFName;
-    pImpl = new Writer_Impl( *pDoc );
 
     // PaM kopieren, damit er veraendert werden kann
     pCurPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
