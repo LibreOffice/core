@@ -14,7 +14,7 @@
 #i109939 -o forms.OFileControlModel
 -o forms.OFixedTextModel
 -o forms.OFormattedControl
--o forms.OFormattedFieldWrapper
+#i109939 -o forms.OFormattedFieldWrapper
 # L‰SST EIN DOKUMENT OFFEN -o forms.OFormsCollection
 -o forms.OGridControlModel
 -o forms.OGroupBoxControl
