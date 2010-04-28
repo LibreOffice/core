@@ -215,7 +215,6 @@ void PageObjectPainter::PaintPreview (
 
     const bool bIsExcluded (rpDescriptor->GetVisualState().GetCurrentVisualState()
         == model::VisualState::VS_Excluded);
-    bool bIsOverlayPaintRequested (bIsExcluded);
 
     if (mpCache != NULL)
     {

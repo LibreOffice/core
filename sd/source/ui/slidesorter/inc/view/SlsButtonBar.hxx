@@ -55,11 +55,6 @@ class ButtonBar
 public:
     ButtonBar (SlideSorter& rSlideSorter);
 
-    /** In order to place and size the buttons the ButtonBar has to
-        know how large the page objects are.
-    */
-    void SetPageObjectSize (const Size aPageObjectSize);
-
     void ProcessButtonDownEvent (
         const model::SharedPageDescriptor& rpDescriptor,
         const Point aMouseModelLocation);

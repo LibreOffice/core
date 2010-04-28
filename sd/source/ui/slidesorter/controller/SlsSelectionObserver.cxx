@@ -145,7 +145,6 @@ void SelectionObserver::EndObservation (void)
     OSL_ASSERT(mbIsOvservationActive);
     mbIsOvservationActive = false;
 
-    model::SlideSorterModel& rModel (mrSlideSorter.GetModel());
     PageSelector& rSelector (mrSlideSorter.GetController().GetPageSelector());
     PageSelector::UpdateLock aUpdateLock (mrSlideSorter);
     rSelector.DeselectAllPages();

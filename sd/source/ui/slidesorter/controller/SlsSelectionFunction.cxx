@@ -50,7 +50,7 @@
 #include "view/SlideSorterView.hxx"
 #include "view/SlsLayouter.hxx"
 #include "view/SlsPageObjectLayouter.hxx"
-#include "view/SlsButton.hxx"
+#include "view/SlsButtonBar.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include "showview.hxx"
 #include "ViewShellBase.hxx"
@@ -1241,6 +1241,7 @@ void SelectionFunction::ModeHandler::StartDrag (
     const Point& rMousePosition,
     const InsertionIndicatorHandler::Mode eMode)
 {
+    (void)eMode;
     // Do not start a drag-and-drop operation when one is already active.
     // (when dragging pages from one document into another, pressing a
     // modifier key can trigger a MouseMotion event in the originating
@@ -1873,6 +1874,7 @@ void ButtonModeHandler::Abort (void)
 
 void ButtonModeHandler::ProcessEvent (SelectionFunction::EventDescriptor& rDescriptor)
 {
+    (void)rDescriptor;
 }
 
 
@@ -1910,7 +1912,6 @@ bool ButtonModeHandler::ProcessButtonUpEvent (SelectionFunction::EventDescriptor
                 rDescriptor.maMouseModelPosition);
             mrSelectionFunction.SwitchToNormalMode();
             return true;
-            break;
     }
 
     return false;
@@ -1929,7 +1930,6 @@ bool ButtonModeHandler::ProcessMotionEvent (SelectionFunction::EventDescriptor& 
                 rDescriptor.maMouseModelPosition,
                 true);
             return true;
-            break;
 
         case MOUSE_MOTION:
             mrSlideSorter.GetView().GetButtonBar().ProcessMouseMotionEvent(
@@ -1937,7 +1937,6 @@ bool ButtonModeHandler::ProcessMotionEvent (SelectionFunction::EventDescriptor& 
                 rDescriptor.maMouseModelPosition,
                 false);
             return true;
-            break;
     }
 
     return false;

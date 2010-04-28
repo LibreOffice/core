@@ -653,7 +653,7 @@ sal_Int8 Clipboard::ExecuteDrop (
                         mrController.GetInsertionIndicatorHandler());
             // Get insertion position and then turn off the insertion indicator.
             pInsertionIndicatorHandler->UpdatePosition(aEventModelPosition, rEvent.mnAction);
-            USHORT nIndex = DetermineInsertPosition(*pDragTransferable);
+            //            USHORT nIndex = DetermineInsertPosition(*pDragTransferable);
 
             // Do not process the insertion when it is trivial,
             // i.e. would insert pages at their original place.
@@ -729,8 +729,6 @@ void Clipboard::Abort (void)
 
 USHORT Clipboard::DetermineInsertPosition (const SdTransferable& )
 {
-    USHORT nInsertPosition = SDRPAGE_NOTFOUND;
-
     // Tell the model to move the dragged pages behind the one with the
     // index nInsertionIndex which first has to be transformed into an index
     // understandable by the document.

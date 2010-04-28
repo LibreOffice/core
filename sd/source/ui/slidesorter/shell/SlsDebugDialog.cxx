@@ -228,7 +228,7 @@ private:
         USHORT nSaturation (0);
         USHORT nBrightness (0);
         aColor.RGBtoHSB(nHue, nSaturation, nBrightness);
-        snprintf(aBuffer, nMaxLength, "r%02Xg%02Xb%02X  h%ds%d%b%d",
+        snprintf(aBuffer, nMaxLength, "r%02Xg%02Xb%02X  h%ds%db%d",
             nRed,nGreen,nBlue, nHue,nSaturation,nBrightness);
         mpTextValue->SetText(::rtl::OUString::createFromAscii(aBuffer));
 

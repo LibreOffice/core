@@ -432,7 +432,7 @@ void Theme::SetGradientBrightnessOverride (const GradientColorType eType, const 
 
 BitmapEx Theme::GetIcon (const IconType eType)
 {
-    if (eType>=0 && eType<maIcons.size())
+    if (eType>=0 && size_t(eType)<maIcons.size())
         return maIcons[eType];
     else
     {
@@ -505,7 +505,7 @@ void Theme::SetIntegerValue (const IntegerValueType eType, const sal_Int32 nValu
 
 ::rtl::OUString Theme::GetString (const StringType eType) const
 {
-    if (eType>=0 && eType<maStrings.size())
+    if (eType>=0 && size_t(eType)<maStrings.size())
         return maStrings[eType];
     else
     {
@@ -519,7 +519,7 @@ void Theme::SetIntegerValue (const IntegerValueType eType, const sal_Int32 nValu
 
 Theme::GradientDescriptor& Theme::GetGradient (const GradientColorType eType)
 {
-    if (eType>=0 && eType<maGradients.size())
+    if (eType>=0 && size_t(eType)<maGradients.size())
         return maGradients[eType];
     else
     {
@@ -533,7 +533,7 @@ Theme::GradientDescriptor& Theme::GetGradient (const GradientColorType eType)
 
 void Theme::InitializeIcon (const IconType eType, USHORT nResourceId)
 {
-    if (eType>=0 && eType<maIcons.size())
+    if (eType>=0 && size_t(eType)<maIcons.size())
         maIcons[eType] = Image(SdResId(nResourceId)).GetBitmapEx();
     else
     {

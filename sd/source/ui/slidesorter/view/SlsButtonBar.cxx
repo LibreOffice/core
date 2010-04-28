@@ -98,13 +98,6 @@ ButtonBar::ButtonBar (SlideSorter& rSlideSorter)
 
 
 
-void ButtonBar::SetPageObjectSize (const Size aPageObjectSize)
-{
-}
-
-
-
-
 void ButtonBar::ProcessButtonDownEvent (
     const model::SharedPageDescriptor& rpDescriptor,
     const Point aMouseModelLocation)
@@ -260,13 +253,13 @@ sal_Int32 ButtonBar::GetButtonCount (const bool bIsExcluded) const
         ? maExcludedButtons
         : maRegularButtons);
 
-    if (nIndex<0 || nIndex>=rButtons.size())
+    if (nIndex<0 || sal_uInt32(nIndex)>=rButtons.size())
     {
         OSL_ASSERT(nIndex<0 || nIndex>=rButtons.size());
         return ::boost::shared_ptr<Button>();
     }
     else
-        return rButtons[nIndex];
+        return rButtons[sal_uInt32(nIndex)];
 }
 
 
@@ -279,9 +272,9 @@ SharedButton ButtonBar::GetButtonAt (const Point aModelLocation)
         const Point aLocalLocation (aModelLocation - mpDescriptor->GetBoundingBox().TopLeft());
         ::std::vector<SharedButton>& rButtons (
             mbIsExcluded ? maExcludedButtons : maRegularButtons);
-        for (sal_Int32 nIndex=0; nIndex<rButtons.size(); ++nIndex)
-            if (rButtons[nIndex]->GetBoundingBox().IsInside(aLocalLocation))
-                return rButtons[nIndex];
+        for (sal_uInt32 nIndex=0; nIndex<rButtons.size(); ++nIndex)
+            if (rButtons[sal_uInt32(nIndex)]->GetBoundingBox().IsInside(aLocalLocation))
+                return rButtons[sal_uInt32(nIndex)];
     }
 
     return SharedButton();
@@ -337,7 +330,7 @@ void ButtonBar::Paint (
         rpDescriptor->HasState(model::PageDescriptor::ST_Excluded)
             ? maExcludedButtons
             : maRegularButtons);
-    for (sal_Int32 nIndex=0; nIndex<rButtons.size(); ++nIndex)
+    for (sal_uInt32 nIndex=0; nIndex<rButtons.size(); ++nIndex)
         rButtons[nIndex]->Paint(
             rDevice,
             aOffset,
@@ -486,16 +479,18 @@ bool ButtonBar::LayoutButtons (
     const Size aPageObjectSize,
     const bool bIsSmall)
 {
+    (void)aPageObjectSize;
+
     // Tell buttons which size they are.
-    for (sal_Int32 nIndex=0; nIndex<maExcludedButtons.size(); ++nIndex)
+    for (sal_uInt32 nIndex=0; nIndex<maExcludedButtons.size(); ++nIndex)
         maExcludedButtons[nIndex]->SetIsSmall(bIsSmall);
-    for (sal_Int32 nIndex=0; nIndex<maRegularButtons.size(); ++nIndex)
+    for (sal_uInt32 nIndex=0; nIndex<maRegularButtons.size(); ++nIndex)
         maRegularButtons[nIndex]->SetIsSmall(bIsSmall);
 
     // Determine maximal height of the buttons.
     // Start with the buttons used for the excluded state.
     sal_Int32 nMaximumHeight (0);
-    for (sal_Int32 nIndex=0; nIndex<maExcludedButtons.size(); ++nIndex)
+    for (sal_uInt32 nIndex=0; nIndex<maExcludedButtons.size(); ++nIndex)
     {
         const Size aSize (maExcludedButtons[nIndex]->GetSize());
         if (aSize.Height() > nMaximumHeight)
@@ -503,7 +498,7 @@ bool ButtonBar::LayoutButtons (
     }
 
     // Do the same for the regular buttons.
-    for (sal_Int32 nIndex=0; nIndex<maRegularButtons.size(); ++nIndex)
+    for (sal_uInt32 nIndex=0; nIndex<maRegularButtons.size(); ++nIndex)
     {
         const Size aSize (maRegularButtons[nIndex]->GetSize());
         if (aSize.Height() > nMaximumHeight)
@@ -542,10 +537,10 @@ bool ButtonBar::LayoutButtons (
     }
 
     // We return true only when there is no inactive button.
-    for (sal_Int32 nIndex=0; nIndex<maExcludedButtons.size(); ++nIndex)
+    for (sal_uInt32 nIndex=0; nIndex<maExcludedButtons.size(); ++nIndex)
         if ( ! maExcludedButtons[nIndex]->IsActive())
             return false;
-    for (sal_Int32 nIndex=0; nIndex<maRegularButtons.size(); ++nIndex)
+    for (sal_uInt32 nIndex=0; nIndex<maRegularButtons.size(); ++nIndex)
         if ( ! maRegularButtons[nIndex]->IsActive())
             return false;
     return true;
@@ -684,6 +679,8 @@ void TextButton::Paint (
     const double nAlpha,
     const ::boost::shared_ptr<Theme>& rpTheme) const
 {
+    (void)nAlpha;
+
     if (mbIsActive)
     {
         // Paint text over the button background.
@@ -733,6 +730,7 @@ void ImageButton::Place (
     const Rectangle aButtonBarBox,
     const sal_Int32 nIndex)
 {
+    (void)nIndex;
     const sal_Int32 nWidth (mbIsSmall
         ? maSmallIcon.GetSizePixel().Width()
         : maNormalIcon.GetSizePixel().Width());

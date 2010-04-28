@@ -383,7 +383,6 @@ void SlideSorterView::Rearrange (void)
 
         if (bRearrangeSuccess)
         {
-            GetButtonBar().SetPageObjectSize(mpLayouter->GetPageObjectSize());
             Layout();
             UpdatePageUnderMouse(false);
             RequestRepaint();
