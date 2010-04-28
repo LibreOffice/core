@@ -327,6 +327,7 @@ testcase tFileOpenHTML
     HTMLImportOptions.OK
     Printlog " Close recent document"
     Call hCloseDocument
+    sleep (1)
     Printlog " Retry with Calc Web Querry filter"
     Printlog " Open File-Open-dialog"
     FileOpen
