@@ -96,10 +96,8 @@ SLOFILES =  \
     $(SLO)$/olinetab.obj \
     $(SLO)$/pagepar.obj \
     $(SLO)$/patattr.obj \
-    $(SLO)$/pivot.obj \
     $(SLO)$/pivot2.obj \
     $(SLO)$/poolhelp.obj \
-    $(SLO)$/scimpexpmsg.obj \
     $(SLO)$/sortparam.obj \
     $(SLO)$/stlpool.obj \
     $(SLO)$/stlsheet.obj \

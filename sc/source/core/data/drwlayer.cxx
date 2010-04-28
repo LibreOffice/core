@@ -456,7 +456,7 @@ inline BOOL IsInBlock( const ScAddress& rPos, SCCOL nCol1,SCROW nRow1, SCCOL nCo
 }
 
 void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
-                                SCsCOL nDx,SCsROW nDy )
+                                SCsCOL nDx,SCsROW nDy, bool bUpdateNoteCaptionPos )
 {
     SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
     DBG_ASSERT(pPage,"Page nicht gefunden");
@@ -492,13 +492,13 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
                 if ( pObj->ISA( SdrRectObj ) && pData->maStart.IsValid() && pData->maEnd.IsValid() )
                     pData->maStart.PutInOrder( pData->maEnd );
                 AddCalcUndo( new ScUndoObjData( pObj, aOldStt, aOldEnd, pData->maStart, pData->maEnd ) );
-                RecalcPos( pObj, *pData, bNegativePage );
+                RecalcPos( pObj, *pData, bNegativePage, bUpdateNoteCaptionPos );
             }
         }
     }
 }
 
-void ScDrawLayer::SetPageSize( USHORT nPageNo, const Size& rSize )
+void ScDrawLayer::SetPageSize( USHORT nPageNo, const Size& rSize, bool bUpdateNoteCaptionPos )
 {
     SdrPage* pPage = GetPage(nPageNo);
     if (pPage)
@@ -521,34 +521,31 @@ void ScDrawLayer::SetPageSize( USHORT nPageNo, const Size& rSize )
             SdrObject* pObj = pPage->GetObj( i );
             ScDrawObjData* pData = GetObjDataTab( pObj, static_cast<SCTAB>(nPageNo) );
             if( pData )
-                RecalcPos( pObj, *pData, bNegativePage );
+                RecalcPos( pObj, *pData, bNegativePage, bUpdateNoteCaptionPos );
         }
     }
 }
 
-void ScDrawLayer::RecalcPos( SdrObject* pObj, const ScDrawObjData& rData, bool bNegativePage )
+void ScDrawLayer::RecalcPos( SdrObject* pObj, const ScDrawObjData& rData, bool bNegativePage, bool bUpdateNoteCaptionPos )
 {
     DBG_ASSERT( pDoc, "ScDrawLayer::RecalcPos - missing document" );
     if( !pDoc )
         return;
 
-    /*  TODO CleanUp: Updating note position works just by chance currently...
-        When inserting rows/columns, this function is called after the
-        insertion, and the note is located at the new position contained in the
-        passed ScDrawObjData already. But when deleting rows/columns, this
-        function is called *before* the deletion, so the note is still at the
-        old cell position, and ScDocument::GetNote() will fail to get the note
-        or will get another note. But after the rows/columns are deleted, a
-        call to ScDrawLayer::SetPageSize() will call this function again, and
-        now the note is at the expected position in the document. */
     if( rData.mbNote )
     {
         DBG_ASSERT( rData.maStart.IsValid(), "ScDrawLayer::RecalcPos - invalid position for cell note" );
-        /*  When inside an undo action, there may be pending note captions
-            where cell note is already deleted. The caption will be deleted
-            later with drawing undo. */
-        if( ScPostIt* pNote = pDoc->GetNote( rData.maStart ) )
-            pNote->UpdateCaptionPos( rData.maStart );
+        /*  #i109372# On insert/remove rows/columns/cells: Updating the caption
+            position must not be done, if the cell containing the note has not
+            been moved yet in the document. The calling code now passes an
+            additional boolean stating if the cells are already moved. */
+        if( bUpdateNoteCaptionPos )
+            /*  When inside an undo action, there may be pending note captions
+                where cell note is already deleted (thus document cannot find
+                the note object anymore). The caption will be deleted later
+                with drawing undo. */
+            if( ScPostIt* pNote = pDoc->GetNote( rData.maStart ) )
+                pNote->UpdateCaptionPos( rData.maStart );
         return;
     }
 
@@ -1020,7 +1017,7 @@ void ScDrawLayer::MoveAreaTwips( SCTAB nTab, const Rectangle& rArea,
 }
 
 void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
-                            SCsCOL nDx,SCsROW nDy, BOOL bInsDel )
+                            SCsCOL nDx,SCsROW nDy, BOOL bInsDel, bool bUpdateNoteCaptionPos )
 {
     DBG_ASSERT( pDoc, "ScDrawLayer::MoveArea without document" );
     if ( !pDoc )
@@ -1069,7 +1066,7 @@ void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCR
         //      Detektiv-Pfeile: Zellpositionen anpassen
         //
 
-    MoveCells( nTab, nCol1,nRow1, nCol2,nRow2, nDx,nDy );
+    MoveCells( nTab, nCol1,nRow1, nCol2,nRow2, nDx,nDy, bUpdateNoteCaptionPos );
 }
 
 void ScDrawLayer::WidthChanged( SCTAB nTab, SCCOL nCol, long nDifTwips )
