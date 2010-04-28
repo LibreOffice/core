@@ -135,6 +135,9 @@ protected:
 public:
     ~SwNodes();
 
+    typedef ::std::vector<SwNodeRange> NodeRanges_t;
+    typedef ::std::vector<NodeRanges_t> TableRanges_t;
+
     SwNodePtr operator[]( ULONG n ) const
         { return (SwNodePtr)BigPtrArray::operator[] ( n ); }
 
@@ -276,8 +279,11 @@ public:
                                 SwTableBoxFmt* pBoxFmt,
                                 SwTxtFmtColl* pTxtColl,
                                 SwUndoTxtToTbl* pUndo = 0 );
+
+    SwNodeRange * ExpandRangeForTableBox(const SwNodeRange & rRange);
+
     //create a table from a vector of NodeRanges - API support
-    SwTableNode* TextToTable( const std::vector< std::vector<SwNodeRange> >& rTableNodes,
+    SwTableNode* TextToTable( const TableRanges_t& rTableNodes,
                                 SwTableFmt* pTblFmt,
                                 SwTableLineFmt* pLineFmt,
                                 SwTableBoxFmt* pBoxFmt,

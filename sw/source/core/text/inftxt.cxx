@@ -276,6 +276,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       bURLNotify( rNew.URLNotify() ),
       bStopUnderFlow( rNew.StopUnderFlow() ),
       bFtnInside( rNew.IsFtnInside() ),
+      bOtherThanFtnInside( rNew.IsOtherThanFtnInside() ),
       bMulti( rNew.IsMulti() ),
       bFirstMulti( rNew.IsFirstMulti() ),
       bRuby( rNew.IsRuby() ),
@@ -373,7 +374,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
     nIdx = nNewIdx;
     nLen = nNewLen;
     bNotEOL = sal_False;
-    bStopUnderFlow = bFtnInside = sal_False;
+    bStopUnderFlow = bFtnInside = bOtherThanFtnInside = sal_False;
     bMulti = bFirstMulti = bRuby = bHanging = bScriptSpace =
         bForbiddenChars = sal_False;
 
@@ -400,6 +401,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       bURLNotify( rNew.URLNotify() ),
       bStopUnderFlow( rNew.StopUnderFlow() ),
       bFtnInside( rNew.IsFtnInside() ),
+      bOtherThanFtnInside( rNew.IsOtherThanFtnInside() ),
       bMulti( rNew.IsMulti() ),
       bFirstMulti( rNew.IsFirstMulti() ),
       bRuby( rNew.IsRuby() ),
@@ -1142,26 +1144,29 @@ void SwTxtPaintInfo::DrawCheckBox( const SwFieldFormPortion &rPor, bool checked)
 {
     SwRect aIntersect;
     CalcRect( rPor, &aIntersect, 0 );
-    if ( aIntersect.HasArea() ) {
-    if (OnWin()) {
-        OutputDevice* pOutDev = (OutputDevice*)GetOut();
-        pOutDev->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-        pOutDev->SetLineColor( Color(220, 233, 245));
-        pOutDev->SetFillColor( Color(220, 233, 245));
-        pOutDev->DrawRect( aIntersect.SVRect() );
-        pOutDev->Pop();
-    }
-    const int delta=10;
-    Rectangle r(aIntersect.Left()+delta, aIntersect.Top()+delta, aIntersect.Right()-delta, aIntersect.Bottom()-delta);
-    pOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-    pOut->SetLineColor( Color(0, 0, 0));
-    pOut->SetFillColor();
-    pOut->DrawRect( r );
-    if (checked) {
-        pOut->DrawLine(r.TopLeft(), r.BottomRight());
-        pOut->DrawLine(r.TopRight(), r.BottomLeft());
+    if ( aIntersect.HasArea() )
+    {
+        if (OnWin() && SwViewOption::IsFieldShadings() &&
+                !GetOpt().IsPagePreview())
+        {
+            OutputDevice* pOut_ = (OutputDevice*)GetOut();
+            pOut_->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+            pOut_->SetFillColor( SwViewOption::GetFieldShadingsColor() );
+            pOut_->SetLineColor();
+            pOut_->DrawRect( aIntersect.SVRect() );
+            pOut_->Pop();
+        }
+        const int delta=10;
+        Rectangle r(aIntersect.Left()+delta, aIntersect.Top()+delta, aIntersect.Right()-delta, aIntersect.Bottom()-delta);
+        pOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+        pOut->SetLineColor( Color(0, 0, 0));
+        pOut->SetFillColor();
+        pOut->DrawRect( r );
+        if (checked) {
+            pOut->DrawLine(r.TopLeft(), r.BottomRight());
+            pOut->DrawLine(r.TopRight(), r.BottomLeft());
+        }
         pOut->Pop();
-    }
     }
 }
 
@@ -1216,14 +1221,22 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
                 }
             }
             bool bIsStartMark=(1==GetLen() && CH_TXT_ATR_FIELDSTART==GetTxt().GetChar(GetIdx()));
-            if(pFieldmark) OSL_TRACE("Found Fieldmark");
+            if(pFieldmark) {
+                OSL_TRACE("Found Fieldmark");
+#if DEBUG
+                rtl::OUString str = pFieldmark->ToString( );
+                fprintf( stderr, "%s\n", rtl::OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr( ) );
+#endif
+            }
             if(bIsStartMark) OSL_TRACE("Found StartMark");
-            if (OnWin() && (pFieldmark!=NULL || bIsStartMark))
+            if (OnWin() && (pFieldmark!=NULL || bIsStartMark) &&
+                    SwViewOption::IsFieldShadings() &&
+                    !GetOpt().IsPagePreview())
             {
                 OutputDevice* pOutDev = (OutputDevice*)GetOut();
                 pOutDev->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-                pOutDev->SetLineColor( Color(220, 233, 245));
-                pOutDev->SetFillColor( Color(220, 233, 245));
+                pOutDev->SetFillColor( SwViewOption::GetFieldShadingsColor() );
+                pOutDev->SetLineColor( );
                 pOutDev->DrawRect( aIntersect.SVRect() );
                 pOutDev->Pop();
             }
