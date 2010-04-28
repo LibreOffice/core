@@ -74,7 +74,7 @@ ShapeContextHandler::getGraphicShapeContext(::sal_Int32 Element )
             case XML_graphic:
                 mpShape.reset(new Shape("com.sun.star.drawing.OLE2Shape" ));
                 mxGraphicShapeContext.set
-                (new GraphicalObjectFrameContext(*rFragmentHandler, pMasterShape, mpShape));
+                (new GraphicalObjectFrameContext(*rFragmentHandler, pMasterShape, mpShape, true));
                 break;
             case XML_pic:
                 mpShape.reset(new Shape("com.sun.star.drawing.GraphicObjectShape" ));
@@ -240,7 +240,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
         }
         else if (mpShape.get() != NULL)
         {
-            mpShape->addShape(*mxFilterBase, mpThemePtr, xShapes);
+            mpShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes);
             xResult.set(mpShape->getXShape());
         }
     }

@@ -46,6 +46,7 @@ SLOFILES =								\
     $(SLO)$/axismodel.obj				\
     $(SLO)$/chartcontextbase.obj		\
     $(SLO)$/chartconverter.obj			\
+    $(SLO)$/chartdrawingfragment.obj	\
     $(SLO)$/chartspaceconverter.obj		\
     $(SLO)$/chartspacefragment.obj		\
     $(SLO)$/chartspacemodel.obj			\
