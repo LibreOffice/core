@@ -39,6 +39,7 @@
 #include "recoveryui.hxx"
 #include "xmlgrhlp.hxx"
 #include "tbunocontroller.hxx"
+#include "tbunosearchcontrollers.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -283,6 +284,12 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
             writeInfo( pKey, svx::GraphicExporter_getImplementationName(), svx::GraphicExporter_getSupportedServiceNames() );
 #endif
             writeInfo( pKey, svx::FontHeightToolBoxControl::getImplementationName_Static(), svx::FontHeightToolBoxControl::getSupportedServiceNames_Static() );
+
+            writeInfo( pKey, svx::FindTextToolbarController::getImplementationName_Static(), svx::FindTextToolbarController::getSupportedServiceNames_Static() );
+            writeInfo( pKey, svx::DownSearchToolboxController::getImplementationName_Static(), svx::DownSearchToolboxController::getSupportedServiceNames_Static() );
+            writeInfo( pKey, svx::UpSearchToolboxController::getImplementationName_Static(), svx::UpSearchToolboxController::getSupportedServiceNames_Static() );
+            writeInfo( pKey, svx::FindbarDispatcher::getImplementationName_Static(), svx::FindbarDispatcher::getSupportedServiceNames_Static() );
+
             writeInfo( pKey, ::unogallery::GalleryThemeProvider_getImplementationName(),::unogallery::GalleryThemeProvider_getSupportedServiceNames() );
 
             // XPrimitiveFactory2D
@@ -353,6 +360,34 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
                 svx::FontHeightToolBoxControl::getImplementationName_Static(),
                 svx::FontHeightToolBoxControl_createInstance,
                 svx::FontHeightToolBoxControl::getSupportedServiceNames_Static() );
+        }
+        else if ( svx::FindTextToolbarController::getImplementationName_Static().equalsAscii( pImplName ) )
+        {
+            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+                svx::FindTextToolbarController::getImplementationName_Static(),
+                svx::FindTextToolbarController_createInstance,
+                svx::FindTextToolbarController::getSupportedServiceNames_Static() );
+        }
+        else if ( svx::DownSearchToolboxController::getImplementationName_Static().equalsAscii( pImplName ) )
+        {
+            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+                svx::DownSearchToolboxController::getImplementationName_Static(),
+                svx::DownSearchToolboxController_createInstance,
+                svx::DownSearchToolboxController::getSupportedServiceNames_Static() );
+        }
+        else if ( svx::UpSearchToolboxController::getImplementationName_Static().equalsAscii( pImplName ) )
+        {
+            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+                svx::UpSearchToolboxController::getImplementationName_Static(),
+                svx::UpSearchToolboxController_createInstance,
+                svx::UpSearchToolboxController::getSupportedServiceNames_Static() );
+        }
+        else if ( svx::FindbarDispatcher::getImplementationName_Static().equalsAscii( pImplName ) )
+        {
+            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+                svx::FindbarDispatcher::getImplementationName_Static(),
+                svx::FindbarDispatcher_createInstance,
+                svx::FindbarDispatcher::getSupportedServiceNames_Static() );
         }
         else if( ::unogallery::GalleryThemeProvider_getImplementationName().equalsAscii( pImplName ) )
         {
