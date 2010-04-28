@@ -15,7 +15,7 @@
 #i52607 -o toolkit.AccessiblePopupMenu
 #i86107,i86110 -o toolkit.AccessibleRadioButton
 -o toolkit.AccessibleScrollBar
--o toolkit.AccessibleStatusBar
+#i111225 -o toolkit.AccessibleStatusBar
 -o toolkit.AccessibleStatusBarItem
 #i109643 -o toolkit.AccessibleTabControl
 #i109643 -o toolkit.AccessibleTabPage
