@@ -35,6 +35,13 @@ AC_ARG_ENABLE(ldap,
 [  --disable-ldap          Disables the use of LDAP backend via Netscape/Mozilla
                           or OpenLDAP LDAP SDK
 ],,)
+AC_ARG_ENABLE(fetch-external,
+[  --disable-fetch-external Disables fetching external tarballs from web sources.
+],,)
+AC_ARG_WITH(external-tar,
+[  --with-external-tar=<TARFILE PATH>   Specify path to tarfiles manually ],
+[ TARFILE_LOCATION="$withval"
+])
 AC_ARG_WITH(openldap,
 [  --with-openldap         Enables the use of the OpenLDAP LDAP SDK instead
                           of the Netscape/Mozilla one
@@ -183,10 +190,8 @@ AC_ARG_ENABLE(dbgutil,
                           Independent from --enable-debug
 ],,)
 AC_ARG_ENABLE(crashdump,
-[[  --enable-crashdump[=yes|TRUE|STATIC|no]
-                          Enable (disable) the crashdump feature code.
-                          [default=no]
-]],,enable_crashdump=no)
+[  --enable-crashdump      Enable the crashdump feature code.
+],,)
 AC_ARG_ENABLE(cl-standard,
 [  --enable-cl-standard    For Microsoft C/C++ compiler users, use non-optimizing
                           standard compiler. ( This just disavles optimization
@@ -376,7 +381,7 @@ AC_ARG_ENABLE(mysql-connector,
 AC_ARG_WITH(system-mysql,
 [  --with-system-mysql          Use MySQL libraries already on system, for building the MySQL Connector/OOo extension.
                                 Requires MYSQLCONFIG to point to the mysql_config executable.
-],,with_system_mysql="no")
+],,)
 AC_ARG_WITH(libmysql-path,
 [  --with-libmysql-path         Use Connector/C (libmysql) installation for building the MySQL Connector/OOo extension.
 
@@ -542,6 +547,9 @@ AC_ARG_WITH(system-altlinuxhyph,
 AC_ARG_WITH(system-lpsolve,
 [  --with-system-lpsolve         Use lpsolve already on system
 ],,)
+AC_ARG_WITH(system-cppunit,
+[  --with-system-cppunit         Use cppunit already on system
+],,)
 AC_ARG_WITH(system-redland,
 [  --with-system-redland   Use redland library already on system
 ],,)
@@ -600,6 +608,13 @@ AC_ARG_WITH(ant-home,
  
                           Usage: --with-ant-home=<absolute path to Ant home>
 ],,)
+AC_ARG_WITH(junit,
+[  --with-junit            Specifies the JUnit 4 jar file to use for JUnit-based
+                          tests.  --without-junit disables those tests.  Not
+                          relevant in the --without-java case.
+
+                          Usage: --with-junit=<absolute path to JUnit 4 jar>
+],,with_junit=yes)
 AC_ARG_WITH(perl-home,
 [  --with-perl-home        If you have installed the Perl 5 Distribution, on your
                           system, please supply the path here.
@@ -777,7 +792,7 @@ AC_ARG_WITH(zip-home,
 ],,)
 AC_ARG_WITH(mingwin,
 [  --with-mingwin          For Windows users, use the mingwin32 compiler within
-                          cygwin environment, this implies --with-use-shell=tcsh
+                          cygwin environment
 
                           Usage: --with-mingwin=yes
 
@@ -787,15 +802,6 @@ AC_ARG_WITH(mingwin,
 
                           Usage: --with-mingwin=i586-mingw32msvc-g++
 ],WITH_MINGWIN=$withval,WITH_MINGWIN=0)
-AC_ARG_WITH(use-shell,
-[  --with-use-shell        Use this option to override the default shell to be
-                          used for the build environment.
-                          Supported options:
-                            tcsh (default)
-                            bash
-
-                          Usage: --with-use-shell=tcsh|bash
-],with_use_shell=$withval,with_use_shell="tcsh")
 AC_ARG_WITH(build-version,
 [  --with-build-version    Allows the builder to add a custom version tag
                           that will appear in the Help/About box for QA
@@ -1050,23 +1056,13 @@ dnl ===================================================================
 dnl Set the ENABLE_CRASHDUMP variable.
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable crashdump feature])
-if test "$enable_crashdump" = "yes" -o "$enable_crashdump" = "TRUE"; then
+if test "$enable_crashdump" = "yes"; then
    ENABLE_CRASHDUMP="TRUE"
-   AC_MSG_RESULT([yes])
    BUILD_TYPE="$BUILD_TYPE CRASHREP"
+   AC_MSG_RESULT([yes])
 else
-   if test "$enable_crashdump" = "STATIC"; then
-      ENABLE_CRASHDUMP="STATIC"
-      AC_MSG_RESULT([yes, STATIC])
-      BUILD_TYPE="$BUILD_TYPE CRASHREP"
-   else
-      if test "$enable_crashdump" = "" -o "$enable_crashdump" = "no"; then
-         ENABLE_CRASHDUMP=""
-	 AC_MSG_RESULT([no])
-      else
-         AC_MSG_ERROR([--enable-crashdump only accepts yes, no, TRUE or STATIC as parameter.])
-      fi
-   fi
+   ENABLE_CRASHDUMP=""
+   AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_CRASHDUMP)
 
@@ -1211,6 +1207,19 @@ else
 fi
 AC_SUBST(ENABLE_FONTCONFIG)
 
+dnl ===================================================================
+dnl find external tarballs.
+dnl ===================================================================
+if test -z $TARFILE_LOCATION; then
+   TARFILE_LOCATION="DEFAULT"
+fi
+AC_SUBST(TARFILE_LOCATION)
+
+if test -z "$enable_fetch_external" || test "$enable_fetch_external" = "yes" \
+   && test -z "$with_system_libs" -a "$with_system_jars" != "no"; then
+   DO_FETCH_TARBALLS="yes"
+fi
+AC_SUBST(DO_FETCH_TARBALLS)
 
 dnl ===================================================================
 dnl Disable legacy binary file formats filters
@@ -1320,16 +1329,8 @@ AC_SUBST(DICT_SYSTEM_DIR)
 AC_SUBST(HYPH_SYSTEM_DIR)
 AC_SUBST(THES_SYSTEM_DIR)
 
-dnl ===================================================================
-dnl all O/S use tcsh or bash.
-dnl The following sets the with_use_shell variable.
-dnl ===================================================================
-AC_MSG_CHECKING([which shell to use])
 if test $_os = "WINNT"; then
-   dnl ===================================================================
-   if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash"; then
-      AC_MSG_ERROR([only "tcsh" or "bash" are supported options])
-   fi
+   AC_MSG_CHECKING([Windows build environment sanity])
    dnl ===================================================================
    dnl Sanity check! Native windows programs cannot use cygwin symlinks!
    dnl ===================================================================
@@ -1357,32 +1358,14 @@ link, and copy the program to the name of the link.])
          fi
       fi
    dnl ===================================================================
-   dnl If using Mingwin32 then don't use 4NT
-   dnl ===================================================================
    if test "$WITH_MINGWIN" = "yes" ; then
-      if test "x$with_use_shell" = "x"; then
-         with_use_shell="tcsh"
-      fi
       if test -z "$CC"; then
          CC="gcc -mno-cygwin"
          CXX="g++ -mno-cygwin"
       fi
    fi
-elif test $_os = "OS2"; then
-   if test "$with_use_shell" != "tcsh"; then
-      AC_MSG_ERROR([only "tcsh" is supported options])
-   fi
-else 
-   dnl ===================================================================
-   dnl All other operating systems use tcsh or bash.
-   dnl ===================================================================
-   if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash"; then
-      AC_MSG_ERROR([only "tcsh" or "bash" are supported options])
-   fi
+   AC_MSG_RESULT([ok])
 fi
-USE_SHELL="$with_use_shell"
-AC_MSG_RESULT([$USE_SHELL])
-AC_SUBST(USE_SHELL)
 AC_SUBST(WITH_MINGWIN)
 
 dnl ===================================================================
@@ -1401,25 +1384,13 @@ fi
 
 
 dnl ===================================================================
-dnl Check whether the chosen shell can be used.
+dnl Check whether the bash shell can be used.
 dnl ===================================================================
-if test "$with_use_shell" = "tcsh"; then
-   AC_PATH_PROG(SHELLPATH, tcsh)
-   if test -z "$SHELLPATH"; then
-      AC_MSG_ERROR([tcsh not found in \$PATH])
-   else
-      SHELLPATH=`echo $SHELLPATH | $SED -n "s/\/tcsh$//p"`
-   fi
-elif test "$with_use_shell" = "bash"; then
-   AC_PATH_PROG(SHELLPATH, bash)
-   if test -z "$SHELLPATH"; then
-      AC_MSG_ERROR([bash not found in \$PATH])
-   else
-      SHELLPATH=`echo $SHELLPATH | $SED -n "s/\/bash$//p"`
-   fi
+AC_PATH_PROG(SHELLPATH, bash)
+if test -z "$SHELLPATH"; then
+   AC_MSG_ERROR([bash not found in \$PATH])
 else
-   AC_MSG_WARN([Windows/OS/2 4NT builds don't test for the shell])
-   SHELLPATH="NO_SHELLPATH_NEEDED"
+   SHELLPATH=`echo $SHELLPATH | $SED -n "s/\/bash$//p"`
 fi
 AC_SUBST(SHELLPATH)
 
@@ -2764,6 +2735,17 @@ if test "$SOLAR_JAVA" != ""; then
       fi
       JAVAINTERPRETER=`cygpath -d "$JAVAINTERPRETER"`
       JAVAINTERPRETER=`cygpath -u "$JAVAINTERPRETER"`
+   elif test "$_os" = "Darwin"; then
+      dnl HACK:  There currently is only a 32 bit version of OOo for Mac OS X,
+      dnl and Tiger java complains about -d32 while Snow Leopard java needs it
+      dnl to run in 32 bit mode and be able to load OOo jnilibs:
+      AC_MSG_CHECKING([whether to pass -d32 to Java interpreter])
+      if "$JAVAINTERPRETER" -d32 >&5 2>&5; then
+         AC_MSG_RESULT([yes])
+         JAVAIFLAGS=-d32
+      else
+         AC_MSG_RESULT([no])
+      fi
    fi
 fi
 
@@ -3146,6 +3128,7 @@ AC_SUBST(JAVA_HOME)
 AC_SUBST(JDK)
 AC_SUBST(JAVAFLAGS)
 AC_SUBST(JAVAINTERPRETER)
+AC_SUBST(JAVAIFLAGS)
 AC_SUBST(JAVACOMPILER)
 AC_SUBST(JAVAAOTCOMPILER)
 AC_SUBST(JAVADOC)
@@ -3197,7 +3180,7 @@ fi
 AC_SUBST(BUILD_DMAKE)
 
 AC_MSG_CHECKING([whether to enable EPM for packing])
-if test "$_os" != "WINNT" -a \( "z$enable_epm" = "z" -o "$enable_epm" != "no" \) ; then
+if test "$enable_epm" = "yes"; then
    AC_MSG_RESULT([yes])
    dnl ===================================================================
    dnl Check for epm - not needed for windows
@@ -3248,18 +3231,6 @@ if test "$_os" != "WINNT" -a \( "z$enable_epm" = "z" -o "$enable_epm" != "no" \)
 
    # test which package format to use
    AC_MSG_CHECKING([which package format to use])
-   # epm supports the following formats:
-   # aix - AIX software distribution
-   # bsd - FreeBSD, NetBSD, or OpenBSD software distribution
-   # depot or swinstall - HP-UX software distribution
-   # deb - Debian software distribution
-   # inst or tardist - IRIX software distribution
-   # osx - MacOS X software distribution
-   # pkg - Solaris software distribution
-   # rpm - RedHat software distribution
-   # setld - Tru64 (setld) software distribution
-   # native - "Native" software distribution for the platform
-   # portable - Portable software distribution
 
    # defaults
    case "$_os" in
@@ -3289,6 +3260,9 @@ if test "$_os" != "WINNT" -a \( "z$enable_epm" = "z" -o "$enable_epm" != "no" \)
 	OSF1)
 		PKGFORMAT=setld
 		;;
+    WINNT)
+        PKGFORMAT=msi
+        ;;
 	# we never should get here since we check the arciecture/os at the beginning,
 	# but go sure...
 	*)
@@ -3297,7 +3271,7 @@ if test "$_os" != "WINNT" -a \( "z$enable_epm" = "z" -o "$enable_epm" != "no" \)
    if test -n "$with_package_format"; then
 	for i in $with_package_format; do 
 		case "$i" in
-			aix | bsd | deb | inst | tardist | osx | pkg | rpm | setld | native | portable) 
+			aix | bsd | deb | inst | tardist | osx | pkg | rpm | setld | native | portable | archive | dmg | installed | msi)
 			;;
 		*)
 			AC_MSG_ERROR([unsupported format $i. Supported by EPM are:
@@ -3312,6 +3286,11 @@ rpm - RedHat software distribution
 setld - Tru64 (setld) software distribution
 native - "Native" software distribution for the platform
 portable - Portable software distribution
+OOo additionally supports:
+archive - .tar.gz or .zip
+dmg - Mac OS X .dmg
+installed - installation tree
+msi - Windows .msi
 			]) 
 			;;
 		esac
@@ -3624,6 +3603,33 @@ fi
 AC_SUBST(SYSTEM_LIBWPD)
 AC_SUBST(LIBWPD_CFLAGS)
 AC_SUBST(LIBWPD_LIBS)
+
+dnl ===================================================================
+dnl Check for system cppunit
+dnl ===================================================================
+AC_MSG_CHECKING([which cppunit to use])
+if test -n "$with_system_cppunit" -o -n "$with_system_libs" && \
+        test "$with_system_cppunit" != "no"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_CPPUNIT=YES
+    # might work for earlier, too but go sure. We didn't have
+    # a system-cppunit before the first version using a proper cppunit
+    # (and that being 1.12.1) anyway
+    PKG_CHECK_MODULES( CPPUNIT, cppunit >= 1.12.1 )
+    AC_MSG_CHECKING([STL compatibility])
+    if test "$WITH_STLPORT" != "no"; then
+	AC_MSG_ERROR([to use system cppunit you need to use --without-stlport])
+    else
+	AC_MSG_RESULT([OK])	
+    fi
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_CPPUNIT=NO
+    BUILD_TYPE="$BUILD_TYPE CPPUNIT"
+fi
+AC_SUBST(SYSTEM_CPPUNIT)
+AC_SUBST(CPPUNIT_CFLAGS)
+AC_SUBST(CPPUNIT_LIBS)
 
 dnl ===================================================================
 dnl Check whether freetype is available
@@ -3955,13 +3961,6 @@ int main(int argc, char **argv) {
       ], [AC_MSG_RESULT(OK)], [AC_MSG_ERROR([not suitable, we need >= 1.0.6])])
         AC_LANG_POP([C++])
 
-	AC_MSG_CHECKING([STL compatibility])
-	if test "$WITH_STLPORT" != "no"; then
-		AC_MSG_ERROR([to use system mysqlcppconn you need to use --without-stlport])
-	else
-		AC_MSG_RESULT([OK])	
-	fi
-
 else
 	AC_MSG_RESULT([internal])
         AC_MSG_CHECKING([for mysqlcppconn module])
@@ -4077,6 +4076,70 @@ if test -n "$with_system_saxon" -o -n "$with_system_libs" && \
           AC_CHECK_FILE($SERIALIZER_JAR, [],
                [AC_MSG_ERROR(serializer.jar not found.)], [])
           AC_SUBST(SERIALIZER_JAR)
+        fi
+
+dnl Saxon comes in two practically available versions, the out-of-date saxonb which
+dnl supports the java extensions that OOo uses, and the up-to-date saxon he 
+dnl "home edition" version, which is crippled to not support those java extensions.
+dnl And as an aside the he one also needs to be tweaked to include 
+dnl a META-INF/services to broadcast that it supports the jaxp transform factory
+
+        AC_MSG_CHECKING([if saxon works])
+        cat > saxontest.java <<_ACEOF
+[import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.stream.StreamSource;
+import java.io.*;
+
+import net.sf.saxon.FeatureKeys;
+
+class saxontest {
+    public static void main(String[] args) {
+      System.setProperty("javax.xml.transform.TransformerFactory",
+        "net.sf.saxon.TransformerFactoryImpl");
+      try {
+        TransformerFactory tfactory = TransformerFactory.newInstance();
+	// some external saxons (Debian, Ubuntu, ...) have this disabled
+	// per default
+	tfactory.setAttribute(FeatureKeys.ALLOW_EXTERNAL_FUNCTIONS, new Boolean(true));
+        System.out.println("TransformerFactory is" +
+          tfactory.getClass().getName());
+        Transformer transformer = tfactory.newTransformer(
+          new StreamSource(new File(args[0])));
+      } catch(Exception e){
+        e.printStackTrace(System.err);
+        System.exit(-1);
+      }
+      System.exit(0);
+    }
+}
+]
+_ACEOF
+        cat > saxontest.xsl<<_ACEOF
+[<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+ <xsl:template match="/">
+  <xsl:value-of select="math:sqrt(1)" xmlns:math="java:java.lang.Math"/>
+ </xsl:template>
+</xsl:stylesheet>
+]
+_ACEOF
+        javac_cmd="$JAVACOMPILER -cp $SAXON_JAR saxontest.java 1>&2"
+        AC_TRY_EVAL(javac_cmd)
+        if test $? = 0 && test -f ./saxontest.class ; then
+            java_cmd="$JAVAINTERPRETER -cp $SAXON_JAR:. saxontest saxontest.xsl 1>&2"
+            AC_TRY_EVAL(java_cmd)
+            if test $? = 0; then
+              AC_MSG_RESULT([yes])
+            else
+              cat saxontest.java >&5
+              AC_MSG_RESULT([no])
+              AC_MSG_ERROR([Non-functional saxon jar, e.g. crippled saxon-he instead of saxonb])
+            fi
+        else
+          AC_MSG_RESULT([no])
+          cat saxontest.java >&5
+          AC_MSG_ERROR([saxontest could not be compiled, non-functional saxon jar])
         fi
 else
     AC_MSG_RESULT([internal])
@@ -4470,26 +4533,34 @@ if test "$BUILD_MOZAB" = "TRUE"; then
       MOZILLA_VERSION=1.1.14
    fi
    MOZILLA_SOURCE_VERSION="seamonkey-${MOZILLA_VERSION}.source"
-   for e in gz bz2; do
-      AC_MSG_CHECKING([for $MOZILLA_SOURCE_VERSION.tar.$e])
-      if test ! -e "moz/download/$MOZILLA_SOURCE_VERSION.tar.$e" && test "$HAVE_MOZILLA_TARBALL" != "y"; then
-         AC_MSG_RESULT([not found])
-         HAVE_MOZILLA_TARBALL=n
+   MOZILLA_FETCH_FILE=`grep $MOZILLA_SOURCE_VERSION ooo.lst`
+   AC_MSG_CHECKING([for mozilla sources])
+   if test -z "$MOZILLA_FETCH_FILE"; then
+      AC_MSG_RESULT([not found])
+      HAVE_MOZILLA_TARBALL=n
+   else
+      AC_MSG_CHECKING([for $MOZILLA_FETCH_FILE])
+      if test ! -e "$TARFILE_LOCATION/$MOZILLA_FETCH_FILE"; then
+         if test -z "$DO_FETCH"; then
+            AC_MSG_RESULT([will be fetched])
+            HAVE_MOZILLA_TARBALL=y
+         else
+            AC_MSG_RESULT([not found])
+            HAVE_MOZILLA_TARBALL=n
+         fi
       else
          AC_MSG_RESULT([found])
          HAVE_MOZILLA_TARBALL=y
       fi
-   done
+   fi
    if test "$HAVE_MOZILLA_TARBALL" != "y"; then
-         AC_MSG_ERROR([Mozilla/SeaMonkey source archive not found.
-Please copy $MOZILLA_SOURCE_VERSION.tar.bz2 or $MOZILLA_SOURCE_VERSION.tar.gz to moz/download/.
-The archives can be found here:
-ftp://ftp.mozilla.org/pub/mozilla.org/seamonkey/releases/$MOZILLA_VERSION/])
+      AC_MSG_ERROR([Mozilla/SeaMonkey source archive not found.
+Use "./fetch_tarballs.sh ooo.lst" to download.])
    fi
    if test "$_os" = "WINNT"; then
       AC_MSG_CHECKING([for moztools binaries])
-      if test ! -e "moz/download/vc8-moztools.zip" ; then
-        AC_MSG_ERROR([The following file is missing in moz/download: vc8-moztools.zip
+      if test ! -e "$TARFILE_LOCATION/vc8-moztools.zip" ; then
+        AC_MSG_ERROR([The following file is missing in $TARFILE_LOCATION: vc8-moztools.zip
 (from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/historic/vc8/)])
       else
          AC_MSG_RESULT([ok])
@@ -6642,6 +6713,34 @@ EOF
   fi
 fi
 rm -f conftest* core core.* *.core
+
+OOO_JUNIT_JAR=
+if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
+    AC_MSG_CHECKING([for JUnit 4])
+    if test "$with_junit" == "yes"; then
+        if test -e /usr/share/java/junit4.jar; then
+            OOO_JUNIT_JAR=/usr/share/java/junit4.jar
+        else
+            OOO_JUNIT_JAR=/usr/share/java/junit.jar
+        fi
+    else
+        OOO_JUNIT_JAR=$with_junit
+    fi
+    if test "$_os" = "WINNT"; then
+        OOO_JUNIT_JAR=`cygpath -m "$OOO_JUNIT_JAR"`
+    fi
+    "$JAVA_HOME/bin/jar" tf "$OOO_JUNIT_JAR" 2>&5 | \
+        grep org/junit/Before.class > /dev/null 2>&5
+    if test $? -eq 0; then
+        AC_MSG_RESULT([$OOO_JUNIT_JAR])
+    else
+        AC_MSG_RESULT([no])
+        AC_MSG_ERROR([cannot find JUnit 4 jar at $OOO_JUNIT_JAR;
+please install one and/or specify its pathname via --with-junit=...,
+or disable it via --without-junit])
+    fi
+fi
+AC_SUBST(OOO_JUNIT_JAR)
 
 AC_MSG_CHECKING([which languages to be built])
 WITH_LANG="$with_lang"
