@@ -97,6 +97,9 @@ testcase tInvalidModuleNames
 
     printlog( "Try to give BASIC modules invalid names (which should fail)" )
 
+    const MAX_WAIT = 2
+    const OK_BUTTON_ONLY = 1
+
     dim iCurrentName as Integer
     dim sSeparator as String 
     dim cModuleName as string
@@ -106,29 +109,36 @@ testcase tInvalidModuleNames
     cModuleName = hCreateInvalidModuleName( iCurrentName )
     printlog( "Trying module name: " & cModuleName )
 
+    hCreateDocument()
+    ToolsMacro_uno
+
+    ' hCreateModuleForDoc should usually end with the BASIC IDE open
+    ' but we want it to fail by providing an invalid module name
     if ( hCreateModuleForDoc( cModuleName ) ) then
         warnlog( "Basic-Ide should not open for invalid module names" )
-        
-        ' try to recover and continue for other names
-        hCloseBasicIde()
-        hDestroyDocument
     else
         kontext "Active"
-        if ( Active.exists( 2 ) ) then
-            if( Active.getButtonCount() = 1 ) then
-                printlog( "Invalid module name warning displayed, good." )
-                printlog( Active.getText() )
+        if ( Active.exists( MAX_WAIT ) ) then
+            if( Active.getButtonCount() = OK_BUTTON_ONLY ) then
+
+                printlog( "Messagebox <Invalid name> displayed: " & Active.getText() )
                 hCloseDialog( Active, "ok" )
 
                 kontext "NeuesModul"
-                if ( NeuesModul.exists( 2 ) ) then
+                if ( NeuesModul.exists( MAX_WAIT ) ) then
                     hCloseDialog( NeuesModul, "cancel" )
+
+                    kontext "Makro"
+                    if ( Makro.exists() ) then
+                        hCloseDialog( Makro, "close" )
+                    else
+                        warnlog( "Test should be back on macro dialog" )
+                    endif
                 else
                     warnlog( "<NeuesModul> dialog should show after failed naming attempt" )
                 endif
             else
-                warnlog( "Unexpected messagebox" )
-                printlog( Active.getText() )
+                warnlog( "Unexpected messagebox: " & Active.getText() )
                 hCloseDialog( Active, "close" )
             endif
         else
@@ -136,9 +146,7 @@ testcase tInvalidModuleNames
         endif
     endif
 
-    kontext "Makro"
-    hCloseDialog( Makro, "close" )
-    hDestroyDocument()
+    hFileCloseAll()
 
 endcase
 
@@ -170,8 +178,7 @@ testcase tValidModuleNames
 
     if ( hCreateModuleForDoc( sModuleName ) ) then
         printlog( "The module name was accepted: " & sModuleName )
-        hCloseBasicIDE()
-        hDestroyDocument()
+        hFileCloseAll()
     else
         warnlog( "The module name was not accepted: " & sModuleName )
         goto endsub
