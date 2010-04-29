@@ -61,44 +61,35 @@ function hInsertMacroFromFile( cMacroId as string, optional cSource as string ) 
     
     '///+<li>Find the path to the source file</li>
     dim cFile as string
-    if ( IsMissing( cSource ) ) then
-        cFile = convertpath( gTesttoolPath & "global/input/macros.txt" )
-    else
-        cFile = convertpath( cSource )
-    endif        
-    
     dim aInstructionList( MAX_LINES_IN_MACRO_FILE ) as string
-        
     dim iInstructionCount as integer
     dim iCurrentInstruction as integer
-    
-    dim brc as boolean
-    
+
+    if ( IsMissing( cSource ) ) then cFile = gTesttoolPath & "global/input/macros.txt"
+
     '///+<li>retrieve the macro from the file with ID as section</li>
-    iInstructionCount = hGetDataFileSection( cFile, _
-                                             aInstructionList(), _
-                                             cMacroId, "", "" )
+    iInstructionCount = hGetDataFileSection( cFile, aInstructionList(), cMacroId, "", "" )
                         
     '///+<li>Delete all content from the BASIC IDE edit window</li>
     '///+<li>Insert the code into the IDE line by line</li>
-    if ( hDeleteMacro() ) then
-
-        for iCurrentInstruction = 1 to iInstructionCount
-        
-            EditWindow.TypeKeys( "<HOME>" )
-            EditWindow.TypeKeys( aInstructionList( iCurrentInstruction ) )
-            EditWindow.TypeKeys( "<RETURN>" )
-            
-        next iCurrentInstruction
-        printlog( CFN & "Inserted macro: " & cMacroId )
-        hInsertMacroFromFile() = iInstructionCount
-        
+    kontext "BasicIDE"
+    if ( EditWindow.exists() ) then
+        if ( hDeleteMacro() ) then
+            for iCurrentInstruction = 1 to iInstructionCount
+                EditWindow.TypeKeys( "<HOME>" )
+                EditWindow.TypeKeys( aInstructionList( iCurrentInstruction ) )
+                EditWindow.TypeKeys( "<RETURN>" )
+            next iCurrentInstruction
+            printlog( CFN & "Inserted macro: " & cMacroId )
+            hInsertMacroFromFile() = iInstructionCount
+        else
+            printlog( CFN & "IDE is not empty, will not insert macro" )
+            hInsertMacroFromFile() = RETVAL_FAILURE
+        endif
     else
-    
-        printlog( CFN & "IDE is not empty, will not insert macro" )
+        warnlog( CFN & "Editwindow is not visible" )
         hInsertMacroFromFile() = RETVAL_FAILURE
-        
-    endif    
+    endif
     '///</ul>
         
 end function
@@ -141,4 +132,37 @@ function hMacroOrganizerRunMacro( cMacroName as string ) as integer
     endif
 
     
+end function
+
+'*******************************************************************************
+
+function hBasicIDERunMacro( cIdentifier as string ) as boolean
+
+    const CFN = "hBasicIDERunMacro(): "
+    const MAX_WAIT = 1
+    dim cMessage as string : cMessage = ""
+
+    kontext "BasicIDE"
+    if ( BasicIDE.exists() ) then
+
+        BasicRun
+
+        kontext "Active"
+        if ( Active.exists( MAX_WAIT ) ) then
+            cMessage = Active.getText()
+            hCloseDialog( Active, "close" )
+        endif
+
+        if ( cMessage = cIdentifier ) then
+            printlog( "The expected macro was executed" )
+            hBasicIDERunMacro() = true
+        else
+            printlog( CFN & "Incorrect macro executed" )
+            hBasicIDERunMacro() = false
+        endif
+    else
+        warnlog( CFN & "BasicIDE is not open" )
+        hBasicIDERunMacro() = false
+    endif
+
 end function

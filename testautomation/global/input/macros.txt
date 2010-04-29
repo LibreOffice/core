@@ -39,7 +39,7 @@ end function
 '# TTMacro1: This is a short testscript for automated testing!
 sub main
 
-    print( "Hello" )
+    print( "TTMacro1" )
 
 end sub
 

@@ -1140,7 +1140,7 @@ function hCloseDialog( oDialog as object, sUserFlags as string ) as boolean
     ' this function closes a dialog providing three different methods while
     ' removing the need for static sleep statements
 
-    const CFN = "global::tools::includes::required::t_tools3.inc:hCloseDialog"
+    const CFN = "global::tools::includes::required::t_tools3.inc::hCloseDialog(): "
     const METHOD_CLOSE  = 1
     const METHOD_CANCEL = 2
     const METHOD_OK     = 3
@@ -1205,7 +1205,7 @@ end function
 
 function hWaitForObject( oControl as object, iTime as integer ) as integer
 
-    const CFN = "hWaitForObject()::"
+    const CFN = "global::tools::includes::required::t_tools3.inc::hWaitForObject(): "
     dim iWait as integer
 
     if ( GVERBOSE ) then printlog( CFN & "Entering function for control: " & oControl.name() )

@@ -35,7 +35,9 @@ testcase tBasicIdeModuleHide
 
     
     const CFN = "tBasicIdeModuleHide::"
-    const RAISE_MESSAGEBOX = 1
+
+    const TESTMACRO = "TTMacro1"
+    const ERR_NO_LINES_INSERTED = 0
 
     const RC_SUCCESS = 0
     const RC_TIMEOUT = -1
@@ -52,7 +54,7 @@ testcase tBasicIdeModuleHide
     ToolsMacro_uno
     hCreateModuleForDoc()
     
-    if ( hInsertMacro( RAISE_MESSAGEBOX ) ) then
+    if ( hInsertMacroFromFile( TESTMACRO ) > ERR_NO_LINES_INSERTED ) then
        printlog( CFN & "Macro has been written successfully" )
     else
        warnlog( CFN & "Failed to insert macro" )
@@ -64,7 +66,7 @@ testcase tBasicIdeModuleHide
     endif
 
     ' hTestMacro is expected to fail, so we jump to the catch statement
-    if ( hTestMacro( RAISE_MESSAGEBOX ) = RC_SUCCESS ) then
+    if ( hInsertMacroFromFile( TESTMACRO ) > ERR_NO_LINES_INSERTED ) then
         warnlog( "For some reason the original module is still visible" )
     else
         warnlog( "There should not be any editingwindow visible" )
@@ -78,14 +80,12 @@ testcase tBasicIdeModuleHide
             goto endsub
         endif
         
-        if ( hTestMacro( RAISE_MESSAGEBOX ) = RAISE_MESSAGEBOX ) then
-            printlog( " * the correct macro-module is open. Good." )
-        else
-            warnlog( "The open macro-module is not the one that was expected" )
+        if ( not hBasicIDERunMacro( TESTMACRO ) ) then
+            warnlog( "Incorrect macro executed/macro missing" )
         endif
-         
+
         hCloseBasicIDE()
-        hCloseDocument()      
+        hFileCloseAll()
          
     else
         warnlog( "restarting the office to recover from errors" )
