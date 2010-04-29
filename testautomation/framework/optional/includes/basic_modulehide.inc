@@ -54,42 +54,45 @@ testcase tBasicIdeModuleHide
     ToolsMacro_uno
     hCreateModuleForDoc()
     
+    printlog( "Insert macro" )
     if ( hInsertMacroFromFile( TESTMACRO ) > ERR_NO_LINES_INSERTED ) then
        printlog( CFN & "Macro has been written successfully" )
     else
        warnlog( CFN & "Failed to insert macro" )
     endif
 
+    printlog( "Hide the module" )
+    if ( hHideModule() ) then 
 
-    if ( hHideModule() <> RC_SUCCESS ) then
+        ' hTestMacro is expected to fail, so we jump to the catch statement
+        if ( hInsertMacroFromFile( TESTMACRO ) <> ERR_NO_LINES_INSERTED ) then
+            warnlog( "For some reason the original module is still visible" )
+        else
+            printlog( "The edit window is not accessible, good" )
+        endif
+
+        if ( hOpenBasicObjectOrganizer( TAB_MODULES ) ) then
+
+            modulliste.typekeys( "<END><RIGHT><DOWN><RIGHT><DOWN>" )
+            if ( hClickButton( Bearbeiten ) = RC_TIMEOUT ) then
+                warnlog( "#i35097# Crash when editing last module" )
+                goto endsub
+            endif
+
+            if ( not hBasicIDERunMacro( TESTMACRO ) ) then
+                warnlog( "Incorrect macro executed/macro missing" )
+            endif
+
+            hCloseBasicIDE()
+            hFileCloseAll()
+
+        else
+            warnlog( "restarting the office to recover from errors" )
+            call exitRestartTheOffice()
+        endif
+
+    else
         warnlog( "Some unexpected error occurred while trying to hide the module" )
-    endif
-
-    ' hTestMacro is expected to fail, so we jump to the catch statement
-    if ( hInsertMacroFromFile( TESTMACRO ) > ERR_NO_LINES_INSERTED ) then
-        warnlog( "For some reason the original module is still visible" )
-    else
-        warnlog( "There should not be any editingwindow visible" )
-    endif
-    
-    if ( hOpenBasicObjectOrganizer( TAB_MODULES ) ) then
-    
-        modulliste.typekeys( "<END><RIGHT><DOWN><RIGHT><DOWN>" )
-        if ( hClickButton( Bearbeiten ) = RC_TIMEOUT ) then
-            warnlog( "#i35097# Crash when editing last module" )
-            goto endsub
-        endif
-        
-        if ( not hBasicIDERunMacro( TESTMACRO ) ) then
-            warnlog( "Incorrect macro executed/macro missing" )
-        endif
-
-        hCloseBasicIDE()
-        hFileCloseAll()
-         
-    else
-        warnlog( "restarting the office to recover from errors" )
-        call exitRestartTheOffice()
     endif
     
 endcase

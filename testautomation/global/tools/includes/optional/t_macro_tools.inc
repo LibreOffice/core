@@ -87,7 +87,7 @@ function hInsertMacroFromFile( cMacroId as string, optional cSource as string ) 
             hInsertMacroFromFile() = RETVAL_FAILURE
         endif
     else
-        warnlog( CFN & "Editwindow is not visible" )
+        printlog( CFN & "Editwindow is not visible" )
         hInsertMacroFromFile() = RETVAL_FAILURE
     endif
     '///</ul>
@@ -145,12 +145,19 @@ function hBasicIDERunMacro( cIdentifier as string ) as boolean
     kontext "BasicIDE"
     if ( BasicIDE.exists() ) then
 
-        BasicRun
+        Wait( 2000 )
+
+        kontext "MacroBar"
+        if ( MacroBar.exists() ) then
+            BasicRun.click()
+        else
+            warnlog( "MacroBar not accessible" )
+        endif
 
         kontext "Active"
         if ( Active.exists( MAX_WAIT ) ) then
             cMessage = Active.getText()
-            hCloseDialog( Active, "close" )
+            hCloseDialog( Active, "ok" )
         endif
 
         if ( cMessage = cIdentifier ) then

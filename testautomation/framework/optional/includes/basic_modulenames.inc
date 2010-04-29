@@ -33,7 +33,10 @@
 
 testcase tBasicIdeModuleNames
 
-    const CMODULE = "TModuleNames"
+    printlog( "Modulenames in BASIC IDE" )
+
+    const CMODULE_VALID1 = "tValidName"
+    const CMODULE_VALID2 = "tValidToo"
     const TEST_MACRO = "TTMacro1"
 
     const RC_SUCCESS = 0
@@ -46,7 +49,7 @@ testcase tBasicIdeModuleNames
     gApplication = "WRITER"
     hCreateDocument()
 
-    hInitBasicIde( CMODULE )
+    hInitBasicIde( CMODULE_VALID1 )
     if ( hInsertMacroFromFile( TEST_MACRO ) > ERR_NO_LINES_INSERTED ) then
    
         cTabName = hGetTabNameFromOrganizer()
@@ -54,29 +57,19 @@ testcase tBasicIdeModuleNames
         Randomize
         iCurrentName = Int( 24 * RND ) + 1 ' Range from 1 to 24
 
+        printlog( "Trying with invalid modulename" )
         cTabName = hCreateInvalidModuleName( iCurrentName )
-
-        if ( hRenameTab( cTabName ) = RC_FAILURE ) then
-            hHandleInvalidNameWarning( cTabname )
+        hRenameTab( cTabName )
+        if ( hHandleInvalidNameWarning( cTabname ) ) then
+            printlog( "Warning for invalid modulename displayed" )
         else
-            warnlog( "Warning missing" )
+            warnlog( "Warning for invalid modulename is missing" )
         endif
 
-        cTabname = CMODULE
-
-        if ( hRenameTab( cTabname ) <> RC_SUCCESS ) then
-            if ( hHandleInvalidNameWarning( cTabname )  ) then
-                warnlog( "Failed to set valid name" )
-            endif
-        endif
-
-
-        cTabname = hCreateInvalidModuleName( 0 )
-
-        if ( hRenameTab( cTabName ) <> RC_SUCCESS ) then
-            if ( hHandleInvalidNameWarning( cTabname )  ) then
-                warnlog( "Failed to set valid name" )
-            endif
+        printlog( "Trying with valid modulename" )
+        hRenameTab( CMODULE_VALID2 )
+        if ( hHandleInvalidNameWarning( CMODULE_VALID2 ) ) then
+            warnlog( "Failed to set valid modulename" )
         endif
 
     else
@@ -91,7 +84,7 @@ endcase
 
 testcase tInvalidModuleNames
 
-    printlog( "Try to give BASIC modules invalid names (which should fail)" )
+    printlog( "Modulenames in BASIC Organizer" )
 
     const MAX_WAIT = 2
     const OK_BUTTON_ONLY = 1
@@ -150,7 +143,7 @@ endcase
 
 testcase tValidModuleNames
 
-    printlog( "Try using BASIC reserved names (and others) as module names (which should work)" )
+    printlog( "Valid modulenames in BASIC Organizer: Names that are BASIC keywords" )
 
     dim iCurrentName as Integer
     dim sModuleName as String
@@ -192,22 +185,21 @@ function hHandleInvalidNameWarning( cTabName as string ) as boolean
     kontext "Active"
     if ( Active.exists( MAX_WAIT ) ) then
 
-        printlog( "Invalid name message displayed" )
-        printlog( Active.getText() )
+        printlog( "Invalid name message displayed" & Active.getText() )
         hCloseDialog( Active, "ok" )
         hHandleInvalidNameWarning() = true
         
         kontext "Active"
         if ( Active.exists( MAX_WAIT ) ) then
-            warnlog( "Unexpected messagebox displayed: " & Active.getText() )
+            printlog( "Unexpected messagebox displayed: " & Active.getText() )
             hHandleInvalidNameWarning() = false
         endif
 
-        kontext "basicide"
+        kontext "BasicIDE"
         tabbar.typekeys( "<ESCAPE>" , true )
 
     else
-        warnlog( "Invalid name warning is missing" )
+        printlog( "Invalid name warning not displayed" )
         hHandleInvalidNameWarning() = false
     endif
 

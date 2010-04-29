@@ -329,20 +329,21 @@ function hRenameTab( cTabName as string ) as integer
     const RETVAL_NO_ACCESS = 2
     const RETVAL_NO_MENU   = 3
 
+    dim sFullString as string : sFullString = "<HOME><SHIFT END>" & cTabName & "<RETURN>"
+
     kontext "BasicIDE"
     if ( BasicIDE.exists() ) then
         try
             hRenameTab() = RETVAL_NO_MENU
             Tabbar.openContextMenu()
             hMenuSelectNr( MENUITEM_RENAME )
-            WaitSlot( MAX_WAIT )
+            Wait( MAX_WAIT )
 
             ' At this point the string on the tab should be selected, print the 
             ' string to the log and overwrite it with the new name
             hRenameTab() = RETVAL_NO_ACCESS
-            printlog( "Current modulename is: " & Tabbar.getSelText() )
-            Tabbar.typeKeys( cTabName )
-            Tabbar.typeKeys( "<RETURN>" )
+
+            Tabbar.typeKeys( sFullString , true )
             hRenameTab() = RETVAL_SUCCESS
         catch
             warnlog( CFN & "Failed to rename the current module" )
@@ -812,3 +813,4 @@ function hIDESelectTabByIndex( iIndex as integer ) as string
     '///</ul>
 
 end function
+
