@@ -2618,13 +2618,20 @@ void ScXMLExport::_ExportAutoStyles()
                     GetShapeExport()->exportAutoStyles();
                     GetFormExport()->exportAutoStyles( );
 
+                    if (pDoc)
                     {
-                        // Special table style for the external ref cache tables.
-                        AddAttribute(XML_NAMESPACE_STYLE, XML_NAME, sExternalRefTabStyleName);
-                        AddAttribute(XML_NAMESPACE_STYLE, XML_FAMILY, XML_TABLE);
-                        SvXMLElementExport aElemStyle(*this, XML_NAMESPACE_STYLE, XML_STYLE, sal_True, sal_True);
-                        AddAttribute(XML_NAMESPACE_TABLE,  XML_DISPLAY, XML_FALSE);
-                        SvXMLElementExport aElemStyleTabProps(*this, XML_NAMESPACE_STYLE, XML_TABLE_PROPERTIES, sal_True, sal_True);
+                        ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+                        // #i100879# write the table style for cached tables only if there are cached tables
+                        // (same logic as in ExportExternalRefCacheStyles)
+                        if (pRefMgr->hasExternalData())
+                        {
+                            // Special table style for the external ref cache tables.
+                            AddAttribute(XML_NAMESPACE_STYLE, XML_NAME, sExternalRefTabStyleName);
+                            AddAttribute(XML_NAMESPACE_STYLE, XML_FAMILY, XML_TABLE);
+                            SvXMLElementExport aElemStyle(*this, XML_NAMESPACE_STYLE, XML_STYLE, sal_True, sal_True);
+                            AddAttribute(XML_NAMESPACE_TABLE,  XML_DISPLAY, XML_FALSE);
+                            SvXMLElementExport aElemStyleTabProps(*this, XML_NAMESPACE_STYLE, XML_TABLE_PROPERTIES, sal_True, sal_True);
+                        }
                     }
                 }
                 if (getExportFlags() & EXPORT_MASTERSTYLES)
