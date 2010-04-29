@@ -394,8 +394,13 @@ if ( $installer::globals::globallogging ) { installer::files::save_hash($logging
 installer::setupscript::add_forced_properties($allvariableshashref);
 if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables5.log", $allvariableshashref); }
 
+# Replacing preset properties, not using the default mechanisms (for example for UNIXPRODUCTNAME)
+installer::setupscript::replace_preset_properties($allvariableshashref);
+if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables6.log", $allvariableshashref); }
+
 installer::scpzipfiles::replace_all_ziplistvariables_in_file($setupscriptref, $allvariableshashref);
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "setupscript3.log" ,$setupscriptref); }
+
 
 installer::logger::log_hashref($allvariableshashref);
 
@@ -1340,6 +1345,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 installer::packagelist::resolve_packagevariables(\$packagename, $allvariableshashref, 0);
             }
 
+            # Debian allows no underline in package name
+            if ( $installer::globals::debian ) { $packagename =~ s/_/-/g; }
+
             my $linkaddon = "";
             my $linkpackage = 0;
             $installer::globals::add_required_package = "";
@@ -1369,7 +1377,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # try it again later.
             ####################################################
 
-            if (( $installer::globals::patch ) || ( $installer::globals::languagepack ) || ( $installer::globals::packageformat eq "native" ) || ( $installer::globals::packageformat eq "osx" )) { $allvariableshashref->{'POOLPRODUCT'} = 0; }
+            if (( $installer::globals::patch ) ||
+                ( $installer::globals::languagepack ) ||
+                ( $installer::globals::packageformat eq "native" ) ||
+                ( $installer::globals::packageformat eq "portable" ) ||
+                ( $installer::globals::packageformat eq "osx" )) { $allvariableshashref->{'POOLPRODUCT'} = 0; }
 
             if ( $allvariableshashref->{'POOLPRODUCT'} )
             {
