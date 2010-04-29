@@ -305,76 +305,39 @@ end function
 
 function hRenameTab( cTabName as string ) as integer
 
-    '///<h3>Rename the first tab in the Basic IDE Tabbar</h3>
-    '///<i>Starting point: Basic IDE is open, at least one tab exists</i><br>
-    '///Return values are:
-    '///<ul>
-    '///+<li>0 = Tab was correctly renamed</li>
-    '///+<li>1 = Invalid name warning is displayed (handle outside of function)</li>
-    '///+<li>2 = Unknown error / failed to rename the tab</li>
-    '///+<li>3 = Unable to access context menu</li>
-    '///</ul>
-    '///Description
-    '///<ul>
-    
     const CFN = "hRenameTab(): "
-    const RETVAL_SUCCESS         = 0
-    const RETVAL_UNKNOWN_MESSAGE = 1
-    const RETVAL_UNKNOWN_ERROR   = 2
-    const RETVAL_NO_CONTEXT_MENU = 3
-    
-    dim cString as string
-    dim iWait as integer
-    dim iTry as integer
-    dim brc as boolean : brc = false
 
-    cString = "<HOME><SHIFT END>" & cTabName & "<RETURN>" 
-    kontext "basicide"
-    
-    '///+<li>Open the context menu of the tabbar</li>
-    for iTry = 1 to 5
-	    try
-    	    kontext "basicide"
-            Tabbar.OpenContextMenu
-            hMenuSelectNr( 3 )
-            sleep( 2 )
-            brc = true
+    const MENUITEM_RENAME  = 3
+    const MAX_WAIT         = 1000
 
+    const RETVAL_SUCCESS   = 0
+    const RETVAL_NO_IDE    = 1
+    const RETVAL_NO_ACCESS = 2
+    const RETVAL_NO_MENU   = 3
+
+    kontext "BasicIDE"
+    if ( BasicIDE.exists() ) then
+        try
+            hRenameTab() = RETVAL_NO_MENU
+            Tabbar.openContextMenu()
+            hMenuSelectNr( MENUITEM_RENAME )
+            WaitSlot( MAX_WAIT )
+
+            ' At this point the string on the tab should be selected, print the 
+            ' string to the log and overwrite it with the new name
+            hRenameTab() = RETVAL_NO_ACCESS
+            printlog( "Current modulename is: " & Tabbar.getSelText() )
+            Tabbar.typeKeys( cTabName )
+            Tabbar.typeKeys( "<RETURN>" )
+            hRenameTab() = RETVAL_SUCCESS
         catch
-            printlog( "No context menu, retrying..." )
+            warnlog( CFN & "Failed to rename the current module" )
         endcatch
-    next iTry    
-        '///+<li>Select to rename the tab</li>
-    if ( not brc ) then
-        warnlog( CFN & "Unable to access Context Menu" )
-        hRenameTab() = RETVAL_NO_CONTEXT_MENU
-        exit function       
+    else
+        warnlog( CFN & "BASIC IDE is not open" )
+        hRenameTab() = RETVAL_NO_IDE
     endif
-    
-    try
-        '///+<li>Overwrite the old name of the tab</li>
-        kontext "basicide"
-        Tabbar.TypeKeys( cString , true )
-        hRenameTab() = RETVAL_SUCCESS
-        printlog( CFN & "Tab renamed: " & cTabName )
-    catch
-        '///+<li>Handle possible errors</li>
-        hRenameTab() = RETVAL_UNKNOWN_ERROR
-        warnlog(  CFN & "Failed to rename tab: " & cTabName )
-        exit function
-    endcatch
-    
-    kontext "active"
-    for iWait = 1 to 3
-        if ( active.exists( 1 ) ) then
-            hRenameTab() = RETVAL_UNKNOWN_MESSAGE
-            printlog( CFN & "Invalid name for tab: Warning is displayed" )
-            exit for
-        endif
-    next iWait
-    '///+<li>Return 0, 1 or 2</li>
-    '///</ul>
-    
+
 end function
 
 '*******************************************************************************
