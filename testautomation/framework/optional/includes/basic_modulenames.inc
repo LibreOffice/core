@@ -33,20 +33,21 @@
 
 testcase tBasicIdeModuleNames
 
-    dim rc as integer
-    dim brc as boolean
-    dim i as integer
-    dim iCurrentName as integer
     const CMODULE = "TModuleNames"
+    const TEST_MACRO = "TTMacro1"
+
+    const RC_SUCCESS = 0
+    const RC_FAILURE = 1
+    const ERR_NO_LINES_INSERTED = 0
+
+    dim iCurrentName as integer
     dim cTabName as string
 
     gApplication = "WRITER"
     hCreateDocument()
 
-    ' ------ prerequisites ---------
-    
     hInitBasicIde( CMODULE )
-    if ( hInsertMacro( 1 ) = 0 ) then
+    if ( hInsertMacroFromFile( TEST_MACRO ) > ERR_NO_LINES_INSERTED ) then
    
         cTabName = hGetTabNameFromOrganizer()
 
@@ -55,7 +56,7 @@ testcase tBasicIdeModuleNames
 
         cTabName = hCreateInvalidModuleName( iCurrentName )
 
-        if ( hRenameTab( cTabName ) = 1 ) then
+        if ( hRenameTab( cTabName ) = RC_FAILURE ) then
             hHandleInvalidNameWarning( cTabname )
         else
             warnlog( "Warning missing" )
@@ -63,7 +64,7 @@ testcase tBasicIdeModuleNames
 
         cTabname = CMODULE
 
-        if ( hRenameTab( cTabname ) <> 0 ) then
+        if ( hRenameTab( cTabname ) <> RC_SUCCESS ) then
             if ( hHandleInvalidNameWarning( cTabname )  ) then
                 warnlog( "Failed to set valid name" )
             endif
@@ -72,22 +73,17 @@ testcase tBasicIdeModuleNames
 
         cTabname = hCreateInvalidModuleName( 0 )
 
-        if ( hRenameTab( cTabName ) <> 0 ) then
+        if ( hRenameTab( cTabName ) <> RC_SUCCESS ) then
             if ( hHandleInvalidNameWarning( cTabname )  ) then
                 warnlog( "Failed to set valid name" )
             endif
         endif
 
-
-        if ( hTestMacro( 1 ) <> 1 ) then
-            warnlog( "The open macro-module is not the one that was expected" )
-        endif
     else
         warnlog( "Failed to insert macro" )
     endif
     
-    hCloseBasicIDE()
-    hDestroyDocument()
+    hFileCloseAll()
 
 endcase
 
