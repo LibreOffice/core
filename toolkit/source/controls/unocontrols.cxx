@@ -1847,7 +1847,37 @@ sal_Bool UnoGroupBoxControl::isTransparent() throw(uno::RuntimeException)
 // =====================================================================================================================
 // = UnoControlListBoxModel_Data
 // =====================================================================================================================
-typedef beans::Pair< ::rtl::OUString, ::rtl::OUString >  ListItem;
+struct ListItem
+{
+    ::rtl::OUString ItemText;
+    ::rtl::OUString ItemImageURL;
+    Any             ItemUserData;
+
+    ListItem()
+        :ItemText()
+        ,ItemImageURL()
+        ,ItemUserData()
+    {
+    }
+
+    ListItem( const ::rtl::OUString& i_rItemText )
+        :ItemText( i_rItemText )
+        ,ItemImageURL()
+        ,ItemUserData()
+    {
+    }
+};
+
+typedef beans::Pair< ::rtl::OUString, ::rtl::OUString > UnoListItem;
+
+struct StripItemData : public ::std::unary_function< ListItem, UnoListItem >
+{
+    UnoListItem operator()( const ListItem& i_rItem )
+    {
+        return UnoListItem( i_rItem.ItemText, i_rItem.ItemImageURL );
+    }
+};
+
 struct UnoControlListBoxModel_Data
 {
     UnoControlListBoxModel_Data( UnoControlListBoxModel& i_rAntiImpl )
@@ -1878,10 +1908,10 @@ struct UnoControlListBoxModel_Data
         return *m_aListItems.insert( m_aListItems.begin() + i_nIndex, ListItem() );
     }
 
-    Sequence< ListItem >    getAllItems() const
+    Sequence< UnoListItem > getAllItems() const
     {
-        Sequence< ListItem >    aItems( sal_Int32( m_aListItems.size() ) );
-        ::std::copy( m_aListItems.begin(), m_aListItems.end(), aItems.getArray() );
+        Sequence< UnoListItem > aItems( sal_Int32( m_aListItems.size() ) );
+        ::std::transform( m_aListItems.begin(), m_aListItems.end(), aItems.getArray(), StripItemData() );
         return aItems;
     }
 
@@ -1976,7 +2006,7 @@ namespace
     {
         ListItem operator()( const ::rtl::OUString& i_rItemText )
         {
-            return ListItem( i_rItemText, ::rtl::OUString() );
+            return ListItem( i_rItemText );
         }
     };
 }
@@ -2047,8 +2077,8 @@ void SAL_CALL UnoControlListBoxModel::insertItem( ::sal_Int32 i_nPosition, const
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     // SYNCHRONIZED ----->
     ListItem& rItem( m_pData->insertItem( i_nPosition ) );
-    rItem.First = i_rItemText;
-    rItem.Second = i_rItemImageURL;
+    rItem.ItemText = i_rItemText;
+    rItem.ItemImageURL = i_rItemImageURL;
 
     impl_handleInsert( i_nPosition, i_rItemText, i_rItemImageURL, aGuard );
     // <----- SYNCHRONIZED
@@ -2060,7 +2090,7 @@ void SAL_CALL UnoControlListBoxModel::insertItemText( ::sal_Int32 i_nPosition, c
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     // SYNCHRONIZED ----->
     ListItem& rItem( m_pData->insertItem( i_nPosition ) );
-    rItem.First = i_rItemText;
+    rItem.ItemText = i_rItemText;
 
     impl_handleInsert( i_nPosition, i_rItemText, ::boost::optional< ::rtl::OUString >(), aGuard );
     // <----- SYNCHRONIZED
@@ -2072,7 +2102,7 @@ void SAL_CALL UnoControlListBoxModel::insertItemImage( ::sal_Int32 i_nPosition, 
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     // SYNCHRONIZED ----->
     ListItem& rItem( m_pData->insertItem( i_nPosition ) );
-    rItem.Second = i_rItemImageURL;
+    rItem.ItemImageURL = i_rItemImageURL;
 
     impl_handleInsert( i_nPosition, ::boost::optional< ::rtl::OUString >(), i_rItemImageURL, aGuard );
     // <----- SYNCHRONIZED
@@ -2106,7 +2136,7 @@ void SAL_CALL UnoControlListBoxModel::setItemText( ::sal_Int32 i_nPosition, cons
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     // SYNCHRONIZED ----->
     ListItem& rItem( m_pData->getItem( i_nPosition ) );
-    rItem.First = i_rItemText;
+    rItem.ItemText = i_rItemText;
 
     impl_handleModify( i_nPosition, i_rItemText, ::boost::optional< ::rtl::OUString >(), aGuard );
     // <----- SYNCHRONIZED
@@ -2118,7 +2148,7 @@ void SAL_CALL UnoControlListBoxModel::setItemImage( ::sal_Int32 i_nPosition, con
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     // SYNCHRONIZED ----->
     ListItem& rItem( m_pData->getItem( i_nPosition ) );
-    rItem.Second = i_rItemImageURL;
+    rItem.ItemImageURL = i_rItemImageURL;
 
     impl_handleModify( i_nPosition, ::boost::optional< ::rtl::OUString >(), i_rItemImageURL, aGuard );
     // <----- SYNCHRONIZED
@@ -2130,35 +2160,51 @@ void SAL_CALL UnoControlListBoxModel::setItemTextAndImage( ::sal_Int32 i_nPositi
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     // SYNCHRONIZED ----->
     ListItem& rItem( m_pData->getItem( i_nPosition ) );
-    rItem.First = i_rItemText;
-    rItem.Second = i_rItemImageURL;
+    rItem.ItemText = i_rItemText;
+    rItem.ItemImageURL = i_rItemImageURL;
 
     impl_handleModify( i_nPosition, i_rItemText, i_rItemImageURL, aGuard );
     // <----- SYNCHRONIZED
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
+void SAL_CALL UnoControlListBoxModel::setUserData( ::sal_Int32 i_nPosition, const Any& i_rDataValue ) throw (IndexOutOfBoundsException, RuntimeException)
+{
+    ::osl::ClearableMutexGuard aGuard( GetMutex() );
+    ListItem& rItem( m_pData->getItem( i_nPosition ) );
+    rItem.ItemUserData = i_rDataValue;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL UnoControlListBoxModel::getItemText( ::sal_Int32 i_nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( GetMutex() );
-    ListItem& rItem( m_pData->getItem( i_nPosition ) );
-    return rItem.First;
+    const ListItem& rItem( m_pData->getItem( i_nPosition ) );
+    return rItem.ItemText;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL UnoControlListBoxModel::getItemImage( ::sal_Int32 i_nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( GetMutex() );
-    ListItem& rItem( m_pData->getItem( i_nPosition ) );
-    return rItem.Second;
+    const ListItem& rItem( m_pData->getItem( i_nPosition ) );
+    return rItem.ItemImageURL;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 beans::Pair< ::rtl::OUString, ::rtl::OUString > SAL_CALL UnoControlListBoxModel::getItemTextAndImage( ::sal_Int32 i_nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( GetMutex() );
-    ListItem& rItem( m_pData->getItem( i_nPosition ) );
-    return rItem;
+    const ListItem& rItem( m_pData->getItem( i_nPosition ) );
+    return beans::Pair< ::rtl::OUString, ::rtl::OUString >( rItem.ItemText, rItem.ItemImageURL );
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+Any SAL_CALL UnoControlListBoxModel::getUserData( ::sal_Int32 i_nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
+{
+    ::osl::ClearableMutexGuard aGuard( GetMutex() );
+    const ListItem& rItem( m_pData->getItem( i_nPosition ) );
+    return rItem.ItemUserData;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
