@@ -150,6 +150,7 @@ public:
 class WRITERFILTER_DLLPUBLIC Table
 {
 public:
+    typedef boost::shared_ptr<Table> Pointer_t;
     /**
        Receives an entry of the table.
 
