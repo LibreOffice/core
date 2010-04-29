@@ -189,14 +189,17 @@ interface XItemList
             the position of the item whose data value should be set. Must be greater or equal to 0, and
             lesser than <member>ItemCount</member>.
 
+        @param ItemData
+            the data to associate with the list item
+
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if <code>Position</code> is invalid.
 
-        @see getUserData
+        @see getItemData
     */
-    void    setUserData(
+    void    setItemData(
                 [in] long Position,
-                [in] any DataValue
+                [in] any ItemData
             )
             raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
@@ -244,7 +247,7 @@ interface XItemList
             raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
     /** retrieves the implementation dependend value associated with the given list item.
-        @see setUserData
+        @see setItemData
 
         @param Position
             the position of the item whose data value should be retrieved. Must be greater or equal to 0, and
@@ -253,9 +256,9 @@ interface XItemList
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if <code>Position</code> is invalid.
 
-        @see getUserData
+        @see setItemData
     */
-    any     getUserData(
+    any     getItemData(
                 [in] long Position
             )
             raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
