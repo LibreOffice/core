@@ -287,7 +287,7 @@ gb_SrsPartTarget_RSCTARGET := $(OUTDIR)/bin/rsc
 gb_SrsPartTarget_RSCCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_SrsPartTarget_RSCTARGET)
 
 # FIXME use mkdepend or something
-define gb_SrsPartTarget_command_dep
+define gb_SrsPartTarget__command_dep
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p `dirname $(call gb_SrsPartTarget_get_target,$(1))` && \
     touch $(call gb_SrsPartTarget_get_target,$(1))

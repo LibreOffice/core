@@ -54,8 +54,7 @@ $(call gb_SrsPartTarget_get_dep_target,%) : $(SRCDIR)/%
 $(call gb_SrsPartTarget_get_dep_target,%) :
     $(error unable to find resource definition file $(SRCDIR)/$*)
 
-define gb_SrsPartTarget_SrsPartTarget
-endef
+gb_SrsPartTarget_SrsPartTarget =
 
 
 # SrsTarget class
@@ -221,21 +220,9 @@ define gb_AllLangResTarget_AllLangResTarget
 $(call gb_ResTarget_ResTarget,$(1)en-US,$(1),en-US)
 endef
 
-define gb_AllLangResTarget_add_file
-$(foreach lang,$(gb_AllLangResTarget_LANGS),\
-    $(call gb_ResTarget_add_file,$(1)$(lang),$(2)))
-
-endef
-
 define gb_AllLangResTarget_add_one_srs
 $(foreach lang,$(gb_AllLangResTarget_LANGS),\
     $(call gb_ResTarget_add_one_srs,$(1)$(lang),$(2)))
-
-endef
-
-define gb_AllLangResTarget_add_files
-$(foreach file,$(2),\
-    $(call gb_AllLangResTarget_add_file,$(1),$(file)))
 
 endef
 
