@@ -574,6 +574,15 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
             }
         }
 #else
+        vector<SCROW> aRows;
+        pTab->getAllRows(aRows, nDataRow1, nDataRow2);
+        if (aRows.empty())
+            // Cache is empty.
+            return TokenArrayRef();
+        else
+            // Trim the column below the last non-empty row.
+            nDataRow2 = aRows.back();
+
         // Empty all matrix elements first, and fill only non-empty elements.
         for (SCROW nRow = nDataRow1; nRow <= nDataRow2; ++nRow)
         {
