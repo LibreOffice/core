@@ -52,6 +52,9 @@
 ' #1 getIdForDatabaseType
 '*
 '\***********************************************************************************
+
+private const VERBOSE = true
+
 function fCreateMySQL_ODBC_Datasource(sFileName, sOdbcDSN, sUser,optional sRegister) as boolean
     '/// create a new MySQL database via ODBC file with the given filename 
     '///+ and the given URL 
@@ -153,7 +156,9 @@ function fCreateMySQL_JDBC_Datasource(sFileName,sDatabaseName,sHost,sPort,sUser,
     '/// <b>sUser:</b> the user for the connection        
     '/// <b><i>optional</i> sRegister:</b> the name under which the database is be registered 
     dim bOK as boolean
-	bOK = FALSE
+    bOK = FALSE
+    
+    dim sEntry as string
 
     ' delete the file
     if ( app.Dir( ConvertPath(sFileName) ) ) <> "" then
@@ -175,8 +180,12 @@ function fCreateMySQL_JDBC_Datasource(sFileName,sDatabaseName,sHost,sPort,sUser,
 
     Kontext "DatabaseWizard"    
         ConnectToDatabase.Check
-        sleep(1)        
-        DatabaseType.select( hGetDatabaseDisplayName( "sdbc:mysql:jdbc:*" ) )
+        sleep(1)
+        sEntry = hGetDatabaseDisplayName( "sdbc:mysql:jdbc:*" )
+        'cut off the (JDBC) string
+        sEntry = Mid( sEntry , 1, len(sEntry) - Instr(sEntry,"(") )
+        printlog "entry = " + sEntry
+        DatabaseType.select( sEntry )
         sleep(1)
         NextBtn.Click
         sleep(1)
@@ -197,8 +206,8 @@ function fCreateMySQL_JDBC_Datasource(sFileName,sDatabaseName,sHost,sPort,sUser,
         '/// check the password required checkbox
         printlog "check the password required checkbox"        
         PasswordRequired.Check
-    
-    Kontext "DatabaseWizard"
+
+        NextBtn.Click
         FinishBtn.Click
 	
     Kontext "SpeichernDlg"
@@ -1454,13 +1463,12 @@ function fSetJDBCDriverFiles(sClassPath) as boolean
     
 end function
 '-------------------------------------------------------------------------
-private const VERBOSE = false
 
 function hGetInstalledDatabaseDrivers( dbDriverList() as string ) as integer
 
     ' This function returns the number of currently installed database drivers.
     ' Additionally it fills a given list (which should be large enough to hold
-    ' the names of all installed drivers) with the names and makes the list 
+    ' the names of all installed drivers) with the url and makes the list
     ' compatible to the listfunctions (which places the list size in element 0)
     ' The list is platform dependent and might be locale dependent
     ' Note that some drivers (like e.g. HSQL Database Engine) do *not* show up
@@ -1474,7 +1482,7 @@ function hGetInstalledDatabaseDrivers( dbDriverList() as string ) as integer
     dim iCurrentDriver as integer
     dim iDriverCount as integer
 
-    const CFN = "global::tools::includes::optional::t_database.inc::hGetInstalledDatabaseDrivers(): "
+    const CFN = "dbaccess::tools::dbcreatetools.inc::hGetInstalledDatabaseDrivers(): "
     
     ' Path to the node, searches all files below "Drivers" for "Installed" 
     aPropertyValue( 0 ).Name  = "nodepath"
@@ -1493,11 +1501,11 @@ function hGetInstalledDatabaseDrivers( dbDriverList() as string ) as integer
         ' Get access
         xViewRoot = oUnoConfigurationAccess.createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess", aPropertyValue() )
         aElements() = xViewRoot.getElementNames()
-        
+
         iDriverCount = ubound( aElements() )
         dbDriverList( 0 ) = iDriverCount
         for iCurrentDriver = 1 to iDriverCount
-            dbDriverList( iCurrentDriver ) = xViewRoot.getByName( aElements( iCurrentDriver ) ).getByName( "DriverTypeDisplayName" )
+            dbDriverList( iCurrentDriver ) = aElements( iCurrentDriver )
         next iCurrentDriver
         
     endif
@@ -1505,11 +1513,12 @@ function hGetInstalledDatabaseDrivers( dbDriverList() as string ) as integer
     if ( VERBOSE ) then 
         printlog( CFN & "Returning " & iDriverCount & " drivers" )
     endif
+
     hGetInstalledDatabaseDrivers() = iDriverCount
     
 end function
 
-'*******************************************************************************
+'-------------------------------------------------------------------------
 
 function hGetDatabaseDisplayName( dbDriverURL as string ) as string
 
@@ -1551,7 +1560,7 @@ function hGetDatabaseDisplayName( dbDriverURL as string ) as string
     dim oDriver as object
     dim sDatabaseName as string
  
-    const CFN = "global::tools::includes::optional::t_database.inc::hGetDatabaseDisplayName(): "
+    const CFN = "dbaccess::tools::dbcreatetools.inc::hGetDatabaseDisplayName(): "
     
     ' Path to the node, searches all files below "Drivers" for "Installed" 
     aPropertyValue( 0 ).Name  = "nodepath"
@@ -1583,6 +1592,39 @@ function hGetDatabaseDisplayName( dbDriverURL as string ) as string
         printlog( CFN & "Database display string: " & sDatabaseName )
     endif
     hGetDataBaseDisplayName() = sDatabaseName
+    
+end function
+'-------------------------------------------------------------------------
+function isDriverInstalled( dbDriverURL as string ) as string
+
+    ' This function return true or false if a driver for a given URL is installed
+
+    Dim myDriverList(20) as string
+    Dim i as integer
+    Dim sDriver as string
+    Dim breturn as boolean
+    breturn = false
+
+    const CFN = "dbaccess::tools::dbcreatetools.inc::isDriverInstalled(): "
+
+    if VERBOSE then
+        printlog CFN
+        printlog "url to search for : " + dbDriverURL
+    endif
+
+    hGetInstalledDatabaseDrivers( myDriverList() )
+
+    for i = 1 to ubound(myDriverList)
+        sDriver = myDriverList(i)
+        if VERBOSE then
+            printlog "found url : " + sDriver
+        endif
+        if sDriver = dbDriverURL then
+            breturn = true
+        endif
+    next
+
+    isDriverInstalled = breturn
     
 end function
 
