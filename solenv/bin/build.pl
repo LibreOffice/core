@@ -225,10 +225,11 @@
         $deliver_env{'L10N_framework'}++;
     };
     $StandDir = get_stand_dir();   # This also sets $initial_module
+    $source_config = SourceConfig -> new($StandDir);
     if (defined $html_path) {
         $html_file = CorrectPath($html_path . '/' . $ENV{INPATH}. '.build.html');
     } else {
-        $html_file = CorrectPath($ENV{SOLARSRC} . '/../' . $ENV{INPATH}. '.build.html');
+        $html_file = CorrectPath($StandDir . '/../' . $ENV{INPATH}. '.build.html');
     };
 
     if ($generate_config && ($clear_config || (scalar keys %remove_from_config)||(scalar keys %add_to_config))) {
@@ -346,7 +347,6 @@ sub rename_file {
 };
 
 sub generate_config_file {
-    my $source_config = SourceConfig->new($StandDir);
     $source_config->add_active_modules([keys %add_to_config], 1) if (scalar %add_to_config);
     $source_config->remove_activated_modules([keys %remove_from_config], 1) if (scalar %remove_from_config);
     $source_config->remove_all_activated_modules() if ($clear_config);
@@ -1240,7 +1240,7 @@ sub check_deps_hash {
                     $jobs_hash{$key} = {    SHORT_NAME => $string,
                                             BUILD_NUMBER => $build_number,
                                             STATUS => 'waiting',
-                                            LOG_PATH => $module . "/$ENV{INPATH}/misc/logs/$log_name",
+                                            LOG_PATH => $source_config->get_module_repository($module) . "/$module/$ENV{INPATH}/misc/logs/$log_name",
                                             LONG_LOG_PATH => CorrectPath($module_paths{$module} . "/$ENV{INPATH}/misc/logs/$log_name"),
                                             START_TIME => 0,
                                             FINISH_TIME => 0,
@@ -1597,7 +1597,6 @@ sub get_options {
 
 sub get_module_and_buildlist_paths {
     if ($build_all_parents || $checkparents) {
-        my $source_config = SourceConfig -> new($StandDir);
         $source_config_file = $source_config->get_config_file_path();
         $active_modules{$_}++ foreach ($source_config->get_active_modules());
         my %active_modules_copy = %active_modules;
@@ -2293,7 +2292,7 @@ sub prepare_incompatible_build {
     %add_to_config = %$deps_hash;
     if ($prepare) {
         if ((!defined $ENV{UPDATER}) || (defined $ENV{CWS_WORK_STAMP})) {
-            SourceConfig->new($StandDir)->add_active_modules([keys %add_to_config], 0);
+            $source_config->add_active_modules([keys %add_to_config], 0);
         }
         clear_delivered();
     }
