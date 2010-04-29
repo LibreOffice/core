@@ -126,12 +126,6 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
 ))
 endif
 
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,tl,\
-    dl \
-    m \
-    pthread \
-))
 ifeq ($(SYSTEM_ZLIB),YES)
 $(eval $(call gb_Library_set_cxxflags,tl,\
     $$(CXXFLAGS) \
@@ -145,9 +139,12 @@ $(eval $(call gb_Library_add_linked_static_libs,tl,\
     zlib \
 ))
 endif
-else
-$(eval $(call gb_Library_add_linked_static_libs,tl,\
-    zlib \
+
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_linked_libs,tl,\
+    dl \
+    m \
+    pthread \
 ))
 endif
 
