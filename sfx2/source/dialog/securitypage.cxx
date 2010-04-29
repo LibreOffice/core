@@ -29,22 +29,23 @@
 #include "precompiled_sfx2.hxx"
 
 #include "sfx2/securitypage.hxx"
-#include "sfx2/sfx.hrc"
+
 #include "securitypage.hrc"
 #include "sfxresid.hxx"
+
+#include <sfx2/sfx.hrc>
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/objsh.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/dispatch.hxx>
 
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 #include <svl/eitem.hxx>
-#include <svx/svxids.hrc>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/dispatch.hxx>
 #include <svl/poolitem.hxx>
-#include <svtools/xwindowitem.hxx>
-#include <sfx2/objsh.hxx>
 #include <svl/intitem.hxx>
-#include <svx/htmlmode.hxx>
+#include <svtools/xwindowitem.hxx>
 
 
 
