@@ -342,7 +342,7 @@ sub rename_file {
 };
 
 sub generate_config_file {
-    my $source_config = SourceConfig->new();
+    my $source_config = SourceConfig->new($StandDir);
     $source_config->add_active_modules([keys %add_to_config], 1) if (scalar %add_to_config);
     $source_config->remove_activated_modules([keys %remove_from_config], 1) if (scalar %remove_from_config);
     $source_config->remove_all_activated_modules() if ($clear_config);
@@ -2289,7 +2289,7 @@ sub prepare_incompatible_build {
     %add_to_config = %$deps_hash;
     if ($prepare) {
         if ((!defined $ENV{UPDATER}) || (defined $ENV{CWS_WORK_STAMP})) {
-            SourceConfig->new()->add_active_modules([keys %add_to_config], 0);
+            SourceConfig->new($StandDir)->add_active_modules([keys %add_to_config], 0);
         }
         clear_delivered();
     }
