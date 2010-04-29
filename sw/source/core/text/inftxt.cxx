@@ -276,6 +276,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       bURLNotify( rNew.URLNotify() ),
       bStopUnderFlow( rNew.StopUnderFlow() ),
       bFtnInside( rNew.IsFtnInside() ),
+      bOtherThanFtnInside( rNew.IsOtherThanFtnInside() ),
       bMulti( rNew.IsMulti() ),
       bFirstMulti( rNew.IsFirstMulti() ),
       bRuby( rNew.IsRuby() ),
@@ -373,7 +374,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
     nIdx = nNewIdx;
     nLen = nNewLen;
     bNotEOL = sal_False;
-    bStopUnderFlow = bFtnInside = sal_False;
+    bStopUnderFlow = bFtnInside = bOtherThanFtnInside = sal_False;
     bMulti = bFirstMulti = bRuby = bHanging = bScriptSpace =
         bForbiddenChars = sal_False;
 
@@ -400,6 +401,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       bURLNotify( rNew.URLNotify() ),
       bStopUnderFlow( rNew.StopUnderFlow() ),
       bFtnInside( rNew.IsFtnInside() ),
+      bOtherThanFtnInside( rNew.IsOtherThanFtnInside() ),
       bMulti( rNew.IsMulti() ),
       bFirstMulti( rNew.IsFirstMulti() ),
       bRuby( rNew.IsRuby() ),

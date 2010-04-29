@@ -644,7 +644,7 @@ BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFm
 void SwWrtShell::LaunchOLEObj( long nVerb )
 {
     if ( GetCntType() == CNT_OLE &&
-         !GetView().GetViewFrame()->GetFrame()->IsInPlace() )
+         !GetView().GetViewFrame()->GetFrame().IsInPlace() )
     {
         svt::EmbeddedObjectRef& xRef = GetOLEObject();
         ASSERT( xRef.is(), "OLE not found" );
@@ -1378,10 +1378,13 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
         if ( pTxtNode &&
              ePosAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
         {
-            short nTxtNodeFirstLineOffset( 0 );
-            pTxtNode->GetFirstLineOfsWithNum( nTxtNodeFirstLineOffset );
-            const SwTwips nTxtNodeIndent = pTxtNode->GetLeftMarginForTabCalculation() +
-                                           nTxtNodeFirstLineOffset;
+            // --> OD 2010-01-05 #b6884103#
+//            short nTxtNodeFirstLineOffset( 0 );
+//            pTxtNode->GetFirstLineOfsWithNum( nTxtNodeFirstLineOffset );
+//            const SwTwips nTxtNodeIndent = pTxtNode->GetLeftMarginForTabCalculation() +
+//                                           nTxtNodeFirstLineOffset;
+            const SwTwips nTxtNodeIndent = pTxtNode->GetAdditionalIndentForStartingNewList();
+            // <--
             if ( ( nTxtNodeIndent + nWidthOfTabs ) != 0 )
             {
                 const SwTwips nIndentChange = nTxtNodeIndent + nWidthOfTabs;

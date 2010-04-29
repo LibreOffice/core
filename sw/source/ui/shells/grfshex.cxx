@@ -153,7 +153,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest& rReq )
 
             pObj->setURL( aURL );
             rSh.EnterStdMode();
-            rSh.SwFEShell::Insert( *pObj, 0, 0, &aPos );
+            rSh.SwFEShell::InsertDrawObj( *pObj, aPos );
             bRet = true;
 
             if( pWindow )
