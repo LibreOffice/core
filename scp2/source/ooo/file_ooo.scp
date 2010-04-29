@@ -2100,7 +2100,7 @@ End
 File gid_File_Extension_Dictionary_Sl
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-sl.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, PATCH, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
