@@ -272,16 +272,18 @@ end function
 function hDeleteMacro() as boolean
 
     '///<h3>Delete all text in the Basic IDE editor</h3>
-    '///<i>Starting point: Basic IDE is open, has focus, code can be edited</i>
-    const TIMEOUT = -1
+    const CFN = "hDeleteMacro(): "
+    
     kontext "BasicIDE"
-    if ( hUseAsyncSlot( "EditSelectAll" ) = TIMEOUT ) then
-        qaerrorlog( "<EditSelectAll> is not enabled in BASIC IDE" )
-        BasicIDE.typeKeys( "<MOD1 HOME>" )
-        BasicIDE.typeKeys( "<MOD1 SHIFT END>" )
+    if ( BasicIDE.exists() ) then
+        WaitSlot() : EditWindow.typeKeys( "<MOD1 HOME>" )
+        WaitSlot() : EditWindow.typeKeys( "<MOD1 SHIFT END>" )
+        WaitSlot() : EditWindow.typeKeys( "<DELETE>" )
+        hDeleteMacro() = hIsEditWindowEmpty()
+    else
+        warnlog( CFN & "Basic IDE is not open" )
+        hDeleteMacro() = false
     endif
-    BasicIDE.typeKeys( "<DELETE>" )
-    hDeleteMacro() = hIsEditWindowEmpty()
 
 end function
 
@@ -292,17 +294,23 @@ function hIsEditWindowEmpty() as boolean
     '///<h3>Test if the Basic-EditWindow is empty</h3>
     '///<i>Starting point: Basic IDE editor is open and has the focus</i>
     const CFN = "hIsEditWindowEmpty(): "
-    const SLOT_TIMEOUT = -1
 
-    SetClipboard( "" )
-    hUseAsyncSlot( "EditSelectAll" )
-    hUseAsyncSlot( "EditCopy" )
+    kontext "BasicIDE
+    if ( BasicIDE.exists() ) then
+        SetClipboard( "" )
+        WaitSlot() : EditWindow.typeKeys( "<MOD1 HOME>" )
+        WaitSlot() : EditWindow.typeKeys( "<MOD1 SHIFT END>" )
+        hUseAsyncSlot( "EditCopy" )
 
-    if ( GetClipBoardText() = "" ) then
-        hIsEditWindowEmpty() = true
+        if ( GetClipBoardText() = "" ) then
+            hIsEditWindowEmpty() = true
+        else
+            warnlog( CFN & "Edit window is not empty" )
+            printlog( GetClipboardText )
+            hIsEditWindowEmpty() = false
+        endif
     else
-        warnlog( CFN & "Edit window is not empty" )
-        printlog( GetClipboardText )
+        warnlog( CFN & "BasicIDE is not open" )
         hIsEditWindowEmpty() = false
     endif
     
