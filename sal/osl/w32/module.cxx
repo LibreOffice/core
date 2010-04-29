@@ -64,9 +64,9 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
     if ( osl_File_E_None != nError )
         rtl_uString_assign(&Module, strModuleName);
 
-    hInstance = LoadLibraryW(Module->buffer);
+    hInstance = LoadLibraryW(reinterpret_cast<LPCWSTR>(Module->buffer));
     if (hInstance == NULL)
-        hInstance = LoadLibraryExW(Module->buffer, NULL,
+        hInstance = LoadLibraryExW(reinterpret_cast<LPCWSTR>(Module->buffer), NULL,
                                   LOAD_WITH_ALTERED_SEARCH_PATH);
 
     if (hInstance <= (HINSTANCE)HINSTANCE_ERROR)
@@ -88,7 +88,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
 sal_Bool SAL_CALL
 osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
 {
-    HINSTANCE hInstance = GetModuleHandleW(pModuleName->buffer);
+    HINSTANCE hInstance = GetModuleHandleW(reinterpret_cast<LPCWSTR>(pModuleName->buffer));
     if( hInstance )
     {
         *pResult = (oslModule) hInstance;
@@ -429,7 +429,7 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT( void *pv, rtl_uString **pu
                     ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
                     rtl_uString *ustrSysPath = NULL;
 
-                    GetModuleFileNameW( lpModules[iModule], aBuffer, aBuffer.getBufSizeInSymbols() );
+                    GetModuleFileNameW( lpModules[iModule], ::osl::mingw_reinterpret_cast<LPWSTR>(aBuffer), aBuffer.getBufSizeInSymbols() );
 
                     rtl_uString_newFromStr( &ustrSysPath, aBuffer );
                     osl_getFileURLFromSystemPath( ustrSysPath, pustrURL );
