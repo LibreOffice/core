@@ -201,7 +201,7 @@ function hFindFirstDialog() as boolean
     hFindFirstDialog() = false
 
     '///+<li>Set focus to Basic IDE, maximize it</li>
-    kontext "BasicIde"
+    kontext "BasicIDE"
     BasicIde.maximize()
 
 
@@ -295,7 +295,7 @@ function hIsEditWindowEmpty() as boolean
     '///<i>Starting point: Basic IDE editor is open and has the focus</i>
     const CFN = "hIsEditWindowEmpty(): "
 
-    kontext "BasicIDE
+    kontext "BasicIDE"
     if ( BasicIDE.exists() ) then
         SetClipboard( "" )
         WaitSlot() : EditWindow.typeKeys( "<MOD1 HOME>" )
@@ -306,7 +306,6 @@ function hIsEditWindowEmpty() as boolean
             hIsEditWindowEmpty() = true
         else
             warnlog( CFN & "Edit window is not empty" )
-            printlog( GetClipboardText )
             hIsEditWindowEmpty() = false
         endif
     else
