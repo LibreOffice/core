@@ -35,7 +35,9 @@
 #include "AxisHelper.hxx"
 #include "ContainerHelper.hxx"
 #include "ChartTypeHelper.hxx"
+#include "ChartModelHelper.hxx"
 #include "CommonConverters.hxx"
+#include "ExplicitCategoriesProvider.hxx"
 #include "servicenames_charttypes.hxx"
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
@@ -597,7 +599,7 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
                         , const uno::Reference< chart2::XDataSeries >& xDataSeries
                         , const uno::Reference< chart2::XDiagram >& xDiagram
                         , const uno::Reference< uno::XComponentContext > & xContext
-                        )
+                        , bool bAdaptAxes )
 {
     bool bChanged = false;
 
@@ -608,6 +610,7 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
 
     sal_Int32 nNewAxisIndex = bAttachToMainAxis ? 0 : 1;
     sal_Int32 nOldAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
+    uno::Reference< chart2::XAxis > xOldAxis( DiagramHelper::getAttachedAxis( xDataSeries, xDiagram ) );
 
     if( nOldAxisIndex != nNewAxisIndex )
     {
@@ -627,6 +630,11 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
         uno::Reference< XAxis > xAxis( AxisHelper::getAxis( 1, bAttachToMainAxis, xDiagram ) );
         if(!xAxis.is()) //create an axis if necessary
             xAxis = AxisHelper::createAxis( 1, bAttachToMainAxis, xDiagram, xContext );
+        if( bAdaptAxes )
+        {
+            AxisHelper::makeAxisVisible( xAxis );
+            AxisHelper::hideAxisIfNoDataIsAttached( xOldAxis, xDiagram );
+        }
     }
 
     return bChanged;
@@ -955,8 +963,7 @@ Reference< data::XLabeledDataSequence >
     return xResult;
 }
 
-//static
-void DiagramHelper::generateAutomaticCategoriesFromChartType(
+void lcl_generateAutomaticCategoriesFromChartType(
             Sequence< rtl::OUString >& rRet,
             const Reference< XChartType >& xChartType )
 {
@@ -986,51 +993,7 @@ void DiagramHelper::generateAutomaticCategoriesFromChartType(
     }
 }
 
-//static
-Sequence< rtl::OUString > DiagramHelper::generateAutomaticCategories(
-            const Reference< XChartDocument >& xChartDoc )
-{
-    Sequence< rtl::OUString > aRet;
-    if(xChartDoc.is())
-    {
-        uno::Reference< chart2::XDiagram > xDia( xChartDoc->getFirstDiagram() );
-        if(xDia.is())
-        {
-            Reference< data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDia ) );
-            if( xCategories.is() )
-                aRet = DataSequenceToStringSequence(xCategories->getValues());
-            if( !aRet.getLength() )
-            {
-                /*
-                //unused ranges are very problematic as they bear the risk to damage the rectangular structure completly
-                if( bUseUnusedDataAlso )
-                {
-                    Sequence< Reference< chart2::data::XLabeledDataSequence > > aUnusedSequences( xDia->getUnusedData() );
-                    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aUnusedCategoryVector(
-                        DataSeriesHelper::getAllDataSequencesByRole( aUnusedSequences, C2U("categories") ) );
-                    if( aUnusedCategoryVector.size() && aUnusedCategoryVector[0].is() )
-                        aRet = DataSequenceToStringSequence(aUnusedCategoryVector[0]->getValues());
-                }
-                */
-                if( !aRet.getLength() )
-                {
-                    Reference< XCoordinateSystemContainer > xCooSysCnt( xDia, uno::UNO_QUERY );
-                    if( xCooSysCnt.is() )
-                    {
-                        Sequence< Reference< XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
-                        if( aCooSysSeq.getLength() )
-                            aRet = DiagramHelper::generateAutomaticCategories( aCooSysSeq[0] );
-                    }
-                }
-            }
-        }
-    }
-    return aRet;
-}
-
-//static
-Sequence< rtl::OUString > DiagramHelper::generateAutomaticCategories(
-            const Reference< XCoordinateSystem > & xCooSys )
+Sequence< rtl::OUString > DiagramHelper::generateAutomaticCategoriesFromCooSys( const Reference< XCoordinateSystem > & xCooSys )
 {
     Sequence< rtl::OUString > aRet;
 
@@ -1040,10 +1003,25 @@ Sequence< rtl::OUString > DiagramHelper::generateAutomaticCategories(
         Sequence< Reference< XChartType > > aChartTypes( xTypeCntr->getChartTypes() );
         for( sal_Int32 nN=0; nN<aChartTypes.getLength(); nN++ )
         {
-            DiagramHelper::generateAutomaticCategoriesFromChartType( aRet, aChartTypes[nN] );
+            lcl_generateAutomaticCategoriesFromChartType( aRet, aChartTypes[nN] );
             if( aRet.getLength() )
                 return aRet;
         }
+    }
+    return aRet;
+}
+
+//static
+Sequence< rtl::OUString > DiagramHelper::getExplicitSimpleCategories(
+            const Reference< XChartDocument >& xChartDoc )
+{
+    Sequence< rtl::OUString > aRet;
+    uno::Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
+    if(xChartModel.is())
+    {
+        uno::Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
+        ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, xChartModel );
+        aRet = aExplicitCategoriesProvider.getSimpleCategories();
     }
     return aRet;
 }

@@ -160,7 +160,7 @@ public:
          *                       values, for performance reasons.
          */
         SC_DLLPUBLIC void setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex = 0, bool bSetCacheRange = true);
-        TokenRef getCell(SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex = NULL) const;
+        SC_DLLPUBLIC TokenRef getCell(SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex = NULL) const;
         bool hasRow( SCROW nRow ) const;
         /** Set/clear referenced status flag only if current status is not
             REFERENCED_PERMANENT. */
@@ -171,8 +171,12 @@ public:
         bool isReferenced() const;
         /// Obtain a sorted vector of rows.
         void getAllRows(::std::vector<SCROW>& rRows, SCROW nLow = 0, SCROW nHigh = MAXROW) const;
+        /// Returns the half-open range of used rows in this table. Returns [0,0) if table is empty.
+        SC_DLLPUBLIC ::std::pair< SCROW, SCROW > getRowRange() const;
         /// Obtain a sorted vector of columns.
         void getAllCols(SCROW nRow, ::std::vector<SCCOL>& rCols, SCCOL nLow = 0, SCCOL nHigh = MAXCOL) const;
+        /// Returns the half-open range of used columns in the specified row. Returns [0,0) if row is empty.
+        SC_DLLPUBLIC ::std::pair< SCCOL, SCCOL > getColRange( SCROW nRow ) const;
         void getAllNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
         const ScRangeList& getCachedRanges() const;
         bool isRangeCached(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
@@ -470,6 +474,13 @@ public:
      * @return shared_ptr to the cache table instance
      */
     ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, const String& rTabName, bool bCreateNew, size_t* pnIndex = 0);
+
+    /** Returns a vector containing all (real) table names and cache tables of
+        the specified file.
+
+        The index in the returned vector corresponds to the table index used to
+        access the cache table, e.g. in getCacheTable().
+     */
     void getAllCachedTableNames(sal_uInt16 nFileId, ::std::vector<String>& rTabNames) const;
 
     /**

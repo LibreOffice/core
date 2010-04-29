@@ -190,7 +190,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
             pDrawLayer->ScRenamePage( nTab, aName );
             ULONG nx = (ULONG) ((double) (MAXCOL+1) * STD_COL_WIDTH           * HMM_PER_TWIPS );
             ULONG ny = (ULONG) ((double) (MAXROW+1) * ScGlobal::nStdRowHeight * HMM_PER_TWIPS );
-            pDrawLayer->SetPageSize( static_cast<sal_uInt16>(nTab), Size( nx, ny ) );
+            pDrawLayer->SetPageSize( static_cast<sal_uInt16>(nTab), Size( nx, ny ), false );
         }
     }
 
@@ -683,7 +683,7 @@ BOOL ScTable::GetDataStart( SCCOL& rStartCol, SCROW& rStartRow ) const
 }
 
 void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow,
-                           BOOL bIncludeOld ) const
+                           BOOL bIncludeOld, bool bOnlyDown ) const
 {
     BOOL bLeft       = FALSE;
     BOOL bRight  = FALSE;
@@ -698,26 +698,44 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
     {
         bChanged = FALSE;
 
-        SCROW nStart = rStartRow;
-        SCROW nEnd = rEndRow;
-        if (nStart>0) --nStart;
-        if (nEnd<MAXROW) ++nEnd;
+        if (!bOnlyDown)
+        {
+            SCROW nStart = rStartRow;
+            SCROW nEnd = rEndRow;
+            if (nStart>0) --nStart;
+            if (nEnd<MAXROW) ++nEnd;
 
-        if (rEndCol < MAXCOL)
-            if (!aCol[rEndCol+1].IsEmptyBlock(nStart,nEnd))
-            {
-                ++rEndCol;
-                bChanged = TRUE;
-                bRight = TRUE;
-            }
+            if (rEndCol < MAXCOL)
+                if (!aCol[rEndCol+1].IsEmptyBlock(nStart,nEnd))
+                {
+                    ++rEndCol;
+                    bChanged = TRUE;
+                    bRight = TRUE;
+                }
 
-        if (rStartCol > 0)
-            if (!aCol[rStartCol-1].IsEmptyBlock(nStart,nEnd))
+            if (rStartCol > 0)
+                if (!aCol[rStartCol-1].IsEmptyBlock(nStart,nEnd))
+                {
+                    --rStartCol;
+                    bChanged = TRUE;
+                    bLeft = TRUE;
+                }
+
+            if (rStartRow > 0)
             {
-                --rStartCol;
-                bChanged = TRUE;
-                bLeft = TRUE;
+                nTest = rStartRow-1;
+                bFound = FALSE;
+                for (i=rStartCol; i<=rEndCol && !bFound; i++)
+                    if (aCol[i].HasDataAt(nTest))
+                        bFound = TRUE;
+                if (bFound)
+                {
+                    --rStartRow;
+                    bChanged = TRUE;
+                    bTop = TRUE;
+                }
             }
+        }
 
         if (rEndRow < MAXROW)
         {
@@ -731,21 +749,6 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
                 ++rEndRow;
                 bChanged = TRUE;
                 bBottom = TRUE;
-            }
-        }
-
-        if (rStartRow > 0)
-        {
-            nTest = rStartRow-1;
-            bFound = FALSE;
-            for (i=rStartCol; i<=rEndCol && !bFound; i++)
-                if (aCol[i].HasDataAt(nTest))
-                    bFound = TRUE;
-            if (bFound)
-            {
-                --rStartRow;
-                bChanged = TRUE;
-                bTop = TRUE;
             }
         }
     }
@@ -779,6 +782,77 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
         }
     }
 }
+
+
+bool ScTable::ShrinkToUsedDataArea( SCCOL& rStartCol, SCROW& rStartRow,
+        SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const
+{
+    bool bRet = false;
+    bool bChanged;
+
+    do
+    {
+        bChanged = false;
+
+        bool bCont = true;
+        while (rEndCol > 0 && bCont && rStartCol < rEndCol)
+        {
+            if (aCol[rEndCol].IsEmptyBlock( rStartRow, rEndRow))
+            {
+                --rEndCol;
+                bChanged = true;
+            }
+            else
+                bCont = false;
+        }
+
+        bCont = true;
+        while (rStartCol < MAXCOL && bCont && rStartCol < rEndCol)
+        {
+            if (aCol[rStartCol].IsEmptyBlock( rStartRow, rEndRow))
+            {
+                ++rStartCol;
+                bChanged = true;
+            }
+            else
+                bCont = false;
+        }
+
+        if (!bColumnsOnly)
+        {
+            if (rStartRow < MAXROW && rStartRow < rEndRow)
+            {
+                bool bFound = false;
+                for (SCCOL i=rStartCol; i<=rEndCol && !bFound; i++)
+                    if (aCol[i].HasDataAt( rStartRow))
+                        bFound = true;
+                if (!bFound)
+                {
+                    ++rStartRow;
+                    bChanged = true;
+                }
+            }
+
+            if (rEndRow > 0 && rStartRow < rEndRow)
+            {
+                bool bFound = false;
+                for (SCCOL i=rStartCol; i<=rEndCol && !bFound; i++)
+                    if (aCol[i].HasDataAt( rEndRow))
+                        bFound = true;
+                if (!bFound)
+                {
+                    --rEndRow;
+                    bChanged = true;
+                }
+            }
+        }
+
+        if (bChanged)
+            bRet = true;
+    } while( bChanged );
+    return bRet;
+}
+
 
 SCSIZE ScTable::GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow, ScDirection eDir )
@@ -1117,7 +1191,7 @@ BOOL ScTable::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMa
 
 void ScTable::UpdateDrawRef( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz, bool bUpdateNoteCaptionPos )
 {
     if ( nTab >= nTab1 && nTab <= nTab2 && nDz == 0 )       // only within the table
     {
@@ -1133,14 +1207,14 @@ void ScTable::UpdateDrawRef( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nR
                 nRow2 = sal::static_int_cast<SCROW>( nRow2 - nDy );
             }
             pDrawLayer->MoveArea( nTab, nCol1,nRow1, nCol2,nRow2, nDx,nDy,
-                                    (eUpdateRefMode == URM_INSDEL) );
+                                    (eUpdateRefMode == URM_INSDEL), bUpdateNoteCaptionPos );
         }
     }
 }
 
 void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                      SCCOL nCol2, SCROW nRow2, SCTAB nTab2, SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                     ScDocument* pUndoDoc, BOOL bIncludeDraw )
+                     ScDocument* pUndoDoc, BOOL bIncludeDraw, bool bUpdateNoteCaptionPos )
 {
     SCCOL i;
     SCCOL iMax;
@@ -1159,7 +1233,7 @@ void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW 
                                     nDx, nDy, nDz, pUndoDoc );
 
     if ( bIncludeDraw )
-        UpdateDrawRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
+        UpdateDrawRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz, bUpdateNoteCaptionPos );
 
     if ( nTab >= nTab1 && nTab <= nTab2 && nDz == 0 )       // print ranges: only within the table
     {

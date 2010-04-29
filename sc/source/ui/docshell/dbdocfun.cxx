@@ -56,6 +56,7 @@
 #include "attrib.hxx"
 #include "drwlayer.hxx"
 #include "dpshttab.hxx"
+#include "hints.hxx"
 
 // -----------------------------------------------------------------
 
@@ -592,7 +593,7 @@ BOOL ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         if (pDestData)
             pNewData = pDestData;               // Bereich vorhanden -> anpassen
         else                                    // Bereich ab Cursor/Markierung wird angelegt
-            pNewData = rDocShell.GetDBData(aDestPos, SC_DB_MAKE, TRUE );
+            pNewData = rDocShell.GetDBData(aDestPos, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );
         if (pNewData)
         {
             pNewData->SetArea( nTab,
@@ -919,7 +920,7 @@ BOOL ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             pNewData = rDocShell.GetDBData(
                             ScRange( aLocalParam.nCol1, aLocalParam.nRow1, nDestTab,
                                      aLocalParam.nCol2, aLocalParam.nRow2, nDestTab ),
-                            SC_DB_MAKE, TRUE );
+                            SC_DB_MAKE, SC_DBSEL_FORCE_MARK );
 
         if (pNewData)
         {
@@ -1403,7 +1404,12 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     delete pUndoDPObj;
 
     if (bDone)
+    {
+        // notify API objects
+        if (pDestObj)
+            pDoc->BroadcastUno( ScDataPilotModifiedHint( pDestObj->GetName() ) );
         aModificator.SetDocumentModified();
+    }
 
     if ( nErrId && !bApi )
         rDocShell.ErrorMessage( nErrId );
