@@ -77,10 +77,10 @@ testcase tDeleteModulesAtRunningBasic
         iMenuItemCount = hMenuItemGetCount()
 
         select case ( iMenuItemCount )
-        case 2  : printlog( "Correct number of items in menu: " & iMenuItemCount )
-        case 3  : warnlog ( "Delete is active in context menu for a running macro => BUG!" )
-        case 5  : warnlog ( "#i101972# - Disabled entries are shown in context menu on tab bar" )
-        default : warnlog ( "Incorrect itemcount in context menu: " & iMenuItemCount )
+        case 2    : printlog( "Correct number of items in menu: " & iMenuItemCount )
+        case 3    : warnlog ( "Delete is active in context menu for a running macro => BUG!" )
+        case 5    : warnlog ( "#i101972# - Disabled entries are shown in context menu on tab bar" )
+        case else : warnlog ( "Incorrect itemcount in context menu: " & iMenuItemCount )
         end select
     catch
         warnlog( "Unable to retrieve the number of menuitems" )
