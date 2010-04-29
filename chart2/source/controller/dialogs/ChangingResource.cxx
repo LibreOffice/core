@@ -35,6 +35,10 @@ namespace chart
 {
 //.............................................................................
 
+ResourceChangeListener::~ResourceChangeListener()
+{
+}
+
 ChangingResource::ChangingResource()
                 : m_pChangeListener(0)
 {
