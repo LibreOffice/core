@@ -170,9 +170,9 @@ void LayeredDevice::Invalidate (
     const Rectangle& rInvalidationArea,
     const sal_Int32 nLayer)
 {
-    if (nLayer<0 || sal_uInt32(nLayer)>=mpLayers->size())
+    if (nLayer<0 || size_t(nLayer)>=mpLayers->size())
     {
-        OSL_ASSERT(nLayer>=0 && nLayer<mpLayers->size());
+        OSL_ASSERT(nLayer>=0 && size_t(nLayer)<mpLayers->size());
         return;
     }
 
@@ -250,9 +250,9 @@ void LayeredDevice::RemovePainter (
         OSL_ASSERT(rpPainter);
         return;
     }
-    if (nLayer<0 || sal_uInt32(nLayer)>=mpLayers->size())
+    if (nLayer<0 || size_t(nLayer)>=mpLayers->size())
     {
-        OSL_ASSERT(nLayer>=0 && nLayer<mpLayers->size());
+        OSL_ASSERT(nLayer>=0 && size_t(nLayer)<mpLayers->size());
         return;
     }
 

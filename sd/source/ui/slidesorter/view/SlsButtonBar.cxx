@@ -255,7 +255,7 @@ sal_Int32 ButtonBar::GetButtonCount (const bool bIsExcluded) const
 
     if (nIndex<0 || sal_uInt32(nIndex)>=rButtons.size())
     {
-        OSL_ASSERT(nIndex<0 || nIndex>=rButtons.size());
+        OSL_ASSERT(nIndex<0 || sal_uInt32(nIndex)>=rButtons.size());
         return ::boost::shared_ptr<Button>();
     }
     else

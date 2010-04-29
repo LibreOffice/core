@@ -189,7 +189,7 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
 
     const bool bSavedHighContrastMode (mbIsHighContrastMode);
     mbIsHighContrastMode = rpProperties->IsHighContrastModeActive();
-    if (bSavedHighContrastMode != mbIsHighContrastMode)
+    if (bSavedHighContrastMode != mbIsHighContrastMode || maIcons.empty())
     {
         LocalResource aResource (RID_SLIDESORTER_ICONS);
 
@@ -436,7 +436,7 @@ BitmapEx Theme::GetIcon (const IconType eType)
         return maIcons[eType];
     else
     {
-        OSL_ASSERT(eType>=0 && eType<maIcons.size());
+        OSL_ASSERT(eType>=0 && size_t(eType)<maIcons.size());
         return BitmapEx();
     }
 }
@@ -509,7 +509,7 @@ void Theme::SetIntegerValue (const IntegerValueType eType, const sal_Int32 nValu
         return maStrings[eType];
     else
     {
-        OSL_ASSERT(eType>=0 && eType<maStrings.size());
+        OSL_ASSERT(eType>=0 && size_t(eType)<maStrings.size());
         return ::rtl::OUString();
     }
 }
@@ -523,7 +523,7 @@ Theme::GradientDescriptor& Theme::GetGradient (const GradientColorType eType)
         return maGradients[eType];
     else
     {
-        OSL_ASSERT(eType>=0 && eType<maGradients.size());
+        OSL_ASSERT(eType>=0 && size_t(eType)<maGradients.size());
         return maGradients[0];
     }
 }
@@ -537,7 +537,7 @@ void Theme::InitializeIcon (const IconType eType, USHORT nResourceId)
         maIcons[eType] = Image(SdResId(nResourceId)).GetBitmapEx();
     else
     {
-        OSL_ASSERT(eType>=0 && eType<maIcons.size());
+        OSL_ASSERT(eType>=0 && size_t(eType)<maIcons.size());
     }
 }
 

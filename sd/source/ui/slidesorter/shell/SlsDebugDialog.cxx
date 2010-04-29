@@ -265,9 +265,11 @@ public:
         const char* pTitle,
         const Theme::GradientColorType eType,
         const Rectangle& rBoundingBox,
-        SlideSorter& rSlideSorter)
+        SlideSorter& rSlideSorter,
+        const Updater& rUpdater = Updater())
         : mpTheme(rSlideSorter.GetTheme()),
           mrSlideSorter(rSlideSorter),
+          maUpdater(rUpdater),
           meType(eType),
           mpContainer(new ::Window(pParent, WB_BORDER)),
           mpColorControl(new ColorControl(mpContainer, pTitle,
@@ -411,6 +413,7 @@ public:
 private:
     ::boost::shared_ptr<view::Theme> mpTheme;
     SlideSorter& mrSlideSorter;
+    Updater maUpdater;
     Theme::GradientColorType meType;
     ::Window* mpContainer;
     ColorControl* mpColorControl;
@@ -500,6 +503,8 @@ IMPL_LINK(GradientControl, Update, void*, EMPTYARG)
         mpFillOffset2Slider->GetThumbPos(),
         mpBorderOffset1Slider->GetThumbPos(),
         mpBorderOffset2Slider->GetThumbPos());
+    if (maUpdater)
+        maUpdater();
     UpdateDisplay();
 
     return 0;
@@ -840,7 +845,9 @@ SlideSorterDebugDialog::SlideSorterDebugDialog (SlideSorter& rSlideSorter)
         "Button Background",
         Theme::Gradient_ButtonBackground,
         Rectangle(10,nY,285,nY+220),
-        rSlideSorter));
+        rSlideSorter,
+        ::boost::bind(&view::ButtonBar::RequestLayout,
+            ::boost::ref(rSlideSorter.GetView().GetButtonBar()))));
     nY += maControls.back()->GetHeight() + nGap;
 
     maControls.push_back(new SliderControl(
@@ -874,17 +881,6 @@ SlideSorterDebugDialog::SlideSorterDebugDialog (SlideSorter& rSlideSorter)
         pControl,
         ::boost::bind(&GradientControl::GetType, pControl),
         ::boost::bind(&GradientControl::SetType, pControl, _1)));
-    nY += maControls.back()->GetHeight() + nGap;
-
-    maControls.push_back(new BoolControl(
-        mpTopLevelWindow,
-        "Alternative Button Paint Style",
-        Rectangle(10,nY,290,nY+20),
-        1,0,
-        ::boost::bind(&view::Theme::GetIntegerValue, pTheme, view::Theme::Integer_ButtonPaintType),
-        ::boost::bind(&view::Theme::SetIntegerValue, pTheme, view::Theme::Integer_ButtonPaintType, _1),
-        ::boost::bind(&view::SlideSorterView::RequestRepaint,
-            ::boost::ref(rSlideSorter.GetView()))));
     nY += maControls.back()->GetHeight() + nGap;
 
     maControls.push_back(new TextButton(
