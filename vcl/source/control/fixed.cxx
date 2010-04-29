@@ -496,16 +496,11 @@ void FixedLine::ImplDraw( bool bLayout )
 {
     Size                    aOutSize = GetOutputSizePixel();
     String                  aText = GetText();
-    const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     WinBits                 nWinStyle = GetStyle();
     MetricVector*           pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
     String*                 pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
 
-    if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )
-        SetLineColor( Color( COL_BLACK ) );
-    else
-        SetLineColor( rStyleSettings.GetShadowColor() );
-
+    DecorationView aDecoView( this );
     if ( !aText.Len() || (nWinStyle & WB_VERT) )
     {
         if( !pVector )
@@ -516,21 +511,12 @@ void FixedLine::ImplDraw( bool bLayout )
             if ( nWinStyle & WB_VERT )
             {
                 nX = (aOutSize.Width()-1)/2;
-                DrawLine( Point( nX, 0 ), Point( nX, aOutSize.Height()-1 ) );
+                aDecoView.DrawSeparator( Point( nX, 0 ), Point( nX, aOutSize.Height()-1 ) );
             }
             else
             {
                 nY = (aOutSize.Height()-1)/2;
-                DrawLine( Point( 0, nY ), Point( aOutSize.Width()-1, nY ) );
-            }
-
-            if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
-            {
-                SetLineColor( rStyleSettings.GetLightColor() );
-                if ( nWinStyle & WB_VERT )
-                    DrawLine( Point( nX+1, 0 ), Point( nX+1, aOutSize.Height()-1 ) );
-                else
-                    DrawLine( Point( 0, nY+1 ), Point( aOutSize.Width()-1, nY+1 ) );
+                aDecoView.DrawSeparator( Point( 0, nY ), Point( aOutSize.Width()-1, nY ), false );
             }
         }
     }
@@ -538,6 +524,7 @@ void FixedLine::ImplDraw( bool bLayout )
     {
         USHORT      nStyle = TEXT_DRAW_MNEMONIC | TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER | TEXT_DRAW_ENDELLIPSIS;
         Rectangle   aRect( 0, 0, aOutSize.Width(), aOutSize.Height() );
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
         if ( !IsEnabled() )
             nStyle |= TEXT_DRAW_DISABLE;
@@ -551,12 +538,7 @@ void FixedLine::ImplDraw( bool bLayout )
         if( !pVector )
         {
             long nTop = aRect.Top() + ((aRect.GetHeight()-1)/2);
-            DrawLine( Point( aRect.Right()+FIXEDLINE_TEXT_BORDER, nTop ), Point( aOutSize.Width()-1, nTop ) );
-            if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
-            {
-                SetLineColor( rStyleSettings.GetLightColor() );
-                DrawLine( Point( aRect.Right()+FIXEDLINE_TEXT_BORDER, nTop+1 ), Point( aOutSize.Width()-1, nTop+1 ) );
-            }
+            aDecoView.DrawSeparator( Point( aRect.Right()+FIXEDLINE_TEXT_BORDER, nTop ), Point( aOutSize.Width()-1, nTop ), false );
         }
     }
 }
