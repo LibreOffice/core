@@ -58,7 +58,6 @@ SLOFILES= \
     $(SLO)$/WW8LFOTable.obj \
     $(SLO)$/WW8ListTable.obj \
     $(SLO)$/resources.obj \
-    $(SLO)$/doctokutil.obj \
     $(SLO)$/WW8CpAndFc.obj \
     $(SLO)$/WW8StructBase.obj \
     $(SLO)$/WW8Clx.obj \
