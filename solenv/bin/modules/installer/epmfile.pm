@@ -1436,6 +1436,8 @@ sub set_autoprovreq_in_specfile
         $autoreqprovline = "AutoReqProv\: no\n";
     }
 
+    $autoreqprovline .= "%define _binary_filedigest_algorithm 1\n%define _binary_payload w9.gzdio\n";
+
     for ( my $i = 0; $i <= $#{$changefile}; $i++ )
     {
         # Adding "autoreqprov" behind the line beginning with: Group:
