@@ -119,7 +119,7 @@ protected:
     ::osl::Mutex&                                                               GetMutex() { return maMutex; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >          getParentPeer() const;
-    void                                                                        updateFromModel();
+    virtual void                                                                updateFromModel();
     void                                                                        peerCreated();
     bool                                                                        ImplCheckLocalize( ::rtl::OUString& _rPossiblyLocalizable );
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >      ImplGetCompatiblePeer( sal_Bool bAcceptExistingPeer );

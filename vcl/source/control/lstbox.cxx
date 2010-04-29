@@ -1081,6 +1081,15 @@ void ListBox::RemoveEntry( USHORT nPos )
 
 // -----------------------------------------------------------------------
 
+Image ListBox::GetEntryImage( USHORT nPos ) const
+{
+    if ( mpImplLB->GetEntryList()->HasEntryImage( nPos ) )
+        return mpImplLB->GetEntryList()->GetEntryImage( nPos );
+    return Image();
+}
+
+// -----------------------------------------------------------------------
+
 USHORT ListBox::GetEntryPos( const XubString& rStr ) const
 {
     USHORT nPos = mpImplLB->GetEntryList()->FindEntry( rStr );
