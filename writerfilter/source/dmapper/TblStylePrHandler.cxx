@@ -1,6 +1,8 @@
 #include <TblStylePrHandler.hxx>
 #include <PropertyMap.hxx>
 #include <ooxml/resourceids.hxx>
+#include <dmapperLoggers.hxx>
+#include <resourcemodel/QNameToString.hxx>
 
 namespace writerfilter {
 namespace dmapper {
@@ -20,6 +22,13 @@ TblStylePrHandler::~TblStylePrHandler( )
 
 void TblStylePrHandler::attribute(Id rName, Value & rVal)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("TblStylePrHandler.attribute");
+    dmapper_logger->attribute("name", (*QNameToString::Instance())(rName));
+    dmapper_logger->chars(rVal.toString());
+    dmapper_logger->endElement("TblStylePrHandler.attribute");
+#endif
+
     switch ( rName )
     {
         case NS_ooxml::LN_CT_TblStyleOverrideType:
@@ -34,6 +43,11 @@ void TblStylePrHandler::attribute(Id rName, Value & rVal)
 
 void TblStylePrHandler::sprm(Sprm & rSprm)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("TblStylePrHandler.sprm");
+    dmapper_logger->attribute("sprm", rSprm.toString());
+#endif
+
     Value::Pointer_t pValue = rSprm.getValue();
     switch ( rSprm.getId( ) )
     {
@@ -57,6 +71,10 @@ void TblStylePrHandler::sprm(Sprm & rSprm)
                 m_rDMapper.PopStyleSheetProperties( true );
             }
     }
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("TblStylePrHandler.sprm");
+#endif
 }
 
 void TblStylePrHandler::resolveSprmProps(Sprm & rSprm)
