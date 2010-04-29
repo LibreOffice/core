@@ -133,7 +133,7 @@ typedef BaseHash< ProtocolHandler > HandlerHash;
     @modified       30.04.2002 11:19, as96863
 */
 
-class FWI_DLLPUBLIC HandlerCFGAccess;
+class HandlerCFGAccess;
 class FWI_DLLPUBLIC HandlerCache
 {
     /* member */
