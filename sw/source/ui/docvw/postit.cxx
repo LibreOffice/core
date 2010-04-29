@@ -1259,7 +1259,12 @@ void SwMarginWin::ExecuteCommand(USHORT nSlot)
             SwView* pView = DocView();
             if (Engine()->GetEditEngine().GetText() != String(EMPTYSTRING))
             {
-                OutlinerParaObject* pPara = new OutlinerParaObject(*View()->GetEditView().CreateTextObject());
+                // since we will be owner of the object returned by CreateTextObject,
+                // and OutlinerParaObject will clone that one, we need to delete the
+                // original object.
+                EditTextObject* pTemporaryText = View()->GetEditView().CreateTextObject();
+                OutlinerParaObject* pPara = new OutlinerParaObject( *pTemporaryText );
+                delete pTemporaryText;
                 Mgr()->RegisterAnswer(pPara);
             }
             if (Mgr()->GetActivePostIt())
