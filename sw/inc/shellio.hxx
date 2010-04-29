@@ -28,6 +28,7 @@
 #define SW_SHELLIO_HXX
 
 #include <memory>
+#include <boost/utility.hpp>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -433,7 +434,9 @@ extern BOOL SetHTMLTemplate( SwDoc &rDoc ); //Fuer Vorlagen aus HTML.vor laden s
 class IDocumentSettingAccess;
 class IDocumentStylePoolAccess;
 
-class SW_DLLPUBLIC Writer : public SvRefBase
+class SW_DLLPUBLIC Writer
+    : public SvRefBase
+    , private ::boost::noncopyable
 {
     SwAsciiOptions aAscOpts;
     String          sBaseURL;
