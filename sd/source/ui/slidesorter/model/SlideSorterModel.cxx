@@ -66,24 +66,48 @@ namespace {
         Reference<drawing::XDrawPage> mxSlide;
     };
 
+    bool PrintModel (const SlideSorterModel& rModel)
+    {
+        for (sal_Int32 nIndex=0,nCount=rModel.GetPageCount(); nIndex<nCount; ++nIndex)
+        {
+            SharedPageDescriptor pDescriptor (rModel.GetPageDescriptor(nIndex));
+            if (pDescriptor)
+            {
+                OSL_TRACE("%d %d %d %d %x",
+                    nIndex,
+                    pDescriptor->GetPageIndex(),
+                    pDescriptor->GetVisualState().mnPageId,
+                    FromCoreIndex(pDescriptor->GetPage()->GetPageNum()),
+                    pDescriptor->GetPage());
+            }
+            else
+            {
+                OSL_TRACE("%d", nIndex);
+            }
+        }
+
+        return true;
+    }
     bool CheckModel (const SlideSorterModel& rModel)
     {
         for (sal_Int32 nIndex=0,nCount=rModel.GetPageCount(); nIndex<nCount; ++nIndex)
         {
             SharedPageDescriptor pDescriptor (rModel.GetPageDescriptor(nIndex));
-            OSL_TRACE("%d %d %d %d %x",
-                nIndex,
-                pDescriptor->GetPageIndex(),
-                pDescriptor->GetVisualState().mnPageId,
-                FromCoreIndex(pDescriptor->GetPage()->GetPageNum()),
-                pDescriptor->GetPage());
+            if ( ! pDescriptor)
+            {
+                PrintModel(rModel);
+                OSL_ASSERT(pDescriptor);
+                return false;
+            }
             if (nIndex != pDescriptor->GetPageIndex())
             {
+                PrintModel(rModel);
                 OSL_ASSERT(nIndex == pDescriptor->GetPageIndex());
                 return false;
             }
             if (nIndex != pDescriptor->GetVisualState().mnPageId)
             {
+                PrintModel(rModel);
                 OSL_ASSERT(nIndex == pDescriptor->GetVisualState().mnPageId);
                 return false;
             }

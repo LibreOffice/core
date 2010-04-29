@@ -129,7 +129,8 @@ SlideSorterViewShell::SlideSorterViewShell (
     ::Window* pParentWindow,
     FrameView* pFrameViewArgument)
     : ViewShell (pFrame, pParentWindow, rViewShellBase),
-      mpSlideSorter()
+      mpSlideSorter(),
+      mbIsArrangeGUIElementsPending(true)
 {
     meShellType = ST_SLIDE_SORTER;
 
@@ -560,7 +561,10 @@ void SlideSorterViewShell::ArrangeGUIElements (void)
     {
         OSL_ASSERT(mpSlideSorter.get()!=NULL);
         mpSlideSorter->ArrangeGUIElements(maViewPos, maViewSize);
+        mbIsArrangeGUIElementsPending = false;
     }
+    else
+        mbIsArrangeGUIElementsPending = true;
 }
 
 
@@ -602,6 +606,16 @@ bool SlideSorterViewShell::HandleScrollCommand (const CommandEvent& rEvent, ::sd
     }
 
     return bDone;
+}
+
+
+
+
+void SlideSorterViewShell::Activate (BOOL bIsMDIActivate)
+{
+    ViewShell::Activate(bIsMDIActivate);
+    if (mbIsArrangeGUIElementsPending)
+        ArrangeGUIElements();
 }
 
 

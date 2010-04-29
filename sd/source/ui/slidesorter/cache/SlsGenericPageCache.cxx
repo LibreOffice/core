@@ -65,14 +65,12 @@ GenericPageCache::GenericPageCache (
 
 GenericPageCache::~GenericPageCache (void)
 {
-    OSL_TRACE("terminating queue processor %p", mpQueueProcessor.get());
     if (mpQueueProcessor.get() != NULL)
         mpQueueProcessor->Stop();
     maRequestQueue.Clear();
     if (mpQueueProcessor.get() != NULL)
         mpQueueProcessor->Terminate();
     mpQueueProcessor.reset();
-    OSL_TRACE("queue processor stopped and terminated");
 
     if (mpBitmapCache.get() != NULL)
         PageCacheManager::Instance()->ReleaseCache(mpBitmapCache);

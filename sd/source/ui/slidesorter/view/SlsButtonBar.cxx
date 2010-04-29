@@ -373,10 +373,6 @@ void ButtonBar::PaintButtonBackground (
         AlphaMask aMask (pBitmap->GetSizePixel(), &aTransparency);
         rDevice.DrawBitmapEx(maBoundingBox.TopLeft()+aOffset, BitmapEx(*pBitmap, aMask));
     }
-    else
-    {
-        OSL_TRACE("not painting background");
-    }
 }
 
 

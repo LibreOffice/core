@@ -171,7 +171,8 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
       mpSelectionPainter(),
       mpBackgroundPainter(
           new BackgroundPainter(mrSlideSorter.GetTheme()->GetColor(Theme::Background))),
-      mpButtonBar(new ButtonBar(mrSlideSorter))
+      mpButtonBar(new ButtonBar(mrSlideSorter)),
+      mbIsRearrangePending(true)
 {
     // Hide the page that contains the page objects.
     SetPageVisible (FALSE);
@@ -307,7 +308,7 @@ void SlideSorterView::PostModelChange (void)
         model::PageEnumerationProvider::CreateAllPagesEnumeration(mrModel));
 
     // The new page objects have to be scaled and positioned.
-    Rearrange();
+    RequestRearrange();
     RequestRepaint();
 }
 
@@ -363,6 +364,15 @@ void SlideSorterView::Resize (void)
     UpdateOrientation();
 
     mpLayeredDevice->Resize();
+    RequestRearrange();
+}
+
+
+
+
+void SlideSorterView::RequestRearrange (void)
+{
+    mbIsRearrangePending = true;
     Rearrange();
 }
 
@@ -371,22 +381,30 @@ void SlideSorterView::Resize (void)
 
 void SlideSorterView::Rearrange (void)
 {
-    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
-    if (mrModel.GetPageCount()>0 && pWindow)
-    {
-        const bool bRearrangeSuccess (
-            mpLayouter->Rearrange (
-                meOrientation,
-                pWindow->GetSizePixel(),
-                mrModel.GetPageDescriptor(0)->GetPage()->GetSize(),
-                mrModel.GetPageCount()));
+    if ( ! mbIsRearrangePending)
+        return;
+    if (mrModel.GetPageCount() <= 0)
+        return;
 
-        if (bRearrangeSuccess)
-        {
-            Layout();
-            UpdatePageUnderMouse(false);
-            RequestRepaint();
-        }
+    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
+    if ( ! pWindow)
+        return;
+    const Size aWindowSize (pWindow->GetSizePixel());
+    if (aWindowSize.Width()<=0 || aWindowSize.Height()<=0)
+        return;
+
+    const bool bRearrangeSuccess (
+        mpLayouter->Rearrange (
+            meOrientation,
+            aWindowSize,
+            mrModel.GetPageDescriptor(0)->GetPage()->GetSize(),
+            mrModel.GetPageCount()));
+    if (bRearrangeSuccess)
+    {
+        mbIsRearrangePending = false;
+        Layout();
+        UpdatePageUnderMouse(false);
+        //        RequestRepaint();
     }
 }
 
@@ -749,6 +767,9 @@ void SlideSorterView::Paint (
 
     if (mbPreciousFlagUpdatePending)
         UpdatePreciousFlags();
+
+    if (mbIsRearrangePending)
+        Rearrange();
 
     // Paint all page objects that are fully or partially inside the
     // repaint region.

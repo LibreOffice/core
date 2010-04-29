@@ -129,6 +129,8 @@ public:
 
     virtual bool HandleScrollCommand (const CommandEvent& rEvent, ::sd::Window* pWindow);
 
+    virtual void Activate (BOOL IsMDIActivate);
+
     //===== Drag and Drop =====================================================
 
     virtual void StartDrag (
@@ -205,6 +207,7 @@ protected:
 
 private:
     ::boost::shared_ptr<SlideSorter> mpSlideSorter;
+    bool mbIsArrangeGUIElementsPending;
 
     SlideSorterViewShell (
         SfxViewFrame* pFrame,

@@ -204,8 +204,6 @@ void LayeredDevice::RegisterPainter (
     const SharedILayerPainter& rpPainter,
     const sal_Int32 nLayer)
 {
-    OSL_TRACE("layered device at %x registering painter %x at layer %d",
-        this, rpPainter.get(), nLayer);
     OSL_ASSERT(mpLayers);
     if ( ! rpPainter)
     {
@@ -243,8 +241,6 @@ void LayeredDevice::RemovePainter (
     const SharedILayerPainter& rpPainter,
     const sal_Int32 nLayer)
 {
-    OSL_TRACE("layered device at %x removing painter %x from layer %d",
-        this, rpPainter.get(), nLayer);
     if ( ! rpPainter)
     {
         OSL_ASSERT(rpPainter);
@@ -441,13 +437,6 @@ void Layer::Initialize (const SharedSdWindow& rpTargetWindow)
 
 void Layer::InvalidateRectangle (const Rectangle& rInvalidationBox)
 {
-  /*
-    OSL_TRACE("invalidating layer %x  %d %d %d %d", this,
-        rInvalidationBox.Left(),
-        rInvalidationBox.Top(),
-        rInvalidationBox.GetWidth(),
-        rInvalidationBox.GetHeight());
-  */
     maInvalidationRegion.Union(rInvalidationBox);
 }
 
@@ -483,13 +472,6 @@ void Layer::ValidateRectangle (const Rectangle& rBox)
 {
     if ( ! mpLayerDevice)
         return;
-    /*
-    OSL_TRACE("validating layer %x  %d %d %d %d", this,
-        rBox.Left(),
-        rBox.Top(),
-        rBox.GetWidth(),
-        rBox.GetHeight());
-    */
     const Region aSavedClipRegion (mpLayerDevice->GetClipRegion());
     mpLayerDevice->IntersectClipRegion(rBox);
 

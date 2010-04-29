@@ -651,6 +651,7 @@ bool Layouter::Implementation::Rearrange  (
 {
     mnPageCount = nPageCount;
 
+    // Return early when the window or the model have not yet been initialized.
     if (rWindowSize.Width()<=0 || rWindowSize.Height()<=0)
         return false;
     if (rPreviewModelSize.Width()<=0 || rPreviewModelSize.Height()<=0)

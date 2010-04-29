@@ -266,12 +266,14 @@ private:
     Region maRedrawRegion;
     SharedILayerPainter mpBackgroundPainter;
     ::boost::scoped_ptr<ButtonBar> mpButtonBar;
+    bool mbIsRearrangePending;
 
     /** Determine the visibility of all page objects.
     */
     void DeterminePageObjectVisibilities (void);
 
     void UpdatePreciousFlags (void);
+    void RequestRearrange (void);
     void Rearrange (void);
 };
 

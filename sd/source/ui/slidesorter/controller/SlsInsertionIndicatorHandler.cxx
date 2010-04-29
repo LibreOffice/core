@@ -149,10 +149,6 @@ void InsertionIndicatorHandler::UpdatePosition (
     const Point& rMouseModelPosition,
     const Mode eMode)
 {
-    OSL_TRACE("InsertionIndicatorHandler::UpdatePosition %d,%d,  %d",
-        rMouseModelPosition.X(),
-        rMouseModelPosition.Y(),
-        eMode);
     if ( ! mbIsActive)
         return;
 
@@ -228,8 +224,6 @@ void InsertionIndicatorHandler::SetPosition (
         mbIsInsertionTrivial = IsInsertionTrivial(maInsertPosition.GetIndex(), eMode);
         if (maInsertPosition.GetIndex()>=0 && ! mbIsInsertionTrivial)
         {
-            OSL_TRACE("A insertion at %d is %strivial",
-                maInsertPosition.GetIndex(), mbIsInsertionTrivial?"":"not ");
             mpInsertionIndicatorOverlay->SetLocation(maInsertPosition.GetLocation());
 
             GetInsertAnimator()->SetInsertPosition(maInsertPosition);
@@ -237,8 +231,6 @@ void InsertionIndicatorHandler::SetPosition (
         }
         else
         {
-            OSL_TRACE("B insertion at %d is %strivial",
-                maInsertPosition.GetIndex(), mbIsInsertionTrivial?"":"not ");
             GetInsertAnimator()->Reset(Animator::AM_Animated);
             mpInsertionIndicatorOverlay->Hide();
         }

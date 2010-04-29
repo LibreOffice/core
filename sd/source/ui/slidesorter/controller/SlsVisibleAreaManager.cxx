@@ -100,10 +100,6 @@ void VisibleAreaManager::RequestVisible (
     if (rpDescriptor)
     {
         const sal_Int32 nIndex (rpDescriptor->GetPageIndex());
-        if (nIndex > 20)
-        {
-            OSL_TRACE("%d", nIndex);
-        }
         maVisibleRequests.push_back(
             mrSlideSorter.GetView().GetLayouter().GetPageObjectBox(
                 rpDescriptor->GetPageIndex(),
