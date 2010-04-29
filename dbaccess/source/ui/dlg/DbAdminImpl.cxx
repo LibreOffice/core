@@ -270,9 +270,9 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
             if ( !xHandler.is() )
             {
                 // instantiate the default SDB interaction handler
-                xHandler = Reference< XInteractionHandler >( m_xORB->createInstance( SERVICE_SDB_INTERACTION_HANDLER ), UNO_QUERY );
+                xHandler = Reference< XInteractionHandler >( m_xORB->createInstance( SERVICE_TASK_INTERACTION_HANDLER ), UNO_QUERY );
                 if ( !xHandler.is() )
-                    ShowServiceNotAvailableError(m_pParent->GetParent(), String(SERVICE_SDB_INTERACTION_HANDLER), sal_True);
+                    ShowServiceNotAvailableError(m_pParent->GetParent(), String(SERVICE_TASK_INTERACTION_HANDLER), sal_True);
             }
 
             String sName = pName ? pName->GetValue() : String();
@@ -294,7 +294,7 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
             aRequest.HasRealm   = aRequest.HasAccount = sal_False;
             // aRequest.Realm
             aRequest.HasUserName = pUser != 0;
-            aRequest.UserName    = pUser ? pUser->GetValue() : ::rtl::OUString();
+            aRequest.UserName    = pUser ? rtl::OUString(pUser->GetValue()) : ::rtl::OUString();
             aRequest.HasPassword = sal_True;
             //aRequest.Password
             aRequest.HasAccount  = sal_False;
