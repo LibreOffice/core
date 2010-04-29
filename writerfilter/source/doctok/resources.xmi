@@ -2322,6 +2322,9 @@
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="plcf"/>
           </UML:ModelElement.stereotype>
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8nopayloadoffset"/>
+          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>rtf:LISTTABLE</UML:TaggedValue.dataValue>
@@ -3116,6 +3119,9 @@
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="plcf"/>
           </UML:ModelElement.stereotype>
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8nopayloadoffset"/>
+          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>rtf:LFOTABLE</UML:TaggedValue.dataValue>
@@ -3138,6 +3144,9 @@
         <UML:Class xmi.id="FontTable" name="FontTable">
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8resource"/>
+          </UML:ModelElement.stereotype>
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8nopayloadoffset"/>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="plcf"/>
@@ -4783,6 +4792,9 @@
           </UML:ModelElement.stereotype>
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="plcf"/>
+          </UML:ModelElement.stereotype>
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8nopayloadoffset"/>
           </UML:ModelElement.stereotype>
           <UML:Classifier.feature>
             <UML:Attribute name="size">

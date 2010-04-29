@@ -319,13 +319,15 @@ class </xsl:text>
     sal_uInt32 getEntryOffset(sal_uInt32 nIndex)
     {
         return entryOffsets[nIndex];
-    }   
-
+    }</xsl:text>
+    <xsl:if test="not(.//UML:Stereotype[@xmi.idref='ww8nopayloadoffset'])">
+      <xsl:text>
     /**
         Calculate offset for payload.
     */
-    sal_uInt32 calcPayloadOffset();
-
+    sal_uInt32 calcPayloadOffset();</xsl:text>
+    </xsl:if>
+    <xsl:text>
     /**
     Set offset for payloads.
 
