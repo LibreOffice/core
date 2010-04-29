@@ -45,54 +45,48 @@ testcase tBasicIdeModuleNames
 
     ' ------ prerequisites ---------
     
-    brc = hInitBasicIde( CMODULE )
-
+    hInitBasicIde( CMODULE )
+    if ( hInsertMacro( 1 ) = 0 ) then
    
-    brc = hInsertMacro( 1 )
-    if ( rc <> 0 ) then
-       warnlog( "Failed to insert macro" )
-    endif
-   
-    cTabName = hGetTabNameFromOrganizer()
+        cTabName = hGetTabNameFromOrganizer()
 
-    Randomize
-    iCurrentName = Int( 24 * RND ) + 1 ' Range from 1 to 24
-    
-    cTabName = hCreateInvalidModuleName( iCurrentName )
-    rc = hRenameTab( cTabName )
-    if ( rc = 1 ) then
-        hHandleInvalidNameWarning( cTabname )
+        Randomize
+        iCurrentName = Int( 24 * RND ) + 1 ' Range from 1 to 24
+
+        cTabName = hCreateInvalidModuleName( iCurrentName )
+
+        if ( hRenameTab( cTabName ) = 1 ) then
+            hHandleInvalidNameWarning( cTabname )
+        else
+            warnlog( "Warning missing" )
+        endif
+
+        cTabname = CMODULE
+
+        if ( hRenameTab( cTabname ) <> 0 ) then
+            if ( hHandleInvalidNameWarning( cTabname )  ) then
+                warnlog( "Failed to set valid name" )
+            endif
+        endif
+
+
+        cTabname = hCreateInvalidModuleName( 0 )
+
+        if ( hRenameTab( cTabName ) <> 0 ) then
+            if ( hHandleInvalidNameWarning( cTabname )  ) then
+                warnlog( "Failed to set valid name" )
+            endif
+        endif
+
+
+        if ( hTestMacro( 1 ) <> 1 ) then
+            warnlog( "The open macro-module is not the one that was expected" )
+        endif
     else
-        warnlog( "Warning missing" )
-    endif
-        
-    cTabname = CMODULE
-    rc = hRenameTab( cTabname )
-    if ( rc <> 0 ) then
-        brc = hHandleInvalidNameWarning( cTabname ) 
-        if ( brc ) then
-            warnlog( "Failed to set valid name" )
-        endif      
-    endif
-
-    
-    cTabname = hCreateInvalidModuleName( 0 )
-    rc = hRenameTab( cTabName )
-    if ( rc <> 0 ) then
-        brc = hHandleInvalidNameWarning( cTabname ) 
-        if ( brc ) then
-            warnlog( "Failed to set valid name" )
-        endif      
-    endif
-    
-    
-    rc = hTestMacro( 1 )
-    if ( rc <> 1 ) then
-        warnlog( "The open macro-module is not the one that was expected" )
+        warnlog( "Failed to insert macro" )
     endif
     
     hCloseBasicIDE()
-    
     hDestroyDocument()
 
 endcase
@@ -171,6 +165,9 @@ testcase tValidModuleNames
         case 8  : sModuleName = "ThisIsQuiteALongNameForAModuleDontYouThink"
     end select
 
+    hCreateDocument()
+    ToolsMacro_uno
+
     if ( hCreateModuleForDoc( sModuleName ) ) then
         printlog( "The module name was accepted: " & sModuleName )
         hCloseBasicIDE()
@@ -186,39 +183,30 @@ endcase
 
 function hHandleInvalidNameWarning( cTabName as string ) as boolean
 
-
-    dim brc as boolean : brc = false
-    dim iTry as integer
-    
-    const CFN = "hHandleInvalidNameWarning::"
+    const CFN = "hHandleInvalidNameWarning(): "
+    const MAX_WAIT = 1
 
     kontext "Active"
-    for iTry = 1 to 5
-    
-    	if ( active.exists( 1 ) ) then
-    	
-    	    if ( brc ) then
-    	    	warnlog( CFN & "Too many invalid name warnings" )
-    	    endif
-    	
-    	    printlog( CFN & "Message: " & active.getText() )
-    	    
-	    active.ok()
-    	    brc = true
-    	   
-    	else
-    	
-            if ( not brc ) then
-                warnlog( CFN & "Invalid name warning missing" )
-    	    endif
-    	
+    if ( Active.exists( MAX_WAIT ) ) then
+
+        printlog( "Invalid name message displayed" )
+        printlog( Active.getText() )
+        hCloseDialog( Active, "ok" )
+        hHandleInvalidNameWarning() = true
+        
+        kontext "Active"
+        if ( Active.exists( MAX_WAIT ) ) then
+            warnlog( "Unexpected messagebox displayed: " & Active.getText() )
+            hHandleInvalidNameWarning() = false
         endif
-    
-    next iTry
-    
-    kontext "basicide"
-    tabbar.typekeys( "<ESCAPE>" , true )       
-    hHandleInvalidNameWarning() = brc
+
+        kontext "basicide"
+        tabbar.typekeys( "<ESCAPE>" , true )
+
+    else
+        warnlog( "Invalid name warning is missing" )
+        hHandleInvalidNameWarning() = false
+    endif
 
 end function
 

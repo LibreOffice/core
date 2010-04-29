@@ -36,13 +36,19 @@ function hShowMacroControls() as boolean
     '///<h3>Tear off the ToolsCollectionBar from the MacroBar</h3>
     '///<i>Starting point: Basic dialog editor is open and has the focus</i>
     '///<ul>
-    const CFN = "hShowMacroControls::"   
+    const CFN = "hShowMacroControls::"
+
+    const MAX_WAIT = 5
+    const SHORT_WAIT = 1
+
+    const VERTICALLY_CENTERED = 50
+    const HORIZONTALLY_CENTERED = 50
     
     if ( GVERBOSE ) then printlog( CFN & "Enter" )
 
     '///+<li>Test whether the ToolsCollectionBar is already open. If yes, exit directly</li>
     kontext "ToolsCollectionBar"
-    if ( ToolsCollectionBar.exists( 3 ) ) then
+    if ( ToolsCollectionBar.exists( SHORT_WAIT ) ) then
         printlog( CFN & "ToolsCollectionBar is already open." )
         hShowMacroControls() = true
         exit function
@@ -50,7 +56,7 @@ function hShowMacroControls() as boolean
     
     '///+<li>Verify that the Dialog Bar is available</li>
     Kontext "DialogBar"
-    if ( DialogBar.exists( 5 ) ) then
+    if ( DialogBar.exists( MAX_WAIT ) ) then
 
         '///+<li>Verify that the controls-button is enabled</li>
         try        
@@ -62,10 +68,10 @@ function hShowMacroControls() as boolean
             
             '///+<li>Verify that the ToolsCollectionBar is visible and can be accessed</li>
             kontext "ToolsCollectionBar"
-            if ( ToolsCollectionBar.exists( 5 ) ) then
+            if ( ToolsCollectionBar.exists( MAX_WAIT ) ) then
             
                 '///+<li>Move it to the upper left corner at pos 50/50</li>
-                ToolsCollectionBar.Move ( 50 , 50 )
+                ToolsCollectionBar.Move ( HORIZONTALLY_CENTERED , VERTICALLY_CENTERED )
                 printlog( CFN & "ToolsCollectionBar is open and has been placed" )
                 hShowMacroControls() = true
             else
@@ -106,13 +112,14 @@ function hOpenBasicIDE() as boolean
     
     const CFN = "hOpenBasicIDE::"
     const BUTTON_TIMEOUT = -1
+    const MAX_WAIT = 2
     
     if ( hSelectTheLastModule( true ) ) then
     
         if ( hClickButton( Bearbeiten) <> BUTTON_TIMEOUT ) then
 
             kontext "BASICIDE"
-            if ( BasicIDE.exists( 2 ) ) then
+            if ( BasicIDE.exists( MAX_WAIT ) ) then
                 printlog( "Basic IDE is open" )
                 BasicIDE.maximize()
                 hOpenBasicIDE() = true
@@ -186,9 +193,9 @@ function hFindFirstDialog() as boolean
     
     const CFN = "hFindFirstDialog::"
     const REPEAT_COUNT = 5 ' number of times to send a keystroke to BASIC IDE
-    const PROBE_STEPPING = 5
-    const VERTICALLY_CENTERED = 50
     const MAX_NUMBER_OF_RETRIES = 20
+    const SELECT_TAB_RIGHT = "<MOD1 PAGEUP>"
+    const SCROLL_UP_LEFT   = "<UP><LEFT>"
 
     dim iPosOverTabbar as integer
     hFindFirstDialog() = false
@@ -201,12 +208,12 @@ function hFindFirstDialog() as boolean
     '///+<li>move pointer over the tabbar and click until a dialog opens (hopefully)</li>
     for iPosOverTabbar = 1 to MAX_NUMBER_OF_RETRIES
 
-        BASICIDE.typeKeys( "<MOD1 PAGEUP>" )
+        BASICIDE.typeKeys( SELECT_TAB_RIGHT )
 
         if ( DialogWindow.Exists() ) then
             printlog( "BASIC Dialog window found" )
             hFindFirstDialog() = true
-            DialogWindow.typeKeys( "<UP><LEFT>" , REPEAT_COUNT )
+            DialogWindow.typeKeys( SCROLL_UP_LEFT , REPEAT_COUNT )
             exit for
         endif
 
@@ -380,6 +387,7 @@ function hNewDialog() as boolean
     '///<ul>
 
     const CFN = "hNewDialog::"
+    const MAX_WAIT = 2000
 
     '///+<li>Open the context menu for the tabbar</li>
     kontext "basicide"
@@ -387,11 +395,11 @@ function hNewDialog() as boolean
     
     '///+<li>Select the first item (insert)</li>
     hMenuSelectNr( 1 )
-    WaitSlot( 1000 ) ' sleep( 1 )
+    WaitSlot( MAX_WAIT ) ' sleep( 1 )
     
     '///+<li>Select the second item (new dialog)</li>
     hMenuSelectNr( 2 )
-    WaitSlot( 2000 ) ' sleep( 2 )
+    WaitSlot( MAX_WAIT ) ' sleep( 2 )
     
     '///+<li>Verify that a new dialog is opened and has the focus</li>
     if ( DialogWindow.Exists() ) then 
@@ -399,7 +407,7 @@ function hNewDialog() as boolean
         hNewDialog() = true
 	if ( DialogWindow.IsMax() = false ) then		
             DialogWindow.Maximize()
-            Wait( 2000 )
+            Wait( MAX_WAIT )
 	end if		
     else
         warnlog( CFN & "New dialog is not open" )
@@ -419,6 +427,7 @@ function hNewModule() as boolean
     '///<ul>
 
     const CFN = "hNewModule::"
+    const MAX_WAIT = 2000
 
     '///+<li>Open the context menu for the tabbar</li>
     kontext "basicide"
@@ -426,11 +435,11 @@ function hNewModule() as boolean
     
     '///+<li>Select the first item (insert)</li>
     hMenuSelectNr( 1 )
-    WaitSlot( 1000 ) ' sleep( 1 )
+    WaitSlot( MAX_WAIT ) ' sleep( 1 )
     
     '///+<li>Select the first item (new module)</li>
     hMenuSelectNr( 1 )
-    WaitSlot( 2000 ) ' sleep( 2 )
+    WaitSlot( MAX_WAIT ) ' sleep( 2 )
     
     '///+<li>Verify that a new module is opened and has the focus</li>
     if ( EditWindow.Exists() ) then 
@@ -454,6 +463,7 @@ function hHideModule() as boolean
     '///<ul>
 
     const CFN = "hHideModule::"
+    const MENUENTRY_HIDE = 4
     
     kontext "basicide"
     
@@ -462,7 +472,7 @@ function hHideModule() as boolean
        tabbar.openContextMenu
        
        '///+<li>Select the fourth entry (Hide)</li>
-       hMenuSelectNr( 4 )
+       hMenuSelectNr( MENUENTRY_HIDE )
        sleep( 1 )
        hHideModule() = true
        printlog( CFN & "Success" )

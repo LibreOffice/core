@@ -74,36 +74,43 @@ function hCreateModuleForDoc( optional cName as string ) as boolean
     '///<i>Starting point: Basic Macro Organizer is visible and has focus</i>
     const CFN = "hCreateModuleForDoc::"
     const DEFAULT_WAIT = 2
+    const RETVAL_FAILURE = 0
+
     if ( isMissing( cName ) ) then cName = "TTModule"
 
     kontext "Makro"
-    if ( hSelectTheLastNode( MakroAus ) > 0 ) then
+    if ( Makro.exists() ) then
+        if ( hSelectTheLastNode( MakroAus ) > RETVAL_FAILURE ) then
 
-        kontext "Makro"
-        if ( hClickButton( Neu ) ) then
+            kontext "Makro"
+            if ( hClickButton( Neu ) ) then
 
-            Kontext "NeuesModul"
-            if ( NeuesModul.exists( DEFAULT_WAIT ) ) then
-                Modulname.SetText( cName )
-                hCloseDialog( NeuesModul, "ok" )
+                Kontext "NeuesModul"
+                if ( NeuesModul.exists( DEFAULT_WAIT ) ) then
+                    Modulname.SetText( cName )
+                    hCloseDialog( NeuesModul, "ok" )
 
-                kontext "BasicIDE"
-                if ( BasicIde.exists( DEFAULT_WAIT ) ) then
-                    hCreateModuleForDoc() = true
+                    kontext "BasicIDE"
+                    if ( BasicIde.exists( DEFAULT_WAIT ) ) then
+                        hCreateModuleForDoc() = true
+                    else
+                        printlog( CFN & "BASIC IDE is not open" )
+                        hCreateModuleForDoc() = false
+                    endif
                 else
-                    warnlog( CFN & "BASIC IDE is not open" )
+                    warnlog( CFN & "Dialog <NeuesModul> did not open" )
                     hCreateModuleForDoc() = false
                 endif
             else
-                warnlog( CFN & "Dialog <NeuesModul> did not open" )
+                warnlog( CFN & "Failed to click <Neu> button" )
                 hCreateModuleForDoc() = false
             endif
         else
-            warnlog( CFN & "Failed to click <Neu> button" )
+            warnlog( CFN & "Failed to select the last node" )
             hCreateModuleForDoc() = false
         endif
     else
-        warnlog( CFN & "Failed to select the last node" )
+        warnlog( CFN & "Macro organizer is not open" )
         hCreateModuleForDoc() = false
     endif
 
