@@ -52,7 +52,7 @@ published service RedlinePortion
     /** contains the name of the author of the change.*/
     [readonly, property] string RedlineAuthor;
     /** contains the date and time of the change.*/
-    [readonly, property] com::sun::star::util::DateTime RedlineDataTime;
+    [readonly, property] com::sun::star::util::DateTime RedlineDateTime;
     /** contains a comment for the change.*/
     [readonly, property] string RedlineComment;
     /** contains the type of the change
@@ -70,7 +70,7 @@ published service RedlinePortion
         <p> The elements of the sequence are:</p>
         <UL>
             <LI><P>string RedlineAuthor;                              </P>
-            <LI><P>com::sun::star::util::DateTime RedlineDataTime;    </P>
+            <LI><P>com::sun::star::util::DateTime RedlineDateTime;    </P>
             <LI><P>string RedlineComment;                             </P>
             <LI><P>string RedlineType;                                </P>
         </UL>
