@@ -53,4 +53,4 @@ JARCOMPRESS 	= TRUE
 
 
 run:
-    $(JAVAI) -cp $(CLASSPATH) org.openoffice.Runner -TestBase java_complex -o $(PACKAGE:s#$/#.#).$(JAVAFILES:b)
+    $(JAVAI) $(JAVAIFLAGS) -cp $(CLASSPATH) org.openoffice.Runner -TestBase java_complex -o $(PACKAGE:s#$/#.#).$(JAVAFILES:b)

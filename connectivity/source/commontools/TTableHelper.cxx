@@ -95,14 +95,53 @@ public:
 }
 namespace connectivity
 {
+    ::rtl::OUString lcl_getServiceNameForSetting(const Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,const ::rtl::OUString& i_sSetting)
+    {
+        ::rtl::OUString sSupportService;
+        Any aValue;
+        if ( ::dbtools::getDataSourceSetting(_xConnection,i_sSetting,aValue) )
+        {
+            aValue >>= sSupportService;
+        }
+        return sSupportService;
+    }
     struct OTableHelperImpl
     {
         TKeyMap  m_aKeys;
-        Reference< ::com::sun::star::sdbc::XDatabaseMetaData >  m_xMetaData;
+        // helper services which can be provided by extensions
+        Reference< ::com::sun::star::sdb::tools::XTableRename>      m_xRename;
+        Reference< ::com::sun::star::sdb::tools::XTableAlteration>  m_xAlter;
+        Reference< ::com::sun::star::sdb::tools::XKeyAlteration>    m_xKeyAlter;
+        Reference< ::com::sun::star::sdb::tools::XIndexAlteration>  m_xIndexAlter;
+
+        Reference< ::com::sun::star::sdbc::XDatabaseMetaData >      m_xMetaData;
         Reference< ::com::sun::star::sdbc::XConnection >            m_xConnection;
         ::comphelper::ImplementationReference< OTableContainerListener,XContainerListener>
                                     m_xTablePropertyListener;
         ::std::vector< ColumnDesc > m_aColumnDesc;
+        OTableHelperImpl(const Reference< ::com::sun::star::sdbc::XConnection >& _xConnection)
+            : m_xConnection(_xConnection)
+        {
+            try
+            {
+                m_xMetaData = m_xConnection->getMetaData();
+                Reference<XMultiServiceFactory> xFac(_xConnection,UNO_QUERY);
+                if ( xFac.is() )
+                {
+                    static const ::rtl::OUString s_sTableRename(RTL_CONSTASCII_USTRINGPARAM("TableRenameServiceName"));
+                    m_xRename.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,s_sTableRename)),UNO_QUERY);
+                    static const ::rtl::OUString s_sTableAlteration(RTL_CONSTASCII_USTRINGPARAM("TableAlterationServiceName"));
+                    m_xAlter.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,s_sTableAlteration)),UNO_QUERY);
+                    static const ::rtl::OUString s_sKeyAlteration(RTL_CONSTASCII_USTRINGPARAM("KeyAlterationServiceName"));
+                    m_xKeyAlter.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,s_sKeyAlteration)),UNO_QUERY);
+                    static const ::rtl::OUString s_sIndexAlteration(RTL_CONSTASCII_USTRINGPARAM("IndexAlterationServiceName"));
+                    m_xIndexAlter.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,s_sIndexAlteration)),UNO_QUERY);
+                }
+            }
+            catch(const Exception&)
+            {
+            }
+        }
     };
 }
 
@@ -110,16 +149,8 @@ OTableHelper::OTableHelper( sdbcx::OCollection* _pTables,
                            const Reference< XConnection >& _xConnection,
                            sal_Bool _bCase)
     :OTable_TYPEDEF(_pTables,_bCase)
-    ,m_pImpl(new OTableHelperImpl)
+    ,m_pImpl(new OTableHelperImpl(_xConnection))
 {
-    try
-    {
-        m_pImpl->m_xConnection = _xConnection;
-        m_pImpl->m_xMetaData = m_pImpl->m_xConnection->getMetaData();
-    }
-    catch(const Exception&)
-    {
-    }
 }
 // -------------------------------------------------------------------------
 OTableHelper::OTableHelper( sdbcx::OCollection* _pTables,
@@ -137,16 +168,8 @@ OTableHelper::OTableHelper( sdbcx::OCollection* _pTables,
                                           _Description,
                                           _SchemaName,
                                           _CatalogName)
-                        ,m_pImpl(new OTableHelperImpl)
+                        ,m_pImpl(new OTableHelperImpl(_xConnection))
 {
-    try
-    {
-        m_pImpl->m_xConnection = _xConnection;
-        m_pImpl->m_xMetaData = m_pImpl->m_xConnection->getMetaData();
-    }
-    catch(const Exception&)
-    {
-    }
 }
 // -----------------------------------------------------------------------------
 OTableHelper::~OTableHelper()
@@ -480,24 +503,31 @@ void SAL_CALL OTableHelper::rename( const ::rtl::OUString& newName ) throw(SQLEx
 
     if(!isNew())
     {
-        ::rtl::OUString sSql = getRenameStart();
-        ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
-
-        ::rtl::OUString sCatalog,sSchema,sTable;
-        ::dbtools::qualifiedNameComponents(getMetaData(),newName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
-
-        ::rtl::OUString sComposedName;
-        sComposedName = ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,sal_True,::dbtools::eInDataManipulation);
-        sSql += sComposedName
-             + ::rtl::OUString::createFromAscii(" TO ");
-        sComposedName = ::dbtools::composeTableName(getMetaData(),sCatalog,sSchema,sTable,sal_True,::dbtools::eInDataManipulation);
-        sSql += sComposedName;
-
-        Reference< XStatement > xStmt = m_pImpl->m_xConnection->createStatement(  );
-        if ( xStmt.is() )
+        if ( m_pImpl->m_xRename.is() )
         {
-            xStmt->execute(sSql);
-            ::comphelper::disposeComponent(xStmt);
+            m_pImpl->m_xRename->rename(this,newName);
+        }
+        else
+        {
+            ::rtl::OUString sSql = getRenameStart();
+            ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
+
+            ::rtl::OUString sCatalog,sSchema,sTable;
+            ::dbtools::qualifiedNameComponents(getMetaData(),newName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
+
+            ::rtl::OUString sComposedName;
+            sComposedName = ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,sal_True,::dbtools::eInDataManipulation);
+            sSql += sComposedName
+                 + ::rtl::OUString::createFromAscii(" TO ");
+            sComposedName = ::dbtools::composeTableName(getMetaData(),sCatalog,sSchema,sTable,sal_True,::dbtools::eInDataManipulation);
+            sSql += sComposedName;
+
+            Reference< XStatement > xStmt = m_pImpl->m_xConnection->createStatement(  );
+            if ( xStmt.is() )
+            {
+                xStmt->execute(sSql);
+                ::comphelper::disposeComponent(xStmt);
+            }
         }
 
         OTable_TYPEDEF::rename(newName);
@@ -576,3 +606,24 @@ Reference< XConnection> OTableHelper::getConnection() const
 {
     return m_pImpl->m_xConnection;
 }
+// -----------------------------------------------------------------------------
+Reference< ::com::sun::star::sdb::tools::XTableRename>      OTableHelper::getRenameService() const
+{
+    return m_pImpl->m_xRename;
+}
+// -----------------------------------------------------------------------------
+Reference< ::com::sun::star::sdb::tools::XTableAlteration>  OTableHelper::getAlterService() const
+{
+    return m_pImpl->m_xAlter;
+}
+// -----------------------------------------------------------------------------
+Reference< ::com::sun::star::sdb::tools::XKeyAlteration>  OTableHelper::getKeyService() const
+{
+    return m_pImpl->m_xKeyAlter;
+}
+// -----------------------------------------------------------------------------
+Reference< ::com::sun::star::sdb::tools::XIndexAlteration>  OTableHelper::getIndexService() const
+{
+    return m_pImpl->m_xIndexAlter;
+}
+// -----------------------------------------------------------------------------

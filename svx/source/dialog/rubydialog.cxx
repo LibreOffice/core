@@ -321,7 +321,7 @@ void SvxRubyDialog::Activate()
     aStylistPB.Enable(bEnable);
     //get selection from current view frame
     SfxViewFrame* pCurFrm = SfxViewFrame::Current();
-    Reference< XController > xCtrl = pCurFrm->GetFrame()->GetController();
+    Reference< XController > xCtrl = pCurFrm->GetFrame().GetController();
     pImpl->SetController(xCtrl);
     if(pImpl->HasSelectionChanged())
     {
