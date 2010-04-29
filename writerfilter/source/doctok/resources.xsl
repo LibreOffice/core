@@ -301,14 +301,15 @@ class </xsl:text>
     */
     static sal_uInt32 getSize() { return </xsl:text>
     <xsl:value-of select='$size'/>
-    <xsl:text>; }
-
+    <xsl:text>; }</xsl:text>
+    <xsl:if test="not(.//UML:Stereotype[@xmi.ref='ww8nocalcsize'])">
+      <xsl:text>
     /**
         Calculate actual size.
     */  
-    sal_uInt32 calcSize();
-
-    </xsl:text>
+    sal_uInt32 calcSize(); 
+      </xsl:text>
+    </xsl:if>
     <xsl:if test='.//UML:Stereotype[@xmi.idref ="plcf"]'>
       <xsl:text>
     /**

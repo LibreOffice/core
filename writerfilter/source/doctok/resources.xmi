@@ -4797,6 +4797,9 @@
             <UML:Stereotype xmi.idref="ww8nopayloadoffset"/>
           </UML:ModelElement.stereotype>
           <UML:Classifier.feature>
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8nocalcsize"/>
+          </UML:ModelElement.stereotype>
             <UML:Attribute name="size">
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>
@@ -22909,6 +22912,9 @@
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8resource"/>
           </UML:ModelElement.stereotype>
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8nocalcsize"/>
+          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>10</UML:TaggedValue.dataValue>
@@ -32226,6 +32232,9 @@
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8resource"/>
           </UML:ModelElement.stereotype>
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8nopayloadoffset"/>
+          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>0xC60D</UML:TaggedValue.dataValue>
@@ -38875,6 +38884,9 @@
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8resource"/>
           </UML:ModelElement.stereotype>
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8nocalcsize"/>
+          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>0xD609</UML:TaggedValue.dataValue>
@@ -40206,6 +40218,9 @@
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8resource"/>
           </UML:ModelElement.stereotype>
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8nocalcsize"/>
+          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>0xD61A</UML:TaggedValue.dataValue>
@@ -40269,6 +40284,9 @@
           </UML:ModelElement.stereotype>
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8resource"/>
+          </UML:ModelElement.stereotype>
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8nocalcsize"/>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
@@ -40334,6 +40352,9 @@
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8resource"/>
           </UML:ModelElement.stereotype>
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8nocalcsize"/>
+          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>0xD61C</UML:TaggedValue.dataValue>
@@ -40398,6 +40419,9 @@
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8resource"/>
           </UML:ModelElement.stereotype>
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8nocalcsize"/>
+          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>0xD61D</UML:TaggedValue.dataValue>
@@ -40461,6 +40485,9 @@
           </UML:ModelElement.stereotype>
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8resource"/>
+          </UML:ModelElement.stereotype>
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8nocalcsize"/>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
@@ -40974,6 +41001,9 @@
           </UML:ModelElement.stereotype>
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
+          </UML:ModelElement.stereotype>
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8nocalcsize"/>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
