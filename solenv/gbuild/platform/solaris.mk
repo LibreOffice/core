@@ -33,15 +33,15 @@ gb_CXX := CC
 gb_GCCP := cc
 
 gb_OSDEFS := \
+    -D$(OS) \
+    -D$(GUI) \
     -DSYSV \
     -DSUN \
     -DSUN4 \
     -D_REENTRANT \
     -D_POSIX_PTHREAD_SEMANTICS \
     -D_PTHREADS \
-    -DSOLARIS \
     -DUNIX \
-    -D$(GUI) \
 #	$(PTHREAD_CFLAGS) \
 
 gb_COMPILERDEFS := \
@@ -49,16 +49,10 @@ gb_COMPILERDEFS := \
 #	-D$(CVER) \
 #	-DCVER=$(CVER) \
 
-#ifeq ($(CPUNAME),X86_64)
-#gb_CPUDEFS := -D$(CPUNAME)
-#else
-#gb_CPUDEFS := -DX86
-#endif
-
 ifeq ($(CPUNAME),INTEL)
-gb_CFLAGS_ARCH :=
+gb_CPUDEFS :=
 else # ifeq ($(CPUNAME),SPARC)
-gb_CFLAGS_ARCH := -D__sparcv8plus
+gb_CPUDEFS := -D__sparcv8plus
 endif
 
 gb_CFLAGS := \
@@ -67,7 +61,6 @@ gb_CFLAGS := \
     -mt \
     -xCC \
     -xc99=none \
-    $(gb_CFLAGS_ARCH) \
 
 gb_CXXFLAGS := \
     -temp=/tmp \
@@ -220,10 +213,10 @@ endif
 
 ifeq ($(CPUNAME),INTEL)
 gb_Library_OOOEXT := si$(gb_Library_PLAINEXT)
-gb_Library_UNOEXT := si.uno$(gb_Library_PLAINEXT)
+gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 else # ifeq ($(CPUNAME),SPARC)
 gb_Library_OOOEXT := ss$(gb_Library_PLAINEXT)
-gb_Library_UNOEXT := ss.uno$(gb_Library_PLAINEXT)
+gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 endif
 
 gb_Library_PLAINLIBS += \
