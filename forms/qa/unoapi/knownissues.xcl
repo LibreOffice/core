@@ -123,3 +123,4 @@ forms.OFileControlModel::com::sun::star::form::FormControlModel
 
 ### i111148 ###
 forms.OImageControlModel::com::sun::star::beans::XMultiPropertySet
+forms.OImageControlModel::com::sun::star::beans::XPropertySet
