@@ -167,8 +167,8 @@
     $html_last_updated = 0;
     %jobs_hash = ();
     $html_path = undef;
-    $html_file = CorrectPath($ENV{SOLARSRC} . '/' . $ENV{INPATH}. '.build.html');
     $build_finished = 0;
+    $html_file = '';
     %had_error = (); # hack for misteriuos windows problems - try run dmake 2 times if first time there was an error
     $mkout = CorrectPath("$ENV{SOLARENV}/bin/mkout.pl");
     %weights_hash = (); # hash contains info about how many modules are dependent from one module
@@ -209,7 +209,6 @@
 
     get_options();
 
-    $html_file = CorrectPath($html_path . '/' . $ENV{INPATH}. '.build.html') if (defined $html_path);
 #    my $temp_html_file = CorrectPath($tmp_dir. '/' . $ENV{INPATH}. '.build.html');
     get_build_modes();
     %deliver_env = ();
@@ -225,12 +224,17 @@
         $deliver_env{'OUTPATH'}++;
         $deliver_env{'L10N_framework'}++;
     };
+    $StandDir = get_stand_dir();   # This also sets $initial_module
+    if (defined $html_path) {
+        $html_file = CorrectPath($html_path . '/' . $ENV{INPATH}. '.build.html');
+    } else {
+        $html_file = CorrectPath($ENV{SOLARSRC} . '/../' . $ENV{INPATH}. '.build.html');
+    };
 
     if ($generate_config && ($clear_config || (scalar keys %remove_from_config)||(scalar keys %add_to_config))) {
         generate_config_file();
         exit 0;
     }
-    $StandDir = get_stand_dir();   # This also sets $initial_module
     get_module_and_buildlist_paths();
     provide_consistency() if (defined $ENV{CWS_WORK_STAMP} && defined($ENV{COMMON_ENV_TOOLS}));
 
