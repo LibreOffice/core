@@ -180,6 +180,26 @@ interface XItemList
             )
             raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
+    /** associates an implementation dependend value with the given list item.
+
+        <p>You can use this to store data for an item which does not interfere with the displayed
+        text and image, but can be used by the client of the list box for an arbitrary purpose.</p>
+
+        @param Position
+            the position of the item whose data value should be set. Must be greater or equal to 0, and
+            lesser than <member>ItemCount</member>.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <code>Position</code> is invalid.
+
+        @see getUserData
+    */
+    void    setUserData(
+                [in] long Position,
+                [in] any DataValue
+            )
+            raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
     /** retrieves the text of an existing item
 
         @param Position
@@ -219,6 +239,23 @@ interface XItemList
     */
     ::com::sun::star::beans::Pair< string, string >
             getItemTextAndImage(
+                [in] long Position
+            )
+            raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** retrieves the implementation dependend value associated with the given list item.
+        @see setUserData
+
+        @param Position
+            the position of the item whose data value should be retrieved. Must be greater or equal to 0, and
+            lesser than <member>ItemCount</member>.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <code>Position</code> is invalid.
+
+        @see getUserData
+    */
+    any     getUserData(
                 [in] long Position
             )
             raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
