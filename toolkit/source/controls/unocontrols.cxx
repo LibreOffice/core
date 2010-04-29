@@ -1851,19 +1851,19 @@ struct ListItem
 {
     ::rtl::OUString ItemText;
     ::rtl::OUString ItemImageURL;
-    Any             ItemUserData;
+    Any             ItemData;
 
     ListItem()
         :ItemText()
         ,ItemImageURL()
-        ,ItemUserData()
+        ,ItemData()
     {
     }
 
     ListItem( const ::rtl::OUString& i_rItemText )
         :ItemText( i_rItemText )
         ,ItemImageURL()
-        ,ItemUserData()
+        ,ItemData()
     {
     }
 };
@@ -2168,11 +2168,11 @@ void SAL_CALL UnoControlListBoxModel::setItemTextAndImage( ::sal_Int32 i_nPositi
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void SAL_CALL UnoControlListBoxModel::setUserData( ::sal_Int32 i_nPosition, const Any& i_rDataValue ) throw (IndexOutOfBoundsException, RuntimeException)
+void SAL_CALL UnoControlListBoxModel::setItemData( ::sal_Int32 i_nPosition, const Any& i_rDataValue ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     ListItem& rItem( m_pData->getItem( i_nPosition ) );
-    rItem.ItemUserData = i_rDataValue;
+    rItem.ItemData = i_rDataValue;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -2200,11 +2200,11 @@ beans::Pair< ::rtl::OUString, ::rtl::OUString > SAL_CALL UnoControlListBoxModel:
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-Any SAL_CALL UnoControlListBoxModel::getUserData( ::sal_Int32 i_nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
+Any SAL_CALL UnoControlListBoxModel::getItemData( ::sal_Int32 i_nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     const ListItem& rItem( m_pData->getItem( i_nPosition ) );
-    return rItem.ItemUserData;
+    return rItem.ItemData;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
