@@ -147,6 +147,11 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/layout/vcl/wrapper \
 ))
 
+ifeq ($(GUIBASE),aqua)
+$(eval $(call gb_Library_set_cxxflags,tk,\
+    $$(CXXFLAGS) $(gb_OBJCXXFLAGS)))
+endif
+
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_linked_libs,tk,\
     X11 \
