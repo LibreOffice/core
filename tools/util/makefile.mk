@@ -87,19 +87,6 @@ SHL1STDLIBS += $(ZLIB3RDLIB) \
 
 LIB1FILES+=  $(SLB)$/dll.lib
 
-
-.IF "$(BIG_TOOLS)"!=""
-.IF "$(GUI)"=="WNT"
-#SOLARLIBDIR=$(SOLARVER)\$((INPATH)\lib
-#SOLARLIBDIR=..\$(INPATH)\lib
-# bei lokalen osl rtl oder vos das SOLARLIBDIR bitte patchen !
-LIB1FILES+= $(SOLARLIBDIR)\xosl.lib \
-            $(SOLARLIBDIR)\xrtl.lib \
-            $(SOLARLIBDIR)\xvos.lib
-SHL1STDLIBS+=   $(WSOCK32LIB)
-.ENDIF
-.ENDIF          # "$(BIG_TOOLS)"!=""
-
 # --- TOOLS.DLL ---
 
 SHL1TARGET=     tl$(DLLPOSTFIX)

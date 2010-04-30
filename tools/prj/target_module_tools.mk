@@ -54,3 +54,6 @@ $(eval $(call gb_Module_read_includes,tools,\
 #COPY tools/unxlngx6.pro/lib/stdstrm.lib unxlngx6.pro/lib/stdstrm.lib
 #COPY tools/unxlngx6.pro/obj/pathutils.obj unxlngx6.pro/lib/pathutils-obj.obj
 #COPY tools/unxlngx6.pro/slo/pathutils.obj unxlngx6.pro/lib/pathutils-slo.obj
+
+#todo: link tools dynamically everywhere
+#todo: ALWAYSDBGFLAG etc.

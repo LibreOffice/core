@@ -1,7 +1,6 @@
 tl	tools	:	cppu external offuh vos ZLIB:zlib EXPAT:expat basegfx comphelper i18npool NULL
 tl	tools								usr1	-	all	tl_mkout NULL
 tl	tools\bootstrp\isdll				get		-	all	tl_bsisdll NULL
-tl	tools\bootstrp\addexes				get		-	all	tl_bsexes NULL
 tl	tools\inc							nmake	-	all	tl_inc NULL
 tl	tools\prj							get		-	all	tl_prj NULL
 tl	tools\prj							usr7	-	all	tl_deliver NULL
