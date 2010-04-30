@@ -447,7 +447,7 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
         case tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED:
         {
             ConnectToController();
-            mrController.GetPageSelector().GetCoreSelection();
+            //            mrController.GetPageSelector().GetCoreSelection();
             UpdateEditMode();
         }
         break;

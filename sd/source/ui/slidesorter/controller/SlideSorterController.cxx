@@ -833,6 +833,8 @@ Rectangle  SlideSorterController::Rearrange (bool bForce)
 
         // Keep the current slide in the visible area.
         GetVisibleAreaManager().RequestCurrentSlideVisible();
+
+        mrView.RequestRepaint();
     }
 
     return aNewContentArea;

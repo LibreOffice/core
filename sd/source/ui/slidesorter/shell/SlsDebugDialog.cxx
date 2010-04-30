@@ -870,8 +870,10 @@ SlideSorterDebugDialog::SlideSorterDebugDialog (SlideSorter& rSlideSorter)
     const char* aValues[] = {
         "Normal",
         "Selected",
-        "SelectedAndFocused",
-        "MouseOver"
+        "Selected & Focused",
+        "MouseOver",
+        "MouseOver & Selected & FocusedPage",
+        "FocusedPage"
     };
     maControls.push_back(new ChoiceControl(
         mpTopLevelWindow,
