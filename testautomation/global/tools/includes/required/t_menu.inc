@@ -687,11 +687,14 @@ end function
 
 '*******************************************************************************
 
-function hGetWindowCaption(sApplication as string, optional bAll as boolean)
+function hGetWindowCaption( sApplication as string, optional bAll as boolean )
 
     '///<b> function hGetWindowCaption () </b>///'
     '///+ just returns the string from the application main window ///'
     '///+ If optional parameter = true, thenn go throught all applications and get caption; return array ///'
+
+    ' BEWARE: THIS FUNCTION MODIFIES ITS FUNCTION PARAMETER UNDER CERTAIN
+    '         CONDITIONS!
 
     dim sTemp as string
     dim aApplication() as string
@@ -699,7 +702,7 @@ function hGetWindowCaption(sApplication as string, optional bAll as boolean)
     dim iTimes as integer
     dim i as integer
 
-    aApplication = array("SWRITER","SGLOBAL","SWEB","SCALC","SDRAW","SIMPRESS","SMATH","BASIC","BACK")
+    aApplication = array("SWRITER","SGLOBAL","SWEB","SCALC","SDRAW","SIMPRESS","SMATH","BASIC","DATABASE","SOFFICE")
     if (isMissing(bAll) OR (NOT bAll)) then
         iTimes = 0
     else
@@ -756,7 +759,13 @@ function hGetWindowCaption(sApplication as string, optional bAll as boolean)
                     sTemp = BasicIDE.caption
                 catch
                 endcatch
-            Case "BACK"
+            Case "DATABASE"
+                Kontext "DATABASE"
+                try
+                    sTemp = DataBase.caption
+                catch
+                endcatch
+            Case "SOFFICE"
                 Kontext "DocumentBackground"
                 try
                     sTemp = DocumentBackground.caption
@@ -782,7 +791,7 @@ end function
 
 '*******************************************************************************
 
-function fSplitWindowTitle(sInString as string)
+function fSplitWindowTitle( sInString as string )
 
     dim a, b, x, i, iProductname as integer
     dim sTemp() as string

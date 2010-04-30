@@ -73,7 +73,7 @@ function hGetOleObjectName( cApplication as string ) as string
 
     ' The application names for the API are case sensitive so we cannot use gApplication
     select case ( cApplication )
-    case "WRITER" : Application_API_Name = "Writer
+    case "WRITER" : Application_API_Name = "Writer"
     case "CALC"   : Application_API_Name = "Calc"
     case "IMPRESS": Application_API_Name = "Impress"
     case "DRAW"   : Application_API_Name = "Draw"
