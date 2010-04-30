@@ -61,6 +61,7 @@ ifeq ($(OS),LINUX)
 $(eval $(call gb_Executable_add_linked_libs,g2g,\
    pthread \
    dl \
+   X11 \
 ))
 endif
 # vim: set noet sw=4 ts=4:
