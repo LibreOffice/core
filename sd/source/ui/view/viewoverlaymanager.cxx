@@ -83,7 +83,7 @@ BitmapEx ViewOverlayManager::maSmallButtonImages[BMP_PLACEHOLDER_SMALL_END - BMP
 BitmapEx ViewOverlayManager::maLargeButtonImages[BMP_PLACEHOLDER_LARGE_END - BMP_PLACEHOLDER_LARGE_START];
 
 static USHORT gButtonSlots[] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
-static USHORT gButtonToolTips[] = { STR_RESET_LAYOUT, STR_INSERT_TABLE, STR_INSERT_CHART, STR_INSERT_PICTURE,STR_INSERT_MOVIE };
+static USHORT gButtonToolTips[] = { STR_INSERT_TABLE, STR_INSERT_CHART, STR_INSERT_PICTURE, STR_INSERT_MOVIE };
 
 // --------------------------------------------------------------------
 
