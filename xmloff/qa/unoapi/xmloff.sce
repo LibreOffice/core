@@ -10,8 +10,8 @@
 -o xmloff.Draw.XMLImporter
 -o xmloff.Draw.XMLMetaExporter
 #i111200 -o xmloff.Draw.XMLMetaImporter
--o xmloff.Draw.XMLSettingsExporter
--o xmloff.Draw.XMLSettingsImporter
+#i111287 -o xmloff.Draw.XMLSettingsExporter
+#i111287 -o xmloff.Draw.XMLSettingsImporter
 #i87695 -o xmloff.Draw.XMLStylesExporter
 -o xmloff.Draw.XMLStylesImporter
 #i111224 -o xmloff.Impress.XMLContentExporter
@@ -20,7 +20,7 @@
 #i111111# -o xmloff.Impress.XMLImporter
 -o xmloff.Impress.XMLMetaExporter
 -o xmloff.Impress.XMLMetaImporter
--o xmloff.Impress.XMLSettingsExporter
--o xmloff.Impress.XMLSettingsImporter
+#i111287 -o xmloff.Impress.XMLSettingsExporter
+#i111287 -o xmloff.Impress.XMLSettingsImporter
 #i87695 -o xmloff.Impress.XMLStylesExporter
 -o xmloff.Impress.XMLStylesImporter
