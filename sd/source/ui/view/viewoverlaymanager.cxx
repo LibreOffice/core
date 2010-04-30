@@ -112,9 +112,6 @@ public:
     /** returns true if the SmartTag consumes this event. */
     virtual bool KeyInput( const KeyEvent& rKEvt );
 
-    /** returns true if the SmartTag consumes this event. */
-    virtual bool RequestHelp( const HelpEvent& rHEvt );
-
     BitmapEx createOverlayImage( int nHighlight = -1 );
 
 protected:
@@ -323,8 +320,13 @@ bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& /*rMEvt*/, SmartHd
 
         if( mxPlaceholderObj.get() )
         {
-            SdrPageView* pPV = mrView.GetSdrPageView();
-            mrView.MarkObj(mxPlaceholderObj.get(), pPV, FALSE);
+            // mark placeholder if it is not currently marked (or if also others are marked)
+            if( !mrView.IsObjMarked( mxPlaceholderObj.get() ) || (mrView.GetMarkedObjectList().GetMarkCount() != 1) )
+            {
+                SdrPageView* pPV = mrView.GetSdrPageView();
+                mrView.UnmarkAllObj(pPV );
+                mrView.MarkObj(mxPlaceholderObj.get(), pPV, FALSE);
+            }
         }
 
         mrView.GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( nSID, SFX_CALLMODE_ASYNCHRON);
@@ -353,20 +355,6 @@ bool ChangePlaceholderTag::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-/** returns true if the SmartTag consumes this event. */
-bool ChangePlaceholderTag::RequestHelp( const HelpEvent& /*rHEvt*/ )
-{
-/*
-    Rectangle aItemRect( rHEvt.GetMousePosPixel(), Size(1,1) );
-    String aHelpText(RTL_CONSTASCII_USTRINGPARAM("I'm a help text"));
-    if( rHEvt.GetMode() == HELPMODE_BALLOON )
-        Help::ShowBalloon( static_cast< ::Window* >(mrView.GetFirstOutputDevice()), aItemRect.Center(), aItemRect, aHelpText);
-    else
-        Help::ShowQuickHelp( static_cast< ::Window* >(mrView.GetFirstOutputDevice()), aItemRect, aHelpText );
-*/
-    return false;
-}
-
 // --------------------------------------------------------------------
 
 BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
@@ -385,10 +373,7 @@ BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
 
         Size aShapeSizePix = pDev->LogicToPixel(rSnapRect.GetSize());
         long nShapeSizePix = std::min(aShapeSizePix.Width(),aShapeSizePix.Height());
-/*
-        if( 50 > nShapeSizePix )
-            return;
- */
+
         BitmapEx* pImages = (nShapeSizePix > 250) ? &ViewOverlayManager::maLargeButtonImages[0] : &ViewOverlayManager::maSmallButtonImages[0];
 
         Size aSize( pImages->GetSizePixel() );
@@ -439,34 +424,14 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
         Point aPos( rSnapRect.Center() );
         aPos.X() -= all_width >> 1;
         aPos.Y() -= all_height >> 1;
-/*
-        long nStartX = aPos.X();
 
-        for( int i = 0, c = 0; i < 4; i++ )
-        {
-            Image aImg( pImages[i] );
-            Image aImgMO( pImages[i+4] );
-  */
-            ImageButtonHdl* pHdl = new ImageButtonHdl( xThis, /* gButtonSlots[i], aImg, aImgMO, */ aPoint );
-            pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
-            pHdl->SetPageView( mrView.GetSdrPageView() );
+        ImageButtonHdl* pHdl = new ImageButtonHdl( xThis, aPoint );
+        pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
+        pHdl->SetPageView( mrView.GetSdrPageView() );
 
-            pHdl->SetPos( aPos );
+        pHdl->SetPos( aPos );
 
-            rHandlerList.AddHdl( pHdl );
-/*
-            if( ++c == nColumns )
-            {
-                aPos.X() = nStartX;
-                aPos.Y() += aButtonSize.Height();
-                c = 0;
-            }
-            else
-            {
-                aPos.X() += aButtonSize.Width();
-            }
-        }
-*/
+        rHandlerList.AddHdl( pHdl );
     }
 }
 
