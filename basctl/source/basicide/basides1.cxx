@@ -430,11 +430,31 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             {
                 String aNewName( rModName.GetValue() );
                 String aOldName( pWin->GetName() );
-
                 if ( aNewName != aOldName )
                 {
-                    if ( ( pWin->IsA( TYPE( ModulWindow ) ) && ((ModulWindow*)pWin)->RenameModule( aNewName ) )
-                         || ( pWin->IsA( TYPE( DialogWindow ) ) && ((DialogWindow*)pWin)->RenameDialog( aNewName ) ) )
+                    bool bRenameOk = false;
+                    if ( pWin->IsA( TYPE( ModulWindow ) ) )
+                    {
+                        ModulWindow* pModWin = (ModulWindow*)pWin;
+                        String aLibName = ( pModWin->GetLibName() );
+                        ScriptDocument aDocument( pWin->GetDocument() );
+
+                        if ( BasicIDE::RenameModule( pModWin, aDocument, aLibName,  aOldName, aNewName ) )
+                        {
+                            bRenameOk = true;
+                            // Because we listen for container events for script
+                            // modules, rename will delete the 'old' window
+                            // pWin has been invalidated, restore now
+                            pWin = FindBasWin( aDocument, aLibName, aNewName, TRUE );
+                        }
+
+                    }
+                    else if ( pWin->IsA( TYPE( DialogWindow ) ) )
+                    {
+                        DialogWindow* pDlgWin = (DialogWindow*)pWin;
+                        bRenameOk = pDlgWin->RenameDialog( aNewName );
+                    }
+                    if ( bRenameOk )
                     {
                         BasicIDE::MarkDocumentModified( pWin->GetDocument() );
                     }

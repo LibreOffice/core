@@ -1223,19 +1223,6 @@ void __EXPORT ModulWindow::DoScroll( ScrollBar* pCurScrollBar )
 }
 
 
-BOOL ModulWindow::RenameModule( const String& rNewName )
-{
-    if ( !BasicIDE::RenameModule( this, GetDocument(), GetLibName(), GetName(), rNewName ) )
-        return FALSE;
-
-    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-    if ( pBindings )
-        pBindings->Invalidate( SID_DOC_MODIFIED );
-
-    return TRUE;
-}
-
-
 BOOL __EXPORT ModulWindow::IsModified()
 {
     return GetEditEngine() ? GetEditEngine()->IsModified() : FALSE;

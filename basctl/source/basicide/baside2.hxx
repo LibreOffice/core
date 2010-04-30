@@ -390,7 +390,7 @@ public:
     virtual void    SetReadOnly( BOOL bReadOnly );
     virtual BOOL    IsReadOnly();
 
-    StarBASIC*      GetBasic() { return xBasic; }
+    StarBASIC*      GetBasic() { XModule(); return xBasic; }
 
     SbModule*       GetSbModule() { return xModule; }
     void            SetSbModule( SbModule* pModule ) { xModule = pModule; }
@@ -418,7 +418,6 @@ public:
 //  void            InsertFromObjectCatalog( ObjectCatalog* pObjDlg );
 
     BOOL            ToggleBreakPoint( ULONG nLine );
-    BOOL            RenameModule( const String& rNewName );
 
     BasicStatus&    GetBasicStatus() { return aStatus; }
 
