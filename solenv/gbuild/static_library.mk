@@ -76,9 +76,13 @@ $(eval $(foreach method,\
     add_cobjects \
     add_cxxobject \
     add_cxxobjects \
+    add_objcxxobject \
+    add_objcxxobjects \
     add_exception_objects \
     add_noexception_objects \
+    set_cflags \
     set_cxxflags \
+    set_objcxxflags \
     set_defs \
     set_include \
     set_ldflags \

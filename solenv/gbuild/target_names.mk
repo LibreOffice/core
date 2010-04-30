@@ -30,6 +30,7 @@
 
 gb_CObject_get_target = $(WORKDIR)/CObject/$(1).o
 gb_CxxObject_get_target = $(WORKDIR)/CxxObject/$(1).o
+gb_ObjCxxObject_get_target = $(WORKDIR)/ObjCxxObject/$(1).o
 gb_LinkTarget_get_target = $(WORKDIR)/LinkTarget/$(1)
 
 define gb_LinkTarget_get_layer
@@ -97,6 +98,7 @@ $(eval $(call gb_Helper_make_outdir_clean_targets,\
 $(eval $(call gb_Helper_make_dep_targets,\
     CObject \
     CxxObject \
+    ObjCxxObject \
     LinkTarget \
     SrsPartTarget \
     SrsTarget \

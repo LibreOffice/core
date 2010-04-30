@@ -63,6 +63,25 @@ $(call gb_CxxObject_get_dep_target,%) :
 
 gb_CxxObject_CxxObject =
 
+# ObjCxxObject class
+
+gb_ObjCxxObject_get_source = $(SRCDIR)/$(1).mm
+# defined by platform
+#  gb_ObjCxxObject__command
+#  gb_ObjCxxObject__command_dep
+
+$(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,%)
+    $(call gb_ObjCxxObject__command,$@,$*,$<,$(DEFS),$(OBJCXXFLAGS),$(INCLUDE_STL) $(INCLUDE))
+
+$(call gb_ObjCxxObject_get_dep_target,%) : $(call gb_ObjCxxObject_get_source,%)
+    $(call gb_ObjCxxObject__command_dep,$@,$*,$<,$(DEFS),$(OBJCXXFLAGS),$(INCLUDE_STL) $(INCLUDE))
+
+$(call gb_ObjCxxObject_get_dep_target,%) :
+    $(error unable to find Objective C++ file $(call gb_ObjCxxObject_get_source,$*))
+
+gb_ObjCxxObject_ObjCxxObject =
+
+
 
 # LinkTarget class
 
@@ -82,6 +101,8 @@ $(call gb_LinkTarget_get_clean_target,%) :
             $(foreach object,$(COBJECTS),$(call gb_CObject_get_dep_target,$(object))) \
             $(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
             $(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_dep_target,$(object))) \
+            $(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
+            $(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_dep_target,$(object))) \
             $(call gb_LinkTarget_get_target,$*) \
             $(call gb_LinkTarget_get_dep_target,$*) \
             $(call gb_LinkTarget_get_headers_target,$*) \
@@ -95,15 +116,16 @@ $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     cat $(gb_Helper_NULLFILE)\
         $(foreach object,$(3),$(call gb_CObject_get_dep_target,$(object))) \
-        $(foreach object,$(4),$(call gb_CxxObject_get_dep_target,$(object))) > $(1))
+        $(foreach object,$(4),$(call gb_CxxObject_get_dep_target,$(object))) \
+        $(foreach object,$(5),$(call gb_ObjCxxObject_get_dep_target,$(object))) > $(1))
 endef
 
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(call gb_LinkTarget_get_dep_target,%)
-    $(call gb_LinkTarget__command_dep,$(call gb_LinkTarget_get_dep_target,$*),$*,$(COBJECTS),$(CXXOBJECTS))
-    $(call gb_LinkTarget__command,$@,$*,$(TARGETTYPE_FLAGS) $(LDFLAGS),$(LINKED_LIBS),$(LINKED_STATIC_LIBS),$(COBJECTS),$(CXXOBJECTS))
+    $(call gb_LinkTarget__command_dep,$(call gb_LinkTarget_get_dep_target,$*),$*,$(COBJECTS),$(CXXOBJECTS),$(OBJCXXOBJECTS))
+    $(call gb_LinkTarget__command,$@,$*,$(TARGETTYPE_FLAGS) $(LDFLAGS),$(LINKED_LIBS),$(LINKED_STATIC_LIBS),$(COBJECTS),$(CXXOBJECTS),$(OBJCXXOBJECTS))
 
 $(call gb_LinkTarget_get_dep_target,%) : $(call gb_LinkTarget_get_headers_target,%)
-    $(call gb_LinkTarget__command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS))
+    $(call gb_LinkTarget__command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS),$(OBJCXXOBJECTS))
 
 define gb_LinkTarget__get_external_headers_check
 ifneq ($$(SELF),$$*)
@@ -134,6 +156,11 @@ $(call gb_LinkTarget_get_target,$(1)) : CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : CXXOBJECTS := 
+$(call gb_LinkTarget_get_dep_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS)
+$(call gb_LinkTarget_get_clean_target,$(1)) \
+$(call gb_LinkTarget_get_dep_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : OBJCXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS)
 $(call gb_LinkTarget_get_target,$(1)) : DLLTARGET := 
@@ -166,6 +193,11 @@ endef
 define gb_LinkTarget_set_cxxflags
 $(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXFLAGS := $(2)
+endef
+
+define gb_LinkTarget_set_objcxxflags
+$(call gb_LinkTarget_get_target,$(1)) \
+$(call gb_LinkTarget_get_dep_target,$(1)) : OBJCXXFLAGS := $(2)
 endef
 
 define gb_LinkTarget_set_include
@@ -232,6 +264,20 @@ $(call gb_CxxObject_get_target,$(2)) : CXXFLAGS += $(3)
 
 endef
 
+define gb_LinkTarget_add_objcxxobject
+$(call gb_LinkTarget_get_target,$(1)) : OBJCXXOBJECTS += $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : OBJCXXOBJECTS += $(2)
+$(call gb_LinkTarget_get_clean_target,$(1)) : OBJCXXOBJECTS += $(2)
+
+$(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_ObjCxxObject_get_dep_target,$(2))
+$(call gb_LinkTarget_get_target,$(1)) : $(call gb_ObjCxxObject_get_target,$(2))
+$(call gb_ObjCxxObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
+$(call gb_ObjCxxObject_get_target,$(2)) : OBJCXXFLAGS += $(3)
+
+endef
+
+
+
 define gb_LinkTarget_add_noexception_object
 $(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_NOEXCEPTIONFLAGS))
 endef
@@ -246,6 +292,10 @@ endef
 
 define gb_LinkTarget_add_cxxobjects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_cxxobject,$(1),$(obj),$(3)))
+endef
+
+define gb_LinkTarget_add_objcxxobjects
+$(foreach obj,$(2),$(call gb_LinkTarget_add_objcxxobject,$(1),$(obj),$(3)))
 endef
 
 define gb_LinkTarget_add_noexception_objects
