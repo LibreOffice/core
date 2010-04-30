@@ -60,6 +60,7 @@ gb_Library_OOOLIBS :=\
     vcl \
     xo \
     xof \
+    xcr \
 
 gb_Library_PLAINLIBS :=\
     icuuc \
