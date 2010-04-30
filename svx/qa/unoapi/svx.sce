@@ -3,7 +3,7 @@
 #i111252 -o svx.AccessibleGraphicShape
 #i46736 -o svx.AccessibleImageBullet
 #i111252 -o svx.AccessibleOLEShape
--o svx.AccessiblePageShape
+#i111252 -o svx.AccessiblePageShape
 #i111216 -o svx.AccessiblePresentationGraphicShape
 #i111216 -o svx.AccessiblePresentationOLEShape
 #i85539 -o svx.AccessiblePresentationShape
