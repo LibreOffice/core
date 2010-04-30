@@ -54,13 +54,6 @@ $(eval $(call gb_Library_set_defs,sfx,\
     -DABOUTBMPNAMES="$(ABOUTBITMAPS)" \
 ))
 
-ifneq ($(OS),UNX)
-$(eval $(call gb_Library_set_defs,sfx,\
-    $$(DEFS) \
-    -DENABLE_QUICKSTART_APPLET \
-))
-endif
-
 $(eval $(call gb_Library_add_linked_libs,sfx,\
     comphelper \
     cppu \
@@ -258,14 +251,25 @@ $(eval $(call gb_SdiTarget_set_include,sfx2/sdi/sfxslots,\
     -I$(SRCDIR)/sfx2/sdi \
 ))
 
+ifeq ($(OS),$(filter WNT MACOSX,$(OS)))
+$(eval $(call gb_Library_set_defs,sfx,\
+    $$(DEFS) \
+    -DENABLE_QUICKSTART_APPLET \
+))
+endif
+
 ifeq ($(OS),OS2)
 $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/shutdowniconOs2.ob \
 ))
 endif
-ifeq ($(OS),OSX)
-$(eval $(call gb_Library_add_exception_objects,sfx,\
-    sfx2/source/appl/shutdowniconaqua.ob \
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_add_objcxxobjects,sfx,\
+    sfx2/source/appl/shutdowniconaqua \
+))
+$(eval $(call gb_Library_add_linked_libs,sfx,\
+    objc \
+    Cocoa \
 ))
 endif
 ifeq ($(OS),WNT)
