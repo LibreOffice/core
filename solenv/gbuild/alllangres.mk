@@ -37,7 +37,7 @@ $(call gb_SrsPartTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) | $(g
     $(call gb_SrsPartTarget__command_dep,$*,$<,$(INCLUDE),$(DEFS))
     $(call gb_Helper_abbreviate_dirs_native,\
         mkdir -p $(dir $@) && \
-        RESPONSEFILE=`mktemp -p $(gb_Helper_MISC)` && \
+        RESPONSEFILE=`$(gb_MkTemp) $(gb_Helper_MISC)` && \
         echo "-s \
             $(INCLUDE) \
             $(DEFS) \
@@ -142,7 +142,7 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCT
     $(call gb_Helper_abbreviate_dirs_native,\
         mkdir -p $(dir $@) $(OUTDIR)/bin \
             $(dir $(call gb_ResTarget_get_imagelist_target,$(1))) && \
-        RESPONSEFILE=`mktemp -p $(gb_Helper_MISC)` && \
+        RESPONSEFILE=`$(gb_MkTemp) $(gb_Helper_MISC)` && \
         echo "-r -p \
             -lg$(LANGUAGE) \
             -fs=$(OUTDIR)/bin/$(LIBRARY)$(LANGUAGE).res \
