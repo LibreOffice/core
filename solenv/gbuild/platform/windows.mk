@@ -222,6 +222,8 @@ endef
 
 # LinkTarget class
 
+gb_LinkTarget_get_rpath :=
+
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_MSCOPTFLAGS)
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_MSCOPTFLAGS)
 
@@ -278,6 +280,16 @@ gb_Library_PLAINLIBS += \
     uuid \
     uwinapi \
     z \
+
+gb_LinkTarget_LAYER := \
+    $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_PLAINLIBS),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_RTLIBS),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_RTVERLIBS),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_STLLIBS),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_UNOLIBS),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):OOOLIB) \
+
 
 # HACK
 # .lib files should be named following the same scheme that the .dll use in the end

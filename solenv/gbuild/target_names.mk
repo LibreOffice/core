@@ -32,6 +32,10 @@ gb_CObject_get_target = $(WORKDIR)/CObject/$(1).o
 gb_CxxObject_get_target = $(WORKDIR)/CxxObject/$(1).o
 gb_LinkTarget_get_target = $(WORKDIR)/LinkTarget/$(1)
 
+define gb_LinkTarget_get_layer
+$(patsubst $(1):%,%,$(filter $(1):%,$(gb_LinkTarget_LAYER)))
+endef
+
 define gb_Library_get_filename
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_FILENAMES)))
 endef

@@ -86,7 +86,6 @@ gb_LinkTarget_NOEXCEPTIONFLAGS := \
     -DEXCEPTIONS_OFF \
     -noex \
 
-# FIXME RPATH is hardcoded
 gb_LinkTarget_LDFLAGS := \
     $(subst -L../lib , ,$(SOLARLIB)) \
     -temp=/tmp \
@@ -96,7 +95,6 @@ gb_LinkTarget_LDFLAGS := \
     -norunpath \
     -PIC \
     -library=no%Cstd \
-    $(gb_LinkTarget_RPATH_OOO) \
 
 ifeq ($(gb_DEBUGLEVEL),2)
 gb_CCOPTFLAGS :=
@@ -167,6 +165,30 @@ endef
 
 # LinkTarget class
 
+define gb_LinkTarget__get_rpath_for_layer
+$(patsubst $(1):%,%,$(filter $(1):%,$(gb_LinkTarget__RPATHS)))
+endef
+define gb_LinkTarget_get_rpath
+-R\'$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_LinkTarget_get_layer,$(2)))\'
+endef
+
+gb_LinkTarget__RPATHS := \
+    URELIB:'$$$$ORIGIN' \
+    UREBIN:'$$$$ORIGIN/../lib:$$$$ORIGIN' \
+    OOOLIB:'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' \
+    BRAND:'$$$$ORIGIN:$$$$ORIGIN/../basis-link/program:$$$$ORIGIN/../basis-link/ure-link/lib' \
+    SDK:'$$$$ORIGIN/../../ure-link/lib' \
+
+#FIXME incomplete
+gb_LinkTarget_LAYER := \
+    $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_PLAINLIBS),$(lib):) \
+    $(foreach lib,$(gb_Library_RTLIBS),$(lib):) \
+    $(foreach lib,$(gb_Library_RTVERLIBS),$(lib):) \
+    $(foreach lib,$(gb_Library_STLLIBS),$(lib):URELIB) \
+    $(foreach lib,$(gb_Library_UNOLIBS),$(lib):URELIB) \
+    $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
+
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CCOPTFLAGS)
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CCOPTFLAGS)
 
@@ -193,12 +215,6 @@ endef
 
 
 # Library class
-
-gb_LinkTarget_RPATH_URELIB := -R\''$$ORIGIN'\'
-gb_LinkTarget_RPATH_UREBIN := -R\''$$ORIGIN/../lib:$$ORIGIN'\'
-gb_LinkTarget_RPATH_OOO := -R\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
-gb_LinkTarget_RPATH_SDK := -R\''$$ORIGIN/../../ure-link/lib'\'
-gb_LinkTarget_RPATH_BRAND := -R\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
 
 #gb_Library_DEFS := -DSHAREDLIB -D_DLL_
 gb_Library_DEFS :=

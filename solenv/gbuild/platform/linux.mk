@@ -99,8 +99,6 @@ gb_LinkTarget_LDFLAGS := \
     -Wl,--dynamic-list-cpp-typeinfo \
     -Wl,--hash-style=both \
     -Wl,-Bsymbolic-functions \
-    -Wl,-rpath,$(OUTDIR)/lib \
-    -Wl,-rpath-link,$(OUTDIR)/lib \
     -Wl,-z,combreloc \
     -Wl,-z,defs \
     $(subst -L../lib , ,$(SOLARLIB)) \
@@ -164,6 +162,31 @@ endef
 
 
 # LinkTarget class
+
+define gb_LinkTarget__get_rpath_for_layer
+$(patsubst $(1):%,%,$(filter $(1):%,$(gb_LinkTarget__RPATHS)))
+endef
+define gb_LinkTarget_get_rpath
+-Wl,-rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_LinkTarget_get_layer,$(2))) \
+-Wl,-rpath-link,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_LinkTarget_get_layer,$(2)))
+endef
+
+gb_LinkTarget__RPATHS := \
+    URELIB:'$$$$ORIGIN' \
+    UREBIN:'$$$$ORIGIN/../lib:$$$$ORIGIN' \
+    OOOLIB:'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' \
+    BRAND:'$$$$ORIGIN:$$$$ORIGIN/../basis-link/program:$$$$ORIGIN/../basis-link/ure-link/lib' \
+    SDK:'$$$$ORIGIN/../../ure-link/lib' \
+
+#FIXME incomplete
+gb_LinkTarget_LAYER := \
+    $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_PLAINLIBS),$(lib):) \
+    $(foreach lib,$(gb_Library_RTLIBS),$(lib):) \
+    $(foreach lib,$(gb_Library_RTVERLIBS),$(lib):) \
+    $(foreach lib,$(gb_Library_STLLIBS),$(lib):URELIB) \
+    $(foreach lib,$(gb_Library_UNOLIBS),$(lib):URELIB) \
+    $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
 
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_GCCOPTFLAGS)
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_GCCOPTFLAGS)
