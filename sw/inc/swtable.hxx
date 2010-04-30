@@ -468,4 +468,21 @@ public:
         { return const_cast<SwTableBox*>(this)->FindEndOfRowSpan( rTable, nMaxStep ); }
 };
 
+class SwCellFrm;
+class SW_DLLPUBLIC SwTableCellInfo : public ::boost::noncopyable
+{
+    struct Impl;
+    ::std::auto_ptr<Impl> m_pImpl;
+
+    const SwCellFrm * getCellFrm() const ;
+
+public:
+    SwTableCellInfo(const SwTable * pTable);
+    ~SwTableCellInfo();
+
+    bool getNext();
+    SwRect getRect() const;
+    const SwTableBox * getTableBox() const;
+};
+
 #endif  //_SWTABLE_HXX
