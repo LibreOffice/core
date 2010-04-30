@@ -28,9 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#ifndef DBG_UTIL
-#error Wer fummelt denn an den makefiles rum?
-#endif
+#ifdef DBG_UTIL
+
 #include <tools/stream.hxx>
 #include "dbgloop.hxx"
 #include "errhdl.hxx"
@@ -165,4 +164,5 @@ int main()
 }
 #endif
 
+#endif // DBG_UTIL
 

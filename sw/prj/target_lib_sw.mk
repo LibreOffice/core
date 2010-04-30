@@ -709,6 +709,10 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/wrtsh/wrtsh3 \
     sw/source/ui/wrtsh/wrtsh4 \
     sw/source/ui/wrtsh/wrtundo \
+    sw/source/core/except/errhdl \
+    sw/source/core/except/dbgloop \
+    sw/source/core/layout/dbg_lay \
+    sw/source/core/text/txtio \
 ))
 
 ifeq ($(OS),LINUX)
