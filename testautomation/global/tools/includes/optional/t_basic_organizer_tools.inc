@@ -229,7 +229,7 @@ function hDeleteLibrary( iLocation as integer, cLibName as string ) as boolean
     dim cCurrentObjectName as string
 
     '///+<li>Open Macro Organizer</li>
-    ToolsMakro_uno
+    ToolsMacro_uno
     
     '///+<li>Click Manage-button</li>
     Kontext "Makro"

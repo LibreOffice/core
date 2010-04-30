@@ -69,6 +69,7 @@ testcase tMacroUsertemplate
     ToolsMacro_uno
 
     printlog( "Search for the module" )
+    kontext "Makro"
     iCurrentNode = hSelectNodeByName( MakroAus, "Module1" )
     if ( iCurrentNode = 0 ) then    
         warnlog( "#i73521# - The expected node could not be found. Aborting test" )

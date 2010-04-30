@@ -62,9 +62,11 @@ testcase tBasicDialogI18nCopyControl
 
     printlog( "Test init: Setting up environment" )
     if ( hInitFormControls( DIALOG_NAME ) ) then
-    
+
+        printlog( "Draw a commandbutton on the dialog" )
         hDrawControlOnDialog( COMMAND_BUTTON )
 
+        printlog( "Open the property browser" )
         hOpenPropertyBrowser()
         kontext "TabGeneralControl"
         printlog( "Get internal coordinates for the control" )
@@ -81,11 +83,13 @@ testcase tBasicDialogI18nCopyControl
         qaerrorlog( "#i80456# properties button not enabled when a formcontrol is inserted via keyboard" )
 
         kontext "ToolsCollectionBar"
+        printlog( "Click <Manage Languages>" )
         ManageLanguage.click()
 
         kontext "ManageUILanguages"
         if ( ManageUILanguages.exists( DEFAULT_TIMEOUT ) ) then
 
+            printlog( "Click <Add>" )
             hClickButton( Add )
 
             kontext "SetDefaultLanguage"
@@ -101,6 +105,7 @@ testcase tBasicDialogI18nCopyControl
         kontext "ManageUILanguages"
         if ( ManageUILanguages.exists( DEFAULT_TIMEOUT ) ) then
 
+            printlog( "Click <Add>" )
             hClickButton( Add )
 
             kontext "AddUserInterface"
