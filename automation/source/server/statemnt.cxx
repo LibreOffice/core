@@ -6271,7 +6271,7 @@ protected:
                                                             ::svt::table::RowPos nLastPos;
                                                             while ( ( nLastPos = pTC->GetCurrentRow( aPos ) ) != nNr1-1 && nStep > 0 )
                                                             {
-                                                                if ( nLastPos > nNr1-1 )
+                                                                if ( nLastPos > nNr1-1 || nLastPos == ROW_INVALID )
                                                                     aPos.Y() -= nStep;
                                                                 else
                                                                     aPos.Y() += nStep;
