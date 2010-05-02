@@ -144,6 +144,7 @@ MY_FILES_main = \
     $(MY_XCS)/Office/CalcAddIns.xcs \
     $(MY_XCS)/Office/Canvas.xcs \
     $(MY_XCS)/Office/Chart.xcs \
+    $(MY_XCS)/Office/Commands.xcs \
     $(MY_XCS)/Office/Common.xcs \
     $(MY_XCS)/Office/Compatibility.xcs \
     $(MY_XCS)/Office/DataAccess/Drivers.xcs \
