@@ -1881,9 +1881,9 @@ struct StripItemData : public ::std::unary_function< ListItem, UnoListItem >
 struct UnoControlListBoxModel_Data
 {
     UnoControlListBoxModel_Data( UnoControlListBoxModel& i_rAntiImpl )
-        :m_rAntiImpl( i_rAntiImpl )
+        :m_bSettingLegacyProperty( false )
+        ,m_rAntiImpl( i_rAntiImpl )
         ,m_aListItems()
-        ,m_bSettingLegacyProperty( false )
     {
     }
 
