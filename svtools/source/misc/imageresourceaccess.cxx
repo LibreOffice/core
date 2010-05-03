@@ -141,8 +141,13 @@ namespace svt
     //--------------------------------------------------------------------
     bool GraphicAccess::isSupportedURL( const ::rtl::OUString& _rURL )
     {
-        ::rtl::OUString sIndicator( RTL_CONSTASCII_USTRINGPARAM( "private:resource/" ) );
-        return ( ( _rURL.indexOf( sIndicator ) == 0 ) || ( _rURL.compareToAscii( GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( GRAPHOBJ_URLPREFIX ) ) == 0 ) );
+        if  (   ( _rURL.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:resource/" ) ) == 0 )
+            ||  ( _rURL.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:graphicrepository/" ) ) == 0 )
+            ||  ( _rURL.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:standardimage/" ) ) == 0 )
+            ||  ( _rURL.compareToAscii( GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( GRAPHOBJ_URLPREFIX ) ) == 0 )
+            )
+            return true;
+        return false;
     }
 
     //--------------------------------------------------------------------
