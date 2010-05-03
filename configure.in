@@ -5098,7 +5098,7 @@ if test -n "$with_system_mythes" && test "$with_system_mythes" != "no"; then
         AC_CHECK_LIB(mythes-1.2, main, [],
             [ MYTHES_FOUND=no], [])
  	if test "$MYTHES_FOUND" = "no"; then
-            AC_CHECK_LIB(mythes, main, [],
+            AC_CHECK_LIB(mythes, main, [MYTHES_FOUND=yes],
                 [ MYTHES_FOUND=no], [])
 	fi
 	if test "$MYTHES_FOUND" = "no"; then

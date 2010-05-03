@@ -18526,12 +18526,7 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_mythes_main" >&5
 $as_echo "$ac_cv_lib_mythes_main" >&6; }
 if test "x$ac_cv_lib_mythes_main" = x""yes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBMYTHES 1
-_ACEOF
-
-  LIBS="-lmythes $LIBS"
-
+  MYTHES_FOUND=yes
 else
    MYTHES_FOUND=no
 fi
