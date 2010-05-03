@@ -1655,7 +1655,13 @@ sub cancel_build {
             $message_part .= "--from @broken_modules_names\n";
         };
     } else {
-        $message_part .= "--all:@broken_modules_names\n";
+        if ($processes_to_run) {
+            $message_part .= "--from ";
+        } else {
+            $message_part .= "--all:";
+        };
+        $message_part .= "@broken_modules_names\n";
+
     };
     if ($broken_modules_number && $build_all_parents) {
         print "\n";
