@@ -82,6 +82,7 @@
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/configurationhelper.hxx>
+#include <comphelper/docpasswordrequest.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ucb/XContent.hpp>
@@ -183,9 +184,6 @@ static sal_Bool AskPasswordToModify_Impl( const uno::Reference< task::XInteracti
         while ( !bResult && !bCancel )
         {
             sal_Bool bMSType = !pFilter->IsOwnFormat();
-            ::comphelper::DocPasswordRequestType nType = bMSType ?
-                                ::comphelper::DocPasswordRequestType_MS :
-                                ::comphelper::DocPasswordRequestType_STANDARD;
 
             ::rtl::Reference< ::comphelper::DocPasswordRequest > pPasswordRequest(
                  new ::comphelper::DocPasswordRequest(

@@ -428,8 +428,8 @@ executePasswordDialog(
             const sal_uInt16 nMaxPasswdLen = bMSCryptoMode ? 15 : 0;   // 0 -> allow any length
 
             VclAbstractDialogFactory * pFact = VclAbstractDialogFactory::Create();
-            std::auto_ptr< AbstractPasswordToOpenModifyDialog > pDialog(
-                    pFact->CreatePasswordToOpenModifyDialog( pParent, 0, nMaxPasswdLen ) );
+            AbstractPasswordToOpenModifyDialog *pTmp = pFact->CreatePasswordToOpenModifyDialog( pParent, 0, nMaxPasswdLen );
+            std::auto_ptr< AbstractPasswordToOpenModifyDialog > pDialog( pTmp );
 
             rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
             rInfo.SetPassword( pDialog->GetPasswordToOpen() );
