@@ -276,9 +276,9 @@ function hDeleteMacro() as boolean
     
     kontext "BasicIDE"
     if ( BasicIDE.exists() ) then
-        WaitSlot() : EditWindow.typeKeys( "<MOD1 HOME>" )
-        WaitSlot() : EditWindow.typeKeys( "<MOD1 SHIFT END>" )
-        WaitSlot() : EditWindow.typeKeys( "<DELETE>" )
+        WaitSlot() : Wait( 100 ) : EditWindow.typeKeys( "<MOD1 HOME>" )
+        WaitSlot() : Wait( 100 ) : EditWindow.typeKeys( "<MOD1 SHIFT END>" )
+        WaitSlot() : Wait( 100 ) : EditWindow.typeKeys( "<DELETE>" )
         hDeleteMacro() = hIsEditWindowEmpty()
     else
         warnlog( CFN & "Basic IDE is not open" )
