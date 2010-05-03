@@ -46,44 +46,25 @@ function hListDelete( aList() as string, iItemToDelete as integer ) as boolean
     '///+ runtime error. 3) Means that arrays may only have an upper boundary
     '///+ declared, all loops must start with index array(1) and must end with
     '///+ index array(val( array(0))</i><br>    
-    '///<u>Review the code, it has many unused variables</u>
-    '///<ul>
 
     const CFN = "hListDelete::"
-
-    dim iArraySize as integer   ' The size of the array, must be large enough
-    dim iListSizeOld as integer ' The size of the list before deletion
-    dim iListSizeNew as integer ' The size of the list after deletion
+    const INDEX_CORRECTION = 1
     dim iCurrentItem as integer ' Increment-Variable
-    dim iOffset as integer      ' First item to be "moved down" by index
-    dim sItemToDelete as string ' The string that will be deleted
-    dim brc as boolean          ' preliminary return value
     
-    '///+<li>Get some data from the arrays to work with.</li>
-    iArraySize    = ubound( aList() )
-    iListSizeOld  = ListCount( aList() )
-    iListSizeNew  = iListSizeOld - 1
-    sItemToDelete = aList( iItemToDelete )
-    iOffset       = iItemToDelete + 1
-    
-    ' some output (may be removed as soon the function is thoroughly tested)
-    'printlog( CFN & "Removing: " & sItemToDelete & " at pos " & iItemToDelete )
+    if ( GVERBOSE ) then 
+        printlog( CFN & "Removing: " & aList( iItemToDelete ) & " at pos " & iItemToDelete )
+    endif
     
     ' Move all items down by one in the list beginning with the item after
     ' iItemToDelete
-    '///+<li>Move all items one up</li>
-    for iCurrentItem = iOffset to iListSizeOld
-        aList( iCurrentItem - 1 ) = aList( iCurrentItem )
+    for iCurrentItem = ( iItemToDelete + INDEX_CORRECTION ) to ListCount( aList() )
+        aList( iCurrentItem - INDEX_CORRECTION ) = aList( iCurrentItem )
     next iCurrentItem
     
     ' Delete the last entry, it is no longer used and it is duplicate to the item
     ' at iListSizeOld-1 (iListSizeNew)
-    '///+<li>Delete the last item from the list</li>
-    aList( iListSizeOld ) = ""
-    
-    '///+<li>Set the new listsize (one smaller than the original list)</li>
-    aList( 0 ) = iListSizeNew
-    '///</ul>
+    aList( iCurrentItem ) = ""
+    aList( 0 ) = iCurrentItem - INDEX_CORRECTION
     
 end function
 
@@ -106,6 +87,7 @@ function hListAppend( sNewString as string, aTargetList() as string ) as integer
     '///+ index array(val( array(0))</i><br>    
 
     const CFN = "hListAppend::"
+    const RC_ARRAY_TOO_SMALL = -1
 
     dim iCurrentListSize as integer
     dim iNewListSize as integer
@@ -120,14 +102,12 @@ function hListAppend( sNewString as string, aTargetList() as string ) as integer
         warnlog ( CFN & "Cannot append, array too small" )
         printlog( CFN & "Array-Size.....: " & iArraySize )
         printlog( CFN & "Requested index: " & iNewListSize )
-        irc = -1
+        hListAppend() = RC_ARRAY_TOO_SMALL
     else
         aTargetList( iNewListSize ) = sNewString
         aTargetList( 0 ) = iNewListSize
-        irc = iNewListSize
+        hListAppend() = iNewListSize
     endif
-    
-    hListAppend() = irc
     
 end function
 
@@ -237,7 +217,6 @@ function hListCompare( aListOne() as String, aListTwo() as String ) as integer
     dim iListOneSize as integer
     
     dim bFound as boolean
-    dim irc as integer : irc = 0
     
     '///+<li>Create a copy of list two so we do not change the original list</li>
     ListCopy( aListTwo() , aTwoOnlyList() )
@@ -280,17 +259,16 @@ function hListCompare( aListOne() as String, aListTwo() as String ) as integer
     if ( ListCount( aOneOnlyList() ) > 0 ) then
         printlog( CFN & "Objects have been added to the list" )
         hListPrint( aOneOnlyList() , "Items found in list ONE only (NEW)" )
-        irc = ListCount( aOneOnlyList() )
+        hListCompare() = ListCount( aOneOnlyList() )
     end if
         
     '///+<li>List all items that exist in List Two only</li>
     if ( ListCount( aTwoOnlyList() ) > 0 ) then
         printlog( CFN & "Objects have been removed from the list" )
         hListPrint( aTwoOnlyList() , "Items found in list TWO only (MISSING)" )
-        irc = ListCount( aOneOnlyList() ) * -1
+        hListCompare() = ListCount( aOneOnlyList() ) * -1
     end if
 
-    hListCompare() = irc
     '///</ul>
     
 end function
@@ -335,9 +313,7 @@ function hListPrependString( aList() as string, cString as string ) as boolean
     
     '///+<li>Cycle through the list and insert a text infront of each item</li>
     for iCurrentItem = 1 to listcount( aList() )
-    
         aList( iCurrentItem ) = cString & " : " & aList( iCurrentItem )
-        
     next iCurrentItem
     
     hListPrependString() = true
@@ -439,33 +415,20 @@ function hCountMatchesInList( acItemList() as string, cSearchTerm as string ) as
     '///</ol>
 
     const CFN = "hCountMatchesInList::"
-    printlog( CFN & "Enter" )
-    
     dim iHitCount as integer
-    dim iItemCount as integer
     dim iCurrentItem as integer
 
-    '///<u>Description:</u>
-    '///<ul>
-    '///+<li>Retrieve the number of items in the list</li>
-    iItemCount = ListCount( acItemList() )
-    
-    '///+<li>Walk through the list and count the hits</li>
-    printlog( CFN & "Begin with term: " & cSearchTerm )
-    for iCurrentItem = 1 to iItemCount
-    
-        printlog( acItemList( iCurrentItem ) )
-    
+    if ( GVERBOSE ) then printlog( CFN & "Begin with term: " & cSearchTerm )
+
+    for iCurrentItem = 1 to ListCount( acItemList() )
+        if ( GVERBOSE ) then printlog( acItemList( iCurrentItem ) )
+
         if ( instr( acItemList( iCurrentItem ), cSearchTerm ) > 0 ) then
             iHitCount = iHitCount + 1
         endif
-        
     next iCurrentItem
-    printlog( CFN & "End" )
-   '///</ul>
 
-    printlog( CFN & "Exit with result: " & iHitCount )
-
+if ( GVERBOSE ) then printlog( CFN & "Exit with result: " & iHitCount )
     hCountMatchesInList() = iHitCount
 
 end function
