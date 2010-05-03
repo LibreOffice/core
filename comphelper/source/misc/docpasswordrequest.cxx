@@ -71,7 +71,7 @@ private:
 class PasswordContinuation : public ::cppu::WeakImplHelper1< XInteractionPassword2 >
 {
 public:
-    inline explicit     PasswordContinuation() : mbSelected( sal_False ), mbReadOnly( sal_False ) {}
+    inline explicit     PasswordContinuation() : mbReadOnly( sal_False ), mbSelected( sal_False ) {}
 
     inline sal_Bool     isSelected() const { return mbSelected; }
     inline void         reset() { mbSelected = sal_False; }

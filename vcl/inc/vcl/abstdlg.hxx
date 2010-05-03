@@ -66,7 +66,7 @@ public:
     virtual void            Sync() = 0;
 };
 
-class AbstractPasswordToOpenModifyDialog : public VclAbstractDialog
+class VCL_DLLPUBLIC AbstractPasswordToOpenModifyDialog : public VclAbstractDialog
 {
 public:
     virtual String  GetPasswordToOpen() const   = 0;
