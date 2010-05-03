@@ -166,3 +166,6 @@ sw.XMLContentExporter::com::sun::star::document::XFilter
 
 ### i111273 ###
 sw.SwXTextEmbeddedObject::com::sun::star::document::XEmbeddedObjectSupplier
+
+### i111332 ###
+sw.XMLStylesExporter::com::sun::star::document::XFilter
