@@ -33,6 +33,10 @@
 
 function hGetOfficeVersion() as string
 
+    ' The "Insert OLE object" dialog lists the OLE Objects with application name
+    ' and version number. THe version numbers are tracked in the officeinfo.txt
+    ' file which must be adjusted each time we change to a new major version.
+
     const CFN = "global::tools::includes::optional::t_ole.inc::hGetOfficeVersion(): "
     const DATAFILE = "global/input/officeinfo.txt"
     const MAX_LINES_IN_DATAFILE = 20
@@ -72,7 +76,7 @@ function hGetOleObjectName( cApplication as string ) as string
     const CFN = "global::tools::includes::optional::t_ole.inc::hGetOleObjectName(): "
 
     ' The application names for the API are case sensitive so we cannot use gApplication
-    select case ( cApplication )
+    select case ( ucase( cApplication ) )
     case "WRITER" : Application_API_Name = "Writer"
     case "CALC"   : Application_API_Name = "Calc"
     case "IMPRESS": Application_API_Name = "Impress"
