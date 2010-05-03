@@ -622,7 +622,7 @@
 			</dict>
 		</dict>
 
-		<!--- Microsoft Excel XML -->
+		<!-- Microsoft Excel XML -->
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
