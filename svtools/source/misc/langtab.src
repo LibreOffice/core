@@ -320,6 +320,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Sardinian, Sassarese" ; LANGUAGE_USER_SARDINIAN_SASSARESE ; > ;
         < "Bafia" ; LANGUAGE_USER_BAFIA ; > ;
         < "Gikuyu" ; LANGUAGE_USER_GIKUYU ; > ;
+        < "Yoruba" ; LANGUAGE_YORUBA ; > ;
     };
 };
 
