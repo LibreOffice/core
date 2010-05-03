@@ -303,13 +303,13 @@ string WW8TableNodeInfoInner::toString() const
 {
     static char buffer[256];
     snprintf(buffer, sizeof(buffer),
-             "<tableinner depth=\"%" SAL_PRIxUINT32 "\""
-             " cell=\"%" SAL_PRIxUINT32 "\""
-             " row=\"%" SAL_PRIxUINT32 "\""
+             "<tableinner depth=\"%" SAL_PRIuUINT32 "\""
+             " cell=\"%" SAL_PRIuUINT32 "\""
+             " row=\"%" SAL_PRIuUINT32 "\""
              " endOfCell=\"%s\""
              " endOfLine=\"%s\""
-             " shadowsBefore=\"%" SAL_PRIxUINT32 "\""
-             " shadowsAfter=\"%" SAL_PRIxUINT32 "\""
+             " shadowsBefore=\"%" SAL_PRIuUINT32 "\""
+             " shadowsAfter=\"%" SAL_PRIuUINT32 "\""
              " vertMerge=\"%s\"/>",
              mnDepth, mnCell, mnRow,
              mbEndOfCell ? "yes" : "no",
@@ -341,7 +341,7 @@ WW8TableNodeInfo::~WW8TableNodeInfo()
 {
     static char buffer[1024];
     snprintf(buffer, sizeof(buffer),
-             "<tableNodeInfo p=\"%p\" depth=\"%" SAL_PRIxUINT32 "\">"
+             "<tableNodeInfo p=\"%p\" depth=\"%" SAL_PRIuUINT32 "\">"
              ,this, getDepth());
 
     ::std::string sResult(buffer);
@@ -578,7 +578,7 @@ WW8TableInfo::processSwTableByLayout(const SwTable * pTable)
         ::std::clog << "<CellFrm>" << ::std::endl;
 
         snprintf(sBuffer, sizeof(sBuffer),
-                 "<rect top=\"%" SAL_PRIxUINT32 "\" bottom=\"%" SAL_PRIxUINT32 "\" left=\"%" SAL_PRIxUINT32 "\" right=\"%" SAL_PRIxUINT32 "\"/>",
+                 "<rect top=\"%" SAL_PRIdINT32 "\" bottom=\"%" SAL_PRIdINT32 "\" left=\"%" SAL_PRIdINT32 "\" right=\"%" SAL_PRIdINT32 "\"/>",
                  aRect.Top(), aRect.Bottom(), aRect.Left(), aRect.Right());
         ::std::clog << sBuffer << ::std::endl;
 #endif
@@ -1001,10 +1001,10 @@ bool CellInfo::operator < (const CellInfo & aCellInfo) const
     static char sBuffer[256];
 
     snprintf(sBuffer, sizeof(sBuffer),
-             "<cellinfo left=\"%" SAL_PRIxUINT32 "\""
-             " right=\"%" SAL_PRIxUINT32 "\""
-             " top=\"%" SAL_PRIxUINT32 "\""
-             " bottom=\"%" SAL_PRIxUINT32 "\""
+             "<cellinfo left=\"%" SAL_PRIdINT32 "\""
+             " right=\"%" SAL_PRIdINT32 "\""
+             " top=\"%" SAL_PRIdINT32 "\""
+             " bottom=\"%" SAL_PRIdINT32 "\""
              " node=\"%p\"/>",
              left(),
              right(),
