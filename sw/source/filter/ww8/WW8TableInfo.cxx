@@ -578,7 +578,7 @@ WW8TableInfo::processSwTableByLayout(const SwTable * pTable)
         ::std::clog << "<CellFrm>" << ::std::endl;
 
         snprintf(sBuffer, sizeof(sBuffer),
-                 "<rect top=\"%" SAL_PRIdINT32 "\" bottom=\"%" SAL_PRIdINT32 "\" left=\"%" SAL_PRIdINT32 "\" right=\"%" SAL_PRIdINT32 "\"/>",
+                 "<rect top=\"%ld\" bottom=\"%ld\" left=\"%ld\" right=\"%ld\"/>",
                  aRect.Top(), aRect.Bottom(), aRect.Left(), aRect.Right());
         ::std::clog << sBuffer << ::std::endl;
 #endif
@@ -1001,10 +1001,10 @@ bool CellInfo::operator < (const CellInfo & aCellInfo) const
     static char sBuffer[256];
 
     snprintf(sBuffer, sizeof(sBuffer),
-             "<cellinfo left=\"%" SAL_PRIdINT32 "\""
-             " right=\"%" SAL_PRIdINT32 "\""
-             " top=\"%" SAL_PRIdINT32 "\""
-             " bottom=\"%" SAL_PRIdINT32 "\""
+             "<cellinfo left=\"%ld\""
+             " right=\"%ld\""
+             " top=\"%ld\""
+             " bottom=\"%ld\""
              " node=\"%p\"/>",
              left(),
              right(),
@@ -1289,7 +1289,7 @@ string WW8TableCellGrid::toString()
     static char sBuffer[1024];
     while (aTopsIt != getRowTopsEnd())
     {
-        sprintf(sBuffer, "<row y=\"%" SAL_PRIxUINT32 "\">", *aTopsIt);
+        sprintf(sBuffer, "<row y=\"%ld\">", *aTopsIt);
         sResult += sBuffer;
 
         CellInfoMultiSet::const_iterator aCellIt = getCellsBegin(*aTopsIt);
@@ -1297,7 +1297,7 @@ string WW8TableCellGrid::toString()
 
         while (aCellIt != aCellsEnd)
         {
-            snprintf(sBuffer, sizeof(sBuffer), "<cellInfo top=\"%" SAL_PRIxUINT32 "\" bottom=\"%" SAL_PRIxUINT32 "\" left=\"%" SAL_PRIxUINT32 "\" right=\"%" SAL_PRIxUINT32 "\">",
+            snprintf(sBuffer, sizeof(sBuffer), "<cellInfo top=\"%ld\" bottom=\"%ld\" left=\"%ld\" right=\"%ld\">",
                      aCellIt->top(), aCellIt->bottom(), aCellIt->left(), aCellIt->right());
             sResult += sBuffer;
 
