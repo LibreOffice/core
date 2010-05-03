@@ -513,6 +513,8 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_SARDINIAN_SASSARESE   0x0653
 #define LANGUAGE_USER_BAFIA                 0x0654
 #define LANGUAGE_USER_GIKUYU                0x0655
+#define LANGUAGE_USER_RUSYN_UKRAINE         0x0656
+#define LANGUAGE_USER_RUSYN_SLOVAKIA        0x8256  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_USER_RUSYN_UKRAINE)) */
 
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
