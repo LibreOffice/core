@@ -211,6 +211,23 @@ function fGetCountryName( CountryID as Integer ) as String
             QAErrorLog "Now, the test does not support for the language " +iSprache
             fGetCountryName = ""
         end select
+    case 50   :        ' Slovenian
+       select case CountryID
+       case 1:  fGetCountryName = "angleški (ZDA)"
+       case 33: fGetCountryName = "francoski (Francija)"
+       case 34: fGetCountryName = "španski (Španija)"
+       case 39: fGetCountryName = "italijanski (Italija)"
+       case 46: fGetCountryName = "švedski (Švedska)"
+       case 49: fGetCountryName = "nemški (Nemčija)"
+       case 55: fGetCountryName = "portugalski (Brazilija)"
+       case 81: fGetCountryName = "japonski"
+       case 82: fGetCountryName = "korejski (RK)"
+       case 86: fGetCountryName = "kitajski (poenostavljeni)"
+       case 88: fGetCountryName = "kitajski (tradicionalni)"
+       case else :
+           QAErrorLog "Now, the test does not support for the language " +iSprache
+           fGetCountryName = ""
+       end select
     case 55   :        ' Portuguese
         select case CountryID
         case 1:  fGetCountryName = "Inglês (EUA)"
