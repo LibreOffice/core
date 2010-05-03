@@ -155,7 +155,9 @@ $filebase =~ s/\..*?$//;
 # now stript it to something that doesn't togger vista execution prevention :(
 $flbs = $filebase;
 $flbs =~ s/[aeiou]//g;
-$workfile = "$tmpdir/${flbs}_".$$;
+# call srand ony once per script!
+srand();
+$workfile = "$tmpdir/${flbs}_".$$.rand();
 #$workfile =~ s/setup/set_up/;
 
 # now get $workfile ready for shell usage...
@@ -171,7 +173,7 @@ unlink "$workfile.obj";
 
 if ( -f "$workfile.hid" )
 {
-    unlink "$workfile.hid" or die "ERRROR - cannot remove $workfile.hid\n";;
+    unlink "$workfile.hid" or die "ERRROR - cannot remove $workfile.hid\n";
 }
 
 # hack to quit for files which cannot be handled
