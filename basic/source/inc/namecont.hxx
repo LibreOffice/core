@@ -35,6 +35,7 @@
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/script/XLibraryContainerExport.hpp>
+#include <com/sun/star/script/XLibraryContainer3.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
@@ -57,7 +58,7 @@
 #include <com/sun/star/deployment/XPackage.hpp>
 
 #include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/compbase7.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
 class BasicManager;
@@ -65,11 +66,12 @@ class BasicManager;
 namespace basic
 {
 
-typedef ::cppu::WeakComponentImplHelper6<
+typedef ::cppu::WeakComponentImplHelper7<
     ::com::sun::star::lang::XInitialization,
     ::com::sun::star::script::XStorageBasedLibraryContainer,
     ::com::sun::star::script::XLibraryContainerPassword,
     ::com::sun::star::script::XLibraryContainerExport,
+    ::com::sun::star::script::XLibraryContainer3,
     ::com::sun::star::container::XContainer,
     ::com::sun::star::lang::XServiceInfo > LibraryContainerHelper;
 
@@ -405,6 +407,12 @@ public:
     virtual ::rtl::OUString SAL_CALL getContainerLocationName() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL storeLibraries(  ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
+    //Methods XLibraryContainer3
+    virtual ::rtl::OUString SAL_CALL getOriginalLibraryLinkURL( const ::rtl::OUString& Name )
+        throw (::com::sun::star::lang::IllegalArgumentException,
+               ::com::sun::star::container::NoSuchElementException,
+               ::com::sun::star::uno::RuntimeException);
+
     // Methods XLibraryContainer2 (base of XPersistentLibraryContainer)
     virtual sal_Bool SAL_CALL isLibraryLink( const ::rtl::OUString& Name )
         throw (::com::sun::star::container::NoSuchElementException,
@@ -541,6 +549,8 @@ private:
     ::rtl::OUString maLibInfoFileURL;
     ::rtl::OUString maStorageURL;
     ::rtl::OUString maUnexpandedStorageURL;
+    ::rtl::OUString maOrignialStorageURL;
+
     sal_Bool mbLink;
     sal_Bool mbReadOnly;
     sal_Bool mbReadOnlyLink;

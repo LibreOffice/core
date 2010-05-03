@@ -50,10 +50,15 @@ public class UnoPkgContainer extends ParcelContainer
 {
 
     private Map registeredPackages = new HashMap();
+    protected String extensionDb;
+    protected String extensionRepository;
 
-    public UnoPkgContainer(  XComponentContext xCtx, String locationURL, String language ) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.lang.WrappedTargetException
+    public UnoPkgContainer(  XComponentContext xCtx, String locationURL,
+            String _extensionDb, String _extensionRepository, String language ) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.lang.WrappedTargetException
     {
         super( xCtx, locationURL, language, false );
+        extensionDb = _extensionDb;
+        extensionRepository = _extensionRepository;
         init();
     }
 
@@ -218,8 +223,8 @@ public class UnoPkgContainer extends ParcelContainer
         DeployedUnoPackagesDB dp = null;
         try
         {
-            String path = containerUrl.substring( 0, containerUrl.lastIndexOf("/") );
-            String packagesUrl = PathUtils.make_url( path, "Scripts/unopkg-desc.xml" );
+//            String path = containerUrl.substring( 0, containerUrl.lastIndexOf("/") );
+            String packagesUrl = PathUtils.make_url( extensionDb, "/Scripts/" + extensionRepository + "-extension-desc.xml" );
             LogUtils.DEBUG("getUnoPackagesDB() looking for existing db in " + packagesUrl );
             if ( m_xSFA.exists( packagesUrl ) )
             {
@@ -277,8 +282,8 @@ public class UnoPkgContainer extends ParcelContainer
         OutputStream os = null;
         try
         {
-            String path = containerUrl.substring( 0, containerUrl.lastIndexOf("/") );
-            String packagesUrl = PathUtils.make_url( path, "Scripts/unopkg-desc.xml" );
+//            String path = containerUrl.substring( 0, containerUrl.lastIndexOf("/") );
+            String packagesUrl = PathUtils.make_url( extensionDb, "/Scripts/" + extensionRepository + "-extension-desc.xml" );
             xos =  m_xSFA.openFileWrite( packagesUrl );
             XTruncate xTrc = (XTruncate) UnoRuntime.queryInterface( XTruncate.class, xos );
             if (  xTrc != null )
@@ -375,7 +380,10 @@ public class UnoPkgContainer extends ParcelContainer
         String parentUrl = uri;
 
         if ( uri.indexOf( "%2Funo_packages%2F" ) > -1 ||
-             uri.indexOf( "/uno_packages/" ) > -1 )
+             uri.indexOf( "/uno_packages/" ) > -1 ||
+             uri.indexOf("$UNO_USER_PACKAGES_CACHE/") > -1 ||
+             uri.indexOf("$UNO_SHARED_PACKAGES_CACHE/") > -1 ||
+             uri.indexOf("$BUNDLED_EXTENSIONS/") > -1 )
         {
             //its in a bundle need to determine the uno-package file its in
             LogUtils.DEBUG("processUnoPackage - is part of a uno bundle");

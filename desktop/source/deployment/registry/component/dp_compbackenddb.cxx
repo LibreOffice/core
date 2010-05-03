@@ -46,6 +46,7 @@ using ::rtl::OUString;
 #define EXTENSION_REG_NS "http://openoffice.org/extensionmanager/component-registry/2010"
 #define NS_PREFIX "comp"
 #define ROOT_ELEMENT_NAME "component-backend-db"
+#define KEY_ELEMENT_NAME "component"
 
 namespace dp_registry {
 namespace backend {
@@ -73,54 +74,31 @@ OUString ComponentBackendDb::getRootElementName()
     return OUSTR(ROOT_ELEMENT_NAME);
 }
 
+OUString ComponentBackendDb::getKeyElementName()
+{
+    return OUSTR(KEY_ELEMENT_NAME);
+}
+
 void ComponentBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
 {
     try{
-        const OUString sNameSpace = getDbNSName();
-        const OUString sPrefix = getNSPrefix();
-        Reference<css::xml::dom::XDocument> doc = getDocument();
-        Reference<css::xml::dom::XNode> root = doc->getFirstChild();
-
-#if    OSL_DEBUG_LEVEL > 0
-        //There must not be yet an entry with the same url
-        OUString sExpression(
-            sPrefix + OUSTR(":component[@url = \"") + url + OUSTR("\"]"));
-        Reference<css::xml::dom::XNode> _extensionNode =
-            getXPathAPI()->selectSingleNode(root, sExpression);
-        OSL_ASSERT(! _extensionNode.is());
-#endif
-        Reference<css::xml::dom::XElement> componentElement(
-            doc->createElementNS(sNameSpace, sPrefix + OUSTR(":component")));
-
-        componentElement->setAttribute(OUSTR("url"), url);
-
-        Reference<css::xml::dom::XNode> componentNode(
-            componentElement, UNO_QUERY_THROW);
-
-        root->appendChild(componentNode);
-
-        Reference<css::xml::dom::XNode> javaTypeLibNode(
-            doc->createElementNS(sNameSpace, sPrefix + OUSTR(":java-type-library")), UNO_QUERY_THROW);
-
-        componentNode->appendChild(javaTypeLibNode);
-
-        Reference<css::xml::dom::XNode> javaTypeLibValueNode(
-            doc->createTextNode(OUString::valueOf((sal_Bool) data.javaTypeLibrary)),
-            UNO_QUERY_THROW);
-        javaTypeLibNode->appendChild(javaTypeLibValueNode);
+        Reference<css::xml::dom::XNode> componentNode = writeKeyElement(url);
+        writeSimpleElement(OUSTR("java-type-library"),
+                           OUString::valueOf((sal_Bool) data.javaTypeLibrary),
+                           componentNode);
 
         writeSimpleList(
             data.implementationNames,
-            sPrefix + OUSTR(":implementation-names"),
-            sPrefix + OUSTR(":name"),
+            OUSTR("implementation-names"),
+            OUSTR("name"),
             componentNode);
 
         writeVectorOfPair(
             data.singletons,
-            sPrefix + OUSTR(":singletons"),
-            sPrefix + OUSTR(":item"),
-            sPrefix + OUSTR(":key"),
-            sPrefix + OUSTR(":value"),
+            OUSTR("singletons"),
+            OUSTR("item"),
+            OUSTR("key"),
+            OUSTR("value"),
             componentNode);
 
         save();
@@ -134,50 +112,31 @@ void ComponentBackendDb::addEntry(::rtl::OUString const & url, Data const & data
     }
 }
 
-void ComponentBackendDb::removeEntry(::rtl::OUString const & url)
-{
-    OUString sExpression(
-        OUSTR(NS_PREFIX) + OUSTR(":component[@url = \"") + url + OUSTR("\"]"));
-    removeElement(sExpression);
-}
-
 ComponentBackendDb::Data ComponentBackendDb::getEntry(::rtl::OUString const & url)
 {
     try
     {
-        const OUString sPrefix = getNSPrefix();
         ComponentBackendDb::Data retData;
-        const OUString sExpression(
-            sPrefix + OUSTR(":component[@url = \"") + url + OUSTR("\"]"));
-        Reference<css::xml::dom::XDocument> doc = getDocument();
-        Reference<css::xml::dom::XNode> root = doc->getFirstChild();
-
-        Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
-        //find the extension element that is to be removed
-        Reference<css::xml::dom::XNode> aNode =
-            xpathApi->selectSingleNode(root, sExpression);
+        Reference<css::xml::dom::XNode> aNode = getKeyElement(url);
         if (aNode.is())
         {
-            const OUString sExprJavaTypeLib(sPrefix + OUSTR(":java-type-library/text()"));
-
-            Reference<css::xml::dom::XNode> idValueNode =
-                xpathApi->selectSingleNode(aNode, sExprJavaTypeLib);
-            retData.javaTypeLibrary =
-                idValueNode->getNodeValue().equals(OUSTR("true")) ? true : false;
+            bool bJava = readSimpleElement(OUSTR("java-type-library"), aNode)
+                .equals(OUSTR("true")) ? true : false;
+            retData.javaTypeLibrary = bJava;
 
             retData.implementationNames =
                 readList(
                     aNode,
-                    sPrefix + OUSTR(":implementation-names"),
-                    sPrefix + OUSTR(":name"));
+                    OUSTR("implementation-names"),
+                    OUSTR("name"));
 
             retData.singletons =
                 readVectorOfPair(
                     aNode,
-                    sPrefix + OUSTR(":singletons"),
-                    sPrefix + OUSTR(":item"),
-                    sPrefix + OUSTR(":key"),
-                    sPrefix + OUSTR(":value"));
+                    OUSTR("singletons"),
+                    OUSTR("item"),
+                    OUSTR("key"),
+                    OUSTR("value"));
         }
         return retData;
     }

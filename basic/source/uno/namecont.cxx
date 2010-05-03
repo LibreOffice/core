@@ -2169,6 +2169,7 @@ Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
     SfxLibrary* pNewLib = implCreateLibraryLink( Name, aLibInfoFileURL, aLibDirURL, ReadOnly );
     pNewLib->maLibElementFileExtension = maLibElementFileExtension;
     pNewLib->maUnexpandedStorageURL = aUnexpandedStorageURL;
+    pNewLib->maOrignialStorageURL = StorageURL;
 
     OUString aInitFileName;
     uno::Reference< embed::XStorage > xDummyStor;
@@ -2788,6 +2789,19 @@ OUString SfxLibraryContainer::expand_url( const OUString& url )
     }
 }
 
+//XLibraryContainer3
+OUString SAL_CALL SfxLibraryContainer::getOriginalLibraryLinkURL( const OUString& Name )
+    throw (IllegalArgumentException, NoSuchElementException, RuntimeException)
+{
+    LibraryContainerMethodGuard aGuard( *this );
+    SfxLibrary* pImplLib = getImplLib( Name );
+    sal_Bool bLink = pImplLib->mbLink;
+    if( !bLink )
+        throw IllegalArgumentException();
+    OUString aRetStr = pImplLib->maOrignialStorageURL;
+    return aRetStr;
+}
+
 // Methods XServiceInfo
 ::sal_Bool SAL_CALL SfxLibraryContainer::supportsService( const ::rtl::OUString& _rServiceName )
     throw (RuntimeException)
@@ -3381,7 +3395,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextSharedScri
 
     if( m_iSharedPackage == m_aSharedPackagesSeq.getLength() )
     {
-        m_eState = END_REACHED;
+        m_eState = BUNDLED_EXTENSIONS;
     }
     else
     {

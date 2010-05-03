@@ -49,6 +49,7 @@ using ::rtl::OUString;
 #define EXTENSION_REG_NS "http://openoffice.org/extensionmanager/help-registry/2010"
 #define NS_PREFIX "help"
 #define ROOT_ELEMENT_NAME "help-backend-db"
+#define KEY_ELEMENT_NAME "help"
 
 namespace dp_registry {
 namespace backend {
@@ -76,42 +77,24 @@ OUString HelpBackendDb::getRootElementName()
     return OUSTR(ROOT_ELEMENT_NAME);
 }
 
+OUString HelpBackendDb::getKeyElementName()
+{
+    return OUSTR(KEY_ELEMENT_NAME);
+}
+
+
 void HelpBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
 {
     try{
+        Reference<css::xml::dom::XNode> helpNode
+            = writeKeyElement(url);
 
-        const OUString sNameSpace = getDbNSName();
-        const OUString sPrefix = getNSPrefix();
-        Reference<css::xml::dom::XDocument> doc = getDocument();
-        Reference<css::xml::dom::XNode> root = doc->getFirstChild();
-
-#if    OSL_DEBUG_LEVEL > 0
-        //There must not be yet an entry with the same url
-        OUString sExpression(
-            sPrefix + OUSTR(":help[@url = \"") + url + OUSTR("\"]"));
-        Reference<css::xml::dom::XNode> _extensionNode =
-            getXPathAPI()->selectSingleNode(root, sExpression);
-        OSL_ASSERT(! _extensionNode.is());
-#endif
-        Reference<css::xml::dom::XElement> helpElement(
-            doc->createElementNS(sNameSpace, sPrefix +  OUSTR(":help")));
-
-        helpElement->setAttribute(OUSTR("url"), url);
-
-        Reference<css::xml::dom::XNode> helpNode(
-            helpElement, UNO_QUERY_THROW);
-        root->appendChild(helpNode);
-
-        Reference<css::xml::dom::XNode> dataNode(
-            doc->createElementNS(sNameSpace, sPrefix + OUSTR(":data-url")),
-            UNO_QUERY_THROW);
-        helpNode->appendChild(dataNode);
-
-        Reference<css::xml::dom::XNode> dataValue(
-            doc->createTextNode(data.dataUrl), UNO_QUERY_THROW);
-        dataNode->appendChild(dataValue);
-
+        writeSimpleElement(OUSTR("data-url"), data.dataUrl, helpNode);
         save();
+    }
+    catch (css::deployment::DeploymentException& )
+    {
+        throw;
     }
     catch(css::uno::Exception &)
     {
@@ -122,42 +105,27 @@ void HelpBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
     }
 }
 
-void HelpBackendDb::removeEntry(::rtl::OUString const & url)
-{
-    OUString sExpression(
-        OUSTR(NS_PREFIX) + OUSTR(":help[@url = \"") + url + OUSTR("\"]"));
-    removeElement(sExpression);
-}
 
 ::boost::optional<HelpBackendDb::Data>
 HelpBackendDb::getEntry(::rtl::OUString const & url)
 {
     try
     {
-        const OUString sPrefix = getNSPrefix();
         HelpBackendDb::Data retData;
-        const OUString sExpression(
-            sPrefix + OUSTR(":help[@url = \"") + url + OUSTR("\"]"));
-        Reference<css::xml::dom::XDocument> doc = getDocument();
-        Reference<css::xml::dom::XNode> root = doc->getFirstChild();
-
-        Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
-        //find the extension element that is to be removed
-        Reference<css::xml::dom::XNode> aNode =
-            xpathApi->selectSingleNode(root, sExpression);
+        Reference<css::xml::dom::XNode> aNode = getKeyElement(url);
         if (aNode.is())
         {
-            const OUString sExprDataUrl(sPrefix + OUSTR(":data-url/text()"));
-
-            Reference<css::xml::dom::XNode> dataUrlVal =
-                xpathApi->selectSingleNode(aNode, sExprDataUrl);
-            retData.dataUrl = dataUrlVal->getNodeValue();
+            retData.dataUrl = readSimpleElement(OUSTR("data-url"), aNode);
         }
         else
         {
             return ::boost::optional<Data>();
         }
         return ::boost::optional<Data>(retData);
+    }
+    catch (css::deployment::DeploymentException& )
+    {
+        throw;
     }
     catch(css::uno::Exception &)
     {
@@ -189,6 +157,10 @@ HelpBackendDb::getEntry(::rtl::OUString const & url)
                 listRet.push_back(nodes->item(i)->getNodeValue());
         }
         return listRet;
+    }
+    catch (css::deployment::DeploymentException& )
+    {
+        throw;
     }
     catch(css::uno::Exception &)
     {

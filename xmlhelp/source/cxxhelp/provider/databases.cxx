@@ -1511,6 +1511,7 @@ void ExtensionIteratorBase::init()
 
     m_bUserPackagesLoaded = false;
     m_bSharedPackagesLoaded = false;
+    m_bBundledPackagesLoaded = false;
     m_iUserPackage = 0;
     m_iSharedPackage = 0;
     m_iBundledPackage = 0;
@@ -1624,7 +1625,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPa
 
     if( m_iSharedPackage == m_aSharedPackagesSeq.getLength() )
     {
-        m_eState = END_REACHED;
+        m_eState = BUNDLED_EXTENSIONS;
     }
     else
     {

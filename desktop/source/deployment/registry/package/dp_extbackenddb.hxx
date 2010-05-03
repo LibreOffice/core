@@ -62,6 +62,7 @@ protected:
     virtual ::rtl::OUString getDbNSName();
     virtual ::rtl::OUString getNSPrefix();
     virtual ::rtl::OUString getRootElementName();
+    virtual ::rtl::OUString getKeyElementName();
 
 public:
     struct Data
@@ -81,7 +82,7 @@ public:
                         ::rtl::OUString const & url);
 
     void addEntry(::rtl::OUString const & url, Data const & data);
-    void removeEntry(::rtl::OUString const & url);
+
     Data getEntry(::rtl::OUString const & url);
 
 };

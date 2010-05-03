@@ -63,13 +63,13 @@ BackendDb::BackendDb(
 
 void BackendDb::save()
 {
-    Reference<css::io::XActiveDataSource> xDataSource(m_doc,css::uno::UNO_QUERY_THROW);
+    const Reference<css::io::XActiveDataSource> xDataSource(m_doc,css::uno::UNO_QUERY_THROW);
     ::rtl::ByteSequence bytes;
     xDataSource->setOutputStream(::xmlscript::createOutputStream(&bytes));
-    Reference<css::io::XActiveDataControl> xDataControl(m_doc,css::uno::UNO_QUERY_THROW);
+    const Reference<css::io::XActiveDataControl> xDataControl(m_doc,css::uno::UNO_QUERY_THROW);
     xDataControl->start();
 
-    Reference<css::io::XInputStream> xData(
+    const Reference<css::io::XInputStream> xData(
         ::xmlscript::createInputStream(bytes));
     ::ucbhelper::Content ucbDb(m_urlDb, 0);
     ucbDb.writeStream(xData, true /*replace existing*/);
@@ -79,7 +79,7 @@ css::uno::Reference<css::xml::dom::XDocument> BackendDb::getDocument()
 {
     if (!m_doc.is())
     {
-        Reference<css::xml::dom::XDocumentBuilder> xDocBuilder(
+        const Reference<css::xml::dom::XDocumentBuilder> xDocBuilder(
             m_xContext->getServiceManager()->createInstanceWithContext(
                 OUSTR("com.sun.star.xml.dom.DocumentBuilder"),
                 m_xContext ), css::uno::UNO_QUERY);
@@ -97,11 +97,10 @@ css::uno::Reference<css::xml::dom::XDocument> BackendDb::getDocument()
         {
             //Create a new document and insert some basic stuff
             m_doc = xDocBuilder->newDocument();
-            Reference<css::xml::dom::XElement> rootNode =
+            const Reference<css::xml::dom::XElement> rootNode =
                 m_doc->createElementNS(getDbNSName(), getNSPrefix() +
                                        OUSTR(":") + getRootElementName());
-//             rootNode->setAttribute(
-//                 OUSTR("xmlns"), getDbNSName());
+
             m_doc->appendChild(Reference<css::xml::dom::XNode>(
                                    rootNode, UNO_QUERY_THROW));
             save();
@@ -144,11 +143,11 @@ void BackendDb::removeElement(::rtl::OUString const & sXPathExpression)
 {
     try
     {
-        Reference<css::xml::dom::XDocument> doc = getDocument();
-        Reference<css::xml::dom::XNode> root = doc->getFirstChild();
-        Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
+        const Reference<css::xml::dom::XDocument> doc = getDocument();
+        const Reference<css::xml::dom::XNode> root = doc->getFirstChild();
+        const Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
         //find the extension element that is to be removed
-        Reference<css::xml::dom::XNode> aNode =
+        const Reference<css::xml::dom::XNode> aNode =
             xpathApi->selectSingleNode(root, sXPathExpression);
 
         if (aNode.is())
@@ -159,7 +158,7 @@ void BackendDb::removeElement(::rtl::OUString const & sXPathExpression)
 
 #if    OSL_DEBUG_LEVEL > 0
         //There must not be any other entry with the same url
-        Reference<css::xml::dom::XNode> nextNode =
+        const Reference<css::xml::dom::XNode> nextNode =
             xpathApi->selectSingleNode(root, sXPathExpression);
         OSL_ASSERT(! nextNode.is());
 #endif
@@ -171,7 +170,50 @@ void BackendDb::removeElement(::rtl::OUString const & sXPathExpression)
             OUSTR("Extension Manager: failed to write data entry in backend db: ") +
             m_urlDb, 0, exc);
     }
+}
 
+void BackendDb::removeEntry(::rtl::OUString const & url)
+{
+    const OUString sKeyElement = getKeyElementName();
+    const OUString sPrefix = getNSPrefix();
+    ::rtl::OUStringBuffer sExpression(500);
+    sExpression.append(sPrefix);
+    sExpression.appendAscii(":");
+    sExpression.append(sKeyElement);
+    sExpression.append(OUSTR("[@url = \""));
+    sExpression.append(url);
+    sExpression.appendAscii("\"]");
+
+    removeElement(sExpression.makeStringAndClear());
+}
+
+Reference<css::xml::dom::XNode> BackendDb::getKeyElement(
+    ::rtl::OUString const & url)
+{
+    try
+    {
+        const OUString sPrefix = getNSPrefix();
+        const OUString sKeyElement = getKeyElementName();
+        ::rtl::OUStringBuffer sExpression(500);
+        sExpression.append(sPrefix);
+        sExpression.appendAscii(":");
+        sExpression.append(sKeyElement);
+        sExpression.append(OUSTR("[@url = \""));
+        sExpression.append(url);
+        sExpression.appendAscii("\"]");
+
+        const Reference<css::xml::dom::XDocument> doc = getDocument();
+        const Reference<css::xml::dom::XNode> root = doc->getFirstChild();
+        const Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
+        return xpathApi->selectSingleNode(root, sExpression.makeStringAndClear());
+    }
+    catch(css::uno::Exception &)
+    {
+        Any exc( ::cppu::getCaughtException() );
+        throw css::deployment::DeploymentException(
+            OUSTR("Extension Manager: failed to read key element in backend db: ") +
+            m_urlDb, 0, exc);
+    }
 }
 
 //Only writes the data if there is at least one entry
@@ -188,11 +230,12 @@ void BackendDb::writeVectorOfPair(
             return;
         const OUString sNameSpace = getDbNSName();
         OSL_ASSERT(sNameSpace.getLength());
-        Reference<css::xml::dom::XDocument> doc = getDocument();
-        Reference<css::xml::dom::XNode> root = doc->getFirstChild();
+        const OUString sPrefix(getNSPrefix() + OUSTR(":"));
+        const Reference<css::xml::dom::XDocument> doc = getDocument();
+        const Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
-        Reference<css::xml::dom::XElement> vectorNode(
-            doc->createElementNS(sNameSpace, sVectorTagName));
+        const Reference<css::xml::dom::XElement> vectorNode(
+            doc->createElementNS(sNameSpace, sPrefix + sVectorTagName));
 
         xParent->appendChild(
             Reference<css::xml::dom::XNode>(
@@ -200,35 +243,35 @@ void BackendDb::writeVectorOfPair(
         typedef ::std::vector< ::std::pair< OUString, OUString > >::const_iterator CIT;
         for (CIT i = vecPairs.begin(); i != vecPairs.end(); i++)
         {
-            Reference<css::xml::dom::XElement> pairNode(
-                doc->createElementNS(sNameSpace, sPairTagName));
+            const Reference<css::xml::dom::XElement> pairNode(
+                doc->createElementNS(sNameSpace, sPrefix + sPairTagName));
 
             vectorNode->appendChild(
                 Reference<css::xml::dom::XNode>(
                     pairNode, css::uno::UNO_QUERY_THROW));
 
-            Reference<css::xml::dom::XElement> firstNode(
-                doc->createElementNS(sNameSpace, sFirstTagName));
+            const Reference<css::xml::dom::XElement> firstNode(
+                doc->createElementNS(sNameSpace, sPrefix + sFirstTagName));
 
             pairNode->appendChild(
                 Reference<css::xml::dom::XNode>(
                     firstNode, css::uno::UNO_QUERY_THROW));
 
-            Reference<css::xml::dom::XText> firstTextNode(
+            const Reference<css::xml::dom::XText> firstTextNode(
                 doc->createTextNode( i->first));
 
             firstNode->appendChild(
                 Reference<css::xml::dom::XNode>(
                     firstTextNode, css::uno::UNO_QUERY_THROW));
 
-            Reference<css::xml::dom::XElement> secondNode(
-                doc->createElementNS(sNameSpace, sSecondTagName));
+            const Reference<css::xml::dom::XElement> secondNode(
+                doc->createElementNS(sNameSpace, sPrefix + sSecondTagName));
 
             pairNode->appendChild(
                 Reference<css::xml::dom::XNode>(
                     secondNode, css::uno::UNO_QUERY_THROW));
 
-            Reference<css::xml::dom::XText> secondTextNode(
+            const Reference<css::xml::dom::XText> secondTextNode(
                 doc->createTextNode( i->second));
 
             secondNode->appendChild(
@@ -256,23 +299,24 @@ BackendDb::readVectorOfPair(
     try
     {
         OSL_ASSERT(parent.is());
-        Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
-        OUString sExprPairs(
-            sListTagName + OUSTR("/") + sPairTagName);
-        Reference<css::xml::dom::XNodeList> listPairs =
+        const OUString sPrefix(getNSPrefix() + OUSTR(":"));
+        const Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
+        const OUString sExprPairs(
+            sPrefix + sListTagName + OUSTR("/") + sPrefix + sPairTagName);
+        const Reference<css::xml::dom::XNodeList> listPairs =
             xpathApi->selectNodeList(parent, sExprPairs);
 
         ::std::vector< ::std::pair< OUString, OUString > > retVector;
         sal_Int32 length = listPairs->getLength();
         for (sal_Int32 i = 0; i < length; i++)
         {
-            Reference<css::xml::dom::XNode> aPair = listPairs->item(i);
-            OUString sExprFirst(sFirstTagName + OUSTR("/text()"));
-            Reference<css::xml::dom::XNode> first =
+            const Reference<css::xml::dom::XNode> aPair = listPairs->item(i);
+            const OUString sExprFirst(sPrefix + sFirstTagName + OUSTR("/text()"));
+            const Reference<css::xml::dom::XNode> first =
                 xpathApi->selectSingleNode(aPair, sExprFirst);
 
-            OUString sExprSecond(sSecondTagName + OUSTR("/text()"));
-            Reference<css::xml::dom::XNode> second =
+            const OUString sExprSecond(sPrefix + sSecondTagName + OUSTR("/text()"));
+            const Reference<css::xml::dom::XNode> second =
                 xpathApi->selectSingleNode(aPair, sExprSecond);
             OSL_ASSERT(first.is() && second.is());
 
@@ -302,10 +346,11 @@ void BackendDb::writeSimpleList(
         if (list.size() == 0)
             return;
         const OUString sNameSpace = getDbNSName();
-        Reference<css::xml::dom::XDocument> doc = getDocument();
+        const OUString sPrefix(getNSPrefix() + OUSTR(":"));
+        const Reference<css::xml::dom::XDocument> doc = getDocument();
 
-        Reference<css::xml::dom::XElement> listNode(
-            doc->createElementNS(sNameSpace, sListTagName));
+        const Reference<css::xml::dom::XElement> listNode(
+            doc->createElementNS(sNameSpace, sPrefix + sListTagName));
 
         xParent->appendChild(
             Reference<css::xml::dom::XNode>(
@@ -314,12 +359,12 @@ void BackendDb::writeSimpleList(
         typedef ::std::list<OUString>::const_iterator ITC_ITEMS;
         for (ITC_ITEMS i = list.begin(); i != list.end(); i++)
         {
-            Reference<css::xml::dom::XNode> memberNode(
-                doc->createElementNS(sNameSpace, sMemberTagName), css::uno::UNO_QUERY_THROW);
+            const Reference<css::xml::dom::XNode> memberNode(
+                doc->createElementNS(sNameSpace, sPrefix + sMemberTagName), css::uno::UNO_QUERY_THROW);
 
             listNode->appendChild(memberNode);
 
-            Reference<css::xml::dom::XNode> textNode(
+            const Reference<css::xml::dom::XNode> textNode(
                 doc->createTextNode( *i), css::uno::UNO_QUERY_THROW);
 
             memberNode->appendChild(textNode);
@@ -332,8 +377,104 @@ void BackendDb::writeSimpleList(
             OUSTR("Extension Manager: failed to write data entry in backend db: ") +
             m_urlDb, 0, exc);
     }
+}
+
+//Writes only the element if is has a value.
+//The prefix is automatically added to the element name
+void BackendDb::writeSimpleElement(
+    OUString const & sElementName, OUString const & value,
+    Reference<css::xml::dom::XNode> const & xParent)
+{
+    try
+    {
+        if (value.getLength() == 0)
+            return;
+        const OUString sPrefix = getNSPrefix();
+        const Reference<css::xml::dom::XDocument> doc = getDocument();
+        const OUString sNameSpace = getDbNSName();
+        const Reference<css::xml::dom::XNode> dataNode(
+            doc->createElementNS(sNameSpace, sPrefix + OUSTR(":") + sElementName),
+            UNO_QUERY_THROW);
+        xParent->appendChild(dataNode);
+
+        const Reference<css::xml::dom::XNode> dataValue(
+            doc->createTextNode(value), UNO_QUERY_THROW);
+        dataNode->appendChild(dataValue);
+    }
+    catch(css::uno::Exception &)
+    {
+        Any exc( ::cppu::getCaughtException() );
+        throw css::deployment::DeploymentException(
+            OUSTR("Extension Manager: failed to write data entry(writeSimpleElement) in backend db: ") +
+            m_urlDb, 0, exc);
+    }
 
 }
+
+/** The key elements have an url attribute and are always children of the root
+    element.
+*/
+Reference<css::xml::dom::XNode> BackendDb::writeKeyElement(
+    ::rtl::OUString const & url)
+{
+    try
+    {
+        const OUString sNameSpace = getDbNSName();
+        const OUString sPrefix = getNSPrefix();
+        const OUString sElementName = getKeyElementName();
+        const Reference<css::xml::dom::XDocument> doc = getDocument();
+        const Reference<css::xml::dom::XNode> root = doc->getFirstChild();
+
+#if    OSL_DEBUG_LEVEL > 0
+        //There must not be yet an entry with the same url
+        const OUString sExpression(
+            sPrefix + OUSTR(":") + sElementName + OUSTR("[@url = \"") + url + OUSTR("\"]"));
+        const Reference<css::xml::dom::XNode> _extensionNode =
+            getXPathAPI()->selectSingleNode(root, sExpression);
+        OSL_ASSERT(! _extensionNode.is());
+#endif
+        const Reference<css::xml::dom::XElement> keyElement(
+            doc->createElementNS(sNameSpace, sPrefix +  OUSTR(":") + sElementName));
+
+        keyElement->setAttribute(OUSTR("url"), url);
+
+        const Reference<css::xml::dom::XNode> keyNode(
+            keyElement, UNO_QUERY_THROW);
+        root->appendChild(keyNode);
+        return keyNode;
+    }
+    catch(css::uno::Exception &)
+    {
+        Any exc( ::cppu::getCaughtException() );
+        throw css::deployment::DeploymentException(
+            OUSTR("Extension Manager: failed to write key element in backend db: ") +
+            m_urlDb, 0, exc);
+    }
+}
+
+OUString BackendDb::readSimpleElement(
+    OUString const & sElementName, Reference<css::xml::dom::XNode> const & xParent)
+{
+    try
+    {
+        const OUString sPrefix = getNSPrefix();
+        const OUString sExpr(sPrefix + OUSTR(":") + sElementName + OUSTR("/text()"));
+        const Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
+        const Reference<css::xml::dom::XNode> val =
+            xpathApi->selectSingleNode(xParent, sExpr);
+        if (val.is())
+            return val->getNodeValue();
+        return OUString();
+    }
+    catch(css::uno::Exception &)
+    {
+        Any exc( ::cppu::getCaughtException() );
+        throw css::deployment::DeploymentException(
+            OUSTR("Extension Manager: failed to read data (readSimpleElement) in backend db: ") +
+            m_urlDb, 0, exc);
+    }
+}
+
 
 ::std::list< OUString> BackendDb::readList(
     Reference<css::xml::dom::XNode> const & parent,
@@ -343,17 +484,18 @@ void BackendDb::writeSimpleList(
     try
     {
         OSL_ASSERT(parent.is());
-        Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
-        OUString sExprList(
-            sListTagName + OUSTR("/") + sMemberTagName + OUSTR("/text()"));
-        Reference<css::xml::dom::XNodeList> list =
+        const OUString sPrefix(getNSPrefix() + OUSTR(":"));
+        const Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
+        const OUString sExprList(
+            sPrefix + sListTagName + OUSTR("/") + sPrefix + sMemberTagName + OUSTR("/text()"));
+        const Reference<css::xml::dom::XNodeList> list =
             xpathApi->selectNodeList(parent, sExprList);
 
         ::std::list<OUString > retList;
         sal_Int32 length = list->getLength();
         for (sal_Int32 i = 0; i < length; i++)
         {
-            Reference<css::xml::dom::XNode> member = list->item(i);
+            const Reference<css::xml::dom::XNode> member = list->item(i);
             retList.push_back(member->getNodeValue());
         }
         return retList;
@@ -367,6 +509,84 @@ void BackendDb::writeSimpleList(
     }
 }
 
+
+
+//================================================================================
+RegisteredDb::RegisteredDb(
+    Reference<XComponentContext> const &  xContext,
+    ::rtl::OUString const & url):BackendDb(xContext, url)
+{
+
+}
+
+void RegisteredDb::addEntry(::rtl::OUString const & url)
+{
+    try{
+
+        const OUString sNameSpace = getDbNSName();
+        const OUString sPrefix = getNSPrefix();
+        const OUString sEntry = getKeyElementName();
+
+        Reference<css::xml::dom::XDocument> doc = getDocument();
+        Reference<css::xml::dom::XNode> root = doc->getFirstChild();
+
+#if    OSL_DEBUG_LEVEL > 0
+        //There must not be yet an entry with the same url
+        OUString sExpression(
+            sPrefix + OUSTR(":") + sEntry + OUSTR("[@url = \"") + url + OUSTR("\"]"));
+        Reference<css::xml::dom::XNode> _extensionNode =
+            getXPathAPI()->selectSingleNode(root, sExpression);
+        OSL_ASSERT(! _extensionNode.is());
+#endif
+        Reference<css::xml::dom::XElement> helpElement(
+            doc->createElementNS(sNameSpace, sPrefix +  OUSTR(":") + sEntry));
+
+        helpElement->setAttribute(OUSTR("url"), url);
+
+        Reference<css::xml::dom::XNode> helpNode(
+            helpElement, UNO_QUERY_THROW);
+        root->appendChild(helpNode);
+
+        save();
+    }
+    catch(css::uno::Exception &)
+    {
+        Any exc( ::cppu::getCaughtException() );
+        throw css::deployment::DeploymentException(
+            OUSTR("Extension Manager: failed to write data entry in backend db: ") +
+            m_urlDb, 0, exc);
+    }
+}
+
+bool RegisteredDb::getEntry(::rtl::OUString const & url)
+{
+    try
+    {
+        const OUString sPrefix = getNSPrefix();
+        const OUString sEntry = getKeyElementName();
+        const OUString sExpression(
+            sPrefix + OUSTR(":") + sEntry + OUSTR("[@url = \"") + url + OUSTR("\"]"));
+        Reference<css::xml::dom::XDocument> doc = getDocument();
+        Reference<css::xml::dom::XNode> root = doc->getFirstChild();
+
+        Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
+        //find the extension element that is to be removed
+        Reference<css::xml::dom::XNode> aNode =
+            xpathApi->selectSingleNode(root, sExpression);
+        if (!aNode.is())
+        {
+            return false;
+        }
+        return true;
+    }
+    catch(css::uno::Exception &)
+    {
+        Any exc( ::cppu::getCaughtException() );
+        throw css::deployment::DeploymentException(
+            OUSTR("Extension Manager: failed to read data entry in backend db: ") +
+            m_urlDb, 0, exc);
+    }
+}
 
 
 } // namespace backend

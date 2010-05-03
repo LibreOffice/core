@@ -59,9 +59,6 @@ namespace help {
 
 /* The XML file stores the extensions which are currently registered.
    They will be removed when they are revoked.
-   The format looks like this:
-
-<?xml version="1.0"?>
  */
 class HelpBackendDb: public dp_registry::backend::BackendDb
 {
@@ -71,6 +68,8 @@ protected:
     virtual ::rtl::OUString getNSPrefix();
 
     virtual ::rtl::OUString getRootElementName();
+
+    virtual ::rtl::OUString getKeyElementName();
 
 public:
     struct Data
@@ -87,7 +86,7 @@ public:
                         ::rtl::OUString const & url);
 
     void addEntry(::rtl::OUString const & url, Data const & data);
-    void removeEntry(::rtl::OUString const & url);
+
     ::boost::optional<Data> getEntry(::rtl::OUString const & url);
     ::std::list< ::rtl::OUString> getAllDataUrls();
 

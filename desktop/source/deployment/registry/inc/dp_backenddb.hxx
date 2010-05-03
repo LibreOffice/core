@@ -30,6 +30,7 @@
 
 #include "rtl/ustring.hxx"
 #include <list>
+#include <vector>
 
 namespace css = ::com::sun::star;
 
@@ -75,6 +76,9 @@ protected:
     void save();
     void removeElement(::rtl::OUString const & sXPathExpression);
 
+    css::uno::Reference<css::xml::dom::XNode> getKeyElement(
+        ::rtl::OUString const & url);
+
     void writeSimpleList(
         ::std::list< ::rtl::OUString> const & list,
         ::rtl::OUString const & sListTagName,
@@ -87,6 +91,17 @@ protected:
         ::rtl::OUString const & sPairTagName,
         ::rtl::OUString const & sFirstTagName,
         ::rtl::OUString const & sSecondTagName,
+        css::uno::Reference<css::xml::dom::XNode> const & xParent);
+
+    void writeSimpleElement(
+        ::rtl::OUString const & sElementName, ::rtl::OUString const & value,
+        css::uno::Reference<css::xml::dom::XNode> const & xParent);
+
+    css::uno::Reference<css::xml::dom::XNode> writeKeyElement(
+        ::rtl::OUString const & url);
+
+    ::rtl::OUString readSimpleElement(
+        ::rtl::OUString const & sElementName,
         css::uno::Reference<css::xml::dom::XNode> const & xParent);
 
     ::std::vector< ::std::pair< ::rtl::OUString, ::rtl::OUString > >
@@ -117,6 +132,10 @@ protected:
     /* returns the name of the root element without any namespace prefix.
      */
     virtual ::rtl::OUString getRootElementName()=0;
+    /* returns the name of xml element for each entry
+     */
+    virtual ::rtl::OUString getKeyElementName()=0;
+
 
 
 public:
@@ -124,7 +143,23 @@ public:
               ::rtl::OUString const & url);
     virtual ~BackendDb() {};
 
+    void removeEntry(::rtl::OUString const & url);
 };
+
+class RegisteredDb: public BackendDb
+{
+
+public:
+    RegisteredDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
+                  ::rtl::OUString const & url);
+    virtual ~RegisteredDb() {};
+
+
+    virtual void addEntry(::rtl::OUString const & url);
+    virtual bool getEntry(::rtl::OUString const & url);
+
+};
+
 
 }
 }

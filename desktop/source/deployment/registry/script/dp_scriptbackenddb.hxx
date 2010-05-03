@@ -28,12 +28,12 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_DP_EXECUTABLEBACKENDDB_HXX
-#define INCLUDED_DP_EXECUTABLEBACKENDDB_HXX
+#if ! defined INCLUDED_DP_SCRIPTBACKENDDB_HXX
+#define INCLUDED_DP_SCRIPTBACKENDDB_HXX
 
 #include "rtl/ustring.hxx"
 #include "dp_backenddb.hxx"
-
+#include "boost/optional.hpp"
 namespace css = ::com::sun::star;
 
 namespace com { namespace sun { namespace star {
@@ -44,15 +44,12 @@ namespace com { namespace sun { namespace star {
 
 namespace dp_registry {
 namespace backend {
-namespace executable {
+namespace script {
 
 /* The XML file stores the extensions which are currently registered.
    They will be removed when they are revoked.
-   The format looks like this:
-
-<?xml version="1.0"?>
  */
-class ExecutableBackendDb: public dp_registry::backend::RegisteredDb
+class ScriptBackendDb: public dp_registry::backend::RegisteredDb
 {
 protected:
     virtual ::rtl::OUString getDbNSName();
@@ -63,11 +60,11 @@ protected:
 
     virtual ::rtl::OUString getKeyElementName();
 
+
 public:
 
-    ExecutableBackendDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
+    ScriptBackendDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
                         ::rtl::OUString const & url);
-
 };
 
 

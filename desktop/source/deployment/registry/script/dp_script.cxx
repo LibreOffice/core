@@ -39,12 +39,12 @@
 #include "comphelper/servicedecl.hxx"
 #include "svl/inettype.hxx"
 #include "com/sun/star/util/XUpdatable.hpp"
-#include "com/sun/star/script/XLibraryContainer.hpp"
+#include "com/sun/star/script/XLibraryContainer3.hpp"
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
-#include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
 #include <memory>
+#include "dp_scriptbackenddb.hxx"
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
@@ -100,15 +100,19 @@ class BackendImpl : public t_helper
         sal_Bool bRemoved, OUString const & identifier,
         Reference<XCommandEnvironment> const & xCmdEnv );
 
-    rtl::OUString getRegisteredFlagFileURL( Reference< deployment::XPackage > xPackage );
-    rtl::OUString expandURL( const rtl::OUString& aURL );
-    Reference< ucb::XSimpleFileAccess > getFileAccess( void );
-    Reference< ucb::XSimpleFileAccess > m_xSFA;
+    void addDataToDb(OUString const & url);
+    void deleteDataFromDb(OUString const & url);
+    bool isRegisteredInDb(OUString const & url);
+
+
+
+//     Reference< ucb::XSimpleFileAccess > getFileAccess( void );
+//  Reference< ucb::XSimpleFileAccess > m_xSFA;
 
     const Reference<deployment::XPackageTypeInfo> m_xBasicLibTypeInfo;
     const Reference<deployment::XPackageTypeInfo> m_xDialogLibTypeInfo;
     Sequence< Reference<deployment::XPackageTypeInfo> > m_typeInfos;
-
+    std::auto_ptr<ScriptBackendDb> m_backendDb;
 public:
     BackendImpl( Sequence<Any> const & args,
                  Reference<XComponentContext> const & xComponentContext );
@@ -172,6 +176,33 @@ BackendImpl::BackendImpl(
     m_typeInfos[ 1 ] = m_xDialogLibTypeInfo;
 
     OSL_ASSERT( ! transientMode() );
+
+    if (!transientMode())
+    {
+        OUString dbFile = makeURL(getCachePath(), OUSTR("backenddb.xml"));
+        m_backendDb.reset(
+            new ScriptBackendDb(getComponentContext(), dbFile));
+    }
+
+}
+void BackendImpl::addDataToDb(OUString const & url)
+{
+    if (m_backendDb.get())
+        m_backendDb->addEntry(url);
+}
+
+bool BackendImpl::isRegisteredInDb(OUString const & url)
+{
+    bool registered = false;
+    if (m_backendDb.get())
+        registered = m_backendDb->getEntry(url);
+    return registered;
+}
+
+void BackendImpl::deleteDataFromDb(OUString const & url)
+{
+    if (m_backendDb.get())
+        m_backendDb->removeEntry(url);
 }
 
 // XUpdatable
@@ -261,90 +292,6 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         static_cast<sal_Int16>(-1) );
 }
 
-rtl::OUString BackendImpl::getRegisteredFlagFileURL( Reference< deployment::XPackage > xPackage )
-{
-    rtl::OUString aRetURL;
-    if( !xPackage.is() )
-        return aRetURL;
-    rtl::OUString aHelpURL = xPackage->getURL();
-    aRetURL = expandURL( aHelpURL );
-    aRetURL += rtl::OUString::createFromAscii( "/RegisteredFlag" );
-    return aRetURL;
-}
-
-rtl::OUString BackendImpl::expandURL( const rtl::OUString& aURL )
-{
-    static Reference< util::XMacroExpander > xMacroExpander;
-    static Reference< uri::XUriReferenceFactory > xFac;
-
-    if( !xMacroExpander.is() || !xFac.is() )
-    {
-        Reference<XComponentContext> const & xContext = getComponentContext();
-        if( xContext.is() )
-        {
-            xFac = Reference< uri::XUriReferenceFactory >(
-                xContext->getServiceManager()->createInstanceWithContext( rtl::OUString::createFromAscii(
-                "com.sun.star.uri.UriReferenceFactory"), xContext ) , UNO_QUERY );
-        }
-        if( !xFac.is() )
-        {
-            throw RuntimeException(
-                ::rtl::OUString::createFromAscii(
-                "dp_registry::backend::help::BackendImpl::expandURL(), "
-                "could not instatiate UriReferenceFactory." ),
-                Reference< XInterface >() );
-        }
-
-        xMacroExpander = Reference< util::XMacroExpander >(
-            xContext->getValueByName(
-            ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.util.theMacroExpander" ) ),
-            UNO_QUERY_THROW );
-     }
-
-    rtl::OUString aRetURL = aURL;
-    if( xMacroExpander.is() )
-    {
-        Reference< uri::XUriReference > uriRef;
-        for (;;)
-        {
-            uriRef = Reference< uri::XUriReference >( xFac->parse( aRetURL ), UNO_QUERY );
-            if ( uriRef.is() )
-            {
-                Reference < uri::XVndSunStarExpandUrl > sxUri( uriRef, UNO_QUERY );
-                if( !sxUri.is() )
-                    break;
-
-                aRetURL = sxUri->expand( xMacroExpander );
-            }
-        }
-     }
-    return aRetURL;
-}
-
-Reference< ucb::XSimpleFileAccess > BackendImpl::getFileAccess( void )
-{
-    if( !m_xSFA.is() )
-    {
-        Reference<XComponentContext> const & xContext = getComponentContext();
-        if( xContext.is() )
-        {
-            m_xSFA = Reference< ucb::XSimpleFileAccess >(
-                xContext->getServiceManager()->createInstanceWithContext(
-                    rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ),
-                    xContext ), UNO_QUERY );
-        }
-        if( !m_xSFA.is() )
-        {
-            throw RuntimeException(
-                ::rtl::OUString::createFromAscii(
-                "dp_registry::backend::help::BackendImpl::getFileAccess(), "
-                "could not instatiate SimpleFileAccess." ),
-                Reference< XInterface >() );
-        }
-    }
-    return m_xSFA;
-}
-
 //##############################################################################
 
 // Package
@@ -373,14 +320,11 @@ BackendImpl::PackageImpl::isRegistered_(
 
     BackendImpl * that = getMyBackend();
     Reference< deployment::XPackage > xThisPackage( this );
-    rtl::OUString aRegisteredFlagFile = that->getRegisteredFlagFileURL( xThisPackage );
 
-    Reference< ucb::XSimpleFileAccess > xSFA = that->getFileAccess();
-    bool bReg = xSFA->exists( aRegisteredFlagFile );
-
+    bool registered = getMyBackend()->isRegisteredInDb(getURL());
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
         true /* IsPresent */,
-        beans::Ambiguous<sal_Bool>( bReg, false /* IsAmbiguous */ ) );
+        beans::Ambiguous<sal_Bool>( registered, false /* IsAmbiguous */ ) );
 }
 
 //______________________________________________________________________________
@@ -396,15 +340,13 @@ void BackendImpl::PackageImpl::processPackage_(
     BackendImpl * that = getMyBackend();
 
     Reference< deployment::XPackage > xThisPackage( this );
-    rtl::OUString aRegisteredFlagFile = that->getRegisteredFlagFileURL( xThisPackage );
-    Reference< ucb::XSimpleFileAccess > xSFA = that->getFileAccess();
     Reference<XComponentContext> const & xComponentContext = that->getComponentContext();
 
     bool bScript = (m_scriptURL.getLength() > 0);
-    Reference<css::script::XLibraryContainer> xScriptLibs;
+    Reference<css::script::XLibraryContainer3> xScriptLibs;
 
     bool bDialog = (m_dialogURL.getLength() > 0);
-    Reference<css::script::XLibraryContainer> xDialogLibs;
+    Reference<css::script::XLibraryContainer3> xDialogLibs;
 
     bool bRunning = office_is_running();
     if( bRunning )
@@ -425,52 +367,116 @@ void BackendImpl::PackageImpl::processPackage_(
                     xComponentContext ), UNO_QUERY_THROW );
         }
     }
-
+    bool bRegistered = getMyBackend()->isRegisteredInDb(getURL());
     if( !doRegisterPackage )
     {
-        if( xSFA->exists( aRegisteredFlagFile ) )
+        //We cannot just call removeLibrary(name) because this could remove a
+        //script which was added by an extension in a different repository. For
+        //example, extension foo is contained in the bundled repository and then
+        //the user adds it it to the user repository. The extension manager will
+        //then register the new script and revoke the script from the bundled
+        //extension. removeLibrary(name) would now remove the script from the
+        //user repository. That is, the script of the newly added user extension does
+        //not work anymore. Therefore we must check if the currently active
+        //script comes in fact from the currently processed extension.
+
+        if (bRegistered)
         {
-            xSFA->kill( aRegisteredFlagFile );
+            if (!isRemoved())
+            {
+                if (bScript && xScriptLibs.is() && xScriptLibs->hasByName(m_name))
+                {
+                    const OUString sScriptUrl = xScriptLibs->getOriginalLibraryLinkURL(m_name);
+                    if (sScriptUrl.equals(m_scriptURL))
+                        xScriptLibs->removeLibrary(m_name);
+                }
 
-            if( bScript && xScriptLibs.is() && xScriptLibs->hasByName( m_name ) )
-                xScriptLibs->removeLibrary( m_name );
-
-            if( bDialog && xDialogLibs.is() && xDialogLibs->hasByName( m_dialogName ) )
-                xDialogLibs->removeLibrary( m_dialogName );
+                if (bDialog && xDialogLibs.is() && xDialogLibs->hasByName(m_dialogName))
+                {
+                    const OUString sDialogUrl = xDialogLibs->getOriginalLibraryLinkURL(m_dialogName);
+                    if (sDialogUrl.equals(m_dialogURL))
+                        xDialogLibs->removeLibrary(m_dialogName);
+                }
+            }
+            getMyBackend()->deleteDataFromDb(getURL());
+            return;
         }
-        return;
     }
-
-    if( xSFA->exists( aRegisteredFlagFile ) )
+    if (bRegistered)
         return;     // Already registered
 
     // Update LibraryContainer
     bool bScriptSuccess = false;
     const bool bReadOnly = false;
-    if( bScript && xScriptLibs.is() && !xScriptLibs->hasByName( m_name ) )
+
+    //If there is a bundled extension, and the user installes the same extension
+    //then the script from the bundled extension must be removed. If this does not work
+    //then live deployment does not work for scripts.
+    if (bScript && xScriptLibs.is())
     {
-        xScriptLibs->createLibraryLink( m_name, m_scriptURL, bReadOnly );
-        bScriptSuccess = xScriptLibs->hasByName( m_name );
+        bool bCanAdd = true;
+        if (xScriptLibs->hasByName(m_name))
+        {
+            const OUString sOriginalUrl = xScriptLibs->getOriginalLibraryLinkURL(m_name);
+            //We assume here that library names in extensions are unique, which may not be the case
+            //ToDo: If the script exist in another extension, then both extensions must have the
+            //same id
+            if (sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE"))
+                || sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE"))
+                || sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$BUNDLED_EXTENSIONS")))
+            {
+                xScriptLibs->removeLibrary(m_name);
+                bCanAdd = true;
+            }
+            else
+            {
+                bCanAdd = false;
+            }
+        }
+
+        if (bCanAdd)
+        {
+            xScriptLibs->createLibraryLink( m_name, m_scriptURL, bReadOnly );
+            bScriptSuccess = xScriptLibs->hasByName( m_name );
+        }
     }
 
     bool bDialogSuccess = false;
-    if( bDialog && xDialogLibs.is() && !xDialogLibs->hasByName( m_dialogName ) )
+    if (bDialog && xDialogLibs.is())
     {
-        xDialogLibs->createLibraryLink( m_dialogName, m_dialogURL, bReadOnly );
-        bDialogSuccess = xDialogLibs->hasByName( m_dialogName );
-    }
+        bool bCanAdd = true;
+        if (xDialogLibs->hasByName(m_dialogName))
+        {
+            const OUString sOriginalUrl = xDialogLibs->getOriginalLibraryLinkURL(m_dialogName);
+            //We assume here that library names in extensions are unique, which may not be the case
+            //ToDo: If the script exist in another extension, then both extensions must have the
+            //same id
+            if (sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE"))
+                || sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE"))
+                || sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$BUNDLED_EXTENSIONS")))
+            {
+                xDialogLibs->removeLibrary(m_dialogName);
+                bCanAdd = true;
+            }
+            else
+            {
+                bCanAdd = false;
+            }
+        }
 
+        if (bCanAdd)
+        {
+            xDialogLibs->createLibraryLink( m_dialogName, m_dialogURL, bReadOnly );
+            bDialogSuccess = xDialogLibs->hasByName(m_dialogName);
+        }
+    }
     bool bSuccess = bScript || bDialog;     // Something must have happened
     if( bRunning )
         if( (bScript && !bScriptSuccess) || (bDialog && !bDialogSuccess) )
             bSuccess = false;
 
-    if( bSuccess && !xSFA->exists( aRegisteredFlagFile ) )
-    {
-        Reference< io::XOutputStream > xOutputStream = xSFA->openFileWrite( aRegisteredFlagFile );
-        if( xOutputStream.is() )
-            xOutputStream->closeOutput();
-    }
+    if (bSuccess)
+        getMyBackend()->addDataToDb(getURL());
 }
 
 } // anon namespace

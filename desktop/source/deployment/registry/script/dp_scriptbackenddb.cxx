@@ -32,50 +32,54 @@
 #include "precompiled_desktop.hxx"
 
 #include "rtl/string.h"
+#include "cppuhelper/exc_hlp.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/xml/dom/XDocument.hpp"
+#include "com/sun/star/xml/xpath/XXPathAPI.hpp"
 #include "dp_misc.h"
-#include "dp_executablebackenddb.hxx"
+#include "dp_scriptbackenddb.hxx"
 
 
 namespace css = ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
-#define EXTENSION_REG_NS "http://openoffice.org/extensionmanager/executable-registry/2010"
-#define NS_PREFIX "exe"
-#define ROOT_ELEMENT_NAME "executable-backend-db"
-#define ENTRY_NAME "executable"
+#define EXTENSION_REG_NS "http://openoffice.org/extensionmanager/script-registry/2010"
+#define NS_PREFIX "script"
+#define ROOT_ELEMENT_NAME "script-backend-db"
+#define KEY_ELEMENT_NAME "script"
 
 namespace dp_registry {
 namespace backend {
-namespace executable {
+namespace script {
 
-ExecutableBackendDb::ExecutableBackendDb(
+ScriptBackendDb::ScriptBackendDb(
     Reference<XComponentContext> const &  xContext,
     ::rtl::OUString const & url):RegisteredDb(xContext, url)
 {
 
 }
 
-OUString ExecutableBackendDb::getDbNSName()
+OUString ScriptBackendDb::getDbNSName()
 {
     return OUSTR(EXTENSION_REG_NS);
 }
 
-OUString ExecutableBackendDb::getNSPrefix()
+OUString ScriptBackendDb::getNSPrefix()
 {
     return OUSTR(NS_PREFIX);
 }
 
-OUString ExecutableBackendDb::getRootElementName()
+OUString ScriptBackendDb::getRootElementName()
 {
     return OUSTR(ROOT_ELEMENT_NAME);
 }
 
-OUString ExecutableBackendDb::getKeyElementName()
+OUString ScriptBackendDb::getKeyElementName()
 {
-    return OUSTR(ENTRY_NAME);
+    return OUSTR(KEY_ELEMENT_NAME);
 }
+
 
 
 } // namespace executable
