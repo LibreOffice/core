@@ -2081,24 +2081,24 @@ throw (RuntimeException)
 
 ::rtl::OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl )
 {
-
-
-    ::rtl::OUString ret;
-
     ::rtl::OUString baseLocation;
     ::rtl::OUString url;
 
     rbase  >>= baseLocation;
     rUrl  >>= url;
 
+    ::rtl::OUString absoluteURL( url );
     if ( url.getLength() > 0 )
     {
         INetURLObject urlObj(baseLocation);
         urlObj.removeSegment();
         baseLocation = urlObj.GetMainURL( INetURLObject::NO_DECODE );
-        ::osl::FileBase::getAbsoluteFileURL( baseLocation, url, ret );
+
+        ::rtl::OUString testAbsoluteURL;
+        if ( osl_File_E_None == ::osl::FileBase::getAbsoluteFileURL( baseLocation, url, testAbsoluteURL ) )
+            absoluteURL = testAbsoluteURL;
     }
 
-    return ret;
+    return absoluteURL;
 }
 
