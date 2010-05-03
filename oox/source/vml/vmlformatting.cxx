@@ -468,6 +468,7 @@ void FillModel::assignUsed( const FillModel& rSource )
     moFocus.assignIfUsed( rSource.moFocus );
     moFocusPos.assignIfUsed( rSource.moFocusPos );
     moFocusSize.assignIfUsed( rSource.moFocusSize );
+    moBitmapPath.assignIfUsed( rSource.moBitmapPath );
     moRotate.assignIfUsed( rSource.moRotate );
 }
 
@@ -557,6 +558,23 @@ void FillModel::pushToPropMap( PropertyMap& rPropMap, const FilterBase& rFilter 
                 }
             }
             break;
+
+            case XML_pattern:
+            case XML_tile:
+            case XML_frame:
+            {
+                if( moBitmapPath.has() && moBitmapPath.get().getLength() > 0 )
+                {
+                    aFillProps.maBlipProps.mxGraphic = rFilter.importEmbeddedGraphic( moBitmapPath.get() );
+                    if( aFillProps.maBlipProps.mxGraphic.is() )
+                    {
+                        aFillProps.moFillType = XML_blipFill;
+                        aFillProps.maBlipProps.moBitmapMode = (nFillType == XML_frame) ? XML_stretch : XML_tile;
+                        break;  // do not break if bitmap is missing, but run to XML_solid instead
+                    }
+                }
+            }
+            // run-through to XML_solid in case of missing bitmap path intended!
 
             case XML_solid:
             default:

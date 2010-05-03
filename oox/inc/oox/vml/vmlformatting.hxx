@@ -165,6 +165,7 @@ struct FillModel
     OptValue< double >  moFocus;                /// Linear gradient focus of second color.
     OptValue< DoublePair > moFocusPos;          /// Rectanguar gradient focus position of second color.
     OptValue< DoublePair > moFocusSize;         /// Rectanguar gradient focus size of second color.
+    OptValue< ::rtl::OUString > moBitmapPath;   /// Path to fill bitmap fragment.
     OptValue< bool >    moRotate;               /// True = rotate gradient/bitmap with shape.
 
     void                assignUsed( const FillModel& rSource );
