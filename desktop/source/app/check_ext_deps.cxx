@@ -47,8 +47,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include "com/sun/star/deployment/XPackage.hpp"
-#include "com/sun/star/deployment/XPackageManager.hpp"
-#include "com/sun/star/deployment/thePackageManagerFactory.hpp"
 #include "com/sun/star/deployment/ExtensionManager.hpp"
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
