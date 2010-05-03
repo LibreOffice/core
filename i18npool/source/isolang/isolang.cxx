@@ -1007,6 +1007,28 @@ LanguageType MsLangId::convertIsoByteStringToLanguage(
 }
 
 // -----------------------------------------------------------------------
+
+struct IsoLangGLIBCModifiersEntry
+{
+    LanguageType  mnLang;
+    sal_Char      maLangStr[4];
+    sal_Char      maCountry[3];
+    sal_Char      maAtString[9];
+};
+
+static IsoLangGLIBCModifiersEntry const aImplIsoLangGLIBCModifiersEntries[] =
+{
+    // MS-LANGID codes               ISO639-1/2/3 ISO3166            glibc modifier
+    { LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "bs", "BA", "cyrillic" },
+    { LANGUAGE_USER_SERBIAN_LATIN_SERBIA,           "sr", "RS", "latin" },   // Serbian Latin in Serbia
+    { LANGUAGE_SERBIAN_LATIN,                       "sr", "CS", "latin" },   // Serbian Latin in Serbia and Montenegro
+    { LANGUAGE_USER_SERBIAN_LATIN_MONTENEGRO,       "sr", "ME", "latin" },   // Serbian Latin in Montenegro
+    { LANGUAGE_SERBIAN_LATIN_NEUTRAL,               "sr", "",   "latin" },
+    { LANGUAGE_AZERI_CYRILLIC,                      "az", "AZ", "cyrillic" },
+    { LANGUAGE_UZBEK_CYRILLIC,                      "uz", "UZ", "cyrillic" },
+    { LANGUAGE_DONTKNOW,                            "",   "",   ""   }       // marks end of table
+};
+
 // convert a unix locale string into LanguageType
 
 // static
@@ -1015,14 +1037,19 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
 {
     rtl::OString  aLang;
     rtl::OString  aCountry;
+    rtl::OString  aAtString;
 
     sal_Int32  nLangSepPos    = rString.indexOf( (sal_Char)'_' );
     sal_Int32  nCountrySepPos = rString.indexOf( (sal_Char)'.' );
+    sal_Int32  nAtPos         = rString.indexOf( (sal_Char)'@' );
 
     if (nCountrySepPos < 0)
-        nCountrySepPos = rString.indexOf( (sal_Char)'@' );
+        nCountrySepPos = nAtPos;
     if (nCountrySepPos < 0)
         nCountrySepPos = rString.getLength();
+
+    if (nAtPos >= 0)
+        aAtString = rString.copy( nAtPos+1 );
 
     if (   ((nLangSepPos >= 0) && (nLangSepPos > nCountrySepPos))
         || ((nLangSepPos < 0)) )
@@ -1035,6 +1062,30 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
         // well formed iso names like "en_US.UTF-8", "sh_BA.ISO8859-2@bosnia"
         aLang    = rString.copy( 0, nLangSepPos );
         aCountry = rString.copy( nLangSepPos+1, nCountrySepPos - nLangSepPos - 1);
+    }
+
+    //  if there is a glibc modifier, first look for exact match in modifier table
+    if (aAtString.getLength())
+    {
+        // language is lower case in table
+        rtl::OString aLowerLang = aLang.toAsciiLowerCase();
+        // country is upper case in table
+        rtl::OString aUpperCountry = aCountry.toAsciiUpperCase();
+        const IsoLangGLIBCModifiersEntry* pGLIBCModifiersEntry = aImplIsoLangGLIBCModifiersEntries;
+        do
+        {
+            if (( aLowerLang.equals( pGLIBCModifiersEntry->maLangStr ) ) &&
+               ( aAtString.equals( pGLIBCModifiersEntry->maAtString ) ))
+            {
+                if ( !aUpperCountry.getLength() ||
+                     aUpperCountry.equals( pGLIBCModifiersEntry->maCountry ) )
+               {
+                    return pGLIBCModifiersEntry->mnLang;
+               }
+            }
+            ++pGLIBCModifiersEntry;
+        }
+        while ( pGLIBCModifiersEntry->mnLang != LANGUAGE_DONTKNOW );
     }
 
     return convertIsoNamesToLanguage( aLang, aCountry );
