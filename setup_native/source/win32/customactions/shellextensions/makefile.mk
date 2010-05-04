@@ -62,7 +62,6 @@ SLOFILES = \
     $(SLO)$/setadmininstall.obj \
     $(SLO)$/layerlinks.obj \
     $(SLO)$/dotnetcheck.obj \
-    $(SLO)$/registerextensions.obj \
     $(SLO)$/copyeditiondata.obj \
     $(SLO)$/vistaspecial.obj \
     $(SLO)$/checkrunningoffice.obj \

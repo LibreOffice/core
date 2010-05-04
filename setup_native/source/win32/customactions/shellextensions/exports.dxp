@@ -6,9 +6,6 @@ SetProductInstallMode
 RebuildShellIconCache
 ExecutePostUninstallScript
 MigrateInstallPath
-RegisterExtensions
-DeregisterExtensions
-RemoveExtensions
 CheckInstallDirectory
 SetAdminInstallProperty
 CreateLayerLinks
