@@ -70,11 +70,5 @@ namespace dp_misc {
     return ::dp_misc::EQUAL;
 }
 
-::dp_misc::Order comparePackageVersions(
-    css::uno::Reference< css::deployment::XPackage > const & package1,
-    css::uno::Reference< css::deployment::XPackage > const & package2)
-{
-    return compareVersions(package1->getVersion(), package2->getVersion());
-}
 
 }

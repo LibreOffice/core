@@ -132,6 +132,7 @@ class Desktop : public Application
         static sal_Bool         LicenseNeedsAcceptance();
         static sal_Bool         IsFirstStartWizardNeeded();
         static sal_Bool         CheckExtensionDependencies();
+        static void             SynchronizeExtensionRepositories();
 
     private:
         // Bootstrap methods

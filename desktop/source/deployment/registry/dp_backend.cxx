@@ -88,6 +88,10 @@ PackageRegistryBackend::PackageRegistryBackend(
         m_eContext = CONTEXT_USER;
     else if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("shared") ))
         m_eContext = CONTEXT_SHARED;
+    else if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bundled") ))
+        m_eContext = CONTEXT_BUNDLED;
+    else if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("tmp") ))
+        m_eContext = CONTEXT_TMP;
     else if (m_context.matchIgnoreAsciiCaseAsciiL(
                  RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.tdoc:/") ))
         m_eContext = CONTEXT_DOCUMENT;
@@ -127,24 +131,29 @@ void PackageRegistryBackend::disposing()
 // XPackageRegistry
 //______________________________________________________________________________
 Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
-    OUString const & url, OUString const & mediaType,
+    OUString const & url, OUString const & mediaType, sal_Bool  bNoFileAccess ,
     Reference<XCommandEnvironment> const & xCmdEnv )
     throw (deployment::DeploymentException, CommandFailedException,
            lang::IllegalArgumentException, RuntimeException)
 {
     ::osl::ResettableMutexGuard guard( getMutex() );
     check();
-    t_string2ref::const_iterator const iFind( m_bound.find( url ) );
-    if (iFind != m_bound.end()) {
-        Reference<deployment::XPackage> xPackage( iFind->second );
-        if (xPackage.is())
-            return xPackage;
+    if (!bNoFileAccess)
+    {
+        //We only save those object which were created with bNoFileAccess = false
+        t_string2ref::const_iterator const iFind( m_bound.find( url ) );
+        if (iFind != m_bound.end())
+        {
+            Reference<deployment::XPackage> xPackage( iFind->second );
+            if (xPackage.is())
+                return xPackage;
+        }
     }
     guard.clear();
 
     Reference<deployment::XPackage> xNewPackage;
     try {
-        xNewPackage = bindPackage_( url, mediaType, xCmdEnv );
+        xNewPackage = bindPackage_( url, mediaType,  bNoFileAccess, xCmdEnv );
     }
     catch (RuntimeException &) {
         throw;
@@ -166,19 +175,23 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
     }
 
     guard.reset();
-    ::std::pair< t_string2ref::iterator, bool > insertion(
-        m_bound.insert( t_string2ref::value_type( url, xNewPackage ) ) );
-    if (insertion.second)
-    { // first insertion
-        OSL_ASSERT( Reference<XInterface>(insertion.first->second)
-                    == xNewPackage );
-    }
-    else
-    { // found existing entry
-        Reference<deployment::XPackage> xPackage( insertion.first->second );
-        if (xPackage.is())
-            return xPackage;
-        insertion.first->second = xNewPackage;
+    if (!bNoFileAccess)
+    {
+        //We only save those object which were created with bNoFileAccess = false
+        ::std::pair< t_string2ref::iterator, bool > insertion(
+            m_bound.insert( t_string2ref::value_type( url, xNewPackage ) ) );
+        if (insertion.second)
+        { // first insertion
+            OSL_ASSERT( Reference<XInterface>(insertion.first->second)
+                == xNewPackage );
+        }
+        else
+        { // found existing entry
+            Reference<deployment::XPackage> xPackage( insertion.first->second );
+            if (xPackage.is())
+                return xPackage;
+            insertion.first->second = xNewPackage;
+        }
     }
     guard.clear();
     xNewPackage->addEventListener( this ); // listen for disposing events
@@ -197,13 +210,15 @@ Package::Package( ::rtl::Reference<PackageRegistryBackend> const & myBackend,
                   OUString const & url,
                   OUString const & name,
                   OUString const & displayName,
-                  Reference<deployment::XPackageTypeInfo> const & xPackageType )
+                  Reference<deployment::XPackageTypeInfo> const & xPackageType,
+    bool bUseDb)
     : t_PackageBase( getMutex() ),
       m_myBackend( myBackend ),
       m_url( url ),
       m_name( name ),
       m_displayName( displayName ),
-      m_xPackageType( xPackageType )
+      m_xPackageType( xPackageType ),
+      m_bUseDb(bUseDb)
 {
 }
 
@@ -542,7 +557,29 @@ void Package::revokePackage(
            lang::IllegalArgumentException, RuntimeException)
 {
     processPackage_impl( false /* revoke */, xAbortChannel, xCmdEnv );
+
 }
+
+PackageRegistryBackend * Package::getMyBackend() const
+{
+    PackageRegistryBackend * pBackend = m_myBackend.get();
+    if (NULL == pBackend)
+    {
+        //May throw a DisposedException
+        check();
+        //We should never get here...
+        throw RuntimeException(
+            OUSTR("Failed to get the BackendImpl"),
+            static_cast<OWeakObject*>(const_cast<Package *>(this)));
+    }
+    return pBackend;
+}
+OUString Package::getRepositoryName()
+    throw (RuntimeException)
+{
+    PackageRegistryBackend * backEnd = getMyBackend();
+    return backEnd->getContext();
+ }
 
 //##############################################################################
 

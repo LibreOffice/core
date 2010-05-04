@@ -197,6 +197,19 @@ OUString makeURL( OUString const & baseURL, OUString const & relPath_ )
     return buf.makeStringAndClear();
 }
 
+OUString makeURLAppendSysPathSegment( OUString const & baseURL, OUString const & relPath_ )
+{
+    OUString segment = relPath_;
+    OSL_ASSERT(segment.indexOf(static_cast<sal_Unicode>('/')) == -1);
+
+    ::rtl::Uri::encode(
+        segment, rtl_UriCharClassPchar, rtl_UriEncodeIgnoreEscapes,
+        RTL_TEXTENCODING_UTF8);
+    return makeURL(baseURL, segment);
+}
+
+
+
 //==============================================================================
 OUString expandUnoRcTerm( OUString const & term_ )
 {
@@ -465,6 +478,24 @@ void TRACE(::rtl::OString const & sText)
 #if OSL_DEBUG_LEVEL > 1
     writeConsole(sText);
 #endif
+}
+
+bool hasExtensionRepositoryChanged(::rtl::OUString const & repository)
+{
+    if (repository.equals(OUSTR("shared")))
+    {
+        //get the extensions folder
+        OUString folder(RTL_CONSTASCII_USTRINGPARAM("BUNDLED_EXTENSIONS"));
+        ::rtl::Bootstrap::expandMacros(folder);
+    }
+    else if (repository.equals(OUSTR("bundled")))
+    {
+    }
+    else
+        throw lang::IllegalArgumentException(
+            OUSTR("Invalid repository name."), 0, 0);
+
+    return false;
 }
 
 }

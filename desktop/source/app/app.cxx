@@ -1395,6 +1395,9 @@ void Desktop::Main()
         bool bAbort = CheckExtensionDependencies();
         if ( bAbort )
             return;
+        //Check if bundled or shared extensions were added /removed
+        //and process those extensions
+        SynchronizeExtensionRepositories();
 
         // First Start Wizard allowed ?
         if ( ! pCmdLineArgs->IsNoFirstStartWizard())

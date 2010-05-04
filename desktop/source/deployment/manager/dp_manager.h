@@ -53,6 +53,8 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
 {
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
     ::rtl::OUString m_context;
+    ::rtl::OUString m_registrationData;
+    ::rtl::OUString m_registrationData_expanded;
     ::rtl::OUString m_registryCache;
     bool m_readOnly;
 
@@ -83,16 +85,20 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
         css::uno::Reference<css::deployment::XPackage> const & xPackage,
         ::rtl::OUString const & destFolder );
 
-    bool checkUpdate(
-        css::uno::Reference<css::deployment::XPackage> const & package,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & origCmdEnv,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const &
-            wrappedCmdEnv );
+    bool isInstalled(
+        css::uno::Reference<css::deployment::XPackage> const & package);
 
-    bool checkInstall(
-        css::uno::Reference<css::deployment::XPackage> const & package,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & cmdEnv);
+    void synchronizeRemovedExtensions(
+        css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > &
+        out_removedExtensions,
+        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
+    void synchronizeAddedExtensions(
+        css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > &
+        out_AddedExtensions,
+        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
     class CmdEnvWrapperImpl
         : public ::cppu::WeakImplHelper2< css::ucb::XCommandEnvironment,
@@ -135,7 +141,7 @@ protected:
         : t_pm_helper( getMutex() ),
           m_xComponentContext( xComponentContext ),
           m_context( context ),
-          m_readOnly( false )
+          m_readOnly( true )
         {}
 
 public:
@@ -180,17 +186,15 @@ public:
                css::lang::IllegalArgumentException,
                css::uno::RuntimeException);
 
-    /* Unregisters the package but does not remove it from disk.
-        When the operation is canceled by the user, a CommandAbortedException
-        is thrown. Then the package is still fully functional.
-        @param out_oldData
-            can be NULL
-    */
-    void removePackage_(
-        ::rtl::OUString const & id, ::rtl::OUString const & fileName,
+    virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL importExtension(
+        css::uno::Reference<css::deployment::XPackage> const & extension,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
-        ActivePackages::Data * out_oldData);
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
+        throw (css::deployment::DeploymentException,
+            css::ucb::CommandFailedException,
+            css::ucb::CommandAbortedException,
+            css::lang::IllegalArgumentException,
+            css::uno::RuntimeException);
 
     virtual void SAL_CALL removePackage(
         ::rtl::OUString const & id, ::rtl::OUString const & fileName,
@@ -242,6 +246,17 @@ public:
 
     virtual ::sal_Bool SAL_CALL isReadOnly(  )
         throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL synchronize(
+        css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > & out_xAddedExtensions,
+        css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > & out_xRemovedExtensions,
+        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
+        throw (css::deployment::DeploymentException,
+               css::ucb::CommandFailedException,
+               css::ucb::CommandAbortedException,
+               css::uno::RuntimeException);
+
 };
 
 //______________________________________________________________________________

@@ -74,7 +74,23 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 ::rtl::OUString expandUnoRcUrl( ::rtl::OUString const & url );
 
 //==============================================================================
+
+/** appends a relative path to a url.
+
+    The relative path must already be correctly encoded for use in an URL.
+    If the URL starts with vnd.sun.star.expand then the relative path will
+    be again encoded for use in an "expand" URL.
+ */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString makeURL(
+    ::rtl::OUString const & baseURL, ::rtl::OUString const & relPath );
+
+
+/** appends a relative path to a url.
+
+    This is the same as makeURL, but the relative Path must me a segment
+    of an system path.
+ */
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString makeURLAppendSysPathSegment(
     ::rtl::OUString const & baseURL, ::rtl::OUString const & relPath );
 
 //==============================================================================
@@ -151,6 +167,11 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 void TRACE(::rtl::OUString const & sText);
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 void TRACE(::rtl::OString const & sText);
+
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
+bool hasExtensionRepositoryChanged(::rtl::OUString const & repository);
+
+
 }
 
 #endif

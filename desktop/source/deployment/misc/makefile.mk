@@ -75,7 +75,8 @@ SHL1STDLIBS = \
     $(TOOLSLIB) \
     $(UCBHELPERLIB) \
     $(UNOTOOLSLIB) \
-    $(XMLSCRIPTLIB)
+    $(XMLSCRIPTLIB) \
+    $(COMPHELPERLIB)
 .IF "$(GUI)"=="OS2"
 SHL1IMPLIB = ideploymentmisc$(DLLPOSTFIX)
 LIB1TARGET = $(SLB)$/_deplmisc.lib

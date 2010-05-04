@@ -110,12 +110,15 @@ using ::rtl::OUString;
 
 namespace {
 
-OUString getVersion( const uno::Reference< deployment::XPackage > &rPackage )
+OUString getVersion( OUString const & sVersion )
 {
-    OUString sVersion( rPackage->getVersion());
     return ( sVersion.getLength() == 0 ) ? OUString( RTL_CONSTASCII_USTRINGPARAM( "0" ) ) : sVersion;
 }
 
+OUString getVersion( const uno::Reference< deployment::XPackage > &rPackage )
+{
+    return getVersion( rPackage->getVersion());
+}
 }
 
 
@@ -468,7 +471,8 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
     else if (request >>= verExc)
     {
         sal_uInt32 id;
-        switch (dp_misc::comparePackageVersions( verExc.New, verExc.Deployed ))
+        switch (dp_misc::compareVersions(
+                    verExc.NewVersion, verExc.Deployed->getVersion() ))
         {
         case dp_misc::LESS:
             id = RID_WARNINGBOX_VERSION_LESS;
@@ -480,8 +484,8 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             id = RID_WARNINGBOX_VERSION_GREATER;
             break;
         }
-        OSL_ASSERT( verExc.New.is() && verExc.Deployed.is() );
-        bool bEqualNames = verExc.New->getDisplayName().equals(
+        OSL_ASSERT( verExc.Deployed.is() );
+        bool bEqualNames = verExc.NewDisplayName.equals(
             verExc.Deployed->getDisplayName());
         {
             vos::OGuard guard(Application::GetSolarMutex());
@@ -506,9 +510,9 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             {
                s = String(ResId(RID_STR_WARNINGBOX_VERSION_GREATER_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()));
             }
-            s.SearchAndReplaceAllAscii( "$NAME", verExc.New->getDisplayName());
+            s.SearchAndReplaceAllAscii( "$NAME", verExc.NewDisplayName);
             s.SearchAndReplaceAllAscii( "$OLDNAME", verExc.Deployed->getDisplayName());
-            s.SearchAndReplaceAllAscii( "$NEW", getVersion(verExc.New) );
+            s.SearchAndReplaceAllAscii( "$NEW", getVersion(verExc.NewVersion) );
             s.SearchAndReplaceAllAscii( "$DEPLOYED", getVersion(verExc.Deployed) );
             box.SetMessText(s);
             approve = box.Execute() == RET_OK;
@@ -527,7 +531,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             {
                 vos::OGuard guard(Application::GetSolarMutex());
 
-                approve = m_pDialogHelper->installExtensionWarn( instExc.New->getDisplayName() );
+                approve = m_pDialogHelper->installExtensionWarn( instExc.displayName );
             }
             else
                 approve = false;

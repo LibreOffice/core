@@ -94,9 +94,9 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
             ::rtl::Reference<PackageRegistryBackend> const & myBackend,
             OUString const & url, OUString const & name,
             Reference<deployment::XPackageTypeInfo> const & xPackageType,
-            bool isSchema )
+            bool isSchema, bool bUseDb)
             : Package( myBackend, url, name, name /* display-name */,
-                       xPackageType ),
+                       xPackageType, bUseDb),
               m_isSchema( isSchema )
             {}
     };
@@ -113,7 +113,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
-        OUString const & url, OUString const & mediaType,
+        OUString const & url, OUString const & mediaType, sal_Bool bNoFileAccess,
         Reference<XCommandEnvironment> const & xCmdEnv );
 
     ::std::auto_ptr<PersistentMap> m_registeredPackages;
@@ -199,7 +199,7 @@ BackendImpl::BackendImpl(
         m_registeredPackages.reset(
             new PersistentMap(
                 makeURL( getCachePath(), OUSTR("registered_packages.db") ),
-                m_readOnly ) );
+                false ) );
     }
 }
 
@@ -215,6 +215,7 @@ BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 //______________________________________________________________________________
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & url, OUString const & mediaType_,
+    sal_Bool bNoFileAccess,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     OUString mediaType( mediaType_ );
@@ -255,14 +256,14 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 return new PackageImpl(
                     this, url, ucbContent.getPropertyValue(
                         StrTitle::get() ).get<OUString>(),
-                    m_xConfDataTypeInfo, false /* data file */ );
+                    m_xConfDataTypeInfo, false /* data file */, bNoFileAccess);
             }
             else if (subType.EqualsIgnoreCaseAscii(
                          "vnd.sun.star.configuration-schema")) {
                 return new PackageImpl(
                     this, url, ucbContent.getPropertyValue(
                         StrTitle::get() ).get<OUString>(),
-                    m_xConfSchemaTypeInfo, true /* schema file */ );
+                    m_xConfSchemaTypeInfo, true /* schema file */, bNoFileAccess);
             }
         }
     }

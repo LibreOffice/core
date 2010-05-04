@@ -62,6 +62,7 @@ typedef ::cppu::WeakComponentImplHelper1<
 //==============================================================================
 class Package : protected ::dp_misc::MutexHolder, public t_PackageBase
 {
+    PackageRegistryBackend * getMyBackend() const;
     void processPackage_impl(
         bool registerPackage,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
@@ -73,6 +74,7 @@ protected:
     ::rtl::OUString m_name;
     ::rtl::OUString m_displayName;
     const css::uno::Reference<css::deployment::XPackageTypeInfo> m_xPackageType;
+    const bool m_bUseDb;
 
     void check() const;
     void fireModified();
@@ -101,7 +103,8 @@ protected:
              ::rtl::OUString const & name,
              ::rtl::OUString const & displayName,
              css::uno::Reference<css::deployment::XPackageTypeInfo> const &
-             xPackageType );
+             xPackageType,
+             bool bUseDb);
 
 public:
 
@@ -233,6 +236,9 @@ public:
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::ucb::CommandFailedException,
                css::ucb::CommandAbortedException, css::uno::RuntimeException);
+
+   virtual ::rtl::OUString SAL_CALL getRepositoryName()
+       throw (css::uno::RuntimeException);
 };
 
 typedef ::cppu::WeakComponentImplHelper2<
@@ -243,7 +249,6 @@ typedef ::cppu::WeakComponentImplHelper2<
 class PackageRegistryBackend
     : protected ::dp_misc::MutexHolder, public t_BackendBase
 {
-    ::rtl::OUString m_cachePath;
     //The map held originally WeakReferences. The map entries are removed in the disposing
     //function, which is called when the XPackages are destructed or they are
     //explicitely disposed. The latter happens, for example, when a extension is
@@ -257,13 +262,14 @@ class PackageRegistryBackend
     t_string2ref m_bound;
 
 protected:
+    ::rtl::OUString m_cachePath;
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
 
     ::rtl::OUString m_context;
     // currently only for library containers:
     enum context {
         CONTEXT_UNKNOWN,
-        CONTEXT_USER, CONTEXT_SHARED,
+        CONTEXT_USER, CONTEXT_SHARED,CONTEXT_BUNDLED, CONTEXT_TMP,
         CONTEXT_DOCUMENT
     } m_eContext;
     bool m_readOnly;
@@ -276,6 +282,7 @@ protected:
     // @@@ to be implemented by specific backend:
     virtual css::uno::Reference<css::deployment::XPackage> bindPackage_(
         ::rtl::OUString const & url, ::rtl::OUString const & mediaType,
+        sal_Bool bNoFileAccess,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         = 0;
 
@@ -299,6 +306,8 @@ public:
     inline ::rtl::OUString const & getCachePath() const { return m_cachePath; }
     inline bool transientMode() const { return m_cachePath.getLength() == 0; }
 
+    inline ::rtl::OUString getContext() const {return m_context; }
+
     // XEventListener
     virtual void SAL_CALL disposing( css::lang::EventObject const & evt )
         throw (css::uno::RuntimeException);
@@ -306,6 +315,7 @@ public:
     // XPackageRegistry
     virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL bindPackage(
         ::rtl::OUString const & url, ::rtl::OUString const & mediaType,
+        sal_Bool bNoFileAccess,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,
                css::ucb::CommandFailedException,

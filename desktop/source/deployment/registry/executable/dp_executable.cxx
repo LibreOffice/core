@@ -72,9 +72,9 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         inline ExecutablePackageImpl(
             ::rtl::Reference<PackageRegistryBackend> const & myBackend,
             OUString const & url, OUString const & name,
-            Reference<deployment::XPackageTypeInfo> const & xPackageType)
+            Reference<deployment::XPackageTypeInfo> const & xPackageType, bool bUseDb)
             : Package( myBackend, url, name, name /* display-name */,
-                       xPackageType ) //,
+                       xPackageType, bUseDb) //,
             {}
     };
     friend class ExecutablePackageImpl;
@@ -84,7 +84,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
-        OUString const & url, OUString const & mediaType,
+        OUString const & url, OUString const & mediaType, sal_Bool bNoFileAccess,
         Reference<XCommandEnvironment> const & xCmdEnv );
 
     Reference<deployment::XPackageTypeInfo> m_xExecutableTypeInfo;
@@ -125,7 +125,7 @@ BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 
 // PackageRegistryBackend
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
-    OUString const & url, OUString const & mediaType,
+    OUString const & url, OUString const & mediaType, sal_Bool bNoFileAccess,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     if (mediaType.getLength() == 0)
@@ -147,7 +147,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.executable"))
             {
                 return new BackendImpl::ExecutablePackageImpl(
-                    this, url, name,  m_xExecutableTypeInfo);
+                    this, url, name,  m_xExecutableTypeInfo, bNoFileAccess);
             }
         }
     }

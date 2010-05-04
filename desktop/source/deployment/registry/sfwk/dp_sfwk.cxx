@@ -81,8 +81,9 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
             Reference<XCommandEnvironment> const & xCmdEnv );
 
     public:
-        PackageImpl( ::rtl::Reference<BackendImpl> const & myBackend,
-                     OUString const & url, OUString const & libType );
+        PackageImpl(
+            ::rtl::Reference<BackendImpl> const & myBackend,
+            OUString const & url, OUString const & libType, bool bUseDb);
         // XPackage
         virtual OUString SAL_CALL getDescription() throw (RuntimeException);
     };
@@ -91,6 +92,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
+        sal_Bool bNoFileAccess,
         Reference<XCommandEnvironment> const & xCmdEnv );
 
     const Reference<deployment::XPackageTypeInfo> m_xTypeInfo;
@@ -131,9 +133,9 @@ OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException)
 //______________________________________________________________________________
 BackendImpl::PackageImpl::PackageImpl(
     ::rtl::Reference<BackendImpl> const & myBackend,
-    OUString const & url, OUString const & libType )
+    OUString const & url, OUString const & libType, bool bUseDb)
     : Package( myBackend.get(), url, OUString(), OUString(),
-               myBackend->m_xTypeInfo ),
+               myBackend->m_xTypeInfo, bUseDb ),
       m_descr(libType)
 {
     initPackageHandler();
@@ -217,7 +219,7 @@ BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 // PackageRegistryBackend
 //______________________________________________________________________________
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
-    OUString const & url, OUString const & mediaType_,
+    OUString const & url, OUString const & mediaType_, sal_Bool bNoFileAccess,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     OUString mediaType( mediaType_ );
@@ -294,7 +296,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 dp_misc::TRACE(OUSTR(" BackEnd detected lang = ") + lang + OUSTR("\n"));
                 dp_misc::TRACE(OUSTR(" for url ") + sParcelDescURL + OUSTR("\n") );
                 dp_misc::TRACE("******************************\n");
-                return new PackageImpl( this, url, sfwkLibType );
+                return new PackageImpl( this, url, sfwkLibType, bNoFileAccess);
             }
         }
     }
@@ -321,6 +323,10 @@ void BackendImpl::PackageImpl:: initPackageHandler()
     else if ( that->m_eContext == CONTEXT_SHARED )
     {
         aContext  <<= OUSTR("share");
+    }
+    else if ( that->m_eContext == CONTEXT_BUNDLED )
+    {
+        aContext  <<= OUSTR("bundled");
     }
     else
     {

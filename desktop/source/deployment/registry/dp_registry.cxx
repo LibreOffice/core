@@ -126,7 +126,7 @@ public:
 
     // XPackageRegistry
     virtual Reference<deployment::XPackage> SAL_CALL bindPackage(
-        OUString const & url, OUString const & mediaType,
+        OUString const & url, OUString const & mediaType, sal_Bool bNoFileAccess,
         Reference<XCommandEnvironment> const & xCmdEnv )
         throw (deployment::DeploymentException, CommandFailedException,
                lang::IllegalArgumentException, RuntimeException);
@@ -361,9 +361,24 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
     // Always register as last, because we want to add extensions also as folders
     // and as a default we accept every folder, which was not recognized by the other
     // backends.
-    that->insertBackend(
+    Reference<deployment::XPackageRegistry> extensionBackend =
         ::dp_registry::backend::bundle::create(
-            that, context, cachePath, readOnly, xComponentContext ) );
+            that, context, cachePath, readOnly, xComponentContext);
+    that->insertBackend(extensionBackend);
+
+    Reference<lang::XServiceInfo> xServiceInfo(
+        extensionBackend, UNO_QUERY_THROW );
+
+    OSL_ASSERT(xServiceInfo.is());
+    OUString registryCachePath(
+        makeURL( cachePath,
+                 ::rtl::Uri::encode(
+                     xServiceInfo->getImplementationName(),
+                     rtl_UriCharClassPchar,
+                     rtl_UriEncodeIgnoreEscapes,
+                     RTL_TEXTENCODING_UTF8 ) ) );
+    create_folder( 0, registryCachePath, Reference<XCommandEnvironment>());
+
 
 #if OSL_DEBUG_LEVEL > 1
     // dump tables:
@@ -443,7 +458,7 @@ void PackageRegistryImpl::update() throw (RuntimeException)
 // XPackageRegistry
 //______________________________________________________________________________
 Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
-    OUString const & url, OUString const & mediaType_,
+    OUString const & url, OUString const & mediaType_, sal_Bool bNoFileAccess,
     Reference<XCommandEnvironment> const & xCmdEnv )
     throw (deployment::DeploymentException, CommandFailedException,
            lang::IllegalArgumentException, RuntimeException)
@@ -482,7 +497,7 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
         for ( ; iPos != iEnd; ++iPos )
         {
             try {
-                return (*iPos)->bindPackage( url, mediaType, xCmdEnv );
+                return (*iPos)->bindPackage( url, mediaType, bNoFileAccess, xCmdEnv );
             }
             catch (lang::IllegalArgumentException &) {
             }
@@ -511,7 +526,7 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
                 getResourceString(RID_STR_UNSUPPORTED_MEDIA_TYPE) + mediaType,
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
         }
-        return iFind->second->bindPackage( url, mediaType, xCmdEnv );
+        return iFind->second->bindPackage( url, mediaType, bNoFileAccess, xCmdEnv );
     }
 }
 

@@ -40,7 +40,8 @@ SRC1FILES = \
 INCPRE += ..$/..$/inc
 
 SLOFILES = \
-        $(SLO)$/dp_component.obj
+        $(SLO)$/dp_component.obj \
+        $(SLO)$/dp_compbackenddb.obj
 
 .INCLUDE : ..$/..$/target.pmk
 .INCLUDE : target.mk

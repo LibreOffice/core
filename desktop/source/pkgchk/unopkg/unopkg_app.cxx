@@ -41,7 +41,8 @@
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "comphelper/anytostring.hxx"
-#include "com/sun/star/deployment/thePackageManagerFactory.hpp"
+#include "com/sun/star/deployment/ExtensionManager.hpp"
+
 #include "com/sun/star/deployment/ui/PackageManagerDialog.hpp"
 #include "com/sun/star/ui/dialogs/XExecutableDialog.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
@@ -149,12 +150,13 @@ void DialogClosedListenerImpl::dialogClosed(
 // installed with OOo 2.2 or later could not normally be found via its file
 // name.
 Reference<deployment::XPackage> findPackage(
-    Reference<deployment::XPackageManager> const & manager,
+    OUString const & repository,
+    Reference<deployment::XExtensionManager> const & manager,
     Reference<ucb::XCommandEnvironment > const & environment,
     OUString const & idOrFileName )
 {
     Sequence< Reference<deployment::XPackage> > ps(
-        manager->getDeployedPackages(
+        manager->getDeployedExtensions(repository,
             Reference<task::XAbortChannel>(), environment ) );
     for ( sal_Int32 i = 0; i < ps.getLength(); ++i )
         if ( dp_misc::getIdentifier( ps[i] ) == idOrFileName )
@@ -214,7 +216,7 @@ extern "C" int unopkg_main()
     bool subcmd_add = false;
     bool subcmd_gui = false;
     OUString logFile;
-    OUString deploymentContext;
+    OUString repository;
     OUString cmdArg;
     ::std::vector<OUString> cmdPackages;
 
@@ -279,7 +281,7 @@ extern "C" int unopkg_main()
                      !readOption( &option_force, info_force, &nPos ) &&
                      !readOption( &option_bundled, info_bundled, &nPos ) &&
                      !readOption( &option_suppressLicense, info_suppressLicense, &nPos ) &&
-                     !readArgument( &deploymentContext, info_context, &nPos ) &&
+                     !readArgument( &repository, info_context, &nPos ) &&
                      !isBootstrapVariable(&nPos))
             {
                 osl_getCommandArg( nPos, &cmdArg.pData );
@@ -313,24 +315,30 @@ extern "C" int unopkg_main()
         }
 
         //make sure the bundled option was provided together with shared
-        if (option_bundled && !option_shared)
-        {
-            dp_misc::writeConsoleError(
-                "\nERROR: option --bundled can only be used together with --shared!");
-            return 1;
-        }
+//         if (option_bundled && !option_shared)
+//         {
+//             dp_misc::writeConsoleError(
+//                 "\nERROR: option --bundled can only be used together with --shared!");
+//             return 1;
+//         }
 
 
         xComponentContext = getUNO(
             disposeGuard, option_verbose, option_shared, subcmd_gui,
             xLocalComponentContext );
 
-        if (deploymentContext.getLength() == 0) {
-            deploymentContext = option_shared ? OUSTR("shared") : OUSTR("user");
+        if (repository.getLength() == 0)
+        {
+            if (option_shared)
+                repository = OUSTR("shared");
+            else if (option_bundled)
+                repository = OUSTR("bundled");
+            else
+                repository = OUSTR("user");
         }
         else
         {
-            if (deploymentContext.equalsAsciiL(
+            if (repository.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM("shared") )) {
                 option_shared = true;
             }
@@ -343,10 +351,9 @@ extern "C" int unopkg_main()
             }
         }
 
-        Reference<deployment::XPackageManagerFactory> xPackageManagerFactory(
-            deployment::thePackageManagerFactory::get( xComponentContext ) );
-        Reference<deployment::XPackageManager> xPackageManager(
-            xPackageManagerFactory->getPackageManager( deploymentContext ) );
+
+        Reference<deployment::XExtensionManager> xExtensionManager(
+            deployment::ExtensionManager::get( xComponentContext ) );
 
         Reference< ::com::sun::star::ucb::XCommandEnvironment > xCmdEnv(
             createCmdEnv( xComponentContext, logFile,
@@ -362,25 +369,23 @@ extern "C" int unopkg_main()
                 OUString const & cmdPackage = cmdPackages[ pos ];
                 if (subcmd_add)
                 {
-                    Reference<deployment::XPackage> xPackage(
-                        xPackageManager->addPackage(
-                            cmdPackage, OUString() /* to be detected */,
-                            Reference<task::XAbortChannel>(), xCmdEnv ) );
-                    OSL_ASSERT( xPackage.is() );
+                        xExtensionManager->addExtension(
+                            cmdPackage, repository,
+                            Reference<task::XAbortChannel>(), xCmdEnv);
                 }
                 else
                 {
                     try
                     {
-                        xPackageManager->removePackage(
-                            cmdPackage, cmdPackage,
+                        xExtensionManager->removeExtension(
+                            cmdPackage, cmdPackage, repository,
                             Reference<task::XAbortChannel>(), xCmdEnv );
                     }
                     catch (lang::IllegalArgumentException &)
                     {
                         Reference<deployment::XPackage> p(
-                            findPackage(
-                                xPackageManager, xCmdEnv, cmdPackage ) );
+                             findPackage(repository,
+                                xExtensionManager, xCmdEnv, cmdPackage ) );
                         //Todo. temporary preventing exception in bundled case.
                         //In case of a bundled extension, remove would be called as a result of
                         //uninstalling a rpm. Then we do not want to show an error when the
@@ -389,8 +394,9 @@ extern "C" int unopkg_main()
                         if ( !p.is() && !option_bundled)
                             throw;
                         else if (p.is())
-                            xPackageManager->removePackage(
+                            xExtensionManager->removeExtension(
                                 ::dp_misc::getIdentifier(p), p->getName(),
+                                repository,
                                 Reference<task::XAbortChannel>(), xCmdEnv );
                     }
                 }
@@ -399,18 +405,18 @@ extern "C" int unopkg_main()
         else if (subCommand.equalsAsciiL(
                      RTL_CONSTASCII_STRINGPARAM("reinstall") ))
         {
-            xPackageManager->reinstallDeployedPackages(
-                Reference<task::XAbortChannel>(), xCmdEnv );
+            xExtensionManager->reinstallDeployedExtensions(
+                repository, Reference<task::XAbortChannel>(), xCmdEnv);
         }
         else if (subCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("list") ))
         {
             Sequence< Reference<deployment::XPackage> > packages;
             if (cmdPackages.empty())
             {
-                packages = xPackageManager->getDeployedPackages(
-                    Reference<task::XAbortChannel>(), xCmdEnv );
+                packages = xExtensionManager->getDeployedExtensions(
+                    repository, Reference<task::XAbortChannel>(), xCmdEnv );
                 dp_misc::writeConsole(
-                    OUSTR("all deployed ") + deploymentContext + OUSTR(" packages:\n"));
+                    OUSTR("all deployed ") + repository + OUSTR(" packages:\n"));
             }
             else
             {
@@ -418,13 +424,13 @@ extern "C" int unopkg_main()
                 for ( ::std::size_t pos = 0; pos < cmdPackages.size(); ++pos )
                     try
                     {
-                        packages[ pos ] = xPackageManager->getDeployedPackage(
-                            cmdPackages[ pos ], cmdPackages[ pos ], xCmdEnv );
+                        packages[ pos ] = xExtensionManager->getDeployedExtension(
+                            repository, cmdPackages[ pos ], cmdPackages[ pos ], xCmdEnv );
                     }
                     catch (lang::IllegalArgumentException &)
                     {
-                        packages[ pos ] = findPackage(
-                            xPackageManager, xCmdEnv, cmdPackages[ pos ] );
+                        packages[ pos ] = findPackage(repository,
+                            xExtensionManager, xCmdEnv, cmdPackages[ pos ] );
                         if ( !packages[ pos ].is() )
                             throw;
                     }

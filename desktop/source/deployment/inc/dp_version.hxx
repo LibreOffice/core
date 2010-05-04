@@ -43,13 +43,6 @@ enum Order { LESS, EQUAL, GREATER };
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC Order compareVersions(
     ::rtl::OUString const & version1, ::rtl::OUString const & version2);
-
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC Order comparePackageVersions(
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage >
-        const & package1,
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage >
-        const & package2);
-
 }
 
 #endif

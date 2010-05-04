@@ -320,7 +320,7 @@ void CommandEnvironmentImpl::handle(
         deployment::VersionException nc_exc;
         if (request >>= nc_exc) {
             approve = m_option_force_overwrite ||
-                (::dp_misc::comparePackageVersions(nc_exc.New, nc_exc.Deployed)
+                (::dp_misc::compareVersions(nc_exc.NewVersion, nc_exc.Deployed->getVersion())
                  == ::dp_misc::GREATER);
             abort = !approve;
         }
