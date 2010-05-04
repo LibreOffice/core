@@ -25,34 +25,35 @@
 *
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_UPDATE_HXX
-#define INCLUDED_CONFIGMGR_UPDATE_HXX
+#ifndef INCLUDED_CONFIGMGR_SOURCE_UPDATE_HXX
+#define INCLUDED_CONFIGMGR_SOURCE_UPDATE_HXX
 
 #include "sal/config.h"
 
-#include <set>
+#include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/Sequence.hxx"
+#include "cppuhelper/factory.hxx"
+#include "rtl/unload.h"
+#include "sal/types.h"
 
-#include "configmgr/detail/configmgrdllapi.hxx"
-
+namespace com { namespace sun { namespace star { namespace lang {
+    class XSingleComponentFactory;
+} } } }
 namespace rtl { class OUString; }
 
-namespace configmgr {
+namespace configmgr { namespace update {
 
-namespace update {
+rtl::OUString SAL_CALL getImplementationName();
 
-OOO_DLLPUBLIC_CONFIGMGR void insertExtensionXcsFile(
-    bool shared, rtl::OUString const & fileUri);
+com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+getSupportedServiceNames();
 
-OOO_DLLPUBLIC_CONFIGMGR void insertExtensionXcuFile(
-    bool shared, rtl::OUString const & fileUri);
+com::sun::star::uno::Reference< com::sun::star::lang::XSingleComponentFactory >
+SAL_CALL createFactory(
+    cppu::ComponentFactoryFunc, rtl::OUString const &,
+    com::sun::star::uno::Sequence< rtl::OUString > const &, rtl_ModuleCount *)
+    SAL_THROW(());
 
-OOO_DLLPUBLIC_CONFIGMGR void insertModificationXcuFile(
-    rtl::OUString const & fileUri,
-    std::set< rtl::OUString > const & includedPaths,
-    std::set< rtl::OUString > const & excludedPaths);
-
-}
-
-}
+} }
 
 #endif
