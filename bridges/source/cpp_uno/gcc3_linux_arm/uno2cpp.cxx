@@ -149,7 +149,7 @@ namespace arm
     }
 }
 
-void MapReturn(long r0, long r1, typelib_TypeDescriptionReference * pReturnType, void *pRegisterReturn)
+void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionReference * pReturnType, sal_uInt32* pRegisterReturn)
 {
 #if !defined(__ARM_EABI__) && !defined(__SOFTFP__)
     register float fret asm("f0");
@@ -160,32 +160,28 @@ void MapReturn(long r0, long r1, typelib_TypeDescriptionReference * pReturnType,
     {
         case typelib_TypeClass_HYPER:
         case typelib_TypeClass_UNSIGNED_HYPER:
-            ((long*)pRegisterReturn)[1] = r1;
+            pRegisterReturn[1] = r1;
         case typelib_TypeClass_LONG:
         case typelib_TypeClass_UNSIGNED_LONG:
         case typelib_TypeClass_ENUM:
-            ((long*)pRegisterReturn)[0] = r0;
-            break;
         case typelib_TypeClass_CHAR:
         case typelib_TypeClass_SHORT:
         case typelib_TypeClass_UNSIGNED_SHORT:
-            *(unsigned short*)pRegisterReturn = (unsigned short)r0;
-            break;
         case typelib_TypeClass_BOOLEAN:
         case typelib_TypeClass_BYTE:
-            *(unsigned char*)pRegisterReturn = (unsigned char)r0;
+            pRegisterReturn[0] = r0;
             break;
         case typelib_TypeClass_FLOAT:
 #if defined(__ARM_EABI__) || defined(__SOFTFP__)
-            ((long*)pRegisterReturn)[0] = r0;
+            pRegisterReturn[0] = r0;
 #else
             *(float*)pRegisterReturn = fret;
 #endif
         break;
         case typelib_TypeClass_DOUBLE:
 #if defined(__ARM_EABI__) || defined(__SOFTFP__)
-            ((long*)pRegisterReturn)[1] = r1;
-            ((long*)pRegisterReturn)[0] = r0;
+            pRegisterReturn[1] = r1;
+            pRegisterReturn[0] = r0;
 #else
             *(double*)pRegisterReturn = dret;
 #endif
@@ -194,7 +190,7 @@ void MapReturn(long r0, long r1, typelib_TypeDescriptionReference * pReturnType,
         case typelib_TypeClass_EXCEPTION:
         {
             if (!arm::return_in_hidden_param(pReturnType))
-                ((long*)pRegisterReturn)[0] = r0;
+                pRegisterReturn[0] = r0;
             break;
         }
         default:
@@ -260,7 +256,7 @@ void callVirtualMethod(
         "mov %1, r1\n\t"
         : "=r" (r0), "=r" (r1) : );
 
-    MapReturn(r0, r1, pReturnType, pRegisterReturn);
+    MapReturn(r0, r1, pReturnType, (sal_uInt32*)pRegisterReturn);
 }
 }
 

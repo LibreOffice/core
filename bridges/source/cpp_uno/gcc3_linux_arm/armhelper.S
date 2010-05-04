@@ -2,7 +2,7 @@
 @
 @ Written by Peter Naulls <peter@chocky.org>
 @ Modified by Caolan McNamara <caolanm@redhat.com>
-@ Fixed by Michael Casadevall
+@ Fixed by Michael Casadevall <mcasadevall@kubuntu.org>
 
 #ifdef __ARM_EABI__
 #  define UNWIND

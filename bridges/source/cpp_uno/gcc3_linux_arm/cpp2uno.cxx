@@ -408,8 +408,30 @@ extern "C" sal_Int64 cpp_vtable_call( long *pFunctionAndOffset,
     void **pCallStack )
 {
     sal_Int64 nRegReturn;
-    cpp_mediate( pFunctionAndOffset[0], pFunctionAndOffset[1], pCallStack,
+    typelib_TypeClass aType = cpp_mediate( pFunctionAndOffset[0], pFunctionAndOffset[1], pCallStack,
         &nRegReturn );
+
+    switch( aType )
+    {
+        case typelib_TypeClass_BOOLEAN:
+        case typelib_TypeClass_BYTE:
+            nRegReturn = (unsigned long)(*(unsigned char *)&nRegReturn);
+            break;
+        case typelib_TypeClass_CHAR:
+        case typelib_TypeClass_UNSIGNED_SHORT:
+        case typelib_TypeClass_SHORT:
+            nRegReturn = (unsigned long)(*(unsigned short *)&nRegReturn);
+            break;
+        case typelib_TypeClass_ENUM:
+        case typelib_TypeClass_UNSIGNED_LONG:
+        case typelib_TypeClass_LONG:
+            nRegReturn = (unsigned long)(*(unsigned int *)&nRegReturn);
+            break;
+        case typelib_TypeClass_VOID:
+        default:
+            break;
+    }
+
     return nRegReturn;
 }
 
