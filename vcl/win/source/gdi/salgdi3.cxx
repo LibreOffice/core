@@ -1272,15 +1272,24 @@ HFONT WinSalGraphics::ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFont
         && (ImplSalWICompareAscii( aLogFont.lfFaceName, "Courier" ) == 0) )
             lstrcpynW( aLogFont.lfFaceName, L"Courier New", 11 );
 
-        // limit font requests to MAXFONTHEIGHT
+        // #i47675# limit font requests to MAXFONTHEIGHT
         // TODO: share MAXFONTHEIGHT font instance
-        if( -aLogFont.lfHeight <= MAXFONTHEIGHT )
+        if( (-aLogFont.lfHeight <= MAXFONTHEIGHT)
+        &&  (+aLogFont.lfWidth <= MAXFONTHEIGHT) )
+        {
             o_rFontScale = 1.0;
-        else
+        }
+        else if( -aLogFont.lfHeight >= +aLogFont.lfWidth )
         {
             o_rFontScale = -aLogFont.lfHeight / (float)MAXFONTHEIGHT;
             aLogFont.lfHeight = -MAXFONTHEIGHT;
-            aLogFont.lfWidth = static_cast<LONG>( aLogFont.lfWidth / o_rFontScale );
+            aLogFont.lfWidth = FRound( aLogFont.lfWidth / o_rFontScale );
+        }
+        else // #i95867# also limit font widths
+        {
+            o_rFontScale = +aLogFont.lfWidth / (float)MAXFONTHEIGHT;
+            aLogFont.lfWidth = +MAXFONTHEIGHT;
+            aLogFont.lfHeight = FRound( aLogFont.lfHeight / o_rFontScale );
         }
 
         hNewFont = ::CreateFontIndirectW( &aLogFont );
