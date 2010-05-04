@@ -50,6 +50,15 @@ interface XPackageRegistry
                package URL, must be UCB conform
         @param mediaType
                media type of package, empty string if to be detected
+        @param noFileAccess
+               true - the implementation may not try to access the files referenced
+               by the parameter url. This is useful when the files are already
+               removed, but the respective XPackage object haven not been
+               revoked yet. Then the caller can obtain an XPackage object for the
+               removed extension and call XPackage.revokePackage.
+               The implementation can throw an
+               <type>com.sun.star.lang.IllegalArgumentException</type> if it does
+               not support this.
         @param xCmdEnv
                command environment for error and progress handling
         @return
@@ -58,6 +67,7 @@ interface XPackageRegistry
     XPackage bindPackage(
         [in] string url,
         [in] string mediaType,
+        [in] boolean noFileAccess,
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,
                 com::sun::star::ucb::CommandFailedException,

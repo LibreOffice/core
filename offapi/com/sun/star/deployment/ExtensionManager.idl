@@ -25,40 +25,26 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_COM_SUN_STAR_DEPLOYMENT_VERSIONEXCEPTION_IDL
-#define INCLUDED_COM_SUN_STAR_DEPLOYMENT_VERSIONEXCEPTION_IDL
+#if ! defined INCLUDED_com_sun_star_deployment_ExtensionManagerFactory_idl
+#define INCLUDED_com_sun_star_deployment_ExtensionManagerFactory_idl
 
-#include "com/sun/star/uno/Exception.idl"
+#include <com/sun/star/deployment/XExtensionManager.idl>
+
 
 module com { module sun { module star { module deployment {
 
-interface XPackage;
+/** <type>thePackageManagerFactory</type> denotes the one and only
+    <type>XPackageManagerFactory</type> object to be used.
+    <p>
+    The component context entry is
+    <code>
+    /singletons/com.sun.star.deployment.thePackageManagerFactory
+    </code>.
+    </p>
 
-/**
-   describes version clashes of a deployment unit.
-
-   <p>This exception is intended to be used with an
-   <type scope="com::sun::star::task">XInteractionHandler</type>.</p>
-
-   @since OOo 2.1
+    @since OOo 2.0.0
 */
-exception VersionException: com::sun::star::uno::Exception {
-    /**
-       the version of the extension which is being installed.
-    */
-    string NewVersion;
-    /**
-       the display name of the extension which is being installed.
-    */
-    string NewDisplayName;
-
-    /**
-       represents the already installed version of the deployment unit.
-
-       <p>Must not be <NULL/>.</p>
-    */
-    XPackage Deployed;
-};
+singleton ExtensionManager : XExtensionManager;
 
 }; }; }; };
 

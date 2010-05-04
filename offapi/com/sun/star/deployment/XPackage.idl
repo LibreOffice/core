@@ -306,6 +306,10 @@ interface XPackage
             should be used.
     */
     com::sun::star::graphic::XGraphic getIcon( [in] boolean highContrast );
+
+    /** returns the name of the repository where this object comes from.
+     */
+    string getRepositoryName();
 };
 
 }; }; }; };

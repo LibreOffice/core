@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_com_sun_star_deployment_XPackageManager_idl
-#define INCLUDED_com_sun_star_deployment_XPackageManager_idl
+#if ! defined INCLUDED_com_sun_star_deployment_XExtensionManager_idl
+#define INCLUDED_com_sun_star_deployment_XExtensionManager_idl
 
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/task/XAbortChannel.idl>
@@ -42,20 +42,16 @@
 module com { module sun { module star { module deployment {
 
 /** The <type>XPackageManager</type> interface is used to add or remove
-    packages to a specific repository. This interface represents a particular
-    repository.
+    packages to a specific deployment context.
     Packages are deployable files, e.g. scripts or UNO components.
     <p>
     Adding an UNO package means that a copy of the package is stored
-    in the repository.
+    with respect to the context of the manager and the package is registered,
+    thus activated.
     </p>
     <p>
-    Removing an UNO package means that the previously added package is
-    removed from the repository.
-    </p>
-    <p>
-    All interface methods do neither register or revoke an extension.
-    This happens exclusively by <type>XExtensionManager</type>.
+    Removing an UNO package means that the previously added package is revoked,
+    thus deactivated, first and then removed from the context.
     </p>
     <p>
     Objects of this interface are created using the
@@ -68,30 +64,25 @@ module com { module sun { module star { module deployment {
     @see thePackageManagerFactory
     @since OOo 2.0.0
 */
-interface XPackageManager
+interface XExtensionManager
 {
     /** interface to notify disposing
      */
-    interface com::sun::star::lang::XComponent;
+//     interface com::sun::star::lang::XComponent;
 
-    /** interface to notify changes of the set of deployed packages of
-        this manager
-    */
-    interface com::sun::star::util::XModifyBroadcaster;
+//     /** interface to notify changes of the set of deployed packages of
+//         this manager
+//     */
+//     interface com::sun::star::util::XModifyBroadcaster;
 
-    /** returns the underlying deployment context.
-
-        @return
-                underlying deployment context
-    */
-    string getContext();
 
     /** gets the supported <type>XPackageTypeInfo</type>s.
 
         @return
                 supported <type>XPackageTypeInfo</type>s.
     */
-    sequence<XPackageTypeInfo> getSupportedPackageTypes();
+    sequence<XPackageTypeInfo> getSupportedPackageTypes(
+        [in] string repository);
 
     /** creates a command channel to be used to asynchronously abort a command.
 
@@ -104,44 +95,20 @@ interface XPackageManager
 
         @param url
                package URL, must be UCB conform
-        @param mediaType
-               media-type of package, empty string if to be detected
+        @param repository
+               the name of the repository
         @param xAbortChannel
                abort channel to asynchronously abort the adding process,
                or null
         @param xCmdEnv
                command environment for error and progress handling
         @return
-               <type>XPackage</type> handle
+               object representing the extension.
     */
-    XPackage addPackage( [in] string url,
-                         [in] string mediaType,
-                         [in] com::sun::star::task::XAbortChannel xAbortChannel,
-                         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
-        raises (DeploymentException,
-                com::sun::star::ucb::CommandFailedException,
-                com::sun::star::ucb::CommandAbortedException,
-                com::sun::star::lang::IllegalArgumentException);
-
-    /** adds an extension.
-
-        This copies the extension. If it was from the same repository,
-        which is represented by this XPackageManager insterface, then
-        nothing happens.
-
-        @param extension
-
-        @param xAbortChannel
-               abort channel to asynchronously abort the adding process,
-               or null
-        @param xCmdEnv
-               command environment for error and progress handling
-        @return
-               <type>XPackage</type> handle
-    */
-    XPackage importExtension( [in] XPackage extension,
-                         [in] com::sun::star::task::XAbortChannel xAbortChannel,
-                         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+    XPackage addExtension( [in] string url,
+                           [in] string repository,
+                           [in] com::sun::star::task::XAbortChannel xAbortChannel,
+                           [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException,
@@ -153,23 +120,95 @@ interface XPackageManager
                package identifier
         @param fileName
                package file name
+        @param repository
+               the name of the repository
         @param xAbortChannel
                abort channel to asynchronously abort the removing process,
                or null
         @param xCmdEnv
                command environment for error and progress handling
     */
-    void removePackage( [in] string identifier,
-                        [in] string fileName,
-                        [in] com::sun::star::task::XAbortChannel xAbortChannel,
-                        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+    void removeExtension(
+        [in] string identifier,
+        [in] string fileName,
+        [in] string repository,
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
 
-    /** gets a deployed package.
 
+    /** enable an extension.
+
+        If the extension is not from the user repository then an
+        IllegalArgumentException is thrown.
+
+        @param extension
+               the extension which is to be enabled.
+        @param xAbortChannel
+               abort channel to asynchronously abort the removing process,
+               or null
+        @param xCmdEnv
+               command environment for error and progress handling
+    */
+    void enableExtension(
+        [in] XPackage extension,
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+    /** disable an extension.
+
+        If the extension is not from the user repository then an
+        IllegalArgumentException is thrown.
+
+        @param extension
+               the extension which is to be disabled
+        @param xAbortChannel
+               abort channel to asynchronously abort the removing process,
+               or null
+        @param xCmdEnv
+               command environment for error and progress handling
+     */
+    void  disableExtension(
+        [in] XPackage extension,
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+    /** gets all currently deployed extensions.
+        @param repository
+               the repository from which the extensions are returned
+        @param xAbortChannel
+               abort channel to asynchronously abort the removing process,
+               or null
+        @param xCmdEnv
+               command environment for error and progress handling
+        @return
+               all currently deployed packages
+    */
+    sequence<XPackage> getDeployedExtensions(
+        [in] string repository,
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+
+    /** gets a deployed extensions.
+
+        @param repositroy
+               the name of the repository
         @param identifier
                package identifier
         @param fileName
@@ -179,7 +218,8 @@ interface XPackageManager
         @return
                <type>XPackage</type> handle
     */
-    XPackage getDeployedPackage(
+    XPackage getDeployedExtension(
+        [in] string repository,
         [in] string identifier,
         [in] string fileName,
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
@@ -187,23 +227,23 @@ interface XPackageManager
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::lang::IllegalArgumentException);
 
-    /** gets all currently deployed packages.
+    /** returns a sequence containing all installed extensions.
 
-        @param xAbortChannel
-               abort channel to asynchronously abort the removing process,
-               or null
-        @param xCmdEnv
-               command environment for error and progress handling
-        @return
-                all currently deployed packages
-    */
-    sequence<XPackage> getDeployedPackages(
+        The members of the returned sequence correspond to an extension with a
+        particular extension identifer. The members are also sequences which
+        contain as many elements as there are repositories. Those are ordered
+        according to the priority of the repository. That is, the first member
+        is the extension from the user repository, the second is from the shared
+        repository and the last is from the bundled repository.
+     */
+    sequence<sequence<XPackage> > getAllExtensions(
         [in] com::sun::star::task::XAbortChannel xAbortChannel,
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
+
 
     /** Expert feature: erases the underlying registry cache and reinstalls
         all previously added packages.  Please keep in mind that all
@@ -211,13 +251,15 @@ interface XPackageManager
         <p>
         Please use this in case of suspected cache inconsistencies only.
         </p>
-
+        @param repositroy
+               the name of the repository
         @param xAbortChannel
                abort channel to asynchronously abort the adding process
         @param xCmdEnv
                command environment for error and progress handling
     */
-    void reinstallDeployedPackages(
+    void reinstallDeployedExtensions(
+        [in] string repository,
         [in] com::sun::star::task::XAbortChannel xAbortChannel,
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,
@@ -225,20 +267,6 @@ interface XPackageManager
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
 
-    /** indicates that this implementation cannot be used for tasks
-        which require write access to the location where the extensions
-        are installed.
-        <p>
-        Normally one would call a method and handle the exception
-        if writing failed. However, a GUI interface may need to know beforehand
-        if writing is allowed. For example, the Extension Manager dialog
-        needs to enable / disable the Add button depending if the user has
-        write permission. Only the XPackageManager implementation knows the
-        location of the installed extensions. Therefore it is not possible
-        to check &quot;externally&quot; for write permission.
-        </p>
-    */
-    boolean isReadOnly();
 
     /** synchronizes the extension database with the contents of the extensions
        folder.
@@ -246,19 +274,17 @@ interface XPackageManager
        Added extensions will be added to the database and removed extensions
        will be removed from the database.
 
-       @param xAddedExtension
-            new extensions which may need to be registered.
-
-       @param
-            removed extensions which must be revoked
+       @param repository
+              the repository which is to be synchronized
     */
-    void synchronize([out] sequence<XPackage> xAddedExtensions,
-                     [out] sequence<XPackage> xRemovedExtensions,
-                     [in] com::sun::star::task::XAbortChannel xAbortChannel,
-                     [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+    void synchronize(
+        [in] string repository,
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,
                 com::sun::star::ucb::CommandFailedException,
-                com::sun::star::ucb::CommandAbortedException);
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
 
 };
 

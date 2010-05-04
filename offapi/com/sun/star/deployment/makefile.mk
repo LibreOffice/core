@@ -42,6 +42,8 @@ IDLFILES = \
         PackageRegistryBackend.idl              \
         XPackageManager.idl                     \
         XPackageManagerFactory.idl              \
+        XExtensionManager.idl                   \
+        ExtensionManager.idl                    \
         thePackageManagerFactory.idl			\
         DependencyException.idl                 \
         LicenseException.idl                    \
