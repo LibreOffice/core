@@ -1662,24 +1662,6 @@ BOOL SwLayAction::FormatLayoutFly( SwFlyFrm* pFly )
 }
 
 // OD 31.10.2002 #104100#
-// NOTE: no adjustments for vertical layout support necessary
-BOOL CheckPos( SwFrm *pFrm )
-{
-    if ( !pFrm->GetValidPosFlag() )
-    {
-        Point aOld( pFrm->Frm().Pos() );
-        pFrm->MakePos();
-        if ( aOld != pFrm->Frm().Pos() )
-        {
-            pFrm->Frm().Pos( aOld );
-            pFrm->_InvalidatePos();
-            return FALSE;
-        }
-    }
-    return TRUE;
-}
-
-// OD 31.10.2002 #104100#
 // Implement vertical layout support
 BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
 {
