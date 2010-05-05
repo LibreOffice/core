@@ -133,7 +133,8 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     mbInitControls( false ),
     mnLayoutStyle( 0 ),
     mpAccExec( NULL ),
-    mnBtnPos( 120 )
+    mnBtnPos( 120 ),
+    mnBtnTop( 150 )
 {
     mnColumnWidth[0] = mnColumnWidth[1] = 0;
     mnTextColumnWidth[0] = mnTextColumnWidth[1] = 0;
@@ -732,6 +733,9 @@ void BackingWindow::Resize()
     nYPos += nPDelta - nDiff;
 
     nYPos += nWDelta/2 - nDiff;
+
+    if( mnLayoutStyle != 1 )
+        nYPos = maControlRect.Top() + mnBtnTop;
 
     maWriterButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos, nYPos ), Size( mnTextColumnWidth[0], maButtonImageSize.Height() ) );
     maDrawButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos + mnColumnWidth[0], nYPos ), Size( mnTextColumnWidth[1], maButtonImageSize.Height() ) );
