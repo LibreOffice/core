@@ -177,7 +177,7 @@ namespace svt { namespace table
         virtual void        GetFocus();
         virtual void        LoseFocus();
         virtual void        KeyInput( const KeyEvent& rKEvt );
-    //virtual long      Notify(NotifyEvent& rNEvt);
+        virtual void        StateChanged( StateChangedType i_nStateChange );
 
     /** Creates and returns the accessible object of the whole GridControl. */
     SVT_DLLPRIVATE virtual XACC CreateAccessible();
