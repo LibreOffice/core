@@ -88,7 +88,7 @@ GrFeatureParser::GrFeatureParser(gr::Font & font, const std::string features, co
                 gr::isocode aLang = maLang;
                 for (size_t i = pos; i < nFeatEnd; i++)
                     aLang.rgch[i-pos] = features[i];
-                sil_std::pair<gr::LanguageIterator,gr::LanguageIterator> aSupported
+                ext_std::pair<gr::LanguageIterator,gr::LanguageIterator> aSupported
                     = font.getSupportedLanguages();
                 gr::LanguageIterator iL = aSupported.first;
                 while (iL != aSupported.second)
@@ -139,7 +139,7 @@ void GrFeatureParser::setLang(gr::Font & font, const std::string & lang)
             if (lang[i] == '-') break;
             aLang.rgch[i] = lang[i];
         }
-        sil_std::pair<gr::LanguageIterator,gr::LanguageIterator> aSupported
+        ext_std::pair<gr::LanguageIterator,gr::LanguageIterator> aSupported
                     = font.getSupportedLanguages();
         gr::LanguageIterator iL = aSupported.first;
         while (iL != aSupported.second)
@@ -186,7 +186,7 @@ bool GrFeatureParser::isValid(gr::Font & font, gr::FeatureSetting & setting)
     {
         return false;
     }
-    sil_std::pair< gr::FeatureSettingIterator, gr::FeatureSettingIterator >
+    ext_std::pair< gr::FeatureSettingIterator, gr::FeatureSettingIterator >
         validValues = font.getFeatureSettings(i);
     gr::FeatureSettingIterator j = validValues.first;
     while (j != validValues.second)
