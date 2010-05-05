@@ -362,6 +362,13 @@ Reference< XTreeNode > SAL_CALL UnoTreeControl::getClosestNodeForLocation( sal_I
 
 // -------------------------------------------------------------------
 
+awt::Rectangle SAL_CALL UnoTreeControl::getNodeRect( const Reference< XTreeNode >& Node ) throw (IllegalArgumentException, RuntimeException)
+{
+    return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->getNodeRect( Node );
+}
+
+// -------------------------------------------------------------------
+
 sal_Bool SAL_CALL UnoTreeControl::isEditing(  ) throw (RuntimeException)
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->isEditing();
