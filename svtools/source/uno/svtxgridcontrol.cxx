@@ -129,6 +129,18 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
     TableControl* pTable = (TableControl*)GetWindow();
     switch( GetPropertyId( PropertyName ) )
     {
+        case BASEPROPERTY_BACKGROUNDCOLOR:
+        {
+            // let the base class handle this for the TableControl
+            VCLXWindow::setProperty( PropertyName, aValue );
+            // and forward to the grid control's data window
+            if ( pTable->IsBackground() )
+                pTable->getDataWindow()->SetBackground( pTable->GetBackground() );
+            else
+                pTable->getDataWindow()->SetBackground();
+        }
+        break;
+
         case BASEPROPERTY_GRID_SELECTIONMODE:
         {
             SelectionType eSelectionType;
