@@ -2250,7 +2250,8 @@ Region SvTreeListBox::GetDragRegion() const
 void SvTreeListBox::Command( const CommandEvent& rCEvt )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    pImp->Command( rCEvt );
+    if ( !pImp->Command( rCEvt ) )
+        SvLBox::Command( rCEvt );
 }
 
 

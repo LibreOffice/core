@@ -1515,9 +1515,10 @@ void SvLBox::MakeVisible( SvLBoxEntry* )
     DBG_CHKTHIS(SvLBox,0);
 }
 
-void SvLBox::Command( const CommandEvent& )
+void SvLBox::Command( const CommandEvent& i_rCommandEvent )
 {
     DBG_CHKTHIS(SvLBox,0);
+    Control::Command( i_rCommandEvent );
 }
 
 void SvLBox::KeyInput( const KeyEvent& rKEvt )
