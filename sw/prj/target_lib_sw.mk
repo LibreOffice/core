@@ -30,14 +30,14 @@ $(eval $(call gb_Library_Library,sw))
 $(eval $(call gb_Library_add_sdi_headers,sw,sw/sdi/swslots))
 
 $(eval $(call gb_Library_set_include,sw,\
-    $$(SOLARINC) \
-    -I$(WORKDIR)/inc/sw/sdi \
-    -I$(WORKDIR)/inc/sw/ \
-    -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/source/filter/inc \
     -I$(SRCDIR)/sw/source/ui/inc \
     -I$(SRCDIR)/sw/inc/pch \
+    -I$(SRCDIR)/sw/inc \
+    -I$(WORKDIR)/inc/sw/sdi \
+    -I$(WORKDIR)/inc/sw/ \
+    $$(INCLUDE) \
     -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
 ))

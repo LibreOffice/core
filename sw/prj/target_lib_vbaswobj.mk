@@ -122,3 +122,14 @@ $(eval $(call gb_Library_set_ldflags,vbaswobj,\
 ))
 endif
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_add_linked_libs,vbaswobj,\
+    advapi32 \
+    kernel32 \
+    msvcrt \
+    oldnames \
+    user32 \
+    uwinapi \
+))
+endif
+# vim: set noet sw=4 ts=4:
