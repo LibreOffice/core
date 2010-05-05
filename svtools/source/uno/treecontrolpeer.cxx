@@ -196,7 +196,9 @@ void TreeControlPeer::addEntry( UnoTreeListEntry* pEntry )
             mpTreeNodeMap = new TreeNodeMap();
         }
 
-        (*mpTreeNodeMap)[ pEntry->mxNode ] = pEntry;
+        const Reference< XTreeNode > xNormalizedNode( pEntry->mxNode, UNO_QUERY );
+        (*mpTreeNodeMap)[ xNormalizedNode ] = pEntry;
+        OSL_TRACE( "tree: adding %p => %p", xNormalizedNode.get(), pEntry );
     }
 }
 
@@ -206,9 +208,13 @@ void TreeControlPeer::removeEntry( UnoTreeListEntry* pEntry )
 {
     if( mpTreeNodeMap && pEntry && pEntry->mxNode.is() )
     {
-        TreeNodeMap::iterator aIter( mpTreeNodeMap->find( pEntry->mxNode ) );
+        const Reference< XTreeNode > xNormalizedNode( pEntry->mxNode, UNO_QUERY );
+        TreeNodeMap::iterator aIter( mpTreeNodeMap->find( xNormalizedNode ) );
         if( aIter != mpTreeNodeMap->end() )
+        {
+            OSL_TRACE( "tree: removing %p => %p", xNormalizedNode.get(), pEntry );
             mpTreeNodeMap->erase( aIter );
+        }
     }
 }
 
@@ -218,7 +224,8 @@ UnoTreeListEntry* TreeControlPeer::getEntry( const Reference< XTreeNode >& xNode
 {
     if( mpTreeNodeMap )
     {
-        TreeNodeMap::iterator aIter( mpTreeNodeMap->find( xNode ) );
+        const Reference< XTreeNode > xNormalizedNode( xNode, UNO_QUERY );
+        TreeNodeMap::iterator aIter( mpTreeNodeMap->find( xNormalizedNode ) );
         if( aIter != mpTreeNodeMap->end() )
             return (*aIter).second;
     }
