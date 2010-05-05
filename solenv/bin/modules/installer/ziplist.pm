@@ -659,7 +659,7 @@ sub set_manufacturer
         if (( $allvariables->{'DEFINEDMANUFACTURER'} ) && ( $allvariables->{'DEFINEDMANUFACTURER'} ne "" )) { $sunname = $allvariables->{'DEFINEDMANUFACTURER'}; }
         else { installer::exiter::exit_program("ERROR: Property DEFINEDMANUFACTURER has to be set for this product!", "set_manufacturer"); }
         $installer::globals::manufacturer = $sunname;
-        $installer::globals::longmanufacturer = $sunname . ", Inc.";
+        $installer::globals::longmanufacturer = $sunname;
     }
 
     $allvariables->{'MANUFACTURER'} = $installer::globals::manufacturer;
