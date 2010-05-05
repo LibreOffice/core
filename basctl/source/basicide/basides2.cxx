@@ -260,11 +260,14 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
         {
             pWin = FindBasWin( rDocument, aLibName, aModName, FALSE, TRUE );
             if( !pWin )
-            {    // new module window
-            pWin = new ModulWindow( pModulLayout, rDocument, aLibName, aModName, aModule );
-            nKey = InsertWindowInTable( pWin );
+            {
+                // new module window
+                pWin = new ModulWindow( pModulLayout, rDocument, aLibName, aModName, aModule );
+                nKey = InsertWindowInTable( pWin );
+            }
+            else // we've gotten called recursively ( via listener from createModule above ), get outta here
+                return pWin;
         }
-    }
     }
     else
     {
