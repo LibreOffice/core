@@ -47,25 +47,33 @@
 #define PARSER_IMPLEMENTATION_NAME "com.sun.star.comp.extensions.xml.sax.FastParser"
 #define PARSER_SERVICE_NAME        "com.sun.star.xml.sax.FastParser"
 
-namespace sax_fastparser
-{
+namespace sax_fastparser {
 
-    class FastLocatorImpl;
-    struct NamespaceDefine;
-    struct SaxContextImpl;
-    typedef boost::shared_ptr< SaxContextImpl > SaxContextImplPtr;
-    typedef ::std::hash_map< ::rtl::OUString, sal_Int32,
-        ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString >
-    > NamespaceMap;
+class FastLocatorImpl;
+struct NamespaceDefine;
+struct SaxContextImpl;
+
+typedef ::boost::shared_ptr< SaxContextImpl > SaxContextImplPtr;
+typedef ::boost::shared_ptr< NamespaceDefine > NamespaceDefineRef;
+
+typedef ::std::hash_map< ::rtl::OUString, sal_Int32,
+        ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > NamespaceMap;
 
 // --------------------------------------------------------------------
 
-// Entity binds all information neede for a single file
+// Entity binds all information needed for a single file
 struct Entity
 {
-    ::com::sun::star::xml::sax::InputSource         maStructSource;
-    XML_Parser                                      mpParser;
-    sax_expatwrap::XMLFile2UTFConverter             maConverter;
+    ::com::sun::star::xml::sax::InputSource maStructSource;
+    XML_Parser                              mpParser;
+    ::sax_expatwrap::XMLFile2UTFConverter   maConverter;
+
+    // Exceptions cannot be thrown through the C-XmlParser (possible resource leaks),
+    // therefore the exception must be saved somewhere.
+    ::com::sun::star::uno::Any              maSavedException;
+
+    ::std::stack< SaxContextImplPtr >       maContextStack;
+    ::std::vector< NamespaceDefineRef >     maNamespaceDefines;
 };
 
 // --------------------------------------------------------------------
@@ -75,7 +83,7 @@ class FastSaxParser : public ::cppu::WeakImplHelper2< ::com::sun::star::xml::sax
 {
 public:
     FastSaxParser();
-    ~FastSaxParser();
+    virtual ~FastSaxParser();
 
     // The implementation details
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void);
@@ -100,9 +108,9 @@ public:
     void callbackCharacters( const XML_Char* s, int nLen );
     int callbackExternalEntityRef( XML_Parser parser, const XML_Char *openEntityNames, const XML_Char *base, const XML_Char *systemId, const XML_Char *publicId);
 
-    void pushEntity( const struct Entity &entity ) { vecEntity.push_back( entity ); }
-    void popEntity()                               { vecEntity.pop_back( ); }
-    struct Entity &getEntity()                     { return vecEntity.back(); }
+    inline void pushEntity( const Entity& rEntity ) { maEntities.push( rEntity ); }
+    inline void popEntity()                         { maEntities.pop(); }
+    Entity& getEntity()                             { return maEntities.top(); }
 
 private:
     void parse();
@@ -131,21 +139,13 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XErrorHandler >        mxErrorHandler;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XEntityResolver >      mxEntityResolver;
 
-    rtl::Reference < FastLocatorImpl >   mxDocumentLocator;
-    rtl::Reference < FastAttributeList > mxAttributes;
+    ::rtl::Reference< FastLocatorImpl >     mxDocumentLocator;
+    ::rtl::Reference< FastAttributeList >   mxAttributes;
+    ::com::sun::star::lang::Locale          maLocale;
+    NamespaceMap                            maNamespaceMap;
 
     // External entity stack
-    std::vector< struct Entity > vecEntity;
-
-    // Exceptions cannot be thrown through the C-XmlParser (possible resource leaks),
-    // therefore the exception must be saved somewhere.
-    ::com::sun::star::uno::Any maSavedException;
-
-    ::com::sun::star::lang::Locale maLocale;
-
-    std::stack< SaxContextImplPtr > maContextStack;
-    std::vector< boost::shared_ptr< NamespaceDefine > > maNamespaceDefines;
-    NamespaceMap maNamespaceMap;
+    ::std::stack< Entity > maEntities;
 };
 
 }
