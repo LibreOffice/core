@@ -244,8 +244,8 @@ $(call gb_Helper_announce,Linking $(2) ...)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
     RESPONSEFILE=$$(mktemp --tmpdir=$(gb_Helper_MISC)) && \
-    echo "$(foreach object,$(6),$(call gb_CxxObject_get_target,$(object))) \
-        $(foreach object,$(7),$(call gb_CObject_get_target,$(object)))" > $${RESPONSEFILE} && \
+    echo "$(foreach object,$(7),$(call gb_CxxObject_get_target,$(object))) \
+        $(foreach object,$(6),$(call gb_CObject_get_target,$(object)))" > $${RESPONSEFILE} && \
     $(gb_LINK) \
         $(3) \
         @$${RESPONSEFILE} \
@@ -303,7 +303,11 @@ gb_Library_FILENAMES := $(patsubst i18nisolang1:ii18nisolang1%,i18nisolang1:ii18
 gb_Library_FILENAMES := $(patsubst i18nisolang1:iii18nisolang1%,i18nisolang1:iii18nisolang%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst sb:isb%,sb:basic%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst sfx:isfx%,sfx:sfx%,$(gb_Library_FILENAMES))
+ifeq ($(gb_PRODUCT),$(true))
 gb_Library_FILENAMES := $(patsubst stl:istl%,stl:stlport_vc71%,$(gb_Library_FILENAMES))
+else
+gb_Library_FILENAMES := $(patsubst stl:istl%,stl:stlport_vc71_stldebug%,$(gb_Library_FILENAMES))
+endif
 gb_Library_FILENAMES := $(patsubst svt:isvt%,svt:svtool%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst tl:itl%,tl:itools%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst vbahelper:ivbahelper%,vbahelper:vbahelper%,$(gb_Library_FILENAMES))
@@ -333,7 +337,11 @@ gb_Library_FILENAMES += $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):$(lib
 gb_Library_DLLEXT := .dll
 gb_Library_MAJORVER := 3
 gb_Library_RTEXT := MSC$(gb_Library_DLLEXT)
+ifeq ($(gb_PRODUCT),$(true))
 gb_Library_STLEXT := port_vc7145$(gb_Library_DLLEXT)
+else
+gb_Library_STLEXT := port_vc7145_stldebug$(gb_Library_DLLEXT)
+endif
 gb_Library_OOOEXT := mi$(gb_Library_DLLEXT)
 gb_Library_UNOEXT := mi.uno$(gb_Library_DLLEXT)
 gb_Library_UNOVEREXT := $(gb_Library_MAJORVER)$(gb_Library_DLLEXT)
@@ -409,8 +417,7 @@ gb_SrsPartTarget_RSCTARGET := $(OUTDIR)/bin/rsc.exe
 gb_SrsPartTarget_RSCCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_SrsPartTarget_RSCTARGET)
 
 define gb_SrsPartTarget__command_dep
-mkdir -p $(dir $(1)) && \
-    echo '$(call gb_SrsPartTarget_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
+$(info gb_SrsPartTarget__command_dep not implemented)
 endef
 
 

@@ -40,6 +40,7 @@ $(call gb_SrsPartTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) | $(g
         RESPONSEFILE=`$(gb_MkTemp) $(gb_Helper_MISC)` && \
         echo "-s \
             $(INCLUDE) \
+            -I$(dir $<) \
             $(DEFS) \
             -fp=$@ \
             $<" > $${RESPONSEFILE} && \

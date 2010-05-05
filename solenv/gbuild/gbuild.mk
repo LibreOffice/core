@@ -70,7 +70,7 @@ endif
 true := T
 false :=
 
-ifneq ($(strip $(PRODUCT)),)
+ifneq ($(strip $(PRODUCT)$(product)),)
 gb_PRODUCT := $(true)
 else
 gb_PRODUCT := $(false)
@@ -156,6 +156,7 @@ else
 gb_GLOBALDEFS += \
     -DDBG_UTIL \
     -D_STLP_DEBUG \
+    -D_DEBUG \
 
 endif
 
