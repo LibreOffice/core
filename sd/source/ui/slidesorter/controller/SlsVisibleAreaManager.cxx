@@ -99,7 +99,6 @@ void VisibleAreaManager::RequestVisible (
 {
     if (rpDescriptor)
     {
-        const sal_Int32 nIndex (rpDescriptor->GetPageIndex());
         maVisibleRequests.push_back(
             mrSlideSorter.GetView().GetLayouter().GetPageObjectBox(
                 rpDescriptor->GetPageIndex(),

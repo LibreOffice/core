@@ -105,7 +105,6 @@ static const sal_uInt32 NOT_OVER_PAGE            (0x00000000);
 static const sal_uInt32 MODIFIER_MASK            (SHIFT_MODIFIER | CONTROL_MODIFIER);
 static const sal_uInt32 BUTTON_MASK              (LEFT_BUTTON | RIGHT_BUTTON | MIDDLE_BUTTON);
 
-
 } // end of anonymous namespace
 
 
@@ -239,7 +238,7 @@ protected:
     virtual bool ProcessDragEvent (SelectionFunction::EventDescriptor& rDescriptor);
 
 private:
-    Point maButtonDownLocation;
+    ::boost::optional<Point> maButtonDownLocation;
 
     /** Select all pages between and including the selection anchor and the
         specified page.
@@ -1272,7 +1271,8 @@ bool SelectionFunction::ModeHandler::IsMouseOverIndicatorAllowed (void) const
 NormalModeHandler::NormalModeHandler (
     SlideSorter& rSlideSorter,
     SelectionFunction& rSelectionFunction)
-    : ModeHandler(rSlideSorter, rSelectionFunction, true)
+    : ModeHandler(rSlideSorter, rSelectionFunction, true),
+      maButtonDownLocation()
 {
 }
 
@@ -1415,6 +1415,7 @@ bool NormalModeHandler::ProcessButtonUpEvent (
 
 
 
+
 bool NormalModeHandler::ProcessMotionEvent (
     SelectionFunction::EventDescriptor& rDescriptor)
 {
@@ -1431,10 +1432,11 @@ bool NormalModeHandler::ProcessMotionEvent (
         // A mouse motion without visible substitution starts that.
         case ANY_MODIFIER(MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE):
         {
-            const sal_Int32 nDistance (
-                ::std::max (
-                    abs(maButtonDownLocation.X() - rDescriptor.maMousePosition.X()),
-                    abs(maButtonDownLocation.Y() - rDescriptor.maMousePosition.Y())));
+            const sal_Int32 nDistance (maButtonDownLocation
+                ? ::std::max (
+                    abs(maButtonDownLocation->X() - rDescriptor.maMousePosition.X()),
+                    abs(maButtonDownLocation->Y() - rDescriptor.maMousePosition.Y()))
+                : 0);
             if (nDistance > 3)
                 StartDrag(
                     rDescriptor.maMousePosition,
@@ -1483,15 +1485,15 @@ void NormalModeHandler::RangeSelect (const model::SharedPageDescriptor& rpDescri
     {
         // Select all pages between the anchor and the given one, including
         // the two.
-        USHORT nAnchorIndex ((pAnchor->GetPage()->GetPageNum()-1) / 2);
-        USHORT nOtherIndex ((rpDescriptor->GetPage()->GetPageNum()-1) / 2);
+        const USHORT nAnchorIndex ((pAnchor->GetPage()->GetPageNum()-1) / 2);
+        const USHORT nOtherIndex ((rpDescriptor->GetPage()->GetPageNum()-1) / 2);
 
         // Iterate over all pages in the range.  Start with the anchor
         // page.  This way the PageSelector will recognize it again as
         // anchor (the first selected page after a DeselectAllPages()
         // becomes the anchor.)
-        USHORT nStep = (nAnchorIndex < nOtherIndex) ? +1 : -1;
-        USHORT nIndex = nAnchorIndex;
+        const USHORT nStep ((nAnchorIndex < nOtherIndex) ? +1 : -1);
+        USHORT nIndex (nAnchorIndex);
         while (true)
         {
             rSelector.SelectPage(nIndex);
@@ -1756,7 +1758,7 @@ DragAndDropModeHandler::DragAndDropModeHandler (
         pDragTransferable = SD_MOD()->pTransferDrag;
     }
 
-    mrSlideSorter.GetController().GetInsertionIndicatorHandler()->Start(true);
+//    mrSlideSorter.GetController().GetInsertionIndicatorHandler()->Start(true);
     mpDragAndDropContext.reset(new DragAndDropContext(mrSlideSorter));
     mrSlideSorter.GetController().GetInsertionIndicatorHandler()->Start(
         pDragTransferable != NULL
