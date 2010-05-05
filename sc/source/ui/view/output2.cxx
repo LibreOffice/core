@@ -75,6 +75,8 @@
 #include "scmod.hxx"
 #include "fillinfo.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 #include <math.h>
 
 //! Autofilter-Breite mit column.cxx zusammenfassen
@@ -1293,10 +1295,6 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
 
     ScDrawStringsVars aVars( this, bPixelToLogic );
 
-    const ScPatternAttr* pOldPattern = NULL;
-    const SfxItemSet* pOldCondSet = NULL;
-    BYTE nOldScript = 0;
-
     BOOL bProgress = FALSE;
 
     long nInitPosX = nScrX;
@@ -1319,6 +1317,13 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
     SvxCellHorJustify eOutHorJust = SVX_HOR_JUSTIFY_STANDARD;
     const ScPatternAttr* pPattern = NULL;
     const SfxItemSet* pCondSet = NULL;
+    const ScPatternAttr* pOldPattern = NULL;
+    const SfxItemSet* pOldCondSet = NULL;
+    BYTE nOldScript = 0;
+
+    // alternative pattern instance in case we need to modify the pattern
+    // before processing the cell value.
+    ::boost::scoped_ptr<ScPatternAttr> pAltPattern;
 
     long nPosY = nScrY;
     for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
@@ -1454,6 +1459,17 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                     {
                         pPattern = pDoc->GetPattern( nCellX, nCellY, nTab );
                         pCondSet = pDoc->GetCondResult( nCellX, nCellY, nTab );
+                    }
+
+                    if (pCell->HasValueData() &&
+                        static_cast<const SfxBoolItem&>(
+                            pPattern->GetItem(ATTR_LINEBREAK, pCondSet)).GetValue())
+                    {
+                        // Disable line break when the cell content is numeric.
+                        pAltPattern.reset(new ScPatternAttr(*pPattern));
+                        SfxBoolItem aLineBreak(ATTR_LINEBREAK, false);
+                        pAltPattern->GetItemSet().Put(aLineBreak);
+                        pPattern = pAltPattern.get();
                     }
 
                     BYTE nScript = GetScriptType( pDoc, pCell, pPattern, pCondSet );
