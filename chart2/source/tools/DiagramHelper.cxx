@@ -41,6 +41,7 @@
 #include "servicenames_charttypes.hxx"
 #include "ChartModelHelper.hxx"
 #include "RelativePositionHelper.hxx"
+#include "ControllerLockGuard.hxx"
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
@@ -1435,55 +1436,6 @@ DiagramPositioningMode DiagramHelper::getDiagramPositioningMode( const uno::Refe
     return eMode;
 }
 
-//static
-bool DiagramHelper::setDiagramPositioningMode( const uno::Reference<
-                chart2::XDiagram > & xDiagram, DiagramPositioningMode eMode )
-{
-    bool bChanged = false;
-    uno::Reference< beans::XPropertySet > xDiaProps( xDiagram, uno::UNO_QUERY );
-    if( !xDiaProps.is() )
-        return bChanged;
-
-    bool bOld = false;
-    xDiaProps->getPropertyValue(C2U("PosSizeExcludeAxes")) >>= bOld;
-    bool bNew = bOld;
-
-    if( eMode == DiagramPositioningMode_AUTO )
-    {
-
-        RelativePosition aPos;
-        if( (xDiaProps->getPropertyValue(C2U("RelativePosition") ) >>= aPos) )
-            bChanged = true;
-        if( !bChanged )
-        {
-            RelativeSize aSize;
-            if( (xDiaProps->getPropertyValue(C2U("RelativeSize") ) >>= aSize) )
-                bChanged = true;
-        }
-
-        if( bChanged )
-        {
-            xDiaProps->setPropertyValue(C2U("RelativePosition"), uno::Any() );
-            xDiaProps->setPropertyValue(C2U("RelativeSize"), uno::Any() );
-        }
-    }
-    else if( eMode == DiagramPositioningMode_EXCLUDING )
-    {
-        bNew = true;
-        bChanged = (bNew!=bOld);
-        if(bChanged)
-            xDiaProps->setPropertyValue(C2U("PosSizeExcludeAxes"), uno::makeAny(bNew) );
-    }
-    else if( eMode == DiagramPositioningMode_INCLUDING)
-    {
-        bNew = false;
-        bChanged = (bNew!=bOld);
-        if(bChanged)
-            xDiaProps->setPropertyValue(C2U("PosSizeExcludeAxes"), uno::makeAny(bNew) );
-    }
-    return bChanged;
-}
-
 void lcl_ensureRange0to1( double& rValue )
 {
     if(rValue<0.0)
@@ -1496,6 +1448,8 @@ void lcl_ensureRange0to1( double& rValue )
 bool DiagramHelper::setDiagramPositioning( const uno::Reference< frame::XModel >& xChartModel,
         const awt::Rectangle& rPosRect /*100th mm*/ )
 {
+    ControllerLockGuard aCtrlLockGuard( xChartModel );
+
     bool bChanged = false;
     awt::Size aPageSize( ChartModelHelper::getPageSize(xChartModel) );
     uno::Reference< beans::XPropertySet > xDiaProps( ChartModelHelper::findDiagram( xChartModel ), uno::UNO_QUERY );

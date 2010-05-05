@@ -31,6 +31,7 @@
 #include <svl/solar.hrc>
 
 //next free is 291
+//single free is: 134
 
 //#define RID_APP_START 30000
 ////#define STR_NULL                            (RID_APP_START +  1)
@@ -297,7 +298,6 @@
 #define STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE   (RID_APP_START + 266)
 
 #define STR_PAGE_POSITIONING  (RID_APP_START + 277)
-#define STR_PAGE_POSITIONANDSIZE (RID_APP_START + 134)
 #define STR_PAGE_ASIAN                       (RID_APP_START + 281)
 
 //-----------------------------------------------------------------------------

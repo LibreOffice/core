@@ -745,6 +745,7 @@ awt::Point SAL_CALL DiagramWrapper::getPosition()
 void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
     throw (uno::RuntimeException)
 {
+    ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     Reference< beans::XPropertySet > xProp( this->getInnerPropertySet() );
     if( xProp.is() )
     {
@@ -778,6 +779,7 @@ void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
     throw (beans::PropertyVetoException,
            uno::RuntimeException)
 {
+    ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     Reference< beans::XPropertySet > xProp( this->getInnerPropertySet() );
     if( xProp.is() )
     {
@@ -811,6 +813,7 @@ OUString SAL_CALL DiagramWrapper::getShapeType()
 
 void SAL_CALL DiagramWrapper::setAutomaticDiagramPositioning() throw (uno::RuntimeException)
 {
+    ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
     {
@@ -832,6 +835,7 @@ void SAL_CALL DiagramWrapper::setAutomaticDiagramPositioning() throw (uno::Runti
 }
 void SAL_CALL DiagramWrapper::setDiagramPositionExcludingAxes( const awt::Rectangle& rPositionRect ) throw (uno::RuntimeException)
 {
+    ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     DiagramHelper::setDiagramPositioning( m_spChart2ModelContact->getChartModel(), rPositionRect );
     uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
@@ -859,6 +863,7 @@ awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionExcludingAxes(  
 }
 void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxes( const awt::Rectangle& rPositionRect ) throw (uno::RuntimeException)
 {
+    ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     DiagramHelper::setDiagramPositioning( m_spChart2ModelContact->getChartModel(), rPositionRect );
     uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
@@ -870,6 +875,7 @@ awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxes(  
 }
 void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxesAndAxisTitles( const awt::Rectangle& rPositionRect ) throw (uno::RuntimeException)
 {
+    ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     awt::Rectangle aRect( m_spChart2ModelContact->SubstractAxisTitleSizes(rPositionRect) );
     DiagramWrapper::setDiagramPositionIncludingAxes( aRect );
 }

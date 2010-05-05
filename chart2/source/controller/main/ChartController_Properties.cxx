@@ -60,7 +60,6 @@
 #include "Strings.hrc"
 #include "ReferenceSizeProvider.hxx"
 #include "RegressionCurveHelper.hxx"
-#include "DiagramItemConverter.hxx"
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 //for auto_ptr
@@ -152,9 +151,6 @@ namespace
             case OBJECTTYPE_LEGEND_ENTRY:
                     break;
             case OBJECTTYPE_DIAGRAM:
-                pItemConverter =  new wrapper::DiagramItemConverter(
-                                        xObjectProperties, rDrawModel.GetItemPool(),
-                                        rDrawModel, xChartModel, rDrawModel.GetUIScale() );
                     break;
             case OBJECTTYPE_DIAGRAM_WALL:
             case OBJECTTYPE_DIAGRAM_FLOOR:

@@ -72,12 +72,15 @@
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 #include <svx/unofill.hxx>
+#include <unotools/saveopt.hxx>
 
 #include <time.h>
 
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart/XDiagramPositioning.hpp>
 #include <com/sun/star/chart2/ExplicitSubIncrement.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -314,7 +317,7 @@ uno::Any SAL_CALL ChartView::getTransferData( const datatransfer::DataFlavor& aF
     if( ! (bHighContrastMetaFile || aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMEType)) )
         return aRet;
 
-    impl_updateView();
+    update();
 
     SvMemoryStream aStream( 1024, 1024 );
     utl::OStreamWrapper* pStreamWrapper = new utl::OStreamWrapper( aStream );
@@ -2815,17 +2818,6 @@ void ChartView::impl_updateView()
 
             //create chart view
             {
-                /*
-                ::vos::OGuard aGuard( Application::GetSolarMutex());
-                while( m_bViewDirty )
-                {
-                    createShapes();
-                    m_bViewDirty = m_bViewUpdatePending;
-                    m_bViewUpdatePending = false;
-                    m_bInViewUpdate = false;
-                }
-                */
-
                 m_bViewDirty = false;
                 m_bViewUpdatePending = false;
                 createShapes();
@@ -2991,6 +2983,33 @@ void SAL_CALL ChartView::removeModeChangeApproveListener( const uno::Reference< 
 void SAL_CALL ChartView::update() throw (uno::RuntimeException)
 {
     impl_updateView();
+
+    //#i100778# migrate all imported or old documents to a plot area sizing exclusive axes (in case the save settings allow for this):
+    //Although in general it is a bad idea to change the model from within the view this is exceptionally the best place to do this special conversion.
+    //When a view update is requested (what happens for creating the metafile or displaying
+    //the chart in edit mode or printing) it is most likely that all necessary informations are available - like the underlying spreadsheet data for example.
+    //Those data is important for the correct axis lable sizes which are needed during conversion.
+    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
+    if( nCurrentODFVersion == SvtSaveOptions::ODFVER_LATEST )//#i100778# todo: change this dependent on fileformat evolution
+    {
+        uno::Reference< ::com::sun::star::chart::XChartDocument > xOldDoc( m_xChartModel, uno::UNO_QUERY ) ;
+        if( xOldDoc.is() )
+        {
+            uno::Reference< ::com::sun::star::chart::XDiagramPositioning > xDiagramPositioning( xOldDoc->getDiagram(), uno::UNO_QUERY );
+            if( xDiagramPositioning.is() && !xDiagramPositioning->isAutomaticDiagramPositioning() && !xDiagramPositioning->isExcludingDiagramPositioning() )
+            {
+                {
+                    ControllerLockGuard aCtrlLockGuard( m_xChartModel );
+                    uno::Reference< util::XModifiable > xModifiable( m_xChartModel, uno::UNO_QUERY );
+                    bool bModelWasModified = xModifiable.is() && xModifiable->isModified();
+                    xDiagramPositioning->setDiagramPositionExcludingAxes( xDiagramPositioning->calculateDiagramPositionExcludingAxes() );
+                    if(!bModelWasModified && xModifiable.is() )
+                        xModifiable->setModified(sal_False);
+                }
+                impl_updateView();
+            }
+        }
+    }
 }
 
 // ____ XPropertySet ____

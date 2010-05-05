@@ -327,8 +327,6 @@ public:
 
     static DiagramPositioningMode getDiagramPositioningMode( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDiagram > & xDiagram );
-    static bool setDiagramPositioningMode( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDiagram > & xDiagram, DiagramPositioningMode eMode );
 
     static bool setDiagramPositioning( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel,
         const ::com::sun::star::awt::Rectangle& rPosRect /*100th mm*/ );
