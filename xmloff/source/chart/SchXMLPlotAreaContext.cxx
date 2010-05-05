@@ -523,7 +523,7 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
         case XML_TOK_PA_COORDINATE_REGION_EXT:
         case XML_TOK_PA_COORDINATE_REGION:
         {
-            pContext = new SchXMLExcludingPositionContext( GetImport(), nPrefix, rLocalName, m_aInnerPositioning );
+            pContext = new SchXMLCoordinateRegionContext( GetImport(), nPrefix, rLocalName, m_aInnerPositioning );
         }
         break;
 
@@ -694,20 +694,17 @@ void SchXMLPlotAreaContext::EndElement()
     uno::Reference< chart::XDiagramPositioning > xDiaPos( mxDiagram, uno::UNO_QUERY );
     if( xDiaPos.is())
     {
-        bool bOuterSize = m_aOuterPositioning.hasPosSize() && !m_aOuterPositioning.isAutomatic();
-        if( m_aInnerPositioning.hasPosSize() )
+        if( !m_aOuterPositioning.isAutomatic() )
         {
-            if( !m_aInnerPositioning.isAutomatic() )
+            if( m_aInnerPositioning.hasPosSize() )
                 xDiaPos->setDiagramPositionExcludingAxes( m_aInnerPositioning.getRectangle() );
-            else if( bOuterSize )
-                xDiaPos->setDiagramPositionIncludingAxes( m_aOuterPositioning.getRectangle() );
-        }
-        else if( bOuterSize )
-        {
-            if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan3_3( GetImport().GetModel() ) ) //old version of OOo did write a wrong rectangle for the diagram size
-                xDiaPos->setDiagramPositionIncludingAxesAndAxisTitles( m_aOuterPositioning.getRectangle() );
-            else
-                xDiaPos->setDiagramPositionIncludingAxes( m_aOuterPositioning.getRectangle() );
+            else if( m_aOuterPositioning.hasPosSize() )
+            {
+                if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan3_3( GetImport().GetModel() ) ) //old version of OOo did write a wrong rectangle for the diagram size
+                    xDiaPos->setDiagramPositionIncludingAxesAndAxisTitles( m_aOuterPositioning.getRectangle() );
+                else
+                    xDiaPos->setDiagramPositionIncludingAxes( m_aOuterPositioning.getRectangle() );
+            }
         }
     }
 
@@ -1744,12 +1741,6 @@ bool SchXMLPositonAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefix
         else
             bReturn = false;
     }
-    else if( IsXMLToken( rLocalName, XML_PREFER_COORDINATE_REGION ) )
-    {
-        sal_Bool bPreferExcludingPosition = false;
-        m_rImport.GetMM100UnitConverter().convertBool( bPreferExcludingPosition, rValue );
-        m_bAutoPosition = m_bAutoSize = !bPreferExcludingPosition;
-    }
     else
         bReturn = false;
 
@@ -1771,7 +1762,7 @@ void SchXMLPositonAttributesHelper::readAutomaticPositioningProperties( XMLPropS
 
 // ========================================
 
-SchXMLExcludingPositionContext::SchXMLExcludingPositionContext(
+SchXMLCoordinateRegionContext::SchXMLCoordinateRegionContext(
           SvXMLImport& rImport
         , sal_uInt16 nPrefix
         , const rtl::OUString& rLocalName
@@ -1781,11 +1772,11 @@ SchXMLExcludingPositionContext::SchXMLExcludingPositionContext(
 {
 }
 
-SchXMLExcludingPositionContext::~SchXMLExcludingPositionContext()
+SchXMLCoordinateRegionContext::~SchXMLCoordinateRegionContext()
 {
 }
 
-void SchXMLExcludingPositionContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLCoordinateRegionContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     // parse attributes
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;

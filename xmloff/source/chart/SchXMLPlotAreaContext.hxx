@@ -251,15 +251,15 @@ public:
 
 // ----------------------------------------
 
-class SchXMLExcludingPositionContext : public SvXMLImportContext
+class SchXMLCoordinateRegionContext : public SvXMLImportContext
 {
 public:
-    SchXMLExcludingPositionContext(
+    SchXMLCoordinateRegionContext(
             SvXMLImport& rImport
             , sal_uInt16 nPrefix
             , const rtl::OUString& rLocalName
             , SchXMLPositonAttributesHelper& rPositioning );
-    virtual ~SchXMLExcludingPositionContext();
+    virtual ~SchXMLCoordinateRegionContext();
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
 private:

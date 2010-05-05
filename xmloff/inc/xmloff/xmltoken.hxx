@@ -3099,7 +3099,6 @@ namespace xmloff { namespace token {
         XML_NP_CHART_EXT,
         XML_N_CHART_EXT,
         XML_COORDINATE_REGION,
-        XML_PREFER_COORDINATE_REGION,
 
         XML_TOKEN_END
     };

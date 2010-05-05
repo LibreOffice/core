@@ -199,7 +199,7 @@ public:
         const ::com::sun::star::awt::Size & rPageSize,
         sal_Bool bExportContent,
         sal_Bool bIncludeTable );
-    void exportExcludingPosition( const com::sun::star::uno::Reference< com::sun::star::chart::XDiagram >& xDiagram );
+    void exportCoordinateRegion( const com::sun::star::uno::Reference< com::sun::star::chart::XDiagram >& xDiagram );
     void exportAxes( const com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > & xDiagram,
                                     const com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > & xNewDiagram,
                                     sal_Bool bExportContent );
@@ -1921,7 +1921,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
         pElPlotArea = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_PLOT_AREA, sal_True, sal_True );
 
         //inner position rectangle element
-        exportExcludingPosition( xDiagram );
+        exportCoordinateRegion( xDiagram );
 
         // light sources (inside plot area element)
         if( bIs3DChart &&
@@ -2083,12 +2083,12 @@ void SchXMLExportHelper_Impl::exportPlotArea(
         delete pElPlotArea;
 }
 
-void SchXMLExportHelper_Impl::exportExcludingPosition( const uno::Reference< chart::XDiagram >& xDiagram )
+void SchXMLExportHelper_Impl::exportCoordinateRegion( const uno::Reference< chart::XDiagram >& xDiagram )
 {
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
     if( nCurrentODFVersion <= SvtSaveOptions::ODFVER_012 )//do not export to ODF 1.2 or older
         return;
-    if( nCurrentODFVersion != SvtSaveOptions::ODFVER_LATEST )//export only if extensions are enabled //todo: change this dependent on fileformat evolution
+    if( nCurrentODFVersion != SvtSaveOptions::ODFVER_LATEST )//export only if extensions are enabled //#i100778# todo: change this dependent on fileformat evolution
         return;
 
     Reference< chart::XDiagramPositioning > xDiaPos( xDiagram, uno::UNO_QUERY );
@@ -2100,13 +2100,7 @@ void SchXMLExportHelper_Impl::exportExcludingPosition( const uno::Reference< cha
     addPosition( awt::Point(aRect.X,aRect.Y) );
     addSize( awt::Size(aRect.Width,aRect.Height) );
 
-    sal_Bool bPreferExcludingPositioning = xDiaPos->isExcludingDiagramPositioning();
-    rtl::OUStringBuffer sStringBuffer;
-    SvXMLUnitConverter::convertBool( sStringBuffer, bPreferExcludingPositioning );
-    String aString( sStringBuffer.makeStringAndClear() );
-    mrExport.AddAttribute( XML_NAMESPACE_CHART_EXT, XML_PREFER_COORDINATE_REGION, aString );//todo: change to chart namespace in future - dependent on fileformat
-
-    SvXMLElementExport aExcludingPosition( mrExport, XML_NAMESPACE_CHART_EXT, XML_COORDINATE_REGION, sal_True, sal_True );//todo: change to chart namespace in future - dependent on fileformat
+    SvXMLElementExport aCoordinateRegion( mrExport, XML_NAMESPACE_CHART_EXT, XML_COORDINATE_REGION, sal_True, sal_True );//#i100778# todo: change to chart namespace in future - dependent on fileformat
 }
 
 void SchXMLExportHelper_Impl::exportAxes(
