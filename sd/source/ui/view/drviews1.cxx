@@ -92,7 +92,6 @@
 #include "slideshow.hxx"
 #include "optsitem.hxx"
 #include "fusearch.hxx"
-#include "fuspell.hxx"
 #include "Outliner.hxx"
 #include "AnimationChildWindow.hxx"
 #include "SdUnoDrawView.hxx"

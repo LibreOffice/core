@@ -105,11 +105,6 @@ SdUnoSearchReplaceShape::SdUnoSearchReplaceShape( drawing::XDrawPage* pPage ) th
     mpPage = pPage;
 }
 
-SdUnoSearchReplaceShape::SdUnoSearchReplaceShape( drawing::XShape* pShape ) throw()
-{
-    mpShape = pShape;
-}
-
 SdUnoSearchReplaceShape::~SdUnoSearchReplaceShape() throw()
 {
 }

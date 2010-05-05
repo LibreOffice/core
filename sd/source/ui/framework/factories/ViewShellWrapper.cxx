@@ -101,14 +101,6 @@ void SAL_CALL ViewShellWrapper::disposing (void)
 
 
 
-bool ViewShellWrapper::IsUnique (void)
-{
-    return m_refCount==1;
-}
-
-
-
-
 //----- XResource -------------------------------------------------------------
 
 Reference<XResourceId> SAL_CALL ViewShellWrapper::getResourceId (void)

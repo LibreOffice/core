@@ -69,15 +69,6 @@ public:
     TreeNode (TreeNode* pParent);
     virtual ~TreeNode (void);
 
-    /** Returns <TRUE/> if the node has no children, i.e. is a leaf of a
-        tree.  In this case mpControlContainer is NULL.
-    */
-    bool IsLeaf (void);
-
-    /** Returns true if the node has no parent, i.e. is the root of a tree.
-    */
-    bool IsRoot (void);
-
     void SetParentNode (TreeNode* pNewParent);
     TreeNode* GetParentNode (void);
 
@@ -186,14 +177,6 @@ public:
         Multiple calls are ignored.  Each listener is added only once.
     */
     void AddStateChangeListener (const Link& rListener);
-
-    /** Remove the listener form the list of state change listeners.
-        @param rListener
-            It is OK to specify a listener that is not currently
-            registered.  Only when the listener is registered it is
-            removed.  Otherwise the call is ignored.
-    */
-    void RemoveStateChangeListener (const Link& rListener);
 
     /** Call the state change listeners and pass a state change event with
         the specified event id.  The source field is set to this.

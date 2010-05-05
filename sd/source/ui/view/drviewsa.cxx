@@ -150,21 +150,6 @@ DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBas
 
 /*************************************************************************
 |*
-|* Copy-Konstruktor
-|*
-\************************************************************************/
-
-DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ::Window* pParentWindow, const DrawViewShell& rShell )
-: ViewShell(pFrame, pParentWindow, rShell)
-, maTabControl(this, pParentWindow)
-, mbIsInSwitchPage(false)
-{
-    mpFrameView = new FrameView(GetDoc());
-    Construct (GetDocSh(), PK_STANDARD);
-}
-
-/*************************************************************************
-|*
 |* Destruktor
 |*
 \************************************************************************/

@@ -93,12 +93,6 @@ public:
     */
     USHORT AddMenu (const String& rsMenuName, ULONG nHelpId, const Link& rCallback);
 
-    /** Set the title of the docking window to the given string.  Use this
-        method when the title is not yet known at the time of construction
-        or can not be passed to the constructor.
-    */
-    void SetTitle (const String& rsTitle);
-
     ::Window* GetContentWindow (void);
 
     ::boost::shared_ptr<ToolBox> GetTitleToolBox (void) const;

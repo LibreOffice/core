@@ -90,16 +90,6 @@ public:
     */
     ::boost::shared_ptr<ViewShell> GetViewShell (void);
 
-    /** Returns whether there is exactly one reference to the called
-        ViewShellWrapper object (the number of references to the wrapped
-        ViewShell object is not taken into account).  This method is
-        typically used by the owner of a ViewShellWrapper object to verify
-        that, at the end of the ViewShellWrapper object's lifetime, the
-        owner holds the last reference and by releasing it will destroy the
-        object.
-    */
-    bool IsUnique (void);
-
 
     // XUnoTunnel
 

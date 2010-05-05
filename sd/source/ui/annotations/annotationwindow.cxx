@@ -493,12 +493,6 @@ void AnnotationWindow::ResizeIfNeccessary(long aOldHeight, long aNewHeight)
     }
 }
 
-void AnnotationWindow::SetReadonly(bool bSet)
-{
-    mbReadonly = bSet;
-    getView()->SetReadOnly(bSet);
-}
-
 void AnnotationWindow::SetLanguage(const SvxLanguageItem aNewItem)
 {
     Engine()->SetModifyHdl( Link() );

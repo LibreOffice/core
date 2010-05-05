@@ -267,23 +267,6 @@ void SAL_CALL TaskPanelFactory::releaseResource (
 
 
 
-//=============================================================================
-
-void TaskPanelFactory::ThrowIfDisposed (void) const
-    throw (lang::DisposedException)
-{
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        throw lang::DisposedException (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "TaskPanelFactory object has already been disposed")),
-            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
-    }
-}
-
-
-
-
 //===== ToolPanelResource =====================================================
 
 namespace {

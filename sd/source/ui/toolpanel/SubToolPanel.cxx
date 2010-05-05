@@ -86,64 +86,6 @@ SubToolPanel::~SubToolPanel (void)
 
 
 
-void SubToolPanel::ListHasChanged (void)
-{
-    mpControlContainer->ListHasChanged ();
-    RequestResize ();
-}
-
-
-
-
-void SubToolPanel::AddControl (
-    ::std::auto_ptr<TreeNode> pControl,
-    const String& rTitle,
-    ULONG nHelpId)
-{
-    pControl->GetWindow()->AddEventListener (
-        LINK(this,SubToolPanel,WindowEventListener));
-
-    // We are interested only in the title.  The control itself is
-    // managed by the content object.
-    TitledControl* pTitledControl = new TitledControl(
-        this,
-        pControl,
-        rTitle,
-        TitledControlStandardClickHandler(GetControlContainer(), ControlContainer::ES_TOGGLE),
-        TitleBar::TBT_SUB_CONTROL_HEADLINE);
-    pTitledControl->GetWindow()->SetParent(this);
-    pTitledControl->GetWindow()->SetHelpId(nHelpId);
-    ::std::auto_ptr<TreeNode> pChild (pTitledControl);
-
-    // Add a down link only for the first control so that when
-    // entering the sub tool panel the focus is set to the first control.
-    if (mpControlContainer->GetControlCount() == 0)
-        FocusManager::Instance().RegisterDownLink(GetParent(), pTitledControl->GetWindow());
-    FocusManager::Instance().RegisterUpLink(pTitledControl->GetWindow(), GetParent());
-
-    mpControlContainer->AddControl (pChild);
-}
-
-
-
-
-void SubToolPanel::AddControl (::std::auto_ptr<TreeNode> pControl)
-{
-    pControl->GetWindow()->AddEventListener (
-        LINK(this,SubToolPanel,WindowEventListener));
-
-    // Add a down link only for the first control so that when
-    // entering the sub tool panel the focus is set to the first control.
-    if (mpControlContainer->GetControlCount() == 0)
-        FocusManager::Instance().RegisterDownLink(GetParent(), pControl->GetWindow());
-    FocusManager::Instance().RegisterUpLink(pControl->GetWindow(), GetParent());
-
-    mpControlContainer->AddControl (pControl);
-}
-
-
-
-
 void SubToolPanel::Paint (const Rectangle& rRect)
 {
     if (mbIsRearrangePending)

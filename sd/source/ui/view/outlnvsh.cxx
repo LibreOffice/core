@@ -235,31 +235,6 @@ OutlineViewShell::OutlineViewShell (
     Construct(GetDocSh());
 }
 
-
-/*************************************************************************
-|*
-|* Copy-Konstruktor
-|*
-\************************************************************************/
-
-OutlineViewShell::OutlineViewShell (
-    SfxViewFrame* pFrame,
-    ::Window* pParentWindow,
-    const OutlineViewShell& rShell)
-    : ViewShell (pFrame, pParentWindow, rShell),
-      pOlView(NULL),
-      pLastPage( NULL ),
-      pClipEvtLstnr(NULL),
-      bPastePossible(FALSE),
-      mbInitialized(false)
-
-{
-    mpFrameView = new FrameView(GetDoc());
-    mpFrameView->Connect();
-
-    Construct(GetDocSh());
-}
-
 /*************************************************************************
 |*
 |* Destruktor

@@ -312,14 +312,6 @@ sal_Bool GroupTable::GetNextGroupEntry()
 
 // ---------------------------------------------------------------------------------------------
 
-void GroupTable::SkipCurrentGroup()
-{
-    if ( mnCurrentGroupEntry )
-        delete ( mpGroupEntry[ --mnCurrentGroupEntry ] );
-}
-
-// ---------------------------------------------------------------------------------------------
-
 FontCollectionEntry::~FontCollectionEntry()
 {
 }
@@ -1869,7 +1861,7 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
     }
 }
 
-PortionObj::PortionObj( PortionObj& rPortionObj )
+PortionObj::PortionObj( const PortionObj& rPortionObj )
 : PropStateValue( rPortionObj )
 {
     ImplConstruct( rPortionObj );
@@ -2097,7 +2089,7 @@ void PortionObj::ImplClear()
     delete[] mpText;
 }
 
-void PortionObj::ImplConstruct( PortionObj& rPortionObj )
+void PortionObj::ImplConstruct( const PortionObj& rPortionObj )
 {
     mbLastPortion = rPortionObj.mbLastPortion;
     mnTextSize = rPortionObj.mnTextSize;
@@ -2291,7 +2283,7 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
     return nRetValue;
 }
 
-PortionObj& PortionObj::operator=( PortionObj& rPortionObj )
+PortionObj& PortionObj::operator=( const PortionObj& rPortionObj )
 {
     if ( this != &rPortionObj )
     {
@@ -2369,7 +2361,7 @@ ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::
     }
 }
 
-ParagraphObj::ParagraphObj( ParagraphObj& rObj )
+ParagraphObj::ParagraphObj( const ParagraphObj& rObj )
 : List()
 , PropStateValue()
 , SOParagraph()
@@ -2878,7 +2870,7 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Boo
     meBiDi = ePropState;
 }
 
-void ParagraphObj::ImplConstruct( ParagraphObj& rParagraphObj )
+void ParagraphObj::ImplConstruct( const ParagraphObj& rParagraphObj )
 {
     mnTextSize = rParagraphObj.mnTextSize;
     mnTextAdjust = rParagraphObj.mnTextAdjust;
@@ -2891,8 +2883,9 @@ void ParagraphObj::ImplConstruct( ParagraphObj& rParagraphObj )
     mbForbiddenRules = rParagraphObj.mbForbiddenRules;
     mnBiDi = rParagraphObj.mnBiDi;
 
-    for ( void* pPtr = rParagraphObj.First(); pPtr; pPtr = rParagraphObj.Next() )
-        Insert( new PortionObj( *(PortionObj*)pPtr ), LIST_APPEND );
+    ParagraphObj& rOther = const_cast<ParagraphObj&>(rParagraphObj);
+    for ( const void* pPtr = rOther.First(); pPtr; pPtr = rOther.Next() )
+        Insert( new PortionObj( *(const PortionObj*)pPtr ), LIST_APPEND );
 
     maTabStop = rParagraphObj.maTabStop;
     bExtendedParameters = rParagraphObj.bExtendedParameters;
@@ -2917,16 +2910,6 @@ void ParagraphObj::ImplConstruct( ParagraphObj& rParagraphObj )
     nBulletId = rParagraphObj.nBulletId;
 }
 
-::com::sun::star::awt::Size ParagraphObj::ImplMapSize( const ::com::sun::star::awt::Size& rSize )
-{
-    Size aSize( OutputDevice::LogicToLogic( Size( rSize.Width, rSize.Height ), maMapModeSrc, maMapModeDest ) );
-    if ( !aSize.Width() )
-        aSize.Width()++;
-    if ( !aSize.Height() )
-        aSize.Height()++;
-    return ::com::sun::star::awt::Size( aSize.Width(), aSize.Height() );
-}
-
 sal_uInt32 ParagraphObj::ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition )
 {
     mnTextSize = 0;
@@ -2935,7 +2918,7 @@ sal_uInt32 ParagraphObj::ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosi
     return mnTextSize;
 }
 
-ParagraphObj& ParagraphObj::operator=( ParagraphObj& rParagraphObj )
+ParagraphObj& ParagraphObj::operator=( const ParagraphObj& rParagraphObj )
 {
     if ( this != &rParagraphObj )
     {
@@ -2998,7 +2981,7 @@ TextObj::TextObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XSim
     ImplCalculateTextPositions();
 }
 
-TextObj::TextObj( TextObj& rTextObj )
+TextObj::TextObj( const TextObj& rTextObj )
 {
     mpImplTextObj = rTextObj.mpImplTextObj;
     mpImplTextObj->mnRefCount++;

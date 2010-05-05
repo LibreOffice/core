@@ -46,8 +46,6 @@
 #include "controls/TableDesignPanel.hxx"
 #include "controls/CustomAnimationPanel.hxx"
 #include "controls/SlideTransitionPanel.hxx"
-#include "controls/AnimationSchemesPanel.hxx"
-#include "TitleToolBox.hxx"
 #include "taskpane/ControlContainer.hxx"
 #include "FrameView.hxx"
 #include "Window.hxx"
@@ -75,6 +73,7 @@
 #include <svx/colrctrl.hxx>
 #include <svx/xtable.hxx>
 #include <vcl/dockwin.hxx>
+#include <vcl/toolbox.hxx>
 #include "sdtreelb.hxx"
 #include "DrawViewShell.hxx"
 #include "drawdoc.hxx"
@@ -134,13 +133,6 @@ public:
         TaskPaneViewShell::PanelId.
     */
     void AddPanel (sal_uInt32 nInternalId, PanelId nPublicId);
-
-    /** Return the public id for the given internal one.
-        @return
-            When the given public id is not known then PID_UNKNOWN is
-            returned.
-    */
-    PanelId GetPublicId (sal_uInt32 nInternalId) const;
 
     /** Return the internal id for the given public one.
         @return
@@ -622,21 +614,6 @@ SdPage* TaskPaneViewShell::getCurrentPage(void) const
 
 
 
-void TaskPaneViewShell::Execute (SfxRequest& )
-{
-}
-
-
-
-
-void TaskPaneViewShell::GetState (SfxItemSet& rItemSet)
-{
-    (void)rItemSet;
-}
-
-
-
-
 TaskPaneShellManager& TaskPaneViewShell::GetSubShellManager (void) const
 {
     return *mpSubShellManager.get();
@@ -669,21 +646,6 @@ void TaskPaneViewShell::ShowPanel (const PanelId nPublicId)
         mpTaskPane->GetControlContainer().SetVisibilityState (
             nId,
             ControlContainer::VS_SHOW);
-    }
-}
-
-
-
-
-void TaskPaneViewShell::HidePanel (const PanelId nPublicId)
-{
-    Initialize();
-    sal_uInt32 nId (mpImpl->GetInternalId(nPublicId));
-    if (nId != Implementation::mnInvalidId)
-    {
-        mpTaskPane->GetControlContainer().SetVisibilityState (
-            nId,
-            ControlContainer::VS_HIDE);
     }
 }
 
@@ -809,19 +771,6 @@ void TaskPaneViewShell::Implementation::AddPanel (
 
 
 
-TaskPaneViewShell::PanelId
-    TaskPaneViewShell::Implementation::GetPublicId (
-        sal_uInt32 nInternalId) const
-{
-    if (nInternalId < maIndexMap.size())
-        return maIndexMap[nInternalId];
-    else
-        return PID_UNKNOWN;
-}
-
-
-
-
 sal_uInt32
     TaskPaneViewShell::Implementation::GetInternalId (
         TaskPaneViewShell::PanelId nPublicId) const
@@ -835,27 +784,6 @@ sal_uInt32
         }
 
     return nId;
-}
-
-
-
-
-//===== PanelActivation =======================================================
-
-PanelActivation::PanelActivation (ViewShellBase& rBase, TaskPaneViewShell::PanelId nPanelId)
-    : mrBase(rBase),
-      mnPanelId(nPanelId)
-{
-}
-
-void PanelActivation::operator() (bool)
-{
-    toolpanel::TaskPaneViewShell* pTaskPane
-        = dynamic_cast<toolpanel::TaskPaneViewShell*>(
-            framework::FrameworkHelper::Instance(mrBase)
-            ->GetViewShell(framework::FrameworkHelper::msRightPaneURL).get());
-    if (pTaskPane != NULL)
-        pTaskPane->ShowPanel(mnPanelId);
 }
 
 

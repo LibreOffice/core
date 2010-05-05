@@ -147,35 +147,6 @@ void Window::SetViewShell (ViewShell* pViewSh)
     }
 }
 
-
-
-
-/*************************************************************************
-|*
-|* Die Haelfte des Sichtbaren Bereich eines anderen Fensters darstellen
-|*
-\************************************************************************/
-
-void Window::ShareViewArea(Window* pOtherWin)
-{
-    mpShareWin      = pOtherWin;
-    maViewOrigin    = pOtherWin->maViewOrigin;
-    maViewSize      = pOtherWin->maViewSize;
-    mnMinZoom       = pOtherWin->mnMinZoom;
-    mnMaxZoom       = pOtherWin->mnMaxZoom;
-    mbCenterAllowed = pOtherWin->mbCenterAllowed;
-
-    long nZoom = pOtherWin->GetZoom();
-    MapMode aMap(GetMapMode());
-    aMap.SetScaleX(Fraction(nZoom, 100));
-    aMap.SetScaleY(Fraction(nZoom, 100));
-    aMap.SetOrigin(pOtherWin->GetMapMode().GetOrigin());
-    SetMapMode(aMap);
-}
-
-
-
-
 void Window::CalcMinZoom()
 {
     // Are we entitled to change the minimal zoom factor?

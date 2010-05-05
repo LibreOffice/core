@@ -305,14 +305,6 @@ LayoutMenu::~LayoutMenu (void)
 
 
 
-String LayoutMenu::GetSelectedLayoutName (void)
-{
-    return GetItemText (GetSelectItemId());
-}
-
-
-
-
 AutoLayout LayoutMenu::GetSelectedAutoLayout (void)
 {
     AutoLayout aResult = AUTOLAYOUT_NONE;

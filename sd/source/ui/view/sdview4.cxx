@@ -599,11 +599,6 @@ void View::LockRedraw(BOOL bLock)
 
 
 
-bool View::IsRedrawLocked (void) const
-{
-    return mnLockRedrawSmph>0;
-}
-
 /*************************************************************************
 |*
 |* StyleSheet aus der Sleketion besorgen

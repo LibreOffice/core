@@ -163,8 +163,6 @@ public:
 
     ::boost::shared_ptr<FormShellManager> mpFormShellManager;
 
-    ::boost::shared_ptr<CustomHandleManager> mpCustomHandleManager;
-
     Implementation (ViewShellBase& rBase);
     ~Implementation (void);
 
@@ -460,13 +458,6 @@ ViewShellBase* ViewShellBase::GetViewShellBase (SfxViewFrame* pViewFrame)
 
 
 
-void ViewShellBase::GetMenuState (SfxItemSet& )
-{
-}
-
-
-
-
 DrawDocShell* ViewShellBase::GetDocShell (void) const
 {
     return mpDocShell;
@@ -707,21 +698,6 @@ ErrCode ViewShellBase::DoPrint (
     (void)bIsAPI;
     return 0;
     //return mpImpl->mpPrintManager->DoPrint (pPrinter, pPrintDialog, bSilent, bIsAPI );
-}
-
-
-
-
-USHORT ViewShellBase::SetPrinterOptDlg (
-    SfxPrinter* pNewPrinter,
-    USHORT nDiffFlags,
-    BOOL bShowDialog)
-{
-    (void)pNewPrinter;
-    (void)nDiffFlags;
-    (void)bShowDialog;
-    return 0;
-    //    return mpImpl->mpPrintManager->SetPrinterOptDlg ( pNewPrinter, nDiffFlags, bShowDialog);
 }
 
 
@@ -1246,16 +1222,6 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
 
 
 
-
-CustomHandleManager& ViewShellBase::getCustomHandleManager() const
-{
-    OSL_ASSERT(mpImpl.get()!=NULL);
-
-    if( !mpImpl->mpCustomHandleManager.get() )
-        mpImpl->mpCustomHandleManager.reset( new ::sd::CustomHandleManager(*const_cast< ViewShellBase* >(this)) );
-
-    return *mpImpl->mpCustomHandleManager.get();
-}
 
 ::rtl::OUString ViewShellBase::RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL ) const
 {
@@ -1812,35 +1778,5 @@ void FocusForwardingWindow::Command (const CommandEvent& rEvent)
 
 
 } // end of anonymouse namespace
-
-// ====================================================================
-
-CustomHandleManager::CustomHandleManager( ViewShellBase& rViewShellBase  )
-: mrViewShellBase( rViewShellBase )
-{
-}
-
-CustomHandleManager::~CustomHandleManager()
-{
-    DBG_ASSERT( maSupplier.empty(), "sd::CustomHandleManager::~CustomHandleManager(), still suppliers attached!" );
-}
-
-void CustomHandleManager::registerSupplier( ICustomhandleSupplier* pSupplier )
-{
-    maSupplier.insert( pSupplier );
-}
-
-void CustomHandleManager::unRegisterSupplier( ICustomhandleSupplier* pSupplier )
-{
-    maSupplier.erase( pSupplier );
-}
-
-void CustomHandleManager::addCustomHandler( SdrView& rSourceView, ViewShell::ShellType eShellType, SdrHdlList& rHandlerList )
-{
-    for( std::set< ICustomhandleSupplier* >::iterator aIter( maSupplier.begin() ); aIter != maSupplier.end(); aIter++ )
-    {
-        (*aIter)->addCustomHandler( rSourceView, eShellType, rHandlerList );
-    }
-}
 
 } // end of namespace sd

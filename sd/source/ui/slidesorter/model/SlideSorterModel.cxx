@@ -119,30 +119,6 @@ bool SlideSorterModel::SetEditMode (EditMode eEditMode)
 
 
 
-bool SlideSorterModel::SetEditModeFromController (void)
-{
-    bool bIsMasterPageMode = false;
-    // Get the edit mode from the controller.
-    try
-    {
-        Reference<beans::XPropertySet> xSet (mrSlideSorter.GetXController(), UNO_QUERY_THROW);
-        Any aValue (xSet->getPropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode"))));
-        aValue >>= bIsMasterPageMode;
-    }
-    catch (RuntimeException&)
-    {
-        // When the property is not supported then the master
-        // page mode is not supported, too.
-        bIsMasterPageMode = false;
-    }
-
-    return SetEditMode(bIsMasterPageMode ? EM_MASTERPAGE : EM_PAGE);
-}
-
-
-
-
 EditMode SlideSorterModel::GetEditMode (void) const
 {
     return meEditMode;
@@ -312,27 +288,6 @@ void SlideSorterModel::SynchronizeDocumentSelection (void)
         pDescriptor->GetPage()->SetSelected (pDescriptor->IsSelected());
     }
 }
-
-
-
-
-void SlideSorterModel::SynchronizeModelSelection (void)
-{
-    ::osl::MutexGuard aGuard (maMutex);
-
-    PageEnumeration aAllPages (PageEnumerationProvider::CreateAllPagesEnumeration(*this));
-    while (aAllPages.HasMoreElements())
-    {
-        SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
-        if (pDescriptor->GetPage()->IsSelected())
-            pDescriptor->Select ();
-        else
-            pDescriptor->Deselect ();
-    }
-}
-
-
-
 
 void SlideSorterModel::SetPageObjectFactory(
     ::std::auto_ptr<controller::PageObjectFactory> pPageObjectFactory)

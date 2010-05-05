@@ -162,14 +162,6 @@ Reference<XConfiguration> ConfigurationUpdater::GetCurrentConfiguration (void) c
 
 
 
-Reference<XConfiguration> ConfigurationUpdater::GetRequestedConfiguration (void) const
-{
-    return mxRequestedConfiguration;
-}
-
-
-
-
 bool ConfigurationUpdater::IsUpdatePossible (void)
 {
     return ! mbUpdateBeingProcessed

@@ -110,15 +110,6 @@ ScrollPanel::~ScrollPanel (void)
 
 
 
-void ScrollPanel::ListHasChanged (void)
-{
-    mpControlContainer->ListHasChanged ();
-    RequestResize ();
-}
-
-
-
-
 TitledControl* ScrollPanel::AddControl (
     ::std::auto_ptr<TreeNode> pControl,
     const String& rTitle,

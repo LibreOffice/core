@@ -94,15 +94,6 @@ PaneDockingWindow::~PaneDockingWindow (void)
 
 
 
-void PaneDockingWindow::SetTitle (const String& rsTitle)
-{
-    msTitle = rsTitle;
-    Invalidate();
-}
-
-
-
-
 void PaneDockingWindow::Resize (void)
 {
     SfxDockingWindow::Resize();

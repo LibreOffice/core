@@ -101,11 +101,6 @@ public:
 
     using Window::GetWindow;
 
-protected:
-    /** Initiate a rearrangement of the controls.
-    */
-    void ListHasChanged (void);
-
 private:
     TaskPaneViewShell& mrViewShell;
 

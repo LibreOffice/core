@@ -91,7 +91,6 @@ public:
     /** Deselect the descriptor that is associated with the given page.
     */
     void DeselectPage (int nPageIndex);
-    void DeselectPage (const SdPage* pPage);
     void DeselectPage (const model::SharedPageDescriptor& rpDescriptor);
 
     /** This convenience method returns the same number of pages that

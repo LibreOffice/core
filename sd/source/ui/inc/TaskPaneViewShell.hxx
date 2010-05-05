@@ -44,7 +44,6 @@ class PopupMenu;
 namespace sd {  namespace toolpanel {
 
 class TaskPaneShellManager;
-class TitleToolBox;
 class TitleBar;
 class TitledControl;
 class ToolPanel;
@@ -101,9 +100,6 @@ public:
     virtual SdPage* GetActualPage (void);
     virtual SdPage* getCurrentPage (void) const;
 
-    void Execute (SfxRequest& rRequest);
-    void GetState (SfxItemSet& rItemSet);
-
     virtual void ArrangeGUIElements (void);
 
     TaskPaneShellManager& GetSubShellManager (void) const;
@@ -120,12 +116,6 @@ public:
             The id of the panel that is to be made visible.
     */
     void ShowPanel (const PanelId nId);
-
-    /** Hide and collapse the specified panel.
-        @param nId
-            The id of the panel that is to hide.
-    */
-    void HidePanel (const PanelId nId);
 
     /** Expand the specified panel.  Its visibility state is not modified.
         @param nId
@@ -197,27 +187,6 @@ private:
         method returns immediately.
     */
     void Initialize (void);
-};
-
-
-
-
-/** This functor makes visible a panel in the task pane.  It can be used
-    with the FrameworkHelper to make a panel visible after an asynchonous
-    update of the configuration, e.g. after switching to another view.
-*/
-class PanelActivation
-{
-public:
-    /** Create a new object that, when its operator() method is called, will
-        make the specified panel visible in the task pane that belongs to
-        the application window specified by the given ViewShellBase.
-    */
-    PanelActivation (ViewShellBase& rBase, TaskPaneViewShell::PanelId nPanelId);
-    void operator() (bool);
-private:
-    ViewShellBase& mrBase;
-    TaskPaneViewShell::PanelId mnPanelId;
 };
 
 

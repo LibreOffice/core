@@ -69,19 +69,6 @@ public:
     SubToolPanel (TreeNode* pParent);
     virtual ~SubToolPanel (void);
 
-    /** Add a control to the sub panel.
-        @param rTitle
-            The title that will be shown in the two title bars that
-            belong to the control.
-        @param nHelpId
-            The help id is set at the title bar not the actual control.
-    */
-    void AddControl (
-        ::std::auto_ptr<TreeNode> pControl,
-        const String& rTitle,
-        ULONG nHelpId);
-    void AddControl (::std::auto_ptr<TreeNode> pControl);
-
     virtual void Paint (const Rectangle& rRect);
 
     /** Initiate a rearrangement of the controls and title bars.
@@ -107,11 +94,6 @@ public:
             ::com::sun::star::accessibility::XAccessible>& rxParent);
 
     using Window::GetWindow;
-protected:
-    /** Initiate a rearrangement of the controls.
-    */
-    void ListHasChanged (void);
-
 private:
     ::Window maWindowFiller;
     bool mbIsRearrangePending;

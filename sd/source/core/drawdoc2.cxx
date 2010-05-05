@@ -1342,37 +1342,6 @@ void SdDrawDocument::CheckMasterPages()
     }
 }
 
-
-
-
-USHORT SdDrawDocument::CreatePage (USHORT nPageNum)
-{
-    PageKind ePageKind = PK_STANDARD;
-
-    // Get current page.
-    SdPage* pActualPage = GetSdPage(nPageNum, ePageKind);
-
-    // Get background flags.
-    SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
-    BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
-    BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
-    SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
-
-    // Get layout from current page.
-    AutoLayout eAutoLayout = pActualPage->GetAutoLayout();
-
-    return CreatePage (
-        pActualPage, ePageKind,
-        // No names for the new slides.
-        String(), String(),
-        eAutoLayout, eAutoLayout,
-        aVisibleLayers.IsSet(aBckgrnd),
-        aVisibleLayers.IsSet(aBckgrndObj));
-}
-
-
-
-
 USHORT SdDrawDocument::CreatePage (
     SdPage* pActualPage,
     PageKind ePageKind,

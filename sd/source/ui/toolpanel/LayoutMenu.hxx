@@ -99,10 +99,6 @@ public:
         ViewShellBase& rBase,
         DrawDocShell& rDocShell);
 
-    /** Return the name of the currently selected layout.
-    */
-    String GetSelectedLayoutName (void);
-
     /** Return a numerical value representing the currently selected
         layout.
     */

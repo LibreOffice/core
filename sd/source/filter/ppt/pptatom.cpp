@@ -109,15 +109,3 @@ const Atom* Atom::findNextChildAtom( sal_uInt16 nRecType, const Atom* pLast ) co
 
     return pChild;
 }
-
-/** returns the next child atom after pLast with nRecType and nRecInstance or NULL */
-const Atom* Atom::findNextChildAtom( sal_uInt16 nRecType, sal_uInt16 nRecInstance, const Atom* pLast ) const
-{
-    const Atom* pChild = pLast != NULL ? pLast->mpNextAtom : mpFirstChild;
-    while( pChild && (pChild->maRecordHeader.nRecType != nRecType) && (pChild->maRecordHeader.nRecInstance != nRecInstance) )
-    {
-        pChild = findNextChildAtom( pChild );
-    }
-
-    return pChild;
-}

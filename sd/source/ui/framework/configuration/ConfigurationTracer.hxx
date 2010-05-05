@@ -32,7 +32,6 @@
 
 namespace sd { namespace framework {
 
-
 /** Print debug information about configurations to the standard error
     output channel.
 */
@@ -43,13 +42,14 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::framework::XConfiguration>& rxConfiguration,
         const char* pMessage);
-
+#ifdef DEBUG
     static void TraceBoundResources (
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::framework::XConfiguration>& rxConfiguration,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::framework::XResourceId>& rxResourceId,
         const int nIndentation);
+#endif
 };
 
 } } // end of namespace sd::framework

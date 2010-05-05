@@ -125,15 +125,6 @@ sal_uInt32 ToolPanel::AddControl (
 
 
 
-void ToolPanel::ListHasChanged (void)
-{
-    mpControlContainer->ListHasChanged ();
-    Rearrange ();
-}
-
-
-
-
 void ToolPanel::Resize (void)
 {
     Control::Resize();
