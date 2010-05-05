@@ -97,7 +97,7 @@ OOO_STLPORT_LIBS += -lm
 # execute that program; however, the program would fail to locate the STLport
 # library (another work-around might be to add something like --as-needed around
 # $(LIBSTLPORT)):
-.IF "$(OS)" == "LINUX" || "$(OS)" == "SOLARIS"
+.IF "$(OS)" == "FREEBSD" || "$(OS)" == "LINUX" || "$(OS)" == "SOLARIS"
 .IF "$(LD_LIBRARY_PATH)" == ""
 LD_LIBRARY_PATH := $(SOLARLIBDIR)
     # strictly speaking, this is incorrect if the LD_LIBRARY_PATH environment
