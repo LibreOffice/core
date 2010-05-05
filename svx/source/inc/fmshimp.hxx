@@ -163,6 +163,7 @@ typedef ::utl::ConfigItem                   FmXFormShell_CFGBASE;
 struct SdrViewEvent;
 class FmFormShell;
 class FmFormView;
+class FmFormObj;
 class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
                                     ,public FmXFormShell_CFGBASE
                                     ,public ::svxform::OStaticDataAccessTools
@@ -349,8 +350,11 @@ protected:
     void startListening();
     void stopListening();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>  GetControlFromModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& xModel);
-        // liefert das Control, welches das angegebene Model hat
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
+        impl_getControl(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& i_rxModel,
+            const FmFormObj& i_rKnownFormObj
+        );
 
     // sammelt in strNames die Namen aller Formulare
     static void impl_collectFormSearchContexts_nothrow(
