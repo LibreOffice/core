@@ -58,6 +58,7 @@
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -67,6 +68,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 
 #include <vcl/toolbox.hxx>
+#include <vcl/accel.hxx>
 
 namespace com
 {
@@ -194,6 +196,9 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         void setToolBarImage(const Image& _aImage,const CommandToInfoMap::const_iterator& _pIter);
         void impl_elementChanged(bool _bRemove,const ::com::sun::star::ui::ConfigurationEvent& Event );
 
+        static bool impl_RetrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg, const rtl::OUString& rCommand, rtl::OUString& rShortCut );
+        bool RetrieveShortcut( const rtl::OUString& rCommandURL, rtl::OUString& rShortCut );
+
     protected:
         typedef ::std::hash_map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener > > ToolBarControllerMap;
         typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XSubToolbarController > > SubToolBarControllerVector;
@@ -233,6 +238,10 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         Timer                                                                                  m_aAsyncUpdateControllersTimer;
         sal_Int16                                                                              m_nSymbolsStyle;
         MenuDescriptionMap m_aMenuMap;
+        sal_Bool                                                                               m_bAcceleratorCfg;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xDocAcceleratorManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xModuleAcceleratorManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xGlobalAcceleratorManager;
 };
 
 }
