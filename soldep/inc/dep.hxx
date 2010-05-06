@@ -28,7 +28,7 @@
 #ifndef _DEP_HXX
 #define _DEP_HXX
 
-#include <bootstrp/sstring.hxx>
+#include <soldep/sstring.hxx>
 
 class SByteExtStringList : public SByteStringList
 {

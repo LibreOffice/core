@@ -33,7 +33,7 @@
 #endif
 #include <vcl/menu.hxx>
 #include <vcl/timer.hxx>
-#include <bootstrp/listmacr.hxx>
+#include <soldep/listmacr.hxx>
 #include <tools/stream.hxx>
 
 #include <soldep/connctr.hxx>

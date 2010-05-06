@@ -73,7 +73,11 @@ false :=
 ifneq ($(strip $(PRODUCT)$(product)),)
 gb_PRODUCT := $(true)
 else
+ifneq ($(strip $(product)),)
+gb_PRODUCT := $(true)
+else
 gb_PRODUCT := $(false)
+endif
 endif
 
 ifneq ($(strip $(DEBUG)),)
