@@ -321,7 +321,7 @@ class WinMtfClipPath
 
         sal_Bool    bNeedsUpdate;
 
-                    WinMtfClipPath(): eType(EMPTY), bNeedsUpdate( sal_False ){};
+                    WinMtfClipPath(): eType(EMPTY), nDepth( 0 ), bNeedsUpdate( sal_False ){};
 
         void        SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode );
         void        IntersectClipRect( const Rectangle& rRect );
