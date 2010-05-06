@@ -218,8 +218,8 @@ namespace
 class SAL_DLLPRIVATE VCLXWindowImpl : public ::comphelper::IEventProcessor
 {
 private:
-    typedef ::std::vector< ::rtl::Reference< ::comphelper::AnyEvent > >
-        EventArray;
+    typedef ::std::vector< ::rtl::Reference< ::comphelper::AnyEvent > > LegacyEventArray;
+    typedef ::std::vector< VCLXWindow::Callback >                       CallbackArray;
 
 private:
     VCLXWindow&                         mrAntiImpl;
@@ -243,8 +243,11 @@ private:
     VclContainerListenerMultiplexer     maContainerListeners;
     TopWindowListenerMultiplexer        maTopWindowListeners;
 
-    EventArray                          maEvents;
-    ULONG                               mnEventId;
+    LegacyEventArray                    maLegacyEvents;
+    ULONG                               mnLegacyEventId;
+
+    CallbackArray                       maCallbackEvents;
+    ULONG                               mnCallbackEventId;
 
 public:
     bool                                mbDisposing             : 1;
@@ -293,6 +296,10 @@ public:
     */
     void    notifyPlainEvent( const lang::EventObject& _rPlainEvent, PlainEventType _nType );
 
+    /** impl-version of VCLXWindow::ImplExecuteAsyncWithoutSolarLock
+    */
+    void    callBackAsync( const VCLXWindow::Callback& i_callback );
+
     /** notifies the object that its VCLXWindow is being disposed
     */
     void    disposing();
@@ -326,7 +333,8 @@ protected:
     virtual void processEvent( const ::comphelper::AnyEvent& _rEvent );
 
 private:
-    DECL_LINK( OnProcessEvent, void* );
+    DECL_LINK( OnProcessLegacyEvent, void* );
+    DECL_LINK( OnProcessCallbacks, void* );
 
 private:
     /** notifies an arbitrary event
@@ -373,7 +381,8 @@ VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex, 
     ,maPaintListeners( _rAntiImpl )
     ,maContainerListeners( _rAntiImpl )
     ,maTopWindowListeners( _rAntiImpl )
-    ,mnEventId( 0 )
+    ,mnLegacyEventId( 0 )
+    ,mnCallbackEventId( 0 )
     ,mbDisposing( false )
     ,mbDesignMode( false )
     ,mbSynthesizingVCLEvent( false )
@@ -394,9 +403,14 @@ VCLXWindowImpl::~VCLXWindowImpl()
 void VCLXWindowImpl::disposing()
 {
     ::vos::OGuard aGuard( mrMutex );
-    if ( mnEventId )
-        Application::RemoveUserEvent( mnEventId );
-    mnEventId = 0;
+    if ( mnLegacyEventId )
+        Application::RemoveUserEvent( mnLegacyEventId );
+    mnLegacyEventId = 0;
+
+    if ( mnCallbackEventId )
+        Application::RemoveUserEvent( mnCallbackEventId );
+    mnCallbackEventId = 0;
+
     mbDisposed= true;
 
     ::com::sun::star::lang::EventObject aEvent;
@@ -417,9 +431,9 @@ void VCLXWindowImpl::disposing()
 //--------------------------------------------------------------------
 void VCLXWindowImpl::impl_notifyAnyEvent( const ::rtl::Reference< ::comphelper::AnyEvent >& _rEvent )
 {
-    maEvents.push_back( _rEvent );
-    if ( !mnEventId )
-        mnEventId = Application::PostUserEvent( LINK( this, VCLXWindowImpl, OnProcessEvent ) );
+    maLegacyEvents.push_back( _rEvent );
+    if ( !mnLegacyEventId )
+        mnLegacyEventId = Application::PostUserEvent( LINK( this, VCLXWindowImpl, OnProcessLegacyEvent ) );
 }
 
 //--------------------------------------------------------------------
@@ -439,25 +453,25 @@ void VCLXWindowImpl::notifyPlainEvent( const lang::EventObject& _rPlainEvent, Pl
 }
 
 //--------------------------------------------------------------------
-IMPL_LINK( VCLXWindowImpl, OnProcessEvent, void*, EMPTYARG )
+IMPL_LINK( VCLXWindowImpl, OnProcessLegacyEvent, void*, EMPTYARG )
 {
     // work on a copy of the events array
-    EventArray aEventsCopy;
+    LegacyEventArray aEventsCopy;
     {
         ::vos::OGuard aGuard( mrMutex );
-        aEventsCopy = maEvents;
-        maEvents.clear();
+        aEventsCopy = maLegacyEvents;
+        maLegacyEvents.clear();
 
-        if ( !mnEventId )
+        if ( !mnLegacyEventId )
             // we were disposed while waiting for the mutex to lock
             return 1L;
 
-        mnEventId = 0;
+        mnLegacyEventId = 0;
     }
 
     {
         ::toolkit::ReleaseSolarMutex aReleaseSolar;
-        for (   EventArray::const_iterator loop = aEventsCopy.begin();
+        for (   LegacyEventArray::const_iterator loop = aEventsCopy.begin();
                 loop != aEventsCopy.end();
                 ++loop
             )
@@ -523,6 +537,46 @@ void VCLXWindowImpl::processEvent( const ::comphelper::AnyEvent& _rEvent )
 }
 
 //--------------------------------------------------------------------
+void VCLXWindowImpl::callBackAsync( const VCLXWindow::Callback& i_callback )
+{
+    DBG_TESTSOLARMUTEX();
+    maCallbackEvents.push_back( i_callback );
+    if ( !mnCallbackEventId )
+        mnCallbackEventId = Application::PostUserEvent( LINK( this, VCLXWindowImpl, OnProcessCallbacks ) );
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+IMPL_LINK( VCLXWindowImpl, OnProcessCallbacks, void*, EMPTYARG )
+{
+    // work on a copy of the callback array
+    CallbackArray aCallbacksCopy;
+    {
+        ::vos::OGuard aGuard( mrMutex );
+        aCallbacksCopy = maCallbackEvents;
+        maCallbackEvents.clear();
+
+        if ( !mnCallbackEventId )
+            // we were disposed while waiting for the mutex to lock
+            return 1L;
+
+        mnCallbackEventId = 0;
+    }
+
+    {
+        ::toolkit::ReleaseSolarMutex aReleaseSolar;
+        for (   CallbackArray::const_iterator loop = aCallbacksCopy.begin();
+                loop != aCallbacksCopy.end();
+                ++loop
+            )
+        {
+            (*loop)();
+        }
+    }
+
+    return 0L;
+}
+
+//--------------------------------------------------------------------
 void SAL_CALL VCLXWindowImpl::acquire()
 {
     mrAntiImpl.acquire();
@@ -581,6 +635,13 @@ VCLXWindow::~VCLXWindow()
     }
 }
 
+//----------------------------------------------------------------------------------------------------------------------
+void VCLXWindow::ImplExecuteAsyncWithoutSolarLock( const Callback& i_callback )
+{
+    mpImpl->callBackAsync( i_callback );
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 ::toolkit::IAccessibleFactory& VCLXWindow::getAccessibleFactory()
 {
     return mpImpl->getAccessibleFactory().getFactory();
