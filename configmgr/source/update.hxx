@@ -25,54 +25,35 @@
 *
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_XCDPARSER_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_XCDPARSER_HXX
+#ifndef INCLUDED_CONFIGMGR_SOURCE_UPDATE_HXX
+#define INCLUDED_CONFIGMGR_SOURCE_UPDATE_HXX
 
 #include "sal/config.h"
 
-#include <set>
+#include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/Sequence.hxx"
+#include "cppuhelper/factory.hxx"
+#include "rtl/unload.h"
+#include "sal/types.h"
 
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
+namespace com { namespace sun { namespace star { namespace lang {
+    class XSingleComponentFactory;
+} } } }
+namespace rtl { class OUString; }
 
-#include "parser.hxx"
-#include "xmlreader.hxx"
+namespace configmgr { namespace update {
 
-namespace configmgr {
+rtl::OUString SAL_CALL getImplementationName();
 
-struct Data;
-struct Span;
+com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+getSupportedServiceNames();
 
-class XcdParser: public Parser {
-public:
-    typedef std::set< rtl::OUString > Dependencies;
+com::sun::star::uno::Reference< com::sun::star::lang::XSingleComponentFactory >
+SAL_CALL createFactory(
+    cppu::ComponentFactoryFunc, rtl::OUString const &,
+    com::sun::star::uno::Sequence< rtl::OUString > const &, rtl_ModuleCount *)
+    SAL_THROW(());
 
-    XcdParser(int layer, Dependencies const & dependencies, Data & data);
-
-private:
-    virtual ~XcdParser();
-
-    virtual XmlReader::Text getTextMode();
-
-    virtual bool startElement(
-        XmlReader & reader, XmlReader::Namespace ns, Span const & name);
-
-    virtual void endElement(XmlReader const & reader);
-
-    virtual void characters(Span const & text);
-
-    enum State {
-        STATE_START, STATE_DEPENDENCIES, STATE_DEPENDENCY, STATE_COMPONENTS };
-
-    int layer_;
-    Dependencies const & dependencies_;
-    Data & data_;
-    State state_;
-    rtl::OUString dependency_;
-    rtl::Reference< Parser > nestedParser_;
-    long nesting_;
-};
-
-}
+} }
 
 #endif

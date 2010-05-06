@@ -45,9 +45,9 @@
 #include "ucbhelper/content.hxx"
 #include "comphelper/anytostring.hxx"
 #include "comphelper/servicedecl.hxx"
-#include "configmgr/update.hxx"
 #include "xmlscript/xml_helper.hxx"
 #include "svl/inettype.hxx"
+#include "com/sun/star/configuration/Update.hpp"
 #include "com/sun/star/ucb/NameClash.hpp"
 #include "com/sun/star/io/XActiveDataSink.hpp"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
@@ -656,14 +656,16 @@ void BackendImpl::PackageImpl::processPackage_(
     {
         if (m_isSchema)
         {
-            configmgr::update::insertExtensionXcsFile(
-                that->m_eContext == CONTEXT_SHARED, expandUnoRcUrl(url));
+            com::sun::star::configuration::Update::get(
+                that->m_xComponentContext)->insertExtensionXcsFile(
+                    that->m_eContext == CONTEXT_SHARED, expandUnoRcUrl(url));
         }
         else
         {
             url = replaceOrigin(url, xCmdEnv);
-            configmgr::update::insertExtensionXcuFile(
-                that->m_eContext == CONTEXT_SHARED, expandUnoRcUrl(url));
+            com::sun::star::configuration::Update::get(
+                that->m_xComponentContext)->insertExtensionXcuFile(
+                    that->m_eContext == CONTEXT_SHARED, expandUnoRcUrl(url));
         }
 
         that->addToConfigmgrIni( m_isSchema, url, xCmdEnv );
