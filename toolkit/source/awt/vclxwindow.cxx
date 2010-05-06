@@ -111,50 +111,14 @@ namespace
             m_rFlag = false;
         }
     };
-
-    //................................................................
-    //. EventType
-    //................................................................
-    enum EventType
-    {
-        EVENT_WINDOW_ENABLED    = 1,
-        EVENT_WINDOW_DISABLED   = 2,
-    };
-
-    //................................................................
-    //. AnyWindowEvent
-    //................................................................
-    struct AnyWindowEvent : public ::comphelper::AnyEvent
-    {
-    private:
-        lang::EventObject   m_aEvent;
-        EventType           m_nEventType;
-
-    public:
-        AnyWindowEvent( const lang::EventObject& _rEvent, EventType _nType )
-            :comphelper::AnyEvent()
-            ,m_aEvent( _rEvent )
-            ,m_nEventType( _nType )
-        {
-        }
-
-        const lang::EventObject& getEvent() const
-        {
-            return m_aEvent;
-        }
-
-        EventType getEventType() const { return m_nEventType; }
-
-    };
 }
 
 //====================================================================
 //= VCLXWindowImpl
 //====================================================================
-class SAL_DLLPRIVATE VCLXWindowImpl : public ::comphelper::IEventProcessor
+class SAL_DLLPRIVATE VCLXWindowImpl
 {
 private:
-    typedef ::std::vector< ::rtl::Reference< ::comphelper::AnyEvent > > LegacyEventArray;
     typedef ::std::vector< VCLXWindow::Callback >                       CallbackArray;
 
 private:
@@ -178,9 +142,6 @@ private:
     PaintListenerMultiplexer            maPaintListeners;
     VclContainerListenerMultiplexer     maContainerListeners;
     TopWindowListenerMultiplexer        maTopWindowListeners;
-
-    LegacyEventArray                    maLegacyEvents;
-    ULONG                               mnLegacyEventId;
 
     CallbackArray                       maCallbackEvents;
     ULONG                               mnCallbackEventId;
@@ -224,10 +185,6 @@ public:
     void    setDirectVisible( sal_Bool bDirectVisible ) { mbDirectVisible = bDirectVisible; }
     sal_Bool    isDirectVisible() { return mbDirectVisible; }
 
-    /** asynchronously notifies an event described by an EventObject to the respective listeners
-    */
-    void    notifyEvent( const lang::EventObject& _rEvent, EventType _nType );
-
     /** impl-version of VCLXWindow::ImplExecuteAsyncWithoutSolarLock
     */
     void    callBackAsync( const VCLXWindow::Callback& i_callback );
@@ -261,22 +218,10 @@ protected:
     virtual void SAL_CALL acquire();
     virtual void SAL_CALL release();
 
-    // IEventProcessor
-    virtual void processEvent( const ::comphelper::AnyEvent& _rEvent );
-
 private:
-    DECL_LINK( OnProcessLegacyEvent, void* );
     DECL_LINK( OnProcessCallbacks, void* );
 
 private:
-    /** notifies an arbitrary event
-        @param _rEvent
-            the event to notify
-    */
-    void impl_notifyAnyEvent(
-        const ::rtl::Reference< ::comphelper::AnyEvent >& _rEvent
-    );
-
 private:
     /** determines whether the instance is already disposed
         @precond
@@ -313,7 +258,6 @@ VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex, 
     ,maPaintListeners( _rAntiImpl )
     ,maContainerListeners( _rAntiImpl )
     ,maTopWindowListeners( _rAntiImpl )
-    ,mnLegacyEventId( 0 )
     ,mnCallbackEventId( 0 )
     ,mbDisposing( false )
     ,mbDesignMode( false )
@@ -335,10 +279,6 @@ VCLXWindowImpl::~VCLXWindowImpl()
 void VCLXWindowImpl::disposing()
 {
     ::vos::OGuard aGuard( mrMutex );
-    if ( mnLegacyEventId )
-        Application::RemoveUserEvent( mnLegacyEventId );
-    mnLegacyEventId = 0;
-
     if ( mnCallbackEventId )
         Application::RemoveUserEvent( mnCallbackEventId );
     mnCallbackEventId = 0;
@@ -358,78 +298,6 @@ void VCLXWindowImpl::disposing()
     maContainerListeners.disposeAndClear( aEvent );
     maTopWindowListeners.disposeAndClear( aEvent );
 
-}
-
-//--------------------------------------------------------------------
-void VCLXWindowImpl::impl_notifyAnyEvent( const ::rtl::Reference< ::comphelper::AnyEvent >& _rEvent )
-{
-    maLegacyEvents.push_back( _rEvent );
-    if ( !mnLegacyEventId )
-        mnLegacyEventId = Application::PostUserEvent( LINK( this, VCLXWindowImpl, OnProcessLegacyEvent ) );
-}
-
-//--------------------------------------------------------------------
-void VCLXWindowImpl::notifyEvent( const lang::EventObject& _rEvent, EventType _nType )
-{
-    ::vos::OClearableGuard aGuard( mrMutex );
-    if ( maWindow2Listeners.getLength() )
-        impl_notifyAnyEvent( new AnyWindowEvent( _rEvent, _nType ) );
-}
-
-//--------------------------------------------------------------------
-IMPL_LINK( VCLXWindowImpl, OnProcessLegacyEvent, void*, EMPTYARG )
-{
-    // work on a copy of the events array
-    LegacyEventArray aEventsCopy;
-    {
-        ::vos::OGuard aGuard( mrMutex );
-        aEventsCopy = maLegacyEvents;
-        maLegacyEvents.clear();
-
-        if ( !mnLegacyEventId )
-            // we were disposed while waiting for the mutex to lock
-            return 1L;
-
-        mnLegacyEventId = 0;
-    }
-
-    {
-        ::toolkit::ReleaseSolarMutex aReleaseSolar;
-        for (   LegacyEventArray::const_iterator loop = aEventsCopy.begin();
-                loop != aEventsCopy.end();
-                ++loop
-            )
-        {
-            processEvent( *(*loop) );
-        }
-    }
-
-    return 0L;
-}
-
-//--------------------------------------------------------------------
-void VCLXWindowImpl::processEvent( const ::comphelper::AnyEvent& _rEvent )
-{
-    ::vos::OGuard aGuard( mrMutex );
-    if ( impl_isDisposed() )
-        // while we were waiting for our mutex, another thread disposed us
-        return;
-
-    const AnyWindowEvent& rEventDescriptor( static_cast< const AnyWindowEvent& >( _rEvent ) );
-
-    const lang::EventObject& rEvent( rEventDescriptor.getEvent() );
-    switch ( rEventDescriptor.getEventType() )
-    {
-    case EVENT_WINDOW_ENABLED:
-        maWindow2Listeners.notifyEach( &XWindowListener2::windowEnabled, rEvent );
-        break;
-    case EVENT_WINDOW_DISABLED:
-        maWindow2Listeners.notifyEach( &XWindowListener2::windowDisabled, rEvent );
-        break;
-    default:
-        DBG_ERROR( "VCLXWindowImpl::processEvent: what kind of event *is* this (2)?" );
-        break;
-    }
 }
 
 //--------------------------------------------------------------------
@@ -598,6 +466,28 @@ IMPL_LINK( VCLXWindow, WindowEventListener, VclSimpleEvent*, pEvent )
     return 0;
 }
 
+namespace
+{
+    struct CallWindow2Listener
+    {
+        CallWindow2Listener( ::cppu::OInterfaceContainerHelper& i_rWindow2Listeners, const bool i_bEnabled, const EventObject& i_rEvent )
+            :m_rWindow2Listeners( i_rWindow2Listeners )
+            ,m_bEnabled( i_bEnabled )
+            ,m_aEvent( i_rEvent )
+        {
+        }
+
+        void operator()()
+        {
+            m_rWindow2Listeners.notifyEach( m_bEnabled ? &XWindowListener2::windowEnabled : &XWindowListener2::windowDisabled, m_aEvent );
+        }
+
+        ::cppu::OInterfaceContainerHelper&  m_rWindow2Listeners;
+        const bool                          m_bEnabled;
+        const EventObject                   m_aEvent;
+    };
+}
+
 void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xThis( (::cppu::OWeakObject*)this );
@@ -607,10 +497,12 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         case VCLEVENT_WINDOW_ENABLED:
         case VCLEVENT_WINDOW_DISABLED:
         {
-            bool bEnabled = ( VCLEVENT_WINDOW_ENABLED == rVclWindowEvent.GetId() );
-            EventObject aEvent( *this );
-            mpImpl->notifyEvent( aEvent,
-                bEnabled ? EVENT_WINDOW_ENABLED : EVENT_WINDOW_DISABLED );
+            Callback aCallback = CallWindow2Listener(
+                mpImpl->getWindow2Listeners(),
+                ( VCLEVENT_WINDOW_ENABLED == rVclWindowEvent.GetId() ),
+                EventObject( *this )
+            );
+            ImplExecuteAsyncWithoutSolarLock( aCallback );
         }
         break;
 
