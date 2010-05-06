@@ -112,6 +112,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ui;
+using namespace ::com::sun::star;
 
 namespace framework
 {
@@ -803,17 +804,18 @@ void ToolBarManager::RemoveControllers()
     m_aControllerMap.clear();
 }
 
-::rtl::OUString ToolBarManager::RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL )
+uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const ::rtl::OUString& rCmdURL )
 {
-    ::rtl::OUString aLabel;
+    Sequence< PropertyValue > aPropSeq;
 
-    // Retrieve popup menu labels
-    if ( !m_bModuleIdentified )
+    // Retrieve properties for command
+    try
     {
-        Reference< XModuleManager > xModuleManager( m_xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
-        Reference< XInterface > xIfac( m_xFrame, UNO_QUERY );
-        try
+        if ( !m_bModuleIdentified )
         {
+            Reference< XModuleManager > xModuleManager( m_xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
+            Reference< XInterface > xIfac( m_xFrame, UNO_QUERY );
+
             m_bModuleIdentified = sal_True;
             m_aModuleIdentifier = xModuleManager->identify( xIfac );
 
@@ -821,44 +823,57 @@ void ToolBarManager::RemoveControllers()
             {
                 Reference< XNameAccess > xNameAccess( m_xServiceManager->createInstance( SERVICENAME_UICOMMANDDESCRIPTION ), UNO_QUERY );
                 if ( xNameAccess.is() )
-                {
                     xNameAccess->getByName( m_aModuleIdentifier ) >>= m_xUICommandLabels;
-                }
             }
         }
-        catch ( Exception& )
+
+        if ( m_xUICommandLabels.is() )
         {
+            if ( rCmdURL.getLength() > 0 )
+                m_xUICommandLabels->getByName( rCmdURL ) >>= aPropSeq;
         }
     }
-
-    if ( m_xUICommandLabels.is() )
+    catch ( Exception& )
     {
-        try
-        {
-            if ( aCmdURL.getLength() > 0 )
-            {
-                rtl::OUString aStr;
-                Sequence< PropertyValue > aPropSeq;
-                if ( m_xUICommandLabels->getByName( aCmdURL ) >>= aPropSeq )
-                {
-                    for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
-                    {
-                        if ( aPropSeq[i].Name.equalsAscii( "Name" ))
-                        {
-                            aPropSeq[i].Value >>= aStr;
-                            break;
-                        }
-                    }
-                }
-                aLabel = aStr;
-            }
-        }
-        catch ( com::sun::star::uno::Exception& )
-        {
-        }
     }
 
+    return aPropSeq;
+}
+
+::rtl::OUString ToolBarManager::RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL )
+{
+    ::rtl::OUString aLabel;
+    Sequence< PropertyValue > aPropSeq;
+
+    // Retrieve popup menu labels
+    aPropSeq = GetPropsForCommand( aCmdURL );
+    for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+    {
+        if ( aPropSeq[i].Name.equalsAscii( "Name" ))
+        {
+            aPropSeq[i].Value >>= aLabel;
+            break;
+        }
+    }
     return aLabel;
+}
+
+sal_Int32 ToolBarManager::RetrievePropertiesFromCommand( const ::rtl::OUString& aCmdURL )
+{
+    sal_Int32 nProperties(0);
+    Sequence< PropertyValue > aPropSeq;
+
+    // Retrieve popup menu labels
+    aPropSeq = GetPropsForCommand( aCmdURL );
+    for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+    {
+        if ( aPropSeq[i].Name.equalsAscii( "Properties" ))
+        {
+            aPropSeq[i].Value >>= nProperties;
+            break;
+        }
+    }
+    return nProperties;
 }
 
 void ToolBarManager::CreateControllers()
@@ -969,8 +984,15 @@ void ToolBarManager::CreateControllers()
                 {
                     MenuDescriptionMap::iterator it = m_aMenuMap.find( nId );
                     if ( it == m_aMenuMap.end() )
-                    xController = Reference< XStatusListener >(
-                        new GenericToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aCommandURL ));
+                    {
+                        xController = Reference< XStatusListener >(
+                            new GenericToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aCommandURL ));
+
+                        // Accessibility support: Set toggle button role for specific commands
+                        sal_Int32 nProps = RetrievePropertiesFromCommand( aCommandURL );
+                        if ( nProps & UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON )
+                            m_pToolBar->SetItemBits( nId, m_pToolBar->GetItemBits( nId ) | TIB_CHECKABLE );
+                    }
                     else
                         xController = Reference< XStatusListener >(
                             new MenuToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aCommandURL, m_aModuleIdentifier, m_aMenuMap[ nId ] ));
