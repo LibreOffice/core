@@ -107,7 +107,7 @@ public:
         try
         {
             uno::Reference< container::XContainer > xContainer( rScriptDocument.getLibrary( E_SCRIPTS, aLibName, FALSE ), uno::UNO_QUERY );
-            if ( rScriptDocument.isDocument() && xContainer.is() )
+            if ( xContainer.is() )
             {
                 uno::Reference< container::XContainerListener > xContainerListener( this );
                 xContainer->addContainerListener( xContainerListener );
@@ -120,7 +120,7 @@ public:
         try
         {
             uno::Reference< container::XContainer > xContainer( rScriptDocument.getLibrary( E_SCRIPTS, aLibName, FALSE ), uno::UNO_QUERY );
-            if ( rScriptDocument.isDocument() && xContainer.is() )
+            if ( xContainer.is() )
             {
                 uno::Reference< container::XContainerListener > xContainerListener( this );
                 xContainer->removeContainerListener( xContainerListener );

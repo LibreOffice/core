@@ -109,7 +109,6 @@ void __EXPORT BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                 {
                     if ( aDocument.removeModule( aLibName, aName ) )
                     {
-                        RemoveWindow( pCurWin, TRUE );
                         BasicIDE::MarkDocumentModified( aDocument );
                     }
                 }
