@@ -57,6 +57,7 @@ public:
     virtual model::SlideSorterModel& GetModel (void) const = 0;
     virtual view::SlideSorterView& GetView (void) const = 0;
     virtual ::boost::shared_ptr<controller::Animator> GetAnimator (void) = 0;
+    virtual SharedSdWindow GetContentWindow (void) = 0;
 };
 
 
@@ -145,10 +146,12 @@ public:
     virtual model::SlideSorterModel& GetModel (void) const { return mrModel; }
     virtual view::SlideSorterView& GetView (void) const { return mrView; }
     virtual ::boost::shared_ptr<controller::Animator> GetAnimator (void) { return mpAnimator; }
+    virtual SharedSdWindow GetContentWindow (void) { return mrSlideSorter.GetContentWindow(); }
 
 private:
     model::SlideSorterModel& mrModel;
     view::SlideSorterView& mrView;
+    SlideSorter& mrSlideSorter;
     ::boost::shared_ptr<controller::Animator> mpAnimator;
     typedef ::std::set<SharedPageObjectRun, PageObjectRun::Comparator> RunContainer;
     RunContainer maRuns;
@@ -197,6 +200,7 @@ void InsertAnimator::Reset (const controller::Animator::AnimationMode eMode)
 InsertAnimator::Implementation::Implementation (SlideSorter& rSlideSorter)
     : mrModel(rSlideSorter.GetModel()),
       mrView(rSlideSorter.GetView()),
+      mrSlideSorter(rSlideSorter),
       mpAnimator(rSlideSorter.GetController().GetAnimator()),
       maRuns(),
       maInsertPosition()
@@ -510,8 +514,15 @@ void PageObjectRun::operator () (const double nGlobalTime)
                 maStartOffset[nIndex-mnStartIndex],
                 maEndOffset[nIndex-mnStartIndex],
                 nLocalTime));
+
+        // Request a repaint of the old and new bounding box (which largely overlap.)
         rView.RequestRepaint(aOldBoundingBox);
         rView.RequestRepaint(pDescriptor);
+
+        // Call Flush to make a) animations a bit more smooth and
+        // b) on Mac without the Flush a Reset of the page locations is not
+        // properly visualized when the mouse leaves the window during drag-and-drop.
+        mrAnimatorAccess.GetContentWindow()->Flush();
     }
 }
 
