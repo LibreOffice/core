@@ -153,11 +153,13 @@ void AnimationFunction::ApplyLocationOffsetChange (
 void AnimationFunction::ApplyButtonAlphaChange(
     const model::SharedPageDescriptor& rpDescriptor,
     view::SlideSorterView& rView,
-    const double nAlpha)
+    const double nButtonAlpha,
+    const double nButtonBarAlpha)
 {
     if (rpDescriptor)
     {
-        rpDescriptor->GetVisualState().SetButtonAlpha(nAlpha);
+        rpDescriptor->GetVisualState().SetButtonAlpha(nButtonAlpha);
+        rpDescriptor->GetVisualState().SetButtonBarAlpha(nButtonBarAlpha);
         rView.RequestRepaint(rpDescriptor);
     }
 }

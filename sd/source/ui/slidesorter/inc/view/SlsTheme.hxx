@@ -152,6 +152,7 @@ public:
     {
         Integer_ButtonCornerRadius,
         Integer_ButtonMaxAlpha,
+        Integer_ButtonBarMaxAlpha,
         Integer_ButtonPaintType,
         Integer_ButtonBorder,
         Integer_ButtonGap
@@ -198,6 +199,7 @@ private:
     ::std::vector<ColorData> maColor;
     sal_Int32 mnButtonCornerRadius;
     sal_Int32 mnButtonMaxAlpha;
+    sal_Int32 mnButtonBarMaxAlpha;
     sal_Int32 mnButtonPaintType;
     sal_Int32 mnButtonBorder;
     sal_Int32 mnButtonGap;

@@ -316,8 +316,8 @@ void ButtonBar::Paint (
     if ( ! mpDescriptor || mpDescriptor!=rpDescriptor)
         return;
 
-    const double nAlpha (mpDescriptor->GetVisualState().GetButtonAlpha());
-    if (nAlpha >= 1)
+    const double nButtonAlpha (mpDescriptor->GetVisualState().GetButtonAlpha());
+    if (nButtonAlpha >= 1)
         return;
 
     const Point aOffset (rpDescriptor->GetBoundingBox().TopLeft());
@@ -330,11 +330,13 @@ void ButtonBar::Paint (
         rpDescriptor->HasState(model::PageDescriptor::ST_Excluded)
             ? maExcludedButtons
             : maRegularButtons);
+
+
     for (sal_uInt32 nIndex=0; nIndex<rButtons.size(); ++nIndex)
         rButtons[nIndex]->Paint(
             rDevice,
             aOffset,
-            nAlpha,
+            nButtonAlpha,
             mrSlideSorter.GetTheme());
 }
 
@@ -369,7 +371,7 @@ void ButtonBar::PaintButtonBackground (
 
     if (pBitmap != NULL)
     {
-        BYTE aTransparency (mpDescriptor->GetVisualState().GetButtonAlpha()*255);
+        BYTE aTransparency (mpDescriptor->GetVisualState().GetButtonBarAlpha()*255);
         AlphaMask aMask (pBitmap->GetSizePixel(), &aTransparency);
         rDevice.DrawBitmapEx(maBoundingBox.TopLeft()+aOffset, BitmapEx(*pBitmap, aMask));
     }

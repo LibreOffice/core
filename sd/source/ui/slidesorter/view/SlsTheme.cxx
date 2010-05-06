@@ -108,7 +108,8 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
       maIcons(),
       maColor(),
       mnButtonCornerRadius(3),
-      mnButtonMaxAlpha(255 * 20/100),
+      mnButtonMaxAlpha(0),
+      mnButtonBarMaxAlpha(255 * 20/100),
       mnButtonPaintType(1),
       mnButtonBorder(4),
       mnButtonGap(8)
@@ -454,6 +455,9 @@ sal_Int32 Theme::GetIntegerValue (const IntegerValueType eType) const
         case Integer_ButtonMaxAlpha:
             return mnButtonMaxAlpha;
 
+        case Integer_ButtonBarMaxAlpha:
+            return mnButtonBarMaxAlpha;
+
         case Integer_ButtonPaintType:
             return mnButtonPaintType;
 
@@ -481,6 +485,10 @@ void Theme::SetIntegerValue (const IntegerValueType eType, const sal_Int32 nValu
 
         case Integer_ButtonMaxAlpha:
             mnButtonMaxAlpha = nValue;
+            break;
+
+        case Integer_ButtonBarMaxAlpha:
+            mnButtonBarMaxAlpha = nValue;
             break;
 
         case Integer_ButtonPaintType:

@@ -43,6 +43,7 @@ VisualState::VisualState (const sal_Int32 nPageId)
       maLocationOffset(0,0),
       mnLocationAnimationId(controller::Animator::NotAnAnimationId),
       mnButtonAlpha(1.0),
+      mnButtonBarAlpha(1.0),
       mnButtonAlphaAnimationId(controller::Animator::NotAnAnimationId)
 {
 }
@@ -198,6 +199,22 @@ double VisualState::GetButtonAlpha (void) const
 void VisualState::SetButtonAlpha (const double nAlpha)
 {
     mnButtonAlpha = nAlpha;
+}
+
+
+
+
+double VisualState::GetButtonBarAlpha (void) const
+{
+    return mnButtonBarAlpha;
+}
+
+
+
+
+void VisualState::SetButtonBarAlpha (const double nAlpha)
+{
+    mnButtonBarAlpha = nAlpha;
 }
 
 

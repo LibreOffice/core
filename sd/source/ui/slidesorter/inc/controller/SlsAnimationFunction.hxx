@@ -112,7 +112,8 @@ public:
     static void ApplyButtonAlphaChange(
         const model::SharedPageDescriptor& rpDescriptor,
         view::SlideSorterView& rView,
-        const double nAlpha);
+        const double nButtonAlpha,
+        const double nButtonBarAlpha);
 };
 
 

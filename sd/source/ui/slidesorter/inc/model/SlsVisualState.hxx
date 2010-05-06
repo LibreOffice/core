@@ -76,6 +76,8 @@ public:
 
     double GetButtonAlpha (void) const;
     void SetButtonAlpha (const double nAlpha);
+    double GetButtonBarAlpha (void) const;
+    void SetButtonBarAlpha (const double nAlpha);
     sal_Int32 GetButtonAlphaAnimationId (void) const;
     void SetButtonAlphaAnimationId (const sal_Int32 nAnimationId);
 
@@ -93,6 +95,7 @@ private:
     sal_Int32 mnLocationAnimationId;
 
     double mnButtonAlpha;
+    double mnButtonBarAlpha;
     sal_Int32 mnButtonAlphaAnimationId;
 };
 

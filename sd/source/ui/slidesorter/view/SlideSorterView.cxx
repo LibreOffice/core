@@ -985,13 +985,17 @@ bool SlideSorterView::SetState (
     // Fade in or out the buttons.
     if (eState == PageDescriptor::ST_MouseOver)
     {
-        const double nMinAlpha (
+        const double nMinButtonAlpha (
             mrSlideSorter.GetTheme()->GetIntegerValue(Theme::Integer_ButtonMaxAlpha)/255.0);
+        const double nMinButtonBarAlpha (
+            mrSlideSorter.GetTheme()->GetIntegerValue(Theme::Integer_ButtonBarMaxAlpha)/255.0);
         const static double nMaxAlpha (1.0);
-        const double nEndAlpha (bStateValue ? nMinAlpha : nMaxAlpha);
+        const double nEndButtonAlpha (bStateValue ? nMinButtonAlpha : nMaxAlpha);
+        const double nEndButtonBarAlpha (bStateValue ? nMinButtonBarAlpha : nMaxAlpha);
         if (bAnimate)
         {
-            const double nStartAlpha (pDescriptor->GetVisualState().GetButtonAlpha());
+            const double nStartButtonAlpha (pDescriptor->GetVisualState().GetButtonAlpha());
+            const double nStartButtonBarAlpha (pDescriptor->GetVisualState().GetButtonBarAlpha());
 
             // Stop a running animation.
             const Animator::AnimationId nId (
@@ -999,11 +1003,17 @@ bool SlideSorterView::SetState (
             if (nId != Animator::NotAnAnimationId)
                 mrSlideSorter.GetController().GetAnimator()->RemoveAnimation(nId);
 
-            const ::boost::function<double(double)> aBlendFunctor (
+            const ::boost::function<double(double)> aButtonBlendFunctor (
                 ::boost::bind(
                     AnimationFunction::Blend,
-                    nStartAlpha,
-                    nEndAlpha,
+                    nStartButtonAlpha,
+                    nEndButtonAlpha,
+                    ::boost::bind(AnimationFunction::Linear, _1)));
+            const ::boost::function<double(double)> aButtonBarBlendFunctor (
+                ::boost::bind(
+                    AnimationFunction::Blend,
+                    nStartButtonBarAlpha,
+                    nEndButtonBarAlpha,
                     ::boost::bind(AnimationFunction::Linear, _1)));
 
             // Delay the fade in a little bit when the buttons are not
@@ -1013,7 +1023,7 @@ bool SlideSorterView::SetState (
             // showing.  Fade out is faster than fade in.
             double nStartOffset (bStateValue ? 500 : 100);
             const double nDuration (bStateValue ? 400 : 250);
-            if (nStartAlpha>nMinAlpha && nStartAlpha<nMaxAlpha)
+            if (nStartButtonBarAlpha>nMinButtonBarAlpha && nStartButtonBarAlpha<nMaxAlpha)
                 nStartOffset = 0;
             pDescriptor->GetVisualState().SetButtonAlphaAnimationId(
                 mrSlideSorter.GetController().GetAnimator()->AddAnimation(
@@ -1021,7 +1031,8 @@ bool SlideSorterView::SetState (
                         AnimationFunction::ApplyButtonAlphaChange,
                         pDescriptor,
                         ::boost::ref(*this),
-                        ::boost::bind(aBlendFunctor, _1)),
+                        ::boost::bind(aButtonBlendFunctor, _1),
+                        ::boost::bind(aButtonBarBlendFunctor, _1)),
                     nStartOffset,
                     nDuration,
                     ::boost::bind(
@@ -1032,7 +1043,8 @@ bool SlideSorterView::SetState (
         }
         else
         {
-            pDescriptor->GetVisualState().SetButtonAlpha(nEndAlpha);
+            pDescriptor->GetVisualState().SetButtonAlpha(nEndButtonAlpha);
+            pDescriptor->GetVisualState().SetButtonBarAlpha(nEndButtonBarAlpha);
         }
     }
 

@@ -1758,7 +1758,6 @@ DragAndDropModeHandler::DragAndDropModeHandler (
         pDragTransferable = SD_MOD()->pTransferDrag;
     }
 
-//    mrSlideSorter.GetController().GetInsertionIndicatorHandler()->Start(true);
     mpDragAndDropContext.reset(new DragAndDropContext(mrSlideSorter));
     mrSlideSorter.GetController().GetInsertionIndicatorHandler()->Start(
         pDragTransferable != NULL

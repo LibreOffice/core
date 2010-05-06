@@ -861,6 +861,17 @@ SlideSorterDebugDialog::SlideSorterDebugDialog (SlideSorter& rSlideSorter)
             ::boost::ref(rSlideSorter.GetView()))));
     nY += maControls.back()->GetHeight() + nGap;
 
+    maControls.push_back(new SliderControl(
+        mpTopLevelWindow,
+        "Max Button Bar Alpha",
+        Rectangle(10,nY,290,nY+60),
+        Range(0,255),
+        ::boost::bind(&view::Theme::GetIntegerValue, pTheme, view::Theme::Integer_ButtonBarMaxAlpha),
+        ::boost::bind(&view::Theme::SetIntegerValue, pTheme, view::Theme::Integer_ButtonBarMaxAlpha,_1),
+        ::boost::bind(&view::SlideSorterView::RequestRepaint,
+            ::boost::ref(rSlideSorter.GetView()))));
+    nY += maControls.back()->GetHeight() + nGap;
+
     GradientControl* pControl = new GradientControl(
         mpTopLevelWindow,
         "Base Color",
