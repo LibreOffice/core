@@ -1609,6 +1609,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bCreate )
                     if( !bUndo )
                         SdrObject::Free( pObj );
                 }
+/* #i108541# keep non empty pres obj as pres obj even if they are not part of the current layout
                 else
                 {
                     if( bUndo )
@@ -1620,6 +1621,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bCreate )
                     maPresentationShapeList.removeShape( *pObj );
                     pObj->SetUserCall(0);
                 }
+*/
             }
             pObj = pNext;
         }
