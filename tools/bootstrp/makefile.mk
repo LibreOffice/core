@@ -42,32 +42,20 @@ CDEFS+=-D_TOOLS_STRINGLIST
 
 OBJFILES= \
           $(OBJ)$/appdef.obj \
-          $(OBJ)$/command.obj \
           $(OBJ)$/cppdep.obj\
-          $(OBJ)$/inimgr.obj\
-          $(OBJ)$/mkcreate.obj \
-          $(OBJ)$/sstring.obj \
-          $(OBJ)$/prj.obj
+          $(OBJ)$/inimgr.obj
 
 SLOFILES= \
           $(SLO)$/appdef.obj \
-          $(SLO)$/command.obj \
           $(SLO)$/cppdep.obj \
-          $(SLO)$/inimgr.obj \
-          $(SLO)$/mkcreate.obj \
-          $(SLO)$/sstring.obj \
-          $(SLO)$/prj.obj
-
+          $(SLO)$/inimgr.obj 
 
 LIB1TARGET= $(LB)$/$(TARGET).lib
 LIB1ARCHIV= $(LB)$/lib$(TARGET).a
 LIB1OBJFILES=\
           $(OBJ)$/appdef.obj \
-          $(OBJ)$/command.obj \
           $(OBJ)$/cppdep.obj \
-          $(OBJ)$/inimgr.obj \
-          $(OBJ)$/mkcreate.obj \
-          $(OBJ)$/sstring.obj
+          $(OBJ)$/inimgr.obj 
 
 LIB2TARGET= $(LB)$/$(TARGET1).lib
 LIB2ARCHIV= $(LB)$/lib$(TARGET1).a

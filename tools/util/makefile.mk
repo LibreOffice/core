@@ -38,26 +38,25 @@ ENABLE_EXCEPTIONS=true
 # --- Allgemein ----------------------------------------------------
 
 # --- STDSTRM.LIB ---
-LIB3TARGET= $(LB)$/stdstrm.lib
-LIB3ARCHIV= $(LB)$/libstdstrm.a
-LIB3FILES=  $(LB)$/stream.lib
+#LIB3TARGET= $(LB)$/stdstrm.lib
+#LIB3ARCHIV= $(LB)$/libstdstrm.a
+#LIB3FILES=  $(LB)$/stream.lib
 
-LIB7TARGET= $(LB)$/a$(TARGET).lib
-LIB7ARCHIV= $(LB)$/liba$(TARGET).a
-LIB7FILES=  $(LB)$/gen.lib          \
-            $(LB)$/str.lib          \
-            $(LB)$/mtools.lib       \
-            $(LB)$/datetime.lib     \
-            $(LB)$/fsys.lib         \
-            $(LB)$/communi.lib      \
-            $(LB)$/stream.lib       \
-            $(LB)$/ref.lib          \
-            $(LB)$/rc.lib           \
-            $(LB)$/inet.lib         \
-            $(LB)$/debug.lib
-
-
-LIB7FILES+= $(LB)$/dll.lib
+#LIB7TARGET= $(LB)$/a$(TARGET).lib
+#LIB7ARCHIV= $(LB)$/liba$(TARGET).a
+#LIB7FILES=  $(LB)$/gen.lib          \
+#            $(LB)$/str.lib          \
+#            $(LB)$/mtools.lib       \
+#            $(LB)$/datetime.lib     \
+#            $(LB)$/fsys.lib         \
+#            $(LB)$/communi.lib      \
+#            $(LB)$/stream.lib       \
+#            $(LB)$/ref.lib          \
+#            $(LB)$/rc.lib           \
+#            $(LB)$/inet.lib         \
+#            $(LB)$/debug.lib
+#
+#LIB7FILES+= $(LB)$/dll.lib
 
 # --- TOOLS.LIB ---
 LIB1TARGET:= $(SLB)$/$(TARGET).lib
