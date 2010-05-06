@@ -956,6 +956,10 @@ private:
     WW8PLCFMan* pPlcxMan;
     std::map<short, String> aLinkStringMap;
 
+    // --> OD 2010-05-06 #i103711#
+    std::set<const SwNode*> maTxtNodesHavingFirstLineOfstSet;
+    // <--
+
     WW8RStyle* pStyles;     // Pointer auf die Style-Einleseklasse
     SwFmt* pAktColl;        // gerade zu erzeugende Collection
                             // ( ist ausserhalb einer Style-Def immer 0 )
@@ -1155,7 +1159,10 @@ private:
     void ImportTox( int nFldId, String aStr );
 
     void EndSprm( USHORT nId );
-    void NewAttr( const SfxPoolItem& rAttr );
+    // --> OD 2010-05-06 #i103711#
+    void NewAttr( const SfxPoolItem& rAttr,
+                  const bool bFirstLineOfStSet = false );
+    // <--
 
     bool GetFontParams(USHORT, FontFamily&, String&, FontPitch&,
         rtl_TextEncoding&);
@@ -1612,7 +1619,9 @@ public:     // eigentlich private, geht aber leider nur public
 bool CanUseRemoteLink(const String &rGrfName);
 void UseListIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt);
 void SetStyleIndent(SwWW8StyInf &rStyleInfo, const SwNumFmt &rFmt);
-void SyncIndentWithList(SvxLRSpaceItem &rLR, const SwNumFmt &rFmt);
+void SyncIndentWithList( SvxLRSpaceItem &rLR,
+                         const SwNumFmt &rFmt,
+                         const bool bFirstLineOfStSet );
 long GetListFirstLineIndent(const SwNumFmt &rFmt);
 String BookmarkToWriter(const String &rBookmark);
 bool RTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,

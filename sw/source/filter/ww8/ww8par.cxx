@@ -844,13 +844,28 @@ long lcl_GetTrueMargin(const SvxLRSpaceItem &rLR, const SwNumFmt &rFmt,
     return nExtraListIndent > 0 ? nExtraListIndent : 0;
 }
 
-void SyncIndentWithList(SvxLRSpaceItem &rLR, const SwNumFmt &rFmt)
+// --> OD 2010-05-06 #i103711#
+void SyncIndentWithList( SvxLRSpaceItem &rLR,
+                         const SwNumFmt &rFmt,
+                         const bool bFirstLineOfstSet )
 {
-    long nWantedFirstLinePos;
-    long nExtraListIndent = lcl_GetTrueMargin(rLR, rFmt, nWantedFirstLinePos);
-    rLR.SetTxtLeft(nWantedFirstLinePos - nExtraListIndent);
-    rLR.SetTxtFirstLineOfst(0);
+    if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+    {
+        long nWantedFirstLinePos;
+        long nExtraListIndent = lcl_GetTrueMargin(rLR, rFmt, nWantedFirstLinePos);
+        rLR.SetTxtLeft(nWantedFirstLinePos - nExtraListIndent);
+        rLR.SetTxtFirstLineOfst(0);
+    }
+    else if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+    {
+        if ( !bFirstLineOfstSet &&
+             rFmt.GetFirstLineIndent() != 0 )
+        {
+            rLR.SetTxtFirstLineOfst( rFmt.GetFirstLineIndent() );
+        }
+    }
 }
+// <--
 
 const SwNumFmt* SwWW8FltControlStack::GetNumFmtFromStack(const SwPosition &rPos,
     const SwTxtNode &rTxtNode)
@@ -907,16 +922,19 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                         pNum = GetNumFmtFromStack(*aRegion.GetPoint(),
                             *pTxtNode);
                         if (!pNum)
-                            pNum = GetNumFmtFromTxtNode(*pTxtNode);
-
-                        // --> OD 2008-06-03 #i86652#
-//                        if (pNum)
-                        if ( pNum &&
-                             pNum->GetPositionAndSpaceMode() ==
-                               SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
-                        // <--
                         {
-                            SyncIndentWithList(aNewLR, *pNum);
+                            pNum = GetNumFmtFromTxtNode(*pTxtNode);
+                        }
+
+                        if ( pNum )
+                        {
+                            // --> OD 2010-05-06 #i103711#
+                            const bool bFirstLineIndentSet =
+                                ( rReader.maTxtNodesHavingFirstLineOfstSet.end() !=
+                                    rReader.maTxtNodesHavingFirstLineOfstSet.find( pNode ) );
+                            SyncIndentWithList( aNewLR, *pNum,
+                                                bFirstLineIndentSet );
+                            // <--
                         }
 
                         if (aNewLR == aOldLR)
@@ -3185,6 +3203,9 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     maGrfNameGenerator(bNewDoc,String('G')),
     maParaStyleMapper(rD),
     maCharStyleMapper(rD),
+    // --> OD 2010-05-06 #i103711#
+    maTxtNodesHavingFirstLineOfstSet(),
+    // <--
     pMSDffManager(0),
     mpAtnNames(0),
     pAuthorInfos(0),

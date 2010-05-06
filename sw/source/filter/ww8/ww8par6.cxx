@@ -2715,7 +2715,8 @@ bool SwWW8ImplReader::TestSameApo(const ApoTestResults &rApo,
 #       Attribut - Verwaltung
 #**************************************************************************/
 
-void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr )
+void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr,
+                               const bool bFirstLineOfStSet )
 {
     if( !bNoAttrImport ) // zum Ignorieren von Styles beim Doc-Einfuegen
     {
@@ -2725,11 +2726,24 @@ void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr )
             pAktColl->SetFmtAttr(rAttr);
         }
         else if (pAktItemSet)
+        {
             pAktItemSet->Put(rAttr);
+        }
         else if (rAttr.Which() == RES_FLTR_REDLINE)
+        {
             mpRedlineStack->open(*pPaM->GetPoint(), rAttr);
+        }
         else
+        {
             pCtrlStck->NewAttr(*pPaM->GetPoint(), rAttr);
+            // --> OD 2010-05-06 #i103711#
+            if ( bFirstLineOfStSet )
+            {
+                const SwNode* pNd = &(pPaM->GetPoint()->nNode.GetNode());
+                maTxtNodesHavingFirstLineOfstSet.insert( pNd );
+            }
+            // <--
+        }
 
         if (mpPostProcessAttrsInfo && mpPostProcessAttrsInfo->mbCopy)
             mpPostProcessAttrsInfo->mItemSet.Put(rAttr);
@@ -3958,6 +3972,10 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
         }
     }
 
+    // --> OD 2010-05-06 #i103711#
+    bool bFirstLinOfstSet( false );
+    // <--
+
     switch (nId)
     {
         //sprmPDxaLeft
@@ -3998,7 +4016,10 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
 
             aLR.SetTxtFirstLineOfst(nPara);
             if (pAktColl)
+            {
                 pCollA[nAktColl].bListReleventIndentSet = true;
+            }
+            bFirstLinOfstSet = true;
             break;
         //sprmPDxaRight
         case     16:
@@ -4010,7 +4031,9 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
             return;
     }
 
-    NewAttr(aLR);
+    // --> OD 2010-05-06 #i103711#
+    NewAttr( aLR, bFirstLinOfstSet );
+    // <--
 }
 
 // Sprm 20

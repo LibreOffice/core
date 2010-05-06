@@ -1697,7 +1697,9 @@ void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
     {
         SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.pFmt, RES_LR_SPACE));
         if (rStyle.bListReleventIndentSet)
-            SyncIndentWithList(aLR, rFmt);
+        {
+            SyncIndentWithList( aLR, rFmt, false );
+        }
         else
         {
             aLR.SetTxtLeft(0);
