@@ -305,6 +305,19 @@ bool curl_run(const rtl::OUString& rURL, OutData& out, const rtl::OString& aProx
             ret = true;
         }
 
+        if ( CURLE_PARTIAL_FILE  == cc )
+        {
+            // this sometimes happens, when a user throws away his user data, but has already
+            // completed the download of an update.
+            double fDownloadSize;
+            curl_easy_getinfo( pCURL, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &fDownloadSize );
+            if ( -1 == fDownloadSize )
+            {
+                out.Handler->downloadFinished(out.File);
+                ret = true;
+            }
+        }
+
         // Avoid target file being removed
         else if( (CURLE_ABORTED_BY_CALLBACK == cc) || out.StopCondition.check() )
             ret = true;
@@ -388,7 +401,7 @@ Download::start(const rtl::OUString& rURL, const rtl::OUString& rFile, const rtl
                 aFile = rtl::OUString();
             }
             else
-                m_aHandler->downloadStarted( aFile, 1 );
+                m_aHandler->downloadStarted( aFile, 0 );
         }
         else
         {

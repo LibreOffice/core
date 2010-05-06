@@ -824,7 +824,7 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
 
                     if( nDownloadSize > 0 )
                     {
-                        if ( nDownloadSize == nFileSize ) // we have already downloaded everthing
+                        if ( nDownloadSize <= nFileSize ) // we have already downloaded everthing
                         {
                             bContinueDownload = false;
                             bDownloadAvailable = true;
@@ -1177,15 +1177,18 @@ UpdateCheck::downloadProgressAt(sal_Int8 nPercent)
 void
 UpdateCheck::downloadStarted(const rtl::OUString& rLocalFileName, sal_Int64 nFileSize)
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    if ( nFileSize > 0 )
+    {
+        osl::MutexGuard aGuard(m_aMutex);
 
-    rtl::Reference< UpdateCheckConfig > aModel(UpdateCheckConfig::get(m_xContext));
-    aModel->storeLocalFileName(rLocalFileName, nFileSize);
+        rtl::Reference< UpdateCheckConfig > aModel(UpdateCheckConfig::get(m_xContext));
+        aModel->storeLocalFileName(rLocalFileName, nFileSize);
 
-    // Bring-up release note for position 1 ..
-    const rtl::OUString aURL(getReleaseNote(m_aUpdateInfo, 1, aModel->isAutoDownloadEnabled()));
-    if( aURL.getLength() > 0 )
-        showReleaseNote(aURL);
+        // Bring-up release note for position 1 ..
+        const rtl::OUString aURL(getReleaseNote(m_aUpdateInfo, 1, aModel->isAutoDownloadEnabled()));
+        if( aURL.getLength() > 0 )
+            showReleaseNote(aURL);
+    }
 }
 
 //------------------------------------------------------------------------------
