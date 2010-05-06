@@ -306,18 +306,27 @@ void VCLXWindowImpl::callBackAsync( const VCLXWindow::Callback& i_callback )
     DBG_TESTSOLARMUTEX();
     maCallbackEvents.push_back( i_callback );
     if ( !mnCallbackEventId )
+    {
+        // ensure our VCLXWindow is not destroyed while the event is underway
+        mrAntiImpl.acquire();
         mnCallbackEventId = Application::PostUserEvent( LINK( this, VCLXWindowImpl, OnProcessCallbacks ) );
+    }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 IMPL_LINK( VCLXWindowImpl, OnProcessCallbacks, void*, EMPTYARG )
 {
+    const Reference< uno::XInterface > xKeepAlive( mrAntiImpl );
+
     // work on a copy of the callback array
     CallbackArray aCallbacksCopy;
     {
         ::vos::OGuard aGuard( mrMutex );
         aCallbacksCopy = maCallbackEvents;
         maCallbackEvents.clear();
+
+        // we acquired our VCLXWindow once before posting the event, release this one ref now
+        mrAntiImpl.release();
 
         if ( !mnCallbackEventId )
             // we were disposed while waiting for the mutex to lock
