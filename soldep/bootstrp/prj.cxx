@@ -26,14 +26,14 @@
  ************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
-#include <bootstrp/sstring.hxx>
+#include <soldep/sstring.hxx>
 #include <vos/mutex.hxx>
 
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <tools/stream.hxx>
 #include <tools/geninfo.hxx>
 #include <soldep/prj.hxx>
-#include <bootstrp/inimgr.hxx>
+//#include <bootstrp/inimgr.hxx>
 
 #ifndef MACOSX
 #pragma hdrstop
@@ -1237,24 +1237,21 @@ Star::Star(SolarFileList *pSolarFiles )
 }
 
 /*****************************************************************************/
-Star::Star(GenericInformationList *pStandLst, ByteString &rVersion,
-    BOOL bLocal, const char *pSourceRoot )
+Star::Star(GenericInformationList *pStandLst, ByteString &rVersion )
 /*****************************************************************************/
                 : pDepMode (NULL),
                 pAllDepMode (NULL)
 {
-    UpdateFileList (pStandLst, rVersion, TRUE, bLocal, pSourceRoot);
+    UpdateFileList (pStandLst, rVersion, TRUE );
 }
 
 /*****************************************************************************/
 void Star::UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersion,
-    BOOL bRead, BOOL bLocal, const char *pSourceRoot )
+    BOOL bRead )
 /*****************************************************************************/
 {
     sSourceRoot=String::CreateFromAscii(""); // clear old SourceRoot
     ByteString sPath( rVersion );
-    if ( pSourceRoot )
-        sSourceRoot = String::CreateFromAscii( pSourceRoot );
 
 #ifdef UNX
     sPath += "/settings/UNXSOLARLIST";
@@ -1265,10 +1262,6 @@ void Star::UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersi
 
     if( pInfo && pInfo->GetValue().Len()) {
         ByteString sFile( pInfo->GetValue());
-        if ( bLocal ) {
-            IniManager aIniManager;
-            aIniManager.ToLocal( sFile );
-        }
         String sFileName_l( sFile, RTL_TEXTENCODING_ASCII_US );
         nStarMode = STAR_MODE_SINGLE_PARSE;
         if (bRead)
@@ -1385,14 +1378,14 @@ void Star::UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersi
 
 /*****************************************************************************/
 void Star::FullReload( GenericInformationList *pStandLst, ByteString &rVersion,
-    BOOL bRead, BOOL bLocal, const char *pSourceRoot )
+    BOOL bRead )
 /*****************************************************************************/
 {
     ClearAvailableDeps();
     ClearCurrentDeps();
     ClearLoadedFilesList();
     RemoveAllPrj();
-    UpdateFileList( pStandLst, rVersion, bRead, bLocal, pSourceRoot );
+    UpdateFileList( pStandLst, rVersion, bRead );
 }
 
 /*****************************************************************************/
@@ -2413,13 +2406,11 @@ StarWriter::StarWriter( SolarFileList *pSolarFiles, BOOL bReadComments )
 
 /*****************************************************************************/
 StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
-    ByteString &rMinor, BOOL bReadComments, BOOL bLocal, const char *pSourceRoot )
+    ByteString &rMinor, BOOL bReadComments )
 /*****************************************************************************/
                 : Star ()
 {
     ByteString sPath( rVersion );
-    if ( pSourceRoot )
-        sSourceRoot = String::CreateFromAscii( pSourceRoot );
 
 #ifdef UNX
     sPath += "/settings/UNXSOLARLIST";
@@ -2430,10 +2421,6 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
 
     if( pInfo_l && pInfo_l->GetValue().Len()) {
         ByteString sFile( pInfo_l->GetValue());
-        if ( bLocal ) {
-            IniManager aIniManager;
-            aIniManager.ToLocal( sFile );
-        }
         String sFileName_l( sFile, RTL_TEXTENCODING_ASCII_US );
         nStarMode = STAR_MODE_SINGLE_PARSE;
         Read( sFileName_l, bReadComments );

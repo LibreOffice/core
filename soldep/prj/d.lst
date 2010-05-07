@@ -27,8 +27,11 @@ mkdir: %COMMON_DEST%\res%_EXT%\img\additional
 ..\inc\soldep\prj.hxx %_DEST%\inc%_EXT%\soldep\prj.hxx
 ..\inc\dep.hxx %_DEST%\inc%_EXT%\soldep\dep.hxx
 ..\inc\prodmap.hxx %_DEST%\inc%_EXT%\soldep\prodmap.hxx
-..\inc\appdef.hxx %_DEST%\inc%_EXT%\soldep\appdef.hxx
+..\inc\soldep\appdef.hxx %_DEST%\inc%_EXT%\soldep\appdef.hxx
 ..\inc\soldep\soldlg.hrc %_DEST%\inc%_EXT%\soldep\soldlg.hrc
+..\inc\soldep\sstring.hxx %_DEST%\inc%_EXT%\soldep\sstring.hxx
+..\inc\soldep\command.hxx %_DEST%\inc%_EXT%\soldep\command.hxx
+..\inc\soldep\listmacr.hxx %_DEST%\inc%_EXT%\soldep\listmacr.hxx
 
 ..\%__SRC%\lib\soldep.lib %_DEST%\lib%_EXT%\soldep.lib
 ..\%__SRC%\lib\bootstrpdt.lib %_DEST%\lib%_EXT%\bootstrpdt.lib

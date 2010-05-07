@@ -30,10 +30,8 @@
 #define _FMRWRK_CONNCTR_HXX
 
 
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
-#include <bootstrp/listmacr.hxx>
+#include <soldep/listmacr.hxx>
 #include <tools/stream.hxx>
 
 class DepWin;

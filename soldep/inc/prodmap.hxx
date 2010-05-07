@@ -28,9 +28,7 @@
 #ifndef PRODUCT_MAPPER_HXX
 #define PRODUCT_MAPPER_HXX
 
-#ifndef _SSTRING_HXX
-#include <bootstrp/sstring.hxx>
-#endif
+#include <soldep/sstring.hxx>
 
 class GenericInformation;
 class GenericInformationList;
