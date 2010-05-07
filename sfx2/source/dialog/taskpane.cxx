@@ -970,7 +970,16 @@ namespace sfx2
     {
         ::boost::optional< size_t > aPanelPos( m_rTaskPane.GetPanelPos( i_rPanelURL ) );
         ENSURE_OR_RETURN_VOID( !!aPanelPos, "TaskPaneController_Impl::ActivateToolPanel: no such panel!" );
-        m_rTaskPane.GetPanelDeck().ActivatePanel( aPanelPos );
+
+        if ( aPanelPos == m_rTaskPane.GetPanelDeck().GetActivePanel() )
+        {
+            ::svt::PToolPanel pPanel( m_rTaskPane.GetPanelDeck().GetPanel( *aPanelPos ) );
+            pPanel->GrabFocus();
+        }
+        else
+        {
+            m_rTaskPane.GetPanelDeck().ActivatePanel( aPanelPos );
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
