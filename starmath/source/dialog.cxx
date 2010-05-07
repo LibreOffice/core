@@ -1934,7 +1934,7 @@ IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, EMPTYARG pButton )
             aSymbolSets.GetText() );
 
     // remove old symbol if the name was changed then add new one
-    const bool bSetNameChanged    = aOldSymbolSets.GetText() != aSymbolSets.GetText();
+//    const bool bSetNameChanged    = aOldSymbolSets.GetText() != aSymbolSets.GetText();
     const bool bNameChanged       = aOldSymbols.GetText() != aSymbols.GetText();
     if (bNameChanged)
         aSymbolMgrCopy.RemoveSymbol( aOldSymbols.GetText() );
