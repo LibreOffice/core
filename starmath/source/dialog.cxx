@@ -1893,10 +1893,17 @@ IMPL_LINK( SmSymDefineDialog, AddClickHdl, Button *, EMPTYARG pButton )
 
     // add symbol
     // TO_DO_UCS4 (#i74049): get rid of cast without loosing UCS4 functionality
-    const SmSym aSymbol( aSymbols.GetText(), aCharsetDisplay.GetFont(),
+    const SmSym aNewSymbol( aSymbols.GetText(), aCharsetDisplay.GetFont(),
             sal::static_int_cast< sal_Unicode >( aCharsetDisplay.GetSelectCharacter() ),
             aSymbolSets.GetText() );
-    aSymbolMgrCopy.AddOrReplaceSymbol( aSymbol );
+    DBG_ASSERT( aSymbolMgrCopy.GetSymbolByName(aTmpSymbolName) == NULL, "symbol already exists" );
+    aSymbolMgrCopy.AddOrReplaceSymbol( aNewSymbol );
+
+    // update display of new symbol
+    aSymbolDisplay.SetChar( aNewSymbol.GetCharacter() );
+    aSymbolDisplay.SetFont( aNewSymbol.GetFace() );
+    aSymbolName.SetText( aNewSymbol.GetName() );
+    aSymbolSetName.SetText( aNewSymbol.GetSymbolSetName() );
 
     // update list box entries
     FillSymbolSets(aOldSymbolSets, FALSE);
@@ -1922,17 +1929,26 @@ IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, EMPTYARG pButton )
     //! get font from symbol-disp lay since charset-display does not keep
     //! the bold attribut.
     // TO_DO_UCS4 (#i74049): get rid of cast without loosing UCS4 functionality
-    const SmSym aNewSymbol( aSymbols.GetText(), aSymbolDisplay.GetFont(),
+    const SmSym aNewSymbol( aSymbols.GetText(), aCharsetDisplay.GetFont(),
             sal::static_int_cast< sal_Unicode >( aCharsetDisplay.GetSelectCharacter() ),
             aSymbolSets.GetText() );
 
     // remove old symbol if the name was changed then add new one
-    if (aOldSymbols.GetText() != aSymbols.GetText())
+    const bool bSetNameChanged    = aOldSymbolSets.GetText() != aSymbolSets.GetText();
+    const bool bNameChanged       = aOldSymbols.GetText() != aSymbols.GetText();
+    if (bNameChanged)
         aSymbolMgrCopy.RemoveSymbol( aOldSymbols.GetText() );
     aSymbolMgrCopy.AddOrReplaceSymbol( aNewSymbol, true );
 
-    // clear display for original symbol
-    SetOrigSymbol(NULL, XubString());
+    // clear display for original symbol if necessary
+    if (bNameChanged)
+        SetOrigSymbol(NULL, XubString());
+
+    // update display of new symbol
+    aSymbolDisplay.SetChar( aNewSymbol.GetCharacter() );
+    aSymbolDisplay.SetFont( aNewSymbol.GetFace() );
+    aSymbolName.SetText( aNewSymbol.GetName() );
+    aSymbolSetName.SetText( aNewSymbol.GetSymbolSetName() );
 
     // update list box entries
     FillSymbolSets(aOldSymbolSets, FALSE);
@@ -2005,9 +2021,12 @@ void SmSymDefineDialog::UpdateButtons()
         // aendern wenn bei gleichem Namen mindestens eine Einstellung anders ist
         // oder wenn es noch kein Symbol des neuen Namens gibt (wuerde implizites
         // loeschen des bereits vorhandenen Symbols erfordern)
-        BOOL  bEqualName = pOrigSymbol && aTmpSymbolName == pOrigSymbol->GetName();
-        bChange = pOrigSymbol && ( (bEqualName && !bEqual) || (!bEqualName && bAdd) );
-    }
+//        BOOL  bEqualName = pOrigSymbol && aTmpSymbolName == pOrigSymbol->GetName();
+//      bChange = pOrigSymbol && ( (bEqualName && !bEqual) || (!bEqualName && bAdd) );
+
+        // aendern nur falls altes Symbol vorhanden und am neuen etwas anders ist
+        bChange = pOrigSymbol && !bEqual;
+}
 
     aAddBtn   .Enable(bAdd);
     aChangeBtn.Enable(bChange);
