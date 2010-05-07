@@ -173,9 +173,12 @@ void PPTShape::addShape(
             if( mnSubType && getSubTypeIndex() && rSlidePersist.getMasterPersist().get() ) {
                 oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex( getSubTypeIndex(), rSlidePersist.getMasterPersist()->getShapes()->getChildren() );
                 if( pPlaceholder.get() && pPlaceholder->getTextBody() ) {
-                TextListStylePtr pNewTextListStyle (new TextListStyle());
+                TextListStylePtr pNewTextListStyle ( new TextListStyle() );
 
                 pNewTextListStyle->apply( pPlaceholder->getTextBody()->getTextListStyle() );
+                if( pPlaceholder->getMasterTextListStyle().get() )
+                    pNewTextListStyle->apply( *pPlaceholder->getMasterTextListStyle() );
+
                 aMasterTextListStyle = pNewTextListStyle;
                 }
             }

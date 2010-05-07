@@ -242,12 +242,12 @@ Reference< XPropertySet > PropertyMap::makePropertySet() const
 }
 
 #if OSL_DEBUG_LEVEL > 0
-void PropertyMap::dump()
+void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
 {
-  Reference< XPropertySet > rXPropSet( makePropertySet(), UNO_QUERY );
-
     Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
     Sequence< beans::Property > props = info->getProperties ();
+
+    OSL_TRACE("dump props, len: %d", props.getLength ());
 
     for (int i=0; i < props.getLength (); i++) {
         OString name = OUStringToOString( props [i].Name, RTL_TEXTENCODING_UTF8);
@@ -293,6 +293,11 @@ void PropertyMap::dump()
         fprintf (stderr,"unable to get '%s' value\n", USS(props [i].Name));
     }
     }
+}
+
+void PropertyMap::dump()
+{
+    dump( Reference< XPropertySet >( makePropertySet(), UNO_QUERY ) );
 }
 #endif
 
