@@ -1153,11 +1153,16 @@ void ScDPResultMember::LateInitFrom( LateInitParams& rParams/*const vector<ScDPD
         {
             if (  rParams.GetDim( nPos ) ->getIsDataLayoutDimension() )
             {
-                 if ( !pChildDimension )
-                        pChildDimension = new ScDPResultDimension( pResultData );
-                    rParams.SetInitChild( FALSE );
-                    pChildDimension->LateInitFrom( rParams, pItemData, nPos, rInitState );
-                    return;
+                if ( !pChildDimension )
+                    pChildDimension = new ScDPResultDimension( pResultData );
+
+                // #i111462# reset InitChild flag only for this child dimension's LateInitFrom call,
+                // not for following members of parent dimensions
+                BOOL bWasInitChild = rParams.GetInitChild();
+                rParams.SetInitChild( FALSE );
+                pChildDimension->LateInitFrom( rParams, pItemData, nPos, rInitState );
+                rParams.SetInitChild( bWasInitChild );
+                return;
             }
             else
             { //find next dim
