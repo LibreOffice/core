@@ -27,7 +27,6 @@
 
 package complex.writer;
 
-import complexlib.ComplexTestCase;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.XComponentContext;
@@ -60,6 +59,13 @@ import com.sun.star.text.TextContentAnchorType;
 import static com.sun.star.text.TextContentAnchorType.*;
 import static com.sun.star.text.ControlCharacter.*;
 import com.sun.star.rdf.XMetadatable;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -422,10 +428,8 @@ class FuzzyTester
     private Stack<Pair<TreeNode, TreeNodeEnum>> m_StackActual;
     private List<TreeNode> m_BufferExpected;
     private List<TreeNode> m_BufferActual;
-    private share.LogWriter m_Log;
 
-    FuzzyTester(share.LogWriter log) {
-        m_Log = log;
+    FuzzyTester() {
         m_BufferExpected = new ArrayList<TreeNode>();
         m_BufferActual = new ArrayList<TreeNode>();
         m_StackExpected = new Stack<Pair<TreeNode, TreeNodeEnum>>();
@@ -434,12 +438,10 @@ class FuzzyTester
 
     /** idea: traverse both trees, enumerate nodes, stopping at content nodes.
         then compare buffers. */
-    boolean doTest(TreeNode expected, TreeNode actual)
+    void doTest(TreeNode expected, TreeNode actual)
     {
-        if (!expected.getType().equals("__ROOT__"))
-            throw new RuntimeException("doTest: expected: root");
-        if (!actual.getType().equals("__ROOT__"))
-            throw new RuntimeException("doTest: actual: root");
+        assertEquals("__ROOT__", expected.getType());
+        assertEquals("__ROOT__", actual.getType());
         m_StackExpected.push(new Pair(expected, expected.createEnumeration()));
         m_StackActual.push(new Pair(actual, actual.createEnumeration()));
         do {
@@ -449,18 +451,19 @@ class FuzzyTester
             testBuffer();
         } while (!m_StackExpected.empty() || !m_StackActual.empty());
         if (m_DiffSequence != 0) {
-            m_Log.println("warning: " +  m_DiffSequence
+            System.out.println("warning: " +  m_DiffSequence
                     + " differences in sequence");
         }
         if (m_DiffSpuriousEmptyText != 0) {
-            m_Log.println("warning: " +  m_DiffSpuriousEmptyText
+            System.out.println("warning: " +  m_DiffSpuriousEmptyText
                     + " spurious empty text nodes");
         }
         if (m_DiffNesting != 0) {
-            m_Log.println("WARNING: " +  m_DiffNesting
+            System.out.println("WARNING: " +  m_DiffNesting
                     + " differences in nesting");
         }
-        return (m_DiffContent == 0) && (m_DiffMissing == 0);
+        assertEquals(0, m_DiffContent);
+        assertEquals(0, m_DiffMissing);
     }
 
     private void traverse(Stack<Pair<TreeNode, TreeNodeEnum>> stack,
@@ -553,7 +556,7 @@ class FuzzyTester
                 }
                 m_BufferActual.set(j, null);
             } else {
-//m_Log.println("testBuffer:");
+//System.out.println("testBuffer:");
                 printMissing(node);
                 m_DiffMissing++;
             }
@@ -563,7 +566,7 @@ class FuzzyTester
             TreeNode node = m_BufferActual.get(j);
             if (node != null)
             {
-//m_Log.println("testBuffer:");
+//System.out.println("testBuffer:");
                 printUnexpected(node);
                 if ((node instanceof TextNode) &&
                         ((TextNode) node).getContent().length() == 0) {
@@ -580,25 +583,25 @@ class FuzzyTester
 
     void printDiff(String prefix, String expected, String actual)
     {
-        m_Log.println(prefix +
+        System.out.println(prefix +
                 ":\texpected: " + expected + "\tactual: " + actual);
     }
 
     void printNesting(TreeNode node, TreeNode nesting)
     {
-        m_Log.println("node: " + node.toString()
+        System.out.println("node: " + node.toString()
                 + " possibly moved across nesting " + nesting.toString());
     }
 
     void printMissing(TreeNode node)
     {
-        m_Log.println("   missing node: " + node.toString());
+        System.out.println("   missing node: " + node.toString());
 
     }
 
     void printUnexpected(TreeNode node)
     {
-        m_Log.println("unexpected node: " + node.toString());
+        System.out.println("unexpected node: " + node.toString());
 
     }
 }
@@ -609,10 +612,9 @@ class FuzzyTester
 class EnumConverter
 {
     private Stack<TreeNode> m_Stack;
-    TextPortionEnumerationTest m_T;
 
-    EnumConverter(TextPortionEnumerationTest err) {
-        m_Stack = new Stack<TreeNode>(); m_T = err;
+    EnumConverter() {
+        m_Stack = new Stack<TreeNode>();
     }
 
     TreeNode convert(XEnumeration xEnum) throws Exception
@@ -620,7 +622,7 @@ class EnumConverter
         TreeNode root = new TreeNode();
         m_Stack.push(root);
         TreeNode ret = convertChildren(xEnum);
-        m_T.assure("EnumConverter.convert: stack", m_Stack.empty());
+        assertTrue("EnumConverter.convert: stack", m_Stack.empty());
         return ret;
     }
 
@@ -660,7 +662,7 @@ class EnumConverter
                         xMeta);
                     XEnumeration xEnumChildren = xEA.createEnumeration();
                     TreeNode node2 = convertChildren(xEnumChildren);
-                    m_T.assure("stack error: meta-field", node == node2);
+                    assertSame("stack error: meta-field", node2, node);
                 } else {
                     XPropertySet xFieldPropSet = (XPropertySet)
                         UnoRuntime.queryInterface(XPropertySet.class, xField);
@@ -668,7 +670,7 @@ class EnumConverter
                         xFieldPropSet.getPropertyValue("Content");
                     boolean isFixed = (Boolean)
                         xFieldPropSet.getPropertyValue("IsFixed");
-                    m_T.assure("field not fixed?", isFixed);
+                    assertTrue("field not fixed?", isFixed);
                     node = new TextFieldNode(content);
                 }
             } else if (type.equals("Footnote")) {
@@ -771,10 +773,8 @@ class EnumConverter
                     continue;
                 } else {
                     node = m_Stack.pop();
-                    m_T.assure("stack error: Ruby expected; is: " +
-                            node.toString(), node instanceof RubyNode);
-//                    m_T.assure("stack error: ruby",
-//                            ruby.equals(((RubyNode)node).getRubyText()));
+                    assertTrue("stack error: Ruby expected; is: " +
+                               node.toString(), node instanceof RubyNode);
                 }
             } else if (type.equals("InContentMetadata")) {
                 Object xMeta = xPropSet.getPropertyValue("InContentMetadata");
@@ -787,9 +787,7 @@ class EnumConverter
                     UnoRuntime.queryInterface(XEnumerationAccess.class, xMeta);
                 XEnumeration xEnumChildren = xEA.createEnumeration();
                 TreeNode node2 = convertChildren(xEnumChildren);
-                m_T.assure("stack error: meta", node == node2);
-//            } else if (type.equals("MetadataField")) {
-//                    Object xMeta = xPropSet.getPropertyValue("MetadataField");
+                assertSame("stack error: meta", node2, node);
             } else {
                 throw new RuntimeException("unexpected type: " + type);
             }
@@ -1226,7 +1224,7 @@ class RangeInserter extends Inserter
 
 //----------------------------------------------------------------------
 
-public class TextPortionEnumerationTest extends ComplexTestCase
+public class TextPortionEnumerationTest
 {
     private XMultiServiceFactory m_xMSF = null;
     private XComponentContext m_xContext = null;
@@ -1235,113 +1233,26 @@ public class TextPortionEnumerationTest extends ComplexTestCase
 
     private int m_Count = 1;
 
-//    public String[] getTestMethodNames() { return new String[] { "testLoadStore" }; }
-    public String[] getTestMethodNames() {
-        return new String[] {
-            "testText",
-            "testTextField",
-//            "testControlChar",
-//            "testSoftPageBreak",
-            "testFootnote",
-            "testFrameAs",
-            "testFrameAt",
-            "testBookmarkPoint",
-            "testBookmark",
-            "testBookmarkPointXmlId",
-            "testBookmarkXmlId",
-            "testRefmarkPoint",
-            "testRefmark",
-            "testToxmarkPoint",
-            "testToxmark",
-            "testHyperlink",
-            "testHyperlinkEmpty",
-            "testRuby",
-            "testRubyEmpty",
-            "testMeta",
-            "testMetaEmpty",
-            "testMetaField",
-            "testMetaFieldEmpty",
-            "testBookmark1",
-            "testBookmark2",
-            "testRefMark2",
-            "testRefMark3",
-            "testToxMark2",
-            "testToxMark3",
-            "testMarks1",
-            "testMarks2",
-            "testMarks3",
-            "testFrameMark1",
-            "testFrameMark2",
-            "testFrameMark3",
-            "testFrameMark4",
-            "testFrames1",
-            "testFrames2",
-            "testFrames3",
-            "testFrames4",
-            "testFrames5",
-            "testRubyHyperlink1",
-            "testRubyHyperlink2",
-            "testEnd1",
-            "testEnd2",
-            "testEnd3",
-            "testEnd4",
-            "testEnd5",
-            "testEmpty1",
-            "testEmpty2",
-            "testEmpty3",
-            "test1",
-            "testRange1",
-            "testRangeHyperlinkHyperlink",
-            "testRangeHyperlinkRuby",
-            "testRangeRubyHyperlink",
-            "testRangeRubyRuby",
-            "testRangeHyperlinkMeta",
-            "testRangeRubyMeta",
-            "testRangeMetaHyperlink",
-            "testRangeMetaRuby",
-            "testRangeMetaMeta",
-            "testRange2",
-            "testRange3",
-            "testRange4",
-            "testRange5",
-            "testRange6",
-            "testRange7",
-            "testMetaXText",
-            "testMetaXTextCursor",
-            "testMetaXTextAttachToxMark",
-            "testMetaXTextAttachRefMark",
-            "testMetaXTextAttachTextField",
-            "testMetaXTextAttachFootnote",
-            "testMetaXTextAttachMeta",
-            "testMetaFieldXTextField",
-            "testMetaFieldXPropertySet",
-            "testLoadStore",
-        };
-    }
-
-    public void before() throws Exception
+    @Before public void before() throws Exception
     {
-        m_xMSF = (XMultiServiceFactory) param.getMSF();
+        m_xMSF = connection.getFactory();
         XPropertySet xPropertySet = (XPropertySet)
             UnoRuntime.queryInterface(XPropertySet.class, m_xMSF);
         Object defaultCtx = xPropertySet.getPropertyValue("DefaultContext");
         m_xContext = (XComponentContext)
             UnoRuntime.queryInterface(XComponentContext.class, defaultCtx);
-        assure("could not get component context.", m_xContext != null);
+        assertNotNull("could not get component context.", m_xContext);
         m_xDoc = util.WriterTools.createTextDoc(m_xMSF);
         m_TmpDir = util.utils.getOfficeTemp/*Dir*/(m_xMSF);
-        log.println("tempdir: " + m_TmpDir);
+        System.out.println("tempdir: " + m_TmpDir);
     }
 
-    public void after()
+    @After public void after()
     {
-        if (m_xDoc != null) {
-            util.DesktopTools.closeDoc(m_xDoc);
-            m_xDoc = null;
-        }
+        util.DesktopTools.closeDoc(m_xDoc);
     }
 
-    public void testText() throws Exception
+    @Test public void testText() throws Exception
     {
         TreeNode root = new TreeNode();
         TreeNode text = new TextNode("abc");
@@ -1349,7 +1260,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testTextField() throws Exception
+    @Test public void testTextField() throws Exception
     {
         String name = mkName("ruby");
         TreeNode root = new TreeNode();
@@ -1358,7 +1269,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testControlChar() throws Exception
+    /*@Test*/ public void testControlChar() throws Exception
     {
 //FIXME this is converted to a text portion: ControlCharacter is obsolete
         TreeNode root = new TreeNode();
@@ -1367,7 +1278,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testSoftPageBreak() throws Exception
+    /*@Test*/ public void testSoftPageBreak() throws Exception
     {
 //FIXME: insert a soft page break: not done
         TreeNode root = new TreeNode();
@@ -1378,7 +1289,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testFootnote() throws Exception
+    @Test public void testFootnote() throws Exception
     {
         String name = mkName("ftn");
         TreeNode root = new TreeNode();
@@ -1387,7 +1298,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testFrameAs() throws Exception
+    @Test public void testFrameAs() throws Exception
     {
         String name = mkName("frame");
         TreeNode root = new TreeNode();
@@ -1396,7 +1307,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testFrameAt() throws Exception
+    @Test public void testFrameAt() throws Exception
     {
         String name = mkName("frame");
         TreeNode root = new TreeNode();
@@ -1407,7 +1318,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testBookmarkPoint() throws Exception
+    @Test public void testBookmarkPoint() throws Exception
     {
         String name = mkName("mark");
         TreeNode root = new TreeNode();
@@ -1418,7 +1329,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testBookmark() throws Exception
+    @Test public void testBookmark() throws Exception
     {
         String name = mkName("mark");
         TreeNode root = new TreeNode();
@@ -1431,7 +1342,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testBookmarkPointXmlId() throws Exception
+    @Test public void testBookmarkPointXmlId() throws Exception
     {
         String name = mkName("mark");
         StringPair id = mkId("id");
@@ -1443,7 +1354,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testBookmarkXmlId() throws Exception
+    @Test public void testBookmarkXmlId() throws Exception
     {
         String name = mkName("mark");
         StringPair id = mkId("id");
@@ -1457,7 +1368,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testRefmarkPoint() throws Exception
+    @Test public void testRefmarkPoint() throws Exception
     {
         String name = mkName("refmark");
         TreeNode root = new TreeNode();
@@ -1468,7 +1379,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testRefmark() throws Exception
+    @Test public void testRefmark() throws Exception
     {
         String name = mkName("refmark");
         TreeNode root = new TreeNode();
@@ -1481,7 +1392,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testToxmarkPoint() throws Exception
+    @Test public void testToxmarkPoint() throws Exception
     {
         String name = mkName("toxmark");
         TreeNode root = new TreeNode();
@@ -1492,7 +1403,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testToxmark() throws Exception
+    @Test public void testToxmark() throws Exception
     {
         String name = mkName("toxmark");
         TreeNode root = new TreeNode();
@@ -1505,7 +1416,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testHyperlink() throws Exception
+    @Test public void testHyperlink() throws Exception
     {
         String name = mkName("url");
         TreeNode root = new TreeNode();
@@ -1516,7 +1427,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testHyperlinkEmpty() throws Exception
+    @Test public void testHyperlinkEmpty() throws Exception
     {
         String name = mkName("url");
         TreeNode root = new TreeNode();
@@ -1527,7 +1438,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testRuby() throws Exception
+    @Test public void testRuby() throws Exception
     {
         String name = mkName("ruby");
         TreeNode root = new TreeNode();
@@ -1538,7 +1449,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testRubyEmpty() throws Exception
+    @Test public void testRubyEmpty() throws Exception
     {
         // BUG: #i91534#
         String name = mkName("ruby");
@@ -1548,7 +1459,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testMeta() throws Exception
+    @Test public void testMeta() throws Exception
     {
         StringPair id = new StringPair("content.xml", mkName("id"));
         TreeNode root = new TreeNode();
@@ -1560,7 +1471,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testMetaEmpty() throws Exception
+    @Test public void testMetaEmpty() throws Exception
     {
         StringPair id = new StringPair("content.xml", mkName("id"));
         TreeNode root = new TreeNode();
@@ -1571,7 +1482,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testMetaField() throws Exception
+    @Test public void testMetaField() throws Exception
     {
         StringPair id = new StringPair("content.xml", mkName("id"));
         TreeNode root = new TreeNode();
@@ -1583,7 +1494,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testMetaFieldEmpty() throws Exception
+    @Test public void testMetaFieldEmpty() throws Exception
     {
         StringPair id = new StringPair("content.xml", mkName("id"));
         TreeNode root = new TreeNode();
@@ -1594,7 +1505,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testBookmark1() throws Exception
+    @Test public void testBookmark1() throws Exception
     {
         String name1 = mkName("mark");
         String name2 = mkName("mark");
@@ -1610,7 +1521,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testBookmark2() throws Exception
+    @Test public void testBookmark2() throws Exception
     {
         String name1 = mkName("mark");
         String name2 = mkName("mark");
@@ -1626,7 +1537,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testRefMark2() throws Exception
+    @Test public void testRefMark2() throws Exception
     {
         String name1 = mkName("refmark");
         TreeNode root = new TreeNode();
@@ -1638,7 +1549,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testRefMark3() throws Exception
+    @Test public void testRefMark3() throws Exception
     {
         String name1 = mkName("refmark");
         String name2 = mkName("refmark");
@@ -1652,7 +1563,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testToxMark2() throws Exception
+    @Test public void testToxMark2() throws Exception
     {
         String name1 = mkName("toxmark");
         TreeNode root = new TreeNode();
@@ -1663,7 +1574,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testToxMark3() throws Exception
+    @Test public void testToxMark3() throws Exception
     {
         String name1 = mkName("toxmark");
         String name2 = mkName("toxmark");
@@ -1677,7 +1588,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testMarks1() throws Exception
+    @Test public void testMarks1() throws Exception
     {
         String name1 = mkName("bookmark");
         String name2 = mkName("toxmark");
@@ -1696,7 +1607,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testMarks2() throws Exception
+    @Test public void testMarks2() throws Exception
     {
         String name1 = mkName("bookmark");
         String name2 = mkName("refmark");
@@ -1719,7 +1630,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testMarks3() throws Exception
+    @Test public void testMarks3() throws Exception
     {
         String name1 = mkName("bookmark");
         String name2 = mkName("refmark");
@@ -1741,7 +1652,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testFrameMark1() throws Exception
+    @Test public void testFrameMark1() throws Exception
     {
         String name1 = mkName("bookmark");
         String name2 = mkName("frame");
@@ -1753,7 +1664,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testFrameMark2() throws Exception
+    @Test public void testFrameMark2() throws Exception
     {
         // BUG: #i98530#
         String name1 = mkName("bookmark");
@@ -1766,7 +1677,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testFrameMark3() throws Exception
+    @Test public void testFrameMark3() throws Exception
     {
         String name1 = mkName("frame");
         String name2 = mkName("bookmark");
@@ -1778,7 +1689,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testFrameMark4() throws Exception
+    @Test public void testFrameMark4() throws Exception
     {
         String name1 = mkName("frame");
         String name2 = mkName("bookmark");
@@ -1790,7 +1701,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testFrames1() throws Exception
+    @Test public void testFrames1() throws Exception
     {
         String name1 = mkName("frame");
         String name2 = mkName("frame");
@@ -1802,7 +1713,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testFrames2() throws Exception
+    @Test public void testFrames2() throws Exception
     {
         String name1 = mkName("frame");
         String name2 = mkName("frame");
@@ -1814,7 +1725,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testFrames3() throws Exception
+    @Test public void testFrames3() throws Exception
     {
         String name1 = mkName("frame");
         String name2 = mkName("frame");
@@ -1826,7 +1737,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testFrames4() throws Exception
+    @Test public void testFrames4() throws Exception
     {
         String name1 = mkName("frame");
         String name2 = mkName("frame");
@@ -1838,7 +1749,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testFrames5() throws Exception
+    @Test public void testFrames5() throws Exception
     {
         String name1 = mkName("frame");
         String name2 = mkName("frame");
@@ -1850,7 +1761,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testRubyHyperlink1() throws Exception
+    @Test public void testRubyHyperlink1() throws Exception
     {
         String name1 = mkName("ruby");
         String name2 = mkName("url");
@@ -1863,7 +1774,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testRubyHyperlink2() throws Exception
+    @Test public void testRubyHyperlink2() throws Exception
     {
         String name1 = mkName("url");
         String name2 = mkName("ruby");
@@ -1876,7 +1787,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testEnd1() throws Exception
+    @Test public void testEnd1() throws Exception
     {
         String name1 = mkName("bookmark");
         String name2 = mkName("toxmark");
@@ -1889,7 +1800,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testEnd2() throws Exception
+    @Test public void testEnd2() throws Exception
     {
         String name1 = mkName("bookmark");
         String name2 = mkName("frame");
@@ -1906,7 +1817,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testEnd3() throws Exception
+    @Test public void testEnd3() throws Exception
     {
         String name1 = mkName("ftn");
         String name2 = mkName("toxmark");
@@ -1917,7 +1828,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testEnd4() throws Exception
+    @Test public void testEnd4() throws Exception
     {
         String name1 = mkName("bookmark");
         String name2 = mkName("frame");
@@ -1929,7 +1840,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testEnd5() throws Exception
+    @Test public void testEnd5() throws Exception
     {
         String name1 = mkName("refmark");
         String name2 = mkName("ruby");
@@ -1943,7 +1854,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testEmpty1() throws Exception
+    @Test public void testEmpty1() throws Exception
     {
         String name1 = mkName("refmark");
         String name2 = mkName("toxmark");
@@ -1965,7 +1876,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testEmpty2() throws Exception
+    @Test public void testEmpty2() throws Exception
     {
         String name3 = mkName("bookmark");
         String name4 = mkName("frame");
@@ -1979,7 +1890,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void testEmpty3() throws Exception
+    @Test public void testEmpty3() throws Exception
     {
         String name1 = mkName("refmark");
         String name2 = mkName("toxmark");
@@ -2010,7 +1921,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root);
     }
 
-    public void test1() throws Exception
+    @Test public void test1() throws Exception
     {
         String name1 = mkName("frame");
         String name2 = mkName("bookmark");
@@ -2037,7 +1948,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
        attributes; if these ever become entities, they should not be split!
      */
 
-    public void testRange1() throws Exception
+    @Test public void testRange1() throws Exception
     {
         String name1 = mkName("url");
         RangeInserter inserter = new RangeInserter(m_xDoc);
@@ -2052,7 +1963,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root, false);
     }
 
-    public void testRangeHyperlinkHyperlink() throws Exception
+    @Test public void testRangeHyperlinkHyperlink() throws Exception
     {
         RangeInserter inserter = new RangeInserter(m_xDoc);
         TreeNode text = new TextNode("123456789");
@@ -2111,7 +2022,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root, false);
     }
 
-    public void testRangeHyperlinkRuby() throws Exception
+    @Test public void testRangeHyperlinkRuby() throws Exception
     {
         RangeInserter inserter = new RangeInserter(m_xDoc);
         TreeNode text = new TextNode("123456789");
@@ -2177,7 +2088,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root, false);
     }
 
-    public void testRangeRubyHyperlink() throws Exception
+    @Test public void testRangeRubyHyperlink() throws Exception
     {
         RangeInserter inserter = new RangeInserter(m_xDoc);
         TreeNode text = new TextNode("123456789");
@@ -2234,7 +2145,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root, false);
     }
 
-    public void testRangeRubyRuby() throws Exception
+    @Test public void testRangeRubyRuby() throws Exception
     {
         RangeInserter inserter = new RangeInserter(m_xDoc);
         TreeNode text = new TextNode("123456789");
@@ -2280,7 +2191,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root, false);
     }
 
-    public void testRangeHyperlinkMeta() throws Exception
+    @Test public void testRangeHyperlinkMeta() throws Exception
     {
         RangeInserter inserter = new RangeInserter(m_xDoc);
         TreeNode text = new TextNode("123456789");
@@ -2346,7 +2257,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root, false);
     }
 
-    public void testRangeRubyMeta() throws Exception
+    @Test public void testRangeRubyMeta() throws Exception
     {
         RangeInserter inserter = new RangeInserter(m_xDoc);
         TreeNode text = new TextNode("123456789");
@@ -2413,7 +2324,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root, false);
     }
 
-    public void testRangeMetaHyperlink() throws Exception
+    @Test public void testRangeMetaHyperlink() throws Exception
     {
         RangeInserter inserter = new RangeInserter(m_xDoc);
         TreeNode text = new TextNode("123456789");
@@ -2470,7 +2381,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root, false);
     }
 
-    public void testRangeMetaRuby() throws Exception
+    @Test public void testRangeMetaRuby() throws Exception
     {
         RangeInserter inserter = new RangeInserter(m_xDoc);
         TreeNode text = new TextNode("123456789");
@@ -2559,7 +2470,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root, false);
     }
 
-    public void testRangeMetaMeta() throws Exception
+    @Test public void testRangeMetaMeta() throws Exception
     {
         RangeInserter inserter = new RangeInserter(m_xDoc);
         TreeNode text = new TextNode("123456789");
@@ -2570,7 +2481,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         TreeNode met2 = new MetaNode( mkId("id") );
         try {
             inserter.insertRange( new Range(0, 4, met2) );
-            assure("testRangeMetaMeta: overlap left allowed", false);
+            fail("testRangeMetaMeta: overlap left allowed");
         } catch (com.sun.star.lang.IllegalArgumentException e) { /* ignore */ }
         TreeNode root = new TreeNode()
             .appendChild( new TextNode("123") )
@@ -2581,7 +2492,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         TreeNode met3 = new MetaNode( mkId("id") );
         try {
             inserter.insertRange( new Range(5/*-1*/, 8/*-1*/, met3) );
-            assure("testRangeMetaMeta: overlap right allowed", false);
+            fail("testRangeMetaMeta: overlap right allowed");
         } catch (com.sun.star.lang.IllegalArgumentException e) { /* ignore */ }
         root = new TreeNode()
             .appendChild( new TextNode("123") )
@@ -2611,7 +2522,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root, false);
     }
 
-    public void testRange2() throws Exception
+    @Test public void testRange2() throws Exception
     {
         RangeInserter inserter = new RangeInserter(m_xDoc);
         TreeNode text = new TextNode("123456789");
@@ -2681,7 +2592,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root, false);
     }
 
-    public void testRange3() throws Exception
+    @Test public void testRange3() throws Exception
     {
         RangeInserter inserter = new RangeInserter(m_xDoc);
         TreeNode text = new TextNode("123456789");
@@ -2715,7 +2626,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root, false);
     }
 
-    public void testRange4() throws Exception
+    @Test public void testRange4() throws Exception
     {
         RangeInserter inserter = new RangeInserter(m_xDoc);
         TreeNode text = new TextNode("123456789");
@@ -2769,7 +2680,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root, false);
     }
 
-    public void testRange5() throws Exception
+    @Test public void testRange5() throws Exception
     {
         RangeInserter inserter = new RangeInserter(m_xDoc);
         TreeNode text = new TextNode("123456789");
@@ -2818,7 +2729,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root, false);
     }
 
-    public void testRange6() throws Exception
+    @Test public void testRange6() throws Exception
     {
         RangeInserter inserter = new RangeInserter(m_xDoc);
         TreeNode text = new TextNode("123456789");
@@ -2858,7 +2769,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         doTest(root, false);
     }
 
-    public void testRange7() throws Exception
+    @Test public void testRange7() throws Exception
     {
         RangeInserter inserter = new RangeInserter(m_xDoc);
         TreeNode text = new TextNode("123456789");
@@ -2899,7 +2810,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
     /* TODO: test partial selection, test UNDO/REDO */
 
     /** test SwXMeta XText interface */
-    public void testMetaXText() throws Exception
+    @Test public void testMetaXText() throws Exception
     {
         RangeInserter inserter = new RangeInserter(m_xDoc);
         TreeNode text = new TextNode("12AB6789");
@@ -2921,113 +2832,106 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         XText xText = (XText) UnoRuntime.queryInterface(XText.class, xMeta);
 
         XText xParentText = xText.getText();
-        assure("getText(): no parent", xParentText != null);
+        assertNotNull("getText(): no parent", xParentText);
 
         XTextRange xStart = xText.getStart();
-        assure("getStart(): no start", xStart != null);
+        assertNotNull("getStart(): no start", xStart);
 
         XTextRange xEnd = xText.getEnd();
-        assure("getEnd(): no end", xEnd != null);
-
-        /*
-        String string = xText.getString();
-        assure("getString(): invalid string returned",
-            string != null && "AB".equals(string) );
-            */
+        assertNotNull("getEnd(): no end", xEnd);
 
         xText.setString("45");
 
         {
             String string = xText.getString();
-            assure("getString(): invalid string returned: " + string,
-                string != null && "45".equals(string) );
+            assertEquals("getString(): invalid string returned",
+                         "45", string);
         }
 
         XTextCursor xTextCursor = xText.createTextCursor();
-        assure("createTextCursor(): failed", xTextCursor != null);
+        assertNotNull("createTextCursor(): failed", xTextCursor);
 
         try {
             xText.createTextCursorByRange(null);
-            assure("createTextCursorByRange(): null allowed?", false);
+            fail("createTextCursorByRange(): null allowed?");
         } catch (RuntimeException e) { /* expected */ }
 
         XTextCursor xTextCursorStart = xText.createTextCursorByRange(xStart);
-        assure("createTextCursorByRange(): failed for start",
-                xTextCursorStart != null);
+        assertNotNull("createTextCursorByRange(): failed for start",
+                      xTextCursorStart);
 
         XTextCursor xTextCursorEnd = xText.createTextCursorByRange(xEnd);
-        assure("createTextCursorByRange(): failed for end",
-                xTextCursorEnd != null);
+        assertNotNull("createTextCursorByRange(): failed for end",
+                      xTextCursorEnd);
 
         // move outside meta
         xDocTextCursor.gotoStart(false);
 
         try {
             xText.insertString(null, "foo", false);
-            assure("insertString(): null allowed?", false);
+            fail("insertString(): null allowed?");
         } catch (RuntimeException e) { /* expected */ }
 
         try {
             xText.insertString(xDocTextCursor, "foo", false);
-            assure("insertString(): cursor outside allowed?", false);
+            fail("insertString(): cursor outside allowed?");
         } catch (RuntimeException e) { /* expected */ }
 
         xStart = xText.getStart();
         xText.insertString(xStart, "A", false);
         {
             String string = xText.getString();
-            assure("getString(): invalid string returned: " + string,
-                string != null && "A45".equals(string) );
+            assertEquals("getString(): invalid string returned",
+                         "A45", string);
         }
 
         xText.insertString(xEnd, "B", false);
         {
             String string = xText.getString();
-            assure("getString(): invalid string returned: " + string,
-                string != null && "A45B".equals(string) );
+            assertEquals("getString(): invalid string returned",
+                         "A45B", string);
         }
 
         try {
             xText.insertControlCharacter(null, HARD_HYPHEN, false);
-            assure("insertControlCharacter(): null allowed?", false);
+            fail("insertControlCharacter(): null allowed?");
         } catch (com.sun.star.lang.IllegalArgumentException e) { /* ignore */ }
 
         xStart = xText.getStart();
         try {
             xText.insertControlCharacter(xDocTextCursor, HARD_HYPHEN, false);
-            assure("insertControlCharacter(): cursor outside allowed?", false);
+            fail("insertControlCharacter(): cursor outside allowed?");
         } catch (com.sun.star.lang.IllegalArgumentException e) { /* ignore */ }
 
         xText.insertControlCharacter(xStart, HARD_HYPHEN, false);
         {
             String string = xText.getString();
-            assure("getString(): invalid string returned: " + string,
-                string != null && ('\u2011' + "A45B").equals(string) );
+            assertEquals("getString(): invalid string returned",
+                         '\u2011' + "A45B", string);
         }
 
         xText.insertControlCharacter(xEnd, HARD_HYPHEN, false);
         {
             String string = xText.getString();
-            assure("getString(): invalid string returned: " + string,
-                string != null &&
-                ('\u2011' + "A45B" + '\u2011').equals(string) );
+            assertEquals("getString(): invalid string returned",
+                         '\u2011' + "A45B" + '\u2011', string);
         }
 
         xText.setString("45");
 
         try {
             xText.insertTextContent(null, xMeta, false);
-            assure("insertTextContent(): null range allowed?", false);
+            fail("insertTextContent(): null range allowed?");
         } catch (com.sun.star.lang.IllegalArgumentException e) { /* ignore */ }
 
         try {
             xText.insertTextContent(xStart, null, false);
-            assure("insertTextContent(): null content allowed?", false);
+            fail("insertTextContent(): null content allowed?");
         } catch (com.sun.star.lang.IllegalArgumentException e) { /* ignore */ }
 
         try {
             xText.insertTextContent(xDocTextCursor, xMeta, false);
-            assure("insertTextContent(): cursor outside allowed?", false);
+            fail("insertTextContent(): cursor outside allowed?");
         } catch (com.sun.star.lang.IllegalArgumentException e) { /* ignore */ }
 
         TextFieldNode field1 = new TextFieldNode( "f1" );
@@ -3059,13 +2963,13 @@ public class TextPortionEnumerationTest extends ComplexTestCase
 
         try {
             xText.removeTextContent(null);
-            assure("removeTextContent(): null content allowed?", false);
+            fail("removeTextContent(): null content allowed?");
         } catch (RuntimeException e) { /* expected */ }
 
         xText.removeTextContent(xField1);
 
         XTextRange xAnchor = xMeta.getAnchor();
-        assure("getAnchor(): null", xAnchor != null);
+        assertNotNull("getAnchor(): null", xAnchor);
 
         // evil test case: insert ruby around meta
         RubyNode ruby = new RubyNode( mkName("ruby") );
@@ -3085,31 +2989,31 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         XEnumerationAccess xEA = (XEnumerationAccess)
             UnoRuntime.queryInterface(XEnumerationAccess.class, xMeta);
         XEnumeration xEnum = xEA.createEnumeration();
-        assure("createEnumeration(): returns null", xEnum != null);
+        assertNotNull("createEnumeration(): returns null", xEnum);
         {
-            assure("hasNext(): first missing", xEnum.hasMoreElements());
+            assertTrue("hasNext(): first missing", xEnum.hasMoreElements());
             Object xElement = xEnum.nextElement();
             XTextRange xPortion = (XTextRange)
                 UnoRuntime.queryInterface(XTextRange.class, xElement);
             XPropertySet xPropSet = (XPropertySet)
                 UnoRuntime.queryInterface(XPropertySet.class, xPortion);
             String type = (String) xPropSet.getPropertyValue("TextPortionType");
-            assure("first: not text: " + type, type.equals("Text"));
+            assertEquals("first: not text", "Text", type);
             String txt = xPortion.getString();
-            assure("first: text differs: " + txt, "45".equals(txt));
+            assertEquals("first: text differs", "45", txt);
         }
         {
-            assure("hasNext(): second missing", xEnum.hasMoreElements());
+            assertTrue("hasNext(): second missing", xEnum.hasMoreElements());
             Object xElement = xEnum.nextElement();
             XTextRange xPortion = (XTextRange)
                 UnoRuntime.queryInterface(XTextRange.class, xElement);
             XPropertySet xPropSet = (XPropertySet)
                 UnoRuntime.queryInterface(XPropertySet.class, xPortion);
             String type = (String) xPropSet.getPropertyValue("TextPortionType");
-            assure("second: not text", type.equals("TextField"));
+            assertEquals("second: not text", "TextField", type);
         }
         // no ruby end here!!!
-        assure("hasNext(): more elements?", !xEnum.hasMoreElements());
+        assertFalse("hasNext(): more elements?", xEnum.hasMoreElements());
 
         XComponent xComponent = (XComponent)
             UnoRuntime.queryInterface(XComponent.class, xMeta);
@@ -3117,14 +3021,14 @@ public class TextPortionEnumerationTest extends ComplexTestCase
 
         try {
             XTextCursor xCursor = xText.createTextCursor();
-            assure("createTextCursor(): succeeds on disposed object?",
-                    xCursor == null);
+            assertNull("createTextCursor(): succeeds on disposed object?",
+                       xCursor);
         } catch (RuntimeException e) { /* expected */ }
     }
 
     /** check that cursor move methods move to positions in the meta,
         but do not move to positions outside the meta. */
-    public void testMetaXTextCursor() throws Exception
+    @Test public void testMetaXTextCursor() throws Exception
     {
         RangeInserter inserter = new RangeInserter(m_xDoc);
         TreeNode text = new TextNode("Text. 12 More text here.");
@@ -3145,30 +3049,30 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         XText xText = (XText) UnoRuntime.queryInterface(XText.class, xMeta);
 
         XTextRange xStart = xText.getStart();
-        assure("getStart(): no start", xStart != null);
+        assertNotNull("getStart(): no start", xStart);
         XTextRange xEnd = xText.getEnd();
-        assure("getEnd(): no end", xEnd != null);
+        assertNotNull("getEnd(): no end", xEnd);
 
         XTextCursor xTextCursor = xText.createTextCursor();
-        assure("createTextCursor(): no cursor", xTextCursor != null);
+        assertNotNull("createTextCursor(): no cursor", xTextCursor);
 
         // XTextCursor
         boolean bSuccess = false;
         xTextCursor.gotoStart(false);
         xTextCursor.gotoEnd(false);
         bSuccess = xTextCursor.goLeft((short)1, false);
-        assure("goLeft(): failed", bSuccess);
+        assertTrue("goLeft(): failed", bSuccess);
         bSuccess = xTextCursor.goLeft((short)1000, false);
-        assure("goLeft(): succeeded", !bSuccess);
+        assertFalse("goLeft(): succeeded", bSuccess);
         bSuccess = xTextCursor.goRight((short)1, false);
-        assure("goRight(): failed", bSuccess);
+        assertTrue("goRight(): failed", bSuccess);
         bSuccess = xTextCursor.goRight((short)1000, false);
-        assure("goRight(): succeeded", !bSuccess);
+        assertFalse("goRight(): succeeded", bSuccess);
         xTextCursor.gotoRange(xStart, false);
         xTextCursor.gotoRange(xEnd, false);
         try {
             xTextCursor.gotoRange(xDocTextCursor, false);
-            assure("gotoRange(): succeeded", false);
+            fail("gotoRange(): succeeded");
         } catch (RuntimeException e) { /* expected */ }
 
         // XWordCursor
@@ -3178,44 +3082,44 @@ public class TextPortionEnumerationTest extends ComplexTestCase
             UnoRuntime.queryInterface(XWordCursor.class, xTextCursor);
 
         bSuccess = xWordCursor.gotoNextWord(true);
-        assure("gotoNextWord(): failed", bSuccess);
+        assertTrue("gotoNextWord(): failed", bSuccess);
         {
             String string = xTextCursor.getString();
-            assure("gotoNextWord(): wrong string: " + string,
-                    "Two ".equals(string));
+            assertEquals("gotoNextWord(): wrong string",
+                         "Two ", string);
         }
         bSuccess = xWordCursor.gotoNextWord(false);
-        assure("gotoNextWord(): succeeded", !bSuccess);
+        assertFalse("gotoNextWord(): succeeded", bSuccess);
         xTextCursor.collapseToEnd();
         bSuccess = xWordCursor.gotoPreviousWord(true);
-        assure("gotoPreviousWord(): failed", bSuccess);
+        assertTrue("gotoPreviousWord(): failed", bSuccess);
         {
             String string = xTextCursor.getString();
-            assure("gotoPreviousWord(): wrong string: " + string,
-                    "words".equals(string));
+            assertEquals("gotoPreviousWord(): wrong string",
+                         "words", string);
         }
         bSuccess = xWordCursor.gotoPreviousWord(false);
-        assure("gotoPreviousWord(): succeeded", !bSuccess);
+        assertFalse("gotoPreviousWord(): succeeded", bSuccess);
         bSuccess = xWordCursor.gotoEndOfWord(true);
-        assure("gotoEndOfWord(): failed", bSuccess);
+        assertTrue("gotoEndOfWord(): failed", bSuccess);
         {
             String string = xTextCursor.getString();
-            assure("gotoEndOfWord(): wrong string: " + string,
-                    "Two".equals(string));
+            assertEquals("gotoEndOfWord(): wrong string",
+                         "Two", string);
         }
         xTextCursor.gotoEnd(false);
         bSuccess = xWordCursor.gotoStartOfWord(true);
-        assure("gotoStartOfWord(): failed", bSuccess);
+        assertTrue("gotoStartOfWord(): failed", bSuccess);
         {
             String string = xTextCursor.getString();
-            assure("gotoStartOfWord(): wrong string: " + string,
-                    "words".equals(string));
+            assertEquals("gotoStartOfWord(): wrong string",
+                         "words", string);
         }
         xText.setString("");
         bSuccess = xWordCursor.gotoEndOfWord(false);
-        assure("gotoEndOfWord(): succeeded", !bSuccess);
+        assertFalse("gotoEndOfWord(): succeeded", bSuccess);
         bSuccess = xWordCursor.gotoStartOfWord(false);
-        assure("gotoStartOfWord(): succeeded", !bSuccess);
+        assertFalse("gotoStartOfWord(): succeeded", bSuccess);
 
         // XSentenceCursor
         xText.setString("This is a sentence. Another sentence.");
@@ -3224,60 +3128,60 @@ public class TextPortionEnumerationTest extends ComplexTestCase
             UnoRuntime.queryInterface(XSentenceCursor.class, xTextCursor);
 
         bSuccess = xSentenceCursor.gotoNextSentence(true);
-        assure("gotoNextSentence(): failed", bSuccess);
+        assertTrue("gotoNextSentence(): failed", bSuccess);
         {
             String string = xTextCursor.getString();
-            assure("gotoNextSentence(): wrong string: " + string,
-                    "This is a sentence. ".equals(string));
+            assertEquals("gotoNextSentence(): wrong string",
+                         "This is a sentence. ", string);
         }
         bSuccess = xSentenceCursor.gotoNextSentence(false);
-        assure("gotoNextSentence(): succeeded", !bSuccess);
+        assertFalse("gotoNextSentence(): succeeded", bSuccess);
         // FIXME:
         // the sentence cursor seems to work differently than the word cursor
         xText.setString("This is a sentence. Another sentence. Sentence 3.");
         xTextCursor.gotoEnd(false);
         bSuccess = xSentenceCursor.gotoPreviousSentence(true);
-        assure("gotoPreviousSentence(): failed", bSuccess);
+        assertTrue("gotoPreviousSentence(): failed", bSuccess);
         {
             String string = xTextCursor.getString();
-            assure("gotoPreviousSentence(): wrong string: " + string,
-                    "Another sentence. Sentence 3.".equals(string));
+            assertEquals("gotoPreviousSentence(): wrong string",
+                         "Another sentence. Sentence 3.", string);
         }
         bSuccess = xSentenceCursor.gotoPreviousSentence(false);
-        assure("gotoPreviousSentence(): succeeded", !bSuccess);
+        assertFalse("gotoPreviousSentence(): succeeded", bSuccess);
         bSuccess = xSentenceCursor.gotoEndOfSentence(true);
-        assure("gotoEndOfSentence(): failed", bSuccess);
+        assertTrue("gotoEndOfSentence(): failed", bSuccess);
         {
             String string = xTextCursor.getString();
-            assure("gotoEndOfSentence(): wrong string: " + string,
-                    "This is a sentence.".equals(string));
+            assertEquals("gotoEndOfSentence(): wrong string",
+                         "This is a sentence.", string);
         }
         xTextCursor.gotoEnd(false);
         bSuccess = xSentenceCursor.gotoStartOfSentence(true);
-        assure("gotoStartOfSentence(): failed", bSuccess);
+        assertTrue("gotoStartOfSentence(): failed", bSuccess);
         {
             String string = xTextCursor.getString();
-            assure("gotoStartOfSentence(): wrong string: " + string,
-                    "Sentence 3.".equals(string));
+            assertEquals("gotoStartOfSentence(): wrong string",
+                         "Sentence 3.", string);
         }
         xText.setString("");
         bSuccess = xSentenceCursor.gotoEndOfSentence(false);
-        assure("gotoEndOfSentence(): succeeded", !bSuccess);
+        assertFalse("gotoEndOfSentence(): succeeded", bSuccess);
         bSuccess = xSentenceCursor.gotoStartOfSentence(false);
-        assure("gotoStartOfSentence(): succeeded", !bSuccess);
+        assertFalse("gotoStartOfSentence(): succeeded", bSuccess);
 
         XParagraphCursor xParagraphCursor = (XParagraphCursor)
             UnoRuntime.queryInterface(XParagraphCursor.class, xTextCursor);
 
         // XParagraphCursor (does not make sense)
         bSuccess = xParagraphCursor.gotoNextParagraph(false);
-        assure("gotoNextParagraph(): succeeded", !bSuccess);
+        assertFalse("gotoNextParagraph(): succeeded", bSuccess);
         bSuccess = xParagraphCursor.gotoPreviousParagraph(false);
-        assure("gotoPreviousParagraph(): succeeded", !bSuccess);
+        assertFalse("gotoPreviousParagraph(): succeeded", bSuccess);
         bSuccess = xParagraphCursor.gotoStartOfParagraph(false);
-        assure("gotoStartOfParagraph(): succeeded", !bSuccess);
+        assertFalse("gotoStartOfParagraph(): succeeded", bSuccess);
         bSuccess = xParagraphCursor.gotoEndOfParagraph(false);
-        assure("gotoEndOfParagraph(): succeeded", !bSuccess);
+        assertFalse("gotoEndOfParagraph(): succeeded", bSuccess);
     }
 
 
@@ -3291,7 +3195,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
             throws Exception { }
     }
 
-    public void testMetaXTextAttachToxMark() throws Exception
+    @Test public void testMetaXTextAttachToxMark() throws Exception
     {
         doMetaXTextAttach( new AttachHelper()
             {
@@ -3307,7 +3211,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
             });
     }
 
-    public void testMetaXTextAttachRefMark() throws Exception
+    @Test public void testMetaXTextAttachRefMark() throws Exception
     {
         doMetaXTextAttach( new AttachHelper()
             {
@@ -3323,7 +3227,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
             });
     }
 
-    public void testMetaXTextAttachTextField() throws Exception
+    @Test public void testMetaXTextAttachTextField() throws Exception
     {
         doMetaXTextAttach( new AttachHelper()
             {
@@ -3339,7 +3243,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
             });
     }
 
-    public void testMetaXTextAttachFootnote() throws Exception
+    @Test public void testMetaXTextAttachFootnote() throws Exception
     {
         doMetaXTextAttach( new AttachHelper()
             {
@@ -3355,7 +3259,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
             });
     }
 
-    public void testMetaXTextAttachMeta() throws Exception
+    @Test public void testMetaXTextAttachMeta() throws Exception
     {
         doMetaXTextAttach( new AttachHelper()
             {
@@ -3605,7 +3509,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         }
     }
 
-    public void testMetaFieldXTextField() throws Exception
+    @Test public void testMetaFieldXTextField() throws Exception
     {
         com.sun.star.rdf.XRepositorySupplier xModel =
             (com.sun.star.rdf.XRepositorySupplier) UnoRuntime.queryInterface(
@@ -3643,12 +3547,12 @@ public class TextPortionEnumerationTest extends ComplexTestCase
 
         xGraph.addStatement(xMetadatable, xOdfPrefix, xPrefix);
         xGraph.addStatement(xMetadatable, xOdfSuffix, xSuffix);
-        assure("getPresentation(): wrong",
-            "fooabcbar".equals(xMetaField.getPresentation(false)));
+        assertEquals("getPresentation(): wrong",
+                     "fooabcbar", xMetaField.getPresentation(false));
         inserter.insertRange( new Range(0, 0, text) );
     }
 
-    public void testMetaFieldXPropertySet() throws Exception
+    @Test public void testMetaFieldXPropertySet() throws Exception
     {
         RangeInserter inserter = new RangeInserter(m_xDoc);
         TreeNode text = new TextNode("123");
@@ -3664,32 +3568,32 @@ public class TextPortionEnumerationTest extends ComplexTestCase
 
         XPropertySet xPropertySet = (XPropertySet)
             UnoRuntime.queryInterface(XPropertySet.class, xMetaField);
-        assure("PropertySet: not supported?", xPropertySet != null);
+        assertNotNull("PropertySet: not supported?", xPropertySet);
         XPropertySetInfo xPropertySetInfo = xPropertySet.getPropertySetInfo();
-        assure("hasPropertyByName(\"NumberFormat\"):",
-                xPropertySetInfo.hasPropertyByName("NumberFormat"));
-        assure("hasPropertyByName(\"IsFixedLanguage\"):",
-                xPropertySetInfo.hasPropertyByName("IsFixedLanguage"));
+        assertTrue("hasPropertyByName(\"NumberFormat\"):",
+                   xPropertySetInfo.hasPropertyByName("NumberFormat"));
+        assertTrue("hasPropertyByName(\"IsFixedLanguage\"):",
+                   xPropertySetInfo.hasPropertyByName("IsFixedLanguage"));
 
         int def = (Integer) xPropertySet.getPropertyValue("NumberFormat");
-        log.println("NumberFormat: default is " + def);
+        System.out.println("NumberFormat: default is " + def);
         short INT = com.sun.star.i18n.NumberFormatIndex.NUMBER_INT;
         xPropertySet.setPropertyValue("NumberFormat", INT);
         xPropertySet.setPropertyValue("IsFixedLanguage", true);
         int format = (Integer) xPropertySet.getPropertyValue("NumberFormat");
-        assure("NumberFormat: failed", format == INT);
+        assertEquals("NumberFormat: failed", INT, format);
         boolean isFixed = (Boolean)
             xPropertySet.getPropertyValue("IsFixedLanguage");
-        assure("IsFixedLanguage: failed", isFixed);
+        assertTrue("IsFixedLanguage: failed", isFixed);
     }
 
-    public void testLoadStore() throws Exception
+    @Test public void testLoadStore() throws Exception
     {
         XComponent xComp = null;
         String filename = "TESTMETA.odt";
         String file;
         try {
-            file = util.utils.getFullTestURL(filename);
+            file = TestDocument.getUrl(filename);
             xComp = doLoad(file);
             if (xComp != null)
             {
@@ -3705,21 +3609,21 @@ public class TextPortionEnumerationTest extends ComplexTestCase
 
     private void doStore(XComponent xComp, String file) throws Exception
     {
-        log.println("Storing test document...");
+        System.out.println("Storing test document...");
 
         XStorable xStor = (XStorable) UnoRuntime.queryInterface(
                     XStorable.class, xComp);
 
         xStor.storeToURL(file, new PropertyValue[0]);
 
-        log.println("...done");
+        System.out.println("...done");
     }
 
     public XComponent doLoad(String file) throws Exception
     {
         XComponent xComp = null;
 
-        log.println("Loading test document...");
+        System.out.println("Loading test document...");
 
         PropertyValue[] loadProps = new PropertyValue[1];
         loadProps[0] = new PropertyValue();
@@ -3735,9 +3639,9 @@ public class TextPortionEnumerationTest extends ComplexTestCase
 
         XText xText = xTextDoc.getText();
 
-        log.println("...done");
+        System.out.println("...done");
 
-        log.println("Checking meta(-field)s in loaded test document...");
+        System.out.println("Checking meta(-field)s in loaded test document...");
 
         TreeNode root = new TreeNode()
             .appendChild( new RubyNode("ruby1")
@@ -3782,7 +3686,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
             .appendChild( new TextNode(" X X ") );
         doTest(xTextDoc, root, false);
 
-        log.println("...done");
+        System.out.println("...done");
 
         return xComp;
     }
@@ -3828,19 +3732,18 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         XEnumerationAccess xEA = (XEnumerationAccess)
             UnoRuntime.queryInterface(XEnumerationAccess.class, xElement);
         XEnumeration xEnum = xEA.createEnumeration();
-        TreeNode outtree = new EnumConverter(this).convert(xEnum);
+        TreeNode outtree = new EnumConverter().convert(xEnum);
 
         dumpTree(outtree, "O: ");
 
-        boolean success = new FuzzyTester(log).doTest(intree, outtree);
-        assure("test failed", success);
+        new FuzzyTester().doTest(intree, outtree);
     }
 
     private void dumpTree(TreeNode tree) { dumpTree(tree, "> "); }
 
     private void dumpTree(TreeNode tree, String prefix)
     {
-        log.println(prefix + tree.toString());
+        System.out.println(prefix + tree.toString());
         TreeNodeEnum children = tree.createEnumeration();
         while (children.hasNext()) {
             TreeNode node = children.next();
@@ -3863,6 +3766,16 @@ public class TextPortionEnumerationTest extends ComplexTestCase
         return new StringPair("content.xml", id);
     }
 
-    public void assure(String str, boolean cond) { super.assure(str, cond); }
+    @BeforeClass public static void setUpConnection() throws Exception {
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
 }
 
