@@ -466,18 +466,20 @@ sal_Int32 DiagramHelper::getDimension( const Reference< XDiagram > & xDiagram )
 
     try
     {
-        Reference< XCoordinateSystemContainer > xCooSysCnt(
-            xDiagram, uno::UNO_QUERY_THROW );
-        Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
-            xCooSysCnt->getCoordinateSystems());
-
-        for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
+        Reference< XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY );
+        if( xCooSysCnt.is() )
         {
-            Reference< XCoordinateSystem > xCooSys( aCooSysSeq[i] );
-            if(xCooSys.is())
+            Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
+                xCooSysCnt->getCoordinateSystems());
+
+            for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
             {
-                nResult = xCooSys->getDimension();
-                break;
+                Reference< XCoordinateSystem > xCooSys( aCooSysSeq[i] );
+                if(xCooSys.is())
+                {
+                    nResult = xCooSys->getDimension();
+                    break;
+                }
             }
         }
     }
