@@ -882,8 +882,8 @@ long GraphiteLayout::FillDXArray( sal_Int32* pDXArray ) const
     {
         for (size_t i = 0; i < mvCharDxs.size(); i++)
         {
-            assert((mvChar2BaseGlyph[i] >= -1) &&
-                ((mvChar2BaseGlyph[i] & GLYPH_INDEX_MASK) < (signed)mvGlyphs.size()));
+            assert( (mvChar2BaseGlyph[i] == -1) ||
+                ((signed)(mvChar2BaseGlyph[i] & GLYPH_INDEX_MASK) < (signed)mvGlyphs.size()));
             if (mvChar2BaseGlyph[i] != -1 &&
                 mvGlyphs[mvChar2BaseGlyph[i] & GLYPH_INDEX_MASK].mnGlyphIndex == GF_DROPPED)
             {
