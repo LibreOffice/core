@@ -183,16 +183,21 @@ endef
 
 # CObject class
 
+# some dark shell magic here
+# C is the command to execute
+# E is the linker output, that we are only interested in on error (good programs keep silent on success)
+# R is the return code of the link command
 define gb_CObject__command
 $(call gb_Helper_announce,Compiling $(2) (plain C) ...)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
-    C="$(gb_CC) \
+    R=0 && C="$(gb_CC) \
         $(4) $(5) \
         -I$(dir $(3)) \
         $(6) \
         -c $(3) \
-        -Fo$(1)" && E=$$($$C) || (echo $$C && echo $$E 1>&2 && false))
+        -Fo$(1)" && \
+    E=$$($$C) || (R=$$? && echo $$C && echo $$E 1>&2 && $$(exit $$R)))
 $(call gb_Helper_abbreviate_dirs_native,\
     $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
         $(4) $(5) \
@@ -216,6 +221,10 @@ endef
 
 # CxxObject class
 
+# some dark shell magic here
+# C is the command to execute
+# E is the linker output, that we are only interested in on error (good programs keep silent on success)
+# R is the return code of the link command
 define gb_CxxObject__command
 $(call gb_Helper_announce,Compiling $(2) ...)
 $(call gb_Helper_abbreviate_dirs_native,\
@@ -225,7 +234,8 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -I$(dir $(3)) \
         $(6) \
         -c $(3) \
-        -Fo$(1)" && E=$$($$C) || (echo $$C && echo $$E 1>&2 && false))
+        -Fo$(1)" && \
+    E=$$($$C) || (R=$$? && echo $$C && echo $$E 1>&2 && $$(exit $$R)))
 $(call gb_Helper_abbreviate_dirs_native,\
     $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
         $(4) $(5) \
@@ -266,6 +276,10 @@ gb_LinkTarget_INCLUDE :=\
 
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
+# some dark shell magic here
+# C is the command to execute
+# E is the linker output, that we are only interested in on error (good programs keep silent on success)
+# R is the return code of the link command
 define gb_LinkTarget__command
 $(call gb_Helper_announce,Linking $(2) ...)
 $(call gb_Helper_abbreviate_dirs_native,\
@@ -273,14 +287,14 @@ $(call gb_Helper_abbreviate_dirs_native,\
     RESPONSEFILE=$$(mktemp --tmpdir=$(gb_Helper_MISC)) && \
     echo "$(foreach object,$(7),$(call gb_CxxObject_get_target,$(object))) \
         $(foreach object,$(6),$(call gb_CObject_get_target,$(object)))" > $${RESPONSEFILE} && \
-    $(gb_LINK) \
+    R=0 && C="$(gb_LINK) \
         $(3) \
         @$${RESPONSEFILE} \
         $(foreach lib,$(4),$(call gb_Library_get_filename,$(lib))) \
         $(foreach lib,$(5),$(call gb_StaticLibrary_get_filename,$(lib))) \
-        $(subst -out: -implib:$(1),-out:$(1),-out:$(DLLTARGET) -implib:$(1)) && \
-    rm $${RESPONSEFILE})
-
+        $(subst -out: -implib:$(1),-out:$(1),-out:$(DLLTARGET) -implib:$(1))" && \
+    E=$$($$C) || (R=$$? && echo $$C && echo $$E 1>&2); \
+    rm $${RESPONSEFILE} && $$(exit $$R))
 endef
 
 
