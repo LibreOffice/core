@@ -241,7 +241,8 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
                 Any& rIntervalCount = rSubIncrementSeq[ 0 ].IntervalCount;
                 if( bLogScale )
                 {
-                    rIntervalCount <<= sal_Int32( 10 );
+                    if( mrModel.mofMinorUnit.has() )
+                        rIntervalCount <<= sal_Int32( 9 );
                 }
                 else
                 {
