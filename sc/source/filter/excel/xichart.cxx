@@ -2741,7 +2741,8 @@ void XclImpChValueRange::Convert( ScaleData& rScaleData, bool bMirrorOrient ) co
     Any& rIntervalCount = rSubIncrementSeq[ 0 ].IntervalCount;
     if( bLogScale )
     {
-        rIntervalCount <<= sal_Int32( 10 );
+        if( !bAutoMinor )
+            rIntervalCount <<= sal_Int32( 9 );
     }
     else
     {
