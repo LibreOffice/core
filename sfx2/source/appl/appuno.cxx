@@ -2411,6 +2411,26 @@ RequestPackageReparation::RequestPackageReparation( ::rtl::OUString aName )
        m_lContinuations[1] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pDisapprove );
 }
 
+/*uno::*/Any SAL_CALL RequestPackageReparation::queryInterface( const /*uno::*/Type& rType ) throw (RuntimeException)
+{
+    return ::cppu::queryInterface ( rType,
+            // OWeakObject interfaces
+            dynamic_cast< XInterface* > ( (XInteractionRequest *) this ),
+            static_cast< XWeak* > ( this ),
+            // my own interfaces
+            static_cast< XInteractionRequest*  > ( this ) );
+}
+
+void SAL_CALL RequestPackageReparation::acquire(  ) throw ()
+{
+    OWeakObject::acquire();
+}
+
+void SAL_CALL RequestPackageReparation::release(  ) throw ()
+{
+    OWeakObject::release();
+}
+
 ::com::sun::star::uno::Any SAL_CALL RequestPackageReparation::getRequest()
         throw( ::com::sun::star::uno::RuntimeException )
 {
@@ -2440,6 +2460,26 @@ NotifyBrokenPackage::NotifyBrokenPackage( ::rtl::OUString aName )
 
        m_lContinuations.realloc( 1 );
        m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pAbort  );
+}
+
+/*uno::*/Any SAL_CALL NotifyBrokenPackage::queryInterface( const /*uno::*/Type& rType ) throw (RuntimeException)
+{
+    return ::cppu::queryInterface ( rType,
+            // OWeakObject interfaces
+            dynamic_cast< XInterface* > ( (XInteractionRequest *) this ),
+            static_cast< XWeak* > ( this ),
+            // my own interfaces
+            static_cast< XInteractionRequest*  > ( this ) );
+}
+
+void SAL_CALL NotifyBrokenPackage::acquire(  ) throw ()
+{
+    OWeakObject::acquire();
+}
+
+void SAL_CALL NotifyBrokenPackage::release(  ) throw ()
+{
+    OWeakObject::release();
 }
 
 ::com::sun::star::uno::Any SAL_CALL NotifyBrokenPackage::getRequest()
