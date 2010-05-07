@@ -769,7 +769,6 @@ void SelectionFunction::MouseDragged (
 
 
 
-
 void SelectionFunction::ProcessKeyEvent (const KeyEvent& rEvent)
 {
     EventDescriptor aEventDescriptor (rEvent, mrSlideSorter);
