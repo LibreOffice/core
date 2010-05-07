@@ -48,9 +48,19 @@ namespace sfx2
 //......................................................................................................................
 
     //==================================================================================================================
+    //= ITaskPaneToolPanelAccess
+    //==================================================================================================================
+    class SAL_NO_VTABLE ITaskPaneToolPanelAccess
+    {
+    public:
+        virtual void ActivateToolPanel( const ::rtl::OUString& i_rPanelURL ) = 0;
+    };
+
+    //==================================================================================================================
     //= TaskPaneWrapper
     //==================================================================================================================
-    class SFX2_DLLPUBLIC TaskPaneWrapper : public SfxChildWindow
+    class SFX2_DLLPUBLIC TaskPaneWrapper    :public SfxChildWindow
+                                            ,public ITaskPaneToolPanelAccess
     {
     public:
         TaskPaneWrapper(
@@ -61,6 +71,9 @@ namespace sfx2
         );
 
         SFX_DECL_CHILDWINDOW( TaskPaneWrapper );
+
+        // ITaskPaneToolPanelAccess
+        virtual void ActivateToolPanel( const ::rtl::OUString& i_rPanelURL );
     };
 
     //==================================================================================================================
@@ -193,6 +206,9 @@ namespace sfx2
         */
         void    SetDefaultTitle( const String& i_rTitle );
 
+        /// activates the panel with the given URL
+        void    ActivateToolPanel( const ::rtl::OUString& i_rPanelURL );
+
     private:
         ::boost::scoped_ptr< TaskPaneController_Impl >  m_pImpl;
     };
@@ -200,11 +216,15 @@ namespace sfx2
     //==================================================================================================================
     //= TaskPaneDockingWindow
     //==================================================================================================================
-    class TaskPaneDockingWindow : public TitledDockingWindow
+    class TaskPaneDockingWindow :public TitledDockingWindow
+                                ,public ITaskPaneToolPanelAccess
     {
     public:
         TaskPaneDockingWindow( SfxBindings* i_pBindings, TaskPaneWrapper& i_rWrapper,
             Window* i_pParent, WinBits i_nBits );
+
+        // ITaskPaneToolPanelAccess
+        virtual void    ActivateToolPanel( const ::rtl::OUString& i_rPanelURL );
 
     protected:
         // Window overridables

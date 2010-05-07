@@ -169,6 +169,8 @@ public:
 
     String                  UpdateTitle();
 
+    static void ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const ::rtl::OUString& i_rPanelURL );
+
     // interne Handler
     SAL_DLLPRIVATE virtual BOOL SetBorderPixelImpl( const SfxViewShell *pSh, const SvBorder &rBorder );
     SAL_DLLPRIVATE virtual const SvBorder& GetBorderPixelImpl( const SfxViewShell *pSh ) const;
@@ -245,6 +247,7 @@ public:
     SAL_DLLPRIVATE void INetState_Impl(SfxItemSet &);
 
     SAL_DLLPRIVATE void SetCurViewId_Impl( const USHORT i_nID );
+    SAL_DLLPRIVATE void ActivateToolPanel_Impl( const ::rtl::OUString& i_rPanelURL );
 
 //#endif
 private:

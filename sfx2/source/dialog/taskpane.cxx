@@ -212,6 +212,12 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    void TaskPaneDockingWindow::ActivateToolPanel( const ::rtl::OUString& i_rPanelURL )
+    {
+        m_aPaneController.ActivateToolPanel( i_rPanelURL );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void TaskPaneDockingWindow::GetFocus()
     {
         TitledDockingWindow::GetFocus();
@@ -244,6 +250,14 @@ namespace sfx2
 
         dynamic_cast< SfxDockingWindow* >( pWindow )->Initialize( i_pInfo );
         SetHideNotDelete( TRUE );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void TaskPaneWrapper::ActivateToolPanel( const ::rtl::OUString& i_rPanelURL )
+    {
+        TaskPaneDockingWindow* pDockingWindow = dynamic_cast< TaskPaneDockingWindow* >( GetWindow() );
+        ENSURE_OR_RETURN_VOID( pDockingWindow, "TaskPaneWrapper::ActivateToolPanel: invalid docking window implementation!" );
+        pDockingWindow->ActivateToolPanel( i_rPanelURL );
     }
 
     //==================================================================================================================
@@ -847,6 +861,7 @@ namespace sfx2
         ~TaskPaneController_Impl();
 
         void    SetDefaultTitle( const String& i_rTitle );
+        void    ActivateToolPanel( const ::rtl::OUString& i_rPanelURL );
 
     protected:
         // IToolPanelDeckListener overridables
@@ -948,6 +963,14 @@ namespace sfx2
     {
         m_sDefaultTitle = i_rTitle;
         impl_updateDockingWindowTitle();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void TaskPaneController_Impl::ActivateToolPanel( const ::rtl::OUString& i_rPanelURL )
+    {
+        ::boost::optional< size_t > aPanelPos( m_rTaskPane.GetPanelPos( i_rPanelURL ) );
+        ENSURE_OR_RETURN_VOID( !!aPanelPos, "TaskPaneController_Impl::ActivateToolPanel: no such panel!" );
+        m_rTaskPane.GetPanelDeck().ActivatePanel( aPanelPos );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -1234,6 +1257,12 @@ namespace sfx2
     void TaskPaneController::SetDefaultTitle( const String& i_rTitle )
     {
         m_pImpl->SetDefaultTitle( i_rTitle );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void TaskPaneController::ActivateToolPanel( const ::rtl::OUString& i_rPanelURL )
+    {
+        m_pImpl->ActivateToolPanel( i_rPanelURL );
     }
 
 //......................................................................................................................

@@ -3414,3 +3414,35 @@ void SfxViewFrame::SetViewFrame( SfxViewFrame* pFrame )
 {
     SFX_APP()->SetViewFrame_Impl( pFrame );
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
+void SfxViewFrame::ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const ::rtl::OUString& i_rPanelURL )
+{
+    // look up the SfxFrame for the given XFrame
+    SfxFrame* pFrame = NULL;
+    for ( pFrame = SfxFrame::GetFirst(); pFrame; pFrame = SfxFrame::GetNext( *pFrame ) )
+    {
+        if ( pFrame->GetFrameInterface() == i_rFrame )
+            break;
+    }
+    SfxViewFrame* pViewFrame = pFrame ? pFrame->GetCurrentViewFrame() : NULL;
+    ENSURE_OR_RETURN_VOID( pViewFrame != NULL, "SfxViewFrame::ActivateToolPanel: did not find an SfxFrame for the given XFrame!" );
+
+    pViewFrame->ActivateToolPanel_Impl( i_rPanelURL );
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void SfxViewFrame::ActivateToolPanel_Impl( const ::rtl::OUString& i_rPanelURL )
+{
+    // ensure the task pane is visible
+    ENSURE_OR_RETURN_VOID( KnowsChildWindow( SID_TASKPANE ), "SfxViewFrame::ActivateToolPanel: this frame/module does not allow for a task pane!" );
+    if ( !HasChildWindow( SID_TASKPANE ) )
+        ToggleChildWindow( SID_TASKPANE );
+
+    SfxChildWindow* pTaskPaneChildWindow = GetChildWindow( SID_TASKPANE );
+    ENSURE_OR_RETURN_VOID( pTaskPaneChildWindow, "SfxViewFrame::ActivateToolPanel_Impl: just switched it on, but it is not there!" );
+
+    ::sfx2::ITaskPaneToolPanelAccess* pPanelAccess = dynamic_cast< ::sfx2::ITaskPaneToolPanelAccess* >( pTaskPaneChildWindow );
+    ENSURE_OR_RETURN_VOID( pPanelAccess, "SfxViewFrame::ActivateToolPanel_Impl: task pane child window does not implement a required interface!" );
+    pPanelAccess->ActivateToolPanel( i_rPanelURL );
+}
