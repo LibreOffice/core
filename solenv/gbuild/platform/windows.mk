@@ -293,7 +293,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         $(foreach lib,$(4),$(call gb_Library_get_filename,$(lib))) \
         $(foreach lib,$(5),$(call gb_StaticLibrary_get_filename,$(lib))) \
         $(subst -out: -implib:$(1),-out:$(1),-out:$(DLLTARGET) -implib:$(1))" && \
-    E=$$($$C) || (R=$$? && echo $$C && echo $$E 1>&2); \
+    E=$$($$C) || (R=$$? && echo $$C && echo $$E 1>&2 && rm -f $(1)); \
     rm $${RESPONSEFILE} && $$(exit $$R))
 endef
 
