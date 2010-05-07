@@ -835,10 +835,16 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     }
 
     ::rtl::OUString aAdjustToType;
-
-    // bSetStandardName == true means that user agreed to store document in the default (default default ;-)) format
-    if ( !(( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED )) &&
-        ( bSetStandardName || GetStorable()->hasLocation() ))
+    if ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ))
+    {
+        // it is export, set the preselected filter
+        ::rtl::OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
+                                        ::rtl::OUString::createFromAscii( "UIName" ),
+                                        ::rtl::OUString() );
+        pFileDlg->SetCurrentFilter( aFilterUIName );
+    }
+    // it is no export, bSetStandardName == true means that user agreed to store document in the default (default default ;-)) format
+    else if ( bSetStandardName || GetStorable()->hasLocation() )
     {
         uno::Sequence< beans::PropertyValue > aOldFilterProps;
         ::rtl::OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault(
@@ -1572,8 +1578,10 @@ uno::Sequence< beans::PropertyValue > SfxStoringHelper::SearchForFilter(
     uno::Reference< container::XEnumeration > xFilterEnum =
                                             xFilterQuery->createSubSetEnumerationByProperties( aSearchRequest );
 
-    // use the first filter that is found
+    // the first default filter will be taken,
+    // if there is no filter with flag default the first acceptable filter will be taken
     if ( xFilterEnum.is() )
+    {
         while ( xFilterEnum->hasMoreElements() )
         {
             uno::Sequence< beans::PropertyValue > aProps;
@@ -1584,11 +1592,17 @@ uno::Sequence< beans::PropertyValue > SfxStoringHelper::SearchForFilter(
                                                                         (sal_Int32)0 );
                 if ( ( ( nFlags & nMustFlags ) == nMustFlags ) && !( nFlags & nDontFlags ) )
                 {
-                    aFilterProps = aProps;
-                    break;
+                    if ( ( nFlags & SFX_FILTER_DEFAULT ) == SFX_FILTER_DEFAULT )
+                    {
+                        aFilterProps = aProps;
+                        break;
+                    }
+                    else if ( !aFilterProps.getLength() )
+                        aFilterProps = aProps;
                 }
             }
         }
+    }
 
     return aFilterProps;
 }
