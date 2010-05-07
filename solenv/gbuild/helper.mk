@@ -48,8 +48,8 @@ endef
 
 define gb_Helper_abbreviate_dirs
 S=$(SRCDIR) && \
-$(subst $(SRCDIR)/,$$S/,W=$(WORKDIR) && O=$(OUTDIR)) && \
-$(subst $(SRCDIR)/,$$S/,$(subst $(WORKDIR)/,$$W/,$(subst $(OUTDIR)/,$$O/,$(1))))
+$(subst $(SRCDIR)/,$$S/,O=$(OUTDIR)) && \
+$(subst $(SRCDIR)/,$$S/,$(subst $(OUTDIR)/,$$O/,W=$(WORKDIR) && $(subst $(WORKDIR)/,$$W/,$(1))))
 endef
 
 define gb_Helper_make_clean_target

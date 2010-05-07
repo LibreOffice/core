@@ -33,6 +33,7 @@ gb_MkTemp := mktemp -p
 gb_CC := cl
 gb_CXX := cl
 gb_LINK := link
+gb_AWK := awk
 
 gb_OSDEFS :=\
     -DWINVER=0x0500 \
@@ -176,8 +177,8 @@ gb_Helper_OUTDIR_NATIVE := $(shell cygpath -m $(OUTDIR))
 
 define gb_Helper_abbreviate_dirs_native
 S=$(gb_Helper_SRCDIR_NATIVE) && \
-$(subst $(gb_Helper_SRCDIR_NATIVE)/,$$S/,W=$(gb_Helper_WORKDIR_NATIVE) && O=$(gb_Helper_OUTDIR_NATIVE)) && \
-$(subst $(SRCDIR)/,$$S/,$(subst $(WORKDIR)/,$$W/,$(subst $(OUTDIR)/,$$O/,$(1))))
+$(subst $(gb_Helper_SRCDIR_NATIVE)/,$$S/,O=$(gb_Helper_OUTDIR_NATIVE)) && \
+$(subst $(gb_Helper_SRCDIR_NATIVE)/,$$S/,$(subst $(SRCDIR)/,$$S/,$(subst $(gb_Helper_OUTDIR_NATIVE)/,$$O/,$(subst $(OUTDIR)/,$$O/,W=$(gb_Helper_WORKDIR_NATIVE) && $(subst $(gb_Helper_WORKDIR_NATIVE)/,$$W/,$(subst $(WORKDIR)/,$$W/,$(1)))))))
 endef
 
 # CObject class
@@ -192,6 +193,19 @@ $(call gb_Helper_abbreviate_dirs_native,\
         $(6) \
         -c $(3) \
         -Fo$(1)" && E=$$($$C) || (echo $$C && echo $$E 1>&2 && false))
+$(call gb_Helper_abbreviate_dirs_native,\
+    $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
+        $(4) $(5) \
+        -I$(dir $(3)) \
+        $(6) \
+        $(3) \
+        -f - \
+    | $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
+        -v OBJECTFILE=$(1) \
+        -v OUTDIR=$(OUTDIR)/ \
+        -v WORKDIR=$(WORKDIR)/ \
+        -v SRCDIR=$(SRCDIR)/ \
+    > $(call gb_CxxObject_get_dep_target,$(2)))
 endef
 
 define gb_CObject__command_dep
@@ -212,11 +226,24 @@ $(call gb_Helper_abbreviate_dirs_native,\
         $(6) \
         -c $(3) \
         -Fo$(1)" && E=$$($$C) || (echo $$C && echo $$E 1>&2 && false))
+$(call gb_Helper_abbreviate_dirs_native,\
+    $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
+        $(4) $(5) \
+        -I$(dir $(3)) \
+        $(6) \
+        $(3) \
+        -f - \
+    | $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
+        -v OBJECTFILE=$(1) \
+        -v OUTDIR=$(OUTDIR)/ \
+        -v WORKDIR=$(WORKDIR)/ \
+        -v SRCDIR=$(SRCDIR)/ \
+    > $(call gb_CxxObject_get_dep_target,$(2)))
 endef
 
 define gb_CxxObject__command_dep
 mkdir -p $(dir $(1)) && \
-    echo '$(call gb_CObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
+    echo '$(call gb_CxxObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
 endef
 
 
@@ -417,7 +444,17 @@ gb_SrsPartTarget_RSCTARGET := $(OUTDIR)/bin/rsc.exe
 gb_SrsPartTarget_RSCCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_SrsPartTarget_RSCTARGET)
 
 define gb_SrsPartTarget__command_dep
-$(info gb_SrsPartTarget__command_dep not implemented)
+$(call gb_Helper_abbreviate_dirs_native,\
+    $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
+        $(3) $(4) \
+        $(2) \
+        -f - \
+    | $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
+        -v OBJECTFILE=$(call gb_SrsPartTarget_get_target,$(1)) \
+        -v OUTDIR=$(OUTDIR)/ \
+        -v WORKDIR=$(WORKDIR)/ \
+        -v SRCDIR=$(SRCDIR)/ \
+    > $(call gb_SrsPartTarget_get_dep_target,$(1)))
 endef
 
 
