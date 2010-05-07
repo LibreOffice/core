@@ -228,7 +228,7 @@ End
 File gid_File_Lib_QStart_Gtk
     Name = LIBNAME(qstart_gtk);
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
@@ -505,7 +505,7 @@ SPECIAL_UNO_LIB_FILE(gid_File_Lib_Fileacc,fileacc)
 
 File gid_File_Lib_Filterconfig1
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     Dir = SCP2_OOO_BIN_DIR;
     RegistryID = gid_Starregistry_Services_Rdb;
     Name = SPECIAL_NAME(filterconfig1);
@@ -653,7 +653,7 @@ STD_LIB_FILE( gid_File_Lib_Fwi , fwi)
 File gid_File_Lib_Fwk
     Name = LIBNAME(fwk);
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     Dir = SCP2_OOO_BIN_DIR;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
@@ -1181,7 +1181,7 @@ End
 File gid_File_Lib_Basebmp
     Name = LIBNAME(basebmp);
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
@@ -1195,7 +1195,7 @@ STD_LIB_FILE( gid_File_Lib_BaseBmp, basebmp )
 
 File gid_File_Lib_Recentfile
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(librecentfile,UNXSUFFIX));
 End
@@ -1238,7 +1238,7 @@ End
 File gid_File_Lib_Res
     Name = LIBNAME(res);
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     Dir = SCP2_OOO_BIN_DIR;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
