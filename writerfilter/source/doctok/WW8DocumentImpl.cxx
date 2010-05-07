@@ -1079,6 +1079,24 @@ writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getStyleSheet() const
     return pResult;
 }
 
+writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getAssocTable() const
+{
+    writerfilter::Reference<Table>::Pointer_t pResult;
+
+    if (mpFib->get_lcbSttbfAssoc() > 0)
+    {
+        WW8Sttbf::Pointer_t pSttbfAssoc
+            (new WW8Sttbf(*mpTableStream,
+                          mpFib->get_fcSttbfAssoc(),
+                          mpFib->get_lcbSttbfAssoc()));
+
+        pResult = writerfilter::Reference<Table>::Pointer_t
+            (new WW8SttbTableResource(pSttbfAssoc));
+    }
+
+    return pResult;
+}
+
 sal_uInt32 WW8DocumentImpl::getHeaderCount() const
 {
     sal_uInt32 nResult = 0;
@@ -1754,6 +1772,11 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         {
             clog << e.getText() << endl;
         }
+
+        writerfilter::Reference<Table>::Pointer_t pAssocTable = getAssocTable();
+
+        if (pAssocTable.get() != NULL)
+            rStream.table(NS_rtf::LN_SttbAssoc, pAssocTable);
     }
 
     WW8DocumentIterator::Pointer_t pIt = begin();

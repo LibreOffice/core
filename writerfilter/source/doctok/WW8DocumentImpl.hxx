@@ -554,6 +554,11 @@ public:
     writerfilter::Reference<Table>::Pointer_t getStyleSheet() const;
 
     /**
+       Return reference to associated data.
+     */
+    writerfilter::Reference<Table>::Pointer_t getAssocTable() const;
+
+    /**
        Return count of headers/footers.
     */
     sal_uInt32 getHeaderCount() const;

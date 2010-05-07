@@ -552,6 +552,21 @@
               </UML:ModelElement.stereotype>
             </UML:Attribute>
           </UML:Classifier.feature>
+          <UML:Classifier.feature>
+            <UML:Attribute name="SttbAssoc">
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>rtf:SttbAssoc</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="attrid"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.stereotype>
+                <UML:Stereotype xmi.idref="attribute"/>
+              </UML:ModelElement.stereotype>
+            </UML:Attribute>
+          </UML:Classifier.feature>
         </UML:Class>
         <!--Class dummy-->
         <!--Classes without stereotype-->
@@ -4797,9 +4812,9 @@
             <UML:Stereotype xmi.idref="ww8nopayloadoffset"/>
           </UML:ModelElement.stereotype>
           <UML:Classifier.feature>
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8nocalcsize"/>
-          </UML:ModelElement.stereotype>
+            <UML:ModelElement.stereotype>
+              <UML:Stereotype xmi.idref="ww8nocalcsize"/>
+            </UML:ModelElement.stereotype>
             <UML:Attribute name="size">
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>
