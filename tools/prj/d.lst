@@ -1,27 +1,12 @@
-mkdir: %_DEST%\inc%_EXT%\bootstrp
+mkdir: %_DEST%\inc%_EXT%\tools
 
 ..\%__SRC%\bin\mkunroll* %_DEST%\bin%_EXT%
 ..\%__SRC%\bin\tl?????.dll %_DEST%\bin%_EXT%\tl?????.dll
 ..\%__SRC%\bin\tl?????.sym %_DEST%\bin%_EXT%\tl?????.sym
-..\%__SRC%\lib\atools.lib %_DEST%\lib%_EXT%\atools.lib
-..\%__SRC%\lib\btstrp.lib %_DEST%\lib%_EXT%\btstrp.lib
-..\%__SRC%\lib\bootstrp2.lib %_DEST%\lib%_EXT%\bootstrp2.lib
 ..\%__SRC%\lib\itools.lib %_DEST%\lib%_EXT%\itools.lib
-..\%__SRC%\lib\lib*.a %_DEST%\lib%_EXT%\lib*.a
-..\%__SRC%\lib\lib*.sl %_DEST%\lib%_EXT%\lib*.sl
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
 ..\%__SRC%\lib\lib*.so.* %_DEST%\lib%_EXT%\lib*.so.*
 ..\%__SRC%\lib\lib*.dylib %_DEST%\lib%_EXT%\lib*.dylib
-..\%__SRC%\lib\stdstrm.lib %_DEST%\lib%_EXT%\stdstrm.lib
-..\%__SRC%\misc\tl?????.map %_DEST%\bin%_EXT%\tl?????.map
-..\%__SRC%\slb\btstrpsh.lib %_DEST%\lib%_EXT%\btstrpsh.lib
-
-..\inc\bootstrp\command.hxx %_DEST%\inc%_EXT%\bootstrp\command.hxx
-..\inc\bootstrp\inimgr.hxx %_DEST%\inc%_EXT%\bootstrp\inimgr.hxx
-..\inc\bootstrp\listmacr.hxx %_DEST%\inc%_EXT%\bootstrp\listmacr.hxx
-..\inc\bootstrp\mkcreate.hxx %_DEST%\inc%_EXT%\bootstrp\mkcreate.hxx
-..\inc\bootstrp\prj.hxx %_DEST%\inc%_EXT%\bootstrp\prj.hxx
-..\inc\bootstrp\sstring.hxx %_DEST%\inc%_EXT%\bootstrp\sstring.hxx
 
 ..\inc\tools\*.h %_DEST%\inc%_EXT%\tools\*.h
 ..\inc\tools\*.hxx %_DEST%\inc%_EXT%\tools\*.hxx

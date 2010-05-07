@@ -47,7 +47,7 @@ APP1STDLIBS+=-lpthread
 APP1STDLIBS+=-lpthread
 .ENDIF
 APP1LIBS=	$(LB)$/btstrp.lib $(LB)$/bootstrp2.lib
-APP1DEPN=   $(LB)$/atools.lib $(LB)$/btstrp.lib $(LB)$/bootstrp2.lib
+APP1DEPN=   $(LB)$/btstrp.lib $(LB)$/bootstrp2.lib
 
 
 DEPOBJFILES		=	$(APP1OBJS)

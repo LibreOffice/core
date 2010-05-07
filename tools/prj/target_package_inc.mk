@@ -26,12 +26,6 @@
 #*************************************************************************
 
 $(eval $(call gb_Package_Package,tools_inc,$(SRCDIR)/tools/inc))
-$(eval $(call gb_Package_add_file,tools_inc,inc/bootstrp/command.hxx,bootstrp/command.hxx))
-$(eval $(call gb_Package_add_file,tools_inc,inc/bootstrp/inimgr.hxx,bootstrp/inimgr.hxx))
-$(eval $(call gb_Package_add_file,tools_inc,inc/bootstrp/listmacr.hxx,bootstrp/listmacr.hxx))
-$(eval $(call gb_Package_add_file,tools_inc,inc/bootstrp/mkcreate.hxx,bootstrp/mkcreate.hxx))
-$(eval $(call gb_Package_add_file,tools_inc,inc/bootstrp/prj.hxx,bootstrp/prj.hxx))
-$(eval $(call gb_Package_add_file,tools_inc,inc/bootstrp/sstring.hxx,bootstrp/sstring.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/StringListResource.hxx,tools/StringListResource.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/agapi.hxx,tools/agapi.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/agitem.hxx,tools/agitem.hxx))

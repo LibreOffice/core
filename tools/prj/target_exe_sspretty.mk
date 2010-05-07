@@ -49,13 +49,10 @@ $(eval $(call gb_Executable_add_linked_libs,sspretty,\
 
 $(eval $(call gb_Executable_add_exception_objects,sspretty,\
     tools/bootstrp/appdef \
-    tools/bootstrp/command \
     tools/bootstrp/cppdep \
     tools/bootstrp/inimgr \
-    tools/bootstrp/mkcreate \
     tools/bootstrp/prj \
     tools/bootstrp/sspretty \
-    tools/bootstrp/sstring \
 ))
 
 ifeq ($(OS),WNT)
