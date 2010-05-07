@@ -3418,6 +3418,8 @@ void SfxViewFrame::SetViewFrame( SfxViewFrame* pFrame )
 // ---------------------------------------------------------------------------------------------------------------------
 void SfxViewFrame::ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const ::rtl::OUString& i_rPanelURL )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     // look up the SfxFrame for the given XFrame
     SfxFrame* pFrame = NULL;
     for ( pFrame = SfxFrame::GetFirst(); pFrame; pFrame = SfxFrame::GetNext( *pFrame ) )
