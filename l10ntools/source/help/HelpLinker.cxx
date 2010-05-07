@@ -401,7 +401,8 @@ void HelpLinker::link() throw( HelpProcessingException )
 
     if( bExtensionMode )
     {
-        indexDirParentName = sourceRoot;
+        //indexDirParentName = sourceRoot;
+        indexDirParentName = extensionDestination;
     }
     else
     {
