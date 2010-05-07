@@ -66,7 +66,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     {
         BackendImpl * getMyBackend() const;
 
-        HelpBackendDb::Data m_dbData;
+//        HelpBackendDb::Data m_dbData;
 
         // Package
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
@@ -234,13 +234,13 @@ BackendImpl::PackageImpl::PackageImpl(
     : Package( myBackend, url, name, name, xPackageType, bRemoved,
                identifier)
 {
-        if (bRemoved)
-        {
-            ::boost::optional<HelpBackendDb::Data> opt =
-                getMyBackend()->readDataFromDb(url);
-            if (opt)
-                m_dbData = *opt;
-        }
+//         if (bRemoved)
+//         {
+//             ::boost::optional<HelpBackendDb::Data> opt =
+//                 getMyBackend()->readDataFromDb(url);
+//             if (opt)
+//                 m_dbData = *opt;
+//         }
 }
 
 // Package

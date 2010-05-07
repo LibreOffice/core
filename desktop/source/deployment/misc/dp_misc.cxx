@@ -317,6 +317,22 @@ OUString expandUnoRcTerm( OUString const & term_ )
     return term;
 }
 
+OUString makeRcTerm( OUString const & url )
+{
+    OSL_ASSERT( url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM(
+                                     "vnd.sun.star.expand:") ) );
+    if (url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.expand:") )) {
+        // cut protocol:
+        OUString rcterm( url.copy( sizeof ("vnd.sun.star.expand:") - 1 ) );
+        // decode uric class chars:
+        rcterm = ::rtl::Uri::decode(
+            rcterm, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+        return rcterm;
+    }
+    else
+        return url;
+}
+
 //==============================================================================
 OUString expandUnoRcUrl( OUString const & url )
 {

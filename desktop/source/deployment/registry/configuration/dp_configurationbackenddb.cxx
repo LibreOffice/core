@@ -39,57 +39,58 @@
 #include "com/sun/star/xml/xpath/XXPathAPI.hpp"
 #include "dp_misc.h"
 
-#include "dp_helpbackenddb.hxx"
+#include "dp_configurationbackenddb.hxx"
 
 
 namespace css = ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
-#define EXTENSION_REG_NS "http://openoffice.org/extensionmanager/help-registry/2010"
-#define NS_PREFIX "help"
-#define ROOT_ELEMENT_NAME "help-backend-db"
-#define KEY_ELEMENT_NAME "help"
+#define EXTENSION_REG_NS "http://openoffice.org/extensionmanager/configuration-registry/2010"
+#define NS_PREFIX "conf"
+#define ROOT_ELEMENT_NAME "configuration-backend-db"
+#define KEY_ELEMENT_NAME "configuration"
 
 namespace dp_registry {
 namespace backend {
-namespace help {
+namespace configuration {
 
-HelpBackendDb::HelpBackendDb(
+ConfigurationBackendDb::ConfigurationBackendDb(
     Reference<XComponentContext> const &  xContext,
     ::rtl::OUString const & url):BackendDb(xContext, url)
 {
 
 }
 
-OUString HelpBackendDb::getDbNSName()
+OUString ConfigurationBackendDb::getDbNSName()
 {
     return OUSTR(EXTENSION_REG_NS);
 }
 
-OUString HelpBackendDb::getNSPrefix()
+OUString ConfigurationBackendDb::getNSPrefix()
 {
     return OUSTR(NS_PREFIX);
 }
 
-OUString HelpBackendDb::getRootElementName()
+OUString ConfigurationBackendDb::getRootElementName()
 {
     return OUSTR(ROOT_ELEMENT_NAME);
 }
 
-OUString HelpBackendDb::getKeyElementName()
+OUString ConfigurationBackendDb::getKeyElementName()
 {
     return OUSTR(KEY_ELEMENT_NAME);
 }
 
 
-void HelpBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
+void ConfigurationBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
 {
     try{
         Reference<css::xml::dom::XNode> helpNode
             = writeKeyElement(url);
 
         writeSimpleElement(OUSTR("data-url"), data.dataUrl, helpNode);
+        writeSimpleElement(OUSTR("ini-entry"), data.iniEntry, helpNode);
         save();
     }
     catch (css::deployment::DeploymentException& )
@@ -100,22 +101,23 @@ void HelpBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to write data entry in help backend db: ") +
+            OUSTR("Extension Manager: failed to write data entry in configuration backend db: ") +
             m_urlDb, 0, exc);
     }
 }
 
 
-::boost::optional<HelpBackendDb::Data>
-HelpBackendDb::getEntry(::rtl::OUString const & url)
+::boost::optional<ConfigurationBackendDb::Data>
+ConfigurationBackendDb::getEntry(::rtl::OUString const & url)
 {
     try
     {
-        HelpBackendDb::Data retData;
+        ConfigurationBackendDb::Data retData;
         Reference<css::xml::dom::XNode> aNode = getKeyElement(url);
         if (aNode.is())
         {
             retData.dataUrl = readSimpleElement(OUSTR("data-url"), aNode);
+            retData.iniEntry = readSimpleElement(OUSTR("ini-entry"), aNode);
         }
         else
         {
@@ -131,12 +133,12 @@ HelpBackendDb::getEntry(::rtl::OUString const & url)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to read data entry in help backend db: ") +
+            OUSTR("Extension Manager: failed to read data entry in configuration backend db: ") +
             m_urlDb, 0, exc);
     }
 }
 
-::std::list<OUString> HelpBackendDb::getAllDataUrls()
+::std::list<OUString> ConfigurationBackendDb::getAllDataUrls()
 {
     try
     {
@@ -147,7 +149,7 @@ HelpBackendDb::getEntry(::rtl::OUString const & url)
         Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
         const OUString sPrefix = getNSPrefix();
         OUString sExpression(
-            sPrefix + OUSTR(":help/") + sPrefix + OUSTR(":data-url/text()"));
+            sPrefix + OUSTR(":configuration/") + sPrefix + OUSTR(":data-url/text()"));
         Reference<css::xml::dom::XNodeList> nodes =
             xpathApi->selectNodeList(root, sExpression);
         if (nodes.is())
@@ -166,13 +168,19 @@ HelpBackendDb::getEntry(::rtl::OUString const & url)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            OUSTR("Extension Manager: failed to read data entry in help backend db: ") +
+            OUSTR("Extension Manager: failed to read data entry in configuration backend db: ") +
             m_urlDb, 0, exc);
     }
 }
 
+::std::list<OUString> ConfigurationBackendDb::getAllIniEntries()
+{
+    return getOneChildFromAllEntries(OUSTR("ini-entry"));
+}
 
-} // namespace help
+
+
+} // namespace configuration
 } // namespace backend
 } // namespace dp_registry
 

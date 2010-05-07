@@ -239,6 +239,22 @@ OUString PackageRegistryBackend::createFolder(
     return destFolder;
 }
 
+void PackageRegistryBackend::deleteTempFolder(
+    OUString const & folderUrl)
+{
+    OSL_ASSERT(folderUrl.getLength()
+               && folderUrl[folderUrl.getLength() - 1] == '_');
+    if (folderUrl.getLength()
+               && folderUrl[folderUrl.getLength() - 1] == '_')
+    {
+        const OUString  tempFile = folderUrl.copy(0, folderUrl.getLength() - 1);
+        erase_path( folderUrl, Reference<XCommandEnvironment>(),
+                    false /* no throw: ignore errors */ );
+        erase_path( tempFile, Reference<XCommandEnvironment>(),
+                    false /* no throw: ignore errors */ );
+    }
+}
+
 void PackageRegistryBackend::deleteUnusedFolders(
     OUString const & relUrl,
     ::std::list< OUString> const & usedFolders)
@@ -273,16 +289,12 @@ void PackageRegistryBackend::deleteUnusedFolders(
         {
             //usedFolders contains the urls to the folders which have
             //a trailing underscore
-            const OUString  tempFile = tempEntries[ pos ];
-            const OUString tempFolderName = tempFile + OUSTR("_");
+            const OUString tempFolderName = tempEntries[ pos ] + OUSTR("_");
 
             if (::std::find( usedFolders.begin(), usedFolders.end(), tempFolderName ) ==
                 usedFolders.end())
             {
-                erase_path( tempFolderName, Reference<XCommandEnvironment>(),
-                            false /* no throw: ignore errors */ );
-                erase_path( tempFile, Reference<XCommandEnvironment>(),
-                            false /* no throw: ignore errors */ );
+                deleteTempFolder(tempFolder);
             }
         }
     }

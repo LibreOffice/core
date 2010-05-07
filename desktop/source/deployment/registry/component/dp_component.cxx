@@ -75,7 +75,6 @@ typedef ::std::list<OUString> t_stringlist;
 typedef ::std::vector< ::std::pair<OUString, OUString> > t_stringpairvec;
 
 #define IMPLEMENTATION_NAME  "com.sun.star.comp.deployment.component.PackageRegistryBackend"
-inline OUString makeRcTerm( OUString const & url );
 
 /** return a vector of bootstrap variables which have been provided
     as command arguments.
@@ -779,11 +778,16 @@ void BackendImpl::unorc_verify_init(
                     OUString token( line.getToken( 0, ' ', index ).trim() );
                     if (token.getLength() > 0)
                     {
-                        //The jar file may not exist anymore if a shared or bundled
-                        //extension was removed, but it can still be in the unorc
-                        //After running XExtensionManager::synchronize, the unorc is
-                        //cleaned up
-                        m_jar_typelibs.push_back( token );
+                        if (create_ucb_content(
+                                0, expandUnoRcTerm(token), xCmdEnv,
+                                false /* no throw */ ))
+                        {
+                            //The jar file may not exist anymore if a shared or bundled
+                            //extension was removed, but it can still be in the unorc
+                            //After running XExtensionManager::synchronize, the unorc is
+                            //cleaned up
+                            m_jar_typelibs.push_back( token );
+                        }
                     }
                 }
                 while (index >= 0);
@@ -797,11 +801,16 @@ void BackendImpl::unorc_verify_init(
                     {
                         if (token[ 0 ] == '?')
                             token = token.copy( 1 );
-                        //The RDB file may not exist anymore if a shared or bundled
-                        //extension was removed, but it can still be in the unorc.
-                        //After running XExtensionManager::synchronize, the unorc is
-                        //cleaned up
-                        m_rdb_typelibs.push_back( token );
+                         if (create_ucb_content(
+                                0, expandUnoRcTerm(token), xCmdEnv,
+                                false /* no throw */ ))
+                         {
+                             //The RDB file may not exist anymore if a shared or bundled
+                             //extension was removed, but it can still be in the unorc.
+                             //After running XExtensionManager::synchronize, the unorc is
+                             //cleaned up
+                             m_rdb_typelibs.push_back( token );
+                         }
                     }
                 }
                 while (index >= 0);
@@ -842,7 +851,7 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
     ::rtl::OStringBuffer buf;
 
     buf.append(RTL_CONSTASCII_STRINGPARAM("ORIGIN="));
-    OUString sOrigin = makeRcTerm(m_cachePath);
+    OUString sOrigin = dp_misc::makeRcTerm(m_cachePath);
     ::rtl::OString osOrigin = ::rtl::OUStringToOString(sOrigin, RTL_TEXTENCODING_UTF8);
     buf.append(osOrigin);
     buf.append(LF);
@@ -933,28 +942,11 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
     m_unorc_modified = false;
 }
 
-//------------------------------------------------------------------------------
-inline OUString makeRcTerm( OUString const & url )
-{
-    OSL_ASSERT( url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                 "vnd.sun.star.expand:") ) );
-    if (url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.expand:") )) {
-        // cut protocol:
-        OUString rcterm( url.copy( sizeof ("vnd.sun.star.expand:") - 1 ) );
-        // decode uric class chars:
-        rcterm = ::rtl::Uri::decode(
-            rcterm, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-        return rcterm;
-    }
-    else
-        return url;
-}
-
 //______________________________________________________________________________
 bool BackendImpl::addToUnoRc( bool jarFile, OUString const & url_,
                               Reference<XCommandEnvironment> const & xCmdEnv )
 {
-    const OUString rcterm( makeRcTerm(url_) );
+    const OUString rcterm( dp_misc::makeRcTerm(url_) );
     const ::osl::MutexGuard guard( getMutex() );
     unorc_verify_init( xCmdEnv );
     t_stringlist & rSet = getTypelibs(jarFile);
@@ -974,7 +966,7 @@ bool BackendImpl::removeFromUnoRc(
     bool jarFile, OUString const & url_,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
-    const OUString rcterm( makeRcTerm(url_) );
+    const OUString rcterm( dp_misc::makeRcTerm(url_) );
     const ::osl::MutexGuard guard( getMutex() );
     unorc_verify_init( xCmdEnv );
     getTypelibs(jarFile).remove( rcterm );
@@ -988,7 +980,7 @@ bool BackendImpl::removeFromUnoRc(
 bool BackendImpl::hasInUnoRc(
     bool jarFile, OUString const & url_ )
 {
-    const OUString rcterm( makeRcTerm(url_) );
+    const OUString rcterm( dp_misc::makeRcTerm(url_) );
     const ::osl::MutexGuard guard( getMutex() );
     t_stringlist const & rSet = getTypelibs(jarFile);
     return ::std::find( rSet.begin(), rSet.end(), rcterm ) != rSet.end();

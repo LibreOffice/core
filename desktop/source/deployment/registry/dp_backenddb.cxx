@@ -509,6 +509,51 @@ OUString BackendDb::readSimpleElement(
     }
 }
 
+::std::list<OUString> BackendDb::getOneChildFromAllEntries(
+    OUString const & name)
+{
+    try
+    {
+        ::std::list<OUString> listRet;
+        Reference<css::xml::dom::XDocument> doc = getDocument();
+        Reference<css::xml::dom::XNode> root = doc->getFirstChild();
+
+        Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
+        const OUString sPrefix = getNSPrefix();
+        const OUString sKeyElement = getKeyElementName();
+        ::rtl::OUStringBuffer buf(512);
+        buf.append(sPrefix);
+        buf.appendAscii(":");
+        buf.append(sKeyElement);
+        buf.appendAscii("/");
+        buf.append(sPrefix);
+        buf.appendAscii(":");
+        buf.append(name);
+        buf.append(OUSTR("/text()"));
+
+        Reference<css::xml::dom::XNodeList> nodes =
+            xpathApi->selectNodeList(root, buf.makeStringAndClear());
+        if (nodes.is())
+        {
+            sal_Int32 length = nodes->getLength();
+            for (sal_Int32 i = 0; i < length; i++)
+                listRet.push_back(nodes->item(i)->getNodeValue());
+        }
+        return listRet;
+    }
+    catch (css::deployment::DeploymentException& )
+    {
+        throw;
+    }
+    catch(css::uno::Exception &)
+    {
+        Any exc( ::cppu::getCaughtException() );
+        throw css::deployment::DeploymentException(
+            OUSTR("Extension Manager: failed to read data entry in backend db: ") +
+            m_urlDb, 0, exc);
+    }
+}
+
 
 
 //================================================================================

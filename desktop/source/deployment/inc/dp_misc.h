@@ -70,6 +70,9 @@ inline void try_dispose( ::com::sun::star::uno::Reference< ::com::sun::star::uno
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 ::rtl::OUString expandUnoRcTerm( ::rtl::OUString const & term );
 
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
+::rtl::OUString makeRcTerm( ::rtl::OUString const & url );
+
 //==============================================================================
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 ::rtl::OUString expandUnoRcUrl( ::rtl::OUString const & url );

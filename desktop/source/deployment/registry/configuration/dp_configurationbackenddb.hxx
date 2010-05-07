@@ -28,10 +28,11 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_DP_HELPBACKENDDB_HXX
-#define INCLUDED_DP_HELPBACKENDDB_HXX
+#if ! defined INCLUDED_DP_CONFIGURATIONBACKENDDB_HXX
+#define INCLUDED_DP_CONFIGURATIONBACKENDDB_HXX
 
 #include "rtl/ustring.hxx"
+#include "rtl/string.hxx"
 #include <list>
 #include "boost/optional.hpp"
 #include "dp_backenddb.hxx"
@@ -46,12 +47,12 @@ namespace com { namespace sun { namespace star {
 
 namespace dp_registry {
 namespace backend {
-namespace help {
+namespace configuration {
 
 /* The XML file stores the extensions which are currently registered.
    They will be removed when they are revoked.
  */
-class HelpBackendDb: public dp_registry::backend::BackendDb
+class ConfigurationBackendDb: public dp_registry::backend::BackendDb
 {
 protected:
     virtual ::rtl::OUString getDbNSName();
@@ -65,22 +66,25 @@ protected:
 public:
     struct Data
     {
-        /* the URL to the folder containing the compiled help files, etc.
+        /* the URL to the folder containing the xcu or xcs files which contained
+           %origin%
          */
         ::rtl::OUString dataUrl;
-
+        /* the URL of the xcu or xcs file which is written in to the configmgr.ini
+         */
+        ::rtl::OUString iniEntry;
     };
 
 public:
 
-    HelpBackendDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
+    ConfigurationBackendDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
                         ::rtl::OUString const & url);
 
     void addEntry(::rtl::OUString const & url, Data const & data);
 
     ::boost::optional<Data> getEntry(::rtl::OUString const & url);
     ::std::list< ::rtl::OUString> getAllDataUrls();
-
+    ::std::list< ::rtl::OUString> getAllIniEntries();
 };
 
 

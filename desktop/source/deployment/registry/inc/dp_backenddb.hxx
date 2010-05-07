@@ -117,7 +117,10 @@ protected:
         ::rtl::OUString const & sListTagName,
         ::rtl::OUString const & sMemberTagName);
 
-
+    /* returns the values of one particulary child element of all key elements.
+     */
+    ::std::list< ::rtl::OUString> BackendDb::getOneChildFromAllEntries(
+        ::rtl::OUString const & sElementName);
 
 
     /*  returns the namespace which is to be written as xmlns attribute

@@ -336,6 +336,11 @@ protected:
     void deleteUnusedFolders(
         ::rtl::OUString const & relUrl,
         ::std::list< ::rtl::OUString> const & usedFolders);
+    /* deletes one folder with a "temporary" name and the corresponding
+       tmp file, which was used to derive the folder name.
+    */
+    static void deleteTempFolder(
+        ::rtl::OUString const & folderUrl);
 
 
 public:
