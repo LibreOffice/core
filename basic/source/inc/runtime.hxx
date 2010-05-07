@@ -219,6 +219,8 @@ public:
 
     void Error( SbError );                      // trappable Error
     void Error( SbError, const String& rMsg );  // trappable Error mit Message
+    void ErrorVB( sal_Int32 nVBNumber, const String& rMsg );
+    void setErrorVB( sal_Int32 nVBNumber, const String& rMsg );
     void FatalError( SbError );                 // non-trappable Error
     void FatalError( SbError, const String& );  // non-trappable Error
     void Abort();                               // Abbruch mit aktuellem Fehlercode
@@ -441,10 +443,11 @@ public:
 
     SbiRuntime( SbModule*, SbMethod*, UINT32 );
    ~SbiRuntime();
-    void Error( SbError );                      // Fehler setzen, falls != 0
+    void Error( SbError, bool bVBATranslationAlreadyDone = false );     // Fehler setzen, falls != 0
     void Error( SbError, const String& );       // Fehler setzen, falls != 0
     void FatalError( SbError );                 // Fehlerbehandlung=Standard, Fehler setzen
     void FatalError( SbError, const String& );  // Fehlerbehandlung=Standard, Fehler setzen
+    static sal_Int32 translateErrorToVba( SbError nError, String& rMsg );
     void DumpPCode();
     BOOL Step();                    // Einzelschritt (ein Opcode)
     void Stop()            { bRun = FALSE;   }

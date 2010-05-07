@@ -45,6 +45,8 @@
 #include "sbunoobj.hxx"
 #include "errobject.hxx"
 
+using namespace ::com::sun::star;
+
 bool SbiRuntime::isVBAEnabled()
 {
     bool result = false;
@@ -423,6 +425,35 @@ void SbiInstance::Error( SbError n, const String& rMsg )
     }
 }
 
+void SbiInstance::ErrorVB( sal_Int32 nVBNumber, const String& rMsg )
+{
+    if( !bWatchMode )
+    {
+        SbError n = StarBASIC::GetSfxFromVBError( static_cast< USHORT >( nVBNumber ) );
+        if ( !n )
+            n = nVBNumber; // force orig number, probably should have a specific table of vb ( localized ) errors
+
+        aErrorMsg = rMsg;
+        SbiRuntime::translateErrorToVba( n, aErrorMsg );
+
+        bool bVBATranslationAlreadyDone = true;
+        pRun->Error( SbERR_BASIC_COMPAT, bVBATranslationAlreadyDone );
+    }
+}
+
+void SbiInstance::setErrorVB( sal_Int32 nVBNumber, const String& rMsg )
+{
+    SbError n = StarBASIC::GetSfxFromVBError( static_cast< USHORT >( nVBNumber ) );
+    if( !n )
+        n = nVBNumber; // force orig number, probably should have a specific table of vb ( localized ) errors
+
+    aErrorMsg = rMsg;
+    SbiRuntime::translateErrorToVba( n, aErrorMsg );
+
+    nErr = n;
+}
+
+
 void SbiInstance::FatalError( SbError n )
 {
     pRun->FatalError( n );
@@ -792,33 +823,20 @@ BOOL SbiRuntime::Step()
     return bRun;
 }
 
-void SbiRuntime::Error( SbError n )
+void SbiRuntime::Error( SbError n, bool bVBATranslationAlreadyDone )
 {
     if( n )
     {
         nError = n;
-        if ( isVBAEnabled() )
+        if( isVBAEnabled() && !bVBATranslationAlreadyDone )
         {
             String aMsg = pInst->GetErrorMsg();
-            // If a message is defined use that ( in preference to
-            // the defined one for the error ) NB #TODO
-            // if there is an error defined it more than likely
-            // is not the one you want ( some are the same though )
-            // we really need a new vba compatible error list
-            if ( !aMsg.Len() )
-            {
-                                // is the error number vb or ( sb )
-                                SbError nTmp = StarBASIC::GetSfxFromVBError( n );
-                                if ( !nTmp )
-                                    nTmp = n;
-                StarBASIC::MakeErrorText( nTmp, aMsg );
-                aMsg =  StarBASIC::GetErrorText();
-                if ( !aMsg.Len() ) // no message for err no.
-                    // need localized resource here
-                    aMsg = String( RTL_CONSTASCII_USTRINGPARAM("Internal Object Error:") );
-            }
-            // no num? most likely then it *is* really a vba err
-            SbxErrObject::getUnoErrObject()->setNumber( ( StarBASIC::GetVBErrorCode( n ) == 0 ) ? n : StarBASIC::GetVBErrorCode( n ) );
+            sal_Int32 nVBAErrorNumber = translateErrorToVba( nError, aMsg );
+            SbxVariable* pSbxErrObjVar = SbxErrObject::getErrObject();
+            SbxErrObject* pGlobErr = static_cast< SbxErrObject* >( pSbxErrObjVar );
+            if( pGlobErr != NULL )
+                pGlobErr->setNumberAndDescription( nVBAErrorNumber, aMsg );
+
             pInst->aErrorMsg = aMsg;
             nError = SbERR_BASIC_COMPAT;
         }
@@ -852,6 +870,30 @@ void SbiRuntime::FatalError( SbError _errCode, const String& _details )
 {
     StepSTDERROR();
     Error( _errCode, _details );
+}
+
+sal_Int32 SbiRuntime::translateErrorToVba( SbError nError, String& rMsg )
+{
+    // If a message is defined use that ( in preference to
+    // the defined one for the error ) NB #TODO
+    // if there is an error defined it more than likely
+    // is not the one you want ( some are the same though )
+    // we really need a new vba compatible error list
+    if ( !rMsg.Len() )
+    {
+        // TEST, has to be vb here always
+        SbError nTmp = StarBASIC::GetSfxFromVBError( nError );
+        DBG_ASSERT( nTmp, "No VB error!" );
+
+        StarBASIC::MakeErrorText( nError, rMsg );
+        rMsg = StarBASIC::GetErrorText();
+        if ( !rMsg.Len() ) // no message for err no, need localized resource here
+            rMsg = String( RTL_CONSTASCII_USTRINGPARAM("Internal Object Error:") );
+    }
+    // no num? most likely then it *is* really a vba err
+    USHORT nVBErrorCode = StarBASIC::GetVBErrorCode( nError );
+    sal_Int32 nVBAErrorNumber = ( nVBErrorCode == 0 ) ? nError : nVBErrorCode;
+    return nVBAErrorNumber;
 }
 
 //////////////////////////////////////////////////////////////////////////

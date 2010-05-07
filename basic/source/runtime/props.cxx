@@ -31,6 +31,7 @@
 #include "runtime.hxx"
 #include "stdobj.hxx"
 #include "rtlproto.hxx"
+#include "errobject.hxx"
 
 
 // Properties und Methoden legen beim Get (bWrite = FALSE) den Returnwert
@@ -50,14 +51,21 @@ RTLFUNC(Err)
     (void)pBasic;
     (void)bWrite;
 
-    if( bWrite )
+    if( SbiRuntime::isVBAEnabled() )
     {
-        INT32 nVal = rPar.Get( 0 )->GetLong();
-        if( nVal <= 65535L )
-            StarBASIC::Error( StarBASIC::GetSfxFromVBError( (USHORT) nVal ) );
+        rPar.Get( 0 )->PutObject( SbxErrObject::getErrObject() );
     }
     else
-        rPar.Get( 0 )->PutLong( StarBASIC::GetVBErrorCode( StarBASIC::GetErrBasic() ) );
+    {
+        if( bWrite )
+        {
+            INT32 nVal = rPar.Get( 0 )->GetLong();
+            if( nVal <= 65535L )
+                StarBASIC::Error( StarBASIC::GetSfxFromVBError( (USHORT) nVal ) );
+        }
+        else
+            rPar.Get( 0 )->PutLong( StarBASIC::GetVBErrorCode( StarBASIC::GetErrBasic() ) );
+    }
 }
 
 RTLFUNC(False)

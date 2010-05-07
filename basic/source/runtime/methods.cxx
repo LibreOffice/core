@@ -271,17 +271,27 @@ RTLFUNC(Error)
             else
                 nErr = StarBASIC::GetSfxFromVBError( (USHORT)nCode );
         }
-        pBasic->MakeErrorText( nErr, aErrorMsg );
-                String tmpErrMsg(  pBasic->GetErrorText() );
-                // If this rtlfunc 'Error'  passed a errcode the same as the active Err Objects's
-                // current err then  return the description for the error message if it is set
-                // ( complicated isn't it ? )
-                if ( SbiRuntime::isVBAEnabled() && rPar.Count() > 1 );
-                {
-                    com::sun::star::uno::Reference< ooo::vba::XErrObject > xErrObj( SbxErrObject::getUnoErrObject() );
-                    if ( xErrObj.is() && xErrObj->getNumber() == nCode && xErrObj->getDescription().getLength() )
-                        tmpErrMsg = xErrObj->getDescription();
-                }
+
+        bool bVBA = SbiRuntime::isVBAEnabled();
+        String tmpErrMsg;
+        if( bVBA && aErrorMsg.Len() > 0 )
+        {
+            tmpErrMsg = aErrorMsg;
+        }
+        else
+        {
+            pBasic->MakeErrorText( nErr, aErrorMsg );
+            tmpErrMsg = pBasic->GetErrorText();
+        }
+        // If this rtlfunc 'Error'  passed a errcode the same as the active Err Objects's
+        // current err then  return the description for the error message if it is set
+        // ( complicated isn't it ? )
+        if ( bVBA && rPar.Count() > 1 )
+        {
+            com::sun::star::uno::Reference< ooo::vba::XErrObject > xErrObj( SbxErrObject::getUnoErrObject() );
+            if ( xErrObj.is() && xErrObj->getNumber() == nCode && xErrObj->getDescription().getLength() )
+                tmpErrMsg = xErrObj->getDescription();
+        }
         rPar.Get( 0 )->PutString( tmpErrMsg );
     }
 }
