@@ -733,6 +733,14 @@ Reference< XUIElement > ToolPanelViewShell::CreatePanelUIElement( const Referenc
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
+void ToolPanelViewShell::ActivatePanel( const ::rtl::OUString& i_rPanelResourceURL )
+{
+    OSL_ENSURE( i_rPanelResourceURL.indexOf( FrameworkHelper::msTaskPanelURLPrefix ) < 0,
+        "ToolPanelViewShell::ActivatePanel: for drawing-framework-controller panels, please use FrameworkHelper::RequestTaskPanel!" );
+    mpImpl->ActivatePanelByResource( i_rPanelResourceURL );
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
 void ToolPanelViewShell::DeactivatePanel( const ::rtl::OUString& i_rPanelResourceURL )
 {
     mpImpl->DeactivatePanelByResource( i_rPanelResourceURL );

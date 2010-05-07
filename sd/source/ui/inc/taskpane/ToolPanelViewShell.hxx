@@ -102,6 +102,11 @@ public:
 
     TaskPaneShellManager& GetSubShellManager (void) const;
 
+    /** deactivates the given panel, bypassing the configuration controller. Only valid for tool panels which are
+        not under the drawing framework's control.
+    */
+    void    ActivatePanel( const ::rtl::OUString& i_rPanelResourceURL );
+
     /** deactivates the given panel, bypassing the configuration controller
     */
     void    DeactivatePanel( const ::rtl::OUString& i_rPanelResourceURL );

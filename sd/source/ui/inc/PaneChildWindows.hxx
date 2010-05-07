@@ -29,6 +29,7 @@
 #define SD_PANE_CHILD_WINDOWS_HXX
 
 #include <sfx2/childwin.hxx>
+#include <sfx2/taskpane.hxx>
 
 namespace sd {
 
@@ -77,7 +78,8 @@ public:
 //======================================================================================================================
 //= ToolPanelChildWindow
 //======================================================================================================================
-class ToolPanelChildWindow : public PaneChildWindow
+class ToolPanelChildWindow  :public PaneChildWindow
+                            ,public ::sfx2::ITaskPaneToolPanelAccess
 {
 public:
     ToolPanelChildWindow(
@@ -87,6 +89,9 @@ public:
         SfxChildWinInfo* i_pChildWindowInfo );
 
     SFX_DECL_CHILDWINDOW( ToolPanelChildWindow );
+
+    // ::sfx2::ITaskPaneToolPanelAccess
+    virtual void ActivateToolPanel( const ::rtl::OUString& i_rPanelURL );
 };
 
 

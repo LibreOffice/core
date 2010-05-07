@@ -32,6 +32,7 @@
 #include "PaneDockingWindow.hxx"
 #include "ViewShellBase.hxx"
 #include "framework/FrameworkHelper.hxx"
+#include "taskpane/ToolPanelViewShell.hxx"
 #include "app.hrc"
 #include "strings.hrc"
 #include "sdresid.hxx"
@@ -40,6 +41,7 @@
 #include <sfx2/dockwin.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace sd {
 
@@ -146,6 +148,31 @@ ToolPanelChildWindow::ToolPanelChildWindow( ::Window* i_pParentWindow, USHORT i_
     :PaneChildWindow( i_pParentWindow, i_nId, i_pBindings, i_pChildWindowInfo,
         FLT_TOOL_PANEL_DOCKING_WINDOW, STR_RIGHT_PANE_TITLE, SFX_ALIGN_RIGHT )
 {
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void ToolPanelChildWindow::ActivateToolPanel( const ::rtl::OUString& i_rPanelURL )
+{
+    SfxDockingWindow* pDockingWindow = dynamic_cast< SfxDockingWindow* >( GetWindow() );
+    ViewShellBase* pViewShellBase = ViewShellBase::GetViewShellBase( pDockingWindow->GetBindings().GetDispatcher()->GetFrame() );
+    ENSURE_OR_RETURN_VOID( pViewShellBase != NULL, "ToolPanelChildWindow::ActivateToolPanel: no view shell access!" );
+
+    const ::boost::shared_ptr< framework::FrameworkHelper > pFrameworkHelper( framework::FrameworkHelper::Instance( *pViewShellBase ) );
+
+    if ( i_rPanelURL.indexOf( framework::FrameworkHelper::msTaskPanelURLPrefix ) == 0 )
+    {
+        // it's one of our standard panels known to the drawing framework
+        pFrameworkHelper->RequestTaskPanel( i_rPanelURL );
+    }
+    else
+    {
+        // TODO: it would be nice if the drawing framework were able to handle non-standard panels, installed by
+        // extensions, too. As long as this is not the case, we need to take the direct way ...
+        ::boost::shared_ptr< ViewShell > pViewShell = pFrameworkHelper->GetViewShell( framework::FrameworkHelper::msRightPaneURL );
+        toolpanel::ToolPanelViewShell* pToolPanelViewShell = dynamic_cast< toolpanel::ToolPanelViewShell* >( pViewShell.get() );
+        ENSURE_OR_RETURN_VOID( pToolPanelViewShell != NULL, "ToolPanelChildWindow::ActivateToolPanel: no tool panel view shell access!" );
+        pToolPanelViewShell->ActivatePanel( i_rPanelURL );
+    }
 }
 
 } // end of namespace ::sd
