@@ -158,6 +158,8 @@ void Shape::addShape(
             if ( xShapes.is() )
                 addChildren( rFilterBase, *this, pTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap );
         }
+        if( xLockable.is() )
+            xLockable->removeActionLock();
     }
     catch( const Exception&  )
     {
@@ -365,6 +367,10 @@ Reference< XShape > Shape::createAndInsert(
                 xNamed->setName( msName );
         }
         rxShapes->add( mxShape );
+
+        Reference< document::XActionLockable > xLockable( mxShape, UNO_QUERY );
+        if( xLockable.is() )
+            xLockable->addActionLock();
 
         Reference< document::XActionLockable > xLockable( mxShape, UNO_QUERY );
         if( xLockable.is() )
