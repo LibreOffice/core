@@ -1714,8 +1714,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
         if ( pClient || bHasOwnClient )
         {
             // TODO/LATER: IMHO we need to do similar things when object is UIActive or OutplaceActive?! (MBA)
-            if ( (nMiscStatus & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) &&
-                    svt::EmbeddedObjectRef::TryRunningState( xObjRef.GetObject() )
+            if ( ((nMiscStatus & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) &&
+                    svt::EmbeddedObjectRef::TryRunningState( xObjRef.GetObject() ))
                     || xObjRef->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE
                     )
             {
