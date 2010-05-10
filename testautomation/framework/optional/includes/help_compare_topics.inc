@@ -46,7 +46,7 @@ testcase tCompareHelpTopics()
     '       handle this. If problems occur, this shuld be the first place to
     '       look.
 
-    const MAX_ENTRIES = 50000
+    const MAX_ENTRIES = 25000
 
     ' variables related to filenames
     dim sFileOut as string
@@ -59,6 +59,7 @@ testcase tCompareHelpTopics()
     ' some increment operators and temporary variables
     dim iCurrentItem as integer
     dim sCurrentItem as string
+    dim sProductName as string
     dim iCurrentApp as integer
     dim iAboutItems as integer
     dim cAboutItem as string
@@ -66,7 +67,8 @@ testcase tCompareHelpTopics()
     dim bNextItem as boolean
     
     ' define input and output paths, presetting variables
-    sFileName = gProductName & "_help_topics_" & gIsoLang & ".txt"
+    sProductName = hStringReplaceChar( gProductName, " ", "_" )
+    sFileName = sProductName & "_help_topics_" & gIsoLang & ".txt"
     sFileOut = hGetWorkFile( sFilename )
     sFileIn  = gTesttoolPath & "framework\optional\input\help_browser\"  
     sFileIn  = convertpath( sFileIn & sFileName )
