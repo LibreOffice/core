@@ -139,8 +139,8 @@ testcase tBasicDocuments
     hFileCloseAll()
 
     printlog( "Cleanup: Remove workfiles" )
-    brc = hDeleteFile( sFileWriter )
-    brc = hDeleteFile( sFileCalc )
+    hDeleteFile( sFileWriter )
+    hDeleteFile( sFileCalc )
 
     printlog( "Rest macro security level" )
     hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_DEFAULT )
@@ -152,17 +152,19 @@ endcase
 function hTestLibraryListBox( cNodeList() ) as boolean
 
     const CFN = "hTestLibraryListBox::"
+    const EXACT_MATCH = 1
 
     dim iEntry as integer
     dim cEntry as string
-    dim brc as boolean : brc = true
     dim irc as integer
+
+    hTestLibraryListBox() = true
     
     if ( bibliothek.getItemCount() <> IDOCS ) then
         warnlog( CFN & "Incorrect number of items in listbox" )
         printlog( CFN & "Expected: " & bibliothek.getItemCount() )
         printlog( CFN & "Found...: " & listcount( cNodeList() ) )
-        brc = false
+        hTestLibraryListBox() = false
     endif
         
     for iEntry = 3 to IDOCS
@@ -170,11 +172,10 @@ function hTestLibraryListBox( cNodeList() ) as boolean
         Bibliothek.select( iEntry )
         cEntry = Bibliothek.getSelText()
         
-        irc = hCompareSubStrings( cNodeList( iEntry ) , cEntry )
-        if ( irc <> 1 ) then
+        if ( hCompareSubStrings( cNodeList( iEntry ) , cEntry ) <> EXACT_MATCH ) then
             warnlog( CFN & "Comparision failed" )
             printlog( CFN & "Expected: " & cNodeList( iEntry ) & "<>" & cEntry )
-            brc = false
+            hTestLibraryListBox() = false
         else
             printlog( CFN & "Comparision succeeded:" & cEntry )
         endif
