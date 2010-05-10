@@ -101,6 +101,7 @@ function hExtensionAddGUI( _path as string, _flags as string ) as integer
     '///+<li>Verify that the requested extension exists (filesystem level)</li>
     if ( not FileExists( path ) ) then
         printlog( CFN & "Requested extension does not exist" )
+        printlog( CFN & path )
         hExtensionAddGUI() = -1
         exit function
     endif

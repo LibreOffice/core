@@ -33,30 +33,47 @@
 
 testcase tExtensionIssue110083()
 
-    printlog( "Configuration schema which might trigger a <Bad root element> (or similar) exception from unopkg" )
+    printlog( "Configuration/-schema .xcu/.xcs-files which might trigger exceptions from unopkg/Extension Manager" )
 
-    const EXTENSION_NAME = "LoggingOptions.xcs"
-    const ERRORMESSAGE_IDENTIFIER = "no component element"
+    const NUMBER_OF_TEST_EXTENSIONS = 2
+
+    dim cExtensionNames( NUMBER_OF_TEST_EXTENSIONS ) as string
+        cExtensionNames( 1 ) = "LoggingOptions.xcs"
+        cExtensionNames( 2 ) = "Logging.xcu"
+
+    dim cErrorIdentifier( NUMBER_OF_TEST_EXTENSIONS ) as string
+        cErrorIdentifier( 1 ) = "no component element"
+        cErrorIdentifier( 2 ) = "no component element"
 
     dim cExtensionPath as string
-        cExtensionPath = gTesttoolPath & "extensions/optional/input/issues/" & EXTENSION_NAME
-        cExtensionPath = convertpath( cExtensionPath )
+        cExtensionPath = gTesttoolPath & "extensions/optional/input/issues/"
 
-    hExtensionAddGUI( cExtensionPath, "" )
+    dim cExtension as string
 
-    kontext "Active"
-    if ( Active.exists() ) then
-        if ( instr( Active.getText, ERRORMESSAGE_IDENTIFIER ) > 0 ) then
-            warnlog( "#i110083# - error installing xcs-file" )
-            Active.ok()
+    dim iCurrentExtension as integer
+        
 
-            kontext "PackageManager"
-            PackageManager.close()
+    for iCurrentExtension = 1 to NUMBER_OF_TEST_EXTENSIONS
+
+        cExtension = convertpath( cExtensionPath & cExtensionNames( iCurrentExtension ) )
+        hExtensionAddGUI( cExtension, "" )
+
+        kontext "Active"
+        if ( Active.exists() ) then
+            if ( instr( Active.getText, cErrorIdentifier( iCurrentExtension ) ) > 0 ) then
+                warnlog( "#i110083# - Error installing .xcs/.xcu-file: " & cExtensionNames( iCurrentExtension ) )
+                Active.ok()
+
+                kontext "PackageManager"
+                PackageManager.close()
+            else
+                warnlog( "Unexpected messagebox displayed. It cannot be handled" )
+            endif
         else
-            warnlog( "Unexpected messagebox displayed. It cannot be handled" )
+            hExtensionRemoveGUI( cExtensionNames( iCurrentExtension ) )
         endif
-    else
-        hExtensionRemoveGUI( EXTENSION_NAME )
-    endif
+
+    next iCurrentExtension
 
 endcase
+
