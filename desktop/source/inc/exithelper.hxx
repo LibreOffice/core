@@ -58,6 +58,8 @@ class ExitHelper
             E_FATAL_ERROR = 333,    // Only the low 8 bits are significant 333 % 256 = 77
             /// user force automatic restart after crash
             E_CRASH_WITH_RESTART = 79,
+            /// the office restarts itself
+            E_NORMAL_RESTART = 81
         };
 };
 

@@ -416,7 +416,8 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
             CloseHandle( aProcessInfo.hProcess );
             CloseHandle( aProcessInfo.hThread );
         }
-    } while ( fSuccess && ::desktop::ExitHelper::E_CRASH_WITH_RESTART == dwExitCode );
+    } while ( fSuccess
+      && ( ::desktop::ExitHelper::E_CRASH_WITH_RESTART == dwExitCode || ::desktop::ExitHelper::E_NORMAL_RESTART == dwExitCode );
     delete[] lpCommandLine;
 
     return fSuccess ? dwExitCode : -1;

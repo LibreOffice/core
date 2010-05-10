@@ -84,6 +84,7 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
+#include <com/sun/star/task/XRestartManager.hpp>
 #ifndef _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
 #include <com/sun/star/task/XJob.hpp>
 #endif
@@ -103,6 +104,7 @@
 #include <vos/security.hxx>
 #include <vos/ref.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/configurationhelper.hxx>
 #ifndef _UTL__HXX_
 #include <unotools/configmgr.hxx>
@@ -140,6 +142,7 @@
 #include <sfx2/sfx.hrc>
 #include <ucbhelper/contentbroker.hxx>
 #include <unotools/bootstrap.hxx>
+#include <cppuhelper/bootstrap.hxx>
 
 #include "vos/process.hxx"
 
@@ -1615,6 +1618,7 @@ void Desktop::Main()
     // call Application::Execute to process messages in vcl message loop
     RTL_LOGFILE_PRODUCT_TRACE( "PERFORMANCE - enter Application::Execute()" );
 
+    Reference< ::com::sun::star::task::XRestartManager > xRestartManager;
     try
     {
         // The JavaContext contains an interaction handler which is used when
@@ -1622,7 +1626,11 @@ void Desktop::Main()
         com::sun::star::uno::ContextLayer layer2(
             new svt::JavaContext( com::sun::star::uno::getCurrentContext() ) );
 
-        Execute();
+        ::comphelper::ComponentContext aContext( xSMgr );
+        xRestartManager.set( aContext.getSingleton( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.OfficeRestartManager" ) ) ), UNO_QUERY );
+
+        if ( !xRestartManager.is() || !xRestartManager->isRestartRequested( sal_True ) )
+            Execute();
     }
     catch(const com::sun::star::document::CorruptedFilterConfigurationException& exFilterCfg)
     {
@@ -1634,6 +1642,9 @@ void Desktop::Main()
         OfficeIPCThread::SetDowning();
         FatalError( MakeStartupErrorMessage(exAnyCfg.Message) );
     }
+
+    // check whether the shutdown is caused by restart
+    sal_Bool bRestartRequested = ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
 
     if (xGlobalBroadcaster.is())
     {
@@ -1671,6 +1682,14 @@ void Desktop::Main()
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- deinit ucb" );
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "FINISHED WITH Destop::Main" );
+    if ( bRestartRequested )
+    {
+#ifdef MACOSX
+        DoRestart();
+#endif
+        // wouldn't the solution be more clean if SalMain returns the exit code to the system?
+        _exit( ExitHelper::E_NORMAL_RESTART );
+    }
 }
 
 IMPL_LINK( Desktop, ImplInitFilterHdl, ConvertData*, pData )
