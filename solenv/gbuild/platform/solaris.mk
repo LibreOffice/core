@@ -97,16 +97,16 @@ gb_LinkTarget_LDFLAGS := \
     -library=no%Cstd \
 
 ifeq ($(gb_DEBUGLEVEL),2)
-gb_CCOPTFLAGS :=
+gb_COMPILEROPTFLAGS :=
 else
 ifeq ($(CPUNAME),INTEL)
-gb_CCOPTFLAGS := -xarch=generic -xO3
+gb_COMPILEROPTFLAGS := -xarch=generic -xO3
 else # ifeq ($(CPUNAME),SPARC)
 #  -m32 -xarch=sparc        restrict target to 32 bit sparc
 #  -xO3                     optimization level 3
 #  -xspace                  don't do optimizations which do increase binary size
 #  -xprefetch=yes           do prefetching (helps on UltraSparc III)
-gb_CCOPTFLAGS := -m32 -xarch=sparc -xO3 -xspace -xprefetch=yes
+gb_COMPILEROPTFLAGS := -m32 -xarch=sparc -xO3 -xspace -xprefetch=yes
 endif
 endif
 
@@ -189,8 +189,8 @@ gb_LinkTarget_LAYER := \
     $(foreach lib,$(gb_Library_UNOLIBS),$(lib):URELIB) \
     $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
 
-gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CCOPTFLAGS)
-gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CCOPTFLAGS)
+gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_COMPILEROPTFLAGS)
 
 ifeq ($(gb_DEBUGLEVEL),2)
 gb_LinkTarget_CXXFLAGS += -g

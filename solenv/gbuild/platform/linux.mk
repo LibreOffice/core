@@ -104,9 +104,9 @@ gb_LinkTarget_LDFLAGS := \
     $(subst -L../lib , ,$(SOLARLIB)) \
 
 ifeq ($(gb_DEBUGLEVEL),2)
-gb_GCCOPTFLAGS := -O0
+gb_COMPILEROPTFLAGS := -O0
 else
-gb_GCCOPTFLAGS := -Os
+gb_COMPILEROPTFLAGS := -Os
 endif
 
 
@@ -188,8 +188,8 @@ gb_LinkTarget_LAYER := \
     $(foreach lib,$(gb_Library_UNOLIBS),$(lib):URELIB) \
     $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
 
-gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_GCCOPTFLAGS)
-gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_GCCOPTFLAGS)
+gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_COMPILEROPTFLAGS)
 
 ifeq ($(gb_DEBUGLEVEL),2)
 gb_LinkTarget_CXXFLAGS += -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline

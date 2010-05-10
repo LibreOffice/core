@@ -124,9 +124,9 @@ gb_LinkTarget_LDFLAGS := \
 #man ld says: obsolete	-Wl,-multiply_defined,suppress \
 
 ifeq ($(gb_DEBUGLEVEL),2)
-gb_GCCOPTFLAGS := -O0
+gb_COMPILEROPTFLAGS := -O0
 else
-gb_GCCOPTFLAGS := -O2
+gb_COMPILEROPTFLAGS := -O2
 endif
 
 
@@ -228,9 +228,9 @@ gb_LinkTarget_LAYER := \
     $(foreach lib,$(gb_Library_UNOLIBS),$(lib):URELIB) \
     $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
 
-gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_GCCOPTFLAGS)
-gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_GCCOPTFLAGS)
-gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_OBJCXXFLAGS) $(gb_GCCOPTFLAGS)
+gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_OBJCXXFLAGS) $(gb_COMPILEROPTFLAGS)
 
 ifeq ($(gb_DEBUGLEVEL),2)
 gb_LinkTarget_CFLAGS += -g

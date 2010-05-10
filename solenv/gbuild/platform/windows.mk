@@ -35,14 +35,14 @@ gb_CXX := cl
 gb_LINK := link
 gb_AWK := awk
 
-gb_OSDEFS :=\
+gb_OSDEFS := \
     -DWINVER=0x0500 \
     -D_WIN32_IE=0x0500 \
     -DNT351 \
     -DWIN32 \
     -DWNT \
 
-gb_COMPILERDEFS :=\
+gb_COMPILERDEFS := \
     -DMSC \
     -D_CRT_NON_CONFORMING_SWPRINTFS \
     -D_CRT_NONSTDC_NO_DEPRECATE \
@@ -55,7 +55,7 @@ gb_COMPILERDEFS :=\
 
 gb_CPUDEFS := -DINTEL -D_X86_=1
 
-gb_CFLAGS :=\
+gb_CFLAGS := \
     -Gd \
     -GR \
     -Gs \
@@ -102,7 +102,7 @@ gb_CFLAGS :=\
     -Zc:forScope,wchar_t- \
     -Zm500 \
 
-gb_CXXFLAGS :=\
+gb_CXXFLAGS := \
     -Gd \
     -GR \
     -Gs \
@@ -148,24 +148,24 @@ gb_CXXFLAGS :=\
     -Zc:forScope,wchar_t- \
     -Zm500 \
 
-gb_LinkTarget_EXCEPTIONFLAGS :=\
+gb_LinkTarget_EXCEPTIONFLAGS := \
     -DEXCEPTIONS_ON \
     -EHa \
 
-gb_LinkTarget_NOEXCEPTIONFLAGS :=\
+gb_LinkTarget_NOEXCEPTIONFLAGS := \
     -DEXCEPTIONS_OFF \
     
-gb_LinkTarget_LDFLAGS :=\
+gb_LinkTarget_LDFLAGS := \
     -MACHINE:IX86 \
     -NODEFAULTLIB \
     -SUBSYSTEM:CONSOLE \
 
 
 ifeq ($(gb_DEBUGLEVEL),2)
-gb_MSCOPTFLAGS :=
+gb_COMPILEROPTFLAGS :=
 gb_LinkTarget_LDFLAGS += -DEBUG
 else
-gb_MSCOPTFLAGS := -Ob1 -Oxs -Oy-
+gb_COMPILEROPTFLAGS := -Ob1 -Oxs -Oy-
 endif
 
 
@@ -261,8 +261,8 @@ endef
 
 gb_LinkTarget_get_rpath :=
 
-gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_MSCOPTFLAGS)
-gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_MSCOPTFLAGS)
+gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_COMPILEROPTFLAGS)
 
 ifeq ($(gb_DEBUGLEVEL),2)
 gb_LinkTarget_CXXFLAGS +=
