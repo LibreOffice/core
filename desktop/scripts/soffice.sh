@@ -124,7 +124,7 @@ while [ $sd_ret -eq 79 -o $sd_ret -eq 81 ]
 do
     if [ $sd_ret -eq 79 ]; then
         "$sd_prog/$sd_binary" ""$BOOTSTRAPVARS"" &
-    elif if [ $sd_ret -eq 81 ]; then
+    elif [ $sd_ret -eq 81 ]; then
         "$sd_prog/$sd_binary" "$@" &
     fi
 
