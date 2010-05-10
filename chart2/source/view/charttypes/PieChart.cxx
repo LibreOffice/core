@@ -280,18 +280,21 @@ double PieChart::getMaxOffset()
     if(fExplodePercentage>m_fMaxOffset)
         m_fMaxOffset=fExplodePercentage;
 
-    uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-    if( xSeriesProp->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList )
+    if(!m_bSizeExcludesLabelsAndExplodedSegments)
     {
-        for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
+        uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
+        if( xSeriesProp->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList )
         {
-            uno::Reference< beans::XPropertySet > xPointProp( pSeries->getPropertiesOfPoint(aAttributedDataPointIndexList[nN]) );
-            if(xPointProp.is())
+            for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
             {
-                fExplodePercentage=0.0;
-                xPointProp->getPropertyValue( C2U( "Offset" )) >>= fExplodePercentage;
-                if(fExplodePercentage>m_fMaxOffset)
-                    m_fMaxOffset=fExplodePercentage;
+                uno::Reference< beans::XPropertySet > xPointProp( pSeries->getPropertiesOfPoint(aAttributedDataPointIndexList[nN]) );
+                if(xPointProp.is())
+                {
+                    fExplodePercentage=0.0;
+                    xPointProp->getPropertyValue( C2U( "Offset" )) >>= fExplodePercentage;
+                    if(fExplodePercentage>m_fMaxOffset)
+                        m_fMaxOffset=fExplodePercentage;
+                }
             }
         }
     }
@@ -299,7 +302,7 @@ double PieChart::getMaxOffset()
 }
 double PieChart::getMaximumX()
 {
-    double fMaxOffset = m_bSizeExcludesLabelsAndExplodedSegments ? 0.0 : getMaxOffset();
+    double fMaxOffset = getMaxOffset();
     if( m_aZSlots.size()>0 && m_bUseRings)
         return m_aZSlots[0].size()+0.5+fMaxOffset;
     return 1.5+fMaxOffset;
@@ -403,7 +406,7 @@ void PieChart::createShapes()
         for( nPointIndex = 0; nPointIndex < nPointCount; nPointIndex++ )
         {
             double fLogicInnerRadius, fLogicOuterRadius;
-            double fOffset = m_bSizeExcludesLabelsAndExplodedSegments ? 0.0 : getMaxOffset();
+            double fOffset = getMaxOffset();
             bool bIsVisible = m_pPosHelper->getInnerAndOuterRadius( fSlotX+1.0, fLogicInnerRadius, fLogicOuterRadius, m_bUseRings, fOffset );
             if( !bIsVisible )
                 continue;
