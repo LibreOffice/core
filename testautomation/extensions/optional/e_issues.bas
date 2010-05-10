@@ -35,7 +35,7 @@ sub main
 
     use "extensions\optional\includes\issue110083.inc"
 
-    call hStatusIn( "extensions" , "e_issue110083.bas" )
+    call hStatusIn( "extensions" , "e_issues.bas" )
     call tExtensionIssue110083()
     call hStatusOut()
 
