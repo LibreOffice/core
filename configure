@@ -1239,6 +1239,8 @@ Optional Packages:
 
   --with-system-cppunit         Use cppunit already on system
 
+  --with-system-redland   Use redland library already on system
+
   --with-system-mozilla   Use mozilla already on system. Note that some
                           components cannot be built against a contemporary
                           mozilla. The flavour used can be specified by
@@ -2722,6 +2724,12 @@ fi;
 # Check whether --with-system-cppunit or --without-system-cppunit was given.
 if test "${with_system_cppunit+set}" = set; then
   withval="$with_system_cppunit"
+
+fi;
+
+# Check whether --with-system-redland or --without-system-redland was given.
+if test "${with_system_redland+set}" = set; then
+  withval="$with_system_redland"
 
 fi;
 
@@ -22507,7 +22515,7 @@ fi
 
 echo "$as_me:$LINENO: checking which redland library to use" >&5
 echo $ECHO_N "checking which redland library to use... $ECHO_C" >&6
-if test -n "$with_system_redland" && \
+if test -n "$with_system_redland" -o -n "$with_system_libs" && \
 	test "$with_system_redland" != "no"; then
 	echo "$as_me:$LINENO: result: external" >&5
 echo "${ECHO_T}external" >&6
@@ -22566,23 +22574,23 @@ fi
   else
      PKG_CONFIG_MIN_VERSION=0.9.0
      if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        echo "$as_me:$LINENO: checking for redland" >&5
-echo $ECHO_N "checking for redland... $ECHO_C" >&6
+        echo "$as_me:$LINENO: checking for redland >= 1.0.8" >&5
+echo $ECHO_N "checking for redland >= 1.0.8... $ECHO_C" >&6
 
-        if $PKG_CONFIG --exists "redland" ; then
+        if $PKG_CONFIG --exists "redland >= 1.0.8" ; then
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
             succeeded=yes
 
             echo "$as_me:$LINENO: checking REDLAND_CFLAGS" >&5
 echo $ECHO_N "checking REDLAND_CFLAGS... $ECHO_C" >&6
-            REDLAND_CFLAGS=`$PKG_CONFIG --cflags "redland"`
+            REDLAND_CFLAGS=`$PKG_CONFIG --cflags "redland >= 1.0.8"`
             echo "$as_me:$LINENO: result: $REDLAND_CFLAGS" >&5
 echo "${ECHO_T}$REDLAND_CFLAGS" >&6
 
             echo "$as_me:$LINENO: checking REDLAND_LIBS" >&5
 echo $ECHO_N "checking REDLAND_LIBS... $ECHO_C" >&6
-            REDLAND_LIBS=`$PKG_CONFIG --libs "redland"`
+            REDLAND_LIBS=`$PKG_CONFIG --libs "redland >= 1.0.8"`
             echo "$as_me:$LINENO: result: $REDLAND_LIBS" >&5
 echo "${ECHO_T}$REDLAND_LIBS" >&6
         else
@@ -22590,7 +22598,7 @@ echo "${ECHO_T}$REDLAND_LIBS" >&6
             REDLAND_LIBS=""
             ## If we have a custom action on failure, don't print errors, but
             ## do set a variable so people can do so.
-            REDLAND_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "redland"`
+            REDLAND_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "redland >= 1.0.8"`
             echo $REDLAND_PKG_ERRORS
         fi
 
@@ -22605,8 +22613,8 @@ echo "${ECHO_T}$REDLAND_LIBS" >&6
   if test $succeeded = yes; then
      :
   else
-     { { echo "$as_me:$LINENO: error: Library requirements (redland) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&5
-echo "$as_me: error: Library requirements (redland) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&2;}
+     { { echo "$as_me:$LINENO: error: Library requirements (redland >= 1.0.8) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&5
+echo "$as_me: error: Library requirements (redland >= 1.0.8) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&2;}
    { (exit 1); exit 1; }; }
   fi
 
