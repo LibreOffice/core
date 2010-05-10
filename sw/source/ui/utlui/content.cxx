@@ -335,7 +335,8 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                 (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
                 && TOX_HEADER_SECTION != eTmpType )
                 {
-                    const String& rSectionName = pFmt->GetSection()->GetName();
+                    const String& rSectionName =
+                        pFmt->GetSection()->GetSectionName();
                     BYTE nLevel = 0;
                     SwSectionFmt* pParentFmt = pFmt->GetParent();
                     while(pParentFmt)
@@ -697,7 +698,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                 (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
                 && TOX_HEADER_SECTION != eTmpType )
                 {
-                    String sSectionName = pFmt->GetSection()->GetName();
+                    String sSectionName = pFmt->GetSection()->GetSectionName();
 
                     BYTE nLevel = 0;
                     SwSectionFmt* pParentFmt = pFmt->GetParent();

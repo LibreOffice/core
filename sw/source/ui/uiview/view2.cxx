@@ -1369,12 +1369,12 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                                 {
                                     ASSERT( !this,
                                         "was ist das fuer ein Verzeichnis?" );
-                                    sStr = pCurrSect->GetName();
+                                    sStr = pCurrSect->GetSectionName();
                                 }
                             }
                             break;
                         default:
-                            sStr = pCurrSect->GetName();
+                            sStr = pCurrSect->GetSectionName();
                             break;
                         }
                     }
