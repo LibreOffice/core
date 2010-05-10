@@ -79,6 +79,7 @@ function hExtensionAddGUI( _path as string, _flags as string ) as integer
     '///+<li>-4 = Unknown messagebox before the file Open dialog exists</li>
     '///+<li>-5 = Broken dependency warning displayed</li>
     '///+<li>-6 = The File Open dialog did not pop up</li>
+    '///+<li>-7 = Unknown and unhandled messagebox. function exit</li>
     '///</ul>
     '///</ol>
 
@@ -233,6 +234,8 @@ function hExtensionAddGUI( _path as string, _flags as string ) as integer
             else
                 printlog( CFN & "Unexpected/unknown dialog displayed" )
                 printlog( Active.getText() )
+                hExtensionAddGUI() = -7
+                exit function
             endif
         else
             if ( instr( flags , "noupdate" ) <> 0 ) then
