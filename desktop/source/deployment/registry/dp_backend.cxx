@@ -294,7 +294,7 @@ void PackageRegistryBackend::deleteUnusedFolders(
             if (::std::find( usedFolders.begin(), usedFolders.end(), tempFolderName ) ==
                 usedFolders.end())
             {
-                deleteTempFolder(tempFolder);
+                deleteTempFolder(tempFolderName);
             }
         }
     }
