@@ -1,0 +1,8 @@
+[ps]
+### contains date in it, will fail every time ###
+CurrentTime.ods
+
+[pdf]
+### contains date in it, will fail every time ###
+CurrentTime.ods
+
