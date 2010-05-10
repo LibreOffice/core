@@ -28,7 +28,7 @@
 GUI := UNX
 COM := GCC
 
-gb_MkTemp := TMPDIR= mktemp -t
+gb_MKTEMP := TMPDIR= mktemp -t
 
 gb_CC := gcc
 gb_CXX := g++
@@ -248,7 +248,7 @@ define gb_LinkTarget__command
 $(call gb_Helper_announce,Linking $(2) ...)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
-    DYLIB_FILE=`$(gb_MkTemp) $(dir $(1))` && \
+    DYLIB_FILE=`$(gb_MKTEMP) $(dir $(1))` && \
     $(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl $(3) $(patsubst lib%.dylib,-l%,$(foreach lib,$(4),$(call gb_Library_get_filename,$(lib)))) > $${DYLIB_FILE} && \
     $(gb_CXX) \
         $(3) \
