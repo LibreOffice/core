@@ -46,7 +46,7 @@ testcase tCompareHelpTopics()
     '       handle this. If problems occur, this shuld be the first place to
     '       look.
 
-    const MAX_ENTRIES = 30000
+    const MAX_ENTRIES = 50000
 
     ' variables related to filenames
     dim sFileOut as string
@@ -63,7 +63,6 @@ testcase tCompareHelpTopics()
     dim iAboutItems as integer
     dim cAboutItem as string
     dim irc as integer
-    dim brc as boolean
     dim bNextItem as boolean
     
     ' define input and output paths, presetting variables
@@ -74,8 +73,7 @@ testcase tCompareHelpTopics()
     
     aTopicsFromUI( 0 ) = "0"    
     
-    brc = hOpenHelp()
-    if ( not brc ) then
+    if ( not hOpenHelp() ) then
         warnlog( "Help not open, aborting test" )
         goto endsub
     endif
