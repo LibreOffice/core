@@ -765,7 +765,7 @@ sal_Int16 SAL_CALL ToolbarMenuEntryAcc::getAccessibleRole() throw (RuntimeExcept
 
 ::rtl::OUString SAL_CALL ToolbarMenuEntryAcc::getAccessibleDescription() throw (RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "ToolbarMenu item" ) );
+    return ::rtl::OUString();
 }
 
 // -----------------------------------------------------------------------------

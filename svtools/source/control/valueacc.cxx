@@ -976,10 +976,7 @@ sal_Int16 SAL_CALL ValueItemAcc::getAccessibleRole()
 ::rtl::OUString SAL_CALL ValueItemAcc::getAccessibleDescription()
     throw (uno::RuntimeException)
 {
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
-    String              aRet( RTL_CONSTASCII_USTRINGPARAM( "ValueSet item" ) );
-
-    return aRet;
+    return ::rtl::OUString();
 }
 
 // -----------------------------------------------------------------------------

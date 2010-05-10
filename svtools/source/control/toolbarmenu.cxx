@@ -30,6 +30,7 @@
 #include "precompiled_svtools.hxx"
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <comphelper/processfactory.hxx>
 
 #include <vcl/dockwin.hxx>
@@ -432,6 +433,7 @@ void ToolbarMenu_Impl::notifyHighlightedEntry()
 
             fireAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOld, aNew );
             fireAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, aOld, aNew );
+            fireAccessibleEvent( AccessibleEventId::STATE_CHANGED, Any(), Any( AccessibleStateType::FOCUSED ) );
             aNew >>= mxOldSelection;
         }
     }
@@ -760,6 +762,13 @@ Size ToolbarMenu::implCalcSize()
     aSz.Height() += nY + BORDER_Y;
 
     return aSz;
+}
+
+// --------------------------------------------------------------------
+
+void ToolbarMenu::highlightFirstEntry()
+{
+    implChangeHighlightEntry( 0 );
 }
 
 // --------------------------------------------------------------------

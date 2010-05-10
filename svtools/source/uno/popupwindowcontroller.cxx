@@ -34,6 +34,7 @@
 #include <vcl/svapp.hxx>
 
 #include "svtools/popupwindowcontroller.hxx"
+#include "svtools/toolbarmenu.hxx"
 
 using rtl::OUString;
 using namespace ::com::sun::star;
@@ -107,6 +108,10 @@ IMPL_LINK( PopupWindowControllerImpl, WindowEventListener, VclSimpleEvent*, pEve
                 if( mpToolBox )
                     mpToolBox->CallEventListeners( VCLEVENT_DROPDOWN_OPEN, (void*)mpPopupWindow );
                 mpPopupWindow->CallEventListeners( VCLEVENT_WINDOW_GETFOCUS, 0 );
+
+                svtools::ToolbarMenu* pToolbarMenu = dynamic_cast< svtools::ToolbarMenu* >( mpPopupWindow );
+                if( pToolbarMenu )
+                    pToolbarMenu->highlightFirstEntry();
                 break;
             }
             break;

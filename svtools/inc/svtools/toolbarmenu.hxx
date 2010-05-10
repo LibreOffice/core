@@ -103,6 +103,8 @@ public:
     int             getSelectedEntryId() const;
     int             getHighlightedEntryId() const;
 
+    void            highlightFirstEntry();
+
 protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
