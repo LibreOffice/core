@@ -119,7 +119,7 @@ protected:
 
     /* returns the values of one particulary child element of all key elements.
      */
-    ::std::list< ::rtl::OUString> BackendDb::getOneChildFromAllEntries(
+    ::std::list< ::rtl::OUString> getOneChildFromAllEntries(
         ::rtl::OUString const & sElementName);
 
 
