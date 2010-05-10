@@ -56,7 +56,7 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_accels.inc"
     use "global\tools\includes\optional\t_security_tools.inc"
     use "global\tools\includes\optional\t_listfuncs.inc"
-    use "global\tools\includes\optional\t_stringtools.inc
+    use "global\tools\includes\optional\t_stringtools.inc"
 
     gApplication = "WRITER"
     call GetUseFiles()
