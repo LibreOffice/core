@@ -1985,6 +1985,16 @@ void SvXMLImport::SetXmlId(uno::Reference<uno::XInterface> const & i_xIfc,
     }
 }
 
+SAL_DLLPRIVATE ::xmloff::RDFaImportHelper &
+SvXMLImport::GetRDFaImportHelper()
+{
+    if (!mpImpl->mpRDFaHelper.get())
+    {
+        mpImpl->mpRDFaHelper.reset( new ::xmloff::RDFaImportHelper(*this) );
+    }
+    return *mpImpl->mpRDFaHelper;
+}
+
 void
 SvXMLImport::AddRDFa(uno::Reference<rdf::XMetadatable> i_xObject,
     ::rtl::OUString const & i_rAbout,
@@ -1994,11 +2004,8 @@ SvXMLImport::AddRDFa(uno::Reference<rdf::XMetadatable> i_xObject,
 {
     // N.B.: we only get called if i_xObject had xhtml:about attribute
     // (an empty attribute value is valid)
-    if (!mpImpl->mpRDFaHelper.get())
-    {
-        mpImpl->mpRDFaHelper.reset( new ::xmloff::RDFaImportHelper(*this) );
-    }
-    mpImpl->mpRDFaHelper->AddRDFa(i_xObject,
+    ::xmloff::RDFaImportHelper & rRDFaHelper( GetRDFaImportHelper() );
+    rRDFaHelper.ParseAndAddRDFa(i_xObject,
         i_rAbout, i_rProperty, i_rContent, i_rDatatype);
 }
 

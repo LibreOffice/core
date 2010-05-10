@@ -201,10 +201,6 @@ void XMLIndexTOCContext::StartElement(
                     OUString::createFromAscii(aIndexServiceMap[eIndexType]));
             if( xIfc.is() )
             {
-
-                // xml:id for RDF metadata
-                GetImport().SetXmlId(xIfc, sXmlId);
-
                 // get Property set
                 Reference<XPropertySet> xPropSet(xIfc, UNO_QUERY);
                 xTOCPropertySet = xPropSet;
@@ -245,6 +241,9 @@ void XMLIndexTOCContext::StartElement(
                     bValid = false;
                     return;
                 }
+
+                // xml:id for RDF metadata
+                GetImport().SetXmlId(xIfc, sXmlId);
 
                 // b) insert marker and move cursor
                 rImport->InsertString(sMarker);
