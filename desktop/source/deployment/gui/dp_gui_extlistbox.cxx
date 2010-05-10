@@ -1138,7 +1138,7 @@ void ExtensionBox_Impl::checkEntries()
             {   // remove entry from list
                 if ( nPos < m_nActive )
                     m_nActive -= 1;
-                else if ( ( nPos == m_nActive ) && ( nPos == m_vEntries.size() - 1 ) )
+                else if ( ( nPos == m_nActive ) && ( nPos == (long) m_vEntries.size() - 1 ) )
                     m_nActive -= 1;
                 m_vRemovedEntries.push_back( *iIndex );
                 m_vEntries.erase( iIndex );
