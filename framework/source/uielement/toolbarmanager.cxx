@@ -1552,7 +1552,11 @@ IMPL_LINK( ToolBarManager, DropdownClick, ToolBox*, EMPTYARG )
         Reference< XToolbarController > xController( pIter->second, UNO_QUERY );
 
         if ( xController.is() )
-            xController->createPopupWindow();
+        {
+            Reference< XWindow > xWin = xController->createPopupWindow();
+            if ( xWin.is() )
+                xWin->setFocus();
+        }
     }
     return 1;
 }
