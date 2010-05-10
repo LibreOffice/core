@@ -503,7 +503,7 @@ void TheExtensionManager::notifyTermination( ::lang::EventObject const & rEvt )
 
 //------------------------------------------------------------------------------
 // XModifyListener
-void TheExtensionManager::modified( ::lang::EventObject const & rEvt )
+void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
     throw ( uno::RuntimeException )
 {
     getDialogHelper()->prepareChecking();

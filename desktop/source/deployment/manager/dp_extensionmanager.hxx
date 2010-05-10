@@ -202,7 +202,8 @@ public:
         throw (css::deployment::DeploymentException,
                css::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL isReadOnlyRepository(::rtl::OUString const & repository);
+    virtual sal_Bool SAL_CALL isReadOnlyRepository(::rtl::OUString const & repository)
+        throw (css::uno::RuntimeException);
 
 private:
 
@@ -233,7 +234,7 @@ private:
     bool isUserDisabled(::rtl::OUString const & identifier,
                         ::rtl::OUString const & filename);
 
-    bool ExtensionManager::isUserDisabled(
+    bool isUserDisabled(
         css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > const & seqExtSameId);
 
     void activateExtension(

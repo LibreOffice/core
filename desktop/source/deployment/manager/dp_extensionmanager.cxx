@@ -1225,6 +1225,7 @@ ExtensionManager::getExtensionsWithUnacceptedLicenses(
 }
 
 sal_Bool ExtensionManager::isReadOnlyRepository(::rtl::OUString const & repository)
+        throw (uno::RuntimeException)
 {
     return getPackageManager(repository)->isReadOnly();
 }

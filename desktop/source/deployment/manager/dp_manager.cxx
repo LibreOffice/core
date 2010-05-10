@@ -1471,6 +1471,8 @@ Sequence< Reference<deployment::XPackage> > PackageManagerImpl::getExtensionsWit
     Reference<ucb::XCommandEnvironment> const & xCmdEnv)
     throw (deployment::DeploymentException, RuntimeException)
 {
+    ::std::vector<Reference<deployment::XPackage> > vec;
+
     try
     {
         const ::osl::MutexGuard guard( getMutex() );
@@ -1479,8 +1481,6 @@ Sequence< Reference<deployment::XPackage> > PackageManagerImpl::getExtensionsWit
 
         ActivePackages::Entries::const_iterator i = id2temp.begin();
         bool bShared = m_context.equals(OUSTR("shared"));
-        ::std::vector<Reference<deployment::XPackage> > vec;
-
 
         for (; i != id2temp.end(); i++ )
         {
@@ -1523,6 +1523,8 @@ Sequence< Reference<deployment::XPackage> > PackageManagerImpl::getExtensionsWit
         exc <<= de;
         ::cppu::throwException(exc);
     }
+
+    return ::comphelper::containerToSequence(vec);
 }
 
 sal_Int32 PackageManagerImpl::checkPrerequisites(

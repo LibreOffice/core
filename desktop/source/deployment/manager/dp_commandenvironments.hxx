@@ -84,9 +84,8 @@ public:
 class TmpRepositoryCommandEnv : public BaseCommandEnv
 {
 public:
-    TmpRepositoryCommandEnv::TmpRepositoryCommandEnv();
-    TmpRepositoryCommandEnv::TmpRepositoryCommandEnv(
-        css::uno::Reference< css::task::XInteractionHandler> const & handler);
+    TmpRepositoryCommandEnv();
+    TmpRepositoryCommandEnv(css::uno::Reference< css::task::XInteractionHandler> const & handler);
 
 // XInteractionHandler
     virtual void SAL_CALL handle(
@@ -105,8 +104,8 @@ private:
     ::rtl::OUString m_repository;
     bool m_bSuppressLicense;
 public:
-    LicenseCommandEnv::LicenseCommandEnv(){};
-    LicenseCommandEnv::LicenseCommandEnv(
+    LicenseCommandEnv(){};
+    LicenseCommandEnv(
         css::uno::Reference< css::task::XInteractionHandler> const & handler,
         bool bSuppressLicense,
         ::rtl::OUString const & repository);
@@ -126,9 +125,8 @@ class NoLicenseCommandEnv : public BaseCommandEnv
 {
 
 public:
-    NoLicenseCommandEnv::NoLicenseCommandEnv(){};
-    NoLicenseCommandEnv::NoLicenseCommandEnv(
-        css::uno::Reference< css::task::XInteractionHandler> const & handler);
+    NoLicenseCommandEnv(){};
+    NoLicenseCommandEnv(css::uno::Reference< css::task::XInteractionHandler> const & handler);
 
 // XInteractionHandler
     virtual void SAL_CALL handle(

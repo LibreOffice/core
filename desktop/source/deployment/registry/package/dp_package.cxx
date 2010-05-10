@@ -228,7 +228,8 @@ class BackendImpl : public ImplBaseT
         virtual beans::StringPair SAL_CALL getPublisherInfo()
             throw (deployment::ExtensionRemovedException, RuntimeException);
 
-        virtual OUString SAL_CALL getDisplayName() throw (RuntimeException);
+        virtual OUString SAL_CALL getDisplayName()
+            throw (deployment::ExtensionRemovedException, RuntimeException);
 
         virtual Reference< graphic::XGraphic > SAL_CALL
         getIcon( ::sal_Bool bHighContrast )
@@ -754,9 +755,10 @@ bool BackendImpl::PackageImpl::checkDependencies(
 
 ::sal_Bool BackendImpl::PackageImpl::checkDependencies(
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv )
-        throw (css::deployment::DeploymentException,
-            css::ucb::CommandFailedException,
-            css::uno::RuntimeException)
+        throw (deployment::DeploymentException,
+               deployment::ExtensionRemovedException,
+               ucb::CommandFailedException,
+               RuntimeException)
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
@@ -781,7 +783,8 @@ beans::Optional<OUString> BackendImpl::PackageImpl::getIdentifier()
         true, identifier);
 }
 
-OUString BackendImpl::PackageImpl::getVersion() throw (RuntimeException)
+OUString BackendImpl::PackageImpl::getVersion()
+    throw (deployment::ExtensionRemovedException, RuntimeException)
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
@@ -982,7 +985,8 @@ void BackendImpl::PackageImpl::processPackage_(
 }
 
 //______________________________________________________________________________
-OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException)
+OUString BackendImpl::PackageImpl::getDescription()
+    throw (deployment::ExtensionRemovedException, RuntimeException)
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();

@@ -274,12 +274,12 @@ void PackageRegistryBackend::deleteUnusedFolders(
             //usedFolders contains the urls to the folders which have
             //a trailing underscore
             const OUString  tempFile = tempEntries[ pos ];
-            const OUString tempFolder = tempFile + OUSTR("_");
+            const OUString tempFolderName = tempFile + OUSTR("_");
 
-            if (::std::find( usedFolders.begin(), usedFolders.end(), tempFolder ) ==
+            if (::std::find( usedFolders.begin(), usedFolders.end(), tempFolderName ) ==
                 usedFolders.end())
             {
-                erase_path( tempFolder, Reference<XCommandEnvironment>(),
+                erase_path( tempFolderName, Reference<XCommandEnvironment>(),
                             false /* no throw: ignore errors */ );
                 erase_path( tempFile, Reference<XCommandEnvironment>(),
                             false /* no throw: ignore errors */ );
@@ -306,7 +306,7 @@ Package::~Package()
 //______________________________________________________________________________
 Package::Package( ::rtl::Reference<PackageRegistryBackend> const & myBackend,
                   OUString const & url,
-                  OUString const & name,
+                  OUString const & rName,
                   OUString const & displayName,
                   Reference<deployment::XPackageTypeInfo> const & xPackageType,
                   bool bRemoved,
@@ -314,7 +314,7 @@ Package::Package( ::rtl::Reference<PackageRegistryBackend> const & myBackend,
     : t_PackageBase( getMutex() ),
       m_myBackend( myBackend ),
       m_url( url ),
-      m_name( name ),
+      m_name( rName ),
       m_displayName( displayName ),
       m_xPackageType( xPackageType ),
       m_bRemoved(bRemoved),

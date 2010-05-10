@@ -321,7 +321,7 @@ BackendImpl::PackageImpl::isRegistered_(
     BackendImpl * that = getMyBackend();
     Reference< deployment::XPackage > xThisPackage( this );
 
-    bool registered = getMyBackend()->isRegisteredInDb(getURL());
+    bool registered = that->isRegisteredInDb(getURL());
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
         true /* IsPresent */,
         beans::Ambiguous<sal_Bool>( registered, false /* IsAmbiguous */ ) );
