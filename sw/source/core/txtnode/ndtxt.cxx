@@ -1278,11 +1278,11 @@ void lcl_CopyHint( const USHORT nWhich, const SwTxtAttr * const pHt,
     ASSERT( nWhich == pHt->Which(), "Falsche Hint-Id" );
     switch( nWhich )
     {
-        // Wenn wir es mit einem Fussnoten-Attribut zu tun haben,
-        // muessen wir natuerlich auch den Fussnotenbereich kopieren.
+        // copy nodesarray section with footnote content
         case RES_TXTATR_FTN :
+            ASSERT(pDest, "lcl_CopyHint: no destination text node?");
             static_cast<const SwTxtFtn*>(pHt)->CopyFtn(
-                static_cast<SwTxtFtn*>(pNewHt));
+                *static_cast<SwTxtFtn*>(pNewHt), *pDest);
             break;
 
         // Beim Kopieren von Feldern in andere Dokumente
@@ -1660,24 +1660,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
             pNewHt = MakeTxtAttr( *GetDoc(), pHt->GetAttr(),
                     nAttrStt, nAttrEnd );
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//JP 23.04.95:  erstmal so gesondert hier behandeln. Am Besten ist es
-//              aber im CopyFtn wenn die pDestFtn keinen StartNode hat,
-//              sich diesen dann anlegt.
-//              Aber so kurz vor der BETA besser nicht anfassen.
-            if( RES_TXTATR_FTN == nWhich )
-            {
-                SwTxtFtn* pFtn = (SwTxtFtn*)pNewHt;
-                pFtn->ChgTxtNode( this );
-                pFtn->MakeNewTextSection( GetNodes() );
-                lcl_CopyHint( nWhich, pHt, pFtn, 0, 0 );
-                pFtn->ChgTxtNode( 0 );
-            }
-            else
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            {
-                lcl_CopyHint( nWhich, pHt, pNewHt, 0, pDest );
-            }
+            lcl_CopyHint(nWhich, pHt, pNewHt, 0, pDest);
             aArr.C40_INSERT( SwTxtAttr, pNewHt, aArr.Count() );
         }
         else
