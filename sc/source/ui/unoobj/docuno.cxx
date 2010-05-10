@@ -1392,7 +1392,8 @@ void SAL_CALL ScModelObj::enableAutomaticCalculation( sal_Bool bEnabled )
 void SAL_CALL ScModelObj::protect( const rtl::OUString& aPassword ) throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    if (pDocShell)
+    // #i108245# if already protected, don't change anything
+    if ( pDocShell && !pDocShell->GetDocument()->IsDocProtected() )
     {
         String aString(aPassword);
 
@@ -1410,9 +1411,9 @@ void SAL_CALL ScModelObj::unprotect( const rtl::OUString& aPassword )
         String aString(aPassword);
 
         ScDocFunc aFunc(*pDocShell);
-        aFunc.Unprotect( TABLEID_DOC, aString, TRUE );
-
-        //! Rueckgabewert auswerten, Exception oder so
+        BOOL bDone = aFunc.Unprotect( TABLEID_DOC, aString, TRUE );
+        if (!bDone)
+            throw lang::IllegalArgumentException();
     }
 }
 
