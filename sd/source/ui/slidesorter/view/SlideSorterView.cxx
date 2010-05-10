@@ -68,6 +68,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/poly.hxx>
 #include <vcl/lineinfo.hxx>
+#include <vcl/help.hxx>
 #include <algorithm>
 #include <svx/sdrpagewindow.hxx>
 #include <svl/itempool.hxx>
@@ -148,9 +149,9 @@ TYPEINIT1(SlideSorterView, ::sd::View);
 
 SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     : ::sd::View (
-        rSlideSorter.GetModel().GetDocument(),
-            rSlideSorter.GetContentWindow().get(),
-        rSlideSorter.GetViewShell()),
+          rSlideSorter.GetModel().GetDocument(),
+          rSlideSorter.GetContentWindow().get(),
+          rSlideSorter.GetViewShell()),
       mrSlideSorter(rSlideSorter),
       mrModel(rSlideSorter.GetModel()),
       mbIsDisposed(false),
@@ -165,7 +166,9 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
       meOrientation(Layouter::GRID),
       mpProperties(rSlideSorter.GetProperties()),
       mpPageUnderMouse(),
-      msHelpText(),
+      msDefaultHelpText(),
+      msCurrentHelpText(),
+      mnHelpWindowHandle(0),
       mnButtonUnderMouse(-1),
       mpPageObjectPainter(),
       mpSelectionPainter(),
@@ -647,7 +650,8 @@ void SlideSorterView::RequestRepaint (void)
 
 void SlideSorterView::RequestRepaint (const model::SharedPageDescriptor& rpDescriptor)
 {
-    RequestRepaint(rpDescriptor->GetBoundingBox());
+    if (rpDescriptor)
+        RequestRepaint(rpDescriptor->GetBoundingBox());
 }
 
 
@@ -840,6 +844,58 @@ ButtonBar& SlideSorterView::GetButtonBar (void) const
 
 
 
+void SlideSorterView::SetHelpText (
+    const ::rtl::OUString& rsHelpText,
+    const bool bIsDefaultHelpText)
+{
+    if (bIsDefaultHelpText)
+        msDefaultHelpText = rsHelpText;
+    if (msCurrentHelpText != rsHelpText)
+    {
+        if (mnHelpWindowHandle>0)
+        {
+            Help::HideTip(mnHelpWindowHandle);
+            mnHelpWindowHandle = 0;
+        }
+
+        msCurrentHelpText = rsHelpText;
+
+        if (msCurrentHelpText.getLength() > 0)
+        {
+            Rectangle aBox (
+                mpLayouter->GetPageObjectLayouter()->GetBoundingBox(
+                    mpPageUnderMouse,
+                    PageObjectLayouter::Preview,
+                    PageObjectLayouter::WindowCoordinateSystem));
+            ::Window* pParent (mrSlideSorter.GetContentWindow().get());
+            while (pParent!=NULL && pParent->GetParent()!=NULL)
+                pParent = pParent->GetParent();
+            const Point aOffset (
+                mrSlideSorter.GetContentWindow()->GetWindowExtentsRelative(pParent).TopLeft());
+            aBox.Move(aOffset.X(), aOffset.Y());
+            // We want the help text outside (below) the preview.  Therefore
+            // we have to make the box larger.
+            aBox.Bottom()+=25;
+            mnHelpWindowHandle = Help::ShowTip(
+                mrSlideSorter.GetContentWindow().get(),
+                aBox,
+                msCurrentHelpText,
+                QUICKHELP_CENTER | QUICKHELP_BOTTOM);
+        }
+    }
+}
+
+
+
+
+const ::rtl::OUString& SlideSorterView::GetDefaultHelpText (void) const
+{
+    return msDefaultHelpText;
+}
+
+
+
+
 void SlideSorterView::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint)
 {
     ::sd::DrawDocShell* pDocShell = mrModel.GetDocument()->GetDocSh();
@@ -908,7 +964,7 @@ void SlideSorterView::UpdatePageUnderMouse (
         && GetButtonBar().IsMouseOverBar() != bIsMouseOverButtonBar
         && bIsMouseOverButtonBar)
     {
-        pWindow->SetQuickHelpText(msHelpText);
+        SetHelpText(msDefaultHelpText, true);
     }
 }
 
@@ -934,23 +990,26 @@ void SlideSorterView::SetPageUnderMouse (
         SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
         if (pWindow)
         {
-            msHelpText = ::rtl::OUString();
+            ::rtl::OUString sHelpText;
             if (mpPageUnderMouse)
             {
                 SdPage* pPage = mpPageUnderMouse->GetPage();
                 if (pPage != NULL)
-                    msHelpText = pPage->GetName();
+                    sHelpText = pPage->GetName();
                 else
                 {
                     OSL_ASSERT(mpPageUnderMouse->GetPage() != NULL);
                 }
-                if (msHelpText.getLength() == 0)
+                if (sHelpText.getLength() == 0)
                 {
-                    msHelpText = String(SdResId(STR_PAGE));
-                    msHelpText += String::CreateFromInt32(mpPageUnderMouse->GetPageIndex()+1);
+                    sHelpText = String(SdResId(STR_PAGE));
+                    sHelpText += String::CreateFromInt32(mpPageUnderMouse->GetPageIndex()+1);
                 }
+
+                SetHelpText(sHelpText, true);
             }
-            pWindow->SetQuickHelpText(msHelpText);
+            else
+                SetHelpText(::rtl::OUString(), false);
         }
     }
 }

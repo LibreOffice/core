@@ -181,9 +181,9 @@ void ButtonBar::ProcessMouseMotionEvent (
         SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
         if (pWindow)
             if (mpButtonUnderMouse)
-                pWindow->SetQuickHelpText(mpButtonUnderMouse->GetHelpText());
+                mrSlideSorter.GetView().SetHelpText(mpButtonUnderMouse->GetHelpText(), false);
             else
-                pWindow->SetQuickHelpText(::rtl::OUString());
+                mrSlideSorter.GetView().SetHelpText(mrSlideSorter.GetView().GetDefaultHelpText(),true);
     }
 
     if (bPageHasChanged || bButtonHasChanged || bButtonStateHasChanged)

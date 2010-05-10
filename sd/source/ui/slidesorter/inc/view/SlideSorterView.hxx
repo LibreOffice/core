@@ -241,6 +241,12 @@ public:
 
     ButtonBar& GetButtonBar (void) const;
 
+    /** Show a tool tip with either the given help text, or when that is
+        empty, with the content of msHelpText.
+    */
+    void SetHelpText (const ::rtl::OUString& rsHelpText, bool bIsDefaultHelpText);
+    const ::rtl::OUString& GetDefaultHelpText (void) const;
+
 protected:
     virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
 
@@ -259,7 +265,9 @@ private:
     Layouter::Orientation meOrientation;
     ::boost::shared_ptr<controller::Properties> mpProperties;
     model::SharedPageDescriptor mpPageUnderMouse;
-    ::rtl::OUString msHelpText;
+    ::rtl::OUString msDefaultHelpText;
+    ::rtl::OUString msCurrentHelpText;
+    ULONG mnHelpWindowHandle;
     sal_Int32 mnButtonUnderMouse;
     ::boost::shared_ptr<PageObjectPainter> mpPageObjectPainter;
     ::boost::shared_ptr<SelectionPainter> mpSelectionPainter;
