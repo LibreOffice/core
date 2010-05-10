@@ -2383,6 +2383,16 @@ void OutputDevice::impPaintLineGeometryWithEvtlExpand(
     {
         const double fHalfLineWidth((rInfo.GetWidth() * 0.5) + 0.5);
 
+        if(aLinePolyPolygon.areControlPointsUsed())
+        {
+            // #i110768# When area geometry has to be created, do not
+            // use the fallback bezier decomposition inside createAreaGeometry,
+            // but one that is at least as good as ImplSubdivideBezier was.
+            // There, Polygon::AdaptiveSubdivide was used with default parameter
+            // 1.0 as quality index.
+            aLinePolyPolygon = basegfx::tools::adaptiveSubdivideByDistance(aLinePolyPolygon, 1.0);
+        }
+
         for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
         {
             aFillPolyPolygon.append(basegfx::tools::createAreaGeometry(
