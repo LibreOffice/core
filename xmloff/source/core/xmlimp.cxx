@@ -38,7 +38,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "xmlnmspe.hxx"
-#include "xmlkywd.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/xmlictxt.hxx>
@@ -110,6 +109,7 @@ sal_Char __READONLY_DATA sXML_np__number[] = "_number";
 sal_Char __READONLY_DATA sXML_np__svg[] = "_svg";
 sal_Char __READONLY_DATA sXML_np__chart[] = "_chart";
 sal_Char __READONLY_DATA sXML_np__math[] = "_math";
+sal_Char __READONLY_DATA sXML_np__form[] = "_form";
 sal_Char __READONLY_DATA sXML_np__script[] = "_script";
 sal_Char __READONLY_DATA sXML_np__config[] = "_config";
 sal_Char __READONLY_DATA sXML_np__db[] = "_db";
@@ -293,7 +293,7 @@ void SvXMLImport::_InitCtor()
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__math) ),
                             GetXMLToken(XML_N_MATH),
                             XML_NAMESPACE_MATH );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_namespace_form) ),
+        mpNamespaceMap->Add(OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_np__form )),
                             GetXMLToken(XML_N_FORM),
                             XML_NAMESPACE_FORM );
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__script) ),
@@ -675,7 +675,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
             }
         }
         else if( ( rAttrName.getLength() >= 5 ) &&
-            ( rAttrName.compareToAscii( sXML_xmlns, 5 ) == 0 ) &&
+            ( rAttrName.compareTo( GetXMLToken(XML_XMLNS), 5 ) == 0 ) &&
             ( rAttrName.getLength() == 5 || ':' == rAttrName[5] ) )
         {
             if( !pRewindMap )
