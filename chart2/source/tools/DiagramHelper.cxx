@@ -44,6 +44,8 @@
 #include "ControllerLockGuard.hxx"
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart/XDiagramPositioning.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
@@ -54,9 +56,11 @@
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
-#include <com/sun/star/drawing/ShadeMode.hpp>
 
+#include <unotools/saveopt.hxx>
 #include <rtl/math.hxx>
+
+#include <com/sun/star/util/XModifiable.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -1519,6 +1523,35 @@ awt::Rectangle DiagramHelper::getDiagramRectangleFromModel( const uno::Reference
     aRet = awt::Rectangle(aAbsPosLeftTop.X, aAbsPosLeftTop.Y, aAbsSize.Width, aAbsSize.Height );
 
     return aRet;
+}
+
+//static
+bool DiagramHelper::switchDiagramPositioningToExcludingPositioning(
+    const uno::Reference< frame::XModel >& xChartModel
+    , bool bResetModifiedState, bool bConvertAlsoFromAutoPositioning )
+{
+    //return true if something was changed
+    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
+    if( nCurrentODFVersion == SvtSaveOptions::ODFVER_LATEST )//#i100778# todo: change this dependent on fileformat evolution
+    {
+        uno::Reference< ::com::sun::star::chart::XChartDocument > xOldDoc( xChartModel, uno::UNO_QUERY ) ;
+        if( xOldDoc.is() )
+        {
+            uno::Reference< ::com::sun::star::chart::XDiagramPositioning > xDiagramPositioning( xOldDoc->getDiagram(), uno::UNO_QUERY );
+            if( xDiagramPositioning.is() && ( bConvertAlsoFromAutoPositioning || !xDiagramPositioning->isAutomaticDiagramPositioning() )
+                && !xDiagramPositioning->isExcludingDiagramPositioning() )
+            {
+                ControllerLockGuard aCtrlLockGuard( xChartModel );
+                uno::Reference< util::XModifiable > xModifiable( xChartModel, uno::UNO_QUERY );
+                bool bModelWasModified = xModifiable.is() && xModifiable->isModified();
+                xDiagramPositioning->setDiagramPositionExcludingAxes( xDiagramPositioning->calculateDiagramPositionExcludingAxes() );
+                if(bResetModifiedState && !bModelWasModified && xModifiable.is() )
+                    xModifiable->setModified(sal_False);
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 } //  namespace chart

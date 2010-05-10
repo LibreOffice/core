@@ -796,6 +796,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
         if ( m_eDrawMode == CHARTDRAW_INSERT && pDrawViewWrapper->IsCreateObj() )
         {
             pDrawViewWrapper->EndCreateObj( SDRCREATE_FORCEEND );
+            impl_switchDiagramPositioningToExcludingPositioning();
             if ( pDrawViewWrapper->AreObjectsMarked() )
             {
                 if ( pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_TEXT )

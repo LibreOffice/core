@@ -333,6 +333,11 @@ public:
 
     static ::com::sun::star::awt::Rectangle getDiagramRectangleFromModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
 
+    static bool switchDiagramPositioningToExcludingPositioning( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::frame::XModel >& xChartModel
+        , bool bResetModifiedState //set model back to unchanged if it was unchanged before
+        , bool bConvertAlsoFromAutoPositioning );
+
 private:
     // not implemented
     DiagramHelper();
