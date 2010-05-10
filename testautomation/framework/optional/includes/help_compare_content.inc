@@ -43,6 +43,7 @@ testcase tCompareHelpContent()
     dim sFileOut as string
     dim sFilein as string
     dim sFileName as string
+    dim sProductName as string : sProductName = hStringReplaceChar( gProductName, " ", "_" )
     
     ' the array that holds the names of the applications
     dim aTopicsFromUI( 1200 ) as string 
@@ -55,7 +56,8 @@ testcase tCompareHelpContent()
     dim brc as boolean
     
     ' define input and output paths, presetting variables
-    sFileName = gProductName & "_help_content_" & gIsoLang & ".txt"
+
+    sFileName = sProductName & "_help_content_" & gIsoLang & ".txt"
     sFileOut = hGetWorkFile( sFilename )
     sFileIn  = gTesttoolPath & "framework\optional\input\help_browser\"  
     sFileIn  = convertpath( sFileIn & sFileName )
