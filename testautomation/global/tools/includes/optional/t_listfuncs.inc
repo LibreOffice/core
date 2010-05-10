@@ -140,7 +140,7 @@ function hManageComparisionList( sFileIn as string, sFileOut as string, sListOut
     '///<ul>
 
     const CFN = "hManageComparisionList::"
-    const FILESIZE = 10000
+    const FILESIZE = 25000
     const COMPARE_SUCCESS = 0
     const ENCODING_UTF8 = "UTF8"
 
