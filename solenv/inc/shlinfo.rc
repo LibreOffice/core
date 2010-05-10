@@ -79,7 +79,7 @@ VS_VERSION_INFO versioninfo
 				value "FileVersion",		PPS(VER_LEVEL) "\0"
 				value "OriginalFilename",	PPS(ORG_NAME) "\0"
 				value "InternalName", 		PPS(INTERNAL_NAME) "\0"
-				value "LegalCopyright",		S_CRIGHT " Sun Microsystems, Inc.\0"
+				value "LegalCopyright",		S_CRIGHT " Oracle, Inc.\0"
 				ADDITIONAL_VERINFO1
 				ADDITIONAL_VERINFO2
 				ADDITIONAL_VERINFO3
@@ -92,7 +92,7 @@ VS_VERSION_INFO versioninfo
 				value "FileVersion",		PPS(VER_LEVEL) "\0"
 				value "OriginalFilename",	PPS(ORG_NAME) "\0"
 				value "InternalName", 		PPS(INTERNAL_NAME) "\0"
-				value "LegalCopyright", 	S_CRIGHT " Sun Microsystems, Inc.\0"
+				value "LegalCopyright", 	S_CRIGHT " Oracle, Inc.\0"
 				ADDITIONAL_VERINFO1
 				ADDITIONAL_VERINFO2
 				ADDITIONAL_VERINFO3

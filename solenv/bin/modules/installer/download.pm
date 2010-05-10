@@ -446,11 +446,10 @@ sub get_downloadname_language
     # en-US is default language and can be removed therefore
     # for one-language installation sets
 
-    if ( $languages =~ /^\s*en-US\s*$/ )
-    {
-        $languages = "";
-    }
-
+    # if ( $languages =~ /^\s*en-US\s*$/ )
+    # {
+    #   $languages = "";
+    # }
 
     if ( length ($languages) > $installer::globals::max_lang_length )
     {
@@ -461,17 +460,245 @@ sub get_downloadname_language
 }
 
 #########################################################
-# Setting download name, first part
+# Setting download name
 #########################################################
 
-sub get_downloadname_start
+sub get_downloadname_productname
 {
     my ($allvariables) = @_;
 
     my $start = "OOo";
+
+    if ( $allvariables->{'PRODUCTNAME'} eq "OpenOffice.org" ) { $start = "OOo"; }
+
+    if ( $allvariables->{'PRODUCTNAME'} eq "OOo-dev" ) { $start = "OOo-Dev"; }
+
+    if (( $allvariables->{'PRODUCTNAME'} eq "OpenOffice.org" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start = "OOo-SDK"; }
+
+    if (( $allvariables->{'PRODUCTNAME'} eq "OOo-dev" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start = "OOo-Dev-SDK"; }
+
+    if ( $allvariables->{'PRODUCTNAME'} eq "URE" ) { $start = "OOo-URE"; }
+
     if ( $allvariables->{'PRODUCTNAME'} eq "BrOffice.org" ) { $start = "BrOo"; }
 
+    if ( $allvariables->{'PRODUCTNAME'} eq "BrOo-dev" ) { $start = "BrOo-Dev"; }
+
+    if (( $allvariables->{'PRODUCTNAME'} eq "BrOffice.org" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start = "BrOo-SDK"; }
+
+    if (( $allvariables->{'PRODUCTNAME'} eq "BrOo-dev" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start = "BrOo-Dev-SDK"; }
+
     return $start;
+}
+
+#########################################################
+# Setting download version
+#########################################################
+
+sub get_download_version
+{
+    my ($allvariables) = @_;
+
+    my $version = "";
+
+    my $devproduct = 0;
+    if (( $allvariables->{'DEVELOPMENTPRODUCT'} ) && ( $allvariables->{'DEVELOPMENTPRODUCT'} == 1 )) { $devproduct = 1; }
+
+    my $cwsproduct = 0;
+    # the environment variable CWS_WORK_STAMP is set only in CWS
+    if ( $ENV{'CWS_WORK_STAMP'} ) { $cwsproduct = 1; }
+
+    if (( $cwsproduct ) || ( $devproduct ))  # use "DEV300m75"
+    {
+        my $source = uc($installer::globals::build); # DEV300
+        my $localminor = "";
+        if ( $installer::globals::minor ne "" ) { $localminor = $installer::globals::minor; }
+        else { $localminor = $installer::globals::lastminor; }
+        $version = $source . $localminor;
+    }
+    else  # use 3.2.0rc1
+    {
+        $version = $allvariables->{'PRODUCTVERSION'};
+        if (( $allvariables->{'ABOUTBOXPRODUCTVERSION'} ) && ( $allvariables->{'ABOUTBOXPRODUCTVERSION'} ne "" )) { $version = $allvariables->{'ABOUTBOXPRODUCTVERSION'}; }
+        if (( $allvariables->{'SHORT_PRODUCTEXTENSION'} ) && ( $allvariables->{'SHORT_PRODUCTEXTENSION'} ne "" )) { $version = $version . $allvariables->{'SHORT_PRODUCTEXTENSION'}; }
+    }
+
+    return $version;
+}
+
+###############################################################
+# Set date string, format: yymmdd
+###############################################################
+
+sub set_date_string
+{
+    my ($allvariables) = @_;
+
+    my $datestring = "";
+
+    my $devproduct = 0;
+    if (( $allvariables->{'DEVELOPMENTPRODUCT'} ) && ( $allvariables->{'DEVELOPMENTPRODUCT'} == 1 )) { $devproduct = 1; }
+
+    my $cwsproduct = 0;
+    # the environment variable CWS_WORK_STAMP is set only in CWS
+    if ( $ENV{'CWS_WORK_STAMP'} ) { $cwsproduct = 1; }
+
+    my $releasebuild = 1;
+    if (( $allvariables->{'SHORT_PRODUCTEXTENSION'} ) && ( $allvariables->{'SHORT_PRODUCTEXTENSION'} ne "" )) { $releasebuild = 0; }
+
+    if (( ! $devproduct ) && ( ! $cwsproduct ) && ( ! $releasebuild ))
+    {
+        my @timearray = localtime(time);
+
+        my $day = $timearray[3];
+        my $month = $timearray[4] + 1;
+        my $year = $timearray[5] + 1900;
+
+        if ( $month < 10 ) { $month = "0" . $month; }
+        if ( $day < 10 ) { $day = "0" . $day; }
+
+        $datestring = $year . $month . $day;
+    }
+
+    return $datestring;
+}
+
+#################################################################
+# Setting the platform name for download
+#################################################################
+
+sub get_download_platformname
+{
+    my $platformname = "";
+
+    if ( $installer::globals::islinuxbuild )
+    {
+        $platformname = "Linux";
+    }
+    elsif ( $installer::globals::issolarisbuild )
+    {
+        $platformname = "Solaris";
+    }
+    elsif ( $installer::globals::iswindowsbuild )
+    {
+        $platformname = "Win";
+    }
+    elsif ( $installer::globals::isfreebsdbuild )
+    {
+        $platformname = "FreeBSD";
+    }
+    elsif ( $installer::globals::ismacbuild )
+    {
+        $platformname = "MacOS";
+    }
+    else
+    {
+        # $platformname = $installer::globals::packageformat;
+        $platformname = $installer::globals::compiler;
+    }
+
+    return $platformname;
+}
+
+#########################################################
+# Setting the architecture for the download name
+#########################################################
+
+sub get_download_architecture
+{
+    my $arch = "";
+
+    if ( $installer::globals::compiler =~ /unxlngi/ )
+    {
+        $arch = "x86";
+    }
+    elsif ( $installer::globals::compiler =~ /unxlngppc/ )
+    {
+        $arch = "PPC";
+    }
+    elsif ( $installer::globals::compiler =~ /unxlngx/ )
+    {
+        $arch = "x86-64";
+    }
+    elsif ( $installer::globals::issolarissparcbuild )
+    {
+        $arch = "Sparc";
+    }
+    elsif ( $installer::globals::issolarisx86build )
+    {
+        $arch = "x86";
+    }
+    elsif ( $installer::globals::iswindowsbuild )
+    {
+        $arch = "x86";
+    }
+    elsif ( $installer::globals::compiler =~ /^unxmacxi/ )
+    {
+        $arch = "x86";
+    }
+    elsif ( $installer::globals::compiler =~ /^unxmacxp/ )
+    {
+        $arch = "PPC";
+    }
+
+    return $arch;
+}
+
+#########################################################
+# Setting the installation type for the download name
+#########################################################
+
+sub get_install_type
+{
+    my ($allvariables) = @_;
+
+    my $type = "";
+
+    if ( $installer::globals::languagepack )
+    {
+        $type = "langpack";
+
+        if ( $installer::globals::islinuxrpmbuild )
+        {
+            $type = $type . "-rpm";
+        }
+
+        if ( $installer::globals::islinuxdebbuild )
+        {
+            $type = $type . "-deb";
+        }
+
+        if ( $installer::globals::packageformat eq "archive" )
+        {
+            $type = $type . "-arc";
+        }
+    }
+    else
+    {
+        $type = "install";
+
+        if ( $installer::globals::islinuxrpmbuild )
+        {
+            $type = $type . "-rpm";
+        }
+
+        if ( $installer::globals::islinuxdebbuild )
+        {
+            $type = $type . "-deb";
+        }
+
+        if ( $installer::globals::packageformat eq "archive" )
+        {
+            $type = $type . "-arc";
+        }
+
+        if (( $allvariables->{'WITHJREPRODUCT'} ) && ( $allvariables->{'WITHJREPRODUCT'} == 1 ))
+        {
+            $type = $type . "-wJRE";
+        }
+
+    }
+
+    return $type;
 }
 
 #########################################################
@@ -548,48 +775,29 @@ sub get_current_version
     return $versionstring;
 }
 
-#########################################################
-# Determining the download file name
-# Samples:
-# OOo_2.0.2rc1_060213_Solarisx86_install_de
-# OOo_2.0.2rc1_060213_LinuxIntel_langpack_zh-TW
-# OOo_2.0.2rc1_060213_SolarisSparc_install_zh-TW_wJRE
-# OOo_2.0.2rc1_060213_Win32Intel_install_zh-TW_wJRE
-# OOo_2.0.157_LinuxIntel_install_de
-#
-#########################################################
+###############################################################################################
+# Setting the download file name
+# Syntax:
+# (PRODUCTNAME)_(VERSION)_(TIMESTAMP)_(OS)_(ARCH)_(INSTALLTYPE)_(LANGUAGE).(FILEEXTENSION)
+# Rules:
+# Timestamp only for Beta and Release Candidate
+###############################################################################################
 
 sub set_download_filename
 {
     my ($languagestringref, $allvariables) = @_;
 
-    my $start = get_downloadname_start($allvariables);
-    # my $versionstring = get_current_version();
-    my $versionstring = "";
-    my $date = installer::logger::set_installation_date();
-    if ( $installer::globals::product =~ /_Dev\s*$/ ) { $date = ""; }
-    my $platform = installer::worker::get_platform_name();
-    my $type = get_installation_type();
+    my $start = get_downloadname_productname($allvariables);
+    my $versionstring = get_download_version($allvariables);
+    my $date = set_date_string($allvariables);
+    my $platform = get_download_platformname();
+    my $architecture = get_download_architecture();
+    my $type = get_install_type($allvariables);
     my $language = get_downloadname_language($languagestringref);
-    my $addon = get_downloadname_addon();
 
-    if ( $installer::globals::product =~ /_Dev\s*$/ )
-    {
-        my $localminor = "";
-        if ( $installer::globals::minor ne "" ) { $localminor = $installer::globals::minor; }
-        else { $localminor = $installer::globals::lastminor; }
-        if ( $localminor =~ /^\s*\w(\d+)\w*\s*$/ ) { $localminor = $1; }
-        $versionstring = $allvariables->{'PRODUCTVERSION'} . "." . $localminor;
-    }
-    else
-    {
-        if ( $allvariables->{'PACKAGEVERSION'} )
-        {
-            $versionstring = $allvariables->{'PACKAGEVERSION'};
-        }
-    }
+    # Setting the extension happens automatically
 
-    my $filename = $start . "_" . $versionstring . "_" . $date . "_" . $platform . "_" . $type . "_" . $language . $addon;
+    my $filename = $start . "_" . $versionstring . "_" . $date . "_" . $platform . "_" . $architecture . "_" . $type . "_" . $language;
 
     $filename =~ s/\_\_/\_/g;   # necessary, if $versionstring or $platform or $language are empty
     $filename =~ s/\_\s*$//;    # necessary, if $language and $addon are empty
@@ -1039,6 +1247,10 @@ sub nsis_language_converter
 
     my $nsislanguage = "";
 
+    # Assign language used by NSIS.
+    # The files "$nsislanguage.nsh" and "$nsislanguage.nlf"
+    # are needed in the NSIS environment.
+    # Directory: <NSIS-Dir>/Contrib/Language files
     if ( $language eq "en-US" ) { $nsislanguage = "English"; }
     elsif ( $language eq "sq" ) { $nsislanguage = "Albanian"; }
     elsif ( $language eq "ar" ) { $nsislanguage = "Arabic"; }
@@ -1057,6 +1269,7 @@ sub nsis_language_converter
     elsif ( $language eq "fr" ) { $nsislanguage = "French"; }
     elsif ( $language eq "hu" ) { $nsislanguage = "Hungarian"; }
     elsif ( $language eq "he" ) { $nsislanguage = "Hebrew"; }
+    elsif ( $language eq "is" ) { $nsislanguage = "Icelandic"; }
     elsif ( $language eq "id" ) { $nsislanguage = "Indonesian"; }
     elsif ( $language eq "it" ) { $nsislanguage = "Italian"; }
     elsif ( $language eq "lv" ) { $nsislanguage = "Latvian"; }
