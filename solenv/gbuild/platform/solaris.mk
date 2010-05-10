@@ -29,6 +29,7 @@ GUI := UNX
 COM := C52
 
 gb_MKTEMP := mktemp -p
+gb_AWK := nawk
 
 gb_CC := cc
 gb_CXX := CC
@@ -297,25 +298,21 @@ gb_SdiTarget_SVIDLPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
 gb_SrsPartTarget_RSCTARGET := $(OUTDIR)/bin/rsc
 gb_SrsPartTarget_RSCCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_SrsPartTarget_RSCTARGET)
 
-# FIXME use mkdepend or something
+# Sun cc/CC support -xM1/-xMF flags, but unfortunately refuse input files that
+# do not have the right suffix, so use makedepend here...
 define gb_SrsPartTarget__command_dep
-$(call gb_Helper_abbreviate_dirs,\
-    mkdir -p `dirname $(call gb_SrsPartTarget_get_target,$(1))` && \
-    touch $(call gb_SrsPartTarget_get_target,$(1))
-)
+$(call gb_Helper_abbreviate_dirs_native,\
+    $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
+        $(3) $(4) \
+        $(2) \
+        -f - \
+    | $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
+        -v OBJECTFILE=$(call gb_SrsPartTarget_get_target,$(1)) \
+        -v OUTDIR=$(OUTDIR)/ \
+        -v WORKDIR=$(WORKDIR)/ \
+        -v SRCDIR=$(SRCDIR)/ \
+    > $(call gb_SrsPartTarget_get_dep_target,$(1)))
 endef
-# FIXME does not work!
-#	$(gb_GCCP) \
-#		-xM1 \
-#		-xMF $(call gb_SrsPartTarget_get_target,$(1)) \
-#		$(3) \
-#		$(4) \
-#		-c $(2) \
-#		)
-#endef
-#		-c -x c++-header $(2) \
-#		-o $(call gb_SrsPartTarget_get_dep_target,$(1)))
-
 
 # vim: set noet sw=4 ts=4:
 
