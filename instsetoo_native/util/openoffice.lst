@@ -37,9 +37,9 @@ Globals
             UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
  			PACKAGEMAP package_names.txt,package_names_ext.txt
 			WINDOWSPATCHLEVEL 6
-			OPENSOURCE 1
 			OOODOWNLOADNAME 1
 			STARTCENTER_LAYOUT_STYLE 0
+			BUILDIDCWS {buildidcws}
 		}
 	}
 }
