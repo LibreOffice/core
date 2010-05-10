@@ -1588,6 +1588,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     // Del-Array fuer alle RefMarks ohne Ausdehnung
     SwpHts aRefMrkArr;
 
+    USHORT nDeletedDummyChars(0);
         //Achtung: kann ungueltig sein!!
     for (USHORT n = 0; ( n < nSize ); ++n)
     {
@@ -1681,9 +1682,19 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
         }
         else
         {
-            pNewHt = pDest->InsertItem( pHt->GetAttr(), nAttrStt,
-                                nAttrEnd, nsSetAttrMode::SETATTR_NOTXTATRCHR );
-            lcl_CopyHint( nWhich, pHt, pNewHt, pOtherDoc, pDest );
+            pNewHt = pDest->InsertItem( pHt->GetAttr(), nAttrStt - nDeletedDummyChars,
+                nAttrEnd - nDeletedDummyChars, nsSetAttrMode::SETATTR_NOTXTATRCHR );
+            if (pNewHt)
+            {
+                lcl_CopyHint( nWhich, pHt, pNewHt, pOtherDoc, pDest );
+            }
+            else if (pHt->HasDummyChar())
+            {
+                // The attribute that has failed to be copied would insert
+                // dummy char, so positions of the following attributes have
+                // to be shifted by one to compensate for that missing char.
+                ++nDeletedDummyChars;
+            }
         }
 
         if( RES_TXTATR_REFMARK == nWhich && !pEndIdx && !bCopyRefMark )
