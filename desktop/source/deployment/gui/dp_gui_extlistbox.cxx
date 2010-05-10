@@ -1123,17 +1123,30 @@ void ExtensionBox_Impl::checkEntries()
     {
         if ( (*iIndex)->m_bChecked == false )
         {
+            (*iIndex)->m_bChecked = true;
             bNeedsUpdate = true;
             nPos = iIndex-m_vEntries.begin();
             if ( (*iIndex)->m_bNew )
-            {
+            { // add entry to list and correct active pos
                 if ( nNewPos == - 1)
                     nNewPos = nPos;
                 if ( nPos <= m_nActive )
                     m_nActive += 1;
+                iIndex++;
+            }
+            else
+            {   // remove entry from list
+                if ( nPos < m_nActive )
+                    m_nActive -= 1;
+                else if ( ( nPos == m_nActive ) && ( nPos == m_vEntries.size() - 1 ) )
+                    m_nActive -= 1;
+                m_vRemovedEntries.push_back( *iIndex );
+                m_vEntries.erase( iIndex );
+                iIndex = m_vEntries.begin() + nPos;
             }
         }
-        iIndex++;
+        else
+            iIndex++;
     }
     guard.clear();
 

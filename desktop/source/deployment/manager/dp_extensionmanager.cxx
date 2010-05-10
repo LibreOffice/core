@@ -326,6 +326,8 @@ void ExtensionManager::activateExtension(
         ::std::list<Reference<deploy::XPackage> >
         > (listExtensions),
         bUserDisabled, bStartup, xAbortChannel, xCmdEnv);
+
+    fireModified();
 }
 
 void ExtensionManager::activateExtension(

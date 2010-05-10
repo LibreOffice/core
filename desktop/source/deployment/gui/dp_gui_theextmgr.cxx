@@ -34,6 +34,7 @@
 #include "vos/mutex.hxx"
 
 #include "toolkit/helper/vclunohelper.hxx"
+
 #include "com/sun/star/beans/XPropertySet.hpp"
 
 #include "dp_gui_dialog2.hxx"
@@ -43,10 +44,6 @@
 #include "dp_identifier.hxx"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
-#define USER_PACKAGE_MANAGER    OUSTR("user")
-#define SHARED_PACKAGE_MANAGER  OUSTR("shared")
-#define BUNDLED_PACKAGE_MANAGER OUSTR("bundled")
 
 #define USER_PACKAGE_MANAGER    OUSTR("user")
 #define SHARED_PACKAGE_MANAGER  OUSTR("shared")

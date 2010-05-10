@@ -69,8 +69,6 @@ private:
 
     ::rtl::OUString          m_sGetExtensionsURL;
 
-    // liste der packages ( xpackage?, mit parent manager, ... )
-
     void createPackageList();
 
 public:

@@ -1028,13 +1028,14 @@ void ExtensionCmdQueue::Thread::_enableExtension( ::rtl::Reference< ProgressCmdE
     if ( !xPackage.is() )
         return;
 
-    uno::Reference< task::XAbortChannel > xAbortChannel( xPackage->createAbortChannel() );
+    uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
+    uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
     OUString sTitle = searchAndReplaceAll( m_sEnablingPackages, OUSTR("%EXTENSION_NAME"), xPackage->getDisplayName() );
     rCmdEnv->progressSection( sTitle, xAbortChannel );
 
     try
     {
-        xPackage->registerPackage(false, xAbortChannel, rCmdEnv.get() );
+        xExtMgr->enableExtension( xPackage, xAbortChannel, rCmdEnv.get() );
         if ( m_pDialogHelper )
             m_pDialogHelper->updatePackageInfo( xPackage );
     }
@@ -1049,13 +1050,14 @@ void ExtensionCmdQueue::Thread::_disableExtension( ::rtl::Reference< ProgressCmd
     if ( !xPackage.is() )
         return;
 
-    uno::Reference< task::XAbortChannel > xAbortChannel( xPackage->createAbortChannel() );
+    uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
+    uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
     OUString sTitle = searchAndReplaceAll( m_sDisablingPackages, OUSTR("%EXTENSION_NAME"), xPackage->getDisplayName() );
     rCmdEnv->progressSection( sTitle, xAbortChannel );
 
     try
     {
-        xPackage->revokePackage( xAbortChannel, rCmdEnv.get() );
+        xExtMgr->disableExtension( xPackage, xAbortChannel, rCmdEnv.get() );
         if ( m_pDialogHelper )
             m_pDialogHelper->updatePackageInfo( xPackage );
     }
