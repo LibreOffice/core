@@ -2095,7 +2095,7 @@ throw (RuntimeException)
         baseLocation = urlObj.GetMainURL( INetURLObject::NO_DECODE );
 
         ::rtl::OUString testAbsoluteURL;
-        if ( osl_File_E_None == ::osl::FileBase::getAbsoluteFileURL( baseLocation, url, testAbsoluteURL ) )
+        if ( ::osl::FileBase::E_None == ::osl::FileBase::getAbsoluteFileURL( baseLocation, url, testAbsoluteURL ) )
             absoluteURL = testAbsoluteURL;
     }
 
