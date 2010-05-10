@@ -72,7 +72,7 @@ sub hEnablePrettyPrinting ( optional bDisablePrettyPrinting )
 
     ToolsOptions
     Kontext "ExtrasOptionenDLG"
-    if ( ExtrasOptionanDlg.exists( 1 ) ) then
+    if ( ExtrasOptionenDlg.exists( 1 ) ) then
 
         call hToolsOptions("loadsave","general")
 
