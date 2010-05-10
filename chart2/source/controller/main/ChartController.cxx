@@ -874,7 +874,7 @@ void ChartController::impl_deleteDrawViewController()
         throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex());
-    if( m_aLifeTimeManager.impl_isDisposed() )
+    if( m_aLifeTimeManager.impl_isDisposed(false) )
         return; //behave passive if already disposed or suspended
 
     //--remove listener

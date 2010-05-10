@@ -550,7 +550,7 @@ void SAL_CALL ChartModel::addEventListener( const uno::Reference< lang::XEventLi
 void SAL_CALL ChartModel::removeEventListener( const uno::Reference< lang::XEventListener > & xListener )
         throw(uno::RuntimeException)
 {
-    if( m_aLifeTimeManager.impl_isDisposedOrClosed() )
+    if( m_aLifeTimeManager.impl_isDisposedOrClosed(false) )
         return; //behave passive if already disposed or closed
 
     m_aLifeTimeManager.m_aListenerContainer.removeInterface( ::getCppuType((const uno::Reference< lang::XEventListener >*)0), xListener );
@@ -569,7 +569,7 @@ void SAL_CALL ChartModel::addCloseListener( const uno::Reference<   util::XClose
 void SAL_CALL ChartModel::removeCloseListener( const uno::Reference< util::XCloseListener > & xListener )
         throw(uno::RuntimeException)
 {
-    if( m_aLifeTimeManager.impl_isDisposedOrClosed() )
+    if( m_aLifeTimeManager.impl_isDisposedOrClosed(false) )
         return; //behave passive if already disposed or closed
 
     m_aLifeTimeManager.m_aListenerContainer.removeInterface( ::getCppuType((const uno::Reference< util::XCloseListener >*)0), xListener );

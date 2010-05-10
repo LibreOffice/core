@@ -746,7 +746,7 @@ void SAL_CALL ChartModel::removeModifyListener(
     const uno::Reference< util::XModifyListener >& xListener )
     throw(uno::RuntimeException)
 {
-    if( m_aLifeTimeManager.impl_isDisposedOrClosed() )
+    if( m_aLifeTimeManager.impl_isDisposedOrClosed(false) )
         return; //behave passive if already disposed or closed
 
     m_aLifeTimeManager.m_aListenerContainer.removeInterface(
@@ -845,7 +845,7 @@ void SAL_CALL ChartModel::addStorageChangeListener( const Reference< document::X
 void SAL_CALL ChartModel::removeStorageChangeListener( const Reference< document::XStorageChangeListener >& xListener )
     throw (uno::RuntimeException)
 {
-    if( m_aLifeTimeManager.impl_isDisposedOrClosed() )
+    if( m_aLifeTimeManager.impl_isDisposedOrClosed(false) )
         return; //behave passive if already disposed or closed
 
     m_aLifeTimeManager.m_aListenerContainer.removeInterface(
