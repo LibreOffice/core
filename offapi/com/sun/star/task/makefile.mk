@@ -57,6 +57,7 @@ IDLFILES=\
     PasswordContainerInteractionHandler.idl\
     PasswordRequest.idl\
     PasswordRequestMode.idl\
+    OfficeRestartManager.idl\
     UnsupportedOverwriteRequest.idl\
     UrlRecord.idl\
     UserRecord.idl\
@@ -71,6 +72,7 @@ IDLFILES=\
     XMasterPasswordHandling.idl\
     XMasterPasswordHandling2.idl\
     XPasswordContainer.idl\
+    XRestartManager.idl\
     XStatusIndicator.idl\
     XStatusIndicatorFactory.idl\
     XStatusIndicatorSupplier.idl\
