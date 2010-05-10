@@ -376,6 +376,10 @@ Reference< XShape > Shape::createAndInsert(
         if( xLockable.is() )
             xLockable->addActionLock();
 
+        Reference< document::XActionLockable > xLockable( mxShape, UNO_QUERY );
+        if( xLockable.is() )
+            xLockable->addActionLock();
+
         // sj: removing default text of placeholder objects such as SlideNumberShape or HeaderShape
         if ( bClearText )
         {
