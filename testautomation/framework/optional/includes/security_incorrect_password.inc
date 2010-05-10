@@ -33,8 +33,6 @@
 
 testcase tIncorrectPassword( filetypeID as string )
  
-    dim rc as integer
-    dim brc as boolean
     dim iCurrentFilter as integer
     dim cCurrentFilter as string
     dim filepath as string
@@ -51,7 +49,8 @@ testcase tIncorrectPassword( filetypeID as string )
     hDeleteFile( filepath )
 
     printlog( "Make sure we have exactly one single document open" )
-    hInitSingleDoc()
+    hFileCloseAll()
+    hCreateDocument() ' Do not use hInitSingleDoc() here as it creates a Writer document
 
     printlog( "Change the document" )
     hChangeDoc()
@@ -87,9 +86,7 @@ testcase tIncorrectPassword( filetypeID as string )
         printlog( "Click on the Save-Button" )
         Speichern.click()
 
-        brc = hSecurityEnterPasswordOnSave( PASSWORD_VALID )
-
-        if ( brc ) then
+        if ( hSecurityEnterPasswordOnSave( PASSWORD_VALID ) ) then
 
             kontext "AlienWarning"
             if ( AlienWarning.exists( 3 ) ) then
@@ -102,8 +99,7 @@ testcase tIncorrectPassword( filetypeID as string )
             endif
 
             printlog( "Close the document" )
-            brc = hDestroyDocument()
-            if ( not brc ) then
+            if ( not hDestroyDocument() ) then
                 warnlog( "Something went wrong while closing the document. please check" )
             endif
 
@@ -113,8 +109,7 @@ testcase tIncorrectPassword( filetypeID as string )
 
         printlog( "Load the file again" )
         hFileOpen( workpath & WORKFILE & suffix )
-        brc = hSecurityEnterPasswordOnLoad( PASSWORD_FALSE , false )
-        if ( not brc ) then
+        if ( not hSecurityEnterPasswordOnLoad( PASSWORD_FALSE , false ) ) then
             warnlog( "Something went wrong while using the password dialog" )
         endif
 
