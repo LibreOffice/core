@@ -178,17 +178,24 @@ gb_LinkTarget__RPATHS := \
     UREBIN:'$$$$ORIGIN/../lib:$$$$ORIGIN' \
     OOOLIB:'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' \
     BRAND:'$$$$ORIGIN:$$$$ORIGIN/../basis-link/program:$$$$ORIGIN/../basis-link/ure-link/lib' \
-    SDK:'$$$$ORIGIN/../../ure-link/lib' \
+    SDKBIN:'$$$$ORIGIN/../../ure-link/lib' \
+    NONEBIN:'$$$$ORIGIN/../lib:$$$$ORIGIN' \
 
-#FIXME incomplete
 gb_LinkTarget_LAYER := \
     $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_PLAINLIBS),$(lib):) \
-    $(foreach lib,$(gb_Library_RTLIBS),$(lib):) \
-    $(foreach lib,$(gb_Library_RTVERLIBS),$(lib):) \
+    $(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):URELIB) \
+    $(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_RTLIBS),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_RTVERLIBS),$(lib):URELIB) \
     $(foreach lib,$(gb_Library_STLLIBS),$(lib):URELIB) \
-    $(foreach lib,$(gb_Library_UNOLIBS),$(lib):URELIB) \
+    $(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):URELIB) \
+    $(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOOLIB) \
     $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
+    $(foreach lib,$(gb_Executable_UREBIN),$(lib):UREBIN) \
+    $(foreach lib,$(gb_Executable_SDK),$(lib):SDKBIN) \
+    $(foreach lib,$(gb_Executable_OOO),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Executable_BRAND),$(lib):BRAND) \
+    $(foreach lib,$(gb_Executable_NONE),$(lib):NONEBIN) \
 
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_COMPILEROPTFLAGS)
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_COMPILEROPTFLAGS)
