@@ -1,28 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
- * Copyright 2000, 2010 Oracle and/or its affiliates.
- *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '*  owner : joerg.skottke@sun.com
@@ -148,7 +148,7 @@ endcase
 
 sub sAllWindowTitle
 
-    printlog( "Window titles for the applications" )
+    printlog( "Window titles for the applications: " & gProductName )
     
     printlog( "Writer" )
     gApplication = "WRITER"
@@ -230,7 +230,7 @@ testcase tCheckWindowTitle(sApplication as string, sReference as string)
     dim sTemp as string
     dim saTemp() as string
     dim brc as boolean
-    gApplication = UCase (gApplication)
+    gApplication = gApplication
     printlog " - Application: " + sApplication + "; Title should be: " + sReference
     
     printlog( "Ensure that exactly one document is open" )
@@ -250,46 +250,33 @@ testcase tCheckWindowTitle(sApplication as string, sReference as string)
         case"smath":
         case"basic":
             ToolsMacroMacro
-
             kontext "makro"
-
             if Makro.exists(5) then
                 MakroAus.typeKeys "<end>"
-
                 if (Neu.isEnabled) then
                     Neu.click
-
                     kontext "basicide"
-
                     if BasicIDE.exists(5) then
                         printlog( "Basic IDE open. Good." )
                     else
                         warnlog( "Basic IDE not open. This is unexpected" )
                     endif
-
                 else
                     warnlog( "New-button is unexpectedly disabled." )
                 endif
-
-
                 try
-
                     kontext "neuesmodul"
-
                     if NeuesModul.exists(5) then
                         NeuesModul.OK
                     else
                         warnlog( "New module naming dialog is not open" )
                     endif
-
                 catch
                     warnlog( "Accessing <New module> dialog failed" )
                 endcatch
-
             else
                 warnlog( "Couldn't open Tools->Macros->Organize Macros...->StarOffice Basic..." )
             endif
-
         case"chart":
         case"DATABASE":
         case"soffice":
@@ -306,14 +293,12 @@ testcase tCheckWindowTitle(sApplication as string, sReference as string)
 
     printlog( "Compare the string to a reference" )
     if (ubound(saTemp()) > 0) then
-
         if (saTemp(1) <> sReference) then
-            warnlog "Applicationname not as expected. Sould be: '" & sReference & "', is: '" & saTemp(1) & "'"
+            warnlog "Applicationname not as expected. Should be: '" & sReference & "', is: '" & saTemp(1) & "'"
         endif
-
-        printlog "Productname: '" & saTemp(2) & "'"
+        printlog "Productname: '" + saTemp(2) + "'"
     else
-        warnlog "#i36173# - Applicationname not as expected. Should be: '" & sReference & "', is: '" & "'"
+        warnlog "#i36173# - Applicationname not as expected. Should be: '" & sReference & "', is: '" & saTemp(1) + "'"
     endif
 
     printlog( "Cleanup after test" )
@@ -336,6 +321,5 @@ testcase tCheckWindowTitle(sApplication as string, sReference as string)
 
     printlog( "Close all open documents" )
     hFileCloseAll()
-    
 endcase
 

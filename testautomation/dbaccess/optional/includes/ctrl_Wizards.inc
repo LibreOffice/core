@@ -1,28 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
- * Copyright 2000, 2010 Oracle and/or its affiliates.
- *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : marc.neumann@sun.com
@@ -96,7 +96,7 @@ testcase tGroupBoxWithDatasource
      printlog "insert password 'testtool' into login dialog"
      Kontext "LoginDialog"
         if LoginDialog.Exists then
-         	Password.setText "testtool"
+         	LoginPassword.setText "testtool"
          	LoginDialog.OK
             sleep(1)
         else
@@ -104,7 +104,7 @@ testcase tGroupBoxWithDatasource
         endif
      Kontext "LoginDialog"
         if LoginDialog.Exists then
-         	Password.setText "testtool"
+         	LoginPassword.setText "testtool"
          	LoginDialog.OK
             sleep(1)
         else
@@ -112,9 +112,10 @@ testcase tGroupBoxWithDatasource
         endif
     Kontext "TabDataForm"         
     '/// set the table TT_Control
-     printlog "set the table TT_Control"    
-	 Content.setText("TT_Control")
-     Content.TypeKeys "<RETURN>" , true       
+    printlog "set the table TT_Control"    
+    Content.setText("TT_Control")
+    Content.TypeKeys "<RETURN>" , true
+    sleep(1)
   	Kontext "ControlPropertiesDialog"
    	 ControlPropertiesDialog.Close
    	sleep(3)
@@ -587,12 +588,12 @@ testcase tListBox
         Kontext "TabListBoxData"                
         '/// choose database TT & click next
         DataSource.Select(sDSName)
-		Kontext "LoginDialog"
+        Kontext "LoginDialog"
         if LoginDialog.Exists(3) then
-        	printlog "login dialog"
-            Password.SetText "testtool"
-	        LoginDialog.OK
-	        sleep 1
+            printlog "login dialog"
+            LoginPassword.SetText "testtool"
+            LoginDialog.OK
+            sleep 1
         end if	    
         '/// choose table TPCoA-1 & click next
         Kontext "TabListBoxData"                
@@ -814,7 +815,7 @@ testcase tTableControl
 		Kontext "LoginDialog"
         if LoginDialog.Exists(3) then
         	printlog "login dialog"
-            Password.SetText "testtool"
+                LoginPassword.SetText "testtool"
 	        LoginDialog.OK
 	        sleep (1)
         end if	    

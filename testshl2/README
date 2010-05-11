@@ -1,8 +1,0 @@
-This is the second version of the testshl.
-
-Upper-lower case filenames.
-- I prever lower case filenames. Due to the fact that the cppunit 
-  code uses mixed upper and lower case I leave the original filenames
-  unchanged.
-
-
