@@ -268,14 +268,6 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                                 bRet = FALSE;
                     }
                     break;
-                case SID_ATTR_SAVEDOCWINS :
-                    {
-                        bRet = TRUE;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVEDOCWINS))
-                            if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_SAVEDOCWINS ), aSaveOptions.IsSaveDocWins())))
-                                bRet = FALSE;
-                    }
-                    break;
                 case SID_ATTR_SAVEDOCVIEW :
                     {
                         bRet = TRUE;
@@ -625,13 +617,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetSaveWorkingSet(((const SfxBoolItem *)pItem)->GetValue());
-    }
-
-    // offene Fenster speichern
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_SAVEDOCWINS), TRUE, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        aSaveOptions.SetSaveDocWins(((const SfxBoolItem *)pItem)->GetValue());
     }
 
     // Fenster-Einstellung speichern

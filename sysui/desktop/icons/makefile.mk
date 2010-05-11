@@ -37,6 +37,33 @@ TARGET=icons
 # --- Targets -------------------------------------------------------------
 
 all: \
+    $(MISC)$/oasis-database.ico \
+    $(MISC)$/oasis-drawing-template.ico \
+    $(MISC)$/oasis-drawing.ico \
+    $(MISC)$/oasis-empty-template.ico \
+    $(MISC)$/oasis-empty-document.ico \
+    $(MISC)$/oasis-formula.ico \
+    $(MISC)$/oasis-master-document.ico \
+    $(MISC)$/oasis-presentation-template.ico \
+    $(MISC)$/oasis-presentation.ico \
+    $(MISC)$/oasis-spreadsheet-template.ico \
+    $(MISC)$/oasis-spreadsheet.ico \
+    $(MISC)$/oasis-text-template.ico \
+    $(MISC)$/oasis-text.ico \
+    $(MISC)$/oasis-web-template.ico \
+    $(MISC)$/database.ico \
+    $(MISC)$/drawing-template.ico \
+    $(MISC)$/drawing.ico \
+    $(MISC)$/empty-template.ico \
+    $(MISC)$/empty-document.ico \
+    $(MISC)$/formula.ico \
+    $(MISC)$/master-document.ico \
+    $(MISC)$/presentation-template.ico \
+    $(MISC)$/presentation.ico \
+    $(MISC)$/spreadsheet-template.ico \
+    $(MISC)$/spreadsheet.ico \
+    $(MISC)$/text-template.ico \
+    $(MISC)$/text.ico \
     $(MISC)$/ooo-base-app.ico \
     $(MISC)$/ooo-base-doc.ico \
     $(MISC)$/ooo-calc-app.ico \
@@ -87,6 +114,7 @@ all: \
     $(MISC)$/ooo3_math_doc.ico \
     $(MISC)$/ooo3_writer_tem.ico \
     $(MISC)$/ooo3_empty_tem.ico \
+    $(MISC)$/ooo3_open.ico \
     $(MISC)$/ooo11-base-doc.ico \
     $(MISC)$/ooo11-calc-doc.ico \
     $(MISC)$/ooo11-calc-tem.ico \
@@ -149,6 +177,7 @@ all: \
     $(MISC)$/so9_chart_doc.ico \
     $(MISC)$/so9_writer_app.ico \
     $(MISC)$/so9_draw_app.ico \
+    $(MISC)$/so9_open.ico \
     $(MISC)$/so7-base-doc.ico \
     $(MISC)$/so7-calc-doc.ico \
     $(MISC)$/so7-calc-tem.ico \
