@@ -36,6 +36,7 @@
 #include <string.h>
 
 #include "bootstrp/prj.hxx"
+#include "sal/main.h"
 
 #include <tools/string.hxx>
 #include <tools/list.hxx>
@@ -78,12 +79,7 @@ static int  optopt = 0;
 static int  opterr = 0;
 #endif
 
-
-int
-#ifdef WNT
-_cdecl
-#endif
-main( int argc, char **argv )
+SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 {
     int c;
     char aBuf[255];

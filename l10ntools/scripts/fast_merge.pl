@@ -45,11 +45,7 @@ my $last_localize_file;
 my $first_run = "1";
 my $sdf_filename;
 my $merge_dir;
-my $WIN;
 my $state = "none";
-
-if ( defined $ENV{USE_SHELL} && $ENV{USE_SHELL} eq '4nt' ) { $WIN = 'TRUE'; }
-else { $WIN = ''; }
 
 $SIG{INT}  = 'inthandler';
 $SIG{QUIT} = 'quithandler';
@@ -67,7 +63,6 @@ struct ( sdf_obj =>
 
 parse_options();
 my $lock_file   = $merge_dir."/lock.mk";
-$lock_file =~ s/\//\\/g , if ( $WIN ) ;
 acquire_lock();
 read_sdf_file_names();
 init();
@@ -247,10 +242,9 @@ sub make_paths
 {
     my $localizeFile = $merge_dir."\\".$current[ 0 ]->module."\\".$current[ 0 ]->file;
     my $path = getDir( $localizeFile );
-    if ( !$WIN ) { $path =~ s/\\/\//g; }
+    $path =~ s/\\/\//g;
 
-    $localizeFile = $path."\\localize.sdf";
-    if ( !$WIN ) { $localizeFile =~ s/\\/\//g; }
+    $localizeFile = $path."/localize.sdf";
 
     return ( $path , $localizeFile );
 }

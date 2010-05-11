@@ -66,6 +66,7 @@ namespace com { namespace sun { namespace star { namespace rendering
     struct ViewState;
     struct IntegerBitmapLayout;
     class  XCanvas;
+    struct Texture;
     class  XIntegerBitmapColorSpace;
     class  XPolyPolygon2D;
 
@@ -414,28 +415,6 @@ namespace canvas
          */
         ::basegfx::B2IRange spritePixelAreaFromB2DRange( const ::basegfx::B2DRange& rRange );
 
-        /** This method clamps the given value to the specified range
-
-            @param val
-            The value to clamp
-
-            @param minVal
-            The minimal value val is allowed to attain
-
-            @param maxVal
-            The maximal value val is allowed to attain
-
-            @return the clamped value
-         */
-        template< typename T > T clamp( T  val,
-                                        T  minVal,
-                                        T  maxVal )
-        {
-            return ::std::max( minVal,
-                               ::std::min( maxVal,
-                                           val ) );
-        }
-
         /** Retrieve various internal properties of the actual canvas implementation.
 
             This method retrieves a bunch of internal, implementation-
@@ -518,6 +497,18 @@ namespace canvas
          */
         ::basegfx::B2DPolyPolygon getBoundMarksPolyPolygon( const ::basegfx::B2DRange& rRange );
 
+        /** Calculate number of gradient "strips" to generate (takes
+           into account device resolution)
+
+           @param nColorSteps
+           Maximal integer difference between all color stops, needed
+           for smooth gradient color differences
+         */
+        int calcGradientStepCount( ::basegfx::B2DHomMatrix&                        rTotalTransform,
+                                   const ::com::sun::star::rendering::ViewState&   viewState,
+                                   const ::com::sun::star::rendering::RenderState& renderState,
+                                   const ::com::sun::star::rendering::Texture&     texture,
+                                   int                                             nColorSteps );
 
         /** A very simplistic map for ASCII strings and arbitrary value
             types.

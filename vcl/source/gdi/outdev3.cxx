@@ -2091,10 +2091,13 @@ ImplDevFontListData* ImplDevFontList::FindDefaultFont() const
 ImplDevFontList* ImplDevFontList::Clone( bool bScalable, bool bEmbeddable ) const
 {
     ImplDevFontList* pClonedList = new ImplDevFontList;
-    pClonedList->mbMatchData    = mbMatchData;
+//  pClonedList->mbMatchData    = mbMatchData;
     pClonedList->mbMapNames     = mbMapNames;
     pClonedList->mpPreMatchHook = mpPreMatchHook;
     pClonedList->mpFallbackHook = mpFallbackHook;
+
+    // TODO: clone the config-font attributes too?
+    pClonedList->mbMatchData    = false;
 
     DevFontList::const_iterator it = maDevFontList.begin();
     for(; it != maDevFontList.end(); ++it )

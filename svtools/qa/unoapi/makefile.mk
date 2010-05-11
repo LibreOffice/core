@@ -1,7 +1,6 @@
 #*************************************************************************
-#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -22,19 +21,28 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#
-#*************************************************************************
+#***********************************************************************/
 
-PRJ=..$/..
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
 
-PRJNAME=svtools
-TARGET=qa_unoapi
+PRJ = ../..
+PRJNAME = svtools
+TARGET = qa_unoapi
+
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = org/openoffice/svtools/qa/unoapi
+JAVATESTFILES = Test.java
+JAVAFILES = $(JAVATESTFILES)
+JARFILES = OOoRunner.jar ridl.jar test.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
+.END
 
 .INCLUDE: settings.mk
-
 .INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
-ALLTAR : UNOAPI_TEST
+ALLTAR : javatest
 
-UNOAPI_TEST:
-    +$(SOLARENV)$/bin$/checkapi -sce svtools.sce -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
+.END

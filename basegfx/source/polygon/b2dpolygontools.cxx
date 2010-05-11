@@ -2346,7 +2346,8 @@ namespace basegfx
             // polygon must be closed to resemble a rect, and contain
             // at least four points.
             if( !rPoly.isClosed() ||
-                rPoly.count() < 4 )
+                rPoly.count() < 4 ||
+                rPoly.areControlPointsUsed() )
             {
                 return false;
             }

@@ -36,6 +36,7 @@
 #include "vcl/svids.hrc"
 #include "vcl/metaact.hxx"
 #include "vcl/msgbox.hxx"
+#include "vcl/configsettings.hxx"
 
 #include "tools/urlobj.hxx"
 
@@ -171,13 +172,15 @@ public:
     // set by user through printer config dialog
     // if set, pages are centered and trimmed onto the fixed page
     Size                                                        maFixedPageSize;
+    sal_Int32                                                   mnDefaultPaperBin;
 
     ImplPrinterControllerData() :
         mbFirstPage( sal_True ),
         mbLastPage( sal_False ),
         mbReversePageOrder( sal_False ),
         meJobState( view::PrintableState_JOB_STARTED ),
-        mpProgress( NULL )
+        mpProgress( NULL ),
+        mnDefaultPaperBin( -1 )
     {}
     ~ImplPrinterControllerData() { delete mpProgress; }
 
@@ -327,9 +330,25 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     // setup printer
 
     // if no specific printer is already set, create one
+
+    // #i108686#
+    // in case of a UI (platform independent or system dialog) print job, make the printer persistent over jobs
+    // however if no printer was already set by the print job's originator,
+    // and this is an API job, then use the system default location (because
+    // this is the only sensible default available if the user has no means of changing
+    // the destination
     if( ! pController->getPrinter() )
     {
-        boost::shared_ptr<Printer> pPrinter( new Printer( i_rInitSetup.GetPrinterName() ) );
+        rtl::OUString aPrinterName( i_rInitSetup.GetPrinterName() );
+        if( ! aPrinterName.getLength() && pController->isShowDialogs() && ! pController->isDirectPrint() )
+        {
+            // get printer name from configuration
+            SettingsConfigItem* pItem = SettingsConfigItem::get();
+            aPrinterName = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
+                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPrinterUsed" ) ) );
+        }
+
+        boost::shared_ptr<Printer> pPrinter( new Printer( aPrinterName ) );
         pController->setPrinter( pPrinter );
     }
 
@@ -440,7 +459,12 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
                     return;
                 }
                 pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LocalFileName" ) ),
-                                     makeAny( aFile ) );
+                                       makeAny( aFile ) );
+            }
+            else if( aDlg.isSingleJobs() )
+            {
+                pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintCollateAsSingleJobs" ) ),
+                                       makeAny( sal_True ) );
             }
         }
         catch( std::bad_alloc& )
@@ -501,6 +525,13 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
     if ( !mpPrinter )
         return FALSE;
 
+    sal_Bool bSinglePrintJobs = sal_False;
+    beans::PropertyValue* pSingleValue = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintCollateAsSingleJobs" ) ) );
+    if( pSingleValue )
+    {
+        pSingleValue->Value >>= bSinglePrintJobs;
+    }
+
     // remark: currently it is still possible to use EnablePrintFile and
     // SetPrintFileName to redirect printout into file
     // it can be argued that those methods should be removed in favor
@@ -514,6 +545,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
         {
             mbPrintFile = TRUE;
             maPrintFile = aFile;
+            bSinglePrintJobs = sal_False;
         }
     }
 
@@ -561,49 +593,90 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
         i_pController->setJobState( view::PrintableState_JOB_STARTED );
         i_pController->jobStarted();
 
-        if( mpPrinter->StartJob( pPrintFile,
-                                 i_rJobName,
-                                 Application::GetDisplayName(),
-                                 nCopies,
-                                 bCollateCopy,
-                                 i_pController->isDirectPrint(),
-                                 maJobSetup.ImplGetConstData() ) )
+        int nJobs = 1;
+        int nRepeatCount = bUserCopy ? mnCopyCount : 1;
+        if( bSinglePrintJobs )
         {
-            mbJobActive             = TRUE;
-            i_pController->createProgressDialog();
-            int nPages = i_pController->getFilteredPageCount();
-            int nRepeatCount = bUserCopy ? mnCopyCount : 1;
-            for( int nIteration = 0; nIteration < nRepeatCount; nIteration++ )
+            nJobs = mnCopyCount;
+            nCopies = 1;
+            nRepeatCount = 1;
+        }
+
+        for( int nJobIteration = 0; nJobIteration < nJobs; nJobIteration++ )
+        {
+            bool bError = false;
+            if( mpPrinter->StartJob( pPrintFile,
+                                     i_rJobName,
+                                     Application::GetDisplayName(),
+                                     nCopies,
+                                     bCollateCopy,
+                                     i_pController->isDirectPrint(),
+                                     maJobSetup.ImplGetConstData() ) )
             {
-                for( int nPage = 0; nPage < nPages; nPage++ )
+                mbJobActive             = TRUE;
+                i_pController->createProgressDialog();
+                int nPages = i_pController->getFilteredPageCount();
+                for( int nIteration = 0; nIteration < nRepeatCount; nIteration++ )
                 {
-                    if( nPage == nPages-1 && nIteration == nRepeatCount-1 )
-                        i_pController->setLastPage( sal_True );
-                    i_pController->printFilteredPage( nPage );
+                    for( int nPage = 0; nPage < nPages; nPage++ )
+                    {
+                        if( nPage == nPages-1 && nIteration == nRepeatCount-1 && nJobIteration == nJobs-1 )
+                            i_pController->setLastPage( sal_True );
+                        i_pController->printFilteredPage( nPage );
+                    }
+                    // FIXME: duplex ?
                 }
-                // FIXME: duplex ?
+                EndJob();
+
+                if( nJobIteration < nJobs-1 )
+                {
+                    mpPrinter = pSVData->mpDefInst->CreatePrinter( mpInfoPrinter );
+
+                    if ( mpPrinter )
+                    {
+                        maJobName               = i_rJobName;
+                        mnCurPage               = 1;
+                        mnCurPrintPage          = 1;
+                        mbPrinting              = TRUE;
+                    }
+                    else
+                        bError = true;
+                }
             }
-            EndJob();
+            else
+                bError = true;
 
-            if( i_pController->getJobState() == view::PrintableState_JOB_STARTED )
-                i_pController->setJobState( view::PrintableState_JOB_SPOOLED );
-        }
-        else
-        {
-            mnError = ImplSalPrinterErrorCodeToVCL( mpPrinter->GetErrorCode() );
-            if ( !mnError )
-                mnError = PRINTER_GENERALERROR;
-            i_pController->setJobState( mnError == PRINTER_ABORT
-                                        ? view::PrintableState_JOB_ABORTED
-                                        : view::PrintableState_JOB_FAILED );
-            pSVData->mpDefInst->DestroyPrinter( mpPrinter );
-            mnCurPage           = 0;
-            mnCurPrintPage      = 0;
-            mbPrinting          = FALSE;
-            mpPrinter = NULL;
+            if( bError )
+            {
+                mnError = ImplSalPrinterErrorCodeToVCL( mpPrinter->GetErrorCode() );
+                if ( !mnError )
+                    mnError = PRINTER_GENERALERROR;
+                i_pController->setJobState( mnError == PRINTER_ABORT
+                                            ? view::PrintableState_JOB_ABORTED
+                                            : view::PrintableState_JOB_FAILED );
+                if( mpPrinter )
+                    pSVData->mpDefInst->DestroyPrinter( mpPrinter );
+                mnCurPage           = 0;
+                mnCurPrintPage      = 0;
+                mbPrinting          = FALSE;
+                mpPrinter = NULL;
 
-            return false;
+                return false;
+            }
         }
+
+        if( i_pController->getJobState() == view::PrintableState_JOB_STARTED )
+            i_pController->setJobState( view::PrintableState_JOB_SPOOLED );
+    }
+
+    // make last used printer persistent for UI jobs
+    if( i_pController->isShowDialogs() && ! i_pController->isDirectPrint() )
+    {
+        SettingsConfigItem* pItem = SettingsConfigItem::get();
+        pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
+                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPrinterUsed" ) ),
+                         GetName()
+                         );
     }
 
     return true;
@@ -634,6 +707,7 @@ void PrinterController::setPrinter( const boost::shared_ptr<Printer>& i_rPrinter
     mpImplData->mpPrinter = i_rPrinter;
     setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ),
               makeAny( rtl::OUString( i_rPrinter->GetName() ) ) );
+    mpImplData->mnDefaultPaperBin = mpImplData->mpPrinter->GetPaperBin();
 }
 
 bool PrinterController::setupPrinter( Window* i_pParent )
@@ -668,27 +742,55 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
 {
     PrinterController::PageSize aPageSize;
     aPageSize.aSize = mpPrinter->GetPaperSize();
+    awt::Size aSetSize, aIsSize;
+    sal_Int32 nPaperBin = mnDefaultPaperBin;
     for( sal_Int32 nProperty = 0, nPropertyCount = i_rProps.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
-        if( i_rProps[ nProperty ].Name.equalsAscii( "PageSize" ) )
+        if( i_rProps[ nProperty ].Name.equalsAscii( "PreferredPageSize" ) )
         {
-            awt::Size aSize;
-            i_rProps[ nProperty].Value >>= aSize;
-            aPageSize.aSize.Width() = aSize.Width;
-            aPageSize.aSize.Height() = aSize.Height;
-
-            Size aCurSize( mpPrinter->GetPaperSize() );
-            Size aRealPaperSize( getRealPaperSize( aPageSize.aSize ) );
-            if( aRealPaperSize != aCurSize )
-                mpPrinter->SetPaperSizeUser( aRealPaperSize, ! isFixedPageSize() );
+            i_rProps[ nProperty ].Value >>= aSetSize;
         }
-        if( i_rProps[ nProperty ].Name.equalsAscii( "PageIncludesNonprintableArea" ) )
+        else if( i_rProps[ nProperty ].Name.equalsAscii( "PageSize" ) )
+        {
+            i_rProps[ nProperty ].Value >>= aIsSize;
+        }
+        else if( i_rProps[ nProperty ].Name.equalsAscii( "PageIncludesNonprintableArea" ) )
         {
             sal_Bool bVal = sal_False;
-            i_rProps[ nProperty].Value >>= bVal;
+            i_rProps[ nProperty ].Value >>= bVal;
             aPageSize.bFullPaper = static_cast<bool>(bVal);
         }
+        else if( i_rProps[ nProperty ].Name.equalsAscii( "PrinterPaperTray" ) )
+        {
+            sal_Int32 nBin = -1;
+            i_rProps[ nProperty ].Value >>= nBin;
+            if( nBin >= 0 && nBin < mpPrinter->GetPaperBinCount() )
+                nPaperBin = nBin;
+        }
     }
+
+    Size aCurSize( mpPrinter->GetPaperSize() );
+    if( aSetSize.Width && aSetSize.Height )
+    {
+        Size aSetPaperSize( aSetSize.Width, aSetSize.Height );
+        Size aRealPaperSize( getRealPaperSize( aSetPaperSize ) );
+        if( aRealPaperSize != aCurSize )
+            aIsSize = aSetSize;
+    }
+
+    if( aIsSize.Width && aIsSize.Height )
+    {
+        aPageSize.aSize.Width() = aIsSize.Width;
+        aPageSize.aSize.Height() = aIsSize.Height;
+
+        Size aRealPaperSize( getRealPaperSize( aPageSize.aSize ) );
+        if( aRealPaperSize != aCurSize )
+            mpPrinter->SetPaperSizeUser( aRealPaperSize, ! isFixedPageSize() );
+    }
+
+    if( nPaperBin != -1 && nPaperBin != mpPrinter->GetPaperBin() )
+        mpPrinter->SetPaperBin( nPaperBin );
+
     return aPageSize;
 }
 
@@ -1393,6 +1495,8 @@ void PrinterController::createProgressDialog()
             mpImplData->mpProgress->Show();
         }
     }
+    else
+        mpImplData->mpProgress->reset();
 }
 
 void PrinterController::setMultipage( const MultiPageSetup& i_rMPS )

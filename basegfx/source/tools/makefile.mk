@@ -37,9 +37,11 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files -------------------------------------
 
-SLOFILES= $(SLO)$/canvastools.obj	\
+SLOFILES= $(SLO)$/b2dclipstate.obj	\
+          $(SLO)$/canvastools.obj	\
           $(SLO)$/gradienttools.obj	\
           $(SLO)$/debugplotter.obj	\
+          $(SLO)$/keystoplerp.obj	\
           $(SLO)$/liangbarsky.obj	\
           $(SLO)$/tools.obj		    \
           $(SLO)$/unopolypolygon.obj

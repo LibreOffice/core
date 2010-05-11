@@ -31,6 +31,7 @@
 #include <boost/scoped_ptr.hpp>
 
 #include <osl/diagnose.h>
+#include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
@@ -41,8 +42,9 @@
 
 #include <string.h>
 
-using ::rtl::OUString;
 using ::rtl::OString;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using namespace ::std;
 using namespace ::osl;
 using namespace ::cppu;
@@ -51,8 +53,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
 //using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
-namespace sax_fastparser
-{
+
+namespace sax_fastparser {
 
 // --------------------------------------------------------------------
 
@@ -111,29 +113,34 @@ private:
 // the implementation part
 //---------------------------------------------
 
-extern "C"
+extern "C" {
+
+static void call_callbackStartElement(void *userData, const XML_Char *name , const XML_Char **atts)
 {
-    static void call_callbackStartElement(void *userData, const XML_Char *name , const XML_Char **atts)
-    {
-        FastSaxParser::callbackStartElement(userData,name,atts);
-    }
-    static void call_callbackEndElement(void *userData, const XML_Char *name)
-    {
-        FastSaxParser::callbackEndElement(userData,name);
-    }
-    static void call_callbackCharacters( void *userData , const XML_Char *s , int nLen )
-    {
-        FastSaxParser::callbackCharacters(userData,s,nLen);
-    }
-    static int call_callbackExternalEntityRef(XML_Parser parser,
-                                              const XML_Char *openEntityNames,
-                                              const XML_Char *base,
-                                              const XML_Char *systemId,
-                                              const XML_Char *publicId)
-    {
-        return FastSaxParser::callbackExternalEntityRef(parser,openEntityNames,base,systemId,publicId);
-    }
+    FastSaxParser* pFastParser = reinterpret_cast< FastSaxParser* >( userData );
+    pFastParser->callbackStartElement( name, atts );
 }
+
+static void call_callbackEndElement(void *userData, const XML_Char *name)
+{
+    FastSaxParser* pFastParser = reinterpret_cast< FastSaxParser* >( userData );
+    pFastParser->callbackEndElement( name );
+}
+
+static void call_callbackCharacters( void *userData , const XML_Char *s , int nLen )
+{
+    FastSaxParser* pFastParser = reinterpret_cast< FastSaxParser* >( userData );
+    pFastParser->callbackCharacters( s, nLen );
+}
+
+static int call_callbackExternalEntityRef( XML_Parser parser,
+        const XML_Char *openEntityNames, const XML_Char *base, const XML_Char *systemId, const XML_Char *publicId )
+{
+    FastSaxParser* pFastParser = reinterpret_cast< FastSaxParser* >( XML_GetUserData( parser ) );
+    return pFastParser->callbackExternalEntityRef( parser, openEntityNames, base, systemId, publicId );
+}
+
+} // extern "C"
 
 // --------------------------------------------------------------------
 // FastLocatorImpl implementation
@@ -172,15 +179,13 @@ OUString SAL_CALL FastLocatorImpl::getSystemId(void) throw (RuntimeException)
 // FastSaxParser implementation
 // --------------------------------------------------------------------
 
-FastSaxParser::FastSaxParser(  )
+FastSaxParser::FastSaxParser()
 {
     mxDocumentLocator.set( new FastLocatorImpl( this ) );
 
     // performance-Improvment. Reference is needed when calling the startTag callback.
     // Handing out the same object with every call is allowed (see sax-specification)
     mxAttributes.set( new FastAttributeList( mxTokenHandler ) );
-
-    mbExceptionWasThrown = sal_False;
 }
 
 // --------------------------------------------------------------------
@@ -419,34 +424,27 @@ void FastSaxParser::parseStream( const InputSource& maStructSource) throw (SAXEx
     struct Entity entity;
     entity.maStructSource = maStructSource;
 
-    if( ! entity.maStructSource.aInputStream.is() )
-    {
-        throw SAXException( OUString::createFromAscii( "No input source" ), Reference< XInterface > () , Any() );
-    }
+    if( !entity.maStructSource.aInputStream.is() )
+        throw SAXException( OUString( RTL_CONSTASCII_USTRINGPARAM( "No input source" ) ), Reference< XInterface >(), Any() );
 
     entity.maConverter.setInputStream( entity.maStructSource.aInputStream );
     if( entity.maStructSource.sEncoding.getLength() )
-    {
-        entity.maConverter.setEncoding( OUStringToOString( entity.maStructSource.sEncoding , RTL_TEXTENCODING_ASCII_US ) );
-    }
+        entity.maConverter.setEncoding( OUStringToOString( entity.maStructSource.sEncoding, RTL_TEXTENCODING_ASCII_US ) );
 
     // create parser with proper encoding
     entity.mpParser = XML_ParserCreate( 0 );
-    if( ! entity.mpParser )
-    {
-        throw SAXException( OUString::createFromAscii( "Couldn't create parser" ), Reference< XInterface > (), Any() );
-    }
+    if( !entity.mpParser )
+        throw SAXException( OUString( RTL_CONSTASCII_USTRINGPARAM( "Couldn't create parser" ) ), Reference< XInterface >(), Any() );
 
     // set all necessary C-Callbacks
-    XML_SetUserData( entity.mpParser , this );
-    XML_SetElementHandler(  entity.mpParser ,
-                            call_callbackStartElement ,
-                            call_callbackEndElement );
-    XML_SetCharacterDataHandler( entity.mpParser , call_callbackCharacters );
-    XML_SetExternalEntityRefHandler(    entity.mpParser,
-                                        call_callbackExternalEntityRef);
+    XML_SetUserData( entity.mpParser, this );
+    XML_SetElementHandler( entity.mpParser, call_callbackStartElement, call_callbackEndElement );
+    XML_SetCharacterDataHandler( entity.mpParser, call_callbackCharacters );
+    XML_SetExternalEntityRefHandler( entity.mpParser, call_callbackExternalEntityRef );
 
+    // maSavedException used to transport exceptions through C callbacks
     maSavedException.clear();
+
     pushEntity( entity );
     try
     {
@@ -569,112 +567,71 @@ Sequence< OUString > FastSaxParser::getSupportedServiceNames(void) throw (Runtim
 * Helper functions and classes
 *
 *-------------------------------------------*/
-OUString getErrorMessage( XML_Error xmlE, OUString sSystemId , sal_Int32 nLine )
+
+namespace {
+
+OUString lclGetErrorMessage( XML_Error xmlE, const OUString& sSystemId, sal_Int32 nLine )
 {
-    OUString Message;
-    if( XML_ERROR_NONE == xmlE ) {
-        Message = OUString::createFromAscii( "No" );
-    }
-    else if( XML_ERROR_NO_MEMORY == xmlE ) {
-        Message = OUString::createFromAscii( "no memory" );
-    }
-    else if( XML_ERROR_SYNTAX == xmlE ) {
-        Message = OUString::createFromAscii( "syntax" );
-    }
-    else if( XML_ERROR_NO_ELEMENTS == xmlE ) {
-        Message = OUString::createFromAscii( "no elements" );
-    }
-    else if( XML_ERROR_INVALID_TOKEN == xmlE ) {
-        Message = OUString::createFromAscii( "invalid token" );
-    }
-    else if( XML_ERROR_UNCLOSED_TOKEN == xmlE ) {
-        Message = OUString::createFromAscii( "unclosed token" );
-    }
-    else if( XML_ERROR_PARTIAL_CHAR == xmlE ) {
-        Message = OUString::createFromAscii( "partial char" );
-    }
-    else if( XML_ERROR_TAG_MISMATCH == xmlE ) {
-        Message = OUString::createFromAscii( "tag mismatch" );
-    }
-    else if( XML_ERROR_DUPLICATE_ATTRIBUTE == xmlE ) {
-        Message = OUString::createFromAscii( "duplicate attribute" );
-    }
-    else if( XML_ERROR_JUNK_AFTER_DOC_ELEMENT == xmlE ) {
-        Message = OUString::createFromAscii( "junk after doc element" );
-    }
-    else if( XML_ERROR_PARAM_ENTITY_REF == xmlE ) {
-        Message = OUString::createFromAscii( "parameter entity reference" );
-    }
-    else if( XML_ERROR_UNDEFINED_ENTITY == xmlE ) {
-        Message = OUString::createFromAscii( "undefined entity" );
-    }
-    else if( XML_ERROR_RECURSIVE_ENTITY_REF == xmlE ) {
-        Message = OUString::createFromAscii( "recursive entity reference" );
-    }
-    else if( XML_ERROR_ASYNC_ENTITY == xmlE ) {
-        Message = OUString::createFromAscii( "async entity" );
-    }
-    else if( XML_ERROR_BAD_CHAR_REF == xmlE ) {
-        Message = OUString::createFromAscii( "bad char reference" );
-    }
-    else if( XML_ERROR_BINARY_ENTITY_REF == xmlE ) {
-        Message = OUString::createFromAscii( "binary entity reference" );
-    }
-    else if( XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF == xmlE ) {
-        Message = OUString::createFromAscii( "attribute external entity reference" );
-    }
-    else if( XML_ERROR_MISPLACED_XML_PI == xmlE ) {
-        Message = OUString::createFromAscii( "misplaced xml processing instruction" );
-    }
-    else if( XML_ERROR_UNKNOWN_ENCODING == xmlE ) {
-        Message = OUString::createFromAscii( "unknown encoding" );
-    }
-    else if( XML_ERROR_INCORRECT_ENCODING == xmlE ) {
-        Message = OUString::createFromAscii( "incorrect encoding" );
-    }
-    else if( XML_ERROR_UNCLOSED_CDATA_SECTION == xmlE ) {
-        Message = OUString::createFromAscii( "unclosed cdata section" );
-    }
-    else if( XML_ERROR_EXTERNAL_ENTITY_HANDLING == xmlE ) {
-        Message = OUString::createFromAscii( "external entity reference" );
-    }
-    else if( XML_ERROR_NOT_STANDALONE == xmlE ) {
-        Message = OUString::createFromAscii( "not standalone" );
+    const sal_Char* pMessage = "";
+    switch( xmlE )
+    {
+        case XML_ERROR_NONE:                            pMessage = "No";                                    break;
+        case XML_ERROR_NO_MEMORY:                       pMessage = "no memory";                             break;
+        case XML_ERROR_SYNTAX:                          pMessage = "syntax";                                break;
+        case XML_ERROR_NO_ELEMENTS:                     pMessage = "no elements";                           break;
+        case XML_ERROR_INVALID_TOKEN:                   pMessage = "invalid token";                         break;
+        case XML_ERROR_UNCLOSED_TOKEN:                  pMessage = "unclosed token";                        break;
+        case XML_ERROR_PARTIAL_CHAR:                    pMessage = "partial char";                          break;
+        case XML_ERROR_TAG_MISMATCH:                    pMessage = "tag mismatch";                          break;
+        case XML_ERROR_DUPLICATE_ATTRIBUTE:             pMessage = "duplicate attribute";                   break;
+        case XML_ERROR_JUNK_AFTER_DOC_ELEMENT:          pMessage = "junk after doc element";                break;
+        case XML_ERROR_PARAM_ENTITY_REF:                pMessage = "parameter entity reference";            break;
+        case XML_ERROR_UNDEFINED_ENTITY:                pMessage = "undefined entity";                      break;
+        case XML_ERROR_RECURSIVE_ENTITY_REF:            pMessage = "recursive entity reference";            break;
+        case XML_ERROR_ASYNC_ENTITY:                    pMessage = "async entity";                          break;
+        case XML_ERROR_BAD_CHAR_REF:                    pMessage = "bad char reference";                    break;
+        case XML_ERROR_BINARY_ENTITY_REF:               pMessage = "binary entity reference";               break;
+        case XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF:   pMessage = "attribute external entity reference";   break;
+        case XML_ERROR_MISPLACED_XML_PI:                pMessage = "misplaced xml processing instruction";  break;
+        case XML_ERROR_UNKNOWN_ENCODING:                pMessage = "unknown encoding";                      break;
+        case XML_ERROR_INCORRECT_ENCODING:              pMessage = "incorrect encoding";                    break;
+        case XML_ERROR_UNCLOSED_CDATA_SECTION:          pMessage = "unclosed cdata section";                break;
+        case XML_ERROR_EXTERNAL_ENTITY_HANDLING:        pMessage = "external entity reference";             break;
+        case XML_ERROR_NOT_STANDALONE:                  pMessage = "not standalone";                        break;
+        default:;
     }
 
-    OUString str = OUString::createFromAscii( "[" );
-    str += sSystemId;
-    str += OUString::createFromAscii( " line " );
-    str += OUString::valueOf( nLine );
-    str += OUString::createFromAscii( "]: " );
-    str += Message;
-    str += OUString::createFromAscii( "error" );
-
-    return str;
+    OUStringBuffer aBuffer( sal_Unicode( '[' ) );
+    aBuffer.append( sSystemId );
+    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( " line " ) );
+    aBuffer.append( nLine );
+    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "]: " ) );
+    aBuffer.appendAscii( pMessage );
+    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( " error" ) );
+    return aBuffer.makeStringAndClear();
 }
 
+} // namespace
 
 // starts parsing with actual parser !
-void FastSaxParser::parse( )
+void FastSaxParser::parse()
 {
-    const int nBufSize = 16*1024;
+    const int BUFFER_SIZE = 16 * 1024;
+    Sequence< sal_Int8 > seqOut( BUFFER_SIZE );
 
-    int nRead = nBufSize;
-    Sequence< sal_Int8 > seqOut(nBufSize);
-
-    while( nRead )
+    int nRead = 0;
+    do
     {
-        nRead = getEntity().maConverter.readAndConvert( seqOut, nBufSize );
-
-        if( ! nRead )
+        nRead = getEntity().maConverter.readAndConvert( seqOut, BUFFER_SIZE );
+        if( nRead <= 0 )
         {
-            XML_Parse( getEntity().mpParser, ( const char * ) seqOut.getArray(), 0 , 1 );
+            XML_Parse( getEntity().mpParser, (const char*) seqOut.getConstArray(), 0, 1 );
             break;
         }
 
-        sal_Bool bContinue = ( XML_Parse( getEntity().mpParser, (const char *) seqOut.getArray(), nRead, 0 ) != 0 );
-
-        if( !bContinue || mbExceptionWasThrown )
+        bool bContinue = XML_Parse( getEntity().mpParser, (const char*) seqOut.getConstArray(), nRead, 0 ) != 0;
+        // callbacks used inside XML_Parse may have caught an exception
+        if( !bContinue || maSavedException.hasValue() )
         {
             // Error during parsing !
             XML_Error xmlE = XML_GetErrorCode( getEntity().mpParser );
@@ -682,26 +639,25 @@ void FastSaxParser::parse( )
             sal_Int32 nLine = mxDocumentLocator->getLineNumber();
 
             SAXParseException aExcept(
-                getErrorMessage(xmlE , sSystemId, nLine) ,
+                lclGetErrorMessage( xmlE, sSystemId, nLine ),
                 Reference< XInterface >(),
-                Any( &maSavedException , getCppuType( &maSavedException) ),
+                Any( &maSavedException, getCppuType( &maSavedException ) ),
                 mxDocumentLocator->getPublicId(),
                 mxDocumentLocator->getSystemId(),
                 mxDocumentLocator->getLineNumber(),
                 mxDocumentLocator->getColumnNumber()
-                );
+            );
 
+            // error handler is set, it may throw the exception
             if( mxErrorHandler.is() )
-            {
-                // error handler is set, so the handler may throw the maSavedException
                 mxErrorHandler->fatalError( Any( aExcept ) );
-            }
 
-            // Error handler has not thrown an maSavedException, but parsing cannot go on,
-            // so an maSavedException MUST be thrown.
+            // error handler has not thrown, but parsing cannot go on, the
+            // exception MUST be thrown
             throw aExcept;
         }
     }
+    while( nRead > 0 );
 }
 
 //------------------------------------------
@@ -721,25 +677,23 @@ struct AttributeData
 
 } // namespace
 
-void FastSaxParser::callbackStartElement( void *pvThis, const XML_Char *pwName, const XML_Char **awAttributes )
+void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char** awAttributes )
 {
-     FastSaxParser *pThis = (FastSaxParser*)pvThis;
-
     Reference< XFastContextHandler > xParentContext;
-    if( !pThis->maContextStack.empty() )
+    if( !maContextStack.empty() )
     {
-        xParentContext = pThis->maContextStack.top()->mxContext;
+        xParentContext = maContextStack.top()->mxContext;
         if( !xParentContext.is() )
         {
             // we ignore current elements, so no processing needed
-            pThis->pushContext();
+            pushContext();
             return;
         }
     }
 
-    pThis->pushContext();
+    pushContext();
 
-    pThis->mxAttributes->clear();
+    mxAttributes->clear();
 
     // create attribute map and process namespace instructions
     int i = 0;
@@ -747,108 +701,100 @@ void FastSaxParser::callbackStartElement( void *pvThis, const XML_Char *pwName, 
     const XML_Char *pName;
     const XML_Char *pPrefix;
 
-    /*  #158414# Each element may define new namespaces, also for attribues.
-        First, process all namespace attributes and cache other attributes in a
-        vector. Second, process the attributes after namespaces have been
-        initialized. */
-    ::std::vector< AttributeData > aAttribs;
-
-    // #158414# first: get namespaces
-    for( ; awAttributes[i]; i += 2 )
-    {
-        OSL_ASSERT( awAttributes[i+1] );
-
-        pThis->splitName( awAttributes[i], pPrefix, nPrefixLen, pName, nNameLen );
-        if( nPrefixLen )
-        {
-            if( (nPrefixLen == 5) && (strncmp( pPrefix, "xmlns", 5 ) == 0) )
-            {
-                pThis->DefineNamespace( OString( pName, nNameLen ), awAttributes[i+1] );
-            }
-            else
-            {
-                aAttribs.resize( aAttribs.size() + 1 );
-                aAttribs.back().maPrefix = OString( pPrefix, nPrefixLen );
-                aAttribs.back().maName = OString( pName, nNameLen );
-                aAttribs.back().maValue = OString( awAttributes[i+1] );
-            }
-        }
-        else
-        {
-            if( (nNameLen == 5) && (strcmp( pName, "xmlns" ) == 0) )
-            {
-                // namespace of the element found
-                pThis->maContextStack.top()->maNamespace = OUString( awAttributes[i+1], strlen( awAttributes[i+1] ), RTL_TEXTENCODING_UTF8 );
-            }
-            else
-            {
-                aAttribs.resize( aAttribs.size() + 1 );
-                aAttribs.back().maName = OString( pName, nNameLen );
-                aAttribs.back().maValue = OString( awAttributes[i+1] );
-            }
-        }
-    }
-
-    // #158414# second: fill attribute list with other attributes
-    for( ::std::vector< AttributeData >::const_iterator aIt = aAttribs.begin(), aEnd = aAttribs.end(); aIt != aEnd; ++aIt )
-    {
-        if( aIt->maPrefix.getLength() )
-        {
-            const sal_Int32 nAttributeToken = pThis->GetTokenWithPrefix( aIt->maPrefix, aIt->maName );
-            if( nAttributeToken != FastToken::DONTKNOW )
-                pThis->mxAttributes->add( nAttributeToken, aIt->maValue );
-            else
-                pThis->mxAttributes->addUnknown( pThis->GetNamespaceURL( aIt->maPrefix ), aIt->maName, aIt->maValue );
-        }
-        else
-        {
-            const sal_Int32 nAttributeToken = pThis->GetToken( aIt->maName );
-            if( nAttributeToken != FastToken::DONTKNOW )
-                pThis->mxAttributes->add( nAttributeToken, aIt->maValue );
-            else
-                pThis->mxAttributes->addUnknown( aIt->maName, aIt->maValue );
-        }
-    }
-
-    sal_Int32 nElementToken;
-    pThis->splitName( pwName, pPrefix, nPrefixLen, pName, nNameLen );
-    if( nPrefixLen )
-    {
-        nElementToken = pThis->GetTokenWithPrefix( pPrefix, nPrefixLen, pName, nNameLen );
-    }
-    else if( pThis->maContextStack.top()->maNamespace.getLength() )
-    {
-        nElementToken = pThis->GetTokenWithNamespaceURL( pThis->maContextStack.top()->maNamespace, pName, nNameLen );
-    }
-    else
-    {
-        nElementToken = pThis->GetToken( pName );
-    }
-    pThis->maContextStack.top()->mnElementToken = nElementToken;
-
     try
     {
-        Reference< XFastAttributeList > xAttr( pThis->mxAttributes.get() );
+        /*  #158414# Each element may define new namespaces, also for attribues.
+            First, process all namespace attributes and cache other attributes in a
+            vector. Second, process the attributes after namespaces have been
+            initialized. */
+        ::std::vector< AttributeData > aAttribs;
+
+        // #158414# first: get namespaces
+        for( ; awAttributes[i]; i += 2 )
+        {
+            OSL_ASSERT( awAttributes[i+1] );
+
+            splitName( awAttributes[i], pPrefix, nPrefixLen, pName, nNameLen );
+            if( nPrefixLen )
+            {
+                if( (nPrefixLen == 5) && (strncmp( pPrefix, "xmlns", 5 ) == 0) )
+                {
+                    DefineNamespace( OString( pName, nNameLen ), awAttributes[i+1] );
+                }
+                else
+                {
+                    aAttribs.resize( aAttribs.size() + 1 );
+                    aAttribs.back().maPrefix = OString( pPrefix, nPrefixLen );
+                    aAttribs.back().maName = OString( pName, nNameLen );
+                    aAttribs.back().maValue = OString( awAttributes[i+1] );
+                }
+            }
+            else
+            {
+                if( (nNameLen == 5) && (strcmp( pName, "xmlns" ) == 0) )
+                {
+                    // namespace of the element found
+                    maContextStack.top()->maNamespace = OUString( awAttributes[i+1], strlen( awAttributes[i+1] ), RTL_TEXTENCODING_UTF8 );
+                }
+                else
+                {
+                    aAttribs.resize( aAttribs.size() + 1 );
+                    aAttribs.back().maName = OString( pName, nNameLen );
+                    aAttribs.back().maValue = OString( awAttributes[i+1] );
+                }
+            }
+        }
+
+        // #158414# second: fill attribute list with other attributes
+        for( ::std::vector< AttributeData >::const_iterator aIt = aAttribs.begin(), aEnd = aAttribs.end(); aIt != aEnd; ++aIt )
+        {
+            if( aIt->maPrefix.getLength() > 0 )
+            {
+                sal_Int32 nAttributeToken = GetTokenWithPrefix( aIt->maPrefix, aIt->maName );
+                if( nAttributeToken != FastToken::DONTKNOW )
+                    mxAttributes->add( nAttributeToken, aIt->maValue );
+                else
+                    mxAttributes->addUnknown( GetNamespaceURL( aIt->maPrefix ), aIt->maName, aIt->maValue );
+            }
+            else
+            {
+                sal_Int32 nAttributeToken = GetToken( aIt->maName );
+                if( nAttributeToken != FastToken::DONTKNOW )
+                    mxAttributes->add( nAttributeToken, aIt->maValue );
+                else
+                    mxAttributes->addUnknown( aIt->maName, aIt->maValue );
+            }
+        }
+
+        sal_Int32 nElementToken;
+        splitName( pwName, pPrefix, nPrefixLen, pName, nNameLen );
+        if( nPrefixLen > 0 )
+            nElementToken = GetTokenWithPrefix( pPrefix, nPrefixLen, pName, nNameLen );
+        else if( maContextStack.top()->maNamespace.getLength() > 0 )
+            nElementToken = GetTokenWithNamespaceURL( maContextStack.top()->maNamespace, pName, nNameLen );
+        else
+            nElementToken = GetToken( pName );
+        maContextStack.top()->mnElementToken = nElementToken;
+
+        Reference< XFastAttributeList > xAttr( mxAttributes.get() );
         Reference< XFastContextHandler > xContext;
         if( nElementToken == FastToken::DONTKNOW )
         {
-            if( nPrefixLen )
-            {
-                pThis->maContextStack.top()->maNamespace = pThis->GetNamespaceURL( pPrefix, nPrefixLen );
-            }
+            if( nPrefixLen > 0 )
+                maContextStack.top()->maNamespace = GetNamespaceURL( pPrefix, nPrefixLen );
 
-            const OUString aNamespace( pThis->maContextStack.top()->maNamespace );
+            const OUString aNamespace( maContextStack.top()->maNamespace );
             const OUString aElementName( pPrefix, nPrefixLen, RTL_TEXTENCODING_UTF8 );
-            pThis->maContextStack.top()->maElementName = aElementName;
+            maContextStack.top()->maElementName = aElementName;
 
             if( xParentContext.is() )
                 xContext = xParentContext->createUnknownChildContext( aNamespace, aElementName, xAttr );
             else
-                xContext = pThis->mxDocumentHandler->createUnknownChildContext( aNamespace, aElementName, xAttr );
+                xContext = mxDocumentHandler->createUnknownChildContext( aNamespace, aElementName, xAttr );
 
             if( xContext.is() )
             {
-                pThis->maContextStack.top()->mxContext = xContext;
+                maContextStack.top()->mxContext = xContext;
                 xContext->startUnknownElement( aNamespace, aElementName, xAttr );
             }
         }
@@ -857,142 +803,125 @@ void FastSaxParser::callbackStartElement( void *pvThis, const XML_Char *pwName, 
             if( xParentContext.is() )
                 xContext = xParentContext->createFastChildContext( nElementToken, xAttr );
             else
-                xContext = pThis->mxDocumentHandler->createFastChildContext( nElementToken, xAttr );
+                xContext = mxDocumentHandler->createFastChildContext( nElementToken, xAttr );
 
 
             if( xContext.is() )
             {
-                pThis->maContextStack.top()->mxContext = xContext;
+                maContextStack.top()->mxContext = xContext;
                 xContext->startFastElement( nElementToken, xAttr );
             }
         }
     }
     catch( Exception& e )
     {
-        pThis->maSavedException <<= e;
+        maSavedException <<= e;
     }
 }
 
-void FastSaxParser::callbackEndElement( void *pvThis , const XML_Char *  )
+void FastSaxParser::callbackEndElement( const XML_Char* )
 {
-    FastSaxParser *pThis = (FastSaxParser*)pvThis;
-
-    if( !pThis->maContextStack.empty() )
+    OSL_ENSURE( !maContextStack.empty(), "FastSaxParser::callbackEndElement - no context" );
+    if( !maContextStack.empty() )
     {
-        SaxContextImplPtr pContext( pThis->maContextStack.top() );
+        SaxContextImplPtr pContext( maContextStack.top() );
         const Reference< XFastContextHandler >& xContext( pContext->mxContext );
         if( xContext.is() ) try
         {
             sal_Int32 nElementToken = pContext->mnElementToken;
             if( nElementToken != FastToken::DONTKNOW )
-            {
                 xContext->endFastElement( nElementToken );
-            }
             else
-            {
                 xContext->endUnknownElement( pContext->maNamespace, pContext->maElementName );
-            }
         }
         catch( Exception& e )
         {
-            pThis->maSavedException <<= e;
+            maSavedException <<= e;
         }
 
-        pThis->popContext();
-    }
-    else
-    {
-        OSL_ENSURE( false, "no context on sax::FastSaxParser::callbackEndElement() ??? ");
+        popContext();
     }
 }
 
 
-void FastSaxParser::callbackCharacters( void *pvThis , const XML_Char *s , int nLen )
+void FastSaxParser::callbackCharacters( const XML_Char* s, int nLen )
 {
-    FastSaxParser *pThis = (FastSaxParser*)pvThis;
-
-    const Reference< XFastContextHandler >& xContext( pThis->maContextStack.top()->mxContext );
+    const Reference< XFastContextHandler >& xContext( maContextStack.top()->mxContext );
     if( xContext.is() ) try
     {
         xContext->characters( OUString( s, nLen, RTL_TEXTENCODING_UTF8 ) );
     }
     catch( Exception& e )
     {
-        pThis->maSavedException <<= e;
+        maSavedException <<= e;
     }
 }
 
 int FastSaxParser::callbackExternalEntityRef( XML_Parser parser,
-                                                    const XML_Char *context,
-                                                    const XML_Char * /*base*/,
-                                                    const XML_Char *systemId,
-                                                    const XML_Char *publicId)
+        const XML_Char *context, const XML_Char * /*base*/, const XML_Char *systemId, const XML_Char *publicId )
 {
     bool bOK = true;
     InputSource source;
-    FastSaxParser *pImpl = ((FastSaxParser*)XML_GetUserData( parser ));
 
     struct Entity entity;
 
-    if( pImpl->mxEntityResolver.is() ) {
-        try
-        {
-            entity.maStructSource = pImpl->mxEntityResolver->resolveEntity(
-                OUString( publicId, strlen( publicId ), RTL_TEXTENCODING_UTF8 ) ,
-                OUString( systemId, strlen( systemId ), RTL_TEXTENCODING_UTF8 ) );
-        }
-        catch( SAXParseException & e )
-        {
-            pImpl->maSavedException <<= e;
-            bOK = false;
-        }
-        catch( SAXException & e )
-        {
-            pImpl->maSavedException <<= SAXParseException(
-                e.Message , e.Context , e.WrappedException ,
-                pImpl->mxDocumentLocator->getPublicId(),
-                pImpl->mxDocumentLocator->getSystemId(),
-                pImpl->mxDocumentLocator->getLineNumber(),
-                pImpl->mxDocumentLocator->getColumnNumber() );
-            bOK = false;
-        }
+    if( mxEntityResolver.is() ) try
+    {
+        entity.maStructSource = mxEntityResolver->resolveEntity(
+            OUString( publicId, strlen( publicId ), RTL_TEXTENCODING_UTF8 ) ,
+            OUString( systemId, strlen( systemId ), RTL_TEXTENCODING_UTF8 ) );
+    }
+    catch( SAXParseException & e )
+    {
+        maSavedException <<= e;
+        bOK = false;
+    }
+    catch( SAXException & e )
+    {
+        maSavedException <<= SAXParseException(
+            e.Message, e.Context, e.WrappedException,
+            mxDocumentLocator->getPublicId(),
+            mxDocumentLocator->getSystemId(),
+            mxDocumentLocator->getLineNumber(),
+            mxDocumentLocator->getColumnNumber() );
+        bOK = false;
     }
 
     if( entity.maStructSource.aInputStream.is() )
     {
-        entity.mpParser = XML_ExternalEntityParserCreate( parser , context, 0 );
+        entity.mpParser = XML_ExternalEntityParserCreate( parser, context, 0 );
         if( ! entity.mpParser )
         {
             return false;
         }
 
         entity.maConverter.setInputStream( entity.maStructSource.aInputStream );
-        pImpl->pushEntity( entity );
+        pushEntity( entity );
         try
         {
-            pImpl->parse();
+            parse();
         }
         catch( SAXParseException & e )
         {
-            pImpl->maSavedException <<= e;
+            maSavedException <<= e;
             bOK = false;
         }
         catch( IOException &e )
         {
             SAXException aEx;
             aEx.WrappedException <<= e;
-            pImpl->maSavedException <<= aEx;
+            maSavedException <<= aEx;
             bOK = false;
         }
         catch( RuntimeException &e )
         {
             SAXException aEx;
             aEx.WrappedException <<= e;
-            pImpl->maSavedException <<= aEx;
+            maSavedException <<= aEx;
             bOK = false;
         }
 
-        pImpl->popEntity();
+        popEntity();
 
         XML_ParserFree( entity.mpParser );
     }
@@ -1000,4 +929,4 @@ int FastSaxParser::callbackExternalEntityRef( XML_Parser parser,
     return bOK;
 }
 
-}
+} // namespace sax_fastparser

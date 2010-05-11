@@ -97,32 +97,7 @@ public class SdfString {
     public void setModuleName(String modulename) {
         this.modulename = modulename;
     }
-    /*
-    public String getRealFileName(){
-        //String srcroot   = "U:\\cws01\\l10ncleanup\\SRC680\\src.m213";//java.lang.System.getProperty( "SOLARSRC");
-        //String isWindows = "4nt";//java.lang.System.getProperty( "USE_SHELL");
-        String srcroot   = java.lang.System.getProperty( "SOLARSRC" );
-        String isWindows = java.lang.System.getProperty( "USE_SHELL" );
 
-        //System.out.println("srcroot="+srcroot+" isWindows="+isWindows );
-        //if( true ) return;
-        //String relpath   = sourceString.getFileId().substring( sourceString.getFileId().lastIndexOf("\\")
-        //                                                   , sourceString.getFileId().length() );
-        String filename;
-        if( isWindows != null && isWindows.compareTo( "4nt") == 0 )
-        {
-            filename = srcroot + "\\" + //sourceString.getProject() + "\\" +
-                       sourceString.getFileId() +".recommand";
-        }
-        else
-        {
-            String filepart = sourceString.getFileId();
-            filepart = filepart.replaceAll( "\\\\" , "/" );
-            filename = srcroot + "/" + //sourceString.getProject() + "//" +
-                       filepart +".recommand";
-        }
-        return filename;
-    }*/
     public String getRealFileName(){
         String filepart = sourceString.getFileId();
         filepart = filepart.replaceAll( "\\\\" , "_" );

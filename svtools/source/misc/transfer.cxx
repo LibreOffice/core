@@ -42,6 +42,7 @@
 #include <vos/mutex.hxx>
 #include <rtl/memory.h>
 #include <rtl/uuid.h>
+#include <rtl/uri.hxx>
 #ifndef DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -154,6 +155,10 @@ SvStream& operator<<( SvStream& rOStm, const TransferableObjectDescriptor& rObjD
 }
 
 // -----------------------------------------------------------------------------
+// the reading of the parameter is done using the special service ::com::sun::star::datatransfer::MimeContentType,
+// a similar approach should be implemented for creation of the mimetype string;
+// for now the set of acceptable characters has to be hardcoded, in future it should be part of the service that creates the mimetype
+const ::rtl::OUString aQuotedParamChars = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "()<>@,;:\\\"/[]?=!#$%&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~. " ) );
 
 static ::rtl::OUString ImplGetParameterString( const TransferableObjectDescriptor& rObjDesc )
 {
@@ -177,8 +182,21 @@ static ::rtl::OUString ImplGetParameterString( const TransferableObjectDescripto
 
     if( rObjDesc.maDisplayName.Len() )
     {
+        // the display name might contain unacceptable characters, encode all of them
+        // this seems to be the only parameter currently that might contain such characters
+        sal_Bool pToAccept[128];
+        for ( sal_Int32 nBInd = 0; nBInd < 128; nBInd++ )
+            pToAccept[nBInd] = sal_False;
+
+        for ( sal_Int32 nInd = 0; nInd < aQuotedParamChars.getLength(); nInd++ )
+        {
+            sal_Unicode nChar = aQuotedParamChars.getStr()[nInd];
+            if ( nChar < 128 )
+                pToAccept[nChar] = sal_True;
+        }
+
         aParams += ::rtl::OUString::createFromAscii( ";displayname=\"" );
-        aParams += rObjDesc.maDisplayName;
+        aParams += ::rtl::Uri::encode( rObjDesc.maDisplayName, pToAccept, rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8 );
         aParams += aChar;
     }
 
@@ -248,7 +266,9 @@ static void ImplSetParameterString( TransferableObjectDescriptor& rObjDesc, cons
 
                 if( xMimeType->hasParameter( aDisplayNameString ) )
                 {
-                    rObjDesc.maDisplayName = xMimeType->getParameterValue( aDisplayNameString );
+                    // the display name might contain unacceptable characters, in this case they should be encoded
+                    // this seems to be the only parameter currently that might contain such characters
+                    rObjDesc.maDisplayName = ::rtl::Uri::decode( xMimeType->getParameterValue( aDisplayNameString ), rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
                 }
 
                 if( xMimeType->hasParameter( aViewAspectString ) )

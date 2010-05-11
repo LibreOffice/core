@@ -43,7 +43,7 @@ SHL1STDLIBS = \
         $(CPPULIB) \
         $(CPPUHELPERLIB) \
         $(SALLIB)
-SHL1VERSIONMAP = canvasfactory.map
+SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 
 SHL1DEPN =
 SHL1IMPLIB = i$(TARGET)

@@ -192,6 +192,7 @@ namespace com { namespace sun { namespace star {
 
 #define VCLEVENT_TOOLBOX_BUTTONSTATECHANGED     1223    // pData = itempos
 #define VCLEVENT_TABLECELL_NAMECHANGED          1224    // pData = struct(Entry, Column, oldText)
+#define VCLEVENT_TABLEROW_SELECT                1225
 
 class VCL_DLLPUBLIC VclSimpleEvent
 {

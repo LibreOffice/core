@@ -260,6 +260,12 @@ namespace basegfx
 
         /// apply transformation given in matrix form
         void transform(const basegfx::B2DHomMatrix& rMatrix);
+
+        // point iterators (same iterator validity conditions as for vector)
+        const B2DPoint* begin() const;
+        const B2DPoint* end() const;
+        B2DPoint* begin();
+        B2DPoint* end();
     };
 } // end of namespace basegfx
 

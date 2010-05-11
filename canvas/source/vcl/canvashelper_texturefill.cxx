@@ -54,6 +54,8 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/tools/tools.hxx>
+#include <basegfx/tools/lerp.hxx>
+#include <basegfx/tools/keystoplerp.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
@@ -61,6 +63,9 @@
 
 #include <canvas/canvastools.hxx>
 #include <canvas/parametricpolypolygon.hxx>
+
+#include <boost/bind.hpp>
+#include <boost/tuple/tuple.hpp>
 
 #include "spritecanvas.hxx"
 #include "canvashelper.hxx"
@@ -115,17 +120,13 @@ namespace vclcanvas
             Since most of the code for linear and axial gradients are
             the same, we've a unified method here
          */
-        void fillGeneralLinearGradient( OutputDevice&                   rOutDev,
-                                        const ::basegfx::B2DHomMatrix&  rTextureTransform,
-                                        const ::Rectangle&              rBounds,
-                                        int                             nStepCount,
-                                        const ::Color&                  rColor1,
-                                        const ::Color&                  rColor2,
-                                        bool                            bFillNonOverlapping,
-                                        bool                            bAxialGradient )
+        void fillLinearGradient( OutputDevice&                                  rOutDev,
+                                 const ::basegfx::B2DHomMatrix&                 rTextureTransform,
+                                 const ::Rectangle&                             rBounds,
+                                 unsigned int                                   nStepCount,
+                                 const ::canvas::ParametricPolyPolygon::Values& rValues,
+                                 const std::vector< ::Color >&                  rColors )
         {
-            (void)bFillNonOverlapping;
-
             // determine general position of gradient in relation to
             // the bound rect
             // =====================================================
@@ -204,36 +205,26 @@ namespace vclcanvas
             // iteratively render all other strips
             // -----------------------------------
 
-            // ensure that nStepCount is odd, to have a well-defined
-            // middle index for axial gradients.
-            if( bAxialGradient && !(nStepCount % 2) )
+            // ensure that nStepCount matches color stop parity, to
+            // have a well-defined middle color e.g. for axial
+            // gradients.
+            if( (rColors.size() % 2) != (nStepCount % 2) )
                 ++nStepCount;
 
-            const int nStepCountHalved( nStepCount / 2 );
+            basegfx::tools::KeyStopLerp aLerper(rValues.maStops);
 
             // only iterate nStepCount-1 steps, as the last strip is
             // explicitely painted below
-            for( int i=0; i<nStepCount-1; ++i )
+            for( unsigned int i=0; i<nStepCount-1; ++i )
             {
-                // lerp color
-                if( bAxialGradient )
-                {
-                    // axial gradient has a triangle-like interpolation function
-                    const int iPrime( i<=nStepCountHalved ? i : nStepCount-i-1);
+                std::ptrdiff_t nIndex;
+                double fAlpha;
+                boost::tuples::tie(nIndex,fAlpha)=aLerper.lerp(double(i)/nStepCount);
 
-                    rOutDev.SetFillColor(
-                        Color( (UINT8)(((nStepCountHalved - iPrime)*rColor1.GetRed() + iPrime*rColor2.GetRed())/nStepCountHalved),
-                               (UINT8)(((nStepCountHalved - iPrime)*rColor1.GetGreen() + iPrime*rColor2.GetGreen())/nStepCountHalved),
-                               (UINT8)(((nStepCountHalved - iPrime)*rColor1.GetBlue() + iPrime*rColor2.GetBlue())/nStepCountHalved) ) );
-                }
-                else
-                {
-                    // linear gradient has a plain lerp between start and end color
-                    rOutDev.SetFillColor(
-                        Color( (UINT8)(((nStepCount - i)*rColor1.GetRed() + i*rColor2.GetRed())/nStepCount),
-                               (UINT8)(((nStepCount - i)*rColor1.GetGreen() + i*rColor2.GetGreen())/nStepCount),
-                               (UINT8)(((nStepCount - i)*rColor1.GetBlue() + i*rColor2.GetBlue())/nStepCount) ) );
-                }
+                rOutDev.SetFillColor(
+                    Color( (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
+                           (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
+                           (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
 
                 // copy right egde of polygon to left edge (and also
                 // copy the closing point)
@@ -280,59 +271,18 @@ namespace vclcanvas
             aTempPoly[3] = ::Point( ::basegfx::fround( rPoint4.getX() ),
                                     ::basegfx::fround( rPoint4.getY() ) );
 
-            if( bAxialGradient )
-                rOutDev.SetFillColor( rColor1 );
-            else
-                rOutDev.SetFillColor( rColor2 );
+            rOutDev.SetFillColor( rColors.back() );
 
             rOutDev.DrawPolygon( aTempPoly );
         }
 
-
-        inline void fillLinearGradient( OutputDevice&                           rOutDev,
-                                        const ::Color&                          rColor1,
-                                        const ::Color&                          rColor2,
-                                        const ::basegfx::B2DHomMatrix&          rTextureTransform,
-                                        const ::Rectangle&                      rBounds,
-                                        int                                     nStepCount,
-                                        bool                                    bFillNonOverlapping )
-        {
-            fillGeneralLinearGradient( rOutDev,
-                                       rTextureTransform,
-                                       rBounds,
-                                       nStepCount,
-                                       rColor1,
-                                       rColor2,
-                                       bFillNonOverlapping,
-                                       false );
-        }
-
-        inline void fillAxialGradient( OutputDevice&                            rOutDev,
-                                       const ::Color&                           rColor1,
-                                       const ::Color&                           rColor2,
-                                       const ::basegfx::B2DHomMatrix&           rTextureTransform,
-                                       const ::Rectangle&                       rBounds,
-                                       int                                      nStepCount,
-                                       bool                                     bFillNonOverlapping )
-        {
-            fillGeneralLinearGradient( rOutDev,
-                                       rTextureTransform,
-                                       rBounds,
-                                       nStepCount,
-                                       rColor1,
-                                       rColor2,
-                                       bFillNonOverlapping,
-                                       true );
-        }
-
         void fillPolygonalGradient( OutputDevice&                                  rOutDev,
-                                    const ::canvas::ParametricPolyPolygon::Values& rValues,
-                                    const ::Color&                                 rColor1,
-                                    const ::Color&                                 rColor2,
                                     const ::basegfx::B2DHomMatrix&                 rTextureTransform,
                                     const ::Rectangle&                             rBounds,
-                                    int                                            nStepCount,
-                                    bool                                           bFillNonOverlapping )
+                                    unsigned int                                   nStepCount,
+                                    bool                                           bFillNonOverlapping,
+                                    const ::canvas::ParametricPolyPolygon::Values& rValues,
+                                    const std::vector< ::Color >&                  rColors )
         {
             const ::basegfx::B2DPolygon& rGradientPoly( rValues.maGradientPoly );
 
@@ -366,9 +316,6 @@ namespace vclcanvas
             // apply scaling (possibly anisotrophic) to inner polygon
             // ------------------------------------------------------
 
-            // move center of scaling to origin
-            aInnerPolygonTransformMatrix.translate( -0.5, -0.5 );
-
             // scale inner polygon according to aspect ratio: for
             // wider-than-tall bounds (nAspectRatio > 1.0), the inner
             // polygon, representing the gradient focus, must have
@@ -393,9 +340,6 @@ namespace vclcanvas
                 aInnerPolygonTransformMatrix.scale( 0.0, 0.0 );
             }
 
-            // move origin back to former center of polygon
-            aInnerPolygonTransformMatrix.translate( 0.5, 0.5 );
-
             // and finally, add texture transform to it.
             aInnerPolygonTransformMatrix *= rTextureTransform;
 
@@ -403,8 +347,8 @@ namespace vclcanvas
             aInnerPoly.transform( aInnerPolygonTransformMatrix );
 
 
-            const sal_Int32         nNumPoints( aOuterPoly.count() );
-            ::Polygon               aTempPoly( static_cast<USHORT>(nNumPoints+1) );
+            const sal_uInt32 nNumPoints( aOuterPoly.count() );
+            ::Polygon        aTempPoly( static_cast<USHORT>(nNumPoints+1) );
 
             // increase number of steps by one: polygonal gradients have
             // the outermost polygon rendered in rColor2, and the
@@ -422,28 +366,33 @@ namespace vclcanvas
             // color).
             ++nStepCount;
 
+            basegfx::tools::KeyStopLerp aLerper(rValues.maStops);
+
             if( !bFillNonOverlapping )
             {
                 // fill background
-                rOutDev.SetFillColor( rColor1 );
+                rOutDev.SetFillColor( rColors.front() );
                 rOutDev.DrawRect( rBounds );
 
                 // render polygon
                 // ==============
 
-                for( int i=1,p; i<nStepCount; ++i )
+                for( unsigned int i=1,p; i<nStepCount; ++i )
                 {
+                    const double fT( i/double(nStepCount) );
+
+                    std::ptrdiff_t nIndex;
+                    double fAlpha;
+                    boost::tuples::tie(nIndex,fAlpha)=aLerper.lerp(fT);
+
                     // lerp color
                     rOutDev.SetFillColor(
-                        Color( (UINT8)(((nStepCount - i)*rColor1.GetRed() + i*rColor2.GetRed())/nStepCount),
-                               (UINT8)(((nStepCount - i)*rColor1.GetGreen() + i*rColor2.GetGreen())/nStepCount),
-                               (UINT8)(((nStepCount - i)*rColor1.GetBlue() + i*rColor2.GetBlue())/nStepCount) ) );
+                        Color( (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
+                               (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
+                               (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
 
                     // scale and render polygon, by interpolating between
                     // outer and inner polygon.
-
-                    // calc interpolation parameter in [0,1] range
-                    const double nT( (nStepCount-i)/double(nStepCount) );
 
                     for( p=0; p<nNumPoints; ++p )
                     {
@@ -451,8 +400,8 @@ namespace vclcanvas
                         const ::basegfx::B2DPoint& rInnerPoint( aInnerPoly.getB2DPoint(p) );
 
                         aTempPoly[(USHORT)p] = ::Point(
-                            basegfx::fround( (1.0-nT)*rInnerPoint.getX() + nT*rOuterPoint.getX() ),
-                            basegfx::fround( (1.0-nT)*rInnerPoint.getY() + nT*rOuterPoint.getY() ) );
+                            basegfx::fround( fT*rInnerPoint.getX() + (1-fT)*rOuterPoint.getX() ),
+                            basegfx::fround( fT*rInnerPoint.getY() + (1-fT)*rOuterPoint.getY() ) );
                     }
 
                     // close polygon explicitely
@@ -486,13 +435,19 @@ namespace vclcanvas
                 aTempPolyPoly.Insert( aTempPoly );
                 aTempPolyPoly.Insert( aTempPoly2 );
 
-                for( int i=0,p; i<nStepCount; ++i )
+                for( unsigned int i=0,p; i<nStepCount; ++i )
                 {
+                    const double fT( (i+1)/double(nStepCount) );
+
+                    std::ptrdiff_t nIndex;
+                    double fAlpha;
+                    boost::tuples::tie(nIndex,fAlpha)=aLerper.lerp(fT);
+
                     // lerp color
                     rOutDev.SetFillColor(
-                        Color( (UINT8)(((nStepCount - i)*rColor1.GetRed() + i*rColor2.GetRed())/nStepCount),
-                               (UINT8)(((nStepCount - i)*rColor1.GetGreen() + i*rColor2.GetGreen())/nStepCount),
-                               (UINT8)(((nStepCount - i)*rColor1.GetBlue() + i*rColor2.GetBlue())/nStepCount) ) );
+                        Color( (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
+                               (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
+                               (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
 
 #if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
                     if( i && !(i % 10) )
@@ -503,17 +458,14 @@ namespace vclcanvas
                     // calculate the inner polygon, which is actually the
                     // start of the _next_ color strip. Thus, i+1
 
-                    // calc interpolation parameter in [0,1] range
-                    const double nT( (nStepCount-i-1)/double(nStepCount) );
-
                     for( p=0; p<nNumPoints; ++p )
                     {
                         const ::basegfx::B2DPoint& rOuterPoint( aOuterPoly.getB2DPoint(p) );
                         const ::basegfx::B2DPoint& rInnerPoint( aInnerPoly.getB2DPoint(p) );
 
                         aTempPoly[(USHORT)p] = ::Point(
-                            basegfx::fround( (1.0-nT)*rInnerPoint.getX() + nT*rOuterPoint.getX() ),
-                            basegfx::fround( (1.0-nT)*rInnerPoint.getY() + nT*rOuterPoint.getY() ) );
+                            basegfx::fround( fT*rInnerPoint.getX() + (1-fT)*rOuterPoint.getX() ),
+                            basegfx::fround( fT*rInnerPoint.getY() + (1-fT)*rOuterPoint.getY() ) );
                     }
 
                     // close polygon explicitely
@@ -546,46 +498,33 @@ namespace vclcanvas
 
         void doGradientFill( OutputDevice&                                  rOutDev,
                              const ::canvas::ParametricPolyPolygon::Values& rValues,
-                             const ::Color&                                 rColor1,
-                             const ::Color&                                 rColor2,
+                             const std::vector< ::Color >&                  rColors,
                              const ::basegfx::B2DHomMatrix&                 rTextureTransform,
                              const ::Rectangle&                             rBounds,
-                             int                                            nStepCount,
+                             unsigned int                                   nStepCount,
                              bool                                           bFillNonOverlapping )
         {
             switch( rValues.meType )
             {
                 case ::canvas::ParametricPolyPolygon::GRADIENT_LINEAR:
                     fillLinearGradient( rOutDev,
-                                        rColor1,
-                                        rColor2,
                                         rTextureTransform,
                                         rBounds,
                                         nStepCount,
-                                        bFillNonOverlapping );
-                    break;
-
-                case ::canvas::ParametricPolyPolygon::GRADIENT_AXIAL:
-                    fillAxialGradient( rOutDev,
-                                       rColor1,
-                                       rColor2,
-                                       rTextureTransform,
-                                       rBounds,
-                                       nStepCount,
-                                       bFillNonOverlapping );
+                                        rValues,
+                                        rColors );
                     break;
 
                 case ::canvas::ParametricPolyPolygon::GRADIENT_ELLIPTICAL:
                     // FALLTHROUGH intended
                 case ::canvas::ParametricPolyPolygon::GRADIENT_RECTANGULAR:
                     fillPolygonalGradient( rOutDev,
-                                           rValues,
-                                           rColor1,
-                                           rColor2,
                                            rTextureTransform,
                                            rBounds,
                                            nStepCount,
-                                           bFillNonOverlapping );
+                                           bFillNonOverlapping,
+                                           rValues,
+                                           rColors );
                     break;
 
                 default:
@@ -594,11 +533,19 @@ namespace vclcanvas
             }
         }
 
+        int numColorSteps( const ::Color& rColor1, const ::Color& rColor2 )
+        {
+            return ::std::max(
+                labs( rColor1.GetRed() - rColor2.GetRed() ),
+                ::std::max(
+                    labs( rColor1.GetGreen() - rColor2.GetGreen() ),
+                    labs( rColor1.GetBlue()  - rColor2.GetBlue() ) ) );
+        }
+
         bool gradientFill( OutputDevice&                                   rOutDev,
                            OutputDevice*                                   p2ndOutDev,
                            const ::canvas::ParametricPolyPolygon::Values&  rValues,
-                           const ::Color&                                  rColor1,
-                           const ::Color&                                  rColor2,
+                           const std::vector< ::Color >&                   rColors,
                            const PolyPolygon&                              rPoly,
                            const rendering::ViewState&                     viewState,
                            const rendering::RenderState&                   renderState,
@@ -612,64 +559,26 @@ namespace vclcanvas
             // deadlocks, canvashelper calls this method with locked own
             // mutex.
 
-            // calculate overall texture transformation (directly from
-            // texture to device space).
-            ::basegfx::B2DHomMatrix aMatrix;
-            ::basegfx::B2DHomMatrix aTextureTransform;
-
-            ::basegfx::unotools::homMatrixFromAffineMatrix( aTextureTransform,
-                                                            texture.AffineTransform );
-            ::canvas::tools::mergeViewAndRenderTransform(aMatrix,
-                                                         viewState,
-                                                         renderState);
-            aTextureTransform *= aMatrix; // prepend total view/render transformation
-
-            // determine maximal bound rect of gradient-filled polygon
-            const ::Rectangle aPolygonDeviceRectOrig(
-                rPoly.GetBoundRect() );
-
-            // determine size of gradient in device coordinate system
-            // (to e.g. determine sensible number of gradient steps)
-            ::basegfx::B2DPoint aLeftTop( 0.0, 0.0 );
-            ::basegfx::B2DPoint aLeftBottom( 0.0, 1.0 );
-            ::basegfx::B2DPoint aRightTop( 1.0, 0.0 );
-            ::basegfx::B2DPoint aRightBottom( 1.0, 1.0 );
-
-            aLeftTop    *= aTextureTransform;
-            aLeftBottom *= aTextureTransform;
-            aRightTop   *= aTextureTransform;
-            aRightBottom*= aTextureTransform;
-
-
             // calc step size
             // --------------
-            const int nColorSteps(
-                ::std::max(
-                    labs( rColor1.GetRed() - rColor2.GetRed() ),
-                    ::std::max(
-                        labs( rColor1.GetGreen() - rColor2.GetGreen() ),
-                        labs( rColor1.GetBlue()  - rColor2.GetBlue() ) ) ) );
+            int nColorSteps = 0;
+            for( size_t i=0; i<rColors.size()-1; ++i )
+                nColorSteps += numColorSteps(rColors[i],rColors[i+1]);
 
-            // longest line in gradient bound rect
-            const int nGradientSize(
-                static_cast<int>(
-                    ::std::max(
-                        ::basegfx::B2DVector(aRightBottom-aLeftTop).getLength(),
-                        ::basegfx::B2DVector(aRightTop-aLeftBottom).getLength() ) + 1.0 ) );
-
-            // typical number for pixel of the same color (strip size)
-            const int nStripSize( nGradientSize < 50 ? 2 : 4 );
-
-            // use at least three steps, and at utmost the number of color
-            // steps
-            const int nStepCount(
-                ::std::max(
-                    3,
-                    ::std::min(
-                        nGradientSize / nStripSize,
-                        nColorSteps ) ) );
+            ::basegfx::B2DHomMatrix aTotalTransform;
+            const int nStepCount=
+                ::canvas::tools::calcGradientStepCount(aTotalTransform,
+                                                       viewState,
+                                                       renderState,
+                                                       texture,
+                                                       nColorSteps);
 
             rOutDev.SetLineColor();
+
+            // determine maximal bound rect of texture-filled
+            // polygon
+            const ::Rectangle aPolygonDeviceRectOrig(
+                rPoly.GetBoundRect() );
 
             if( tools::isRectangle( rPoly ) )
             {
@@ -687,9 +596,8 @@ namespace vclcanvas
                 rOutDev.IntersectClipRegion( aPolygonDeviceRectOrig );
                 doGradientFill( rOutDev,
                                 rValues,
-                                rColor1,
-                                rColor2,
-                                aTextureTransform,
+                                rColors,
+                                aTotalTransform,
                                 aPolygonDeviceRectOrig,
                                 nStepCount,
                                 false );
@@ -701,9 +609,8 @@ namespace vclcanvas
                     p2ndOutDev->IntersectClipRegion( aPolygonDeviceRectOrig );
                     doGradientFill( *p2ndOutDev,
                                     rValues,
-                                    rColor1,
-                                    rColor2,
-                                    aTextureTransform,
+                                    rColors,
+                                    aTotalTransform,
                                     aPolygonDeviceRectOrig,
                                     nStepCount,
                                     false );
@@ -720,9 +627,8 @@ namespace vclcanvas
 
                 doGradientFill( rOutDev,
                                 rValues,
-                                rColor1,
-                                rColor2,
-                                aTextureTransform,
+                                rColors,
+                                aTotalTransform,
                                 aPolygonDeviceRectOrig,
                                 nStepCount,
                                 false );
@@ -734,9 +640,8 @@ namespace vclcanvas
                     p2ndOutDev->SetClipRegion( aPolyClipRegion );
                     doGradientFill( *p2ndOutDev,
                                     rValues,
-                                    rColor1,
-                                    rColor2,
-                                    aTextureTransform,
+                                    rColors,
+                                    aTotalTransform,
                                     aPolygonDeviceRectOrig,
                                     nStepCount,
                                     false );
@@ -750,9 +655,8 @@ namespace vclcanvas
                 rOutDev.SetRasterOp( ROP_XOR );
                 doGradientFill( rOutDev,
                                 rValues,
-                                rColor1,
-                                rColor2,
-                                aTextureTransform,
+                                rColors,
+                                aTotalTransform,
                                 aPolygonDeviceRectOrig,
                                 nStepCount,
                                 true );
@@ -762,9 +666,8 @@ namespace vclcanvas
                 rOutDev.SetRasterOp( ROP_XOR );
                 doGradientFill( rOutDev,
                                 rValues,
-                                rColor1,
-                                rColor2,
-                                aTextureTransform,
+                                rColors,
+                                aTotalTransform,
                                 aPolygonDeviceRectOrig,
                                 nStepCount,
                                 true );
@@ -776,9 +679,8 @@ namespace vclcanvas
                     p2ndOutDev->SetRasterOp( ROP_XOR );
                     doGradientFill( *p2ndOutDev,
                                     rValues,
-                                    rColor1,
-                                    rColor2,
-                                    aTextureTransform,
+                                    rColors,
+                                    aTotalTransform,
                                     aPolygonDeviceRectOrig,
                                     nStepCount,
                                     true );
@@ -788,9 +690,8 @@ namespace vclcanvas
                     p2ndOutDev->SetRasterOp( ROP_XOR );
                     doGradientFill( *p2ndOutDev,
                                     rValues,
-                                    rColor1,
-                                    rColor2,
-                                    aTextureTransform,
+                                    rColors,
+                                    aTotalTransform,
                                     aPolygonDeviceRectOrig,
                                     nStepCount,
                                     true );
@@ -852,33 +753,41 @@ namespace vclcanvas
                 ::canvas::ParametricPolyPolygon* pGradient =
                       dynamic_cast< ::canvas::ParametricPolyPolygon* >( textures[0].Gradient.get() );
 
-                if( pGradient )
+                if( pGradient && pGradient->getValues().maColors.getLength() )
                 {
                     // copy state from Gradient polypoly locally
                     // (given object might change!)
                     const ::canvas::ParametricPolyPolygon::Values& rValues(
                         pGradient->getValues() );
 
-                    // TODO: use all the colors and place them on given positions/stops
-                    const ::Color aColor1(
-                        ::vcl::unotools::stdColorSpaceSequenceToColor(
-                            rValues.maColors [0] ) );
-                    const ::Color aColor2(
-                        ::vcl::unotools::stdColorSpaceSequenceToColor(
-                            rValues.maColors [rValues.maColors.getLength () - 1] ) );
+                    if( rValues.maColors.getLength() < 2 )
+                    {
+                        rendering::RenderState aTempState=renderState;
+                        aTempState.DeviceColor = rValues.maColors[0];
+                        fillPolyPolygon(pCanvas, xPolyPolygon, viewState, aTempState);
+                    }
+                    else
+                    {
+                        std::vector< ::Color > aColors(rValues.maColors.getLength());
+                        std::transform(&rValues.maColors[0],
+                                       &rValues.maColors[0]+rValues.maColors.getLength(),
+                                       aColors.begin(),
+                                       boost::bind(
+                                           &vcl::unotools::stdColorSpaceSequenceToColor,
+                                           _1));
 
-                    // TODO(E1): Return value
-                    // TODO(F1): FillRule
-                    gradientFill( mpOutDev->getOutDev(),
-                                  mp2ndOutDev.get() ? &mp2ndOutDev->getOutDev() : (OutputDevice*)NULL,
-                                  rValues,
-                                  aColor1,
-                                  aColor2,
-                                  aPolyPoly,
-                                  viewState,
-                                  renderState,
-                                  textures[0],
-                                  nTransparency );
+                        // TODO(E1): Return value
+                        // TODO(F1): FillRule
+                        gradientFill( mpOutDev->getOutDev(),
+                                      mp2ndOutDev.get() ? &mp2ndOutDev->getOutDev() : (OutputDevice*)NULL,
+                                      rValues,
+                                      aColors,
+                                      aPolyPoly,
+                                      viewState,
+                                      renderState,
+                                      textures[0],
+                                      nTransparency );
+                    }
                 }
                 else
                 {
@@ -889,10 +798,6 @@ namespace vclcanvas
             }
             else if( textures[0].Bitmap.is() )
             {
-//                OSL_ENSURE( textures[0].RepeatModeX == rendering::TexturingMode::REPEAT &&
-//                            textures[0].RepeatModeY == rendering::TexturingMode::REPEAT,
-//                            "CanvasHelper::fillTexturedPolyPolygon(): VCL canvas cannot currently clamp textures." );
-
                 const geometry::IntegerSize2D aBmpSize( textures[0].Bitmap->getSize() );
 
                 ENSURE_ARG_OR_THROW( aBmpSize.Width != 0 &&
@@ -966,23 +871,6 @@ namespace vclcanvas
                                            viewState,
                                            aLocalState );
                     }
-                }
-                else if ( textures[0].RepeatModeX == rendering::TexturingMode::CLAMP &&
-                          textures[0].RepeatModeY == rendering::TexturingMode::CLAMP )
-                {
-                    rendering::RenderState aLocalState( renderState );
-                    ::canvas::tools::appendToRenderState(aLocalState,
-                                                         aTextureTransform);
-                    ::basegfx::B2DHomMatrix aScaleCorrection;
-                    aScaleCorrection.scale( 1.0/aBmpSize.Width,
-                                            1.0/aBmpSize.Height );
-                    ::canvas::tools::appendToRenderState(aLocalState,
-                                                         aScaleCorrection);
-
-                    return drawBitmap( pCanvas,
-                                       textures[0].Bitmap,
-                                       viewState,
-                                       aLocalState );
                 }
                 else
                 {
@@ -1117,15 +1005,21 @@ namespace vclcanvas
                                                                 aSingleTextureRect,
                                                                 aPureTotalTransform );
 
-                    const ::Point aPt( ::vcl::unotools::pointFromB2DPoint(
-                                           aSingleDeviceTextureRect.getMinimum() ) );
+                    const ::Point aPtRepeat( ::vcl::unotools::pointFromB2DPoint(
+                                                 aSingleDeviceTextureRect.getMinimum() ) );
                     const ::Size  aSz( ::basegfx::fround( aScale.getX() * aBmpSize.Width ),
                                        ::basegfx::fround( aScale.getY() * aBmpSize.Height ) );
                     const ::Size  aIntegerNextTileX( ::vcl::unotools::sizeFromB2DSize(aNextTileX) );
                     const ::Size  aIntegerNextTileY( ::vcl::unotools::sizeFromB2DSize(aNextTileY) );
 
-                    const sal_Int32 nTilesX( nX2 - nX1 );
-                    const sal_Int32 nTilesY( nY2 - nY1 );
+                    const ::Point aPt( textures[0].RepeatModeX == rendering::TexturingMode::NONE ?
+                                       ::basegfx::fround( aOutputPos.getX() ) : aPtRepeat.X(),
+                                       textures[0].RepeatModeY == rendering::TexturingMode::NONE ?
+                                       ::basegfx::fround( aOutputPos.getY() ) : aPtRepeat.Y() );
+                    const sal_Int32 nTilesX( textures[0].RepeatModeX == rendering::TexturingMode::NONE ?
+                                             1 : nX2 - nX1 );
+                    const sal_Int32 nTilesY( textures[0].RepeatModeX == rendering::TexturingMode::NONE ?
+                                             1 : nY2 - nY1 );
 
                     OutputDevice& rOutDev( mpOutDev->getOutDev() );
 
@@ -1206,20 +1100,9 @@ namespace vclcanvas
                             aPolyPoly.Translate( ::Point( -aPolygonDeviceRect.Left(),
                                                           -aPolygonDeviceRect.Top() ) );
 
-                            aVDev.SetRasterOp( ROP_XOR );
-                            textureFill( aVDev,
-                                         *pGrfObj,
-                                         aOutPos,
-                                         aIntegerNextTileX,
-                                         aIntegerNextTileY,
-                                         nTilesX,
-                                         nTilesY,
-                                         aSz,
-                                         aGrfAttr );
-                            aVDev.SetFillColor( COL_BLACK );
-                            aVDev.SetRasterOp( ROP_0 );
-                            aVDev.DrawPolyPolygon( aPolyPoly );
-                            aVDev.SetRasterOp( ROP_XOR );
+                            const Region aPolyClipRegion( aPolyPoly );
+
+                            aVDev.SetClipRegion( aPolyClipRegion );
                             textureFill( aVDev,
                                          *pGrfObj,
                                          aOutPos,
@@ -1251,7 +1134,6 @@ namespace vclcanvas
                                                                        aOutputBmpEx );
                         }
                         else
-#if defined(QUARTZ) // TODO: other ports should avoid the XOR-trick too (implementation vs. interface!)
                         {
                             const Region aPolyClipRegion( aPolyPoly );
 
@@ -1287,66 +1169,6 @@ namespace vclcanvas
                                 r2ndOutDev.Pop();
                             }
                         }
-#else // TODO: remove once doing the XOR-trick in the canvas-layer becomes redundant
-                        {
-                            // output via repeated XORing
-                            rOutDev.Push( PUSH_RASTEROP );
-                            rOutDev.SetRasterOp( ROP_XOR );
-                            textureFill( rOutDev,
-                                         *pGrfObj,
-                                         aPt,
-                                         aIntegerNextTileX,
-                                         aIntegerNextTileY,
-                                         nTilesX,
-                                         nTilesY,
-                                         aSz,
-                                         aGrfAttr );
-                            rOutDev.SetFillColor( COL_BLACK );
-                            rOutDev.SetRasterOp( ROP_0 );
-                            rOutDev.DrawPolyPolygon( aPolyPoly );
-                            rOutDev.SetRasterOp( ROP_XOR );
-                            textureFill( rOutDev,
-                                         *pGrfObj,
-                                         aPt,
-                                         aIntegerNextTileX,
-                                         aIntegerNextTileY,
-                                         nTilesX,
-                                         nTilesY,
-                                         aSz,
-                                         aGrfAttr );
-                            rOutDev.Pop();
-
-                            if( mp2ndOutDev )
-                            {
-                                OutputDevice& r2ndOutDev( mp2ndOutDev->getOutDev() );
-                                r2ndOutDev.Push( PUSH_RASTEROP );
-                                r2ndOutDev.SetRasterOp( ROP_XOR );
-                                textureFill( r2ndOutDev,
-                                             *pGrfObj,
-                                             aPt,
-                                             aIntegerNextTileX,
-                                             aIntegerNextTileY,
-                                             nTilesX,
-                                             nTilesY,
-                                             aSz,
-                                             aGrfAttr );
-                                r2ndOutDev.SetFillColor( COL_BLACK );
-                                r2ndOutDev.SetRasterOp( ROP_0 );
-                                r2ndOutDev.DrawPolyPolygon( aPolyPoly );
-                                r2ndOutDev.SetRasterOp( ROP_XOR );
-                                textureFill( r2ndOutDev,
-                                             *pGrfObj,
-                                             aPt,
-                                             aIntegerNextTileX,
-                                             aIntegerNextTileY,
-                                             nTilesX,
-                                             nTilesY,
-                                             aSz,
-                                             aGrfAttr );
-                                r2ndOutDev.Pop();
-                            }
-                        }
-#endif // complex-clipping vs. XOR-trick
                     }
                 }
             }

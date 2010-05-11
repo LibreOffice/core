@@ -56,17 +56,17 @@ namespace svt { namespace table
 /** special column width value which indicates that the column should be
     automatically resized to fit the view
 */
-#define COLWIDTH_FIT_TO_VIEW    ((TableMetrics)-1)
+#define COLWIDTH_FIT_TO_VIEW    ((::svt::table::TableMetrics)-1)
 
 /// denotes the column containing the row headers
-#define COL_ROW_HEADERS         ((ColPos)-1)
+#define COL_ROW_HEADERS         ((::svt::table::ColPos)-1)
 /// denotes the row containing the column headers
-#define ROW_COL_HEADERS         ((RowPos)-1)
+#define ROW_COL_HEADERS         ((::svt::table::RowPos)-1)
 
 /// denotes an invalid column index
-#define COL_INVALID             ((ColPos)-2)
+#define COL_INVALID             ((::svt::table::ColPos)-2)
 /// denotes an invalid row index
-#define ROW_INVALID             ((RowPos)-2)
+#define ROW_INVALID             ((::svt::table::RowPos)-2)
 
 
 //........................................................................
