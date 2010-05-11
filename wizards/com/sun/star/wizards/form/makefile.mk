@@ -59,7 +59,6 @@ JAVAFILES=	\
         FormDocument.java	\
         StyleApplier.java	\
         UIControlArranger.java	\
-        XCallFormWizard.java
 
 JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
