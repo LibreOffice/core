@@ -52,6 +52,9 @@
 #define STR_MORE_OPTIONS                51
 #define STR_FEWER_OPTIONS               52
 #define STR_PASSWD_MUST_BE_CONFIRMED    53
+#define STR_ONE_PASSWORD_MISMATCH       54
+#define STR_TWO_PASSWORDS_MISMATCH      55
+#define STR_INVALID_STATE_FOR_OK_BUTTON 56
 
 #endif
 
