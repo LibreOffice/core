@@ -456,7 +456,7 @@ void XcsParser::handleNodeRef(XmlReader & reader) {
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    rtl::Reference< Node > node(tmpl->clone());
+    rtl::Reference< Node > node(tmpl->clone(false));
     node->setLayer(valueParser_.getLayer());
     elements_.push(Element(node, name));
 }
