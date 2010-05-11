@@ -1005,9 +1005,9 @@ BOOL SwCrsrShell::IsPageAtPos( const Point &rPt ) const
 }
 
 BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
-                                        SwContentAtPos& rCntntAtPos,
-                                        BOOL bSetCrsr,
-                                        SwRect* pFldRect )
+                                   SwContentAtPos& rCntntAtPos,
+                                   BOOL bSetCrsr,
+                                   SwRect* pFldRect )
 {
     SET_CURR_SHELL( this );
     BOOL bRet = FALSE;
