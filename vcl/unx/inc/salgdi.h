@@ -250,7 +250,7 @@ public:
     virtual void            SetTextColor( SalColor nSalColor );
     virtual USHORT          SetFont( ImplFontSelectData*, int nFallbackLevel );
     virtual void            GetFontMetric( ImplFontMetricData* );
-    virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs );
+    virtual ULONG           GetKernPairs( ULONG nMaxPairs, ImplKernPairData* );
     virtual ImplFontCharMap* GetImplFontCharMap() const;
     virtual void            GetDevFontList( ImplDevFontList* );
     virtual void            GetDevFontSubstList( OutputDevice* );

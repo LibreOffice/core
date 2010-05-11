@@ -92,8 +92,6 @@ public:
     void            Print();
 };
 
-static ByteString thePath( "PATH" );
-
 /** Declares and spawns a child process.
     The spawned programm could be a native executable or a schell script.
 */
@@ -127,7 +125,7 @@ public:
                         @param sItem specifies the system shell
                         @return the Location (when programm was found)
                     */
-    static ByteString   Search( ByteString sEnv = thePath,
+    static ByteString   Search( ByteString sEnv,
                                     ByteString sItem = COMMAND_SHELL );
 
                     /** Spawns the Process
