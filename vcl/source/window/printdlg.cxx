@@ -42,16 +42,22 @@
 #include "vcl/help.hxx"
 #include "vcl/decoview.hxx"
 #include "vcl/svapp.hxx"
+#include "vcl/unohelp.hxx"
 
 #include "unotools/localedatawrapper.hxx"
 
 #include "rtl/ustrbuf.hxx"
 
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/container/XNameAccess.hpp"
+#include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/awt/Size.hpp"
 
 using namespace vcl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 
 #define HELPID_PREFIX ".HelpId:vcl:PrintDialog"
@@ -66,7 +72,7 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const Re
 {
     SetPaintTransparent( TRUE );
     SetBackground();
-    if( GetSettings().GetStyleSettings().GetHighContrastMode() )
+    if( useHCColorReplacement() )
         maPageVDev.SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
     else
         maPageVDev.SetBackground( Color( COL_WHITE ) );
@@ -76,12 +82,76 @@ PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
 {
 }
 
+bool PrintDialog::PrintPreviewWindow::useHCColorReplacement() const
+{
+    bool bRet = false;
+    if( GetSettings().GetStyleSettings().GetHighContrastMode() )
+    {
+        try
+        {
+            // get service provider
+            Reference< XMultiServiceFactory > xSMgr( unohelper::GetMultiServiceFactory() );
+            // create configuration hierachical access name
+            if( xSMgr.is() )
+            {
+                try
+                {
+                    Reference< XMultiServiceFactory > xConfigProvider(
+                        Reference< XMultiServiceFactory >(
+                            xSMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                            "com.sun.star.configuration.ConfigurationProvider" ))),
+                            UNO_QUERY )
+                        );
+                    if( xConfigProvider.is() )
+                    {
+                        Sequence< Any > aArgs(1);
+                        PropertyValue aVal;
+                        aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+                        aVal.Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Accessibility" ) );
+                        aArgs.getArray()[0] <<= aVal;
+                        Reference< XNameAccess > xConfigAccess(
+                            Reference< XNameAccess >(
+                                xConfigProvider->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                    "com.sun.star.configuration.ConfigurationAccess" )),
+                                                                                aArgs ),
+                                UNO_QUERY )
+                            );
+                        if( xConfigAccess.is() )
+                        {
+                            try
+                            {
+                                sal_Bool bValue = sal_False;
+                                Any aAny = xConfigAccess->getByName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsForPagePreviews" ) ) );
+                                if( aAny >>= bValue )
+                                    bRet = bool(bValue);
+                            }
+                            catch( NoSuchElementException& )
+                            {
+                            }
+                            catch( WrappedTargetException& )
+                            {
+                            }
+                        }
+                    }
+                }
+                catch( Exception& )
+                {
+                }
+            }
+        }
+        catch( WrappedTargetException& )
+        {
+        }
+    }
+    return bRet;
+}
+
 void PrintDialog::PrintPreviewWindow::DataChanged( const DataChangedEvent& i_rDCEvt )
 {
     // react on settings changed
     if( i_rDCEvt.GetType() == DATACHANGED_SETTINGS )
     {
-        if( GetSettings().GetStyleSettings().GetHighContrastMode() )
+        if( useHCColorReplacement() )
             maPageVDev.SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
         else
             maPageVDev.SetBackground( Color( COL_WHITE ) );
@@ -118,6 +188,23 @@ void PrintDialog::PrintPreviewWindow::Resize()
     }
     aScaledSize.Width() = long(aScaledSize.Width()*fScale);
     aScaledSize.Height() = long(aScaledSize.Height()*fScale);
+
+    maPreviewSize = aScaledSize;
+
+    // #i104784# if we render the page too small then rounding issues result in
+    // layout artifacts looking really bad. So scale the page unto a device that is not
+    // full page size but not too small either. This also results in much better visual
+    // quality of the preview, e.g. when its height approaches the number of text lines
+    // find a good scaling factor
+    Size aPreviewMMSize( maPageVDev.PixelToLogic( aScaledSize, MapMode( MAP_100TH_MM ) ) );
+    double fZoom = double(maOrigSize.Height())/double(aPreviewMMSize.Height());
+    while( fZoom > 10 )
+    {
+        aScaledSize.Width() *= 2;
+        aScaledSize.Height() *= 2;
+        fZoom /= 2.0;
+    }
+
     maPageVDev.SetOutputSizePixel( aScaledSize, FALSE );
 }
 
@@ -129,9 +216,14 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
         // replacement is active
         Push();
         Rectangle aTextRect( Point( 0, 0 ), aSize );
-        Font aFont( GetSettings().GetStyleSettings().GetFieldFont() );
-        aFont.SetSize( Size( 0, aSize.Height()/12 ) );
-        SetFont( aFont );
+        DecorationView aVw( this );
+        aVw.DrawFrame( aTextRect, FRAME_DRAW_GROUP );
+        aTextRect.Left()   += 2;
+        aTextRect.Top()    += 2;
+        aTextRect.Right()  -= 2;
+        aTextRect.Bottom() -= 2;
+        Font aFont( GetSettings().GetStyleSettings().GetLabelFont() );
+        SetZoomedPointFont( aFont );
         DrawText( aTextRect, maReplacementString,
                   TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE
                  );
@@ -141,11 +233,11 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
     {
         GDIMetaFile aMtf( maMtf );
 
-        Size aPreviewSize = maPageVDev.GetOutputSizePixel();
-        Point aOffset( (aSize.Width() - aPreviewSize.Width()) / 2,
-                       (aSize.Height() - aPreviewSize.Height()) / 2 );
+        Point aOffset( (aSize.Width() - maPreviewSize.Width()) / 2,
+                       (aSize.Height() - maPreviewSize.Height()) / 2 );
 
-        const Size aLogicSize( maPageVDev.PixelToLogic( aPreviewSize, MapMode( MAP_100TH_MM ) ) );
+        Size aVDevSize( maPageVDev.GetOutputSizePixel() );
+        const Size aLogicSize( maPageVDev.PixelToLogic( aVDevSize, MapMode( MAP_100TH_MM ) ) );
         Size aOrigSize( maOrigSize );
         if( aOrigSize.Width() < 1 )
             aOrigSize.Width() = aLogicSize.Width();
@@ -165,11 +257,11 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
 
         SetMapMode( MAP_PIXEL );
         maPageVDev.SetMapMode( MAP_PIXEL );
-        DrawOutDev( aOffset, aPreviewSize, Point( 0, 0 ), aPreviewSize, maPageVDev );
+        DrawOutDev( aOffset, maPreviewSize, Point( 0, 0 ), aVDevSize, maPageVDev );
 
         DecorationView aVw( this );
-        aOffset.X() -= 1; aOffset.Y() -=1; aPreviewSize.Width() += 2; aPreviewSize.Height() += 2;
-        aVw.DrawFrame( Rectangle( aOffset, aPreviewSize ), FRAME_DRAW_GROUP );
+        Rectangle aFrame( aOffset + Point( -1, -1 ), Size( maPreviewSize.Width() + 2, maPreviewSize.Height() + 2 ) );
+        aVw.DrawFrame( aFrame, FRAME_DRAW_GROUP );
     }
 }
 
@@ -211,9 +303,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     #endif
     SetQuickHelpText( aBuf.makeStringAndClear() );
     maMtf = i_rNewPreview;
-    if( GetSettings().GetStyleSettings().GetHighContrastMode() &&
-        GetSettings().GetStyleSettings().GetWindowColor().IsDark()
-        )
+    if( useHCColorReplacement() )
     {
         maMtf.ReplaceColors( Color( COL_BLACK ), Color( COL_WHITE ), 30 );
     }
@@ -834,6 +924,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maNUpPage.maBorderCB.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maOptionsPage.maToFileBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
     maOptionsPage.maReverseOrderBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maOptionsPage.maCollateSingleJobsBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
     maNUpPage.maPagesBtn.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
 
     // setup modify hdl
@@ -1027,6 +1118,11 @@ bool PrintDialog::isCollate()
     return maJobPage.maCopyCountField.GetValue() > 1 ? maJobPage.maCollateBox.IsChecked() : FALSE;
 }
 
+bool PrintDialog::isSingleJobs()
+{
+    return maOptionsPage.maCollateSingleJobsBox.IsChecked();
+}
+
 static void setSmartId( Window* i_pWindow, const char* i_pType, sal_Int32 i_nId = -1, const rtl::OUString& i_rPropName = rtl::OUString() )
 {
     rtl::OUStringBuffer aBuf( 256 );
@@ -1049,10 +1145,17 @@ static void setSmartId( Window* i_pWindow, const char* i_pType, sal_Int32 i_nId 
     i_pWindow->SetSmartHelpId( SmartId( aBuf.makeStringAndClear(), HID_PRINTDLG ) );
 }
 
-static void setHelpText( Window* i_pWindow, const Sequence< rtl::OUString >& i_rHelpTexts, sal_Int32 i_nIndex )
+static void setHelpText( Window* /*i_pWindow*/, const Sequence< rtl::OUString >& /*i_rHelpTexts*/, sal_Int32 /*i_nIndex*/ )
 {
+    // without a help text set and the correct smartID,
+    // help texts will be retrieved from the online help system
+
+    // passed help texts for optional UI is used only for native dialogs which currently
+    // cannot access the same (rather implicit) mechanism
+    #if 0
     if( i_nIndex >= 0 && i_nIndex < i_rHelpTexts.getLength() )
         i_pWindow->SetHelpText( i_rHelpTexts.getConstArray()[i_nIndex] );
+    #endif
 }
 
 void updateMaxSize( const Size& i_rCheckSize, Size& o_rMaxSize )
@@ -1572,6 +1675,12 @@ void PrintDialog::setupOptionalUI()
         maJobPage.maLayout.setBorders( nIndex-1, 0, 0, 0, aBorder.Width()  );
 #endif
 
+    // create auto mnemomnics now so they can be calculated in layout
+    ImplWindowAutoMnemonic( &maJobPage );
+    ImplWindowAutoMnemonic( &maNUpPage );
+    ImplWindowAutoMnemonic( &maOptionsPage );
+    ImplWindowAutoMnemonic( this );
+
     // calculate job page
     Size aMaxSize = maJobPage.maLayout.getOptimalSize( WINDOWSIZE_PREFERRED );
     // and layout page
@@ -1654,6 +1763,7 @@ void PrintDialog::checkControlDependencies()
     maJobPage.maCollateImage.SetSizePixel( aImgSize );
     maJobPage.maCollateImage.SetImage( bHC ? aHCImg : aImg );
     maJobPage.maCollateImage.SetModeImage( aHCImg, BMP_COLOR_HIGHCONTRAST );
+    maJobPage.maLayout.resize();
 
     // enable setup button only for printers that can be setup
     bool bHaveSetup = maPController->getPrinter()->HasSupport( SUPPORT_SETUPDIALOG );
@@ -2442,6 +2552,11 @@ void PrintProgressDialog::tick()
 {
     if( mnCur < mnMax )
         setProgress( ++mnCur );
+}
+
+void PrintProgressDialog::reset()
+{
+    setProgress( 0 );
 }
 
 void PrintProgressDialog::Paint( const Rectangle& )
