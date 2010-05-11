@@ -77,6 +77,7 @@
 #include "escher.hxx"
 
 #include "docsh.hxx"
+#include <cstdio>
 
 using namespace ::com::sun::star;
 using namespace nsFieldFlags;

@@ -77,7 +77,7 @@
 #include <doc.hxx>
 #include <pam.hxx>
 #include <SwGrammarMarkUp.hxx>
-
+#include <cstdio>
 // --> FME 2004-06-08 #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
 // <--
