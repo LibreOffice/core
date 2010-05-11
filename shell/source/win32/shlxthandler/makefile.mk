@@ -75,8 +75,14 @@ SHL1STDLIBS+=\
     $(SHELL32LIB)\
     $(KERNEL32LIB)\
     $(GDI32LIB)\
-    $(GDIPLUSLIB)\
-    msvcprt.lib \
+    $(GDIPLUSLIB)
+
+.IF "$(COM)"!="GCC"
+SHL1STDLIBS+=\
+    msvcprt.lib
+.ENDIF
+
+SHL1STDLIBS+=\
     $(SHLWAPILIB)
 
 SHL1LIBS+=$(SLB)$/util.lib\
