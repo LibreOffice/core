@@ -422,6 +422,46 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
     {
         o2u_attachCurrentThread();
         ITypeInfo * pInfo = getTypeInfo();
+        // I was going to implement an XServiceInfo interface to allow the type
+        // of the automation object to be exposed.. but it seems
+        // from looking at comments in the code that it is possible for
+        // this object to actually wrap an UNO object ( I guess if automation is
+        // used from MSO to create Openoffice objects ) Therefore, those objects
+        // will more than likely already have their own XServiceInfo interface.
+        // Instead here I chose a name that should be illegal both in COM and
+        // UNO ( from an IDL point of view ) therefore I think this is a safe
+        // hack
+        if ( aPropertyName.equals( rtl::OUString::createFromAscii("$GetTypeName") ))
+        {
+            if ( pInfo && m_sTypeName.getLength() == 0 )
+            {
+                 m_sTypeName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IDispatch") );
+                CComBSTR sName;
+
+                if ( SUCCEEDED( pInfo->GetDocumentation( -1, &sName, NULL, NULL, NULL  ) ) )
+                {
+                    rtl::OUString sTmp( reinterpret_cast<const sal_Unicode*>(LPCOLESTR(sName)));
+                    if ( sTmp.indexOf('_')  == 0 )
+                       sTmp = sTmp.copy(1);
+                    // do we own the memory for pTypeLib, msdn doco is vague
+                    // I'll assume we do
+                    CComPtr< ITypeLib > pTypeLib;
+                    unsigned int index;
+                    if ( SUCCEEDED(  pInfo->GetContainingTypeLib(  &pTypeLib.p, &index )) )
+                    {
+                        if ( SUCCEEDED( pTypeLib->GetDocumentation( -1, &sName, NULL, NULL, NULL  ) ) )
+                        {
+                            rtl::OUString sLibName( reinterpret_cast<const sal_Unicode*>(LPCOLESTR(sName)));
+                            m_sTypeName = sLibName.concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(".") ) ).concat( sTmp );
+
+                        }
+                    }
+                }
+
+            }
+            ret <<= m_sTypeName;
+            return ret;
+        }
         FuncDesc aDescGet(pInfo);
         FuncDesc aDescPut(pInfo);
         VarDesc aVarDesc(pInfo);
