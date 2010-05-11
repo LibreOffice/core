@@ -959,6 +959,9 @@ private:
     // --> OD 2010-05-06 #i103711#
     std::set<const SwNode*> maTxtNodesHavingFirstLineOfstSet;
     // <--
+    // --> OD 2010-05-11 #i105414#
+    std::set<const SwNode*> maTxtNodesHavingLeftIndentSet;
+    // <--
 
     WW8RStyle* pStyles;     // Pointer auf die Style-Einleseklasse
     SwFmt* pAktColl;        // gerade zu erzeugende Collection
@@ -1160,8 +1163,10 @@ private:
 
     void EndSprm( USHORT nId );
     // --> OD 2010-05-06 #i103711#
+    // --> OD 2010-05-11 #i105414#
     void NewAttr( const SfxPoolItem& rAttr,
-                  const bool bFirstLineOfStSet = false );
+                  const bool bFirstLineOfStSet = false,
+                  const bool bLeftIndentSet = false );
     // <--
 
     bool GetFontParams(USHORT, FontFamily&, String&, FontPitch&,
@@ -1619,9 +1624,13 @@ public:     // eigentlich private, geht aber leider nur public
 bool CanUseRemoteLink(const String &rGrfName);
 void UseListIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt);
 void SetStyleIndent(SwWW8StyInf &rStyleInfo, const SwNumFmt &rFmt);
+// --> OD 2010-05-06 #i103711#
+// --> OD 2010-05-11 #i105414#
 void SyncIndentWithList( SvxLRSpaceItem &rLR,
                          const SwNumFmt &rFmt,
-                         const bool bFirstLineOfStSet );
+                         const bool bFirstLineOfStSet,
+                         const bool bLeftIndentSet );
+// <--
 long GetListFirstLineIndent(const SwNumFmt &rFmt);
 String BookmarkToWriter(const String &rBookmark);
 bool RTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,

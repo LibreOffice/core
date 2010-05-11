@@ -2716,7 +2716,8 @@ bool SwWW8ImplReader::TestSameApo(const ApoTestResults &rApo,
 #**************************************************************************/
 
 void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr,
-                               const bool bFirstLineOfStSet )
+                               const bool bFirstLineOfStSet,
+                               const bool bLeftIndentSet )
 {
     if( !bNoAttrImport ) // zum Ignorieren von Styles beim Doc-Einfuegen
     {
@@ -2741,6 +2742,13 @@ void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr,
             {
                 const SwNode* pNd = &(pPaM->GetPoint()->nNode.GetNode());
                 maTxtNodesHavingFirstLineOfstSet.insert( pNd );
+            }
+            // <--
+            // --> OD 2010-05-11 #i105414#
+            if ( bLeftIndentSet )
+            {
+                const SwNode* pNd = &(pPaM->GetPoint()->nNode.GetNode());
+                maTxtNodesHavingLeftIndentSet.insert( pNd );
             }
             // <--
         }
@@ -3975,6 +3983,9 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
     // --> OD 2010-05-06 #i103711#
     bool bFirstLinOfstSet( false );
     // <--
+    // --> OD 2010-05-11 #i105414#
+    bool bLeftIndentSet( false );
+    // <--
 
     switch (nId)
     {
@@ -3984,7 +3995,12 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
         case 0x845E:
             aLR.SetTxtLeft( nPara );
             if (pAktColl)
+            {
                 pCollA[nAktColl].bListReleventIndentSet = true;
+            }
+            // --> OD 2010-05-11 #i105414#
+            bLeftIndentSet = true;
+            // <--
             break;
         //sprmPDxaLeft1
         case     19:
@@ -4019,7 +4035,9 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
             {
                 pCollA[nAktColl].bListReleventIndentSet = true;
             }
+            // --> OD 2010-05-06 #i103711#
             bFirstLinOfstSet = true;
+            // <--
             break;
         //sprmPDxaRight
         case     16:
@@ -4032,7 +4050,8 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
     }
 
     // --> OD 2010-05-06 #i103711#
-    NewAttr( aLR, bFirstLinOfstSet );
+    // --> OD 2010-05-11 #i105414#
+    NewAttr( aLR, bFirstLinOfstSet, bLeftIndentSet );
     // <--
 }
 

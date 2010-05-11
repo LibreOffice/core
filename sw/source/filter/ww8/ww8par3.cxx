@@ -1698,7 +1698,10 @@ void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
         SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.pFmt, RES_LR_SPACE));
         if (rStyle.bListReleventIndentSet)
         {
-            SyncIndentWithList( aLR, rFmt, false );
+            // --> OD 2010-05-06 #i103711#
+            // --> OD 2010-05-11 #i105414#
+            SyncIndentWithList( aLR, rFmt, false, false );
+            // <--
         }
         else
         {

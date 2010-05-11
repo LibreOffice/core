@@ -845,9 +845,11 @@ long lcl_GetTrueMargin(const SvxLRSpaceItem &rLR, const SwNumFmt &rFmt,
 }
 
 // --> OD 2010-05-06 #i103711#
+// --> OD 2010-05-11 #i105414#
 void SyncIndentWithList( SvxLRSpaceItem &rLR,
                          const SwNumFmt &rFmt,
-                         const bool bFirstLineOfstSet )
+                         const bool bFirstLineOfstSet,
+                         const bool bLeftIndentSet )
 {
     if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
@@ -858,10 +860,15 @@ void SyncIndentWithList( SvxLRSpaceItem &rLR,
     }
     else if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
     {
-        if ( !bFirstLineOfstSet &&
+        if ( !bFirstLineOfstSet && bLeftIndentSet &&
              rFmt.GetFirstLineIndent() != 0 )
         {
             rLR.SetTxtFirstLineOfst( rFmt.GetFirstLineIndent() );
+        }
+        else if ( bFirstLineOfstSet && !bLeftIndentSet &&
+                  rFmt.GetIndentAt() != 0 )
+        {
+            rLR.SetTxtLeft( rFmt.GetIndentAt() );
         }
     }
 }
@@ -932,8 +939,13 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                             const bool bFirstLineIndentSet =
                                 ( rReader.maTxtNodesHavingFirstLineOfstSet.end() !=
                                     rReader.maTxtNodesHavingFirstLineOfstSet.find( pNode ) );
+                            // --> OD 2010-05-11 #i105414#
+                            const bool bLeftIndentSet =
+                                (  rReader.maTxtNodesHavingLeftIndentSet.end() !=
+                                    rReader.maTxtNodesHavingLeftIndentSet.find( pNode ) );
                             SyncIndentWithList( aNewLR, *pNum,
-                                                bFirstLineIndentSet );
+                                                bFirstLineIndentSet,
+                                                bLeftIndentSet );
                             // <--
                         }
 
@@ -3205,6 +3217,9 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     maCharStyleMapper(rD),
     // --> OD 2010-05-06 #i103711#
     maTxtNodesHavingFirstLineOfstSet(),
+    // <--
+    // --> OD 2010-05-11 #i105414#
+    maTxtNodesHavingLeftIndentSet(),
     // <--
     pMSDffManager(0),
     mpAtnNames(0),
