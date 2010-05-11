@@ -50,7 +50,8 @@ UNIXTEXT= \
 UNIXTEXT+= $(BIN)$/stclient_wrapper.sh
 .ENDIF
 
-FAKEDB=$(BIN)$/noarch/fake-db-1.0-0.noarch.rpm
+NOARCH=$(BIN)$/noarch
+FAKEDB=$(NOARCH)/fake-db-1.0-0.noarch.rpm
 FAKEDBROOT=$(COMMONMISC)/$(TARGET)/fake-db-root
 
 # --- Targets ------------------------------------------------------
@@ -58,7 +59,7 @@ FAKEDBROOT=$(COMMONMISC)/$(TARGET)/fake-db-root
 .ENDIF # L10N_framework
 .INCLUDE :	target.mk
 .IF "$(L10N_framework)"==""
-.IF "$(OS)" == "SOLARIS" || "$(OS)" == "LINUX"
+.IF "$(OS)" == "SOLARIS" || ( "$(OS)" == "LINUX" && "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)" )
 
 ALLTAR: $(BIN)$/install $(BIN)$/uninstall
 
@@ -69,18 +70,21 @@ $(BIN)$/install: install_$(OS:l).sh
 .ENDIF
 
 .IF "$(OS)" == "LINUX"
+.IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 
 $(FAKEDB) : fake-db.spec 
     $(MKDIRHIER) $(FAKEDBROOT)
     $(RPM) --define "_builddir $(shell @cd $(FAKEDBROOT) && pwd)" --define "_rpmdir $(shell @cd $(BIN) && pwd)" -bb $<
+    chmod g+w $(NOARCH)
 
 $(BIN)$/install: $(FAKEDB)
+.ENDIF          # "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 
 $(BIN)$/uninstall: uninstall_linux.sh
     $(TYPE) $< | tr -d "\015" > $@
     -chmod 775 $@
 
-.ENDIF
+.ENDIF          # "$(OS)" == "LINUX"
 
 .IF "$(OS)" == "SOLARIS"
 

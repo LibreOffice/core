@@ -26,11 +26,13 @@
  ************************************************************************/
 package integration.forms;
 
+import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XChild;
 import com.sun.star.container.XIndexContainer;
 import com.sun.star.container.XNameContainer;
+import com.sun.star.document.MacroExecMode;
 import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XDrawPageSupplier;
 import com.sun.star.drawing.XDrawPages;
@@ -68,13 +70,19 @@ public class DocumentHelper
     /* ------------------------------------------------------------------ */
     protected static XComponent implLoadAsComponent( XMultiServiceFactory orb, String documentOrFactoryURL ) throws com.sun.star.uno.Exception
     {
+        return implLoadAsComponent( orb, documentOrFactoryURL, new PropertyValue[0] );
+    }
+
+    /* ------------------------------------------------------------------ */
+    protected static XComponent implLoadAsComponent( XMultiServiceFactory orb, String documentOrFactoryURL, final PropertyValue[] i_args ) throws com.sun.star.uno.Exception
+    {
         XComponentLoader aLoader = (XComponentLoader)UnoRuntime.queryInterface(
             XComponentLoader.class,
             orb.createInstance( "com.sun.star.frame.Desktop" )
         );
 
         XComponent document = dbfTools.queryComponent(
-            aLoader.loadComponentFromURL( documentOrFactoryURL, "_blank", 0, new PropertyValue[ 0 ] )
+            aLoader.loadComponentFromURL( documentOrFactoryURL, "_blank", 0, i_args )
         );
         return document;
     }
@@ -82,7 +90,13 @@ public class DocumentHelper
     /* ------------------------------------------------------------------ */
     private static DocumentHelper implLoadDocument( XMultiServiceFactory orb, String documentOrFactoryURL ) throws com.sun.star.uno.Exception
     {
-        XComponent document = implLoadAsComponent( orb, documentOrFactoryURL );
+        return implLoadDocument( orb, documentOrFactoryURL, new PropertyValue[0] );
+    }
+
+    /* ------------------------------------------------------------------ */
+    private static DocumentHelper implLoadDocument( XMultiServiceFactory orb, String documentOrFactoryURL, final PropertyValue[] i_args ) throws com.sun.star.uno.Exception
+    {
+        XComponent document = implLoadAsComponent( orb, documentOrFactoryURL, i_args );
 
         XServiceInfo xSI = (XServiceInfo)UnoRuntime.queryInterface( XServiceInfo.class,
             document );
@@ -112,7 +126,10 @@ public class DocumentHelper
     /* ------------------------------------------------------------------ */
     public static DocumentHelper blankDocument( XMultiServiceFactory orb, DocumentType eType ) throws com.sun.star.uno.Exception
     {
-        return implLoadDocument( orb, getDocumentFactoryURL( eType ) );
+        final PropertyValue[] args = new PropertyValue[] {
+            new PropertyValue( "MacroExecutionMode", -1, MacroExecMode.ALWAYS_EXECUTE, PropertyState.DIRECT_VALUE )
+        };
+        return implLoadDocument( orb, getDocumentFactoryURL( eType ), args );
     }
 
     /* ================================================================== */

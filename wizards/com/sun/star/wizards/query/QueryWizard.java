@@ -26,29 +26,30 @@
  ************************************************************************/
 package com.sun.star.wizards.query;
 
-import com.sun.star.frame.XFrame;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.lang.XComponent;
-import com.sun.star.wizards.common.*;
-import com.sun.star.wizards.db.*;
+import com.sun.star.frame.XFrame;
+import com.sun.star.sdb.CommandType;
 import com.sun.star.sdbc.SQLException;
-import com.sun.star.uno.*;
-import com.sun.star.wizards.ui.*;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.Resource;
+import com.sun.star.wizards.db.DatabaseObjectWizard;
+import com.sun.star.wizards.db.QueryMetaData;
+import com.sun.star.wizards.ui.AggregateComponent;
+import com.sun.star.wizards.ui.CommandFieldSelection;
+import com.sun.star.wizards.ui.FieldSelection;
+import com.sun.star.wizards.ui.FilterComponent;
+import com.sun.star.wizards.ui.SortingComponent;
+import com.sun.star.wizards.ui.TitlesComponent;
 
-public class QueryWizard extends WizardDialog
+public class QueryWizard extends DatabaseObjectWizard
 {
-
-    private XFrame CurFrame;
-
-    public XFrame getCurFrame()
-    {
-        return CurFrame;
-    }
     public static final String SFILLUPFIELDSLISTBOX = "fillUpFieldsListbox";
     private static final int SOFIELDSELECTION_PAGE = 1;
     private static final int SOSORTING_PAGE = 2;
@@ -72,23 +73,21 @@ public class QueryWizard extends WizardDialog
     private String reslblFields;
     private String reslblSelFields;
     private String reslblTables;
-    // private String resQuery;
     private String resQueryWizard;
     private String reslblGroupBy;
     private String resmsgNonNumericAsGroupBy;
-    private XComponent[] components = null;    //Resources Object
-    // private short CurTabIndex = 0;
+    private String m_createdQuery;
 
-    public QueryWizard(XMultiServiceFactory xMSF)
+    public QueryWizard( XMultiServiceFactory xMSF, PropertyValue[] i_wizardContext )
     {
-        super(xMSF, 40970);
+        super( xMSF, 40970, i_wizardContext );
         addResourceHandler("QueryWizard", "dbw");
         CurDBMetaData = new QuerySummary(xMSF, m_oResource);
     }
 
-    public static void main(String args[])
+/*    public static void main(String args[])
     {
-        String ConnectStr = "uno:pipe,name=fs93730;urp;StarOffice.ServiceManager";
+        String ConnectStr = "uno:pipe,name=foo;urp;StarOffice.ServiceManager";
         try
         {
             XMultiServiceFactory xLocMSF = Desktop.connect(ConnectStr);
@@ -106,13 +105,18 @@ public class QueryWizard extends WizardDialog
         {
             jexception.printStackTrace(System.out);
         }
+    }*/
+
+    public final XFrame getFrame()
+    {
+        return m_frame;
     }
 
-    public XComponent[] startQueryWizard(XMultiServiceFactory xMSF, PropertyValue[] CurPropertyValues)
+    public String startQueryWizard()
     {
         try
         {
-            if (CurDBMetaData.getConnection(CurPropertyValues))
+            if ( CurDBMetaData.getConnection( m_wizardContext ) )
             {
                 reslblFields = m_oResource.getResText(UIConsts.RID_QUERY + 4);
                 reslblFieldHeader = m_oResource.getResText(UIConsts.RID_QUERY + 19); //Fielnames in  AliasComponent
@@ -134,22 +138,13 @@ public class QueryWizard extends WizardDialog
                 setRightPaneHeaders(m_oResource, UIConsts.RID_QUERY + 70, 8);
                 this.setMaxStep(8);
                 buildSteps();
-                this.CurDBCommandFieldSelection.preselectCommand(CurPropertyValues, false);
-                if (Properties.hasPropertyValue(CurPropertyValues, "ParentFrame"))
-                {
-                    CurFrame = (XFrame) UnoRuntime.queryInterface(XFrame.class, Properties.getPropertyValue(CurPropertyValues, "ParentFrame"));
-                }
-                else
-                {
-                    CurFrame = Desktop.getActiveFrame(xMSF);
-                }
+                this.CurDBCommandFieldSelection.preselectCommand( m_wizardContext, false );
 
-                XWindowPeer windowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, CurFrame.getContainerWindow());
-                this.xMSF = xMSF;
+                XWindowPeer windowPeer = UnoRuntime.queryInterface( XWindowPeer.class, m_frame.getContainerWindow() );
                 createWindowPeer(windowPeer);
                 CurDBMetaData.setWindowPeer(this.xControl.getPeer());
                 insertQueryRelatedSteps();
-                executeDialog(CurFrame.getContainerWindow().getPosSize());
+                executeDialog( m_frame.getContainerWindow().getPosSize() );
             }
         }
         catch (java.lang.Exception jexception)
@@ -161,14 +156,12 @@ public class QueryWizard extends WizardDialog
         CurAggregateComponent = null;
         CurDBCommandFieldSelection = null;
         xWindowPeer = null;
-        CurFrame = null;
         CurFinalizer = null;
         CurDBMetaData.finish();
         CurDBMetaData = null;
-        XComponent[] ret = components;
-        components = null;
         System.gc();
-        return ret;
+
+        return m_createdQuery;
     }
 
     public void enableRoadmapItems(String[] _FieldNames, boolean _bEnabled)
@@ -226,7 +219,6 @@ public class QueryWizard extends WizardDialog
     {
         try
         {
-//            String[] sRMItemLabels = getRMItemLabels();
             setRMItemLabels(m_oResource, UIConsts.RID_QUERY + 80);
             addRoadmap();
             int i = 0;
@@ -289,17 +281,22 @@ public class QueryWizard extends WizardDialog
         }
     }
 
-    public void finishWizard()
+    public boolean finishWizard()
     {
         int ncurStep = getCurrentStep();
-        if ((switchToStep(ncurStep, SOSUMMARY_PAGE)) || (ncurStep == SOSUMMARY_PAGE))
+        if  (   ( ncurStep == SOSUMMARY_PAGE )
+            ||  ( switchToStep( ncurStep, SOSUMMARY_PAGE ) )
+            )
         {
-            components = CurFinalizer.finish();
-            if ( components == null )
+            m_createdQuery = CurFinalizer.finish();
+            if ( m_createdQuery.length() > 0 )
             {
-                setControlProperty("btnWizardFinish", "Enabled", false);
+                loadSubComponent( CommandType.QUERY, m_createdQuery, CurFinalizer.displayQueryDesign() );
+                xDialog.endExecute();
+                return true;
             }
         }
+        return false;
     }
 
     protected void enterStep(int nOldStep, int nNewStep)
