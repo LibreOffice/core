@@ -1535,3 +1535,55 @@ void SAL_CALL UnoControl::removeModeChangeApproveListener( const Reference< XMod
     throw NoSupportException( );
 }
 
+//----------------------------------------------------------------------------------------------------------------------
+awt::Point SAL_CALL UnoControl::convertPointToLogic( const awt::Point& i_Point, ::sal_Int16 i_TargetUnit ) throw (IllegalArgumentException, RuntimeException)
+{
+    Reference< XUnitConversion > xPeerConversion;
+    {
+        ::osl::MutexGuard aGuard( GetMutex() );
+        xPeerConversion = xPeerConversion.query( getPeer() );
+    }
+    if ( xPeerConversion.is() )
+        return xPeerConversion->convertPointToLogic( i_Point, i_TargetUnit );
+    return awt::Point( );
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+awt::Point SAL_CALL UnoControl::convertPointToPixel( const awt::Point& i_Point, ::sal_Int16 i_SourceUnit ) throw (IllegalArgumentException, RuntimeException)
+{
+    Reference< XUnitConversion > xPeerConversion;
+    {
+        ::osl::MutexGuard aGuard( GetMutex() );
+        xPeerConversion = xPeerConversion.query( getPeer() );
+    }
+    if ( xPeerConversion.is() )
+        return xPeerConversion->convertPointToPixel( i_Point, i_SourceUnit );
+    return awt::Point( );
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+awt::Size SAL_CALL UnoControl::convertSizeToLogic( const awt::Size& i_Size, ::sal_Int16 i_TargetUnit ) throw (IllegalArgumentException, RuntimeException)
+{
+    Reference< XUnitConversion > xPeerConversion;
+    {
+        ::osl::MutexGuard aGuard( GetMutex() );
+        xPeerConversion = xPeerConversion.query( getPeer() );
+    }
+    if ( xPeerConversion.is() )
+        return xPeerConversion->convertSizeToLogic( i_Size, i_TargetUnit );
+    return awt::Size( );
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+awt::Size SAL_CALL UnoControl::convertSizeToPixel( const awt::Size& i_Size, ::sal_Int16 i_SourceUnit ) throw (IllegalArgumentException, RuntimeException)
+{
+    Reference< XUnitConversion > xPeerConversion;
+    {
+        ::osl::MutexGuard aGuard( GetMutex() );
+        xPeerConversion = xPeerConversion.query( getPeer() );
+    }
+    if ( xPeerConversion.is() )
+        return xPeerConversion->convertSizeToPixel( i_Size, i_SourceUnit );
+    return awt::Size( );
+}
+
