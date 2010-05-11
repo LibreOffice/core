@@ -37,6 +37,7 @@
 
 testcase tEis1549
     call hNewDocument
+    call sSelectEmptyLayout
     call hTextrahmenErstellen ("Sun",20,20,70,20)
 
     hTypeKeys ("<escape><escape>")
@@ -116,10 +117,16 @@ testcase tEis1549
     endcatch
 
     call hCloseDocument
-endcase
+endcase 'tEis1549
 
 testcase tEis1523
     call hNewDocument
+
+    printlog "Switching between Draw/Impress"
+    if (UCase(gApplication)) = "IMPRESS" then
+        call sSelectEmptyLayout
+    
+    endif
     call hTextrahmenErstellen ("A",20,20,30,30)
     hTypeKeys ("<escape><escape>")
     call hTextrahmenErstellen ("B",10,10,15,15)
@@ -209,7 +216,7 @@ testcase tEis1523
     endif
 
     call hCloseDocument
-endcase
+endcase 'tEis1523
 
 testcase tEis1581
     dim i as integer
@@ -237,8 +244,11 @@ testcase tEis1581
         LayoutsPreview.TypeKeys "<Return>"
         sleep (1)
         hTypeKeys ("<tab><tab>")
-        sleep (1)
-        hTypeKeys ("<Return>")
+
+        DocumentImpress.UseMenu
+        hMenuSelectNr(4)
+        hMenuSelectNr(13)
+        hMenuSelectNr(1)
         sleep (2)
         kontext "GeneralFileDialog"
         if GeneralFileDialog.exists then
@@ -255,7 +265,7 @@ testcase tEis1581
             Pagelayout_UndoDeleteWarning.ok
         endif
         sleep (1)
-        for i = 1 to 17
+        for i = 1 to 3
             kontext "Tasks"
             LayoutsPreview.TypeKeys "<RIGHT>"
             kontext "Pagelayout_UndoDeleteWarning"
@@ -267,9 +277,12 @@ testcase tEis1581
         kontext "Tasks"
         LayoutsPreview.TypeKeys "<Return>"
         sleep (1)
-        hTypeKeys ("<tab><tab><tab>")
+        hTypeKeys ("<tab><tab>")
         sleep (1)
-        hTypeKeys ("<Return>")
+        DocumentImpress.UseMenu
+        hMenuSelectNr(4)
+        hMenuSelectNr(16)
+        hMenuSelectNr(1)
         try
             sleep 2
             '         InsertTitle *OLEObjektEinfuegen/OLEObjektInsert   SID_INSERT_OBJECT
@@ -281,4 +294,4 @@ testcase tEis1581
         endcatch
     endif
     call hCloseDocument
-endcase
+endcase 'tEis1581
