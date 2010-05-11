@@ -57,14 +57,27 @@ sub new {
     my $source_root = shift;
     my $self = {};
     $self->{USER_SOURCE_ROOT} = undef;
+    $self->{SOURCE_CONFIG_FILE} = undef;
     if (defined $source_root) {
-        $self->{USER_SOURCE_ROOT} = $source_root;
+        $source_root = Cwd::realpath($source_root);
         $source_root =~ s/\\|\/$//;
-        $source_root .= '/..';
+        if (-f $source_root) {
+            # We have path to source_config
+            if (File::Basename::basename($source_root) eq 'source_config') {
+                # We have path to source_config
+                $self->{SOURCE_CONFIG_FILE} = $source_root;
+                $source_root = File::Basename::dirname($source_root);
+            } else {
+                croak("$source_root is not a source_config file");
+            };
+        } else {
+            $self->{USER_SOURCE_ROOT} = $source_root;
+            $source_root .= '/..';
+        }
     } else {
-        $source_root = $ENV{SOURCE_ROOT_DIR};
+        $source_root = Cwd::realpath($ENV{SOURCE_ROOT_DIR});
     };
-    $self->{SOURCE_ROOT} = Cwd::realpath($source_root);
+    $self->{SOURCE_ROOT} = $source_root;
     $self->{DEBUG} = 0;
     $self->{VERBOSE} = 0;
     $self->{REPOSITORIES} = {};
@@ -81,10 +94,12 @@ sub new {
     $self->{WARNINGS} = [];
     $self->{REPORT_MESSAGES} = [];
     $self->{CONFIG_FILE_CONTENT} = [];
+    $self->{DEFAULT_REPOSITORY} = undef;
     if (defined $self->{USER_SOURCE_ROOT}) {
         ${$self->{REPOSITORIES}}{File::Basename::basename($self->{USER_SOURCE_ROOT})} = $self->{USER_SOURCE_ROOT};
+        $self->{DEFAULT_REPOSITORY} = File::Basename::basename($self->{USER_SOURCE_ROOT});
     };
-    $self->{SOURCE_CONFIG_FILE} = get_config_file($self->{SOURCE_ROOT});
+    $self->{SOURCE_CONFIG_FILE} = get_config_file($self->{SOURCE_ROOT}) if (!defined $self->{SOURCE_CONFIG_FILE});
     $self->{SOURCE_CONFIG_DEFAULT} = $self->{SOURCE_ROOT} .'/'.SOURCE_CONFIG_FILE_NAME;
     read_config_file($self);
     bless($self, $class);
@@ -286,11 +301,17 @@ sub read_config_file {
             next if (!$repository_section && !$module_section);
             if (/\s*(\S+)=active\s*(\s+#)*/) {
                 if ($repository_section) {
-                    ${$self->{REPOSITORIES}}{$1} = $self->{SOURCE_ROOT} . "/$1";
-                    ${$self->{ACTIVATED_REPOSITORIES}}{$1}++;
+                    my $repository_source_path = $self->{SOURCE_ROOT} . "/$1";
                     if (defined $ENV{UPDMINOREXT}) {
-                        ${$self->{REPOSITORIES}}{$1} .= $ENV{UPDMINOREXT};
+                        $repository_source_path .= $ENV{UPDMINOREXT};
                     };
+                    if ((defined $self->{DEFAULT_REPOSITORY}) && (${$self->{REPOSITORIES}}{$self->{DEFAULT_REPOSITORY}} eq $repository_source_path)) {
+                        delete ${$self->{REPOSITORIES}}{$self->{DEFAULT_REPOSITORY}};
+                        $self->{DEFAULT_REPOSITORY} = undef;
+
+                    };
+                    ${$self->{REPOSITORIES}}{$1} = $repository_source_path;
+                    ${$self->{ACTIVATED_REPOSITORIES}}{$1}++;
                     next;
                 }
                 if ($module_section) {
@@ -525,7 +546,8 @@ Methods:
 
 SourceConfig::new()
 
-Creates a new instance of SourceConfig. Can't fail.
+Creates a new instance of SourceConfig. Can be initialized by: path to the default repository, path to the source_config, default - empty, the source_config will be taken from the environment
+
 
 SourceConfig::get_version()
 
