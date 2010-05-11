@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS EGREP AWK SED LOCAL_SOLENV _solenv UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os GNUTAR OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP VC_STANDARD ENABLE_WERROR ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS DISABLE_STRIP ENABLE_CUPS ENABLE_FONTCONFIG WITH_BINFILTER ENABLE_DIRECTX DISABLE_ACTIVEX DISABLE_ATL ENABLE_RPATH WITH_MYSPELL_DICTS SYSTEM_DICTS DICT_SYSTEM_DIR HYPH_SYSTEM_DIR THES_SYSTEM_DIR USE_SHELL WITH_MINGWIN SHELLPATH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_LD_BSYMBOLIC_FUNCTIONS ENABLE_PCH NO_HIDS GNUMAKE _cc HAVE_LD_HASH_STYLE PERL MSPDB_PATH COMEX USE_MINGW MIDL_PATH CSC_PATH FRAME_HOME CPP CXX CXXFLAGS ac_ct_CXX CXXCPP SIZEOF_LONG WORDS_BIGENDIAN LFS_CFLAGS ENABLE_VBA VBA_EXTENSION PAM NEW_SHADOW_API PAM_LINK CRYPT_LINK GXX_INCLUDE_PATH MINGW_LIB_INCLUDE_PATH MINGW_BACKWARD_INCLUDE_PATH MINGW_CLIB_DIR MINGW_SHARED_GCCLIB MINGW_GCCLIB_EH MINGW_SHARED_GXXLIB MINGW_GCCDLL MINGW_GXXDLL EXCEPTIONS STLPORT4 STLPORT_VER USE_SYSTEM_STL USE_CCACHE CCACHE HAVE_GCC_VISIBILITY_FEATURE ALLOC BUILD_VER_STRING SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVACISGCJ JAVADOC AWTLIB JAVAAOTCOMPILER JAVA_HOME JDK JAVAFLAGS DMAKE BUILD_DMAKE EPM DPKG PKGMK BUILD_EPM PKGFORMAT RPM GPERF MINGWCXX ac_ct_MINGWCXX MINGWSTRIP ac_ct_MINGWSTRIP BUILD_UNOWINREG BUILD_QADEVOOO SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD FREETYPE_CFLAGS FREETYPE_LIBS USE_FT_EMBOLDEN LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC SYSTEM_LIBXSLT LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir BZIP2 SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS HOME SYSTEM_DB DB_VERSION DB_INCLUDES DB_JAR SYSTEM_LUCENE LUCENE_CORE_JAR LUCENE_ANALYZERS_JAR ENABLE_MYSQLC MYSQLCONFIG SYSTEM_MYSQL MYSQL_INC MYSQL_LIB MYSQL_DEFINES LIBMYSQL_PATH SYSTEM_MYSQL_CPPCONN SYSTEM_HSQLDB HSQLDB_JAR SYSTEM_BSH BSH_JAR SERIALIZER_JAR SYSTEM_SAXON SAXON_JAR CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_VIGRA SYSTEM_ODBC_HEADERS WITH_MOZILLA WITH_LDAP WITH_OPENLDAP MOZ_NSS_CFLAGS MOZ_NSS_LIBS NSS_LIB MOZ_NSPR_CFLAGS MOZ_NSPR_LIBS NSPR_LIB MOZILLAXPCOM_CFLAGS MOZILLAXPCOM_LIBS MOZILLA_VERSION MOZILLA_TOOLKIT MOZGTK2_CFLAGS MOZGTK2_LIBS MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB ENABLE_NSS_MODULE MOZILLABUILD SYSTEM_MOZILLA MOZ_FLAVOUR MOZ_INC MOZ_LIB MOZ_LIB_XPCOM MOZ_LDAP_CFLAGS SYSTEM_SANE_HEADER SYSTEM_GENBRK SYSTEM_GENCCODE SYSTEM_GENCMN SYSTEM_ICU GRAPHITE_CFLAGS GRAPHITE_LIBS ENABLE_GRAPHITE SYSTEM_GRAPHITE X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB XAU_LIBS DISABLE_XAW SYSTEM_XRENDER_HEADERS XRENDER_LINK XRANDR_CFLAGS XRANDR_LIBS XRANDR_DLOPEN ENABLE_RANDR DISABLE_NEON NEON_CFLAGS NEON_LIBS SYSTEM_NEON NEON_VERSION OPENSSL_CFLAGS OPENSSL_LIBS SYSTEM_OPENSSL ENABLE_AGG AGG_CFLAGS AGG_LIBS SYSTEM_AGG AGG_VERSION REDLAND_CFLAGS REDLAND_LIBS SYSTEM_REDLAND HUNSPELL_CFLAGS HUNSPELL_LIBS SYSTEM_HUNSPELL SYSTEM_HYPH HYPHEN_LIB SYSTEM_MYTHES SYSTEM_LPSOLVE PSDK_HOME WINDOWS_VISTA_PSDK DIRECTXSDK_HOME DIRECTXSDK_LIB NSIS_PATH BISON FLEX PATCH GNUCP GNUPATCH CYGWIN_PATH ML_EXE ASM_HOME ZIP UNZIP ZIP_HOME ENABLE_GTK ENABLE_KDE ENABLE_KDE4 GCONF_CFLAGS GCONF_LIBS ENABLE_GCONF GNOMEVFS_CFLAGS GNOMEVFS_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS DBUS_CFLAGS DBUS_LIBS GIO_CFLAGS GIO_LIBS ENABLE_GIO ENABLE_DBUS ENABLE_SYSTRAY_GTK CAIRO_CFLAGS CAIRO_LIBS ENABLE_CAIRO BUILD_PIXMAN SYSTEM_CAIRO ENABLE_OPENGL ENABLE_PRESENTER_EXTRA_UI ENABLE_MINIMIZER ENABLE_PRESENTER_SCREEN POPPLER_CFLAGS POPPLER_LIBS ENABLE_PDFIMPORT SYSTEM_POPPLER ENABLE_MEDIAWIKI SYSTEM_SERVLETAPI SERVLETAPI_JAR ENABLE_REPORTBUILDER SYSTEM_JFREEREPORT SAC_JAR LIBXML_JAR FLUTE_JAR JFREEREPORT_JAR LIBBASE_JAR LIBLAYOUT_JAR LIBLOADER_JAR LIBFORMULA_JAR LIBREPOSITORY_JAR LIBFONTS_JAR LIBSERIALIZER_JAR SYSTEM_APACHE_COMMONS COMMONS_CODEC_JAR COMMONS_LANG_JAR COMMONS_HTTPCLIENT_JAR COMMONS_LOGGING_JAR MOC KDE_CFLAGS KDE_LIBS MOC4 KDE4_CFLAGS KDE4_LIBS ENABLE_LOCKDOWN GOBJECT_CFLAGS GOBJECT_LIBS ENABLE_EVOAB2 ENABLE_KAB WITH_FONTS WITHOUT_PPDS WITHOUT_AFMS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB WITH_LANG WITH_POOR_HELP_LOCALIZATIONS WITH_DICT INTRO_BITMAPS ABOUT_BITMAPS OOO_VENDOR UNIXWRAPPERNAME ENABLE_STATIC_GTK ENABLE_LAYOUT VERBOSE LOCAL_SOLVER BUILD_TYPE LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS EGREP AWK SED LOCAL_SOLENV _solenv UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os GNUTAR OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP VC_STANDARD ENABLE_WERROR ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS DISABLE_STRIP ENABLE_CUPS ENABLE_FONTCONFIG TARFILE_LOCATION DO_FETCH_TARBALLS WITH_BINFILTER ENABLE_DIRECTX DISABLE_ACTIVEX DISABLE_ATL ENABLE_RPATH WITH_MYSPELL_DICTS SYSTEM_DICTS DICT_SYSTEM_DIR HYPH_SYSTEM_DIR THES_SYSTEM_DIR WITH_MINGWIN SHELLPATH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_LD_BSYMBOLIC_FUNCTIONS ENABLE_PCH NO_HIDS GNUMAKE _cc HAVE_LD_HASH_STYLE PERL MSPDB_PATH COMEX USE_MINGW MIDL_PATH CSC_PATH FRAME_HOME CPP CXX CXXFLAGS ac_ct_CXX CXXCPP SIZEOF_LONG WORDS_BIGENDIAN LFS_CFLAGS ENABLE_VBA VBA_EXTENSION PAM NEW_SHADOW_API PAM_LINK CRYPT_LINK GXX_INCLUDE_PATH MINGW_LIB_INCLUDE_PATH MINGW_BACKWARD_INCLUDE_PATH MINGW_CLIB_DIR MINGW_SHARED_GCCLIB MINGW_GCCLIB_EH MINGW_SHARED_GXXLIB MINGW_GCCDLL MINGW_GXXDLL EXCEPTIONS STLPORT4 STLPORT_VER USE_SYSTEM_STL USE_CCACHE CCACHE HAVE_GCC_VISIBILITY_FEATURE ALLOC BUILD_VER_STRING SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVACISGCJ JAVADOC AWTLIB JAVAAOTCOMPILER JAVA_HOME JDK JAVAFLAGS JAVAIFLAGS DMAKE BUILD_DMAKE EPM DPKG PKGMK BUILD_EPM PKGFORMAT RPM GPERF MINGWCXX ac_ct_MINGWCXX MINGWSTRIP ac_ct_MINGWSTRIP BUILD_UNOWINREG BUILD_QADEVOOO SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD CPPUNIT_CFLAGS CPPUNIT_LIBS SYSTEM_CPPUNIT FREETYPE_CFLAGS FREETYPE_LIBS USE_FT_EMBOLDEN LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC SYSTEM_LIBXSLT LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir BZIP2 SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS HOME SYSTEM_DB DB_VERSION DB_INCLUDES DB_JAR SYSTEM_LUCENE LUCENE_CORE_JAR LUCENE_ANALYZERS_JAR ENABLE_MYSQLC MYSQLCONFIG SYSTEM_MYSQL MYSQL_INC MYSQL_LIB MYSQL_DEFINES LIBMYSQL_PATH SYSTEM_MYSQL_CPPCONN SYSTEM_HSQLDB HSQLDB_JAR SYSTEM_BSH BSH_JAR SERIALIZER_JAR SYSTEM_SAXON SAXON_JAR CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_VIGRA SYSTEM_ODBC_HEADERS WITH_MOZILLA WITH_LDAP WITH_OPENLDAP MOZ_NSS_CFLAGS MOZ_NSS_LIBS NSS_LIB MOZ_NSPR_CFLAGS MOZ_NSPR_LIBS NSPR_LIB MOZILLAXPCOM_CFLAGS MOZILLAXPCOM_LIBS MOZILLA_VERSION MOZILLA_TOOLKIT MOZGTK2_CFLAGS MOZGTK2_LIBS MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB ENABLE_NSS_MODULE MOZILLABUILD SYSTEM_MOZILLA MOZ_FLAVOUR MOZ_INC MOZ_LIB MOZ_LIB_XPCOM MOZ_LDAP_CFLAGS SYSTEM_SANE_HEADER SYSTEM_GENBRK SYSTEM_GENCCODE SYSTEM_GENCMN SYSTEM_ICU GRAPHITE_CFLAGS GRAPHITE_LIBS ENABLE_GRAPHITE SYSTEM_GRAPHITE X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB XAU_LIBS DISABLE_XAW SYSTEM_XRENDER_HEADERS XRENDER_LINK XRANDR_CFLAGS XRANDR_LIBS XRANDR_DLOPEN ENABLE_RANDR DISABLE_NEON NEON_CFLAGS NEON_LIBS SYSTEM_NEON NEON_VERSION OPENSSL_CFLAGS OPENSSL_LIBS SYSTEM_OPENSSL ENABLE_AGG AGG_CFLAGS AGG_LIBS SYSTEM_AGG AGG_VERSION REDLAND_CFLAGS REDLAND_LIBS SYSTEM_REDLAND HUNSPELL_CFLAGS HUNSPELL_LIBS SYSTEM_HUNSPELL SYSTEM_HYPH HYPHEN_LIB SYSTEM_MYTHES SYSTEM_LPSOLVE PSDK_HOME WINDOWS_VISTA_PSDK DIRECTXSDK_HOME DIRECTXSDK_LIB NSIS_PATH BISON FLEX PATCH GNUCP GNUPATCH CYGWIN_PATH ML_EXE ASM_HOME ZIP UNZIP ZIP_HOME ENABLE_GTK ENABLE_KDE ENABLE_KDE4 GCONF_CFLAGS GCONF_LIBS ENABLE_GCONF GNOMEVFS_CFLAGS GNOMEVFS_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS DBUS_CFLAGS DBUS_LIBS GIO_CFLAGS GIO_LIBS ENABLE_GIO ENABLE_DBUS ENABLE_SYSTRAY_GTK CAIRO_CFLAGS CAIRO_LIBS ENABLE_CAIRO BUILD_PIXMAN SYSTEM_CAIRO ENABLE_OPENGL ENABLE_PRESENTER_EXTRA_UI ENABLE_MINIMIZER ENABLE_PRESENTER_SCREEN POPPLER_CFLAGS POPPLER_LIBS ENABLE_PDFIMPORT SYSTEM_POPPLER ENABLE_MEDIAWIKI SYSTEM_SERVLETAPI SERVLETAPI_JAR ENABLE_REPORTBUILDER SYSTEM_JFREEREPORT SAC_JAR LIBXML_JAR FLUTE_JAR JFREEREPORT_JAR LIBBASE_JAR LIBLAYOUT_JAR LIBLOADER_JAR LIBFORMULA_JAR LIBREPOSITORY_JAR LIBFONTS_JAR LIBSERIALIZER_JAR SYSTEM_APACHE_COMMONS COMMONS_CODEC_JAR COMMONS_LANG_JAR COMMONS_HTTPCLIENT_JAR COMMONS_LOGGING_JAR MOC KDE_CFLAGS KDE_LIBS MOC4 KDE4_CFLAGS KDE4_LIBS ENABLE_LOCKDOWN GOBJECT_CFLAGS GOBJECT_LIBS ENABLE_EVOAB2 ENABLE_KAB WITH_FONTS WITHOUT_PPDS WITHOUT_AFMS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB OOO_JUNIT_JAR WITH_LANG WITH_POOR_HELP_LOCALIZATIONS WITH_DICT INTRO_BITMAPS ABOUT_BITMAPS OOO_VENDOR UNIXWRAPPERNAME ENABLE_STATIC_GTK ENABLE_LAYOUT VERBOSE LOCAL_SOLVER BUILD_TYPE LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -866,6 +866,8 @@ Optional Features:
   --disable-ldap          Disables the use of LDAP backend via Netscape/Mozilla
                           or OpenLDAP LDAP SDK
 
+  --disable-fetch-external Disables fetching external tarballs from web sources.
+
   --enable-lockdown       Enables the gconf integration work in OOo
 
   --disable-vba           disables the vba compatibility feature
@@ -938,9 +940,7 @@ Optional Features:
                           assertions, object counting, etc. Larger build.
                           Independent from --enable-debug
 
-  --enable-crashdump[=yes|TRUE|STATIC|no]
-                          Enable (disable) the crashdump feature code.
-                          [default=no]
+  --enable-crashdump      Enable the crashdump feature code.
 
   --enable-cl-standard    For Microsoft C/C++ compiler users, use non-optimizing
                           standard compiler. ( This just disavles optimization
@@ -1066,6 +1066,7 @@ Optional Packages:
 
   --with-system-graphite    use graphite library already installed on system
 
+  --with-external-tar=<TARFILE PATH>   Specify path to tarfiles manually
   --with-openldap         Enables the use of the OpenLDAP LDAP SDK instead
                           of the Netscape/Mozilla one
 
@@ -1236,6 +1237,8 @@ Optional Packages:
 
   --with-system-lpsolve         Use lpsolve already on system
 
+  --with-system-cppunit         Use cppunit already on system
+
   --with-system-mozilla   Use mozilla already on system. Note that some
                           components cannot be built against a contemporary
                           mozilla. The flavour used can be specified by
@@ -1277,6 +1280,12 @@ Optional Packages:
                           but the location of the entire distribution.
 
                           Usage: --with-ant-home=<absolute path to Ant home>
+
+  --with-junit            Specifies the JUnit 4 jar file to use for JUnit-based
+                          tests.  --without-junit disables those tests.  Not
+                          relevant in the --without-java case.
+
+                          Usage: --with-junit=<absolute path to JUnit 4 jar>
 
   --with-perl-home        If you have installed the Perl 5 Distribution, on your
                           system, please supply the path here.
@@ -1415,7 +1424,7 @@ Optional Packages:
                           Usage: --with-zip-home=<path to zip executable>
 
   --with-mingwin          For Windows users, use the mingwin32 compiler within
-                          cygwin environment, this implies --with-use-shell=tcsh
+                          cygwin environment
 
                           Usage: --with-mingwin=yes
 
@@ -1424,14 +1433,6 @@ Optional Packages:
                           Compilers name.
 
                           Usage: --with-mingwin=i586-mingw32msvc-g++
-
-  --with-use-shell        Use this option to override the default shell to be
-                          used for the build environment.
-                          Supported options:
-                            tcsh (default)
-                            bash
-
-                          Usage: --with-use-shell=tcsh|bash
 
   --with-build-version    Allows the builder to add a custom version tag
                           that will appear in the Help/About box for QA
@@ -1931,6 +1932,18 @@ if test "${enable_ldap+set}" = set; then
   enableval="$enable_ldap"
 
 fi;
+# Check whether --enable-fetch-external or --disable-fetch-external was given.
+if test "${enable_fetch_external+set}" = set; then
+  enableval="$enable_fetch_external"
+
+fi;
+
+# Check whether --with-external-tar or --without-external-tar was given.
+if test "${with_external_tar+set}" = set; then
+  withval="$with_external_tar"
+   TARFILE_LOCATION="$withval"
+
+fi;
 
 # Check whether --with-openldap or --without-openldap was given.
 if test "${with_openldap+set}" = set; then
@@ -2103,8 +2116,6 @@ fi;
 if test "${enable_crashdump+set}" = set; then
   enableval="$enable_crashdump"
 
-else
-  enable_crashdump=no
 fi;
 # Check whether --enable-cl-standard or --disable-cl-standard was given.
 if test "${enable_cl_standard+set}" = set; then
@@ -2410,8 +2421,6 @@ fi;
 if test "${with_system_mysql+set}" = set; then
   withval="$with_system_mysql"
 
-else
-  with_system_mysql="no"
 fi;
 
 # Check whether --with-libmysql-path or --without-libmysql-path was given.
@@ -2710,6 +2719,12 @@ if test "${with_system_lpsolve+set}" = set; then
 
 fi;
 
+# Check whether --with-system-cppunit or --without-system-cppunit was given.
+if test "${with_system_cppunit+set}" = set; then
+  withval="$with_system_cppunit"
+
+fi;
+
 # Check whether --with-system-mozilla or --without-system-mozilla was given.
 if test "${with_system_mozilla+set}" = set; then
   withval="$with_system_mozilla"
@@ -2755,6 +2770,14 @@ fi;
 if test "${with_ant_home+set}" = set; then
   withval="$with_ant_home"
 
+fi;
+
+# Check whether --with-junit or --without-junit was given.
+if test "${with_junit+set}" = set; then
+  withval="$with_junit"
+
+else
+  with_junit=yes
 fi;
 
 # Check whether --with-perl-home or --without-perl-home was given.
@@ -2913,14 +2936,6 @@ if test "${with_mingwin+set}" = set; then
   WITH_MINGWIN=$withval
 else
   WITH_MINGWIN=0
-fi;
-
-# Check whether --with-use-shell or --without-use-shell was given.
-if test "${with_use_shell+set}" = set; then
-  withval="$with_use_shell"
-  with_use_shell=$withval
-else
-  with_use_shell="tcsh"
 fi;
 
 # Check whether --with-build-version or --without-build-version was given.
@@ -3468,28 +3483,15 @@ esac
 
 echo "$as_me:$LINENO: checking whether to enable crashdump feature" >&5
 echo $ECHO_N "checking whether to enable crashdump feature... $ECHO_C" >&6
-if test "$enable_crashdump" = "yes" -o "$enable_crashdump" = "TRUE"; then
+if test "$enable_crashdump" = "yes"; then
    ENABLE_CRASHDUMP="TRUE"
+   BUILD_TYPE="$BUILD_TYPE CRASHREP"
    echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-   BUILD_TYPE="$BUILD_TYPE CRASHREP"
 else
-   if test "$enable_crashdump" = "STATIC"; then
-      ENABLE_CRASHDUMP="STATIC"
-      echo "$as_me:$LINENO: result: yes, STATIC" >&5
-echo "${ECHO_T}yes, STATIC" >&6
-      BUILD_TYPE="$BUILD_TYPE CRASHREP"
-   else
-      if test "$enable_crashdump" = "" -o "$enable_crashdump" = "no"; then
-         ENABLE_CRASHDUMP=""
-	 echo "$as_me:$LINENO: result: no" >&5
+   ENABLE_CRASHDUMP=""
+   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-      else
-         { { echo "$as_me:$LINENO: error: --enable-crashdump only accepts yes, no, TRUE or STATIC as parameter." >&5
-echo "$as_me: error: --enable-crashdump only accepts yes, no, TRUE or STATIC as parameter." >&2;}
-   { (exit 1); exit 1; }; }
-      fi
-   fi
 fi
 
 
@@ -3642,6 +3644,16 @@ echo "${ECHO_T}no" >&6
 fi
 
 
+if test -z $TARFILE_LOCATION; then
+   TARFILE_LOCATION="DEFAULT"
+fi
+
+
+if test -z "$enable_fetch_external" || test "$enable_fetch_external" = "yes" \
+   && test -z "$with_system_libs" -a "$with_system_jars" != "no"; then
+   DO_FETCH_TARBALLS="yes"
+fi
+
 
 echo "$as_me:$LINENO: checking whether to enable filters for legacy binary file formats (StarOffice 5.2)" >&5
 echo $ECHO_N "checking whether to enable filters for legacy binary file formats (StarOffice 5.2)... $ECHO_C" >&6
@@ -3769,14 +3781,9 @@ fi
 
 
 
-echo "$as_me:$LINENO: checking which shell to use" >&5
-echo $ECHO_N "checking which shell to use... $ECHO_C" >&6
 if test $_os = "WINNT"; then
-      if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash"; then
-      { { echo "$as_me:$LINENO: error: only \"tcsh\" or \"bash\" are supported options" >&5
-echo "$as_me: error: only \"tcsh\" or \"bash\" are supported options" >&2;}
-   { (exit 1); exit 1; }; }
-   fi
+   echo "$as_me:$LINENO: checking Windows build environment sanity" >&5
+echo $ECHO_N "checking Windows build environment sanity... $ECHO_C" >&6
                      if test -L $AWK -o -L `which awk` -o -L `which tar` -o -L `which gunzip` ; then
          { { echo "$as_me:$LINENO: error: $AWK, awk, tar or gunzip is a cygwin symlink!
 Native windows programs cannot use cygwin symlinks. Remove the symbolic
@@ -3793,32 +3800,15 @@ link, and copy the program to the name of the link." >&2;}
             WITH_MINGWIN="yes"
          fi
       fi
-            if test "$WITH_MINGWIN" = "yes" ; then
-      if test "x$with_use_shell" = "x"; then
-         with_use_shell="tcsh"
-      fi
+      if test "$WITH_MINGWIN" = "yes" ; then
       if test -z "$CC"; then
          CC="gcc -mno-cygwin"
          CXX="g++ -mno-cygwin"
       fi
    fi
-elif test $_os = "OS2"; then
-   if test "$with_use_shell" != "tcsh"; then
-      { { echo "$as_me:$LINENO: error: only \"tcsh\" is supported options" >&5
-echo "$as_me: error: only \"tcsh\" is supported options" >&2;}
-   { (exit 1); exit 1; }; }
-   fi
-else
-            if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash"; then
-      { { echo "$as_me:$LINENO: error: only \"tcsh\" or \"bash\" are supported options" >&5
-echo "$as_me: error: only \"tcsh\" or \"bash\" are supported options" >&2;}
-   { (exit 1); exit 1; }; }
-   fi
+   echo "$as_me:$LINENO: result: ok" >&5
+echo "${ECHO_T}ok" >&6
 fi
-USE_SHELL="$with_use_shell"
-echo "$as_me:$LINENO: result: $USE_SHELL" >&5
-echo "${ECHO_T}$USE_SHELL" >&6
-
 
 
 if test "$_os" = "WINNT" ; then
@@ -3835,55 +3825,7 @@ echo "$as_me: error: cygwin gcc and g++ are needed, please install them." >&2;}
 fi
 
 
-if test "$with_use_shell" = "tcsh"; then
-   # Extract the first word of "tcsh", so it can be a program name with args.
-set dummy tcsh; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_SHELLPATH+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  case $SHELLPATH in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_SHELLPATH="$SHELLPATH" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_SHELLPATH="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-  ;;
-esac
-fi
-SHELLPATH=$ac_cv_path_SHELLPATH
-
-if test -n "$SHELLPATH"; then
-  echo "$as_me:$LINENO: result: $SHELLPATH" >&5
-echo "${ECHO_T}$SHELLPATH" >&6
-else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
-   if test -z "$SHELLPATH"; then
-      { { echo "$as_me:$LINENO: error: tcsh not found in \$PATH" >&5
-echo "$as_me: error: tcsh not found in \$PATH" >&2;}
-   { (exit 1); exit 1; }; }
-   else
-      SHELLPATH=`echo $SHELLPATH | $SED -n "s/\/tcsh$//p"`
-   fi
-elif test "$with_use_shell" = "bash"; then
-   # Extract the first word of "bash", so it can be a program name with args.
+# Extract the first word of "bash", so it can be a program name with args.
 set dummy bash; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
@@ -3922,17 +3864,12 @@ else
 echo "${ECHO_T}no" >&6
 fi
 
-   if test -z "$SHELLPATH"; then
-      { { echo "$as_me:$LINENO: error: bash not found in \$PATH" >&5
+if test -z "$SHELLPATH"; then
+   { { echo "$as_me:$LINENO: error: bash not found in \$PATH" >&5
 echo "$as_me: error: bash not found in \$PATH" >&2;}
    { (exit 1); exit 1; }; }
-   else
-      SHELLPATH=`echo $SHELLPATH | $SED -n "s/\/bash$//p"`
-   fi
 else
-   { echo "$as_me:$LINENO: WARNING: Windows/OS/2 4NT builds don't test for the shell" >&5
-echo "$as_me: WARNING: Windows/OS/2 4NT builds don't test for the shell" >&2;}
-   SHELLPATH="NO_SHELLPATH_NEEDED"
+   SHELLPATH=`echo $SHELLPATH | $SED -n "s/\/bash$//p"`
 fi
 
 
@@ -10640,6 +10577,17 @@ echo "$as_me: error: $_java_path not found set with_jdk_home" >&2;}
       fi
       JAVAINTERPRETER=`cygpath -d "$JAVAINTERPRETER"`
       JAVAINTERPRETER=`cygpath -u "$JAVAINTERPRETER"`
+   elif test "$_os" = "Darwin"; then
+                        echo "$as_me:$LINENO: checking whether to pass -d32 to Java interpreter" >&5
+echo $ECHO_N "checking whether to pass -d32 to Java interpreter... $ECHO_C" >&6
+      if "$JAVAINTERPRETER" -d32 >&5 2>&5; then
+         echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+         JAVAIFLAGS=-d32
+      else
+         echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+      fi
    fi
 fi
 
@@ -11689,6 +11637,7 @@ fi
 
 
 
+
 # Extract the first word of "dmake", so it can be a program name with args.
 set dummy dmake; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
@@ -11772,7 +11721,7 @@ fi
 
 echo "$as_me:$LINENO: checking whether to enable EPM for packing" >&5
 echo $ECHO_N "checking whether to enable EPM for packing... $ECHO_C" >&6
-if test "$_os" != "WINNT" -a \( "z$enable_epm" = "z" -o "$enable_epm" != "no" \) ; then
+if test "$enable_epm" = "yes"; then
    echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
             if test "$_os" != "WINNT"; then
@@ -11874,18 +11823,6 @@ echo "${ECHO_T}too old. epm >= 3.7 is required." >&6
    # test which package format to use
    echo "$as_me:$LINENO: checking which package format to use" >&5
 echo $ECHO_N "checking which package format to use... $ECHO_C" >&6
-   # epm supports the following formats:
-   # aix - AIX software distribution
-   # bsd - FreeBSD, NetBSD, or OpenBSD software distribution
-   # depot or swinstall - HP-UX software distribution
-   # deb - Debian software distribution
-   # inst or tardist - IRIX software distribution
-   # osx - MacOS X software distribution
-   # pkg - Solaris software distribution
-   # rpm - RedHat software distribution
-   # setld - Tru64 (setld) software distribution
-   # native - "Native" software distribution for the platform
-   # portable - Portable software distribution
 
    # defaults
    case "$_os" in
@@ -11915,6 +11852,9 @@ echo $ECHO_N "checking which package format to use... $ECHO_C" >&6
 	OSF1)
 		PKGFORMAT=setld
 		;;
+    WINNT)
+        PKGFORMAT=msi
+        ;;
 	# we never should get here since we check the arciecture/os at the beginning,
 	# but go sure...
 	*)
@@ -11925,7 +11865,7 @@ echo "$as_me: error: unknown system" >&2;}
    if test -n "$with_package_format"; then
 	for i in $with_package_format; do
 		case "$i" in
-			aix | bsd | deb | inst | tardist | osx | pkg | rpm | setld | native | portable)
+			aix | bsd | deb | inst | tardist | osx | pkg | rpm | setld | native | portable | archive | dmg | installed | msi)
 			;;
 		*)
 			{ { echo "$as_me:$LINENO: error: unsupported format $i. Supported by EPM are:
@@ -11940,6 +11880,11 @@ rpm - RedHat software distribution
 setld - Tru64 (setld) software distribution
 native - \"Native\" software distribution for the platform
 portable - Portable software distribution
+OOo additionally supports:
+archive - .tar.gz or .zip
+dmg - Mac OS X .dmg
+installed - installation tree
+msi - Windows .msi
 			" >&5
 echo "$as_me: error: unsupported format $i. Supported by EPM are:
 aix - AIX software distribution
@@ -11953,6 +11898,11 @@ rpm - RedHat software distribution
 setld - Tru64 (setld) software distribution
 native - \"Native\" software distribution for the platform
 portable - Portable software distribution
+OOo additionally supports:
+archive - .tar.gz or .zip
+dmg - Mac OS X .dmg
+installed - installation tree
+msi - Windows .msi
 			" >&2;}
    { (exit 1); exit 1; }; }
 			;;
@@ -13614,6 +13564,134 @@ else
 echo "${ECHO_T}internal" >&6
     SYSTEM_LIBWPD=NO
     BUILD_TYPE="$BUILD_TYPE LIBWPD"
+fi
+
+
+
+
+echo "$as_me:$LINENO: checking which cppunit to use" >&5
+echo $ECHO_N "checking which cppunit to use... $ECHO_C" >&6
+if test -n "$with_system_cppunit" -o -n "$with_system_libs" && \
+        test "$with_system_cppunit" != "no"; then
+    echo "$as_me:$LINENO: result: external" >&5
+echo "${ECHO_T}external" >&6
+    SYSTEM_CPPUNIT=YES
+    # might work for earlier, too but go sure. We didn't have
+    # a system-cppunit before the first version using a proper cppunit
+    # (and that being 1.12.1) anyway
+
+  succeeded=no
+
+  if test -z "$PKG_CONFIG"; then
+    # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+
+if test -n "$PKG_CONFIG"; then
+  echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+  fi
+
+  if test "$PKG_CONFIG" = "no" ; then
+     echo "*** The pkg-config script could not be found. Make sure it is"
+     echo "*** in your path, or set the PKG_CONFIG environment variable"
+     echo "*** to the full path to pkg-config."
+     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
+  else
+     PKG_CONFIG_MIN_VERSION=0.9.0
+     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
+        echo "$as_me:$LINENO: checking for cppunit >= 1.12.1 " >&5
+echo $ECHO_N "checking for cppunit >= 1.12.1 ... $ECHO_C" >&6
+
+        if $PKG_CONFIG --exists "cppunit >= 1.12.1 " ; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+            succeeded=yes
+
+            echo "$as_me:$LINENO: checking CPPUNIT_CFLAGS" >&5
+echo $ECHO_N "checking CPPUNIT_CFLAGS... $ECHO_C" >&6
+            CPPUNIT_CFLAGS=`$PKG_CONFIG --cflags "cppunit >= 1.12.1 "`
+            echo "$as_me:$LINENO: result: $CPPUNIT_CFLAGS" >&5
+echo "${ECHO_T}$CPPUNIT_CFLAGS" >&6
+
+            echo "$as_me:$LINENO: checking CPPUNIT_LIBS" >&5
+echo $ECHO_N "checking CPPUNIT_LIBS... $ECHO_C" >&6
+            CPPUNIT_LIBS=`$PKG_CONFIG --libs "cppunit >= 1.12.1 "`
+            echo "$as_me:$LINENO: result: $CPPUNIT_LIBS" >&5
+echo "${ECHO_T}$CPPUNIT_LIBS" >&6
+        else
+            CPPUNIT_CFLAGS=""
+            CPPUNIT_LIBS=""
+            ## If we have a custom action on failure, don't print errors, but
+            ## do set a variable so people can do so.
+            CPPUNIT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cppunit >= 1.12.1 "`
+            echo $CPPUNIT_PKG_ERRORS
+        fi
+
+
+
+     else
+        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
+        echo "*** See http://www.freedesktop.org/software/pkgconfig"
+     fi
+  fi
+
+  if test $succeeded = yes; then
+     :
+  else
+     { { echo "$as_me:$LINENO: error: Library requirements (cppunit >= 1.12.1 ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&5
+echo "$as_me: error: Library requirements (cppunit >= 1.12.1 ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&2;}
+   { (exit 1); exit 1; }; }
+  fi
+
+    echo "$as_me:$LINENO: checking STL compatibility" >&5
+echo $ECHO_N "checking STL compatibility... $ECHO_C" >&6
+    if test "$WITH_STLPORT" != "no"; then
+	{ { echo "$as_me:$LINENO: error: to use system cppunit you need to use --without-stlport" >&5
+echo "$as_me: error: to use system cppunit you need to use --without-stlport" >&2;}
+   { (exit 1); exit 1; }; }
+    else
+	echo "$as_me:$LINENO: result: OK" >&5
+echo "${ECHO_T}OK" >&6
+    fi
+else
+    echo "$as_me:$LINENO: result: internal" >&5
+echo "${ECHO_T}internal" >&6
+    SYSTEM_CPPUNIT=NO
+    BUILD_TYPE="$BUILD_TYPE CPPUNIT"
 fi
 
 
@@ -15417,17 +15495,6 @@ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ex
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
-	echo "$as_me:$LINENO: checking STL compatibility" >&5
-echo $ECHO_N "checking STL compatibility... $ECHO_C" >&6
-	if test "$WITH_STLPORT" != "no"; then
-		{ { echo "$as_me:$LINENO: error: to use system mysqlcppconn you need to use --without-stlport" >&5
-echo "$as_me: error: to use system mysqlcppconn you need to use --without-stlport" >&2;}
-   { (exit 1); exit 1; }; }
-	else
-		echo "$as_me:$LINENO: result: OK" >&5
-echo "${ECHO_T}OK" >&6
-	fi
-
 else
 	echo "$as_me:$LINENO: result: internal" >&5
 echo "${ECHO_T}internal" >&6
@@ -15714,6 +15781,81 @@ echo "$as_me: error: serializer.jar not found." >&2;}
 fi
 
 
+        fi
+
+
+        echo "$as_me:$LINENO: checking if saxon works" >&5
+echo $ECHO_N "checking if saxon works... $ECHO_C" >&6
+        cat > saxontest.java <<_ACEOF
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.stream.StreamSource;
+import java.io.*;
+
+import net.sf.saxon.FeatureKeys;
+
+class saxontest {
+    public static void main(String[] args) {
+      System.setProperty("javax.xml.transform.TransformerFactory",
+        "net.sf.saxon.TransformerFactoryImpl");
+      try {
+        TransformerFactory tfactory = TransformerFactory.newInstance();
+	// some external saxons (Debian, Ubuntu, ...) have this disabled
+	// per default
+	tfactory.setAttribute(FeatureKeys.ALLOW_EXTERNAL_FUNCTIONS, new Boolean(true));
+        System.out.println("TransformerFactory is" +
+          tfactory.getClass().getName());
+        Transformer transformer = tfactory.newTransformer(
+          new StreamSource(new File(args[0])));
+      } catch(Exception e){
+        e.printStackTrace(System.err);
+        System.exit(-1);
+      }
+      System.exit(0);
+    }
+}
+
+_ACEOF
+        cat > saxontest.xsl<<_ACEOF
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+ <xsl:template match="/">
+  <xsl:value-of select="math:sqrt(1)" xmlns:math="java:java.lang.Math"/>
+ </xsl:template>
+</xsl:stylesheet>
+
+_ACEOF
+        javac_cmd="$JAVACOMPILER -cp $SAXON_JAR saxontest.java 1>&2"
+        { (eval echo "$as_me:$LINENO: \"$javac_cmd\"") >&5
+  (eval $javac_cmd) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }
+        if test $? = 0 && test -f ./saxontest.class ; then
+            java_cmd="$JAVAINTERPRETER -cp $SAXON_JAR:. saxontest saxontest.xsl 1>&2"
+            { (eval echo "$as_me:$LINENO: \"$java_cmd\"") >&5
+  (eval $java_cmd) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }
+            if test $? = 0; then
+              echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+            else
+              cat saxontest.java >&5
+              echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+              { { echo "$as_me:$LINENO: error: Non-functional saxon jar, e.g. crippled saxon-he instead of saxonb" >&5
+echo "$as_me: error: Non-functional saxon jar, e.g. crippled saxon-he instead of saxonb" >&2;}
+   { (exit 1); exit 1; }; }
+            fi
+        else
+          echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+          cat saxontest.java >&5
+          { { echo "$as_me:$LINENO: error: saxontest could not be compiled, non-functional saxon jar" >&5
+echo "$as_me: error: saxontest could not be compiled, non-functional saxon jar" >&2;}
+   { (exit 1); exit 1; }; }
         fi
 else
     echo "$as_me:$LINENO: result: internal" >&5
@@ -17948,37 +18090,46 @@ echo "$as_me: WARNING: Building SeaMonkey with mingwin is not tested, and likely
       MOZILLA_VERSION=1.1.14
    fi
    MOZILLA_SOURCE_VERSION="seamonkey-${MOZILLA_VERSION}.source"
-   for e in gz bz2; do
-      echo "$as_me:$LINENO: checking for $MOZILLA_SOURCE_VERSION.tar.$e" >&5
-echo $ECHO_N "checking for $MOZILLA_SOURCE_VERSION.tar.$e... $ECHO_C" >&6
-      if test ! -e "moz/download/$MOZILLA_SOURCE_VERSION.tar.$e" && test "$HAVE_MOZILLA_TARBALL" != "y"; then
-         echo "$as_me:$LINENO: result: not found" >&5
+   MOZILLA_FETCH_FILE=`grep $MOZILLA_SOURCE_VERSION ooo.lst`
+   echo "$as_me:$LINENO: checking for mozilla sources" >&5
+echo $ECHO_N "checking for mozilla sources... $ECHO_C" >&6
+   if test -z "$MOZILLA_FETCH_FILE"; then
+      echo "$as_me:$LINENO: result: not found" >&5
 echo "${ECHO_T}not found" >&6
-         HAVE_MOZILLA_TARBALL=n
+      HAVE_MOZILLA_TARBALL=n
+   else
+      echo "$as_me:$LINENO: checking for $MOZILLA_FETCH_FILE" >&5
+echo $ECHO_N "checking for $MOZILLA_FETCH_FILE... $ECHO_C" >&6
+      if test ! -e "$TARFILE_LOCATION/$MOZILLA_FETCH_FILE"; then
+         if test -z "$DO_FETCH"; then
+            echo "$as_me:$LINENO: result: will be fetched" >&5
+echo "${ECHO_T}will be fetched" >&6
+            HAVE_MOZILLA_TARBALL=y
+         else
+            echo "$as_me:$LINENO: result: not found" >&5
+echo "${ECHO_T}not found" >&6
+            HAVE_MOZILLA_TARBALL=n
+         fi
       else
          echo "$as_me:$LINENO: result: found" >&5
 echo "${ECHO_T}found" >&6
          HAVE_MOZILLA_TARBALL=y
       fi
-   done
+   fi
    if test "$HAVE_MOZILLA_TARBALL" != "y"; then
-         { { echo "$as_me:$LINENO: error: Mozilla/SeaMonkey source archive not found.
-Please copy $MOZILLA_SOURCE_VERSION.tar.bz2 or $MOZILLA_SOURCE_VERSION.tar.gz to moz/download/.
-The archives can be found here:
-ftp://ftp.mozilla.org/pub/mozilla.org/seamonkey/releases/$MOZILLA_VERSION/" >&5
+      { { echo "$as_me:$LINENO: error: Mozilla/SeaMonkey source archive not found.
+Use \"./fetch_tarballs.sh ooo.lst\" to download." >&5
 echo "$as_me: error: Mozilla/SeaMonkey source archive not found.
-Please copy $MOZILLA_SOURCE_VERSION.tar.bz2 or $MOZILLA_SOURCE_VERSION.tar.gz to moz/download/.
-The archives can be found here:
-ftp://ftp.mozilla.org/pub/mozilla.org/seamonkey/releases/$MOZILLA_VERSION/" >&2;}
+Use \"./fetch_tarballs.sh ooo.lst\" to download." >&2;}
    { (exit 1); exit 1; }; }
    fi
    if test "$_os" = "WINNT"; then
       echo "$as_me:$LINENO: checking for moztools binaries" >&5
 echo $ECHO_N "checking for moztools binaries... $ECHO_C" >&6
-      if test ! -e "moz/download/vc8-moztools.zip" ; then
-        { { echo "$as_me:$LINENO: error: The following file is missing in moz/download: vc8-moztools.zip
+      if test ! -e "$TARFILE_LOCATION/vc8-moztools.zip" ; then
+        { { echo "$as_me:$LINENO: error: The following file is missing in $TARFILE_LOCATION: vc8-moztools.zip
 (from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/historic/vc8/)" >&5
-echo "$as_me: error: The following file is missing in moz/download: vc8-moztools.zip
+echo "$as_me: error: The following file is missing in $TARFILE_LOCATION: vc8-moztools.zip
 (from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/historic/vc8/)" >&2;}
    { (exit 1); exit 1; }; }
       else
@@ -28526,6 +28677,41 @@ echo "$as_me: error: no. Did you install ant-apache-regexp?" >&2;}
 fi
 rm -f conftest* core core.* *.core
 
+OOO_JUNIT_JAR=
+if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
+    echo "$as_me:$LINENO: checking for JUnit 4" >&5
+echo $ECHO_N "checking for JUnit 4... $ECHO_C" >&6
+    if test "$with_junit" == "yes"; then
+        if test -e /usr/share/java/junit4.jar; then
+            OOO_JUNIT_JAR=/usr/share/java/junit4.jar
+        else
+            OOO_JUNIT_JAR=/usr/share/java/junit.jar
+        fi
+    else
+        OOO_JUNIT_JAR=$with_junit
+    fi
+    if test "$_os" = "WINNT"; then
+        OOO_JUNIT_JAR=`cygpath -m "$OOO_JUNIT_JAR"`
+    fi
+    "$JAVA_HOME/bin/jar" tf "$OOO_JUNIT_JAR" 2>&5 | \
+        grep org/junit/Before.class > /dev/null 2>&5
+    if test $? -eq 0; then
+        echo "$as_me:$LINENO: result: $OOO_JUNIT_JAR" >&5
+echo "${ECHO_T}$OOO_JUNIT_JAR" >&6
+    else
+        echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+        { { echo "$as_me:$LINENO: error: cannot find JUnit 4 jar at $OOO_JUNIT_JAR;
+please install one and/or specify its pathname via --with-junit=...,
+or disable it via --without-junit" >&5
+echo "$as_me: error: cannot find JUnit 4 jar at $OOO_JUNIT_JAR;
+please install one and/or specify its pathname via --with-junit=...,
+or disable it via --without-junit" >&2;}
+   { (exit 1); exit 1; }; }
+    fi
+fi
+
+
 echo "$as_me:$LINENO: checking which languages to be built" >&5
 echo $ECHO_N "checking which languages to be built... $ECHO_C" >&6
 WITH_LANG="$with_lang"
@@ -29384,6 +29570,8 @@ s,@ENABLE_SYMBOLS@,$ENABLE_SYMBOLS,;t t
 s,@DISABLE_STRIP@,$DISABLE_STRIP,;t t
 s,@ENABLE_CUPS@,$ENABLE_CUPS,;t t
 s,@ENABLE_FONTCONFIG@,$ENABLE_FONTCONFIG,;t t
+s,@TARFILE_LOCATION@,$TARFILE_LOCATION,;t t
+s,@DO_FETCH_TARBALLS@,$DO_FETCH_TARBALLS,;t t
 s,@WITH_BINFILTER@,$WITH_BINFILTER,;t t
 s,@ENABLE_DIRECTX@,$ENABLE_DIRECTX,;t t
 s,@DISABLE_ACTIVEX@,$DISABLE_ACTIVEX,;t t
@@ -29394,7 +29582,6 @@ s,@SYSTEM_DICTS@,$SYSTEM_DICTS,;t t
 s,@DICT_SYSTEM_DIR@,$DICT_SYSTEM_DIR,;t t
 s,@HYPH_SYSTEM_DIR@,$HYPH_SYSTEM_DIR,;t t
 s,@THES_SYSTEM_DIR@,$THES_SYSTEM_DIR,;t t
-s,@USE_SHELL@,$USE_SHELL,;t t
 s,@WITH_MINGWIN@,$WITH_MINGWIN,;t t
 s,@SHELLPATH@,$SHELLPATH,;t t
 s,@GCC_HOME@,$GCC_HOME,;t t
@@ -29462,6 +29649,7 @@ s,@JAVAAOTCOMPILER@,$JAVAAOTCOMPILER,;t t
 s,@JAVA_HOME@,$JAVA_HOME,;t t
 s,@JDK@,$JDK,;t t
 s,@JAVAFLAGS@,$JAVAFLAGS,;t t
+s,@JAVAIFLAGS@,$JAVAIFLAGS,;t t
 s,@DMAKE@,$DMAKE,;t t
 s,@BUILD_DMAKE@,$BUILD_DMAKE,;t t
 s,@EPM@,$EPM,;t t
@@ -29485,6 +29673,9 @@ s,@PKG_CONFIG@,$PKG_CONFIG,;t t
 s,@LIBWPD_CFLAGS@,$LIBWPD_CFLAGS,;t t
 s,@LIBWPD_LIBS@,$LIBWPD_LIBS,;t t
 s,@SYSTEM_LIBWPD@,$SYSTEM_LIBWPD,;t t
+s,@CPPUNIT_CFLAGS@,$CPPUNIT_CFLAGS,;t t
+s,@CPPUNIT_LIBS@,$CPPUNIT_LIBS,;t t
+s,@SYSTEM_CPPUNIT@,$SYSTEM_CPPUNIT,;t t
 s,@FREETYPE_CFLAGS@,$FREETYPE_CFLAGS,;t t
 s,@FREETYPE_LIBS@,$FREETYPE_LIBS,;t t
 s,@USE_FT_EMBOLDEN@,$USE_FT_EMBOLDEN,;t t
@@ -29698,6 +29889,7 @@ s,@XINERAMA_LINK@,$XINERAMA_LINK,;t t
 s,@ANT@,$ANT,;t t
 s,@ANT_HOME@,$ANT_HOME,;t t
 s,@ANT_LIB@,$ANT_LIB,;t t
+s,@OOO_JUNIT_JAR@,$OOO_JUNIT_JAR,;t t
 s,@WITH_LANG@,$WITH_LANG,;t t
 s,@WITH_POOR_HELP_LOCALIZATIONS@,$WITH_POOR_HELP_LOCALIZATIONS,;t t
 s,@WITH_DICT@,$WITH_DICT,;t t

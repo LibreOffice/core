@@ -143,7 +143,9 @@ SHL1VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL1VERSIONMAP)
 $(USE_SHL1VERSIONMAP): $(SHL1OBJS) $(SHL1LIBS)
 .ENDIF
 
-$(USE_SHL1VERSIONMAP): $(SHL1VERSIONMAP)
+# .ERRREMOVE is needed as a recipe line like "$(AWK) ... > $@" would create $@
+# even if the $(AWK) part fails:
+$(USE_SHL1VERSIONMAP) .ERRREMOVE: $(SHL1VERSIONMAP)
     @@-$(RM) -f $@
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -289,16 +291,20 @@ $(SHL1TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL1ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --input-def $(SHL1DEF) \
-        --dllname $(SHL1TARGET)$(DLLPOST) \
+    @echo dlltool --dllname $(SHL1TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_1.cmd
     @noop $(assign ALL1OBJLIST:=$(STDOBJ) $(SHL1OBJS) $(SHL1LINKRESO) $(shell $(TYPE) /dev/null $(SHL1LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB1NAME)"!=""	# do not have to include objs
     @noop $(assign DEF1OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB1NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF1OBJLIST) $(assign ALL1OBJLIST:=$(ALL1OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB1NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(ALL1OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_1.cmd
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_1.cmd
+.IF "$(SHL1DEF)"!=""
+    @echo	--input-def $(SHL1DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_1.cmd
+.ELSE
+    @echo	$(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_1.cmd
+.ENDIF
+    @echo	$(ALL1OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_1.cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ) $(SHL1OBJS) $(SHL1LINKRESO) \
         `$(TYPE) /dev/null $(SHL1LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
@@ -689,7 +695,9 @@ SHL2VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL2VERSIONMAP)
 $(USE_SHL2VERSIONMAP): $(SHL2OBJS) $(SHL2LIBS)
 .ENDIF
 
-$(USE_SHL2VERSIONMAP): $(SHL2VERSIONMAP)
+# .ERRREMOVE is needed as a recipe line like "$(AWK) ... > $@" would create $@
+# even if the $(AWK) part fails:
+$(USE_SHL2VERSIONMAP) .ERRREMOVE: $(SHL2VERSIONMAP)
     @@-$(RM) -f $@
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -835,16 +843,20 @@ $(SHL2TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL2ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --input-def $(SHL2DEF) \
-        --dllname $(SHL2TARGET)$(DLLPOST) \
+    @echo dlltool --dllname $(SHL2TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_2.cmd
     @noop $(assign ALL2OBJLIST:=$(STDOBJ) $(SHL2OBJS) $(SHL2LINKRESO) $(shell $(TYPE) /dev/null $(SHL2LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB2NAME)"!=""	# do not have to include objs
     @noop $(assign DEF2OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB2NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF2OBJLIST) $(assign ALL2OBJLIST:=$(ALL2OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB2NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(ALL2OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_2.cmd
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_2.cmd
+.IF "$(SHL2DEF)"!=""
+    @echo	--input-def $(SHL2DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_2.cmd
+.ELSE
+    @echo	$(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_2.cmd
+.ENDIF
+    @echo	$(ALL2OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_2.cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ) $(SHL2OBJS) $(SHL2LINKRESO) \
         `$(TYPE) /dev/null $(SHL2LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
@@ -1235,7 +1247,9 @@ SHL3VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL3VERSIONMAP)
 $(USE_SHL3VERSIONMAP): $(SHL3OBJS) $(SHL3LIBS)
 .ENDIF
 
-$(USE_SHL3VERSIONMAP): $(SHL3VERSIONMAP)
+# .ERRREMOVE is needed as a recipe line like "$(AWK) ... > $@" would create $@
+# even if the $(AWK) part fails:
+$(USE_SHL3VERSIONMAP) .ERRREMOVE: $(SHL3VERSIONMAP)
     @@-$(RM) -f $@
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -1381,16 +1395,20 @@ $(SHL3TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL3ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --input-def $(SHL3DEF) \
-        --dllname $(SHL3TARGET)$(DLLPOST) \
+    @echo dlltool --dllname $(SHL3TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_3.cmd
     @noop $(assign ALL3OBJLIST:=$(STDOBJ) $(SHL3OBJS) $(SHL3LINKRESO) $(shell $(TYPE) /dev/null $(SHL3LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB3NAME)"!=""	# do not have to include objs
     @noop $(assign DEF3OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB3NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF3OBJLIST) $(assign ALL3OBJLIST:=$(ALL3OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB3NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(ALL3OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_3.cmd
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_3.cmd
+.IF "$(SHL3DEF)"!=""
+    @echo	--input-def $(SHL3DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_3.cmd
+.ELSE
+    @echo	$(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_3.cmd
+.ENDIF
+    @echo	$(ALL3OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_3.cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ) $(SHL3OBJS) $(SHL3LINKRESO) \
         `$(TYPE) /dev/null $(SHL3LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
@@ -1781,7 +1799,9 @@ SHL4VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL4VERSIONMAP)
 $(USE_SHL4VERSIONMAP): $(SHL4OBJS) $(SHL4LIBS)
 .ENDIF
 
-$(USE_SHL4VERSIONMAP): $(SHL4VERSIONMAP)
+# .ERRREMOVE is needed as a recipe line like "$(AWK) ... > $@" would create $@
+# even if the $(AWK) part fails:
+$(USE_SHL4VERSIONMAP) .ERRREMOVE: $(SHL4VERSIONMAP)
     @@-$(RM) -f $@
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -1927,16 +1947,20 @@ $(SHL4TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL4ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --input-def $(SHL4DEF) \
-        --dllname $(SHL4TARGET)$(DLLPOST) \
+    @echo dlltool --dllname $(SHL4TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_4.cmd
     @noop $(assign ALL4OBJLIST:=$(STDOBJ) $(SHL4OBJS) $(SHL4LINKRESO) $(shell $(TYPE) /dev/null $(SHL4LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB4NAME)"!=""	# do not have to include objs
     @noop $(assign DEF4OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB4NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF4OBJLIST) $(assign ALL4OBJLIST:=$(ALL4OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB4NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(ALL4OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_4.cmd
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_4.cmd
+.IF "$(SHL4DEF)"!=""
+    @echo	--input-def $(SHL4DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_4.cmd
+.ELSE
+    @echo	$(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_4.cmd
+.ENDIF
+    @echo	$(ALL4OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_4.cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ) $(SHL4OBJS) $(SHL4LINKRESO) \
         `$(TYPE) /dev/null $(SHL4LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
@@ -2327,7 +2351,9 @@ SHL5VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL5VERSIONMAP)
 $(USE_SHL5VERSIONMAP): $(SHL5OBJS) $(SHL5LIBS)
 .ENDIF
 
-$(USE_SHL5VERSIONMAP): $(SHL5VERSIONMAP)
+# .ERRREMOVE is needed as a recipe line like "$(AWK) ... > $@" would create $@
+# even if the $(AWK) part fails:
+$(USE_SHL5VERSIONMAP) .ERRREMOVE: $(SHL5VERSIONMAP)
     @@-$(RM) -f $@
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -2473,16 +2499,20 @@ $(SHL5TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL5ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --input-def $(SHL5DEF) \
-        --dllname $(SHL5TARGET)$(DLLPOST) \
+    @echo dlltool --dllname $(SHL5TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_5.cmd
     @noop $(assign ALL5OBJLIST:=$(STDOBJ) $(SHL5OBJS) $(SHL5LINKRESO) $(shell $(TYPE) /dev/null $(SHL5LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB5NAME)"!=""	# do not have to include objs
     @noop $(assign DEF5OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB5NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF5OBJLIST) $(assign ALL5OBJLIST:=$(ALL5OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB5NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(ALL5OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_5.cmd
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_5.cmd
+.IF "$(SHL5DEF)"!=""
+    @echo	--input-def $(SHL5DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_5.cmd
+.ELSE
+    @echo	$(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_5.cmd
+.ENDIF
+    @echo	$(ALL5OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_5.cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ) $(SHL5OBJS) $(SHL5LINKRESO) \
         `$(TYPE) /dev/null $(SHL5LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
@@ -2873,7 +2903,9 @@ SHL6VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL6VERSIONMAP)
 $(USE_SHL6VERSIONMAP): $(SHL6OBJS) $(SHL6LIBS)
 .ENDIF
 
-$(USE_SHL6VERSIONMAP): $(SHL6VERSIONMAP)
+# .ERRREMOVE is needed as a recipe line like "$(AWK) ... > $@" would create $@
+# even if the $(AWK) part fails:
+$(USE_SHL6VERSIONMAP) .ERRREMOVE: $(SHL6VERSIONMAP)
     @@-$(RM) -f $@
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -3019,16 +3051,20 @@ $(SHL6TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL6ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --input-def $(SHL6DEF) \
-        --dllname $(SHL6TARGET)$(DLLPOST) \
+    @echo dlltool --dllname $(SHL6TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_6.cmd
     @noop $(assign ALL6OBJLIST:=$(STDOBJ) $(SHL6OBJS) $(SHL6LINKRESO) $(shell $(TYPE) /dev/null $(SHL6LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB6NAME)"!=""	# do not have to include objs
     @noop $(assign DEF6OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB6NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF6OBJLIST) $(assign ALL6OBJLIST:=$(ALL6OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB6NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(ALL6OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_6.cmd
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_6.cmd
+.IF "$(SHL6DEF)"!=""
+    @echo	--input-def $(SHL6DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_6.cmd
+.ELSE
+    @echo	$(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_6.cmd
+.ENDIF
+    @echo	$(ALL6OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_6.cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ) $(SHL6OBJS) $(SHL6LINKRESO) \
         `$(TYPE) /dev/null $(SHL6LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
@@ -3419,7 +3455,9 @@ SHL7VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL7VERSIONMAP)
 $(USE_SHL7VERSIONMAP): $(SHL7OBJS) $(SHL7LIBS)
 .ENDIF
 
-$(USE_SHL7VERSIONMAP): $(SHL7VERSIONMAP)
+# .ERRREMOVE is needed as a recipe line like "$(AWK) ... > $@" would create $@
+# even if the $(AWK) part fails:
+$(USE_SHL7VERSIONMAP) .ERRREMOVE: $(SHL7VERSIONMAP)
     @@-$(RM) -f $@
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -3565,16 +3603,20 @@ $(SHL7TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL7ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --input-def $(SHL7DEF) \
-        --dllname $(SHL7TARGET)$(DLLPOST) \
+    @echo dlltool --dllname $(SHL7TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_7.cmd
     @noop $(assign ALL7OBJLIST:=$(STDOBJ) $(SHL7OBJS) $(SHL7LINKRESO) $(shell $(TYPE) /dev/null $(SHL7LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB7NAME)"!=""	# do not have to include objs
     @noop $(assign DEF7OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB7NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF7OBJLIST) $(assign ALL7OBJLIST:=$(ALL7OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB7NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(ALL7OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_7.cmd
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_7.cmd
+.IF "$(SHL7DEF)"!=""
+    @echo	--input-def $(SHL7DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_7.cmd
+.ELSE
+    @echo	$(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_7.cmd
+.ENDIF
+    @echo	$(ALL7OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_7.cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ) $(SHL7OBJS) $(SHL7LINKRESO) \
         `$(TYPE) /dev/null $(SHL7LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
@@ -3965,7 +4007,9 @@ SHL8VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL8VERSIONMAP)
 $(USE_SHL8VERSIONMAP): $(SHL8OBJS) $(SHL8LIBS)
 .ENDIF
 
-$(USE_SHL8VERSIONMAP): $(SHL8VERSIONMAP)
+# .ERRREMOVE is needed as a recipe line like "$(AWK) ... > $@" would create $@
+# even if the $(AWK) part fails:
+$(USE_SHL8VERSIONMAP) .ERRREMOVE: $(SHL8VERSIONMAP)
     @@-$(RM) -f $@
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -4111,16 +4155,20 @@ $(SHL8TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL8ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --input-def $(SHL8DEF) \
-        --dllname $(SHL8TARGET)$(DLLPOST) \
+    @echo dlltool --dllname $(SHL8TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_8.cmd
     @noop $(assign ALL8OBJLIST:=$(STDOBJ) $(SHL8OBJS) $(SHL8LINKRESO) $(shell $(TYPE) /dev/null $(SHL8LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB8NAME)"!=""	# do not have to include objs
     @noop $(assign DEF8OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB8NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF8OBJLIST) $(assign ALL8OBJLIST:=$(ALL8OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB8NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(ALL8OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_8.cmd
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_8.cmd
+.IF "$(SHL8DEF)"!=""
+    @echo	--input-def $(SHL8DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_8.cmd
+.ELSE
+    @echo	$(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_8.cmd
+.ENDIF
+    @echo	$(ALL8OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_8.cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ) $(SHL8OBJS) $(SHL8LINKRESO) \
         `$(TYPE) /dev/null $(SHL8LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
@@ -4511,7 +4559,9 @@ SHL9VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL9VERSIONMAP)
 $(USE_SHL9VERSIONMAP): $(SHL9OBJS) $(SHL9LIBS)
 .ENDIF
 
-$(USE_SHL9VERSIONMAP): $(SHL9VERSIONMAP)
+# .ERRREMOVE is needed as a recipe line like "$(AWK) ... > $@" would create $@
+# even if the $(AWK) part fails:
+$(USE_SHL9VERSIONMAP) .ERRREMOVE: $(SHL9VERSIONMAP)
     @@-$(RM) -f $@
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -4657,16 +4707,20 @@ $(SHL9TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL9ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --input-def $(SHL9DEF) \
-        --dllname $(SHL9TARGET)$(DLLPOST) \
+    @echo dlltool --dllname $(SHL9TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_9.cmd
     @noop $(assign ALL9OBJLIST:=$(STDOBJ) $(SHL9OBJS) $(SHL9LINKRESO) $(shell $(TYPE) /dev/null $(SHL9LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB9NAME)"!=""	# do not have to include objs
     @noop $(assign DEF9OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB9NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF9OBJLIST) $(assign ALL9OBJLIST:=$(ALL9OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB9NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(ALL9OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_9.cmd
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_9.cmd
+.IF "$(SHL9DEF)"!=""
+    @echo	--input-def $(SHL9DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_9.cmd
+.ELSE
+    @echo	$(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_9.cmd
+.ENDIF
+    @echo	$(ALL9OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_9.cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ) $(SHL9OBJS) $(SHL9LINKRESO) \
         `$(TYPE) /dev/null $(SHL9LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
@@ -5057,7 +5111,9 @@ SHL10VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL10VERSIONMAP)
 $(USE_SHL10VERSIONMAP): $(SHL10OBJS) $(SHL10LIBS)
 .ENDIF
 
-$(USE_SHL10VERSIONMAP): $(SHL10VERSIONMAP)
+# .ERRREMOVE is needed as a recipe line like "$(AWK) ... > $@" would create $@
+# even if the $(AWK) part fails:
+$(USE_SHL10VERSIONMAP) .ERRREMOVE: $(SHL10VERSIONMAP)
     @@-$(RM) -f $@
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -5203,16 +5259,20 @@ $(SHL10TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL10ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --input-def $(SHL10DEF) \
-        --dllname $(SHL10TARGET)$(DLLPOST) \
+    @echo dlltool --dllname $(SHL10TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_10.cmd
     @noop $(assign ALL10OBJLIST:=$(STDOBJ) $(SHL10OBJS) $(SHL10LINKRESO) $(shell $(TYPE) /dev/null $(SHL10LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB10NAME)"!=""	# do not have to include objs
     @noop $(assign DEF10OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB10NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF10OBJLIST) $(assign ALL10OBJLIST:=$(ALL10OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB10NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(ALL10OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_10.cmd
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_10.cmd
+.IF "$(SHL10DEF)"!=""
+    @echo	--input-def $(SHL10DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_10.cmd
+.ELSE
+    @echo	$(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_10.cmd
+.ENDIF
+    @echo	$(ALL10OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_10.cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ) $(SHL10OBJS) $(SHL10LINKRESO) \
         `$(TYPE) /dev/null $(SHL10LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
