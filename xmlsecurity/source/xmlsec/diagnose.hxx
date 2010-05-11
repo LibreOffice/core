@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: xmlstreamio.hxx,v $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -25,3 +28,16 @@
  *
  ************************************************************************/
 
+#ifndef XMLSECURITY_DIAGNOSE_HXX
+#define XMLSECURITY_DIAGNOSE_HXX
+
+
+namespace xmlsecurity
+{
+
+    void xmlsec_trace(const char* pszFormat, ...);
+}
+
+
+
+#endif //XMLSECURITY_DIAGNOSE_HXX

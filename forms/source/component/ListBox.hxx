@@ -41,6 +41,7 @@
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
 #include <com/sun/star/form/XChangeBroadcaster.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/asyncnotification.hxx>
@@ -82,7 +83,7 @@ class OListBoxModel :public OBoundControlModel
     // </properties>
 
     sal_Int16                                   m_nNULLPos;             // position of the NULL value in our list
-    sal_Bool                                    m_bBoundComponent : 1;
+    sal_Int32                                   m_nBoundColumnType;
 
 private:
     ::connectivity::ORowSetValue getFirstSelectedValue() const;
@@ -177,6 +178,8 @@ private:
     void        impl_refreshDbEntryList( bool _bForce );
 
     ValueList   impl_getValues() const;
+
+    bool        impl_hasBoundComponent() const { return m_nBoundColumnType != ::com::sun::star::sdbc::DataType::SQLNULL; }
 };
 
 //==================================================================
