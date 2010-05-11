@@ -89,6 +89,11 @@ public:
   */
   NSString* openOfficeToSystemFlavor(const com::sun::star::datatransfer::DataFlavor& oooDataFlavor) const;
 
+  /* Select the best available image data type
+     If there is no suiteable mapping available NULL will
+     be returned.
+  */
+  NSString* openOfficeImageToSystemFlavor(NSPasteboard* pPasteboard) const;
 
   /* Get a data provider which is able to provide the data 'rTransferable' offers in a format that can
      be put on to the system clipboard.
