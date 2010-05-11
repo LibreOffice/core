@@ -265,7 +265,7 @@ uno::Any DataSeries::GetDefaultValue( sal_Int32 nHandle ) const
         DataSeriesProperties::AddDefaultsToMap( aStaticDefaults );
         CharacterProperties::AddDefaultsToMap( aStaticDefaults );
 
-        float fDefaultCharHeight = 6.0;
+        float fDefaultCharHeight = 10.0;
         ::chart::PropertyHelper::setPropertyValue( aStaticDefaults, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
         ::chart::PropertyHelper::setPropertyValue( aStaticDefaults, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
         ::chart::PropertyHelper::setPropertyValue( aStaticDefaults, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );

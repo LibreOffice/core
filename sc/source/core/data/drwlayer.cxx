@@ -28,6 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
@@ -79,6 +80,7 @@
 #include "chartarr.hxx"
 #include "postit.hxx"
 #include "attrib.hxx"
+#include "charthelper.hxx"
 
 #define DET_ARROW_OFFSET    1000
 
@@ -454,7 +456,7 @@ inline BOOL IsInBlock( const ScAddress& rPos, SCCOL nCol1,SCROW nRow1, SCCOL nCo
 }
 
 void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
-                                SCsCOL nDx,SCsROW nDy )
+                                SCsCOL nDx,SCsROW nDy, bool bUpdateNoteCaptionPos )
 {
     SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
     DBG_ASSERT(pPage,"Page nicht gefunden");
@@ -490,13 +492,13 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
                 if ( pObj->ISA( SdrRectObj ) && pData->maStart.IsValid() && pData->maEnd.IsValid() )
                     pData->maStart.PutInOrder( pData->maEnd );
                 AddCalcUndo( new ScUndoObjData( pObj, aOldStt, aOldEnd, pData->maStart, pData->maEnd ) );
-                RecalcPos( pObj, *pData, bNegativePage );
+                RecalcPos( pObj, *pData, bNegativePage, bUpdateNoteCaptionPos );
             }
         }
     }
 }
 
-void ScDrawLayer::SetPageSize( USHORT nPageNo, const Size& rSize )
+void ScDrawLayer::SetPageSize( USHORT nPageNo, const Size& rSize, bool bUpdateNoteCaptionPos )
 {
     SdrPage* pPage = GetPage(nPageNo);
     if (pPage)
@@ -519,34 +521,31 @@ void ScDrawLayer::SetPageSize( USHORT nPageNo, const Size& rSize )
             SdrObject* pObj = pPage->GetObj( i );
             ScDrawObjData* pData = GetObjDataTab( pObj, static_cast<SCTAB>(nPageNo) );
             if( pData )
-                RecalcPos( pObj, *pData, bNegativePage );
+                RecalcPos( pObj, *pData, bNegativePage, bUpdateNoteCaptionPos );
         }
     }
 }
 
-void ScDrawLayer::RecalcPos( SdrObject* pObj, const ScDrawObjData& rData, bool bNegativePage )
+void ScDrawLayer::RecalcPos( SdrObject* pObj, const ScDrawObjData& rData, bool bNegativePage, bool bUpdateNoteCaptionPos )
 {
     DBG_ASSERT( pDoc, "ScDrawLayer::RecalcPos - missing document" );
     if( !pDoc )
         return;
 
-    /*  TODO CleanUp: Updating note position works just by chance currently...
-        When inserting rows/columns, this function is called after the
-        insertion, and the note is located at the new position contained in the
-        passed ScDrawObjData already. But when deleting rows/columns, this
-        function is called *before* the deletion, so the note is still at the
-        old cell position, and ScDocument::GetNote() will fail to get the note
-        or will get another note. But after the rows/columns are deleted, a
-        call to ScDrawLayer::SetPageSize() will call this function again, and
-        now the note is at the expected position in the document. */
     if( rData.mbNote )
     {
         DBG_ASSERT( rData.maStart.IsValid(), "ScDrawLayer::RecalcPos - invalid position for cell note" );
-        /*  When inside an undo action, there may be pending note captions
-            where cell note is already deleted. The caption will be deleted
-            later with drawing undo. */
-        if( ScPostIt* pNote = pDoc->GetNote( rData.maStart ) )
-            pNote->UpdateCaptionPos( rData.maStart );
+        /*  #i109372# On insert/remove rows/columns/cells: Updating the caption
+            position must not be done, if the cell containing the note has not
+            been moved yet in the document. The calling code now passes an
+            additional boolean stating if the cells are already moved. */
+        if( bUpdateNoteCaptionPos )
+            /*  When inside an undo action, there may be pending note captions
+                where cell note is already deleted (thus document cannot find
+                the note object anymore). The caption will be deleted later
+                with drawing undo. */
+            if( ScPostIt* pNote = pDoc->GetNote( rData.maStart ) )
+                pNote->UpdateCaptionPos( rData.maStart );
         return;
     }
 
@@ -1018,7 +1017,7 @@ void ScDrawLayer::MoveAreaTwips( SCTAB nTab, const Rectangle& rArea,
 }
 
 void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
-                            SCsCOL nDx,SCsROW nDy, BOOL bInsDel )
+                            SCsCOL nDx,SCsROW nDy, BOOL bInsDel, bool bUpdateNoteCaptionPos )
 {
     DBG_ASSERT( pDoc, "ScDrawLayer::MoveArea without document" );
     if ( !pDoc )
@@ -1067,7 +1066,7 @@ void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCR
         //      Detektiv-Pfeile: Zellpositionen anpassen
         //
 
-    MoveCells( nTab, nCol1,nRow1, nCol2,nRow2, nDx,nDy );
+    MoveCells( nTab, nCol1,nRow1, nCol2,nRow2, nDx,nDy, bUpdateNoteCaptionPos );
 }
 
 void ScDrawLayer::WidthChanged( SCTAB nTab, SCCOL nCol, long nDifTwips )
@@ -1386,7 +1385,9 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle&
                     pNewObject->SetModel(pDestModel);
                     pNewObject->SetPage(pDestPage);
 
-                    pNewObject->NbcMove(Size(0,0));
+                    uno::Reference< chart2::XChartDocument > xOldChart( ScChartHelper::GetChartFromSdrObject( pOldObject ) );
+                    if(!xOldChart.is())//#i110034# do not move charts as they loose all their data references otherwise
+                        pNewObject->NbcMove(Size(0,0));
                     pDestPage->InsertObject( pNewObject );
 
                     //  no undo needed in clipboard document
@@ -1399,38 +1400,48 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle&
     }
 }
 
-BOOL lcl_IsAllInRange( const ScRangeList& rRanges, const ScRange& rClipRange )
+BOOL lcl_IsAllInRange( const ::std::vector< ScRangeList >& rRangesVector, const ScRange& rClipRange )
 {
-    //  check if every range of rRanges is completely in rClipRange
+    //  check if every range of rRangesVector is completely in rClipRange
 
-    ULONG nCount = rRanges.Count();
-    for (ULONG i=0; i<nCount; i++)
+    ::std::vector< ScRangeList >::const_iterator aIt = rRangesVector.begin();
+    for( ;aIt!=rRangesVector.end(); ++aIt )
     {
-        ScRange aRange = *rRanges.GetObject(i);
-        if ( !rClipRange.In( aRange ) )
+        const ScRangeList& rRanges = *aIt;
+        ULONG nCount = rRanges.Count();
+        for (ULONG i=0; i<nCount; i++)
         {
-            return FALSE;   // at least one range is not valid
+            ScRange aRange = *rRanges.GetObject(i);
+            if ( !rClipRange.In( aRange ) )
+            {
+                return FALSE;   // at least one range is not valid
+            }
         }
     }
 
     return TRUE;            // everything is fine
 }
 
-BOOL lcl_MoveRanges( ScRangeList& rRanges, const ScRange& rSourceRange, const ScAddress& rDestPos )
+BOOL lcl_MoveRanges( ::std::vector< ScRangeList >& rRangesVector, const ScRange& rSourceRange, const ScAddress& rDestPos )
 {
     BOOL bChanged = FALSE;
 
-    ULONG nCount = rRanges.Count();
-    for (ULONG i=0; i<nCount; i++)
+    ::std::vector< ScRangeList >::iterator aIt = rRangesVector.begin();
+    for( ;aIt!=rRangesVector.end(); ++aIt )
     {
-        ScRange* pRange = rRanges.GetObject(i);
-        if ( rSourceRange.In( *pRange ) )
+        ScRangeList& rRanges = *aIt;
+        ULONG nCount = rRanges.Count();
+        for (ULONG i=0; i<nCount; i++)
         {
-            SCsCOL nDiffX = rDestPos.Col() - (SCsCOL)rSourceRange.aStart.Col();
-            SCsROW nDiffY = rDestPos.Row() - (SCsROW)rSourceRange.aStart.Row();
-            SCsTAB nDiffZ = rDestPos.Tab() - (SCsTAB)rSourceRange.aStart.Tab();
-            pRange->Move( nDiffX, nDiffY, nDiffZ );
-            bChanged = TRUE;
+            ScRange* pRange = rRanges.GetObject(i);
+            if ( rSourceRange.In( *pRange ) )
+            {
+                SCsCOL nDiffX = rDestPos.Col() - (SCsCOL)rSourceRange.aStart.Col();
+                SCsROW nDiffY = rDestPos.Row() - (SCsROW)rSourceRange.aStart.Row();
+                SCsTAB nDiffZ = rDestPos.Tab() - (SCsTAB)rSourceRange.aStart.Tab();
+                pRange->Move( nDiffX, nDiffY, nDiffZ );
+                bChanged = TRUE;
+            }
         }
     }
 
@@ -1469,6 +1480,37 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
     if ( !pSrcPage || !pDestPage )
         return;
 
+    SdrObjListIter aIter( *pSrcPage, IM_FLAT );
+    SdrObject* pOldObject = aIter.Next();
+
+    ScDocument* pClipDoc = pClipModel->GetDocument();
+    //  a clipboard document and its source share the same document item pool,
+    //  so the pointers can be compared to see if this is copy&paste within
+    //  the same document
+    BOOL bSameDoc = pDoc && pClipDoc && pDoc->GetPool() == pClipDoc->GetPool();
+    BOOL bDestClip = pDoc && pDoc->IsClipboard();
+
+    //#i110034# charts need correct sheet names for xml range conversion during load
+    //so the target sheet name is temporarily renamed (if we have any SdrObjects)
+    String aDestTabName;
+    BOOL bRestoreDestTabName = FALSE;
+    if( pOldObject && !bSameDoc && !bDestClip )
+    {
+        if( pDoc && pClipDoc )
+        {
+            String aSourceTabName;
+            if( pClipDoc->GetName( nSourceTab, aSourceTabName )
+                && pDoc->GetName( nDestTab, aDestTabName ) )
+            {
+                if( !(aSourceTabName==aDestTabName) &&
+                    pDoc->ValidNewTabName(aSourceTabName) )
+                {
+                    bRestoreDestTabName = pDoc->RenameTab( nDestTab, aSourceTabName ); //BOOL bUpdateRef = TRUE, BOOL bExternalDocument = FALSE
+                }
+            }
+        }
+    }
+
     // first mirror, then move
     Size aMove( rDestRange.Left() - aMirroredSource.Left(), rDestRange.Top() - aMirroredSource.Top() );
 
@@ -1497,8 +1539,6 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
     }
     Point aRefPos = rDestRange.TopLeft();       // for resizing (after moving)
 
-    SdrObjListIter aIter( *pSrcPage, IM_FLAT );
-    SdrObject* pOldObject = aIter.Next();
     while (pOldObject)
     {
         Rectangle aObjRect = pOldObject->GetCurrentBoundRect();
@@ -1522,7 +1562,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
             if (bRecording)
                 AddCalcUndo( new SdrUndoInsertObj( *pNewObject ) );
 
-            //  handle chart data references (after InsertObject)
+            //#i110034# handle chart data references (after InsertObject)
 
             if ( pNewObject->GetObjIdentifier() == OBJ_OLE2 )
             {
@@ -1541,73 +1581,63 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
 
                 if ( xIPObj.is() && SotExchange::IsChart( aObjectClassName ) )
                 {
-                    String aNewName = ((SdrOle2Obj*)pNewObject)->GetPersistName();
-
-                    //! need to set new DataProvider, or does Chart handle this itself?
-
-                    ScRangeListRef xRanges( new ScRangeList );
-                    BOOL bColHeaders = FALSE;
-                    BOOL bRowHeaders = FALSE;
-                    pDoc->GetOldChartParameters( aNewName, *xRanges, bColHeaders, bRowHeaders );
-
-                    if ( xRanges->Count() > 0 )
+                    uno::Reference< chart2::XChartDocument > xNewChart( ScChartHelper::GetChartFromSdrObject( pNewObject ) );
+                    if( xNewChart.is() && !xNewChart->hasInternalDataProvider() )
                     {
-                        ScDocument* pClipDoc = pClipModel->GetDocument();
-
-                        //  a clipboard document and its source share the same document item pool,
-                        //  so the pointers can be compared to see if this is copy&paste within
-                        //  the same document
-                        BOOL bSameDoc = pDoc && pClipDoc && pDoc->GetPool() == pClipDoc->GetPool();
-
-                        BOOL bDestClip = pDoc && pDoc->IsClipboard();
-
-                        BOOL bInSourceRange = FALSE;
-                        ScRange aClipRange;
-                        if ( pClipDoc )
+                        String aChartName = ((SdrOle2Obj*)pNewObject)->GetPersistName();
+                        ::std::vector< ScRangeList > aRangesVector;
+                        pDoc->GetChartRanges( aChartName, aRangesVector, pDoc );
+                        if( !aRangesVector.empty() )
                         {
-                            SCCOL nClipStartX;
-                            SCROW nClipStartY;
-                            SCCOL nClipEndX;
-                            SCROW nClipEndY;
-                            pClipDoc->GetClipStart( nClipStartX, nClipStartY );
-                            pClipDoc->GetClipArea( nClipEndX, nClipEndY, TRUE );
-                            nClipEndX = nClipEndX + nClipStartX;
-                            nClipEndY += nClipStartY;   // GetClipArea returns the difference
-
-                            aClipRange = ScRange( nClipStartX, nClipStartY, nSourceTab,
-                                                    nClipEndX, nClipEndY, nSourceTab );
-
-                            bInSourceRange = lcl_IsAllInRange( *xRanges, aClipRange );
-                        }
-
-                        // always lose references when pasting into a clipboard document (transpose)
-                        if ( ( bInSourceRange || bSameDoc ) && !bDestClip )
-                        {
-                            if ( bInSourceRange )
+                            BOOL bInSourceRange = FALSE;
+                            ScRange aClipRange;
+                            if ( pClipDoc )
                             {
-                                if ( rDestPos != aClipRange.aStart )
+                                SCCOL nClipStartX;
+                                SCROW nClipStartY;
+                                SCCOL nClipEndX;
+                                SCROW nClipEndY;
+                                pClipDoc->GetClipStart( nClipStartX, nClipStartY );
+                                pClipDoc->GetClipArea( nClipEndX, nClipEndY, TRUE );
+                                nClipEndX = nClipEndX + nClipStartX;
+                                nClipEndY += nClipStartY;   // GetClipArea returns the difference
+
+                                SCTAB nClipTab = bRestoreDestTabName ? nDestTab : nSourceTab;
+                                aClipRange = ScRange( nClipStartX, nClipStartY, nClipTab,
+                                                        nClipEndX, nClipEndY, nClipTab );
+
+                                bInSourceRange = lcl_IsAllInRange( aRangesVector, aClipRange );
+                            }
+
+                            // always lose references when pasting into a clipboard document (transpose)
+                            if ( ( bInSourceRange || bSameDoc ) && !bDestClip )
+                            {
+                                if ( bInSourceRange )
                                 {
-                                    //  update the data ranges to the new (copied) position
-                                    ScRangeListRef xNewRanges = new ScRangeList( *xRanges );
-                                    if ( lcl_MoveRanges( *xNewRanges, aClipRange, rDestPos ) )
+                                    if ( rDestPos != aClipRange.aStart )
                                     {
-                                        pDoc->UpdateChartArea( aNewName, xNewRanges, bColHeaders, bRowHeaders, FALSE );
+                                        //  update the data ranges to the new (copied) position
+                                        if ( lcl_MoveRanges( aRangesVector, aClipRange, rDestPos ) )
+                                            pDoc->SetChartRanges( aChartName, aRangesVector );
                                     }
+                                }
+                                else
+                                {
+                                    //  leave the ranges unchanged
                                 }
                             }
                             else
                             {
-                                //  leave the ranges unchanged
+                                //  pasting into a new document without the complete source data
+                                //  -> break connection to source data and switch to own data
+
+                                uno::Reference< chart::XChartDocument > xOldChartDoc( ScChartHelper::GetChartFromSdrObject( pOldObject ), uno::UNO_QUERY );
+                                uno::Reference< chart::XChartDocument > xNewChartDoc( xNewChart, uno::UNO_QUERY );
+                                if( xOldChartDoc.is() && xNewChartDoc.is() )
+                                    xNewChartDoc->attachData( xOldChartDoc->getData() );
+
+                                //  (see ScDocument::UpdateChartListenerCollection, PastingDrawFromOtherDoc)
                             }
-                        }
-                        else
-                        {
-                            //  pasting into a new document without the complete source data
-                            //  -> break connection to source data
-
-                            //  (see ScDocument::UpdateChartListenerCollection, PastingDrawFromOtherDoc)
-
-                            //! need chart interface to switch to own data
                         }
                     }
                 }
@@ -1616,6 +1646,9 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
 
         pOldObject = aIter.Next();
     }
+
+    if( bRestoreDestTabName )
+        pDoc->RenameTab( nDestTab, aDestTabName );
 }
 
 void ScDrawLayer::MirrorRTL( SdrObject* pObj )
