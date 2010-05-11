@@ -40,120 +40,118 @@
 '\********************************************************************
 
 testcase i_us_presentation1
-   dim iPictures as integer
-   dim PresentationFile1 as string
-   PresentationFile1 = ConvertPath ((ConvertPath (gOfficePath + "user\work\PowerPes1.odp")))
-   Call hNewDocument        '/// New impress document ///'
-   WaitSlot (2000)
-   kontext "DocumentImpress"
-   '/// 1. ViewMaster: 2nd master - Background: picture (Gallery) ///'
-   '///                           - 50% Transparency              ///'
-   '///                           - Mosaic 16px x 16px            ///'
-   '///                           - Close Master                  ///'
+    dim iPictures as integer
+    dim PresentationFile1 as string
+    PresentationFile1 = ConvertPath ((ConvertPath (gOfficePath + "user\work\PowerPes1.odp")))
+    printlog "New impress document"
+    Call hNewDocument
+    Call sSelectEmptyLayout
+    WaitSlot (2000)
+    kontext "DocumentImpress"
+    printlog "Add second Master-Page "
+    ViewMasterPage
+    kontext "Slides"
+    SlidesControl.OpenContextMenu(true)
+    sleep (2)
+    printlog "New master"
+    MenuSelect(MenuGetItemID(1)) 
+    sleep (1)
+    printlog "Inserted second Master-Slide"
 
-   '/// Add second Master-Page ///'
-   ViewMasterPage
-   kontext "Slides"
-      SlidesControl.OpenContextMenu(true)
-      sleep (2)
-      MenuSelect(MenuGetItemID(1)) 'New Master
-      sleep (1)
-      printlog "   Inserted second Master-Slide"
+    printlog "set background to picture(Gallery)"
+    Kontext "Gallery"
+    if Gallery.Exists(2) then
+        warnlog "   The Gallery was already visible. Check earlier ran tests for inconsistency."
+        sleep (2)
+    else
+        ToolsGallery
+        WaitSlot (2000)
+    end if
 
-   '/// - Background: picture (Gallery) ///'
-   Kontext "Gallery"
-   if Gallery.Exists(2) then
-      warnlog "   The Gallery was already visible. Check earlier ran tests for inconsistency."
-      sleep (2)
-   else
-      ToolsGallery
-      WaitSlot (2000)
-   end if
-
-   if gOOO = TRUE then   'OpenOffice.org
-      select case iSprache
-         case 01   : iPictures = 1 'English
-         case else : iPictures = 1 'Unknown
+    if gOOO = TRUE then   'OpenOffice.org
+        select case iSprache
+            case 01   : iPictures = 1 'English
+            case else : iPictures = 1 'Unknown
                            warnlog "Please insert the entrienumbers for 'Backgrounds'. Language: " + iSprache
-      end select
+        end select
 
-   else  ' StarOffice...
-      select case iSprache
-         case 01   : iPictures = 21 'English
-         case 07   : iPictures = 28 'Russian
-         case 31   : iPictures = 04 'Netherlands
-         case 33   : iPictures = 22 'French
-         case 34   : iPictures = 12 'Spanish
-         case 36   : iPictures = 17 'Hungaria
-         case 39   : iPictures = 23 'Italian
-         case 46   : iPictures = 09 'Swedish
-         case 48   : iPictures = 20 'Polish
-         case 49   : iPictures = 11 'German
-         case 55   : iPictures = 16 'Portuguese
-         case 81   : iPictures = 22 'Japanese
-         case 82   : iPictures = 04 'Korean
-         case 86   : iPictures = 06 'Simplified
-         case 88   : iPictures = 17 'Traditional
-         case else : iPictures = 21 'Unknown
-                           warnlog "Please insert the entrienumbers for 'Backgrounds'. Language: " + iSprache
-      end select
+    else  ' StarOffice...
+        select case iSprache
+             case 01   : iPictures = 21 'English
+             case 07   : iPictures = 28 'Russian
+             case 31   : iPictures = 04 'Netherlands
+             case 33   : iPictures = 22 'French
+             case 34   : iPictures = 12 'Spanish
+             case 36   : iPictures = 17 'Hungaria
+             case 39   : iPictures = 23 'Italian
+             case 46   : iPictures = 09 'Swedish
+             case 48   : iPictures = 20 'Polish
+             case 49   : iPictures = 11 'German
+             case 55   : iPictures = 16 'Portuguese
+             case 81   : iPictures = 22 'Japanese
+             case 82   : iPictures = 04 'Korean
+             case 86   : iPictures = 06 'Simplified
+             case 88   : iPictures = 17 'Traditional
+             case else : iPictures = 21 'Unknown
+             warnlog "Please insert the entrienumbers for 'Backgrounds'. Language: " + iSprache
+        end select
    end if
    
-   kontext "Gallery"
-   Gallerys.Select (iPictures)
+    kontext "Gallery"
+    Gallerys.Select (iPictures)
+    View.TypeKeys "<HOME><RIGHT><RIGHT>"
+    printlog "OpenContextMenu"
+    View.TypeKeys "<SHIFT F10>"
+    sleep (2)
+    MenuSelect(MenuGetItemID(1))
+    sleep (2)
+    MenuSelect(MenuGetItemID(1))
+    sleep (2)
+    printlog "Check that we really got a copy of the object"
+    kontext "DocumentImpress"
+    DocumentImpress.OpenContextMenu(true)
+    sleep (2)
+    MenuSelect 27353
+    sleep (2)
+    Kontext "ExportierenDlg"
+    if ExportierenDlg.IsVisible(5) then
+        printlog "   Gallery-object correctly copied into Slide."
+        ExportierenDlg.Close
+    else
+        warnlog "   Doesn't seem like we copied anything from the Gallery... ?"
+    end if
+    kontext "GraphicObjectbar"
+    if GraphicObjectbar.Exists(5) = FALSE then
+        kontext "DocumentImpress"
+        ViewToolbarsPicture
+    end if
 
-   View.TypeKeys "<HOME><RIGHT><RIGHT>"
-   View.TypeKeys "<SHIFT F10>"    'OpenContextMenu(true)
-   sleep (2)
-   MenuSelect(MenuGetItemID(1))   'Insert
-   sleep (2)
-   MenuSelect(MenuGetItemID(1))   'Copy
-   sleep (2)
-   '/// Check that we really got a copy of the object ///'
-   kontext "DocumentImpress"
-   DocumentImpress.OpenContextMenu(true)
-   sleep (2)
-   MenuSelect 27353
-   sleep (2)
-   Kontext "ExportierenDlg"
-   if ExportierenDlg.IsVisible(5) then
-      printlog "   Gallery-object correctly copied into Slide."
-      ExportierenDlg.Close
-   else
-      warnlog "   Doesn't seem like we copied anything from the Gallery... ?"
-   end if
-   kontext "GraphicObjectbar"
-      if GraphicObjectbar.Exists(5) = FALSE then
-         kontext "DocumentImpress"
-         ViewToolbarsPicture
-      end if
-
-      '/// - 50% Transparency   ///'
-      WaitSlot (2000)
-      kontext "GraphicObjectbar" ' the one with Transparency
-      Transparenz.SetText "50"
-      sleep (1)
-
-      '/// - Mosaic 16px x 16px ///'
-      Filter.TearOff
-      sleep (1)
-      kontext "GraphicFilterBar"
-      Mosaic.Click
-      WaitSlot (2000)
-      kontext "Mosaic"
-         Width.SetText "16"
-         Height.SetText "16"
-         Mosaic.OK
-
-      kontext "GraphicFilterBar"
-      GraphicFilterBar.Close
-
-   ToolsGallery
-   WaitSlot (1000)
-   kontext "DocumentImpress"
-   gMouseClick 50,50
+    printlog " 50% Transparency"
+    WaitSlot (2000)
+    kontext "GraphicObjectbar"
+    Transparenz.SetText "50"
     sleep (1)
-'   DocumentImpress.TypeKeys "<TAB>", 6
+
+    printlog "Mosaic 16px x 16px"
+    Filter.TearOff
+    sleep (1)
+    kontext "GraphicFilterBar"
+    Mosaic.Click
+    WaitSlot (2000)
+    kontext "Mosaic"
+    Width.SetText "16"
+    Height.SetText "16"
+    Mosaic.OK
+
+    kontext "GraphicFilterBar"
+    GraphicFilterBar.Close
+
+    ToolsGallery
+    WaitSlot (1000)
+    kontext "DocumentImpress"
+    hTypeKeys "<TAB>"
+    
+    sleep (1)
     FormatPositionAndSize
     WaitSlot (1000)
     kontext
@@ -164,23 +162,22 @@ testcase i_us_presentation1
     SizePosition.TypeKeys "<RIGHT><DOWN>"
     TabPositionAndSize.OK
 
-   '/// - Close Master ///'
+    printlog "Close Master"
     ViewNormal
     WaitSlot (1000)
 
-   '/// Save Document ///'
+    printlog "Save Document"
     call hFileSaveAsKill (PresentationFile1)
     printlog "OK   saved at ", PresentationFile1
     WaitSlot (1000)
 
     ActiveDeactivateCTLSupport (FALSE)
     WaitSlot (2000)
-    '/// Close Document ///'
+    printlog "Close Document"
     Call hCloseDocument
-endcase
+endcase 'i_us_presentation1
 
-'00oo...//==---...---...---...---....---...---...---...---...---...---...--..--.--.-.-.-.-....---....
-
+'-------------------------------------------------------------------------------
 testcase i_us_presentation2
     dim PresentationFile1 as string
     dim PresentationFile2 as string

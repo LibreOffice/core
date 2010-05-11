@@ -38,6 +38,7 @@ sub main
     Call hStatusIn ( "Graphics","i_slidecopy.bas")
 
     use "graphics\tools\id_tools.inc"
+    use "graphics\tools\id_tools_2.inc"
     use "graphics\optional\includes\impress\i_slidecopy.inc"
 
     PrintLog "-------------------------" + gApplication + "-------------------"
