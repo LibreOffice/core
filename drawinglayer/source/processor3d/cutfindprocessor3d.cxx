@@ -32,11 +32,11 @@
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
 #include <drawinglayer/primitive3d/hatchtextureprimitive3d.hxx>
-#include <drawinglayer/primitive3d/hittestprimitive3d.hxx>
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
+#include <drawinglayer/primitive3d/hiddengeometryprimitive3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -53,7 +53,8 @@ namespace drawinglayer
             maBack(rBack),
             maResult(),
             maCombinedTransform(),
-            mbAnyHit(bAnyHit)
+            mbAnyHit(bAnyHit),
+            mbUseInvisiblePrimitiveContent(true)
         {
         }
 
@@ -124,13 +125,46 @@ namespace drawinglayer
                     process(rPrimitive.getChildren());
                     break;
                 }
-                case PRIMITIVE3D_ID_HITTESTPRIMITIVE3D :
+                case PRIMITIVE3D_ID_HIDDENGEOMETRYPRIMITIVE3D :
                 {
-                    // HitTestPrimitive3D, force usage due to we are doing a hit test and this
-                    // primitive only gets generated on 3d objects without fill, exactly for this
-                    // purpose
-                    const primitive3d::HitTestPrimitive3D& rPrimitive = static_cast< const primitive3d::HitTestPrimitive3D& >(rCandidate);
-                    process(rPrimitive.getChildren());
+                    // HiddenGeometryPrimitive3D; the default decomposition would return an empty seqence,
+                    // so force this primitive to process it's children directly if the switch is set
+                    // (which is the default). Else, ignore invisible content
+                    const primitive3d::HiddenGeometryPrimitive3D& rHiddenGeometry(static_cast< const primitive3d::HiddenGeometryPrimitive3D& >(rCandidate));
+                       const primitive3d::Primitive3DSequence& rChildren = rHiddenGeometry.getChildren();
+
+                    if(rChildren.hasElements())
+                    {
+                        if(getUseInvisiblePrimitiveContent())
+                        {
+                            process(rChildren);
+                        }
+                    }
+
+                    break;
+                }
+                case PRIMITIVE3D_ID_UNIFIEDTRANSPARENCETEXTUREPRIMITIVE3D :
+                {
+                    const primitive3d::UnifiedTransparenceTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::UnifiedTransparenceTexturePrimitive3D& >(rCandidate);
+                       const primitive3d::Primitive3DSequence rChildren = rPrimitive.getChildren();
+
+                    if(rChildren.getLength())
+                    {
+                        if(1.0 <= rPrimitive.getTransparence())
+                        {
+                            // not visible, but use for HitTest
+                            if(getUseInvisiblePrimitiveContent())
+                            {
+                                   process(rChildren);
+                            }
+                        }
+                        else if(rPrimitive.getTransparence() >= 0.0 && rPrimitive.getTransparence() < 1.0)
+                        {
+                            // visible; use content
+                            process(rChildren);
+                        }
+                    }
+
                     break;
                 }
                 case PRIMITIVE3D_ID_POLYPOLYGONMATERIALPRIMITIVE3D :

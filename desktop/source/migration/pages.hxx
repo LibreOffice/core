@@ -38,6 +38,8 @@
 #include <svl/lstner.hxx>
 #include <svtools/xtextedt.hxx>
 
+#include <com/sun/star/awt/XThrobber.hpp>
+
 namespace desktop
 {
 class WelcomePage : public svt::OWizardPage
@@ -120,8 +122,9 @@ private:
     FixedText m_ftBody;
     CheckBox m_cbMigration;
     sal_Bool m_bMigrationDone;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XThrobber > m_xThrobber;
 public:
-    MigrationPage( svt::OWizardMachine* parent, const ResId& resid);
+    MigrationPage( svt::OWizardMachine* parent, const ResId& resid, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XThrobber > xThrobber );
     virtual sal_Bool commitPage( CommitPageReason _eReason );
 
 protected:
