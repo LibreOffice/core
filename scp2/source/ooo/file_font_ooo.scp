@@ -135,3 +135,16 @@ STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicItalic, GenBkBasI.ttf, Gentium Book 
 STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicBoldItalic, GenBkBasBI.ttf, Gentium Book Basic Bold Italic)
 #endif 
 
+// fontconfig updates to allow proper use of local fonts
+
+#ifdef UNX
+#ifndef WITHOUT_FONTS 
+File gid_File_FcLocal_Conf
+    Dir = gid_Dir_Fonts_Truetype;
+    USER_FILE_BODY;
+#   Styles = ();
+    Name = "fc_local.conf";
+End
+#endif
+#endif
+
