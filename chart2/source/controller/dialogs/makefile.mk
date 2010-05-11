@@ -98,6 +98,8 @@ SLOFILES=   	\
                 $(SLO)$/dlg_ChartType_UNO.obj \
                 $(SLO)$/dlg_ChartType.obj \
                 $(SLO)$/dlg_NumberFormat.obj \
+                $(SLO)$/dlg_ShapeFont.obj \
+                $(SLO)$/dlg_ShapeParagraph.obj \
                 $(SLO)$/RangeSelectionButton.obj \
                 $(SLO)$/RangeSelectionHelper.obj \
                 $(SLO)$/RangeSelectionListener.obj \
@@ -150,7 +152,9 @@ SRC1FILES=		\
                 dlg_InsertErrorBars.src \
                 dlg_InsertTitle.src \
                 dlg_ChartType.src \
-                dlg_CreationWizard.src
+                dlg_CreationWizard.src \
+                dlg_ShapeFont.src \
+                dlg_ShapeParagraph.src
 
 SRS1NAME=$(TARGET)
 

@@ -262,6 +262,8 @@
 
 #define HID_SC_RENAME_OBJECT    ( HID_SC_TOOLBOX_START + 9 )
 
+#define HID_SC_REN_AFMT_DLG     ( HID_SC_TOOLBOX_START + 10 )
+
 // Hilfe IDs fuer Submenus (max.50) ------------------------------------------
 #define HID_SCMENU_EDIT         ( HID_SC_MENU_START )
 #define HID_SCMENU_FILL         ( HID_SC_MENU_START + 1 )
@@ -1636,10 +1638,11 @@
 #define RID_SCDLG_DOCPROTECTION         (SC_DIALOGS_START + 149)
 #define RID_SCDLG_RETYPEPASS            (SC_DIALOGS_START + 150)
 #define RID_SCDLG_RETYPEPASS_INPUT      (SC_DIALOGS_START + 151)
-#define RID_POPUP_FILTER                (SC_DIALOGS_START + 152)
-#define RID_SCDLG_TAB_BG_COLOR          (SC_DIALOGS_START + 153)
+#define RID_SCDLG_TEXT_IMPORT_OPTIONS   (SC_DIALOGS_START + 152)
+#define RID_POPUP_FILTER                (SC_DIALOGS_START + 153)
+#define RID_SCDLG_TAB_BG_COLOR          (SC_DIALOGS_START + 154)
 
-#define SC_DIALOGS_END                  (SC_DIALOGS_START + 154)
+#define SC_DIALOGS_END                  (SC_DIALOGS_START + 155)
 
 #ifndef STD_MASKCOLOR
 #define STD_MASKCOLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }

@@ -5516,7 +5516,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScCellRangeObj::createSortDescripto
     if ( pDocSh )
     {
         // DB-Bereich anlegen erst beim Ausfuehren, per API immer genau den Bereich
-        ScDBData* pData = pDocSh->GetDBData( aRange, SC_DB_OLD, TRUE );
+        ScDBData* pData = pDocSh->GetDBData( aRange, SC_DB_OLD, SC_DBSEL_FORCE_MARK );
         if (pData)
         {
             pData->GetSortParam(aParam);
@@ -5547,7 +5547,7 @@ void SAL_CALL ScCellRangeObj::sort( const uno::Sequence<beans::PropertyValue>& a
     {
         USHORT i;
         ScSortParam aParam;
-        ScDBData* pData = pDocSh->GetDBData( aRange, SC_DB_MAKE, TRUE );    // ggf. Bereich anlegen
+        ScDBData* pData = pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK ); // ggf. Bereich anlegen
         if (pData)
         {
             //  alten Einstellungen holen, falls nicht alles neu gesetzt wird
@@ -5576,7 +5576,7 @@ void SAL_CALL ScCellRangeObj::sort( const uno::Sequence<beans::PropertyValue>& a
         aParam.nCol2 = aRange.aEnd.Col();
         aParam.nRow2 = aRange.aEnd.Row();
 
-        pDocSh->GetDBData( aRange, SC_DB_MAKE, TRUE );      // ggf. Bereich anlegen
+        pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );       // ggf. Bereich anlegen
 
         ScDBDocFunc aFunc(*pDocSh);                         // Bereich muss angelegt sein
         aFunc.Sort( nTab, aParam, TRUE, TRUE, TRUE );
@@ -5594,7 +5594,7 @@ uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScCellRangeObj::createFil
     if ( !bEmpty && pDocSh )
     {
         // DB-Bereich anlegen erst beim Ausfuehren, per API immer genau den Bereich
-        ScDBData* pData = pDocSh->GetDBData( aRange, SC_DB_OLD, TRUE );
+        ScDBData* pData = pDocSh->GetDBData( aRange, SC_DB_OLD, SC_DBSEL_FORCE_MARK );
         if (pData)
         {
             ScQueryParam aParam;
@@ -5676,7 +5676,7 @@ void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDe
         aParam.nCol2 = aRange.aEnd.Col();
         aParam.nRow2 = aRange.aEnd.Row();
 
-        pDocSh->GetDBData( aRange, SC_DB_MAKE, TRUE );  // ggf. Bereich anlegen
+        pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );   // ggf. Bereich anlegen
 
         //! keep source range in filter descriptor
         //! if created by createFilterDescriptorByObject ???
@@ -5763,7 +5763,7 @@ uno::Reference<sheet::XSubTotalDescriptor> SAL_CALL ScCellRangeObj::createSubTot
     if ( !bEmpty && pDocSh )
     {
         // DB-Bereich anlegen erst beim Ausfuehren, per API immer genau den Bereich
-        ScDBData* pData = pDocSh->GetDBData( aRange, SC_DB_OLD, TRUE );
+        ScDBData* pData = pDocSh->GetDBData( aRange, SC_DB_OLD, SC_DBSEL_FORCE_MARK );
         if (pData)
         {
             ScSubTotalParam aParam;
@@ -5826,7 +5826,7 @@ void SAL_CALL ScCellRangeObj::applySubTotals(
         aParam.nCol2 = aRange.aEnd.Col();
         aParam.nRow2 = aRange.aEnd.Row();
 
-        pDocSh->GetDBData( aRange, SC_DB_MAKE, TRUE );  // ggf. Bereich anlegen
+        pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );   // ggf. Bereich anlegen
 
         ScDBDocFunc aFunc(*pDocSh);
         aFunc.DoSubTotals( nTab, aParam, NULL, TRUE, TRUE );    // Bereich muss angelegt sein
@@ -5841,7 +5841,7 @@ void SAL_CALL ScCellRangeObj::removeSubTotals() throw(uno::RuntimeException)
     if (pDocSh)
     {
         ScSubTotalParam aParam;
-        ScDBData* pData = pDocSh->GetDBData( aRange, SC_DB_OLD, TRUE );
+        ScDBData* pData = pDocSh->GetDBData( aRange, SC_DB_OLD, SC_DBSEL_FORCE_MARK );
         if (pData)
             pData->GetSubTotalParam(aParam);    // auch bei Remove die Feld-Eintraege behalten
 
@@ -5853,7 +5853,7 @@ void SAL_CALL ScCellRangeObj::removeSubTotals() throw(uno::RuntimeException)
         aParam.nCol2 = aRange.aEnd.Col();
         aParam.nRow2 = aRange.aEnd.Row();
 
-        pDocSh->GetDBData( aRange, SC_DB_MAKE, TRUE );  // ggf. Bereich anlegen
+        pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );   // ggf. Bereich anlegen
 
         ScDBDocFunc aFunc(*pDocSh);
         aFunc.DoSubTotals( nTab, aParam, NULL, TRUE, TRUE );    // Bereich muss angelegt sein
@@ -5869,7 +5869,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScCellRangeObj::createImportDescrip
     if ( !bEmpty && pDocSh )
     {
         // DB-Bereich anlegen erst beim Ausfuehren, per API immer genau den Bereich
-        ScDBData* pData = pDocSh->GetDBData( aRange, SC_DB_OLD, TRUE );
+        ScDBData* pData = pDocSh->GetDBData( aRange, SC_DB_OLD, SC_DBSEL_FORCE_MARK );
         if (pData)
             pData->GetImportParam(aParam);
     }
@@ -5898,7 +5898,7 @@ void SAL_CALL ScCellRangeObj::doImport( const uno::Sequence<beans::PropertyValue
         //! TODO: could we get passed a valid result set by any means?
         uno::Reference< sdbc::XResultSet > xResultSet;
 
-        pDocSh->GetDBData( aRange, SC_DB_MAKE, TRUE );      // ggf. Bereich anlegen
+        pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );       // ggf. Bereich anlegen
 
         ScDBDocFunc aFunc(*pDocSh);                         // Bereich muss angelegt sein
         aFunc.DoImport( nTab, aParam, xResultSet, NULL, TRUE, FALSE );  //! Api-Flag als Parameter

@@ -53,7 +53,7 @@ private:
 public:
                     ScDBFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
 //UNUSED2008-05     ScDBFunc( Window* pParent, const ScDBFunc& rDBFunc, ScTabViewShell* pViewShell );
-                    ~ScDBFunc();
+    virtual         ~ScDBFunc();
 
                     //  nur UISort wiederholt bei Bedarf die Teilergebnisse
 
@@ -77,7 +77,7 @@ public:
     void            GotoDBArea( const String& rDBName );
 
                     // DB-Bereich vom Cursor
-    ScDBData*       GetDBData( BOOL bMarkArea = TRUE, ScGetDBMode eMode = SC_DB_MAKE, bool bShrinkToData = false );
+    ScDBData*       GetDBData( BOOL bMarkArea = TRUE, ScGetDBMode eMode = SC_DB_MAKE, ScGetDBSelection eSel = SC_DBSEL_KEEP );
 
     void            NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const List& rDelAreaList );
 
@@ -86,8 +86,10 @@ public:
     bool            MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, BOOL bNewTable,
                                     const ScDPObject& rSource, BOOL bApi = FALSE );
     void            DeletePivotTable();
-    void            RecalcPivotTable();
-
+    // Wang Xu Ming -- 2009-6-17
+    // DataPilot Migration
+    ULONG   RecalcPivotTable();
+    // End Comments
     BOOL            HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& rParts );
     BOOL            HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo );
     void            GroupDataPilot();

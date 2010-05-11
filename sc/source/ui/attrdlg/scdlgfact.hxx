@@ -62,6 +62,7 @@ class ScTabBgColorDlg;
 class ScImportOptionsDlg;
 class SfxTabDialog;
 class ScSortWarningDlg;
+class ScTextImportOptionsDlg;
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
     DialogClass*        pDlg;                       \
@@ -117,6 +118,7 @@ class AbstractScImportAsciiDlg_Impl : public AbstractScImportAsciiDlg  //add for
     DECL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl, ScImportAsciiDlg)
     virtual void                        GetOptions( ScAsciiOptions& rOpt );
     virtual void                        SetTextToColumnsMode();
+    virtual void                        SaveParameters();
 };
 
 class AbstractScAutoFormatDlg_Impl : public AbstractScAutoFormatDlg  //add for ScAutoFormatDlg
@@ -347,6 +349,13 @@ class AbstractScImportOptionsDlg_Impl : public AbstractScImportOptionsDlg  //add
     virtual void GetImportOptions( ScImportOptions& rOptions ) const;
 };
 
+class AbstractScTextImportOptionsDlg_Impl : public AbstractScTextImportOptionsDlg
+{
+    DECL_ABSTDLG_BASE( AbstractScTextImportOptionsDlg_Impl, ScTextImportOptionsDlg)
+    virtual LanguageType GetLanguageType() const;
+    virtual bool IsDateConversionSet() const;
+};
+
 //add for ScAttrDlg , ScHFEditDlg, ScStyleDlg, ScSubTotalDlg, ScCharDlg, ScParagraphDlg, ScValidationDlg, ScSortDlg
 class AbstractTabDialog_Impl : public SfxAbstractTabDialog
 {
@@ -387,6 +396,8 @@ public:
     virtual     AbstractScImportAsciiDlg * CreateScImportAsciiDlg( Window* pParent, String aDatName, //add for ScImportAsciiDlg
                                                                     SvStream* pInStream, int nId,
                                                                     sal_Unicode cSep = '\t');
+
+    virtual AbstractScTextImportOptionsDlg * CreateScTextImportOptionsDlg( Window* pParent, int nId );
 
     virtual     AbstractScAutoFormatDlg * CreateScAutoFormatDlg( Window*                    pParent, //add for ScAutoFormatDlg
                                                                 ScAutoFormat*               pAutoFormat,

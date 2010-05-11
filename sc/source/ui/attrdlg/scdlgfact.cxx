@@ -72,6 +72,7 @@
 #include "validate.hxx" //add for ScValidationDlg
 #include "validate.hrc" //add for ScValidationDlg
 #include "sortdlg.hxx" //add for ScSortDlg
+#include "textimportoptions.hxx"
 #include "opredlin.hxx" //add for  ScRedlineOptionsTabPage
 #include "tpcalc.hxx" //add for ScTpCalcOptions
 #include "tpprint.hxx" //add for ScTpPrintOptions
@@ -114,6 +115,7 @@ IMPL_ABSTDLG_BASE(AbstractScShowTabDlg_Impl); //add for ScShowTabDlg
 IMPL_ABSTDLG_BASE(AbstractScStringInputDlg_Impl); //add for ScStringInputDlg
 IMPL_ABSTDLG_BASE(AbstractScTabBgColorDlg_Impl); //add for ScTabBgColorDlg
 IMPL_ABSTDLG_BASE(AbstractScImportOptionsDlg_Impl); //add for ScImportOptionsDlg
+IMPL_ABSTDLG_BASE(AbstractScTextImportOptionsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl); //add for ScAttrDlg, ScHFEditDlg, ScStyleDlg, ScSubTotalDlg,ScCharDlg, ScParagraphDlg, ScValidationDlg, ScSortDlg
 
 // AbstractTabDialog_Impl begin
@@ -193,6 +195,11 @@ void AbstractScImportAsciiDlg_Impl::GetOptions( ScAsciiOptions& rOpt )
 void AbstractScImportAsciiDlg_Impl::SetTextToColumnsMode()
 {
     pDlg->SetTextToColumnsMode();
+}
+
+void AbstractScImportAsciiDlg_Impl::SaveParameters()
+{
+    pDlg->SaveParameters();
 }
 
 // AbstractScImportAsciiDlg_Impl end
@@ -627,6 +634,20 @@ void AbstractScImportOptionsDlg_Impl::GetImportOptions( ScImportOptions& rOption
     pDlg->GetImportOptions(rOptions);
 }
 // add for AbstractScImportOptionsDlg_Impl end
+
+//add for AbstractScLangChooserDlg_Impl begin
+LanguageType AbstractScTextImportOptionsDlg_Impl::GetLanguageType() const
+{
+    return pDlg->getLanguageType();
+}
+
+bool AbstractScTextImportOptionsDlg_Impl::IsDateConversionSet() const
+{
+    return pDlg->isDateConversionSet();
+}
+
+//add for AbstractScLangChooserDlg_Impl end
+
 // =========================Factories  for createdialog ===================
 
 //add for ScImportAsciiDlg begin
@@ -648,6 +669,21 @@ AbstractScImportAsciiDlg * ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg 
     return 0;
 }
 // ScImportAsciiDlg end
+
+AbstractScTextImportOptionsDlg * ScAbstractDialogFactory_Impl::CreateScTextImportOptionsDlg( Window* pParent, int nId )
+{
+    ScTextImportOptionsDlg* pDlg = NULL;
+    switch (nId)
+    {
+        case RID_SCDLG_TEXT_IMPORT_OPTIONS:
+            pDlg = new ScTextImportOptionsDlg(pParent);
+        break;
+        default:
+            ;
+    }
+
+    return pDlg ? new AbstractScTextImportOptionsDlg_Impl(pDlg) : NULL;
+}
 
 //add for ScAutoFormatDlg begin
 
