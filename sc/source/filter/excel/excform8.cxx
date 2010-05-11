@@ -392,10 +392,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aIn.Ignore( 4 );
                 if( bAllowArrays )
                 {
-                    SCSIZE nC = nByte + 1;
-                    SCSIZE nR = nUINT16 + 1;
-
-                    aStack << aPool.StoreMatrix( nC, nR );
+                    aStack << aPool.StoreMatrix();
                     aExtensions.push_back( EXTENSION_ARRAY );
                 }
                 else

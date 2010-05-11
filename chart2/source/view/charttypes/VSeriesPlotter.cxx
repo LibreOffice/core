@@ -156,7 +156,7 @@ VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeMode
         , m_aZSlots()
         , m_bCategoryXAxis(bCategoryXAxis)
         , m_xColorScheme()
-        , m_xExplicitCategoriesProvider()
+        , m_pExplicitCategoriesProvider(0)
         , m_bPointsWereSkipped(false)
 {
     DBG_ASSERT(m_xChartTypeModel.is(),"no XChartType available in view, fallback to default values may be wrong");
@@ -477,9 +477,9 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         {
             if(pLabel->ShowCategoryName)
             {
-                if( m_xExplicitCategoriesProvider.is() )
+                if( m_pExplicitCategoriesProvider )
                 {
-                    Sequence< OUString > aCategories( m_xExplicitCategoriesProvider->getTextualData() );
+                    Sequence< OUString > aCategories( m_pExplicitCategoriesProvider->getSimpleCategories() );
                     if( nPointIndex >= 0 && nPointIndex < aCategories.getLength() )
                     {
                         aText.append( aCategories[nPointIndex] );
@@ -560,11 +560,17 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             sal_Int32 nYDiff = aTextSize.Height/nLineCountForSymbolsize;
             sal_Int32 nXDiff = aSymbolSize.Width * nYDiff/aSymbolSize.Height;
 
+            // #i109336# Improve auto positioning in chart
+            nXDiff = nXDiff * 80 / 100;
+            nYDiff = nYDiff * 80 / 100;
+
             aSymbolSize.Width =  nXDiff * 75/100;
             aSymbolSize.Height = nYDiff * 75/100;
 
             awt::Point aSymbolPosition( aUnrotatedTextPos );
-            aSymbolPosition.Y += (nYDiff * 25/200);
+
+            // #i109336# Improve auto positioning in chart
+            aSymbolPosition.Y += ( nYDiff / 4 );
 
             if(LABEL_ALIGN_LEFT==eAlignment
                 || LABEL_ALIGN_LEFT_TOP==eAlignment
@@ -1127,7 +1133,12 @@ void VSeriesPlotter::setMappedProperties(
 double VSeriesPlotter::getMinimumX()
 {
     if( m_bCategoryXAxis )
-        return 1.0;//first category (index 0) matches with real number 1.0
+    {
+        double fRet = 1.0;//first category (index 0) matches with real number 1.0
+        if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->hasComplexCategories() )
+            fRet -= 0.5;
+        return fRet;
+    }
 
     double fMinimum, fMaximum;
     this->getMinimumAndMaximiumX( fMinimum, fMaximum );
@@ -1138,8 +1149,10 @@ double VSeriesPlotter::getMaximumX()
     if( m_bCategoryXAxis )
     {
         //return category count
-        sal_Int32 nPointCount = getPointCount();
-        return nPointCount;//first category (index 0) matches with real number 1.0
+        double fRet = getPointCount();//first category (index 0) matches with real number 1.0
+        if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->hasComplexCategories() )
+            fRet += 0.5;
+        return fRet;
     }
 
     double fMinimum, fMaximum;
@@ -1356,9 +1369,9 @@ void VSeriesPlotter::setColorScheme( const uno::Reference< XColorScheme >& xColo
     m_xColorScheme = xColorScheme;
 }
 
-void VSeriesPlotter::setExplicitCategoriesProvider( const uno::Reference< data::XTextualDataSequence >& xExplicitCategoriesProvider )
+void VSeriesPlotter::setExplicitCategoriesProvider( ExplicitCategoriesProvider* pExplicitCategoriesProvider )
 {
-    m_xExplicitCategoriesProvider = xExplicitCategoriesProvider;
+    m_pExplicitCategoriesProvider = pExplicitCategoriesProvider;
 }
 
 sal_Int32 VDataSeriesGroup::getPointCount() const
@@ -1929,8 +1942,8 @@ std::vector< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntriesForSe
         if( bVaryColorsByPoint )
         {
             Sequence< OUString > aCategoryNames;
-            if( m_xExplicitCategoriesProvider.is() )
-                aCategoryNames = m_xExplicitCategoriesProvider->getTextualData();
+            if( m_pExplicitCategoriesProvider )
+                aCategoryNames = m_pExplicitCategoriesProvider->getSimpleCategories();
 
             for( sal_Int32 nIdx=0; nIdx<aCategoryNames.getLength(); ++nIdx )
             {
@@ -2074,9 +2087,9 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
         pRet = new PieChart(xChartTypeModel,nDimensionCount);
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
-        pRet = new AreaChart(xChartTypeModel,nDimensionCount,true,true,new PolarPlottingPositionHelper(),true,true,false,1,drawing::Direction3D(1,1,1) );
+        pRet = new AreaChart(xChartTypeModel,nDimensionCount,true,true,new PolarPlottingPositionHelper(),true,false,1,drawing::Direction3D(1,1,1) );
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
-        pRet = new AreaChart(xChartTypeModel,nDimensionCount,true,false,new PolarPlottingPositionHelper(),true,true,false,1,drawing::Direction3D(1,1,1) );
+        pRet = new AreaChart(xChartTypeModel,nDimensionCount,true,false,new PolarPlottingPositionHelper(),true,false,1,drawing::Direction3D(1,1,1) );
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
         pRet = new CandleStickChart(xChartTypeModel,nDimensionCount);
     else

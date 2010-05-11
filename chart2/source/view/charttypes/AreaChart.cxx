@@ -72,7 +72,6 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
                      , bool bNoArea
                      , PlottingPositionHelper* pPlottingPositionHelper
                      , bool bConnectLastToFirstPoint
-                     , bool bAddOneToXMax
                      , bool bExpandIfValuesCloseToBorder
                      , sal_Int32 nKeepAspectRatio
                      , const drawing::Direction3D& rAspectRatio
@@ -84,7 +83,6 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
         , m_bSymbol( ChartTypeHelper::isSupportingSymbolProperties(xChartTypeModel,nDimensionCount) )
         , m_bIsPolarCooSys( bConnectLastToFirstPoint )
         , m_bConnectLastToFirstPoint( bConnectLastToFirstPoint )
-        , m_bAddOneToXMax(bAddOneToXMax)
         , m_bExpandIfValuesCloseToBorder( bExpandIfValuesCloseToBorder )
         , m_nKeepAspectRatio(nKeepAspectRatio)
         , m_aGivenAspectRatio(rAspectRatio)
@@ -123,14 +121,17 @@ AreaChart::~AreaChart()
     delete m_pMainPosHelper;
 }
 
+double AreaChart::getMinimumX()
+{
+    if( m_bCategoryXAxis && m_bIsPolarCooSys )//the angle axis in net charts needs a different autoscaling
+        return 1.0;//first category (index 0) matches with real number 1.0
+    return VSeriesPlotter::getMinimumX();
+}
+
 double AreaChart::getMaximumX()
 {
-    if( m_bAddOneToXMax )
-    {
-        //return category count
-        sal_Int32 nPointCount = getPointCount();
-        return nPointCount+1;
-    }
+    if( m_bCategoryXAxis && m_bIsPolarCooSys )//the angle axis in net charts needs a different autoscaling
+        return getPointCount()+1;
     return VSeriesPlotter::getMaximumX();
 }
 
@@ -402,7 +403,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
 
                 m_pShapeFactory->createStripe(xSeriesGroupShape_Shapes
                     , Stripe( aPoint1, aPoint2, fDepth )
-                    , pSeries->getPropertiesOfSeries(), PropertyMapper::getPropertyNameMapForFilledSeriesProperties(), true );
+                    , pSeries->getPropertiesOfSeries(), PropertyMapper::getPropertyNameMapForFilledSeriesProperties(), true, 1 );
             }
         }
     }

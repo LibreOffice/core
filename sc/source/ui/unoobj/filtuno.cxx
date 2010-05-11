@@ -48,7 +48,12 @@
 
 #include "sc.hrc" //CHINA001
 #include "scabstdlg.hxx" //CHINA001
+#include "i18npool/lang.h"
+
+#include <memory>
+
 using namespace ::com::sun::star;
+using ::rtl::OUStringBuffer;
 
 //------------------------------------------------------------------------
 
@@ -143,6 +148,10 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
     sal_Int16 nRet = ui::dialogs::ExecutableDialogResults::CANCEL;
 
     String aFilterString( aFilterName );
+
+    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+
     if ( !bExport && aFilterString == ScDocShell::GetAsciiFilterName() )
     {
         //  ascii import is special...
@@ -161,19 +170,39 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
             pInStream = utl::UcbStreamHelper::CreateStream( xInputStream );
 
         //CHINA001 ScImportAsciiDlg* pDlg = new ScImportAsciiDlg( NULL, aPrivDatName, pInStream, cAsciiDel );
-        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
         AbstractScImportAsciiDlg* pDlg = pFact->CreateScImportAsciiDlg( NULL, aPrivDatName, pInStream, RID_SCDLG_ASCII, cAsciiDel);
         DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
         if ( pDlg->Execute() == RET_OK )
         {
             ScAsciiOptions aOptions;
             pDlg->GetOptions( aOptions );
+            pDlg->SaveParameters();
             aFilterOptions = aOptions.WriteToString();
             nRet = ui::dialogs::ExecutableDialogResults::OK;
         }
         delete pDlg;
         delete pInStream;
+    }
+    else if ( aFilterString == ScDocShell::GetWebQueryFilterName() || aFilterString == ScDocShell::GetHtmlFilterName() )
+    {
+        if (!bExport)
+        {
+            // HTML import.
+            ::std::auto_ptr<AbstractScTextImportOptionsDlg> pDlg(
+                pFact->CreateScTextImportOptionsDlg(NULL, RID_SCDLG_TEXT_IMPORT_OPTIONS));
+
+            if (pDlg->Execute() == RET_OK)
+            {
+                LanguageType eLang = pDlg->GetLanguageType();
+                OUStringBuffer aBuf;
+
+                aBuf.append(String::CreateFromInt32(static_cast<sal_Int32>(eLang)));
+                aBuf.append(sal_Unicode(' '));
+                aBuf.append(pDlg->IsDateConversionSet() ? sal_Unicode('1') : sal_Unicode('0'));
+                aFilterOptions = aBuf.makeStringAndClear();
+                nRet = ui::dialogs::ExecutableDialogResults::OK;
+            }
+        }
     }
     else
     {
@@ -246,8 +275,6 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
 //CHINA001      &aOptions, &aTitle, bMultiByte, bDBEnc,
 //CHINA001      !bExport );
 //CHINA001
-        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
         AbstractScImportOptionsDlg* pDlg = pFact->CreateScImportOptionsDlg( NULL, RID_SCDLG_IMPORTOPT,
                                                                             bAscii, &aOptions, &aTitle, bMultiByte, bDBEnc,
