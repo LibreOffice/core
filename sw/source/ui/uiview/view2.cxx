@@ -125,7 +125,6 @@
 #include <dbmgr.hxx>
 
 #include <PostItMgr.hxx>
-#include <postit.hxx>
 
 #include <ndtxt.hxx> //#outline level,added by zhaojianwei
 
@@ -1760,8 +1759,10 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         break;
         case SID_ATTR_INSERT:
             SwPostItMgr* pMgr = GetPostItMgr();
-            if (pMgr && pMgr->GetActivePostIt())
-                pMgr->GetActivePostIt()->ToggleInsMode();
+            if ( pMgr && pMgr->HasActiveSidebarWin() )
+            {
+                pMgr->ToggleInsModeOnActiveSidebarWin();
+            }
             else
                 rSh.ToggleInsMode();
             bUp = TRUE;
@@ -1775,9 +1776,6 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         rBnd.Update(nWhich);
     }
 }
-
-
-
 
 void SwView::InsFrmMode(USHORT nCols)
 {

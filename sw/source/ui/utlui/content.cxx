@@ -106,7 +106,6 @@
 #include <swundo.hxx>
 #include <ndtxt.hxx>
 #include <PostItMgr.hxx>
-#include <postit.hxx>
 #include <postithelper.hxx>
 #include <redline.hxx>
 #include <docary.hxx>
@@ -2671,7 +2670,7 @@ void    SwContentTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
             break;
         case 602:
             {
-                pActiveShell->GetView().GetPostItMgr()->SetActivePostIt(0);
+                pActiveShell->GetView().GetPostItMgr()->SetActiveSidebarWin(0);
                 pActiveShell->GetView().GetPostItMgr()->Delete();
                 break;
             }
@@ -2933,7 +2932,7 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
             {
                 if (((SwPostItContent*)pCnt)->IsPostIt())
                 {
-                    pActiveShell->GetView().GetPostItMgr()->SetActivePostIt(0);
+                    pActiveShell->GetView().GetPostItMgr()->SetActiveSidebarWin(0);
                     pActiveShell->DelRight();
                 }
                 /*
@@ -3141,7 +3140,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
     }
     SwView& rView = pActiveShell->GetView();
     rView.StopShellTimer();
-    rView.GetPostItMgr()->SetActivePostIt(0);
+    rView.GetPostItMgr()->SetActiveSidebarWin(0);
     rView.GetEditWin().GrabFocus();
 }
 /*-----------------06.02.97 19.14-------------------

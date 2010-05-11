@@ -1679,7 +1679,7 @@ SfxItemSet* SwFltOutBase::NewFlyDefaults()
     return p;
 }
 
-BOOL SwFltOutBase::BeginFly( RndStdIds eAnchor /*= FLY_AT_CNTNT*/,
+BOOL SwFltOutBase::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
                            BOOL bAbsolutePos /*= FALSE*/,
                            const SfxItemSet*
 #ifdef DBG_UTIL
@@ -1731,7 +1731,7 @@ SwFrmFmt* SwFltOutDoc::MakeFly( RndStdIds eAnchor, SfxItemSet* pSet )
     return pFly;
 }
 
-BOOL SwFltOutDoc::BeginFly( RndStdIds eAnchor /*= FLY_AT_CNTNT*/,
+BOOL SwFltOutDoc::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
                            BOOL bAbsolutePos /*= FALSE*/,
                            const SfxItemSet* pMoreAttrs /*= 0*/ )
 
@@ -1837,7 +1837,7 @@ void SwFltOutDoc::EndFly()
         return GetDoc().GetAttrPool().GetDefaultItem(nWhich);
 }
 
-BOOL SwFltFormatCollection::BeginFly( RndStdIds eAnchor /*= FLY_AT_CNTNT*/,
+BOOL SwFltFormatCollection::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
                            BOOL bAbsolutePos /*= FALSE*/,
                            const SfxItemSet* pMoreAttrs /*= 0*/ )
 
@@ -1865,7 +1865,7 @@ BOOL SwFltFormatCollection::BeginStyleFly( SwFltOutDoc* pOutDoc )
 // Flys in SwFltShell
 //-----------------------------------------------------------------------------
 
-BOOL SwFltShell::BeginFly( RndStdIds eAnchor /*= FLY_AT_CNTNT*/,
+BOOL SwFltShell::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
                            BOOL bAbsolutePos /*= FALSE*/ )
 
 {
