@@ -116,21 +116,13 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     Window( i_pParent, FwkResId( DLG_BACKING ) ),
     maWelcome( this, WB_LEFT ),
     maProduct( this, WB_LEFT ),
-    maWriterText( this, WB_WORDBREAK | WB_VCENTER ),
     maWriterButton( this, STC_BUTTON_STYLE ),
-    maCalcText( this, WB_WORDBREAK | WB_VCENTER ),
     maCalcButton( this, STC_BUTTON_STYLE ),
-    maImpressText( this, WB_WORDBREAK | WB_VCENTER ),
     maImpressButton( this, STC_BUTTON_STYLE ),
-    maOpenText( this, WB_WORDBREAK | WB_VCENTER ),
     maOpenButton( this, STC_BUTTON_STYLE ),
-    maDrawText( this, WB_WORDBREAK | WB_VCENTER ),
     maDrawButton( this, STC_BUTTON_STYLE ),
-    maDBText( this, WB_WORDBREAK | WB_VCENTER ),
     maDBButton( this, STC_BUTTON_STYLE ),
-    maMathText( this, WB_WORDBREAK | WB_VCENTER ),
     maMathButton( this, STC_BUTTON_STYLE ),
-    maTemplateText( this, WB_WORDBREAK | WB_VCENTER ),
     maTemplateButton( this, STC_BUTTON_STYLE ),
     maToolbox( this, WB_DIALOGCONTROL ),
     maWelcomeString( FwkResId( STR_BACKING_WELCOME ) ),
@@ -324,22 +316,6 @@ void BackingWindow::initBackground()
     maWelcome.SetBackground();
     maProduct.SetControlForeground( maWelcomeTextColor );
     maProduct.SetBackground();
-    maWriterText.SetControlForeground( maLabelTextColor );
-    maWriterText.SetControlBackground( aTextBGColor );
-    maCalcText.SetControlForeground( maLabelTextColor );
-    maCalcText.SetControlBackground( aTextBGColor );
-    maImpressText.SetControlForeground( maLabelTextColor );
-    maImpressText.SetControlBackground( aTextBGColor );
-    maDrawText.SetControlForeground( maLabelTextColor );
-    maDrawText.SetControlBackground( aTextBGColor );
-    maDBText.SetControlForeground( maLabelTextColor );
-    maDBText.SetControlBackground( aTextBGColor );
-    maMathText.SetControlForeground( maLabelTextColor );
-    maMathText.SetControlBackground( aTextBGColor );
-    maTemplateText.SetControlForeground( maLabelTextColor );
-    maTemplateText.SetControlBackground( aTextBGColor );
-    maOpenText.SetControlForeground( maLabelTextColor );
-    maOpenText.SetControlBackground( aTextBGColor );
 
     if( mnLayoutStyle == 1 )
     {
@@ -456,35 +432,35 @@ void BackingWindow::initControls()
     }
 
     // layout the buttons
-    layoutButtonAndText( WRITER_URL, 0, aFileNewAppsAvailable,
-                         aModuleOptions, SvtModuleOptions::E_SWRITER,
-                         maWriterButton, maWriterText, aMnemns );
-    layoutButtonAndText( DRAW_URL, 1, aFileNewAppsAvailable,
-                         aModuleOptions, SvtModuleOptions::E_SDRAW,
-                         maDrawButton, maDrawText, aMnemns );
+    layoutButton( WRITER_URL, 0, aFileNewAppsAvailable,
+                  aModuleOptions, SvtModuleOptions::E_SWRITER,
+                  maWriterButton, aMnemns );
+    layoutButton( DRAW_URL, 1, aFileNewAppsAvailable,
+                  aModuleOptions, SvtModuleOptions::E_SDRAW,
+                  maDrawButton, aMnemns );
     nYPos += maButtonImageSize.Height() + 10;
-    layoutButtonAndText( CALC_URL, 0, aFileNewAppsAvailable,
-                         aModuleOptions, SvtModuleOptions::E_SCALC,
-                         maCalcButton, maCalcText, aMnemns );
-    layoutButtonAndText( BASE_URL, 1, aFileNewAppsAvailable,
-                         aModuleOptions, SvtModuleOptions::E_SDATABASE,
-                         maDBButton, maDBText, aMnemns );
+    layoutButton( CALC_URL, 0, aFileNewAppsAvailable,
+                  aModuleOptions, SvtModuleOptions::E_SCALC,
+                  maCalcButton, aMnemns );
+    layoutButton( BASE_URL, 1, aFileNewAppsAvailable,
+                  aModuleOptions, SvtModuleOptions::E_SDATABASE,
+                  maDBButton, aMnemns );
     nYPos += maButtonImageSize.Height() + 10;
-    layoutButtonAndText( IMPRESS_WIZARD_URL, 0, aFileNewAppsAvailable,
-                         aModuleOptions, SvtModuleOptions::E_SIMPRESS,
-                         maImpressButton, maImpressText, aMnemns );
-    layoutButtonAndText( MATH_URL, 1, aFileNewAppsAvailable,
-                         aModuleOptions, SvtModuleOptions::E_SMATH,
-                         maMathButton, maMathText, aMnemns );
+    layoutButton( IMPRESS_WIZARD_URL, 0, aFileNewAppsAvailable,
+                  aModuleOptions, SvtModuleOptions::E_SIMPRESS,
+                  maImpressButton, aMnemns );
+    layoutButton( MATH_URL, 1, aFileNewAppsAvailable,
+                  aModuleOptions, SvtModuleOptions::E_SMATH,
+                  maMathButton, aMnemns );
 
     nYPos += 3*maButtonImageSize.Height() / 2;
 
-    layoutButtonAndText( NULL, 0, aFileNewAppsAvailable,
-                         aModuleOptions, SvtModuleOptions::E_SWRITER,
-                         maOpenButton, maOpenText, aMnemns, maOpenString );
-    layoutButtonAndText( NULL, 1, aFileNewAppsAvailable,
-                         aModuleOptions, SvtModuleOptions::E_SWRITER,
-                         maTemplateButton, maTemplateText, aMnemns, maTemplateString );
+    layoutButton( NULL, 0, aFileNewAppsAvailable,
+                  aModuleOptions, SvtModuleOptions::E_SWRITER,
+                  maOpenButton, aMnemns, maOpenString );
+    layoutButton( NULL, 1, aFileNewAppsAvailable,
+                  aModuleOptions, SvtModuleOptions::E_SWRITER,
+                  maTemplateButton, aMnemns, maTemplateString );
     nYPos += 10;
 
     DBG_ASSERT( nYPos < maControlRect.GetHeight(), "misformatting !" );
@@ -532,6 +508,8 @@ void BackingWindow::initControls()
         maBackgroundMiddle = BitmapEx();
 
     Resize();
+
+    maWriterButton.GrabFocus();
 }
 
 void BackingWindow::loadImage( const ResId& i_rId, ImageButton& i_rButton )
@@ -545,11 +523,11 @@ void BackingWindow::loadImage( const ResId& i_rId, ImageButton& i_rButton )
     i_rButton.SetModeImage( aBmp );
 }
 
-void BackingWindow::layoutButtonAndText(
+void BackingWindow::layoutButton(
                           const char* i_pURL, int nColumn,
                           const std::set<rtl::OUString>& i_rURLS,
                           SvtModuleOptions& i_rOpt, SvtModuleOptions::EModule i_eMod,
-                          ImageButton& i_rBtn, FixedText& i_rText,
+                          ImageButton& i_rBtn,
                           MnemonicGenerator& i_rMnemns,
                           const String& i_rStr
                           )
@@ -582,12 +560,6 @@ void BackingWindow::layoutButtonAndText(
     i_rBtn.SetImageAlign( IMAGEALIGN_LEFT );
     // show the controls
     i_rBtn.Show();
-    i_rText.Show( FALSE );
-
-
-    // FIXME: the only reason the FixedTexts are left are not to trigger
-    // a translation change due to changed src files. For the next minor
-    // the FixedTexts should be removed completely
 }
 
 void BackingWindow::Paint( const Rectangle& )
@@ -635,8 +607,73 @@ long BackingWindow::Notify( NotifyEvent& rNEvt )
         }
 
         const KeyEvent* pEvt = rNEvt.GetKeyEvent();
-        if( pEvt && mpAccExec->execute(pEvt->GetKeyCode()) )
+        const KeyCode& rKeyCode(pEvt->GetKeyCode());
+        if( pEvt && mpAccExec->execute(rKeyCode) )
             return 1;
+        // #i110344# extrawurst: specialized arrow key control
+        if( rKeyCode.GetModifier() == 0 )
+        {
+            if( rKeyCode.GetCode() == KEY_RIGHT )
+            {
+                if( maWriterButton.HasFocus() )
+                    maDrawButton.GrabFocus();
+                else if( maCalcButton.HasFocus() )
+                    maDBButton.GrabFocus();
+                else if( maImpressButton.HasFocus() )
+                    maMathButton.GrabFocus();
+                else if( maOpenButton.HasFocus() )
+                    maTemplateButton.GrabFocus();
+                return 1;
+            }
+            else if( rKeyCode.GetCode() == KEY_LEFT )
+            {
+                if( maDrawButton.HasFocus() )
+                    maWriterButton.GrabFocus();
+                else if( maDBButton.HasFocus() )
+                    maCalcButton.GrabFocus();
+                else if( maMathButton.HasFocus() )
+                    maImpressButton.GrabFocus();
+                else if( maTemplateButton.HasFocus() )
+                    maOpenButton.GrabFocus();
+                return 1;
+            }
+            else if( rKeyCode.GetCode() == KEY_UP )
+            {
+                // first column
+                if( maOpenButton.HasFocus() )
+                    maImpressButton.GrabFocus();
+                else if( maImpressButton.HasFocus() )
+                    maCalcButton.GrabFocus();
+                else if( maCalcButton.HasFocus() )
+                    maWriterButton.GrabFocus();
+                // second column
+                else if( maTemplateButton.HasFocus() )
+                    maMathButton.GrabFocus();
+                else if( maMathButton.HasFocus() )
+                    maDBButton.GrabFocus();
+                else if( maDBButton.HasFocus() )
+                    maDrawButton.GrabFocus();
+                return 1;
+            }
+            else if( rKeyCode.GetCode() == KEY_DOWN )
+            {
+                // first column
+                if( maWriterButton.HasFocus() )
+                    maCalcButton.GrabFocus();
+                else if( maCalcButton.HasFocus() )
+                    maImpressButton.GrabFocus();
+                else if( maImpressButton.HasFocus() )
+                    maOpenButton.GrabFocus();
+                // second column
+                else if( maDrawButton.HasFocus() )
+                    maDBButton.GrabFocus();
+                else if( maDBButton.HasFocus() )
+                    maMathButton.GrabFocus();
+                else if( maMathButton.HasFocus() )
+                    maTemplateButton.GrabFocus();
+                return 1;
+            }
+        }
     }
     return Window::Notify( rNEvt );
 }
@@ -863,54 +900,6 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
         dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(TEMPLATE_URL) ), rtl::OUString(), xFrame, aArgs );
     }
     return 0;
-}
-
-Window* BackingWindow::GetParentLabelFor( const Window* pLabel ) const
-{
-    const Window* pRet = NULL;
-
-    if( pLabel == &maWriterText )
-        pRet = &maWriterButton;
-    else if( pLabel == &maCalcText )
-        pRet = &maCalcButton;
-    else if( pLabel == &maImpressText )
-        pRet = &maImpressButton;
-    else if( pLabel == &maDrawText )
-        pRet = &maDrawButton;
-    else if( pLabel == &maDBText )
-        pRet = &maDBButton;
-    else if( pLabel == &maMathText )
-        pRet = &maMathButton;
-    else if( pLabel == &maTemplateText )
-        pRet = &maTemplateButton;
-    else if( pLabel == &maOpenText )
-        pRet = &maOpenButton;
-
-    return const_cast<Window*>(pRet);
-}
-
-Window* BackingWindow::GetParentLabeledBy( const Window* pLabeled ) const
-{
-    const Window *pRet = NULL;
-
-    if( pLabeled == &maWriterButton )
-        pRet = &maWriterText;
-    else if( pLabeled == &maCalcButton )
-        pRet = &maCalcText;
-    else if( pLabeled == &maImpressButton )
-        pRet = &maImpressText;
-    else if( pLabeled == &maDrawButton )
-        pRet = &maDrawText;
-    else if( pLabeled == &maDBButton )
-        pRet = &maDBText;
-    else if( pLabeled == &maMathButton )
-        pRet = &maMathText;
-    else if( pLabeled == &maTemplateButton )
-        pRet = &maTemplateText;
-    else if( pLabeled == &maOpenButton )
-        pRet = &maOpenText;
-
-    return const_cast<Window*>(pRet);
 }
 
 struct ImplDelayedDispatch

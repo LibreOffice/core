@@ -30,6 +30,7 @@
 
 #include <stdlib.h>
 #include <rtl/math.hxx>
+#include <basic/sbuno.hxx>
 #include "runtime.hxx"
 #include "sbintern.hxx"
 #include "iosys.hxx"
@@ -229,8 +230,6 @@ void SbiRuntime::StepRETURN( UINT32 nOp1 )
 }
 
 // FOR-Variable testen (+Endlabel)
-
-void unoToSbxValue( SbxVariable* pVar, const Any& aValue );
 
 void SbiRuntime::StepTESTFOR( UINT32 nOp1 )
 {
