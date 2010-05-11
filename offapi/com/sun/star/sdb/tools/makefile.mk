@@ -44,7 +44,13 @@ IDLFILES=\
     XConnectionTools.idl \
     XDataSourceMetaData.idl \
     XObjectNames.idl \
-    XTableName.idl
+    XTableName.idl \
+    XTableRename.idl \
+    XViewAccess.idl \
+    XTableAlteration.idl \
+    XKeyAlteration.idl \
+    XIndexAlteration.idl \
+    XConnectionSupplier.idl
 
 # ------------------------------------------------------------------
 .INCLUDE :  target.mk
