@@ -370,6 +370,7 @@ TextOverlap
 TextRightDistance
 TextRotation
 TextUpperDistance
+TextVerticalAdjust
 TextWordWrap
 TextWritingMode
 Toggle

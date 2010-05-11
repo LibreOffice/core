@@ -75,7 +75,7 @@ Reference< XFastContextHandler > ShapeGroupContext::createFastChildContext( sal_
         break;
     case XML_ph:
         mpGroupShapePtr->setSubType( xAttribs->getOptionalValueToken( XML_type, FastToken::DONTKNOW ) );
-        mpGroupShapePtr->setIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
+        mpGroupShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
         break;
     // nvSpPr CT_ShapeNonVisual end
 
@@ -103,7 +103,7 @@ Reference< XFastContextHandler > ShapeGroupContext::createFastChildContext( sal_
         xRet.set( new GraphicShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) ) ) );
         break;
     case XML_graphicFrame:  // CT_GraphicalObjectFrame
-        xRet.set( new GraphicalObjectFrameContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.OLE2Shape" ) ) ) );
+        xRet.set( new GraphicalObjectFrameContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.OLE2Shape" ) ), true ) );
         break;
     }
     if( !xRet.is() )
