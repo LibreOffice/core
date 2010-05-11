@@ -163,6 +163,7 @@ public class LinuxInstaller extends Installer {
 
             File completePackage = new File(packagePath, packageName);
             packageName = completePackage.getPath();
+            packageName = "\"" + packageName + "\""; // Quoting is necessary, if the path the the packages contains white spaces.
 
             if ( completePackage.exists() ) {
                 String relocations = helper.getRelocationString(packageData, packageName);
