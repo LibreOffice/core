@@ -69,7 +69,7 @@ SHL1LINKFLAGS+=$(KDE_LIBS) -lkio
 SHL1STDLIBS=    \
         $(CPPUHELPERLIB) \
         $(CPPULIB) \
-        $(SALLIB) \
+        $(SALLIB)
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)

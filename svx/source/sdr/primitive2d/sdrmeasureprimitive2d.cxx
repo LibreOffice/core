@@ -35,8 +35,8 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
-#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -56,36 +56,44 @@ namespace drawinglayer
             bool bLeftActive,
             bool bRightActive) const
         {
-            const attribute::SdrLineStartEndAttribute* pLineStartEnd = getSdrLSTAttribute().getLineStartEnd();
+            const attribute::SdrLineStartEndAttribute& rLineStartEnd = getSdrLSTAttribute().getLineStartEnd();
             basegfx::B2DPolygon aPolygon;
 
             aPolygon.append(rStart);
             aPolygon.append(rEnd);
 
-            if(!pLineStartEnd || (!bLeftActive && !bRightActive))
+            if(rLineStartEnd.isDefault() || (!bLeftActive && !bRightActive))
             {
-                return createPolygonLinePrimitive(aPolygon, rObjectMatrix, rLineAttribute, 0);
+                return createPolygonLinePrimitive(
+                    aPolygon,
+                    rObjectMatrix,
+                    rLineAttribute,
+                    attribute::SdrLineStartEndAttribute());
             }
 
             if(bLeftActive && bRightActive)
             {
-                return createPolygonLinePrimitive(aPolygon, rObjectMatrix, rLineAttribute, pLineStartEnd);
+                return createPolygonLinePrimitive(
+                    aPolygon,
+                    rObjectMatrix,
+                    rLineAttribute,
+                    rLineStartEnd);
             }
 
             const basegfx::B2DPolyPolygon aEmpty;
             const attribute::SdrLineStartEndAttribute aLineStartEnd(
-                bLeftActive ? pLineStartEnd->getStartPolyPolygon() : aEmpty, bRightActive ? pLineStartEnd->getEndPolyPolygon() : aEmpty,
-                bLeftActive ? pLineStartEnd->getStartWidth() : 0.0, bRightActive ? pLineStartEnd->getEndWidth() : 0.0,
-                bLeftActive ? pLineStartEnd->isStartActive() : false, bRightActive ? pLineStartEnd->isEndActive() : false,
-                bLeftActive ? pLineStartEnd->isStartCentered() : false, bRightActive? pLineStartEnd->isEndCentered() : false);
+                bLeftActive ? rLineStartEnd.getStartPolyPolygon() : aEmpty, bRightActive ? rLineStartEnd.getEndPolyPolygon() : aEmpty,
+                bLeftActive ? rLineStartEnd.getStartWidth() : 0.0, bRightActive ? rLineStartEnd.getEndWidth() : 0.0,
+                bLeftActive ? rLineStartEnd.isStartActive() : false, bRightActive ? rLineStartEnd.isEndActive() : false,
+                bLeftActive ? rLineStartEnd.isStartCentered() : false, bRightActive? rLineStartEnd.isEndCentered() : false);
 
-            return createPolygonLinePrimitive(aPolygon, rObjectMatrix, rLineAttribute, &aLineStartEnd);
+            return createPolygonLinePrimitive(aPolygon, rObjectMatrix, rLineAttribute, aLineStartEnd);
         }
 
         Primitive2DSequence SdrMeasurePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
-            SdrBlockTextPrimitive2D* pBlockText = 0L;
+            SdrBlockTextPrimitive2D* pBlockText = 0;
             basegfx::B2DRange aTextRange;
             double fTextX((getStart().getX() + getEnd().getX()) * 0.5);
             double fTextY((getStart().getX() + getEnd().getX()) * 0.5);
@@ -93,11 +101,13 @@ namespace drawinglayer
             const double fDistance(aLine.getLength());
             const double fAngle(atan2(aLine.getY(), aLine.getX()));
             bool bAutoUpsideDown(false);
-            const attribute::SdrTextAttribute* pTextAttribute = getSdrLSTAttribute().getText();
+            const attribute::SdrTextAttribute rTextAttribute = getSdrLSTAttribute().getText();
             const basegfx::B2DHomMatrix aObjectMatrix(
                 basegfx::tools::createShearXRotateTranslateB2DHomMatrix(0.0, fAngle, getStart()));
 
-            if(pTextAttribute)
+            // preapare text, but do not add yet; it needs to be aligned to
+            // the line geometry
+            if(!rTextAttribute.isDefault())
             {
                 basegfx::B2DHomMatrix aTextMatrix;
                 double fTestAngle(fAngle);
@@ -123,58 +133,52 @@ namespace drawinglayer
 
                 // create primitive and get text range
                 pBlockText = new SdrBlockTextPrimitive2D(
-                    &pTextAttribute->getSdrText(),
-                    pTextAttribute->getOutlinerParaObject(),
+                    &rTextAttribute.getSdrText(),
+                    rTextAttribute.getOutlinerParaObject(),
                     aTextMatrix,
                     SDRTEXTHORZADJUST_CENTER,
                     SDRTEXTVERTADJUST_CENTER,
-                    pTextAttribute->isScroll(),
+                    rTextAttribute.isScroll(),
                     false,
                     false,
                     false,
                     false);
+
                 aTextRange = pBlockText->getB2DRange(aViewInformation);
             }
 
             // prepare line attribute and result
-            const attribute::SdrLineAttribute* pLineAttribute(getSdrLSTAttribute().getLine());
-
-            if(!pLineAttribute)
             {
-                // if initially no line is defined, create one for HitTest and BoundRect
-                pLineAttribute = new attribute::SdrLineAttribute(basegfx::BColor(0.0, 0.0, 0.0));
-            }
-
-            {
+                const attribute::SdrLineAttribute rLineAttribute(getSdrLSTAttribute().getLine());
                 bool bArrowsOutside(false);
                 bool bMainLineSplitted(false);
-                const attribute::SdrLineStartEndAttribute* pLineStartEnd = getSdrLSTAttribute().getLineStartEnd();
+                const attribute::SdrLineStartEndAttribute& rLineStartEnd = getSdrLSTAttribute().getLineStartEnd();
                 double fStartArrowW(0.0);
                 double fStartArrowH(0.0);
                 double fEndArrowW(0.0);
                 double fEndArrowH(0.0);
 
-                if(pLineStartEnd)
+                if(!rLineStartEnd.isDefault())
                 {
-                    if(pLineStartEnd->isStartActive())
+                    if(rLineStartEnd.isStartActive())
                     {
-                        const basegfx::B2DRange aArrowRange(basegfx::tools::getRange(pLineStartEnd->getStartPolyPolygon()));
-                        fStartArrowW = pLineStartEnd->getStartWidth();
+                        const basegfx::B2DRange aArrowRange(basegfx::tools::getRange(rLineStartEnd.getStartPolyPolygon()));
+                        fStartArrowW = rLineStartEnd.getStartWidth();
                         fStartArrowH = aArrowRange.getHeight() * fStartArrowW / aArrowRange.getWidth();
 
-                        if(pLineStartEnd->isStartCentered())
+                        if(rLineStartEnd.isStartCentered())
                         {
                             fStartArrowH *= 0.5;
                         }
                     }
 
-                    if(pLineStartEnd->isEndActive())
+                    if(rLineStartEnd.isEndActive())
                     {
-                        const basegfx::B2DRange aArrowRange(basegfx::tools::getRange(pLineStartEnd->getEndPolyPolygon()));
-                        fEndArrowW = pLineStartEnd->getEndWidth();
+                        const basegfx::B2DRange aArrowRange(basegfx::tools::getRange(rLineStartEnd.getEndPolyPolygon()));
+                        fEndArrowW = rLineStartEnd.getEndWidth();
                         fEndArrowH = aArrowRange.getHeight() * fEndArrowW / aArrowRange.getWidth();
 
-                        if(pLineStartEnd->isEndCentered())
+                        if(rLineStartEnd.isEndCentered())
                         {
                             fEndArrowH *= 0.5;
                         }
@@ -183,7 +187,7 @@ namespace drawinglayer
 
                 const double fSpaceNeededByArrows(fStartArrowH + fEndArrowH + ((fStartArrowW + fEndArrowW) * 0.5));
                 const double fArrowsOutsideLen((fStartArrowH + fEndArrowH + fStartArrowW + fEndArrowW) * 0.5);
-                const double fHalfLineWidth(pLineAttribute->getWidth() * 0.5);
+                const double fHalfLineWidth(rLineAttribute.getWidth() * 0.5);
 
                 if(fSpaceNeededByArrows > fDistance)
                 {
@@ -275,12 +279,12 @@ namespace drawinglayer
                     const basegfx::B2DPoint aMainLeftLeft(aMainLeft.getX() - fLenLeft, aMainLeft.getY());
                     const basegfx::B2DPoint aMainRightRight(aMainRight.getX() + fLenRight, aMainRight.getY());
 
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(*pLineAttribute, aObjectMatrix, aMainLeftLeft, aMainLeft, false, true));
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(*pLineAttribute, aObjectMatrix, aMainRight, aMainRightRight, true, false));
+                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(rLineAttribute, aObjectMatrix, aMainLeftLeft, aMainLeft, false, true));
+                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(rLineAttribute, aObjectMatrix, aMainRight, aMainRightRight, true, false));
 
                     if(!bMainLineSplitted || MEASURETEXTPOSITION_CENTERED != eHorizontal)
                     {
-                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(* pLineAttribute, aObjectMatrix, aMainLeft, aMainRight, false, false));
+                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(rLineAttribute, aObjectMatrix, aMainLeft, aMainRight, false, false));
                     }
                 }
                 else
@@ -291,12 +295,12 @@ namespace drawinglayer
                         const basegfx::B2DPoint aMainInnerLeft(aMainLeft.getX() + fHalfLength, aMainLeft.getY());
                         const basegfx::B2DPoint aMainInnerRight(aMainRight.getX() - fHalfLength, aMainRight.getY());
 
-                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(*pLineAttribute, aObjectMatrix, aMainLeft, aMainInnerLeft, true, false));
-                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(*pLineAttribute, aObjectMatrix, aMainInnerRight, aMainRight, false, true));
+                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(rLineAttribute, aObjectMatrix, aMainLeft, aMainInnerLeft, true, false));
+                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(rLineAttribute, aObjectMatrix, aMainInnerRight, aMainRight, false, true));
                     }
                     else
                     {
-                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(*pLineAttribute, aObjectMatrix, aMainLeft, aMainRight, true, true));
+                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(rLineAttribute, aObjectMatrix, aMainLeft, aMainRight, true, true));
                     }
                 }
 
@@ -309,13 +313,13 @@ namespace drawinglayer
                 const basegfx::B2DPoint aLeftUp(0.0, fTopEdge);
                 const basegfx::B2DPoint aLeftDown(0.0, fBottomLeft);
 
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(*pLineAttribute, aObjectMatrix, aLeftDown, aLeftUp, false, false));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(rLineAttribute, aObjectMatrix, aLeftDown, aLeftUp, false, false));
 
                 // right help line
                 const basegfx::B2DPoint aRightUp(fDistance, fTopEdge);
                 const basegfx::B2DPoint aRightDown(fDistance, fBottomRight);
 
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(*pLineAttribute, aObjectMatrix, aRightDown, aRightUp, false, false));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(rLineAttribute, aObjectMatrix, aRightDown, aRightUp, false, false));
 
                 // text horizontal position
                 if(MEASURETEXTPOSITION_NEGATIVE == eHorizontal)
@@ -329,9 +333,9 @@ namespace drawinglayer
                         fTextX -= (fArrowsOutsideLen - fStartArrowH);
                     }
 
-                    if(pTextAttribute)
+                    if(!rTextAttribute.isDefault())
                     {
-                        fTextX -= pTextAttribute->getTextRightDistance();
+                        fTextX -= rTextAttribute.getTextRightDistance();
                     }
                 }
                 else if(MEASURETEXTPOSITION_POSITIVE == eHorizontal)
@@ -345,9 +349,9 @@ namespace drawinglayer
                         fTextX += (fArrowsOutsideLen - fEndArrowH);
                     }
 
-                    if(pTextAttribute)
+                    if(!rTextAttribute.isDefault())
                     {
-                        fTextX += pTextAttribute->getTextLeftDistance();
+                        fTextX += rTextAttribute.getTextLeftDistance();
                     }
                 }
                 else // MEASURETEXTPOSITION_CENTERED
@@ -355,9 +359,9 @@ namespace drawinglayer
                     // centered
                     fTextX = aMainLeft.getX() + ((fDistance - aTextRange.getWidth()) * 0.5);
 
-                    if(pTextAttribute)
+                    if(!rTextAttribute.isDefault())
                     {
-                        fTextX += (pTextAttribute->getTextLeftDistance() - pTextAttribute->getTextRightDistance()) / 2L;
+                        fTextX += (rTextAttribute.getTextLeftDistance() - rTextAttribute.getTextRightDistance()) / 2L;
                     }
                 }
 
@@ -368,9 +372,9 @@ namespace drawinglayer
                     const double fSmall(fArrowsOutsideLen * 0.10);
                     fTextY = aMainLeft.getY() - (aTextRange.getHeight() + fSmall + fHalfLineWidth);
 
-                    if(pTextAttribute)
+                    if(!rTextAttribute.isDefault())
                     {
-                        fTextY -= pTextAttribute->getTextLowerDistance();
+                        fTextY -= rTextAttribute.getTextLowerDistance();
                     }
                 }
                 else if(MEASURETEXTPOSITION_POSITIVE == eVertical)
@@ -379,9 +383,9 @@ namespace drawinglayer
                     const double fSmall(fArrowsOutsideLen * 0.10);
                     fTextY = aMainLeft.getY() + (fSmall + fHalfLineWidth);
 
-                    if(pTextAttribute)
+                    if(!rTextAttribute.isDefault())
                     {
-                        fTextY += pTextAttribute->getTextUpperDistance();
+                        fTextY += rTextAttribute.getTextUpperDistance();
                     }
                 }
                 else // MEASURETEXTPOSITION_CENTERED
@@ -389,21 +393,19 @@ namespace drawinglayer
                     // centered
                     fTextY = aMainLeft.getY() - (aTextRange.getHeight() * 0.5);
 
-                    if(pTextAttribute)
+                    if(!rTextAttribute.isDefault())
                     {
-                        fTextY += (pTextAttribute->getTextUpperDistance() - pTextAttribute->getTextLowerDistance()) / 2L;
+                        fTextY += (rTextAttribute.getTextUpperDistance() - rTextAttribute.getTextLowerDistance()) / 2L;
                     }
                 }
             }
 
-            if(!getSdrLSTAttribute().getLine())
+            if(getSdrLSTAttribute().getLine().isDefault())
             {
-                // embed line geometry to invisible line group
-                const Primitive2DReference xHiddenLines(new HitTestPrimitive2D(aRetval));
-                aRetval = Primitive2DSequence(&xHiddenLines, 1);
+                // embed line geometry to invisible (100% transparent) line group for HitTest
+                const Primitive2DReference xHiddenLines(new HiddenGeometryPrimitive2D(aRetval));
 
-                // delete temporary LineAttribute again
-                delete pLineAttribute;
+                aRetval = Primitive2DSequence(&xHiddenLines, 1);
             }
 
             if(pBlockText)
@@ -433,9 +435,11 @@ namespace drawinglayer
             }
 
             // add shadow
-            if(getSdrLSTAttribute().getShadow())
+            if(!getSdrLSTAttribute().getShadow().isDefault())
             {
-                aRetval = createEmbeddedShadowPrimitive(aRetval, *getSdrLSTAttribute().getShadow());
+                aRetval = createEmbeddedShadowPrimitive(
+                    aRetval,
+                    getSdrLSTAttribute().getShadow());
             }
 
             return aRetval;
