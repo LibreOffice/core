@@ -2316,7 +2316,7 @@ sub prepare_incompatible_build {
     @modules_built = keys %$deps_hash;
     %add_to_config = %$deps_hash;
     if ($prepare) {
-        if ((!defined $ENV{UPDATER}) || (defined $ENV{CWS_WORK_STAMP})) {
+        if ((!(defined $ENV{UPDATER} && (!defined $ENV{CWS_WORK_STAMP}))) || (defined $ENV{CWS_WORK_STAMP})) {
             $source_config->add_active_modules([keys %add_to_config], 0);
         }
         clear_delivered();
