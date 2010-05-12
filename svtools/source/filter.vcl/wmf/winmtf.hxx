@@ -314,6 +314,7 @@ class WinMtfClipPath
 {
         PolyPolygon         aPolyPoly;
         WinMtfClipPathType  eType;
+        sal_Int32           nDepth;
 
         void        ImpUpdateType();
 
