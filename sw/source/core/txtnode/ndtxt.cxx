@@ -4386,6 +4386,10 @@ namespace {
                 if ( pNumRuleItem.GetValue().Len() > 0 )
                 {
                     mbAddTxtNodeToList = true;
+                    // --> OD 2010-05-12 #i105562#
+                    //
+                    mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
+                    // <--
                 }
             }
             break;
@@ -4397,10 +4401,6 @@ namespace {
                                         dynamic_cast<const SfxStringItem&>(pItem);
                 ASSERT( pListIdItem.GetValue().Len() > 0,
                         "<HandleSetAttrAtTxtNode(..)> - empty list id attribute not excepted. Serious defect -> please inform OD." );
-//                const SfxStringItem& rListIdItemOfTxtNode =
-//                                    dynamic_cast<const SfxStringItem&>(
-//                                        rTxtNode.GetAttr( RES_PARATR_LIST_ID ));
-//                if ( pListIdItem.GetValue() != rListIdItemOfTxtNode.GetValue() )
                 const String sListIdOfTxtNode = rTxtNode.GetListId();
                 if ( pListIdItem.GetValue() != sListIdOfTxtNode )
                 {
@@ -4514,11 +4514,6 @@ namespace {
         {
             const SfxStringItem* pListIdItem =
                                     dynamic_cast<const SfxStringItem*>(pItem);
-//            const SfxStringItem& rListIdItemOfTxtNode =
-//                                    dynamic_cast<const SfxStringItem&>(
-//                                        mrTxtNode.GetAttr( RES_PARATR_LIST_ID ));
-//            if ( pListIdItem &&
-//                 pListIdItem->GetValue() != rListIdItemOfTxtNode.GetValue() )
             const String sListIdOfTxtNode = mrTxtNode.GetListId();
             if ( pListIdItem &&
                  pListIdItem->GetValue() != sListIdOfTxtNode )
@@ -4923,7 +4918,9 @@ namespace {
                 mrTxtNode.AddToList();
             }
             // --> OD 2008-11-19 #i70748#
-            else if ( dynamic_cast<const SfxUInt16Item &>(mrTxtNode.GetAttr( RES_PARATR_OUTLINELEVEL, FALSE )).GetValue() > 0 )
+            // --> OD 2010-05-12 #i105562#
+            else if ( mrTxtNode.GetpSwAttrSet() &&
+                      dynamic_cast<const SfxUInt16Item &>(mrTxtNode.GetAttr( RES_PARATR_OUTLINELEVEL, FALSE )).GetValue() > 0 )
             {
                 mrTxtNode.SetEmptyListStyleDueToSetOutlineLevelAttr();
             }
