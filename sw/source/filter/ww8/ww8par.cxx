@@ -1387,14 +1387,19 @@ void SwWW8ImplReader::ImportDop()
             uno::Reference<beans::XPropertySetInfo> xInfo =
                 xDocProps->getPropertySetInfo();
             sal_Bool bValue = false;
-            if (xInfo.is() &&
-                xInfo->hasPropertyByName(C2U("ApplyFormDesignMode")))
+            if (xInfo.is())
             {
-                xDocProps->setPropertyValue(C2U("ApplyFormDesignMode"),
-                    cppu::bool2any(bValue));
+                if (xInfo->hasPropertyByName(C2U("ApplyFormDesignMode")))
+                {
+                    xDocProps->setPropertyValue(C2U("ApplyFormDesignMode"),
+                                                cppu::bool2any(bValue));
+                }
             }
         }
     }
+
+    mpDocShell->SetModifyPasswordHash(pWDop->lKeyProtDoc);
+
     const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
     sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
     if (bUseEnhFields) {
