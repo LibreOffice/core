@@ -174,6 +174,7 @@ private:
     long        GetSignWidth();
     long        GetDotWidth();
     void        TextChanged();
+    long        ConvertWidthLogicToPixel( long nWidth ) const;
 };
 
 //==================================================================
@@ -571,7 +572,12 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
             return;
     }
 
-    if (pOutput->pFmtDevice->GetTextWidth(aString) > nWidth)
+    long nActualTextWidth = pOutput->pFmtDevice->GetTextWidth(aString);
+
+    if (bPixelToLogic)
+        nActualTextWidth = ConvertWidthLogicToPixel(nActualTextWidth);
+
+    if (nActualTextWidth > nWidth)
     {
         // Even after the decimal adjustment the text doesn't fit.  Give up.
         SetHashText();
@@ -623,6 +629,9 @@ long ScDrawStringsVars::GetMaxDigitWidth()
         long n = pOutput->pFmtDevice->GetTextWidth(String(cDigit));
         nMaxDigitWidth = ::std::max(nMaxDigitWidth, n);
     }
+
+    if (bPixelToLogic)
+        nMaxDigitWidth = ConvertWidthLogicToPixel(nMaxDigitWidth);
     return nMaxDigitWidth;
 }
 
@@ -632,6 +641,8 @@ long ScDrawStringsVars::GetSignWidth()
         return nSignWidth;
 
     nSignWidth = pOutput->pFmtDevice->GetTextWidth(String('-'));
+    if (bPixelToLogic)
+        nSignWidth = ConvertWidthLogicToPixel(nSignWidth);
     return nSignWidth;
 }
 
@@ -642,6 +653,8 @@ long ScDrawStringsVars::GetDotWidth()
 
     const ::rtl::OUString& sep = ScGlobal::GetpLocaleData()->getLocaleItem().decimalSeparator;
     nDotWidth = pOutput->pFmtDevice->GetTextWidth(sep);
+    if (bPixelToLogic)
+        nDotWidth = ConvertWidthLogicToPixel(nDotWidth);
     return nDotWidth;
 }
 
@@ -669,6 +682,13 @@ void ScDrawStringsVars::TextChanged()
     nOriginalWidth = aTextSize.Width();
     if ( bPixelToLogic )
         aTextSize = pRefDevice->LogicToPixel( aTextSize );
+}
+
+long ScDrawStringsVars::ConvertWidthLogicToPixel( long nWidth ) const
+{
+    Size aSize(nWidth, pOutput->pFmtDevice->GetTextHeight());
+    aSize = pOutput->pRefDevice->LogicToPixel(aSize);
+    return aSize.Width();
 }
 
 BOOL ScDrawStringsVars::HasEditCharacters() const
