@@ -1275,63 +1275,66 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
         data.implementationNames = implNames;
         data.singletons = singletons;
 
-        // factories live insertion:
-        const Reference<container::XSet> xSet(
-            that->getComponentContext()->getServiceManager(), UNO_QUERY_THROW );
-        for ( t_stringlist::const_iterator iPos( implNames.begin() );
-              iPos != implNames.end(); ++iPos )
+        if (!startup)
         {
-            checkAborted( abortChannel );
-            OUString const & implName = *iPos;
-            // activate factory:
-            const Reference<XInterface> xFactory(
-                xLoader->activate(
-                    implName, OUString(), url,
-                    xServicesRDB->getRootKey()->openKey(
-                        OUSTR("/IMPLEMENTATIONS/") + implName ) ) );
-            try {
-                xSet->insert( Any(xFactory) );
-            } // ignore if factory has already been inserted:
-            catch (container::ElementExistException &) {
-                OSL_ENSURE( 0, "### factory already registered?" );
-            }
-        }
-
-        if (! singletons.empty())
-        {
-            // singletons live insertion:
-            const Reference<container::XNameContainer> xRootContext(
-                that->getComponentContext()->getValueByName(
-                    OUSTR("_root") ), UNO_QUERY );
-            if (xRootContext.is())
+            // factories live insertion:
+            const Reference<container::XSet> xSet(
+                that->getComponentContext()->getServiceManager(), UNO_QUERY_THROW );
+            for ( t_stringlist::const_iterator iPos( implNames.begin() );
+                  iPos != implNames.end(); ++iPos )
             {
-                for ( t_stringpairvec::const_iterator iPos(
-                          singletons.begin() );
-                      iPos != singletons.end(); ++iPos )
+                checkAborted( abortChannel );
+                OUString const & implName = *iPos;
+                // activate factory:
+                const Reference<XInterface> xFactory(
+                    xLoader->activate(
+                        implName, OUString(), url,
+                        xServicesRDB->getRootKey()->openKey(
+                            OUSTR("/IMPLEMENTATIONS/") + implName ) ) );
+                try {
+                    xSet->insert( Any(xFactory) );
+                } // ignore if factory has already been inserted:
+                catch (container::ElementExistException &) {
+                    OSL_ENSURE( 0, "### factory already registered?" );
+                }
+            }
+
+            if (! singletons.empty())
+            {
+                // singletons live insertion:
+                const Reference<container::XNameContainer> xRootContext(
+                    that->getComponentContext()->getValueByName(
+                        OUSTR("_root") ), UNO_QUERY );
+                if (xRootContext.is())
                 {
-                    ::std::pair<OUString, OUString> const & sp = *iPos;
-                    const OUString name( OUSTR("/singletons/") + sp.first );
-                    // assure no arguments:
-                    try {
-                        xRootContext->removeByName( name + OUSTR("/arguments"));
-                    } catch (container::NoSuchElementException &) {}
-                    // used service:
-                    try {
-                        xRootContext->insertByName(
-                            name + OUSTR("/service"), Any(sp.second) );
-                    } catch (container::ElementExistException &) {
-                        xRootContext->replaceByName(
-                            name + OUSTR("/service"), Any(sp.second) );
-                    }
-                    // singleton entry:
-                    try {
-                        xRootContext->insertByName( name, Any() );
-                    } catch (container::ElementExistException & exc) {
-                        (void) exc; // avoid warnings
-                        OSL_ENSURE(
-                            0, OUStringToOString(
-                                exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
-                        xRootContext->replaceByName( name, Any() );
+                    for ( t_stringpairvec::const_iterator iPos(
+                              singletons.begin() );
+                          iPos != singletons.end(); ++iPos )
+                    {
+                        ::std::pair<OUString, OUString> const & sp = *iPos;
+                        const OUString name( OUSTR("/singletons/") + sp.first );
+                        // assure no arguments:
+                        try {
+                            xRootContext->removeByName( name + OUSTR("/arguments"));
+                        } catch (container::NoSuchElementException &) {}
+                        // used service:
+                        try {
+                            xRootContext->insertByName(
+                                name + OUSTR("/service"), Any(sp.second) );
+                        } catch (container::ElementExistException &) {
+                            xRootContext->replaceByName(
+                                name + OUSTR("/service"), Any(sp.second) );
+                        }
+                        // singleton entry:
+                        try {
+                            xRootContext->insertByName( name, Any() );
+                        } catch (container::ElementExistException & exc) {
+                            (void) exc; // avoid warnings
+                            OSL_ENSURE(
+                                0, OUStringToOString(
+                                    exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                            xRootContext->replaceByName( name, Any() );
+                        }
                     }
                 }
             }
@@ -1365,53 +1368,57 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
         {
             getComponentInfo( &implNames, &singletons, xContext );
         }
-        // factories live removal:
-        const Reference<container::XSet> xSet(
-            that->getComponentContext()->getServiceManager(), UNO_QUERY_THROW );
-        for ( t_stringlist::const_iterator iPos( implNames.begin() );
-              iPos != implNames.end(); ++iPos )
-        {
-            OUString const & implName = *iPos;
-            try {
-                xSet->remove( Any(implName) );
-            } // ignore if factory has not been live deployed:
-            catch (container::NoSuchElementException &) {
-            }
-        }
 
-        if (! singletons.empty())
+        if (!startup)
         {
-            // singletons live removal:
-            const Reference<container::XNameContainer> xRootContext(
-                that->getComponentContext()->getValueByName(
-                    OUSTR("_root") ), UNO_QUERY );
-            if (xRootContext.is())
+            // factories live removal:
+            const Reference<container::XSet> xSet(
+                that->getComponentContext()->getServiceManager(), UNO_QUERY_THROW );
+            for ( t_stringlist::const_iterator iPos( implNames.begin() );
+                  iPos != implNames.end(); ++iPos )
             {
-                for ( t_stringpairvec::const_iterator iPos(
-                          singletons.begin() );
-                      iPos != singletons.end(); ++iPos )
+                OUString const & implName = *iPos;
+                try {
+                    xSet->remove( Any(implName) );
+                } // ignore if factory has not been live deployed:
+                catch (container::NoSuchElementException &) {
+                }
+            }
+
+            if (! singletons.empty())
+            {
+                // singletons live removal:
+                const Reference<container::XNameContainer> xRootContext(
+                    that->getComponentContext()->getValueByName(
+                        OUSTR("_root") ), UNO_QUERY );
+                if (xRootContext.is())
                 {
-                    ::std::pair<OUString, OUString> const & sp = *iPos;
-                    const OUString name( OUSTR("/singletons/") + sp.first );
-                    // arguments:
-                    try {
-                        xRootContext->removeByName( name + OUSTR("/arguments"));
-                    }
-                    catch (container::NoSuchElementException &) {}
-                    // used service:
-                    try {
-                        xRootContext->removeByName( name + OUSTR("/service") );
-                    }
-                    catch (container::NoSuchElementException &) {}
-                    // singleton entry:
-                    try {
-                        xRootContext->removeByName( name );
-                    }
-                    catch (container::NoSuchElementException & exc) {
-                        (void) exc; // avoid warnings
-                        OSL_ENSURE(
-                            0, OUStringToOString(
-                                exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    for ( t_stringpairvec::const_iterator iPos(
+                              singletons.begin() );
+                          iPos != singletons.end(); ++iPos )
+                    {
+                        ::std::pair<OUString, OUString> const & sp = *iPos;
+                        const OUString name( OUSTR("/singletons/") + sp.first );
+                        // arguments:
+                        try {
+                            xRootContext->removeByName( name + OUSTR("/arguments"));
+                        }
+                        catch (container::NoSuchElementException &) {}
+                        // used service:
+                        try {
+                            xRootContext->removeByName( name + OUSTR("/service") );
+                        }
+                        catch (container::NoSuchElementException &) {}
+                        // singleton entry:
+                        try {
+                            xRootContext->removeByName( name );
+                        }
+                        catch (container::NoSuchElementException & exc) {
+                            (void) exc; // avoid warnings
+                            OSL_ENSURE(
+                                0, OUStringToOString(
+                                    exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        }
                     }
                 }
             }

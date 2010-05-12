@@ -42,9 +42,11 @@
 #include "osl/thread.hxx"
 #include "osl/mutex.hxx"
 #include "com/sun/star/ucb/CommandAbortedException.hpp"
+#include "com/sun/star/task/XInteractionHandler.hpp"
 #include "com/sun/star/bridge/UnoUrlResolver.hpp"
 #include "com/sun/star/bridge/XUnoUrlResolver.hpp"
 #include "com/sun/star/deployment/ExtensionManager.hpp"
+#include "com/sun/star/task/XRestartManager.hpp"
 #include "boost/scoped_array.hpp"
 #include "boost/shared_ptr.hpp"
 #include <comphelper/processfactory.hxx>
@@ -600,7 +602,8 @@ void syncRepositories(Reference<ucb::XCommandEnvironment> const & xCmdEnv)
     Reference<deployment::XExtensionManager> xExtensionManager;
     //synchronize shared before bundled otherewise there are
     //more revoke and registration calls.
-    OUString sShared(RTL_CONSTASCII_USTRINGPARAM("shared"));
+    bool bSynced = false;
+    const OUString sShared(RTL_CONSTASCII_USTRINGPARAM("shared"));
     if (needToSyncRepostitory(sShared))
     {
         xExtensionManager =
@@ -611,10 +614,11 @@ void syncRepositories(Reference<ucb::XCommandEnvironment> const & xCmdEnv)
         {
             xExtensionManager->synchronize(
                 sShared, Reference<task::XAbortChannel>(), xCmdEnv);
+            bSynced = true;
         }
     }
 
-    OUString sBundled(RTL_CONSTASCII_USTRINGPARAM("bundled"));
+    const OUString sBundled(RTL_CONSTASCII_USTRINGPARAM("bundled"));
     if (needToSyncRepostitory( sBundled))
     {
         if (!xExtensionManager.is())
@@ -627,8 +631,21 @@ void syncRepositories(Reference<ucb::XCommandEnvironment> const & xCmdEnv)
         {
             xExtensionManager->synchronize(
                 sBundled, Reference<task::XAbortChannel>(), xCmdEnv);
-
+            bSynced = true;
         }
+    }
+
+    if (bSynced)
+    {
+        Reference<task::XRestartManager> restarter(
+            comphelper_getProcessComponentContext()->getValueByName(
+                OUSTR( "/singletons/com.sun.star.task.OfficeRestartManager") ), UNO_QUERY );
+        if (restarter.is())
+        {
+            fprintf(stdout, "\nrestarting\n");
+            restarter->requestRestart(xCmdEnv.is() == sal_True ? xCmdEnv->getInteractionHandler() :
+                                      Reference<task::XInteractionHandler>());
+         }
     }
 }
 

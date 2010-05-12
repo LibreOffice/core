@@ -680,7 +680,7 @@ OUString replaceOrigin(
 void BackendImpl::PackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
     bool doRegisterPackage,
-    bool /*startup*/,
+    bool startup,
     ::rtl::Reference<AbortChannel> const &,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
@@ -702,7 +702,8 @@ void BackendImpl::PackageImpl::processPackage_(
         }
         //No need for live-deployment for bundled extension, because OOo
         //restarts after installation
-        if (that->m_eContext != CONTEXT_BUNDLED)
+        if (that->m_eContext != CONTEXT_BUNDLED
+            && !startup)
         {
             if (m_isSchema)
             {

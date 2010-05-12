@@ -331,7 +331,7 @@ BackendImpl::PackageImpl::isRegistered_(
 void BackendImpl::PackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
     bool doRegisterPackage,
-    bool /* startup */,
+    bool startup,
     ::rtl::Reference<AbortChannel> const &,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
@@ -382,7 +382,8 @@ void BackendImpl::PackageImpl::processPackage_(
 
         if (bRegistered)
         {
-            if (!isRemoved())
+            //we also prevent and live deployment at startup
+            if (!isRemoved() && !startup)
             {
                 if (bScript && xScriptLibs.is() && xScriptLibs->hasByName(m_name))
                 {
@@ -409,65 +410,69 @@ void BackendImpl::PackageImpl::processPackage_(
     bool bScriptSuccess = false;
     const bool bReadOnly = false;
 
-    //If there is a bundled extension, and the user installes the same extension
-    //then the script from the bundled extension must be removed. If this does not work
-    //then live deployment does not work for scripts.
-    if (bScript && xScriptLibs.is())
-    {
-        bool bCanAdd = true;
-        if (xScriptLibs->hasByName(m_name))
-        {
-            const OUString sOriginalUrl = xScriptLibs->getOriginalLibraryLinkURL(m_name);
-            //We assume here that library names in extensions are unique, which may not be the case
-            //ToDo: If the script exist in another extension, then both extensions must have the
-            //same id
-            if (sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE"))
-                || sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE"))
-                || sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$BUNDLED_EXTENSIONS")))
-            {
-                xScriptLibs->removeLibrary(m_name);
-                bCanAdd = true;
-            }
-            else
-            {
-                bCanAdd = false;
-            }
-        }
-
-        if (bCanAdd)
-        {
-            xScriptLibs->createLibraryLink( m_name, m_scriptURL, bReadOnly );
-            bScriptSuccess = xScriptLibs->hasByName( m_name );
-        }
-    }
-
     bool bDialogSuccess = false;
-    if (bDialog && xDialogLibs.is())
+    if (!startup)
     {
-        bool bCanAdd = true;
-        if (xDialogLibs->hasByName(m_dialogName))
+        //If there is a bundled extension, and the user installes the same extension
+        //then the script from the bundled extension must be removed. If this does not work
+        //then live deployment does not work for scripts.
+        if (bScript && xScriptLibs.is())
         {
-            const OUString sOriginalUrl = xDialogLibs->getOriginalLibraryLinkURL(m_dialogName);
-            //We assume here that library names in extensions are unique, which may not be the case
-            //ToDo: If the script exist in another extension, then both extensions must have the
-            //same id
-            if (sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE"))
-                || sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE"))
-                || sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$BUNDLED_EXTENSIONS")))
+            bool bCanAdd = true;
+            if (xScriptLibs->hasByName(m_name))
             {
-                xDialogLibs->removeLibrary(m_dialogName);
-                bCanAdd = true;
+                const OUString sOriginalUrl = xScriptLibs->getOriginalLibraryLinkURL(m_name);
+                //We assume here that library names in extensions are unique, which may not be the case
+                //ToDo: If the script exist in another extension, then both extensions must have the
+                //same id
+                if (sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE"))
+                    || sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE"))
+                    || sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$BUNDLED_EXTENSIONS")))
+                {
+                    xScriptLibs->removeLibrary(m_name);
+                    bCanAdd = true;
+                }
+                else
+                {
+                    bCanAdd = false;
+                }
             }
-            else
+
+            if (bCanAdd)
             {
-                bCanAdd = false;
+                xScriptLibs->createLibraryLink( m_name, m_scriptURL, bReadOnly );
+                bScriptSuccess = xScriptLibs->hasByName( m_name );
             }
         }
 
-        if (bCanAdd)
+
+        if (bDialog && xDialogLibs.is())
         {
-            xDialogLibs->createLibraryLink( m_dialogName, m_dialogURL, bReadOnly );
-            bDialogSuccess = xDialogLibs->hasByName(m_dialogName);
+            bool bCanAdd = true;
+            if (xDialogLibs->hasByName(m_dialogName))
+            {
+                const OUString sOriginalUrl = xDialogLibs->getOriginalLibraryLinkURL(m_dialogName);
+                //We assume here that library names in extensions are unique, which may not be the case
+                //ToDo: If the script exist in another extension, then both extensions must have the
+                //same id
+                if (sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE"))
+                    || sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE"))
+                    || sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$BUNDLED_EXTENSIONS")))
+                {
+                    xDialogLibs->removeLibrary(m_dialogName);
+                    bCanAdd = true;
+                }
+                else
+                {
+                    bCanAdd = false;
+                }
+            }
+
+            if (bCanAdd)
+            {
+                xDialogLibs->createLibraryLink( m_dialogName, m_dialogURL, bReadOnly );
+                bDialogSuccess = xDialogLibs->hasByName(m_dialogName);
+            }
         }
     }
     bool bSuccess = bScript || bDialog;     // Something must have happened
