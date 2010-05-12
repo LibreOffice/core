@@ -33,15 +33,17 @@
 
 sub main
 
-    use "framework\optional\includes\basic_vba-compat_import_nothing.inc"
-    use "framework\optional\includes\basic_vba-compat_import_disabled.inc"
-    use "framework\optional\includes\basic_vba-compat_import_enabled.inc"
+    'use "framework\optional\includes\basic_vba-compat_import_nothing.inc"
+    'use "framework\optional\includes\basic_vba-compat_import_disabled.inc"
+    'use "framework\optional\includes\basic_vba-compat_import_enabled.inc"
+    use "framework\optional\includes\basic_vba-compat_thisworkbook.inc"
     
-    call hStatusIn( "framework" , "f_basic_vba-compat.bas" )
-    call tBasicVBACompatImportNothing()
-    call tBasicVBACompatImportDisabled()
-    call tBasicVBACompatImportEnabled()
-    call hStatusOut()
+    'call hStatusIn( "framework" , "f_basic_vba-compat.bas" )
+    'call tBasicVBACompatImportNothing()
+    'call tBasicVBACompatImportDisabled()
+    'call tBasicVBACompatImportEnabled()
+    call tBasicVBACompatThisWorkBook()
+    'call hStatusOut()
 
 end sub
 
@@ -55,6 +57,7 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_basic_organizer_tools.inc"
     use "global\tools\includes\optional\t_treelist_tools.inc"
     use "global\tools\includes\optional\t_stringtools.inc"
+    use "global\tools\includes\optional\t_macro_tools.inc"
 
     use "framework\optional\includes\basic_vba_compat_tools.inc"
     
