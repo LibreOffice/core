@@ -33,17 +33,19 @@
 
 sub main
 
-    'use "framework\optional\includes\basic_vba-compat_import_nothing.inc"
-    'use "framework\optional\includes\basic_vba-compat_import_disabled.inc"
-    'use "framework\optional\includes\basic_vba-compat_import_enabled.inc"
+    use "framework\optional\includes\basic_vba-compat_import_nothing.inc"
+    use "framework\optional\includes\basic_vba-compat_import_disabled.inc"
+    use "framework\optional\includes\basic_vba-compat_import_enabled.inc"
     use "framework\optional\includes\basic_vba-compat_thisworkbook.inc"
+    use "framework\optional\includes\basic_vba-compat_application-union.inc"
     
-    'call hStatusIn( "framework" , "f_basic_vba-compat.bas" )
-    'call tBasicVBACompatImportNothing()
-    'call tBasicVBACompatImportDisabled()
-    'call tBasicVBACompatImportEnabled()
+    call hStatusIn( "framework" , "f_basic_vba-compat.bas" )
+    call tBasicVBACompatImportNothing()
+    call tBasicVBACompatImportDisabled()
+    call tBasicVBACompatImportEnabled()
     call tBasicVBACompatThisWorkBook()
-    'call hStatusOut()
+    call tBasicVBACompatApplicationUnion()
+    call hStatusOut()
 
 end sub
 
