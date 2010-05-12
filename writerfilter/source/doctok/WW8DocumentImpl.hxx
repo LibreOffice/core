@@ -284,6 +284,9 @@ class WW8DocumentImpl : public WW8Document
     /// pointer to the compound object stream of the document
     WW8Stream::Pointer_t mpCompObjStream;
 
+    /// pointer to the summayry information stream of the document
+    WW8Stream::Pointer_t mpSummaryInformationStream;
+
     /// pointer to the piece table
     WW8PieceTable::Pointer_t mpPieceTable;
 
@@ -680,6 +683,13 @@ public:
      */
     writerfilter::Reference<Properties>::Pointer_t
     getField(const CpAndFc & rCpAndFc) const;
+
+    /**
+       Return document properties.
+
+    */
+    writerfilter::Reference<Properties>::Pointer_t
+    getDocumentProperties() const;
 
     /**
        Return current field descriptor.

@@ -187,6 +187,9 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
     mpDocStream = getSubStream(::rtl::OUString::createFromAscii
                                ("WordDocument"));
 
+    mpSummaryInformationStream = getSubStream(::rtl::OUString::createFromAscii
+                                              ("\5SummaryInformation"));
+
     try
     {
         mpDataStream = getSubStream(::rtl::OUString::createFromAscii
@@ -1301,6 +1304,19 @@ WW8DocumentImpl::getField(const CpAndFc & rCpAndFc) const
     return mpFieldHelper->getField(rCpAndFc);
 }
 
+writerfilter::Reference<Properties>::Pointer_t
+WW8DocumentImpl::getDocumentProperties() const
+{
+    writerfilter::Reference<Properties>::Pointer_t pResult;
+
+    if (mpFib->get_lcbDop() > 0)
+    {
+        pResult.reset(new WW8DopBase(*mpTableStream, mpFib->get_fcDop(), mpFib->get_lcbDop()));
+    }
+
+    return pResult;
+}
+
 WW8FLD::Pointer_t WW8DocumentImpl::getCurrentFLD() const
 {
     return mpFLD;
@@ -1652,7 +1668,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 
         //output.addItem(mTextboxHeaderEndCpAndFc.toString());
 
-#if 0
+#if 1
         output.addItem("<substream-names>");
         output.addItem(mpStream->getSubStreamNames());
         output.addItem("</substream-names>");
@@ -1660,6 +1676,11 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         if (mpDocStream.get() != NULL)
         {
             mpDocStream->dump(output);
+        }
+
+        if (mpSummaryInformationStream.get() != NULL)
+        {
+            mpSummaryInformationStream->dump(output);
         }
 #endif
 
@@ -1869,6 +1890,9 @@ void WW8DocumentImpl::resolve(Stream & rStream)
             {
                 startSectionGroup(rStream);
                 rStream.info(pIt->toString());
+
+                if (nSectionIndex == 0)
+                    rStream.props(getDocumentProperties());
 
                 sal_uInt32 nHeaderStartIndex = 6 + nSectionIndex * 6;
                 sal_uInt32 nHeaderEndIndex = nHeaderStartIndex + 6;
