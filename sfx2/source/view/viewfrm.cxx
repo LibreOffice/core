@@ -1510,7 +1510,7 @@ void SfxViewFrame::KillDispatcher_Impl()
 //------------------------------------------------------------------------
 SfxViewFrame* SfxViewFrame::Current()
 {
-    return SfxApplication::Is_Impl() ? SFX_APP()->Get_Impl()->pViewFrame : NULL;
+    return SfxApplication::Get() ? SFX_APP()->Get_Impl()->pViewFrame : NULL;
 }
 
 //--------------------------------------------------------------------
