@@ -1824,14 +1824,14 @@ void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, String& rOutStr
 }
 #endif
 
-    // If truncating the value to desired precision alters the original value,
-    // we should show the trailing zeros, otherwise strip them.
-    double fRounded = ::rtl::math::round(rNumber, nPrecision);
-    bool bRemoveZeros = ::rtl::math::approxEqual(fRounded, rNumber);
+    // We decided to strip trailing zeros unconditionally, since binary
+    // double-precision rounding error makes it impossible to determine e.g.
+    // whether 844.10000000000002273737 is what the user has typed, or the
+    // user has typed 844.1 but IEEE 754 represents it that way internally.
 
     rOutString = ::rtl::math::doubleToUString( rNumber,
             rtl_math_StringFormat_F, nPrecision /*2*/,
-            GetFormatter().GetNumDecimalSep().GetChar(0), bRemoveZeros );
+            GetFormatter().GetNumDecimalSep().GetChar(0), true );
     if (rOutString.GetChar(0) == '-' &&
         rOutString.GetTokenCount('0') == rOutString.Len())
         rOutString.EraseLeadingChars('-');            // nicht -0
@@ -2079,7 +2079,7 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                     bool bSign = ::rtl::math::isSignBitSet(fNumber);
                     if (bSign)
                         fNumber = -fNumber;
-                    ImpGetOutputInputLine(fNumber, OutString);
+                    ImpGetOutputStdToPrecision(fNumber, OutString, 10); // Use 10 decimals for general 'unlimited' format.
                     if (fNumber < EXP_LOWER_BOUND)
                     {
                         xub_StrLen nLen = OutString.Len();
