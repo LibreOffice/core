@@ -139,6 +139,7 @@
     $html = '';
     @ignored_errors = ();
     %incompatibles = ();
+    %exclude_branches = ();
     $only_platform = ''; # the only platform to prepare
     $only_common = ''; # the only common output tree to delete when preparing
     %build_modes = ();
@@ -566,17 +567,31 @@ sub get_parent_deps {
     my @unresolved_parents = get_parents_array($prj_dir);
     $parents_deps_hash{$_}++ foreach (@unresolved_parents);
     $$deps_hash{$prj_dir} = \%parents_deps_hash;
+    my %skipped_branches = ();
     while ($module = pop(@unresolved_parents)) {
+        if (defined $exclude_branches{$module}) {
+            $skipped_branches{$module}++;
+            next;
+        };
         my %parents_deps_hash = ();
-        $parents_deps_hash{$_}++ foreach (get_parents_array($module));
+        foreach (get_parents_array($module)) {
+            if (defined $exclude_branches{$_}) {
+                $skipped_branches{$_}++;
+                next;
+            };
+            $parents_deps_hash{$_}++;
+        }
         $$deps_hash{$module} = \%parents_deps_hash;
         foreach $Parent (keys %parents_deps_hash) {
-            if (!defined($$deps_hash{$Parent})) {
+            if (!defined($$deps_hash{$Parent}) && (!defined $exclude_branches{$module})) {
                 push (@unresolved_parents, $Parent);
             };
         };
     };
     check_deps_hash($deps_hash);
+    foreach (keys %skipped_branches) {
+        print $echo . "Skipping module's $_ branch\n";
+    };
 };
 
 sub store_weights {
@@ -1396,7 +1411,7 @@ sub print_error {
 
 sub usage {
     print STDERR "\nbuild\n";
-    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches|-b]|[--prepare|-p][:platform] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes|--server [--setenvstring \"string\"] [--client_timeout MIN] [--port port1[:port2:...:portN]]] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [--html [--html_path html_file_path] [--dontgraboutput]] [--pre_job=pre_job_sring] [--job=job_string|-j] [--post_job=post_job_sring] [--stoponerror] [--genconf [--removeall|--clear|--remove|--add [module1,module2[,...,moduleN]]]] [--interactive]\n";
+    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches|-b]|[--prepare|-p][:platform] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes|--server [--setenvstring \"string\"] [--client_timeout MIN] [--port port1[:port2:...:portN]]] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [--html [--html_path html_file_path] [--dontgraboutput]] [--pre_job=pre_job_sring] [--job=job_string|-j] [--post_job=post_job_sring] [--stoponerror] [--genconf [--removeall|--clear|--remove|--add [module1,module2[,...,moduleN]]]] [--exclude_branch_from prj_name1[:prj_name2] [prj_name3 [...]]] [--interactive]\n";
     print STDERR "Example1:    build --from sfx2\n";
     print STDERR "                     - build all projects dependent from sfx2, starting with sfx2, finishing with the current module\n";
     print STDERR "Example2:    build --all:sfx2\n";
@@ -1409,6 +1424,7 @@ sub usage {
     print STDERR "\nSwitches:\n";
     print STDERR "        --all        - build all projects from very beginning till current one\n";
     print STDERR "        --from       - build all projects dependent from the specified (including it) till current one\n";
+    print STDERR "        --exclude_branch_from    - exclude module(s) and its branch from the build\n";
     print STDERR "        --mode OOo   - build only projects needed for OpenOffice.org\n";
     print STDERR "        --prepare    - clear all projects for incompatible build from prj_name till current one [for platform] (cws version)\n";
     print STDERR "        --with_branches- build all projects in neighbour branches and current branch starting from actual project\n";
@@ -1478,7 +1494,11 @@ sub get_options {
                                 and $build_all_cont = $1            and next;
         if ($arg =~ /^--from$/ || $arg =~ /^-f$/) {
                                     $build_all_parents = 1;
-                                    get_incomp_projects();
+                                    get_modules_passed(\%incompatibles);
+                                    next;
+        };
+        if ($arg =~ /^--exclude_branch_from$/) {
+                                    get_modules_passed(\%exclude_branches);
                                     next;
         };
         $arg =~ /^--prepare$/    and $prepare = 1 and next;
@@ -2279,7 +2299,6 @@ sub prepare_incompatible_build {
         if (!defined $$deps_hash{$module}) {
             print_error("The module $initial_module is independent from $module\n");
         }
-        delete $incompatibles{$module};
         $incompatibles{$module} = $$deps_hash{$module};
         delete $$deps_hash{$module};
     }
@@ -2423,7 +2442,8 @@ sub get_list_of_modules {
 #    };
 };
 
-sub get_incomp_projects {
+sub get_modules_passed {
+    my $hash_ref = shift;
     my $option = '';
     while ($option = shift @ARGV) {
         if ($option =~ /^-+/) {
@@ -2435,7 +2455,7 @@ sub get_incomp_projects {
                 print_error("\'--from\' switch collision") if ($build_all_cont);
                 $build_all_cont = $';
             };
-            $incompatibles{$option}++;
+            $$hash_ref{$option}++;
         };
     };
 };
