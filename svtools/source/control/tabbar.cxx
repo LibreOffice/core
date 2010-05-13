@@ -39,6 +39,8 @@
 #include <vcl/edit.hxx>
 #include "svtaccessiblefactory.hxx"
 
+#include <limits>
+
 // =======================================================================
 
 #define TABBAR_OFFSET_X         7
