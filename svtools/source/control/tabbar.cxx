@@ -1633,7 +1633,6 @@ void TabBar::SetTabBgColor( USHORT nPageId, const Color& aTabBgColor )
     if ( nPos != PAGE_NOT_FOUND )
     {
         pItem = mpItemList->GetObject( nPos );
-        // TODO: Need to take the text color specification out of this code!
         if ( aTabBgColor != Color( COL_AUTO )  )
         {
             pItem->maTabBgColor = aTabBgColor;
