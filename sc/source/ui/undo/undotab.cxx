@@ -59,6 +59,7 @@
 #include "printfun.hxx"
 #include "chgtrack.hxx"
 #include "tabprotection.hxx"
+#include "viewdata.hxx"
 
 // for ScUndoRenameObject - might me moved to another file later
 #include <svx/svditer.hxx>
@@ -66,9 +67,6 @@
 #include <svx/svdpage.hxx>
 #include "drwlayer.hxx"
 #include "scresid.hxx"
-
-// for set tab bg color
-#include "viewdata.hxx"
 
 extern BOOL bDrawIsInUndo;          //! irgendwo als Member !!!
 
