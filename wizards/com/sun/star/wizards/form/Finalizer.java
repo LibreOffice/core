@@ -32,8 +32,6 @@ package com.sun.star.wizards.form;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.wizards.common.Desktop;
-import com.sun.star.wizards.common.JavaTools;
-import com.sun.star.wizards.db.DBMetaData;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.*;
 

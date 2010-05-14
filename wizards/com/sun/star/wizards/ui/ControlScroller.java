@@ -29,15 +29,11 @@
  ************************************************************************/
 package com.sun.star.wizards.ui;
 
-import com.sun.star.awt.FocusEvent;
-import com.sun.star.awt.XFocusListener;
 import com.sun.star.awt.XScrollBar;
 import com.sun.star.awt.AdjustmentEvent;
 import com.sun.star.beans.*;
 import com.sun.star.awt.*;
-import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.Any;
 import com.sun.star.wizards.common.*;
 
 import java.util.*;
@@ -120,7 +116,7 @@ public abstract class ControlScroller
         iStartPosY = iCompPosY + SORELFIRSTPOSY;
         int ScrollHeight = iCompHeight - 2;
         nlineincrement = 1;
-        sIncSuffix = com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.xDlgNameAccess, "imgBackground");
+        sIncSuffix = com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.getDlgNameAccess(), "imgBackground");
         oImgControl = CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", "imgBackground" + sIncSuffix,
                 new String[]
                 {
@@ -236,7 +232,7 @@ public abstract class ControlScroller
         PropertyValue[] valueProps = (PropertyValue[]) scrollfields.get(guiRow + nscrollvalue);
         for (int n = 0; n < nameProps.length; n++)
         {
-            if (CurUnoDialog.xDlgNameAccess.hasByName(nameProps[n].Name))
+            if (CurUnoDialog.getDlgNameAccess().hasByName(nameProps[n].Name))
             {
                 setControlData(nameProps[n].Name, valueProps[n].Value);
             }
@@ -418,7 +414,7 @@ public abstract class ControlScroller
 
     protected PropertyValue fieldInfo(PropertyValue valueProp, PropertyValue nameProp)
     {
-        if (CurUnoDialog.xDlgNameAccess.hasByName(nameProp.Name))
+        if (CurUnoDialog.getDlgNameAccess().hasByName(nameProp.Name))
         {
             valueProp.Value = getControlData(nameProp.Name);
         }

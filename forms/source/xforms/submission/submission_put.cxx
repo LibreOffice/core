@@ -53,31 +53,13 @@ using namespace std;
 
 CSubmissionPut::CSubmissionPut(const rtl::OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
     : CSubmission(aURL, aFragment)
-    , m_aFactory(utl::getProcessServiceFactory())
 {
 }
 
 CSubmission::SubmissionResult CSubmissionPut::submit(const CSS::uno::Reference< CSS::task::XInteractionHandler >& aInteractionHandler)
 {
-    // PUT always uses application/xml
-    auto_ptr< CSerialization > apSerialization(new CSerializationAppXML());
-    apSerialization->setSource(m_aFragment);
-    apSerialization->serialize();
-
-    // create a commandEnvironment and use the default interaction handler
-    CCommandEnvironmentHelper *pHelper = new CCommandEnvironmentHelper;
-    if( aInteractionHandler.is() )
-        pHelper->m_aInteractionHandler = aInteractionHandler;
-    else
-        pHelper->m_aInteractionHandler = CSS::uno::Reference< XInteractionHandler >(m_aFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.task.InteractionHandler")), UNO_QUERY);
-    OSL_ENSURE(pHelper->m_aInteractionHandler.is(), "failed to create IntreractionHandler");
-
-    CProgressHandlerHelper *pProgressHelper = new CProgressHandlerHelper;
-    pHelper->m_aProgressHandler = CSS::uno::Reference< XProgressHandler >(pProgressHelper);
-
-    // UCB has ownership of environment...
-    CSS::uno::Reference< XCommandEnvironment > aEnvironment(pHelper);
+    CSS::uno::Reference< XCommandEnvironment > aEnvironment;
+    auto_ptr< CSerialization > apSerialization(createSerialization(aInteractionHandler,aEnvironment));
 
     try {
         ucbhelper::Content aContent(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE), aEnvironment);

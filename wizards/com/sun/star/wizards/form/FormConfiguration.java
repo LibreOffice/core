@@ -35,7 +35,6 @@ import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.ui.CommandFieldSelection;
-import com.sun.star.wizards.ui.FieldSelection;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.wizards.ui.WizardDialog;

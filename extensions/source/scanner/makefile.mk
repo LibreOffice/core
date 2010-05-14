@@ -79,8 +79,7 @@ SHL1STDLIBS=\
     $(ONELIB)			\
     $(TOOLSLIB)			\
     $(VCLLIB)			\
-    $(SVTOOLLIB)		\
-    $(GOODIESLIB)		
+    $(SVTOOLLIB)
 
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"!="FREEBSD"

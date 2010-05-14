@@ -43,18 +43,18 @@ namespace oooimprovement
     {
         public:
             Config(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& sf);
-            bool getEnablingAllowed();
-            bool getInvitationAccepted();
-            bool getShowedInvitation();
-            const ::rtl::OUString getCompleteProductname();
-            const ::rtl::OUString getLogPath();
-            const ::rtl::OUString getReporterEmail();
-            const ::rtl::OUString getSetupLocale();
-            const ::rtl::OUString getSoapId();
-            const ::rtl::OUString getSoapUrl();
-            const sal_Int32 getReportCount();
-            const sal_Int32 getFailedAttempts();
-            const sal_Int32 getOfficeStartCounterdown();
+            bool getEnablingAllowed() const;
+            bool getInvitationAccepted() const;
+            bool getShowedInvitation() const;
+            ::rtl::OUString getCompleteProductname() const;
+            ::rtl::OUString getLogPath() const;
+            ::rtl::OUString getReporterEmail() const;
+            ::rtl::OUString getSetupLocale() const;
+            ::rtl::OUString getSoapId() const;
+            ::rtl::OUString getSoapUrl() const;
+            sal_Int32 getReportCount() const;
+            sal_Int32 getFailedAttempts() const;
+            sal_Int32 getOfficeStartCounterdown() const;
             sal_Int32 incrementEventCount(sal_Int32 by);
             sal_Int32 incrementReportCount(sal_Int32 by);
             sal_Int32 incrementFailedAttempts(sal_Int32 by);

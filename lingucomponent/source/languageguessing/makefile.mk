@@ -63,7 +63,6 @@ SHL1STDLIBS= \
         $(LIBTEXTCATLIB)        \
         $(SALLIB)               \
         $(SVLLIB)               \
-        $(SVTOOLLIB)            \
         $(TOOLSLIB)             \
         $(UNOTOOLSLIB)
 

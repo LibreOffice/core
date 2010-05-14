@@ -29,7 +29,6 @@
  ************************************************************************/
 package com.sun.star.wizards.db;
 
-import com.sun.star.awt.XWindow;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XComponent;

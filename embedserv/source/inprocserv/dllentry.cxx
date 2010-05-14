@@ -59,29 +59,44 @@ static ULONG g_nLock = 0;
 
 
 namespace {
+    void FillCharFromInt( int nValue, char* pBuf, int nLen )
+    {
+        int nInd = 0;
+        while( nInd < nLen )
+        {
+            char nSign = ( nValue / ( 1 << ( ( nLen - nInd ) * 4 ) ) ) % 16;
+            if ( nSign >= 0 && nSign <= 9 )
+                pBuf[nInd] = nSign + '0';
+            else if ( nSign >= 10 && nSign <= 15 )
+                pBuf[nInd] = nSign - 10 + 'a';
+
+            nInd++;
+        }
+    }
+
     int GetStringFromClassID( const GUID& guid, char* pBuf, int nLen )
     {
-        if ( nLen < 27 )
+        // is not allowed to insert
+        if ( nLen < 38 )
             return 0;
 
-        int nResult = sprintf( pBuf,
-                          "{%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x}",
-                          guid.Data1,
-                          guid.Data2,
-                          guid.Data3,
-                          guid.Data4[0],
-                          guid.Data4[1],
-                          guid.Data4[2],
-                          guid.Data4[3],
-                          guid.Data4[4],
-                          guid.Data4[5],
-                          guid.Data4[6],
-                          guid.Data4[7] );
+        pBuf[0] = '{';
+        FillCharFromInt( guid.Data1, &pBuf[1], 8 );
+        pBuf[9] = '-';
+        FillCharFromInt( guid.Data2, &pBuf[10], 4 );
+        pBuf[14] = '-';
+        FillCharFromInt( guid.Data3, &pBuf[15], 4 );
+        pBuf[19] = '-';
 
-        if ( nResult && nResult < nLen )
-            return ++nResult;
+        int nInd = 0;
+        for ( nInd = 0; nInd < 2 ; nInd++ )
+            FillCharFromInt( guid.Data4[nInd], &pBuf[20 + 2*nInd], 2 );
+        pBuf[24] = '-';
+        for ( nInd = 2; nInd < 8 ; nInd++ )
+            FillCharFromInt( guid.Data4[nInd], &pBuf[20 + 1 + 2*nInd], 2 );
+        pBuf[37] = '}';
 
-        return 0;
+        return 38;
     }
 
     HRESULT WriteLibraryToRegistry( char* pLibrary, DWORD nLen )
@@ -90,21 +105,17 @@ namespace {
         if ( pLibrary && nLen )
         {
             HKEY hKey = NULL;
-            char* pPrefix = "Software\\Classes\\CLSID\\";
-            char* pPostfix = "\\InprocHandler32";
 
             hRes = S_OK;
             for ( int nInd = 0; nInd < SUPPORTED_FACTORIES_NUM; nInd++ )
             {
-                char pSubKey[513];
-                char pCLSID[64];
-                int nGuidLen = GetStringFromClassID( *guidList[nInd], pCLSID, 64 );
+                char* pSubKey = "Software\\Classes\\CLSID\\.....................................\\InprocHandler32";
+
+                int nGuidLen = GetStringFromClassID( *guidList[nInd], &pSubKey[23], 38 );
 
                 BOOL bLocalSuccess = FALSE;
-                if ( nGuidLen && nGuidLen < 64 )
+                if ( nGuidLen && nGuidLen == 38 )
                 {
-                    pCLSID[nGuidLen] = 0;
-                    sprintf( pSubKey, "%s%s%s", pPrefix, pCLSID, pPostfix );
                     if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE, pSubKey, &hKey ) )
                     {
                         if ( ERROR_SUCCESS == RegSetValueEx( hKey, "", 0, REG_SZ, (const BYTE*)pLibrary, nLen ) )

@@ -31,9 +31,7 @@ package com.sun.star.wizards.db;
 
 import java.util.Vector;
 
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sdbc.ColumnSearch;
 import com.sun.star.sdbc.ColumnValue;
 import com.sun.star.sdbc.DataType;

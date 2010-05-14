@@ -42,6 +42,7 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyAttribute;
+import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.container.XEnumeration;
@@ -53,10 +54,13 @@ import com.sun.star.report.XFixedText;
 import com.sun.star.report.XFormattedField;
 import com.sun.star.report.XGroup;
 import com.sun.star.report.XGroups;
+import com.sun.star.report.XImageControl;
 import com.sun.star.report.XReportComponent;
+import com.sun.star.report.XReportControlModel;
 import com.sun.star.report.XReportDefinition;
 import com.sun.star.report.XSection;
 import com.sun.star.drawing.XShape;
+import com.sun.star.sdbc.DataType;
 import com.sun.star.style.XStyle;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XNumberFormatTypes;
@@ -238,11 +242,11 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         final int MAX_INDENT = 2;
         if (_nGroupCount <= MAX_INDENT)
         {
-            nIndent = _nGroupCount * 500;
+            nIndent = _nGroupCount * LayoutConstants.IndentFactorWidth;
         }
         else
         {
-            nIndent = MAX_INDENT * 500;
+            nIndent = MAX_INDENT * LayoutConstants.IndentFactorWidth;
         }
         return nIndent;
     }
@@ -434,7 +438,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 int nLabelHeight = 0;
 //               if (aSO != null)
 //               {
-                nLabelHeight = aSO.getHeight(500);
+                nLabelHeight = aSO.getHeight(LayoutConstants.LabelHeight);
                 aRect = insertLabel(xGroupSection, getTitleFromFieldName(m_aGroupNames[i]), aRect, nLabelWidth, aSO);
 //               }
 //               else
@@ -450,7 +454,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 aRect.X = nLeftPageIndent + getLeftGroupIndent(i);
                 aRect.Y = nLabelHeight;
                 final int nLineWidth = getPageWidth() - getRightPageIndent() - aRect.X;
-                final int nLineHeight = 250;
+                final int nLineHeight = LayoutConstants.LineHeight;
                 insertHorizontalLine(xGroupSection, aRect, nLineWidth, nLineHeight);
                 xGroupSection.setHeight(nLabelHeight + nLineHeight);
             }
@@ -488,6 +492,18 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             }
         }
         return "";
+    }
+
+        protected int getTypeFromFieldName(String _sField)
+    {
+        for (int i = 0; i < m_aFieldNames.length; i++)
+        {
+            if (m_aFieldNames[i].equals(_sField))
+            {
+                return m_aFieldTypes[i];
+            }
+        }
+        return 0;
     }
 
     protected boolean listContains(String[] _aList, String _aValue)
@@ -631,7 +647,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 final XFixedText xFixedText = (XFixedText) UnoRuntime.queryInterface(XFixedText.class, aFixedText);
 
 
-                int nHeight = 500;        // default height of label is fixed.
+                int nHeight = LayoutConstants.LabelHeight;        // default height of label is fixed.
                 if (_aSO != null)
                 {
                     if (_aSO instanceof SectionEmptyObject)
@@ -651,7 +667,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                             xFixedText.setFontDescriptor(aFD);
                             copyProperties(_aSO.getParent(), xFixedText);
                         }
-                        nHeight = _aSO.getHeight(500);
+                        nHeight = _aSO.getHeight(LayoutConstants.LabelHeight);
                     }
                 }
                 xFixedText.setLabel(_sLabel);
@@ -682,6 +698,16 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return aDataField.toString();
 
     }
+    protected String convertFromFieldName(String _sName)
+    {
+        if (_sName.startsWith("field:["))
+        {
+            int nCloseBrace = _sName.lastIndexOf("]");
+            final String sName = _sName.substring(7, nCloseBrace).trim();
+            return sName;
+        }
+        return _sName;
+    }
     // -------------------------------------------------------------------------
     /**
      * Insert a already formatted field name into a given section
@@ -706,45 +732,96 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         {
             try
             {
-                final Object aFormattedField = getMSFofReportDefinition().createInstance("com.sun.star.report.FormattedField");
-                final XFormattedField xFormattedField = (XFormattedField) UnoRuntime.queryInterface(XFormattedField.class, aFormattedField);
-                // #i86907# not documented right in idl description.
-                xFormattedField.setDataField(_sFormattedfield);
-                int nHeight = 500;
-                if (_aSO != null)
+                Object aField;
+                int nHeight = LayoutConstants.FormattedFieldHeight;
+
+                int nType = getTypeFromFieldName(convertFromFieldName(_sFormattedfield));
+                if (nType == DataType.BINARY ||
+                    nType == DataType.VARBINARY ||
+                    nType == DataType.LONGVARBINARY)
                 {
-// TODO: there seems to be some problems with copy all properties from the design template to the current design
-                    final FontDescriptor aFD = _aSO.getFontDescriptor();
-                    if (aFD != null)
+                    aField = getMSFofReportDefinition().createInstance("com.sun.star.report.ImageControl");
+                    nHeight = LayoutConstants.BinaryHeight;
+                }
+                else
+                {
+                    aField = getMSFofReportDefinition().createInstance("com.sun.star.report.FormattedField");
+                    nHeight = LayoutConstants.FormattedFieldHeight;
+                    if (nType == DataType.LONGVARCHAR) /* memo */
                     {
-                        xFormattedField.setFontDescriptor(aFD);
-                        copyProperties(_aSO.getParent(), xFormattedField);
+                        nHeight = LayoutConstants.MemoFieldHeight; // special case for memo
                     }
-                    nHeight = _aSO.getHeight(500);
                 }
-                xFormattedField.setPositionX(_aRect.X);
-                xFormattedField.setPositionY(_aRect.Y);
-                xFormattedField.setWidth(_nWidth);
-                _aRect.X += _nWidth;
-                xFormattedField.setHeight(nHeight);
+                _aRect.Height = nHeight;
 
-                xFormattedField.setParaAdjust(_nAlignment);
-
-                // spezial case rpt:now() (default date format)
-                if (_sFormattedfield.equals("rpt:now()"))
+                final XReportControlModel xReportControlModel = (XReportControlModel) UnoRuntime.queryInterface(XReportControlModel.class, aField);
+                if (xReportControlModel != null)
                 {
-                    XNumberFormatsSupplier x = xFormattedField.getFormatsSupplier();
-                    XNumberFormats xFormats = x.getNumberFormats();
-                    XNumberFormatTypes x3 = (XNumberFormatTypes) UnoRuntime.queryInterface(XNumberFormatTypes.class, xFormats);
-                    Locale.getDefault();
-                    com.sun.star.lang.Locale aLocale = new com.sun.star.lang.Locale();
-                    aLocale.Country = Locale.getDefault().getCountry();
-                    aLocale.Language = Locale.getDefault().getLanguage();
+                    // #i86907# not documented right in idl description.
+                    xReportControlModel.setDataField(_sFormattedfield);
+                    if (_aSO != null)
+                    {
+    // TODO: there seems to be some problems with copy all properties from the design template to the current design
+                        final FontDescriptor aFD = _aSO.getFontDescriptor();
+                        if (aFD != null)
+                        {
+                            xReportControlModel.setFontDescriptor(aFD);
+                            copyProperties(_aSO.getParent(), xReportControlModel);
+                        }
+                        nHeight = _aSO.getHeight(nHeight);
+                    }
+                    xReportControlModel.setPositionX(_aRect.X);
+                    xReportControlModel.setPositionY(_aRect.Y);
+                    xReportControlModel.setWidth(_nWidth);
+                    _aRect.X += _nWidth;
+                    xReportControlModel.setHeight(nHeight);
 
-                    int nFormat = x3.getStandardFormat(com.sun.star.util.NumberFormat.DATE, aLocale);
-                    xFormattedField.setFormatKey(nFormat);
+                    if (nType == DataType.BINARY ||
+                        nType == DataType.VARBINARY ||
+                        nType == DataType.LONGVARBINARY)
+                    {
+                        // aField = getMSFofReportDefinition().createInstance("com.sun.star.report.ImageControl");
+                        final XImageControl xImageControl = (XImageControl) UnoRuntime.queryInterface(XImageControl.class, xReportControlModel);
+                        if (xImageControl != null)
+                        {
+                            // xImageControl.setScaleImage(true);
+
+                            xImageControl.setScaleMode(com.sun.star.awt.ImageScaleMode.Isotropic);
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            xReportControlModel.setParaAdjust(_nAlignment);
+                            // if (nType == DataType.LONGVARCHAR)
+                            // {
+                            //     xReportControlModel.???
+                            // }
+                        }
+                        catch (com.sun.star.beans.UnknownPropertyException e)
+                        {
+                            // seems we not able to set ParaAdjust
+                        }
+                    }
+                    // spezial case rpt:now() (default date format)
+                    if (_sFormattedfield.equals("rpt:now()"))
+                    {
+                        final XFormattedField xFormattedField = (XFormattedField) UnoRuntime.queryInterface(XFormattedField.class, xReportControlModel);
+
+                        XNumberFormatsSupplier x = xFormattedField.getFormatsSupplier();
+                        XNumberFormats xFormats = x.getNumberFormats();
+                        XNumberFormatTypes x3 = (XNumberFormatTypes) UnoRuntime.queryInterface(XNumberFormatTypes.class, xFormats);
+                        Locale.getDefault();
+                        com.sun.star.lang.Locale aLocale = new com.sun.star.lang.Locale();
+                        aLocale.Country = Locale.getDefault().getCountry();
+                        aLocale.Language = Locale.getDefault().getLanguage();
+
+                        int nFormat = x3.getStandardFormat(com.sun.star.util.NumberFormat.DATE, aLocale);
+                        xFormattedField.setFormatKey(nFormat);
+                    }
+                    _xSection.add(xReportControlModel);
                 }
-                _xSection.add(xFormattedField);
             }
             catch (com.sun.star.uno.Exception e)
             {
@@ -1253,7 +1330,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 aRect.X = getLeftPageIndent();
                 SectionObject aSOLabel = SectionEmptyObject.create();
                 aSOLabel.setFontToBold();
-                aRect.Y = aSOLabel.getHeight(500);
+                aRect.Y = aSOLabel.getHeight(LayoutConstants.LabelHeight);
 
                 final int nWidth = 3000;
 
@@ -1263,26 +1340,26 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 // aRect = insertFormattedField(xSection, "rpt:Title()", aRect, nTitleWidth);
                 aRect = insertLabel(xSection, sTitle, aRect, nTitleWidth, aSOLabel);
 
-                aRect.Y += aSOLabel.getHeight(500) + 250;
+                aRect.Y += aSOLabel.getHeight(LayoutConstants.LabelHeight) + LayoutConstants.LineHeight;
 
                 aRect.X = getLeftPageIndent();
                 aRect = insertLabel(xSection, sAuthorTitle, aRect, nWidth, aSOLabel);
                 // aRect = insertFormattedField(xSection, "rpt:Author()", aRect, nWidth);
                 aRect = insertLabel(xSection, sAuthor, aRect, nTitleWidth, aSOLabel);
 
-                aRect.Y += aSOLabel.getHeight(500);
+                aRect.Y += aSOLabel.getHeight(LayoutConstants.LabelHeight);
 
                 aRect.X = getLeftPageIndent();
                 aRect = insertLabel(xSection, sDateTitle, aRect, nWidth, aSOLabel);
                 // aRect = insertFormattedField(xSection, "rpt:Date()", aRect, nWidth);
                 aRect = insertFormattedField(xSection, sDate, aRect, nTitleWidth, aSOLabel);
 
-                aRect.Y += aSOLabel.getHeight(500) + 250;
+                aRect.Y += aSOLabel.getHeight(LayoutConstants.FormattedFieldHeight) + LayoutConstants.LineHeight;
 
                 // draw a line under the label/formattedfield
                 aRect.X = getLeftPageIndent();
                 final int nLineWidth = getPageWidth() - getRightPageIndent() - aRect.X;
-                final int nLineHeight = 250;
+                final int nLineHeight = LayoutConstants.LineHeight;
                 insertHorizontalLine(xSection, aRect, nLineWidth, nLineHeight);
 
                 aRect.Y += nLineHeight;
@@ -1366,18 +1443,18 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
                 // draw a line over the label/formattedfield
                 final int nLineWidth = getPageWidth() - getRightPageIndent() - aRect.X;
-                final int nLineHeight = 250;
+                final int nLineHeight = LayoutConstants.LineHeight;
                 insertHorizontalLine(xSection, aRect, nLineWidth, nLineHeight);
 
                 aRect.Y += nLineHeight;
-                aRect.Y += 500;
+                aRect.Y += LayoutConstants.LabelHeight;
 
                 final int nWidth = nUsablePageWidth;
                 aRect.X = getLeftPageIndent();
 
                 aRect = insertFormattedField(xSection, "rpt:" + sNoFirstUnusedQuotes, aRect, nWidth, null, (short) com.sun.star.awt.TextAlign.CENTER);
 
-                aRect.Y += 500 + 250;
+                aRect.Y += LayoutConstants.FormattedFieldHeight + LayoutConstants.LineHeight;
                 xSection.setHeight(aRect.Y);
             }
             catch (Exception e)

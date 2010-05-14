@@ -235,6 +235,8 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleRadioButton::getAccessibleActio
                 aKeyStroke.Modifiers |= awt::KeyModifier::MOD1;
             if ( aKeyCode.IsMod2() )
                 aKeyStroke.Modifiers |= awt::KeyModifier::MOD2;
+            if ( aKeyCode.IsMod3() )
+                aKeyStroke.Modifiers |= awt::KeyModifier::MOD3;
             aKeyStroke.KeyCode = aKeyCode.GetCode();
             aKeyStroke.KeyChar = aKeyEvent.GetCharCode();
             aKeyStroke.KeyFunc = static_cast< sal_Int16 >( aKeyCode.GetFunction() );

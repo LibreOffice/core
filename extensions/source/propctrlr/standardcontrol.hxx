@@ -337,6 +337,8 @@ namespace pcr
         virtual void SAL_CALL appendListEntry( const ::rtl::OUString& NewEntry ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getListEntries(  ) throw (::com::sun::star::uno::RuntimeException);
 
+    protected:
+        DECL_LINK( OnEntrySelected, void* );
     };
 
     //========================================================================

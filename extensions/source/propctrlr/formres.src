@@ -77,7 +77,7 @@ String RID_STR_SHOWTHOUSANDSEP
 };
 String RID_STR_PRINTABLE
 {
-    Text [ en-US ] = "Print" ;
+    Text [ en-US ] = "Printable" ;
 };
 String RID_STR_TARGET_URL
 {
@@ -744,7 +744,7 @@ String RID_STR_EVT_APPROVEPARAMETER
 };
 String RID_STR_EVT_ACTIONPERFORMED
 {
-    Text [ en-US ] = "When initiating" ;
+    Text [ en-US ] = "Execute action" ;
 };
 String RID_STR_EVT_AFTERUPDATE
 {
@@ -844,7 +844,7 @@ String RID_STR_EVT_APPROVERESETTED
 };
 String RID_STR_EVT_APPROVEACTIONPERFORMED
 {
-    Text [ en-US ] = "Before commencing" ;
+    Text [ en-US ] = "Approve action" ;
 };
 String RID_STR_EVT_SUBMITTED
 {

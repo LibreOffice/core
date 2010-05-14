@@ -30,8 +30,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
-
+#include <memory>
 #include "submission.hxx"
+#include "serialization_app_xml.hxx"
 
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
@@ -44,11 +45,14 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <ucbhelper/content.hxx>
 
 using namespace com::sun::star::uno;
+using namespace com::sun::star::ucb;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
+using namespace com::sun::star::task;
 using namespace com::sun::star::xml::dom;
 
 CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aReplace, const Reference<XDocument>& aDocument, const Reference<XFrame>& aFrame)
@@ -116,5 +120,29 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
     }
     return CSubmission::UNKNOWN_ERROR;
 }
+::std::auto_ptr< CSerialization > CSubmission::createSerialization(const Reference< XInteractionHandler >& _xHandler,Reference<XCommandEnvironment>& _rOutEnv)
+{
+    // PUT always uses application/xml
+    ::std::auto_ptr< CSerialization > apSerialization(new CSerializationAppXML());
+    apSerialization->setSource(m_aFragment);
+    apSerialization->serialize();
+
+    // create a commandEnvironment and use the default interaction handler
+    CCommandEnvironmentHelper *pHelper = new CCommandEnvironmentHelper;
+    if( _xHandler.is() )
+        pHelper->m_aInteractionHandler = _xHandler;
+    else
+        pHelper->m_aInteractionHandler = CSS::uno::Reference< XInteractionHandler >(m_aFactory->createInstance(
+        ::rtl::OUString::createFromAscii("com.sun.star.task.InteractionHandler")), UNO_QUERY);
+    OSL_ENSURE(pHelper->m_aInteractionHandler.is(), "failed to create IntreractionHandler");
+
+    CProgressHandlerHelper *pProgressHelper = new CProgressHandlerHelper;
+    pHelper->m_aProgressHandler = Reference< XProgressHandler >(pProgressHelper);
+
+    // UCB has ownership of environment...
+    _rOutEnv = pHelper;
+    return apSerialization;
+}
+
 
 

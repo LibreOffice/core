@@ -442,7 +442,7 @@ public class FormDocument extends TextDocument
         {
             if (oFormController != null)
             {
-                return oFormController.LabelControlList;
+                return oFormController.getLabelControlList();
             }
             else
             {

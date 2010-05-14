@@ -29,18 +29,13 @@
  ************************************************************************/
 package com.sun.star.wizards.form;
 
-import java.beans.PropertyChangeEvent;
-
 import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XListBox;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Exception;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
-import com.sun.star.wizards.common.SystemDialog;
-import com.sun.star.wizards.db.CommandMetaData;
 import com.sun.star.wizards.db.RelationController;
 import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.wizards.ui.WizardDialog;

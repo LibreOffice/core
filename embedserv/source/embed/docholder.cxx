@@ -502,7 +502,17 @@ void DocumentHolder::InPlaceDeactivate(void)
         m_xLayoutManager->setVisible(false);
 
     if (NULL!=m_pIOleIPSite)
+    {
+        // The following workaround should let the object be stored in case of inplace editing
+//        CComPtr< IOleClientSite > pClientSite;
+//
+//        m_pIOleIPSite->QueryInterface(
+//              IID_IOleClientSite, (void**)&pClientSite );
+//        if ( pClientSite )
+//            pClientSite->SaveObject();
+
         m_pIOleIPSite->OnInPlaceDeactivate();
+    }
 
     if(m_pIOleIPFrame) m_pIOleIPFrame->Release(); m_pIOleIPFrame = 0;
     if(m_pIOleIPUIWindow) m_pIOleIPUIWindow->Release(); m_pIOleIPUIWindow = 0;
@@ -512,7 +522,9 @@ void DocumentHolder::InPlaceDeactivate(void)
     {
         LockedEmbedDocument_Impl aDocLock = m_xOleAccess->GetEmbedDocument();
         if ( aDocLock.GetEmbedDocument() )
+        {
             aDocLock.GetEmbedDocument()->SaveObject();
+        }
     }
 
     return;

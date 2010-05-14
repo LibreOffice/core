@@ -448,21 +448,34 @@ void SecurityEnvironment_NssImpl::updateSlots()
             if(pSlot != NULL)
             {
                 RTL_LOGFILE_TRACE2( "XMLSEC: Found a slot: SlotName=%s, TokenName=%s", PK11_GetSlotName(pSlot), PK11_GetTokenName(pSlot) );
-                pSymKey = PK11_KeyGen( pSlot , CKM_DES3_CBC, NULL, 128, NULL ) ;
-                if( pSymKey == NULL )
-                {
-                    PK11_FreeSlot( pSlot ) ;
-                    RTL_LOGFILE_TRACE( "XMLSEC: Error - pSymKey is NULL" );
-                    continue;
-                }
 
+//The following code which is commented out checks if a slot, that is a smart card for example, is
+//              able to generate a symmetric key of type CKM_DES3_CBC. If this fails then this token
+//              will not be used. This key is possibly used for the encryption service. However, all
+//              interfaces and services used for public key signature and encryption are not published
+//              and the encryption is not used in OOo. Therefore it does not do any harm to remove
+//              this code, hence allowing smart cards which cannot generate this type of key.
+//
+//              By doing this, the encryption may fail if a smart card is being used which does not
+//              support this key generation.
+//
+                pSymKey = PK11_KeyGen( pSlot , CKM_DES3_CBC, NULL, 128, NULL ) ;
+//              if( pSymKey == NULL )
+//              {
+//                  PK11_FreeSlot( pSlot ) ;
+//                  RTL_LOGFILE_TRACE( "XMLSEC: Error - pSymKey is NULL" );
+//                  continue;
+//              }
                 addCryptoSlot(pSlot);
                 PK11_FreeSlot( pSlot ) ;
                 pSlot = NULL;
 
-                adoptSymKey( pSymKey ) ;
-                PK11_FreeSymKey( pSymKey ) ;
-                pSymKey = NULL;
+                if (pSymKey != NULL)
+                {
+                    adoptSymKey( pSymKey ) ;
+                    PK11_FreeSymKey( pSymKey ) ;
+                    pSymKey = NULL;
+                }
 
             }// end of if(pSlot != NULL)
         }// end of for

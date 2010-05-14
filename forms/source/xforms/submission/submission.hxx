@@ -35,12 +35,14 @@
 #include <rtl/ustring.h>
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
+#include <unotools/processfactory.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
 #include <com/sun/star/xml/dom/XDocumentFragment.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
@@ -66,10 +68,12 @@ class CCommandEnvironmentHelper : public cppu::WeakImplHelper1< CSS::ucb::XComma
     friend class CSubmissionPut;
     friend class CSubmissionPost;
     friend class CSubmissionGet;
+    friend class CSubmission;
 
 protected:
-    CSS::uno::Reference< CSS::task::XInteractionHandler > m_aInteractionHandler;
-    CSS::uno::Reference< CSS::ucb::XProgressHandler > m_aProgressHandler;
+    CSS::uno::Reference< CSS::task::XInteractionHandler >   m_aInteractionHandler;
+    CSS::uno::Reference< CSS::ucb::XProgressHandler >       m_aProgressHandler;
+
 public:
     virtual CSS::uno::Reference< CSS::task::XInteractionHandler > SAL_CALL getInteractionHandler() throw (CSS::uno::RuntimeException)
     {
@@ -118,10 +122,14 @@ class CSubmission
 
 protected:
     INetURLObject m_aURLObj;
-    CSS::uno::Reference< CSS::xml::xpath::XXPathObject > m_aXPathObject;
+    CSS::uno::Reference< CSS::xml::xpath::XXPathObject >    m_aXPathObject;
     CSS::uno::Reference< CSS::xml::dom::XDocumentFragment > m_aFragment;
-    CSS::uno::Reference< CSS::io::XInputStream > m_aResultStream;
+    CSS::uno::Reference< CSS::io::XInputStream >            m_aResultStream;
+    CSS::uno::Reference< CSS::lang::XMultiServiceFactory >  m_aFactory;
     rtl::OUString m_aEncoding;
+
+    ::std::auto_ptr< CSerialization > createSerialization(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler
+                                                  ,com::sun::star::uno::Reference<com::sun::star::ucb::XCommandEnvironment>& _rOutEnv);
 
 public:
     enum SubmissionResult {
@@ -136,6 +144,7 @@ public:
     CSubmission(const rtl::OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
         : m_aURLObj(aURL)
         , m_aFragment(aFragment)
+        , m_aFactory(::utl::getProcessServiceFactory())
     {}
 
     virtual ~CSubmission() {}

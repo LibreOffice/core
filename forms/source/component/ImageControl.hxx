@@ -35,6 +35,7 @@
 #include "imgprod.hxx"
 #include <com/sun/star/form/XImageProducerSupplier.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/implementationreference.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -145,49 +146,17 @@ protected:
 };
 
 //==================================================================
-//= OImageIndicator (helper class for OImageControlControl)
-//==================================================================
-typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::awt::XImageConsumer
-                                >   OImageIndicator_Base;
-
-class OImageIndicator : public OImageIndicator_Base
-{
-private:
-    sal_Bool    m_bIsProducing  : 1;
-    sal_Bool    m_bIsEmptyImage : 1;
-
-public:
-    OImageIndicator( );
-
-            void        reset();
-    inline  sal_Bool    isEmptyImage() const { return m_bIsEmptyImage; }
-
-protected:
-    ~OImageIndicator( );
-    // XImageProducer
-    virtual void SAL_CALL init( sal_Int32 Width, sal_Int32 Height ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setColorModel( sal_Int16 BitCount, const ::com::sun::star::uno::Sequence< sal_Int32 >& RGBAPal, sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask, sal_Int32 AlphaMask ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setPixelsByBytes( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int8 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setPixelsByLongs( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int32 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer >& xProducer ) throw (::com::sun::star::uno::RuntimeException);
-
-private:
-    OImageIndicator( const OImageIndicator& );              // never implemented
-    OImageIndicator& operator=( const OImageIndicator& );   // never implemented
-};
-
-//==================================================================
 //= OImageControlControl
 //==================================================================
-class OImageControlControl  :public ::com::sun::star::awt::XMouseListener
-                            ,public OBoundControl
+typedef ::cppu::ImplHelper2 <   ::com::sun::star::awt::XMouseListener
+                            ,   ::com::sun::star::util::XModifyBroadcaster
+                            >   OImageControlControl_Base;
+class OImageControlControl  : public OBoundControl
+                            , public OImageControlControl_Base
 {
 private:
-    typedef ::comphelper::ImplementationReference< OImageIndicator, ::com::sun::star::awt::XImageConsumer >
-                                ImageIndicatorReference;
-    ImageIndicatorReference     m_pImageIndicator;
+    ::cppu::OInterfaceContainerHelper   m_aModifyListeners;
 
-protected:
     // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
@@ -195,12 +164,11 @@ public:
     OImageControlControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
     // UNO
-    DECLARE_UNO3_AGG_DEFAULTS(OImageControlControl, OBoundControl);
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
+    DECLARE_UNO3_AGG_DEFAULTS( OImageControlControl, OBoundControl );
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException);
 
     // XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException)
-        { OBoundControl::disposing(_rSource); }
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     IMPLEMENTATION_NAME(OImageControlControl);
@@ -212,15 +180,16 @@ public:
     virtual void SAL_CALL mouseEntered(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL mouseExited(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException);
 
-    // XControl
-    virtual sal_Bool SAL_CALL setModel(const ::com::sun::star::uno::Reference<starawt::XControlModel>& _rxModel ) throw (::com::sun::star::uno::RuntimeException);
+    // XModifyBroadcaster
+    virtual void SAL_CALL addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
-    // prevent method hiding
-    using OBoundControl::disposing;
+    // OComponentHelper
+    virtual void SAL_CALL disposing();
 
 private:
     void    implClearGraphics( sal_Bool _bForce );
-    void    implInsertGraphics();
+    bool    implInsertGraphics();
 
     /** determines whether the control does currently have an empty grahic set
     */

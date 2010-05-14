@@ -33,22 +33,16 @@ import com.sun.star.awt.XCheckBox;
 import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XRadioButton;
-import com.sun.star.awt.XTextComponent;
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.sdbc.DataType;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
-import com.sun.star.wizards.db.DBMetaData;
 import com.sun.star.wizards.db.TableDescriptor;
 import com.sun.star.wizards.db.TypeInspector;
 import com.sun.star.wizards.ui.FieldSelection;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
-import com.sun.star.wizards.ui.WizardDialog;
 import com.sun.star.wizards.ui.XFieldSelectionListener;
 
 public class PrimaryKeyHandler implements XFieldSelectionListener

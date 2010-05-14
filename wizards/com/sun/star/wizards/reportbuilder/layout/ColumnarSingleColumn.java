@@ -94,9 +94,10 @@ public class ColumnarSingleColumn extends ReportBuilderLayouter
             aRect = insertLabel(xSection, sLabel, aRect, nLabelWidth, aSOLabel);
             final String sFieldName = convertToFieldName(aFieldNames[i]);
             aRect = insertFormattedField(xSection, sFieldName, aRect, nWidth, aSOTextField);
-            aRect.Y += aSOLabel.getHeight(500);
+            int nHeight = aRect.Height;
+            aRect.Y += Math.max(aSOLabel.getHeight(LayoutConstants.LabelHeight), nHeight);
         }
-        aRect.Y += aSOLabel.getHeight(500); // one empty line
+        aRect.Y += aSOLabel.getHeight(LayoutConstants.EmptyLineHeight); // one empty line
         xSection.setHeight(aRect.Y);
         doNotBreakInTable(xSection);
     }

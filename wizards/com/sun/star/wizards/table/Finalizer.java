@@ -29,26 +29,12 @@
  ************************************************************************/
 package com.sun.star.wizards.table;
 
-import com.sun.star.awt.FocusEvent;
-import com.sun.star.awt.TextEvent;
-import com.sun.star.awt.VclWindowPeerAttribute;
-import com.sun.star.awt.XFocusListener;
 import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.awt.XTextComponent;
-import com.sun.star.awt.XTextListener;
-import com.sun.star.awt.XWindow;
-import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.lang.EventObject;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sdbc.SQLException;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
-import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
-import com.sun.star.wizards.common.SystemDialog;
-import com.sun.star.wizards.db.DBMetaData;
 import com.sun.star.wizards.db.TableDescriptor;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.*;
@@ -148,7 +134,7 @@ public class Finalizer
                                     },
                                     new Object[]
                                     {
-                                        Boolean.TRUE, new Integer(12), "HID:41244", new Short("7"), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sCatalogNames, new Short(curtabindex++), new Integer(80)
+                                        Boolean.TRUE, new Integer(12), "HID:41244", new Short(UnoDialog.getListBoxLineCount()), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sCatalogNames, new Short(curtabindex++), new Integer(80)
                                     });
                             int isel = JavaTools.FieldInList(sCatalogNames, sCatalog);
                             if (isel < 0)
@@ -203,7 +189,7 @@ public class Finalizer
                                     },
                                     new Object[]
                                     {
-                                        Boolean.TRUE, new Integer(12), "HID:41245", new Short("7"), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sSchemaNames, new Short(curtabindex++), new Integer(80)
+                                        Boolean.TRUE, new Integer(12), "HID:41245", new Short(UnoDialog.getListBoxLineCount()), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sSchemaNames, new Short(curtabindex++), new Integer(80)
                                     });
                             int isel = JavaTools.FieldInList(sSchemaNames, sSchema);
                             if (isel < 0)
@@ -321,7 +307,7 @@ public class Finalizer
     {
         if (txtTableName.getText().equals(""))
         {
-            String ssuffix = Desktop.getIncrementSuffix(curtabledescriptor.xTableNames, getComposedTableName(_tablename));
+            String ssuffix = Desktop.getIncrementSuffix(curtabledescriptor.getTableNamesAsNameAccess(), getComposedTableName(_tablename));
             txtTableName.setText(_tablename + ssuffix);
             setCompletionFlag();
         }

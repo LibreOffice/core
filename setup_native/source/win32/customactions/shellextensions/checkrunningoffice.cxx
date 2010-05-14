@@ -242,7 +242,7 @@ extern "C" UINT __stdcall IsOfficeRunning( MSIHANDLE handle )
             return ERROR_SUCCESS;
 
         std::_tstring sRenameSrc = sOfficeInstallPath + TEXT("program");
-        std::_tstring sRenameDst = sOfficeInstallPath + TEXT("program_1");
+        std::_tstring sRenameDst = sOfficeInstallPath + TEXT("program_test");
 
         bool bSuccess = MoveFile( sRenameSrc.c_str(), sRenameDst.c_str() );
 
@@ -252,6 +252,32 @@ extern "C" UINT __stdcall IsOfficeRunning( MSIHANDLE handle )
         }
         else
         {
+            DWORD  dwError = GetLastError();
+            LPVOID lpMsgBuf;
+            // When there is no program folder, there could be no running office
+            if ( dwError == ERROR_FILE_NOT_FOUND )
+                return ERROR_SUCCESS;
+            // The destination folder should never exist, don't know what to do here
+            if ( dwError == ERROR_ALREADY_EXISTS )
+                return ERROR_SUCCESS;
+
+            if ( FormatMessage(
+                FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                FORMAT_MESSAGE_FROM_SYSTEM |
+                FORMAT_MESSAGE_IGNORE_INSERTS,
+                NULL,
+                GetLastError(),
+                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                (LPTSTR) &lpMsgBuf,
+                0,
+                NULL ))
+            {
+                OutputDebugStringFormat( TEXT("Error Code %d: %s"), dwError, lpMsgBuf );
+                LocalFree( lpMsgBuf );
+            }
+            else
+                OutputDebugStringFormat( TEXT("Error Code %d: Unknown"), dwError );
+
             MsiSetProperty( handle, TEXT("OFFICERUNS"), TEXT("1") );
             SetMsiErrorCode( MSI_ERROR_OFFICE_IS_RUNNING );
         }

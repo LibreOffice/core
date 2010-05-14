@@ -54,7 +54,7 @@ import com.sun.star.frame.*;
 public class CommandMetaData extends DBMetaData
 {
     public Map FieldTitleSet = new HashMap();
-    public String[] AllFieldNames = new String[]{};
+    public String[] m_aAllFieldNames = new String[]{};
     public FieldColumn[] FieldColumns = new FieldColumn[]{};
 //  public String[] FieldNames = new String[] {};
     public String[] GroupFieldNames = new String[] {};
@@ -63,7 +63,7 @@ public class CommandMetaData extends DBMetaData
     public String[][] AggregateFieldNames = new String[][] {};
     public String[] NumericFieldNames = new String[] {};
     public String[] NonAggregateFieldNames;
-    public int[] FieldTypes;
+    private int[] FieldTypes;
     private int CommandType;
     private String Command;
     boolean bCatalogAtStart = true;
@@ -297,7 +297,7 @@ public class CommandMetaData extends DBMetaData
         {
             try
             {
-                Object oField;
+                // Object oField;
                 java.util.Vector ResultFieldNames = new java.util.Vector(10);
                 String[] FieldNames;
                 CommandObject oCommand = this.getCommandByName(_commandname, _commandtype);
@@ -306,7 +306,7 @@ public class CommandMetaData extends DBMetaData
                 {
                     for (int n = 0; n < FieldNames.length; n++)
                     {
-                        oField = oCommand.xColumns.getByName(FieldNames[n]);
+                        Object oField = oCommand.xColumns.getByName(FieldNames[n]);
                         int iType = AnyConverter.toInt(Helper.getUnoPropertyValue(oField, "Type"));
                         // BinaryFieldTypes are not included in the WidthList
                         if (JavaTools.FieldInIntTable(WidthList, iType) >= 0)
@@ -316,11 +316,15 @@ public class CommandMetaData extends DBMetaData
 //                        else
                             ResultFieldNames.addElement(FieldNames[n]);
                         }
+                        else if (JavaTools.FieldInIntTable(BinaryTypes, iType) >= 0)
+                        {
+                            ResultFieldNames.addElement(FieldNames[n]);
+                        }
                     }
-                    FieldNames = new String[FieldNames.length];
+                    // FieldNames = new String[FieldNames.length];
                     FieldTypes = new int[FieldNames.length];
-                    AllFieldNames = new String[ResultFieldNames.size()];
-                    ResultFieldNames.copyInto(AllFieldNames);
+                    m_aAllFieldNames = new String[ResultFieldNames.size()];
+                    ResultFieldNames.copyInto(m_aAllFieldNames);
                     return true;
                 }
             }
@@ -367,7 +371,7 @@ public class CommandMetaData extends DBMetaData
             return Command;
         }
     /**
-     * @param command The command to set.
+     * @param _command The command to set.
      */
     public void setCommandName(String _command)
         {
@@ -383,7 +387,7 @@ public class CommandMetaData extends DBMetaData
         }
 
     /**
-     * @param commandType The commandType to set.
+     * @param _commandType The commandType to set.
      */
     public void setCommandType(int _commandType)
         {
@@ -504,7 +508,7 @@ public class CommandMetaData extends DBMetaData
 
     /**
      * the fieldnames passed over are not necessarily the ones that are defined in the class
-     * @param FieldNames
+     * @param _DisplayFieldNames
      * @return
      */
     public boolean hasNumericalFields(String[] _DisplayFieldNames)
@@ -659,7 +663,9 @@ public class CommandMetaData extends DBMetaData
                 XComponentLoader xLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class,xFac.createInstanceWithArguments(args));
                 ret[0] = xLoader.loadComponentFromURL(surl, "_self", 0, _rArgs);
                 if ( ret[0] != null)
+                {
                     ret[0] = (XComponent)UnoRuntime.queryInterface(XComponent.class,xLoader);
+                }
             }
             catch (Exception exception)
             {
@@ -683,7 +689,7 @@ public class CommandMetaData extends DBMetaData
                     if (xDBMetaData.supportsIntegrityEnhancementFacility())
                     {
                         java.util.Vector TableVector = new java.util.Vector();
-                        Object oTable = xTableNames.getByName(_stablename);
+                        Object oTable = getTableNamesAsNameAccess().getByName(_stablename);
                         XKeysSupplier xKeysSupplier = (XKeysSupplier) UnoRuntime.queryInterface(XKeysSupplier.class, oTable);
                         xIndexKeys = xKeysSupplier.getKeys();
                         for (int i = 0; i < xIndexKeys.getCount(); i++)
@@ -694,7 +700,7 @@ public class CommandMetaData extends DBMetaData
                             {
                                 // getImportedKeys (RelationController.cxx /source/ui/relationdesign) /Zeile 475
                                 String sreftablename = AnyConverter.toString(xPropertySet.getPropertyValue("ReferencedTable"));
-                                if (xTableNames.hasByName(sreftablename))
+                                if (getTableNamesAsNameAccess().hasByName(sreftablename))
                                 {
                                     TableVector.addElement(sreftablename);
                                 }
@@ -732,7 +738,7 @@ public class CommandMetaData extends DBMetaData
                     if (curtype == KeyType.FOREIGN)
                     {
                         String scurreftablename = AnyConverter.toString(xPropertySet.getPropertyValue("ReferencedTable"));
-                        if (xTableNames.hasByName(scurreftablename))
+                        if (getTableNamesAsNameAccess().hasByName(scurreftablename))
                         {
                             if (scurreftablename.equals(_sreferencedtablename))
                             {

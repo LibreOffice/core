@@ -72,7 +72,7 @@ namespace
 
     static const OUString SOAPID = OUString::createFromAscii("OpenOffice.org Improvement Report - Version 1\n");
 
-    static const sal_Int32 incrementCfgValue(
+    static sal_Int32 incrementCfgValue(
         const Reference<XMultiServiceFactory> sm,
         const OUString& package,
         const OUString& rel_path,
@@ -103,7 +103,7 @@ namespace oooimprovement
         : m_ServiceFactory(sf)
     {}
 
-    const OUString Config::getSoapUrl()
+    OUString Config::getSoapUrl() const
     {
         OUString result;
         MyConfigurationHelper::readDirectKey(
@@ -113,7 +113,7 @@ namespace oooimprovement
         return result;
     }
 
-    const OUString Config::getSoapId()
+    OUString Config::getSoapId() const
     {
         OUString value;
         OUStringBuffer result = SOAPID;
@@ -125,7 +125,7 @@ namespace oooimprovement
         return result.makeStringAndClear();
     }
 
-    const OUString Config::getReporterEmail()
+    OUString Config::getReporterEmail() const
     {
         OUString result;
         MyConfigurationHelper::readDirectKey(
@@ -135,7 +135,7 @@ namespace oooimprovement
         return result;
     }
 
-    const OUString Config::getLogPath()
+    OUString Config::getLogPath() const
     {
         OUString result;
         MyConfigurationHelper::readDirectKey(
@@ -145,7 +145,7 @@ namespace oooimprovement
         return result;
     }
 
-    bool Config::getEnablingAllowed()
+    bool Config::getEnablingAllowed() const
     {
         bool result = false;
         MyConfigurationHelper::readDirectKey(
@@ -155,7 +155,7 @@ namespace oooimprovement
         return result;
     }
 
-    bool Config::getInvitationAccepted()
+    bool Config::getInvitationAccepted() const
     {
        bool result = false;
        MyConfigurationHelper::readDirectKey(
@@ -165,7 +165,7 @@ namespace oooimprovement
        return result;
     };
 
-    bool Config::getShowedInvitation()
+    bool Config::getShowedInvitation() const
     {
        bool result = false;
        MyConfigurationHelper::readDirectKey(
@@ -175,7 +175,7 @@ namespace oooimprovement
        return result;
     };
 
-    const OUString Config::getCompleteProductname()
+    OUString Config::getCompleteProductname() const
     {
         OUStringBuffer result;
         OUString value;
@@ -202,7 +202,7 @@ namespace oooimprovement
         return result.makeStringAndClear();
     }
 
-    const OUString Config::getSetupLocale()
+    OUString Config::getSetupLocale() const
     {
         OUString result;
         MyConfigurationHelper::readDirectKey(
@@ -212,7 +212,7 @@ namespace oooimprovement
         return result;
     }
 
-    const sal_Int32 Config::getReportCount()
+    sal_Int32 Config::getReportCount() const
     {
         sal_Int32 result = 0;
         MyConfigurationHelper::readDirectKey(
@@ -222,7 +222,7 @@ namespace oooimprovement
         return result;
     }
 
-    const sal_Int32 Config::getFailedAttempts()
+    sal_Int32 Config::getFailedAttempts() const
     {
         sal_Int32 result = 0;
         MyConfigurationHelper::readDirectKey(
@@ -232,7 +232,7 @@ namespace oooimprovement
         return result;
     }
 
-    const sal_Int32 Config::getOfficeStartCounterdown()
+    sal_Int32 Config::getOfficeStartCounterdown() const
     {
         sal_Int32 result = 0;
         MyConfigurationHelper::readDirectKey(

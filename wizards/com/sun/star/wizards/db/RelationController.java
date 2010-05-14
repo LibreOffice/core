@@ -31,14 +31,9 @@ package com.sun.star.wizards.db;
 
 import java.util.Vector;
 
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XRow;
-import com.sun.star.sdbcx.KeyType;
-import com.sun.star.sdbcx.XColumnsSupplier;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.JavaTools;
 

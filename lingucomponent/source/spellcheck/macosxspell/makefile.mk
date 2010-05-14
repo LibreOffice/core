@@ -56,12 +56,10 @@ CFLAGSCXX += -I..$/..$/lingutil
 CFLAGSCXX += -x objective-c++ -fobjc-exceptions
 
 EXCEPTIONSFILES=	\
-        $(SLO)$/sprophelp.obj\
         $(SLO)$/macspellimp.obj
 
 
 SLOFILES=	\
-        $(SLO)$/sprophelp.obj\
         $(SLO)$/macreg.obj\
         $(SLO)$/macspellimp.obj
 

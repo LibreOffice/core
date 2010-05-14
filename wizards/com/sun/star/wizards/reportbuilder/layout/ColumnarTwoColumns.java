@@ -108,6 +108,7 @@ public class ColumnarTwoColumns extends ReportBuilderLayouter
         final SectionObject aSOLabel = getDesignTemplate().getDetailLabel();
         aSOLabel.setFontToBold();
         final SectionObject aSOTextField = getDesignTemplate().getDetailTextField();
+        int nMaxHeight = 0;
         for (int x = 0; x < _nColumns; x++)
         {
             aRect.Y = 0;
@@ -120,13 +121,15 @@ public class ColumnarTwoColumns extends ReportBuilderLayouter
                     aRect = insertLabel(xSection, sLabel, aRect, nLabelWidth, aSOLabel);
                     final String sFieldName = convertToFieldName(aFieldNames[i]);
                     aRect = insertFormattedField(xSection, sFieldName, aRect, nWidth, aSOTextField);
-                    aRect.Y += aSOLabel.getHeight(500);
+
+                    aRect.Y += Math.max(aSOLabel.getHeight(LayoutConstants.LabelHeight), aRect.Height);
                     ++i;
                 }
             }
+            nMaxHeight = Math.max(aRect.Y, nMaxHeight);
         }
-        aRect.Y = aSOLabel.getHeight(500) * nRows;
-        aRect.Y += aSOLabel.getHeight(500); // one empty line
+        aRect.Y = Math.max(aSOLabel.getHeight(LayoutConstants.LabelHeight) * nRows, nMaxHeight);
+        aRect.Y += aSOLabel.getHeight(LayoutConstants.EmptyLineHeight); // one empty line
         xSection.setHeight(aRect.Y);
         doNotBreakInTable(xSection);
     }

@@ -34,7 +34,6 @@ import java.io.FileNotFoundException;
 
 import org.w3c.dom.Node;
 
-import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.document.MacroExecMode;
 import com.sun.star.document.UpdateDocMode;
@@ -48,7 +47,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.DateTime;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.FileAccess;
-import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.XMLHelper;

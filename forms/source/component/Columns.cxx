@@ -204,11 +204,11 @@ Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType ) throw (RuntimeE
 
 DBG_NAME(OGridColumn);
 //------------------------------------------------------------------------------
-OGridColumn::OGridColumn(const Reference<XMultiServiceFactory>& _rxFactory, const ::rtl::OUString& _sModelName)
+OGridColumn::OGridColumn( const comphelper::ComponentContext& _rContext, const ::rtl::OUString& _sModelName )
     :OGridColumn_BASE(m_aMutex)
     ,OPropertySetAggregationHelper(OGridColumn_BASE::rBHelper)
     ,m_aHidden( makeAny( sal_False ) )
-    ,m_xORB( _rxFactory )
+    ,m_aContext( _rContext )
     ,m_aModelName(_sModelName)
 {
     DBG_CTOR(OGridColumn,NULL);
@@ -218,15 +218,13 @@ OGridColumn::OGridColumn(const Reference<XMultiServiceFactory>& _rxFactory, cons
     {
         increment( m_refCount );
 
-        // Muss im eigenen Block,
-        // da xAgg vor dem delegator setzen wieder freigesetzt sein muss!
         {
-            m_xAggregate = Reference< XAggregation >( _rxFactory->createInstance( m_aModelName ), UNO_QUERY );
+            m_xAggregate.set( m_aContext.createComponent( m_aModelName ), UNO_QUERY );
             setAggregation( m_xAggregate );
         }
 
-        if (m_xAggregate.is())
-        {   // don't omit this brackets - they ensure that the following temporary is properly deleted
+        if ( m_xAggregate.is() )
+        {   // don't omit those brackets - they ensure that the following temporary is properly deleted
             m_xAggregate->setDelegator( static_cast< ::cppu::OWeakObject* >( this ) );
         }
 
@@ -239,7 +237,7 @@ OGridColumn::OGridColumn(const Reference<XMultiServiceFactory>& _rxFactory, cons
 OGridColumn::OGridColumn( const OGridColumn* _pOriginal )
     :OGridColumn_BASE( m_aMutex )
     ,OPropertySetAggregationHelper( OGridColumn_BASE::rBHelper )
-    ,m_xORB( _pOriginal->m_xORB )
+    ,m_aContext( _pOriginal->m_aContext )
 {
     DBG_CTOR(OGridColumn,NULL);
 
@@ -283,13 +281,6 @@ OGridColumn::~OGridColumn()
     DBG_DTOR(OGridColumn,NULL);
 }
 
-// XChild
-//------------------------------------------------------------------------------
-void SAL_CALL OGridColumn::setParent(const InterfaceRef& Parent) throw(NoSupportException, RuntimeException)
-{
-    m_xParent = Parent;
-}
-
 // XEventListener
 //------------------------------------------------------------------------------
 void SAL_CALL OGridColumn::disposing(const EventObject& _rSource) throw(RuntimeException)
@@ -311,8 +302,6 @@ void OGridColumn::disposing()
     Reference<XComponent>  xComp;
     if (query_aggregation(m_xAggregate, xComp))
         xComp->dispose();
-
-    setParent(InterfaceRef ());
 }
 
 //------------------------------------------------------------------------------

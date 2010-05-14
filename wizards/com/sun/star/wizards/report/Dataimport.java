@@ -33,11 +33,8 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 
-import com.sun.star.wizards.db.*;
 import com.sun.star.wizards.ui.*;
 import com.sun.star.wizards.common.*;
-import com.sun.star.wizards.document.*;
-import com.sun.star.wizards.text.*;
 import com.sun.star.uno.Exception;
 
 public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionListener

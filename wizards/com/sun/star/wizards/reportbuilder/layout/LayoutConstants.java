@@ -1,4 +1,5 @@
-/***************************************************************************
+/*
+ * ***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -6,8 +7,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: altstrfunc.hxx,v $
- * $Revision: 1.4 $
+ * $RCSfile: InBlocksLabelsLeft.java,v $
+ *
+ * $Revision: 1.2.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -26,19 +28,29 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/
+ * **********************************************************************
+ */
 
-#ifndef _ALT_STRFUNC_HXX_
-#define _ALT_STRFUNC_HXX_
+package com.sun.star.wizards.reportbuilder.layout;
 
-#include <string>
-#include <guess.hxx>
+/**
+ *
+ * @author ll93751
+ */
+public class LayoutConstants
+{
+    public static final int LabelHeight = 500;
+    public static final int FormattedFieldHeight = 500;
+    public static final int EmptyLineHeight = 500;
 
-inline bool isSeparator(const char c){
-    return c == GUESS_SEPARATOR_OPEN || c == GUESS_SEPARATOR_SEP || c == GUESS_SEPARATOR_CLOSE || c == '\0';
+    public static final int BinaryHeight = 4000;
+    public static final int MemoFieldHeight = 4000;
+
+    public static final int LineHeight = 250;
+
+    /**
+     * Groups will indent
+     * This is the factor (5mm) which will multiply with the current indent
+     */
+    public static final int IndentFactorWidth = 500;
 }
-
-int             start(const std::string &s1, const std::string &s2);
-
-#endif
-

@@ -53,6 +53,7 @@
 #include <string>
 #include <queue>
 #include <stdio.h>
+#include <strsafe.h>
 
 #include <systools/win32/uwinapi.h>
 

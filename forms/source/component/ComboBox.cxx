@@ -143,7 +143,7 @@ DBG_NAME( OComboBoxModel )
 OComboBoxModel::OComboBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
     :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_COMBOBOX, FRM_SUN_CONTROL_COMBOBOX, sal_True, sal_True, sal_True )
                     // use the old control name for compytibility reasons
-    ,OEntryListHelper( m_aMutex )
+    ,OEntryListHelper( (OControlModel&)*this )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
     ,m_aListRowSet( getContext() )
     ,m_eListSourceType(ListSourceType_TABLE)
@@ -158,7 +158,7 @@ OComboBoxModel::OComboBoxModel(const Reference<XMultiServiceFactory>& _rxFactory
 //------------------------------------------------------------------
 OComboBoxModel::OComboBoxModel( const OComboBoxModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
     :OBoundControlModel( _pOriginal, _rxFactory )
-    ,OEntryListHelper( *_pOriginal, m_aMutex )
+    ,OEntryListHelper( *_pOriginal, (OControlModel&)*this )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
     ,m_aListRowSet( getContext() )
     ,m_aListSource( _pOriginal->m_aListSource )
@@ -265,8 +265,8 @@ void OComboBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const 
 
         case PROPERTY_ID_STRINGITEMLIST:
         {
-            ::osl::ResettableMutexGuard aGuard( m_aMutex );
-            setNewStringItemList( _rValue, aGuard );
+            ControlModelLock aLock( *this );
+            setNewStringItemList( _rValue, aLock );
                 // TODO: this is bogus. setNewStringItemList expects a guard which has the *only*
                 // lock to the mutex, but setFastPropertyValue_NoBroadcast is already called with
                 // a lock - so we effectively has two locks here, of which setNewStringItemList can
@@ -384,7 +384,7 @@ void SAL_CALL OComboBoxModel::write(const Reference<stario::XObjectOutputStream>
 void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, RuntimeException)
 {
     OBoundControlModel::read(_rxInStream);
-    ::osl::ResettableMutexGuard aGuard(m_aMutex);
+    ControlModelLock aLock( *this );
 
     // since we are "overwriting" the StringItemList of our aggregate (means we have
     // an own place to store the value, instead of relying on our aggregate storing it),
@@ -392,7 +392,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
     try
     {
         if ( m_xAggregateSet.is() )
-            setNewStringItemList( m_xAggregateSet->getPropertyValue( PROPERTY_STRINGITEMLIST ), aGuard );
+            setNewStringItemList( m_xAggregateSet->getPropertyValue( PROPERTY_STRINGITEMLIST ), aLock );
     }
     catch( const Exception& )
     {
@@ -853,7 +853,7 @@ Any OComboBoxModel::getDefaultForReset() const
 }
 
 //--------------------------------------------------------------------
-void OComboBoxModel::stringItemListChanged( ::osl::ResettableMutexGuard& /*_rInstanceLock*/ )
+void OComboBoxModel::stringItemListChanged( ControlModelLock& /*_rInstanceLock*/ )
 {
     if ( m_xAggregateSet.is() )
         m_xAggregateSet->setPropertyValue( PROPERTY_STRINGITEMLIST, makeAny( getStringItemList() ) );

@@ -28,16 +28,22 @@
  *
  ************************************************************************/
 
-#include "FormComponent.hxx"
-#include <com/sun/star/form/XGridColumnFactory.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/form/XLoadable.hpp>
-#include <tools/link.hxx>
-#include "InterfaceContainer.hxx"
-#include <comphelper/proparrhlp.hxx>
-#include <cppuhelper/implbase6.hxx>
 #include "errorbroadcaster.hxx"
+#include "FormComponent.hxx"
 #include "formcontrolfont.hxx"
+#include "InterfaceContainer.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/form/XGridColumnFactory.hpp>
+#include <com/sun/star/form/XLoadable.hpp>
+#include <com/sun/star/sdb/XRowSetSupplier.hpp>
+#include <com/sun/star/sdb/XRowSetChangeBroadcaster.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/proparrhlp.hxx>
+#include <cppuhelper/implbase7.hxx>
+#include <tools/link.hxx>
 
 //.........................................................................
 namespace frm
@@ -59,12 +65,13 @@ class OGridColumn;
 //==================================================================
 // OGridControlModel
 //==================================================================
-typedef ::cppu::ImplHelper6 <   ::com::sun::star::awt::XControlModel
+typedef ::cppu::ImplHelper7 <   ::com::sun::star::awt::XControlModel
                             ,   ::com::sun::star::form::XGridColumnFactory
-                            ,   ::com::sun::star::form::XLoadListener
                             ,   ::com::sun::star::form::XReset
                             ,   ::com::sun::star::view::XSelectionSupplier
                             ,   ::com::sun::star::sdb::XSQLErrorListener
+                            ,   ::com::sun::star::sdb::XRowSetSupplier
+                            ,   ::com::sun::star::sdb::XRowSetChangeBroadcaster
                             >   OGridControlModel_BASE;
 
 class OGridControlModel :public OControlModel
@@ -74,7 +81,8 @@ class OGridControlModel :public OControlModel
                         ,public OGridControlModel_BASE
 {
     ::cppu::OInterfaceContainerHelper       m_aSelectListeners,
-                                            m_aResetListeners;
+                                            m_aResetListeners,
+                                            m_aRowSetChangeListeners;
 
 // [properties]
     ::com::sun::star::uno::Any              m_aRowHeight;           // Zeilenhoehe
@@ -87,7 +95,6 @@ class OGridControlModel :public OControlModel
 // [properties]
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xSelection;
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >           m_xParentFormLoadable;
 
 // [properties]
     ::rtl::OUString             m_sHelpURL;                 // URL
@@ -128,13 +135,6 @@ public:
     // XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException);
 
-    // XLoadListener
-    virtual void SAL_CALL loaded(const ::com::sun::star::lang::EventObject& aEvent) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL unloaded(const ::com::sun::star::lang::EventObject& aEvent) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL unloading(const ::com::sun::star::lang::EventObject& aEvent) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL reloading(const ::com::sun::star::lang::EventObject& aEvent) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL reloaded(const ::com::sun::star::lang::EventObject& aEvent) throw(::com::sun::star::uno::RuntimeException);
-
     // XReset
     virtual void SAL_CALL reset() throw ( ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addResetListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException);
@@ -168,6 +168,14 @@ public:
     // XSQLErrorListener
     virtual void SAL_CALL errorOccured( const ::com::sun::star::sdb::SQLErrorEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException);
 
+    // XRowSetSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > SAL_CALL getRowSet(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setRowSet( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xDataSource ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XRowSetChangeBroadcaster
+    virtual void SAL_CALL addRowSetChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowSetChangeListener >& i_Listener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeRowSetChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowSetChangeListener >& i_Listener ) throw (::com::sun::star::uno::RuntimeException);
+
     // OControlModel's property handling
     virtual void describeFixedProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
@@ -195,7 +203,10 @@ protected:
 protected:
     virtual void implRemoved(const InterfaceRef& _rxObject);
     virtual void implInserted( const ElementDescription* _pElement );
-    virtual void implReplaced( const InterfaceRef& _rxReplacedObject, const ElementDescription* _pElement );
+    virtual void impl_replacedElement(
+                    const ::com::sun::star::container::ContainerEvent& _rEvent,
+                    ::osl::ClearableMutexGuard& _rInstanceLock
+                );
 
     void gotColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxColumn);
     void lostColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxColumn);

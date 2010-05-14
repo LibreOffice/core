@@ -777,7 +777,9 @@ String RID_DB_QUERY_WIZARD_START + 25
     Text [ en-US] = "Value";
 };
 
-
+// --------------------------------------
+// don't change anything to the next 10 values
+// they are list elements and need to be as follows
 String RID_DB_QUERY_WIZARD_START + 26
 {
     Text [ en-US] = "is equal to";
@@ -799,7 +801,6 @@ String RID_DB_QUERY_WIZARD_START + 29
     Text [ en-US] = "is greater than";
 };
 
-
 String RID_DB_QUERY_WIZARD_START + 30
 {
     Text [ en-US] = "is equal or less than ";
@@ -817,10 +818,36 @@ String RID_DB_QUERY_WIZARD_START + 32
 
 String RID_DB_QUERY_WIZARD_START + 33
 {
-    Text [ en-US] = "and";
+    Text [ en-US] = "not like";
 };
 
 String RID_DB_QUERY_WIZARD_START + 34
+{
+    Text [ en-US] = "is null";
+};
+
+String RID_DB_QUERY_WIZARD_START + 35
+{
+    Text [ en-US] = "is not null";
+};
+// --------------------------------------
+
+String RID_DB_QUERY_WIZARD_START + 36
+{
+    Text [ en-US] = "true";
+};
+
+String RID_DB_QUERY_WIZARD_START + 37
+{
+    Text [ en-US] = "false";
+};
+
+String RID_DB_QUERY_WIZARD_START + 38
+{
+    Text [ en-US] = "and";
+};
+
+String RID_DB_QUERY_WIZARD_START + 39
 {
     Text [ en-US] = "or";
 };

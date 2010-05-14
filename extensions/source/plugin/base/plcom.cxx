@@ -60,3 +60,14 @@ PluginComm::~PluginComm()
         aEntry.Kill();
     }
 }
+
+NPError PluginComm::NPP_SetWindow( XPlugin_Impl* i_pImpl )
+{
+    return NPP_SetWindow( i_pImpl->getNPPInstance(), i_pImpl->getNPWindow() );
+}
+
+NPError PluginComm::NPP_Destroy( XPlugin_Impl* i_pImpl, NPSavedData** save )
+{
+    return NPP_Destroy( i_pImpl->getNPPInstance(), save );
+}
+

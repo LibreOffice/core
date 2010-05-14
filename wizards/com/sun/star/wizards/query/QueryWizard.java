@@ -523,7 +523,7 @@ public class QueryWizard extends WizardDialog
                 if (JavaTools.FieldInList(CurDBMetaData.NonAggregateFieldNames, CurDisplayFieldName) > -1)
                 {
                     showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, resmsgNonNumericAsGroupBy);
-                    CurGroupFieldSelection.xSelFieldsListBox.addItems(SelItems, CurGroupFieldSelection.xSelFieldsListBox.getItemCount());
+                    CurGroupFieldSelection.xSelectedFieldsListBox.addItems(SelItems, CurGroupFieldSelection.xSelectedFieldsListBox.getItemCount());
                     String FieldList[] = CurGroupFieldSelection.xFieldsListBox.getItems();
                     int index = JavaTools.FieldInList(FieldList, CurDisplayFieldName);
                     if (index > -1)

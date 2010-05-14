@@ -340,6 +340,14 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
+    void TabOrderListBox::ModelHasMoved( SvListEntry* _pSource )
+    {
+        SvTreeListBox::ModelHasMoved( _pSource );
+
+        ((TabOrderDialog*)Window::GetParent())->SetModified();
+    }
+
+    //------------------------------------------------------------------------
     void TabOrderListBox::MoveSelection( long nRelPos )
     {
         UniString aSelEntryPrevText,aSelEntryNextText;

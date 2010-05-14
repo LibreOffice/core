@@ -31,11 +31,8 @@ package com.sun.star.wizards.form;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.sdb.CommandType;
-import com.sun.star.uno.AnyConverter;
 import com.sun.star.lang.XComponent;
 import com.sun.star.wizards.common.*;
-import com.sun.star.wizards.db.DBMetaData;
 import com.sun.star.wizards.db.RelationController;
 import com.sun.star.wizards.document.OfficeDocument;
 import com.sun.star.wizards.ui.*;
@@ -348,7 +345,7 @@ public class FormWizard extends WizardDialog
         return ret;
     }
 
-    public boolean getFormResources()
+    private boolean getFormResources()
     {
         sMsgWizardName = super.m_oResource.getResText(UIConsts.RID_FORM);
         sShowBinaryFields = m_oResource.getResText(UIConsts.RID_FORM + 2);

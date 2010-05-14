@@ -316,7 +316,7 @@ namespace accessibility
                 {
                     sal_uInt16 nPageId = (sal_uInt16)(sal_IntPtr) rVclWindowEvent.GetData();
 
-                    if ( nPageId == TAB_PAGE_NOTFOUND )
+                    if ( nPageId == TABBAR_PAGE_NOTFOUND )
                     {
                         for ( sal_Int32 i = m_aAccessibleChildren.size() - 1; i >= 0; --i )
                             RemoveChild( i );

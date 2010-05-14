@@ -37,7 +37,6 @@
  */
 package com.sun.star.wizards.web.data;
 
-import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Vector;
@@ -46,13 +45,10 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.i18n.NumberFormatIndex;
-import com.sun.star.lang.Locale;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.DateTime;
-import com.sun.star.util.XNumberFormatsSupplier;
-import com.sun.star.util.XNumberFormatter;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.common.Helper.DateUtils;
 

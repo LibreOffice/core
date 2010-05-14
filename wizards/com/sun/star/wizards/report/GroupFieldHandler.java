@@ -128,7 +128,7 @@ public class GroupFieldHandler extends FieldSelection
     protected void toggleListboxButtons(short iFieldsSelIndex, short iSelFieldsSelIndex)
     {
         super.toggleListboxButtons(iFieldsSelIndex, iSelFieldsSelIndex);
-        int iSelCount = xSelFieldsListBox.getItemCount();
+        int iSelCount = xSelectedFieldsListBox.getItemCount();
         if (iSelCount >= MAXSELFIELDS)
         {
             CurUnoDialog.setControlProperty("cmdMoveSelected" + sIncSuffix, "Enabled", Boolean.FALSE);
@@ -137,7 +137,7 @@ public class GroupFieldHandler extends FieldSelection
 
     public void selectFields(boolean bMoveAll)
     {
-        int iSelCount = xSelFieldsListBox.getItemCount();
+        int iSelCount = xSelectedFieldsListBox.getItemCount();
         if (iSelCount < MAXSELFIELDS)
         {
             super.selectFields(bMoveAll);
@@ -150,18 +150,18 @@ public class GroupFieldHandler extends FieldSelection
 
         public void moveItemDown(String Selitem)
         {
-            CurReportDocument.refreshGroupFields(xSelFieldsListBox.getItems());
+            CurReportDocument.refreshGroupFields(xSelectedFieldsListBox.getItems());
         }
 
         public void moveItemUp(String item)
         {
-            CurReportDocument.refreshGroupFields(xSelFieldsListBox.getItems());
+            CurReportDocument.refreshGroupFields(xSelectedFieldsListBox.getItems());
         }
 
         public void shiftFromLeftToRight(String[] Selitems, String[] Newitems)
         {
             String CurGroupTitle = Selitems[0];
-            int iSelCount = xSelFieldsListBox.getItemCount();
+            int iSelCount = xSelectedFieldsListBox.getItemCount();
             String[] CurGroupNames = xFieldsListBox.getItems();
             CurReportDocument.liveupdate_addGroupNametoDocument(CurGroupNames, CurGroupTitle, GroupFieldVector, CurReportDocument.getReportPath(), iSelCount);
             CurUnoDialog.setControlProperty("lblBlindTextNote_1", "Enabled", new Boolean(true));
@@ -177,12 +177,12 @@ public class GroupFieldHandler extends FieldSelection
             if (iSelPos > 0)
             {
                 String OldGroupTitle = OldSelitems[0];
-                String[] NewSelList = xSelFieldsListBox.getItems();
+                String[] NewSelList = xSelectedFieldsListBox.getItems();
                 CurReportDocument.liveupdate_removeGroupName(NewSelList, OldGroupTitle, GroupFieldVector);
-                String[] NewSelGroupNames = xSelFieldsListBox.getItems();
+                String[] NewSelGroupNames = xSelectedFieldsListBox.getItems();
                 CurUnoDialog.setControlProperty("lblBlindTextNote_1", "Enabled", new Boolean(NewSelGroupNames.length == 0));
 
-            // CurReportDocument.refreshGroupFields(xSelFieldsListBox.getItems());
+            // CurReportDocument.refreshGroupFields(xSelectedFieldsListBox.getItems());
             }
         }
 

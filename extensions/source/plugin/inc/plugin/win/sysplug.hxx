@@ -90,6 +90,7 @@ public:
     virtual             ~PluginComm_Impl();
 
 public:
+    using PluginComm::NPP_Destroy;
     virtual NPError     NPP_Destroy( NPP instance, NPSavedData** save );
     virtual NPError     NPP_DestroyStream( NPP instance, NPStream* stream, NPError reason );
     virtual void *      NPP_GetJavaClass();
@@ -99,6 +100,8 @@ public:
     virtual NPError     NPP_NewStream( NPP instance, NPMIMEType type, NPStream* stream,
                                        NPBool seekable, uint16* stype );
     virtual void        NPP_Print( NPP instance, NPPrint* platformPrint );
+
+    using PluginComm::NPP_SetWindow;
     virtual NPError     NPP_SetWindow( NPP instance, NPWindow* window );
     virtual void        NPP_Shutdown();
     virtual void        NPP_StreamAsFile( NPP instance, NPStream* stream, const char* fname );

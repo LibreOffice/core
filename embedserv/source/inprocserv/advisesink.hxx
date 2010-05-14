@@ -82,6 +82,7 @@ public:
     FORMATETC* GetFormatEtc() { return m_pFormatEtc; }
     DWORD GetAspect() { return m_nAspect; }
     ComSmart< IAdviseSink >& GetOrigAdvise() { return m_pListener; }
+    void DisconnectOrigAdvise() { m_pListener = NULL; }
 
     void SetClosed() { m_bClosed = TRUE; }
     void UnsetClosed() { m_bClosed = FALSE; }

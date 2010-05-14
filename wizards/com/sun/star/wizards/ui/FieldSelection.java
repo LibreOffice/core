@@ -45,18 +45,19 @@ public class FieldSelection
 
     public UnoDialog CurUnoDialog;
     public XListBox xFieldsListBox;
-    public XListBox xSelFieldsListBox;
+    public XListBox xSelectedFieldsListBox;
     public XFieldSelectionListener xFieldSelection;
     public int maxfieldcount = 10000000;
     public String sIncSuffix;
     protected Integer IStep;
     protected int FirstHelpIndex;
     protected short curtabindex;
-    String[] AllFieldNames;
-    public Integer ListBoxWidth;
+    private String[] AllFieldNames;
+    private Integer ListBoxWidth;
     public Integer SelListBoxPosX;
     boolean bisModified = false;
     boolean AppendMode = false;
+
     final int SOCMDMOVESEL = 1;
     final int SOCMDMOVEALL = 2;
     final int SOCMDREMOVESEL = 3;
@@ -71,6 +72,7 @@ public class FieldSelection
     final int cmdButtonVertiDist = 2;
     final int lblHeight = 8;
     final int lblVertiDist = 2;
+
     int CompPosX;
     int CompPosY;
     int CompHeight;
@@ -217,7 +219,7 @@ public class FieldSelection
 
             Integer CmdButtonWidth = new Integer(cmdButtonWidth);
 
-            sIncSuffix = "_" + com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.xDlgNameAccess, "lblFields_");
+            sIncSuffix = "_" + com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.getDlgNameAccess(), "lblFields_");
 
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblFields" + sIncSuffix,
                     new String[]
@@ -297,7 +299,7 @@ public class FieldSelection
                         new Integer(8), slblSelFields, SelListBoxPosX, new Integer(CompPosY), IStep, new Short(curtabindex++), ListBoxWidth
                     });
 
-            xSelFieldsListBox = CurUnoDialog.insertListBox("lstSelFields" + sIncSuffix, SOSELFLDSLST, new ActionListenerImpl(), new ItemListenerImpl(),
+            xSelectedFieldsListBox = CurUnoDialog.insertListBox("lstSelFields" + sIncSuffix, SOSELFLDSLST, new ActionListenerImpl(), new ItemListenerImpl(),
                     new String[]
                     {
                         "Height", "HelpURL", "MultiSelection", "PositionX", "PositionY", "Step", "TabIndex", "Width"
@@ -330,7 +332,7 @@ public class FieldSelection
             CurUnoDialog.getPeerConfiguration().setAccessibleName(btnmoveselected, AccessTextMoveSelected);
             CurUnoDialog.getPeerConfiguration().setAccessibleName(btnremoveselected, AccessTextRemoveSelected);
             CurUnoDialog.getPeerConfiguration().setAccessibleName(xFieldsListBox, JavaTools.replaceSubString(slblFields, "", "~"));
-            CurUnoDialog.getPeerConfiguration().setAccessibleName(xSelFieldsListBox, JavaTools.replaceSubString(slblSelFields, "", "~"));
+            CurUnoDialog.getPeerConfiguration().setAccessibleName(xSelectedFieldsListBox, JavaTools.replaceSubString(slblSelFields, "", "~"));
             if (btnmoveall != null)
             {
                 CurUnoDialog.getPeerConfiguration().setAccessibleName(btnmoveall, AccessTextMoveAll);
@@ -382,18 +384,18 @@ public class FieldSelection
 
     private void changeSelectionOrder(int iNeighbor)
     {
-        short[] iSelIndices = xSelFieldsListBox.getSelectedItemsPos();
+        short[] iSelIndices = xSelectedFieldsListBox.getSelectedItemsPos();
         // Todo: we are assuming that the array starts with the lowest index. Verfy this assumption!!!!!
         if (iSelIndices.length == 1)
         {
             short iSelIndex = iSelIndices[0];
-            String[] NewItemList = xSelFieldsListBox.getItems();
+            String[] NewItemList = xSelectedFieldsListBox.getItems();
             String CurItem = NewItemList[iSelIndex];
             String NeighborItem = NewItemList[iSelIndex + iNeighbor];
             NewItemList[iSelIndex + iNeighbor] = CurItem;
             NewItemList[iSelIndex] = NeighborItem;
             CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, "StringItemList", NewItemList);
-            xSelFieldsListBox.selectItem(CurItem, true);
+            xSelectedFieldsListBox.selectItem(CurItem, true);
             if (xFieldSelection != null)
             {
                 if (iNeighbor < 0)
@@ -443,16 +445,16 @@ public class FieldSelection
             boolean bmoveUpenabled = false;
             boolean bmoveDownenabled = false;
             CurUnoDialog.selectListBoxItem(xFieldsListBox, iFieldsSelIndex);
-            CurUnoDialog.selectListBoxItem(xSelFieldsListBox, iSelFieldsSelIndex);
-            int SelListBoxSelLength = xSelFieldsListBox.getSelectedItems().length;
+            CurUnoDialog.selectListBoxItem(xSelectedFieldsListBox, iSelFieldsSelIndex);
+            int SelListBoxSelLength = xSelectedFieldsListBox.getSelectedItems().length;
             int ListBoxSelLength = xFieldsListBox.getSelectedItems().length;
             boolean bIsFieldSelected = (ListBoxSelLength > 0);
             int FieldCount = xFieldsListBox.getItemCount();
             boolean bSelectSelected = (SelListBoxSelLength > 0);
-            int SelectCount = xSelFieldsListBox.getItemCount();
+            int SelectCount = xSelectedFieldsListBox.getItemCount();
             if (bSelectSelected)
             {
-                short[] iSelIndices = xSelFieldsListBox.getSelectedItemsPos();
+                short[] iSelIndices = xSelectedFieldsListBox.getSelectedItemsPos();
                 bmoveUpenabled = ((iSelIndices[0] > 0) && (iSelIndices.length == 1));
                 bmoveDownenabled = (((iSelIndices[SelListBoxSelLength - 1]) < (short) (SelectCount - 1)) && (iSelIndices.length == 1));
             }
@@ -470,8 +472,8 @@ public class FieldSelection
 
     protected void toggleMoveButtons(boolean _btoggleMoveAll, boolean _btoggleMoveSelected)
     {
-        boolean btoggleMoveAll = (((xFieldsListBox.getItemCount() + xSelFieldsListBox.getItemCount()) < maxfieldcount) && (_btoggleMoveAll));
-        boolean btoggleMoveSelected = (((xFieldsListBox.getSelectedItems().length + xSelFieldsListBox.getItemCount()) < maxfieldcount) && (_btoggleMoveSelected));
+        boolean btoggleMoveAll = (((xFieldsListBox.getItemCount() + xSelectedFieldsListBox.getItemCount()) < maxfieldcount) && (_btoggleMoveAll));
+        boolean btoggleMoveSelected = (((xFieldsListBox.getSelectedItems().length + xSelectedFieldsListBox.getItemCount()) < maxfieldcount) && (_btoggleMoveSelected));
         CurUnoDialog.setControlProperty("cmdMoveAll" + sIncSuffix, "Enabled", new Boolean(btoggleMoveAll));
         CurUnoDialog.setControlProperty("cmdMoveSelected" + sIncSuffix, "Enabled", new Boolean(btoggleMoveSelected));
     }
@@ -479,7 +481,7 @@ public class FieldSelection
     public void setMultipleMode(boolean _bisMultiple)
     {
         xFieldsListBox.setMultipleMode(_bisMultiple);
-        xSelFieldsListBox.setMultipleMode(_bisMultiple);
+        xSelectedFieldsListBox.setMultipleMode(_bisMultiple);
     }
 
     public void emptyFieldsListBoxes()
@@ -502,25 +504,31 @@ public class FieldSelection
 
     public void mergeList(String[] AllFieldNames, String[] SecondList)
     {
-        int MaxIndex = SecondList.length;
+        // int MaxIndex = SecondList.length;
         xFieldsListBox.addItems(AllFieldNames, (short) 0);
         toggleListboxButtons((short) - 1, (short) - 1);
     }
 
     public void intializeSelectedFields(String[] _SelectedFieldNames)
     {
-        xSelFieldsListBox.addItems(_SelectedFieldNames, xSelFieldsListBox.getItemCount());
+        xSelectedFieldsListBox.addItems(_SelectedFieldNames, xSelectedFieldsListBox.getItemCount());
     }
+
+    private void removeAllItems(XListBox _xListBox)
+    {
+        _xListBox.removeItems((short) 0, _xListBox.getItemCount());
+    }
+
     // Note Boolean Parameter
     public void initialize(String[] _AllFieldNames, boolean _AppendMode)
     {
         AppendMode = _AppendMode;
-        xFieldsListBox.removeItems((short) 0, xFieldsListBox.getItemCount());
+        removeAllItems(xFieldsListBox);
         xFieldsListBox.addItems(_AllFieldNames, (short) 0);
-        this.AllFieldNames = xFieldsListBox.getItems();
-        if ((xSelFieldsListBox.getItemCount() > 0) && (!AppendMode))
+        AllFieldNames = xFieldsListBox.getItems();
+        if ((xSelectedFieldsListBox.getItemCount() > 0) && (!AppendMode))
         {
-            xSelFieldsListBox.removeItems((short) 0, xSelFieldsListBox.getItemCount());
+            removeAllItems(xSelectedFieldsListBox);
         }
         toggleListboxControls(Boolean.TRUE);
     }
@@ -543,8 +551,8 @@ public class FieldSelection
 
     public void initialize(String[] _AllFieldNames, String[] _SelFieldNames, boolean _AppendMode)
     {
-        xSelFieldsListBox.removeItems((short) 0, xSelFieldsListBox.getItemCount());
-        xSelFieldsListBox.addItems(_SelFieldNames, (short) 0);
+        removeAllItems(xSelectedFieldsListBox);
+        xSelectedFieldsListBox.addItems(_SelFieldNames, (short) 0);
         initialize(_AllFieldNames, _AppendMode);
     }
 
@@ -553,20 +561,20 @@ public class FieldSelection
         // int CurIndex;
         short iFieldSelected = (short) - 1;
         short iSelFieldSelected = (short) - 1;
-        // int MaxCurTarget = xSelFieldsListBox.getItemCount();
+        // int MaxCurTarget = xSelectedFieldsListBox.getItemCount();
         String[] SelFieldItems;
         if (bMoveAll)
         {
             SelFieldItems = xFieldsListBox.getItems();
-            xFieldsListBox.removeItems((short) 0, xFieldsListBox.getItemCount());
+            removeAllItems(xFieldsListBox);
             if (!AppendMode)
             {
-                xSelFieldsListBox.removeItems((short) 0, xSelFieldsListBox.getItemCount());
-                xSelFieldsListBox.addItems(AllFieldNames, (short) 0);
+                removeAllItems(xSelectedFieldsListBox);
+                xSelectedFieldsListBox.addItems(AllFieldNames, (short) 0);
             }
             else
             {
-                xSelFieldsListBox.addItems(SelFieldItems, xSelFieldsListBox.getItemCount());
+                xSelectedFieldsListBox.addItems(SelFieldItems, xSelectedFieldsListBox.getItemCount());
             }
         }
         else
@@ -576,18 +584,18 @@ public class FieldSelection
             if (MaxSourceSelected > 0)
             {
                 iFieldSelected = xFieldsListBox.getSelectedItemPos();
-                iSelFieldSelected = xSelFieldsListBox.getSelectedItemPos();
+                iSelFieldSelected = xSelectedFieldsListBox.getSelectedItemPos();
                 short[] SourceSelList = new short[xFieldsListBox.getSelectedItemsPos().length];
                 SourceSelList = xFieldsListBox.getSelectedItemsPos();
-                xSelFieldsListBox.addItems(SelFieldItems, xSelFieldsListBox.getItemCount());
+                xSelectedFieldsListBox.addItems(SelFieldItems, xSelectedFieldsListBox.getItemCount());
                 CurUnoDialog.removeSelectedItems(xFieldsListBox);
-                xSelFieldsListBox.selectItemPos((short) 0, xSelFieldsListBox.getSelectedItems().length > 0);
+                xSelectedFieldsListBox.selectItemPos((short) 0, xSelectedFieldsListBox.getSelectedItems().length > 0);
             }
         }
         toggleListboxButtons(iFieldSelected, iSelFieldSelected);
         if (xFieldSelection != null)
         {
-            xFieldSelection.shiftFromLeftToRight(SelFieldItems, xSelFieldsListBox.getItems());
+            xFieldSelection.shiftFromLeftToRight(SelFieldItems, xSelectedFieldsListBox.getItems());
         }
     }
 
@@ -596,14 +604,14 @@ public class FieldSelection
         // int m = 0;
         String SearchString;
         short iOldFieldSelected = xFieldsListBox.getSelectedItemPos();
-        short iOldSelFieldSelected = xSelFieldsListBox.getSelectedItemPos();
-        String[] OldSelFieldItems = xSelFieldsListBox.getSelectedItems();
+        short iOldSelFieldSelected = xSelectedFieldsListBox.getSelectedItemPos();
+        String[] OldSelFieldItems = xSelectedFieldsListBox.getSelectedItems();
         if (bMoveAll)
         {
-            OldSelFieldItems = xSelFieldsListBox.getItems();
-            xFieldsListBox.removeItems((short) 0, xFieldsListBox.getItemCount());
+            OldSelFieldItems = xSelectedFieldsListBox.getItems();
+            removeAllItems(xFieldsListBox);
             xFieldsListBox.addItems(AllFieldNames, (short) 0);
-            xSelFieldsListBox.removeItems((short) 0, xSelFieldsListBox.getItemCount());
+            removeAllItems(xSelectedFieldsListBox);
         }
         else
         {
@@ -630,10 +638,10 @@ public class FieldSelection
                 NewSourceVector.toArray(NewSourceList);
                 xFieldsListBox.addItems(NewSourceList, (short) 0);
             }
-            CurUnoDialog.removeSelectedItems(xSelFieldsListBox);
+            CurUnoDialog.removeSelectedItems(xSelectedFieldsListBox);
         }
         toggleListboxButtons(iOldFieldSelected, iOldSelFieldSelected);
-        String[] NewSelFieldItems = xSelFieldsListBox.getItems();
+        String[] NewSelFieldItems = xSelectedFieldsListBox.getItems();
         if (xFieldSelection != null)
         {
             xFieldSelection.shiftFromRightToLeft(OldSelFieldItems, NewSelFieldItems);

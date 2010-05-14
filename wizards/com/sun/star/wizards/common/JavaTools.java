@@ -30,11 +30,8 @@
 package com.sun.star.wizards.common;
 
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.sdb.CommandType;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.DateTime;
 import com.sun.star.beans.PropertyValue;
-import java.net.URLDecoder;
 import java.util.*;
 import java.io.File;
 

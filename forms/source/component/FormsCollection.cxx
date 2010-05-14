@@ -46,6 +46,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::util;
+
 //------------------------------------------------------------------
 DBG_NAME(OFormsCollection)
 //------------------------------------------------------------------
@@ -74,10 +76,20 @@ Sequence<Type> SAL_CALL OFormsCollection::getTypes() throw(RuntimeException)
 
 //------------------------------------------------------------------
 OFormsCollection::OFormsCollection(const Reference<XMultiServiceFactory>& _rxFactory)
-         :FormsCollectionComponentBase(m_aMutex)
-         ,OInterfaceContainer(_rxFactory, m_aMutex, ::getCppuType(static_cast<Reference<XForm>*>(NULL)))
+    :FormsCollectionComponentBase( m_aMutex )
+    ,OInterfaceContainer( _rxFactory, m_aMutex, XForm::static_type() )
+    ,OFormsCollection_BASE()
 {
     DBG_CTOR(OFormsCollection, NULL);
+}
+
+//------------------------------------------------------------------------------
+OFormsCollection::OFormsCollection( const OFormsCollection& _cloneSource )
+    :FormsCollectionComponentBase( m_aMutex )
+    ,OInterfaceContainer( m_aMutex, _cloneSource )
+    ,OFormsCollection_BASE()
+{
+    DBG_CTOR( OFormsCollection, NULL );
 }
 
 //------------------------------------------------------------------------------
@@ -132,6 +144,17 @@ StringSequence SAL_CALL OFormsCollection::getSupportedServiceNames() throw(Runti
     aReturn.getArray()[1] = ::rtl::OUString::createFromAscii("com.sun.star.form.FormComponents");
 
     return aReturn;
+}
+
+// XCloneable
+//------------------------------------------------------------------------------
+Reference< XCloneable > SAL_CALL OFormsCollection::createClone(  ) throw (RuntimeException)
+{
+    OFormsCollection* pClone = new OFormsCollection( *this );
+    osl_incrementInterlockedCount( &pClone->m_refCount );
+    pClone->clonedFrom( *this );
+    osl_decrementInterlockedCount( &pClone->m_refCount );
+    return pClone;
 }
 
 // OComponentHelper

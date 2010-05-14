@@ -33,7 +33,6 @@ package com.sun.star.wizards.web;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Configuration;
-import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.document.OfficeDocument;

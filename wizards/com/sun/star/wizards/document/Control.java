@@ -35,14 +35,10 @@ import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XLayoutConstrains;
 import com.sun.star.awt.XWindowPeer;
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.ElementExistException;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.container.XNamed;
-import com.sun.star.sdbc.DataType;
 import com.sun.star.wizards.common.*;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
@@ -50,7 +46,6 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
 
 public class Control extends Shape
 {
@@ -65,9 +60,9 @@ public class Control extends Shape
     String sServiceName;
     XNamed xNamed;
     final int SOMAXTEXTSIZE = 50;
-    int icontroltype;
+    private int icontroltype;
     protected XNameContainer xFormName;
-    protected final int IIMGFIELDWIDTH = 2000;
+    protected final int IIMGFIELDWIDTH = 3000;
 
     public Control()
     {
@@ -102,8 +97,8 @@ public class Control extends Shape
     {
         try
         {
-            this.icontroltype = _icontroltype;
-            this.sServiceName = oFormHandler.sModelServices[icontroltype];
+            icontroltype = _icontroltype;
+            sServiceName = oFormHandler.sModelServices[getControlType()];
             Object oControlModel = oFormHandler.xMSFDoc.createInstance(sServiceName);
             xControlModel = (XControlModel) UnoRuntime.queryInterface(XControlModel.class, oControlModel);
             xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oControlModel);
@@ -194,7 +189,7 @@ public class Control extends Shape
     public int getPreferredHeight(String sText)
     {
         Size aPeerSize = getPreferredSize(sText);
-        if (icontroltype == FormHandler.SOCHECKBOX)
+        if (getControlType() == FormHandler.SOCHECKBOX)
         {
             return (aPeerSize.Height * oFormHandler.getXPixelFactor());
         }
@@ -206,7 +201,7 @@ public class Control extends Shape
 
     public int getPreferredWidth()
     {
-        if (icontroltype == FormHandler.SOIMAGECONTROL)
+        if (getControlType() == FormHandler.SOIMAGECONTROL)
         {
             return IIMGFIELDWIDTH;
         }
@@ -215,7 +210,7 @@ public class Control extends Shape
             Size aPeerSize = getPeerSize();
             // We increase the preferred Width a bit so that the control does not become too small
             // when we change the border from "3D" to "Flat"
-            if (icontroltype == FormHandler.SOCHECKBOX)
+            if (getControlType() == FormHandler.SOCHECKBOX)
             {
                 return ((aPeerSize.Width * oFormHandler.getXPixelFactor()));
             }
@@ -228,7 +223,7 @@ public class Control extends Shape
 
     public int getPreferredHeight()
     {
-        if (this.icontroltype == FormHandler.SOIMAGECONTROL)
+        if (getControlType() == FormHandler.SOIMAGECONTROL)
         {
             return 2000;
         }
@@ -310,17 +305,17 @@ public class Control extends Shape
                 aPreferredSize = getPeer().getPreferredSize();
                 xPropertySet.setPropertyValue("EffectiveValue", com.sun.star.uno.Any.VOID);
             }
-            else if (this.icontroltype == FormHandler.SOCHECKBOX)
+            else if (getControlType() == FormHandler.SOCHECKBOX)
             {
                 aPreferredSize = getPeer().getPreferredSize();
             }
-            else if (this.icontroltype == FormHandler.SODATECONTROL)
+            else if (getControlType() == FormHandler.SODATECONTROL)
             {
                 xPropertySet.setPropertyValue("Date", new Integer(4711));       //TODO find a better date
                 aPreferredSize = getPeer().getPreferredSize();
                 xPropertySet.setPropertyValue("Date", com.sun.star.uno.Any.VOID);
             }
-            else if (this.icontroltype == FormHandler.SOTIMECONTROL)
+            else if (getControlType() == FormHandler.SOTIMECONTROL)
             {
                 xPropertySet.setPropertyValue("Time", new Integer(47114));      //TODO find a better time
                 aPreferredSize = getPeer().getPreferredSize();

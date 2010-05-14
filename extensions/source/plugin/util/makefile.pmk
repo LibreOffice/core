@@ -42,6 +42,11 @@ CDEFS+=-DENABLE_GTK
 PKGCONFIG_MODULES+=gtk+-2.0 gthread-2.0
 .ENDIF
 
+.IF "$(GUIBASE)" == "aqua"
+CFLAGS += -I$(FRAMEWORKSHOME)/ApplicationServices.framework/Versions/Current/Frameworks/QD.framework/Headers\
+          -I$(FRAMEWORKSHOME)/Carbon.framework/Versions/Current/Frameworks/HIToolbox.framework/Versions/Current/Headers
+.ENDIF
+
 .IF "$(PKGCONFIG_MODULES)" != ""
 .INCLUDE : pkg_config.mk
 .ENDIF

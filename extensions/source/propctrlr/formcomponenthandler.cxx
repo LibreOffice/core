@@ -559,8 +559,12 @@ namespace pcr
             ::rtl::OUString sControlValue;
             OSL_VERIFY( _rControlValue >>= sControlValue );
 
-            String sShowHide = String( PcrRes( RID_STR_SHOW_HIDE ) );
-            aPropertyValue <<= (sal_Bool)( sShowHide.GetToken(1) == String( sControlValue ) );
+            ::std::vector< ::rtl::OUString > aListEntries;
+            tools::StringListResource aRes( PcrRes( RID_RSC_ENUM_SHOWHIDE ), aListEntries );
+            OSL_ENSURE( aListEntries.size() == 2, "FormComponentPropertyHandler::convertToPropertyValue: broken resource for Show/Hide!" );
+            sal_Bool bShow = ( aListEntries.size() < 2 ) || ( sControlValue == aListEntries[1] );
+
+            aPropertyValue <<= bShow;
         }
         break;
 
@@ -661,10 +665,17 @@ namespace pcr
         case PROPERTY_ID_SHOW_RECORDACTIONS:
         case PROPERTY_ID_SHOW_FILTERSORT:
         {
-            String aEntries = PcrRes( RID_STR_SHOW_HIDE );
-            ::rtl::OUString sControlValue(
-                ::comphelper::getBOOL( _rPropertyValue ) ? aEntries.GetToken( 1 ) : aEntries.GetToken( 0 ) );
-            aControlValue <<= sControlValue;
+            ::std::vector< ::rtl::OUString > aListEntries;
+            tools::StringListResource aRes( PcrRes( RID_RSC_ENUM_SHOWHIDE ), aListEntries );
+            OSL_ENSURE( aListEntries.size() == 2, "FormComponentPropertyHandler::convertToControlValue: broken resource for Show/Hide!" );
+
+            if ( aListEntries.size() == 2 )
+            {
+                ::rtl::OUString sControlValue =     ::comphelper::getBOOL( _rPropertyValue )
+                                                ?   aListEntries[1]
+                                                :   aListEntries[0];
+                aControlValue <<= sControlValue;
+            }
         }
         break;
 

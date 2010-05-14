@@ -69,6 +69,10 @@ namespace pcr
         virtual ~TabOrderListBox();
 
         void            MoveSelection( long nRelPos );
+
+    protected:
+        virtual void    ModelHasMoved(SvListEntry* pSource );
+
     private:
         using SvTreeListBox::MoveSelection;
     };

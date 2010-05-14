@@ -33,6 +33,8 @@
 #include <tools/string.hxx>
 #include <list>
 
+class XPlugin_Impl;
+
 class PluginComm
 {
 protected:
@@ -78,6 +80,9 @@ public:
     virtual NPError NPP_GetValue( NPP instance, NPPVariable  variable, void* value ) = 0;
     virtual NPError NPP_SetValue( NPP instance, NPNVariable variable,
                                  void *value) = 0;
+
+    virtual NPError NPP_SetWindow( XPlugin_Impl* );
+    virtual NPError NPP_Destroy( XPlugin_Impl*, NPSavedData** save );
 };
 
 #endif

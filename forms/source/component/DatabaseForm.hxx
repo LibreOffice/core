@@ -228,6 +228,7 @@ class ODatabaseForm :public OFormComponents
 
 public:
     ODatabaseForm(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    ODatabaseForm( const ODatabaseForm& _cloneSource );
     ~ODatabaseForm();
 
     // UNO binding
@@ -440,6 +441,9 @@ public:
     virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     using OPropertySetAggregationHelper::setPropertyValues;
 
+    // XCloneable
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException);
+
     inline void submitNBC( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& Control, const ::com::sun::star::awt::MouseEvent& MouseEvt );
 
 protected:
@@ -520,6 +524,7 @@ private:
     void    onError(const ::com::sun::star::sdbc::SQLException&, const ::rtl::OUString& _rContextDescription);
 
     // html tools
+    ::rtl::OUString         GetDataEncoded(bool _bURLEncoded,const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
     ::rtl::OUString         GetDataURLEncoded(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
     ::rtl::OUString         GetDataTextEncoded(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
     ::com::sun::star::uno::Sequence<sal_Int8>   GetDataMultiPartEncoded(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt,
@@ -537,6 +542,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection();
 
     void    impl_createLoadTimer();
+
+    void    impl_construct();
 
     DECL_LINK( OnTimeout, void* );
 protected:

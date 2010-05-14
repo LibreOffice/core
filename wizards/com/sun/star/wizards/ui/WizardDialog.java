@@ -645,8 +645,12 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
 
     public abstract void finishWizard();
 
+    /**
+     * This function will call if the finish button is pressed on the UI.
+     */
     public void finishWizard_1()
     {
+        enableFinishButton(false);
         finishWizard();
         removeTerminateListener();
     }

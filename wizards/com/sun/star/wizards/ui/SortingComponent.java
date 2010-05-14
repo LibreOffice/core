@@ -114,7 +114,7 @@ public class SortingComponent
                             "Dropdown", "Enabled", "Height", "HelpURL", "LineCount", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                         }, new Object[]
                         {
-                            new Boolean(true), new Boolean(bDoEnable), new Integer(12), HIDString, new Short("7"), "lstSort" + new Integer(i + 1), IListBoxPosX, new Integer(iCurPosY + 14), IStep, new Short(curtabindex++), IListBoxWidth
+                            new Boolean(true), new Boolean(bDoEnable), new Integer(12), HIDString, new Short(UnoDialog.getListBoxLineCount()), "lstSort" + new Integer(i + 1), IListBoxPosX, new Integer(iCurPosY + 14), IStep, new Short(curtabindex++), IListBoxWidth
                         }); //new Short((short) (17+i*4))
 
                 HIDString = "HID:" + Integer.toString(FirstHelpIndex + 1);

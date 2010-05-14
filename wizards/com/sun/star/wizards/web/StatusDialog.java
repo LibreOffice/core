@@ -32,7 +32,6 @@ package com.sun.star.wizards.web;
 import com.sun.star.awt.XButton;
 import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XProgressBar;
-import com.sun.star.awt.XWindowListener;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.Renderer;

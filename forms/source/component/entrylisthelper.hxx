@@ -46,6 +46,9 @@ namespace frm
 {
 //.........................................................................
 
+    class OControlModel;
+    class ControlModelLock;
+
     //=====================================================================
     //= OEntryListHelper
     //=====================================================================
@@ -57,19 +60,19 @@ namespace frm
     class OEntryListHelper : public OEntryListHelper_BASE
     {
     private:
-        ::osl::Mutex&   m_rMutex;
+        OControlModel&  m_rControlModel;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >
                         m_xListSource;      /// our external list source
         ::com::sun::star::uno::Sequence< ::rtl::OUString >
                         m_aStringItems;     /// "overridden" StringItemList property value
-           ::cppu::OInterfaceContainerHelper
+        ::cppu::OInterfaceContainerHelper
                         m_aRefreshListeners;
 
 
     protected:
-        OEntryListHelper( ::osl::Mutex& _rMutex );
-        OEntryListHelper( const OEntryListHelper& _rSource, ::osl::Mutex& _rMutex );
+        OEntryListHelper( OControlModel& _rControlModel );
+        OEntryListHelper( const OEntryListHelper& _rSource, OControlModel& _rControlModel );
         virtual ~OEntryListHelper( );
 
         /// returns the current string item list
@@ -117,7 +120,7 @@ namespace frm
                 not to be called when we have an external list source
             @see hasExternalListSource
         */
-        void        setNewStringItemList( const ::com::sun::star::uno::Any& _rValue, ::osl::ResettableMutexGuard& _rInstanceLock );
+        void        setNewStringItemList( const ::com::sun::star::uno::Any& _rValue, ControlModelLock& _rInstanceLock );
 
         /** announces that the list of entries has changed.
 
@@ -127,7 +130,7 @@ namespace frm
             @pure
             @see getStringItemList
         */
-        virtual void    stringItemListChanged( ::osl::ResettableMutexGuard& _rInstanceLock ) = 0;
+        virtual void    stringItemListChanged( ControlModelLock& _rInstanceLock ) = 0;
 
         /** called whenever a connection to a new external list source has been established
         */
@@ -171,7 +174,7 @@ namespace frm
         */
         void        connectExternalListSource(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxSource,
-                        ::osl::ResettableMutexGuard& _rInstanceLock
+                        ControlModelLock& _rInstanceLock
                     );
 
         /** refreshes our list entries
@@ -182,7 +185,7 @@ namespace frm
 
             In case we do not have an external list source, refreshInternalEntryList is called.
         */
-        void        impl_lock_refreshList( ::osl::ResettableMutexGuard& _rInstanceLock );
+        void        impl_lock_refreshList( ControlModelLock& _rInstanceLock );
 
     private:
         OEntryListHelper();                                     // never implemented

@@ -146,7 +146,7 @@ protected:
                             getDefaultForReset() const;
 
     // OEntryListHelper overriables
-    virtual void    stringItemListChanged( ::osl::ResettableMutexGuard& _rInstanceLock );
+    virtual void    stringItemListChanged( ControlModelLock& _rInstanceLock );
     virtual void    connectedExternalListSource( );
     virtual void    disconnectedExternalListSource( );
     virtual void    refreshInternalEntryList();

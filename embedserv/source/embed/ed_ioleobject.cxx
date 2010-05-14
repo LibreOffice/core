@@ -159,6 +159,11 @@ STDMETHODIMP EmbedDocument_Impl::DoVerb(
     if ( m_bIsInVerbHandling )
         return OLEOBJ_S_CANNOT_DOVERB_NOW;
 
+    // an object can not handle any Verbs in Hands off mode
+    if ( m_pMasterStorage == NULL || m_pOwnStream == NULL )
+        return OLE_E_CANT_BINDTOSOURCE;
+
+
     BooleanGuard_Impl aGuard( m_bIsInVerbHandling );
 
     if ( iVerb == OLEIVERB_PRIMARY )
@@ -260,8 +265,9 @@ STDMETHODIMP EmbedDocument_Impl::EnumVerbs( IEnumOLEVERB ** /*ppEnumOleVerb*/ )
 
 STDMETHODIMP EmbedDocument_Impl::Update()
 {
-    HRESULT hr = CACHE_E_NOCACHE_UPDATED;
-    return hr;
+    return S_OK;
+//    HRESULT hr = CACHE_E_NOCACHE_UPDATED;
+//    return hr;
 }
 
 STDMETHODIMP EmbedDocument_Impl::IsUpToDate()
