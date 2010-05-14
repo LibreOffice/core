@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : oliver.craemer@sun.com
 '*
 '* short description : Chart wizard general functionality
 '*
@@ -714,4 +714,422 @@ testcase tCreateNewLineChart
     printlog "Close document"
     Call hCloseDocument
 endcase
+'
+'--------------------------------------------------------------------
+'
+testcase tCreateNewBubbleChart    
+    dim sInputFile as STRING
+    dim sOutputFile as STRING
+    dim sControlString as STRING
+    sInputFile = convertpath ( gTesttoolPath & "chart2/optional/input/ods/BubbleChartData.ods" )
+    sOutputFile = convertpath ( gOfficepath & "user/work/tCreateNewBubbleChart.ods" )    
+    printlog "File / Load TesttoolPath/chart2/optional/input/ods/BubbleChartData.ods"
+    call hFileOpen(sInputFile)
+    sleep(2)    
+    printlog "Save document as Officepath/user/work/tCreateNewBubbleChart.ods"
+    if NOT hFileSaveAsWithFilterKill ( sOutputFile , "calc8" ) then
+        warnlog "Saving test document localy failed -> Aborting"
+        call hCloseDocument
+        goto endsub
+    endif    
+    printlog "Insert / Chart"
+    InsertChart       
+    printlog "Change Chart type to BUBBLE (7th entry from the top)"
+    Kontext "ChartType"
+    if NOT ChartType.Exists(5) then
+        warnlog "Chart Wizard was not visible. EXITING!"
+        goto endsub
+    else
+        printlog "Chart Wizard visible."
+    end if	
+    if fSetChartType ( "bubble" ) > 0 then
+        warnlog "Something went wrong setting chart type to Bubble Chart."
+    endif    
+    printlog "Select 1st chart type variant (Bubble Chart)"
+    if fSetChartTypeVariant ( 1 ) > 0 then
+        warnlog "Something went wrong setting chart type to 1st variant (Bubble Chart)."
+    endif    
+    printlog "Change to Data Range tab-page"
+    Kontext "ChartWizard"
+    GoNext.Click
+    Kontext "TabChartTypeDataRange"    
+    printlog "Set Data Range text box to $Sheet1.$A$2:$C$5;$Sheet1.$A$13:$C$16"
+    if fSetTextBox ( DataRange , "$Sheet1.$A$2:$C$5;$Sheet1.$A$13:$C$16" ) > 0 then
+        warnlog "Something went wrong setting Text."
+    endif    
+    printlog "Change to Data Series tab-page"
+    Kontext "ChartWizard"
+    GoNext.Click
+    Kontext "TabChartTypeDataSeries"    
+	'### Name ###
+    printlog "Select 1st entry in Data Series"
+    if fSetListBoxByItem ( DataSeries , 1 ) > 0 then
+        warnlog "Something went wrong selecting 'Data Series' item No. 1."
+    endif
+	printlog "Select 1st entry in Data Ranges"
+    if fSetListBoxByItem ( DataRanges , 1 ) > 0 then
+        warnlog "Something went wrong selecting 'Data Ranges' item No. 1."
+    endif        
+	printlog "Set 'Range for Name' text box to $Sheet1.$C$1"
+    if fSetTextBox ( RangeFor , "$Sheet1.$C$1" ) > 0 then
+        warnlog "Something went wrong setting Text."
+    endif
+	'### Bubble Sizes ###	
+	printlog "Select 2nd entry in Data Ranges"
+    if fSetListBoxByItem ( DataRanges , 2 ) > 0 then
+        warnlog "Something went wrong selecting 'Data Ranges' item No. 2."
+    endif        
+	printlog "Set 'Range for Bubble Sizes' text box to $Sheet1.$C$2:$C$5"
+    if fSetTextBox ( RangeFor , "$Sheet1.$C$2:$C$5" ) > 0 then
+        warnlog "Something went wrong setting Text."
+    endif
+	'### X-Values ###	
+	printlog "Select 3rd entry in Data Ranges"
+    if fSetListBoxByItem ( DataRanges , 3 ) > 0 then
+        warnlog "Something went wrong selecting 'Data Ranges' item No. 3."
+    endif        
+	printlog "Set 'X-Values' text box to $Sheet1.$A$2:$A$5"
+    if fSetTextBox ( RangeFor , "$Sheet1.$A$2:$A$5" ) > 0 then
+        warnlog "Something went wrong setting Text."
+    endif
+	'### Y-Values ###	
+	printlog "Select 4th entry in Data Ranges"
+    if fSetListBoxByItem ( DataRanges , 4 ) > 0 then
+        warnlog "Something went wrong selecting 'Data Ranges' item No. 4."
+    endif        
+	printlog "Set 'Y-Values' text box to $Sheet1.$B$2:$B$5"
+    if fSetTextBox ( RangeFor , "$Sheet1.$B$2:$B$5" ) > 0 then
+        warnlog "Something went wrong setting Text."
+    endif
+	printlog "Add data series"
+	AddButton.Click
+	'### Name ###
+	printlog "Select 1st entry in Data Ranges"
+    if fSetListBoxByItem ( DataRanges , 1 ) > 0 then
+        warnlog "Something went wrong selecting 'Data Ranges' item No. 2."
+    endif        
+	printlog "Set 'Range for Name' text box to $Sheet1.$C$12"
+    if fSetTextBox ( RangeFor , "$Sheet1.$C$12" ) > 0 then
+        warnlog "Something went wrong setting Text."
+    endif
+	'### Bubble Sizes ###	
+	printlog "Select 2nd entry in Data Ranges"
+    if fSetListBoxByItem ( DataRanges , 2 ) > 0 then
+        warnlog "Something went wrong selecting 'Data Ranges' item No. 2."
+    endif        
+	printlog "Set 'Range for Bubble Sizes' text box to $Sheet1.$C$13:$C$16"
+    if fSetTextBox ( RangeFor , "$Sheet1.$C$13:$C$16" ) > 0 then
+        warnlog "Something went wrong setting Text."
+    endif
+	'### X-Values ###	
+	printlog "Select 3rd entry in Data Ranges"
+    if fSetListBoxByItem ( DataRanges , 3 ) > 0 then
+        warnlog "Something went wrong selecting 'Data Ranges' item No. 3."
+    endif        
+	printlog "Set 'X-Values' text box to $Sheet1.$A$13:$A$16"
+    if fSetTextBox ( RangeFor , "$Sheet1.$A$13:$A$16" ) > 0 then
+        warnlog "Something went wrong setting Text."
+    endif
+	'### Y-Values ###	
+	printlog "Select 4th entry in Data Ranges"
+    if fSetListBoxByItem ( DataRanges , 4 ) > 0 then
+        warnlog "Something went wrong selecting 'Data Ranges' item No. 4."
+    endif        
+	printlog "Set 'Y-Values' text box to $Sheet1.$B$13:$B$16"
+    if fSetTextBox ( RangeFor , "$Sheet1.$B$13:$B$16" ) > 0 then
+        warnlog "Something went wrong setting Text."
+    endif
+
+    printlog "Change to Chart Elements tab-page"
+    Kontext "ChartWizard"
+    GoNext.Click
+    Kontext "TabChartTypeChartElements"    
+    printlog "Uncheck 'Y Axis'"
+    if fSetCheckBox ( GridLinesYAxis , FALSE ) > 0 then
+        warnlog "Something went wrong unselecting 'Y Axis'."
+    endif    
+    printlog "Uncheck 'Legend Display'"
+    if fSetCheckBox ( Display , FALSE ) > 0 then
+        warnlog "Something went wrong unselecting 'Legend Display'."
+    endif    
+    printlog "Create Chart by clicking Finish-button"
+    Kontext "ChartWizard"
+    ChartWizard.OK    
+    sleep(2)    
+    printlog "File / Save"
+    FileSave
+    Kontext "DocumentCalc"
+    printlog "Press twice <ESCAPE>-key"
+    DocumentCalc.TypeKeys "<Escape>" , 2                
+    printlog "File / Close document"
+    Call hCloseDocument
+    sleep(2)    
+    printlog "Open saved file again"
+    call hFileOpen(sOutputFile)
+    sleep(2)    
+    printlog "Open the Navigator (F5)"    
+    printlog "Select the first OLE object in the Navigator"
+    call fSelectFirstOLE    
+    printlog "Edit / Object / Edit to enter Inplace Mode"
+    EditObjectEdit    
+    printlog "Format / Chart Type"    
+    FormatChartType
+    Kontext "ChartType"
+    if ChartType.Exists(2) then        
+        printlog "Check if chart type is BUBBLE CHART"
+        if ChooseType.GetSelIndex <> 7 then
+            warnlog "Selected chart type wasn't preserved after save and reload."
+        endif        
+        printlog "Check if chart variant is BUBBLE CHART (1st variant in non-CTL versions from the left)"
+        if Variant.GetSelIndex <> 1 then
+            warnlog "Selected chart type variant wasn't preserved after save and reload."
+        end if            
+        printlog "Leave Chart Type dialog with Cancel"
+        Kontext "ChartType"
+        if ChartType.Exists(2) then
+	        ChartType.Cancel
+	    else
+	        warnlog "ChartType dialog was not visible!?"
+	    end if        
+    else
+        warnlog "Chart Type dialog was not up!"
+    end if    
+    printlog "Format / Data Ranges"   
+    FormatDataRanges
+    Kontext
+    Active.SetPage TabChartTypeDataRange        
+    Kontext "TabChartTypeDataRange"
+    if TabChartTypeDataRange.Exists(2) then        
+        printlog "Check substrings '$A$2:$C$5', '$C$1', '$B$13:$C$16', '$C$12' in Data Range"        
+        sControlString = DataRange.GetText
+        printlog "Data Range is: " & sControlString
+        if instr ( sControlString , "$A$2:$C$5" ) = 0 Then
+            warnlog "Data range wasn't correctly preserved after save and reload: $A$2:$C$13"
+        endif
+        if instr ( sControlString , "$C$1" ) = 0 Then
+            warnlog "Data range wasn't correctly preserved after save and reload: $A$19"
+        endif
+        if instr ( sControlString , "$B$13:$C$16" ) = 0 Then
+           QAErrorlog "#i100780#Data range wasn't correctly preserved after save and reload: $B$13:$C$16"
+        endif
+        if instr ( sControlString , "$C$12" ) = 0 Then
+            warnlog "Data range wasn't correctly preserved after save and reload: $E$1:$F$13"
+        endif
+        printlog "Check if Radio Button ROWS is checked"
+        if Rows.IsChecked then
+            warnlog "Radio Button ROWS (disabled) wasn't preserved after save and reload."
+        endif        
+        printlog "Check if Radio Button COLUMNS is unchecked"
+        if NOT Columns.IsChecked then
+            warnlog "Radio Button COLUMNS (enabled) wasn't preserved after save and reload."
+        endif        
+        printlog "Check if 'First row as label' box is checked"
+        if NOT FirstRowAsLabel.IsChecked then
+            warnlog "Check box 'First row as label' (checked) wasn't preserved after save and reload."
+        endif        
+        printlog "Check if 'First column as label' box is not checked"
+        if FirstColumnAsLabel.IsChecked then
+            warnlog "Check box 'First column as label' (unchecked) wasn't preserved after save and reload."
+        endif
+    else
+        warnlog "Tab page Data Range was not up!"
+        FormatDataRanges        
+    end if    
+    printlog "Switch to tab page Data Series"
+    Kontext
+    Active.SetPage TabFormatDataRangesDataSeries 
+    Kontext "TabChartTypeDataSeries"
+    if TabChartTypeDataSeries.Exists(2) then        
+        printlog "Select 1st entry in Data Series"
+        if fSetListBoxByItem ( DataSeries , 1 ) > 0 then
+            warnlog "Selecting 1st item in Data Series failed. EXITING!"
+            TabChartTypeDataSeries.Cancel
+            call hCloseDocument
+            goto endsub
+        endif        
+        printlog "Select Name in Data Ranges"
+        if fSetListBoxByItem ( DataRanges , 1 ) > 0 then
+            warnlog "Something went wrong selecting 'Data Ranges' item No. 1."
+        endif        
+        printlog "Check substring '$C$1' in Range for Name"        
+        sControlString = RangeFor.GetText
+        printlog "'Range for name' is: " & sControlString
+        if instr ( sControlString , "$C$1" ) = 0 Then
+            warnlog "'Range for name' wasn't correctly preserved after save and reload."
+        endif        
+		
+        printlog "Select Bubble Sizes in Data Ranges"
+        if fSetListBoxByItem ( DataRanges , 2 ) > 0 then
+            warnlog "Something went wrong selecting 'Data Ranges' item No. 2. EXITING!"
+            TabChartTypeDataSeries.Cancel
+            call hCloseDocument
+            goto endsub
+        endif        
+        printlog "Check substring '$C$2:$C$5'in Range for Name"       
+        sControlString = RangeFor.GetText        
+        if instr ( sControlString , "$C$2:$C$5" ) = 0 Then
+            warnlog "'Range for Bubble Sizes' wasn't correctly preserved after save and reload."
+        endif				
+
+        printlog "Select X-Values in Data Ranges"
+        if fSetListBoxByItem ( DataRanges , 3 ) > 0 then
+            warnlog "Something went wrong selecting 'Data Ranges' item No. 3. EXITING!"
+            TabChartTypeDataSeries.Cancel
+            call hCloseDocument
+            goto endsub
+        endif        
+        printlog "Check substring '$A$2:$A$5' in Range for Name"       
+        sControlString = RangeFor.GetText        
+        if instr ( sControlString , "$A$2:$A$5" ) = 0 Then
+            warnlog "'Range for X-Values' wasn't correctly preserved after save and reload."
+        endif
+		
+        printlog "Select Y-Values in Data Ranges"
+        if fSetListBoxByItem ( DataRanges , 4 ) > 0 then
+            warnlog "Something went wrong selecting 'Data Ranges' item No. 4. EXITING!"
+            TabChartTypeDataSeries.Cancel
+            call hCloseDocument
+            goto endsub
+        endif        
+        printlog "Check substring '$B$2:$B$5' in Range for Name"       
+        sControlString = RangeFor.GetText        
+        if instr ( sControlString , "$B$2:$B$5" ) = 0 Then
+            warnlog "'Range for Y-Values' wasn't correctly preserved after save and reload."
+        endif
+
+        printlog "Select 2nd entry in Data Series"
+        if fSetListBoxByItem ( DataSeries , 2 ) > 0 then
+            warnlog "Selecting 1st item in Data Series failed. EXITING!"
+            TabChartTypeDataSeries.Cancel
+            call hCloseDocument
+            goto endsub
+        endif        
+        printlog "Select Name in Data Ranges"
+        if fSetListBoxByItem ( DataRanges , 1 ) > 0 then
+            warnlog "Something went wrong selecting 'Data Ranges' item No. 1."
+        endif        
+        printlog "Check substring '$C$12' in Range for Name"        
+        sControlString = RangeFor.GetText
+        printlog "'Range for name' is: " & sControlString
+        if instr ( sControlString , "$C$12" ) = 0 Then
+            warnlog "'Range for name' wasn't correctly preserved after save and reload."
+        endif        
+		
+        printlog "Select Bubble Sizes in Data Ranges"
+        if fSetListBoxByItem ( DataRanges , 2 ) > 0 then
+            warnlog "Something went wrong selecting 'Data Ranges' item No. 2. EXITING!"
+            TabChartTypeDataSeries.Cancel
+            call hCloseDocument
+            goto endsub
+        endif        
+        printlog "Check substring '$C$13:$C$16'in Range for Name"       
+        sControlString = RangeFor.GetText        
+        if instr ( sControlString , "$C$13:$C$16" ) = 0 Then
+            warnlog "'Range for Bubble Sizes' wasn't correctly preserved after save and reload."
+        endif				
+
+        printlog "Select X-Values in Data Ranges"
+        if fSetListBoxByItem ( DataRanges , 3 ) > 0 then
+            warnlog "Something went wrong selecting 'Data Ranges' item No. 3. EXITING!"
+            TabChartTypeDataSeries.Cancel
+            call hCloseDocument
+            goto endsub
+        endif        
+        printlog "Check substring '$A$13:$A$16' in Range for Name"       
+        sControlString = RangeFor.GetText        
+        if instr ( sControlString , "$A$13:$A$16" ) = 0 Then
+            warnlog "'Range for X-Values' wasn't correctly preserved after save and reload."
+        endif
+		
+        printlog "Select Y-Values in Data Ranges"
+        if fSetListBoxByItem ( DataRanges , 4 ) > 0 then
+            warnlog "Something went wrong selecting 'Data Ranges' item No. 4. EXITING!"
+            TabChartTypeDataSeries.Cancel
+            call hCloseDocument
+            goto endsub
+        endif        
+        printlog "Check substring '$B$13:$B$16' in Range for Name"       
+        sControlString = RangeFor.GetText        
+        if instr ( sControlString , "$B$13:$B$16" ) = 0 Then
+            warnlog "'Range for Y-Values' wasn't correctly preserved after save and reload."
+        endif
+		
+        printlog "Leave tab page data series with CANCEL" 
+        TabChartTypeDataSeries.Cancel
+    else
+        warnlog "Tab page Data Series was not up!"
+    end if
+    printlog "Insert / Title"    
+    InsertTitle        
+    Kontext "InsertTitleDialog"
+    if InsertTitleDialog.Exists(2) then        
+        printlog "Check if 'Title' text box is empty"
+        sControlString = MainTitle.GetText    
+        if sControlString <> "" then
+            warnlog "Empty Title string wasn't preserved after save and reload."
+        endif        
+        printlog "Check if 'Subtitle' text box is empty"
+        sControlString = SubTitle.GetText    
+        if sControlString <> "" then
+            warnlog "Empty Subtitle string wasn't preserved after save and reload."
+        endif        
+        printlog "Check if 'X Title' text box is empty"
+        sControlString = TitleXaxis.GetText    
+        if sControlString <> "" then
+            warnlog "Empty X Title string wasn't preserved after save and reload."
+        endif        
+        printlog "Check if 'Y Title' text box is empty"
+        sControlString = TitleYaxis.GetText   
+        if sControlString <> "" then
+            warnlog "Empty Y Title string wasn't preserved after save and reload."
+        endif        
+        printlog "Check if 'Z Title' text box is empty"
+        sControlString = TitleZaxis.GetText    
+        if sControlString <> "" then
+            warnlog "Empty Z Title string wasn't preserved after save and reload."
+        endif        
+        printlog "Leaving Title dialog with Cancel"
+        InsertTitleDialog.Cancel
+    else
+        warnlog "Title dialog was not up!"    
+    end if    
+    printlog "Insert / Grids"    
+    If fInvokeGridsDialog = 0 then
+        Kontext "InsertGridsDialog"            
+        printlog "Check if 'Gridlines X Axis' box is checked"
+        if MainGridXaxis.IsChecked then
+            warnlog "Check box 'Gridlines X Axis' (disabled) wasn't preserved after save and reload."
+        endif        
+        printlog "Check if 'Gridlines Y Axis' box is unchecked"
+        if MainGridYaxis.IsChecked then
+            warnlog "Check box 'Gridlines Y Axis' (disabled) wasn't preserved after save and reload."
+        endif        
+        printlog "Check if 'Gridlines Z Axis' box is checked"
+        if MainGridZaxis.IsEnabled then
+            warnlog "Check box 'Gridlines Z Axis' shouldn't be enabled after save and reload."
+        endif
+        printlog "Leave dialog with CANCEL"
+        InsertGridsDialog.Cancel
+    else
+        warnlog "Insert Grids dialog was not up!"
+    end if    
+    printlog "Insert / Legend"
+    if fInvokeLegendDialog() = 0 then                         
+        printlog "Check if 'Legend Display' box is checked"
+        Kontext "InsertLegendDialog"
+        if Display.IsChecked then
+            warnlog "Check box 'Legend Display' (disabled) wasn't preserved after save and reload."
+        endif
+        printlog "Leave dialog with CANCEL."
+        InsertLegendDialog.Cancel
+    else
+        warnlog "Insert Legend dialog was not up!"
+    end if    
+    printlog "Press ESCAPE button (deselecting the OLE object)"
+    Kontext "DocumentCalc"
+    DocumentCalc.TypeKeys "<Escape>"    
+    printlog "Close document"
+    Call hCloseDocument
+endcase
+
 

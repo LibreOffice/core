@@ -30,7 +30,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description :
 '*
@@ -96,7 +96,7 @@ testcase tToolsOptionsWriterOther
 
     printlog ("'/// - all states inverting ///")
 
-    if irgendwas(2) Then Feldbefehle.UnCheck                         Else Feldbefehle.Check
+    if irgendwas(2) Then Feldbefehle.UnCheck Else Feldbefehle.Check
     if Feldbefehle.IsChecked  Then if irgendwas(3) Then Diagramme.UnCheck Else Diagramme.Check
 
     if (Immer.IsChecked = True) Then AufNachfrage.Check Else Immer.Check
@@ -299,9 +299,9 @@ testcase tToolsOptionsWriterOther
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -413,7 +413,7 @@ testcase tToolsOptionsWriterAutoCaption
     ' checking Listentry '(7) = StarOffice 6.0 Impress' completely
 
     dim vObjectList(10) as integer
-    dim vObjectListDescription(10) as string    
+    dim vObjectListDescription(10) as string
     Dim vCategory(10) as integer
     Dim vCategoryTmp(10) as string
     Dim vNumbering(10) as integer
@@ -438,7 +438,7 @@ testcase tToolsOptionsWriterAutoCaption
 
     NumberOfObjects = ObjectList.GetItemCount
     Select Case gPlatGroup
-        Case "w95"        
+        Case "w95"
             if (NumberOfObjects <> 9) then
                 warnlog "Number of Object List is not correct"
             end if
@@ -447,7 +447,7 @@ testcase tToolsOptionsWriterAutoCaption
                 warnlog "Number of Object List is not correct"
             end if
     end select
-            
+
     for i=1 to NumberOfObjects
         ObjectList.Select (i)
         vObjectList(i) = ObjectList.IsChecked
@@ -497,7 +497,7 @@ testcase tToolsOptionsWriterAutoCaption
             ObjectList.Check
         end if
     next i
-   
+
     printlog ("'/// - change states ///")
     '/// look if properties get saved for each list item
     for i=1 to NumberOfObjects
@@ -557,7 +557,7 @@ testcase tToolsOptionsWriterAutoCaption
     ExtrasOptionenDlg.OK
 
     printlog ("'/// - SO quit - start ///")
-    
+
     Call wOfficeRestart
 
     printlog ("'/// - checking states ///")
@@ -566,7 +566,7 @@ testcase tToolsOptionsWriterAutoCaption
     Kontext "TabAutoCaption"
     for i=1 to NumberOfObjects
         printlog "-   checking: " & ObjectList.Gettext
-        ObjectList.Select (i) 
+        ObjectList.Select (i)
 		wait 500
         if ObjectList.IsChecked Then
             if i <= 7 then
@@ -590,7 +590,7 @@ testcase tToolsOptionsWriterAutoCaption
                 Warnlog "-    'Level' changed after restart"
             else
                 Printlog "-    'Level' => ok"
-            end if            
+            end if
             if CharacterStyle.GetSelIndex <> i then
                 Warnlog "-    'Character Style' changed after restart"
             else
@@ -602,7 +602,7 @@ testcase tToolsOptionsWriterAutoCaption
             else
                 printlog "-    'Category' => ok"
             end if
-            
+
             Select Case i
                 case 1:
                     if Position.GetSelIndex <> 1 then
@@ -637,28 +637,28 @@ testcase tToolsOptionsWriterAutoCaption
                     else
                         printlog "-    'Position' => ok"
                     end if
-                    
+
                 case 5:
                     if Position.GetSelIndex <> 1 then
                         Warnlog "-    'Position' changed after restart"
                     else
                         printlog "-    'Position' => ok"
                     end if
-                    
+
                 case 6:
                     if Position.GetSelIndex <> 2 then
                         Warnlog "-    'Position' changed after restart"
                     else
                         printlog "-    'Position' => ok"
                     end if
-                    
+
                 case 7:
                     if Position.GetSelIndex <> 1 then
                         Warnlog "-    'Position' changed after restart"
                     else
                         printlog "-    'Position' => ok"
                     end if
-                    
+
                 case 8:
                     if Numbering.GetItemCount > 7 then
                         if Numbering.GetSelIndex <> Numbering.GetItemCount then
@@ -679,7 +679,7 @@ testcase tToolsOptionsWriterAutoCaption
                     else
                         printlog "-    'Position' => ok"
                     end if
-                    
+
                 case 9:
                     if Numbering.GetItemCount > 7 then
                         if Numbering.GetSelIndex <> Numbering.GetItemCount then
@@ -700,13 +700,13 @@ testcase tToolsOptionsWriterAutoCaption
                     else
                         printlog "-    'Position' => ok"
                     end if
-                    
+
             end select
         else
             Warnlog "-   " & ObjectList.GetText & " is not checked"
         end if
-    next i    
-    
+    next i
+
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
@@ -717,7 +717,7 @@ testcase tToolsOptionsWriterAutoCaption
     Kontext "TabAutoCaption"
 
     for i=1 to NumberOfObjects
-        ObjectList.Select (i)              
+        ObjectList.Select (i)
         if ObjectList.IsChecked then
             if vCategory(i) > Category.GetItemCount then
                 Category.Select Category.GetItemCount
@@ -738,7 +738,7 @@ testcase tToolsOptionsWriterAutoCaption
                         ApplyBorderAndShadow.Uncheck
                 end select
             end if
-        end if    
+        end if
         Select case vObjectList(i)
             Case true
                 ObjectList.Check
@@ -751,9 +751,9 @@ testcase tToolsOptionsWriterAutoCaption
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -762,6 +762,7 @@ testcase tToolsOptionsWriterGeneral
     Dim i as integer
     Dim ist_aktualisiert as boolean
     Dim CompareThis as string
+
     ' State is saved with document. Thats why I use 3 docs
     Call hNewDocument
     printlog "'///- Extras / Optionen / Sonstiges / Verkn?pfungen aktualisieren ///"
@@ -861,9 +862,10 @@ testcase tToolsOptionsWriterGeneral
     AufNachfrage.Check
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
+
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -880,17 +882,17 @@ testcase tToolsOptionsWriterMailMerge
     '/// Fill out all fields
     printlog " - fill out Mail Settings"
     Kontext "TabMailMergeEmail"
-    YourName.Settext "Helge Delfs"
-    EmailAddress.Settext "fredrik.haegg@sun.com"
+    YourName.Settext "Fredrik Haegg"
+    EmailAddress.Settext "helge.delfs@sun.com"
     SendReplies.Check
-    ReplyAddress.Settext "hde@openoffice.org"
+    ReplyAddress.Settext "fredrikh@openoffice.org"
     ServerName.Settext "MySMTP-Server"
     UseSecure.Check
     
     '/// Change details for Server Authentication
     printlog " - fill out Authentication Settings"
     ServerAuthentication.Click
-    wait 500    
+    wait 500
     Kontext "ServerAuthentication"
     SMTPauthentication.Check
     
@@ -899,8 +901,8 @@ testcase tToolsOptionsWriterMailMerge
     Port.Settext "111"
     IMAP.Check
     User.Settext "MyAuthenticationUserName"
-    Password.Settext "MyAuthenticationPassword"    
-    ServerAuthentication.Ok   
+    Password.Settext "MyAuthenticationPassword"
+    ServerAuthentication.Ok
     
     '/// Close 'Server Authentication dialog, reopen and check values set
     printlog " - check settings"
@@ -908,7 +910,7 @@ testcase tToolsOptionsWriterMailMerge
     ServerAuthentication.Click
     wait 500
     Kontext "ServerAuthentication"
-    if Not SMTPauthentication.IsChecked then Warnlog "SMTP Authentication is not checked anymore"    
+    if Not SMTPauthentication.IsChecked then Warnlog "SMTP Authentication is not checked anymore"
     if Not IncomingMailServer.IsChecked then Warnlog "Incoming Mail Server has been changed"
     if Server.Gettext <> "MySMTP-Server" then Warnlog "Servername has been changed"
     if Port.Gettext <> "111" then Warnlog "Server Port has been changed"
@@ -925,7 +927,7 @@ testcase tToolsOptionsWriterMailMerge
     '/// Close options dialog and restart the office
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Ok
-    printlog " - restart office"  
+    printlog " - restart office"
     Call wOfficeRestart
 
     '/// Reopen Tools/Options and check settings
@@ -934,10 +936,10 @@ testcase tToolsOptionsWriterMailMerge
     Call hToolsOptions ("WRITER","MailMergeEMail")
 
     Kontext "TabMailMergeEmail"
-    if YourName.Gettext <> "Helge Delfs" then Warnlog "'Your Name' has been changed after a restart"
-    if EmailAddress.Gettext <> "fredrik.haegg@sun.com" then Warnlog "'Email Address' has been changed after a restart"
+    if YourName.Gettext <> "Fredrik Haegg" then Warnlog "'Your Name' has been changed after a restart"
+    if EmailAddress.Gettext <> "helge.delfs@sun.com" then Warnlog "'Email Address' has been changed after a restart"
     if Not SendReplies.IsChecked then Warnlog "'Send replies' has been changed after a restart"
-    if ReplyAddress.Gettext <> "hde@openoffice.org" then Warnlog "'Reply adresses' has been changed after a restart"
+    if ReplyAddress.Gettext <> "fredrikh@openoffice.org" then Warnlog "'Reply adresses' has been changed after a restart"
     if ServerName.Gettext <> "MySMTP-Server" then Warnlog "'Server name' has been changed after a restart"
     if UseSecure.IsChecked = false then Warnlog "'Secure' has been changed after a restart"
 
@@ -955,7 +957,7 @@ testcase tToolsOptionsWriterMailMerge
     TestSettings.Click
     
     Kontext "TestAccountSettings"
-    Do 
+    Do
         if TaskStatusListBox.GetItemCount > 0 then
             TestAccountSettings.Cancel
             exit do
@@ -980,8 +982,7 @@ testcase tToolsOptionsWriterMailMerge
     OutgoingPassword.Settext ""
 
     SMTPauthentication.UnCheck
-    
-    ServerAuthentication.Ok   
+    ServerAuthentication.Ok
 
     Kontext "TabMailMergeEmail"
     YourName.Settext ""
@@ -995,7 +996,8 @@ testcase tToolsOptionsWriterMailMerge
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Ok
 
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
+'------------------------------------------------------------------------------

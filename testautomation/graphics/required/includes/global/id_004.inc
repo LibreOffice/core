@@ -55,236 +55,248 @@
 ' #1 tiInsertSnappointLine
 ' #1 tdInsertLayer
 '\**********************************************************************************
-
-'///      Dateiname.settext Convertpath (gTesttoolPath + "global\input\graf_inp\stabler.tif") ///'
-
 testcase tiInsertSlide
 
-    '/// open application ///'
+    printlog "Dateiname.settext Convertpath (gTesttoolPath + global\input\graf_inp\stabler.tif) "
+    printlog "open application"
     Call  hNewDocument
-    '/// Insert->Slide ///'
+    printlog "Insert->Slide"
     InsertSlide
     WaitSlot (2000)
     hTypekeys "<Pagedown>"
     WaitSlot (2000) 'sleep 2
-    '/// close application ///'
+    printlog "close application"
     Call  hCloseDocument
-endcase
-
+    
+endcase 'tiInsertSlide
+'--------------------------------------------------------
 testcase tiInsertDuplicateSlide
-    '/// open application ///'
+
+    printlog "open application"
     Call hNewDocument
-    '/// create rectangle ///'
+    printlog "create rectangle"
     Call hRechteckErstellen ( 30, 40, 40, 50 )
-    '/// Insert->Duplicate Slide ///'
+    printlog "Insert->Duplicate Slide"
     InsertDuplicateSlide
     WaitSlot (2000)
-    '/// close application ///'
+    printlog "close application"
     Call  hCloseDocument
-endcase
-
+    
+endcase 'tiInsertDuplicateSlide
+'--------------------------------------------------------
 testcase tiInsertField
-    '/// open application ///'
+
+    printlog "open application"
     Call hNewDocument
 
-    '/// Insert->Fields->Time (fixed) ///'
+    printlog "Insert->Fields->Time (fixed)"
     InsertFieldsTimeFix
     WaitSlot (1000)
     printlog "OK   Time Fix"
-    '/// delete it with EditSelectAll + <Delete> ///'
+    printlog "delete it with EditSelectAll + <Delete> "
     EditSelectAll
     hTypekeys "<Delete>"
     sleep 1
 
-    '/// Insert->Fields->Date (fixed) ///'
+    printlog "Insert->Fields->Date (fixed) "
     InsertFieldsDateFix
     WaitSlot (1000)
     printlog "OK   Date Fix"
-    '/// delete it with EditSelectAll + <Delete> ///'
+    printlog "delete it with EditSelectAll + <Delete> "
     EditSelectAll
     hTypekeys "<Delete>"
     sleep 1
 
-    '/// Insert->Fields->Time (variable) ///'
+    printlog "Insert->Fields->Time (variable) "
     InsertFieldsTimeVariable
     WaitSlot (1000)
     printlog "OK   Time Variabel"
-    '/// delete it with EditSelectAll + <Delete> ///'
+    printlog "delete it with EditSelectAll + <Delete> "
     EditSelectAll
     hTypekeys "<Delete>"
     sleep 1
 
-    '/// Insert->Fields->Date (variable) ///'
+    printlog "Insert->Fields->Date (variable) "
     InsertFieldsDateVariable
     WaitSlot (1000)
     printlog "OK   Date Variabel"
-    '/// delete it with EditSelectAll + <Delete> ///'
+    printlog "delete it with EditSelectAll + <Delete> "
     EditSelectAll
     hTypekeys "<Delete>"
     sleep 1
 
-    '/// Insert->Fields->Author ///'
+    printlog "Insert->Fields->Author "
     InsertFieldsAuthorDraw
     WaitSlot (1000)
     printlog "OK   Author"
-    '/// delete it with EditSelectAll + <Delete> ///'
+    printlog "delete it with EditSelectAll + <Delete> "
     EditSelectAll
     hTypekeys "<Delete>"
     sleep 1
 
-    '/// Insert->Fields->Page Numbers///'
+    printlog "Insert->Fields->Page Numbers"
     InsertFieldsPageNumberDraw
     WaitSlot (1000)
     printlog "OK   Page number"
-    '/// delete it with EditSelectAll + <Delete> ///'
+    printlog "delete it with EditSelectAll + <Delete> "
     EditSelectAll
     hTypekeys "<Delete>"
     sleep 1
 
-    '/// Insert->Fields->Filename ///'
+    printlog "Insert->Fields->Filename "
     InsertFieldsFileName
     WaitSlot (1000) 'sleep 1
     printlog "OK   File name"
-    '/// delete it with EditSelectAll + <Delete> ///'
+    printlog "delete it with EditSelectAll + <Delete> "
     EditSelectAll
     hTypekeys "<Delete>"
     sleep 2
-    '/// close application ///'
+    printlog "close application "
     Call  hCloseDocument
-endcase
-
+    
+endcase 'tiInsertField
+'--------------------------------------------------------
 testcase tiInsertSpecialCharacter
-    '/// open application ///'
+
+    printlog "open application "
     Call hNewDocument
 
-    '/// insert text ///'
+    printlog "insert text "
     hTextrahmenErstellen ("This is a testtext",30,40,60,50)
     sleep 2
-    '/// Insert->SpecialCharacter ///'
+    printlog "Insert->SpecialCharacter "
     InsertSpecialCharacterDraw
     WaitSlot (2000)
     Kontext "Sonderzeichen"
-        Call DialogTest (Sonderzeichen)
-        '/// cancel dialog 'Special Characters' ///'
-        Sonderzeichen.Cancel
-        sleep 2
-    '/// close application ///'
+    Call DialogTest (Sonderzeichen)
+    printlog "cancel dialog 'Special Characters' "
+    Sonderzeichen.Cancel
+    sleep 2
+    printlog "close application "
     Call hCloseDocument
-endcase
-
+    
+endcase 'tiInsertSpecialCharacter
+'--------------------------------------------------------
 testcase tiInsertHyperlink
-    '/// open application ///'
+
+    printlog "open application "
     Call hNewDocument
-    '/// Insert->Hyperlink ///'
+    printlog "Insert->Hyperlink "
     InsertHyperlink
     WaitSlot (5000)
     Kontext "Hyperlink"
-        if Hyperlink.exists (5) then
-            Auswahl.MouseDown 50, 5
-            Auswahl.MouseUp 50, 5
-            Auswahl.typekeys "<PAGEDOWN><PAGEUP>"
-            Auswahl.typekeys "<TAB>"
-            sleep 3
-            Kontext "TabHyperlinkInternet"
+    if Hyperlink.exists (5) then
+        Auswahl.MouseDown 50, 5
+        Auswahl.MouseUp 50, 5
+        Auswahl.typekeys "<PAGEDOWN><PAGEUP>"
+        Auswahl.typekeys "<TAB>"
+        sleep 3
+        Kontext "TabHyperlinkInternet"
 
-            'Workaround to get rid of a Focusing-problem...
-            NameText.Typekeys "alal <RETURN>"
-            NameText.Typekeys "<MOD1 A><DELETE>"
-            TabHyperlinkInternet.Typekeys "<TAB>", 6
-            TabHyperlinkInternet.Typekeys "<LEFT>", 3
-            'End of workaround...
+        printlog "Workaround to get rid of a Focusing-problem..."
+        NameText.Typekeys "alal <RETURN>"
+        NameText.Typekeys "<MOD1 A><DELETE>"
+        TabHyperlinkInternet.Typekeys "<TAB>", 6
+        TabHyperlinkInternet.Typekeys "<LEFT>", 3
+        printlog "End of workaround..."
 
-            Internet.Check
-            ZielUrl.Settext "http://mahler"
-            Kontext "Hyperlink"
-                Uebernehmen.Click
-                Hyperlink.Close
-        else
-            warnlog "Failed to open hyperlink ??!!"
-        end if
-    '/// close application ///'
+        Internet.Check
+        ZielUrl.Settext "http://mahler"
+        Kontext "Hyperlink"
+        Uebernehmen.Click
+        Hyperlink.Close
+    else
+        warnlog "Failed to open hyperlink ??!!"
+    end if
+    printlog "close application "
     Call hCloseDocument
-endcase
-
+    
+endcase 'tiInsertHyperlink
+'--------------------------------------------------------
 testcase tiInsertGraphic
-    '/// open application ///'
+
+    printlog "open application "
     Call  hNewDocument
-    '/// Insert->Graphics ///'
+    printlog "Insert->Graphics "
     InsertGraphicsFromFile
     WaitSlot (2000) '
     try
         Kontext "GrafikEinfuegenDlg"
-            '/// if checkbox 'link' is available, check it; if not available: ERROR ///'
-            if Link.exists then
-                Link.Check
-                else
-                Warnlog  "Linking grafik doesn't work :-("
-            end if
-            '/// if checkbox 'Preview' is available, check it; if not available: ERROR ///'
-            if Preview.exists then
-                Preview.Check
+        printlog "if checkbox 'link' is available, check it; if not available: ERROR "
+        if Link.exists then
+            Link.Check
             else
-                Warnlog "Preview of graphic doesn't work :-("
-            end if
-            DialogTest (GrafikEinfuegenDlg)
-
-            '/// use file: "global\input\graf_inp\stabler.tif") ///'
-            Dateiname.settext Convertpath (gTesttoolPath + "global\input\graf_inp\stabler.tif")
-            '/// click 'open' ///'
-            Oeffnen.click
+            Warnlog  "Linking grafik doesn't work :-("
+        end if
+        printlog "if checkbox 'Preview' is available, check it; if not available: ERROR "
+        if Preview.exists then
+            Preview.Check
+        else
+            Warnlog "Preview of graphic doesn't work :-("
+        end if
+        DialogTest (GrafikEinfuegenDlg)
+        printlog " use file: global\input\graf_inp\stabler.tif) "
+        Dateiname.settext Convertpath (gTesttoolPath + "global\input\graf_inp\stabler.tif")
+        printlog "click 'open' "
+        Oeffnen.click
     catch
         Warnlog "Insert graphic doesn't work :-("
     endcatch
 
-    '/// close application ///'
+    printlog "close application "
     Call hCloseDocument
-endcase
-
+    
+endcase 'tiInsertGraphic
+'--------------------------------------------------------
 testcase tiInsertObjectSound
+
     goto endsub ' disabled for final, because always wrong (TZ 01/2002)
     'TODO: TBO: enhance!
-    '/// open application ///'
+    printlog "open application "
     Call hNewDocument
     try
-        '/// Insert->Object->Sound ///'
+        printlog " Insert->Object->Sound "
         InsertObjectSound
         WaitSlot (1000)
         Kontext "OeffnenDlg"
-            '       Call Dialogtest (OeffnenDlg) ' just be sure to check one pth and one open dialog : TZ 28.11.201
-
-            '/// cancel file open dialog ///'
-            OeffnenDlg.Cancel
+        'Call Dialogtest (OeffnenDlg) ' just be sure to check one pth and one open dialog : TZ 28.11.201
+        printlog "cancel file open dialog "
+        OeffnenDlg.Cancel
     catch
         printlog "'Insert -> Object -> Sound' not available. TestDevelopmentInProgress (TDIP) ;-)"
     endcatch
-    '/// close application ///'
+    printlog "close application "
     Call hCloseDocument
-endcase
-
+    
+endcase 'tiInsertObjectSound
+'--------------------------------------------------------
 testcase tiInsertObjectVideo
+
     goto endsub
     'TODO: TBO: enhance!
-    '/// open application ///'
+    printlog " open application "
     Call hNewDocument
     try
-        '/// Insert->Object->Video ///'
+        printlog "Insert->Object->Video "
         InsertObjectVideo
         Kontext "OeffnenDlg"
-            '      Call Dialogtest (OeffnenDlg)
-            WaitSlot (1000)
-            '/// cancel file open dialog ///'
-            OeffnenDlg.Cancel
+        'Call Dialogtest (OeffnenDlg)
+        WaitSlot (1000)
+        printlog "cancel file open dialog "
+        OeffnenDlg.Cancel
     catch
         printlog "'Insert -> Object -> Video' not available. (TDIP) ;-)"
     endcatch
-    '/// close application ///'
+    printlog "close application "
     Call hCloseDocument
-endcase
-
+    
+endcase 'tiInsertObjectVideo
+'--------------------------------------------------------
 testcase tiInsertChart
-    '/// open application ///'
+
+    printlog "open application "
     Call hNewDocument
-    '/// Insert->Chart ///'
+    printlog "Insert->Chart "
     InsertChart
     WaitSlot (2000)
     Kontext "Messagebox"
@@ -295,45 +307,49 @@ testcase tiInsertChart
         end if
     gMouseClick 1,1
     sleep 2
-    '/// close application ///'
+    printlog "close application "
     Call hCloseDocument
-endcase
-
+    
+endcase 'tiInsertChart
+'--------------------------------------------------------
 testcase tiInsertObjectOLEObjects
-    '/// open application ///'
+
+    printlog "open application "
     hNewDocument
-    '/// Insert->Object->OLEObjekts ///'
+    printlog "Insert->Object->OLEObjekts "
     InsertObjectOLEObject
     Kontext "OLEObjektEinfuegen"
-        '   Call Dialogtest ( OLEObjektEinfuegen )
-        '   NeuErstellen.Check ' is default value
-        Call DialogTest (OLEObjektEinfuegen, 1)
-        '/// check 'Create from file' ///'
-        AusDateiErstellen.Check
-        Call DialogTest (OLEObjektEinfuegen, 2)
-        '/// click 'Search...' ///'
-        Durchsuchen.click
-        Kontext "OeffnenDlG"
-            '/// cancel file open dialog ///'
-            OeffnenDLG.Cancel
+    'Call Dialogtest ( OLEObjektEinfuegen )
+    'NeuErstellen.Check ' is default value
+    Call DialogTest (OLEObjektEinfuegen, 1)
+    printlog "check 'Create from file' "
+    AusDateiErstellen.Check
+    Call DialogTest (OLEObjektEinfuegen, 2)
+    printlog "click 'Search...' "
+    Durchsuchen.click
+    Kontext "OeffnenDlG"
+    printlog "cancel file open dialog "
+    OeffnenDLG.Cancel
     Kontext "OLEObjektEinfuegen"
-        '/// cancel dialog 'insert OLE Object' ///'
-        OLEObjektEinfuegen.Cancel
-        sleep 1
-    '/// close application ///'
+    printlog "cancel dialog 'insert OLE Object' "
+    OLEObjektEinfuegen.Cancel
+    sleep 1
+    printlog "close application "
     Call hCloseDocument
-endcase
-
+    
+endcase 'tiInsertObjectOLEObjects
+'--------------------------------------------------------
 testcase tiInsertSpreadsheet
+
     if gtSYSName = "Linux" then
         printlog "Linux = wont test tiInsertSpreadsheet"
-    goto endsub
-endif
+        goto endsub
+    endif
 
-'/// open application ///'
+    printlog "open application "
     Call hNewDocument
     WaitSlot (2000)
-    '/// Insert->Spreadsheet ///'
+    printlog "Insert->Spreadsheet "
     InsertSpreadsheetDraw
     WaitSlot (2000)
     Kontext "Messagebox"
@@ -342,151 +358,166 @@ endif
             Messagebox.OK
         end if
         sleep 2
-        '/// click somewhere out of the object, to deselect it ///'
+        printlog "click somewhere out of the object, to deselect it "
         gMouseClick 1,1
         sleep 1
-        '/// select and delete object with keys: <Tab><Delete> ///'
+        printlog "select and delete object with keys: <Tab><Delete> "
         hTypekeys "<Tab><Delete>"
         sleep 2
-    '/// close application ///'
+    printlog "close application "
     Call hCloseDocument
-endcase
-
+    
+endcase 'tiInsertSpreadsheet
+'--------------------------------------------------------
 testcase tiInsertFormula
-    '/// open application ///'
+
+    printlog "open application "
     Call hNewDocument
-    '/// Insert->Object->Formula ///'
+    printlog "Insert->Object->Formula "
     InsertObjectFormulaDraw
     WaitSlot (2000)
     Kontext "Messagebox"
-        if Messagebox.Exists then
-            Warnlog Messagebox.GetText
-            Messagebox.OK
-            sleep 1
-        end if
-        '/// click somewhere out of the object, to deselect it ///'
-        gMouseClick 1,1
+    if Messagebox.Exists then
+        Warnlog Messagebox.GetText
+        Messagebox.OK
         sleep 1
-        '/// select and delete object with keys: <Tab><Delete> ///'
-        hTypekeys "<Tab><Delete>"
-    '/// close application ///'
+    end if
+    printlog "click somewhere out of the object, to deselect it "
+    gMouseClick 1,1
+    sleep 1
+    printlog "select and delete object with keys: <Tab><Delete> "
+    hTypekeys "<Tab><Delete>"
+    printlog "close application "
     Call hCloseDocument
-endcase
-
+    
+endcase 'tiInsertFormula
+'--------------------------------------------------------
 testcase tiInsertFloatingFrame
-    '/// open application ///'
+
+    printlog "open application "
     Call hNewDocument
-    '/// Insert->Floating Frame ///'
+    printlog "Insert->Floating Frame "
     InsertFloatingFrame
     WaitSlot (2000)
     Kontext "TabEigenschaften"
-        Dialogtest (TabEigenschaften)
-        '/// click '...' ///'
-        Oeffnen.Click
-        Kontext "OeffnenDlg"
-            sleep 1
-            '/// cancel file open dialog ///'
-            OeffnenDlg.Cancel
+    Dialogtest (TabEigenschaften)
+    printlog "click '...' "
+    Oeffnen.Click
+    Kontext "OeffnenDlg"
+    sleep 1
+    printlog "cancel file open dialog "
+    OeffnenDlg.Cancel
     Kontext "TabEigenschaften"
-        '/// cancel dialog 'Floating Frame Properties' ///'
-        TabEigenschaften.Cancel
-    '/// close application ///'
+    printlog "cancel dialog 'Floating Frame Properties' "
+    TabEigenschaften.Cancel
+    printlog "close application "
     Call hCloseDocument
-endcase
-
+    
+endcase 'tiInsertFloatingFrame
+'--------------------------------------------------------
 testcase tiInsertFile
-    '/// open application ///'
+
+    printlog "open application "
     Call  hNewDocument
     WaitSlot (1000)
-    '/// Insert->File ///'
+    printlog "Insert->File "
     InsertFileDraw
     WaitSlot (1000)
     Kontext "OeffnenDLG"
-        '   	Call Dialogtest ( OeffnenDLG )
-        '/// cancel file open dialog ///'
-        OeffnenDLG.Cancel
-    '/// close application ///'
+    'Call Dialogtest ( OeffnenDLG )
+    printlog "cancel file open dialog "
+    OeffnenDLG.Cancel
+    printlog "close application "
     Call  hCloseDocument
-endcase
-
+    
+endcase 'tiInsertFile
+'--------------------------------------------------------
 testcase tiInsertPlugin
-    '/// open application ///'
+
+    printlog "open application "
     call hNewDocument
-    '/// Insert->Object->PlugIn ///'
+    printlog "Insert->Object->PlugIn "
     InsertObjectPlugIn
     Kontext "PluginEinfuegen"
-        if PluginEinfuegen.exists (5) then
-            call Dialogtest (PluginEinfuegen)
-            '/// click 'browse' ///'
-            Durchsuchen.Click
-            sleep 1
-            Kontext "Messagebox"
-                if Messagebox.Exists (5) Then
-                    Warnlog Messagebox.GetText
-                    Messagebox.OK
-                else
-                    printlog "No Messagebox :-)"
-                end if
-            Kontext "OeffnenDlG"
-                if OeffnenDlG.exists (5) then
-                    sleep 1
-                    '/// cancel file open dialog ///'
-                    OeffnenDLG.Cancel
-                end if
-    Kontext "PluginEinfuegen"
-        '/// cancel dialog 'Insert Plug-in' ///'
-        if PluginEinfuegen.exists (5) then PluginEinfuegen.Cancel
+    if PluginEinfuegen.exists (5) then
+        call Dialogtest (PluginEinfuegen)
+        printlog "click 'browse' "
+        Durchsuchen.Click
+        sleep 1
+        Kontext "Messagebox"
+        if Messagebox.Exists (5) Then
+            Warnlog Messagebox.GetText
+            Messagebox.OK
         else
-            warnlog "Insert Plugin does not work :-("
+            printlog "No Messagebox :-)"
         end if
-    '/// close application ///'
+        Kontext "OeffnenDlG"
+        if OeffnenDlG.exists (5) then
+            sleep 1
+            printlog "cancel file open dialog "
+            OeffnenDLG.Cancel
+        end if
+    Kontext "PluginEinfuegen"
+    printlog "cancel dialog 'Insert Plug-in' "
+    if PluginEinfuegen.exists (5) then PluginEinfuegen.Cancel
+        else
+        warnlog "Insert Plugin does not work :-("
+    end if
+    printlog "close application "
     Call hCloseDocument
-endcase
-
+    
+endcase 'tiInsertPlugin
+'--------------------------------------------------------
 testcase tiInsertScan
+
     goto endsub
-    '/// DISABLED because not able to make automatic :-( ///'
-    '/// open application ///'
+    printlog "DISABLED because not able to make automatic :-( "
+    printlog "open application "
     Call hNewDocument
-    '/// Insert->Scan->Request ///'
+    printlog "Insert->Scan->Request "
     InsertScanRequest ' as long as there is no scanner available, nothing happens
     WaitSlot (1000)
-    '/// Insert->Scan->SelectSource ///'
+    printlog " Insert->Scan->SelectSource "
     InsertScanSelectSource
     WaitSlot (1000)
     printlog "Not testable, not translatable, just callable, because of systemdialog :-("
-    '/// close application ///'
+    printlog "close application "
     Call hCloseDocument
-endcase
-
+    
+endcase 'tiInsertScan
+'--------------------------------------------------------
 testcase tiInsertSnappointLine
-    '/// open application ///'
+
+    printlog "open application "
     Call  hNewDocument
-    '/// DRAW   : Insert->Snap Point/Line  ///'
-    '/// + IMPRESS: available via Kontext menu: Insert->Snap Point/Line  ///'
+    printlog "DRAW  : Insert->Snap Point/Line  "
+    printlog "+ IMPRESS: available via Kontext menu: Insert->Snap Point/Line  "
     InsertSnapPointLine
     Kontext "NeuesFangobjekt"
-        DialogTest ( NeuesFangobjekt )
-        '/// Cancel dialog 'New Snap Object' ///'
-        NeuesFangobjekt.Cancel
-        sleep 2
-    '/// close application ///'
+    DialogTest ( NeuesFangobjekt )
+    printlog "Cancel dialog 'New Snap Object' "
+    NeuesFangobjekt.Cancel
+    sleep 2
+    printlog "close application "
     Call  hCloseDocument
-endcase
-
+    
+endcase 'tiInsertSnappointLine
+'--------------------------------------------------------
 testcase tdInsertLayer
-    '/// open application ///'
+
+    printlog "open application "
     Call  hNewDocument
     WaitSlot (1000)
-    '/// View->Layer ///'
+    printlog "View->Layer "
     ViewLayer
-    '/// Insert->Layer ///'
+    printlog "Insert->Layer "
     InsertLayer
     Kontext "EbeneEinfuegenDlg"
-        DialogTest ( EbeneEinfuegenDlg )
-        '/// cancel dialog 'Insert Layer' ///'
-        EbeneEinfuegenDlg.Cancel
-    '/// close application ///'
+    DialogTest ( EbeneEinfuegenDlg )
+    printlog "cancel dialog 'Insert Layer' "
+    EbeneEinfuegenDlg.Cancel
+    printlog "close application "
     Call  hCloseDocument
-endcase
+    
+endcase 'tdInsertLayer
 

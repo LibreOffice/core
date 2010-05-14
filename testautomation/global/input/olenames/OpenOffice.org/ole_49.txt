@@ -1,7 +1,0 @@
-CALC=OpenOffice.org 2.3 Tabelle
-CHART=OpenOffice.org 2.3 Diagramm
-DRAW=OpenOffice.org 2.3 Zeichnung
-IMPRESS=OpenOffice.org 2.3 Präsentation
-MATH=OpenOffice.org 2.3 Formel
-WRITER=OpenOffice.org 2.3 Text
-OTHER=Weitere Objekte

@@ -77,7 +77,7 @@ public class _XSimpleText extends MultiMethodTest {
     */
     public void _insertString() {
         requiredMethod("createTextCursor()");
-        log.println( "Testing insertString)" );
+        log.println( "Testing insertString" );
         String sStr = getInterfaceName() ;
         oObj.insertString( oCursor, sStr, false );
         String gStr = oObj.getText().getString() ;

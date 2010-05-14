@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Checks the export to all available Filters from 
 '*
@@ -48,7 +48,7 @@ testcase tExportAllReadableFormatsIntoODF
 	if iSprache <> 1 then
 		QAErrorlog "#100970#test only support english language"
 		goto endsub
-	endif
+	end if
 
     Dim AvailableFilters( 35 ) as String
     Dim TemplateFilterFile as String
@@ -86,7 +86,7 @@ testcase tExportAllReadableFormatsIntoODF
 		printlog "- " & i & ". load: " & ImportFileList(i)
         Call hFileOpen ( ImportFileList(i) )
 		printlog "-  done"
-		
+
 		Kontext "TextImport"
 		if TextImport.Exists then
 			TextImport.Ok
@@ -141,18 +141,18 @@ testcase tExportAllReadableFormatsIntoODF
 		if AlienWarning.Exists then
 			AlienWarning.Ok
 			printlog "-  Alien warning passed"
-		endif
+		end if
 
 		sExportFile = WorkDirectory & "ExportedFile" & i & ".odf"
 		Printlog "-  Save as : " & ConvertPath ( sExportFile )
 		if hFileSaveAsWithFilterKill (sExportFile, "writer8") = true then
-			printlog "-  done"            
+			printlog "-  done"
 			printlog "-  close file"
 			Call hCloseDocument
 
 			Printlog "-  Open previous saved file"
 			Call hFileOpenWithFilter (sExportFile, "writer8")
-			printlog "-  done"  
+			printlog "-  done"
 			' Check for macro alert
 			Kontext "SecurityWarning"
 			if SecurityWarning.Exists then
@@ -164,7 +164,7 @@ testcase tExportAllReadableFormatsIntoODF
 			Sleep 1
 		else
 			Warnlog "Unable to save file: " & sExportFile
-		endif
+		end if
 
 		printlog "-  Close all open files."
 		Do Until GetDocumentCount = 0
@@ -181,7 +181,7 @@ testcase tExportAllReadableFormatsIntoThemselves
 	if iSprache <> 1 then
 		QAErrorlog "#100970#test only support english language"
 		goto endsub
-	endif
+	end if
 	
     Dim AvailableFilters( 35 ) as String
     Dim TemplateFilterFile as String
@@ -214,6 +214,8 @@ testcase tExportAllReadableFormatsIntoThemselves
     end if
     app.Mkdir sWorkDirectory
 
+warnlog "#i102221# - Pocketword-filter seems broken."
+
     For iCurrentFileIndex = 1 to 16
         select case iCurrentFileIndex
                     case 1 :   sCurrentFile = "xml2.odt"
@@ -236,8 +238,8 @@ testcase tExportAllReadableFormatsIntoThemselves
                                      sCurrentFilter = "StarWriter 4.0 Vorlage/Template"
                     case 10 : sCurrentFile = "sw50.sdw"
                                      sCurrentFilter = "StarWriter 5.0"
-                    case 11 : sCurrentFile = "pocketword.psw"
-                                     sCurrentFilter = "PocketWord File"
+                    case 11 : sCurrentFile = "html.html"
+                                     sCurrentFilter = "HTML (StarWriter)"
                     case 12 : sCurrentFile = "rtf.rtf"
                                      sCurrentFilter = "Rich Text Format"
                     case 13 : sCurrentFile = "sw60.sxw"
@@ -248,8 +250,9 @@ testcase tExportAllReadableFormatsIntoThemselves
                                      sCurrentFilter = "MS Word 95"
                     case 16 : sCurrentFile = "wintext.txt"
                                      sCurrentFilter = "Text (encoded)"
-                    case 17 : sCurrentFile = "html.html"
-                                     sCurrentFilter = "HTML (StarWriter)"									 
+'                    case 17 : sCurrentFile = "pocketword.psw"
+'                                     sCurrentFilter = "PocketWord File"
+
 
 'TODO: 18-23 not applyable. Can be opened, but saving in the format is not supported.
 
@@ -330,7 +333,7 @@ testcase tExportAllReadableFormatsIntoThemselves
 
             ' Save Out-file
             Call hFileSaveAsWithFilterKill(sSaveFile, sCurrentFilter)
-            
+
             kontext "active"
             if active.exists(2) then 
                 active.ok
@@ -354,7 +357,7 @@ testcase tExportAllReadableFormatsIntoThemselves
         catch
             Warnlog "Error with file: " + sLoadFile
         endcatch
-        
+
         Cleanup:
         kontext "active"
         if active.exists(2) then 
@@ -379,7 +382,7 @@ testcase tExportTop5FormatsIntoTop5
 	if iSprache <> 1 then
 		QAErrorlog "#100970#test only support english language"
 		goto endsub
-	endif
+	end if
 
     Dim ExportFileList(300) as String
     Dim sWorkDirectory as String

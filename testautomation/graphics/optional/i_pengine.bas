@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,7 @@
 global glLocale (15*20) as string
 
 sub main
-   Call hStatusIn ( "Graphics","i_pengine.bas", "Presentation-Engine-Optional Test"  )
-       GetOLEDefaultNames
+    Call hStatusIn ( "Graphics","i_pengine.bas" )
 
     use "graphics\tools\id_tools.inc"
     use "graphics\tools\id_tools_2.inc"
@@ -50,7 +49,7 @@ sub main
     use "graphics\optional\includes\impress\options.inc"
 
 
-       PrintLog "------------------------- " + gApplication + " Presentation-Engine-Optional Test -------------------"
+    PrintLog "------------------------- " + gApplication + " Presentation-Engine-Optional Test -------------------"
 
     Call tiPengineAllShapesAndEffects
     Call tiPengine2ObjectsGetsEffects
@@ -58,13 +57,13 @@ sub main
     Call tiPengineTabEntrance
     Call tiPengineTabpageEntrance2
 
-   if bAsianLan <> TRUE then
+    if bAsianLan <> TRUE then
         Call tiPengineTabEmphasis
         Call tiPengineTabPageEmphasis2
         Call tiPengineTabExit
         Call tiPengineTabPageExit2
         Call tiPengineTabMotionPaths
-        Call tiPengineTabPageMotionPaths2   
+        Call tiPengineTabPageMotionPaths2
         Call tiPengineAnimationEffectsOptions
     else
         qaerrorlog "Deactivated tiPengineAnimationEffectsSlideshow and tiPengineAnimationEffectsOptions, due to strange results under Asian language."
@@ -73,13 +72,13 @@ sub main
     Call tiPengineAnimationEffectsPreview
     Call tiPengineSlideTransition
 
-   Call hStatusOut
+    Call hStatusOut
 end sub
 
 sub LoadIncludeFiles
-   use "global\system\includes\master.inc"
-   use "global\system\includes\gvariabl.inc"
-   use "global\tools\includes\optional\t_ui_filters.inc"
-   gApplication = "IMPRESS"
-   Call GetUseFiles
+    use "global\system\includes\master.inc"
+    use "global\system\includes\gvariabl.inc"
+    use "global\tools\includes\optional\t_ui_filters.inc"
+    gApplication = "IMPRESS"
+    Call GetUseFiles
 end sub

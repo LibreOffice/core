@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -46,16 +46,15 @@ sub main
     use "graphics\tools\id_tools.inc"
     use "graphics\optional\includes\global\g_export_html.inc"
 
-    GetOLEDefaultNames
     hSetLocaleStrings ( gTesttoolPath + "graphics\tools\locale_1.txt" , glLocale () )
 
     PrintLog "-------------------------" + gApplication + "-------------------"
-        Call tHTMLExport
-        Call tHtmlExport_Webcast
+    Call tHTMLExport
+    Call tHtmlExport_Webcast
 
     gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
-        Call tHTMLExport
+    Call tHTMLExport
 
     Call hStatusOut
 end sub

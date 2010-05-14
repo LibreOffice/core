@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -48,22 +48,22 @@ sub main
     use "graphics\optional\includes\global\g_format.inc"
 
     PrintLog "-------------------------" + gApplication + "-------------------"
-        Call tiFormatText
-        Call tiFormatPositionAndSize
-        Call tdFormatConnector
-        Call tiFormat3D_Effekte
-        Call tiFormatAufzaehlungszeichen
-        Call tdFormatTemplates
+    Call tiFormatText
+    Call tiFormatPositionAndSize
+    Call tdFormatConnector
+    Call tiFormat3D_Effekte
+    Call tiFormatAufzaehlungszeichen
+    Call tdFormatTemplates
 
     gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
-        Call tiFormatText
-        Call tdFormatLayer
-        Call tiFormatPositionAndSize
-        Call tdFormatConnector
-        Call tiFormat3D_Effekte
-        Call tiFormatAufzaehlungszeichen
-        Call tdFormatTemplates
+    Call tiFormatText
+    Call tdFormatLayer
+    Call tiFormatPositionAndSize
+    Call tdFormatConnector
+    Call tiFormat3D_Effekte
+    Call tiFormatAufzaehlungszeichen
+    Call tdFormatTemplates
 
     Call hStatusOut
 end sub

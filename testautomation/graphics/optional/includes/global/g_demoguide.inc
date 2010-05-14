@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -40,18 +40,16 @@
 ' #1 t_Introduction         ' Description
 ' #1 t_Interoperability     ' Description
 ' #1 t_DrawingEngine        ' Description
-' 
+'
 '*
 '\***********************************************************************
 testcase t_Introduction
 
     gApplication   = "IMPRESS"
-    
-    '///Open new presentation
+
     printlog "Open new presentation"
     Call hNewDocument
-    
-    '///Open the Gallery
+
     printlog "Open the Gallery"
     ToolsGallery
     Sleep (1)
@@ -59,8 +57,7 @@ testcase t_Introduction
     if Gallery.NotExists(2) then
         ToolsGallery
     end if
-    
-    '///Choose computer theme and insert the third image
+
     printlog "Choose an item from the gallery"
     Gallerys.Select(2)
     View.TypeKeys "<HOME><RIGHT><RIGHT>"
@@ -70,7 +67,6 @@ testcase t_Introduction
     sleep 2
     MenuSelect(MenuGetItemID(1))   'Copy
     sleep 2
-    '///+ - Check that we really got a copy of the object ///'
     kontext "DocumentImpress"
     DocumentImpress.OpenContextMenu(true)
     sleep 2
@@ -78,10 +74,10 @@ testcase t_Introduction
     sleep 2
     Kontext "ExportierenDlg"
     if ExportierenDlg.IsVisible(5) then
-            printlog "   Gallery-object correctly copied into Slide."
-            ExportierenDlg.Close
-        else
-            warnlog "   Doesn't seem like we copied anything from the Gallery... ?"
+        printlog "   Gallery-object correctly copied into Slide."
+        ExportierenDlg.Close
+    else
+        warnlog "   Doesn't seem like we copied anything from the Gallery... ?"
     endif
     printlog "Delete the item"
     kontext "DocumentImpress"
@@ -98,15 +94,13 @@ testcase t_Introduction
     catch
         Warnlog "Insert graphic doesn't work"
     endcatch
-    
-    '///Resize object 
+
     printlog "Resize object"
     Kontext "DocumentImpress"
     gMouseClick (10, 10)
     sleep 1
     EditSelectAll
     sleep 1
-    ContextPositionAndSize                '/// Format-position and size
     Kontext
     Active.SetPage TabPositionAndSize
     Kontext "TabPositionAndSize"
@@ -115,8 +109,7 @@ testcase t_Introduction
     SizePosition.TypeKeys "<DOWN> <RIGHT>"
     Width.SetText CStr((CInt(Width.GetText)) * 2)
     TabPositionAndSize.OK
-    
-    '///Break object
+
     printlog "Break object"
     Kontext "DocumentImpress"
     gMouseClick (10, 10)
@@ -124,8 +117,7 @@ testcase t_Introduction
     EditSelectAll
     sleep 1
     hOpenContextMenu  '(when the object is marked)
-    hMenuSelectNr(13) 
-    '///    Select part of object and make it black
+    hMenuSelectNr(13)
     printlog "Select part of object and make it black"
     DocumentImpress.TypeKeys "<SHIFT TAB>"
     FormatArea
@@ -135,15 +127,13 @@ testcase t_Introduction
     FillOptions.Select 2
     ColourList.Select 1
     TabArea.OK
-    
-    '///Group the objects
+
     printlog "Group the object"
     kontext "DocumentImpress"
     DocumentImpress.TypeKeys "<MOD1 A>"
     hOpenContextMenu  '(when the object is marked)
     hMenuSelectNr(12)
-    
-    '///Add Layout "Title Only"
+
     Printlog "Add Layout"
     kontext "Tasks"
     if (NOT Tasks.exists) then
@@ -153,23 +143,21 @@ testcase t_Introduction
     Kontext "LayoutsPreview"
     LayoutsPreview.TypeKeys "<HOME> <DOWN> <DOWN> <RETURN>"
     sleep (5)
-    '///Add a background
     Printlog "Add background"
-    
+
     Kontext "Tasks"
     printlog "Deselect all tabs from view menu in task pane except the needed."
     View.OpenMenu
-    MenuSelect(MenuGetItemID(5))        
+    MenuSelect(MenuGetItemID(5))
     View.OpenMenu
-    MenuSelect(MenuGetItemID(4))        
+    MenuSelect(MenuGetItemID(4))
     View.OpenMenu
     MenuSelect(MenuGetItemID(3))
     View.OpenMenu
     MenuSelect(MenuGetItemID(2))
     Kontext "AvailableForUsePreview"
     AvailableForUsePreview.TypeKeys "<HOME> <RIGHT> <RETURN>"
-    sleep (5)    
-    '///Add a transition effect
+    sleep (5)
     Printlog "Add a transition effect"
     Kontext "Tasks"
     View.OpenMenu
@@ -179,11 +167,10 @@ testcase t_Introduction
     TransitionSound.GetItemCount   'needed for select
     Sleep 1
     TransitionSound.Select 4
-    
-    '///Close the document
+
     Printlog "Close the document"
     Call hCloseDocument
-    
+
 endcase 't_Introduction
 '--------------------------------------------------------------------
 
@@ -192,33 +179,32 @@ testcase t_Interoperability
     Dim sTemplatename as string
 
     gApplication   = "IMPRESS"
-    
-    '///Open PowerPoint presentation
+
     printlog "Open PowerPoint presentation"
     hFileOpen (Convertpath (gTesttoolPath + "graphics/required/input/dotNetOverview.ppt"))
 
     Call sMakeReadOnlyDocumentEditable
-    
+
     'Save the name of the origin background (taken from last slide)
-        Kontext "DocumentImpress"
-        DocumentImpress.TypeKeys "<END>"
-        sleep (4)
-        sTemplatename = DocumentImpress.StatusGetText (6)
-        printlog "    Background = " & sTemplatename     'Debugcode
-    
+    Kontext "DocumentImpress"
+    DocumentImpress.TypeKeys "<END>"
+    sleep (4)
+    sTemplatename = DocumentImpress.StatusGetText (6)
+    printlog "    Background = " & sTemplatename     'Debugcode
+
     printlog "Choose a masterpage from right pane"
-    
+
     Kontext "Tasks"
     printlog "Deselect all tabs accept the Master Pages"
     View.OpenMenu
-    MenuSelect(MenuGetItemID(5)) 
+    MenuSelect(MenuGetItemID(5))
     View.OpenMenu
-    MenuSelect(MenuGetItemID(4))        
+    MenuSelect(MenuGetItemID(4))
     View.OpenMenu
     MenuSelect(MenuGetItemID(3))
     View.OpenMenu
     MenuSelect(MenuGetItemID(2))
-    sleep 2    
+    sleep 2
     Kontext "AvailableForUsePreview"
     AvailableForUsePreview.TypeKeys "<HOME> <RIGHT> <RETURN>"
     sleep (5)
@@ -226,11 +212,10 @@ testcase t_Interoperability
     Kontext "DocumentImpress"
     printlog "    Background is " & DocumentImpress.StatusGetText (6)     'Debugcode
     if DocumentImpress.StatusGetText (6) = sTemplatename then
-            warnlog "The background is not changed"
-        else printlog "    Background has been changed"
+        warnlog "The background is not changed"
+    else printlog "    Background has been changed"
     endif
-    
-    '///Switch back to original background
+
     printlog "Switch back to original background"
     Kontext "Tasks"
     Kontext "AvailableForUsePreview"
@@ -238,11 +223,10 @@ testcase t_Interoperability
     sleep (5)
     Kontext "DocumentImpress"
     if DocumentImpress.StatusGetText (6) = sTemplatename then
-            printlog "    The background has been set back to default"
-        else warnlog "The background is " & DocumentImpress.StatusGetText (6) & " but should be: " & sTemplatename
+        printlog "    The background has been set back to default"
+    else warnlog "The background is " & DocumentImpress.StatusGetText (6) & " but should be: " & sTemplatename
     endif
-    
-    '///Resort slides
+
     printlog "Resort slides"
     Kontext "DocumentImpress"
     Kontext "Slides"
@@ -254,29 +238,28 @@ testcase t_Interoperability
     Kontext "SlidesControl"
     SlidesControl.TypeKeys "<Mod1 V>"
     kontext "InsertPaste"
-     if InsertPaste.Exists(1) then
+    if InsertPaste.Exists(1) then
         Before.Check
         InsertPaste.OK
-     endif
-     Printlog "    Verify that the slide was moved correctly"
-     Kontext "Slides"
-     SlidesControl.TypeKeys "<PAGEUP>"
-     SlidesControl.TypeKeys "<SHIFT F10>"
-     if hMenuFindSelect(27268, true, 3) = false then
+    endif
+    Printlog "    Verify that the slide was moved correctly"
+    Kontext "Slides"
+    SlidesControl.TypeKeys "<PAGEUP>"
+    SlidesControl.TypeKeys "<SHIFT F10>"
+    if hMenuFindSelect(27268, true, 3) = false then
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
-     kontext "NameDlgPage"
-     if NameField.GetText <> ".NET Enterprise Federation" then
+    endif
+    kontext "NameDlgPage"
+    if NameField.GetText <> ".NET Enterprise Federation" then
         Warnlog "Wrong slide found! Expected no 3, but found " + NameField.GetText + "."
-     else
+    else
         Printlog "    The slide was correctly moved"
-     endif
-     NameDlgPage.OK
-     sleep 1
-    
-    '///Switch views
+    endif
+    NameDlgPage.OK
+    sleep 1
+
     printlog "Switch views"
     ViewWorkspaceOutlineView
     sleep (2)
@@ -287,8 +270,8 @@ testcase t_Interoperability
         DocumentImpressOutlineView.TypeKeys "<Mod1 C>"
         sleep (5)
         if getclipboard() <> ".NET Enterprise" then
-                warnlog "    Wrong selection in outlineview. Should be '.NET Enterprise', but is '" & getclipboard() +"'."
-            else printlog "    Switching to Outlineview was successfull"
+            warnlog "    Wrong selection in outlineview. Should be '.NET Enterprise', but is '" & getclipboard() +"'."
+        else printlog "    Switching to Outlineview was successfull"
         endif
     catch
         warnlog "Switching to Outlineview was not successfull"
@@ -336,8 +319,7 @@ testcase t_Interoperability
     catch
         warnlog "Switching to Drawingview was not successfull"
     endcatch
-    
-    '///Travel through the presentation by left pane
+
     printlog "Travel through the presentation by left pane to slide 7"
     Kontext "DocumentImpress"
     DocumentImpress.TypeKeys "<HOME><PAGEDOWN><PAGEDOWN><PAGEDOWN><PAGEDOWN><PAGEDOWN><PAGEDOWN><PAGEDOWN>"
@@ -346,31 +328,31 @@ testcase t_Interoperability
     Kontext "SlidesControl"
     SlidesControl.OpenContextMenu
     if hMenuFindSelect(27268, true, 3) = false then
-    Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
-    Call hCloseDocument
-    Goto Endsub
+        Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
+        Call hCloseDocument
+        Goto Endsub
     endif
     kontext "NameDlgPage"
     if NameField.GetText <> "Visual Studio.NET The complete development environment  for building distributed applications  for Windows and the Web" then
-            Warnlog "Wrong slide found! Expected no 7, but found " + NameField.GetText + "."
-        else Printlog "    Slide 7 is reached"        
+        Warnlog "Wrong slide found! Expected no 7, but found " + NameField.GetText + "."
+    else Printlog "    Slide 7 is reached"
     endif
     NameDlgPage.OK
     sleep 1
-    
+
     printlog "Autoshape support"
     Kontext "DocumentImpress"
     DocumentImpress.TypeKeys "<TAB>"
     try
         Kontext "ExtrusionObjectBar"
-	printlog "Checking if ExtrusionObjectBar is already open."
+        printlog "Checking if ExtrusionObjectBar is already open."
         if ExtrusionObjectBar.Exists then
-        	printlog "ExtrusionObjectBar Exists = " & ExtrusionObjectBar.Exists
+            printlog "ExtrusionObjectBar Exists = " & ExtrusionObjectBar.Exists
         else
-		printlog "ExtrusionObjectBar Exists = " & ExtrusionObjectBar.Exists
-		printlog "Opening ExtrusionObjectBar."
-        	ViewToolbarsThreeDSettings
-        endif	
+            printlog "ExtrusionObjectBar Exists = " & ExtrusionObjectBar.Exists
+            printlog "Opening ExtrusionObjectBar."
+            ViewToolbarsThreeDSettings
+        endif
         ExtrusionTiltRight.Click
         printlog "    An autoshape was found and turned right"
     catch
@@ -378,24 +360,22 @@ testcase t_Interoperability
     endcatch
     printlog "Close document"
     Call hCloseDocument
-        
+
 endcase 't_Interoperability
 '--------------------------------------------------------------------
 
 testcase t_DrawingEngine
 
-Dim sGroupPosition as string
-Dim sObjectPosition as string
+    Dim sGroupPosition as string
+    Dim sObjectPosition as string
 
-gApplication   = "DRAW"
-    
-    '///Open a drawing
+    gApplication   = "DRAW"
+
     printlog "Open a drawing"
     hFileOpen (Convertpath (gTesttoolPath + "graphics/required/input/Blueprint.odg"))
 
     Call sMakeReadOnlyDocumentEditable
 
-    '///Select grouped object and enter group
     printlog "Select group"
     Kontext "DocumentDraw"
     DocumentDraw.TypeKeys "<TAB><TAB>"
@@ -412,8 +392,7 @@ gApplication   = "DRAW"
     Kontext "DocumentDraw"
     FormatEditGroupDraw
     sleep 1
-    
-    '///Select and move single object
+
     printlog "Select and move single object"
     printlog "    Select object"
     Kontext "DocumentDraw"
@@ -424,8 +403,8 @@ gApplication   = "DRAW"
     MenuSelect(MenuGetItemID(15))               'Select NAME from context
     kontext "NameDlgObject"
     if NameField.GetText <> "Chair" then
-            Warnlog "Wrong object selected!"
-        else Printlog "    The correct object is selected"
+        Warnlog "Wrong object selected!"
+    else Printlog "    The correct object is selected"
     endif
     NameDlgObject.OK
     sleep 1
@@ -442,13 +421,12 @@ gApplication   = "DRAW"
     DocumentDraw.TypeKeys "<UP><UP><UP>"
     sleep (5)
     printlog "    Verify that the object was moved"
-    ContextPositionAndSize                '/// Format-position and size
     Kontext
     Active.SetPage TabPositionAndSize
     Kontext "TabPositionAndSize"
     if PositionY.GetText <> sObjectPosition then
-            printlog "    Single object was moved" 
-        else warnlog "The object has not been moved"
+        printlog "    Single object was moved"
+    else warnlog "The object has not been moved"
     endif
     TabPositionAndSize.OK
     printlog "    Exit group"
@@ -460,12 +438,11 @@ gApplication   = "DRAW"
     Active.SetPage TabPositionAndSize
     Kontext "TabPositionAndSize"
     if PositionY.GetText = sGroupPosition then
-            printlog "    Group is still on position"
-        else warnlog "Group has moved from " & sGroupPosition & " to " & PositionY.GetText
+        printlog "    Group is still on position"
+    else warnlog "Group has moved from " & sGroupPosition & " to " & PositionY.GetText
     endif
     TabPositionAndSize.OK
-    
-    '///Close document
+
     printlog "Close document"
     Call hCloseDocument
 

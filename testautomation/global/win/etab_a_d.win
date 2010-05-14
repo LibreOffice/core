@@ -434,6 +434,8 @@ PercentageFormat        HID_SCH_PB_PERCENT_NUMBERFORMAT
 Separator               HID_SCH_DATALABEL_SEPARATOR
 Placement               HID_SCH_DATALABEL_PLACEMENT
 TextDirection           HID_SCH_TEXTDIRECTION
+RotateAngle             HID_SCH_DATALABEL_ROTATION_KNOB
+RotateDegrees           HID_SCH_DATALABEL_ROTATION_EDIT
 
 +TabDataPointLabels TabDataSeriesLabels
 

@@ -112,6 +112,8 @@ testcase tExecute
         sleep(1)
         BackGroundColor.select 11        
         sleep(2)
+        Height.setText("5")
+        Height.typeKeys("<RETURN>",true)
         
     ' select detail section with unselect the control
     Kontext "ReportDesign"
@@ -119,7 +121,7 @@ testcase tExecute
         ReportDesign.MouseUp(50, 10)
         sleep(1)
     Kontext "ReportGeneralProperties"           
-        Height.setText("0")
+        Height.setText("5")
         Height.typeKeys("<RETURN>",true)
         
     sleep(1) 
@@ -162,8 +164,19 @@ testcase tExecute
     SAXSeekElement("table:table")
 
     iNumberOfChilds = SAXGetChildCount 
-    if (iNumberOfChilds <> 64 ) then
-        warnlog "there should be 64 rows in the table, but there are " + iNumberOfChilds        
+    dim iLoop as integer
+    dim iCount as integer
+    iCount = 0
+    for iLoop = 1 to iNumberOfChilds
+	    SAXSeekElement(iLoop)
+		if ( SAXGetElementName() = "table:table-row" ) then
+			iCount = iCount + 1
+		endif
+		SAXSeekElement(0)
+	next
+	
+    if (iCount <> 59 ) then
+        warnlog "there should be 59 rows in the table, but there are " + iNumberOfChilds        
         SAXRelease
         goto endsub
     endif
